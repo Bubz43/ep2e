@@ -47,7 +47,6 @@ const df = (path) => [path, d(path)];
 const n = (path) => [path, { name: d(path) }];
 
 archive
-  .directory(...df("images/"))
   .directory(...df("packs/"))
   .directory(...df("build/"))
   .file(...n("lang/en.json"))

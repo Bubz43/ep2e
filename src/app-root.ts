@@ -7,10 +7,7 @@ import {
   unsafeCSS,
 } from 'lit-element';
 import style from './app.scss';
-const thing = (num: number) =>
-  css`
-    ${num}vh
-  `;
+const eclipse = new URL("images/eclipse.png", import.meta.url)
 
 @customElement('app-root')
 export class AppRoot extends LitElement {
@@ -25,7 +22,7 @@ export class AppRoot extends LitElement {
       <div class="wrapper">
         <h1>LitElement + Snowpack</h1>
         <p>Edit <code>src/app-root.ts</code> and save to reload.</p>
-        <sl-button>Test Button</sl-button>
+        <sl-button><img height="20px" src=${eclipse.href} >Test Button</sl-button>
         <a
           class="link"
           href="https://lit-element.polymer-project.org/"
