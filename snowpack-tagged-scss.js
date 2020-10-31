@@ -128,22 +128,19 @@ module.exports = function sassPlugin(_, { native, compilerOptions = {} } = {}) {
       );
       // Handle the output.
       if (stderr) throw new Error(stderr);
-      if (stripFileExtension(filePath).endsWith("global")) {
-        console.log("thing");
-        return { '.css': stdout };
-      }
       if (stdout) {
-      
+        if (stripFileExtension(filePath).endsWith('global')) {
+          return { '.css': stdout };
+        }
         return {
-        '.css.js': `import {css} from '${afterSrc.join(
-          '/',
-        )}/web_modules/lit-element.js';
+          '.css.js': `import {css} from '${afterSrc.join(
+            '/',
+          )}/web_modules/lit-element.js';
   
                             const style = css\`${stdout}\`; 
                             export default style`,
-      };
+        };
       }
-      
     },
   };
 };
