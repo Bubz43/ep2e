@@ -1,6 +1,16 @@
-import { customElement, property, LitElement, html, css, unsafeCSS } from 'lit-element';
-import style from "./app.scss"
-const thing = (num: number) => css`${num}vh`;
+import {
+  customElement,
+  property,
+  LitElement,
+  html,
+  css,
+  unsafeCSS,
+} from 'lit-element';
+import style from './app.scss';
+const thing = (num: number) =>
+  css`
+    ${num}vh
+  `;
 
 @customElement('app-root')
 export class AppRoot extends LitElement {
@@ -11,7 +21,7 @@ export class AppRoot extends LitElement {
   }
 
   render() {
-    const thing = document.createElement("sl-button")
+    const thing = document.createElement('sl-button');
     return html`
       <div class="wrapper">
         <h1>LitElement + Snowpack</h1>
@@ -23,7 +33,7 @@ export class AppRoot extends LitElement {
           target="_blank"
           rel="noopener noreferrer"
         >
-          ${this.message ?? "some stuff"}
+          ${this.message ?? 'some stuff'}
         </a>
       </div>
     `;
