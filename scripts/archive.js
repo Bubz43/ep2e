@@ -42,17 +42,15 @@ archive.on("error", function (err) {
 // pipe archive data to the file
 archive.pipe(output);
 
-const d = (path) => `eclipse-phase-2e/${path}`;
+const d = (path) => `ep2e/${path}`;
 const df = (path) => [path, d(path)];
 const n = (path) => [path, { name: d(path) }];
 
 archive
   .directory(...df("images/"))
   .directory(...df("packs/"))
+  .directory(...df("build/"))
   .file(...n("lang/en.json"))
-  .file(...n("dist/ep2e.js"))
-  .file(...n("dist/ep2e.js.map"))
-  .file(...n("dist/ep2e.licenses.txt"))
   .file(...n("body-init.css"))
   .file(...n("darkMCE.css"))
   .file(...n("system.json"))

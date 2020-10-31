@@ -21,7 +21,6 @@ export class AppRoot extends LitElement {
   }
 
   render() {
-    const thing = document.createElement('sl-button');
     return html`
       <div class="wrapper">
         <h1>LitElement + Snowpack</h1>
