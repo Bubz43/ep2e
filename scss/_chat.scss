@@ -1,3 +1,5 @@
+@use "functions" as *;
+@use "mixins" as *;
 
 #chat-form {
   grid-area: form;
@@ -8,7 +10,8 @@
   display: flex;
   flex-flow: column;
   margin: 0;
-  
+  position: relative;
+  border-top: 1px solid var(--color-border);
   background: alphav(var(--color-bg), 0.95);
   &:focus-within {
     background: var(--color-bg);
@@ -34,6 +37,126 @@
       box-shadow: none;
       outline: none;
     }
+  }
+  #chat-message {
+    font-family: Spartan;
+  }
+}
+
+#chat-log {
+  grid-area: log;
+  display: flex;
+  flex-flow: column nowrap;
+
+  height: 100%;
+  min-height: 100px;
+  overflow-y: scroll;
+  padding: 0;
+  align-self: end;
+
+  background: hsla(260, 97%, 4%, 0.3) !important;
+  background: transparent !important;
+  width: 360px;
+  justify-self: flex-end;
+  align-items: flex-end;
+  pointer-events: none;
+
+  @include animate-css(fadeIn, 1000ms);
+  animation-fill-mode: none !important;
+  cursor: initial;
+  .table-draw {
+    .table-description {
+      border-top: none;
+      color: var(--color-text);
+      opacity: 0.8;
+      font-weight: lighter;
+      font-size: 13px;
+    }
+    .result-image {
+      filter: contrast(0.5);
+    }
+  }
+  > *:first-child {
+    margin-top: auto !important;
+  }
+}
+
+.table-result {
+  margin: auto;
+  width: max-content;
+  .result-image {
+    filter: contrast(0.5);
+  }
+  .result-text {
+    max-width: 260px;
+  }
+}
+
+
+message-sender {
+  grid-area: sender;
+}
+
+#chat-controls {
+  grid-area: controls;
+  padding: 0;
+  pointer-events: initial;
+  font-size: 12px;
+  margin: 0;
+  height: 24px;
+  background: alphav(var(--color-bg), 0.9);
+  background: alphav(var(--color-bg), 0.95);
+
+  border-top: 1px solid alphav(var(--color-text), 0.1);
+  // border-bottom-left-radius: 3px;
+  // border-bottom-right-radius: 3px;
+  overflow: hidden;
+  .control-buttons {
+    border-left: 1px solid alphav(var(--color-text), 0.1);
+    display: flex;
+    width: unset;
+    > a {
+      pointer-events: initial;
+      cursor: pointer;
+      text-shadow: none;
+      width: unset;
+      flex: 1;
+      padding: 0 0.5rem;
+      &:not(:last-of-type) {
+        border-right: 1px solid alphav(var(--color-text), 0.1);
+      }
+      &:hover {
+        background: var(--color-primary);
+      }
+    }
+    i.fas {
+      font-size: 15px !important;
+      line-height: 15px;
+      padding: 2px;
+      transform: translateY(2px);
+    }
+  }
+  .roll-type-select {
+    background: transparent !important;
+    display: flex;
+    flex: 1;
+    -webkit-appearance: none;
+    cursor: pointer;
+    opacity: 0.9;
+    padding-left: 0.5rem;
+    height: 100%;
+    font-weight: lighter;
+    letter-spacing: 1px;
+    border-radius: 0px;
+    font-size: 1rem;
+    &:hover {
+      background: var(--color-primary) !important;
+      opacity: 1;
+      box-shadow: none !important;
+    }
+  }
+  .chat-control-icon {
+    display: none;
   }
 }
 

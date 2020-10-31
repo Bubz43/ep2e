@@ -1,0 +1,99 @@
+@use "functions" as *;
+
+#controls {
+  // left: unset;
+  // top: unset;
+  position: relative;
+  flex-flow: column;
+  width: 250px;
+  // align-items: flex-end;
+  padding: 0;
+  margin: 0;
+  top: 70px;
+  left: 0.5rem;
+  // margin-right: 2rem;
+  // margin-left: 1rem;
+  pointer-events: none;
+  align-items: flex-start;
+  z-index: 20;
+  .scene-control.active {
+    .control-tools {
+      right: 0;
+      justify-content: flex-start;
+    }
+  }
+  li {
+    pointer-events: initial;
+  }
+  &.collapsed {
+    .scene-control {
+      display: none;
+    }
+  }
+  .scene-control {
+    background-color: alphav(var(--color-bg), 0.9);
+    opacity: 0.7;
+    pointer-events: initial;
+    // transition: opacity 100ms ease-in-out, transform 100ms ease-in-out;
+    transition: all 100ms ease-in-out;
+    transform: scale(0.8);
+    margin-bottom: 2px;
+    box-shadow: 0 0 10px black, 0 0 2px white inset;
+    &:not(.active):hover {
+      background-color: var(--color-bg);
+      opacity: 0.9;
+      transform: scale(0.9);
+    }
+    &.active {
+      transform: none;
+      display: list-item !important;
+      opacity: 1;
+      cursor: initial;
+      .control-tools {
+        top: unset;
+        bottom: unset;
+        display: flex;
+        flex-flow: row wrap;
+        width: 200px;
+        // justify-content: flex-end;
+        align-items: center;
+        margin-top: -41px;
+        // right: 40px;
+        left: unset;
+        > * {
+          margin: 4px;
+          &.active {
+            cursor: initial;
+          }
+        }
+      }
+    }
+  }
+  .control-tool {
+    position: relative;
+    transform: scale(0.85);
+    transition: all 50ms ease-in-out;
+
+    &::before {
+      content: "";
+      z-index: -1;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: alphav(var(--color-bg), 0.9);
+    }
+    &:hover,
+    &.active {
+      background-color: alphav(var(--color-secondary), 0.3);
+      transform: none;
+    }
+    &[data-tool="clear"] {
+      background-color: alphav(var(--color-negative), 0.3);
+      &:hover {
+        background-color: alphav(var(--color-negative), 0.5);
+      }
+    }
+  }
+}

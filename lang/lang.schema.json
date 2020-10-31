@@ -3649,6 +3649,9 @@
             "token": {
               "type": "string"
             },
+            "took": {
+              "type": "string"
+            },
             "topOfTheLine": {
               "type": "string"
             },
@@ -5095,6 +5098,7 @@
             "toggle",
             "toggled",
             "token",
+            "took",
             "topOfTheLine",
             "total",
             "touchOnly",

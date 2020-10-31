@@ -1,0 +1,149 @@
+{
+  "$ref": "#/definitions/SystemSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "SystemSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "author": {
+          "type": "string"
+        },
+        "compatibleCoreVersion": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "download": {
+          "type": "string"
+        },
+        "esmodules": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "gridDistance": {
+          "type": "number"
+        },
+        "gridUnits": {
+          "type": "string"
+        },
+        "initiative": {
+          "type": "string"
+        },
+        "languages": {
+          "items": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "properties": {
+              "lang": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "lang",
+              "path"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "manifest": {
+          "type": "string"
+        },
+        "minimumCoreVersion": {
+          "type": "string"
+        },
+        "name": {
+          "const": "ep2e",
+          "type": "string"
+        },
+        "packs": {
+          "items": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "properties": {
+              "entity": {
+                "enum": [
+                  "Actor",
+                  "Item",
+                  "JournalEntry",
+                  "RollTable"
+                ],
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "entity",
+              "label",
+              "name",
+              "path"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "primaryTokenAttribute": {
+          "type": "string"
+        },
+        "scripts": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "secondaryTokenAttribute": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "socket": {
+          "type": "boolean"
+        },
+        "styles": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "title": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "version": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "name",
+        "title",
+        "description",
+        "version",
+        "author",
+        "languages",
+        "gridDistance",
+        "gridUnits",
+        "minimumCoreVersion"
+      ],
+      "type": "object"
+    }
+  }
+}

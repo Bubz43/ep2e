@@ -1,0 +1,74 @@
+@use "functions" as *;
+
+.app {
+  &.scene-sheet {
+    max-width: 600px;
+    max-height: calc(100vh - 200px);
+    min-height: 400px;
+    button[type="submit"] {
+      position: sticky;
+      bottom: 0;
+    }
+  }
+  .compendium {
+    color: var(--color-text);
+  }
+
+  .window-content {
+    background: var(--color-bg);
+
+    .form-header {
+      color: var(--color-text);
+    }
+
+    form:not(#token-hud) {
+      color: var(--color-text);
+      background: var(--color-bg);
+    }
+
+    span.units,
+    .hint {
+      color: var(--color-text-lighter);
+    }
+
+    .notes {
+      font-size: 13px;
+      color: var(--color-text-lighter);
+    }
+
+    textarea[name="command"] {
+      color: var(--color-text);
+    }
+  }
+
+  &.dialog {
+    .dialog-content {
+      color: var(--color-text);
+    }
+  }
+}
+
+.window-app.dialog p {
+  color: var(--color-text-lighter);
+}
+.window-app {
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  max-height: 95vh;
+  background: alphav(var(--color-bg), 0.8);
+  border-radius: 0px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.712), 0 0 5px black,
+    0 0 1px rgba(255, 255, 255, 0.822) inset;
+
+  &.token-sheet {
+    div[data-tab="resources"] {
+      .form-group {
+        display: none;
+        &:first-of-type {
+          display: flex;
+          margin-bottom: 0.5rem;
+        }
+      }
+    }
+  }
+}
