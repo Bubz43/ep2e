@@ -1,5 +1,1633 @@
-@mixin heading {
-  h1 {
-    font-size: 10rem;
+@mixin styled-scrollbars {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    box-shadow: 0 0 1px #999 inset;
+    border-radius: 0px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    outline: none;
+    border-radius: 0px;
+    background: #782e22;
+    border: 1px solid #ff6400;
+    background: #b0c4de99;
+    border: 1px solid #77889980;
+  }
+
+  * {
+    // scrollbar-color: hsl(14, 94%, 42%) hsl(0, 2%, 18%);
+    scrollbar-color: #b52a0ae6 #28272745;
+    scrollbar-color: #77889980 #28272745;
+
+    scrollbar-width: thin;
+  }
+}
+
+@mixin grid-area-classes($areas...) {
+  @each $area in $areas {
+    .#{unquote($area)} {
+      grid-area: unquote($area);
+    }
+  }
+}
+
+@mixin label($font-size: 12px, $padding: 1px 4px 0px 0px) {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: $font-size;
+  padding: $padding;
+  margin: 0;
+  font-weight: normal;
+  // opacity: 0.8;
+  color: hsl(0, 0%, 80%)
+}
+
+@mixin divider($width: 80%, $vertMargin: 0.5rem) {
+  content: "";
+  display: block;
+  width: $width;
+  margin: $vertMargin auto;
+  opacity: 0.6;
+  border-radius: 100%;
+  border-bottom: 2px solid var(--color-primary);
+}
+
+@mixin elevation {
+  background: hsla(0, 0%, 41%, 0.05);
+  box-shadow: 0 0 10px black;
+}
+
+@mixin widgetless-number-inputs {
+  input[type="number"] {
+    -moz-appearance: textfield !important;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+}
+
+@mixin truncate($truncation-boundary) {
+  max-width: $truncation-boundary;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+///
+/// Creates a triangle on one of the edges of an element
+///
+/// @author Eduardo Boucas
+///
+/// @param {String}   $pos - Which edge to create the triangle on
+/// @param {Length}   $offset - The offset from the origin (top or left) on the edge
+/// @param {String}   $direction - Direction of the triangle (in or out)
+/// @param {Length}   $width - Width of the triangle
+/// @param {String}   $type - Type of the pseudo-element (before or after)
+///
+/// @example scss - A triangle on the left edge of the parent, 15px from the top, pointing out with a width of 30px
+///  @include triangle('left', 15px, 'out', 30px);
+///
+/// @example scss - A triangle on the bottom edge of the parent, 220px from the left, pointing out, with a width of 60px and using a :before
+///  @include triangle('bottom', 220px, 'out', 60px, 'before');
+///
+@mixin triangle($pos, $offset, $direction, $width, $type: "after") {
+  position: relative;
+
+  &:#{$type} {
+    position: absolute;
+    content: "";
+    z-index: 9999;
+
+    // Reset position and offsets
+    top: auto;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    $hOffset: 0;
+    $vOffset: 0;
+
+    // Triangle: down
+    @if (
+      (($pos== "top") and ($direction== "in")) or
+        ($pos== "bottom") and
+        ($direction== "out")
+    ) {
+      border-top: $width solid currentColor;
+      border-right: $width solid transparent;
+      border-bottom: none;
+      border-left: $width solid transparent;
+
+      $vOffset: if($direction== "in", 0, -$width);
+    }
+
+    // Triangle: up
+    @if (
+      (($pos== "top") and ($direction== "out")) or
+        ($pos== "bottom") and
+        ($direction== "in")
+    ) {
+      border-top: none;
+      border-right: $width solid transparent;
+      border-bottom: $width solid currentColor;
+      border-left: $width solid transparent;
+
+      $vOffset: if($direction== "in", 0, -$width);
+    }
+
+    // Triangle: right
+    @if (
+      (($pos== "left") and ($direction== "in")) or
+        ($pos== "right") and
+        ($direction== "out")
+    ) {
+      border-top: $width solid transparent;
+      border-right: none;
+      border-bottom: $width solid transparent;
+      border-left: $width solid currentColor;
+
+      $hOffset: if($direction== "in", 0, -$width);
+    }
+
+    // Triangle: left
+    @if (
+      (($pos== "left") and ($direction== "out")) or
+        ($pos== "right") and
+        ($direction== "in")
+    ) {
+      border-top: $width solid transparent;
+      border-right: $width solid currentColor;
+      border-bottom: $width solid transparent;
+      border-left: none;
+      $hOffset: if($direction== "in", 0, -$width);
+    }
+
+    @if ($pos== "top") {
+      top: $vOffset;
+      left: if($offset== "center", calc(50% - #{$width}), $offset);
+    } @else if ($pos== "bottom") {
+      bottom: $vOffset;
+      left: if($offset== "center", calc(50% - #{$width}), $offset);
+    } @else if ($pos== "left") {
+      top: if($offset== "center", calc(50% - #{$width}), $offset);
+      left: $hOffset;
+    } @else if ($pos== "right") {
+      top: if($offset== "center", calc(50% - #{$width}), $offset);
+      right: $hOffset;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------
+//
+//     SCSS mixin based on Animate.css
+//
+//     Animate.css https://daneden.github.io/animate.css
+//     Licensed under the MIT license - https://opensource.org/licenses/MIT
+//     Copyright (c) 2015 Daniel Eden
+//
+// -----------------------------------------------------------------------
+//
+//     Syntax:
+//     @include animate-css($type, [$duration, $repeat]);
+//
+//     Requirements:  Autoprefixer
+//
+//     Notes:
+//     @keyframes will boubble why extend placeholders will
+//     cause keyframes to be printed – even if not used.
+//
+//     To avoid class dependencies the classes .animate and
+//     .infinite has been removed. .animate values comes
+//     with each include and .infinite can be set by passing
+//     $repeat: infinite
+//
+//     Type values:
+//     bounce
+//     flash
+//     pulse
+//     rubberBand
+//     shake
+//     headShake
+//     swing
+//     tada
+//     wobble
+//     jello
+//     bounceIn
+//     bounceInDown
+//     bounceInLeft
+//     bounceInRight
+//     bounceInUp
+//     bounceOut
+//     bounceOutDown
+//     bounceOutLeft
+//     bounceOutRight
+//     bounceOutUp
+//     fadeIn
+//     fadeInDown
+//     fadeInDownBig
+//     fadeInLeft
+//     fadeInLeftBig
+//     fadeInRight
+//     fadeInRightBig
+//     fadeInUp
+//     fadeInUpBig
+//     fadeOut
+//     fadeOutDown
+//     fadeOutDownBig
+//     fadeOutLeft
+//     fadeOutLeftBig
+//     fadeOutRight
+//     fadeOutRightBig
+//     fadeOutUp
+//     fadeOutUpBig
+//     flipInX
+//     flipInY
+//     flipOutX
+//     flipOutY
+//     lightSpeedIn
+//     lightSpeedOut
+//     rotateIn
+//     rotateInDownLeft
+//     rotateInDownRight
+//     rotateInUpLeft
+//     rotateInUpRight
+//     rotateOut
+//     rotateOutDownLeft
+//     rotateOutDownRight
+//     rotateOutUpLeft
+//     rotateOutUpRight
+//     hinge
+//     rollIn
+//     rollOut
+//     zoomIn
+//     zoomInDown
+//     zoomInLeft
+//     zoomInRight
+//     zoomInUp
+//     zoomOut
+//     zoomOutDown
+//     zoomOutLeft
+//     zoomOutRight
+//     zoomOutUp
+//     slideInDown
+//     slideInLeft
+//     slideInRight
+//     slideInUp
+//     slideOutDown
+//     slideOutLeft
+//     slideOutRight
+//     slideOutUp
+//
+// -----------------------------------------------------------------------
+@mixin animate-css($type, $duration: null, $repeat: null) {
+  //     Animation name prefix
+  $prefix: "";
+
+  //     Type
+  animation-name: unquote($prefix + $type);
+
+  //     Duration
+  $duration: if(not $duration and index(hinge, $type), 2s, $duration);
+  $duration: if(
+    not $duration and index(bounceIn bounceOut flipOutX flipOutY, $type),
+    0.75s,
+    $duration
+  );
+  animation-duration: $duration or 1s;
+
+  //     Repeat
+  animation-iteration-count: if($repeat==infinite, infinite, $repeat);
+
+  //    Fill mode
+  animation-fill-mode: both;
+
+  //    Custom
+  @if $type==bounce {
+    transform-origin: center bottom;
+  }
+
+  @if $type==headShake {
+    animation-timing-function: ease-in-out;
+  }
+
+  @if $type==swing {
+    transform-origin: top center;
+  }
+
+  @if $type==jello {
+    transform-origin: center;
+  }
+
+  @if $type==flip {
+    backface-visibility: visible;
+  }
+
+  @if $type==flipInX {
+    backface-visibility: visible !important;
+  }
+
+  @if $type==flipInY {
+    backface-visibility: visible !important;
+  }
+
+  @if $type==flipOutX {
+    backface-visibility: visible !important;
+  }
+
+  @if $type==flipOutY {
+    backface-visibility: visible !important;
+  }
+
+  @if $type==lightSpeedIn {
+    animation-timing-function: ease-out;
+  }
+
+  @if $type==lightSpeedOut {
+    animation-timing-function: ease-in;
+  }
+
+  //    Keyframes
+  $keyframerenderonce: if(
+    global-variable-exists(keyframerenderonce),
+    $keyframerenderonce,
+    ()
+  ) !global;
+
+  @if not index($keyframerenderonce, $type) {
+    $keyframerenderonce: append($keyframerenderonce, $type) !global;
+
+    @keyframes #{$prefix + $type} {
+      //     Attention Seekers
+      @if $type==bounce {
+        20%,
+        53%,
+        80%,
+        from,
+        to {
+          animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+          transform: translate3d(0, 0, 0);
+        }
+
+        40%,
+        43% {
+          animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+          transform: translate3d(0, -30px, 0);
+        }
+
+        70% {
+          animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+          transform: translate3d(0, -15px, 0);
+        }
+
+        90% {
+          transform: translate3d(0, -4px, 0);
+        }
+      }
+
+      @if $type==flash {
+        50%,
+        from,
+        to {
+          opacity: 1;
+        }
+
+        25%,
+        75% {
+          opacity: 0;
+        }
+      }
+
+      @if $type==pulse {
+        from {
+          transform: scale3d(1, 1, 1);
+        }
+
+        50% {
+          transform: scale3d(1.05, 1.05, 1.05);
+        }
+
+        to {
+          transform: scale3d(1, 1, 1);
+        }
+      }
+
+      @if $type==rubberBand {
+        from {
+          transform: scale3d(1, 1, 1);
+        }
+
+        30% {
+          transform: scale3d(1.25, 0.75, 1);
+        }
+
+        40% {
+          transform: scale3d(0.75, 1.25, 1);
+        }
+
+        50% {
+          transform: scale3d(1.15, 0.85, 1);
+        }
+
+        65% {
+          transform: scale3d(0.95, 1.05, 1);
+        }
+
+        75% {
+          transform: scale3d(1.05, 0.95, 1);
+        }
+
+        to {
+          transform: scale3d(1, 1, 1);
+        }
+      }
+
+      @if $type==shake {
+        from,
+        to {
+          transform: translate3d(0, 0, 0);
+        }
+
+        10%,
+        30%,
+        50%,
+        70%,
+        90% {
+          transform: translate3d(-10px, 0, 0);
+        }
+
+        20%,
+        40%,
+        60%,
+        80% {
+          transform: translate3d(10px, 0, 0);
+        }
+      }
+
+      @if $type==headShake {
+        0% {
+          transform: translateX(0);
+        }
+
+        6.5% {
+          transform: translateX(-6px) rotateY(-9deg);
+        }
+
+        18.5% {
+          transform: translateX(5px) rotateY(7deg);
+        }
+
+        31.5% {
+          transform: translateX(-3px) rotateY(-5deg);
+        }
+
+        43.5% {
+          transform: translateX(2px) rotateY(3deg);
+        }
+
+        50% {
+          transform: translateX(0);
+        }
+      }
+
+      @if $type==swing {
+        20% {
+          transform: rotate3d(0, 0, 1, 15deg);
+        }
+
+        40% {
+          transform: rotate3d(0, 0, 1, -10deg);
+        }
+
+        60% {
+          transform: rotate3d(0, 0, 1, 5deg);
+        }
+
+        80% {
+          transform: rotate3d(0, 0, 1, -5deg);
+        }
+
+        to {
+          transform: rotate3d(0, 0, 1, 0deg);
+        }
+      }
+
+      @if $type==tada {
+        from {
+          transform: scale3d(1, 1, 1);
+        }
+
+        10%,
+        20% {
+          transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
+        }
+
+        30%,
+        50%,
+        70%,
+        90% {
+          transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+        }
+
+        40%,
+        60%,
+        80% {
+          transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+        }
+
+        to {
+          transform: scale3d(1, 1, 1);
+        }
+      }
+
+      @if $type==wobble {
+        from {
+          transform: none;
+        }
+
+        15% {
+          transform: translate3d(-25%, 0, 0) rotate3d(0, 0, 1, -5deg);
+        }
+
+        30% {
+          transform: translate3d(20%, 0, 0) rotate3d(0, 0, 1, 3deg);
+        }
+
+        45% {
+          transform: translate3d(-15%, 0, 0) rotate3d(0, 0, 1, -3deg);
+        }
+
+        60% {
+          transform: translate3d(10%, 0, 0) rotate3d(0, 0, 1, 2deg);
+        }
+
+        75% {
+          transform: translate3d(-5%, 0, 0) rotate3d(0, 0, 1, -1deg);
+        }
+
+        to {
+          transform: none;
+        }
+      }
+
+      @if $type==jello {
+        11.1%,
+        from,
+        to {
+          transform: none;
+        }
+
+        22.2% {
+          transform: skewX(-12.5deg) skewY(-12.5deg);
+        }
+
+        33.3% {
+          transform: skewX(6.25deg) skewY(6.25deg);
+        }
+
+        44.4% {
+          transform: skewX(-3.125deg) skewY(-3.125deg);
+        }
+
+        55.5% {
+          transform: skewX(1.5625deg) skewY(1.5625deg);
+        }
+
+        66.6% {
+          transform: skewX(-0.78125deg) skewY(-0.78125deg);
+        }
+
+        77.7% {
+          transform: skewX(0.390625deg) skewY(0.390625deg);
+        }
+
+        88.8% {
+          transform: skewX(-0.1953125deg) skewY(-0.1953125deg);
+        }
+      }
+
+      //     Bouncing Entrances
+      @if $type==bounceIn {
+        20%,
+        40%,
+        60%,
+        80%,
+        from,
+        to {
+          animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        0% {
+          opacity: 0;
+          transform: scale3d(0.3, 0.3, 0.3);
+        }
+
+        20% {
+          transform: scale3d(1.1, 1.1, 1.1);
+        }
+
+        40% {
+          transform: scale3d(0.9, 0.9, 0.9);
+        }
+
+        60% {
+          opacity: 1;
+          transform: scale3d(1.03, 1.03, 1.03);
+        }
+
+        80% {
+          transform: scale3d(0.97, 0.97, 0.97);
+        }
+
+        to {
+          opacity: 1;
+          transform: scale3d(1, 1, 1);
+        }
+      }
+
+      @if $type==bounceInDown {
+        60%,
+        75%,
+        90%,
+        from,
+        to {
+          animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        0% {
+          opacity: 0;
+          transform: translate3d(0, -3000px, 0);
+        }
+
+        60% {
+          opacity: 1;
+          transform: translate3d(0, 25px, 0);
+        }
+
+        75% {
+          transform: translate3d(0, -10px, 0);
+        }
+
+        90% {
+          transform: translate3d(0, 5px, 0);
+        }
+
+        to {
+          transform: none;
+        }
+      }
+
+      @if $type==bounceInLeft {
+        60%,
+        75%,
+        90%,
+        from,
+        to {
+          animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        0% {
+          opacity: 0;
+          transform: translate3d(-3000px, 0, 0);
+        }
+
+        60% {
+          opacity: 1;
+          transform: translate3d(25px, 0, 0);
+        }
+
+        75% {
+          transform: translate3d(-10px, 0, 0);
+        }
+
+        90% {
+          transform: translate3d(5px, 0, 0);
+        }
+
+        to {
+          transform: none;
+        }
+      }
+
+      @if $type==bounceInRight {
+        60%,
+        75%,
+        90%,
+        from,
+        to {
+          animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        from {
+          opacity: 0;
+          transform: translate3d(3000px, 0, 0);
+        }
+
+        60% {
+          opacity: 1;
+          transform: translate3d(-25px, 0, 0);
+        }
+
+        75% {
+          transform: translate3d(10px, 0, 0);
+        }
+
+        90% {
+          transform: translate3d(-5px, 0, 0);
+        }
+
+        to {
+          transform: none;
+        }
+      }
+
+      @if $type==bounceInUp {
+        60%,
+        75%,
+        90%,
+        from,
+        to {
+          animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        from {
+          opacity: 0;
+          transform: translate3d(0, 3000px, 0);
+        }
+
+        60% {
+          opacity: 1;
+          transform: translate3d(0, -20px, 0);
+        }
+
+        75% {
+          transform: translate3d(0, 10px, 0);
+        }
+
+        90% {
+          transform: translate3d(0, -5px, 0);
+        }
+
+        to {
+          transform: translate3d(0, 0, 0);
+        }
+      }
+
+      //     Bouncing Exits
+      @if $type==bounceOut {
+        20% {
+          transform: scale3d(0.9, 0.9, 0.9);
+        }
+
+        50%,
+        55% {
+          opacity: 1;
+          transform: scale3d(1.1, 1.1, 1.1);
+        }
+
+        to {
+          opacity: 0;
+          transform: scale3d(0.3, 0.3, 0.3);
+        }
+      }
+
+      @if $type==bounceOutDown {
+        20% {
+          transform: translate3d(0, 10px, 0);
+        }
+
+        40%,
+        45% {
+          opacity: 1;
+          transform: translate3d(0, -20px, 0);
+        }
+
+        to {
+          opacity: 0;
+          transform: translate3d(0, 2000px, 0);
+        }
+      }
+
+      @if $type==bounceOutLeft {
+        20% {
+          opacity: 1;
+          transform: translate3d(20px, 0, 0);
+        }
+
+        to {
+          opacity: 0;
+          transform: translate3d(-2000px, 0, 0);
+        }
+      }
+
+      @if $type==bounceOutRight {
+        20% {
+          opacity: 1;
+          transform: translate3d(-20px, 0, 0);
+        }
+
+        to {
+          opacity: 0;
+          transform: translate3d(2000px, 0, 0);
+        }
+      }
+
+      @if $type==bounceOutUp {
+        20% {
+          transform: translate3d(0, -10px, 0);
+        }
+
+        40%,
+        45% {
+          opacity: 1;
+          transform: translate3d(0, 20px, 0);
+        }
+
+        to {
+          opacity: 0;
+          transform: translate3d(0, -2000px, 0);
+        }
+      }
+
+      //     Fading Entrances
+      @if $type==fadeIn {
+        from {
+          opacity: 0;
+        }
+
+        to {
+          opacity: 1;
+        }
+      }
+
+      @if $type==fadeInDown {
+        from {
+          opacity: 0;
+          transform: translate3d(0, -100%, 0);
+        }
+
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      @if $type==fadeInDownBig {
+        from {
+          opacity: 0;
+          transform: translate3d(0, -2000px, 0);
+        }
+
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      @if $type==fadeInLeft {
+        from {
+          opacity: 0;
+          transform: translate3d(-100%, 0, 0);
+        }
+
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      @if $type==fadeInLeftBig {
+        from {
+          opacity: 0;
+          transform: translate3d(-2000px, 0, 0);
+        }
+
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      @if $type==fadeInRight {
+        from {
+          opacity: 0;
+          transform: translate3d(100%, 0, 0);
+        }
+
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      @if $type==fadeInRightBig {
+        from {
+          opacity: 0;
+          transform: translate3d(2000px, 0, 0);
+        }
+
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      @if $type==fadeInUp {
+        from {
+          opacity: 0;
+          transform: translate3d(0, 100%, 0);
+        }
+
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      @if $type==fadeInUpBig {
+        from {
+          opacity: 0;
+          transform: translate3d(0, 2000px, 0);
+        }
+
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      //    Fading Exits
+      @if $type==fadeOut {
+        from {
+          opacity: 1;
+        }
+
+        to {
+          opacity: 0;
+        }
+      }
+
+      @if $type==fadeOutDown {
+        from {
+          opacity: 1;
+        }
+
+        to {
+          opacity: 0;
+          transform: translate3d(0, 100%, 0);
+        }
+      }
+
+      @if $type==fadeOutDownBig {
+        from {
+          opacity: 1;
+        }
+
+        to {
+          opacity: 0;
+          transform: translate3d(0, 2000px, 0);
+        }
+      }
+
+      @if $type==fadeOutLeft {
+        from {
+          opacity: 1;
+        }
+
+        to {
+          opacity: 0;
+          transform: translate3d(-100%, 0, 0);
+        }
+      }
+
+      @if $type==fadeOutLeftBig {
+        from {
+          opacity: 1;
+        }
+
+        to {
+          opacity: 0;
+          transform: translate3d(-2000px, 0, 0);
+        }
+      }
+
+      @if $type==fadeOutRight {
+        from {
+          opacity: 1;
+        }
+
+        to {
+          opacity: 0;
+          transform: translate3d(100%, 0, 0);
+        }
+      }
+
+      @if $type==fadeOutRightBig {
+        from {
+          opacity: 1;
+        }
+
+        to {
+          opacity: 0;
+          transform: translate3d(2000px, 0, 0);
+        }
+      }
+
+      @if $type==fadeOutUp {
+        from {
+          opacity: 1;
+        }
+
+        to {
+          opacity: 0;
+          transform: translate3d(0, -100%, 0);
+        }
+      }
+
+      @if $type==fadeOutUpBig {
+        from {
+          opacity: 1;
+        }
+
+        to {
+          opacity: 0;
+          transform: translate3d(0, -2000px, 0);
+        }
+      }
+
+      //    Flippers
+      @if $type==flip {
+        from {
+          transform: perspective(400px) rotate3d(0, 1, 0, -360deg);
+          animation-timing-function: ease-out;
+        }
+
+        40% {
+          transform: perspective(400px)
+            translate3d(0, 0, 150px)
+            rotate3d(0, 1, 0, -190deg);
+          animation-timing-function: ease-out;
+        }
+
+        50% {
+          transform: perspective(400px)
+            translate3d(0, 0, 150px)
+            rotate3d(0, 1, 0, -170deg);
+          animation-timing-function: ease-in;
+        }
+
+        80% {
+          transform: perspective(400px) scale3d(0.95, 0.95, 0.95);
+          animation-timing-function: ease-in;
+        }
+
+        to {
+          transform: perspective(400px);
+          animation-timing-function: ease-in;
+        }
+      }
+
+      @if $type==flipInX {
+        from {
+          transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+          animation-timing-function: ease-in;
+          opacity: 0;
+        }
+
+        40% {
+          transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+          animation-timing-function: ease-in;
+        }
+
+        60% {
+          transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+          opacity: 1;
+        }
+
+        80% {
+          transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+        }
+
+        to {
+          transform: perspective(400px);
+        }
+      }
+
+      @if $type==flipInY {
+        from {
+          transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+          animation-timing-function: ease-in;
+          opacity: 0;
+        }
+
+        40% {
+          transform: perspective(400px) rotate3d(0, 1, 0, -20deg);
+          animation-timing-function: ease-in;
+        }
+
+        60% {
+          transform: perspective(400px) rotate3d(0, 1, 0, 10deg);
+          opacity: 1;
+        }
+
+        80% {
+          transform: perspective(400px) rotate3d(0, 1, 0, -5deg);
+        }
+
+        to {
+          transform: perspective(400px);
+        }
+      }
+
+      @if $type==flipOutX {
+        from {
+          transform: perspective(400px);
+        }
+
+        30% {
+          transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+          opacity: 1;
+        }
+
+        to {
+          transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+          opacity: 0;
+        }
+      }
+
+      @if $type==flipOutY {
+        from {
+          transform: perspective(400px);
+        }
+
+        30% {
+          transform: perspective(400px) rotate3d(0, 1, 0, -15deg);
+          opacity: 1;
+        }
+
+        to {
+          transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+          opacity: 0;
+        }
+      }
+
+      //     Lightspeed
+      @if $type==lightSpeedIn {
+        from {
+          transform: translate3d(100%, 0, 0) skewX(-30deg);
+          opacity: 0;
+        }
+
+        60% {
+          transform: skewX(20deg);
+          opacity: 1;
+        }
+
+        80% {
+          transform: skewX(-5deg);
+          opacity: 1;
+        }
+
+        to {
+          transform: none;
+          opacity: 1;
+        }
+      }
+
+      @if $type==lightSpeedOut {
+        from {
+          opacity: 1;
+        }
+
+        to {
+          transform: translate3d(100%, 0, 0) skewX(30deg);
+          opacity: 0;
+        }
+      }
+
+      //     Rotating Entrances
+      @if $type==rotateIn {
+        from {
+          transform-origin: center;
+          transform: rotate3d(0, 0, 1, -200deg);
+          opacity: 0;
+        }
+
+        to {
+          transform-origin: center;
+          transform: none;
+          opacity: 1;
+        }
+      }
+
+      @if $type==rotateInDownLeft {
+        from {
+          transform-origin: left bottom;
+          transform: rotate3d(0, 0, 1, -45deg);
+          opacity: 0;
+        }
+
+        to {
+          transform-origin: left bottom;
+          transform: none;
+          opacity: 1;
+        }
+      }
+
+      @if $type==rotateInDownRight {
+        from {
+          transform-origin: right bottom;
+          transform: rotate3d(0, 0, 1, 45deg);
+          opacity: 0;
+        }
+
+        to {
+          transform-origin: right bottom;
+          transform: none;
+          opacity: 1;
+        }
+      }
+
+      @if $type==rotateInUpLeft {
+        from {
+          transform-origin: left bottom;
+          transform: rotate3d(0, 0, 1, 45deg);
+          opacity: 0;
+        }
+
+        to {
+          transform-origin: left bottom;
+          transform: none;
+          opacity: 1;
+        }
+      }
+
+      @if $type==rotateInUpRight {
+        from {
+          transform-origin: right bottom;
+          transform: rotate3d(0, 0, 1, -90deg);
+          opacity: 0;
+        }
+
+        to {
+          transform-origin: right bottom;
+          transform: none;
+          opacity: 1;
+        }
+      }
+
+      //     Rotating Exits
+      @if $type==rotateOut {
+        from {
+          transform-origin: center;
+          opacity: 1;
+        }
+
+        to {
+          transform-origin: center;
+          transform: rotate3d(0, 0, 1, 200deg);
+          opacity: 0;
+        }
+      }
+
+      @if $type==rotateOutDownLeft {
+        from {
+          transform-origin: left bottom;
+          opacity: 1;
+        }
+
+        to {
+          transform-origin: left bottom;
+          transform: rotate3d(0, 0, 1, 45deg);
+          opacity: 0;
+        }
+      }
+
+      @if $type==rotateOutDownRight {
+        from {
+          transform-origin: right bottom;
+          opacity: 1;
+        }
+
+        to {
+          transform-origin: right bottom;
+          transform: rotate3d(0, 0, 1, -45deg);
+          opacity: 0;
+        }
+      }
+
+      @if $type==rotateOutUpLeft {
+        from {
+          transform-origin: left bottom;
+          opacity: 1;
+        }
+
+        to {
+          transform-origin: left bottom;
+          transform: rotate3d(0, 0, 1, -45deg);
+          opacity: 0;
+        }
+      }
+
+      @if $type==rotateOutUpRight {
+        from {
+          transform-origin: right bottom;
+          opacity: 1;
+        }
+
+        to {
+          transform-origin: right bottom;
+          transform: rotate3d(0, 0, 1, 90deg);
+          opacity: 0;
+        }
+      }
+
+      //     Sliding Entrances
+      @if $type==slideInDown {
+        from {
+          transform: translate3d(0, -100%, 0);
+          visibility: visible;
+        }
+
+        to {
+          transform: translate3d(0, 0, 0);
+        }
+      }
+
+      @if $type==slideInLeft {
+        from {
+          transform: translate3d(-100%, 0, 0);
+          visibility: visible;
+        }
+
+        to {
+          transform: translate3d(0, 0, 0);
+        }
+      }
+
+      @if $type==slideInRight {
+        from {
+          transform: translate3d(100%, 0, 0);
+          visibility: visible;
+        }
+
+        to {
+          transform: translate3d(0, 0, 0);
+        }
+      }
+
+      @if $type==slideInUp {
+        from {
+          transform: translate3d(0, 100%, 0);
+          visibility: visible;
+        }
+
+        to {
+          transform: translate3d(0, 0, 0);
+        }
+      }
+
+      //     Sliding Exits
+      @if $type==slideOutUp {
+        from {
+          transform: translate3d(0, 0, 0);
+        }
+
+        to {
+          visibility: hidden;
+          transform: translate3d(0, -100%, 0);
+        }
+      }
+
+      @if $type==slideOutDown {
+        from {
+          transform: translate3d(0, 0, 0);
+        }
+
+        to {
+          visibility: hidden;
+          transform: translate3d(0, 100%, 0);
+        }
+      }
+
+      @if $type==slideOutLeft {
+        from {
+          transform: translate3d(0, 0, 0);
+        }
+
+        to {
+          visibility: hidden;
+          transform: translate3d(-100%, 0, 0);
+        }
+      }
+
+      @if $type==slideOutRight {
+        from {
+          transform: translate3d(0, 0, 0);
+        }
+
+        to {
+          visibility: hidden;
+          transform: translate3d(1800%, 0, 0);
+        }
+      }
+
+      //    Zoom Entrances
+      @if $type==zoomIn {
+        from {
+          opacity: 0;
+          transform: scale3d(0.3, 0.3, 0.3);
+        }
+
+        50% {
+          opacity: 1;
+        }
+      }
+
+      @if $type==zoomInDown {
+        from {
+          opacity: 0;
+          transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
+          animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+        }
+
+        60% {
+          opacity: 1;
+          transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
+          animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+        }
+      }
+
+      @if $type==zoomInLeft {
+        from {
+          opacity: 0;
+          transform: scale3d(0.1, 0.1, 0.1) translate3d(-1000px, 0, 0);
+          animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+        }
+
+        60% {
+          opacity: 1;
+          transform: scale3d(0.475, 0.475, 0.475) translate3d(10px, 0, 0);
+          animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+        }
+      }
+
+      @if $type==zoomInRight {
+        from {
+          opacity: 0;
+          transform: scale3d(0.1, 0.1, 0.1) translate3d(1000px, 0, 0);
+          animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+        }
+
+        60% {
+          opacity: 1;
+          transform: scale3d(0.475, 0.475, 0.475) translate3d(-10px, 0, 0);
+          animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+        }
+      }
+
+      @if $type==zoomInUp {
+        from {
+          opacity: 0;
+          transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 1000px, 0);
+          animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+        }
+
+        60% {
+          opacity: 1;
+          transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);
+          animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+        }
+      }
+
+      //    Zoom Exits
+      @if $type==zoomOut {
+        from {
+          opacity: 1;
+        }
+
+        50% {
+          opacity: 0;
+          transform: scale3d(0.3, 0.3, 0.3);
+        }
+
+        to {
+          opacity: 0;
+        }
+      }
+
+      @if $type==zoomOutDown {
+        40% {
+          opacity: 1;
+          transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);
+          animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+        }
+
+        to {
+          opacity: 0;
+          transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 2000px, 0);
+          transform-origin: center bottom;
+          animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+        }
+      }
+
+      @if $type==zoomOutLeft {
+        40% {
+          opacity: 1;
+          transform: scale3d(0.475, 0.475, 0.475) translate3d(42px, 0, 0);
+        }
+
+        to {
+          opacity: 0;
+          transform: scale(0.1) translate3d(-2000px, 0, 0);
+          transform-origin: left center;
+        }
+      }
+
+      @if $type==zoomOutRight {
+        40% {
+          opacity: 1;
+          transform: scale3d(0.475, 0.475, 0.475) translate3d(-42px, 0, 0);
+        }
+
+        to {
+          opacity: 0;
+          transform: scale(0.1) translate3d(2000px, 0, 0);
+          transform-origin: right center;
+        }
+      }
+
+      @if $type==zoomOutUp {
+        40% {
+          opacity: 1;
+          transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
+          animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+        }
+
+        to {
+          opacity: 0;
+          transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -2000px, 0);
+          transform-origin: center bottom;
+          animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+        }
+      }
+
+      //    Specials
+      @if $type==hinge {
+        0% {
+          transform-origin: top left;
+          animation-timing-function: ease-in-out;
+        }
+
+        20%,
+        60% {
+          transform: rotate3d(0, 0, 1, 80deg);
+          transform-origin: top left;
+          animation-timing-function: ease-in-out;
+        }
+
+        40%,
+        80% {
+          transform: rotate3d(0, 0, 1, 60deg);
+          transform-origin: top left;
+          animation-timing-function: ease-in-out;
+          opacity: 1;
+        }
+
+        to {
+          transform: translate3d(0, 700px, 0);
+          opacity: 0;
+        }
+      }
+
+      @if $type==rollIn {
+        from {
+          opacity: 0;
+          transform: translate3d(-100%, 0, 0) rotate3d(0, 0, 1, -120deg);
+        }
+
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      @if $type==rollOut {
+        from {
+          opacity: 1;
+        }
+
+        to {
+          opacity: 0;
+          transform: translate3d(100%, 0, 0) rotate3d(0, 0, 1, 120deg);
+        }
+      }
+    }
   }
 }

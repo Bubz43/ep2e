@@ -1,6 +1,26 @@
 import { AppRoot } from './app-root';
 import { Button } from './components/button/button';
 
+const link = document.createElement('link');
+link.rel = 'stylesheet';
+link.href = 'systems/ep2e/build/_dist_/global.css';
+document.head.appendChild(link);
+
+for (const link of [
+  "https://fonts.googleapis.com/css?family=Material+Icons&display=block",
+  "https://fonts.googleapis.com/css?family=Roboto:300,400,500",
+  "https://fonts.googleapis.com/css?family=Rubik:300,400,700&display=swap",
+  "https://fonts.googleapis.com/css?family=Jost:300,400,700&display=swap",
+
+  "https://fonts.googleapis.com/css?family=Spartan:300,400,700&display=swap",
+  "https://fonts.googleapis.com/css?family=Fira+Code&display=swap",
+]) {
+  const fontEl = document.createElement("link");
+  fontEl.rel = "stylesheet";
+  fontEl.href = link;
+  document.head.appendChild(fontEl);
+}
+
 // Material Components
 import "@material/mwc-button";
 import "@material/mwc-icon-button-toggle";
@@ -31,11 +51,6 @@ AppRoot;
 Button;
 
 Hooks.once('ready', async () => {
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = 'systems/ep2e/build/_dist_/global.css';
-  document.head.appendChild(link);
   requestAnimationFrame(() => document.body.classList.add('ready'));
   document.body.appendChild(new AppRoot());
-
 });

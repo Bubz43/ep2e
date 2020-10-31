@@ -1,16 +1,12 @@
 @use "scss/mixins";
-// @import "./scss/mixins";
-
-// @include heading;
 
 :host {
   z-index: 1000;
 }
 
-@include mixins.heading;
-// h1 {
-//   font-size: 4rem;
-// }
+h1 {
+  font-size: 6rem;
+}
 
 .wrapper {
   display: flex;

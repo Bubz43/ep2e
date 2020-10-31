@@ -1,0 +1,31 @@
+// credit: https://codyhouse.co/blog/post/how-to-combine-sass-color-functions-and-css-variables;
+
+@mixin defineColorHSL($color, $hue, $saturation, $lightness) {
+  #{$color}: unquote("hsl(#{$hue}, #{$saturation}, #{$lightness})");
+  #{$color}-h: #{$hue};
+  #{$color}-s: #{$saturation};
+  #{$color}-l: #{$lightness};
+}
+
+body {
+  @include defineColorHSL(--color-primary, 240, 40%, 52%);
+  // @include defineColorHSL(--color-primary, 207, 70%, 55%);
+  @include defineColorHSL(--color-primary-alt, 253, 64%, 79%);
+  @include defineColorHSL(--color-secondary, 196, 62%, 48%);
+  @include defineColorHSL(--color-grey, 210, 14%, 53%);
+  @include defineColorHSL(--color-border, 210, 5%, 20%);
+  // @include defineColorHSL(--color-bg, 260, 12%, 6%);
+  // @include defineColorHSL(--color-bg, 260, 12%, 8.5%);
+  @include defineColorHSL(--color-bg, 0, 0%, 7%);
+  @include defineColorHSL(--color-bg-alt, 200, 6%, 10%);
+
+  @include defineColorHSL(--color-disabled, 0, 0%, 5%);
+  @include defineColorHSL(--color-negative, 349, 64%, 28%);
+  @include defineColorHSL(--color-text, 0, 0%, 94%);
+  @include defineColorHSL(--color-text-lighter, 0, 0%, 65%);
+  @include defineColorHSL(--color-text-disabled, 0, 0%, 28%);
+  @include defineColorHSL(--color-foundry, 24, 100%, 50%);
+
+  color: rgb(18, 18, 18);
+  color: rgb(24, 26, 27)
+}
