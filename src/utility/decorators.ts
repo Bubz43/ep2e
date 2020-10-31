@@ -1,7 +1,7 @@
 export function debounce(time = 250, callFirst = false) {
   return function (
-    target: unknown,
-    propertyKey: string,
+    // target: unknown,
+    // propertyKey: string,
     descriptor: PropertyDescriptor,
   ) {
     const map = new WeakMap();
@@ -20,8 +20,8 @@ export function debounce(time = 250, callFirst = false) {
 
 export function throttle(time = 250, callFirst = false) {
   return function (
-    target: unknown,
-    propertyKey: string,
+    // target: unknown,
+    // propertyKey: string,
     descriptor: PropertyDescriptor,
   ) {
     const map = new WeakMap();

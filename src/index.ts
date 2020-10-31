@@ -25,6 +25,12 @@ import 'weightless/label';
 import 'weightless/list-item';
 
 import 'web-dialog';
+import { Field } from './components/field/field';
+import { Form } from './components/form/form';
+
+// My Components
+Field;
+Form;
 
 const link = document.createElement('link');
 link.rel = 'stylesheet';
