@@ -1,14 +1,15 @@
-import { customElement, LitElement, property, html, PropertyValues, query } from "lit-element";
-import styles from "./form.scss";
-
-import { FieldValue, isFieldValue } from "src/utility/field-values";
-import { notEmpty } from "src/utility/helpers";
+import { debounce } from "@src/utility/decorators";
+import { FieldValue, isFieldValue } from "@src/utility/field-values";
+import { notEmpty } from "@src/utility/helpers";
+import { customElement, html, LitElement, property, PropertyValues, query } from "lit-element";
 import { stopEvent } from "weightless/util/event";
-import { observer } from "@material/mwc-base/observer.js";
-import { debounce } from "src/utility/decorators";
 import type { FieldElement } from "../field/fields";
+import styles from "./form.scss";
 import { FormValueStoredEvent, SlCustomStoreEvent } from "./forms";
 import { validateFormField } from "./validations";
+import { observer } from "@material/mwc-base/observer.js";
+
+
 
 export type SlFormData = {
   key: string;

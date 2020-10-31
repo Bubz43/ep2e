@@ -1,6 +1,6 @@
+import { createEnvironment } from '@src/features/environment';
 import { once } from 'remeda';
 import { addListener } from 'weightless/util/event';
-import { createEnvironment } from '../features/environment';
 import type { NonFunction } from '../utility/helper-types';
 import { EP } from './system';
 

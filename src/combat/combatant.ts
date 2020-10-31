@@ -1,12 +1,13 @@
-import { createPipe } from 'remeda';
-import { SurpriseState } from 'src/features/data-enums';
-import type { ActorEP } from 'src/entities/actor';
-import { UpdateStore } from 'src/entities/update-store';
-import type { Action } from 'src/features/actions';
-import type { StringID } from 'src/features/feature-helpers';
-import { EP } from 'src/foundry/system';
-import type { TokenData } from 'types/foundry-cont';
-import type { DeepPartial } from 'utility-types';
+import { SurpriseState } from "@src/data-enums";
+import type { ActorEP } from "@src/entities/actor";
+import { UpdateStore } from "@src/entities/update-store";
+import type { Action } from "@src/features/actions";
+import type { StringID } from "@src/features/feature-helpers";
+import { EP } from "@src/foundry/system";
+import { createPipe } from "remeda";
+import type { TokenData } from "@src/foundry/foundry-cont";
+import type { DeepPartial } from "utility-types";
+
 
 export type Combatant = {
   active: boolean;

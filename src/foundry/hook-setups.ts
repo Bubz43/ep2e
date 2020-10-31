@@ -1,5 +1,5 @@
+import type { EntityType } from './foundry-cont';
 import type { Class } from 'type-fest';
-import type { EntityType } from 'types/foundry-cont';
 
 type HookType = keyof Pick<
   typeof Hooks,

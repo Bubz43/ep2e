@@ -1,7 +1,7 @@
+import { AptitudeType } from "@src/data-enums";
+import { localize } from "@src/foundry/localization";
 import { clamp } from "remeda";
-import type { AptitudeType } from "src/features/data-enums";
-import { localize } from "src/foundry/localization";
-import { safeMerge } from "src/utility/helpers";
+import { safeMerge } from "../utility/helpers";
 import { createFeature } from "./feature-helpers";
 import { toMilliseconds } from "./time";
 

@@ -32,6 +32,7 @@ module.exports = {
     /* ... */
   },
   alias: {
+    "@src": "./src",
     /* ... */
   },
 };

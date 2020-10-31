@@ -3,14 +3,15 @@ import type { ValueOf, Mutable, JsonObject, Class } from "type-fest";
 import type { DeepPartial, PickByValue } from "utility-types";
 import type * as PIXI from "pixi.js";
 import type { Socket } from "socket.io";
-import type { ActorEP } from "../src/entities/actor";
-import type { ChatMessageEP } from "../src/entities/chat-message";
-import type { ItemEP } from "../src/entities/item";
-import type { SceneEP } from "../src/entities/scene";
-import type { UserEP } from "../src/entities/user";
-import type { EP } from "../src/foundry/system";
-import type { Combatant } from "../src/combat/combatant";
-import type { Environment, EnvironmentOverrides } from "../src/features/environment";
+import type { Combatant } from "@src/combat/combatant";
+import type { ActorEP } from "@src/entities/actor";
+import type { ChatMessageEP } from "@src/entities/chat-message";
+import type { ItemEP } from "@src/entities/item";
+import type { SceneEP } from "@src/entities/scene";
+import type { UserEP } from "@src/entities/user";
+import type { Environment, EnvironmentOverrides } from "@src/features/environment";
+import type { EP } from "./system";
+
 
 // * Comment out canvas, game, ui from foundry.d.ts
 // * Add in context param to Entity.prototype._onUpdate
@@ -49,7 +50,7 @@ export interface EntitySheet {
   bringToTop(): void;
 }
 
-type TokenData = {
+export type TokenData = {
   flags: Record<string, unknown>;
   name: string;
   effects?: string[];
@@ -75,7 +76,7 @@ type TokenData = {
   lightAlpha: number;
   actorId: string;
   actorLink: boolean;
-  actorData: DeepPartial<ActorDatas>;
+  // actorData: DeepPartial<ActorDatas>;
   disposition: ValueOf<CONST["TOKEN_DISPOSITIONS"]>;
   displayBars: ValueOf<CONST["TOKEN_DISPLAY_MODES"]>;
   randomImg: boolean;
@@ -92,7 +93,7 @@ type EntityName = keyof PickByValue<
   Config,
   { entityClass: Class<{ entity: unknown }> }
 >;
-type EntityType = Config[EntityName]["entityClass"];
+export type EntityType = Config[EntityName]["entityClass"];
 
 export type CanvasLayers = {
   background: BackgroundLayer;
@@ -129,7 +130,7 @@ type CombatRoundInfo = {
 };
 
 type Col<T extends Entity> = Omit<Collection<T>, "get"> & {
-  get(id: string, { strict }?: { strict: Boolean }): T | null;
+  get(id: string, options: { strict: Boolean }): T | null;
   render(force: boolean): unknown;
 };
 

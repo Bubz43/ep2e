@@ -1,22 +1,5 @@
 
-const link = document.createElement('link');
-link.rel = 'stylesheet';
-link.href = 'systems/ep2e/build/_dist_/global.css';
-document.head.appendChild(link);
-
-for (const link of [
-  'https://fonts.googleapis.com/css?family=Material+Icons&display=block',
-  'https://fonts.googleapis.com/css?family=Roboto:300,400,500',
-  'https://fonts.googleapis.com/css?family=Rubik:300,400,700&display=swap',
-  'https://fonts.googleapis.com/css?family=Jost:300,400,700&display=swap',
-  'https://fonts.googleapis.com/css?family=Spartan:300,400,700&display=swap',
-  'https://fonts.googleapis.com/css?family=Fira+Code&display=swap',
-]) {
-  const fontEl = document.createElement('link');
-  fontEl.rel = 'stylesheet';
-  fontEl.href = link;
-  document.head.appendChild(fontEl);
-}
+import "./init"
 
 // Material Components
 import '@material/mwc-button';
@@ -43,6 +26,25 @@ import 'weightless/label';
 import 'weightless/list-item';
 
 import 'web-dialog';
+
+const link = document.createElement('link');
+link.rel = 'stylesheet';
+link.href = 'systems/ep2e/build/_dist_/global.css';
+document.head.appendChild(link);
+
+for (const link of [
+  'https://fonts.googleapis.com/css?family=Material+Icons&display=block',
+  'https://fonts.googleapis.com/css?family=Roboto:300,400,500',
+  'https://fonts.googleapis.com/css?family=Rubik:300,400,700&display=swap',
+  'https://fonts.googleapis.com/css?family=Jost:300,400,700&display=swap',
+  'https://fonts.googleapis.com/css?family=Spartan:300,400,700&display=swap',
+  'https://fonts.googleapis.com/css?family=Fira+Code&display=swap',
+]) {
+  const fontEl = document.createElement('link');
+  fontEl.rel = 'stylesheet';
+  fontEl.href = link;
+  document.head.appendChild(fontEl);
+}
 
 
 Hooks.once('ready', async () => {

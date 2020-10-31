@@ -1,10 +1,11 @@
+import type { UpdateActions } from "@src/entities/update-store";
+import { localize } from "@src/foundry/localization";
+import { FieldValue, FieldProps, mapProps } from "@src/utility/field-values";
 import { html } from "lit-html";
 import { ifDefined } from "lit-html/directives/if-defined";
-import type { UpdateActions } from "src/entities/update-store";
-import { localize } from "src/foundry/localization";
-import { FieldValue, FieldProps, mapProps } from "src/utility/field-values";
 import type { PickByValue } from "utility-types";
 import type { Form, SlFormData } from "./form";
+
 
 export type FormHandlers<T extends Record<string, unknown>> = Pick<
   FormInstance<T>,

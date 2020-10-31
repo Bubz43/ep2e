@@ -7,7 +7,9 @@
     "jsx": "preserve",
     "baseUrl": "./",
     /* paths - If you configure Snowpack import aliases, add them here. */
-    "paths": {},
+    "paths": {
+      "@src/*": ["src/*"],
+    },
     /* noEmit - Snowpack builds (emits) files, not tsc. */
     "noEmit": true,
     /* LitElement - Add decorator support! */
@@ -18,6 +20,11 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+    "alwaysStrict": true,
     "allowSyntheticDefaultImports": true,
     "importsNotUsedAsValues": "error"
   }

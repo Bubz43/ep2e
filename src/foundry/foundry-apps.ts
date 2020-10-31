@@ -1,5 +1,5 @@
 import { reposition } from "nanopop";
-import { repositionIfNeeded } from "src/utility/dom";
+import { repositionIfNeeded } from "@src/utility/dom";
 
 export enum NotificationType {
   Info = "info",

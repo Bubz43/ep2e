@@ -2,7 +2,7 @@ import { customElement, LitElement, property, html, query } from "lit-element";
 import styles from "./field.scss";
 import { classMap } from "lit-html/directives/class-map";
 import { nothing } from "lit-html";
-import { debounce } from "src/utility/decorators";
+import { debounce } from "@src/utility/decorators";
 
 type FieldInput = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 

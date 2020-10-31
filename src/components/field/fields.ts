@@ -1,13 +1,13 @@
 import {
   localize,
   LangEntry,
-} from "../../foundry/localization";
+} from "../../../src/foundry/localization";
 import { html, nothing, TemplateResult } from "lit-html";
 import { live } from "lit-html/directives/live";
 import { ifDefined } from "lit-html/directives/if-defined";
-import { notEmpty } from "../../utility/helpers";
+import { notEmpty } from "../../../src/utility/helpers";
 import type { Field } from "./field";
-import type { ValuedProp } from "../../utility/field-values";
+import type { ValuedProp } from "../../../src/utility/field-values";
 import type { Checkbox } from "@material/mwc-checkbox";
 import type { Switch } from "@material/mwc-switch";
 import type { Radio } from "@material/mwc-radio";

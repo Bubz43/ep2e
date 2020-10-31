@@ -1,4 +1,4 @@
-import { localize, LangEntry } from "src/foundry/localization";
+import { localize, LangEntry } from "../foundry/localization";
 
 export const toMilliseconds = ({
   days = 0,

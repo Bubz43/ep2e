@@ -3,7 +3,7 @@ import { purry, range, createPipe, pipe } from 'remeda';
 import type { JsonValue, SetOptional, SetRequired } from 'type-fest';
 import { safeMerge } from '../utility/helpers';
 import type { UpdateActions } from '../entities/update-store';
-import type { FormInstance } from 'src/components/form/forms';
+// import type { FormInstance } from 'src/components/form/forms';
 
 type Feature = Record<string, JsonValue>;
 
@@ -35,29 +35,29 @@ export const uniqueStringID = (existing: string[]) => {
 // };
 
 // TODO: Allow these to take function version of arguments so nested actions can be created
-export const addUpdateRemoveFeature = <T extends FeatureWithID>(
-  updateList: () => UpdateActions<T[]>['commit'],
-): AddUpdateRemoveFeature<T> => {
-  const add: FormInstance<Omit<T, 'id'>>['update'] = (changed, orig) => {
-    updateList()(addFeature({ ...orig, ...changed }));
-  };
+// export const addUpdateRemoveFeature = <T extends FeatureWithID>(
+//   updateList: () => UpdateActions<T[]>['commit'],
+// ): AddUpdateRemoveFeature<T> => {
+//   const add: FormInstance<Omit<T, 'id'>>['update'] = (changed, orig) => {
+//     updateList()(addFeature({ ...orig, ...changed }));
+//   };
 
-  const update: (changed: Partial<T>, original: Pick<T, 'id'>) => void = (
-    changed,
-    feature,
-  ) =>
-    updateList()((list) => updateFeature(list, { ...changed, id: feature.id }));
+//   const update: (changed: Partial<T>, original: Pick<T, 'id'>) => void = (
+//     changed,
+//     feature,
+//   ) =>
+//     updateList()((list) => updateFeature(list, { ...changed, id: feature.id }));
 
-  const remove = (id: string) => updateList()(removeFeature(id));
+//   const remove = (id: string) => updateList()(removeFeature(id));
 
-  return { update, add, remove };
-};
+//   return { update, add, remove };
+// };
 
-export type AddUpdateRemoveFeature<T extends FeatureWithID> = {
-  add: FormInstance<Omit<T, 'id'>>['update'];
-  update: (changed: Partial<T>, original: Pick<T, 'id'>) => void;
-  remove: (id: string) => void;
-};
+// export type AddUpdateRemoveFeature<T extends FeatureWithID> = {
+//   add: FormInstance<Omit<T, 'id'>>['update'];
+//   update: (changed: Partial<T>, original: Pick<T, 'id'>) => void;
+//   remove: (id: string) => void;
+// };
 
 type CreateFn<T extends Feature, R extends keyof T = never> = (
   seed: SetRequired<Partial<T>, R>,

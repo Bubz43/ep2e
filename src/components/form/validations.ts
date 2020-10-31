@@ -1,8 +1,9 @@
-import { notify, NotificationType } from "src/foundry/foundry-apps";
-import { localize } from "src/foundry/localization";
-import { rollFormula, cleanFormula } from "src/foundry/rolls";
-import type { FieldValue } from "src/utility/field-values";
+// import { notify, NotificationType } from "src/foundry/foundry-apps";
+
+import { rollFormula, cleanFormula } from "@src/foundry/rolls";
+import type { FieldValue } from "@src/utility/field-values";
 import type { FieldElement } from "../field/fields";
+
 
 const badNumbervalues = [NaN, null, undefined] as const;
 
@@ -28,13 +29,13 @@ const validateFormulaInput = (input: HTMLInputElement) => {
   if (value) {
     const { total } = rollFormula(value);
     if (isInvalidNumber(total)) {
-      notify(
-        NotificationType.Error,
-        `${localize(
-          "DESCRIPTIONS",
-          "invalidRollFormula"
-        )}: <code class="formula">${value.trim()}</code> `
-      );
+      // notify(
+      //   NotificationType.Error,
+      //   `${localize(
+      //     "DESCRIPTIONS",
+      //     "invalidRollFormula"
+      //   )}: <code class="formula">${value.trim()}</code> `
+      // );
 
       const { validFormula } = input.dataset;
       input.value = validFormula || "";
