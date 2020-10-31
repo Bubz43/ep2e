@@ -44,7 +44,7 @@ module.exports = function sassPlugin(_, { native, compilerOptions = {} } = {}) {
     name: 'snowpack-tagged-scss',
     resolve: {
       input: ['.scss', '.sass'],
-      output: ['.css.js'],
+      output: ['.css.js', '.css'],
     },
     /**
      * If any files imported the given file path, mark them as changed.
@@ -128,13 +128,22 @@ module.exports = function sassPlugin(_, { native, compilerOptions = {} } = {}) {
       );
       // Handle the output.
       if (stderr) throw new Error(stderr);
-      if (stdout)
-        return `import {css} from '${afterSrc.join(
+      if (stripFileExtension(filePath).endsWith("global")) {
+        console.log("thing");
+        return { '.css': stdout };
+      }
+      if (stdout) {
+      
+        return {
+        '.css.js': `import {css} from '${afterSrc.join(
           '/',
         )}/web_modules/lit-element.js';
-
-                          const style = css\`${stdout}\`; 
-                          export default style`;
+  
+                            const style = css\`${stdout}\`; 
+                            export default style`,
+      };
+      }
+      
     },
   };
 };

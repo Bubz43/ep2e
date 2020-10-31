@@ -3,14 +3,18 @@ import style from "./button.scss";
 
 @customElement("sl-button")
 export class Button extends LitElement {
-  static get styles() {
-    return style
-  }
+  static styles = style
 
 
   render() {
     return html`
       <button><slot></slot></button>
     `;
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "sl-button": Button;
   }
 }
