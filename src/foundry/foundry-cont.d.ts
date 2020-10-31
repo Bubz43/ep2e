@@ -1,17 +1,18 @@
-
-import type { ValueOf, Mutable, JsonObject, Class } from "type-fest";
-import type { DeepPartial, PickByValue } from "utility-types";
-import type * as PIXI from "pixi.js";
-import type { Socket } from "socket.io";
-import type { Combatant } from "@src/combat/combatant";
-import type { ActorEP } from "@src/entities/actor";
-import type { ChatMessageEP } from "@src/entities/chat-message";
-import type { ItemEP } from "@src/entities/item";
-import type { SceneEP } from "@src/entities/scene";
-import type { UserEP } from "@src/entities/user";
-import type { Environment, EnvironmentOverrides } from "@src/features/environment";
-import type { EP } from "./system";
-
+import type { ValueOf, Mutable, JsonObject, Class } from 'type-fest';
+import type { DeepPartial, PickByValue } from 'utility-types';
+import type * as PIXI from 'pixi.js';
+import type { Socket } from 'socket.io';
+import type { Combatant } from '@src/combat/combatant';
+import type { ActorEP } from '@src/entities/actor';
+import type { ChatMessageEP } from '@src/entities/chat-message';
+import type { ItemEP } from '@src/entities/item';
+import type { SceneEP } from '@src/entities/scene';
+import type { UserEP } from '@src/entities/user';
+import type {
+  Environment,
+  EnvironmentOverrides,
+} from '@src/features/environment';
+import type { EP } from './system';
 
 // * Comment out canvas, game, ui from foundry.d.ts
 // * Add in context param to Entity.prototype._onUpdate
@@ -24,7 +25,7 @@ export type CommonEntityData = {
   img: string;
   _id: string;
   // flags: JsonObject;
-  permission: Record<"default" | string, ValueOf<CONST["ENTITY_PERMISSIONS"]>>;
+  permission: Record<'default' | string, ValueOf<CONST['ENTITY_PERMISSIONS']>>;
   folder?: string;
   sort?: number;
 };
@@ -55,7 +56,7 @@ export type TokenData = {
   name: string;
   effects?: string[];
   overlayEffect?: string;
-  displayName: ValueOf<CONST["TOKEN_DISPLAY_MODES"]>;
+  displayName: ValueOf<CONST['TOKEN_DISPLAY_MODES']>;
   img: string;
   tint: null | unknown;
   width: number;
@@ -77,8 +78,8 @@ export type TokenData = {
   actorId: string;
   actorLink: boolean;
   // actorData: DeepPartial<ActorDatas>;
-  disposition: ValueOf<CONST["TOKEN_DISPOSITIONS"]>;
-  displayBars: ValueOf<CONST["TOKEN_DISPLAY_MODES"]>;
+  disposition: ValueOf<CONST['TOKEN_DISPOSITIONS']>;
+  displayBars: ValueOf<CONST['TOKEN_DISPLAY_MODES']>;
   randomImg: boolean;
   elevation: number;
   _id: string;
@@ -93,7 +94,7 @@ type EntityName = keyof PickByValue<
   Config,
   { entityClass: Class<{ entity: unknown }> }
 >;
-export type EntityType = Config[EntityName]["entityClass"];
+export type EntityType = Config[EntityName]['entityClass'];
 
 export type CanvasLayers = {
   background: BackgroundLayer;
@@ -105,14 +106,14 @@ export type CanvasLayers = {
   notes: NotesLayer;
   tokens: Omit<
     TokenLayer,
-    "placeables" | "controlled" | "updateMany" | "cycleTokens" | "get"
+    'placeables' | 'controlled' | 'updateMany' | 'cycleTokens' | 'get'
   > & {
     placeables: Token[];
     controlled: Token[];
     get(tokenId: string): Token | null;
     updateMany(
       data: (Partial<TokenData> & { _id: string })[],
-      options?: unknown
+      options?: unknown,
     ): Promise<void>;
     cycleTokens(forward: boolean, reset: boolean): boolean;
   };
@@ -129,7 +130,7 @@ type CombatRoundInfo = {
   turn: number | null;
 };
 
-type Col<T extends Entity> = Omit<Collection<T>, "get"> & {
+type Col<T extends Entity> = Omit<Collection<T>, 'get'> & {
   get(id: string, options: { strict: Boolean }): T | null;
   render(force: boolean): unknown;
 };
@@ -160,7 +161,7 @@ declare global {
     y: number;
     actor?: ActorEP | null;
     _validPosition: { x: number; y: number };
-    bars: Record<"bar1" | "bar2", PIXI.Graphics>;
+    bars: Record<'bar1' | 'bar2', PIXI.Graphics>;
     effects: PIXI.Container;
     update(tokenData: DeepPartial<TokenData>, options: unknown): Promise<Token>;
   }
@@ -230,7 +231,7 @@ declare global {
     readonly formula: string;
     readonly total: number | null;
     toJSON(): {
-      class: "Roll";
+      class: 'Roll';
       dice: unknown[];
       terms: (string | number | unknown)[];
       results: (string | number)[];
@@ -253,7 +254,7 @@ declare global {
 
   interface Application {
     readonly position: Record<
-      "width" | "height" | "left" | "top" | "scale",
+      'width' | 'height' | 'left' | 'top' | 'scale',
       number
     >;
     _element: JQuery | null;
@@ -267,7 +268,7 @@ declare global {
       command: string;
       img: string;
       name: string;
-      type: "script" | "chat";
+      type: 'script' | 'chat';
       _id: string;
     };
     sheet: Application | null;
@@ -286,7 +287,7 @@ declare global {
         color: string;
         active: boolean;
         name: string;
-        role: ValueOf<CONST["USER_ROLES"]>;
+        role: ValueOf<CONST['USER_ROLES']>;
         character?: string;
         avatar?: string;
         password: string;
@@ -302,7 +303,7 @@ declare global {
 
   interface Die {
     faces: number;
-    results: ReturnType<DiceTerm["roll"]>[];
+    results: ReturnType<DiceTerm['roll']>[];
     sides: number[];
   }
 
@@ -315,7 +316,7 @@ declare global {
   }
 
   interface JournalEntry {
-    data: { content: string }
+    data: { content: string };
   }
 
   interface ChatMessage {
@@ -359,7 +360,7 @@ declare global {
   }
 
   export function duplicate<T extends Record<string, unknown>>(
-    data: T
+    data: T,
   ): Mutable<T>;
   export function timeSince(timestamp: Date | number): string;
   export function mergeObject<O, C>(
@@ -371,7 +372,7 @@ declare global {
       overwrite: boolean;
       inplace: boolean;
       enforceTypes: boolean;
-    }>
+    }>,
   ): O & C;
 
   const game: GameCollections & {

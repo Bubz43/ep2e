@@ -1,4 +1,4 @@
-export type RollData = ReturnType<Roll["toJSON"]>;
+export type RollData = ReturnType<Roll['toJSON']>;
 
 export type RollInfo = {
   label: string;
@@ -8,7 +8,7 @@ export type RollInfo = {
 };
 
 export const setupRollInfo = (
-  unrolled: Pick<RollInfo, "label" | "formula">[]
+  unrolled: Pick<RollInfo, 'label' | 'formula'>[],
 ) => {
   return unrolled.map((part) => {
     const { total = 0, roll: rollInstance } = rollFormula(part.formula);
@@ -22,7 +22,7 @@ export const setupRollInfo = (
 
 export const rollInfoTotal = (rolls: RollInfo[]) => {
   const fullFormula = cleanFormula(
-    rolls.map(({ formula }) => formula).join("+")
+    rolls.map(({ formula }) => formula).join('+'),
   );
   return {
     fullFormula,
@@ -35,13 +35,13 @@ const preRolled = {
   min: new Map<string, number>(),
 };
 
-export const rollLimit = (formula: string, limit: "max" | "min") => {
+export const rollLimit = (formula: string, limit: 'max' | 'min') => {
   const rolled = preRolled[limit];
   const existing = rolled.get(formula);
-  if (typeof existing === "number") return existing;
-  const val = new Roll(formula || "0").evaluate({
-    maximize: limit === "max",
-    minimize: limit === "min",
+  if (typeof existing === 'number') return existing;
+  const val = new Roll(formula || '0').evaluate({
+    maximize: limit === 'max',
+    minimize: limit === 'min',
   }).total;
   rolled.set(formula, val);
   return val;
@@ -49,13 +49,13 @@ export const rollLimit = (formula: string, limit: "max" | "min") => {
 
 export const averageRoll = (formula: string) => {
   return Math.round(
-    (rollLimit(formula, "max") + rollLimit(formula, "min")) / 2
+    (rollLimit(formula, 'max') + rollLimit(formula, 'min')) / 2,
   );
 };
 
 export const rollFormula = (
   formula: string,
-  data: Record<string, number> = {}
+  data: Record<string, number> = {},
 ) => {
   try {
     const roll = new Roll(formula, data).roll();

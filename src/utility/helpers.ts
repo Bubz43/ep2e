@@ -80,6 +80,6 @@ const replacer = /[-\/\\^$*+?.()|[\]{}]/g;
 export const searchRegExp = (search: string) =>
   new RegExp(search.replace(replacer, '\\$&'), 'i');
 
-  export const nonNegative = (val: number) => (val < 0 ? 0 : val);
+export const nonNegative = (val: number) => (val < 0 ? 0 : val);
 
-export const withSign = (val: number) => `${val < 0 ? "" : "+"}${val}`;
+export const withSign = (val: number) => `${val < 0 ? '' : '+'}${val}`;

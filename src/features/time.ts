@@ -1,4 +1,4 @@
-import { localize, LangEntry } from "../foundry/localization";
+import { localize, LangEntry } from '../foundry/localization';
 
 export const toMilliseconds = ({
   days = 0,
@@ -38,7 +38,7 @@ type Options = Partial<{
 }>;
 
 // This should always be ordered from biggest to smallest
-export const timeIntervals = ["days", "hours", "minutes", "seconds"] as const;
+export const timeIntervals = ['days', 'hours', 'minutes', 'seconds'] as const;
 
 export type TimeInterval = typeof timeIntervals[number];
 
@@ -48,9 +48,9 @@ export const prettyMilliseconds = (
     turns = true,
     compact = true,
     approx = false,
-    whenZero = "0",
-    whenNegative = localize("indefinite"),
-  }: Options = {}
+    whenZero = '0',
+    whenNegative = localize('indefinite'),
+  }: Options = {},
 ) => {
   if (milliseconds < 0) return whenNegative;
   if (milliseconds === 0) return whenZero;
@@ -58,13 +58,13 @@ export const prettyMilliseconds = (
   const final: string[] = [];
   let approxApplied = false;
   for (const interval of timeIntervals) {
-    const showTurns = interval === "seconds" && turns;
-    let toLocalize = showTurns ? "turns" : interval;
+    const showTurns = interval === 'seconds' && turns;
+    let toLocalize = showTurns ? 'turns' : interval;
     const value = parsed[interval] / (showTurns ? 3 : 1);
     if (
       approx &&
       value &&
-      (interval === "minutes" || interval === "seconds") &&
+      (interval === 'minutes' || interval === 'seconds') &&
       final.length
     ) {
       approxApplied = true;
@@ -77,32 +77,32 @@ export const prettyMilliseconds = (
         [
           value % 1 ? value.toFixed(2) : value,
           compact ? label[0] : ` ${label}`,
-        ].join("")
+        ].join(''),
       );
   }
-  return `${approxApplied ? "~" : ""}${final.join(
-    compact ? " " : ", "
+  return `${approxApplied ? '~' : ''}${final.join(
+    compact ? ' ' : ', ',
   )}`.trim();
 };
 
 export const prettyDuration = (duration: number, options?: Options) => {
-  if (duration === 0) return localize("completed");
-  if (duration < 0) return localize("indefinite");
+  if (duration === 0) return localize('completed');
+  if (duration < 0) return localize('indefinite');
   return prettyMilliseconds(duration, options);
 };
 
 export const prettyDate = (value: string) => {
   const date = new Date(value);
   return new Date(
-    date.getTime() - date.getTimezoneOffset() * -60000
+    date.getTime() - date.getTimezoneOffset() * -60000,
   ).toLocaleDateString();
 };
 
 export enum EPTimeInterval {
-  ActionTurns = "actionTurns",
-  Minutes = "minutes",
-  Hours = "hours",
-  Days = "days",
+  ActionTurns = 'actionTurns',
+  Minutes = 'minutes',
+  Hours = 'hours',
+  Days = 'days',
 }
 
 export enum CommonInterval {
@@ -116,12 +116,12 @@ export enum CommonInterval {
 }
 
 export const prettyOnset = (onset: number) => {
-  if (onset <= 0) return localize("ready");
+  if (onset <= 0) return localize('ready');
   const label =
     onset <= CommonInterval.Turn
-      ? `${localize("at")} ${localize("endOfTurn")}`
+      ? `${localize('at')} ${localize('endOfTurn')}`
       : onset <= CommonInterval.Turn * 2
-      ? `${localize("at")} ${localize("endOfNextTurn")}`
-      : `${localize("in")} ${prettyMilliseconds(onset, { compact: false })}`;
-  return `${localize("active")} ${label}`.toLocaleLowerCase();
+      ? `${localize('at')} ${localize('endOfNextTurn')}`
+      : `${localize('in')} ${prettyMilliseconds(onset, { compact: false })}`;
+  return `${localize('active')} ${label}`.toLocaleLowerCase();
 };

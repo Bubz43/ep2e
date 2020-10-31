@@ -1,21 +1,21 @@
-import { AptitudeType } from "@src/data-enums";
-import { localize } from "@src/foundry/localization";
-import { clamp } from "remeda";
-import { safeMerge } from "../utility/helpers";
-import { createFeature } from "./feature-helpers";
-import { toMilliseconds } from "./time";
+import { AptitudeType } from '@src/data-enums';
+import { localize } from '@src/foundry/localization';
+import { clamp } from 'remeda';
+import { safeMerge } from '../utility/helpers';
+import { createFeature } from './feature-helpers';
+import { toMilliseconds } from './time';
 
 export enum ActionType {
-  Automatic = "automatic",
-  Quick = "quick",
-  Complex = "complex",
-  Task = "task",
+  Automatic = 'automatic',
+  Quick = 'quick',
+  Complex = 'complex',
+  Task = 'task',
 }
 
 export enum ActionSubtype {
-  Physical = "physical",
-  Mesh = "mesh",
-  Mental = "mental",
+  Physical = 'physical',
+  Mesh = 'mesh',
+  Mental = 'mental',
 }
 
 export type Action = {
@@ -31,7 +31,7 @@ export const createAction = createFeature<Action>(() => ({
   subtype: ActionSubtype.Mental,
   timeframe: 0,
   timeMod: 0,
-  notes: "",
+  notes: '',
 }));
 
 export const updateAction = (action: Action, update: Partial<Action>) => {
@@ -66,7 +66,7 @@ export const defaultCheckActionSubtype = (aptitude: AptitudeType) => {
 
 export const applyTaskActionMultiplier = (
   timeframe: number,
-  multiplier: number
+  multiplier: number,
 ) => {
   return timeframe * clamp(multiplier, { min: 0.25 });
 };
@@ -85,7 +85,7 @@ export const applyTaskActionMultiplier = (
 
 export const actionTimeframeModifier = ({ type, timeMod }: Action) => {
   const modifier = type === ActionType.Task ? timeMod * 0.25 : 0;
-  const source = localize(modifier < 0 ? "rushing" : "takingTime");
+  const source = localize(modifier < 0 ? 'rushing' : 'takingTime');
   return { source, modifier };
 };
 

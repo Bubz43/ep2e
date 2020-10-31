@@ -1,3 +1,3 @@
-import type { registerEPSettings } from "./foundry/game-settings";
+import type { registerEPSettings } from './foundry/game-settings';
 
 export let gameSettings: ReturnType<typeof registerEPSettings>;

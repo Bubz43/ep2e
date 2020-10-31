@@ -1,48 +1,47 @@
-import { customElement, LitElement, property, html, query } from "lit-element";
-import styles from "./field.scss";
-import { classMap } from "lit-html/directives/class-map";
-import { nothing } from "lit-html";
-import { debounce } from "@src/utility/decorators";
+import { customElement, LitElement, property, html, query } from 'lit-element';
+import styles from './field.scss';
+import { classMap } from 'lit-html/directives/class-map';
+import { nothing } from 'lit-html';
+import { debounce } from '@src/utility/decorators';
 
 type FieldInput = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
-const showSelectIcon = CSS.supports("-moz-appearance", "none");
+const showSelectIcon = CSS.supports('-moz-appearance', 'none');
 
 const isFieldInput = (el: Node | null | undefined): el is FieldInput =>
   el instanceof HTMLInputElement ||
   el instanceof HTMLSelectElement ||
   el instanceof HTMLTextAreaElement;
 
-
-@customElement("sl-field")
+@customElement('sl-field')
 export class Field extends LitElement {
   static get is() {
-    return "sl-field" as const;
+    return 'sl-field' as const;
   }
 
   static styles = [styles];
 
   static additionalStyles?: HTMLTemplateElement;
 
-  @property({ type: String }) label = "";
+  @property({ type: String }) label = '';
 
-  @property({ type: String }) helpText = "";
+  @property({ type: String }) helpText = '';
 
   @property({ type: Boolean }) helpPersistent = false;
 
-  @property({ type: String }) validationMessage = "";
+  @property({ type: String }) validationMessage = '';
 
   @property({ type: Boolean, reflect: true }) dirty = false;
 
   @property({ type: Boolean, reflect: true }) private disabled = false;
 
-  @query(".input-slot") inputSlot!: HTMLSlotElement;
+  @query('.input-slot') inputSlot!: HTMLSlotElement;
 
   private mutationObs?: MutationObserver | null;
 
   async connectedCallback() {
     super.connectedCallback();
-    this.addEventListener("click", () => this.focusInput())
+    this.addEventListener('click', () => this.focusInput());
     if (this.hasUpdated) {
       await this.updateComplete;
       this.onInputChanged();
@@ -72,14 +71,14 @@ export class Field extends LitElement {
       for (const { attributeName, oldValue, target } of entries) {
         if (!attributeName || !isFieldInput(target)) continue;
         const newVal = target.getAttribute(attributeName);
-        if (attributeName === "disabled") this.disabled = !!target.disabled;
+        if (attributeName === 'disabled') this.disabled = !!target.disabled;
         changed = changed || newVal !== oldValue;
       }
 
       if (changed) setTimeout(() => this.requestUpdate(), 10);
     });
     this.mutationObs.observe(input, {
-      attributeFilter: ["min", "max", "value", "disabled", "maxlength"],
+      attributeFilter: ['min', 'max', 'value', 'disabled', 'maxlength'],
       attributeOldValue: true,
       attributes: true,
     });
@@ -111,7 +110,7 @@ export class Field extends LitElement {
     const { input, dirty } = this;
     if (!input) return {};
     this.disabled = !!input.disabled;
-    const invalid = dirty && input.matches(":invalid");
+    const invalid = dirty && input.matches(':invalid');
     const characterCounter =
       input instanceof HTMLInputElement &&
       input.maxLength !== -1 &&
@@ -128,14 +127,14 @@ export class Field extends LitElement {
       invalid,
       above,
       required: input.required,
-      textarea: input.localName === "textarea",
+      textarea: input.localName === 'textarea',
       characterCounter,
     };
   }
 
   private renderNumberButtons() {
     const { input, disabled } = this;
-    if (input instanceof HTMLInputElement && input.type === "number") {
+    if (input instanceof HTMLInputElement && input.type === 'number') {
       const value = input.valueAsNumber;
       const maxEnabled = !disabled && (!input.max || value < Number(input.max));
       const minEnabled = !disabled && (!input.min || value > Number(input.min));
@@ -143,11 +142,11 @@ export class Field extends LitElement {
       return html`
         <div class="number-buttons">
           ${([
-            ["remove", !minEnabled],
-            ["add", !maxEnabled],
-          ] as [string,boolean][]).map(
+            ['remove', !minEnabled],
+            ['add', !maxEnabled],
+          ] as [string, boolean][]).map(
             ([action, disable]) => html`
-            <button
+              <button
                 tabindex="-1"
                 @click=${this.stepInput}
                 data-action=${action}
@@ -155,7 +154,7 @@ export class Field extends LitElement {
               >
                 <mwc-icon>${action}</mwc-icon>
               </button>
-            `
+            `,
           )}
         </div>
       `;
@@ -164,7 +163,7 @@ export class Field extends LitElement {
   }
 
   private renderSelectIcon() {
-    return this.input?.localName === "select" && showSelectIcon
+    return this.input?.localName === 'select' && showSelectIcon
       ? html`
           <mwc-icon @click=${this.focusInput} class="select-icon"
             >expand_more</mwc-icon
@@ -179,21 +178,19 @@ export class Field extends LitElement {
     if (
       input instanceof HTMLInputElement &&
       !input.disabled &&
-      input.type === "number"
+      input.type === 'number'
     ) {
       const button = ev.currentTarget as HTMLElement;
       const { action } = button.dataset;
 
-      if (action === "remove") input.stepDown();
+      if (action === 'remove') input.stepDown();
       else input.stepUp();
 
       input.dispatchEvent(
-        new Event("change", { bubbles: true, composed: true })
+        new Event('change', { bubbles: true, composed: true }),
       );
     }
   }
-
-
 
   render() {
     const {
@@ -209,18 +206,14 @@ export class Field extends LitElement {
       invalid,
     };
     const wrapper = {
-      "input-wrapper": true,
+      'input-wrapper': true,
       textarea,
     };
     const footerClasses = {
       invalid,
     };
     return html`
-      <wl-label
-        class=${classMap(labelClasses)}
-        ?required=${required}
-        nowrap
-      >
+      <wl-label class=${classMap(labelClasses)} ?required=${required} nowrap>
         ${this.label}
       </wl-label>
       <slot name="before"></slot>
@@ -242,10 +235,10 @@ export class Field extends LitElement {
         ${characterCounter
           ? html`
               <span class="character-counter"
-                >${characterCounter.join(" / ")}</span
+                >${characterCounter.join(' / ')}</span
               >
             `
-          : ""}
+          : ''}
       </footer>
     `;
   }
@@ -253,6 +246,6 @@ export class Field extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "sl-field": Field;
+    'sl-field': Field;
   }
 }

@@ -1,4 +1,4 @@
-import type { LangEntry } from "./foundry/localization";
+import type { LangEntry } from './foundry/localization';
 
 const valuedEnums = new WeakMap();
 export const enumValues = <T extends Record<string, LangEntry>>(

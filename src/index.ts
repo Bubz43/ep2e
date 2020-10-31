@@ -1,5 +1,4 @@
-
-import "./init"
+import './init';
 
 // Material Components
 import '@material/mwc-button';
@@ -45,7 +44,6 @@ for (const link of [
   fontEl.href = link;
   document.head.appendChild(fontEl);
 }
-
 
 Hooks.once('ready', async () => {
   requestAnimationFrame(() => document.body.classList.add('ready'));

@@ -1,15 +1,20 @@
-import { debounce } from "@src/utility/decorators";
-import { FieldValue, isFieldValue } from "@src/utility/field-values";
-import { notEmpty } from "@src/utility/helpers";
-import { customElement, html, LitElement, property, PropertyValues, query } from "lit-element";
-import { stopEvent } from "weightless/util/event";
-import type { FieldElement } from "../field/fields";
-import styles from "./form.scss";
-import { FormValueStoredEvent, SlCustomStoreEvent } from "./forms";
-import { validateFormField } from "./validations";
-import { observer } from "@material/mwc-base/observer.js";
-
-
+import { debounce } from '@src/utility/decorators';
+import { FieldValue, isFieldValue } from '@src/utility/field-values';
+import { notEmpty } from '@src/utility/helpers';
+import {
+  customElement,
+  html,
+  LitElement,
+  property,
+  PropertyValues,
+  query,
+} from 'lit-element';
+import { stopEvent } from 'weightless/util/event';
+import type { FieldElement } from '../field/fields';
+import styles from './form.scss';
+import { FormValueStoredEvent, SlCustomStoreEvent } from './forms';
+import { validateFormField } from './validations';
+import { observer } from '@material/mwc-base/observer.js';
 
 export type SlFormData = {
   key: string;
@@ -18,10 +23,10 @@ export type SlFormData = {
 
 const stopProp = (ev: Event) => ev.stopPropagation();
 
-@customElement("sl-form")
+@customElement('sl-form')
 export class Form extends LitElement {
   static get is() {
-    return "sl-form" as const;
+    return 'sl-form' as const;
   }
 
   static styles = [styles];
@@ -46,7 +51,7 @@ export class Form extends LitElement {
   private store: Record<string, FieldValue> = {};
 
   updated(changedProps: PropertyValues) {
-    changedProps.get("disabled") !== undefined &&
+    changedProps.get('disabled') !== undefined &&
       requestAnimationFrame(() => this.toggleElementDisabled());
   }
 
@@ -59,14 +64,14 @@ export class Form extends LitElement {
   get elements(): FieldElement[] {
     return Array.from(
       this.querySelectorAll<FieldElement>(
-        "input, select, textarea, mwc-checkbox, mwc-switch, mwc-radio, mwc-slider, time-field, mwc-textfield, mwc-textarea, mwc-select"
-      )
+        'input, select, textarea, mwc-checkbox, mwc-switch, mwc-radio, mwc-slider, time-field, mwc-textfield, mwc-textarea, mwc-select',
+      ),
     );
   }
 
   toggleElementDisabled() {
     const disable = this.disabled;
-    const attrName = "data-_disabled";
+    const attrName = 'data-_disabled';
     this.elements.forEach((el) => {
       if (!disable) {
         if (!el.hasAttribute(attrName)) el.disabled = false;
@@ -76,7 +81,7 @@ export class Form extends LitElement {
         el.disabled = true;
       }
     });
-    this.submitButtons.forEach((el) => el.toggleAttribute("disabled", disable));
+    this.submitButtons.forEach((el) => el.toggleAttribute('disabled', disable));
   }
 
   get hasStoredValues() {
@@ -91,7 +96,7 @@ export class Form extends LitElement {
 
   IsValid({ report = true }) {
     return this.elements.every((input) => {
-      if ("reportValidity" in input) {
+      if ('reportValidity' in input) {
         return report ? input.reportValidity() : input.checkValidity();
       }
       return true;
@@ -100,7 +105,7 @@ export class Form extends LitElement {
 
   addToStore({ key, value, trim }: SlFormData & { trim?: boolean }) {
     if (this.disabled) return;
-    const trimmed = typeof value === "string" && trim ? value.trim() : value;
+    const trimmed = typeof value === 'string' && trim ? value.trim() : value;
     const validValue = this.validProperties[key];
     if (typeof validValue !== typeof trimmed) {
       return;
@@ -125,7 +130,7 @@ export class Form extends LitElement {
     if (notEmpty(submitButtons)) {
       const complete = this.isComplete({ report: false });
       for (const el of submitButtons) {
-        el.toggleAttribute("complete", complete);
+        el.toggleAttribute('complete', complete);
       }
     }
   }
@@ -149,7 +154,7 @@ export class Form extends LitElement {
 
     if (this.isComplete({ report: true })) {
       const { store } = this;
-      this.dispatchEvent(new CustomEvent("form-data", { detail: store }));
+      this.dispatchEvent(new CustomEvent('form-data', { detail: store }));
       this.store = {};
     }
   }
@@ -162,10 +167,10 @@ export class Form extends LitElement {
 
   private validate(ev: Event) {
     ev.stopPropagation();
-    const inputEvent = ev.type === "input";
+    const inputEvent = ev.type === 'input';
     if (inputEvent && !this.storeOnInput) return;
     const { key, value, required } = validateFormField(
-      ev.target as FieldElement
+      ev.target as FieldElement,
     );
     if (key)
       this.addToStore({
@@ -177,7 +182,7 @@ export class Form extends LitElement {
 
   private handleKeyDown(ev: KeyboardEvent) {
     ev.stopPropagation();
-    if (ev.key === "Enter" && !ev.shiftKey) {
+    if (ev.key === 'Enter' && !ev.shiftKey) {
       this.validate(ev);
       for (const button of this.submitButtons) {
         (button as HTMLElement).click();
@@ -216,6 +221,6 @@ export class Form extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "sl-form": Form;
+    'sl-form': Form;
   }
 }

@@ -1,10 +1,10 @@
-import { html } from "lit-html";
-import { pipe, filter, sortBy, first } from "remeda";
-import type { Class } from "type-fest";
-import type { CanvasLayers } from "./foundry-cont";
-import { unsafeHTML } from "lit-html/directives/unsafe-html";
-import type { ActorEP } from "../entities/actor";
-import type { SceneEP } from "../entities/scene";
+import { html } from 'lit-html';
+import { pipe, filter, sortBy, first } from 'remeda';
+import type { Class } from 'type-fest';
+import type { CanvasLayers } from './foundry-cont';
+import { unsafeHTML } from 'lit-html/directives/unsafe-html';
+import type { ActorEP } from '../entities/actor';
+import type { SceneEP } from '../entities/scene';
 
 export const isGamemaster = () => {
   return (
@@ -15,7 +15,7 @@ export const isGamemaster = () => {
         [...game.users.values()],
         filter((user) => user.active && user.isGM),
         sortBy((user) => user.data._id),
-        (gms) => first(gms) === game.user
+        (gms) => first(gms) === game.user,
       ))
   );
 };
@@ -42,8 +42,8 @@ export const userCan = (permission: keyof typeof USER_PERMISSIONS) => {
 
 export const packEntityIs = <T extends Class<Entity>, E = InstanceType<T>>(
   pack: Compendium,
-  cls: T
-): pack is Omit<Compendium, "getContent" | "cls"> & {
+  cls: T,
+): pack is Omit<Compendium, 'getContent' | 'cls'> & {
   getContent(): Promise<E[]>;
   cls: T;
 } => pack.cls === cls;
@@ -53,13 +53,13 @@ export const packIsVisible = (pack: Compendium) =>
 
 export const importFromCompendium = (
   compendium: Compendium,
-  entryId: string
+  entryId: string,
 ) => {
   compendium.cls.collection.importFromCollection(
     compendium.collection,
     entryId,
     {},
-    { renderSheet: true }
+    { renderSheet: true },
   );
 };
 
@@ -69,7 +69,7 @@ export const activeCanvas = () => {
       CanvasLayers & {
         scene: SceneEP;
         stage: { scale: number };
-        dimensions: Record<"size" | "distance", number>;
+        dimensions: Record<'size' | 'distance', number>;
         hud: HeadsUpDisplay;
       };
   return null;
@@ -92,7 +92,7 @@ export const performIntegerSort = <T extends { id: string }>({
     target: (target as unknown) as null,
     siblings: siblings as never[],
     sortBefore,
-    sortKey: "sort",
+    sortKey: 'sort',
   }) as { target: T; update: { sort: number } }[];
   return new Map(sorted.map(({ target, update }) => [target, update.sort]));
 };
@@ -106,11 +106,11 @@ type FoundryOption = {
 
 export const convertMenuOptions = (
   options: FoundryOption[],
-  targetLi: JQuery<HTMLElement>
+  targetLi: JQuery<HTMLElement>,
 ) => {
   return (options || []).flatMap(({ name, icon, condition, callback }) =>
     (
-      typeof condition === "function"
+      typeof condition === 'function'
         ? condition(targetLi)
         : condition !== false
     )
@@ -119,6 +119,6 @@ export const convertMenuOptions = (
           icon: html`${unsafeHTML(icon)}`,
           callback: () => callback(targetLi),
         }
-      : []
+      : [],
   );
 };

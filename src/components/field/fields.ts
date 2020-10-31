@@ -1,17 +1,14 @@
-import {
-  localize,
-  LangEntry,
-} from "../../../src/foundry/localization";
-import { html, nothing, TemplateResult } from "lit-html";
-import { live } from "lit-html/directives/live";
-import { ifDefined } from "lit-html/directives/if-defined";
-import { notEmpty } from "../../../src/utility/helpers";
-import type { Field } from "./field";
-import type { ValuedProp } from "../../../src/utility/field-values";
-import type { Checkbox } from "@material/mwc-checkbox";
-import type { Switch } from "@material/mwc-switch";
-import type { Radio } from "@material/mwc-radio";
-import { DatepickerValueUpdated } from "app-datepicker/dist/custom_typings";
+import { localize, LangEntry } from '../../../src/foundry/localization';
+import { html, nothing, TemplateResult } from 'lit-html';
+import { live } from 'lit-html/directives/live';
+import { ifDefined } from 'lit-html/directives/if-defined';
+import { notEmpty } from '../../../src/utility/helpers';
+import type { Field } from './field';
+import type { ValuedProp } from '../../../src/utility/field-values';
+import type { Checkbox } from '@material/mwc-checkbox';
+import type { Switch } from '@material/mwc-switch';
+import type { Radio } from '@material/mwc-radio';
+import { DatepickerValueUpdated } from 'app-datepicker/dist/custom_typings';
 
 export type FieldElement =
   | HTMLInputElement
@@ -29,17 +26,17 @@ export const renderListToOptions = <T extends ReadonlyArray<string>>({
   disableOptions,
 }: {
   list: T;
-  selected: T[number] | "";
+  selected: T[number] | '';
   emptyText?: string;
   altLabel?: (option: T[number]) => string;
   disableOptions?: T;
 }) => {
   const options = [];
 
-  if (typeof emptyText === "string") {
+  if (typeof emptyText === 'string') {
     options.push(html`
-      <option value="" .selected=${live(selected === "")}>
-        ${emptyText === "" ? nothing : emptyText}
+      <option value="" .selected=${live(selected === '')}>
+        ${emptyText === '' ? nothing : emptyText}
       </option>
     `);
   } else if (notEmpty(list) === false) {
@@ -64,7 +61,7 @@ export const renderListToOptions = <T extends ReadonlyArray<string>>({
 
 type FieldSlots = Partial<{ before: TemplateResult; after: TemplateResult }>;
 type FieldOptions = Partial<
-  Pick<Field, "helpText" | "helpPersistent" | "validationMessage" | "dirty">
+  Pick<Field, 'helpText' | 'helpPersistent' | 'validationMessage' | 'dirty'>
 > &
   FieldSlots;
 
@@ -74,13 +71,13 @@ type CommonOptions = Partial<{
 }> &
   FieldOptions;
 
-const slotNames = ["before", "after"] as const;
+const slotNames = ['before', 'after'] as const;
 
 const fieldSlots = <T extends FieldSlots>(possibleSlots: T) => {
   return slotNames.map((slot) => fieldSlot(slot, possibleSlots[slot]));
 };
 
-const fieldSlot = (slot: "before" | "after", content: unknown) => {
+const fieldSlot = (slot: 'before' | 'after', content: unknown) => {
   return content ? html` <span slot=${slot}>${content}</span> ` : nothing;
 };
 
@@ -107,7 +104,7 @@ const field = ({
 };
 
 export const renderSelectField = <T extends ReadonlyArray<LangEntry | string>>(
-  { prop, label, value }: ValuedProp<T[number] | "">,
+  { prop, label, value }: ValuedProp<T[number] | ''>,
   list: T,
   {
     emptyText,
@@ -120,7 +117,7 @@ export const renderSelectField = <T extends ReadonlyArray<LangEntry | string>>(
     emptyText?: string;
     altLabel?: (options: T[number]) => string;
     disableOptions?: T;
-  } = {}
+  } = {},
 ) => {
   const confirmedVal = emptyText === undefined && !value ? list[0] : value;
   // const labelFn = altLabel || localize;
@@ -149,11 +146,7 @@ export const renderSelectField = <T extends ReadonlyArray<LangEntry | string>>(
     label,
     ...fieldOptions,
     content: html`
-      <select
-        name=${prop}
-        ?disabled=${disabled}
-        ?required=${required}
-      >
+      <select name=${prop} ?disabled=${disabled} ?required=${required}>
         ${renderListToOptions({
           list,
           selected: confirmedVal,
@@ -174,7 +167,7 @@ type RadioProps = {
 };
 
 const clickOnEnter = (ev: KeyboardEvent) => {
-  if (ev.key === "Enter") {
+  if (ev.key === 'Enter') {
     ev.stopPropagation();
     (ev.currentTarget as HTMLElement).click();
   }
@@ -201,10 +194,13 @@ export const renderRadioFields = <T extends ReadonlyArray<LangEntry>>(
   {
     disabled = false,
     altLabel = localize,
-  }: { disabled?: boolean; altLabel?: (val: T[number]) => string } = {}
+  }: { disabled?: boolean; altLabel?: (val: T[number]) => string } = {},
 ) => {
   return html`
-    <div style="display: flex; justify-content: space-around" class="radio-fields">
+    <div
+      style="display: flex; justify-content: space-around"
+      class="radio-fields"
+    >
       ${list.map(
         (option) => html`
           <mwc-formfield label=${altLabel(option)} style="height: 40px">
@@ -215,7 +211,7 @@ export const renderRadioFields = <T extends ReadonlyArray<LangEntry>>(
               disabled,
             })}
           </mwc-formfield>
-        `
+        `,
       )}
     </div>
   `;
@@ -232,7 +228,7 @@ export const renderCheckbox = (
   {
     disabled = false,
     indeterminate = false,
-  }: Omit<CheckboxOptions, "alignEnd"> = {}
+  }: Omit<CheckboxOptions, 'alignEnd'> = {},
 ) => html`
   <mwc-checkbox
     id=${prop}
@@ -246,7 +242,7 @@ export const renderCheckbox = (
 
 export const renderLabeledCheckbox = (
   props: ValuedProp<boolean>,
-  { alignEnd = false, ...options }: CheckboxOptions = {}
+  { alignEnd = false, ...options }: CheckboxOptions = {},
 ) => html`
   <mwc-formfield
     label=${props.label}
@@ -259,7 +255,9 @@ export const renderLabeledCheckbox = (
 
 export const renderSwitch = (
   { value, label, prop }: ValuedProp<boolean>,
-  { disabled = false }: Omit<CheckboxOptions, "indeterminate" | "alignEnd"> = {}
+  {
+    disabled = false,
+  }: Omit<CheckboxOptions, 'indeterminate' | 'alignEnd'> = {},
 ) => html`
   <mwc-switch
     style="margin: 0.7rem 1rem"
@@ -277,7 +275,7 @@ export const renderLabeledSwitch = (
   {
     disabled = false,
     alignEnd = false,
-  }: Omit<CheckboxOptions, "indeterminate"> = {}
+  }: Omit<CheckboxOptions, 'indeterminate'> = {},
 ) => html`
   <mwc-formfield label=${label} ?alignEnd=${alignEnd}>
     ${renderSwitch({ value, label, prop }, { disabled })}
@@ -290,10 +288,10 @@ export type NumberOptions = Partial<{
   step: number;
 }>;
 
-type NumberFieldOptions = Omit<CommonOptions, "after"> & NumberOptions;
+type NumberFieldOptions = Omit<CommonOptions, 'after'> & NumberOptions;
 
 export const renderSlider = (
-  { prop, value }: Omit<ValuedProp<number>, "label">,
+  { prop, value }: Omit<ValuedProp<number>, 'label'>,
   {
     max,
     min,
@@ -302,7 +300,7 @@ export const renderSlider = (
     markers = false,
     pin = false,
   }: NumberOptions &
-    Partial<{ disabled: boolean; markers: boolean; pin: boolean }> = {}
+    Partial<{ disabled: boolean; markers: boolean; pin: boolean }> = {},
 ) => html`
   <mwc-slider
     value=${live(value)}
@@ -319,14 +317,14 @@ export const renderSlider = (
 `;
 
 export const renderNumberInput = (
-  { prop, value }: Omit<ValuedProp<number>, "label">,
+  { prop, value }: Omit<ValuedProp<number>, 'label'>,
   {
     max,
     min,
     step,
     disabled = false,
     required = false,
-  }: NumberOptions & Partial<{ disabled: boolean; required: boolean }> = {}
+  }: NumberOptions & Partial<{ disabled: boolean; required: boolean }> = {},
 ) => html` <input
   type="number"
   name=${prop}
@@ -348,7 +346,7 @@ export const renderNumberField = (
     disabled,
     required,
     ...fieldOptions
-  }: NumberFieldOptions = {}
+  }: NumberFieldOptions = {},
 ) => {
   // const mwcTextField = html`
   //   <mwc-textfield
@@ -372,7 +370,7 @@ export const renderNumberField = (
     ...fieldOptions,
     content: renderNumberInput(
       { value, prop },
-      { min, max, step, disabled, required }
+      { min, max, step, disabled, required },
     ),
   });
 };
@@ -393,7 +391,7 @@ export const renderTimeField = (
     max,
     permanentLabel,
     whenZero,
-  }: TimeFieldOptions = {}
+  }: TimeFieldOptions = {},
 ) => {
   return html`
     <time-field
@@ -420,10 +418,10 @@ type TextFieldOptions = CommonOptions & {
 
 const clearSearchOnEscape = (ev: KeyboardEvent) => {
   const input = ev.currentTarget as HTMLInputElement;
-  if (ev.key === "Escape" && input.type === "search") {
-    input.value = "";
+  if (ev.key === 'Escape' && input.type === 'search') {
+    input.value = '';
     input.dispatchEvent(
-      new CustomEvent("change", { bubbles: true, composed: true })
+      new CustomEvent('change', { bubbles: true, composed: true }),
     );
   }
 };
@@ -437,7 +435,7 @@ type DateInputOptions = Partial<{
 
 export const renderDateField = (
   { value, label, prop }: ValuedProp<string>,
-  { min, max, disabled = false, required = false }: DateInputOptions = {}
+  { min, max, disabled = false, required = false }: DateInputOptions = {},
 ) => {
   return html`
     <sl-date-field
@@ -462,11 +460,11 @@ export const renderTextInput = (
     search,
     placeholder,
     maxLength,
-  }: TextFieldOptions = {}
+  }: TextFieldOptions = {},
 ) => {
   return html`
     <input
-      type=${search ? "search" : "text"}
+      type=${search ? 'search' : 'text'}
       name=${prop}
       @keydown=${clearSearchOnEscape}
       value=${live(value)}
@@ -482,7 +480,7 @@ export const renderTextInput = (
 
 export const renderTextField = (
   props: ValuedProp<string>,
-  options: TextFieldOptions = {}
+  options: TextFieldOptions = {},
 ) => {
   // const mwcTextField = html`
   //   <mwc-textfield
@@ -521,7 +519,7 @@ export const renderFormulaField = (
     placeholder,
     showAverage = true,
     ...fieldOptions
-  }: FormulaFieldOptions = {}
+  }: FormulaFieldOptions = {},
 ) => {
   // const mwcTextField = html`
   //   <mwc-textfield
@@ -561,7 +559,7 @@ export const renderFormulaField = (
   });
 };
 
-type TextareaFieldOptions = Omit<CommonOptions, "after" | "before"> &
+type TextareaFieldOptions = Omit<CommonOptions, 'after' | 'before'> &
   Partial<{
     rows: number;
     resizable?: boolean;
@@ -575,7 +573,7 @@ export const renderTextareaField = (
     rows = 2,
     resizable = false,
     ...fieldOptions
-  }: TextareaFieldOptions = {}
+  }: TextareaFieldOptions = {},
 ) => {
   //   const mwcTextField = html`
   //    <mwc-textarea

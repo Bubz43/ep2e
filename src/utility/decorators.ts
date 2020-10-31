@@ -2,7 +2,7 @@ export function debounce(time = 250, callFirst = false) {
   return function (
     target: unknown,
     propertyKey: string,
-    descriptor: PropertyDescriptor
+    descriptor: PropertyDescriptor,
   ) {
     const map = new WeakMap();
     const originalMethod = descriptor.value;
@@ -22,7 +22,7 @@ export function throttle(time = 250, callFirst = false) {
   return function (
     target: unknown,
     propertyKey: string,
-    descriptor: PropertyDescriptor
+    descriptor: PropertyDescriptor,
   ) {
     const map = new WeakMap();
     const originalMethod = descriptor.value;
@@ -42,7 +42,7 @@ export function throttle(time = 250, callFirst = false) {
 export function debounceFn<T extends (...args: any) => any>(
   fn: T,
   wait: number,
-  callFirst?: boolean
+  callFirst?: boolean,
 ) {
   let timeout: undefined | number;
   return function <F>(this: F, ...args: Parameters<T>) {
@@ -65,7 +65,7 @@ export function debounceFn<T extends (...args: any) => any>(
 export function throttleFn<T extends (...args: any) => any>(
   fn: T,
   interval: number,
-  callFirst: boolean
+  callFirst: boolean,
 ) {
   let wait = false;
   let callNow = false;

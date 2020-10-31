@@ -1,9 +1,9 @@
-import { mapToObj, pipe, map, clamp, prop, createPipe, filter } from "remeda";
-import type { LiteralUnion } from "type-fest";
-import type { NonFunctionKeys } from "utility-types";
-import { fromPairs, nonNegative } from "./helpers";
+import { mapToObj, pipe, map, clamp, prop, createPipe, filter } from 'remeda';
+import type { LiteralUnion } from 'type-fest';
+import type { NonFunctionKeys } from 'utility-types';
+import { fromPairs, nonNegative } from './helpers';
 
-export const resizeObsAvailable = "ResizeObserver" in window;
+export const resizeObsAvailable = 'ResizeObserver' in window;
 
 export const getParentElement = (element: HTMLElement) => {
   const { parentElement } = element;
@@ -18,26 +18,24 @@ export const getParentElement = (element: HTMLElement) => {
   );
 };
 
-export const leftTop = ["left", "top"] as const;
-export const dimensions = ["width", "height"] as const;
-export const sizeOffsets = ["offsetWidth", "offsetHeight"] as const;
+export const leftTop = ['left', 'top'] as const;
+export const dimensions = ['width', 'height'] as const;
+export const sizeOffsets = ['offsetWidth', 'offsetHeight'] as const;
 export const px = (value: number) => `${value}px`;
 
-type Bounds = Pick<HTMLElement, "offsetWidth" | "offsetHeight">;
+type Bounds = Pick<HTMLElement, 'offsetWidth' | 'offsetHeight'>;
 
 export const containElement = (
   { offsetWidth, offsetHeight }: HTMLElement,
-  bounds: Bounds = document.body
+  bounds: Bounds = document.body,
 ) => {
   const size = { offsetHeight, offsetWidth };
-  const max = mapToObj(sizeOffsets, (prop) =>
-    [
-      prop === "offsetHeight" ? "top" : "left",
-      nonNegative(bounds[prop] - size[prop]),
-    ]);
+  const max = mapToObj(sizeOffsets, (prop) => [
+    prop === 'offsetHeight' ? 'top' : 'left',
+    nonNegative(bounds[prop] - size[prop]),
+  ]);
 
-
-  const clampPosition = (position: Record<"top" | "left", number>) =>
+  const clampPosition = (position: Record<'top' | 'left', number>) =>
     pipe(
       [...leftTop],
       map((prop) => {
@@ -59,31 +57,31 @@ export const containElement = (
         style: {
           top: top.style,
           left: left.style,
-          right: "unset",
-          bottom: "unset",
+          right: 'unset',
+          bottom: 'unset',
         },
-      })
+      }),
     );
 
   return { max, clampPosition, ...size };
 };
-const positionKeyframes = { duration: 300, easing: "ease-in-out" };
+const positionKeyframes = { duration: 300, easing: 'ease-in-out' };
 
 export const assignStyles = <T extends HTMLElement>(
   element: T,
-  styles: Partial<Record<NonFunctionKeys<CSSStyleDeclaration>, string>>
+  styles: Partial<Record<NonFunctionKeys<CSSStyleDeclaration>, string>>,
 ) => {
   Object.assign(element.style, styles);
   return element;
 };
 
 export const joinCoor = ({ x, y }: { x: number; y: number }) =>
-  [x, y].map(px).join(", ");
+  [x, y].map(px).join(', ');
 
 export const repositionIfNeeded = (element: HTMLElement, bounds?: Bounds) => {
   const { max, clampPosition } = containElement(
     element,
-    bounds || getParentElement(element)
+    bounds || getParentElement(element),
   );
 
   const { offsetLeft: left, offsetTop: top } = element;
@@ -99,11 +97,11 @@ export const repositionIfNeeded = (element: HTMLElement, bounds?: Bounds) => {
       element.animate(
         {
           transform: [
-            "translate(0)",
-            `translate(${[left, top].map(prop("change")).map(px).join(", ")})`,
+            'translate(0)',
+            `translate(${[left, top].map(prop('change')).map(px).join(', ')})`,
           ],
         },
-        positionKeyframes
+        positionKeyframes,
       ).onfinish = () => {
         assignStyles(element, style);
         resolve(outOfBounds);
@@ -127,7 +125,7 @@ type StartEndInit<
   listener: (
     ev: T extends keyof GlobalEventHandlersEventMap
       ? GlobalEventHandlersEventMap[T]
-      : Event
+      : Event,
   ) => unknown;
   onEnd?: () => unknown;
   target: X;
@@ -146,7 +144,7 @@ export const listenThenRemoveEvent = <
 }: StartEndInit<T, E, X>) => {
   target.addEventListener(
     event,
-    listener as EventListenerOrEventListenerObject
+    listener as EventListenerOrEventListenerObject,
   );
   target.addEventListener(
     endEvent,
@@ -154,19 +152,19 @@ export const listenThenRemoveEvent = <
       onEnd?.();
       target.removeEventListener(
         event,
-        listener as EventListenerOrEventListenerObject
+        listener as EventListenerOrEventListenerObject,
       );
     },
-    { once: true }
+    { once: true },
   );
   return target;
 };
 
-type PointerPosition = Record<"pageX" | "pageY", number>;
+type PointerPosition = Record<'pageX' | 'pageY', number>;
 
 const initialPositions = (
   { offsetLeft, offsetTop }: HTMLElement,
-  { pageX, pageY }: PointerPosition
+  { pageX, pageY }: PointerPosition,
 ) => ({
   offsetLeft,
   offsetTop,
@@ -178,7 +176,7 @@ const initialPositions = (
 
 const initialSize = (
   { offsetWidth, offsetHeight }: HTMLElement,
-  { pageX, pageY }: PointerPosition
+  { pageX, pageY }: PointerPosition,
 ) => ({
   offsetHeight,
   offsetWidth,
@@ -199,7 +197,7 @@ type ElementDragInit = PointerInit & {
 };
 
 export const resetPositions = (el: HTMLElement) =>
-  assignStyles(el, { top: "", left: "", bottom: "", right: "" });
+  assignStyles(el, { top: '', left: '', bottom: '', right: '' });
 
 export const dragElement = ({
   element,
@@ -209,8 +207,8 @@ export const dragElement = ({
 }: ElementDragInit) => {
   const { clampPosition } = containElement(element, bounds);
   listenThenRemoveEvent({
-    event: "pointermove",
-    endEvent: "pointerup",
+    event: 'pointermove',
+    endEvent: 'pointerup',
     onEnd,
     target: window,
     listener: pipe(initialPositions(element, ev), ({ diffX, diffY }) =>
@@ -221,8 +219,8 @@ export const dragElement = ({
             left: diffX + pageX,
           }),
         ({ style }) =>
-          assignStyles(element, { ...style, right: "unset", bottom: "unset" })
-      )
+          assignStyles(element, { ...style, right: 'unset', bottom: 'unset' }),
+      ),
     ),
   });
   return element;
@@ -245,15 +243,15 @@ export const resizeElement = ({
   reverse,
 }: ResizeInit) => {
   listenThenRemoveEvent({
-    event: "pointermove",
-    endEvent: "pointerup",
+    event: 'pointermove',
+    endEvent: 'pointerup',
     onEnd,
     target: window,
     listener: pipe(
       initialSize(element, ev),
       ({ pageY, pageX, offsetHeight, offsetWidth }) => [
-        [height, "height", "pageY", pageY, offsetHeight] as const,
-        [width, "width", "pageX", pageX, offsetWidth] as const,
+        [height, 'height', 'pageY', pageY, offsetHeight] as const,
+        [width, 'width', 'pageX', pageX, offsetWidth] as const,
       ],
       filter(([use]) => use),
       map(([, ...vals]) => vals),
@@ -261,11 +259,11 @@ export const resizeElement = ({
         for (const [dimension, coorName, origCoor, origDim] of initial) {
           const amount = moveEv[coorName] - origCoor;
           element.style[dimension] = px(
-            origDim + (reverse ? -amount : amount)
+            origDim + (reverse ? -amount : amount),
             // Math.min(origDim + (reverse ? -amount : amount), origCoor + origDim)
           );
         }
-      }
+      },
     ),
   });
   return element;
@@ -291,15 +289,14 @@ const placeToLeft = ({
   spacing: number;
 }) => left - offsetWidth - spacing;
 
-
 export const togglePointerEvents = (el: HTMLElement) => {
-  el.style.pointerEvents = "none";
-  return () => (el.style.pointerEvents = "");
+  el.style.pointerEvents = 'none';
+  return () => (el.style.pointerEvents = '');
 };
 
 export const toggleTouchAction = (el: HTMLElement) => {
-  el.style.touchAction = "none";
-  return () => (el.style.touchAction = "");
+  el.style.touchAction = 'none';
+  return () => (el.style.touchAction = '');
 };
 
 export const backgroundImageStyle = (url: string) =>
@@ -309,15 +306,14 @@ export const topLeftToBottomRight = (element: HTMLElement) => {
   const { bottom, right } = element.getBoundingClientRect();
   const { innerHeight, innerWidth } = window;
   return {
-    top: "",
-    left: "",
+    top: '',
+    left: '',
     right: px(innerWidth - right),
     bottom: px(innerHeight - bottom),
   };
 };
 
-
-export const findMatchingElement = (ev: Event, selector: string)=> {
+export const findMatchingElement = (ev: Event, selector: string) => {
   let item: HTMLElement | null = null;
   try {
     for (const target of ev.composedPath()) {
@@ -330,4 +326,4 @@ export const findMatchingElement = (ev: Event, selector: string)=> {
     console.log(error);
   }
   return item;
-}
+};

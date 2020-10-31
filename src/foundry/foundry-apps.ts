@@ -1,25 +1,25 @@
-import { reposition } from "nanopop";
-import { repositionIfNeeded } from "@src/utility/dom";
+import { reposition } from 'nanopop';
+import { repositionIfNeeded } from '@src/utility/dom';
 
 export enum NotificationType {
-  Info = "info",
-  Warn = "warn",
-  Error = "error",
+  Info = 'info',
+  Warn = 'warn',
+  Error = 'error',
 }
 
 export const notify = (
   type: NotificationType,
   message: string,
-  { permanent = false } = {}
+  { permanent = false } = {},
 ) => {
   ui.notifications.notify(message, type, { permanent });
 };
 
-type PositionableApp = Pick<Application, "element" | "position">;
+type PositionableApp = Pick<Application, 'element' | 'position'>;
 
 export const positionApp = async <T extends PositionableApp>(
   app: T,
-  relative: HTMLElement
+  relative: HTMLElement,
 ) => {
   const rect = relative.getBoundingClientRect();
   if (!rect.top && !rect.left) return;
@@ -30,7 +30,7 @@ export const positionApp = async <T extends PositionableApp>(
   }
   const [element] = (app.element || []) as JQuery;
   if (element instanceof HTMLElement) {
-    reposition(relative, element, { position: "left"})
+    reposition(relative, element, { position: 'left' });
     updateAppPositionFromEl(app, element);
   }
 };
@@ -46,7 +46,7 @@ export const confirmFloatingAppPositions = () => {
 
 const updateAppPositionFromEl = <T extends PositionableApp>(
   app: T,
-  el: HTMLElement
+  el: HTMLElement,
 ) => {
   const { top, left } = el.getBoundingClientRect();
   app.position.left = left;
@@ -58,13 +58,13 @@ const pickers = new WeakMap<object, FilePicker>();
 export const openImagePicker = (
   key: object,
   currentSrc: string,
-  callback: (path: string) => void
+  callback: (path: string) => void,
 ) => {
   const picker = pickers.get(key);
   if (picker?.rendered) closeImagePicker(key);
   else {
     const newPicker = new FilePicker({
-      type: "image",
+      type: 'image',
       current: currentSrc,
       callback,
     });

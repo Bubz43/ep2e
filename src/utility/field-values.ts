@@ -1,5 +1,5 @@
-import type { PickByValue } from "utility-types";
-import { localize, LangEntry } from "../foundry/localization";
+import type { PickByValue } from 'utility-types';
+import { localize, LangEntry } from '../foundry/localization';
 
 export type FieldValue = string | number | boolean;
 
@@ -24,15 +24,14 @@ export type FieldProps<
 };
 
 export type FieldPropsRenderer<T extends Record<string, unknown>> = (
-  valuedProps: FieldProps<T>
+  valuedProps: FieldProps<T>,
 ) => unknown;
-
 
 export const isFieldValue = (value: unknown): value is FieldValue => {
   switch (typeof value) {
-    case "boolean":
-    case "number":
-    case "string":
+    case 'boolean':
+    case 'number':
+    case 'string':
       return true;
 
     default:
