@@ -1,6 +1,9 @@
-@use "./scss/colors";
-@use "./scss/functions";
-@use "./scss/mixins";
+@use "scss/colors";
+@use "scss/functions";
+@use "scss/mixins";
+@use "scss/chat";
+@use "scss/css-properties";
+
 
 @include mixins.styled-scrollbars;
 @include mixins.widgetless-number-inputs;
@@ -9,100 +12,6 @@ body {
   color: var(--color-text);
   background-color: #000000;
 
-  --font-1: Jost, sans-serif;
-  --font-2: Spartan, sans-serif;
-  --font-3: Rubik, sans-serif;
-  --font-mono: "Fira Code", monospace;
-
-  --font-primary: Jost, sans-serif;
-  --font-alt: "Fira Code", monospace;
-  --text-highlight: 0 0 6px currentColor;
-
-  // Material Elements
-  --mdc-theme-primary: var(--color-primary);
-  --mdc-theme-error: var(--color-negative);
-  --mdc-theme-on-primary: var(--color-text);
-  --mdc-theme-text-primary-on-background: var(--color-text);
-  --mdc-theme-secondary: var(--color-secondary);
-  --mdc-theme-on-secondary: var(--color-text);
-  --mdc-theme-on-surface: var(--color-text);
-  --mdc-button-disabled-fill-color: var(--color-disabled);
-  --mdc-button-disabled-ink-color: var(--color-text-disabled);
-  --mdc-button-outline-color: --mdc-theme-primary;
-  --mdc-button-disabled-outline-color: var(--color-text-disabled);
-  --mdc-radio-unchecked-color: var(--color-primary);
-  --mdc-radio-disabled-color: var(--color-text-disabled);
-  --mdc-checkbox-disabled-color: var(--color-text-disabled);
-  --mdc-checkbox-unchecked-color: var(--color-primary);
-
-  --mdc-tab-text-label-color-default: var(--color-text-lighter);
-  --mdc-tab-color-default: var(--color-text-lighter);
-  --mdc-tab-height: 36px;
-  --mdc-theme-surface: var(--color-bg);
-  --mdc-theme-text-secondary-on-background: var(--color-text-lighter);
-  --mdc-linear-progress-buffer-color: var(--color-grey);
-
-  --mdc-typography-button-font-family: var(--font-primary);
-  --mdc-typography-subtitle1-font-family: var(--font-1);
-  --mdc-typography-body2-font-family: var(--font-primary);
-  --mdc-typography-body2-font-size: 1rem;
-
-  --app-datepicker-accent-color: var(--color-secondary);
-  --app-datepicker-bg-color: var(--color-bg);
-  --app-datepicker-color: var(--color-text);
-  --app-datepicker-disabled-day-color: var(--color-text-disabled);
-  --app-datepicker-selector-color: var(--color-text-lighter);
-  --app-datepicker-weekday-color: var(--color-grey);
-
-  // --mdc-text-field-ink-color: var(--color-text);
-  // --mdc-text-field-label-ink-color: var(--color-text-lighter);
-  // --mdc-text-field-idle-line-color: var(--color-text-lighter);
-  // --mdc-text-field-hover-line-color: var(--color-text);
-  // --mdc-text-field-disabled-ink-color: var(--color-text-disabled);
-  // --mdc-text-field-outlined-idle-border-color: var(--color-text-lighter);
-  // --mdc-text-field-outlined-hover-border-color: var(--color-text);
-  // --mdc-select-disabled-ink-color: var(--color-text-disabled);
-  // --mdc-text-field-fill-color: hsla(0, 0%, 94%, 0.02);
-  // --mdc-select-fill-color: hsla(0, 0%, 94%, 0.02);
-  // --mdc-text-field-fill-color: transparent;
-  // --mdc-select-fill-color: transparent;
-  // --mdc-select-ink-color: var(--color-text);
-  // --mdc-select-label-ink-color: var(--color-text-lighter);
-  // --mdc-menu-item-height: 30px;
-  // --mdc-select-dropdown-icon-color: var(--color-text);
-  // --mdc-select-hover-line-color: var(--color-secondary);
-  // --mdc-select-outlined-idle-border-color: var(--color-text-lighter);
-  // --mdc-select-outlined-hover-border-color: var(--color-text);
-  // --mdc-select-idle-line-color: var(--color-text-lighter);
-  // --mdc-typography-subtitle1-font-size: 1.02rem;
-  // --mdc-typography-subtitle1-font-family: var(--font-primary);
-  // --mdc-typography-subtitle1-letter-spacing: 1px;
-  // --mdc-list-vertical-padding: 0px;
-  // --mdc-list-side-padding: 30px;
-  // --mdc-ripple-color: var(--color-text);
-  --mdc-ripple-color: currentColor;
-  --mdc-ripple-hover-opacity: 0.07;
-  --mdc-list-vertical-padding: 0px;
-  --mdc-menu-z-index: 1000;
-
-  // Weightless Elements
-  --primary-hue: 270;
-  --secondary-hue: 200;
-  --primary-saturation: 95%;
-  --primary-lightness: 70%;
-  --label-color: hsl(0, 0, 80%);
-  --label-font-family: var(--font-primary);
-  --label-font-size: 14px;
-
-  --dialog-bg: #191919;
-  --dialog-color: white;
-
-  --list-item-bg: transparent;
-  --list-item-bg-hover: hsla(0, 0%, 100%, 0.05);
-  --list-item-padding: 0.5rem 1rem;
-  --list-item-color: var(--color-text);
-  --list-item-color-hover: var(--color-text);
-  --list-item-border-radius: 0px;
   font-size: 1rem;
 }
 
@@ -147,88 +56,3 @@ web-dialog {
 }
 
 
-
-#chat-form {
-  grid-area: form;
-  height: 60px;
-  min-height: 60px;
-  max-height: 170px;
-  cursor: ns-resize;
-  display: flex;
-  flex-flow: column;
-  margin: 0;
-  
-  background: alphav(var(--color-bg), 0.95);
-  &:focus-within {
-    background: var(--color-bg);
-  }
-  textarea {
-    cursor: initial;
-    margin: none;
-
-    margin-top: auto;
-    padding: 0.5rem 1rem;
-    background: transparent;
-    border-radius: 0px;
-    height: calc(100% - 6px);
-    color: var(--color-text);
-    border: none;
-    font-size: 15px;
-
-    &::placeholder {
-      font-size: 14px;
-    }
-    &:focus {
-      box-shadow: 0px 0px 2px 1px var(--color-secondary) inset;
-      box-shadow: none;
-      outline: none;
-    }
-  }
-}
-
-.dice-roll {
-  cursor: pointer;
-
-  &:hover {
-    .dice-formula,
-    .dice-total {
-      border-color: var(--color-secondary);
-      &::after {
-        border-color: var(--color-secondary);
-      }
-    }
-  }
-
-  .dice-formula,
-  .dice-total {
-    border-radius: 0px;
-    outline: none;
-    box-shadow: none;
-    border: none;
-    background: transparent;
-  }
-
-  .dice-formula {
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .dice-total {
-    border-top: 1px solid var(--color-border);
-    padding-top: 0.25rem;
-  }
-
-  .dice-tooltip {
-    padding: 0.75rem 1rem;
-    background: var(--color-bg);
-    margin-top: -0.5rem;
-    border-radius: 3px;
-  }
-
-  .part-flavor {
-    color: var(--color-grey) !important;
-  }
-}
-
-.inline-roll {
-  color: var(--color-bg);
-}
