@@ -1,0 +1,1050 @@
+{
+  "Actor": {
+    "types": [
+      "biological",
+      "character",
+      "syntheticShell",
+      "infomorph"
+    ],
+    "templates": {
+      "Acquisition": {
+        "acquisition": {
+          "availability": 0,
+          "complexity": "minor",
+          "cost": 0,
+          "resource": "",
+          "restricted": false
+        }
+      },
+      "Common": {
+        "description": "",
+        "reference": ""
+      },
+      "Mobile": {
+        "movementRates": []
+      },
+      "PoolData": {
+        "pools": {
+          "insight": 0,
+          "moxie": 0,
+          "vigor": 0,
+          "flex": 0
+        }
+      },
+      "PhysicalHealth": {
+        "physicalHealth": {
+          "baseDurability": 35,
+          "damage": 0,
+          "wounds": 0,
+          "bleedingOut": false,
+          "dots": [],
+          "hot": {
+            "damage": {
+              "amount": "1d10",
+              "interval": 86400000,
+              "lastAidedTick": 0,
+              "lastUnaidedTick": 0
+            },
+            "wound": {
+              "amount": "1",
+              "interval": 86400000,
+              "lastAidedTick": 0,
+              "lastUnaidedTick": 0
+            }
+          }
+        }
+      },
+      "FullMeshHealth": {
+        "meshHealth": {
+          "baseDurability": 20,
+          "crash": {
+            "damage": 0,
+            "wounds": 0
+          },
+          "damage": 0,
+          "hot": {
+            "damage": {
+              "amount": "1d10",
+              "interval": 60000,
+              "lastAidedTick": 0,
+              "lastUnaidedTick": 0
+            },
+            "wound": {
+              "amount": "1",
+              "interval": 60000,
+              "lastAidedTick": 0,
+              "lastUnaidedTick": 0
+            }
+          },
+          "wounds": 0
+        }
+      },
+      "Firewall": {
+        "firewall": {
+          "baseDurability": 30,
+          "crash": {
+            "damage": 0,
+            "wounds": 0
+          },
+          "damage": 0,
+          "wounds": 0,
+          "firewallRating": 30
+        }
+      },
+      "Conditions": {
+        "conditions": []
+      }
+    },
+    "biological": {
+      "templates": [
+        "Common",
+        "Mobile",
+        "Acquisition",
+        "PoolData",
+        "PhysicalHealth",
+        "FullMeshHealth",
+        "Firewall",
+        "Conditions"
+      ],
+      "prehensileLimbs": 2,
+      "sex": "",
+      "subtype": "",
+      "unarmedDV": "1d6",
+      "swarm": false,
+      "cyberbrain": false,
+      "recoveryConditions": "normal",
+      "size": "medium"
+    },
+    "infomorph": {
+      "templates": [
+        "Common",
+        "Acquisition",
+        "PoolData",
+        "FullMeshHealth",
+        "Firewall",
+        "Conditions"
+      ],
+      "additionalHomeDevices": [],
+      "localFirewall": true,
+      "subtype": "",
+      "privilege": "public"
+    },
+    "syntheticShell": {
+      "templates": [
+        "Common",
+        "Mobile",
+        "Acquisition",
+        "PoolData",
+        "PhysicalHealth",
+        "FullMeshHealth",
+        "Firewall",
+        "Conditions"
+      ],
+      "hostType": "aliOnly",
+      "passengers": 0,
+      "prehensileLimbs": 2,
+      "shellType": "synthmorph",
+      "subtype": "",
+      "unarmedDV": "2d6",
+      "swarm": false,
+      "painFilter": false,
+      "recoveryConditions": "normal",
+      "size": "medium",
+      "defaultDevice": {
+        "deviceType": "host"
+      },
+      "inherentArmor": {
+        "energy": 0,
+        "kinetic": 0,
+        "source": ""
+      }
+    },
+    "character": {
+      "templates": [
+        "Common"
+      ],
+      "mentalEdits": "",
+      "fakeId": "",
+      "aptitudes": {
+        "cog": 10,
+        "int": 10,
+        "ref": 10,
+        "sav": 10,
+        "som": 10,
+        "wil": 10
+      },
+      "favoriteItems": [],
+      "purchaseLog": [],
+      "accountShells": [],
+      "fieldSkills": {
+        "exotic": [],
+        "hardware": [],
+        "know": [],
+        "medicine": [],
+        "pilot": []
+      },
+      "homeDevice": {
+        "actorId": "",
+        "itemId": ""
+      },
+      "network": {
+        "masterDeviceId": "",
+        "systemDefenders": [],
+        "unslavedDevices": []
+      },
+      "mentalHealth": {
+        "alienation": 0,
+        "helplessness": 0,
+        "naturalHealAttempts": [],
+        "stress": 0,
+        "timeSinceStressAccrued": 0,
+        "traumas": 0,
+        "violence": 0
+      },
+      "settings": {
+        "canDefault": true,
+        "trackMentalHealth": true,
+        "useThreat": false,
+        "characterDetails": true,
+        "threatDetails": false,
+        "trackPoints": true,
+        "trackReputations": true
+      },
+      "shortRecharge": {
+        "refreshTimer": 0,
+        "taken": 0
+      },
+      "longRecharge": {
+        "refreshTimer": 0,
+        "taken": 0
+      },
+      "motivations": [],
+      "points": {
+        "customization": 0,
+        "gear": 0,
+        "morph": 0,
+        "rez": 0,
+        "credits": 0
+      },
+      "taskAction": {
+        "accumulatedTime": 0,
+        "tasks": []
+      },
+      "reps": {
+        "@Rep": {
+          "major": 0,
+          "minor": 0,
+          "moderate": 0,
+          "refreshTimer": 0,
+          "score": 0,
+          "track": false
+        },
+        "cRep": {
+          "major": 0,
+          "minor": 0,
+          "moderate": 0,
+          "refreshTimer": 0,
+          "score": 0,
+          "track": false
+        },
+        "fRep": {
+          "major": 0,
+          "minor": 0,
+          "moderate": 0,
+          "refreshTimer": 0,
+          "score": 0,
+          "track": false
+        },
+        "gRep": {
+          "major": 0,
+          "minor": 0,
+          "moderate": 0,
+          "refreshTimer": 0,
+          "score": 0,
+          "track": false
+        },
+        "iRep": {
+          "major": 0,
+          "minor": 0,
+          "moderate": 0,
+          "refreshTimer": 0,
+          "score": 0,
+          "track": false
+        },
+        "rRep": {
+          "major": 0,
+          "minor": 0,
+          "moderate": 0,
+          "refreshTimer": 0,
+          "score": 0,
+          "track": false
+        },
+        "xRep": {
+          "major": 0,
+          "minor": 0,
+          "moderate": 0,
+          "refreshTimer": 0,
+          "score": 0,
+          "track": false
+        }
+      },
+      "skills": {
+        "athletics": {
+          "points": 0,
+          "specialization": ""
+        },
+        "deceive": {
+          "points": 0,
+          "specialization": ""
+        },
+        "fray": {
+          "points": 0,
+          "specialization": ""
+        },
+        "freeFall": {
+          "points": 0,
+          "specialization": ""
+        },
+        "guns": {
+          "points": 0,
+          "specialization": ""
+        },
+        "infiltrate": {
+          "points": 0,
+          "specialization": ""
+        },
+        "infosec": {
+          "points": 0,
+          "specialization": ""
+        },
+        "interface": {
+          "points": 0,
+          "specialization": ""
+        },
+        "kinesics": {
+          "points": 0,
+          "specialization": ""
+        },
+        "melee": {
+          "points": 0,
+          "specialization": ""
+        },
+        "perceive": {
+          "points": 0,
+          "specialization": ""
+        },
+        "persuade": {
+          "points": 0,
+          "specialization": ""
+        },
+        "program": {
+          "points": 0,
+          "specialization": ""
+        },
+        "provoke": {
+          "points": 0,
+          "specialization": ""
+        },
+        "psi": {
+          "points": 0,
+          "specialization": ""
+        },
+        "research": {
+          "points": 0,
+          "specialization": ""
+        },
+        "survival": {
+          "points": 0,
+          "specialization": ""
+        }
+      },
+      "spentPools": {
+        "flex": 0,
+        "insight": 0,
+        "moxie": 0,
+        "threat": 0,
+        "vigor": 0
+      },
+      "flex": 0,
+      "threat": 0,
+      "characterDetails": {
+        "age": "",
+        "aliases": "",
+        "background": "",
+        "career": "",
+        "faction": "",
+        "gender": "",
+        "interest": "",
+        "languages": ""
+      },
+      "temporary": [],
+      "egoType": "",
+      "forkType": "",
+      "threatDetails": {
+        "level": "yellow",
+        "niche": "",
+        "numbers": "",
+        "stress": {
+          "sv": "",
+          "minSV": 0,
+          "minHalve": false,
+          "notes": ""
+        }
+      },
+      "activeForks": [],
+      "backups": [],
+      "appliedSubstances": [],
+      "log": [],
+      "combatState": {
+        "complexAim": false,
+        "mentalFullDefense": false,
+        "physicalFullDefense": false,
+        "trackStandardAmmo": false
+      }
+    }
+  },
+  "Item": {
+    "types": [
+      "psi",
+      "trait",
+      "sleight",
+      "substance",
+      "armor",
+      "explosive",
+      "software",
+      "meleeWeapon",
+      "physicalTech",
+      "beamWeapon",
+      "physicalService",
+      "railgun",
+      "firearm",
+      "firearmAmmo",
+      "sprayWeapon",
+      "seekerWeapon",
+      "thrownWeapon"
+    ],
+    "templates": {
+      "Size": {
+        "idealUserSize": "",
+        "itemSize": "verySmall"
+      },
+      "Common": {
+        "description": "",
+        "reference": ""
+      },
+      "Cost": {
+        "complexity": "minor",
+        "restricted": false,
+        "quality": "average"
+      },
+      "GearState": {
+        "state": {
+          "disabled": false,
+          "equipped": false
+        }
+      },
+      "GearTraits": {
+        "concealable": false,
+        "fragile": false,
+        "singleUse": false,
+        "twoHanded": false
+      },
+      "Copyable": {
+        "blueprint": {
+          "blueprintType": "",
+          "cracked": false,
+          "used": false
+        }
+      }
+    },
+    "psi": {
+      "templates": [
+        "Common"
+      ],
+      "level": 1,
+      "requireBioSubstrate": false,
+      "state": {
+        "freePush": "",
+        "infectionRating": 10,
+        "receded": false,
+        "checkoutTime": false,
+        "interference": false
+      }
+    },
+    "trait": {
+      "templates": [
+        "Common"
+      ],
+      "restrictions": "",
+      "triggers": "",
+      "source": "ego",
+      "state": {
+        "level": 0,
+        "triggered": false
+      },
+      "levels": [
+        {
+          "cost": 1,
+          "effects": [],
+          "id": "_defaultLevel"
+        }
+      ],
+      "subtype": "",
+      "traitType": "positive"
+    },
+    "sleight": {
+      "templates": [
+        "Common"
+      ],
+      "duration": "actionTurns",
+      "infectionMod": 1,
+      "sleightType": "gamma",
+      "action": "complex",
+      "effects": [],
+      "effectsOnSelf": [],
+      "effectsOnTarget": [],
+      "scaleEffectsOnSuperior": false,
+      "attack": {
+        "armorUsed": [],
+        "conditions": [],
+        "damage": "",
+        "health": "mental",
+        "traits": [],
+        "interval": 0
+      },
+      "heal": {
+        "amount": "1d6",
+        "health": "mental"
+      },
+      "mentalArmor": {
+        "divisor": 3,
+        "formula": "1d6"
+      },
+      "special": "",
+      "state": {
+        "sustained": false
+      }
+    },
+    "substance": {
+      "templates": [
+        "Common",
+        "Cost",
+        "Copyable"
+      ],
+      "addiction": "",
+      "addictionMod": 0,
+      "hasSeverity": false,
+      "state": {
+        "stashed": false
+      },
+      "application": [
+        "dermal",
+        "inhalation",
+        "injection",
+        "oral"
+      ],
+      "alwaysApplied": {
+        "damage": {
+          "damageFormula": "",
+          "perTurn": false,
+          "armorPiercing": false,
+          "armorRemoving": false,
+          "armorUsed": [],
+          "damageType": "physical"
+        },
+        "duration": 3000,
+        "effects": [],
+        "wearOffStress": "",
+        "notes": ""
+      },
+      "category": "",
+      "classification": "biochem",
+      "consumeOnUse": true,
+      "substanceType": "drug",
+      "isAntidote": false,
+      "quantity": 5,
+      "quantityPerCost": 5,
+      "severity": {
+        "check": "som",
+        "checkMod": 0,
+        "conditions": [],
+        "wearOffStress": "",
+        "damage": {
+          "damageFormula": "",
+          "perTurn": false,
+          "armorPiercing": false,
+          "armorRemoving": false,
+          "armorUsed": [],
+          "damageType": "physical"
+        },
+        "duration": 3000,
+        "effects": [],
+        "notes": ""
+      }
+    },
+    "explosive": {
+      "templates": [
+        "Common",
+        "Cost",
+        "Copyable"
+      ],
+      "areaEffect": "",
+      "explosiveType": "grenade",
+      "containSubstance": false,
+      "quantity": 5,
+      "areaEffectRadius": 0,
+      "size": "micro",
+      "sticky": true,
+      "unitsPerComplexity": 5,
+      "dosesPerUnit": 1,
+      "hasSecondaryMode": false,
+      "state": {
+        "stashed": false
+      },
+      "primaryAttack": {
+        "armorPiercing": false,
+        "armorUsed": "",
+        "attackTraits": [],
+        "damageFormula": "",
+        "duration": 0,
+        "label": "",
+        "notes": ""
+      },
+      "secondaryAttack": {
+        "armorPiercing": false,
+        "armorUsed": "",
+        "attackTraits": [],
+        "damageFormula": "",
+        "duration": 0,
+        "label": "",
+        "notes": ""
+      }
+    },
+    "armor": {
+      "templates": [
+        "Common",
+        "Cost",
+        "Copyable",
+        "Size",
+        "GearState"
+      ],
+      "activeArmor": {
+        "energy": 0,
+        "kinetic": 0,
+        "concealable": false,
+        "layerable": false
+      },
+      "armorValues": {
+        "energy": 0,
+        "kinetic": 0,
+        "concealable": false,
+        "layerable": false
+      },
+      "attackTraits": [],
+      "effects": [],
+      "state": {
+        "activated": false
+      },
+      "hasActiveState": false,
+      "fragile": false,
+      "singleUse": false,
+      "twoHanded": false,
+      "notes": "",
+      "wareType": ""
+    },
+    "software": {
+      "softwareType": "app",
+      "templates": [
+        "Common",
+        "Cost"
+      ],
+      "activatedEffects": [],
+      "effects": [],
+      "category": "",
+      "serviceDuration": 0,
+      "skills": [],
+      "meshHealth": {
+        "baseDurability": 20,
+        "damage": 0,
+        "wounds": 0,
+        "crash": {
+          "damage": 0,
+          "wounds": 0
+        }
+      },
+      "settings": {
+        "hasActiveState": false,
+        "hasAttack": false,
+        "trackMeshHealth": false
+      },
+      "state": {
+        "activated": false,
+        "equipped": false,
+        "serviceElapsed": 0,
+        "paused": false
+      },
+      "primaryAttack": {
+        "armorPiercing": false,
+        "armorUsed": [
+          "mesh"
+        ],
+        "attackTraits": [],
+        "damageFormula": "",
+        "armorRemoving": false,
+        "damageType": "mesh",
+        "label": "",
+        "notes": ""
+      },
+      "secondaryAttack": {
+        "armorPiercing": false,
+        "armorUsed": [
+          "mesh"
+        ],
+        "attackTraits": [],
+        "damageType": "mesh",
+        "damageFormula": "",
+        "armorRemoving": false,
+        "label": "",
+        "notes": ""
+      }
+    },
+    "physicalService": {
+      "duration": -1,
+      "reputations": [],
+      "serviceType": "generic",
+      "state": {
+        "elapsed": 0
+      },
+      "templates": [
+        "Common",
+        "Cost"
+      ]
+    },
+    "physicalTech": {
+      "templates": [
+        "Common",
+        "Cost",
+        "GearTraits",
+        "Copyable",
+        "Size",
+        "GearState"
+      ],
+      "activatedEffects": [],
+      "activation": "none",
+      "deviceType": "",
+      "effects": [],
+      "category": "",
+      "fabricator":"",
+      "state": {
+        "activated": false,
+        "embeddedEgos": [],
+        "onboardAliDeleted": false
+      },
+      "physicalHealth": {
+        "baseDurability": 20,
+        "damage": 0,
+        "wounds": 0,
+        "dots": []
+      },
+      "meshHealth": {
+        "baseDurability": 20,
+        "crash": {
+          "damage": 0,
+          "wounds": 0
+        },
+        "damage": 0,
+        "wounds": 0,
+        "hot": {
+          "damage": {
+            "amount": "1d10",
+            "interval": 60000,
+            "lastAidedTick": 0,
+            "lastUnaidedTick": 0
+          },
+          "wound": {
+            "amount": "1",
+            "interval": 60000,
+            "lastAidedTick": 0,
+            "lastUnaidedTick": 0
+          }
+        }
+      },
+      "wareType": ""
+    },
+    "meleeWeapon": {
+      "templates": [
+        "Common",
+        "Cost",
+        "GearTraits",
+        "Copyable",
+        "Size",
+        "GearState"
+      ],
+      "primaryAttack": {
+        "armorPiercing": false,
+        "attackTraits": [],
+        "damageFormula": "",
+        "label": "",
+        "notes": ""
+      },
+      "secondaryAttack": {
+        "armorPiercing": false,
+        "attackTraits": [],
+        "damageFormula": "",
+        "label": "",
+        "notes": ""
+      },
+      "hasSecondaryAttack": false,
+      "augmentUnarmed": false,
+      "acceptsPayload": false,
+      "reachBonus": 0,
+      "improvised": false,
+      "touchOnly": false,
+      "wareType": "",
+      "exoticSkill": ""
+    },
+    "sprayWeapon": {
+      "accessories": [
+        "safetySystem",
+        "smartlink"
+      ],
+      "ammo": {
+        "max": 15,
+        "value": 15
+      },
+      "dosesPerShot": 0,
+      "firedShots": 0,
+      "fixed": false,
+      "long": false,
+      "range": 15,
+      "payloadUse": "",
+      "primaryAttack": {
+        "armorPiercing": false,
+        "armorUsed": "",
+        "attackTraits": [],
+        "damageFormula": "",
+        "firingModes": [
+          "semiAuto"
+        ],
+        "superiorSuccessDot": "",
+        "notes": ""
+      },
+      "state": {
+        "braced": false,
+        "interface": false
+      },
+      "templates": [
+        "Common",
+        "Cost",
+        "GearTraits",
+        "Copyable",
+        "Size",
+        "GearState"
+      ],
+      "wareType": ""
+    },
+    "beamWeapon": {
+      "firedShots": 0,
+      "accessories": [
+        "smartlink",
+        "safetySystem"
+      ],
+      "ammo": {
+        "charge": 10,
+        "max": 10,
+        "recharge": 0
+      },
+      "primaryAttack": {
+        "armorPiercing": false,
+        "attackTraits": [],
+        "damageFormula": "",
+        "firingModes": [
+          "semiAuto"
+        ],
+        "label": "",
+        "notes": "",
+        "areaEffect": "",
+        "areaEffectRadius": 1
+      },
+      "hasSecondaryAttack": false,
+      "range": 15,
+      "secondaryAttack": {
+        "armorPiercing": false,
+        "attackTraits": [],
+        "damageFormula": "",
+        "firingModes": [
+          "semiAuto"
+        ],
+        "label": "",
+        "notes": "",
+        "areaEffect": "",
+        "areaEffectRadius": 1
+      },
+      "state": {
+        "braced": false,
+        "interface": false
+      },
+      "fixed": false,
+      "long": false,
+      "noClose": false,
+      "noPointBlank": false,
+      "templates": [
+        "Common",
+        "Cost",
+        "GearTraits",
+        "Copyable",
+        "Size",
+        "GearState"
+      ],
+      "wareType": ""
+    },
+    "firearm": {
+      "fixed": false,
+      "long": false,
+      "accessories": [
+        "smartlink",
+        "safetySystem"
+      ],
+      "ammo": {
+        "ammoClass": "heavyPistol",
+        "max": 9,
+        "value": 9,
+        "forms": [],
+        "selectedForm": 0
+      },
+      "firedShots": 0,
+      "primaryAttack": {
+        "damageFormula": "1d10",
+        "firingModes": [
+          "semiAuto",
+          "burstFire"
+        ],
+        "notes": ""
+      },
+      "range": 25,
+      "state": {
+        "braced": false,
+        "interface": false
+      },
+      "templates": [
+        "Common",
+        "Cost",
+        "GearTraits",
+        "Copyable",
+        "Size",
+        "GearState"
+      ],
+      "wareType": ""
+    },
+    "firearmAmmo": {
+      "ammoClass": "heavyPistol",
+      "quantity": 100,
+      "carryPayload": false,
+      "forms": [
+        {
+          "name": "",
+          "armorPiercing": false,
+          "attackTraits": [],
+          "damageFormula": "",
+          "steady": false,
+          "damageModifierType": "formula",
+          "notes": "",
+          "id": "_defaultID"
+        }
+      ],
+      "state": {
+        "stashed": false
+      },
+      "templates": [
+        "Common",
+        "Cost",
+        "Copyable"
+      ]
+    },
+    "railgun": {
+      "fixed": false,
+      "long": false,
+      "firedShots": 0,
+      "accessories": [
+        "safetySystem",
+        "smartlink"
+      ],
+      "ammo": {
+        "ammoClass": "holdoutPistol",
+        "max": 9,
+        "value": 9
+      },
+      "battery": {
+        "charge": 200,
+        "max": 200,
+        "recharge": 0
+      },
+      "primaryAttack": {
+        "damageFormula": "1d10",
+        "firingModes": [
+          "semiAuto"
+        ],
+        "notes": ""
+      },
+      "range": 37,
+      "state": {
+        "braced": false,
+        "interface": false
+      },
+      "templates": [
+        "Common",
+        "Cost",
+        "GearTraits",
+        "Copyable",
+        "Size",
+        "GearState"
+      ],
+      "wareType": ""
+    },
+    "seekerWeapon": {
+      "accessories": ["smartlink", "safetySystem"],
+      "firedShots": 0,
+      "fixed": false,
+      "hasAlternativeAmmo": false,
+      "long": false,
+      "noClose": false,
+      "noPointBlank": false,
+      "state": {
+        "braced": false,
+        "interface": false,
+        "homing": false
+      },
+      "templates": [
+        "Common",
+        "Cost",
+        "GearTraits",
+        "Copyable",
+        "Size",
+        "GearState"
+      ],
+      "wareType": "",
+      "firingMode": "semiAuto",
+      "primaryAmmo": {
+        "missileCapacity": 1,
+        "missileSize": "micro",
+        "range": 75
+      },
+      "alternativeAmmo": {
+        "missileCapacity": 1,
+        "missileSize": "mini",
+        "range": 75
+      }
+    },
+    "thrownWeapon": {
+      "exoticSkill": "",
+      "quantity": 5,
+      "templates": ["Common","Cost","GearTraits","Copyable"],
+      "primaryAttack": {
+        "armorPiercing": false,
+        "attackTraits": [],
+        "damageFormula": "1d6",
+        "notes": ""
+      }
+    }
+  }
+}

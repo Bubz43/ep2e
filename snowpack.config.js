@@ -7,11 +7,19 @@ module.exports = {
     '@snowpack/plugin-babel',
     '@snowpack/plugin-dotenv',
     '@snowpack/plugin-typescript',
+    './snowpack-tagged-scss.js',
   ],
   install: [
     /* ... */
   ],
   installOptions: {
+    rollup: {
+      plugins: [
+        require('rollup-plugin-livereload')({
+          watch: 'build/_dist_',
+        }),
+      ],
+    },
     /* ... */
   },
   devOptions: {

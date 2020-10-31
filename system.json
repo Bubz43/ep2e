@@ -1,0 +1,69 @@
+{
+  "name": "ep2e",
+  "title": "Eclipse Phase 2e",
+  "description": "Eclipse Phase 2e Game System.",
+  "version": 0.64686,
+  "author": "Bubz",
+  "esmodules": [
+    "./build/_dist_/index.js"
+  ],
+  "packs": [
+    {
+      "name": "beam-weapons",
+      "system": "eclipse-phase",
+      "label": "Beam Weapons",
+      "path": "./packs/beam-weapons.db",
+      "entity": "Item"
+    },
+    {
+      "name": "melee-weapons",
+      "system": "eclipse-phase",
+      "label": "Melee Weapons",
+      "path": "./packs/melee-weapons.db",
+      "entity": "Item"
+    },
+    {
+      "name": "traits",
+      "system": "eclipse-phase",
+      "label": "Traits",
+      "path": "./packs/traits.db",
+      "entity": "Item"
+    },
+    {
+      "name": "armor",
+      "system": "eclipse-phase",
+      "label": "Armor",
+      "path": "./packs/armor.db",
+      "entity": "Item"
+    },
+    {
+      "name": "disorders",
+      "system": "eclipse-phase",
+      "label": "Disorders",
+      "path": "./packs/disorders.db",
+      "entity": "Item"
+    },
+    {
+      "name": "weapon-accessories",
+      "system": "eclipse-phase",
+      "label": "Weapon Accessories",
+      "path": "./packs/weapon-accessories.db",
+      "entity": "JournalEntry"
+    }
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "styles": [
+    "body-init.css"
+  ],
+  "compatibleCoreVersion": "0.7.5",
+  "gridDistance": 1,
+  "gridUnits": "m",
+  "minimumCoreVersion": "0.7.5",
+  "socket": true
+}

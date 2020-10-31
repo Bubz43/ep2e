@@ -2,6 +2,7 @@
 /* Use this folder to also add/extend a package d.ts file, if needed. */
 
 declare module '*.css';
+declare module '*.scss';
 declare module '*.svg' {
   const ref: string;
   export default ref;

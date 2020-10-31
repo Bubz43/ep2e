@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost&display=swap');
+body {
+  color: white;
+  font-family: 'Jost', sans-serif;
+  background-color: transparent;
+  line-height: 1.5em;
+  letter-spacing: 0.5px;
+}
+
+a.inline-roll,
+a.entity-link {
+  color: black;
+}
+
+hr {
+  border-color: hsl(210, 14%, 53%);
+}
+
+h1,
+h2 {
+  border-color: hsl(210, 5%, 20%);
+}

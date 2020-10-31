@@ -1,0 +1,5223 @@
+{
+  "$ref": "#/definitions/Lang",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "Lang": {
+      "additionalProperties": false,
+      "properties": {
+        "EP2E": {
+          "additionalProperties": false,
+          "properties": {
+            "@Rep": {
+              "type": "string"
+            },
+            "DESCRIPTIONS": {
+              "additionalProperties": false,
+              "properties": {
+                "blinded": {
+                  "type": "string"
+                },
+                "confused": {
+                  "type": "string"
+                },
+                "dazed": {
+                  "type": "string"
+                },
+                "deafened": {
+                  "type": "string"
+                },
+                "grappled": {
+                  "type": "string"
+                },
+                "immobilized": {
+                  "type": "string"
+                },
+                "incapacitated": {
+                  "type": "string"
+                },
+                "integrationTest": {
+                  "type": "string"
+                },
+                "invalidRollFormula": {
+                  "type": "string"
+                },
+                "medicineHeal": {
+                  "type": "string"
+                },
+                "prone": {
+                  "type": "string"
+                },
+                "stunned": {
+                  "type": "string"
+                },
+                "unconscious": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "medicineHeal",
+                "invalidRollFormula",
+                "integrationTest",
+                "confused",
+                "blinded",
+                "dazed",
+                "grappled",
+                "immobilized",
+                "incapacitated",
+                "prone",
+                "unconscious",
+                "stunned",
+                "deafened"
+              ],
+              "type": "object"
+            },
+            "FORMATABLE": {
+              "additionalProperties": false,
+              "properties": {
+                "ArmorReduced": {
+                  "type": "string"
+                },
+                "DotPerTurnNoArmor": {
+                  "type": "string"
+                },
+                "NoMatching": {
+                  "type": "string"
+                },
+                "NoMore": {
+                  "type": "string"
+                },
+                "OnCheckFailure": {
+                  "type": "string"
+                },
+                "TakeSVWhenWearsOff": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "NoMatching",
+                "NoMore",
+                "DotPerTurnNoArmor",
+                "TakeSVWhenWearsOff",
+                "OnCheckFailure",
+                "ArmorReduced"
+              ],
+              "type": "object"
+            },
+            "FULL": {
+              "additionalProperties": false,
+              "properties": {
+                "@Rep": {
+                  "type": "string"
+                },
+                "cRep": {
+                  "type": "string"
+                },
+                "cog": {
+                  "type": "string"
+                },
+                "fRep": {
+                  "type": "string"
+                },
+                "gRep": {
+                  "type": "string"
+                },
+                "iRep": {
+                  "type": "string"
+                },
+                "int": {
+                  "type": "string"
+                },
+                "rRep": {
+                  "type": "string"
+                },
+                "ref": {
+                  "type": "string"
+                },
+                "sav": {
+                  "type": "string"
+                },
+                "som": {
+                  "type": "string"
+                },
+                "wil": {
+                  "type": "string"
+                },
+                "xRep": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "cog",
+                "int",
+                "ref",
+                "sav",
+                "som",
+                "wil",
+                "@Rep",
+                "cRep",
+                "fRep",
+                "gRep",
+                "iRep",
+                "rRep",
+                "xRep"
+              ],
+              "type": "object"
+            },
+            "SHORT": {
+              "additionalProperties": false,
+              "properties": {
+                "app": {
+                  "type": "string"
+                },
+                "armorPiercing": {
+                  "type": "string"
+                },
+                "armorRating": {
+                  "type": "string"
+                },
+                "armorValue": {
+                  "type": "string"
+                },
+                "average": {
+                  "type": "string"
+                },
+                "bioware": {
+                  "type": "string"
+                },
+                "burstFire": {
+                  "type": "string"
+                },
+                "cyberware": {
+                  "type": "string"
+                },
+                "damageValue": {
+                  "type": "string"
+                },
+                "deathRating": {
+                  "type": "string"
+                },
+                "dermal": {
+                  "type": "string"
+                },
+                "durability": {
+                  "type": "string"
+                },
+                "fullAuto": {
+                  "type": "string"
+                },
+                "gearPoints": {
+                  "type": "string"
+                },
+                "hardware": {
+                  "type": "string"
+                },
+                "high": {
+                  "type": "string"
+                },
+                "inhalation": {
+                  "type": "string"
+                },
+                "injection": {
+                  "type": "string"
+                },
+                "insanityRating": {
+                  "type": "string"
+                },
+                "low": {
+                  "type": "string"
+                },
+                "lucidity": {
+                  "type": "string"
+                },
+                "major": {
+                  "type": "string"
+                },
+                "meshware": {
+                  "type": "string"
+                },
+                "minor": {
+                  "type": "string"
+                },
+                "moderate": {
+                  "type": "string"
+                },
+                "modifier": {
+                  "type": "string"
+                },
+                "morphPoints": {
+                  "type": "string"
+                },
+                "nanoware": {
+                  "type": "string"
+                },
+                "oral": {
+                  "type": "string"
+                },
+                "rare": {
+                  "type": "string"
+                },
+                "semiAuto": {
+                  "type": "string"
+                },
+                "singleShot": {
+                  "type": "string"
+                },
+                "stressValue": {
+                  "type": "string"
+                },
+                "suppressiveFire": {
+                  "type": "string"
+                },
+                "traumaThreshold": {
+                  "type": "string"
+                },
+                "traumasIgnored": {
+                  "type": "string"
+                },
+                "veryHigh": {
+                  "type": "string"
+                },
+                "veryLow": {
+                  "type": "string"
+                },
+                "woundThreshold": {
+                  "type": "string"
+                },
+                "woundsIgnored": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "woundThreshold",
+                "woundsIgnored",
+                "deathRating",
+                "durability",
+                "lucidity",
+                "traumaThreshold",
+                "traumasIgnored",
+                "insanityRating",
+                "minor",
+                "moderate",
+                "major",
+                "rare",
+                "armorPiercing",
+                "armorValue",
+                "stressValue",
+                "damageValue",
+                "gearPoints",
+                "morphPoints",
+                "app",
+                "dermal",
+                "inhalation",
+                "injection",
+                "oral",
+                "veryLow",
+                "low",
+                "average",
+                "high",
+                "veryHigh",
+                "singleShot",
+                "semiAuto",
+                "burstFire",
+                "fullAuto",
+                "suppressiveFire",
+                "armorRating",
+                "modifier",
+                "bioware",
+                "hardware",
+                "cyberware",
+                "nanoware",
+                "meshware"
+              ],
+              "type": "object"
+            },
+            "abbr": {
+              "type": "string"
+            },
+            "abilities": {
+              "type": "string"
+            },
+            "ability": {
+              "type": "string"
+            },
+            "academic": {
+              "type": "string"
+            },
+            "academics": {
+              "type": "string"
+            },
+            "accessories": {
+              "type": "string"
+            },
+            "accountShell": {
+              "type": "string"
+            },
+            "accountShells": {
+              "type": "string"
+            },
+            "accounting": {
+              "type": "string"
+            },
+            "accumulated": {
+              "type": "string"
+            },
+            "accushot": {
+              "type": "string"
+            },
+            "acquireClue": {
+              "type": "string"
+            },
+            "acquisition": {
+              "type": "string"
+            },
+            "acronym": {
+              "type": "string"
+            },
+            "act": {
+              "type": "string"
+            },
+            "actNow": {
+              "type": "string"
+            },
+            "action": {
+              "type": "string"
+            },
+            "actionTurns": {
+              "type": "string"
+            },
+            "actions": {
+              "type": "string"
+            },
+            "activate": {
+              "type": "string"
+            },
+            "activated": {
+              "type": "string"
+            },
+            "activation": {
+              "type": "string"
+            },
+            "active": {
+              "type": "string"
+            },
+            "activeForks": {
+              "type": "string"
+            },
+            "activeRecharge": {
+              "type": "string"
+            },
+            "actor": {
+              "type": "string"
+            },
+            "actorLink": {
+              "type": "string"
+            },
+            "add": {
+              "type": "string"
+            },
+            "addiction": {
+              "type": "string"
+            },
+            "addictionMod": {
+              "type": "string"
+            },
+            "additional": {
+              "type": "string"
+            },
+            "additionalArmor": {
+              "type": "string"
+            },
+            "additionalDv": {
+              "type": "string"
+            },
+            "adjacentTargets": {
+              "type": "string"
+            },
+            "admin": {
+              "type": "string"
+            },
+            "advance": {
+              "type": "string"
+            },
+            "advancePersonalTime": {
+              "type": "string"
+            },
+            "aerospace": {
+              "type": "string"
+            },
+            "age": {
+              "type": "string"
+            },
+            "aggressive": {
+              "type": "string"
+            },
+            "agi": {
+              "type": "string"
+            },
+            "ai": {
+              "type": "string"
+            },
+            "aided": {
+              "type": "string"
+            },
+            "aidedHealing": {
+              "type": "string"
+            },
+            "aim": {
+              "type": "string"
+            },
+            "air": {
+              "type": "string"
+            },
+            "airburst": {
+              "type": "string"
+            },
+            "aircraft": {
+              "type": "string"
+            },
+            "alerted": {
+              "type": "string"
+            },
+            "ali": {
+              "type": "string"
+            },
+            "aliOnly": {
+              "type": "string"
+            },
+            "aliases": {
+              "type": "string"
+            },
+            "alien": {
+              "type": "string"
+            },
+            "alienation": {
+              "type": "string"
+            },
+            "all": {
+              "type": "string"
+            },
+            "allActions": {
+              "type": "string"
+            },
+            "allowRemoteControl": {
+              "type": "string"
+            },
+            "alpha": {
+              "type": "string"
+            },
+            "alt": {
+              "type": "string"
+            },
+            "altAttackMode": {
+              "type": "string"
+            },
+            "altMode": {
+              "type": "string"
+            },
+            "alternativeAmmo": {
+              "type": "string"
+            },
+            "alwaysApplied": {
+              "type": "string"
+            },
+            "alwaysApplies": {
+              "type": "string"
+            },
+            "ammo": {
+              "type": "string"
+            },
+            "ammoUsed": {
+              "type": "string"
+            },
+            "ammunition": {
+              "type": "string"
+            },
+            "amount": {
+              "type": "string"
+            },
+            "anarchist": {
+              "type": "string"
+            },
+            "animalHandler": {
+              "type": "string"
+            },
+            "animalHandling": {
+              "type": "string"
+            },
+            "antidote": {
+              "type": "string"
+            },
+            "any": {
+              "type": "string"
+            },
+            "anyway": {
+              "type": "string"
+            },
+            "app": {
+              "type": "string"
+            },
+            "appAsService": {
+              "type": "string"
+            },
+            "appAsWare": {
+              "type": "string"
+            },
+            "applicable": {
+              "type": "string"
+            },
+            "application": {
+              "type": "string"
+            },
+            "applicationMethods": {
+              "type": "string"
+            },
+            "applied": {
+              "type": "string"
+            },
+            "appliedSubstance": {
+              "type": "string"
+            },
+            "apply": {
+              "type": "string"
+            },
+            "applyCoating": {
+              "type": "string"
+            },
+            "applyEffects": {
+              "type": "string"
+            },
+            "applyTo": {
+              "type": "string"
+            },
+            "apps": {
+              "type": "string"
+            },
+            "aptitude": {
+              "type": "string"
+            },
+            "aptitudeCheck": {
+              "type": "string"
+            },
+            "aptitudeMultiplier": {
+              "type": "string"
+            },
+            "aptitudes": {
+              "type": "string"
+            },
+            "arc": {
+              "type": "string"
+            },
+            "areaEffect": {
+              "type": "string"
+            },
+            "areaEffectRadius": {
+              "type": "string"
+            },
+            "areaEffectType": {
+              "type": "string"
+            },
+            "argonaut": {
+              "type": "string"
+            },
+            "armSlide": {
+              "type": "string"
+            },
+            "armor": {
+              "type": "string"
+            },
+            "armorLayer": {
+              "type": "string"
+            },
+            "armorLayerPenalty": {
+              "type": "string"
+            },
+            "armorPiercing": {
+              "type": "string"
+            },
+            "armorRating": {
+              "type": "string"
+            },
+            "armorReduction": {
+              "type": "string"
+            },
+            "armorRemoving": {
+              "type": "string"
+            },
+            "armorUsed": {
+              "type": "string"
+            },
+            "armorValue": {
+              "type": "string"
+            },
+            "armorer": {
+              "type": "string"
+            },
+            "artist/icon": {
+              "type": "string"
+            },
+            "arts": {
+              "type": "string"
+            },
+            "as": {
+              "type": "string"
+            },
+            "asi": {
+              "type": "string"
+            },
+            "assaultRifle": {
+              "type": "string"
+            },
+            "async": {
+              "type": "string"
+            },
+            "at": {
+              "type": "string"
+            },
+            "athletics": {
+              "type": "string"
+            },
+            "atmosphere": {
+              "type": "string"
+            },
+            "attack": {
+              "type": "string"
+            },
+            "attackMode": {
+              "type": "string"
+            },
+            "attackTraits": {
+              "type": "string"
+            },
+            "attackingOrSpotting": {
+              "type": "string"
+            },
+            "attacks": {
+              "type": "string"
+            },
+            "attempt": {
+              "type": "string"
+            },
+            "attempts": {
+              "type": "string"
+            },
+            "augmentUnarmed": {
+              "type": "string"
+            },
+            "augmentation": {
+              "type": "string"
+            },
+            "auto": {
+              "type": "string"
+            },
+            "autoRemove": {
+              "type": "string"
+            },
+            "automatic": {
+              "type": "string"
+            },
+            "availability": {
+              "type": "string"
+            },
+            "available": {
+              "type": "string"
+            },
+            "average": {
+              "type": "string"
+            },
+            "avoid": {
+              "type": "string"
+            },
+            "awaiting": {
+              "type": "string"
+            },
+            "back": {
+              "type": "string"
+            },
+            "background": {
+              "type": "string"
+            },
+            "backup": {
+              "type": "string"
+            },
+            "backups": {
+              "type": "string"
+            },
+            "badlyDamaged": {
+              "type": "string"
+            },
+            "barelyDamaged": {
+              "type": "string"
+            },
+            "barsoomian": {
+              "type": "string"
+            },
+            "base": {
+              "type": "string"
+            },
+            "baseDurability": {
+              "type": "string"
+            },
+            "baseInfectionRating": {
+              "type": "string"
+            },
+            "battery": {
+              "type": "string"
+            },
+            "battleRifle": {
+              "type": "string"
+            },
+            "beamWeapon": {
+              "type": "string"
+            },
+            "beforeMitigation": {
+              "type": "string"
+            },
+            "beta": {
+              "type": "string"
+            },
+            "beyondRange": {
+              "type": "string"
+            },
+            "bio": {
+              "type": "string"
+            },
+            "biochem": {
+              "type": "string"
+            },
+            "biological": {
+              "type": "string"
+            },
+            "biologicalBody": {
+              "type": "string"
+            },
+            "biologicalLife": {
+              "type": "string"
+            },
+            "biomorph": {
+              "type": "string"
+            },
+            "biotech": {
+              "type": "string"
+            },
+            "bioware": {
+              "type": "string"
+            },
+            "blind": {
+              "type": "string"
+            },
+            "blindRoll": {
+              "type": "string"
+            },
+            "blinded": {
+              "type": "string"
+            },
+            "blinding": {
+              "type": "string"
+            },
+            "blueprint": {
+              "type": "string"
+            },
+            "blueprints": {
+              "type": "string"
+            },
+            "boat": {
+              "type": "string"
+            },
+            "bonus": {
+              "type": "string"
+            },
+            "bot": {
+              "type": "string"
+            },
+            "both": {
+              "type": "string"
+            },
+            "bow": {
+              "type": "string"
+            },
+            "braced": {
+              "type": "string"
+            },
+            "brain": {
+              "type": "string"
+            },
+            "breakTool": {
+              "type": "string"
+            },
+            "brinker": {
+              "type": "string"
+            },
+            "burn": {
+              "type": "string"
+            },
+            "burnRep": {
+              "type": "string"
+            },
+            "burnedRep": {
+              "type": "string"
+            },
+            "burning": {
+              "type": "string"
+            },
+            "burstFire": {
+              "type": "string"
+            },
+            "by": {
+              "type": "string"
+            },
+            "bypassArmor": {
+              "type": "string"
+            },
+            "cRep": {
+              "type": "string"
+            },
+            "calledShot": {
+              "type": "string"
+            },
+            "canContainPayload": {
+              "type": "string"
+            },
+            "canDefault": {
+              "type": "string"
+            },
+            "canOnlyGlandSubstances": {
+              "type": "string"
+            },
+            "cancel": {
+              "type": "string"
+            },
+            "capacity": {
+              "type": "string"
+            },
+            "career": {
+              "type": "string"
+            },
+            "carried": {
+              "type": "string"
+            },
+            "carryPayload": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "cause": {
+              "type": "string"
+            },
+            "centered": {
+              "type": "string"
+            },
+            "change": {
+              "type": "string"
+            },
+            "character": {
+              "type": "string"
+            },
+            "characterDetails": {
+              "type": "string"
+            },
+            "charge": {
+              "type": "string"
+            },
+            "charging": {
+              "type": "string"
+            },
+            "check": {
+              "type": "string"
+            },
+            "checkMod": {
+              "type": "string"
+            },
+            "checkoutTime": {
+              "type": "string"
+            },
+            "checks": {
+              "type": "string"
+            },
+            "chemical": {
+              "type": "string"
+            },
+            "chi": {
+              "type": "string"
+            },
+            "class": {
+              "type": "string"
+            },
+            "classification": {
+              "type": "string"
+            },
+            "clear": {
+              "type": "string"
+            },
+            "close": {
+              "type": "string"
+            },
+            "coat": {
+              "type": "string"
+            },
+            "coatAmmunition": {
+              "type": "string"
+            },
+            "coatWeapon": {
+              "type": "string"
+            },
+            "coating": {
+              "type": "string"
+            },
+            "cog": {
+              "type": "string"
+            },
+            "cognitive": {
+              "type": "string"
+            },
+            "colonist": {
+              "type": "string"
+            },
+            "combat": {
+              "type": "string"
+            },
+            "commaSeperated": {
+              "type": "string"
+            },
+            "commander": {
+              "type": "string"
+            },
+            "commit": {
+              "type": "string"
+            },
+            "complete": {
+              "type": "string"
+            },
+            "completed": {
+              "type": "string"
+            },
+            "complex": {
+              "type": "string"
+            },
+            "complexity": {
+              "type": "string"
+            },
+            "components": {
+              "type": "string"
+            },
+            "computer": {
+              "type": "string"
+            },
+            "concealable": {
+              "type": "string"
+            },
+            "concentrated": {
+              "type": "string"
+            },
+            "concentratedDamage": {
+              "type": "string"
+            },
+            "concentratedToHit": {
+              "type": "string"
+            },
+            "concluded": {
+              "type": "string"
+            },
+            "condition": {
+              "type": "string"
+            },
+            "conditional": {
+              "type": "string"
+            },
+            "conditions": {
+              "type": "string"
+            },
+            "cone": {
+              "type": "string"
+            },
+            "confirm": {
+              "type": "string"
+            },
+            "confused": {
+              "type": "string"
+            },
+            "constant": {
+              "type": "string"
+            },
+            "consumable": {
+              "type": "string"
+            },
+            "consumables": {
+              "type": "string"
+            },
+            "consumeOnUse": {
+              "type": "string"
+            },
+            "containSubstance": {
+              "type": "string"
+            },
+            "controls": {
+              "type": "string"
+            },
+            "convert": {
+              "type": "string"
+            },
+            "cost": {
+              "type": "string"
+            },
+            "costType": {
+              "type": "string"
+            },
+            "covertOperative": {
+              "type": "string"
+            },
+            "covertness": {
+              "type": "string"
+            },
+            "cp": {
+              "type": "string"
+            },
+            "cracked": {
+              "type": "string"
+            },
+            "crashed": {
+              "type": "string"
+            },
+            "create": {
+              "type": "string"
+            },
+            "credits": {
+              "type": "string"
+            },
+            "criminal": {
+              "type": "string"
+            },
+            "criticalDamage": {
+              "type": "string"
+            },
+            "criticalFailure": {
+              "type": "string"
+            },
+            "criticalQuality": {
+              "type": "string"
+            },
+            "criticalSuccess": {
+              "type": "string"
+            },
+            "cumulative": {
+              "type": "string"
+            },
+            "current": {
+              "type": "string"
+            },
+            "custom": {
+              "type": "string"
+            },
+            "customization": {
+              "type": "string"
+            },
+            "cyber": {
+              "type": "string"
+            },
+            "cyberbrain": {
+              "type": "string"
+            },
+            "cyberware": {
+              "type": "string"
+            },
+            "daily": {
+              "type": "string"
+            },
+            "damage": {
+              "type": "string"
+            },
+            "damageAgainstStructures": {
+              "type": "string"
+            },
+            "damageApplier": {
+              "type": "string"
+            },
+            "damageFormula": {
+              "type": "string"
+            },
+            "damageOverTime": {
+              "type": "string"
+            },
+            "damageType": {
+              "type": "string"
+            },
+            "damageValue": {
+              "type": "string"
+            },
+            "damaged": {
+              "type": "string"
+            },
+            "date": {
+              "type": "string"
+            },
+            "day": {
+              "type": "string"
+            },
+            "days": {
+              "type": "string"
+            },
+            "dazed": {
+              "type": "string"
+            },
+            "deactivate": {
+              "type": "string"
+            },
+            "deafened": {
+              "type": "string"
+            },
+            "deathRating": {
+              "type": "string"
+            },
+            "deceive": {
+              "type": "string"
+            },
+            "deduct": {
+              "type": "string"
+            },
+            "default": {
+              "type": "string"
+            },
+            "defaulting": {
+              "type": "string"
+            },
+            "defending": {
+              "type": "string"
+            },
+            "defineEnvironment": {
+              "type": "string"
+            },
+            "defineRelationship": {
+              "type": "string"
+            },
+            "delay": {
+              "type": "string"
+            },
+            "delayTurn": {
+              "type": "string"
+            },
+            "delete": {
+              "type": "string"
+            },
+            "deleted": {
+              "type": "string"
+            },
+            "demolitions": {
+              "type": "string"
+            },
+            "derived": {
+              "type": "string"
+            },
+            "dermal": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "destroyed": {
+              "type": "string"
+            },
+            "detail": {
+              "type": "string"
+            },
+            "details": {
+              "type": "string"
+            },
+            "detonate": {
+              "type": "string"
+            },
+            "deviceManagement": {
+              "type": "string"
+            },
+            "deviceType": {
+              "type": "string"
+            },
+            "devices": {
+              "type": "string"
+            },
+            "digimorph": {
+              "type": "string"
+            },
+            "digitalSpeed": {
+              "type": "string"
+            },
+            "disable": {
+              "type": "string"
+            },
+            "disarm": {
+              "type": "string"
+            },
+            "disarmDifficulty": {
+              "type": "string"
+            },
+            "disguise": {
+              "type": "string"
+            },
+            "disorder": {
+              "type": "string"
+            },
+            "distance": {
+              "type": "string"
+            },
+            "distracted": {
+              "type": "string"
+            },
+            "distribute": {
+              "type": "string"
+            },
+            "distributed": {
+              "type": "string"
+            },
+            "distributedDevices": {
+              "type": "string"
+            },
+            "doses": {
+              "type": "string"
+            },
+            "dosesPerShot": {
+              "type": "string"
+            },
+            "downgrade": {
+              "type": "string"
+            },
+            "downtime": {
+              "type": "string"
+            },
+            "dropSleight/Trait": {
+              "type": "string"
+            },
+            "drug": {
+              "type": "string"
+            },
+            "drugOrToxin": {
+              "type": "string"
+            },
+            "durability": {
+              "type": "string"
+            },
+            "duration": {
+              "type": "string"
+            },
+            "durationFormula": {
+              "type": "string"
+            },
+            "dvModifier": {
+              "type": "string"
+            },
+            "edit": {
+              "type": "string"
+            },
+            "editTotals": {
+              "type": "string"
+            },
+            "editor": {
+              "type": "string"
+            },
+            "effect": {
+              "type": "string"
+            },
+            "effectDuration": {
+              "type": "string"
+            },
+            "effectType": {
+              "type": "string"
+            },
+            "effectiveRange": {
+              "type": "string"
+            },
+            "effects": {
+              "type": "string"
+            },
+            "ego": {
+              "type": "string"
+            },
+            "egoAndMorph": {
+              "type": "string"
+            },
+            "egoTraits": {
+              "type": "string"
+            },
+            "egoType": {
+              "type": "string"
+            },
+            "elapsed": {
+              "type": "string"
+            },
+            "electronic": {
+              "type": "string"
+            },
+            "electronics": {
+              "type": "string"
+            },
+            "embeddedEgos": {
+              "type": "string"
+            },
+            "empty": {
+              "type": "string"
+            },
+            "enclaver": {
+              "type": "string"
+            },
+            "encumbered": {
+              "type": "string"
+            },
+            "end": {
+              "type": "string"
+            },
+            "endOfNextTurn": {
+              "type": "string"
+            },
+            "endOfTurn": {
+              "type": "string"
+            },
+            "endOnRecharge": {
+              "type": "string"
+            },
+            "endProcess": {
+              "type": "string"
+            },
+            "energy": {
+              "type": "string"
+            },
+            "energyArmor": {
+              "type": "string"
+            },
+            "enforcer": {
+              "type": "string"
+            },
+            "enhancedBehavior": {
+              "type": "string"
+            },
+            "entangling": {
+              "type": "string"
+            },
+            "environment": {
+              "type": "string"
+            },
+            "epsilon": {
+              "type": "string"
+            },
+            "equip": {
+              "type": "string"
+            },
+            "equipped": {
+              "type": "string"
+            },
+            "escapeArtist": {
+              "type": "string"
+            },
+            "exhuman": {
+              "type": "string"
+            },
+            "exists": {
+              "type": "string"
+            },
+            "exoskeleton": {
+              "type": "string"
+            },
+            "exotic": {
+              "type": "string"
+            },
+            "exoticMorphology": {
+              "type": "string"
+            },
+            "expend": {
+              "type": "string"
+            },
+            "expending": {
+              "type": "string"
+            },
+            "expired": {
+              "type": "string"
+            },
+            "exploration": {
+              "type": "string"
+            },
+            "explorer": {
+              "type": "string"
+            },
+            "explosive": {
+              "type": "string"
+            },
+            "explosiveType": {
+              "type": "string"
+            },
+            "exsurgent": {
+              "type": "string"
+            },
+            "extendedMagazine": {
+              "type": "string"
+            },
+            "extra": {
+              "type": "string"
+            },
+            "extraAction": {
+              "type": "string"
+            },
+            "extraTarget": {
+              "type": "string"
+            },
+            "extropian": {
+              "type": "string"
+            },
+            "fRep": {
+              "type": "string"
+            },
+            "fab": {
+              "type": "string"
+            },
+            "fabricator": {
+              "type": "string"
+            },
+            "face": {
+              "type": "string"
+            },
+            "faction": {
+              "type": "string"
+            },
+            "fail": {
+              "type": "string"
+            },
+            "failed": {
+              "type": "string"
+            },
+            "failure": {
+              "type": "string"
+            },
+            "fake": {
+              "type": "string"
+            },
+            "fakeEgoIDs": {
+              "type": "string"
+            },
+            "fakeEgoId": {
+              "type": "string"
+            },
+            "fakeId": {
+              "type": "string"
+            },
+            "fast": {
+              "type": "string"
+            },
+            "favor": {
+              "type": "string"
+            },
+            "favorites": {
+              "type": "string"
+            },
+            "favors": {
+              "type": "string"
+            },
+            "field": {
+              "type": "string"
+            },
+            "fieldSkill": {
+              "type": "string"
+            },
+            "fighter": {
+              "type": "string"
+            },
+            "filter": {
+              "type": "string"
+            },
+            "final": {
+              "type": "string"
+            },
+            "finalize": {
+              "type": "string"
+            },
+            "firePayload": {
+              "type": "string"
+            },
+            "firearm": {
+              "type": "string"
+            },
+            "firearmAmmo": {
+              "type": "string"
+            },
+            "firewall": {
+              "type": "string"
+            },
+            "firewallRating": {
+              "type": "string"
+            },
+            "firingMode": {
+              "type": "string"
+            },
+            "firingModes": {
+              "type": "string"
+            },
+            "fixed": {
+              "type": "string"
+            },
+            "flashSuppressor": {
+              "type": "string"
+            },
+            "flex": {
+              "type": "string"
+            },
+            "flipRoll": {
+              "type": "string"
+            },
+            "forensics": {
+              "type": "string"
+            },
+            "forensicsSpecialist": {
+              "type": "string"
+            },
+            "fork": {
+              "type": "string"
+            },
+            "forkType": {
+              "type": "string"
+            },
+            "form": {
+              "type": "string"
+            },
+            "formula": {
+              "type": "string"
+            },
+            "fragile": {
+              "type": "string"
+            },
+            "frame": {
+              "type": "string"
+            },
+            "frameType": {
+              "type": "string"
+            },
+            "fray": {
+              "type": "string"
+            },
+            "freeFall": {
+              "type": "string"
+            },
+            "freePush": {
+              "type": "string"
+            },
+            "freelancer": {
+              "type": "string"
+            },
+            "full": {
+              "type": "string"
+            },
+            "fullAuto": {
+              "type": "string"
+            },
+            "fullMove": {
+              "type": "string"
+            },
+            "gRep": {
+              "type": "string"
+            },
+            "gain": {
+              "type": "string"
+            },
+            "gamemaster": {
+              "type": "string"
+            },
+            "gamma": {
+              "type": "string"
+            },
+            "gear": {
+              "type": "string"
+            },
+            "gearPoints": {
+              "type": "string"
+            },
+            "gearTraits": {
+              "type": "string"
+            },
+            "gender": {
+              "type": "string"
+            },
+            "genehacker": {
+              "type": "string"
+            },
+            "general": {
+              "type": "string"
+            },
+            "generic": {
+              "type": "string"
+            },
+            "gland": {
+              "type": "string"
+            },
+            "glands": {
+              "type": "string"
+            },
+            "goal": {
+              "type": "string"
+            },
+            "grappled": {
+              "type": "string"
+            },
+            "gravity": {
+              "type": "string"
+            },
+            "grenade": {
+              "type": "string"
+            },
+            "ground": {
+              "type": "string"
+            },
+            "groundcraft": {
+              "type": "string"
+            },
+            "group": {
+              "type": "string"
+            },
+            "guns": {
+              "type": "string"
+            },
+            "gyromount": {
+              "type": "string"
+            },
+            "hacker": {
+              "type": "string"
+            },
+            "hacking": {
+              "type": "string"
+            },
+            "half": {
+              "type": "string"
+            },
+            "halve": {
+              "type": "string"
+            },
+            "halved": {
+              "type": "string"
+            },
+            "hard": {
+              "type": "string"
+            },
+            "hardening": {
+              "type": "string"
+            },
+            "hardsuit": {
+              "type": "string"
+            },
+            "hardware": {
+              "type": "string"
+            },
+            "harsh": {
+              "type": "string"
+            },
+            "hasActivation": {
+              "type": "string"
+            },
+            "hasActiveState": {
+              "type": "string"
+            },
+            "hasAttack": {
+              "type": "string"
+            },
+            "hasSeverity": {
+              "type": "string"
+            },
+            "heal": {
+              "type": "string"
+            },
+            "healing": {
+              "type": "string"
+            },
+            "healingTimeframes": {
+              "type": "string"
+            },
+            "health": {
+              "type": "string"
+            },
+            "healthRecovery": {
+              "type": "string"
+            },
+            "hearingBased": {
+              "type": "string"
+            },
+            "heavy": {
+              "type": "string"
+            },
+            "heavyPistol": {
+              "type": "string"
+            },
+            "helplessness": {
+              "type": "string"
+            },
+            "high": {
+              "type": "string"
+            },
+            "holdoutPistol": {
+              "type": "string"
+            },
+            "homeDevice": {
+              "type": "string"
+            },
+            "homing": {
+              "type": "string"
+            },
+            "hopper": {
+              "type": "string"
+            },
+            "host": {
+              "type": "string"
+            },
+            "hostType": {
+              "type": "string"
+            },
+            "hour": {
+              "type": "string"
+            },
+            "hours": {
+              "type": "string"
+            },
+            "hover": {
+              "type": "string"
+            },
+            "hybrid": {
+              "type": "string"
+            },
+            "hypercorp": {
+              "type": "string"
+            },
+            "hyperelite": {
+              "type": "string"
+            },
+            "iRep": {
+              "type": "string"
+            },
+            "icon": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "idealUserSize": {
+              "type": "string"
+            },
+            "ignoreMods": {
+              "type": "string"
+            },
+            "ignoreTrauma": {
+              "type": "string"
+            },
+            "ignoreWound": {
+              "type": "string"
+            },
+            "ignored": {
+              "type": "string"
+            },
+            "ignoredModifiers": {
+              "type": "string"
+            },
+            "ignoresArmor": {
+              "type": "string"
+            },
+            "imagingScope": {
+              "type": "string"
+            },
+            "img": {
+              "type": "string"
+            },
+            "immediate": {
+              "type": "string"
+            },
+            "immobilized": {
+              "type": "string"
+            },
+            "immunity": {
+              "type": "string"
+            },
+            "impact": {
+              "type": "string"
+            },
+            "impaired": {
+              "type": "string"
+            },
+            "impairedX2": {
+              "type": "string"
+            },
+            "impairedX3": {
+              "type": "string"
+            },
+            "implanted": {
+              "type": "string"
+            },
+            "implantedWare": {
+              "type": "string"
+            },
+            "improved": {
+              "type": "string"
+            },
+            "improvised": {
+              "type": "string"
+            },
+            "in": {
+              "type": "string"
+            },
+            "inDisrepair": {
+              "type": "string"
+            },
+            "inVacuum": {
+              "type": "string"
+            },
+            "inactive": {
+              "type": "string"
+            },
+            "incapacitated": {
+              "type": "string"
+            },
+            "incompatibleWith": {
+              "type": "string"
+            },
+            "incorrectMissileSize": {
+              "type": "string"
+            },
+            "increase": {
+              "type": "string"
+            },
+            "increased": {
+              "type": "string"
+            },
+            "increasedDuration": {
+              "type": "string"
+            },
+            "increasedEffect": {
+              "type": "string"
+            },
+            "increasedPenetration": {
+              "type": "string"
+            },
+            "increasedPower": {
+              "type": "string"
+            },
+            "increasedRange": {
+              "type": "string"
+            },
+            "indefinite": {
+              "type": "string"
+            },
+            "indenture": {
+              "type": "string"
+            },
+            "industrial": {
+              "type": "string"
+            },
+            "infection": {
+              "type": "string"
+            },
+            "infectionInfluences": {
+              "type": "string"
+            },
+            "infectionMod": {
+              "type": "string"
+            },
+            "infectionRating": {
+              "type": "string"
+            },
+            "infectionTest": {
+              "type": "string"
+            },
+            "infiltrate": {
+              "type": "string"
+            },
+            "inflict": {
+              "type": "string"
+            },
+            "influence": {
+              "type": "string"
+            },
+            "influences": {
+              "type": "string"
+            },
+            "info": {
+              "type": "string"
+            },
+            "infolife": {
+              "type": "string"
+            },
+            "infomorph": {
+              "type": "string"
+            },
+            "infosec": {
+              "type": "string"
+            },
+            "inhalation": {
+              "type": "string"
+            },
+            "inherentArmor": {
+              "type": "string"
+            },
+            "initial": {
+              "type": "string"
+            },
+            "initiative": {
+              "type": "string"
+            },
+            "injection": {
+              "type": "string"
+            },
+            "innate": {
+              "type": "string"
+            },
+            "innateArmor": {
+              "type": "string"
+            },
+            "insanityRating": {
+              "type": "string"
+            },
+            "insight": {
+              "type": "string"
+            },
+            "install": {
+              "type": "string"
+            },
+            "installed": {
+              "type": "string"
+            },
+            "instant": {
+              "type": "string"
+            },
+            "int": {
+              "type": "string"
+            },
+            "integration": {
+              "type": "string"
+            },
+            "integrationTest": {
+              "type": "string"
+            },
+            "interest": {
+              "type": "string"
+            },
+            "interests": {
+              "type": "string"
+            },
+            "interface": {
+              "type": "string"
+            },
+            "interference": {
+              "type": "string"
+            },
+            "interval": {
+              "type": "string"
+            },
+            "into": {
+              "type": "string"
+            },
+            "introduceItem": {
+              "type": "string"
+            },
+            "introduceNPC": {
+              "type": "string"
+            },
+            "inventory": {
+              "type": "string"
+            },
+            "investigator": {
+              "type": "string"
+            },
+            "ionic": {
+              "type": "string"
+            },
+            "isAntidote": {
+              "type": "string"
+            },
+            "isolate": {
+              "type": "string"
+            },
+            "item": {
+              "type": "string"
+            },
+            "itemMustBeBlueprint": {
+              "type": "string"
+            },
+            "itemSize": {
+              "type": "string"
+            },
+            "itemTrash": {
+              "type": "string"
+            },
+            "items": {
+              "type": "string"
+            },
+            "jack-of-all-trades": {
+              "type": "string"
+            },
+            "jammer": {
+              "type": "string"
+            },
+            "jamming": {
+              "type": "string"
+            },
+            "jovian": {
+              "type": "string"
+            },
+            "keepOpen": {
+              "type": "string"
+            },
+            "keepQuiet": {
+              "type": "string"
+            },
+            "keepingQuiet": {
+              "type": "string"
+            },
+            "kinesics": {
+              "type": "string"
+            },
+            "kinetic": {
+              "type": "string"
+            },
+            "kineticArmor": {
+              "type": "string"
+            },
+            "knockdown": {
+              "type": "string"
+            },
+            "know": {
+              "type": "string"
+            },
+            "label": {
+              "type": "string"
+            },
+            "lacksSmartlink": {
+              "type": "string"
+            },
+            "languages": {
+              "type": "string"
+            },
+            "large": {
+              "type": "string"
+            },
+            "laserSight": {
+              "type": "string"
+            },
+            "lasts": {
+              "type": "string"
+            },
+            "layer": {
+              "type": "string"
+            },
+            "layerable": {
+              "type": "string"
+            },
+            "layers": {
+              "type": "string"
+            },
+            "learn": {
+              "type": "string"
+            },
+            "level": {
+              "type": "string"
+            },
+            "levels": {
+              "type": "string"
+            },
+            "light": {
+              "type": "string"
+            },
+            "limb": {
+              "type": "string"
+            },
+            "limbs": {
+              "type": "string"
+            },
+            "limitedUse": {
+              "type": "string"
+            },
+            "lineOfSight": {
+              "type": "string"
+            },
+            "linked": {
+              "type": "string"
+            },
+            "linkedAptitude": {
+              "type": "string"
+            },
+            "loaded": {
+              "type": "string"
+            },
+            "localFirewall": {
+              "type": "string"
+            },
+            "locateFiredWeapon": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string"
+            },
+            "long": {
+              "type": "string"
+            },
+            "longRecharge": {
+              "type": "string"
+            },
+            "lose": {
+              "type": "string"
+            },
+            "lost": {
+              "type": "string"
+            },
+            "low": {
+              "type": "string"
+            },
+            "lucidity": {
+              "type": "string"
+            },
+            "lunar/orbital": {
+              "type": "string"
+            },
+            "machineGun": {
+              "type": "string"
+            },
+            "machinePistol": {
+              "type": "string"
+            },
+            "macro": {
+              "type": "string"
+            },
+            "made": {
+              "type": "string"
+            },
+            "major": {
+              "type": "string"
+            },
+            "manuallyToggled": {
+              "type": "string"
+            },
+            "match": {
+              "type": "string"
+            },
+            "max": {
+              "type": "string"
+            },
+            "maxUses": {
+              "type": "string"
+            },
+            "medic": {
+              "type": "string"
+            },
+            "medical": {
+              "type": "string"
+            },
+            "medicine": {
+              "type": "string"
+            },
+            "medium": {
+              "type": "string"
+            },
+            "mediumPistol": {
+              "type": "string"
+            },
+            "melee": {
+              "type": "string"
+            },
+            "meleeAttack": {
+              "type": "string"
+            },
+            "meleeDamageRolls": {
+              "type": "string"
+            },
+            "meleeWeapon": {
+              "type": "string"
+            },
+            "memoryRelated": {
+              "type": "string"
+            },
+            "mental": {
+              "type": "string"
+            },
+            "mental/MeshActionsOnly": {
+              "type": "string"
+            },
+            "mental/physical": {
+              "type": "string"
+            },
+            "mentalArmor": {
+              "type": "string"
+            },
+            "mentalFullDefense": {
+              "type": "string"
+            },
+            "mentalHealth": {
+              "type": "string"
+            },
+            "mercurial": {
+              "type": "string"
+            },
+            "mesh": {
+              "type": "string"
+            },
+            "meshHealth": {
+              "type": "string"
+            },
+            "meshService": {
+              "type": "string"
+            },
+            "meshware": {
+              "type": "string"
+            },
+            "meters": {
+              "type": "string"
+            },
+            "micro": {
+              "type": "string"
+            },
+            "microgravity": {
+              "type": "string"
+            },
+            "microlight": {
+              "type": "string"
+            },
+            "micromissile": {
+              "type": "string"
+            },
+            "minHalve": {
+              "type": "string"
+            },
+            "minSV": {
+              "type": "string"
+            },
+            "minStressValue": {
+              "type": "string"
+            },
+            "mindState": {
+              "type": "string"
+            },
+            "mindhacker": {
+              "type": "string"
+            },
+            "mini": {
+              "type": "string"
+            },
+            "minigrenade": {
+              "type": "string"
+            },
+            "minimissile": {
+              "type": "string"
+            },
+            "minor": {
+              "type": "string"
+            },
+            "minute": {
+              "type": "string"
+            },
+            "minutes": {
+              "type": "string"
+            },
+            "misc": {
+              "type": "string"
+            },
+            "missile": {
+              "type": "string"
+            },
+            "missileCapacity": {
+              "type": "string"
+            },
+            "missileSize": {
+              "type": "string"
+            },
+            "missiles": {
+              "type": "string"
+            },
+            "missing": {
+              "type": "string"
+            },
+            "mnemonics": {
+              "type": "string"
+            },
+            "mode": {
+              "type": "string"
+            },
+            "moderate": {
+              "type": "string"
+            },
+            "modifier": {
+              "type": "string"
+            },
+            "modifiers": {
+              "type": "string"
+            },
+            "modular": {
+              "type": "string"
+            },
+            "morph": {
+              "type": "string"
+            },
+            "morphPoints": {
+              "type": "string"
+            },
+            "morphTraits": {
+              "type": "string"
+            },
+            "morphType": {
+              "type": "string"
+            },
+            "mote": {
+              "type": "string"
+            },
+            "motivation": {
+              "type": "string"
+            },
+            "motivations": {
+              "type": "string"
+            },
+            "movement": {
+              "type": "string"
+            },
+            "movementRate": {
+              "type": "string"
+            },
+            "movementRates": {
+              "type": "string"
+            },
+            "moxie": {
+              "type": "string"
+            },
+            "mp": {
+              "type": "string"
+            },
+            "multiUse": {
+              "type": "string"
+            },
+            "multiplier": {
+              "type": "string"
+            },
+            "muse": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "nano": {
+              "type": "string"
+            },
+            "nanodrug": {
+              "type": "string"
+            },
+            "nanoware": {
+              "type": "string"
+            },
+            "narcoalgorithm": {
+              "type": "string"
+            },
+            "naturalHealAttempts": {
+              "type": "string"
+            },
+            "nautical": {
+              "type": "string"
+            },
+            "nauticalCraft": {
+              "type": "string"
+            },
+            "negate": {
+              "type": "string"
+            },
+            "negateGaffe": {
+              "type": "string"
+            },
+            "negated": {
+              "type": "string"
+            },
+            "negative": {
+              "type": "string"
+            },
+            "negativeRangeModifiersMultiplier": {
+              "type": "string"
+            },
+            "neogenetic": {
+              "type": "string"
+            },
+            "network": {
+              "type": "string"
+            },
+            "networker": {
+              "type": "string"
+            },
+            "new": {
+              "type": "string"
+            },
+            "nextAction": {
+              "type": "string"
+            },
+            "nextTick": {
+              "type": "string"
+            },
+            "niche": {
+              "type": "string"
+            },
+            "no": {
+              "type": "string"
+            },
+            "noClose": {
+              "type": "string"
+            },
+            "noDamage": {
+              "type": "string"
+            },
+            "noFlipFlop": {
+              "type": "string"
+            },
+            "noInitiativeModificationsAvailable": {
+              "type": "string"
+            },
+            "noNaturalHealsAttempted": {
+              "type": "string"
+            },
+            "noPointBlank": {
+              "type": "string"
+            },
+            "noResults": {
+              "type": "string"
+            },
+            "noRoll": {
+              "type": "string"
+            },
+            "nonAddictive": {
+              "type": "string"
+            },
+            "none": {
+              "type": "string"
+            },
+            "normal": {
+              "type": "string"
+            },
+            "notFound": {
+              "type": "string"
+            },
+            "notes": {
+              "type": "string"
+            },
+            "now": {
+              "type": "string"
+            },
+            "npc": {
+              "type": "string"
+            },
+            "numbers": {
+              "type": "string"
+            },
+            "obedient": {
+              "type": "string"
+            },
+            "objective": {
+              "type": "string"
+            },
+            "of": {
+              "type": "string"
+            },
+            "off": {
+              "type": "string"
+            },
+            "offline": {
+              "type": "string"
+            },
+            "on": {
+              "type": "string"
+            },
+            "onTest": {
+              "type": "string"
+            },
+            "ongoing": {
+              "type": "string"
+            },
+            "online": {
+              "type": "string"
+            },
+            "onset": {
+              "type": "string"
+            },
+            "openSource": {
+              "type": "string"
+            },
+            "operatingSystem": {
+              "type": "string"
+            },
+            "opponent's": {
+              "type": "string"
+            },
+            "opponentsTests": {
+              "type": "string"
+            },
+            "oppose": {
+              "type": "string"
+            },
+            "opposeWith": {
+              "type": "string"
+            },
+            "opposing": {
+              "type": "string"
+            },
+            "opposition": {
+              "type": "string"
+            },
+            "oral": {
+              "type": "string"
+            },
+            "orange": {
+              "type": "string"
+            },
+            "organic": {
+              "type": "string"
+            },
+            "originalRange": {
+              "type": "string"
+            },
+            "outdated": {
+              "type": "string"
+            },
+            "over": {
+              "type": "string"
+            },
+            "overburdened": {
+              "type": "string"
+            },
+            "override": {
+              "type": "string"
+            },
+            "overview": {
+              "type": "string"
+            },
+            "own": {
+              "type": "string"
+            },
+            "ownHealing": {
+              "type": "string"
+            },
+            "pain": {
+              "type": "string"
+            },
+            "painFilter": {
+              "type": "string"
+            },
+            "painResistance": {
+              "type": "string"
+            },
+            "paramedic": {
+              "type": "string"
+            },
+            "passengers": {
+              "type": "string"
+            },
+            "paused": {
+              "type": "string"
+            },
+            "payload": {
+              "type": "string"
+            },
+            "payloadUse": {
+              "type": "string"
+            },
+            "pc": {
+              "type": "string"
+            },
+            "per": {
+              "type": "string"
+            },
+            "perTurn": {
+              "type": "string"
+            },
+            "perceive": {
+              "type": "string"
+            },
+            "permanently": {
+              "type": "string"
+            },
+            "personal": {
+              "type": "string"
+            },
+            "personalArmorUsed": {
+              "type": "string"
+            },
+            "personalTransportDevice": {
+              "type": "string"
+            },
+            "persuade": {
+              "type": "string"
+            },
+            "petal": {
+              "type": "string"
+            },
+            "pharmacology": {
+              "type": "string"
+            },
+            "physical": {
+              "type": "string"
+            },
+            "physicalDamage": {
+              "type": "string"
+            },
+            "physicalFullDefense": {
+              "type": "string"
+            },
+            "physicalHealth": {
+              "type": "string"
+            },
+            "physicalService": {
+              "type": "string"
+            },
+            "physicalServices": {
+              "type": "string"
+            },
+            "physicalTech": {
+              "type": "string"
+            },
+            "pierce": {
+              "type": "string"
+            },
+            "pilot": {
+              "type": "string"
+            },
+            "placeEgo": {
+              "type": "string"
+            },
+            "plasmaCutter": {
+              "type": "string"
+            },
+            "playerCharacter": {
+              "type": "string"
+            },
+            "players": {
+              "type": "string"
+            },
+            "pod": {
+              "type": "string"
+            },
+            "point": {
+              "type": "string"
+            },
+            "pointBlank": {
+              "type": "string"
+            },
+            "points": {
+              "type": "string"
+            },
+            "polarity": {
+              "type": "string"
+            },
+            "pool": {
+              "type": "string"
+            },
+            "pools": {
+              "type": "string"
+            },
+            "poolsRecovered": {
+              "type": "string"
+            },
+            "poolsRegained": {
+              "type": "string"
+            },
+            "poor": {
+              "type": "string"
+            },
+            "positive": {
+              "type": "string"
+            },
+            "prehensile": {
+              "type": "string"
+            },
+            "prehensileLimbs": {
+              "type": "string"
+            },
+            "primary": {
+              "type": "string"
+            },
+            "primaryAmmo": {
+              "type": "string"
+            },
+            "primaryAttack": {
+              "type": "string"
+            },
+            "primaryMode": {
+              "type": "string"
+            },
+            "prime": {
+              "type": "string"
+            },
+            "privilege": {
+              "type": "string"
+            },
+            "professionalTraining": {
+              "type": "string"
+            },
+            "profile": {
+              "type": "string"
+            },
+            "program": {
+              "type": "string"
+            },
+            "progressTowards": {
+              "type": "string"
+            },
+            "progressTowardsRefresh": {
+              "type": "string"
+            },
+            "prone": {
+              "type": "string"
+            },
+            "properties": {
+              "type": "string"
+            },
+            "provideMentalArmor": {
+              "type": "string"
+            },
+            "provoke": {
+              "type": "string"
+            },
+            "proximity": {
+              "type": "string"
+            },
+            "psi": {
+              "type": "string"
+            },
+            "psiChi": {
+              "type": "string"
+            },
+            "psiEpsilon": {
+              "type": "string"
+            },
+            "psiGamma": {
+              "type": "string"
+            },
+            "psiInfluence": {
+              "type": "string"
+            },
+            "psiInfluences": {
+              "type": "string"
+            },
+            "psiTest": {
+              "type": "string"
+            },
+            "psiUser": {
+              "type": "string"
+            },
+            "psychology": {
+              "type": "string"
+            },
+            "psychosurgery": {
+              "type": "string"
+            },
+            "public": {
+              "type": "string"
+            },
+            "publicRoll": {
+              "type": "string"
+            },
+            "push": {
+              "type": "string"
+            },
+            "pushable": {
+              "type": "string"
+            },
+            "pushed": {
+              "type": "string"
+            },
+            "pushedChiSleight": {
+              "type": "string"
+            },
+            "quality": {
+              "type": "string"
+            },
+            "quantity": {
+              "type": "string"
+            },
+            "quantityPerCost": {
+              "type": "string"
+            },
+            "quick": {
+              "type": "string"
+            },
+            "rRep": {
+              "type": "string"
+            },
+            "radius": {
+              "type": "string"
+            },
+            "railgun": {
+              "type": "string"
+            },
+            "range": {
+              "type": "string"
+            },
+            "ranged": {
+              "type": "string"
+            },
+            "rangedAttack": {
+              "type": "string"
+            },
+            "rare": {
+              "type": "string"
+            },
+            "reIntegrate": {
+              "type": "string"
+            },
+            "reach": {
+              "type": "string"
+            },
+            "reachBonus": {
+              "type": "string"
+            },
+            "ready": {
+              "type": "string"
+            },
+            "readyIn": {
+              "type": "string"
+            },
+            "realWorldNaivete": {
+              "type": "string"
+            },
+            "realization": {
+              "type": "string"
+            },
+            "reboot": {
+              "type": "string"
+            },
+            "receded": {
+              "type": "string"
+            },
+            "recharge": {
+              "type": "string"
+            },
+            "recharges": {
+              "type": "string"
+            },
+            "reclaimer": {
+              "type": "string"
+            },
+            "recon": {
+              "type": "string"
+            },
+            "recovery": {
+              "type": "string"
+            },
+            "recreational": {
+              "type": "string"
+            },
+            "recurring": {
+              "type": "string"
+            },
+            "red": {
+              "type": "string"
+            },
+            "redirect": {
+              "type": "string"
+            },
+            "reduceAVbyDV": {
+              "type": "string"
+            },
+            "reduced": {
+              "type": "string"
+            },
+            "reduction": {
+              "type": "string"
+            },
+            "ref": {
+              "type": "string"
+            },
+            "reference": {
+              "type": "string"
+            },
+            "refresh": {
+              "type": "string"
+            },
+            "refreshTimer": {
+              "type": "string"
+            },
+            "regainedPoints": {
+              "type": "string"
+            },
+            "regional": {
+              "type": "string"
+            },
+            "reload": {
+              "type": "string"
+            },
+            "remaining": {
+              "type": "string"
+            },
+            "remainingDelay": {
+              "type": "string"
+            },
+            "remainingDuration": {
+              "type": "string"
+            },
+            "remove": {
+              "type": "string"
+            },
+            "removing": {
+              "type": "string"
+            },
+            "removingArmor": {
+              "type": "string"
+            },
+            "renderSheet": {
+              "type": "string"
+            },
+            "rep": {
+              "type": "string"
+            },
+            "repTest": {
+              "type": "string"
+            },
+            "repair": {
+              "type": "string"
+            },
+            "reps": {
+              "type": "string"
+            },
+            "reputation": {
+              "type": "string"
+            },
+            "reputations": {
+              "type": "string"
+            },
+            "require": {
+              "type": "string"
+            },
+            "requireBioSubstrate": {
+              "type": "string"
+            },
+            "required": {
+              "type": "string"
+            },
+            "requirement": {
+              "type": "string"
+            },
+            "research": {
+              "type": "string"
+            },
+            "resistInfection": {
+              "type": "string"
+            },
+            "resistSubstanceOrDisease": {
+              "type": "string"
+            },
+            "resisted": {
+              "type": "string"
+            },
+            "resisting": {
+              "type": "string"
+            },
+            "resleeve": {
+              "type": "string"
+            },
+            "resleevingStress": {
+              "type": "string"
+            },
+            "resource": {
+              "type": "string"
+            },
+            "restore": {
+              "type": "string"
+            },
+            "restricted": {
+              "type": "string"
+            },
+            "restrictions": {
+              "type": "string"
+            },
+            "result": {
+              "type": "string"
+            },
+            "resultEffects": {
+              "type": "string"
+            },
+            "resultEffectsAvailable": {
+              "type": "string"
+            },
+            "resultImproved": {
+              "type": "string"
+            },
+            "rez": {
+              "type": "string"
+            },
+            "robotic": {
+              "type": "string"
+            },
+            "robotics": {
+              "type": "string"
+            },
+            "rogue": {
+              "type": "string"
+            },
+            "roll": {
+              "type": "string"
+            },
+            "rollFlipped": {
+              "type": "string"
+            },
+            "rollInitiative": {
+              "type": "string"
+            },
+            "roller": {
+              "type": "string"
+            },
+            "rotor": {
+              "type": "string"
+            },
+            "round": {
+              "type": "string"
+            },
+            "run": {
+              "type": "string"
+            },
+            "running": {
+              "type": "string"
+            },
+            "rush": {
+              "type": "string"
+            },
+            "rushing": {
+              "type": "string"
+            },
+            "safetySystem": {
+              "type": "string"
+            },
+            "sav": {
+              "type": "string"
+            },
+            "save": {
+              "type": "string"
+            },
+            "scaleEffectsOnSuperior": {
+              "type": "string"
+            },
+            "scavenger": {
+              "type": "string"
+            },
+            "scene": {
+              "type": "string"
+            },
+            "scientist": {
+              "type": "string"
+            },
+            "score": {
+              "type": "string"
+            },
+            "scum": {
+              "type": "string"
+            },
+            "search": {
+              "type": "string"
+            },
+            "second": {
+              "type": "string"
+            },
+            "secondaryAttack": {
+              "type": "string"
+            },
+            "secondaryMode": {
+              "type": "string"
+            },
+            "seconds": {
+              "type": "string"
+            },
+            "security": {
+              "type": "string"
+            },
+            "seekerWeapon": {
+              "type": "string"
+            },
+            "select": {
+              "type": "string"
+            },
+            "selectFreePush": {
+              "type": "string"
+            },
+            "self": {
+              "type": "string"
+            },
+            "semiAuto": {
+              "type": "string"
+            },
+            "server": {
+              "type": "string"
+            },
+            "service": {
+              "type": "string"
+            },
+            "serviceType": {
+              "type": "string"
+            },
+            "services": {
+              "type": "string"
+            },
+            "set": {
+              "type": "string"
+            },
+            "settings": {
+              "type": "string"
+            },
+            "setup": {
+              "type": "string"
+            },
+            "severe": {
+              "type": "string"
+            },
+            "severity": {
+              "type": "string"
+            },
+            "sex": {
+              "type": "string"
+            },
+            "shape": {
+              "type": "string"
+            },
+            "shared": {
+              "type": "string"
+            },
+            "shell": {
+              "type": "string"
+            },
+            "shellType": {
+              "type": "string"
+            },
+            "shock": {
+              "type": "string"
+            },
+            "shockSafety": {
+              "type": "string"
+            },
+            "shoddy": {
+              "type": "string"
+            },
+            "shop": {
+              "type": "string"
+            },
+            "short": {
+              "type": "string"
+            },
+            "shortRecharge": {
+              "type": "string"
+            },
+            "signal": {
+              "type": "string"
+            },
+            "silencer": {
+              "type": "string"
+            },
+            "singleShot": {
+              "type": "string"
+            },
+            "singleUse": {
+              "type": "string"
+            },
+            "situational": {
+              "type": "string"
+            },
+            "size": {
+              "type": "string"
+            },
+            "skill": {
+              "type": "string"
+            },
+            "skillCategory": {
+              "type": "string"
+            },
+            "skillTest": {
+              "type": "string"
+            },
+            "skillTests": {
+              "type": "string"
+            },
+            "skillType": {
+              "type": "string"
+            },
+            "skills": {
+              "type": "string"
+            },
+            "slacker": {
+              "type": "string"
+            },
+            "sleeve": {
+              "type": "string"
+            },
+            "sleeved": {
+              "type": "string"
+            },
+            "sleeves": {
+              "type": "string"
+            },
+            "sleight": {
+              "type": "string"
+            },
+            "sleightOfHand": {
+              "type": "string"
+            },
+            "sleightTest": {
+              "type": "string"
+            },
+            "sleightType": {
+              "type": "string"
+            },
+            "sleights": {
+              "type": "string"
+            },
+            "slow": {
+              "type": "string"
+            },
+            "small": {
+              "type": "string"
+            },
+            "smartMagazine": {
+              "type": "string"
+            },
+            "smartlink": {
+              "type": "string"
+            },
+            "snake": {
+              "type": "string"
+            },
+            "sniperRifle": {
+              "type": "string"
+            },
+            "social": {
+              "type": "string"
+            },
+            "socialite": {
+              "type": "string"
+            },
+            "software": {
+              "type": "string"
+            },
+            "softwareType": {
+              "type": "string"
+            },
+            "soldier": {
+              "type": "string"
+            },
+            "som": {
+              "type": "string"
+            },
+            "some": {
+              "type": "string"
+            },
+            "source": {
+              "type": "string"
+            },
+            "sources": {
+              "type": "string"
+            },
+            "space": {
+              "type": "string"
+            },
+            "spacecraft": {
+              "type": "string"
+            },
+            "spacer": {
+              "type": "string"
+            },
+            "special": {
+              "type": "string"
+            },
+            "specialization": {
+              "type": "string"
+            },
+            "specialized": {
+              "type": "string"
+            },
+            "specificTarget": {
+              "type": "string"
+            },
+            "spentPools": {
+              "type": "string"
+            },
+            "sprayWeapon": {
+              "type": "string"
+            },
+            "stance": {
+              "type": "string"
+            },
+            "standard": {
+              "type": "string"
+            },
+            "standardGrenade": {
+              "type": "string"
+            },
+            "standardMissile": {
+              "type": "string"
+            },
+            "start": {
+              "type": "string"
+            },
+            "started": {
+              "type": "string"
+            },
+            "starting": {
+              "type": "string"
+            },
+            "stash": {
+              "type": "string"
+            },
+            "stat": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "stateOfTheArt": {
+              "type": "string"
+            },
+            "staticModifiers": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            },
+            "steady": {
+              "type": "string"
+            },
+            "sticky": {
+              "type": "string"
+            },
+            "strengthBased": {
+              "type": "string"
+            },
+            "stress": {
+              "type": "string"
+            },
+            "stressTest": {
+              "type": "string"
+            },
+            "stressType": {
+              "type": "string"
+            },
+            "stressValue": {
+              "type": "string"
+            },
+            "stressfulExperience": {
+              "type": "string"
+            },
+            "structuralWeakpoint": {
+              "type": "string"
+            },
+            "student": {
+              "type": "string"
+            },
+            "stun": {
+              "type": "string"
+            },
+            "stunned": {
+              "type": "string"
+            },
+            "submachineGun": {
+              "type": "string"
+            },
+            "submarine": {
+              "type": "string"
+            },
+            "substance": {
+              "type": "string"
+            },
+            "substanceType": {
+              "type": "string"
+            },
+            "substances": {
+              "type": "string"
+            },
+            "substrain": {
+              "type": "string"
+            },
+            "subsumedEgos": {
+              "type": "string"
+            },
+            "subtype": {
+              "type": "string"
+            },
+            "success": {
+              "type": "string"
+            },
+            "successTest": {
+              "type": "string"
+            },
+            "summary": {
+              "type": "string"
+            },
+            "superiorFailure": {
+              "type": "string"
+            },
+            "superiorFailureX2": {
+              "type": "string"
+            },
+            "superiorSuccess": {
+              "type": "string"
+            },
+            "superiorSuccessDot": {
+              "type": "string"
+            },
+            "superiorSuccessX2": {
+              "type": "string"
+            },
+            "support": {
+              "type": "string"
+            },
+            "suppressiveFire": {
+              "type": "string"
+            },
+            "surprise": {
+              "type": "string"
+            },
+            "surprised": {
+              "type": "string"
+            },
+            "survival": {
+              "type": "string"
+            },
+            "survivalist": {
+              "type": "string"
+            },
+            "sustained": {
+              "type": "string"
+            },
+            "swarm": {
+              "type": "string"
+            },
+            "swimmer": {
+              "type": "string"
+            },
+            "synthetic": {
+              "type": "string"
+            },
+            "syntheticShell": {
+              "type": "string"
+            },
+            "synthmorph": {
+              "type": "string"
+            },
+            "systemName": {
+              "type": "string"
+            },
+            "tag": {
+              "type": "string"
+            },
+            "tagType": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "string"
+            },
+            "take": {
+              "type": "string"
+            },
+            "takeDV": {
+              "type": "string"
+            },
+            "takeExtraAction": {
+              "type": "string"
+            },
+            "takeSV": {
+              "type": "string"
+            },
+            "takeTheInitiative": {
+              "type": "string"
+            },
+            "takeTime": {
+              "type": "string"
+            },
+            "taken": {
+              "type": "string"
+            },
+            "takingTime": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string"
+            },
+            "targetDistance": {
+              "type": "string"
+            },
+            "task": {
+              "type": "string"
+            },
+            "taskAction": {
+              "type": "string"
+            },
+            "taskActionTimeframe": {
+              "type": "string"
+            },
+            "taskActions": {
+              "type": "string"
+            },
+            "taskType": {
+              "type": "string"
+            },
+            "tasks": {
+              "type": "string"
+            },
+            "tech": {
+              "type": "string"
+            },
+            "techie": {
+              "type": "string"
+            },
+            "technical": {
+              "type": "string"
+            },
+            "technologicallyAided": {
+              "type": "string"
+            },
+            "template": {
+              "type": "string"
+            },
+            "temporarily": {
+              "type": "string"
+            },
+            "temporary": {
+              "type": "string"
+            },
+            "temporaryEffects": {
+              "type": "string"
+            },
+            "temporaryItem": {
+              "type": "string"
+            },
+            "test": {
+              "type": "string"
+            },
+            "tests": {
+              "type": "string"
+            },
+            "theUnknown": {
+              "type": "string"
+            },
+            "threat": {
+              "type": "string"
+            },
+            "threatDetails": {
+              "type": "string"
+            },
+            "threatLevel": {
+              "type": "string"
+            },
+            "throwingKnives": {
+              "type": "string"
+            },
+            "throwingRange": {
+              "type": "string"
+            },
+            "thrownAttack": {
+              "type": "string"
+            },
+            "thrownWeapon": {
+              "type": "string"
+            },
+            "thrustVector": {
+              "type": "string"
+            },
+            "time": {
+              "type": "string"
+            },
+            "timeAdvance": {
+              "type": "string"
+            },
+            "timeSinceStressAccrued": {
+              "type": "string"
+            },
+            "timeframe": {
+              "type": "string"
+            },
+            "timeframes": {
+              "type": "string"
+            },
+            "timer": {
+              "type": "string"
+            },
+            "timerDuration": {
+              "type": "string"
+            },
+            "timers": {
+              "type": "string"
+            },
+            "titan": {
+              "type": "string"
+            },
+            "titanian": {
+              "type": "string"
+            },
+            "to": {
+              "type": "string"
+            },
+            "toHit": {
+              "type": "string"
+            },
+            "toOpponent": {
+              "type": "string"
+            },
+            "toggle": {
+              "type": "string"
+            },
+            "toggled": {
+              "type": "string"
+            },
+            "token": {
+              "type": "string"
+            },
+            "topOfTheLine": {
+              "type": "string"
+            },
+            "total": {
+              "type": "string"
+            },
+            "touchOnly": {
+              "type": "string"
+            },
+            "toxin": {
+              "type": "string"
+            },
+            "track": {
+              "type": "string"
+            },
+            "trackMentalHealth": {
+              "type": "string"
+            },
+            "trackMeshHealth": {
+              "type": "string"
+            },
+            "trackPoints": {
+              "type": "string"
+            },
+            "trackReputations": {
+              "type": "string"
+            },
+            "trackResourcePoints": {
+              "type": "string"
+            },
+            "tracked": {
+              "type": "string"
+            },
+            "trait": {
+              "type": "string"
+            },
+            "traitType": {
+              "type": "string"
+            },
+            "traits": {
+              "type": "string"
+            },
+            "transformer": {
+              "type": "string"
+            },
+            "transhuman": {
+              "type": "string"
+            },
+            "trauma": {
+              "type": "string"
+            },
+            "traumaModifier": {
+              "type": "string"
+            },
+            "traumaThreshold": {
+              "type": "string"
+            },
+            "traumas": {
+              "type": "string"
+            },
+            "traumasIgnored": {
+              "type": "string"
+            },
+            "trigger": {
+              "type": "string"
+            },
+            "triggered": {
+              "type": "string"
+            },
+            "triggeredEffects": {
+              "type": "string"
+            },
+            "triggers": {
+              "type": "string"
+            },
+            "trivial": {
+              "type": "string"
+            },
+            "turn": {
+              "type": "string"
+            },
+            "turns": {
+              "type": "string"
+            },
+            "twoHanded": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "ultraviolet": {
+              "type": "string"
+            },
+            "unarmed": {
+              "type": "string"
+            },
+            "unarmedDV": {
+              "type": "string"
+            },
+            "unarmedMelee": {
+              "type": "string"
+            },
+            "unconscious": {
+              "type": "string"
+            },
+            "undamaged": {
+              "type": "string"
+            },
+            "underclass": {
+              "type": "string"
+            },
+            "undo": {
+              "type": "string"
+            },
+            "unequip": {
+              "type": "string"
+            },
+            "unequipped": {
+              "type": "string"
+            },
+            "uniform": {
+              "type": "string"
+            },
+            "unignored": {
+              "type": "string"
+            },
+            "uninstall": {
+              "type": "string"
+            },
+            "unique": {
+              "type": "string"
+            },
+            "unitsPerComplexity": {
+              "type": "string"
+            },
+            "unknown": {
+              "type": "string"
+            },
+            "unload": {
+              "type": "string"
+            },
+            "unset": {
+              "type": "string"
+            },
+            "unsleeve": {
+              "type": "string"
+            },
+            "unspent": {
+              "type": "string"
+            },
+            "untrigger": {
+              "type": "string"
+            },
+            "update": {
+              "type": "string"
+            },
+            "updateInitiative": {
+              "type": "string"
+            },
+            "upgrade": {
+              "type": "string"
+            },
+            "uplift": {
+              "type": "string"
+            },
+            "usabilityModification": {
+              "type": "string"
+            },
+            "usableTwice": {
+              "type": "string"
+            },
+            "use": {
+              "type": "string"
+            },
+            "useCredits": {
+              "type": "string"
+            },
+            "useFirewall": {
+              "type": "string"
+            },
+            "useMuse": {
+              "type": "string"
+            },
+            "useThreat": {
+              "type": "string"
+            },
+            "used": {
+              "type": "string"
+            },
+            "user": {
+              "type": "string"
+            },
+            "uses": {
+              "type": "string"
+            },
+            "using": {
+              "type": "string"
+            },
+            "utility": {
+              "type": "string"
+            },
+            "vacuum": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            },
+            "values": {
+              "type": "string"
+            },
+            "vehicle": {
+              "type": "string"
+            },
+            "venusian": {
+              "type": "string"
+            },
+            "veryFast": {
+              "type": "string"
+            },
+            "veryHigh": {
+              "type": "string"
+            },
+            "veryLarge": {
+              "type": "string"
+            },
+            "veryLow": {
+              "type": "string"
+            },
+            "verySlow": {
+              "type": "string"
+            },
+            "verySmall": {
+              "type": "string"
+            },
+            "veterinary": {
+              "type": "string"
+            },
+            "view": {
+              "type": "string"
+            },
+            "vigor": {
+              "type": "string"
+            },
+            "violence": {
+              "type": "string"
+            },
+            "visionBased": {
+              "type": "string"
+            },
+            "walker": {
+              "type": "string"
+            },
+            "ware": {
+              "type": "string"
+            },
+            "wareType": {
+              "type": "string"
+            },
+            "weapon": {
+              "type": "string"
+            },
+            "weaponAccessories": {
+              "type": "string"
+            },
+            "weaponRange": {
+              "type": "string"
+            },
+            "wearOffStress": {
+              "type": "string"
+            },
+            "weekly": {
+              "type": "string"
+            },
+            "wellCrafted": {
+              "type": "string"
+            },
+            "wheeled": {
+              "type": "string"
+            },
+            "when": {
+              "type": "string"
+            },
+            "whenMade": {
+              "type": "string"
+            },
+            "whips": {
+              "type": "string"
+            },
+            "whisperGM": {
+              "type": "string"
+            },
+            "wieldedWith": {
+              "type": "string"
+            },
+            "wil": {
+              "type": "string"
+            },
+            "winged": {
+              "type": "string"
+            },
+            "with": {
+              "type": "string"
+            },
+            "withinRange": {
+              "type": "string"
+            },
+            "worth": {
+              "type": "string"
+            },
+            "wound": {
+              "type": "string"
+            },
+            "woundModifier": {
+              "type": "string"
+            },
+            "woundThreshold": {
+              "type": "string"
+            },
+            "wounds": {
+              "type": "string"
+            },
+            "woundsIgnored": {
+              "type": "string"
+            },
+            "xRep": {
+              "type": "string"
+            },
+            "xenofauna": {
+              "type": "string"
+            },
+            "yellow": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "@Rep",
+            "DESCRIPTIONS",
+            "FORMATABLE",
+            "FULL",
+            "SHORT",
+            "abbr",
+            "abilities",
+            "ability",
+            "academic",
+            "academics",
+            "accessories",
+            "accountShell",
+            "accountShells",
+            "accounting",
+            "accumulated",
+            "accushot",
+            "acquireClue",
+            "acquisition",
+            "acronym",
+            "act",
+            "actNow",
+            "action",
+            "actionTurns",
+            "actions",
+            "activate",
+            "activated",
+            "activation",
+            "active",
+            "activeForks",
+            "activeRecharge",
+            "actor",
+            "actorLink",
+            "add",
+            "addiction",
+            "addictionMod",
+            "additional",
+            "additionalArmor",
+            "additionalDv",
+            "adjacentTargets",
+            "admin",
+            "advance",
+            "advancePersonalTime",
+            "aerospace",
+            "age",
+            "aggressive",
+            "agi",
+            "ai",
+            "aided",
+            "aidedHealing",
+            "aim",
+            "air",
+            "airburst",
+            "aircraft",
+            "alerted",
+            "ali",
+            "aliOnly",
+            "aliases",
+            "alien",
+            "alienation",
+            "all",
+            "allActions",
+            "allowRemoteControl",
+            "alpha",
+            "alt",
+            "altAttackMode",
+            "altMode",
+            "alternativeAmmo",
+            "alwaysApplied",
+            "alwaysApplies",
+            "ammo",
+            "ammoUsed",
+            "ammunition",
+            "amount",
+            "anarchist",
+            "animalHandler",
+            "animalHandling",
+            "antidote",
+            "any",
+            "anyway",
+            "app",
+            "appAsService",
+            "appAsWare",
+            "applicable",
+            "application",
+            "applicationMethods",
+            "applied",
+            "appliedSubstance",
+            "apply",
+            "applyCoating",
+            "applyEffects",
+            "applyTo",
+            "apps",
+            "aptitude",
+            "aptitudeCheck",
+            "aptitudeMultiplier",
+            "aptitudes",
+            "arc",
+            "areaEffect",
+            "areaEffectRadius",
+            "areaEffectType",
+            "argonaut",
+            "armSlide",
+            "armor",
+            "armorLayer",
+            "armorLayerPenalty",
+            "armorPiercing",
+            "armorRating",
+            "armorReduction",
+            "armorRemoving",
+            "armorUsed",
+            "armorValue",
+            "armorer",
+            "artist/icon",
+            "arts",
+            "as",
+            "asi",
+            "assaultRifle",
+            "async",
+            "at",
+            "athletics",
+            "atmosphere",
+            "attack",
+            "attackMode",
+            "attackTraits",
+            "attackingOrSpotting",
+            "attacks",
+            "attempt",
+            "attempts",
+            "augmentUnarmed",
+            "augmentation",
+            "auto",
+            "autoRemove",
+            "automatic",
+            "availability",
+            "available",
+            "average",
+            "avoid",
+            "awaiting",
+            "back",
+            "background",
+            "backup",
+            "backups",
+            "badlyDamaged",
+            "barelyDamaged",
+            "barsoomian",
+            "base",
+            "baseDurability",
+            "baseInfectionRating",
+            "battery",
+            "battleRifle",
+            "beamWeapon",
+            "beforeMitigation",
+            "beta",
+            "beyondRange",
+            "bio",
+            "biochem",
+            "biological",
+            "biologicalBody",
+            "biologicalLife",
+            "biomorph",
+            "biotech",
+            "bioware",
+            "blind",
+            "blindRoll",
+            "blinded",
+            "blinding",
+            "blueprint",
+            "blueprints",
+            "boat",
+            "bonus",
+            "bot",
+            "both",
+            "bow",
+            "braced",
+            "brain",
+            "breakTool",
+            "brinker",
+            "burn",
+            "burnRep",
+            "burnedRep",
+            "burning",
+            "burstFire",
+            "by",
+            "bypassArmor",
+            "cRep",
+            "calledShot",
+            "canContainPayload",
+            "canDefault",
+            "canOnlyGlandSubstances",
+            "cancel",
+            "capacity",
+            "career",
+            "carried",
+            "carryPayload",
+            "category",
+            "cause",
+            "centered",
+            "change",
+            "character",
+            "characterDetails",
+            "charge",
+            "charging",
+            "check",
+            "checkMod",
+            "checkoutTime",
+            "checks",
+            "chemical",
+            "chi",
+            "class",
+            "classification",
+            "clear",
+            "close",
+            "coat",
+            "coatAmmunition",
+            "coatWeapon",
+            "coating",
+            "cog",
+            "cognitive",
+            "colonist",
+            "combat",
+            "commaSeperated",
+            "commander",
+            "commit",
+            "complete",
+            "completed",
+            "complex",
+            "complexity",
+            "components",
+            "computer",
+            "concealable",
+            "concentrated",
+            "concentratedDamage",
+            "concentratedToHit",
+            "concluded",
+            "condition",
+            "conditional",
+            "conditions",
+            "cone",
+            "confirm",
+            "confused",
+            "constant",
+            "consumable",
+            "consumables",
+            "consumeOnUse",
+            "containSubstance",
+            "controls",
+            "convert",
+            "cost",
+            "costType",
+            "covertOperative",
+            "covertness",
+            "cp",
+            "cracked",
+            "crashed",
+            "create",
+            "credits",
+            "criminal",
+            "criticalDamage",
+            "criticalFailure",
+            "criticalQuality",
+            "criticalSuccess",
+            "cumulative",
+            "current",
+            "custom",
+            "customization",
+            "cyber",
+            "cyberbrain",
+            "cyberware",
+            "daily",
+            "damage",
+            "damageAgainstStructures",
+            "damageApplier",
+            "damageFormula",
+            "damageOverTime",
+            "damageType",
+            "damageValue",
+            "damaged",
+            "date",
+            "day",
+            "days",
+            "dazed",
+            "deactivate",
+            "deafened",
+            "deathRating",
+            "deceive",
+            "deduct",
+            "default",
+            "defaulting",
+            "defending",
+            "defineEnvironment",
+            "defineRelationship",
+            "delay",
+            "delayTurn",
+            "delete",
+            "deleted",
+            "demolitions",
+            "derived",
+            "dermal",
+            "description",
+            "destroyed",
+            "detail",
+            "details",
+            "detonate",
+            "deviceManagement",
+            "deviceType",
+            "devices",
+            "digimorph",
+            "digitalSpeed",
+            "disable",
+            "disarm",
+            "disarmDifficulty",
+            "disguise",
+            "disorder",
+            "distance",
+            "distracted",
+            "distribute",
+            "distributed",
+            "distributedDevices",
+            "doses",
+            "dosesPerShot",
+            "downgrade",
+            "downtime",
+            "dropSleight/Trait",
+            "drug",
+            "drugOrToxin",
+            "durability",
+            "duration",
+            "durationFormula",
+            "dvModifier",
+            "edit",
+            "editTotals",
+            "editor",
+            "effect",
+            "effectDuration",
+            "effectType",
+            "effectiveRange",
+            "effects",
+            "ego",
+            "egoAndMorph",
+            "egoTraits",
+            "egoType",
+            "elapsed",
+            "electronic",
+            "electronics",
+            "embeddedEgos",
+            "empty",
+            "enclaver",
+            "encumbered",
+            "end",
+            "endOfNextTurn",
+            "endOfTurn",
+            "endOnRecharge",
+            "endProcess",
+            "energy",
+            "energyArmor",
+            "enforcer",
+            "enhancedBehavior",
+            "entangling",
+            "environment",
+            "epsilon",
+            "equip",
+            "equipped",
+            "escapeArtist",
+            "exhuman",
+            "exists",
+            "exoskeleton",
+            "exotic",
+            "exoticMorphology",
+            "expend",
+            "expending",
+            "expired",
+            "exploration",
+            "explorer",
+            "explosive",
+            "explosiveType",
+            "exsurgent",
+            "extendedMagazine",
+            "extra",
+            "extraAction",
+            "extraTarget",
+            "extropian",
+            "fRep",
+            "fab",
+            "fabricator",
+            "face",
+            "faction",
+            "fail",
+            "failed",
+            "failure",
+            "fake",
+            "fakeEgoIDs",
+            "fakeEgoId",
+            "fakeId",
+            "fast",
+            "favor",
+            "favorites",
+            "favors",
+            "field",
+            "fieldSkill",
+            "fighter",
+            "filter",
+            "final",
+            "finalize",
+            "firePayload",
+            "firearm",
+            "firearmAmmo",
+            "firewall",
+            "firewallRating",
+            "firingMode",
+            "firingModes",
+            "fixed",
+            "flashSuppressor",
+            "flex",
+            "flipRoll",
+            "forensics",
+            "forensicsSpecialist",
+            "fork",
+            "forkType",
+            "form",
+            "formula",
+            "fragile",
+            "frame",
+            "frameType",
+            "fray",
+            "freeFall",
+            "freePush",
+            "freelancer",
+            "full",
+            "fullAuto",
+            "fullMove",
+            "gRep",
+            "gain",
+            "gamemaster",
+            "gamma",
+            "gear",
+            "gearPoints",
+            "gearTraits",
+            "gender",
+            "genehacker",
+            "general",
+            "generic",
+            "gland",
+            "glands",
+            "goal",
+            "grappled",
+            "gravity",
+            "grenade",
+            "ground",
+            "groundcraft",
+            "group",
+            "guns",
+            "gyromount",
+            "hacker",
+            "hacking",
+            "half",
+            "halve",
+            "halved",
+            "hard",
+            "hardening",
+            "hardsuit",
+            "hardware",
+            "harsh",
+            "hasActivation",
+            "hasActiveState",
+            "hasAttack",
+            "hasSeverity",
+            "heal",
+            "healing",
+            "healingTimeframes",
+            "health",
+            "healthRecovery",
+            "hearingBased",
+            "heavy",
+            "heavyPistol",
+            "helplessness",
+            "high",
+            "holdoutPistol",
+            "homeDevice",
+            "homing",
+            "hopper",
+            "host",
+            "hostType",
+            "hour",
+            "hours",
+            "hover",
+            "hybrid",
+            "hypercorp",
+            "hyperelite",
+            "iRep",
+            "icon",
+            "id",
+            "idealUserSize",
+            "ignoreMods",
+            "ignoreTrauma",
+            "ignoreWound",
+            "ignored",
+            "ignoredModifiers",
+            "ignoresArmor",
+            "imagingScope",
+            "img",
+            "immediate",
+            "immobilized",
+            "immunity",
+            "impact",
+            "impaired",
+            "impairedX2",
+            "impairedX3",
+            "implanted",
+            "implantedWare",
+            "improved",
+            "improvised",
+            "in",
+            "inDisrepair",
+            "inVacuum",
+            "inactive",
+            "incapacitated",
+            "incompatibleWith",
+            "incorrectMissileSize",
+            "increase",
+            "increased",
+            "increasedDuration",
+            "increasedEffect",
+            "increasedPenetration",
+            "increasedPower",
+            "increasedRange",
+            "indefinite",
+            "indenture",
+            "industrial",
+            "infection",
+            "infectionInfluences",
+            "infectionMod",
+            "infectionRating",
+            "infectionTest",
+            "infiltrate",
+            "inflict",
+            "influence",
+            "influences",
+            "info",
+            "infolife",
+            "infomorph",
+            "infosec",
+            "inhalation",
+            "inherentArmor",
+            "initial",
+            "initiative",
+            "injection",
+            "innate",
+            "innateArmor",
+            "insanityRating",
+            "insight",
+            "install",
+            "installed",
+            "instant",
+            "int",
+            "integration",
+            "integrationTest",
+            "interest",
+            "interests",
+            "interface",
+            "interference",
+            "interval",
+            "into",
+            "introduceItem",
+            "introduceNPC",
+            "inventory",
+            "investigator",
+            "ionic",
+            "isAntidote",
+            "isolate",
+            "item",
+            "itemMustBeBlueprint",
+            "itemSize",
+            "itemTrash",
+            "items",
+            "jack-of-all-trades",
+            "jammer",
+            "jamming",
+            "jovian",
+            "keepOpen",
+            "keepQuiet",
+            "keepingQuiet",
+            "kinesics",
+            "kinetic",
+            "kineticArmor",
+            "knockdown",
+            "know",
+            "label",
+            "lacksSmartlink",
+            "languages",
+            "large",
+            "laserSight",
+            "lasts",
+            "layer",
+            "layerable",
+            "layers",
+            "learn",
+            "level",
+            "levels",
+            "light",
+            "limb",
+            "limbs",
+            "limitedUse",
+            "lineOfSight",
+            "linked",
+            "linkedAptitude",
+            "loaded",
+            "localFirewall",
+            "locateFiredWeapon",
+            "location",
+            "long",
+            "longRecharge",
+            "lose",
+            "lost",
+            "low",
+            "lucidity",
+            "lunar/orbital",
+            "machineGun",
+            "machinePistol",
+            "macro",
+            "made",
+            "major",
+            "manuallyToggled",
+            "match",
+            "max",
+            "maxUses",
+            "medic",
+            "medical",
+            "medicine",
+            "medium",
+            "mediumPistol",
+            "melee",
+            "meleeAttack",
+            "meleeDamageRolls",
+            "meleeWeapon",
+            "memoryRelated",
+            "mental",
+            "mental/MeshActionsOnly",
+            "mental/physical",
+            "mentalArmor",
+            "mentalFullDefense",
+            "mentalHealth",
+            "mercurial",
+            "mesh",
+            "meshHealth",
+            "meshService",
+            "meshware",
+            "meters",
+            "micro",
+            "microgravity",
+            "microlight",
+            "micromissile",
+            "minHalve",
+            "minSV",
+            "minStressValue",
+            "mindState",
+            "mindhacker",
+            "mini",
+            "minigrenade",
+            "minimissile",
+            "minor",
+            "minute",
+            "minutes",
+            "misc",
+            "missile",
+            "missileCapacity",
+            "missileSize",
+            "missiles",
+            "missing",
+            "mnemonics",
+            "mode",
+            "moderate",
+            "modifier",
+            "modifiers",
+            "modular",
+            "morph",
+            "morphPoints",
+            "morphTraits",
+            "morphType",
+            "mote",
+            "motivation",
+            "motivations",
+            "movement",
+            "movementRate",
+            "movementRates",
+            "moxie",
+            "mp",
+            "multiUse",
+            "multiplier",
+            "muse",
+            "name",
+            "nano",
+            "nanodrug",
+            "nanoware",
+            "narcoalgorithm",
+            "naturalHealAttempts",
+            "nautical",
+            "nauticalCraft",
+            "negate",
+            "negateGaffe",
+            "negated",
+            "negative",
+            "negativeRangeModifiersMultiplier",
+            "neogenetic",
+            "network",
+            "networker",
+            "new",
+            "nextAction",
+            "nextTick",
+            "niche",
+            "no",
+            "noClose",
+            "noDamage",
+            "noFlipFlop",
+            "noInitiativeModificationsAvailable",
+            "noNaturalHealsAttempted",
+            "noPointBlank",
+            "noResults",
+            "noRoll",
+            "nonAddictive",
+            "none",
+            "normal",
+            "notFound",
+            "notes",
+            "now",
+            "npc",
+            "numbers",
+            "obedient",
+            "objective",
+            "of",
+            "off",
+            "offline",
+            "on",
+            "onTest",
+            "ongoing",
+            "online",
+            "onset",
+            "openSource",
+            "operatingSystem",
+            "opponent's",
+            "opponentsTests",
+            "oppose",
+            "opposeWith",
+            "opposing",
+            "opposition",
+            "oral",
+            "orange",
+            "organic",
+            "originalRange",
+            "outdated",
+            "over",
+            "overburdened",
+            "override",
+            "overview",
+            "own",
+            "ownHealing",
+            "pain",
+            "painFilter",
+            "painResistance",
+            "paramedic",
+            "passengers",
+            "paused",
+            "payload",
+            "payloadUse",
+            "pc",
+            "per",
+            "perTurn",
+            "perceive",
+            "permanently",
+            "personal",
+            "personalArmorUsed",
+            "personalTransportDevice",
+            "persuade",
+            "petal",
+            "pharmacology",
+            "physical",
+            "physicalDamage",
+            "physicalFullDefense",
+            "physicalHealth",
+            "physicalService",
+            "physicalServices",
+            "physicalTech",
+            "pierce",
+            "pilot",
+            "placeEgo",
+            "plasmaCutter",
+            "playerCharacter",
+            "players",
+            "pod",
+            "point",
+            "pointBlank",
+            "points",
+            "polarity",
+            "pool",
+            "pools",
+            "poolsRecovered",
+            "poolsRegained",
+            "poor",
+            "positive",
+            "prehensile",
+            "prehensileLimbs",
+            "primary",
+            "primaryAmmo",
+            "primaryAttack",
+            "primaryMode",
+            "prime",
+            "privilege",
+            "professionalTraining",
+            "profile",
+            "program",
+            "progressTowards",
+            "progressTowardsRefresh",
+            "prone",
+            "properties",
+            "provideMentalArmor",
+            "provoke",
+            "proximity",
+            "psi",
+            "psiChi",
+            "psiEpsilon",
+            "psiGamma",
+            "psiInfluence",
+            "psiInfluences",
+            "psiTest",
+            "psiUser",
+            "psychology",
+            "psychosurgery",
+            "public",
+            "publicRoll",
+            "push",
+            "pushable",
+            "pushed",
+            "pushedChiSleight",
+            "quality",
+            "quantity",
+            "quantityPerCost",
+            "quick",
+            "rRep",
+            "radius",
+            "railgun",
+            "range",
+            "ranged",
+            "rangedAttack",
+            "rare",
+            "reIntegrate",
+            "reach",
+            "reachBonus",
+            "ready",
+            "readyIn",
+            "realWorldNaivete",
+            "realization",
+            "reboot",
+            "receded",
+            "recharge",
+            "recharges",
+            "reclaimer",
+            "recon",
+            "recovery",
+            "recreational",
+            "recurring",
+            "red",
+            "redirect",
+            "reduceAVbyDV",
+            "reduced",
+            "reduction",
+            "ref",
+            "reference",
+            "refresh",
+            "refreshTimer",
+            "regainedPoints",
+            "regional",
+            "reload",
+            "remaining",
+            "remainingDelay",
+            "remainingDuration",
+            "remove",
+            "removing",
+            "removingArmor",
+            "renderSheet",
+            "rep",
+            "repTest",
+            "repair",
+            "reps",
+            "reputation",
+            "reputations",
+            "require",
+            "requireBioSubstrate",
+            "required",
+            "requirement",
+            "research",
+            "resistInfection",
+            "resistSubstanceOrDisease",
+            "resisted",
+            "resisting",
+            "resleeve",
+            "resleevingStress",
+            "resource",
+            "restore",
+            "restricted",
+            "restrictions",
+            "result",
+            "resultEffects",
+            "resultEffectsAvailable",
+            "resultImproved",
+            "rez",
+            "robotic",
+            "robotics",
+            "rogue",
+            "roll",
+            "rollFlipped",
+            "rollInitiative",
+            "roller",
+            "rotor",
+            "round",
+            "run",
+            "running",
+            "rush",
+            "rushing",
+            "safetySystem",
+            "sav",
+            "save",
+            "scaleEffectsOnSuperior",
+            "scavenger",
+            "scene",
+            "scientist",
+            "score",
+            "scum",
+            "search",
+            "second",
+            "secondaryAttack",
+            "secondaryMode",
+            "seconds",
+            "security",
+            "seekerWeapon",
+            "select",
+            "selectFreePush",
+            "self",
+            "semiAuto",
+            "server",
+            "service",
+            "serviceType",
+            "services",
+            "set",
+            "settings",
+            "setup",
+            "severe",
+            "severity",
+            "sex",
+            "shape",
+            "shared",
+            "shell",
+            "shellType",
+            "shock",
+            "shockSafety",
+            "shoddy",
+            "shop",
+            "short",
+            "shortRecharge",
+            "signal",
+            "silencer",
+            "singleShot",
+            "singleUse",
+            "situational",
+            "size",
+            "skill",
+            "skillCategory",
+            "skillTest",
+            "skillTests",
+            "skillType",
+            "skills",
+            "slacker",
+            "sleeve",
+            "sleeved",
+            "sleeves",
+            "sleight",
+            "sleightOfHand",
+            "sleightTest",
+            "sleightType",
+            "sleights",
+            "slow",
+            "small",
+            "smartMagazine",
+            "smartlink",
+            "snake",
+            "sniperRifle",
+            "social",
+            "socialite",
+            "software",
+            "softwareType",
+            "soldier",
+            "som",
+            "some",
+            "source",
+            "sources",
+            "space",
+            "spacecraft",
+            "spacer",
+            "special",
+            "specialization",
+            "specialized",
+            "specificTarget",
+            "spentPools",
+            "sprayWeapon",
+            "stance",
+            "standard",
+            "standardGrenade",
+            "standardMissile",
+            "start",
+            "started",
+            "starting",
+            "stash",
+            "stat",
+            "state",
+            "stateOfTheArt",
+            "staticModifiers",
+            "status",
+            "steady",
+            "sticky",
+            "strengthBased",
+            "stress",
+            "stressTest",
+            "stressType",
+            "stressValue",
+            "stressfulExperience",
+            "structuralWeakpoint",
+            "student",
+            "stun",
+            "stunned",
+            "submachineGun",
+            "submarine",
+            "substance",
+            "substanceType",
+            "substances",
+            "substrain",
+            "subsumedEgos",
+            "subtype",
+            "success",
+            "successTest",
+            "summary",
+            "superiorFailure",
+            "superiorFailureX2",
+            "superiorSuccess",
+            "superiorSuccessDot",
+            "superiorSuccessX2",
+            "support",
+            "suppressiveFire",
+            "surprise",
+            "surprised",
+            "survival",
+            "survivalist",
+            "sustained",
+            "swarm",
+            "swimmer",
+            "synthetic",
+            "syntheticShell",
+            "synthmorph",
+            "systemName",
+            "tag",
+            "tagType",
+            "tags",
+            "take",
+            "takeDV",
+            "takeExtraAction",
+            "takeSV",
+            "takeTheInitiative",
+            "takeTime",
+            "taken",
+            "takingTime",
+            "target",
+            "targetDistance",
+            "task",
+            "taskAction",
+            "taskActionTimeframe",
+            "taskActions",
+            "taskType",
+            "tasks",
+            "tech",
+            "techie",
+            "technical",
+            "technologicallyAided",
+            "template",
+            "temporarily",
+            "temporary",
+            "temporaryEffects",
+            "temporaryItem",
+            "test",
+            "tests",
+            "theUnknown",
+            "threat",
+            "threatDetails",
+            "threatLevel",
+            "throwingKnives",
+            "throwingRange",
+            "thrownAttack",
+            "thrownWeapon",
+            "thrustVector",
+            "time",
+            "timeAdvance",
+            "timeSinceStressAccrued",
+            "timeframe",
+            "timeframes",
+            "timer",
+            "timerDuration",
+            "timers",
+            "titan",
+            "titanian",
+            "to",
+            "toHit",
+            "toOpponent",
+            "toggle",
+            "toggled",
+            "token",
+            "topOfTheLine",
+            "total",
+            "touchOnly",
+            "toxin",
+            "track",
+            "trackMentalHealth",
+            "trackMeshHealth",
+            "trackPoints",
+            "trackReputations",
+            "trackResourcePoints",
+            "tracked",
+            "trait",
+            "traitType",
+            "traits",
+            "transformer",
+            "transhuman",
+            "trauma",
+            "traumaModifier",
+            "traumaThreshold",
+            "traumas",
+            "traumasIgnored",
+            "trigger",
+            "triggered",
+            "triggeredEffects",
+            "triggers",
+            "trivial",
+            "turn",
+            "turns",
+            "twoHanded",
+            "type",
+            "ultraviolet",
+            "unarmed",
+            "unarmedDV",
+            "unarmedMelee",
+            "unconscious",
+            "undamaged",
+            "underclass",
+            "undo",
+            "unequip",
+            "unequipped",
+            "uniform",
+            "unignored",
+            "uninstall",
+            "unique",
+            "unitsPerComplexity",
+            "unknown",
+            "unload",
+            "unset",
+            "unsleeve",
+            "unspent",
+            "untrigger",
+            "update",
+            "updateInitiative",
+            "upgrade",
+            "uplift",
+            "usabilityModification",
+            "usableTwice",
+            "use",
+            "useCredits",
+            "useFirewall",
+            "useMuse",
+            "useThreat",
+            "used",
+            "user",
+            "uses",
+            "using",
+            "utility",
+            "vacuum",
+            "value",
+            "values",
+            "vehicle",
+            "venusian",
+            "veryFast",
+            "veryHigh",
+            "veryLarge",
+            "veryLow",
+            "verySlow",
+            "verySmall",
+            "veterinary",
+            "view",
+            "vigor",
+            "violence",
+            "visionBased",
+            "walker",
+            "ware",
+            "wareType",
+            "weapon",
+            "weaponAccessories",
+            "weaponRange",
+            "wearOffStress",
+            "weekly",
+            "wellCrafted",
+            "wheeled",
+            "when",
+            "whenMade",
+            "whips",
+            "whisperGM",
+            "wieldedWith",
+            "wil",
+            "winged",
+            "with",
+            "withinRange",
+            "worth",
+            "wound",
+            "woundModifier",
+            "woundThreshold",
+            "wounds",
+            "woundsIgnored",
+            "xRep",
+            "xenofauna",
+            "yellow"
+          ],
+          "type": "object"
+        },
+        "Eclipse Phase 2e": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Eclipse Phase 2e",
+        "EP2E"
+      ],
+      "type": "object"
+    }
+  }
+}
