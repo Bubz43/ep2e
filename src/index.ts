@@ -27,10 +27,15 @@ import 'weightless/list-item';
 import 'web-dialog';
 import { Field } from './components/field/field';
 import { Form } from './components/form/form';
+import { AnimatedList } from './components/animated-list/animated-list';
+import { DateField } from './components/date-field/date-field';
 
 // My Components
 Field;
 Form;
+AnimatedList;
+DateField;
+
 
 const link = document.createElement('link');
 link.rel = 'stylesheet';

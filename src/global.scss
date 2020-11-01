@@ -1,6 +1,6 @@
 @use "scss/colors";
-@use "scss/functions";
-@use "scss/mixins";
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
 
 @use "scss/css-properties";
 @use "scss/chat";
@@ -11,15 +11,15 @@
 @use "scss/controls";
 @use "scss/players";
 
-@include mixins.styled-scrollbars;
-@include mixins.widgetless-number-inputs;
+@include styled-scrollbars;
+@include widgetless-number-inputs;
 
 body {
   color: var(--color-text);
   background-color: #000000;
-
   font-size: 1rem;
 }
+
 
 li[divider] {
   border-color: alphav(var(--color-border), 0.5);
@@ -57,7 +57,7 @@ web-dialog {
 
 * {
   &:not(mwc-icon):not(i) {
-    font-family: var(--font-primary);
+    font-family: var(--font-1);
   }
 }
 
@@ -70,7 +70,7 @@ mwc-snackbar {
 code.formula {
   background: var(--color-bg);
   color: var(--color-text);
-  font-family: var(--font-alt);
+  font-family: var(--font-mono);
   padding: 0 1ch;
 }
 

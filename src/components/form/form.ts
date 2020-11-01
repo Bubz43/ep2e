@@ -60,6 +60,7 @@ export class Form extends LitElement {
       requestAnimationFrame(() => this.toggleElementDisabled());
     }
   }
+  
 
   get elements(): FieldElement[] {
     return Array.from(

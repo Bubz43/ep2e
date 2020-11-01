@@ -1,12 +1,8 @@
 body {
-  
   --font-1: Jost, sans-serif;
   --font-2: Spartan, sans-serif;
   --font-3: Rubik, sans-serif;
-  --font-mono: "Fira Code", monospace;
-
-  --font-primary: Jost, sans-serif;
-  --font-alt: "Fira Code", monospace;
+  --font-mono: 'Fira Code', monospace;
   --text-highlight: 0 0 6px currentColor;
 
   // Material Elements
@@ -33,9 +29,9 @@ body {
   --mdc-theme-text-secondary-on-background: var(--color-text-lighter);
   --mdc-linear-progress-buffer-color: var(--color-grey);
 
-  --mdc-typography-button-font-family: var(--font-primary);
+  --mdc-typography-button-font-family: var(--font-1);
   --mdc-typography-subtitle1-font-family: var(--font-1);
-  --mdc-typography-body2-font-family: var(--font-primary);
+  --mdc-typography-body2-font-family: var(--font-1);
   --mdc-typography-body2-font-size: 1rem;
 
   --app-datepicker-accent-color: var(--color-secondary);
@@ -66,7 +62,7 @@ body {
   // --mdc-select-outlined-hover-border-color: var(--color-text);
   // --mdc-select-idle-line-color: var(--color-text-lighter);
   // --mdc-typography-subtitle1-font-size: 1.02rem;
-  // --mdc-typography-subtitle1-font-family: var(--font-primary);
+  // --mdc-typography-subtitle1-font-family: var(--font-1);
   // --mdc-typography-subtitle1-letter-spacing: 1px;
   // --mdc-list-vertical-padding: 0px;
   // --mdc-list-side-padding: 30px;
@@ -82,7 +78,7 @@ body {
   --primary-saturation: 95%;
   --primary-lightness: 70%;
   --label-color: hsl(0, 0, 80%);
-  --label-font-family: var(--font-primary);
+  --label-font-family: var(--font-1);
   --label-font-size: 14px;
 
   --dialog-bg: #191919;

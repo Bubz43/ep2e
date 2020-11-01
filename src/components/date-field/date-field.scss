@@ -1,0 +1,44 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+}
+
+wl-list-item {
+  padding: 6px;
+}
+
+wl-label {
+  --label-font-size: 13px;
+  letter-spacing: 1px;
+  width: fit-content;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+button {
+  background: transparent;
+  border: none;
+  display: inline-flex;
+  flex-flow: column;
+  cursor: pointer;
+  transition: opacity 100ms ease-in-out;
+  color: var(--color-text);
+  font-family: var(--font-1);
+  font-size: 1rem;
+  position: relative;
+  width: 100%;
+  padding: 6px 0.5rem;
+  &:focus {
+    outline: none;
+  }
+  &[disabled] {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+}
