@@ -1,0 +1,77 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  ::slotted([slot="info"]) {
+    flex: 1;
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    justify-content: end;
+    gap: 1rem;
+  }
+  
+}
+
+:host([open]) {
+  // margin-bottom: 0.5rem;
+  .icon {
+    transform: rotate(90deg);
+  }
+  .toggle {
+    background: alphav(var(--color-border), 0.5);
+  }
+}
+
+:host(:not([disabled])) {
+  .toggle {
+    cursor: pointer;
+  }
+}
+
+.toggle {
+  display: flex;
+  position: relative;
+  padding: 0.25rem 0.5rem;
+  &:focus {
+    outline: none;
+  }
+}
+
+.icon {
+  transition: transform 50ms ease-in-out;
+  opacity: 0.8;
+}
+
+.info {
+  display: flex;
+  flex-flow: row wrap;
+  padding-left: 1rem;
+  flex: 1;
+}
+
+.full-summary {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-left: 0.25rem;
+}
+
+.summary {
+  font-size: 1.1rem;
+}
+
+.content {
+  // margin-left: 0.5rem;
+  padding: 0.5rem;
+  // padding-left: 1rem;
+  background: var(--details-content-bg);
+  overflow: hidden;
+}
+

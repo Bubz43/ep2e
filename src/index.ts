@@ -29,13 +29,16 @@ import { Field } from './components/field/field';
 import { Form } from './components/form/form';
 import { AnimatedList } from './components/animated-list/animated-list';
 import { DateField } from './components/date-field/date-field';
+import { DeleteButton } from './components/delete-button/delete-button';
+import { Details } from './components/details/details';
 
 // My Components
 Field;
 Form;
 AnimatedList;
 DateField;
-
+DeleteButton;
+Details;
 
 const link = document.createElement('link');
 link.rel = 'stylesheet';
