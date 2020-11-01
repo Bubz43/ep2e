@@ -14,7 +14,7 @@
   --list-item-padding: 0rem 0.5rem;
   border-bottom: 1px solid var(--color-border);
 
-  ::slotted([slot="action"]) {
+  ::slotted([slot='action']) {
     --mdc-icon-size: 22px;
     --mdc-icon-button-size: 32px;
   }

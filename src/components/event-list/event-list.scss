@@ -5,7 +5,6 @@
   box-sizing: border-box;
 }
 
-
 :host {
   display: block;
   position: absolute;
@@ -64,6 +63,5 @@ li {
   &:hover {
     opacity: 1 !important;
     background: alphav(var(--color-bg), 0.7);
-
   }
 }

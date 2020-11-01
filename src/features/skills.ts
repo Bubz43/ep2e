@@ -1,54 +1,54 @@
-import { AptitudeType, enumValues } from "@src/data-enums";
-import { LangEntry, localize } from "@src/foundry/localization";
-import { compact } from "remeda";
-import type { SetRequired } from "type-fest";
-import { createFeature } from "./feature-helpers";
+import { AptitudeType, enumValues } from '@src/data-enums';
+import { LangEntry, localize } from '@src/foundry/localization';
+import { compact } from 'remeda';
+import type { SetRequired } from 'type-fest';
+import { createFeature } from './feature-helpers';
 
 export type Aptitudes = Record<AptitudeType, number>;
 
 export enum FieldSkillType {
-  Exotic = "exotic",
-  Hardware = "hardware",
-  Know = "know",
-  Medicine = "medicine",
-  Pilot = "pilot",
+  Exotic = 'exotic',
+  Hardware = 'hardware',
+  Know = 'know',
+  Medicine = 'medicine',
+  Pilot = 'pilot',
 }
 
 export enum SkillType {
-  Athletics = "athletics",
-  Deceive = "deceive",
-  Fray = "fray",
-  FreeFall = "freeFall",
-  Guns = "guns",
-  Infosec = "infosec",
-  Infiltrate = "infiltrate",
-  Interface = "interface",
-  Kinesics = "kinesics",
-  Melee = "melee",
-  Perceive = "perceive",
-  Persuade = "persuade",
-  Program = "program",
-  Provoke = "provoke",
-  Psi = "psi",
-  Research = "research",
-  Survival = "survival",
+  Athletics = 'athletics',
+  Deceive = 'deceive',
+  Fray = 'fray',
+  FreeFall = 'freeFall',
+  Guns = 'guns',
+  Infosec = 'infosec',
+  Infiltrate = 'infiltrate',
+  Interface = 'interface',
+  Kinesics = 'kinesics',
+  Melee = 'melee',
+  Perceive = 'perceive',
+  Persuade = 'persuade',
+  Program = 'program',
+  Provoke = 'provoke',
+  Psi = 'psi',
+  Research = 'research',
+  Survival = 'survival',
 }
 
 export enum ActiveSkillCategory {
-  Combat = "combat",
-  Mental = "mental",
-  Misc = "misc",
-  Physical = "physical",
-  Social = "social",
-  Technical = "technical",
-  Vehicle = "vehicle",
+  Combat = 'combat',
+  Mental = 'mental',
+  Misc = 'misc',
+  Physical = 'physical',
+  Social = 'social',
+  Technical = 'technical',
+  Vehicle = 'vehicle',
 }
 
 export enum KnowSkillCategory {
-  Academics = "academics",
-  Arts = "arts",
-  Interests = "interests",
-  ProfessionalTraining = "professionalTraining",
+  Academics = 'academics',
+  Arts = 'arts',
+  Interests = 'interests',
+  ProfessionalTraining = 'professionalTraining',
 }
 
 type Info = Readonly<{
@@ -66,8 +66,8 @@ export type FieldSkillData = SkillData & {
 
 export const createFieldSkillData = createFeature<FieldSkillData>(() => ({
   points: 0,
-  specialization: "",
-  field: "",
+  specialization: '',
+  field: '',
   linkedAptitude: AptitudeType.Cognition,
   category: ActiveSkillCategory.Misc,
 }));
@@ -81,9 +81,9 @@ export type FullSkill = {
   fullName: string;
   aptitudePoints: number;
   aptBonus: number;
-} & SetRequired<Info, "aptMultiplier">;
+} & SetRequired<Info, 'aptMultiplier'>;
 
-export type FullFieldSkill = Omit<FullSkill, "skill" | "category"> &
+export type FullFieldSkill = Omit<FullSkill, 'skill' | 'category'> &
   FieldSkillData & {
     fieldSkill: FieldSkillType;
     readonly nameWithoutFieldType: string;
@@ -153,41 +153,41 @@ export const skillInfo: Readonly<Record<SkillType, Info>> = {
 } as const;
 
 export enum CommonExoticField {
-  AnimalHandling = "animalHandling",
-  Bow = "bow",
-  Disguise = "disguise",
-  EscapeArtist = "escapeArtist",
-  PlasmaCutter = "plasmaCutter",
-  SleightOfHand = "sleightOfHand",
-  ThrowingKnives = "throwingKnives",
-  Whips = "whips",
+  AnimalHandling = 'animalHandling',
+  Bow = 'bow',
+  Disguise = 'disguise',
+  EscapeArtist = 'escapeArtist',
+  PlasmaCutter = 'plasmaCutter',
+  SleightOfHand = 'sleightOfHand',
+  ThrowingKnives = 'throwingKnives',
+  Whips = 'whips',
 }
 
 export enum CommonHardwareField {
-  Aerospace = "aerospace",
-  Armorer = "armorer",
-  Demolitions = "demolitions",
-  Electronics = "electronics",
-  GroundCraft = "groundcraft",
-  Industrial = "industrial",
-  Nautical = "nautical",
-  Robotics = "robotics",
+  Aerospace = 'aerospace',
+  Armorer = 'armorer',
+  Demolitions = 'demolitions',
+  Electronics = 'electronics',
+  GroundCraft = 'groundcraft',
+  Industrial = 'industrial',
+  Nautical = 'nautical',
+  Robotics = 'robotics',
 }
 
 export enum CommonMedicineField {
-  Biotech = "biotech",
-  Forensics = "forensics",
-  Paramedic = "paramedic",
-  Pharmacology = "pharmacology",
-  Psychosurgery = "psychosurgery",
-  Veterinary = "veterinary",
+  Biotech = 'biotech',
+  Forensics = 'forensics',
+  Paramedic = 'paramedic',
+  Pharmacology = 'pharmacology',
+  Psychosurgery = 'psychosurgery',
+  Veterinary = 'veterinary',
 }
 
 export enum CommonPilotField {
-  Air = "air",
-  Ground = "ground",
-  Nautical = "nautical",
-  Space = "space",
+  Air = 'air',
+  Ground = 'ground',
+  Nautical = 'nautical',
+  Space = 'space',
 }
 
 export const fieldSkillInfo: Readonly<Record<
@@ -240,11 +240,11 @@ export const fieldSkillInfo: Readonly<Record<
 };
 
 export const allSampleFields = Object.values(fieldSkillInfo).flatMap(
-  ({ sampleFields }) => sampleFields || []
+  ({ sampleFields }) => sampleFields || [],
 );
 
 export const isFieldSkill = (skill: Skill): skill is FullFieldSkill => {
-  return "fieldSkill" in skill;
+  return 'fieldSkill' in skill;
 };
 
 type SkillFilterData = {
@@ -254,14 +254,14 @@ type SkillFilterData = {
 };
 
 export const skillFilterCheck = (filter: string) => {
-  const reg = new RegExp(filter, "i");
+  const reg = new RegExp(filter, 'i');
   return ({ fullName, category, linkedAptitude }: SkillFilterData) =>
     !reg.test(
       compact([
         fullName,
         localize(category),
-        linkedAptitude ? localize("FULL", linkedAptitude) : "",
-      ]).join("__")
+        linkedAptitude ? localize('FULL', linkedAptitude) : '',
+      ]).join('__'),
     );
 };
 
@@ -303,7 +303,7 @@ export const fieldSkillName = ({ fieldSkill, field }: FieldSkillIdentifier) => {
 
 export const setupFullSkill = (
   skillData: SkillData & { skill: SkillType },
-  aptitudes: Aptitudes
+  aptitudes: Aptitudes,
 ): FullSkill => {
   const data = { ...skillData, ...skillInfo[skillData.skill] };
   return {
@@ -327,7 +327,7 @@ export const setupFullSkill = (
 
 export const setupFullFieldSkill = (
   fieldData: FieldSkillData & { fieldSkill: FieldSkillType },
-  aptitudes: Aptitudes
+  aptitudes: Aptitudes,
 ): FullFieldSkill => {
   return {
     ...fieldData,
@@ -339,7 +339,7 @@ export const setupFullFieldSkill = (
     }),
     get nameWithoutFieldType() {
       return `${this.field} ${
-        this.specialization ? `(${this.specialization})` : ""
+        this.specialization ? `(${this.specialization})` : ''
       }`;
     },
     get aptBonus(): number {

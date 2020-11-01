@@ -1,41 +1,46 @@
-import { AptitudeType } from "@src/data-enums";
-import { localize } from "@src/foundry/localization";
-import { uniq, createPipe, map } from "remeda";
-import type { ActionType, ActionSubtype } from "./actions";
-import { createFeature } from "./feature-helpers";
-import { RepNetwork } from "./reputations";
-import { SkillType, FieldSkillType, ActiveSkillCategory, KnowSkillCategory, fieldSkillName } from "./skills";
+import { AptitudeType } from '@src/data-enums';
+import { localize } from '@src/foundry/localization';
+import { uniq, createPipe, map } from 'remeda';
+import type { ActionType, ActionSubtype } from './actions';
+import { createFeature } from './feature-helpers';
+import { RepNetwork } from './reputations';
+import {
+  SkillType,
+  FieldSkillType,
+  ActiveSkillCategory,
+  KnowSkillCategory,
+  fieldSkillName,
+} from './skills';
 
 export enum TagType {
-  AllActions = "allActions",
-  Action = "action",
-  AptitudeChecks = "aptitudeCheck",
-  LinkedAptitude = "linkedAptitude",
-  Skill = "skill",
-  FieldSkill = "fieldSkill",
-  SkillCategory = "skillCategory",
-  Rep = "rep",
-  Special = "special",
+  AllActions = 'allActions',
+  Action = 'action',
+  AptitudeChecks = 'aptitudeCheck',
+  LinkedAptitude = 'linkedAptitude',
+  Skill = 'skill',
+  FieldSkill = 'fieldSkill',
+  SkillCategory = 'skillCategory',
+  Rep = 'rep',
+  Special = 'special',
 }
 
 export enum SpecialTest {
-  Integration = "integration",
-  ResleevingStress = "resleevingStress",
-  ResistSubstance = "resistSubstanceOrDisease",
-  PainResistance = "painResistance",
-  ResistInfection = "resistInfection",
-  Pain = "pain",
-  Shock = "shock",
+  Integration = 'integration',
+  ResleevingStress = 'resleevingStress',
+  ResistSubstance = 'resistSubstanceOrDisease',
+  PainResistance = 'painResistance',
+  ResistInfection = 'resistInfection',
+  Pain = 'pain',
+  Shock = 'shock',
 }
-
 
 export type UniversalTag = {
   type: TagType.AllActions;
 };
 export type ActionTag = {
   type: TagType.Action;
-  action: ActionType | "";
-  subtype: ActionSubtype | "";
+  action: ActionType | '';
+  subtype: ActionSubtype | '';
 };
 export type ChecksTag = {
   type: TagType.AptitudeChecks;
@@ -83,8 +88,8 @@ const allActions = createFeature<UniversalTag>(() => ({
 }));
 const action = createFeature<ActionTag>(() => ({
   type: TagType.Action,
-  action: "",
-  subtype: "",
+  action: '',
+  subtype: '',
 }));
 
 const aptitudeCheck = createFeature<ChecksTag>(() => ({
@@ -105,7 +110,7 @@ const skill = createFeature<SkillTag>(() => ({
 const fieldSkill = createFeature<FieldSkillTag>(() => ({
   type: TagType.FieldSkill,
   fieldSkill: FieldSkillType.Exotic,
-  field: "",
+  field: '',
 }));
 
 const skillCategory = createFeature<SkillCategoryTag>(() => ({
@@ -139,42 +144,42 @@ export const formatTag = (tag: Tag) => {
   switch (tag.type) {
     case TagType.Action:
       return `${uniq([
-        localize(tag.subtype ? tag.subtype : "all"),
-        localize(tag.action ? tag.action : "all"),
-      ]).join(" ")} ${localize("actions")}`;
+        localize(tag.subtype ? tag.subtype : 'all'),
+        localize(tag.action ? tag.action : 'all'),
+      ]).join(' ')} ${localize('actions')}`;
 
     case TagType.AptitudeChecks:
-      return `${localize(tag.aptitude)} ${localize("checks")}`;
+      return `${localize(tag.aptitude)} ${localize('checks')}`;
 
     case TagType.AllActions:
-      return localize("allActions");
+      return localize('allActions');
 
     case TagType.LinkedAptitude:
-      return `${localize("linkedAptitude")} ${localize(
-        tag.aptitude
-      )} ${localize("skillTests")}`;
+      return `${localize('linkedAptitude')} ${localize(
+        tag.aptitude,
+      )} ${localize('skillTests')}`;
 
     case TagType.Skill:
-      return `${localize(tag.skillType)} ${localize("tests")}`;
+      return `${localize(tag.skillType)} ${localize('tests')}`;
 
     case TagType.FieldSkill:
       return `${
         tag.field ? fieldSkillName(tag) : localize(tag.fieldSkill)
-      } ${localize("tests")}`;
+      } ${localize('tests')}`;
 
     case TagType.SkillCategory:
-      return `${localize(tag.category)} ${localize("skills")}`;
+      return `${localize(tag.category)} ${localize('skills')}`;
 
     case TagType.Rep:
       return localize(tag.network);
 
     case TagType.Special:
-      return `${localize(tag.test)} ${localize("tests")}`;
+      return `${localize(tag.test)} ${localize('tests')}`;
   }
 };
 
 export const formatEffectTags = createPipe(map(formatTag), (formatted) =>
-  formatted.join(", ").replace(/,([^,]*)$/, " /$1")
+  formatted.join(', ').replace(/,([^,]*)$/, ' /$1'),
 );
 
 //   formatted.join(", ").replace(/,([^,]*)$/, " and $1")

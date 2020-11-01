@@ -7,9 +7,7 @@
 
 :host {
   display: block;
-  
 }
-
 
 @keyframes zoom {
   from {
@@ -33,7 +31,7 @@
 }
 
 @mixin arrow($placement) {
-  @include triangle($placement, var(--_triangle-offset), "out", 10px);
+  @include triangle($placement, var(--_triangle-offset), 'out', 10px);
 
   &::after {
     @if $placement == top {
@@ -70,7 +68,6 @@
     background: lightv(var(--color-bg), 1.3);
     border-radius: 5px;
     padding: 1rem 1.618rem;
-
   }
 
   &.unpadded {

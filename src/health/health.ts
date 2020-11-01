@@ -1,6 +1,6 @@
-import type { Abbreviation } from "@src/foundry/lang-schema";
-import { LangEntry, localize } from "@src/foundry/localization";
-import type { ValuedProp } from "@src/utility/field-values";
+import type { Abbreviation } from '@src/foundry/lang-schema';
+import { LangEntry, localize } from '@src/foundry/localization';
+import type { ValuedProp } from '@src/utility/field-values';
 
 type HealthProp<T extends LangEntry | Abbreviation> = ValuedProp<number, T>;
 
@@ -16,32 +16,32 @@ export type BasicHealthData = {
 };
 
 export enum HealthType {
-  Mental = "mental",
-  Mesh = "mesh",
-  Physical = "physical",
+  Mental = 'mental',
+  Mesh = 'mesh',
+  Physical = 'physical',
 }
 
 export enum PhysicalHealthSubtype {
-  Bio = "bio",
-  Synth = "synth",
+  Bio = 'bio',
+  Synth = 'synth',
 }
 
 export enum HealthStat {
-  Derived = "derived",
-  Durability = "durability",
-  WoundsIgnored = "woundsIgnored",
-  WoundModifier = "woundModifier",
-  WoundThreshold = "woundThreshold",
-  DeathRating = "deathRating",
+  Derived = 'derived',
+  Durability = 'durability',
+  WoundsIgnored = 'woundsIgnored',
+  WoundModifier = 'woundModifier',
+  WoundThreshold = 'woundThreshold',
+  DeathRating = 'deathRating',
 }
 
 export const mentalHealthStats = {
-  [HealthStat.Derived]: "derived",
-  [HealthStat.Durability]: "lucidity",
-  [HealthStat.WoundsIgnored]: "traumasIgnored",
-  [HealthStat.WoundModifier]: "traumaModifier",
-  [HealthStat.WoundThreshold]: "traumaThreshold",
-  [HealthStat.DeathRating]: "insanityRating",
+  [HealthStat.Derived]: 'derived',
+  [HealthStat.Durability]: 'lucidity',
+  [HealthStat.WoundsIgnored]: 'traumasIgnored',
+  [HealthStat.WoundModifier]: 'traumaModifier',
+  [HealthStat.WoundThreshold]: 'traumaThreshold',
+  [HealthStat.DeathRating]: 'insanityRating',
 } as const;
 
 export type HealthMain = {
@@ -70,12 +70,12 @@ export type CommonHealth = {
 export const formatDamageType = (type: HealthType) => {
   switch (type) {
     case HealthType.Mental:
-      return localize("SHORT", "stressValue");
+      return localize('SHORT', 'stressValue');
     case HealthType.Mesh:
-      return `${localize("mesh")} ${localize("SHORT", "damageValue")}`;
+      return `${localize('mesh')} ${localize('SHORT', 'damageValue')}`;
 
     case HealthType.Physical:
-      return `${localize("SHORT", "damageValue")}`;
+      return `${localize('SHORT', 'damageValue')}`;
   }
 };
 

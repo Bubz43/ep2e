@@ -7,7 +7,7 @@
 
 :host {
   display: block;
-  ::slotted([slot="info"]) {
+  ::slotted([slot='info']) {
     flex: 1;
     display: grid;
     grid-auto-flow: column;
@@ -15,7 +15,6 @@
     justify-content: end;
     gap: 1rem;
   }
-  
 }
 
 :host([open]) {
@@ -74,4 +73,3 @@
   background: var(--details-content-bg);
   overflow: hidden;
 }
-

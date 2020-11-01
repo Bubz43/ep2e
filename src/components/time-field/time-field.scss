@@ -3,7 +3,6 @@
 
 @include widgetless-number-inputs;
 
-
 * {
   box-sizing: border-box;
 }
@@ -21,7 +20,6 @@
   opacity: 0.6;
   pointer-events: none;
 }
-
 
 :host(:focus-within),
 :host(:hover) {
@@ -114,8 +112,8 @@ sl-form {
   bottom: 0;
   pointer-events: none;
   line-height: initial;
-  font-family: var(--font-1);;
-  @include truncate(100%)
+  font-family: var(--font-1);
+  @include truncate(100%);
 }
 
 .label {
@@ -179,7 +177,7 @@ footer {
 
   &::before,
   &::after {
-    content: "";
+    content: '';
     display: block;
     position: absolute;
     top: 2px;

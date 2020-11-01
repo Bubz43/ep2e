@@ -1,23 +1,23 @@
-import { enumValues } from "@src/data-enums";
-import type { ActorType } from "@src/entities/entity-types";
-import { localize } from "@src/foundry/localization";
-import { nonNegative, notEmpty } from "@src/utility/helpers";
-import { localImage } from "@src/utility/images";
-import { clamp, pipe } from "remeda";
-import { ActionSubtype } from "./actions";
+import { enumValues } from '@src/data-enums';
+import type { ActorType } from '@src/entities/entity-types';
+import { localize } from '@src/foundry/localization';
+import { nonNegative, notEmpty } from '@src/utility/helpers';
+import { localImage } from '@src/utility/images';
+import { clamp, pipe } from 'remeda';
+import { ActionSubtype } from './actions';
 
 export enum ArmorType {
-  Energy = "energy",
-  Kinetic = "kinetic",
-  Mental = "mental",
-  Mesh = "mesh",
+  Energy = 'energy',
+  Kinetic = 'kinetic',
+  Mental = 'mental',
+  Mesh = 'mesh',
 }
 
-type ArmorKey = ArmorType | "layers";
+type ArmorKey = ArmorType | 'layers';
 
 export type ReadonlyArmor = Omit<
   ActiveArmor,
-  "setupArmors" | "set" | "delete" | "clear"
+  'setupArmors' | 'set' | 'delete' | 'clear'
 >;
 
 export class ActiveArmor extends Map<ArmorKey, number> {
@@ -46,7 +46,7 @@ export class ActiveArmor extends Map<ArmorKey, number> {
   }
 
   get excessLayers() {
-    return clamp(this.get("layers") - 1, { min: 0 });
+    return clamp(this.get('layers') - 1, { min: 0 });
   }
 
   get highestPhysicalArmor() {
@@ -61,7 +61,7 @@ export class ActiveArmor extends Map<ArmorKey, number> {
   }
 
   private incrementLayers() {
-    return this.set("layers", this.get("layers") + 1);
+    return this.set('layers', this.get('layers') + 1);
   }
 
   private addValue(armor: ArmorType, value: number) {
@@ -69,7 +69,7 @@ export class ActiveArmor extends Map<ArmorKey, number> {
   }
 
   addInherentShellArmor(
-    inherent: Record<ArmorType.Energy | ArmorType.Kinetic, number>
+    inherent: Record<ArmorType.Energy | ArmorType.Kinetic, number>,
   ) {
     this.incrementLayers();
     for (const type of [ArmorType.Energy, ArmorType.Kinetic] as const) {
@@ -165,14 +165,16 @@ export class ActiveArmor extends Map<ArmorKey, number> {
   //     effectsFromArmor.push(this.#overburdened);
   //   }
   //   // TODO Encumbered
-    
+
   //   return effectsFromArmor;
   // }
 
   get icon() {
-    return localImage(`images/icons/armor/${
-      this.excessLayers ? "layered-armor" : "shield"
-    }.svg`);
+    return localImage(
+      `images/icons/armor/${
+        this.excessLayers ? 'layered-armor' : 'shield'
+      }.svg`,
+    );
   }
 
   static physicalTypes = [ArmorType.Energy, ArmorType.Kinetic];
@@ -182,7 +184,7 @@ export class ActiveArmor extends Map<ArmorKey, number> {
       this.positiveArmorSources.has(type) ||
       ActiveArmor.physicalTypes.includes(type) === physical
         ? { type, value: this.get(type) }
-        : []
+        : [],
     );
   }
 }

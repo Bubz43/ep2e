@@ -1,8 +1,8 @@
 export enum ActorType {
-  Character = "character",
-  SyntheticShell = "syntheticShell",
-  Infomorph = "infomorph",
-  Biological = "biological",
+  Character = 'character',
+  SyntheticShell = 'syntheticShell',
+  Infomorph = 'infomorph',
+  Biological = 'biological',
 }
 
 export const sleeveTypes = [
@@ -12,23 +12,23 @@ export const sleeveTypes = [
 ] as const;
 
 export enum ItemType {
-  PhysicalTech = "physicalTech",
-  Trait = "trait",
-  Armor = "armor",
-  Psi = "psi",
-  Sleight = "sleight",
-  Substance = "substance",
-  Explosive = "explosive",
-  Software = "software",
-  MeleeWeapon = "meleeWeapon",
-  BeamWeapon = "beamWeapon",
-  Railgun = "railgun",
-  PhysicalService = "physicalService",
-  Firearm = "firearm",
-  FirearmAmmo = "firearmAmmo",
-  SprayWeapon = "sprayWeapon",
-  SeekerWeapon = "seekerWeapon",
-  ThrownWeapon = "thrownWeapon"
+  PhysicalTech = 'physicalTech',
+  Trait = 'trait',
+  Armor = 'armor',
+  Psi = 'psi',
+  Sleight = 'sleight',
+  Substance = 'substance',
+  Explosive = 'explosive',
+  Software = 'software',
+  MeleeWeapon = 'meleeWeapon',
+  BeamWeapon = 'beamWeapon',
+  Railgun = 'railgun',
+  PhysicalService = 'physicalService',
+  Firearm = 'firearm',
+  FirearmAmmo = 'firearmAmmo',
+  SprayWeapon = 'sprayWeapon',
+  SeekerWeapon = 'seekerWeapon',
+  ThrownWeapon = 'thrownWeapon',
 }
 
 export const equippableItemTypes = [
@@ -40,7 +40,7 @@ export const equippableItemTypes = [
   ItemType.Railgun,
   ItemType.Firearm,
   ItemType.SprayWeapon,
-  ItemType.SeekerWeapon
+  ItemType.SeekerWeapon,
 ] as const;
 
 export const inventoryItemTypes = [
@@ -48,5 +48,5 @@ export const inventoryItemTypes = [
   ItemType.Substance,
   ItemType.Explosive,
   ItemType.FirearmAmmo,
-  ItemType.ThrownWeapon
+  ItemType.ThrownWeapon,
 ] as const;

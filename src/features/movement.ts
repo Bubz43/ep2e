@@ -1,32 +1,32 @@
-import { localize } from "@src/foundry/localization";
-import { map, identity } from "remeda";
-import { createFeature } from "./feature-helpers";
-import { FieldSkillType, SkillType, CommonPilotField } from "./skills";
+import { localize } from '@src/foundry/localization';
+import { map, identity } from 'remeda';
+import { createFeature } from './feature-helpers';
+import { FieldSkillType, SkillType, CommonPilotField } from './skills';
 
 export enum Movement {
-  Boat = "boat",
-  Hopper = "hopper",
-  Hover = "hover",
-  Ionic = "ionic",
-  Microlight = "microlight",
-  Roller = "roller",
-  Rotor = "rotor",
-  Snake = "snake",
-  Submarine = "submarine",
-  Swimmer = "swimmer",
-  ThrustVector = "thrustVector",
-  Tracked = "tracked",
-  Walker = "walker",
-  Wheeled = "wheeled",
-  Winged = "winged",
+  Boat = 'boat',
+  Hopper = 'hopper',
+  Hover = 'hover',
+  Ionic = 'ionic',
+  Microlight = 'microlight',
+  Roller = 'roller',
+  Rotor = 'rotor',
+  Snake = 'snake',
+  Submarine = 'submarine',
+  Swimmer = 'swimmer',
+  ThrustVector = 'thrustVector',
+  Tracked = 'tracked',
+  Walker = 'walker',
+  Wheeled = 'wheeled',
+  Winged = 'winged',
 }
 
 export enum MovementRange {
-  VerySlow = "verySlow",
-  Slow = "slow",
-  Medium = "medium",
-  Fast = "fast",
-  VeryFast = "veryFast",
+  VerySlow = 'verySlow',
+  Slow = 'slow',
+  Medium = 'medium',
+  Fast = 'fast',
+  VeryFast = 'veryFast',
 }
 
 export const movementRangeSpeeds = {
@@ -39,14 +39,14 @@ export const movementRangeSpeeds = {
 
 export const getMovementSpeed = (range: MovementRange) => {
   const { base, full } = movementRangeSpeeds[range];
-  return [base, full].join(" / ");
+  return [base, full].join(' / ');
 };
 
 export const getMovementSkill = (movement: Movement) => {
   const piloted = pilotMovementTypes.get(movement);
   return piloted
     ? `${localize(FieldSkillType.Pilot)}: ${localize(piloted)}`
-    : map([SkillType.Athletics, SkillType.FreeFall], localize).join("|");
+    : map([SkillType.Athletics, SkillType.FreeFall], localize).join('|');
 };
 
 export const pilotMovementTypes: ReadonlyMap<
@@ -69,9 +69,10 @@ export type MovementRate = {
   range: MovementRange;
 };
 
-export const createMovementRate = createFeature<MovementRate, keyof MovementRate>(
-  identity
-);
+export const createMovementRate = createFeature<
+  MovementRate,
+  keyof MovementRate
+>(identity);
 
 export const defaultMovement = createMovementRate({
   type: Movement.Walker,

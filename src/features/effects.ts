@@ -1,30 +1,35 @@
-import type { PoolType, PoolEffectUsability, RechargeType, AptitudeType } from "@src/data-enums";
-import type { HealthType, HealthStat } from "@src/health/health";
-import type { HealthTick, DotOrHotTarget } from "@src/health/recovery";
-import type { ActionSubtype } from "./actions";
-import type { ArmorType } from "./armor";
-import type { SkillType, FieldSkillType } from "./skills";
-import type { Tag } from "./tags";
+import type {
+  PoolType,
+  PoolEffectUsability,
+  RechargeType,
+  AptitudeType,
+} from '@src/data-enums';
+import type { HealthType, HealthStat } from '@src/health/health';
+import type { HealthTick, DotOrHotTarget } from '@src/health/recovery';
+import type { ActionSubtype } from './actions';
+import type { ArmorType } from './armor';
+import type { SkillType, FieldSkillType } from './skills';
+import type { Tag } from './tags';
 
 export enum UniqueEffectType {
-  NoFlipFlop = "noFlipFlop",
-  AllowRemoteControl = "allowRemoteControl",
-  Modular = "modular",
+  NoFlipFlop = 'noFlipFlop',
+  AllowRemoteControl = 'allowRemoteControl',
+  Modular = 'modular',
 }
 
 export enum EffectType {
-  Initiative = "initiative",
-  Pool = "pool",
-  Misc = "misc",
-  SuccessTest = "successTest",
-  Health = "health",
-  HealthRecovery = "healthRecovery",
-  Armor = "armor",
-  Recharge = "recharge",
-  Duration = "duration",
-  Melee = "melee",
-  Ranged = "ranged",
-  Skill = "skill",
+  Initiative = 'initiative',
+  Pool = 'pool',
+  Misc = 'misc',
+  SuccessTest = 'successTest',
+  Health = 'health',
+  HealthRecovery = 'healthRecovery',
+  Armor = 'armor',
+  Recharge = 'recharge',
+  Duration = 'duration',
+  Melee = 'melee',
+  Ranged = 'ranged',
+  Skill = 'skill',
   // TODO Unique Toggles (disable distracted, no flip-flop)
   // TODO Vision MISC
   // TODO Limb / add extra/convert existing to prehensile
@@ -40,7 +45,7 @@ export type PoolEffect = {
   type: EffectType.Pool;
   pool: Exclude<PoolType, PoolType.Threat>;
   modifier: number;
-  usabilityModification: "" | PoolEffectUsability;
+  usabilityModification: '' | PoolEffectUsability;
 };
 
 export type SuccessTestEffect = {
@@ -53,7 +58,7 @@ export type SuccessTestEffect = {
 
 export type MiscEffect = {
   type: EffectType.Misc;
-  unique: "" | UniqueEffectType;
+  unique: '' | UniqueEffectType;
   description: string;
 };
 
@@ -76,7 +81,7 @@ export type RangedEffect = {
 
 export type HealthRecoveryEffect = Omit<
   HealthTick,
-  "lastUnaidedTick" | "lastAidedTick"
+  'lastUnaidedTick' | 'lastAidedTick'
 > & {
   stat: DotOrHotTarget;
   technologicallyAided: boolean;
@@ -92,14 +97,14 @@ export type DurationEffect = {
   type: EffectType.Duration;
   subtype: DurationEffectTarget;
   modifier: number;
-  taskType: ActionSubtype | "";
+  taskType: ActionSubtype | '';
   halve: boolean;
 };
 
 export enum RechargeStat {
-  MaxUses = "maxUses",
-  Duration = "duration",
-  PoolsRecovered = "poolsRecovered",
+  MaxUses = 'maxUses',
+  Duration = 'duration',
+  PoolsRecovered = 'poolsRecovered',
 }
 
 export type RechargeEffect = {
@@ -110,10 +115,10 @@ export type RechargeEffect = {
 };
 
 export enum DurationEffectTarget {
-  EffectDuration = "effectDuration",
-  TaskActionTimeframe = "taskActionTimeframe",
-  Drugs = "drugOrToxin",
-  HealingTimeframes = "healingTimeframes",
+  EffectDuration = 'effectDuration',
+  TaskActionTimeframe = 'taskActionTimeframe',
+  Drugs = 'drugOrToxin',
+  HealingTimeframes = 'healingTimeframes',
 }
 
 export type SkillEffect = {

@@ -1,16 +1,21 @@
-import { customElement, LitElement, property, html, TemplateResult } from "lit-element";
-import { render } from "lit-html";
-import { NanoPopPosition, reposition } from "nanopop";
-import { addListener } from "weightless";
-import styles from "./tooltip.scss";
+import {
+  customElement,
+  LitElement,
+  property,
+  html,
+  TemplateResult,
+} from 'lit-element';
+import { render } from 'lit-html';
+import { NanoPopPosition, reposition } from 'nanopop';
+import { addListener } from 'weightless';
+import styles from './tooltip.scss';
 
-const leaveEvents = ["mouseleave", "blur"];
+const leaveEvents = ['mouseleave', 'blur'];
 
-
-@customElement("sl-tooltip")
+@customElement('sl-tooltip')
 export class ToolTip extends LitElement {
   static get is() {
-    return "sl-tooltip" as const;
+    return 'sl-tooltip' as const;
   }
 
   static styles = [styles];
@@ -24,15 +29,15 @@ export class ToolTip extends LitElement {
   private interactable = false;
 
   firstUpdated() {
-    this.addEventListener("mouseleave", () => {
-      if (!this.attachedEl?.matches(":hover")) this.detach(true);
+    this.addEventListener('mouseleave', () => {
+      if (!this.attachedEl?.matches(':hover')) this.detach(true);
     });
   }
 
   attach({
     el,
     content,
-    position = "top-start",
+    position = 'top-start',
     interactable = false,
   }: {
     el: HTMLElement;
@@ -47,13 +52,13 @@ export class ToolTip extends LitElement {
     render(content, this);
     this.visible = true;
     requestAnimationFrame(() =>
-      reposition(el, this, { position, margin: interactable ? 0 : 4 })
+      reposition(el, this, { position, margin: interactable ? 0 : 4 }),
     );
     this.listenerUnsub = addListener(el, leaveEvents, this.checkRemove);
   }
 
   checkRemove = () => {
-    if (this.interactable ? !this.matches(":hover") : true) this.detach(true);
+    if (this.interactable ? !this.matches(':hover') : true) this.detach(true);
   };
 
   detach(hide: boolean) {
@@ -69,6 +74,6 @@ export class ToolTip extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "sl-tooltip": ToolTip;
+    'sl-tooltip': ToolTip;
   }
 }

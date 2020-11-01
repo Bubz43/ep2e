@@ -1,24 +1,24 @@
-import { clamp } from "remeda";
-import { createFeature, StringID } from "./feature-helpers";
-import { CommonInterval, toMilliseconds } from "./time";
+import { clamp } from 'remeda';
+import { createFeature, StringID } from './feature-helpers';
+import { CommonInterval, toMilliseconds } from './time';
 
 export enum Favor {
-  Trivial = "trivial",
-  Minor = "minor",
-  Moderate = "moderate",
-  Major = "major",
+  Trivial = 'trivial',
+  Minor = 'minor',
+  Moderate = 'moderate',
+  Major = 'major',
 }
 
 export type ConsumableFavor = Exclude<Favor, Favor.Trivial>;
 
 export enum RepNetwork {
-  Anarchist = "@Rep",
-  Civic = "cRep",
-  Fame = "fRep",
-  Guanxi = "gRep",
-  Eye = "iRep",
-  Research = "rRep",
-  Explore = "xRep",
+  Anarchist = '@Rep',
+  Civic = 'cRep',
+  Fame = 'fRep',
+  Guanxi = 'gRep',
+  Eye = 'iRep',
+  Research = 'rRep',
+  Explore = 'xRep',
 }
 
 export type RepData = {
@@ -37,7 +37,7 @@ export type RepBase = {
 
 export type RepWithIdentifier = RepBase & { identifier: RepIdentifier };
 
-export const createRep = createFeature<RepBase, "acronym" | "network">(() => ({
+export const createRep = createFeature<RepBase, 'acronym' | 'network'>(() => ({
   score: 10,
   refreshTimer: 0,
   [Favor.Minor]: 0,
@@ -53,7 +53,7 @@ export const repRefreshTimerActive = ({
 
 export const refreshRep = (
   refreshTimer: number,
-  advance: number
+  advance: number,
 ): Partial<RepData> => {
   const advancedTimer = refreshTimer + advance;
   return advancedTimer >= CommonInterval.Week

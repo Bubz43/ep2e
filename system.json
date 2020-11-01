@@ -7,6 +7,14 @@
   "esmodules": [
     "./build/_dist_/index.js"
   ],
+  "styles": [
+    "./build/_dist_/global.css"
+  ],
+  "compatibleCoreVersion": "0.7.5",
+  "gridDistance": 1,
+  "gridUnits": "m",
+  "minimumCoreVersion": "0.7.5",
+  "socket": true,
   "packs": [
     {
       "name": "beam-weapons",
@@ -57,13 +65,5 @@
       "name": "English",
       "path": "lang/en.json"
     }
-  ],
-  "styles": [
-    "./build/_dist_/global.css"
-  ],
-  "compatibleCoreVersion": "0.7.5",
-  "gridDistance": 1,
-  "gridUnits": "m",
-  "minimumCoreVersion": "0.7.5",
-  "socket": true
+  ]
 }

@@ -1,12 +1,12 @@
 export enum DotOrHotTarget {
-  Damage = "damage",
-  Wound = "wound",
+  Damage = 'damage',
+  Wound = 'wound',
 }
 
 export enum RecoveryConditions {
-  Normal = "normal",
-  Poor = "poor",
-  Harsh = "harsh",
+  Normal = 'normal',
+  Poor = 'poor',
+  Harsh = 'harsh',
 }
 
 export type HealthTick = {

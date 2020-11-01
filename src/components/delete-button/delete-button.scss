@@ -5,7 +5,6 @@
   box-sizing: border-box;
 }
 
-
 :host {
   display: block;
   padding: 3px 1px !important;
@@ -14,7 +13,6 @@
   --mdc-icon-button-size: 32px;
   --mdc-icon-size: 22px;
 }
-
 
 :host([confirm]) {
   wl-list-item {
@@ -33,7 +31,6 @@
 
 div {
   position: relative;
-
 }
 
 wl-list-item {

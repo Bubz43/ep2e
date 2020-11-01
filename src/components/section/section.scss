@@ -7,7 +7,7 @@
 
 :host {
   display: block;
-  ::slotted([slot="control"]:last-of-type) {
+  ::slotted([slot='control']:last-of-type) {
     margin-right: 1rem;
   }
 }
@@ -40,7 +40,6 @@ h2 {
   font-family: Spartan;
   font-weight: normal;
 }
-
 
 .content {
   border-top: 2px solid;
