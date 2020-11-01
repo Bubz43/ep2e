@@ -11,8 +11,6 @@
 @use "scss/controls";
 @use "scss/players";
 
-
-
 @include mixins.styled-scrollbars;
 @include mixins.widgetless-number-inputs;
 
@@ -27,7 +25,7 @@ li[divider] {
   border-color: alphav(var(--color-border), 0.5);
   margin: 0.25rem 0;
 }
-[slot="graphic"] {
+[slot='graphic'] {
   color: currentColor;
 }
 
@@ -45,7 +43,7 @@ mwc-menu {
   mwc-list-item[noninteractive]:not([graphic]):not([twoline]) {
     height: var(--mdc-menu-item-height);
   }
-  [slot="graphic"] {
+  [slot='graphic'] {
     border-radius: 4px;
   }
 }
@@ -98,14 +96,11 @@ code.formula {
     .effect-control {
       transition: all 100ms;
       &:not(.active).overlay {
-        opacity: 0.5;; 
+        opacity: 0.5;
       }
     }
   }
 }
-
-
-
 
 table {
   border-color: var(--color-border);
@@ -233,7 +228,6 @@ table {
   background: var(--color-primary);
 }
 
-
 #navigation {
   // position: relative;
   // top: unset;
@@ -307,7 +301,7 @@ table {
         background: linear-gradient(
           to right,
           var(--color-bg),
-          var(--color-bg-alt),
+          var(--color-bg-alt)
         );
       }
     }
@@ -317,10 +311,7 @@ table {
     pointer-events: initial;
     min-width: max-content;
   }
-
 }
-
-
 
 .quick-test-popover {
   // display: grid;
@@ -370,7 +361,7 @@ table {
   }
 }
 
-sl-tooltip { 
+sl-tooltip {
   .dice-tooltip {
     padding: 0.25rem;
     display: block;
@@ -408,8 +399,8 @@ sl-tooltip {
   .entity {
     display: grid;
     grid-template-areas:
-      "img name"
-      "img type";
+      'img name'
+      'img type';
     line-height: 16px;
     padding: 2px;
     border: none;
@@ -437,13 +428,13 @@ sl-tooltip {
       opacity: 0.8;
       align-self: start;
     }
-    &[style="display: flex;"] {
+    &[style='display: flex;'] {
       display: grid !important;
     }
     &.item {
       img {
-        &[src="icons/svg/mystery-man.svg"],
-        &[data-src="icons/svg/mystery-man.svg"] {
+        &[src='icons/svg/mystery-man.svg'],
+        &[data-src='icons/svg/mystery-man.svg'] {
           // display: none;
           opacity: 0.1;
         }
@@ -454,7 +445,7 @@ sl-tooltip {
 
 .directory-header {
   padding: 0 0.5rem;
-  input[name="search"] {
+  input[name='search'] {
     color: black;
     &:focus {
       outline: solid var(--color-secondary);

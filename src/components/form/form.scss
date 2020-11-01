@@ -1,8 +1,16 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
 * {
   box-sizing: border-box;
 }
 
 :host {
-  display: block;
-  
+  display: grid;
+  grid-auto-rows: min-content;
+  ::slotted([slot='submit']) {
+    margin-top: 0.5rem;
+    width: 100%;
+    grid-column: 1 / -1;
+  }
 }
