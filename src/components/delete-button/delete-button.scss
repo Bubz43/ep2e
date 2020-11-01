@@ -1,0 +1,58 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+
+:host {
+  display: block;
+  padding: 3px 1px !important;
+  height: max-content;
+  width: max-content;
+  --mdc-icon-button-size: 32px;
+  --mdc-icon-size: 22px;
+}
+
+
+:host([confirm]) {
+  wl-list-item {
+    // @include animate-css(fadeOut, 100ms);
+    pointer-events: none;
+    transform: scale(0);
+  }
+  mwc-icon-button {
+    opacity: 1;
+    pointer-events: initial;
+    cursor: pointer;
+    z-index: 1;
+    filter: brightness(1.5);
+  }
+}
+
+div {
+  position: relative;
+
+}
+
+wl-list-item {
+  padding: 2px;
+  color: var(--color-text-lighter);
+  transition: all 100ms ease-in-out;
+  // transition: transform
+}
+
+mwc-icon-button {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease-in-out;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--color-negative);
+  border-radius: 100%;
+  background: var(--color-bg);
+  box-shadow: 0 0 4px var(--color-negative);
+}
