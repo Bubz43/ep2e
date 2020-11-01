@@ -1,0 +1,12 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  background: var(--drag-bg, var(--dropzone-bg));
+  transition: background 200ms;
+}

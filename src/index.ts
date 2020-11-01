@@ -31,6 +31,7 @@ import { AnimatedList } from './components/animated-list/animated-list';
 import { DateField } from './components/date-field/date-field';
 import { DeleteButton } from './components/delete-button/delete-button';
 import { Details } from './components/details/details';
+import { DropZone } from './components/dropzone/dropzone';
 
 // My Components
 Field;
@@ -39,6 +40,7 @@ AnimatedList;
 DateField;
 DeleteButton;
 Details;
+DropZone;
 
 const link = document.createElement('link');
 link.rel = 'stylesheet';
