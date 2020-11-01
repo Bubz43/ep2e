@@ -1,9 +1,9 @@
-import type { LitElement } from "lit-element";
-import type { Class } from "type-fest";
+import type { LitElement } from 'lit-element';
+import type { Class } from 'type-fest';
 import {
   EventListenerSubscription,
   removeListeners,
-} from "weightless/util/event";
+} from 'weightless/util/event';
 
 export const ListenerSubscription = (Base: Class<LitElement>) => {
   return class ListenerSubscription extends Base {

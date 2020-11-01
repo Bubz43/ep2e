@@ -1,0 +1,69 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+
+:host {
+  display: block;
+  position: absolute;
+  bottom: 175px;
+  right: 370px;
+}
+
+// ::-webkit-scrollbar {
+//   width: 0px !important;
+// }
+
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  height: 100px;
+  // pointer-events: none;
+  width: 300px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  display: flex;
+  flex-flow: column;
+  justify-content: flex-end;
+  // scrollbar-width: none !important;;
+  // ::-webkit-scrollbar {
+  //   width: 0px !important;
+  // }
+}
+
+@keyframes fadeOut {
+  75% {
+    opacity: 1;
+    background: alphav(var(--color-bg), 0.7);
+  }
+  100% {
+    opacity: 0.5;
+    background: transparent;
+  }
+}
+
+li {
+  animation: fadeOut 2s;
+  pointer-events: initial;
+  font-size: 14px;
+  background: alphav(var(--color-bg), 0.7);
+  margin-left: auto;
+  &:not(.scroll-target) {
+    padding: 0.25rem 0.5rem;
+  }
+  &.animated {
+    opacity: 0.5;
+    transition: all 200ms;
+    background: transparent;
+    // @include truncate(200px);
+  }
+  &:hover {
+    opacity: 1 !important;
+    background: alphav(var(--color-bg), 0.7);
+
+  }
+}

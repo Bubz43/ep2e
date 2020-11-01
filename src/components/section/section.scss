@@ -1,0 +1,52 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  ::slotted([slot="control"]:last-of-type) {
+    margin-right: 1rem;
+  }
+}
+
+header {
+  display: flex;
+  max-height: 24px;
+  align-items: center;
+}
+
+:host([flipped]) {
+  header {
+    flex-flow: row-reverse;
+  }
+  h2 {
+    text-align: left;
+  }
+}
+
+h2 {
+  text-transform: uppercase;
+  text-align: right;
+  font-size: 1.25rem;
+  transform: translateY(0.3rem);
+  letter-spacing: 1px;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+  font-family: Spartan;
+  font-weight: normal;
+}
+
+
+.content {
+  border-top: 2px solid;
+  border-bottom: 2px solid;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-left: 1px inset;
+  border-color: alphav(var(--color-primary), 0.7);
+}

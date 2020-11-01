@@ -1,15 +1,22 @@
-import type { CircularProgress } from "@material/mwc-circular-progress";
-import type { UpdateActions } from "@src/entities/update-store";
-import { localize } from "@src/foundry/localization";
-import { customElement, LitElement, property, html, PropertyValues, query } from "lit-element";
-import type { Editor } from "tinymce";
-import type { EnrichedHTML } from "../enriched-html/enriched-html";
-import styles from "./editor-wrapper.scss";
+import type { CircularProgress } from '@material/mwc-circular-progress';
+import type { UpdateActions } from '@src/entities/update-store';
+import { localize } from '@src/foundry/localization';
+import {
+  customElement,
+  LitElement,
+  property,
+  html,
+  PropertyValues,
+  query,
+} from 'lit-element';
+import type { Editor } from 'tinymce';
+import type { EnrichedHTML } from '../enriched-html/enriched-html';
+import styles from './editor-wrapper.scss';
 
-@customElement("editor-wrapper")
+@customElement('editor-wrapper')
 export class EditorWrapper extends LitElement {
   static get is() {
-    return "editor-wrapper" as const;
+    return 'editor-wrapper' as const;
   }
 
   static styles = [styles];
@@ -21,15 +28,15 @@ export class EditorWrapper extends LitElement {
       return true;
     },
   })
-  updateActions!: Pick<UpdateActions<string>, "commit" | "originalValue">;
+  updateActions!: Pick<UpdateActions<string>, 'commit' | 'originalValue'>;
 
   @property({ type: Boolean }) disabled = false;
 
-  @property({ type: String }) heading = "";
+  @property({ type: String }) heading = '';
 
-  @query(".spinner", true) private spinner!: CircularProgress;
+  @query('.spinner', true) private spinner!: CircularProgress;
 
-  @query("enriched-html") contentArea!: EnrichedHTML;
+  @query('enriched-html') contentArea!: EnrichedHTML;
 
   private editor: Editor | null = null;
 
@@ -39,7 +46,7 @@ export class EditorWrapper extends LitElement {
   }
 
   updated(changedProps: PropertyValues) {
-    if (changedProps.has("disabled") && this.disabled) this.cleanupEditor();
+    if (changedProps.has('disabled') && this.disabled) this.cleanupEditor();
   }
 
   private get content() {
@@ -52,12 +59,12 @@ export class EditorWrapper extends LitElement {
       target: contentArea,
       setup: this.editorSetup,
       save_onsavecallback: this.editorSave,
-      target_list: [{ title: "New page", value: "_blank" }],
+      target_list: [{ title: 'New page', value: '_blank' }],
       autoresize_on_init: false,
       autoresize_overflow_padding: 10,
       min_height: 200,
       max_height: 400,
-      plugins: CONFIG.TinyMCE.plugins + " autoresize",
+      plugins: CONFIG.TinyMCE.plugins + ' autoresize',
     };
   }
 
@@ -73,7 +80,7 @@ export class EditorWrapper extends LitElement {
   };
 
   private cleanupEditor() {
-    this.style.overflow = "";
+    this.style.overflow = '';
     if (this.editor) {
       this.editor.destroy();
       this.editor = null;
@@ -94,14 +101,14 @@ export class EditorWrapper extends LitElement {
 
   private static animOptions = {
     duration: 200,
-    easing: "ease-in-out",
-    fill: "forwards",
+    easing: 'ease-in-out',
+    fill: 'forwards',
   } as const;
 
   private toggleEditor(ev: Event) {
     const clicked = ev.currentTarget as HTMLElement;
-    clicked.style.pointerEvents = "none";
-    setTimeout(() => (clicked.style.pointerEvents = ""), 250);
+    clicked.style.pointerEvents = 'none';
+    setTimeout(() => (clicked.style.pointerEvents = ''), 250);
     if (this.editor) return this.editorSave(this.editor);
 
     const { contentArea, content, editorOptions, spinner } = this;
@@ -109,21 +116,21 @@ export class EditorWrapper extends LitElement {
     const { animOptions } = EditorWrapper;
     spinner.closed = false;
     if (!contentArea) return;
-    this.style.overflow = "hidden";
+    this.style.overflow = 'hidden';
     contentArea.animate({ opacity }, animOptions).onfinish = async () => {
       const editor = await TextEditor.create(editorOptions, content);
       editor.focus();
       contentArea.animate({ opacity: opacity.reverse() }, animOptions);
       this.requestUpdate();
       spinner.closed = true;
-      this.style.overflow = "";
+      this.style.overflow = '';
     };
   }
 
   render() {
     return html`
       <header>
-        ${this.heading || localize("description")}
+        ${this.heading || localize('description')}
         <mwc-icon-button-toggle
           class="toggle"
           slot="actions"
@@ -148,6 +155,6 @@ export class EditorWrapper extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "editor-wrapper": EditorWrapper;
+    'editor-wrapper': EditorWrapper;
   }
 }

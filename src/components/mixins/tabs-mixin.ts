@@ -1,16 +1,16 @@
-import type { TabBar } from "@material/mwc-tab-bar";
-import { LangEntry, localize } from "@src/foundry/localization";
-import { LitElement, query } from "lit-element";
-import { TemplateResult, html } from "lit-html";
-import { ifDefined } from "lit-html/directives/if-defined";
-import type { Class } from "type-fest";
+import type { TabBar } from '@material/mwc-tab-bar';
+import { LangEntry, localize } from '@src/foundry/localization';
+import { LitElement, query } from 'lit-element';
+import { TemplateResult, html } from 'lit-html';
+import { ifDefined } from 'lit-html/directives/if-defined';
+import type { Class } from 'type-fest';
 
 export const TabsMixin = <T extends LangEntry>(tabs: readonly T[]) => (
-  Base: Class<LitElement>
+  Base: Class<LitElement>,
 ) => {
   class TabsMix extends Base {
     readonly tabs = tabs;
-    @query("mwc-tab-bar") tabBar?: TabBar;
+    @query('mwc-tab-bar') tabBar?: TabBar;
 
     protected changeTab() {
       this.requestUpdate();

@@ -34,6 +34,18 @@ import { Details } from './components/details/details';
 import { DropZone } from './components/dropzone/dropzone';
 import { EditorWrapper } from './components/editor-wrapper/editor-wrapper';
 import { EnrichedHTML } from './components/enriched-html/enriched-html';
+import { NotificationCoin } from './components/notification-coin/notification-coin';
+import { Group } from './components/group/group';
+import { EventList } from './components/event-list/event-list';
+import { Popover } from 'weightless';
+import { Header } from './components/header/header';
+import { PopoverSection } from './components/popover/popover-section';
+import { Section } from './components/section/section';
+import { SubmitButton } from './components/submit-button/submit-button';
+import { TimeField } from './components/time-field/time-field';
+import { ToolTip } from './components/tooltip/tooltip';
+import { ValueStatus } from './components/value-status/value-status';
+import { SlWindow } from './components/window/window';
 
 // My Components
 Field;
@@ -45,6 +57,18 @@ Details;
 DropZone;
 EditorWrapper;
 EnrichedHTML;
+Group;
+EventList;
+NotificationCoin;
+Popover;
+Header;
+PopoverSection;
+Section;
+SubmitButton;
+TimeField;
+ToolTip;
+ValueStatus;
+SlWindow;
 
 const link = document.createElement('link');
 link.rel = 'stylesheet';

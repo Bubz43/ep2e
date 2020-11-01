@@ -1,0 +1,111 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  
+}
+
+
+@keyframes zoom {
+  from {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 1);
+    transform: scale3d(0.4, 0.4, 1);
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0.25;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@mixin arrow($placement) {
+  @include triangle($placement, var(--_triangle-offset), "out", 10px);
+
+  &::after {
+    @if $placement == top {
+      transform: translate(-2px, 2px);
+    } @else if $placement == left {
+      transform: translate(2px, -2px);
+    } @else {
+      transform: translate(-2px, -2px);
+    }
+  }
+}
+
+.floater {
+  display: none;
+  position: absolute !important;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10000;
+  min-width: 120px;
+  min-width: min-content;
+  width: max-content;
+  will-change: transform;
+
+  /*
+    border: 2px inset lightslategray;
+    box-shadow: black 0px 0px 4px;
+    border-radius: 7px;
+    overflow: hidden
+  */
+
+  &:not(.minimal) {
+    box-sizing: border-box;
+    box-shadow: 0 0 10px black;
+    background: lightv(var(--color-bg), 1.3);
+    border-radius: 5px;
+    padding: 1rem 1.618rem;
+
+  }
+
+  &.unpadded {
+    padding: 0;
+  }
+
+  &.open {
+    display: block;
+    pointer-events: inherit;
+    opacity: 1;
+    // transition: opacity 1500ms ease-out 100ms;
+    animation: fadeIn 100ms ease-in-out both;
+    &.animate {
+      animation: zoom 150ms both ease-in-out 100ms;
+    }
+  }
+
+  &::after {
+    color: hsl(0, 0%, 80%);
+    border-radius: 4px;
+  }
+
+  &.top-triangle {
+    @include arrow(top);
+  }
+
+  &.right-triangle {
+    @include arrow(right);
+  }
+
+  &.bottom-triangle {
+    @include arrow(bottom);
+  }
+
+  &.left-triangle {
+    @include arrow(left);
+  }
+}

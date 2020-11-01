@@ -1,13 +1,13 @@
-import { clickIfEnter } from "@src/utility/helpers";
-import { customElement, LitElement, property, html } from "lit-element";
-import mix from "mix-with/lib";
-import { LazyRipple } from "../mixins/lazy-ripple";
-import styles from "./details.scss";
+import { clickIfEnter } from '@src/utility/helpers';
+import { customElement, LitElement, property, html } from 'lit-element';
+import mix from 'mix-with/lib';
+import { LazyRipple } from '../mixins/lazy-ripple';
+import styles from './details.scss';
 
-@customElement("sl-details")
+@customElement('sl-details')
 export class Details extends mix(LitElement).with(LazyRipple) {
   static get is() {
-    return "sl-details" as const;
+    return 'sl-details' as const;
   }
 
   static styles = [styles];
@@ -16,7 +16,7 @@ export class Details extends mix(LitElement).with(LazyRipple) {
 
   @property({ type: Boolean, reflect: true }) disabled = false;
 
-  @property({ type: String }) summary = "";
+  @property({ type: String }) summary = '';
 
   toggleOpen() {
     if (this.disabled) return;
@@ -34,7 +34,7 @@ export class Details extends mix(LitElement).with(LazyRipple) {
         @mouseenter="${this.handleRippleMouseEnter}"
         @mouseleave="${this.handleRippleMouseLeave}"
         @keydown=${clickIfEnter}
-        tabindex=${this.disabled ? "-1" : "0"}
+        tabindex=${this.disabled ? '-1' : '0'}
       >
         <mwc-icon class="icon">arrow_right</mwc-icon>
         <div class="full-summary">
@@ -51,6 +51,6 @@ export class Details extends mix(LitElement).with(LazyRipple) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "sl-details": Details;
+    'sl-details': Details;
   }
 }

@@ -1,16 +1,22 @@
-import { prettyDate } from "@src/features/time";
-import { debounce } from "@src/utility/decorators";
-import type { DatepickerValueUpdated } from "app-datepicker/dist/custom_typings";
-import { customElement, LitElement, property, html, PropertyValues } from "lit-element";
-import { ifDefined } from "lit-html/directives/if-defined";
-import mix from "mix-with/lib";
-import { LazyRipple } from "../mixins/lazy-ripple";
-import styles from "./date-field.scss";
+import { prettyDate } from '@src/features/time';
+import { debounce } from '@src/utility/decorators';
+import type { DatepickerValueUpdated } from 'app-datepicker/dist/custom_typings';
+import {
+  customElement,
+  LitElement,
+  property,
+  html,
+  PropertyValues,
+} from 'lit-element';
+import { ifDefined } from 'lit-html/directives/if-defined';
+import mix from 'mix-with/lib';
+import { LazyRipple } from '../mixins/lazy-ripple';
+import styles from './date-field.scss';
 
-@customElement("sl-date-field")
+@customElement('sl-date-field')
 export class DateField extends mix(LitElement).with(LazyRipple) {
   static get is() {
-    return "sl-date-field" as const;
+    return 'sl-date-field' as const;
   }
 
   static styles = [styles];
@@ -21,7 +27,7 @@ export class DateField extends mix(LitElement).with(LazyRipple) {
 
   @property({ type: String }) value!: string;
 
-  @property({ type: String }) label = "";
+  @property({ type: String }) label = '';
 
   @property({ type: Boolean }) disabled = false;
 
@@ -30,25 +36,25 @@ export class DateField extends mix(LitElement).with(LazyRipple) {
   @debounce(250, true)
   private updateSlottedInputs() {
     const { value } = this;
-    this.querySelectorAll("input").forEach((el) => {
+    this.querySelectorAll('input').forEach((el) => {
       if (el.value === value) return;
       el.value = value;
       el.dispatchEvent(
-        new Event("change", {
+        new Event('change', {
           bubbles: true,
           composed: true,
           cancelable: true,
-        })
+        }),
       );
     });
   }
 
   get valueAsNumber() {
-    return new Date(this.value).getTime()
+    return new Date(this.value).getTime();
   }
-  
+
   updated(changedProps: PropertyValues) {
-    if (changedProps.get("value") !== undefined) {
+    if (changedProps.get('value') !== undefined) {
       this.updateSlottedInputs();
     }
   }
@@ -91,6 +97,6 @@ export class DateField extends mix(LitElement).with(LazyRipple) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "sl-date-field": DateField;
+    'sl-date-field': DateField;
   }
 }

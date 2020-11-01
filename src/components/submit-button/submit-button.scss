@@ -1,0 +1,10 @@
+
+:host {
+  display: inline-flex;
+  --mdc-theme-primary: var(--color-border);
+}
+
+
+:host([complete]) {
+  --mdc-theme-primary: var(--color-primary)
+}

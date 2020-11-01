@@ -1,12 +1,12 @@
-import type { IconButton } from "@material/mwc-icon-button";
-import { debounce } from "@src/utility/decorators";
-import { customElement, LitElement, property, html, query } from "lit-element";
-import styles from "./delete-button.scss";
+import type { IconButton } from '@material/mwc-icon-button';
+import { debounce } from '@src/utility/decorators';
+import { customElement, LitElement, property, html, query } from 'lit-element';
+import styles from './delete-button.scss';
 
-@customElement("delete-button")
+@customElement('delete-button')
 export class DeleteButton extends LitElement {
   static get is() {
-    return "delete-button" as const;
+    return 'delete-button' as const;
   }
 
   static styles = [styles];
@@ -15,26 +15,28 @@ export class DeleteButton extends LitElement {
 
   @property({ reflect: true, type: Boolean }) confirm = false;
 
-  @property({ type: String }) icon = "delete";
+  @property({ type: String }) icon = 'delete';
 
-  @query("mwc-icon-button")
+  @query('mwc-icon-button')
   iconButton!: IconButton;
 
   private emitDelete() {
     if (!this.confirm) return;
     this.dispatchEvent(
-      new CustomEvent("delete", { bubbles: true, composed: true })
+      new CustomEvent('delete', { bubbles: true, composed: true }),
     );
     this.confirm = false;
   }
 
   @debounce(100)
   private setConfirming() {
-    const button = this.iconButton.renderRoot.querySelector("button");
+    const button = this.iconButton.renderRoot.querySelector('button');
     if (button) {
       button.focus();
       // button.click();
-      button.dispatchEvent( new CustomEvent("mousedown", { bubbles: true, composed: true }))
+      button.dispatchEvent(
+        new CustomEvent('mousedown', { bubbles: true, composed: true }),
+      );
     }
     this.confirm = true;
   }
@@ -55,7 +57,7 @@ export class DeleteButton extends LitElement {
           <mwc-icon>${this.icon}</mwc-icon>
         </wl-list-item>
         <mwc-icon-button
-        tabindex="-1"
+          tabindex="-1"
           icon="delete_forever"
           @click=${this.emitDelete}
           @focusout=${this.cancelConfirm}
@@ -68,6 +70,6 @@ export class DeleteButton extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "delete-button": DeleteButton;
+    'delete-button': DeleteButton;
   }
 }

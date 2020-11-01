@@ -1,0 +1,34 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  background: alphav(var(--color-bg-alt), 0.95);
+  border: 2px groove var(--color-border);
+  box-shadow: 0 0 4px black;
+  z-index: 100000;
+  position: absolute;
+  padding: 0.25rem 0.75rem;
+  border-radius: 3px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 200ms ease-in-out;
+  max-width: 450px;
+  top: 10px;
+  left: 10px;
+  pointer-events: none !important;
+  ::slotted(p) {
+    padding: 0 0.5rem;
+    margin: 0.25rem 0;
+  }
+}
+
+:host([visible]) {
+  pointer-events: initial !important;
+  opacity: 1;
+}
+
