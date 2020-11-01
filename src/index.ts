@@ -32,6 +32,8 @@ import { DateField } from './components/date-field/date-field';
 import { DeleteButton } from './components/delete-button/delete-button';
 import { Details } from './components/details/details';
 import { DropZone } from './components/dropzone/dropzone';
+import { EditorWrapper } from './components/editor-wrapper/editor-wrapper';
+import { EnrichedHTML } from './components/enriched-html/enriched-html';
 
 // My Components
 Field;
@@ -41,6 +43,8 @@ DateField;
 DeleteButton;
 Details;
 DropZone;
+EditorWrapper;
+EnrichedHTML;
 
 const link = document.createElement('link');
 link.rel = 'stylesheet';

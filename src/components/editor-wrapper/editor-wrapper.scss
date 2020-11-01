@@ -1,0 +1,51 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+@include styled-scrollbars;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  position: relative;
+  min-width: 420px;
+  min-height: 150px;
+  z-index: 0;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 20px;
+  padding: 0 0.5rem;
+  --mdc-icon-button-size: 34px;
+  --mdc-icon-size: 22px;
+}
+
+.spinner {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  pointer-events: none;
+}
+
+.tox .tox-toolbar-overlord {
+  background-color: transparent !important;
+}
+
+.tox .tox-toolbar-overlord .tox-toolbar__primary {
+  background-color: transparent !important;
+}
+
+.tox .tox-edit-area__iframe {
+  background:  transparent !important;
+}
+
+enriched-html {
+  padding: 0 0.5rem;
+}
