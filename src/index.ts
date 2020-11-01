@@ -70,11 +70,6 @@ ToolTip;
 ValueStatus;
 SlWindow;
 
-const link = document.createElement('link');
-link.rel = 'stylesheet';
-link.href = 'systems/ep2e/build/_dist_/global.css';
-document.head.appendChild(link);
-
 for (const link of [
   'https://fonts.googleapis.com/css?family=Material+Icons&display=block',
   'https://fonts.googleapis.com/css?family=Roboto:300,400,500',

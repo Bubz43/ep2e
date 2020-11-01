@@ -59,7 +59,7 @@
     }
   ],
   "styles": [
-    "body-init.css"
+    "./build/_dist_/global.css"
   ],
   "compatibleCoreVersion": "0.7.5",
   "gridDistance": 1,
