@@ -13,6 +13,7 @@ export type BasicHealthData = {
    * @minimum 0
    */
   wounds: number;
+  modifications: Record<HealthModificationMode, HealthModification[]>
 };
 
 export enum HealthType {
@@ -26,6 +27,21 @@ export enum PhysicalHealthSubtype {
   Synth = 'synth',
 }
 
+export enum HealthModificationMode {
+  Edit = "edit",
+  Heal = "heal",
+  Inflict = "inflict",
+}
+
+export type HealthModification = {
+  mode: HealthModificationMode;
+  damage: number;
+  wounds: number;
+  source: string;
+  timestamp: number;
+};
+
+
 export enum HealthStat {
   Derived = 'derived',
   Durability = 'durability',
@@ -34,6 +50,8 @@ export enum HealthStat {
   WoundThreshold = 'woundThreshold',
   DeathRating = 'deathRating',
 }
+
+export type HealthStatMods = ReadonlyMap<HealthStat, number>;
 
 export const mentalHealthStats = {
   [HealthStat.Derived]: 'derived',
@@ -57,15 +75,16 @@ export type HealthWounds = {
   woundsIgnored: HealthProp<Abbreviation>;
 };
 
-export type CommonHealth = {
-  main: HealthMain;
-  wound?: HealthWounds;
-  type: HealthType;
-  subtype?: PhysicalHealthSubtype;
-  source: string;
-  icon: string;
-  woundIcon: string;
-};
+// export type CommonHealth = {
+//   readonly main: HealthMain;
+//   readonly wound?: HealthWounds;
+//   readonly type: HealthType;
+//   readonly subtype?: PhysicalHealthSubtype;
+//   readonly source: string;
+//   readonly icon: string;
+//   readonly woundIcon: string;
+//   applyMutation(mutation: HealthModification): void
+// };
 
 export const formatDamageType = (type: HealthType) => {
   switch (type) {
@@ -81,3 +100,15 @@ export const formatDamageType = (type: HealthType) => {
 
 export const healthLabels = (healthType: HealthType, stat: HealthStat) =>
   localize(healthType === HealthType.Mental ? mentalHealthStats[stat] : stat);
+
+  // export const healthDiff = <T extends CommonHealth>(
+  //   originalHealth: T,
+  //   newHealth: T
+  // ) => ({
+  //   damage: newHealth.main.damage.value - originalHealth.main.damage.value,
+  //   wounds:
+  //     (newHealth.wound?.wounds.value || 0) -
+  //     (originalHealth.wound?.wounds.value || 0),
+  //   damageLabel: originalHealth.main.damage.label,
+  //   woundLabel: originalHealth.wound?.wounds.label,
+  // });
