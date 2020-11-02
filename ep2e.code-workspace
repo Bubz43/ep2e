@@ -1,0 +1,32 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "json.schemas": [
+    
+      {
+        "fileMatch": [
+          "template.json"
+        ],
+        "url": "/template.schema.json"
+      },
+      {
+        "fileMatch": [
+          "system.json"
+        ],
+        "url": "/system.schema.json"
+      },
+      { 
+        "fileMatch": [
+          "/lang/*.json"
+        ],
+        "url": "/lang/lang.schema.json"
+      }
+    ],
+  
+  }
+}

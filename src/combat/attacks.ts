@@ -22,6 +22,7 @@ export type SleightAttackData = {
 }
 
 export type SoftwareAttackData = {
+  label: string;
   damageFormula: string;
   damageType: HealthType;
   attackTraits: AttackTrait[];
@@ -29,7 +30,6 @@ export type SoftwareAttackData = {
   armorPiercing: boolean;
   reduceAVbyDV: boolean;
   applyConditions: ConditionEffect;
-
 }
 
 export type SubstanceAttackData = {

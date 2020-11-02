@@ -667,25 +667,22 @@ type PhysicalServiceData = {
 
 export interface EntityTemplates {
   Actor: {
+    /**
+     * @minItems 4
+     * @maxItems 4
+     * @uniqueItems true
+     */
     types: ActorType[];
-  }
-  // Actor: {
-  //   /**
-  //    * @minItems 4
-  //    * @maxItems 4
-  //    * @uniqueItems true
-  //    */
-  //   types: ActorType[];
-  //   templates: ActorTemplates;
-  // } & ActorTypeTemplates;
+    templates: ActorTemplates;
+  } & ActorTypeTemplates;
 
-  // Item: {
-  //   /**
-  //    * @minItems 17
-  //    * @maxItems 17
-  //    * @uniqueItems true
-  //    */
-  //   types: (keyof ItemTypeTemplates)[];
-  //   templates: ItemTemplates;
-  // } & ItemTypeTemplates;
+  Item: {
+    /**
+     * @minItems 17
+     * @maxItems 17
+     * @uniqueItems true
+     */
+    types: (keyof ItemTypeTemplates)[];
+    templates: ItemTemplates;
+  } & ItemTypeTemplates;
 }
