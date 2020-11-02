@@ -1,4 +1,4 @@
-import type { ExplosiveAttackData, SleightAttackData, SubstanceAttackData } from '@src/combat/attacks';
+import type { BeamWeaponAttackData, ExplosiveAttackData, FirearmAmmoModeData, KineticWeaponAttackData, MeleeWeaponAttackData, SleightAttackData, SprayWeaponAttackData, SubstanceAttackData, ThrownWeaponAttackData } from '@src/combat/attacks';
 import type {
   AptitudeType,
   AreaEffectType,
@@ -11,12 +11,17 @@ import type {
   ExplosiveType,
   GearQuality,
   GearTrait,
+  KineticWeaponClass,
   MorphCost,
+  PhysicalWare,
   PoolType,
   PsiPush,
+  RangedWeaponAccessory,
+  RangedWeaponTrait,
   SleightDuration,
   SleightSpecial,
   SleightType,
+  SprayPayload,
   SubstanceApplicationMethod,
   SubstanceClassification,
   SubstanceType,
@@ -27,6 +32,7 @@ import type { ItemType, ActorType } from '@src/entities/entity-types';
 import type { ActionType } from '@src/features/actions';
 import type { ConditionType } from '@src/features/conditions';
 import type { Effect } from '@src/features/effects';
+import type { FiringMode } from '@src/features/firing-modes';
 import type { MovementRate } from '@src/features/movement';
 import type { HealthType } from '@src/health/health';
 import type { JsonValue } from 'type-fest';
@@ -272,6 +278,127 @@ type AT<
     primaryAttack: ExplosiveAttackData;
     secondaryAttack: ExplosiveAttackData;
     state: { stashed: boolean };
+  };
+
+  type MeleeWeaponData = {
+    templates: UseItemTemplate<
+      ["Common", "Cost", "GearTraits", "Copyable", "GearState"]
+    >;
+    wareType: "" | PhysicalWare;
+    primaryAttack: MeleeWeaponAttackData;
+    secondaryAttack: MeleeWeaponAttackData;
+    touchOnly: boolean;
+    reachBonus: number;
+    augmentUnarmed: boolean;
+    improvised: boolean;
+    exoticSkill: string;
+    hasSecondaryAttack: boolean;
+    acceptsPayload: boolean;
+  };
+
+  type ThrownWeaponData = {
+    templates: UseItemTemplate<["Common", "Cost", "GearTraits", "Copyable"]>;
+    quantity: number;
+    primaryAttack: ThrownWeaponAttackData
+    exoticSkill: string;
+  };
+
+  type RangedWeaponDataBase = {
+    templates: UseItemTemplate<
+      ["Common", "Cost", "GearTraits", "Copyable", "GearState"]
+    >;
+    wareType: "" | PhysicalWare;
+    range: number;
+    /**
+     * @uniqueItems
+     */
+    accessories: RangedWeaponAccessory[];
+    state: { braced: boolean; interface: boolean };
+    firedShots: number;
+  };
+
+  type SeekerAmmo = {
+    missileSize: ExplosiveSize;
+    range: number;
+    missileCapacity: number;
+  };
+
+  type SeekerWeaponData = Omit<RangedWeaponDataBase, "range"> &
+  Record<RangedWeaponTrait, boolean> & {
+    primaryAmmo: SeekerAmmo;
+    alternativeAmmo: SeekerAmmo;
+    firingMode: FiringMode.SemiAutomatic | FiringMode.SingleShot;
+    hasAlternativeAmmo: boolean;
+    state: { homing: boolean };
+  };
+
+  type SprayWeaponData = RangedWeaponDataBase & {
+    payloadUse: "" | SprayPayload;
+    dosesPerShot: number;
+    fixed: boolean;
+    long: boolean;
+    ammo: {
+      value: number;
+      max: number;
+    };
+    primaryAttack: SprayWeaponAttackData;
+  };
+
+  type FirearmData = RangedWeaponDataBase & {
+    ammo: {
+      value: number;
+      /**
+       * @minimum 1
+       */
+      max: number;
+      ammoClass: KineticWeaponClass;
+      selectedForm: number;
+      forms: number[];
+    };
+    fixed: boolean;
+    long: boolean;
+    primaryAttack: KineticWeaponAttackData;
+  };
+
+  type FirearmAmmoData = {
+    templates: UseItemTemplate<["Common", "Cost", "Copyable"]>;
+    ammoClass: KineticWeaponClass;
+    quantity: number;
+    carryPayload: boolean;
+    /**
+     * @minItems 1
+     */
+    forms: StringID<FirearmAmmoModeData>[];
+    state: { stashed: boolean };
+  };
+
+  type RailgunData = RangedWeaponDataBase & {
+    ammo: {
+      value: number;
+      max: number;
+      ammoClass: KineticWeaponClass;
+    };
+    battery: {
+      charge: number;
+      max: number;
+      recharge: number;
+    };
+    fixed: boolean;
+    long: boolean;
+    primaryAttack: KineticWeaponAttackData;
+  };
+
+
+  type BeamWeaponData = RangedWeaponDataBase &
+  Record<RangedWeaponTrait, boolean> & {
+    ammo: {
+      max: number;
+      charge: number;
+      recharge: number;
+    };
+    primaryAttack: BeamWeaponAttackData;
+    secondaryAttack: BeamWeaponAttackData;
+    hasSecondaryAttack: boolean;
   };
 
 // Template<"PhysicalHealth", { physicalHealth: PhysicalHealthData }> &
