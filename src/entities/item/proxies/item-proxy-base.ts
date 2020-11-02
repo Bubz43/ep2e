@@ -2,9 +2,9 @@ import { localize } from "@src/foundry/localization";
 import { EP } from "@src/foundry/system";
 import { noop } from "remeda";
 import type { Mutable } from "type-fest";
-import type { ItemType } from "../entity-types";
-import type { ItemEntity, NonEditableProps } from "../models";
-import { UpdateStore } from "../update-store";
+import type { ItemType } from "../../entity-types";
+import type { ItemEntity, NonEditableProps } from "../../models";
+import { UpdateStore } from "../../update-store";
 
 export type ItemProxyInit<T extends ItemType> = {
   data: ItemEntity<T>;

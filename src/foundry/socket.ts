@@ -1,5 +1,5 @@
 import type { CombatantSocket } from "@src/combat/combatant-commands";
-import type { ItemOperations } from "@src/entities/actor";
+import type { ItemOperations } from "@src/entities/actor/actor";
 import { once } from "remeda";
 import { EP } from "./system";
 

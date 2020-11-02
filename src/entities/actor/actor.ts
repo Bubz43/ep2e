@@ -3,11 +3,11 @@ import { SystemSocketData, emitEPSocket } from "@src/foundry/socket";
 import { pipe, map, compact, flatMap, forEach, reject } from "remeda";
 import type { SetRequired } from "type-fest";
 import type { DeepPartial } from "utility-types";
-import { ActorType } from "./entity-types";
-import type { ItemEP } from "./item";
-import type { ActorDatas, ItemEntity } from "./models";
-import { UpdateStore } from "./update-store";
-import { EntitySubscription, Subscribable } from "./update-subcriptions";
+import { ActorType } from "../entity-types";
+import type { ItemEP } from "../item/item";
+import type { ActorDatas, ItemEntity } from "../models";
+import { UpdateStore } from "../update-store";
+import { EntitySubscription, Subscribable } from "../update-subcriptions";
 
 type ItemUpdate = SetRequired<DeepPartial<ItemEntity>, "_id">;
 
@@ -24,8 +24,9 @@ export class ActorEP extends Actor {
   readonly #subscribers = new EntitySubscription<this>();
   readonly items?: Collection<ItemEP>;
   readonly effects!: Collection<ActiveEffect>
+  itemTrash: ItemEP["data"][] = [];
 
-  // proxy?: ActorProxy;
+  // #agent?: ActorProxy;
   #updater?: UpdateStore<ActorDatas>;
   // #identifiers?: ActorIdentifiers;
   #itemOperations?: ItemOperations;
@@ -71,58 +72,58 @@ export class ActorEP extends Actor {
     }
   }
 
-  // get itemOperations() {
-  //   if (!this.#itemOperations) {
-  //     this.#itemOperations = {
-  //       add: async (...itemDatas) => {
-  //         await this.createOwnedItem(itemDatas);
-  //         const added = pipe(
-  //           this.data.items.slice(-itemDatas.length),
-  //           map(({ _id }) => this.items?.get(_id)),
-  //           compact
-  //         );
-  //         this.emitItemSocket({
-  //           type: "add",
-  //           itemIds: added.map(({ id }) => id),
-  //         });
-  //         return added;
-  //       },
-  //       update: (...itemDatas) => {
-  //         const itemIds: string[] = [];
-  //         for (const { _id } of itemDatas) {
-  //           this.items?.get(_id)?.invalidate();
-  //           itemIds.push(_id);
-  //         }
-  //         this.emitItemSocket({ itemIds, type: "update" });
-  //         return this.updateOwnedItem(itemDatas);
-  //       },
-  //       remove: async (...itemIds) => {
-  //         this.emitItemSocket({ type: "remove", itemIds });
-  //         pipe(
-  //           itemIds,
-  //           flatMap((id) => this.getOwnedItem(id) || []),
-  //           forEach((item) => {
-  //             this.itemTrash.push(item.dataCopy());
-  //             item?._onDelete({}, game.user.id);
-  //           })
-  //         );
+  get itemOperations() {
+    if (!this.#itemOperations) {
+      this.#itemOperations = {
+        add: async (...itemDatas) => {
+          await this.createOwnedItem(itemDatas);
+          const added = pipe(
+            this.data.items.slice(-itemDatas.length),
+            map(({ _id }) => this.items?.get(_id)),
+            compact
+          );
+          this.emitItemSocket({
+            type: "add",
+            itemIds: added.map(({ id }) => id),
+          });
+          return added;
+        },
+        update: (...itemDatas) => {
+          const itemIds: string[] = [];
+          for (const { _id } of itemDatas) {
+            this.items?.get(_id)?.invalidate();
+            itemIds.push(_id);
+          }
+          this.emitItemSocket({ itemIds, type: "update" });
+          return this.updateOwnedItem(itemDatas);
+        },
+        remove: async (...itemIds) => {
+          this.emitItemSocket({ type: "remove", itemIds });
+          pipe(
+            itemIds,
+            flatMap((id) => this.getOwnedItem(id) || []),
+            forEach((item) => {
+              this.itemTrash.push(item.dataCopy());
+              item?._onDelete({}, game.user.id);
+            })
+          );
 
-  //         if (this.agent.type === ActorType.Character) {
-  //           const { favoriteItemIds: favoriteItems } = this.agent;
-  //           const favs = reject(favoriteItems, (fav) => itemIds.includes(fav));
-  //           if (favs.length !== favoriteItems.length) {
-  //             await this.agent.updater
-  //               .prop("data", "favoriteItems")
-  //               .commit(favs);
-  //           }
-  //         }
+          if (this.agent.type === ActorType.Character) {
+            const { favoriteItemIds: favoriteItems } = this.agent;
+            const favs = reject(favoriteItems, (fav) => itemIds.includes(fav));
+            if (favs.length !== favoriteItems.length) {
+              await this.agent.updater
+                .prop("data", "favoriteItems")
+                .commit(favs);
+            }
+          }
 
-  //         return this.deleteOwnedItem(itemIds);
-  //       },
-  //     };
-  //   }
-  //   return this.#itemOperations;
-  // }
+          return this.deleteOwnedItem(itemIds);
+        },
+      };
+    }
+    return this.#itemOperations;
+  }
 
   get subscriptions() {
     return this.#subscribers as Subscribable<this>;

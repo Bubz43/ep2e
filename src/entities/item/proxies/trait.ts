@@ -2,7 +2,7 @@ import { TraitSource, TraitType, CharacterPoint } from "@src/data-enums";
 import { localize } from "@src/foundry/localization";
 import { notEmpty, toggle } from "@src/utility/helpers";
 import { clamp, compact } from "remeda";
-import type { ItemType } from "../entity-types";
+import type { ItemType } from "../../entity-types";
 import { ItemProxyBase, ItemProxyInit } from "./item-proxy-base";
 
 export class Trait extends ItemProxyBase<ItemType.Trait> {

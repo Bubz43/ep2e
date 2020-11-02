@@ -1,5 +1,5 @@
 import { ItemType } from "@src/entities/entity-types";
-import { Trait } from "@src/entities/item-proxies/trait";
+import { Trait } from "@src/entities/item/proxies/trait";
 import { ItemEntity, createItemEntity } from "@src/entities/models";
 import { localize } from "@src/foundry/localization";
 import { rollFormula } from "@src/foundry/rolls";

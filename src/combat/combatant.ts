@@ -1,5 +1,5 @@
 import { SurpriseState } from '@src/data-enums';
-import type { ActorEP } from '@src/entities/actor';
+import type { ActorEP } from '@src/entities/actor/actor';
 import { UpdateStore } from '@src/entities/update-store';
 import type { Action } from '@src/features/actions';
 import type { StringID } from '@src/features/feature-helpers';

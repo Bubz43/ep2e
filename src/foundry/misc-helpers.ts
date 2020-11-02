@@ -3,7 +3,7 @@ import { pipe, filter, sortBy, first } from 'remeda';
 import type { Class } from 'type-fest';
 import type { CanvasLayers } from './foundry-cont';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
-import type { ActorEP } from '../entities/actor';
+import type { ActorEP } from '../entities/actor/actor';
 import type { SceneEP } from '../entities/scene';
 
 export const isGamemaster = () => {
