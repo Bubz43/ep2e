@@ -24,20 +24,6 @@ export enum ConditionType {
   Unconscious = "unconscious",
 }
 
-export type AttackCondition = {
-  condition: ConditionType;
-  duration: number;
-  durationScaling: number;
-};
-
-export const createAttackCondition = createFeature<
-  AttackCondition,
-  "condition"
->(() => ({
-  duration: CommonInterval.Turn,
-  durationScaling: 0,
-}));
-
 const conditionIconPairs = [
   [ConditionType.Blinded, foundryIcon("blind")],
   [ConditionType.Confused, localImage("images/icons/condition/uncertainty.svg")],
@@ -168,7 +154,7 @@ type BaseEffectInfo = {
   impairment: number;
 };
 
-type ConditionEffect = {
+export type ConditionEffect = {
   check: AptitudeType;
   checkModifier: number;
   armorAsModifier: ArmorType | "";

@@ -1,20 +1,34 @@
+import type { ExplosiveAttackData, SleightAttackData, SubstanceAttackData } from '@src/combat/attacks';
 import type {
+  AptitudeType,
+  AreaEffectType,
   ArmorWare,
   AttackTrait,
   BlueprintType,
   Complexity,
+  DrugAddiction,
+  ExplosiveSize,
+  ExplosiveType,
   GearQuality,
   GearTrait,
   MorphCost,
   PoolType,
   PsiPush,
+  SleightDuration,
+  SleightSpecial,
+  SleightType,
+  SubstanceApplicationMethod,
+  SubstanceClassification,
+  SubstanceType,
   TraitSource,
   TraitType,
 } from '@src/data-enums';
 import type { ItemType, ActorType } from '@src/entities/entity-types';
+import type { ActionType } from '@src/features/actions';
 import type { ConditionType } from '@src/features/conditions';
 import type { Effect } from '@src/features/effects';
 import type { MovementRate } from '@src/features/movement';
+import type { HealthType } from '@src/health/health';
 import type { JsonValue } from 'type-fest';
 
 type StringID<T> = T & { id: string };
@@ -99,6 +113,24 @@ type AT<
   } & Readonly<Omit<D, "templates">>;
   };
 
+  type ItemTypeTemplates = IT<ItemType.Trait, TraitData> &
+  IT<ItemType.Psi, PsiData> &
+  IT<ItemType.Sleight, SleightData> &
+  IT<ItemType.Substance, SubstanceData> &
+  IT<ItemType.Armor, ArmorData> &
+  IT<ItemType.Explosive, ExplosiveData> 
+  // IT<ItemType.Software, SoftwareData> &
+  // IT<ItemType.PhysicalService, PhysicalServiceData> &
+  // IT<ItemType.MeleeWeapon, MeleeWeaponData> &
+  // IT<ItemType.PhysicalTech, PhysicalTechData> &
+  // IT<ItemType.BeamWeapon, BeamWeaponData> &
+  // IT<ItemType.Railgun, RailgunData> &
+  // IT<ItemType.Firearm, FirearmData> &
+  // IT<ItemType.FirearmAmmo, FirearmAmmoData> &
+  // IT<ItemType.SprayWeapon, SprayWeaponData> &
+  // IT<ItemType.SeekerWeapon, SeekerWeaponData> &
+  // IT<ItemType.ThrownWeapon, ThrownWeaponData>;
+
   type TraitData = {
     templates: UseItemTemplate<["Common"]>;
     traitType: TraitType;
@@ -119,7 +151,72 @@ type AT<
     };
   };
 
+  type SleightData = {
+    templates: UseItemTemplate<["Common"]>;
+    sleightType: SleightType;
+    duration: SleightDuration;
+    /**
+     * @minimum 0
+     * @maximum 80
+     */
+    infectionMod: number;
+    action: ActionType;
+    effectsOnTarget: StringID<Effect>[];
+    effectsOnSelf: StringID<Effect>[];
+    effects: StringID<Effect>[];
+    scaleEffectsOnSuperior: boolean;
+    special: "" | SleightSpecial;
+    mentalArmor: {
+      formula: string;
+      divisor: number;
+    };
+    attack: SleightAttackData;
+    heal: {
+      amount: string;
+      health: HealthType;
+    };
+    state: {
+      sustained: boolean;
+    };
+  };
 
+  type SubstanceData = {
+    templates: UseItemTemplate<["Common", "Cost", "Copyable"]>;
+    category: string;
+    quantity: number;
+    quantityPerCost: number;
+    consumeOnUse: boolean;
+    substanceType: SubstanceType;
+    classification: SubstanceClassification;
+    /**
+     * @minItems 1
+     * @maxItems 4
+     * @uniqueItems true
+     */
+    application: SubstanceApplicationMethod[];
+    addiction: "" | DrugAddiction;
+    addictionMod: number;
+    isAntidote: boolean;
+    hasSeverity: boolean;
+    alwaysApplied: {
+      effects: StringID<Effect>[];
+      duration: number;
+      damage: SubstanceAttackData;
+      wearOffStress: string;
+      notes: string;
+    };
+    severity: {
+      duration: number;
+      effects: StringID<Effect>[];
+      check: AptitudeType;
+      checkMod: number;
+      conditions: ConditionType[];
+      damage: SubstanceAttackData;
+      wearOffStress: string;
+      notes: string;
+    };
+    state: { stashed: boolean };
+  };
   
   type PsiData = {
     templates: UseItemTemplate<["Common"]>;
@@ -158,6 +255,24 @@ type AT<
     activeArmor: ArmorValues;
     state: { activated: boolean };
   } & Omit<GearTraits, "concealable">;
+
+  type ExplosiveData = {
+    templates: UseItemTemplate<["Common", "Cost", "Copyable"]>;
+    explosiveType: ExplosiveType;
+    size: ExplosiveSize;
+    quantity: number;
+    unitsPerComplexity: number;
+    sticky: boolean;
+    areaEffect: "" | AreaEffectType;
+    areaEffectRadius: number;
+    containSubstance: boolean;
+    dosesPerUnit: number;
+    // TODO drug/toxin doses?
+    hasSecondaryMode: boolean;
+    primaryAttack: ExplosiveAttackData;
+    secondaryAttack: ExplosiveAttackData;
+    state: { stashed: boolean };
+  };
 
 // Template<"PhysicalHealth", { physicalHealth: PhysicalHealthData }> &
 // Template<"FullMeshHealth", { meshHealth: FullMeshHealthData }> &
