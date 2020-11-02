@@ -1,4 +1,7 @@
 import type { ItemType } from '@src/entities/entity-types';
+import mix from 'mix-with/lib';
+import { Purchasable } from '../item-mixins';
 import { ItemProxyBase } from './item-proxy-base';
 
-export class Software extends ItemProxyBase<ItemType.Software> {}
+class Base extends ItemProxyBase<ItemType.Software> {}
+export class Software extends mix(Base).with(Purchasable) {}

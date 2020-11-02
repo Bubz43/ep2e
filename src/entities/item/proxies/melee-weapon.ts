@@ -1,4 +1,17 @@
+import { enumValues, GearTrait } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
+import { localize } from '@src/foundry/localization';
+import mix from 'mix-with/lib';
+import { map } from 'remeda';
+import { Equippable, Gear, Purchasable } from '../item-mixins';
 import { ItemProxyBase } from './item-proxy-base';
 
-export class MeleeWeapon extends ItemProxyBase<ItemType.MeleeWeapon> {}
+class MeleeWeaponBase extends ItemProxyBase<ItemType.MeleeWeapon> {}
+
+export class MeleeWeapon extends mix(MeleeWeaponBase).with(
+  Gear,
+  Purchasable,
+  Equippable,
+) {
+  
+}

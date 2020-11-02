@@ -1,7 +1,10 @@
 import type { ItemType } from '@src/entities/entity-types';
+import mix from 'mix-with/lib';
+import { Purchasable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
-export class Substance extends ItemProxyBase<ItemType.Substance> {
+class Base extends ItemProxyBase<ItemType.Substance>  {}
+export class Substance extends mix(Base).with(Purchasable) {
   readonly loaded;
   constructor({
     loaded,

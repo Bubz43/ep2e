@@ -1,4 +1,7 @@
 import type { ItemType } from '@src/entities/entity-types';
+import mix from 'mix-with/lib';
+import { Equippable, Gear, Purchasable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
-export class Firearm extends ItemProxyBase<ItemType.Firearm> {}
+class Base extends ItemProxyBase<ItemType.Firearm> { };
+export class Firearm extends mix(Base).with(Purchasable, Gear, Equippable) {}

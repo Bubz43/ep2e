@@ -1,4 +1,7 @@
 import type { ItemType } from '@src/entities/entity-types';
+import mix from 'mix-with/lib';
+import { Equippable, Gear, Purchasable } from '../item-mixins';
 import { ItemProxyBase } from './item-proxy-base';
 
-export class PhysicalTech extends ItemProxyBase<ItemType.PhysicalTech> {}
+class Base extends ItemProxyBase<ItemType.PhysicalTech> { };
+export class PhysicalTech extends mix(Base).with(Purchasable, Gear, Equippable) {}

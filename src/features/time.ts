@@ -125,3 +125,7 @@ export const prettyOnset = (onset: number) => {
       : `${localize('in')} ${prettyMilliseconds(onset, { compact: false })}`;
   return `${localize('active')} ${label}`.toLocaleLowerCase();
 };
+
+export type RefreshTimer = { label: string; elapsed: number; max: number, id: string }
+
+export const refreshAvailable = ({elapsed, max}: RefreshTimer) => elapsed >= max

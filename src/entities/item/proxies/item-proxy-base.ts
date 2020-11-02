@@ -25,9 +25,6 @@ export abstract class ItemProxyBase<T extends ItemType> {
   embedded;
   usable = true;
 
-  abstract get fullName(): string;
-  abstract getTextInfo(): string[];
-
   constructor({
     data,
     updater,
@@ -51,12 +48,24 @@ export abstract class ItemProxyBase<T extends ItemType> {
     // this.actorIdentifiers = actorIdentifiers;
   }
 
+  get textInfo(): string[] {
+    return []
+  }
+
+  get tags(): string[] {
+    return []
+  }
+
   get name() {
     return this.data.name;
   }
 
   get type() {
     return this.data.type;
+  }
+
+  get fullName() {
+    return this.name;
   }
 
   get fullType() {
@@ -80,7 +89,7 @@ export abstract class ItemProxyBase<T extends ItemType> {
     return this.updater.editable;
   }
 
-  protected get epData() {
+  get epData() {
     return this.data.data;
   }
 

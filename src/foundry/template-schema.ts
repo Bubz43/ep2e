@@ -458,7 +458,7 @@ export type ArmorValues = {
 type ArmorData = {
   templates: UseItemTemplate<['Common', 'Cost', 'Copyable', 'GearState']>;
   effects: StringID<Effect>[];
-  wareType: '' | ArmorWare;
+  wareType: PhysicalWare | "";
   notes: string;
   attackTraits: AttackTrait[];
   hasActiveState: boolean;
