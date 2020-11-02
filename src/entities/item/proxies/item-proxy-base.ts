@@ -1,10 +1,10 @@
-import { localize } from "@src/foundry/localization";
-import { EP } from "@src/foundry/system";
-import { noop } from "remeda";
-import type { Mutable } from "type-fest";
-import type { ItemType } from "../../entity-types";
-import type { ItemEntity, NonEditableProps } from "../../models";
-import { UpdateStore } from "../../update-store";
+import { localize } from '@src/foundry/localization';
+import { EP } from '@src/foundry/system';
+import { noop } from 'remeda';
+import type { Mutable } from 'type-fest';
+import type { ItemType } from '../../entity-types';
+import type { ItemEntity, NonEditableProps } from '../../models';
+import { UpdateStore } from '../../update-store';
 
 export type ItemProxyInit<T extends ItemType> = {
   data: ItemEntity<T>;
@@ -13,7 +13,7 @@ export type ItemProxyInit<T extends ItemType> = {
   openForm?: () => void;
   deleteSelf?: () => void;
   alwaysDeletable?: boolean;
-}
+};
 
 export abstract class ItemProxyBase<T extends ItemType> {
   readonly data;
@@ -28,7 +28,14 @@ export abstract class ItemProxyBase<T extends ItemType> {
   abstract get fullName(): string;
   abstract getTextInfo(): string[];
 
-  constructor({ data, updater, embedded, openForm, deleteSelf, alwaysDeletable = false }: ItemProxyInit<T>) {
+  constructor({
+    data,
+    updater,
+    embedded,
+    openForm,
+    deleteSelf,
+    alwaysDeletable = false,
+  }: ItemProxyInit<T>) {
     this.data = data;
     this.updater =
       updater ??
@@ -53,7 +60,7 @@ export abstract class ItemProxyBase<T extends ItemType> {
   }
 
   get fullType() {
-    return localize(this.type)
+    return localize(this.type);
   }
 
   get img() {
@@ -81,7 +88,7 @@ export abstract class ItemProxyBase<T extends ItemType> {
     const { data } = this;
     return duplicate(data) as Mutable<typeof data>;
   }
-  
+
   get id() {
     return this.data._id;
   }
@@ -91,11 +98,10 @@ export abstract class ItemProxyBase<T extends ItemType> {
   }
 
   get sort() {
-    return this.data.sort || 0
+    return this.data.sort || 0;
   }
 
   get epFlags() {
-    return this.data.flags[EP.Name]
+    return this.data.flags[EP.Name];
   }
-
 }

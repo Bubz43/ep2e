@@ -1,41 +1,41 @@
-import type { Mutable } from "type-fest";
-import type { ActorEP } from "../actor/actor";
-import { ItemType, ActorType } from "../entity-types";
-import type { ItemDatas } from "../models";
-import { UpdateStore } from "../update-store";
-import { EntitySubscription, Subscribable } from "../update-subcriptions";
-import { ItemEPSheet } from "./item-sheet";
-import { Armor } from "./proxies/armor";
-import { BeamWeapon } from "./proxies/beam-weapon";
-import { Explosive } from "./proxies/explosive";
-import { Firearm } from "./proxies/firearm";
-import { FirearmAmmo } from "./proxies/firearm-ammo";
-import { MeleeWeapon } from "./proxies/melee-weapon";
-import { PhysicalService } from "./proxies/physical-service";
-import { PhysicalTech } from "./proxies/physical-tech";
-import { Psi } from "./proxies/psi";
-import { Railgun } from "./proxies/railgun";
-import { SeekerWeapon } from "./proxies/seeker-weapon";
-import { Sleight } from "./proxies/sleight";
-import { Software } from "./proxies/software";
-import { SprayWeapon } from "./proxies/spray-weapon";
-import { Substance } from "./proxies/substance";
-import { ThrownWeapon } from "./proxies/thrown-weapon";
-import { Trait } from "./proxies/trait";
+import type { Mutable } from 'type-fest';
+import type { ActorEP } from '../actor/actor';
+import { ItemType, ActorType } from '../entity-types';
+import type { ItemDatas } from '../models';
+import { UpdateStore } from '../update-store';
+import { EntitySubscription, Subscribable } from '../update-subcriptions';
+import { ItemEPSheet } from './item-sheet';
+import { Armor } from './proxies/armor';
+import { BeamWeapon } from './proxies/beam-weapon';
+import { Explosive } from './proxies/explosive';
+import { Firearm } from './proxies/firearm';
+import { FirearmAmmo } from './proxies/firearm-ammo';
+import { MeleeWeapon } from './proxies/melee-weapon';
+import { PhysicalService } from './proxies/physical-service';
+import { PhysicalTech } from './proxies/physical-tech';
+import { Psi } from './proxies/psi';
+import { Railgun } from './proxies/railgun';
+import { SeekerWeapon } from './proxies/seeker-weapon';
+import { Sleight } from './proxies/sleight';
+import { Software } from './proxies/software';
+import { SprayWeapon } from './proxies/spray-weapon';
+import { Substance } from './proxies/substance';
+import { ThrownWeapon } from './proxies/thrown-weapon';
+import { Trait } from './proxies/trait';
 
 type Operations = {
   openForm?: () => void;
   deleteSelf?: () => void;
 };
 
-export type ItemProxy = ReturnType<ItemEP["createAgent"]>
+export type ItemProxy = ReturnType<ItemEP['createProxy']>;
 
 export class ItemEP extends Item {
   data!: ItemDatas;
   private invalidated = true;
   readonly #subscribers = new EntitySubscription<this>();
   #updater?: UpdateStore<ItemDatas>;
-  #agent?: ItemProxy;
+  #proxy?: ItemProxy;
   #operations?: Operations;
 
   invalidate() {
@@ -64,7 +64,7 @@ export class ItemEP extends Item {
     return this.#updater;
   }
 
-  private agentInit<T extends ItemDatas>(data: T) {
+  private proxyInit<T extends ItemDatas>(data: T) {
     return {
       data,
       updater: (this.updater as unknown) as UpdateStore<T>,
@@ -77,7 +77,7 @@ export class ItemEP extends Item {
   get sheet() {
     for (const [subscriber] of this.subscriptions.subs) {
       if (subscriber instanceof ItemEPSheet) {
-        return subscriber
+        return subscriber;
       }
     }
     return null;
@@ -117,78 +117,73 @@ export class ItemEP extends Item {
   }
 
   get agent() {
-    if (!this.#agent || this.invalidated) this.#agent = this.createAgent();
+    if (!this.#proxy || this.invalidated) this.#proxy = this.createProxy();
 
     this.invalidated = false;
-    return this.#agent;
+    return this.#proxy;
   }
 
-
-
-
-  private createAgent() {
+  private createProxy() {
     const { data, actor } = this;
     switch (data.type) {
       case ItemType.Trait:
         return new Trait({
-          ...this.agentInit(data),
+          ...this.proxyInit(data),
           lockSource: actor ? actor.type !== ActorType.Character : false,
         });
 
       case ItemType.Psi:
-        return new Psi(this.agentInit(data));
+        return new Psi(this.proxyInit(data));
 
       case ItemType.Sleight:
-        return new Sleight(this.agentInit(data));
+        return new Sleight(this.proxyInit(data));
 
       case ItemType.Substance:
-        return new Substance({...this.agentInit(data), loaded: false });
+        return new Substance({ ...this.proxyInit(data), loaded: false });
 
       case ItemType.Armor:
-        return new Armor(this.agentInit(data));
+        return new Armor(this.proxyInit(data));
 
       case ItemType.Explosive:
-        return new Explosive({ ...this.agentInit(data), loaded: false });
+        return new Explosive({ ...this.proxyInit(data), loaded: false });
 
       case ItemType.Software:
-        return new Software(this.agentInit(data));
+        return new Software(this.proxyInit(data));
 
       case ItemType.MeleeWeapon:
-        return new MeleeWeapon(this.agentInit(data));
+        return new MeleeWeapon(this.proxyInit(data));
 
       case ItemType.PhysicalTech:
-        return new PhysicalTech(this.agentInit(data));
+        return new PhysicalTech(this.proxyInit(data));
 
       case ItemType.BeamWeapon:
-        return new BeamWeapon(this.agentInit(data));
+        return new BeamWeapon(this.proxyInit(data));
 
       case ItemType.Railgun:
-        return new Railgun(this.agentInit(data));
+        return new Railgun(this.proxyInit(data));
 
       case ItemType.Firearm:
-        return new Firearm(this.agentInit(data));
+        return new Firearm(this.proxyInit(data));
 
       case ItemType.FirearmAmmo:
-        return new FirearmAmmo({ ...this.agentInit(data), loaded: false });
+        return new FirearmAmmo({ ...this.proxyInit(data), loaded: false });
 
       case ItemType.PhysicalService:
-        return new PhysicalService(this.agentInit(data));
+        return new PhysicalService(this.proxyInit(data));
 
       case ItemType.SprayWeapon:
-        return new SprayWeapon(this.agentInit(data));
+        return new SprayWeapon(this.proxyInit(data));
 
       case ItemType.SeekerWeapon:
-        return new SeekerWeapon(this.agentInit(data));
+        return new SeekerWeapon(this.proxyInit(data));
 
       case ItemType.ThrownWeapon:
-        return new ThrownWeapon(this.agentInit(data));
+        return new ThrownWeapon(this.proxyInit(data));
     }
   }
-
 
   _onDelete(options: unknown, userId: string) {
     super._onDelete(options, userId);
     this.#subscribers.unsubscribeAll();
   }
-
 }

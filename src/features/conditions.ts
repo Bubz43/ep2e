@@ -1,65 +1,68 @@
-import { AptitudeType, AttackTrait } from "@src/data-enums";
-import type { DescriptionEntry } from "@src/foundry/lang-schema";
-import { localize } from "@src/foundry/localization";
-import { fromPairs } from "@src/utility/helpers";
-import { foundryIcon, localImage } from "@src/utility/images";
-import { ActionSubtype } from "./actions";
-import { ArmorType } from "./armor";
-import { createEffect, Effect } from "./effects";
-import { createFeature } from "./feature-helpers";
-import { SkillType } from "./skills";
-import { TagType } from "./tags";
-import { CommonInterval } from "./time";
+import { AptitudeType, AttackTrait } from '@src/data-enums';
+import type { DescriptionEntry } from '@src/foundry/lang-schema';
+import { localize } from '@src/foundry/localization';
+import { fromPairs } from '@src/utility/helpers';
+import { foundryIcon, localImage } from '@src/utility/images';
+import { ActionSubtype } from './actions';
+import { ArmorType } from './armor';
+import { createEffect, Effect } from './effects';
+import { createFeature } from './feature-helpers';
+import { SkillType } from './skills';
+import { TagType } from './tags';
+import { CommonInterval } from './time';
 
 export enum ConditionType {
-  Blinded = "blinded",
-  Confused = "confused",
-  Dazed = "dazed",
-  Deafened = "deafened",
-  Grappled = "grappled",
-  Immobilized = "immobilized",
-  Incapacitated = "incapacitated",
-  Prone = "prone",
-  Stunned = "stunned",
-  Unconscious = "unconscious",
+  Blinded = 'blinded',
+  Confused = 'confused',
+  Dazed = 'dazed',
+  Deafened = 'deafened',
+  Grappled = 'grappled',
+  Immobilized = 'immobilized',
+  Incapacitated = 'incapacitated',
+  Prone = 'prone',
+  Stunned = 'stunned',
+  Unconscious = 'unconscious',
 }
 
 const conditionIconPairs = [
-  [ConditionType.Blinded, foundryIcon("blind")],
-  [ConditionType.Confused, localImage("images/icons/condition/uncertainty.svg")],
-  [ConditionType.Dazed, foundryIcon("daze")],
-  [ConditionType.Deafened, foundryIcon("deaf")],
-  [ConditionType.Grappled, foundryIcon("net")],
-  [ConditionType.Immobilized, foundryIcon("statue")],
-  [ConditionType.Prone, foundryIcon("falling")],
-  [ConditionType.Unconscious, foundryIcon("unconscious")],
-  [ConditionType.Incapacitated, foundryIcon("sleep")],
-  [ConditionType.Stunned, localImage("images/icons/condition/oppression.svg")],
+  [ConditionType.Blinded, foundryIcon('blind')],
+  [
+    ConditionType.Confused,
+    localImage('images/icons/condition/uncertainty.svg'),
+  ],
+  [ConditionType.Dazed, foundryIcon('daze')],
+  [ConditionType.Deafened, foundryIcon('deaf')],
+  [ConditionType.Grappled, foundryIcon('net')],
+  [ConditionType.Immobilized, foundryIcon('statue')],
+  [ConditionType.Prone, foundryIcon('falling')],
+  [ConditionType.Unconscious, foundryIcon('unconscious')],
+  [ConditionType.Incapacitated, foundryIcon('sleep')],
+  [ConditionType.Stunned, localImage('images/icons/condition/oppression.svg')],
 ] as const;
 
 export const conditionIcons = fromPairs(conditionIconPairs);
 
 export const iconToCondition = new Map(
-  conditionIconPairs.map(([condition, icon]) => [icon, condition])
+  conditionIconPairs.map(([condition, icon]) => [icon, condition]),
 );
 
 export const conditionSync = (
   actorConditionTextures: string[],
-  tokenEffects: string[] = []
+  tokenEffects: string[] = [],
 ) => {
   return [
     ...new Set(
       tokenEffects
         .filter((e) =>
-          iconToCondition.has(e) ? actorConditionTextures.includes(e) : true
+          iconToCondition.has(e) ? actorConditionTextures.includes(e) : true,
         )
-        .concat(actorConditionTextures)
+        .concat(actorConditionTextures),
     ),
   ];
 };
 
 const miscEffect = (condition: DescriptionEntry) =>
-  createEffect.misc({ description: localize("DESCRIPTIONS", condition) });
+  createEffect.misc({ description: localize('DESCRIPTIONS', condition) });
 
 export const getConditionEffects = (condition: ConditionType): Effect[] => {
   switch (condition) {
@@ -68,12 +71,12 @@ export const getConditionEffects = (condition: ConditionType): Effect[] => {
       return [
         createEffect.successTest({
           modifier: -30,
-          requirement: localize("visionBased"),
+          requirement: localize('visionBased'),
           tags: [
             {
               type: TagType.Action,
               subtype: ActionSubtype.Physical,
-              action: "",
+              action: '',
             },
           ],
         }),
@@ -90,7 +93,7 @@ export const getConditionEffects = (condition: ConditionType): Effect[] => {
         createEffect.initiative({ modifier: -3 }),
         createEffect.successTest({
           modifier: -30,
-          requirement: localize("hearingBased"),
+          requirement: localize('hearingBased'),
           tags: [{ type: TagType.Skill, skillType: SkillType.Perceive }],
         }),
       ];
@@ -99,7 +102,7 @@ export const getConditionEffects = (condition: ConditionType): Effect[] => {
       return [
         createEffect.successTest({
           modifier: -30,
-          requirement: "Attack outside grapple",
+          requirement: 'Attack outside grapple',
           tags: [{ type: TagType.Skill, skillType: SkillType.Fray }],
         }),
         miscEffect(condition),
@@ -113,14 +116,14 @@ export const getConditionEffects = (condition: ConditionType): Effect[] => {
         miscEffect(condition),
         createEffect.successTest({
           modifier: 20,
-          requirement: "Standing/Oriented in melee range",
+          requirement: 'Standing/Oriented in melee range',
           toOpponent: true,
           tags: [{ type: TagType.AllActions }],
         }),
         createEffect.successTest({
           modifier: -10,
           toOpponent: true,
-          requirement: "Range or futher ranged attack in gravity",
+          requirement: 'Range or futher ranged attack in gravity',
           tags: [{ type: TagType.AllActions }],
         }),
       ];
@@ -132,14 +135,14 @@ export const getConditionEffects = (condition: ConditionType): Effect[] => {
             {
               type: TagType.Action,
               subtype: ActionSubtype.Physical,
-              action: "",
+              action: '',
             },
           ],
         }),
         createEffect.successTest({
           modifier: -10,
           tags: [
-            { type: TagType.Action, subtype: ActionSubtype.Mental, action: "" },
+            { type: TagType.Action, subtype: ActionSubtype.Mental, action: '' },
           ],
         }),
       ];
@@ -149,7 +152,7 @@ export const getConditionEffects = (condition: ConditionType): Effect[] => {
 };
 
 type BaseEffectInfo = {
-  condition: ConditionType | "";
+  condition: ConditionType | '';
   duration: number;
   impairment: number;
 };
@@ -157,7 +160,7 @@ type BaseEffectInfo = {
 export type ConditionEffect = {
   check: AptitudeType;
   checkModifier: number;
-  armorAsModifier: ArmorType | "";
+  armorAsModifier: ArmorType | '';
   onCheckSuccess: BaseEffectInfo[];
   onCheckFailure: (BaseEffectInfo & {
     additionalDurationPerSuperior: number;
@@ -169,14 +172,14 @@ export type ConditionEffect = {
 };
 
 const conditionEffectFromAttackTrait = (
-  trait: AttackTrait
+  trait: AttackTrait,
 ): ConditionEffect => {
   switch (trait) {
     case AttackTrait.Blinding:
       return {
         check: AptitudeType.Reflexes,
         checkModifier: 0,
-        armorAsModifier: "",
+        armorAsModifier: '',
         onCheckSuccess: [],
         onCheckFailure: [
           {
@@ -184,7 +187,7 @@ const conditionEffectFromAttackTrait = (
             duration: CommonInterval.Turn,
             impairment: 0,
             additionalDurationPerSuperior: CommonInterval.Turn,
-            notes: "",
+            notes: '',
           },
         ],
         onCriticalCheckFailure: [
@@ -192,7 +195,7 @@ const conditionEffectFromAttackTrait = (
             condition: ConditionType.Blinded,
             duration: CommonInterval.Indefinite,
             impairment: 0,
-            notes: "",
+            notes: '',
           },
         ],
       };
@@ -201,7 +204,7 @@ const conditionEffectFromAttackTrait = (
       return {
         check: AptitudeType.Reflexes,
         checkModifier: 0,
-        armorAsModifier: "",
+        armorAsModifier: '',
         onCheckSuccess: [],
         onCheckFailure: [
           {
@@ -209,7 +212,7 @@ const conditionEffectFromAttackTrait = (
             duration: CommonInterval.Instant,
             impairment: 0,
             additionalDurationPerSuperior: CommonInterval.Instant,
-            notes: "",
+            notes: '',
           },
         ],
         onCriticalCheckFailure: [],
@@ -219,7 +222,7 @@ const conditionEffectFromAttackTrait = (
       return {
         check: AptitudeType.Somatics,
         checkModifier: 0,
-        armorAsModifier: "",
+        armorAsModifier: '',
         onCheckSuccess: [],
         onCheckFailure: [
           {
@@ -227,7 +230,7 @@ const conditionEffectFromAttackTrait = (
             duration: CommonInterval.Instant,
             impairment: 0,
             additionalDurationPerSuperior: CommonInterval.Instant,
-            notes: "",
+            notes: '',
           },
         ],
         onCriticalCheckFailure: [],
@@ -237,14 +240,14 @@ const conditionEffectFromAttackTrait = (
       return {
         check: AptitudeType.Willpower,
         checkModifier: 0,
-        armorAsModifier: "",
+        armorAsModifier: '',
         onCheckFailure: [
           {
-            condition: "",
+            condition: '',
             duration: CommonInterval.Turn,
             impairment: -20,
             additionalDurationPerSuperior: 0,
-            notes: "",
+            notes: '',
           },
         ],
         onCheckSuccess: [],
@@ -269,21 +272,21 @@ const conditionEffectFromAttackTrait = (
             duration: CommonInterval.Turn,
             impairment: 0,
             additionalDurationPerSuperior: CommonInterval.Turn * 2,
-            notes: "",
+            notes: '',
           },
           {
             condition: ConditionType.Prone,
             duration: CommonInterval.Instant,
             impairment: 0,
             additionalDurationPerSuperior: 0,
-            notes: "",
+            notes: '',
           },
           {
             condition: ConditionType.Stunned,
             duration: CommonInterval.Minute * 3,
             impairment: 0,
             additionalDurationPerSuperior: 0,
-            notes: "",
+            notes: '',
           },
         ],
         onCriticalCheckFailure: [],
@@ -301,7 +304,7 @@ const conditionEffectFromAttackTrait = (
             duration: CommonInterval.Turn,
             impairment: 0,
             additionalDurationPerSuperior: CommonInterval.Turn,
-            notes: "",
+            notes: '',
           },
         ],
         onCriticalCheckFailure: [
@@ -309,13 +312,13 @@ const conditionEffectFromAttackTrait = (
             condition: ConditionType.Incapacitated,
             duration: CommonInterval.Turn,
             impairment: 0,
-            notes: "",
+            notes: '',
           },
           {
             condition: ConditionType.Stunned,
             duration: CommonInterval.Minute,
             impairment: 0,
-            notes: "",
+            notes: '',
           },
         ],
       };

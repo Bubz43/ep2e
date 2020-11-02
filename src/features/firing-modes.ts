@@ -1,26 +1,26 @@
 export enum FiringMode {
-  SingleShot = "singleShot",
-  SemiAutomatic = "semiAuto",
-  BurstFire = "burstFire",
-  FullAuto = "fullAuto",
+  SingleShot = 'singleShot',
+  SemiAutomatic = 'semiAuto',
+  BurstFire = 'burstFire',
+  FullAuto = 'fullAuto',
 }
 
 export enum MultiAmmoOption {
-  ConcentratedToHit = "concentratedToHit",
-  ConcentratedDamage = "concentratedDamage",
-  AdjacentTargets = "adjacentTargets",
+  ConcentratedToHit = 'concentratedToHit',
+  ConcentratedDamage = 'concentratedDamage',
+  AdjacentTargets = 'adjacentTargets',
 }
 
-export type FullAutoOption = MultiAmmoOption | "suppressiveFire";
+export type FullAutoOption = MultiAmmoOption | 'suppressiveFire';
 
 export const multiAmmoValues = {
   [FiringMode.BurstFire]: {
-    [MultiAmmoOption.ConcentratedDamage]: "1d10",
+    [MultiAmmoOption.ConcentratedDamage]: '1d10',
     [MultiAmmoOption.AdjacentTargets]: 2,
     [MultiAmmoOption.ConcentratedToHit]: 10,
   },
   [FiringMode.FullAuto]: {
-    [MultiAmmoOption.ConcentratedDamage]: "2d10",
+    [MultiAmmoOption.ConcentratedDamage]: '2d10',
     [MultiAmmoOption.AdjacentTargets]: 3,
     [MultiAmmoOption.ConcentratedToHit]: 30,
   },
@@ -34,7 +34,7 @@ export type FiringModeGroup =
   | [FiringMode.FullAuto, FullAutoOption];
 
 export const createFiringModeGroup = (
-  firingMode: FiringMode
+  firingMode: FiringMode,
 ): FiringModeGroup => {
   switch (firingMode) {
     case FiringMode.SemiAutomatic:
@@ -56,5 +56,5 @@ export const firingModeCost = {
 } as const;
 
 export const hasFiringModeOptions = (
-  mode: FiringMode
+  mode: FiringMode,
 ): mode is MultiAmmoFiringMode => mode in multiAmmoValues;

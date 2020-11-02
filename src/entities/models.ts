@@ -1,14 +1,17 @@
-import type { SubstanceAttackData } from "@src/combat/attacks";
-import { StringID, stringID } from "@src/features/feature-helpers";
-import type { PsiInfluence } from "@src/features/psi-influence";
-import type { CommonEntityData, TokenData } from "@src/foundry/foundry-cont";
-import type { EP } from "@src/foundry/system";
-import type { EntityTemplates, AppliedSubstanceBase } from "@src/foundry/template-schema";
-import type { UnionToIntersection, SetOptional } from "type-fest";
-import type { ActorType, sleeveTypes, ItemType } from "./entity-types";
+import type { SubstanceAttackData } from '@src/combat/attacks';
+import { StringID, stringID } from '@src/features/feature-helpers';
+import type { PsiInfluence } from '@src/features/psi-influence';
+import type { CommonEntityData, TokenData } from '@src/foundry/foundry-cont';
+import type { EP } from '@src/foundry/system';
+import type {
+  EntityTemplates,
+  AppliedSubstanceBase,
+} from '@src/foundry/template-schema';
+import type { UnionToIntersection, SetOptional } from 'type-fest';
+import type { ActorType, sleeveTypes, ItemType } from './entity-types';
 
 type EPEntity = keyof EntityTemplates;
-type EntityTypeTemplates<T extends EPEntity> = EntityTemplates[T]["templates"];
+type EntityTypeTemplates<T extends EPEntity> = EntityTemplates[T]['templates'];
 type TemplateHolder<T extends EPEntity> = {
   templates: (keyof EntityTypeTemplates<T>)[];
 };
@@ -16,7 +19,7 @@ type TemplateHolder<T extends EPEntity> = {
 type TemplateData<
   E extends EPEntity,
   T extends TemplateHolder<E>
-> = T["templates"][number];
+> = T['templates'][number];
 
 type TemplateParts<E extends EPEntity, T extends TemplateHolder<E>> = {
   [key in TemplateData<E, T>]: EntityTypeTemplates<E>[key];
@@ -26,11 +29,11 @@ type WithTemplates<
   E extends EPEntity,
   T extends TemplateHolder<E>
 > = UnionToIntersection<TemplateParts<E, T>[TemplateData<E, T>]> &
-  Omit<T, "templates">;
+  Omit<T, 'templates'>;
 
 type ActorData<T extends ActorType> = WithTemplates<
-  "Actor",
-  EntityTemplates["Actor"][T]
+  'Actor',
+  EntityTemplates['Actor'][T]
 >;
 
 export type ActorModels = {
@@ -59,7 +62,7 @@ type ActorFlags<T extends ActorType> = T extends ActorType.Character
 export type ActorEntity<T extends ActorType = ActorType> = CommonEntityData & {
   type: T;
   data: ActorModels[T];
-  token: SetOptional<Readonly<TokenData>, "elevation" | "_id" | "x" | "y">;
+  token: SetOptional<Readonly<TokenData>, 'elevation' | '_id' | 'x' | 'y'>;
   flags: Readonly<{ [EP.Name]?: Readonly<Partial<ActorFlags<T>>> }>;
   items: readonly ItemDatas[];
   effects: unknown[];
@@ -74,10 +77,10 @@ export const createActorEntity = <T extends ActorType>({
   type,
   data,
   ...seed
-}: Partial<Omit<ActorEntity<T>, "data">> & {
+}: Partial<Omit<ActorEntity<T>, 'data'>> & {
   type: T;
   name: string;
-  data?: Partial<ActorEntity<T>["data"]>;
+  data?: Partial<ActorEntity<T>['data']>;
 }): ActorEntity<T> => {
   const modelData = mergeObject(game.system.model.Actor[type], data || {}, {
     inplace: false,
@@ -113,7 +116,7 @@ export const createActorEntity = <T extends ActorType>({
       brightLight: 0,
       sightAngle: 360,
       lightAngle: 360,
-      lightColor: "",
+      lightColor: '',
       lightAlpha: 1,
       actorId: _id,
       actorLink: false,
@@ -121,8 +124,8 @@ export const createActorEntity = <T extends ActorType>({
       disposition: CONST.TOKEN_DISPOSITIONS.HOSTILE,
       displayBars: CONST.TOKEN_DISPLAY_MODES.NONE,
       randomImg: false,
-      bar1: { attribute: "" },
-      bar2: { attribute: "" },
+      bar1: { attribute: '' },
+      bar2: { attribute: '' },
     },
     ...seed,
   };
@@ -133,10 +136,10 @@ export const createItemEntity = <T extends ItemType>({
   type,
   data,
   ...seed
-}: Partial<Omit<ItemEntity<T>, "data">> & {
+}: Partial<Omit<ItemEntity<T>, 'data'>> & {
   type: T;
   name: string;
-  data?: Partial<ItemEntity<T>["data"]>;
+  data?: Partial<ItemEntity<T>['data']>;
 }): ItemEntity<T> => {
   const modelData = mergeObject(game.system.model.Item[type], data || {}, {
     inplace: false,
@@ -154,8 +157,8 @@ export const createItemEntity = <T extends ItemType>({
 };
 
 type ItemData<T extends ItemType> = WithTemplates<
-  "Item",
-  EntityTemplates["Item"][T]
+  'Item',
+  EntityTemplates['Item'][T]
 >;
 
 type ItemFlags<T extends ItemType> = T extends ItemType.Psi
@@ -218,4 +221,4 @@ export type ItemDatas = {
   [key in ItemType]: ItemEntity<key>;
 }[ItemType];
 
-export type NonEditableProps = "type" | "_id";
+export type NonEditableProps = 'type' | '_id';

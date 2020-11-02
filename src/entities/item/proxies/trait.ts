@@ -1,9 +1,9 @@
-import { TraitSource, TraitType, CharacterPoint } from "@src/data-enums";
-import { localize } from "@src/foundry/localization";
-import { notEmpty, toggle } from "@src/utility/helpers";
-import { clamp, compact } from "remeda";
-import type { ItemType } from "../../entity-types";
-import { ItemProxyBase, ItemProxyInit } from "./item-proxy-base";
+import { TraitSource, TraitType, CharacterPoint } from '@src/data-enums';
+import { localize } from '@src/foundry/localization';
+import { notEmpty, toggle } from '@src/utility/helpers';
+import { clamp, compact } from 'remeda';
+import type { ItemType } from '../../entity-types';
+import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
 export class Trait extends ItemProxyBase<ItemType.Trait> {
   readonly lockSource;
@@ -24,14 +24,14 @@ export class Trait extends ItemProxyBase<ItemType.Trait> {
       // activeEffects,
       triggered,
     } = this;
-    const triggerList = triggers ? `${localize("triggers")}: ${triggers}` : "";
+    const triggerList = triggers ? `${localize('triggers')}: ${triggers}` : '';
 
     return [
-      triggered ? "" : triggerList,
+      triggered ? '' : triggerList,
       // ...map(activeEffects?.effects || [], formatEffect),
       localize(traitType),
       localize(currentSource),
-      triggered ? triggerList : "",
+      triggered ? triggerList : '',
     ];
   }
 
@@ -40,21 +40,20 @@ export class Trait extends ItemProxyBase<ItemType.Trait> {
     return compact([
       localize(traitType),
       this.source,
-      triggered ? localize("triggered") : "",
+      triggered ? localize('triggered') : '',
       subtype,
-      ...restrictions.split(","),
-      ...triggers.split(","),
+      ...restrictions.split(','),
+      ...triggers.split(','),
     ]);
   }
 
   toggleTriggered() {
-    return this.updater.prop("data", "state", "triggered").commit(toggle);
+    return this.updater.prop('data', 'state', 'triggered').commit(toggle);
   }
 
   updateLevel(levelIndex: number) {
-    return this.updater.prop("data", "state", "level").commit(levelIndex);
+    return this.updater.prop('data', 'state', 'level').commit(levelIndex);
   }
-
 
   get fullType() {
     return `${localize(this.source)} ${localize(this.type)}`;
@@ -97,7 +96,7 @@ export class Trait extends ItemProxyBase<ItemType.Trait> {
   }
 
   get isNegative() {
-    return this.traitType === TraitType.Negative
+    return this.traitType === TraitType.Negative;
   }
 
   get levelRange() {
@@ -136,15 +135,15 @@ export class Trait extends ItemProxyBase<ItemType.Trait> {
     const { levelIndex, subtype, triggered, embedded, levels } = this;
     const parts = compact([
       subtype,
-      levels.length > 1 && embedded && `${localize("level")} ${levelIndex + 1}`,
+      levels.length > 1 && embedded && `${localize('level')} ${levelIndex + 1}`,
     ]);
 
     return [
-      triggered ? `[${localize("triggered")}]` : "",
+      triggered ? `[${localize('triggered')}]` : '',
       this.name,
-      notEmpty(parts) ? `(${parts.join(", ")})` : "",
+      notEmpty(parts) ? `(${parts.join(', ')})` : '',
     ]
-      .join(" ")
+      .join(' ')
       .trim();
   }
 
@@ -164,7 +163,6 @@ export class Trait extends ItemProxyBase<ItemType.Trait> {
   }
 
   get costLabel() {
-    return localize(this.isPositive ? "cost" : "bonus");
+    return localize(this.isPositive ? 'cost' : 'bonus');
   }
-
 }

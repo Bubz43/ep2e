@@ -13,7 +13,7 @@ export type BasicHealthData = {
    * @minimum 0
    */
   wounds: number;
-  modifications: Record<HealthModificationMode, HealthModification[]>
+  modifications: Record<HealthModificationMode, HealthModification[]>;
 };
 
 export enum HealthType {
@@ -28,9 +28,9 @@ export enum PhysicalHealthSubtype {
 }
 
 export enum HealthModificationMode {
-  Edit = "edit",
-  Heal = "heal",
-  Inflict = "inflict",
+  Edit = 'edit',
+  Heal = 'heal',
+  Inflict = 'inflict',
 }
 
 export type HealthModification = {
@@ -40,7 +40,6 @@ export type HealthModification = {
   source: string;
   timestamp: number;
 };
-
 
 export enum HealthStat {
   Derived = 'derived',
@@ -101,14 +100,14 @@ export const formatDamageType = (type: HealthType) => {
 export const healthLabels = (healthType: HealthType, stat: HealthStat) =>
   localize(healthType === HealthType.Mental ? mentalHealthStats[stat] : stat);
 
-  // export const healthDiff = <T extends CommonHealth>(
-  //   originalHealth: T,
-  //   newHealth: T
-  // ) => ({
-  //   damage: newHealth.main.damage.value - originalHealth.main.damage.value,
-  //   wounds:
-  //     (newHealth.wound?.wounds.value || 0) -
-  //     (originalHealth.wound?.wounds.value || 0),
-  //   damageLabel: originalHealth.main.damage.label,
-  //   woundLabel: originalHealth.wound?.wounds.label,
-  // });
+// export const healthDiff = <T extends CommonHealth>(
+//   originalHealth: T,
+//   newHealth: T
+// ) => ({
+//   damage: newHealth.main.damage.value - originalHealth.main.damage.value,
+//   wounds:
+//     (newHealth.wound?.wounds.value || 0) -
+//     (originalHealth.wound?.wounds.value || 0),
+//   damageLabel: originalHealth.main.damage.label,
+//   woundLabel: originalHealth.wound?.wounds.label,
+// });

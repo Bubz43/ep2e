@@ -1,20 +1,20 @@
-import { ItemType } from "@src/entities/entity-types";
-import { Trait } from "@src/entities/item/proxies/trait";
-import { ItemEntity, createItemEntity } from "@src/entities/models";
-import { localize } from "@src/foundry/localization";
-import { rollFormula } from "@src/foundry/rolls";
-import { html } from "lit-html";
-import { range } from "remeda";
-import type { Effect } from "./effects";
-import { StringID, createFeature, addFeature } from "./feature-helpers";
-import { Motivation, createMotivation } from "./motivations";
-import { EPTimeInterval, CommonInterval, toMilliseconds } from "./time";
+import { ItemType } from '@src/entities/entity-types';
+import { Trait } from '@src/entities/item/proxies/trait';
+import { ItemEntity, createItemEntity } from '@src/entities/models';
+import { localize } from '@src/foundry/localization';
+import { rollFormula } from '@src/foundry/rolls';
+import { html } from 'lit-html';
+import { range } from 'remeda';
+import type { Effect } from './effects';
+import { StringID, createFeature, addFeature } from './feature-helpers';
+import { Motivation, createMotivation } from './motivations';
+import { EPTimeInterval, CommonInterval, toMilliseconds } from './time';
 
 export enum PsiInfluenceType {
-  Damage = "physicalDamage",
-  Trait = "trait",
-  Motivation = "motivation",
-  Unique = "unique",
+  Damage = 'physicalDamage',
+  Trait = 'trait',
+  Motivation = 'motivation',
+  Unique = 'unique',
 }
 
 export type InfluenceRoll = 1 | 2 | 3 | 4 | 5 | 6;
@@ -61,61 +61,61 @@ export type TemporaryInfluence = Exclude<PsiInfluence, DamageInfluence>;
 
 const influenceBase = <T extends PsiInfluenceType>(type: T) => ({
   type,
-  description: "",
+  description: '',
 });
 
-const motivation = createFeature<MotivationInfluence, "roll" | "motivation">(
-  () => influenceBase(PsiInfluenceType.Motivation)
+const motivation = createFeature<MotivationInfluence, 'roll' | 'motivation'>(
+  () => influenceBase(PsiInfluenceType.Motivation),
 );
 
-const damage = createFeature<DamageInfluence, "roll" | "formula">(() =>
-  influenceBase(PsiInfluenceType.Damage)
+const damage = createFeature<DamageInfluence, 'roll' | 'formula'>(() =>
+  influenceBase(PsiInfluenceType.Damage),
 );
 
 const unique = createFeature<
   UniqueInfluence,
-  "roll" | "name" | "effects" | "duration"
+  'roll' | 'name' | 'effects' | 'duration'
 >(() => influenceBase(PsiInfluenceType.Unique));
 
-const trait = createFeature<TraitInfluence, "roll" | "trait">(() =>
-  influenceBase(PsiInfluenceType.Trait)
+const trait = createFeature<TraitInfluence, 'roll' | 'trait'>(() =>
+  influenceBase(PsiInfluenceType.Trait),
 );
 
 export const createPsiInfluence = { motivation, damage, unique, trait };
 
 export const createDefaultInfluence = (
   roll: InfluenceRoll,
-  type: PsiInfluenceType
+  type: PsiInfluenceType,
 ) => {
   switch (type) {
     case PsiInfluenceType.Damage:
-      return damage({ roll, formula: "1d6" });
+      return damage({ roll, formula: '1d6' });
 
     case PsiInfluenceType.Motivation:
       return motivation({
         roll,
-        motivation: createMotivation({ objective: localize("motivation") }),
+        motivation: createMotivation({ objective: localize('motivation') }),
       });
 
     case PsiInfluenceType.Trait:
       return trait({
         roll,
         trait: createItemEntity({
-          name: "Modify Behavior",
+          name: 'Modify Behavior',
           type: ItemType.Trait,
         }),
       });
 
     case PsiInfluenceType.Unique:
       return unique({
-        description: "",
-        name: "Custom Influence",
+        description: '',
+        name: 'Custom Influence',
         roll,
         duration: CommonInterval.Day,
         effects: {
           items: [],
           interval: EPTimeInterval.Minutes,
-          durationFormula: "1d6",
+          durationFormula: '1d6',
         },
       });
   }
@@ -132,7 +132,7 @@ export const createDefaultPsiInfluences = () => {
         ? createDefaultInfluence(roll, PsiInfluenceType.Trait)
         : [4, 5].includes(roll)
         ? createDefaultInfluence(roll, PsiInfluenceType.Motivation)
-        : createDefaultInfluence(roll, PsiInfluenceType.Unique)
+        : createDefaultInfluence(roll, PsiInfluenceType.Unique),
     );
   }, [] as StringID<PsiInfluence>[]);
 };
@@ -143,7 +143,7 @@ export const influenceInfo = (influence: PsiInfluence) => {
   switch (influence.type) {
     case PsiInfluenceType.Damage:
       return {
-        name: `${localize("takeDV")} ${influence.formula}`,
+        name: `${localize('takeDV')} ${influence.formula}`,
       };
 
     case PsiInfluenceType.Motivation: {
@@ -159,7 +159,7 @@ export const influenceInfo = (influence: PsiInfluence) => {
     case PsiInfluenceType.Trait: {
       const trait = new Trait({
         data: influence.trait,
-        embedded: localize("psi"),
+        embedded: localize('psi'),
         lockSource: true,
       });
       return {
@@ -179,10 +179,10 @@ export const influenceInfo = (influence: PsiInfluence) => {
 export const influenceTimeframe = (influence: TemporaryInfluence) => {
   switch (influence.type) {
     case PsiInfluenceType.Motivation:
-      return toMilliseconds({ hours: rollFormula("1d6").total || 0 });
+      return toMilliseconds({ hours: rollFormula('1d6').total || 0 });
 
     case PsiInfluenceType.Trait:
-      return toMilliseconds({ minutes: rollFormula("1d6").total || 0 });
+      return toMilliseconds({ minutes: rollFormula('1d6').total || 0 });
 
     case PsiInfluenceType.Unique: {
       return influence.duration;

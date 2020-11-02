@@ -1,14 +1,14 @@
-import { AptitudeType } from "@src/data-enums";
-import { localize } from "@src/foundry/localization";
-import { SuccessTestEffect, createEffect } from "./effects";
-import { createTag } from "./tags";
+import { AptitudeType } from '@src/data-enums';
+import { localize } from '@src/foundry/localization';
+import { SuccessTestEffect, createEffect } from './effects';
+import { createTag } from './tags';
 
 export enum Size {
-  VerySmall = "verySmall",
-  Small = "small",
-  Medium = "medium",
-  Large = "large",
-  VeryLarge = "veryLarge",
+  VerySmall = 'verySmall',
+  Small = 'small',
+  Medium = 'medium',
+  Large = 'large',
+  VeryLarge = 'veryLarge',
 }
 
 const strengthEffects = new Map<Size, SuccessTestEffect>();
@@ -28,7 +28,7 @@ export const sizeTargettedEffect = (size: Size) => {
   if (!effect) {
     effect = createEffect.successTest({
       modifier: sizeModifiers[size],
-      requirement: localize("attackingOrSpotting"),
+      requirement: localize('attackingOrSpotting'),
       toOpponent: true,
       tags: [createTag.action({})],
     });
@@ -43,7 +43,7 @@ export const strengthSizeEffect = (size: Size) => {
   if (!effect) {
     effect = createEffect.successTest({
       modifier: sizeModifiers[size],
-      requirement: localize("strengthBased"),
+      requirement: localize('strengthBased'),
       tags: [createTag.aptitudeCheck({ aptitude: AptitudeType.Somatics })],
     });
     strengthEffects.set(size, effect);

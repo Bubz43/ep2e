@@ -1,8 +1,8 @@
-import { createFeature } from "./feature-helpers";
+import { createFeature } from './feature-helpers';
 
 export enum MotivationStance {
-  Oppose = "oppose",
-  Support = "support",
+  Oppose = 'oppose',
+  Support = 'support',
 }
 
 export type Motivation = {
@@ -12,9 +12,9 @@ export type Motivation = {
 };
 
 export const createMotivation = createFeature<Motivation>(() => ({
-  objective: "",
+  objective: '',
   stance: MotivationStance.Support,
-  goal: "",
+  goal: '',
 }));
 
 export const motivationSort = (a: Motivation, b: Motivation) =>

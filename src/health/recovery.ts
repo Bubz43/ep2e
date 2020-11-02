@@ -1,9 +1,12 @@
-import { enumValues } from "@src/data-enums";
-import { HealthRecoveryEffect, Source, SourcedEffect } from "@src/features/effects";
-import { prettyMilliseconds } from "@src/features/time";
-import { localize } from "@src/foundry/localization";
-import { averageRoll } from "@src/foundry/rolls";
-
+import { enumValues } from '@src/data-enums';
+import {
+  HealthRecoveryEffect,
+  Source,
+  SourcedEffect,
+} from '@src/features/effects';
+import { prettyMilliseconds } from '@src/features/time';
+import { localize } from '@src/foundry/localization';
+import { averageRoll } from '@src/foundry/rolls';
 
 export enum DotOrHotTarget {
   Damage = 'damage',
@@ -27,11 +30,11 @@ export type HealsOverTime = {
   [key in DotOrHotTarget]: HealthTick;
 };
 
-export type BasicTickInfo = Pick<HealthTick, "amount" | "interval">;
+export type BasicTickInfo = Pick<HealthTick, 'amount' | 'interval'>;
 
 export enum HealingSlot {
-  OwnHealing = "own",
-  Aided = "aided",
+  OwnHealing = 'own',
+  Aided = 'aided',
 }
 
 export type HealthRecovery = BasicTickInfo & {
@@ -59,35 +62,35 @@ export const recoveryMultiplier = (condition: RecoveryConditions) => {
 export const recoveryConditionsLabel = (condition: RecoveryConditions) => {
   return `${localize(condition)} ${
     condition === RecoveryConditions.Normal
-      ? ""
+      ? ''
       : `x${recoveryMultiplier(condition)}`
   }`.trim();
 };
 
 export const formatAutoHealing = (
   { amount, interval }: BasicTickInfo,
-  conditions = RecoveryConditions.Normal
+  conditions = RecoveryConditions.Normal,
 ) => {
   return [
-    amount || "-",
-    localize("per").toLocaleLowerCase(),
+    amount || '-',
+    localize('per').toLocaleLowerCase(),
     prettyMilliseconds(interval * recoveryMultiplier(conditions), {
       compact: true,
       approx: true,
     }),
-  ].join(" ");
+  ].join(' ');
 };
 
 export const tickRate = ({ amount, interval }: BasicTickInfo) =>
   averageRoll(amount) / interval;
 
 export const healingSlotToProp = (slot: HealingSlot) =>
-  slot === HealingSlot.Aided ? "lastAidedTick" : "lastUnaidedTick";
+  slot === HealingSlot.Aided ? 'lastAidedTick' : 'lastUnaidedTick';
 
 export const setupHealthRecoveries = (
   hot: HealsOverTime,
   biological: boolean,
-  effects: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>> = []
+  effects: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>> = [],
 ) => {
   // TODO: Also need healing timeframe duration effect
   const groups = {
@@ -104,7 +107,7 @@ export const setupHealthRecoveries = (
     group.set(innate, {
       ...hot[stat],
       slot: innate,
-      source: localize("innate"),
+      source: localize('innate'),
       timeSinceTick: getTimeSince(stat, innate),
     });
   }

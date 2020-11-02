@@ -7,7 +7,11 @@ import {
 } from '@src/data-enums';
 import { localize } from '@src/foundry/localization';
 import { HealthType, HealthStat, healthLabels } from '@src/health/health';
-import { HealthTick, DotOrHotTarget, formatAutoHealing } from '@src/health/recovery';
+import {
+  HealthTick,
+  DotOrHotTarget,
+  formatAutoHealing,
+} from '@src/health/recovery';
 import { withSign } from '@src/utility/helpers';
 import { map, createPipe, compact, purry, anyPass } from 'remeda';
 import type { Action, ActionSubtype } from './actions';

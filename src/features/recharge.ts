@@ -1,7 +1,7 @@
-import { RechargeType } from "@src/data-enums";
-import { clamp } from "remeda";
-import { RechargeEffect, RechargeStat } from "./effects";
-import { toMilliseconds } from "./time";
+import { RechargeType } from '@src/data-enums';
+import { clamp } from 'remeda';
+import { RechargeEffect, RechargeStat } from './effects';
+import { toMilliseconds } from './time';
 
 const baseRechargeInfo = {
   [RechargeType.Short]: {
@@ -31,7 +31,7 @@ type RechargeInit = RechargeData & {
   type: RechargeType;
 };
 
-export type ReadonlyRecharge = Omit<Recharge, "addEffect">;
+export type ReadonlyRecharge = Omit<Recharge, 'addEffect'>;
 export class Recharge {
   readonly type: RechargeType;
   readonly taken: number;
@@ -47,7 +47,7 @@ export class Recharge {
     this.refreshTimer = refreshTimer;
 
     this.#max = baseRechargeInfo[this.type].max;
-    
+
     this.#timeframe =
       this.type === RechargeType.Short || !inBiological
         ? baseRechargeInfo[this.type].duration

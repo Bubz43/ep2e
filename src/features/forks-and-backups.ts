@@ -1,5 +1,5 @@
-import { Fork } from "@src/data-enums";
-import { createFeature } from "./feature-helpers";
+import { Fork } from '@src/data-enums';
+import { createFeature } from './feature-helpers';
 
 export type ActiveForkData = {
   forkType: Fork;
@@ -21,7 +21,7 @@ export type EgoBackupData = {
 export const createActiveForkData = createFeature<ActiveForkData>(() => ({
   whenMade: new Date().toISOString(),
   forkType: Fork.Alpha,
-  notes: "",
-  packId: "",
-  forkId: "",
+  notes: '',
+  packId: '',
+  forkId: '',
 }));

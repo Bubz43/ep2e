@@ -1,16 +1,13 @@
-export type EntitySubCallbacks<
-  T,
-> = {
+export type EntitySubCallbacks<T> = {
   onEntityUpdate: (entity: T) => void;
   onSubEnd?: () => void;
 };
 
-export type Subscribable<
-  T,
-> = Omit<EntitySubscription<T>, "updateSubscribers" | "unsubscribeAll">;
-export class EntitySubscription<
-  T,
-> {
+export type Subscribable<T> = Omit<
+  EntitySubscription<T>,
+  'updateSubscribers' | 'unsubscribeAll'
+>;
+export class EntitySubscription<T> {
   #subs = new Map<object, EntitySubCallbacks<T>>();
 
   get subs() {
@@ -18,7 +15,7 @@ export class EntitySubscription<
   }
 
   subscribe(subscriber: object, callbacks: EntitySubCallbacks<T>) {
-    // TODO: maybe unsubscribe if key already exists 
+    // TODO: maybe unsubscribe if key already exists
     this.#subs.set(subscriber, callbacks);
     return () => this.unsubscribe(subscriber);
   }

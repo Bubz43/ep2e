@@ -15,7 +15,7 @@ import type {
 import type { EP, SystemSchema } from './system';
 import type { ActorDatas, ActorModels, ItemModels } from '@src/entities/models';
 import type { EntityTemplates } from './template-schema';
-
+import type { UserHotbarEntry } from '@src/features/hotbar-entry';
 // * Comment out canvas, game, ui from foundry.d.ts
 // * Add in context param to Entity.prototype._onUpdate
 // * Add generic type to collection
@@ -133,7 +133,7 @@ type CombatRoundInfo = {
 };
 
 type Col<T extends Entity> = Omit<Collection<T>, 'get'> & {
-  get(id: string, options: { strict: Boolean }): T | null;
+  get(id: string, options?: { strict: Boolean }): T | null;
   render(force: boolean): unknown;
 };
 
@@ -295,7 +295,7 @@ declare global {
         password: string;
         flags: {
           [EP.Name]?: Partial<{
-            // hotbar: UserHotbarEntry[];
+            hotbar: UserHotbarEntry[];
           }>;
         };
       }
@@ -377,13 +377,12 @@ declare global {
     }>,
   ): O & C;
 
-  
-type System = {
-  id: EP.Name;
-  template: EntityTemplates;
-  model: { Actor: ActorModels; Item: ItemModels };
-  data: SystemSchema;
-};
+  type System = {
+    id: EP.Name;
+    template: EntityTemplates;
+    model: { Actor: ActorModels; Item: ItemModels };
+    data: SystemSchema;
+  };
 
   const game: GameCollections & {
     user: UserEP;

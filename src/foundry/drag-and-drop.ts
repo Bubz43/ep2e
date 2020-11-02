@@ -1,0 +1,275 @@
+import { enumValues } from '@src/data-enums';
+import { ActorEP } from '@src/entities/actor/actor';
+import { ItemEP } from '@src/entities/item/item';
+import type { ItemEntity } from '@src/entities/models';
+import { Effect, EffectType } from '@src/features/effects';
+import type { StringID } from '@src/features/feature-helpers';
+import {
+  HotbarEntryData,
+  HotbarCell,
+  HotbarEntryType,
+} from '@src/features/hotbar-entry';
+import { PsiInfluence, PsiInfluenceType } from '@src/features/psi-influence';
+import { isJsonObject } from '@src/utility/helpers';
+import { createPipe } from 'remeda';
+import type { JsonObject } from 'type-fest';
+
+const source: {
+  element: HTMLElement | null | undefined;
+  data: Drop | null | undefined;
+} = { element: null, data: null };
+
+const parseData = (ev: DragEvent) => {
+  const stringifiedData = ev.dataTransfer?.getData('text/plain');
+  let drop: null | unknown = null;
+  try {
+    drop = typeof stringifiedData === 'string' && JSON.parse(stringifiedData);
+  } catch {
+    drop = null;
+  }
+  return { ev, drop, srcEl: source.element, data: source.data };
+};
+
+type KnownDrop<T extends { type: DropType }> = T;
+
+export type Drop = Drops[DropType];
+
+type DropHandler = (info: ReturnType<typeof parseData>) => void;
+
+type UnknownValues<T> = {
+  [key in keyof T]?: unknown;
+};
+
+const dropChecker = <T extends DropType, D = Drops[T]>(
+  type: T,
+  finalCheck: (obj: UnknownValues<D> & { type: T }) => boolean,
+) => (droppedData: unknown): droppedData is D => {
+  return !!(
+    isJsonObject(droppedData) &&
+    droppedData.type === type &&
+    finalCheck(droppedData as JsonObject & { type: T })
+  );
+};
+
+export const dragSource = () => source as Readonly<typeof source>;
+
+const setDragSource = (ev: DragEvent, drop: Drop) => {
+  const el = ev
+    .composedPath()
+    .find(
+      (e) => e instanceof HTMLElement && e.getAttribute('draggable') === 'true',
+    ) as HTMLElement | undefined;
+
+  el?.addEventListener(
+    'dragend',
+    () => {
+      source.element = null;
+      source.data = null;
+    },
+    {
+      once: true,
+    },
+  );
+
+  source.element = el;
+  source.data = drop;
+};
+
+export enum DropType {
+  Macro = 'Macro',
+  HotbarEntryData = 'HotbarEntryData',
+  FullHotbarEntry = 'FullHotbarEntry',
+  Roll = 'Roll',
+  Item = 'Item',
+  Effect = 'Effect',
+  PsiInfluence = 'PsiInfluence',
+  Actor = 'Actor',
+}
+
+type MacroDrop = KnownDrop<{ id: string; type: DropType.Macro }>;
+type HotbarEntryDataDrop = KnownDrop<{
+  type: DropType.HotbarEntryData;
+  data: HotbarEntryData;
+}>;
+type FullHotbarEntry = KnownDrop<{
+  type: DropType.FullHotbarEntry;
+  data: StringID<HotbarCell<HotbarEntryData>>;
+}>;
+
+type RollDrop = KnownDrop<{
+  type: DropType.Roll;
+  messageId: string;
+  roll: number;
+  formula: string;
+  flavor: string;
+}>;
+
+export type ActorDrop = KnownDrop<{
+  type: DropType.Actor;
+  id: string;
+  pack?: string;
+}>;
+
+export type ItemDrop =
+  | KnownDrop<{
+      type: DropType.Item;
+      actorId?: string;
+      tokenId?: string;
+      data: ItemEntity;
+    }>
+  | KnownDrop<{
+      type: DropType.Item;
+      pack: string;
+      id: string;
+    }>
+  | KnownDrop<{
+      type: DropType.Item;
+      id: string;
+    }>;
+
+type EffectDrop = KnownDrop<{ type: DropType.Effect; effect: Effect }>;
+
+type PsiInfluenceDrop = KnownDrop<{
+  type: DropType.PsiInfluence;
+  influence: PsiInfluence;
+}>;
+
+type Drops = {
+  [DropType.Macro]: MacroDrop;
+  [DropType.HotbarEntryData]: HotbarEntryDataDrop;
+  [DropType.FullHotbarEntry]: FullHotbarEntry;
+  [DropType.Roll]: RollDrop;
+  [DropType.Item]: ItemDrop;
+  [DropType.Effect]: EffectDrop;
+  [DropType.PsiInfluence]: PsiInfluenceDrop;
+  [DropType.Actor]: ActorDrop;
+};
+
+const isMacro = dropChecker(DropType.Macro, ({ id }) => typeof id === 'string');
+
+const isHotbarEntry = (
+  data: unknown,
+): data is JsonObject & { type: HotbarEntryType } => {
+  return (
+    isJsonObject(data) &&
+    (Object.values(HotbarEntryType) as unknown[]).includes(data.type)
+  );
+};
+
+const isHotbarEntryData = dropChecker(DropType.HotbarEntryData, ({ data }) => {
+  return isHotbarEntry(data);
+});
+
+const isFullHotbarEntry = dropChecker(
+  DropType.FullHotbarEntry,
+  ({ data }) =>
+    isHotbarEntry(data) &&
+    typeof data.id === 'string' &&
+    typeof data.cell === 'number',
+);
+
+const isRollDrop = dropChecker(
+  DropType.Roll,
+  ({ messageId, roll, formula, flavor }) => {
+    return (
+      typeof messageId === 'string' &&
+      typeof roll === 'number' &&
+      typeof formula === 'string' &&
+      typeof flavor === 'string'
+    );
+  },
+);
+
+const isItemDrop = dropChecker(DropType.Item, (itemDrop) => {
+  return (
+    ('actorId' in itemDrop && isJsonObject(itemDrop.data)) ||
+    ('id' in itemDrop && typeof itemDrop.id === 'string')
+  );
+});
+
+const isEffectDrop = dropChecker(DropType.Effect, ({ effect }) => {
+  return (
+    isJsonObject(effect) &&
+    enumValues(EffectType).some((t) => t === effect.type)
+  );
+});
+
+const isInfluenceDrop = dropChecker(DropType.PsiInfluence, ({ influence }) => {
+  return (
+    isJsonObject(influence) &&
+    typeof influence.type === 'string' &&
+    (enumValues(PsiInfluenceType) as string[]).includes(influence.type)
+  );
+});
+
+const isActorDrop = dropChecker(DropType.Actor, ({ pack, id }) => {
+  return !!(
+    typeof id === 'string' &&
+    id.length &&
+    (!pack || (typeof pack === 'string' && pack.length))
+  );
+});
+
+const droppedChecks: Record<DropType, (dropped: unknown) => boolean> = {
+  [DropType.Macro]: isMacro,
+  [DropType.HotbarEntryData]: isHotbarEntryData,
+  [DropType.FullHotbarEntry]: isFullHotbarEntry,
+  [DropType.Roll]: isRollDrop,
+  [DropType.Item]: isItemDrop,
+  [DropType.Effect]: isEffectDrop,
+  [DropType.PsiInfluence]: isInfluenceDrop,
+  [DropType.Actor]: isActorDrop,
+};
+
+export const isKnownDrop = (droppedData: unknown): droppedData is Drop => {
+  return !!(
+    isJsonObject(droppedData) &&
+    typeof droppedData.type === 'string' &&
+    droppedData.type in droppedChecks &&
+    droppedChecks[droppedData.type as DropType](droppedData)
+  );
+};
+
+export const handleDrop = (handler: DropHandler) =>
+  createPipe(parseData, handler);
+
+export const dragValue = (check: unknown) => (check ? 'true' : 'false');
+
+export const setDragDrop = (ev: DragEvent, drop: Drop) => {
+  setDragSource(ev, drop);
+  ev.dataTransfer?.setData('text/plain', JSON.stringify(drop));
+};
+
+export const actorDroptoActorAgent = async (drop: ActorDrop) => {
+  if (drop.pack) {
+    const pack = game.packs.get(drop.pack);
+    const actor = await pack?.getEntity(drop.id);
+    if (actor instanceof ActorEP) return actor.agent;
+  }
+  return game.actors.get(drop.id)?.agent;
+};
+
+export const itemDropToItemAgent = async (drop: ItemDrop) => {
+  if ('pack' in drop) {
+    const pack = game.packs.get(drop.pack);
+    const item = await pack?.getEntity(drop.id);
+    if (item instanceof ItemEP) return item.agent;
+  } else if ('id' in drop) {
+    return game.items.get(drop.id)?.agent;
+  } else {
+    const actor = drop.tokenId
+      ? game.actors.tokens[drop.tokenId] ||
+        (drop.actorId && game.actors.get(drop.actorId))
+      : drop.actorId
+      ? game.actors.get(drop.actorId)
+      : null;
+    return (
+      actor?.items?.get(drop.data?._id)?.agent ||
+      new ItemEP(drop.data, {}).agent
+    );
+  }
+  return null;
+};
+
+export const effectDrag = (effect: Effect) => (ev: DragEvent) =>
+  setDragDrop(ev, { type: DropType.Effect, effect });

@@ -60,7 +60,10 @@ import type { ActionType, ActiveTaskAction } from '@src/features/actions';
 import type { ConditionType } from '@src/features/conditions';
 import type { Effect } from '@src/features/effects';
 import type { FiringMode } from '@src/features/firing-modes';
-import type { ActiveForkData, EgoBackupData } from '@src/features/forks-and-backups';
+import type {
+  ActiveForkData,
+  EgoBackupData,
+} from '@src/features/forks-and-backups';
 import type { Motivation } from '@src/features/motivations';
 import type { MovementRate } from '@src/features/movement';
 import type { RechargeData } from '@src/features/recharge';
@@ -130,8 +133,6 @@ type ActorTypeTemplates = AT<ActorType.Character, CharacterData> &
   AT<ActorType.Biological, BiologicalData> &
   AT<ActorType.Infomorph, InfomorphData>;
 
-  
-
 type ItemTemplates = Template<'Common', CommonDetails> &
   Template<'Cost', GearCost & { quality: GearQuality }> &
   Template<'GearTraits', GearTraits> &
@@ -142,7 +143,7 @@ type ActorTemplates = Template<'Common', CommonDetails> &
   Template<'Acquisition', Acquisition> &
   Template<'PoolData', { pools: MorphPoolsData }> &
   Template<'Conditions', { conditions: ConditionType[] }>;
-  // Template<"PhysicalHealth", { physicalHealth: PhysicalHealthData }> &
+// Template<"PhysicalHealth", { physicalHealth: PhysicalHealthData }> &
 // Template<"FullMeshHealth", { meshHealth: FullMeshHealthData }> &
 // Template<"Firewall", { firewall: FirewallData }> &
 
@@ -151,7 +152,7 @@ type UseItemTemplate<T extends (keyof ItemTemplates)[]> = T;
 
 export type EgoData = {
   egoType: string;
-  forkType: "" | Fork;
+  forkType: '' | Fork;
   threat: number;
   flex: number;
   aptitudes: Readonly<Aptitudes>;
@@ -189,10 +190,8 @@ export type AppliedSubstanceBase = {
   conditions: ConditionType[];
 };
 
-
-
 type CharacterData = EgoData & {
-  templates: ["Common"];
+  templates: ['Common'];
   fakeId: string;
   homeDevice: { itemId: string; actorId: string };
   network: {
@@ -233,12 +232,12 @@ type CharacterData = EgoData & {
 type InfomorphData = {
   templates: UseActorTemplate<
     [
-      "Common",
-      "Acquisition",
-      "PoolData",
+      'Common',
+      'Acquisition',
+      'PoolData',
       // "FullMeshHealth",
       // "Firewall",
-      "Conditions"
+      'Conditions',
     ]
   >;
   subtype: string;
@@ -250,18 +249,18 @@ type InfomorphData = {
 type SyntheticShellData = {
   templates: UseActorTemplate<
     [
-      "Common",
-      "Mobile",
-      "Acquisition",
-      "PoolData",
+      'Common',
+      'Mobile',
+      'Acquisition',
+      'PoolData',
       // "PhysicalHealth",
       // "FullMeshHealth",
       // "Firewall",
-      "Conditions"
+      'Conditions',
     ]
   >;
   shellType: ShellType;
-  subtype: "" | VehicleType | BotType;
+  subtype: '' | VehicleType | BotType;
   hostType: ShellHostType;
   passengers: number;
   unarmedDV: string;
@@ -284,14 +283,14 @@ type SyntheticShellData = {
 type BiologicalData = {
   templates: UseActorTemplate<
     [
-      "Common",
-      "Mobile",
-      "Acquisition",
-      "PoolData",
+      'Common',
+      'Mobile',
+      'Acquisition',
+      'PoolData',
       // "PhysicalHealth",
       // "FullMeshHealth",
       // "Firewall",
-      "Conditions"
+      'Conditions',
     ]
   >;
   subtype: string;
@@ -306,7 +305,6 @@ type BiologicalData = {
   size: Size;
   recoveryConditions: RecoveryConditions;
 };
-
 
 type IT<
   /* Only 1 */
@@ -662,8 +660,6 @@ type PhysicalServiceData = {
   duration: number;
   state: { elapsed: number };
 };
-
-
 
 export interface EntityTemplates {
   Actor: {

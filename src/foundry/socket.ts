@@ -1,7 +1,7 @@
-import type { CombatantSocket } from "@src/combat/combatant-commands";
-import type { ItemOperations } from "@src/entities/actor/actor";
-import { once } from "remeda";
-import { EP } from "./system";
+import type { CombatantSocket } from '@src/combat/combatant-commands';
+import type { ItemOperations } from '@src/entities/actor/actor';
+import { once } from 'remeda';
+import { EP } from './system';
 
 type ItemChange = {
   itemIds: string[];
@@ -20,7 +20,7 @@ type SystemSocketEvent = keyof SystemSocketData;
 type SocketHandler<T extends SystemSocketEvent> = ((
   data: SystemSocketData[T],
   id: string,
-  local: boolean
+  local: boolean,
 ) => unknown | Promise<unknown>) & { once?: boolean };
 
 const socketListeners = new Map<
@@ -34,7 +34,7 @@ const isSystemSocketEvent = (event: string): event is SystemSocketEvent =>
 const systemSocketHandler = (
   socketData: Partial<SystemSocketData>,
   id: string,
-  local: boolean
+  local: boolean,
 ) => {
   for (const [event, data] of Object.entries(socketData)) {
     if (isSystemSocketEvent(event) && data) {
@@ -49,7 +49,7 @@ const systemSocketHandler = (
 export const addEPSocketHandler = <T extends SystemSocketEvent>(
   key: T,
   handler: SocketHandler<T>,
-  { once = false } = {}
+  { once = false } = {},
 ) => {
   handler.once = handler.once ?? once;
   const current = (socketListeners.get(key) || new Set()) as Set<
@@ -62,7 +62,7 @@ export const addEPSocketHandler = <T extends SystemSocketEvent>(
 
 export const emitEPSocket = (
   data: Partial<SystemSocketData>,
-  transmitLocally = false
+  transmitLocally = false,
 ) => {
   if (transmitLocally)
     systemSocketHandler(data, game.socket.id, transmitLocally);
@@ -70,5 +70,5 @@ export const emitEPSocket = (
 };
 
 export const setupSystemSocket = once(() =>
-  game.socket.on(EP.Socket, systemSocketHandler)
+  game.socket.on(EP.Socket, systemSocketHandler),
 );

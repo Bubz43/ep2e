@@ -1,21 +1,25 @@
-import { SurpriseState } from "@src/data-enums";
-import { UpdateStore } from "@src/entities/update-store";
-import type { Action } from "@src/features/actions";
-import { updateFeature, addFeature, removeFeature } from "@src/features/feature-helpers";
-import { isGamemaster } from "@src/foundry/misc-helpers";
-import { rollFormula } from "@src/foundry/rolls";
-import { emitEPSocket, SystemSocketData } from "@src/foundry/socket";
-import { EP } from "@src/foundry/system";
-import { pick, pipe, takeWhile, reject, map, filter } from "remeda";
-import { Combatant, CombatantHelpers } from "./combatant";
+import { SurpriseState } from '@src/data-enums';
+import { UpdateStore } from '@src/entities/update-store';
+import type { Action } from '@src/features/actions';
+import {
+  updateFeature,
+  addFeature,
+  removeFeature,
+} from '@src/features/feature-helpers';
+import { isGamemaster } from '@src/foundry/misc-helpers';
+import { rollFormula } from '@src/foundry/rolls';
+import { emitEPSocket, SystemSocketData } from '@src/foundry/socket';
+import { EP } from '@src/foundry/system';
+import { pick, pipe, takeWhile, reject, map, filter } from 'remeda';
+import { Combatant, CombatantHelpers } from './combatant';
 
 enum CommandName {
-  ApplySurprise = "applySurprise",
-  ApplyMovement = "applyMovement",
-  AlterUsedActions = "alterUsedActions",
-  TakeIniative = "takeInitiative",
-  ToggleTurnDelay = "toggleTurnDelay",
-  TakeExtraAction = "takeExtraAction",
+  ApplySurprise = 'applySurprise',
+  ApplyMovement = 'applyMovement',
+  AlterUsedActions = 'alterUsedActions',
+  TakeIniative = 'takeInitiative',
+  ToggleTurnDelay = 'toggleTurnDelay',
+  TakeExtraAction = 'takeExtraAction',
 }
 
 type TurnSettings = Partial<{
@@ -30,7 +34,7 @@ type TurnSettings = Partial<{
 
 const rollInitiative = (combatant: Combatant, formula?: string) => {
   return (
-    rollFormula(formula || game.combat?._getInitiativeFormula(combatant) || "")
+    rollFormula(formula || game.combat?._getInitiativeFormula(combatant) || '')
       .total || 0
   );
 };
@@ -50,7 +54,7 @@ type CommandHandler = (commandArgs: CommandArguments) => void;
 
 const commandWrapper = (
   command: CommandName,
-  handler: (args: Required<CommandArguments>) => void
+  handler: (args: Required<CommandArguments>) => void,
 ): CommandHandler => ({ settings = {}, combatant }) => {
   // TODO: See if I should add combat ID as well
   if (game.user.isGM) handler({ settings, combatant });
@@ -65,33 +69,40 @@ const surprise = commandWrapper(
     const initMod = surprise === SurpriseState.Alerted ? 3 : 0;
     if (hasRolled) {
       CombatantHelpers.updater(combatant)
-        .prop("initiative")
+        .prop('initiative')
         .store(String(rollInitiative(combatant, initiativeFormula) - initMod))
-        .prop("flags", EP.Name, "surprise")
+        .prop('flags', EP.Name, 'surprise')
         .commit(surprise);
     } else {
       await game.combat?.rollInitiative([combatant._id], {
-        formula: `${initiativeFormula || game.combat._getInitiativeFormula(combatant)} - ${initMod}` as unknown as null,
+        formula: (`${
+          initiativeFormula || game.combat._getInitiativeFormula(combatant)
+        } - ${initMod}` as unknown) as null,
       });
       CombatantHelpers.updater(combatant)
-        .prop("flags", EP.Name, "surprise")
+        .prop('flags', EP.Name, 'surprise')
         .commit(surprise);
     }
-  }
+  },
 );
 
 const movement = commandWrapper(
   CommandName.ApplyMovement,
   ({ combatant, settings }) => {
-    if (!combatant.token || !settings.movement || game.combat?.combatant !== combatant) return;
+    if (
+      !combatant.token ||
+      !settings.movement ||
+      game.combat?.combatant !== combatant
+    )
+      return;
     const { tokenMovement = [] } = CombatantHelpers.flags(combatant);
     const currentRound = game.combat.round;
     const loggedMovement = tokenMovement.find(
-      ({ round }) => round === currentRound
+      ({ round }) => round === currentRound,
     );
 
     CombatantHelpers.updater(combatant)
-      .prop("flags", EP.Name, "tokenMovement")
+      .prop('flags', EP.Name, 'tokenMovement')
       .commit(
         loggedMovement
           ? updateFeature(tokenMovement, {
@@ -102,13 +113,13 @@ const movement = commandWrapper(
               round: currentRound,
               moves: [settings.movement],
               originalCoordinates: pick(combatant.token, [
-                "x",
-                "y",
-                "elevation",
+                'x',
+                'y',
+                'elevation',
               ]),
-            })
+            }),
       );
-  }
+  },
 );
 
 const alterActions = commandWrapper(
@@ -120,11 +131,11 @@ const alterActions = commandWrapper(
     const { takenActions = [] } = CombatantHelpers.flags(combatant);
     const turnActions = takenActions.find(({ round }) => round === onRound);
     const actionUpdate = CombatantHelpers.updater(combatant).prop(
-      "flags",
+      'flags',
       EP.Name,
-      "takenActions"
+      'takenActions',
     ).commit;
-    if ("addAction" in settings.alterActions) {
+    if ('addAction' in settings.alterActions) {
       const { addAction } = settings.alterActions;
       const updatedActions = addFeature(turnActions?.actions || [], addAction);
       actionUpdate(
@@ -136,7 +147,7 @@ const alterActions = commandWrapper(
           : addFeature(takenActions, {
               round: onRound,
               actions: updatedActions,
-            })
+            }),
       );
     } else if (turnActions) {
       const { removeAction } = settings.alterActions;
@@ -144,30 +155,31 @@ const alterActions = commandWrapper(
         updateFeature(takenActions, {
           actions: removeFeature(turnActions.actions, removeAction),
           id: turnActions.id,
-        })
+        }),
       );
     }
-  }
+  },
 );
 
 const initiative = commandWrapper(
   CommandName.TakeIniative,
   ({ combatant, settings }) => {
     const updater = CombatantHelpers.updater(combatant)
-      .prop("flags", EP.Name, "tookInitiative")
+      .prop('flags', EP.Name, 'tookInitiative')
       .store(true)
-      .prop("initiative")
+      .prop('initiative')
       .store((initiative) =>
         String(
           (initiative == null
             ? rollInitiative(combatant)
-            : parseFloat(initiative)) + CombatantHelpers.tempTakeInitiativeBonus
-        )
+            : parseFloat(initiative)) +
+            CombatantHelpers.tempTakeInitiativeBonus,
+        ),
       );
     settings.meshOrMentalOnly
-      ? updater.prop("flags", EP.Name, "mentalOrMeshOnly").commit(true)
+      ? updater.prop('flags', EP.Name, 'mentalOrMeshOnly').commit(true)
       : updater.commit();
-  }
+  },
 );
 
 const toggleTurnDelay = commandWrapper(
@@ -179,12 +191,12 @@ const toggleTurnDelay = commandWrapper(
     const updater = CombatantHelpers.updater(combatant);
 
     if (!delay) {
-      await updater.prop("flags", EP.Name, "delay").commit(true);
+      await updater.prop('flags', EP.Name, 'delay').commit(true);
       await game.combat.nextTurn();
       return;
     }
 
-    updater.prop("flags", EP.Name, "delay").store(false);
+    updater.prop('flags', EP.Name, 'delay').store(false);
     const { turn, turns } = game.combat;
     const currentCombatant = CombatantHelpers.current();
     if (
@@ -196,15 +208,15 @@ const toggleTurnDelay = commandWrapper(
     } else {
       const { initiative } = combatant;
       const newInitiative = String(
-        parseFloat(currentCombatant?.initiative ?? initiative ?? "0") + 0.01
+        parseFloat(currentCombatant?.initiative ?? initiative ?? '0') + 0.01,
       );
       if (newInitiative === turns[turn - 1]?.initiative) {
-        updater.prop("initiative").store(newInitiative);
+        updater.prop('initiative').store(newInitiative);
         pipe(
           turns,
           takeWhile((c) => c !== currentCombatant),
           reject((c) => c === combatant),
-          map((c) => [c, parseFloat(c.initiative || "0") * 100] as const),
+          map((c) => [c, parseFloat(c.initiative || '0') * 100] as const),
           async (combatants) => {
             const turnMap = new Map(combatants.reverse());
             let targetInit = parseFloat(newInitiative) * 100;
@@ -220,21 +232,21 @@ const toggleTurnDelay = commandWrapper(
               filter(([c, init]) => parseFloat(c.initiative!) * 100 !== init),
               map(([turnCombatant, init]) =>
                 CombatantHelpers.updater(turnCombatant)
-                  .prop("initiative")
-                  .store((init / 100).toFixed(2))
+                  .prop('initiative')
+                  .store((init / 100).toFixed(2)),
               ),
               (updaters) => UpdateStore.prepUpdateMany([...updaters, updater]),
-              CombatantHelpers.updateMany
+              CombatantHelpers.updateMany,
             );
-          }
+          },
         );
-      } else await updater.prop("initiative").commit(newInitiative);
+      } else await updater.prop('initiative').commit(newInitiative);
     }
 
     if (turn !== 0 && turns.findIndex((c) => c._id === combatant._id) < turn) {
       await game.combat.previousTurn();
     }
-  }
+  },
 );
 
 const takeExtraAction = commandWrapper(
@@ -242,14 +254,14 @@ const takeExtraAction = commandWrapper(
   async ({ combatant, settings }) => {
     if (!game.combat) return;
     const extraAction = game.combat.turns.some(
-      CombatantHelpers.isCopy(combatant)
+      CombatantHelpers.isCopy(combatant),
     )
       ? 2
       : 1;
     const originalCombatant = game.combat.turns.find(
       (c) =>
         c.tokenId === combatant.tokenId &&
-        !CombatantHelpers.flags(c).extraAction
+        !CombatantHelpers.flags(c).extraAction,
     );
     if (originalCombatant) {
       const {
@@ -261,13 +273,13 @@ const takeExtraAction = commandWrapper(
         tokenId,
         hidden,
         initiative: pipe(
-          originalCombatant.initiative || "0",
+          originalCombatant.initiative || '0',
           parseFloat,
           (init) =>
             tookInitiative
               ? init - CombatantHelpers.tempTakeInitiativeBonus
               : init,
-          (init) => (init - 100 - extraAction / 100).toFixed(2)
+          (init) => (init - 100 - extraAction / 100).toFixed(2),
         ),
         flags: {
           [EP.Name]: {
@@ -278,7 +290,7 @@ const takeExtraAction = commandWrapper(
         },
       });
     }
-  }
+  },
 );
 
 export const combatantCommands: Record<CommandName, CommandHandler> = {
@@ -294,7 +306,7 @@ export const combatantSocketHandler = ({
   _id,
   command,
   settings: options = {},
-}: SystemSocketData["combatant"]) => {
+}: SystemSocketData['combatant']) => {
   if (isGamemaster()) {
     const combatant = CombatantHelpers.get(_id);
     combatant && combatantCommands[command]({ combatant, settings: options });

@@ -1,20 +1,20 @@
-import { debounceFn } from "@src/utility/decorators";
-import { TemplateResult, render } from "lit-html";
-import { SlWindow } from "./window";
-import { ResizeOption, SlWindowEventName } from "./window-options";
+import { debounceFn } from '@src/utility/decorators';
+import { TemplateResult, render } from 'lit-html';
+import { SlWindow } from './window';
+import { ResizeOption, SlWindowEventName } from './window-options';
 
 const windows = new WeakMap<object, SlWindow>();
 
 export type WindowOpenSettings = {
   key: object;
   content: TemplateResult;
-  name: SlWindow["name"];
+  name: SlWindow['name'];
   forceFocus?: boolean;
   adjacentEl?: HTMLElement | null | false;
 };
 
 export type WindowOpenOptions = Partial<{
-  resizable: SlWindow["resizable"];
+  resizable: SlWindow['resizable'];
   clearContentOnClose: boolean;
 }>;
 
@@ -23,7 +23,7 @@ export const openWindow = (
   {
     resizable = ResizeOption.None,
     clearContentOnClose = false,
-  }: WindowOpenOptions = {}
+  }: WindowOpenOptions = {},
 ) => {
   let win = windows.get(key);
   const windowExisted = !!win;
@@ -68,19 +68,18 @@ export const closeWindow = (key: object) => {
 
 export const getWindow = (key: Object) => {
   return windows.get(key);
-}
+};
 
 let ignorePointerDown = false;
 
 const resetPointerDownIgnore = debounceFn(
   () => (ignorePointerDown = false),
-  150
+  150,
 );
 
 export let lastClickedEl: HTMLElement | null = null;
 
-
-document.body.addEventListener("pointerdown", (ev: Event) => {
+document.body.addEventListener('pointerdown', (ev: Event) => {
   const { target } = ev;
   lastClickedEl = target instanceof HTMLElement ? target : null;
   if (ignorePointerDown) return;

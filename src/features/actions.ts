@@ -33,7 +33,7 @@ export type ActiveTaskAction = {
   paused: boolean;
   actionSubtype: ActionSubtype;
   failed: boolean;
-}
+};
 
 export const createAction = createFeature<Action>(() => ({
   type: ActionType.Automatic,
