@@ -1,0 +1,39 @@
+{
+  "$ref": "#/definitions/EntityTemplates",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "ActorType": {
+      "enum": [
+        "character",
+        "syntheticShell",
+        "infomorph",
+        "biological"
+      ],
+      "type": "string"
+    },
+    "EntityTemplates": {
+      "additionalProperties": false,
+      "properties": {
+        "Actor": {
+          "additionalProperties": false,
+          "properties": {
+            "types": {
+              "items": {
+                "$ref": "#/definitions/ActorType"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "types"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "Actor"
+      ],
+      "type": "object"
+    }
+  }
+}

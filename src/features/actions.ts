@@ -26,6 +26,15 @@ export type Action = {
   notes: string;
 };
 
+export type ActiveTaskAction = {
+  name: string;
+  timeframe: number;
+  elapsedTime: number;
+  paused: boolean;
+  actionSubtype: ActionSubtype;
+  failed: boolean;
+}
+
 export const createAction = createFeature<Action>(() => ({
   type: ActionType.Automatic,
   subtype: ActionSubtype.Mental,

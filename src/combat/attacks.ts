@@ -21,6 +21,17 @@ export type SleightAttackData = {
   notes: string;
 }
 
+export type SoftwareAttackData = {
+  damageFormula: string;
+  damageType: HealthType;
+  attackTraits: AttackTrait[];
+  meshArmor?: boolean;
+  armorPiercing: boolean;
+  reduceAVbyDV: boolean;
+  applyConditions: ConditionEffect;
+
+}
+
 export type SubstanceAttackData = {
   damageFormula: string;
   armorUsed: ArmorType[];
@@ -89,3 +100,4 @@ export type BeamWeaponAttackData = FiringModeList & {
   areaEffect: AreaEffectType | "";
   areaEffectRadius: number;
 }
+
