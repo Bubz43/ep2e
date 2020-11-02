@@ -2,7 +2,7 @@
   "name": "ep2e",
   "title": "Eclipse Phase 2e",
   "description": "Eclipse Phase 2e Game System.",
-  "version": 0.64686,
+  "version": 0.647,
   "author": "Bubz",
   "esmodules": [
     "./build/_dist_/index.js"
@@ -15,6 +15,13 @@
   "gridUnits": "m",
   "minimumCoreVersion": "0.7.5",
   "socket": true,
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
   "packs": [
     {
       "name": "beam-weapons",
@@ -58,12 +65,6 @@
       "path": "./packs/weapon-accessories.db",
       "entity": "JournalEntry"
     }
-  ],
-  "languages": [
-    {
-      "lang": "en",
-      "name": "English",
-      "path": "lang/en.json"
-    }
   ]
+
 }

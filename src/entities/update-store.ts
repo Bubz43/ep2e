@@ -32,7 +32,7 @@ type DataCallbacks<T extends UpdateStoreData> = {
   ) => unknown | Promise<unknown>;
 };
 
-export class UpdateStore<T extends UpdateStoreData, O extends keyof T = never> {
+export class UpdateStore<T extends UpdateStoreData> {
   constructor(private callbacks: DataCallbacks<T>) {}
   private updatedData = {} as DeepPartial<T>;
   private _editable = false;
@@ -152,15 +152,15 @@ export class UpdateStore<T extends UpdateStoreData, O extends keyof T = never> {
 
   prop(k1: ''): UpdateStoreActions<T, this>;
 
-  prop<K1 extends Exclude<keyof T, O>>(k1: K1): UpdateStoreActions<T[K1], this>;
+  prop<K1 extends keyof T>(k1: K1): UpdateStoreActions<T[K1], this>;
 
-  prop<K1 extends Exclude<keyof T, O>, K2 extends keyof T[K1]>(
+  prop<K1 extends keyof T, K2 extends keyof T[K1]>(
     k1: K1,
     k2: K2,
   ): UpdateStoreActions<T[K1][K2], this>;
 
   prop<
-    K1 extends Exclude<keyof NonNullable<T>, O>,
+    K1 extends keyof NonNullable<T>,
     K2 extends keyof NonNullable<NonNullable<T>[K1]>,
     K3 extends keyof NonNullable<NonNullable<NonNullable<T>[K1]>[K2]>
   >(
@@ -173,7 +173,7 @@ export class UpdateStore<T extends UpdateStoreData, O extends keyof T = never> {
   >;
 
   prop<
-    K1 extends Exclude<keyof NonNullable<T>, O>,
+    K1 extends keyof NonNullable<T>,
     K2 extends keyof NonNullable<NonNullable<T>[K1]>,
     K3 extends keyof NonNullable<NonNullable<NonNullable<T>[K1]>[K2]>,
     K4 extends keyof NonNullable<
@@ -190,7 +190,7 @@ export class UpdateStore<T extends UpdateStoreData, O extends keyof T = never> {
   >;
 
   prop<
-    K1 extends Exclude<keyof NonNullable<T>, O>,
+    K1 extends keyof NonNullable<T>,
     K2 extends keyof NonNullable<NonNullable<T>[K1]>,
     K3 extends keyof NonNullable<NonNullable<NonNullable<T>[K1]>[K2]>,
     K4 extends keyof NonNullable<
@@ -213,7 +213,7 @@ export class UpdateStore<T extends UpdateStoreData, O extends keyof T = never> {
   >;
 
   prop<
-    K1 extends Exclude<keyof NonNullable<T>, O>,
+    K1 extends keyof NonNullable<T>,
     K2 extends keyof NonNullable<NonNullable<T>[K1]>,
     K3 extends keyof NonNullable<NonNullable<NonNullable<T>[K1]>[K2]>,
     K4 extends keyof NonNullable<

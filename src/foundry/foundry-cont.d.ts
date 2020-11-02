@@ -12,7 +12,9 @@ import type {
   Environment,
   EnvironmentOverrides,
 } from '@src/features/environment';
-import type { EP } from './system';
+import type { EP, SystemSchema } from './system';
+import type { ActorDatas, ActorModels, ItemModels } from '@src/entities/models';
+import type { EntityTemplates } from './template-schema';
 
 // * Comment out canvas, game, ui from foundry.d.ts
 // * Add in context param to Entity.prototype._onUpdate
@@ -77,7 +79,7 @@ export type TokenData = {
   lightAlpha: number;
   actorId: string;
   actorLink: boolean;
-  // actorData: DeepPartial<ActorDatas>;
+  actorData: DeepPartial<ActorDatas>;
   disposition: ValueOf<CONST['TOKEN_DISPOSITIONS']>;
   displayBars: ValueOf<CONST['TOKEN_DISPLAY_MODES']>;
   randomImg: boolean;
@@ -375,11 +377,19 @@ declare global {
     }>,
   ): O & C;
 
+  
+type System = {
+  id: EP.Name;
+  template: EntityTemplates;
+  model: { Actor: ActorModels; Item: ItemModels };
+  data: SystemSchema;
+};
+
   const game: GameCollections & {
     user: UserEP;
     packs: Collection<Compendium>;
     settings: ClientSettings;
-    system: PIXI.System;
+    system: System;
     i18n: Localization;
     socket: Socket;
     keyboard: KeyboardManager;
