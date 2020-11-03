@@ -92,4 +92,8 @@ class BiologicalHealthBase implements CommonHealth {
   }
 }
 
-export class BiologicalHealth extends mix(BiologicalHealthBase).with(HealthMixin) {}
+export class BiologicalHealth extends mix(BiologicalHealthBase).with(HealthMixin) {
+  constructor(init: ConstructorParameters<typeof BiologicalHealthBase>) {
+    super(init)
+  }
+}

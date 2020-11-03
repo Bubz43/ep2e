@@ -31,6 +31,7 @@ import {
 import { localize } from '@src/foundry/localization';
 import type { EgoData, CommonDetails } from '@src/foundry/template-schema';
 import { HealthType } from '@src/health/health';
+import { MentalHealth } from '@src/health/mental-health';
 import { groupBy, compact, map } from 'remeda';
 import type { ReadonlyAppliedEffects } from '../applied-effects';
 import { ItemType } from '../entity-types';
@@ -90,7 +91,7 @@ export class Ego {
 
   #skills?: Skill[];
   #filteredSkills?: Skill[];
-  // #mentalHealth?: MentalHealth | null;
+  #mentalHealth?: MentalHealth | null;
   #groupedSkills?: Partial<Record<'active' | 'know', Skill[]>>;
 
   get epData() {
@@ -122,13 +123,13 @@ export class Ego {
     return this.epData.flex;
   }
 
-  // get mentalHealth() {
-  //   if (this.#mentalHealth === undefined) {
-  //     this.#mentalHealth = this.setupMentalHealth();
-  //   }
+  get mentalHealth() {
+    if (this.#mentalHealth === undefined) {
+      this.#mentalHealth = this.setupMentalHealth();
+    }
 
-  //   return this.#mentalHealth;
-  // }
+    return this.#mentalHealth;
+  }
 
   get skills() {
     if (!this.#filteredSkills) {
@@ -381,17 +382,17 @@ export class Ego {
     return this.#skills;
   }
 
-  // private setupMentalHealth() {
-  //   return this.settings.trackMentalHealth
-  //     ? new MentalHealth({
-  //         data: this.epData.mentalHealth,
-  //         statMods: this.activeEffects.getHealthStatMods(HealthType.Mental),
-  //         wil: this.aptitudes.wil,
-  //         updates: this.updater.prop("data", "mentalHealth"),
-  //         source: this.name,
-  //       })
-  //     : null;
-  // }
+  private setupMentalHealth() {
+    return this.settings.trackMentalHealth
+      ? new MentalHealth({
+          data: this.epData.mentalHealth,
+          statMods: this.activeEffects.getHealthStatMods(HealthType.Mental),
+          wil: this.aptitudes.wil,
+          updates: this.updater.prop("data", "mentalHealth"),
+          source: this.name,
+        })
+      : null;
+  }
 
   acceptItemAgent(agent: ItemProxy) {
     if (Ego.egoItems.includes(agent.type)) {

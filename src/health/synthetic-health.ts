@@ -79,4 +79,8 @@ class SyntheticHealthBase implements CommonHealth {
   }
 }
 
-export class SyntheticHealth extends mix(SyntheticHealthBase).with(HealthMixin) {}
+export class SyntheticHealth extends mix(SyntheticHealthBase).with(HealthMixin) {
+  constructor(init: ConstructorParameters<typeof SyntheticHealthBase>) {
+    super(init)
+  }
+}

@@ -2,12 +2,13 @@ import { createEffect } from '@src/features/effects';
 import { TagType } from '@src/features/tags';
 import { localize } from '@src/foundry/localization';
 import { notEmpty } from '@src/utility/helpers';
+import type { Constructor } from 'mix-with/lib';
 import { clamp } from 'remeda';
 import type { Class } from 'type-fest';
 import type { CommonHealth } from './health';
 
-export const HealthMixin = (cls: Class<CommonHealth>) => {
-  return class extends cls {
+export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
+  class Health extends cls {
     obtainEffects() {
       const { wound, type } = this;
       if (!wound) return null;
@@ -55,4 +56,5 @@ export const HealthMixin = (cls: Class<CommonHealth>) => {
       };
     }
   };
+  return Health;
 };

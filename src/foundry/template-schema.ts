@@ -76,8 +76,12 @@ import type {
   SkillData,
   SkillType,
 } from '@src/features/skills';
+import type { BiologicalHealthData } from '@src/health/biological-health';
 import type { HealthType } from '@src/health/health';
+import type { InfomorphHealthData } from '@src/health/infomorph-health';
+import type { MentalHealthData } from '@src/health/mental-health';
 import type { RecoveryConditions } from '@src/health/recovery';
+import type { SyntheticHealthData } from '@src/health/synthetic-health';
 import type { JsonValue } from 'type-fest';
 
 type StringID<T> = T & { id: string };
@@ -161,7 +165,7 @@ export type EgoData = {
   points: Readonly<Record<CharacterPoint, number>>;
   reps: Record<RepNetwork, RepData & { track: boolean }>;
   settings: Readonly<Record<EgoSetting, boolean>>;
-  // mentalHealth: Readonly<MentalHealthData>;
+  mentalHealth: Readonly<MentalHealthData>;
   motivations: StringID<Motivation>[];
   characterDetails: Readonly<Record<CharacterDetail, string>>;
   threatDetails: Readonly<{
@@ -235,13 +239,13 @@ type InfomorphData = {
       'Common',
       'Acquisition',
       'PoolData',
-      // "FullMeshHealth",
       // "Firewall",
       'Conditions',
     ]
   >;
   subtype: string;
   localFirewall: boolean;
+  meshHealth: InfomorphHealthData;
   // additionalHomeDevices: StringID<DistributedMeshHealthData>[];
   privilege: AccessPrivilege;
 };
@@ -253,7 +257,6 @@ type SyntheticShellData = {
       'Mobile',
       'Acquisition',
       'PoolData',
-      // "PhysicalHealth",
       // "FullMeshHealth",
       // "Firewall",
       'Conditions',
@@ -267,6 +270,8 @@ type SyntheticShellData = {
   swarm: boolean;
   painFilter: boolean;
   recoveryConditions: RecoveryConditions;
+  physicalHealth: SyntheticHealthData;
+  meshHealth: InfomorphHealthData;
   defaultDevice: {
     deviceType: DeviceType;
   };
@@ -287,7 +292,6 @@ type BiologicalData = {
       'Mobile',
       'Acquisition',
       'PoolData',
-      // "PhysicalHealth",
       // "FullMeshHealth",
       // "Firewall",
       'Conditions',
@@ -304,6 +308,7 @@ type BiologicalData = {
   prehensileLimbs: number;
   size: Size;
   recoveryConditions: RecoveryConditions;
+  physicalHealth: BiologicalHealthData;
 };
 
 type IT<
