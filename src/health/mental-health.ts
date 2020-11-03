@@ -128,9 +128,5 @@ class MentalHealthBase implements CommonHealth {
   }
 }
 
-export class MentalHealth extends mix(MentalHealthBase).with(HealthMixin) {
-  constructor(init: Init) {
-    super(init)
-  }
-}
+export class MentalHealth extends HealthMixin(MentalHealthBase) {}
 

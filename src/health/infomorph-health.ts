@@ -78,10 +78,4 @@ class InfomorphHealthBase implements CommonHealth {
   }
 }
 
-export class InfomorphHealth extends mix(InfomorphHealthBase).with(
-  HealthMixin,
-) {
-  constructor(init: Init) {
-    super(init);
-  }
-}
+export class InfomorphHealth extends HealthMixin(InfomorphHealthBase) {}
