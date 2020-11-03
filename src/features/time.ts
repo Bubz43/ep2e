@@ -1,3 +1,6 @@
+import type { ActorEP } from '@src/entities/actor/actor';
+import { ActorType } from '@src/entities/entity-types';
+import { updateManyActors } from '@src/foundry/misc-helpers';
 import { localize, LangEntry } from '../foundry/localization';
 
 export const toMilliseconds = ({
@@ -126,6 +129,34 @@ export const prettyOnset = (onset: number) => {
   return `${localize('active')} ${label}`.toLocaleLowerCase();
 };
 
-export type RefreshTimer = { label: string; elapsed: number; max: number, id: string }
+export type RefreshTimer = {
+  label: string;
+  elapsed: number;
+  max: number;
+  id: string;
+};
 
-export const refreshAvailable = ({elapsed, max}: RefreshTimer) => elapsed >= max
+export const refreshAvailable = ({ elapsed, max }: RefreshTimer) =>
+  elapsed >= max;
+
+export const worldTimeMS = () => {
+  return toMilliseconds({ seconds: game.time.worldTime });
+};
+
+export const advanceWorldTime = async (
+  milliseconds: number,
+  actors: Set<ActorEP>,
+) => {
+  game.time.advance(Math.round(milliseconds / 1000));
+  for (const actor of actors) {
+    if (actor.agent.type === ActorType.Character) {
+      await actor.agent.storeTimeAdvance(milliseconds);
+    }
+  }
+  updateManyActors([...actors]);
+};
+
+// export const onWorldTimeUpdate = (_: number, delta: number) => {
+//   const deltaMS = toMilliseconds({ seconds: delta });
+//   console.log(deltaMS);
+// }

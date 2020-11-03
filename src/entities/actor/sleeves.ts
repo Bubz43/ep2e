@@ -1,15 +1,19 @@
-import { userCan, packEntityIs, packIsVisible } from "@src/foundry/misc-helpers";
-import { EP } from "@src/foundry/system";
-import { notEmpty } from "@src/utility/helpers";
-import { pipe, filter } from "remeda";
-import { ItemType, sleeveTypes } from "../entity-types";
-import type { ItemEP } from "../item/item";
-import type { ActorEntity, SleeveType } from "../models";
-import { ActorEP } from "./actor";
-import type { Biological } from "./proxies/biological";
-import type { Character } from "./proxies/character";
-import type { Infomorph } from "./proxies/infomorph";
-import type { SyntheticShell } from "./proxies/synthetic-shell";
+import {
+  userCan,
+  packEntityIs,
+  packIsVisible,
+} from '@src/foundry/misc-helpers';
+import { EP } from '@src/foundry/system';
+import { notEmpty } from '@src/utility/helpers';
+import { pipe, filter } from 'remeda';
+import { ItemType, sleeveTypes } from '../entity-types';
+import type { ItemEP } from '../item/item';
+import type { ActorEntity, SleeveType } from '../models';
+import { ActorEP } from './actor';
+import type { Biological } from './proxies/biological';
+import type { Character } from './proxies/character';
+import type { Infomorph } from './proxies/infomorph';
+import type { SyntheticShell } from './proxies/synthetic-shell';
 
 export type Sleeve = Biological | SyntheticShell | Infomorph;
 
@@ -24,7 +28,7 @@ export type ResleevingSettings = {
 
 export type ResleeveOptions = Pick<
   ResleevingSettings,
-  "keepCurrent" | "keepInto"
+  'keepCurrent' | 'keepInto'
 >;
 
 // export const resleeve = async ({
@@ -98,7 +102,7 @@ export type ResleeveOptions = Pick<
 //   }
 // };
 
-const isSleeve = (agent: ActorEP["agent"]): agent is Sleeve => {
+const isSleeve = (agent: ActorEP['agent']): agent is Sleeve => {
   return sleeveTypes.some((type) => agent.type === type);
 };
 
@@ -137,6 +141,6 @@ export const sleeveActors = () => {
   return pipe(
     game.actors.entries,
     filter((a) => a.owner),
-    getSleeves
+    getSleeves,
   );
 };

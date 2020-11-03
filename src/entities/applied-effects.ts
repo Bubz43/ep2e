@@ -1,23 +1,36 @@
-import { createEffect, DurationEffectTarget, Effect, EffectType, HealthEffect, Source, SourcedEffect, SuccessTestEffect } from "@src/features/effects";
-import { SkillType } from "@src/features/skills";
-import { createTag } from "@src/features/tags";
-import { localize } from "@src/foundry/localization";
-import type { HealthType, HealthStat, HealthStatMods } from "@src/health/health";
-import { pipe, concat, filter, allPass } from "remeda";
+import {
+  createEffect,
+  DurationEffectTarget,
+  Effect,
+  EffectType,
+  HealthEffect,
+  Source,
+  SourcedEffect,
+  SuccessTestEffect,
+} from '@src/features/effects';
+import { SkillType } from '@src/features/skills';
+import { createTag } from '@src/features/tags';
+import { localize } from '@src/foundry/localization';
+import type {
+  HealthType,
+  HealthStat,
+  HealthStatMods,
+} from '@src/health/health';
+import { pipe, concat, filter, allPass } from 'remeda';
 
 export type AddEffects = {
   source: string;
   effects: Effect[];
 };
 
-export type ReadonlyAppliedEffects = Omit<AppliedEffects, "add">;
+export type ReadonlyAppliedEffects = Omit<AppliedEffects, 'add'>;
 
 const defaultSuccessTestEffects = (): SourcedEffect<SuccessTestEffect>[] => [
   {
-    [Source]: localize("distracted"),
+    [Source]: localize('distracted'),
     ...createEffect.successTest({
       modifier: -20,
-      requirement: "Passive",
+      requirement: 'Passive',
       tags: [createTag.skill({ skillType: SkillType.Perceive })],
     }),
   },
@@ -38,14 +51,13 @@ export class AppliedEffects {
 
   get uniqueEffects() {
     return new Set(
-      this.getGroup(EffectType.Misc).flatMap(({ unique }) => unique || [])
+      this.getGroup(EffectType.Misc).flatMap(({ unique }) => unique || []),
     );
   }
 
   get timeframeEffects() {
-    
     return this.getGroup(EffectType.Duration).filter(
-      (effect) => effect.subtype === DurationEffectTarget.TaskActionTimeframe
+      (effect) => effect.subtype === DurationEffectTarget.TaskActionTimeframe,
     );
   }
 
@@ -62,18 +74,20 @@ export class AppliedEffects {
   initiativeTotal(baseInitiative: number) {
     return this.getGroup(EffectType.Initiative).reduce(
       (accum, { modifier }) => (accum += modifier),
-      baseInitiative
+      baseInitiative,
     );
   }
 
   getMatchingSuccessTestEffects(
     condition: (effect: SuccessTestEffect) => boolean,
-    toOpponent: boolean
+    toOpponent: boolean,
   ) {
     return pipe(
       this.getGroup(EffectType.SuccessTest),
       concat(defaultSuccessTestEffects()),
-      filter(allPass([(effect) => effect.toOpponent === toOpponent, condition]))
+      filter(
+        allPass([(effect) => effect.toOpponent === toOpponent, condition]),
+      ),
     );
   }
 
@@ -87,7 +101,7 @@ export class AppliedEffects {
       const collection = this.groups.get(effect.type);
       const sourcedEffect: SourcedEffect<typeof effect> = Object.assign(
         effect,
-        { [Source]: source }
+        { [Source]: source },
       );
 
       if (collection) collection.push(sourcedEffect);

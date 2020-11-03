@@ -1,5 +1,9 @@
 import { SlWindow } from '@src/components/window/window';
-import { closeWindow, openWindow, getWindow } from '@src/components/window/window-controls';
+import {
+  closeWindow,
+  openWindow,
+  getWindow,
+} from '@src/components/window/window-controls';
 import { ResizeOption } from '@src/components/window/window-options';
 import type {
   EntitySheet,

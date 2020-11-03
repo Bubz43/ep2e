@@ -40,4 +40,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   acceptItemAgent(agent: ItemProxy) {
     return { accept: true } as const;
   }
+
+  async storeTimeAdvance(milliseconds: number) {
+    // TODO
+  }
 }

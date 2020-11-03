@@ -1,11 +1,11 @@
-import { ActorType, ItemType } from "@src/entities/entity-types";
-import type { ItemProxy } from "@src/entities/item/item";
-import { localize } from "@src/foundry/localization";
-import { ActorProxyBase } from "./actor-proxy-base";
+import { ActorType, ItemType } from '@src/entities/entity-types';
+import type { ItemProxy } from '@src/entities/item/item';
+import { localize } from '@src/foundry/localization';
+import { ActorProxyBase } from './actor-proxy-base';
 
 export class Biological extends ActorProxyBase<ActorType.Biological> {
   get subtype() {
-    return this.epData.subtype
+    return this.epData.subtype;
   }
 
   acceptItemAgent(agent: ItemProxy) {
@@ -14,7 +14,7 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
         accept: false,
         override: false,
         rejectReason: `Can only add ${localize(
-          agent.type
+          agent.type,
         )} to character or ego.`,
       } as const;
     }
@@ -22,7 +22,7 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
       return {
         accept: false,
         override: false,
-        rejectReason: "Cannot add ego traits.",
+        rejectReason: 'Cannot add ego traits.',
       };
     }
     return { accept: true } as const;

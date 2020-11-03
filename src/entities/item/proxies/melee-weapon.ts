@@ -12,6 +12,4 @@ export class MeleeWeapon extends mix(MeleeWeaponBase).with(
   Gear,
   Purchasable,
   Equippable,
-) {
-
-}
+) {}

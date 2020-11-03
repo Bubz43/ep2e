@@ -43,14 +43,16 @@ export class UpdateStore<T extends UpdateStoreData> {
 
   private toggleDisableCommits(disabled: boolean) {
     this.commitsDisabled = disabled;
-    this.nestedStores.forEach(({ store }) => store.commitsDisabled = disabled);
+    this.nestedStores.forEach(
+      ({ store }) => (store.commitsDisabled = disabled),
+    );
   }
 
   async batchCommits(commits: () => void | Promise<void>) {
     this.toggleDisableCommits(true);
-    await commits()
+    await commits();
     this.toggleDisableCommits(false);
-    return this.forceCommit()
+    return this.forceCommit();
   }
 
   private nestedStores = new Map<
@@ -77,7 +79,8 @@ export class UpdateStore<T extends UpdateStoreData> {
     return this._editable;
   }
 
-  readonly commit = async () => this.commitsDisabled ? this : this.forceCommit();
+  readonly commit = async () =>
+    this.commitsDisabled ? this : this.forceCommit();
 
   async forceCommit() {
     if (!this.editable) {
@@ -155,7 +158,6 @@ export class UpdateStore<T extends UpdateStoreData> {
 
     return this;
   }
-
 
   static prepUpdateMany<T extends { _id: string }>(updaters: UpdateStore<T>[]) {
     return updaters.flatMap((updater) =>

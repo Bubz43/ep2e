@@ -1,17 +1,42 @@
-import { CharacterPoint, enumValues, CharacterDetail, Fork } from "@src/data-enums";
-import type { StringID } from "@src/features/feature-helpers";
-import { RepNetwork, RepWithIdentifier, repRefreshTimerActive } from "@src/features/reputations";
-import { SkillType, FullSkill, FullFieldSkill, Skill, isFieldSkill, FieldSkillType, setupFullSkill, FieldSkillData, fieldSkillName, setupFullFieldSkill, FieldSkillIdentifier } from "@src/features/skills";
-import { CommonInterval, refreshAvailable, RefreshTimer } from "@src/features/time";
-import { localize } from "@src/foundry/localization";
-import type { EgoData, CommonDetails } from "@src/foundry/template-schema";
-import { HealthType } from "@src/health/health";
-import { groupBy, compact, map } from "remeda";
-import type { ReadonlyAppliedEffects } from "../applied-effects";
-import { ItemType } from "../entity-types";
-import type { ItemEP, ItemProxy } from "../item/item";
-import type { UpdateStore } from "../update-store";
-import type { ActorEP } from "./actor";
+import {
+  CharacterPoint,
+  enumValues,
+  CharacterDetail,
+  Fork,
+} from '@src/data-enums';
+import type { StringID } from '@src/features/feature-helpers';
+import {
+  RepNetwork,
+  RepWithIdentifier,
+  repRefreshTimerActive,
+} from '@src/features/reputations';
+import {
+  SkillType,
+  FullSkill,
+  FullFieldSkill,
+  Skill,
+  isFieldSkill,
+  FieldSkillType,
+  setupFullSkill,
+  FieldSkillData,
+  fieldSkillName,
+  setupFullFieldSkill,
+  FieldSkillIdentifier,
+} from '@src/features/skills';
+import {
+  CommonInterval,
+  refreshAvailable,
+  RefreshTimer,
+} from '@src/features/time';
+import { localize } from '@src/foundry/localization';
+import type { EgoData, CommonDetails } from '@src/foundry/template-schema';
+import { HealthType } from '@src/health/health';
+import { groupBy, compact, map } from 'remeda';
+import type { ReadonlyAppliedEffects } from '../applied-effects';
+import { ItemType } from '../entity-types';
+import type { ItemEP, ItemProxy } from '../item/item';
+import type { UpdateStore } from '../update-store';
+import type { ActorEP } from './actor';
 
 export type FullEgoData = {
   _id: string;
@@ -52,8 +77,8 @@ export class Ego {
 
   static formatPoint(point: CharacterPoint) {
     return point === CharacterPoint.Credits
-      ? localize("credits")
-      : `${localize(point)[0]}${localize("points")[0]}`.toLocaleUpperCase();
+      ? localize('credits')
+      : `${localize(point)[0]}${localize('points')[0]}`.toLocaleUpperCase();
   }
 
   private readonly commonSkills = new Map<SkillType, FullSkill>();
@@ -66,7 +91,7 @@ export class Ego {
   #skills?: Skill[];
   #filteredSkills?: Skill[];
   // #mentalHealth?: MentalHealth | null;
-  #groupedSkills?: Partial<Record<"active" | "know", Skill[]>>;
+  #groupedSkills?: Partial<Record<'active' | 'know', Skill[]>>;
 
   get epData() {
     return this.data.data;
@@ -120,9 +145,9 @@ export class Ego {
     if (!this.#groupedSkills) {
       this.#groupedSkills = groupBy(this.skills, (skill) =>
         isFieldSkill(skill) && skill.fieldSkill === FieldSkillType.Know
-          ? "know"
-          : "active"
-      ) as Partial<Record<"active" | "know", Skill[]>>;
+          ? 'know'
+          : 'active',
+      ) as Partial<Record<'active' | 'know', Skill[]>>;
     }
     return this.#groupedSkills;
   }
@@ -178,7 +203,7 @@ export class Ego {
       }
     }
     if (groups.length === 1) {
-      groups[0].label = `${localize("rez")} ${localize("points")}`;
+      groups[0].label = `${localize('rez')} ${localize('points')}`;
     }
     return groups;
   }
@@ -197,14 +222,14 @@ export class Ego {
 
     if (settings.threatDetails) {
       const { niche, numbers, level, stress } = threatDetails;
-      if (niche) details.push({ label: localize("niche"), value: niche });
-      if (numbers) details.push({ label: localize("numbers"), value: numbers });
-      details.push({ label: localize("threatLevel"), value: localize(level) });
+      if (niche) details.push({ label: localize('niche'), value: niche });
+      if (numbers) details.push({ label: localize('numbers'), value: numbers });
+      details.push({ label: localize('threatLevel'), value: localize(level) });
       if (stress.sv) {
         const { minHalve, minSV, notes, sv } = stress;
         details.push({
-          label: `${localize("stressTest")} ${notes ? `(${notes})` : ""}`,
-          value: compact([sv, minHalve ? localize("half") : minSV]).join("/"),
+          label: `${localize('stressTest')} ${notes ? `(${notes})` : ''}`,
+          value: compact([sv, minHalve ? localize('half') : minSV]).join('/'),
         });
       }
     }
@@ -212,8 +237,8 @@ export class Ego {
     return details;
   }
 
-  setForkType(type: Fork | "") {
-    return this.updater.prop("data", "forkType").commit(type);
+  setForkType(type: Fork | '') {
+    return this.updater.prop('data', 'forkType').commit(type);
   }
 
   getCommonSkill(skill: SkillType) {
@@ -221,7 +246,7 @@ export class Ego {
     if (!fullSkill) {
       fullSkill = setupFullSkill(
         { skill, ...this.epData.skills[skill] },
-        this.aptitudes
+        this.aptitudes,
       );
       this.commonSkills.set(skill, fullSkill);
     }
@@ -234,12 +259,12 @@ export class Ego {
       id,
       ...data
     }: StringID<FieldSkillData> & { fieldSkill: FieldSkillType },
-    { skipCheck = false } = {}
+    { skipCheck = false } = {},
   ) {
     let fullSkill = skipCheck
       ? undefined
       : this.fieldSkills.get(
-          `${fieldSkillName({ fieldSkill, field: data.field })}-${id}`
+          `${fieldSkillName({ fieldSkill, field: data.field })}-${id}`,
         );
 
     if (!fullSkill) {
@@ -256,12 +281,12 @@ export class Ego {
     if (!fullSkill) {
       const { field, fieldSkill } = ids;
       const existing = this.epData.fieldSkills[ids.fieldSkill].find(
-        (f) => f.field.toLocaleLowerCase() === field.toLocaleLowerCase()
+        (f) => f.field.toLocaleLowerCase() === field.toLocaleLowerCase(),
       );
       if (existing)
         fullSkill = this.getFieldSkill(
           { fieldSkill, ...existing },
-          { skipCheck: true }
+          { skipCheck: true },
         );
     }
     return fullSkill;
@@ -272,7 +297,7 @@ export class Ego {
     if (!rep) {
       rep = {
         acronym: localize(network),
-        network: localize("FULL", network),
+        network: localize('FULL', network),
         ...this.epData.reps[network],
         identifier: { networkId: network },
       };
@@ -286,10 +311,10 @@ export class Ego {
     for (const rep of this.reps.values()) {
       if (repRefreshTimerActive(rep)) {
         timers.push({
-          label: `${rep.acronym} ${localize("SHORT", "minor")}/${localize(
-            "SHORT",
-            "moderate"
-          )} ${localize("refresh")}`,
+          label: `${rep.acronym} ${localize('SHORT', 'minor')}/${localize(
+            'SHORT',
+            'moderate',
+          )} ${localize('refresh')}`,
           elapsed: rep.refreshTimer,
           max: CommonInterval.Week,
           id: rep.network,
@@ -307,11 +332,11 @@ export class Ego {
     if (this.repRefreshTimers.some(refreshAvailable)) {
       for (const network of enumValues(RepNetwork)) {
         this.updater
-          .prop("data", "reps", network)
+          .prop('data', 'reps', network)
           .store((rep) =>
             rep.refreshTimer >= CommonInterval.Week
               ? { ...rep, refreshTimer: 0, minor: 0, moderate: 0 }
-              : rep
+              : rep,
           );
       }
     }
@@ -322,11 +347,11 @@ export class Ego {
   advanceRepTimers(advance: number) {
     for (const network of enumValues(RepNetwork)) {
       this.updater
-        .prop("data", "reps", network)
+        .prop('data', 'reps', network)
         .store((rep) =>
           repRefreshTimerActive(rep)
             ? { ...rep, refreshTimer: rep.refreshTimer + advance }
-            : rep
+            : rep,
         );
     }
   }
@@ -345,7 +370,7 @@ export class Ego {
       const fields = fieldSkills[fieldSkill];
       for (const field of fields) {
         skills.push(
-          this.getFieldSkill({ ...field, fieldSkill }, { skipCheck: true })
+          this.getFieldSkill({ ...field, fieldSkill }, { skipCheck: true }),
         );
       }
     }
@@ -376,7 +401,7 @@ export class Ego {
       accept: false,
       override: false,
       rejectReason: `Ego can only accept [${map(Ego.egoItems, localize).join(
-        ", "
+        ', ',
       )}] items.`,
     } as const;
   }

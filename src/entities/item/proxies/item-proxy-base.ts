@@ -49,11 +49,11 @@ export abstract class ItemProxyBase<T extends ItemType> {
   }
 
   get textInfo(): string[] {
-    return []
+    return [];
   }
 
   get tags(): string[] {
-    return []
+    return [];
   }
 
   get name() {

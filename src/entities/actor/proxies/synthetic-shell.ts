@@ -1,11 +1,11 @@
-import { ActorType, ItemType } from "@src/entities/entity-types";
-import type { ItemProxy } from "@src/entities/item/item";
-import { localize } from "@src/foundry/localization";
-import { ActorProxyBase } from "./actor-proxy-base";
+import { ActorType, ItemType } from '@src/entities/entity-types';
+import type { ItemProxy } from '@src/entities/item/item';
+import { localize } from '@src/foundry/localization';
+import { ActorProxyBase } from './actor-proxy-base';
 
 export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
   get subtype() {
-    return this.epData.subtype
+    return this.epData.subtype;
   }
   acceptItemAgent(agent: ItemProxy) {
     if ([ItemType.Psi, ItemType.Sleight].includes(agent.type)) {
@@ -13,7 +13,7 @@ export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
         accept: false,
         override: false,
         rejectReason: `Can only add ${localize(
-          agent.type
+          agent.type,
         )} to character or ego.`,
       } as const;
     }
@@ -21,8 +21,8 @@ export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
       return {
         accept: false,
         override: false,
-        rejectReason: "Cannot add ego traits."
-      }
+        rejectReason: 'Cannot add ego traits.',
+      };
     }
     return { accept: true } as const;
   }

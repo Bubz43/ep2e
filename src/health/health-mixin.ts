@@ -1,10 +1,10 @@
-import { createEffect } from "@src/features/effects";
-import { TagType } from "@src/features/tags";
-import { localize } from "@src/foundry/localization";
-import { notEmpty } from "@src/utility/helpers";
-import { clamp } from "remeda";
-import type { Class } from "type-fest";
-import type { CommonHealth } from "./health";
+import { createEffect } from '@src/features/effects';
+import { TagType } from '@src/features/tags';
+import { localize } from '@src/foundry/localization';
+import { notEmpty } from '@src/utility/helpers';
+import { clamp } from 'remeda';
+import type { Class } from 'type-fest';
+import type { CommonHealth } from './health';
 
 export const HealthMixin = (cls: Class<CommonHealth>) => {
   return class extends cls {
@@ -13,7 +13,7 @@ export const HealthMixin = (cls: Class<CommonHealth>) => {
       if (!wound) return null;
       const { wounds, woundsIgnored, woundModifier } = wound;
       const activeTraumas = wounds.value - woundsIgnored.value;
-  
+
       return activeTraumas > 0
         ? {
             source: `${localize(type)} ${wounds.label}`,
@@ -27,7 +27,7 @@ export const HealthMixin = (cls: Class<CommonHealth>) => {
           }
         : null;
     }
-  
+
     get damagePercents() {
       const { main } = this;
       return {
@@ -41,14 +41,18 @@ export const HealthMixin = (cls: Class<CommonHealth>) => {
           ),
       };
     }
-  
+
     get regenState() {
       const { main, wound, recoveries } = this;
       const damage = !!(main.damage.value && notEmpty(recoveries?.damage));
       return {
         damage: damage,
-        wound: !!(!damage && wound?.wounds.value && notEmpty(recoveries?.wound)),
+        wound: !!(
+          !damage &&
+          wound?.wounds.value &&
+          notEmpty(recoveries?.wound)
+        ),
       };
     }
-  }
-}
+  };
+};

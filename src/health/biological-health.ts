@@ -1,16 +1,24 @@
 import type { UpdateStore } from '@src/entities/update-store';
 import type { ArmorType } from '@src/features/armor';
 import type {
-  SourcedEffect,
   HealthRecoveryEffect,
+  SourcedEffect,
 } from '@src/features/effects';
 import type { StringID } from '@src/features/feature-helpers';
-import { localize } from '@src/foundry/localization';
 import { mapProps } from '@src/utility/field-values';
 import { localImage } from '@src/utility/images';
 import mix from 'mix-with/lib';
-import { pipe, merge, pick } from 'remeda';
-import { BasicHealthData, CommonHealth, HealthMain, HealthModification, HealthStatMods, HealthType, initializeHealthData } from './health';
+import { merge, pipe } from 'remeda';
+import {
+  applyHealthModification,
+  BasicHealthData,
+  CommonHealth,
+  HealthMain,
+  HealthModification,
+  HealthStatMods,
+  HealthType,
+  initializeHealthData,
+} from './health';
 import { HealthMixin } from './health-mixin';
 import type { HealsOverTime } from './recovery';
 
@@ -35,14 +43,16 @@ class BioHealthBase implements CommonHealth {
   readonly main: HealthMain;
   readonly wound;
 
-  constructor( protected readonly init: {
-    data: BiologicalHealthData;
-    updater: UpdateStore<BiologicalHealthData>;
-    source: string;
-    isSwarm: boolean;
-    statMods: HealthStatMods;
-    recovery: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
-  }) {
+  constructor(
+    protected readonly init: {
+      data: BiologicalHealthData;
+      updater: UpdateStore<BiologicalHealthData>;
+      source: string;
+      isSwarm: boolean;
+      statMods: HealthStatMods;
+      recovery: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
+    },
+  ) {
     const { durability, deathRating, damage, ...wound } = pipe(
       {
         baseDurability: init.data.baseDurability,
@@ -51,7 +61,7 @@ class BioHealthBase implements CommonHealth {
       },
       initializeHealthData,
       merge({ damage: init.data.damage, wounds: init.data.wounds }),
-      mapProps
+      mapProps,
     );
     this.main = {
       damage,
@@ -62,26 +72,26 @@ class BioHealthBase implements CommonHealth {
   }
 
   get type() {
-    return HealthType.Physical
+    return HealthType.Physical;
   }
 
   get source() {
-    return this.init.source
+    return this.init.source;
   }
 
   get icon() {
-    return localImage("images/icons/health/heart-organ.svg")
+    return localImage('images/icons/health/heart-organ.svg');
   }
 
   get woundIcon() {
-    return localImage("images/icons/health/ragged-wound.svg")
+    return localImage('images/icons/health/ragged-wound.svg');
   }
 
   applyModification(modification: HealthModification) {
-    
+    this.init.updater
+      .prop('')
+      .commit((data) => applyHealthModification(data, modification));
   }
 }
 
-export class BiologicalHealth extends mix(BioHealthBase).with(HealthMixin) {
-
-}
+export class BiologicalHealth extends mix(BioHealthBase).with(HealthMixin) {}

@@ -1,12 +1,4 @@
-import {
-  mapToObj,
-  pipe,
-  map,
-  clamp,
-  prop,
-  createPipe,
-  filter,
-} from 'remeda';
+import { mapToObj, pipe, map, clamp, prop, createPipe, filter } from 'remeda';
 import type { LiteralUnion } from 'type-fest';
 import type { NonFunctionKeys } from 'utility-types';
 import { nonNegative } from './helpers';

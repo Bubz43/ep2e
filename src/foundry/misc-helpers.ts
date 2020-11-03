@@ -1,10 +1,11 @@
 import { html } from 'lit-html';
-import { pipe, filter, sortBy, first } from 'remeda';
-import type { Class } from 'type-fest';
+import { pipe, filter, sortBy, first, map, prop } from 'remeda';
+import type { Class, SetRequired } from 'type-fest';
 import type { CanvasLayers } from './foundry-cont';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
-import type { ActorEP } from '../entities/actor/actor';
+import { ActorEP } from '../entities/actor/actor';
 import type { SceneEP } from '../entities/scene';
+import { UpdateStore } from '@src/entities/update-store';
 
 export const isGamemaster = () => {
   return (
@@ -120,5 +121,50 @@ export const convertMenuOptions = (
           callback: () => callback(targetLi),
         }
       : [],
+  );
+};
+
+type TokenActor = SetRequired<ActorEP, 'token'>;
+
+export const updateManyActors = async (actors: ActorEP[]): Promise<unknown> => {
+  const tokens = new Map<Scene, TokenActor[]>();
+  const gameActors: typeof actors = [];
+  for (const actor of actors) {
+    if (actor.updater.isEmpty) continue;
+    if (actor.isToken) {
+      const tokenActor = actor as TokenActor;
+      const { scene } = tokenActor.token;
+      scene && tokens.set(scene, (tokens.get(scene) || []).concat(tokenActor));
+    } else gameActors.push(actor);
+  }
+
+  return Promise.all(
+    map([...tokens], ([scene, tokenActors]) =>
+      scene.updateEmbeddedEntity(
+        'Token',
+        pipe(
+          tokenActors,
+          filter((tokenActor) => tokenActor.token.scene === scene),
+          map(
+            (tokenActor) =>
+              new UpdateStore({
+                getData: () => tokenActor.token.data,
+                isEditable: () => true,
+                setData: (update) => tokenActor.update(update),
+              })
+                .prop('actorData')
+                .append(tokenActor.updater as any), // Deep partial on actorData messes this up
+          ),
+          UpdateStore.prepUpdateMany,
+        ),
+      ),
+    ).concat(
+      pipe(
+        gameActors,
+        map(prop('updater')),
+        UpdateStore.prepUpdateMany,
+        (updates) => ActorEP.update(updates),
+      ),
+    ),
   );
 };

@@ -1,9 +1,15 @@
-import { Complexity, enumValues, GearQuality, GearTrait, PhysicalWare } from '@src/data-enums';
+import {
+  Complexity,
+  enumValues,
+  GearQuality,
+  GearTrait,
+  PhysicalWare,
+} from '@src/data-enums';
 import { toggle } from '@src/utility/helpers';
 import type { Class } from 'type-fest';
 import type { UpdateStore } from '../update-store';
 
-type HasEpData<T> = Class<{ epData: T}>
+type HasEpData<T> = Class<{ epData: T }>;
 
 export const Purchasable = (
   cls: HasEpData<{
@@ -23,28 +29,28 @@ export const Purchasable = (
   };
 };
 
-export const Equippable = (cls: HasEpData<{
-  state: { equipped: boolean },
-  wareType: PhysicalWare | ""
-}>) => {
+export const Equippable = (
+  cls: HasEpData<{
+    state: { equipped: boolean };
+    wareType: PhysicalWare | '';
+  }>,
+) => {
   return class extends cls {
     get equipped() {
-      return this.epData.state.equipped
+      return this.epData.state.equipped;
     }
     get wareType() {
-      return this.epData.wareType
+      return this.epData.wareType;
     }
     get isWare() {
-      return !!this.wareType
+      return !!this.wareType;
     }
-  }
-}
+  };
+};
 
-
-
-export const Gear = (cls: HasEpData<Record<GearTrait, boolean>>) => class extends cls {
-  get gearTraits() {
-    return enumValues(GearTrait).filter((trait) => this.epData[trait]);
-  }
- 
-}
+export const Gear = (cls: HasEpData<Record<GearTrait, boolean>>) =>
+  class extends cls {
+    get gearTraits() {
+      return enumValues(GearTrait).filter((trait) => this.epData[trait]);
+    }
+  };

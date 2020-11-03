@@ -1,3 +1,5 @@
+import { createFeature } from '@src/features/feature-helpers';
+import { worldTimeMS } from '@src/features/time';
 import type { Abbreviation } from '@src/foundry/lang-schema';
 import { LangEntry, localize } from '@src/foundry/localization';
 import type { ValuedProp } from '@src/utility/field-values';
@@ -16,7 +18,7 @@ export type BasicHealthData = {
    * @minimum 0
    */
   wounds: number;
-  modifications: Record<HealthModificationMode, HealthModification[]>;
+  log: HealthModification[];
 };
 
 export enum HealthType {
@@ -42,7 +44,24 @@ export type HealthModification = {
   wounds: number;
   source: string;
   timestamp: number;
+  worldTime: number;
 };
+
+export const createHealthModification = createFeature<
+  HealthModification,
+  'mode' | 'damage' | 'wounds'
+>(
+  () => ({
+    source: localize('unknown'),
+    timestamp: Date.now(),
+    worldTime: worldTimeMS(),
+  }),
+  ({ damage, wounds, ...data }) => ({
+    damage: Math.abs(damage),
+    wounds: Math.abs(wounds),
+    ...data,
+  }),
+);
 
 export enum HealthStat {
   Derived = 'derived',
@@ -86,8 +105,8 @@ export interface CommonHealth {
   readonly icon: string;
   readonly woundIcon: string;
   readonly recoveries?: HealthRecoveries;
-  applyModification(modification: HealthModification): void
-};
+  applyModification(modification: HealthModification): void;
+}
 
 export const formatDamageType = (type: HealthType) => {
   switch (type) {
@@ -113,9 +132,8 @@ export const initializeHealthData = ({
   baseDurability: number;
   deathRatingMultiplier: 1.5 | 2;
   statMods?: HealthStatMods | null;
-    durabilitySplit?: number;
-
-}) =>{
+  durabilitySplit?: number;
+}) => {
   const derivableDur = baseDurability + (mods?.get(HealthStat.Derived) || 0);
   const split = durabilitySplit || 1;
   const splitDur = Math.round(derivableDur / split);
@@ -140,7 +158,37 @@ export const initializeHealthData = ({
     }),
     woundModifier: -10 + (mods?.get(HealthStat.WoundModifier) || 0),
   };
-}
+};
+
+export const applyHealthModification = (
+  { log, damage: oldDamage, wounds: oldWounds }: BasicHealthData,
+  modification: HealthModification,
+) => {
+  const { mode, damage, wounds } = modification;
+  const updatedLog = [...log, modification];
+  switch (mode) {
+    case HealthModificationMode.Edit:
+      return {
+        log: updatedLog,
+        damage: nonNegative(damage),
+        wounds: nonNegative(wounds),
+      };
+
+    case HealthModificationMode.Heal:
+      return {
+        log: updatedLog,
+        damage: nonNegative(oldDamage - damage),
+        wounds: nonNegative(oldWounds - wounds),
+      };
+
+    case HealthModificationMode.Inflict:
+      return {
+        log: updatedLog,
+        damage: nonNegative(oldDamage + damage),
+        wounds: nonNegative(oldWounds + wounds),
+      };
+  }
+};
 
 // export const healthDiff = <T extends CommonHealth>(
 //   originalHealth: T,

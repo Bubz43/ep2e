@@ -1,5 +1,5 @@
 /* eslint-disable prefer-rest-params */
-import { purry, range, createPipe, pipe } from 'remeda';
+import { purry, range, createPipe, pipe, identity } from 'remeda';
 import type { JsonValue, SetOptional, SetRequired } from 'type-fest';
 import { safeMerge } from '../utility/helpers';
 import type { UpdateActions } from '../entities/update-store';
@@ -65,8 +65,9 @@ type CreateFn<T extends Feature, R extends keyof T = never> = (
 
 export const createFeature = <T extends Feature, R extends keyof T = never>(
   fn: CreateFn<T, R>,
+  transformer: (feature: T) => T = identity,
 ) => (seed: SetRequired<Partial<T>, R>) => {
-  return (safeMerge(fn(seed), seed) as unknown) as T;
+  return transformer((safeMerge(fn(seed), seed) as unknown) as T);
 };
 
 const existingIds = (list: ReadonlyArray<FeatureWithID>) =>

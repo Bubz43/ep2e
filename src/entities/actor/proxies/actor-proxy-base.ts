@@ -1,13 +1,17 @@
-import { EP } from "@src/foundry/system";
-import { ItemOperations, ActorEP } from "../actor";
-import type { ActorType } from "../../entity-types";
-import type { ItemEP, ItemProxy } from "../../item/item";
-import type { ActorEntity, NonEditableProps } from "../../models";
-import type { UpdateStore } from "../../update-store";
-import { localize } from "@src/foundry/localization";
-import { render, html } from "lit-html";
-import { openDialog } from "web-dialog";
-import { Drop, DropType, itemDropToItemAgent } from "@src/foundry/drag-and-drop";
+import { EP } from '@src/foundry/system';
+import { ItemOperations, ActorEP } from '../actor';
+import type { ActorType } from '../../entity-types';
+import type { ItemEP, ItemProxy } from '../../item/item';
+import type { ActorEntity, NonEditableProps } from '../../models';
+import type { UpdateStore } from '../../update-store';
+import { localize } from '@src/foundry/localization';
+import { render, html } from 'lit-html';
+import { openDialog } from 'web-dialog';
+import {
+  Drop,
+  DropType,
+  itemDropToItemAgent,
+} from '@src/foundry/drag-and-drop';
 
 export type ActorProxyInit<T extends ActorType> = {
   data: ActorEntity<T>;
@@ -24,7 +28,13 @@ export abstract class ActorProxyBase<T extends ActorType> {
   readonly itemOperations: ItemOperations;
   readonly actor: ActorEP;
 
-  constructor({ data, updater, items, itemOperations, actor }: ActorProxyInit<T>) {
+  constructor({
+    data,
+    updater,
+    items,
+    itemOperations,
+    actor,
+  }: ActorProxyInit<T>) {
     this.data = data;
     this.updater = updater;
     this.items = items;
@@ -37,7 +47,7 @@ export abstract class ActorProxyBase<T extends ActorType> {
   }
 
   get epFlags() {
-    return this.data.flags[EP.Name]
+    return this.data.flags[EP.Name];
   }
 
   get id() {
@@ -82,13 +92,12 @@ export abstract class ActorProxyBase<T extends ActorType> {
     });
   }
 
-  
   hasItemAgent(agent: ItemProxy | null | undefined) {
     return this.items.get(agent?.id)?.agent === agent;
   }
 
   abstract acceptItemAgent(
-    agent: ItemProxy
+    agent: ItemProxy,
   ):
     | { accept: true }
     | {
@@ -109,7 +118,7 @@ export abstract class ActorProxyBase<T extends ActorType> {
   private get highestItemSort() {
     return [...this.items.values()].reduce(
       (accum, { agent }) => Math.max(accum, agent.sort || 0),
-      0
+      0,
     );
   }
 
@@ -135,30 +144,28 @@ export abstract class ActorProxyBase<T extends ActorType> {
                       </h2>
                     </header>
                     <article>
-                      <p>
-                        ${allow.rejectReason}
-                      </p>
+                      <p>${allow.rejectReason}</p>
                     </article>
                     <footer>
                       ${allow.override
-                      ? html`
+                        ? html`
                             <mwc-button
-                            outlined
+                              outlined
                               @click=${() => {
-                          dialog.close();
-                          this.addItemAgent(agent, true);
-                        }}
-                              label=${localize("override")}
+                                dialog.close();
+                                this.addItemAgent(agent, true);
+                              }}
+                              label=${localize('override')}
                             ></mwc-button>
                           `
-                      : ""}
+                        : ''}
                       <mwc-button
                         @click=${() => dialog.close()}
-                        label=${localize("close")}
+                        label=${localize('close')}
                       ></mwc-button>
                     </footer>
                   `,
-                  dialog
+                  dialog,
                 ),
             });
           }
@@ -169,6 +176,5 @@ export abstract class ActorProxyBase<T extends ActorType> {
       default:
         break;
     }
-
   }
 }

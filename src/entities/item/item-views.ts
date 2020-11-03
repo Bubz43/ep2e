@@ -1,5 +1,5 @@
-import type { ItemProxy } from "./item";
+import type { ItemProxy } from './item';
 
 export const renderItemForm = (proxy: ItemProxy) => {
-  return ""
-}
+  return '';
+};

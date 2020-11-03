@@ -8,8 +8,12 @@ import { ItemProxyBase } from './item-proxy-base';
 
 class Base extends ItemProxyBase<ItemType.SeekerWeapon> {}
 
-export class SeekerWeapon extends mix(Base).with(Purchasable, Equippable, Gear) {
+export class SeekerWeapon extends mix(Base).with(
+  Purchasable,
+  Equippable,
+  Gear,
+) {
   getTextInfo(): string[] {
-    return map(this.gearTraits, localize)
+    return map(this.gearTraits, localize);
   }
 }

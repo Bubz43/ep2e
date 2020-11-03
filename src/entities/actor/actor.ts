@@ -33,7 +33,7 @@ export type ItemOperations = {
   remove: (...itemIds: string[]) => Promise<unknown>;
 };
 
-export type ActorProxy = ReturnType<ActorEP["createProxy"]>
+export type ActorProxy = ReturnType<ActorEP['createProxy']>;
 
 export type MaybeToken = Token | null | undefined;
 
@@ -234,11 +234,11 @@ export class ActorEP extends Actor {
   get sheet() {
     for (const [subscriber] of this.subscriptions.subs) {
       if (subscriber instanceof ActorEPSheet) {
-        return subscriber
+        return subscriber;
       }
     }
 
-    return null
+    return null;
   }
 
   getOwnedItem(id: string | null) {
@@ -246,16 +246,16 @@ export class ActorEP extends Actor {
   }
 
   async createOwnedItem<T extends ItemType>(
-    itemData: SetRequired<DeepPartial<ItemEntity<T>>, "type" | "name">,
-    options?: unknown
+    itemData: SetRequired<DeepPartial<ItemEntity<T>>, 'type' | 'name'>,
+    options?: unknown,
   ): Promise<ItemEntity<T> | null>;
 
   async createOwnedItem<
-    T extends SetRequired<DeepPartial<ItemEntity>, "type" | "name">
+    T extends SetRequired<DeepPartial<ItemEntity>, 'type' | 'name'>
   >(itemDatas: T[], options?: unknown): Promise<ItemEntity[] | null>;
 
   async createOwnedItem<
-    D extends SetRequired<DeepPartial<ItemEntity>, "name" | "type">
+    D extends SetRequired<DeepPartial<ItemEntity>, 'name' | 'type'>
   >(itemData: D | D[], options = {}) {
     return super.createOwnedItem(itemData, options);
   }
@@ -263,24 +263,24 @@ export class ActorEP extends Actor {
   // TODO: These types are pretty wonky, look into better solution
   static async create<T extends ActorType>(
     data: Omit<
-      SetRequired<Partial<ActorEntity<T>>, "type" | "name">,
-      "data" | "token"
+      SetRequired<Partial<ActorEntity<T>>, 'type' | 'name'>,
+      'data' | 'token'
     > & { data?: Partial<ActorModels[T]>; token?: Partial<TokenData> },
-    options?: { temporary?: boolean; renderSheet?: boolean }
+    options?: { temporary?: boolean; renderSheet?: boolean },
   ): Promise<ActorEP>;
 
   static async create<
-    D extends SetRequired<DeepPartial<ActorEntity>, "type" | "name">[]
+    D extends SetRequired<DeepPartial<ActorEntity>, 'type' | 'name'>[]
   >(
     data: D,
-    options?: { temporary?: boolean; renderSheet?: boolean }
+    options?: { temporary?: boolean; renderSheet?: boolean },
   ): Promise<ActorEP[]>;
 
   static async create<
-    D extends SetRequired<DeepPartial<ActorEntity>, "type" | "name">
+    D extends SetRequired<DeepPartial<ActorEntity>, 'type' | 'name'>
   >(
     data: D | D[],
-    options: { temporary?: boolean; renderSheet?: boolean } = {}
+    options: { temporary?: boolean; renderSheet?: boolean } = {},
   ) {
     return super.create(data, options);
   }
