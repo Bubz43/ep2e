@@ -4,12 +4,8 @@ import { Equippable, Gear, Purchasable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
 class Base extends ItemProxyBase<ItemType.SprayWeapon> {}
-export class SprayWeapon extends mix(Base).with(
-  Gear,
-  Purchasable,
-  Equippable,
-) {
+export class SprayWeapon extends mix(Base).with(Gear, Purchasable, Equippable) {
   constructor(init: ItemProxyInit<ItemType.SprayWeapon>) {
-    super(init)
+    super(init);
   }
 }

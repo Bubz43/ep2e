@@ -1,4 +1,3 @@
-import type { UpdateStore } from '@src/entities/update-store';
 import type { ArmorType } from '@src/features/armor';
 import type {
   HealthRecoveryEffect,
@@ -7,7 +6,6 @@ import type {
 import type { StringID } from '@src/features/feature-helpers';
 import { mapProps } from '@src/utility/field-values';
 import { localImage } from '@src/utility/images';
-import mix from 'mix-with/lib';
 import { merge, pipe } from 'remeda';
 import {
   applyHealthModification,
@@ -40,19 +38,17 @@ export type BiologicalHealthData = BasicHealthData & {
   }>[];
 };
 
-type Init =HealthInit<BiologicalHealthData> & {
+type Init = HealthInit<BiologicalHealthData> & {
   isSwarm: boolean;
-  statMods: HealthStatMods;
+  statMods: HealthStatMods | undefined;
   recovery: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
-}
+};
 
 class BiologicalHealthBase implements CommonHealth {
   readonly main: HealthMain;
   readonly wound;
 
-  constructor(
-    protected readonly init: Init,
-  ) {
+  constructor(protected readonly init: Init) {
     const { durability, deathRating, damage, ...wound } = pipe(
       {
         baseDurability: init.data.baseDurability,
@@ -94,5 +90,4 @@ class BiologicalHealthBase implements CommonHealth {
   }
 }
 
-export class BiologicalHealth extends HealthMixin(BiologicalHealthBase) {
-}
+export class BiologicalHealth extends HealthMixin(BiologicalHealthBase) {}

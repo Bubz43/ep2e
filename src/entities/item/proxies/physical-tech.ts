@@ -10,6 +10,6 @@ export class PhysicalTech extends mix(Base).with(
   Equippable,
 ) {
   constructor(init: ItemProxyInit<ItemType.PhysicalTech>) {
-    super(init)
+    super(init);
   }
 }

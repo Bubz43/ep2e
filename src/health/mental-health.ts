@@ -1,8 +1,6 @@
-import type { UpdateStore } from '@src/entities/update-store';
 import type { StringID } from '@src/features/feature-helpers';
 import { mapProps } from '@src/utility/field-values';
 import { localImage } from '@src/utility/images';
-import mix from 'mix-with/lib';
 import { pick } from 'remeda';
 import {
   applyHealthModification,
@@ -54,15 +52,13 @@ export const hardeningTypes = [
 type Init = HealthInit<MentalHealthData> & {
   statMods: HealthStatMods | undefined;
   willpower: number;
-}
+};
 
 class MentalHealthBase implements CommonHealth {
   readonly main: HealthMain;
   readonly wound: HealthWounds;
 
-  constructor(
-    protected readonly init: Init,
-  ) {
+  constructor(protected readonly init: Init) {
     const { statMods, willpower, data } = init;
 
     const {
@@ -129,4 +125,3 @@ class MentalHealthBase implements CommonHealth {
 }
 
 export class MentalHealth extends HealthMixin(MentalHealthBase) {}
-

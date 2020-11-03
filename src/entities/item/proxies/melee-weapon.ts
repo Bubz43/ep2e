@@ -14,8 +14,6 @@ export class MeleeWeapon extends mix(MeleeWeaponBase).with(
   Equippable,
 ) {
   constructor(init: ItemProxyInit<ItemType.MeleeWeapon>) {
-    super(init)
+    super(init);
   }
 }
-
-

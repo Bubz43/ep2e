@@ -1,6 +1,5 @@
 import { mapProps } from '@src/utility/field-values';
 import { localImage } from '@src/utility/images';
-import mix from 'mix-with/lib';
 import { pipe, merge } from 'remeda';
 import {
   applyHealthModification,
@@ -28,7 +27,7 @@ export type InfomorphHealthData = BasicHealthData & {
 
 type Init = HealthInit<InfomorphHealthData> & {
   homeDevices: number;
-  statMods: HealthStatMods;
+  statMods: HealthStatMods | undefined;
 };
 
 class InfomorphHealthBase implements CommonHealth {

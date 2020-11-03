@@ -1,18 +1,28 @@
-import type { UpdateStore } from "@src/entities/update-store";
-import type { ArmorType } from "@src/features/armor";
-import type { SourcedEffect, HealthRecoveryEffect } from "@src/features/effects";
-import type { StringID } from "@src/features/feature-helpers";
-import { mapProps } from "@src/utility/field-values";
-import { localImage } from "@src/utility/images";
-import mix from "mix-with/lib";
-import { pipe, merge } from "remeda";
-import type { BiologicalHealthData } from "./biological-health";
-import { applyHealthModification, BasicHealthData, CommonHealth, HealthInit, HealthMain, HealthModification, HealthStatMods, HealthType, initializeHealthData } from "./health";
-import { HealthMixin } from "./health-mixin";
-import type { HealsOverTime } from "./recovery";
+import type { ArmorType } from '@src/features/armor';
+import type {
+  HealthRecoveryEffect,
+  SourcedEffect,
+} from '@src/features/effects';
+import type { StringID } from '@src/features/feature-helpers';
+import { mapProps } from '@src/utility/field-values';
+import { localImage } from '@src/utility/images';
+import { merge, pipe } from 'remeda';
+import {
+  applyHealthModification,
+  BasicHealthData,
+  CommonHealth,
+  HealthInit,
+  HealthMain,
+  HealthModification,
+  HealthStatMods,
+  HealthType,
+  initializeHealthData,
+} from './health';
+import { HealthMixin } from './health-mixin';
+import type { HealsOverTime } from './recovery';
 
 export type SyntheticHealthData = BasicHealthData & {
-   /**
+  /**
    * @minimum 1
    */
   baseDurability: number;
@@ -25,21 +35,19 @@ export type SyntheticHealthData = BasicHealthData & {
     duration: number;
     elapsed: number;
   }>[];
-}
+};
 
 type Init = HealthInit<SyntheticHealthData> & {
   isSwarm: boolean;
-  statMods: HealthStatMods;
+  statMods: HealthStatMods | undefined;
   recovery: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
-}
+};
 
 class SyntheticHealthBase implements CommonHealth {
   readonly main: HealthMain;
   readonly wound;
 
-  constructor(
-    protected readonly init: Init,
-  ) {
+  constructor(protected readonly init: Init) {
     const { durability, deathRating, damage, ...wound } = pipe(
       {
         baseDurability: init.data.baseDurability,
@@ -81,5 +89,4 @@ class SyntheticHealthBase implements CommonHealth {
   }
 }
 
-export class SyntheticHealth extends HealthMixin(SyntheticHealthBase) {
-}
+export class SyntheticHealth extends HealthMixin(SyntheticHealthBase) {}

@@ -1,5 +1,9 @@
 import type { UpdateStore } from '@src/entities/update-store';
-import { addFeature, createFeature, StringID } from '@src/features/feature-helpers';
+import {
+  addFeature,
+  createFeature,
+  StringID,
+} from '@src/features/feature-helpers';
 import { worldTimeMS } from '@src/features/time';
 import type { Abbreviation } from '@src/foundry/lang-schema';
 import { LangEntry, localize } from '@src/foundry/localization';
@@ -91,10 +95,10 @@ export type HealthMain = {
 };
 
 export type HealthInit<T extends BasicHealthData> = {
-  data: T,
-  updater: UpdateStore<T>,
+  data: T;
+  updater: UpdateStore<T>;
   source: string;
-}
+};
 
 export type HealthWounds = {
   wounds: HealthProp<LangEntry>;

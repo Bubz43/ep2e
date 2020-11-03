@@ -14,7 +14,7 @@ export class SeekerWeapon extends mix(Base).with(
   Gear,
 ) {
   constructor(init: ItemProxyInit<ItemType.SeekerWeapon>) {
-    super(init)
+    super(init);
   }
   getTextInfo(): string[] {
     return map(this.gearTraits, localize);

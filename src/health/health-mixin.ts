@@ -55,6 +55,6 @@ export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
         ),
       };
     }
-  };
+  }
   return Health;
 };

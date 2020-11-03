@@ -6,6 +6,6 @@ import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 class Base extends ItemProxyBase<ItemType.Railgun> {}
 export class Railgun extends mix(Base).with(Purchasable, Gear, Equippable) {
   constructor(init: ItemProxyInit<ItemType.Railgun>) {
-    super(init)
+    super(init);
   }
 }
