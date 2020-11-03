@@ -4,9 +4,31 @@ import {
   Source,
   SourcedEffect,
 } from '@src/features/effects';
-import { prettyMilliseconds } from '@src/features/time';
+import { createFeature } from '@src/features/feature-helpers';
+import { prettyMilliseconds, worldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { averageRoll } from '@src/foundry/rolls';
+
+export enum NaturalMentalHeal {
+  Stress = 'stress',
+  Trauma = 'trauma',
+  Disorder = 'disorder',
+}
+
+export type NaturalMentalHealAttempt = {
+  heal: NaturalMentalHeal;
+  failed: boolean;
+  timestamp: number;
+  worldTime: number;
+};
+
+export const createMentalHealthAttempt = createFeature<
+  NaturalMentalHealAttempt,
+  'heal' | 'failed'
+>(() => ({
+  timestamp: Date.now(),
+  worldTime: worldTimeMS(),
+}));
 
 export enum DotOrHotTarget {
   Damage = 'damage',

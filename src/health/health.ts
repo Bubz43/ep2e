@@ -1,4 +1,5 @@
-import { createFeature } from '@src/features/feature-helpers';
+import type { UpdateStore } from '@src/entities/update-store';
+import { addFeature, createFeature, StringID } from '@src/features/feature-helpers';
 import { worldTimeMS } from '@src/features/time';
 import type { Abbreviation } from '@src/foundry/lang-schema';
 import { LangEntry, localize } from '@src/foundry/localization';
@@ -18,7 +19,7 @@ export type BasicHealthData = {
    * @minimum 0
    */
   wounds: number;
-  log: HealthModification[];
+  log: StringID<HealthModification>[];
 };
 
 export enum HealthType {
@@ -89,6 +90,12 @@ export type HealthMain = {
   deathRating?: HealthProp<Abbreviation>;
 };
 
+export type HealthInit<T extends BasicHealthData> = {
+  data: T,
+  updater: UpdateStore<T>,
+  source: string;
+}
+
 export type HealthWounds = {
   wounds: HealthProp<LangEntry>;
   woundThreshold: HealthProp<Abbreviation>;
@@ -105,7 +112,7 @@ export interface CommonHealth {
   readonly icon: string;
   readonly woundIcon: string;
   readonly recoveries?: HealthRecoveries;
-  applyModification(modification: HealthModification): void;
+  applyModification(modification: HealthModification): void | Promise<unknown>;
 }
 
 export const formatDamageType = (type: HealthType) => {
@@ -165,7 +172,7 @@ export const applyHealthModification = (
   modification: HealthModification,
 ) => {
   const { mode, damage, wounds } = modification;
-  const updatedLog = [...log, modification];
+  const updatedLog = addFeature(log, modification);
   switch (mode) {
     case HealthModificationMode.Edit:
       return {
