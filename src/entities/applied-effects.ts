@@ -43,6 +43,7 @@ export class AppliedEffects {
   }
 
   get timeframeEffects() {
+    
     return this.getGroup(EffectType.Duration).filter(
       (effect) => effect.subtype === DurationEffectTarget.TaskActionTimeframe
     );

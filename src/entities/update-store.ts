@@ -39,6 +39,13 @@ export class UpdateStore<T extends UpdateStoreData> {
   private recheckEditable = true;
   private actionCache = new Map<string, UpdateStoreActions<any, this>>();
 
+  private commitsDisabled = false;
+
+  disableCommits() {
+    this.commitsDisabled = true;
+    return this;
+  }
+
   private nestedStores = new Map<
     string,
     {
@@ -63,10 +70,13 @@ export class UpdateStore<T extends UpdateStoreData> {
     return this._editable;
   }
 
-  private async commitData() {
+  readonly commit = async () => this.commitsDisabled ? this : this.forceCommit();
+
+  async forceCommit() {
     if (!this.editable) {
       throw new Error('Cannot commit data as UpdateStore is non editable.');
     }
+    this.commitsDisabled = false;
     if (this.isEmpty === false) {
       this.appendNestedStores();
       const { updatedData } = this;
@@ -85,7 +95,10 @@ export class UpdateStore<T extends UpdateStoreData> {
   }
 
   private appendNestedStores() {
-    this.nestedStores.forEach(({ appendStore }) => appendStore());
+    this.nestedStores.forEach(({ store, appendStore }) => {
+      store.commitsDisabled = false;
+      appendStore()
+    });
     return this;
   }
 
@@ -140,7 +153,6 @@ export class UpdateStore<T extends UpdateStoreData> {
     return this;
   }
 
-  readonly commit = () => this.commitData();
 
   static prepUpdateMany<T extends { _id: string }>(updaters: UpdateStore<T>[]) {
     return updaters.flatMap((updater) =>
@@ -272,7 +284,7 @@ export class UpdateStore<T extends UpdateStoreData> {
       store,
       originalValue,
       append,
-      commit: (newVal: ValOrValFN<NonFunction>) => store(newVal).commitData(),
+      commit: (newVal: ValOrValFN<NonFunction>) => store(newVal).commit(),
       nestedStore: (): any => this.makeNested({ path, append, originalValue }),
       clearNestedStore,
     };
@@ -299,7 +311,7 @@ export class UpdateStore<T extends UpdateStoreData> {
     const nested = new UpdateStore<any>({
       getData: originalValue,
       isEditable: this.callbacks.isEditable,
-      setData: (_, nestedStore) => append(nestedStore).commitData(),
+      setData: (_, nestedStore) => append(nestedStore).commit(),
     });
     this.nestedStores.set(path, {
       store: nested,

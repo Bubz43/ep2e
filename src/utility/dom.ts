@@ -1,7 +1,15 @@
-import { mapToObj, pipe, map, clamp, prop, createPipe, filter } from 'remeda';
+import {
+  mapToObj,
+  pipe,
+  map,
+  clamp,
+  prop,
+  createPipe,
+  filter,
+} from 'remeda';
 import type { LiteralUnion } from 'type-fest';
 import type { NonFunctionKeys } from 'utility-types';
-import { fromPairs, nonNegative } from './helpers';
+import { nonNegative } from './helpers';
 
 export const resizeObsAvailable = 'ResizeObserver' in window;
 
@@ -38,19 +46,16 @@ export const containElement = (
   const clampPosition = (position: Record<'top' | 'left', number>) =>
     pipe(
       [...leftTop],
-      map((prop) => {
+      mapToObj((prop) => {
         const value = position[prop];
         const clamped = clamp(value, { min: 0, max: max[prop] });
-        return [
-          prop,
-          {
-            style: px(clamped),
-            change: clamped - value,
-            newPos: clamped,
-          },
-        ] as const;
+        const pos = {
+          style: px(clamped),
+          change: clamped - value,
+          newPos: clamped,
+        };
+        return [prop, pos];
       }),
-      fromPairs,
       ({ top, left }) => ({
         top,
         left,

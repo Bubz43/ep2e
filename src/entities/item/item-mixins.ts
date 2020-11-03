@@ -1,5 +1,7 @@
 import { Complexity, enumValues, GearQuality, GearTrait, PhysicalWare } from '@src/data-enums';
+import { toggle } from '@src/utility/helpers';
 import type { Class } from 'type-fest';
+import type { UpdateStore } from '../update-store';
 
 type HasEpData<T> = Class<{ epData: T}>
 
@@ -37,6 +39,8 @@ export const Equippable = (cls: HasEpData<{
     }
   }
 }
+
+
 
 export const Gear = (cls: HasEpData<Record<GearTrait, boolean>>) => class extends cls {
   get gearTraits() {

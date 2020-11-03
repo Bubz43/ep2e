@@ -1,6 +1,9 @@
 import type { Abbreviation } from '@src/foundry/lang-schema';
 import { LangEntry, localize } from '@src/foundry/localization';
 import type { ValuedProp } from '@src/utility/field-values';
+import { nonNegative } from '@src/utility/helpers';
+import { pipe, clamp } from 'remeda';
+import type { HealthRecoveries } from './recovery';
 
 type HealthProp<T extends LangEntry | Abbreviation> = ValuedProp<number, T>;
 
@@ -22,10 +25,10 @@ export enum HealthType {
   Physical = 'physical',
 }
 
-export enum PhysicalHealthSubtype {
-  Bio = 'bio',
-  Synth = 'synth',
-}
+// export enum PhysicalHealthSubtype {
+//   Bio = 'bio',
+//   Synth = 'synth',
+// }
 
 export enum HealthModificationMode {
   Edit = 'edit',
@@ -74,16 +77,17 @@ export type HealthWounds = {
   woundsIgnored: HealthProp<Abbreviation>;
 };
 
-// export type CommonHealth = {
-//   readonly main: HealthMain;
-//   readonly wound?: HealthWounds;
-//   readonly type: HealthType;
-//   readonly subtype?: PhysicalHealthSubtype;
-//   readonly source: string;
-//   readonly icon: string;
-//   readonly woundIcon: string;
-//   applyMutation(mutation: HealthModification): void
-// };
+export interface CommonHealth {
+  readonly main: HealthMain;
+  readonly wound?: HealthWounds;
+  readonly type: HealthType;
+  // readonly subtype?: PhysicalHealthSubtype;
+  readonly source: string;
+  readonly icon: string;
+  readonly woundIcon: string;
+  readonly recoveries?: HealthRecoveries;
+  applyModification(modification: HealthModification): void
+};
 
 export const formatDamageType = (type: HealthType) => {
   switch (type) {
@@ -99,6 +103,44 @@ export const formatDamageType = (type: HealthType) => {
 
 export const healthLabels = (healthType: HealthType, stat: HealthStat) =>
   localize(healthType === HealthType.Mental ? mentalHealthStats[stat] : stat);
+
+export const initializeHealthData = ({
+  baseDurability,
+  deathRatingMultiplier,
+  statMods: mods,
+  durabilitySplit,
+}: {
+  baseDurability: number;
+  deathRatingMultiplier: 1.5 | 2;
+  statMods?: HealthStatMods | null;
+    durabilitySplit?: number;
+
+}) =>{
+  const derivableDur = baseDurability + (mods?.get(HealthStat.Derived) || 0);
+  const split = durabilitySplit || 1;
+  const splitDur = Math.round(derivableDur / split);
+  const durability = nonNegative(
+    splitDur + Math.floor((mods?.get(HealthStat.Durability) || 0) / split),
+  );
+
+  return {
+    durability,
+    deathRating: pipe(
+      splitDur * deathRatingMultiplier,
+      (dr) => Math.ceil(dr) + (mods?.get(HealthStat.DeathRating) || 0),
+      clamp({ min: durability }),
+    ),
+    woundThreshold: pipe(
+      derivableDur / 5,
+      (wt) => Math.ceil(wt) + (mods?.get(HealthStat.WoundThreshold) || 0),
+      clamp({ min: 1 }),
+    ),
+    woundsIgnored: clamp(mods?.get(HealthStat.WoundsIgnored) || 0, {
+      max: 3,
+    }),
+    woundModifier: -10 + (mods?.get(HealthStat.WoundModifier) || 0),
+  };
+}
 
 // export const healthDiff = <T extends CommonHealth>(
 //   originalHealth: T,
