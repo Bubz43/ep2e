@@ -41,9 +41,16 @@ export class UpdateStore<T extends UpdateStoreData> {
 
   private commitsDisabled = false;
 
-  disableCommits() {
-    this.commitsDisabled = true;
-    return this;
+  private toggleDisableCommits(disabled: boolean) {
+    this.commitsDisabled = disabled;
+    this.nestedStores.forEach(({ store }) => store.commitsDisabled = disabled);
+  }
+
+  async batchCommits(commits: () => void | Promise<void>) {
+    this.toggleDisableCommits(true);
+    await commits()
+    this.toggleDisableCommits(false);
+    return this.forceCommit()
   }
 
   private nestedStores = new Map<
@@ -76,7 +83,6 @@ export class UpdateStore<T extends UpdateStoreData> {
     if (!this.editable) {
       throw new Error('Cannot commit data as UpdateStore is non editable.');
     }
-    this.commitsDisabled = false;
     if (this.isEmpty === false) {
       this.appendNestedStores();
       const { updatedData } = this;
@@ -95,10 +101,7 @@ export class UpdateStore<T extends UpdateStoreData> {
   }
 
   private appendNestedStores() {
-    this.nestedStores.forEach(({ store, appendStore }) => {
-      store.commitsDisabled = false;
-      appendStore()
-    });
+    this.nestedStores.forEach(({ appendStore }) => appendStore());
     return this;
   }
 
