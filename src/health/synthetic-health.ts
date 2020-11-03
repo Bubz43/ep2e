@@ -27,16 +27,18 @@ export type SyntheticHealthData = BasicHealthData & {
   }>[];
 }
 
+type Init = HealthInit<SyntheticHealthData> & {
+  isSwarm: boolean;
+  statMods: HealthStatMods;
+  recovery: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
+}
+
 class SyntheticHealthBase implements CommonHealth {
   readonly main: HealthMain;
   readonly wound;
 
   constructor(
-    protected readonly init: HealthInit<SyntheticHealthData> & {
-      isSwarm: boolean;
-      statMods: HealthStatMods;
-      recovery: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
-    },
+    protected readonly init: Init,
   ) {
     const { durability, deathRating, damage, ...wound } = pipe(
       {
@@ -80,7 +82,7 @@ class SyntheticHealthBase implements CommonHealth {
 }
 
 export class SyntheticHealth extends mix(SyntheticHealthBase).with(HealthMixin) {
-  constructor(init: ConstructorParameters<typeof SyntheticHealthBase>) {
+  constructor(init: Init) {
     super(init)
   }
 }

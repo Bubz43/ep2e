@@ -40,16 +40,18 @@ export type BiologicalHealthData = BasicHealthData & {
   }>[];
 };
 
+type Init =HealthInit<BiologicalHealthData> & {
+  isSwarm: boolean;
+  statMods: HealthStatMods;
+  recovery: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
+}
+
 class BiologicalHealthBase implements CommonHealth {
   readonly main: HealthMain;
   readonly wound;
 
   constructor(
-    protected readonly init: HealthInit<BiologicalHealthData> & {
-      isSwarm: boolean;
-      statMods: HealthStatMods;
-      recovery: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
-    },
+    protected readonly init: Init,
   ) {
     const { durability, deathRating, damage, ...wound } = pipe(
       {
@@ -93,7 +95,7 @@ class BiologicalHealthBase implements CommonHealth {
 }
 
 export class BiologicalHealth extends mix(BiologicalHealthBase).with(HealthMixin) {
-  constructor(init: ConstructorParameters<typeof BiologicalHealthBase>) {
+  constructor(init: Init) {
     super(init)
   }
 }

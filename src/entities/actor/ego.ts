@@ -387,8 +387,8 @@ export class Ego {
       ? new MentalHealth({
           data: this.epData.mentalHealth,
           statMods: this.activeEffects.getHealthStatMods(HealthType.Mental),
-          wil: this.aptitudes.wil,
-          updates: this.updater.prop("data", "mentalHealth"),
+          willpower: this.aptitudes.wil,
+          updater: this.updater.prop("data", "mentalHealth").nestedStore(),
           source: this.name,
         })
       : null;

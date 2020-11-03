@@ -26,16 +26,16 @@ export type InfomorphHealthData = BasicHealthData & {
   reboot: number;
 };
 
+type Init = HealthInit<InfomorphHealthData> & {
+  homeDevices: number;
+  statMods: HealthStatMods;
+};
+
 class InfomorphHealthBase implements CommonHealth {
   readonly main: HealthMain;
   readonly wound: HealthWounds;
 
-  constructor(
-    protected readonly init: HealthInit<InfomorphHealthData> & {
-      homeDevices: number;
-      statMods: HealthStatMods;
-    },
-  ) {
+  constructor(protected readonly init: Init) {
     const { durability, deathRating, damage, ...wound } = pipe(
       {
         baseDurability: init.data.baseDurability,
@@ -80,4 +80,8 @@ class InfomorphHealthBase implements CommonHealth {
 
 export class InfomorphHealth extends mix(InfomorphHealthBase).with(
   HealthMixin,
-) {}
+) {
+  constructor(init: Init) {
+    super(init);
+  }
+}

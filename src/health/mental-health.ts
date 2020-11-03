@@ -51,15 +51,17 @@ export const hardeningTypes = [
   Stress.Violence,
 ] as const;
 
+type Init = HealthInit<MentalHealthData> & {
+  statMods: HealthStatMods | undefined;
+  willpower: number;
+}
+
 class MentalHealthBase implements CommonHealth {
   readonly main: HealthMain;
   readonly wound: HealthWounds;
 
   constructor(
-    protected readonly init: HealthInit<MentalHealthData> & {
-      statMods: HealthStatMods;
-      willpower: number;
-    },
+    protected readonly init: Init,
   ) {
     const { statMods, willpower, data } = init;
 
@@ -127,7 +129,7 @@ class MentalHealthBase implements CommonHealth {
 }
 
 export class MentalHealth extends mix(MentalHealthBase).with(HealthMixin) {
-  constructor(init: ConstructorParameters<typeof MentalHealthBase>) {
+  constructor(init: Init) {
     super(init)
   }
 }
