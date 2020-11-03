@@ -1,4 +1,7 @@
-import { AppliedEffects, ReadonlyAppliedEffects } from '@src/entities/applied-effects';
+import {
+  AppliedEffects,
+  ReadonlyAppliedEffects,
+} from '@src/entities/applied-effects';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
 import type { ActorEntity } from '@src/entities/models';
@@ -12,13 +15,18 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
   #physicalHealth?: BiologicalHealth;
   #localEffects?: AppliedEffects;
   #outsideEffects?: ReadonlyAppliedEffects;
+
   readonly sleeved;
-  constructor({ activeEffects, sleeved, ...init}: ActorProxyInit<ActorType.Biological> & {
+  constructor({
+    activeEffects,
+    sleeved,
+    ...init
+  }: ActorProxyInit<ActorType.Biological> & {
     activeEffects?: ReadonlyAppliedEffects;
-    sleeved?: boolean
+    sleeved?: boolean;
   }) {
     super(init);
-     if (!activeEffects) {
+    if (!activeEffects) {
       this.#localEffects = new AppliedEffects();
       // TODO: Setup local effects;
     } else this.#outsideEffects = activeEffects;
@@ -36,7 +44,7 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
   }
 
   get isSwarm() {
-    return this.epData.swarm
+    return this.epData.swarm;
   }
 
   get physicalHealth() {
@@ -44,8 +52,8 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
       this.#physicalHealth = new BiologicalHealth({
         data: this.epData.physicalHealth,
         statMods: this.activeEffects.getHealthStatMods(HealthType.Physical),
-        updater: this.updater.prop("data", "physicalHealth").nestedStore(),
-        source: localize("frame"),
+        updater: this.updater.prop('data', 'physicalHealth').nestedStore(),
+        source: localize('frame'),
         isSwarm: this.isSwarm,
         recovery: this.activeEffects.getGroup(EffectType.HealthRecovery),
       });

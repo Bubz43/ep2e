@@ -1,9 +1,33 @@
+import {
+  AppliedEffects,
+  ReadonlyAppliedEffects,
+} from '@src/entities/applied-effects';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
 import { localize } from '@src/foundry/localization';
-import { ActorProxyBase } from './actor-proxy-base';
+import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 
 export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
+  #localEffects?: AppliedEffects;
+  #outsideEffects?: ReadonlyAppliedEffects;
+  readonly sleeved;
+
+  constructor({
+    activeEffects,
+    sleeved,
+    ...init
+  }: ActorProxyInit<ActorType.SyntheticShell> & {
+    activeEffects?: ReadonlyAppliedEffects;
+    sleeved?: boolean;
+  }) {
+    super(init);
+    if (!activeEffects) {
+      this.#localEffects = new AppliedEffects();
+      // TODO: Setup local effects;
+    } else this.#outsideEffects = activeEffects;
+    this.sleeved = sleeved;
+  }
+
   get subtype() {
     return this.epData.subtype;
   }

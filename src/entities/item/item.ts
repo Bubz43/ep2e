@@ -31,7 +31,6 @@ type Operations = {
 export type ItemProxy = ReturnType<ItemEP['createProxy']>;
 
 export class ItemEP extends Item {
-  data!: ItemDatas;
   private invalidated = true;
   readonly #subscribers = new EntitySubscription<this>();
   #updater?: UpdateStore<ItemDatas>;
@@ -80,7 +79,7 @@ export class ItemEP extends Item {
         return subscriber;
       }
     }
-    return null;
+    return new ItemEPSheet(this);
   }
 
   get operations() {

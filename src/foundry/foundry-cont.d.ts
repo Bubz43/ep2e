@@ -13,7 +13,12 @@ import type {
   EnvironmentOverrides,
 } from '@src/features/environment';
 import type { EP, SystemSchema } from './system';
-import type { ActorDatas, ActorModels, ItemModels } from '@src/entities/models';
+import type {
+  ActorDatas,
+  ActorModels,
+  ItemDatas,
+  ItemModels,
+} from '@src/entities/models';
 import type { EntityTemplates } from './template-schema';
 import type { UserHotbarEntry } from '@src/features/hotbar-entry';
 // * Comment out canvas, game, ui from foundry.d.ts
@@ -43,7 +48,7 @@ export type EntitySheetOptions = {
 };
 
 export interface EntitySheet {
-  options: EntitySheetOptions;
+  // options: EntitySheetOptions;
   render(force: boolean, options?: Record<string, unknown>): this;
   close(): Promise<this>;
   maximize(): this;
@@ -192,6 +197,17 @@ declare global {
 
   interface Entity {
     readonly compendium: Compendium | null;
+  }
+
+  interface Actor {
+    data: ActorDatas;
+    readonly items?: Collection<ItemEP>;
+    readonly effects: Collection<ActiveEffect>;
+    readonly token?: Token;
+  }
+
+  interface Item {
+    data: ItemDatas;
   }
 
   interface String {

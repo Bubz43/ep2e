@@ -23,14 +23,16 @@ import { ActorType } from '../entity-types';
 import type { ActorEP } from './actor';
 import { renderCharacterView, renderSleeveForm } from './actor-views';
 
-export class ActorEPSheet implements EntitySheet {
-  #token?: Token | null;
+type Unsub = (() => void) | null;
 
-  private unsub: () => void;
+export class ActorEPSheet implements EntitySheet {
+  private _token?: Token | null;
+
+  private unsub: Unsub;
 
   private window: SlWindow | null = null;
 
-  constructor(private actor: ActorEP, public options: EntitySheetOptions) {
+  constructor(private actor: ActorEP) {
     this.unsub = actor.subscriptions.subscribe(this, {
       onEntityUpdate: () => this.render(false),
       onSubEnd: () => this.close(),
@@ -48,8 +50,8 @@ export class ActorEPSheet implements EntitySheet {
   get content() {
     const { agent } = this.actor;
     return agent.type === ActorType.Character
-      ? renderCharacterView(agent, this.#token)
-      : renderSleeveForm(agent, this.#token);
+      ? renderCharacterView(agent, this._token)
+      : renderSleeveForm(agent, this._token);
   }
 
   bringToTop() {
@@ -63,7 +65,7 @@ export class ActorEPSheet implements EntitySheet {
         onClick: this.configureToken,
         disabled: !(this.actor.owner && userCan('TOKEN_CONFIGURE')),
         content: html`
-          <i class="fas fa-user-circle"></i> ${this.#token
+          <i class="fas fa-user-circle"></i> ${this._token
             ? 'Token'
             : 'Prototype Token'}
         `,
@@ -78,7 +80,7 @@ export class ActorEPSheet implements EntitySheet {
   }
 
   private get actorToken() {
-    return this.#token || this.actor.token;
+    return this._token || this.actor.token;
   }
 
   private configureToken = (ev: Event) => {
@@ -98,7 +100,7 @@ export class ActorEPSheet implements EntitySheet {
       {
         key: this.actor,
         content: html` ${this.windowHeaderButtons} ${this.content} `,
-        name: this.#token?.data.name || this.actor.name,
+        name: this._token?.data.name || this.actor.name,
         forceFocus: force,
         adjacentEl: !this.rendered && this.getAdjacentEl(),
       },
@@ -119,7 +121,7 @@ export class ActorEPSheet implements EntitySheet {
     if ('actorId' in drop) {
       if (
         drop.actorId === this.actor.data._id ||
-        (drop.tokenId && drop.tokenId === this.#token?.data._id)
+        (drop.tokenId && drop.tokenId === this._token?.data._id)
       ) {
         return;
       }
@@ -129,7 +131,7 @@ export class ActorEPSheet implements EntitySheet {
 
   getAdjacentEl() {
     const { actor } = this;
-    const token = this.#token || this.actor.token;
+    const token = this._token || this.actor.token;
     if (token?.isVisible) {
       const hud = document.getElementById('hud');
       if (hud) {
@@ -164,7 +166,7 @@ export class ActorEPSheet implements EntitySheet {
     if (!force && !this.rendered) return this;
 
     if (force) {
-      this.#token =
+      this._token =
         token ||
         (this.actor.token &&
           activeCanvas()?.tokens.get(this.actor.token.data._id));
@@ -176,12 +178,13 @@ export class ActorEPSheet implements EntitySheet {
 
   maximize() {
     // TODO don't pass token if opened from sidebar-list
-    if (this._minimized) this.render(true, { token: this.#token });
+    if (this._minimized) this.render(true, { token: this._token });
     return this;
   }
 
   async close() {
-    this.unsub();
+    this.unsub?.();
+    this.unsub = null;
     closeWindow(this.actor);
     this.window?.removeEventListener('drop', this.unpackDrop);
     this.window = null;

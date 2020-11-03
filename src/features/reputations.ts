@@ -91,28 +91,36 @@ export const maxFavors: ReadonlyMap<ConsumableFavor, number> = new Map([
   [Favor.Major, 1],
 ]);
 
-export const favorValues = {
-  [Favor.Trivial]: {
-    modifier: 30,
-    burnCost: 0,
-    timeframe: 0,
-  },
-  [Favor.Minor]: {
-    modifier: 10,
-    burnCost: 5,
-    timeframe: toMilliseconds({ hours: 2 }),
-  },
-  [Favor.Moderate]: {
-    modifier: 0,
-    burnCost: 10,
-    timeframe: toMilliseconds({ hours: 8 }),
-  },
-  [Favor.Major]: {
-    modifier: -30,
-    burnCost: 20,
-    timeframe: CommonInterval.Day,
-  },
-} as const;
+export const favorFavues = (favor: Favor) => {
+  switch (favor) {
+    case Favor.Trivial:
+      return {
+        modifier: 30,
+        burnCost: 0,
+        timeframe: 0,
+      };
+
+    case Favor.Minor:
+      return {
+        modifier: 10,
+        burnCost: 5,
+        timeframe: toMilliseconds({ hours: 2 }),
+      };
+    case Favor.Moderate:
+      return {
+        modifier: 0,
+        burnCost: 10,
+        timeframe: toMilliseconds({ hours: 8 }),
+      };
+
+    case Favor.Major:
+      return {
+        modifier: -30,
+        burnCost: 20,
+        timeframe: CommonInterval.Day,
+      };
+  }
+};
 
 export type FakeEgoId = {
   name: string;

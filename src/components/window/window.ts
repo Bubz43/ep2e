@@ -142,7 +142,7 @@ export class SlWindow extends LitElement {
 
   @property({ type: String }) resizable = ResizeOption.None;
 
-  @query('#header') private header!: HTMLElement;
+  @query('header') private header!: HTMLElement;
 
   @query('.content') private contentContainer!: HTMLElement;
 

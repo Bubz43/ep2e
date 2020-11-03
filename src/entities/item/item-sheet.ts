@@ -18,16 +18,15 @@ import type { ItemEP } from './item';
 import { renderItemForm } from './item-views';
 
 export class ItemEPSheet implements EntitySheet {
-  private unsub: () => void;
-  private actorUnsub?: () => void;
+  private unsub: (() => void) | null;
+  private actorUnsub?: (() => void) | null;
   private window: SlWindow | null = null;
 
-  constructor(private item: ItemEP, public options: EntitySheetOptions) {
+  constructor(private item: ItemEP) {
     this.unsub = item.subscriptions.subscribe(this, {
       onEntityUpdate: () => this.render(false),
       onSubEnd: () => this.close(),
     });
-    // TODO: maybe move this into the item entity itself
     if (item.actor) {
       this.actorUnsub = item.actor.subscriptions.subscribe(this, {
         onEntityUpdate: () => this.render(false),
@@ -64,8 +63,10 @@ export class ItemEPSheet implements EntitySheet {
   }
 
   async close() {
-    this.unsub();
+    this.unsub?.();
+    this.unsub = null;
     this.actorUnsub?.();
+    this.actorUnsub = null;
     closeWindow(this.item);
     this.window = null;
     return this;

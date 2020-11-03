@@ -1,0 +1,134 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+@include styled-scrollbars;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: grid;
+
+  width: 750px;
+  min-width: 100%;
+  min-height: 100%;
+  grid-template-rows: min-content 1fr;
+  grid-template-columns: min-content 1fr;
+
+  grid-template-areas:
+    "sidebar tabs"
+    "sidebar content";
+
+  background: linear-gradient(45deg, var(--color-bg-alt), var(--color-bg));
+
+  ::slotted([slot="description"]) {
+    border-top: 1px solid var(--color-border);
+
+    padding: 0.25rem 0.5rem 0.5rem;
+  }
+
+  ::slotted([slot="tabs"]) {
+    box-shadow: 0 2px 4px 1px hsla(0, 0%, 0%, 0.322);
+    background: lightv(var(--color-bg), 1.2);
+    --mdc-theme-primary: var(--color-grey);
+    width: min-content;
+    margin: 0 auto 0.25rem;
+  }
+
+  ::slotted([slot="details"]) {
+    display: flex;
+    flex-flow: column;
+    padding: 1rem 1.618rem;
+  }
+
+  ::slotted([slot="drawer-content"]) {
+    grid-area: content;
+  }
+}
+
+.drawer-content,
+.content {
+  height: 500px;
+  min-height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.drawer {
+  grid-area: 1 / 1 / -1 / -1;
+  pointer-events: none;
+  z-index: 0;
+  display: flex;
+  transition: background 350ms;
+  .shim {
+    flex: 1;
+  }
+
+  .drawer-content {
+    display: grid;
+    grid-template-areas: "content";
+
+    width: min-content;
+    justify-self: end;
+    padding: 0 1rem 1rem;
+    background: linear-gradient(45deg, var(--color-bg), var(--color-bg-alt));
+    transition: transform 350ms ease-out;
+    transform: translateX(100%);
+    margin-left: auto;
+    box-shadow: 0 0 4px black;
+    max-height: 100%;
+    .drawer-closer {
+      position: sticky;
+      z-index: 1;
+      justify-self: end;
+      --mdc-icon-button-size: 30px;
+      --mdc-icon-size: 20px;
+      margin-top: 0.5rem;
+      grid-area: content;
+      height: min-content;
+    }
+  }
+  &.open {
+    background: rgba(black, 0.4);
+    pointer-events: initial;
+    .drawer-content {
+      transform: none;
+    }
+  }
+}
+
+slot[name="tabs"] {
+  grid-area: tabs;
+  display: block;
+}
+
+.content {
+  grid-area: content;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  grid-template-columns: 100%;
+  &.no-scroll {
+    overflow: visible;
+    & + .drawer {
+      .drawer-content {
+        height: 100%;
+        overflow: visible;
+      }
+    }
+  }
+}
+
+.sidebar {
+  display: flex;
+  flex-flow: column;
+  grid-area: sidebar;
+  padding: 1rem 1.618rem;
+  background: alphav(var(--color-bg), 0.1);
+  border-right: 1px solid var(--color-border);
+  min-width: 220px;
+}
+
+slot[name="description"] {
+  display: block;
+}

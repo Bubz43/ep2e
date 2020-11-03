@@ -4,7 +4,7 @@ module.exports = {
     src: '/_dist_',
   },
   plugins: [
-    '@snowpack/plugin-babel', // TODO Check if I actually need babel
+    '@snowpack/plugin-babel',
     '@snowpack/plugin-dotenv',
     '@snowpack/plugin-typescript',
     './snowpack-tagged-scss.js',

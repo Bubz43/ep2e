@@ -38,10 +38,7 @@ export type ActorProxy = ReturnType<ActorEP['createProxy']>;
 export type MaybeToken = Token | null | undefined;
 
 export class ActorEP extends Actor {
-  readonly token?: Token;
   readonly #subscribers = new EntitySubscription<this>();
-  readonly items?: Collection<ItemEP>;
-  readonly effects!: Collection<ActiveEffect>;
   itemTrash: ItemEP['data'][] = [];
 
   #proxy?: ActorProxy;
@@ -49,17 +46,20 @@ export class ActorEP extends Actor {
   // #identifiers?: ActorIdentifiers;
   #itemOperations?: ItemOperations;
 
-  data!: ActorDatas;
   private invalidated = true;
 
   get updater() {
     if (!this.#updater)
       this.#updater = new UpdateStore({
         getData: () => this.data,
-        isEditable: () => !!this.owner && !this.compendium?.locked,
+        isEditable: () => this.editable,
         setData: (changedData) => this.update(changedData, {}),
       });
     return this.#updater;
+  }
+
+  get editable() {
+    return this.owner && (!this.compendium || !this.compendium.locked);
   }
 
   get isToken() {
@@ -238,7 +238,7 @@ export class ActorEP extends Actor {
       }
     }
 
-    return null;
+    return new ActorEPSheet(this);
   }
 
   getOwnedItem(id: string | null) {
@@ -284,15 +284,4 @@ export class ActorEP extends Actor {
   ) {
     return super.create(data, options);
   }
-
-  // get proxy() {
-  //   if (!this.#agent || this.invalidated) {
-  //     console.time("Create actor agent");
-  //     const agent = this.createAgent();
-  //     console.timeEnd("Create actor agent");
-  //     this.#agent = agent;
-  //   }
-  //   this.invalidated = false;
-  //   return this.#agent;
-  // }
 }
