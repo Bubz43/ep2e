@@ -1,4 +1,4 @@
-import type { ArmorType } from '@src/features/armor';
+import type { ArmorType } from '@src/features/active-armor';
 import type {
   HealthRecoveryEffect,
   SourcedEffect,

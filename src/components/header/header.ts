@@ -1,6 +1,9 @@
 import { customElement, LitElement, property, html } from 'lit-element';
 import styles from './header.scss';
 
+/**
+ * @slot action
+ */
 @customElement('sl-header')
 export class Header extends LitElement {
   static get is() {
@@ -17,7 +20,7 @@ export class Header extends LitElement {
     return html`
       <h3>
         ${this.heading}
-        ${typeof this.itemCount === 'number'
+        ${this.itemCount !== undefined
           ? html`<span class="count">${this.itemCount}</span>`
           : ''}
       </h3>

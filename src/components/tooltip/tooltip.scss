@@ -18,6 +18,7 @@
   opacity: 0;
   transition: opacity 200ms ease-in-out;
   max-width: 450px;
+  // transform: translateY(-0.5rem);
   top: 10px;
   left: 10px;
   pointer-events: none !important;
@@ -27,7 +28,21 @@
   }
 }
 
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 :host([visible]) {
   pointer-events: initial !important;
-  opacity: 1;
+  animation: appear 150ms ease-in-out 100ms forwards;
+  // opacity: 1;
+  // opacity: 1;
+  // transform: none;
 }

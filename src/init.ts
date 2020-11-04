@@ -4,6 +4,7 @@ import { onChatMessageRender } from './chat/message-hooks';
 import { onCombatTrackerRender, onCombatUpdate } from './combat/combat-hooks';
 import { combatantSocketHandler } from './combat/combatant-commands';
 import { EPOverlay } from './components/ep-overlay/ep-overlay';
+import type { ToolTip } from './components/tooltip/tooltip';
 import { SlWindow } from './components/window/window';
 import { enumValues } from './data-enums';
 import { ActorEP } from './entities/actor/actor';
@@ -30,6 +31,7 @@ import { EP } from './foundry/system';
 
 export let gameSettings: ReturnType<typeof registerEPSettings>;
 export let overlay: EPOverlay;
+export let tooltip: ToolTip;
 
 Hooks.once('init', () => {
   gameSettings = registerEPSettings();
@@ -113,6 +115,10 @@ Hooks.once('ready', async () => {
     SlWindow.container = overlay;
     document.body.append(overlay);
     document.getElementById('hotbar')?.remove();
+
+    tooltip = document.createElement('sl-tooltip');
+    tooltip.slot = 'tooltip';
+    overlay.append(tooltip);
   }, 150);
 
   mutateEntityHook({

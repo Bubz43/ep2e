@@ -5,9 +5,8 @@ import {
   GearTrait,
   PhysicalWare,
 } from '@src/data-enums';
-import { toggle } from '@src/utility/helpers';
+import type { BlueprintData } from '@src/foundry/template-schema';
 import type { Class } from 'type-fest';
-import type { UpdateStore } from '../update-store';
 
 type HasEpData<T> = Class<{ epData: T }>;
 
@@ -48,9 +47,25 @@ export const Equippable = (
   };
 };
 
-export const Gear = (cls: HasEpData<Record<GearTrait, boolean>>) =>
-  class extends cls {
-    get gearTraits() {
-      return enumValues(GearTrait).filter((trait) => this.epData[trait]);
+export const Copyable = (cls: HasEpData<{ blueprint: BlueprintData }>) => {
+  return class extends cls {
+
+    get blueprintType() {
+      return this.epData.blueprint.blueprintType
     }
+
+    get isBlueprint() {
+      return !!this.blueprintType
+    }
+  }
+}
+
+export const Gear = (cls: HasEpData<Record<GearTrait, boolean>>) =>
+  {
+    return class extends cls {
+      get gearTraits() {
+        return enumValues(GearTrait).filter((trait) => this.epData[trait]);
+      }
+    };
   };
+

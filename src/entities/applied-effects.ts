@@ -1,9 +1,11 @@
+import type { PoolType } from '@src/data-enums';
 import {
   createEffect,
   DurationEffectTarget,
   Effect,
   EffectType,
   HealthEffect,
+  PoolEffect,
   Source,
   SourcedEffect,
   SuccessTestEffect,
@@ -16,7 +18,7 @@ import type {
   HealthStat,
   HealthStatMods,
 } from '@src/health/health';
-import { pipe, concat, filter, allPass } from 'remeda';
+import { pipe, concat, filter, allPass, clamp } from 'remeda';
 
 export type AddEffects = {
   source: string;
@@ -24,6 +26,10 @@ export type AddEffects = {
 };
 
 export type ReadonlyAppliedEffects = Omit<AppliedEffects, 'add'>;
+
+export interface ObtainableEffects {
+  obtainEffects(): AddEffects | null
+}
 
 const defaultSuccessTestEffects = (): SourcedEffect<SuccessTestEffect>[] => [
   {
@@ -59,6 +65,17 @@ export class AppliedEffects {
     return this.getGroup(EffectType.Duration).filter(
       (effect) => effect.subtype === DurationEffectTarget.TaskActionTimeframe,
     );
+  }
+
+  get poolBonuses() {
+    return this.getGroup(EffectType.Pool).reduce((accum, effect) => {
+      const { modifier, pool } = effect;
+      const { effects = [], total = 0 } = accum.get(pool) ?? {};
+      return accum.set(pool, {
+        effects: effects.concat(effect),
+        total: total + modifier,
+      });
+    }, new Map<PoolType, { effects: SourcedEffect<PoolEffect>[]; total: number }>());
   }
 
   getHealthStatMods(type: HealthType) {

@@ -1,3 +1,4 @@
+import type { ObtainableEffects } from '@src/entities/applied-effects';
 import { createEffect } from '@src/features/effects';
 import { TagType } from '@src/features/tags';
 import { localize } from '@src/foundry/localization';
@@ -8,7 +9,7 @@ import type { Class } from 'type-fest';
 import type { CommonHealth } from './health';
 
 export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
-  class Health extends cls {
+  class Health extends cls implements ObtainableEffects {
     obtainEffects() {
       const { wound, type } = this;
       if (!wound) return null;

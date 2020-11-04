@@ -14,7 +14,6 @@
 @include styled-scrollbars;
 @include widgetless-number-inputs;
 
-
 body {
   color: var(--color-text);
   background-color: #000000;
@@ -282,10 +281,10 @@ table {
         alphav(var(--color-bg), 0.8),
         alphav(var(--color-bg-alt), 0.8)
       );
-      border-color: var(--color-border);
+      border: 1px solid var(--color-border);
       &.gm {
         background: lightv(var(--color-primary), 0.3) !important;
-        border: 1px solid lightv(var(--color-primary), 0.5) !important;
+        border: 1px solid lightv(var(--color-primary), 0.5);
       }
       a {
         text-shadow: none !important;
@@ -309,6 +308,9 @@ table {
           var(--color-bg),
           var(--color-bg-alt)
         );
+        border: 1px groove var(--color-primary-alt);
+        box-shadow: none;
+        filter: contrast(0.95) drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.8));
       }
     }
   }

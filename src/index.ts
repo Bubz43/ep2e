@@ -17,11 +17,17 @@ import '@material/mwc-slider';
 import '@material/mwc-snackbar';
 import '@material/mwc-switch';
 import '@material/mwc-tab-bar';
+
+// Misc
 import 'web-dialog';
-import { Popover } from 'weightless';
+import "@tinymce/tinymce-webcomponent"
+import { Datepicker } from "app-datepicker/dist/datepicker"
+customElements.define("app-datepicker", Datepicker);
+
 // Weightless Components
 import 'weightless/label';
 import 'weightless/list-item';
+
 import { AnimatedList } from './components/animated-list/animated-list';
 import { DateField } from './components/date-field/date-field';
 import { DeleteButton } from './components/delete-button/delete-button';
@@ -35,6 +41,7 @@ import { Form } from './components/form/form';
 import { Group } from './components/group/group';
 import { Header } from './components/header/header';
 import { NotificationCoin } from './components/notification-coin/notification-coin';
+import { Popover } from './components/popover/popover';
 import { PopoverSection } from './components/popover/popover-section';
 import { Section } from './components/section/section';
 import { SubmitButton } from './components/submit-button/submit-button';
@@ -47,7 +54,10 @@ import { EntityFormFooter } from './entities/components/form-layout/entity-form-
 import { EntityFormHeader } from './entities/components/form-layout/entity-form-header';
 import { EntityFormLayout } from './entities/components/form-layout/entity-form-layout';
 import { InfomorphForm } from './entities/components/sleeve-forms/infomorph/infomorph-form';
-import "./foundry/prototype-overrides";
+import { SleeveFormPools } from './entities/components/sleeve-forms/sleeve-form-pools';
+
+// Side Effects
+import './foundry/prototype-overrides';
 import './init';
 
 // Generic Components
@@ -79,8 +89,7 @@ EntityFormLayout;
 EntityFormFooter;
 InfomorphForm;
 CompendiumList;
-
-
+SleeveFormPools;
 
 for (const link of [
   'https://fonts.googleapis.com/css?family=Material+Icons&display=block',

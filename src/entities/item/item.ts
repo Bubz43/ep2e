@@ -1,4 +1,4 @@
-import type { Mutable } from 'type-fest';
+import type { Mutable, RequireAtLeastOne } from 'type-fest';
 import type { ActorEP } from '../actor/actor';
 import { ItemType, ActorType } from '../entity-types';
 import type { ItemDatas } from '../models';
@@ -29,6 +29,41 @@ type Operations = {
 };
 
 export type ItemProxy = ReturnType<ItemEP['createProxy']>;
+
+export type RangedWeapon =
+  | BeamWeapon
+  | Railgun
+  | Firearm
+  | SprayWeapon
+  | SeekerWeapon;
+
+export type EquippableItem =
+  | Armor
+  | Software
+  | MeleeWeapon
+  | PhysicalTech
+  | RangedWeapon;
+
+export type CopyableItem =
+  | Substance
+  | Armor
+  | Explosive
+  | MeleeWeapon
+  | PhysicalTech
+  | RangedWeapon
+  | FirearmAmmo
+  | ThrownWeapon;
+
+export type InventoryItem =
+  | Armor
+  | Software
+  | Explosive
+  | Substance
+  | MeleeWeapon
+  | PhysicalTech
+  | RangedWeapon
+  | FirearmAmmo
+  | ThrownWeapon;
 
 export class ItemEP extends Item {
   private invalidated = true;

@@ -5,20 +5,19 @@
   box-sizing: border-box;
 }
 
-
 :host {
   display: grid;
   padding: 0.5rem;
   color: var(--color-text);
   grid-template-areas:
-    "avatar form form"
-    "avatar tags type";
+    'avatar form form'
+    'avatar tags type';
   // gap: 0 0.5rem;
   grid-template-columns: min-content 1fr;
   box-shadow: 0 5px 5px -5px black;
   align-items: center;
 
-  ::slotted([slot="tag"]) {
+  ::slotted([slot='tag']) {
     border: 1px solid var(--color-grey);
     background: alphav(var(--color-grey), 0.5);
     padding: 1px 2px;
@@ -27,8 +26,6 @@
     @include animate-css(fadeIn, 200ms);
   }
 }
-
-
 
 .type {
   grid-area: type;
@@ -119,7 +116,7 @@ sl-form {
 }
 
 h1 {
-  pointer-events: none;  
+  pointer-events: none;
   font-weight: normal;
   grid-area: form;
   @include truncate(450px);
@@ -168,7 +165,6 @@ h1 {
 .avatar {
   height: 56px;
 }
-
 
 .name-part {
   color: var(--color-text-lighter);

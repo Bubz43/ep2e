@@ -21,11 +21,10 @@ mwc-list {
 
 mwc-list-item {
   z-index: 0;
-  [slot="graphic"] {
+  [slot='graphic'] {
     border-radius: 4px;
   }
 }
-
 
 label {
   display: flex;

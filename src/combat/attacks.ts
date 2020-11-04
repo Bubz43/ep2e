@@ -3,7 +3,7 @@ import type {
   AttackTrait,
   FirearmAmmoModifierType,
 } from '@src/data-enums';
-import type { ArmorType } from '@src/features/armor';
+import type { ArmorType } from '@src/features/active-armor';
 import type { ConditionEffect } from '@src/features/conditions';
 import type { FiringMode } from '@src/features/firing-modes';
 import type { HealthType } from '@src/health/health';

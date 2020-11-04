@@ -17,18 +17,18 @@
   grid-template-columns: min-content 1fr;
 
   grid-template-areas:
-    "sidebar tabs"
-    "sidebar content";
+    'sidebar tabs'
+    'sidebar content';
 
   background: linear-gradient(45deg, var(--color-bg-alt), var(--color-bg));
 
-  ::slotted([slot="description"]) {
+  ::slotted([slot='description']) {
     border-top: 1px solid var(--color-border);
 
     padding: 0.25rem 0.5rem 0.5rem;
   }
 
-  ::slotted([slot="tabs"]) {
+  ::slotted([slot='tabs']) {
     box-shadow: 0 2px 4px 1px hsla(0, 0%, 0%, 0.322);
     background: lightv(var(--color-bg), 1.2);
     --mdc-theme-primary: var(--color-grey);
@@ -36,13 +36,13 @@
     margin: 0 auto 0.25rem;
   }
 
-  ::slotted([slot="details"]) {
+  ::slotted([slot='details']) {
     display: flex;
     flex-flow: column;
     padding: 1rem 1.618rem;
   }
 
-  ::slotted([slot="drawer-content"]) {
+  ::slotted([slot='drawer-content']) {
     grid-area: content;
   }
 }
@@ -67,7 +67,7 @@
 
   .drawer-content {
     display: grid;
-    grid-template-areas: "content";
+    grid-template-areas: 'content';
 
     width: min-content;
     justify-self: end;
@@ -98,7 +98,7 @@
   }
 }
 
-slot[name="tabs"] {
+slot[name='tabs'] {
   grid-area: tabs;
   display: block;
 }
@@ -129,6 +129,6 @@ slot[name="tabs"] {
   min-width: 220px;
 }
 
-slot[name="description"] {
+slot[name='description'] {
   display: block;
 }

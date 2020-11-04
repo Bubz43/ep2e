@@ -13,6 +13,13 @@ import { classMap } from 'lit-html/directives/class-map';
 import { first } from 'remeda';
 import styles from './entity-form-layout.scss';
 
+/**
+ * @slot sidebar
+ * @slot details
+ * @slot description
+ * @slot tabs
+ * @slot drawer-content
+ */
 @customElement('entity-form-layout')
 export class EntityFormLayout extends LitElement {
   static get is() {

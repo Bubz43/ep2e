@@ -109,7 +109,9 @@ export class EditorWrapper extends LitElement {
     const clicked = ev.currentTarget as HTMLElement;
     clicked.style.pointerEvents = 'none';
     setTimeout(() => (clicked.style.pointerEvents = ''), 250);
-    if (this.editor) return this.editorSave(this.editor);
+    if (this.editor) {
+      return this.editorSave(this.editor);
+    }
 
     const { contentArea, content, editorOptions, spinner } = this;
     const opacity = [1, 0];
@@ -119,7 +121,7 @@ export class EditorWrapper extends LitElement {
     this.style.overflow = 'hidden';
     contentArea.animate({ opacity }, animOptions).onfinish = async () => {
       const editor = await TextEditor.create(editorOptions, content);
-      editor.focus();
+      // editor.focus();
       contentArea.animate({ opacity: opacity.reverse() }, animOptions);
       this.requestUpdate();
       spinner.closed = true;

@@ -1,0 +1,44 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+@include resetUnorderedList;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+}
+
+.pools {
+  display: flex;
+  justify-content: space-evenly;
+  margin: 0.5rem 0;
+}
+
+.pool {
+  align-items: center;
+  display: grid;
+  grid-auto-flow: column;
+  gap: 0.5ch;
+
+  &.hide {
+    opacity: 0.5;
+  }
+
+  [data-bonus] {
+    &::before {
+      content: attr(data-bonus);
+    }
+    &::first-letter {
+      color: var(--color-secondary);
+    }
+  }
+
+  [data-bonus^='-'] {
+    &::first-letter {
+      color: var(--color-negative);
+    }
+  }
+}

@@ -1121,7 +1121,7 @@
     "stash": "Stash",
     "unset": "Unset",
     "systemName": "System Name",
-    "privilege" : "Privilege",
+    "privilege": "Privilege",
     "calledShot": "Called Shot",
     "damageApplier": "Damage Applier",
     "multiplier": "Multiplier",
@@ -1219,6 +1219,7 @@
     "severe": "Severe",
     "perTurn": "Per Turn",
     "carryPayload": "Carry Payload",
+    "took": "Took",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
@@ -1232,7 +1233,8 @@
       "prone": "You are knocked on the ground in gravity or spinning helplessly in microgravity. You must take a quick action to stand up or re-orient, and your Movement Rate for that turn is reduced by half. A standing/oriented opponent has superior position (+20) against you in melee. In gravity, however, anyone shooting at you from range or farther receives an additional –10 modifier",
       "unconscious": "You have lost consciousness (or your software mindstate has crashed) and are helpless. You can be awoken/rebooted by application of a stimulant (biomorphs only) or with an INT Check at –30 if someone vigorously disturbs you and your damage points do not exceed your Durability.",
       "deafened": "You cannot hear. You suffer –3 to Initiative Tests and –30 to general Perceive Tests.",
-      "stunned": "You have the wind knocked out of you. You suffer –30 to all physical actions and –10 to mental actions."
+      "stunned": "You have the wind knocked out of you. You suffer –30 to all physical actions and –10 to mental actions.",
+      "OnlyWarePoolBonus": "Only pool bonuses from ware are added."
     },
     "FULL": {
       "cog": "Cognition",

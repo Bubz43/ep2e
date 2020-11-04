@@ -1,11 +1,12 @@
 import { TraitSource, TraitType, CharacterPoint } from '@src/data-enums';
+import type { ObtainableEffects } from '@src/entities/applied-effects';
 import { localize } from '@src/foundry/localization';
 import { notEmpty, toggle } from '@src/utility/helpers';
 import { clamp, compact } from 'remeda';
 import type { ItemType } from '../../entity-types';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
-export class Trait extends ItemProxyBase<ItemType.Trait> {
+export class Trait extends ItemProxyBase<ItemType.Trait> implements ObtainableEffects {
   readonly lockSource;
 
   constructor({
@@ -14,6 +15,15 @@ export class Trait extends ItemProxyBase<ItemType.Trait> {
   }: ItemProxyInit<ItemType.Trait> & { lockSource: boolean }) {
     super(init);
     this.lockSource = lockSource;
+  }
+
+  obtainEffects() {
+    const { levelInfo, triggered, hasTriggers } = this;
+    if (hasTriggers && !triggered) return null;
+    return {
+      source: this.fullName,
+      effects: levelInfo.effects,
+    };
   }
 
   getTextInfo() {

@@ -15,7 +15,7 @@ import {
 import { withSign } from '@src/utility/helpers';
 import { map, createPipe, compact, purry, anyPass } from 'remeda';
 import type { Action, ActionSubtype } from './actions';
-import { ArmorType } from './armor';
+import { ArmorType } from './active-armor';
 import { createFeature } from './feature-helpers';
 import type { RepBase } from './reputations';
 import {

@@ -1,18 +1,13 @@
 @use "functions" as *;
 
 #controls {
-  // left: unset;
-  // top: unset;
   position: relative;
   flex-flow: column;
   width: 250px;
-  // align-items: flex-end;
   padding: 0;
   margin: 0;
-  top: 70px;
+  top: 75px;
   left: 0.5rem;
-  // margin-right: 2rem;
-  // margin-left: 1rem;
   pointer-events: none;
   align-items: flex-start;
   z-index: 20;

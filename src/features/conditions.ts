@@ -4,7 +4,7 @@ import { localize } from '@src/foundry/localization';
 import { fromPairs } from '@src/utility/helpers';
 import { foundryIcon, localImage } from '@src/utility/images';
 import { ActionSubtype } from './actions';
-import { ArmorType } from './armor';
+import { ArmorType } from './active-armor';
 import { createEffect, Effect } from './effects';
 import { createFeature } from './feature-helpers';
 import { SkillType } from './skills';

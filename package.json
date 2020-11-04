@@ -11,13 +11,6 @@
     "gen:lang-schema": "./node_modules/.bin/ts-json-schema-generator --tsconfig tsconfig.json --path ./src/foundry/lang-schema.ts --no-type-check -t Lang --strict-tuples -o ./lang/lang.schema.json"
   },
   "dependencies": {
-    "lit-element": "^2.4.0",
-    "lit-html": "^1.3.0",
-    "mix-with": "^3.0.2",
-    "nanopop": "^2.1.0",
-    "remeda": "0.0.26",
-    "web-dialog": "0.0.11",
-    "weightless": "0.0.37",
     "@a11y/focus-trap": "^1.0.5",
     "@material/mwc-button": "^0.19.1",
     "@material/mwc-checkbox": "^0.19.1",
@@ -38,8 +31,17 @@
     "@material/mwc-tab-bar": "^0.19.1",
     "@material/mwc-textarea": "^0.19.1",
     "@material/mwc-textfield": "^0.19.1",
+    "@tinymce/tinymce-webcomponent": "^1.0.2",
     "app-datepicker": "^4.3.0",
-    "archiver": "^5.0.2"
+    "archiver": "^5.0.2",
+    "lit-element": "^2.4.0",
+    "lit-html": "^1.3.0",
+    "mix-with": "^3.0.2",
+    "nanopop": "^2.1.0",
+    "remeda": "0.0.26",
+    "typescript-memoize": "^1.0.0-alpha.3",
+    "web-dialog": "0.0.11",
+    "weightless": "0.0.37"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.12.1",

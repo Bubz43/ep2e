@@ -121,13 +121,14 @@ type Acquisition = {
 export type MorphPoolsData = Record<Exclude<PoolType, PoolType.Threat>, number>;
 
 type GearTraits = Readonly<Record<GearTrait, boolean>>;
+export type BlueprintData = {
+  blueprintType: '' | BlueprintType;
+  used: boolean;
+  cracked: boolean;
+}
 
 type Copyable = {
-  blueprint: Readonly<{
-    blueprintType: '' | BlueprintType;
-    used: boolean;
-    cracked: boolean;
-  }>;
+  blueprint: BlueprintData;
 };
 
 type GearState = { state: { equipped: boolean; disabled: boolean } };
