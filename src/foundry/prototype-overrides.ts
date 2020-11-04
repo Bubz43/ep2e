@@ -1,8 +1,5 @@
-import type { Combatant } from "@src/combat/combatant";
-import { openWindow, closeWindow } from "@src/components/window/window-controls";
 import type { ActorEP } from "@src/entities/actor/actor";
 import { ActorType } from "@src/entities/entity-types";
-import { ItemEP } from "@src/entities/item/item";
 import type { SceneEP } from "@src/entities/scene";
 import type { UserEP } from "@src/entities/user";
 import { iconToCondition } from "@src/features/conditions";
@@ -10,9 +7,7 @@ import { openMenu } from "@src/open-menu";
 import { findMatchingElement } from "@src/utility/dom";
 import { notEmpty } from "@src/utility/helpers";
 import { html, render } from "lit-html";
-import { ifDefined } from "lit-html/directives/if-defined";
-import { pipe, first, mapToObj, compact, noop } from "remeda";
-import { stopEvent } from "weightless";
+import { compact, first, mapToObj, noop, pipe } from "remeda";
 import type { TokenData } from "./foundry-cont";
 import { activeCanvas, convertMenuOptions } from "./misc-helpers";
 import { activeTokenStatusEffects } from "./token-helpers";
@@ -474,3 +469,8 @@ ChatPopout.prototype.close = async function () {
   delete this.message.apps[this.appId];
   close.call(this, []);
 };
+
+tinymce.FocusManager.isEditorUIElement = function (elm: Element) {
+  const className = elm.className?.toString() ?? "";
+  return className.indexOf('tox-') !== -1 || className.indexOf('mce-') !== -1;
+}
