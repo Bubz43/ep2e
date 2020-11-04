@@ -38,7 +38,6 @@ export class InfomorphForm extends SleeveFormBase {
             .editFn=${this.setDrawerFromEvent(this.renderPoolEdit)}
           ></sleeve-form-pools>
         </div>
-        <!-- <tinymce-editor slot="description" value=${description} .on-Change=${(ev: unknown) => console.log(ev)} ></tinymce-editor> -->
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}

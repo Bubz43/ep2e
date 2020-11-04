@@ -121,7 +121,7 @@ export class EditorWrapper extends LitElement {
     this.style.overflow = 'hidden';
     contentArea.animate({ opacity }, animOptions).onfinish = async () => {
       const editor = await TextEditor.create(editorOptions, content);
-      // editor.focus();
+      editor.focus();
       contentArea.animate({ opacity: opacity.reverse() }, animOptions);
       this.requestUpdate();
       spinner.closed = true;

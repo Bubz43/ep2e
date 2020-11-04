@@ -538,9 +538,9 @@ export class SlWindow extends LitElement {
               <div class="heading">${this.name}</div>
             </slot>`}
       </header>
-      <div class="content">
+      <focus-trap class="content">
         <slot></slot>
-      </div>
+      </focus-trap>
       <slot name="footer"></slot>
       ${this.resizable !== ResizeOption.None
         ? resizeList.map((option) => {
