@@ -21,6 +21,7 @@ import type {
 } from '@src/entities/models';
 import type { EntityTemplates } from './template-schema';
 import type { UserHotbarEntry } from '@src/features/hotbar-entry';
+import type { MessageData } from '@src/chat/create-message';
 // * Comment out canvas, game, ui from foundry.d.ts
 // * Add in context param to Entity.prototype._onUpdate
 // * Add generic type to collection
@@ -338,9 +339,10 @@ declare global {
   }
 
   interface ChatMessage {
+    apps: Record<string | number, Application>;
     data: {
       flags: {
-        // [EP.Name]?: MessageData;
+        [EP.Name]?: MessageData;
         core?: { canPopout?: boolean };
       };
       flavor?: string | null;
