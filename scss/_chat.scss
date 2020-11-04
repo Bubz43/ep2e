@@ -1,6 +1,10 @@
 @use "functions" as *;
 @use "mixins" as *;
 
+#chat {
+  display: contents;
+}
+
 #chat-form {
   grid-area: form;
   height: 60px;
