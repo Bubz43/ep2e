@@ -42,10 +42,12 @@ import { TimeField } from './components/time-field/time-field';
 import { ToolTip } from './components/tooltip/tooltip';
 import { ValueStatus } from './components/value-status/value-status';
 import { SlWindow } from './components/window/window';
+import { CompendiumList } from './entities/components/compendium-list/compendium-list';
 import { EntityFormFooter } from './entities/components/form-layout/entity-form-footer';
 import { EntityFormHeader } from './entities/components/form-layout/entity-form-header';
 import { EntityFormLayout } from './entities/components/form-layout/entity-form-layout';
 import { InfomorphForm } from './entities/components/sleeve-forms/infomorph/infomorph-form';
+import "./foundry/prototype-overrides";
 import './init';
 
 // Generic Components
@@ -71,11 +73,14 @@ ToolTip;
 ValueStatus;
 SlWindow;
 
-// Entity Form Components
+// Entity Components
 EntityFormHeader;
 EntityFormLayout;
 EntityFormFooter;
 InfomorphForm;
+CompendiumList;
+
+
 
 for (const link of [
   'https://fonts.googleapis.com/css?family=Material+Icons&display=block',

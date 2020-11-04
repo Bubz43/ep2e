@@ -45,7 +45,7 @@ export const onChatMessageRender = (message: ChatMessageEP, [el]: JQuery) => {
     ? findActor(speakerToId)?.img
     : message.user?.avatar;
   if (img) {
-    el.style.setProperty('--header-icon', `url("${img}")`);
+    el.style.setProperty('--header-icon', `url("/${img}")`);
     el.classList.add('has-icon');
   }
 

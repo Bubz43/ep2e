@@ -23,15 +23,15 @@ ol {
   height: 100px;
   // pointer-events: none;
   width: 300px;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  // overflow-y: scroll;
+  // overflow-x: hidden;
   display: flex;
   flex-flow: column;
   justify-content: flex-end;
-  // scrollbar-width: none !important;;
-  // ::-webkit-scrollbar {
-  //   width: 0px !important;
-  // }
+  scrollbar-width: none !important;;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @keyframes fadeOut {

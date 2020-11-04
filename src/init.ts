@@ -3,6 +3,8 @@ import { first } from 'remeda';
 import { onChatMessageRender } from './chat/message-hooks';
 import { onCombatTrackerRender, onCombatUpdate } from './combat/combat-hooks';
 import { combatantSocketHandler } from './combat/combatant-commands';
+import { EPOverlay } from './components/ep-overlay/ep-overlay';
+import { SlWindow } from './components/window/window';
 import { enumValues } from './data-enums';
 import { ActorEP } from './entities/actor/actor';
 import { ActorEPSheet } from './entities/actor/actor-sheet';
@@ -27,6 +29,7 @@ import { addEPSocketHandler, setupSystemSocket } from './foundry/socket';
 import { EP } from './foundry/system';
 
 export let gameSettings: ReturnType<typeof registerEPSettings>;
+export let overlay: EPOverlay;
 
 Hooks.once('init', () => {
   gameSettings = registerEPSettings();
@@ -106,9 +109,9 @@ Hooks.once('ready', async () => {
   );
 
   setTimeout(() => {
-    // overlay = new EPOverlay();
-    // SlWindow.container = overlay;
-    // document.body.append(overlay);
+    overlay = new EPOverlay();
+    SlWindow.container = overlay;
+    document.body.append(overlay);
     document.getElementById('hotbar')?.remove();
   }, 150);
 
@@ -211,7 +214,7 @@ window.addEventListener(
 );
 
 const isItem = (entity: ItemEP | ActorEP): entity is ItemEP => {
-  return (entity as ActorEP)._prepareOwnedItems !== undefined;
+  return (entity as ActorEP)._prepareOwnedItems === undefined;
 };
 
 for (const app of [ActorDirectory, ItemDirectory]) {

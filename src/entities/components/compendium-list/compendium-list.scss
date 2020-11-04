@@ -1,0 +1,62 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+@include styled-scrollbars;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: grid;
+  max-height: 100%;
+  grid-template-rows: min-content 1fr;
+}
+
+mwc-list {
+  max-height: 100%;
+  overflow-y: scroll;
+  margin-top: 0.5rem;
+}
+
+mwc-list-item {
+  z-index: 0;
+  [slot="graphic"] {
+    border-radius: 4px;
+  }
+}
+
+
+label {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem 0.75rem;
+  color: var(--color-text);
+  background: var(--color-bg);
+
+  border-bottom: 1px solid var(--color-border);
+  &:focus-within {
+    color: var(--color-secondary);
+  }
+  input {
+    background: transparent;
+    font-family: var(--font-1);
+    border: none;
+    flex: 1;
+    padding: 0.25rem 1rem;
+    font-size: 1rem;
+    color: var(--color-text);
+    &::placeholder {
+      text-transform: capitalize;
+    }
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+img {
+  &.default {
+    opacity: 0.1;
+  }
+}
