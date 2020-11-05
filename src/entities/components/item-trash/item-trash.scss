@@ -1,0 +1,49 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: flex;
+  flex-flow: column;
+}
+
+delete-button {
+  margin: 0.5rem 0.5rem 0 auto;
+}
+
+.restore-menu {
+  max-height: 50vh;
+  overflow-y: auto;
+  min-width: 300px;
+  .restore-commit {
+    position: sticky;
+    bottom: 0;
+    background: var(--color-bg);
+  }
+}
+
+li[divider] {
+  border-color: var(--color-border);
+}
+
+mwc-list-item {
+  [slot="graphic"] {
+    color: var(--color-text);
+  }
+  &[disabled] {
+    [slot="graphic"] {
+      color: var(--color-text-disabled);
+    }
+  }
+}
+
+.restore-button {
+  transition: box-shadow 1s ease-in-out;
+  border-radius: 100%;
+  &:not([disabled]) {
+    box-shadow: 0 0 0.5rem var(--color-secondary);
+  }
+}

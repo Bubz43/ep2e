@@ -41,7 +41,6 @@
   -webkit-backdrop-filter: blur(5px) contrast(85%);
   backdrop-filter: blur(5px) contrast(85%);
   box-shadow: 0px 6px 5px rgba(0, 0, 0, 0.712), 0 0 10px black, 0 0 1px white;
-
   // @supports (not (backdrop-filter: blur(3px) contrast(30%))) and
   //   (not (-webkit-backdrop-filter: blur(3px) contrast(30%))) {
   //   background: alphav(var(--color-bg), 0.97);
@@ -64,6 +63,7 @@
 
 :host([minimized]) {
   overflow: hidden;
+
   slot[name='footer'] {
     display: none;
   }

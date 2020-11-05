@@ -42,6 +42,10 @@ export abstract class ActorProxyBase<T extends ActorType> {
     this.actor = actor;
   }
 
+  get itemTrash() {
+    return this.actor.itemTrash;
+  }
+
   protected get epData() {
     return this.data.data;
   }

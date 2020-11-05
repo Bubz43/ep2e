@@ -54,6 +54,7 @@ export class InfomorphForm extends SleeveFormBase {
       description,
       type,
       sleeved,
+      itemTrash,
     } = this.infomorph;
 
     return html`
@@ -104,6 +105,15 @@ export class InfomorphForm extends SleeveFormBase {
                 @mouseover=${tooltip.fromData}
                 >info</mwc-icon
               >
+              ${notEmpty(itemTrash) && !disabled
+                ? html`
+                    <mwc-icon-button
+                      @click=${this.setDrawerFromEvent(this.renderItemTrash)}
+                      icon="delete_outline"
+                      slot="action"
+                    ></mwc-icon-button>
+                  `
+                : ''}
             </sl-header>
 
             ${notEmpty(itemGroups.traits)
@@ -131,6 +141,13 @@ export class InfomorphForm extends SleeveFormBase {
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
+    `;
+  }
+
+  private renderItemTrash() {
+    return html`
+      <h3>${localize('deleted')} ${localize('items')}</h3>
+      <item-trash .proxy=${this.infomorph}></item-trash>
     `;
   }
 
