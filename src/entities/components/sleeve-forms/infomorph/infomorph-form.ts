@@ -21,11 +21,17 @@ export class InfomorphForm extends SleeveFormBase {
   @property({ attribute: false }) infomorph!: Infomorph;
 
   render() {
-    const { updater, disabled, itemGroups, pools, description } = this.infomorph;
+    const {
+      updater,
+      disabled,
+      itemGroups,
+      pools,
+      meshHealth,
+      description,
+    } = this.infomorph;
 
     return html`
       <entity-form-layout noSidebar>
-     
         <div slot="details">
           <sleeve-form-pools
             .poolData=${pools}
@@ -33,7 +39,16 @@ export class InfomorphForm extends SleeveFormBase {
             ?disabled=${disabled}
             .editFn=${this.setDrawerFromEvent(this.renderPoolEdit)}
           ></sleeve-form-pools>
-          <sleeve-form-acquisition .updateActions=${updater.prop("data", "acquisition")} ?disabled=${disabled}></sleeve-form-acquisition>
+          <sleeve-form-acquisition
+            .updateActions=${updater.prop('data', 'acquisition')}
+            ?disabled=${disabled}
+          ></sleeve-form-acquisition>
+
+          <health-item
+            clickable
+            ?disabled=${disabled}
+            .health=${meshHealth}
+          ></health-item>
         </div>
         <editor-wrapper
           slot="description"

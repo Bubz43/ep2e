@@ -125,7 +125,7 @@ export type BlueprintData = {
   blueprintType: '' | BlueprintType;
   used: boolean;
   cracked: boolean;
-}
+};
 
 type Copyable = {
   blueprint: BlueprintData;

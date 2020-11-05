@@ -37,7 +37,6 @@ export type ActorProxy = ReturnType<ActorEP['createProxy']>;
 
 export type MaybeToken = Token | null | undefined;
 
-
 export class ActorEP extends Actor {
   readonly #subscribers = new EntitySubscription<this>();
   itemTrash: ItemEP['data'][] = [];

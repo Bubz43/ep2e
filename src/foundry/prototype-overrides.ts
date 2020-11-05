@@ -1,21 +1,21 @@
-import type { ActorEP } from "@src/entities/actor/actor";
-import { ActorType } from "@src/entities/entity-types";
-import type { SceneEP } from "@src/entities/scene";
-import type { UserEP } from "@src/entities/user";
-import { iconToCondition } from "@src/features/conditions";
-import { openMenu } from "@src/open-menu";
-import { findMatchingElement } from "@src/utility/dom";
-import { notEmpty } from "@src/utility/helpers";
-import { html, render } from "lit-html";
-import { compact, first, mapToObj, noop, pipe } from "remeda";
-import type { TokenData } from "./foundry-cont";
-import { activeCanvas, convertMenuOptions } from "./misc-helpers";
-import { activeTokenStatusEffects } from "./token-helpers";
+import type { ActorEP } from '@src/entities/actor/actor';
+import { ActorType } from '@src/entities/entity-types';
+import type { SceneEP } from '@src/entities/scene';
+import type { UserEP } from '@src/entities/user';
+import { iconToCondition } from '@src/features/conditions';
+import { openMenu } from '@src/open-menu';
+import { findMatchingElement } from '@src/utility/dom';
+import { notEmpty } from '@src/utility/helpers';
+import { html, render } from 'lit-html';
+import { compact, first, mapToObj, noop, pipe } from 'remeda';
+import type { TokenData } from './foundry-cont';
+import { activeCanvas, convertMenuOptions } from './misc-helpers';
+import { activeTokenStatusEffects } from './token-helpers';
 
 TextEditor.create = new Proxy(TextEditor.create, {
   apply(target, thisArg, argumentsList) {
     // eslint-disable-next-line @typescript-eslint/camelcase
-    argumentsList[0].skin = "oxide-dark";
+    argumentsList[0].skin = 'oxide-dark';
     return Reflect.apply(target, thisArg, argumentsList);
   },
 });
@@ -26,8 +26,8 @@ Application.prototype._injectHTML = function (html: JQuery, options: unknown) {
     return;
   }
   const [el] = html;
-  el.slot = "foundry-apps";
-  document.querySelector("ep-overlay")?.append(el);
+  el.slot = 'foundry-apps';
+  document.querySelector('ep-overlay')?.append(el);
   this._element = html;
   html.hide().fadeIn(200);
 };
@@ -42,7 +42,7 @@ PlayerConfig.prototype.getData = function () {
   return {
     ...original,
     actors: original.actors.filter(
-      (actor) => actor.agent.type === ActorType.Character
+      (actor) => actor.agent.type === ActorType.Character,
     ),
   };
 };
@@ -91,9 +91,9 @@ PlayerConfig.prototype.getData = function () {
 const { _onPreventDragstart } = Game.prototype;
 Game.prototype._onPreventDragstart = function (ev: DragEvent) {
   return pipe(ev.composedPath(), first(), (target) =>
-    target instanceof Element && target.getAttribute("draggable") === "true"
+    target instanceof Element && target.getAttribute('draggable') === 'true'
       ? undefined
-      : _onPreventDragstart.call(this, ev)
+      : _onPreventDragstart.call(this, ev),
   );
 };
 
@@ -107,7 +107,7 @@ const {
 Token.prototype._onUpdate = function (
   data: Partial<TokenData>,
   options: unknown,
-  userId: string
+  userId: string,
 ) {
   _onUpdate.call(this, data, options, userId);
   if ((data.overlayEffect || data.effects) && this.hasActiveHUD) {
@@ -127,7 +127,7 @@ Token.prototype.drawEffects = async function () {
     const promises: Promise<unknown>[] = [];
     const width =
       Math.round(
-        (canvas as ReturnType<typeof activeCanvas>)!.dimensions.size / 2 / 5
+        (canvas as ReturnType<typeof activeCanvas>)!.dimensions.size / 2 / 5,
       ) * 2;
 
     const background = this.effects
@@ -153,11 +153,11 @@ Token.prototype.drawEffects = async function () {
   }
 };
 Token.prototype.toggleEffect = async function (
-  effect: string | typeof CONFIG["statusEffects"][number] | null,
-  options: { overlay?: boolean; active?: boolean } = {}
+  effect: string | typeof CONFIG['statusEffects'][number] | null,
+  options: { overlay?: boolean; active?: boolean } = {},
 ) {
   const texture =
-    typeof effect === "string"
+    typeof effect === 'string'
       ? effect
       : effect?.icon ?? CONFIG.controlIcons.defeated;
   if (options.overlay)
@@ -181,7 +181,7 @@ Token.prototype.toggleEffect = async function (
   return this;
 };
 
-const conditionRegex = new RegExp("conditions", "i");
+const conditionRegex = new RegExp('conditions', 'i');
 const hasConditions = (path: string) => conditionRegex.test(path);
 Token.prototype._onUpdateBarAttributes = function (updateData) {
   _onUpdateBarAttributes.call(this, updateData);
@@ -198,11 +198,11 @@ TokenHUD.prototype._getStatusEffectChoices = function () {
   const effects = activeTokenStatusEffects(token);
   const statuses = new Map(
     [...(token.actor?.effects.values() ?? [])].flatMap((effect) => {
-      const id = effect.getFlag("core", "statusId");
-      return typeof id === "string" && id.length
-        ? [[id, { id, overlay: !!effect.getFlag("core", "overlay") }]]
+      const id = effect.getFlag('core', 'statusId');
+      return typeof id === 'string' && id.length
+        ? [[id, { id, overlay: !!effect.getFlag('core', 'overlay') }]]
         : [];
-    })
+    }),
   );
 
   return mapToObj(CONFIG.statusEffects, ({ icon: src, id, label }) => {
@@ -217,8 +217,8 @@ TokenHUD.prototype._getStatusEffectChoices = function () {
         title: game.i18n.localize(label) as string,
         isActive,
         isOverlay,
-        cssClass: compact([isActive && "active", isOverlay && "overlay"]).join(
-          " "
+        cssClass: compact([isActive && 'active', isOverlay && 'overlay']).join(
+          ' ',
         ),
       },
     ];
@@ -275,7 +275,7 @@ TokenHUD.prototype._getStatusEffectChoices = function () {
 // };
 
 const { defaultOptions } = JournalSheet;
-Object.defineProperty(JournalSheet, "defaultOptions", {
+Object.defineProperty(JournalSheet, 'defaultOptions', {
   enumerable: true,
   get() {
     return { ...(defaultOptions as {}), width: 620 };
@@ -283,7 +283,7 @@ Object.defineProperty(JournalSheet, "defaultOptions", {
 });
 
 Compendium.prototype._renderInner = async function () {
-  const existing = this.element?.[0]?.querySelector("compendium-list");
+  const existing = this.element?.[0]?.querySelector('compendium-list');
   const content = await this.getContent();
   if (existing) {
     existing.content = content;
@@ -295,7 +295,7 @@ Compendium.prototype._renderInner = async function () {
       .content=${content}
       .compendium=${this}
     ></compendium-list>`,
-    frag
+    frag,
   );
   return $(frag);
 };
@@ -303,31 +303,31 @@ Compendium.prototype._renderInner = async function () {
 Compendium.prototype._replaceHTML = noop;
 
 SidebarDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
-  jqueryEl[0].addEventListener("contextmenu", (ev) => {
-    const entityLi = findMatchingElement(ev, ".entity, .folder .folder-header");
+  jqueryEl[0].addEventListener('contextmenu', (ev) => {
+    const entityLi = findMatchingElement(ev, '.entity, .folder .folder-header');
     if (!entityLi) return;
     const jqueryLi = $(entityLi);
 
-    if (entityLi.matches(".entity")) {
+    if (entityLi.matches('.entity')) {
       const entryOptions = this._getEntryContextOptions();
       Hooks.call(
         `get${this.constructor.name}EntryContext`,
         jqueryEl,
-        entryOptions
+        entryOptions,
       );
       const convertedOptions = convertMenuOptions(entryOptions, jqueryLi);
-      const heading = entityLi.querySelector(".entity-name")?.textContent;
+      const heading = entityLi.querySelector('.entity-name')?.textContent;
       openMenu({
         content: convertedOptions,
         position: ev,
         header: heading ? { heading } : undefined,
       });
-    } else if (entityLi.matches(".folder .folder-header")) {
+    } else if (entityLi.matches('.folder .folder-header')) {
       const folderOptions = this._getFolderContextOptions();
       Hooks.call(
         `get${this.constructor.name}FolderContext`,
         jqueryEl,
-        folderOptions
+        folderOptions,
       );
 
       const convertedOptions = convertMenuOptions(folderOptions, jqueryLi);
@@ -343,8 +343,8 @@ SidebarDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
 };
 
 CombatTracker.prototype._contextMenu = function (jqueryEl: JQuery) {
-  jqueryEl[0].addEventListener("contextmenu", (ev) => {
-    const item = findMatchingElement(ev, ".directory-item");
+  jqueryEl[0].addEventListener('contextmenu', (ev) => {
+    const item = findMatchingElement(ev, '.directory-item');
     if (!item) return;
     const targetEl = $(item);
     const entryOptions = this._getEntryContextOptions();
@@ -360,8 +360,8 @@ CombatTracker.prototype._contextMenu = function (jqueryEl: JQuery) {
 };
 
 PlayerList.prototype.activateListeners = function (jqueryEl: JQuery) {
-  jqueryEl[0].addEventListener("contextmenu", (ev) => {
-    const item = findMatchingElement(ev, ".player");
+  jqueryEl[0].addEventListener('contextmenu', (ev) => {
+    const item = findMatchingElement(ev, '.player');
     if (!item) return;
     const targetEl = $(item);
 
@@ -378,19 +378,19 @@ PlayerList.prototype.activateListeners = function (jqueryEl: JQuery) {
 };
 
 SceneNavigation.prototype.activateListeners = function (jqueryEl: JQuery) {
-  const scenes = jqueryEl.find(".scene");
+  const scenes = jqueryEl.find('.scene');
   scenes.click(this._onClickScene.bind(this));
-  jqueryEl.find("#nav-toggle").click(this._onToggleNav.bind(this));
+  jqueryEl.find('#nav-toggle').click(this._onToggleNav.bind(this));
 
-  jqueryEl[0].addEventListener("contextmenu", (ev) => {
-    const item = findMatchingElement(ev, ".scene");
+  jqueryEl[0].addEventListener('contextmenu', (ev) => {
+    const item = findMatchingElement(ev, '.scene');
     if (!item) return;
     const contextOptions = this._getContextMenuOptions();
-    Hooks.call("getSceneNavigationContext", html, contextOptions);
+    Hooks.call('getSceneNavigationContext', html, contextOptions);
     const targetEl = $(item);
     const convertedOptions = convertMenuOptions(contextOptions, targetEl);
     const heading = item
-      .querySelector<HTMLElement>(".scene-name")
+      .querySelector<HTMLElement>('.scene-name')
       ?.textContent?.trim();
     openMenu({
       content: convertedOptions,
@@ -401,14 +401,14 @@ SceneNavigation.prototype.activateListeners = function (jqueryEl: JQuery) {
 };
 
 CompendiumDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
-  jqueryEl[0].addEventListener("contextmenu", (ev) => {
-    const item = findMatchingElement(ev, ".compendium-pack");
+  jqueryEl[0].addEventListener('contextmenu', (ev) => {
+    const item = findMatchingElement(ev, '.compendium-pack');
     if (!item) return;
     const entryOptions = this._getEntryContextOptions();
     Hooks.call(`get${this.constructor.name}EntryContext`, html, entryOptions);
     const targetEl = $(item);
     const convertedOptions = convertMenuOptions(entryOptions, targetEl);
-    const heading = item.querySelector("h4")?.textContent;
+    const heading = item.querySelector('h4')?.textContent;
     openMenu({
       content: convertedOptions,
       position: ev,
@@ -418,8 +418,8 @@ CompendiumDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
 };
 
 ChatLog.prototype._contextMenu = function (jqueryEl: JQuery) {
-  jqueryEl[0].addEventListener("contextmenu", (ev) => {
-    const item = findMatchingElement(ev, ".message");
+  jqueryEl[0].addEventListener('contextmenu', (ev) => {
+    const item = findMatchingElement(ev, '.message');
     if (!item) return;
     // TODO Alter/Replace Chat popout
     const entryOptions = this._getEntryContextOptions();
@@ -471,6 +471,6 @@ ChatPopout.prototype.close = async function () {
 };
 
 tinymce.FocusManager.isEditorUIElement = function (elm: Element) {
-  const className = elm.className?.toString() ?? "";
+  const className = elm.className?.toString() ?? '';
   return className.indexOf('tox-') !== -1 || className.indexOf('mce-') !== -1;
-}
+};

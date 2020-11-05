@@ -1,3 +1,7 @@
+// Side Effects
+import './foundry/prototype-overrides';
+import './init';
+
 // Material Components
 import '@material/mwc-button';
 import '@material/mwc-checkbox';
@@ -20,9 +24,9 @@ import '@material/mwc-tab-bar';
 
 // Misc
 import 'web-dialog';
-import "@tinymce/tinymce-webcomponent"
-import { Datepicker } from "app-datepicker/dist/datepicker"
-customElements.define("app-datepicker", Datepicker);
+import '@tinymce/tinymce-webcomponent';
+import { Datepicker } from 'app-datepicker/dist/datepicker';
+customElements.define('app-datepicker', Datepicker);
 
 // Weightless Components
 import 'weightless/label';
@@ -55,11 +59,8 @@ import { EntityFormHeader } from './entities/components/form-layout/entity-form-
 import { EntityFormLayout } from './entities/components/form-layout/entity-form-layout';
 import { InfomorphForm } from './entities/components/sleeve-forms/infomorph/infomorph-form';
 import { SleeveFormPools } from './entities/components/sleeve-forms/pools/sleeve-form-pools';
-
-// Side Effects
-import './foundry/prototype-overrides';
-import './init';
 import { SleeveFormAquisition } from './entities/components/sleeve-forms/acquisition/sleeve-form-acquisition';
+import { HealthItem } from './health/components/health-item/health-item';
 
 // Generic Components
 Field;
@@ -92,17 +93,4 @@ InfomorphForm;
 CompendiumList;
 SleeveFormPools;
 SleeveFormAquisition;
-
-for (const link of [
-  'https://fonts.googleapis.com/css?family=Material+Icons&display=block',
-  'https://fonts.googleapis.com/css?family=Roboto:300,400,500',
-  'https://fonts.googleapis.com/css?family=Rubik:300,400,700&display=swap',
-  'https://fonts.googleapis.com/css?family=Jost:300,400,700&display=swap',
-  'https://fonts.googleapis.com/css?family=Spartan:300,400,700&display=swap',
-  'https://fonts.googleapis.com/css?family=Fira+Code&display=swap',
-]) {
-  const fontEl = document.createElement('link');
-  fontEl.rel = 'stylesheet';
-  fontEl.href = link;
-  document.head.appendChild(fontEl);
-}
+HealthItem;

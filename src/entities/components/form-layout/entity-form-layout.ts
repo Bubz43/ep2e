@@ -117,12 +117,14 @@ export class EntityFormLayout extends LitElement {
 
   render() {
     return html`
-    ${this.noSidebar ? "" : html`
-    <aside class="sidebar">
-        <slot name="sidebar"></slot>
-      </aside>
-    `}
-   
+      ${this.noSidebar
+        ? ''
+        : html`
+            <aside class="sidebar">
+              <slot name="sidebar"></slot>
+            </aside>
+          `}
+
       <slot name="tabs"></slot>
       <section
         class="content ${classMap({

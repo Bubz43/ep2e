@@ -159,7 +159,7 @@ type GameCollections = {
 };
 
 declare global {
-  const tinymce: TinyMCE
+  const tinymce: TinyMCE;
 
   interface Compendium {
     readonly locked: boolean;

@@ -13,7 +13,7 @@ import {
   internalProperty,
   LitElement,
   property,
-  query
+  query,
 } from 'lit-element';
 import { render } from 'lit-html';
 import { cache } from 'lit-html/directives/cache';

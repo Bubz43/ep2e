@@ -9,7 +9,9 @@ import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 const serviceTypes = [SoftwareType.AppAsService, SoftwareType.MeshService];
 
 class Base extends ItemProxyBase<ItemType.Software> {}
-export class Software extends mix(Base).with(Purchasable) implements ObtainableEffects {
+export class Software
+  extends mix(Base).with(Purchasable)
+  implements ObtainableEffects {
   constructor(init: ItemProxyInit<ItemType.Software>) {
     super(init);
   }
@@ -19,7 +21,7 @@ export class Software extends mix(Base).with(Purchasable) implements ObtainableE
   }
 
   get settings() {
-    return this.epData.settings
+    return this.epData.settings;
   }
 
   get isService() {
@@ -33,11 +35,10 @@ export class Software extends mix(Base).with(Purchasable) implements ObtainableE
   get effects() {
     return this.epData.effects;
   }
-  
+
   get hasActiveState() {
     return this.settings.hasActiveState;
   }
-
 
   get activeStateEffects() {
     return this.epData.activatedEffects;
@@ -55,7 +56,7 @@ export class Software extends mix(Base).with(Purchasable) implements ObtainableE
     const { effects, activeStateEffects, activated, equipped } = this;
     if (!equipped) return null;
     return {
-      source: `${this.name} ${activated ? `(${localize("activated")})` : ""}`,
+      source: `${this.name} ${activated ? `(${localize('activated')})` : ''}`,
       effects: effects.concat(activated ? activeStateEffects : []),
     };
   }

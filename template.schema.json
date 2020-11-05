@@ -218,13 +218,6 @@
       ],
       "type": "object"
     },
-    "ArmorWare": {
-      "enum": [
-        "bioware",
-        "hardware"
-      ],
-      "type": "string"
-    },
     "AttackTrait": {
       "enum": [
         "blinding",
@@ -288,6 +281,79 @@
         "firingModes",
         "label",
         "notes"
+      ],
+      "type": "object"
+    },
+    "BiologicalHealthData": {
+      "additionalProperties": false,
+      "properties": {
+        "baseDurability": {
+          "minimum": 1,
+          "type": "number"
+        },
+        "bleedingOut": {
+          "type": "boolean"
+        },
+        "damage": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "dots": {
+          "items": {
+            "$ref": "#/definitions/StringID%3Cstructure--817-970--807-971--807-973--799-974--697-976--679-976--643-977--0-2274%3E"
+          },
+          "type": "array"
+        },
+        "hot": {
+          "$ref": "#/definitions/HealsOverTime"
+        },
+        "log": {
+          "items": {
+            "$ref": "#/definitions/StringID%3CHealthModification%3E"
+          },
+          "type": "array"
+        },
+        "wounds": {
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "baseDurability",
+        "bleedingOut",
+        "damage",
+        "dots",
+        "hot",
+        "log",
+        "wounds"
+      ],
+      "type": "object"
+    },
+    "BlueprintData": {
+      "additionalProperties": false,
+      "properties": {
+        "blueprintType": {
+          "anyOf": [
+            {
+              "const": "",
+              "type": "string"
+            },
+            {
+              "$ref": "#/definitions/BlueprintType"
+            }
+          ]
+        },
+        "cracked": {
+          "type": "boolean"
+        },
+        "used": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "blueprintType",
+        "used",
+        "cracked"
       ],
       "type": "object"
     },
@@ -619,6 +685,9 @@
                 "cyberbrain": {
                   "type": "boolean"
                 },
+                "physicalHealth": {
+                  "$ref": "#/definitions/BiologicalHealthData"
+                },
                 "prehensileLimbs": {
                   "minimum": 0,
                   "type": "number"
@@ -671,6 +740,7 @@
               },
               "required": [
                 "cyberbrain",
+                "physicalHealth",
                 "prehensileLimbs",
                 "recoveryConditions",
                 "sex",
@@ -1235,6 +1305,56 @@
                 },
                 "mentalEdits": {
                   "type": "string"
+                },
+                "mentalHealth": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "alienation": {
+                      "maximum": 5,
+                      "minimum": 0,
+                      "type": "number"
+                    },
+                    "damage": {
+                      "minimum": 0,
+                      "type": "number"
+                    },
+                    "helplessness": {
+                      "maximum": 5,
+                      "minimum": 0,
+                      "type": "number"
+                    },
+                    "log": {
+                      "items": {
+                        "$ref": "#/definitions/StringID%3CHealthModification%3E"
+                      },
+                      "type": "array"
+                    },
+                    "naturalHealAttempts": {
+                      "items": {
+                        "$ref": "#/definitions/StringID%3CNaturalMentalHealAttempt%3E"
+                      },
+                      "type": "array"
+                    },
+                    "violence": {
+                      "maximum": 5,
+                      "minimum": 0,
+                      "type": "number"
+                    },
+                    "wounds": {
+                      "minimum": 0,
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "damage",
+                    "wounds",
+                    "log",
+                    "alienation",
+                    "helplessness",
+                    "violence",
+                    "naturalHealAttempts"
+                  ],
+                  "type": "object"
                 },
                 "motivations": {
                   "items": {
@@ -2071,6 +2191,7 @@
                 "homeDevice",
                 "longRecharge",
                 "mentalEdits",
+                "mentalHealth",
                 "motivations",
                 "network",
                 "points",
@@ -2092,6 +2213,9 @@
               "properties": {
                 "localFirewall": {
                   "type": "boolean"
+                },
+                "meshHealth": {
+                  "$ref": "#/definitions/InfomorphHealthData"
                 },
                 "privilege": {
                   "$ref": "#/definitions/AccessPrivilege"
@@ -2125,6 +2249,7 @@
               },
               "required": [
                 "localFirewall",
+                "meshHealth",
                 "privilege",
                 "subtype",
                 "templates"
@@ -2169,11 +2294,17 @@
                   ],
                   "type": "object"
                 },
+                "meshHealth": {
+                  "$ref": "#/definitions/InfomorphHealthData"
+                },
                 "painFilter": {
                   "type": "boolean"
                 },
                 "passengers": {
                   "type": "number"
+                },
+                "physicalHealth": {
+                  "$ref": "#/definitions/SyntheticHealthData"
                 },
                 "prehensileLimbs": {
                   "minimum": 0,
@@ -2240,8 +2371,10 @@
                 "defaultDevice",
                 "hostType",
                 "inherentArmor",
+                "meshHealth",
                 "painFilter",
                 "passengers",
+                "physicalHealth",
                 "prehensileLimbs",
                 "recoveryConditions",
                 "shellType",
@@ -2843,11 +2976,11 @@
                 "wareType": {
                   "anyOf": [
                     {
-                      "const": "",
-                      "type": "string"
+                      "$ref": "#/definitions/PhysicalWare"
                     },
                     {
-                      "$ref": "#/definitions/ArmorWare"
+                      "const": "",
+                      "type": "string"
                     }
                   ]
                 }
@@ -8131,32 +8264,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "blueprint": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "blueprintType": {
-                          "anyOf": [
-                            {
-                              "const": "",
-                              "type": "string"
-                            },
-                            {
-                              "$ref": "#/definitions/BlueprintType"
-                            }
-                          ]
-                        },
-                        "cracked": {
-                          "type": "boolean"
-                        },
-                        "used": {
-                          "type": "boolean"
-                        }
-                      },
-                      "required": [
-                        "blueprintType",
-                        "used",
-                        "cracked"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/BlueprintData"
                     }
                   },
                   "required": [
@@ -8951,6 +9059,22 @@
       ],
       "type": "string"
     },
+    "HealsOverTime": {
+      "additionalProperties": false,
+      "properties": {
+        "damage": {
+          "$ref": "#/definitions/HealthTick"
+        },
+        "wound": {
+          "$ref": "#/definitions/HealthTick"
+        }
+      },
+      "required": [
+        "damage",
+        "wound"
+      ],
+      "type": "object"
+    },
     "HealthEffect": {
       "additionalProperties": false,
       "properties": {
@@ -8975,6 +9099,14 @@
         "modifier"
       ],
       "type": "object"
+    },
+    "HealthModificationMode": {
+      "enum": [
+        "edit",
+        "heal",
+        "inflict"
+      ],
+      "type": "string"
     },
     "HealthRecoveryEffect": {
       "additionalProperties": false,
@@ -9016,6 +9148,30 @@
       ],
       "type": "string"
     },
+    "HealthTick": {
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "type": "string"
+        },
+        "interval": {
+          "type": "number"
+        },
+        "lastAidedTick": {
+          "type": "number"
+        },
+        "lastUnaidedTick": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "amount",
+        "interval",
+        "lastUnaidedTick",
+        "lastAidedTick"
+      ],
+      "type": "object"
+    },
     "HealthType": {
       "enum": [
         "mental",
@@ -9023,6 +9179,44 @@
         "physical"
       ],
       "type": "string"
+    },
+    "InfomorphHealthData": {
+      "additionalProperties": false,
+      "properties": {
+        "baseDurability": {
+          "minimum": 1,
+          "type": "number"
+        },
+        "damage": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "hot": {
+          "$ref": "#/definitions/HealsOverTime"
+        },
+        "log": {
+          "items": {
+            "$ref": "#/definitions/StringID%3CHealthModification%3E"
+          },
+          "type": "array"
+        },
+        "reboot": {
+          "type": "number"
+        },
+        "wounds": {
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "baseDurability",
+        "damage",
+        "hot",
+        "log",
+        "reboot",
+        "wounds"
+      ],
+      "type": "object"
     },
     "InitiativeEffect": {
       "additionalProperties": false,
@@ -9247,6 +9441,14 @@
         "medium",
         "fast",
         "veryFast"
+      ],
+      "type": "string"
+    },
+    "NaturalMentalHeal": {
+      "enum": [
+        "stress",
+        "trauma",
+        "disorder"
       ],
       "type": "string"
     },
@@ -9782,6 +9984,148 @@
       ],
       "type": "object"
     },
+    "StringID<HealthModification>": {
+      "additionalProperties": false,
+      "properties": {
+        "damage": {
+          "type": "number"
+        },
+        "id": {
+          "type": "string"
+        },
+        "mode": {
+          "$ref": "#/definitions/HealthModificationMode"
+        },
+        "source": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "number"
+        },
+        "worldTime": {
+          "type": "number"
+        },
+        "wounds": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "damage",
+        "id",
+        "mode",
+        "source",
+        "timestamp",
+        "worldTime",
+        "wounds"
+      ],
+      "type": "object"
+    },
+    "StringID<NaturalMentalHealAttempt>": {
+      "additionalProperties": false,
+      "properties": {
+        "failed": {
+          "type": "boolean"
+        },
+        "heal": {
+          "$ref": "#/definitions/NaturalMentalHeal"
+        },
+        "id": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "number"
+        },
+        "worldTime": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "failed",
+        "heal",
+        "id",
+        "timestamp",
+        "worldTime"
+      ],
+      "type": "object"
+    },
+    "StringID<structure--792-945--782-946--782-948--774-949--696-951--678-951--643-952--0-2244>": {
+      "additionalProperties": false,
+      "properties": {
+        "armorPiercing": {
+          "type": "boolean"
+        },
+        "armorRemoving": {
+          "type": "boolean"
+        },
+        "armorUsed": {
+          "items": {
+            "$ref": "#/definitions/ArmorType"
+          },
+          "type": "array"
+        },
+        "duration": {
+          "type": "number"
+        },
+        "elapsed": {
+          "type": "number"
+        },
+        "formula": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "armorPiercing",
+        "armorRemoving",
+        "armorUsed",
+        "duration",
+        "elapsed",
+        "formula",
+        "id"
+      ],
+      "type": "object"
+    },
+    "StringID<structure--817-970--807-971--807-973--799-974--697-976--679-976--643-977--0-2274>": {
+      "additionalProperties": false,
+      "properties": {
+        "armorPiercing": {
+          "type": "boolean"
+        },
+        "armorRemoving": {
+          "type": "boolean"
+        },
+        "armorUsed": {
+          "items": {
+            "$ref": "#/definitions/ArmorType"
+          },
+          "type": "array"
+        },
+        "duration": {
+          "type": "number"
+        },
+        "elapsed": {
+          "type": "number"
+        },
+        "formula": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "armorPiercing",
+        "armorRemoving",
+        "armorUsed",
+        "duration",
+        "elapsed",
+        "formula",
+        "id"
+      ],
+      "type": "object"
+    },
     "SubstanceApplicationMethod": {
       "enum": [
         "dermal",
@@ -9878,6 +10222,47 @@
         "modifier",
         "requirement",
         "toOpponent"
+      ],
+      "type": "object"
+    },
+    "SyntheticHealthData": {
+      "additionalProperties": false,
+      "properties": {
+        "baseDurability": {
+          "minimum": 1,
+          "type": "number"
+        },
+        "damage": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "dots": {
+          "items": {
+            "$ref": "#/definitions/StringID%3Cstructure--792-945--782-946--782-948--774-949--696-951--678-951--643-952--0-2244%3E"
+          },
+          "type": "array"
+        },
+        "hot": {
+          "$ref": "#/definitions/HealsOverTime"
+        },
+        "log": {
+          "items": {
+            "$ref": "#/definitions/StringID%3CHealthModification%3E"
+          },
+          "type": "array"
+        },
+        "wounds": {
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "baseDurability",
+        "damage",
+        "dots",
+        "hot",
+        "log",
+        "wounds"
       ],
       "type": "object"
     },

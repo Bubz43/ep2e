@@ -49,23 +49,20 @@ export const Equippable = (
 
 export const Copyable = (cls: HasEpData<{ blueprint: BlueprintData }>) => {
   return class extends cls {
-
     get blueprintType() {
-      return this.epData.blueprint.blueprintType
+      return this.epData.blueprint.blueprintType;
     }
 
     get isBlueprint() {
-      return !!this.blueprintType
+      return !!this.blueprintType;
     }
-  }
-}
-
-export const Gear = (cls: HasEpData<Record<GearTrait, boolean>>) =>
-  {
-    return class extends cls {
-      get gearTraits() {
-        return enumValues(GearTrait).filter((trait) => this.epData[trait]);
-      }
-    };
   };
+};
 
+export const Gear = (cls: HasEpData<Record<GearTrait, boolean>>) => {
+  return class extends cls {
+    get gearTraits() {
+      return enumValues(GearTrait).filter((trait) => this.epData[trait]);
+    }
+  };
+};

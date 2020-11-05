@@ -6,7 +6,9 @@ import { clamp, compact } from 'remeda';
 import type { ItemType } from '../../entity-types';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
-export class Trait extends ItemProxyBase<ItemType.Trait> implements ObtainableEffects {
+export class Trait
+  extends ItemProxyBase<ItemType.Trait>
+  implements ObtainableEffects {
   readonly lockSource;
 
   constructor({

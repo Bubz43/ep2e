@@ -1,21 +1,27 @@
-import { renderTextInput } from "@src/components/field/fields";
-import { renderAutoForm } from "@src/components/form/forms";
-import type { ItemEP } from "@src/entities/item/item";
-import type { EntitySheet } from "@src/foundry/foundry-cont";
-import { localize } from "@src/foundry/localization";
-import { importFromCompendium } from "@src/foundry/misc-helpers";
-import { openMenu } from "@src/open-menu";
-import { searchRegExp, clickIfEnter } from "@src/utility/helpers";
-import { customElement, LitElement, property, html, internalProperty } from "lit-element";
-import { ifDefined } from "lit-html/directives/if-defined";
-import { repeat } from "lit-html/directives/repeat";
-import { compact } from "remeda";
-import styles from "./compendium-list.scss";
+import { renderTextInput } from '@src/components/field/fields';
+import { renderAutoForm } from '@src/components/form/forms';
+import type { ItemEP } from '@src/entities/item/item';
+import type { EntitySheet } from '@src/foundry/foundry-cont';
+import { localize } from '@src/foundry/localization';
+import { importFromCompendium } from '@src/foundry/misc-helpers';
+import { openMenu } from '@src/open-menu';
+import { searchRegExp, clickIfEnter } from '@src/utility/helpers';
+import {
+  customElement,
+  LitElement,
+  property,
+  html,
+  internalProperty,
+} from 'lit-element';
+import { ifDefined } from 'lit-html/directives/if-defined';
+import { repeat } from 'lit-html/directives/repeat';
+import { compact } from 'remeda';
+import styles from './compendium-list.scss';
 
-@customElement("compendium-list")
+@customElement('compendium-list')
 export class CompendiumList extends LitElement {
   static get is() {
-    return "compendium-list" as const;
+    return 'compendium-list' as const;
   }
 
   static styles = [styles];
@@ -26,7 +32,7 @@ export class CompendiumList extends LitElement {
     img?: string;
   })[];
 
-  @internalProperty() search = "";
+  @internalProperty() search = '';
 
   private openedEntities = new Map<string, Entity>();
 
@@ -36,8 +42,8 @@ export class CompendiumList extends LitElement {
   }
 
   firstUpdated() {
-    this.addEventListener("drop", (ev) => {
-      if (!this.compendium.locked && this.compendium._canDragDrop("")) {
+    this.addEventListener('drop', (ev) => {
+      if (!this.compendium.locked && this.compendium._canDragDrop('')) {
         this.compendium._onDrop(ev);
       }
     });
@@ -52,46 +58,52 @@ export class CompendiumList extends LitElement {
     if (!entryId) return;
     const entry = this.findEntity(entryId);
     if (!entry) return;
-    openMenu(
-      {
-        content: [
-          {
-            label: game.i18n.localize("COMPENDIUM.ImportEntry"),
-            icon: html`<i class="fas fa-download"></i>`,
-            disabled: !game.user.isGM && !game.user.can(
-              `${(this.compendium.entity as string).toLocaleUpperCase()}_CREATE`
+    openMenu({
+      content: [
+        {
+          label: game.i18n.localize('COMPENDIUM.ImportEntry'),
+          icon: html`<i class="fas fa-download"></i>`,
+          disabled:
+            !game.user.isGM &&
+            !game.user.can(
+              `${(this.compendium
+                .entity as string).toLocaleUpperCase()}_CREATE`,
             ),
-            callback: () => importFromCompendium(this.compendium, entryId),
+          callback: () => importFromCompendium(this.compendium, entryId),
+        },
+        {
+          label: game.i18n.localize('COMPENDIUM.DeleteEntry'),
+          icon: html`<i class="fas fa-trash"></i>`,
+          disabled: this.compendium.locked || !game.user.isGM,
+          callback: () => {
+            Dialog.confirm(
+              {
+                title: `${game.i18n.localize('COMPENDIUM.DeleteEntry')} ${
+                  entry.name
+                }`,
+                content: game.i18n.localize('COMPENDIUM.DeleteConfirm'),
+                yes: () => this.compendium.deleteEntity(entryId),
+              } as any,
+              {},
+            );
           },
-          {
-            label: game.i18n.localize("COMPENDIUM.DeleteEntry"),
-            icon: html`<i class="fas fa-trash"></i>`,
-            disabled: this.compendium.locked || !game.user.isGM,
-            callback: () => {
-              Dialog.confirm(
-                ({
-                  title: `${game.i18n.localize("COMPENDIUM.DeleteEntry")} ${entry.name}`,
-                  content: game.i18n.localize("COMPENDIUM.DeleteConfirm"),
-                  yes: () => this.compendium.deleteEntity(entryId),
-                } as any),
-                {}
-              );
-            },
-          },
-        ], position: ev, header: { heading: entry.name }
-      }    );
+        },
+      ],
+      position: ev,
+      header: { heading: entry.name },
+    });
   }
 
   private setDragData(ev: DragEvent) {
     const { entity, collection } = this.compendium;
     const { entryId } = (ev.currentTarget as HTMLElement).dataset;
     ev.dataTransfer?.setData(
-      "text/plain",
+      'text/plain',
       JSON.stringify({
         type: entity,
         pack: collection,
         id: entryId,
-      })
+      }),
     );
   }
 
@@ -112,12 +124,12 @@ export class CompendiumList extends LitElement {
       ${renderAutoForm({
         storeOnInput: true,
         props: { search: this.search },
-        update: ({ search = "" }) => (this.search = search),
+        update: ({ search = '' }) => (this.search = search),
         fields: ({ search }) =>
           html`<label
             ><mwc-icon>search</mwc-icon>${renderTextInput(search, {
               search: true,
-              placeholder: `${this.compendium.entity} ${localize("search")}`,
+              placeholder: `${this.compendium.entity} ${localize('search')}`,
             })}</label
           >`,
       })}
@@ -128,10 +140,10 @@ export class CompendiumList extends LitElement {
   private renderItems() {
     const { content } = this;
 
-    const isItem = this.compendium.entity === "Item";
-    const isActor = this.compendium.entity === "Actor";
+    const isItem = this.compendium.entity === 'Item';
+    const isActor = this.compendium.entity === 'Actor';
     const regexp = searchRegExp(this.search);
-    const canDrag = this.compendium._canDragStart("");
+    const canDrag = this.compendium._canDragStart('');
     const isHidden = (...parts: string[]) =>
       !compact(parts).some((part) => regexp.test(part));
     return html`
@@ -140,17 +152,17 @@ export class CompendiumList extends LitElement {
           content,
           ({ _id }) => _id,
           (entry) => {
-            const type = isItem ? (entry as ItemEP).agent.fullType : "";
+            const type = isItem ? (entry as ItemEP).agent.fullType : '';
             const finalName = isItem
               ? (entry as ItemEP).agent.fullName
               : entry.name;
             const hidden = isHidden(type, finalName);
-            if (hidden) return "";
-            const img = typeof entry.img === "string" ? entry.img : undefined;
+            if (hidden) return '';
+            const img = typeof entry.img === 'string' ? entry.img : undefined;
             return html`
               <mwc-list-item
-                draggable=${canDrag ? "true" : "false"}
-                graphic=${ifDefined(img ? "avatar" : undefined)}
+                draggable=${canDrag ? 'true' : 'false'}
+                graphic=${ifDefined(img ? 'avatar' : undefined)}
                 ?twoline=${!!type}
                 data-entry-id=${entry._id}
                 @click=${this.openEntrySheet}
@@ -162,19 +174,19 @@ export class CompendiumList extends LitElement {
                   ? html`
                       <img
                         src=${img}
-                        class=${img === CONST.DEFAULT_TOKEN ? "default" : ""}
+                        class=${img === CONST.DEFAULT_TOKEN ? 'default' : ''}
                         loading="lazy"
                         width="40px"
                         slot="graphic"
                       />
                     `
-                  : ""}
+                  : ''}
 
                 <span title=${finalName}>${finalName}</span>
-                ${type ? html`<span slot="secondary">${type}</span>` : ""}
+                ${type ? html`<span slot="secondary">${type}</span>` : ''}
               </mwc-list-item>
             `;
-          }
+          },
         )}
       </mwc-list>
     `;
@@ -183,6 +195,6 @@ export class CompendiumList extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "compendium-list": CompendiumList;
+    'compendium-list': CompendiumList;
   }
 }

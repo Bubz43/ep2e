@@ -25,18 +25,18 @@ export class ToolTip extends LitElement {
   private listenerUnsub: (() => void) | null = null;
 
   firstUpdated() {
-    this.addEventListener('mouseleave', () =>  this.detach(true));
+    this.addEventListener('mouseleave', () => this.detach(true));
   }
 
-  readData = ({currentTarget: el }: Event) => {
+  readData = ({ currentTarget: el }: Event) => {
     if (el instanceof HTMLElement && el.dataset.tooltip) {
       this.attach({
         el,
         content: el.dataset.tooltip,
-        position: "bottom-middle"
-      })
+        position: 'bottom-middle',
+      });
     }
-  }
+  };
 
   attach({
     el,
@@ -50,12 +50,9 @@ export class ToolTip extends LitElement {
     if (this.listenerUnsub) this.detach(false);
     render(content, this);
     this.visible = true;
-    requestAnimationFrame(() =>
-      reposition(el, this, { position, margin: 4 }),
-    );
+    requestAnimationFrame(() => reposition(el, this, { position, margin: 4 }));
     this.listenerUnsub = addListener(el, leaveEvents, () => this.detach(true));
   }
-
 
   detach(hide: boolean) {
     this.visible = !hide;

@@ -1,0 +1,159 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+:host([clickable]) {
+  .view {
+    cursor: pointer;
+  }
+}
+
+:host([disabled]) {
+  pointer-events: none;
+}
+
+.view {
+  display: grid;
+  grid-template-columns: min-content;
+  grid-template-areas:
+    '.. type damage'
+    'bars bars bars';
+  position: relative;
+  padding: var(--health-view-padding, 0.5rem);
+
+  outline: none;
+  &.dead {
+    .health-icon {
+      filter: drop-shadow(1px 2px 10px var(--color-secondary)) invert(1);
+    }
+  }
+}
+.drop-helper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: alphav(var(--color-bg), 0.9);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  font: 1.1rem;
+}
+
+.health-icon {
+  height: 30px;
+  grid-area: 1 / 1 / -1 / 2;
+  filter: drop-shadow(0 0 2px black);
+}
+
+.health-type {
+  grid-area: type;
+  margin-left: 0.25rem;
+}
+
+.damage-info {
+  grid-area: damage;
+  justify-self: end;
+  display: flex;
+  margin-right: 0.25rem;
+}
+
+.damage {
+  text-shadow: 2px 3px 4px black;
+  white-space: nowrap;
+  position: relative;
+  bottom: -1px;
+  > span {
+    &:not(:first-of-type) {
+      font-size: 13px;
+      font-weight: lighter;
+      &::before {
+        content: ' / ';
+        opacity: 0.6;
+      }
+    }
+  }
+  &.dying {
+    > span:nth-of-type(2) {
+      font-weight: bold;
+    }
+  }
+  &.dead {
+    > span:last-of-type {
+      font-weight: bold;
+    }
+  }
+
+  & + .wounds {
+    margin-left: 1.5rem;
+  }
+}
+
+.wounds {
+  display: flex;
+  min-width: 60px;
+  align-items: center;
+  align-self: flex-end;
+  justify-content: flex-end;
+  > *:not(.wound-threshold) {
+    display: flex;
+    align-items: center;
+
+    & + * {
+      margin-left: 0.25rem;
+    }
+  }
+  .wound-value {
+    font-size: 14px;
+    min-width: 1ch;
+    text-align: center;
+    color: var(--color-text-lighter);
+  }
+  .wound-icon {
+    height: 16px;
+    margin-right: 0.25ch;
+  }
+
+  .threshold-label {
+    font-size: 15px;
+    font-weight: light;
+  }
+}
+
+.bars {
+  grid-area: bars;
+  display: flex;
+  align-self: end;
+  background: alphav(var(--color-border), 0.4);
+}
+
+.bar {
+  flex: 1;
+  border: 1px solid lightv(var(--color-bg), 0.8);
+  height: 0.5rem;
+  position: relative;
+  &::before {
+    content: '';
+    background: alphav(var(--color-negative), 0.8);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    transition: transform 300ms ease-out, opacity 300ms ease-in-out;
+    transform-origin: left;
+    transform: scaleX(var(--percent));
+    opacity: 0.8;
+  }
+}

@@ -28,7 +28,7 @@ export type AddEffects = {
 export type ReadonlyAppliedEffects = Omit<AppliedEffects, 'add'>;
 
 export interface ObtainableEffects {
-  obtainEffects(): AddEffects | null
+  obtainEffects(): AddEffects | null;
 }
 
 const defaultSuccessTestEffects = (): SourcedEffect<SuccessTestEffect>[] => [

@@ -7,11 +7,14 @@ import type { EquippableItem, ItemProxy } from '@src/entities/item/item';
 import type { Software } from '@src/entities/item/proxies/software';
 import type { Trait } from '@src/entities/item/proxies/trait';
 import { localize } from '@src/foundry/localization';
+import { HealthType } from '@src/health/health';
+import { InfomorphHealth } from '@src/health/infomorph-health';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 
 export class Infomorph extends ActorProxyBase<ActorType.Infomorph> {
   private _localEffects?: AppliedEffects;
   private _outsideEffects?: ReadonlyAppliedEffects;
+  private _meshHealth?: InfomorphHealth;
   readonly sleeved;
 
   constructor({
@@ -21,7 +24,6 @@ export class Infomorph extends ActorProxyBase<ActorType.Infomorph> {
   }: ActorProxyInit<ActorType.Infomorph> & {
     activeEffects?: ReadonlyAppliedEffects;
     sleeved?: boolean;
-    
   }) {
     super(init);
     if (!activeEffects) {
@@ -36,7 +38,24 @@ export class Infomorph extends ActorProxyBase<ActorType.Infomorph> {
   }
 
   get pools() {
-    return this.epData.pools
+    return this.epData.pools;
+  }
+
+  get activeEffects() {
+    return this._outsideEffects ?? this._localEffects;
+  }
+
+  get meshHealth() {
+    if (!this._meshHealth) {
+      this._meshHealth = new InfomorphHealth({
+        data: this.epData.meshHealth,
+        statMods: this.activeEffects?.getHealthStatMods(HealthType.Mesh),
+        updater: this.updater.prop('data', 'meshHealth').nestedStore(),
+        source: localize('mindState'),
+        homeDevices: 1, // TODO
+      });
+    }
+    return this._meshHealth;
   }
 
   acceptItemAgent(agent: ItemProxy) {
@@ -106,6 +125,4 @@ export class Infomorph extends ActorProxyBase<ActorType.Infomorph> {
     }
     return { traits, ware, software, effects };
   }
-
-
 }

@@ -3,13 +3,27 @@ import { createEffect } from '@src/features/effects';
 import { TagType } from '@src/features/tags';
 import { localize } from '@src/foundry/localization';
 import { notEmpty } from '@src/utility/helpers';
-import type { Constructor } from 'mix-with/lib';
 import { clamp } from 'remeda';
 import type { Class } from 'type-fest';
+import type { DeepReadonly } from 'utility-types';
 import type { CommonHealth } from './health';
 
+export type Health = CommonHealth &
+  ObtainableEffects &
+  DeepReadonly<{
+    damagePercents: {
+      durability: number;
+      deathRating: number | null;
+      dead: boolean;
+    };
+    regenState: {
+      damage: boolean;
+      wound: boolean;
+    };
+  }>;
+
 export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
-  class Health extends cls implements ObtainableEffects {
+  class HealthInfo extends cls implements Health {
     obtainEffects() {
       const { wound, type } = this;
       if (!wound) return null;
@@ -32,15 +46,19 @@ export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
 
     get damagePercents() {
       const { main } = this;
+      const durability = Math.min(main.damage.value / main.durability.value, 1);
+      const deathRating =
+        main.deathRating && main.deathRating.value > main.durability.value
+          ? clamp(
+              (main.damage.value - main.durability.value) /
+                (main.deathRating.value - main.durability.value),
+              { min: 0, max: 1 },
+            )
+          : null;
       return {
-        durability: Math.min(main.damage.value / main.durability.value, 1),
-        deathRating:
-          main.deathRating &&
-          clamp(
-            (main.damage.value - main.durability.value) /
-              (main.deathRating.value - main.durability.value),
-            { min: 0, max: 1 },
-          ),
+        durability,
+        deathRating,
+        dead: (deathRating ?? durability) >= 1,
       };
     }
 
@@ -57,5 +75,5 @@ export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
       };
     }
   }
-  return Health;
+  return HealthInfo;
 };
