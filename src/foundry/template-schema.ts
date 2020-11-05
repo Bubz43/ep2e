@@ -245,10 +245,10 @@ type InfomorphData = {
     ]
   >;
   subtype: string;
-  localFirewall: boolean;
+  // localFirewall: boolean;
   meshHealth: InfomorphHealthData;
   // additionalHomeDevices: StringID<DistributedMeshHealthData>[];
-  privilege: AccessPrivilege;
+  // privilege: AccessPrivilege;
 };
 
 type SyntheticShellData = {

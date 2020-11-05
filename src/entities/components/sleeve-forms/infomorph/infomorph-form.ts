@@ -1,6 +1,8 @@
 import {
+  renderFormulaField,
   renderNumberField,
   renderTextField,
+  renderTimeField,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import { enumValues, PoolType } from '@src/data-enums';
@@ -11,9 +13,11 @@ import {
   formatHealthModificationMode,
   HealthModificationMode,
 } from '@src/health/health';
+import { DotOrHotTarget } from '@src/health/recovery';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, property, html } from 'lit-element';
+import { sortBy } from 'remeda';
 import { SleeveFormBase } from '../sleeve-form-base';
 import styles from './infomorph-form.scss';
 
@@ -69,6 +73,29 @@ export class InfomorphForm extends SleeveFormBase {
               @click=${this.setDrawerFromEvent(this.renderMeshHealthEdit)}
             ></health-item>
           </section>
+
+          <section>
+            <sl-header heading="${localize('traits')} & ${localize('ware')}">
+              <mwc-icon
+                slot="action"
+                icon="info"
+                data-tooltip=${localize('DESCRIPTIONS', 'AddItemInfo')}
+                @mouseover=${tooltip.readData}
+                >info</mwc-icon
+              >
+            </sl-header>
+
+            ${notEmpty(itemGroups.traits)
+              ? html`
+                  <ul class="item-list">
+                    <li class="label">${localize('traits')}:</li>
+                    ${sortBy(itemGroups.traits, (t) => t.fullName).map(
+                      (trait, index, list) => html` <li>${trait.fullName.trim()}</li>${index < list.length - 1 ? "," : ""} `,
+                    )}
+                  </ul>
+                `
+              : ''}
+          </section>
         </div>
         <editor-wrapper
           slot="description"
@@ -118,14 +145,15 @@ export class InfomorphForm extends SleeveFormBase {
   }
 
   private renderMeshHealthEdit() {
-    const { meshHealth } = this.infomorph;
+    const { meshHealth, updater } = this.infomorph;
     return html`
       <h3>${localize('meshHealth')}</h3>
-      ${renderUpdaterForm(this.infomorph.updater.prop('data', 'meshHealth'), {
+      ${renderUpdaterForm(updater.prop('data', 'meshHealth'), {
         fields: ({ baseDurability }) =>
           renderNumberField(baseDurability, { min: 1 }),
       })}
       ${renderAutoForm({
+        classes: 'health-state',
         props: meshHealth.data,
         update: ({
           damage = meshHealth.data.damage,
@@ -144,6 +172,27 @@ export class InfomorphForm extends SleeveFormBase {
           renderNumberField(wounds, { min: 0 }),
         ],
       })}
+      ${enumValues(DotOrHotTarget).map(
+        (target) => html`
+          ${renderUpdaterForm(
+            updater
+              .prop('data', 'meshHealth')
+              .nestedStore()
+              .prop('hot', target),
+            {
+              classes: 'auto-heal-form',
+              fields: ({ amount, interval }) => html`
+                <p>${localize(target)} ${localize('repair')}</p>
+
+                ${[
+                  renderTimeField(interval),
+                  interval.value ? renderFormulaField(amount) : '',
+                ]}
+              `,
+            },
+          )}
+        `,
+      )}
     `;
   }
 

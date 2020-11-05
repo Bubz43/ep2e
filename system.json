@@ -25,42 +25,42 @@
   "packs": [
     {
       "name": "beam-weapons",
-      "system": "eclipse-phase",
+      "system": "ep2e",
       "label": "Beam Weapons",
       "path": "./packs/beam-weapons.db",
       "entity": "Item"
     },
     {
       "name": "melee-weapons",
-      "system": "eclipse-phase",
+      "system": "ep2e",
       "label": "Melee Weapons",
       "path": "./packs/melee-weapons.db",
       "entity": "Item"
     },
     {
       "name": "traits",
-      "system": "eclipse-phase",
+      "system": "ep2e",
       "label": "Traits",
       "path": "./packs/traits.db",
       "entity": "Item"
     },
     {
       "name": "armor",
-      "system": "eclipse-phase",
+      "system": "ep2e",
       "label": "Armor",
       "path": "./packs/armor.db",
       "entity": "Item"
     },
     {
       "name": "disorders",
-      "system": "eclipse-phase",
+      "system": "ep2e",
       "label": "Disorders",
       "path": "./packs/disorders.db",
       "entity": "Item"
     },
     {
       "name": "weapon-accessories",
-      "system": "eclipse-phase",
+      "system": "ep2e",
       "label": "Weapon Accessories",
       "path": "./packs/weapon-accessories.db",
       "entity": "JournalEntry"

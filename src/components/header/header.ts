@@ -3,6 +3,7 @@ import styles from './header.scss';
 
 /**
  * @slot action
+ * @slot icon
  */
 @customElement('sl-header')
 export class Header extends LitElement {
@@ -19,10 +20,11 @@ export class Header extends LitElement {
   render() {
     return html`
       <h3>
-        ${this.heading}
+        <span>${this.heading}</span>
         ${this.itemCount !== undefined
           ? html`<span class="count">${this.itemCount}</span>`
-          : ''}
+      : ''}
+          <slot name="icon"></slot>
       </h3>
       <slot name="action"></slot>
     `;

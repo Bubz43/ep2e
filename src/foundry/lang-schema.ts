@@ -1312,7 +1312,7 @@ export type DescriptionEntry =
   | 'unconscious'
   | 'stunned'
   | 'deafened'
-  | 'OnlyWarePoolBonus';
+  | 'OnlyWarePoolBonus' | "AddItemInfo"
 
 type F<T extends string, D extends string[]> = {
   [key in T]: D;

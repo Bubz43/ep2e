@@ -13,14 +13,20 @@
   min-height: 33px;
   --list-item-padding: 0rem 0.5rem;
   border-bottom: 1px solid var(--color-grey);
+  --mdc-icon-size: 22px;
+  --mdc-icon-button-size: 32px;
 
-  ::slotted([slot='action']) {
-    --mdc-icon-size: 22px;
-    --mdc-icon-button-size: 32px;
+  ::slotted([slot="icon"]) {
+    color: var(--color-grey);
   }
 }
 
 h3 {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  align-items: center;
+  gap: 0.5ch;
   margin: 0;
   padding: 0;
   font-size: larger;

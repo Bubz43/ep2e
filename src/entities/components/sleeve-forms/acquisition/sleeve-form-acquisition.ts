@@ -33,10 +33,7 @@ const renderAcquisitionFields: FieldPropsRenderer<AcquisitionData> = ({
             renderLabeledCheckbox(restricted),
           ]
         : [
-            renderNumberField(
-              { ...cost, label: localize('morphPoints') },
-              { min: 0 },
-            ),
+            renderNumberField(cost, { min: 0 }),
             renderNumberField(availability, { min: 0, max: 100 }),
           ]),
     );
