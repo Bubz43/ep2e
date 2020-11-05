@@ -1234,7 +1234,7 @@
       "unconscious": "You have lost consciousness (or your software mindstate has crashed) and are helpless. You can be awoken/rebooted by application of a stimulant (biomorphs only) or with an INT Check at –30 if someone vigorously disturbs you and your damage points do not exceed your Durability.",
       "deafened": "You cannot hear. You suffer –3 to Initiative Tests and –30 to general Perceive Tests.",
       "stunned": "You have the wind knocked out of you. You suffer –30 to all physical actions and –10 to mental actions.",
-      "OnlyWarePoolBonus": "Only pool bonuses from ware are added."
+      "OnlyWarePoolBonus": "Only bonuses from traits/ware/abilities/software are shown."
     },
     "FULL": {
       "cog": "Cognition",

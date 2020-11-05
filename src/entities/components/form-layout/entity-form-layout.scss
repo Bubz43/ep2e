@@ -47,6 +47,10 @@
   }
 }
 
+:host([nosidebar]) {
+  width: 550px;
+}
+
 .drawer-content,
 .content {
   height: 500px;

@@ -24,12 +24,8 @@ export class InfomorphForm extends SleeveFormBase {
     const { updater, disabled, itemGroups, pools, description } = this.infomorph;
 
     return html`
-      <entity-form-layout>
-        ${renderUpdaterForm(updater.prop('data'), {
-          slot: 'sidebar',
-          disabled,
-          fields: ({ subtype }) => [renderTextField(subtype)],
-        })}
+      <entity-form-layout noSidebar>
+     
         <div slot="details">
           <sleeve-form-pools
             .poolData=${pools}
@@ -37,18 +33,20 @@ export class InfomorphForm extends SleeveFormBase {
             ?disabled=${disabled}
             .editFn=${this.setDrawerFromEvent(this.renderPoolEdit)}
           ></sleeve-form-pools>
+          <sleeve-form-acquisition .updateActions=${updater.prop("data", "acquisition")} ?disabled=${disabled}></sleeve-form-acquisition>
         </div>
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
           .updateActions=${updater.prop('data', 'description')}
         ></editor-wrapper>
+        ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
   }
   private renderPoolEdit() {
     return html`
-      <h4>${localize('pools')}</h4>
+      <h3>${localize('pools')}</h3>
       ${renderUpdaterForm(this.infomorph.updater.prop('data', 'pools'), {
         fields: (pools) =>
           enumValues(PoolType).map((type) =>

@@ -80,14 +80,7 @@
     display: none;
   }
   .content {
-    overflow: hidden;
-    min-width: 0px;
-    min-height: 0px;
-    // &.hide {
-    //   > * {
-    //     display: none;
-    //   }
-    // }
+    display: none;
   }
 }
 

@@ -32,6 +32,7 @@ export class SleeveFormPools extends LitElement {
     return html`
       <sl-header heading=${localize('pools')}>
         <mwc-icon-button
+          class="info"
           slot="action"
           icon="info"
           data-tooltip=${localize('DESCRIPTIONS', 'OnlyWarePoolBonus')}

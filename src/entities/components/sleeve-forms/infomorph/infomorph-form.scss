@@ -8,3 +8,17 @@
 :host {
   display: block;
 }
+
+[slot="details"] {
+  display: grid;
+  grid-auto-rows: min-content;
+  gap: 0.5rem;
+}
+
+[slot="drawer-content"] {
+  min-width: 200px;
+}
+
+entity-form-layout {
+  background: transparent;
+}

@@ -32,6 +32,8 @@ export class EntityFormLayout extends LitElement {
 
   @property({ type: Boolean }) noScroll = false;
 
+  @property({ type: Boolean, reflect: true }) noSidebar = false;
+
   @internalProperty() private hideScroll = false;
 
   @internalProperty() private drawerOpen = false;
@@ -115,9 +117,12 @@ export class EntityFormLayout extends LitElement {
 
   render() {
     return html`
-      <aside class="sidebar">
+    ${this.noSidebar ? "" : html`
+    <aside class="sidebar">
         <slot name="sidebar"></slot>
       </aside>
+    `}
+   
       <slot name="tabs"></slot>
       <section
         class="content ${classMap({

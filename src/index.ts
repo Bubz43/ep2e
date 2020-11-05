@@ -54,11 +54,12 @@ import { EntityFormFooter } from './entities/components/form-layout/entity-form-
 import { EntityFormHeader } from './entities/components/form-layout/entity-form-header';
 import { EntityFormLayout } from './entities/components/form-layout/entity-form-layout';
 import { InfomorphForm } from './entities/components/sleeve-forms/infomorph/infomorph-form';
-import { SleeveFormPools } from './entities/components/sleeve-forms/sleeve-form-pools';
+import { SleeveFormPools } from './entities/components/sleeve-forms/pools/sleeve-form-pools';
 
 // Side Effects
 import './foundry/prototype-overrides';
 import './init';
+import { SleeveFormAquisition } from './entities/components/sleeve-forms/acquisition/sleeve-form-acquisition';
 
 // Generic Components
 Field;
@@ -90,6 +91,7 @@ EntityFormFooter;
 InfomorphForm;
 CompendiumList;
 SleeveFormPools;
+SleeveFormAquisition;
 
 for (const link of [
   'https://fonts.googleapis.com/css?family=Material+Icons&display=block',

@@ -1,0 +1,26 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  
+}
+
+sl-form {
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0.5rem 0;
+  mwc-formfield {
+    justify-self: center;
+  }
+}
+
+[slot="action"] {
+  sl-group {
+    font-size: 1.1rem;
+    margin-right: 1ch;
+  }
+}
