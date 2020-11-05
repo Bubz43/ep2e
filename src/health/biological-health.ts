@@ -67,6 +67,11 @@ class BiologicalHealthBase implements CommonHealth {
     if (!init.isSwarm) this.wound = wound;
   }
 
+  
+  get data() {
+    return this.init.data
+  }
+
   get type() {
     return HealthType.Physical;
   }
@@ -87,6 +92,10 @@ class BiologicalHealthBase implements CommonHealth {
     return this.init.updater
       .prop('')
       .commit((data) => applyHealthModification(data, modification));
+  }
+
+  resetLog() {
+    return this.init.updater.prop("log").commit([])
   }
 }
 

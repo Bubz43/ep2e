@@ -68,6 +68,19 @@ export const createHealthModification = createFeature<
   }),
 );
 
+export const formatHealthModificationMode = (mode: HealthModificationMode) => {
+  switch (mode) {
+    case HealthModificationMode.Edit:
+      return localize("setHealthTo")
+    
+    case HealthModificationMode.Heal:
+      return localize("healed")
+    
+    case HealthModificationMode.Inflict:
+      return localize("inflicted")
+  }
+}
+
 export enum HealthStat {
   Derived = 'derived',
   Durability = 'durability',
@@ -107,16 +120,18 @@ export type HealthWounds = {
   woundsIgnored: HealthProp<Abbreviation>;
 };
 
-export interface CommonHealth {
+export interface CommonHealth<T extends BasicHealthData = BasicHealthData> {
   readonly main: HealthMain;
   readonly wound?: HealthWounds;
   readonly type: HealthType;
+  readonly data: T;
   // readonly subtype?: PhysicalHealthSubtype;
   readonly source: string;
   readonly icon: string;
   readonly woundIcon: string;
   readonly recoveries?: HealthRecoveries;
   applyModification(modification: HealthModification): void | Promise<unknown>;
+  resetLog(): void | Promise<unknown>
 }
 
 export const formatDamageType = (type: HealthType) => {

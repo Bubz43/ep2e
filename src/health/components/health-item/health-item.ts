@@ -10,14 +10,16 @@ import { compact } from 'remeda';
 import styles from './health-item.scss';
 
 @customElement('health-item')
-export class HealthItem extends mix(LitElement).with(LazyRipple) {
+export class HealthItem<T extends Health = Health> extends mix(LitElement).with(
+  LazyRipple,
+) {
   static get is() {
     return 'health-item' as const;
   }
 
   static styles = [styles];
 
-  @property({ attribute: false }) health!: Health;
+  @property({ attribute: false }) health!: T;
 
   @property({ type: Boolean, reflect: true }) clickable = false;
 

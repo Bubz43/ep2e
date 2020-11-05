@@ -1242,7 +1242,7 @@ type LangEntries =
   | 'severe'
   | 'perTurn'
   | 'carryPayload'
-  | 'took';
+  | 'took' | "history" | "setHealthTo" | "healed" | "inflicted"
 type FullNames =
   | 'cog'
   | 'int'

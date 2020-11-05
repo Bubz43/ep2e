@@ -66,6 +66,11 @@ class SyntheticHealthBase implements CommonHealth {
     if (!init.isSwarm) this.wound = wound;
   }
 
+  
+  get data() {
+    return this.init.data
+  }
+
   get type() {
     return HealthType.Physical;
   }
@@ -86,6 +91,10 @@ class SyntheticHealthBase implements CommonHealth {
     return this.init.updater
       .prop('')
       .commit((data) => applyHealthModification(data, modification));
+  }
+
+  resetLog() {
+    return this.init.updater.prop("log").commit([])
   }
 }
 

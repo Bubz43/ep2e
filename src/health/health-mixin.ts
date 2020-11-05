@@ -74,6 +74,11 @@ export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
         ),
       };
     }
+
+    get log() {
+      return this.data.log
+    }
   }
+  
   return HealthInfo;
 };

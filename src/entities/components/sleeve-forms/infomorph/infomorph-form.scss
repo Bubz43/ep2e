@@ -16,9 +16,19 @@
 }
 
 [slot='drawer-content'] {
-  min-width: 200px;
+  min-width: max-content;
 }
 
-entity-form-layout {
-  background: transparent;
+.history {
+  display: flex;
+  flex-flow: column;
+  min-width: 300px;
+
+  .change-source {
+    color: var(--color-grey);
+  }
+
+  delete-button {
+    margin-left: auto;
+  }
 }

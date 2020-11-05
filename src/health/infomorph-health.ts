@@ -54,6 +54,11 @@ class InfomorphHealthBase implements CommonHealth {
     this.wound = wound;
   }
 
+  
+  get data() {
+    return this.init.data
+  }
+
   get type() {
     return HealthType.Mesh;
   }
@@ -74,6 +79,10 @@ class InfomorphHealthBase implements CommonHealth {
     return this.init.updater
       .prop('')
       .commit((data) => applyHealthModification(data, modification));
+  }
+
+  resetLog() {
+    return this.init.updater.prop("log").commit([])
   }
 }
 

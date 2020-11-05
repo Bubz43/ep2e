@@ -60,7 +60,6 @@ class MentalHealthBase implements CommonHealth {
 
   constructor(protected readonly init: Init) {
     const { statMods, willpower, data } = init;
-
     const {
       durability: lucidity,
       deathRating: insanityRating,
@@ -97,6 +96,10 @@ class MentalHealthBase implements CommonHealth {
     };
   }
 
+  get data() {
+    return this.init.data
+  }
+
   get type() {
     return HealthType.Mental;
   }
@@ -121,6 +124,10 @@ class MentalHealthBase implements CommonHealth {
     return this.init.updater
       .prop('')
       .commit((data) => applyHealthModification(data, modification));
+  }
+
+  resetLog() {
+    return this.init.updater.prop("log").commit([])
   }
 }
 

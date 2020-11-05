@@ -1220,6 +1220,10 @@
     "perTurn": "Per Turn",
     "carryPayload": "Carry Payload",
     "took": "Took",
+    "setHealthTo": "Set health to",
+    "healed": "Healed",
+    "history": "History",
+    "inflicted": "Inflicted",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

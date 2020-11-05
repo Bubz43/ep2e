@@ -1721,6 +1721,9 @@
             "heal": {
               "type": "string"
             },
+            "healed": {
+              "type": "string"
+            },
             "healing": {
               "type": "string"
             },
@@ -1746,6 +1749,9 @@
               "type": "string"
             },
             "high": {
+              "type": "string"
+            },
+            "history": {
               "type": "string"
             },
             "holdoutPistol": {
@@ -1923,6 +1929,9 @@
               "type": "string"
             },
             "inflict": {
+              "type": "string"
+            },
+            "inflicted": {
               "type": "string"
             },
             "influence": {
@@ -3144,6 +3153,9 @@
               "type": "string"
             },
             "set": {
+              "type": "string"
+            },
+            "setHealthTo": {
               "type": "string"
             },
             "settings": {
@@ -4458,6 +4470,7 @@
             "hasAttack",
             "hasSeverity",
             "heal",
+            "healed",
             "healing",
             "healingTimeframes",
             "health",
@@ -4467,6 +4480,7 @@
             "heavyPistol",
             "helplessness",
             "high",
+            "history",
             "holdoutPistol",
             "homeDevice",
             "homing",
@@ -4526,6 +4540,7 @@
             "infectionTest",
             "infiltrate",
             "inflict",
+            "inflicted",
             "influence",
             "influences",
             "info",
@@ -4933,6 +4948,7 @@
             "serviceType",
             "services",
             "set",
+            "setHealthTo",
             "settings",
             "setup",
             "severe",
