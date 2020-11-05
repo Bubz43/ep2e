@@ -9,6 +9,7 @@ import type {
   EntitySheet,
   EntitySheetOptions,
 } from '@src/foundry/foundry-cont';
+import { localize } from '@src/foundry/localization';
 import {
   userCan,
   importFromCompendium,
@@ -96,11 +97,18 @@ export class ActorEPSheet implements EntitySheet {
 
   @debounce(1)
   private openWindow(force: boolean) {
+    const { name: actorName } = this.actor;
+    const { name: tokenName } = this._token ?? {};
     const { win, windowExisted } = openWindow(
       {
         key: this.actor,
         content: html` ${this.windowHeaderButtons} ${this.content} `,
-        name: this._token?.data.name || this.actor.name,
+        name:
+          actorName !== tokenName
+            ? `${actorName} ${
+                tokenName ? `${localize('as').toLocaleLowerCase()} ${tokenName} (${localize("token")})` : ''
+              }`
+            : actorName,
         forceFocus: force,
         adjacentEl: !this.rendered && this.getAdjacentEl(),
       },

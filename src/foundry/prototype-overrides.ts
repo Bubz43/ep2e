@@ -8,6 +8,7 @@ import { findMatchingElement } from '@src/utility/dom';
 import { notEmpty } from '@src/utility/helpers';
 import { html, render } from 'lit-html';
 import { compact, first, mapToObj, noop, pipe } from 'remeda';
+import { isKnownDrop, setDragSource } from './drag-and-drop';
 import type { TokenData } from './foundry-cont';
 import { activeCanvas, convertMenuOptions } from './misc-helpers';
 import { activeTokenStatusEffects } from './token-helpers';
@@ -474,3 +475,18 @@ tinymce.FocusManager.isEditorUIElement = function (elm: Element) {
   const className = elm.className?.toString() ?? '';
   return className.indexOf('tox-') !== -1 || className.indexOf('mce-') !== -1;
 };
+
+const { _handleDragStart } = DragDrop.prototype;
+DragDrop.prototype._handleDragStart = function (ev: DragEvent) {
+  _handleDragStart.call(this, ev)
+  let data: unknown = null;
+  try {
+    const stringified = ev.dataTransfer?.getData("text/plain");
+    data = typeof stringified === "string" && JSON.parse(stringified);
+  } catch (error) {
+    console.log(error)
+  }
+  if (isKnownDrop(data)) {
+    setDragSource(ev, data);
+  }
+}

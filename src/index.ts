@@ -61,7 +61,7 @@ import { InfomorphForm } from './entities/components/sleeve-forms/infomorph/info
 import { SleeveFormPools } from './entities/components/sleeve-forms/pools/sleeve-form-pools';
 import { SleeveFormAquisition } from './entities/components/sleeve-forms/acquisition/sleeve-form-acquisition';
 import { HealthItem } from './health/components/health-item/health-item';
-import { SleeveFormItemsList } from './entities/components/sleeve-forms/items/sleeve-form-items-list';
+import { SleeveFormItemsList } from './entities/components/sleeve-forms/items-list/sleeve-form-items-list';
 
 // Generic Components
 Field;

@@ -9,6 +9,12 @@
   display: block;
 }
 
+:host([disabled]) {
+  sl-header {
+    border-bottom: none;
+  }
+}
+
 sl-form {
   grid-template-columns: repeat(3, 1fr);
   margin: 0.5rem 0;

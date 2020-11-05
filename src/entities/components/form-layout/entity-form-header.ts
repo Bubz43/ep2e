@@ -118,10 +118,10 @@ export class EntityFormHeader extends LitElement {
         fields: this.nameInput,
       })}
 
-      <h1 class=${this.disabled ? '' : 'editable-sheet'}>
+      <!-- <h1 class=${this.disabled ? '' : 'editable-sheet'}>
         ${before ? html`<span class="name-part">${before}</span>` : ''}
         ${middle} ${after ? html`<span class="name-part">${after}</span>` : ''}
-      </h1>
+      </h1> -->
 
       <ul class="tags">
         <slot name="tag"></slot>

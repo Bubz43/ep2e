@@ -7,6 +7,11 @@ import {
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import { enumValues, PoolType } from '@src/data-enums';
 import type { Infomorph } from '@src/entities/actor/proxies/infomorph';
+import {
+  DropType,
+  handleDrop,
+  itemDropToItemAgent,
+} from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import {
   createHealthModification,
@@ -32,6 +37,13 @@ export class InfomorphForm extends SleeveFormBase {
 
   @property({ attribute: false }) infomorph!: Infomorph;
 
+  private handleItemDrop = handleDrop(async ({ ev, drop, data }) => {
+    if (data?.type === DropType.Item) {
+      const agent = await itemDropToItemAgent(data);
+      console.log(agent);
+    }
+  });
+
   render() {
     const {
       updater,
@@ -40,10 +52,19 @@ export class InfomorphForm extends SleeveFormBase {
       pools,
       meshHealth,
       description,
+      type,
+      sleeved,
     } = this.infomorph;
 
     return html`
       <entity-form-layout noSidebar>
+        <entity-form-header
+          slot="header"
+          .updater=${updater}
+          type=${localize(type)}
+        >
+          ${sleeved ? html` <li slot="tag">${localize('sleeved')}</li> ` : ''}
+        </entity-form-header>
         <div slot="details">
           <sleeve-form-acquisition
             .updateActions=${updater.prop('data', 'acquisition')}
@@ -75,7 +96,7 @@ export class InfomorphForm extends SleeveFormBase {
             ></health-item>
           </section>
 
-          <sl-dropzone>
+          <sl-dropzone @drop=${this.handleItemDrop}>
             <sl-header heading="${localize('traits')} & ${localize('ware')}">
               <mwc-icon
                 slot="icon"
@@ -87,13 +108,20 @@ export class InfomorphForm extends SleeveFormBase {
 
             ${notEmpty(itemGroups.traits)
               ? html`
-                  <sleeve-form-items-list .items=${itemGroups.traits} label=${localize("traits")}></sleeve-form-items-list>
+                  <sleeve-form-items-list
+                    .items=${itemGroups.traits}
+                    label=${localize('traits')}
+                  ></sleeve-form-items-list>
                 `
               : ''}
-
-              ${notEmpty(itemGroups.ware) ? html`
-              <sleeve-form-items-list .items=${itemGroups.ware} label=${localize("ware")}></sleeve-form-items-list>
-              ` : ""}
+            ${notEmpty(itemGroups.ware)
+              ? html`
+                  <sleeve-form-items-list
+                    .items=${itemGroups.ware}
+                    label=${localize('ware')}
+                  ></sleeve-form-items-list>
+                `
+              : ''}
           </sl-dropzone>
         </div>
         <editor-wrapper

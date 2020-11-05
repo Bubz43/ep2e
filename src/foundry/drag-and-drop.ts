@@ -53,7 +53,7 @@ const dropChecker = <T extends DropType, D = Drops[T]>(
 
 export const dragSource = () => source as Readonly<typeof source>;
 
-const setDragSource = (ev: DragEvent, drop: Drop) => {
+export const setDragSource = (ev: DragEvent, drop: Drop) => {
   const el = ev
     .composedPath()
     .find(
@@ -66,9 +66,7 @@ const setDragSource = (ev: DragEvent, drop: Drop) => {
       source.element = null;
       source.data = null;
     },
-    {
-      once: true,
-    },
+    { once: true },
   );
 
   source.element = el;

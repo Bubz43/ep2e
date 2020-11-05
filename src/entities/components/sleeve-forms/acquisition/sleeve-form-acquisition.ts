@@ -57,7 +57,7 @@ export class SleeveFormAquisition extends LitElement {
   })
   updateActions!: UpdateActions<AcquisitionData>;
 
-  @property({ type: Boolean }) disabled = false;
+  @property({ type: Boolean, reflect: true }) disabled = false;
 
   render() {
     return html`
@@ -66,11 +66,13 @@ export class SleeveFormAquisition extends LitElement {
           ${renderMorphAcquisition(this.updateActions.originalValue())}
         </div></sl-header
       >
-      ${renderUpdaterForm(this.updateActions, {
-        classes: 'acquisition-form',
-        disabled: this.disabled,
-        fields: renderAcquisitionFields,
-      })}
+      ${this.disabled
+        ? ''
+        : renderUpdaterForm(this.updateActions, {
+            classes: 'acquisition-form',
+            disabled: this.disabled,
+            fields: renderAcquisitionFields,
+          })}
     `;
   }
 }

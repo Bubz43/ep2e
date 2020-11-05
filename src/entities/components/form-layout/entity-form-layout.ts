@@ -14,6 +14,7 @@ import { first } from 'remeda';
 import styles from './entity-form-layout.scss';
 
 /**
+ * @slot header
  * @slot sidebar
  * @slot details
  * @slot description
@@ -117,6 +118,7 @@ export class EntityFormLayout extends LitElement {
 
   render() {
     return html`
+    <slot name="header"></slot>
       ${this.noSidebar
         ? ''
         : html`

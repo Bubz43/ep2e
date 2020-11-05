@@ -11,13 +11,12 @@ export const renderCharacterView = (proxy: Character, token: MaybeToken) => {
 
 export const renderSleeveForm = (proxy: Sleeve, token: MaybeToken) => {
   return html`
-    <entity-form-header
-      slot="header"
+    <!-- <entity-form-header
       .updater=${proxy.updater}
       type=${localize(proxy.type)}
     >
       ${proxy.sleeved ? html` <li slot="tag">${localize('sleeved')}</li> ` : ''}
-    </entity-form-header>
+    </entity-form-header> -->
     ${renderSpecificSleeveForm(proxy, token)}
   `;
 };
