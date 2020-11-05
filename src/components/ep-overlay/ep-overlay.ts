@@ -278,15 +278,6 @@ export class EPOverlay extends LitElement {
     }
   };
 
-  private showDirectoryTooltip = (ev: MouseEvent) => {
-    const el = ev.currentTarget as HTMLElement;
-    tooltip.attach({
-      el,
-      content: el.dataset.tooltip!,
-      position: 'bottom-middle',
-    });
-  };
-
   private setFoundryPopouts() {
     this.foundryViewControls.forEach((el) => el.remove());
     const sTabs = document.getElementById('sidebar-tabs');
@@ -306,7 +297,8 @@ export class EPOverlay extends LitElement {
           slot="app-controls"
           clickable
           data-tooltip=${title}
-          @mouseenter=${this.showDirectoryTooltip}
+          @mouseenter=${tooltip.fromData}
+          @focus=${tooltip.fromData}
           data-view=${tabName}
           @click=${(ev: Event) => {
             const { _popout } = tabApp;

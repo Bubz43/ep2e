@@ -82,7 +82,6 @@ export class Infomorph extends ActorProxyBase<ActorType.Infomorph> {
     const traits: Trait[] = [];
     const ware: EquippableItem[] = [];
     const effects = new AppliedEffects();
-    const software: Software[] = [];
     for (const { agent } of this.items) {
       switch (agent.type) {
         case ItemType.Psi:
@@ -97,22 +96,16 @@ export class Infomorph extends ActorProxyBase<ActorType.Infomorph> {
         case ItemType.Armor:
         case ItemType.MeleeWeapon:
         case ItemType.PhysicalTech:
-          if (agent.wareType && agent.equipped) ware.push(agent);
-
-          if (agent.type === ItemType.Armor && agent.equipped) {
+          ware.push(agent);
+          if ('obtainEffects' in agent) {
             effects.add(agent.obtainEffects());
           }
 
-          if (agent.type === ItemType.PhysicalTech) {
-            effects.add(agent.obtainEffects());
-          }
           break;
 
         case ItemType.Software:
-          if (agent.equipped) {
-            effects.add(agent.obtainEffects());
-            software.push(agent);
-          }
+          effects.add(agent.obtainEffects());
+          ware.push(agent);
 
           break;
 
@@ -123,6 +116,6 @@ export class Infomorph extends ActorProxyBase<ActorType.Infomorph> {
           break;
       }
     }
-    return { traits, ware, software, effects };
+    return { traits, ware, effects };
   }
 }

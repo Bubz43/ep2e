@@ -18,23 +18,9 @@
   padding: 0.5rem 0.75rem;
   > * {
     padding: 0.5rem 1rem;
-    background: var(--color-bg-alt);
     border-radius: 3px;
     border: 1px solid var(--color-border);
-  }
-}
-
-.item-list {
-  display: flex;
-  flex-flow: row wrap;
-  margin: 0.5rem 0.25rem;
-  .label {
-    text-transform: uppercase;
-    color: var(--color-text-lighter);
-    letter-spacing: 0.5px;
-  }
-  li:not(.label) {
-    margin-left: 0.5ch;
+    background: var(--color-bg-alt);
   }
 }
 

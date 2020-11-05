@@ -34,12 +34,16 @@ li[divider] {
   color: currentColor;
 }
 
+
 mwc-menu {
-  --mdc-theme-surface: black;
+  --mdc-theme-surface: #{lightv(var(--color-grey), 0.35)};
   --mdc-menu-item-height: 2rem;
   --mdc-menu-min-width: 200px;
   --mdc-list-vertical-padding: 0.25rem;
-
+  li[divider] {
+    border-color: var(--color-bg);
+    margin: 0.25rem 0;
+  }
   --mdc-theme-text-primary-on-background: hsl(0, 0%, 85%);
   --mdc-list-item-graphic-margin: 1rem;
   --mdc-list-item-graphic-size: 20px;
@@ -241,6 +245,7 @@ table {
   // left: 0.5rem;
   pointer-events: none;
   flex: 1;
+  min-height: 42px;
   // z-index: 30;
   #nav-toggle {
     pointer-events: initial;
@@ -249,18 +254,13 @@ table {
   #nav-toggle {
     border: none;
     background: alphav(var(--color-bg-alt), 0.5);
-    min-width: 34px;
-    filter: contrast(0.6);
-    clip-path: polygon(
-      30% 0%,
-      70% 0%,
-      100% 30%,
-      100% 70%,
-      70% 100%,
-      30% 100%,
-      0% 70%,
-      0% 30%
-    );
+    border-radius: 100%;
+    display: grid;
+    place-items: center;
+    flex: unset;
+    height: 1.75rem;
+    width: 1.75rem;
+    
     &:hover {
       text-shadow: none !important;
       background: alphav(var(--color-bg-alt), 0.7);

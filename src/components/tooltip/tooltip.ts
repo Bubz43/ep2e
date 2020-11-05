@@ -28,7 +28,7 @@ export class ToolTip extends LitElement {
     this.addEventListener('mouseleave', () => this.detach(true));
   }
 
-  readData = ({ currentTarget: el }: Event) => {
+  fromData = ({ currentTarget: el }: Event) => {
     if (el instanceof HTMLElement && el.dataset.tooltip) {
       this.attach({
         el,

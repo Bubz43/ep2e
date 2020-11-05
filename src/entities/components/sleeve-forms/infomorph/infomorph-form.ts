@@ -15,6 +15,7 @@ import {
 } from '@src/health/health';
 import { DotOrHotTarget } from '@src/health/recovery';
 import { tooltip } from '@src/init';
+import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, property, html } from 'lit-element';
 import { sortBy } from 'remeda';
@@ -74,28 +75,26 @@ export class InfomorphForm extends SleeveFormBase {
             ></health-item>
           </section>
 
-          <section>
+          <sl-dropzone>
             <sl-header heading="${localize('traits')} & ${localize('ware')}">
               <mwc-icon
-                slot="action"
-                icon="info"
+                slot="icon"
                 data-tooltip=${localize('DESCRIPTIONS', 'AddItemInfo')}
-                @mouseover=${tooltip.readData}
+                @mouseover=${tooltip.fromData}
                 >info</mwc-icon
               >
             </sl-header>
 
             ${notEmpty(itemGroups.traits)
               ? html`
-                  <ul class="item-list">
-                    <li class="label">${localize('traits')}:</li>
-                    ${sortBy(itemGroups.traits, (t) => t.fullName).map(
-                      (trait, index, list) => html` <li>${trait.fullName.trim()}</li>${index < list.length - 1 ? "," : ""} `,
-                    )}
-                  </ul>
+                  <sleeve-form-items-list .items=${itemGroups.traits} label=${localize("traits")}></sleeve-form-items-list>
                 `
               : ''}
-          </section>
+
+              ${notEmpty(itemGroups.ware) ? html`
+              <sleeve-form-items-list .items=${itemGroups.ware} label=${localize("ware")}></sleeve-form-items-list>
+              ` : ""}
+          </sl-dropzone>
         </div>
         <editor-wrapper
           slot="description"
@@ -133,8 +132,8 @@ export class InfomorphForm extends SleeveFormBase {
           ? html`
               <delete-button
                 data-tooltip="${localize('delete')} ${localize('history')}"
-                @mouseover=${tooltip.readData}
-                @focus=${tooltip.readData}
+                @mouseover=${tooltip.fromData}
+                @focus=${tooltip.fromData}
                 @delete=${() => meshHealth.resetLog()}
                 ?disabled=${disabled}
               ></delete-button>

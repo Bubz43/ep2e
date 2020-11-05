@@ -7,6 +7,12 @@
 
 :host {
   display: block;
-  background: var(--drag-bg, var(--dropzone-bg));
-  transition: background 200ms;
+}
+
+:host([outlined]) {
+  outline: 2px dashed var(--color-secondary);
+  outline-offset: -2px;
+  > * {
+    pointer-events: none !important;
+  }
 }

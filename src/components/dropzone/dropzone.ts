@@ -16,19 +16,21 @@ export class DropZone extends LitElement {
   private static set highlighted(cell: DropZone | null) {
     const { _highlighted } = DropZone;
     if (_highlighted === cell) return;
-    _highlighted?.style.setProperty('--drag-bg', null);
-    cell?.style.setProperty('--drag-bg', 'var(--color-secondary)');
+    _highlighted?.removeAttribute('outlined');
+    cell?.setAttribute('outlined', '');
     DropZone._highlighted = cell;
   }
 
   firstUpdated() {
-    this.addEventListener('dragover', () => this.highlightBackground());
+    this.addEventListener('dragover', () => this.setOutline());
+    this.addEventListener('dragenter', () => this.setOutline());
+
     for (const event of dragEvents) {
       this.addEventListener(event, this.removeBackgroundHighlight);
     }
   }
 
-  private highlightBackground() {
+  private setOutline() {
     DropZone.highlighted = this;
   }
 

@@ -42,7 +42,7 @@ const shadowAnimationOptions = {
   duration: 200,
   fill: 'forwards',
   delay: 50,
-  easing: 'ease-in-out',
+  easing: 'ease-out',
 } as const;
 
 const shadowElStyles = {
@@ -286,9 +286,7 @@ export class SlWindow extends LitElement {
     }).animate(
       {
         transform: [
-          `translate(0) scale(1) rotateZ(${Math.ceil(
-            Math.random() * (wentRight ? -3 : 3),
-          )}deg)`,
+          `translate(0) scale(1)`,
           `translate(${joinCoor({
             x: offsetLeft - relativeRect.left,
             y: offsetTop - relativeRect.top,
@@ -302,7 +300,7 @@ export class SlWindow extends LitElement {
       },
       {
         ...shadowAnimationOptions,
-        duration: shadowAnimationOptions.duration - 50,
+        duration: shadowAnimationOptions.duration - 100,
       },
     ).onfinish = () => {
       const opacity = [1, 0];

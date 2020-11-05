@@ -106,28 +106,28 @@ export class ActorEPSheet implements EntitySheet {
       },
       { resizable: ResizeOption.Both },
     );
-    if (!windowExisted) win.addEventListener('drop', this.unpackDrop);
+    // if (!windowExisted) win.addEventListener('drop', this.unpackDrop);
 
     this.window = win;
   }
 
-  private unpackDrop = handleDrop(({ ev, drop }) => {
-    if (
-      this.actor.agent.type === ActorType.Character ||
-      !isKnownDrop(drop) ||
-      !this.actor.agent.editable
-    )
-      return;
-    if ('actorId' in drop) {
-      if (
-        drop.actorId === this.actor.data._id ||
-        (drop.tokenId && drop.tokenId === this._token?.data._id)
-      ) {
-        return;
-      }
-    }
-    this.actor.agent.handleDrop({ ev, drop });
-  });
+  // private unpackDrop = handleDrop(({ ev, drop }) => {
+  //   if (
+  //     this.actor.agent.type === ActorType.Character ||
+  //     !isKnownDrop(drop) ||
+  //     !this.actor.agent.editable
+  //   )
+  //     return;
+  //   if ('actorId' in drop) {
+  //     if (
+  //       drop.actorId === this.actor.data._id ||
+  //       (drop.tokenId && drop.tokenId === this._token?.data._id)
+  //     ) {
+  //       return;
+  //     }
+  //   }
+  //   this.actor.agent.handleDrop({ ev, drop });
+  // });
 
   getAdjacentEl() {
     const { actor } = this;
@@ -186,7 +186,7 @@ export class ActorEPSheet implements EntitySheet {
     this.unsub?.();
     this.unsub = null;
     closeWindow(this.actor);
-    this.window?.removeEventListener('drop', this.unpackDrop);
+    // this.window?.removeEventListener('drop', this.unpackDrop);
     this.window = null;
     return this;
   }

@@ -34,7 +34,7 @@ export class SleeveFormPools extends LitElement {
         <mwc-icon
           slot="icon"
           data-tooltip=${localize('DESCRIPTIONS', 'OnlyWarePoolBonus')}
-          @mouseenter=${tooltip.readData}
+          @mouseenter=${tooltip.fromData}
         >info</mwc-icon>
         <mwc-icon-button
           slot="action"
