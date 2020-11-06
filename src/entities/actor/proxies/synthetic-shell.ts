@@ -28,6 +28,11 @@ export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
     this.sleeved = sleeved;
   }
 
+  get pools() {
+    return this.epData.pools
+  }
+
+
   get subtype() {
     return this.epData.subtype;
   }

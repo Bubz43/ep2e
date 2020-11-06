@@ -118,14 +118,15 @@ export class EntityFormLayout extends LitElement {
 
   render() {
     return html`
-    <slot name="header"></slot>
-      ${this.noSidebar
+     ${this.noSidebar
         ? ''
         : html`
             <aside class="sidebar">
               <slot name="sidebar"></slot>
             </aside>
           `}
+    <slot name="header"></slot>
+     
 
       <slot name="tabs"></slot>
       <section

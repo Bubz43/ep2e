@@ -13,7 +13,7 @@
 
 .pools {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
   margin: 0.5rem 0;
 }
 
@@ -22,7 +22,7 @@
   display: grid;
   grid-auto-flow: column;
   gap: 0.5ch;
-
+  font-size: 1.1rem;
   &.hide {
     opacity: 0.5;
   }

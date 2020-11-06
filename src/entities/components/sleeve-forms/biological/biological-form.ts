@@ -1,45 +1,27 @@
-import {
-  renderFormulaField,
-  renderNumberField,
-  renderTextField,
-  renderTimeField,
-} from '@src/components/field/fields';
-import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
-import { enumValues, PoolType } from '@src/data-enums';
-import type { Infomorph } from '@src/entities/actor/proxies/infomorph';
-import { ItemType } from '@src/entities/entity-types';
-import {
-  Drop,
-  DropType,
-  handleDrop,
-  itemDropToItemProxy,
-} from '@src/foundry/drag-and-drop';
-import { NotificationType, notify } from '@src/foundry/foundry-apps';
-import { format, localize } from '@src/foundry/localization';
-import {
-  createHealthModification,
-  formatHealthModificationMode,
-  HealthModificationMode,
-} from '@src/health/health';
-import { DotOrHotTarget } from '@src/health/recovery';
-import { tooltip } from '@src/init';
-import { openMenu } from '@src/open-menu';
-import { notEmpty } from '@src/utility/helpers';
-import { customElement, property, html } from 'lit-element';
-import { sortBy } from 'remeda';
-import { renderPoolEditForm } from '../pools/pool-edit-form';
-import { SleeveFormBase } from '../sleeve-form-base';
-import styles from './infomorph-form.scss';
+import { renderFormulaField, renderLabeledCheckbox, renderNumberField, renderSelectField, renderTextField } from "@src/components/field/fields";
+import { renderUpdaterForm } from "@src/components/form/forms";
+import { enumValues } from "@src/data-enums";
+import type { Biological } from "@src/entities/actor/proxies/biological";
+import { Size } from "@src/features/size";
+import { handleDrop, DropType, itemDropToItemProxy } from "@src/foundry/drag-and-drop";
+import { notify, NotificationType } from "@src/foundry/foundry-apps";
+import { localize } from "@src/foundry/localization";
+import { tooltip } from "@src/init";
+import { notEmpty } from "@src/utility/helpers";
+import { customElement, LitElement, property, html } from "lit-element";
+import { renderPoolEditForm } from "../pools/pool-edit-form";
+import { SleeveFormBase } from "../sleeve-form-base";
+import styles from "./biological-form.scss";
 
-@customElement('infomorph-form')
-export class InfomorphForm extends SleeveFormBase {
+@customElement("biological-form")
+export class BiologicalForm extends SleeveFormBase {
   static get is() {
-    return 'infomorph-form' as const;
+    return "biological-form" as const;
   }
 
   static styles = [styles];
 
-  @property({ attribute: false }) sleeve!: Infomorph;
+  @property({ attribute: false }) sleeve!: Biological;
 
   private handleItemDrop = handleDrop(async ({ data }) => {
     console.log(data);
@@ -58,14 +40,13 @@ export class InfomorphForm extends SleeveFormBase {
       disabled,
       itemGroups,
       pools,
-      meshHealth,
+      physicalHealth,
       type,
       sleeved,
       itemTrash,
     } = this.sleeve;
-
     return html`
-      <entity-form-layout noSidebar>
+       <entity-form-layout>
         <entity-form-header
           slot="header"
           .updateActions=${updater.prop('')}
@@ -73,6 +54,22 @@ export class InfomorphForm extends SleeveFormBase {
         >
           ${sleeved ? html` <li slot="tag">${localize('sleeved')}</li> ` : ''}
         </entity-form-header>
+
+        ${renderUpdaterForm(updater.prop("data"), {
+          disabled,
+          slot: "sidebar",
+          fields: ({ subtype, sex, unarmedDV, swarm, brain, prehensileLimbs, size }) => [
+            renderTextField(subtype),
+            renderTextField(sex),
+            renderFormulaField(unarmedDV),
+            renderLabeledCheckbox(swarm),
+            // TODO brain,
+            renderNumberField(prehensileLimbs, { min: 0 }),
+            renderSelectField(size, enumValues(Size))
+          ]
+        })}
+
+
         <div slot="details">
           <sleeve-form-acquisition
             .updateActions=${updater.prop('data', 'acquisition')}
@@ -86,7 +83,7 @@ export class InfomorphForm extends SleeveFormBase {
           ></sleeve-form-pools>
 
           <section>
-            <sl-header heading=${localize('meshHealth')}>
+            <sl-header heading=${localize('physicalHealth')}>
               <mwc-icon-button
                 slot="action"
                 data-tooltip=${localize('changes')}
@@ -102,21 +99,21 @@ export class InfomorphForm extends SleeveFormBase {
             <health-item
               clickable
               ?disabled=${disabled}
-              .health=${meshHealth}
+              .health=${physicalHealth}
               @click=${this.setDrawerFromEvent(this.renderMeshHealthEdit)}
             ></health-item>
           </section>
 
           <sl-dropzone @drop=${this.handleItemDrop} ?disabled=${disabled}>
             <sl-header
-              heading="${localize('traits')} & ${localize('software')}"
+              heading="${localize('traits')} & ${localize('ware')}"
             >
-              <mwc-icon
+              <!-- <mwc-icon
                 slot="icon"
                 data-tooltip=${localize('DESCRIPTIONS', 'OnlyInfomorphItems')}
                 @mouseover=${tooltip.fromData}
                 >info</mwc-icon
-              >
+              > -->
               ${notEmpty(itemTrash) && !disabled
                 ? html`
                     <mwc-icon-button
@@ -164,27 +161,27 @@ export class InfomorphForm extends SleeveFormBase {
   }
 
   private renderHealthChangeHistory() {
-    const { meshHealth, disabled } = this.sleeve;
+    const { physicalHealth, disabled } = this.sleeve;
     return html`
       <section class="history">
         <h3>${localize('history')}</h3>
-        <health-log .health=${meshHealth} ?disabled=${disabled}></health-log>
+        <health-log .health=${physicalHealth} ?disabled=${disabled}></health-log>
       </section>
     `;
   }
 
   private renderMeshHealthEdit() {
-    const { meshHealth, updater } = this.sleeve;
+    const { physicalHealth, updater } = this.sleeve;
     return html`
       <h3>${localize('meshHealth')}</h3>
-      ${renderUpdaterForm(updater.prop('data', 'meshHealth'), {
+      ${renderUpdaterForm(updater.prop('data', 'physicalHealth'), {
         fields: ({ baseDurability }) =>
           renderNumberField(baseDurability, { min: 1 }),
       })}
-      <health-state-form .health=${meshHealth}></health-state-form>
+      <health-state-form .health=${physicalHealth}></health-state-form>
       <health-regen-settings-form
-        .health=${meshHealth}
-        .regenUpdater=${updater.prop('data', 'meshHealth').nestedStore()}
+        .health=${physicalHealth}
+        .regenUpdater=${updater.prop('data', 'physicalHealth').nestedStore()}
       ></health-regen-settings-form>
     `;
   }
@@ -199,6 +196,6 @@ export class InfomorphForm extends SleeveFormBase {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'infomorph-form': InfomorphForm;
+    "biological-form": BiologicalForm;
   }
 }

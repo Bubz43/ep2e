@@ -244,7 +244,7 @@ type InfomorphData = {
       'Conditions',
     ]
   >;
-  subtype: string;
+  // subtype: string;
   // localFirewall: boolean;
   meshHealth: InfomorphHealthData;
   // additionalHomeDevices: StringID<DistributedMeshHealthData>[];
@@ -302,7 +302,7 @@ type BiologicalData = {
   sex: string;
   unarmedDV: string;
   swarm: boolean;
-  cyberbrain: boolean;
+  brain: string;
   /**
    * @minimum 0
    */

@@ -39,6 +39,9 @@ export class SleeveFormPools extends LitElement {
         <mwc-icon-button
           slot="action"
           icon="edit"
+          data-tooltip=${localize("edit")}
+          @mouseover=${tooltip.fromData}
+          @focus=${tooltip.fromData}
           ?disabled=${this.disabled}
           @click=${this.editFn}
         ></mwc-icon-button>
@@ -51,7 +54,7 @@ export class SleeveFormPools extends LitElement {
           return html`
             <li class="pool ${classMap({ hide: !bonus && !value })}">
               ${localize(poolType)}
-              <img height="16px" src=${poolIcon(poolType)} />
+              <img height="19px" src=${poolIcon(poolType)} />
               ${value}
               ${bonus
                 ? html`

@@ -1,6 +1,6 @@
 import { renderTextInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
-import type { UpdateStore } from '@src/entities/update-store';
+import type { UpdateActions, UpdateStore } from '@src/entities/update-store';
 import { closeImagePicker, openImagePicker } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
 import type { FieldPropsRenderer } from '@src/utility/field-values';
@@ -17,21 +17,17 @@ export class EntityFormHeader extends LitElement {
 
   @property({
     attribute: false,
-    type: Object,
     hasChanged() {
-      return true;
-    },
+      return true
+    }
   })
-  updater!: UpdateStore<{
-    name: string;
-    img: string;
-  }>;
+    updateActions!: UpdateActions<{name: string, img: string}>
 
   @property({ type: String }) type!: string;
 
   @property({ type: Boolean }) noDefaultImg = false;
 
-  @property({ type: String }) altName?: string;
+  @property({ type: Boolean }) disabled = false;
 
   async connectedCallback() {
     super.connectedCallback();
@@ -54,47 +50,24 @@ export class EntityFormHeader extends LitElement {
   }
 
   private editImg() {
-    const { originalValue, commit } = this.updater.prop('img');
-    openImagePicker(this, originalValue(), commit);
+    const { originalValue, commit } = this.updateActions;
+    openImagePicker(this, originalValue().img, newImg => commit({ img: newImg }));
   }
 
   private updateEgoName = ({ name }: { name?: string }) => {
-    if (name) this.updater.prop('name').commit(name);
+    if (name) this.updateActions.commit({name});
     else this.requestUpdate();
   };
-
-  private get disabled() {
-    return !this.updater.editable;
-  }
 
   private nameInput: FieldPropsRenderer<{ name: string }> = ({ name }) => {
     return renderTextInput(name);
   };
 
-  private nameParts(name: string) {
-    if (this.altName) {
-      const initial = this.altName.indexOf(name);
-      const last = this.altName.lastIndexOf(name);
-      if (initial === last) {
-        const [before, after] = this.altName
-          .replace(name, '__**__')
-          .split('__**__');
-        return {
-          before,
-          middle: name,
-          after,
-        };
-      }
-      return { middle: this.altName };
-    }
-    return { middle: name };
-  }
 
   render() {
-    const { name, img } = this.updater.prop('').originalValue();
+    const { name, img } = this.updateActions.originalValue();
     // TODO Reset img on right click options
     const hideImg = this.noDefaultImg && img === CONST.DEFAULT_TOKEN;
-    const { before, middle, after } = this.nameParts(name);
     return html`
       ${hideImg && this.disabled
         ? ''
@@ -117,11 +90,6 @@ export class EntityFormHeader extends LitElement {
         update: this.updateEgoName,
         fields: this.nameInput,
       })}
-
-      <!-- <h1 class=${this.disabled ? '' : 'editable-sheet'}>
-        ${before ? html`<span class="name-part">${before}</span>` : ''}
-        ${middle} ${after ? html`<span class="name-part">${after}</span>` : ''}
-      </h1> -->
 
       <ul class="tags">
         <slot name="tag"></slot>

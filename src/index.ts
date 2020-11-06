@@ -63,6 +63,10 @@ import { SleeveFormAquisition } from './entities/components/sleeve-forms/acquisi
 import { HealthItem } from './health/components/health-item/health-item';
 import { SleeveFormItemsList } from './entities/components/sleeve-forms/items-list/sleeve-form-items-list';
 import { ItemTrash } from './entities/components/item-trash/item-trash';
+import { HealthLog } from './health/components/health-log/health-log';
+import { HealthRegenSettingsForm } from './health/components/health-regen-settings-form/health-regen-settings-form';
+import { HealthStateForm } from './health/components/health-state-form/health-state-form';
+import { BiologicalForm } from './entities/components/sleeve-forms/biological/biological-form';
 
 // Generic Components
 Field;
@@ -92,9 +96,15 @@ EntityFormHeader;
 EntityFormLayout;
 EntityFormFooter;
 InfomorphForm;
+BiologicalForm;
 CompendiumList;
 SleeveFormPools;
 SleeveFormAquisition;
 SleeveFormItemsList;
-HealthItem;
 ItemTrash;
+
+// Health Components 
+HealthItem;
+HealthLog;
+HealthRegenSettingsForm;
+HealthStateForm;

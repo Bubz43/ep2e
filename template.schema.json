@@ -2,15 +2,6 @@
   "$ref": "#/definitions/EntityTemplates",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
-    "AccessPrivilege": {
-      "enum": [
-        "public",
-        "user",
-        "security",
-        "admin"
-      ],
-      "type": "string"
-    },
     "AcquisitionData": {
       "additionalProperties": false,
       "properties": {
@@ -300,7 +291,7 @@
         },
         "dots": {
           "items": {
-            "$ref": "#/definitions/StringID%3Cstructure--817-970--807-971--807-973--799-974--697-976--679-976--643-977--0-2274%3E"
+            "$ref": "#/definitions/StringID%3Cstructure--817-970--807-971--807-973--799-974--697-976--679-976--643-977--0-2395%3E"
           },
           "type": "array"
         },
@@ -682,8 +673,8 @@
             "biological": {
               "additionalProperties": false,
               "properties": {
-                "cyberbrain": {
-                  "type": "boolean"
+                "brain": {
+                  "type": "string"
                 },
                 "physicalHealth": {
                   "$ref": "#/definitions/BiologicalHealthData"
@@ -739,7 +730,7 @@
                 }
               },
               "required": [
-                "cyberbrain",
+                "brain",
                 "physicalHealth",
                 "prehensileLimbs",
                 "recoveryConditions",
@@ -2211,17 +2202,8 @@
             "infomorph": {
               "additionalProperties": false,
               "properties": {
-                "localFirewall": {
-                  "type": "boolean"
-                },
                 "meshHealth": {
                   "$ref": "#/definitions/InfomorphHealthData"
-                },
-                "privilege": {
-                  "$ref": "#/definitions/AccessPrivilege"
-                },
-                "subtype": {
-                  "type": "string"
                 },
                 "templates": {
                   "items": [
@@ -2248,10 +2230,7 @@
                 }
               },
               "required": [
-                "localFirewall",
                 "meshHealth",
-                "privilege",
-                "subtype",
                 "templates"
               ],
               "type": "object"
@@ -10048,7 +10027,7 @@
       ],
       "type": "object"
     },
-    "StringID<structure--792-945--782-946--782-948--774-949--696-951--678-951--643-952--0-2244>": {
+    "StringID<structure--792-945--782-946--782-948--774-949--696-951--678-951--643-952--0-2365>": {
       "additionalProperties": false,
       "properties": {
         "armorPiercing": {
@@ -10087,7 +10066,7 @@
       ],
       "type": "object"
     },
-    "StringID<structure--817-970--807-971--807-973--799-974--697-976--679-976--643-977--0-2274>": {
+    "StringID<structure--817-970--807-971--807-973--799-974--697-976--679-976--643-977--0-2395>": {
       "additionalProperties": false,
       "properties": {
         "armorPiercing": {
@@ -10238,7 +10217,7 @@
         },
         "dots": {
           "items": {
-            "$ref": "#/definitions/StringID%3Cstructure--792-945--782-946--782-948--774-949--696-951--678-951--643-952--0-2244%3E"
+            "$ref": "#/definitions/StringID%3Cstructure--792-945--782-946--782-948--774-949--696-951--678-951--643-952--0-2365%3E"
           },
           "type": "array"
         },

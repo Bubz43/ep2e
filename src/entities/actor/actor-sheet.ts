@@ -106,7 +106,7 @@ export class ActorEPSheet implements EntitySheet {
         name:
           actorName !== tokenName
             ? `${actorName} ${
-                tokenName ? `${localize('as').toLocaleLowerCase()} ${tokenName} (${localize("token")})` : ''
+                tokenName ? `- ${localize("token")}: ${tokenName}` : ''
               }`
             : actorName,
         forceFocus: force,

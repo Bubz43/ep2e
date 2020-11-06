@@ -35,7 +35,7 @@ export class Infomorph extends ActorProxyBase<ActorType.Infomorph> {
   }
 
   get subtype() {
-    return this.epData.subtype;
+    return localize(this.type);
   }
 
   get pools() {

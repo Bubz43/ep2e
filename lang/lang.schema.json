@@ -930,6 +930,9 @@
             "change": {
               "type": "string"
             },
+            "changes": {
+              "type": "string"
+            },
             "character": {
               "type": "string"
             },
@@ -4217,6 +4220,7 @@
             "cause",
             "centered",
             "change",
+            "changes",
             "character",
             "characterDetails",
             "charge",

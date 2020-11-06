@@ -49,7 +49,7 @@
       "subtype": "",
       "unarmedDV": "1d6",
       "swarm": false,
-      "cyberbrain": false,
+      "brain": "",
       "recoveryConditions": "normal",
       "size": "medium",
       "physicalHealth": {
@@ -82,9 +82,6 @@
         "PoolData",
         "Conditions"
       ],
-      "localFirewall": true,
-      "subtype": "",
-      "privilege": "public",
       "meshHealth": {
         "baseDurability": 20,
         "damage": 0,

@@ -25,7 +25,7 @@ const renderSpecificSleeveForm = (proxy: Sleeve, token: MaybeToken) => {
   switch (proxy.type) {
     case ActorType.Infomorph:
       return html`<infomorph-form
-          .infomorph=${proxy}
+          .sleeve=${proxy}
           .token=${token}
         ></infomorph-form>
         <entity-form-footer
@@ -33,13 +33,13 @@ const renderSpecificSleeveForm = (proxy: Sleeve, token: MaybeToken) => {
           .updater=${proxy.updater.prop('data').nestedStore()}
         ></entity-form-footer> `;
     case ActorType.Biological:
-      return html`TODO
+      return html`<biological-form .sleeve=${proxy} .token=${token}></biological-form>
         <entity-form-footer
           slot="footer"
           .updater=${proxy.updater.prop('data').nestedStore()}
         ></entity-form-footer> `;
     case ActorType.SyntheticShell:
-      return html`TODO
+      return html`
         <entity-form-footer
           slot="footer"
           .updater=${proxy.updater.prop('data').nestedStore()}

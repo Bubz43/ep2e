@@ -78,22 +78,10 @@ input {
 
 sl-form {
   grid-area: form;
-  // opacity: 0;
-  // will-change: opacity;
   width: 100%;
   &[disabled] {
     pointer-events: none;
   }
-  // &:hover,
-  // &:focus-within {
-  //   opacity: 1;
-  //   transition: opacity 200ms 50ms;
-  //   & + .editable-sheet {
-  //     opacity: 0;
-  //     transition: opacity 200ms 50ms ease-in;
-  //   }
-  // }
-
   input {
     background: transparent;
     border: none;
@@ -117,18 +105,6 @@ sl-form {
     }
   }
 }
-
-// h1 {
-//   pointer-events: none;
-//   font-weight: normal;
-//   grid-area: form;
-//   @include truncate(450px);
-//   display: -webkit-inline-box;
-//   will-change: opacity;
-//   &.editable-sheet {
-//     border-bottom: 1px dashed var(--color-border);
-//   }
-// }
 
 .avatar-button {
   all: unset;

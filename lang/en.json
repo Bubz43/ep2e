@@ -1224,6 +1224,7 @@
     "healed": "Healed",
     "history": "History",
     "inflicted": "Inflicted",
+    "changes": "Changes",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

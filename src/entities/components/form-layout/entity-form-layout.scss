@@ -23,8 +23,8 @@
 
   background: linear-gradient(45deg, var(--color-bg-alt), var(--color-bg));
 
-  ::slotted([slot="header"]) {
-    box-shadow: 0 0 5px black;;
+  ::slotted([slot='header']) {
+    box-shadow: 0 0 5px black;
     // margin-bottom: 0.5rem;
   }
 
@@ -43,13 +43,16 @@
   }
 
   ::slotted([slot='details']) {
-    display: flex;
-    flex-flow: column;
-    padding: 1rem 1.618rem;
+    display: grid;
+    grid-auto-rows: min-content;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
   }
 
   ::slotted([slot='drawer-content']) {
     grid-area: content;
+    width: min-content;
+    min-width: 200px;
   }
 }
 
@@ -108,7 +111,7 @@
   }
 }
 
-slot[name="header"] {
+slot[name='header'] {
   display: block;
   grid-area: header;
 }
@@ -139,7 +142,7 @@ slot[name='tabs'] {
   flex-flow: column;
   grid-area: sidebar;
   padding: 1rem 1.618rem;
-  background: alphav(var(--color-bg), 0.1);
+  background: linear-gradient(to bottom, var(--color-bg), var(--color-bg-alt));
   border-right: 1px solid var(--color-border);
   min-width: 220px;
 }

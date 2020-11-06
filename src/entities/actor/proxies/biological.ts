@@ -3,10 +3,12 @@ import {
   ReadonlyAppliedEffects,
 } from '@src/entities/applied-effects';
 import { ActorType, ItemType } from '@src/entities/entity-types';
-import type { ItemProxy } from '@src/entities/item/item';
+import type { EquippableItem, ItemProxy } from '@src/entities/item/item';
+import type { Trait } from '@src/entities/item/proxies/trait';
 import type { ActorEntity } from '@src/entities/models';
 import { EffectType } from '@src/features/effects';
-import { localize } from '@src/foundry/localization';
+import { notify, NotificationType } from '@src/foundry/foundry-apps';
+import { format, localize } from '@src/foundry/localization';
 import { BiologicalHealth } from '@src/health/biological-health';
 import { HealthType } from '@src/health/health';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
@@ -31,6 +33,10 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
       // TODO: Setup local effects;
     } else this.#outsideEffects = activeEffects;
     this.sleeved = sleeved;
+  }
+
+  get pools() {
+    return this.epData.pools
   }
 
   get activeEffects() {
@@ -59,6 +65,73 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
       });
     }
     return this.#physicalHealth;
+  }
+
+  addNewItemProxy(proxy: ItemProxy | null | undefined) {
+    if (!proxy || this.disabled) return;
+    if (this.hasItemProxy(proxy)) {
+      return notify(
+        NotificationType.Info,
+        format('AlreadyHasItem', {
+          ownerName: this.name,
+          itemName: proxy.name,
+        }),
+      );
+    }
+
+    switch (proxy.type) {
+      case ItemType.Trait: {
+        if (proxy.isMorphTrait) {
+          if (proxy.hasMultipleLevels) {
+            proxy.selectLevelAndAdd(this.itemOperations.add);
+          } else {
+            this.itemOperations.add(proxy.getDataCopy(true));
+          }
+        } else {
+          notify(
+            NotificationType.Error,
+            localize('DESCRIPTIONS', 'OnlyMorphTraits'),
+          );
+        }
+        break;
+      }
+
+      case ItemType.Software: {
+        // TODO
+        break;
+      }
+
+      default:
+        notify(
+          NotificationType.Error,
+          localize('DESCRIPTIONS', 'OnlyInfomorphItems'),
+        );
+        break;
+    }
+  }
+
+  get itemGroups() {
+    const traits: Trait[] = [];
+    const ware: EquippableItem[] = [];
+    const effects = new AppliedEffects();
+    for (const { agent } of this.items) {
+      switch (agent.type) {
+        case ItemType.Trait:
+          traits.push(agent);
+          effects.add(agent.obtainEffects());
+          break;
+
+        case ItemType.Software: {
+          // TODO
+        }
+          
+          break;
+
+        default:
+          break;
+      }
+    }
+    return { traits, ware, effects };
   }
 
   acceptItemAgent(agent: ItemProxy) {
