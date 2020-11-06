@@ -41,7 +41,7 @@ export class InfomorphForm extends SleeveFormBase {
   @property({ attribute: false }) infomorph!: Infomorph;
 
   private handleItemDrop = handleDrop(async ({ data }) => {
-    console.log(data)
+    console.log(data);
     if (data?.type === DropType.Item) {
       this.infomorph.addNewItemProxy(await itemDropToItemProxy(data));
     }
@@ -100,7 +100,9 @@ export class InfomorphForm extends SleeveFormBase {
           </section>
 
           <sl-dropzone @drop=${this.handleItemDrop} ?disabled=${disabled}>
-            <sl-header heading="${localize('traits')} & ${localize('ware')}">
+            <sl-header
+              heading="${localize('traits')} & ${localize('software')}"
+            >
               <mwc-icon
                 slot="icon"
                 data-tooltip=${localize('DESCRIPTIONS', 'AddItemInfo')}
@@ -130,7 +132,7 @@ export class InfomorphForm extends SleeveFormBase {
               ? html`
                   <sleeve-form-items-list
                     .items=${itemGroups.ware}
-                    label=${localize('ware')}
+                    label=${localize('software')}
                   ></sleeve-form-items-list>
                 `
               : ''}

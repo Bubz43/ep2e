@@ -17,6 +17,9 @@
                 "AddItemInfo": {
                   "type": "string"
                 },
+                "OnlyInfomorphItems": {
+                  "type": "string"
+                },
                 "OnlyMorphTraits": {
                   "type": "string"
                 },
@@ -79,7 +82,8 @@
                 "deafened",
                 "OnlyWarePoolBonus",
                 "AddItemInfo",
-                "OnlyMorphTraits"
+                "OnlyMorphTraits",
+                "OnlyInfomorphItems"
               ],
               "type": "object"
             },

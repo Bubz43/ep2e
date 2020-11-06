@@ -1240,7 +1240,8 @@
       "stunned": "You have the wind knocked out of you. You suffer –30 to all physical actions and –10 to mental actions.",
       "OnlyWarePoolBonus": "Only bonuses from traits/ware/abilities/software are shown.",
       "AddItemInfo": "Drop item to add.",
-      "OnlyMorphTraits": "Only morph traits allowed."
+      "OnlyMorphTraits": "Only morph traits allowed.",
+      "OnlyInfomorphItems": "Only morph traits and meshware can be added to an infomorph.",
     },
     "FULL": {
       "cog": "Cognition",

@@ -81,36 +81,18 @@ export class Infomorph extends ActorProxyBase<ActorType.Infomorph> {
 
   get itemGroups() {
     const traits: Trait[] = [];
-    const ware: EquippableItem[] = [];
+    const ware: Software[] = [];
     const effects = new AppliedEffects();
     for (const { agent } of this.items) {
       switch (agent.type) {
-        case ItemType.Psi:
-        case ItemType.Sleight:
-          break;
-
         case ItemType.Trait:
           traits.push(agent);
           effects.add(agent.obtainEffects());
           break;
 
-        case ItemType.Armor:
-        case ItemType.MeleeWeapon:
-        case ItemType.PhysicalTech:
-          ware.push(agent);
-          if ('obtainEffects' in agent) {
-            effects.add(agent.obtainEffects());
-          }
-
-          break;
-
         case ItemType.Software:
           effects.add(agent.obtainEffects());
           ware.push(agent);
-
-          break;
-
-        case ItemType.PhysicalService:
           break;
 
         default:
@@ -131,20 +113,37 @@ export class Infomorph extends ActorProxyBase<ActorType.Infomorph> {
         }),
       );
     }
-    if (proxy.type === ItemType.Trait) {
-      if (proxy.isMorphTrait) {
-        if (proxy.hasMultipleLevels) {
-          proxy.selectLevelAndAdd(this.itemOperations.add)
-        } else {
-          this.itemOperations.add(proxy.getDataCopy(true));
 
+    switch (proxy.type) {
+      case ItemType.Trait: {
+        if (proxy.isMorphTrait) {
+          if (proxy.hasMultipleLevels) {
+            proxy.selectLevelAndAdd(this.itemOperations.add);
+          } else {
+            this.itemOperations.add(proxy.getDataCopy(true));
+          }
+        } else {
+          notify(
+            NotificationType.Error,
+            localize('DESCRIPTIONS', 'OnlyMorphTraits'),
+          );
         }
-      } else {
-        return notify(
-          NotificationType.Error,
-          localize('DESCRIPTIONS', 'OnlyMorphTraits'),
-        );
+        break;
       }
+
+      case ItemType.Software: {
+        const copy = proxy.getDataCopy(true);
+        copy.data.state.equipped = true;
+        this.itemOperations.add(copy);
+        break;
+      }
+
+      default:
+        notify(
+          NotificationType.Error,
+          localize('DESCRIPTIONS', 'OnlyInfomorphItems'),
+        );
+        break;
     }
   }
 }
