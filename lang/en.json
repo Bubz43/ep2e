@@ -1241,7 +1241,7 @@
       "OnlyWarePoolBonus": "Only bonuses from traits/ware/abilities/software are shown.",
       "AddItemInfo": "Drop item to add.",
       "OnlyMorphTraits": "Only morph traits allowed.",
-      "OnlyInfomorphItems": "Only morph traits and meshware can be added to an infomorph.",
+      "OnlyInfomorphItems": "Only morph traits and software can be added to an infomorph."
     },
     "FULL": {
       "cog": "Cognition",

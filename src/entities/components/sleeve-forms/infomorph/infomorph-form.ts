@@ -44,7 +44,7 @@ export class InfomorphForm extends SleeveFormBase {
     console.log(data);
     if (data?.type === DropType.Item) {
       this.infomorph.addNewItemProxy(await itemDropToItemProxy(data));
-    }
+    } else notify(NotificationType.Info, localize("DESCRIPTIONS", "OnlyInfomorphItems"))
   });
 
   render() {
@@ -105,7 +105,7 @@ export class InfomorphForm extends SleeveFormBase {
             >
               <mwc-icon
                 slot="icon"
-                data-tooltip=${localize('DESCRIPTIONS', 'AddItemInfo')}
+                data-tooltip=${localize('DESCRIPTIONS', 'OnlyInfomorphItems')}
                 @mouseover=${tooltip.fromData}
                 >info</mwc-icon
               >
