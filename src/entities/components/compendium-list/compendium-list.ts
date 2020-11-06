@@ -1,6 +1,7 @@
 import { renderTextInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import type { ItemEP } from '@src/entities/item/item';
+import { setDragDrop } from '@src/foundry/drag-and-drop';
 import type { EntitySheet } from '@src/foundry/foundry-cont';
 import { localize } from '@src/foundry/localization';
 import { importFromCompendium } from '@src/foundry/misc-helpers';
@@ -97,14 +98,11 @@ export class CompendiumList extends LitElement {
   private setDragData(ev: DragEvent) {
     const { entity, collection } = this.compendium;
     const { entryId } = (ev.currentTarget as HTMLElement).dataset;
-    ev.dataTransfer?.setData(
-      'text/plain',
-      JSON.stringify({
-        type: entity,
-        pack: collection,
-        id: entryId,
-      }),
-    );
+    setDragDrop(ev, {
+      type: entity,
+      pack: collection as string,
+      id: entryId as string
+    })
   }
 
   private openEntrySheet(ev: Event) {

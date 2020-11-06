@@ -1,7 +1,8 @@
 import { Complexity } from '@src/data-enums';
 import { localize } from '@src/foundry/localization';
 import { compact } from 'remeda';
-import { toMilliseconds, CommonInterval } from './time';
+import { CommonInterval } from './time';
+import { toMilliseconds } from "./modify-milliseconds";
 
 export const complexityGP = {
   [Complexity.Minor]: 1,

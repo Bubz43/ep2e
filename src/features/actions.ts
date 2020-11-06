@@ -3,7 +3,7 @@ import { localize } from '@src/foundry/localization';
 import { clamp } from 'remeda';
 import { safeMerge } from '../utility/helpers';
 import { createFeature } from './feature-helpers';
-import { toMilliseconds } from './time';
+import { toMilliseconds } from "./modify-milliseconds";
 
 export enum ActionType {
   Automatic = 'automatic',

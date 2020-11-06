@@ -94,11 +94,9 @@ slot[name='footer'] {
 #header {
   display: flex;
   flex-flow: row-reverse;
-  align-items: center;
   position: relative;
   cursor: move;
   height: min-content;
-  // background: alphav(var(--color-bg), 0.2);
   background: alphav(var(--color-grey), 0.2);
 
   transition: background 100ms ease-in-out;
@@ -111,7 +109,6 @@ slot[name='footer'] {
   }
   ::slotted([slot='header']) {
     flex: 1;
-    // background: alphav(var(--color-bg-alt), 0.6);
     background: linear-gradient(
       to bottom,
       var(--color-bg-alt),

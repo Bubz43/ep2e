@@ -1,6 +1,8 @@
 import { TraitSource, TraitType, CharacterPoint } from '@src/data-enums';
 import type { ObtainableEffects } from '@src/entities/applied-effects';
 import { localize } from '@src/foundry/localization';
+import { lastEventPosition } from '@src/init';
+import { openMenu } from '@src/open-menu';
 import { notEmpty, toggle } from '@src/utility/helpers';
 import { clamp, compact } from 'remeda';
 import type { ItemType } from '../../entity-types';
@@ -45,6 +47,21 @@ export class Trait
       localize(currentSource),
       triggered ? triggerList : '',
     ];
+  }
+
+  selectLevelAndAdd(addTrait: (data: Trait["data"]) => unknown,) {
+    openMenu({
+      header: { heading: this.name },
+      content: this.levels.map((_, index) => ({
+        label: `${localize("level")} ${index + 1}`,
+        callback: () => {
+          const copy = this.getDataCopy();
+          copy.data.state.level = index;
+          addTrait(copy)
+        }
+      })),
+      position: lastEventPosition
+    })
   }
 
   get tags() {

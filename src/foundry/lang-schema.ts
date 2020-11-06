@@ -1312,7 +1312,7 @@ export type DescriptionEntry =
   | 'unconscious'
   | 'stunned'
   | 'deafened'
-  | 'OnlyWarePoolBonus' | "AddItemInfo"
+  | 'OnlyWarePoolBonus' | "AddItemInfo" | "OnlyMorphTraits"
 
 type F<T extends string, D extends string[]> = {
   [key in T]: D;
@@ -1326,6 +1326,7 @@ export type Formatable = {
   TakeSVWhenWearsOff: ['wearOffStress', 'substanceType'];
   OnCheckFailure: ['aptitude'];
   ArmorReduced: ['armor', 'value'];
+  AlreadyHasItem: ["ownerName", "itemName"];
 };
 
 export interface Lang {

@@ -10,7 +10,7 @@ import { openDialog } from 'web-dialog';
 import {
   Drop,
   DropType,
-  itemDropToItemAgent,
+  itemDropToItemProxy,
 } from '@src/foundry/drag-and-drop';
 
 export type ActorProxyInit<T extends ActorType> = {
@@ -96,7 +96,7 @@ export abstract class ActorProxyBase<T extends ActorType> {
     });
   }
 
-  hasItemAgent(agent: ItemProxy | null | undefined) {
+  hasItemProxy(agent: ItemProxy | null | undefined) {
     return this.items.get(agent?.id)?.agent === agent;
   }
 
@@ -131,7 +131,7 @@ export abstract class ActorProxyBase<T extends ActorType> {
     switch (drop.type) {
       case DropType.Item:
         {
-          const agent = await itemDropToItemAgent(drop);
+          const agent = await itemDropToItemProxy(drop);
           if (!agent) return;
           const allow = this.acceptItemAgent(agent);
           if (allow.accept) this.addItemAgent(agent, true);

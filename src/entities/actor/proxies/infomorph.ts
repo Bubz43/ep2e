@@ -6,7 +6,8 @@ import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { EquippableItem, ItemProxy } from '@src/entities/item/item';
 import type { Software } from '@src/entities/item/proxies/software';
 import type { Trait } from '@src/entities/item/proxies/trait';
-import { localize } from '@src/foundry/localization';
+import { notify, NotificationType } from '@src/foundry/foundry-apps';
+import { format, localize } from '@src/foundry/localization';
 import { HealthType } from '@src/health/health';
 import { InfomorphHealth } from '@src/health/infomorph-health';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
@@ -117,5 +118,33 @@ export class Infomorph extends ActorProxyBase<ActorType.Infomorph> {
       }
     }
     return { traits, ware, effects };
+  }
+
+  addNewItemProxy(proxy: ItemProxy | null | undefined) {
+    if (!proxy || this.disabled) return;
+    if (this.hasItemProxy(proxy)) {
+      return notify(
+        NotificationType.Info,
+        format('AlreadyHasItem', {
+          ownerName: this.name,
+          itemName: proxy.name,
+        }),
+      );
+    }
+    if (proxy.type === ItemType.Trait) {
+      if (proxy.isMorphTrait) {
+        if (proxy.hasMultipleLevels) {
+          proxy.selectLevelAndAdd(this.itemOperations.add)
+        } else {
+          this.itemOperations.add(proxy.getDataCopy(true));
+
+        }
+      } else {
+        return notify(
+          NotificationType.Error,
+          localize('DESCRIPTIONS', 'OnlyMorphTraits'),
+        );
+      }
+    }
   }
 }

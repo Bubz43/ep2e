@@ -12,7 +12,25 @@
 :host([outlined]) {
   outline: 2px dashed var(--color-secondary);
   outline-offset: -2px;
+  position: relative;
   > * {
     pointer-events: none !important;
   }
+  .rejection {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background: alphav(var(--color-negative), 0.5);
+    display: grid;
+    grid-template-areas: "line";
+    place-items: center;
+    pointer-events: none;
+  }
+}
+
+.rejection {
+  display: none;
 }

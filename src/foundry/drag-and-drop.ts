@@ -82,6 +82,10 @@ export enum DropType {
   Effect = 'Effect',
   PsiInfluence = 'PsiInfluence',
   Actor = 'Actor',
+  Scene = 'Scene',
+  JournalEntry = 'JournalEntry',
+  RollTable = 'RollTable',
+  Playlist = 'Playlist',
 }
 
 type MacroDrop = KnownDrop<{ id: string; type: DropType.Macro }>;
@@ -102,11 +106,17 @@ type RollDrop = KnownDrop<{
   flavor: string;
 }>;
 
-export type ActorDrop = KnownDrop<{
-  type: DropType.Actor;
+export type SimpleDrop<T extends DropType> = KnownDrop<{
+  type: T;
   id: string;
   pack?: string;
 }>;
+
+export type ActorDrop = SimpleDrop<DropType.Actor>;
+export type PlayListDrop = SimpleDrop<DropType.Playlist>;
+export type RollTableDrop = SimpleDrop<DropType.RollTable>;
+export type JournalEntryDrop = SimpleDrop<DropType.JournalEntry>;
+export type SceneDrop = SimpleDrop<DropType.Scene>;
 
 export type ItemDrop =
   | KnownDrop<{
@@ -141,6 +151,10 @@ type Drops = {
   [DropType.Effect]: EffectDrop;
   [DropType.PsiInfluence]: PsiInfluenceDrop;
   [DropType.Actor]: ActorDrop;
+  [DropType.JournalEntry]: JournalEntryDrop,
+  [DropType.Playlist]: PlayListDrop,
+  [DropType.Scene]: SceneDrop,
+  [DropType.RollTable]: RollTableDrop
 };
 
 const isMacro = dropChecker(DropType.Macro, ({ id }) => typeof id === 'string');
@@ -200,13 +214,20 @@ const isInfluenceDrop = dropChecker(DropType.PsiInfluence, ({ influence }) => {
   );
 });
 
-const isActorDrop = dropChecker(DropType.Actor, ({ pack, id }) => {
+const simpleDropCheck = ({ pack, id }: { pack?: unknown; id?: unknown; }) => {
   return !!(
     typeof id === 'string' &&
     id.length &&
     (!pack || (typeof pack === 'string' && pack.length))
   );
-});
+}
+
+const isActorDrop = dropChecker(DropType.Actor, simpleDropCheck);
+const isSceneDrop = dropChecker(DropType.Scene, simpleDropCheck);
+const isPlaylistDrop = dropChecker(DropType.Playlist, simpleDropCheck);
+const isRollTableDrop = dropChecker(DropType.RollTable, simpleDropCheck);
+const isJournalEntryDrop = dropChecker(DropType.JournalEntry, simpleDropCheck);
+
 
 const droppedChecks: Record<DropType, (dropped: unknown) => boolean> = {
   [DropType.Macro]: isMacro,
@@ -217,6 +238,10 @@ const droppedChecks: Record<DropType, (dropped: unknown) => boolean> = {
   [DropType.Effect]: isEffectDrop,
   [DropType.PsiInfluence]: isInfluenceDrop,
   [DropType.Actor]: isActorDrop,
+  [DropType.Scene]:isSceneDrop,
+  [DropType.Playlist]: isPlaylistDrop,
+  [DropType.RollTable]: isRollTableDrop,
+  [DropType.JournalEntry]: isJournalEntryDrop
 };
 
 export const isKnownDrop = (droppedData: unknown): droppedData is Drop => {
@@ -247,7 +272,7 @@ export const actorDroptoActorAgent = async (drop: ActorDrop) => {
   return game.actors.get(drop.id)?.agent;
 };
 
-export const itemDropToItemAgent = async (drop: ItemDrop) => {
+export const itemDropToItemProxy = async (drop: ItemDrop) => {
   if ('pack' in drop) {
     const pack = game.packs.get(drop.pack);
     const item = await pack?.getEntity(drop.id);

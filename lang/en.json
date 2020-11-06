@@ -1239,7 +1239,8 @@
       "deafened": "You cannot hear. You suffer –3 to Initiative Tests and –30 to general Perceive Tests.",
       "stunned": "You have the wind knocked out of you. You suffer –30 to all physical actions and –10 to mental actions.",
       "OnlyWarePoolBonus": "Only bonuses from traits/ware/abilities/software are shown.",
-      "AddItemInfo": "Drop item to add."
+      "AddItemInfo": "Drop item to add.",
+      "OnlyMorphTraits": "Only morph traits allowed."
     },
     "FULL": {
       "cog": "Cognition",
@@ -1304,7 +1305,8 @@
       "DotPerTurnNoArmor": "DV {formula} per action turn (armor ignored)",
       "TakeSVWhenWearsOff": "Take SV {wearOffStress} when {substanceType} wears off",
       "OnCheckFailure": "On {aptitude} check failure",
-      "ArmorReduced": "{armor} armor reduced by {value}."
+      "ArmorReduced": "{armor} armor reduced by {value}.",
+      "AlreadyHasItem": "{ownerName} already has {itemName}."
     }
   }
 }

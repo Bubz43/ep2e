@@ -66,9 +66,10 @@ export const openMenu = ({
   header,
 }: {
   content: TemplateResult | MWCMenuOption[];
-  position:
+  position?:
     | HTMLElement
-    | { x: number; y: number; currentTarget: EventTarget | null };
+    | { x: number; y: number; currentTarget: EventTarget | null }
+    | null;
   header?: { heading: string; subheading?: string; img?: string } | null;
 }) => {
   if (Array.isArray(content) && content.length === 0) return;
@@ -79,8 +80,10 @@ export const openMenu = ({
     setTimeout(() => openMenu({ content, position, header }), 100);
     return;
   }
-
-  if (position instanceof HTMLElement) {
+  if (!position) {
+    menu.x = window.innerWidth / 2;
+    menu.y = window.innerHeight / 2;
+  } else if (position instanceof HTMLElement) {
     const { top, left } = position.getBoundingClientRect();
     menu.x = top / 2;
     menu.x = left / 2;

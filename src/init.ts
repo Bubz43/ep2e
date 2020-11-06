@@ -46,6 +46,14 @@ for (const link of [
 export let gameSettings: ReturnType<typeof registerEPSettings>;
 export let overlay: EPOverlay;
 export let tooltip: ToolTip;
+export let lastEventPosition: DragEvent | MouseEvent | null = null;
+
+const setLastPosition = (ev: DragEvent | MouseEvent) => lastEventPosition = ev;
+window.addEventListener("mousedown", setLastPosition, { capture: true })
+window.addEventListener("mouseup", setLastPosition, { capture: true })
+window.addEventListener("click", setLastPosition, { capture: true })
+window.addEventListener("drop", setLastPosition, { capture: true })
+
 
 Hooks.once('init', () => {
   gameSettings = registerEPSettings();
@@ -193,6 +201,9 @@ Hooks.once('ready', async () => {
     },
   });
 });
+
+
+
 
 let lastClicked: HTMLElement | null = null;
 

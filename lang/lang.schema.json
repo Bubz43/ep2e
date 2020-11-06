@@ -17,6 +17,9 @@
                 "AddItemInfo": {
                   "type": "string"
                 },
+                "OnlyMorphTraits": {
+                  "type": "string"
+                },
                 "OnlyWarePoolBonus": {
                   "type": "string"
                 },
@@ -75,13 +78,17 @@
                 "stunned",
                 "deafened",
                 "OnlyWarePoolBonus",
-                "AddItemInfo"
+                "AddItemInfo",
+                "OnlyMorphTraits"
               ],
               "type": "object"
             },
             "FORMATABLE": {
               "additionalProperties": false,
               "properties": {
+                "AlreadyHasItem": {
+                  "type": "string"
+                },
                 "ArmorReduced": {
                   "type": "string"
                 },
@@ -107,7 +114,8 @@
                 "DotPerTurnNoArmor",
                 "TakeSVWhenWearsOff",
                 "OnCheckFailure",
-                "ArmorReduced"
+                "ArmorReduced",
+                "AlreadyHasItem"
               ],
               "type": "object"
             },

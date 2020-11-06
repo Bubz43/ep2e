@@ -7,12 +7,15 @@ import {
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import { enumValues, PoolType } from '@src/data-enums';
 import type { Infomorph } from '@src/entities/actor/proxies/infomorph';
+import { ItemType } from '@src/entities/entity-types';
 import {
+  Drop,
   DropType,
   handleDrop,
-  itemDropToItemAgent,
+  itemDropToItemProxy,
 } from '@src/foundry/drag-and-drop';
-import { localize } from '@src/foundry/localization';
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
+import { format, localize } from '@src/foundry/localization';
 import {
   createHealthModification,
   formatHealthModificationMode,
@@ -37,10 +40,10 @@ export class InfomorphForm extends SleeveFormBase {
 
   @property({ attribute: false }) infomorph!: Infomorph;
 
-  private handleItemDrop = handleDrop(async ({ ev, drop, data }) => {
+  private handleItemDrop = handleDrop(async ({ data }) => {
+    console.log(data)
     if (data?.type === DropType.Item) {
-      const agent = await itemDropToItemAgent(data);
-      console.log(agent);
+      this.infomorph.addNewItemProxy(await itemDropToItemProxy(data));
     }
   });
 
@@ -51,7 +54,6 @@ export class InfomorphForm extends SleeveFormBase {
       itemGroups,
       pools,
       meshHealth,
-      description,
       type,
       sleeved,
       itemTrash,
@@ -97,7 +99,7 @@ export class InfomorphForm extends SleeveFormBase {
             ></health-item>
           </section>
 
-          <sl-dropzone @drop=${this.handleItemDrop}>
+          <sl-dropzone @drop=${this.handleItemDrop} ?disabled=${disabled}>
             <sl-header heading="${localize('traits')} & ${localize('ware')}">
               <mwc-icon
                 slot="icon"

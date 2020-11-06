@@ -1,4 +1,5 @@
-import { customElement, LitElement, property, html } from 'lit-element';
+import { dragSource, Drop } from '@src/foundry/drag-and-drop';
+import { customElement, LitElement, property, html, internalProperty } from 'lit-element';
 import styles from './dropzone.scss';
 
 const dragEvents = ['dragleave', 'dragend', 'drop'] as const;
@@ -21,23 +22,27 @@ export class DropZone extends LitElement {
     DropZone._highlighted = cell;
   }
 
+  @property({ type: Boolean }) disabled = false;
+  
+
   firstUpdated() {
-    this.addEventListener('dragover', () => this.setOutline());
-    this.addEventListener('dragenter', () => this.setOutline());
+    this.addEventListener('dragover', this.setOutline);
+    this.addEventListener('dragenter', this.setOutline);
 
     for (const event of dragEvents) {
       this.addEventListener(event, this.removeBackgroundHighlight);
     }
   }
 
-  private setOutline() {
+  private setOutline = () => {
+    if (this.disabled) return;
     DropZone.highlighted = this;
   }
 
   private removeBackgroundHighlight = () => (DropZone.highlighted = null);
 
   render() {
-    return html` <slot></slot> `;
+    return html` <slot></slot>`;
   }
 }
 
