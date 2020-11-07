@@ -41,8 +41,6 @@ export class EntityFormLayout extends LitElement {
 
   @query('.drawer', true) drawer!: HTMLElement;
 
-  @query('.sidebar') sidebar?: HTMLElement;
-
   private resizeObs?: ResizeObserver;
 
   private allowDrawerClose = false;

@@ -57,16 +57,16 @@ import { CompendiumList } from './entities/components/compendium-list/compendium
 import { EntityFormFooter } from './entities/components/form-layout/entity-form-footer';
 import { EntityFormHeader } from './entities/components/form-layout/entity-form-header';
 import { EntityFormLayout } from './entities/components/form-layout/entity-form-layout';
-import { InfomorphForm } from './entities/components/sleeve-forms/infomorph/infomorph-form';
-import { SleeveFormPools } from './entities/components/sleeve-forms/pools/sleeve-form-pools';
-import { SleeveFormAquisition } from './entities/components/sleeve-forms/acquisition/sleeve-form-acquisition';
+import { InfomorphForm } from './entities/actor/components/sleeve-forms/infomorph/infomorph-form';
+import { SleeveFormPools } from './entities/actor/components/sleeve-forms/pools/sleeve-form-pools';
+import { SleeveFormAquisition } from './entities/actor/components/sleeve-forms/acquisition/sleeve-form-acquisition';
 import { HealthItem } from './health/components/health-item/health-item';
-import { SleeveFormItemsList } from './entities/components/sleeve-forms/items-list/sleeve-form-items-list';
-import { ItemTrash } from './entities/components/item-trash/item-trash';
+import { SleeveFormItemsList } from './entities/actor/components/sleeve-forms/items-list/sleeve-form-items-list';
+import { ItemTrash } from './entities/actor/components/item-trash/item-trash';
 import { HealthLog } from './health/components/health-log/health-log';
 import { HealthRegenSettingsForm } from './health/components/health-regen-settings-form/health-regen-settings-form';
 import { HealthStateForm } from './health/components/health-state-form/health-state-form';
-import { BiologicalForm } from './entities/components/sleeve-forms/biological/biological-form';
+import { BiologicalForm } from './entities/actor/components/sleeve-forms/biological/biological-form';
 import { EntityFormSidebarDivider } from './entities/components/form-layout/entity-form-sidebar-divider';
 
 // Generic Components

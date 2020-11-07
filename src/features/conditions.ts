@@ -6,7 +6,6 @@ import { foundryIcon, localImage } from '@src/utility/images';
 import { ActionSubtype } from './actions';
 import { ArmorType } from './active-armor';
 import { createEffect, Effect } from './effects';
-import { createFeature } from './feature-helpers';
 import { SkillType } from './skills';
 import { TagType } from './tags';
 import { CommonInterval } from './time';
@@ -26,10 +25,7 @@ export enum ConditionType {
 
 const conditionIconPairs = [
   [ConditionType.Blinded, foundryIcon('blind')],
-  [
-    ConditionType.Confused,
-    localImage('images/icons/condition/uncertainty.svg'),
-  ],
+  [ConditionType.Confused, localImage('icons/condition/uncertainty.svg')],
   [ConditionType.Dazed, foundryIcon('daze')],
   [ConditionType.Deafened, foundryIcon('deaf')],
   [ConditionType.Grappled, foundryIcon('net')],
@@ -37,7 +33,7 @@ const conditionIconPairs = [
   [ConditionType.Prone, foundryIcon('falling')],
   [ConditionType.Unconscious, foundryIcon('unconscious')],
   [ConditionType.Incapacitated, foundryIcon('sleep')],
-  [ConditionType.Stunned, localImage('images/icons/condition/oppression.svg')],
+  [ConditionType.Stunned, localImage('icons/condition/oppression.svg')],
 ] as const;
 
 export const conditionIcons = fromPairs(conditionIconPairs);

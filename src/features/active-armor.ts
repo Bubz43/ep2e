@@ -1,10 +1,7 @@
 import { enumValues } from '@src/data-enums';
-import type { ActorType } from '@src/entities/entity-types';
-import { localize } from '@src/foundry/localization';
-import { nonNegative, notEmpty } from '@src/utility/helpers';
+import { nonNegative } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
-import { clamp, pipe } from 'remeda';
-import { ActionSubtype } from './actions';
+import { clamp } from 'remeda';
 
 export enum ArmorType {
   Energy = 'energy',
@@ -171,9 +168,7 @@ export class ActiveArmor extends Map<ArmorKey, number> {
 
   get icon() {
     return localImage(
-      `images/icons/armor/${
-        this.excessLayers ? 'layered-armor' : 'shield'
-      }.svg`,
+      `icons/armor/${this.excessLayers ? 'layered-armor' : 'shield'}.svg`,
     );
   }
 

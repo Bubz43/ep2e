@@ -100,7 +100,7 @@ export class ItemEPSheet implements EntitySheet {
       {
         key: this.item,
         content: html`${this.windowHeaderButtons} ${this.content}`,
-        name: this.item.name,
+        name: this.item.agent.fullName,
         forceFocus: force,
         adjacentEl: !this.rendered && this.getAdjacentEl(),
       },

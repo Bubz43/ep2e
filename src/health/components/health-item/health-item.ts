@@ -2,7 +2,7 @@ import { LazyRipple } from '@src/components/mixins/lazy-ripple';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import type { Health } from '@src/health/health-mixin';
-import { customElement, LitElement, property, html, query } from 'lit-element';
+import { customElement, html, LitElement, property, query } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import mix from 'mix-with/lib';
@@ -106,7 +106,7 @@ export class HealthItem<T extends Health = Health> extends mix(LitElement).with(
                     ? html`
                         <div title=${wound.woundsIgnored.label}>
                           <img
-                            src="${EP.Path}/images/icons/health/interdiction.svg"
+                            src="${EP.Path}/icons/health/interdiction.svg"
                             class="wound-icon ignored"
                           /><span class="wound-value"
                             >${wound.woundsIgnored.value}</span

@@ -97,7 +97,7 @@ class MentalHealthBase implements CommonHealth {
   }
 
   get data() {
-    return this.init.data
+    return this.init.data;
   }
 
   get type() {
@@ -105,11 +105,11 @@ class MentalHealthBase implements CommonHealth {
   }
 
   get icon() {
-    return localImage('images/icons/health/self-love.svg');
+    return localImage('icons/health/self-love.svg');
   }
 
   get woundIcon() {
-    return localImage('images/icons/health/stoned-skull.svg');
+    return localImage('icons/health/stoned-skull.svg');
   }
 
   get source() {
@@ -127,7 +127,7 @@ class MentalHealthBase implements CommonHealth {
   }
 
   resetLog() {
-    return this.init.updater.prop("log").commit([])
+    return this.init.updater.prop('log').commit([]);
   }
 }
 

@@ -1,6 +1,6 @@
 import { mapProps } from '@src/utility/field-values';
 import { localImage } from '@src/utility/images';
-import { pipe, merge } from 'remeda';
+import { merge, pipe } from 'remeda';
 import {
   applyHealthModification,
   BasicHealthData,
@@ -54,9 +54,8 @@ class InfomorphHealthBase implements CommonHealth {
     this.wound = wound;
   }
 
-  
   get data() {
-    return this.init.data
+    return this.init.data;
   }
 
   get type() {
@@ -64,11 +63,11 @@ class InfomorphHealthBase implements CommonHealth {
   }
 
   get icon() {
-    return localImage(`images/icons/health/artificial-intelligence.svg`);
+    return localImage(`icons/health/artificial-intelligence.svg`);
   }
 
   get woundIcon() {
-    return localImage(`images/icons/health/cpu-shot.svg`);
+    return localImage(`icons/health/cpu-shot.svg`);
   }
 
   get source() {
@@ -82,7 +81,7 @@ class InfomorphHealthBase implements CommonHealth {
   }
 
   resetLog() {
-    return this.init.updater.prop("log").commit([])
+    return this.init.updater.prop('log').commit([]);
   }
 }
 

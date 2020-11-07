@@ -26,10 +26,13 @@ export class ToolTip extends LitElement {
 
   firstUpdated() {
     this.addEventListener('mouseleave', () => this.detach(true));
-    window.addEventListener('wheel', () => this.detach(true), {
-      passive: true,
-      capture: true,
-    });
+    window.addEventListener(
+      'wheel',
+      () => {
+        if (this.visible) this.detach(true);
+      },
+      { passive: true, capture: true },
+    );
   }
 
   fromData = ({ currentTarget: el }: Event) => {

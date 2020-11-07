@@ -66,9 +66,8 @@ class SyntheticHealthBase implements CommonHealth {
     if (!init.isSwarm) this.wound = wound;
   }
 
-  
   get data() {
-    return this.init.data
+    return this.init.data;
   }
 
   get type() {
@@ -80,11 +79,11 @@ class SyntheticHealthBase implements CommonHealth {
   }
 
   get icon() {
-    return localImage('images/icons/health/techno-heart.svg');
+    return localImage('icons/health/techno-heart.svg');
   }
 
   get woundIcon() {
-    return localImage('images/icons/health/cracked-disc.svg');
+    return localImage('icons/health/cracked-disc.svg');
   }
 
   applyModification(modification: HealthModification) {
@@ -94,7 +93,7 @@ class SyntheticHealthBase implements CommonHealth {
   }
 
   resetLog() {
-    return this.init.updater.prop("log").commit([])
+    return this.init.updater.prop('log').commit([]);
   }
 }
 

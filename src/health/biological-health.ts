@@ -67,9 +67,8 @@ class BiologicalHealthBase implements CommonHealth {
     if (!init.isSwarm) this.wound = wound;
   }
 
-  
   get data() {
-    return this.init.data
+    return this.init.data;
   }
 
   get type() {
@@ -81,11 +80,11 @@ class BiologicalHealthBase implements CommonHealth {
   }
 
   get icon() {
-    return localImage('images/icons/health/heart-organ.svg');
+    return localImage('icons/health/heart-organ.svg');
   }
 
   get woundIcon() {
-    return localImage('images/icons/health/ragged-wound.svg');
+    return localImage('icons/health/ragged-wound.svg');
   }
 
   applyModification(modification: HealthModification) {
@@ -95,7 +94,7 @@ class BiologicalHealthBase implements CommonHealth {
   }
 
   resetLog() {
-    return this.init.updater.prop("log").commit([])
+    return this.init.updater.prop('log').commit([]);
   }
 }
 

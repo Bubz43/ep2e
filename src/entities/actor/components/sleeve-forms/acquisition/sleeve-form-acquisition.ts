@@ -10,7 +10,7 @@ import { localize } from '@src/foundry/localization';
 import type { AcquisitionData } from '@src/foundry/template-schema';
 import type { FieldPropsRenderer } from '@src/utility/field-values';
 import { customElement, LitElement, property, html } from 'lit-element';
-import { renderMorphAcquisition } from '../../sleeve-acquisition';
+import { renderMorphAcquisition } from '../../../../components/sleeve-acquisition';
 import styles from './sleeve-form-acquisition.scss';
 
 const renderAcquisitionFields: FieldPropsRenderer<AcquisitionData> = ({
