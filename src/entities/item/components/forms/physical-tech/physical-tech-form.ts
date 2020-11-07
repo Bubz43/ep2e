@@ -6,7 +6,7 @@ import {
 } from '@src/components/field/fields';
 import { renderUpdaterForm } from '@src/components/form/forms';
 import { DeviceType, enumValues, FabType, PhysicalWare } from '@src/data-enums';
-import { entityFormDetailsStyles } from '@src/entities/components/form-layout/entity-form-details-style';
+import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
@@ -21,7 +21,7 @@ export class PhysicalTechForm extends ItemFormBase {
     return 'physical-tech-form' as const;
   }
 
-  static styles = [entityFormDetailsStyles, styles];
+  static styles = [entityFormCommonStyles, styles];
 
   @property({ attribute: false }) item!: PhysicalTech;
 

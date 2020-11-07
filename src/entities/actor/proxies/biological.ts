@@ -4,6 +4,7 @@ import {
 } from '@src/entities/applied-effects';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { EquippableItem, ItemProxy } from '@src/entities/item/item';
+import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import type { Software } from '@src/entities/item/proxies/software';
 import type { Trait } from '@src/entities/item/proxies/trait';
 import type { ActorEntity } from '@src/entities/models';
@@ -54,13 +55,14 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
 
   @LazyGetter()
   get availableBrains() {
-    return new Map(
-      flatMap([...this.items], ({ agent }) =>
-        agent.type === ItemType.PhysicalTech && agent.isBrain
-          ? ([agent.id, agent] as const)
-          : [],
-      ),
-    );
+    const things = new Map<string, PhysicalTech>();
+    for (const {agent} of [...this.items]) {
+      if (agent.type === ItemType.PhysicalTech && agent.isBrain) {
+        things.set(agent.id, agent)
+      }
+    }
+    return things;
+
   }
 
   get subtype() {
@@ -76,11 +78,11 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
   }
 
   get reachBonus() {
-    return this.isSwarm ? 0 : this.epData.reach
+    return this.isSwarm ? 0 : this.epData.reach;
   }
 
   get prehensileLimbs() {
-    return this.epData.prehensileLimbs
+    return this.epData.prehensileLimbs;
   }
 
   @LazyGetter()
@@ -124,13 +126,6 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
         break;
       }
 
-      case ItemType.Software: {
-        const copy = proxy.getDataCopy(true);
-        copy.data.state.equipped = true;
-        this.itemOperations.add(copy);
-        break;
-      }
-
       case ItemType.Armor:
       case ItemType.BeamWeapon:
       case ItemType.Firearm:
@@ -143,7 +138,10 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
           copy.data.state.equipped = true;
           this.itemOperations.add(copy);
         } else {
-          localize('DESCRIPTIONS', 'OnlyWareItems');
+          notify(
+            NotificationType.Error,
+            localize('DESCRIPTIONS', 'OnlyWareItems'),
+          );
         }
         break;
       }
@@ -161,7 +159,6 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
   get itemGroups() {
     const traits: Trait[] = [];
     const ware: EquippableItem[] = [];
-    const software: Software[] = [];
     const effects = new AppliedEffects();
     for (const { agent } of this.items) {
       switch (agent.type) {
@@ -184,16 +181,11 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
           break;
         }
 
-        case ItemType.Software: {
-          effects.add(agent.obtainEffects());
-          software.push(agent);
-          break;
-        }
 
         default:
           break;
       }
     }
-    return { traits, ware, software, effects };
+    return { traits, ware, effects };
   }
 }

@@ -1,7 +1,7 @@
 import { renderNumberField } from '@src/components/field/fields';
 import { renderUpdaterForm } from '@src/components/form/forms';
 import type { Infomorph } from '@src/entities/actor/proxies/infomorph';
-import { entityFormDetailsStyles } from '@src/entities/components/form-layout/entity-form-details-style';
+import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import {
   DropType,
   handleDrop,
@@ -22,12 +22,11 @@ export class InfomorphForm extends SleeveFormBase {
     return 'infomorph-form' as const;
   }
 
-  static styles = [entityFormDetailsStyles, styles];
+  static styles = [entityFormCommonStyles, styles];
 
   @property({ attribute: false }) sleeve!: Infomorph;
 
   private handleItemDrop = handleDrop(async ({ data }) => {
-    console.log(data);
     if (data?.type === DropType.Item) {
       this.sleeve.addNewItemProxy(await itemDropToItemProxy(data));
     } else

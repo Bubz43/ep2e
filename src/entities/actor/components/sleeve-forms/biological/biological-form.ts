@@ -11,7 +11,7 @@ import {
 } from '@src/components/form/forms';
 import { enumValues } from '@src/data-enums';
 import type { Biological } from '@src/entities/actor/proxies/biological';
-import { entityFormDetailsStyles } from '@src/entities/components/form-layout/entity-form-details-style';
+import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { renderMovementRateFields } from '@src/features/components/movement-rate-fields';
 import { addUpdateRemoveFeature, idProp } from '@src/features/feature-helpers';
 import { defaultMovement, Movement } from '@src/features/movement';
@@ -37,7 +37,7 @@ import { renderPoolEditForm } from '../pools/pool-edit-form';
 import { SleeveFormBase } from '../sleeve-form-base';
 import styles from './biological-form.scss';
 
-const itemGroupKeys = ['ware', 'software', 'traits'] as const;
+const itemGroupKeys = ['ware', 'traits'] as const;
 
 @customElement('biological-form')
 export class BiologicalForm extends SleeveFormBase {
@@ -45,7 +45,7 @@ export class BiologicalForm extends SleeveFormBase {
     return 'biological-form' as const;
   }
 
-  static styles = [entityFormDetailsStyles, styles];
+  static styles = [entityFormCommonStyles, styles];
 
   @property({ attribute: false }) sleeve!: Biological;
 
@@ -54,7 +54,6 @@ export class BiologicalForm extends SleeveFormBase {
   );
 
   private handleItemDrop = handleDrop(async ({ data }) => {
-    console.log(data);
     if (data?.type === DropType.Item) {
       this.sleeve.addNewItemProxy(await itemDropToItemProxy(data));
     } else
@@ -103,6 +102,15 @@ export class BiologicalForm extends SleeveFormBase {
             prehensileLimbs,
             brain,
           }) => [
+            notEmpty(availableBrains)
+              ? html`
+                  ${renderSelectField(brain, [...availableBrains.keys()], {
+                    emptyText: localize('default'),
+                    altLabel: (key) => availableBrains.get(key)!.fullName,
+                  })}
+                  <entity-form-sidebar-divider></entity-form-sidebar-divider>
+                `
+              : '',
             renderTextField(subtype),
             renderTextField(sex),
             html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
@@ -118,15 +126,6 @@ export class BiologicalForm extends SleeveFormBase {
                   renderNumberField(reach, { min: 0, max: 30, step: 10 }),
                 ],
             renderFormulaField(unarmedDV),
-            notEmpty(availableBrains)
-              ? html`
-                  <entity-form-sidebar-divider></entity-form-sidebar-divider>
-                  ${renderSelectField(brain, [...availableBrains.keys()], {
-                    emptyText: localize('default'),
-                    altLabel: (key) => availableBrains.get(key)!.fullName,
-                  })}
-                `
-              : '',
           ],
         })}
 

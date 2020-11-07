@@ -10,7 +10,7 @@
 :host {
   display: grid;
 
-  width: 750px;
+  width: 710px;
   min-width: 100%;
   min-height: 100%;
   grid-template-rows: min-content min-content 1fr;
@@ -57,7 +57,7 @@
 }
 
 :host([nosidebar]) {
-  width: 550px;
+  width: 540px;
 }
 
 .drawer-content,
