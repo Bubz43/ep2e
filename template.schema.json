@@ -661,6 +661,9 @@
         },
         {
           "$ref": "#/definitions/SkillEffect"
+        },
+        {
+          "$ref": "#/definitions/MovementEffect"
         }
       ]
     },
@@ -675,6 +678,9 @@
               "properties": {
                 "brain": {
                   "type": "string"
+                },
+                "isSwarm": {
+                  "type": "boolean"
                 },
                 "physicalHealth": {
                   "$ref": "#/definitions/BiologicalHealthData"
@@ -694,9 +700,6 @@
                 },
                 "subtype": {
                   "type": "string"
-                },
-                "swarm": {
-                  "type": "boolean"
                 },
                 "templates": {
                   "items": [
@@ -731,13 +734,13 @@
               },
               "required": [
                 "brain",
+                "isSwarm",
                 "physicalHealth",
                 "prehensileLimbs",
                 "recoveryConditions",
                 "sex",
                 "size",
                 "subtype",
-                "swarm",
                 "templates",
                 "unarmedDV"
               ],
@@ -2273,6 +2276,9 @@
                   ],
                   "type": "object"
                 },
+                "isSwarm": {
+                  "type": "boolean"
+                },
                 "meshHealth": {
                   "$ref": "#/definitions/InfomorphHealthData"
                 },
@@ -2312,9 +2318,6 @@
                     }
                   ]
                 },
-                "swarm": {
-                  "type": "boolean"
-                },
                 "templates": {
                   "items": [
                     {
@@ -2350,6 +2353,7 @@
                 "defaultDevice",
                 "hostType",
                 "inherentArmor",
+                "isSwarm",
                 "meshHealth",
                 "painFilter",
                 "passengers",
@@ -2359,7 +2363,6 @@
                 "shellType",
                 "size",
                 "subtype",
-                "swarm",
                 "templates",
                 "unarmedDV"
               ],
@@ -2418,19 +2421,23 @@
                       "items": {
                         "additionalProperties": false,
                         "properties": {
+                          "base": {
+                            "type": "number"
+                          },
+                          "full": {
+                            "type": "number"
+                          },
                           "id": {
                             "type": "string"
-                          },
-                          "range": {
-                            "$ref": "#/definitions/MovementRange"
                           },
                           "type": {
                             "$ref": "#/definitions/Movement"
                           }
                         },
                         "required": [
+                          "base",
+                          "full",
                           "id",
-                          "range",
                           "type"
                         ],
                         "type": "object"
@@ -2894,6 +2901,39 @@
                           "skillType",
                           "specialization",
                           "total",
+                          "type"
+                        ],
+                        "type": "object"
+                      },
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "base": {
+                            "type": "number"
+                          },
+                          "full": {
+                            "type": "number"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "mode": {
+                            "$ref": "#/definitions/MovementEffectMode"
+                          },
+                          "movementType": {
+                            "$ref": "#/definitions/Movement"
+                          },
+                          "type": {
+                            "const": "movement",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "base",
+                          "full",
+                          "id",
+                          "mode",
+                          "movementType",
                           "type"
                         ],
                         "type": "object"
@@ -4002,6 +4042,39 @@
                           "type"
                         ],
                         "type": "object"
+                      },
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "base": {
+                            "type": "number"
+                          },
+                          "full": {
+                            "type": "number"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "mode": {
+                            "$ref": "#/definitions/MovementEffectMode"
+                          },
+                          "movementType": {
+                            "$ref": "#/definitions/Movement"
+                          },
+                          "type": {
+                            "const": "movement",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "base",
+                          "full",
+                          "id",
+                          "mode",
+                          "movementType",
+                          "type"
+                        ],
+                        "type": "object"
                       }
                     ]
                   },
@@ -4415,6 +4488,39 @@
                           "skillType",
                           "specialization",
                           "total",
+                          "type"
+                        ],
+                        "type": "object"
+                      },
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "base": {
+                            "type": "number"
+                          },
+                          "full": {
+                            "type": "number"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "mode": {
+                            "$ref": "#/definitions/MovementEffectMode"
+                          },
+                          "movementType": {
+                            "$ref": "#/definitions/Movement"
+                          },
+                          "type": {
+                            "const": "movement",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "base",
+                          "full",
+                          "id",
+                          "mode",
+                          "movementType",
                           "type"
                         ],
                         "type": "object"
@@ -5267,6 +5373,39 @@
                           "type"
                         ],
                         "type": "object"
+                      },
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "base": {
+                            "type": "number"
+                          },
+                          "full": {
+                            "type": "number"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "mode": {
+                            "$ref": "#/definitions/MovementEffectMode"
+                          },
+                          "movementType": {
+                            "$ref": "#/definitions/Movement"
+                          },
+                          "type": {
+                            "const": "movement",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "base",
+                          "full",
+                          "id",
+                          "mode",
+                          "movementType",
+                          "type"
+                        ],
+                        "type": "object"
                       }
                     ]
                   },
@@ -5666,6 +5805,39 @@
                           "type"
                         ],
                         "type": "object"
+                      },
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "base": {
+                            "type": "number"
+                          },
+                          "full": {
+                            "type": "number"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "mode": {
+                            "$ref": "#/definitions/MovementEffectMode"
+                          },
+                          "movementType": {
+                            "$ref": "#/definitions/Movement"
+                          },
+                          "type": {
+                            "const": "movement",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "base",
+                          "full",
+                          "id",
+                          "mode",
+                          "movementType",
+                          "type"
+                        ],
+                        "type": "object"
                       }
                     ]
                   },
@@ -6062,6 +6234,39 @@
                           "skillType",
                           "specialization",
                           "total",
+                          "type"
+                        ],
+                        "type": "object"
+                      },
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "base": {
+                            "type": "number"
+                          },
+                          "full": {
+                            "type": "number"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "mode": {
+                            "$ref": "#/definitions/MovementEffectMode"
+                          },
+                          "movementType": {
+                            "$ref": "#/definitions/Movement"
+                          },
+                          "type": {
+                            "const": "movement",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "base",
+                          "full",
+                          "id",
+                          "mode",
+                          "movementType",
                           "type"
                         ],
                         "type": "object"
@@ -6563,6 +6768,39 @@
                           "type"
                         ],
                         "type": "object"
+                      },
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "base": {
+                            "type": "number"
+                          },
+                          "full": {
+                            "type": "number"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "mode": {
+                            "$ref": "#/definitions/MovementEffectMode"
+                          },
+                          "movementType": {
+                            "$ref": "#/definitions/Movement"
+                          },
+                          "type": {
+                            "const": "movement",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "base",
+                          "full",
+                          "id",
+                          "mode",
+                          "movementType",
+                          "type"
+                        ],
+                        "type": "object"
                       }
                     ]
                   },
@@ -6962,6 +7200,39 @@
                           "skillType",
                           "specialization",
                           "total",
+                          "type"
+                        ],
+                        "type": "object"
+                      },
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "base": {
+                            "type": "number"
+                          },
+                          "full": {
+                            "type": "number"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "mode": {
+                            "$ref": "#/definitions/MovementEffectMode"
+                          },
+                          "movementType": {
+                            "$ref": "#/definitions/Movement"
+                          },
+                          "type": {
+                            "const": "movement",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "base",
+                          "full",
+                          "id",
+                          "mode",
+                          "movementType",
                           "type"
                         ],
                         "type": "object"
@@ -7676,6 +7947,39 @@
                               "type"
                             ],
                             "type": "object"
+                          },
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "base": {
+                                "type": "number"
+                              },
+                              "full": {
+                                "type": "number"
+                              },
+                              "id": {
+                                "type": "string"
+                              },
+                              "mode": {
+                                "$ref": "#/definitions/MovementEffectMode"
+                              },
+                              "movementType": {
+                                "$ref": "#/definitions/Movement"
+                              },
+                              "type": {
+                                "const": "movement",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "base",
+                              "full",
+                              "id",
+                              "mode",
+                              "movementType",
+                              "type"
+                            ],
+                            "type": "object"
                           }
                         ]
                       },
@@ -8139,6 +8443,39 @@
                               "skillType",
                               "specialization",
                               "total",
+                              "type"
+                            ],
+                            "type": "object"
+                          },
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "base": {
+                                "type": "number"
+                              },
+                              "full": {
+                                "type": "number"
+                              },
+                              "id": {
+                                "type": "string"
+                              },
+                              "mode": {
+                                "$ref": "#/definitions/MovementEffectMode"
+                              },
+                              "movementType": {
+                                "$ref": "#/definitions/Movement"
+                              },
+                              "type": {
+                                "const": "movement",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "base",
+                              "full",
+                              "id",
+                              "mode",
+                              "movementType",
                               "type"
                             ],
                             "type": "object"
@@ -8778,6 +9115,39 @@
                                 "type"
                               ],
                               "type": "object"
+                            },
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "base": {
+                                  "type": "number"
+                                },
+                                "full": {
+                                  "type": "number"
+                                },
+                                "id": {
+                                  "type": "string"
+                                },
+                                "mode": {
+                                  "$ref": "#/definitions/MovementEffectMode"
+                                },
+                                "movementType": {
+                                  "$ref": "#/definitions/Movement"
+                                },
+                                "type": {
+                                  "const": "movement",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "base",
+                                "full",
+                                "id",
+                                "mode",
+                                "movementType",
+                                "type"
+                              ],
+                              "type": "object"
                             }
                           ]
                         },
@@ -9413,13 +9783,39 @@
       ],
       "type": "string"
     },
-    "MovementRange": {
+    "MovementEffect": {
+      "additionalProperties": false,
+      "properties": {
+        "base": {
+          "type": "number"
+        },
+        "full": {
+          "type": "number"
+        },
+        "mode": {
+          "$ref": "#/definitions/MovementEffectMode"
+        },
+        "movementType": {
+          "$ref": "#/definitions/Movement"
+        },
+        "type": {
+          "const": "movement",
+          "type": "string"
+        }
+      },
+      "required": [
+        "base",
+        "full",
+        "mode",
+        "movementType",
+        "type"
+      ],
+      "type": "object"
+    },
+    "MovementEffectMode": {
       "enum": [
-        "verySlow",
-        "slow",
-        "medium",
-        "fast",
-        "veryFast"
+        "grant",
+        "modify"
       ],
       "type": "string"
     },

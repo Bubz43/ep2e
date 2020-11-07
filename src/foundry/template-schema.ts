@@ -268,7 +268,7 @@ type SyntheticShellData = {
   hostType: ShellHostType;
   passengers: number;
   unarmedDV: string;
-  swarm: boolean;
+  isSwarm: boolean;
   painFilter: boolean;
   recoveryConditions: RecoveryConditions;
   physicalHealth: SyntheticHealthData;
@@ -301,7 +301,7 @@ type BiologicalData = {
   subtype: string;
   sex: string;
   unarmedDV: string;
-  swarm: boolean;
+  isSwarm: boolean;
   brain: string;
   /**
    * @minimum 0
@@ -642,8 +642,7 @@ type PhysicalTechData = {
   templates: UseItemTemplate<
     ['Common', 'Cost', 'GearTraits', 'Copyable', 'GearState']
   >;
-  // physicalHealth: Omit<PhysicalHealthData, "hot" | "bleedingOut">;
-  // meshHealth: FullMeshHealthData;
+  meshHealth: InfomorphHealthData;
   effects: StringID<Effect>[];
   activatedEffects: StringID<Effect>[];
   wareType: '' | PhysicalWare;

@@ -35,7 +35,7 @@
   padding-left: 1px;
   font-size: 1.3rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
   font-weight: lighter;
   color: var(--color-text-lighter);
   min-width: 100px;
@@ -64,15 +64,12 @@
   text-transform: uppercase;
 }
 
-// h1,
 input {
   font-family: var(--font-2);
   font-size: 1.5rem;
   padding: 0.1rem 0.5rem;
   margin: 0;
   align-self: start;
-  // border-radius: 4px;
-  // width: 450px;
   width: 100%;
 }
 

@@ -1,4 +1,4 @@
-import { Activation } from '@src/data-enums';
+import { Activation, DeviceType } from '@src/data-enums';
 import type { ObtainableEffects } from '@src/entities/applied-effects';
 import type { ItemType } from '@src/entities/entity-types';
 import mix from 'mix-with/lib';
@@ -32,6 +32,14 @@ export class PhysicalTech
 
   get activatedEffects() {
     return this.epData.activatedEffects;
+  }
+
+  get deviceType() {
+    return this.epData.deviceType;
+  }
+
+  get isBrain() {
+    return this.deviceType === DeviceType.Host;
   }
 
   obtainEffects() {

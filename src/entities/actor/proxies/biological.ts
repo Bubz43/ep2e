@@ -11,6 +11,7 @@ import { notify, NotificationType } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
 import { BiologicalHealth } from '@src/health/biological-health';
 import { HealthType } from '@src/health/health';
+import { flatMap, flatMapToObj } from 'remeda';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 
 export class Biological extends ActorProxyBase<ActorType.Biological> {
@@ -36,7 +37,7 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
   }
 
   get pools() {
-    return this.epData.pools
+    return this.epData.pools;
   }
 
   get activeEffects() {
@@ -45,16 +46,26 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
     );
   }
 
+  get availableBrains() {
+    return new Map(
+      flatMap([...this.items], ({ agent }) =>
+        agent.type === ItemType.PhysicalTech && agent.isBrain
+          ? ([agent.id, agent] as const)
+          : [],
+      ),
+    );
+  }
+
   get subtype() {
     return this.epData.subtype;
   }
 
   get isSwarm() {
-    return this.epData.swarm;
+    return this.epData.isSwarm;
   }
 
   get movementRates() {
-    return this.epData.movementRates
+    return this.epData.movementRates;
   }
 
   get physicalHealth() {
@@ -125,10 +136,11 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
           effects.add(agent.obtainEffects());
           break;
 
-        case ItemType.Software: {
-          // TODO
-        }
-          
+        case ItemType.Software:
+          {
+            // TODO
+          }
+
           break;
 
         default:

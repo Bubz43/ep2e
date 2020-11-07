@@ -165,6 +165,13 @@ declare global {
     readonly locked: boolean;
   }
 
+  interface Collection<T> {
+    find(condition: (entry: T) => boolean): T | null
+    filter(condition: (entry: T) => boolean): T[]
+    map<M>(transform: (entry: T) => M): M[]
+    reduce<I>(evaluator: (accum: I, entry: T) => I, initial: I): I
+  }
+
   interface Token {
     data: Readonly<TokenData>;
     scene?: SceneEP;

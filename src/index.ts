@@ -67,6 +67,7 @@ import { HealthLog } from './health/components/health-log/health-log';
 import { HealthRegenSettingsForm } from './health/components/health-regen-settings-form/health-regen-settings-form';
 import { HealthStateForm } from './health/components/health-state-form/health-state-form';
 import { BiologicalForm } from './entities/components/sleeve-forms/biological/biological-form';
+import { EntityFormSidebarDivider } from './entities/components/form-layout/entity-form-sidebar-divider';
 
 // Generic Components
 Field;
@@ -91,10 +92,14 @@ ToolTip;
 ValueStatus;
 SlWindow;
 
-// Entity Components
+// Entity Form Layout Components
 EntityFormHeader;
 EntityFormLayout;
 EntityFormFooter;
+EntityFormSidebarDivider;
+
+
+// Sleeve Forms 
 InfomorphForm;
 BiologicalForm;
 CompendiumList;

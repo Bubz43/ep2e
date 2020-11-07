@@ -66,6 +66,7 @@ export class BiologicalForm extends SleeveFormBase {
       sleeved,
       itemTrash,
       movementRates,
+      availableBrains,
     } = this.sleeve;
     const { movementEffects } = itemGroups.effects;
 
@@ -86,18 +87,28 @@ export class BiologicalForm extends SleeveFormBase {
             size,
             subtype,
             sex,
-            swarm,
+            isSwarm,
             unarmedDV,
             prehensileLimbs,
             brain,
           }) => [
+            renderLabeledCheckbox(isSwarm),
+            renderSelectField(size, enumValues(Size)),
+            html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
             renderTextField(subtype),
             renderTextField(sex),
+            html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
+            isSwarm.value ? '' : renderNumberField(prehensileLimbs, { min: 0 }),
             renderFormulaField(unarmedDV),
-            renderLabeledCheckbox(swarm),
-            // TODO brain,
-            renderNumberField(prehensileLimbs, { min: 0 }),
-            renderSelectField(size, enumValues(Size)),
+            notEmpty(availableBrains)
+              ? html`
+                  <entity-form-sidebar-divider></entity-form-sidebar-divider>
+                  ${renderSelectField(brain, [...availableBrains.keys()], {
+                    emptyText: localize('default'),
+                    altLabel: (key) => availableBrains.get(key)!.fullName,
+                  })}
+                `
+              : '',
           ],
         })}
 
@@ -240,7 +251,7 @@ export class BiologicalForm extends SleeveFormBase {
         update: this.movementOperations.add,
         fields: renderMovementRateFields,
         noDebounce: true,
-        submitEmpty: true
+        submitEmpty: true,
       })}
     `;
   }
