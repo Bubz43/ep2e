@@ -1225,6 +1225,9 @@
     "history": "History",
     "inflicted": "Inflicted",
     "changes": "Changes",
+    "isSwarm": "Is Swarm",
+    "grant": "Grant",
+    "modify": "Modify",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

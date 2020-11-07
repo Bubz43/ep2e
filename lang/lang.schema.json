@@ -1671,6 +1671,9 @@
             "goal": {
               "type": "string"
             },
+            "grant": {
+              "type": "string"
+            },
             "grappled": {
               "type": "string"
             },
@@ -2052,6 +2055,9 @@
             "isAntidote": {
               "type": "string"
             },
+            "isSwarm": {
+              "type": "string"
+            },
             "isolate": {
               "type": "string"
             },
@@ -2365,6 +2371,9 @@
               "type": "string"
             },
             "modifiers": {
+              "type": "string"
+            },
+            "modify": {
               "type": "string"
             },
             "modular": {
@@ -4467,6 +4476,7 @@
             "gland",
             "glands",
             "goal",
+            "grant",
             "grappled",
             "gravity",
             "grenade",
@@ -4594,6 +4604,7 @@
             "investigator",
             "ionic",
             "isAntidote",
+            "isSwarm",
             "isolate",
             "item",
             "itemMustBeBlueprint",
@@ -4699,6 +4710,7 @@
             "moderate",
             "modifier",
             "modifiers",
+            "modify",
             "modular",
             "morph",
             "morphPoints",

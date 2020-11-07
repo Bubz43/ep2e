@@ -49,7 +49,6 @@ export class Infomorph extends ActorProxyBase<ActorType.Infomorph> {
 
   @LazyGetter()
   get meshHealth() {
-    console.log("mesh health")
     return new InfomorphHealth({
       data: this.epData.meshHealth,
       statMods: this.activeEffects?.getHealthStatMods(HealthType.Mesh),

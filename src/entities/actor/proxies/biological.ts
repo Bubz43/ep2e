@@ -11,13 +11,13 @@ import { notify, NotificationType } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
 import { BiologicalHealth } from '@src/health/biological-health';
 import { HealthType } from '@src/health/health';
+import { LazyGetter } from 'lazy-get-decorator';
 import { flatMap, flatMapToObj } from 'remeda';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 
 export class Biological extends ActorProxyBase<ActorType.Biological> {
-  #physicalHealth?: BiologicalHealth;
-  #localEffects?: AppliedEffects;
-  #outsideEffects?: ReadonlyAppliedEffects;
+  private _localEffects?: AppliedEffects;
+  private _outsideEffects?: ReadonlyAppliedEffects;
 
   readonly sleeved;
   constructor({
@@ -30,9 +30,9 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
   }) {
     super(init);
     if (!activeEffects) {
-      this.#localEffects = new AppliedEffects();
+      this._localEffects = new AppliedEffects();
       // TODO: Setup local effects;
-    } else this.#outsideEffects = activeEffects;
+    } else this._outsideEffects = activeEffects;
     this.sleeved = sleeved;
   }
 
@@ -42,10 +42,11 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
 
   get activeEffects() {
     return (
-      this.#outsideEffects || (this.#localEffects as ReadonlyAppliedEffects)
+      this._outsideEffects || (this._localEffects as ReadonlyAppliedEffects)
     );
   }
 
+  @LazyGetter()
   get availableBrains() {
     return new Map(
       flatMap([...this.items], ({ agent }) =>
@@ -68,18 +69,16 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
     return this.epData.movementRates;
   }
 
+  @LazyGetter()
   get physicalHealth() {
-    if (this.#physicalHealth === undefined) {
-      this.#physicalHealth = new BiologicalHealth({
-        data: this.epData.physicalHealth,
-        statMods: this.activeEffects.getHealthStatMods(HealthType.Physical),
-        updater: this.updater.prop('data', 'physicalHealth').nestedStore(),
-        source: localize('frame'),
-        isSwarm: this.isSwarm,
-        recovery: this.activeEffects.getGroup(EffectType.HealthRecovery),
-      });
-    }
-    return this.#physicalHealth;
+    return new BiologicalHealth({
+      data: this.epData.physicalHealth,
+      statMods: this.activeEffects.getHealthStatMods(HealthType.Physical),
+      updater: this.updater.prop('data', 'physicalHealth').nestedStore(),
+      source: localize('frame'),
+      isSwarm: this.isSwarm,
+      recovery: this.activeEffects.getGroup(EffectType.HealthRecovery),
+    })
   }
 
   addNewItemProxy(proxy: ItemProxy | null | undefined) {
@@ -125,6 +124,7 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
     }
   }
 
+  @LazyGetter()
   get itemGroups() {
     const traits: Trait[] = [];
     const ware: EquippableItem[] = [];
