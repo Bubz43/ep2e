@@ -303,8 +303,6 @@ declare global {
     sheet: Application | null;
   }
 
-  // export type UserHotbarEntry = StringID<HotbarCell<MacroEntry>>;
-
   interface User {
     active: boolean;
     targets: Set<Token>;
@@ -431,13 +429,4 @@ declare global {
   const ui: UI;
 
   const canvas: unknown;
-
-  // const canvas:
-  //   | (Canvas &
-  //       CanvasLayers & {
-  //         scene: Scene;
-  //         stage: { scale: number };
-  //       })
-  //   | undefined
-  //   | { ready: false };
 }

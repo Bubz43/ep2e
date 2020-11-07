@@ -5,5 +5,5 @@ import { FormDrawer } from '../../../components/form-layout/entity-form-drawer-m
 export abstract class SleeveFormBase extends FormDrawer(LitElement) {
   @property({ attribute: false }) token?: MaybeToken;
 
-  abstract sleeve: ActorProxy;
+  declare abstract sleeve: ActorProxy;
 }

@@ -223,7 +223,7 @@ type CheckboxOptions = Partial<{
   disabled: boolean;
   indeterminate: boolean;
   alignEnd: boolean;
-  tooltipText: string
+  tooltipText: string;
 }>;
 
 export const renderCheckbox = (
@@ -253,7 +253,6 @@ export const renderLabeledCheckbox = (
     style="height: 40px; padding-right: 0.5rem;"
     data-tooltip=${ifDefined(tooltipText)}
     @mouseover=${tooltipText ? tooltip.fromData : noop}
-    
   >
     ${renderCheckbox(props, options)}
   </mwc-formfield>
@@ -608,3 +607,5 @@ export const renderTextareaField = (
     `,
   });
 };
+
+export const emptyValue = { emptyText: '-' } as const;

@@ -3,7 +3,7 @@ import { LitElement } from "lit-element";
 import type { ItemProxy } from "../../item";
 
 export abstract class ItemFormBase extends FormDrawer(LitElement) { 
-  abstract item: ItemProxy;
+  declare abstract item: ItemProxy;
 
   get disabled() {
     return !this.item.editable

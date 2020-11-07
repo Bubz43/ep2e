@@ -26,7 +26,6 @@ import {
   MutateEvent,
 } from './foundry/hook-setups';
 import { localize } from './foundry/localization';
-import { activeCanvas } from './foundry/misc-helpers';
 import { addEPSocketHandler, setupSystemSocket } from './foundry/socket';
 import { EP } from './foundry/system';
 

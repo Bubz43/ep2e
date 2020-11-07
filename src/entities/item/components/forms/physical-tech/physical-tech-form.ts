@@ -1,4 +1,5 @@
 import {
+  emptyValue,
   renderNumberField,
   renderSelectField,
   renderTextField,
@@ -25,7 +26,7 @@ export class PhysicalTechForm extends ItemFormBase {
   @property({ attribute: false }) item!: PhysicalTech;
 
   render() {
-    const { updater, embedded, isBlueprint, type, meshHealth } = this.item;
+    const { updater, embedded, isBlueprint, type, deviceType } = this.item;
     const { disabled } = this;
     return html`
       <entity-form-layout>
@@ -40,27 +41,7 @@ export class PhysicalTechForm extends ItemFormBase {
         </entity-form-header>
 
         <div slot="details">
-          <section>
-            <sl-header heading=${localize('meshHealth')}>
-              <mwc-icon-button
-                slot="action"
-                data-tooltip=${localize('changes')}
-                @mouseover=${tooltip.fromData}
-                @focus=${tooltip.fromData}
-                icon="change_history"
-                @click=${this.setDrawerFromEvent(
-                  this.renderHealthChangeHistory,
-                  false,
-                )}
-              ></mwc-icon-button>
-            </sl-header>
-            <health-item
-              clickable
-              ?disabled=${disabled}
-              .health=${meshHealth}
-              @click=${this.setDrawerFromEvent(this.renderMeshHealthEdit)}
-            ></health-item>
-          </section>
+          ${deviceType ? this.renderMeshHealthSection() : ''}
         </div>
 
         ${renderUpdaterForm(updater.prop('data'), {
@@ -70,15 +51,44 @@ export class PhysicalTechForm extends ItemFormBase {
             renderTextField(category),
             html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
             renderSelectField(wareType, enumValues(PhysicalWare), {
-              emptyText: '-',
+              ...emptyValue,
+              disabled: !!embedded,
             }),
             renderSelectField(deviceType, enumValues(DeviceType), {
-              emptyText: '-',
+              ...emptyValue,
+              disabled: !!embedded,
             }),
-            renderSelectField(fabricator, enumValues(FabType)),
+            renderSelectField(fabricator, enumValues(FabType), emptyValue),
           ],
         })}
+        ${this.renderDrawerContent()}
       </entity-form-layout>
+    `;
+  }
+
+  private renderMeshHealthSection() {
+    return html`
+      <section>
+        <sl-header heading=${localize('meshHealth')}>
+          <mwc-icon-button
+            slot="action"
+            data-tooltip=${localize('changes')}
+            @mouseover=${tooltip.fromData}
+            @focus=${tooltip.fromData}
+            icon="change_history"
+            @click=${this.setDrawerFromEvent(
+              this.renderHealthChangeHistory,
+              false,
+            )}
+          ></mwc-icon-button>
+        </sl-header>
+        <health-item
+          clickable
+          ?disabled=${this.disabled}
+          .health=${this.item.meshHealth}
+          @click=${this.setDrawerFromEvent(this.renderMeshHealthEdit)}
+        ></health-item>
+      </section>
     `;
   }
 
