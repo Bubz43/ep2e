@@ -1,6 +1,10 @@
 import { Activation, DeviceType } from '@src/data-enums';
 import type { ObtainableEffects } from '@src/entities/applied-effects';
 import type { ItemType } from '@src/entities/entity-types';
+import { localize } from '@src/foundry/localization';
+import { HealthType } from '@src/health/health';
+import { InfomorphHealth } from '@src/health/infomorph-health';
+import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { compact } from 'remeda';
 import { Copyable, Equippable, Gear, Purchasable } from '../item-mixins';
@@ -49,5 +53,16 @@ export class PhysicalTech
       source: this.name,
       effects: compact([effects, activated && activatedEffects]).flat(),
     };
+  }
+
+  @LazyGetter()
+  get meshHealth() {
+    return new InfomorphHealth({
+      data: this.epData.meshHealth,
+      statMods: undefined,
+      updater: this.updater.prop('data', 'meshHealth').nestedStore(),
+      source: localize('host'),
+      homeDevices: 1, // TODO
+    })
   }
 }

@@ -99,86 +99,12 @@ export abstract class ActorProxyBase<T extends ActorType> {
   hasItemProxy(agent: ItemProxy | null | undefined) {
     return this.items.get(agent?.id)?.agent === agent;
   }
-
-  abstract acceptItemAgent(
-    agent: ItemProxy,
-  ):
-    | { accept: true }
-    | {
-        accept: false;
-        override: boolean;
-        rejectReason: string;
-      };
-
-  addItemAgent(agent: ItemProxy, placeLast: boolean) {
-    return this.itemOperations.add({
-      ...agent.getDataCopy(false),
-      sort: placeLast
-        ? this.highestItemSort + CONST.SORT_INTEGER_DENSITY
-        : agent.sort,
-    });
-  }
-
-  private get highestItemSort() {
+  
+  protected get highestItemSort() {
     return [...this.items.values()].reduce(
       (accum, { agent }) => Math.max(accum, agent.sort || 0),
       0,
     );
   }
 
-  async handleDrop({ ev, drop }: { ev: DragEvent; drop: Drop }) {
-    // TODO Allow additional step, like changing trait level
-    switch (drop.type) {
-      case DropType.Item:
-        {
-          const agent = await itemDropToItemProxy(drop);
-          if (!agent) return;
-          const allow = this.acceptItemAgent(agent);
-          if (allow.accept) this.addItemAgent(agent, true);
-          else {
-            openDialog({
-              center: true,
-              $content: (dialog) =>
-                render(
-                  html`
-                    <header>
-                      <h2>
-                        ${agent.name} was rejected by ${localize(this.type)}
-                        ${this.name}.
-                      </h2>
-                    </header>
-                    <article>
-                      <p>${allow.rejectReason}</p>
-                    </article>
-                    <footer>
-                      ${allow.override
-                        ? html`
-                            <mwc-button
-                              outlined
-                              @click=${() => {
-                                dialog.close();
-                                this.addItemAgent(agent, true);
-                              }}
-                              label=${localize('override')}
-                            ></mwc-button>
-                          `
-                        : ''}
-                      <mwc-button
-                        @click=${() => dialog.close()}
-                        label=${localize('close')}
-                      ></mwc-button>
-                    </footer>
-                  `,
-                  dialog,
-                ),
-            });
-          }
-        }
-
-        break;
-
-      default:
-        break;
-    }
-  }
 }

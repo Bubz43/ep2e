@@ -1,4 +1,4 @@
-import { resizeObsAvailable } from '@src/utility/dom';
+import { px, resizeObsAvailable } from '@src/utility/dom';
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
@@ -41,6 +41,8 @@ export class EntityFormLayout extends LitElement {
 
   @query('.drawer', true) drawer!: HTMLElement;
 
+  @query('.sidebar') sidebar?: HTMLElement;
+
   private resizeObs?: ResizeObserver;
 
   private allowDrawerClose = false;
@@ -53,8 +55,8 @@ export class EntityFormLayout extends LitElement {
       if (host) {
         this.resizeObs = new ResizeObserver(([entry]) => {
           requestAnimationFrame(() => {
-            const { offsetHeight, scrollHeight } = entry.target as HTMLElement;
-            this.hideScroll = offsetHeight < scrollHeight;
+            const { offsetHeight } = entry.target as HTMLElement;
+            this.hideScroll = offsetHeight < this.offsetHeight;
           });
         });
         this.resizeObs.observe(host);
@@ -117,23 +119,19 @@ export class EntityFormLayout extends LitElement {
   }
 
   render() {
+    const noScroll = this.hideScroll || this.noScroll;
     return html`
-     ${this.noSidebar
+      ${this.noSidebar
         ? ''
         : html`
-            <aside class="sidebar">
+            <aside class="sidebar ${classMap({ 'no-scroll': noScroll })}">
               <slot name="sidebar"></slot>
             </aside>
           `}
-    <slot name="header"></slot>
-     
+      <slot name="header"></slot>
 
       <slot name="tabs"></slot>
-      <section
-        class="content ${classMap({
-          'no-scroll': this.hideScroll || this.noScroll,
-        })}"
-      >
+      <section class="content ${classMap({ 'no-scroll': noScroll })}">
         <slot name="details"></slot>
         ${this.noDescription ? '' : html` <slot name="description"></slot> `}
       </section>

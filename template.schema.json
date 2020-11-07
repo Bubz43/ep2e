@@ -689,6 +689,9 @@
                   "minimum": 0,
                   "type": "number"
                 },
+                "reach": {
+                  "type": "number"
+                },
                 "recoveryConditions": {
                   "$ref": "#/definitions/RecoveryConditions"
                 },
@@ -737,6 +740,7 @@
                 "isSwarm",
                 "physicalHealth",
                 "prehensileLimbs",
+                "reach",
                 "recoveryConditions",
                 "sex",
                 "size",
@@ -2295,6 +2299,9 @@
                   "minimum": 0,
                   "type": "number"
                 },
+                "reach": {
+                  "type": "number"
+                },
                 "recoveryConditions": {
                   "$ref": "#/definitions/RecoveryConditions"
                 },
@@ -2359,6 +2366,7 @@
                 "passengers",
                 "physicalHealth",
                 "prehensileLimbs",
+                "reach",
                 "recoveryConditions",
                 "shellType",
                 "size",
@@ -4540,6 +4548,9 @@
                     }
                   ]
                 },
+                "meshHealth": {
+                  "$ref": "#/definitions/InfomorphHealthData"
+                },
                 "state": {
                   "additionalProperties": false,
                   "properties": {
@@ -4609,6 +4620,7 @@
                 "deviceType",
                 "effects",
                 "fabricator",
+                "meshHealth",
                 "state",
                 "templates",
                 "wareType"

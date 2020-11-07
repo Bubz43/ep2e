@@ -4,6 +4,7 @@ import {
 } from '@src/entities/applied-effects';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { EquippableItem, ItemProxy } from '@src/entities/item/item';
+import type { Software } from '@src/entities/item/proxies/software';
 import type { Trait } from '@src/entities/item/proxies/trait';
 import type { ActorEntity } from '@src/entities/models';
 import { EffectType } from '@src/features/effects';
@@ -46,6 +47,11 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
     );
   }
 
+  get nonDefaultBrain() {
+    const { brain } = this.epData;
+    return brain ? this.availableBrains.get(brain) : null;
+  }
+
   @LazyGetter()
   get availableBrains() {
     return new Map(
@@ -69,6 +75,14 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
     return this.epData.movementRates;
   }
 
+  get reachBonus() {
+    return this.isSwarm ? 0 : this.epData.reach
+  }
+
+  get prehensileLimbs() {
+    return this.epData.prehensileLimbs
+  }
+
   @LazyGetter()
   get physicalHealth() {
     return new BiologicalHealth({
@@ -78,7 +92,7 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
       source: localize('frame'),
       isSwarm: this.isSwarm,
       recovery: this.activeEffects.getGroup(EffectType.HealthRecovery),
-    })
+    });
   }
 
   addNewItemProxy(proxy: ItemProxy | null | undefined) {
@@ -111,14 +125,33 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
       }
 
       case ItemType.Software: {
-        // TODO
+        const copy = proxy.getDataCopy(true);
+        copy.data.state.equipped = true;
+        this.itemOperations.add(copy);
+        break;
+      }
+
+      case ItemType.Armor:
+      case ItemType.BeamWeapon:
+      case ItemType.Firearm:
+      case ItemType.MeleeWeapon:
+      case ItemType.PhysicalTech:
+      case ItemType.Railgun:
+      case ItemType.SeekerWeapon: {
+        if (proxy.isWare) {
+          const copy = proxy.getDataCopy(true);
+          copy.data.state.equipped = true;
+          this.itemOperations.add(copy);
+        } else {
+          localize('DESCRIPTIONS', 'OnlyWareItems');
+        }
         break;
       }
 
       default:
         notify(
           NotificationType.Error,
-          localize('DESCRIPTIONS', 'OnlyInfomorphItems'),
+          localize('DESCRIPTIONS', 'OnlyPhysicalMorphItems'),
         );
         break;
     }
@@ -128,6 +161,7 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
   get itemGroups() {
     const traits: Trait[] = [];
     const ware: EquippableItem[] = [];
+    const software: Software[] = [];
     const effects = new AppliedEffects();
     for (const { agent } of this.items) {
       switch (agent.type) {
@@ -136,37 +170,30 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
           effects.add(agent.obtainEffects());
           break;
 
-        case ItemType.Software:
-          {
-            // TODO
+        case ItemType.Armor:
+        case ItemType.BeamWeapon:
+        case ItemType.Firearm:
+        case ItemType.MeleeWeapon:
+        case ItemType.PhysicalTech:
+        case ItemType.Railgun:
+        case ItemType.SeekerWeapon: {
+          ware.push(agent);
+          if ('obtainEffects' in agent) {
+            effects.add(agent.obtainEffects());
           }
-
           break;
+        }
+
+        case ItemType.Software: {
+          effects.add(agent.obtainEffects());
+          software.push(agent);
+          break;
+        }
 
         default:
           break;
       }
     }
-    return { traits, ware, effects };
-  }
-
-  acceptItemAgent(agent: ItemProxy) {
-    if ([ItemType.Psi, ItemType.Sleight].includes(agent.type)) {
-      return {
-        accept: false,
-        override: false,
-        rejectReason: `Can only add ${localize(
-          agent.type,
-        )} to character or ego.`,
-      } as const;
-    }
-    if (agent.type === ItemType.Trait && !agent.isMorphTrait) {
-      return {
-        accept: false,
-        override: false,
-        rejectReason: 'Cannot add ego traits.',
-      };
-    }
-    return { accept: true } as const;
+    return { traits, ware, software, effects };
   }
 }

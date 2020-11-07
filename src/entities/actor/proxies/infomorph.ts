@@ -1,12 +1,12 @@
 import {
   AppliedEffects,
-  ReadonlyAppliedEffects,
+  ReadonlyAppliedEffects
 } from '@src/entities/applied-effects';
 import { ActorType, ItemType } from '@src/entities/entity-types';
-import type { EquippableItem, ItemProxy } from '@src/entities/item/item';
+import type { ItemProxy } from '@src/entities/item/item';
 import type { Software } from '@src/entities/item/proxies/software';
 import type { Trait } from '@src/entities/item/proxies/trait';
-import { notify, NotificationType } from '@src/foundry/foundry-apps';
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
 import { HealthType } from '@src/health/health';
 import { InfomorphHealth } from '@src/health/infomorph-health';
@@ -58,25 +58,6 @@ export class Infomorph extends ActorProxyBase<ActorType.Infomorph> {
     })
   }
 
-  acceptItemAgent(agent: ItemProxy) {
-    if ([ItemType.Psi, ItemType.Sleight].includes(agent.type)) {
-      return {
-        accept: false,
-        override: false,
-        rejectReason: `Can only add ${localize(
-          agent.type,
-        )} to character or ego.`,
-      } as const;
-    }
-    if (agent.type === ItemType.Trait && !agent.isMorphTrait) {
-      return {
-        accept: false,
-        override: false,
-        rejectReason: 'Cannot add ego traits.',
-      };
-    }
-    return { accept: true } as const;
-  }
 
   @LazyGetter()
   get itemGroups() {

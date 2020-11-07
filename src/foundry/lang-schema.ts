@@ -1242,7 +1242,15 @@ type LangEntries =
   | 'severe'
   | 'perTurn'
   | 'carryPayload'
-  | 'took' | "history" | "setHealthTo" | "healed" | "inflicted" | "changes" | "grant" | "modify" | "isSwarm"
+  | 'took'
+  | 'history'
+  | 'setHealthTo'
+  | 'healed'
+  | 'inflicted'
+  | 'changes'
+  | 'grant'
+  | 'modify'
+  | 'isSwarm';
 type FullNames =
   | 'cog'
   | 'int'
@@ -1312,11 +1320,13 @@ export type DescriptionEntry =
   | 'unconscious'
   | 'stunned'
   | 'deafened'
-  | 'OnlyWarePoolBonus' | "AddItemInfo" | "OnlyMorphTraits" | "OnlyInfomorphItems"
+  | 'OnlyWarePoolBonus'
+  | 'AddItemInfo'
+  | 'OnlyMorphTraits'
+  | 'OnlyInfomorphItems'
+  | 'AppliesSwarmRules'
+  | 'OnlyPhysicalMorphItems' | "OnlyWareItems"
 
-type F<T extends string, D extends string[]> = {
-  [key in T]: D;
-};
 
 // TODO Look into using data keys as pattern to validate json string
 export type Formatable = {
@@ -1326,7 +1336,7 @@ export type Formatable = {
   TakeSVWhenWearsOff: ['wearOffStress', 'substanceType'];
   OnCheckFailure: ['aptitude'];
   ArmorReduced: ['armor', 'value'];
-  AlreadyHasItem: ["ownerName", "itemName"];
+  AlreadyHasItem: ['ownerName', 'itemName'];
 };
 
 export interface Lang {

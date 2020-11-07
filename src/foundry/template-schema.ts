@@ -282,6 +282,7 @@ type SyntheticShellData = {
    */
   prehensileLimbs: number;
   inherentArmor: { energy: number; kinetic: number; source: string };
+  reach: number;
 };
 
 // TODO: Limbs/Prehensile Limbs
@@ -301,6 +302,7 @@ type BiologicalData = {
   subtype: string;
   sex: string;
   unarmedDV: string;
+  reach: number;
   isSwarm: boolean;
   brain: string;
   /**

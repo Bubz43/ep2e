@@ -17,10 +17,19 @@
                 "AddItemInfo": {
                   "type": "string"
                 },
+                "AppliesSwarmRules": {
+                  "type": "string"
+                },
                 "OnlyInfomorphItems": {
                   "type": "string"
                 },
                 "OnlyMorphTraits": {
+                  "type": "string"
+                },
+                "OnlyPhysicalMorphItems": {
+                  "type": "string"
+                },
+                "OnlyWareItems": {
                   "type": "string"
                 },
                 "OnlyWarePoolBonus": {
@@ -83,7 +92,10 @@
                 "OnlyWarePoolBonus",
                 "AddItemInfo",
                 "OnlyMorphTraits",
-                "OnlyInfomorphItems"
+                "OnlyInfomorphItems",
+                "AppliesSwarmRules",
+                "OnlyPhysicalMorphItems",
+                "OnlyWareItems"
               ],
               "type": "object"
             },

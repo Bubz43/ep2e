@@ -1245,7 +1245,10 @@
       "OnlyWarePoolBonus": "Only bonuses from traits/ware/abilities/software are shown.",
       "AddItemInfo": "Drop item to add.",
       "OnlyMorphTraits": "Only morph traits allowed.",
-      "OnlyInfomorphItems": "Only morph traits and software can be added to an infomorph."
+      "OnlyInfomorphItems": "Only morph traits and software can be added to an infomorph.",
+      "AppliesSwarmRules": "Applies swarm rules",
+      "OnlyPhysicalMorphItems": "Only morph traits, physical ware and sofware can be added to morph.",
+      "OnlyWareItems": "Physical items must be ware to be added directly to morph."
     },
     "FULL": {
       "cog": "Cognition",

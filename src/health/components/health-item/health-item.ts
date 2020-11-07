@@ -9,6 +9,9 @@ import mix from 'mix-with/lib';
 import { compact } from 'remeda';
 import styles from './health-item.scss';
 
+/**
+ * @slot source
+ */
 @customElement('health-item')
 export class HealthItem<T extends Health = Health> extends mix(LitElement).with(
   LazyRipple,

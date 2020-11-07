@@ -124,10 +124,14 @@ slot[name='tabs'] {
 .content {
   grid-area: content;
   display: grid;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: min-content auto;
   grid-template-columns: 100%;
   &.no-scroll {
     overflow: visible;
+
+    ::slotted([slot="description"]) {
+      border-left: 1px solid var(--color-border);
+    }
     & + .drawer {
       .drawer-content {
         height: 100%;
@@ -145,6 +149,9 @@ slot[name='tabs'] {
   background: linear-gradient(to bottom, var(--color-bg), var(--color-bg-alt));
   border-right: 1px solid var(--color-border);
   min-width: 220px;
+  &.no-scroll {
+    border-bottom: 1px solid var(--color-border);
+  }
 }
 
 slot[name='description'] {
