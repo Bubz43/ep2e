@@ -68,11 +68,11 @@ export class Infomorph extends ActorProxyBase<ActorType.Infomorph> {
       switch (agent.type) {
         case ItemType.Trait:
           traits.push(agent);
-          effects.add(agent.obtainEffects());
+          effects.add(agent.currentEffects);
           break;
 
         case ItemType.Software:
-          effects.add(agent.obtainEffects());
+          effects.add(agent.currentEffects);
           ware.push(agent);
           break;
 

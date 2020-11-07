@@ -164,7 +164,7 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
       switch (agent.type) {
         case ItemType.Trait:
           traits.push(agent);
-          effects.add(agent.obtainEffects());
+          effects.add(agent.currentEffects);
           break;
 
         case ItemType.Armor:
@@ -175,8 +175,8 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
         case ItemType.Railgun:
         case ItemType.SeekerWeapon: {
           ware.push(agent);
-          if ('obtainEffects' in agent) {
-            effects.add(agent.obtainEffects());
+          if ('currentEffects' in agent) {
+            effects.add(agent.currentEffects);
           }
           break;
         }

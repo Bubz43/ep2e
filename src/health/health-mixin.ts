@@ -3,6 +3,7 @@ import { createEffect } from '@src/features/effects';
 import { TagType } from '@src/features/tags';
 import { localize } from '@src/foundry/localization';
 import { notEmpty } from '@src/utility/helpers';
+import { LazyGetter } from 'lazy-get-decorator';
 import { clamp } from 'remeda';
 import type { Class } from 'type-fest';
 import type { DeepReadonly } from 'utility-types';
@@ -23,8 +24,9 @@ export type Health = CommonHealth &
   }>;
 
 export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
-  class HealthInfo extends cls implements Health {
-    obtainEffects() {
+  class HealthInfo extends cls implements Health, ObtainableEffects {
+    @LazyGetter()
+    get currentEffects() {
       const { wound, type } = this;
       if (!wound) return null;
       const { wounds, woundsIgnored, woundModifier } = wound;

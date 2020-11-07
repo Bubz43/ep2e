@@ -655,6 +655,10 @@ type PhysicalTechData = {
     embeddedEgos: string[];
     onboardAliDeleted: boolean;
   };
+  use: {
+    duration: number;
+    check: AptitudeType | "";
+  }
   deviceType: '' | DeviceType;
   category: string;
   fabricator: '' | FabType;

@@ -1,6 +1,7 @@
 import type { ObtainableEffects } from '@src/entities/applied-effects';
 import type { ItemType } from '@src/entities/entity-types';
 import { createEffect } from '@src/features/effects';
+import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { Copyable, Equippable, Purchasable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
@@ -61,7 +62,8 @@ export class Armor
     });
   }
 
-  obtainEffects() {
+  @LazyGetter()
+  get currentEffects() {
     return {
       source: this.name,
       effects: [...this.effects, this.armorEffect],

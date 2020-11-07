@@ -406,7 +406,7 @@ sl-tooltip {
       'img name'
       'img type';
     line-height: 16px;
-    padding: 2px;
+    padding: 0.25rem 0.5rem;
     border: none;
     > img {
       grid-area: img;
@@ -448,7 +448,8 @@ sl-tooltip {
 }
 
 .directory-header {
-  padding: 0 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-bottom: 1px solid var(--color-border);
   input[name='search'] {
     color: black;
     &:focus {
@@ -479,6 +480,7 @@ sl-tooltip {
     grid-area: list;
     display: flex;
     flex-flow: column nowrap;
+    padding: 0.25rem 0;
     .entity {
       background-color: alphav(var(--color-bg), 0.3);
       img {

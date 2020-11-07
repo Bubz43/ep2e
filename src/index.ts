@@ -69,6 +69,7 @@ import { HealthStateForm } from './health/components/health-state-form/health-st
 import { BiologicalForm } from './entities/actor/components/sleeve-forms/biological/biological-form';
 import { EntityFormSidebarDivider } from './entities/components/form-layout/entity-form-sidebar-divider';
 import { PhysicalTechForm } from './entities/item/components/forms/physical-tech/physical-tech-form';
+import { ItemFormEffectsList } from './entities/item/components/forms/item-form-effects-list/item-form-effects-list';
 
 // Generic Components
 Field;
@@ -114,6 +115,7 @@ SleeveFormItemsList;
 
 // Item Forms
 PhysicalTechForm;
+ItemFormEffectsList;
 
 // Health Components 
 HealthItem;

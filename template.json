@@ -747,6 +747,10 @@
       "effects": [],
       "category": "",
       "fabricator":"",
+      "use": {
+        "check":"",
+        "duration": 0
+      },
       "state": {
         "activated": false,
         "embeddedEgos": [],

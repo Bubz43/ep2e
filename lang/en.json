@@ -1247,8 +1247,8 @@
       "OnlyMorphTraits": "Only morph traits allowed.",
       "OnlyInfomorphItems": "Only morph traits and software can be added to an infomorph.",
       "AppliesSwarmRules": "Applies swarm rules",
-      "OnlyPhysicalMorphItems": "Only morph traits, physical ware and sofware can be added to morph.",
-      "OnlyWareItems": "Physical items must be ware to be added directly to morph."
+      "OnlyPhysicalMorphItems": "Only morph traits and physical ware can be added to morph.",
+      "OnlyWareItems": "Only physical augmentations (ware) can be added directly to morph."
     },
     "FULL": {
       "cog": "Cognition",

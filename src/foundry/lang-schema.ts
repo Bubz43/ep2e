@@ -1250,7 +1250,7 @@ type LangEntries =
   | 'changes'
   | 'grant'
   | 'modify'
-  | 'isSwarm';
+  | 'isSwarm' | "passive";
 type FullNames =
   | 'cog'
   | 'int'

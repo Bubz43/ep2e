@@ -2,6 +2,7 @@ import { SoftwareType } from '@src/data-enums';
 import type { ObtainableEffects } from '@src/entities/applied-effects';
 import type { ItemType } from '@src/entities/entity-types';
 import { localize } from '@src/foundry/localization';
+import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { Purchasable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
@@ -52,7 +53,8 @@ export class Software
     return this.state.equipped;
   }
 
-  obtainEffects() {
+  @LazyGetter()
+  get currentEffects() {
     const { effects, activeStateEffects, activated, equipped } = this;
     if (!equipped) return null;
     return {

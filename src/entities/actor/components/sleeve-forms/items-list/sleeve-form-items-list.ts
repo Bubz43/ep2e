@@ -19,6 +19,22 @@ export class SleeveFormItemsList extends LitElement {
 
   @property({ type: String }) label = '';
 
+  private openItemMenu(item: ItemProxy) {
+    return (ev: MouseEvent) => {
+      openMenu({
+        content: [
+          {
+            label: localize('delete'),
+            callback: () => item.deleteSelf?.(),
+            icon: html`<mwc-icon>delete</mwc-icon>`,
+          },
+        ],
+        position: ev,
+        header: { heading: item.fullName },
+      });
+    };
+  }
+
   render() {
     const { items } = this;
     const commaTarget = items.length - 1;
@@ -28,33 +44,21 @@ export class SleeveFormItemsList extends LitElement {
         ${repeat(
           sortBy(items, (i) => i.fullName),
           idProp,
-          (item, index) => {
-            return html`
-              <li
-                @click=${() => item.openForm?.()}
-                @contextmenu=${(ev: MouseEvent) => {
-                  openMenu({
-                    content: [
-                      {
-                        label: localize('delete'),
-                        callback: () => item.deleteSelf?.(),
-                        icon: html`<mwc-icon>delete</mwc-icon>`,
-                      },
-                    ],
-                    position: ev,
-                    header: { heading: item.fullName },
-                  });
-                }}
-                ?data-comma=${index < commaTarget}
+          (item, index) => html`
+            <li ?data-comma=${index < commaTarget}>
+              <button
+                @click=${item.openForm}
+                @contextmenu=${this.openItemMenu(item)}
               >
-                <button>${item.fullName.trim()}</button>
-              </li>
-            `;
-          },
+                ${item.fullName.trim()}
+              </button>
+            </li>
+          `,
         )}
       </sl-animated-list>
     `;
   }
+
 }
 
 declare global {

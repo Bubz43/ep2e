@@ -8,12 +8,15 @@ import { renderUpdaterForm } from '@src/components/form/forms';
 import { DeviceType, enumValues, FabType, PhysicalWare } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
+import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { customElement, property, html } from 'lit-element';
-import { type } from 'remeda';
+import { mapToObj, type } from 'remeda';
 import { ItemFormBase } from '../item-form-base';
 import styles from './physical-tech-form.scss';
+
+const opsGroups = ['effects', 'activatedEffects'] as const;
 
 @customElement('physical-tech-form')
 export class PhysicalTechForm extends ItemFormBase {
@@ -25,8 +28,20 @@ export class PhysicalTechForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: PhysicalTech;
 
+  private effectsOps = mapToObj(opsGroups, (group) => [
+    group === 'effects' ? 'passive' : 'activated',
+    addUpdateRemoveFeature(() => this.item.updater.prop('data', group).commit),
+  ]);
+
   render() {
-    const { updater, embedded, isBlueprint, type, deviceType } = this.item;
+    const {
+      updater,
+      embedded,
+      isBlueprint,
+      type,
+      deviceType,
+      effectGroups,
+    } = this.item;
     const { disabled } = this;
     return html`
       <entity-form-layout>
@@ -41,6 +56,19 @@ export class PhysicalTechForm extends ItemFormBase {
         </entity-form-header>
 
         <div slot="details">
+          <section>
+            <sl-header heading=${localize('effects')}></sl-header>
+            ${[...effectGroups].map(
+              ([key, group]) => html`
+                <item-form-effects-list
+                  label=${localize(key)}
+                  .effects=${group}
+                  .operations=${this.effectsOps[key]}
+                  ?disabled=${disabled}
+                ></item-form-effects-list>
+              `,
+            )}
+          </section>
           ${deviceType ? this.renderMeshHealthSection() : ''}
         </div>
 

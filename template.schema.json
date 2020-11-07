@@ -291,7 +291,7 @@
         },
         "dots": {
           "items": {
-            "$ref": "#/definitions/StringID%3Cstructure--817-970--807-971--807-973--799-974--697-976--679-976--643-977--0-2395%3E"
+            "$ref": "#/definitions/StringID%3Cstructure--817-970--807-971--807-973--799-974--697-976--679-976--643-977--0-2380%3E"
           },
           "type": "array"
         },
@@ -4601,6 +4601,30 @@
                   "minItems": 5,
                   "type": "array"
                 },
+                "use": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "check": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/definitions/AptitudeType"
+                        },
+                        {
+                          "const": "",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "duration": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "duration",
+                    "check"
+                  ],
+                  "type": "object"
+                },
                 "wareType": {
                   "anyOf": [
                     {
@@ -4623,6 +4647,7 @@
                 "meshHealth",
                 "state",
                 "templates",
+                "use",
                 "wareType"
               ],
               "type": "object"
@@ -10435,7 +10460,7 @@
       ],
       "type": "object"
     },
-    "StringID<structure--792-945--782-946--782-948--774-949--696-951--678-951--643-952--0-2365>": {
+    "StringID<structure--792-945--782-946--782-948--774-949--696-951--678-951--643-952--0-2350>": {
       "additionalProperties": false,
       "properties": {
         "armorPiercing": {
@@ -10474,7 +10499,7 @@
       ],
       "type": "object"
     },
-    "StringID<structure--817-970--807-971--807-973--799-974--697-976--679-976--643-977--0-2395>": {
+    "StringID<structure--817-970--807-971--807-973--799-974--697-976--679-976--643-977--0-2380>": {
       "additionalProperties": false,
       "properties": {
         "armorPiercing": {
@@ -10625,7 +10650,7 @@
         },
         "dots": {
           "items": {
-            "$ref": "#/definitions/StringID%3Cstructure--792-945--782-946--782-948--774-949--696-951--678-951--643-952--0-2365%3E"
+            "$ref": "#/definitions/StringID%3Cstructure--792-945--782-946--782-948--774-949--696-951--678-951--643-952--0-2350%3E"
           },
           "type": "array"
         },

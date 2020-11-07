@@ -1,0 +1,46 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  
+}
+
+li {
+  list-style: none;
+}
+
+.effects-list {
+  display: flex;
+  flex-flow: row wrap;
+  margin: 0.5rem 0.25rem;
+  position: relative;
+  .label {
+    text-transform: uppercase;
+    color: var(--color-text-lighter);
+    letter-spacing: 0.5px;
+  }
+  li:not(.label) {
+    margin-left: 0.5ch;
+    display: inline-flex;
+    button {
+      all: unset;
+      &:hover,
+      &:focus {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+    &[data-comma] {
+      &::after {
+        content: ",";
+        color: var(--color-text-lighter);
+      }
+    }
+  }
+
+}

@@ -46,9 +46,18 @@ export class PhysicalTech
     return this.deviceType === DeviceType.Host;
   }
 
-  obtainEffects() {
-    const { effects, activatedEffects, activated, wareType, equipped } = this;
-    if (!equipped) return null;
+  @LazyGetter()
+  get effectGroups() {
+    const { effects, activatedEffects, activation } = this;
+    const group = new Map<"passive" | "activated", typeof effects>();
+    group.set("passive", effects);
+    if (activation) group.set("activated", activatedEffects)
+    return group;
+  }
+
+  @LazyGetter()
+  get currentEffects() {
+    const { effects, activatedEffects, activated } = this;
     return {
       source: this.name,
       effects: compact([effects, activated && activatedEffects]).flat(),
@@ -63,6 +72,21 @@ export class PhysicalTech
       updater: this.updater.prop('data', 'meshHealth').nestedStore(),
       source: localize('host'),
       homeDevices: 1, // TODO
-    })
+    });
+  }
+
+  getDataCopy(reset = false) {
+    const copy = super.getDataCopy(reset);
+    copy.data = {
+      ...copy.data,
+      state: {
+        equipped: false,
+        disabled: false,
+        activated: false,
+        embeddedEgos: [],
+        onboardAliDeleted: false,
+      },
+    };
+    return copy;
   }
 }

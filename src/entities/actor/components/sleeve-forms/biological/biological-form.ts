@@ -242,7 +242,11 @@ export class BiologicalForm extends SleeveFormBase {
           </section>
 
           <sl-dropzone @drop=${this.handleItemDrop} ?disabled=${disabled}>
-            <sl-header heading="${localize('traits')} & ${localize('ware')}">
+            <sl-header
+              heading="${localize('traits')} & ${localize(
+                'installed',
+              )} ${localize('ware')}"
+            >
               <mwc-icon
                 slot="icon"
                 data-tooltip=${localize(

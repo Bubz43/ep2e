@@ -4,6 +4,7 @@ import { localize } from '@src/foundry/localization';
 import { lastEventPosition } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import { notEmpty, toggle } from '@src/utility/helpers';
+import { LazyGetter } from 'lazy-get-decorator';
 import { clamp, compact } from 'remeda';
 import type { ItemType } from '../../entity-types';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
@@ -21,7 +22,8 @@ export class Trait
     this.lockSource = lockSource;
   }
 
-  obtainEffects() {
+  @LazyGetter()
+  get currentEffects() {
     const { levelInfo, triggered, hasTriggers } = this;
     if (hasTriggers && !triggered) return null;
     return {
