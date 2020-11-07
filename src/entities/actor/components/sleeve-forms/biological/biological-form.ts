@@ -11,6 +11,7 @@ import {
 } from '@src/components/form/forms';
 import { enumValues } from '@src/data-enums';
 import type { Biological } from '@src/entities/actor/proxies/biological';
+import { entityFormDetailsStyles } from '@src/entities/components/form-layout/entity-form-details-style';
 import { renderMovementRateFields } from '@src/features/components/movement-rate-fields';
 import { addUpdateRemoveFeature, idProp } from '@src/features/feature-helpers';
 import { defaultMovement, Movement } from '@src/features/movement';
@@ -44,7 +45,7 @@ export class BiologicalForm extends SleeveFormBase {
     return 'biological-form' as const;
   }
 
-  static styles = [styles];
+  static styles = [entityFormDetailsStyles, styles];
 
   @property({ attribute: false }) sleeve!: Biological;
 
@@ -59,7 +60,7 @@ export class BiologicalForm extends SleeveFormBase {
     } else
       notify(
         NotificationType.Info,
-        localize('DESCRIPTIONS', 'OnlyInfomorphItems'),
+        localize('DESCRIPTIONS', 'OnlyPhysicalMorphItems'),
       );
   });
 

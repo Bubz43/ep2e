@@ -24,7 +24,7 @@ import '@material/mwc-tab-bar';
 
 // Misc
 import 'web-dialog';
-import '@tinymce/tinymce-webcomponent';
+// import '@tinymce/tinymce-webcomponent'; // TODO Test this out further
 import { Datepicker } from 'app-datepicker/dist/datepicker';
 customElements.define('app-datepicker', Datepicker);
 
@@ -68,6 +68,7 @@ import { HealthRegenSettingsForm } from './health/components/health-regen-settin
 import { HealthStateForm } from './health/components/health-state-form/health-state-form';
 import { BiologicalForm } from './entities/actor/components/sleeve-forms/biological/biological-form';
 import { EntityFormSidebarDivider } from './entities/components/form-layout/entity-form-sidebar-divider';
+import { PhysicalTechForm } from './entities/item/components/forms/physical-tech/physical-tech-form';
 
 // Generic Components
 Field;
@@ -92,21 +93,27 @@ ToolTip;
 ValueStatus;
 SlWindow;
 
+// Entity 
+CompendiumList;
+
+// Actor
+ItemTrash;
+
 // Entity Form Layout Components
 EntityFormHeader;
 EntityFormLayout;
 EntityFormFooter;
 EntityFormSidebarDivider;
 
-
 // Sleeve Forms 
 InfomorphForm;
 BiologicalForm;
-CompendiumList;
 SleeveFormPools;
 SleeveFormAquisition;
 SleeveFormItemsList;
-ItemTrash;
+
+// Item Forms
+PhysicalTechForm;
 
 // Health Components 
 HealthItem;

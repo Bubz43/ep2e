@@ -1,32 +1,17 @@
-import {
-  renderFormulaField,
-  renderNumberField,
-  renderTextField,
-  renderTimeField,
-} from '@src/components/field/fields';
-import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
-import { enumValues, PoolType } from '@src/data-enums';
+import { renderNumberField } from '@src/components/field/fields';
+import { renderUpdaterForm } from '@src/components/form/forms';
 import type { Infomorph } from '@src/entities/actor/proxies/infomorph';
-import { ItemType } from '@src/entities/entity-types';
+import { entityFormDetailsStyles } from '@src/entities/components/form-layout/entity-form-details-style';
 import {
-  Drop,
   DropType,
   handleDrop,
   itemDropToItemProxy,
 } from '@src/foundry/drag-and-drop';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
-import { format, localize } from '@src/foundry/localization';
-import {
-  createHealthModification,
-  formatHealthModificationMode,
-  HealthModificationMode,
-} from '@src/health/health';
-import { DotOrHotTarget } from '@src/health/recovery';
+import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
-import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
-import { customElement, property, html } from 'lit-element';
-import { sortBy } from 'remeda';
+import { customElement, html, property } from 'lit-element';
 import { renderPoolEditForm } from '../pools/pool-edit-form';
 import { SleeveFormBase } from '../sleeve-form-base';
 import styles from './infomorph-form.scss';
@@ -37,7 +22,7 @@ export class InfomorphForm extends SleeveFormBase {
     return 'infomorph-form' as const;
   }
 
-  static styles = [styles];
+  static styles = [entityFormDetailsStyles, styles];
 
   @property({ attribute: false }) sleeve!: Infomorph;
 
