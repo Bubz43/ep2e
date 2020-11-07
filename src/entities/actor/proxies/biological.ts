@@ -53,6 +53,10 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
     return this.epData.swarm;
   }
 
+  get movementRates() {
+    return this.epData.movementRates
+  }
+
   get physicalHealth() {
     if (this.#physicalHealth === undefined) {
       this.#physicalHealth = new BiologicalHealth({

@@ -9,7 +9,7 @@ export const FormDrawer = (Base: Class<LitElement>) => {
 
     @query('focus-trap[slot="drawer-content"]') focusTrap?: FocusTrap;
 
-    private autoFocus = true;
+    private _autoFocus = true;    
 
     @internalProperty() protected drawerContentRenderer:
       | (() => TemplateResult)
@@ -30,7 +30,7 @@ export const FormDrawer = (Base: Class<LitElement>) => {
     }
 
     focusDrawerContent = () => {
-      this.autoFocus && this.focusTrap?.focusFirstElement();
+      this._autoFocus && this.focusTrap?.focusFirstElement();
     };
 
     renderDrawerContent() {
@@ -53,7 +53,7 @@ export const FormDrawer = (Base: Class<LitElement>) => {
       return ({ currentTarget }: Event) => {
         this.drawerOpener = currentTarget as HTMLElement;
         this.drawerContentRenderer = fn;
-        this.autoFocus = autoFocus;
+        this._autoFocus = autoFocus;
       };
     }
   }

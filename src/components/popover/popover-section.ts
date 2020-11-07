@@ -1,6 +1,10 @@
 import { customElement, LitElement, property, html } from 'lit-element';
 import styles from './popover-section.scss';
 
+/**
+ * @slot action
+ * @slot 
+ */
 @customElement('sl-popover-section')
 export class PopoverSection extends LitElement {
   static get is() {

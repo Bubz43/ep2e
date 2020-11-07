@@ -19,3 +19,21 @@
     background: linear-gradient(45deg, var(--color-bg), var(--color-bg-alt));
   }
 }
+
+.movement-list {
+  margin: 0.25rem 0.5rem;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.movement-rate {
+  list-style: none;
+  button {
+    all: unset;
+
+    &:hover,
+    &:focus {
+      text-shadow: var(--text-shadow);
+    }
+  }
+}

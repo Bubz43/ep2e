@@ -35,6 +35,9 @@ const oppositePlacement = (placement: Placement) => {
   }
 };
 
+/**
+ * @slot base
+ */
 @customElement('sl-popover')
 export class Popover extends mix(LitElement).with(ListenerSubscription) {
   static get is() {
@@ -78,7 +81,7 @@ export class Popover extends mix(LitElement).with(ListenerSubscription) {
 
   @property({ type: String }) scrollContainerQuery = '';
 
-  @property({ type: Boolean }) unpadded = false;
+  @property({ type: Boolean }) padded = false;
 
   @internalProperty() private arrowPlacement: Placement = Placement.Left;
 
@@ -557,12 +560,12 @@ export class Popover extends mix(LitElement).with(ListenerSubscription) {
   }
 
   render() {
-    const { arrowPlacement, arrow, minimal, unpadded, open } = this;
+    const { arrowPlacement, arrow, minimal, padded, open } = this;
     const floaterClasses: Record<string, boolean> = {
       open,
       minimal,
       animate: !this.noAnimation,
-      unpadded,
+      padded,
     };
     if (arrow) {
       for (const placement of placements) {

@@ -17,6 +17,7 @@ import { map, createPipe, compact, purry, anyPass } from 'remeda';
 import type { Action, ActionSubtype } from './actions';
 import { ArmorType } from './active-armor';
 import { createFeature } from './feature-helpers';
+import { Movement, MovementRate } from './movement';
 import type { RepBase } from './reputations';
 import {
   SkillType,
@@ -47,6 +48,7 @@ export enum EffectType {
   Melee = 'melee',
   Ranged = 'ranged',
   Skill = 'skill',
+  Movement = 'movement',
   // TODO Unique Toggles (disable distracted, no flip-flop)
   // TODO Vision MISC
   // TODO Limb / add extra/convert existing to prehensile
@@ -148,6 +150,24 @@ export type SkillEffect = {
   linkedAptitude: AptitudeType;
 };
 
+export enum MovementEffectMode {
+  Grant = 'grant',
+  Modify = 'modify',
+}
+
+export type MovementEffect = Omit<MovementRate, 'type'> & {
+  type: EffectType.Movement;
+  movementType: Movement;
+  mode: MovementEffectMode;
+};
+
+export type MovementEffectsInfo = {
+  grant: SourcedEffect<MovementEffect>[];
+  modify: SourcedEffect<MovementEffect>[];
+  baseModification: number;
+  fullModification: number;
+};
+
 export type Effect =
   | InitiativeEffect
   | PoolEffect
@@ -160,7 +180,8 @@ export type Effect =
   | HealthRecoveryEffect
   | MeleeEffect
   | RangedEffect
-  | SkillEffect;
+  | SkillEffect
+  | MovementEffect;
 
 export const Source = Symbol();
 
@@ -256,6 +277,14 @@ const healthRecovery = createFeature<HealthRecoveryEffect>(() => ({
   technologicallyAided: true,
 }));
 
+const movement = createFeature<MovementEffect>(() => ({
+  type: EffectType.Movement,
+  base: 0,
+  full: 0,
+  movementType: Movement.Walker,
+  mode: MovementEffectMode.Modify,
+}));
+
 export const createEffect = Object.freeze({
   pool,
   initiative,
@@ -269,6 +298,7 @@ export const createEffect = Object.freeze({
   melee,
   ranged,
   skill,
+  movement,
 });
 
 const format = (effect: Effect): (string | number)[] => {
@@ -383,6 +413,18 @@ const format = (effect: Effect): (string | number)[] => {
           : `@ ${localize(effect.linkedAptitude)} x${
               effect.aptitudeMultiplier
             }`,
+      ];
+    }
+
+    case EffectType.Movement: {
+      return [
+        localize(effect.mode),
+        localize(effect.movementType),
+        effect.mode === MovementEffectMode.Grant
+          ? `${localize('by')}  (${withSign(effect.base)} / ${withSign(
+              effect.full,
+            )})`
+          : `(${effect.base} / ${effect.full})`,
       ];
     }
   }

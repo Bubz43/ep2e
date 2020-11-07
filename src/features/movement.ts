@@ -37,10 +37,10 @@ export const movementRangeSpeeds = {
   [MovementRange.VeryFast]: { base: 8, full: 40 },
 } as const;
 
-export const getMovementSpeed = (range: MovementRange) => {
-  const { base, full } = movementRangeSpeeds[range];
-  return [base, full].join(' / ');
-};
+// export const getMovementSpeed = (range: MovementRange) => {
+//   const { base, full } = movementRangeSpeeds[range];
+//   return [base, full].join(' / ');
+// };
 
 export const getMovementSkill = (movement: Movement) => {
   const piloted = pilotMovementTypes.get(movement);
@@ -66,7 +66,9 @@ export const pilotMovementTypes: ReadonlyMap<
 
 export type MovementRate = {
   type: Movement;
-  range: MovementRange;
+  base: number;
+  full: number;
+  // range: MovementRange;
 };
 
 export const createMovementRate = createFeature<
@@ -76,5 +78,6 @@ export const createMovementRate = createFeature<
 
 export const defaultMovement = createMovementRate({
   type: Movement.Walker,
-  range: MovementRange.Medium,
+  base: 4,
+  full: 20
 });

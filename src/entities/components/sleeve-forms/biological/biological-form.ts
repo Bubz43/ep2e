@@ -1,27 +1,48 @@
-import { renderFormulaField, renderLabeledCheckbox, renderNumberField, renderSelectField, renderTextField } from "@src/components/field/fields";
-import { renderUpdaterForm } from "@src/components/form/forms";
-import { enumValues } from "@src/data-enums";
-import type { Biological } from "@src/entities/actor/proxies/biological";
-import { Size } from "@src/features/size";
-import { handleDrop, DropType, itemDropToItemProxy } from "@src/foundry/drag-and-drop";
-import { notify, NotificationType } from "@src/foundry/foundry-apps";
-import { localize } from "@src/foundry/localization";
-import { tooltip } from "@src/init";
-import { notEmpty } from "@src/utility/helpers";
-import { customElement, LitElement, property, html } from "lit-element";
-import { renderPoolEditForm } from "../pools/pool-edit-form";
-import { SleeveFormBase } from "../sleeve-form-base";
-import styles from "./biological-form.scss";
+import {
+  renderFormulaField,
+  renderLabeledCheckbox,
+  renderNumberField,
+  renderSelectField,
+  renderTextField,
+} from '@src/components/field/fields';
+import {
+  renderSubmitForm,
+  renderUpdaterForm,
+} from '@src/components/form/forms';
+import { enumValues } from '@src/data-enums';
+import type { Biological } from '@src/entities/actor/proxies/biological';
+import { renderMovementRateFields } from '@src/features/components/movement-rate-fields';
+import { addUpdateRemoveFeature, idProp } from '@src/features/feature-helpers';
+import { defaultMovement, Movement } from '@src/features/movement';
+import { Size } from '@src/features/size';
+import {
+  handleDrop,
+  DropType,
+  itemDropToItemProxy,
+} from '@src/foundry/drag-and-drop';
+import { notify, NotificationType } from '@src/foundry/foundry-apps';
+import { localize } from '@src/foundry/localization';
+import { tooltip } from '@src/init';
+import { notEmpty, withSign } from '@src/utility/helpers';
+import { customElement, LitElement, property, html } from 'lit-element';
+import { repeat } from 'lit-html/directives/repeat';
+import { renderPoolEditForm } from '../pools/pool-edit-form';
+import { SleeveFormBase } from '../sleeve-form-base';
+import styles from './biological-form.scss';
 
-@customElement("biological-form")
+@customElement('biological-form')
 export class BiologicalForm extends SleeveFormBase {
   static get is() {
-    return "biological-form" as const;
+    return 'biological-form' as const;
   }
 
   static styles = [styles];
 
   @property({ attribute: false }) sleeve!: Biological;
+
+  private movementOperations = addUpdateRemoveFeature(
+    () => this.sleeve.updater.prop('data', 'movementRates').commit,
+  );
 
   private handleItemDrop = handleDrop(async ({ data }) => {
     console.log(data);
@@ -44,9 +65,12 @@ export class BiologicalForm extends SleeveFormBase {
       type,
       sleeved,
       itemTrash,
+      movementRates,
     } = this.sleeve;
+    const { movementEffects } = itemGroups.effects;
+
     return html`
-       <entity-form-layout>
+      <entity-form-layout>
         <entity-form-header
           slot="header"
           .updateActions=${updater.prop('')}
@@ -55,20 +79,27 @@ export class BiologicalForm extends SleeveFormBase {
           ${sleeved ? html` <li slot="tag">${localize('sleeved')}</li> ` : ''}
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.prop("data"), {
+        ${renderUpdaterForm(updater.prop('data'), {
           disabled,
-          slot: "sidebar",
-          fields: ({ subtype, sex, unarmedDV, swarm, brain, prehensileLimbs, size }) => [
+          slot: 'sidebar',
+          fields: ({
+            size,
+            subtype,
+            sex,
+            swarm,
+            unarmedDV,
+            prehensileLimbs,
+            brain,
+          }) => [
             renderTextField(subtype),
             renderTextField(sex),
             renderFormulaField(unarmedDV),
             renderLabeledCheckbox(swarm),
             // TODO brain,
             renderNumberField(prehensileLimbs, { min: 0 }),
-            renderSelectField(size, enumValues(Size))
-          ]
+            renderSelectField(size, enumValues(Size)),
+          ],
         })}
-
 
         <div slot="details">
           <sleeve-form-acquisition
@@ -104,10 +135,57 @@ export class BiologicalForm extends SleeveFormBase {
             ></health-item>
           </section>
 
+          <section>
+            <sl-header heading=${localize('movementRates')}>
+              <mwc-icon-button
+                slot="action"
+                icon="add"
+                ?disabled=${disabled}
+                @click=${this.setDrawerFromEvent(this.renderMovementCreator)}
+              ></mwc-icon-button>
+            </sl-header>
+            <sl-animated-list class="movement-list">
+              ${repeat(movementRates, idProp, (movement) => {
+                const { baseModification, fullModification } =
+                  movementEffects.get(movement.type) ?? {};
+                return html`<li class="movement-rate">
+                  <sl-popover
+                    .renderOnDemand=${() => html`
+                      <sl-popover-section
+                        heading="${localize('edit')} ${localize('movement')}"
+                      >
+                        <delete-button
+                          slot="action"
+                          @delete=${this.movementOperations.removeCallback(
+                            movement.id,
+                          )}
+                        ></delete-button>
+                        ${renderSubmitForm({
+                          props: movement,
+                          update: this.movementOperations.update,
+                          fields: renderMovementRateFields,
+                        })}
+                      </sl-popover-section>
+                    `}
+                  >
+                    <button slot="base" ?disabled=${disabled}>
+                      ${localize(movement.type)}
+                      ${movement.base}${baseModification
+                        ? html`<sup>(${withSign(baseModification)})</sup>`
+                        : ''}
+                      /
+                      ${movement.full}${fullModification
+                        ? html`<sup>(${withSign(fullModification)})</sup>`
+                        : ''}
+                    </button>
+                  </sl-popover>
+                </li>`;
+              })}
+            </sl-animated-list>
+          </section>
+
           <sl-dropzone @drop=${this.handleItemDrop} ?disabled=${disabled}>
-            <sl-header
-              heading="${localize('traits')} & ${localize('ware')}"
-            >
+            <sl-header heading="${localize('traits')} & ${localize('ware')}">
               <!-- <mwc-icon
                 slot="icon"
                 data-tooltip=${localize('DESCRIPTIONS', 'OnlyInfomorphItems')}
@@ -153,6 +231,20 @@ export class BiologicalForm extends SleeveFormBase {
     `;
   }
 
+  private renderMovementCreator() {
+    return html`
+      <h3>${localize('add')} ${localize('movement')}</h3>
+
+      ${renderSubmitForm({
+        props: defaultMovement,
+        update: this.movementOperations.add,
+        fields: renderMovementRateFields,
+        noDebounce: true,
+        submitEmpty: true
+      })}
+    `;
+  }
+
   private renderItemTrash() {
     return html`
       <h3>${localize('deleted')} ${localize('items')}</h3>
@@ -165,7 +257,10 @@ export class BiologicalForm extends SleeveFormBase {
     return html`
       <section class="history">
         <h3>${localize('history')}</h3>
-        <health-log .health=${physicalHealth} ?disabled=${disabled}></health-log>
+        <health-log
+          .health=${physicalHealth}
+          ?disabled=${disabled}
+        ></health-log>
       </section>
     `;
   }
@@ -196,6 +291,6 @@ export class BiologicalForm extends SleeveFormBase {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "biological-form": BiologicalForm;
+    'biological-form': BiologicalForm;
   }
 }

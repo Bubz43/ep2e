@@ -1,3 +1,5 @@
+import { ButtonBase } from '@material/mwc-button/mwc-button-base';
+import { style as buttonStyles } from "@material/mwc-button/styles-css"
 import { customElement, LitElement, property, html } from 'lit-element';
 import { stopEvent } from 'weightless';
 import styles from './submit-button.scss';
@@ -12,12 +14,12 @@ const anim = [
 ];
 
 @customElement('submit-button')
-export class SubmitButton extends LitElement {
+export class SubmitButton extends ButtonBase {
   static get is() {
     return 'submit-button' as const;
   }
 
-  static styles = [styles];
+  static styles = [buttonStyles, styles];
 
   @property({ type: Boolean, reflect: true }) complete = false;
 

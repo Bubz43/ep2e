@@ -5,11 +5,15 @@ import {
   Effect,
   EffectType,
   HealthEffect,
+  MovementEffect,
+  MovementEffectMode,
+  MovementEffectsInfo,
   PoolEffect,
   Source,
   SourcedEffect,
   SuccessTestEffect,
 } from '@src/features/effects';
+import type { Movement } from '@src/features/movement';
 import { SkillType } from '@src/features/skills';
 import { createTag } from '@src/features/tags';
 import { localize } from '@src/foundry/localization';
@@ -71,11 +75,36 @@ export class AppliedEffects {
     return this.getGroup(EffectType.Pool).reduce((accum, effect) => {
       const { modifier, pool } = effect;
       const { effects = [], total = 0 } = accum.get(pool) ?? {};
+      effects.push(effect);
       return accum.set(pool, {
-        effects: effects.concat(effect),
+        effects: effects,
         total: total + modifier,
       });
     }, new Map<PoolType, { effects: SourcedEffect<PoolEffect>[]; total: number }>());
+  }
+
+  get movementEffects() {
+    return this.getGroup(EffectType.Movement).reduce((accum, effect) => {
+      let original = accum.get(effect.movementType);
+      if (!original) {
+        original = {
+          grant: [],
+          modify: [],
+          baseModification: 0,
+          fullModification: 0,
+        };
+        accum.set(effect.movementType, original);
+      }
+
+      if (effect.mode === MovementEffectMode.Grant) {
+        original.grant.push(effect);
+      } else {
+        original.modify.push(effect);
+        original.baseModification += effect.base;
+        original.fullModification += effect.full;
+      }
+      return accum;
+    }, new Map<Movement, MovementEffectsInfo>());
   }
 
   getHealthStatMods(type: HealthType) {
