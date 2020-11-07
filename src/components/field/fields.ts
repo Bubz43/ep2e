@@ -9,6 +9,8 @@ import type { Checkbox } from '@material/mwc-checkbox';
 import type { Switch } from '@material/mwc-switch';
 import type { Radio } from '@material/mwc-radio';
 import { DatepickerValueUpdated } from 'app-datepicker/dist/custom_typings';
+import { tooltip } from '@src/init';
+import { noop } from 'remeda';
 
 export type FieldElement =
   | HTMLInputElement
@@ -221,6 +223,7 @@ type CheckboxOptions = Partial<{
   disabled: boolean;
   indeterminate: boolean;
   alignEnd: boolean;
+  tooltipText: string
 }>;
 
 export const renderCheckbox = (
@@ -242,12 +245,15 @@ export const renderCheckbox = (
 
 export const renderLabeledCheckbox = (
   props: ValuedProp<boolean>,
-  { alignEnd = false, ...options }: CheckboxOptions = {},
+  { alignEnd = false, tooltipText, ...options }: CheckboxOptions = {},
 ) => html`
   <mwc-formfield
     label=${props.label}
     ?alignEnd=${alignEnd}
     style="height: 40px; padding-right: 0.5rem;"
+    data-tooltip=${ifDefined(tooltipText)}
+    @mouseover=${tooltipText ? tooltip.fromData : noop}
+    
   >
     ${renderCheckbox(props, options)}
   </mwc-formfield>

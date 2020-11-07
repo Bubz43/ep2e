@@ -92,7 +92,7 @@ export class BiologicalForm extends SleeveFormBase {
             prehensileLimbs,
             brain,
           }) => [
-            renderLabeledCheckbox(isSwarm),
+            renderLabeledCheckbox(isSwarm, { tooltipText: "Applies swarm rules"}),
             renderSelectField(size, enumValues(Size)),
             html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
             renderTextField(subtype),
