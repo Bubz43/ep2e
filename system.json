@@ -10,10 +10,10 @@
   "styles": [
     "./build/_dist_/global.css"
   ],
-  "compatibleCoreVersion": "0.7.5",
+  "compatibleCoreVersion": "0.7.6",
   "gridDistance": 1,
   "gridUnits": "m",
-  "minimumCoreVersion": "0.7.5",
+  "minimumCoreVersion": "0.7.6",
   "socket": true,
   "languages": [
     {

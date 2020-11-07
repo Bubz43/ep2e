@@ -22,7 +22,7 @@ import type {
 import type { EntityTemplates } from './template-schema';
 import type { UserHotbarEntry } from '@src/features/hotbar-entry';
 import type { MessageData } from '@src/chat/create-message';
-import type { TinyMCE } from 'tinymce';
+import type { TinyMCE, RawEditorSettings } from 'tinymce';
 // * Comment out canvas, game, ui from foundry.d.ts
 // * Add in context param to Entity.prototype._onUpdate
 // * Add generic type to collection

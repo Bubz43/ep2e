@@ -1,5 +1,6 @@
 import { render, html } from 'lit-html';
 import { first } from 'remeda';
+import type { RawEditorSettings } from 'tinymce';
 import { onChatMessageRender } from './chat/message-hooks';
 import { onCombatTrackerRender, onCombatUpdate } from './combat/combat-hooks';
 import { combatantSocketHandler } from './combat/combatant-commands';
@@ -69,7 +70,8 @@ Hooks.once('init', () => {
   CONFIG.Item.entityClass = ItemEP;
   Items.unregisterSheet('core', ItemSheet);
   Items.registerSheet(EP.Name, ItemEPSheet, { makeDefault: true });
-  CONFIG.TinyMCE.css.push(`${EP.Path}/darkMCE.css`);
+  CONFIG.TinyMCE.content_css.push(`${EP.Path}/darkMCE.css`);
+  (CONFIG.TinyMCE as RawEditorSettings).skin = "oxide-dark";
   CONFIG.Combat.initiative.decimals = 2;
 
   CONFIG.statusEffects = [CONFIG.statusEffects[0]].concat(
