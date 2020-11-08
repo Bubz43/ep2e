@@ -13,18 +13,19 @@ import {
   enumValues,
   Fork,
 } from '@src/data-enums';
+import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { FormDrawer } from '@src/entities/components/form-layout/entity-form-drawer-mixin';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import { Aptitudes, FieldSkillType } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
+import { tooltip } from '@src/init';
 import type { FieldProps, FieldPropsRenderer } from '@src/utility/field-values';
 import { customElement, LitElement, property, html } from 'lit-element';
+import { cache } from 'lit-html/directives/cache';
 import mix from 'mix-with/lib';
 import { createPipe, map, mapToObj, toPairs } from 'remeda';
 import type { Ego } from '../../ego';
 import styles from './ego-form.scss';
-
-const aptitudeSettings = { min: 0, max: 30, helpPersistent: false } as const;
 
 const renderAptitudeField = ([, apt]: [
   string,
@@ -32,7 +33,7 @@ const renderAptitudeField = ([, apt]: [
 ]) => {
   return renderNumberField(
     { ...apt, label: localize('FULL', apt.prop) },
-    aptitudeSettings,
+    { min: 0, max: 30 },
   );
 };
 
@@ -50,7 +51,7 @@ export class EgoForm extends mix(LitElement).with(
     return 'ego-form' as const;
   }
 
-  static styles = [styles];
+  static styles = [entityFormCommonStyles, styles];
 
   @property({ attribute: false }) ego!: Ego;
 
@@ -87,7 +88,7 @@ export class EgoForm extends mix(LitElement).with(
           type=${localize('ego')}
         ></entity-form-header>
         ${this.renderTabBar('tabs')} ${this.renderSidebar()}
-        ${this.renderTabbedContent(this.activeTab)}
+        ${cache(this.renderTabbedContent(this.activeTab))}
         ${activeTab === 'skills'
           ? ''
           : html`
@@ -99,6 +100,58 @@ export class EgoForm extends mix(LitElement).with(
             `}
         ${this.renderDrawerContent()}
       </entity-form-layout>
+    `;
+  }
+
+  protected renderTabbedContent(tab: EgoForm['tabs'][number]) {
+    switch (tab) {
+      case 'details':
+        return this.renderDetails();
+
+      case 'skills':
+        return html`
+          <ego-form-skills slot="details" .ego=${this.ego}></ego-form-skills>
+        `;
+    }
+  }
+
+  private renderDetails() {
+    const { settings } = this.ego;
+    return html`
+      <div slot="details">
+        <section>
+          <sl-header heading=${localize('motivations')}></sl-header>
+        </section>
+
+        ${settings.trackReputations
+          ? html`<section>
+              <sl-header heading=${localize('reputations')}></sl-header>
+            </section>`
+          : ''}
+        ${settings.trackMentalHealth
+          ? html`
+              <section>
+                <sl-header heading=${localize('mentalHealth')}></sl-header>
+              </section>
+            `
+          : ''}
+
+        <section>
+          <sl-header heading=${localize('traits')}></sl-header>
+        </section>
+
+        <section>
+          <sl-header heading=${localize('notes')}>
+            <mwc-icon
+              slot="info"
+              data-tooltip="${localize('mentalEdits')}, ${localize(
+                'forks',
+              )} & ${localize('backups')}"
+              @mouseover=${tooltip.fromData}
+            >info</mwc-icon>
+          </sl-header>
+        </section>
+      </div>
     `;
   }
 
@@ -125,21 +178,17 @@ export class EgoForm extends mix(LitElement).with(
         ],
         disabled,
       })}
-      <sl-popover
-        class="settings-popover"
+
+      <mwc-button
+        label=${localize('settings')}
+        icon="settings"
         slot="sidebar"
-        center
-        .renderOnDemand=${this.renderSettingsForm}
-      >
-        <mwc-button
-          label=${localize('settings')}
-          outlined
-          icon="settings"
-          slot="base"
-          ?disabled=${disabled}
-          trailingIcon
-        ></mwc-button>
-      </sl-popover>
+        ?disabled=${disabled}
+        class="settings-toggle"
+        trailingIcon
+        @click=${this.setDrawerFromEvent(this.renderSettingsForm)}
+      ></mwc-button>
+
       <entity-form-sidebar-divider
         slot="sidebar"
         label="aptitudes"
@@ -162,36 +211,24 @@ export class EgoForm extends mix(LitElement).with(
     </datalist>
   `;
 
-  private renderSettingsForm = () =>
-    renderUpdaterForm(this.ego.updater.prop('data', 'settings'), {
-      disabled: this.ego.disabled,
-      fields: (props) =>
-        enumValues(EgoSetting).map((setting) => {
-          const prop = props[setting];
-          return setting === EgoSetting.TrackPoints
-            ? renderLabeledCheckbox({
-                ...prop,
-                label: localize('trackResourcePoints'),
-              })
-            : renderLabeledCheckbox(prop);
-        }),
-      classes: 'settings-form',
-    });
-
-  protected renderTabbedContent(tab: EgoForm['tabs'][number]) {
-    switch (tab) {
-      case 'details':
-        return this.renderDetails();
-
-      case 'skills':
-        return html`
-          <ego-form-skills slot="details" .ego=${this.ego}></ego-form-skills>
-        `;
-    }
-  }
-
-  private renderDetails() {
-    return html``;
+  private renderSettingsForm() {
+    return html`
+      <h3>${localize('settings')}</h3>
+      ${renderUpdaterForm(this.ego.updater.prop('data', 'settings'), {
+        disabled: this.ego.disabled,
+        classes: 'settings-form',
+        fields: (props) =>
+          enumValues(EgoSetting).map((setting) => {
+            const prop = props[setting];
+            return setting === EgoSetting.TrackPoints
+              ? renderLabeledCheckbox({
+                  ...prop,
+                  label: localize('trackResourcePoints'),
+                })
+              : renderLabeledCheckbox(prop);
+          }),
+      })}
+    `;
   }
 }
 

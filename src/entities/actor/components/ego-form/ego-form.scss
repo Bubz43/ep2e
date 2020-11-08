@@ -7,5 +7,22 @@
 
 :host {
   display: block;
-  
 }
+
+.settings-toggle {
+  left: -1rem;
+  position: relative;
+  width: calc(100% + 2rem);
+  --mdc-theme-primary: var(--color-grey);
+}
+
+.settings-form {
+  min-width: max-content;
+}
+
+[slot='description'],
+[slot='details'] {
+  @include animate-css(fadeIn, 500ms);
+  animation-fill-mode: none !important;
+}
+

@@ -1302,7 +1302,23 @@
                   "$ref": "#/definitions/RechargeData"
                 },
                 "mentalEdits": {
-                  "type": "string"
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "edit": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "edit",
+                      "id"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
                 },
                 "mentalHealth": {
                   "additionalProperties": false,
@@ -2248,9 +2264,6 @@
                 "brain": {
                   "type": "string"
                 },
-                "deviceType": {
-                  "$ref": "#/definitions/DeviceType"
-                },
                 "inherentArmor": {
                   "additionalProperties": false,
                   "properties": {
@@ -2349,7 +2362,6 @@
               },
               "required": [
                 "brain",
-                "deviceType",
                 "inherentArmor",
                 "isSwarm",
                 "meshHealth",

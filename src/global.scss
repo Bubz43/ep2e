@@ -43,7 +43,7 @@ mwc-menu {
     border-color: var(--color-bg);
     margin: 0.25rem 0;
   }
-  --mdc-theme-text-primary-on-background: hsl(0, 0%, 85%);
+  --mdc-theme-text-primary-on-background: var(--color-text);
   --mdc-list-item-graphic-margin: 1rem;
   --mdc-list-item-graphic-size: 20px;
   --mdc-icon-size: 20px;

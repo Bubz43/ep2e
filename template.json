@@ -124,7 +124,6 @@
       "size": "medium",
       "reach": 0,
       "brain": "",
-      "deviceType": "mote",
       "inherentArmor": {
         "energy": 0,
         "kinetic": 0,
@@ -177,7 +176,7 @@
       "templates": [
         "Common"
       ],
-      "mentalEdits": "",
+      "mentalEdits": [],
       "fakeId": "",
       "aptitudes": {
         "cog": 10,

@@ -35,11 +35,11 @@
   }
 
   ::slotted([slot='tabs']) {
-    box-shadow: 0 2px 4px 1px hsla(0, 0%, 0%, 0.322);
-    background: lightv(var(--color-bg), 1.2);
+    box-shadow: 0 3px 4px 1px rgba(black, 0.5);
+    background: lightv(var(--color-bg), 1.4);
     --mdc-theme-primary: var(--color-grey);
     width: min-content;
-    margin: 0 auto 0.25rem;
+    margin: 0 auto 0.5rem;
   }
 
   ::slotted([slot='details']) {

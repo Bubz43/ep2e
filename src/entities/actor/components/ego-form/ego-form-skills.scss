@@ -9,3 +9,54 @@
   display: block;
   
 }
+
+.skills-header {
+  display: grid;
+  align-items: center;
+  margin-top: 0.25rem;
+  padding-top: 0.25rem;
+  gap: 2px;
+  grid-template-areas:
+    "active know creator"
+    "info info info";
+
+  .creator {
+    grid-area: creator;
+    place-self: center;
+    --mdc-theme-primary: var(--color-secondary);
+  }
+
+  .group {
+    display: flex;
+    .label {
+      display: inline-block;
+      transform: translateY(3px);
+      margin-right: 4px;
+      margin-left: auto;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: var(--color-text-lighter);
+      &::after {
+        content: ":";
+      }
+    }
+  }
+
+  .skill-totals {
+    &.know {
+      grid-area: know;
+    }
+    &.active {
+      grid-area: active;
+    }
+  }
+
+  .skills-info {
+    grid-area: info;
+  }
+
+  .total-number {
+    min-width: 4.5ch;
+  }
+  
+}

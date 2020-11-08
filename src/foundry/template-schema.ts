@@ -180,7 +180,7 @@ export type EgoData = {
       notes: string;
     };
   }>;
-  mentalEdits: string;
+  mentalEdits: StringID<{ edit: string }>[];
   activeForks: StringID<ActiveForkData>[];
   backups: StringID<EgoBackupData>[];
 };
