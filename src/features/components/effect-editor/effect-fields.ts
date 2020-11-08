@@ -77,8 +77,9 @@ const pool: FieldPropsRenderer<PoolEffect> = ({
   renderSelectField(usabilityModification, enumValues(PoolEffectUsability), {
     emptyText: localize('none'),
   }),
+  // TODO Check if there is anything that ever lowers amount of pools
   usabilityModification.value !== PoolEffectUsability.Disable
-    ? renderNumberField(modifier, { min: -5, max: 5 })
+    ? renderNumberField(modifier, { min: 0, max: 5 })
     : '',
 ];
 

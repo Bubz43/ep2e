@@ -1,6 +1,9 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+@include dataComma();
+@include listItemLabel();
+
 * {
   box-sizing: border-box;
 }
@@ -17,33 +20,11 @@ li {
   display: flex;
   flex-flow: row wrap;
   margin: 0.5rem 0.25rem;
-  // position: relative;
-  .label {
-    text-transform: uppercase;
-    color: var(--color-text-lighter);
-    letter-spacing: 0.5px;
-  }
+
   li:not(.label) {
     margin-left: 0.5ch;
     display: inline-flex;
-    button {
-      all: unset;
-      &[disabled] {
-        pointer-events: none;
-      }
-      &:hover{
-        color: satv(var(--color-secondary), 1.4);
-        cursor: pointer;
-      }
-      &:focus {
-        text-shadow: var(--text-highlight);
-      }
-    }
-    &[data-comma] {
-      &::after {
-        content: ',';
-        color: var(--color-text-lighter);
-      }
-    }
+    
+    @include textButton();
   }
 }

@@ -1,3 +1,5 @@
+@use "./functions";
+
 @mixin styled-scrollbars {
   ::-webkit-scrollbar {
     width: 6px;
@@ -49,7 +51,7 @@
     all: unset;
     &:hover {
       cursor: pointer;
-      color: satv(var(--color-secondary), 1.2);
+      color: functions.satv(var(--color-secondary), 1.2);
     }
     &:focus {
       text-shadow: var(--text-highlight);

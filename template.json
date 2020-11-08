@@ -113,7 +113,6 @@
         "PoolData",
         "Conditions"
       ],
-      "hostType": "aliOnly",
       "passengers": 0,
       "prehensileLimbs": 2,
       "shellType": "synthmorph",
@@ -124,9 +123,8 @@
       "recoveryConditions": "normal",
       "size": "medium",
       "reach": 0,
-      "defaultDevice": {
-        "deviceType": "host"
-      },
+      "brain": "",
+      "deviceType": "mote",
       "inherentArmor": {
         "energy": 0,
         "kinetic": 0,

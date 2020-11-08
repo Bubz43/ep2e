@@ -258,14 +258,12 @@ type SyntheticShellData = {
       'Mobile',
       'Acquisition',
       'PoolData',
-      // "FullMeshHealth",
-      // "Firewall",
       'Conditions',
     ]
   >;
   shellType: ShellType;
   subtype: '' | VehicleType | BotType;
-  hostType: ShellHostType;
+  deviceType: DeviceType;
   passengers: number;
   unarmedDV: string;
   isSwarm: boolean;
@@ -273,9 +271,7 @@ type SyntheticShellData = {
   recoveryConditions: RecoveryConditions;
   physicalHealth: SyntheticHealthData;
   meshHealth: InfomorphHealthData;
-  defaultDevice: {
-    deviceType: DeviceType;
-  };
+  brain: string;
   size: Size;
   /**
    * @minimum 0

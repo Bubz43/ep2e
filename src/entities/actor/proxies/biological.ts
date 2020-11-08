@@ -20,8 +20,8 @@ import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 export class Biological extends ActorProxyBase<ActorType.Biological> {
   private _localEffects?: AppliedEffects;
   private _outsideEffects?: ReadonlyAppliedEffects;
-
   readonly sleeved;
+  
   constructor({
     activeEffects,
     sleeved,

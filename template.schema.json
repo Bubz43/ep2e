@@ -2245,20 +2245,11 @@
             "syntheticShell": {
               "additionalProperties": false,
               "properties": {
-                "defaultDevice": {
-                  "additionalProperties": false,
-                  "properties": {
-                    "deviceType": {
-                      "$ref": "#/definitions/DeviceType"
-                    }
-                  },
-                  "required": [
-                    "deviceType"
-                  ],
-                  "type": "object"
+                "brain": {
+                  "type": "string"
                 },
-                "hostType": {
-                  "$ref": "#/definitions/ShellHostType"
+                "deviceType": {
+                  "$ref": "#/definitions/DeviceType"
                 },
                 "inherentArmor": {
                   "additionalProperties": false,
@@ -2357,8 +2348,8 @@
                 }
               },
               "required": [
-                "defaultDevice",
-                "hostType",
+                "brain",
+                "deviceType",
                 "inherentArmor",
                 "isSwarm",
                 "meshHealth",
@@ -10064,13 +10055,6 @@
         "network"
       ],
       "type": "object"
-    },
-    "ShellHostType": {
-      "enum": [
-        "aliOnly",
-        "cyberbrain"
-      ],
-      "type": "string"
     },
     "ShellType": {
       "enum": [
