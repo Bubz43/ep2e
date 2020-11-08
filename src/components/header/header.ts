@@ -3,7 +3,7 @@ import styles from './header.scss';
 
 /**
  * @slot action
- * @slot icon
+ * @slot info
  */
 @customElement('sl-header')
 export class Header extends LitElement {
@@ -24,7 +24,7 @@ export class Header extends LitElement {
         ${this.itemCount !== undefined
           ? html`<span class="count">${this.itemCount}</span>`
           : ''}
-        <slot name="icon"></slot>
+        <slot name="info"></slot>
       </h3>
       <slot name="action"></slot>
     `;

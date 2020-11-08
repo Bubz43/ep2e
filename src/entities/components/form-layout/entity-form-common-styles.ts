@@ -9,6 +9,6 @@ export const entityFormCommonStyles = css`
   }
 
   entity-form-sidebar-divider + sl-field {
-    margin-top: 0.25rem;
+    margin-top: 0.4rem;
   }
 `;

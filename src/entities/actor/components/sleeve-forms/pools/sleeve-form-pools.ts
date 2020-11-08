@@ -5,7 +5,7 @@ import { localize } from '@src/foundry/localization';
 import type { MorphPoolsData } from '@src/foundry/template-schema';
 import { tooltip } from '@src/init';
 import { withSign } from '@src/utility/helpers';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, html, LitElement, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { clamp } from 'remeda';
 import styles from './sleeve-form-pools.scss';
@@ -32,7 +32,7 @@ export class SleeveFormPools extends LitElement {
     return html`
       <sl-header heading=${localize('pools')}>
         <mwc-icon
-          slot="icon"
+          slot="info"
           data-tooltip=${localize('DESCRIPTIONS', 'OnlyWarePoolBonus')}
           @mouseenter=${tooltip.fromData}
           >info</mwc-icon
@@ -59,9 +59,9 @@ export class SleeveFormPools extends LitElement {
               ${value}
               ${bonus
                 ? html`
-                    <span
+                    <sup
                       data-bonus=${withSign(clamp(bonus, { max: 5 }))}
-                    ></span>
+                    ></sup>
                   `
                 : ''}
             </li>

@@ -1,3 +1,4 @@
+import type { EffectUpdatedEvent } from '@src/features/components/effect-editor/effect-updated-event';
 import { Effect, formatEffect } from '@src/features/effects';
 import {
   AddUpdateRemoveFeature,
@@ -40,7 +41,27 @@ export class ItemFormEffectsList extends LitElement {
           idProp,
           (effect, index) => html`
             <li ?data-comma=${index < commaTarget}>
-              <button>${formatEffect(effect)}</button>
+              <sl-popover
+                .renderOnDemand=${() => html`
+                  <sl-popover-section
+                    heading="${localize('edit')} ${localize('effect')}"
+                  >
+                    <delete-button
+                      slot="action"
+                      @delete=${this.operations.removeCallback(effect.id)}
+                    ></delete-button>
+                    <effect-editor
+                      .effect=${effect}
+                      @effect-updated=${(ev: EffectUpdatedEvent) =>
+                        this.operations.update(ev.effect, effect)}
+                    ></effect-editor>
+                  </sl-popover-section>
+                `}
+              >
+                <button slot="base" ?disabled=${this.disabled}>
+                  ${formatEffect(effect)}
+                </button>
+              </sl-popover>
             </li>
           `,
         )}

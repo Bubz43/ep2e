@@ -6,12 +6,14 @@ import {
   html,
   internalProperty,
 } from 'lit-element';
+import mix from 'mix-with/lib';
+import { LazyRipple } from '../mixins/lazy-ripple';
 import styles from './dropzone.scss';
 
 const dragEvents = ['dragleave', 'dragend', 'drop'] as const;
 
 @customElement('sl-dropzone')
-export class DropZone extends LitElement {
+export class DropZone extends mix(LitElement).with(LazyRipple) {
   static get is() {
     return 'sl-dropzone' as const;
   }
@@ -44,10 +46,18 @@ export class DropZone extends LitElement {
     DropZone.highlighted = this;
   };
 
-  private removeBackgroundHighlight = () => (DropZone.highlighted = null);
+  private removeBackgroundHighlight = (ev: DragEvent) => {
+    if (ev.type === 'drop') {
+      this.rippleHandlers.startPress(ev);
+      requestAnimationFrame(() => {
+        this.rippleHandlers.endPress();
+        setTimeout(() =>  DropZone.highlighted = null, 350);
+      });
+    } else DropZone.highlighted = null;
+  };
 
   render() {
-    return html` <slot></slot>`;
+    return html` <slot></slot> ${this.renderRipple(this.disabled)}`;
   }
 }
 

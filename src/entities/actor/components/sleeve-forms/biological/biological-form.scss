@@ -19,10 +19,17 @@
   list-style: none;
   button {
     all: unset;
-
-    &:hover,
-    &:focus {
-      text-shadow: var(--text-shadow);
+    &:hover {
+      cursor: pointer;
+      color: satv(var(--color-secondary), 1.2);
     }
+    &:focus {
+      text-shadow: var(--text-highlight);
+    }
+  }
+  sup {
+    vertical-align: text-top;
+    margin-left: 0.25ch;
+    color: satv(var(--color-grey), 1.2);
   }
 }

@@ -10,7 +10,7 @@
 :host {
   display: grid;
 
-  width: 710px;
+  width: 720px;
   min-width: 100%;
   min-height: 100%;
   grid-template-rows: min-content min-content 1fr;
@@ -145,10 +145,10 @@ slot[name='tabs'] {
   display: flex;
   flex-flow: column;
   grid-area: sidebar;
-  padding: 1rem 1.618rem;
+  padding: 1rem;
   background: linear-gradient(to bottom, var(--color-bg), var(--color-bg-alt));
   border-right: 1px solid var(--color-border);
-  min-width: 220px;
+  min-width: calc(220px - 0.6rem);
   &.no-scroll {
     border-bottom: 1px solid var(--color-border);
   }

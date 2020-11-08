@@ -96,7 +96,7 @@ export class InfomorphForm extends SleeveFormBase {
               heading="${localize('traits')} & ${localize('software')}"
             >
               <mwc-icon
-                slot="icon"
+                slot="info"
                 data-tooltip=${localize('DESCRIPTIONS', 'OnlyInfomorphItems')}
                 @mouseover=${tooltip.fromData}
                 >info</mwc-icon

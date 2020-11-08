@@ -22,12 +22,14 @@
   display: grid;
   grid-auto-flow: column;
   gap: 0.5ch;
-  font-size: 1.1rem;
   &.hide {
     opacity: 0.5;
   }
 
   [data-bonus] {
+    margin-left: -0.25ch;
+    color: alphav(var(--color-text), 0.9);
+    align-self: start;
     &::before {
       content: attr(data-bonus);
     }

@@ -73,7 +73,6 @@ submit-button {
   justify-content: space-between;
   align-items: center;
   padding: 0 0 0 0.5rem;
-  --list-item-padding: 0rem 0.5rem;
   margin: 0 0 0.25rem 0;
   > h4 {
     margin: 0;
@@ -84,7 +83,7 @@ submit-button {
   }
 
   mwc-button {
-    color: var(--color-secondary);
+    --mdc-theme-primary: var(--color-primary-alt);
   }
 }
 

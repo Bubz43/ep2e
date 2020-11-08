@@ -14,24 +14,18 @@ import type { Biological } from '@src/entities/actor/proxies/biological';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { renderMovementRateFields } from '@src/features/components/movement-rate-fields';
 import { addUpdateRemoveFeature, idProp } from '@src/features/feature-helpers';
-import { defaultMovement, Movement } from '@src/features/movement';
+import { defaultMovement } from '@src/features/movement';
 import { Size } from '@src/features/size';
 import {
-  handleDrop,
   DropType,
+  handleDrop,
   itemDropToItemProxy,
 } from '@src/foundry/drag-and-drop';
-import { notify, NotificationType } from '@src/foundry/foundry-apps';
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { notEmpty, withSign } from '@src/utility/helpers';
-import {
-  customElement,
-  LitElement,
-  property,
-  html,
-  TemplateResult,
-} from 'lit-element';
+import { customElement, html, property, TemplateResult } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { renderPoolEditForm } from '../pools/pool-edit-form';
 import { SleeveFormBase } from '../sleeve-form-base';
@@ -248,7 +242,7 @@ export class BiologicalForm extends SleeveFormBase {
               )} ${localize('ware')}"
             >
               <mwc-icon
-                slot="icon"
+                slot="info"
                 data-tooltip=${localize(
                   'DESCRIPTIONS',
                   'OnlyPhysicalMorphItems',
