@@ -48,12 +48,12 @@ export let overlay: EPOverlay;
 export let tooltip: ToolTip;
 export let lastEventPosition: DragEvent | MouseEvent | null = null;
 
-const setLastPosition = (ev: DragEvent | MouseEvent) => lastEventPosition = ev;
-window.addEventListener("mousedown", setLastPosition, { capture: true })
-window.addEventListener("mouseup", setLastPosition, { capture: true })
-window.addEventListener("click", setLastPosition, { capture: true })
-window.addEventListener("drop", setLastPosition, { capture: true })
-
+const setLastPosition = (ev: DragEvent | MouseEvent) =>
+  (lastEventPosition = ev);
+window.addEventListener('mousedown', setLastPosition, { capture: true });
+window.addEventListener('mouseup', setLastPosition, { capture: true });
+window.addEventListener('click', setLastPosition, { capture: true });
+window.addEventListener('drop', setLastPosition, { capture: true });
 
 Hooks.once('init', () => {
   gameSettings = registerEPSettings();
@@ -70,7 +70,7 @@ Hooks.once('init', () => {
   Items.unregisterSheet('core', ItemSheet);
   Items.registerSheet(EP.Name, ItemEPSheet, { makeDefault: true });
   CONFIG.TinyMCE.content_css.push(`${EP.Path}/darkMCE.css`);
-  (CONFIG.TinyMCE as RawEditorSettings).skin = "oxide-dark";
+  (CONFIG.TinyMCE as RawEditorSettings).skin = 'oxide-dark';
   CONFIG.Combat.initiative.decimals = 2;
 
   CONFIG.statusEffects = [CONFIG.statusEffects[0]].concat(
@@ -202,9 +202,6 @@ Hooks.once('ready', async () => {
     },
   });
 });
-
-
-
 
 let lastClicked: HTMLElement | null = null;
 

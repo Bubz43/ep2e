@@ -51,19 +51,19 @@ export class Trait
     ];
   }
 
-  selectLevelAndAdd(addTrait: (data: Trait["data"]) => unknown,) {
+  selectLevelAndAdd(addTrait: (data: Trait['data']) => unknown) {
     openMenu({
       header: { heading: this.name },
       content: this.levels.map((_, index) => ({
-        label: `${localize("level")} ${index + 1}`,
+        label: `${localize('level')} ${index + 1}`,
         callback: () => {
           const copy = this.getDataCopy();
           copy.data.state.level = index;
-          addTrait(copy)
-        }
+          addTrait(copy);
+        },
       })),
-      position: lastEventPosition
-    })
+      position: lastEventPosition,
+    });
   }
 
   get tags() {

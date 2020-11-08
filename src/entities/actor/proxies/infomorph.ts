@@ -1,6 +1,6 @@
 import {
   AppliedEffects,
-  ReadonlyAppliedEffects
+  ReadonlyAppliedEffects,
 } from '@src/entities/applied-effects';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
@@ -46,7 +46,6 @@ export class Infomorph extends ActorProxyBase<ActorType.Infomorph> {
     return this._outsideEffects ?? this._localEffects;
   }
 
-
   @LazyGetter()
   get meshHealth() {
     return new InfomorphHealth({
@@ -55,9 +54,8 @@ export class Infomorph extends ActorProxyBase<ActorType.Infomorph> {
       updater: this.updater.prop('data', 'meshHealth').nestedStore(),
       source: localize('mindState'),
       homeDevices: 1, // TODO
-    })
+    });
   }
-
 
   @LazyGetter()
   get itemGroups() {

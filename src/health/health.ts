@@ -71,15 +71,15 @@ export const createHealthModification = createFeature<
 export const formatHealthModificationMode = (mode: HealthModificationMode) => {
   switch (mode) {
     case HealthModificationMode.Edit:
-      return localize("setHealthTo")
-    
+      return localize('setHealthTo');
+
     case HealthModificationMode.Heal:
-      return localize("healed")
-    
+      return localize('healed');
+
     case HealthModificationMode.Inflict:
-      return localize("inflicted")
+      return localize('inflicted');
   }
-}
+};
 
 export enum HealthStat {
   Derived = 'derived',
@@ -131,7 +131,7 @@ export interface CommonHealth<T extends BasicHealthData = BasicHealthData> {
   readonly woundIcon: string;
   readonly recoveries?: HealthRecoveries;
   applyModification(modification: HealthModification): void | Promise<unknown>;
-  resetLog(): void | Promise<unknown>
+  resetLog(): void | Promise<unknown>;
 }
 
 export const formatDamageType = (type: HealthType) => {

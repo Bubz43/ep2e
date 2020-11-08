@@ -27,8 +27,6 @@ export const uniqueStringID = (existing: string[]) => {
   return id;
 };
 
-
-
 export const addUpdateRemoveFeature = <T extends FeatureWithID>(
   updateList: () => UpdateActions<T[]>['commit'],
 ): AddUpdateRemoveFeature<T> => {
@@ -44,7 +42,7 @@ export const addUpdateRemoveFeature = <T extends FeatureWithID>(
 
   const remove = (id: string) => updateList()(removeFeature(id));
 
-  const removeCallback = (id: string) => () => remove(id)
+  const removeCallback = (id: string) => () => remove(id);
 
   return { update, add, remove, removeCallback };
 };
@@ -53,7 +51,7 @@ export type AddUpdateRemoveFeature<T extends FeatureWithID> = {
   add: FormInstance<Omit<T, 'id'>>['update'];
   update: (changed: Partial<T>, original: Pick<T, 'id'>) => void;
   remove: (id: string) => void;
-  removeCallback: (id: string) => () => void
+  removeCallback: (id: string) => () => void;
 };
 
 type CreateFn<T extends Feature, R extends keyof T = never> = (

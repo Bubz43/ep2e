@@ -6,8 +6,8 @@ import {
 } from '@src/features/time';
 import {
   toMilliseconds,
-  parseMilliseconds
-} from "@src/features/modify-milliseconds";
+  parseMilliseconds,
+} from '@src/features/modify-milliseconds';
 import { localize } from '@src/foundry/localization';
 import { debounce } from '@src/utility/decorators';
 import {

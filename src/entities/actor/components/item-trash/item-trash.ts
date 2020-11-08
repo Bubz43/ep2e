@@ -54,7 +54,6 @@ export class ItemTrash extends LitElement {
 
   render() {
     return html`
-  
       <mwc-list multi @selected=${this.saveRestoreIndex} class="restore-menu">
         ${this.proxy.actor.itemTrash.map((data) => {
           const { agent } = new ItemEP(data, {});
@@ -77,7 +76,12 @@ export class ItemTrash extends LitElement {
         </mwc-list-item>
       </mwc-list>
       ${notEmpty(this.proxy.itemTrash)
-        ? html`<delete-button data-tooltip="${localize("empty")} ${localize("itemTrash")}" @mouseover=${tooltip.fromData} @focus=${tooltip.fromData} @delete=${this.emptyTrash}></delete-button>`
+        ? html`<delete-button
+            data-tooltip="${localize('empty')} ${localize('itemTrash')}"
+            @mouseover=${tooltip.fromData}
+            @focus=${tooltip.fromData}
+            @delete=${this.emptyTrash}
+          ></delete-button>`
         : ''}
     `;
   }

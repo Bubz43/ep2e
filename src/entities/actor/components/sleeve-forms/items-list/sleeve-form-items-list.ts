@@ -58,7 +58,6 @@ export class SleeveFormItemsList extends LitElement {
       </sl-animated-list>
     `;
   }
-
 }
 
 declare global {

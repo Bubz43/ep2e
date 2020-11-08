@@ -84,4 +84,3 @@ export function throttleFn<T extends (...args: any) => any>(
     }
   };
 }
-

@@ -33,7 +33,10 @@ const renderSpecificSleeveForm = (proxy: Sleeve, token: MaybeToken) => {
           .updater=${proxy.updater.prop('data').nestedStore()}
         ></entity-form-footer> `;
     case ActorType.Biological:
-      return html`<biological-form .sleeve=${proxy} .token=${token}></biological-form>
+      return html`<biological-form
+          .sleeve=${proxy}
+          .token=${token}
+        ></biological-form>
         <entity-form-footer
           slot="footer"
           .updater=${proxy.updater.prop('data').nestedStore()}
@@ -43,6 +46,7 @@ const renderSpecificSleeveForm = (proxy: Sleeve, token: MaybeToken) => {
         <entity-form-footer
           slot="footer"
           .updater=${proxy.updater.prop('data').nestedStore()}
-        ></entity-form-footer> `;
+        ></entity-form-footer>
+      `;
   }
 };

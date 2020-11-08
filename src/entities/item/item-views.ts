@@ -14,6 +14,6 @@ export const renderItemForm = (proxy: ItemProxy) => {
       `;
 
     default:
-      return html``
+      return html``;
   }
 };

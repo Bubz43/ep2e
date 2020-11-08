@@ -35,11 +35,12 @@ export class SleeveFormPools extends LitElement {
           slot="icon"
           data-tooltip=${localize('DESCRIPTIONS', 'OnlyWarePoolBonus')}
           @mouseenter=${tooltip.fromData}
-        >info</mwc-icon>
+          >info</mwc-icon
+        >
         <mwc-icon-button
           slot="action"
           icon="edit"
-          data-tooltip=${localize("edit")}
+          data-tooltip=${localize('edit')}
           @mouseover=${tooltip.fromData}
           @focus=${tooltip.fromData}
           ?disabled=${this.disabled}

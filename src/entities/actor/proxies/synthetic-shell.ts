@@ -1,6 +1,6 @@
 import {
   AppliedEffects,
-  ReadonlyAppliedEffects
+  ReadonlyAppliedEffects,
 } from '@src/entities/applied-effects';
 import type { ActorType } from '@src/entities/entity-types';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
@@ -27,12 +27,10 @@ export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
   }
 
   get pools() {
-    return this.epData.pools
+    return this.epData.pools;
   }
-
 
   get subtype() {
     return this.epData.subtype;
   }
-
 }

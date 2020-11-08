@@ -1250,7 +1250,8 @@ type LangEntries =
   | 'changes'
   | 'grant'
   | 'modify'
-  | 'isSwarm' | "passive";
+  | 'isSwarm'
+  | 'passive';
 type FullNames =
   | 'cog'
   | 'int'
@@ -1325,8 +1326,8 @@ export type DescriptionEntry =
   | 'OnlyMorphTraits'
   | 'OnlyInfomorphItems'
   | 'AppliesSwarmRules'
-  | 'OnlyPhysicalMorphItems' | "OnlyWareItems"
-
+  | 'OnlyPhysicalMorphItems'
+  | 'OnlyWareItems';
 
 // TODO Look into using data keys as pattern to validate json string
 export type Formatable = {

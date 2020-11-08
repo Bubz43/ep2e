@@ -99,12 +99,11 @@ export abstract class ActorProxyBase<T extends ActorType> {
   hasItemProxy(agent: ItemProxy | null | undefined) {
     return this.items.get(agent?.id)?.agent === agent;
   }
-  
+
   protected get highestItemSort() {
     return [...this.items.values()].reduce(
       (accum, { agent }) => Math.max(accum, agent.sort || 0),
       0,
     );
   }
-
 }

@@ -478,15 +478,15 @@ tinymce.FocusManager.isEditorUIElement = function (elm: Element) {
 
 const { _handleDragStart } = DragDrop.prototype;
 DragDrop.prototype._handleDragStart = function (ev: DragEvent) {
-  _handleDragStart.call(this, ev)
+  _handleDragStart.call(this, ev);
   let data: unknown = null;
   try {
-    const stringified = ev.dataTransfer?.getData("text/plain");
-    data = typeof stringified === "string" && JSON.parse(stringified);
+    const stringified = ev.dataTransfer?.getData('text/plain');
+    data = typeof stringified === 'string' && JSON.parse(stringified);
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
   if (isKnownDrop(data)) {
     setDragSource(ev, data);
   }
-}
+};

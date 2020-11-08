@@ -1,5 +1,5 @@
 import { ButtonBase } from '@material/mwc-button/mwc-button-base';
-import { style as buttonStyles } from "@material/mwc-button/styles-css"
+import { style as buttonStyles } from '@material/mwc-button/styles-css';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { stopEvent } from 'weightless';
 import styles from './submit-button.scss';

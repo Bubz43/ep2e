@@ -9,7 +9,7 @@ import type { Effect } from './effects';
 import { StringID, createFeature, addFeature } from './feature-helpers';
 import { Motivation, createMotivation } from './motivations';
 import { EPTimeInterval, CommonInterval } from './time';
-import { toMilliseconds } from "./modify-milliseconds";
+import { toMilliseconds } from './modify-milliseconds';
 
 export enum PsiInfluenceType {
   Damage = 'physicalDamage',

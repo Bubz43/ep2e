@@ -12,8 +12,8 @@ import {
   DotOrHotTarget,
   formatAutoHealing,
 } from '@src/health/recovery';
-import { withSign } from '@src/utility/helpers';
-import { map, createPipe, compact, purry, anyPass } from 'remeda';
+import { nonNegative, withSign } from '@src/utility/helpers';
+import { map, createPipe, compact, purry, anyPass, clamp } from 'remeda';
 import type { Action, ActionSubtype } from './actions';
 import { ArmorType } from './active-armor';
 import { createFeature } from './feature-helpers';
@@ -277,13 +277,22 @@ const healthRecovery = createFeature<HealthRecoveryEffect>(() => ({
   technologicallyAided: true,
 }));
 
-const movement = createFeature<MovementEffect>(() => ({
-  type: EffectType.Movement,
-  base: 0,
-  full: 0,
-  movementType: Movement.Walker,
-  mode: MovementEffectMode.Modify,
-}));
+const movement = createFeature<MovementEffect>(
+  () => ({
+    type: EffectType.Movement,
+    base: 0,
+    full: 0,
+    movementType: Movement.Walker,
+    mode: MovementEffectMode.Modify,
+  }),
+  (effect) => {
+    if (effect.mode === MovementEffectMode.Grant) {
+      effect.base = clamp(effect.base, { min: 1 });
+      effect.full = clamp(effect.base, { min: 1 });
+    }
+    return effect;
+  },
+);
 
 export const createEffect = Object.freeze({
   pool,

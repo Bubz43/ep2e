@@ -1,4 +1,3 @@
-
 export const toMilliseconds = ({
   days = 0,
   hours = 0,

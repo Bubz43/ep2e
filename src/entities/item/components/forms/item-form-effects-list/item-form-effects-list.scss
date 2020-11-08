@@ -7,7 +7,6 @@
 
 :host {
   display: block;
-  
 }
 
 li {
@@ -37,10 +36,9 @@ li {
     }
     &[data-comma] {
       &::after {
-        content: ",";
+        content: ',';
         color: var(--color-text-lighter);
       }
     }
   }
-
 }

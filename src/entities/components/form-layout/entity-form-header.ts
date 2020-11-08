@@ -18,10 +18,10 @@ export class EntityFormHeader extends LitElement {
   @property({
     attribute: false,
     hasChanged() {
-      return true
-    }
+      return true;
+    },
   })
-    updateActions!: UpdateActions<{name: string, img: string}>
+  updateActions!: UpdateActions<{ name: string; img: string }>;
 
   @property({ type: String }) type!: string;
 
@@ -51,18 +51,19 @@ export class EntityFormHeader extends LitElement {
 
   private editImg() {
     const { originalValue, commit } = this.updateActions;
-    openImagePicker(this, originalValue().img, newImg => commit({ img: newImg }));
+    openImagePicker(this, originalValue().img, (newImg) =>
+      commit({ img: newImg }),
+    );
   }
 
   private updateEgoName = ({ name }: { name?: string }) => {
-    if (name) this.updateActions.commit({name});
+    if (name) this.updateActions.commit({ name });
     else this.requestUpdate();
   };
 
   private nameInput: FieldPropsRenderer<{ name: string }> = ({ name }) => {
     return renderTextInput(name);
   };
-
 
   render() {
     const { name, img } = this.updateActions.originalValue();

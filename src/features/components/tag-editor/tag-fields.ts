@@ -1,17 +1,39 @@
-import { renderSelectField, renderTextField } from "@src/components/field/fields";
-import { enumValues, AptitudeType } from "@src/data-enums";
-import { ActionType, ActionSubtype } from "@src/features/actions";
-import { RepNetwork } from "@src/features/reputations";
-import { SkillType, FieldSkillType, ActiveSkillCategory, KnowSkillCategory } from "@src/features/skills";
-import { ActionTag, ChecksTag, SkillTag, FieldSkillTag, SkillCategoryTag, RepTag, SpecialTag, SpecialTest, Tag } from "@src/features/tags";
-import { localize } from "@src/foundry/localization";
-import type { FieldPropsRenderer, FieldProps } from "@src/utility/field-values";
-import { noop } from "remeda";
+import {
+  renderSelectField,
+  renderTextField,
+} from '@src/components/field/fields';
+import { enumValues, AptitudeType } from '@src/data-enums';
+import { ActionType, ActionSubtype } from '@src/features/actions';
+import { RepNetwork } from '@src/features/reputations';
+import {
+  SkillType,
+  FieldSkillType,
+  ActiveSkillCategory,
+  KnowSkillCategory,
+} from '@src/features/skills';
+import {
+  ActionTag,
+  ChecksTag,
+  SkillTag,
+  FieldSkillTag,
+  SkillCategoryTag,
+  RepTag,
+  SpecialTag,
+  SpecialTest,
+  Tag,
+} from '@src/features/tags';
+import { localize } from '@src/foundry/localization';
+import type { FieldPropsRenderer, FieldProps } from '@src/utility/field-values';
+import { noop } from 'remeda';
 
 const action: FieldPropsRenderer<ActionTag> = ({ subtype, action }) => [
-  renderSelectField(action, enumValues(ActionType), { emptyText: localize("all")}),
-  renderSelectField(subtype, enumValues(ActionSubtype), { emptyText: localize("all")})
-]
+  renderSelectField(action, enumValues(ActionType), {
+    emptyText: localize('all'),
+  }),
+  renderSelectField(subtype, enumValues(ActionSubtype), {
+    emptyText: localize('all'),
+  }),
+];
 
 const aptitudeCheck: FieldPropsRenderer<ChecksTag> = ({ aptitude }) =>
   renderSelectField(aptitude, enumValues(AptitudeType));
@@ -48,12 +70,9 @@ const tagPropRenderers = {
   skillCategory,
   rep,
   special,
-  allActions: noop
+  allActions: noop,
 } as const;
 
-
 export const tagFields = (tag: FieldProps<Tag>) => {
-  return (tagPropRenderers[tag.type.value] as FieldPropsRenderer<Tag>)(
-    tag
-  );
+  return (tagPropRenderers[tag.type.value] as FieldPropsRenderer<Tag>)(tag);
 };

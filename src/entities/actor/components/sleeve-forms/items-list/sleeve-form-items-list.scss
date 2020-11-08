@@ -1,14 +1,12 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
-
 * {
   box-sizing: border-box;
 }
 
 :host {
   display: block;
-  
 }
 
 li {
@@ -38,10 +36,9 @@ li {
     }
     &[data-comma] {
       &::after {
-        content: ",";
+        content: ',';
         color: var(--color-text-lighter);
       }
     }
   }
-
 }

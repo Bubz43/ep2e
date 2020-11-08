@@ -49,9 +49,9 @@ export class PhysicalTech
   @LazyGetter()
   get effectGroups() {
     const { effects, activatedEffects, activation } = this;
-    const group = new Map<"passive" | "activated", typeof effects>();
-    group.set("passive", effects);
-    if (activation) group.set("activated", activatedEffects)
+    const group = new Map<'passive' | 'activated', typeof effects>();
+    group.set('passive', effects);
+    if (activation) group.set('activated', activatedEffects);
     return group;
   }
 

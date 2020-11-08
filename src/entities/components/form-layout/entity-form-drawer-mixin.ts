@@ -9,7 +9,7 @@ export const FormDrawer = (Base: Class<LitElement>) => {
 
     @query('focus-trap[slot="drawer-content"]') focusTrap?: FocusTrap;
 
-    private _autoFocus = true;    
+    private _autoFocus = true;
 
     @internalProperty() protected drawerContentRenderer:
       | (() => TemplateResult)

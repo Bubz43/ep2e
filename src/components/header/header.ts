@@ -23,8 +23,8 @@ export class Header extends LitElement {
         <span>${this.heading}</span>
         ${this.itemCount !== undefined
           ? html`<span class="count">${this.itemCount}</span>`
-      : ''}
-          <slot name="icon"></slot>
+          : ''}
+        <slot name="icon"></slot>
       </h3>
       <slot name="action"></slot>
     `;

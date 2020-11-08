@@ -16,7 +16,7 @@
   --mdc-icon-size: 22px;
   --mdc-icon-button-size: 32px;
 
-  ::slotted([slot="icon"]) {
+  ::slotted([slot='icon']) {
     color: var(--color-grey);
   }
 }

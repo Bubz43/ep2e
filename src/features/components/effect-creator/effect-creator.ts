@@ -1,19 +1,77 @@
-import { customElement, LitElement, property, html } from "lit-element";
-import styles from "./effect-creator.scss";
+import { renderSelectField } from '@src/components/field/fields';
+import { FormHandlers, renderAutoForm } from '@src/components/form/forms';
+import { enumValues } from '@src/data-enums';
+import { createEffect, EffectType } from '@src/features/effects';
+import { createTag } from '@src/features/tags';
+import { localize } from '@src/foundry/localization';
+import {
+  customElement,
+  LitElement,
+  property,
+  html,
+  internalProperty,
+} from 'lit-element';
+import type { EffectUpdatedEvent } from '../effect-editor/effect-updated-event';
+import { EffectCreatedEvent } from './effect-created-event';
+import styles from './effect-creator.scss';
 
-@customElement("effect-creator")
+/**
+ * @fires effect-created
+ */
+@customElement('effect-creator')
 export class EffectCreator extends LitElement {
   static get is() {
-    return "effect-creator" as const;
+    return 'effect-creator' as const;
   }
 
   static styles = [styles];
 
-  
+  @property({ type: Array }) effectTypes = enumValues(EffectType);
+
+  @internalProperty() effectType!: EffectType;
+
+  connectedCallback() {
+    this.effectType = this.effectTypes[0];
+    super.connectedCallback();
+  }
+
+  private emitCreated(ev: EffectUpdatedEvent) {
+    this.dispatchEvent(new EffectCreatedEvent(ev.effect));
+    this.requestUpdate();
+  }
+
+  private newEffect() {
+    return this.effectType === EffectType.SuccessTest
+      ? createEffect.successTest({ tags: [createTag.allActions({})] })
+      : createEffect[this.effectType]({});
+  }
+
+  private typeFormHandlers: FormHandlers<{ type: EffectType }> = {
+    update: ({ type }) => type && (this.effectType = type),
+    fields: ({ type }) =>
+      renderSelectField(
+        { ...type, label: localize('effectType') },
+        enumValues(EffectType),
+      ),
+  };
+
+  render() {
+    return html`
+      ${renderAutoForm({
+        noDebounce: true,
+        props: { type: this.effectType },
+        ...this.typeFormHandlers,
+      })}
+      <effect-editor
+        .effect=${this.newEffect()}
+        @effect-updated=${this.emitCreated}
+      ></effect-editor>
+    `;
+  }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "effect-creator": EffectCreator;
+    'effect-creator': EffectCreator;
   }
 }

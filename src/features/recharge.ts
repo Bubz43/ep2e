@@ -1,7 +1,7 @@
 import { RechargeType } from '@src/data-enums';
 import { clamp } from 'remeda';
 import { RechargeEffect, RechargeStat } from './effects';
-import { toMilliseconds } from "./modify-milliseconds";
+import { toMilliseconds } from './modify-milliseconds';
 
 const baseRechargeInfo = {
   [RechargeType.Short]: {

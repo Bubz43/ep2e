@@ -101,8 +101,8 @@ export class CompendiumList extends LitElement {
     setDragDrop(ev, {
       type: entity,
       pack: collection as string,
-      id: entryId as string
-    })
+      id: entryId as string,
+    });
   }
 
   private openEntrySheet(ev: Event) {

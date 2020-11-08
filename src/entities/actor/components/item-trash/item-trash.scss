@@ -30,11 +30,11 @@ li[divider] {
 }
 
 mwc-list-item {
-  [slot="graphic"] {
+  [slot='graphic'] {
     color: var(--color-text);
   }
   &[disabled] {
-    [slot="graphic"] {
+    [slot='graphic'] {
       color: var(--color-text-disabled);
     }
   }

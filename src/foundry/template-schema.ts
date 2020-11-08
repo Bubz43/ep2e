@@ -657,8 +657,8 @@ type PhysicalTechData = {
   };
   use: {
     duration: number;
-    check: AptitudeType | "";
-  }
+    check: AptitudeType | '';
+  };
   deviceType: '' | DeviceType;
   category: string;
   fabricator: '' | FabType;

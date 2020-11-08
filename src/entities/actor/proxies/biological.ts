@@ -56,13 +56,12 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
   @LazyGetter()
   get availableBrains() {
     const things = new Map<string, PhysicalTech>();
-    for (const {agent} of [...this.items]) {
+    for (const { agent } of [...this.items]) {
       if (agent.type === ItemType.PhysicalTech && agent.isBrain) {
-        things.set(agent.id, agent)
+        things.set(agent.id, agent);
       }
     }
     return things;
-
   }
 
   get subtype() {
@@ -180,7 +179,6 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
           }
           break;
         }
-
 
         default:
           break;

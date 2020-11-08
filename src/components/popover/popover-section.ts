@@ -3,7 +3,7 @@ import styles from './popover-section.scss';
 
 /**
  * @slot action
- * @slot 
+ * @slot
  */
 @customElement('sl-popover-section')
 export class PopoverSection extends LitElement {

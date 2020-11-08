@@ -48,8 +48,8 @@ export class Form extends LitElement {
   updated(changedProps: PropertyValues) {
     changedProps.get('disabled') !== undefined &&
       requestAnimationFrame(() => this.toggleElementDisabled());
-    
-    if (changedProps.has("validProperties")) {
+
+    if (changedProps.has('validProperties')) {
       this.store = {};
       this.toggleCompleteOnSubmits();
     }

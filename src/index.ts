@@ -97,7 +97,7 @@ ToolTip;
 ValueStatus;
 SlWindow;
 
-// Entity 
+// Entity
 CompendiumList;
 
 // Actor
@@ -114,7 +114,7 @@ EntityFormLayout;
 EntityFormFooter;
 EntityFormSidebarDivider;
 
-// Sleeve Forms 
+// Sleeve Forms
 InfomorphForm;
 BiologicalForm;
 SleeveFormPools;
@@ -125,7 +125,7 @@ SleeveFormItemsList;
 PhysicalTechForm;
 ItemFormEffectsList;
 
-// Health Components 
+// Health Components
 HealthItem;
 HealthLog;
 HealthRegenSettingsForm;

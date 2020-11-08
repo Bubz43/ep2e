@@ -34,7 +34,6 @@ li[divider] {
   color: currentColor;
 }
 
-
 mwc-menu {
   --mdc-theme-surface: #{lightv(var(--color-grey), 0.35)};
   --mdc-menu-item-height: 2rem;
@@ -260,7 +259,7 @@ table {
     flex: unset;
     height: 1.75rem;
     width: 1.75rem;
-    
+
     &:hover {
       text-shadow: none !important;
       background: alphav(var(--color-bg-alt), 0.7);

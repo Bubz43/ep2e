@@ -1,7 +1,7 @@
 import { clamp } from 'remeda';
 import { createFeature, StringID } from './feature-helpers';
 import { CommonInterval } from './time';
-import { toMilliseconds } from "./modify-milliseconds";
+import { toMilliseconds } from './modify-milliseconds';
 
 export enum Favor {
   Trivial = 'trivial',

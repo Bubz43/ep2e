@@ -129,7 +129,7 @@ slot[name='tabs'] {
   &.no-scroll {
     overflow: visible;
 
-    ::slotted([slot="description"]) {
+    ::slotted([slot='description']) {
       border-left: 1px solid var(--color-border);
     }
     & + .drawer {

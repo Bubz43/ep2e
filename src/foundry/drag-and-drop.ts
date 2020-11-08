@@ -151,10 +151,10 @@ type Drops = {
   [DropType.Effect]: EffectDrop;
   [DropType.PsiInfluence]: PsiInfluenceDrop;
   [DropType.Actor]: ActorDrop;
-  [DropType.JournalEntry]: JournalEntryDrop,
-  [DropType.Playlist]: PlayListDrop,
-  [DropType.Scene]: SceneDrop,
-  [DropType.RollTable]: RollTableDrop
+  [DropType.JournalEntry]: JournalEntryDrop;
+  [DropType.Playlist]: PlayListDrop;
+  [DropType.Scene]: SceneDrop;
+  [DropType.RollTable]: RollTableDrop;
 };
 
 const isMacro = dropChecker(DropType.Macro, ({ id }) => typeof id === 'string');
@@ -214,20 +214,19 @@ const isInfluenceDrop = dropChecker(DropType.PsiInfluence, ({ influence }) => {
   );
 });
 
-const simpleDropCheck = ({ pack, id }: { pack?: unknown; id?: unknown; }) => {
+const simpleDropCheck = ({ pack, id }: { pack?: unknown; id?: unknown }) => {
   return !!(
     typeof id === 'string' &&
     id.length &&
     (!pack || (typeof pack === 'string' && pack.length))
   );
-}
+};
 
 const isActorDrop = dropChecker(DropType.Actor, simpleDropCheck);
 const isSceneDrop = dropChecker(DropType.Scene, simpleDropCheck);
 const isPlaylistDrop = dropChecker(DropType.Playlist, simpleDropCheck);
 const isRollTableDrop = dropChecker(DropType.RollTable, simpleDropCheck);
 const isJournalEntryDrop = dropChecker(DropType.JournalEntry, simpleDropCheck);
-
 
 const droppedChecks: Record<DropType, (dropped: unknown) => boolean> = {
   [DropType.Macro]: isMacro,
@@ -238,10 +237,10 @@ const droppedChecks: Record<DropType, (dropped: unknown) => boolean> = {
   [DropType.Effect]: isEffectDrop,
   [DropType.PsiInfluence]: isInfluenceDrop,
   [DropType.Actor]: isActorDrop,
-  [DropType.Scene]:isSceneDrop,
+  [DropType.Scene]: isSceneDrop,
   [DropType.Playlist]: isPlaylistDrop,
   [DropType.RollTable]: isRollTableDrop,
-  [DropType.JournalEntry]: isJournalEntryDrop
+  [DropType.JournalEntry]: isJournalEntryDrop,
 };
 
 export const isKnownDrop = (droppedData: unknown): droppedData is Drop => {

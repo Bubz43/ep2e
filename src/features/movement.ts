@@ -79,5 +79,5 @@ export const createMovementRate = createFeature<
 export const defaultMovement = createMovementRate({
   type: Movement.Walker,
   base: 4,
-  full: 20
+  full: 20,
 });

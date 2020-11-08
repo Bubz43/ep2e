@@ -25,7 +25,7 @@
 
     background: alphav(var(--color-negative), 0.5);
     display: grid;
-    grid-template-areas: "line";
+    grid-template-areas: 'line';
     place-items: center;
     pointer-events: none;
   }

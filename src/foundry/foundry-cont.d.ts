@@ -166,10 +166,10 @@ declare global {
   }
 
   interface Collection<T> {
-    find(condition: (entry: T) => boolean): T | null
-    filter(condition: (entry: T) => boolean): T[]
-    map<M>(transform: (entry: T) => M): M[]
-    reduce<I>(evaluator: (accum: I, entry: T) => I, initial: I): I
+    find(condition: (entry: T) => boolean): T | null;
+    filter(condition: (entry: T) => boolean): T[];
+    map<M>(transform: (entry: T) => M): M[];
+    reduce<I>(evaluator: (accum: I, entry: T) => I, initial: I): I;
   }
 
   interface Token {
