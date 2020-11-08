@@ -8,9 +8,11 @@ import {
 import {
   renderUpdaterForm,
   renderSubmitForm,
+  renderAutoForm,
 } from '@src/components/form/forms';
-import { enumValues } from '@src/data-enums';
+import { BotType, enumValues, ShellType, VehicleType } from '@src/data-enums';
 import type { SyntheticShell } from '@src/entities/actor/proxies/synthetic-shell';
+import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import type { UpdateStore } from '@src/entities/update-store';
 import { renderMovementRateFields } from '@src/features/components/movement-rate-fields';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
@@ -34,6 +36,7 @@ import {
   html,
   TemplateResult,
 } from 'lit-element';
+import { first } from 'remeda';
 import { renderPoolEditForm } from '../pools/pool-edit-form';
 import { SleeveFormBase } from '../sleeve-form-base';
 import styles from './synthetic-form.scss';
@@ -46,7 +49,7 @@ export class SyntheticForm extends SleeveFormBase {
     return 'synthetic-form' as const;
   }
 
-  static styles = [styles];
+  static styles = [entityFormCommonStyles, styles];
 
   @property({ attribute: false }) sleeve!: SyntheticShell;
 
@@ -64,6 +67,20 @@ export class SyntheticForm extends SleeveFormBase {
       );
   });
 
+  private getShellTypeGroup(
+    shellType: ShellType,
+  ): readonly (BotType | VehicleType)[] | null {
+    switch (shellType) {
+      case ShellType.Bot:
+        return enumValues(BotType);
+      case ShellType.Vehicle:
+        return enumValues(VehicleType);
+
+      default:
+        return null;
+    }
+  }
+
   render() {
     const {
       updater,
@@ -80,6 +97,7 @@ export class SyntheticForm extends SleeveFormBase {
       nonDefaultBrain,
     } = this.sleeve;
     const { movementEffects } = itemGroups.effects;
+    const { originalValue, commit } = updater.prop('data');
 
     return html`
       <entity-form-layout>
@@ -91,9 +109,23 @@ export class SyntheticForm extends SleeveFormBase {
           ${sleeved ? html` <li slot="tag">${localize('sleeved')}</li> ` : ''}
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.prop('data'), {
+        ${renderAutoForm({
+          props: originalValue(),
           disabled,
           slot: 'sidebar',
+          update: ({ shellType, ...props }) => {
+            commit(
+              shellType
+                ? {
+                    shellType,
+                    subtype:
+                      first(this.getShellTypeGroup(shellType) || []) || '',
+                    isSwarm:
+                      shellType === ShellType.Vehicle ? false : undefined,
+                  }
+                : props,
+            );
+          },
           fields: ({
             size,
             subtype,
@@ -102,33 +134,39 @@ export class SyntheticForm extends SleeveFormBase {
             unarmedDV,
             prehensileLimbs,
             brain,
+            passengers,
             shellType,
-            deviceType,
-          }) => [
-            notEmpty(availableBrains)
-              ? html`
-                  ${renderSelectField(brain, [...availableBrains.keys()], {
-                    emptyText: localize('default'),
-                    altLabel: (key) => availableBrains.get(key)!.fullName,
-                  })}
-                  <entity-form-sidebar-divider></entity-form-sidebar-divider>
-                `
-              : '',
-            renderTextField(subtype),
-            html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
-            renderLabeledCheckbox(isSwarm, {
-              tooltipText: localize('DESCRIPTIONS', 'AppliesSwarmRules'),
-            }),
-            renderSelectField(size, enumValues(Size)),
-            html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
-            isSwarm.value
-              ? ''
-              : [
-                  renderNumberField(prehensileLimbs, { min: 0 }),
-                  renderNumberField(reach, { min: 0, max: 30, step: 10 }),
-                ],
-            renderFormulaField(unarmedDV),
-          ],
+          }) => {
+            const subtypes = this.getShellTypeGroup(shellType.value);
+
+            return [
+              notEmpty(availableBrains)
+                ? html`
+                    ${renderSelectField(brain, [...availableBrains.keys()], {
+                      emptyText: localize('default'),
+                      altLabel: (key) => availableBrains.get(key)!.fullName,
+                    })}
+                    <entity-form-sidebar-divider></entity-form-sidebar-divider>
+                  `
+                : '',
+              notEmpty(subtypes) ? renderSelectField(subtype, subtypes) : '',
+              html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
+              shellType.value === ShellType.Vehicle
+                ? renderNumberField(passengers, { min: 0 })
+                : renderLabeledCheckbox(isSwarm, {
+                    tooltipText: localize('DESCRIPTIONS', 'AppliesSwarmRules'),
+                  }),
+              renderSelectField(size, enumValues(Size)),
+              html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
+              isSwarm.value
+                ? ''
+                : [
+                    renderNumberField(prehensileLimbs, { min: 0 }),
+                    renderNumberField(reach, { min: 0, max: 30, step: 10 }),
+                  ],
+              renderFormulaField(unarmedDV),
+            ];
+          },
         })}
 
         <div slot="details">

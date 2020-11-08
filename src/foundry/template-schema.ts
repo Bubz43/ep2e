@@ -263,7 +263,6 @@ type SyntheticShellData = {
   >;
   shellType: ShellType;
   subtype: '' | VehicleType | BotType;
-  deviceType: DeviceType;
   passengers: number;
   unarmedDV: string;
   isSwarm: boolean;

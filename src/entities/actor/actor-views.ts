@@ -43,6 +43,10 @@ const renderSpecificSleeveForm = (proxy: Sleeve, token: MaybeToken) => {
         ></entity-form-footer> `;
     case ActorType.SyntheticShell:
       return html`
+      <synthetic-form
+          .sleeve=${proxy}
+          .token=${token}
+        ></synthetic-form>
         <entity-form-footer
           slot="footer"
           .updater=${proxy.updater.prop('data').nestedStore()}
