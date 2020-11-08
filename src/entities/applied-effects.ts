@@ -13,7 +13,7 @@ import {
   SourcedEffect,
   SuccessTestEffect,
 } from '@src/features/effects';
-import type { Movement } from '@src/features/movement';
+import type { Movement, MovementRate } from '@src/features/movement';
 import { SkillType } from '@src/features/skills';
 import { createTag } from '@src/features/tags';
 import { localize } from '@src/foundry/localization';
@@ -84,27 +84,33 @@ export class AppliedEffects {
   }
 
   get movementEffects() {
-    return this.getGroup(EffectType.Movement).reduce((accum, effect) => {
-      let original = accum.get(effect.movementType);
-      if (!original) {
-        original = {
-          grant: [],
-          modify: [],
-          baseModification: 0,
-          fullModification: 0,
-        };
-        accum.set(effect.movementType, original);
-      }
-
+    const granted: SourcedEffect<MovementRate>[] = [];
+    const modify = new Map<Movement, MovementEffectsInfo>();
+    for (const effect of this.getGroup(EffectType.Movement)) {
       if (effect.mode === MovementEffectMode.Grant) {
-        original.grant.push(effect);
+        granted.push({
+          type: effect.movementType,
+          base: effect.base,
+          full: effect.full,
+          [Source]: effect[Source],
+        });
       } else {
-        original.modify.push(effect);
-        original.baseModification += effect.base;
-        original.fullModification += effect.full;
+        let info = modify.get(effect.movementType);
+        if (!info) {
+          info = {
+            modify: [],
+            baseModification: 0,
+            fullModification: 0,
+          };
+          modify.set(effect.movementType, info);
+        }
+
+        info.modify.push(effect);
+        info.baseModification += effect.base;
+        info.fullModification += effect.full;
       }
-      return accum;
-    }, new Map<Movement, MovementEffectsInfo>());
+    }
+    return { granted, modify };
   }
 
   getHealthStatMods(type: HealthType) {

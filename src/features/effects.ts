@@ -162,7 +162,6 @@ export type MovementEffect = Omit<MovementRate, 'type'> & {
 };
 
 export type MovementEffectsInfo = {
-  grant: SourcedEffect<MovementEffect>[];
   modify: SourcedEffect<MovementEffect>[];
   baseModification: number;
   fullModification: number;
@@ -288,7 +287,7 @@ const movement = createFeature<MovementEffect>(
   (effect) => {
     if (effect.mode === MovementEffectMode.Grant) {
       effect.base = clamp(effect.base, { min: 1 });
-      effect.full = clamp(effect.base, { min: 1 });
+      effect.full = clamp(effect.full, { min: 1 });
     }
     return effect;
   },

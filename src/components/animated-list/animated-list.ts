@@ -5,6 +5,9 @@ import styles from './animated-list.scss';
 
 type Info = { top: number; left: number; width: number; height: number };
 
+/**
+ * @slot 
+ */
 @customElement('sl-animated-list')
 export class AnimatedList extends LitElement {
   static get is() {

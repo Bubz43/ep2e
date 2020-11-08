@@ -272,6 +272,7 @@ for (const app of [ActorDirectory, ItemDirectory]) {
   });
 }
 
+
 // applicationHook({
 //   app: CompendiumDirectory,
 //   hook: "on",

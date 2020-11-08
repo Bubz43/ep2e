@@ -73,6 +73,7 @@ import { ItemFormEffectsList } from './entities/item/components/forms/item-form-
 import { EffectCreator } from './features/components/effect-creator/effect-creator';
 import { EffectEditor } from './features/components/effect-editor/effect-editor';
 import { TagEditor } from './features/components/tag-editor/tag-editor';
+import { SleeveFormMovementList } from './entities/actor/components/sleeve-forms/movement/sleeve-form-movement-list';
 
 // Generic Components
 Field;
@@ -120,6 +121,7 @@ BiologicalForm;
 SleeveFormPools;
 SleeveFormAquisition;
 SleeveFormItemsList;
+SleeveFormMovementList;
 
 // Item Forms
 PhysicalTechForm;

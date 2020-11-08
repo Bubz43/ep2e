@@ -1254,7 +1254,7 @@ type LangEntries =
   | 'passive'
   | 'movementType'
   | 'reset'
-  | 'image';
+  | 'image' | "upgrades"
 type FullNames =
   | 'cog'
   | 'int'

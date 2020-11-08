@@ -195,44 +195,12 @@ export class BiologicalForm extends SleeveFormBase {
                 @click=${this.setDrawerFromEvent(this.renderMovementCreator)}
               ></mwc-icon-button>
             </sl-header>
-            <sl-animated-list class="movement-list">
-              ${repeat(movementRates, idProp, (movement) => {
-                const { baseModification, fullModification } =
-                  movementEffects.get(movement.type) ?? {};
-                return html`<li class="movement-rate">
-                  <sl-popover
-                    .renderOnDemand=${() => html`
-                      <sl-popover-section
-                        heading="${localize('edit')} ${localize('movement')}"
-                      >
-                        <delete-button
-                          slot="action"
-                          @delete=${this.movementOperations.removeCallback(
-                            movement.id,
-                          )}
-                        ></delete-button>
-                        ${renderSubmitForm({
-                          props: movement,
-                          update: this.movementOperations.update,
-                          fields: renderMovementRateFields,
-                        })}
-                      </sl-popover-section>
-                    `}
-                  >
-                    <button slot="base" ?disabled=${disabled}>
-                      ${localize(movement.type)}
-                      ${movement.base}${baseModification
-                        ? html`<sup>(${withSign(baseModification)})</sup>`
-                        : ''}
-                      /
-                      ${movement.full}${fullModification
-                        ? html`<sup>(${withSign(fullModification)})</sup>`
-                        : ''}
-                    </button>
-                  </sl-popover>
-                </li>`;
-              })}
-            </sl-animated-list>
+            <sleeve-form-movement-list
+              .movementRates=${movementRates}
+              .effects=${movementEffects}
+              .operations=${this.movementOperations}
+              ?disabled=${disabled}
+            ></sleeve-form-movement-list>
           </section>
 
           <sl-dropzone @drop=${this.handleItemDrop} ?disabled=${disabled}>
