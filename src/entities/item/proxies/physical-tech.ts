@@ -23,11 +23,15 @@ export class PhysicalTech
   }
 
   get activated() {
-    return this.activation !== Activation.None && this.state.activated;
+    return this.hasActivation && this.state.activated;
   }
 
   get activation() {
     return this.epData.activation;
+  }
+
+  get hasActivation() {
+    return this.activation !== Activation.None
   }
 
   get effects() {
@@ -48,10 +52,10 @@ export class PhysicalTech
 
   @LazyGetter()
   get effectGroups() {
-    const { effects, activatedEffects, activation } = this;
+    const { effects, activatedEffects, hasActivation } = this;
     const group = new Map<'passive' | 'activated', typeof effects>();
     group.set('passive', effects);
-    if (activation) group.set('activated', activatedEffects);
+    if (hasActivation) group.set('activated', activatedEffects);
     return group;
   }
 

@@ -13,6 +13,7 @@ import type { EffectCreatedEvent } from '@src/features/components/effect-creator
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
+import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   property,
@@ -20,6 +21,7 @@ import {
   internalProperty,
   PropertyValues,
 } from 'lit-element';
+import { ifDefined } from 'lit-html/directives/if-defined';
 import { mapToObj, type } from 'remeda';
 import { ItemFormBase } from '../item-form-base';
 import styles from './physical-tech-form.scss';
@@ -44,7 +46,7 @@ export class PhysicalTechForm extends ItemFormBase {
   ]);
 
   update(changedProps: PropertyValues) {
-    if (!this.item.activation) this.effectGroup = 'passive';
+    if (!this.item.hasActivation) this.effectGroup = 'passive';
     super.update(changedProps);
   }
 
@@ -65,6 +67,7 @@ export class PhysicalTechForm extends ItemFormBase {
     return html`
       <entity-form-layout>
         <entity-form-header
+          noDefaultImg
           slot="header"
           .updateActions=${updater.prop('')}
           type=${localize(type)}
@@ -73,30 +76,6 @@ export class PhysicalTechForm extends ItemFormBase {
             ? html` <li slot="tag">${localize('blueprint')}</li> `
             : ''}
         </entity-form-header>
-
-        <div slot="details">
-          <section>
-            <sl-header heading=${localize('effects')}
-              ><mwc-icon-button
-                icon="add"
-                slot="action"
-                @click=${this.setDrawerFromEvent(this.renderEffectCreator)}
-                ?disabled=${disabled}
-              ></mwc-icon-button
-            ></sl-header>
-            ${[...effectGroups].map(
-              ([key, group]) => html`
-                <item-form-effects-list
-                  label=${localize(key)}
-                  .effects=${group}
-                  .operations=${this.effectsOps[key]}
-                  ?disabled=${disabled}
-                ></item-form-effects-list>
-              `,
-            )}
-          </section>
-          ${deviceType ? this.renderMeshHealthSection() : ''}
-        </div>
 
         ${renderUpdaterForm(updater.prop('data'), {
           disabled,
@@ -115,6 +94,40 @@ export class PhysicalTechForm extends ItemFormBase {
             renderSelectField(fabricator, enumValues(FabType), emptyValue),
           ],
         })}
+
+        <div slot="details">
+          <section>
+            <sl-header heading=${localize('effects')}
+              ><mwc-icon-button
+                icon="add"
+                slot="action"
+                @click=${this.setDrawerFromEvent(this.renderEffectCreator)}
+                ?disabled=${disabled}
+              ></mwc-icon-button
+            ></sl-header>
+            ${[...effectGroups].map(([key, group]) =>
+              notEmpty(group)
+                ? html`
+                    <item-form-effects-list
+                      label=${ifDefined(
+                        effectGroups.size > 1 ? localize(key) : undefined,
+                      )}
+                      .effects=${group}
+                      .operations=${this.effectsOps[key]}
+                      ?disabled=${disabled}
+                    ></item-form-effects-list>
+                  `
+                : '',
+            )}
+          </section>
+          ${deviceType ? this.renderMeshHealthSection() : ''}
+        </div>
+
+        <editor-wrapper
+          slot="description"
+          ?disabled=${disabled}
+          .updateActions=${updater.prop('data', 'description')}
+        ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
@@ -176,15 +189,16 @@ export class PhysicalTechForm extends ItemFormBase {
   }
 
   private renderEffectCreator() {
-    const props = { group: this.effectGroup };
     return html`
       <h3>${localize('add')} ${localize('effect')}</h3>
-      ${renderAutoForm({
-        props,
-        update: ({ group }) => group && (this.effectGroup = group),
-        fields: ({ group }) =>
-          renderRadioFields(group, ['passive', 'activated']),
-      })}
+      ${this.item.hasActivation
+        ? renderAutoForm({
+            props: { group: this.effectGroup },
+            update: ({ group }) => group && (this.effectGroup = group),
+            fields: ({ group }) =>
+              renderRadioFields(group, ['passive', 'activated']),
+          })
+        : ''}
 
       <effect-creator @effect-created=${this.addCreatedEffect}></effect-creator>
     `;

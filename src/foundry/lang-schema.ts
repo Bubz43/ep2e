@@ -1251,7 +1251,10 @@ type LangEntries =
   | 'grant'
   | 'modify'
   | 'isSwarm'
-  | 'passive';
+  | 'passive'
+  | 'movementType'
+  | 'reset'
+  | 'image';
 type FullNames =
   | 'cog'
   | 'int'

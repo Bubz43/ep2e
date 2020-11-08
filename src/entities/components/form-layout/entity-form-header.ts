@@ -3,9 +3,12 @@ import { renderAutoForm } from '@src/components/form/forms';
 import type { UpdateActions, UpdateStore } from '@src/entities/update-store';
 import { closeImagePicker, openImagePicker } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
+import { openMenu } from '@src/open-menu';
 import type { FieldPropsRenderer } from '@src/utility/field-values';
 import { customElement, LitElement, property, html } from 'lit-element';
 import styles from './entity-form-header.scss';
+
+type CommonInfo = { name: string; img: string };
 
 @customElement('entity-form-header')
 export class EntityFormHeader extends LitElement {
@@ -21,7 +24,7 @@ export class EntityFormHeader extends LitElement {
       return true;
     },
   })
-  updateActions!: UpdateActions<{ name: string; img: string }>;
+  updateActions!: UpdateActions<CommonInfo>;
 
   @property({ type: String }) type!: string;
 
@@ -49,11 +52,11 @@ export class EntityFormHeader extends LitElement {
     requestAnimationFrame(() => (this.style.columnGap = '1rem'));
   }
 
+  private updateImage = (img: string) => this.updateActions.commit({ img });
+
   private editImg() {
     const { originalValue, commit } = this.updateActions;
-    openImagePicker(this, originalValue().img, (newImg) =>
-      commit({ img: newImg }),
-    );
+    openImagePicker(this, originalValue().img, this.updateImage);
   }
 
   private updateEgoName = ({ name }: { name?: string }) => {
@@ -67,24 +70,9 @@ export class EntityFormHeader extends LitElement {
 
   render() {
     const { name, img } = this.updateActions.originalValue();
-    // TODO Reset img on right click options
-    const hideImg = this.noDefaultImg && img === CONST.DEFAULT_TOKEN;
+
     return html`
-      ${hideImg && this.disabled
-        ? ''
-        : html`
-            <button
-              class="avatar-button"
-              @click=${this.editImg}
-              ?disabled=${this.disabled}
-            >
-              ${hideImg
-                ? html` <span class="image-select">${localize('icon')}</span> `
-                : html`
-                    <img src=${img} class="avatar" alt="Avatar of ${name}" />
-                  `}
-            </button>
-          `}
+      ${this.renderIcon({ name, img })}
       ${renderAutoForm({
         disabled: this.disabled,
         props: { name },
@@ -100,6 +88,41 @@ export class EntityFormHeader extends LitElement {
         ${this.type} ${this.disabled ? html`<mwc-icon>lock</mwc-icon>` : ''}
       </div>
     `;
+  }
+
+  private openResetMenu(ev: MouseEvent) {
+    openMenu({
+      content: [
+        {
+          label: `${localize(this.noDefaultImg ? 'clear' : 'reset')} ${localize(
+            'image',
+          )}`,
+          icon: html`<mwc-icon>clear</mwc-icon>`,
+          callback: () => this.updateImage(CONST.DEFAULT_TOKEN),
+        },
+      ],
+      position: ev
+    });
+  }
+
+  private renderIcon({ name, img }: CommonInfo) {
+    // TODO Reset img on right click options
+    const hideImg = this.noDefaultImg && img === CONST.DEFAULT_TOKEN;
+    if (hideImg && this.disabled) return '';
+    if (hideImg)
+      return html`<mwc-icon-button
+        icon="insert_photo"
+        class="add-photo"
+        @click=${this.editImg}
+      ></mwc-icon-button>`;
+    return html` <button
+      class="avatar-button"
+      @click=${this.editImg}
+      ?disabled=${this.disabled}
+      @contextmenu=${this.openResetMenu}
+    >
+      <img src=${img} class="avatar" alt="Avatar of ${name}" />
+    </button>`;
   }
 }
 

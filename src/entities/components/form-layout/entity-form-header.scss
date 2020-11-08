@@ -103,16 +103,20 @@ sl-form {
   }
 }
 
+.add-photo {
+  --mdc-icon-button-size: 2.5rem;
+  grid-area: avatar;
+
+}
+
 .avatar-button {
   all: unset;
   cursor: pointer;
   grid-area: avatar;
+
   &:hover {
     .avatar {
       filter: drop-shadow(2px 2px 3px var(--color-secondary));
-    }
-    .image-select {
-      color: var(--color-text);
     }
   }
   &[disabled] {
@@ -122,21 +126,13 @@ sl-form {
       filter: drop-shadow(2px 2px 3px var(--color-disabled));
     }
   }
+  
   &:focus {
     outline: 2px solid var(--color-secondary);
   }
+
 }
 
-.image-select {
-  writing-mode: vertical-lr;
-  text-orientation: unset;
-  letter-spacing: 1px;
-  color: var(--color-text-lighter);
-  font-size: 13px;
-  padding: 0.1rem 0;
-  font-family: var(--font-2);
-  text-transform: uppercase;
-}
 
 .avatar {
   height: 66px;
