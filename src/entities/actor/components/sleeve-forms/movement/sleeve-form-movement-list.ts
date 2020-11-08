@@ -44,7 +44,7 @@ export class SleeveFormMovementList extends LitElement {
       ${hasGranted
         ? html`
             <sl-animated-list class="movement-list" skipExitAnimation>
-              <li class="label">${localize('upgrades')}</li>
+              <li class="label">${localize('upgrades')}:</li>
               ${granted.map(this.renderGrantedMovement)}
             </sl-animated-list>
           `
@@ -52,9 +52,13 @@ export class SleeveFormMovementList extends LitElement {
     `;
   }
 
-  private renderInnateMovement = (movement: StringID<MovementRate>) => {
+  private renderInnateMovement = (
+    movement: StringID<MovementRate>,
+    index: number,
+  ) => {
     const { baseModification, fullModification } =
       this.effects.modify.get(movement.type) ?? {};
+    const showComma = index < this.movementRates.length - 1;
     return html`<li class="movement-rate">
       <sl-popover
         .renderOnDemand=${() => html`
@@ -81,29 +85,33 @@ export class SleeveFormMovementList extends LitElement {
           /
           ${movement.full}${fullModification
             ? html`<sup>(${withSign(fullModification)})</sup>`
-            : ''}
-        </button>
-      </sl-popover>
+            : ''}${showComma ? html`<span data-comma></span>` : ''}
+        </button></sl-popover
+      >
     </li>`;
   };
 
-  private renderGrantedMovement = (movement: SourcedEffect<MovementRate>) => {
+  private renderGrantedMovement = (
+    movement: SourcedEffect<MovementRate>,
+    index: number,
+  ) => {
     const { baseModification, fullModification } =
       this.effects.modify.get(movement.type) ?? {};
+    const showComma = index < this.effects.granted.length - 1;
     return html`
       <li
         class="movement-rate"
         data-tooltip="${localize('source')}: ${movement[Source]}"
         @mouseover=${tooltip.fromData}
       >
-          ${localize(movement.type)}
-          ${movement.base}${baseModification
-            ? html`<sup>(${withSign(baseModification)})</sup>`
-            : ''}
-          /
-          ${movement.full}${fullModification
-            ? html`<sup>(${withSign(fullModification)})</sup>`
-            : ''}
+        ${localize(movement.type)}
+        ${movement.base}${baseModification
+          ? html`<sup>(${withSign(baseModification)})</sup>`
+          : ''}
+        /
+        ${movement.full}${fullModification
+          ? html`<sup>(${withSign(fullModification)})</sup>`
+          : ''}${showComma ? html`<span data-comma></span>` : ''}
       </li>
     `;
   };

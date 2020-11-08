@@ -27,6 +27,36 @@
   }
 }
 
+@mixin dataComma() {
+  [data-comma] {
+    &::after {
+      content: ',';
+      color: var(--color-text-lighter);
+    }
+  }
+}
+
+@mixin listItemLabel() {
+  li.label {
+    text-transform: uppercase;
+    color: var(--color-text-lighter);
+    letter-spacing: 0.5px;
+  }
+}
+
+@mixin textButton() {
+  button {
+    all: unset;
+    &:hover {
+      cursor: pointer;
+      color: satv(var(--color-secondary), 1.2);
+    }
+    &:focus {
+      text-shadow: var(--text-highlight);
+    }
+  }
+}
+
 @mixin resetUnorderedList() {
   ul {
     margin: 0;

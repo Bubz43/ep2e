@@ -37,10 +37,6 @@ export const movementRangeSpeeds = {
   [MovementRange.VeryFast]: { base: 8, full: 40 },
 } as const;
 
-// export const getMovementSpeed = (range: MovementRange) => {
-//   const { base, full } = movementRangeSpeeds[range];
-//   return [base, full].join(' / ');
-// };
 
 export const getMovementSkill = (movement: Movement) => {
   const piloted = pilotMovementTypes.get(movement);

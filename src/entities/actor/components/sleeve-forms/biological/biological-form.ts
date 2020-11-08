@@ -13,7 +13,7 @@ import { enumValues } from '@src/data-enums';
 import type { Biological } from '@src/entities/actor/proxies/biological';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { renderMovementRateFields } from '@src/features/components/movement-rate-fields';
-import { addUpdateRemoveFeature, idProp } from '@src/features/feature-helpers';
+import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import { defaultMovement } from '@src/features/movement';
 import { Size } from '@src/features/size';
 import {
@@ -24,9 +24,8 @@ import {
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
-import { notEmpty, withSign } from '@src/utility/helpers';
+import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property, TemplateResult } from 'lit-element';
-import { repeat } from 'lit-html/directives/repeat';
 import { renderPoolEditForm } from '../pools/pool-edit-form';
 import { SleeveFormBase } from '../sleeve-form-base';
 import styles from './biological-form.scss';

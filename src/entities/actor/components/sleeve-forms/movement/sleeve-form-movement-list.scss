@@ -1,6 +1,10 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+@include resetUnorderedList();
+@include dataComma();
+@include listItemLabel();
+
 * {
   box-sizing: border-box;
 }
@@ -14,11 +18,6 @@ li {
   margin-right: 1ch;
 }
 
-.label {
-  text-transform: uppercase;
-  color: var(--color-text-lighter);
-  letter-spacing: 0.5px;
-}
 
 .movement-list {
   margin: 0.25rem 0.5rem;
@@ -26,17 +25,10 @@ li {
   flex-flow: row wrap;
 }
 
+
 .movement-rate {
-  button {
-    all: unset;
-    &:hover {
-      cursor: pointer;
-      color: satv(var(--color-secondary), 1.2);
-    }
-    &:focus {
-      text-shadow: var(--text-highlight);
-    }
-  }
+  
+  @include textButton();
   sup {
     vertical-align: text-top;
     margin-left: 0.25ch;
