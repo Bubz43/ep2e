@@ -23,12 +23,12 @@ export const renderSleeveForm = (proxy: Sleeve, token: MaybeToken) => {
 };
 
 export const renderEgoForm = (ego: Ego) => html`
- <ego-form .ego=${ego}></ego-form>
-    <entity-form-footer
-      slot="footer"
-      .updater=${updater.prop('data').nestedStore()}
-    ></entity-form-footer>
-`
+  <ego-form .ego=${ego}></ego-form>
+  <entity-form-footer
+    slot="footer"
+    .updater=${updater.prop('data').nestedStore()}
+  ></entity-form-footer>
+`;
 
 const renderSpecificSleeveForm = (proxy: Sleeve, token: MaybeToken) => {
   switch (proxy.type) {

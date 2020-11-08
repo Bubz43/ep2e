@@ -253,13 +253,7 @@ type InfomorphData = {
 
 type SyntheticShellData = {
   templates: UseActorTemplate<
-    [
-      'Common',
-      'Mobile',
-      'Acquisition',
-      'PoolData',
-      'Conditions',
-    ]
+    ['Common', 'Mobile', 'Acquisition', 'PoolData', 'Conditions']
   >;
   shellType: ShellType;
   subtype: '' | VehicleType | BotType;

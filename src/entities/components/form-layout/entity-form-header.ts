@@ -101,7 +101,7 @@ export class EntityFormHeader extends LitElement {
           callback: () => this.updateImage(CONST.DEFAULT_TOKEN),
         },
       ],
-      position: ev
+      position: ev,
     });
   }
 

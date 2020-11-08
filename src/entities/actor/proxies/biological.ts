@@ -21,7 +21,7 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
   private _localEffects?: AppliedEffects;
   private _outsideEffects?: ReadonlyAppliedEffects;
   readonly sleeved;
-  
+
   constructor({
     activeEffects,
     sleeved,

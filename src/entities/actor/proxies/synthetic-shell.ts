@@ -83,7 +83,7 @@ export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
     return this.epData.prehensileLimbs;
   }
 
-  @LazyGetter() 
+  @LazyGetter()
   get physicalHealth() {
     return new SyntheticHealth({
       data: this.epData.physicalHealth,
@@ -92,7 +92,7 @@ export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
       source: this.epData.inherentArmor.source || localize('frame'),
       isSwarm: this.isSwarm,
       recovery: this.activeEffects.getGroup(EffectType.HealthRecovery),
-    })
+    });
   }
 
   @LazyGetter()
@@ -159,14 +159,13 @@ export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
         }
         break;
       }
-        
+
       case ItemType.Software: {
         const copy = proxy.getDataCopy(true);
         copy.data.state.equipped = true;
         this.itemOperations.add(copy);
         break;
       }
-
 
       default:
         notify(
@@ -203,10 +202,10 @@ export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
           }
           break;
         }
-          
+
         case ItemType.Software: {
           software.push(agent);
-          effects.add(agent.currentEffects)
+          effects.add(agent.currentEffects);
         }
 
         default:
@@ -215,5 +214,4 @@ export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
     }
     return { traits, ware, effects, software };
   }
-
 }

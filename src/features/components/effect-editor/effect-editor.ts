@@ -127,7 +127,13 @@ export class EffectEditor extends LitElement {
                 origin=${Origin.Inset}
                 @tag-updated=${this.updateTags}
               >
-                <mwc-button dense icon="add" label=${localize("add")} trailingIcon slot="base"></mwc-button>
+                <mwc-button
+                  dense
+                  icon="add"
+                  label=${localize('add')}
+                  trailingIcon
+                  slot="base"
+                ></mwc-button>
               </sl-popover>
             </header>
 

@@ -37,7 +37,6 @@ export const movementRangeSpeeds = {
   [MovementRange.VeryFast]: { base: 8, full: 40 },
 } as const;
 
-
 export const getMovementSkill = (movement: Movement) => {
   const piloted = pilotMovementTypes.get(movement);
   return piloted

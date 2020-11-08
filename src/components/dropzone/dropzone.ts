@@ -51,7 +51,7 @@ export class DropZone extends mix(LitElement).with(LazyRipple) {
       this.rippleHandlers.startPress(ev);
       requestAnimationFrame(() => {
         this.rippleHandlers.endPress();
-        setTimeout(() =>  DropZone.highlighted = null, 350);
+        setTimeout(() => (DropZone.highlighted = null), 350);
       });
     } else DropZone.highlighted = null;
   };

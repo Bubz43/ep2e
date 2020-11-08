@@ -59,9 +59,7 @@ export class SleeveFormPools extends LitElement {
               ${value}
               ${bonus
                 ? html`
-                    <sup
-                      data-bonus=${withSign(clamp(bonus, { max: 5 }))}
-                    ></sup>
+                    <sup data-bonus=${withSign(clamp(bonus, { max: 5 }))}></sup>
                   `
                 : ''}
             </li>

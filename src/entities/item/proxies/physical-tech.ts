@@ -31,7 +31,7 @@ export class PhysicalTech
   }
 
   get hasActivation() {
-    return this.activation !== Activation.None
+    return this.activation !== Activation.None;
   }
 
   get effects() {
