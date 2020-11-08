@@ -1,0 +1,21 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 210px;
+  min-width: 210px;
+}
+
+.submit-form {
+  display: flex;
+  flex-flow: column;
+  submit-button {
+    margin-top: auto;
+  }
+}

@@ -70,6 +70,9 @@ import { BiologicalForm } from './entities/actor/components/sleeve-forms/biologi
 import { EntityFormSidebarDivider } from './entities/components/form-layout/entity-form-sidebar-divider';
 import { PhysicalTechForm } from './entities/item/components/forms/physical-tech/physical-tech-form';
 import { ItemFormEffectsList } from './entities/item/components/forms/item-form-effects-list/item-form-effects-list';
+import { EffectCreator } from './features/components/effect-creator/effect-creator';
+import { EffectEditor } from './features/components/effect-editor/effect-editor';
+import { TagEditor } from './features/components/tag-editor/tag-editor';
 
 // Generic Components
 Field;
@@ -99,6 +102,11 @@ CompendiumList;
 
 // Actor
 ItemTrash;
+
+//Feature Editors
+EffectCreator;
+EffectEditor;
+TagEditor;
 
 // Entity Form Layout Components
 EntityFormHeader;
