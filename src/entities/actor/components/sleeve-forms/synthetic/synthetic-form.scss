@@ -10,6 +10,7 @@
   
 }
 
+
 .inherent-armor {
-  grid-auto-flow: column;
+  grid-template-columns: 1fr min-content min-content;
 }

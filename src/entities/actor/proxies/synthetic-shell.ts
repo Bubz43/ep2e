@@ -89,7 +89,7 @@ export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
       data: this.epData.physicalHealth,
       statMods: this.activeEffects.getHealthStatMods(HealthType.Physical),
       updater: this.updater.prop('data', 'physicalHealth').nestedStore(),
-      source: localize('frame'),
+      source: this.epData.inherentArmor.source || localize('frame'),
       isSwarm: this.isSwarm,
       recovery: this.activeEffects.getGroup(EffectType.HealthRecovery),
     })

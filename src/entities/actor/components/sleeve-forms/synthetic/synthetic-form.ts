@@ -141,10 +141,15 @@ export class SyntheticForm extends SleeveFormBase {
                     <entity-form-sidebar-divider></entity-form-sidebar-divider>
                   `
                 : '',
-              notEmpty(subtypes) ? renderSelectField(subtype, subtypes) : '',
-              html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
+              renderSelectField(shellType, enumValues(ShellType)),
+              notEmpty(subtypes)
+                ? html`
+                    ${renderSelectField(subtype, subtypes)}
+                    <entity-form-sidebar-divider></entity-form-sidebar-divider>
+                  `
+                : '',
               shellType.value === ShellType.Vehicle
-                ? renderNumberField(passengers, { min: 0 })
+                ? renderNumberField(passengers, { min: 1 })
                 : renderLabeledCheckbox(isSwarm, {
                     tooltipText: localize('DESCRIPTIONS', 'AppliesSwarmRules'),
                   }),
@@ -193,14 +198,19 @@ export class SyntheticForm extends SleeveFormBase {
               .health=${physicalHealth}
               @click=${this.setDrawerFromEvent(this.renderPhysicalHealthEdit)}
             ></health-item>
-            <p>${localize("armor")}</p>
             ${renderUpdaterForm(updater.prop('data', 'inherentArmor'), {
               disabled,
               classes: 'inherent-armor',
               fields: ({ energy, kinetic, source }) => [
+                renderTextField(
+                  {
+                    ...source,
+                    label: `${localize('armor')} ${localize('source')}`,
+                  },
+                  { listId: 'frames' },
+                ),
                 renderNumberField(energy, { min: 0 }),
                 renderNumberField(kinetic, { min: 0 }),
-                renderTextField(source, { listId: 'frames' }),
               ],
             })}
             ${this.frameList}
