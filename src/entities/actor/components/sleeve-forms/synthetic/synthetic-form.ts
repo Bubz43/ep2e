@@ -1,47 +1,39 @@
 import {
-  renderSelectField,
-  renderTextField,
+  renderFormulaField,
   renderLabeledCheckbox,
   renderNumberField,
-  renderFormulaField,
+  renderSelectField,
+  renderTextField,
 } from '@src/components/field/fields';
 import {
-  renderUpdaterForm,
-  renderSubmitForm,
   renderAutoForm,
+  renderSubmitForm,
+  renderUpdaterForm,
 } from '@src/components/form/forms';
 import { BotType, enumValues, ShellType, VehicleType } from '@src/data-enums';
 import type { SyntheticShell } from '@src/entities/actor/proxies/synthetic-shell';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
-import type { UpdateStore } from '@src/entities/update-store';
 import { renderMovementRateFields } from '@src/features/components/movement-rate-fields';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import { defaultMovement } from '@src/features/movement';
 import { Size } from '@src/features/size';
 import {
-  handleDrop,
   DropType,
+  handleDrop,
   itemDropToItemProxy,
 } from '@src/foundry/drag-and-drop';
-import { notify, NotificationType } from '@src/foundry/foundry-apps';
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
-import type { InfomorphHealth } from '@src/health/infomorph-health';
-import type { HealsOverTime } from '@src/health/recovery';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
-import {
-  customElement,
-  LitElement,
-  property,
-  html,
-  TemplateResult,
-} from 'lit-element';
+import { customElement, html, property, TemplateResult } from 'lit-element';
 import { first } from 'remeda';
 import { renderPoolEditForm } from '../pools/pool-edit-form';
 import { SleeveFormBase } from '../sleeve-form-base';
 import styles from './synthetic-form.scss';
 
 const itemGroupKeys = ['ware', 'software', 'traits'] as const;
+const frames = ['light', 'medium', 'heavy'] as const;
 
 @customElement('synthetic-form')
 export class SyntheticForm extends SleeveFormBase {
@@ -201,6 +193,17 @@ export class SyntheticForm extends SleeveFormBase {
               .health=${physicalHealth}
               @click=${this.setDrawerFromEvent(this.renderPhysicalHealthEdit)}
             ></health-item>
+            <p>${localize("armor")}</p>
+            ${renderUpdaterForm(updater.prop('data', 'inherentArmor'), {
+              disabled,
+              classes: 'inherent-armor',
+              fields: ({ energy, kinetic, source }) => [
+                renderNumberField(energy, { min: 0 }),
+                renderNumberField(kinetic, { min: 0 }),
+                renderTextField(source, { listId: 'frames' }),
+              ],
+            })}
+            ${this.frameList}
           </section>
 
           <section>
@@ -295,6 +298,14 @@ export class SyntheticForm extends SleeveFormBase {
       </entity-form-layout>
     `;
   }
+
+  private frameList = html` <datalist id="frames">
+    ${frames.map(
+      (frameType) => html`
+        <option value="${localize(frameType)} ${localize('frame')}"></option>
+      `,
+    )}
+  </datalist>`;
 
   private renderMovementCreator() {
     return html`
