@@ -5,28 +5,40 @@ import {
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { enumValues } from '@src/data-enums';
+import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import {
-  addUpdateRemoveFeature,
-  StringID,
-} from '@src/features/feature-helpers';
-import {
-  FullSkill,
+  FieldSkillType,
   FullFieldSkill,
+  FullSkill,
+  Skill,
   skillFilterCheck,
   SkillType,
-  Skill,
-  isFieldSkill,
-  FieldSkillType,
 } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
-import { debounceFn, throttleFn } from '@src/utility/decorators';
-import { PropertyValues, query, TemplateResult } from 'lit-element';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { debounceFn } from '@src/utility/decorators';
+import type { FieldPropsRenderer } from '@src/utility/field-values';
+import {
+  customElement,
+  html,
+  LitElement,
+  property,
+  PropertyValues,
+  query,
+} from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { identity, mapToObj, sort } from 'remeda';
-import type { ArrayEntry } from 'type-fest/source/entry';
+import { mapToObj } from 'remeda';
 import type { Ego } from '../../../ego';
 import styles from './ego-form-skills.scss';
+
+const renderControlFields: FieldPropsRenderer<
+  EgoFormSkills['skillControls']
+> = ({ filter, editTotals }) => [
+  renderTextInput(filter, {
+    search: true,
+    placeholder: `${localize('filter')} ${localize('skills')}`,
+  }),
+  renderLabeledSwitch(editTotals),
+];
 
 enum SkillSort {
   Name = 0,
@@ -110,12 +122,6 @@ export class EgoFormSkills extends LitElement {
     super.update(changedProps);
   }
 
-  disconnectedCallback() {
-    this.groupedSkills = [];
-    this.filteredSkills.clear();
-    super.disconnectedCallback();
-  }
-
   private setupSkills() {
     this.activeTracker.reset();
     this.knowTracker.reset();
@@ -186,13 +192,7 @@ export class EgoFormSkills extends LitElement {
         props: this.skillControls,
         update: this.updateSkillControls,
         storeOnInput: true,
-        fields: ({ filter, editTotals }) => [
-          renderTextInput(filter, {
-            search: true,
-            placeholder: `${localize('filter')} ${localize('skills')}`,
-          }),
-          renderLabeledSwitch(editTotals),
-        ],
+        fields: renderControlFields,
       })}
       <sl-animated-list class="skills-list">
         ${repeat(
