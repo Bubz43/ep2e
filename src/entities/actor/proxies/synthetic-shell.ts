@@ -30,10 +30,8 @@ export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
     sleeved?: boolean;
   }) {
     super(init);
-    if (!activeEffects) {
-      this._localEffects = new AppliedEffects();
-      // TODO: Setup local effects;
-    } else this._outsideEffects = activeEffects;
+    if (activeEffects) this._outsideEffects = activeEffects;
+
     this.sleeved = sleeved;
   }
 
@@ -46,9 +44,7 @@ export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
   }
 
   get activeEffects() {
-    return (
-      this._outsideEffects || (this._localEffects as ReadonlyAppliedEffects)
-    );
+    return this._outsideEffects ?? this.itemGroups.effects;
   }
 
   get nonDefaultBrain() {

@@ -27,10 +27,7 @@ export class Infomorph extends ActorProxyBase<ActorType.Infomorph> {
     sleeved?: boolean;
   }) {
     super(init);
-    if (!activeEffects) {
-      this._localEffects = new AppliedEffects();
-      // TODO: Setup local effects;
-    } else this._outsideEffects = activeEffects;
+    if (activeEffects) this._outsideEffects = activeEffects;
     this.sleeved = sleeved;
   }
 
@@ -43,7 +40,7 @@ export class Infomorph extends ActorProxyBase<ActorType.Infomorph> {
   }
 
   get activeEffects() {
-    return this._outsideEffects ?? this._localEffects;
+    return this._outsideEffects ?? this.itemGroups.effects;
   }
 
   @LazyGetter()
