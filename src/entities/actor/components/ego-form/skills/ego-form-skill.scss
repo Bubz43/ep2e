@@ -1,0 +1,142 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: grid;
+  grid-template-areas: 
+  "button points total";
+  padding: 0 1.5rem;
+  grid-template-columns: 1fr auto auto;
+  position: relative;
+  outline: none;
+  transition: opacity 200ms;
+  perspective: 600px;
+
+  --mdc-ripple-hover-opacity: 0.03;
+  --mdc-ripple-focus-opacity: 0.06;
+
+}
+
+
+.name {
+  font-size: larger;
+  @include truncate(286px);
+}
+.info {
+  color: var(--color-text-lighter);
+  @include truncate(286px);
+}
+.points-form {
+  display: contents;
+  input {
+    all: unset;
+    font-size: 2.2rem;
+    text-align: center;
+    width: 4ch;
+    font-family: var(--font-1);;
+    box-sizing: border-box;
+    padding: 0.5rem;
+    transition: opacity 200ms;
+    cursor: initial;
+    &:first-of-type {
+      grid-area: points;
+      border-right: 1px solid var(--color-border);
+    }
+    &:nth-of-type(2n) {
+      grid-area: total;
+    }
+    &[disabled] {
+      opacity: 0.8;
+    }
+  }
+}
+
+.main {
+  grid-area: button;
+  transition: transform 300ms ease-in-out;
+  will-change: transform;
+  transform-style: preserve-3d;
+  display: grid;
+  grid-template-areas: 'content';
+  &:focus-within {
+    z-index: 1;
+  }
+  &.edit {
+    transform: rotateY(180deg);
+    .edit-toggle {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .edits {
+      opacity: 1;
+      pointer-events: initial;
+    }
+  }
+}
+
+.edit-toggle {
+  all: unset;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  grid-area: content;
+  cursor: pointer;
+  transition: opacity 300ms ease-out;
+  &[disabled] {
+    pointer-events: none;
+  }
+}
+
+
+.edits {
+  --mdc-theme-primary: var(--color-primary-alt);
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  transform: rotateY(180deg);
+  grid-area: content;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease-out;
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    height: 28px;
+    delete-button {
+      margin-top: -2px;
+    }
+  }
+}
+
+
+.main-form {
+  display: flex;
+  input {
+    width: 50px;
+    flex: 1;
+    background: transparent;
+    color: var(--color-text);
+    font-family: var(--font-1);
+    font-size: 1rem;
+    border: 1px inset var(--color-grey);
+    border-radius: 3px;
+    background: var(--color-bg);
+    &:focus {
+      outline: none;
+      border-color: var(--color-secondary);
+      z-index: 1;
+    }
+    &:nth-of-type(2n) {
+      margin-left: 0.5ch
+    }
+  }
+}
+
+
+:host([filtered]) {
+  opacity: 0.5;
+}

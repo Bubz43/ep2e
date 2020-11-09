@@ -148,9 +148,6 @@ type ActorTemplates = Template<'Common', CommonDetails> &
   Template<'Acquisition', Acquisition> &
   Template<'PoolData', { pools: MorphPoolsData }> &
   Template<'Conditions', { conditions: ConditionType[] }>;
-// Template<"PhysicalHealth", { physicalHealth: PhysicalHealthData }> &
-// Template<"FullMeshHealth", { meshHealth: FullMeshHealthData }> &
-// Template<"Firewall", { firewall: FirewallData }> &
 
 type UseActorTemplate<T extends (keyof ActorTemplates)[]> = T;
 type UseItemTemplate<T extends (keyof ItemTemplates)[]> = T;

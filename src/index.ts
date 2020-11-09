@@ -76,8 +76,9 @@ import { TagEditor } from './features/components/tag-editor/tag-editor';
 import { SleeveFormMovementList } from './entities/actor/components/sleeve-forms/movement/sleeve-form-movement-list';
 import { SyntheticForm } from './entities/actor/components/sleeve-forms/synthetic/synthetic-form';
 import { EgoForm } from './entities/actor/components/ego-form/ego-form';
-import { EgoFormSkills } from './entities/actor/components/ego-form/ego-form-skills';
-import { EgoFormSkill } from './entities/actor/components/ego-form/ego-form-skill';
+import { EgoFormSkills } from './entities/actor/components/ego-form/skills/ego-form-skills';
+import { EgoFormSkill } from './entities/actor/components/ego-form/skills/ego-form-skill';
+import { EgoFormFieldSkill } from './entities/actor/components/ego-form/skills/ego-form-field-skill';
 
 // Generic Components
 Field;
@@ -110,6 +111,7 @@ ItemTrash;
 EgoForm;
 EgoFormSkills;
 EgoFormSkill;
+EgoFormFieldSkill;
 
 //Feature Editors
 EffectCreator;
