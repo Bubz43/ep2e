@@ -55,6 +55,7 @@ export abstract class EgoFormSkillBase extends mix(LitElement).with(
     return html`
       <mwc-button
         dense
+        tabindex=${this.editMain ? 0 : -1}
         icon="arrow_back"
         label=${this.skill.name}
         @click=${this.toggleEditMain}

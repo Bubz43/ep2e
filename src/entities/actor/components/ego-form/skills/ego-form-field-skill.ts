@@ -56,15 +56,16 @@ export class EgoFormFieldSkill extends EgoFormSkillBase {
             <delete-button
               ?disabled=${this.disabled}
               @delete=${this.deleteSelf}
+              tabindex=${this.editMain ? 0 : -1}
             ></delete-button>
           </div>
-          ${renderAutoForm({
+          ${this.editMain ? renderAutoForm({
             classes: 'main-form',
             disabled: this.disabled,
             props: this.skill,
             update: this.updateSkill,
             fields: renderFields,
-          })}
+          }) : ""}
         </div>
         ${this.renderEditToggle()}
       </div>

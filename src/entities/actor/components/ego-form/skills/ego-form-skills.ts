@@ -119,12 +119,30 @@ export class EgoFormSkills extends LitElement {
   private setupSkills() {
     this.activeTracker.reset();
     this.knowTracker.reset();
+    this.filteredSkills.clear();
     this.groupedSkills = [];
+    const isFiltered = skillFilterCheck(this.skillControls.filter);
 
     for (const skillType of enumValues(SkillType)) {
       const skill = this.ego.getCommonSkill(skillType);
       this.activeTracker.addPoints(skill.points);
       this.groupedSkills.push([skill]);
+      if (isFiltered(skill)) this.filteredSkills.add(skill);
+    }
+
+    for (const fieldSkill of enumValues(FieldSkillType)) {
+      const count =
+        fieldSkill === FieldSkillType.Know
+          ? this.knowTracker
+          : this.activeTracker;
+      const fields = this.ego.epData.fieldSkills[fieldSkill];
+
+      for (const field of fields) {
+        const fullSkill = this.ego.getFieldSkill({ fieldSkill, ...field });
+        count.addPoints(fullSkill.points);
+        this.groupedSkills.push([fullSkill, field.id]);
+        if (isFiltered(fullSkill)) this.filteredSkills.add(fullSkill);
+      }
     }
   }
 
@@ -132,6 +150,7 @@ export class EgoFormSkills extends LitElement {
     async (controls: Partial<EgoFormSkills['skillControls']>) => {
       this.skillControls = { ...this.skillControls, ...controls };
       if (controls.sort) this.skillSort = skillSort(controls.sort);
+      if (controls.filter !== undefined) this.setupFiltered();
       await this.requestUpdate();
       if (controls.filter) this.skillsList?.scrollTo({ top: 0 });
     },
@@ -141,22 +160,21 @@ export class EgoFormSkills extends LitElement {
 
   private sortSkills = ([a]: SetupSkills[number], [b]: SetupSkills[number]) => {
     return (
-      Number(this.filteredSkills.has(a)) - Number(this.filteredSkills.has(b)) ||
+      (this.skillControls.filter &&
+        Number(this.filteredSkills.has(a)) -
+          Number(this.filteredSkills.has(b))) ||
       this.skillSort(a, b)
     );
   };
 
-  private readySkills() {
+  private setupFiltered() {
     const { groupedSkills } = this;
     const isFiltered = skillFilterCheck(this.skillControls.filter);
     this.filteredSkills.clear();
 
     for (const [skill] of groupedSkills) {
-      if (isFiltered(skill)) this.filteredSkills.add(skill)
+      if (isFiltered(skill)) this.filteredSkills.add(skill);
     }
-
-    const blah = groupedSkills.sort(this.sortSkills);
-    return blah
   }
 
   render() {
@@ -177,33 +195,36 @@ export class EgoFormSkills extends LitElement {
         ],
       })}
       <sl-animated-list class="skills-list">
-        ${repeat(this.readySkills(), uniqSkill, ([skill, id]) =>
-          id
-            ? html`
-                <ego-form-field-skill
-                  ?editTotal=${editTotals}
-                  .skill=${skill as FullFieldSkill}
-                  skillId=${id}
-                  ?filtered=${this.filteredSkills.has(skill)}
-                  ?disabled=${disabled}
-                  .operations=${this.fieldOperations[
-                    (skill as FullFieldSkill).fieldSkill
-                  ]}
-                ></ego-form-field-skill>
-              `
-            : html`
-                <ego-form-skill
-                  ?editTotal=${editTotals}
-                  .skill=${skill as FullSkill}
-                  ?disabled=${disabled}
-                  ?filtered=${this.filteredSkills.has(skill)}
-                  .skillUpdate=${updater.prop(
-                    'data',
-                    'skills',
-                    (skill as FullSkill).skill,
-                  ).commit}
-                ></ego-form-skill>
-              `,
+        ${repeat(
+          this.groupedSkills.sort(this.sortSkills),
+          uniqSkill,
+          ([skill, id]) =>
+            id
+              ? html`
+                  <ego-form-field-skill
+                    ?editTotal=${editTotals}
+                    .skill=${skill as FullFieldSkill}
+                    skillId=${id}
+                    ?filtered=${this.filteredSkills.has(skill)}
+                    ?disabled=${disabled}
+                    .operations=${this.fieldOperations[
+                      (skill as FullFieldSkill).fieldSkill
+                    ]}
+                  ></ego-form-field-skill>
+                `
+              : html`
+                  <ego-form-skill
+                    ?editTotal=${editTotals}
+                    .skill=${skill as FullSkill}
+                    ?disabled=${disabled}
+                    ?filtered=${this.filteredSkills.has(skill)}
+                    .skillUpdate=${updater.prop(
+                      'data',
+                      'skills',
+                      (skill as FullSkill).skill,
+                    ).commit}
+                  ></ego-form-skill>
+                `,
         )}
       </sl-animated-list>
     `;

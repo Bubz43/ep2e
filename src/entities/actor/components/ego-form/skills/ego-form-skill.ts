@@ -35,13 +35,13 @@ export class EgoFormSkill extends EgoFormSkillBase {
       <div class="main ${classMap({ edit: this.editMain })}">
         <div class="edits">
           <div class="buttons">${this.renderEditCancelButton()}</div>
-          ${renderAutoForm({
+          ${this.editMain ?renderAutoForm({
             classes: 'main-form',
             disabled: this.disabled,
             props: this.skill,
             update: this.skillUpdate,
             fields: renderFields,
-          })}
+          }) : ""}
         </div>
         ${this.renderEditToggle()}
       </div>
