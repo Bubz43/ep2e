@@ -15,6 +15,7 @@ import {
   SkillType,
 } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
+import { openMenu } from '@src/open-menu';
 import { debounceFn } from '@src/utility/decorators';
 import type { FieldPropsRenderer } from '@src/utility/field-values';
 import {
@@ -25,6 +26,7 @@ import {
   PropertyValues,
   query,
 } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
 import { mapToObj } from 'remeda';
 import type { Ego } from '../../../ego';
@@ -37,14 +39,14 @@ const renderControlFields: FieldPropsRenderer<
     search: true,
     placeholder: `${localize('filter')} ${localize('skills')}`,
   }),
-  renderLabeledSwitch(editTotals),
+  // renderLabeledSwitch(editTotals),
 ];
 
 enum SkillSort {
-  Name = 0,
-  NameReverse = 2,
-  Points = 1,
-  PointsReverse = 3,
+  Name = "a-z",
+  NameReverse = "z-a",
+  Points = "leastPoints",
+  PointsReverse = "mostPoints",
 }
 
 const pointTracker = (name: 'active' | 'know') => ({
@@ -183,17 +185,71 @@ export class EgoFormSkills extends LitElement {
     }
   }
 
+  private openSkillSortMenu(ev: MouseEvent) {
+    openMenu({
+      header: { heading: `${localize("skill")} ${localize("sort")}` },
+      content: enumValues(SkillSort).map(sort => ({
+        label: localize(sort),
+        callback: () => this.updateSkillControls({ sort }),
+        activated: this.skillControls.sort === sort
+      })),
+      position: ev.currentTarget as HTMLElement,
+      // position: ev
+    })
+  }
+
+  private toggleTotalEdit() {
+    this.skillControls.editTotals = !this.skillControls.editTotals;
+    this.requestUpdate();
+  }
+
   render() {
     const { disabled, updater } = this.ego;
     const { editTotals } = this.skillControls;
-
+    // TODO add field
     return html`
-      ${renderAutoForm({
-        props: this.skillControls,
-        update: this.updateSkillControls,
-        storeOnInput: true,
-        fields: renderControlFields,
-      })}
+      <header>
+        <div class="totals">
+          ${[this.activeTracker, this.knowTracker].map(
+            (tracker) => html`
+              <div class="tracker">
+                <span class="skill-count">${tracker.skills}</span>
+                <span class="group"
+                  >${localize(tracker.name)} ${localize('skills')}</span
+                >
+                <span class="points-label"
+                  >${localize('points')}:
+                  <span class="points">${tracker.points}</span></span
+                >
+              </div>
+            `,
+          )}
+        </div>
+        <div class="controls">
+          <mwc-icon-button
+            icon="sort"
+            @click=${this.openSkillSortMenu}
+          ></mwc-icon-button>
+          ${renderAutoForm({
+            props: this.skillControls,
+            update: this.updateSkillControls,
+            storeOnInput: true,
+            fields: renderControlFields,
+          })}
+          <span>${localize('points')}</span>
+          <span class="total-label"
+            >${localize('total')}
+            ${disabled
+              ? ''
+              : html` <mwc-icon-button
+                  class="edit-toggle ${classMap({ active: editTotals })}"
+                  icon="edit"
+                  @click=${this.toggleTotalEdit}
+                ></mwc-icon-button>`}
+          </span>
+        </div>
+      </header>
+
       <sl-animated-list class="skills-list">
         ${repeat(
           this.groupedSkills.sort(this.sortSkills),

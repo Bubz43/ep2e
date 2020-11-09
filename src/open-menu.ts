@@ -85,8 +85,8 @@ export const openMenu = ({
     menu.y = window.innerHeight / 2;
   } else if (position instanceof HTMLElement) {
     const { top, left } = position.getBoundingClientRect();
-    menu.x = top / 2;
     menu.x = left / 2;
+    menu.y = top / 2;
   } else {
     if (
       !position.x &&
@@ -94,11 +94,12 @@ export const openMenu = ({
       position.currentTarget instanceof HTMLElement
     ) {
       const { top, left } = position.currentTarget.getBoundingClientRect();
-      menu.x = top;
       menu.x = left;
+      menu.y = top;
     } else {
       menu.x = position.x / 2;
       menu.y = position.y / 2;
+      console.log(position)
     }
   }
 

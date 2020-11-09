@@ -120,7 +120,7 @@ export class AnimatedList extends LitElement {
       this.previousSize = { width: offsetWidth, height: offsetHeight };
       this.savedPositions = new Map();
 
-      this.slottedItems.forEach((el, index) => {
+      this.slottedItems.forEach((el, index, list) => {
         const {
           offsetTop: top,
           offsetLeft: left,
@@ -138,12 +138,20 @@ export class AnimatedList extends LitElement {
             keyframes.push(
               new KeyframeEffect(
                 el,
-                {
-                  transform: [
-                    `translate(${leftChange}px, ${topChange}px)`,
-                    'translate(0)',
-                  ],
-                },
+                [
+                  { transform: `translate(${leftChange}px, ${topChange}px)` },
+                  {
+                    transform: `translate(${leftChange}px, ${topChange}px)`,
+                    offset: index / list.length,
+                  },
+                  { transform: 'translate(0)' },
+                ],
+                // {
+                //   transform: [
+                //     `translate(${leftChange}px, ${topChange}px)`,
+                //     'translate(0)',
+                //   ],
+                // },
                 { duration: animationDuration, easing: 'ease-out' },
               ),
             );

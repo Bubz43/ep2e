@@ -19,67 +19,81 @@ sl-form {
   input {
     background: transparent;
     font-family: var(--font-1);
-    border: none;
+    border: 1px solid var(--color-border);
     flex: 1;
-    padding: 0.25rem 1rem;
-    font-size: 1.2rem;
+    padding: 0.25rem;
+    font-size: 1rem;
     color: var(--color-text);
+    width: calc(100% - 1rem);
+    border-radius: 3px;
     &::placeholder {
       text-transform: capitalize;
     }
     &:focus {
       outline: none;
+      border-color: var(--color-grey);
+      background: var(--color-bg);
     }
   }
 }
 
-.skills-header {
+.controls {
+  --mdc-icon-button-size: 2rem;
   display: grid;
+  grid-template-columns: min-content 1fr repeat(2, 85px);
   align-items: center;
-  margin-top: 0.25rem;
-  padding-top: 0.25rem;
-  gap: 2px;
-  grid-template-areas:
-    "active know creator"
-    "info info info";
-
-  .creator {
-    grid-area: creator;
+  > span {
     place-self: center;
-    --mdc-theme-primary: var(--color-secondary);
+    font-size: larger;
   }
-
-  .group {
-    display: flex;
-    .label {
-      display: inline-block;
-      transform: translateY(3px);
-      margin-right: 4px;
-      margin-left: auto;
-      font-size: 12px;
-      text-transform: uppercase;
-      color: var(--color-text-lighter);
-      &::after {
-        content: ":";
+  .total-label {
+    position: relative;
+    .edit-toggle {
+      position: absolute;
+      --mdc-icon-size: 20px;
+      transition: color 200ms;
+      &.active {
+        color: var(--color-secondary);
       }
     }
   }
+}
 
-  .skill-totals {
-    &.know {
-      grid-area: know;
-    }
-    &.active {
-      grid-area: active;
-    }
+header {
+  position: sticky;
+  top: 0;
+  background: linear-gradient(to right, var(--color-bg), var(--color-bg-alt));
+  padding: 0.5rem 1.5rem;
+  z-index: 1;
+  display: grid;
+  gap: 0.25rem;
+  box-shadow: 0 0 4px black;
+
+}
+
+.totals {
+  display: flex;
+  font-size: 1.1rem;
+  padding: 0 0.25rem;
+  .skill-count {
+    grid-area: count;
+  }
+  .group {
+    grid-area: group;
   }
 
-  .skills-info {
-    grid-area: info;
+  .points-label {
+    grid-area: points;
   }
 
-  .total-number {
-    min-width: 4.5ch;
+  .skill-count,
+  .points-label {
+    color: var(--color-text-lighter);
   }
-  
+
+  .points {
+    color: var(--color-text);
+    display: inline-block;
+    min-width: 4ch;
+  }
 }

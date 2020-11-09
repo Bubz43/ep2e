@@ -1,6 +1,7 @@
 // Side Effects
 import './foundry/prototype-overrides';
 import './init';
+import "web-animations-js"
 
 // Material Components
 import '@material/mwc-button';
