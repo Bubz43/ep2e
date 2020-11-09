@@ -32,6 +32,8 @@ export class AnimatedList extends LitElement {
 
   @property({ type: Boolean }) noAnimations = false;
 
+  @property({ type: Boolean }) stagger = false;
+
   private resizeObs?: ResizeObserver | null = null;
 
   private savedPositions = new Map<Element, Info>();
@@ -106,6 +108,7 @@ export class AnimatedList extends LitElement {
       fadeOnly,
       transformOrigin,
       slottedItems,
+      stagger
     } = this;
 
     const keyframes: KeyframeEffect[] = [];
@@ -135,7 +138,7 @@ export class AnimatedList extends LitElement {
                   { transform: `translate(${leftChange}px, ${topChange}px)` },
                   {
                     transform: `translate(${leftChange}px, ${topChange}px)`,
-                    offset: index / listLength,
+                    offset: stagger ? index / listLength : 0,
                   },
                   { transform: 'translate(0)' },
                 ],

@@ -1,0 +1,51 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: grid;
+  grid-template-areas: 
+  "icon cause delete"
+  "goals goals goals";
+
+  column-gap: 0.25rem;
+  grid-template-columns: auto 1fr auto;
+  grid-auto-rows: min-content;
+  align-items: center;
+  --mdc-icon-button-size: 2rem;
+  padding: 0.25rem 0;
+}
+
+mwc-icon-button-toggle {
+  grid-area: icon;
+  color: var(--color-negative);
+  --mdc-theme-text-disabled-on-light: currentColor;
+  &[on] {
+    color: var(--color-secondary);
+  }
+}
+
+.cause-form {
+  grid-area: cause;
+  input {
+    background: transparent;
+    font-family: var(--font-1);
+    border: 1px inset var(--color-border);
+    font-size: 1rem;
+    color: var(--color-text-lighter);
+    &:focus {
+      border-color: var(--color-secondary);
+      outline: none;
+    }
+    &[disabled] {
+      color: var(--color-text-disabled);
+    }
+  }
+}
+
+.delete-self-button {
+  grid-area: delete;
+}

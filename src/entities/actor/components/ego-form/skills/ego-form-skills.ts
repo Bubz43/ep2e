@@ -16,7 +16,7 @@ import {
 } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { openMenu } from '@src/open-menu';
-import { debounceFn } from '@src/utility/decorators';
+import { debounce, debounceFn } from '@src/utility/decorators';
 import type { FieldPropsRenderer } from '@src/utility/field-values';
 import {
   customElement,
@@ -44,8 +44,8 @@ const renderControlFields: FieldPropsRenderer<
 enum SkillSort {
   Name = 'a-z',
   NameReverse = 'z-a',
-  Points = 'leastPoints',
-  PointsReverse = 'mostPoints',
+  Points = 'mostPoints',
+  PointsReverse = 'leastPoints',
 }
 
 const pointTracker = (name: 'active' | 'know') => ({
@@ -93,7 +93,7 @@ export class EgoFormSkills extends LitElement {
 
   @property({ attribute: false }) ego!: Ego;
 
-  @query('.skills-list') private skillsList?: AnimatedList;
+  @query('.skills-list') private skillsList!: AnimatedList;
 
   private groupedSkills: SetupSkills = [];
 
@@ -159,11 +159,15 @@ export class EgoFormSkills extends LitElement {
       if (controls.sort) this.skillSort = skillSort(controls.sort);
       if (controls.filter !== undefined) this.setupFiltered();
       await this.requestUpdate();
-      if (controls.filter) this.skillsList?.scrollTo({ top: 0 });
+      if (controls.filter) this.scrollListToTop()
     },
     200,
     false,
   );
+
+  private scrollListToTop() {
+    this.skillsList?.firstElementChild?.scrollIntoView({ block: 'end' });
+  }
 
   private sortSkills = ([a]: SetupSkills[number], [b]: SetupSkills[number]) => {
     return (
@@ -263,7 +267,7 @@ export class EgoFormSkills extends LitElement {
         </div>
       </header>
 
-      <sl-animated-list class="skills-list">
+      <sl-animated-list class="skills-list" stagger>
         ${repeat(
           this.groupedSkills.sort(this.sortSkills),
           uniqSkill,

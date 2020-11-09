@@ -1,8 +1,8 @@
 import {
-  renderSelectField,
-  renderTextField,
   renderLabeledCheckbox,
   renderNumberField,
+  renderSelectField,
+  renderTextField,
 } from '@src/components/field/fields';
 import { renderUpdaterForm } from '@src/components/form/forms';
 import { TabsMixin } from '@src/components/mixins/tabs-mixin';
@@ -16,17 +16,24 @@ import {
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { FormDrawer } from '@src/entities/components/form-layout/entity-form-drawer-mixin';
-import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
+import type { UpdatedMotivationEvent } from '@src/features/components/form-motivation-item/updated-motivation-event';
+import {
+  addUpdateRemoveFeature,
+  idProp,
+  StringID,
+} from '@src/features/feature-helpers';
+import { createMotivation, Motivation } from '@src/features/motivations';
 import type { Aptitudes } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { hardeningTypes } from '@src/health/mental-health';
 import { gameSettings, tooltip } from '@src/init';
 import type { FieldProps, FieldPropsRenderer } from '@src/utility/field-values';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, html, LitElement, property } from 'lit-element';
 import { cache } from 'lit-html/directives/cache';
 import { classMap } from 'lit-html/directives/class-map';
+import { repeat } from 'lit-html/directives/repeat';
 import mix from 'mix-with/lib';
-import { createPipe, map, mapToObj, toPairs } from 'remeda';
+import { createPipe, map, toPairs } from 'remeda';
 import { Ego } from '../../ego';
 import styles from './ego-form.scss';
 
@@ -69,6 +76,14 @@ export class EgoForm extends mix(LitElement).with(
   private readonly backupOps = addUpdateRemoveFeature(
     () => this.ego.updater.prop('data', 'backups').commit,
   );
+
+  private updateMotivation({ changed, id }: UpdatedMotivationEvent) {
+    if (id) this.motivationOps.update(changed, { id });
+  }
+
+  private addMotivation() {
+    this.motivationOps.add({}, createMotivation({}));
+  }
 
   render() {
     const { updater, disabled } = this.ego;
@@ -113,15 +128,24 @@ export class EgoForm extends mix(LitElement).with(
   }
 
   private renderDetails() {
-    const { settings, disabled, updater } = this.ego;
+    const { settings, disabled, updater, motivations } = this.ego;
     const useCredits = gameSettings.credits.current;
 
     return html`
       <div slot="details">
         <section>
           <sl-header heading=${localize('motivations')}>
-          <mwc-icon-button icon="add" ?disabled=${disabled} @click=${this.renderMotivationCreator}></mwc-icon-button>
+            <mwc-icon-button
+              icon="add"
+              slot="action"
+              ?disabled=${disabled}
+              @click=${this.addMotivation}
+            ></mwc-icon-button>
           </sl-header>
+
+          <sl-animated-list class="motivations-list">
+            ${repeat(motivations, idProp, this.renderMotivationItem)}
+          </sl-animated-list>
         </section>
 
         ${settings.trackReputations
@@ -137,16 +161,17 @@ export class EgoForm extends mix(LitElement).with(
                 <sl-header
                   heading="${localize('resource')} ${localize('points')}"
                 >
-                  <ul class="ego-points-simple" slot="action">
-                    ${this.ego.points.map(
-                      ({ label, value }) =>
-                        html`
-                          <sl-group role="listitem" label=${label}
-                            >${value}</sl-group
-                          >
-                        `,
+                  <sl-animated-list class="ego-points-simple" slot="action">
+                    ${repeat(
+                      this.ego.points,
+                      ({ label }) => label,
+                      ({ label, value }) => html`
+                        <sl-group role="listitem" label=${label}
+                          ><span class="value">${value}</span></sl-group
+                        >
+                      `,
                     )}
-                  </ul>
+                  </sl-animated-list>
                 </sl-header>
                 ${disabled
                   ? ''
@@ -159,7 +184,7 @@ export class EgoForm extends mix(LitElement).with(
                             ? renderNumberField({
                                 ...points[point],
                                 label: Ego.formatPoint(point),
-                              })
+                              }, { min: -99, max: 99})
                             : '',
                         ),
                     })}
@@ -211,6 +236,15 @@ export class EgoForm extends mix(LitElement).with(
       </div>
     `;
   }
+
+  private renderMotivationItem = (
+    motivation: StringID<Motivation>,
+  ) => html` <form-motivation-item
+    @updated-motivation=${this.updateMotivation}
+    @delete=${this.motivationOps.removeCallback(motivation.id)}
+    .motivation=${motivation}
+    ?disabled=${this.ego.disabled}
+  ></form-motivation-item>`;
 
   private renderSidebar() {
     const { updater, disabled } = this.ego;
@@ -320,13 +354,6 @@ export class EgoForm extends mix(LitElement).with(
         .ego=${this.ego}
       ></ego-form-field-skill-creator>
     `;
-  }
-
-  private renderMotivationCreator() {
-    return html`
-    <h3>${localize("new")} ${localize("motivation")}</h3>
-
-    `
   }
 }
 

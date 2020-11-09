@@ -81,6 +81,7 @@ import { EgoFormSkills } from './entities/actor/components/ego-form/skills/ego-f
 import { EgoFormSkill } from './entities/actor/components/ego-form/skills/ego-form-skill';
 import { EgoFormFieldSkill } from './entities/actor/components/ego-form/skills/ego-form-field-skill';
 import { EgoFormFieldSkillCreator } from './entities/actor/components/ego-form/skills/ego-form-field-skill-creator';
+import { FormMotivationItem } from './features/components/form-motivation-item/form-motivation-item';
 
 // Generic Components
 Field;
@@ -120,6 +121,7 @@ EgoFormFieldSkillCreator;
 EffectCreator;
 EffectEditor;
 TagEditor;
+FormMotivationItem;
 
 // Entity Form Layout Components
 EntityFormHeader;

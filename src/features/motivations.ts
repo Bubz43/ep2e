@@ -1,24 +1,29 @@
-import { createFeature } from './feature-helpers';
+import { createFeature, StringID } from './feature-helpers';
 
 export enum MotivationStance {
   Oppose = 'oppose',
   Support = 'support',
 }
 
-export type Motivation = {
-  objective: string;
-  stance: MotivationStance;
+export type MotivationalGoal = {
   goal: string;
+  complete: boolean;
+}
+
+export type Motivation = {
+  cause: string;
+  stance: MotivationStance;
+  goals: StringID<MotivationalGoal>[];
 };
 
 export const createMotivation = createFeature<Motivation>(() => ({
-  objective: '',
+  cause: '',
   stance: MotivationStance.Support,
-  goal: '',
+  goals: [],
 }));
 
 export const motivationSort = (a: Motivation, b: Motivation) =>
-  a.stance.length - b.stance.length || a.objective.length - b.objective.length;
+  a.stance.length - b.stance.length || a.cause.length - b.cause.length;
 
 // TODO: Apply stress relief
 // ? Goals array, or maybe say common seperated
