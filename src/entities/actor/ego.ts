@@ -32,6 +32,7 @@ import { localize } from '@src/foundry/localization';
 import type { EgoData, CommonDetails } from '@src/foundry/template-schema';
 import { HealthType } from '@src/health/health';
 import { MentalHealth } from '@src/health/mental-health';
+import { LazyGetter } from 'lazy-get-decorator';
 import { groupBy, compact, map } from 'remeda';
 import type { ReadonlyAppliedEffects } from '../applied-effects';
 import { ItemType } from '../entity-types';
@@ -89,11 +90,6 @@ export class Ego {
     RepWithIdentifier & { track: boolean }
   >();
 
-  #skills?: Skill[];
-  #filteredSkills?: Skill[];
-  #mentalHealth?: MentalHealth | null;
-  #groupedSkills?: Partial<Record<'active' | 'know', Skill[]>>;
-
   get epData() {
     return this.data.data;
   }
@@ -123,34 +119,49 @@ export class Ego {
     return this.epData.flex;
   }
 
+  @LazyGetter()
   get mentalHealth() {
-    if (this.#mentalHealth === undefined) {
-      this.#mentalHealth = this.setupMentalHealth();
-    }
-
-    return this.#mentalHealth;
+    return new MentalHealth({
+      data: this.epData.mentalHealth,
+      statMods: this.activeEffects.getHealthStatMods(HealthType.Mental),
+      willpower: this.aptitudes.wil,
+      updater: this.updater.prop('data', 'mentalHealth').nestedStore(),
+      source: this.name,
+    })
   }
 
+  @LazyGetter()
   get skills() {
-    if (!this.#filteredSkills) {
-      const { canDefault } = this.settings;
-      const skills = this.setupSkills();
-      this.#filteredSkills = canDefault
-        ? skills
-        : skills.filter((s) => s.points);
+    const { canDefault } = this.settings;
+    const { fieldSkills } = this.epData;
+    const skills: Skill[] = [];
+
+    const addSkill = (skill: Skill) => {
+      if (canDefault || skill.points) skills.push(skill)
     }
-    return this.#filteredSkills;
+
+    for (const type of enumValues(SkillType)) {
+      addSkill(this.getCommonSkill(type))
+    }
+
+    for (const fieldSkill of enumValues(FieldSkillType)) {
+      const fields = fieldSkills[fieldSkill];
+      for (const field of fields) {
+        addSkill(this.getFieldSkill({ ...field, fieldSkill }, { skipCheck: true }))
+      }
+    }
+
+    // TODO: Skills from effects and dups overwriting with higher total
+    return skills.sort((a, b) => a.name.localeCompare(b.name));
   }
 
+  @LazyGetter()
   get groupedSkills() {
-    if (!this.#groupedSkills) {
-      this.#groupedSkills = groupBy(this.skills, (skill) =>
-        isFieldSkill(skill) && skill.fieldSkill === FieldSkillType.Know
-          ? 'know'
-          : 'active',
-      ) as Partial<Record<'active' | 'know', Skill[]>>;
-    }
-    return this.#groupedSkills;
+    return groupBy(this.skills, (skill) =>
+    isFieldSkill(skill) && skill.fieldSkill === FieldSkillType.Know
+      ? 'know'
+      : 'active',
+  ) as Partial<Record<'active' | 'know', Skill[]>>;
   }
 
   get reps() {
@@ -209,6 +220,7 @@ export class Ego {
     return groups;
   }
 
+  @LazyGetter()
   get details() {
     const { settings, epData } = this;
     const { characterDetails, threatDetails } = epData;
@@ -307,6 +319,7 @@ export class Ego {
     return rep;
   }
 
+  @LazyGetter()
   get repRefreshTimers() {
     const timers: RefreshTimer[] = [];
     for (const rep of this.reps.values()) {
@@ -357,42 +370,7 @@ export class Ego {
     }
   }
 
-  private setupSkills() {
-    if (this.#skills) return this.#skills;
 
-    const { fieldSkills } = this.epData;
-    const skills: Skill[] = [];
-
-    for (const skill of enumValues(SkillType)) {
-      skills.push(this.getCommonSkill(skill));
-    }
-
-    for (const fieldSkill of enumValues(FieldSkillType)) {
-      const fields = fieldSkills[fieldSkill];
-      for (const field of fields) {
-        skills.push(
-          this.getFieldSkill({ ...field, fieldSkill }, { skipCheck: true }),
-        );
-      }
-    }
-
-    // TODO: Skills from effects and dups overwriting with higher total
-
-    this.#skills = skills.sort((a, b) => a.name.localeCompare(b.name));
-    return this.#skills;
-  }
-
-  private setupMentalHealth() {
-    return this.settings.trackMentalHealth
-      ? new MentalHealth({
-          data: this.epData.mentalHealth,
-          statMods: this.activeEffects.getHealthStatMods(HealthType.Mental),
-          willpower: this.aptitudes.wil,
-          updater: this.updater.prop('data', 'mentalHealth').nestedStore(),
-          source: this.name,
-        })
-      : null;
-  }
 
   acceptItemAgent(agent: ItemProxy) {
     if (Ego.egoItems.includes(agent.type)) {

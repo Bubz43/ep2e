@@ -8,6 +8,7 @@ import { renderUpdaterForm } from '@src/components/form/forms';
 import { TabsMixin } from '@src/components/mixins/tabs-mixin';
 import {
   AptitudeType,
+  CharacterPoint,
   EgoSetting,
   EgoType,
   enumValues,
@@ -16,15 +17,17 @@ import {
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { FormDrawer } from '@src/entities/components/form-layout/entity-form-drawer-mixin';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
-import { Aptitudes, FieldSkillType } from '@src/features/skills';
+import type { Aptitudes } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
-import { tooltip } from '@src/init';
+import { hardeningTypes } from '@src/health/mental-health';
+import { gameSettings, tooltip } from '@src/init';
 import type { FieldProps, FieldPropsRenderer } from '@src/utility/field-values';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { cache } from 'lit-html/directives/cache';
+import { classMap } from 'lit-html/directives/class-map';
 import mix from 'mix-with/lib';
 import { createPipe, map, mapToObj, toPairs } from 'remeda';
-import type { Ego } from '../../ego';
+import { Ego } from '../../ego';
 import styles from './ego-form.scss';
 
 const renderAptitudeField = ([, apt]: [
@@ -65,16 +68,6 @@ export class EgoForm extends mix(LitElement).with(
 
   private readonly backupOps = addUpdateRemoveFeature(
     () => this.ego.updater.prop('data', 'backups').commit,
-  );
-
-  private readonly fieldSkillActions = mapToObj(
-    enumValues(FieldSkillType),
-    (type) => [
-      type,
-      addUpdateRemoveFeature(
-        () => this.ego.updater.prop('data', 'fieldSkills', type).commit,
-      ),
-    ],
   );
 
   render() {
@@ -120,11 +113,15 @@ export class EgoForm extends mix(LitElement).with(
   }
 
   private renderDetails() {
-    const { settings } = this.ego;
+    const { settings, disabled, updater } = this.ego;
+    const useCredits = gameSettings.credits.current;
+
     return html`
       <div slot="details">
         <section>
-          <sl-header heading=${localize('motivations')}></sl-header>
+          <sl-header heading=${localize('motivations')}>
+          <mwc-icon-button icon="add" ?disabled=${disabled} @click=${this.renderMotivationCreator}></mwc-icon-button>
+          </sl-header>
         </section>
 
         ${settings.trackReputations
@@ -132,10 +129,65 @@ export class EgoForm extends mix(LitElement).with(
               <sl-header heading=${localize('reputations')}></sl-header>
             </section>`
           : ''}
+        ${settings.trackPoints
+          ? html`
+              <section
+                class="resource-points-section ${classMap({ disabled })}"
+              >
+                <sl-header
+                  heading="${localize('resource')} ${localize('points')}"
+                >
+                  <ul class="ego-points-simple" slot="action">
+                    ${this.ego.points.map(
+                      ({ label, value }) =>
+                        html`
+                          <sl-group role="listitem" label=${label}
+                            >${value}</sl-group
+                          >
+                        `,
+                    )}
+                  </ul>
+                </sl-header>
+                ${disabled
+                  ? ''
+                  : renderUpdaterForm(updater.prop('data', 'points'), {
+                      disabled,
+                      classes: 'points-form',
+                      fields: (points) =>
+                        enumValues(CharacterPoint).map((point) =>
+                          useCredits || point !== CharacterPoint.Credits
+                            ? renderNumberField({
+                                ...points[point],
+                                label: Ego.formatPoint(point),
+                              })
+                            : '',
+                        ),
+                    })}
+              </section>
+            `
+          : ''}
         ${settings.trackMentalHealth
           ? html`
               <section>
-                <sl-header heading=${localize('mentalHealth')}></sl-header>
+                <sl-header heading=${localize('mentalHealth')}
+                  ><mwc-icon-button
+                    slot="action"
+                    data-tooltip=${localize('changes')}
+                    @mouseover=${tooltip.fromData}
+                    @focus=${tooltip.fromData}
+                    icon="change_history"
+                    @click=${this.setDrawerFromEvent(
+                      this.renderMentalHealthChangeHistory,
+                      false,
+                    )}
+                  ></mwc-icon-button
+                ></sl-header>
+                <health-item
+                  clickable
+                  ?disabled=${disabled}
+                  .health=${this.ego.mentalHealth}
+                  @click=${this.setDrawerFromEvent(this.renderMentalHealthEdit)}
+                ></health-item>
               </section>
             `
           : ''}
@@ -236,11 +288,45 @@ export class EgoForm extends mix(LitElement).with(
     `;
   }
 
+  private renderMentalHealthChangeHistory() {
+    return html`
+      <h3>${localize('history')}</h3>
+      <health-log
+        .mealth=${this.ego.mentalHealth}
+        ?disabled=${this.ego.disabled}
+      ></health-log>
+    `;
+  }
+
+  private renderMentalHealthEdit() {
+    return html`
+      <h3>${localize('edit')} ${localize('mentalHealth')}</h3>
+      <health-state-form .health=${this.ego.mentalHealth}></health-state-form>
+
+      <p class="hardening-label">${localize('hardening')}</p>
+      ${renderUpdaterForm(this.ego.updater.prop('data', 'mentalHealth'), {
+        fields: (hardenings) =>
+          hardeningTypes.map((type) =>
+            renderNumberField(hardenings[type], { min: 0, max: 5 }),
+          ),
+      })}
+    `;
+  }
+
   private renderFieldCreator() {
     return html`
-    <h3>${localize("create")} ${localize("fieldSkill")}</h3>
-    <ego-form-field-skill-creator .ego=${this.ego}></ego-form-field-skill-creator>
+      <h3>${localize('create')} ${localize('fieldSkill')}</h3>
+      <ego-form-field-skill-creator
+        .ego=${this.ego}
+      ></ego-form-field-skill-creator>
     `;
+  }
+
+  private renderMotivationCreator() {
+    return html`
+    <h3>${localize("new")} ${localize("motivation")}</h3>
+    
+    `
   }
 }
 

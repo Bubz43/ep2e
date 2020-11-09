@@ -37,8 +37,16 @@ export class HealthStateForm extends LitElement {
             }),
           ),
         fields: ({ damage, wounds }) => [
-          renderNumberField(damage, { min: 0 }),
-          renderNumberField(wounds, { min: 0 }),
+          renderNumberField(
+            { ...damage, label: this.health.main.damage.label },
+            { min: 0 },
+          ),
+          this.health.wound
+            ? renderNumberField(
+                { ...wounds, label: this.health.wound.wounds.label },
+                { min: 0 },
+              )
+            : '',
         ],
       })}
     `;

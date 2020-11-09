@@ -7,6 +7,7 @@
 
 :host {
   display: block;
+  min-width: 720px;
 }
 
 .settings-toggle {
@@ -34,4 +35,31 @@ ego-form-skills {
 
 .aptitudes {
   margin-top: 0.3rem;
+}
+
+.hardening-label {
+  margin-bottom: 0.5rem;
+}
+
+.resource-points-section {
+  &.disabled {
+    sl-header {
+      border-bottom: none;
+    }
+  }
+}
+
+.points-form {
+  grid-auto-flow: column;
+  padding: 0.5rem 0;;
+}
+
+.ego-points-simple {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0.5rem 0 0 auto;
+  list-style: none;
+  > * {
+    margin-right: 1rem;
+  }
 }
