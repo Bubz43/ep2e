@@ -30,6 +30,10 @@ export class EgoFormSkill extends EgoFormSkillBase {
     if (newPoints !== undefined) this.skillUpdate({ points: newPoints })
   }
 
+  get backLabel() {
+    return this.skill.name;
+  }
+
   render() {
     return html`
       <div class="main ${classMap({ edit: this.editMain })}">

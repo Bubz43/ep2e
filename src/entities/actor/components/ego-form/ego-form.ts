@@ -239,6 +239,7 @@ export class EgoForm extends mix(LitElement).with(
   private renderFieldCreator() {
     return html`
     <h3>${localize("create")} ${localize("fieldSkill")}</h3>
+    <ego-form-field-skill-creator .ego=${this.ego}></ego-form-field-skill-creator>
     `;
   }
 }

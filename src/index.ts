@@ -80,6 +80,7 @@ import { EgoForm } from './entities/actor/components/ego-form/ego-form';
 import { EgoFormSkills } from './entities/actor/components/ego-form/skills/ego-form-skills';
 import { EgoFormSkill } from './entities/actor/components/ego-form/skills/ego-form-skill';
 import { EgoFormFieldSkill } from './entities/actor/components/ego-form/skills/ego-form-field-skill';
+import { EgoFormFieldSkillCreator } from './entities/actor/components/ego-form/skills/ego-form-field-skill-creator';
 
 // Generic Components
 Field;
@@ -113,6 +114,7 @@ EgoForm;
 EgoFormSkills;
 EgoFormSkill;
 EgoFormFieldSkill;
+EgoFormFieldSkillCreator;
 
 //Feature Editors
 EffectCreator;

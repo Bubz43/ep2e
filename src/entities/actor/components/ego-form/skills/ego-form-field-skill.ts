@@ -47,6 +47,10 @@ export class EgoFormFieldSkill extends EgoFormSkillBase {
     this.operations.remove(this.skillId);
   }
 
+  get backLabel() {
+    return localize(this.skill.fieldSkill)
+  }
+
   render() {
     return html`
       <div class="main ${classMap({ edit: this.editMain })}">

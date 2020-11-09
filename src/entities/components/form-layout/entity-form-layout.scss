@@ -129,6 +129,10 @@ slot[name='tabs'] {
   &.no-scroll {
     overflow: visible;
 
+    &.drawer-open {
+      overflow: hidden;
+    }
+
     ::slotted([slot='description']) {
       border-left: 1px solid var(--color-border);
     }

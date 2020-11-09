@@ -129,7 +129,12 @@ export class EntityFormLayout extends LitElement {
       <slot name="header"></slot>
 
       <slot name="tabs"></slot>
-      <section class="content ${classMap({ 'no-scroll': noScroll })}">
+      <section
+        class="content ${classMap({
+          'no-scroll': noScroll,
+          'drawer-open': this.drawerOpen,
+        })}"
+      >
         <slot name="details"></slot>
         ${this.noDescription ? '' : html` <slot name="description"></slot> `}
       </section>
@@ -142,7 +147,7 @@ export class EntityFormLayout extends LitElement {
         >
           ${this.drawerOpen
             ? html`<mwc-icon-button
-                icon="close"
+                icon="east"
                 class="drawer-closer"
                 @click=${this.closeDrawer}
               ></mwc-icon-button>`

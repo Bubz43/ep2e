@@ -39,7 +39,6 @@ const renderControlFields: FieldPropsRenderer<
     search: true,
     placeholder: `${localize('filter')} ${localize('skills')}`,
   }),
-  // renderLabeledSwitch(editTotals),
 ];
 
 enum SkillSort {

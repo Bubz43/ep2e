@@ -21,6 +21,8 @@ export abstract class EgoFormSkillBase extends mix(LitElement).with(
 
   declare abstract skill: Skill;
 
+  declare abstract readonly backLabel: string;
+
   @property({ type: Boolean, reflect: true }) disabled = false;
 
   @property({ type: Boolean, reflect: true }) filtered = false;
@@ -57,7 +59,7 @@ export abstract class EgoFormSkillBase extends mix(LitElement).with(
         dense
         tabindex=${this.editMain ? 0 : -1}
         icon="arrow_back"
-        label=${this.skill.name}
+        label=${this.backLabel}
         @click=${this.toggleEditMain}
       ></mwc-button>
     `;
