@@ -292,7 +292,7 @@ export class EgoForm extends mix(LitElement).with(
     return html`
       <h3>${localize('history')}</h3>
       <health-log
-        .mealth=${this.ego.mentalHealth}
+        .health=${this.ego.mentalHealth}
         ?disabled=${this.ego.disabled}
       ></health-log>
     `;
@@ -325,7 +325,7 @@ export class EgoForm extends mix(LitElement).with(
   private renderMotivationCreator() {
     return html`
     <h3>${localize("new")} ${localize("motivation")}</h3>
-    
+
     `
   }
 }
