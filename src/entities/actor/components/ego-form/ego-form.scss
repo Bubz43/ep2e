@@ -22,7 +22,14 @@
 
 [slot='description'],
 [slot='details'] {
-  @include animate-css(fadeIn, 500ms);
+  @include animate-css(fadeIn, 1s);
   animation-fill-mode: none !important;
 }
 
+ego-form-skills {
+  padding: 0;
+}
+
+.aptitudes {
+  margin-top: 0.3rem;
+}

@@ -7,7 +7,30 @@
 
 :host {
   display: block;
-  
+}
+
+sl-form {
+  grid-auto-flow: column;
+  padding: 0 0.5rem;
+
+  mwc-formfield {
+    place-self: center;
+  }
+  input {
+    background: transparent;
+    font-family: var(--font-1);
+    border: none;
+    flex: 1;
+    padding: 0.25rem 1rem;
+    font-size: 1.2rem;
+    color: var(--color-text);
+    &::placeholder {
+      text-transform: capitalize;
+    }
+    &:focus {
+      outline: none;
+    }
+  }
 }
 
 .skills-header {

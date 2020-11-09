@@ -1,0 +1,66 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: grid;
+  grid-template-areas: 
+  "button points total";
+  padding: 0 1.5rem;
+  grid-template-columns: 1fr auto auto;
+  position: relative;
+  outline: none;
+  cursor: pointer;
+  transition: opacity 200ms;
+
+  button {
+    all: unset;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+  }
+
+  .name {
+    font-size: larger;
+    @include truncate(286px);
+  }
+  .info {
+    color: var(--color-text-lighter);
+    @include truncate(286px);
+  }
+  sl-form {
+    display: contents;
+  }
+  input {
+    all: unset;
+    font-size: 2.2rem;
+    text-align: center;
+    width: 4ch;
+    font-family: var(--font-1);;
+    box-sizing: border-box;
+    padding: 0.5rem;
+    transition: opacity 200ms;
+    cursor: initial;
+    &:first-of-type {
+      grid-area: points;
+      border-right: 1px solid var(--color-border);
+    }
+    &:nth-of-type(2n) {
+      grid-area: total;
+    }
+    &[disabled] {
+      opacity: 0.8;
+    }
+  }
+}
+
+:host([filtered]) {
+  opacity: 0.5;
+}
+
+:host([disabled]) {
+  cursor: initial;
+}

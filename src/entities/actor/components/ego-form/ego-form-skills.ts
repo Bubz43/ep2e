@@ -1,13 +1,36 @@
 import type { AnimatedList } from '@src/components/animated-list/animated-list';
+import {
+  renderLabeledSwitch,
+  renderTextInput,
+} from '@src/components/field/fields';
+import { renderAutoForm } from '@src/components/form/forms';
+import { enumValues } from '@src/data-enums';
 import type { StringID } from '@src/features/feature-helpers';
-import { FullSkill, FullFieldSkill, skillFilterCheck } from '@src/features/skills';
+import {
+  FullSkill,
+  FullFieldSkill,
+  skillFilterCheck,
+  SkillType,
+  Skill,
+  isFieldSkill,
+} from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
+import { debounceFn, throttleFn } from '@src/utility/decorators';
 import { query, TemplateResult } from 'lit-element';
 import { customElement, LitElement, property, html } from 'lit-element';
+import { repeat } from 'lit-html/directives/repeat';
+import { identity, sort } from 'remeda';
 import type { Ego } from '../../ego';
 import styles from './ego-form-skills.scss';
 
-const pointTracker = (name: "active" | "know") => ({
+enum SkillSort {
+  Name = 0,
+  NameReverse = 2,
+  Points = 1,
+  PointsReverse = 3,
+}
+
+const pointTracker = (name: 'active' | 'know') => ({
   points: 0,
   skills: 0,
   name,
@@ -17,12 +40,26 @@ const pointTracker = (name: "active" | "know") => ({
   },
 });
 
+const skillSort = (type: SkillSort): ((a: Skill, b: Skill) => number) => {
+  switch (type) {
+    case SkillSort.Name:
+      return (a, b) => a.name.localeCompare(b.name);
+
+    case SkillSort.NameReverse:
+      return (a, b) => b.name.localeCompare(a.name);
+
+    case SkillSort.Points:
+      return (a, b) => b.points - a.points;
+
+    case SkillSort.PointsReverse:
+      return (a, b) => a.points - b.points;
+  }
+};
+
 type SkillInfo = {
   filtered: boolean;
   template: TemplateResult;
 };
-
-
 
 @customElement('ego-form-skills')
 export class EgoFormSkills extends LitElement {
@@ -39,46 +76,77 @@ export class EgoFormSkills extends LitElement {
   private skillControls = {
     filter: '',
     editTotals: false,
-    // sort: SkillSort.Name,
+    sort: SkillSort.Name,
   };
 
-  updateSkillControls = async (
+  updateSkillControls = debounceFn(async (
     controls: Partial<EgoFormSkills['skillControls']>,
   ) => {
     this.skillControls = { ...this.skillControls, ...controls };
     await this.requestUpdate();
     if (controls.filter) this.skillsList?.scrollTo({ top: 0 });
-  };
+  }, 200, false);
 
   render() {
     const { disabled, updater } = this.ego;
-    const activeSkillTracker = pointTracker("active");
-    const knowSkillTracker = pointTracker("know");
+    const activeSkillTracker = pointTracker('active');
+    const knowSkillTracker = pointTracker('know');
 
-    const nonFieldSkills = new Map<FullSkill, SkillInfo>();
-    const fullFieldSkills = new Map<FullFieldSkill, StringID<SkillInfo>>();
+    const nonFieldSkills: [FullSkill, SkillInfo][] = [];
+    const fullFieldSkills: [FullFieldSkill, StringID<SkillInfo>][] = [];
 
-    const { editTotals, filter } = this.skillControls;
+    const { editTotals, filter, sort: sortType } = this.skillControls;
     const isFiltered = skillFilterCheck(filter);
 
+    for (const skillType of enumValues(SkillType)) {
+      const skill = this.ego.getCommonSkill(skillType);
+      const filtered = isFiltered(skill);
+      activeSkillTracker.addPoints(skill.points);
+      nonFieldSkills.push([
+        skill,
+        {
+          filtered,
+          template: html`
+            <ego-form-skill
+              .skill=${skill}
+              ?disabled=${disabled}
+              ?filtered=${isFiltered(skill)}
+              ?editTotal=${editTotals}
+            ></ego-form-skill>
+          `,
+        },
+      ]);
+    }
+
     return html`
-      <header class="skills-header">
-      ${[activeSkillTracker, knowSkillTracker].map(
-        ({ skills, points, name }) => html`
-          <div class="skill-totals ${name}">
-            <div class="group">
-              <span class="label">${localize(name)} ${localize("skills")}</span>
-              <div class="total-number">${skills}</div>
-            </div>
-            <div class="group">
-              <span class="label">${localize("points")}</span>
-              <div class="total-number">${points}</div>
-            </div>
-          </div>
-        `
-      )}
-      </header>
-    `
+      ${renderAutoForm({
+        props: this.skillControls,
+        update: this.updateSkillControls,
+        storeOnInput: true,
+        fields: ({ filter, editTotals }) => [
+          renderTextInput(filter, {
+            search: true,
+            placeholder: `${localize('filter')} ${localize('skills')}`,
+          }),
+          renderLabeledSwitch(editTotals),
+        ],
+      })}
+      <sl-animated-list class="skills-list">
+        ${repeat(
+          sort(
+            [...nonFieldSkills, ...fullFieldSkills],
+            ([a, aInfo], [b, bInfo]) =>
+              Number(aInfo.filtered) - Number(bInfo.filtered) ||
+              skillSort(sortType)(a, b),
+          ),
+          ([skill, info]) =>
+            'id' in info && isFieldSkill(skill)
+              ? `${skill.fieldSkill}-${info.id}`
+              : skill.name,
+          ([, { template }]) => template,
+        )}
+      </sl-animated-list>
+    `;
   }
 }
 

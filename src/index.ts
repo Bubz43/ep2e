@@ -77,6 +77,7 @@ import { SleeveFormMovementList } from './entities/actor/components/sleeve-forms
 import { SyntheticForm } from './entities/actor/components/sleeve-forms/synthetic/synthetic-form';
 import { EgoForm } from './entities/actor/components/ego-form/ego-form';
 import { EgoFormSkills } from './entities/actor/components/ego-form/ego-form-skills';
+import { EgoFormSkill } from './entities/actor/components/ego-form/ego-form-skill';
 
 // Generic Components
 Field;
@@ -108,6 +109,7 @@ CompendiumList;
 ItemTrash;
 EgoForm;
 EgoFormSkills;
+EgoFormSkill;
 
 //Feature Editors
 EffectCreator;

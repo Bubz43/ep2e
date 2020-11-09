@@ -14,7 +14,6 @@ import type { FieldElement } from '../field/fields';
 import styles from './form.scss';
 import { FormValueStoredEvent, SlCustomStoreEvent } from './forms';
 import { validateFormField } from './validations';
-import { observer } from '@material/mwc-base/observer.js';
 
 export type SlFormData = {
   key: string;
