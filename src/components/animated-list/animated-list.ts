@@ -1,6 +1,6 @@
 import { debounce } from '@src/utility/decorators';
-import { resizeObsAvailable, assignStyles } from '@src/utility/dom';
-import { customElement, LitElement, property, html, query } from 'lit-element';
+import { assignStyles, resizeObsAvailable } from '@src/utility/dom';
+import { customElement, html, LitElement, property, query } from 'lit-element';
 import styles from './animated-list.scss';
 
 type Info = { top: number; left: number; width: number; height: number };
@@ -40,8 +40,6 @@ export class AnimatedList extends LitElement {
 
   private initTimeout?: number;
 
-  private previousSize: { width: number; height: number } | null = null;
-
   async connectedCallback() {
     super.connectedCallback();
     await this.updateComplete;
@@ -61,7 +59,6 @@ export class AnimatedList extends LitElement {
   disconnectedCallback() {
     clearTimeout(this.initTimeout);
     this.isReady = false;
-    this.previousSize = null;
     this.savedPositions.clear();
     this.resizeObs?.disconnect();
     this.resizeObs = null;
@@ -103,24 +100,20 @@ export class AnimatedList extends LitElement {
     if (!this.isReady) return;
     const animate = !this.noAnimations && animateNow;
     const {
-      offsetWidth,
-      offsetHeight,
-      previousSize,
       resizeObs,
       savedPositions: previousPositions,
       animationDuration,
       fadeOnly,
       transformOrigin,
+      slottedItems,
     } = this;
-    // TODO: Factor in scroll
 
     const keyframes: KeyframeEffect[] = [];
+    const { length: listLength } = slottedItems;
 
     requestAnimationFrame(() => {
-      this.previousSize = { width: offsetWidth, height: offsetHeight };
       this.savedPositions = new Map();
-
-      this.slottedItems.forEach((el, index, list) => {
+      slottedItems.forEach((el, index) => {
         const {
           offsetTop: top,
           offsetLeft: left,
@@ -142,16 +135,10 @@ export class AnimatedList extends LitElement {
                   { transform: `translate(${leftChange}px, ${topChange}px)` },
                   {
                     transform: `translate(${leftChange}px, ${topChange}px)`,
-                    offset: index / list.length,
+                    offset: index / listLength,
                   },
                   { transform: 'translate(0)' },
                 ],
-                // {
-                //   transform: [
-                //     `translate(${leftChange}px, ${topChange}px)`,
-                //     'translate(0)',
-                //   ],
-                // },
                 { duration: animationDuration, easing: 'ease-out' },
               ),
             );
@@ -207,7 +194,9 @@ export class AnimatedList extends LitElement {
 
       previousPositions.clear();
 
-      keyframes.forEach((keyframe) => new Animation(keyframe).play());
+      for (const keyframe of keyframes) {
+        new Animation(keyframe).play();
+      }
     });
   }
 

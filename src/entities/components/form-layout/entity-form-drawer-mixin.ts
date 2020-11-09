@@ -50,8 +50,9 @@ export const FormDrawer = (Base: Class<LitElement>) => {
     };
 
     protected setDrawerFromEvent(fn: () => TemplateResult, autoFocus = true) {
-      return ({ currentTarget }: Event) => {
-        this.drawerOpener = currentTarget as HTMLElement;
+      return (ev: Event) => {
+        const el = ev.composedPath()[0] || ev.currentTarget;
+        this.drawerOpener = el as HTMLElement;
         this.drawerContentRenderer = fn;
         this._autoFocus = autoFocus;
       };

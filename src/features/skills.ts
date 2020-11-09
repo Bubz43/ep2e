@@ -255,14 +255,15 @@ type SkillFilterData = {
 
 export const skillFilterCheck = (filter: string) => {
   const reg = new RegExp(filter, 'i');
-  return ({ fullName, category, linkedAptitude }: SkillFilterData) =>
-    !reg.test(
+  return ({ fullName, category, linkedAptitude }: SkillFilterData) => {
+    return !reg.test(
       compact([
         fullName,
         localize(category),
         linkedAptitude ? localize('FULL', linkedAptitude) : '',
       ]).join('__'),
     );
+  };
 };
 
 export type SkillFilterCheck = ReturnType<typeof skillFilterCheck>;

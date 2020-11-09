@@ -110,7 +110,11 @@ export class EgoForm extends mix(LitElement).with(
 
       case 'skills':
         return html`
-          <ego-form-skills slot="details" .ego=${this.ego}></ego-form-skills>
+          <ego-form-skills
+            @open-field-form=${this.setDrawerFromEvent(this.renderFieldCreator)}
+            slot="details"
+            .ego=${this.ego}
+          ></ego-form-skills>
         `;
     }
   }
@@ -148,7 +152,8 @@ export class EgoForm extends mix(LitElement).with(
                 'forks',
               )} & ${localize('backups')}"
               @mouseover=${tooltip.fromData}
-            >info</mwc-icon>
+              >info</mwc-icon
+            >
           </sl-header>
         </section>
       </div>
@@ -228,6 +233,12 @@ export class EgoForm extends mix(LitElement).with(
               : renderLabeledCheckbox(prop);
           }),
       })}
+    `;
+  }
+
+  private renderFieldCreator() {
+    return html`
+    <h3>${localize("create")} ${localize("fieldSkill")}</h3>
     `;
   }
 }

@@ -43,10 +43,10 @@ const renderControlFields: FieldPropsRenderer<
 ];
 
 enum SkillSort {
-  Name = "a-z",
-  NameReverse = "z-a",
-  Points = "leastPoints",
-  PointsReverse = "mostPoints",
+  Name = 'a-z',
+  NameReverse = 'z-a',
+  Points = 'leastPoints',
+  PointsReverse = 'mostPoints',
 }
 
 const pointTracker = (name: 'active' | 'know') => ({
@@ -187,15 +187,15 @@ export class EgoFormSkills extends LitElement {
 
   private openSkillSortMenu(ev: MouseEvent) {
     openMenu({
-      header: { heading: `${localize("skill")} ${localize("sort")}` },
-      content: enumValues(SkillSort).map(sort => ({
+      header: { heading: `${localize('skill')} ${localize('sort')}` },
+      content: enumValues(SkillSort).map((sort) => ({
         label: localize(sort),
         callback: () => this.updateSkillControls({ sort }),
-        activated: this.skillControls.sort === sort
+        activated: this.skillControls.sort === sort,
       })),
       position: ev.currentTarget as HTMLElement,
       // position: ev
-    })
+    });
   }
 
   private toggleTotalEdit() {
@@ -203,10 +203,15 @@ export class EgoFormSkills extends LitElement {
     this.requestUpdate();
   }
 
+  private requestFieldForm(ev: Event) {
+    (ev.currentTarget as HTMLElement).dispatchEvent(
+      new CustomEvent('open-field-form', { bubbles: true, composed: true }),
+    );
+  }
+
   render() {
     const { disabled, updater } = this.ego;
     const { editTotals } = this.skillControls;
-    // TODO add field
     return html`
       <header>
         <div class="totals">
@@ -214,17 +219,25 @@ export class EgoFormSkills extends LitElement {
             (tracker) => html`
               <div class="tracker">
                 <span class="skill-count">${tracker.skills}</span>
-                <span class="group"
-                  >${localize(tracker.name)} ${localize('skills')}</span
-                >
+                <span class="group">${localize(tracker.name)}</span>
                 <span class="points-label"
-                  >${localize('points')}:
+                  >${localize('points').toLocaleLowerCase()}:
                   <span class="points">${tracker.points}</span></span
                 >
               </div>
             `,
           )}
         </div>
+
+        <mwc-button
+          @click=${this.requestFieldForm}
+          class="add-field-button"
+          dense
+          icon="add"
+          label=${localize('field')}
+          ?disabled=${disabled}
+        ></mwc-button>
+
         <div class="controls">
           <mwc-icon-button
             icon="sort"
@@ -244,6 +257,7 @@ export class EgoFormSkills extends LitElement {
               : html` <mwc-icon-button
                   class="edit-toggle ${classMap({ active: editTotals })}"
                   icon="edit"
+                  tabindex="-1"
                   @click=${this.toggleTotalEdit}
                 ></mwc-icon-button>`}
           </span>

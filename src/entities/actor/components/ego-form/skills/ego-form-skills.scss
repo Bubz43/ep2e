@@ -37,27 +37,6 @@ sl-form {
   }
 }
 
-.controls {
-  --mdc-icon-button-size: 2rem;
-  display: grid;
-  grid-template-columns: min-content 1fr repeat(2, 85px);
-  align-items: center;
-  > span {
-    place-self: center;
-    font-size: larger;
-  }
-  .total-label {
-    position: relative;
-    .edit-toggle {
-      position: absolute;
-      --mdc-icon-size: 20px;
-      transition: color 200ms;
-      &.active {
-        color: var(--color-secondary);
-      }
-    }
-  }
-}
 
 header {
   position: sticky;
@@ -66,15 +45,24 @@ header {
   padding: 0.5rem 1.5rem;
   z-index: 1;
   display: grid;
+  grid-template-areas:
+  "totals add"
+  "controls controls";
   gap: 0.25rem;
   box-shadow: 0 0 4px black;
 
 }
 
+.add-field-button {
+  grid-area: add;
+  --mdc-theme-primary: var(--color-secondary);
+}
+
 .totals {
   display: flex;
-  font-size: 1.1rem;
   padding: 0 0.25rem;
+  font-size: large;
+  grid-area: totals;
   .skill-count {
     grid-area: count;
   }
@@ -94,6 +82,29 @@ header {
   .points {
     color: var(--color-text);
     display: inline-block;
-    min-width: 4ch;
+    min-width: 3ch;
+  }
+}
+
+.controls {
+  --mdc-icon-button-size: 2rem;
+  display: grid;
+  grid-template-columns: min-content 1fr repeat(2, 85px);
+  align-items: center;
+  grid-area: controls;
+  > span {
+    place-self: center;
+    font-size: larger;
+  }
+  .total-label {
+    position: relative;
+    .edit-toggle {
+      position: absolute;
+      --mdc-icon-size: 20px;
+      transition: color 200ms;
+      &.active {
+        color: var(--color-secondary);
+      }
+    }
   }
 }
