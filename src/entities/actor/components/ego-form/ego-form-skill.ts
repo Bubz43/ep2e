@@ -1,6 +1,8 @@
 import {
   renderNumberField,
   renderNumberInput,
+  renderTextField,
+  renderTextInput,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { LazyRipple } from '@src/components/mixins/lazy-ripple';
@@ -13,6 +15,7 @@ import {
   property,
   html,
   PropertyValues,
+  internalProperty,
 } from 'lit-element';
 import mix from 'mix-with/lib';
 import styles from './ego-form-skill.scss';
@@ -32,6 +35,8 @@ export class EgoFormSkill extends mix(LitElement).with(LazyRipple) {
   @property({ type: Boolean, reflect: true }) filtered = false;
 
   @property({ type: Boolean }) editTotal = false;
+
+  @internalProperty() editMain = false;
 
   // @property({ attribute: false }) updateValues!: ()
 
@@ -58,22 +63,61 @@ export class EgoFormSkill extends mix(LitElement).with(LazyRipple) {
     }
   }
 
+  private toggleEditMain() {
+    this.editMain = !this.editMain;
+  }
+
   render() {
     const { skill } = this;
     const { aptBonus } = skill;
     return html`
-      <button tabindex="-1" @mousedown="${this.handleRippleMouseDown}">
-        <span class="name">${skill.fullName}</span>
-        <span class="info">
-          ${[
-            `${localize('FULL', skill.linkedAptitude)}
+      ${this.editMain
+        ? html`
+            <div class="main">
+              <div class="buttons">
+                <mwc-button
+                  dense
+                  icon="arrow_back"
+                  label=${skill.name}
+                  @click=${this.toggleEditMain}
+                ></mwc-button>
+                <delete-button></delete-button>
+              </div>
+              ${renderAutoForm({
+                classes: 'main-form',
+                disabled: this.disabled,
+                props: { field: '', specialization: '' },
+                update: () => {},
+                fields: ({ field, specialization }) => html`
+                  ${[
+                    renderTextInput(field, { placeholder: localize('field') }),
+                    renderTextInput(specialization, {
+                      placeholder: localize('specialization'),
+                    }),
+                  ]}
+                `,
+              })}
+            </div>
+          `
+        : html`
+            <button
+              tabindex="-1"
+              @mousedown="${this.handleRippleMouseDown}"
+              @click=${this.toggleEditMain}
+              ?disabled=${this.disabled}
+            >
+              <span class="name">${skill.fullName}</span>
+              <span class="info">
+                ${[
+                  `${localize('FULL', skill.linkedAptitude)}
                 ${skill.aptMultiplier !== 1 ? `x${skill.aptMultiplier}` : ''}`,
-            localize(skill.category),
-          ].join(' | ')}
-        </span>
-      </button>
-
+                  localize(skill.category),
+                ].join(' | ')}
+              </span>
+            </button>
+          `}
       ${renderAutoForm({
+        classes: 'points-form',
         props: skill,
         update: ({ points, total }) => {
           const newPoints = points ?? (total && total - aptBonus);
