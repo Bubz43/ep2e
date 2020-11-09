@@ -7,9 +7,9 @@
 
 :host {
   display: grid;
-  grid-template-areas: 
-  "icon cause delete"
-  "goals goals goals";
+  grid-template-areas:
+    'icon cause goals-toggle goals-add delete'
+    'goals goals goals goals goals';
 
   column-gap: 0.25rem;
   grid-template-columns: auto 1fr auto;
@@ -25,27 +25,60 @@ mwc-icon-button-toggle {
   --mdc-theme-text-disabled-on-light: currentColor;
   &[on] {
     color: var(--color-secondary);
+    filter: hue-rotate(-30deg);
   }
+}
+
+.new-goal-button {
+  grid-area: goals-add;
+}
+
+.goals-toggle {
+  grid-area: goals-toggle;
+  --mdc-theme-primary: var(--color-grey);
+  min-width: 115px;
 }
 
 .cause-form {
   grid-area: cause;
-  input {
-    background: transparent;
-    font-family: var(--font-1);
-    border: 1px inset var(--color-border);
-    font-size: 1rem;
-    color: var(--color-text-lighter);
-    &:focus {
-      border-color: var(--color-secondary);
-      outline: none;
-    }
-    &[disabled] {
-      color: var(--color-text-disabled);
-    }
+}
+
+input {
+  background: transparent;
+  font-family: var(--font-1);
+  border: 1px inset var(--color-border);
+  font-size: 1rem;
+  color: var(--color-text);
+  &:focus {
+    border-color: var(--color-secondary);
+    outline: none;
+  }
+  &[disabled] {
+    color: var(--color-text-disabled);
   }
 }
 
 .delete-self-button {
   grid-area: delete;
+}
+
+.goal-form {
+  display: contents;
+}
+
+.goals-list {
+  grid-area: goals;
+  margin-bottom: 0.25rem;
+  li {
+    list-style: none;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    column-gap: 0.25rem;
+    align-items: center;
+    mwc-checkbox {
+      height: 36px;
+      position: relative;
+      top: -6px;
+    }
+  }
 }

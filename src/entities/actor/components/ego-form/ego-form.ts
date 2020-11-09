@@ -27,6 +27,7 @@ import type { Aptitudes } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { hardeningTypes } from '@src/health/mental-health';
 import { gameSettings, tooltip } from '@src/init';
+import { debounce } from '@src/utility/decorators';
 import type { FieldProps, FieldPropsRenderer } from '@src/utility/field-values';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { cache } from 'lit-html/directives/cache';
@@ -140,6 +141,9 @@ export class EgoForm extends mix(LitElement).with(
               slot="action"
               ?disabled=${disabled}
               @click=${this.addMotivation}
+              data-tooltip="${localize("add")} ${localize("motivation")}"
+              @mouseover=${tooltip.fromData}
+              @focus=${tooltip.fromData}
             ></mwc-icon-button>
           </sl-header>
 

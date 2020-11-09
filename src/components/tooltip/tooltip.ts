@@ -1,3 +1,4 @@
+import { debounce } from '@src/utility/decorators';
 import {
   customElement,
   LitElement,
@@ -55,10 +56,14 @@ export class ToolTip extends LitElement {
     position?: NanoPopPosition;
   }) {
     if (this.listenerUnsub) this.detach(false);
-    render(content, this);
+    this.updateContent(content)
     this.visible = true;
     requestAnimationFrame(() => reposition(el, this, { position, margin: 4 }));
     this.listenerUnsub = addListener(el, leaveEvents, () => this.detach(true));
+  }
+
+  updateContent(content: TemplateResult | string) {
+    render(content, this);
   }
 
   detach(hide: boolean) {

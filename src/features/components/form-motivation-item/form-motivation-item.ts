@@ -1,8 +1,33 @@
-import { renderTextInput } from '@src/components/field/fields';
+import {
+  renderCheckbox,
+  renderLabeledCheckbox,
+  renderTextField,
+  renderTextInput,
+} from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
-import type { StringID } from '@src/features/feature-helpers';
-import { Motivation, MotivationStance } from '@src/features/motivations';
-import { customElement, LitElement, property, html } from 'lit-element';
+import {
+  addUpdateRemoveFeature,
+  idProp,
+  StringID,
+} from '@src/features/feature-helpers';
+import {
+  createMotivationalGoal,
+  Motivation,
+  MotivationStance,
+} from '@src/features/motivations';
+import { localize } from '@src/foundry/localization';
+import { tooltip } from '@src/init';
+import { debounce } from '@src/utility/decorators';
+import type { ValOrValFN } from '@src/utility/helper-types';
+import {
+  customElement,
+  LitElement,
+  property,
+  html,
+  internalProperty,
+} from 'lit-element';
+import { render } from 'lit-html';
+import { repeat } from 'lit-html/directives/repeat';
 import styles from './form-motivation-item.scss';
 import { UpdatedMotivationEvent } from './updated-motivation-event';
 
@@ -21,22 +46,43 @@ export class FormMotivationItem extends LitElement {
 
   @property({ type: Boolean }) disabled = false;
 
+  @internalProperty() expandGoals = false;
+
+  private readonly goalOps = addUpdateRemoveFeature<
+    Motivation['goals'][number]
+  >(() => async (newValue) => {
+    const newGoals =
+      typeof newValue === 'function'
+        ? newValue(this.motivation.goals)
+        : newValue;
+    this.emitUpdate({ goals: newGoals });
+  });
+
   private toggleStance() {
-    this.emitUpdate({
-      stance:
-        this.motivation.stance === MotivationStance.Support
-          ? MotivationStance.Oppose
-          : MotivationStance.Support,
-    });
+    const newStance =
+      this.motivation.stance === MotivationStance.Support
+        ? MotivationStance.Oppose
+        : MotivationStance.Support;
+    this.emitUpdate({ stance: newStance });
+    tooltip.updateContent(localize(newStance));
   }
 
-  private emitUpdate(changed: Partial<Motivation>) {
+  private toggleExpandedGoals() {
+    this.expandGoals = !this.expandGoals;
+  }
+
+  private emitUpdate = (changed: Partial<Motivation>) => {
     this.dispatchEvent(
       new UpdatedMotivationEvent(
         changed,
         'id' in this.motivation ? this.motivation.id : undefined,
       ),
     );
+  };
+
+  @debounce(150)
+  private addGoal() {
+    this.goalOps.add({}, createMotivationalGoal({}));
   }
 
   render() {
@@ -47,17 +93,77 @@ export class FormMotivationItem extends LitElement {
         ?on=${motivation.stance === MotivationStance.Support}
         onIcon="add"
         offIcon="remove"
+        data-tooltip=${localize(motivation.stance)}
+        @mouseover=${tooltip.fromData}
         ?disabled=${disabled}
       ></mwc-icon-button-toggle>
       ${renderAutoForm({
         props: motivation,
         update: this.emitUpdate,
-        classes: "cause-form",
+        classes: 'cause-form',
         disabled,
         fields: ({ cause }) =>
           renderTextInput(cause, { placeholder: cause.label }),
       })}
-      <delete-button class="delete-self-button" ?disabled=${disabled}></delete-button>
+
+      <mwc-button
+        @click=${this.toggleExpandedGoals}
+        dense
+        class="goals-toggle"
+        label="${localize('goals')}: ${motivation.goals.length}"
+        ?disabled=${motivation.goals.length === 0}
+        icon=${this.expandGoals
+          ? 'keyboard_arrow_down'
+          : 'keyboard_arrow_left'}
+        trailingIcon
+      ></mwc-button>
+
+      <mwc-icon-button
+        icon="add"
+        class="new-goal-button"
+        data-tooltip="${localize("add")} ${localize("goal")}"
+        @mouseover=${tooltip.fromData}
+        @focus=${tooltip.fromData}
+        ?disabled=${disabled}
+        @click=${this.addGoal}
+      ></mwc-icon-button>
+      <delete-button
+        class="delete-self-button"
+        ?disabled=${disabled}
+      ></delete-button>
+
+      ${this.expandGoals
+        ? html`
+            <sl-animated-list class="goals-list">
+              ${repeat(
+                motivation.goals,
+                idProp,
+                (goalInfo) => html`
+                  <li>
+                    ${renderAutoForm({
+                      props: goalInfo,
+                      classes: 'goal-form',
+                      disabled,
+                      update: this.goalOps.update,
+                      fields: ({ completed, goal }) => [
+                        renderCheckbox(completed),
+                        renderTextInput(goal, { placeholder: goal.label }),
+                      ],
+                    })}
+                    <delete-button
+                      icon="close"
+                      ?disabled=${disabled}
+                      @delete=${(ev: Event) => {
+                        ev.stopPropagation();
+                        this.goalOps.remove(goalInfo.id);
+                      }}
+                    ></delete-button>
+                  </li>
+                `,
+              )}
+            </sl-animated-list>
+          `
+        : ''}
     `;
   }
 }

@@ -1255,7 +1255,14 @@ type LangEntries =
   | 'movementType'
   | 'reset'
   | 'image'
-  | 'upgrades' | "mentalEdits" | "forks" | "sort" | "a-z" | "z-a" | "leastPoints" | "mostPoints";
+  | 'upgrades'
+  | 'mentalEdits'
+  | 'forks'
+  | 'sort'
+  | 'a-z'
+  | 'z-a'
+  | 'leastPoints'
+  | 'mostPoints' | "goals"
 type FullNames =
   | 'cog'
   | 'int'
