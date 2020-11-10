@@ -5,7 +5,7 @@ import {
   SourcedEffect,
 } from '@src/features/effects';
 import { createFeature } from '@src/features/feature-helpers';
-import { prettyMilliseconds, worldTimeMS } from '@src/features/time';
+import { prettyMilliseconds, currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { averageRoll } from '@src/foundry/rolls';
 
@@ -27,7 +27,7 @@ export const createMentalHealthAttempt = createFeature<
   'heal' | 'failed'
 >(() => ({
   timestamp: Date.now(),
-  worldTime: worldTimeMS(),
+  worldTime: currentWorldTimeMS(),
 }));
 
 export enum DotOrHotTarget {

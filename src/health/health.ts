@@ -4,7 +4,7 @@ import {
   createFeature,
   StringID,
 } from '@src/features/feature-helpers';
-import { worldTimeMS } from '@src/features/time';
+import { Timestamp, currentWorldTimeMS, createTimestamp } from '@src/features/time';
 import type { Abbreviation } from '@src/foundry/lang-schema';
 import { LangEntry, localize } from '@src/foundry/localization';
 import type { ValuedProp } from '@src/utility/field-values';
@@ -43,13 +43,11 @@ export enum HealthModificationMode {
   Inflict = 'inflict',
 }
 
-export type HealthModification = {
+export type HealthModification = Timestamp & {
   mode: HealthModificationMode;
   damage: number;
   wounds: number;
   source: string;
-  timestamp: number;
-  worldTime: number;
 };
 
 export const createHealthModification = createFeature<
@@ -58,8 +56,7 @@ export const createHealthModification = createFeature<
 >(
   () => ({
     source: localize('unknown'),
-    timestamp: Date.now(),
-    worldTime: worldTimeMS(),
+    ...createTimestamp({}),
   }),
   ({ damage, wounds, ...data }) => ({
     damage: Math.abs(damage),

@@ -2,6 +2,7 @@ import type { ActorEP } from '@src/entities/actor/actor';
 import { ActorType } from '@src/entities/entity-types';
 import { updateManyActors } from '@src/foundry/misc-helpers';
 import { localize, LangEntry } from '../foundry/localization';
+import { createFeature } from './feature-helpers';
 import { parseMilliseconds, toMilliseconds } from './modify-milliseconds';
 
 type Options = Partial<{
@@ -11,6 +12,16 @@ type Options = Partial<{
   whenZero: string;
   whenNegative: string;
 }>;
+
+export type Timestamp = {
+  realTimeMS: number;
+  worldTimeMS: number;
+}
+
+export const createTimestamp = createFeature<Timestamp>(() => ({
+  realTimeMS: Date.now(),
+  worldTimeMS: currentWorldTimeMS()
+}))
 
 // This should always be ordered from biggest to smallest
 export const timeIntervals = ['days', 'hours', 'minutes', 'seconds'] as const;
@@ -111,7 +122,7 @@ export type RefreshTimer = {
 export const refreshAvailable = ({ elapsed, max }: RefreshTimer) =>
   elapsed >= max;
 
-export const worldTimeMS = () => {
+export const currentWorldTimeMS = () => {
   return toMilliseconds({ seconds: game.time.worldTime });
 };
 

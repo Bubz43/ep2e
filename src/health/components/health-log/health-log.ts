@@ -23,7 +23,7 @@ export class HealthLog extends LitElement {
     return html`
       <mwc-list>
         ${log.map(
-          ({ mode, damage, wounds, source, timestamp }) => html`
+          ({ mode, damage, wounds, source, realTimeMS }) => html`
             <mwc-list-item twoline noninteractive>
               <span
                 ><span class="change-source">[${source}]</span>
@@ -32,7 +32,7 @@ export class HealthLog extends LitElement {
               <span slot="secondary"
                 >${damage} ${this.health.main.damage.label}, ${wounds}
                 ${this.health.wound?.wounds.label} -
-                <time>${timeSince(timestamp)}</time></span
+                <time>${timeSince(realTimeMS)}</time></span
               >
             </mwc-list-item>
           `,
