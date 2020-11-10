@@ -51,7 +51,7 @@ ego-form-skills {
 
 .points-form {
   grid-auto-flow: column;
-  padding: 0.5rem 0;;
+  padding: 0.5rem 0 0;;
 }
 
 .ego-points-simple {
@@ -87,4 +87,18 @@ li {
   .network-abbreviation {
     color: var(--color-text-lighter);
   }
+}
+
+.character-details-form {
+  padding: 0.5rem 0 0;
+  display: block;
+  column-count: 2;
+  > * {
+    break-inside: avoid;
+  }
+}
+
+.threat-details-form {
+  grid-template-columns: repeat(3, 1fr);
+  padding: 0.5rem 0 0;
 }

@@ -3,17 +3,24 @@ import {
   renderLabeledCheckbox,
   renderNumberField,
   renderSelectField,
+  renderTextareaField,
   renderTextField,
 } from '@src/components/field/fields';
 import { renderUpdaterForm } from '@src/components/form/forms';
 import { TabsMixin } from '@src/components/mixins/tabs-mixin';
 import {
   AptitudeType,
+  CharacterDetail,
   CharacterPoint,
+  EgoBackground,
+  EgoCareer,
+  EgoFaction,
+  EgoInterest,
   EgoSetting,
   EgoType,
   enumValues,
   Fork,
+  ThreatLevel,
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { FormDrawer } from '@src/entities/components/form-layout/entity-form-drawer-mixin';
@@ -51,7 +58,7 @@ const renderAptitudeField = ([, apt]: [
   FieldProps<Aptitudes>[AptitudeType],
 ]) => {
   return renderNumberField(
-    { ...apt, label: localize('FULL', apt.prop) },
+    { ...apt, label: `${localize('FULL', apt.prop)} (${apt.label})` },
     { min: 0, max: 30 },
   );
 };
@@ -61,7 +68,7 @@ const renderAptitudeFields: FieldPropsRenderer<Aptitudes> = createPipe(
   map(renderAptitudeField),
 );
 
-const itemGroupKeys = ['traits', 'sleights'] as const;
+const itemGroupKeys = ['sleights', "traits"] as const;
 
 @customElement('ego-form')
 export class EgoForm extends mix(LitElement).with(
@@ -103,9 +110,8 @@ export class EgoForm extends mix(LitElement).with(
       notify(NotificationType.Info, localize('DESCRIPTIONS', 'OnlyEgoItems'));
   });
 
-  protected renderTab(tab: EgoForm['tabs'][number]) {
-    if (tab === 'reps' && !this.ego.settings.trackReputations) return html``;
-    return super.renderTab(tab);
+  protected shouldRenderTab(tab: EgoForm['tabs'][number]) {
+    return tab !== 'reps' || this.ego.settings.trackReputations;
   }
 
   render() {
@@ -126,6 +132,15 @@ export class EgoForm extends mix(LitElement).with(
                 slot="description"
                 ?disabled=${disabled}
                 .updateActions=${updater.prop('data', 'description')}
+              ></editor-wrapper>
+            `
+          : activeTab === 'notes'
+          ? html`
+              <editor-wrapper
+                slot="description"
+                ?disabled=${disabled}
+                .updateActions=${updater.prop('data', 'additionalNotes')}
+                heading=${localize('additionalNotes')}
               ></editor-wrapper>
             `
           : ''}
@@ -172,80 +187,36 @@ export class EgoForm extends mix(LitElement).with(
 
     return html`
       <div slot="details">
-        ${settings.trackMentalHealth
+        ${settings.threatDetails
           ? html`
               <section>
-                <sl-header heading=${localize('mentalHealth')}
-                  ><mwc-icon-button
-                    slot="action"
-                    data-tooltip=${localize('changes')}
-                    @mouseover=${tooltip.fromData}
-                    @focus=${tooltip.fromData}
-                    icon="change_history"
-                    @click=${this.setDrawerFromEvent(
-                      this.renderMentalHealthChangeHistory,
-                      false,
+                <sl-header heading=${localize('threatDetails')}></sl-header>
+                <div class="threat-details">
+                  ${renderUpdaterForm(updater.prop('data', 'threatDetails'), {
+                    classes: 'threat-details-form',
+                    disabled,
+                    fields: ({ niche, numbers, level }) => [
+                      renderTextField(niche),
+                      renderTextField(numbers),
+                      renderSelectField(
+                        { ...level, label: localize('threatLevel') },
+                        enumValues(ThreatLevel),
+                      ),
+                    ],
+                  })}
+                  <ego-form-threat-stress
+                    .stressInfo=${this.ego.stressTestValue}
+                    ?disabled=${disabled}
+                    .updateOps=${updater.prop(
+                      'data',
+                      'threatDetails',
+                      'stress',
                     )}
-                  ></mwc-icon-button
-                ></sl-header>
-                <health-item
-                  clickable
-                  ?disabled=${disabled}
-                  .health=${this.ego.mentalHealth}
-                  @click=${this.setDrawerFromEvent(this.renderMentalHealthEdit)}
-                ></health-item>
+                  ></ego-form-threat-stress>
+                </div>
               </section>
             `
           : ''}
-
-        <sl-dropzone ?disabled=${disabled} @drop=${this.handleItemDrop}>
-          <sl-header
-            heading="${localize('traits')} & ${localize('sleights')}"
-            itemCount=${traits.length + sleights.length}
-            ?hideBorder=${traits.length + sleights.length === 0}
-          >
-            <mwc-icon
-              slot="info"
-              data-tooltip=${localize('DESCRIPTIONS', 'OnlyEgoItems')}
-              @mouseover=${tooltip.fromData}
-              >info</mwc-icon
-            >
-          </sl-header>
-          ${itemGroupKeys.map((key) => {
-            // TODO Psi
-            const group = itemGroups[key];
-            return notEmpty(group)
-              ? html`
-                  <form-items-list
-                    .items=${group}
-                    label=${localize(key)}
-                  ></form-items-list>
-                `
-              : '';
-          })}
-        </sl-dropzone>
-        <section>
-          <sl-header
-            heading=${localize('motivations')}
-            itemCount=${motivations.length}
-            ?hideBorder=${motivations.length === 0}
-          >
-            <mwc-icon-button
-              icon="add"
-              slot="action"
-              ?disabled=${disabled}
-              @click=${this.addMotivation}
-              data-tooltip="${localize('add')} ${localize('motivation')}"
-              @mouseover=${tooltip.fromData}
-              @focus=${tooltip.fromData}
-            ></mwc-icon-button>
-          </sl-header>
-
-          <sl-animated-list class="motivations-list" transformOrigin="top">
-            ${repeat(motivations, idProp, this.renderMotivationItem)}
-          </sl-animated-list>
-        </section>
-
         ${settings.trackPoints
           ? html`
               <section
@@ -287,9 +258,122 @@ export class EgoForm extends mix(LitElement).with(
               </section>
             `
           : ''}
+
+        <section>
+          <sl-header
+            heading=${localize('motivations')}
+            itemCount=${motivations.length}
+            ?hideBorder=${motivations.length === 0}
+          >
+            <mwc-icon-button
+              icon="add"
+              slot="action"
+              ?disabled=${disabled}
+              @click=${this.addMotivation}
+              data-tooltip="${localize('add')} ${localize('motivation')}"
+              @mouseover=${tooltip.fromData}
+              @focus=${tooltip.fromData}
+            ></mwc-icon-button>
+          </sl-header>
+
+          <sl-animated-list class="motivations-list" transformOrigin="top">
+            ${repeat(motivations, idProp, this.renderMotivationItem)}
+          </sl-animated-list>
+        </section>
+
+        <sl-dropzone ?disabled=${disabled} @drop=${this.handleItemDrop}>
+          <sl-header
+            heading="${localize('traits')} & ${localize('sleights')}"
+            itemCount=${traits.length + sleights.length}
+            ?hideBorder=${traits.length + sleights.length === 0}
+          >
+            <mwc-icon
+              slot="info"
+              data-tooltip=${localize('DESCRIPTIONS', 'OnlyEgoItems')}
+              @mouseover=${tooltip.fromData}
+              >info</mwc-icon
+            >
+          </sl-header>
+          ${itemGroupKeys.map((key) => {
+            // TODO Psi
+            const group = itemGroups[key];
+            return notEmpty(group)
+              ? html`
+                  <form-items-list
+                    .items=${group}
+                    label=${localize(key)}
+                  ></form-items-list>
+                `
+              : '';
+          })}
+        </sl-dropzone>
+
+        ${settings.trackMentalHealth
+          ? html`
+              <section>
+                <sl-header heading=${localize('mentalHealth')}
+                  ><mwc-icon-button
+                    slot="action"
+                    data-tooltip=${localize('changes')}
+                    @mouseover=${tooltip.fromData}
+                    @focus=${tooltip.fromData}
+                    icon="change_history"
+                    @click=${this.setDrawerFromEvent(
+                      this.renderMentalHealthChangeHistory,
+                      false,
+                    )}
+                  ></mwc-icon-button
+                ></sl-header>
+                <health-item
+                  clickable
+                  ?disabled=${disabled}
+                  .health=${this.ego.mentalHealth}
+                  @click=${this.setDrawerFromEvent(this.renderMentalHealthEdit)}
+                ></health-item>
+              </section>
+            `
+          : ''}
+        ${settings.characterDetails
+          ? html`
+              <section>
+                <sl-header heading=${localize('character')}></sl-header>
+                ${renderUpdaterForm(updater.prop('data', 'characterDetails'), {
+                  disabled,
+                  classes: 'character-details-form',
+                  fields: (details) =>
+                    enumValues(CharacterDetail).map((detail) =>
+                      CharacterDetail.Languages === detail
+                        ? renderTextareaField(details[detail], {
+                            helpText: localize('commaSeperated'),
+                            rows: 6,
+                          })
+                        : renderTextField(details[detail], {
+                            listId: detail,
+                          }),
+                    ),
+                })}
+                ${this.detailDatalists}
+              </section>
+            `
+          : ''}
       </div>
     `;
   }
+
+  private detailDatalists = ([
+    [EgoBackground, CharacterDetail.Background],
+    [EgoCareer, CharacterDetail.Career],
+    [EgoInterest, CharacterDetail.Interest],
+    [EgoFaction, CharacterDetail.Faction],
+  ] as const).map(
+    ([list, id]) => html`
+      <datalist id=${id}>
+        ${enumValues(list).map(
+          (listItem) => html` <option value=${localize(listItem)}></option> `,
+        )}
+      </datalist>
+    `,
+  );
 
   private renderMotivationItem = (
     motivation: StringID<Motivation>,

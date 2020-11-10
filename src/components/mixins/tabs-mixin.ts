@@ -18,7 +18,8 @@ export const TabsMixin = <T extends LangEntry>(tabs: readonly T[]) => (
     }
 
     protected get activeTab() {
-      return this.tabs[this.tabBar?.activeIndex || 0];
+      const tabEl = this.tabElements[this.tabBar?.activeIndex || 0]
+      return (tabEl?.dataset.tab as T) ?? tabs[0]
     }
 
     protected get tabElements() {
@@ -37,11 +38,18 @@ export const TabsMixin = <T extends LangEntry>(tabs: readonly T[]) => (
       super.updated(changedProps);
     }
 
+    protected shouldRenderTab(tab: T) {
+      return true;
+    }
+
     protected renderTabBar(slot?: string) {
       const tabTemplates: TemplateResult[] = [];
       for (const tab of tabs) {
-        const template = this.renderTab(tab);
-        if (template) tabTemplates.push(template);
+        if (this.shouldRenderTab(tab)) {
+          tabTemplates.push(html`
+            <mwc-tab data-tab=${tab} label=${localize(tab)}></mwc-tab>
+          `);
+        }
       }
       return html`<mwc-tab-bar
         id="primary-tab-bar"
@@ -50,10 +58,6 @@ export const TabsMixin = <T extends LangEntry>(tabs: readonly T[]) => (
       >
         ${tabTemplates}
       </mwc-tab-bar>`;
-    }
-
-    protected renderTab(tab: T): TemplateResult | null {
-      return html` <mwc-tab label=${localize(tab)}></mwc-tab> `;
     }
 
     protected renderTabbedContent(content: T) {

@@ -1262,7 +1262,8 @@ type LangEntries =
   | 'a-z'
   | 'z-a'
   | 'leastPoints'
-  | 'mostPoints' | "goals"
+  | 'mostPoints'
+  | 'goals' | "additionalNotes" | "minimumStress" | "value"
 type FullNames =
   | 'cog'
   | 'int'
@@ -1338,7 +1339,11 @@ export type DescriptionEntry =
   | 'OnlyInfomorphItems'
   | 'AppliesSwarmRules'
   | 'OnlyPhysicalMorphItems'
-  | 'OnlyWareItems' | "OnlyEgoItems" | "OnlyEgoTraits" | "EgoAlreadyHasPsi" | "CannotAddPsi"
+  | 'OnlyWareItems'
+  | 'OnlyEgoItems'
+  | 'OnlyEgoTraits'
+  | 'EgoAlreadyHasPsi'
+  | 'CannotAddPsi';
 
 // TODO Look into using data keys as pattern to validate json string
 export type Formatable = {

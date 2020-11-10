@@ -1,0 +1,39 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: flex;
+  flex-flow: column;
+}
+
+.main-form {
+  grid-template-columns: 1fr 1fr;
+}
+
+.min-form {
+  display: flex;
+  span {
+    padding: 0 0.5rem;
+  }
+  input {
+    background: transparent;
+    color: var(--color-text-lighter);
+    font-family: var(--font-1);
+    font-size: 1rem;
+    align-self: center;
+    position: relative;
+    top: 0.7rem;
+    border: 1px inset var(--color-border);
+    &:focus {
+      border-color: var(--color-secondary);
+      outline: none;
+    }
+    &[disabled] {
+      color: var(--color-text-disabled);
+    }
+  }
+}

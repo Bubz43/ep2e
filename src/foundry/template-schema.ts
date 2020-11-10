@@ -31,6 +31,7 @@ import type {
   GearQuality,
   GearTrait,
   KineticWeaponClass,
+  MinStressOption,
   MorphCost,
   PhysicalServiceType,
   PhysicalWare,
@@ -172,7 +173,7 @@ export type EgoData = {
     level: ThreatLevel;
     stress: {
       sv: string;
-      minHalve: boolean;
+      minStressOption: MinStressOption;
       minSV: number;
       notes: string;
     };
@@ -180,6 +181,7 @@ export type EgoData = {
   mentalEdits: StringID<{ edit: string }>[];
   activeForks: StringID<ActiveForkData>[];
   backups: StringID<EgoBackupData>[];
+  additionalNotes: string;
 };
 
 export type AppliedSubstanceBase = {

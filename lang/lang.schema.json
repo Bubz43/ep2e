@@ -481,6 +481,9 @@
             "additionalDv": {
               "type": "string"
             },
+            "additionalNotes": {
+              "type": "string"
+            },
             "adjacentTargets": {
               "type": "string"
             },
@@ -4137,6 +4140,7 @@
             "additional",
             "additionalArmor",
             "additionalDv",
+            "additionalNotes",
             "adjacentTargets",
             "admin",
             "advance",

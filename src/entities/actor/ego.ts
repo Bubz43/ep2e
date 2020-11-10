@@ -2,6 +2,7 @@ import {
   CharacterPoint,
   enumValues,
   CharacterDetail,
+  MinStressOption,
 } from '@src/data-enums';
 import type { StringID } from '@src/features/feature-helpers';
 import {
@@ -140,7 +141,7 @@ export class Ego {
   }
 
   get useThreat() {
-    return this.settings.useThreat
+    return this.settings.useThreat;
   }
 
   @LazyGetter()
@@ -285,10 +286,17 @@ export class Ego {
       if (numbers) details.push({ label: localize('numbers'), value: numbers });
       details.push({ label: localize('threatLevel'), value: localize(level) });
       if (stress.sv) {
-        const { minHalve, minSV, notes, sv } = stress;
+        const { minStressOption, minSV, notes, sv } = stress;
         details.push({
           label: `${localize('stressTest')} ${notes ? `(${notes})` : ''}`,
-          value: compact([sv, minHalve ? localize('half') : minSV]).join('/'),
+          value: compact([
+            sv,
+            minStressOption === MinStressOption.Half
+              ? localize('half')
+              : minStressOption === MinStressOption.Value
+              ? minSV
+              : '',
+          ]).join('/'),
         });
       }
     }

@@ -176,6 +176,7 @@
       "templates": [
         "Common"
       ],
+      "additionalNotes": "",
       "mentalEdits": [],
       "fakeId": "",
       "aptitudes": {
@@ -386,8 +387,8 @@
         "numbers": "",
         "stress": {
           "sv": "",
-          "minSV": 0,
-          "minHalve": false,
+          "minSV": 1,
+          "minStressOption": "none",
           "notes": ""
         }
       },

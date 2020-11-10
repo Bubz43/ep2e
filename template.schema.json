@@ -791,6 +791,9 @@
                   },
                   "type": "array"
                 },
+                "additionalNotes": {
+                  "type": "string"
+                },
                 "appliedSubstances": {
                   "items": {
                     "additionalProperties": false,
@@ -1374,13 +1377,16 @@
                   "items": {
                     "additionalProperties": false,
                     "properties": {
-                      "goal": {
+                      "cause": {
                         "type": "string"
+                      },
+                      "goals": {
+                        "items": {
+                          "$ref": "#/definitions/StringID%3CMotivationalGoal%3E"
+                        },
+                        "type": "array"
                       },
                       "id": {
-                        "type": "string"
-                      },
-                      "objective": {
                         "type": "string"
                       },
                       "stance": {
@@ -1388,9 +1394,9 @@
                       }
                     },
                     "required": [
-                      "goal",
+                      "cause",
+                      "goals",
                       "id",
-                      "objective",
                       "stance"
                     ],
                     "type": "object"
@@ -2157,11 +2163,11 @@
                     "stress": {
                       "additionalProperties": false,
                       "properties": {
-                        "minHalve": {
-                          "type": "boolean"
-                        },
                         "minSV": {
                           "type": "number"
+                        },
+                        "minStressOption": {
+                          "$ref": "#/definitions/MinStressOption"
                         },
                         "notes": {
                           "type": "string"
@@ -2172,7 +2178,7 @@
                       },
                       "required": [
                         "sv",
-                        "minHalve",
+                        "minStressOption",
                         "minSV",
                         "notes"
                       ],
@@ -2191,6 +2197,7 @@
               "required": [
                 "accumulatedTime",
                 "activeForks",
+                "additionalNotes",
                 "appliedSubstances",
                 "aptitudes",
                 "backups",
@@ -9736,6 +9743,14 @@
       ],
       "type": "object"
     },
+    "MinStressOption": {
+      "enum": [
+        "none",
+        "half",
+        "value"
+      ],
+      "type": "string"
+    },
     "MiscEffect": {
       "additionalProperties": false,
       "properties": {
@@ -10425,6 +10440,26 @@
         "timestamp",
         "worldTime",
         "wounds"
+      ],
+      "type": "object"
+    },
+    "StringID<MotivationalGoal>": {
+      "additionalProperties": false,
+      "properties": {
+        "completed": {
+          "type": "boolean"
+        },
+        "goal": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "completed",
+        "goal",
+        "id"
       ],
       "type": "object"
     },

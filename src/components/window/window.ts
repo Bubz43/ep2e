@@ -19,6 +19,7 @@ import {
   html,
   query,
   TemplateResult,
+  eventOptions,
 } from 'lit-element';
 import { render, nothing } from 'lit-html';
 import { reposition } from 'nanopop';
@@ -158,8 +159,7 @@ export class SlWindow extends LitElement {
     super.connectedCallback();
     this.gainFocus();
     await this.updateComplete;
-    this.addEventListener('pointerdown', this);
-    this.addEventListener('keydown', this);
+
     window.addEventListener('resize', this);
     requestAnimationFrame(() => {
       this.setupResizeObserver();
@@ -176,6 +176,11 @@ export class SlWindow extends LitElement {
     this.resizeObs?.disconnect();
     window.removeEventListener('resize', this);
     super.disconnectedCallback();
+  }
+
+  firstUpdated() {
+    this.addEventListener('pointerdown', this);
+    this.addEventListener('keydown', this);
   }
 
   handleEvent(ev: Event) {
@@ -195,7 +200,11 @@ export class SlWindow extends LitElement {
         if (key === 'Escape') {
           ev.stopPropagation();
           this.closeButton.focus();
-        } else if (key === 'Tab') {
+        } else if (
+          key === 'Tab' ||
+          key.startsWith('Arrow') ||
+          key === 'Delete'
+        ) {
           ev.stopPropagation();
         }
 

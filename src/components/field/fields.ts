@@ -190,6 +190,7 @@ export const renderRadio = ({
   ></mwc-radio>
 `;
 
+// TODO arrow keys to move between radios
 export const renderRadioFields = <T extends ReadonlyArray<LangEntry>>(
   { label, value, prop }: ValuedProp<T[number]>,
   list: T,

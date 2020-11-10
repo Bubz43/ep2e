@@ -1241,6 +1241,8 @@
     "sort": "Sort",
     "upgrades": "Upgrades",
     "z-a": "Z-A",
+    "additionalNotes": "Additional Notes",
+    "minimumStress": "Minimum Stress",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

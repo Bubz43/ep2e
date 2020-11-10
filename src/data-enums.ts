@@ -34,6 +34,12 @@ export enum ThreatLevel {
   Ultraviolet = 'ultraviolet',
 }
 
+export enum MinStressOption {
+  None = "none",
+  Half = "half",
+  Value = "value"
+}
+
 export enum EgoType {
   AGI = 'agi',
   ALI = 'ali',
