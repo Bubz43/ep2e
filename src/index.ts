@@ -78,6 +78,7 @@ import { HealthRegenSettingsForm } from './health/components/health-regen-settin
 import { HealthStateForm } from './health/components/health-state-form/health-state-form';
 import './init';
 import { EgoFormThreatStress } from './entities/actor/components/ego-form/ego-form-threat-stress';
+import { EgoFormRep } from './entities/actor/components/ego-form/ego-form-rep';
 
 customElements.define('app-datepicker', Datepicker);
 
@@ -115,6 +116,7 @@ EgoFormSkill;
 EgoFormFieldSkill;
 EgoFormFieldSkillCreator;
 EgoFormThreatStress;
+EgoFormRep
 
 //Feature Editors
 EffectCreator;

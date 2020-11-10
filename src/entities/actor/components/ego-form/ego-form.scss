@@ -72,22 +72,6 @@ ego-form-skills {
   position: relative;
 }
 
-li {
-  list-style: none;
-}
-
-.rep {
-  padding: 0.25rem 0;
-}
-
-.rep-form {
-  grid-template-columns: auto 1fr 125px;
-
-  align-items: center;
-  .network-abbreviation {
-    color: var(--color-text-lighter);
-  }
-}
 
 .character-details-form {
   padding: 0.5rem 0 0;
@@ -96,6 +80,10 @@ li {
   > * {
     break-inside: avoid;
   }
+}
+
+.stress-roll {
+  --mdc-theme-primary: #{lightv(var(--color-negative), 1.75)};
 }
 
 .threat-details-form {

@@ -251,16 +251,18 @@ type SkillFilterData = {
   fullName: string;
   category: ActiveSkillCategory | KnowSkillCategory;
   linkedAptitude?: AptitudeType;
+  points: number;
 };
 
 export const skillFilterCheck = (filter: string) => {
   const reg = new RegExp(filter, 'i');
-  return ({ fullName, category, linkedAptitude }: SkillFilterData) => {
+  return ({ fullName, category, linkedAptitude, points }: SkillFilterData) => {
     return !reg.test(
       compact([
         fullName,
         localize(category),
         linkedAptitude ? localize('FULL', linkedAptitude) : '',
+        points === 0 ? localize("defaulting") : ""
       ]).join('__'),
     );
   };

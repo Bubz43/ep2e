@@ -19,6 +19,8 @@
   color: var(--color-text-lighter);
   span {
     padding: 0 0.5rem;
+    display: flex;
+    align-items: center;
   }
   input {
     background: transparent;
@@ -26,10 +28,10 @@
     font-family: var(--font-1);
     font-size: 1rem;
     align-self: center;
-    position: relative;
-    top: 0.7rem;
     border: 1px inset var(--color-border);
     width: 5ch;
+    flex: 1;
+    margin-right: 0.75ch;
     &:focus {
       border-color: var(--color-secondary);
       outline: none;

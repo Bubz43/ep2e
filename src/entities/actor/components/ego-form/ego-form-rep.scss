@@ -1,0 +1,66 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  padding: 0.5rem 0;
+
+}
+
+.rep-form {
+  grid-template-columns: auto 1fr 110px;
+  column-gap: 0.5rem;
+  grid-template-areas: 
+  "track name score"
+  "track favors score";
+
+  align-items: center;
+  .network-abbreviation {
+    color: var(--color-text-lighter);
+  }
+
+  mwc-checkbox {
+    grid-area: track;
+  }
+
+  .track-toggle {
+    grid-area: track;
+    color: var(--color-grey);
+  }
+
+  sl-field {
+    grid-area: score;
+    padding: 0;
+    margin-bottom: -0.5rem
+  }
+
+  .favors {
+    grid-area: favors;
+  }
+}
+
+.rep-name {
+  @include truncate(100%);
+  grid-area: name;
+}
+
+
+.favors {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  column-gap: 2ch;
+  --mdc-icon-button-size: 1.5rem;
+  --mdc-icon-size: 20px;
+  > span {
+    display: flex;
+    color: alphav(var(--color-text), 0.85);
+  }
+  .favor-label {
+    color: var(--color-text-lighter);
+  }
+}

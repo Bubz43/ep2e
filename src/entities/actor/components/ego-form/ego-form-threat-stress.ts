@@ -22,11 +22,13 @@ export class EgoFormThreatStress extends LitElement {
 
   static styles = [styles];
 
-  @property({ type: Object }) stressInfo!: Ego['stressTestValue'];
-
-  @property({ attribute: false }) updateOps!: UpdateActions<
-    Ego['stressTestValue']
-  >;
+  @property({
+    attribute: false,
+    hasChanged() {
+      return true;
+    },
+  })
+  updateOps!: UpdateActions<Ego['stressTestValue']>;
 
   @property({ type: Boolean }) disabled = false;
 
@@ -40,10 +42,13 @@ export class EgoFormThreatStress extends LitElement {
             ...sv,
             label: localize('stressValue'),
           }),
-          renderTextField({...notes, label: `${localize("stress")} ${notes.label}`}),
+          renderTextField({
+            ...notes,
+            label: `${localize('stress')} ${notes.label}`,
+          }),
         ],
       })}
-      ${this.stressInfo.sv
+      ${this.updateOps.originalValue().sv
         ? html`
             ${renderUpdaterForm(this.updateOps, {
               disabled: this.disabled,

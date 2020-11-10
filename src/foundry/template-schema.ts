@@ -68,7 +68,7 @@ import type {
 import type { Motivation } from '@src/features/motivations';
 import type { MovementRate } from '@src/features/movement';
 import type { RechargeData } from '@src/features/recharge';
-import type { RepBase, RepData, RepNetwork } from '@src/features/reputations';
+import type { EgoRepData, RepBase, RepData, RepNetwork } from '@src/features/reputations';
 import type { Size } from '@src/features/size';
 import type {
   Aptitudes,
@@ -162,7 +162,7 @@ export type EgoData = {
   skills: Readonly<Record<SkillType, Readonly<SkillData>>>;
   fieldSkills: Record<FieldSkillType, StringID<FieldSkillData>[]>;
   points: Readonly<Record<CharacterPoint, number>>;
-  reps: Record<RepNetwork, RepData & { track: boolean }>;
+  reps: Record<RepNetwork, EgoRepData>;
   settings: Readonly<Record<EgoSetting, boolean>>;
   mentalHealth: Readonly<MentalHealthData>;
   motivations: StringID<Motivation>[];

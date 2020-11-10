@@ -10,6 +10,7 @@ import {
   internalProperty,
 } from 'lit-element';
 import mix from 'mix-with/lib';
+import { compact } from 'remeda';
 import styles from './ego-form-skill.scss';
 
 export type PointsFields = Record<'points' | 'total', number>
@@ -76,11 +77,12 @@ export abstract class EgoFormSkillBase extends mix(LitElement).with(
     >
       <span class="name">${skill.fullName}</span>
       <span class="info">
-        ${[
+        ${compact([
           `${localize('FULL', skill.linkedAptitude)}
           ${skill.aptMultiplier !== 1 ? `x${skill.aptMultiplier}` : ''}`,
           localize(skill.category),
-        ].join(' | ')}
+          skill.points === 0 ? localize("defaulting") : ""
+        ]).join(' | ')}
       </span>
     </button>`;
   }

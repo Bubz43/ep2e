@@ -27,12 +27,14 @@ export class AnimatedList extends LitElement {
   @property({ type: String }) transformOrigin: 'top' | 'center' | 'bottom' =
     'center';
 
-  @query('slot#main')
-  itemSlot!: HTMLSlotElement;
+  @property({ type: Boolean }) animateOnResize = false;
 
   @property({ type: Boolean }) noAnimations = false;
 
   @property({ type: Boolean }) stagger = false;
+
+  @query('slot#main')
+  itemSlot!: HTMLSlotElement;
 
   private resizeObs?: ResizeObserver | null = null;
 
@@ -95,7 +97,7 @@ export class AnimatedList extends LitElement {
       }
       return true;
     });
-    if (entriesChanged) this.storeElements(false);
+    if (entriesChanged) this.storeElements(this.animateOnResize);
   }
 
   storeElements(animateNow: boolean) {

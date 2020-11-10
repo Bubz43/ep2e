@@ -49,7 +49,7 @@ import { cache } from 'lit-html/directives/cache';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
 import mix from 'mix-with/lib';
-import { createPipe, map, toPairs } from 'remeda';
+import { createPipe, identity, map, toPairs } from 'remeda';
 import { Ego } from '../../ego';
 import styles from './ego-form.scss';
 
@@ -177,9 +177,6 @@ export class EgoForm extends mix(LitElement).with(
       disabled,
       updater,
       motivations,
-      backups,
-      activeForks,
-      mentalEdits,
       itemGroups,
       psi,
     } = this.ego;
@@ -191,7 +188,15 @@ export class EgoForm extends mix(LitElement).with(
         ${settings.threatDetails
           ? html`
               <section>
-                <sl-header heading=${localize('threatDetails')}></sl-header>
+                <sl-header heading=${localize('threatDetails')}>
+                  <mwc-button
+                    class="stress-roll"
+                    dense
+                    slot="action"
+                    label="${localize('SHORT', 'stressValue')}: ${this.ego
+                      .stressValueInfo.value}"
+                  ></mwc-button>
+                </sl-header>
                 <div class="threat-details">
                   ${renderUpdaterForm(updater.prop('data', 'threatDetails'), {
                     classes: 'threat-details-form',
@@ -206,7 +211,6 @@ export class EgoForm extends mix(LitElement).with(
                     ],
                   })}
                   <ego-form-threat-stress
-                    .stressInfo=${this.ego.stressTestValue}
                     ?disabled=${disabled}
                     .updateOps=${updater.prop(
                       'data',
@@ -299,7 +303,7 @@ export class EgoForm extends mix(LitElement).with(
             ? html`
                 <div class="psi">
                   <span class="psi-info">
-                    <span class="psi-label">${localize("psi")}:</span>
+                    <span class="psi-label">${localize('psi')}:</span>
                     ${psi.fullName}
                     <span class="psi-level"
                       >${localize('level')} ${psi.level}</span
@@ -530,32 +534,18 @@ export class EgoForm extends mix(LitElement).with(
   }
 
   private renderReputations() {
-    const { updater, reps, disabled } = this.ego;
     return html`<section slot="details">
-      ${repeat(
-        reps,
-        ([network]) => network,
-        ([network, rep]) => {
-          return html`
-            <li class="rep">
-              ${renderUpdaterForm(updater.prop('data', 'reps', network), {
-                disabled,
-                classes: 'rep-form',
-                fields: ({ track, score }) => html`
-                  ${renderCheckbox(track)}
-                  <span
-                    >${localize('FULL', network)}
-                    <span class="network-abbreviation"
-                      >(${localize(network)})</span
-                    ></span
-                  >
-                  ${renderNumberField(score)}
-                `,
-              })}
-            </li>
-          `;
-        },
-      )}
+      <!-- <div> -->
+      ${repeat(this.ego.reps.keys(), identity, (network) => {
+        return html`
+          <ego-form-rep
+            .repOps=${this.ego.updater.prop('data', 'reps', network)}
+            network=${network}
+            ?disabled=${this.ego.disabled}
+          ></ego-form-rep>
+        `;
+      })}
+      <!-- </div> -->
     </section>`;
   }
 

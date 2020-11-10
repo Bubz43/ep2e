@@ -268,6 +268,22 @@ export class Ego {
   }
 
   @LazyGetter()
+  get stressValueInfo() {
+    const { minStressOption, minSV, notes, sv } = this.stressTestValue;
+    return {
+      label: `${localize('stressValue')} ${notes ? `(${notes})` : ''}`,
+      value: compact([
+        sv,
+        minStressOption === MinStressOption.Half
+          ? localize('half')
+          : minStressOption === MinStressOption.Value
+          ? minSV
+          : '',
+      ]).join('/'),
+    };
+  }
+
+  @LazyGetter()
   get details() {
     const { settings, epData } = this;
     const { characterDetails, threatDetails } = epData;
@@ -285,20 +301,7 @@ export class Ego {
       if (niche) details.push({ label: localize('niche'), value: niche });
       if (numbers) details.push({ label: localize('numbers'), value: numbers });
       details.push({ label: localize('threatLevel'), value: localize(level) });
-      if (stress.sv) {
-        const { minStressOption, minSV, notes, sv } = stress;
-        details.push({
-          label: `${localize('stressTest')} ${notes ? `(${notes})` : ''}`,
-          value: compact([
-            sv,
-            minStressOption === MinStressOption.Half
-              ? localize('half')
-              : minStressOption === MinStressOption.Value
-              ? minSV
-              : '',
-          ]).join('/'),
-        });
-      }
+      if (stress.sv) details.push(this.stressValueInfo)
     }
 
     return details;
