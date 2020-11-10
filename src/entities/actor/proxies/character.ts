@@ -37,6 +37,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
             .prop('flags', EP.Name, ItemType.Psi)
             .nestedStore(),
           embedded: this.name,
+          deleteSelf: () => this.updater.prop("flags", EP.Name, ItemType.Psi).commit(null)
           // TODO Open form and delete self
         }),
       addPsi: this.updater.prop('flags', EP.Name, ItemType.Psi).commit,

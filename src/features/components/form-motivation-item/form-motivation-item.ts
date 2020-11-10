@@ -19,6 +19,7 @@ import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { debounce } from '@src/utility/decorators';
 import type { ValOrValFN } from '@src/utility/helper-types';
+import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   LitElement,
@@ -27,6 +28,7 @@ import {
   internalProperty,
 } from 'lit-element';
 import { render } from 'lit-html';
+import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
 import styles from './form-motivation-item.scss';
 import { UpdatedMotivationEvent } from './updated-motivation-event';
@@ -112,9 +114,9 @@ export class FormMotivationItem extends LitElement {
         class="goals-toggle"
         label="${localize('goals')}: ${motivation.goals.length}"
         ?disabled=${motivation.goals.length === 0}
-        icon=${this.expandGoals
+        icon=${ifDefined(notEmpty(motivation.goals) ? this.expandGoals
           ? 'keyboard_arrow_down'
-          : 'keyboard_arrow_left'}
+          : 'keyboard_arrow_left' : undefined)}
         trailingIcon
       ></mwc-button>
 
@@ -132,7 +134,7 @@ export class FormMotivationItem extends LitElement {
         ?disabled=${disabled}
       ></delete-button>
 
-      ${this.expandGoals
+      ${this.expandGoals && notEmpty(motivation.goals)
         ? html`
             <sl-animated-list class="goals-list" transformOrigin="top">
               ${repeat(

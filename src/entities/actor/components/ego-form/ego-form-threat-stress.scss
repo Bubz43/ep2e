@@ -16,6 +16,7 @@
 
 .min-form {
   display: flex;
+  color: var(--color-text-lighter);
   span {
     padding: 0 0.5rem;
   }
@@ -28,6 +29,7 @@
     position: relative;
     top: 0.7rem;
     border: 1px inset var(--color-border);
+    width: 5ch;
     &:focus {
       border-color: var(--color-secondary);
       outline: none;

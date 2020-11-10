@@ -68,7 +68,7 @@ const renderAptitudeFields: FieldPropsRenderer<Aptitudes> = createPipe(
   map(renderAptitudeField),
 );
 
-const itemGroupKeys = ['sleights', "traits"] as const;
+const itemGroupKeys = ['sleights', 'traits'] as const;
 
 @customElement('ego-form')
 export class EgoForm extends mix(LitElement).with(
@@ -181,6 +181,7 @@ export class EgoForm extends mix(LitElement).with(
       activeForks,
       mentalEdits,
       itemGroups,
+      psi,
     } = this.ego;
     const useCredits = gameSettings.credits.current;
     const { traits, sleights } = itemGroups;
@@ -285,7 +286,7 @@ export class EgoForm extends mix(LitElement).with(
           <sl-header
             heading="${localize('traits')} & ${localize('sleights')}"
             itemCount=${traits.length + sleights.length}
-            ?hideBorder=${traits.length + sleights.length === 0}
+            ?hideBorder=${!psi && traits.length + sleights.length === 0}
           >
             <mwc-icon
               slot="info"
@@ -294,8 +295,36 @@ export class EgoForm extends mix(LitElement).with(
               >info</mwc-icon
             >
           </sl-header>
+          ${psi
+            ? html`
+                <div class="psi">
+                  <span class="psi-info">
+                    <span class="psi-label">${localize("psi")}:</span>
+                    ${psi.fullName}
+                    <span class="psi-level"
+                      >${localize('level')} ${psi.level}</span
+                    >
+                  </span>
+                  ${psi.openForm
+                    ? html`
+                        <mwc-icon-button
+                          icon="launch"
+                          @click=${psi.openForm}
+                        ></mwc-icon-button>
+                      `
+                    : ''}
+                  ${psi.deleteSelf
+                    ? html`
+                        <delete-button
+                          ?disabled=${disabled}
+                          @delete=${psi.deleteSelf}
+                        ></delete-button>
+                      `
+                    : ''}
+                </div>
+              `
+            : ''}
           ${itemGroupKeys.map((key) => {
-            // TODO Psi
             const group = itemGroups[key];
             return notEmpty(group)
               ? html`

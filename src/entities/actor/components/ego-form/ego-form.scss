@@ -51,7 +51,7 @@ ego-form-skills {
 
 .points-form {
   grid-auto-flow: column;
-  padding: 0.5rem 0 0;;
+  padding: 0.5rem 0 0;
 }
 
 .ego-points-simple {
@@ -82,7 +82,7 @@ li {
 
 .rep-form {
   grid-template-columns: auto 1fr 125px;
-  
+
   align-items: center;
   .network-abbreviation {
     color: var(--color-text-lighter);
@@ -101,4 +101,30 @@ li {
 .threat-details-form {
   grid-template-columns: repeat(3, 1fr);
   padding: 0.5rem 0 0;
+}
+
+.psi {
+  display: flex;
+  padding: 0 0.5rem;
+  margin: 0.5rem 0 0;
+  align-items: center;
+  font-size: large;
+  border-left: 2px solid var(--color-border);
+  &:hover {
+    background: alphav(var(--color-text), 0.03);
+  }
+  .psi-info {
+    flex: 1;
+  }
+  .psi-level {
+    color: var(--color-text-lighter);
+  }
+  .psi-label {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--color-text-lighter);
+  }
+  mwc-icon-button {
+    margin-left: auto;
+  }
 }
