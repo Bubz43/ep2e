@@ -110,6 +110,7 @@ li {
   align-items: center;
   font-size: large;
   border-left: 2px solid var(--color-border);
+  --mdc-icon-button-size: 2rem;
   &:hover {
     background: alphav(var(--color-text), 0.03);
   }
@@ -123,8 +124,5 @@ li {
     text-transform: uppercase;
     letter-spacing: 1px;
     color: var(--color-text-lighter);
-  }
-  mwc-icon-button {
-    margin-left: auto;
   }
 }

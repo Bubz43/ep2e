@@ -1,3 +1,5 @@
+import { openWindow, closeWindow } from '@src/components/window/window-controls';
+import { SlWindowEventName } from '@src/components/window/window-options';
 import { EP } from '@src/foundry/system';
 import type { ActorType } from '../../entity-types';
 import type { ItemEP, ItemProxy } from '../../item/item';
@@ -98,4 +100,34 @@ export abstract class ActorProxyBase<T extends ActorType> {
       0,
     );
   }
+
+  protected addLinkedWindow(
+    updater: UpdateStore<any>,
+    onViableUpdate: (actor: ActorEP) => boolean,
+    {
+      win,
+      wasConnected,
+    }: Pick<ReturnType<typeof openWindow>, "win" | "wasConnected">
+  ) {
+    const { actor } = this;
+    actor.subscriptions.subscribe(updater, {
+      onEntityUpdate: (actor) => {
+        if (onViableUpdate(actor) === false) {
+          actor.subscriptions.unsubscribe(updater);
+        }
+      },
+      onSubEnd: () => closeWindow(updater),
+    });
+    if (!wasConnected) {
+      win.addEventListener(
+        SlWindowEventName.Closed,
+        () => {
+          actor.subscriptions.unsubscribe(updater);
+          closeWindow(updater);
+        },
+        { once: true }
+      );
+    }
+  }
+
 }
