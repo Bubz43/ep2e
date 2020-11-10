@@ -20,6 +20,18 @@
                 "AppliesSwarmRules": {
                   "type": "string"
                 },
+                "CannotAddPsi": {
+                  "type": "string"
+                },
+                "EgoAlreadyHasPsi": {
+                  "type": "string"
+                },
+                "OnlyEgoItems": {
+                  "type": "string"
+                },
+                "OnlyEgoTraits": {
+                  "type": "string"
+                },
                 "OnlyInfomorphItems": {
                   "type": "string"
                 },
@@ -95,7 +107,11 @@
                 "OnlyInfomorphItems",
                 "AppliesSwarmRules",
                 "OnlyPhysicalMorphItems",
-                "OnlyWareItems"
+                "OnlyWareItems",
+                "OnlyEgoItems",
+                "OnlyEgoTraits",
+                "EgoAlreadyHasPsi",
+                "CannotAddPsi"
               ],
               "type": "object"
             },
@@ -362,6 +378,9 @@
                 "meshware"
               ],
               "type": "object"
+            },
+            "a-z": {
+              "type": "string"
             },
             "abbr": {
               "type": "string"
@@ -1605,6 +1624,9 @@
             "forkType": {
               "type": "string"
             },
+            "forks": {
+              "type": "string"
+            },
             "form": {
               "type": "string"
             },
@@ -1681,6 +1703,9 @@
               "type": "string"
             },
             "goal": {
+              "type": "string"
+            },
+            "goals": {
               "type": "string"
             },
             "grant": {
@@ -1852,6 +1877,9 @@
               "type": "string"
             },
             "ignoresArmor": {
+              "type": "string"
+            },
+            "image": {
               "type": "string"
             },
             "imagingScope": {
@@ -2154,6 +2182,9 @@
             "learn": {
               "type": "string"
             },
+            "leastPoints": {
+              "type": "string"
+            },
             "level": {
               "type": "string"
             },
@@ -2283,6 +2314,9 @@
             "mentalArmor": {
               "type": "string"
             },
+            "mentalEdits": {
+              "type": "string"
+            },
             "mentalFullDefense": {
               "type": "string"
             },
@@ -2403,6 +2437,9 @@
             "morphType": {
               "type": "string"
             },
+            "mostPoints": {
+              "type": "string"
+            },
             "mote": {
               "type": "string"
             },
@@ -2419,6 +2456,9 @@
               "type": "string"
             },
             "movementRates": {
+              "type": "string"
+            },
+            "movementType": {
               "type": "string"
             },
             "moxie": {
@@ -2647,6 +2687,9 @@
               "type": "string"
             },
             "passengers": {
+              "type": "string"
+            },
+            "passive": {
               "type": "string"
             },
             "paused": {
@@ -3036,6 +3079,9 @@
             "research": {
               "type": "string"
             },
+            "reset": {
+              "type": "string"
+            },
             "resistInfection": {
               "type": "string"
             },
@@ -3343,6 +3389,9 @@
               "type": "string"
             },
             "some": {
+              "type": "string"
+            },
+            "sort": {
               "type": "string"
             },
             "source": {
@@ -3870,6 +3919,9 @@
             "upgrade": {
               "type": "string"
             },
+            "upgrades": {
+              "type": "string"
+            },
             "uplift": {
               "type": "string"
             },
@@ -4040,6 +4092,9 @@
             },
             "yellow": {
               "type": "string"
+            },
+            "z-a": {
+              "type": "string"
             }
           },
           "required": [
@@ -4048,6 +4103,7 @@
             "FORMATABLE",
             "FULL",
             "SHORT",
+            "a-z",
             "abbr",
             "abilities",
             "ability",
@@ -4462,6 +4518,7 @@
             "forensicsSpecialist",
             "fork",
             "forkType",
+            "forks",
             "form",
             "formula",
             "fragile",
@@ -4488,6 +4545,7 @@
             "gland",
             "glands",
             "goal",
+            "goals",
             "grant",
             "grappled",
             "gravity",
@@ -4545,6 +4603,7 @@
             "ignored",
             "ignoredModifiers",
             "ignoresArmor",
+            "image",
             "imagingScope",
             "img",
             "immediate",
@@ -4645,6 +4704,7 @@
             "layerable",
             "layers",
             "learn",
+            "leastPoints",
             "level",
             "levels",
             "light",
@@ -4688,6 +4748,7 @@
             "mental/MeshActionsOnly",
             "mental/physical",
             "mentalArmor",
+            "mentalEdits",
             "mentalFullDefense",
             "mentalHealth",
             "mercurial",
@@ -4728,12 +4789,14 @@
             "morphPoints",
             "morphTraits",
             "morphType",
+            "mostPoints",
             "mote",
             "motivation",
             "motivations",
             "movement",
             "movementRate",
             "movementRates",
+            "movementType",
             "moxie",
             "mp",
             "multiUse",
@@ -4810,6 +4873,7 @@
             "painResistance",
             "paramedic",
             "passengers",
+            "passive",
             "paused",
             "payload",
             "payloadUse",
@@ -4939,6 +5003,7 @@
             "required",
             "requirement",
             "research",
+            "reset",
             "resistInfection",
             "resistSubstanceOrDisease",
             "resisted",
@@ -5042,6 +5107,7 @@
             "soldier",
             "som",
             "some",
+            "sort",
             "source",
             "sources",
             "space",
@@ -5217,6 +5283,7 @@
             "update",
             "updateInitiative",
             "upgrade",
+            "upgrades",
             "uplift",
             "usabilityModification",
             "usableTwice",
@@ -5273,7 +5340,8 @@
             "woundsIgnored",
             "xRep",
             "xenofauna",
-            "yellow"
+            "yellow",
+            "z-a"
           ],
           "type": "object"
         },

@@ -66,7 +66,7 @@ const itemGroupKeys = ['traits', 'sleights'] as const;
 @customElement('ego-form')
 export class EgoForm extends mix(LitElement).with(
   FormDrawer,
-  TabsMixin(['details', 'skills']),
+  TabsMixin(['details', 'skills', 'reps', 'notes']),
 ) {
   static get is() {
     return 'ego-form' as const;
@@ -103,6 +103,11 @@ export class EgoForm extends mix(LitElement).with(
       notify(NotificationType.Info, localize('DESCRIPTIONS', 'OnlyEgoItems'));
   });
 
+  protected renderTab(tab: EgoForm['tabs'][number]) {
+    if (tab === 'reps' && !this.ego.settings.trackReputations) return html``;
+    return super.renderTab(tab);
+  }
+
   render() {
     const { updater, disabled } = this.ego;
     const { activeTab } = this;
@@ -115,15 +120,15 @@ export class EgoForm extends mix(LitElement).with(
         ></entity-form-header>
         ${this.renderTabBar('tabs')} ${this.renderSidebar()}
         ${cache(this.renderTabbedContent(this.activeTab))}
-        ${activeTab === 'skills'
-          ? ''
-          : html`
+        ${activeTab === 'details'
+          ? html`
               <editor-wrapper
                 slot="description"
                 ?disabled=${disabled}
                 .updateActions=${updater.prop('data', 'description')}
               ></editor-wrapper>
-            `}
+            `
+          : ''}
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
@@ -142,6 +147,12 @@ export class EgoForm extends mix(LitElement).with(
             .ego=${this.ego}
           ></ego-form-skills>
         `;
+
+      case 'reps':
+        return this.renderReputations();
+
+      case 'notes':
+        return html`<div slot="details">${this.renderNotes()}</div>`;
     }
   }
 
@@ -203,12 +214,14 @@ export class EgoForm extends mix(LitElement).with(
           ${itemGroupKeys.map((key) => {
             // TODO Psi
             const group = itemGroups[key];
-            return notEmpty(group) ? html`
-              <form-items-list
-                .items=${group}
-                label=${localize(key)}
-              ></form-items-list>
-            ` : ""
+            return notEmpty(group)
+              ? html`
+                  <form-items-list
+                    .items=${group}
+                    label=${localize(key)}
+                  ></form-items-list>
+                `
+              : '';
           })}
         </sl-dropzone>
         <section>
@@ -233,42 +246,6 @@ export class EgoForm extends mix(LitElement).with(
           </sl-animated-list>
         </section>
 
-        ${settings.trackReputations
-          ? html`<section>
-              <sl-header
-                heading=${localize('reputations')}
-                itemCount=${this.ego.reps.size}
-                ?hideBorder=${this.ego.reps.size === 0}
-              ></sl-header>
-              ${repeat(
-                this.ego.reps,
-                ([network]) => network,
-                ([network, rep]) => {
-                  return html`
-                    <li class="rep">
-                      ${renderUpdaterForm(
-                        updater.prop('data', 'reps', network),
-                        {
-                          disabled,
-                          classes: 'rep-form',
-                          fields: ({ track, score }) => html`
-                            ${renderCheckbox(track)}
-                            <span
-                              >${localize('FULL', network)}
-                              <span class="network-abbreviation"
-                                >(${localize(network)})</span
-                              ></span
-                            >
-                            ${renderNumberField(score)}
-                          `,
-                        },
-                      )}
-                    </li>
-                  `;
-                },
-              )}
-            </section>`
-          : ''}
         ${settings.trackPoints
           ? html`
               <section
@@ -310,22 +287,6 @@ export class EgoForm extends mix(LitElement).with(
               </section>
             `
           : ''}
-
-        <section>
-          <sl-header
-            heading=${localize('notes')}
-            ?hideBorder=${!this.ego.hasNotes}
-          >
-            <mwc-icon
-              slot="info"
-              data-tooltip="${localize('mentalEdits')}, ${localize(
-                'forks',
-              )} & ${localize('backups')}"
-              @mouseover=${tooltip.fromData}
-              >info</mwc-icon
-            >
-          </sl-header>
-        </section>
       </div>
     `;
   }
@@ -340,12 +301,13 @@ export class EgoForm extends mix(LitElement).with(
   ></form-motivation-item>`;
 
   private renderSidebar() {
-    const { updater, disabled } = this.ego;
+    const { updater, disabled, useThreat } = this.ego;
 
     return html`
       ${renderUpdaterForm(updater.prop('data'), {
         slot: 'sidebar',
-        fields: ({ egoType, forkType }) => [
+        disabled,
+        fields: ({ egoType, forkType, flex, threat }) => [
           renderSelectField(
             { ...forkType, label: localize('type') },
             enumValues(Fork),
@@ -359,8 +321,13 @@ export class EgoForm extends mix(LitElement).with(
             { listId: 'ego-types' },
           ),
           this.egoTypes,
+          renderNumberField(
+            useThreat
+              ? threat
+              : { ...flex, label: `${flex.label} ${localize('bonus')}` },
+            { min: 0 },
+          ),
         ],
-        disabled,
       })}
 
       <mwc-button
@@ -446,6 +413,78 @@ export class EgoForm extends mix(LitElement).with(
       <ego-form-field-skill-creator
         .ego=${this.ego}
       ></ego-form-field-skill-creator>
+    `;
+  }
+
+  private renderReputations() {
+    const { updater, reps, disabled } = this.ego;
+    return html`<section slot="details">
+      ${repeat(
+        reps,
+        ([network]) => network,
+        ([network, rep]) => {
+          return html`
+            <li class="rep">
+              ${renderUpdaterForm(updater.prop('data', 'reps', network), {
+                disabled,
+                classes: 'rep-form',
+                fields: ({ track, score }) => html`
+                  ${renderCheckbox(track)}
+                  <span
+                    >${localize('FULL', network)}
+                    <span class="network-abbreviation"
+                      >(${localize(network)})</span
+                    ></span
+                  >
+                  ${renderNumberField(score)}
+                `,
+              })}
+            </li>
+          `;
+        },
+      )}
+    </section>`;
+  }
+
+  private renderNotes() {
+    const { mentalEdits, activeForks, backups, disabled } = this.ego;
+    return html`
+      <section>
+        <sl-header
+          heading=${localize('mentalEdits')}
+          itemCount=${mentalEdits.length}
+          ?hideBorder=${!mentalEdits.length}
+          ><mwc-icon-button
+            slot="action"
+            icon="add"
+            ?disabled=${disabled}
+          ></mwc-icon-button
+        ></sl-header>
+      </section>
+      <section>
+        <sl-header
+          heading=${localize('forks')}
+          itemCount=${activeForks.length}
+          ?hideBorder=${!activeForks.length}
+          ><mwc-icon-button
+            slot="action"
+            icon="add"
+            ?disabled=${disabled}
+          ></mwc-icon-button
+        ></sl-header>
+      </section>
+      <section>
+        <sl-header
+          heading=${localize('backups')}
+          itemCount=${backups.length}
+          ?hideBorder=${!backups.length}
+          ><mwc-icon-button
+            slot="action"
+            icon="add"
+            ?disabled=${disabled}
+          ></mwc-icon-button
+        ></sl-header>
+      </section>
     `;
   }
 }

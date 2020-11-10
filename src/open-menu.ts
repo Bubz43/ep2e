@@ -1,6 +1,7 @@
 import { Menu } from '@material/mwc-menu';
 import { render, nothing, html, TemplateResult } from 'lit-html';
 import { ifDefined } from 'lit-html/directives/if-defined';
+import { traverseActiveElements } from 'weightless';
 import type { ValOrValFN } from './utility/helper-types';
 import { clickIfEnter } from './utility/helpers';
 
@@ -75,6 +76,9 @@ export const openMenu = ({
   if (Array.isArray(content) && content.length === 0) return;
   const menu = document.querySelector('mwc-menu') || setupMenu();
 
+  const active = traverseActiveElements();
+  console.log(active);
+
   if (menu.open) {
     menu.close();
     setTimeout(() => openMenu({ content, position, header }), 100);
@@ -99,7 +103,6 @@ export const openMenu = ({
     } else {
       menu.x = position.x / 2;
       menu.y = position.y / 2;
-      console.log(position)
     }
   }
 

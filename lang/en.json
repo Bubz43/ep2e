@@ -1228,6 +1228,19 @@
     "isSwarm": "Is Swarm",
     "grant": "Grant",
     "modify": "Modify",
+    "a-z": "A-Z",
+    "forks": "Forks",
+    "goals": "Goals",
+    "image": "Image",
+    "leastPoints": "Least Points",
+    "mentalEdits": "Mental Edits",
+    "mostPoints": "Most Points",
+    "movementType": "Movement Type",
+    "passive": "Passive",
+    "reset": "Reset",
+    "sort": "Sort",
+    "upgrades": "Upgrades",
+    "z-a": "Z-A",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
@@ -1248,7 +1261,11 @@
       "OnlyInfomorphItems": "Only morph traits and software can be added to an infomorph.",
       "AppliesSwarmRules": "Applies swarm rules",
       "OnlyPhysicalMorphItems": "Only morph traits and physical ware can be added to morph.",
-      "OnlyWareItems": "Only physical augmentations (ware) can be added directly to morph."
+      "OnlyWareItems": "Only physical augmentations (ware) can be added directly to morph.",
+      "CannotAddPsi": "Cannot add PSI to ego.",
+      "EgoAlreadyHasPsi": "Ego already has PSI.",
+      "OnlyEgoItems": "Only ego traits, sleights and PSI can be added.",
+      "OnlyEgoTraits": "Only ego traits can be added"
     },
     "FULL": {
       "cog": "Cognition",

@@ -139,6 +139,10 @@ export class Ego {
     return this.epData.mentalEdits;
   }
 
+  get useThreat() {
+    return this.settings.useThreat
+  }
+
   @LazyGetter()
   get mentalHealth() {
     return new MentalHealth({

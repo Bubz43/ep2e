@@ -1,8 +1,9 @@
 import type { TabBar } from '@material/mwc-tab-bar';
 import { LangEntry, localize } from '@src/foundry/localization';
-import { LitElement, query } from 'lit-element';
+import { LitElement, PropertyValues, query } from 'lit-element';
 import { TemplateResult, html } from 'lit-html';
 import { ifDefined } from 'lit-html/directives/if-defined';
+import { first } from 'remeda';
 import type { Class } from 'type-fest';
 
 export const TabsMixin = <T extends LangEntry>(tabs: readonly T[]) => (
@@ -10,7 +11,7 @@ export const TabsMixin = <T extends LangEntry>(tabs: readonly T[]) => (
 ) => {
   class TabsMix extends Base {
     readonly tabs = tabs;
-    @query('mwc-tab-bar') tabBar?: TabBar;
+    @query('#primary-tab-bar') tabBar?: TabBar;
 
     protected changeTab() {
       this.requestUpdate();
@@ -20,6 +21,22 @@ export const TabsMixin = <T extends LangEntry>(tabs: readonly T[]) => (
       return this.tabs[this.tabBar?.activeIndex || 0];
     }
 
+    protected get tabElements() {
+      return Array.from(this.tabBar?.querySelectorAll('mwc-tab') ?? []);
+    }
+
+    updated(changedProps: PropertyValues) {
+      const { tabBar } = this;
+      if (tabBar) {
+        requestAnimationFrame(() => {
+          const { tabElements } = this;
+          const activeElement = tabElements[tabBar.activeIndex];
+          if (!activeElement?.active) first(tabElements)?.click();
+        });
+      }
+      super.updated(changedProps);
+    }
+
     protected renderTabBar(slot?: string) {
       const tabTemplates: TemplateResult[] = [];
       for (const tab of tabs) {
@@ -27,6 +44,7 @@ export const TabsMixin = <T extends LangEntry>(tabs: readonly T[]) => (
         if (template) tabTemplates.push(template);
       }
       return html`<mwc-tab-bar
+        id="primary-tab-bar"
         @MDCTabBar:activated=${this.changeTab}
         slot=${ifDefined(slot)}
       >
