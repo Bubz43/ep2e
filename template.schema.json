@@ -667,6 +667,38 @@
         }
       ]
     },
+    "EgoRepData": {
+      "additionalProperties": false,
+      "properties": {
+        "major": {
+          "type": "number"
+        },
+        "minor": {
+          "type": "number"
+        },
+        "moderate": {
+          "type": "number"
+        },
+        "refreshTimer": {
+          "type": "number"
+        },
+        "score": {
+          "type": "number"
+        },
+        "track": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "major",
+        "minor",
+        "moderate",
+        "refreshTimer",
+        "score",
+        "track"
+      ],
+      "type": "object"
+    },
     "EntityTemplates": {
       "additionalProperties": false,
       "properties": {
@@ -755,41 +787,6 @@
               "properties": {
                 "accumulatedTime": {
                   "type": "number"
-                },
-                "activeForks": {
-                  "items": {
-                    "additionalProperties": false,
-                    "properties": {
-                      "forkId": {
-                        "type": "string"
-                      },
-                      "forkType": {
-                        "$ref": "#/definitions/Fork"
-                      },
-                      "id": {
-                        "type": "string"
-                      },
-                      "notes": {
-                        "type": "string"
-                      },
-                      "packId": {
-                        "type": "string"
-                      },
-                      "whenMade": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "forkId",
-                      "forkType",
-                      "id",
-                      "notes",
-                      "packId",
-                      "whenMade"
-                    ],
-                    "type": "object"
-                  },
-                  "type": "array"
                 },
                 "additionalNotes": {
                   "type": "string"
@@ -954,19 +951,23 @@
                       "packId": {
                         "type": "string"
                       },
+                      "realTimeMS": {
+                        "type": "number"
+                      },
                       "storageLocation": {
                         "type": "string"
                       },
-                      "whenMade": {
-                        "type": "string"
+                      "worldTimeMS": {
+                        "type": "number"
                       }
                     },
                     "required": [
                       "backupId",
                       "id",
                       "packId",
+                      "realTimeMS",
                       "storageLocation",
-                      "whenMade"
+                      "worldTimeMS"
                     ],
                     "type": "object"
                   },
@@ -1285,6 +1286,45 @@
                     }
                   ]
                 },
+                "forks": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "forkId": {
+                        "type": "string"
+                      },
+                      "forkType": {
+                        "$ref": "#/definitions/Fork"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "notes": {
+                        "type": "string"
+                      },
+                      "packId": {
+                        "type": "string"
+                      },
+                      "realTimeMS": {
+                        "type": "number"
+                      },
+                      "worldTimeMS": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "forkId",
+                      "forkType",
+                      "id",
+                      "notes",
+                      "packId",
+                      "realTimeMS",
+                      "worldTimeMS"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
                 "homeDevice": {
                   "additionalProperties": false,
                   "properties": {
@@ -1313,11 +1353,19 @@
                       },
                       "id": {
                         "type": "string"
+                      },
+                      "realTimeMS": {
+                        "type": "number"
+                      },
+                      "worldTimeMS": {
+                        "type": "number"
                       }
                     },
                     "required": [
                       "edit",
-                      "id"
+                      "id",
+                      "realTimeMS",
+                      "worldTimeMS"
                     ],
                     "type": "object"
                   },
@@ -1496,228 +1544,25 @@
                   "additionalProperties": false,
                   "properties": {
                     "@Rep": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "major": {
-                          "type": "number"
-                        },
-                        "minor": {
-                          "type": "number"
-                        },
-                        "moderate": {
-                          "type": "number"
-                        },
-                        "refreshTimer": {
-                          "type": "number"
-                        },
-                        "score": {
-                          "type": "number"
-                        },
-                        "track": {
-                          "type": "boolean"
-                        }
-                      },
-                      "required": [
-                        "major",
-                        "minor",
-                        "moderate",
-                        "refreshTimer",
-                        "score",
-                        "track"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/EgoRepData"
                     },
                     "cRep": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "major": {
-                          "type": "number"
-                        },
-                        "minor": {
-                          "type": "number"
-                        },
-                        "moderate": {
-                          "type": "number"
-                        },
-                        "refreshTimer": {
-                          "type": "number"
-                        },
-                        "score": {
-                          "type": "number"
-                        },
-                        "track": {
-                          "type": "boolean"
-                        }
-                      },
-                      "required": [
-                        "major",
-                        "minor",
-                        "moderate",
-                        "refreshTimer",
-                        "score",
-                        "track"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/EgoRepData"
                     },
                     "fRep": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "major": {
-                          "type": "number"
-                        },
-                        "minor": {
-                          "type": "number"
-                        },
-                        "moderate": {
-                          "type": "number"
-                        },
-                        "refreshTimer": {
-                          "type": "number"
-                        },
-                        "score": {
-                          "type": "number"
-                        },
-                        "track": {
-                          "type": "boolean"
-                        }
-                      },
-                      "required": [
-                        "major",
-                        "minor",
-                        "moderate",
-                        "refreshTimer",
-                        "score",
-                        "track"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/EgoRepData"
                     },
                     "gRep": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "major": {
-                          "type": "number"
-                        },
-                        "minor": {
-                          "type": "number"
-                        },
-                        "moderate": {
-                          "type": "number"
-                        },
-                        "refreshTimer": {
-                          "type": "number"
-                        },
-                        "score": {
-                          "type": "number"
-                        },
-                        "track": {
-                          "type": "boolean"
-                        }
-                      },
-                      "required": [
-                        "major",
-                        "minor",
-                        "moderate",
-                        "refreshTimer",
-                        "score",
-                        "track"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/EgoRepData"
                     },
                     "iRep": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "major": {
-                          "type": "number"
-                        },
-                        "minor": {
-                          "type": "number"
-                        },
-                        "moderate": {
-                          "type": "number"
-                        },
-                        "refreshTimer": {
-                          "type": "number"
-                        },
-                        "score": {
-                          "type": "number"
-                        },
-                        "track": {
-                          "type": "boolean"
-                        }
-                      },
-                      "required": [
-                        "major",
-                        "minor",
-                        "moderate",
-                        "refreshTimer",
-                        "score",
-                        "track"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/EgoRepData"
                     },
                     "rRep": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "major": {
-                          "type": "number"
-                        },
-                        "minor": {
-                          "type": "number"
-                        },
-                        "moderate": {
-                          "type": "number"
-                        },
-                        "refreshTimer": {
-                          "type": "number"
-                        },
-                        "score": {
-                          "type": "number"
-                        },
-                        "track": {
-                          "type": "boolean"
-                        }
-                      },
-                      "required": [
-                        "major",
-                        "minor",
-                        "moderate",
-                        "refreshTimer",
-                        "score",
-                        "track"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/EgoRepData"
                     },
                     "xRep": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "major": {
-                          "type": "number"
-                        },
-                        "minor": {
-                          "type": "number"
-                        },
-                        "moderate": {
-                          "type": "number"
-                        },
-                        "refreshTimer": {
-                          "type": "number"
-                        },
-                        "score": {
-                          "type": "number"
-                        },
-                        "track": {
-                          "type": "boolean"
-                        }
-                      },
-                      "required": [
-                        "major",
-                        "minor",
-                        "moderate",
-                        "refreshTimer",
-                        "score",
-                        "track"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/EgoRepData"
                     }
                   },
                   "required": [
@@ -2196,7 +2041,6 @@
               },
               "required": [
                 "accumulatedTime",
-                "activeForks",
                 "additionalNotes",
                 "appliedSubstances",
                 "aptitudes",
@@ -2209,6 +2053,7 @@
                 "fieldSkills",
                 "flex",
                 "forkType",
+                "forks",
                 "homeDevice",
                 "longRecharge",
                 "mentalEdits",
@@ -10419,13 +10264,13 @@
         "mode": {
           "$ref": "#/definitions/HealthModificationMode"
         },
+        "realTimeMS": {
+          "type": "number"
+        },
         "source": {
           "type": "string"
         },
-        "timestamp": {
-          "type": "number"
-        },
-        "worldTime": {
+        "worldTimeMS": {
           "type": "number"
         },
         "wounds": {
@@ -10436,9 +10281,9 @@
         "damage",
         "id",
         "mode",
+        "realTimeMS",
         "source",
-        "timestamp",
-        "worldTime",
+        "worldTimeMS",
         "wounds"
       ],
       "type": "object"

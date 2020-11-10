@@ -64,7 +64,8 @@ import type { FiringMode } from '@src/features/firing-modes';
 import type {
   ActiveForkData,
   EgoBackupData,
-} from '@src/features/forks-and-backups';
+  MentalEdit,
+} from '@src/features/ego-notes';
 import type { Motivation } from '@src/features/motivations';
 import type { MovementRate } from '@src/features/movement';
 import type { RechargeData } from '@src/features/recharge';
@@ -178,8 +179,8 @@ export type EgoData = {
       notes: string;
     };
   }>;
-  mentalEdits: StringID<{ edit: string }>[];
-  activeForks: StringID<ActiveForkData>[];
+  mentalEdits: StringID<MentalEdit>[];
+  forks: StringID<ActiveForkData>[];
   backups: StringID<EgoBackupData>[];
   additionalNotes: string;
 };

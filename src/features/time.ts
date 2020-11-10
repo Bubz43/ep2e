@@ -23,6 +23,8 @@ export const createTimestamp = createFeature<Timestamp>(() => ({
   worldTimeMS: currentWorldTimeMS()
 }))
 
+// TODO Time since timestamp
+
 // This should always be ordered from biggest to smallest
 export const timeIntervals = ['days', 'hours', 'minutes', 'seconds'] as const;
 

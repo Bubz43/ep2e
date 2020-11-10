@@ -87,8 +87,8 @@ export class EgoForm extends mix(LitElement).with(
     () => this.ego.updater.prop('data', 'motivations').commit,
   );
 
-  private readonly activeForkOps = addUpdateRemoveFeature(
-    () => this.ego.updater.prop('data', 'activeForks').commit,
+  private readonly forkOps = addUpdateRemoveFeature(
+    () => this.ego.updater.prop('data', 'forks').commit,
   );
 
   private readonly backupOps = addUpdateRemoveFeature(

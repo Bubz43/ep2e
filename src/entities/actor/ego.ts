@@ -217,7 +217,7 @@ export class Ego {
   }
 
   get activeForks() {
-    return this.epData.activeForks;
+    return this.epData.forks;
   }
 
   get backups() {
