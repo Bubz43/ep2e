@@ -114,18 +114,18 @@ export class InfomorphForm extends SleeveFormBase {
 
             ${notEmpty(itemGroups.ware)
               ? html`
-                  <sleeve-form-items-list
+                  <form-items-list
                     .items=${itemGroups.ware}
                     label=${localize('software')}
-                  ></sleeve-form-items-list>
+                  ></form-items-list>
                 `
               : ''}
             ${notEmpty(itemGroups.traits)
               ? html`
-                  <sleeve-form-items-list
+                  <form-items-list
                     .items=${itemGroups.traits}
                     label=${localize('traits')}
-                  ></sleeve-form-items-list>
+                  ></form-items-list>
                 `
               : ''}
           </sl-dropzone>

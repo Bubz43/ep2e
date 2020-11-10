@@ -94,7 +94,7 @@ export class FormMotivationItem extends LitElement {
         onIcon="add"
         offIcon="remove"
         data-tooltip=${localize(motivation.stance)}
-        @mouseover=${tooltip.fromData}
+        @mouseenter=${tooltip.fromData}
         ?disabled=${disabled}
       ></mwc-icon-button-toggle>
       ${renderAutoForm({
@@ -122,7 +122,7 @@ export class FormMotivationItem extends LitElement {
         icon="add"
         class="new-goal-button"
         data-tooltip="${localize("add")} ${localize("goal")}"
-        @mouseover=${tooltip.fromData}
+        @mouseenter=${tooltip.fromData}
         @focus=${tooltip.fromData}
         ?disabled=${disabled}
         @click=${this.addGoal}
@@ -134,7 +134,7 @@ export class FormMotivationItem extends LitElement {
 
       ${this.expandGoals
         ? html`
-            <sl-animated-list class="goals-list">
+            <sl-animated-list class="goals-list" transformOrigin="top">
               ${repeat(
                 motivation.goals,
                 idProp,

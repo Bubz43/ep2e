@@ -22,7 +22,7 @@ const setupMenu = () => {
   menu.addEventListener('closed', () => render(nothing, menu));
   document.body.append(menu);
   menu.fixed = true;
-  // menu.quick = true;
+  menu.quick = true;
   return menu;
 };
 

@@ -1,4 +1,5 @@
 import {
+  renderCheckbox,
   renderLabeledCheckbox,
   renderNumberField,
   renderSelectField,
@@ -24,6 +25,12 @@ import {
 } from '@src/features/feature-helpers';
 import { createMotivation, Motivation } from '@src/features/motivations';
 import type { Aptitudes } from '@src/features/skills';
+import {
+  handleDrop,
+  DropType,
+  itemDropToItemProxy,
+} from '@src/foundry/drag-and-drop';
+import { notify, NotificationType } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
 import { hardeningTypes } from '@src/health/mental-health';
 import { gameSettings, tooltip } from '@src/init';
@@ -52,6 +59,8 @@ const renderAptitudeFields: FieldPropsRenderer<Aptitudes> = createPipe(
   toPairs,
   map(renderAptitudeField),
 );
+
+const itemGroupKeys = ['traits', 'sleights'] as const;
 
 @customElement('ego-form')
 export class EgoForm extends mix(LitElement).with(
@@ -85,6 +94,13 @@ export class EgoForm extends mix(LitElement).with(
   private addMotivation() {
     this.motivationOps.add({}, createMotivation({}));
   }
+
+  private handleItemDrop = handleDrop(async ({ data }) => {
+    if (data?.type === DropType.Item) {
+      this.ego.addNewItemProxy(await itemDropToItemProxy(data));
+    } else
+      notify(NotificationType.Info, localize('DESCRIPTIONS', 'OnlyEgoItems'));
+  });
 
   render() {
     const { updater, disabled } = this.ego;
@@ -129,32 +145,126 @@ export class EgoForm extends mix(LitElement).with(
   }
 
   private renderDetails() {
-    const { settings, disabled, updater, motivations } = this.ego;
+    const {
+      settings,
+      disabled,
+      updater,
+      motivations,
+      backups,
+      activeForks,
+      mentalEdits,
+      itemGroups,
+    } = this.ego;
     const useCredits = gameSettings.credits.current;
+    const { traits, sleights } = itemGroups;
 
     return html`
       <div slot="details">
+        ${settings.trackMentalHealth
+          ? html`
+              <section>
+                <sl-header heading=${localize('mentalHealth')}
+                  ><mwc-icon-button
+                    slot="action"
+                    data-tooltip=${localize('changes')}
+                    @mouseover=${tooltip.fromData}
+                    @focus=${tooltip.fromData}
+                    icon="change_history"
+                    @click=${this.setDrawerFromEvent(
+                      this.renderMentalHealthChangeHistory,
+                      false,
+                    )}
+                  ></mwc-icon-button
+                ></sl-header>
+                <health-item
+                  clickable
+                  ?disabled=${disabled}
+                  .health=${this.ego.mentalHealth}
+                  @click=${this.setDrawerFromEvent(this.renderMentalHealthEdit)}
+                ></health-item>
+              </section>
+            `
+          : ''}
+
+        <sl-dropzone ?disabled=${disabled} @drop=${this.handleItemDrop}>
+          <sl-header
+            heading="${localize('traits')} & ${localize('sleights')}"
+            itemCount=${traits.length + sleights.length}
+            ?hideBorder=${traits.length + sleights.length === 0}
+          >
+            <mwc-icon
+              slot="info"
+              data-tooltip=${localize('DESCRIPTIONS', 'OnlyEgoItems')}
+              @mouseover=${tooltip.fromData}
+              >info</mwc-icon
+            >
+          </sl-header>
+          ${itemGroupKeys.map((key) => {
+            const group = itemGroups[key];
+            return html`
+              <form-items-list
+                .items=${group}
+                label=${localize(key)}
+              ></form-items-list>
+            `;
+          })}
+        </sl-dropzone>
         <section>
-          <sl-header heading=${localize('motivations')}>
+          <sl-header
+            heading=${localize('motivations')}
+            itemCount=${motivations.length}
+            ?hideBorder=${motivations.length === 0}
+          >
             <mwc-icon-button
               icon="add"
               slot="action"
               ?disabled=${disabled}
               @click=${this.addMotivation}
-              data-tooltip="${localize("add")} ${localize("motivation")}"
+              data-tooltip="${localize('add')} ${localize('motivation')}"
               @mouseover=${tooltip.fromData}
               @focus=${tooltip.fromData}
             ></mwc-icon-button>
           </sl-header>
 
-          <sl-animated-list class="motivations-list">
+          <sl-animated-list class="motivations-list" transformOrigin="top">
             ${repeat(motivations, idProp, this.renderMotivationItem)}
           </sl-animated-list>
         </section>
 
         ${settings.trackReputations
           ? html`<section>
-              <sl-header heading=${localize('reputations')}></sl-header>
+              <sl-header
+                heading=${localize('reputations')}
+                itemCount=${this.ego.reps.size}
+                ?hideBorder=${this.ego.reps.size === 0}
+              ></sl-header>
+              ${repeat(
+                this.ego.reps,
+                ([network]) => network,
+                ([network, rep]) => {
+                  return html`
+                    <li class="rep">
+                      ${renderUpdaterForm(
+                        updater.prop('data', 'reps', network),
+                        {
+                          disabled,
+                          classes: 'rep-form',
+                          fields: ({ track, score }) => html`
+                            ${renderCheckbox(track)}
+                            <span
+                              >${localize('FULL', network)}
+                              <span class="network-abbreviation"
+                                >(${localize(network)})</span
+                              ></span
+                            >
+                            ${renderNumberField(score)}
+                          `,
+                        },
+                      )}
+                    </li>
+                  `;
+                },
+              )}
             </section>`
           : ''}
         ${settings.trackPoints
@@ -185,48 +295,25 @@ export class EgoForm extends mix(LitElement).with(
                       fields: (points) =>
                         enumValues(CharacterPoint).map((point) =>
                           useCredits || point !== CharacterPoint.Credits
-                            ? renderNumberField({
-                                ...points[point],
-                                label: Ego.formatPoint(point),
-                              }, { min: -99, max: 99})
+                            ? renderNumberField(
+                                {
+                                  ...points[point],
+                                  label: Ego.formatPoint(point),
+                                },
+                                { min: -99, max: 99 },
+                              )
                             : '',
                         ),
                     })}
               </section>
             `
           : ''}
-        ${settings.trackMentalHealth
-          ? html`
-              <section>
-                <sl-header heading=${localize('mentalHealth')}
-                  ><mwc-icon-button
-                    slot="action"
-                    data-tooltip=${localize('changes')}
-                    @mouseover=${tooltip.fromData}
-                    @focus=${tooltip.fromData}
-                    icon="change_history"
-                    @click=${this.setDrawerFromEvent(
-                      this.renderMentalHealthChangeHistory,
-                      false,
-                    )}
-                  ></mwc-icon-button
-                ></sl-header>
-                <health-item
-                  clickable
-                  ?disabled=${disabled}
-                  .health=${this.ego.mentalHealth}
-                  @click=${this.setDrawerFromEvent(this.renderMentalHealthEdit)}
-                ></health-item>
-              </section>
-            `
-          : ''}
 
         <section>
-          <sl-header heading=${localize('traits')}></sl-header>
-        </section>
-
-        <section>
-          <sl-header heading=${localize('notes')}>
+          <sl-header
+            heading=${localize('notes')}
+            ?hideBorder=${!this.ego.hasNotes}
+          >
             <mwc-icon
               slot="info"
               data-tooltip="${localize('mentalEdits')}, ${localize(

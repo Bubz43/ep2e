@@ -232,10 +232,10 @@ export class BiologicalForm extends SleeveFormBase {
               const group = itemGroups[key];
               return notEmpty(group)
                 ? html`
-                    <sleeve-form-items-list
+                    <form-items-list
                       .items=${group}
                       label=${localize(key)}
-                    ></sleeve-form-items-list>
+                    ></form-items-list>
                   `
                 : '';
             })}

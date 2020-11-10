@@ -1,17 +1,9 @@
 import { EP } from '@src/foundry/system';
-import { ItemOperations, ActorEP } from '../actor';
 import type { ActorType } from '../../entity-types';
 import type { ItemEP, ItemProxy } from '../../item/item';
-import type { ActorEntity, NonEditableProps } from '../../models';
+import type { ActorEntity } from '../../models';
 import type { UpdateStore } from '../../update-store';
-import { localize } from '@src/foundry/localization';
-import { render, html } from 'lit-html';
-import { openDialog } from 'web-dialog';
-import {
-  Drop,
-  DropType,
-  itemDropToItemProxy,
-} from '@src/foundry/drag-and-drop';
+import { ActorEP, ItemOperations } from '../actor';
 
 export type ActorProxyInit<T extends ActorType> = {
   data: ActorEntity<T>;

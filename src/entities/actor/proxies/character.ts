@@ -2,9 +2,11 @@ import {
   AppliedEffects,
   ReadonlyAppliedEffects,
 } from '@src/entities/applied-effects';
-import type { ActorType } from '@src/entities/entity-types';
+import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { ItemEP, ItemProxy } from '@src/entities/item/item';
+import { Psi } from '@src/entities/item/proxies/psi';
 import type { UpdateStore } from '@src/entities/update-store';
+import { EP } from '@src/foundry/system';
 import { Ego, FullEgoData } from '../ego';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 
@@ -26,6 +28,18 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       activeEffects: this.appliedEffects,
       disabled: this.disabled,
       actor: this.actor,
+      itemOperations: this.itemOperations,
+      psi:
+        this.epFlags?.psi &&
+        new Psi({
+          data: this.epFlags.psi,
+          updater: this.updater
+            .prop('flags', EP.Name, ItemType.Psi)
+            .nestedStore(),
+          embedded: this.name,
+          // TODO Open form and delete self
+        }),
+      addPsi: this.updater.prop('flags', EP.Name, ItemType.Psi).commit,
     });
   }
 

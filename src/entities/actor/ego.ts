@@ -2,7 +2,6 @@ import {
   CharacterPoint,
   enumValues,
   CharacterDetail,
-  Fork,
 } from '@src/data-enums';
 import type { StringID } from '@src/features/feature-helpers';
 import {
@@ -28,7 +27,8 @@ import {
   refreshAvailable,
   RefreshTimer,
 } from '@src/features/time';
-import { localize } from '@src/foundry/localization';
+import { notify, NotificationType } from '@src/foundry/foundry-apps';
+import { format, localize } from '@src/foundry/localization';
 import type { EgoData, CommonDetails } from '@src/foundry/template-schema';
 import { HealthType } from '@src/health/health';
 import { MentalHealth } from '@src/health/mental-health';
@@ -37,8 +37,12 @@ import { groupBy, compact, map } from 'remeda';
 import type { ReadonlyAppliedEffects } from '../applied-effects';
 import { ItemType } from '../entity-types';
 import type { ItemEP, ItemProxy } from '../item/item';
+import type { Psi } from '../item/proxies/psi';
+import type { Sleight } from '../item/proxies/sleight';
+import type { Trait } from '../item/proxies/trait';
+import type { ItemEntity } from '../models';
 import type { UpdateStore } from '../update-store';
-import type { ActorEP } from './actor';
+import type { ActorEP, ItemOperations } from './actor';
 
 export type FullEgoData = {
   _id: string;
@@ -54,6 +58,9 @@ export class Ego {
   readonly disabled;
   readonly actor;
   readonly items;
+  readonly itemOperations;
+  readonly psi;
+  readonly addPsi;
   constructor({
     data,
     updater,
@@ -61,6 +68,9 @@ export class Ego {
     disabled,
     actor,
     items,
+    itemOperations,
+    psi,
+    addPsi,
   }: {
     data: FullEgoData;
     updater: UpdateStore<FullEgoData>;
@@ -68,6 +78,9 @@ export class Ego {
     disabled: boolean;
     actor: ActorEP | null;
     items: Collection<ItemEP>;
+    itemOperations: ItemOperations;
+    psi?: Psi | null;
+    addPsi?: (psiData: ItemEntity<ItemType.Psi>) => void;
   }) {
     this.data = data;
     this.updater = updater;
@@ -75,6 +88,9 @@ export class Ego {
     this.disabled = disabled;
     this.actor = actor;
     this.items = items;
+    this.itemOperations = itemOperations;
+    this.psi = psi;
+    this.addPsi = addPsi;
   }
 
   static formatPoint(point: CharacterPoint) {
@@ -119,6 +135,10 @@ export class Ego {
     return this.epData.flex;
   }
 
+  get mentalEdits() {
+    return this.epData.mentalEdits;
+  }
+
   @LazyGetter()
   get mentalHealth() {
     return new MentalHealth({
@@ -127,7 +147,7 @@ export class Ego {
       willpower: this.aptitudes.wil,
       updater: this.updater.prop('data', 'mentalHealth').nestedStore(),
       source: this.name,
-    })
+    });
   }
 
   @LazyGetter()
@@ -137,17 +157,19 @@ export class Ego {
     const skills: Skill[] = [];
 
     const addSkill = (skill: Skill) => {
-      if (canDefault || skill.points) skills.push(skill)
-    }
+      if (canDefault || skill.points) skills.push(skill);
+    };
 
     for (const type of enumValues(SkillType)) {
-      addSkill(this.getCommonSkill(type))
+      addSkill(this.getCommonSkill(type));
     }
 
     for (const fieldSkill of enumValues(FieldSkillType)) {
       const fields = fieldSkills[fieldSkill];
       for (const field of fields) {
-        addSkill(this.getFieldSkill({ ...field, fieldSkill }, { skipCheck: true }))
+        addSkill(
+          this.getFieldSkill({ ...field, fieldSkill }, { skipCheck: true }),
+        );
       }
     }
 
@@ -158,10 +180,10 @@ export class Ego {
   @LazyGetter()
   get groupedSkills() {
     return groupBy(this.skills, (skill) =>
-    isFieldSkill(skill) && skill.fieldSkill === FieldSkillType.Know
-      ? 'know'
-      : 'active',
-  ) as Partial<Record<'active' | 'know', Skill[]>>;
+      isFieldSkill(skill) && skill.fieldSkill === FieldSkillType.Know
+        ? 'know'
+        : 'active',
+    ) as Partial<Record<'active' | 'know', Skill[]>>;
   }
 
   get reps() {
@@ -172,6 +194,7 @@ export class Ego {
     return this.repMap;
   }
 
+  @LazyGetter()
   get trackedReps() {
     return [...this.reps.values()].filter((rep) => rep.track);
   }
@@ -200,6 +223,25 @@ export class Ego {
     return !!this.epData.points.customization;
   }
 
+  get hasNotes() {
+    return (
+      this.backups.length + this.activeForks.length + this.mentalEdits.length >
+      0
+    );
+  }
+
+  @LazyGetter()
+  get itemGroups() {
+    const traits: Trait[] = [];
+    const sleights: Sleight[] = [];
+    for (const { agent } of this.items) {
+      if (agent.type === ItemType.Trait) traits.push(agent);
+      else if (agent.type === ItemType.Sleight) sleights.push(agent);
+    }
+    return { traits, sleights };
+  }
+
+  @LazyGetter()
   get points(): { label: string; value: number }[] {
     const groups: { label: string; value: number }[] = [];
     if (!this.epData.settings.trackPoints) return groups;
@@ -250,8 +292,50 @@ export class Ego {
     return details;
   }
 
-  setForkType(type: Fork | '') {
-    return this.updater.prop('data', 'forkType').commit(type);
+  addNewItemProxy(proxy: ItemProxy | null | undefined) {
+    if (!proxy || this.disabled) return;
+    if (this.hasItemProxy(proxy)) {
+      return notify(
+        NotificationType.Info,
+        format('AlreadyHasItem', {
+          ownerName: this.name,
+          itemName: proxy.name,
+        }),
+      );
+    }
+
+    if (proxy.type === ItemType.Trait) {
+      if (proxy.isMorphTrait) {
+        notify(
+          NotificationType.Error,
+          localize('DESCRIPTIONS', 'OnlyEgoTraits'),
+        );
+      } else {
+        if (proxy.hasMultipleLevels) {
+          proxy.selectLevelAndAdd(this.itemOperations.add);
+        } else this.itemOperations.add(proxy.getDataCopy(true));
+      }
+    } else if (proxy.type === ItemType.Sleight) {
+      this.itemOperations.add(proxy.getDataCopy(true));
+    } else if (proxy.type === ItemType.Psi) {
+      if (this.psi)
+        notify(
+          NotificationType.Info,
+          localize('DESCRIPTIONS', 'EgoAlreadyHasPsi'),
+        );
+      else if (!this.addPsi)
+        notify(
+          NotificationType.Error,
+          localize('DESCRIPTIONS', 'CannotAddPsi'),
+        );
+      else this.addPsi(proxy.getDataCopy(true));
+    } else {
+      notify(NotificationType.Error, localize('DESCRIPTIONS', 'OnlyEgoItems'));
+    }
+  }
+
+  hasItemProxy(agent: ItemProxy | null | undefined) {
+    return this.items.get(agent?.id)?.agent === agent;
   }
 
   getCommonSkill(skill: SkillType) {
@@ -369,8 +453,6 @@ export class Ego {
         );
     }
   }
-
-
 
   acceptItemAgent(agent: ItemProxy) {
     if (Ego.egoItems.includes(agent.type)) {

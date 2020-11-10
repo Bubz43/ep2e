@@ -1338,7 +1338,7 @@ export type DescriptionEntry =
   | 'OnlyInfomorphItems'
   | 'AppliesSwarmRules'
   | 'OnlyPhysicalMorphItems'
-  | 'OnlyWareItems';
+  | 'OnlyWareItems' | "OnlyEgoItems" | "OnlyEgoTraits" | "EgoAlreadyHasPsi" | "CannotAddPsi"
 
 // TODO Look into using data keys as pattern to validate json string
 export type Formatable = {

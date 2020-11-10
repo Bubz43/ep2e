@@ -1,8 +1,4 @@
 // Side Effects
-import './foundry/prototype-overrides';
-import './init';
-import "web-animations-js"
-
 // Material Components
 import '@material/mwc-button';
 import '@material/mwc-checkbox';
@@ -22,17 +18,14 @@ import '@material/mwc-slider';
 import '@material/mwc-snackbar';
 import '@material/mwc-switch';
 import '@material/mwc-tab-bar';
-
-// Misc
-import 'web-dialog';
 // import '@tinymce/tinymce-webcomponent'; // TODO Test this out further
 import { Datepicker } from 'app-datepicker/dist/datepicker';
-customElements.define('app-datepicker', Datepicker);
-
+import 'web-animations-js';
+// Misc
+import 'web-dialog';
 // Weightless Components
 import 'weightless/label';
 import 'weightless/list-item';
-
 import { AnimatedList } from './components/animated-list/animated-list';
 import { DateField } from './components/date-field/date-field';
 import { DeleteButton } from './components/delete-button/delete-button';
@@ -54,34 +47,38 @@ import { TimeField } from './components/time-field/time-field';
 import { ToolTip } from './components/tooltip/tooltip';
 import { ValueStatus } from './components/value-status/value-status';
 import { SlWindow } from './components/window/window';
+import { EgoForm } from './entities/actor/components/ego-form/ego-form';
+import { EgoFormFieldSkill } from './entities/actor/components/ego-form/skills/ego-form-field-skill';
+import { EgoFormFieldSkillCreator } from './entities/actor/components/ego-form/skills/ego-form-field-skill-creator';
+import { EgoFormSkill } from './entities/actor/components/ego-form/skills/ego-form-skill';
+import { EgoFormSkills } from './entities/actor/components/ego-form/skills/ego-form-skills';
+import { ItemTrash } from './entities/actor/components/item-trash/item-trash';
+import { SleeveFormAquisition } from './entities/actor/components/sleeve-forms/acquisition/sleeve-form-acquisition';
+import { BiologicalForm } from './entities/actor/components/sleeve-forms/biological/biological-form';
+import { InfomorphForm } from './entities/actor/components/sleeve-forms/infomorph/infomorph-form';
+import { FormItemsList } from './entities/actor/components/items-list/form-items-list';
+import { SleeveFormMovementList } from './entities/actor/components/sleeve-forms/movement/sleeve-form-movement-list';
+import { SleeveFormPools } from './entities/actor/components/sleeve-forms/pools/sleeve-form-pools';
+import { SyntheticForm } from './entities/actor/components/sleeve-forms/synthetic/synthetic-form';
 import { CompendiumList } from './entities/components/compendium-list/compendium-list';
 import { EntityFormFooter } from './entities/components/form-layout/entity-form-footer';
 import { EntityFormHeader } from './entities/components/form-layout/entity-form-header';
 import { EntityFormLayout } from './entities/components/form-layout/entity-form-layout';
-import { InfomorphForm } from './entities/actor/components/sleeve-forms/infomorph/infomorph-form';
-import { SleeveFormPools } from './entities/actor/components/sleeve-forms/pools/sleeve-form-pools';
-import { SleeveFormAquisition } from './entities/actor/components/sleeve-forms/acquisition/sleeve-form-acquisition';
+import { EntityFormSidebarDivider } from './entities/components/form-layout/entity-form-sidebar-divider';
+import { ItemFormEffectsList } from './entities/item/components/forms/item-form-effects-list/item-form-effects-list';
+import { PhysicalTechForm } from './entities/item/components/forms/physical-tech/physical-tech-form';
+import { EffectCreator } from './features/components/effect-creator/effect-creator';
+import { EffectEditor } from './features/components/effect-editor/effect-editor';
+import { FormMotivationItem } from './features/components/form-motivation-item/form-motivation-item';
+import { TagEditor } from './features/components/tag-editor/tag-editor';
+import './foundry/prototype-overrides';
 import { HealthItem } from './health/components/health-item/health-item';
-import { SleeveFormItemsList } from './entities/actor/components/sleeve-forms/items-list/sleeve-form-items-list';
-import { ItemTrash } from './entities/actor/components/item-trash/item-trash';
 import { HealthLog } from './health/components/health-log/health-log';
 import { HealthRegenSettingsForm } from './health/components/health-regen-settings-form/health-regen-settings-form';
 import { HealthStateForm } from './health/components/health-state-form/health-state-form';
-import { BiologicalForm } from './entities/actor/components/sleeve-forms/biological/biological-form';
-import { EntityFormSidebarDivider } from './entities/components/form-layout/entity-form-sidebar-divider';
-import { PhysicalTechForm } from './entities/item/components/forms/physical-tech/physical-tech-form';
-import { ItemFormEffectsList } from './entities/item/components/forms/item-form-effects-list/item-form-effects-list';
-import { EffectCreator } from './features/components/effect-creator/effect-creator';
-import { EffectEditor } from './features/components/effect-editor/effect-editor';
-import { TagEditor } from './features/components/tag-editor/tag-editor';
-import { SleeveFormMovementList } from './entities/actor/components/sleeve-forms/movement/sleeve-form-movement-list';
-import { SyntheticForm } from './entities/actor/components/sleeve-forms/synthetic/synthetic-form';
-import { EgoForm } from './entities/actor/components/ego-form/ego-form';
-import { EgoFormSkills } from './entities/actor/components/ego-form/skills/ego-form-skills';
-import { EgoFormSkill } from './entities/actor/components/ego-form/skills/ego-form-skill';
-import { EgoFormFieldSkill } from './entities/actor/components/ego-form/skills/ego-form-field-skill';
-import { EgoFormFieldSkillCreator } from './entities/actor/components/ego-form/skills/ego-form-field-skill-creator';
-import { FormMotivationItem } from './features/components/form-motivation-item/form-motivation-item';
+import './init';
+
+customElements.define('app-datepicker', Datepicker);
 
 // Generic Components
 Field;
@@ -135,7 +132,7 @@ BiologicalForm;
 SyntheticForm;
 SleeveFormPools;
 SleeveFormAquisition;
-SleeveFormItemsList;
+FormItemsList;
 SleeveFormMovementList;
 
 // Item Forms

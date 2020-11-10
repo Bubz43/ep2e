@@ -2,15 +2,15 @@ import type { ItemProxy } from '@src/entities/item/item';
 import { idProp } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
 import { openMenu } from '@src/open-menu';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, html, LitElement, property } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { sortBy } from 'remeda';
-import styles from './sleeve-form-items-list.scss';
+import styles from './form-items-list.scss';
 
-@customElement('sleeve-form-items-list')
-export class SleeveFormItemsList extends LitElement {
+@customElement('form-items-list')
+export class FormItemsList extends LitElement {
   static get is() {
-    return 'sleeve-form-items-list' as const;
+    return 'form-items-list' as const;
   }
 
   static styles = [styles];
@@ -62,6 +62,6 @@ export class SleeveFormItemsList extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'sleeve-form-items-list': SleeveFormItemsList;
+    'form-items-list': FormItemsList;
   }
 }

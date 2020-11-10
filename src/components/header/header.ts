@@ -17,6 +17,8 @@ export class Header extends LitElement {
 
   @property({ type: Number }) itemCount?: number;
 
+  @property({ type: Boolean, reflect: true }) hideBorder = false;
+
   render() {
     return html`
       <h3>
