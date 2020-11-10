@@ -263,8 +263,8 @@ for (const app of [ActorDirectory, ItemDirectory]) {
         listItem.title = entity.name;
         if (isItem(entity)) {
           listItem.querySelector<HTMLElement>('.entity-name > a')!.textContent =
-            entity.agent.fullName;
-          listItem.dataset.type = entity.agent.fullType;
+            entity.proxy.fullName;
+          listItem.dataset.type = entity.proxy.fullType;
         } else {
           listItem.dataset.type = localize(entity.type);
         }

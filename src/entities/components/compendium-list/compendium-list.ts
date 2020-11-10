@@ -150,9 +150,9 @@ export class CompendiumList extends LitElement {
           content,
           ({ _id }) => _id,
           (entry) => {
-            const type = isItem ? (entry as ItemEP).agent.fullType : '';
+            const type = isItem ? (entry as ItemEP).proxy.fullType : '';
             const finalName = isItem
-              ? (entry as ItemEP).agent.fullName
+              ? (entry as ItemEP).proxy.fullName
               : entry.name;
             const hidden = isHidden(type, finalName);
             if (hidden) return '';

@@ -150,7 +150,7 @@ export class ItemEP extends Item {
     return this.data.type;
   }
 
-  get agent() {
+  get proxy() {
     if (!this.#proxy || this.invalidated) this.#proxy = this.createProxy();
 
     this.invalidated = false;

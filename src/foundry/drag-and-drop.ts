@@ -275,9 +275,9 @@ export const itemDropToItemProxy = async (drop: ItemDrop) => {
   if ('pack' in drop) {
     const pack = game.packs.get(drop.pack);
     const item = await pack?.getEntity(drop.id);
-    if (item instanceof ItemEP) return item.agent;
+    if (item instanceof ItemEP) return item.proxy;
   } else if ('id' in drop) {
-    return game.items.get(drop.id)?.agent;
+    return game.items.get(drop.id)?.proxy;
   } else {
     const actor = drop.tokenId
       ? game.actors.tokens[drop.tokenId] ||
@@ -286,8 +286,8 @@ export const itemDropToItemProxy = async (drop: ItemDrop) => {
       ? game.actors.get(drop.actorId)
       : null;
     return (
-      actor?.items?.get(drop.data?._id)?.agent ||
-      new ItemEP(drop.data, {}).agent
+      actor?.items?.get(drop.data?._id)?.proxy ||
+      new ItemEP(drop.data, {}).proxy
     );
   }
   return null;

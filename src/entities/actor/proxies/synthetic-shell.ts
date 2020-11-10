@@ -55,7 +55,7 @@ export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
   @LazyGetter()
   get availableBrains() {
     const things = new Map<string, PhysicalTech>();
-    for (const { agent } of [...this.items]) {
+    for (const { proxy: agent } of [...this.items]) {
       if (agent.type === ItemType.PhysicalTech && agent.isBrain) {
         things.set(agent.id, agent);
       }
@@ -178,7 +178,7 @@ export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
     const ware: EquippableItem[] = [];
     const software: Software[] = [];
     const effects = new AppliedEffects();
-    for (const { agent } of this.items) {
+    for (const { proxy: agent } of this.items) {
       switch (agent.type) {
         case ItemType.Trait:
           traits.push(agent);

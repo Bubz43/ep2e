@@ -44,7 +44,7 @@ export class ItemEPSheet implements EntitySheet {
   }
 
   private get content() {
-    return renderItemForm(this.item.agent);
+    return renderItemForm(this.item.proxy);
   }
 
   render(force: boolean) {
@@ -100,7 +100,7 @@ export class ItemEPSheet implements EntitySheet {
       {
         key: this.item,
         content: html`${this.windowHeaderButtons} ${this.content}`,
-        name: this.item.agent.fullName,
+        name: this.item.proxy.fullName,
         forceFocus: force,
         adjacentEl: !this.rendered && this.getAdjacentEl(),
       },

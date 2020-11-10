@@ -36,6 +36,7 @@ import { hardeningTypes } from '@src/health/mental-health';
 import { gameSettings, tooltip } from '@src/init';
 import { debounce } from '@src/utility/decorators';
 import type { FieldProps, FieldPropsRenderer } from '@src/utility/field-values';
+import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { cache } from 'lit-html/directives/cache';
 import { classMap } from 'lit-html/directives/class-map';
@@ -200,13 +201,14 @@ export class EgoForm extends mix(LitElement).with(
             >
           </sl-header>
           ${itemGroupKeys.map((key) => {
+            // TODO Psi
             const group = itemGroups[key];
-            return html`
+            return notEmpty(group) ? html`
               <form-items-list
                 .items=${group}
                 label=${localize(key)}
               ></form-items-list>
-            `;
+            ` : ""
           })}
         </sl-dropzone>
         <section>

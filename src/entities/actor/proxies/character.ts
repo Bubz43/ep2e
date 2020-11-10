@@ -13,7 +13,7 @@ import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 export class Character extends ActorProxyBase<ActorType.Character> {
   readonly ego;
 
-  #appliedEffects = new AppliedEffects();
+  private _appliedEffects = new AppliedEffects();
 
   constructor(init: ActorProxyInit<ActorType.Character>) {
     super(init);
@@ -41,6 +41,27 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         }),
       addPsi: this.updater.prop('flags', EP.Name, ItemType.Psi).commit,
     });
+
+    for (const item of this.items) {
+      const { proxy } = item;
+        switch (proxy.type) {
+          case ItemType.Sleight: {
+            egoItems.set(item.id, item)
+            // this.#appliedEffects.add(proxy.currentEffects)
+            break;
+          }
+          case ItemType.Trait: {
+            const collection = proxy.isMorphTrait ? sleeveItems : egoItems;
+            collection.set(item.id, item);
+            this._appliedEffects.add(proxy.currentEffects);
+            break;
+          }
+           
+        
+          default:
+            break;
+        }
+    }
   }
 
   get subtype() {
@@ -48,7 +69,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   }
 
   get appliedEffects() {
-    return this.#appliedEffects as ReadonlyAppliedEffects;
+    return this._appliedEffects as ReadonlyAppliedEffects;
   }
 
   acceptItemAgent(agent: ItemProxy) {

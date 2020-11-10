@@ -56,7 +56,7 @@ export class ItemTrash extends LitElement {
     return html`
       <mwc-list multi @selected=${this.saveRestoreIndex} class="restore-menu">
         ${this.proxy.actor.itemTrash.map((data) => {
-          const { agent } = new ItemEP(data, {});
+          const { proxy: agent } = new ItemEP(data, {});
           return html`
             <mwc-check-list-item twoline left>
               <span>${agent.fullName}</span>

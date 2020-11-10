@@ -234,7 +234,7 @@ export class Ego {
   get itemGroups() {
     const traits: Trait[] = [];
     const sleights: Sleight[] = [];
-    for (const { agent } of this.items) {
+    for (const { proxy: agent } of this.items) {
       if (agent.type === ItemType.Trait) traits.push(agent);
       else if (agent.type === ItemType.Sleight) sleights.push(agent);
     }
@@ -335,7 +335,7 @@ export class Ego {
   }
 
   hasItemProxy(agent: ItemProxy | null | undefined) {
-    return this.items.get(agent?.id)?.agent === agent;
+    return this.items.get(agent?.id)?.proxy === agent;
   }
 
   getCommonSkill(skill: SkillType) {
