@@ -201,4 +201,10 @@ export class Trait
     const { costType, costLabel } = this;
     return `${localize(costType)[0]}${localize('points')[0]} ${costLabel}`;
   }
+
+  checkIfLevelActive(index: number) {
+    return (
+      this.hasMultipleLevels && !!this.embedded && index === this.levelIndex
+    );
+  }
 }

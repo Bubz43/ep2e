@@ -32,7 +32,6 @@ export class TraitFormLevel extends LitElement {
 
   @property({ type: String }) costInfo!: string;
 
-
   private readonly effectOps = addUpdateRemoveFeature<Level['effects'][number]>(
     () => async (newValue) => {
       const newGoals =
@@ -55,15 +54,18 @@ export class TraitFormLevel extends LitElement {
     } ${localize('effects')}`;
   }
 
-  private renderCostInfo() {
-    return html`<span class="cost-info"
-      >(${this.costInfo}: ${this.level.cost})</span
-    >`;
+  private requestAddEffectForm() {
+    this.dispatchEvent(
+      new CustomEvent('request-add-effect-form', {
+        bubbles: true,
+        composed: true,
+      }),
+    );
   }
 
-  private requestAddEffectForm(ev: Event) {
-    (ev.currentTarget as HTMLElement).dispatchEvent(
-      new CustomEvent('request-add-effect-form', {
+  private requestEffectImport() {
+    this.dispatchEvent(
+      new CustomEvent('request-effect-import', {
         bubbles: true,
         composed: true,
       }),
@@ -74,6 +76,21 @@ export class TraitFormLevel extends LitElement {
     return html`
       <sl-header>
         <span slot="heading">${this.heading} ${this.renderCostInfo()}</span>
+        ${this.index !== 0
+          ? html`
+              <mwc-icon-button
+                slot="action"
+                icon="import_export"
+                ?disabled=${this.disabled}
+                @click=${this.requestEffectImport}
+                data-tooltip="${localize('copy')} ${localize(
+                  'level',
+                )} 1 ${localize('effects')} @ x${this.index + 1}"
+                @mouseover=${tooltip.fromData}
+              ></mwc-icon-button>
+            `
+          : ''}
+
         <mwc-icon-button
           ?disabled=${this.disabled}
           icon="add"
@@ -90,6 +107,12 @@ export class TraitFormLevel extends LitElement {
         ?disabled=${this.disabled}
       ></item-form-effects-list>
     `;
+  }
+
+  private renderCostInfo() {
+    return html`<span class="cost-info"
+      >(${this.costInfo}: ${this.level.cost})</span
+    >`;
   }
 }
 

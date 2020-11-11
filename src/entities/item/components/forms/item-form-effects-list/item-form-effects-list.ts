@@ -4,6 +4,7 @@ import { Effect, formatEffect } from '@src/features/effects';
 import {
   AddUpdateRemoveFeature,
   idProp,
+  matchID,
   StringID,
 } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
@@ -31,6 +32,25 @@ export class ItemFormEffectsList extends LitElement {
 
   @property({ type: Boolean }) disabled = false;
 
+  private openDeleteMenu(ev: MouseEvent) {
+    const { effectId } = (ev.currentTarget as HTMLElement).dataset;
+    const effect = this.effects.find(matchID(effectId));
+    if (effect) {
+      openMenu({
+        content: [
+          {
+            label: `${localize('delete')} ${localize(effect.type)} ${localize(
+              'effect',
+            )}`,
+            callback: this.operations.removeCallback(effect.id),
+            icon: html`<mwc-icon>delete_forever</mwc-icon>`
+          },
+        ],
+        position: ev
+      });
+    }
+  }
+
   render() {
     const { effects } = this;
     const commaTarget = effects.length - 1;
@@ -46,7 +66,7 @@ export class ItemFormEffectsList extends LitElement {
                 placement=${Placement.Bottom}
                 .renderOnDemand=${() => html`
                   <sl-popover-section
-                    heading="${localize('edit')} ${localize('effect')}"
+                    heading="${localize('edit')} ${localize(effect.type)} ${localize('effect')}"
                   >
                     <delete-button
                       slot="action"
@@ -64,6 +84,9 @@ export class ItemFormEffectsList extends LitElement {
                   slot="base"
                   ?disabled=${this.disabled}
                   ?data-comma=${index < commaTarget}
+                  data-effect-id=${effect.id}
+                  @contextmenu=${this.openDeleteMenu}
+                  title="${localize(effect.type)} ${localize("effect")}"
                 >
                   ${formatEffect(effect)}
                 </button>

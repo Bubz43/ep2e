@@ -61,23 +61,32 @@ const renderMenuOption = (option: MWCMenuOption) => {
   `;
 };
 
+const elementPosition = (positionElement?: HTMLElement) => {
+  const el = positionElement ?? traverseActiveElements();
+  if (el) {
+    const { top, left } = el?.getBoundingClientRect();
+    return { x: left / 2, y: top / 2 };
+  }
+
+  return {
+    x: window.innerWidth / 2,
+    y: window.innerHeight / 2,
+  };
+};
+
 export const openMenu = ({
   content,
   position,
   header,
 }: {
   content: TemplateResult | MWCMenuOption[];
-  position?:
-    | HTMLElement
-    | { x: number; y: number; currentTarget: EventTarget | null }
-    | null;
+  position?: HTMLElement | { x: number; y: number } | null;
   header?: { heading: string; subheading?: string; img?: string } | null;
 }) => {
   if (Array.isArray(content) && content.length === 0) return;
   const menu = document.querySelector('mwc-menu') || setupMenu();
 
-  // const active = traverseActiveElements();
-  // console.log(active);
+  // TODO Use traverseActiveElement if no position given
 
   if (menu.open) {
     menu.close();
@@ -85,21 +94,18 @@ export const openMenu = ({
     return;
   }
   if (!position) {
-    menu.x = window.innerWidth / 2;
-    menu.y = window.innerHeight / 2;
+    const { x, y } = elementPosition();
+    menu.x = x;
+    menu.y = y;
   } else if (position instanceof HTMLElement) {
-    const { top, left } = position.getBoundingClientRect();
-    menu.x = left / 2;
-    menu.y = top / 2;
+    const { x, y } = elementPosition(position);
+    menu.x = x;
+    menu.y = y;
   } else {
-    if (
-      !position.x &&
-      !position.y &&
-      position.currentTarget instanceof HTMLElement
-    ) {
-      const { top, left } = position.currentTarget.getBoundingClientRect();
-      menu.x = left;
-      menu.y = top;
+    if (!position.x && !position.y) {
+      const { x, y } = elementPosition();
+      menu.x = x;
+      menu.y = y;
     } else {
       menu.x = position.x / 2;
       menu.y = position.y / 2;

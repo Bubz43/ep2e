@@ -2,6 +2,7 @@ import type { FocusTrap } from '@a11y/focus-trap';
 import { LitElement, query, internalProperty } from 'lit-element';
 import { TemplateResult, html, nothing } from 'lit-html';
 import type { Class } from 'type-fest';
+import { traverseActiveElements } from 'weightless';
 
 export const FormDrawer = (Base: Class<LitElement>) => {
   class DrawerUser extends Base {
@@ -50,18 +51,15 @@ export const FormDrawer = (Base: Class<LitElement>) => {
     };
 
     protected setDrawerFromEvent(fn: () => TemplateResult, autoFocus = true) {
-      return (ev: Event) => {
-        const el = ev.composedPath()[0] || ev.currentTarget;
-        this.setDrawer(fn, el, autoFocus);
-      };
+      return () => this.setDrawer(fn, autoFocus);
     }
 
     protected setDrawer(
       fn: () => TemplateResult,
-      openerEl: unknown,
       autoFocus = true,
     ) {
-      this.drawerOpener = openerEl instanceof HTMLElement ? openerEl : null;
+      const activeEl = traverseActiveElements();
+      this.drawerOpener = activeEl instanceof HTMLElement ? activeEl : null;
       this.drawerContentRenderer = fn;
       this._autoFocus = autoFocus;
     }

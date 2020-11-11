@@ -188,7 +188,7 @@ export class EgoFormSkills extends LitElement {
     }
   }
 
-  private openSkillSortMenu(ev: MouseEvent) {
+  private openSkillSortMenu() {
     openMenu({
       header: { heading: `${localize('skill')} ${localize('sort')}` },
       content: enumValues(SkillSort).map((sort) => ({
@@ -196,8 +196,6 @@ export class EgoFormSkills extends LitElement {
         callback: () => this.updateSkillControls({ sort }),
         activated: this.skillControls.sort === sort,
       })),
-      position: ev.currentTarget as HTMLElement,
-      // position: ev
     });
   }
 
@@ -206,8 +204,8 @@ export class EgoFormSkills extends LitElement {
     this.requestUpdate();
   }
 
-  private requestFieldForm(ev: Event) {
-    (ev.currentTarget as HTMLElement).dispatchEvent(
+  private requestFieldForm() {
+    this.dispatchEvent(
       new CustomEvent('open-field-form', { bubbles: true, composed: true }),
     );
   }

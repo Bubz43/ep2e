@@ -30,7 +30,7 @@ import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
 import { range, take, first } from 'remeda';
 import { ItemFormBase } from '../item-form-base';
-import type { TraitFormLevel } from './trait-form-level';
+import { TraitFormLevel } from './trait-form-level';
 import styles from './trait-form.scss';
 import type { UpdatedTraitLevelEvent } from './updated-trait-level-event';
 
@@ -106,15 +106,28 @@ export class TraitForm extends ItemFormBase {
     );
   }
 
+  private copyEffectsToLevel({ currentTarget }: Event) {
+    if (currentTarget instanceof TraitFormLevel) {
+      const baseEffects = this.item.levels[0].effects;
+      const multiplied = baseEffects.map((effect) => ({
+        ...multiplyEffectModifier(effect, currentTarget.index + 1),
+        id: effect.id,
+      }));
+      this.levelOps.update(
+        { effects: multiplied },
+        { id: currentTarget.level.id },
+      );
+    }
+  }
+
   updateLevelCount = ({ levelCount = 1 }: Partial<{ levelCount: number }>) => {
     this.levelCount = levelCount;
     this.updateLevels();
   };
 
   private setAddEffectForm(ev: Event) {
-    const opener = ev.composedPath()[0];
     this.addEffectLevel = (ev.currentTarget as TraitFormLevel).index;
-    this.setDrawer(this.renderEffectCreator, opener);
+    this.setDrawer(this.renderEffectCreator);
   }
 
   private openLevelSelector(ev: MouseEvent) {
@@ -254,7 +267,7 @@ export class TraitForm extends ItemFormBase {
                 {
                   ...cost,
                   label: `${localize('level')} ${index + 1} ${
-                    this.item.costLabel
+                    this.item.costInfo
                   }`,
                 },
                 { min: list[index - 1] + 1 || 1 },
@@ -276,21 +289,16 @@ export class TraitForm extends ItemFormBase {
     level: StringID<Trait['levelInfo']>,
     index: number,
   ) => {
-    const { hasMultipleLevels } = this.item;
     return html`
       <trait-form-level
-        class=${classMap({
-          active:
-            hasMultipleLevels &&
-            !!this.item.embedded &&
-            this.item.levelIndex === index,
-        })}
+        class=${classMap({ active: this.item.checkIfLevelActive(index) })}
         @updated-trait-level=${this.updateTraitLevel}
         @request-add-effect-form=${this.setAddEffectForm}
+        @request-effect-import=${this.copyEffectsToLevel}
         .level=${level}
         index=${index}
         ?disabled=${this.disabled}
-        ?showIndex=${hasMultipleLevels}
+        ?showIndex=${this.item.hasMultipleLevels}
         costInfo=${this.item.costInfo}
       ></trait-form-level>
     `;

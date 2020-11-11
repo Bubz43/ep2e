@@ -1266,7 +1266,7 @@ type LangEntries =
   | 'goals'
   | 'additionalNotes'
   | 'minimumStress'
-  | 'value';
+  | 'value' | "copy"
 type FullNames =
   | 'cog'
   | 'int'
