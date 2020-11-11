@@ -79,6 +79,10 @@ import { HealthStateForm } from './health/components/health-state-form/health-st
 import './init';
 import { EgoFormThreatStress } from './entities/actor/components/ego-form/ego-form-threat-stress';
 import { EgoFormRep } from './entities/actor/components/ego-form/ego-form-rep';
+import { PhysicalServiceForm } from './entities/item/components/forms/physical-service/physical-service-form';
+import { TraitForm } from './entities/item/components/forms/trait/trait-form';
+import { SleightForm } from './entities/item/components/forms/sleight/sleight-form';
+import { PsiForm } from './entities/item/components/forms/psi/psi-form';
 
 customElements.define('app-datepicker', Datepicker);
 
@@ -140,6 +144,10 @@ FormItemsList;
 SleeveFormMovementList;
 
 // Item Forms
+TraitForm;
+SleightForm;
+PsiForm;
+PhysicalServiceForm;
 PhysicalTechForm;
 ItemFormEffectsList;
 

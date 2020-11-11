@@ -16,6 +16,42 @@ export const renderItemForm = (proxy: ItemProxy) => {
         ></entity-form-footer>
       `;
 
+    case ItemType.PhysicalService:
+      return html`
+        <physical-service-form .item=${proxy}></physical-service-form>
+        <entity-form-footer
+          slot="footer"
+          .updater=${proxy.updater.prop('data').nestedStore()}
+        ></entity-form-footer>
+      `;
+
+    case ItemType.Trait:
+      return html`
+        <trait-form .item=${proxy}></trait-form>
+        <entity-form-footer
+          slot="footer"
+          .updater=${proxy.updater.prop('data').nestedStore()}
+        ></entity-form-footer>
+      `;
+
+    case ItemType.Sleight:
+      return html`
+        <sleight-form .item=${proxy}></sleight-form>
+        <entity-form-footer
+          slot="footer"
+          .updater=${proxy.updater.prop('data').nestedStore()}
+        ></entity-form-footer>
+      `;
+
+    case ItemType.Psi:
+      return html`
+        <psi-form .item=${proxy}></psi-form>
+        <entity-form-footer
+          slot="footer"
+          .updater=${proxy.updater.prop('data').nestedStore()}
+        ></entity-form-footer>
+      `;
+
     default:
       return html``;
   }

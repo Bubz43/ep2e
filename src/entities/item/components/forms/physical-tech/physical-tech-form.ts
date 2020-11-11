@@ -40,7 +40,7 @@ export class PhysicalTechForm extends ItemFormBase {
 
   @internalProperty() effectGroup: 'passive' | 'activated' = 'passive';
 
-  private effectsOps = mapToObj(opsGroups, (group) => [
+  private readonly effectsOps = mapToObj(opsGroups, (group) => [
     group === 'effects' ? 'passive' : 'activated',
     addUpdateRemoveFeature(() => this.item.updater.prop('data', group).commit),
   ]);
