@@ -178,6 +178,7 @@ export class Trait
       .trim();
   }
 
+
   // get activeEffects(): AddEffects | null {
   //   const { levelInfo, triggered, hasTriggers } = this;
   //   if (hasTriggers && !triggered) return null;
@@ -195,5 +196,10 @@ export class Trait
 
   get costLabel() {
     return localize(this.isPositive ? 'cost' : 'bonus');
+  }
+
+  get costInfo() {
+    const { costType, costLabel } = this;
+    return `${localize(costType)[0]}${localize("points")[0]} ${costLabel}`
   }
 }

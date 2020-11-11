@@ -116,6 +116,7 @@ export class EgoForm extends mix(LitElement).with(
           slot="header"
           .updateActions=${updater.prop('')}
           type=${localize('ego')}
+          ?disabled=${disabled}
         ></entity-form-header>
         ${this.renderTabBar('tabs')} ${this.renderSidebar()}
         ${cache(this.renderTabbedContent(this.activeTab))}

@@ -49,7 +49,7 @@
 @mixin textButton() {
   button {
     all: unset;
-    &:hover {
+    &:not([disabled]):hover {
       cursor: pointer;
       color: functions.satv(var(--color-secondary), 1.2);
     }

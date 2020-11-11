@@ -7,5 +7,26 @@
 
 :host {
   display: block;
-  
+}
+
+sl-header {
+  & + .info-form {
+    margin: 0.5rem 0 0;
+  }
+}
+
+.info-form {
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: -0.25rem;
+}
+
+sl-group {
+  // font-size: larger;
+  display: flex;
+  margin-left: 0.5rem;
+}
+
+
+.level {
+  list-style: none;
 }

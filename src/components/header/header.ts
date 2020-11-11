@@ -2,6 +2,7 @@ import { customElement, LitElement, property, html } from 'lit-element';
 import styles from './header.scss';
 
 /**
+ * @slot heading
  * @slot action
  * @slot info
  */
@@ -22,7 +23,7 @@ export class Header extends LitElement {
   render() {
     return html`
       <h3>
-        <span>${this.heading}</span>
+        <span><slot name="heading">${this.heading}</slot></span>
         ${this.itemCount !== undefined
           ? html`<span class="count">${this.itemCount}</span>`
           : ''}

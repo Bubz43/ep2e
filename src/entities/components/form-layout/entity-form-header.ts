@@ -3,6 +3,7 @@ import { renderAutoForm } from '@src/components/form/forms';
 import type { UpdateActions, UpdateStore } from '@src/entities/update-store';
 import { closeImagePicker, openImagePicker } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
+import { tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import type { FieldPropsRenderer } from '@src/utility/field-values';
 import { customElement, LitElement, property, html } from 'lit-element';
@@ -10,6 +11,9 @@ import styles from './entity-form-header.scss';
 
 type CommonInfo = { name: string; img: string };
 
+/**
+ * @slot tag
+ */
 @customElement('entity-form-header')
 export class EntityFormHeader extends LitElement {
   static get is() {
@@ -106,23 +110,25 @@ export class EntityFormHeader extends LitElement {
   }
 
   private renderIcon({ name, img }: CommonInfo) {
-    // TODO Reset img on right click options
     const hideImg = this.noDefaultImg && img === CONST.DEFAULT_TOKEN;
     if (hideImg && this.disabled) return '';
-    if (hideImg)
-      return html`<mwc-icon-button
-        icon="insert_photo"
-        class="add-photo"
-        @click=${this.editImg}
-      ></mwc-icon-button>`;
-    return html` <button
-      class="avatar-button"
-      @click=${this.editImg}
-      ?disabled=${this.disabled}
-      @contextmenu=${this.openResetMenu}
-    >
-      <img src=${img} class="avatar" alt="Avatar of ${name}" />
-    </button>`;
+    return hideImg
+      ? html`<mwc-icon-button
+          icon="insert_photo"
+          class="add-photo"
+          data-tooltip="${localize('add')} ${localize('icon')}"
+          @mouseover=${tooltip.fromData}
+          @focus=${tooltip.fromData}
+          @click=${this.editImg}
+        ></mwc-icon-button>`
+      : html` <button
+          class="avatar-button"
+          @click=${this.editImg}
+          ?disabled=${this.disabled}
+          @contextmenu=${this.openResetMenu}
+        >
+          <img src=${img} class="avatar" alt="Avatar of ${name}" />
+        </button>`;
   }
 }
 

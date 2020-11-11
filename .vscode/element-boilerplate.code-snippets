@@ -29,6 +29,7 @@
 			"          slot=\"header\"\r",
 			"          .updateActions=${updater.prop('')}\r",
 			"          type=${localize(type)}\r",
+			"          ?disabled=\\${disabled\\}\r",
 			"        >\r",
 			"        </entity-form-header>\r",
 			"\r",

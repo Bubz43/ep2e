@@ -78,6 +78,8 @@ export class BiologicalForm extends SleeveFormBase {
           slot="header"
           .updateActions=${updater.prop('')}
           type=${localize(type)}
+          ?disabled=${disabled}
+
         >
           ${sleeved ? html` <li slot="tag">${localize('sleeved')}</li> ` : ''}
         </entity-form-header>

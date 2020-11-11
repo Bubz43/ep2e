@@ -136,10 +136,6 @@ export class Ego {
     return this.epData.flex;
   }
 
-  get mentalEdits() {
-    return this.epData.mentalEdits;
-  }
-
   get useThreat() {
     return this.settings.useThreat;
   }
@@ -216,23 +212,9 @@ export class Ego {
     return this.epData.threatDetails.stress;
   }
 
-  get activeForks() {
-    return this.epData.forks;
-  }
-
-  get backups() {
-    return this.epData.backups;
-  }
 
   get useCP() {
     return !!this.epData.points.customization;
-  }
-
-  get hasNotes() {
-    return (
-      this.backups.length + this.activeForks.length + this.mentalEdits.length >
-      0
-    );
   }
 
   @LazyGetter()

@@ -1,3 +1,4 @@
+import { Placement } from '@src/components/popover/popover-options';
 import type { EffectUpdatedEvent } from '@src/features/components/effect-editor/effect-updated-event';
 import { Effect, formatEffect } from '@src/features/effects';
 import {
@@ -42,6 +43,7 @@ export class ItemFormEffectsList extends LitElement {
           (effect, index) => html`
             <li ?data-comma=${index < commaTarget}>
               <sl-popover
+              placement=${Placement.Bottom}
                 .renderOnDemand=${() => html`
                   <sl-popover-section
                     heading="${localize('edit')} ${localize('effect')}"

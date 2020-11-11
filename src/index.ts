@@ -83,6 +83,7 @@ import { PhysicalServiceForm } from './entities/item/components/forms/physical-s
 import { TraitForm } from './entities/item/components/forms/trait/trait-form';
 import { SleightForm } from './entities/item/components/forms/sleight/sleight-form';
 import { PsiForm } from './entities/item/components/forms/psi/psi-form';
+import { TraitFormLevel } from './entities/item/components/forms/trait/trait-form-level';
 
 customElements.define('app-datepicker', Datepicker);
 
@@ -145,6 +146,7 @@ SleeveFormMovementList;
 
 // Item Forms
 TraitForm;
+TraitFormLevel;
 SleightForm;
 PsiForm;
 PhysicalServiceForm;

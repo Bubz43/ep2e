@@ -71,6 +71,8 @@ export class PhysicalTechForm extends ItemFormBase {
           slot="header"
           .updateActions=${updater.prop('')}
           type=${localize(type)}
+          ?disabled=${disabled}
+
         >
           ${isBlueprint
             ? html` <li slot="tag">${localize('blueprint')}</li> `
