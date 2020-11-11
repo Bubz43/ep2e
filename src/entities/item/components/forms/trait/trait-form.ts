@@ -8,6 +8,7 @@ import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import { enumValues, TraitSource, TraitType } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import type { Trait } from '@src/entities/item/proxies/trait';
+import type { EffectCreatedEvent } from '@src/features/components/effect-creator/effect-created-event';
 import { multiplyEffectModifier } from '@src/features/effects';
 import {
   addFeature,
@@ -24,9 +25,11 @@ import {
   property,
   PropertyValues,
 } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
 import { range, take, first } from 'remeda';
 import { ItemFormBase } from '../item-form-base';
+import type { TraitFormLevel } from './trait-form-level';
 import styles from './trait-form.scss';
 import type { UpdatedTraitLevelEvent } from './updated-trait-level-event';
 
@@ -44,6 +47,8 @@ export class TraitForm extends ItemFormBase {
 
   @internalProperty() private levels = range(1, 5);
 
+  @internalProperty() addEffectLevel = 0;
+
   private readonly levelOps = addUpdateRemoveFeature(
     () => this.item.updater.prop('data', 'levels').commit,
   );
@@ -54,6 +59,16 @@ export class TraitForm extends ItemFormBase {
       this.setupLevels(this.item.levels.map((l) => l.cost));
     }
     super.update(changedProps);
+  }
+
+  private addCreatedEffect(ev: EffectCreatedEvent) {
+    const level = this.item.levels[this.addEffectLevel];
+    if (level) {
+      this.levelOps.update(
+        { effects: addFeature(level.effects, ev.effect) },
+        { id: level.id },
+      );
+    }
   }
 
   private setupLevels(current: number[]) {
@@ -91,8 +106,15 @@ export class TraitForm extends ItemFormBase {
 
   updateLevelCount = ({ levelCount = 1 }: Partial<{ levelCount: number }>) => {
     this.levelCount = levelCount;
+    this.addEffectLevel = Math.min(levelCount, this.addEffectLevel);
     this.updateLevels();
   };
+
+  private setAddEffectForm(ev: Event) {
+    const opener = ev.composedPath()[0];
+    this.addEffectLevel = (ev.currentTarget as TraitFormLevel).index;
+    this.setDrawer(this.renderEffectCreator, opener);
+  }
 
   render() {
     const {
@@ -176,20 +198,59 @@ export class TraitForm extends ItemFormBase {
   }
 
   private renderSettings() {
-    const { updater } = this.item;
+    const { updater, embedded, levelIndex, hasMultipleLevels } = this.item;
     const { disabled, levels, levelCount } = this;
     return html`
       <h3>${localize('settings')}</h3>
 
-      ${renderAutoForm({
-        props: { levelCount },
-        update: this.updateLevelCount,
-        fields: ({ levelCount }) =>
-          renderNumberField(
-            { ...levelCount, label: localize('levels') },
-            { min: 1, max: 4 },
-          ),
-      })}
+      <div class="level-settings">
+        ${renderAutoForm({
+          props: { levelCount },
+          update: this.updateLevelCount,
+          classes: 'level-count-form',
+          fields: ({ levelCount }) =>
+            renderNumberField(
+              { ...levelCount, label: localize('levels') },
+              { min: 1, max: 4 },
+            ),
+        })}
+        ${embedded && hasMultipleLevels
+          ? renderAutoForm({
+              props: { level: levelIndex + 1 },
+              update: ({ level = 0 }) => this.item.updateLevel(level - 1),
+              fields: ({ level }) =>
+                renderNumberField(
+                  {
+                    ...level,
+                    label: `${localize('current')} ${localize('level')}`,
+                  },
+                  { min: 1, max: levels.length },
+                ),
+            })
+          : ''}
+      </div>
+      <div class="level-costs">
+        ${take(levels, levelCount).map((cost, index, list) =>
+          renderAutoForm({
+            props: { cost },
+            update: ({ cost }) => {
+              list[index] = cost!;
+              this.setupLevels(list);
+              this.updateLevels();
+            },
+            fields: ({ cost }) =>
+              renderNumberField(
+                {
+                  ...cost,
+                  label: `${localize('level')} ${index + 1} ${
+                    this.item.costLabel
+                  }`,
+                },
+                { min: list[index - 1] + 1 || 1 },
+              ),
+          }),
+        )}
+      </div>
       ${renderUpdaterForm(updater.prop('data'), {
         disabled,
         classes: 'text-areas',
@@ -205,17 +266,47 @@ export class TraitForm extends ItemFormBase {
     level: StringID<Trait['levelInfo']>,
     index: number,
   ) => {
+    const { hasMultipleLevels } = this.item;
     return html`
       <trait-form-level
+        class=${classMap({
+          active:
+            hasMultipleLevels &&
+            !!this.item.embedded &&
+            this.item.levelIndex === index,
+        })}
         @updated-trait-level=${this.updateTraitLevel}
+        @request-add-effect-form=${this.setAddEffectForm}
         .level=${level}
         index=${index}
         ?disabled=${this.disabled}
-        ?showIndex=${this.item.hasMultipleLevels}
+        ?showIndex=${hasMultipleLevels}
         costInfo=${this.item.costInfo}
       ></trait-form-level>
     `;
   };
+
+  private renderEffectCreator() {
+    return html`
+      <h3>${localize('add')} ${localize('effect')}</h3>
+
+      ${this.item.hasMultipleLevels
+        ? html`
+            ${renderAutoForm({
+              props: { level: this.addEffectLevel + 1 },
+              update: ({ level = 0 }) => (this.addEffectLevel = level - 1),
+              classes: 'add-effect-level-selector',
+              fields: ({ level }) =>
+                renderNumberField(level, {
+                  min: 1,
+                  max: this.item.levels.length,
+                }),
+            })}
+          `
+        : ''}
+      <effect-creator @effect-created=${this.addCreatedEffect}></effect-creator>
+    `;
+  }
 }
 
 declare global {

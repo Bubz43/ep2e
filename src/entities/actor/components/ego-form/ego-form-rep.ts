@@ -88,28 +88,3 @@ declare global {
     'ego-form-rep': EgoFormRep;
   }
 }
-
-/*
-renderUpdaterForm(this.repOps, {
-          disabled: this.disabled,
-          classes: "favor-form",
-            fields: ({ refreshTimer, ...favors }) => html`
-              ${[...maxFavors].map(([favor, max]) =>
-                renderNumberField(favors[favor], {
-                  min: 0,
-                  max,
-                }),
-              )}
-              ${renderTimeField(
-                {
-                  ...refreshTimer,
-                  label: localize('progressTowardsRefresh'),
-                },
-                { min: 0, max: CommonInterval.Week },
-              )}
-              <mwc-linear-progress
-                progress=${refreshTimer.value / CommonInterval.Week}
-              ></mwc-linear-progress>
-            `,
-          })
-*/

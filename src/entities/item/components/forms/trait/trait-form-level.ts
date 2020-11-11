@@ -4,6 +4,7 @@ import {
   StringID,
 } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
+import { tooltip } from '@src/init';
 import { customElement, LitElement, property, html } from 'lit-element';
 import styles from './trait-form-level.scss';
 import { UpdatedTraitLevelEvent } from './updated-trait-level-event';
@@ -31,6 +32,7 @@ export class TraitFormLevel extends LitElement {
 
   @property({ type: String }) costInfo!: string;
 
+
   private readonly effectOps = addUpdateRemoveFeature<Level['effects'][number]>(
     () => async (newValue) => {
       const newGoals =
@@ -49,19 +51,38 @@ export class TraitFormLevel extends LitElement {
 
   private get heading() {
     return `${
-      this.showIndex
-        ? `${localize('level')} ${this.index + 1}`
-        : ''
+      this.showIndex ? `${localize('level')} ${this.index + 1}` : ''
     } ${localize('effects')}`;
   }
 
   private renderCostInfo() {
-    return html`<span class="cost-info">(${this.costInfo}: ${this.level.cost})</span>`
+    return html`<span class="cost-info"
+      >(${this.costInfo}: ${this.level.cost})</span
+    >`;
   }
+
+  private requestAddEffectForm(ev: Event) {
+    (ev.currentTarget as HTMLElement).dispatchEvent(
+      new CustomEvent('request-add-effect-form', {
+        bubbles: true,
+        composed: true,
+      }),
+    );
+  }
+
   render() {
     return html`
       <sl-header>
-      <span slot="heading">${this.heading} ${this.renderCostInfo()}</span>
+        <span slot="heading">${this.heading} ${this.renderCostInfo()}</span>
+        <mwc-icon-button
+          ?disabled=${this.disabled}
+          icon="add"
+          slot="action"
+          @click=${this.requestAddEffectForm}
+          data-tooltip="${localize('add')} ${localize('effect')}"
+          @mouseover=${tooltip.fromData}
+          @focus=${tooltip.fromData}
+        ></mwc-icon-button>
       </sl-header>
       <item-form-effects-list
         .effects=${this.level.effects}

@@ -52,10 +52,18 @@ export const FormDrawer = (Base: Class<LitElement>) => {
     protected setDrawerFromEvent(fn: () => TemplateResult, autoFocus = true) {
       return (ev: Event) => {
         const el = ev.composedPath()[0] || ev.currentTarget;
-        this.drawerOpener = el as HTMLElement;
-        this.drawerContentRenderer = fn;
-        this._autoFocus = autoFocus;
+        this.setDrawer(fn, el, autoFocus);
       };
+    }
+
+    protected setDrawer(
+      fn: () => TemplateResult,
+      openerEl: unknown,
+      autoFocus = true,
+    ) {
+      this.drawerOpener = openerEl instanceof HTMLElement ? openerEl : null;
+      this.drawerContentRenderer = fn;
+      this._autoFocus = autoFocus;
     }
   }
   return DrawerUser;

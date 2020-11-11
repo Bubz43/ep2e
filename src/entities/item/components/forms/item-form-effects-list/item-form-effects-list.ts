@@ -41,9 +41,9 @@ export class ItemFormEffectsList extends LitElement {
           sortBy(effects, (effect) => localize(effect.type)),
           idProp,
           (effect, index) => html`
-            <li ?data-comma=${index < commaTarget}>
+            <li>
               <sl-popover
-              placement=${Placement.Bottom}
+                placement=${Placement.Bottom}
                 .renderOnDemand=${() => html`
                   <sl-popover-section
                     heading="${localize('edit')} ${localize('effect')}"
@@ -60,7 +60,11 @@ export class ItemFormEffectsList extends LitElement {
                   </sl-popover-section>
                 `}
               >
-                <button slot="base" ?disabled=${this.disabled}>
+                <button
+                  slot="base"
+                  ?disabled=${this.disabled}
+                  ?data-comma=${index < commaTarget}
+                >
                   ${formatEffect(effect)}
                 </button>
               </sl-popover>

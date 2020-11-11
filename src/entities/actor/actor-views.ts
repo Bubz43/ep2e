@@ -11,7 +11,7 @@ export const renderCharacterView = (proxy: Character, token: MaybeToken) => {
 };
 
 export const renderSleeveForm = (proxy: Sleeve, token: MaybeToken) => {
-  return renderSpecificSleeveForm(proxy, token)
+  return renderSpecificSleeveForm(proxy, token);
 };
 
 export const renderEgoForm = (ego: Ego) => html`

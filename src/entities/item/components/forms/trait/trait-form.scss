@@ -30,3 +30,34 @@ sl-group {
 .level {
   list-style: none;
 }
+
+.level-costs,
+.level-settings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.level-settings {
+  margin-bottom: 0.5rem;
+}
+
+[slot="drawer-content"] {
+  display: flex;
+  flex-flow: column;
+  .text-areas {
+    margin-top: auto;
+  }
+}
+
+
+
+.add-effect-level-selector {
+  margin-bottom: 1rem;
+  width: max-content;
+}
+
+trait-form-level {
+  &.active {
+    border-color: var(--color-primary);
+  }
+}

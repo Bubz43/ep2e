@@ -212,7 +212,6 @@ export class Ego {
     return this.epData.threatDetails.stress;
   }
 
-
   get useCP() {
     return !!this.epData.points.customization;
   }

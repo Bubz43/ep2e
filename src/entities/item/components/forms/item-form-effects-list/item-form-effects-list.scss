@@ -26,6 +26,10 @@ li {
     display: inline-flex;
 
     @include textButton();
-    
+
   }
+}
+
+[data-comma]::after {
+  margin-left: -0.5ch;
 }

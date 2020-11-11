@@ -27,7 +27,6 @@ export class PhysicalServiceForm extends ItemFormBase {
           .updateActions=${updater.prop('')}
           type=${localize(type)}
           ?disabled=${disabled}
-
         >
         </entity-form-header>
 
