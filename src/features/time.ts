@@ -16,12 +16,12 @@ type Options = Partial<{
 export type Timestamp = {
   realTimeMS: number;
   worldTimeMS: number;
-}
+};
 
 export const createTimestamp = createFeature<Timestamp>(() => ({
   realTimeMS: Date.now(),
-  worldTimeMS: currentWorldTimeMS()
-}))
+  worldTimeMS: currentWorldTimeMS(),
+}));
 
 // TODO Time since timestamp
 

@@ -1263,7 +1263,10 @@ type LangEntries =
   | 'z-a'
   | 'leastPoints'
   | 'mostPoints'
-  | 'goals' | "additionalNotes" | "minimumStress" | "value"
+  | 'goals'
+  | 'additionalNotes'
+  | 'minimumStress'
+  | 'value';
 type FullNames =
   | 'cog'
   | 'int'

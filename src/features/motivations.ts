@@ -8,7 +8,7 @@ export enum MotivationStance {
 export type MotivationalGoal = {
   goal: string;
   completed: boolean;
-}
+};
 
 export type Motivation = {
   cause: string;
@@ -24,8 +24,8 @@ export const createMotivation = createFeature<Motivation>(() => ({
 
 export const createMotivationalGoal = createFeature<MotivationalGoal>(() => ({
   completed: false,
-  goal: ""
-}))
+  goal: '',
+}));
 
 export const motivationSort = (a: Motivation, b: Motivation) =>
   a.stance.length - b.stance.length || a.cause.length - b.cause.length;

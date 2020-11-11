@@ -110,7 +110,7 @@ export class AnimatedList extends LitElement {
       fadeOnly,
       transformOrigin,
       slottedItems,
-      stagger
+      stagger,
     } = this;
 
     const keyframes: KeyframeEffect[] = [];

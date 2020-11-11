@@ -788,9 +788,6 @@
                 "accumulatedTime": {
                   "type": "number"
                 },
-                "additionalNotes": {
-                  "type": "string"
-                },
                 "appliedSubstances": {
                   "items": {
                     "additionalProperties": false,
@@ -937,41 +934,6 @@
                     "wil"
                   ],
                   "type": "object"
-                },
-                "backups": {
-                  "items": {
-                    "additionalProperties": false,
-                    "properties": {
-                      "backupId": {
-                        "type": "string"
-                      },
-                      "id": {
-                        "type": "string"
-                      },
-                      "packId": {
-                        "type": "string"
-                      },
-                      "realTimeMS": {
-                        "type": "number"
-                      },
-                      "storageLocation": {
-                        "type": "string"
-                      },
-                      "worldTimeMS": {
-                        "type": "number"
-                      }
-                    },
-                    "required": [
-                      "backupId",
-                      "id",
-                      "packId",
-                      "realTimeMS",
-                      "storageLocation",
-                      "worldTimeMS"
-                    ],
-                    "type": "object"
-                  },
-                  "type": "array"
                 },
                 "characterDetails": {
                   "additionalProperties": false,
@@ -1286,45 +1248,6 @@
                     }
                   ]
                 },
-                "forks": {
-                  "items": {
-                    "additionalProperties": false,
-                    "properties": {
-                      "forkId": {
-                        "type": "string"
-                      },
-                      "forkType": {
-                        "$ref": "#/definitions/Fork"
-                      },
-                      "id": {
-                        "type": "string"
-                      },
-                      "notes": {
-                        "type": "string"
-                      },
-                      "packId": {
-                        "type": "string"
-                      },
-                      "realTimeMS": {
-                        "type": "number"
-                      },
-                      "worldTimeMS": {
-                        "type": "number"
-                      }
-                    },
-                    "required": [
-                      "forkId",
-                      "forkType",
-                      "id",
-                      "notes",
-                      "packId",
-                      "realTimeMS",
-                      "worldTimeMS"
-                    ],
-                    "type": "object"
-                  },
-                  "type": "array"
-                },
                 "homeDevice": {
                   "additionalProperties": false,
                   "properties": {
@@ -1343,33 +1266,6 @@
                 },
                 "longRecharge": {
                   "$ref": "#/definitions/RechargeData"
-                },
-                "mentalEdits": {
-                  "items": {
-                    "additionalProperties": false,
-                    "properties": {
-                      "edit": {
-                        "type": "string"
-                      },
-                      "id": {
-                        "type": "string"
-                      },
-                      "realTimeMS": {
-                        "type": "number"
-                      },
-                      "worldTimeMS": {
-                        "type": "number"
-                      }
-                    },
-                    "required": [
-                      "edit",
-                      "id",
-                      "realTimeMS",
-                      "worldTimeMS"
-                    ],
-                    "type": "object"
-                  },
-                  "type": "array"
                 },
                 "mentalHealth": {
                   "additionalProperties": false,
@@ -2041,10 +1937,8 @@
               },
               "required": [
                 "accumulatedTime",
-                "additionalNotes",
                 "appliedSubstances",
                 "aptitudes",
-                "backups",
                 "characterDetails",
                 "combatState",
                 "egoType",
@@ -2053,10 +1947,8 @@
                 "fieldSkills",
                 "flex",
                 "forkType",
-                "forks",
                 "homeDevice",
                 "longRecharge",
-                "mentalEdits",
                 "mentalHealth",
                 "motivations",
                 "network",

@@ -41,7 +41,6 @@ sl-form {
   }
 }
 
-
 header {
   position: sticky;
   top: 0;
@@ -50,11 +49,10 @@ header {
   z-index: 1;
   display: grid;
   grid-template-areas:
-  "totals add"
-  "controls controls";
+    'totals add'
+    'controls controls';
   gap: 0.25rem;
   box-shadow: 0 0 4px black;
-
 }
 
 .add-field-button {

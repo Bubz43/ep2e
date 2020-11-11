@@ -31,6 +31,7 @@ import {
   StringID,
 } from '@src/features/feature-helpers';
 import { createMotivation, Motivation } from '@src/features/motivations';
+import type { RepNetwork } from '@src/features/reputations';
 import type { Aptitudes } from '@src/features/skills';
 import {
   handleDrop,
@@ -73,7 +74,7 @@ const itemGroupKeys = ['sleights', 'traits'] as const;
 @customElement('ego-form')
 export class EgoForm extends mix(LitElement).with(
   FormDrawer,
-  TabsMixin(['details', 'skills', 'reps', 'notes']),
+  TabsMixin(['details', 'skills', 'reps']),
 ) {
   static get is() {
     return 'ego-form' as const;
@@ -85,14 +86,6 @@ export class EgoForm extends mix(LitElement).with(
 
   private readonly motivationOps = addUpdateRemoveFeature(
     () => this.ego.updater.prop('data', 'motivations').commit,
-  );
-
-  private readonly forkOps = addUpdateRemoveFeature(
-    () => this.ego.updater.prop('data', 'forks').commit,
-  );
-
-  private readonly backupOps = addUpdateRemoveFeature(
-    () => this.ego.updater.prop('data', 'backups').commit,
   );
 
   private updateMotivation({ changed, id }: UpdatedMotivationEvent) {
@@ -134,15 +127,6 @@ export class EgoForm extends mix(LitElement).with(
                 .updateActions=${updater.prop('data', 'description')}
               ></editor-wrapper>
             `
-          : activeTab === 'notes'
-          ? html`
-              <editor-wrapper
-                slot="description"
-                ?disabled=${disabled}
-                .updateActions=${updater.prop('data', 'additionalNotes')}
-                heading=${localize('additionalNotes')}
-              ></editor-wrapper>
-            `
           : ''}
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -165,9 +149,6 @@ export class EgoForm extends mix(LitElement).with(
 
       case 'reps':
         return this.renderReputations();
-
-      case 'notes':
-        return html`<div slot="details">${this.renderNotes()}</div>`;
     }
   }
 
@@ -535,61 +516,17 @@ export class EgoForm extends mix(LitElement).with(
 
   private renderReputations() {
     return html`<section slot="details">
-      <!-- <div> -->
-      ${repeat(this.ego.reps.keys(), identity, (network) => {
-        return html`
-          <ego-form-rep
-            .repOps=${this.ego.updater.prop('data', 'reps', network)}
-            network=${network}
-            ?disabled=${this.ego.disabled}
-          ></ego-form-rep>
-        `;
-      })}
-      <!-- </div> -->
+      ${repeat(this.ego.reps.keys(), identity, this.renderRep)}
     </section>`;
   }
 
-  private renderNotes() {
-    const { mentalEdits, activeForks, backups, disabled } = this.ego;
-    return html`
-      <section>
-        <sl-header
-          heading=${localize('mentalEdits')}
-          itemCount=${mentalEdits.length}
-          ?hideBorder=${!mentalEdits.length}
-          ><mwc-icon-button
-            slot="action"
-            icon="add"
-            ?disabled=${disabled}
-          ></mwc-icon-button
-        ></sl-header>
-      </section>
-      <section>
-        <sl-header
-          heading=${localize('forks')}
-          itemCount=${activeForks.length}
-          ?hideBorder=${!activeForks.length}
-          ><mwc-icon-button
-            slot="action"
-            icon="add"
-            ?disabled=${disabled}
-          ></mwc-icon-button
-        ></sl-header>
-      </section>
-      <section>
-        <sl-header
-          heading=${localize('backups')}
-          itemCount=${backups.length}
-          ?hideBorder=${!backups.length}
-          ><mwc-icon-button
-            slot="action"
-            icon="add"
-            ?disabled=${disabled}
-          ></mwc-icon-button
-        ></sl-header>
-      </section>
-    `;
-  }
+  private renderRep = (network: RepNetwork) => html`
+    <ego-form-rep
+      .repOps=${this.ego.updater.prop('data', 'reps', network)}
+      network=${network}
+      ?disabled=${this.ego.disabled}
+    ></ego-form-rep>
+  `;
 }
 
 declare global {

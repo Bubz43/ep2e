@@ -3,17 +3,12 @@ import { LazyRipple } from '@src/components/mixins/lazy-ripple';
 import type { Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import type { FieldPropsRenderer } from '@src/utility/field-values';
-import {
-  LitElement,
-  property,
-  html,
-  internalProperty,
-} from 'lit-element';
+import { LitElement, property, html, internalProperty } from 'lit-element';
 import mix from 'mix-with/lib';
 import { compact } from 'remeda';
 import styles from './ego-form-skill.scss';
 
-export type PointsFields = Record<'points' | 'total', number>
+export type PointsFields = Record<'points' | 'total', number>;
 
 export abstract class EgoFormSkillBase extends mix(LitElement).with(
   LazyRipple,
@@ -81,15 +76,16 @@ export abstract class EgoFormSkillBase extends mix(LitElement).with(
           `${localize('FULL', skill.linkedAptitude)}
           ${skill.aptMultiplier !== 1 ? `x${skill.aptMultiplier}` : ''}`,
           localize(skill.category),
-          skill.points === 0 ? localize("defaulting") : ""
+          skill.points === 0 ? localize('defaulting') : '',
         ]).join(' | ')}
       </span>
     </button>`;
   }
 
-  protected renderPointsFormFields: FieldPropsRenderer<
-  PointsFields
-  > = ({ points, total }) => [
+  protected renderPointsFormFields: FieldPropsRenderer<PointsFields> = ({
+    points,
+    total,
+  }) => [
     renderNumberInput(points, {
       min: 0,
       max: 98,

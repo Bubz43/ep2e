@@ -159,7 +159,7 @@ export class EgoFormSkills extends LitElement {
       if (controls.sort) this.skillSort = skillSort(controls.sort);
       if (controls.filter !== undefined) this.setupFiltered();
       await this.requestUpdate();
-      if (controls.filter) this.scrollListToTop()
+      if (controls.filter) this.scrollListToTop();
     },
     200,
     false,

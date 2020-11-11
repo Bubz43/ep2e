@@ -24,7 +24,7 @@ li {
   li:not(.label) {
     margin-left: 0.5ch;
     display: inline-flex;
-    
+
     @include textButton();
   }
 }

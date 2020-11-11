@@ -9,9 +9,9 @@ import { EgoFormSkillBase, PointsFields } from './ego-form-skill-base';
 import styles from './ego-form-skill.scss';
 
 const renderFields: FieldPropsRenderer<SkillData> = ({ specialization }) =>
-renderTextInput(specialization, {
-  placeholder: localize('specialization'),
-})
+  renderTextInput(specialization, {
+    placeholder: localize('specialization'),
+  });
 
 @customElement('ego-form-skill')
 export class EgoFormSkill extends EgoFormSkillBase {
@@ -23,12 +23,14 @@ export class EgoFormSkill extends EgoFormSkillBase {
 
   @property({ attribute: false }) skill!: FullSkill;
 
-  @property({ attribute: false }) skillUpdate!: (changed: Partial<SkillData>) => void
+  @property({ attribute: false }) skillUpdate!: (
+    changed: Partial<SkillData>,
+  ) => void;
 
   private updatePoints = (changed: Partial<PointsFields>) => {
     const newPoints = this.computePoints(changed);
-    if (newPoints !== undefined) this.skillUpdate({ points: newPoints })
-  }
+    if (newPoints !== undefined) this.skillUpdate({ points: newPoints });
+  };
 
   get backLabel() {
     return this.skill.name;
@@ -39,13 +41,15 @@ export class EgoFormSkill extends EgoFormSkillBase {
       <div class="main ${classMap({ edit: this.editMain })}">
         <div class="edits">
           <div class="buttons">${this.renderEditCancelButton()}</div>
-          ${this.editMain ?renderAutoForm({
-            classes: 'main-form',
-            disabled: this.disabled,
-            props: this.skill,
-            update: this.skillUpdate,
-            fields: renderFields,
-          }) : ""}
+          ${this.editMain
+            ? renderAutoForm({
+                classes: 'main-form',
+                disabled: this.disabled,
+                props: this.skill,
+                update: this.skillUpdate,
+                fields: renderFields,
+              })
+            : ''}
         </div>
         ${this.renderEditToggle()}
       </div>

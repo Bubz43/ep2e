@@ -8,15 +8,14 @@
 :host {
   display: block;
   padding: 0.5rem 0;
-
 }
 
 .rep-form {
   grid-template-columns: auto 1fr 110px;
   column-gap: 0.5rem;
-  grid-template-areas: 
-  "track name score"
-  "track favors score";
+  grid-template-areas:
+    'track name score'
+    'track favors score';
 
   align-items: center;
   .network-abbreviation {
@@ -35,7 +34,7 @@
   sl-field {
     grid-area: score;
     padding: 0;
-    margin-bottom: -0.5rem
+    margin-bottom: -0.5rem;
   }
 
   .favors {
@@ -47,7 +46,6 @@
   @include truncate(100%);
   grid-area: name;
 }
-
 
 .favors {
   display: grid;

@@ -56,7 +56,7 @@ export class ToolTip extends LitElement {
     position?: NanoPopPosition;
   }) {
     if (this.listenerUnsub) this.detach(false);
-    this.updateContent(content)
+    this.updateContent(content);
     this.visible = true;
     requestAnimationFrame(() => reposition(el, this, { position, margin: 4 }));
     this.listenerUnsub = addListener(el, leaveEvents, () => this.detach(true));

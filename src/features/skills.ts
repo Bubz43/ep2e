@@ -262,7 +262,7 @@ export const skillFilterCheck = (filter: string) => {
         fullName,
         localize(category),
         linkedAptitude ? localize('FULL', linkedAptitude) : '',
-        points === 0 ? localize("defaulting") : ""
+        points === 0 ? localize('defaulting') : '',
       ]).join('__'),
     );
   };

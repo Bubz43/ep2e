@@ -7,8 +7,7 @@
 
 :host {
   display: grid;
-  grid-template-areas: 
-  "button points total";
+  grid-template-areas: 'button points total';
   padding: 0 1.5rem;
   grid-template-columns: 1fr auto auto;
   position: relative;
@@ -18,9 +17,7 @@
 
   --mdc-ripple-hover-opacity: 0.03;
   --mdc-ripple-focus-opacity: 0.06;
-
 }
-
 
 .name {
   font-size: larger;
@@ -37,7 +34,7 @@
     font-size: 2.2rem;
     text-align: center;
     width: 4ch;
-    font-family: var(--font-1);;
+    font-family: var(--font-1);
     box-sizing: border-box;
     padding: 0.5rem;
     transition: opacity 200ms;
@@ -91,7 +88,6 @@
   }
 }
 
-
 .edits {
   --mdc-theme-primary: var(--color-primary-alt);
   display: flex;
@@ -112,7 +108,6 @@
   }
 }
 
-
 .main-form {
   display: flex;
   input {
@@ -131,11 +126,10 @@
       z-index: 1;
     }
     &:nth-of-type(2n) {
-      margin-left: 0.5ch
+      margin-left: 0.5ch;
     }
   }
 }
-
 
 :host([filtered]) {
   opacity: 0.5;

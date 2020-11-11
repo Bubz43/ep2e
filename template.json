@@ -176,8 +176,6 @@
       "templates": [
         "Common"
       ],
-      "additionalNotes": "",
-      "mentalEdits": [],
       "fakeId": "",
       "aptitudes": {
         "cog": 10,
@@ -392,8 +390,6 @@
           "notes": ""
         }
       },
-      "forks": [],
-      "backups": [],
       "appliedSubstances": [],
       "combatState": {
         "complexAim": false,

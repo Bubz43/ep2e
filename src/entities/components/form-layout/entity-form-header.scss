@@ -106,7 +106,6 @@ sl-form {
 .add-photo {
   --mdc-icon-button-size: 2.5rem;
   grid-area: avatar;
-
 }
 
 .avatar-button {
@@ -126,13 +125,11 @@ sl-form {
       filter: drop-shadow(2px 2px 3px var(--color-disabled));
     }
   }
-  
+
   &:focus {
     outline: 2px solid var(--color-secondary);
   }
-
 }
-
 
 .avatar {
   height: 66px;

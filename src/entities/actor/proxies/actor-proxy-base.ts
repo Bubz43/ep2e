@@ -1,4 +1,7 @@
-import { openWindow, closeWindow } from '@src/components/window/window-controls';
+import {
+  openWindow,
+  closeWindow,
+} from '@src/components/window/window-controls';
 import { SlWindowEventName } from '@src/components/window/window-options';
 import { EP } from '@src/foundry/system';
 import type { ActorType } from '../../entity-types';
@@ -107,7 +110,7 @@ export abstract class ActorProxyBase<T extends ActorType> {
     {
       win,
       wasConnected,
-    }: Pick<ReturnType<typeof openWindow>, "win" | "wasConnected">
+    }: Pick<ReturnType<typeof openWindow>, 'win' | 'wasConnected'>,
   ) {
     const { actor } = this;
     actor.subscriptions.subscribe(updater, {
@@ -125,9 +128,8 @@ export abstract class ActorProxyBase<T extends ActorType> {
           actor.subscriptions.unsubscribe(updater);
           closeWindow(updater);
         },
-        { once: true }
+        { once: true },
       );
     }
   }
-
 }

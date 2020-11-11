@@ -187,7 +187,8 @@ export const renderRadio = ({
     value=${value}
     ?disabled=${disabled}
     @keydown=${clickOnEnter}
-    style="margin-right: -.4rem";
+    style="margin-right: -.4rem"
+    ;
   ></mwc-radio>
 `;
 

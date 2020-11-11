@@ -44,8 +44,8 @@ export const FormDrawer = (Base: Class<LitElement>) => {
     protected closeDrawer = () => {
       this.drawerContentRenderer = null;
       // requestAnimationFrame(() => {
-        if (this.drawerOpener?.isConnected) this.drawerOpener.focus();
-        this.drawerOpener = null;
+      if (this.drawerOpener?.isConnected) this.drawerOpener.focus();
+      this.drawerOpener = null;
       // });
     };
 

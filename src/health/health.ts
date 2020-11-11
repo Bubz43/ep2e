@@ -4,7 +4,11 @@ import {
   createFeature,
   StringID,
 } from '@src/features/feature-helpers';
-import { Timestamp, currentWorldTimeMS, createTimestamp } from '@src/features/time';
+import {
+  Timestamp,
+  currentWorldTimeMS,
+  createTimestamp,
+} from '@src/features/time';
 import type { Abbreviation } from '@src/foundry/lang-schema';
 import { LangEntry, localize } from '@src/foundry/localization';
 import type { ValuedProp } from '@src/utility/field-values';

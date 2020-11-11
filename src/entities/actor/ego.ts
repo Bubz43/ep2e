@@ -301,7 +301,7 @@ export class Ego {
       if (niche) details.push({ label: localize('niche'), value: niche });
       if (numbers) details.push({ label: localize('numbers'), value: numbers });
       details.push({ label: localize('threatLevel'), value: localize(level) });
-      if (stress.sv) details.push(this.stressValueInfo)
+      if (stress.sv) details.push(this.stressValueInfo);
     }
 
     return details;

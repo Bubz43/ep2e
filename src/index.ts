@@ -116,7 +116,7 @@ EgoFormSkill;
 EgoFormFieldSkill;
 EgoFormFieldSkillCreator;
 EgoFormThreatStress;
-EgoFormRep
+EgoFormRep;
 
 //Feature Editors
 EffectCreator;

@@ -27,7 +27,7 @@ export type RepData = {
   refreshTimer: number;
 } & Record<ConsumableFavor, number>;
 
-export type EgoRepData = RepData & { track: boolean }
+export type EgoRepData = RepData & { track: boolean };
 
 export type FakeIdRepIdentifier = { fakeEgoId: string; repId: string };
 

@@ -18,16 +18,13 @@ li {
   margin-right: 1ch;
 }
 
-
 .movement-list {
   margin: 0.25rem 0.5rem;
   display: flex;
   flex-flow: row wrap;
 }
 
-
 .movement-rate {
-  
   @include textButton();
   sup {
     vertical-align: text-top;

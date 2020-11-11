@@ -21,7 +21,6 @@ export const renderItemForm = (proxy: ItemProxy) => {
   }
 };
 
-
 export const openPsiFormWindow = ({
   psi,
   forceFocus,
@@ -39,6 +38,6 @@ export const openPsiFormWindow = ({
       forceFocus,
       adjacentEl,
     },
-    { resizable: ResizeOption.Vertical }
+    { resizable: ResizeOption.Vertical },
   );
 };

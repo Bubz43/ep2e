@@ -14,7 +14,6 @@ import type {
   Activation,
   AptitudeType,
   AreaEffectType,
-  ArmorWare,
   AttackTrait,
   BlueprintType,
   BotType,
@@ -40,7 +39,6 @@ import type {
   RangedWeaponAccessory,
   RangedWeaponTrait,
   RechargeType,
-  ShellHostType,
   ShellType,
   SleightDuration,
   SleightSpecial,
@@ -55,21 +53,19 @@ import type {
   TraitType,
   VehicleType,
 } from '@src/data-enums';
-import type { ItemType, ActorType } from '@src/entities/entity-types';
-import type { AccessPrivilege } from '@src/features/account-shell';
+import type { ActorType, ItemType } from '@src/entities/entity-types';
 import type { ActionType, ActiveTaskAction } from '@src/features/actions';
 import type { ConditionType } from '@src/features/conditions';
 import type { Effect } from '@src/features/effects';
 import type { FiringMode } from '@src/features/firing-modes';
-import type {
-  ActiveForkData,
-  EgoBackupData,
-  MentalEdit,
-} from '@src/features/ego-notes';
 import type { Motivation } from '@src/features/motivations';
 import type { MovementRate } from '@src/features/movement';
 import type { RechargeData } from '@src/features/recharge';
-import type { EgoRepData, RepBase, RepData, RepNetwork } from '@src/features/reputations';
+import type {
+  EgoRepData,
+  RepBase,
+  RepNetwork,
+} from '@src/features/reputations';
 import type { Size } from '@src/features/size';
 import type {
   Aptitudes,
@@ -179,10 +175,6 @@ export type EgoData = {
       notes: string;
     };
   }>;
-  mentalEdits: StringID<MentalEdit>[];
-  forks: StringID<ActiveForkData>[];
-  backups: StringID<EgoBackupData>[];
-  additionalNotes: string;
 };
 
 export type AppliedSubstanceBase = {

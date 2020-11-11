@@ -18,8 +18,8 @@ export const TabsMixin = <T extends LangEntry>(tabs: readonly T[]) => (
     }
 
     protected get activeTab() {
-      const tabEl = this.tabElements[this.tabBar?.activeIndex || 0]
-      return (tabEl?.dataset.tab as T) ?? tabs[0]
+      const tabEl = this.tabElements[this.tabBar?.activeIndex || 0];
+      return (tabEl?.dataset.tab as T) ?? tabs[0];
     }
 
     protected get tabElements() {

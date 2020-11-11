@@ -114,16 +114,20 @@ export class FormMotivationItem extends LitElement {
         class="goals-toggle"
         label="${localize('goals')}: ${motivation.goals.length}"
         ?disabled=${motivation.goals.length === 0}
-        icon=${ifDefined(notEmpty(motivation.goals) ? this.expandGoals
-          ? 'keyboard_arrow_down'
-          : 'keyboard_arrow_left' : undefined)}
+        icon=${ifDefined(
+          notEmpty(motivation.goals)
+            ? this.expandGoals
+              ? 'keyboard_arrow_down'
+              : 'keyboard_arrow_left'
+            : undefined,
+        )}
         trailingIcon
       ></mwc-button>
 
       <mwc-icon-button
         icon="add"
         class="new-goal-button"
-        data-tooltip="${localize("add")} ${localize("goal")}"
+        data-tooltip="${localize('add')} ${localize('goal')}"
         @mouseenter=${tooltip.fromData}
         @focus=${tooltip.fromData}
         ?disabled=${disabled}

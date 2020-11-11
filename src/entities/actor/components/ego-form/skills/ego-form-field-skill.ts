@@ -48,7 +48,7 @@ export class EgoFormFieldSkill extends EgoFormSkillBase {
   }
 
   get backLabel() {
-    return localize(this.skill.fieldSkill)
+    return localize(this.skill.fieldSkill);
   }
 
   render() {
@@ -63,13 +63,15 @@ export class EgoFormFieldSkill extends EgoFormSkillBase {
               tabindex=${this.editMain ? 0 : -1}
             ></delete-button>
           </div>
-          ${this.editMain ? renderAutoForm({
-            classes: 'main-form',
-            disabled: this.disabled,
-            props: this.skill,
-            update: this.updateSkill,
-            fields: renderFields,
-          }) : ""}
+          ${this.editMain
+            ? renderAutoForm({
+                classes: 'main-form',
+                disabled: this.disabled,
+                props: this.skill,
+                update: this.updateSkill,
+                fields: renderFields,
+              })
+            : ''}
         </div>
         ${this.renderEditToggle()}
       </div>
