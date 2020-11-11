@@ -1,3 +1,4 @@
+import { LazyGetter } from 'lazy-get-decorator';
 import type { Mutable, RequireAtLeastOne } from 'type-fest';
 import type { ActorEP } from '../actor/actor';
 import { ItemType, ActorType } from '../entity-types';
@@ -67,10 +68,8 @@ export type InventoryItem =
 
 export class ItemEP extends Item {
   private invalidated = true;
-  readonly #subscribers = new EntitySubscription<this>();
-  #updater?: UpdateStore<ItemDatas>;
-  #proxy?: ItemProxy;
-  #operations?: Operations;
+  readonly _subscribers = new EntitySubscription<this>();
+  private _proxy?: ItemProxy;
 
   invalidate() {
     this.invalidated = true;
@@ -81,31 +80,22 @@ export class ItemEP extends Item {
   }
 
   get subscriptions() {
-    return this.#subscribers as Subscribable<this>;
+    return this._subscribers as Subscribable<this>;
   }
 
+  @LazyGetter()
   get updater() {
-    if (!this.#updater) {
-      this.#updater = new UpdateStore({
-        getData: () => this.data,
-        isEditable: () => !!this.owner && !this.compendium?.locked,
-        setData: (changedData) =>
-          this.actor
-            ? this.actor.itemOperations.update({ ...changedData, _id: this.id })
-            : this.update(changedData, {}),
-      });
-    }
-    return this.#updater;
-  }
-
-  private proxyInit<T extends ItemDatas>(data: T) {
-    return {
-      data,
-      updater: (this.updater as unknown) as UpdateStore<T>,
-      embedded: this.actor?.name,
-      ...this.operations,
-      // actorIdentifiers: this.actor?.identifiers,
-    } as const;
+    return new UpdateStore({
+      getData: () => this.data,
+      isEditable: () =>
+        !!this.owner &&
+        (this.actor ? this.actor.editable : true) &&
+        !this.compendium?.locked,
+      setData: (changedData) =>
+        this.actor
+          ? this.actor.itemOperations.update({ ...changedData, _id: this.id })
+          : this.update(changedData, {}),
+    });
   }
 
   get sheet() {
@@ -117,15 +107,13 @@ export class ItemEP extends Item {
     return new ItemEPSheet(this);
   }
 
+  @LazyGetter()
   get operations() {
-    if (!this.#operations) {
-      this.#operations = {
-        openForm: () => this.sheet?.render(true),
-        deleteSelf: () =>
-          this.actor?.itemOperations.remove(this.id) ?? this.delete({}),
-      };
-    }
-    return this.#operations;
+    return {
+      openForm: () => this.sheet?.render(true),
+      deleteSelf: () =>
+        this.actor?.itemOperations.remove(this.id) ?? this.delete({}),
+    };
   }
 
   prepareData() {
@@ -134,7 +122,7 @@ export class ItemEP extends Item {
   }
 
   render(force: boolean, context: Record<string, unknown>) {
-    this.#subscribers.updateSubscribers(this);
+    this._subscribers.updateSubscribers(this);
     super.render(force, context);
   }
 
@@ -151,10 +139,10 @@ export class ItemEP extends Item {
   }
 
   get proxy() {
-    if (!this.#proxy || this.invalidated) this.#proxy = this.createProxy();
+    if (!this._proxy || this.invalidated) this._proxy = this.createProxy();
 
     this.invalidated = false;
-    return this.#proxy;
+    return this._proxy;
   }
 
   private createProxy() {
@@ -216,8 +204,18 @@ export class ItemEP extends Item {
     }
   }
 
+  private proxyInit<T extends ItemDatas>(data: T) {
+    return {
+      data,
+      updater: (this.updater as unknown) as UpdateStore<T>,
+      embedded: this.actor?.name,
+      ...this.operations,
+      // actorIdentifiers: this.actor?.identifiers,
+    } as const;
+  }
+
   _onDelete(options: unknown, userId: string) {
     super._onDelete(options, userId);
-    this.#subscribers.unsubscribeAll();
+    this._subscribers.unsubscribeAll();
   }
 }

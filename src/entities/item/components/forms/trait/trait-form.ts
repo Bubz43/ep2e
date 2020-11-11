@@ -18,6 +18,7 @@ import {
   updateFeature,
 } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
+import { openMenu } from '@src/open-menu';
 import {
   customElement,
   html,
@@ -56,6 +57,7 @@ export class TraitForm extends ItemFormBase {
   update(changedProps: PropertyValues) {
     if (changedProps.has('item')) {
       this.levelCount = this.item.levels.length;
+      this.addEffectLevel = Math.min(this.levelCount, this.addEffectLevel);
       this.setupLevels(this.item.levels.map((l) => l.cost));
     }
     super.update(changedProps);
@@ -106,7 +108,6 @@ export class TraitForm extends ItemFormBase {
 
   updateLevelCount = ({ levelCount = 1 }: Partial<{ levelCount: number }>) => {
     this.levelCount = levelCount;
-    this.addEffectLevel = Math.min(levelCount, this.addEffectLevel);
     this.updateLevels();
   };
 
@@ -114,6 +115,19 @@ export class TraitForm extends ItemFormBase {
     const opener = ev.composedPath()[0];
     this.addEffectLevel = (ev.currentTarget as TraitFormLevel).index;
     this.setDrawer(this.renderEffectCreator, opener);
+  }
+
+  private openLevelSelector(ev: MouseEvent) {
+    const { levelIndex, levels } = this.item;
+    openMenu({
+      header: { heading: `${localize('current')} ${localize('level')}` },
+      content: levels.map((_, index) => ({
+        label: `${localize('level')} ${index + 1}`,
+        callback: () => this.item.updateLevel(index),
+        activated: levelIndex === index,
+      })),
+      position: ev,
+    });
   }
 
   render() {
@@ -125,6 +139,7 @@ export class TraitForm extends ItemFormBase {
       levels,
       restrictions,
       triggers,
+      embedded,
     } = this.item;
     const { disabled } = this;
     return html`
@@ -145,6 +160,17 @@ export class TraitForm extends ItemFormBase {
               ? ''
               : html`
                   <sl-header heading=${localize('details')}>
+                    ${embedded && hasMultipleLevels
+                      ? html`
+                          <mwc-icon-button
+                            class="level-selector"
+                            slot="action"
+                            icon="list"
+                            ?disabled=${disabled}
+                            @click=${this.openLevelSelector}
+                          ></mwc-icon-button>
+                        `
+                      : ''}
                     <mwc-icon-button
                       slot="action"
                       icon="settings"
@@ -198,8 +224,7 @@ export class TraitForm extends ItemFormBase {
   }
 
   private renderSettings() {
-    const { updater, embedded, levelIndex, hasMultipleLevels } = this.item;
-    const { disabled, levels, levelCount } = this;
+    const { levels, levelCount } = this;
     return html`
       <h3>${localize('settings')}</h3>
 
@@ -214,20 +239,6 @@ export class TraitForm extends ItemFormBase {
               { min: 1, max: 4 },
             ),
         })}
-        ${embedded && hasMultipleLevels
-          ? renderAutoForm({
-              props: { level: levelIndex + 1 },
-              update: ({ level = 0 }) => this.item.updateLevel(level - 1),
-              fields: ({ level }) =>
-                renderNumberField(
-                  {
-                    ...level,
-                    label: `${localize('current')} ${localize('level')}`,
-                  },
-                  { min: 1, max: levels.length },
-                ),
-            })
-          : ''}
       </div>
       <div class="level-costs">
         ${take(levels, levelCount).map((cost, index, list) =>
@@ -251,8 +262,7 @@ export class TraitForm extends ItemFormBase {
           }),
         )}
       </div>
-      ${renderUpdaterForm(updater.prop('data'), {
-        disabled,
+      ${renderUpdaterForm(this.item.updater.prop('data'), {
         classes: 'text-areas',
         fields: ({ restrictions, triggers }) => [
           renderTextareaField(restrictions),

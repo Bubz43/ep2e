@@ -76,8 +76,8 @@ export const openMenu = ({
   if (Array.isArray(content) && content.length === 0) return;
   const menu = document.querySelector('mwc-menu') || setupMenu();
 
-  const active = traverseActiveElements();
-  console.log(active);
+  // const active = traverseActiveElements();
+  // console.log(active);
 
   if (menu.open) {
     menu.close();
