@@ -9,12 +9,31 @@
   display: block;
 }
 
+.detail-forms {
+  padding: 0.5rem 0 0;
+}
+
+.quantity-form {
+  grid-template-columns: 1fr 1fr;
+  > * {
+    width: min-content;
+    & + * {
+      justify-self: end;
+    }
+  }
+}
+
 .application-methods {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;;
+  gap: 0.5rem;
+  padding: 0.25rem;
   position: relative;
   .method {
     list-style: none;
     display: inline-block;
-    padding: 0.25rem 0.5rem;
+    padding: 0.15rem 0.5rem;
     background: var(--color-border);
     border-radius: 7px;
   }

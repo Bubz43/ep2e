@@ -12,10 +12,12 @@ import {
   DrugCategory,
   DrugAddiction,
   SubstanceApplicationMethod,
+  AptitudeType,
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { Substance } from '@src/entities/item/proxies/substance';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
+import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { customElement, html, property } from 'lit-element';
@@ -44,7 +46,14 @@ export class SubstanceForm extends ItemFormBase {
   );
 
   render() {
-    const { updater, type, isChemical, isAddictive, isDrug } = this.item;
+    const {
+      updater,
+      type,
+      isChemical,
+      isAddictive,
+      isDrug,
+      loaded,
+    } = this.item;
     const { disabled } = this;
     return html`
       <entity-form-layout>
@@ -64,15 +73,10 @@ export class SubstanceForm extends ItemFormBase {
             category,
             substanceType,
             classification,
-            quantityPerCost,
             addiction,
             addictionMod,
-            quantity,
             hasSeverity,
           }) => [
-            this.item.loaded ? '' : renderNumberField(quantity, { min: 0 }),
-            renderLabeledCheckbox(hasSeverity),
-            html` <form-sidebar-divider></form-sidebar-divider> `,
             renderSelectField(
               { ...substanceType, label: localize('type') },
               enumValues(SubstanceType),
@@ -84,41 +88,58 @@ export class SubstanceForm extends ItemFormBase {
                   enumValues(SubstanceClassification),
                 ),
             renderTextField(category, { listId: 'drug-categories' }),
-            renderNumberField(quantityPerCost, { min: 1 }),
+            renderLabeledCheckbox(hasSeverity),
             isDrug
               ? html`
                   ${this.drugCategoryTemplate}
-                  <form-sidebar-divider></form-sidebar-divider>
+                  <entity-form-sidebar-divider></entity-form-sidebar-divider>
+                  ${renderSelectField(addiction, enumValues(DrugAddiction), {
+                    emptyText: localize('nonAddictive'),
+                  })}
+                  ${isAddictive
+                    ? renderNumberField(
+                        {
+                          ...addictionMod,
+                          label: `${localize(
+                            AptitudeType.Willpower,
+                          )} ${localize('check')} ${localize(
+                            'SHORT',
+                            'modifier',
+                          )}`,
+                        },
+                        {
+                          min: -60,
+                          max: 60,
+                          step: 5,
+                        },
+                      )
+                    : ''}
                 `
-              : '',
-            renderSelectField(addiction, enumValues(DrugAddiction), {
-              emptyText: localize('nonAddictive'),
-            }),
-            isAddictive
-              ? renderNumberField(
-                  {
-                    ...addictionMod,
-                    label: `${localize('check')} ${localize(
-                      'SHORT',
-                      'modifier',
-                    )}`,
-                  },
-                  {
-                    min: -60,
-                    max: 60,
-                    step: 5,
-                  },
-                )
               : '',
           ],
         })}
 
         <div slot="details">
-          ${renderUpdaterForm(updater.prop('data'), {
-            classes: complexityForm.cssClass,
-            disabled,
-            fields: renderComplexityFields,
-          })}
+          <section>
+            <sl-header heading=${localize('details')}></sl-header>
+            <div class="detail-forms">
+              ${renderUpdaterForm(updater.prop('data'), {
+                classes: complexityForm.cssClass,
+                disabled,
+                fields: renderComplexityFields,
+              })}
+              ${renderUpdaterForm(updater.prop('data'), {
+                disabled,
+                classes: 'quantity-form',
+                fields: ({ quantity, quantityPerCost }) => [
+                  loaded
+                    ? html`<div></div>`
+                    : renderNumberField(quantity, { min: 0 }),
+                  renderNumberField(quantityPerCost, { min: 1 }),
+                ],
+              })}
+            </div>
+          </section>
           ${isChemical ? '' : html` ${this.renderApplicationMethods()} `}
           ${this.renderEffects()}
         </div>
@@ -159,7 +180,9 @@ export class SubstanceForm extends ItemFormBase {
                 class="method"
                 data-tooltip="${localize('onset')} ${localize(
                   'time',
-                )}: ${Substance.onsetTime(method)}"
+                )}: ${prettyMilliseconds(Substance.onsetTime(method), {
+                  compact: false,
+                })}"
                 @mouseenter=${tooltip.fromData}
               >
                 ${localize(method)}
@@ -189,7 +212,12 @@ export class SubstanceForm extends ItemFormBase {
             }),
             this.item.updater.prop('data', 'application').commit,
           ),
-        fields: (methods) => map(Object.values(methods), renderLabeledCheckbox)
+        fields: (methods) =>
+          enumValues(SubstanceApplicationMethod).map((method) =>
+            renderLabeledCheckbox(methods[method], {
+              disabled: application.length === 1 && applicationObj[method],
+            }),
+          ),
       })}
     `;
   }

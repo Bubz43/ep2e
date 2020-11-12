@@ -42,9 +42,9 @@
 
 :host([visible]) {
   pointer-events: initial !important;
-  animation: appear 150ms ease-in-out 150ms;
-  opacity: 1;
-  transition-delay: 150ms;
+  animation: appear 150ms ease-in-out 150ms both;
+  // opacity: 1;
+  // transition-delay: 150ms;
   // opacity: 1;
   // opacity: 1;
   // transform: none;
