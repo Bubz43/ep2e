@@ -62,7 +62,7 @@ export class MeleeWeapon
       ...data,
       label: this.hasSecondaryAttack ? label || defaultLabel : '',
       rollFormulas:
-        damageFormula || this.augmentUnarmed
+        damageFormula
           ? [createBaseAttackFormula(damageFormula)]
           : [],
       coating: this.coating,

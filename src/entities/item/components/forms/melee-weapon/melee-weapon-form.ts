@@ -140,7 +140,8 @@ export class MeleeWeaponForm extends ItemFormBase {
     if (data?.type === DropType.Item) {
       const agent = await itemDropToItemProxy(data);
       if (agent?.type === ItemType.Explosive) {
-        if (this.item.acceptsPayload && type === "payload") this.item.setPayload(agent);
+        if (this.item.acceptsPayload && type === 'payload')
+          this.item.setPayload(agent);
       } else if (agent?.type === ItemType.Substance) {
         if (agent.isElectronic) {
           // TODO Better error messages
@@ -251,7 +252,7 @@ export class MeleeWeaponForm extends ItemFormBase {
           })}
         </div>
 
-        <sl-animated-list slot="details" class="attacks">
+        <sl-animated-list slot="details" skipExitAnimation>
           ${this.renderAttack(attacks.primary, WeaponAttackType.Primary)}
           ${attacks.secondary
             ? this.renderAttack(attacks.secondary, WeaponAttackType.Secondary)
@@ -259,7 +260,7 @@ export class MeleeWeaponForm extends ItemFormBase {
         </sl-animated-list>
 
         <sl-animated-list slot="details" class="addons">
-          <sl-dropzone @drop=${this.addDrop}>
+          <sl-dropzone ?disabled=${disabled} @drop=${this.addDrop}>
             <sl-header heading=${localize('coating')} ?hideBorder=${!coating}
               ><mwc-icon
                 slot="info"
@@ -270,10 +271,30 @@ export class MeleeWeaponForm extends ItemFormBase {
                 >info</mwc-icon
               ></sl-header
             >
+            ${coating
+              ? html`
+                  <div class="addon">
+                    <span class="addon-name">${coating.name}</span>
+                    <span class="addon-type">${coating.fullType}</span>
+                    <mwc-icon-button
+                      icon="launch"
+                      @click=${this.openCoatingSheet}
+                    ></mwc-icon-button>
+                    <delete-button
+                      ?disabled=${disabled}
+                      @delete=${this.deleteCoating}
+                    ></delete-button>
+                  </div>
+                `
+              : ''}
           </sl-dropzone>
           ${acceptsPayload
             ? html`
-                <sl-dropzone data-drop="payload" @drop=${this.addDrop}>
+                <sl-dropzone
+                  ?disabled=${disabled}
+                  data-drop="payload"
+                  @drop=${this.addDrop}
+                >
                   <sl-header
                     heading=${localize('payload')}
                     ?hideBorder=${!payload}
@@ -286,6 +307,22 @@ export class MeleeWeaponForm extends ItemFormBase {
                       >info</mwc-icon
                     ></sl-header
                   >
+                  ${payload
+                    ? html`
+                        <div class="addon">
+                          <span class="addon-name">${payload.name}</span>
+                          <span class="addon-type">${payload.fullType}</span>
+                          <mwc-icon-button
+                            icon="launch"
+                            @click=${this.openPayloadSheet}
+                          ></mwc-icon-button>
+                          <delete-button
+                            ?disabled=${disabled}
+                            @delete=${this.deletePayload}
+                          ></delete-button>
+                        </div>
+                      `
+                    : ''}
                 </sl-dropzone>
               `
             : ''}
@@ -330,6 +367,8 @@ export class MeleeWeaponForm extends ItemFormBase {
                   ),
                   formatArmorUsed(attack),
                 ].join('; ')
+              : this.item.augmentUnarmed
+              ? ''
               : '-'}
           </sl-group>
 
@@ -387,8 +426,8 @@ export class MeleeWeaponForm extends ItemFormBase {
         update: (traits) =>
           updater.commit({
             attackTraits: enumValues(AttackTrait).flatMap((trait) => {
-              const use = traits[trait] === true || attackTraitsObj[trait];
-              return use ? trait : [];
+              const active = traits[trait] ?? attackTraitsObj[trait];
+              return active ? trait : [];
             }),
           }),
         fields: (traits) =>
