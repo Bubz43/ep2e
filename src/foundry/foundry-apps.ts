@@ -84,8 +84,7 @@ export const closeImagePicker = (key: object) => {
   }
 };
 
-
-export const navMenuListener =  (ev: MouseEvent) => {
+export const navMenuListener = (ev: MouseEvent) => {
   const item = findMatchingElement(ev, '.scene');
   if (!item) return;
   const contextOptions = ui.nav._getContextMenuOptions();
@@ -100,4 +99,4 @@ export const navMenuListener =  (ev: MouseEvent) => {
     position: ev,
     header: heading ? { heading } : undefined,
   });
-}
+};

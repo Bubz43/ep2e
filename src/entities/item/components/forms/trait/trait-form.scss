@@ -26,7 +26,6 @@ sl-group {
   margin-left: 0.5rem;
 }
 
-
 .level {
   list-style: none;
 }
@@ -44,15 +43,13 @@ sl-group {
   color: var(--color-primary-alt);
 }
 
-[slot="drawer-content"] {
+[slot='drawer-content'] {
   display: flex;
   flex-flow: column;
   .text-areas {
     margin-top: auto;
   }
 }
-
-
 
 .add-effect-level-selector {
   margin-bottom: 1rem;

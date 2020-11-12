@@ -350,7 +350,11 @@ CombatTracker.prototype._contextMenu = function (jqueryEl: JQuery) {
     if (!item) return;
     const targetEl = $(item);
     const entryOptions = this._getEntryContextOptions();
-    Hooks.call(`get${this.constructor.name}EntryContext`, this.element, entryOptions);
+    Hooks.call(
+      `get${this.constructor.name}EntryContext`,
+      this.element,
+      entryOptions,
+    );
     const convertedOptions = convertMenuOptions(entryOptions, targetEl);
     const heading = item.textContent?.trim();
     openMenu({
@@ -392,7 +396,11 @@ CompendiumDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
     const item = findMatchingElement(ev, '.compendium-pack');
     if (!item) return;
     const entryOptions = this._getEntryContextOptions();
-    Hooks.call(`get${this.constructor.name}EntryContext`, this.element, entryOptions);
+    Hooks.call(
+      `get${this.constructor.name}EntryContext`,
+      this.element,
+      entryOptions,
+    );
     const targetEl = $(item);
     const convertedOptions = convertMenuOptions(entryOptions, targetEl);
     const heading = item.querySelector('h4')?.textContent;
@@ -410,7 +418,11 @@ ChatLog.prototype._contextMenu = function (jqueryEl: JQuery) {
     if (!item) return;
     // TODO Alter/Replace Chat popout
     const entryOptions = this._getEntryContextOptions();
-    Hooks.call(`get${this.constructor.name}EntryContext`, this.element, entryOptions);
+    Hooks.call(
+      `get${this.constructor.name}EntryContext`,
+      this.element,
+      entryOptions,
+    );
     const targetEl = $(item);
     const convertedOptions = convertMenuOptions(entryOptions, targetEl);
     openMenu({ content: convertedOptions, position: ev });

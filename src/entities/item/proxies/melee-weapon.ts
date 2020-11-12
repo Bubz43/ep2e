@@ -35,6 +35,7 @@ export class MeleeWeapon
   get acceptsPayload() {
     return this.epData.acceptsPayload;
   }
+  
 
   @LazyGetter()
   get attacks() {
@@ -61,10 +62,9 @@ export class MeleeWeapon
       reduceAVbyDV: false,
       ...data,
       label: this.hasSecondaryAttack ? label || defaultLabel : '',
-      rollFormulas:
-        damageFormula
-          ? [createBaseAttackFormula(damageFormula)]
-          : [],
+      rollFormulas: damageFormula
+        ? [createBaseAttackFormula(damageFormula)]
+        : [],
       coating: this.coating,
       payload: this.payload,
     };

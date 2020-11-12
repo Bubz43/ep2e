@@ -15,7 +15,7 @@ export const renderItemForm = (proxy: ItemProxy) => {
           .updater=${proxy.updater.prop('data').nestedStore()}
         ></entity-form-footer>
       `;
-    
+
     case ItemType.MeleeWeapon:
       return html`
         <melee-weapon-form .item=${proxy}></melee-weapon-form>
@@ -55,6 +55,15 @@ export const renderItemForm = (proxy: ItemProxy) => {
     case ItemType.Psi:
       return html`
         <psi-form .item=${proxy}></psi-form>
+        <entity-form-footer
+          slot="footer"
+          .updater=${proxy.updater.prop('data').nestedStore()}
+        ></entity-form-footer>
+      `;
+    
+    case ItemType.Substance:
+      return html`
+        <substance-form .item=${proxy}></substance-form>
         <entity-form-footer
           slot="footer"
           .updater=${proxy.updater.prop('data').nestedStore()}

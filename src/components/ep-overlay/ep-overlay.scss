@@ -8,10 +8,10 @@
 :host {
   display: grid;
   grid-template-areas:
-  "scene app-controls"
-  "nav chat"
-  "controls chat"
-  ".. chat";
+    'scene app-controls'
+    'nav chat'
+    'controls chat'
+    '.. chat';
 
   grid-template-columns: 1fr auto;
 
@@ -40,8 +40,6 @@ scene-view {
   grid-area: scene;
 }
 
-
-
 .nav-wrapper {
   grid-area: nav;
 }
@@ -57,9 +55,8 @@ scene-view {
 
 .chat-wrapper {
   grid-area: chat;
-  padding-top: 0.5rem;;
+  padding-top: 0.5rem;
 }
-
 
 :host([faded]) {
   opacity: 0.1 !important;
@@ -80,7 +77,6 @@ scene-view {
   }
 }
 
-
 slot[name='foundry-apps'],
 slot#windows {
   grid-area: 1 / 1 / -1 / -1;
@@ -99,7 +95,7 @@ slot#windows {
   justify-items: center;
   grid-auto-columns: 28px;
   display: flex;
-  margin: 0.5rem 0 0 ;
+  margin: 0.5rem 0 0;
   pointer-events: initial;
   padding: 0;
   --list-item-padding: 2px;
@@ -148,4 +144,3 @@ slot#windows {
     z-index: 100;
   }
 }
-

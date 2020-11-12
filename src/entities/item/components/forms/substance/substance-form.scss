@@ -1,0 +1,21 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+}
+
+.application-methods {
+  position: relative;
+  .method {
+    list-style: none;
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    background: var(--color-border);
+    border-radius: 7px;
+  }
+}

@@ -8,7 +8,6 @@
 :host {
   display: block;
   min-width: max-content;
-
 }
 
 .forms-header {
@@ -49,9 +48,7 @@ button {
   pointer-events: initial;
 }
 
-
 .environment-toggles {
-
   grid-template-rows: 65px 52px 52px 52px 80px;
 
   > :nth-of-type(3) {

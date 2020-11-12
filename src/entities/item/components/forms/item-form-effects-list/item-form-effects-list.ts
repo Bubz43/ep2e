@@ -43,10 +43,10 @@ export class ItemFormEffectsList extends LitElement {
               'effect',
             )}`,
             callback: this.operations.removeCallback(effect.id),
-            icon: html`<mwc-icon>delete_forever</mwc-icon>`
+            icon: html`<mwc-icon>delete_forever</mwc-icon>`,
           },
         ],
-        position: ev
+        position: ev,
       });
     }
   }
@@ -66,7 +66,9 @@ export class ItemFormEffectsList extends LitElement {
                 placement=${Placement.Bottom}
                 .renderOnDemand=${() => html`
                   <sl-popover-section
-                    heading="${localize('edit')} ${localize(effect.type)} ${localize('effect')}"
+                    heading="${localize('edit')} ${localize(
+                      effect.type,
+                    )} ${localize('effect')}"
                   >
                     <delete-button
                       slot="action"
@@ -86,7 +88,7 @@ export class ItemFormEffectsList extends LitElement {
                   ?data-comma=${index < commaTarget}
                   data-effect-id=${effect.id}
                   @contextmenu=${this.openDeleteMenu}
-                  title="${localize(effect.type)} ${localize("effect")}"
+                  title="${localize(effect.type)} ${localize('effect')}"
                 >
                   ${formatEffect(effect)}
                 </button>

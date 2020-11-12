@@ -1,15 +1,26 @@
-import { renderLabeledCheckbox, renderNumberField, renderSwitch, renderTextareaField, renderTextField } from "@src/components/field/fields";
-import { renderAutoForm, SlCustomStoreEvent } from "@src/components/form/forms";
-import { subscribeToEnvironmentChange, createEnvironmentOverrides, createEnvironment, Environment } from "@src/features/environment";
-import { openImagePicker, closeImagePicker } from "@src/foundry/foundry-apps";
-import { localize } from "@src/foundry/localization";
-import { activeCanvas } from "@src/foundry/misc-helpers";
-import { EP } from "@src/foundry/system";
-import { gameSettings } from "@src/init";
-import type { FieldPropsRenderer } from "@src/utility/field-values";
-import { customElement, LitElement, property, html } from "lit-element";
-import { createPipe, merge, map } from "remeda";
-import styles from "./environment-forms.scss";
+import {
+  renderLabeledCheckbox,
+  renderNumberField,
+  renderSwitch,
+  renderTextareaField,
+  renderTextField,
+} from '@src/components/field/fields';
+import { renderAutoForm, SlCustomStoreEvent } from '@src/components/form/forms';
+import {
+  subscribeToEnvironmentChange,
+  createEnvironmentOverrides,
+  createEnvironment,
+  Environment,
+} from '@src/features/environment';
+import { openImagePicker, closeImagePicker } from '@src/foundry/foundry-apps';
+import { localize } from '@src/foundry/localization';
+import { activeCanvas } from '@src/foundry/misc-helpers';
+import { EP } from '@src/foundry/system';
+import { gameSettings } from '@src/init';
+import type { FieldPropsRenderer } from '@src/utility/field-values';
+import { customElement, LitElement, property, html } from 'lit-element';
+import { createPipe, merge, map } from 'remeda';
+import styles from './environment-forms.scss';
 
 const renderEnvironmentFields: FieldPropsRenderer<Environment> = ({
   name,
@@ -31,7 +42,7 @@ const renderEnvironmentFields: FieldPropsRenderer<Environment> = ({
               new SlCustomStoreEvent({
                 key: img.prop,
                 value: path,
-              })
+              }),
             );
           });
         }}
@@ -44,14 +55,14 @@ const renderEnvironmentFields: FieldPropsRenderer<Environment> = ({
   }),
   renderTextareaField({
     ...notes,
-    label: `${localize("public")} ${notes.label}`,
+    label: `${localize('public')} ${notes.label}`,
   }),
 ];
 
-@customElement("environment-forms")
+@customElement('environment-forms')
 export class EnvironmentForms extends LitElement {
   static get is() {
-    return "environment-forms" as const;
+    return 'environment-forms' as const;
   }
 
   static styles = [styles];
@@ -61,7 +72,7 @@ export class EnvironmentForms extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.environmentUnsub = subscribeToEnvironmentChange(() =>
-      this.requestUpdate()
+      this.requestUpdate(),
     );
   }
 
@@ -85,11 +96,11 @@ export class EnvironmentForms extends LitElement {
       const { environment, environmentOverrides } = scene.epFlags || {};
       forms.push(
         renderAutoForm({
-          classes: "environment-toggles",
+          classes: 'environment-toggles',
           props: createEnvironmentOverrides(environmentOverrides || {}),
           update: (changed, existing) =>
             scene.updater
-              .prop("flags", EP.Name, "environmentOverrides")
+              .prop('flags', EP.Name, 'environmentOverrides')
               .commit({ ...existing, ...changed }),
           fields: ({ name, gravity, vacuum, img, notes }) =>
             map([name, gravity, vacuum, img, notes], renderSwitch),
@@ -98,19 +109,19 @@ export class EnvironmentForms extends LitElement {
           props: createEnvironment(environment || {}),
           update: (changed, existing) =>
             scene.updater
-              .prop("flags", EP.Name, "environment")
+              .prop('flags', EP.Name, 'environment')
               .commit({ ...existing, ...changed }),
           fields: renderEnvironmentFields,
-        })
+        }),
       );
     }
 
     return html`
       <header class="forms-header">
-        <h3>${localize("general")} ${localize("environment")}</h3>
+        <h3>${localize('general')} ${localize('environment')}</h3>
         ${scene
-          ? html` <h3>${localize("scene")} ${localize("environment")}</h3> `
-          : ""}
+          ? html` <h3>${localize('scene')} ${localize('environment')}</h3> `
+          : ''}
       </header>
       <div class="forms">${forms}</div>
     `;
@@ -119,6 +130,6 @@ export class EnvironmentForms extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "environment-forms": EnvironmentForms;
+    'environment-forms': EnvironmentForms;
   }
 }

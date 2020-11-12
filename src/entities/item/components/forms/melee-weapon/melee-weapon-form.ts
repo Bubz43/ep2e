@@ -1,10 +1,10 @@
 import { formatArmorUsed } from '@src/combat/attack-formatting';
 import type { MeleeWeaponAttack } from '@src/combat/attacks';
 import {
-  renderSelectField,
-  renderNumberField,
-  renderLabeledCheckbox,
   renderFormulaField,
+  renderLabeledCheckbox,
+  renderNumberField,
+  renderSelectField,
   renderTextareaField,
   renderTextField,
 } from '@src/components/field/fields';
@@ -16,20 +16,18 @@ import {
   SlWindowEventName,
 } from '@src/components/window/window-options';
 import {
+  AttackTrait,
   enumValues,
   PhysicalWare,
-  GearTrait,
   WeaponAttackType,
-  AttackTrait,
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { ItemType } from '@src/entities/entity-types';
 import { renderItemForm } from '@src/entities/item/item-views';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import {
-  handleDrop,
-  isKnownDrop,
   DropType,
+  handleDrop,
   itemDropToItemProxy,
 } from '@src/foundry/drag-and-drop';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
@@ -430,10 +428,7 @@ export class MeleeWeaponForm extends ItemFormBase {
               return active ? trait : [];
             }),
           }),
-        fields: (traits) =>
-          enumValues(AttackTrait).map((trait) =>
-            renderLabeledCheckbox(traits[trait]),
-          ),
+        fields: (traits) => map(Object.values(traits), renderLabeledCheckbox)
       })}
       ${renderUpdaterForm(updater, {
         disabled,

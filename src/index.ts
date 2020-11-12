@@ -88,6 +88,7 @@ import { EPOverlay } from './components/ep-overlay/ep-overlay';
 import { SceneView } from './components/ep-overlay/components/scene-view/scene-view';
 import { EnvironmentForms } from './components/ep-overlay/components/environment-forms/environment-forms';
 import { MeleeWeaponForm } from './entities/item/components/forms/melee-weapon/melee-weapon-form';
+import { SubstanceForm } from './entities/item/components/forms/substance/substance-form';
 
 customElements.define('app-datepicker', Datepicker);
 
@@ -156,6 +157,7 @@ PsiForm;
 PhysicalServiceForm;
 PhysicalTechForm;
 MeleeWeaponForm;
+SubstanceForm;
 ItemFormEffectsList;
 
 // Health Components

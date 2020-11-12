@@ -1,11 +1,19 @@
-import { renderSelectField, renderLabeledCheckbox } from "@src/components/field/fields";
-import { GearQuality, enumValues, Complexity, GearTrait } from "@src/data-enums";
-import { complexityGP } from "@src/features/complexity";
-import { localize } from "@src/foundry/localization";
-import type { GearCost } from "@src/foundry/template-schema";
-import type { FieldPropsRenderer } from "@src/utility/field-values";
-import { css } from "lit-element";
-import type { TemplateResult } from "lit-html";
+import {
+  renderSelectField,
+  renderLabeledCheckbox,
+} from '@src/components/field/fields';
+import {
+  GearQuality,
+  enumValues,
+  Complexity,
+  GearTrait,
+} from '@src/data-enums';
+import { complexityGP } from '@src/features/complexity';
+import { localize } from '@src/foundry/localization';
+import type { GearCost } from '@src/foundry/template-schema';
+import type { FieldPropsRenderer } from '@src/utility/field-values';
+import { css } from 'lit-element';
+import type { TemplateResult } from 'lit-html';
 
 export const renderComplexityFields: FieldPropsRenderer<
   GearCost & { quality: GearQuality }
@@ -14,10 +22,10 @@ export const renderComplexityFields: FieldPropsRenderer<
   renderSelectField(
     {
       ...complexity,
-      label: `${localize("complexity")}/${localize("SHORT", "gearPoints")}`,
+      label: `${localize('complexity')}/${localize('SHORT', 'gearPoints')}`,
     },
     enumValues(Complexity),
-    { altLabel: (com) => `${localize(com)}/${complexityGP[com]}` }
+    { altLabel: (com) => `${localize(com)}/${complexityGP[com]}` },
   ),
   renderLabeledCheckbox(restricted),
 ];
@@ -31,7 +39,7 @@ export const complexityForm = {
       padding-bottom: 0;
     }
   `,
-  cssClass: "complexity",
+  cssClass: 'complexity',
 } as const;
 
 export const renderGearTraitCheckboxes: FieldPropsRenderer<Record<

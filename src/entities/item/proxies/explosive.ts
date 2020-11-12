@@ -8,7 +8,9 @@ import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
 class Base extends ItemProxyBase<ItemType.Explosive> {}
 
-export class Explosive extends mix(Base).with(Purchasable) implements Stackable {
+export class Explosive
+  extends mix(Base).with(Purchasable)
+  implements Stackable {
   readonly loaded;
   constructor({
     loaded,
@@ -27,9 +29,8 @@ export class Explosive extends mix(Base).with(Purchasable) implements Stackable 
   }
 
   get quantity() {
-    return this.epData.quantity
+    return this.epData.quantity;
   }
-
 
   get fullType() {
     return this.explosiveType === ExplosiveType.Generic
@@ -41,24 +42,23 @@ export class Explosive extends mix(Base).with(Purchasable) implements Stackable 
     if (this.explosiveType === ExplosiveType.Missile) {
       switch (this.size) {
         case ExplosiveSize.Micro:
-          return localize("micromissile");
+          return localize('micromissile');
         case ExplosiveSize.Mini:
-          return localize("minimissile");
+          return localize('minimissile');
         case ExplosiveSize.Standard:
-          return localize("standardMissile");
+          return localize('standardMissile');
       }
     }
     if (this.explosiveType === ExplosiveType.Grenade) {
       switch (this.size) {
         case ExplosiveSize.Micro:
         case ExplosiveSize.Mini:
-          return localize("minigrenade");
+          return localize('minigrenade');
 
         case ExplosiveSize.Standard:
-          return localize("standardGrenade");
+          return localize('standardGrenade');
       }
     }
-    return "";
+    return '';
   }
-
 }

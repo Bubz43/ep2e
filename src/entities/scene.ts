@@ -11,18 +11,17 @@ export class SceneEP extends Scene {
     return this.data.flags[EP.Name];
   }
 
-  @LazyGetter() 
+  @LazyGetter()
   get updater() {
     return new UpdateStore({
       getData: () => this.data,
       setData: (update) => this.update(update),
       isEditable: () => this.owner,
-    })
+    });
   }
 
   preload(push = true) {
     game.scenes.preload(this.id, push);
-    
   }
 
   get fullSceneName() {
@@ -31,5 +30,4 @@ export class SceneEP extends Scene {
       ? `${navName} ${game.user.isGM ? `(${sceneName})` : ''}`
       : sceneName;
   }
-
 }
