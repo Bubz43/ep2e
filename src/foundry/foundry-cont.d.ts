@@ -140,6 +140,7 @@ type CombatRoundInfo = {
 };
 
 type Col<T extends Entity> = Omit<Collection<T>, 'get'> & {
+  [Symbol.iterator](): IterableIterator<T>;
   get(id: string, options?: { strict: Boolean }): T | null;
   render(force: boolean): unknown;
 };
@@ -308,6 +309,7 @@ declare global {
     targets: Set<Token>;
     isTrusted: boolean;
     readonly id: string;
+    readonly viewedScene: string;
     can(permission: string): boolean;
     data: Readonly<
       CommonEntityData & {

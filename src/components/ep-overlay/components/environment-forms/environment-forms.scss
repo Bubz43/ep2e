@@ -1,0 +1,60 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  min-width: max-content;
+
+}
+
+.forms-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  h3 {
+    flex: 1;
+    text-align: center;
+    margin: 0;
+    font-weight: normal;
+  }
+}
+.forms {
+  display: flex;
+
+  justify-content: space-between;
+  sl-form {
+    max-width: 240px;
+  }
+}
+
+button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text);
+  min-width: 40px;
+  pointer-events: initial;
+  &:hover {
+    box-shadow: 0 0 2px var(--color-secondary);
+  }
+  > * {
+    pointer-events: none;
+  }
+}
+* {
+  pointer-events: initial;
+}
+
+
+.environment-toggles {
+
+  grid-template-rows: 65px 52px 52px 52px 80px;
+
+  > :nth-of-type(3) {
+    place-self: center;
+  }
+}

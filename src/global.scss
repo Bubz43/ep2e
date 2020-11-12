@@ -26,6 +26,10 @@ body {
   }
 }
 
+#logo {
+  display: none;
+}
+
 li[divider] {
   border-color: alphav(var(--color-border), 0.5);
   margin: 0.25rem 0;
@@ -236,12 +240,17 @@ table {
   background: var(--color-primary);
 }
 
+
+#controls,
 #navigation {
-  // position: relative;
-  // top: unset;
-  // left: unset;
-  // opacity: 0;
-  // left: 0.5rem;
+  position: relative;
+  top: unset;
+  left: unset;
+}
+
+#navigation {
+  position: relative;
+  width: calc(100% - 350px);
   pointer-events: none;
   flex: 1;
   min-height: 42px;
@@ -301,15 +310,16 @@ table {
         }
       }
       &.view {
-        cursor: initial;
-        background: linear-gradient(
-          to right,
-          var(--color-bg),
-          var(--color-bg-alt)
-        );
-        border: 1px groove var(--color-primary-alt);
-        box-shadow: none;
-        filter: contrast(0.95) drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.8));
+        display: none;
+        // cursor: initial;
+        // background: linear-gradient(
+        //   to right,
+        //   var(--color-bg),
+        //   var(--color-bg-alt)
+        // );
+        // border: 1px groove var(--color-primary-alt);
+        // box-shadow: none;
+        // filter: contrast(0.95) drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.8));
       }
     }
   }

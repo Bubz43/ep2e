@@ -84,6 +84,9 @@ import { TraitForm } from './entities/item/components/forms/trait/trait-form';
 import { SleightForm } from './entities/item/components/forms/sleight/sleight-form';
 import { PsiForm } from './entities/item/components/forms/psi/psi-form';
 import { TraitFormLevel } from './entities/item/components/forms/trait/trait-form-level';
+import { EPOverlay } from './components/ep-overlay/ep-overlay';
+import { SceneView } from './components/ep-overlay/components/scene-view/scene-view';
+import { EnvironmentForms } from './components/ep-overlay/components/environment-forms/environment-forms';
 
 customElements.define('app-datepicker', Datepicker);
 
@@ -158,3 +161,8 @@ HealthItem;
 HealthLog;
 HealthRegenSettingsForm;
 HealthStateForm;
+
+// Overlay
+EPOverlay;
+SceneView;
+EnvironmentForms;

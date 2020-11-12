@@ -6,8 +6,22 @@
 }
 
 :host {
-  display: flex;
-  flex-flow: column;
+  display: grid;
+  grid-template-areas:
+  "scene app-controls"
+  "nav chat"
+  "controls chat"
+  ".. chat";
+
+  grid-template-columns: 1fr auto;
+
+  grid-template-rows: min-content min-content min-content 1fr;
+
+  // grid-auto-rows: min-content;
+
+  padding-left: 1rem;
+  gap: 0.5rem;
+
   position: fixed;
   left: 0;
   bottom: 0;
@@ -22,6 +36,28 @@
     pointer-events: initial;
   }
 }
+
+scene-view {
+  grid-area: scene;
+}
+
+.nav-wrapper {
+  grid-area: nav;
+}
+.controls-wrapper {
+  grid-area: controls;
+  margin-top: 0.5rem;
+}
+
+.foundry-app-controls {
+  grid-area: app-controls;
+  place-self: center;
+}
+
+.chat-wrapper {
+  grid-area: chat;
+}
+
 
 :host([faded]) {
   opacity: 0.1 !important;
@@ -42,14 +78,10 @@
   }
 }
 
-scene-view {
-  position: fixed;
-  top: 0;
-  right: 380px;
-}
 
 slot[name='foundry-apps'],
 slot#windows {
+  grid-area: 1 / 1 / -1 / -1;
   display: block;
   z-index: 40;
 
@@ -59,18 +91,14 @@ slot#windows {
 }
 
 .foundry-app-controls {
-  position: absolute;
-  top: 4px;
-  right: 5px;
   display: grid;
   grid-auto-flow: column;
   align-items: flex-start;
   justify-items: center;
   grid-auto-columns: 28px;
   display: flex;
-  margin: 0;
+  margin: 0.5rem 0 0 ;
   pointer-events: initial;
-  height: 33px;
   padding: 0;
   --list-item-padding: 2px;
   --list-item-border-radius: 0px;
@@ -95,28 +123,7 @@ slot#windows {
   margin-left: 1rem;
 }
 
-.controls-wrapper {
-  position: absolute;
-  top: 100px;
-  left: 0.5rem;
-  padding-top: 1rem;
-  opacity: 0;
-
-  .control-drag {
-    position: absolute;
-    top: 1.5rem;
-    left: -0.5rem;
-    pointer-events: initial;
-    cursor: move;
-    transform: rotate(90deg);
-    opacity: 0.7;
-  }
-}
-
 .chat-wrapper {
-  position: absolute;
-  right: 0px;
-  top: 40px;
   display: grid;
   grid-template-rows: auto 1fr auto min-content;
   grid-template-areas:
@@ -140,8 +147,3 @@ slot#windows {
   }
 }
 
-controlled-character {
-  position: absolute;
-  bottom: 40px;
-  right: 330px;
-}

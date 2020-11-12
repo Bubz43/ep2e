@@ -127,8 +127,7 @@ export class EPOverlay extends LitElement {
   }, 1);
 
   private stealElements() {
-    // TODO: "navigation", "controls"
-    for (const id of ['chat']) {
+    for (const id of ['chat', "navigation", "controls"]) {
       const el = document.getElementById(id);
       if (el) {
         const wrapper = document.createElement('div');
@@ -370,6 +369,14 @@ export class EPOverlay extends LitElement {
             @slotchange=${this.switchWindowZ}
             @pointerdown=${this.switchWindowZ}
           ></slot>
+          <scene-view></scene-view>
+          <div class="nav-wrapper">
+            <slot name="navigation"></slot>
+          </div>
+          <div class="controls-wrapper">
+            <slot name="controls"></slot>
+          </div>
+
           <div
             class="chat-wrapper"
             @mouseenter=${this.toggleChatPointers}
@@ -380,13 +387,13 @@ export class EPOverlay extends LitElement {
 
           <ul class="foundry-app-controls">
             <slot name="app-controls"></slot>
-            <!-- <wl-list-item
+            <wl-list-item
               clickable
               class="menu-toggle"
               @click=${() => ui.menu.toggle()}
             >
               <img src="icons/fvtt.png" height="30px" />
-            </wl-list-item> -->
+            </wl-list-item>
           </ul>
 
           <!-- <user-view></user-view> -->

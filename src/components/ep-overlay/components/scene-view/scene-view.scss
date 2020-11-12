@@ -1,0 +1,41 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+@include resetUnorderedList();
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  align-items: center;
+  gap: 0.5rem;
+  --mdc-icon-button-size: 2rem;
+  > * {
+    pointer-events: initial;
+  }
+}
+
+.active-scene {
+  position: relative;
+}
+
+.scene-players {
+  display: flex;
+  position: absolute;
+  transform: translateY(150%);
+}
+
+.scene-player {
+  text-align: center;
+  font-size: x-small;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 100%;;
+  color: black;;
+  font-weight: bold;
+  text-transform: uppercase;
+}
