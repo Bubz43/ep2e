@@ -123,9 +123,8 @@ export class SubstanceForm extends ItemFormBase {
     super.disconnectedCallback();
   }
 
-  private openItemSheet(group: Group, id: string) {
+  private openItemSheet(group: Group, id: string, shouldExist = false) {
     const subItem = this.item[group].items.get(id);
-    if (!subItem) return;
     const map =
       group === 'alwaysApplied'
         ? this.alwaysAppliedSheets
@@ -135,6 +134,13 @@ export class SubstanceForm extends ItemFormBase {
       key = {};
       map.set(id, key);
     }
+
+    if (!subItem) {
+      closeWindow(key);
+      map.delete(id);
+      return;
+    }
+
 
     const { wasConnected, win } = openWindow(
       {
@@ -454,27 +460,27 @@ export class SubstanceForm extends ItemFormBase {
 
     const itemGroups = [...items.values()].reduce(
       (accum, item) => {
+        const common = {
+          embedded: item.embedded,
+          alwaysDeletable: item.alwaysDeletable,
+          deleteSelf: item.deleteSelf,
+          openForm: () => this.openItemSheet(group, item.id),
+        };
         if (item.type === ItemType.Trait)
           accum.traits.push(
             new Trait({
+              ...common,
               data: item.getDataCopy(),
               lockSource: item.lockSource,
-              embedded: item.embedded,
-              alwaysDeletable: item.alwaysDeletable,
               updater: item.updater,
-              openForm: () => this.openItemSheet(group, item.id),
-              deleteSelf: item.deleteSelf,
             }),
           );
         else
           accum.sleights.push(
             new Sleight({
+              ...common,
               data: item.getDataCopy(),
-              embedded: item.embedded,
-              alwaysDeletable: item.alwaysDeletable,
               updater: item.updater,
-              openForm: () => this.openItemSheet(group, item.id),
-              deleteSelf: item.deleteSelf,
             }),
           );
         return accum;
