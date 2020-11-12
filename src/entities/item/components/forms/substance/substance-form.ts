@@ -5,8 +5,12 @@ import {
   renderSelectField,
   renderTextField,
   renderRadioFields,
+  renderFormulaField,
+  renderTimeField,
+  renderTextareaField,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
+import { Placement } from '@src/components/popover/popover-options';
 import {
   enumValues,
   SubstanceType,
@@ -15,21 +19,24 @@ import {
   DrugAddiction,
   SubstanceApplicationMethod,
   AptitudeType,
+  WeaponAttackType,
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { ItemType } from '@src/entities/entity-types';
 import { Substance } from '@src/entities/item/proxies/substance';
+import { ArmorType } from '@src/features/active-armor';
 import type { EffectCreatedEvent } from '@src/features/components/effect-creator/effect-created-event';
+import { ConditionType } from '@src/features/conditions';
 import { formatEffect } from '@src/features/effects';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
-import { prettyMilliseconds } from '@src/features/time';
+import { CommonInterval, prettyMilliseconds } from '@src/features/time';
 import {
   DropType,
   handleDrop,
   itemDropToItemProxy,
 } from '@src/foundry/drag-and-drop';
 import { format, localize } from '@src/foundry/localization';
-import { formatDamageType } from '@src/health/health';
+import { formatDamageType, HealthType } from '@src/health/health';
 import { tooltip } from '@src/init';
 import { notEmpty, withSign } from '@src/utility/helpers';
 import {
@@ -95,10 +102,10 @@ export class SubstanceForm extends ItemFormBase {
       const key = isSeverity ? 'severityAppliedItems' : 'alwaysAppliedItems';
       if (proxy?.type === ItemType.Trait) {
         if (proxy.hasMultipleLevels) {
-          proxy.selectLevelAndAdd(data => this.item.addItemEffect(key, data))
-        } else this.item.addItemEffect(key, proxy.getDataCopy())
+          proxy.selectLevelAndAdd((data) => this.item.addItemEffect(key, data));
+        } else this.item.addItemEffect(key, proxy.getDataCopy());
       } else if (proxy?.type === ItemType.Sleight) {
-        this.item.addItemEffect(key, proxy.getDataCopy())
+        this.item.addItemEffect(key, proxy.getDataCopy());
       }
     }
   });
@@ -294,20 +301,11 @@ export class SubstanceForm extends ItemFormBase {
           <mwc-icon-button
             slot="action"
             icon="edit"
+            @click=${this.setDrawerFromEvent(this.renderAlwaysAppliedEdit)}
             ?disabled=${disabled}
           ></mwc-icon-button>
         </sl-header>
         <div class="effect-details">
-          ${notEmpty(alwaysApplied.effects)
-            ? html`
-                <item-form-effects-list
-                  label=${localize('effects')}
-                  .effects=${alwaysApplied.effects}
-                  .operations=${this.effectOps}
-                  ?disabled=${disabled}
-                ></item-form-effects-list>
-              `
-            : ''}
           ${this.renderCommonEffectInfo('alwaysApplied')}
         </div>
       </sl-dropzone>
@@ -332,19 +330,10 @@ export class SubstanceForm extends ItemFormBase {
                   slot="action"
                   icon="edit"
                   ?disabled=${disabled}
+                  @click=${this.setDrawerFromEvent(this.renderSeverityEdit)}
                 ></mwc-icon-button>
               </sl-header>
               <div class="effect-details">
-                ${notEmpty(severity.effects)
-                  ? html`
-                      <item-form-effects-list
-                        label=${localize('effects')}
-                        .effects=${severity.effects}
-                        .operations=${this.severityEffectOps}
-                        ?disabled=${disabled}
-                      ></item-form-effects-list>
-                    `
-                  : ''}
                 ${notEmpty(severity.conditions)
                   ? html`
                       <sl-group
@@ -376,18 +365,26 @@ export class SubstanceForm extends ItemFormBase {
     ></mwc-icon-button>`;
   }
 
+  private renderEffectsList(group: 'alwaysApplied' | 'severity') {
+    const { effects } = this.item[group];
+    return notEmpty(effects)
+      ? html`<item-form-effects-list
+          label=${localize('effects')}
+          .effects=${effects}
+          .operations=${group === 'alwaysApplied'
+            ? this.effectOps
+            : this.severityEffectOps}
+          ?disabled=${this.disabled}
+        ></item-form-effects-list>`
+      : '';
+  }
+
   private renderCommonEffectInfo(group: 'alwaysApplied' | 'severity') {
-    const {
-      duration,
-      wearOffStress,
-      effects,
-      items,
-      damage,
-      notes,
-    } = this.item[group];
+    const { duration, wearOffStress, damage, notes } = this.item[group];
     const { damageFormula, damageType, perTurn, ...armor } = damage;
 
     return html`
+      ${this.renderEffectsList(group)}
       ${damageFormula
         ? html`
             <sl-group label=${formatDamageType(damageType)}>
@@ -396,24 +393,6 @@ export class SubstanceForm extends ItemFormBase {
             </sl-group>
           `
         : ''}
-      <!-- ${items.length + effects.length
-        ? html`
-            <ul>
-              ${items.map(
-                (item) =>
-                  html`<li>
-                    ${item.fullName}
-                    <span class="item-type"
-                      >${item.type === ItemType.Trait
-                        ? localize(item.type)
-                        : item.fullType}</span
-                    >
-                  </li>`,
-              )}
-              ${effects.map((effect) => html`<li>${formatEffect(effect)}</li>`)}
-            </ul>
-          `
-        : ''} -->
       ${notes
         ? html` <sl-group label=${localize('notes')}>${notes}</sl-group> `
         : ''}
@@ -446,6 +425,152 @@ export class SubstanceForm extends ItemFormBase {
 
       <effect-creator @effect-created=${this.addCreatedEffect}></effect-creator>
     `;
+  }
+
+  private renderAlwaysAppliedEdit() {
+    const updater = this.item.updater.prop('data', 'alwaysApplied');
+    return html`
+      <h3>${localize('alwaysApplied')}</h3>
+      ${renderUpdaterForm(updater, {
+        fields: ({ duration, wearOffStress }) => [
+          renderTimeField(duration, {
+            permanentLabel: localize('indefinite'),
+            min: CommonInterval.Turn,
+          }),
+          renderFormulaField(wearOffStress),
+        ],
+      })}
+      <p class="label">${localize('damage')}</p>
+      ${this.renderEffectDamage('alwaysApplied')}
+      ${renderUpdaterForm(updater, {
+        fields: ({ notes }) => renderTextareaField(notes),
+      })}
+    `;
+  }
+
+  private renderSeverityEdit() {
+    const { conditions } = this.item.severity;
+    const updater = this.item.updater.prop('data', 'severity');
+    return html`
+      <h3>${localize('severity')}</h3>
+      ${renderUpdaterForm(updater, {
+        fields: ({ check, checkMod, duration, wearOffStress }) => [
+          html`<div class="check-fields">
+            ${[
+              renderSelectField(check, enumValues(AptitudeType)),
+              renderNumberField(checkMod, { min: -90, max: 90 }),
+            ]}
+          </div>`,
+          renderTimeField(duration, { permanentLabel: localize('indefinite') }),
+          renderFormulaField(wearOffStress),
+        ],
+      })}
+      <sl-popover
+        placement=${Placement.Right}
+        .renderOnDemand=${() => this.renderConditionsListForm()}
+      >
+        <wl-list-item slot="base" clickable>
+          <span>${localize('apply')} ${localize('conditions')}</span>
+          <span class="list-values"
+            >${notEmpty(conditions)
+              ? map(conditions, localize).join(', ')
+              : localize('none')}</span
+          >
+        </wl-list-item>
+      </sl-popover>
+
+      <p class="label">${localize('damage')}</p>
+      ${this.renderEffectDamage('severity')}
+      ${renderUpdaterForm(updater, {
+        fields: ({ notes }) => renderTextareaField(notes),
+      })}
+    `;
+  }
+
+  private renderConditionsListForm() {
+    const updater = this.item.updater.prop('data', 'severity');
+    const { conditions } = updater.originalValue();
+    const conditionsObj = mapToObj(enumValues(ConditionType), (condition) => [
+      condition,
+      conditions.includes(condition),
+    ]);
+
+    return renderAutoForm({
+      props: conditionsObj,
+      update: (conditions) =>
+        updater.commit({
+          conditions: enumValues(ConditionType).flatMap((condition) => {
+            const active = conditions[condition] ?? conditionsObj[condition];
+            return active ? condition : [];
+          }),
+        }),
+      fields: (conditions) =>
+        map(Object.values(conditions), renderLabeledCheckbox),
+    });
+  }
+
+  private renderEffectDamage(group: 'alwaysApplied' | 'severity') {
+    const updater = this.item.updater.prop('data', group, 'damage');
+    const { damage } = this.item[group];
+    return html`
+      ${renderUpdaterForm(updater, {
+        fields: ({
+          damageFormula,
+          damageType,
+          perTurn,
+          reduceAVbyDV,
+          armorPiercing,
+        }) => [
+          renderFormulaField(damageFormula),
+          damageFormula.value
+            ? [
+                html`<sl-popover
+                  .renderOnDemand=${() => this.renderArmorUsedForm(group)}
+                  placement=${Placement.Right}
+                >
+                  <wl-list-item slot="base" clickable>
+                    <span>${localize('armorUsed')}</span>
+                    <span class="list-values"
+                      >${notEmpty(damage.armorUsed)
+                        ? map(damage.armorUsed, localize).join(', ')
+                        : localize('none')}</span
+                    >
+                  </wl-list-item>
+                </sl-popover>`,
+                renderSelectField(damageType, enumValues(HealthType)),
+                notEmpty(damage.armorUsed)
+                  ? [
+                      renderLabeledCheckbox(armorPiercing),
+                      renderLabeledCheckbox(reduceAVbyDV),
+                    ]
+                  : '',
+                renderLabeledCheckbox(perTurn),
+              ]
+            : '',
+        ],
+      })}
+    `;
+  }
+
+  private renderArmorUsedForm(group: 'alwaysApplied' | 'severity') {
+    const updater = this.item.updater.prop('data', group, 'damage');
+    const { armorUsed } = updater.originalValue();
+    const armorUsedObj = mapToObj(enumValues(ArmorType), (armor) => [
+      armor,
+      armorUsed.includes(armor),
+    ]);
+
+    return renderAutoForm({
+      props: armorUsedObj,
+      update: (armors) =>
+        updater.commit({
+          armorUsed: enumValues(ArmorType).flatMap((armor) => {
+            const active = armors[armor] ?? armorUsedObj[armor];
+            return active ? armor : [];
+          }),
+        }),
+      fields: (armors) => map(Object.values(armors), renderLabeledCheckbox),
+    });
   }
 
   private drugCategoryTemplate = html`<datalist id="drug-categories">

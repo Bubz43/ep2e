@@ -48,10 +48,40 @@
   }
 }
 
+p.label {
+  @include listLabel();
+  margin-bottom: 0.25rem;
+}
+
+
 .severity-header {
   text-transform: capitalize;
 }
 
 item-form-effects-list {
   margin: 0.25rem 0;;
+}
+
+li {
+  list-style: none;
+}
+
+.item-list {
+  display: flex;
+  flex-flow: row wrap;
+  position: relative;
+  
+
+  li:not(.label) {
+    margin-left: 0.5ch;
+    display: inline-flex;
+    button {
+      all: unset;
+      &:hover,
+      &:focus {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+  }
 }
