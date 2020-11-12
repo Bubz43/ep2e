@@ -48,9 +48,17 @@
 
 @mixin listItemLabel() {
   li.label {
+    // text-transform: uppercase;
+    // color: var(--color-text-lighter);
+    // letter-spacing: 0.5px;
+    white-space: nowrap;
     text-transform: uppercase;
-    color: var(--color-text-lighter);
-    letter-spacing: 0.5px;
+    letter-spacing: 0.075em;
+    font-size:14.4px;
+    padding-right: 4px;
+    margin: 0;
+    opacity: 0.8;
+    align-self: center;
   }
 }
 

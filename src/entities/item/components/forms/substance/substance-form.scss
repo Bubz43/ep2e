@@ -28,7 +28,7 @@
   grid-auto-flow: column;
   grid-auto-columns: max-content;;
   gap: 0.5rem;
-  padding: 0.25rem;
+  padding: 0.5rem;
   position: relative;
   .method {
     list-style: none;
@@ -37,4 +37,21 @@
     background: var(--color-border);
     border-radius: 7px;
   }
+}
+
+
+.effect-details {
+  display: grid;
+  padding: 0.25rem;
+  sl-group {
+    font-size: large;
+  }
+}
+
+.severity-header {
+  text-transform: capitalize;
+}
+
+item-form-effects-list {
+  margin: 0.25rem 0;;
 }

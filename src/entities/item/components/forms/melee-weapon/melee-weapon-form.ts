@@ -134,6 +134,7 @@ export class MeleeWeaponForm extends ItemFormBase {
   }
 
   private addDrop = handleDrop(async ({ ev, data }) => {
+    if (this.disabled) return;
     const type = (ev.currentTarget as HTMLElement).dataset.drop;
     if (data?.type === DropType.Item) {
       const agent = await itemDropToItemProxy(data);

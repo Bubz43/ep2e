@@ -1,8 +1,10 @@
+import { formatArmorUsed } from '@src/combat/attack-formatting';
 import {
   renderNumberField,
   renderLabeledCheckbox,
   renderSelectField,
   renderTextField,
+  renderRadioFields,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import {
@@ -15,17 +17,40 @@ import {
   AptitudeType,
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
+import { ItemType } from '@src/entities/entity-types';
 import { Substance } from '@src/entities/item/proxies/substance';
+import type { EffectCreatedEvent } from '@src/features/components/effect-creator/effect-created-event';
+import { formatEffect } from '@src/features/effects';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import { prettyMilliseconds } from '@src/features/time';
-import { localize } from '@src/foundry/localization';
+import {
+  DropType,
+  handleDrop,
+  itemDropToItemProxy,
+} from '@src/foundry/drag-and-drop';
+import { format, localize } from '@src/foundry/localization';
+import { formatDamageType } from '@src/health/health';
 import { tooltip } from '@src/init';
-import { customElement, html, property } from 'lit-element';
+import { notEmpty, withSign } from '@src/utility/helpers';
+import {
+  customElement,
+  html,
+  internalProperty,
+  property,
+  PropertyValues,
+} from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { flatMap, identity, map, mapToObj, pipe } from 'remeda';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './substance-form.scss';
+
+const renderEffectInfo = () => html` <mwc-icon
+  slot="info"
+  data-tooltip="${localize('traits')} & ${localize('sleights')}"
+  @mouseenter=${tooltip.fromData}
+  >info</mwc-icon
+>`;
 
 @customElement('substance-form')
 export class SubstanceForm extends ItemFormBase {
@@ -37,6 +62,9 @@ export class SubstanceForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: Substance;
 
+  @internalProperty() effectGroup: 'alwaysApplied' | 'severity' =
+    'alwaysApplied';
+
   private effectOps = addUpdateRemoveFeature(
     () => this.item.updater.prop('data', 'alwaysApplied', 'effects').commit,
   );
@@ -44,6 +72,36 @@ export class SubstanceForm extends ItemFormBase {
   private severityEffectOps = addUpdateRemoveFeature(
     () => this.item.updater.prop('data', 'severity', 'effects').commit,
   );
+
+  update(changedProps: PropertyValues) {
+    if (!this.item.hasSeverity) this.effectGroup = 'alwaysApplied';
+    super.update(changedProps);
+  }
+
+  private addCreatedEffect(ev: EffectCreatedEvent) {
+    (this.effectGroup === 'alwaysApplied'
+      ? this.effectOps
+      : this.severityEffectOps
+    ).add({}, ev.effect);
+  }
+
+  private addItem = handleDrop(async ({ ev, data }) => {
+    const isSeverity = (ev.currentTarget as HTMLElement).hasAttribute(
+      'data-severity',
+    );
+    if (this.disabled) return;
+    if (data?.type === DropType.Item) {
+      const proxy = await itemDropToItemProxy(data);
+      const key = isSeverity ? 'severityAppliedItems' : 'alwaysAppliedItems';
+      if (proxy?.type === ItemType.Trait) {
+        if (proxy.hasMultipleLevels) {
+          proxy.selectLevelAndAdd(data => this.item.addItemEffect(key, data))
+        } else this.item.addItemEffect(key, proxy.getDataCopy())
+      } else if (proxy?.type === ItemType.Sleight) {
+        this.item.addItemEffect(key, proxy.getDataCopy())
+      }
+    }
+  });
 
   render() {
     const {
@@ -223,7 +281,171 @@ export class SubstanceForm extends ItemFormBase {
   }
 
   private renderEffects() {
-    return html``;
+    const { severity, hasSeverity, alwaysApplied } = this.item;
+    const { disabled } = this;
+    return html`
+      <sl-dropzone ?disabled=${disabled} @drop=${this.addItem}>
+        <sl-header
+          heading=${hasSeverity
+            ? `${localize('alwaysApplied')}`
+            : localize('effects')}
+        >
+          ${renderEffectInfo()} ${this.renderAddEffectButton('alwaysApplied')}
+          <mwc-icon-button
+            slot="action"
+            icon="edit"
+            ?disabled=${disabled}
+          ></mwc-icon-button>
+        </sl-header>
+        <div class="effect-details">
+          ${notEmpty(alwaysApplied.effects)
+            ? html`
+                <item-form-effects-list
+                  label=${localize('effects')}
+                  .effects=${alwaysApplied.effects}
+                  .operations=${this.effectOps}
+                  ?disabled=${disabled}
+                ></item-form-effects-list>
+              `
+            : ''}
+          ${this.renderCommonEffectInfo('alwaysApplied')}
+        </div>
+      </sl-dropzone>
+
+      ${hasSeverity
+        ? html`
+            <sl-dropzone
+              ?disabled=${disabled}
+              data-severity
+              @drop=${this.addItem}
+            >
+              <sl-header>
+                <span slot="heading" class="severity-header"
+                  >${format('OnCheckFailure', {
+                    aptitude: `${localize('FULL', severity.check)} ${
+                      severity.checkMod ? withSign(severity.checkMod) : ''
+                    }`,
+                  })}</span
+                >
+                ${renderEffectInfo()} ${this.renderAddEffectButton('severity')}
+                <mwc-icon-button
+                  slot="action"
+                  icon="edit"
+                  ?disabled=${disabled}
+                ></mwc-icon-button>
+              </sl-header>
+              <div class="effect-details">
+                ${notEmpty(severity.effects)
+                  ? html`
+                      <item-form-effects-list
+                        label=${localize('effects')}
+                        .effects=${severity.effects}
+                        .operations=${this.severityEffectOps}
+                        ?disabled=${disabled}
+                      ></item-form-effects-list>
+                    `
+                  : ''}
+                ${notEmpty(severity.conditions)
+                  ? html`
+                      <sl-group
+                        label="${localize('apply')} ${localize('conditions')}"
+                        >${map(severity.conditions, localize)}</sl-group
+                      >
+                    `
+                  : ''}
+                ${this.renderCommonEffectInfo('severity')}
+              </div>
+            </sl-dropzone>
+          `
+        : ''}
+    `;
+  }
+
+  private renderAddEffectButton(group: 'alwaysApplied' | 'severity') {
+    return html` <mwc-icon-button
+      slot="action"
+      icon="add"
+      ?disabled=${this.disabled}
+      data-tooltip="${localize('add')} ${localize('effect')}"
+      @mouseenter=${tooltip.fromData}
+      @focus=${tooltip.fromData}
+      @click=${() => {
+        this.effectGroup = group;
+        this.setDrawer(this.renderEffectCreator);
+      }}
+    ></mwc-icon-button>`;
+  }
+
+  private renderCommonEffectInfo(group: 'alwaysApplied' | 'severity') {
+    const {
+      duration,
+      wearOffStress,
+      effects,
+      items,
+      damage,
+      notes,
+    } = this.item[group];
+    const { damageFormula, damageType, perTurn, ...armor } = damage;
+
+    return html`
+      ${damageFormula
+        ? html`
+            <sl-group label=${formatDamageType(damageType)}>
+              ${damageFormula} ${formatArmorUsed(armor)}
+              ${perTurn ? `${localize('perTurn')}` : ''}
+            </sl-group>
+          `
+        : ''}
+      <!-- ${items.length + effects.length
+        ? html`
+            <ul>
+              ${items.map(
+                (item) =>
+                  html`<li>
+                    ${item.fullName}
+                    <span class="item-type"
+                      >${item.type === ItemType.Trait
+                        ? localize(item.type)
+                        : item.fullType}</span
+                    >
+                  </li>`,
+              )}
+              ${effects.map((effect) => html`<li>${formatEffect(effect)}</li>`)}
+            </ul>
+          `
+        : ''} -->
+      ${notes
+        ? html` <sl-group label=${localize('notes')}>${notes}</sl-group> `
+        : ''}
+
+      <sl-group label=${localize('duration')}
+        >${prettyMilliseconds(duration, { compact: false })}
+        ${wearOffStress
+          ? `(${format('TakeSVWhenWearsOff', {
+              wearOffStress,
+              substanceType: localize(
+                this.item.substanceType,
+              ).toLocaleLowerCase(),
+            })})`
+          : ''}</sl-group
+      >
+    `;
+  }
+
+  private renderEffectCreator() {
+    return html`
+      <h3>${localize('add')} ${localize('effect')}</h3>
+      ${this.item.hasSeverity
+        ? renderAutoForm({
+            props: { group: this.effectGroup },
+            update: ({ group }) => group && (this.effectGroup = group),
+            fields: ({ group }) =>
+              renderRadioFields(group, ['alwaysApplied', 'severity']),
+          })
+        : ''}
+
+      <effect-creator @effect-created=${this.addCreatedEffect}></effect-creator>
+    `;
   }
 
   private drugCategoryTemplate = html`<datalist id="drug-categories">

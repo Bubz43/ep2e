@@ -164,7 +164,7 @@ type ItemData<T extends ItemType> = WithTemplates<
 type ItemFlags<T extends ItemType> = T extends ItemType.Psi
   ? { influences: readonly StringID<PsiInfluence>[] }
   : T extends ItemType.Substance
-  ? DrugFlags
+  ? SubstanceItemFlags
   : T extends ItemType.Explosive
   ? { substance: null | [ItemEntity<ItemType.Substance>] }
   : T extends ItemType.MeleeWeapon
@@ -200,7 +200,7 @@ export type DrugAppliedItem =
   | ItemEntity<ItemType.Sleight>
   | ItemEntity<ItemType.Trait>;
 
-type DrugFlags = {
+export type SubstanceItemFlags = {
   alwaysAppliedItems: DrugAppliedItem[];
   severityAppliedItems: DrugAppliedItem[];
 };
