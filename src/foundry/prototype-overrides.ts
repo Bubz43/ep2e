@@ -9,6 +9,7 @@ import { notEmpty } from '@src/utility/helpers';
 import { html, render } from 'lit-html';
 import { compact, first, mapToObj, noop, pipe } from 'remeda';
 import { isKnownDrop, setDragSource } from './drag-and-drop';
+import { navMenuListener } from './foundry-apps';
 import type { TokenData } from './foundry-cont';
 import { activeCanvas, convertMenuOptions } from './misc-helpers';
 import { activeTokenStatusEffects } from './token-helpers';
@@ -349,7 +350,7 @@ CombatTracker.prototype._contextMenu = function (jqueryEl: JQuery) {
     if (!item) return;
     const targetEl = $(item);
     const entryOptions = this._getEntryContextOptions();
-    Hooks.call(`get${this.constructor.name}EntryContext`, html, entryOptions);
+    Hooks.call(`get${this.constructor.name}EntryContext`, this.element, entryOptions);
     const convertedOptions = convertMenuOptions(entryOptions, targetEl);
     const heading = item.textContent?.trim();
     openMenu({
@@ -367,7 +368,7 @@ PlayerList.prototype.activateListeners = function (jqueryEl: JQuery) {
     const targetEl = $(item);
 
     const contextOptions = this._getUserContextOptions();
-    Hooks.call(`getUserContextOptions`, html, contextOptions);
+    Hooks.call(`getUserContextOptions`, this.element, contextOptions);
     const convertedOptions = convertMenuOptions(contextOptions, targetEl);
     const heading = item.textContent?.trim();
     openMenu({
@@ -383,22 +384,7 @@ SceneNavigation.prototype.activateListeners = function (jqueryEl: JQuery) {
   scenes.click(this._onClickScene.bind(this));
   jqueryEl.find('#nav-toggle').click(this._onToggleNav.bind(this));
 
-  jqueryEl[0].addEventListener('contextmenu', (ev) => {
-    const item = findMatchingElement(ev, '.scene');
-    if (!item) return;
-    const contextOptions = this._getContextMenuOptions();
-    Hooks.call('getSceneNavigationContext', html, contextOptions);
-    const targetEl = $(item);
-    const convertedOptions = convertMenuOptions(contextOptions, targetEl);
-    const heading = item
-      .querySelector<HTMLElement>('.scene-name')
-      ?.textContent?.trim();
-    openMenu({
-      content: convertedOptions,
-      position: ev,
-      header: heading ? { heading } : undefined,
-    });
-  });
+  jqueryEl[0].addEventListener('contextmenu', navMenuListener);
 };
 
 CompendiumDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
@@ -406,7 +392,7 @@ CompendiumDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
     const item = findMatchingElement(ev, '.compendium-pack');
     if (!item) return;
     const entryOptions = this._getEntryContextOptions();
-    Hooks.call(`get${this.constructor.name}EntryContext`, html, entryOptions);
+    Hooks.call(`get${this.constructor.name}EntryContext`, this.element, entryOptions);
     const targetEl = $(item);
     const convertedOptions = convertMenuOptions(entryOptions, targetEl);
     const heading = item.querySelector('h4')?.textContent;
@@ -424,7 +410,7 @@ ChatLog.prototype._contextMenu = function (jqueryEl: JQuery) {
     if (!item) return;
     // TODO Alter/Replace Chat popout
     const entryOptions = this._getEntryContextOptions();
-    Hooks.call(`get${this.constructor.name}EntryContext`, html, entryOptions);
+    Hooks.call(`get${this.constructor.name}EntryContext`, this.element, entryOptions);
     const targetEl = $(item);
     const convertedOptions = convertMenuOptions(entryOptions, targetEl);
     openMenu({ content: convertedOptions, position: ev });

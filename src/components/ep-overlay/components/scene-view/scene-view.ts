@@ -1,7 +1,9 @@
+import { IconButton } from '@material/mwc-icon-button';
 import {
   activeEnvironmentInfo,
   getCurrentEnvironment,
 } from '@src/features/environment';
+import { navMenuListener } from '@src/foundry/foundry-apps';
 import {
   MutateEvent,
   mutateEntityHook,
@@ -12,6 +14,7 @@ import { activeCanvas } from '@src/foundry/misc-helpers';
 import { gameSettings, overlay } from '@src/init';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { render } from 'lit-html';
+import { styleMap } from 'lit-html/directives/style-map';
 import { openDialog } from 'web-dialog';
 import styles from './scene-view.scss';
 
@@ -73,8 +76,10 @@ export class SceneView extends LitElement {
     });
   }
 
-  private openSceneSheet() {
-    activeCanvas()?.scene?.sheet?.render(true);
+  private openSceneMenu(ev: MouseEvent) {
+    if (ev.target instanceof IconButton) {
+      navMenuListener(ev);
+    }
   }
 
   render() {
@@ -82,6 +87,14 @@ export class SceneView extends LitElement {
     const { name, img, gravity, vacuum, notes } = getCurrentEnvironment();
 
     return html`
+      <link
+        rel="stylesheet"
+        href="fonts/fontawesome/css/all.min.css"
+        media="all"
+      />
+
+      <!-- ${this.renderActiveScene()} -->
+
       ${isGM
         ? html`
             <mwc-icon-button
@@ -90,7 +103,6 @@ export class SceneView extends LitElement {
             ></mwc-icon-button>
           `
         : ''}
-      ${this.renderActiveScene()}
 
       <sl-group label=${localize('gravity')}>${gravity}</sl-group>
 
@@ -102,32 +114,30 @@ export class SceneView extends LitElement {
     const canvas = activeCanvas();
     const { scene } = canvas || {};
     if (!scene) return '';
-    const { navName, name: sceneName } = scene.data || {};
-    const fullSceneName = navName
-      ? `${navName} ${game.user.isGM ? `(${sceneName})` : ''}`
-      : sceneName;
+    const { fullSceneName } = scene;
 
     return html`
-      <wl-list-item
-        ?clickable=${game.user.isGM}
-        ?disabled=${!game.user.isGM}
-        @click=${this.openSceneSheet}
-        class="active-scene"
-        >${fullSceneName}
+      <div class="scene" data-scene-id=${scene.id} @click=${this.openSceneMenu}>
+        <h4 class="scene-name">
+          ${scene.active
+            ? html`<i class="fas fa-bullseye"></i>`
+            : ''}${fullSceneName}
+        </h4>
+        ${game.user.isGM ? html`
+        <mwc-icon-button class="menu" icon="more_vert"></mwc-icon-button>
+        ` : ""}
         <ul class="scene-players">
           ${[...game.users].map((user) => {
             if (!user.active || user.viewedScene !== scene.id) return '';
             return html`
-              <li
-                class="scene-player"
-                style="background-color: ${user.data.color}"
-              >
+              <li class="scene-player" style="background: ${user.data.color};">
                 ${user.name[0]}
               </li>
             `;
           })}
         </ul>
-      </wl-list-item>
+    
+      </div>
     `;
   }
 }

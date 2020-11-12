@@ -20,4 +20,16 @@ export class SceneEP extends Scene {
     })
   }
 
+  preload(push = true) {
+    game.scenes.preload(this.id, push);
+    
+  }
+
+  get fullSceneName() {
+    const { navName, name: sceneName } = this.data;
+    return navName
+      ? `${navName} ${game.user.isGM ? `(${sceneName})` : ''}`
+      : sceneName;
+  }
+
 }

@@ -1,5 +1,7 @@
 import { reposition } from 'nanopop';
-import { repositionIfNeeded } from '@src/utility/dom';
+import { findMatchingElement, repositionIfNeeded } from '@src/utility/dom';
+import { convertMenuOptions } from './misc-helpers';
+import { openMenu } from '@src/open-menu';
 
 export enum NotificationType {
   Info = 'info',
@@ -81,3 +83,21 @@ export const closeImagePicker = (key: object) => {
     pickers.delete(key);
   }
 };
+
+
+export const navMenuListener =  (ev: MouseEvent) => {
+  const item = findMatchingElement(ev, '.scene');
+  if (!item) return;
+  const contextOptions = ui.nav._getContextMenuOptions();
+  Hooks.call('getSceneNavigationContext', ui.nav.element, contextOptions);
+  const targetEl = $(item);
+  const convertedOptions = convertMenuOptions(contextOptions, targetEl);
+  const heading = item
+    .querySelector<HTMLElement>('.scene-name')
+    ?.textContent?.trim();
+  openMenu({
+    content: convertedOptions,
+    position: ev,
+    header: heading ? { heading } : undefined,
+  });
+}

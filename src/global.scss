@@ -310,16 +310,16 @@ table {
         }
       }
       &.view {
-        display: none;
-        // cursor: initial;
-        // background: linear-gradient(
-        //   to right,
-        //   var(--color-bg),
-        //   var(--color-bg-alt)
-        // );
-        // border: 1px groove var(--color-primary-alt);
-        // box-shadow: none;
-        // filter: contrast(0.95) drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.8));
+        // display: none;
+        cursor: initial;
+        background: linear-gradient(
+          to right,
+          var(--color-bg),
+          var(--color-bg-alt)
+        );
+        border: 1px groove var(--color-primary-alt);
+        box-shadow: none;
+        filter: contrast(0.95) drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.8));
       }
     }
   }

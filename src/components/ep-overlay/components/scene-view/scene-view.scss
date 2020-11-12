@@ -19,14 +19,35 @@
   }
 }
 
-.active-scene {
-  position: relative;
+.scene {
+  display: grid;
+  grid-template-areas: 
+  "name more"
+  "players players";
+
+  padding: 0.25rem;
+
+  .scene-name {
+    display: flex;
+    align-items: center;
+    i {
+      margin-right: 0.5ch;
+    }
+    grid-area: name;
+    margin: 0;
+  }
+  .scene-players {
+    grid-area: players;
+  }
+  .menu {
+    grid-area: more;
+    color: var(--color-text-lighter);
+  }
+
 }
 
 .scene-players {
   display: flex;
-  position: absolute;
-  transform: translateY(150%);
 }
 
 .scene-player {
@@ -38,4 +59,5 @@
   color: black;;
   font-weight: bold;
   text-transform: uppercase;
+  background-color: attr(data-color);
 }
