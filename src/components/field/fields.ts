@@ -253,7 +253,7 @@ export const renderLabeledCheckbox = (
   <mwc-formfield
     label=${props.label}
     ?alignEnd=${alignEnd}
-    style="height: 40px; padding-right: 0.5rem;"
+    style="height: 40px; padding-right: 0.5rem; white-space: nowrap;"
     data-tooltip=${ifDefined(tooltipText)}
     @mouseover=${tooltipText ? tooltip.fromData : noop}
   >

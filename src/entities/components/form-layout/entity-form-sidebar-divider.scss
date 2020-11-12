@@ -14,10 +14,6 @@
 }
 
 span {
-  text-transform: uppercase;
-  font-size: 0.9rem;
-  letter-spacing: 0.25rem;
-  opacity: 0.6;
-  display: block;
+  @include listLabel;
   margin: 0.5rem 0 0 1.25rem;
 }

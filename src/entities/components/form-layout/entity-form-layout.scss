@@ -158,6 +158,7 @@ slot[name='tabs'] {
   }
 }
 
-slot[name='description'] {
+slot[name='description'],
+slot[name="details"] {
   display: block;
 }

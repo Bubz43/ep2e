@@ -8,6 +8,11 @@ export const entityFormCommonStyles = css`
     background: linear-gradient(45deg, var(--color-bg), var(--color-bg-alt));
   }
 
+  [slot="details"] > sl-dropzone {
+    border-style: dashed;
+    border-width: 2px;
+  }
+
   entity-form-sidebar-divider + sl-field {
     margin-top: 0.4rem;
   }

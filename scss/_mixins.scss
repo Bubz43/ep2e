@@ -29,6 +29,14 @@
   }
 }
 
+@mixin listLabel() {
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.25rem;
+  opacity: 0.6;
+  display: block;
+}
+
 @mixin dataComma() {
   [data-comma] {
     &::after {

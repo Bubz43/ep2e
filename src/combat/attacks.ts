@@ -3,9 +3,12 @@ import type {
   AttackTrait,
   FirearmAmmoModifierType,
 } from '@src/data-enums';
+import type { Explosive } from '@src/entities/item/proxies/explosive';
+import type { Substance } from '@src/entities/item/proxies/substance';
 import type { ArmorType } from '@src/features/active-armor';
 import type { ConditionEffect } from '@src/features/conditions';
 import type { FiringMode } from '@src/features/firing-modes';
+import { localize } from '@src/foundry/localization';
 import type { HealthType } from '@src/health/health';
 
 type FiringModeList = {
@@ -13,6 +16,29 @@ type FiringModeList = {
    * @minItems 1
    */
   firingModes: FiringMode[];
+};
+
+export type LabeledFormula = { label: string; formula: string };
+
+type FullAttack<T extends { damageFormula: string }> = Omit<
+  T,
+  'damageFormula'
+> &
+  UsedAttackArmor & {
+    rollFormulas: LabeledFormula[];
+  };
+
+export const createBaseAttackFormula = (
+  damageFormula: string,
+): LabeledFormula => ({
+  label: `${localize('base')} ${localize('damageValue')}`,
+  formula: damageFormula,
+});
+
+export type UsedAttackArmor = {
+  armorUsed: ArmorType[];
+  armorPiercing: boolean;
+  reduceAVbyDV: boolean;
 };
 
 export type SleightAttackData = {
@@ -25,23 +51,18 @@ export type SleightAttackData = {
   notes: string;
 };
 
-export type SoftwareAttackData = {
+export type SoftwareAttackData = Omit<UsedAttackArmor, 'armorUsed'> & {
   label: string;
   damageFormula: string;
   damageType: HealthType;
   attackTraits: AttackTrait[];
   meshArmor?: boolean;
-  armorPiercing: boolean;
-  reduceAVbyDV: boolean;
   applyConditions: ConditionEffect;
 };
 
-export type SubstanceAttackData = {
+export type SubstanceAttackData = UsedAttackArmor & {
   damageFormula: string;
-  armorUsed: ArmorType[];
   attackTraits: AttackTrait[];
-  armorPiercing: boolean;
-  reduceAVbyDV: boolean;
   damageType: HealthType;
   perTurn: boolean;
 };
@@ -61,6 +82,11 @@ export type MeleeWeaponAttackData = {
   attackTraits: AttackTrait[];
   armorPiercing: boolean;
   notes: string;
+};
+
+export type MeleeWeaponAttack = FullAttack<MeleeWeaponAttackData> & {
+  coating?: Substance | null;
+  payload?: Explosive | null;
 };
 
 export type ThrownWeaponAttackData = {

@@ -87,6 +87,7 @@ import { TraitFormLevel } from './entities/item/components/forms/trait/trait-for
 import { EPOverlay } from './components/ep-overlay/ep-overlay';
 import { SceneView } from './components/ep-overlay/components/scene-view/scene-view';
 import { EnvironmentForms } from './components/ep-overlay/components/environment-forms/environment-forms';
+import { MeleeWeaponForm } from './entities/item/components/forms/melee-weapon/melee-weapon-form';
 
 customElements.define('app-datepicker', Datepicker);
 
@@ -154,6 +155,7 @@ SleightForm;
 PsiForm;
 PhysicalServiceForm;
 PhysicalTechForm;
+MeleeWeaponForm;
 ItemFormEffectsList;
 
 // Health Components

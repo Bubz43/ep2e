@@ -15,6 +15,15 @@ export const renderItemForm = (proxy: ItemProxy) => {
           .updater=${proxy.updater.prop('data').nestedStore()}
         ></entity-form-footer>
       `;
+    
+    case ItemType.MeleeWeapon:
+      return html`
+        <melee-weapon-form .item=${proxy}></melee-weapon-form>
+        <entity-form-footer
+          slot="footer"
+          .updater=${proxy.updater.prop('data').nestedStore()}
+        ></entity-form-footer>
+      `;
 
     case ItemType.PhysicalService:
       return html`

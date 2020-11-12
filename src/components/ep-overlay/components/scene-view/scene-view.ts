@@ -76,12 +76,6 @@ export class SceneView extends LitElement {
     });
   }
 
-  private openSceneMenu(ev: MouseEvent) {
-    if (ev.target instanceof IconButton) {
-      navMenuListener(ev);
-    }
-  }
-
   render() {
     const { isGM } = game.user;
     const { name, img, gravity, vacuum, notes } = getCurrentEnvironment();
@@ -92,8 +86,6 @@ export class SceneView extends LitElement {
         href="fonts/fontawesome/css/all.min.css"
         media="all"
       />
-
-      <!-- ${this.renderActiveScene()} -->
 
       ${isGM
         ? html`
@@ -107,37 +99,6 @@ export class SceneView extends LitElement {
       <sl-group label=${localize('gravity')}>${gravity}</sl-group>
 
       ${vacuum ? html`<span>${localize('inVacuum')}</span>` : ''}
-    `;
-  }
-
-  private renderActiveScene() {
-    const canvas = activeCanvas();
-    const { scene } = canvas || {};
-    if (!scene) return '';
-    const { fullSceneName } = scene;
-
-    return html`
-      <div class="scene" data-scene-id=${scene.id} @click=${this.openSceneMenu}>
-        <h4 class="scene-name">
-          ${scene.active
-            ? html`<i class="fas fa-bullseye"></i>`
-            : ''}${fullSceneName}
-        </h4>
-        ${game.user.isGM ? html`
-        <mwc-icon-button class="menu" icon="more_vert"></mwc-icon-button>
-        ` : ""}
-        <ul class="scene-players">
-          ${[...game.users].map((user) => {
-            if (!user.active || user.viewedScene !== scene.id) return '';
-            return html`
-              <li class="scene-player" style="background: ${user.data.color};">
-                ${user.name[0]}
-              </li>
-            `;
-          })}
-        </ul>
-    
-      </div>
     `;
   }
 }

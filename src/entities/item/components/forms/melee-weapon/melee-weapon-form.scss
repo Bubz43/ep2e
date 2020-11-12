@@ -1,0 +1,33 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  
+}
+
+.attack-details {
+  display: grid;
+  padding: 0.25rem;
+  font-size: large;
+}
+
+p.label {
+  @include listLabel();
+  margin-bottom: 0.25rem;
+}
+
+.attacks,
+.addons {
+  position: relative;
+}
+
+.addons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
