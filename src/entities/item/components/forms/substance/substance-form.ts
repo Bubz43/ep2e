@@ -11,6 +11,15 @@ import {
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import { Placement } from '@src/components/popover/popover-options';
+import type { SlWindow } from '@src/components/window/window';
+import {
+  closeWindow,
+  openWindow,
+} from '@src/components/window/window-controls';
+import {
+  ResizeOption,
+  SlWindowEventName,
+} from '@src/components/window/window-options';
 import {
   enumValues,
   SubstanceType,
@@ -23,7 +32,10 @@ import {
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { ItemType } from '@src/entities/entity-types';
+import { renderItemForm } from '@src/entities/item/item-views';
+import { Sleight } from '@src/entities/item/proxies/sleight';
 import { Substance } from '@src/entities/item/proxies/substance';
+import { Trait } from '@src/entities/item/proxies/trait';
 import { ArmorType } from '@src/features/active-armor';
 import type { EffectCreatedEvent } from '@src/features/components/effect-creator/effect-created-event';
 import { ConditionType } from '@src/features/conditions';
@@ -47,7 +59,7 @@ import {
   PropertyValues,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { flatMap, identity, map, mapToObj, pipe } from 'remeda';
+import { flatMap, groupBy, identity, map, mapToObj, pipe } from 'remeda';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './substance-form.scss';
@@ -59,6 +71,10 @@ const renderEffectInfo = () => html` <mwc-icon
   >info</mwc-icon
 >`;
 
+const itemKeys = ['traits', 'sleights'] as const;
+
+type Group = 'alwaysApplied' | 'severity';
+
 @customElement('substance-form')
 export class SubstanceForm extends ItemFormBase {
   static get is() {
@@ -69,8 +85,11 @@ export class SubstanceForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: Substance;
 
-  @internalProperty() effectGroup: 'alwaysApplied' | 'severity' =
-    'alwaysApplied';
+  @internalProperty() effectGroup: Group = 'alwaysApplied';
+
+  private alwaysAppliedSheets = new Map<string, {}>();
+
+  private severitySheets = new Map<string, {}>();
 
   private effectOps = addUpdateRemoveFeature(
     () => this.item.updater.prop('data', 'alwaysApplied', 'effects').commit,
@@ -81,8 +100,57 @@ export class SubstanceForm extends ItemFormBase {
   );
 
   update(changedProps: PropertyValues) {
-    if (!this.item.hasSeverity) this.effectGroup = 'alwaysApplied';
+    if (!this.item.hasSeverity) {
+      this.effectGroup = 'alwaysApplied';
+      this.severitySheets.forEach(closeWindow);
+      this.severitySheets.clear();
+    }
+    for (const [id] of this.alwaysAppliedSheets) {
+      this.openItemSheet('alwaysApplied', id);
+    }
+    for (const [id] of this.severitySheets) {
+      this.openItemSheet('severity', id);
+    }
+
     super.update(changedProps);
+  }
+
+  disconnectedCallback() {
+    for (const map of [this.alwaysAppliedSheets, this.severitySheets]) {
+      map.forEach(closeWindow);
+      map.clear();
+    }
+    super.disconnectedCallback();
+  }
+
+  private openItemSheet(group: Group, id: string) {
+    const subItem = this.item[group].items.get(id);
+    if (!subItem) return;
+    const map =
+      group === 'alwaysApplied'
+        ? this.alwaysAppliedSheets
+        : this.severitySheets;
+    let key = map.get(id);
+    if (!key) {
+      key = {};
+      map.set(id, key);
+    }
+
+    const { wasConnected, win } = openWindow(
+      {
+        key: key,
+        content: renderItemForm(subItem),
+        adjacentEl: this,
+        forceFocus: true,
+        name: subItem.fullName,
+      },
+      { resizable: ResizeOption.Vertical },
+    );
+    if (!wasConnected) {
+      win.addEventListener(SlWindowEventName.Closed, () => map.delete(id), {
+        once: true,
+      });
+    }
   }
 
   private addCreatedEffect(ev: EffectCreatedEvent) {
@@ -336,9 +404,10 @@ export class SubstanceForm extends ItemFormBase {
               <div class="effect-details">
                 ${notEmpty(severity.conditions)
                   ? html`
-                      <sl-group
-                        label="${localize('apply')} ${localize('conditions')}"
-                        >${map(severity.conditions, localize)}</sl-group
+                      <sl-group label=${localize('conditions')}
+                        >${map(severity.conditions, localize).join(
+                          ', ',
+                        )}</sl-group
                       >
                     `
                   : ''}
@@ -350,7 +419,7 @@ export class SubstanceForm extends ItemFormBase {
     `;
   }
 
-  private renderAddEffectButton(group: 'alwaysApplied' | 'severity') {
+  private renderAddEffectButton(group: Group) {
     return html` <mwc-icon-button
       slot="action"
       icon="add"
@@ -365,7 +434,7 @@ export class SubstanceForm extends ItemFormBase {
     ></mwc-icon-button>`;
   }
 
-  private renderEffectsList(group: 'alwaysApplied' | 'severity') {
+  private renderEffectsList(group: Group) {
     const { effects } = this.item[group];
     return notEmpty(effects)
       ? html`<item-form-effects-list
@@ -379,12 +448,52 @@ export class SubstanceForm extends ItemFormBase {
       : '';
   }
 
-  private renderCommonEffectInfo(group: 'alwaysApplied' | 'severity') {
-    const { duration, wearOffStress, damage, notes } = this.item[group];
+  private renderCommonEffectInfo(group: Group) {
+    const { duration, wearOffStress, damage, notes, items } = this.item[group];
     const { damageFormula, damageType, perTurn, ...armor } = damage;
 
+    const itemGroups = [...items.values()].reduce(
+      (accum, item) => {
+        if (item.type === ItemType.Trait)
+          accum.traits.push(
+            new Trait({
+              data: item.getDataCopy(),
+              lockSource: item.lockSource,
+              embedded: item.embedded,
+              alwaysDeletable: item.alwaysDeletable,
+              updater: item.updater,
+              openForm: () => this.openItemSheet(group, item.id),
+              deleteSelf: item.deleteSelf,
+            }),
+          );
+        else
+          accum.sleights.push(
+            new Sleight({
+              data: item.getDataCopy(),
+              embedded: item.embedded,
+              alwaysDeletable: item.alwaysDeletable,
+              updater: item.updater,
+              openForm: () => this.openItemSheet(group, item.id),
+              deleteSelf: item.deleteSelf,
+            }),
+          );
+        return accum;
+      },
+      { traits: [] as Trait[], sleights: [] as Sleight[] },
+    );
     return html`
       ${this.renderEffectsList(group)}
+      ${itemKeys.map((key) => {
+        const itemGroup = itemGroups[key];
+        return notEmpty(itemGroup)
+          ? html`
+              <form-items-list
+                .items=${itemGroup}
+                label=${localize(key)}
+              ></form-items-list>
+            `
+          : '';
+      })}
       ${damageFormula
         ? html`
             <sl-group label=${formatDamageType(damageType)}>
@@ -466,6 +575,7 @@ export class SubstanceForm extends ItemFormBase {
         ],
       })}
       <sl-popover
+        padded
         placement=${Placement.Right}
         .renderOnDemand=${() => this.renderConditionsListForm()}
       >
@@ -509,7 +619,7 @@ export class SubstanceForm extends ItemFormBase {
     });
   }
 
-  private renderEffectDamage(group: 'alwaysApplied' | 'severity') {
+  private renderEffectDamage(group: Group) {
     const updater = this.item.updater.prop('data', group, 'damage');
     const { damage } = this.item[group];
     return html`
@@ -525,6 +635,7 @@ export class SubstanceForm extends ItemFormBase {
           damageFormula.value
             ? [
                 html`<sl-popover
+                  padded
                   .renderOnDemand=${() => this.renderArmorUsedForm(group)}
                   placement=${Placement.Right}
                 >
@@ -552,7 +663,7 @@ export class SubstanceForm extends ItemFormBase {
     `;
   }
 
-  private renderArmorUsedForm(group: 'alwaysApplied' | 'severity') {
+  private renderArmorUsedForm(group: Group) {
     const updater = this.item.updater.prop('data', group, 'damage');
     const { armorUsed } = updater.originalValue();
     const armorUsedObj = mapToObj(enumValues(ArmorType), (armor) => [

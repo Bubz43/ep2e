@@ -4,7 +4,12 @@ import {
   SubstanceType,
 } from '@src/data-enums';
 import { ItemType } from '@src/entities/entity-types';
-import type { DrugAppliedItem, SubstanceItemFlags } from '@src/entities/models';
+import type {
+  DrugAppliedItem,
+  ItemEntity,
+  SubstanceItemFlags,
+} from '@src/entities/models';
+import { UpdateStore } from '@src/entities/update-store';
 import { uniqueStringID } from '@src/features/feature-helpers';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
 import { localize } from '@src/foundry/localization';
@@ -138,12 +143,11 @@ export class Substance
   private getInstancedItems(
     group: 'alwaysAppliedItems' | 'severityAppliedItems',
   ) {
-    return (
-      this.epFlags?.[group]?.map((item) => {
+    return new Map(
+      this.epFlags?.[group]?.map((item, index, list) => {
         const commonInit = {
           embedded: this.name,
           lockSource: false,
-          usable: false,
           alwaysDeletable: this.editable,
           deleteSelf: () =>
             this.updater.prop('flags', EP.Name, group).commit((items) => {
@@ -152,22 +156,53 @@ export class Substance
               return [...set];
             }),
         };
-        return item.type === ItemType.Trait
-          ? new Trait({ data: item, ...commonInit })
-          : new Sleight({ data: item, ...commonInit });
-      }) || []
+        return [
+          item._id,
+          item.type === ItemType.Trait
+            ? new Trait({
+                data: item,
+                ...commonInit,
+                updater: new UpdateStore({
+                  getData: () => item,
+                  isEditable: () => this.editable,
+                  setData: (updated) => {
+                    const updatedList = [...list];
+                    updatedList[index] = mergeObject(item, updated, {
+                      inplace: false,
+                    });
+                    this.updater
+                      .prop('flags', EP.Name, group)
+                      .commit(updatedList);
+                  },
+                }),
+              })
+            : new Sleight({
+                data: item,
+                ...commonInit,
+                updater: new UpdateStore({
+                  getData: () => item,
+                  isEditable: () => this.editable,
+                  setData: (updated) => {
+                    const updatedList = [...list];
+                    updatedList[index] = mergeObject(item, updated, {
+                      inplace: false,
+                    });
+                    this.updater
+                      .prop('flags', EP.Name, group)
+                      .commit(updatedList);
+                  },
+                }),
+              }),
+        ];
+      }) || [],
     );
   }
 
-  addItemEffect(
-    group: keyof SubstanceItemFlags,
-    itemData: DrugAppliedItem
-  ) {
-    this.updater.prop("flags", EP.Name, group).commit((items) => {
+  addItemEffect(group: keyof SubstanceItemFlags, itemData: DrugAppliedItem) {
+    this.updater.prop('flags', EP.Name, group).commit((items) => {
       const changed = [...(items || [])];
       const _id = uniqueStringID(changed.map((i) => i._id));
       return [...changed, { ...itemData, _id }] as typeof changed;
     });
   }
-
 }

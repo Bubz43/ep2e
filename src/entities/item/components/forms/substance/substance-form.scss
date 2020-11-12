@@ -58,30 +58,21 @@ p.label {
   text-transform: capitalize;
 }
 
-item-form-effects-list {
-  margin: 0.25rem 0;;
+item-form-effects-list,
+form-items-list {
+  margin: 0.25rem 0 0;;
 }
 
-li {
-  list-style: none;
-}
-
-.item-list {
-  display: flex;
-  flex-flow: row wrap;
-  position: relative;
-  
-
-  li:not(.label) {
-    margin-left: 0.5ch;
-    display: inline-flex;
-    button {
-      all: unset;
-      &:hover,
-      &:focus {
-        text-decoration: underline;
-        cursor: pointer;
+[slot="drawer-content"] {
+  sl-popover {
+    width: 100%;
+    > wl-list-item[slot="base"] {
+      padding: 0.25rem 0.5rem;
+      margin-bottom: 0.25rem;
+      > span:first-of-type {
+        color: var(--color-text-lighter);
       }
     }
   }
+  
 }
