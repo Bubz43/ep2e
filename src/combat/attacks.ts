@@ -22,10 +22,11 @@ export type LabeledFormula = { label: string; formula: string };
 
 type FullAttack<T extends { damageFormula: string }> = Omit<
   T,
-  'damageFormula'
+  'damageFormula' | "armorUsed"
 > &
   UsedAttackArmor & {
-    rollFormulas: LabeledFormula[];
+  rollFormulas: LabeledFormula[];
+  label: string;
   };
 
 export const createBaseAttackFormula = (
@@ -67,14 +68,23 @@ export type SubstanceAttackData = UsedAttackArmor & {
   perTurn: boolean;
 };
 
+export type SubstanceAttack = FullAttack<SubstanceAttackData>;
 export type ExplosiveAttackData = {
   label: string;
   damageFormula: string;
   armorUsed: '' | ArmorType.Energy | ArmorType.Kinetic;
+  armorPiercing: boolean;
   attackTraits: AttackTrait[];
   duration: number;
   notes: string;
 };
+
+export type ExplosiveAttack = FullAttack<ExplosiveAttackData> & {
+  duration: number;
+  substance?: Substance | null;
+  areaEffect?: AreaEffectType | "";
+  areaEffectRadius?: number;
+}
 
 export type MeleeWeaponAttackData = {
   label: string;

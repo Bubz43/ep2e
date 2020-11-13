@@ -1,0 +1,51 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  
+}
+
+.attack-details {
+  display: grid;
+  padding: 0.25rem;
+  font-size: large;
+}
+
+p.label {
+  @include listLabel();
+  margin-bottom: 0.25rem;
+}
+
+.addon {
+  display: grid;
+  grid-template-areas:
+    'name name name'
+    'type sheet delete';
+  grid-template-columns: 1fr auto auto;
+  padding: 0.5rem 0 0.25rem 0.25rem;
+  align-items: center;
+  .addon-name {
+    font-size: large;
+    grid-area: name;
+    @include truncate(100%);
+  }
+  .addon-type {
+    grid-area: type;
+    color: var(--color-text-lighter);
+    @include truncate(100%);
+  }
+  mwc-icon-button {
+    --mdc-icon-button-size: 1.5rem;
+    color: var(--color-text-lighter);
+    --mdc-icon-size: 1.25rem;
+    grid-area: sheet;
+  }
+  delete-button {
+    grid-area: delete;
+  }
+}

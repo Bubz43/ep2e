@@ -1,4 +1,7 @@
-import { formatArmorUsed } from '@src/combat/attack-formatting';
+import {
+  formatArmorUsed,
+  formatLabeledFormulas,
+} from '@src/combat/attack-formatting';
 import type { MeleeWeaponAttack } from '@src/combat/attacks';
 import {
   renderFormulaField,
@@ -10,7 +13,7 @@ import {
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
-import { openWindow } from '@src/components/window/window-controls';
+import { closeWindow, openWindow } from '@src/components/window/window-controls';
 import {
   ResizeOption,
   SlWindowEventName,
@@ -70,46 +73,43 @@ export class MeleeWeaponForm extends ItemFormBase {
   }
 
   updated(changedProps: PropertyValues) {
-    if (this.coatingSheet) {
-      if (this.item.coating) {
-        openWindow(
-          {
-            key: this,
-            content: renderItemForm(this.item.coating),
-            name: `[${this.item.fullName} ${localize('coating')}] ${
-              this.item.coating.fullName
-            }`,
-          },
-          { resizable: ResizeOption.Vertical },
-        );
-      } else this.closeCoatingSheet();
-    }
-    if (this.payloadSheet) {
-      if (this.item.payload) {
-        openWindow(
-          {
-            key: this,
-            content: renderItemForm(this.item.payload),
-            name: `[${this.item.fullName} ${localize('payload')}] ${
-              this.item.payload.fullName
-            }`,
-          },
-          { resizable: ResizeOption.Vertical },
-        );
-      } else this.closePayloadSheet();
-    }
+    if (this.coatingSheet)  this.openCoatingSheet()
+    if (this.payloadSheet) this.openPayloadSheet();
     super.updated(changedProps);
   }
 
+  
+  private addDrop = handleDrop(async ({ ev, data }) => {
+    if (this.disabled) return;
+    const type = (ev.currentTarget as HTMLElement).dataset.drop;
+    if (data?.type === DropType.Item) {
+      const agent = await itemDropToItemProxy(data);
+      if (agent?.type === ItemType.Explosive) {
+        if (this.item.acceptsPayload && type === 'payload')
+          this.item.setPayload(agent);
+      } else if (agent?.type === ItemType.Substance) {
+        if (agent.isElectronic) {
+          // TODO Better error messages
+          notify(
+            NotificationType.Error,
+            `${localize('non-electronic')} ${localize('substance')}`,
+          );
+        } else {
+          this.item.setCoating(agent);
+        }
+      }
+    }
+  });
+
   private openCoatingSheet() {
     const { coating, fullName } = this.item;
-    if (!coating) return;
+    if (!coating) return this.closeCoatingSheet()
     const { win, wasConnected } = openWindow(
       {
         key: this.coatingSheetKey,
         content: renderItemForm(coating),
         adjacentEl: this,
-        forceFocus: true,
+        forceFocus: !this.coatingSheet,
         name: `[${fullName} ${localize('coating')}] ${coating.fullName}`,
       },
       { resizable: ResizeOption.Vertical },
@@ -133,37 +133,16 @@ export class MeleeWeaponForm extends ItemFormBase {
     return this.item.removeCoating();
   }
 
-  private addDrop = handleDrop(async ({ ev, data }) => {
-    if (this.disabled) return;
-    const type = (ev.currentTarget as HTMLElement).dataset.drop;
-    if (data?.type === DropType.Item) {
-      const agent = await itemDropToItemProxy(data);
-      if (agent?.type === ItemType.Explosive) {
-        if (this.item.acceptsPayload && type === 'payload')
-          this.item.setPayload(agent);
-      } else if (agent?.type === ItemType.Substance) {
-        if (agent.isElectronic) {
-          // TODO Better error messages
-          notify(
-            NotificationType.Error,
-            `${localize('non-electronic')} ${localize('substance')}`,
-          );
-        } else {
-          this.item.setCoating(agent);
-        }
-      }
-    }
-  });
 
   private openPayloadSheet() {
     const { payload, fullName } = this.item;
-    if (!payload) return;
+    if (!payload) return this.closeCoatingSheet()
     const { win, wasConnected } = openWindow(
       {
         key: this.payloadSheetKey,
         content: renderItemForm(payload),
         adjacentEl: this,
-        forceFocus: true,
+        forceFocus: !this.payloadSheet,
         name: `[${fullName} ${localize('payload')}] ${payload.fullName}`,
       },
       { resizable: ResizeOption.Vertical },
@@ -180,7 +159,7 @@ export class MeleeWeaponForm extends ItemFormBase {
 
   private closePayloadSheet() {
     this.payloadSheet?.close();
-    this.payloadSheet = null;
+    this.payloadSheet = null
   }
 
   private deletePayload() {
@@ -361,9 +340,7 @@ export class MeleeWeaponForm extends ItemFormBase {
               : ''}
             ${notEmpty(attack.rollFormulas)
               ? [
-                  cleanFormula(
-                    attack.rollFormulas.map(({ formula }) => formula).join('+'),
-                  ),
+                  formatLabeledFormulas(attack.rollFormulas),
                   formatArmorUsed(attack),
                 ].join('; ')
               : this.item.augmentUnarmed
@@ -429,7 +406,7 @@ export class MeleeWeaponForm extends ItemFormBase {
               return active ? trait : [];
             }),
           }),
-        fields: (traits) => map(Object.values(traits), renderLabeledCheckbox)
+        fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
       })}
       ${renderUpdaterForm(updater, {
         disabled,

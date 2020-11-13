@@ -9068,6 +9068,9 @@
     "ExplosiveAttackData": {
       "additionalProperties": false,
       "properties": {
+        "armorPiercing": {
+          "type": "boolean"
+        },
         "armorUsed": {
           "type": "string"
         },
@@ -9094,6 +9097,7 @@
         "label",
         "damageFormula",
         "armorUsed",
+        "armorPiercing",
         "attackTraits",
         "duration",
         "notes"
@@ -10043,13 +10047,13 @@
         }
       },
       "required": [
-        "label",
+        "applyConditions",
+        "armorPiercing",
+        "attackTraits",
         "damageFormula",
         "damageType",
-        "attackTraits",
-        "armorPiercing",
-        "reduceAVbyDV",
-        "applyConditions"
+        "label",
+        "reduceAVbyDV"
       ],
       "type": "object"
     },
@@ -10347,13 +10351,13 @@
         }
       },
       "required": [
-        "damageFormula",
+        "armorPiercing",
         "armorUsed",
         "attackTraits",
-        "armorPiercing",
-        "reduceAVbyDV",
+        "damageFormula",
         "damageType",
-        "perTurn"
+        "perTurn",
+        "reduceAVbyDV"
       ],
       "type": "object"
     },

@@ -456,7 +456,7 @@ export class SubstanceForm extends ItemFormBase {
 
   private renderCommonEffectInfo(group: Group) {
     const { duration, wearOffStress, damage, notes, items } = this.item[group];
-    const { damageFormula, damageType, perTurn, ...armor } = damage;
+    const { damageFormula, damageType, perTurn, ...armor } = this.item.epData[group].damage;
 
     const itemGroups = [...items.values()].reduce(
       (accum, item) => {

@@ -1,4 +1,9 @@
 import {
+  createBaseAttackFormula,
+  SubstanceAttack,
+  SubstanceAttackData,
+} from '@src/combat/attacks';
+import {
   SubstanceApplicationMethod,
   SubstanceClassification,
   SubstanceType,
@@ -17,7 +22,7 @@ import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { pipe, uniq, map } from 'remeda';
-import type { Stackable } from '../item-interfaces';
+import type { Attacker, Stackable } from '../item-interfaces';
 import { Purchasable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 import { Sleight } from './sleight';
@@ -28,7 +33,7 @@ export type SubstanceUse = Substance['applicationMethods'][number] | 'use';
 class Base extends ItemProxyBase<ItemType.Substance> {}
 export class Substance
   extends mix(Base).with(Purchasable)
-  implements Stackable {
+  implements Stackable, Attacker<SubstanceAttackData, SubstanceAttack> {
   static onsetTime(application: SubstanceUse) {
     switch (application) {
       case SubstanceApplicationMethod.Inhalation:
@@ -115,6 +120,7 @@ export class Substance
   get alwaysApplied() {
     return {
       ...this.epData.alwaysApplied,
+      damage: this.attacks.primary,
       items: this.alwaysAppliedItems,
     };
   }
@@ -122,7 +128,34 @@ export class Substance
   get severity() {
     return {
       ...this.epData.severity,
+      damage: this.setupAttack(this.epData.severity.damage, localize('severity')),
       items: this.severityAppliedItems,
+    };
+  }
+
+  @LazyGetter()
+  get attacks() {
+    return {
+      primary: this.setupAttack(
+        this.epData.alwaysApplied.damage,
+        localize('alwaysApplied'),
+      ),
+      secondary: this.hasSeverity
+        ? this.setupAttack(this.epData.severity.damage, localize('severity'))
+        : null,
+    };
+  }
+
+  setupAttack(
+    { damageFormula, ...data }: SubstanceAttackData,
+    defaultLabel: string,
+  ): SubstanceAttack {
+    return {
+      ...data,
+      label: this.hasSeverity ? defaultLabel : '',
+      rollFormulas: damageFormula
+        ? [createBaseAttackFormula(damageFormula)]
+        : [],
     };
   }
 

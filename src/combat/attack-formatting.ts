@@ -1,7 +1,8 @@
 import { localize } from '@src/foundry/localization';
+import { cleanFormula } from '@src/foundry/rolls';
 import { notEmpty } from '@src/utility/helpers';
 import { compact, map, pipe } from 'remeda';
-import type { UsedAttackArmor } from './attacks';
+import type { LabeledFormula, UsedAttackArmor } from './attacks';
 
 export const formatArmorUsed = ({
   armorPiercing,
@@ -20,3 +21,6 @@ export const formatArmorUsed = ({
       ).join(', ')
     : localize('ignoresArmor');
 };
+
+export const formatLabeledFormulas = (formulas: LabeledFormula[]) =>
+  cleanFormula(formulas.map(({ formula }) => formula).join('+'));
