@@ -4,7 +4,8 @@ import {
   ExplosiveAttackData,
 } from '@src/combat/attacks';
 import { ExplosiveType, ExplosiveSize } from '@src/data-enums';
-import type { ItemType } from '@src/entities/entity-types';
+import { ItemType } from '@src/entities/entity-types';
+import { UpdateStore } from '@src/entities/update-store';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
@@ -31,11 +32,21 @@ export class Explosive
 
   @LazyGetter()
   get substance() {
-    const substanceData = this.epFlags?.substance;
+    const substanceData = this.epFlags?.substance?.[0];
     return substanceData ? new Substance({
-      data: substanceData[0],
+      data: substanceData,
       embedded: this.name,
       loaded: true,
+      updater: new UpdateStore({
+        getData: () => substanceData,
+        isEditable: () => this.editable,
+        setData: (changed) => {
+          this.updater.prop("flags", EP.Name, ItemType.Substance).commit(data => {
+            return data ? mergeObject(data,changed, { inplace: false }) : null
+          })
+        }
+      }),
+      deleteSelf: () => this.removeSubstance()
     }) : null
   }
 

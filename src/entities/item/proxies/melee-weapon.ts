@@ -4,6 +4,7 @@ import {
   MeleeWeaponAttackData,
 } from '@src/combat/attacks';
 import type { ItemType } from '@src/entities/entity-types';
+import { UpdateStore } from '@src/entities/update-store';
 import { ArmorType } from '@src/features/active-armor';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
@@ -35,7 +36,6 @@ export class MeleeWeapon
   get acceptsPayload() {
     return this.epData.acceptsPayload;
   }
-  
 
   @LazyGetter()
   get attacks() {
@@ -74,7 +74,23 @@ export class MeleeWeapon
   get payload() {
     const explosive = this.epFlags?.payload?.[0];
     return explosive
-      ? new Explosive({ data: explosive, embedded: this.name, loaded: true })
+      ? new Explosive({
+          data: explosive,
+          embedded: this.name,
+          loaded: true,
+          updater: new UpdateStore({
+            getData: () => explosive,
+            isEditable: () => this.editable,
+            setData: (changed) => {
+              this.updater.prop('flags', EP.Name, 'payload').commit((data) => {
+                return data
+                  ? mergeObject(data, changed, { inplace: false })
+                  : null;
+              });
+            },
+          }),
+          deleteSelf: () => this.removePayload(),
+        })
       : null;
   }
 
@@ -82,7 +98,23 @@ export class MeleeWeapon
   get coating() {
     const substance = this.epFlags?.coating?.[0];
     return substance
-      ? new Substance({ data: substance, embedded: this.name, loaded: true })
+      ? new Substance({
+          data: substance,
+          embedded: this.name,
+          loaded: true,
+          updater: new UpdateStore({
+            getData: () => substance,
+            isEditable: () => this.editable,
+            setData: (changed) => {
+              this.updater.prop('flags', EP.Name, 'coating').commit((data) => {
+                return data
+                  ? mergeObject(data, changed, { inplace: false })
+                  : null;
+              });
+            },
+          }),
+          deleteSelf: () => this.removeCoating(),
+        })
       : null;
   }
 
