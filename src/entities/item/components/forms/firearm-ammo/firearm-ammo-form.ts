@@ -24,7 +24,7 @@ import { entityFormCommonStyles } from '@src/entities/components/form-layout/ent
 import { ItemType } from '@src/entities/entity-types';
 import { renderItemForm } from '@src/entities/item/item-views';
 import type { FirearmAmmo } from '@src/entities/item/proxies/firearm-ammo';
-import { checkList } from '@src/features/check-list';
+import { pairList } from '@src/features/check-list';
 import {
   addFeature,
   addUpdateRemoveFeature,
@@ -313,7 +313,7 @@ export class FirearmAmmoForm extends ItemFormBase {
     const { hasMultipleModes, modes } = this.item;
     const modeMap = mapToObj(modes, (mode) => [mode.id, mode.name]);
     const activeMode = modes.find(matchID(this.editingModeId))!;
-    const [pairedTraits, change] = checkList(
+    const [pairedTraits, change] = pairList(
       activeMode.attackTraits,
       enumValues(AttackTrait),
     );

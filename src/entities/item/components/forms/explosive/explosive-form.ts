@@ -35,7 +35,7 @@ import { ItemType } from '@src/entities/entity-types';
 import { renderItemForm } from '@src/entities/item/item-views';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
 import { ArmorType } from '@src/features/active-armor';
-import { checkList } from '@src/features/check-list';
+import { pairList } from '@src/features/check-list';
 import { prettyMilliseconds } from '@src/features/time';
 import {
   DropType,
@@ -324,7 +324,7 @@ export class ExplosiveForm extends ItemFormBase {
     const modeLabel = localize(
       type === WeaponAttackType.Primary ? 'primaryMode' : 'secondaryMode',
     );
-    const [pairedTraits, change] = checkList(
+    const [pairedTraits, change] = pairList(
       updater.originalValue().attackTraits,
       enumValues(AttackTrait),
     );

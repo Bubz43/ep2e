@@ -11,11 +11,9 @@
 
 
 .accessories-list {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: max-content;
-  gap: 0.5rem;
-  padding: 0.5rem;
+  display: flex;
+  flex-flow: row wrap;
+  padding: 0 0.5rem 0.5rem;
   position: relative;
   > li {
     list-style: none;
@@ -23,16 +21,19 @@
     padding: 0.15rem 0.5rem;
     background: var(--color-border);
     border-radius: 7px;
+    margin: 0.5rem 0.5rem 0 0;
   }
 }
 
 
 .ammo-form {
   grid-template-columns: 2fr 1fr 1fr;
+  padding: 0.5rem 0;
 }
 
 .battery-form {
   grid-template-columns: 1fr 1fr auto;
+  padding: 0.5rem 0;
 }
 
 p.label {

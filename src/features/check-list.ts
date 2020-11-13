@@ -1,6 +1,6 @@
 import { mapToObj } from 'remeda';
 
-export const checkList = <T extends string>(
+export const pairList = <T extends string>(
   list: T[],
   allOptions: readonly T[],
 ) => {

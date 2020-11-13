@@ -37,7 +37,7 @@ import { Sleight } from '@src/entities/item/proxies/sleight';
 import { Substance } from '@src/entities/item/proxies/substance';
 import { Trait } from '@src/entities/item/proxies/trait';
 import { ArmorType } from '@src/features/active-armor';
-import { checkList } from '@src/features/check-list';
+import { pairList } from '@src/features/check-list';
 import type { EffectCreatedEvent } from '@src/features/components/effect-creator/effect-created-event';
 import { ConditionType } from '@src/features/conditions';
 import { formatEffect } from '@src/features/effects';
@@ -607,7 +607,7 @@ export class SubstanceForm extends ItemFormBase {
 
   private renderConditionsListForm() {
     const updater = this.item.updater.prop('data', 'severity');
-    const [pairedConditions, change] = checkList(
+    const [pairedConditions, change] = pairList(
       updater.originalValue().conditions,
       enumValues(ConditionType),
     );
@@ -666,7 +666,7 @@ export class SubstanceForm extends ItemFormBase {
 
   private renderArmorUsedForm(group: Group) {
     const updater = this.item.updater.prop('data', group, 'damage');
-    const [pairedArmor, change] = checkList(updater.originalValue().armorUsed, enumValues(ArmorType))
+    const [pairedArmor, change] = pairList(updater.originalValue().armorUsed, enumValues(ArmorType))
 
 
     return renderAutoForm({

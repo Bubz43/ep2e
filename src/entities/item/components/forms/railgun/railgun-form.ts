@@ -7,6 +7,8 @@ import {
   renderSelectField,
   renderLabeledCheckbox,
   renderTimeField,
+  renderFormulaField,
+  renderTextareaField,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import {
@@ -16,14 +18,15 @@ import {
   RangedWeaponAccessory,
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
-import type { Railgun } from '@src/entities/item/proxies/railgun';
-import { checkList } from '@src/features/check-list';
+import { Railgun } from '@src/entities/item/proxies/railgun';
+import { pairList } from '@src/features/check-list';
+import { FiringMode } from '@src/features/firing-modes';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
 import { localize } from '@src/foundry/localization';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { createPipe, identity, map, mapToObj } from 'remeda';
+import { createPipe, identity, map, mapToObj, objOf } from 'remeda';
 import {
   complexityForm,
   renderComplexityFields,
@@ -191,6 +194,12 @@ export class RailgunForm extends ItemFormBase {
               : '-'}
           </sl-group>
 
+          <sl-group label=${localize("firingModes")} class="firing-modes"
+            >${attack.firingModes
+              .map((mode) => localize("SHORT", mode))
+              .join("/")}</sl-group
+          >
+
           ${attack.notes
             ? html`
                 <sl-group class="attack-notes" label=${localize('notes')}>
@@ -204,13 +213,40 @@ export class RailgunForm extends ItemFormBase {
   }
 
   private renderAttackEdit() {
-    return html``;
+    const updater = this.item.updater.prop('data', 'primaryAttack');
+    const { firingModes } = updater.originalValue();
+    const [pairFiringModes, change] = pairList(
+      firingModes,
+      enumValues(FiringMode),
+    );
+    const onlyOneMode = firingModes.length === 1;
+    return html`
+      <h3>${localize('attack')}</h3>
+      ${renderUpdaterForm(updater, {
+        classes: 'drawer-attack',
+        fields: ({ damageFormula }) => renderFormulaField(damageFormula),
+      })}
+      <p class="label">${localize('firingModes')}</p>
+      ${renderAutoForm({
+        props: pairFiringModes,
+        update: createPipe(change, objOf('firingModes'), updater.commit),
+        fields: (firingModes) =>
+          Object.values(firingModes).map((mode) =>
+            renderLabeledCheckbox(mode, {
+              disabled: onlyOneMode && mode.value,
+            }),
+          ),
+      })}
+      ${renderUpdaterForm(updater, {
+        fields: ({ notes }) => renderTextareaField(notes),
+      })}
+    `;
   }
 
   private renderAccessoriesEdit() {
-    const [pairedAccessories, change] = checkList(
+    const [pairedAccessories, change] = pairList(
       this.item.accessories,
-      enumValues(RangedWeaponAccessory),
+      Railgun.possibleAccessories,
     );
     return html`
       <h3>${localize('accessories')}</h3>

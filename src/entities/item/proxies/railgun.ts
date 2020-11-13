@@ -3,10 +3,12 @@ import {
   KineticWeaponAttack,
   KineticWeaponAttackData,
 } from '@src/combat/attacks';
+import { enumValues, RangedWeaponAccessory } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
+import { difference } from 'remeda';
 import type { Attacker } from '../item-interfaces';
 import { Equippable, Gear, Purchasable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
@@ -15,6 +17,16 @@ class Base extends ItemProxyBase<ItemType.Railgun> {}
 export class Railgun
   extends mix(Base).with(Purchasable, Gear, Equippable)
   implements Attacker<KineticWeaponAttackData, KineticWeaponAttack> {
+    static readonly possibleAccessories = difference(
+      enumValues(RangedWeaponAccessory),
+      [
+        RangedWeaponAccessory.ExtendedMagazine,
+        RangedWeaponAccessory.FlashSuppressor,
+        RangedWeaponAccessory.Silencer,
+        RangedWeaponAccessory.SmartMagazine,
+      ]
+    );
+  
   constructor(init: ItemProxyInit<ItemType.Railgun>) {
     super(init);
   }

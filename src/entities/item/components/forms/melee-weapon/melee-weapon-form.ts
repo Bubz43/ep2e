@@ -34,7 +34,7 @@ import { entityFormCommonStyles } from '@src/entities/components/form-layout/ent
 import { ItemType } from '@src/entities/entity-types';
 import { renderItemForm } from '@src/entities/item/item-views';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
-import { checkList } from '@src/features/check-list';
+import { pairList } from '@src/features/check-list';
 import { SkillType } from '@src/features/skills';
 import {
   DropType,
@@ -451,7 +451,7 @@ export class MeleeWeaponForm extends ItemFormBase {
     const updater = this.item.updater.prop('data', type);
     const { hasSecondaryAttack } = this.item;
     const { disabled } = this;
-    const [pairedTraits, change] = checkList(
+    const [pairedTraits, change] = pairList(
       updater.originalValue().attackTraits,
       enumValues(AttackTrait),
     );
