@@ -69,6 +69,15 @@ export const renderItemForm = (proxy: ItemProxy) => {
           .updater=${proxy.updater.prop('data').nestedStore()}
         ></entity-form-footer>
       `;
+    
+    case ItemType.Explosive:
+      return html`
+        <explosive-form .item=${proxy}></explosive-form>
+        <entity-form-footer
+          slot="footer"
+          .updater=${proxy.updater.prop('data').nestedStore()}
+        ></entity-form-footer>
+      `;
 
     default:
       return html``;

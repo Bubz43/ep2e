@@ -49,3 +49,19 @@ p.label {
     grid-area: delete;
   }
 }
+
+.detail-forms {
+  padding: 0.5rem 0 0;
+}
+
+
+
+.quantity-form {
+  grid-template-columns: 1fr 1fr;
+  > * {
+    width: min-content;
+    & + * {
+      justify-self: end;
+    }
+  }
+}

@@ -24,6 +24,7 @@ import {
 } from '@src/components/window/window-options';
 import {
   AreaEffectType,
+  AttackTrait,
   enumValues,
   ExplosiveSize,
   ExplosiveType,
@@ -44,7 +45,7 @@ import { localize } from '@src/foundry/localization';
 import { cleanFormula } from '@src/foundry/rolls';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property, PropertyValues } from 'lit-element';
-import { map } from 'remeda';
+import { map, mapToObj } from 'remeda';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './explosive-form.scss';
@@ -220,7 +221,7 @@ export class ExplosiveForm extends ItemFormBase {
           ${canContainSubstance
             ? html`
                 <sl-dropzone ?disabled=${disabled} @drop=${this.addSubstance}>
-                  <sl-header heading=${localize('substance')}></sl-header>
+                  <sl-header heading=${localize('substance')} ?hideBorder=${!substance}></sl-header>
                   ${substance
                     ? html`
                         <div class="addon">
@@ -319,6 +320,11 @@ export class ExplosiveForm extends ItemFormBase {
     const modeLabel = localize(
       type === WeaponAttackType.Primary ? 'primaryMode' : 'secondaryMode',
     );
+    const { attackTraits } = updater.originalValue();
+    const attackTraitsObj = mapToObj(enumValues(AttackTrait), (trait) => [
+      trait,
+      attackTraits.includes(trait),
+    ]);
     return html`
       <h3>${modeLabel}</h3>
       ${renderUpdaterForm(updater, {
@@ -335,7 +341,17 @@ export class ExplosiveForm extends ItemFormBase {
         ],
       })}
       <p class="label">${localize('attackTraits')}</p>
-      ${this.renderAttackTraitsList(type)}
+      ${renderAutoForm({
+        props: attackTraitsObj,
+        update: (traits) =>
+          updater.commit({
+            attackTraits: enumValues(AttackTrait).flatMap((trait) => {
+              const active = traits[trait] ?? attackTraitsObj[trait];
+              return active ? trait : [];
+            }),
+          }),
+        fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
+      })}
       ${renderUpdaterForm(updater, {
         disabled,
         fields: ({ duration, notes }) => [
@@ -345,9 +361,7 @@ export class ExplosiveForm extends ItemFormBase {
       })}
     `;
   }
-  renderAttackTraitsList(type: WeaponAttackType): unknown {
-    throw new Error('Method not implemented.');
-  }
+
 }
 
 declare global {
