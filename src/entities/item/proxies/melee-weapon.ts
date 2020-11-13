@@ -25,6 +25,10 @@ export class MeleeWeapon
     super(init);
   }
 
+  get exoticSkillName() {
+    return this.epData.exoticSkill
+  }
+
   get hasSecondaryAttack() {
     return this.epData.hasSecondaryAttack;
   }

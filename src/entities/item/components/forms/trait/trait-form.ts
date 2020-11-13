@@ -1,4 +1,5 @@
 import {
+  renderLabeledSwitch,
   renderNumberField,
   renderSelectField,
   renderTextareaField,
@@ -173,6 +174,13 @@ export class TraitForm extends ItemFormBase {
               ? ''
               : html`
                   <sl-header heading=${localize('details')}>
+                    ${!!triggers && embedded
+                      ? renderUpdaterForm(updater.prop('data', 'state'), {
+                          slot: 'action',
+                          fields: ({ triggered }) =>
+                            renderLabeledSwitch(triggered, { alignEnd: true }),
+                        })
+                      : ''}
                     ${embedded && hasMultipleLevels
                       ? html`
                           <mwc-icon-button

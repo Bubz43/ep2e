@@ -521,3 +521,8 @@ export enum EgoFaction {
   Venusian = 'venusian',
   Regional = 'regional',
 }
+
+export enum WeaponSkillOption {
+  None = "none",
+  Exotic = "exotic"
+}

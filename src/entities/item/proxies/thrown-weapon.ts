@@ -23,6 +23,10 @@ export class ThrownWeapon
     super(init);
   }
 
+  get exoticSkillName() {
+    return this.epData.exoticSkill
+  }
+
   get attacks() {
     return {
       primary: this.setupAttack(this.epData.primaryAttack),

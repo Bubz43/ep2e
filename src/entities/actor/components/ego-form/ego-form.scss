@@ -98,6 +98,10 @@ ego-form-skills {
   font-size: large;
   border-left: 2px solid var(--color-border);
   --mdc-icon-button-size: 2rem;
+  mwc-icon-button {
+    color: var(--color-text-lighter);
+    --mdc-icon-size: 1.25rem;
+  }
   &:hover {
     background: alphav(var(--color-text), 0.03);
   }

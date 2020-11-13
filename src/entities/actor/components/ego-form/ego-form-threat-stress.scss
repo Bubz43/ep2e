@@ -22,22 +22,11 @@
     display: flex;
     align-items: center;
   }
+  @include inputReset();
   input {
-    background: transparent;
-    color: var(--color-text-lighter);
-    font-family: var(--font-1);
-    font-size: 1rem;
     align-self: center;
-    border: 1px inset var(--color-border);
     width: 5ch;
     flex: 1;
     margin-right: 0.75ch;
-    &:focus {
-      border-color: var(--color-secondary);
-      outline: none;
-    }
-    &[disabled] {
-      color: var(--color-text-disabled);
-    }
   }
 }

@@ -7,13 +7,18 @@ import {
   renderFormulaField,
   renderLabeledCheckbox,
   renderNumberField,
+  renderRadioFields,
   renderSelectField,
   renderTextareaField,
   renderTextField,
+  renderTextInput,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
-import { closeWindow, openWindow } from '@src/components/window/window-controls';
+import {
+  closeWindow,
+  openWindow,
+} from '@src/components/window/window-controls';
 import {
   ResizeOption,
   SlWindowEventName,
@@ -23,11 +28,13 @@ import {
   enumValues,
   PhysicalWare,
   WeaponAttackType,
+  WeaponSkillOption,
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { ItemType } from '@src/entities/entity-types';
 import { renderItemForm } from '@src/entities/item/item-views';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
+import { SkillType } from '@src/features/skills';
 import {
   DropType,
   handleDrop,
@@ -38,7 +45,13 @@ import { localize } from '@src/foundry/localization';
 import { cleanFormula } from '@src/foundry/rolls';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
-import { customElement, html, property, PropertyValues } from 'lit-element';
+import {
+  customElement,
+  html,
+  internalProperty,
+  property,
+  PropertyValues,
+} from 'lit-element';
 import { map, mapToObj } from 'remeda';
 import {
   complexityForm,
@@ -58,6 +71,8 @@ export class MeleeWeaponForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: MeleeWeapon;
 
+  @internalProperty() skillOption = WeaponSkillOption.None;
+
   private coatingSheet?: SlWindow | null;
 
   private payloadSheet?: SlWindow | null;
@@ -66,6 +81,13 @@ export class MeleeWeaponForm extends ItemFormBase {
 
   private payloadSheetKey = {};
 
+  connectedCallback() {
+    this.skillOption = this.item.exoticSkillName
+      ? WeaponSkillOption.Exotic
+      : WeaponSkillOption.None;
+    super.connectedCallback();
+  }
+
   disconnectedCallback() {
     this.closeCoatingSheet();
     this.closePayloadSheet();
@@ -73,12 +95,11 @@ export class MeleeWeaponForm extends ItemFormBase {
   }
 
   updated(changedProps: PropertyValues) {
-    if (this.coatingSheet)  this.openCoatingSheet()
+    if (this.coatingSheet) this.openCoatingSheet();
     if (this.payloadSheet) this.openPayloadSheet();
     super.updated(changedProps);
   }
 
-  
   private addDrop = handleDrop(async ({ ev, data }) => {
     if (this.disabled) return;
     const type = (ev.currentTarget as HTMLElement).dataset.drop;
@@ -103,7 +124,7 @@ export class MeleeWeaponForm extends ItemFormBase {
 
   private openCoatingSheet() {
     const { coating, fullName } = this.item;
-    if (!coating) return this.closeCoatingSheet()
+    if (!coating) return this.closeCoatingSheet();
     const { win, wasConnected } = openWindow(
       {
         key: this.coatingSheetKey,
@@ -114,6 +135,7 @@ export class MeleeWeaponForm extends ItemFormBase {
       },
       { resizable: ResizeOption.Vertical },
     );
+
     this.coatingSheet = win;
     if (!wasConnected) {
       win.addEventListener(
@@ -133,10 +155,9 @@ export class MeleeWeaponForm extends ItemFormBase {
     return this.item.removeCoating();
   }
 
-
   private openPayloadSheet() {
     const { payload, fullName } = this.item;
-    if (!payload) return this.closeCoatingSheet()
+    if (!payload) return this.closeCoatingSheet();
     const { win, wasConnected } = openWindow(
       {
         key: this.payloadSheetKey,
@@ -159,7 +180,7 @@ export class MeleeWeaponForm extends ItemFormBase {
 
   private closePayloadSheet() {
     this.payloadSheet?.close();
-    this.payloadSheet = null
+    this.payloadSheet = null;
   }
 
   private deletePayload() {
@@ -174,9 +195,9 @@ export class MeleeWeaponForm extends ItemFormBase {
       acceptsPayload,
       coating,
       payload,
+      exoticSkillName,
     } = this.item;
     const { disabled } = this;
-    // TODO Exotic Skill
     return html`
       <entity-form-layout>
         <entity-form-header
@@ -224,11 +245,55 @@ export class MeleeWeaponForm extends ItemFormBase {
         })}
 
         <div slot="details">
-          ${renderUpdaterForm(updater.prop('data'), {
-            disabled,
-            classes: complexityForm.cssClass,
-            fields: renderComplexityFields,
-          })}
+          <section>
+            <sl-header heading=${localize('details')}></sl-header>
+           <div class="detail-forms">
+           ${renderAutoForm({
+                classes: 'skill-form',
+                disabled,
+                props: {
+                  skillOption: this.skillOption,
+                  exotic: exoticSkillName,
+                },
+                update: ({ skillOption, exotic }) => {
+                  if (exotic !== undefined) {
+                    this.item.updater
+                    .prop('data', 'exoticSkill')
+                    .commit(exotic);
+                  } else if (skillOption) {
+                    this.skillOption = skillOption;
+                    if (skillOption === WeaponSkillOption.Exotic && !this.item.exoticSkillName) {
+                      this.item.updater.prop("data", "exoticSkill").commit(this.item.name)
+                    } 
+                  }
+                },
+                fields: ({ skillOption, exotic }) => html`
+                  <span class="radio-wrapper"
+                    >${localize('skill')}
+                    ${renderRadioFields(
+                      skillOption,
+                      enumValues(WeaponSkillOption),
+                      {
+                        altLabel: (option) =>
+                          option === WeaponSkillOption.None
+                            ? localize(SkillType.Melee)
+                            : localize(option),
+                      },
+                    )}
+                  </span>
+                  ${renderTextInput(exotic, {
+                    placeholder: `e.g. ${this.item.name}`,
+                    disabled: this.skillOption !== WeaponSkillOption.Exotic,
+                  })}
+                `,
+              })}
+            ${renderUpdaterForm(updater.prop('data'), {
+              disabled,
+              classes: complexityForm.cssClass,
+              fields: renderComplexityFields,
+            })}
+           </div>
+          </section>
         </div>
 
         <sl-animated-list slot="details" skipExitAnimation>

@@ -29,6 +29,24 @@
   }
 }
 
+@mixin inputReset() {
+  input {
+    background: transparent;
+    color: var(--color-text-lighter);
+    font-family: var(--font-1);
+    font-size: 1rem;
+    border: 1px inset var(--color-border);
+
+    &:focus {
+      border-color: var(--color-secondary);
+      outline: none;
+    }
+    &[disabled] {
+      color: var(--color-text-disabled);
+    }
+  }
+}
+
 @mixin itemAddon() {
   .addon {
     display: grid;

@@ -1,23 +1,51 @@
-import { formatLabeledFormulas, formatArmorUsed } from '@src/combat/attack-formatting';
+import {
+  formatLabeledFormulas,
+  formatArmorUsed,
+} from '@src/combat/attack-formatting';
 import type { ThrownWeaponAttack } from '@src/combat/attacks';
-import { renderFormulaField, renderLabeledCheckbox, renderNumberField, renderTextareaField } from '@src/components/field/fields';
+import {
+  renderFormulaField,
+  renderLabeledCheckbox,
+  renderNumberField,
+  renderRadioFields,
+  renderTextareaField,
+  renderTextInput,
+} from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
 import { openWindow } from '@src/components/window/window-controls';
-import { ResizeOption, SlWindowEventName } from '@src/components/window/window-options';
-import { enumValues, AttackTrait } from '@src/data-enums';
+import {
+  ResizeOption,
+  SlWindowEventName,
+} from '@src/components/window/window-options';
+import { enumValues, AttackTrait, WeaponSkillOption } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { ItemType } from '@src/entities/entity-types';
 import { renderItemForm } from '@src/entities/item/item-views';
 import type { ThrownWeapon } from '@src/entities/item/proxies/thrown-weapon';
-import { handleDrop, DropType, itemDropToItemProxy } from '@src/foundry/drag-and-drop';
+import { SkillType } from '@src/features/skills';
+import {
+  handleDrop,
+  DropType,
+  itemDropToItemProxy,
+} from '@src/foundry/drag-and-drop';
 import { notify, NotificationType } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
-import { customElement, html, property, PropertyValues } from 'lit-element';
+import {
+  customElement,
+  html,
+  internalProperty,
+  property,
+  PropertyValues,
+} from 'lit-element';
 import { map, mapToObj } from 'remeda';
-import { complexityForm, renderComplexityFields, renderGearTraitCheckboxes } from '../common-gear-fields';
+import {
+  complexityForm,
+  renderComplexityFields,
+  renderGearTraitCheckboxes,
+} from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './thrown-weapon-form.scss';
 
@@ -31,9 +59,18 @@ export class ThrownWeaponForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: ThrownWeapon;
 
+  @internalProperty() skillOption = WeaponSkillOption.None;
+
   private coatingSheet?: SlWindow | null;
 
   private coatingSheetKey = {};
+
+  connectedCallback() {
+    this.skillOption = this.item.exoticSkillName
+      ? WeaponSkillOption.Exotic
+      : WeaponSkillOption.None;
+    super.connectedCallback();
+  }
 
   disconnectedCallback() {
     this.closeCoatingSheet();
@@ -41,7 +78,7 @@ export class ThrownWeaponForm extends ItemFormBase {
   }
 
   updated(changedProps: PropertyValues) {
-    if (this.coatingSheet)  this.openCoatingSheet()
+    if (this.coatingSheet) this.openCoatingSheet();
     super.updated(changedProps);
   }
 
@@ -66,7 +103,7 @@ export class ThrownWeaponForm extends ItemFormBase {
 
   private openCoatingSheet() {
     const { coating, fullName } = this.item;
-    if (!coating) return this.closeCoatingSheet()
+    if (!coating) return this.closeCoatingSheet();
     const { win, wasConnected } = openWindow(
       {
         key: this.coatingSheetKey,
@@ -96,12 +133,9 @@ export class ThrownWeaponForm extends ItemFormBase {
     return this.item.removeCoating();
   }
 
-
-
   render() {
-    const { updater, type, coating } = this.item;
+    const { updater, type, coating, exoticSkillName } = this.item;
     const { disabled } = this;
-    // TODO Exotic Skill
     return html`
       <entity-form-layout>
         <entity-form-header
@@ -120,10 +154,53 @@ export class ThrownWeaponForm extends ItemFormBase {
         })}
 
         <div slot="details">
-
-        <section>
+          <section>
             <sl-header heading=${localize('details')}></sl-header>
             <div class="detail-forms">
+              ${renderAutoForm({
+                classes: 'skill-form',
+                disabled,
+                props: {
+                  skillOption: this.skillOption,
+                  exotic: exoticSkillName,
+                },
+                update: ({ skillOption, exotic }) => {
+                  if (exotic !== undefined) {
+                    this.item.updater
+                      .prop('data', 'exoticSkill')
+                      .commit(exotic);
+                  } else if (skillOption) {
+                    this.skillOption = skillOption;
+                    if (
+                      skillOption === WeaponSkillOption.Exotic &&
+                      !this.item.exoticSkillName
+                    ) {
+                      this.item.updater
+                        .prop('data', 'exoticSkill')
+                        .commit(this.item.name);
+                    }
+                  }
+                },
+                fields: ({ skillOption, exotic }) => html`
+                  <span class="radio-wrapper"
+                    >${localize('skill')}
+                    ${renderRadioFields(
+                      skillOption,
+                      enumValues(WeaponSkillOption),
+                      {
+                        altLabel: (option) =>
+                          option === WeaponSkillOption.None
+                            ? localize(SkillType.Athletics)
+                            : localize(option),
+                      },
+                    )}
+                  </span>
+                  ${renderTextInput(exotic, {
+                    placeholder: `e.g. ${this.item.name}`,
+                    disabled: this.skillOption !== WeaponSkillOption.Exotic,
+                  })}
+                `,
+              })}
               ${renderUpdaterForm(updater.prop('data'), {
                 classes: complexityForm.cssClass,
                 disabled,
@@ -140,9 +217,9 @@ export class ThrownWeaponForm extends ItemFormBase {
             </div>
           </section>
 
-        ${this.renderAttack(this.item.attacks.primary)}
+          ${this.renderAttack(this.item.attacks.primary)}
 
-        <sl-dropzone ?disabled=${disabled} @drop=${this.addDrop}>
+          <sl-dropzone ?disabled=${disabled} @drop=${this.addDrop}>
             <sl-header heading=${localize('coating')} ?hideBorder=${!coating}
               ><mwc-icon
                 slot="info"
@@ -190,9 +267,7 @@ export class ThrownWeaponForm extends ItemFormBase {
             icon="edit"
             slot="action"
             ?disabled=${this.disabled}
-            @click=${this.setDrawerFromEvent(
-              this.renderAttackEdit,
-            )}
+            @click=${this.setDrawerFromEvent(this.renderAttackEdit)}
           ></mwc-icon-button>
         </sl-header>
         <div class="attack-details">
@@ -225,7 +300,7 @@ export class ThrownWeaponForm extends ItemFormBase {
   }
 
   private renderAttackEdit() {
-    const updater = this.item.updater.prop('data', "primaryAttack");
+    const updater = this.item.updater.prop('data', 'primaryAttack');
     const { disabled } = this;
     const { attackTraits } = updater.originalValue();
     const attackTraitsObj = mapToObj(enumValues(AttackTrait), (trait) => [
