@@ -1243,6 +1243,11 @@
     "z-a": "Z-A",
     "additionalNotes": "Additional Notes",
     "minimumStress": "Minimum Stress",
+    "copy": "Copy",
+    "drop": "Drop",
+    "non-electronic": "Non-electronic",
+    "rounds": "Rounds",
+    "roundsPerComplexity": "Rounds Per Complexity",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

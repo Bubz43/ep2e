@@ -3135,7 +3135,7 @@
                 "carryPayload": {
                   "type": "boolean"
                 },
-                "forms": {
+                "modes": {
                   "items": {
                     "additionalProperties": false,
                     "properties": {
@@ -3185,6 +3185,9 @@
                 "quantity": {
                   "type": "number"
                 },
+                "roundsPerComplexity": {
+                  "type": "number"
+                },
                 "state": {
                   "additionalProperties": false,
                   "properties": {
@@ -3220,8 +3223,9 @@
               "required": [
                 "ammoClass",
                 "carryPayload",
-                "forms",
+                "modes",
                 "quantity",
+                "roundsPerComplexity",
                 "state",
                 "templates"
               ],

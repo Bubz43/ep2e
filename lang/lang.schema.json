@@ -1114,6 +1114,9 @@
             "convert": {
               "type": "string"
             },
+            "copy": {
+              "type": "string"
+            },
             "cost": {
               "type": "string"
             },
@@ -1337,6 +1340,9 @@
               "type": "string"
             },
             "downtime": {
+              "type": "string"
+            },
+            "drop": {
               "type": "string"
             },
             "dropSleight/Trait": {
@@ -2380,6 +2386,9 @@
             "minimissile": {
               "type": "string"
             },
+            "minimumStress": {
+              "type": "string"
+            },
             "minor": {
               "type": "string"
             },
@@ -2564,6 +2573,9 @@
               "type": "string"
             },
             "noRoll": {
+              "type": "string"
+            },
+            "non-electronic": {
               "type": "string"
             },
             "nonAddictive": {
@@ -3155,6 +3167,12 @@
               "type": "string"
             },
             "round": {
+              "type": "string"
+            },
+            "rounds": {
+              "type": "string"
+            },
+            "roundsPerComplexity": {
               "type": "string"
             },
             "run": {
@@ -4351,6 +4369,7 @@
             "containSubstance",
             "controls",
             "convert",
+            "copy",
             "cost",
             "costType",
             "covertOperative",
@@ -4426,6 +4445,7 @@
             "dosesPerShot",
             "downgrade",
             "downtime",
+            "drop",
             "dropSleight/Trait",
             "drug",
             "drugOrToxin",
@@ -4773,6 +4793,7 @@
             "mini",
             "minigrenade",
             "minimissile",
+            "minimumStress",
             "minor",
             "minute",
             "minutes",
@@ -4835,6 +4856,7 @@
             "noPointBlank",
             "noResults",
             "noRoll",
+            "non-electronic",
             "nonAddictive",
             "none",
             "normal",
@@ -5032,6 +5054,8 @@
             "roller",
             "rotor",
             "round",
+            "rounds",
+            "roundsPerComplexity",
             "run",
             "running",
             "rush",

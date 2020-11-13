@@ -940,7 +940,8 @@
       "ammoClass": "heavyPistol",
       "quantity": 100,
       "carryPayload": false,
-      "forms": [
+      "roundsPerComplexity": 100,
+      "modes": [
         {
           "name": "",
           "armorPiercing": false,

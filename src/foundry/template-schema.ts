@@ -559,11 +559,12 @@ type FirearmAmmoData = {
   templates: UseItemTemplate<['Common', 'Cost', 'Copyable']>;
   ammoClass: KineticWeaponClass;
   quantity: number;
+  roundsPerComplexity: number;
   carryPayload: boolean;
   /**
    * @minItems 1
    */
-  forms: StringID<FirearmAmmoModeData>[];
+  modes: StringID<FirearmAmmoModeData>[];
   state: { stashed: boolean };
 };
 

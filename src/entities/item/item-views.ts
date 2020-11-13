@@ -33,6 +33,16 @@ export const renderItemForm = (proxy: ItemProxy) => {
           .updater=${proxy.updater.prop('data').nestedStore()}
         ></entity-form-footer>
       `;
+    
+    case ItemType.FirearmAmmo:
+      return html`
+        <firearm-ammo-form .item=${proxy}></firearm-ammo-form>
+        <entity-form-footer
+          slot="footer"
+          .updater=${proxy.updater.prop('data').nestedStore()}
+        ></entity-form-footer>
+      `;
+
 
 
     case ItemType.PhysicalService:

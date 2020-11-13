@@ -1,0 +1,45 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+@include itemAddon();
+
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  
+}
+
+.detail-forms {
+  padding: 0.5rem 0 0;
+}
+
+.settings-form {
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+}
+
+
+
+.quantity-form {
+  grid-template-columns: 1fr 1fr;
+  > * {
+    width: min-content;
+    & + * {
+      justify-self: end;
+    }
+  }
+}
+
+.attack-details {
+  display: grid;
+  padding: 0.25rem;
+  font-size: large;
+}
+
+p.label {
+  @include listLabel();
+  margin-bottom: 0.25rem;
+}

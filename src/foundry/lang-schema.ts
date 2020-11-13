@@ -1269,7 +1269,7 @@ type LangEntries =
   | 'value'
   | 'copy'
   | 'non-electronic'
-  | 'drop';
+  | 'drop' | "rounds" | "roundsPerComplexity"
 type FullNames =
   | 'cog'
   | 'int'

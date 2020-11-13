@@ -22,7 +22,7 @@ export class Header extends LitElement {
 
   render() {
     return html`
-      <h3>
+      <h3 part="heading">
         <span><slot name="heading">${this.heading}</slot></span>
         ${this.itemCount !== undefined
           ? html`<span class="count">${this.itemCount}</span>`
