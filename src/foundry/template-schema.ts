@@ -509,7 +509,6 @@ type RangedWeaponDataBase = {
    */
   accessories: RangedWeaponAccessory[];
   state: { braced: boolean; interface: boolean };
-  firedShots: number;
 };
 
 type SeekerAmmo = {
@@ -547,8 +546,8 @@ type FirearmData = RangedWeaponDataBase & {
      */
     max: number;
     ammoClass: KineticWeaponClass;
-    selectedForm: number;
-    forms: number[];
+    selectedModeIndex: number;
+    modeSettings: number[];
   };
   fixed: boolean;
   long: boolean;

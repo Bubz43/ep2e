@@ -4,6 +4,7 @@ import type {
   FirearmAmmoModifierType,
 } from '@src/data-enums';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
+import type { FirearmAmmo } from '@src/entities/item/proxies/firearm-ammo';
 import type { Substance } from '@src/entities/item/proxies/substance';
 import type { ArmorType } from '@src/features/active-armor';
 import type { ConditionEffect } from '@src/features/conditions';
@@ -125,7 +126,7 @@ export type KineticWeaponAttackData = FiringModeList & {
 };
 
 export type KineticWeaponAttack = FullAttack<KineticWeaponAttackData> & {
-  // TODO Ammo stuff on firearm
+  specialAmmo: [FirearmAmmo, FirearmAmmoModeData] | null
 }
 
 export type FirearmAmmoModeData = {

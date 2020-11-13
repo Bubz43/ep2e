@@ -5,20 +5,20 @@ import {
   renderSelectField,
   renderSlider,
   renderTextareaField,
-  renderTextField,
+  renderTextField
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
 import { openWindow } from '@src/components/window/window-controls';
 import {
   ResizeOption,
-  SlWindowEventName,
+  SlWindowEventName
 } from '@src/components/window/window-options';
 import {
   AttackTrait,
   enumValues,
   FirearmAmmoModifierType,
-  KineticWeaponClass,
+  KineticWeaponClass
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { ItemType } from '@src/entities/entity-types';
@@ -29,14 +29,14 @@ import {
   addFeature,
   addUpdateRemoveFeature,
   idProp,
-  matchID,
+  matchID
 } from '@src/features/feature-helpers';
 import {
-  handleDrop,
-  DropType,
-  itemDropToItemProxy,
+  DropType, handleDrop,
+
+  itemDropToItemProxy
 } from '@src/foundry/drag-and-drop';
-import { notify, NotificationType } from '@src/foundry/foundry-apps';
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import {
@@ -44,10 +44,10 @@ import {
   html,
   internalProperty,
   property,
-  PropertyValues,
+  PropertyValues
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { map, mapToObj, pipe, range, reduce, take } from 'remeda';
+import { map, mapToObj, pipe, range, take } from 'remeda';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { firearmAmmoDetails } from '../firearm-ammo-details';
 import { ItemFormBase } from '../item-form-base';
@@ -204,6 +204,7 @@ export class FirearmAmmoForm extends ItemFormBase {
                         step: 1,
                         markers: true,
                         pin: true,
+                        disabled: loaded
                       })}
                     </span>
                   `,

@@ -10,12 +10,12 @@ import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { difference } from 'remeda';
 import type { Attacker } from '../item-interfaces';
-import { Equippable, Gear, Purchasable } from '../item-mixins';
+import { Equippable, Gear, Purchasable, RangedWeapon } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
 class Base extends ItemProxyBase<ItemType.Railgun> {}
 export class Railgun
-  extends mix(Base).with(Purchasable, Gear, Equippable)
+  extends mix(Base).with(Purchasable, Gear, Equippable, RangedWeapon)
   implements Attacker<KineticWeaponAttackData, KineticWeaponAttack> {
     static readonly possibleAccessories = difference(
       enumValues(RangedWeaponAccessory),
@@ -29,6 +29,18 @@ export class Railgun
   
   constructor(init: ItemProxyInit<ItemType.Railgun>) {
     super(init);
+  }
+
+  @LazyGetter()
+  get ammoState() {
+    return {
+      ...this.epData.ammo,
+      hasChamber: true,
+    }
+  }
+
+  get batteryState() {
+    return this.epData.battery
   }
 
   @LazyGetter()
@@ -52,10 +64,7 @@ export class Railgun
       rollFormulas: damageFormula
         ? [createBaseAttackFormula(damageFormula)]
         : [],
+      specialAmmo: null,
     };
-  }
-
-  get accessories() {
-    return this.epData.accessories;
   }
 }

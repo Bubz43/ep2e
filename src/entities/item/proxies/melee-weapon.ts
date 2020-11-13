@@ -7,9 +7,11 @@ import type { ItemType } from '@src/entities/entity-types';
 import { UpdateStore } from '@src/entities/update-store';
 import { ArmorType } from '@src/features/active-armor';
 import { localize } from '@src/foundry/localization';
+import { deepMerge, toTuple } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
+import { createPipe } from 'remeda';
 import type { Attacker } from '../item-interfaces';
 import { Equippable, Gear, Purchasable } from '../item-mixins';
 import { Explosive } from './explosive';
@@ -85,11 +87,11 @@ export class MeleeWeapon
           updater: new UpdateStore({
             getData: () => explosive,
             isEditable: () => this.editable,
-            setData: (changed) => {
-              this.updater
-                .prop('flags', EP.Name, 'payload')
-                .commit([mergeObject(explosive, changed, { inplace: false })]);
-            },
+            setData: createPipe(
+              deepMerge(explosive),
+              toTuple,
+              this.updatePayload,
+            ),
           }),
           deleteSelf: () => this.removePayload(),
         })
@@ -107,11 +109,11 @@ export class MeleeWeapon
           updater: new UpdateStore({
             getData: () => substance,
             isEditable: () => this.editable,
-            setData: (changed) => {
-              this.updater
-                .prop('flags', EP.Name, 'coating')
-                .commit([mergeObject(substance, changed, { inplace: false })]);
-            },
+            setData: createPipe(
+              deepMerge(substance),
+              toTuple,
+              this.updateCoating,
+            ),
           }),
           deleteSelf: () => this.removeCoating(),
         })
@@ -122,20 +124,26 @@ export class MeleeWeapon
     const substanceData =
       substance instanceof Substance ? substance.getDataCopy() : substance;
     substanceData.data = { ...substanceData.data, quantity: 1 };
-    this.updater.prop('flags', EP.Name, 'coating').commit([substanceData]);
+    return this.updateCoating([substanceData]);
   }
 
   removeCoating() {
-    this.updater.prop('flags', EP.Name, 'coating').commit(null);
+    return this.updateCoating(null);
   }
 
   setPayload(payload: Explosive) {
-    this.updater
-      .prop('flags', EP.Name, 'payload')
-      .commit([payload.getDataCopy()]);
+    return this.updatePayload([payload.getDataCopy()]);
   }
 
   removePayload() {
-    this.updater.prop('flags', EP.Name, 'payload').commit(null);
+    return this.updatePayload(null);
+  }
+
+  private get updatePayload() {
+    return this.updater.prop('flags', EP.Name, 'payload').commit;
+  }
+
+  private get updateCoating() {
+    return this.updater.prop('flags', EP.Name, 'coating').commit;
   }
 }

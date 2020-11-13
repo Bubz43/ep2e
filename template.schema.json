@@ -2804,9 +2804,6 @@
                   ],
                   "type": "object"
                 },
-                "firedShots": {
-                  "type": "number"
-                },
                 "fixed": {
                   "type": "boolean"
                 },
@@ -2889,7 +2886,6 @@
               "required": [
                 "accessories",
                 "ammo",
-                "firedShots",
                 "fixed",
                 "hasSecondaryAttack",
                 "long",
@@ -3016,17 +3012,17 @@
                     "ammoClass": {
                       "$ref": "#/definitions/KineticWeaponClass"
                     },
-                    "forms": {
+                    "max": {
+                      "minimum": 1,
+                      "type": "number"
+                    },
+                    "modeSettings": {
                       "items": {
                         "type": "number"
                       },
                       "type": "array"
                     },
-                    "max": {
-                      "minimum": 1,
-                      "type": "number"
-                    },
-                    "selectedForm": {
+                    "selectedModeIndex": {
                       "type": "number"
                     },
                     "value": {
@@ -3037,13 +3033,10 @@
                     "value",
                     "max",
                     "ammoClass",
-                    "selectedForm",
-                    "forms"
+                    "selectedModeIndex",
+                    "modeSettings"
                   ],
                   "type": "object"
-                },
-                "firedShots": {
-                  "type": "number"
                 },
                 "fixed": {
                   "type": "boolean"
@@ -3115,7 +3108,6 @@
               "required": [
                 "accessories",
                 "ammo",
-                "firedShots",
                 "fixed",
                 "long",
                 "primaryAttack",
@@ -4524,9 +4516,6 @@
                   ],
                   "type": "object"
                 },
-                "firedShots": {
-                  "type": "number"
-                },
                 "fixed": {
                   "type": "boolean"
                 },
@@ -4598,7 +4587,6 @@
                 "accessories",
                 "ammo",
                 "battery",
-                "firedShots",
                 "fixed",
                 "long",
                 "primaryAttack",
@@ -4637,9 +4625,6 @@
                     "missileCapacity"
                   ],
                   "type": "object"
-                },
-                "firedShots": {
-                  "type": "number"
                 },
                 "firingMode": {
                   "type": "string"
@@ -4741,7 +4726,6 @@
               "required": [
                 "accessories",
                 "alternativeAmmo",
-                "firedShots",
                 "firingMode",
                 "fixed",
                 "hasAlternativeAmmo",
@@ -7218,9 +7202,6 @@
                 "dosesPerShot": {
                   "type": "number"
                 },
-                "firedShots": {
-                  "type": "number"
-                },
                 "fixed": {
                   "type": "boolean"
                 },
@@ -7303,7 +7284,6 @@
                 "accessories",
                 "ammo",
                 "dosesPerShot",
-                "firedShots",
                 "fixed",
                 "long",
                 "payloadUse",

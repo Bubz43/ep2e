@@ -816,7 +816,6 @@
         "value": 15
       },
       "dosesPerShot": 0,
-      "firedShots": 0,
       "fixed": false,
       "long": false,
       "range": 15,
@@ -846,7 +845,6 @@
       "wareType": ""
     },
     "beamWeapon": {
-      "firedShots": 0,
       "accessories": [
         "smartlink",
         "safetySystem"
@@ -910,10 +908,9 @@
         "ammoClass": "heavyPistol",
         "max": 9,
         "value": 9,
-        "forms": [],
-        "selectedForm": 0
+        "modeSettings": [],
+        "selectedModeIndex": 0
       },
-      "firedShots": 0,
       "primaryAttack": {
         "damageFormula": "1d10",
         "firingModes": [
@@ -965,7 +962,6 @@
     "railgun": {
       "fixed": false,
       "long": false,
-      "firedShots": 0,
       "accessories": [
         "safetySystem",
         "smartlink"
@@ -1003,7 +999,6 @@
     },
     "seekerWeapon": {
       "accessories": ["smartlink", "safetySystem"],
-      "firedShots": 0,
       "fixed": false,
       "hasAlternativeAmmo": false,
       "long": false,

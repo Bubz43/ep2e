@@ -1,11 +1,12 @@
 import { html } from 'lit-html';
-import { pipe, filter, sortBy, first, map, prop } from 'remeda';
+import { pipe, filter, sortBy, first, map, prop, purry } from 'remeda';
 import type { Class, SetRequired } from 'type-fest';
 import type { CanvasLayers } from './foundry-cont';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { ActorEP } from '../entities/actor/actor';
 import type { SceneEP } from '../entities/scene';
 import { UpdateStore } from '@src/entities/update-store';
+import type { DeepPartial } from 'utility-types';
 
 export const isGamemaster = () => {
   return (
@@ -168,3 +169,14 @@ export const updateManyActors = async (actors: ActorEP[]): Promise<unknown> => {
     ),
   );
 };
+function _deepMerge <T>(original: T, changes: Partial<DeepPartial<T>>): T {
+  return mergeObject(original, changes, { inplace: false })
+}
+export function deepMerge<T>(original: T): (changes: Partial<DeepPartial<T>>)  => T
+export function deepMerge<T>(original: T, changes: Partial<DeepPartial<T>>): T 
+export function deepMerge() {
+  return purry(_deepMerge, arguments)
+}
+
+
+export const toTuple = <T>(value: T): [T] => [value]

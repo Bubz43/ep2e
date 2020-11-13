@@ -2,7 +2,7 @@
   "name": "ep2e",
   "title": "Eclipse Phase 2e",
   "description": "Eclipse Phase 2e Game System.",
-  "version": 0.64891,
+  "version": 0.64892,
   "author": "Bubz",
   "esmodules": [
     "./build/_dist_/index.js"

@@ -4,13 +4,16 @@ import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { Purchasable } from '../item-mixins';
+import type { Stackable } from '../item-interfaces';
+import { Copyable, Purchasable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 import { Substance } from './substance';
 
 class Base extends ItemProxyBase<ItemType.FirearmAmmo> {}
 
-export class FirearmAmmo extends mix(Base).with(Purchasable) {
+export class FirearmAmmo
+  extends mix(Base).with(Purchasable, Copyable)
+  implements Stackable {
   readonly loaded;
   constructor({
     loaded,
@@ -32,12 +35,21 @@ export class FirearmAmmo extends mix(Base).with(Purchasable) {
     return this.modes.length > 1;
   }
 
+  get quantity() {
+    return this.epData.quantity;
+  }
+
   @LazyGetter()
   get modes() {
     return this.epData.modes.map((type, index) => ({
       ...type,
       name: type.name || `${localize('mode')} ${index + 1}`,
     }));
+  }
+
+  findMode(index: number) {
+    const mode = this.modes[index];
+    return mode as typeof mode | undefined;
   }
 
   get canCarryPayload() {

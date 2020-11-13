@@ -4,11 +4,12 @@ import {
   GearQuality,
   GearTrait,
   PhysicalWare,
+  RangedWeaponAccessory,
 } from '@src/data-enums';
 import type { BlueprintData } from '@src/foundry/template-schema';
 import type { Class } from 'type-fest';
 
-type HasEpData<T> = Class<{ epData: T }>;
+type HasEpData<T, E = {}> = Class<{ epData: T } & E>;
 
 export const Purchasable = (
   cls: HasEpData<{
@@ -63,6 +64,37 @@ export const Gear = (cls: HasEpData<Record<GearTrait, boolean>>) => {
   return class extends cls {
     get gearTraits() {
       return enumValues(GearTrait).filter((trait) => this.epData[trait]);
+    }
+  };
+};
+
+export const RangedWeapon = (
+  cls: HasEpData<{
+    accessories: RangedWeaponAccessory[];
+    state: { braced: boolean; interface: boolean };
+  }>,
+) => {
+  return class extends cls {
+    get accessories() {
+      return this.epData.accessories;
+    }
+    get state() {
+      return this.epData.state;
+    }
+    get braced() {
+      return this.state.braced;
+    }
+    get useInterface() {
+      return this.state.interface;
+    }
+    get magazineModifiers() {
+      let extended = false;
+      let smart = false;
+      for (const accessory of this.accessories) {
+        if (accessory === RangedWeaponAccessory.ExtendedMagazine) extended = true;
+        else if (accessory === RangedWeaponAccessory.SmartMagazine) smart = true;
+      }
+      return { extended, smart, capacityChanged: extended !== smart };
     }
   };
 };
