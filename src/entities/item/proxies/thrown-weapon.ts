@@ -1,4 +1,8 @@
-import { createBaseAttackFormula, ThrownWeaponAttack, ThrownWeaponAttackData } from '@src/combat/attacks';
+import {
+  createBaseAttackFormula,
+  ThrownWeaponAttack,
+  ThrownWeaponAttackData,
+} from '@src/combat/attacks';
 import type { ItemType } from '@src/entities/entity-types';
 import { UpdateStore } from '@src/entities/update-store';
 import { ArmorType } from '@src/features/active-armor';
@@ -12,7 +16,9 @@ import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 import { Substance } from './substance';
 
 class Base extends ItemProxyBase<ItemType.ThrownWeapon> {}
-export class ThrownWeapon extends mix(Base).with(Purchasable) implements Stackable, Attacker<ThrownWeaponAttackData, ThrownWeaponAttack> {
+export class ThrownWeapon
+  extends mix(Base).with(Purchasable)
+  implements Stackable, Attacker<ThrownWeaponAttackData, ThrownWeaponAttack> {
   constructor(init: ItemProxyInit<ItemType.ThrownWeapon>) {
     super(init);
   }
@@ -20,21 +26,24 @@ export class ThrownWeapon extends mix(Base).with(Purchasable) implements Stackab
   get attacks() {
     return {
       primary: this.setupAttack(this.epData.primaryAttack),
-      secondary: null
-    }
+      secondary: null,
+    };
   }
 
-  setupAttack({ damageFormula, ...data}: ThrownWeaponAttackData): ThrownWeaponAttack {
+  setupAttack({
+    damageFormula,
+    ...data
+  }: ThrownWeaponAttackData): ThrownWeaponAttack {
     return {
       ...data,
       armorUsed: [ArmorType.Kinetic],
       reduceAVbyDV: false,
-      label: "",
+      label: '',
       coating: this.coating,
       rollFormulas: damageFormula
-      ? [createBaseAttackFormula(damageFormula)]
-      : [],
-    }
+        ? [createBaseAttackFormula(damageFormula)]
+        : [],
+    };
   }
 
   @LazyGetter()
@@ -49,11 +58,9 @@ export class ThrownWeapon extends mix(Base).with(Purchasable) implements Stackab
             getData: () => substance,
             isEditable: () => this.editable,
             setData: (changed) => {
-              this.updater.prop('flags', EP.Name, 'coating').commit((data) => {
-                return data
-                  ? mergeObject(data, changed, { inplace: false })
-                  : null;
-              });
+              this.updater
+                .prop('flags', EP.Name, 'coating')
+                .commit([mergeObject(substance, changed, { inplace: false })]);
             },
           }),
           deleteSelf: () => this.removeCoating(),
@@ -62,7 +69,7 @@ export class ThrownWeapon extends mix(Base).with(Purchasable) implements Stackab
   }
 
   get quantity() {
-    return this.epData.quantity
+    return this.epData.quantity;
   }
 
   setCoating(substance: Substance | ReturnType<Substance['getDataCopy']>) {

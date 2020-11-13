@@ -82,11 +82,9 @@ export class MeleeWeapon
             getData: () => explosive,
             isEditable: () => this.editable,
             setData: (changed) => {
-              this.updater.prop('flags', EP.Name, 'payload').commit((data) => {
-                return data
-                  ? mergeObject(data, changed, { inplace: false })
-                  : null;
-              });
+              this.updater
+                .prop('flags', EP.Name, 'payload')
+                .commit([mergeObject(explosive, changed, { inplace: false })]);
             },
           }),
           deleteSelf: () => this.removePayload(),
@@ -106,11 +104,9 @@ export class MeleeWeapon
             getData: () => substance,
             isEditable: () => this.editable,
             setData: (changed) => {
-              this.updater.prop('flags', EP.Name, 'coating').commit((data) => {
-                return data
-                  ? mergeObject(data, changed, { inplace: false })
-                  : null;
-              });
+              this.updater
+                .prop('flags', EP.Name, 'coating')
+                .commit([mergeObject(substance, changed, { inplace: false })]);
             },
           }),
           deleteSelf: () => this.removeCoating(),
