@@ -3,30 +3,42 @@ import {
   KineticWeaponAttack,
   KineticWeaponAttackData,
 } from '@src/combat/attacks';
-import { enumValues, RangedWeaponAccessory } from '@src/data-enums';
+import {
+  enumValues,
+  RangedWeaponAccessory,
+  RangedWeaponTrait,
+} from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { difference } from 'remeda';
+import { compact, difference } from 'remeda';
 import type { Attacker } from '../item-interfaces';
 import { Equippable, Gear, Purchasable, RangedWeapon } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
-class Base extends ItemProxyBase<ItemType.Railgun> {}
+class Base extends ItemProxyBase<ItemType.Railgun> {
+  get weaponTraits() {
+    const { long, fixed } = this.epData;
+    return compact([
+      long && RangedWeaponTrait.Long,
+      fixed && RangedWeaponTrait.Fixed,
+    ]);
+  }
+}
 export class Railgun
   extends mix(Base).with(Purchasable, Gear, Equippable, RangedWeapon)
   implements Attacker<KineticWeaponAttackData, KineticWeaponAttack> {
-    static readonly possibleAccessories = difference(
-      enumValues(RangedWeaponAccessory),
-      [
-        RangedWeaponAccessory.ExtendedMagazine,
-        RangedWeaponAccessory.FlashSuppressor,
-        RangedWeaponAccessory.Silencer,
-        RangedWeaponAccessory.SmartMagazine,
-      ]
-    );
-  
+  static readonly possibleAccessories = difference(
+    enumValues(RangedWeaponAccessory),
+    [
+      RangedWeaponAccessory.ExtendedMagazine,
+      RangedWeaponAccessory.FlashSuppressor,
+      RangedWeaponAccessory.Silencer,
+      RangedWeaponAccessory.SmartMagazine,
+    ],
+  );
+
   constructor(init: ItemProxyInit<ItemType.Railgun>) {
     super(init);
   }
@@ -36,11 +48,11 @@ export class Railgun
     return {
       ...this.epData.ammo,
       hasChamber: true,
-    }
+    };
   }
 
   get batteryState() {
-    return this.epData.battery
+    return this.epData.battery;
   }
 
   @LazyGetter()

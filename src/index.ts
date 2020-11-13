@@ -93,6 +93,10 @@ import { ExplosiveForm } from './entities/item/components/forms/explosive/explos
 import { ThrownWeaponForm } from './entities/item/components/forms/thrown-weapon/thrown-weapon-form';
 import { FirearmAmmoForm } from './entities/item/components/forms/firearm-ammo/firearm-ammo-form';
 import { RailgunForm } from './entities/item/components/forms/railgun/railgun-form';
+import { FirearmForm } from './entities/item/components/forms/firearm/firearm-form';
+import { SeekerWeaponForm } from './entities/item/components/forms/seeker-weapon/seeker-weapon-form';
+import { SprayWeaponForm } from './entities/item/components/forms/spray-weapon/spray-weapon-form';
+import { BeamWeaponForm } from './entities/item/components/forms/beam-weapon/beam-weapon-form';
 
 customElements.define('app-datepicker', Datepicker);
 
@@ -166,6 +170,10 @@ ExplosiveForm;
 ThrownWeaponForm;
 FirearmAmmoForm;
 RailgunForm;
+FirearmForm;
+SprayWeaponForm;
+SeekerWeaponForm;
+BeamWeaponForm;
 ItemFormEffectsList;
 
 // Health Components

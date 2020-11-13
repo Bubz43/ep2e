@@ -126,8 +126,8 @@ export type KineticWeaponAttackData = FiringModeList & {
 };
 
 export type KineticWeaponAttack = FullAttack<KineticWeaponAttackData> & {
-  specialAmmo: [FirearmAmmo, FirearmAmmoModeData] | null
-}
+  specialAmmo: [FirearmAmmo, FirearmAmmoModeData] | null;
+};
 
 export type FirearmAmmoModeData = {
   damageModifierType: FirearmAmmoModifierType;

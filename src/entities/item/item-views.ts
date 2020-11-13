@@ -106,6 +106,42 @@ export const renderItemForm = (proxy: ItemProxy) => {
         ></entity-form-footer>
       `;
 
+    case ItemType.Firearm:
+      return html`
+        <firearm-form .item=${proxy}></firearm-form>
+        <entity-form-footer
+          slot="footer"
+          .updater=${proxy.updater.prop('data').nestedStore()}
+        ></entity-form-footer>
+      `;
+
+    case ItemType.SprayWeapon:
+      return html`
+        <spray-weapon-form .item=${proxy}></spray-weapon-form>
+        <entity-form-footer
+          slot="footer"
+          .updater=${proxy.updater.prop('data').nestedStore()}
+        ></entity-form-footer>
+      `;
+
+    case ItemType.BeamWeapon:
+      return html`
+        <beam-weapon-form .item=${proxy}></beam-weapon-form>
+        <entity-form-footer
+          slot="footer"
+          .updater=${proxy.updater.prop('data').nestedStore()}
+        ></entity-form-footer>
+      `;
+
+    case ItemType.SeekerWeapon:
+      return html`
+        <seeker-weapon-form .item=${proxy}></seeker-weapon-form>
+        <entity-form-footer
+          slot="footer"
+          .updater=${proxy.updater.prop('data').nestedStore()}
+        ></entity-form-footer>
+      `;
+
     default:
       return html``;
   }

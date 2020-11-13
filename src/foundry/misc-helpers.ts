@@ -169,14 +169,15 @@ export const updateManyActors = async (actors: ActorEP[]): Promise<unknown> => {
     ),
   );
 };
-function _deepMerge <T>(original: T, changes: Partial<DeepPartial<T>>): T {
-  return mergeObject(original, changes, { inplace: false })
+function _deepMerge<T>(original: T, changes: Partial<DeepPartial<T>>): T {
+  return mergeObject(original, changes, { inplace: false });
 }
-export function deepMerge<T>(original: T): (changes: Partial<DeepPartial<T>>)  => T
-export function deepMerge<T>(original: T, changes: Partial<DeepPartial<T>>): T 
+export function deepMerge<T>(
+  original: T,
+): (changes: Partial<DeepPartial<T>>) => T;
+export function deepMerge<T>(original: T, changes: Partial<DeepPartial<T>>): T;
 export function deepMerge() {
-  return purry(_deepMerge, arguments)
+  return purry(_deepMerge, arguments);
 }
 
-
-export const toTuple = <T>(value: T): [T] => [value]
+export const toTuple = <T>(value: T): [T] => [value];

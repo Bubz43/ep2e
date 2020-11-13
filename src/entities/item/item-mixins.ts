@@ -5,6 +5,7 @@ import {
   GearTrait,
   PhysicalWare,
   RangedWeaponAccessory,
+  RangedWeaponTrait,
 } from '@src/data-enums';
 import type { BlueprintData } from '@src/foundry/template-schema';
 import type { Class } from 'type-fest';
@@ -69,10 +70,16 @@ export const Gear = (cls: HasEpData<Record<GearTrait, boolean>>) => {
 };
 
 export const RangedWeapon = (
-  cls: HasEpData<{
-    accessories: RangedWeaponAccessory[];
-    state: { braced: boolean; interface: boolean };
-  }>,
+  cls: HasEpData<
+    {
+      accessories: RangedWeaponAccessory[];
+      state: { braced: boolean; interface: boolean };
+    },
+    {
+      readonly weaponTraits: RangedWeaponTrait[];
+      readonly gearTraits: GearTrait[];
+    }
+  >,
 ) => {
   return class extends cls {
     get accessories() {
@@ -91,10 +98,35 @@ export const RangedWeapon = (
       let extended = false;
       let smart = false;
       for (const accessory of this.accessories) {
-        if (accessory === RangedWeaponAccessory.ExtendedMagazine) extended = true;
-        else if (accessory === RangedWeaponAccessory.SmartMagazine) smart = true;
+        if (accessory === RangedWeaponAccessory.ExtendedMagazine)
+          extended = true;
+        else if (accessory === RangedWeaponAccessory.SmartMagazine)
+          smart = true;
       }
       return { extended, smart, capacityChanged: extended !== smart };
+    }
+
+    get isFixed() {
+      return this.weaponTraits.includes(RangedWeaponTrait.Fixed);
+    }
+
+    get isLong() {
+      return this.weaponTraits.includes(RangedWeaponTrait.Long);
+    }
+
+    get noClose() {
+      return this.weaponTraits.includes(RangedWeaponTrait.NoClose);
+    }
+
+    get noPointBlank() {
+      return this.weaponTraits.includes(RangedWeaponTrait.NoPointBlank);
+    }
+
+    get isTwoHanded() {
+      return (
+        this.gearTraits.includes(GearTrait.TwoHanded) ||
+        (this.isFixed && !this.braced)
+      );
     }
   };
 };

@@ -470,7 +470,7 @@ export class MeleeWeaponForm extends ItemFormBase {
       <p class="label">${localize('attackTraits')}</p>
       ${renderAutoForm({
         props: pairedTraits,
-        update: createPipe(change, objOf("attackTraits"), updater.commit),
+        update: createPipe(change, objOf('attackTraits'), updater.commit),
         fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
       })}
       ${renderUpdaterForm(updater, {

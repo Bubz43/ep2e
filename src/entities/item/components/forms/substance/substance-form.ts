@@ -60,7 +60,16 @@ import {
   PropertyValues,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { createPipe, flatMap, groupBy, identity, map, mapToObj, objOf, pipe } from 'remeda';
+import {
+  createPipe,
+  flatMap,
+  groupBy,
+  identity,
+  map,
+  mapToObj,
+  objOf,
+  pipe,
+} from 'remeda';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './substance-form.scss';
@@ -614,7 +623,7 @@ export class SubstanceForm extends ItemFormBase {
 
     return renderAutoForm({
       props: pairedConditions,
-      update: createPipe(change, objOf("conditions"), updater.commit),
+      update: createPipe(change, objOf('conditions'), updater.commit),
       fields: (conditions) =>
         map(Object.values(conditions), renderLabeledCheckbox),
     });
@@ -666,12 +675,14 @@ export class SubstanceForm extends ItemFormBase {
 
   private renderArmorUsedForm(group: Group) {
     const updater = this.item.updater.prop('data', group, 'damage');
-    const [pairedArmor, change] = pairList(updater.originalValue().armorUsed, enumValues(ArmorType))
-
+    const [pairedArmor, change] = pairList(
+      updater.originalValue().armorUsed,
+      enumValues(ArmorType),
+    );
 
     return renderAutoForm({
       props: pairedArmor,
-      update: createPipe(change, objOf("armorUsed"), updater.commit),
+      update: createPipe(change, objOf('armorUsed'), updater.commit),
       fields: (armors) => map(Object.values(armors), renderLabeledCheckbox),
     });
   }

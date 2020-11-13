@@ -1,12 +1,29 @@
-import { enumValues, RangedWeaponAccessory } from '@src/data-enums';
+import {
+  enumValues,
+  RangedWeaponAccessory,
+  RangedWeaponTrait,
+} from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
 import mix from 'mix-with/lib';
-import { difference } from 'remeda';
+import { compact, difference } from 'remeda';
 import { Equippable, Gear, Purchasable, RangedWeapon } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
-class Base extends ItemProxyBase<ItemType.SprayWeapon> {}
-export class SprayWeapon extends mix(Base).with(Gear, Purchasable, Equippable, RangedWeapon) {
+class Base extends ItemProxyBase<ItemType.SprayWeapon> {
+  get weaponTraits() {
+    const { long, fixed } = this.epData;
+    return compact([
+      long && RangedWeaponTrait.Long,
+      fixed && RangedWeaponTrait.Fixed,
+    ]);
+  }
+}
+export class SprayWeapon extends mix(Base).with(
+  Gear,
+  Purchasable,
+  Equippable,
+  RangedWeapon,
+) {
   static readonly possibleAccessories = difference(
     enumValues(RangedWeaponAccessory),
     [
@@ -18,5 +35,9 @@ export class SprayWeapon extends mix(Base).with(Gear, Purchasable, Equippable, R
   );
   constructor(init: ItemProxyInit<ItemType.SprayWeapon>) {
     super(init);
+  }
+
+  get range() {
+    return this.epData.range;
   }
 }

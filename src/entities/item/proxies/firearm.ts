@@ -3,17 +3,27 @@ import {
   KineticWeaponAttack,
   KineticWeaponAttackData,
 } from '@src/combat/attacks';
+import { RangedWeaponTrait } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
+import { compact } from 'remeda';
 import type { Attacker } from '../item-interfaces';
 import { Equippable, Gear, Purchasable, RangedWeapon } from '../item-mixins';
 import { FirearmAmmo } from './firearm-ammo';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
-class Base extends ItemProxyBase<ItemType.Firearm> {}
+class Base extends ItemProxyBase<ItemType.Firearm> {
+  get weaponTraits() {
+    const { long, fixed } = this.epData;
+    return compact([
+      long && RangedWeaponTrait.Long,
+      fixed && RangedWeaponTrait.Fixed,
+    ]);
+  }
+}
 export class Firearm
   extends mix(Base).with(Purchasable, Gear, Equippable, RangedWeapon)
   implements Attacker<KineticWeaponAttackData, KineticWeaponAttack> {
@@ -26,25 +36,17 @@ export class Firearm
   }
 
   get ammoClass() {
-    return this.epData.ammo.ammoClass
-  }
-
-  get isFixed() {
-    return this.epData.fixed
-  }
-
-  get isLong() {
-    return this.epData.long
+    return this.epData.ammo.ammoClass;
   }
 
   get specialAmmoModeIndex() {
-    const { selectedModeIndex } = this.ammoData
-    const type = this.specialAmmo?.findMode(selectedModeIndex)
-    return type ? selectedModeIndex : 0
+    const { selectedModeIndex } = this.ammoData;
+    const type = this.specialAmmo?.findMode(selectedModeIndex);
+    return type ? selectedModeIndex : 0;
   }
 
   get ammoData() {
-    return this.epData.ammo
+    return this.epData.ammo;
   }
 
   get magazineCapacity() {
@@ -70,7 +72,6 @@ export class Firearm
       hasChamber: true,
     };
   }
-
 
   @LazyGetter()
   get specialAmmo() {
@@ -111,16 +112,20 @@ export class Firearm
       rollFormulas: damageFormula
         ? [createBaseAttackFormula(damageFormula)]
         : [],
-      specialAmmo: specialAmmo && ammoMode ? [specialAmmo, ammoMode] : null
+      specialAmmo: specialAmmo && ammoMode ? [specialAmmo, ammoMode] : null,
     };
   }
 
   setSpecialAmmo(ammo: FirearmAmmo) {
     const gained = this.gainedFromAmmo(ammo);
     if (ammo.hasMultipleModes) {
-      this.updater.prop("data", "ammo", "modeSettings").store(Array(gained).fill(0));
+      this.updater
+        .prop('data', 'ammo', 'modeSettings')
+        .store(Array(gained).fill(0));
     }
-    this.updater.prop("data", "ammo").store({ selectedModeIndex: 0, value: gained })
+    this.updater
+      .prop('data', 'ammo')
+      .store({ selectedModeIndex: 0, value: gained });
     return this.updateAmmo(ammo.getDataCopy(true));
   }
 
