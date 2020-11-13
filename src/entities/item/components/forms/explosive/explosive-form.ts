@@ -35,6 +35,7 @@ import { ItemType } from '@src/entities/entity-types';
 import { renderItemForm } from '@src/entities/item/item-views';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
 import { ArmorType } from '@src/features/active-armor';
+import { checkList } from '@src/features/check-list';
 import { prettyMilliseconds } from '@src/features/time';
 import {
   DropType,
@@ -45,7 +46,7 @@ import { localize } from '@src/foundry/localization';
 import { cleanFormula } from '@src/foundry/rolls';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property, PropertyValues } from 'lit-element';
-import { map, mapToObj } from 'remeda';
+import { createPipe, map, mapToObj, objOf } from 'remeda';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './explosive-form.scss';
@@ -323,11 +324,10 @@ export class ExplosiveForm extends ItemFormBase {
     const modeLabel = localize(
       type === WeaponAttackType.Primary ? 'primaryMode' : 'secondaryMode',
     );
-    const { attackTraits } = updater.originalValue();
-    const attackTraitsObj = mapToObj(enumValues(AttackTrait), (trait) => [
-      trait,
-      attackTraits.includes(trait),
-    ]);
+    const [pairedTraits, change] = checkList(
+      updater.originalValue().attackTraits,
+      enumValues(AttackTrait),
+    );
     return html`
       <h3>${modeLabel}</h3>
       ${renderUpdaterForm(updater, {
@@ -345,14 +345,8 @@ export class ExplosiveForm extends ItemFormBase {
       })}
       <p class="label">${localize('attackTraits')}</p>
       ${renderAutoForm({
-        props: attackTraitsObj,
-        update: (traits) =>
-          updater.commit({
-            attackTraits: enumValues(AttackTrait).flatMap((trait) => {
-              const active = traits[trait] ?? attackTraitsObj[trait];
-              return active ? trait : [];
-            }),
-          }),
+        props: pairedTraits,
+        update: createPipe(change, objOf("attackTraits"), updater.commit),
         fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
       })}
       ${renderUpdaterForm(updater, {

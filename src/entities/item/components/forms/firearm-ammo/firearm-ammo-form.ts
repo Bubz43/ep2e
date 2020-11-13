@@ -24,6 +24,7 @@ import { entityFormCommonStyles } from '@src/entities/components/form-layout/ent
 import { ItemType } from '@src/entities/entity-types';
 import { renderItemForm } from '@src/entities/item/item-views';
 import type { FirearmAmmo } from '@src/entities/item/proxies/firearm-ammo';
+import { checkList } from '@src/features/check-list';
 import {
   addFeature,
   addUpdateRemoveFeature,
@@ -312,11 +313,11 @@ export class FirearmAmmoForm extends ItemFormBase {
     const { hasMultipleModes, modes } = this.item;
     const modeMap = mapToObj(modes, (mode) => [mode.id, mode.name]);
     const activeMode = modes.find(matchID(this.editingModeId))!;
-    const { attackTraits } = activeMode;
-    const attackTraitsObj = mapToObj(enumValues(AttackTrait), (trait) => [
-      trait,
-      attackTraits.includes(trait),
-    ]);
+    const [pairedTraits, change] = checkList(
+      activeMode.attackTraits,
+      enumValues(AttackTrait),
+    );
+
     return html`
       <h3>${localize('edit')} ${localize('ammo')}</h3>
       ${hasMultipleModes
@@ -373,15 +374,10 @@ export class FirearmAmmoForm extends ItemFormBase {
       <p class="label">${localize('attackTraits')}</p>
 
       ${renderAutoForm({
-        props: attackTraitsObj,
+        props: pairedTraits,
         update: (traits) =>
           this.modeOps.update(
-            {
-              attackTraits: enumValues(AttackTrait).flatMap((trait) => {
-                const active = traits[trait] ?? attackTraitsObj[trait];
-                return active ? trait : [];
-              }),
-            },
+            { attackTraits: change(traits) },
             { id: activeMode.id },
           ),
         fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),

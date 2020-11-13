@@ -124,6 +124,10 @@ export type KineticWeaponAttackData = FiringModeList & {
   notes: string;
 };
 
+export type KineticWeaponAttack = FullAttack<KineticWeaponAttackData> & {
+  // TODO Ammo stuff on firearm
+}
+
 export type FirearmAmmoModeData = {
   damageModifierType: FirearmAmmoModifierType;
   damageFormula: string;

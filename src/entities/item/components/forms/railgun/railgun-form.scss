@@ -8,3 +8,40 @@
 :host {
   display: block;
 }
+
+
+.accessories-list {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  position: relative;
+  > li {
+    list-style: none;
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    background: var(--color-border);
+    border-radius: 7px;
+  }
+}
+
+
+.ammo-form {
+  grid-template-columns: 2fr 1fr 1fr;
+}
+
+.battery-form {
+  grid-template-columns: 1fr 1fr auto;
+}
+
+p.label {
+  @include listLabel();
+  margin-bottom: 0.25rem;
+}
+
+.attack-details {
+  display: grid;
+  padding: 0.25rem;
+  font-size: large;
+}

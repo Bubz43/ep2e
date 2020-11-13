@@ -37,6 +37,7 @@ import { Sleight } from '@src/entities/item/proxies/sleight';
 import { Substance } from '@src/entities/item/proxies/substance';
 import { Trait } from '@src/entities/item/proxies/trait';
 import { ArmorType } from '@src/features/active-armor';
+import { checkList } from '@src/features/check-list';
 import type { EffectCreatedEvent } from '@src/features/components/effect-creator/effect-created-event';
 import { ConditionType } from '@src/features/conditions';
 import { formatEffect } from '@src/features/effects';
@@ -59,7 +60,7 @@ import {
   PropertyValues,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { flatMap, groupBy, identity, map, mapToObj, pipe } from 'remeda';
+import { createPipe, flatMap, groupBy, identity, map, mapToObj, objOf, pipe } from 'remeda';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './substance-form.scss';
@@ -606,21 +607,14 @@ export class SubstanceForm extends ItemFormBase {
 
   private renderConditionsListForm() {
     const updater = this.item.updater.prop('data', 'severity');
-    const { conditions } = updater.originalValue();
-    const conditionsObj = mapToObj(enumValues(ConditionType), (condition) => [
-      condition,
-      conditions.includes(condition),
-    ]);
+    const [pairedConditions, change] = checkList(
+      updater.originalValue().conditions,
+      enumValues(ConditionType),
+    );
 
     return renderAutoForm({
-      props: conditionsObj,
-      update: (conditions) =>
-        updater.commit({
-          conditions: enumValues(ConditionType).flatMap((condition) => {
-            const active = conditions[condition] ?? conditionsObj[condition];
-            return active ? condition : [];
-          }),
-        }),
+      props: pairedConditions,
+      update: createPipe(change, objOf("conditions"), updater.commit),
       fields: (conditions) =>
         map(Object.values(conditions), renderLabeledCheckbox),
     });
@@ -672,21 +666,12 @@ export class SubstanceForm extends ItemFormBase {
 
   private renderArmorUsedForm(group: Group) {
     const updater = this.item.updater.prop('data', group, 'damage');
-    const { armorUsed } = updater.originalValue();
-    const armorUsedObj = mapToObj(enumValues(ArmorType), (armor) => [
-      armor,
-      armorUsed.includes(armor),
-    ]);
+    const [pairedArmor, change] = checkList(updater.originalValue().armorUsed, enumValues(ArmorType))
+
 
     return renderAutoForm({
-      props: armorUsedObj,
-      update: (armors) =>
-        updater.commit({
-          armorUsed: enumValues(ArmorType).flatMap((armor) => {
-            const active = armors[armor] ?? armorUsedObj[armor];
-            return active ? armor : [];
-          }),
-        }),
+      props: pairedArmor,
+      update: createPipe(change, objOf("armorUsed"), updater.commit),
       fields: (armors) => map(Object.values(armors), renderLabeledCheckbox),
     });
   }
