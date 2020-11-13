@@ -90,6 +90,7 @@ import { EnvironmentForms } from './components/ep-overlay/components/environment
 import { MeleeWeaponForm } from './entities/item/components/forms/melee-weapon/melee-weapon-form';
 import { SubstanceForm } from './entities/item/components/forms/substance/substance-form';
 import { ExplosiveForm } from './entities/item/components/forms/explosive/explosive-form';
+import { ThrownWeaponForm } from './entities/item/components/forms/thrown-weapon/thrown-weapon-form';
 
 customElements.define('app-datepicker', Datepicker);
 
@@ -160,6 +161,7 @@ PhysicalTechForm;
 MeleeWeaponForm;
 SubstanceForm;
 ExplosiveForm;
+ThrownWeaponForm;
 ItemFormEffectsList;
 
 // Health Components

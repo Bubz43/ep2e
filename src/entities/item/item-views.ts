@@ -24,6 +24,16 @@ export const renderItemForm = (proxy: ItemProxy) => {
           .updater=${proxy.updater.prop('data').nestedStore()}
         ></entity-form-footer>
       `;
+    
+    case ItemType.ThrownWeapon:
+      return html`
+        <thrown-weapon-form .item=${proxy}></thrown-weapon-form>
+        <entity-form-footer
+          slot="footer"
+          .updater=${proxy.updater.prop('data').nestedStore()}
+        ></entity-form-footer>
+      `;
+
 
     case ItemType.PhysicalService:
       return html`

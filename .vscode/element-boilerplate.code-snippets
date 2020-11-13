@@ -1,6 +1,7 @@
 {
 	"ItemForm": {
 		"prefix": "item-form",
+		"scope": "typescript",
 		"body": [
 			"import { renderUpdaterForm } from '@src/components/form/forms';\r",
 			"import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';\r",

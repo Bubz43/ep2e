@@ -106,6 +106,10 @@ export type ThrownWeaponAttackData = {
   notes: string;
 };
 
+export type ThrownWeaponAttack = FullAttack<ThrownWeaponAttackData> & {
+  coating?: Substance | null;
+}
+
 export type SprayWeaponAttackData = FiringModeList & {
   damageFormula: string;
   attackTraits: AttackTrait[];

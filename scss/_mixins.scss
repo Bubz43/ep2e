@@ -29,6 +29,37 @@
   }
 }
 
+@mixin itemAddon() {
+  .addon {
+    display: grid;
+    grid-template-areas:
+      'name name name'
+      'type sheet delete';
+    grid-template-columns: 1fr auto auto;
+    padding: 0.5rem 0 0.25rem 0.25rem;
+    align-items: center;
+    .addon-name {
+      font-size: large;
+      grid-area: name;
+      @include truncate(100%);
+    }
+    .addon-type {
+      grid-area: type;
+      color: var(--color-text-lighter);
+      @include truncate(100%);
+    }
+    mwc-icon-button {
+      --mdc-icon-button-size: 1.5rem;
+      color: var(--color-text-lighter);
+      --mdc-icon-size: 1.25rem;
+      grid-area: sheet;
+    }
+    delete-button {
+      grid-area: delete;
+    }
+  }
+}
+
 @mixin listLabel() {
   text-transform: uppercase;
   font-size: 0.9rem;

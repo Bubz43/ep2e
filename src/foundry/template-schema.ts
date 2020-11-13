@@ -493,6 +493,7 @@ type MeleeWeaponData = {
 type ThrownWeaponData = {
   templates: UseItemTemplate<['Common', 'Cost', 'GearTraits', 'Copyable']>;
   quantity: number;
+  quantityPerCost: number;
   primaryAttack: ThrownWeaponAttackData;
   exoticSkill: string;
 };

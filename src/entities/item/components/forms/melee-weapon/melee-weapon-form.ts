@@ -176,6 +176,7 @@ export class MeleeWeaponForm extends ItemFormBase {
       payload,
     } = this.item;
     const { disabled } = this;
+    // TODO Exotic Skill
     return html`
       <entity-form-layout>
         <entity-form-header

@@ -1036,6 +1036,7 @@
     "thrownWeapon": {
       "exoticSkill": "",
       "quantity": 5,
+      "quantityPerCost": 5,
       "templates": ["Common","Cost","GearTraits","Copyable"],
       "primaryAttack": {
         "armorPiercing": false,

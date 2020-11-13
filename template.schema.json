@@ -8463,6 +8463,9 @@
                 "quantity": {
                   "type": "number"
                 },
+                "quantityPerCost": {
+                  "type": "number"
+                },
                 "templates": {
                   "items": [
                     {
@@ -8491,6 +8494,7 @@
                 "exoticSkill",
                 "primaryAttack",
                 "quantity",
+                "quantityPerCost",
                 "templates"
               ],
               "type": "object"
