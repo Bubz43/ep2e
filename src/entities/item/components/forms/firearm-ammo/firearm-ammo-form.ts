@@ -83,7 +83,7 @@ export class FirearmAmmoForm extends ItemFormBase {
 
   disconnectedCallback() {
     this.closeCoatingSheet();
-    super.disconnectedCallback()
+    super.disconnectedCallback();
   }
 
   private addDrop = handleDrop(async ({ ev, data }) => {
@@ -320,16 +320,20 @@ export class FirearmAmmoForm extends ItemFormBase {
     return html`
       <h3>${localize('edit')} ${localize('ammo')}</h3>
       ${hasMultipleModes
-      ? renderAutoForm({
-          classes: "mode-select-form",
+        ? renderAutoForm({
+            classes: 'mode-select-form',
             props: { mode: this.editingModeId },
             update: ({ mode }) => {
               if (mode) this.editingModeId = mode;
             },
             fields: ({ mode }) =>
-              renderSelectField({...mode, label: `${localize("edit")} ${mode.label}`}, Object.keys(modeMap), {
-                altLabel: (id) => modeMap[id],
-              }),
+              renderSelectField(
+                { ...mode, label: `${localize('edit')} ${mode.label}` },
+                Object.keys(modeMap),
+                {
+                  altLabel: (id) => modeMap[id],
+                },
+              ),
           })
         : ''}
       ${renderAutoForm({

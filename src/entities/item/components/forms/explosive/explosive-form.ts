@@ -221,7 +221,10 @@ export class ExplosiveForm extends ItemFormBase {
           ${canContainSubstance
             ? html`
                 <sl-dropzone ?disabled=${disabled} @drop=${this.addSubstance}>
-                  <sl-header heading=${localize('substance')} ?hideBorder=${!substance}></sl-header>
+                  <sl-header
+                    heading=${localize('substance')}
+                    ?hideBorder=${!substance}
+                  ></sl-header>
                   ${substance
                     ? html`
                         <div class="addon">
@@ -361,7 +364,6 @@ export class ExplosiveForm extends ItemFormBase {
       })}
     `;
   }
-
 }
 
 declare global {

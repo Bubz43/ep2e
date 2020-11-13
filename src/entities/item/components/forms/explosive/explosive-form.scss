@@ -3,14 +3,12 @@
 
 @include itemAddon();
 
-
 * {
   box-sizing: border-box;
 }
 
 :host {
   display: block;
-  
 }
 
 .attack-details {
@@ -24,12 +22,9 @@ p.label {
   margin-bottom: 0.25rem;
 }
 
-
 .detail-forms {
   padding: 0.5rem 0 0;
 }
-
-
 
 .quantity-form {
   grid-template-columns: 1fr 1fr;

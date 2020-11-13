@@ -523,6 +523,6 @@ export enum EgoFaction {
 }
 
 export enum WeaponSkillOption {
-  None = "none",
-  Exotic = "exotic"
+  None = 'none',
+  Exotic = 'exotic',
 }

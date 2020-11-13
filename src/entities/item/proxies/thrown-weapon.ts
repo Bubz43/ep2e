@@ -24,7 +24,7 @@ export class ThrownWeapon
   }
 
   get exoticSkillName() {
-    return this.epData.exoticSkill
+    return this.epData.exoticSkill;
   }
 
   get attacks() {

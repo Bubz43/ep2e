@@ -2,14 +2,12 @@
 @use "scss/mixins" as *;
 @include itemAddon();
 
-
 * {
   box-sizing: border-box;
 }
 
 :host {
   display: block;
-  
 }
 
 .detail-forms {
@@ -38,7 +36,6 @@ sl-animated-list {
   width: max-content;
   margin-bottom: 1rem;
 }
-
 
 .quantity-form {
   grid-template-columns: 1fr 1fr;

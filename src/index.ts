@@ -92,6 +92,7 @@ import { SubstanceForm } from './entities/item/components/forms/substance/substa
 import { ExplosiveForm } from './entities/item/components/forms/explosive/explosive-form';
 import { ThrownWeaponForm } from './entities/item/components/forms/thrown-weapon/thrown-weapon-form';
 import { FirearmAmmoForm } from './entities/item/components/forms/firearm-ammo/firearm-ammo-form';
+import { RailgunForm } from './entities/item/components/forms/railgun/railgun-form';
 
 customElements.define('app-datepicker', Datepicker);
 
@@ -163,7 +164,8 @@ MeleeWeaponForm;
 SubstanceForm;
 ExplosiveForm;
 ThrownWeaponForm;
-FirearmAmmoForm
+FirearmAmmoForm;
+RailgunForm;
 ItemFormEffectsList;
 
 // Health Components

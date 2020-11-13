@@ -316,8 +316,8 @@ table {
           var(--color-bg),
           var(--color-bg-alt)
         );
-        border: 1px groove var(--color-primary-alt);
-        box-shadow: none;
+        border: 1px outset var(--color-primary-alt);
+        box-shadow: 0 0 4px var(--color-primary-alt), 0 1px 3px black;
         filter: contrast(0.95) drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.8));
       }
     }

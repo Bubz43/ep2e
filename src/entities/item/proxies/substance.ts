@@ -128,7 +128,10 @@ export class Substance
   get severity() {
     return {
       ...this.epData.severity,
-      damage: this.setupAttack(this.epData.severity.damage, localize('severity')),
+      damage: this.setupAttack(
+        this.epData.severity.damage,
+        localize('severity'),
+      ),
       items: this.severityAppliedItems,
     };
   }

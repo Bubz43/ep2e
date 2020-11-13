@@ -52,4 +52,3 @@ export const renderGearTraitCheckboxes: FieldPropsRenderer<Record<
   }
   return checkboxes;
 };
-

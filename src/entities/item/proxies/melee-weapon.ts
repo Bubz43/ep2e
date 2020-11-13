@@ -26,7 +26,7 @@ export class MeleeWeapon
   }
 
   get exoticSkillName() {
-    return this.epData.exoticSkill
+    return this.epData.exoticSkill;
   }
 
   get hasSecondaryAttack() {

@@ -247,8 +247,8 @@ export class MeleeWeaponForm extends ItemFormBase {
         <div slot="details">
           <section>
             <sl-header heading=${localize('details')}></sl-header>
-           <div class="detail-forms">
-           ${renderAutoForm({
+            <div class="detail-forms">
+              ${renderAutoForm({
                 classes: 'skill-form',
                 disabled,
                 props: {
@@ -258,13 +258,18 @@ export class MeleeWeaponForm extends ItemFormBase {
                 update: ({ skillOption, exotic }) => {
                   if (exotic !== undefined) {
                     this.item.updater
-                    .prop('data', 'exoticSkill')
-                    .commit(exotic);
+                      .prop('data', 'exoticSkill')
+                      .commit(exotic);
                   } else if (skillOption) {
                     this.skillOption = skillOption;
-                    if (skillOption === WeaponSkillOption.Exotic && !this.item.exoticSkillName) {
-                      this.item.updater.prop("data", "exoticSkill").commit(this.item.name)
-                    } 
+                    if (
+                      skillOption === WeaponSkillOption.Exotic &&
+                      !this.item.exoticSkillName
+                    ) {
+                      this.item.updater
+                        .prop('data', 'exoticSkill')
+                        .commit(this.item.name);
+                    }
                   }
                 },
                 fields: ({ skillOption, exotic }) => html`
@@ -287,12 +292,12 @@ export class MeleeWeaponForm extends ItemFormBase {
                   })}
                 `,
               })}
-            ${renderUpdaterForm(updater.prop('data'), {
-              disabled,
-              classes: complexityForm.cssClass,
-              fields: renderComplexityFields,
-            })}
-           </div>
+              ${renderUpdaterForm(updater.prop('data'), {
+                disabled,
+                classes: complexityForm.cssClass,
+                fields: renderComplexityFields,
+              })}
+            </div>
           </section>
         </div>
 

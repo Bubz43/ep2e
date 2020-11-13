@@ -22,11 +22,11 @@ export type LabeledFormula = { label: string; formula: string };
 
 type FullAttack<T extends { damageFormula: string }> = Omit<
   T,
-  'damageFormula' | "armorUsed"
+  'damageFormula' | 'armorUsed'
 > &
   UsedAttackArmor & {
-  rollFormulas: LabeledFormula[];
-  label: string;
+    rollFormulas: LabeledFormula[];
+    label: string;
   };
 
 export const createBaseAttackFormula = (
@@ -82,9 +82,9 @@ export type ExplosiveAttackData = {
 export type ExplosiveAttack = FullAttack<ExplosiveAttackData> & {
   duration: number;
   substance?: Substance | null;
-  areaEffect?: AreaEffectType | "";
+  areaEffect?: AreaEffectType | '';
   areaEffectRadius?: number;
-}
+};
 
 export type MeleeWeaponAttackData = {
   label: string;
@@ -108,7 +108,7 @@ export type ThrownWeaponAttackData = {
 
 export type ThrownWeaponAttack = FullAttack<ThrownWeaponAttackData> & {
   coating?: Substance | null;
-}
+};
 
 export type SprayWeaponAttackData = FiringModeList & {
   damageFormula: string;

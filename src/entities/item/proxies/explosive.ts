@@ -33,21 +33,27 @@ export class Explosive
   @LazyGetter()
   get substance() {
     const substanceData = this.epFlags?.substance?.[0];
-    return substanceData ? new Substance({
-      data: substanceData,
-      embedded: this.name,
-      loaded: true,
-      updater: new UpdateStore({
-        getData: () => substanceData,
-        isEditable: () => this.editable,
-        setData: (changed) => {
-          this.updater.prop("flags", EP.Name, ItemType.Substance).commit(data => {
-            return data ? mergeObject(data,changed, { inplace: false }) : null
-          })
-        }
-      }),
-      deleteSelf: () => this.removeSubstance()
-    }) : null
+    return substanceData
+      ? new Substance({
+          data: substanceData,
+          embedded: this.name,
+          loaded: true,
+          updater: new UpdateStore({
+            getData: () => substanceData,
+            isEditable: () => this.editable,
+            setData: (changed) => {
+              this.updater
+                .prop('flags', EP.Name, ItemType.Substance)
+                .commit((data) => {
+                  return data
+                    ? mergeObject(data, changed, { inplace: false })
+                    : null;
+                });
+            },
+          }),
+          deleteSelf: () => this.removeSubstance(),
+        })
+      : null;
   }
 
   @LazyGetter()
@@ -86,7 +92,7 @@ export class Explosive
   }
 
   get canContainSubstance() {
-    return this.epData.containSubstance
+    return this.epData.containSubstance;
   }
 
   get hasSecondaryMode() {

@@ -21,11 +21,11 @@ export class FirearmAmmo extends mix(Base).with(Purchasable) {
   }
 
   get fullType() {
-    return `${localize(this.type)} (${localize(this.ammoClass)})`
+    return `${localize(this.type)} (${localize(this.ammoClass)})`;
   }
 
   get ammoClass() {
-    return this.epData.ammoClass
+    return this.epData.ammoClass;
   }
 
   get hasMultipleModes() {
@@ -36,12 +36,12 @@ export class FirearmAmmo extends mix(Base).with(Purchasable) {
   get modes() {
     return this.epData.modes.map((type, index) => ({
       ...type,
-      name: type.name || `${localize("mode")} ${index + 1}`
-    }))
+      name: type.name || `${localize('mode')} ${index + 1}`,
+    }));
   }
 
   get canCarryPayload() {
-    return this.epData.carryPayload
+    return this.epData.carryPayload;
   }
 
   @LazyGetter()
@@ -73,7 +73,6 @@ export class FirearmAmmo extends mix(Base).with(Purchasable) {
   }
 
   removePayload() {
-    return this.updater.prop("flags", EP.Name, "payload").commit(null)
+    return this.updater.prop('flags', EP.Name, 'payload').commit(null);
   }
-
 }

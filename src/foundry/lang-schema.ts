@@ -1269,7 +1269,11 @@ type LangEntries =
   | 'value'
   | 'copy'
   | 'non-electronic'
-  | 'drop' | "rounds" | "roundsPerComplexity" | "ammoClass" | "programmableModes"
+  | 'drop'
+  | 'rounds'
+  | 'roundsPerComplexity'
+  | 'ammoClass'
+  | 'programmableModes';
 type FullNames =
   | 'cog'
   | 'int'
