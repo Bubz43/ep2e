@@ -21,6 +21,23 @@
   align-items: center;
 }
 
+.modes-wrapper {
+  display: flex;
+  align-items: center;
+  color: var(--color-text-lighter);
+  mwc-slider {
+    margin-left: 1.5ch;
+  }
+}
+
+sl-animated-list {
+  position: relative;
+}
+
+.mode-select-form {
+  width: max-content;
+  margin-bottom: 1rem;
+}
 
 
 .quantity-form {

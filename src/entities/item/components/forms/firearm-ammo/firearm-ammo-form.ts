@@ -25,6 +25,7 @@ import { ItemType } from '@src/entities/entity-types';
 import { renderItemForm } from '@src/entities/item/item-views';
 import type { FirearmAmmo } from '@src/entities/item/proxies/firearm-ammo';
 import {
+  addFeature,
   addUpdateRemoveFeature,
   idProp,
   matchID,
@@ -45,7 +46,7 @@ import {
   PropertyValues,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { map, mapToObj } from 'remeda';
+import { map, mapToObj, pipe, range, reduce, take } from 'remeda';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { firearmAmmoDetails } from '../firearm-ammo-details';
 import { ItemFormBase } from '../item-form-base';
@@ -61,7 +62,7 @@ export class FirearmAmmoForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: FirearmAmmo;
 
-  @internalProperty() private editingModeId = this.item.modes[0].id;
+  @internalProperty() private editingModeId!: string;
 
   private payloadSheet?: SlWindow | null;
 
@@ -75,7 +76,14 @@ export class FirearmAmmoForm extends ItemFormBase {
     const { modes } = this.item;
     const mode = modes.find(matchID(this.editingModeId));
     if (!mode) this.editingModeId = modes[0].id;
+    if (this.payloadSheet) this.openPayloadSheet();
+
     super.update(changedProps);
+  }
+
+  disconnectedCallback() {
+    this.closeCoatingSheet();
+    super.disconnectedCallback()
   }
 
   private addDrop = handleDrop(async ({ ev, data }) => {
@@ -129,8 +137,30 @@ export class FirearmAmmoForm extends ItemFormBase {
     return this.item.removePayload();
   }
 
-  private updateProgrammedTypeCount(newCount: number) {
-    // TODO
+  private updateProgrammedTypeCount(length: number) {
+    const { modes, updater } = this.item;
+    pipe(
+      modes,
+      modes.length > length
+        ? take(length)
+        : (modes) =>
+            range(0, length).reduce(
+              (accum, index) =>
+                accum[index]
+                  ? accum
+                  : addFeature(accum, {
+                      name: '',
+                      attackTraits: [],
+                      armorPiercing: false,
+                      steady: false,
+                      damageFormula: '',
+                      damageModifierType: FirearmAmmoModifierType.Formula,
+                      notes: '',
+                    }),
+              modes,
+            ),
+      updater.prop('data', 'modes').commit,
+    );
   }
 
   render() {
@@ -159,10 +189,23 @@ export class FirearmAmmoForm extends ItemFormBase {
             <sl-header heading=${localize('details')}>
               ${renderAutoForm({
                 slot: 'action',
+                disabled,
                 props: { count: modes.length },
                 update: ({ count = 1 }) =>
                   this.updateProgrammedTypeCount(count),
-                fields: ({ count }) => renderSlider(count, { min: 1, max: 3 }),
+                fields: ({ count }) =>
+                  html`
+                    <span class="modes-wrapper">
+                      ${localize('programmableModes')}
+                      ${renderSlider(count, {
+                        min: 1,
+                        max: 3,
+                        step: 1,
+                        markers: true,
+                        pin: true,
+                      })}
+                    </span>
+                  `,
               })}
             </sl-header>
             <div class="detail-forms">
@@ -196,7 +239,7 @@ export class FirearmAmmoForm extends ItemFormBase {
           </section>
         </div>
 
-        <sl-animated-list slot="details">
+        <sl-animated-list slot="details" transformOrigin="top">
           ${repeat(modes, idProp, this.renderMode)}
           ${canCarryPayload
             ? html`
@@ -244,7 +287,7 @@ export class FirearmAmmoForm extends ItemFormBase {
     `;
   }
 
-  private renderMode(mode: FirearmAmmo['modes'][number]) {
+  private renderMode = (mode: FirearmAmmo['modes'][number]) => {
     return html`
       <section>
         <sl-header
@@ -263,7 +306,7 @@ export class FirearmAmmoForm extends ItemFormBase {
         <div class="attack-details">${firearmAmmoDetails(mode)}</div>
       </section>
     `;
-  }
+  };
 
   private renderAmmoEdit() {
     const { hasMultipleModes, modes } = this.item;
@@ -277,13 +320,14 @@ export class FirearmAmmoForm extends ItemFormBase {
     return html`
       <h3>${localize('edit')} ${localize('ammo')}</h3>
       ${hasMultipleModes
-        ? renderAutoForm({
+      ? renderAutoForm({
+          classes: "mode-select-form",
             props: { mode: this.editingModeId },
             update: ({ mode }) => {
               if (mode) this.editingModeId = mode;
             },
             fields: ({ mode }) =>
-              renderSelectField(mode, Object.keys(modeMap), {
+              renderSelectField({...mode, label: `${localize("edit")} ${mode.label}`}, Object.keys(modeMap), {
                 altLabel: (id) => modeMap[id],
               }),
           })
@@ -299,13 +343,13 @@ export class FirearmAmmoForm extends ItemFormBase {
           steady,
           armorPiercing,
         }) => [
-          renderTextField(name, {
-            placeholder: hasMultipleModes
-              ? `${localize('form')} ${
-                  this.item.modes.findIndex(matchID(activeMode.id)) + 1
-                }`
-              : '-',
-          }),
+          hasMultipleModes
+            ? renderTextField(name, {
+                placeholder: String(
+                  this.item.modes.findIndex(matchID(activeMode.id)) + 1,
+                ),
+              })
+            : '',
           renderSelectField(
             {
               ...damageModifierType,

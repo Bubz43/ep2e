@@ -1248,6 +1248,8 @@
     "non-electronic": "Non-electronic",
     "rounds": "Rounds",
     "roundsPerComplexity": "Rounds Per Complexity",
+    "ammoClass": "Ammo Class",
+    "programmableModes": "Programmable Modes",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

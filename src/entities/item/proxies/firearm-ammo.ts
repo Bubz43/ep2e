@@ -20,6 +20,14 @@ export class FirearmAmmo extends mix(Base).with(Purchasable) {
     this.loaded = loaded;
   }
 
+  get fullType() {
+    return `${localize(this.type)} (${localize(this.ammoClass)})`
+  }
+
+  get ammoClass() {
+    return this.epData.ammoClass
+  }
+
   get hasMultipleModes() {
     return this.modes.length > 1;
   }
