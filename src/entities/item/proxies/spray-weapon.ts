@@ -57,35 +57,50 @@ export class SprayWeapon
     return this.ammoState.value;
   }
 
+  get firePayload() {
+    return this.payloadUse === SprayPayload.FirePayload;
+  }
+
+  get coatedShots() {
+    return this.payloadUse === SprayPayload.CoatAmmunition
+      ? Math.min(this.payload?.quantity || 0, this.availableShots)
+      : 0;
+  }
+
   get ammoState() {
-    const { payloadUse, payload } = this;
     const { value, max } = this.epData.ammo;
     const common = { max, hasChamber: false };
-    return payloadUse === SprayPayload.FirePayload
+    return this.firePayload
       ? {
           ...common,
-          value: payload ? Math.ceil(payload.quantity / this.dosesPerShot) : 0,
+          value: Math.ceil((this.payload?.quantity || 0) / this.dosesPerShot),
         }
       : { ...common, value: Math.min(value, max) };
+  }
+
+  updateAmmoValue(newValue: number) {
+    return this.payloadUse === SprayPayload.FirePayload
+      ? this.payload?.updater.prop('data', 'quantity').commit(newValue)
+      : this.updater.prop('data', 'ammo', 'value').commit(newValue);
   }
 
   spendAmmo(amount: number) {
     const { payloadUse, payload } = this;
     if (payloadUse && payload) {
       payload.updater
-        .prop("data", "quantity")
+        .prop('data', 'quantity')
         .store((quantity) =>
           nonNegative(
             quantity -
               amount *
                 (payloadUse === SprayPayload.FirePayload
                   ? this.dosesPerShot
-                  : 1)
-          )
+                  : 1),
+          ),
         );
     }
     return this.updater
-      .prop("data", "ammo", "value")
+      .prop('data', 'ammo', 'value')
       .commit(nonNegative(this.ammoState.value - amount));
   }
 
@@ -111,7 +126,7 @@ export class SprayWeapon
       rollFormulas: damageFormula
         ? [createBaseAttackFormula(damageFormula)]
         : [],
-      areaEffect: AreaEffectType.Cone
+      areaEffect: AreaEffectType.Cone,
     };
   }
 

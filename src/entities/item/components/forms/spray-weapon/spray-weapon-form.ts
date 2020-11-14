@@ -3,6 +3,7 @@ import {
   formatArmorUsed,
   formatAreaEffect,
 } from '@src/combat/attack-formatting';
+import type { DropZone } from '@src/components/dropzone/dropzone';
 import {
   renderSelectField,
   renderNumberField,
@@ -30,6 +31,7 @@ import { entityFormCommonStyles } from '@src/entities/components/form-layout/ent
 import { ItemType } from '@src/entities/entity-types';
 import { renderItemForm } from '@src/entities/item/item-views';
 import { SprayWeapon } from '@src/entities/item/proxies/spray-weapon';
+import type { Substance } from '@src/entities/item/proxies/substance';
 import { ArmorType } from '@src/features/active-armor';
 import { pairList } from '@src/features/check-list';
 import {
@@ -86,7 +88,7 @@ export class SprayWeaponForm extends ItemFormBase {
   }
 
   private addDrop = handleDrop(async ({ ev, data }) => {
-    if (this.disabled) return;
+    if (this.disabled || (ev.currentTarget as DropZone).disabled) return;
     if (data?.type === DropType.Item) {
       const agent = await itemDropToItemProxy(data);
       if (agent?.type === ItemType.Substance) {
@@ -133,7 +135,15 @@ export class SprayWeaponForm extends ItemFormBase {
   }
 
   render() {
-    const { updater, type, accessories, payloadUse, payload } = this.item;
+    const {
+      updater,
+      type,
+      accessories,
+      payloadUse,
+      payload,
+      firePayload,
+      ammoState
+    } = this.item;
     const { disabled } = this;
     // TODO Some indication that payload has been expended
     return html`
@@ -183,9 +193,36 @@ export class SprayWeaponForm extends ItemFormBase {
           })}
           ${this.renderAttack()}
 
-          <section>
-            <sl-header heading=${localize('ammo')}></sl-header>
-            ${renderUpdaterForm(updater.prop('data', 'ammo'), {
+          <sl-dropzone ?disabled=${!firePayload} @drop=${this.addDrop}>
+            <sl-header heading=${localize('ammo')}
+              >${firePayload
+                ? renderUpdaterForm(updater.prop('data'), {
+                    disabled,
+                    classes: 'doses-form',
+                    slot: 'action',
+                    fields: ({ dosesPerShot }) => html`
+                      <mwc-formfield alignEnd label=${dosesPerShot.label}
+                        >${renderNumberInput(dosesPerShot, {
+                          min: 1,
+                        })}</mwc-formfield
+                      >
+                    `,
+                  })
+                : ''}</sl-header
+            >
+            ${firePayload && payload
+              ? html`
+                  ${this.renderPayload(payload)}
+                  <hr />
+                `
+              : ''}
+            ${renderAutoForm({
+              props: { max: ammoState.max, value: firePayload ? (payload?.quantity || 0) : ammoState.value },
+              update: ({ value, max }) => {
+                if (max !== undefined)
+                  this.item.updater.prop('data', 'ammo', 'max').commit(max);
+                else if (value !== undefined) this.item.updateAmmoValue(value);
+              },
               disabled,
               classes: 'ammo-form',
               fields: ({ value, max }) => [
@@ -193,19 +230,20 @@ export class SprayWeaponForm extends ItemFormBase {
                   { ...max, label: localize('capacity') },
                   { min: 1 },
                 ),
-                renderNumberField(
-                  { ...value, value: Math.min(value.value, max.value) },
-                  { min: 0, max: max.value },
-                ),
+                renderNumberField(value, {
+                  min: 0,
+                  max: max.value,
+                  disabled: firePayload && !payload,
+                }),
               ],
             })}
-          </section>
+          </sl-dropzone>
 
-          ${payloadUse
+          ${payloadUse === SprayPayload.CoatAmmunition
             ? html`
                 <sl-dropzone ?disabled=${disabled} @drop=${this.addDrop}>
                   <sl-header
-                    heading=${localize('payload')}
+                    heading="${localize('ammo')} ${localize('coating')}"
                     ?hideBorder=${!payload}
                     ><mwc-icon
                       slot="info"
@@ -215,37 +253,20 @@ export class SprayWeaponForm extends ItemFormBase {
                       @mouseenter=${tooltip.fromData}
                       >info</mwc-icon
                     >
-                    ${payloadUse === SprayPayload.FirePayload
-                      ? renderUpdaterForm(updater.prop('data'), {
-                          disabled,
-                          classes: 'doses-form',
-                          slot: 'action',
-                          fields: ({ dosesPerShot }) => html`
-                            <mwc-formfield alignEnd label=${dosesPerShot.label}
-                              >${renderNumberInput(dosesPerShot, {
-                                min: 1,
-                              })}</mwc-formfield
-                            >
-                          `,
-                        })
-                      : ''}
+                    ${payload ? renderUpdaterForm(payload.updater.prop('data'), {
+                    disabled,
+                    classes: 'payload-quantity-form',
+                    slot: 'action',
+                    fields: ({ quantity }) => html`
+                      <mwc-formfield alignEnd label=${quantity.label}
+                        >${renderNumberInput(quantity, {
+                          min: 0,
+                        })}</mwc-formfield
+                      >
+                    `,
+                  }) : ""}
                   </sl-header>
-                  ${payload
-                    ? html`
-                        <div class="addon">
-                          <span class="addon-name">${payload.name}</span>
-                          <span class="addon-type">${payload.fullType}</span>
-                          <mwc-icon-button
-                            icon="launch"
-                            @click=${this.openPayloadSheet}
-                          ></mwc-icon-button>
-                          <delete-button
-                            ?disabled=${disabled}
-                            @delete=${payload.deleteSelf}
-                          ></delete-button>
-                        </div>
-                      `
-                    : ''}
+                  ${payload ? this.renderPayload(payload) : ''}
                 </sl-dropzone>
               `
             : ''}
@@ -278,6 +299,21 @@ export class SprayWeaponForm extends ItemFormBase {
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
+  }
+
+  private renderPayload(payload: Substance) {
+    return html`<div class="addon">
+      <span class="addon-name">${payload.name}</span>
+      <span class="addon-type">${payload.fullType}</span>
+      <mwc-icon-button
+        icon="launch"
+        @click=${this.openPayloadSheet}
+      ></mwc-icon-button>
+      <delete-button
+        ?disabled=${this.disabled}
+        @delete=${payload.deleteSelf}
+      ></delete-button>
+    </div>`;
   }
 
   private renderAttack() {
