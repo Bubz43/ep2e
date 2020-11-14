@@ -1,10 +1,28 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+@include itemAddon();
+
 * {
   box-sizing: border-box;
 }
 
 :host {
   display: block;
+}
+
+
+.attack-details {
+  display: grid;
+  padding: 0.25rem;
+  font-size: large;
+}
+
+.missile-info-form {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+hr {
+  width: 100%;
+  border-color: var(--color-border);
 }

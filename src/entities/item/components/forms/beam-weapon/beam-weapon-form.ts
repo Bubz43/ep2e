@@ -12,6 +12,7 @@ import {
   renderFormulaField,
   renderTextField,
   renderTextareaField,
+  emptyTextDash,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import {
@@ -76,9 +77,7 @@ export class BeamWeaponForm extends ItemFormBase {
           disabled,
           slot: 'sidebar',
           fields: ({ wareType, range, hasSecondaryAttack, ...traits }) => [
-            renderSelectField(wareType, enumValues(PhysicalWare), {
-              emptyText: '-',
-            }),
+            renderSelectField(wareType, enumValues(PhysicalWare), emptyTextDash),
             renderNumberField(
               { ...range, label: `${range.label} (${localize('meters')})` },
               { min: 1 },

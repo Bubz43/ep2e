@@ -6,9 +6,12 @@ import {
 } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
 import { localize } from '@src/foundry/localization';
+import { EP } from '@src/foundry/system';
+import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { difference, map } from 'remeda';
 import { Equippable, Gear, Purchasable, RangedWeapon } from '../item-mixins';
+import { Explosive } from './explosive';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
 class Base extends ItemProxyBase<ItemType.SeekerWeapon> {
@@ -33,5 +36,41 @@ export class SeekerWeapon extends mix(Base).with(
   );
   constructor(init: ItemProxyInit<ItemType.SeekerWeapon>) {
     super(init);
+  }
+
+  get allowAlternativeAmmo() {
+    return this.epData.hasAlternativeAmmo;
+  }
+
+  get primaryAmmo() {
+    return this.epData.primaryAmmo
+  }
+
+  get alternativeAmmo() {
+    return this.epData.alternativeAmmo
+  }
+
+  @LazyGetter() 
+  get missiles() {
+    const data = this.epFlags?.missiles
+    return data ? new Explosive({
+      data,
+      embedded: this.name,
+      loaded: true,
+      updater: this.updater.prop("flags", EP.Name, "missiles").nestedStore(),
+      deleteSelf: () => this.removeMissiles()
+    }) : null
+  }
+
+  setMissiles(missiles: Explosive) {
+    return this.updatePayload(missiles.getDataCopy(true));
+  }
+
+  removeMissiles() {
+    return this.updatePayload(null);
+  }
+
+  private get updatePayload() {
+    return this.updater.prop('flags', EP.Name, 'missiles').commit;
   }
 }
