@@ -1,9 +1,11 @@
 import type { ItemType } from '@src/entities/entity-types';
 import { UpdateStore } from '@src/entities/update-store';
 import { localize } from '@src/foundry/localization';
+import { deepMerge, toTuple } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
+import { createPipe } from 'remeda';
 import type { Stackable } from '../item-interfaces';
 import { Copyable, Purchasable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
@@ -67,11 +69,10 @@ export class FirearmAmmo
           updater: new UpdateStore({
             getData: () => explosive,
             isEditable: () => this.editable,
-            setData: (changed) => {
-              this.updater
-                .prop('flags', EP.Name, 'payload')
-                .commit(mergeObject(explosive, changed, { inplace: false }));
-            },
+            setData: createPipe(
+              deepMerge(explosive),
+              this.updatePayload,
+            ),
           }),
           deleteSelf: () => this.removePayload(),
         })
@@ -79,12 +80,14 @@ export class FirearmAmmo
   }
 
   setPayload(payload: Substance) {
-    this.updater
-      .prop('flags', EP.Name, 'payload')
-      .commit(payload.getDataCopy());
+    return this.updatePayload(payload.getDataCopy());
   }
 
   removePayload() {
-    return this.updater.prop('flags', EP.Name, 'payload').commit(null);
+    return this.updatePayload(null);
+  }
+
+  private get updatePayload() {
+    return this.updater.prop('flags', EP.Name, 'payload').commit
   }
 }

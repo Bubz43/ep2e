@@ -513,9 +513,10 @@ function directorySearch(
 
     // Match folder tree
     const includeFolders = (fids: Set<string>) => {
-      const folders = this.folders.filter((f) => fids.has(f._id));
       const parentIds = new Set(
-        folders.flatMap(({ data }) => (data.parent ? data.parent : [])),
+        this.folders.flatMap(({ data, _id }) =>
+          fids.has(_id) && data.parent ? data.parent : [],
+        ),
       );
       if (parentIds.size) {
         parentIds.forEach((p) => folderIds.add(p));
@@ -536,7 +537,7 @@ function directorySearch(
 
     // Folders
     if (el.classList.contains('folder') && folderId) {
-      let match = isSearch && folderIds.has(folderId);
+      const match = isSearch && folderIds.has(folderId);
       el.style.display = !isSearch || match ? '' : 'none';
       if (isSearch && match) el.classList.remove('collapsed');
       else el.classList.toggle('collapsed', !game.folders._expanded[folderId]);

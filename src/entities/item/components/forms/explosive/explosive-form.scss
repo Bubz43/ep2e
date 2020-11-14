@@ -3,6 +3,14 @@
 
 @include itemAddon();
 
+.doses-form {
+  @include inputReset();
+  input {
+    width: 3.5ch;
+    margin-left: 0.5ch;
+  }
+}
+
 * {
   box-sizing: border-box;
 }

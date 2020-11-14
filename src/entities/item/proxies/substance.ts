@@ -18,6 +18,7 @@ import { UpdateStore } from '@src/entities/update-store';
 import { uniqueStringID } from '@src/features/feature-helpers';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
 import { localize } from '@src/foundry/localization';
+import { deepMerge } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
@@ -203,9 +204,7 @@ export class Substance
                   isEditable: () => this.editable,
                   setData: (updated) => {
                     const updatedList = [...list];
-                    updatedList[index] = mergeObject(item, updated, {
-                      inplace: false,
-                    });
+                    updatedList[index] = deepMerge(item, updated);
                     this.updater
                       .prop('flags', EP.Name, group)
                       .commit(updatedList);
@@ -220,9 +219,7 @@ export class Substance
                   isEditable: () => this.editable,
                   setData: (updated) => {
                     const updatedList = [...list];
-                    updatedList[index] = mergeObject(item, updated, {
-                      inplace: false,
-                    });
+                    updatedList[index] = deepMerge(item, updated);
                     this.updater
                       .prop('flags', EP.Name, group)
                       .commit(updatedList);

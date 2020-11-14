@@ -4,13 +4,14 @@ import {
   ExplosiveAttackData,
 } from '@src/combat/attacks';
 import { ExplosiveType, ExplosiveSize } from '@src/data-enums';
-import { ItemType } from '@src/entities/entity-types';
+import type { ItemType } from '@src/entities/entity-types';
 import { UpdateStore } from '@src/entities/update-store';
 import { localize } from '@src/foundry/localization';
+import { deepMerge, toTuple } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { compact } from 'remeda';
+import { compact, createPipe } from 'remeda';
 import type { Attacker, Stackable } from '../item-interfaces';
 import { Purchasable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
@@ -30,6 +31,11 @@ export class Explosive
     this.loaded = loaded;
   }
 
+  get fullName() {
+    const { substance } = this;
+    return `${this.name} ${substance ? `(${substance.name})` : ''}`;
+  }
+
   @LazyGetter()
   get substance() {
     const substanceData = this.epFlags?.substance?.[0];
@@ -41,15 +47,11 @@ export class Explosive
           updater: new UpdateStore({
             getData: () => substanceData,
             isEditable: () => this.editable,
-            setData: (changed) => {
-              this.updater
-                .prop('flags', EP.Name, ItemType.Substance)
-                .commit((data) => {
-                  return data
-                    ? mergeObject(data, changed, { inplace: false })
-                    : null;
-                });
-            },
+            setData: createPipe(
+              deepMerge(substanceData),
+              toTuple,
+              this.updateSubstance,
+            ),
           }),
           deleteSelf: () => this.removeSubstance(),
         })
@@ -150,12 +152,14 @@ export class Explosive
   }
 
   setSubstance(substance: Substance) {
-    this.updater
-      .prop('flags', EP.Name, 'substance')
-      .commit([substance.getDataCopy()]);
+    return this.updateSubstance([substance.getDataCopy()]);
   }
 
   removeSubstance() {
-    this.updater.prop('flags', EP.Name, 'substance').commit(null);
+    return this.updateSubstance(null);
+  }
+
+  private get updateSubstance() {
+    return this.updater.prop('flags', EP.Name, 'substance').commit
   }
 }

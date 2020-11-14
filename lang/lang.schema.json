@@ -580,6 +580,9 @@
             "ammo": {
               "type": "string"
             },
+            "ammoClass": {
+              "type": "string"
+            },
             "ammoUsed": {
               "type": "string"
             },
@@ -1334,6 +1337,9 @@
               "type": "string"
             },
             "dosesPerShot": {
+              "type": "string"
+            },
+            "dosesPerUnit": {
               "type": "string"
             },
             "downgrade": {
@@ -2854,6 +2860,9 @@
             "program": {
               "type": "string"
             },
+            "programmableModes": {
+              "type": "string"
+            },
             "progressTowards": {
               "type": "string"
             },
@@ -4191,6 +4200,7 @@
             "alwaysApplied",
             "alwaysApplies",
             "ammo",
+            "ammoClass",
             "ammoUsed",
             "ammunition",
             "amount",
@@ -4443,6 +4453,7 @@
             "distributedDevices",
             "doses",
             "dosesPerShot",
+            "dosesPerUnit",
             "downgrade",
             "downtime",
             "drop",
@@ -4949,6 +4960,7 @@
             "professionalTraining",
             "profile",
             "program",
+            "programmableModes",
             "progressTowards",
             "progressTowardsRefresh",
             "prone",

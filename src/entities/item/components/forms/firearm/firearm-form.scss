@@ -25,11 +25,7 @@ p.label {
 }
 
 .addon {
-  border-top: 2px solid alphav(var(--color-grey), 0.25);
-
-  .actions {
-    grid-area: sheet;
-  }
+  border-bottom: 2px solid alphav(var(--color-grey), 0.25);
 }
 
 .ammo-form {

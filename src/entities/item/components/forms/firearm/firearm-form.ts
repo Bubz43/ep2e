@@ -33,11 +33,12 @@ import {
   handleDrop,
   itemDropToItemProxy,
 } from '@src/foundry/drag-and-drop';
-import { localize } from '@src/foundry/localization';
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
+import { format, localize } from '@src/foundry/localization';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property, PropertyValues } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { createPipe, identity, objOf } from 'remeda';
+import { createPipe, identity, mapToObj, objOf } from 'remeda';
 import {
   accessoriesListStyles,
   complexityForm,
@@ -82,9 +83,19 @@ export class FirearmForm extends ItemFormBase {
   private addDrop = handleDrop(async ({ ev, data }) => {
     if (this.disabled) return;
     if (data?.type === DropType.Item) {
-      const agent = await itemDropToItemProxy(data);
-      if (agent?.type === ItemType.FirearmAmmo) {
-        this.item.setSpecialAmmo(agent);
+      const proxy = await itemDropToItemProxy(data);
+      if (proxy?.type === ItemType.FirearmAmmo) {
+        const { ammoClass } = proxy;
+        const { ammoClass: targetClass } = this.item;
+        if (ammoClass !== targetClass) {
+          notify(
+            NotificationType.Error,
+            format('MismatchedAmmoClasses', {
+              firearm: localize(ammoClass),
+              ammo: localize(targetClass),
+            }),
+          );
+        } else this.item.setSpecialAmmo(proxy);
       }
     }
   });
@@ -156,13 +167,43 @@ export class FirearmForm extends ItemFormBase {
 
           <sl-dropzone @drop=${this.addDrop} ?disabled=${disabled}>
             <sl-header heading=${localize('ammo')}></sl-header>
-            ${renderUpdaterForm(updater.prop('data', 'ammo'), {
+            ${specialAmmo
+              ? html`
+                  <div class="addon">
+                    <span class="addon-name"
+                      >${specialAmmo.name}
+                      ${specialAmmo.hasMultipleModes
+                        ? `(${specialAmmo.modes.map((m) => m.name).join(', ')})`
+                        : ''}</span
+                    >
+                    <span class="addon-type"
+                      >${localize(specialAmmo.type)}</span
+                    >
+                    <mwc-icon-button
+                      icon="launch"
+                      @click=${this.openAmmoSheet}
+                    ></mwc-icon-button>
+
+                    <delete-button
+                      ?disabled=${disabled}
+                      @delete=${specialAmmo.deleteSelf}
+                    ></delete-button>
+                  </div>
+                `
+              : ''}
+            ${renderAutoForm({
+              props: updater.prop('data', 'ammo').originalValue(),
               disabled,
               classes: 'ammo-form',
+              update: ({ value, ...data}) => {
+                if (value !== undefined) this.item.updateAmmoCount(value);
+                else this.item.updater.prop("data", "ammo").commit(data)
+              },
               fields: ({ value, max, ammoClass }) => [
                 renderSelectField(
                   { ...ammoClass, label: localize('class') },
                   enumValues(KineticWeaponClass),
+                  { disabled: !!specialAmmo },
                 ),
 
                 renderNumberField(
@@ -175,7 +216,19 @@ export class FirearmForm extends ItemFormBase {
                   { min: 1, max: 200 },
                 ),
                 specialAmmo?.hasMultipleModes
-                  ? ''
+                  ? renderNumberField(
+                    {
+                      prop: "value",
+                      label: localize("loaded"),
+                      value: Math.min(ammoState.max + 1, ammoState.value),
+                    },
+                    {
+                      min: 0,
+                      max: ammoState.max + 1,
+                      helpPersistent: true,
+                      helpText: `${localize('capacity')}: ${ammoState.max} + 1`,
+                    },
+                  )
                   : renderNumberField(
                       {
                         ...value,
@@ -195,40 +248,6 @@ export class FirearmForm extends ItemFormBase {
             })}
             ${specialAmmo?.hasMultipleModes
               ? this.renderProgrammableAmmoForm()
-              : ''}
-            ${specialAmmo
-              ? html`
-                  <div class="addon">
-                    <span class="addon-name"
-                      >${specialAmmo.name}
-                      ${specialAmmo.hasMultipleModes
-                        ? `(${
-                            specialAmmo.findMode(specialAmmoModeIndex)?.name ||
-                            `${localize('form')} ${specialAmmoModeIndex + 1}`
-                          })`
-                        : ''}</span
-                    >
-                    <span class="addon-type">${specialAmmo.fullType}</span>
-                    <div class="actions">${specialAmmo.hasMultipleModes
-                      ? html` <mwc-icon-button
-                          icon="transform"
-                          class="transform-button"
-                          @click=${this.setDrawerFromEvent(
-                            this.renderAmmoTransformer,
-                          )}
-                          ?disabled=${disabled}
-                        ></mwc-icon-button>`
-                      : ''}
-                    <mwc-icon-button
-                      icon="launch"
-                      @click=${this.openAmmoSheet}
-                    ></mwc-icon-button></div>
-                    <delete-button
-                      ?disabled=${disabled}
-                      @delete=${specialAmmo.deleteSelf}
-                    ></delete-button>
-                  </div>
-                `
               : ''}
           </sl-dropzone>
 
@@ -279,45 +298,30 @@ export class FirearmForm extends ItemFormBase {
     const { specialAmmo, ammoState, specialAmmoModeIndex } = this.item;
     if (!specialAmmo) return '';
     const activeMode = specialAmmo.findMode(specialAmmoModeIndex)!;
-    const ammoForms = new Map(
-      specialAmmo.modes.map(({ id, name }) => [id, name]),
-    );
-
+    const ammoModes = mapToObj(specialAmmo.modes, ({ id, name }) => [id, name]);
     return html`
-      ${renderAutoForm({
+      <!-- ${renderAutoForm({
         classes: 'mode-settings',
         props: {
-          loaded: ammoState.value,
           mode: activeMode.id,
         },
-        update: ({ loaded, mode }) => {
-          if (loaded !== undefined) this.item.updateAmmoCount(loaded);
-          else {
-            const index = this.item.specialAmmo?.modes.findIndex(matchID(mode));
-            if (typeof index === 'number' && index !== -1)
-              this.item.updater
-                .prop('data', 'ammo', 'selectedModeIndex')
-                .commit(index);
-          }
+        update: ({ mode }) => {
+    
         },
-        fields: ({ loaded, mode }) => [
-          renderSelectField(mode, [...ammoForms.keys()], {
-            altLabel: (modeId) => ammoForms.get(modeId) || localize('mode'),
+        fields: ({ mode }) => [
+          renderSelectField(mode, Object.keys(ammoModes), {
+            altLabel: (modeId) => ammoModes[modeId],
           }),
-          renderNumberField(
-            {
-              ...loaded,
-              value: Math.min(ammoState.max + 1, loaded.value),
-            },
-            {
-              min: 0,
-              max: ammoState.max + 1,
-              helpPersistent: true,
-              helpText: `${localize('capacity')}: ${ammoState.max} + 1`,
-            },
-          ),
         ],
       })}
+      ${specialAmmo.hasMultipleModes
+        ? html` <mwc-icon-button
+            icon="transform"
+            class="transform-button"
+            @click=${this.setDrawerFromEvent(this.renderAmmoTransformer)}
+            ?disabled=${this.disabled}
+          ></mwc-icon-button>`
+        : ''} -->
     `;
   }
 
@@ -358,7 +362,6 @@ export class FirearmForm extends ItemFormBase {
               `
             : ''}
         </div>
-
 
         // TODO Show Ammo Effects
       </section>

@@ -211,7 +211,9 @@ export class FirearmAmmoForm extends ItemFormBase {
                 disabled,
                 classes: 'settings-form',
                 fields: ({ ammoClass, carryPayload }) => [
-                  renderSelectField(ammoClass, enumValues(KineticWeaponClass)),
+                  renderSelectField(ammoClass, enumValues(KineticWeaponClass), {
+                    disabled: loaded,
+                  }),
                   renderLabeledCheckbox(carryPayload),
                 ],
               })}

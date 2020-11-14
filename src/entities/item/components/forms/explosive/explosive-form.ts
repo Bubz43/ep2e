@@ -11,6 +11,7 @@ import {
   renderTextareaField,
   renderTextField,
   renderTimeField,
+  renderNumberInput,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
@@ -225,7 +226,18 @@ export class ExplosiveForm extends ItemFormBase {
                   <sl-header
                     heading=${localize('substance')}
                     ?hideBorder=${!substance}
-                  ></sl-header>
+                  >
+                    ${renderUpdaterForm(updater.prop('data'), {
+                      disabled,
+                      classes: "doses-form",
+                      slot: 'action',
+                      fields: ({ dosesPerUnit }) => html`
+                        <mwc-formfield alignEnd label=${dosesPerUnit.label}
+                          >${renderNumberInput(dosesPerUnit, { min: 1})}</mwc-formfield
+                        >
+                      `,
+                    })}
+                  </sl-header>
                   ${substance
                     ? html`
                         <div class="addon">
