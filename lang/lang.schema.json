@@ -124,7 +124,13 @@
                 "ArmorReduced": {
                   "type": "string"
                 },
+                "CannotLoadMissileSize": {
+                  "type": "string"
+                },
                 "DotPerTurnNoArmor": {
+                  "type": "string"
+                },
+                "MismatchedAmmoClasses": {
                   "type": "string"
                 },
                 "NoMatching": {
@@ -147,7 +153,9 @@
                 "TakeSVWhenWearsOff",
                 "OnCheckFailure",
                 "ArmorReduced",
-                "AlreadyHasItem"
+                "AlreadyHasItem",
+                "MismatchedAmmoClasses",
+                "CannotLoadMissileSize"
               ],
               "type": "object"
             },
@@ -776,6 +784,9 @@
               "type": "string"
             },
             "available": {
+              "type": "string"
+            },
+            "availableShots": {
               "type": "string"
             },
             "average": {
@@ -4266,6 +4277,7 @@
             "automatic",
             "availability",
             "available",
+            "availableShots",
             "average",
             "avoid",
             "awaiting",

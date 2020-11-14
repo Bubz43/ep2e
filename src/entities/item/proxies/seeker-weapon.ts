@@ -9,7 +9,7 @@ import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { difference, map } from 'remeda';
+import { compact, concat, difference, map } from 'remeda';
 import { Equippable, Gear, Purchasable, RangedWeapon } from '../item-mixins';
 import { Explosive } from './explosive';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
@@ -43,23 +43,60 @@ export class SeekerWeapon extends mix(Base).with(
   }
 
   get primaryAmmo() {
-    return this.epData.primaryAmmo
+    return this.epData.primaryAmmo;
   }
 
   get alternativeAmmo() {
-    return this.epData.alternativeAmmo
+    return this.epData.alternativeAmmo;
   }
 
-  @LazyGetter() 
+  get isAlternativeMissiles() {
+    return (
+      this.allowAlternativeAmmo &&
+      this.missiles?.size === this.alternativeAmmo.missileSize
+    );
+  }
+
+  get activeAmmoSettings() {
+    return this.isAlternativeMissiles ? this.alternativeAmmo : this.primaryAmmo;
+  }
+
+  get availableShots() {
+    return Math.min(
+      this.activeAmmoSettings.missileCapacity,
+      this.missiles?.quantity || 0,
+    );
+  }
+
+  get acceptableMissileSizes() {
+    return compact([
+      this.primaryAmmo.missileSize,
+      this.allowAlternativeAmmo && this.alternativeAmmo.missileSize,
+    ]);
+  }
+
+  get currentCapacity() {
+    const { capacityChanged, extended } = this.magazineModifiers;
+    const { missileCapacity } = this.activeAmmoSettings;
+    return capacityChanged && extended
+      ? Math.ceil(missileCapacity * 1.5)
+      : missileCapacity;
+  }
+
+  @LazyGetter()
   get missiles() {
-    const data = this.epFlags?.missiles
-    return data ? new Explosive({
-      data,
-      embedded: this.name,
-      loaded: true,
-      updater: this.updater.prop("flags", EP.Name, "missiles").nestedStore(),
-      deleteSelf: () => this.removeMissiles()
-    }) : null
+    const data = this.epFlags?.missiles;
+    return data
+      ? new Explosive({
+          data,
+          embedded: this.name,
+          loaded: true,
+          updater: this.updater
+            .prop('flags', EP.Name, 'missiles')
+            .nestedStore(),
+          deleteSelf: () => this.removeMissiles(),
+        })
+      : null;
   }
 
   setMissiles(missiles: Explosive) {

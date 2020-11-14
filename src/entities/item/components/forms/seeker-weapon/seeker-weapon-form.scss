@@ -20,6 +20,22 @@
 
 .missile-info-form {
   grid-template-columns: 1fr 1fr 1fr;
+  padding: 0.5rem 0 0;
+}
+
+.missiles-quantity-form {
+  display: flex;
+  align-items: center;
+  @include inputReset();
+  input {
+    width: 3.5ch;
+    margin-left: 0.5ch;
+  }
+  .capacity {
+    color: var(--color-text-lighter);
+    margin-left: 0.5ch;
+    min-width: 3.5ch;
+  }
 }
 
 hr {

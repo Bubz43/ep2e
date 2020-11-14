@@ -1,8 +1,10 @@
+import { DropZone } from '@src/components/dropzone/dropzone';
 import {
   renderSelectField,
   emptyTextDash,
   renderLabeledCheckbox,
   renderNumberField,
+  renderNumberInput,
 } from '@src/components/field/fields';
 import { renderUpdaterForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
@@ -13,20 +15,28 @@ import {
 } from '@src/components/window/window-options';
 import { enumValues, ExplosiveSize, PhysicalWare } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
+import { ItemType } from '@src/entities/entity-types';
 import { renderItemForm } from '@src/entities/item/item-views';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
 import { FiringMode } from '@src/features/firing-modes';
-import { handleDrop } from '@src/foundry/drag-and-drop';
-import { localize } from '@src/foundry/localization';
+import {
+  DropType,
+  handleDrop,
+  itemDropToItemProxy,
+} from '@src/foundry/drag-and-drop';
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
+import { format, localize } from '@src/foundry/localization';
 import { customElement, html, property, PropertyValues } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { difference, identity } from 'remeda';
+import { difference, identity, map } from 'remeda';
 import { SeekerWeapon } from '../../../proxies/seeker-weapon';
 import {
   accessoriesListStyles,
   complexityForm,
   renderComplexityFields,
+  renderGearTraitCheckboxes,
   renderRangedAccessoriesEdit,
+  renderWeaponTraitCheckboxes,
 } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './seeker-weapon-form.scss';
@@ -52,7 +62,6 @@ export class SeekerWeaponForm extends ItemFormBase {
 
   update(changedProps: PropertyValues) {
     if (this.missilesSheet) this.openMissilesSheet();
-
     super.update(changedProps);
   }
 
@@ -62,8 +71,25 @@ export class SeekerWeaponForm extends ItemFormBase {
   }
 
   private addDrop = handleDrop(async ({ ev, data }) => {
-    if (this.disabled) return;
-    // TODO
+    if (this.disabled || data?.type !== DropType.Item) return;
+    const proxy = await itemDropToItemProxy(data);
+    if (proxy?.type === ItemType.Explosive && proxy.isMissile) {
+      const alternate =
+        ev.currentTarget instanceof DropZone &&
+        ev.currentTarget.hasAttribute('data-alternate');
+      const { missileSize } = alternate
+        ? this.item.alternativeAmmo
+        : this.item.primaryAmmo;
+      if (missileSize === proxy.size) this.item.setMissiles(proxy);
+      else
+        notify(
+          NotificationType.Error,
+          format('CannotLoadMissileSize', {
+            missileSize: proxy.formattedSize,
+            availableSizes: localize(missileSize),
+          }),
+        );
+    }
   });
 
   private openMissilesSheet() {
@@ -122,7 +148,7 @@ export class SeekerWeaponForm extends ItemFormBase {
         ${renderUpdaterForm(updater.prop('data'), {
           disabled,
           slot: 'sidebar',
-          fields: ({ wareType, firingMode, hasAlternativeAmmo }) => [
+          fields: ({ wareType, firingMode, hasAlternativeAmmo, ...traits }) => [
             renderSelectField(
               wareType,
               enumValues(PhysicalWare),
@@ -139,6 +165,14 @@ export class SeekerWeaponForm extends ItemFormBase {
               },
               { disabled: alternativeMissile },
             ),
+            html`<entity-form-sidebar-divider
+              label="${localize('weapon')} ${localize('traits')}"
+            ></entity-form-sidebar-divider>`,
+            renderWeaponTraitCheckboxes(traits),
+            html`<entity-form-sidebar-divider
+              label=${localize('gearTraits')}
+            ></entity-form-sidebar-divider>`,
+            renderGearTraitCheckboxes(traits),
           ],
         })}
 
@@ -150,9 +184,11 @@ export class SeekerWeaponForm extends ItemFormBase {
           })}
 
           <sl-dropzone ?disabled=${this.disabled} @drop=${this.addDrop}>
-            <sl-header
-              heading="${localize('missile')} ${localize('info')}"
-            ></sl-header>
+            <sl-header heading=${localize('ammo')}>
+              ${missiles && !alternativeMissile
+                ? this.renderMissilesQuantityForm(missiles)
+                : ''}</sl-header
+            >
             ${missiles && !alternativeMissile
               ? this.renderMissiles(missiles)
               : ''}
@@ -166,7 +202,13 @@ export class SeekerWeaponForm extends ItemFormBase {
                     : [],
                   disabled: !!(missiles && !alternativeMissile),
                 }),
-                renderNumberField(missileCapacity, { min: 1 }),
+                renderNumberField(
+                  {
+                    ...missileCapacity,
+                    label: `${localize('base')} ${localize('capacity')}`,
+                  },
+                  { min: 1 },
+                ),
                 renderNumberField(range, { min: 1 }),
               ],
             })}
@@ -174,10 +216,16 @@ export class SeekerWeaponForm extends ItemFormBase {
 
           ${allowAlternativeAmmo
             ? html`
-                <sl-dropzone ?disabled=${this.disabled} @drop=${this.addDrop}>
-                  <sl-header
-                    heading="${localize('missile')} ${localize('info')}"
-                  ></sl-header>
+                <sl-dropzone
+                  ?disabled=${this.disabled}
+                  @drop=${this.addDrop}
+                  data-alternate
+                >
+                  <sl-header heading=${localize('alternativeAmmo')}
+                    >${missiles && alternativeMissile
+                      ? this.renderMissilesQuantityForm(missiles)
+                      : ''}</sl-header
+                  >
                   ${missiles && alternativeMissile
                     ? this.renderMissiles(missiles)
                     : ''}
@@ -193,7 +241,13 @@ export class SeekerWeaponForm extends ItemFormBase {
                           disabled: alternativeMissile,
                         },
                       ),
-                      renderNumberField(missileCapacity, { min: 1 }),
+                      renderNumberField(
+                        {
+                          ...missileCapacity,
+                          label: `${localize('base')} ${localize('capacity')}`,
+                        },
+                        { min: 1 },
+                      ),
                       renderNumberField(range, { min: 1 }),
                     ],
                   })}
@@ -247,6 +301,27 @@ export class SeekerWeaponForm extends ItemFormBase {
       </div>
       <hr />
     `;
+  }
+
+  private renderMissilesQuantityForm(missiles: Explosive) {
+    const { currentCapacity } = this.item;
+    return renderUpdaterForm(missiles.updater.prop('data'), {
+      disabled: this.disabled,
+      classes: 'missiles-quantity-form',
+      slot: 'action',
+      fields: ({ quantity }) => html`
+        <mwc-formfield alignEnd label=${quantity.label}
+          >${renderNumberInput(
+            { ...quantity, value: Math.min(quantity.value, currentCapacity) },
+            {
+              min: 0,
+              max: currentCapacity,
+            },
+          )}</mwc-formfield
+        >
+        <span class="capacity">/ ${currentCapacity}</span>
+      `,
+    });
   }
 
   private renderAccessoriesEdit() {

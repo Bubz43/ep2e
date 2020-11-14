@@ -1367,6 +1367,7 @@ export type Formatable = {
   ArmorReduced: ['armor', 'value'];
   AlreadyHasItem: ['ownerName', 'itemName'];
   MismatchedAmmoClasses: ['firearm', 'ammo'];
+  CannotLoadMissileSize: ["missileSize", "availableSizes"]
 };
 
 export interface Lang {

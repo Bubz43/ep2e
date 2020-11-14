@@ -36,6 +36,14 @@ export class Explosive
     return `${this.name} ${substance ? `(${substance.name})` : ''}`;
   }
 
+  get isMissile() {
+    return this.explosiveType === ExplosiveType.Missile
+  }
+
+  get isGrenade() {
+    return this.explosiveType === ExplosiveType.Grenade
+  }
+
   @LazyGetter()
   get substance() {
     const substanceData = this.epFlags?.substance?.[0];

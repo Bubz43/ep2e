@@ -1342,7 +1342,9 @@
       "TakeSVWhenWearsOff": "Take SV {wearOffStress} when {substanceType} wears off",
       "OnCheckFailure": "On {aptitude} check failure",
       "ArmorReduced": "{armor} armor reduced by {value}.",
-      "AlreadyHasItem": "{ownerName} already has {itemName}."
+      "AlreadyHasItem": "{ownerName} already has {itemName}.",
+      "MismatchedAmmoClasses": "Ammo is: [{ammo}] but weapon is {firearm}",
+      "CannotLoadMissileSize": "Missile must be [{availableSizes}] but is {missileSize}"
     }
   }
 }
