@@ -132,4 +132,10 @@ export abstract class ActorProxyBase<T extends ActorType> {
       );
     }
   }
+
+  matchRegexp(regex: RegExp) {
+    return [this.name, this.type].some((text) =>
+      regex.test(text),
+    );
+  }
 }

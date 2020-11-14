@@ -218,4 +218,8 @@ export class ItemEP extends Item {
     super._onDelete(options, userId);
     this._subscribers.unsubscribeAll();
   }
+
+  matchRegexp(regex: RegExp) {
+    return this.proxy.matchRegexp(regex)
+  }
 }

@@ -1,4 +1,5 @@
 import type { EntitySheet, TokenData } from '@src/foundry/foundry-cont';
+import { localize } from '@src/foundry/localization';
 import { canViewActor } from '@src/foundry/misc-helpers';
 import { SystemSocketData, emitEPSocket } from '@src/foundry/socket';
 import { EP } from '@src/foundry/system';
@@ -283,5 +284,9 @@ export class ActorEP extends Actor {
     options: { temporary?: boolean; renderSheet?: boolean } = {},
   ) {
     return super.create(data, options);
+  }
+
+  matchRegexp(regex: RegExp) {
+    return [this.name, localize(this.type)].some(text => regex.test(text))
   }
 }

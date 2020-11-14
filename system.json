@@ -10,10 +10,10 @@
   "styles": [
     "./build/_dist_/global.css"
   ],
-  "compatibleCoreVersion": "0.7.6",
+  "compatibleCoreVersion": "0.7.7",
   "gridDistance": 1,
   "gridUnits": "m",
-  "minimumCoreVersion": "0.7.6",
+  "minimumCoreVersion": "0.7.7",
   "socket": true,
   "languages": [
     {
@@ -57,13 +57,6 @@
       "label": "Disorders",
       "path": "./packs/disorders.db",
       "entity": "Item"
-    },
-    {
-      "name": "weapon-accessories",
-      "system": "ep2e",
-      "label": "Weapon Accessories",
-      "path": "./packs/weapon-accessories.db",
-      "entity": "JournalEntry"
     }
   ],
   "manifest": "https://raw.githubusercontent.com/Bubz43/ep2e/master/system.json",

@@ -5,7 +5,7 @@ import type { UserEP } from '@src/entities/user';
 import { iconToCondition } from '@src/features/conditions';
 import { openMenu } from '@src/open-menu';
 import { findMatchingElement } from '@src/utility/dom';
-import { notEmpty } from '@src/utility/helpers';
+import { notEmpty, searchRegExp } from '@src/utility/helpers';
 import { html, render } from 'lit-html';
 import { compact, first, mapToObj, noop, pipe } from 'remeda';
 import { isKnownDrop, setDragSource } from './drag-and-drop';
@@ -488,3 +488,61 @@ DragDrop.prototype._handleDragStart = function (ev: DragEvent) {
     setDragSource(ev, data);
   }
 };
+
+function directorySearch(
+  this: ActorDirectory | ItemDirectory,
+  _: Event,
+  query: string,
+  html: HTMLElement,
+) {
+  const isSearch = !!query;
+  const entityIds = new Set<string>();
+  const folderIds = new Set<string>();
+
+  // Match entities and folders
+  if (isSearch) {
+    const rgx = searchRegExp(query);
+
+    // Match entity names
+    for (const entity of this.entities) {
+      if (entity.matchRegexp(rgx)) {
+        entityIds.add(entity.id);
+        if (entity.data.folder) folderIds.add(entity.data.folder);
+      }
+    }
+
+    // Match folder tree
+    const includeFolders = (fids: Set<string>) => {
+      const folders = this.folders.filter((f) => fids.has(f._id));
+      const parentIds = new Set(
+        folders.flatMap(({ data }) => (data.parent ? data.parent : [])),
+      );
+      if (parentIds.size) {
+        parentIds.forEach((p) => folderIds.add(p));
+        includeFolders(parentIds);
+      }
+    };
+    includeFolders(folderIds);
+  }
+
+  // Toggle each directory item
+  for (const el of html.querySelectorAll<HTMLElement>('.directory-item')) {
+    const { entityId, folderId } = el.dataset;
+
+    // Entities
+    if (el.classList.contains('entity') && entityId) {
+      el.style.display = !isSearch || entityIds.has(entityId) ? '' : 'none';
+    }
+
+    // Folders
+    if (el.classList.contains('folder') && folderId) {
+      let match = isSearch && folderIds.has(folderId);
+      el.style.display = !isSearch || match ? '' : 'none';
+      if (isSearch && match) el.classList.remove('collapsed');
+      else el.classList.toggle('collapsed', !game.folders._expanded[folderId]);
+    }
+  }
+}
+
+ItemDirectory.prototype._onSearchFilter = directorySearch;
+ActorDirectory.prototype._onSearchFilter = directorySearch;

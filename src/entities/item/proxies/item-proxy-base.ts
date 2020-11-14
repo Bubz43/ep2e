@@ -113,4 +113,11 @@ export abstract class ItemProxyBase<T extends ItemType> {
   get epFlags() {
     return this.data.flags[EP.Name];
   }
+
+  matchRegexp(regex: RegExp) {
+    
+    return [this.fullName, this.fullType, localize(this.type)].some((text) =>
+      regex.test(text),
+    );
+  }
 }

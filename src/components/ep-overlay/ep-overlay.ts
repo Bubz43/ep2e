@@ -305,7 +305,7 @@ export class EPOverlay extends LitElement {
             if (_popout && notEmpty(_popout.element)) {
               const [element] = _popout.element;
               if (element.classList.contains('minimized')) _popout.maximize();
-              Draggable.prototype._onClickFloatTop.call({ element }, ev);
+              _popout.bringToTop()
             } else {
               tabApp.renderPopout();
               requestAnimationFrame(async () => {
@@ -316,7 +316,7 @@ export class EPOverlay extends LitElement {
               });
             }
           }}
-          @contextmenu=${() => tabApp._popout?.close()}
+          @contextmenu=${() => tabApp._popout?.close({})}
           >${icon}</wl-list-item
         >
       `;
