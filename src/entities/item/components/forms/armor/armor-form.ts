@@ -15,6 +15,7 @@ import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
 import type { ArmorValues } from '@src/foundry/template-schema';
 import type { FieldPropsRenderer } from '@src/utility/field-values';
+import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property } from 'lit-element';
 import { createPipe, objOf, map } from 'remeda';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
@@ -26,10 +27,10 @@ const renderArmorValuesFields: FieldPropsRenderer<ArmorValues> = ({
   kinetic,
   concealable,
   layerable,
-}) => html`<div class="armor-values">
-    ${[energy, kinetic].map((type) => renderNumberField(type, { min: 0 }))}
-  </div>
-  ${map([layerable, concealable], renderLabeledCheckbox)}`;
+}) => [
+  [energy, kinetic].map((type) => renderNumberField(type, { min: 0 })),
+  html`<div>${map([layerable, concealable], renderLabeledCheckbox)}</div>`,
+];
 
 @customElement('armor-form')
 export class ArmorForm extends ItemFormBase {
@@ -113,36 +114,36 @@ export class ArmorForm extends ItemFormBase {
             fields: renderComplexityFields,
           })}
 
+          <div class="both-values">
+            <section>
+              <sl-header
+                heading="${localize('armor')} ${localize('values')}"
+              ></sl-header>
+              ${renderUpdaterForm(updater.prop('data', 'armorValues'), {
+                disabled,
+                classes: `armor-values-form ${hasActiveState ? '' : 'solo'}`,
+                fields: renderArmorValuesFields,
+              })}
+            </section>
+
+            ${hasActiveState
+              ? html`
+                  <section>
+                    <sl-header heading="${localize('activated')}"></sl-header>
+                    ${renderUpdaterForm(updater.prop('data', 'armorValues'), {
+                      disabled,
+                      classes: 'armor-values-form',
+                      fields: renderArmorValuesFields,
+                    })}
+                  </section>
+                `
+              : ''}
+          </div>
+
           <section>
             <sl-header
-              heading="${localize('armor')} ${localize('values')}"
-            ></sl-header>
-            ${renderUpdaterForm(updater.prop('data', 'armorValues'), {
-              disabled,
-              classes: 'armor-values-form',
-              fields: renderArmorValuesFields,
-            })}
-          </section>
-
-          ${hasActiveState
-            ? html`
-                <section>
-                  <sl-header
-                    heading="${localize('activated')} ${localize(
-                      'armor',
-                    )} ${localize('values')}"
-                  ></sl-header>
-                  ${renderUpdaterForm(updater.prop('data', 'armorValues'), {
-                    disabled,
-                    classes: 'armor-values-form',
-                    fields: renderArmorValuesFields,
-                  })}
-                </section>
-              `
-            : ''}
-
-          <section>
-            <sl-header heading=${localize('effects')}
+              heading=${localize('effects')}
+              ?hideBorder=${effects.length === 0}
               ><mwc-icon-button
                 icon="add"
                 slot="action"
@@ -150,11 +151,15 @@ export class ArmorForm extends ItemFormBase {
                 ?disabled=${disabled}
               ></mwc-icon-button
             ></sl-header>
-            <item-form-effects-list
-              .effects=${effects}
-              .operations=${this.effectsOps}
-              ?disabled=${disabled}
-            ></item-form-effects-list>
+            ${notEmpty(effects)
+              ? html`
+                  <item-form-effects-list
+                    .effects=${effects}
+                    .operations=${this.effectsOps}
+                    ?disabled=${disabled}
+                  ></item-form-effects-list>
+                `
+              : ''}
           </section>
         </div>
 

@@ -9,3 +9,19 @@
   display: block;
   
 }
+
+.both-values {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 1rem;
+}
+
+.armor-values-form {
+  padding: 0.5rem 0 0;
+
+  &.solo {
+    display: flex;
+    align-items: center;
+  }
+}
