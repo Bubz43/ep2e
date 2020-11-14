@@ -1,10 +1,37 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+@include itemAddon();
+
 * {
   box-sizing: border-box;
 }
 
 :host {
   display: block;
+}
+
+.doses-form {
+  @include inputReset();
+  input {
+    width: 3.5ch;
+    margin-left: 0.5ch;
+  }
+}
+
+.ammo-form {
+  grid-template-columns: 2fr 1fr 1fr;
+  padding: 0.5rem 0;
+}
+
+
+p.label {
+  @include listLabel();
+  margin-bottom: 0.25rem;
+}
+
+.attack-details {
+  display: grid;
+  padding: 0.25rem;
+  font-size: large;
 }

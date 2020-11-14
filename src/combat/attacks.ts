@@ -120,7 +120,10 @@ export type SprayWeaponAttackData = FiringModeList & {
   notes: string;
 };
 
-export type SprayWeaponAttack = FullAttack<SprayWeaponAttackData>;
+export type SprayWeaponAttack = FullAttack<SprayWeaponAttackData> & {
+  substance: Substance | null,
+  areaEffect: AreaEffectType | '';
+};
 
 export type KineticWeaponAttackData = FiringModeList & {
   damageFormula: string;

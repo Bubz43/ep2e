@@ -83,7 +83,7 @@ export class FirearmAmmoForm extends ItemFormBase {
   }
 
   disconnectedCallback() {
-    this.closeCoatingSheet();
+    this.closePayloadSheet();
     super.disconnectedCallback();
   }
 
@@ -107,7 +107,7 @@ export class FirearmAmmoForm extends ItemFormBase {
 
   private openPayloadSheet() {
     const { payload, fullName } = this.item;
-    if (!payload) return this.closeCoatingSheet();
+    if (!payload) return this.closePayloadSheet();
     const { win, wasConnected } = openWindow(
       {
         key: this.payloadSheetKey,
@@ -129,7 +129,7 @@ export class FirearmAmmoForm extends ItemFormBase {
     }
   }
 
-  private closeCoatingSheet() {
+  private closePayloadSheet() {
     this.payloadSheet?.close();
     this.payloadSheet = null;
   }
