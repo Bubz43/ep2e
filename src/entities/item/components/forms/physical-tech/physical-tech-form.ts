@@ -1,5 +1,5 @@
 import {
-  emptyValue,
+  emptyTextDash,
   renderNumberField,
   renderRadioFields,
   renderSelectField,
@@ -85,14 +85,14 @@ export class PhysicalTechForm extends ItemFormBase {
             renderTextField(category),
             html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
             renderSelectField(wareType, enumValues(PhysicalWare), {
-              ...emptyValue,
+              ...emptyTextDash,
               disabled: !!embedded,
             }),
             renderSelectField(deviceType, enumValues(DeviceType), {
-              ...emptyValue,
+              ...emptyTextDash,
               disabled: !!embedded,
             }),
-            renderSelectField(fabricator, enumValues(FabType), emptyValue),
+            renderSelectField(fabricator, enumValues(FabType), emptyTextDash),
           ],
         })}
 

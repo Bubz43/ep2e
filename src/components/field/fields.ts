@@ -611,4 +611,4 @@ export const renderTextareaField = (
   });
 };
 
-export const emptyValue = { emptyText: '-' } as const;
+export const emptyTextDash = { emptyText: '-' } as const;

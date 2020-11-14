@@ -815,7 +815,7 @@
         "max": 15,
         "value": 15
       },
-      "dosesPerShot": 0,
+      "dosesPerShot": 1,
       "fixed": false,
       "long": false,
       "range": 15,

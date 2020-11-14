@@ -10,6 +10,7 @@ import {
   renderNumberInput,
   renderFormulaField,
   renderTextareaField,
+  emptyTextDash,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
@@ -157,6 +158,11 @@ export class SprayWeaponForm extends ItemFormBase {
               { ...range, label: `${range.label} (${localize('meters')})` },
               { min: 1 },
             ),
+            renderSelectField(
+              payloadUse,
+              enumValues(SprayPayload),
+              emptyTextDash,
+            ),
             html`<entity-form-sidebar-divider
               label="${localize('weapon')} ${localize('traits')}"
             ></entity-form-sidebar-divider>`,
@@ -209,18 +215,20 @@ export class SprayWeaponForm extends ItemFormBase {
                       @mouseenter=${tooltip.fromData}
                       >info</mwc-icon
                     >
-                    ${renderUpdaterForm(updater.prop('data'), {
-                      disabled,
-                      classes: 'doses-form',
-                      slot: 'action',
-                      fields: ({ dosesPerShot }) => html`
-                        <mwc-formfield alignEnd label=${dosesPerShot.label}
-                          >${renderNumberInput(dosesPerShot, {
-                            min: 1,
-                          })}</mwc-formfield
-                        >
-                      `,
-                    })}
+                    ${payloadUse === SprayPayload.FirePayload
+                      ? renderUpdaterForm(updater.prop('data'), {
+                          disabled,
+                          classes: 'doses-form',
+                          slot: 'action',
+                          fields: ({ dosesPerShot }) => html`
+                            <mwc-formfield alignEnd label=${dosesPerShot.label}
+                              >${renderNumberInput(dosesPerShot, {
+                                min: 1,
+                              })}</mwc-formfield
+                            >
+                          `,
+                        })
+                      : ''}
                   </sl-header>
                   ${payload
                     ? html`
