@@ -25,6 +25,7 @@ import { entityFormCommonStyles } from '@src/entities/components/form-layout/ent
 import { ItemType } from '@src/entities/entity-types';
 import { renderItemForm } from '@src/entities/item/item-views';
 import { Firearm } from '@src/entities/item/proxies/firearm';
+import type { FirearmAmmo } from '@src/entities/item/proxies/firearm-ammo';
 import { pairList } from '@src/features/check-list';
 import { matchID } from '@src/features/feature-helpers';
 import { FiringMode } from '@src/features/firing-modes';
@@ -47,6 +48,7 @@ import {
   renderKineticWeaponSidebar,
   renderRangedAccessoriesEdit,
 } from '../common-gear-fields';
+import { renderFirearmAmmoDetails } from '../firearm-ammo-details';
 import { ItemFormBase } from '../item-form-base';
 import styles from './firearm-form.scss';
 
@@ -137,7 +139,6 @@ export class FirearmForm extends ItemFormBase {
       specialAmmo,
       magazineModifiers,
       ammoState,
-      specialAmmoModeIndex,
     } = this.item;
     const { disabled } = this;
     return html`
@@ -189,15 +190,16 @@ export class FirearmForm extends ItemFormBase {
                       @delete=${specialAmmo.deleteSelf}
                     ></delete-button>
                   </div>
+                  <hr />
                 `
               : ''}
             ${renderAutoForm({
               props: updater.prop('data', 'ammo').originalValue(),
               disabled,
               classes: 'ammo-form',
-              update: ({ value, ...data}) => {
+              update: ({ value, ...data }) => {
                 if (value !== undefined) this.item.updateAmmoCount(value);
-                else this.item.updater.prop("data", "ammo").commit(data)
+                else this.item.updater.prop('data', 'ammo').commit(data);
               },
               fields: ({ value, max, ammoClass }) => [
                 renderSelectField(
@@ -217,18 +219,20 @@ export class FirearmForm extends ItemFormBase {
                 ),
                 specialAmmo?.hasMultipleModes
                   ? renderNumberField(
-                    {
-                      prop: "value",
-                      label: localize("loaded"),
-                      value: Math.min(ammoState.max + 1, ammoState.value),
-                    },
-                    {
-                      min: 0,
-                      max: ammoState.max + 1,
-                      helpPersistent: true,
-                      helpText: `${localize('capacity')}: ${ammoState.max} + 1`,
-                    },
-                  )
+                      {
+                        prop: 'value',
+                        label: localize('loaded'),
+                        value: Math.min(ammoState.max + 1, ammoState.value),
+                      },
+                      {
+                        min: 0,
+                        max: ammoState.max + 1,
+                        helpPersistent: true,
+                        helpText: `${localize('capacity')}: ${
+                          ammoState.max
+                        } + 1`,
+                      },
+                    )
                   : renderNumberField(
                       {
                         ...value,
@@ -247,7 +251,7 @@ export class FirearmForm extends ItemFormBase {
               ],
             })}
             ${specialAmmo?.hasMultipleModes
-              ? this.renderProgrammableAmmoForm()
+              ? this.renderProgrammableAmmoForm(specialAmmo)
               : ''}
           </sl-dropzone>
 
@@ -294,39 +298,41 @@ export class FirearmForm extends ItemFormBase {
     `;
   }
 
-  private renderProgrammableAmmoForm() {
-    const { specialAmmo, ammoState, specialAmmoModeIndex } = this.item;
-    if (!specialAmmo) return '';
-    const activeMode = specialAmmo.findMode(specialAmmoModeIndex)!;
-    const ammoModes = mapToObj(specialAmmo.modes, ({ id, name }) => [id, name]);
+  private renderProgrammableAmmoForm(specialAmmo: FirearmAmmo) {
+    const { specialAmmoModeIndex, availableShots } = this.item;
+    const ammoModes = mapToObj.indexed(specialAmmo.modes, ({ name }, index) => [
+      String(index),
+      name,
+    ]);
     return html`
-      <!-- ${renderAutoForm({
-        classes: 'mode-settings',
-        props: {
-          mode: activeMode.id,
-        },
-        update: ({ mode }) => {
-    
-        },
-        fields: ({ mode }) => [
-          renderSelectField(mode, Object.keys(ammoModes), {
-            altLabel: (modeId) => ammoModes[modeId],
-          }),
-        ],
-      })}
-      ${specialAmmo.hasMultipleModes
-        ? html` <mwc-icon-button
-            icon="transform"
-            class="transform-button"
-            @click=${this.setDrawerFromEvent(this.renderAmmoTransformer)}
-            ?disabled=${this.disabled}
-          ></mwc-icon-button>`
-        : ''} -->
+      <div class="ammo-mode-settings">
+        ${renderAutoForm({
+          props: { mode: String(specialAmmoModeIndex) },
+          update: ({ mode }) =>
+            this.item.updater
+              .prop('data', 'ammo', 'selectedModeIndex')
+              .commit(Number(mode) || 0),
+          fields: ({ mode }) =>
+            renderSelectField(mode, Object.keys(ammoModes), {
+              altLabel: (modeId) => ammoModes[modeId],
+            }),
+        })}
+        <sl-group label=${localize('availableShots')}
+          ><span class="available-shots">${availableShots}</span></sl-group
+        >
+        <mwc-icon-button
+          icon="transform"
+          class="transform-button"
+          @click=${this.setDrawerFromEvent(this.renderAmmoTransformer)}
+          ?disabled=${this.disabled}
+        ></mwc-icon-button>
+      </div>
     `;
   }
 
   private renderAttack() {
     const { primary: attack } = this.item.attacks;
+    const [specialAmmo, mode] = attack?.specialAmmo ?? [];
     return html`
       <section>
         <sl-header heading=${localize('attack')}>
@@ -360,10 +366,22 @@ export class FirearmForm extends ItemFormBase {
                   ${attack.notes}</sl-group
                 >
               `
+      : ''}
+            <hr />
+          ${specialAmmo && mode
+            ? html`
+                  <sl-group label=${localize('ammo')}
+                    >${specialAmmo.name} ${specialAmmo.hasMultipleModes ? `(${mode.name})` : ""}</sl-group
+                  >
+                  ${specialAmmo.payload
+                    ? html`<sl-group label=${localize('payload')}
+                        >${specialAmmo.payload.name}</sl-group
+                      >`
+                    : ''}
+                  ${renderFirearmAmmoDetails(mode)}
+              `
             : ''}
         </div>
-
-        // TODO Show Ammo Effects
       </section>
     `;
   }

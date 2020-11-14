@@ -1251,6 +1251,7 @@
     "ammoClass": "Ammo Class",
     "programmableModes": "Programmable Modes",
     "dosesPerUnit": "Doses per unit",
+    "availableShots": "Available Shots",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

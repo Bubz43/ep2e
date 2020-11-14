@@ -49,7 +49,7 @@ import {
 import { repeat } from 'lit-html/directives/repeat';
 import { map, mapToObj, pipe, range, take } from 'remeda';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
-import { firearmAmmoDetails } from '../firearm-ammo-details';
+import { renderFirearmAmmoDetails } from '../firearm-ammo-details';
 import { ItemFormBase } from '../item-form-base';
 import styles from './firearm-ammo-form.scss';
 
@@ -303,7 +303,7 @@ export class FirearmAmmoForm extends ItemFormBase {
             }}
           ></mwc-icon-button>
         </sl-header>
-        <div class="attack-details">${firearmAmmoDetails(mode)}</div>
+        <div class="attack-details">${renderFirearmAmmoDetails(mode)}</div>
       </section>
     `;
   };
@@ -330,9 +330,7 @@ export class FirearmAmmoForm extends ItemFormBase {
               renderSelectField(
                 { ...mode, label: `${localize('edit')} ${mode.label}` },
                 Object.keys(modeMap),
-                {
-                  altLabel: (id) => modeMap[id],
-                },
+                {  altLabel: (id) => modeMap[id]  },
               ),
           })
         : ''}

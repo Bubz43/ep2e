@@ -1273,7 +1273,7 @@ type LangEntries =
   | 'rounds'
   | 'roundsPerComplexity'
   | 'ammoClass'
-  | 'programmableModes' | "dosesPerUnit";
+  | 'programmableModes' | "dosesPerUnit" | "availableShots"
 type FullNames =
   | 'cog'
   | 'int'

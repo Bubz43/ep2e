@@ -5,7 +5,7 @@ import { notEmpty } from '@src/utility/helpers';
 import { html } from 'lit-html';
 import { map, compact } from 'remeda';
 
-export const firearmAmmoDetails = ({
+export const renderFirearmAmmoDetails = ({
   damageModifierType,
   notes,
   damageFormula,

@@ -10,6 +10,11 @@
   
 }
 
+hr {
+  width: 100%;
+  border-color: var(--color-border);
+}
+
 @include itemAddon();
 
 
@@ -24,15 +29,20 @@ p.label {
   margin-bottom: 0.25rem;
 }
 
-.addon {
-  border-bottom: 2px solid alphav(var(--color-grey), 0.25);
-}
-
 .ammo-form {
   grid-template-columns: 2fr 1fr 1fr;
   padding: 0.5rem 0;
 }
 
-.mode-settings {
-  grid-template-columns: 1fr 1fr 1fr;
+.ammo-mode-settings {
+  margin-top: -0.5rem;
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+}
+
+.available-shots {
+  display: inline-block;
+  min-width: 2ch;
 }
