@@ -9,3 +9,34 @@
   display: block;
   
 }
+
+@include itemAddon();
+
+
+.attack-details {
+  display: grid;
+  padding: 0.25rem;
+  font-size: large;
+}
+
+p.label {
+  @include listLabel();
+  margin-bottom: 0.25rem;
+}
+
+.addon {
+  border-top: 2px solid alphav(var(--color-grey), 0.25);
+
+  .actions {
+    grid-area: sheet;
+  }
+}
+
+.ammo-form {
+  grid-template-columns: 2fr 1fr 1fr;
+  padding: 0.5rem 0;
+}
+
+.mode-settings {
+  grid-template-columns: 1fr 1fr 1fr;
+}

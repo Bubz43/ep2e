@@ -1,0 +1,127 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  width: 300px;
+}
+
+:host([overflowammo]) {
+  .ammo-forms,
+  .buttons {
+    position: static;
+    margin-bottom: 0;
+    background: transparent;
+  }
+}
+
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ammo-forms {
+  display: grid;
+  grid-template-columns: repeat(var(--columns), 1fr);
+  gap: 0.5rem;
+  position: sticky;
+  top: 0;
+  background: alphav(var(--color-bg), 0.7);
+  z-index: 1;
+  > wl-list-item {
+    @include truncate(100%);
+    text-align: center;
+    padding: 0.25rem;
+    &:first-of-type {
+      color: var(--color-grey);
+    }
+    &:nth-of-type(2) {
+      color: var(--color-primary);
+    }
+    &:nth-of-type(3) {
+      color: var(--color-secondary);
+    }
+  }
+}
+
+.weapon-forms {
+  display: grid;
+  gap: 0.2rem;
+  > li {
+    .label {
+      display: flex;
+      width: 100%;
+      &::before,
+      &::after {
+        content: '';
+        background: var(--color-border);
+        height: 1px;
+        flex: 1;
+        align-self: center;
+        margin: 0 0.5rem;
+      }
+    }
+
+    .empty-ammo {
+      height: 0.5rem;
+      border: 1px solid var(--color-text-disabled);
+    }
+
+    .ammo-form {
+      display: grid;
+      grid-template-columns: repeat(var(--columns), 1fr);
+      gap: 0.5rem;
+
+      > wl-list-item {
+        height: 0.75rem;
+        border: 1px solid currentColor;
+        padding: 0;
+        border-radius: 3px;
+        position: relative;
+
+        &:first-of-type {
+          color: var(--color-grey);
+        }
+        &:nth-of-type(2) {
+          color: var(--color-primary);
+        }
+        &:nth-of-type(3) {
+          color: var(--color-secondary);
+        }
+        &.active {
+          &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: currentColor;
+            opacity: 0.8;
+          }
+        }
+      }
+    }
+  }
+}
+
+.buttons {
+  display: flex;
+  margin: 0.5rem 0 1rem;
+  position: sticky;
+  bottom: -0.5rem;
+  mwc-button {
+    --mdc-theme-primary: var(--color-grey);
+    background: var(--color-bg);
+  }
+  submit-button {
+    flex: 1;
+    margin-left: 0.5rem;
+    filter: hue-rotate(-10deg);
+  }
+}

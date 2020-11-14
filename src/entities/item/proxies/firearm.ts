@@ -9,7 +9,7 @@ import { ArmorType } from '@src/features/active-armor';
 import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { compact } from 'remeda';
+import { clamp, compact, concat, identity, take, takeWhile } from 'remeda';
 import type { Attacker } from '../item-interfaces';
 import { Equippable, Gear, Purchasable, RangedWeapon } from '../item-mixins';
 import { FirearmAmmo } from './firearm-ammo';
@@ -31,8 +31,31 @@ export class Firearm
     super(init);
   }
 
+  updateAmmoCount(newValue: number) {
+    const { max, value } = this.ammoState;
+    this.updater
+      .prop("data", "ammo", "value")
+      .store(clamp(newValue, { min: 0, max: max + 1 }));
+    return this.specialAmmo?.hasMultipleModes
+      ? this.updater
+          .prop("data", "ammo", "modeSettings")
+          .commit(
+            newValue < value
+              ? take(newValue)
+              : newValue > value
+              ? concat(Array(newValue - value).fill(this.specialAmmoModeIndex))
+              : identity
+          )
+      : this.updater.commit();
+  }
+
+
   get range() {
     return this.epData.range;
+  }
+
+  get ammoCapacity() {
+    return this.magazineCapacity + 1;
   }
 
   get ammoClass() {
@@ -48,6 +71,18 @@ export class Firearm
   get ammoData() {
     return this.epData.ammo;
   }
+
+  get availableShots() {
+    if (this.specialAmmo?.hasMultipleModes) {
+      const { specialAmmoModeIndex } = this;
+      const { smart } = this.magazineModifiers;
+      return smart
+        ? this.getAmmoFormCount(specialAmmoModeIndex)
+        : takeWhile(this.ammoData.modeSettings, (x) => x === specialAmmoModeIndex).length;
+    }
+    return this.ammoState.value;
+  }
+
 
   get magazineCapacity() {
     const { max } = this.ammoData;
@@ -105,7 +140,7 @@ export class Firearm
     const ammoMode = specialAmmo?.findMode(specialAmmoModeIndex);
     return {
       armorUsed: [ArmorType.Kinetic],
-      armorPiercing: true,
+      armorPiercing: false,
       reduceAVbyDV: false,
       ...data,
       label: '',
@@ -136,6 +171,14 @@ export class Firearm
   private gainedFromAmmo(ammo: FirearmAmmo) {
     return Math.min(this.magazineCapacity, ammo.quantity);
   }
+
+  getAmmoFormCount(index: number) {
+    return this.ammoData.modeSettings.reduce(
+      (accum, modeIndex) => (accum += modeIndex === index ? 1 : 0),
+      0
+    );
+  }
+
 
   private get updateAmmo() {
     return this.updater.prop('flags', EP.Name, 'specialAmmo').commit;

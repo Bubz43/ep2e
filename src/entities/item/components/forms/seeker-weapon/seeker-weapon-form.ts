@@ -6,6 +6,7 @@ import { repeat } from 'lit-html/directives/repeat';
 import { identity } from 'remeda';
 import { SeekerWeapon } from '../../../proxies/seeker-weapon';
 import {
+  accessoriesListStyles,
   complexityForm,
   renderComplexityFields,
   renderRangedAccessoriesEdit,
@@ -19,7 +20,7 @@ export class SeekerWeaponForm extends ItemFormBase {
     return 'seeker-weapon-form' as const;
   }
 
-  static styles = [entityFormCommonStyles, complexityForm.styles, styles];
+  static styles = [entityFormCommonStyles, complexityForm.styles, accessoriesListStyles, styles];
 
   @property({ attribute: false }) item!: SeekerWeapon;
 

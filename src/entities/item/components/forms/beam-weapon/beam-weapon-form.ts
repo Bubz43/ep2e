@@ -6,6 +6,7 @@ import { customElement, html, property } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { identity } from 'remeda';
 import {
+  accessoriesListStyles,
   complexityForm,
   renderComplexityFields,
   renderRangedAccessoriesEdit,
@@ -19,7 +20,7 @@ export class BeamWeaponForm extends ItemFormBase {
     return 'beam-weapon-form' as const;
   }
 
-  static styles = [entityFormCommonStyles, complexityForm.styles, styles];
+  static styles = [entityFormCommonStyles, complexityForm.styles, accessoriesListStyles, styles];
 
   @property({ attribute: false }) item!: BeamWeapon;
 

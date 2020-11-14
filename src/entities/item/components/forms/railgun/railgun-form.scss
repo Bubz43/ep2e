@@ -10,20 +10,6 @@
 }
 
 
-.accessories-list {
-  display: flex;
-  flex-flow: row wrap;
-  padding: 0 0.5rem 0.5rem;
-  position: relative;
-  > li {
-    list-style: none;
-    display: inline-block;
-    padding: 0.15rem 0.5rem;
-    background: var(--color-border);
-    border-radius: 7px;
-    margin: 0.5rem 0.5rem 0 0;
-  }
-}
 
 
 .ammo-form {

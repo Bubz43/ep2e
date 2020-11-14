@@ -105,6 +105,23 @@ export const renderRangedAccessoriesEdit = (
   `;
 };
 
+export const accessoriesListStyles = css`
+  .accessories-list {
+    display: flex;
+  flex-flow: row wrap;
+  padding: 0 0.5rem 0.5rem;
+  position: relative;
+  }
+  .accessories-list > li {
+    list-style: none;
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    background: var(--color-border);
+    border-radius: 7px;
+    margin: 0.5rem 0.5rem 0 0;
+  }
+`;
+
 export const renderKineticAttackEdit = (
   updater: UpdateActions<KineticWeaponAttackData>,
 ) => {

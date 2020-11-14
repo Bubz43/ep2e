@@ -97,6 +97,7 @@ import { FirearmForm } from './entities/item/components/forms/firearm/firearm-fo
 import { SeekerWeaponForm } from './entities/item/components/forms/seeker-weapon/seeker-weapon-form';
 import { SprayWeaponForm } from './entities/item/components/forms/spray-weapon/spray-weapon-form';
 import { BeamWeaponForm } from './entities/item/components/forms/beam-weapon/beam-weapon-form';
+import { FirearmAmmoTransformer } from './entities/components/firearm-ammo-transformer/firearm-ammo-transformer';
 
 customElements.define('app-datepicker', Datepicker);
 
@@ -175,6 +176,7 @@ SprayWeaponForm;
 SeekerWeaponForm;
 BeamWeaponForm;
 ItemFormEffectsList;
+FirearmAmmoTransformer;
 
 // Health Components
 HealthItem;

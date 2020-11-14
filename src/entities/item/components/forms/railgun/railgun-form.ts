@@ -28,6 +28,7 @@ import { customElement, html, property } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { createPipe, identity, map, mapToObj, objOf } from 'remeda';
 import {
+  accessoriesListStyles,
   complexityForm,
   renderComplexityFields,
   renderGearTraitCheckboxes,
@@ -44,7 +45,7 @@ export class RailgunForm extends ItemFormBase {
     return 'railgun-form' as const;
   }
 
-  static styles = [entityFormCommonStyles, complexityForm.styles, styles];
+  static styles = [entityFormCommonStyles, complexityForm.styles, accessoriesListStyles, styles];
 
   @property({ attribute: false }) item!: Railgun;
 
