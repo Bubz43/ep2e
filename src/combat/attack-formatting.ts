@@ -26,20 +26,20 @@ export const formatArmorUsed = ({
 export const formatLabeledFormulas = (formulas: LabeledFormula[]) =>
   cleanFormula(formulas.map(({ formula }) => formula).join('+'));
 
-  export const formatAreaEffect = (
-    {
-      areaEffect,
-      areaEffectRadius,
-    }: { areaEffect: "" | AreaEffectType, areaEffectRadius: number },
-    fallback = "-"
-  ) => {
-    return areaEffect
-      ? `${localize(areaEffect)}${
-          areaEffectRadius
-            ? areaEffect !== AreaEffectType.Centered
-              ? ` (${areaEffectRadius} m)`
-              : ` (–2 DV/m)`
-            : ""
-        }`
-      : fallback;
-  };
+export const formatAreaEffect = (
+  {
+    areaEffect,
+    areaEffectRadius,
+  }: { areaEffect: '' | AreaEffectType; areaEffectRadius: number },
+  fallback = '-',
+) => {
+  return areaEffect
+    ? `${localize(areaEffect)}${
+        areaEffectRadius
+          ? areaEffect !== AreaEffectType.Centered
+            ? ` (${areaEffectRadius} m)`
+            : ` (–2 DV/m)`
+          : ''
+      }`
+    : fallback;
+};

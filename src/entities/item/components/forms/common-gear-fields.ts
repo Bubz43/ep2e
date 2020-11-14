@@ -134,24 +134,26 @@ export const accessoriesListStyles = css`
   }
 `;
 
-export const renderFiringModeCheckboxes = (updateActions: UpdateActions<{ firingModes: FiringMode[] }>) => {
+export const renderFiringModeCheckboxes = (
+  updateActions: UpdateActions<{ firingModes: FiringMode[] }>,
+) => {
   const { firingModes } = updateActions.originalValue();
   const [pairFiringModes, change] = pairList(
     firingModes,
     enumValues(FiringMode),
   );
   const onlyOneMode = firingModes.length === 1;
-    return renderAutoForm({
-      props: pairFiringModes,
-      update: createPipe(change, objOf('firingModes'), updateActions.commit),
-      fields: (firingModes) =>
-        Object.values(firingModes).map((mode) =>
-          renderLabeledCheckbox(mode, {
-            disabled: onlyOneMode && mode.value,
-          }),
-        ),
-    })
-}
+  return renderAutoForm({
+    props: pairFiringModes,
+    update: createPipe(change, objOf('firingModes'), updateActions.commit),
+    fields: (firingModes) =>
+      Object.values(firingModes).map((mode) =>
+        renderLabeledCheckbox(mode, {
+          disabled: onlyOneMode && mode.value,
+        }),
+      ),
+  });
+};
 
 export const renderKineticAttackEdit = (
   updater: UpdateActions<KineticWeaponAttackData>,

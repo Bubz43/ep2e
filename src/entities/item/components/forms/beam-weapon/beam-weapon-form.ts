@@ -280,9 +280,9 @@ export class BeamWeaponForm extends ItemFormBase {
         update: createPipe(changeTraits, objOf('attackTraits'), updater.commit),
         fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
       })}
-         ${renderUpdaterForm(updater, {
-      fields: ({ notes }) => renderTextareaField(notes),
-    })}
+      ${renderUpdaterForm(updater, {
+        fields: ({ notes }) => renderTextareaField(notes),
+      })}
     `;
   }
 

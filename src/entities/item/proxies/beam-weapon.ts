@@ -1,4 +1,8 @@
-import { BeamWeaponAttack, BeamWeaponAttackData, createBaseAttackFormula } from '@src/combat/attacks';
+import {
+  BeamWeaponAttack,
+  BeamWeaponAttackData,
+  createBaseAttackFormula,
+} from '@src/combat/attacks';
 import {
   enumValues,
   RangedWeaponAccessory,
@@ -18,12 +22,9 @@ class Base extends ItemProxyBase<ItemType.BeamWeapon> {
     return enumValues(RangedWeaponTrait).filter((trait) => this.epData[trait]);
   }
 }
-export class BeamWeapon extends mix(Base).with(
-  Gear,
-  Purchasable,
-  Equippable,
-  RangedWeapon,
-) implements Attacker<BeamWeaponAttackData, BeamWeaponAttack> {
+export class BeamWeapon
+  extends mix(Base).with(Gear, Purchasable, Equippable, RangedWeapon)
+  implements Attacker<BeamWeaponAttackData, BeamWeaponAttack> {
   static readonly possibleAccessories = difference(
     enumValues(RangedWeaponAccessory),
     [
@@ -42,26 +43,31 @@ export class BeamWeapon extends mix(Base).with(
   }
 
   get hasSecondaryAttack() {
-    return this.epData.hasSecondaryAttack
+    return this.epData.hasSecondaryAttack;
   }
 
   get attacks() {
     const { primaryAttack, secondaryAttack, hasSecondaryAttack } = this.epData;
     return {
-      primary: this.setupAttack(primaryAttack, localize("primaryAttack")),
-      secondary: hasSecondaryAttack ? this.setupAttack(secondaryAttack, localize("secondaryAttack")) : null
-    }
+      primary: this.setupAttack(primaryAttack, localize('primaryAttack')),
+      secondary: hasSecondaryAttack
+        ? this.setupAttack(secondaryAttack, localize('secondaryAttack'))
+        : null,
+    };
   }
 
-
-
-  setupAttack({ damageFormula, ...data }: BeamWeaponAttackData, defaultLabel: string) {
+  setupAttack(
+    { damageFormula, ...data }: BeamWeaponAttackData,
+    defaultLabel: string,
+  ): BeamWeaponAttack {
     return {
       armorUsed: [ArmorType.Energy],
       reduceAVbyDV: false,
       ...data,
-      label: this.hasSecondaryAttack ? data.label || defaultLabel : "",
-      rollFormulas: damageFormula ? [createBaseAttackFormula(damageFormula)] : [],
-    }
+      label: this.hasSecondaryAttack ? data.label || defaultLabel : '',
+      rollFormulas: damageFormula
+        ? [createBaseAttackFormula(damageFormula)]
+        : [],
+    };
   }
 }
