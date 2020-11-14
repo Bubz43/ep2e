@@ -1275,7 +1275,7 @@ type LangEntries =
   | 'ammoClass'
   | 'programmableModes'
   | 'dosesPerUnit'
-  | 'availableShots';
+  | 'availableShots' | "common"
 type FullNames =
   | 'cog'
   | 'int'

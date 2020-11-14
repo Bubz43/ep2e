@@ -1,8 +1,16 @@
 import { PhysicalServiceType } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
 import { matchID, updateFeature } from '@src/features/feature-helpers';
-import { repRefreshTimerActive, RepUse, repModification } from '@src/features/reputations';
-import { RefreshTimer, CommonInterval, refreshAvailable } from '@src/features/time';
+import {
+  repRefreshTimerActive,
+  RepUse,
+  repModification,
+} from '@src/features/reputations';
+import {
+  RefreshTimer,
+  CommonInterval,
+  refreshAvailable,
+} from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
@@ -65,21 +73,20 @@ export class PhysicalService extends mix(Base).with(Purchasable) {
   useRep({ id, ...use }: RepUse & { id: string }) {
     const rep = this.findRep(id);
     if (!rep) return;
-    return this.updater.prop("data", "reputations").commit((reps) =>
+    return this.updater.prop('data', 'reputations').commit((reps) =>
       updateFeature(reps, {
         id,
         ...repModification({ rep, ...use }),
-      })
+      }),
     );
   }
 
-
   @LazyGetter()
   get repsWithIndefiers() {
-    return  this.reputations.map((rep) => ({
+    return this.reputations.map((rep) => ({
       ...rep,
       identifier: { repId: rep.id, fakeEgoId: this.id },
-    }))
+    }));
   }
 
   @LazyGetter()
@@ -87,32 +94,46 @@ export class PhysicalService extends mix(Base).with(Purchasable) {
     return this.reputations.flatMap((rep) =>
       repRefreshTimerActive(rep)
         ? {
-            label: `${this.name} - ${localize("fakeId")} | ${
+            label: `${this.name} - ${localize('fakeId')} | ${
               rep.acronym
-            } ${localize("SHORT", "minor")}/${localize(
-              "SHORT",
-              "moderate"
-            )} ${localize("refresh")}`,
+            } ${localize('SHORT', 'minor')}/${localize(
+              'SHORT',
+              'moderate',
+            )} ${localize('refresh')}`,
             elapsed: rep.refreshTimer,
             max: CommonInterval.Week,
             id: `${this.id}-${rep.id}`,
           }
-        : []
+        : [],
     );
   }
 
   storeRepRefresh() {
     if (this.refreshTimers.some(refreshAvailable)) {
       this.updater
-        .prop("data", "reputations")
+        .prop('data', 'reputations')
         .store(
           map((rep) =>
             rep.refreshTimer >= CommonInterval.Week
               ? { ...rep, refreshTimer: 0, minor: 0, moderate: 0 }
-              : rep
-          )
+              : rep,
+          ),
         );
     }
     return this.updater;
+  }
+
+  getDataCopy(reset = false) {
+    const copy = super.getDataCopy(reset);
+    if (reset) {
+      copy.data = {
+        ...copy.data,
+        reputations: this.reputations.map((rep) => ({
+          ...rep,
+          refreshTimer: 0,
+        })),
+      };
+    }
+    return copy;
   }
 }

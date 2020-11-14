@@ -159,6 +159,9 @@ export class TimeField extends LitElement {
                         (i) => props[timeIntervals[i]].value > 0,
                       )
                         ? -1
+                        : interval === 'seconds' &&
+                          this.min === CommonInterval.Turn
+                        ? 1
                         : 0,
                     max: maxVal && value === maxVal ? part.value : 999,
                     disabled:

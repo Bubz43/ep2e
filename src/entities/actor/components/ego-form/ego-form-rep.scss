@@ -13,11 +13,11 @@
 .rep-form {
   grid-template-columns: auto 1fr 110px;
   column-gap: 0.5rem;
+  align-items: center;
   grid-template-areas:
     'track name score'
     'track favors score';
 
-  align-items: center;
   .network-abbreviation {
     color: var(--color-text-lighter);
   }
