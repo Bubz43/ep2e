@@ -156,14 +156,13 @@ type GameCollections = {
   playlists: Col<Playlist>;
   combats: Col<Combat>;
   tables: Col<RollTable>;
-  folders: Col<Folder> & { _expanded: Record<string, boolean>};
+  folders: Col<Folder> & { _expanded: Record<string, boolean> };
   actors: Col<ActorEP> & { tokens: Record<string, ActorEP> };
   macros: Col<Macro>;
 };
 
 declare global {
   const tinymce: TinyMCE;
-
 
   interface Compendium {
     readonly locked: boolean;
@@ -401,17 +400,17 @@ declare global {
       sorting: string;
       _id: string;
       type: string;
-    }
+    };
   }
 
   interface ItemDirectory {
-    readonly entities: ItemEP[]
-    readonly folders: Folder[]
+    readonly entities: ItemEP[];
+    readonly folders: Folder[];
   }
 
   interface ActorDirectory {
-    readonly entities: ActorEP[]
-    readonly folders: Folder[]
+    readonly entities: ActorEP[];
+    readonly folders: Folder[];
   }
 
   export function duplicate<T extends Record<string, unknown>>(

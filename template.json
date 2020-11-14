@@ -849,7 +849,7 @@
         "smartlink",
         "safetySystem"
       ],
-      "ammo": {
+      "battery": {
         "charge": 10,
         "max": 10,
         "recharge": 0

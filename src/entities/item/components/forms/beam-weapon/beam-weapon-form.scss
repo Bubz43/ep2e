@@ -7,5 +7,20 @@
 
 :host {
   display: block;
-  
+}
+
+.attack-details {
+  display: grid;
+  padding: 0.25rem;
+  font-size: large;
+}
+
+p.label {
+  @include listLabel();
+  margin-bottom: 0.25rem;
+}
+
+.battery-form {
+  grid-template-columns: 1fr 1fr auto;
+  padding: 0.5rem 0;
 }

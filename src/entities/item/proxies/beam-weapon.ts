@@ -1,11 +1,15 @@
+import { BeamWeaponAttack, BeamWeaponAttackData, createBaseAttackFormula } from '@src/combat/attacks';
 import {
   enumValues,
   RangedWeaponAccessory,
   RangedWeaponTrait,
 } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
+import { ArmorType } from '@src/features/active-armor';
+import { localize } from '@src/foundry/localization';
 import mix from 'mix-with/lib';
 import { difference } from 'remeda';
+import type { Attacker } from '../item-interfaces';
 import { Equippable, Gear, Purchasable, RangedWeapon } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
@@ -19,7 +23,7 @@ export class BeamWeapon extends mix(Base).with(
   Purchasable,
   Equippable,
   RangedWeapon,
-) {
+) implements Attacker<BeamWeaponAttackData, BeamWeaponAttack> {
   static readonly possibleAccessories = difference(
     enumValues(RangedWeaponAccessory),
     [
@@ -35,5 +39,29 @@ export class BeamWeapon extends mix(Base).with(
 
   get range() {
     return this.epData.range;
+  }
+
+  get hasSecondaryAttack() {
+    return this.epData.hasSecondaryAttack
+  }
+
+  get attacks() {
+    const { primaryAttack, secondaryAttack, hasSecondaryAttack } = this.epData;
+    return {
+      primary: this.setupAttack(primaryAttack, localize("primaryAttack")),
+      secondary: hasSecondaryAttack ? this.setupAttack(secondaryAttack, localize("secondaryAttack")) : null
+    }
+  }
+
+
+
+  setupAttack({ damageFormula, ...data }: BeamWeaponAttackData, defaultLabel: string) {
+    return {
+      armorUsed: [ArmorType.Energy],
+      reduceAVbyDV: false,
+      ...data,
+      label: this.hasSecondaryAttack ? data.label || defaultLabel : "",
+      rollFormulas: damageFormula ? [createBaseAttackFormula(damageFormula)] : [],
+    }
   }
 }

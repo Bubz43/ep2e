@@ -20,7 +20,12 @@ export class SeekerWeaponForm extends ItemFormBase {
     return 'seeker-weapon-form' as const;
   }
 
-  static styles = [entityFormCommonStyles, complexityForm.styles, accessoriesListStyles, styles];
+  static styles = [
+    entityFormCommonStyles,
+    complexityForm.styles,
+    accessoriesListStyles,
+    styles,
+  ];
 
   @property({ attribute: false }) item!: SeekerWeapon;
 

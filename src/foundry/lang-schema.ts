@@ -1273,7 +1273,9 @@ type LangEntries =
   | 'rounds'
   | 'roundsPerComplexity'
   | 'ammoClass'
-  | 'programmableModes' | "dosesPerUnit" | "availableShots"
+  | 'programmableModes'
+  | 'dosesPerUnit'
+  | 'availableShots';
 type FullNames =
   | 'cog'
   | 'int'
@@ -1364,7 +1366,7 @@ export type Formatable = {
   OnCheckFailure: ['aptitude'];
   ArmorReduced: ['armor', 'value'];
   AlreadyHasItem: ['ownerName', 'itemName'];
-  MismatchedAmmoClasses: ["firearm", "ammo"]
+  MismatchedAmmoClasses: ['firearm', 'ammo'];
 };
 
 export interface Lang {

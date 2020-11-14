@@ -20,7 +20,12 @@ export class SprayWeaponForm extends ItemFormBase {
     return 'spray-weapon-form' as const;
   }
 
-  static styles = [entityFormCommonStyles, complexityForm.styles, accessoriesListStyles, styles];
+  static styles = [
+    entityFormCommonStyles,
+    complexityForm.styles,
+    accessoriesListStyles,
+    styles,
+  ];
 
   @property({ attribute: false }) item!: SprayWeapon;
 

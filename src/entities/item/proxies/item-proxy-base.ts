@@ -115,7 +115,6 @@ export abstract class ItemProxyBase<T extends ItemType> {
   }
 
   matchRegexp(regex: RegExp) {
-    
     return [this.fullName, this.fullType, localize(this.type)].some((text) =>
       regex.test(text),
     );

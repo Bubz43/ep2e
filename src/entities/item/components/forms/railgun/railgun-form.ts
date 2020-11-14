@@ -45,7 +45,12 @@ export class RailgunForm extends ItemFormBase {
     return 'railgun-form' as const;
   }
 
-  static styles = [entityFormCommonStyles, complexityForm.styles, accessoriesListStyles, styles];
+  static styles = [
+    entityFormCommonStyles,
+    complexityForm.styles,
+    accessoriesListStyles,
+    styles,
+  ];
 
   @property({ attribute: false }) item!: Railgun;
 

@@ -585,7 +585,7 @@ type RailgunData = RangedWeaponDataBase & {
 
 type BeamWeaponData = RangedWeaponDataBase &
   Record<RangedWeaponTrait, boolean> & {
-    ammo: {
+    battery: {
       max: number;
       charge: number;
       recharge: number;

@@ -1,15 +1,21 @@
-import type { Firearm } from "@src/entities/item/proxies/firearm";
-import type { FirearmAmmo } from "@src/entities/item/proxies/firearm-ammo";
-import { localize } from "@src/foundry/localization";
-import type { PropertyValues } from "lit-element";
-import { customElement, LitElement, property, html, internalProperty } from "lit-element";
-import { equals } from "remeda";
-import styles from "./firearm-ammo-transformer.scss";
+import type { Firearm } from '@src/entities/item/proxies/firearm';
+import type { FirearmAmmo } from '@src/entities/item/proxies/firearm-ammo';
+import { localize } from '@src/foundry/localization';
+import type { PropertyValues } from 'lit-element';
+import {
+  customElement,
+  LitElement,
+  property,
+  html,
+  internalProperty,
+} from 'lit-element';
+import { equals } from 'remeda';
+import styles from './firearm-ammo-transformer.scss';
 
-@customElement("firearm-ammo-transformer")
+@customElement('firearm-ammo-transformer')
 export class FirearmAmmoTransformer extends LitElement {
   static get is() {
-    return "firearm-ammo-transformer" as const;
+    return 'firearm-ammo-transformer' as const;
   }
 
   static styles = [styles];
@@ -27,7 +33,7 @@ export class FirearmAmmoTransformer extends LitElement {
   private dragState: number[] = [];
 
   update(changedProps: PropertyValues) {
-    if (changedProps.has("firearm")) {
+    if (changedProps.has('firearm')) {
       this.copyState();
     }
     super.update(changedProps);
@@ -40,7 +46,7 @@ export class FirearmAmmoTransformer extends LitElement {
   private updateFirearmForms() {
     if (!equals(this.modeStates, this.firearm.ammoData.modeSettings)) {
       this.firearm.updater
-        .prop("data", "ammo", "modeSettings")
+        .prop('data', 'ammo', 'modeSettings')
         .commit(this.modeStates);
     }
   }
@@ -57,13 +63,12 @@ export class FirearmAmmoTransformer extends LitElement {
     }
   }
 
-  
   private setStateAndDrag(ammoIndex: number, formIndex: number) {
     this.dragState = [...this.modeStates];
     this.setState(ammoIndex, formIndex);
     this.dragIndex = formIndex;
 
-    window.addEventListener("mouseup", () => (this.dragIndex = null), {
+    window.addEventListener('mouseup', () => (this.dragIndex = null), {
       once: true,
     });
   }
@@ -71,7 +76,10 @@ export class FirearmAmmoTransformer extends LitElement {
   render() {
     const { modeStates } = this;
     const { modes } = this.ammo;
-    const changed = !equals(this.modeStates, this.firearm.ammoData.modeSettings);
+    const changed = !equals(
+      this.modeStates,
+      this.firearm.ammoData.modeSettings,
+    );
     const { ammoCapacity } = this.firearm;
     return html`
       <ol class="ammo-forms" style="--columns: ${modes.length}">
@@ -80,14 +88,14 @@ export class FirearmAmmoTransformer extends LitElement {
             <wl-list-item clickable @click=${() => this.setAll(index)}>
               ${form.name}
             </wl-list-item>
-          `
+          `,
         )}
       </ol>
       <ol class="weapon-forms" style="--columns: ${modes.length}">
         ${Array.from({ length: ammoCapacity }, (_, ammoIndex) => {
           const label =
             ammoIndex % 10
-              ? ""
+              ? ''
               : html`
                   <span class="label"
                     >${ammoIndex + 1} -
@@ -115,12 +123,15 @@ export class FirearmAmmoTransformer extends LitElement {
                       ?clickable=${!active}
                       @mousedown=${() => this.setStateAndDrag(ammoIndex, index)}
                       @mouseenter=${() => {
-                    if (this.dragIndex !== null) {
-                          console.log(this.dragState[ammoIndex], this.dragIndex)
+                        if (this.dragIndex !== null) {
+                          console.log(
+                            this.dragState[ammoIndex],
+                            this.dragIndex,
+                          );
                           this.setState(ammoIndex, this.dragIndex);
                         }
                       }}
-                      class=${active ? "active" : ""}
+                      class=${active ? 'active' : ''}
                     ></wl-list-item>
                   `;
                 })}
@@ -134,23 +145,22 @@ export class FirearmAmmoTransformer extends LitElement {
         <mwc-button
           outlined
           icon="undo"
-          label=${localize("initial")}
+          label=${localize('initial')}
           ?disabled=${!changed}
           @click=${this.copyState}
         ></mwc-button>
         <submit-button
-          label=${localize("save")}
+          label=${localize('save')}
           @submit-attempt=${this.updateFirearmForms}
           ?complete=${changed}
         ></submit-button>
       </footer>
     `;
   }
-
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "firearm-ammo-transformer": FirearmAmmoTransformer;
+    'firearm-ammo-transformer': FirearmAmmoTransformer;
   }
 }

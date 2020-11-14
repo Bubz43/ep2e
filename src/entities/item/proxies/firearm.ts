@@ -34,21 +34,20 @@ export class Firearm
   updateAmmoCount(newValue: number) {
     const { max, value } = this.ammoState;
     this.updater
-      .prop("data", "ammo", "value")
+      .prop('data', 'ammo', 'value')
       .store(clamp(newValue, { min: 0, max: max + 1 }));
     return this.specialAmmo?.hasMultipleModes
       ? this.updater
-          .prop("data", "ammo", "modeSettings")
+          .prop('data', 'ammo', 'modeSettings')
           .commit(
             newValue < value
               ? take(newValue)
               : newValue > value
               ? concat(Array(newValue - value).fill(this.specialAmmoModeIndex))
-              : identity
+              : identity,
           )
       : this.updater.commit();
   }
-
 
   get range() {
     return this.epData.range;
@@ -78,11 +77,13 @@ export class Firearm
       const { smart } = this.magazineModifiers;
       return smart
         ? this.getAmmoFormCount(specialAmmoModeIndex)
-        : takeWhile(this.ammoData.modeSettings, (x) => x === specialAmmoModeIndex).length;
+        : takeWhile(
+            this.ammoData.modeSettings,
+            (x) => x === specialAmmoModeIndex,
+          ).length;
     }
     return this.ammoState.value;
   }
-
 
   get magazineCapacity() {
     const { max } = this.ammoData;
@@ -175,10 +176,9 @@ export class Firearm
   getAmmoFormCount(index: number) {
     return this.ammoData.modeSettings.reduce(
       (accum, modeIndex) => (accum += modeIndex === index ? 1 : 0),
-      0
+      0,
     );
   }
-
 
   private get updateAmmo() {
     return this.updater.prop('flags', EP.Name, 'specialAmmo').commit;

@@ -287,6 +287,6 @@ export class ActorEP extends Actor {
   }
 
   matchRegexp(regex: RegExp) {
-    return [this.name, localize(this.type)].some(text => regex.test(text))
+    return [this.name, localize(this.type)].some((text) => regex.test(text));
   }
 }

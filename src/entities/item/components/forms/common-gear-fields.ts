@@ -14,6 +14,7 @@ import {
   GearTrait,
   PhysicalWare,
   RangedWeaponAccessory,
+  RangedWeaponTrait,
 } from '@src/data-enums';
 import type { UpdateActions } from '@src/entities/update-store';
 import { pairList } from '@src/features/check-list';
@@ -66,6 +67,17 @@ export const renderGearTraitCheckboxes: FieldPropsRenderer<Record<
   return checkboxes;
 };
 
+export const renderWeaponTraitCheckboxes: FieldPropsRenderer<Record<
+  RangedWeaponTrait,
+  boolean
+>> = (traits) => {
+  const checkboxes: TemplateResult[] = [];
+  for (const trait of enumValues(RangedWeaponTrait)) {
+    checkboxes.push(renderLabeledCheckbox(traits[trait]));
+  }
+  return checkboxes;
+};
+
 export const renderKineticWeaponSidebar: FieldPropsRenderer<
   Firearm['epData'] | Railgun['epData']
 > = ({ wareType, range, fixed, long, ...traits }) => [
@@ -108,9 +120,9 @@ export const renderRangedAccessoriesEdit = (
 export const accessoriesListStyles = css`
   .accessories-list {
     display: flex;
-  flex-flow: row wrap;
-  padding: 0 0.5rem 0.5rem;
-  position: relative;
+    flex-flow: row wrap;
+    padding: 0 0.5rem 0.5rem;
+    position: relative;
   }
   .accessories-list > li {
     list-style: none;
@@ -122,15 +134,28 @@ export const accessoriesListStyles = css`
   }
 `;
 
-export const renderKineticAttackEdit = (
-  updater: UpdateActions<KineticWeaponAttackData>,
-) => {
-  const { firingModes } = updater.originalValue();
+export const renderFiringModeCheckboxes = (updateActions: UpdateActions<{ firingModes: FiringMode[] }>) => {
+  const { firingModes } = updateActions.originalValue();
   const [pairFiringModes, change] = pairList(
     firingModes,
     enumValues(FiringMode),
   );
   const onlyOneMode = firingModes.length === 1;
+    return renderAutoForm({
+      props: pairFiringModes,
+      update: createPipe(change, objOf('firingModes'), updateActions.commit),
+      fields: (firingModes) =>
+        Object.values(firingModes).map((mode) =>
+          renderLabeledCheckbox(mode, {
+            disabled: onlyOneMode && mode.value,
+          }),
+        ),
+    })
+}
+
+export const renderKineticAttackEdit = (
+  updater: UpdateActions<KineticWeaponAttackData>,
+) => {
   return html`
     <h3>${localize('attack')}</h3>
     ${renderUpdaterForm(updater, {
@@ -138,16 +163,7 @@ export const renderKineticAttackEdit = (
       fields: ({ damageFormula }) => renderFormulaField(damageFormula),
     })}
     <p class="label">${localize('firingModes')}</p>
-    ${renderAutoForm({
-      props: pairFiringModes,
-      update: createPipe(change, objOf('firingModes'), updater.commit),
-      fields: (firingModes) =>
-        Object.values(firingModes).map((mode) =>
-          renderLabeledCheckbox(mode, {
-            disabled: onlyOneMode && mode.value,
-          }),
-        ),
-    })}
+    ${renderFiringModeCheckboxes(updater)}
     ${renderUpdaterForm(updater, {
       fields: ({ notes }) => renderTextareaField(notes),
     })}

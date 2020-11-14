@@ -366,19 +366,22 @@ export class FirearmForm extends ItemFormBase {
                   ${attack.notes}</sl-group
                 >
               `
-      : ''}
-            <hr />
+            : ''}
+          <hr />
           ${specialAmmo && mode
             ? html`
-                  <sl-group label=${localize('ammo')}
-                    >${specialAmmo.name} ${specialAmmo.hasMultipleModes ? `(${mode.name})` : ""}</sl-group
-                  >
-                  ${specialAmmo.payload
-                    ? html`<sl-group label=${localize('payload')}
-                        >${specialAmmo.payload.name}</sl-group
-                      >`
-                    : ''}
-                  ${renderFirearmAmmoDetails(mode)}
+                <sl-group label=${localize('ammo')}
+                  >${specialAmmo.name}
+                  ${specialAmmo.hasMultipleModes
+                    ? `(${mode.name})`
+                    : ''}</sl-group
+                >
+                ${specialAmmo.payload
+                  ? html`<sl-group label=${localize('payload')}
+                      >${specialAmmo.payload.name}</sl-group
+                    >`
+                  : ''}
+                ${renderFirearmAmmoDetails(mode)}
               `
             : ''}
         </div>

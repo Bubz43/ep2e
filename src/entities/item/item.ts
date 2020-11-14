@@ -220,6 +220,6 @@ export class ItemEP extends Item {
   }
 
   matchRegexp(regex: RegExp) {
-    return this.proxy.matchRegexp(regex)
+    return this.proxy.matchRegexp(regex);
   }
 }

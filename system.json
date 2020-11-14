@@ -2,7 +2,7 @@
   "name": "ep2e",
   "title": "Eclipse Phase 2e",
   "description": "Eclipse Phase 2e Game System.",
-  "version": 0.64892,
+  "version": 0.649,
   "author": "Bubz",
   "esmodules": [
     "./build/_dist_/index.js"
@@ -57,6 +57,13 @@
       "label": "Disorders",
       "path": "./packs/disorders.db",
       "entity": "Item"
+    },
+    {
+      "name": "weapon-accessories",
+      "system": "ep2e",
+      "label": "Weapon Accessories",
+      "path": "./packs/weapon-accessories.db",
+      "entity": "JournalEntry"
     }
   ],
   "manifest": "https://raw.githubusercontent.com/Bubz43/ep2e/master/system.json",

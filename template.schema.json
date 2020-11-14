@@ -2784,7 +2784,7 @@
                   },
                   "type": "array"
                 },
-                "ammo": {
+                "battery": {
                   "additionalProperties": false,
                   "properties": {
                     "charge": {
@@ -2885,7 +2885,7 @@
               },
               "required": [
                 "accessories",
-                "ammo",
+                "battery",
                 "fixed",
                 "hasSecondaryAttack",
                 "long",

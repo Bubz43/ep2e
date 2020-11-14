@@ -160,6 +160,6 @@ export class Explosive
   }
 
   private get updateSubstance() {
-    return this.updater.prop('flags', EP.Name, 'substance').commit
+    return this.updater.prop('flags', EP.Name, 'substance').commit;
   }
 }

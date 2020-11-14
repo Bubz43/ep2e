@@ -330,7 +330,7 @@ export class FirearmAmmoForm extends ItemFormBase {
               renderSelectField(
                 { ...mode, label: `${localize('edit')} ${mode.label}` },
                 Object.keys(modeMap),
-                {  altLabel: (id) => modeMap[id]  },
+                { altLabel: (id) => modeMap[id] },
               ),
           })
         : ''}

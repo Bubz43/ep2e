@@ -229,11 +229,13 @@ export class ExplosiveForm extends ItemFormBase {
                   >
                     ${renderUpdaterForm(updater.prop('data'), {
                       disabled,
-                      classes: "doses-form",
+                      classes: 'doses-form',
                       slot: 'action',
                       fields: ({ dosesPerUnit }) => html`
                         <mwc-formfield alignEnd label=${dosesPerUnit.label}
-                          >${renderNumberInput(dosesPerUnit, { min: 1})}</mwc-formfield
+                          >${renderNumberInput(dosesPerUnit, {
+                            min: 1,
+                          })}</mwc-formfield
                         >
                       `,
                     })}

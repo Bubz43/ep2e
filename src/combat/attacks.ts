@@ -148,3 +148,5 @@ export type BeamWeaponAttackData = FiringModeList & {
   areaEffect: AreaEffectType | '';
   areaEffectRadius: number;
 };
+
+export type BeamWeaponAttack = FullAttack<BeamWeaponAttackData>;

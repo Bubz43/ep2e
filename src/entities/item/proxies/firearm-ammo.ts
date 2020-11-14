@@ -69,10 +69,7 @@ export class FirearmAmmo
           updater: new UpdateStore({
             getData: () => explosive,
             isEditable: () => this.editable,
-            setData: createPipe(
-              deepMerge(explosive),
-              this.updatePayload,
-            ),
+            setData: createPipe(deepMerge(explosive), this.updatePayload),
           }),
           deleteSelf: () => this.removePayload(),
         })
@@ -88,6 +85,6 @@ export class FirearmAmmo
   }
 
   private get updatePayload() {
-    return this.updater.prop('flags', EP.Name, 'payload').commit
+    return this.updater.prop('flags', EP.Name, 'payload').commit;
   }
 }

@@ -12,7 +12,10 @@ type SameTypeFunc<T, C, V = T extends any[] ? T : Partial<T>> = (
 
 type UpdateStoreData = { [x: string]: unknown };
 
-export type UpdateActions<T> = UpdateStoreActions<T, unknown>;
+export type UpdateActions<T> = Omit<
+  UpdateStoreActions<T, unknown>,
+  'append' | 'nestedStore' | 'clearNestedStore'
+>;
 
 type UpdateStoreActions<T, C> = Readonly<{
   store: SameTypeFunc<T, C>;
