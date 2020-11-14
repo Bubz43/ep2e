@@ -98,6 +98,8 @@ import { SeekerWeaponForm } from './entities/item/components/forms/seeker-weapon
 import { SprayWeaponForm } from './entities/item/components/forms/spray-weapon/spray-weapon-form';
 import { BeamWeaponForm } from './entities/item/components/forms/beam-weapon/beam-weapon-form';
 import { FirearmAmmoTransformer } from './entities/components/firearm-ammo-transformer/firearm-ammo-transformer';
+import { ArmorForm } from './entities/item/components/forms/armor/armor-form';
+import { SoftwareForm } from './entities/item/components/forms/software/software-form';
 
 customElements.define('app-datepicker', Datepicker);
 
@@ -174,6 +176,8 @@ RailgunForm;
 FirearmForm;
 SprayWeaponForm;
 SeekerWeaponForm;
+ArmorForm;
+SoftwareForm;
 BeamWeaponForm;
 ItemFormEffectsList;
 FirearmAmmoTransformer;

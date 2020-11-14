@@ -61,6 +61,24 @@ export const renderItemForm = (proxy: ItemProxy) => {
         ></entity-form-footer>
       `;
 
+    case ItemType.Armor:
+      return html`
+        <armor-form .item=${proxy}></armor-form>
+        <entity-form-footer
+          slot="footer"
+          .updater=${proxy.updater.prop('data').nestedStore()}
+        ></entity-form-footer>
+      `;
+
+    case ItemType.Software:
+      return html`
+        <software-form .item=${proxy}></software-form>
+        <entity-form-footer
+          slot="footer"
+          .updater=${proxy.updater.prop('data').nestedStore()}
+        ></entity-form-footer>
+      `;
+
     case ItemType.Sleight:
       return html`
         <sleight-form .item=${proxy}></sleight-form>
@@ -141,9 +159,6 @@ export const renderItemForm = (proxy: ItemProxy) => {
           .updater=${proxy.updater.prop('data').nestedStore()}
         ></entity-form-footer>
       `;
-
-    default:
-      return html``;
   }
 };
 

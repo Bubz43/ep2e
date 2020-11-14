@@ -69,4 +69,8 @@ export class Armor
       effects: [...this.effects, this.armorEffect],
     };
   }
+
+  get attackTraits() {
+    return this.epData.attackTraits
+  }
 }
