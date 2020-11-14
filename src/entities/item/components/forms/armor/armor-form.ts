@@ -129,7 +129,7 @@ export class ArmorForm extends ItemFormBase {
             ${hasActiveState
               ? html`
                   <section>
-                    <sl-header heading="${localize('activated')}"></sl-header>
+                    <sl-header heading="${localize("when")} ${localize('activated')}"></sl-header>
                     ${renderUpdaterForm(updater.prop('data', 'armorValues'), {
                       disabled,
                       classes: 'armor-values-form',

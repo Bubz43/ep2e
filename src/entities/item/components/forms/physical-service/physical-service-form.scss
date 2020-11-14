@@ -8,3 +8,11 @@
 :host {
   display: block;
 }
+
+.detail-forms {
+  padding: 0.5rem 0 0;
+}
+
+.primary-fields-form {
+  grid-template-columns: 1fr auto;
+}
