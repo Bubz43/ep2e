@@ -1,5 +1,12 @@
+import {
+  closeWindow,
+  openWindow,
+} from '@src/components/window/window-controls';
 import type { ActorEP } from '@src/entities/actor/actor';
 import { ActorType } from '@src/entities/entity-types';
+import { ItemCreator } from '@src/entities/item/components/item-creator/item-creator';
+import type { ItemDataEvent } from '@src/entities/item/components/item-creator/item-data-event';
+import { ItemEP } from '@src/entities/item/item';
 import type { SceneEP } from '@src/entities/scene';
 import type { UserEP } from '@src/entities/user';
 import { iconToCondition } from '@src/features/conditions';
@@ -7,7 +14,9 @@ import { openMenu } from '@src/open-menu';
 import { findMatchingElement } from '@src/utility/dom';
 import { notEmpty, searchRegExp } from '@src/utility/helpers';
 import { html, render } from 'lit-html';
+import { ifDefined } from 'lit-html/directives/if-defined';
 import { compact, first, mapToObj, noop, pipe } from 'remeda';
+import { stopEvent } from 'weightless';
 import { isKnownDrop, setDragSource } from './drag-and-drop';
 import { navMenuListener } from './foundry-apps';
 import type { TokenData } from './foundry-cont';
@@ -92,13 +101,12 @@ PlayerConfig.prototype.getData = function () {
 
 const { _onPreventDragstart } = Game.prototype;
 Game.prototype._onPreventDragstart = function (ev: DragEvent) {
-  return pipe(ev.composedPath(), first(), (target) =>
-  {
-      return target instanceof Element && target.getAttribute('draggable') === 'true'
-        ? undefined
-        : _onPreventDragstart.call(this, ev);
-    },
-  );
+  return pipe(ev.composedPath(), first(), (target) => {
+    return target instanceof Element &&
+      target.getAttribute('draggable') === 'true'
+      ? undefined
+      : _onPreventDragstart.call(this, ev);
+  });
 };
 
 const {
@@ -549,3 +557,27 @@ function directorySearch(
 
 ItemDirectory.prototype._onSearchFilter = directorySearch;
 ActorDirectory.prototype._onSearchFilter = directorySearch;
+
+const itemCreate = ({ itemInit }: ItemDataEvent) => {
+  ItemEP.create(itemInit.data, itemInit.options);
+};
+
+const closeCreator = () => closeWindow(ItemCreator);
+
+ItemDirectory.prototype._onCreateEntity = async function (ev: Event) {
+  stopEvent(ev);
+
+  if (ev.currentTarget instanceof HTMLElement) {
+    openWindow({
+      key: ItemCreator,
+      content: html` <item-creator
+        showFolders
+        @close-creator=${closeCreator}
+        @item-data=${itemCreate}
+        folder=${ifDefined(ev.currentTarget.dataset.folder)}
+      ></item-creator>`,
+      name: 'Item Creator',
+      adjacentEl: ev.currentTarget,
+    });
+  }
+};

@@ -15,6 +15,9 @@
   "gridUnits": "m",
   "minimumCoreVersion": "0.7.7",
   "socket": true,
+  "manifest": "https://raw.githubusercontent.com/Bubz43/ep2e/master/system.json",
+  "download": "https://github.com/Bubz43/ep2e/raw/master/latest.zip",
+  "url": "https://github.com/Bubz43/ep2e",
   "languages": [
     {
       "lang": "en",
@@ -65,8 +68,5 @@
       "path": "./packs/weapon-accessories.db",
       "entity": "JournalEntry"
     }
-  ],
-  "manifest": "https://raw.githubusercontent.com/Bubz43/ep2e/master/system.json",
-  "download": "https://github.com/Bubz43/ep2e/raw/master/latest.zip",
-  "url": "https://github.com/Bubz43/ep2e"
+  ]
 }

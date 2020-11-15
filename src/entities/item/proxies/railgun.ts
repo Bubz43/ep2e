@@ -10,6 +10,7 @@ import {
 } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
+import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { compact, difference } from 'remeda';
@@ -41,6 +42,10 @@ export class Railgun
 
   constructor(init: ItemProxyInit<ItemType.Railgun>) {
     super(init);
+  }
+
+  get isPolygun() {
+    return notEmpty(this.epFlags?.alternativeStates) 
   }
 
   @LazyGetter()

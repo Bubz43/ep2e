@@ -174,10 +174,10 @@ type ItemFlags<T extends ItemType> = T extends ItemType.Psi
     }
   : T extends ItemType.PhysicalTech
   ? {
+      software: ItemEntity<ItemType.Software>[];
       fabrication: {
         printTime: number;
         elapsed: number;
-        // blueprint: [CopyableItem["data"]] | null;
       };
     }
   : T extends ItemType.Sleight
@@ -185,7 +185,12 @@ type ItemFlags<T extends ItemType> = T extends ItemType.Psi
   : T extends ItemType.Trait
   ? { temporary: boolean }
   : T extends ItemType.Firearm
-  ? { specialAmmo: ItemEntity<ItemType.FirearmAmmo> | null }
+  ? {
+      specialAmmo: ItemEntity<ItemType.FirearmAmmo> | null;
+      alternativeStates: ItemEntity<ItemType.Firearm>[];
+    }
+  : T extends ItemType.Railgun
+  ? { alternativeStates: ItemEntity<ItemType.Railgun>[] }
   : T extends ItemType.FirearmAmmo
   ? { payload: ItemEntity<ItemType.Substance> | null }
   : T extends ItemType.SprayWeapon

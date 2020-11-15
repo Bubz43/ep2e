@@ -100,6 +100,7 @@ import { BeamWeaponForm } from './entities/item/components/forms/beam-weapon/bea
 import { FirearmAmmoTransformer } from './entities/components/firearm-ammo-transformer/firearm-ammo-transformer';
 import { ArmorForm } from './entities/item/components/forms/armor/armor-form';
 import { SoftwareForm } from './entities/item/components/forms/software/software-form';
+import { ItemCreator } from './entities/item/components/item-creator/item-creator';
 
 customElements.define('app-datepicker', Datepicker);
 
@@ -161,6 +162,7 @@ FormItemsList;
 SleeveFormMovementList;
 
 // Item Forms
+ItemCreator;
 TraitForm;
 TraitFormLevel;
 SleightForm;

@@ -392,6 +392,7 @@ declare global {
   }
 
   interface Folder {
+    displayed: boolean;
     data: {
       color: string;
       name: string;
@@ -399,7 +400,7 @@ declare global {
       sort: null | string;
       sorting: string;
       _id: string;
-      type: string;
+      type: EntityName;
     };
   }
 
