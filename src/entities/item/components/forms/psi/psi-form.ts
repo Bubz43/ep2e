@@ -1,6 +1,7 @@
 import {
   renderNumberField,
   renderLabeledCheckbox,
+  renderTextField,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import {
@@ -11,13 +12,15 @@ import {
   ResizeOption,
   SlWindowEventName,
 } from '@src/components/window/window-options';
+import { enumValues, ExsurgentStrain } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { renderItemForm } from '@src/entities/item/item-views';
 import type { Psi } from '@src/entities/item/proxies/psi';
-import { matchID } from '@src/features/feature-helpers';
+import { idProp, matchID } from '@src/features/feature-helpers';
 import { InfluenceRoll, PsiInfluenceType } from '@src/features/psi-influence';
 import { localize } from '@src/foundry/localization';
 import { customElement, html, property, PropertyValues } from 'lit-element';
+import { repeat } from 'lit-html/directives/repeat';
 import { ItemFormBase } from '../item-form-base';
 import styles from './psi-form.scss';
 
@@ -88,45 +91,70 @@ export class PsiForm extends ItemFormBase {
   }
 
   render() {
-    const { updater, type, hasVariableInfection } = this.item;
+    const {
+      updater,
+      type,
+      hasVariableInfection,
+      name,
+      fullInfluences,
+      influencesData,
+    } = this.item;
     const { disabled } = this;
     return html`
       <entity-form-layout noSidebar>
-        <entity-form-header
-          noDefaultImg
-          slot="header"
-          .updateActions=${updater.prop('')}
-          type=${localize(type)}
-          ?disabled=${disabled}
-        >
-        </entity-form-header>
-
-        ${renderUpdaterForm(updater.prop('data'), {
-          disabled,
-          slot: 'sidebar',
-          fields: () => [],
-        })}
-
         <div slot="details">
-          ${renderAutoForm({
-            disabled,
-            classes: 'primary-form',
-            props: this.item.epData,
-            update: ({ level, requireBioSubstrate }) => {
-              if (level) this.item.updateLevel(level);
-              else if (requireBioSubstrate !== undefined) {
-                this.item.updater
-                  .prop('data', 'requireBioSubstrate')
-                  .commit(requireBioSubstrate);
-              }
-            },
-            fields: ({ level, requireBioSubstrate }) => [
-              renderNumberField(level, { min: 1, max: game.user.isGM ? 3 : 2 }),
-              hasVariableInfection
+          <section>
+            <sl-header heading="${localize('psi')} ${localize('trait')}">
+              ${hasVariableInfection
                 ? ''
-                : renderLabeledCheckbox(requireBioSubstrate),
-            ],
-          })}
+                : renderUpdaterForm(updater.prop('data'), {
+                  disabled,
+                  slot: "action",
+                    fields: ({ requireBioSubstrate }) =>
+                      renderLabeledCheckbox(requireBioSubstrate),
+                  })}
+            </sl-header>
+            <div class="detail-forms">
+              ${this.strainOptions}
+              ${renderUpdaterForm(updater.prop('data'), {
+                disabled,
+                fields: ({ strain }) =>
+                  renderTextField(strain, { listId: 'strains' }),
+              })}
+              ${renderAutoForm({
+                props: { name },
+                update: ({ name = this.item.name }) =>
+                  this.item.updater.prop('name').commit(name),
+                disabled,
+                fields: ({ name }) =>
+                  renderTextField({ ...name, label: localize('substrain') }),
+              })}
+              ${renderUpdaterForm(updater.prop('data'), {
+                disabled,
+                fields: ({ level }) =>
+                  renderNumberField(level, {
+                    min: 1,
+                    max: game.user.isGM ? 3 : 2,
+                  }),
+              })}
+            </div>
+            ${this.strainOptions}
+          </section>
+
+          ${influencesData
+            ? repeat(influencesData, idProp, (influenceData) => {
+                return html`
+                  <sl-dropzone ?disabled=${disabled} draggable="true">
+                    <sl-header
+                      heading="${influenceData.roll} | ${localize(
+                        influenceData.type,
+                      )}"
+                      hideBorder
+                    ></sl-header>
+                  </sl-dropzone>
+                `;
+              })
+            : ''}
         </div>
 
         <editor-wrapper
@@ -138,6 +166,14 @@ export class PsiForm extends ItemFormBase {
       </entity-form-layout>
     `;
   }
+
+  private strainOptions = html`
+    <datalist id="strains">
+      ${enumValues(ExsurgentStrain).map(
+        (strain) => html` <option value=${localize(strain)}></option> `,
+      )}
+    </datalist>
+  `;
 }
 
 declare global {

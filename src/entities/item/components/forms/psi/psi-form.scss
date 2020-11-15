@@ -7,8 +7,25 @@
 
 :host {
   display: block;
+  min-height: 650px;
 }
 
-.primary-form {
-  grid-template-columns: 1fr 1fr;
+sl-header {
+  mwc-formfield {
+    height: 32px !important;
+  }
+}
+
+.detail-forms {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 0.5rem 0 0;
+  
+  sl-form {
+    display: contents;
+  }
+}
+
+sl-dropzone {
+  position: relative;
 }

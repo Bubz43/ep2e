@@ -526,3 +526,13 @@ export enum WeaponSkillOption {
   None = 'none',
   Exotic = 'exotic',
 }
+
+export enum ExsurgentStrain {
+  Alter = "alter",
+  HauntingVirus = "hauntingVirus",
+  Mindstealer = "mindstealer",
+  Skrik = "skrik",
+  WattsMacleod = "Watts-MacLeod",
+  Whisper = "whisper",
+  Xenomorph = "xenomorph"
+}

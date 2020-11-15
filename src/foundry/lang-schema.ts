@@ -1275,7 +1275,15 @@ type LangEntries =
   | 'ammoClass'
   | 'programmableModes'
   | 'dosesPerUnit'
-  | 'availableShots' | "common"
+  | 'availableShots'
+  | 'common'
+  | 'alter'
+  | 'hauntingVirus'
+  | 'mindstealer'
+  | 'skrik'
+  | 'Watts-MacLeod'
+  | 'whisper'
+  | 'xenomorph' | "strain" | "substrain"
 type FullNames =
   | 'cog'
   | 'int'
@@ -1367,7 +1375,7 @@ export type Formatable = {
   ArmorReduced: ['armor', 'value'];
   AlreadyHasItem: ['ownerName', 'itemName'];
   MismatchedAmmoClasses: ['firearm', 'ammo'];
-  CannotLoadMissileSize: ["missileSize", "availableSizes"]
+  CannotLoadMissileSize: ['missileSize', 'availableSizes'];
 };
 
 export interface Lang {

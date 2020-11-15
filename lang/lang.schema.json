@@ -387,6 +387,9 @@
               ],
               "type": "object"
             },
+            "Watts-MacLeod": {
+              "type": "string"
+            },
             "a-z": {
               "type": "string"
             },
@@ -574,6 +577,9 @@
               "type": "string"
             },
             "altMode": {
+              "type": "string"
+            },
+            "alter": {
               "type": "string"
             },
             "alternativeAmmo": {
@@ -1054,6 +1060,9 @@
               "type": "string"
             },
             "commit": {
+              "type": "string"
+            },
+            "common": {
               "type": "string"
             },
             "complete": {
@@ -1803,6 +1812,9 @@
             "hasSeverity": {
               "type": "string"
             },
+            "hauntingVirus": {
+              "type": "string"
+            },
             "heal": {
               "type": "string"
             },
@@ -2392,6 +2404,9 @@
               "type": "string"
             },
             "mindhacker": {
+              "type": "string"
+            },
+            "mindstealer": {
               "type": "string"
             },
             "mini": {
@@ -3366,6 +3381,9 @@
             "skills": {
               "type": "string"
             },
+            "skrik": {
+              "type": "string"
+            },
             "slacker": {
               "type": "string"
             },
@@ -4089,6 +4107,9 @@
             "whips": {
               "type": "string"
             },
+            "whisper": {
+              "type": "string"
+            },
             "whisperGM": {
               "type": "string"
             },
@@ -4131,6 +4152,9 @@
             "xenofauna": {
               "type": "string"
             },
+            "xenomorph": {
+              "type": "string"
+            },
             "yellow": {
               "type": "string"
             },
@@ -4144,6 +4168,7 @@
             "FORMATABLE",
             "FULL",
             "SHORT",
+            "Watts-MacLeod",
             "a-z",
             "abbr",
             "abilities",
@@ -4207,6 +4232,7 @@
             "alt",
             "altAttackMode",
             "altMode",
+            "alter",
             "alternativeAmmo",
             "alwaysApplied",
             "alwaysApplies",
@@ -4367,6 +4393,7 @@
             "commaSeperated",
             "commander",
             "commit",
+            "common",
             "complete",
             "completed",
             "complex",
@@ -4616,6 +4643,7 @@
             "hasActiveState",
             "hasAttack",
             "hasSeverity",
+            "hauntingVirus",
             "heal",
             "healed",
             "healing",
@@ -4813,6 +4841,7 @@
             "minStressValue",
             "mindState",
             "mindhacker",
+            "mindstealer",
             "mini",
             "minigrenade",
             "minimissile",
@@ -5137,6 +5166,7 @@
             "skillTests",
             "skillType",
             "skills",
+            "skrik",
             "slacker",
             "sleeve",
             "sleeved",
@@ -5378,6 +5408,7 @@
             "when",
             "whenMade",
             "whips",
+            "whisper",
             "whisperGM",
             "wieldedWith",
             "wil",
@@ -5392,6 +5423,7 @@
             "woundsIgnored",
             "xRep",
             "xenofauna",
+            "xenomorph",
             "yellow",
             "z-a"
           ],

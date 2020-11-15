@@ -424,6 +424,7 @@ type PsiData = {
   templates: UseItemTemplate<['Common']>;
   level: 1 | 2 | 3;
   requireBioSubstrate: boolean;
+  strain: string;
   state: {
     freePush: PsiPush | '';
     /**

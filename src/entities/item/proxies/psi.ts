@@ -20,7 +20,7 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
   @LazyGetter()
   get fullInfluences() {
     const data = this.influencesData || createDefaultPsiInfluences()
-    return mapToObj<StringID<PsiInfluenceData>, InfluenceRoll, PsiInfluence>(
+    return mapToObj<StringID<PsiInfluenceData>, InfluenceRoll, StringID<PsiInfluence>>(
      data,
       (influence) => {
         if (influence.type === PsiInfluenceType.Trait) {
@@ -59,6 +59,10 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
     // );
   }
 
+  get strain() {
+    return this.epData.strain
+  }
+
   get influencesData() {
     return this.epFlags?.influences;
   }
@@ -80,7 +84,7 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
   }
 
   get infectionRating() {
-    return this.state.infectionRating;
+    return clamp(this.state.infectionRating, this.infectionClamp);
   }
 
   get baseInfectionRating() {

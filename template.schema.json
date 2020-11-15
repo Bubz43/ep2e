@@ -4447,6 +4447,9 @@
                   ],
                   "type": "object"
                 },
+                "strain": {
+                  "type": "string"
+                },
                 "templates": {
                   "items": [
                     {
@@ -4463,6 +4466,7 @@
                 "level",
                 "requireBioSubstrate",
                 "state",
+                "strain",
                 "templates"
               ],
               "type": "object"

@@ -464,6 +464,7 @@
       ],
       "level": 1,
       "requireBioSubstrate": false,
+      "strain": "Watts-MacLeod",
       "state": {
         "freePush": "",
         "infectionRating": 10,
