@@ -37,6 +37,7 @@ import {
 } from '@src/foundry/drag-and-drop';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
+import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property, PropertyValues } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
@@ -72,7 +73,7 @@ export class FirearmForm extends ItemFormBase {
 
   private readonly ammoSheetKey = {};
 
-  private renderSidebarFields = renderKineticWeaponSidebar.bind(this)
+  private renderSidebarFields = renderKineticWeaponSidebar.bind(this);
 
   private addShape = handleDrop(async ({ data }) => {
     if (
@@ -86,7 +87,6 @@ export class FirearmForm extends ItemFormBase {
       this.item.addShape(proxy.getDataCopy(false));
     }
   });
-
 
   update(changedProps: PropertyValues) {
     if (this.ammoSheet) this.openAmmoSheet();
@@ -148,6 +148,19 @@ export class FirearmForm extends ItemFormBase {
     this.ammoSheet = null;
   }
 
+  private openShapeMenu(ev: MouseEvent, shape: Firearm) {
+    openMenu({
+      content: [
+        // TODO Shape Form
+        {
+          label: `${localize("delete")} ${localize("shape")}`,
+          callback: () => this.item.removeShape(shape.id)
+        }
+      ],
+      position: ev
+    });
+  }
+
   render() {
     const {
       updater,
@@ -158,7 +171,7 @@ export class FirearmForm extends ItemFormBase {
       ammoState,
       shapeChanging,
       nestedShape,
-      shapeName
+      shapeName,
     } = this.item;
     const { disabled } = this;
     return html`
@@ -179,7 +192,7 @@ export class FirearmForm extends ItemFormBase {
         })}
 
         <div slot="details">
-        ${shapeChanging && !nestedShape
+          ${shapeChanging && !nestedShape
             ? html`
                 <sl-dropzone ?disabled=${disabled} @drop=${this.addShape}>
                   <sl-header
@@ -193,10 +206,9 @@ export class FirearmForm extends ItemFormBase {
                       update: ({ shapeName }) => {
                         this.item.updater
                           .prop('data', 'shapeName')
-                          .commit(shapeName || this.item.shapeName)
+                          .commit(shapeName || this.item.shapeName);
                         this.requestUpdate();
-                      }
-                        ,
+                      },
                       disabled,
                       fields: ({ shapeName }) =>
                         html`<mwc-formfield alignEnd label=${shapeName.label}
@@ -210,16 +222,19 @@ export class FirearmForm extends ItemFormBase {
                           ${repeat(
                             this.item.shapes.values(),
                             idProp,
-                            ({ name, id }) => html`
+                            (shape) => {
+                              const { id, name } = shape;
+                              return html`
                               <wl-list-item
                                 class="shape"
                                 clickable
                                 ?disabled=${disabled}
-                                @contextmenu=${() => this.item.removeShape(id)}
                                 @click=${() => this.item.swapShape(id)}
+                                @contextmenu=${(ev: MouseEvent) => this.openShapeMenu(ev, shape)}
                                 >${name}</wl-list-item
                               >
-                            `,
+                            `;
+                            },
                           )}
                         </sl-animated-list>
                       `
@@ -436,8 +451,8 @@ export class FirearmForm extends ItemFormBase {
               `
             : ''}
           ${specialAmmo && mode
-      ? html`
-                      <hr />
+            ? html`
+                <hr />
 
                 <sl-group label=${localize('ammo')}
                   >${specialAmmo.name}

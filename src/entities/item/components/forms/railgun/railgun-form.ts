@@ -31,6 +31,7 @@ import {
   itemDropToItemProxy,
 } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
+import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
@@ -76,6 +77,19 @@ export class RailgunForm extends ItemFormBase {
       this.item.addShape(proxy.getDataCopy(false));
     }
   });
+
+  private openShapeMenu(ev: MouseEvent, shape: Railgun) {
+    openMenu({
+      content: [
+        // TODO Shape Form
+        {
+          label: `${localize("delete")} ${localize("shape")}`,
+          callback: () => this.item.removeShape(shape.id)
+        }
+      ],
+      position: ev,
+    });
+  }
 
   render() {
     const { updater, type, accessories, shapeChanging, shapeName, nestedShape } = this.item;
@@ -129,16 +143,19 @@ export class RailgunForm extends ItemFormBase {
                           ${repeat(
                             this.item.shapes.values(),
                             idProp,
-                            ({ name, id }) => html`
+                            (shape) => {
+                              const { id, name } = shape;
+                              return html`
                               <wl-list-item
                                 class="shape"
                                 clickable
                                 ?disabled=${disabled}
-                                @contextmenu=${() => this.item.removeShape(id)}
                                 @click=${() => this.item.swapShape(id)}
+                                @contextmenu=${(ev: MouseEvent) => this.openShapeMenu(ev, shape)}
                                 >${name}</wl-list-item
                               >
-                            `,
+                            `;
+                            },
                           )}
                         </sl-animated-list>
                       `
