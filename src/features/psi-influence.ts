@@ -1,5 +1,5 @@
 import { ItemType } from '@src/entities/entity-types';
-import { Trait } from '@src/entities/item/proxies/trait';
+import type { Trait } from '@src/entities/item/proxies/trait';
 import { ItemEntity, createItemEntity } from '@src/entities/models';
 import { localize } from '@src/foundry/localization';
 import { rollFormula } from '@src/foundry/rolls';
@@ -7,7 +7,7 @@ import { html } from 'lit-html';
 import { range } from 'remeda';
 import type { Effect } from './effects';
 import { StringID, createFeature, addFeature } from './feature-helpers';
-import { Motivation, createMotivation } from './motivations';
+import { Motivation, createMotivation, MotivationStance } from './motivations';
 import { EPTimeInterval, CommonInterval } from './time';
 import { toMilliseconds } from './modify-milliseconds';
 
@@ -52,9 +52,9 @@ export type TraitInfluenceData = Influence<{
   trait: ItemEntity<ItemType.Trait>;
 }>;
 
-export type TraitInfluence = Omit<TraitInfluenceData, "trait"> & {
+export type TraitInfluence = Omit<TraitInfluenceData, 'trait'> & {
   trait: Trait;
-}
+};
 
 export type PsiInfluenceData =
   | MotivationInfluence
@@ -62,9 +62,9 @@ export type PsiInfluenceData =
   | UniqueInfluence
   | TraitInfluenceData;
 
-export type PsiInfluence = Exclude<PsiInfluenceData, TraitInfluenceData> | TraitInfluence
-
-
+export type PsiInfluence =
+  | Exclude<PsiInfluenceData, TraitInfluenceData>
+  | TraitInfluence;
 
 export type TemporaryInfluence = Exclude<PsiInfluenceData, DamageInfluence>;
 
@@ -103,7 +103,7 @@ export const createDefaultInfluence = (
     case PsiInfluenceType.Motivation:
       return motivation({
         roll,
-        motivation: createMotivation({}),
+        motivation: createMotivation({ cause: localize("cause")}),
       });
 
     case PsiInfluenceType.Trait:
@@ -148,32 +148,28 @@ export const createDefaultPsiInfluences = () => {
 
 export const influenceSort = (influence: PsiInfluenceData) => influence.roll;
 
-export const influenceInfo = (influence: PsiInfluenceData) => {
+export const influenceInfo = (influence: PsiInfluence) => {
   switch (influence.type) {
     case PsiInfluenceType.Damage:
       return {
-        name: `${localize('takeDV')} ${influence.formula}`,
+        name: localize('physicalDamage'),
+        description: `${localize('takeDV')} ${influence.formula}`,
       };
 
     case PsiInfluenceType.Motivation: {
       const { motivation, description } = influence;
       return {
-        name: html`
-          <motivation-item .motivation=${motivation}></motivation-item>
-        `,
+        name: `${localize('motivation')}: ${
+          motivation.stance === MotivationStance.Oppose ? '-' : '+'
+        } ${motivation.cause}`,
         description,
       };
     }
 
     case PsiInfluenceType.Trait: {
-      const trait = new Trait({
-        data: influence.trait,
-        embedded: localize('psi'),
-        lockSource: true,
-      });
       return {
-        name: trait.fullName,
-        description: trait.description,
+        name: influence.trait.fullName,
+        description: influence.trait.description,
       };
     }
 

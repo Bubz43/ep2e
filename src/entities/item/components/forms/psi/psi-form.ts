@@ -16,11 +16,21 @@ import { enumValues, ExsurgentStrain } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { renderItemForm } from '@src/entities/item/item-views';
 import type { Psi } from '@src/entities/item/proxies/psi';
-import { idProp, matchID } from '@src/features/feature-helpers';
-import { InfluenceRoll, PsiInfluenceType } from '@src/features/psi-influence';
+import { idProp, matchID, StringID } from '@src/features/feature-helpers';
+import {
+  DamageInfluence,
+  influenceInfo,
+  InfluenceRoll,
+  MotivationInfluence,
+  PsiInfluenceType,
+  UniqueInfluence,
+} from '@src/features/psi-influence';
+import { dragValue } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import { customElement, html, property, PropertyValues } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
+import { stopEvent } from 'weightless';
 import { ItemFormBase } from '../item-form-base';
 import styles from './psi-form.scss';
 
@@ -35,6 +45,8 @@ export class PsiForm extends ItemFormBase {
   @property({ attribute: false }) item!: Psi;
 
   private traitSheetKeys = new Map<InfluenceRoll, {}>();
+
+  private editingRoll: InfluenceRoll = 1;
 
   async connectedCallback() {
     if (!this.disabled && this.item.influencesData?.length !== 6) {
@@ -53,7 +65,18 @@ export class PsiForm extends ItemFormBase {
     for (const [roll] of this.traitSheetKeys) {
       this.openItemSheet(roll);
     }
+    if (
+      this.drawerContentRenderer &&
+      this.editingInfluence.type === PsiInfluenceType.Trait
+    ) {
+      this.drawerContentRenderer = null;
+    }
+
     super.update(changedProps);
+  }
+
+  get editingInfluence() {
+    return this.item.fullInfluences[this.editingRoll];
   }
 
   private openItemSheet(roll: InfluenceRoll) {
@@ -108,8 +131,8 @@ export class PsiForm extends ItemFormBase {
               ${hasVariableInfection
                 ? ''
                 : renderUpdaterForm(updater.prop('data'), {
-                  disabled,
-                  slot: "action",
+                    disabled,
+                    slot: 'action',
                     fields: ({ requireBioSubstrate }) =>
                       renderLabeledCheckbox(requireBioSubstrate),
                   })}
@@ -126,8 +149,7 @@ export class PsiForm extends ItemFormBase {
                 update: ({ name }) => {
                   this.item.updater.prop('name').commit(name || this.item.name);
                   this.requestUpdate();
-                }
-                 ,
+                },
                 disabled,
                 fields: ({ name }) =>
                   renderTextField({ ...name, label: localize('substrain') }),
@@ -145,15 +167,59 @@ export class PsiForm extends ItemFormBase {
           </section>
 
           ${influencesData
-            ? repeat(influencesData, idProp, (influenceData) => {
+            ? repeat(influencesData, idProp, ({ roll, type }) => {
+                const fullInfluence = this.item.fullInfluences[roll];
+                const { name, description } = influenceInfo(fullInfluence);
+                const isDamage = type === PsiInfluenceType.Damage;
+                const hideEnriched = isDamage || !description;
                 return html`
-                  <sl-dropzone ?disabled=${disabled} draggable="true">
-                    <sl-header
-                      heading="${influenceData.roll} | ${localize(
-                        influenceData.type,
-                      )}"
-                      hideBorder
-                    ></sl-header>
+                  <sl-dropzone class="influence" ?disabled=${disabled}>
+                    <span
+                      class="roll ${classMap({
+                        'with-description': !hideEnriched,
+                      })}"
+                      draggable=${dragValue(!disabled)}
+                      @dragstart=${(ev: DragEvent) => {
+                        const el = ev.currentTarget as HTMLElement;
+                        el.classList.add('dragged');
+                      }}
+                      @dragend=${(ev: DragEvent) => {
+                        const el = ev.currentTarget as HTMLElement;
+                        el.classList.remove('dragged');
+                      }}
+                      >${roll}</span
+                    >
+
+                    <span class="name"
+                      >${name}
+                      ${isDamage
+                        ? html`<span class="formula">${description}</span>`
+                        : ''}</span
+                    >
+                    ${hideEnriched
+                      ? ''
+                      : html`
+                          <enriched-html
+                            class="description"
+                            content=${description}
+                          ></enriched-html>
+                        `}
+
+                    <div class="actions">
+                      <mwc-icon-button
+                        icon="edit"
+                        ?disabled=${disabled}
+                        @click=${() => {
+                          if (type === PsiInfluenceType.Trait) {
+                            this.openItemSheet(roll);
+                          } else this.setDrawer(this.influenceEditor);
+                        }}
+                      ></mwc-icon-button>
+                      <mwc-icon-button
+                        icon="transform"
+                        ?disabled=${disabled}
+                      ></mwc-icon-button>
+                    </div>
                   </sl-dropzone>
                 `;
               })
@@ -168,6 +234,32 @@ export class PsiForm extends ItemFormBase {
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
+  }
+
+  private influenceEditor() {
+    const influence = this.editingInfluence;
+    switch (influence.type) {
+      case PsiInfluenceType.Trait:
+        return html``;
+      case PsiInfluenceType.Damage:
+        return this.editDamage(influence);
+      case PsiInfluenceType.Motivation:
+        return this.editMotivation(influence);
+      case PsiInfluenceType.Unique:
+        return this.editUnique(influence);
+    }
+  }
+
+  private editDamage(influence: StringID<DamageInfluence>) {
+    return html``;
+  }
+
+  private editMotivation(influence: StringID<MotivationInfluence>) {
+    return html``;
+  }
+
+  private editUnique(influence: StringID<UniqueInfluence>) {
+    return html``;
   }
 
   private strainOptions = html`

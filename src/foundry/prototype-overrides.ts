@@ -93,9 +93,12 @@ PlayerConfig.prototype.getData = function () {
 const { _onPreventDragstart } = Game.prototype;
 Game.prototype._onPreventDragstart = function (ev: DragEvent) {
   return pipe(ev.composedPath(), first(), (target) =>
-    target instanceof Element && target.getAttribute('draggable') === 'true'
-      ? undefined
-      : _onPreventDragstart.call(this, ev),
+  {
+    console.log(target);
+      return target instanceof Element && target.getAttribute('draggable') === 'true'
+        ? undefined
+        : _onPreventDragstart.call(this, ev);
+    },
   );
 };
 
