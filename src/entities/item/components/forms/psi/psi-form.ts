@@ -2,8 +2,15 @@ import {
   renderNumberField,
   renderLabeledCheckbox,
   renderTextField,
+  renderFormulaField,
+  renderRadioFields,
+  renderTextareaField,
 } from '@src/components/field/fields';
-import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
+import {
+  renderAutoForm,
+  renderSubmitForm,
+  renderUpdaterForm,
+} from '@src/components/form/forms';
 import {
   closeWindow,
   openWindow,
@@ -16,20 +23,33 @@ import { enumValues, ExsurgentStrain } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { renderItemForm } from '@src/entities/item/item-views';
 import type { Psi } from '@src/entities/item/proxies/psi';
-import { idProp, matchID, StringID } from '@src/features/feature-helpers';
 import {
+  addFeature,
+  idProp,
+  matchID,
+  removeFeature,
+  StringID,
+  updateFeature,
+} from '@src/features/feature-helpers';
+import { MotivationStance } from '@src/features/motivations';
+import {
+  createDefaultInfluence,
   DamageInfluence,
   influenceInfo,
   InfluenceRoll,
+  influenceSort,
   MotivationInfluence,
   PsiInfluenceType,
   UniqueInfluence,
 } from '@src/features/psi-influence';
 import { dragValue } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
+import { openMenu } from '@src/open-menu';
+import { safeMerge } from '@src/utility/helpers';
 import { customElement, html, property, PropertyValues } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
+import { sortBy } from 'remeda';
 import { stopEvent } from 'weightless';
 import { ItemFormBase } from '../item-form-base';
 import styles from './psi-form.scss';
@@ -47,6 +67,8 @@ export class PsiForm extends ItemFormBase {
   private traitSheetKeys = new Map<InfluenceRoll, {}>();
 
   private editingRoll: InfluenceRoll = 1;
+
+  private expandedInfluences = new Map<InfluenceRoll, boolean>();
 
   async connectedCallback() {
     if (!this.disabled && this.item.influencesData?.length !== 6) {
@@ -73,6 +95,11 @@ export class PsiForm extends ItemFormBase {
     }
 
     super.update(changedProps);
+  }
+
+  setExpandedState(roll: InfluenceRoll, state: boolean) {
+    this.expandedInfluences.set(roll, state);
+    this.requestUpdate();
   }
 
   get editingInfluence() {
@@ -110,6 +137,31 @@ export class PsiForm extends ItemFormBase {
         () => traitSheetKeys.delete(roll),
         { once: true },
       );
+    }
+  }
+
+  private openTransformMenu(roll: InfluenceRoll) {
+    const influence = this.item.fullInfluences[roll];
+    openMenu({
+      content: enumValues(PsiInfluenceType).map((type) => ({
+        label: `${localize(type)} ${localize('influence')}`,
+        callback: () => {
+          this.item.influenceCommiter((influences) => {
+            const removed = removeFeature(influences, influence.id);
+            return addFeature(removed, createDefaultInfluence(roll, type));
+          });
+        },
+        activated: influence.type === type,
+      })),
+    });
+  }
+
+  private editInfluence(roll: InfluenceRoll) {
+    if (this.item.fullInfluences[roll].type === PsiInfluenceType.Trait) {
+      this.openItemSheet(roll);
+    } else {
+      this.editingRoll = roll;
+      this.setDrawer(this.influenceEditor);
     }
   }
 
@@ -167,62 +219,78 @@ export class PsiForm extends ItemFormBase {
           </section>
 
           ${influencesData
-            ? repeat(influencesData, idProp, ({ roll, type }) => {
-                const fullInfluence = this.item.fullInfluences[roll];
-                const { name, description } = influenceInfo(fullInfluence);
-                const isDamage = type === PsiInfluenceType.Damage;
-                const hideEnriched = isDamage || !description;
-                return html`
-                  <sl-dropzone class="influence" ?disabled=${disabled}>
-                    <span
-                      class="roll ${classMap({
-                        'with-description': !hideEnriched,
-                      })}"
-                      draggable=${dragValue(!disabled)}
-                      @dragstart=${(ev: DragEvent) => {
-                        const el = ev.currentTarget as HTMLElement;
-                        el.classList.add('dragged');
-                      }}
-                      @dragend=${(ev: DragEvent) => {
-                        const el = ev.currentTarget as HTMLElement;
-                        el.classList.remove('dragged');
-                      }}
-                      >${roll}</span
+            ? repeat(
+                sortBy(influencesData, influenceSort),
+                idProp,
+                ({ roll, type }) => {
+                  const fullInfluence = this.item.fullInfluences[roll];
+                  const { name, description } = influenceInfo(fullInfluence);
+                  const isDamage = type === PsiInfluenceType.Damage;
+                  const hideEnriched = isDamage || !description;
+                  const expanded =
+                    !!this.expandedInfluences.get(roll) && !hideEnriched;
+                  return html`
+                    <sl-dropzone
+                      class="influence ${classMap({ expanded })}"
+                      ?disabled=${disabled}
                     >
-
-                    <span class="name"
-                      >${name}
-                      ${isDamage
-                        ? html`<span class="formula">${description}</span>`
-                        : ''}</span
-                    >
-                    ${hideEnriched
-                      ? ''
-                      : html`
-                          <enriched-html
-                            class="description"
-                            content=${description}
-                          ></enriched-html>
-                        `}
-
-                    <div class="actions">
-                      <mwc-icon-button
-                        icon="edit"
-                        ?disabled=${disabled}
-                        @click=${() => {
-                          if (type === PsiInfluenceType.Trait) {
-                            this.openItemSheet(roll);
-                          } else this.setDrawer(this.influenceEditor);
+                      <span
+                        class="roll"
+                        draggable=${dragValue(!disabled)}
+                        @dragstart=${(ev: DragEvent) => {
+                          const el = ev.currentTarget as HTMLElement;
+                          el.classList.add('dragged');
                         }}
-                      ></mwc-icon-button>
-                      <mwc-icon-button
-                        icon="transform"
-                        ?disabled=${disabled}
-                      ></mwc-icon-button>
-                    </div>
-                  </sl-dropzone>
-                `;
-              })
+                        @dragend=${(ev: DragEvent) => {
+                          const el = ev.currentTarget as HTMLElement;
+                          el.classList.remove('dragged');
+                        }}
+                        >${roll}</span
+                      >
+
+                      <span class="name"
+                        >${name}.
+                        ${isDamage
+                          ? html`<span class="formula">${description}</span>`
+                          : ''}</span
+                      >
+                      ${expanded
+                        ? html`
+                            <p class="description">
+                              <enriched-html
+                                content=${description}
+                              ></enriched-html>
+                            </p>
+                          `
+                        : ''}
+
+                      <div class="actions">
+                        ${hideEnriched
+                          ? ''
+                          : html`
+                              <mwc-icon-button
+                                icon=${expanded
+                                  ? 'keyboard_arrow_down'
+                                  : 'keyboard_arrow_left'}
+                                @click=${() =>
+                                  this.setExpandedState(roll, !expanded)}
+                              ></mwc-icon-button>
+                            `}
+                        <mwc-icon-button
+                          icon="edit"
+                          ?disabled=${disabled}
+                          @click=${() => this.editInfluence(roll)}
+                        ></mwc-icon-button>
+                        <mwc-icon-button
+                          icon="transform"
+                          ?disabled=${disabled}
+                          @click=${() => this.openTransformMenu(roll)}
+                        ></mwc-icon-button>
+                      </div>
+                    </sl-dropzone>
+                  `;
+                },
+              )
             : ''}
         </div>
 
@@ -251,15 +319,56 @@ export class PsiForm extends ItemFormBase {
   }
 
   private editDamage(influence: StringID<DamageInfluence>) {
-    return html``;
+    return html`
+      <h3>${localize('edit')} ${localize(influence.type)}</h3>
+      ${renderSubmitForm({
+        props: influence,
+        update: ({ formula = '1d6' }) => {
+          this.item.influenceCommiter((influences) =>
+            updateFeature(influences, { id: influence.id, formula }),
+          );
+        },
+        fields: ({ formula }) =>
+          renderFormulaField(formula, { required: true }),
+      })}
+    `;
   }
 
   private editMotivation(influence: StringID<MotivationInfluence>) {
-    return html``;
+    return html`
+      <h3>${localize('edit')} ${localize(influence.type)}</h3>
+      <div class="motivation-forms">
+        ${renderSubmitForm({
+          props: influence.motivation,
+          update: (changed, original) => {
+            this.item.influenceCommiter((influences) =>
+              updateFeature(influences, {
+                id: influence.id,
+                motivation: safeMerge(original, changed),
+              }),
+            );
+          },
+          fields: ({ stance, cause }) => [
+            renderRadioFields(stance, enumValues(MotivationStance)),
+            renderTextField(cause, { required: true }),
+          ],
+        })}
+        ${renderAutoForm({
+          props: influence,
+          update: ({ description = '' }) => {
+            this.item.influenceCommiter((influences) =>
+              updateFeature(influences, { id: influence.id, description }),
+            );
+          },
+          fields: ({ description }) =>
+            renderTextareaField(description, { rows: 20, resizable: true }),
+        })}
+      </div>
+    `;
   }
 
   private editUnique(influence: StringID<UniqueInfluence>) {
-    return html``;
+    return html` <h3>${localize('edit')} ${localize(influence.type)}</h3> `;
   }
 
   private strainOptions = html`

@@ -1,6 +1,8 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+@include styled-scrollbars;
+
 * {
   box-sizing: border-box;
 }
@@ -40,6 +42,13 @@ sl-dropzone {
   "roll name actions"
   "desc desc desc";
   column-gap: 1rem;
+
+  &.expanded {
+    .roll {
+      border-bottom: 2px dashed var(--color-border);
+      border-bottom-right-radius: 3px;
+    }
+  }
   
   .name {
     grid-area: name;
@@ -58,11 +67,7 @@ sl-dropzone {
     &[draggable="true"] {
       cursor: grab;
     }
-    &.with-description {
-      border-bottom: 2px dashed var(--color-border);
-      border-bottom-right-radius: 3px;
 
-    }
     &.dragged {
       background: alphav(var(--color-secondary), 0.25);
     }
@@ -76,12 +81,21 @@ sl-dropzone {
     color: var(--color-text-lighter);
   }
   .description {
-    color:  var(--color-text-lighter);
     grid-area: desc;
     padding: 0 1rem;
-    margin: 0.25rem 0;
+    margin: 0.2rem 0 0.25rem;
+    enriched-html {
+      color: var(--color-text-lighter);
+    }
+    // margin: 0.35rem 0 0.25rem;
   }
   mwc-icon-button {
     --mdc-icon-button-size: 2rem;
   }
+}
+
+.motivation-forms {
+  display: grid;
+  gap: 1rem;;
+  min-width: 300px;;
 }

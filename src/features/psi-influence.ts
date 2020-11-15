@@ -146,14 +146,14 @@ export const createDefaultPsiInfluences = () => {
   }, [] as StringID<PsiInfluenceData>[]);
 };
 
-export const influenceSort = (influence: PsiInfluenceData) => influence.roll;
+export const influenceSort = ({ roll }: { roll: InfluenceRoll }) => roll;
 
 export const influenceInfo = (influence: PsiInfluence) => {
   switch (influence.type) {
     case PsiInfluenceType.Damage:
       return {
         name: localize('physicalDamage'),
-        description: `${localize('takeDV')} ${influence.formula}`,
+        description: `${localize('takeDV')} ${influence.formula}.`,
       };
 
     case PsiInfluenceType.Motivation: {
@@ -175,7 +175,7 @@ export const influenceInfo = (influence: PsiInfluence) => {
 
     case PsiInfluenceType.Unique:
       return {
-        name: `${influence.name}`,
+        name: influence.name,
         description: influence.description,
       };
   }

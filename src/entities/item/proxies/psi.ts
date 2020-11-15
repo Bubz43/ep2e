@@ -39,14 +39,12 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
                 getData: () => influence.trait,
                 isEditable: () => this.editable,
                 setData: (changed) => {
-                  this.updater
-                    .prop('flags', EP.Name, 'influences')
-                    .commit((influences) =>
-                      updateFeature(influences || [], {
-                        id: influence.id,
-                        trait: deepMerge(influence.trait, changed),
-                      }),
-                    );
+                  this.influenceCommiter((influences) =>
+                    updateFeature(influences, {
+                      id: influence.id,
+                      trait: deepMerge(influence.trait, changed),
+                    }),
+                  );
                 },
               }),
             }),
@@ -161,10 +159,21 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
     return copy;
   }
 
-
   setupDefaultInfluences() {
     return this.updater
       .prop('flags', EP.Name, 'influences')
       .commit(createDefaultPsiInfluences());
+  }
+
+  get influenceCommiter() {
+    return async (
+      callback: (
+        influences: NonNullable<Psi['influencesData']>,
+      ) => NonNullable<Psi['influencesData']>,
+    ) => {
+      await this.updater
+        .prop('flags', EP.Name, 'influences')
+        .commit(callback(this.influencesData || []));
+    };
   }
 }
