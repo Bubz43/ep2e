@@ -123,8 +123,11 @@ export class PsiForm extends ItemFormBase {
               })}
               ${renderAutoForm({
                 props: { name },
-                update: ({ name = this.item.name }) =>
-                  this.item.updater.prop('name').commit(name),
+                update: ({ name }) => {
+                  this.item.updater.prop('name').commit(name || this.item.name);
+                  this.requestUpdate();
+                }
+                 ,
                 disabled,
                 fields: ({ name }) =>
                   renderTextField({ ...name, label: localize('substrain') }),
