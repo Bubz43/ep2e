@@ -1,3 +1,4 @@
+import type { DropZone } from '@src/components/dropzone/dropzone';
 import {
   renderNumberField,
   renderLabeledCheckbox,
@@ -21,6 +22,7 @@ import {
 } from '@src/components/window/window-options';
 import { enumValues, ExsurgentStrain } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
+import { ItemType } from '@src/entities/entity-types';
 import { renderItemForm } from '@src/entities/item/item-views';
 import type { Psi } from '@src/entities/item/proxies/psi';
 import {
@@ -34,6 +36,7 @@ import {
 import { MotivationStance } from '@src/features/motivations';
 import {
   createDefaultInfluence,
+  createPsiInfluence,
   DamageInfluence,
   influenceInfo,
   InfluenceRoll,
@@ -42,14 +45,20 @@ import {
   PsiInfluenceType,
   UniqueInfluence,
 } from '@src/features/psi-influence';
-import { dragValue } from '@src/foundry/drag-and-drop';
+import {
+  dragValue,
+  DropType,
+  handleDrop,
+  itemDropToItemProxy,
+  setDragDrop,
+} from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import { openMenu } from '@src/open-menu';
 import { safeMerge } from '@src/utility/helpers';
 import { customElement, html, property, PropertyValues } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
-import { sortBy } from 'remeda';
+import { createPipe, pipe, sortBy } from 'remeda';
 import { stopEvent } from 'weightless';
 import { ItemFormBase } from '../item-form-base';
 import styles from './psi-form.scss';
@@ -110,6 +119,7 @@ export class PsiForm extends ItemFormBase {
     const influence = this.item.fullInfluences[roll];
     const { traitSheetKeys } = this;
     let key = traitSheetKeys.get(roll);
+    const existed = !!key;
     if (!key) {
       key = {};
       traitSheetKeys.set(roll, key);
@@ -129,7 +139,7 @@ export class PsiForm extends ItemFormBase {
         forceFocus: true,
         name: influence.trait.fullName,
       },
-      { resizable: ResizeOption.Vertical },
+      { resizable: ResizeOption.Vertical, renderOnly: true },
     );
     if (!wasConnected) {
       win.addEventListener(
@@ -165,6 +175,72 @@ export class PsiForm extends ItemFormBase {
     }
   }
 
+  private handleDrop = handleDrop(async ({ ev, srcEl, data }) => {
+    if (this.disabled) return;
+    const target = ev.currentTarget as DropZone;
+    const roll = Number(target.dataset.roll) as InfluenceRoll;
+    const targetInfluence = this.item.fullInfluences[roll];
+    if (!targetInfluence || target.contains(srcEl ?? null)) return;
+    if (data?.type === DropType.PsiInfluence) {
+      const local = target.parentElement?.contains(srcEl ?? null);
+      if (local) {
+        const sourceInfluence = this.item.fullInfluences[data.influence.roll];
+        this.item.influenceCommiter((influences) => {
+          const updated = updateFeature(influences, {
+            id: sourceInfluence.id,
+            roll: targetInfluence.roll,
+          });
+          return updateFeature(updated, {
+            id: targetInfluence.id,
+            roll: sourceInfluence.roll,
+          });
+        });
+      } else {
+        this.item.influenceCommiter(
+          createPipe(
+            removeFeature(targetInfluence.id),
+            addFeature({
+              ...data.influence,
+              roll: targetInfluence.roll,
+            }),
+          ),
+        );
+      }
+    } else if (data?.type === DropType.Item) {
+      const proxy = await itemDropToItemProxy(data);
+      if (proxy?.type === ItemType.Trait) {
+        if (proxy.hasMultipleLevels) {
+          proxy.selectLevelAndAdd(data => {
+            this.item.influenceCommiter(
+              createPipe(
+                removeFeature(targetInfluence.id),
+                addFeature(
+                  createPsiInfluence.trait({
+                    roll: targetInfluence.roll,
+                    trait: data,
+                  }),
+                ),
+              ),
+            );
+          })
+        } else {
+          this.item.influenceCommiter(
+            createPipe(
+              removeFeature(targetInfluence.id),
+              addFeature(
+                createPsiInfluence.trait({
+                  roll: targetInfluence.roll,
+                  trait: proxy.getDataCopy(),
+                }),
+              ),
+            ),
+          );
+        }
+     
+      }
+    }
+  });
+
   render() {
     const {
       updater,
@@ -177,7 +253,7 @@ export class PsiForm extends ItemFormBase {
     const { disabled } = this;
     return html`
       <entity-form-layout noSidebar>
-        <div slot="details">
+        <sl-animated-list slot="details">
           <section>
             <sl-header heading="${localize('psi')} ${localize('trait')}">
               ${hasVariableInfection
@@ -219,80 +295,82 @@ export class PsiForm extends ItemFormBase {
           </section>
 
           ${influencesData
-            ? repeat(
-                sortBy(influencesData, influenceSort),
-                idProp,
-                ({ roll, type }) => {
-                  const fullInfluence = this.item.fullInfluences[roll];
-                  const { name, description } = influenceInfo(fullInfluence);
-                  const isDamage = type === PsiInfluenceType.Damage;
-                  const hideEnriched = isDamage || !description;
-                  const expanded =
-                    !!this.expandedInfluences.get(roll) && !hideEnriched;
-                  return html`
-                    <sl-dropzone
-                      class="influence ${classMap({ expanded })}"
-                      ?disabled=${disabled}
+            ? repeat(sortBy(influencesData, influenceSort), idProp, (data) => {
+                const { roll, type } = data;
+                const fullInfluence = this.item.fullInfluences[roll];
+                const { name, description } = influenceInfo(fullInfluence);
+                const isDamage = type === PsiInfluenceType.Damage;
+                const hideEnriched = isDamage || !description;
+                const expanded =
+                  !!this.expandedInfluences.get(roll) && !hideEnriched;
+                return html`
+                  <sl-dropzone
+                    class="influence ${classMap({ expanded })}"
+                    @drop=${this.handleDrop}
+                    ?disabled=${disabled}
+                    data-roll=${roll}
+                  >
+                    <span
+                      class="roll"
+                      draggable=${dragValue(!disabled)}
+                      @dragstart=${(ev: DragEvent) => {
+                        const el = ev.currentTarget as HTMLElement;
+                        el.parentElement?.classList.add('dragged');
+                        setDragDrop(ev, {
+                          type: DropType.PsiInfluence,
+                          influence: data,
+                        });
+                      }}
+                      @dragend=${(ev: DragEvent) => {
+                        const el = ev.currentTarget as HTMLElement;
+                        el.parentElement?.classList.remove('dragged');
+                      }}
+                      >${roll}</span
                     >
-                      <span
-                        class="roll"
-                        draggable=${dragValue(!disabled)}
-                        @dragstart=${(ev: DragEvent) => {
-                          const el = ev.currentTarget as HTMLElement;
-                          el.classList.add('dragged');
-                        }}
-                        @dragend=${(ev: DragEvent) => {
-                          const el = ev.currentTarget as HTMLElement;
-                          el.classList.remove('dragged');
-                        }}
-                        >${roll}</span
-                      >
 
-                      <span class="name"
-                        >${name}.
-                        ${isDamage
-                          ? html`<span class="formula">${description}</span>`
-                          : ''}</span
-                      >
-                      ${expanded
-                        ? html`
-                            <p class="description">
-                              <enriched-html
-                                content=${description}
-                              ></enriched-html>
-                            </p>
-                          `
-                        : ''}
+                    <span class="name"
+                      >${name}${isDamage
+                        ? html`. <span class="formula">${description}</span>`
+                        : ''}</span
+                    >
+                    ${expanded
+                      ? html`
+                          <p class="description">
+                            <enriched-html
+                              content=${description}
+                            ></enriched-html>
+                          </p>
+                        `
+                      : ''}
 
-                      <div class="actions">
-                        ${hideEnriched
-                          ? ''
-                          : html`
-                              <mwc-icon-button
-                                icon=${expanded
-                                  ? 'keyboard_arrow_down'
-                                  : 'keyboard_arrow_left'}
-                                @click=${() =>
-                                  this.setExpandedState(roll, !expanded)}
-                              ></mwc-icon-button>
-                            `}
-                        <mwc-icon-button
-                          icon="edit"
-                          ?disabled=${disabled}
-                          @click=${() => this.editInfluence(roll)}
-                        ></mwc-icon-button>
-                        <mwc-icon-button
-                          icon="transform"
-                          ?disabled=${disabled}
-                          @click=${() => this.openTransformMenu(roll)}
-                        ></mwc-icon-button>
-                      </div>
-                    </sl-dropzone>
-                  `;
-                },
-              )
+                    <div class="actions">
+                      ${hideEnriched
+                        ? ''
+                        : html`
+                            <mwc-icon-button
+                              icon=${expanded
+                                ? 'keyboard_arrow_down'
+                                : 'keyboard_arrow_left'}
+                              @click=${() =>
+                                this.setExpandedState(roll, !expanded)}
+                            ></mwc-icon-button>
+                          `}
+                      <mwc-icon-button
+                        icon="edit"
+                        ?disabled=${disabled}
+                        @click=${() => this.editInfluence(roll)}
+                      ></mwc-icon-button>
+                      <mwc-icon-button
+                        icon="transform"
+                        ?disabled=${disabled}
+                        @click=${() => this.openTransformMenu(roll)}
+                      ></mwc-icon-button>
+                    </div>
+                  </sl-dropzone>
+                `;
+              })
             : ''}
-        </div>
+        </sl-animated-list>
 
         <editor-wrapper
           slot="description"

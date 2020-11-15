@@ -516,6 +516,17 @@ export class SlWindow extends LitElement {
         @dblclick=${this.resetSize}
         @pointerdown=${this.startDrag}
       >
+        ${this.minimized
+          ? html`<div class="heading">${this.name}</div>`
+          : html` <slot
+              name="header"
+              @slotchange=${this.toggleHeaderVisibility}
+              @pointerdown=${this.gainFocus}
+            >
+              <div class="heading">${this.name}</div>
+            </slot>`}
+        <slot name="header-button"> </slot>
+
         <div class="controls">
           <wl-list-item
             class="minimize-button"
@@ -534,17 +545,8 @@ export class SlWindow extends LitElement {
             <mwc-icon>close</mwc-icon>
           </wl-list-item>
         </div>
-        <slot name="header-button"> </slot>
-        ${this.minimized
-          ? html`<div class="heading">${this.name}</div>`
-          : html` <slot
-              name="header"
-              @slotchange=${this.toggleHeaderVisibility}
-              @pointerdown=${this.gainFocus}
-            >
-              <div class="heading">${this.name}</div>
-            </slot>`}
       </header>
+
       <focus-trap class="content">
         <slot></slot>
       </focus-trap>

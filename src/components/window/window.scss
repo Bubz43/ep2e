@@ -69,7 +69,9 @@
   }
   #header {
     background: alphav(var(--color-grey), 0.2);
-
+    .heading {
+      max-width: 200px;
+    }
     ::slotted([slot='header']) {
       pointer-events: none;
     }
@@ -92,8 +94,9 @@ slot[name='footer'] {
 }
 
 #header {
-  display: flex;
-  flex-flow: row-reverse;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 1fr auto auto;
   position: relative;
   cursor: move;
   height: min-content;
@@ -108,13 +111,11 @@ slot[name='footer'] {
     background: transparent;
   }
   ::slotted([slot='header']) {
-    flex: 1;
     background: linear-gradient(
       to bottom,
       var(--color-bg-alt),
       var(--color-bg)
     );
-    // z-index: 1;
   }
 
   &.alt {
@@ -147,9 +148,7 @@ slot[name='footer'] {
 }
 
 .heading {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  @include truncate(400px);
   margin: 0 2px 0 1rem;
   font-size: 1.1rem;
   text-shadow: 0px 0px 10px black;

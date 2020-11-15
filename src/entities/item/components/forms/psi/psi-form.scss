@@ -18,6 +18,10 @@ sl-header {
   }
 }
 
+[slot="details"] {
+  position: relative;
+}
+
 .detail-forms {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -42,6 +46,12 @@ sl-dropzone {
   "roll name actions"
   "desc desc desc";
   column-gap: 1rem;
+
+  
+  &.dragged {
+    background: alphav(var(--color-grey), 0.07);
+    outline: none;
+  }
 
   &.expanded {
     .roll {
@@ -68,14 +78,12 @@ sl-dropzone {
       cursor: grab;
     }
 
-    &.dragged {
-      background: alphav(var(--color-secondary), 0.25);
-    }
   }
   .actions {
     grid-area: actions;
     display: flex;
     padding: 0 0.5rem 0 0;
+    color: alphav(var(--color-text), 0.9);
   }
   .formula {
     color: var(--color-text-lighter);

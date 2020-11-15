@@ -16,6 +16,7 @@ export type WindowOpenSettings = {
 export type WindowOpenOptions = Partial<{
   resizable: SlWindow['resizable'];
   clearContentOnClose: boolean;
+  renderOnly: boolean;
 }>;
 
 export const openWindow = (
@@ -23,6 +24,7 @@ export const openWindow = (
   {
     resizable = ResizeOption.None,
     clearContentOnClose = false,
+    renderOnly = false,
   }: WindowOpenOptions = {},
 ) => {
   let win = windows.get(key);
@@ -37,13 +39,14 @@ export const openWindow = (
   win.clearContentOnClose = clearContentOnClose;
   render(content, win);
 
-  if (adjacentEl) win.positionAdjacentToElement(adjacentEl);
-
   const wasConnected = win?.isConnected;
+  const apply = !wasConnected || !renderOnly;
+  if (apply && adjacentEl) win.positionAdjacentToElement(adjacentEl);
+
   if (!wasConnected) {
     SlWindow.container.append(win);
     win.minimized = false;
-  } else if (forceFocus) {
+  } else if (forceFocus && apply) {
     win.minimized = false;
     ignorePointerDown = true;
     win.gainFocus();
