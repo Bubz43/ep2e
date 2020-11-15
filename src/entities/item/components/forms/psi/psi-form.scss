@@ -59,6 +59,18 @@ sl-dropzone {
       border-bottom-right-radius: 3px;
     }
   }
+  &[disabled] {
+    .roll {
+      border-right-style: solid;
+      border-right-width: 1px;
+    }
+    &.expanded {
+      .roll {
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+      }
+    }
+  }
   
   .name {
     grid-area: name;

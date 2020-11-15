@@ -3318,6 +3318,12 @@
             "shape": {
               "type": "string"
             },
+            "shapeChanging": {
+              "type": "string"
+            },
+            "shapes": {
+              "type": "string"
+            },
             "shared": {
               "type": "string"
             },
@@ -3529,6 +3535,9 @@
               "type": "string"
             },
             "sticky": {
+              "type": "string"
+            },
+            "strain": {
               "type": "string"
             },
             "strengthBased": {
@@ -5145,6 +5154,8 @@
             "severity",
             "sex",
             "shape",
+            "shapeChanging",
+            "shapes",
             "shared",
             "shell",
             "shellType",
@@ -5216,6 +5227,7 @@
             "status",
             "steady",
             "sticky",
+            "strain",
             "strengthBased",
             "stress",
             "stressTest",

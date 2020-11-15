@@ -5,6 +5,13 @@
   box-sizing: border-box;
 }
 
+.shape-name-form {
+  @include inputReset();
+  mwc-formfield {
+    --mdc-theme-text-primary-on-background: var(--color-text-lighter);
+  }
+}
+
 :host {
   display: block;
 }
@@ -14,12 +21,10 @@
   padding: 0.5rem 0;
 }
 
-
 .ammo-form {
   grid-template-columns: 2fr 1fr 1fr;
   padding: 0.5rem 0;
 }
-
 
 p.label {
   @include listLabel();
@@ -30,4 +35,18 @@ p.label {
   display: grid;
   padding: 0.25rem;
   font-size: large;
+}
+
+.shapes {
+  display: flex;
+  flex-flow: row wrap;
+  padding: 0.25rem;
+  position: relative;
+}
+
+.shape {
+  --list-item-bg: #{alphav(var(--color-grey), 0.25)};
+  --list-item-padding: 0.25rem 0.5rem;
+  border-radius: 7px;
+  margin-right: 0.25rem;
 }

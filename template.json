@@ -901,6 +901,8 @@
     "firearm": {
       "fixed": false,
       "long": false,
+      "shapeChanging": false,
+      "shapeName": "",
       "accessories": [
         "smartlink",
         "safetySystem"
@@ -963,6 +965,8 @@
     "railgun": {
       "fixed": false,
       "long": false,
+      "shapeChanging": false,
+      "shapeName": "",
       "accessories": [
         "safetySystem",
         "smartlink"

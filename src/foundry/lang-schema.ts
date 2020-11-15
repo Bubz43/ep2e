@@ -1283,7 +1283,7 @@ type LangEntries =
   | 'skrik'
   | 'Watts-MacLeod'
   | 'whisper'
-  | 'xenomorph' | "strain" | "substrain"
+  | 'xenomorph' | "strain" | "substrain" | "shapeChanging" | "shapes" | "shapeName"
 type FullNames =
   | 'cog'
   | 'int'

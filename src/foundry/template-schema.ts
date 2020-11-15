@@ -539,7 +539,12 @@ type SprayWeaponData = RangedWeaponDataBase & {
   primaryAttack: SprayWeaponAttackData;
 };
 
-type FirearmData = RangedWeaponDataBase & {
+type Polygun = {
+  shapeChanging: boolean;
+  shapeName: string;
+}
+
+type FirearmData = RangedWeaponDataBase & Polygun & {
   ammo: {
     value: number;
     /**
@@ -568,7 +573,7 @@ type FirearmAmmoData = {
   state: { stashed: boolean };
 };
 
-type RailgunData = RangedWeaponDataBase & {
+type RailgunData = RangedWeaponDataBase & Polygun& {
   ammo: {
     value: number;
     max: number;

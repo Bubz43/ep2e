@@ -8,6 +8,7 @@ import {
   renderNumberField,
   renderSelectField,
   renderTextareaField,
+  renderTextInput,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
@@ -27,7 +28,7 @@ import { renderItemForm } from '@src/entities/item/item-views';
 import { Firearm } from '@src/entities/item/proxies/firearm';
 import type { FirearmAmmo } from '@src/entities/item/proxies/firearm-ammo';
 import { pairList } from '@src/features/check-list';
-import { matchID } from '@src/features/feature-helpers';
+import { idProp, matchID } from '@src/features/feature-helpers';
 import { FiringMode } from '@src/features/firing-modes';
 import {
   DropType,
@@ -70,6 +71,22 @@ export class FirearmForm extends ItemFormBase {
   private ammoSheet?: SlWindow | null;
 
   private readonly ammoSheetKey = {};
+
+  private renderSidebarFields = renderKineticWeaponSidebar.bind(this)
+
+  private addShape = handleDrop(async ({ data }) => {
+    if (
+      this.disabled ||
+      !this.item.shapeChanging ||
+      data?.type !== DropType.Item
+    )
+      return;
+    const proxy = await itemDropToItemProxy(data);
+    if (proxy?.type === this.item.type) {
+      this.item.addShape(proxy.getDataCopy(false));
+    }
+  });
+
 
   update(changedProps: PropertyValues) {
     if (this.ammoSheet) this.openAmmoSheet();
@@ -139,6 +156,9 @@ export class FirearmForm extends ItemFormBase {
       specialAmmo,
       magazineModifiers,
       ammoState,
+      shapeChanging,
+      nestedShape,
+      shapeName
     } = this.item;
     const { disabled } = this;
     return html`
@@ -155,10 +175,58 @@ export class FirearmForm extends ItemFormBase {
         ${renderUpdaterForm(updater.prop('data'), {
           disabled,
           slot: 'sidebar',
-          fields: renderKineticWeaponSidebar,
+          fields: this.renderSidebarFields,
         })}
 
         <div slot="details">
+        ${shapeChanging && !nestedShape
+            ? html`
+                <sl-dropzone ?disabled=${disabled} @drop=${this.addShape}>
+                  <sl-header
+                    heading=${localize('shapes')}
+                    ?hideBorder=${this.item.shapes.size === 0}
+                  >
+                    ${renderAutoForm({
+                      props: { shapeName },
+                      slot: 'action',
+                      classes: 'shape-name-form',
+                      update: ({ shapeName }) => {
+                        this.item.updater
+                          .prop('data', 'shapeName')
+                          .commit(shapeName || this.item.shapeName)
+                        this.requestUpdate();
+                      }
+                        ,
+                      disabled,
+                      fields: ({ shapeName }) =>
+                        html`<mwc-formfield alignEnd label=${shapeName.label}
+                          >${renderTextInput(shapeName)}</mwc-formfield
+                        >`,
+                    })}
+                  </sl-header>
+                  ${notEmpty(this.item.shapes)
+                    ? html`
+                        <sl-animated-list class="shapes">
+                          ${repeat(
+                            this.item.shapes.values(),
+                            idProp,
+                            ({ name, id }) => html`
+                              <wl-list-item
+                                class="shape"
+                                clickable
+                                ?disabled=${disabled}
+                                @contextmenu=${() => this.item.removeShape(id)}
+                                @click=${() => this.item.swapShape(id)}
+                                >${name}</wl-list-item
+                              >
+                            `,
+                          )}
+                        </sl-animated-list>
+                      `
+                    : ''}
+                </sl-dropzone>
+              `
+            : ''}
           ${renderUpdaterForm(updater.prop('data'), {
             disabled,
             classes: complexityForm.cssClass,
@@ -367,9 +435,10 @@ export class FirearmForm extends ItemFormBase {
                 >
               `
             : ''}
-          <hr />
           ${specialAmmo && mode
-            ? html`
+      ? html`
+                      <hr />
+
                 <sl-group label=${localize('ammo')}
                   >${specialAmmo.name}
                   ${specialAmmo.hasMultipleModes

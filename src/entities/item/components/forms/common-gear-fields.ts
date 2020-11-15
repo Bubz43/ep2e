@@ -23,11 +23,14 @@ import { FiringMode } from '@src/features/firing-modes';
 import { localize } from '@src/foundry/localization';
 import type { GearCost } from '@src/foundry/template-schema';
 import type { FieldPropsRenderer } from '@src/utility/field-values';
+import { notEmpty } from '@src/utility/helpers';
 import { css } from 'lit-element';
 import { html, TemplateResult } from 'lit-html';
 import { createPipe, map, objOf } from 'remeda';
 import type { Firearm } from '../../proxies/firearm';
 import type { Railgun } from '../../proxies/railgun';
+import type { FirearmForm } from './firearm/firearm-form';
+import type { RailgunForm } from './railgun/railgun-form';
 
 export const renderComplexityFields: FieldPropsRenderer<
   GearCost & { quality: GearQuality }
@@ -80,24 +83,32 @@ export const renderWeaponTraitCheckboxes: FieldPropsRenderer<Record<
 
 export const renderKineticWeaponSidebar: FieldPropsRenderer<
   Firearm['epData'] | Railgun['epData']
-> = ({ wareType, range, fixed, long, ...traits }) => [
-  renderSelectField(wareType, enumValues(PhysicalWare), {
-    emptyText: '-',
-  }),
-  renderNumberField(
-    { ...range, label: `${range.label} (${localize('meters')})` },
-    { min: 1 },
-  ),
-  html`<entity-form-sidebar-divider
-    label="${localize('weapon')} ${localize('traits')}"
-  ></entity-form-sidebar-divider>`,
-  renderLabeledCheckbox(fixed),
-  renderLabeledCheckbox(long),
-  html`<entity-form-sidebar-divider
-    label=${localize('gearTraits')}
-  ></entity-form-sidebar-divider>`,
-  renderGearTraitCheckboxes(traits),
-];
+> = function (
+  this: FirearmForm | RailgunForm,
+  { wareType, range, fixed, long, shapeChanging, ...traits },
+) {
+  return [
+    renderSelectField(wareType, enumValues(PhysicalWare), {
+      emptyText: '-',
+    }),
+    renderNumberField(
+      { ...range, label: `${range.label} (${localize('meters')})` },
+      { min: 1 },
+    ),
+    renderLabeledCheckbox(shapeChanging, {
+      disabled: shapeChanging.value && (notEmpty(this.item.shapes) || this.item.nestedShape),
+    }),
+    html`<entity-form-sidebar-divider
+      label="${localize('weapon')} ${localize('traits')}"
+    ></entity-form-sidebar-divider>`,
+    renderLabeledCheckbox(fixed),
+    renderLabeledCheckbox(long),
+    html`<entity-form-sidebar-divider
+      label=${localize('gearTraits')}
+    ></entity-form-sidebar-divider>`,
+    renderGearTraitCheckboxes(traits),
+  ];
+};
 type Accessories = RangedWeaponAccessory[];
 
 export const renderRangedAccessoriesEdit = (

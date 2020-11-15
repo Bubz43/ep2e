@@ -462,7 +462,6 @@
     "psiInfluences": "Psi Influences",
     "remaining": "Remaining",
     "selectFreePush": "Select Free Push",
-    "substrain": "Sub-strain",
     "undo": "Undo",
     "push": "Push",
     "pushable": "Pushable",
@@ -1262,6 +1261,9 @@
     "xenomorph": "Xenomorph",
     "strain": "Strain",
     "substrain": "Sub-Strain",
+    "shapeName": "Shape Name",
+    "shapeChanging": "Shape Changing",
+    "shapes": "Shapes",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

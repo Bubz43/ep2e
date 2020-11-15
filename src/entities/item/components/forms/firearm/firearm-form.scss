@@ -44,3 +44,24 @@ p.label {
   display: inline-block;
   min-width: 2ch;
 }
+
+.shape-name-form {
+  @include inputReset();
+  mwc-formfield {
+    --mdc-theme-text-primary-on-background: var(--color-text-lighter);
+  }
+}
+
+.shapes {
+  display: flex;
+  flex-flow: row wrap;
+  padding: 0.25rem;
+  position: relative;
+}
+
+.shape {
+  --list-item-bg: #{alphav(var(--color-grey), 0.25)};
+  --list-item-padding: 0.25rem 0.5rem;
+  border-radius: 7px;
+  margin-right: 0.25rem;
+}

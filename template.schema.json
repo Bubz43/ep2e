@@ -3050,6 +3050,12 @@
                 "range": {
                   "type": "number"
                 },
+                "shapeChanging": {
+                  "type": "boolean"
+                },
+                "shapeName": {
+                  "type": "string"
+                },
                 "state": {
                   "additionalProperties": false,
                   "properties": {
@@ -3112,6 +3118,8 @@
                 "long",
                 "primaryAttack",
                 "range",
+                "shapeChanging",
+                "shapeName",
                 "state",
                 "templates",
                 "wareType"
@@ -4532,6 +4540,12 @@
                 "range": {
                   "type": "number"
                 },
+                "shapeChanging": {
+                  "type": "boolean"
+                },
+                "shapeName": {
+                  "type": "string"
+                },
                 "state": {
                   "additionalProperties": false,
                   "properties": {
@@ -4595,6 +4609,8 @@
                 "long",
                 "primaryAttack",
                 "range",
+                "shapeChanging",
+                "shapeName",
                 "state",
                 "templates",
                 "wareType"

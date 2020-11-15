@@ -182,10 +182,10 @@ export class ItemEP extends Item {
         return new BeamWeapon(this.proxyInit(data));
 
       case ItemType.Railgun:
-        return new Railgun(this.proxyInit(data));
+        return new Railgun({...this.proxyInit(data), nestedShape: false});
 
       case ItemType.Firearm:
-        return new Firearm(this.proxyInit(data));
+        return new Firearm({...this.proxyInit(data), nestedShape: false});
 
       case ItemType.FirearmAmmo:
         return new FirearmAmmo({ ...this.proxyInit(data), loaded: false });

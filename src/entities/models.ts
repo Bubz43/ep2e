@@ -187,10 +187,10 @@ type ItemFlags<T extends ItemType> = T extends ItemType.Psi
   : T extends ItemType.Firearm
   ? {
       specialAmmo: ItemEntity<ItemType.FirearmAmmo> | null;
-      alternativeStates: ItemEntity<ItemType.Firearm>[];
+      shapes: ItemEntity<ItemType.Firearm>[];
     }
   : T extends ItemType.Railgun
-  ? { alternativeStates: ItemEntity<ItemType.Railgun>[] }
+  ? { shapes: ItemEntity<ItemType.Railgun>[] }
   : T extends ItemType.FirearmAmmo
   ? { payload: ItemEntity<ItemType.Substance> | null }
   : T extends ItemType.SprayWeapon

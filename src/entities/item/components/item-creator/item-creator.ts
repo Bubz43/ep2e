@@ -158,6 +158,7 @@ export class ItemCreator extends LitElement {
   render() {
     const ready = !!this.itemData.name;
     const { folders } = this;
+    // TODO Quick item type descriptions
     return html`
       <div class="form-wrapper" @keydown=${this.clickSubmit}>
         ${renderAutoForm({

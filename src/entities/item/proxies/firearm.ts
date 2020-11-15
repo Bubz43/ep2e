@@ -6,6 +6,8 @@ import {
 import { RangedWeaponTrait } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
+import { uniqueStringID } from '@src/features/feature-helpers';
+import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
@@ -27,8 +29,18 @@ class Base extends ItemProxyBase<ItemType.Firearm> {
 export class Firearm
   extends mix(Base).with(Purchasable, Gear, Equippable, RangedWeapon)
   implements Attacker<KineticWeaponAttackData, KineticWeaponAttack> {
-  constructor(init: ItemProxyInit<ItemType.Firearm>) {
+  readonly nestedShape;
+
+  constructor({
+    nestedShape,
+    ...init
+  }: ItemProxyInit<ItemType.Firearm> & { nestedShape: boolean }) {
     super(init);
+    this.nestedShape = nestedShape;
+  }
+
+  get fullName() {
+    return `${this.name} ${this.shapeChanging ? `(${this.shapeName})` : ''}`;
   }
 
   updateAmmoCount(newValue: number) {
@@ -182,5 +194,104 @@ export class Firearm
 
   private get updateAmmo() {
     return this.updater.prop('flags', EP.Name, 'specialAmmo').commit;
+  }
+
+  @LazyGetter()
+  get shapes() {
+    return new Map(
+      (this.epFlags?.shapes || []).map(
+        (shape) =>
+          [
+            shape._id,
+            new Firearm({
+              data: shape,
+              embedded: this.name,
+              nestedShape: true
+            }),
+          ] as const,
+      ),
+    );
+  }
+
+  get shapeChanging() {
+    return this.epData.shapeChanging;
+  }
+
+  get shapeName() {
+    return this.epData.shapeName || localize(this.epData.ammo.ammoClass);
+  }
+
+  async swapShape(id: string) {
+    const shape = this.shapes.get(id);
+    if (shape) {
+      const { name, id } = this;
+      const shapeData = {
+        ...shape.getDataCopy(false),
+        name,
+        _id: id,
+      };
+      shapeData.data = {
+        ...shapeData.data,
+        shapeChanging: true,
+        wareType: this.wareType,
+        description: this.description,
+        ...this.cost
+      };
+      shapeData.flags = {
+        [EP.Name]: {
+          specialAmmo: shape.epFlags?.specialAmmo || null
+        }
+      }
+      this.updater.prop('').store(shapeData);
+
+      const myData = {
+        ...this.getDataCopy(false),
+        name: this.shapeName,
+      };
+      myData.data = {
+        ...myData.data,
+        shapeChanging: true,
+        shapeName: this.shapeName,
+      };
+      this.updater.prop('flags', EP.Name, 'shapes').commit((items) => {
+        const changed = [...(items || [])];
+        const _id = uniqueStringID(changed.map((i) => i._id));
+        const { shapes, ...flags } = myData.flags.ep2e || {};
+        
+        changed.push({ ...myData, _id, flags: { [EP.Name]: flags } });
+        const index = changed.findIndex((s) => s._id === shape.id);
+        if (index !== -1) changed.splice(index, 1);
+
+        return changed;
+      });
+    }
+  }
+
+  addShape(weaponData: ReturnType<Firearm['getDataCopy']>) {
+    const { shapes, ...flags } = weaponData.flags.ep2e || {};
+    weaponData.data = {
+      ...weaponData.data,
+      shapeChanging: true,
+      shapeName: weaponData.name,
+      wareType: this.wareType,
+      description: this.description,
+      ...this.cost
+    };
+    return this.updater.prop('flags', EP.Name, 'shapes').commit((items) => {
+      const changed = [...(items || [])];
+      const _id = uniqueStringID(changed.map((i) => i._id));
+      changed.push({ ...weaponData, _id, flags: { [EP.Name]: flags } });
+
+      return changed;
+    });
+  }
+
+  removeShape(id: string) {
+    return this.updater.prop('flags', EP.Name, 'shapes').commit((items) => {
+      const changed = [...(items || [])];
+      const index = changed.findIndex((s) => s._id === id);
+      if (index !== -1) changed.splice(index, 1);
+      return changed;
+    });
   }
 }

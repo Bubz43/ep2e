@@ -9,6 +9,7 @@ import {
   renderTimeField,
   renderFormulaField,
   renderTextareaField,
+  renderTextInput,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import {
@@ -18,10 +19,17 @@ import {
   RangedWeaponAccessory,
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
+import { ItemType } from '@src/entities/entity-types';
 import { Railgun } from '@src/entities/item/proxies/railgun';
 import { pairList } from '@src/features/check-list';
+import { idProp } from '@src/features/feature-helpers';
 import { FiringMode } from '@src/features/firing-modes';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
+import {
+  DropType,
+  handleDrop,
+  itemDropToItemProxy,
+} from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property } from 'lit-element';
@@ -54,8 +62,23 @@ export class RailgunForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: Railgun;
 
+  private renderSidebarFields = renderKineticWeaponSidebar.bind(this);
+
+  private addShape = handleDrop(async ({ data }) => {
+    if (
+      this.disabled ||
+      !this.item.shapeChanging ||
+      data?.type !== DropType.Item
+    )
+      return;
+    const proxy = await itemDropToItemProxy(data);
+    if (proxy?.type === this.item.type) {
+      this.item.addShape(proxy.getDataCopy(false));
+    }
+  });
+
   render() {
-    const { updater, type, accessories } = this.item;
+    const { updater, type, accessories, shapeChanging, shapeName, nestedShape } = this.item;
     const { disabled } = this;
     return html`
       <entity-form-layout>
@@ -71,10 +94,58 @@ export class RailgunForm extends ItemFormBase {
         ${renderUpdaterForm(updater.prop('data'), {
           disabled,
           slot: 'sidebar',
-          fields: renderKineticWeaponSidebar,
+          fields: this.renderSidebarFields,
         })}
 
         <div slot="details">
+          ${shapeChanging && !nestedShape
+            ? html`
+                <sl-dropzone ?disabled=${disabled} @drop=${this.addShape}>
+                  <sl-header
+                    heading=${localize('shapes')}
+                    ?hideBorder=${this.item.shapes.size === 0}
+                  >
+                    ${renderAutoForm({
+                      props: { shapeName },
+                      slot: 'action',
+                      classes: 'shape-name-form',
+                      update: ({ shapeName }) => {
+                        this.item.updater
+                          .prop('data', 'shapeName')
+                          .commit(shapeName || this.item.shapeName)
+                        this.requestUpdate();
+                      }
+                        ,
+                      disabled,
+                      fields: ({ shapeName }) =>
+                        html`<mwc-formfield alignEnd label=${shapeName.label}
+                          >${renderTextInput(shapeName)}</mwc-formfield
+                        >`,
+                    })}
+                  </sl-header>
+                  ${notEmpty(this.item.shapes)
+                    ? html`
+                        <sl-animated-list class="shapes">
+                          ${repeat(
+                            this.item.shapes.values(),
+                            idProp,
+                            ({ name, id }) => html`
+                              <wl-list-item
+                                class="shape"
+                                clickable
+                                ?disabled=${disabled}
+                                @contextmenu=${() => this.item.removeShape(id)}
+                                @click=${() => this.item.swapShape(id)}
+                                >${name}</wl-list-item
+                              >
+                            `,
+                          )}
+                        </sl-animated-list>
+                      `
+                    : ''}
+                </sl-dropzone>
+              `
+            : ''}
           ${renderUpdaterForm(updater.prop('data'), {
             disabled,
             classes: complexityForm.cssClass,
