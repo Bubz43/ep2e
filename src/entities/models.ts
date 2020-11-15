@@ -1,6 +1,6 @@
 import type { SubstanceAttackData } from '@src/combat/attacks';
 import { StringID, stringID } from '@src/features/feature-helpers';
-import type { PsiInfluence } from '@src/features/psi-influence';
+import type { PsiInfluenceData } from '@src/features/psi-influence';
 import type { CommonEntityData, TokenData } from '@src/foundry/foundry-cont';
 import type { EP } from '@src/foundry/system';
 import type {
@@ -162,7 +162,7 @@ type ItemData<T extends ItemType> = WithTemplates<
 >;
 
 type ItemFlags<T extends ItemType> = T extends ItemType.Psi
-  ? { influences: readonly StringID<PsiInfluence>[] }
+  ? { influences: readonly StringID<PsiInfluenceData>[] }
   : T extends ItemType.Substance
   ? SubstanceItemFlags
   : T extends ItemType.Explosive

@@ -9,7 +9,7 @@ import {
   HotbarCell,
   HotbarEntryType,
 } from '@src/features/hotbar-entry';
-import { PsiInfluence, PsiInfluenceType } from '@src/features/psi-influence';
+import { PsiInfluenceData, PsiInfluenceType } from '@src/features/psi-influence';
 import { isJsonObject } from '@src/utility/helpers';
 import { createPipe } from 'remeda';
 import type { JsonObject } from 'type-fest';
@@ -139,7 +139,7 @@ type EffectDrop = KnownDrop<{ type: DropType.Effect; effect: Effect }>;
 
 type PsiInfluenceDrop = KnownDrop<{
   type: DropType.PsiInfluence;
-  influence: PsiInfluence;
+  influence: PsiInfluenceData;
 }>;
 
 type Drops = {

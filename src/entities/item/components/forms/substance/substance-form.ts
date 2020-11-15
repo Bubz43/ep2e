@@ -97,9 +97,9 @@ export class SubstanceForm extends ItemFormBase {
 
   @internalProperty() effectGroup: Group = 'alwaysApplied';
 
-  private alwaysAppliedSheets = new Map<string, {}>();
+  private alwaysAppliedSheetKeys = new Map<string, {}>();
 
-  private severitySheets = new Map<string, {}>();
+  private severitySheetKeys = new Map<string, {}>();
 
   private effectOps = addUpdateRemoveFeature(
     () => this.item.updater.prop('data', 'alwaysApplied', 'effects').commit,
@@ -112,13 +112,13 @@ export class SubstanceForm extends ItemFormBase {
   update(changedProps: PropertyValues) {
     if (!this.item.hasSeverity) {
       this.effectGroup = 'alwaysApplied';
-      this.severitySheets.forEach(closeWindow);
-      this.severitySheets.clear();
+      this.severitySheetKeys.forEach(closeWindow);
+      this.severitySheetKeys.clear();
     }
-    for (const [id] of this.alwaysAppliedSheets) {
+    for (const [id] of this.alwaysAppliedSheetKeys) {
       this.openItemSheet('alwaysApplied', id);
     }
-    for (const [id] of this.severitySheets) {
+    for (const [id] of this.severitySheetKeys) {
       this.openItemSheet('severity', id);
     }
 
@@ -126,19 +126,19 @@ export class SubstanceForm extends ItemFormBase {
   }
 
   disconnectedCallback() {
-    for (const map of [this.alwaysAppliedSheets, this.severitySheets]) {
+    for (const map of [this.alwaysAppliedSheetKeys, this.severitySheetKeys]) {
       map.forEach(closeWindow);
       map.clear();
     }
     super.disconnectedCallback();
   }
 
-  private openItemSheet(group: Group, id: string, shouldExist = false) {
+  private openItemSheet(group: Group, id: string) {
     const subItem = this.item[group].items.get(id);
     const map =
       group === 'alwaysApplied'
-        ? this.alwaysAppliedSheets
-        : this.severitySheets;
+        ? this.alwaysAppliedSheetKeys
+        : this.severitySheetKeys;
     let key = map.get(id);
     if (!key) {
       key = {};

@@ -47,18 +47,26 @@ export type UniqueInfluence = Influence<{
   };
 }>;
 
-export type TraitInfluence = Influence<{
+export type TraitInfluenceData = Influence<{
   type: PsiInfluenceType.Trait;
   trait: ItemEntity<ItemType.Trait>;
 }>;
 
-export type PsiInfluence =
+export type TraitInfluence = Omit<TraitInfluenceData, "trait"> & {
+  trait: Trait;
+}
+
+export type PsiInfluenceData =
   | MotivationInfluence
   | DamageInfluence
   | UniqueInfluence
-  | TraitInfluence;
+  | TraitInfluenceData;
 
-export type TemporaryInfluence = Exclude<PsiInfluence, DamageInfluence>;
+export type PsiInfluence = Exclude<PsiInfluenceData, TraitInfluenceData> | TraitInfluence
+
+
+
+export type TemporaryInfluence = Exclude<PsiInfluenceData, DamageInfluence>;
 
 const influenceBase = <T extends PsiInfluenceType>(type: T) => ({
   type,
@@ -78,7 +86,7 @@ const unique = createFeature<
   'roll' | 'name' | 'effects' | 'duration'
 >(() => influenceBase(PsiInfluenceType.Unique));
 
-const trait = createFeature<TraitInfluence, 'roll' | 'trait'>(() =>
+const trait = createFeature<TraitInfluenceData, 'roll' | 'trait'>(() =>
   influenceBase(PsiInfluenceType.Trait),
 );
 
@@ -135,12 +143,12 @@ export const createDefaultPsiInfluences = () => {
         ? createDefaultInfluence(roll, PsiInfluenceType.Motivation)
         : createDefaultInfluence(roll, PsiInfluenceType.Unique),
     );
-  }, [] as StringID<PsiInfluence>[]);
+  }, [] as StringID<PsiInfluenceData>[]);
 };
 
-export const influenceSort = (influence: PsiInfluence) => influence.roll;
+export const influenceSort = (influence: PsiInfluenceData) => influence.roll;
 
-export const influenceInfo = (influence: PsiInfluence) => {
+export const influenceInfo = (influence: PsiInfluenceData) => {
   switch (influence.type) {
     case PsiInfluenceType.Damage:
       return {
