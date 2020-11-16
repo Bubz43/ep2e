@@ -83,16 +83,23 @@ export class RailgunForm extends ItemFormBase {
       content: [
         // TODO Shape Form
         {
-          label: `${localize("delete")} ${localize("shape")}`,
-          callback: () => this.item.removeShape(shape.id)
-        }
+          label: `${localize('delete')} ${localize('shape')}`,
+          callback: () => this.item.removeShape(shape.id),
+        },
       ],
       position: ev,
     });
   }
 
   render() {
-    const { updater, type, accessories, shapeChanging, shapeName, nestedShape } = this.item;
+    const {
+      updater,
+      type,
+      accessories,
+      shapeChanging,
+      shapeName,
+      nestedShape,
+    } = this.item;
     const { disabled } = this;
     return html`
       <entity-form-layout>
@@ -126,10 +133,9 @@ export class RailgunForm extends ItemFormBase {
                       update: ({ shapeName }) => {
                         this.item.updater
                           .prop('data', 'shapeName')
-                          .commit(shapeName || this.item.shapeName)
+                          .commit(shapeName || this.item.shapeName);
                         this.requestUpdate();
-                      }
-                        ,
+                      },
                       disabled,
                       fields: ({ shapeName }) =>
                         html`<mwc-formfield alignEnd label=${shapeName.label}
@@ -146,15 +152,16 @@ export class RailgunForm extends ItemFormBase {
                             (shape) => {
                               const { id, name } = shape;
                               return html`
-                              <wl-list-item
-                                class="shape"
-                                clickable
-                                ?disabled=${disabled}
-                                @click=${() => this.item.swapShape(id)}
-                                @contextmenu=${(ev: MouseEvent) => this.openShapeMenu(ev, shape)}
-                                >${name}</wl-list-item
-                              >
-                            `;
+                                <wl-list-item
+                                  class="shape"
+                                  clickable
+                                  ?disabled=${disabled}
+                                  @click=${() => this.item.swapShape(id)}
+                                  @contextmenu=${(ev: MouseEvent) =>
+                                    this.openShapeMenu(ev, shape)}
+                                  >${name}</wl-list-item
+                                >
+                              `;
                             },
                           )}
                         </sl-animated-list>

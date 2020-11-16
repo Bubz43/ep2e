@@ -86,7 +86,7 @@ type StringID<T> = T & { id: string };
 type TopLevel = Record<string, JsonValue>;
 
 type Template<T extends string, D extends TopLevel> = {
-  readonly [key in T]: Readonly<D>;
+  readonly [key in T]: D;
 };
 
 export type CommonDetails = {
@@ -118,7 +118,7 @@ type Acquisition = {
 
 export type MorphPoolsData = Record<Exclude<PoolType, PoolType.Threat>, number>;
 
-type GearTraits = Readonly<Record<GearTrait, boolean>>;
+type GearTraits = Record<GearTrait, boolean>;
 export type BlueprintData = {
   blueprintType: '' | BlueprintType;
   used: boolean;
@@ -155,16 +155,16 @@ export type EgoData = {
   forkType: '' | Fork;
   threat: number;
   flex: number;
-  aptitudes: Readonly<Aptitudes>;
-  skills: Readonly<Record<SkillType, Readonly<SkillData>>>;
+  aptitudes: Aptitudes;
+  skills: Record<SkillType, SkillData>;
   fieldSkills: Record<FieldSkillType, StringID<FieldSkillData>[]>;
-  points: Readonly<Record<CharacterPoint, number>>;
+  points: Record<CharacterPoint, number>;
   reps: Record<RepNetwork, EgoRepData>;
-  settings: Readonly<Record<EgoSetting, boolean>>;
-  mentalHealth: Readonly<MentalHealthData>;
+  settings: Record<EgoSetting, boolean>;
+  mentalHealth: MentalHealthData;
   motivations: StringID<Motivation>[];
-  characterDetails: Readonly<Record<CharacterDetail, string>>;
-  threatDetails: Readonly<{
+  characterDetails: Record<CharacterDetail, string>;
+  threatDetails: {
     niche: string;
     numbers: string;
     level: ThreatLevel;
@@ -174,7 +174,7 @@ export type EgoData = {
       minSV: number;
       notes: string;
     };
-  }>;
+  };
 };
 
 export type AppliedSubstanceBase = {
@@ -197,7 +197,7 @@ type CharacterData = EgoData & {
     systemDefenders: string[];
   };
   // temporary: StringID<TemporaryFeature>[];
-  spentPools: Readonly<Record<PoolType, number>>;
+  spentPools: Record<PoolType, number>;
   // accountShells: StringID<AccountShell>[];
   // TODO toggle psi
   purchaseLog: StringID<{
@@ -224,7 +224,7 @@ type CharacterData = EgoData & {
     mentalFullDefense: boolean;
     trackStandardAmmo: boolean;
   };
-} & Readonly<Record<RechargeType, RechargeData>>;
+} & Record<RechargeType, RechargeData>;
 
 type InfomorphData = {
   templates: UseActorTemplate<
@@ -302,7 +302,7 @@ type IT<
 > = {
   [key in T]: {
     templates: D['templates'];
-  } & Readonly<Omit<D, 'templates'>>;
+  } & Omit<D, 'templates'>;
 };
 
 type AT<
@@ -312,7 +312,7 @@ type AT<
 > = {
   [key in T]: {
     templates: D['templates'];
-  } & Readonly<Omit<D, 'templates'>>;
+  } & Omit<D, 'templates'>;
 };
 
 type ItemTypeTemplates = IT<ItemType.Trait, TraitData> &
@@ -542,23 +542,24 @@ type SprayWeaponData = RangedWeaponDataBase & {
 type Polygun = {
   shapeChanging: boolean;
   shapeName: string;
-}
-
-type FirearmData = RangedWeaponDataBase & Polygun & {
-  ammo: {
-    value: number;
-    /**
-     * @minimum 1
-     */
-    max: number;
-    ammoClass: KineticWeaponClass;
-    selectedModeIndex: number;
-    modeSettings: number[];
-  };
-  fixed: boolean;
-  long: boolean;
-  primaryAttack: KineticWeaponAttackData;
 };
+
+type FirearmData = RangedWeaponDataBase &
+  Polygun & {
+    ammo: {
+      value: number;
+      /**
+       * @minimum 1
+       */
+      max: number;
+      ammoClass: KineticWeaponClass;
+      selectedModeIndex: number;
+      modeSettings: number[];
+    };
+    fixed: boolean;
+    long: boolean;
+    primaryAttack: KineticWeaponAttackData;
+  };
 
 type FirearmAmmoData = {
   templates: UseItemTemplate<['Common', 'Cost', 'Copyable']>;
@@ -573,21 +574,22 @@ type FirearmAmmoData = {
   state: { stashed: boolean };
 };
 
-type RailgunData = RangedWeaponDataBase & Polygun& {
-  ammo: {
-    value: number;
-    max: number;
-    ammoClass: KineticWeaponClass;
+type RailgunData = RangedWeaponDataBase &
+  Polygun & {
+    ammo: {
+      value: number;
+      max: number;
+      ammoClass: KineticWeaponClass;
+    };
+    battery: {
+      charge: number;
+      max: number;
+      recharge: number;
+    };
+    fixed: boolean;
+    long: boolean;
+    primaryAttack: KineticWeaponAttackData;
   };
-  battery: {
-    charge: number;
-    max: number;
-    recharge: number;
-  };
-  fixed: boolean;
-  long: boolean;
-  primaryAttack: KineticWeaponAttackData;
-};
 
 type BeamWeaponData = RangedWeaponDataBase &
   Record<RangedWeaponTrait, boolean> & {

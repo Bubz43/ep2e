@@ -210,7 +210,7 @@ export class PsiForm extends ItemFormBase {
       const proxy = await itemDropToItemProxy(data);
       if (proxy?.type === ItemType.Trait) {
         if (proxy.hasMultipleLevels) {
-          proxy.selectLevelAndAdd(data => {
+          proxy.selectLevelAndAdd((data) => {
             this.item.influenceCommiter(
               createPipe(
                 removeFeature(targetInfluence.id),
@@ -222,7 +222,7 @@ export class PsiForm extends ItemFormBase {
                 ),
               ),
             );
-          })
+          });
         } else {
           this.item.influenceCommiter(
             createPipe(
@@ -236,7 +236,6 @@ export class PsiForm extends ItemFormBase {
             ),
           );
         }
-     
       }
     }
   });

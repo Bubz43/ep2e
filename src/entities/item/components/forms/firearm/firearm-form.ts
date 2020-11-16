@@ -110,8 +110,8 @@ export class FirearmForm extends ItemFormBase {
           notify(
             NotificationType.Error,
             format('MismatchedAmmoClasses', {
-              firearm: localize(ammoClass),
-              ammo: localize(targetClass),
+              firearm: localize(targetClass),
+              ammo: localize(ammoClass),
             }),
           );
         } else this.item.setSpecialAmmo(proxy);
@@ -153,11 +153,11 @@ export class FirearmForm extends ItemFormBase {
       content: [
         // TODO Shape Form
         {
-          label: `${localize("delete")} ${localize("shape")}`,
-          callback: () => this.item.removeShape(shape.id)
-        }
+          label: `${localize('delete')} ${localize('shape')}`,
+          callback: () => this.item.removeShape(shape.id),
+        },
       ],
-      position: ev
+      position: ev,
     });
   }
 
@@ -225,15 +225,16 @@ export class FirearmForm extends ItemFormBase {
                             (shape) => {
                               const { id, name } = shape;
                               return html`
-                              <wl-list-item
-                                class="shape"
-                                clickable
-                                ?disabled=${disabled}
-                                @click=${() => this.item.swapShape(id)}
-                                @contextmenu=${(ev: MouseEvent) => this.openShapeMenu(ev, shape)}
-                                >${name}</wl-list-item
-                              >
-                            `;
+                                <wl-list-item
+                                  class="shape"
+                                  clickable
+                                  ?disabled=${disabled}
+                                  @click=${() => this.item.swapShape(id)}
+                                  @contextmenu=${(ev: MouseEvent) =>
+                                    this.openShapeMenu(ev, shape)}
+                                  >${name}</wl-list-item
+                                >
+                              `;
                             },
                           )}
                         </sl-animated-list>

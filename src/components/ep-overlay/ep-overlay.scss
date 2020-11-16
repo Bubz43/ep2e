@@ -79,8 +79,10 @@ scene-view {
 
 slot[name='foundry-apps'],
 slot#windows {
-  grid-area: 1 / 1 / -1 / -1;
   display: block;
+  position: absolute;
+  height: 100vh;
+  width: 100vw;;
   z-index: 40;
 
   &.top {

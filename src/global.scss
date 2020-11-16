@@ -55,6 +55,9 @@ mwc-menu {
   mwc-list-item[noninteractive]:not([graphic]):not([twoline]) {
     height: var(--mdc-menu-item-height);
   }
+  mwc-list-item[disabled] {
+    color: var(--color-text-disabled);
+  }
   [slot='graphic'] {
     border-radius: 4px;
   }

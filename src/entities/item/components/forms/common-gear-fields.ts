@@ -96,7 +96,9 @@ export const renderKineticWeaponSidebar: FieldPropsRenderer<
       { min: 1 },
     ),
     renderLabeledCheckbox(shapeChanging, {
-      disabled: shapeChanging.value && (notEmpty(this.item.shapes) || this.item.nestedShape),
+      disabled:
+        shapeChanging.value &&
+        (notEmpty(this.item.shapes) || this.item.nestedShape),
     }),
     html`<entity-form-sidebar-divider
       label="${localize('weapon')} ${localize('traits')}"

@@ -127,13 +127,13 @@ export class Railgun
         name,
         _id: id,
       };
-      
+
       shapeData.data = {
         ...shapeData.data,
         shapeChanging: true,
         wareType: this.wareType,
         description: this.description,
-        ...this.cost
+        ...this.cost,
       };
       this.updater.prop('').store(shapeData);
 
@@ -168,7 +168,7 @@ export class Railgun
       shapeName: weaponData.name,
       wareType: this.wareType,
       description: this.description,
-      ...this.cost
+      ...this.cost,
     };
     return this.updater.prop('flags', EP.Name, 'shapes').commit((items) => {
       const changed = [...(items || [])];

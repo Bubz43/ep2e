@@ -37,11 +37,11 @@ export class Explosive
   }
 
   get isMissile() {
-    return this.explosiveType === ExplosiveType.Missile
+    return this.explosiveType === ExplosiveType.Missile;
   }
 
   get isGrenade() {
-    return this.explosiveType === ExplosiveType.Grenade
+    return this.explosiveType === ExplosiveType.Grenade;
   }
 
   @LazyGetter()

@@ -71,6 +71,6 @@ export class Armor
   }
 
   get attackTraits() {
-    return this.epData.attackTraits
+    return this.epData.attackTraits;
   }
 }

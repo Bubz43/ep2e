@@ -121,7 +121,7 @@ export type SprayWeaponAttackData = FiringModeList & {
 };
 
 export type SprayWeaponAttack = FullAttack<SprayWeaponAttackData> & {
-  substance: Substance | null,
+  substance: Substance | null;
   areaEffect: AreaEffectType | '';
 };
 

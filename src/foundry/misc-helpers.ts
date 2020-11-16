@@ -177,7 +177,9 @@ export function deepMerge<T>(
 ): (changes: Partial<DeepPartial<T>>) => T;
 export function deepMerge<T>(original: T, changes: Partial<DeepPartial<T>>): T;
 export function deepMerge() {
-  return purry(_deepMerge, arguments);
+  return arguments.length === 1
+    ? (changes: any) => _deepMerge(arguments[0], changes)
+    : _deepMerge(arguments[0], arguments[1]);
 }
 
 export const toTuple = <T>(value: T): [T] => [value];

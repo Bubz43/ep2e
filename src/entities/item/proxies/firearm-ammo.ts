@@ -60,7 +60,7 @@ export class FirearmAmmo
 
   @LazyGetter()
   get payload() {
-    const explosive = this.epFlags?.payload;
+    const explosive = this.epFlags?.payload?.[0];
     return explosive
       ? new Substance({
           data: explosive,
@@ -69,7 +69,11 @@ export class FirearmAmmo
           updater: new UpdateStore({
             getData: () => explosive,
             isEditable: () => this.editable,
-            setData: createPipe(deepMerge(explosive), this.updatePayload),
+            setData: createPipe(
+              deepMerge(explosive),
+              toTuple,
+              this.updatePayload,
+            ),
           }),
           deleteSelf: () => this.removePayload(),
         })
@@ -77,7 +81,7 @@ export class FirearmAmmo
   }
 
   setPayload(payload: Substance) {
-    return this.updatePayload(payload.getDataCopy());
+    return this.updatePayload([payload.getDataCopy()]);
   }
 
   removePayload() {

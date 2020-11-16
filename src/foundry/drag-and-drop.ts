@@ -9,7 +9,10 @@ import {
   HotbarCell,
   HotbarEntryType,
 } from '@src/features/hotbar-entry';
-import { PsiInfluenceData, PsiInfluenceType } from '@src/features/psi-influence';
+import {
+  PsiInfluenceData,
+  PsiInfluenceType,
+} from '@src/features/psi-influence';
 import { isJsonObject } from '@src/utility/helpers';
 import { createPipe } from 'remeda';
 import type { JsonObject } from 'type-fest';

@@ -528,11 +528,11 @@ export enum WeaponSkillOption {
 }
 
 export enum ExsurgentStrain {
-  Alter = "alter",
-  HauntingVirus = "hauntingVirus",
-  Mindstealer = "mindstealer",
-  Skrik = "skrik",
-  WattsMacleod = "Watts-MacLeod",
-  Whisper = "whisper",
-  Xenomorph = "xenomorph"
+  Alter = 'alter',
+  HauntingVirus = 'hauntingVirus',
+  Mindstealer = 'mindstealer',
+  Skrik = 'skrik',
+  WattsMacleod = 'Watts-MacLeod',
+  Whisper = 'whisper',
+  Xenomorph = 'xenomorph',
 }

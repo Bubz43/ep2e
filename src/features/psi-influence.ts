@@ -103,7 +103,7 @@ export const createDefaultInfluence = (
     case PsiInfluenceType.Motivation:
       return motivation({
         roll,
-        motivation: createMotivation({ cause: localize("cause")}),
+        motivation: createMotivation({ cause: localize('cause') }),
       });
 
     case PsiInfluenceType.Trait:

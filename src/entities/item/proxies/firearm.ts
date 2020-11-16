@@ -5,13 +5,24 @@ import {
 } from '@src/combat/attacks';
 import { RangedWeaponTrait } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
+import { UpdateStore } from '@src/entities/update-store';
 import { ArmorType } from '@src/features/active-armor';
 import { uniqueStringID } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
+import { deepMerge, toTuple } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { clamp, compact, concat, identity, take, takeWhile } from 'remeda';
+import {
+  clamp,
+  compact,
+  concat,
+  createPipe,
+  identity,
+  pipe,
+  take,
+  takeWhile,
+} from 'remeda';
 import type { Attacker } from '../item-interfaces';
 import { Equippable, Gear, Purchasable, RangedWeapon } from '../item-mixins';
 import { FirearmAmmo } from './firearm-ammo';
@@ -123,15 +134,17 @@ export class Firearm
 
   @LazyGetter()
   get specialAmmo() {
-    const ammo = this.epFlags?.specialAmmo;
+    const ammo = this.epFlags?.specialAmmo?.[0];
     return ammo
       ? new FirearmAmmo({
           data: ammo,
           loaded: true,
           embedded: this.name,
-          updater: this.updater
-            .prop('flags', EP.Name, 'specialAmmo')
-            .nestedStore(),
+          updater: new UpdateStore({
+            getData: () => ammo,
+            isEditable: () => this.editable,
+            setData:createPipe(deepMerge(ammo), toTuple, this.updateAmmo),
+          }),
           deleteSelf: () => this.removeSpecialAmmo(),
         })
       : null;
@@ -174,7 +187,7 @@ export class Firearm
     this.updater
       .prop('data', 'ammo')
       .store({ selectedModeIndex: 0, value: gained });
-    return this.updateAmmo(ammo.getDataCopy(true));
+    return this.updateAmmo([ammo.getDataCopy(true)]);
   }
 
   removeSpecialAmmo() {
@@ -206,7 +219,7 @@ export class Firearm
             new Firearm({
               data: shape,
               embedded: this.name,
-              nestedShape: true
+              nestedShape: true,
             }),
           ] as const,
       ),
@@ -235,13 +248,14 @@ export class Firearm
         shapeChanging: true,
         wareType: this.wareType,
         description: this.description,
-        ...this.cost
+        ...this.cost,
       };
+
       shapeData.flags = {
         [EP.Name]: {
-          specialAmmo: shape.epFlags?.specialAmmo || null
-        }
-      }
+          specialAmmo: shape.epFlags?.specialAmmo || null,
+        },
+      };
       this.updater.prop('').store(shapeData);
 
       const myData = {
@@ -257,7 +271,7 @@ export class Firearm
         const changed = [...(items || [])];
         const _id = uniqueStringID(changed.map((i) => i._id));
         const { shapes, ...flags } = myData.flags.ep2e || {};
-        
+
         changed.push({ ...myData, _id, flags: { [EP.Name]: flags } });
         const index = changed.findIndex((s) => s._id === shape.id);
         if (index !== -1) changed.splice(index, 1);
@@ -275,8 +289,9 @@ export class Firearm
       shapeName: weaponData.name,
       wareType: this.wareType,
       description: this.description,
-      ...this.cost
+      ...this.cost,
     };
+
     return this.updater.prop('flags', EP.Name, 'shapes').commit((items) => {
       const changed = [...(items || [])];
       const _id = uniqueStringID(changed.map((i) => i._id));

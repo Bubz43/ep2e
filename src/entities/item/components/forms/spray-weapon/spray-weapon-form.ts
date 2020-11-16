@@ -142,7 +142,7 @@ export class SprayWeaponForm extends ItemFormBase {
       payloadUse,
       payload,
       firePayload,
-      ammoState
+      ammoState,
     } = this.item;
     const { disabled } = this;
     // TODO Some indication that payload has been expended
@@ -217,7 +217,10 @@ export class SprayWeaponForm extends ItemFormBase {
                 `
               : ''}
             ${renderAutoForm({
-              props: { max: ammoState.max, value: firePayload ? (payload?.quantity || 0) : ammoState.value },
+              props: {
+                max: ammoState.max,
+                value: firePayload ? payload?.quantity || 0 : ammoState.value,
+              },
               update: ({ value, max }) => {
                 if (max !== undefined)
                   this.item.updater.prop('data', 'ammo', 'max').commit(max);
@@ -253,18 +256,20 @@ export class SprayWeaponForm extends ItemFormBase {
                       @mouseenter=${tooltip.fromData}
                       >info</mwc-icon
                     >
-                    ${payload ? renderUpdaterForm(payload.updater.prop('data'), {
-                    disabled,
-                    classes: 'payload-quantity-form',
-                    slot: 'action',
-                    fields: ({ quantity }) => html`
-                      <mwc-formfield alignEnd label=${quantity.label}
-                        >${renderNumberInput(quantity, {
-                          min: 0,
-                        })}</mwc-formfield
-                      >
-                    `,
-                  }) : ""}
+                    ${payload
+                      ? renderUpdaterForm(payload.updater.prop('data'), {
+                          disabled,
+                          classes: 'payload-quantity-form',
+                          slot: 'action',
+                          fields: ({ quantity }) => html`
+                            <mwc-formfield alignEnd label=${quantity.label}
+                              >${renderNumberInput(quantity, {
+                                min: 0,
+                              })}</mwc-formfield
+                            >
+                          `,
+                        })
+                      : ''}
                   </sl-header>
                   ${payload ? this.renderPayload(payload) : ''}
                 </sl-dropzone>

@@ -186,13 +186,13 @@ type ItemFlags<T extends ItemType> = T extends ItemType.Psi
   ? { temporary: boolean }
   : T extends ItemType.Firearm
   ? {
-      specialAmmo: ItemEntity<ItemType.FirearmAmmo> | null;
+      specialAmmo: [ItemEntity<ItemType.FirearmAmmo>] | null;
       shapes: ItemEntity<ItemType.Firearm>[];
     }
   : T extends ItemType.Railgun
   ? { shapes: ItemEntity<ItemType.Railgun>[] }
   : T extends ItemType.FirearmAmmo
-  ? { payload: ItemEntity<ItemType.Substance> | null }
+  ? { payload: [ItemEntity<ItemType.Substance>] | null }
   : T extends ItemType.SprayWeapon
   ? { payload: ItemEntity<ItemType.Substance> | null }
   : T extends ItemType.ThrownWeapon
@@ -214,13 +214,11 @@ export type ItemModels = {
   [key in ItemType]: ItemData<key>;
 };
 
-export type ItemEntity<T extends ItemType = ItemType> = Readonly<
-  CommonEntityData & {
-    type: T;
-    data: ItemModels[T];
-    flags: Readonly<{ [EP.Name]?: Readonly<Partial<ItemFlags<T>>> }>;
-  }
->;
+export type ItemEntity<T extends ItemType = ItemType> = CommonEntityData & {
+  type: T;
+  data: ItemModels[T];
+  flags: { [EP.Name]?: Partial<ItemFlags<T>> };
+};
 
 export type ItemDatas = {
   [key in ItemType]: ItemEntity<key>;
