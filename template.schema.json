@@ -9838,6 +9838,9 @@
         "label": {
           "type": "string"
         },
+        "notes": {
+          "type": "string"
+        },
         "reduceAVbyDV": {
           "type": "boolean"
         },
@@ -9852,7 +9855,9 @@
         "damageFormula",
         "damageType",
         "label",
-        "reduceAVbyDV"
+        "notes",
+        "reduceAVbyDV",
+        "useMeshArmor"
       ],
       "type": "object"
     },

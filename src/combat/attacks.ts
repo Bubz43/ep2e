@@ -23,9 +23,10 @@ export type LabeledFormula = { label: string; formula: string };
 
 type FullAttack<T extends { damageFormula: string }> = Omit<
   T,
-  'damageFormula' | 'armorUsed'
+  'damageFormula' | 'armorUsed' | "damageType"
 > &
   UsedAttackArmor & {
+    damageType: HealthType,
     rollFormulas: LabeledFormula[];
     label: string;
   };
@@ -58,8 +59,9 @@ export type SoftwareAttackData = Omit<UsedAttackArmor, 'armorUsed'> & {
   damageFormula: string;
   damageType: HealthType;
   attackTraits: AttackTrait[];
-  useMeshArmor?: boolean;
+  useMeshArmor: boolean;
   applyConditions: ConditionEffect;
+  notes: string;
 };
 
 export type SoftwareAttack = FullAttack<Omit<SoftwareAttackData, "useMeshArmor">>

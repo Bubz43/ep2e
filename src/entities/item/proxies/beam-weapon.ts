@@ -11,6 +11,7 @@ import {
 import type { ItemType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import { localize } from '@src/foundry/localization';
+import { HealthType } from '@src/health/health';
 import mix from 'mix-with/lib';
 import { difference } from 'remeda';
 import type { Attacker } from '../item-interfaces';
@@ -65,6 +66,7 @@ export class BeamWeapon
       reduceAVbyDV: false,
       ...data,
       label: this.hasSecondaryAttack ? data.label || defaultLabel : '',
+      damageType: HealthType.Physical,
       rollFormulas: damageFormula
         ? [createBaseAttackFormula(damageFormula)]
         : [],

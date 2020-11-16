@@ -8,6 +8,7 @@ import { UpdateStore } from '@src/entities/update-store';
 import { ArmorType } from '@src/features/active-armor';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
+import { HealthType } from '@src/health/health';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import type { Attacker, Stackable } from '../item-interfaces';
@@ -44,6 +45,7 @@ export class ThrownWeapon
       reduceAVbyDV: false,
       label: '',
       coating: this.coating,
+      damageType: HealthType.Physical,
       rollFormulas: damageFormula
         ? [createBaseAttackFormula(damageFormula)]
         : [],

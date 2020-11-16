@@ -12,6 +12,7 @@ import {
 } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
 import { EP } from '@src/foundry/system';
+import { HealthType } from '@src/health/health';
 import { nonNegative } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
@@ -123,6 +124,7 @@ export class SprayWeapon
       armorUsed: compact([armorUsed]),
       reduceAVbyDV: false,
       substance: this.payload,
+      damageType: HealthType.Physical,
       rollFormulas: damageFormula
         ? [createBaseAttackFormula(damageFormula)]
         : [],

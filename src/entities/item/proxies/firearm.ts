@@ -11,6 +11,7 @@ import { uniqueStringID } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
 import { deepMerge, toTuple } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
+import { HealthType } from '@src/health/health';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import {
@@ -170,6 +171,7 @@ export class Firearm
       reduceAVbyDV: false,
       ...data,
       label: '',
+      damageType: HealthType.Physical,
       rollFormulas: damageFormula
         ? [createBaseAttackFormula(damageFormula)]
         : [],

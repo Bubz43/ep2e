@@ -710,6 +710,7 @@
         "damageFormula": "",
         "damageType": "mesh",
         "useMeshArmor": true,
+        "notes": "",
         "applyConditions": {
           "armorAsModifier":"",
           "check": "cog",
@@ -727,6 +728,7 @@
         "damageFormula": "",
         "damageType": "mesh",
         "useMeshArmor": true,
+        "notes": "",
         "applyConditions": {
           "armorAsModifier":"",
           "check": "cog",

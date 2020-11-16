@@ -9,3 +9,14 @@
   display: block;
   
 }
+
+.attack-details {
+  display: grid;
+  padding: 0.25rem;
+  font-size: large;
+}
+
+p.label {
+  @include listLabel();
+  margin-bottom: 0.25rem;
+}

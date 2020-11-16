@@ -9,6 +9,7 @@ import { ArmorType } from '@src/features/active-armor';
 import { localize } from '@src/foundry/localization';
 import { deepMerge, toTuple } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
+import { HealthType } from '@src/health/health';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { createPipe } from 'remeda';
@@ -73,6 +74,7 @@ export class MeleeWeapon
         : [],
       coating: this.coating,
       payload: this.payload,
+      damageType: HealthType.Physical
     };
   }
 

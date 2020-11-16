@@ -1,17 +1,23 @@
+import { formatLabeledFormulas, formatArmorUsed } from '@src/combat/attack-formatting';
+import type { SoftwareAttack } from '@src/combat/attacks';
 import {
+  renderFormulaField,
   renderLabeledCheckbox,
   renderNumberField,
   renderRadioFields,
   renderSelectField,
+  renderTextareaField,
   renderTextField,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
-import { enumValues, SoftwareType } from '@src/data-enums';
+import { AttackTrait, enumValues, SoftwareType, WeaponAttackType } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import type { Software } from '@src/entities/item/proxies/software';
+import { pairList } from '@src/features/check-list';
 import type { EffectCreatedEvent } from '@src/features/components/effect-creator/effect-created-event';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
+import { formatDamageType, HealthType } from '@src/health/health';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
 import {
@@ -22,7 +28,7 @@ import {
   PropertyValues,
 } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
-import { map, mapToObj } from 'remeda';
+import { createPipe, map, mapToObj, objOf } from 'remeda';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './software-form.scss';
@@ -56,7 +62,14 @@ export class SoftwareForm extends ItemFormBase {
   }
 
   render() {
-    const { updater, type, effectGroups, hasActivation, isFirewall, hasMeshAttacks } = this.item;
+    const {
+      updater,
+      type,
+      effectGroups,
+      hasActivation,
+      isFirewall,
+      hasMeshAttacks,
+    } = this.item;
     const { disabled } = this;
     return html`
       <entity-form-layout>
@@ -72,18 +85,26 @@ export class SoftwareForm extends ItemFormBase {
         ${renderUpdaterForm(updater.prop('data'), {
           disabled,
           slot: 'sidebar',
-          fields: ({ softwareType, category, firewallRating, hasActiveState, meshAttacks }) => [
+          fields: ({
+            softwareType,
+            category,
+            firewallRating,
+            hasActiveState,
+            meshAttacks,
+          }) => [
             renderSelectField(softwareType, enumValues(SoftwareType)),
-            isFirewall ? renderNumberField(firewallRating, { min: 1, max: 99 }) : "",
+            isFirewall
+              ? renderNumberField(firewallRating, { min: 1, max: 99 })
+              : '',
             renderTextField(category),
-            html`<entity-form-sidebar-divider
-          ></entity-form-sidebar-divider>`,
-            renderLabeledCheckbox(hasActiveState, { disabled: notEmpty(effectGroups.get("activated"))}),
-            renderNumberField(meshAttacks, { min: 0, max: 2 })
+            html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
+            renderLabeledCheckbox(hasActiveState, {
+              disabled:
+                hasActiveState.value && notEmpty(effectGroups.get('activated')),
+            }),
+            renderNumberField(meshAttacks, { min: 0, max: 2 }),
           ],
         })}
-
-
 
         <div slot="details">
           ${renderUpdaterForm(updater.prop('data'), {
@@ -92,7 +113,7 @@ export class SoftwareForm extends ItemFormBase {
             fields: renderComplexityFields,
           })}
 
-<section>
+          <section>
             <sl-header heading=${localize('meshHealth')}>
               <mwc-icon-button
                 slot="action"
@@ -114,7 +135,7 @@ export class SoftwareForm extends ItemFormBase {
             ></health-item>
           </section>
 
-          ${hasMeshAttacks ? this.renderMeshAttacks() : ""}
+          ${hasMeshAttacks ? this.renderMeshAttacks() : ''}
 
           <section>
             <sl-header
@@ -142,7 +163,6 @@ export class SoftwareForm extends ItemFormBase {
                 : '',
             )}
           </section>
-
         </div>
 
         <editor-wrapper
@@ -156,10 +176,11 @@ export class SoftwareForm extends ItemFormBase {
   }
 
   private renderMeshAttacks() {
-    // TODO
+    const { primary, secondary } = this.item.attacks;
     return html`
-      
-    `
+    ${this.renderAttack(primary, WeaponAttackType.Primary)}
+    ${secondary ? this.renderAttack(secondary, WeaponAttackType.Secondary) : ""}
+    `;
   }
 
   private renderHealthChangeHistory() {
@@ -210,6 +231,98 @@ export class SoftwareForm extends ItemFormBase {
       <effect-creator @effect-created=${this.addCreatedEffect}></effect-creator>
     `;
   }
+
+  
+  private renderAttack(attack: SoftwareAttack, type: WeaponAttackType) {
+    return html`
+      <section>
+        <sl-header heading=${attack.label || localize('attack')}>
+          <mwc-icon-button
+            icon="edit"
+            slot="action"
+            ?disabled=${this.disabled}
+            @click=${this.setDrawerFromEvent(
+              type === WeaponAttackType.Primary
+                ? this.renderPrimaryAttackEdit
+                : this.renderSecondaryAttackEdit,
+            )}
+          ></mwc-icon-button>
+        </sl-header>
+        <div class="attack-details">
+          <sl-group label=${formatDamageType(attack.damageType)}>
+            ${notEmpty(attack.rollFormulas)
+              ? [
+                  formatLabeledFormulas(attack.rollFormulas),
+                  formatArmorUsed(attack),
+                ].join('; ')
+              : '-'}
+          </sl-group>
+
+          ${notEmpty(attack.attackTraits)
+            ? html`
+                <sl-group class="attack-traits" label=${localize('traits')}>
+                  ${map(attack.attackTraits, localize).join(', ')}</sl-group
+                >
+              `
+      : ''}
+            
+            // TODO Conditions
+          ${attack.notes
+            ? html`
+                <sl-group class="attack-notes" label=${localize('notes')}>
+                  ${attack.notes}</sl-group
+                >
+              `
+            : ''}
+        </div>
+      </section>
+    `;
+  }
+
+  private renderPrimaryAttackEdit() {
+    return this.renderAttackEdit(WeaponAttackType.Primary);
+  }
+
+  private renderSecondaryAttackEdit() {
+    return this.renderAttackEdit(WeaponAttackType.Secondary);
+  }
+
+  private renderAttackEdit(type: WeaponAttackType) {
+    const updater = this.item.updater.prop('data', type);
+    const hasSecondaryAttack = !!this.item.attacks.secondary;
+    const { disabled } = this;
+    const [pairedTraits, change] = pairList(
+      updater.originalValue().attackTraits,
+      enumValues(AttackTrait),
+    );
+    return html`
+          <h3>${localize(hasSecondaryAttack ? type : 'attack')}</h3>
+
+          ${renderUpdaterForm(updater, {
+        disabled,
+        fields: ({ damageFormula, damageType, useMeshArmor, armorPiercing, reduceAVbyDV, label }) => [
+          hasSecondaryAttack
+            ? renderTextField(label, { placeholder: localize(type) })
+            : '',
+          renderSelectField(damageType, enumValues(HealthType)),
+          renderFormulaField(damageFormula),
+          renderLabeledCheckbox(useMeshArmor),
+          useMeshArmor.value ? map([armorPiercing, reduceAVbyDV], renderLabeledCheckbox) : ""
+        ],
+      })}
+          <p class="label">${localize('attackTraits')}</p>
+      ${renderAutoForm({
+        props: pairedTraits,
+        update: createPipe(change, objOf('attackTraits'), updater.commit),
+        fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
+      })}
+      ${renderUpdaterForm(updater, {
+        disabled,
+        fields: ({ notes }) => [renderTextareaField(notes)],
+      })}
+      `
+  }
+
 }
 
 declare global {

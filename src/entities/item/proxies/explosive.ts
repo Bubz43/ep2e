@@ -9,6 +9,7 @@ import { UpdateStore } from '@src/entities/update-store';
 import { localize } from '@src/foundry/localization';
 import { deepMerge, toTuple } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
+import { HealthType } from '@src/health/health';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { compact, createPipe } from 'remeda';
@@ -98,6 +99,7 @@ export class Explosive
       label: this.hasSecondaryMode ? label || defaultLabel : '',
       areaEffect,
       areaEffectRadius,
+      damageType: HealthType.Physical,
     };
   }
 

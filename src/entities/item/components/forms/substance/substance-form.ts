@@ -371,7 +371,7 @@ export class SubstanceForm extends ItemFormBase {
   }
 
   private renderEffects() {
-    const { severity, hasSeverity, alwaysApplied } = this.item;
+    const { severity, hasSeverity } = this.item;
     const { disabled } = this;
     return html`
       <sl-dropzone ?disabled=${disabled} @drop=${this.addItem}>
@@ -464,7 +464,7 @@ export class SubstanceForm extends ItemFormBase {
   }
 
   private renderCommonEffectInfo(group: Group) {
-    const { duration, wearOffStress, damage, notes, items } = this.item[group];
+    const { duration, wearOffStress, notes, items } = this.item[group];
     const { damageFormula, damageType, perTurn, ...armor } = this.item.epData[
       group
     ].damage;

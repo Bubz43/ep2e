@@ -13,6 +13,7 @@ import { ArmorType } from '@src/features/active-armor';
 import { uniqueStringID } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
+import { HealthType } from '@src/health/health';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { compact, difference } from 'remeda';
@@ -86,6 +87,7 @@ export class Railgun
       reduceAVbyDV: false,
       ...data,
       label: '',
+      damageType: HealthType.Physical,
       rollFormulas: damageFormula
         ? [createBaseAttackFormula(damageFormula)]
         : [],
