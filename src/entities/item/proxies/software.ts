@@ -23,6 +23,14 @@ export class Software
     super(init);
   }
 
+  get fullType() {
+    return `${localize(this.softwareType)} ${this.category ? `(${this.category})` : ""}`
+  }
+
+  get category() {
+    return this.epData.category
+  }
+
   get softwareType() {
     return this.epData.softwareType;
   }

@@ -4,9 +4,17 @@ import {
   renderRadioFields,
   renderSelectField,
   renderTextField,
+  renderTimeField,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
-import { DeviceType, enumValues, FabType, PhysicalWare } from '@src/data-enums';
+import {
+  Activation,
+  AptitudeType,
+  DeviceType,
+  enumValues,
+  FabType,
+  PhysicalWare,
+} from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import type { EffectCreatedEvent } from '@src/features/components/effect-creator/effect-created-event';
@@ -84,14 +92,37 @@ export class PhysicalTechForm extends ItemFormBase {
         ${renderUpdaterForm(updater.prop('data'), {
           disabled,
           slot: 'sidebar',
-          fields: ({ category, wareType, deviceType, fabricator }) => [
+          fields: ({
+            category,
+            activation,
+            wareType,
+            deviceType,
+            fabricator,
+            useDuration,
+            useCheck,
+          }) => [
             renderSelectField(wareType, enumValues(PhysicalWare), {
               ...emptyTextDash,
               disabled: !!embedded,
             }),
             renderTextField(category),
             html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
-
+            renderSelectField(activation, enumValues(Activation), {
+              disableOptions: notEmpty(this.item.epData.activatedEffects)
+                ? [Activation.None]
+                : undefined,
+            }),
+            activation.value === Activation.Use
+              ? html`
+                  ${renderTimeField(useDuration)}
+                  ${renderSelectField(
+                    useCheck,
+                    enumValues(AptitudeType),
+                    emptyTextDash,
+                  )}
+                  <entity-form-sidebar-divider></entity-form-sidebar-divider>
+                `
+              : '',
             renderSelectField(deviceType, enumValues(DeviceType), {
               ...emptyTextDash,
               disabled: !!embedded,

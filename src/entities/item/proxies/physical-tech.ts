@@ -51,9 +51,14 @@ export class PhysicalTech
     return this.deviceType === DeviceType.Host;
   }
 
+  get onlyLocalEffects() {
+    return this.activation !== Activation.Use;
+  }
+
   @LazyGetter()
   get effectGroups() {
     const { effects, activatedEffects, hasActivation } = this;
+    // TODO Figure out if passive effects are applied when toggled;
     const group = new Map<'passive' | 'activated', typeof effects>();
     if (notEmpty(effects)) group.set('passive', effects);
     if (hasActivation && notEmpty(activatedEffects)) group.set('activated', activatedEffects);
@@ -62,10 +67,10 @@ export class PhysicalTech
 
   @LazyGetter()
   get currentEffects() {
-    const { effects, activatedEffects, activated } = this;
+    const { effects, activatedEffects, activated, onlyLocalEffects } = this;
     return {
       source: this.name,
-      effects: compact([effects, activated && activatedEffects]).flat(),
+      effects: compact([effects, activated && onlyLocalEffects && activatedEffects]).flat(),
     };
   }
 

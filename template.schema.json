@@ -4090,29 +4090,19 @@
                   "minItems": 5,
                   "type": "array"
                 },
-                "use": {
-                  "additionalProperties": false,
-                  "properties": {
-                    "check": {
-                      "anyOf": [
-                        {
-                          "$ref": "#/definitions/AptitudeType"
-                        },
-                        {
-                          "const": "",
-                          "type": "string"
-                        }
-                      ]
+                "useCheck": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/definitions/AptitudeType"
                     },
-                    "duration": {
-                      "type": "number"
+                    {
+                      "const": "",
+                      "type": "string"
                     }
-                  },
-                  "required": [
-                    "duration",
-                    "check"
-                  ],
-                  "type": "object"
+                  ]
+                },
+                "useDuration": {
+                  "type": "number"
                 },
                 "wareType": {
                   "anyOf": [
@@ -4136,7 +4126,8 @@
                 "meshHealth",
                 "state",
                 "templates",
-                "use",
+                "useCheck",
+                "useDuration",
                 "wareType"
               ],
               "type": "object"

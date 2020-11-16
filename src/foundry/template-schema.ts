@@ -637,15 +637,12 @@ type PhysicalTechData = {
   activatedEffects: StringID<Effect>[];
   wareType: '' | PhysicalWare;
   activation: Activation;
-
+  useDuration: number;
+  useCheck: AptitudeType | '';
   state: {
     activated: boolean;
     embeddedEgos: string[];
     onboardAliDeleted: boolean;
-  };
-  use: {
-    duration: number;
-    check: AptitudeType | '';
   };
   deviceType: '' | DeviceType;
   category: string;
