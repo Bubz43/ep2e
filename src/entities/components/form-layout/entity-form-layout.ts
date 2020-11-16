@@ -119,6 +119,7 @@ export class EntityFormLayout extends LitElement {
   render() {
     const noScroll = this.hideScroll || this.noScroll;
     return html`
+      <slot name="header"></slot>
       ${this.noSidebar
         ? ''
         : html`
@@ -126,8 +127,6 @@ export class EntityFormLayout extends LitElement {
               <slot name="sidebar"></slot>
             </aside>
           `}
-      <slot name="header"></slot>
-
       <slot name="tabs"></slot>
       <section
         class="content ${classMap({

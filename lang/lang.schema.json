@@ -2367,6 +2367,9 @@
             "mesh": {
               "type": "string"
             },
+            "meshAttacks": {
+              "type": "string"
+            },
             "meshHealth": {
               "type": "string"
             },
@@ -3321,6 +3324,9 @@
             "shapeChanging": {
               "type": "string"
             },
+            "shapeName": {
+              "type": "string"
+            },
             "shapes": {
               "type": "string"
             },
@@ -4006,6 +4012,9 @@
               "type": "string"
             },
             "useFirewall": {
+              "type": "string"
+            },
+            "useMeshArmor": {
               "type": "string"
             },
             "useMuse": {
@@ -4837,6 +4846,7 @@
             "mentalHealth",
             "mercurial",
             "mesh",
+            "meshAttacks",
             "meshHealth",
             "meshService",
             "meshware",
@@ -5155,6 +5165,7 @@
             "sex",
             "shape",
             "shapeChanging",
+            "shapeName",
             "shapes",
             "shared",
             "shell",
@@ -5384,6 +5395,7 @@
             "use",
             "useCredits",
             "useFirewall",
+            "useMeshArmor",
             "useMuse",
             "useThreat",
             "used",

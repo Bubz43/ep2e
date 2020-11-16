@@ -1288,7 +1288,7 @@ type LangEntries =
   | 'substrain'
   | 'shapeChanging'
   | 'shapes'
-  | 'shapeName';
+  | 'shapeName' | "meshAttacks" | "useMeshArmor"
 type FullNames =
   | 'cog'
   | 'int'

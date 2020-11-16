@@ -1264,6 +1264,8 @@
     "shapeName": "Shape Name",
     "shapeChanging": "Shape Changing",
     "shapes": "Shapes",
+    "meshAttacks": "Mesh Attacks",
+    "useMeshArmor": "Use Mesh Armor",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
