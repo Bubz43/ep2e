@@ -76,7 +76,7 @@ import type {
 } from '@src/features/skills';
 import type { BiologicalHealthData } from '@src/health/biological-health';
 import type { HealthType } from '@src/health/health';
-import type { InfomorphHealthData } from '@src/health/infomorph-health';
+import type { MeshHealthData } from '@src/health/infomorph-health';
 import type { MentalHealthData } from '@src/health/mental-health';
 import type { RecoveryConditions } from '@src/health/recovery';
 import type { SyntheticHealthData } from '@src/health/synthetic-health';
@@ -238,7 +238,7 @@ type InfomorphData = {
   >;
   // subtype: string;
   // localFirewall: boolean;
-  meshHealth: InfomorphHealthData;
+  meshHealth: MeshHealthData;
   // additionalHomeDevices: StringID<DistributedMeshHealthData>[];
   // privilege: AccessPrivilege;
 };
@@ -255,7 +255,7 @@ type SyntheticShellData = {
   painFilter: boolean;
   recoveryConditions: RecoveryConditions;
   physicalHealth: SyntheticHealthData;
-  meshHealth: InfomorphHealthData;
+  meshHealth: MeshHealthData;
   brain: string;
   size: Size;
   /**
@@ -612,16 +612,14 @@ type SoftwareData = {
   secondaryAttack: SoftwareAttackData;
   category: string;
   serviceDuration: number;
-  // meshHealth: AppMeshHealthData;
+  meshHealth: MeshHealthData;
   skills: StringID<
     | (FieldSkillData & { fieldSkill: FieldSkillType })
     | (SkillData & { skillType: SkillType })
   >[];
-  settings: {
-    hasActiveState: boolean;
-    hasAttack: boolean;
-    trackMeshHealth: boolean;
-  };
+  hasActiveState: boolean;
+  meshAttacks: 0 | 1 | 2;
+  firewallRating: number;
   state: {
     equipped: boolean;
     activated: boolean;
@@ -634,7 +632,7 @@ type PhysicalTechData = {
   templates: UseItemTemplate<
     ['Common', 'Cost', 'GearTraits', 'Copyable', 'GearState']
   >;
-  meshHealth: InfomorphHealthData;
+  meshHealth: MeshHealthData;
   effects: StringID<Effect>[];
   activatedEffects: StringID<Effect>[];
   wareType: '' | PhysicalWare;

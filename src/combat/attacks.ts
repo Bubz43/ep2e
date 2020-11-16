@@ -58,9 +58,11 @@ export type SoftwareAttackData = Omit<UsedAttackArmor, 'armorUsed'> & {
   damageFormula: string;
   damageType: HealthType;
   attackTraits: AttackTrait[];
-  meshArmor?: boolean;
+  useMeshArmor?: boolean;
   applyConditions: ConditionEffect;
 };
+
+export type SoftwareAttack = FullAttack<Omit<SoftwareAttackData, "useMeshArmor">>
 
 export type SubstanceAttackData = UsedAttackArmor & {
   damageFormula: string;

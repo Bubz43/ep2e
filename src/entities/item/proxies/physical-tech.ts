@@ -3,7 +3,8 @@ import type { ObtainableEffects } from '@src/entities/applied-effects';
 import type { ItemType } from '@src/entities/entity-types';
 import { localize } from '@src/foundry/localization';
 import { HealthType } from '@src/health/health';
-import { InfomorphHealth } from '@src/health/infomorph-health';
+import { MeshHealth } from '@src/health/infomorph-health';
+import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { compact } from 'remeda';
@@ -54,8 +55,8 @@ export class PhysicalTech
   get effectGroups() {
     const { effects, activatedEffects, hasActivation } = this;
     const group = new Map<'passive' | 'activated', typeof effects>();
-    group.set('passive', effects);
-    if (hasActivation) group.set('activated', activatedEffects);
+    if (notEmpty(effects)) group.set('passive', effects);
+    if (hasActivation && notEmpty(activatedEffects)) group.set('activated', activatedEffects);
     return group;
   }
 
@@ -70,26 +71,24 @@ export class PhysicalTech
 
   @LazyGetter()
   get meshHealth() {
-    return new InfomorphHealth({
+    return new MeshHealth({
       data: this.epData.meshHealth,
       statMods: undefined,
       updater: this.updater.prop('data', 'meshHealth').nestedStore(),
       source: localize('host'),
       homeDevices: 1, // TODO
+      autoRepair: true
     });
   }
 
   getDataCopy(reset = false) {
     const copy = super.getDataCopy(reset);
-    copy.data = {
-      ...copy.data,
-      state: {
+    copy.data.state = {
         equipped: false,
         disabled: false,
         activated: false,
         embeddedEgos: [],
         onboardAliDeleted: false,
-      },
     };
     return copy;
   }

@@ -135,6 +135,38 @@
       ],
       "type": "string"
     },
+    "Aptitudes": {
+      "additionalProperties": false,
+      "properties": {
+        "cog": {
+          "type": "number"
+        },
+        "int": {
+          "type": "number"
+        },
+        "ref": {
+          "type": "number"
+        },
+        "sav": {
+          "type": "number"
+        },
+        "som": {
+          "type": "number"
+        },
+        "wil": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "cog",
+        "int",
+        "ref",
+        "sav",
+        "som",
+        "wil"
+      ],
+      "type": "object"
+    },
     "AreaEffectType": {
       "enum": [
         "uniform",
@@ -392,6 +424,22 @@
       "required": [
         "type",
         "aptitude"
+      ],
+      "type": "object"
+    },
+    "CommonDetails": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "reference": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "description",
+        "reference"
       ],
       "type": "object"
     },
@@ -904,36 +952,7 @@
                   "type": "array"
                 },
                 "aptitudes": {
-                  "additionalProperties": false,
-                  "properties": {
-                    "cog": {
-                      "type": "number"
-                    },
-                    "int": {
-                      "type": "number"
-                    },
-                    "ref": {
-                      "type": "number"
-                    },
-                    "sav": {
-                      "type": "number"
-                    },
-                    "som": {
-                      "type": "number"
-                    },
-                    "wil": {
-                      "type": "number"
-                    }
-                  },
-                  "required": [
-                    "cog",
-                    "int",
-                    "ref",
-                    "sav",
-                    "som",
-                    "wil"
-                  ],
-                  "type": "object"
+                  "$ref": "#/definitions/Aptitudes"
                 },
                 "characterDetails": {
                   "additionalProperties": false,
@@ -1268,54 +1287,7 @@
                   "$ref": "#/definitions/RechargeData"
                 },
                 "mentalHealth": {
-                  "additionalProperties": false,
-                  "properties": {
-                    "alienation": {
-                      "maximum": 5,
-                      "minimum": 0,
-                      "type": "number"
-                    },
-                    "damage": {
-                      "minimum": 0,
-                      "type": "number"
-                    },
-                    "helplessness": {
-                      "maximum": 5,
-                      "minimum": 0,
-                      "type": "number"
-                    },
-                    "log": {
-                      "items": {
-                        "$ref": "#/definitions/StringID%3CHealthModification%3E"
-                      },
-                      "type": "array"
-                    },
-                    "naturalHealAttempts": {
-                      "items": {
-                        "$ref": "#/definitions/StringID%3CNaturalMentalHealAttempt%3E"
-                      },
-                      "type": "array"
-                    },
-                    "violence": {
-                      "maximum": 5,
-                      "minimum": 0,
-                      "type": "number"
-                    },
-                    "wounds": {
-                      "minimum": 0,
-                      "type": "number"
-                    }
-                  },
-                  "required": [
-                    "damage",
-                    "wounds",
-                    "log",
-                    "alienation",
-                    "helplessness",
-                    "violence",
-                    "naturalHealAttempts"
-                  ],
-                  "type": "object"
+                  "$ref": "#/definitions/MentalHealthData"
                 },
                 "motivations": {
                   "items": {
@@ -1515,276 +1487,55 @@
                   "additionalProperties": false,
                   "properties": {
                     "athletics": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "points": {
-                          "type": "number"
-                        },
-                        "specialization": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "points",
-                        "specialization"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/SkillData"
                     },
                     "deceive": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "points": {
-                          "type": "number"
-                        },
-                        "specialization": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "points",
-                        "specialization"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/SkillData"
                     },
                     "fray": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "points": {
-                          "type": "number"
-                        },
-                        "specialization": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "points",
-                        "specialization"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/SkillData"
                     },
                     "freeFall": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "points": {
-                          "type": "number"
-                        },
-                        "specialization": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "points",
-                        "specialization"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/SkillData"
                     },
                     "guns": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "points": {
-                          "type": "number"
-                        },
-                        "specialization": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "points",
-                        "specialization"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/SkillData"
                     },
                     "infiltrate": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "points": {
-                          "type": "number"
-                        },
-                        "specialization": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "points",
-                        "specialization"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/SkillData"
                     },
                     "infosec": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "points": {
-                          "type": "number"
-                        },
-                        "specialization": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "points",
-                        "specialization"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/SkillData"
                     },
                     "interface": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "points": {
-                          "type": "number"
-                        },
-                        "specialization": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "points",
-                        "specialization"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/SkillData"
                     },
                     "kinesics": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "points": {
-                          "type": "number"
-                        },
-                        "specialization": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "points",
-                        "specialization"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/SkillData"
                     },
                     "melee": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "points": {
-                          "type": "number"
-                        },
-                        "specialization": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "points",
-                        "specialization"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/SkillData"
                     },
                     "perceive": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "points": {
-                          "type": "number"
-                        },
-                        "specialization": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "points",
-                        "specialization"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/SkillData"
                     },
                     "persuade": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "points": {
-                          "type": "number"
-                        },
-                        "specialization": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "points",
-                        "specialization"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/SkillData"
                     },
                     "program": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "points": {
-                          "type": "number"
-                        },
-                        "specialization": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "points",
-                        "specialization"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/SkillData"
                     },
                     "provoke": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "points": {
-                          "type": "number"
-                        },
-                        "specialization": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "points",
-                        "specialization"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/SkillData"
                     },
                     "psi": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "points": {
-                          "type": "number"
-                        },
-                        "specialization": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "points",
-                        "specialization"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/SkillData"
                     },
                     "research": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "points": {
-                          "type": "number"
-                        },
-                        "specialization": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "points",
-                        "specialization"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/SkillData"
                     },
                     "survival": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "points": {
-                          "type": "number"
-                        },
-                        "specialization": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "points",
-                        "specialization"
-                      ],
-                      "type": "object"
+                      "$ref": "#/definitions/SkillData"
                     }
                   },
                   "required": [
@@ -1970,7 +1721,7 @@
               "additionalProperties": false,
               "properties": {
                 "meshHealth": {
-                  "$ref": "#/definitions/InfomorphHealthData"
+                  "$ref": "#/definitions/MeshHealthData"
                 },
                 "templates": {
                   "items": [
@@ -2032,7 +1783,7 @@
                   "type": "boolean"
                 },
                 "meshHealth": {
-                  "$ref": "#/definitions/InfomorphHealthData"
+                  "$ref": "#/definitions/MeshHealthData"
                 },
                 "painFilter": {
                   "type": "boolean"
@@ -2139,20 +1890,7 @@
                   "type": "object"
                 },
                 "Common": {
-                  "additionalProperties": false,
-                  "properties": {
-                    "description": {
-                      "type": "string"
-                    },
-                    "reference": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "description",
-                    "reference"
-                  ],
-                  "type": "object"
+                  "$ref": "#/definitions/CommonDetails"
                 },
                 "Conditions": {
                   "additionalProperties": false,
@@ -4300,7 +4038,7 @@
                   ]
                 },
                 "meshHealth": {
-                  "$ref": "#/definitions/InfomorphHealthData"
+                  "$ref": "#/definitions/MeshHealthData"
                 },
                 "state": {
                   "additionalProperties": false,
@@ -7033,6 +6771,23 @@
                   },
                   "type": "array"
                 },
+                "firewallRating": {
+                  "type": "number"
+                },
+                "hasActiveState": {
+                  "type": "boolean"
+                },
+                "meshAttacks": {
+                  "enum": [
+                    0,
+                    1,
+                    2
+                  ],
+                  "type": "number"
+                },
+                "meshHealth": {
+                  "$ref": "#/definitions/MeshHealthData"
+                },
                 "primaryAttack": {
                   "$ref": "#/definitions/SoftwareAttackData"
                 },
@@ -7041,26 +6796,6 @@
                 },
                 "serviceDuration": {
                   "type": "number"
-                },
-                "settings": {
-                  "additionalProperties": false,
-                  "properties": {
-                    "hasActiveState": {
-                      "type": "boolean"
-                    },
-                    "hasAttack": {
-                      "type": "boolean"
-                    },
-                    "trackMeshHealth": {
-                      "type": "boolean"
-                    }
-                  },
-                  "required": [
-                    "hasActiveState",
-                    "hasAttack",
-                    "trackMeshHealth"
-                  ],
-                  "type": "object"
                 },
                 "skills": {
                   "items": {
@@ -7183,10 +6918,13 @@
                 "activatedEffects",
                 "category",
                 "effects",
+                "firewallRating",
+                "hasActiveState",
+                "meshAttacks",
+                "meshHealth",
                 "primaryAttack",
                 "secondaryAttack",
                 "serviceDuration",
-                "settings",
                 "skills",
                 "softwareType",
                 "state",
@@ -8349,20 +8087,7 @@
               "additionalProperties": false,
               "properties": {
                 "Common": {
-                  "additionalProperties": false,
-                  "properties": {
-                    "description": {
-                      "type": "string"
-                    },
-                    "reference": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "description",
-                    "reference"
-                  ],
-                  "type": "object"
+                  "$ref": "#/definitions/CommonDetails"
                 },
                 "Copyable": {
                   "additionalProperties": false,
@@ -8391,8 +8116,8 @@
                   },
                   "required": [
                     "complexity",
-                    "restricted",
-                    "quality"
+                    "quality",
+                    "restricted"
                   ],
                   "type": "object"
                 },
@@ -9325,44 +9050,6 @@
       ],
       "type": "string"
     },
-    "InfomorphHealthData": {
-      "additionalProperties": false,
-      "properties": {
-        "baseDurability": {
-          "minimum": 1,
-          "type": "number"
-        },
-        "damage": {
-          "minimum": 0,
-          "type": "number"
-        },
-        "hot": {
-          "$ref": "#/definitions/HealsOverTime"
-        },
-        "log": {
-          "items": {
-            "$ref": "#/definitions/StringID%3CHealthModification%3E"
-          },
-          "type": "array"
-        },
-        "reboot": {
-          "type": "number"
-        },
-        "wounds": {
-          "minimum": 0,
-          "type": "number"
-        }
-      },
-      "required": [
-        "baseDurability",
-        "damage",
-        "hot",
-        "log",
-        "reboot",
-        "wounds"
-      ],
-      "type": "object"
-    },
     "InitiativeEffect": {
       "additionalProperties": false,
       "properties": {
@@ -9489,6 +9176,94 @@
         "attackTraits",
         "armorPiercing",
         "notes"
+      ],
+      "type": "object"
+    },
+    "MentalHealthData": {
+      "additionalProperties": false,
+      "properties": {
+        "alienation": {
+          "maximum": 5,
+          "minimum": 0,
+          "type": "number"
+        },
+        "damage": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "helplessness": {
+          "maximum": 5,
+          "minimum": 0,
+          "type": "number"
+        },
+        "log": {
+          "items": {
+            "$ref": "#/definitions/StringID%3CHealthModification%3E"
+          },
+          "type": "array"
+        },
+        "naturalHealAttempts": {
+          "items": {
+            "$ref": "#/definitions/StringID%3CNaturalMentalHealAttempt%3E"
+          },
+          "type": "array"
+        },
+        "violence": {
+          "maximum": 5,
+          "minimum": 0,
+          "type": "number"
+        },
+        "wounds": {
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "alienation",
+        "damage",
+        "helplessness",
+        "log",
+        "naturalHealAttempts",
+        "violence",
+        "wounds"
+      ],
+      "type": "object"
+    },
+    "MeshHealthData": {
+      "additionalProperties": false,
+      "properties": {
+        "baseDurability": {
+          "minimum": 1,
+          "type": "number"
+        },
+        "damage": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "hot": {
+          "$ref": "#/definitions/HealsOverTime"
+        },
+        "log": {
+          "items": {
+            "$ref": "#/definitions/StringID%3CHealthModification%3E"
+          },
+          "type": "array"
+        },
+        "reboot": {
+          "type": "number"
+        },
+        "wounds": {
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "baseDurability",
+        "damage",
+        "hot",
+        "log",
+        "reboot",
+        "wounds"
       ],
       "type": "object"
     },
@@ -9874,6 +9649,22 @@
       ],
       "type": "object"
     },
+    "SkillData": {
+      "additionalProperties": false,
+      "properties": {
+        "points": {
+          "type": "number"
+        },
+        "specialization": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "points",
+        "specialization"
+      ],
+      "type": "object"
+    },
     "SkillEffect": {
       "additionalProperties": false,
       "properties": {
@@ -10047,10 +9838,10 @@
         "label": {
           "type": "string"
         },
-        "meshArmor": {
+        "reduceAVbyDV": {
           "type": "boolean"
         },
-        "reduceAVbyDV": {
+        "useMeshArmor": {
           "type": "boolean"
         }
       },

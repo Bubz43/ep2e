@@ -11,7 +11,7 @@ import { EffectType } from '@src/features/effects';
 import { notify, NotificationType } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
 import { HealthType } from '@src/health/health';
-import { InfomorphHealth } from '@src/health/infomorph-health';
+import { MeshHealth } from '@src/health/infomorph-health';
 import { SyntheticHealth } from '@src/health/synthetic-health';
 import { LazyGetter } from 'lazy-get-decorator';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
@@ -93,12 +93,13 @@ export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
 
   @LazyGetter()
   get meshHealth() {
-    return new InfomorphHealth({
+    return new MeshHealth({
       data: this.epData.meshHealth,
       statMods: this.activeEffects?.getHealthStatMods(HealthType.Mesh),
       updater: this.updater.prop('data', 'meshHealth').nestedStore(),
       source: localize('mindState'),
       homeDevices: 1, // TODO
+      autoRepair: true
     });
   }
 

@@ -80,11 +80,13 @@ export class RailgunForm extends ItemFormBase {
 
   private openShapeMenu(ev: MouseEvent, shape: Railgun) {
     openMenu({
+      header: { heading: shape.name },
       content: [
         // TODO Shape Form
         {
           label: `${localize('delete')} ${localize('shape')}`,
           callback: () => this.item.removeShape(shape.id),
+          icon: html`<mwc-icon>delete_forever</mwc-icon>`
         },
       ],
       position: ev,

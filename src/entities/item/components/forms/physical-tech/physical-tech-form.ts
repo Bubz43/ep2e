@@ -16,13 +16,14 @@ import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
-  property,
   html,
   internalProperty,
+  property,
   PropertyValues,
 } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
-import { mapToObj, type } from 'remeda';
+import { mapToObj } from 'remeda';
+import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './physical-tech-form.scss';
 
@@ -34,7 +35,7 @@ export class PhysicalTechForm extends ItemFormBase {
     return 'physical-tech-form' as const;
   }
 
-  static styles = [entityFormCommonStyles, styles];
+  static styles = [entityFormCommonStyles, complexityForm.styles, styles];
 
   @property({ attribute: false }) item!: PhysicalTech;
 
@@ -62,8 +63,10 @@ export class PhysicalTechForm extends ItemFormBase {
       type,
       deviceType,
       effectGroups,
+      hasActivation,
     } = this.item;
     const { disabled } = this;
+    // TODO Fabrication
     return html`
       <entity-form-layout>
         <entity-form-header
@@ -82,12 +85,13 @@ export class PhysicalTechForm extends ItemFormBase {
           disabled,
           slot: 'sidebar',
           fields: ({ category, wareType, deviceType, fabricator }) => [
-            renderTextField(category),
-            html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
             renderSelectField(wareType, enumValues(PhysicalWare), {
               ...emptyTextDash,
               disabled: !!embedded,
             }),
+            renderTextField(category),
+            html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
+
             renderSelectField(deviceType, enumValues(DeviceType), {
               ...emptyTextDash,
               disabled: !!embedded,
@@ -97,8 +101,17 @@ export class PhysicalTechForm extends ItemFormBase {
         })}
 
         <div slot="details">
+          ${renderUpdaterForm(updater.prop('data'), {
+            disabled,
+            classes: complexityForm.cssClass,
+            fields: renderComplexityFields,
+          })}
+          ${deviceType ? this.renderMeshHealthSection() : ''}
+
           <section>
-            <sl-header heading=${localize('effects')}
+            <sl-header
+              heading=${localize('effects')}
+              ?hideBorder=${effectGroups.size === 0}
               ><mwc-icon-button
                 icon="add"
                 slot="action"
@@ -111,7 +124,7 @@ export class PhysicalTechForm extends ItemFormBase {
                 ? html`
                     <item-form-effects-list
                       label=${ifDefined(
-                        effectGroups.size > 1 ? localize(key) : undefined,
+                        hasActivation ? localize(key) : undefined,
                       )}
                       .effects=${group}
                       .operations=${this.effectsOps[key]}
@@ -121,7 +134,6 @@ export class PhysicalTechForm extends ItemFormBase {
                 : '',
             )}
           </section>
-          ${deviceType ? this.renderMeshHealthSection() : ''}
         </div>
 
         <editor-wrapper

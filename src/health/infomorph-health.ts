@@ -16,7 +16,7 @@ import {
 import { HealthMixin } from './health-mixin';
 import type { HealsOverTime } from './recovery';
 
-export type InfomorphHealthData = BasicHealthData & {
+export type MeshHealthData = BasicHealthData & {
   /**
    * @minimum 1
    */
@@ -25,9 +25,10 @@ export type InfomorphHealthData = BasicHealthData & {
   reboot: number;
 };
 
-type Init = HealthInit<InfomorphHealthData> & {
+type Init = HealthInit<MeshHealthData> & {
   homeDevices: number;
   statMods: HealthStatMods | undefined;
+  autoRepair: boolean;
 };
 
 class InfomorphHealthBase implements CommonHealth {
@@ -75,6 +76,7 @@ class InfomorphHealthBase implements CommonHealth {
   }
 
   applyModification(modification: HealthModification) {
+    // TODO Crashed vs not crashed
     return this.init.updater
       .prop('')
       .commit((data) => applyHealthModification(data, modification));
@@ -85,4 +87,5 @@ class InfomorphHealthBase implements CommonHealth {
   }
 }
 
-export class InfomorphHealth extends HealthMixin(InfomorphHealthBase) {}
+export class MeshHealth extends HealthMixin(InfomorphHealthBase) { }
+
