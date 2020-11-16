@@ -78,7 +78,7 @@ export class SoftwareForm extends ItemFormBase {
             renderTextField(category),
             html`<entity-form-sidebar-divider
           ></entity-form-sidebar-divider>`,
-            renderLabeledCheckbox(hasActiveState),
+            renderLabeledCheckbox(hasActiveState, { disabled: notEmpty(effectGroups.get("activated"))}),
             renderNumberField(meshAttacks, { min: 0, max: 2 })
           ],
         })}
