@@ -1266,6 +1266,11 @@
     "shapes": "Shapes",
     "meshAttacks": "Mesh Attacks",
     "useMeshArmor": "Use Mesh Armor",
+    "checkFailure": "Check Failure",
+    "checkSuccess": "Check Success",
+    "criticalCheckFailure": "Critical Check Failure",
+    "for": "For",
+    "impairmentModifier": "Impairment Modifier",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

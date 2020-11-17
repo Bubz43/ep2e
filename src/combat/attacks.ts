@@ -8,7 +8,7 @@ import type { Explosive } from '@src/entities/item/proxies/explosive';
 import type { FirearmAmmo } from '@src/entities/item/proxies/firearm-ammo';
 import type { Substance } from '@src/entities/item/proxies/substance';
 import type { ArmorType } from '@src/features/active-armor';
-import type { ApplyableConditions } from '@src/features/conditions';
+import type { AptitudeCheckInfo } from '@src/features/conditions';
 import type { FiringMode } from '@src/features/firing-modes';
 import { localize } from '@src/foundry/localization';
 import type { HealthType } from '@src/health/health';
@@ -52,7 +52,7 @@ export type SleightAttackData = {
   perTurn: boolean;
   attackTraits: AttackTrait[];
   damageType: HealthType;
-  applyConditions: ApplyableConditions;
+  aptitudeCheckInfo: AptitudeCheckInfo;
   notes: string;
 };
 
@@ -62,7 +62,7 @@ export type SoftwareAttackData = Omit<UsedAttackArmor, 'armorUsed'> & {
   damageType: HealthType;
   attackTraits: AttackTrait[];
   useMeshArmor: boolean;
-  applyConditions: ApplyableConditions;
+  aptitudeCheckInfo: AptitudeCheckInfo;
   notes: string;
 };
 

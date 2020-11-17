@@ -7,21 +7,21 @@ import { renderAutoForm } from '@src/components/form/forms';
 import { AptitudeType, enumValues } from '@src/data-enums';
 import { ArmorType } from '@src/features/active-armor';
 import {
-  ApplyableConditions,
+  AptitudeCheckInfo,
   CheckFailureInfo,
-  createResultInfo,
+  createCheckResultInfo,
 } from '@src/features/conditions';
 import { localize } from '@src/foundry/localization';
 import { capitalize } from '@src/foundry/misc-helpers';
 import {
   customElement,
-  LitElement,
-  property,
   html,
   internalProperty,
+  LitElement,
+  property,
 } from 'lit-element';
-import styles from './applyable-conditions-editor.scss';
-import { ApplyableConditionsEvent } from './applyable-conditions-event';
+import { AptitudeCheckInfoUpdateEvent } from './aptitude-check-info-update-event';
+import styles from './aptitude-check-info-editor.scss';
 
 enum ResultState {
   CheckSuccess = 'checkSuccess',
@@ -30,35 +30,35 @@ enum ResultState {
 }
 
 /**
- * @fires applyable-conditions-update
+ * @fires aptitude-check-info-update
  */
-@customElement('applyable-conditions-editor')
-export class ApplyableConditionsEditor extends LitElement {
+@customElement('aptitude-check-info-editor')
+export class AptitudeCheckInfoEditor extends LitElement {
   static get is() {
-    return 'applyable-conditions-editor' as const;
+    return 'aptitude-check-info-editor' as const;
   }
 
   static styles = [styles];
 
-  @property({ type: Object }) applyableConditions!: ApplyableConditions;
+  @property({ type: Object }) aptitudeCheckInfo!: AptitudeCheckInfo;
 
   @internalProperty() private resultForm = ResultState.CheckFailure;
 
-  @internalProperty() private resultInfo = createResultInfo({});
+  @internalProperty() private resultInfo = createCheckResultInfo({});
 
   @internalProperty() private checkFailureInfo: CheckFailureInfo = {
-    ...createResultInfo({}),
+    ...createCheckResultInfo({}),
     additionalDurationPerSuperior: 0,
   };
 
-  private emitUpdate = (changed: Partial<ApplyableConditions>) => {
-    this.dispatchEvent(new ApplyableConditionsEvent(changed));
+  private emitUpdate = (changed: Partial<AptitudeCheckInfo>) => {
+    this.dispatchEvent(new AptitudeCheckInfoUpdateEvent(changed));
   };
 
   render() {
     return html`
       ${renderAutoForm({
-        props: this.applyableConditions,
+        props: this.aptitudeCheckInfo,
         update: this.emitUpdate,
         fields: ({ check, checkModifier, armorAsModifier }) => [
           renderSelectField(check, enumValues(AptitudeType)),
@@ -73,7 +73,7 @@ export class ApplyableConditionsEditor extends LitElement {
 
       <div class="result-conditions">
         ${enumValues(ResultState).map((state) => {
-          const list = this.applyableConditions[state];
+          const list = this.aptitudeCheckInfo[state];
 
           return html` <sl-group label=${localize(state)}> </sl-group> `;
         })}
@@ -108,6 +108,6 @@ export class ApplyableConditionsEditor extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'applyable-conditions-editor': ApplyableConditionsEditor;
+    'aptitude-check-info-editor': AptitudeCheckInfoEditor;
   }
 }

@@ -149,7 +149,7 @@ export const getConditionEffects = (condition: ConditionType): Effect[] => {
   }
 };
 
-export type ResultInfo = {
+export type CheckResultInfo = {
   condition: ConditionType | '';
   staticDuration: number;
   variableDuration: string;
@@ -158,13 +158,13 @@ export type ResultInfo = {
   notes: string;
 };
 
-export type CheckFailureInfo = ResultInfo & {
+export type CheckFailureInfo = CheckResultInfo & {
   additionalDurationPerSuperior: number;
 };
 
 
 
-export const createResultInfo = createFeature<ResultInfo>(() => ({
+export const createCheckResultInfo = createFeature<CheckResultInfo>(() => ({
   condition: '',
   staticDuration: 0,
   variableDuration: '',
@@ -179,17 +179,17 @@ export enum CheckResultState {
   CriticalFailure = 'criticalCheckFailure',
 }
 
-export type ApplyableConditions = {
+export type AptitudeCheckInfo = {
   check: AptitudeType | '';
   checkModifier: number;
   armorAsModifier: ArmorType | '';
-  checkSuccess: ResultInfo[];
+  checkSuccess: CheckResultInfo[];
   checkFailure: CheckFailureInfo[];
-  criticalCheckFailure: ResultInfo[];
+  criticalCheckFailure: CheckResultInfo[];
 };
 
 export const formatCheckResultInfo = (
-  entry: ApplyableConditions[CheckResultState][number],
+  entry: AptitudeCheckInfo[CheckResultState][number],
 ) => {
   const { condition, staticDuration: duration, impairment } = entry;
   const effect = compact([
@@ -201,7 +201,7 @@ export const formatCheckResultInfo = (
 
 const conditionEffectFromAttackTrait = (
   trait: AttackTrait,
-): ApplyableConditions => {
+): AptitudeCheckInfo => {
   switch (trait) {
     case AttackTrait.Blinding:
       return {
@@ -211,7 +211,7 @@ const conditionEffectFromAttackTrait = (
         checkSuccess: [],
         checkFailure: [
           {
-            ...createResultInfo({
+            ...createCheckResultInfo({
               condition: ConditionType.Blinded,
               staticDuration: CommonInterval.Turn,
             }),
@@ -219,7 +219,7 @@ const conditionEffectFromAttackTrait = (
           },
         ],
         criticalCheckFailure: [
-          createResultInfo({
+          createCheckResultInfo({
             condition: ConditionType.Blinded,
             staticDuration: CommonInterval.Indefinite,
           }),
@@ -234,7 +234,7 @@ const conditionEffectFromAttackTrait = (
         checkSuccess: [],
         checkFailure: [
           {
-            ...createResultInfo({
+            ...createCheckResultInfo({
               condition: ConditionType.Grappled,
               staticDuration: CommonInterval.Instant,
             }),
@@ -252,7 +252,7 @@ const conditionEffectFromAttackTrait = (
         checkSuccess: [],
         checkFailure: [
           {
-            ...createResultInfo({
+            ...createCheckResultInfo({
               condition: ConditionType.Prone,
               staticDuration: CommonInterval.Instant,
             }),
@@ -269,7 +269,7 @@ const conditionEffectFromAttackTrait = (
         armorAsModifier: '',
         checkFailure: [
           {
-            ...createResultInfo({
+            ...createCheckResultInfo({
               staticDuration: CommonInterval.Turn,
               impairment: -20,
             }),
@@ -286,28 +286,28 @@ const conditionEffectFromAttackTrait = (
         checkModifier: 0,
         armorAsModifier: ArmorType.Energy,
         checkSuccess: [
-          createResultInfo({
+          createCheckResultInfo({
             condition: ConditionType.Stunned,
             staticDuration: CommonInterval.Turn * 3,
           }),
         ],
         checkFailure: [
           {
-            ...createResultInfo({
+            ...createCheckResultInfo({
               condition: ConditionType.Incapacitated,
               staticDuration: CommonInterval.Turn,
             }),
             additionalDurationPerSuperior: CommonInterval.Turn * 2,
           },
           {
-            ...createResultInfo({
+            ...createCheckResultInfo({
               condition: ConditionType.Prone,
               staticDuration: CommonInterval.Instant,
             }),
             additionalDurationPerSuperior: 0,
           },
           {
-            ...createResultInfo({
+            ...createCheckResultInfo({
               condition: ConditionType.Stunned,
               staticDuration: CommonInterval.Minute * 3,
             }),
@@ -325,7 +325,7 @@ const conditionEffectFromAttackTrait = (
         checkSuccess: [],
         checkFailure: [
           {
-            ...createResultInfo({
+            ...createCheckResultInfo({
               condition: ConditionType.Stunned,
               staticDuration: CommonInterval.Turn,
             }),
@@ -333,11 +333,11 @@ const conditionEffectFromAttackTrait = (
           },
         ],
         criticalCheckFailure: [
-          createResultInfo({
+          createCheckResultInfo({
             condition: ConditionType.Incapacitated,
             staticDuration: CommonInterval.Turn,
           }),
-          createResultInfo({
+          createCheckResultInfo({
             condition: ConditionType.Stunned,
             staticDuration: CommonInterval.Minute,
           }),

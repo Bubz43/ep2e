@@ -507,7 +507,7 @@
       "effectsOnTarget": [],
       "scaleEffectsOnSuperior": false,
       "attack": {
-        "applyConditions": {
+        "aptitudeCheckInfo": {
           "armorAsModifier":"",
           "check": "",
           "checkModifier": 0,
@@ -711,7 +711,7 @@
         "damageType": "mesh",
         "useMeshArmor": true,
         "notes": "",
-        "applyConditions": {
+        "aptitudeCheckInfo": {
           "armorAsModifier":"",
           "check": "",
           "checkModifier": 0,
@@ -729,7 +729,7 @@
         "damageType": "mesh",
         "useMeshArmor": true,
         "notes": "",
-        "applyConditions": {
+        "aptitudeCheckInfo": {
           "armorAsModifier":"",
           "check": "",
           "checkModifier": 0,

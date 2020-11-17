@@ -124,7 +124,7 @@
       ],
       "type": "string"
     },
-    "ApplyableConditions": {
+    "AptitudeCheckInfo": {
       "additionalProperties": false,
       "properties": {
         "armorAsModifier": {
@@ -151,48 +151,7 @@
         },
         "checkFailure": {
           "items": {
-            "additionalProperties": false,
-            "properties": {
-              "additionalDurationPerSuperior": {
-                "type": "number"
-              },
-              "condition": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/ConditionType"
-                  },
-                  {
-                    "const": "",
-                    "type": "string"
-                  }
-                ]
-              },
-              "impairment": {
-                "type": "number"
-              },
-              "notes": {
-                "type": "string"
-              },
-              "staticDuration": {
-                "type": "number"
-              },
-              "stress": {
-                "type": "string"
-              },
-              "variableDuration": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "additionalDurationPerSuperior",
-              "condition",
-              "impairment",
-              "notes",
-              "staticDuration",
-              "stress",
-              "variableDuration"
-            ],
-            "type": "object"
+            "$ref": "#/definitions/CheckFailureInfo"
           },
           "type": "array"
         },
@@ -201,87 +160,13 @@
         },
         "checkSuccess": {
           "items": {
-            "additionalProperties": false,
-            "properties": {
-              "condition": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/ConditionType"
-                  },
-                  {
-                    "const": "",
-                    "type": "string"
-                  }
-                ]
-              },
-              "impairment": {
-                "type": "number"
-              },
-              "notes": {
-                "type": "string"
-              },
-              "staticDuration": {
-                "type": "number"
-              },
-              "stress": {
-                "type": "string"
-              },
-              "variableDuration": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "condition",
-              "staticDuration",
-              "variableDuration",
-              "stress",
-              "impairment",
-              "notes"
-            ],
-            "type": "object"
+            "$ref": "#/definitions/CheckResultInfo"
           },
           "type": "array"
         },
         "criticalCheckFailure": {
           "items": {
-            "additionalProperties": false,
-            "properties": {
-              "condition": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/ConditionType"
-                  },
-                  {
-                    "const": "",
-                    "type": "string"
-                  }
-                ]
-              },
-              "impairment": {
-                "type": "number"
-              },
-              "notes": {
-                "type": "string"
-              },
-              "staticDuration": {
-                "type": "number"
-              },
-              "stress": {
-                "type": "string"
-              },
-              "variableDuration": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "condition",
-              "staticDuration",
-              "variableDuration",
-              "stress",
-              "impairment",
-              "notes"
-            ],
-            "type": "object"
+            "$ref": "#/definitions/CheckResultInfo"
           },
           "type": "array"
         }
@@ -581,6 +466,90 @@
         "credits"
       ],
       "type": "string"
+    },
+    "CheckFailureInfo": {
+      "additionalProperties": false,
+      "properties": {
+        "additionalDurationPerSuperior": {
+          "type": "number"
+        },
+        "condition": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ConditionType"
+            },
+            {
+              "const": "",
+              "type": "string"
+            }
+          ]
+        },
+        "impairment": {
+          "type": "number"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "staticDuration": {
+          "type": "number"
+        },
+        "stress": {
+          "type": "string"
+        },
+        "variableDuration": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "additionalDurationPerSuperior",
+        "condition",
+        "impairment",
+        "notes",
+        "staticDuration",
+        "stress",
+        "variableDuration"
+      ],
+      "type": "object"
+    },
+    "CheckResultInfo": {
+      "additionalProperties": false,
+      "properties": {
+        "condition": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ConditionType"
+            },
+            {
+              "const": "",
+              "type": "string"
+            }
+          ]
+        },
+        "impairment": {
+          "type": "number"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "staticDuration": {
+          "type": "number"
+        },
+        "stress": {
+          "type": "string"
+        },
+        "variableDuration": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "condition",
+        "staticDuration",
+        "variableDuration",
+        "stress",
+        "impairment",
+        "notes"
+      ],
+      "type": "object"
     },
     "ChecksTag": {
       "additionalProperties": false,
@@ -9778,8 +9747,8 @@
     "SleightAttackData": {
       "additionalProperties": false,
       "properties": {
-        "applyConditions": {
-          "$ref": "#/definitions/ApplyableConditions"
+        "aptitudeCheckInfo": {
+          "$ref": "#/definitions/AptitudeCheckInfo"
         },
         "attackTraits": {
           "items": {
@@ -9809,7 +9778,7 @@
         "perTurn",
         "attackTraits",
         "damageType",
-        "applyConditions",
+        "aptitudeCheckInfo",
         "notes"
       ],
       "type": "object"
@@ -9844,8 +9813,8 @@
     "SoftwareAttackData": {
       "additionalProperties": false,
       "properties": {
-        "applyConditions": {
-          "$ref": "#/definitions/ApplyableConditions"
+        "aptitudeCheckInfo": {
+          "$ref": "#/definitions/AptitudeCheckInfo"
         },
         "armorPiercing": {
           "type": "boolean"
@@ -9876,7 +9845,7 @@
         }
       },
       "required": [
-        "applyConditions",
+        "aptitudeCheckInfo",
         "armorPiercing",
         "attackTraits",
         "damageFormula",
