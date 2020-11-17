@@ -8,9 +8,9 @@ import {
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import {
-  Activation,
   AptitudeType,
   DeviceType,
+  EffectStates,
   enumValues,
   FabType,
   PhysicalWare,
@@ -63,6 +63,20 @@ export class PhysicalTechForm extends ItemFormBase {
     this.effectsOps[this.effectGroup].add({}, ev.effect);
   }
 
+  /*
+            activation.value === Activation.Use
+              ? html`
+                  ${renderTimeField(useDuration)}
+                  ${renderSelectField(
+                    useCheck,
+                    enumValues(AptitudeType),
+                    emptyTextDash,
+                  )}
+                  <entity-form-sidebar-divider></entity-form-sidebar-divider>
+                `
+              : '',
+  */
+
   render() {
     const {
       updater,
@@ -94,12 +108,12 @@ export class PhysicalTechForm extends ItemFormBase {
           slot: 'sidebar',
           fields: ({
             category,
-            activation,
+            effectStates,
             wareType,
             deviceType,
             fabricator,
-            useDuration,
-            useCheck,
+            usedEffectsDuration: useDuration,
+            resistEffectsCheck: useCheck,
           }) => [
             renderSelectField(wareType, enumValues(PhysicalWare), {
               ...emptyTextDash,
@@ -107,22 +121,12 @@ export class PhysicalTechForm extends ItemFormBase {
             }),
             renderTextField(category),
             html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
-            renderSelectField(activation, enumValues(Activation), {
+            renderSelectField(effectStates, enumValues(EffectStates), {
               disableOptions: notEmpty(this.item.epData.activatedEffects)
-                ? [Activation.None]
+                ? [EffectStates.Passive]
                 : undefined,
             }),
-            activation.value === Activation.Use
-              ? html`
-                  ${renderTimeField(useDuration)}
-                  ${renderSelectField(
-                    useCheck,
-                    enumValues(AptitudeType),
-                    emptyTextDash,
-                  )}
-                  <entity-form-sidebar-divider></entity-form-sidebar-divider>
-                `
-              : '',
+            html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
             renderSelectField(deviceType, enumValues(DeviceType), {
               ...emptyTextDash,
               disabled: !!embedded,
@@ -175,7 +179,7 @@ export class PhysicalTechForm extends ItemFormBase {
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
-  }
+  } 
 
   private renderMeshHealthSection() {
     return html`

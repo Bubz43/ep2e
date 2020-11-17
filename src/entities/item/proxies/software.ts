@@ -47,8 +47,12 @@ export class Software
     return this.epData.effects;
   }
 
+  get activation() {
+    return this.epData.activation
+  }
+
   get hasActivation() {
-    return this.epData.hasActiveState;
+    return !!this.epData.activation;
   }
 
   get activatedEffects() {

@@ -1295,7 +1295,20 @@ type LangEntries =
   | 'checkFailure'
   | 'criticalCheckFailure'
   | 'impairmentModifier'
-  | 'for' | "checkModifier" | "armorAsModifier" | "additionalDurationPerSuperior" | "impairment" | "static" | "variable" | "folder"
+  | 'for'
+  | 'checkModifier'
+  | 'armorAsModifier'
+  | 'additionalDurationPerSuperior'
+  | 'impairment'
+  | 'static'
+  | 'variable'
+  | 'folder'
+  | 'passiveAndActivated'
+  | 'passiveOrActivated'
+  | 'passiveAndUsable'
+  | 'effectStates'
+  | 'usedEffectsDuration'
+  | 'resistEffectsCheck';
 type FullNames =
   | 'cog'
   | 'int'

@@ -23,6 +23,7 @@ import {
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import type { Software } from '@src/entities/item/proxies/software';
+import { ActionType } from '@src/features/actions';
 import {
   CheckResultState,
   formatAptitudeCheckInfo,
@@ -45,7 +46,7 @@ import {
   PropertyValues,
 } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
-import { compact, createPipe, map, mapToObj, objOf } from 'remeda';
+import { compact, createPipe, difference, map, mapToObj, objOf } from 'remeda';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './software-form.scss';
@@ -106,7 +107,7 @@ export class SoftwareForm extends ItemFormBase {
             softwareType,
             category,
             firewallRating,
-            hasActiveState,
+            activation,
             meshAttacks,
           }) => [
             renderSelectField(softwareType, enumValues(SoftwareType)),
@@ -115,10 +116,13 @@ export class SoftwareForm extends ItemFormBase {
               : '',
             renderTextField(category),
             html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
-            renderLabeledCheckbox(hasActiveState, {
-              disabled:
-                hasActiveState.value && notEmpty(effectGroups.get('activated')),
-            }),
+            renderSelectField(
+              activation,
+              difference(enumValues(ActionType), [ActionType.Task]),
+              notEmpty(effectGroups.get('activated'))
+                ? undefined
+                : emptyTextDash,
+            ),
             renderNumberField(meshAttacks, { min: 0, max: 2 }),
           ],
         })}

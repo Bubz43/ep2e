@@ -95,14 +95,6 @@
       ],
       "type": "string"
     },
-    "Activation": {
-      "enum": [
-        "none",
-        "toggle",
-        "use"
-      ],
-      "type": "string"
-    },
     "ActiveSkillCategory": {
       "enum": [
         "combat",
@@ -151,7 +143,7 @@
         },
         "checkFailure": {
           "items": {
-            "$ref": "#/definitions/CheckFailureInfo"
+            "$ref": "#/definitions/CheckResultInfo"
           },
           "type": "array"
         },
@@ -467,7 +459,7 @@
       ],
       "type": "string"
     },
-    "CheckFailureInfo": {
+    "CheckResultInfo": {
       "additionalProperties": false,
       "properties": {
         "additionalDurationPerSuperior": {
@@ -498,57 +490,11 @@
         },
         "variableDuration": {
           "type": "string"
-        }
-      },
-      "required": [
-        "additionalDurationPerSuperior",
-        "condition",
-        "impairment",
-        "notes",
-        "staticDuration",
-        "stress",
-        "variableDuration"
-      ],
-      "type": "object"
-    },
-    "CheckResultInfo": {
-      "additionalProperties": false,
-      "properties": {
-        "condition": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ConditionType"
-            },
-            {
-              "const": "",
-              "type": "string"
-            }
-          ]
         },
-        "impairment": {
-          "type": "number"
-        },
-        "notes": {
-          "type": "string"
-        },
-        "staticDuration": {
-          "type": "number"
-        },
-        "stress": {
-          "type": "string"
-        },
-        "variableDuration": {
+        "variableInterval": {
           "type": "string"
         }
       },
-      "required": [
-        "condition",
-        "staticDuration",
-        "variableDuration",
-        "stress",
-        "impairment",
-        "notes"
-      ],
       "type": "object"
     },
     "ChecksTag": {
@@ -719,6 +665,15 @@
           "$ref": "#/definitions/MovementEffect"
         }
       ]
+    },
+    "EffectStates": {
+      "enum": [
+        "passive",
+        "passiveAndActivated",
+        "passiveOrActivated",
+        "passiveAndUsable"
+      ],
+      "type": "string"
     },
     "EgoRepData": {
       "additionalProperties": false,
@@ -3582,8 +3537,13 @@
                   },
                   "type": "array"
                 },
-                "activation": {
-                  "$ref": "#/definitions/Activation"
+                "activationAction": {
+                  "enum": [
+                    "automatic",
+                    "quick",
+                    "complex"
+                  ],
+                  "type": "string"
                 },
                 "category": {
                   "type": "string"
@@ -3598,6 +3558,9 @@
                       "$ref": "#/definitions/DeviceType"
                     }
                   ]
+                },
+                "effectStates": {
+                  "$ref": "#/definitions/EffectStates"
                 },
                 "effects": {
                   "items": {
@@ -4045,6 +4008,17 @@
                 "meshHealth": {
                   "$ref": "#/definitions/MeshHealthData"
                 },
+                "resistEffectsCheck": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/definitions/AptitudeType"
+                    },
+                    {
+                      "const": "",
+                      "type": "string"
+                    }
+                  ]
+                },
                 "state": {
                   "additionalProperties": false,
                   "properties": {
@@ -4095,18 +4069,7 @@
                   "minItems": 5,
                   "type": "array"
                 },
-                "useCheck": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/definitions/AptitudeType"
-                    },
-                    {
-                      "const": "",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "useDuration": {
+                "usedEffectsDuration": {
                   "type": "number"
                 },
                 "wareType": {
@@ -4123,16 +4086,17 @@
               },
               "required": [
                 "activatedEffects",
-                "activation",
+                "activationAction",
                 "category",
                 "deviceType",
+                "effectStates",
                 "effects",
                 "fabricator",
                 "meshHealth",
+                "resistEffectsCheck",
                 "state",
                 "templates",
-                "useCheck",
-                "useDuration",
+                "usedEffectsDuration",
                 "wareType"
               ],
               "type": "object"
@@ -6332,6 +6296,15 @@
                   },
                   "type": "array"
                 },
+                "activation": {
+                  "enum": [
+                    "",
+                    "automatic",
+                    "quick",
+                    "complex"
+                  ],
+                  "type": "string"
+                },
                 "category": {
                   "type": "string"
                 },
@@ -6770,9 +6743,6 @@
                 "firewallRating": {
                   "type": "number"
                 },
-                "hasActiveState": {
-                  "type": "boolean"
-                },
                 "meshAttacks": {
                   "enum": [
                     0,
@@ -6912,10 +6882,10 @@
               },
               "required": [
                 "activatedEffects",
+                "activation",
                 "category",
                 "effects",
                 "firewallRating",
-                "hasActiveState",
                 "meshAttacks",
                 "meshHealth",
                 "primaryAttack",

@@ -1425,6 +1425,9 @@
             "effectDuration": {
               "type": "string"
             },
+            "effectStates": {
+              "type": "string"
+            },
             "effectType": {
               "type": "string"
             },
@@ -2772,6 +2775,15 @@
             "passive": {
               "type": "string"
             },
+            "passiveAndActivated": {
+              "type": "string"
+            },
+            "passiveAndUsable": {
+              "type": "string"
+            },
+            "passiveOrActivated": {
+              "type": "string"
+            },
             "paused": {
               "type": "string"
             },
@@ -3163,6 +3175,9 @@
               "type": "string"
             },
             "reset": {
+              "type": "string"
+            },
+            "resistEffectsCheck": {
               "type": "string"
             },
             "resistInfection": {
@@ -4059,6 +4074,9 @@
             "used": {
               "type": "string"
             },
+            "usedEffectsDuration": {
+              "type": "string"
+            },
             "user": {
               "type": "string"
             },
@@ -4568,6 +4586,7 @@
             "editor",
             "effect",
             "effectDuration",
+            "effectStates",
             "effectType",
             "effectiveRange",
             "effects",
@@ -5017,6 +5036,9 @@
             "paramedic",
             "passengers",
             "passive",
+            "passiveAndActivated",
+            "passiveAndUsable",
+            "passiveOrActivated",
             "paused",
             "payload",
             "payloadUse",
@@ -5148,6 +5170,7 @@
             "requirement",
             "research",
             "reset",
+            "resistEffectsCheck",
             "resistInfection",
             "resistSubstanceOrDisease",
             "resisted",
@@ -5446,6 +5469,7 @@
             "useMuse",
             "useThreat",
             "used",
+            "usedEffectsDuration",
             "user",
             "uses",
             "using",

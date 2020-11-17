@@ -224,10 +224,12 @@ export enum SoftwareType {
   OperatingSystem = 'operatingSystem',
 }
 
-export enum Activation {
-  None = 'none',
-  Toggle = 'toggle',
-  Use = 'use',
+
+export enum EffectStates {
+  Passive = "passive",
+  PassiveAndActivated = "passiveAndActivated",
+  PassiveOrActivated = "passiveOrActivated",
+  PassiveAndUsable = "passiveAndUsable"
 }
 
 export enum GearTrait {

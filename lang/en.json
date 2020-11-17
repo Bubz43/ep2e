@@ -1278,6 +1278,12 @@
     "folder": "Folder",
     "static": "Static",
     "variable": "Variable",
+    "effectStates": "Effect States",
+    "passiveAndActivated": "Passive and Activated",
+    "passiveAndUsable": "Passive and Usable",
+    "passiveOrActivated": "Passive or Activated",
+    "resistEffectsCheck": "Resist Effects Check",
+    "usedEffectsDuration": "Used Effects Duration",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

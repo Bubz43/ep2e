@@ -1,4 +1,4 @@
-import { Activation, DeviceType } from '@src/data-enums';
+import { DeviceType, EffectStates } from '@src/data-enums';
 import type { ObtainableEffects } from '@src/entities/applied-effects';
 import type { ItemType } from '@src/entities/entity-types';
 import { localize } from '@src/foundry/localization';
@@ -27,12 +27,12 @@ export class PhysicalTech
     return this.hasActivation && this.state.activated;
   }
 
-  get activation() {
-    return this.epData.activation;
+  get effectStates() {
+    return this.epData.effectStates;
   }
 
   get hasActivation() {
-    return this.activation !== Activation.None;
+    return this.effectStates !== EffectStates.Passive;
   }
 
   get effects() {
@@ -52,7 +52,7 @@ export class PhysicalTech
   }
 
   get onlyLocalEffects() {
-    return this.activation !== Activation.Use;
+    return this.effectStates !== EffectStates.PassiveAndUsable;
   }
 
   @LazyGetter()

@@ -674,7 +674,7 @@
       "category": "",
       "serviceDuration": 0,
       "skills": [],
-      "hasActiveState": false,
+      "activation": "",
       "firewallRating": 30,
       "meshAttacks": 0,
       "meshHealth": {
@@ -762,13 +762,14 @@
         "GearState"
       ],
       "activatedEffects": [],
-      "activation": "none",
       "deviceType": "",
       "effects": [],
       "category": "",
       "fabricator":"",
-      "useCheck": "",
-      "useDuration": 0,
+      "activationAction": "automatic",
+      "effectStates": "passive",
+      "resistEffectsCheck":"",
+    "usedEffectsDuration": 0,
       "state": {
         "activated": false,
         "embeddedEgos": [],
