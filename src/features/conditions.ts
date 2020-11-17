@@ -144,5 +144,3 @@ export const getConditionEffects = (condition: ConditionType): Effect[] => {
       return [miscEffect(condition)];
   }
 };
-
-

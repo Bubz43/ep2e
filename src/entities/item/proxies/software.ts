@@ -1,4 +1,8 @@
-import { createBaseAttackFormula, SoftwareAttack, SoftwareAttackData } from '@src/combat/attacks';
+import {
+  createBaseAttackFormula,
+  SoftwareAttack,
+  SoftwareAttackData,
+} from '@src/combat/attacks';
 import { SoftwareType } from '@src/data-enums';
 import type { ObtainableEffects } from '@src/entities/applied-effects';
 import type { ItemType } from '@src/entities/entity-types';
@@ -24,11 +28,13 @@ export class Software
   }
 
   get fullType() {
-    return `${localize(this.softwareType)} ${this.category ? `(${this.category})` : ""}`
+    return `${localize(this.softwareType)} ${
+      this.category ? `(${this.category})` : ''
+    }`;
   }
 
   get category() {
-    return this.epData.category
+    return this.epData.category;
   }
 
   get softwareType() {
@@ -48,7 +54,7 @@ export class Software
   }
 
   get activation() {
-    return this.epData.activation
+    return this.epData.activation;
   }
 
   get hasActivation() {
@@ -122,14 +128,17 @@ export class Software
     };
   }
 
-  setupAttack({ damageFormula, useMeshArmor, ...data }: SoftwareAttackData, defaultLabel: string): SoftwareAttack {
+  setupAttack(
+    { damageFormula, useMeshArmor, ...data }: SoftwareAttackData,
+    defaultLabel: string,
+  ): SoftwareAttack {
     return {
       ...data,
-      label: this.epData.meshAttacks === 2 ? data.label || defaultLabel : "",
+      label: this.epData.meshAttacks === 2 ? data.label || defaultLabel : '',
       armorUsed: compact([useMeshArmor && ArmorType.Mesh]),
       rollFormulas: damageFormula
-      ? [createBaseAttackFormula(damageFormula)]
-      : []
-    }
+        ? [createBaseAttackFormula(damageFormula)]
+        : [],
+    };
   }
 }

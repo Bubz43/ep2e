@@ -173,8 +173,8 @@ type ItemFlags<T extends ItemType> = T extends ItemType.Psi
       payload: null | [ItemEntity<ItemType.Explosive>];
     }
   : T extends ItemType.PhysicalTech
-? {
-  firewall: ItemEntity<ItemType.Software> | null;
+  ? {
+      firewall: ItemEntity<ItemType.Software> | null;
       software: ItemEntity<ItemType.Software>[];
       fabrication: {
         printTime: number;

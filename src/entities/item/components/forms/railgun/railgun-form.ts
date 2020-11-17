@@ -86,7 +86,7 @@ export class RailgunForm extends ItemFormBase {
         {
           label: `${localize('delete')} ${localize('shape')}`,
           callback: () => this.item.removeShape(shape.id),
-          icon: html`<mwc-icon>delete_forever</mwc-icon>`
+          icon: html`<mwc-icon>delete_forever</mwc-icon>`,
         },
       ],
       position: ev,

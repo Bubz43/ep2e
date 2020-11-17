@@ -74,7 +74,7 @@ export class MeleeWeapon
         : [],
       coating: this.coating,
       payload: this.payload,
-      damageType: HealthType.Physical
+      damageType: HealthType.Physical,
     };
   }
 

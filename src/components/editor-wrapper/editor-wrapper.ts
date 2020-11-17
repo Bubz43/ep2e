@@ -14,8 +14,6 @@ import type { Editor, RawEditorSettings } from 'tinymce';
 import type { EnrichedHTML } from '../enriched-html/enriched-html';
 import styles from './editor-wrapper.scss';
 
-
-
 @customElement('editor-wrapper')
 export class EditorWrapper extends LitElement {
   static get is() {
@@ -43,11 +41,11 @@ export class EditorWrapper extends LitElement {
 
   private editor: Editor | null = null;
 
-  @LazyGetter() 
+  @LazyGetter()
   static get plugins() {
-    const plugins = new Set(CONFIG.TinyMCE.plugins.split(" "));
-    plugins.add("autoresize").delete("code")
-    return [...plugins]
+    const plugins = new Set(CONFIG.TinyMCE.plugins.split(' '));
+    plugins.add('autoresize').delete('code');
+    return [...plugins];
   }
 
   disconnectedCallback() {
@@ -71,13 +69,14 @@ export class EditorWrapper extends LitElement {
       setup: this.editorSetup,
       save_onsavecallback: this.editorSave,
       target_list: [{ title: 'New page', value: '_blank' }],
-      toolbar: "styleselect bullist numlist image table hr link removeformat code",
+      toolbar:
+        'styleselect bullist numlist image table hr link removeformat code',
       autoresize_on_init: false,
       autoresize_overflow_padding: 10,
       min_height: 200,
       max_height: 400,
-      plugins: EditorWrapper.plugins
-    }
+      plugins: EditorWrapper.plugins,
+    };
   }
 
   private editorSetup = (mce: Editor) => {

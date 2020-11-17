@@ -2,10 +2,9 @@ import {
   emptyTextDash,
   renderFormulaField,
   renderNumberField,
-
   renderSelectField,
   renderTextField,
-  renderTimeField
+  renderTimeField,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { AptitudeType, enumValues } from '@src/data-enums';
@@ -14,14 +13,10 @@ import {
   AptitudeCheckInfo,
   CheckResultInfo,
   checkResultInfoWithDefaults,
-
   CheckResultState,
-
-  formatCheckResultInfo
-} from "@src/features/aptitude-check-result-info";
-import {
-  ConditionType
-} from '@src/features/conditions';
+  formatCheckResultInfo,
+} from '@src/features/aptitude-check-result-info';
+import { ConditionType } from '@src/features/conditions';
 import { CommonInterval } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { notEmpty, safeMerge } from '@src/utility/helpers';
@@ -30,12 +25,11 @@ import {
   html,
   internalProperty,
   LitElement,
-  property
+  property,
 } from 'lit-element';
 import { concat, objOf, omit, pipe } from 'remeda';
 import styles from './aptitude-check-info-editor.scss';
 import { AptitudeCheckInfoUpdateEvent } from './aptitude-check-info-update-event';
-
 
 enum DurationEdit {
   Static = 'static',
@@ -73,7 +67,7 @@ export class AptitudeCheckInfoEditor extends LitElement {
 
   private resetResultInfo() {
     this.resultInfo = checkResultInfoWithDefaults({});
-    this.durationEdit = DurationEdit.Static
+    this.durationEdit = DurationEdit.Static;
   }
 
   private get infoIsComplete() {
@@ -140,25 +134,26 @@ export class AptitudeCheckInfoEditor extends LitElement {
               ${enumValues(CheckResultState).map((state) => {
                 const list = this.aptitudeCheckInfo[state];
 
-                return notEmpty(list) ? html`
-                  <sl-group label=${localize(state)}>
-                    ${list.map(
-                      (entry, index) => html`
-                        <wl-list-item
-                          clickable
-                          @click=${() => {
-                            const copy = [...list];
-                            copy.splice(index, 1);
-                            this.emitUpdate({ [state]: copy });
-                          }}
-                          >${formatCheckResultInfo(entry)}
-                          <mwc-icon slot="after">delete_forever</mwc-icon>
-                          </wl-list-item
-                        >
-                      `,
-                    )}
-                  </sl-group>
-                ` : ""
+                return notEmpty(list)
+                  ? html`
+                      <sl-group label=${localize(state)}>
+                        ${list.map(
+                          (entry, index) => html`
+                            <wl-list-item
+                              clickable
+                              @click=${() => {
+                                const copy = [...list];
+                                copy.splice(index, 1);
+                                this.emitUpdate({ [state]: copy });
+                              }}
+                              >${formatCheckResultInfo(entry)}
+                              <mwc-icon slot="after">delete_forever</mwc-icon>
+                            </wl-list-item>
+                          `,
+                        )}
+                      </sl-group>
+                    `
+                  : '';
               })}
             </div>
 

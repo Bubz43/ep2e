@@ -6,7 +6,6 @@ import { CommonInterval, prettyMilliseconds, TimeInterval } from './time';
 import { ConditionType } from './conditions';
 import { withSign } from '@src/utility/helpers';
 
-
 export type CheckResultInfo = {
   condition?: ConditionType | '';
   impairment?: number;

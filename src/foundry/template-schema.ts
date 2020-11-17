@@ -617,7 +617,7 @@ type SoftwareData = {
     | (FieldSkillData & { fieldSkill: FieldSkillType })
     | (SkillData & { skillType: SkillType })
   >[];
-  activation: "" | Exclude<ActionType, ActionType.Task>;
+  activation: '' | Exclude<ActionType, ActionType.Task>;
   meshAttacks: 0 | 1 | 2;
   firewallRating: number;
   state: {
@@ -637,7 +637,7 @@ type PhysicalTechData = {
   activatedEffects: StringID<Effect>[];
   wareType: '' | PhysicalWare;
   effectStates: EffectStates;
-  activationAction: Exclude<ActionType, ActionType.Task>,
+  activationAction: Exclude<ActionType, ActionType.Task>;
   usedEffectsDuration: number;
   resistEffectsCheck: AptitudeType | '';
   state: {

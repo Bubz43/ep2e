@@ -18,7 +18,7 @@ sl-header {
   }
 }
 
-[slot="details"] {
+[slot='details'] {
   position: relative;
 }
 
@@ -26,7 +26,7 @@ sl-header {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   padding: 0.5rem 0 0;
-  
+
   sl-form {
     display: contents;
   }
@@ -37,17 +37,16 @@ sl-dropzone {
 }
 
 .influence {
-  display: grid;;
+  display: grid;
   grid-template-columns: min-content 1fr min-content;
   grid-template-rows: 2.25rem min-content;
   align-items: center;
   padding: 0;
-  grid-template-areas: 
-  "roll name actions"
-  "desc desc desc";
+  grid-template-areas:
+    'roll name actions'
+    'desc desc desc';
   column-gap: 1rem;
 
-  
   &.dragged {
     background: alphav(var(--color-grey), 0.07);
     outline: none;
@@ -71,7 +70,7 @@ sl-dropzone {
       }
     }
   }
-  
+
   .name {
     grid-area: name;
     align-self: center;
@@ -80,16 +79,15 @@ sl-dropzone {
   .roll {
     grid-area: roll;
     font-size: larger;
-    padding: 0 1rem;;
+    padding: 0 1rem;
     align-self: center;
     height: 100%;
     display: grid;
     place-items: center;
     border-right: 2px dashed var(--color-border);
-    &[draggable="true"] {
+    &[draggable='true'] {
       cursor: grab;
     }
-
   }
   .actions {
     grid-area: actions;
@@ -116,6 +114,6 @@ sl-dropzone {
 
 .motivation-forms {
   display: grid;
-  gap: 1rem;;
-  min-width: 300px;;
+  gap: 1rem;
+  min-width: 300px;
 }

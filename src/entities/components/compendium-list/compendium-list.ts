@@ -152,7 +152,7 @@ export class CompendiumList extends LitElement {
             const finalName = isItem
               ? (entry as ItemEP).proxy.fullName
               : entry.name;
-            const hidden = !entry.matchRegexp(regex)
+            const hidden = !entry.matchRegexp(regex);
             if (hidden) return '';
             const img = typeof entry.img === 'string' ? entry.img : undefined;
             return html`

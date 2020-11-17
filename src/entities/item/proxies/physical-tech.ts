@@ -56,7 +56,7 @@ export class PhysicalTech
   }
 
   get activationAction() {
-    return this.epData.activationAction
+    return this.epData.activationAction;
   }
 
   @LazyGetter()
@@ -65,7 +65,8 @@ export class PhysicalTech
     // TODO Figure out if passive effects are applied when toggled;
     const group = new Map<'passive' | 'activated', typeof effects>();
     if (notEmpty(effects)) group.set('passive', effects);
-    if (hasActivation && notEmpty(activatedEffects)) group.set('activated', activatedEffects);
+    if (hasActivation && notEmpty(activatedEffects))
+      group.set('activated', activatedEffects);
     return group;
   }
 
@@ -74,7 +75,10 @@ export class PhysicalTech
     const { effects, activatedEffects, activated, onlyLocalEffects } = this;
     return {
       source: this.name,
-      effects: compact([effects, activated && onlyLocalEffects && activatedEffects]).flat(),
+      effects: compact([
+        effects,
+        activated && onlyLocalEffects && activatedEffects,
+      ]).flat(),
     };
   }
 
@@ -86,18 +90,18 @@ export class PhysicalTech
       updater: this.updater.prop('data', 'meshHealth').nestedStore(),
       source: localize('host'),
       homeDevices: 1, // TODO
-      autoRepair: true
+      autoRepair: true,
     });
   }
 
   getDataCopy(reset = false) {
     const copy = super.getDataCopy(reset);
     copy.data.state = {
-        equipped: false,
-        disabled: false,
-        activated: false,
-        embeddedEgos: [],
-        onboardAliDeleted: false,
+      equipped: false,
+      disabled: false,
+      activated: false,
+      embeddedEgos: [],
+      onboardAliDeleted: false,
     };
     return copy;
   }

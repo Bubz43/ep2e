@@ -24,8 +24,8 @@ import { activeCanvas, convertMenuOptions } from './misc-helpers';
 import { activeTokenStatusEffects } from './token-helpers';
 
 Entity.prototype.matchRegexp = function (regex: RegExp) {
-  return regex.test(this.name)
-}
+  return regex.test(this.name);
+};
 
 const { _injectHTML } = Application.prototype;
 Application.prototype._injectHTML = function (html: JQuery, options: unknown) {

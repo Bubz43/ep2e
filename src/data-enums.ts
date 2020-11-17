@@ -190,7 +190,6 @@ export enum PhysicalWare {
   Nano = 'nanoware',
 }
 
-
 export enum GearQuality {
   TopOfTheLine = 'topOfTheLine',
   StateOfTheArt = 'stateOfTheArt',
@@ -224,12 +223,11 @@ export enum SoftwareType {
   OperatingSystem = 'operatingSystem',
 }
 
-
 export enum EffectStates {
-  Passive = "passive",
-  PassiveAndActivated = "passiveAndActivated",
-  PassiveOrActivated = "passiveOrActivated",
-  PassiveAndUsable = "passiveAndUsable"
+  Passive = 'passive',
+  PassiveAndActivated = 'passiveAndActivated',
+  PassiveOrActivated = 'passiveOrActivated',
+  PassiveAndUsable = 'passiveAndUsable',
 }
 
 export enum GearTrait {

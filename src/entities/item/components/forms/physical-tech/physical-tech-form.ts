@@ -132,40 +132,26 @@ export class PhysicalTechForm extends ItemFormBase {
             ? html`
                 <section>
                   <sl-header heading=${localize('activation')}>
-                  ${renderUpdaterForm(updater.prop('data'), {
-                    disabled,
-                    slot: "action",
-                    fields: ({
-                      activationAction,
-                  
-                    }) => [
-                      renderSelectField(
-                        activationAction,
-                        difference(enumValues(ActionType), [ActionType.Task]),
-                        { minimal: true, altLabel: action => `${localize(action)} ${localize("action")}` }
-                      ),
-     
-                    
-                    ],
-                  })}
-                </sl-header>
+                    ${renderUpdaterForm(updater.prop('data'), {
+                      disabled,
+                      slot: 'action',
+                      fields: ({ activationAction }) => [
+                        renderSelectField(
+                          activationAction,
+                          difference(enumValues(ActionType), [ActionType.Task]),
+                          {
+                            minimal: true,
+                            altLabel: (action) =>
+                              `${localize(action)} ${localize('action')}`,
+                          },
+                        ),
+                      ],
+                    })}
+                  </sl-header>
                   ${renderUpdaterForm(updater.prop('data'), {
                     disabled,
                     classes: 'activation-form',
-                    fields: ({
-                      activationAction,
-                      usedEffectsDuration,
-                      resistEffectsCheck,
-                    }) => [
-                      // renderSelectField(
-                      //   {
-                      //     ...activationAction,
-                      //     label: `${localize(
-                      //       onlyLocalEffects ? 'activation' : 'use',
-                      //     )} ${localize('action')}`,
-                      //   },
-                      //   difference(enumValues(ActionType), [ActionType.Task]),
-                      // ),
+                    fields: ({ usedEffectsDuration, resistEffectsCheck }) => [
                       renderSelectField(
                         resistEffectsCheck,
                         enumValues(AptitudeType),
@@ -174,7 +160,6 @@ export class PhysicalTechForm extends ItemFormBase {
                       renderTimeField(usedEffectsDuration, {
                         permanentLabel: localize('indefinite'),
                       }),
-                    
                     ],
                   })}
                 </section>
@@ -279,8 +264,8 @@ export class PhysicalTechForm extends ItemFormBase {
       <h3>${localize('add')} ${localize('effect')}</h3>
       ${this.item.hasActivation
         ? renderAutoForm({
-          props: { group: this.effectGroup },
-          classes: "effect-group-form",
+            props: { group: this.effectGroup },
+            classes: 'effect-group-form',
             update: ({ group }) => group && (this.effectGroup = group),
             fields: ({ group }) =>
               renderRadioFields(group, ['passive', 'activated']),

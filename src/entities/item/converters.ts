@@ -501,7 +501,7 @@ const tech = async (techData: SimpleTechData[], packName: string) => {
 };
 
 type SimpleSoftwareOrService = {
-  subcategory: "Skillsoft" | "Apps" | "ALIs" | "Scorchers" | "TacNet";
+  subcategory: 'Skillsoft' | 'Apps' | 'ALIs' | 'Scorchers' | 'TacNet';
   name: string;
   'complexity/gp': string;
   summary: string;
@@ -515,23 +515,22 @@ const softwareOrService = async (
 ) => {
   const pack = await Compendium.create(makeMeta(packName));
   if (pack) {
-    const entities = softwareData.flatMap(data => {
-      if (data.subcategory === "ALIs") return [];
-      const category = [...data.subcategory]
-      if (data.subcategory.endsWith("s")) category.pop();
+    const entities = softwareData.flatMap((data) => {
+      if (data.subcategory === 'ALIs') return [];
+      const category = [...data.subcategory];
+      if (data.subcategory.endsWith('s')) category.pop();
       return createItemEntity({
         name: data.name,
         type: ItemType.Software,
         data: {
-          category: data.subcategory === "Apps" ? "" : category.join(""),
+          category: data.subcategory === 'Apps' ? '' : category.join(''),
           description: data.description,
           reference: data.resource,
-          ...convertComplexity(data['complexity/gp'])
-
-        }
-      })
-    })
-    await pack.createEntity(entities)
+          ...convertComplexity(data['complexity/gp']),
+        },
+      });
+    });
+    await pack.createEntity(entities);
   }
 };
 
@@ -549,20 +548,18 @@ export const createDefaultPacks = async () => {
   // await trait(traitData);
   // await armor(armorData);
   // const sleightData = await (await fetch(jsonSource("sleights"))).json();
-  const meleeData = await (
-    await fetch(jsonSource("weapons_melee"))
-  ).json();
-  const substanceData = await (await fetch(jsonSource("gear_drugs"))).json();
-  const commsData = await (await fetch(jsonSource("gear_comms"))).json();
-  const missionGear = await (await fetch(jsonSource("gear_mission"))).json();
-  const nanoGear = await (await fetch(jsonSource("gear_nano"))).json();
-  const securityGear = await (await fetch(jsonSource("gear_security"))).json();
-  const wareData = await (await fetch(jsonSource("gear_ware"))).json();
-  const itemsData = await (await fetch(jsonSource("gear_items"))).json();
-  const software = await (await fetch(jsonSource("gear_software"))).json();
+  const meleeData = await (await fetch(jsonSource('weapons_melee'))).json();
+  const substanceData = await (await fetch(jsonSource('gear_drugs'))).json();
+  const commsData = await (await fetch(jsonSource('gear_comms'))).json();
+  const missionGear = await (await fetch(jsonSource('gear_mission'))).json();
+  const nanoGear = await (await fetch(jsonSource('gear_nano'))).json();
+  const securityGear = await (await fetch(jsonSource('gear_security'))).json();
+  const wareData = await (await fetch(jsonSource('gear_ware'))).json();
+  const itemsData = await (await fetch(jsonSource('gear_items'))).json();
+  const software = await (await fetch(jsonSource('gear_software'))).json();
   const groupedItems = groupBy(
     itemsData,
-    (data) => (data as { subcategory: "Everyday" | "Chemicals" }).subcategory
+    (data) => (data as { subcategory: 'Everyday' | 'Chemicals' }).subcategory,
   );
   // TODO: Software, Services
   // TODO: Bots, Creatures, Swarms, Vehicles, Morphs
@@ -577,5 +574,5 @@ export const createDefaultPacks = async () => {
   // await tech(wareData, "Augmentations");
   // await tech(groupedItems["Everyday"] as SimpleTechData[], "Everyday Tech");
   // await tech(groupedItems["Chemicals"] as SimpleTechData[], "Chemicals");
-  await softwareOrService(software as SimpleSoftwareOrService[], "Software")
+  await softwareOrService(software as SimpleSoftwareOrService[], 'Software');
 };

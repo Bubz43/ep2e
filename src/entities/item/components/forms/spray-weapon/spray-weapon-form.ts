@@ -161,7 +161,11 @@ export class SprayWeaponForm extends ItemFormBase {
           disabled,
           slot: 'sidebar',
           fields: ({ wareType, range, fixed, long, payloadUse, ...traits }) => [
-            renderSelectField(wareType, enumValues(PhysicalWare), emptyTextDash),
+            renderSelectField(
+              wareType,
+              enumValues(PhysicalWare),
+              emptyTextDash,
+            ),
             renderNumberField(
               { ...range, label: `${range.label} (${localize('meters')})` },
               { min: 1 },

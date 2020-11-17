@@ -275,19 +275,18 @@ for (const app of [ActorDirectory, ItemDirectory]) {
 
 applicationHook({
   app: CompendiumDirectory,
-  hook: "on",
-  event: "render",
+  hook: 'on',
+  event: 'render',
   callback: (_, [list]) => {
     if (!game.user.isGM) return;
-    const footer = list.querySelector<HTMLElement>(".directory-footer");
+    const footer = list.querySelector<HTMLElement>('.directory-footer');
     if (footer) {
       const frag = new DocumentFragment();
       render(
         html` <button @click=${createDefaultPacks}>EP Packs</button> `,
-        frag
+        frag,
       );
       footer.append(frag);
     }
   },
 });
-

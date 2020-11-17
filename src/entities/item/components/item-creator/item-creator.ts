@@ -182,7 +182,7 @@ export class ItemCreator extends LitElement {
             renderTextField(name, { required: true }),
             notEmpty(folders) && this.showFolders
               ? renderSelectField(folder, Object.keys(folders), {
-                emptyText: "-",
+                  emptyText: '-',
                   altLabel: (id) => folders[id],
                 })
               : '',

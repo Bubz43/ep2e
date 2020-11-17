@@ -211,7 +211,7 @@ declare global {
 
   interface Entity {
     readonly compendium: Compendium | null;
-    matchRegexp(regex: RegExp): boolean
+    matchRegexp(regex: RegExp): boolean;
   }
 
   interface Actor {

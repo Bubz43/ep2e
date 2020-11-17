@@ -73,7 +73,6 @@ export const prettyMilliseconds = (
   )}`.trim();
 };
 
-
 export const prettyDate = (value: string) => {
   const date = new Date(value);
   return new Date(

@@ -87,5 +87,4 @@ class InfomorphHealthBase implements CommonHealth {
   }
 }
 
-export class MeshHealth extends HealthMixin(InfomorphHealthBase) { }
-
+export class MeshHealth extends HealthMixin(InfomorphHealthBase) {}

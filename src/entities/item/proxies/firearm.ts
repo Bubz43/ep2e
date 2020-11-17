@@ -144,7 +144,7 @@ export class Firearm
           updater: new UpdateStore({
             getData: () => ammo,
             isEditable: () => this.editable,
-            setData:createPipe(deepMerge(ammo), toTuple, this.updateAmmo),
+            setData: createPipe(deepMerge(ammo), toTuple, this.updateAmmo),
           }),
           deleteSelf: () => this.removeSpecialAmmo(),
         })

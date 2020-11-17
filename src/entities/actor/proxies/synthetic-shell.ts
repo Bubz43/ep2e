@@ -99,7 +99,7 @@ export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
       updater: this.updater.prop('data', 'meshHealth').nestedStore(),
       source: localize('mindState'),
       homeDevices: 1, // TODO
-      autoRepair: true
+      autoRepair: true,
     });
   }
 

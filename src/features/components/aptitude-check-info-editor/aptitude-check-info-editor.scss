@@ -7,12 +7,12 @@
 
 :host {
   display: grid;
-  grid-template-areas: 
-  "main edit"
-  "current edit";
+  grid-template-areas:
+    'main edit'
+    'current edit';
   row-gap: 0.5rem;
   grid-template-rows: 150px min-content;
-  --list-item-padding: 0.25rem 0.5rem;  
+  --list-item-padding: 0.25rem 0.5rem;
 
   .common-info {
     grid-area: main;
@@ -29,13 +29,13 @@
 
 wl-list-item {
   font-size: 0.9rem;
-  [slot="after"] {
+  [slot='after'] {
     opacity: 0;
     margin-left: 0;
   }
   &:hover,
   &:focus-within {
-    [slot="after"] {
+    [slot='after'] {
       opacity: 1;
     }
   }
@@ -70,6 +70,5 @@ sl-group {
   display: grid;
   grid-auto-flow: column;
   gap: 0.25rem;
-  padding: 0.25rem 0;;
+  padding: 0.25rem 0;
 }
-
