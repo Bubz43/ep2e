@@ -149,7 +149,7 @@ export const getConditionEffects = (condition: ConditionType): Effect[] => {
   }
 };
 
-type ResultInfo = {
+export type ResultInfo = {
   condition: ConditionType | '';
   staticDuration: number;
   variableDuration: string;
@@ -158,14 +158,11 @@ type ResultInfo = {
   notes: string;
 };
 
-type CheckFailureInfo = ResultInfo & {
+export type CheckFailureInfo = ResultInfo & {
   additionalDurationPerSuperior: number;
 };
 
-type CriticalCheckFailureInfo = Omit<
-  CheckFailureInfo,
-  'additionalDurationPerSuperior'
->;
+
 
 export const createResultInfo = createFeature<ResultInfo>(() => ({
   condition: '',
@@ -188,7 +185,7 @@ export type ApplyableConditions = {
   armorAsModifier: ArmorType | '';
   checkSuccess: ResultInfo[];
   checkFailure: CheckFailureInfo[];
-  criticalCheckFailure: CriticalCheckFailureInfo[];
+  criticalCheckFailure: ResultInfo[];
 };
 
 export const formatCheckResultInfo = (
