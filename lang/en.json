@@ -1271,6 +1271,12 @@
     "criticalCheckFailure": "Critical Check Failure",
     "for": "For",
     "impairmentModifier": "Impairment Modifier",
+    "additionalDurationPerSuperior": "Additional Duration Per Superior",
+    "armorAsModifier": "Armor as Modifier",
+    "checkModifier": "Check Modifier",
+    "staticDuration": "Static Duration",
+    "variableDuration": "Variable Duration",
+    "impairment": "Impairment",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

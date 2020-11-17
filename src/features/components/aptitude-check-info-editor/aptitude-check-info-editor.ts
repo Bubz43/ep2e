@@ -2,6 +2,7 @@ import {
   emptyTextDash,
   renderFormulaField,
   renderNumberField,
+  renderRadioFields,
   renderSelectField,
   renderTextField,
   renderTimeField,
@@ -17,7 +18,7 @@ import {
   formatCheckResultInfo,
 } from '@src/features/conditions';
 import { localize } from '@src/foundry/localization';
-import { capitalize } from '@src/foundry/misc-helpers';
+import { capitalize, deepMerge } from '@src/foundry/misc-helpers';
 import {
   customElement,
   html,
@@ -29,11 +30,18 @@ import {
 import { AptitudeCheckInfoUpdateEvent } from './aptitude-check-info-update-event';
 import styles from './aptitude-check-info-editor.scss';
 import { concat, objOf, omit, pipe } from 'remeda';
+import { CommonInterval } from '@src/features/time';
+import { notEmpty, safeMerge } from '@src/utility/helpers';
 
 enum ResultState {
   CheckSuccess = 'checkSuccess',
   CheckFailure = 'checkFailure',
   CriticalFailure = 'criticalCheckFailure',
+}
+
+enum DurationEdit {
+  Static = 'static',
+  Variable = 'variable',
 }
 
 /**
@@ -47,15 +55,28 @@ export class AptitudeCheckInfoEditor extends LitElement {
 
   static styles = [styles];
 
-  @property({ type: Object }) aptitudeCheckInfo!: AptitudeCheckInfo;
+  @property({
+    type: Object,
+    hasChanged() {
+      return true;
+    },
+  })
+  readonly aptitudeCheckInfo!: AptitudeCheckInfo;
 
-  @internalProperty() private resultForm = ResultState.CheckFailure;
+  @internalProperty() private resultType = ResultState.CheckFailure;
 
   @internalProperty() private resultInfo = checkResultInfoWithDefaults({});
+
+  @internalProperty() private durationEdit = DurationEdit.Static;
 
   private emitUpdate = (changed: Partial<AptitudeCheckInfo>) => {
     this.dispatchEvent(new AptitudeCheckInfoUpdateEvent(changed));
   };
+
+  private resetResultInfo() {
+    this.resultInfo = checkResultInfoWithDefaults({});
+    this.durationEdit = DurationEdit.Static
+  }
 
   private get infoIsComplete() {
     const {
@@ -72,70 +93,88 @@ export class AptitudeCheckInfoEditor extends LitElement {
   }
 
   private addInfo() {
-    
     if (this.infoIsComplete) {
       pipe(
-        this.aptitudeCheckInfo[this.resultForm],
+        this.aptitudeCheckInfo[this.resultType],
         concat([
-          this.resultForm === ResultState.CheckFailure
+          this.resultType === ResultState.CheckFailure
             ? this.resultInfo
             : omit(this.resultInfo, ['additionalDurationPerSuperior']),
         ]),
-        objOf(this.resultForm),
+        objOf(this.resultType),
         this.emitUpdate,
       );
-
-      this.resultInfo = checkResultInfoWithDefaults({});
+      this.resetResultInfo();
     }
   }
 
+  private updateResultInfo = (changed: Partial<CheckResultInfo>) => {
+    this.resultInfo = safeMerge(this.resultInfo, changed);
+  };
+
   render() {
+    const showAll = !!this.aptitudeCheckInfo.check;
     return html`
       ${renderAutoForm({
         props: this.aptitudeCheckInfo,
         update: this.emitUpdate,
+        classes: 'common-info',
         fields: ({ check, checkModifier, armorAsModifier }) => [
-          renderSelectField(check, enumValues(AptitudeType)),
-          renderNumberField(checkModifier),
-          renderSelectField(
-            armorAsModifier,
-            enumValues(ArmorType),
-            emptyTextDash,
-          ),
+          renderSelectField(check, enumValues(AptitudeType), {
+            ...emptyTextDash,
+            altLabel: (apt) => localize('FULL', apt),
+          }),
+          showAll
+            ? [
+                renderNumberField(checkModifier),
+                renderSelectField(
+                  armorAsModifier,
+                  enumValues(ArmorType),
+                  emptyTextDash,
+                ),
+              ]
+            : '',
         ],
       })}
+      ${showAll
+        ? html`
+            <div class="result-conditions">
+              ${enumValues(ResultState).map((state) => {
+                const list = this.aptitudeCheckInfo[state];
 
-      <div class="result-conditions">
-        ${enumValues(ResultState).map((state) => {
-          const list = this.aptitudeCheckInfo[state];
+                return notEmpty(list) ? html`
+                  <sl-group label=${localize(state)}>
+                    ${list.map(
+                      (entry, index) => html`
+                        <wl-list-item
+                          clickable
+                          @click=${() => {
+                            const copy = [...list];
+                            copy.splice(index, 1);
+                            this.emitUpdate({ [state]: copy });
+                          }}
+                          >${formatCheckResultInfo(entry)}
+                          <mwc-icon slot="after">delete_forever</mwc-icon>
+                          </wl-list-item
+                        >
+                      `,
+                    )}
+                  </sl-group>
+                ` : ""
+              })}
+            </div>
 
-          return html`
-            <sl-group label=${localize(state)}>
-              ${list.map(
-                (entry, index) => html`
-                  <wl-list-item
-                    clickable
-                    @click=${() => {
-                      const copy = [...list]
-                      copy.splice(index, 1);
-                      this.emitUpdate({ [state]: copy })
-                    }}
-                    >${formatCheckResultInfo(entry)}</wl-list-item
-                  >
-                `,
-              )}
-            </sl-group>
-          `;
-        })}
-      </div>
-
-      ${renderAutoForm({
-        props: { result: this.resultForm },
-        update: ({ result }) => result && (this.resultForm = result),
-        fields: ({ result }) =>
-          renderSelectField(result, enumValues(ResultState)),
-      })}
-      ${this.renderResultForm()}
+            <div class="result-edits">
+              ${renderAutoForm({
+                props: { result: this.resultType },
+                update: ({ result }) => result && (this.resultType = result),
+                fields: ({ result }) =>
+                  renderSelectField(result, enumValues(ResultState)),
+              })}
+              ${this.renderResultForm()}
+            </div>
+          `
+        : ''}
     `;
   }
 
@@ -143,55 +182,91 @@ export class AptitudeCheckInfoEditor extends LitElement {
     return html`
       ${renderAutoForm({
         props: this.resultInfo,
-        update: (changed) => {
-          this.resultInfo = {
-            ...this.resultInfo,
-            ...changed,
-          };
-          if (changed.staticDuration) this.resultInfo.variableDuration = '';
-          else if (changed.variableDuration) this.resultInfo.staticDuration = 0;
+        update: this.updateResultInfo,
+        fields: ({ condition, stress, impairment, notes }) =>
+          html`
+            <div class="common-settings">
+              ${[
+                renderSelectField(
+                  condition,
+                  enumValues(ConditionType),
+                  emptyTextDash,
+                ),
+                renderNumberField(impairment, { max: 0, step: 10, min: -90 }),
+              ]}
+            </div>
+            ${renderFormulaField(stress)} ${renderTextField(notes)}
+          `,
+      })}
+      ${renderAutoForm({
+        props: { durationType: this.durationEdit },
+        update: ({ durationType }) => {
+          if (durationType) {
+            this.durationEdit = durationType;
+            if (durationType === DurationEdit.Static) {
+              this.resultInfo.variableDuration = '';
+              this.resultInfo.staticDuration = CommonInterval.Turn;
+            } else {
+              (this.resultInfo.variableDuration = '1d6'),
+                (this.resultInfo.staticDuration = 0);
+            }
+          }
         },
+        fields: ({ durationType }) =>
+          renderSelectField(
+            {
+              ...durationType,
+              label: `${localize('duration')} ${localize('type')}`,
+            },
+            enumValues(DurationEdit),
+          ),
+      })}
+      ${renderAutoForm({
+        props: this.resultInfo,
+        update: this.updateResultInfo,
         fields: ({
-          condition,
-          stress,
-          impairment,
           staticDuration,
           variableDuration,
           variableInterval,
           additionalDurationPerSuperior,
           notes,
         }) => [
-          renderSelectField(
-            condition,
-            enumValues(ConditionType),
-            emptyTextDash,
-          ),
-          renderNumberField(impairment, { max: 0 }),
-          renderFormulaField(stress),
-
-          renderTimeField(staticDuration, { min: 0 }),
-          html`
-            <div class="variable-duration">
-              ${renderFormulaField(variableDuration)}
-              ${renderSelectField(variableInterval, [
-                'days',
-                'hours',
-                'minutes',
-                'turns',
-              ])}
-            </div>
-          `,
-          this.resultForm === ResultState.CheckFailure
+          this.durationEdit === DurationEdit.Static
+            ? renderTimeField(
+                { ...staticDuration, label: localize('duration') },
+                { min: 0 },
+              )
+            : html`
+                <div class="variable-duration">
+                  ${renderFormulaField({
+                    ...variableDuration,
+                    label: localize('duration'),
+                  })}
+                  ${renderSelectField(
+                    { ...variableInterval, label: localize('interval') },
+                    ['days', 'hours', 'minutes', 'turns'],
+                  )}
+                </div>
+              `,
+          this.resultType === ResultState.CheckFailure
             ? renderTimeField(additionalDurationPerSuperior, { min: 0 })
             : '',
-          renderTextField(notes),
         ],
       })}
 
-      <submit-button
-        ?complete=${this.infoIsComplete}
-        @submit-attempt=${this.addInfo}
-      ></submit-button>
+      <div class="buttons">
+        <mwc-button
+          outlined
+          label=${localize('reset')}
+          @click=${this.resetResultInfo}
+          icon="undo"
+        ></mwc-button>
+        <submit-button
+          ?complete=${this.infoIsComplete}
+          label=${localize('add')}
+          @submit-attempt=${this.addInfo}
+        ></submit-button>
+      </div>
     `;
   }
 }

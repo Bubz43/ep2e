@@ -1295,7 +1295,7 @@ type LangEntries =
   | 'checkFailure'
   | 'criticalCheckFailure'
   | 'impairmentModifier'
-  | 'for';
+  | 'for' | "checkModifier" | "armorAsModifier" | "additionalDurationPerSuperior" | "impairment" | "static" | "variable" | "folder"
 type FullNames =
   | 'cog'
   | 'int'

@@ -489,6 +489,9 @@
             "additionalArmor": {
               "type": "string"
             },
+            "additionalDurationPerSuperior": {
+              "type": "string"
+            },
             "additionalDv": {
               "type": "string"
             },
@@ -694,6 +697,9 @@
               "type": "string"
             },
             "armor": {
+              "type": "string"
+            },
+            "armorAsModifier": {
               "type": "string"
             },
             "armorLayer": {
@@ -1006,6 +1012,9 @@
               "type": "string"
             },
             "checkMod": {
+              "type": "string"
+            },
+            "checkModifier": {
               "type": "string"
             },
             "checkSuccess": {
@@ -1957,6 +1966,9 @@
               "type": "string"
             },
             "impairedX3": {
+              "type": "string"
+            },
+            "impairment": {
               "type": "string"
             },
             "impairmentModifier": {
@@ -3546,6 +3558,9 @@
             "stateOfTheArt": {
               "type": "string"
             },
+            "staticDuration": {
+              "type": "string"
+            },
             "staticModifiers": {
               "type": "string"
             },
@@ -4062,6 +4077,9 @@
             "values": {
               "type": "string"
             },
+            "variableDuration": {
+              "type": "string"
+            },
             "vehicle": {
               "type": "string"
             },
@@ -4235,6 +4253,7 @@
             "addictionMod",
             "additional",
             "additionalArmor",
+            "additionalDurationPerSuperior",
             "additionalDv",
             "additionalNotes",
             "adjacentTargets",
@@ -4304,6 +4323,7 @@
             "argonaut",
             "armSlide",
             "armor",
+            "armorAsModifier",
             "armorLayer",
             "armorLayerPenalty",
             "armorPiercing",
@@ -4408,6 +4428,7 @@
             "check",
             "checkFailure",
             "checkMod",
+            "checkModifier",
             "checkSuccess",
             "checkoutTime",
             "checks",
@@ -4725,6 +4746,7 @@
             "impaired",
             "impairedX2",
             "impairedX3",
+            "impairment",
             "impairmentModifier",
             "implanted",
             "implantedWare",
@@ -5254,6 +5276,7 @@
             "stat",
             "state",
             "stateOfTheArt",
+            "staticDuration",
             "staticModifiers",
             "status",
             "steady",
@@ -5426,6 +5449,7 @@
             "vacuum",
             "value",
             "values",
+            "variableDuration",
             "vehicle",
             "venusian",
             "veryFast",

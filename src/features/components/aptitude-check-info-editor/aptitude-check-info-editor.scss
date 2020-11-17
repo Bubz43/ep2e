@@ -6,6 +6,70 @@
 }
 
 :host {
-  display: block;
-  
+  display: grid;
+  grid-template-areas: 
+  "main edit"
+  "current edit";
+  row-gap: 0.5rem;
+  grid-template-rows: 150px min-content;
+  --list-item-padding: 0.25rem 0.5rem;  
+
+  .common-info {
+    grid-area: main;
+  }
+  .result-conditions {
+    grid-area: current;
+    align-self: start;
+  }
+  .result-edits {
+    grid-area: edit;
+    margin-left: 0.5rem;
+  }
 }
+
+wl-list-item {
+  font-size: 0.9rem;
+  [slot="after"] {
+    opacity: 0;
+    margin-left: 0;
+  }
+  &:hover,
+  &:focus-within {
+    [slot="after"] {
+      opacity: 1;
+    }
+  }
+}
+
+sl-group {
+  flex-flow: row wrap;
+}
+
+// .common-info {
+//   grid-template-columns: 1fr 1fr;;
+//   sl-field {
+//     &:first-of-type {
+//       grid-column: span 2;
+//     }
+//   }
+// }
+
+.result-conditions {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.25rem;
+}
+
+.variable-duration,
+.common-settings {
+  display: grid;
+  grid-auto-flow: column;
+}
+
+.buttons {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 0.25rem;
+  padding: 0.25rem 0;;
+}
+

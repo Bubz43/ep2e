@@ -1,6 +1,10 @@
-import { formatLabeledFormulas, formatArmorUsed } from '@src/combat/attack-formatting';
+import {
+  formatLabeledFormulas,
+  formatArmorUsed,
+} from '@src/combat/attack-formatting';
 import type { SoftwareAttack } from '@src/combat/attacks';
 import {
+  emptyTextDash,
   renderFormulaField,
   renderLabeledCheckbox,
   renderNumberField,
@@ -10,13 +14,21 @@ import {
   renderTextField,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
-import { AttackTrait, enumValues, SoftwareType, WeaponAttackType } from '@src/data-enums';
+import {
+  AptitudeType,
+  AttackTrait,
+  enumValues,
+  SoftwareType,
+  WeaponAttackType,
+} from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import type { Software } from '@src/entities/item/proxies/software';
 import { pairList } from '@src/features/check-list';
+import type { AptitudeCheckInfoUpdateEvent } from '@src/features/components/aptitude-check-info-editor/aptitude-check-info-update-event';
 import type { EffectCreatedEvent } from '@src/features/components/effect-creator/effect-created-event';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
+import { capitalize } from '@src/foundry/misc-helpers';
 import { formatDamageType, HealthType } from '@src/health/health';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
@@ -178,8 +190,10 @@ export class SoftwareForm extends ItemFormBase {
   private renderMeshAttacks() {
     const { primary, secondary } = this.item.attacks;
     return html`
-    ${this.renderAttack(primary, WeaponAttackType.Primary)}
-    ${secondary ? this.renderAttack(secondary, WeaponAttackType.Secondary) : ""}
+      ${this.renderAttack(primary, WeaponAttackType.Primary)}
+      ${secondary
+        ? this.renderAttack(secondary, WeaponAttackType.Secondary)
+        : ''}
     `;
   }
 
@@ -232,19 +246,24 @@ export class SoftwareForm extends ItemFormBase {
     `;
   }
 
-  
   private renderAttack(attack: SoftwareAttack, type: WeaponAttackType) {
     return html`
       <section>
         <sl-header heading=${attack.label || localize('attack')}>
           <mwc-icon-button
+            icon="check"
+            slot="action"
+            ?disabled=${this.disabled}
+            @click=${this.setDrawerFromEvent(
+              this[`render${capitalize(type)}CheckEdit` as const],
+            )}
+          ></mwc-icon-button>
+          <mwc-icon-button
             icon="edit"
             slot="action"
             ?disabled=${this.disabled}
             @click=${this.setDrawerFromEvent(
-              type === WeaponAttackType.Primary
-                ? this.renderPrimaryAttackEdit
-                : this.renderSecondaryAttackEdit,
+              this[`render${capitalize(type)}Edit` as const],
             )}
           ></mwc-icon-button>
         </sl-header>
@@ -264,9 +283,8 @@ export class SoftwareForm extends ItemFormBase {
                   ${map(attack.attackTraits, localize).join(', ')}</sl-group
                 >
               `
-      : ''}
-            
-            // TODO Conditions
+            : ''}
+          // TODO Conditions
           ${attack.notes
             ? html`
                 <sl-group class="attack-notes" label=${localize('notes')}>
@@ -290,39 +308,68 @@ export class SoftwareForm extends ItemFormBase {
   private renderAttackEdit(type: WeaponAttackType) {
     const updater = this.item.updater.prop('data', type);
     const hasSecondaryAttack = !!this.item.attacks.secondary;
-    const { disabled } = this;
+
     const [pairedTraits, change] = pairList(
       updater.originalValue().attackTraits,
       enumValues(AttackTrait),
     );
     return html`
-          <h3>${localize(hasSecondaryAttack ? type : 'attack')}</h3>
+      <h3>${localize(hasSecondaryAttack ? type : 'attack')}</h3>
 
-          ${renderUpdaterForm(updater, {
-        disabled,
-        fields: ({ damageFormula, damageType, useMeshArmor, armorPiercing, reduceAVbyDV, label }) => [
+      ${renderUpdaterForm(updater, {
+        fields: ({
+          damageFormula,
+          damageType,
+          useMeshArmor,
+          armorPiercing,
+          reduceAVbyDV,
+          label,
+        }) => [
           hasSecondaryAttack
             ? renderTextField(label, { placeholder: localize(type) })
             : '',
           renderSelectField(damageType, enumValues(HealthType)),
           renderFormulaField(damageFormula),
           renderLabeledCheckbox(useMeshArmor),
-          useMeshArmor.value ? map([armorPiercing, reduceAVbyDV], renderLabeledCheckbox) : ""
+          useMeshArmor.value
+            ? map([armorPiercing, reduceAVbyDV], renderLabeledCheckbox)
+            : '',
         ],
       })}
-          <p class="label">${localize('attackTraits')}</p>
+      <p class="label">${localize('attackTraits')}</p>
       ${renderAutoForm({
         props: pairedTraits,
         update: createPipe(change, objOf('attackTraits'), updater.commit),
         fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
       })}
       ${renderUpdaterForm(updater, {
-        disabled,
-        fields: ({ notes }) => [renderTextareaField(notes)],
+        fields: ({ notes }) => renderTextareaField(notes),
       })}
-      `
+    `;
   }
 
+  private renderPrimaryAttackCheckEdit() {
+    return this.renderAttackCheckEdit(WeaponAttackType.Primary);
+  }
+
+  private renderSecondaryAttackCheckEdit() {
+    return this.renderAttackCheckEdit(WeaponAttackType.Secondary);
+  }
+
+  private renderAttackCheckEdit(type: WeaponAttackType) {
+    const updater = this.item.updater.prop('data', type, 'aptitudeCheckInfo');
+    const hasSecondaryAttack = !!this.item.attacks.secondary;
+
+    return html`
+      <h3>${localize(hasSecondaryAttack ? type : 'attack')}</h3>
+      <aptitude-check-info-editor
+        .aptitudeCheckInfo=${updater.originalValue()}
+        @aptitude-check-info-update=${(ev: AptitudeCheckInfoUpdateEvent) => {
+          updater.commit(ev.changed);
+        }}
+      ></aptitude-check-info-editor>
+    `;
+  }
 }
 
 declare global {

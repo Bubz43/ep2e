@@ -217,23 +217,22 @@ export const formatCheckResultInfo = (entry: CheckResultInfo) => {
 
   const effect = compact([
     condition && localize(condition),
-    impairment && `${impairment} ${localize('impairmentModifier')}`,
+    impairment && `${impairment} ${localize('impairmentModifier').toLocaleLowerCase()}`,
     stress && `${localize('SHORT', 'stressValue')} ${stress}`,
+    notes,
   ]).join(` & `);
 
   const duration = staticDuration
-    ? prettyMilliseconds(staticDuration)
-    : `${variableDuration} ${localize(variableInterval)}`;
+    ? prettyMilliseconds(staticDuration, { compact: false })
+    : `${variableDuration} ${localize(variableInterval).toLocaleLowerCase()}`;
 
-  const info = compact([
-    additionalDurationPerSuperior &&
-      `+ ${prettyMilliseconds(additionalDurationPerSuperior)} ${localize(
-        'per',
-      )} ${localize('superiorFailure')}`,
-    notes,
-  ]).join(', ');
-
-  return `${effect || "??"} ${localize('for')} ${duration} ${info ? `(${info})` : ''}`;
+  return `${effect || '??'} ${localize('for').toLocaleLowerCase()} ${duration} ${
+    additionalDurationPerSuperior
+      ? `(${`+${prettyMilliseconds(additionalDurationPerSuperior)} ${localize(
+          'per',
+        ).toLocaleLowerCase()} ${localize('superiorFailure')}`})`
+      : ''
+  }`;
 };
 
 const checkInfoFromAttackTrait = (trait: AttackTrait): AptitudeCheckInfo => {
