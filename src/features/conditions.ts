@@ -10,7 +10,7 @@ import { createEffect, Effect } from './effects';
 import { createFeature } from './feature-helpers';
 import { SkillType } from './skills';
 import { TagType } from './tags';
-import { CommonInterval, prettyMilliseconds } from './time';
+import { CommonInterval, prettyMilliseconds, TimeInterval } from './time';
 
 export enum ConditionType {
   Blinded = 'blinded',
@@ -150,28 +150,43 @@ export const getConditionEffects = (condition: ConditionType): Effect[] => {
 };
 
 export type CheckResultInfo = {
-  condition: ConditionType | '';
-  staticDuration: number;
-  variableDuration: string;
-  stress: string;
-  impairment: number;
-  notes: string;
+  condition?: ConditionType | '';
+  staticDuration?: number;
+  variableDuration?: string;
+  variableInterval?: Exclude<TimeInterval, 'seconds'> | 'turns';
+  additionalDurationPerSuperior?: number;
+  stress?: string;
+  impairment?: number;
+  notes?: string;
 };
 
-export type CheckFailureInfo = CheckResultInfo & {
-  additionalDurationPerSuperior: number;
+export const checkResultInfoWithDefaults = (
+  info: CheckResultInfo,
+): Required<CheckResultInfo> => {
+  const {
+    condition = '',
+    impairment = 0,
+    staticDuration,
+    variableDuration,
+    variableInterval = 'turns',
+    additionalDurationPerSuperior = 0,
+    stress = '',
+    notes = '',
+  } = info;
+
+  const isStatic = !!staticDuration || !variableDuration;
+
+  return {
+    condition,
+    impairment,
+    stress,
+    notes,
+    additionalDurationPerSuperior,
+    staticDuration: isStatic ? staticDuration || CommonInterval.Turn : 0,
+    variableDuration: isStatic ? '' : '1d6',
+    variableInterval,
+  };
 };
-
-
-
-export const createCheckResultInfo = createFeature<CheckResultInfo>(() => ({
-  condition: '',
-  staticDuration: 0,
-  variableDuration: '',
-  stress: '',
-  impairment: 0,
-  notes: '',
-}));
 
 export enum CheckResultState {
   CheckSuccess = 'checkSuccess',
@@ -184,24 +199,44 @@ export type AptitudeCheckInfo = {
   checkModifier: number;
   armorAsModifier: ArmorType | '';
   checkSuccess: CheckResultInfo[];
-  checkFailure: CheckFailureInfo[];
+  checkFailure: CheckResultInfo[];
   criticalCheckFailure: CheckResultInfo[];
 };
 
-export const formatCheckResultInfo = (
-  entry: AptitudeCheckInfo[CheckResultState][number],
-) => {
-  const { condition, staticDuration: duration, impairment } = entry;
+export const formatCheckResultInfo = (entry: CheckResultInfo) => {
+  const {
+    condition,
+    staticDuration,
+    variableDuration,
+    variableInterval,
+    impairment,
+    stress,
+    notes,
+    additionalDurationPerSuperior,
+  } = checkResultInfoWithDefaults(entry);
+
   const effect = compact([
     condition && localize(condition),
     impairment && `${impairment} ${localize('impairmentModifier')}`,
+    stress && `${localize('SHORT', 'stressValue')} ${stress}`,
   ]).join(` & `);
-  return `${effect} ${localize('for')} ${prettyMilliseconds(duration)}`;
+
+  const duration = staticDuration
+    ? prettyMilliseconds(staticDuration)
+    : `${variableDuration} ${localize(variableInterval)}`;
+
+  const info = compact([
+    additionalDurationPerSuperior &&
+      `+ ${prettyMilliseconds(additionalDurationPerSuperior)} ${localize(
+        'per',
+      )} ${localize('superiorFailure')}`,
+    notes,
+  ]).join(', ');
+
+  return `${effect || "??"} ${localize('for')} ${duration} ${info ? `(${info})` : ''}`;
 };
 
-const conditionEffectFromAttackTrait = (
-  trait: AttackTrait,
-): AptitudeCheckInfo => {
+const checkInfoFromAttackTrait = (trait: AttackTrait): AptitudeCheckInfo => {
   switch (trait) {
     case AttackTrait.Blinding:
       return {
@@ -211,18 +246,16 @@ const conditionEffectFromAttackTrait = (
         checkSuccess: [],
         checkFailure: [
           {
-            ...createCheckResultInfo({
-              condition: ConditionType.Blinded,
-              staticDuration: CommonInterval.Turn,
-            }),
+            condition: ConditionType.Blinded,
+            staticDuration: CommonInterval.Turn,
             additionalDurationPerSuperior: CommonInterval.Turn,
           },
         ],
         criticalCheckFailure: [
-          createCheckResultInfo({
+          {
             condition: ConditionType.Blinded,
             staticDuration: CommonInterval.Indefinite,
-          }),
+          },
         ],
       };
 
@@ -234,11 +267,8 @@ const conditionEffectFromAttackTrait = (
         checkSuccess: [],
         checkFailure: [
           {
-            ...createCheckResultInfo({
-              condition: ConditionType.Grappled,
-              staticDuration: CommonInterval.Instant,
-            }),
-            additionalDurationPerSuperior: CommonInterval.Instant,
+            condition: ConditionType.Grappled,
+            staticDuration: CommonInterval.Instant,
           },
         ],
         criticalCheckFailure: [],
@@ -252,11 +282,8 @@ const conditionEffectFromAttackTrait = (
         checkSuccess: [],
         checkFailure: [
           {
-            ...createCheckResultInfo({
-              condition: ConditionType.Prone,
-              staticDuration: CommonInterval.Instant,
-            }),
-            additionalDurationPerSuperior: CommonInterval.Instant,
+            condition: ConditionType.Prone,
+            staticDuration: CommonInterval.Instant,
           },
         ],
         criticalCheckFailure: [],
@@ -269,11 +296,8 @@ const conditionEffectFromAttackTrait = (
         armorAsModifier: '',
         checkFailure: [
           {
-            ...createCheckResultInfo({
-              staticDuration: CommonInterval.Turn,
-              impairment: -20,
-            }),
-            additionalDurationPerSuperior: 0,
+            staticDuration: CommonInterval.Turn,
+            impairment: -20,
           },
         ],
         checkSuccess: [],
@@ -286,32 +310,24 @@ const conditionEffectFromAttackTrait = (
         checkModifier: 0,
         armorAsModifier: ArmorType.Energy,
         checkSuccess: [
-          createCheckResultInfo({
+          {
             condition: ConditionType.Stunned,
             staticDuration: CommonInterval.Turn * 3,
-          }),
+          },
         ],
         checkFailure: [
           {
-            ...createCheckResultInfo({
-              condition: ConditionType.Incapacitated,
-              staticDuration: CommonInterval.Turn,
-            }),
+            condition: ConditionType.Incapacitated,
+            staticDuration: CommonInterval.Turn,
             additionalDurationPerSuperior: CommonInterval.Turn * 2,
           },
           {
-            ...createCheckResultInfo({
-              condition: ConditionType.Prone,
-              staticDuration: CommonInterval.Instant,
-            }),
-            additionalDurationPerSuperior: 0,
+            condition: ConditionType.Prone,
+            staticDuration: CommonInterval.Instant,
           },
           {
-            ...createCheckResultInfo({
-              condition: ConditionType.Stunned,
-              staticDuration: CommonInterval.Minute * 3,
-            }),
-            additionalDurationPerSuperior: 0,
+            condition: ConditionType.Stunned,
+            staticDuration: CommonInterval.Minute * 3,
           },
         ],
         criticalCheckFailure: [],
@@ -325,22 +341,20 @@ const conditionEffectFromAttackTrait = (
         checkSuccess: [],
         checkFailure: [
           {
-            ...createCheckResultInfo({
-              condition: ConditionType.Stunned,
-              staticDuration: CommonInterval.Turn,
-            }),
+            condition: ConditionType.Stunned,
+            staticDuration: CommonInterval.Turn,
             additionalDurationPerSuperior: CommonInterval.Turn,
           },
         ],
         criticalCheckFailure: [
-          createCheckResultInfo({
+          {
             condition: ConditionType.Incapacitated,
             staticDuration: CommonInterval.Turn,
-          }),
-          createCheckResultInfo({
+          },
+          {
             condition: ConditionType.Stunned,
             staticDuration: CommonInterval.Minute,
-          }),
+          },
         ],
       };
   }

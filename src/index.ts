@@ -101,6 +101,7 @@ import { FirearmAmmoTransformer } from './entities/components/firearm-ammo-trans
 import { ArmorForm } from './entities/item/components/forms/armor/armor-form';
 import { SoftwareForm } from './entities/item/components/forms/software/software-form';
 import { ItemCreator } from './entities/item/components/item-creator/item-creator';
+import { AptitudeCheckInfoEditor } from './features/components/aptitude-check-info-editor/aptitude-check-info-editor';
 
 customElements.define('app-datepicker', Datepicker);
 
@@ -145,6 +146,7 @@ EffectCreator;
 EffectEditor;
 TagEditor;
 FormMotivationItem;
+AptitudeCheckInfoEditor;
 
 // Entity Form Layout Components
 EntityFormHeader;
