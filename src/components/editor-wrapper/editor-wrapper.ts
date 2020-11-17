@@ -1,6 +1,7 @@
 import type { CircularProgress } from '@material/mwc-circular-progress';
 import type { UpdateActions } from '@src/entities/update-store';
 import { localize } from '@src/foundry/localization';
+import { LazyGetter } from 'lazy-get-decorator';
 import {
   customElement,
   LitElement,
@@ -9,9 +10,11 @@ import {
   PropertyValues,
   query,
 } from 'lit-element';
-import type { Editor } from 'tinymce';
+import type { Editor, RawEditorSettings } from 'tinymce';
 import type { EnrichedHTML } from '../enriched-html/enriched-html';
 import styles from './editor-wrapper.scss';
+
+
 
 @customElement('editor-wrapper')
 export class EditorWrapper extends LitElement {
@@ -40,6 +43,13 @@ export class EditorWrapper extends LitElement {
 
   private editor: Editor | null = null;
 
+  @LazyGetter() 
+  static get plugins() {
+    const plugins = new Set(CONFIG.TinyMCE.plugins.split(" "));
+    plugins.add("autoresize").delete("code")
+    return [...plugins]
+  }
+
   disconnectedCallback() {
     super.disconnectedCallback();
     if (this.editor) this.editorSave(this.editor);
@@ -53,19 +63,21 @@ export class EditorWrapper extends LitElement {
     return this.updateActions.originalValue();
   }
 
-  private get editorOptions() {
+  private get editorOptions(): RawEditorSettings {
     const { contentArea } = this;
+
     return {
       target: contentArea,
       setup: this.editorSetup,
       save_onsavecallback: this.editorSave,
       target_list: [{ title: 'New page', value: '_blank' }],
+      toolbar: "styleselect bullist numlist image table hr link removeformat code",
       autoresize_on_init: false,
       autoresize_overflow_padding: 10,
       min_height: 200,
       max_height: 400,
-      plugins: CONFIG.TinyMCE.plugins + ' autoresize',
-    };
+      plugins: EditorWrapper.plugins
+    }
   }
 
   private editorSetup = (mce: Editor) => {

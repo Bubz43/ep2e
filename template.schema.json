@@ -124,6 +124,178 @@
       ],
       "type": "string"
     },
+    "ApplyableConditions": {
+      "additionalProperties": false,
+      "properties": {
+        "armorAsModifier": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ArmorType"
+            },
+            {
+              "const": "",
+              "type": "string"
+            }
+          ]
+        },
+        "check": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/AptitudeType"
+            },
+            {
+              "const": "",
+              "type": "string"
+            }
+          ]
+        },
+        "checkFailure": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "additionalDurationPerSuperior": {
+                "type": "number"
+              },
+              "condition": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/ConditionType"
+                  },
+                  {
+                    "const": "",
+                    "type": "string"
+                  }
+                ]
+              },
+              "impairment": {
+                "type": "number"
+              },
+              "notes": {
+                "type": "string"
+              },
+              "staticDuration": {
+                "type": "number"
+              },
+              "stress": {
+                "type": "string"
+              },
+              "variableDuration": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "additionalDurationPerSuperior",
+              "condition",
+              "impairment",
+              "notes",
+              "staticDuration",
+              "stress",
+              "variableDuration"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "checkModifier": {
+          "type": "number"
+        },
+        "checkSuccess": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "condition": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/ConditionType"
+                  },
+                  {
+                    "const": "",
+                    "type": "string"
+                  }
+                ]
+              },
+              "impairment": {
+                "type": "number"
+              },
+              "notes": {
+                "type": "string"
+              },
+              "staticDuration": {
+                "type": "number"
+              },
+              "stress": {
+                "type": "string"
+              },
+              "variableDuration": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "condition",
+              "staticDuration",
+              "variableDuration",
+              "stress",
+              "impairment",
+              "notes"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "criticalCheckFailure": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "condition": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/ConditionType"
+                  },
+                  {
+                    "const": "",
+                    "type": "string"
+                  }
+                ]
+              },
+              "impairment": {
+                "type": "number"
+              },
+              "notes": {
+                "type": "string"
+              },
+              "staticDuration": {
+                "type": "number"
+              },
+              "stress": {
+                "type": "string"
+              },
+              "variableDuration": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "condition",
+              "staticDuration",
+              "variableDuration",
+              "stress",
+              "impairment",
+              "notes"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "check",
+        "checkModifier",
+        "armorAsModifier",
+        "checkSuccess",
+        "checkFailure",
+        "criticalCheckFailure"
+      ],
+      "type": "object"
+    },
     "AptitudeType": {
       "enum": [
         "cog",
@@ -451,142 +623,6 @@
         "rare"
       ],
       "type": "string"
-    },
-    "ConditionEffect": {
-      "additionalProperties": false,
-      "properties": {
-        "armorAsModifier": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ArmorType"
-            },
-            {
-              "const": "",
-              "type": "string"
-            }
-          ]
-        },
-        "check": {
-          "$ref": "#/definitions/AptitudeType"
-        },
-        "checkModifier": {
-          "type": "number"
-        },
-        "onCheckFailure": {
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "additionalDurationPerSuperior": {
-                "type": "number"
-              },
-              "condition": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/ConditionType"
-                  },
-                  {
-                    "const": "",
-                    "type": "string"
-                  }
-                ]
-              },
-              "duration": {
-                "type": "number"
-              },
-              "impairment": {
-                "type": "number"
-              },
-              "notes": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "additionalDurationPerSuperior",
-              "condition",
-              "duration",
-              "impairment",
-              "notes"
-            ],
-            "type": "object"
-          },
-          "type": "array"
-        },
-        "onCheckSuccess": {
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "condition": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/ConditionType"
-                  },
-                  {
-                    "const": "",
-                    "type": "string"
-                  }
-                ]
-              },
-              "duration": {
-                "type": "number"
-              },
-              "impairment": {
-                "type": "number"
-              }
-            },
-            "required": [
-              "condition",
-              "duration",
-              "impairment"
-            ],
-            "type": "object"
-          },
-          "type": "array"
-        },
-        "onCriticalCheckFailure": {
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "condition": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/ConditionType"
-                  },
-                  {
-                    "const": "",
-                    "type": "string"
-                  }
-                ]
-              },
-              "duration": {
-                "type": "number"
-              },
-              "impairment": {
-                "type": "number"
-              },
-              "notes": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "condition",
-              "duration",
-              "impairment",
-              "notes"
-            ],
-            "type": "object"
-          },
-          "type": "array"
-        }
-      },
-      "required": [
-        "check",
-        "checkModifier",
-        "armorAsModifier",
-        "onCheckSuccess",
-        "onCheckFailure",
-        "onCriticalCheckFailure"
-      ],
-      "type": "object"
     },
     "ConditionType": {
       "enum": [
@@ -9743,7 +9779,7 @@
       "additionalProperties": false,
       "properties": {
         "applyConditions": {
-          "$ref": "#/definitions/ConditionEffect"
+          "$ref": "#/definitions/ApplyableConditions"
         },
         "attackTraits": {
           "items": {
@@ -9809,7 +9845,7 @@
       "additionalProperties": false,
       "properties": {
         "applyConditions": {
-          "$ref": "#/definitions/ConditionEffect"
+          "$ref": "#/definitions/ApplyableConditions"
         },
         "armorPiercing": {
           "type": "boolean"

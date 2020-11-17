@@ -73,11 +73,6 @@ export const prettyMilliseconds = (
   )}`.trim();
 };
 
-export const prettyDuration = (duration: number, options?: Options) => {
-  if (duration === 0) return localize('completed');
-  if (duration < 0) return localize('indefinite');
-  return prettyMilliseconds(duration, options);
-};
 
 export const prettyDate = (value: string) => {
   const date = new Date(value);

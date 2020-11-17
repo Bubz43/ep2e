@@ -509,11 +509,11 @@
       "attack": {
         "applyConditions": {
           "armorAsModifier":"",
-          "check": "cog",
+          "check": "",
           "checkModifier": 0,
-          "onCheckFailure": [],
-          "onCheckSuccess": [],
-          "onCriticalCheckFailure": []
+          "checkFailure": [],
+          "checkSuccess": [],
+          "criticalCheckFailure": []
         },
         "attackTraits": [],
         "damageFormula": "",
@@ -713,11 +713,11 @@
         "notes": "",
         "applyConditions": {
           "armorAsModifier":"",
-          "check": "cog",
+          "check": "",
           "checkModifier": 0,
-          "onCheckFailure": [],
-          "onCheckSuccess": [],
-          "onCriticalCheckFailure": []
+          "checkFailure": [],
+          "checkSuccess": [],
+          "criticalCheckFailure": []
         },
         "label": "",
         "reduceAVbyDV": false
@@ -731,11 +731,11 @@
         "notes": "",
         "applyConditions": {
           "armorAsModifier":"",
-          "check": "cog",
+          "check": "",
           "checkModifier": 0,
-          "onCheckFailure": [],
-          "onCheckSuccess": [],
-          "onCriticalCheckFailure": []
+          "checkFailure": [],
+          "checkSuccess": [],
+          "criticalCheckFailure": []
         },
         "label": "",
         "reduceAVbyDV": false

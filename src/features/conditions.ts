@@ -3,12 +3,14 @@ import type { DescriptionEntry } from '@src/foundry/lang-schema';
 import { localize } from '@src/foundry/localization';
 import { fromPairs } from '@src/utility/helpers';
 import { foundryIcon, localImage } from '@src/utility/images';
+import { compact } from 'remeda';
 import { ActionSubtype } from './actions';
 import { ArmorType } from './active-armor';
 import { createEffect, Effect } from './effects';
+import { createFeature } from './feature-helpers';
 import { SkillType } from './skills';
 import { TagType } from './tags';
-import { CommonInterval } from './time';
+import { CommonInterval, prettyMilliseconds } from './time';
 
 export enum ConditionType {
   Blinded = 'blinded',
@@ -147,52 +149,83 @@ export const getConditionEffects = (condition: ConditionType): Effect[] => {
   }
 };
 
-type BaseEffectInfo = {
+type ResultInfo = {
   condition: ConditionType | '';
-  duration: number;
+  staticDuration: number;
+  variableDuration: string;
+  stress: string;
   impairment: number;
+  notes: string;
 };
 
-export type ConditionEffect = {
-  check: AptitudeType;
+type CheckFailureInfo = ResultInfo & {
+  additionalDurationPerSuperior: number;
+};
+
+type CriticalCheckFailureInfo = Omit<
+  CheckFailureInfo,
+  'additionalDurationPerSuperior'
+>;
+
+export const createResultInfo = createFeature<ResultInfo>(() => ({
+  condition: '',
+  staticDuration: 0,
+  variableDuration: '',
+  stress: '',
+  impairment: 0,
+  notes: '',
+}));
+
+export enum CheckResultState {
+  CheckSuccess = 'checkSuccess',
+  CheckFailure = 'checkFailure',
+  CriticalFailure = 'criticalCheckFailure',
+}
+
+export type ApplyableConditions = {
+  check: AptitudeType | '';
   checkModifier: number;
   armorAsModifier: ArmorType | '';
-  onCheckSuccess: BaseEffectInfo[];
-  onCheckFailure: (BaseEffectInfo & {
-    additionalDurationPerSuperior: number;
-    notes: string;
-  })[];
-  onCriticalCheckFailure: (BaseEffectInfo & {
-    notes: string;
-  })[];
+  checkSuccess: ResultInfo[];
+  checkFailure: CheckFailureInfo[];
+  criticalCheckFailure: CriticalCheckFailureInfo[];
+};
+
+export const formatCheckResultInfo = (
+  entry: ApplyableConditions[CheckResultState][number],
+) => {
+  const { condition, staticDuration: duration, impairment } = entry;
+  const effect = compact([
+    condition && localize(condition),
+    impairment && `${impairment} ${localize('impairmentModifier')}`,
+  ]).join(` & `);
+  return `${effect} ${localize('for')} ${prettyMilliseconds(duration)}`;
 };
 
 const conditionEffectFromAttackTrait = (
   trait: AttackTrait,
-): ConditionEffect => {
+): ApplyableConditions => {
   switch (trait) {
     case AttackTrait.Blinding:
       return {
         check: AptitudeType.Reflexes,
         checkModifier: 0,
         armorAsModifier: '',
-        onCheckSuccess: [],
-        onCheckFailure: [
+        checkSuccess: [],
+        checkFailure: [
           {
-            condition: ConditionType.Blinded,
-            duration: CommonInterval.Turn,
-            impairment: 0,
+            ...createResultInfo({
+              condition: ConditionType.Blinded,
+              staticDuration: CommonInterval.Turn,
+            }),
             additionalDurationPerSuperior: CommonInterval.Turn,
-            notes: '',
           },
         ],
-        onCriticalCheckFailure: [
-          {
+        criticalCheckFailure: [
+          createResultInfo({
             condition: ConditionType.Blinded,
-            duration: CommonInterval.Indefinite,
-            impairment: 0,
-            notes: '',
-          },
+            staticDuration: CommonInterval.Indefinite,
+          }),
         ],
       };
 
@@ -201,17 +234,17 @@ const conditionEffectFromAttackTrait = (
         check: AptitudeType.Reflexes,
         checkModifier: 0,
         armorAsModifier: '',
-        onCheckSuccess: [],
-        onCheckFailure: [
+        checkSuccess: [],
+        checkFailure: [
           {
-            condition: ConditionType.Grappled,
-            duration: CommonInterval.Instant,
-            impairment: 0,
+            ...createResultInfo({
+              condition: ConditionType.Grappled,
+              staticDuration: CommonInterval.Instant,
+            }),
             additionalDurationPerSuperior: CommonInterval.Instant,
-            notes: '',
           },
         ],
-        onCriticalCheckFailure: [],
+        criticalCheckFailure: [],
       };
 
     case AttackTrait.Knockdown:
@@ -219,17 +252,17 @@ const conditionEffectFromAttackTrait = (
         check: AptitudeType.Somatics,
         checkModifier: 0,
         armorAsModifier: '',
-        onCheckSuccess: [],
-        onCheckFailure: [
+        checkSuccess: [],
+        checkFailure: [
           {
-            condition: ConditionType.Prone,
-            duration: CommonInterval.Instant,
-            impairment: 0,
+            ...createResultInfo({
+              condition: ConditionType.Prone,
+              staticDuration: CommonInterval.Instant,
+            }),
             additionalDurationPerSuperior: CommonInterval.Instant,
-            notes: '',
           },
         ],
-        onCriticalCheckFailure: [],
+        criticalCheckFailure: [],
       };
 
     case AttackTrait.Pain:
@@ -237,17 +270,17 @@ const conditionEffectFromAttackTrait = (
         check: AptitudeType.Willpower,
         checkModifier: 0,
         armorAsModifier: '',
-        onCheckFailure: [
+        checkFailure: [
           {
-            condition: '',
-            duration: CommonInterval.Turn,
-            impairment: -20,
+            ...createResultInfo({
+              staticDuration: CommonInterval.Turn,
+              impairment: -20,
+            }),
             additionalDurationPerSuperior: 0,
-            notes: '',
           },
         ],
-        onCheckSuccess: [],
-        onCriticalCheckFailure: [],
+        checkSuccess: [],
+        criticalCheckFailure: [],
       };
 
     case AttackTrait.Shock:
@@ -255,37 +288,36 @@ const conditionEffectFromAttackTrait = (
         check: AptitudeType.Somatics,
         checkModifier: 0,
         armorAsModifier: ArmorType.Energy,
-        onCheckSuccess: [
-          {
+        checkSuccess: [
+          createResultInfo({
             condition: ConditionType.Stunned,
-            duration: CommonInterval.Turn * 3,
-            impairment: 0,
-          },
+            staticDuration: CommonInterval.Turn * 3,
+          }),
         ],
-        onCheckFailure: [
+        checkFailure: [
           {
-            condition: ConditionType.Incapacitated,
-            duration: CommonInterval.Turn,
-            impairment: 0,
+            ...createResultInfo({
+              condition: ConditionType.Incapacitated,
+              staticDuration: CommonInterval.Turn,
+            }),
             additionalDurationPerSuperior: CommonInterval.Turn * 2,
-            notes: '',
           },
           {
-            condition: ConditionType.Prone,
-            duration: CommonInterval.Instant,
-            impairment: 0,
+            ...createResultInfo({
+              condition: ConditionType.Prone,
+              staticDuration: CommonInterval.Instant,
+            }),
             additionalDurationPerSuperior: 0,
-            notes: '',
           },
           {
-            condition: ConditionType.Stunned,
-            duration: CommonInterval.Minute * 3,
-            impairment: 0,
+            ...createResultInfo({
+              condition: ConditionType.Stunned,
+              staticDuration: CommonInterval.Minute * 3,
+            }),
             additionalDurationPerSuperior: 0,
-            notes: '',
           },
         ],
-        onCriticalCheckFailure: [],
+        criticalCheckFailure: [],
       };
 
     case AttackTrait.Stun:
@@ -293,29 +325,25 @@ const conditionEffectFromAttackTrait = (
         check: AptitudeType.Somatics,
         checkModifier: 0,
         armorAsModifier: ArmorType.Kinetic,
-        onCheckSuccess: [],
-        onCheckFailure: [
+        checkSuccess: [],
+        checkFailure: [
           {
-            condition: ConditionType.Stunned,
-            duration: CommonInterval.Turn,
-            impairment: 0,
+            ...createResultInfo({
+              condition: ConditionType.Stunned,
+              staticDuration: CommonInterval.Turn,
+            }),
             additionalDurationPerSuperior: CommonInterval.Turn,
-            notes: '',
           },
         ],
-        onCriticalCheckFailure: [
-          {
+        criticalCheckFailure: [
+          createResultInfo({
             condition: ConditionType.Incapacitated,
-            duration: CommonInterval.Turn,
-            impairment: 0,
-            notes: '',
-          },
-          {
+            staticDuration: CommonInterval.Turn,
+          }),
+          createResultInfo({
             condition: ConditionType.Stunned,
-            duration: CommonInterval.Minute,
-            impairment: 0,
-            notes: '',
-          },
+            staticDuration: CommonInterval.Minute,
+          }),
         ],
       };
   }

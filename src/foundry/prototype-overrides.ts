@@ -23,13 +23,10 @@ import type { TokenData } from './foundry-cont';
 import { activeCanvas, convertMenuOptions } from './misc-helpers';
 import { activeTokenStatusEffects } from './token-helpers';
 
-// TextEditor.create = new Proxy(TextEditor.create, {
-//   apply(target, thisArg, argumentsList) {
-//     // eslint-disable-next-line @typescript-eslint/camelcase
-//     argumentsList[0].skin = 'oxide-dark';
-//     return Reflect.apply(target, thisArg, argumentsList);
-//   },
-// });
+Entity.prototype.matchRegexp = function (regex: RegExp) {
+  return regex.test(this.name)
+}
+
 const { _injectHTML } = Application.prototype;
 Application.prototype._injectHTML = function (html: JQuery, options: unknown) {
   if (this instanceof MainMenu) {

@@ -139,11 +139,9 @@ export class CompendiumList extends LitElement {
     const { content } = this;
 
     const isItem = this.compendium.entity === 'Item';
-    const isActor = this.compendium.entity === 'Actor';
-    const regexp = searchRegExp(this.search);
+    const regex = searchRegExp(this.search);
     const canDrag = this.compendium._canDragStart('');
-    const isHidden = (...parts: string[]) =>
-      !compact(parts).some((part) => regexp.test(part));
+
     return html`
       <mwc-list>
         ${repeat(
@@ -154,7 +152,7 @@ export class CompendiumList extends LitElement {
             const finalName = isItem
               ? (entry as ItemEP).proxy.fullName
               : entry.name;
-            const hidden = isHidden(type, finalName);
+            const hidden = !entry.matchRegexp(regex)
             if (hidden) return '';
             const img = typeof entry.img === 'string' ? entry.img : undefined;
             return html`

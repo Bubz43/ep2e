@@ -1,4 +1,5 @@
 import type {
+  AptitudeType,
   AreaEffectType,
   AttackTrait,
   FirearmAmmoModifierType,
@@ -7,7 +8,7 @@ import type { Explosive } from '@src/entities/item/proxies/explosive';
 import type { FirearmAmmo } from '@src/entities/item/proxies/firearm-ammo';
 import type { Substance } from '@src/entities/item/proxies/substance';
 import type { ArmorType } from '@src/features/active-armor';
-import type { ConditionEffect } from '@src/features/conditions';
+import type { ApplyableConditions } from '@src/features/conditions';
 import type { FiringMode } from '@src/features/firing-modes';
 import { localize } from '@src/foundry/localization';
 import type { HealthType } from '@src/health/health';
@@ -44,13 +45,14 @@ export type UsedAttackArmor = {
   reduceAVbyDV: boolean;
 };
 
+
 export type SleightAttackData = {
   damageFormula: string;
   mentalArmor: boolean;
   perTurn: boolean;
   attackTraits: AttackTrait[];
   damageType: HealthType;
-  applyConditions: ConditionEffect;
+  applyConditions: ApplyableConditions;
   notes: string;
 };
 
@@ -60,7 +62,7 @@ export type SoftwareAttackData = Omit<UsedAttackArmor, 'armorUsed'> & {
   damageType: HealthType;
   attackTraits: AttackTrait[];
   useMeshArmor: boolean;
-  applyConditions: ConditionEffect;
+  applyConditions: ApplyableConditions;
   notes: string;
 };
 

@@ -183,3 +183,7 @@ export function deepMerge() {
 }
 
 export const toTuple = <T>(value: T): [T] => [value];
+
+export const capitalize = <T extends string>([c = '', ...characters]: T) =>
+  (c.toLocaleUpperCase() + characters.join('')) as Capitalize<T>;
+

@@ -1288,7 +1288,14 @@ type LangEntries =
   | 'substrain'
   | 'shapeChanging'
   | 'shapes'
-  | 'shapeName' | "meshAttacks" | "useMeshArmor"
+  | 'shapeName'
+  | 'meshAttacks'
+  | 'useMeshArmor'
+  | 'checkSuccess'
+  | 'checkFailure'
+  | 'criticalCheckFailure'
+  | 'impairmentModifier'
+  | 'for';
 type FullNames =
   | 'cog'
   | 'int'
