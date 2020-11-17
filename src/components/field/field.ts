@@ -35,6 +35,8 @@ export class Field extends LitElement {
 
   @property({ type: Boolean, reflect: true }) private disabled = false;
 
+  @property({ type: Boolean, reflect: true }) minimal = false;
+
   @query('.input-slot') inputSlot!: HTMLSlotElement;
 
   private mutationObs?: MutationObserver | null;

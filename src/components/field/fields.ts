@@ -63,9 +63,9 @@ export const renderListToOptions = <T extends ReadonlyArray<string>>({
 
 type FieldSlots = Partial<{ before: TemplateResult; after: TemplateResult }>;
 type FieldOptions = Partial<
-  Pick<Field, 'helpText' | 'helpPersistent' | 'validationMessage' | 'dirty'>
+  Pick<Field, 'helpText' | 'helpPersistent' | 'validationMessage' | 'dirty' | "minimal">
 > &
-  FieldSlots;
+  FieldSlots
 
 type CommonOptions = Partial<{
   disabled: boolean;
@@ -90,6 +90,7 @@ const field = ({
   helpText,
   validationMessage,
   dirty = false,
+  minimal = false,
   ...slots
 }: FieldOptions & { label: string; content: TemplateResult }) => {
   return html`
@@ -99,6 +100,7 @@ const field = ({
       helpText=${ifDefined(helpText)}
       validationMessage=${ifDefined(validationMessage)}
       ?helpPersistent=${helpPersistent}
+      ?minimal=${minimal}
     >
       ${content} ${fieldSlots(slots)}
     </sl-field>

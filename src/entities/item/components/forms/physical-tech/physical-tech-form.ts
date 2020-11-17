@@ -17,6 +17,7 @@ import {
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
+import { ActionType } from '@src/features/actions';
 import type { EffectCreatedEvent } from '@src/features/components/effect-creator/effect-created-event';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
@@ -30,7 +31,7 @@ import {
   PropertyValues,
 } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
-import { mapToObj } from 'remeda';
+import { difference, mapToObj } from 'remeda';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './physical-tech-form.scss';
@@ -63,20 +64,6 @@ export class PhysicalTechForm extends ItemFormBase {
     this.effectsOps[this.effectGroup].add({}, ev.effect);
   }
 
-  /*
-            activation.value === Activation.Use
-              ? html`
-                  ${renderTimeField(useDuration)}
-                  ${renderSelectField(
-                    useCheck,
-                    enumValues(AptitudeType),
-                    emptyTextDash,
-                  )}
-                  <entity-form-sidebar-divider></entity-form-sidebar-divider>
-                `
-              : '',
-  */
-
   render() {
     const {
       updater,
@@ -86,6 +73,7 @@ export class PhysicalTechForm extends ItemFormBase {
       deviceType,
       effectGroups,
       hasActivation,
+      onlyLocalEffects,
     } = this.item;
     const { disabled } = this;
     // TODO Fabrication
@@ -112,8 +100,6 @@ export class PhysicalTechForm extends ItemFormBase {
             wareType,
             deviceType,
             fabricator,
-            usedEffectsDuration: useDuration,
-            resistEffectsCheck: useCheck,
           }) => [
             renderSelectField(wareType, enumValues(PhysicalWare), {
               ...emptyTextDash,
@@ -142,6 +128,58 @@ export class PhysicalTechForm extends ItemFormBase {
             fields: renderComplexityFields,
           })}
           ${deviceType ? this.renderMeshHealthSection() : ''}
+          ${hasActivation
+            ? html`
+                <section>
+                  <sl-header heading=${localize('activation')}>
+                  ${renderUpdaterForm(updater.prop('data'), {
+                    disabled,
+                    slot: "action",
+                    fields: ({
+                      activationAction,
+                  
+                    }) => [
+                      renderSelectField(
+                        activationAction,
+                        difference(enumValues(ActionType), [ActionType.Task]),
+                        { minimal: true, altLabel: action => `${localize(action)} ${localize("action")}` }
+                      ),
+     
+                    
+                    ],
+                  })}
+                </sl-header>
+                  ${renderUpdaterForm(updater.prop('data'), {
+                    disabled,
+                    classes: 'activation-form',
+                    fields: ({
+                      activationAction,
+                      usedEffectsDuration,
+                      resistEffectsCheck,
+                    }) => [
+                      // renderSelectField(
+                      //   {
+                      //     ...activationAction,
+                      //     label: `${localize(
+                      //       onlyLocalEffects ? 'activation' : 'use',
+                      //     )} ${localize('action')}`,
+                      //   },
+                      //   difference(enumValues(ActionType), [ActionType.Task]),
+                      // ),
+                      renderSelectField(
+                        resistEffectsCheck,
+                        enumValues(AptitudeType),
+                        emptyTextDash,
+                      ),
+                      renderTimeField(usedEffectsDuration, {
+                        permanentLabel: localize('indefinite'),
+                      }),
+                    
+                    ],
+                  })}
+                </section>
+              `
+            : ''}
 
           <section>
             <sl-header
@@ -179,7 +217,7 @@ export class PhysicalTechForm extends ItemFormBase {
         ${this.renderDrawerContent()}
       </entity-form-layout>
     `;
-  } 
+  }
 
   private renderMeshHealthSection() {
     return html`
@@ -241,7 +279,8 @@ export class PhysicalTechForm extends ItemFormBase {
       <h3>${localize('add')} ${localize('effect')}</h3>
       ${this.item.hasActivation
         ? renderAutoForm({
-            props: { group: this.effectGroup },
+          props: { group: this.effectGroup },
+          classes: "effect-group-form",
             update: ({ group }) => group && (this.effectGroup = group),
             fields: ({ group }) =>
               renderRadioFields(group, ['passive', 'activated']),

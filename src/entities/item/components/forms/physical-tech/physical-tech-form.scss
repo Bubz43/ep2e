@@ -8,3 +8,13 @@
 :host {
   display: block;
 }
+
+
+.activation-form {
+  padding: 0.5rem 0 0;
+  grid-template-columns: 1fr auto;
+}
+
+.effect-group-form {
+  margin-bottom: 0.25rem;
+}
