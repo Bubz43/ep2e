@@ -1,4 +1,4 @@
-import type { AptitudeCheckInfo } from "@src/features/conditions";
+import type { AptitudeCheckInfo } from "@src/features/aptitude-check-result-info";
 
 export class AptitudeCheckInfoUpdateEvent extends Event {
    static get is() {

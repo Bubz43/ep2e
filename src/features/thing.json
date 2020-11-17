@@ -1,0 +1,18 @@
+{
+  "CHAT.Clear": "Clear Chat Log",
+"CHAT.Export": "Export Chat Log",
+"CHAT.FlushTitle": "Flush Chat Log",
+"CHAT.FlushWarning": "<h3>Are you sure?</h3><p>All messages within the chat log will be deleted and cleared.</p>",
+"CHAT.InvalidCommand": "{command} is not a valid chat message command.",
+"CHAT.Title": "Chat Log",
+"CHAT.To": "To",
+"CHAT.PopoutMessage": "Pop Out Message",
+"CHAT.RevealMessage": "Reveal To Everyone",
+"CHAT.ConcealMessage": "Make Private",
+"CHAT.RollBlind": "Blind GM Roll",
+"CHAT.RollDefault": "Default Roll Mode",
+"CHAT.RollPublic": "Public Roll",
+"CHAT.RollPrivate": "Private GM Roll",
+"CHAT.RollSelf": "Self Roll",
+"CHAT.RollTables": "Rollable Tables"
+}

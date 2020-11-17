@@ -23,6 +23,11 @@ import {
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import type { Software } from '@src/entities/item/proxies/software';
+import {
+  CheckResultState,
+  formatAptitudeCheckInfo,
+  formatCheckResultInfo,
+} from '@src/features/aptitude-check-result-info';
 import { pairList } from '@src/features/check-list';
 import type { AptitudeCheckInfoUpdateEvent } from '@src/features/components/aptitude-check-info-editor/aptitude-check-info-update-event';
 import type { EffectCreatedEvent } from '@src/features/components/effect-creator/effect-created-event';
@@ -40,7 +45,7 @@ import {
   PropertyValues,
 } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
-import { createPipe, map, mapToObj, objOf } from 'remeda';
+import { compact, createPipe, map, mapToObj, objOf } from 'remeda';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './software-form.scss';
@@ -284,7 +289,7 @@ export class SoftwareForm extends ItemFormBase {
                 >
               `
             : ''}
-          // TODO Conditions
+          ${this.renderAptitudeCheck(type)}
           ${attack.notes
             ? html`
                 <sl-group class="attack-notes" label=${localize('notes')}>
@@ -295,6 +300,29 @@ export class SoftwareForm extends ItemFormBase {
         </div>
       </section>
     `;
+  }
+
+  private renderAptitudeCheck(type: WeaponAttackType) {
+    const { aptitudeCheckInfo } = this.item.epData[type];
+    const results = enumValues(CheckResultState).flatMap((state) => {
+      const list = aptitudeCheckInfo[state];
+      return notEmpty(list)
+        ? html`
+            <sl-group label="${localize('on')} ${localize(state)}">
+              ${list.map(formatCheckResultInfo).join('. ')}
+            </sl-group>
+          `
+        : [];
+    });
+
+    return notEmpty(results) && aptitudeCheckInfo.check
+      ? html`
+          <sl-group label=${localize('aptitudeCheck')}
+            >${formatAptitudeCheckInfo(aptitudeCheckInfo)}</sl-group
+          >
+          ${results}
+        `
+      : '';
   }
 
   private renderPrimaryAttackEdit() {

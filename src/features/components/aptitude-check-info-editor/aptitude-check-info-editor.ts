@@ -2,10 +2,10 @@ import {
   emptyTextDash,
   renderFormulaField,
   renderNumberField,
-  renderRadioFields,
+
   renderSelectField,
   renderTextField,
-  renderTimeField,
+  renderTimeField
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { AptitudeType, enumValues } from '@src/data-enums';
@@ -14,30 +14,28 @@ import {
   AptitudeCheckInfo,
   CheckResultInfo,
   checkResultInfoWithDefaults,
-  ConditionType,
-  formatCheckResultInfo,
+
+  CheckResultState,
+
+  formatCheckResultInfo
+} from "@src/features/aptitude-check-result-info";
+import {
+  ConditionType
 } from '@src/features/conditions';
+import { CommonInterval } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
-import { capitalize, deepMerge } from '@src/foundry/misc-helpers';
+import { notEmpty, safeMerge } from '@src/utility/helpers';
 import {
   customElement,
   html,
   internalProperty,
   LitElement,
-  property,
-  PropertyValues,
+  property
 } from 'lit-element';
-import { AptitudeCheckInfoUpdateEvent } from './aptitude-check-info-update-event';
-import styles from './aptitude-check-info-editor.scss';
 import { concat, objOf, omit, pipe } from 'remeda';
-import { CommonInterval } from '@src/features/time';
-import { notEmpty, safeMerge } from '@src/utility/helpers';
+import styles from './aptitude-check-info-editor.scss';
+import { AptitudeCheckInfoUpdateEvent } from './aptitude-check-info-update-event';
 
-enum ResultState {
-  CheckSuccess = 'checkSuccess',
-  CheckFailure = 'checkFailure',
-  CriticalFailure = 'criticalCheckFailure',
-}
 
 enum DurationEdit {
   Static = 'static',
@@ -63,7 +61,7 @@ export class AptitudeCheckInfoEditor extends LitElement {
   })
   readonly aptitudeCheckInfo!: AptitudeCheckInfo;
 
-  @internalProperty() private resultType = ResultState.CheckFailure;
+  @internalProperty() private resultType = CheckResultState.CheckFailure;
 
   @internalProperty() private resultInfo = checkResultInfoWithDefaults({});
 
@@ -97,7 +95,7 @@ export class AptitudeCheckInfoEditor extends LitElement {
       pipe(
         this.aptitudeCheckInfo[this.resultType],
         concat([
-          this.resultType === ResultState.CheckFailure
+          this.resultType === CheckResultState.CheckFailure
             ? this.resultInfo
             : omit(this.resultInfo, ['additionalDurationPerSuperior']),
         ]),
@@ -139,7 +137,7 @@ export class AptitudeCheckInfoEditor extends LitElement {
       ${showAll
         ? html`
             <div class="result-conditions">
-              ${enumValues(ResultState).map((state) => {
+              ${enumValues(CheckResultState).map((state) => {
                 const list = this.aptitudeCheckInfo[state];
 
                 return notEmpty(list) ? html`
@@ -169,7 +167,7 @@ export class AptitudeCheckInfoEditor extends LitElement {
                 props: { result: this.resultType },
                 update: ({ result }) => result && (this.resultType = result),
                 fields: ({ result }) =>
-                  renderSelectField(result, enumValues(ResultState)),
+                  renderSelectField(result, enumValues(CheckResultState)),
               })}
               ${this.renderResultForm()}
             </div>
@@ -248,7 +246,7 @@ export class AptitudeCheckInfoEditor extends LitElement {
                   )}
                 </div>
               `,
-          this.resultType === ResultState.CheckFailure
+          this.resultType === CheckResultState.CheckFailure
             ? renderTimeField(additionalDurationPerSuperior, { min: 0 })
             : '',
         ],

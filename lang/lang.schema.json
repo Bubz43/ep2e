@@ -1665,6 +1665,9 @@
             "flipRoll": {
               "type": "string"
             },
+            "folder": {
+              "type": "string"
+            },
             "for": {
               "type": "string"
             },
@@ -3558,7 +3561,7 @@
             "stateOfTheArt": {
               "type": "string"
             },
-            "staticDuration": {
+            "static": {
               "type": "string"
             },
             "staticModifiers": {
@@ -4077,7 +4080,7 @@
             "values": {
               "type": "string"
             },
-            "variableDuration": {
+            "variable": {
               "type": "string"
             },
             "vehicle": {
@@ -4645,6 +4648,7 @@
             "flashSuppressor",
             "flex",
             "flipRoll",
+            "folder",
             "for",
             "forensics",
             "forensicsSpecialist",
@@ -5276,7 +5280,7 @@
             "stat",
             "state",
             "stateOfTheArt",
-            "staticDuration",
+            "static",
             "staticModifiers",
             "status",
             "steady",
@@ -5449,7 +5453,7 @@
             "vacuum",
             "value",
             "values",
-            "variableDuration",
+            "variable",
             "vehicle",
             "venusian",
             "veryFast",
