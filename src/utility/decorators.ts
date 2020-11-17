@@ -1,12 +1,23 @@
+import type { Constructor } from 'lit-element';
+
+interface ClassElement {
+  kind: 'field' | 'method';
+  key: PropertyKey;
+  placement: 'static' | 'prototype' | 'own';
+  initializer?: Function;
+  extras?: ClassElement[];
+  finisher?: <T>(clazz: Constructor<T>) => undefined | Constructor<T>;
+  descriptor?: PropertyDescriptor;
+}
+
 export function debounce(time = 250, callFirst = false): any {
-  return function (
-    // target: unknown,
-    // propertyKey: string,
-    descriptor: PropertyDescriptor,
-  ) {
+  return function (descriptor: ClassElement) {
     const map = new WeakMap();
-    const originalMethod = descriptor.value;
-    descriptor.value = function (...params: Parameters<typeof originalMethod>) {
+    const originalMethod = descriptor.descriptor!.value;
+
+    descriptor.descriptor!.value = function (
+      ...params: Parameters<typeof originalMethod>
+    ) {
       let debounced = map.get(this);
       if (!debounced) {
         debounced = debounceFn(originalMethod, time, callFirst).bind(this);
@@ -19,14 +30,12 @@ export function debounce(time = 250, callFirst = false): any {
 }
 
 export function throttle(time = 250, callFirst = false): any {
-  return function (
-    // target: unknown,
-    // propertyKey: string,
-    descriptor: PropertyDescriptor,
-  ) {
+  return function (descriptor: ClassElement) {
     const map = new WeakMap();
-    const originalMethod = descriptor.value;
-    descriptor.value = function (...params: Parameters<typeof originalMethod>) {
+    const originalMethod = descriptor.descriptor!.value;
+    descriptor.descriptor!.value = function (
+      ...params: Parameters<typeof originalMethod>
+    ) {
       let throttled = map.get(this);
       if (!throttled) {
         throttled = throttleFn(originalMethod, time, callFirst).bind(this);

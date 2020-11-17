@@ -12,6 +12,7 @@ import { ActorEP } from './entities/actor/actor';
 import { ActorEPSheet } from './entities/actor/actor-sheet';
 import { ChatMessageEP } from './entities/chat-message';
 import { findActor } from './entities/find-entities';
+import { createDefaultPacks } from './entities/item/converters';
 import { ItemEP } from './entities/item/item';
 import { ItemEPSheet } from './entities/item/item-sheet';
 import { migrateWorld } from './entities/migration';
@@ -272,20 +273,21 @@ for (const app of [ActorDirectory, ItemDirectory]) {
   });
 }
 
-// applicationHook({
-//   app: CompendiumDirectory,
-//   hook: "on",
-//   event: "render",
-//   callback: (_, [list]) => {
-//     if (!game.user.isGM) return;
-//     const footer = list.querySelector<HTMLElement>(".directory-footer");
-//     if (footer) {
-//       const frag = new DocumentFragment();
-//       render(
-//         html` <button @click=${createDefaultPacks}>EP Packs</button> `,
-//         frag
-//       );
-//       footer.append(frag);
-//     }
-//   },
-// });
+applicationHook({
+  app: CompendiumDirectory,
+  hook: "on",
+  event: "render",
+  callback: (_, [list]) => {
+    if (!game.user.isGM) return;
+    const footer = list.querySelector<HTMLElement>(".directory-footer");
+    if (footer) {
+      const frag = new DocumentFragment();
+      render(
+        html` <button @click=${createDefaultPacks}>EP Packs</button> `,
+        frag
+      );
+      footer.append(frag);
+    }
+  },
+});
+

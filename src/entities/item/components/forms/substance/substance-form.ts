@@ -513,9 +513,12 @@ export class SubstanceForm extends ItemFormBase {
       })}
       ${damageFormula
         ? html`
-            <sl-group label=${formatDamageType(damageType)}>
+            <sl-group
+              label="${formatDamageType(damageType)} ${perTurn
+                ? localize('perTurn')
+                : ''}"
+            >
               ${damageFormula} ${formatArmorUsed(armor)}
-              ${perTurn ? `${localize('perTurn')}` : ''}
             </sl-group>
           `
         : ''}
@@ -645,7 +648,6 @@ export class SubstanceForm extends ItemFormBase {
           damageFormula.value
             ? [
                 html`<sl-popover
-                  padded
                   .renderOnDemand=${() => this.renderArmorUsedForm(group)}
                   placement=${Placement.Right}
                 >

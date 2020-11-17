@@ -190,10 +190,6 @@ export enum PhysicalWare {
   Nano = 'nanoware',
 }
 
-export enum ArmorWare {
-  Bio = 'bioware',
-  Hard = 'hardware',
-}
 
 export enum GearQuality {
   TopOfTheLine = 'topOfTheLine',
