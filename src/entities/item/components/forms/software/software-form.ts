@@ -119,9 +119,13 @@ export class SoftwareForm extends ItemFormBase {
             renderSelectField(
               activation,
               difference(enumValues(ActionType), [ActionType.Task]),
-              notEmpty(effectGroups.get('activated'))
-                ? undefined
-                : emptyTextDash,
+              {
+                altLabel: (action) =>
+                  `${localize(action)} ${localize('action')}`,
+                emptyText: notEmpty(effectGroups.get('activated'))
+                  ? undefined
+                  : '-',
+              },
             ),
             renderNumberField(meshAttacks, { min: 0, max: 2 }),
           ],

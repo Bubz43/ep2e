@@ -769,7 +769,7 @@
       "activationAction": "automatic",
       "effectStates": "passive",
       "resistEffectsCheck":"",
-    "usedEffectsDuration": 0,
+    "usedEffectsDuration": 3000,
       "state": {
         "activated": false,
         "embeddedEgos": [],

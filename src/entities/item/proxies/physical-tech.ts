@@ -59,6 +59,10 @@ export class PhysicalTech
     return this.epData.activationAction;
   }
 
+  get hasUse() {
+    return this.effectStates === EffectStates.PassiveAndUsable
+  }
+
   @LazyGetter()
   get effectGroups() {
     const { effects, activatedEffects, hasActivation } = this;

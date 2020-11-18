@@ -23,12 +23,6 @@
   --transition: all 125ms ease-in-out;
 }
 
-:host([minimal]) {
-  .label,
-  footer {
-    display: none;
-  }
-}
 
 @mixin floatLabel {
   transform: translate(10px, 0);

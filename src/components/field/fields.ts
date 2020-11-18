@@ -65,7 +65,7 @@ type FieldSlots = Partial<{ before: TemplateResult; after: TemplateResult }>;
 type FieldOptions = Partial<
   Pick<
     Field,
-    'helpText' | 'helpPersistent' | 'validationMessage' | 'dirty' | 'minimal'
+    'helpText' | 'helpPersistent' | 'validationMessage' | 'dirty'
   >
 > &
   FieldSlots;
@@ -93,7 +93,6 @@ const field = ({
   helpText,
   validationMessage,
   dirty = false,
-  minimal = false,
   ...slots
 }: FieldOptions & { label: string; content: TemplateResult }) => {
   return html`
@@ -103,7 +102,6 @@ const field = ({
       helpText=${ifDefined(helpText)}
       validationMessage=${ifDefined(validationMessage)}
       ?helpPersistent=${helpPersistent}
-      ?minimal=${minimal}
     >
       ${content} ${fieldSlots(slots)}
     </sl-field>

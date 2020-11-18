@@ -20,6 +20,7 @@ import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import { ActionType } from '@src/features/actions';
 import type { EffectCreatedEvent } from '@src/features/components/effect-creator/effect-created-event';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
+import { CommonInterval } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
@@ -73,7 +74,7 @@ export class PhysicalTechForm extends ItemFormBase {
       deviceType,
       effectGroups,
       hasActivation,
-      onlyLocalEffects,
+      hasUse,
     } = this.item;
     const { disabled } = this;
     // TODO Fabrication
@@ -100,6 +101,7 @@ export class PhysicalTechForm extends ItemFormBase {
             wareType,
             deviceType,
             fabricator,
+            activationAction,
           }) => [
             renderSelectField(wareType, enumValues(PhysicalWare), {
               ...emptyTextDash,
@@ -112,6 +114,12 @@ export class PhysicalTechForm extends ItemFormBase {
                 ? [EffectStates.Passive]
                 : undefined,
             }),
+            hasActivation
+              ? renderSelectField(
+                  activationAction,
+                  difference(enumValues(ActionType), [ActionType.Task]),
+                )
+              : '',
             html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
             renderSelectField(deviceType, enumValues(DeviceType), {
               ...emptyTextDash,
@@ -128,48 +136,11 @@ export class PhysicalTechForm extends ItemFormBase {
             fields: renderComplexityFields,
           })}
           ${deviceType ? this.renderMeshHealthSection() : ''}
-          ${hasActivation
-            ? html`
-                <section>
-                  <sl-header heading=${localize('activation')}>
-                    ${renderUpdaterForm(updater.prop('data'), {
-                      disabled,
-                      slot: 'action',
-                      fields: ({ activationAction }) => [
-                        renderSelectField(
-                          activationAction,
-                          difference(enumValues(ActionType), [ActionType.Task]),
-                          {
-                            minimal: true,
-                            altLabel: (action) =>
-                              `${localize(action)} ${localize('action')}`,
-                          },
-                        ),
-                      ],
-                    })}
-                  </sl-header>
-                  ${renderUpdaterForm(updater.prop('data'), {
-                    disabled,
-                    classes: 'activation-form',
-                    fields: ({ usedEffectsDuration, resistEffectsCheck }) => [
-                      renderSelectField(
-                        resistEffectsCheck,
-                        enumValues(AptitudeType),
-                        emptyTextDash,
-                      ),
-                      renderTimeField(usedEffectsDuration, {
-                        permanentLabel: localize('indefinite'),
-                      }),
-                    ],
-                  })}
-                </section>
-              `
-            : ''}
 
           <section>
             <sl-header
               heading=${localize('effects')}
-              ?hideBorder=${effectGroups.size === 0}
+              ?hideBorder=${effectGroups.size === 0 || hasUse}
               ><mwc-icon-button
                 icon="add"
                 slot="action"
@@ -177,6 +148,23 @@ export class PhysicalTechForm extends ItemFormBase {
                 ?disabled=${disabled}
               ></mwc-icon-button
             ></sl-header>
+            ${hasUse
+              ? renderUpdaterForm(updater.prop('data'), {
+                  disabled,
+                  classes: 'activation-form',
+                  fields: ({ usedEffectsDuration, resistEffectsCheck }) => [
+                    renderSelectField(
+                      resistEffectsCheck,
+                      enumValues(AptitudeType),
+                      emptyTextDash,
+                    ),
+                    renderTimeField(usedEffectsDuration, {
+                      permanentLabel: localize('indefinite'),
+                      min: CommonInterval.Turn,
+                    }),
+                  ],
+                })
+              : ''}
             ${[...effectGroups].map(([key, group]) =>
               notEmpty(group)
                 ? html`
