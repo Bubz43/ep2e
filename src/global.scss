@@ -26,6 +26,16 @@ body {
   }
 }
 
+mwc-dialog {
+  --mdc-theme-surface: #{alphav(var(--color-bg), 0.95)};
+  > * {
+    overflow: hidden;
+    &[slot] {
+      --mdc-theme-primary: var(--color-primary-alt);
+    }
+  }
+}
+
 #logo {
   display: none;
 }
@@ -63,12 +73,7 @@ mwc-menu {
   }
 }
 
-web-dialog {
-  footer {
-    display: flex;
-    justify-content: flex-end;
-  }
-}
+
 
 * {
   &:not(mwc-icon):not(i) {

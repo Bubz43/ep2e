@@ -3,6 +3,7 @@ import { renderAutoForm, renderSubmitForm } from '@src/components/form/forms';
 import { enumValues } from '@src/data-enums';
 import { createTag, Tag, TagType } from '@src/features/tags';
 import { localize } from '@src/foundry/localization';
+import { LazyGetter } from 'lazy-get-decorator';
 import {
   customElement,
   LitElement,
@@ -10,7 +11,7 @@ import {
   html,
   internalProperty,
 } from 'lit-element';
-import { sort } from 'remeda';
+import { difference, sort } from 'remeda';
 import styles from './tag-editor.scss';
 import { tagFields } from './tag-fields';
 import { TagUpdatedEvent } from './tag-updated-event';
@@ -26,7 +27,14 @@ export class TagEditor extends LitElement {
 
   static styles = [styles];
 
-  @internalProperty() private tagType = TagType.AllActions;
+  @internalProperty() private tagType = TagType.Action;
+
+  @LazyGetter()
+  static get settableTagTypes() {
+    return sort(difference(enumValues(TagType), [TagType.AllActions]), (a, b) =>
+      localize(a).localeCompare(localize(b)),
+    );
+  }
 
   private emitTag(tag: Tag) {
     this.dispatchEvent(new TagUpdatedEvent(tag));
@@ -37,15 +45,11 @@ export class TagEditor extends LitElement {
     const tag = createTag[tagType]({});
     return html`
       ${renderAutoForm({
+        noDebounce: true,
         props: { tagType },
         update: ({ tagType }) => tagType && (this.tagType = tagType),
         fields: ({ tagType }) =>
-          renderSelectField(
-            tagType,
-            sort(enumValues(TagType), (a, b) =>
-              localize(a).localeCompare(localize(b)),
-            ),
-          ),
+          renderSelectField(tagType, TagEditor.settableTagTypes),
       })}
       ${renderSubmitForm({
         classes: 'submit-form',

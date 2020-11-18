@@ -1,21 +1,14 @@
-import { IconButton } from '@material/mwc-icon-button';
+import { getCurrentEnvironment } from '@src/features/environment';
 import {
-  activeEnvironmentInfo,
-  getCurrentEnvironment,
-} from '@src/features/environment';
-import { navMenuListener } from '@src/foundry/foundry-apps';
-import {
-  MutateEvent,
   mutateEntityHook,
+  MutateEvent,
   mutatePlaceableHook,
 } from '@src/foundry/hook-setups';
 import { localize } from '@src/foundry/localization';
-import { activeCanvas } from '@src/foundry/misc-helpers';
 import { gameSettings, overlay } from '@src/init';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, html, LitElement } from 'lit-element';
 import { render } from 'lit-html';
-import { styleMap } from 'lit-html/directives/style-map';
-import { openDialog } from 'web-dialog';
+import { openDialog } from '@src/open-dialog';
 import styles from './scene-view.scss';
 
 @customElement('scene-view')
@@ -64,16 +57,28 @@ export class SceneView extends LitElement {
 
   private openFormsDialog() {
     if (!game.user.isGM) return;
-    openDialog({
-      $content: (dialog) => {
-        dialog.style.setProperty('--dialog-width:', '600px');
-        dialog.style.zIndex = '50';
-        dialog.slot = 'foundry-apps';
-        return render(html`<environment-forms></environment-forms>`, dialog);
-      },
-      center: true,
-      $container: overlay,
+    openDialog((dialog) => {
+      dialog.style.setProperty('--mdc-dialog-min-width', '600px');
+      return render(
+        html`<environment-forms></environment-forms>
+          <mwc-button
+            slot="primaryAction"
+            dialogAction="close"
+            label=${localize('close')}
+          ></mwc-button> `,
+        dialog,
+      );
     });
+    // openDialog({
+    //   $content: (dialog) => {
+    //     dialog.style.setProperty('--dialog-width:', '600px');
+    //     dialog.style.zIndex = '50';
+    //     dialog.slot = 'foundry-apps';
+    //     return render(html`<environment-forms></environment-forms>`, dialog);
+    //   },
+    //   center: true,
+    //   $container: overlay,
+    // });
   }
 
   render() {

@@ -9,7 +9,7 @@ import type { Trait } from '@src/entities/item/proxies/trait';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
 import { HealthType } from '@src/health/health';
-import { MeshHealth } from '@src/health/infomorph-health';
+import { MeshHealth } from '@src/health/mesh-health';
 import { LazyGetter } from 'lazy-get-decorator';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 

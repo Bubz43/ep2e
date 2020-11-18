@@ -125,7 +125,7 @@ const health: FieldPropsRenderer<HealthEffect> = ({
   modifier,
   stat,
 }) => [
-  renderSelectField(health, enumValues(HealthType)),
+  renderSelectField(health, [HealthType.Physical, HealthType.Mental]),
   renderSelectField(stat, enumValues(HealthStat), {
     altLabel: (healthStat) => healthLabels(health.value, healthStat),
   }),

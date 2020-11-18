@@ -23,6 +23,7 @@ export type MeshHealthData = BasicHealthData & {
   baseDurability: number;
   hot: HealsOverTime;
   reboot: number;
+  
 };
 
 type Init = HealthInit<MeshHealthData> & {

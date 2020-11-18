@@ -8,7 +8,7 @@ import type { ObtainableEffects } from '@src/entities/applied-effects';
 import type { ItemType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import { localize } from '@src/foundry/localization';
-import { MeshHealth } from '@src/health/infomorph-health';
+import { MeshHealth } from '@src/health/mesh-health';
 import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
@@ -28,9 +28,9 @@ export class Software
   }
 
   get fullType() {
-    return `${localize(this.softwareType)} ${
-      this.category ? `(${this.category})` : ''
-    }`;
+    const { softwareType, category } = this;
+    const localType = localize(softwareType)
+    return localType === category || !category ? localType : `${localType} (${category})`
   }
 
   get category() {

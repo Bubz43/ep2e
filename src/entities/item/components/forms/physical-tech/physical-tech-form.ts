@@ -140,7 +140,7 @@ export class PhysicalTechForm extends ItemFormBase {
           <section>
             <sl-header
               heading=${localize('effects')}
-              ?hideBorder=${effectGroups.size === 0 || hasUse}
+              ?hideBorder=${effectGroups.size === 0 && !hasUse}
               ><mwc-icon-button
                 icon="add"
                 slot="action"
@@ -156,7 +156,7 @@ export class PhysicalTechForm extends ItemFormBase {
                     renderSelectField(
                       resistEffectsCheck,
                       enumValues(AptitudeType),
-                      emptyTextDash,
+                      { emptyText: localize("none")},
                     ),
                     renderTimeField(usedEffectsDuration, {
                       permanentLabel: localize('indefinite'),

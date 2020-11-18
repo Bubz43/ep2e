@@ -27,20 +27,6 @@
   ],
   "packs": [
     {
-      "name": "beam-weapons",
-      "system": "ep2e",
-      "label": "Beam Weapons",
-      "path": "./packs/beam-weapons.db",
-      "entity": "Item"
-    },
-    {
-      "name": "melee-weapons",
-      "system": "ep2e",
-      "label": "Melee Weapons",
-      "path": "./packs/melee-weapons.db",
-      "entity": "Item"
-    },
-    {
       "name": "traits",
       "system": "ep2e",
       "label": "Traits",

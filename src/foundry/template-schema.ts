@@ -76,7 +76,7 @@ import type {
 } from '@src/features/skills';
 import type { BiologicalHealthData } from '@src/health/biological-health';
 import type { HealthType } from '@src/health/health';
-import type { MeshHealthData } from '@src/health/infomorph-health';
+import type { MeshHealthData } from '@src/health/mesh-health';
 import type { MentalHealthData } from '@src/health/mental-health';
 import type { RecoveryConditions } from '@src/health/recovery';
 import type { SyntheticHealthData } from '@src/health/synthetic-health';

@@ -459,6 +459,9 @@
             "activation": {
               "type": "string"
             },
+            "activationAction": {
+              "type": "string"
+            },
             "active": {
               "type": "string"
             },
@@ -4264,6 +4267,7 @@
             "activate",
             "activated",
             "activation",
+            "activationAction",
             "active",
             "activeForks",
             "activeRecharge",

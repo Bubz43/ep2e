@@ -3,7 +3,7 @@ import type { ObtainableEffects } from '@src/entities/applied-effects';
 import type { ItemType } from '@src/entities/entity-types';
 import { localize } from '@src/foundry/localization';
 import { HealthType } from '@src/health/health';
-import { MeshHealth } from '@src/health/infomorph-health';
+import { MeshHealth } from '@src/health/mesh-health';
 import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
@@ -17,6 +17,18 @@ export class PhysicalTech
   implements ObtainableEffects {
   constructor(init: ItemProxyInit<ItemType.PhysicalTech>) {
     super(init);
+  }
+
+  get fullType() {
+    const { wareType, category } = this;
+    const localType = localize(wareType || this.type);
+    return localType === category || !category
+      ? localType
+      : `${localType} (${category})`;
+  }
+
+  get category() {
+    return this.epData.category;
   }
 
   get state() {
@@ -60,7 +72,7 @@ export class PhysicalTech
   }
 
   get hasUse() {
-    return this.effectStates === EffectStates.PassiveAndUsable
+    return this.effectStates === EffectStates.PassiveAndUsable;
   }
 
   @LazyGetter()

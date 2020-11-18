@@ -4,6 +4,7 @@ import { enumValues } from '@src/data-enums';
 import { createEffect, EffectType } from '@src/features/effects';
 import { createTag } from '@src/features/tags';
 import { localize } from '@src/foundry/localization';
+import { LazyGetter } from 'lazy-get-decorator';
 import {
   customElement,
   LitElement,
@@ -11,6 +12,7 @@ import {
   html,
   internalProperty,
 } from 'lit-element';
+import { difference } from 'remeda';
 import type { EffectUpdatedEvent } from '../effect-editor/effect-updated-event';
 import { EffectCreatedEvent } from './effect-created-event';
 import styles from './effect-creator.scss';
@@ -26,7 +28,12 @@ export class EffectCreator extends LitElement {
 
   static styles = [styles];
 
-  @property({ type: Array }) effectTypes = enumValues(EffectType);
+  @LazyGetter()
+  static get defaultEffectTypes() {
+    return difference(enumValues(EffectType), [EffectType.Armor]);
+  }
+
+  @property({ type: Array }) effectTypes = EffectCreator.defaultEffectTypes;
 
   @internalProperty() effectType!: EffectType;
 

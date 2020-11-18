@@ -16,6 +16,7 @@
     "@material/mwc-button": "^0.19.1",
     "@material/mwc-checkbox": "^0.19.1",
     "@material/mwc-circular-progress": "^0.19.1",
+    "@material/mwc-dialog": "^0.19.1",
     "@material/mwc-formfield": "^0.19.1",
     "@material/mwc-icon": "^0.19.1",
     "@material/mwc-icon-button": "^0.19.1",
@@ -41,7 +42,6 @@
     "nanopop": "^2.1.0",
     "remeda": "0.0.27",
     "web-animations-js": "^2.3.2",
-    "web-dialog": "0.0.11",
     "weightless": "0.0.37"
   },
   "devDependencies": {
@@ -55,7 +55,6 @@
     "@snowpack/plugin-run-script": "^2.2.0",
     "@snowpack/plugin-sass": "^1.1.1",
     "@snowpack/plugin-typescript": "^1.1.0",
-    "@snowpack/plugin-webpack": "^2.1.1",
     "@types/jquery": "^3.5.4",
     "@types/resize-observer-browser": "^0.1.4",
     "@types/snowpack-env": "^2.3.2",
@@ -63,6 +62,7 @@
     "archiver": "^5.0.2",
     "pixi.js": "^5.3.3",
     "prettier": "^2.1.2",
+    "rollup": "^2.33.3",
     "rollup-plugin-license": "^2.2.0",
     "rollup-plugin-livereload": "^2.0.0",
     "snowpack": "^2.17.1",

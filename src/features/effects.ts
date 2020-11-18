@@ -1,30 +1,27 @@
 import {
-  PoolType,
-  PoolEffectUsability,
-  RechargeType,
   AptitudeType,
-  enumValues,
+  enumValues, PoolEffectUsability, PoolType,
+
+  RechargeType
 } from '@src/data-enums';
 import { localize } from '@src/foundry/localization';
-import { HealthType, HealthStat, healthLabels } from '@src/health/health';
+import { healthLabels, HealthStat, HealthType } from '@src/health/health';
 import {
-  HealthTick,
   DotOrHotTarget,
-  formatAutoHealing,
+  formatAutoHealing
 } from '@src/health/recovery';
-import { nonNegative, withSign } from '@src/utility/helpers';
-import { map, createPipe, compact, purry, anyPass, clamp } from 'remeda';
+import { withSign } from '@src/utility/helpers';
+import { anyPass, clamp, compact, createPipe, map, purry } from 'remeda';
 import type { Action, ActionSubtype } from './actions';
 import { ArmorType } from './active-armor';
 import { createFeature } from './feature-helpers';
 import { Movement, MovementRate } from './movement';
 import type { RepBase } from './reputations';
 import {
-  SkillType,
-  FieldSkillType,
-  fieldSkillName,
+  fieldSkillName, FieldSkillType,
+
   isFieldSkill,
-  Skill,
+  Skill, SkillType
 } from './skills';
 import { formatEffectTags, SpecialTest, Tag, TagType } from './tags';
 import { CommonInterval, prettyMilliseconds } from './time';
@@ -98,10 +95,9 @@ export type RangedEffect = {
   negativeRangeModifiersMultiplier: number;
 };
 
-export type HealthRecoveryEffect = Omit<
-  HealthTick,
-  'lastUnaidedTick' | 'lastAidedTick'
-> & {
+export type HealthRecoveryEffect = {
+  interval: number;
+  amount: string;
   stat: DotOrHotTarget;
   technologicallyAided: boolean;
   type: EffectType.HealthRecovery;

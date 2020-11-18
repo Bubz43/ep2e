@@ -71,6 +71,9 @@ body {
   --mdc-ripple-hover-opacity: 0.07;
   --mdc-list-vertical-padding: 0px;
   --mdc-menu-z-index: 1000;
+  --mdc-dialog-heading-ink-color: var(--color-text);
+  --mdc-dialog-content-ink-color: var(--color-text);
+  --mdc-dialog-max-width: 70vw;
 
   // Weightless Elements
   --primary-hue: 270;

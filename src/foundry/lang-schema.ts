@@ -1308,7 +1308,7 @@ type LangEntries =
   | 'passiveAndUsable'
   | 'effectStates'
   | 'usedEffectsDuration'
-  | 'resistEffectsCheck';
+  | 'resistEffectsCheck' | "activationAction";
 type FullNames =
   | 'cog'
   | 'int'

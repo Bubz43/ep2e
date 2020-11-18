@@ -5,7 +5,7 @@ import {
   SourcedEffect,
 } from '@src/features/effects';
 import { createFeature } from '@src/features/feature-helpers';
-import { prettyMilliseconds, currentWorldTimeMS } from '@src/features/time';
+import { prettyMilliseconds, currentWorldTimeMS, Timestamp } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { averageRoll } from '@src/foundry/rolls';
 
@@ -18,16 +18,14 @@ export enum NaturalMentalHeal {
 export type NaturalMentalHealAttempt = {
   heal: NaturalMentalHeal;
   failed: boolean;
-  timestamp: number;
-  worldTime: number;
-};
+} & Timestamp;
 
 export const createMentalHealthAttempt = createFeature<
   NaturalMentalHealAttempt,
   'heal' | 'failed'
 >(() => ({
-  timestamp: Date.now(),
-  worldTime: currentWorldTimeMS(),
+  realTimeMS: Date.now(),
+  worldTimeMS: currentWorldTimeMS(),
 }));
 
 export enum DotOrHotTarget {

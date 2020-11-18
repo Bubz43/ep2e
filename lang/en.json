@@ -1284,6 +1284,7 @@
     "passiveOrActivated": "Passive or Activated",
     "resistEffectsCheck": "Resist Effects Check",
     "usedEffectsDuration": "Used Effects Duration",
+    "activationAction": "Activation Action",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
