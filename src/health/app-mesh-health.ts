@@ -1,38 +1,29 @@
 import { mapProps } from '@src/utility/field-values';
 import { localImage } from '@src/utility/images';
 import { merge, pipe } from 'remeda';
+import type { MeshHealthData } from './full-mesh-health';
 import {
   applyHealthModification,
+
   BasicHealthData,
+
   CommonHealth,
   HealthInit,
   HealthMain,
   HealthModification,
-  HealthStatMods,
   HealthType,
   HealthWounds,
-  initializeHealthData,
+  initializeHealthData
 } from './health';
 import { HealthMixin } from './health-mixin';
-import type { HealsOverTime } from './recovery';
+import type { DotOrHotTarget } from './recovery';
 
-export type MeshHealthData = BasicHealthData & {
-  /**
-   * @minimum 1
-   */
-  baseDurability: number;
-  hot: HealsOverTime;
-  reboot: number;
-  
-};
 
-type Init = HealthInit<MeshHealthData> & {
-  homeDevices: number;
-  statMods: HealthStatMods | undefined;
-  autoRepair: boolean;
-};
+export type AppMeshHealthData = Omit<MeshHealthData, DotOrHotTarget>
 
-class InfomorphHealthBase implements CommonHealth {
+type Init = HealthInit<AppMeshHealthData> 
+
+class MeshHealthBase implements CommonHealth {
   readonly main: HealthMain;
   readonly wound: HealthWounds;
 
@@ -41,8 +32,6 @@ class InfomorphHealthBase implements CommonHealth {
       {
         baseDurability: init.data.baseDurability,
         deathRatingMultiplier: 2,
-        statMods: init.statMods,
-        durabilitySplit: init.homeDevices,
       },
       initializeHealthData,
       merge({ damage: init.data.damage, wounds: init.data.wounds }),
@@ -51,7 +40,7 @@ class InfomorphHealthBase implements CommonHealth {
     this.main = {
       damage,
       durability,
-      deathRating,
+      deathRating
     };
     this.wound = wound;
   }
@@ -65,7 +54,7 @@ class InfomorphHealthBase implements CommonHealth {
   }
 
   get icon() {
-    return localImage(`icons/health/artificial-intelligence.svg`);
+    return localImage(`icons/health/computing.svg`);
   }
 
   get woundIcon() {
@@ -88,4 +77,4 @@ class InfomorphHealthBase implements CommonHealth {
   }
 }
 
-export class MeshHealth extends HealthMixin(InfomorphHealthBase) {}
+export class AppMeshHealth extends HealthMixin(MeshHealthBase) {}

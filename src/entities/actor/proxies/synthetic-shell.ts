@@ -11,10 +11,11 @@ import { EffectType } from '@src/features/effects';
 import { notify, NotificationType } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
 import { HealthType } from '@src/health/health';
-import { MeshHealth } from '@src/health/mesh-health';
+import { MeshHealth } from '@src/health/full-mesh-health';
 import { SyntheticHealth } from '@src/health/synthetic-health';
 import { LazyGetter } from 'lazy-get-decorator';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
+import { AppMeshHealth } from '@src/health/app-mesh-health';
 
 export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
   private _localEffects?: AppliedEffects;
@@ -98,14 +99,28 @@ export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
       statMods: this.activeEffects?.getHealthStatMods(HealthType.Mesh),
       updater: this.updater.prop('data', 'meshHealth').nestedStore(),
       source: localize('mindState'),
-      homeDevices: 1, // TODO
-      autoRepair: true,
+      homeDevices: 1, // TODO,
+      deathRating: true
     });
   }
+
+  @LazyGetter() 
+  get firewallHealth() {
+    return new AppMeshHealth({
+      data: this.epData.firewallHealth,
+      updater: this.updater.prop("data", "firewallHealth").nestedStore(),
+      source: localize("firewall"),
+    })
+    }
 
   get activeMeshHealth() {
     const { nonDefaultBrain } = this;
     return nonDefaultBrain ? nonDefaultBrain.meshHealth : this.meshHealth;
+  }
+
+  get activeFirewallHealth() {
+    const { nonDefaultBrain } = this;
+    return nonDefaultBrain ? nonDefaultBrain.firewallHealth : this.firewallHealth;
   }
 
   addNewItemProxy(proxy: ItemProxy | null | undefined) {

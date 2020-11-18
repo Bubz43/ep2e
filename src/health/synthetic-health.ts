@@ -21,12 +21,11 @@ import {
 import { HealthMixin } from './health-mixin';
 import type { HealsOverTime } from './recovery';
 
-export type SyntheticHealthData = BasicHealthData & {
+export type SyntheticHealthData = BasicHealthData &  HealsOverTime & {
   /**
    * @minimum 1
    */
   baseDurability: number;
-  hot: HealsOverTime;
   dots: StringID<{
     formula: string;
     armorPiercing: boolean;

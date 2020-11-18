@@ -1,6 +1,7 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+
 * {
   box-sizing: border-box;
 }
@@ -101,8 +102,10 @@ header {
   }
   .total-label {
     position: relative;
+    display: flex;
     .edit-toggle {
       position: absolute;
+      left: 100%;
       --mdc-icon-size: 20px;
       transition: color 200ms;
       color: var(--color-text-lighter);

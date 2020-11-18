@@ -219,8 +219,8 @@ export enum SoftwareType {
   AppAsWare = 'appAsWare',
   MeshService = 'meshService',
   Meshware = 'meshware',
-  Firewall = 'firewall',
-  OperatingSystem = 'operatingSystem',
+  // Firewall = 'firewall',
+  // OperatingSystem = 'operatingSystem',
 }
 
 export enum EffectStates {

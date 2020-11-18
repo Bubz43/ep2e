@@ -13,6 +13,7 @@ import {
 import { BotType, enumValues, ShellType, VehicleType } from '@src/data-enums';
 import type { SyntheticShell } from '@src/entities/actor/proxies/synthetic-shell';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
+import type { UpdateStore } from '@src/entities/update-store';
 import { renderMovementRateFields } from '@src/features/components/movement-rate-fields';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import { defaultMovement } from '@src/features/movement';
@@ -24,6 +25,7 @@ import {
 } from '@src/foundry/drag-and-drop';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
+import type { HealsOverTime } from '@src/health/recovery';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property, TemplateResult } from 'lit-element';
@@ -87,6 +89,7 @@ export class SyntheticForm extends SleeveFormBase {
       movementRates,
       availableBrains,
       nonDefaultBrain,
+      activeFirewallHealth,
     } = this.sleeve;
     const { movementEffects } = itemGroups.effects;
     const { originalValue, commit } = updater.prop('data');
@@ -129,6 +132,7 @@ export class SyntheticForm extends SleeveFormBase {
             brain,
             passengers,
             shellType,
+            firewallRating,
           }) => {
             const subtypes = this.getShellTypeGroup(shellType.value);
 
@@ -143,6 +147,9 @@ export class SyntheticForm extends SleeveFormBase {
                   `
                 : '',
               renderSelectField(shellType, enumValues(ShellType)),
+              nonDefaultBrain
+                ? ''
+                : renderNumberField(firewallRating, { min: 1, max: 99 }),
               notEmpty(subtypes)
                 ? html`
                     ${renderSelectField(subtype, subtypes)}
@@ -241,6 +248,14 @@ export class SyntheticForm extends SleeveFormBase {
               ${nonDefaultBrain
                 ? html` <span slot="source">${nonDefaultBrain.fullName}</span> `
                 : ''}
+            </health-item>
+
+            <health-item
+              clickable
+              ?disabled=${disabled}
+              .health=${activeFirewallHealth}
+              @click=${this.setDrawerFromEvent(this.renderFirewallHealthEdit)}
+            >
             </health-item>
           </section>
 
@@ -383,13 +398,13 @@ export class SyntheticForm extends SleeveFormBase {
   }
 
   private renderMeshHealthEdit() {
-    const { nonDefaultBrain, activeMeshHealth } = this.sleeve;
+    const { nonDefaultBrain } = this.sleeve;
 
     // TODO figure out better types so I don't have to do this nonsense
     if (nonDefaultBrain) {
       const { updater, meshHealth } = nonDefaultBrain;
       return html`
-        <h3>${localize('meshHealth')}</h3>
+        <h3>${nonDefaultBrain.name} ${localize('meshHealth')}</h3>
         ${renderUpdaterForm(updater.prop('data', 'meshHealth'), {
           fields: ({ baseDurability }) =>
             renderNumberField(baseDurability, { min: 1 }),
@@ -413,6 +428,32 @@ export class SyntheticForm extends SleeveFormBase {
         .health=${meshHealth}
         .regenUpdater=${updater.prop('data', 'meshHealth').nestedStore()}
       ></health-regen-settings-form>
+    `;
+  }
+
+  private renderFirewallHealthEdit() {
+    const { nonDefaultBrain } = this.sleeve;
+
+    // TODO figure out better types so I don't have to do this nonsense
+    if (nonDefaultBrain) {
+      const { updater, firewallHealth } = nonDefaultBrain;
+      return html`
+        <h3>${nonDefaultBrain.name} ${localize('firewallHealth')}</h3>
+        ${renderUpdaterForm(updater.prop('data', 'firewallHealth'), {
+          fields: ({ baseDurability }) =>
+            renderNumberField(baseDurability, { min: 1 }),
+        })}
+        <health-state-form .health=${firewallHealth}></health-state-form>
+      `;
+    }
+    const { updater, firewallHealth } = this.sleeve;
+    return html`
+      <h3>${localize('firewallHealth')}</h3>
+      ${renderUpdaterForm(updater.prop('data', 'firewallHealth'), {
+        fields: ({ baseDurability }) =>
+          renderNumberField(baseDurability, { min: 1 }),
+      })}
+      <health-state-form .health=${firewallHealth}></health-state-form>
     `;
   }
 

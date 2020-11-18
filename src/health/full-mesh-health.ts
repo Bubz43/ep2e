@@ -1,9 +1,3 @@
-import type { ArmorType } from '@src/features/active-armor';
-import type {
-  HealthRecoveryEffect,
-  SourcedEffect,
-} from '@src/features/effects';
-import type { StringID } from '@src/features/feature-helpers';
 import { mapProps } from '@src/utility/field-values';
 import { localImage } from '@src/utility/images';
 import { merge, pipe } from 'remeda';
@@ -16,43 +10,40 @@ import {
   HealthModification,
   HealthStatMods,
   HealthType,
+  HealthWounds,
   initializeHealthData,
 } from './health';
 import { HealthMixin } from './health-mixin';
 import type { HealsOverTime } from './recovery';
 
-export type BiologicalHealthData = BasicHealthData & HealsOverTime &  {
+export type MeshHealthData = BasicHealthData & HealsOverTime & {
   /**
    * @minimum 1
    */
   baseDurability: number;
-  bleedingOut: boolean;
-  dots: StringID<{
-    formula: string;
-    armorPiercing: boolean;
-    armorRemoving: boolean;
-    armorUsed: ArmorType[];
-    duration: number;
-    elapsed: number;
-  }>[];
+  crash: Omit<BasicHealthData, "log"> & {
+    turnsTillReboot: number
+  }
 };
 
-type Init = HealthInit<BiologicalHealthData> & {
-  isSwarm: boolean;
+
+type Init = HealthInit<MeshHealthData> & {
+  homeDevices: number;
   statMods: HealthStatMods | undefined;
-  recovery: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
+  deathRating: boolean;
 };
 
-class BiologicalHealthBase implements CommonHealth {
+class MeshHealthBase implements CommonHealth {
   readonly main: HealthMain;
-  readonly wound;
+  readonly wound: HealthWounds;
 
   constructor(protected readonly init: Init) {
     const { durability, deathRating, damage, ...wound } = pipe(
       {
         baseDurability: init.data.baseDurability,
-        deathRatingMultiplier: 1.5,
+        deathRatingMultiplier: 2,
         statMods: init.statMods,
+        durabilitySplit: init.homeDevices,
       },
       initializeHealthData,
       merge({ damage: init.data.damage, wounds: init.data.wounds }),
@@ -61,9 +52,9 @@ class BiologicalHealthBase implements CommonHealth {
     this.main = {
       damage,
       durability,
-      deathRating,
+      deathRating: init.deathRating ? deathRating : undefined,
     };
-    if (!init.isSwarm) this.wound = wound;
+    this.wound = wound;
   }
 
   get data() {
@@ -71,22 +62,23 @@ class BiologicalHealthBase implements CommonHealth {
   }
 
   get type() {
-    return HealthType.Physical;
+    return HealthType.Mesh;
+  }
+
+  get icon() {
+    return localImage(`icons/health/artificial-intelligence.svg`);
+  }
+
+  get woundIcon() {
+    return localImage(`icons/health/cpu-shot.svg`);
   }
 
   get source() {
     return this.init.source;
   }
 
-  get icon() {
-    return localImage('icons/health/heart-organ.svg');
-  }
-
-  get woundIcon() {
-    return localImage('icons/health/ragged-wound.svg');
-  }
-
   applyModification(modification: HealthModification) {
+    // TODO Crashed vs not crashed
     return this.init.updater
       .prop('')
       .commit((data) => applyHealthModification(data, modification));
@@ -97,4 +89,4 @@ class BiologicalHealthBase implements CommonHealth {
   }
 }
 
-export class BiologicalHealth extends HealthMixin(BiologicalHealthBase) {}
+export class MeshHealth extends HealthMixin(MeshHealthBase) {}

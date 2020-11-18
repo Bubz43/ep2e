@@ -1308,7 +1308,12 @@ type LangEntries =
   | 'passiveAndUsable'
   | 'effectStates'
   | 'usedEffectsDuration'
-  | 'resistEffectsCheck' | "activationAction";
+  | 'resistEffectsCheck'
+  | 'activationAction'
+  | 'process'
+  | 'damageRepair'
+  | 'woundRepair'
+  | 'firewallHealth';
 type FullNames =
   | 'cog'
   | 'int'

@@ -23,14 +23,12 @@ export class HealthRegenSettingsForm extends LitElement {
 
   @property({ attribute: false }) health!: Health;
 
-  @property({ attribute: false }) regenUpdater!: UpdateStore<{
-    hot: HealsOverTime;
-  }>;
+  @property({ attribute: false }) regenUpdater!: UpdateStore<HealsOverTime>;
 
   render() {
     return html`
       ${enumValues(DotOrHotTarget).map((target) =>
-        renderUpdaterForm(this.regenUpdater.prop('hot', target), {
+        renderUpdaterForm(this.regenUpdater.prop(target), {
           fields: ({ amount, interval }) => html`
             <p>${localize(target)} ${localize('repair')}</p>
             ${[

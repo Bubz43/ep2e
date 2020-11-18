@@ -1,6 +1,9 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+@include widgetless-number-inputs;
+
+
 * {
   box-sizing: border-box;
 }

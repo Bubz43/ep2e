@@ -8,7 +8,8 @@ import type { ObtainableEffects } from '@src/entities/applied-effects';
 import type { ItemType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import { localize } from '@src/foundry/localization';
-import { MeshHealth } from '@src/health/mesh-health';
+import { AppMeshHealth } from '@src/health/app-mesh-health';
+import { MeshHealth } from '@src/health/full-mesh-health';
 import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
@@ -73,14 +74,6 @@ export class Software
     return this.state.equipped;
   }
 
-  get isOperatingSystem() {
-    return this.softwareType === SoftwareType.OperatingSystem;
-  }
-
-  get isFirewall() {
-    return this.softwareType === SoftwareType.Firewall;
-  }
-
   get hasMeshAttacks() {
     return this.epData.meshAttacks > 0;
   }
@@ -97,13 +90,10 @@ export class Software
 
   @LazyGetter()
   get meshHealth() {
-    return new MeshHealth({
+    return new AppMeshHealth({
       data: this.epData.meshHealth,
-      statMods: undefined,
       updater: this.updater.prop('data', 'meshHealth').nestedStore(),
-      source: localize('host'),
-      homeDevices: 1, // TODO
-      autoRepair: this.isOperatingSystem,
+      source: localize('process'),
     });
   }
 

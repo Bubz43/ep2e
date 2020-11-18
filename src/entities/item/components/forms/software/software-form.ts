@@ -85,7 +85,6 @@ export class SoftwareForm extends ItemFormBase {
       type,
       effectGroups,
       hasActivation,
-      isFirewall,
       hasMeshAttacks,
     } = this.item;
     const { disabled } = this;
@@ -106,14 +105,10 @@ export class SoftwareForm extends ItemFormBase {
           fields: ({
             softwareType,
             category,
-            firewallRating,
             activation,
             meshAttacks,
           }) => [
             renderSelectField(softwareType, enumValues(SoftwareType)),
-            isFirewall
-              ? renderNumberField(firewallRating, { min: 1, max: 99 })
-              : '',
             renderTextField(category),
             html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
             renderSelectField(
@@ -224,7 +219,7 @@ export class SoftwareForm extends ItemFormBase {
   }
 
   private renderMeshHealthEdit() {
-    const { meshHealth, updater, isOperatingSystem } = this.item;
+    const { meshHealth, updater } = this.item;
     return html`
       <h3>${localize('meshHealth')}</h3>
       ${renderUpdaterForm(updater.prop('data', 'meshHealth'), {
@@ -232,14 +227,7 @@ export class SoftwareForm extends ItemFormBase {
           renderNumberField(baseDurability, { min: 1 }),
       })}
       <health-state-form .health=${meshHealth}></health-state-form>
-      ${isOperatingSystem
-        ? html`
-            <health-regen-settings-form
-              .health=${meshHealth}
-              .regenUpdater=${updater.prop('data', 'meshHealth').nestedStore()}
-            ></health-regen-settings-form>
-          `
-        : ''}
+
     `;
   }
 

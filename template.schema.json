@@ -116,6 +116,59 @@
       ],
       "type": "string"
     },
+    "AppMeshHealthData": {
+      "additionalProperties": false,
+      "properties": {
+        "baseDurability": {
+          "minimum": 1,
+          "type": "number"
+        },
+        "crash": {
+          "additionalProperties": false,
+          "properties": {
+            "damage": {
+              "minimum": 0,
+              "type": "number"
+            },
+            "turnsTillReboot": {
+              "type": "number"
+            },
+            "wounds": {
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          "required": [
+            "damage",
+            "turnsTillReboot",
+            "wounds"
+          ],
+          "type": "object"
+        },
+        "damage": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "log": {
+          "items": {
+            "$ref": "#/definitions/StringID%3CHealthModification%3E"
+          },
+          "type": "array"
+        },
+        "wounds": {
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "damage",
+        "wounds",
+        "log",
+        "baseDurability",
+        "crash"
+      ],
+      "type": "object"
+    },
     "AptitudeCheckInfo": {
       "additionalProperties": false,
       "properties": {
@@ -370,20 +423,23 @@
           "minimum": 0,
           "type": "number"
         },
+        "damageRepair": {
+          "$ref": "#/definitions/HealthTick"
+        },
         "dots": {
           "items": {
-            "$ref": "#/definitions/StringID%3Cstructure--817-970--807-971--807-973--799-974--697-976--679-976--643-977--0-2380%3E"
+            "$ref": "#/definitions/StringID%3Cstructure--812-965--802-966--802-968--794-969--713-971--679-971--643-972--0-2375%3E"
           },
           "type": "array"
-        },
-        "hot": {
-          "$ref": "#/definitions/HealsOverTime"
         },
         "log": {
           "items": {
             "$ref": "#/definitions/StringID%3CHealthModification%3E"
           },
           "type": "array"
+        },
+        "woundRepair": {
+          "$ref": "#/definitions/HealthTick"
         },
         "wounds": {
           "minimum": 0,
@@ -394,9 +450,10 @@
         "baseDurability",
         "bleedingOut",
         "damage",
+        "damageRepair",
         "dots",
-        "hot",
         "log",
+        "woundRepair",
         "wounds"
       ],
       "type": "object"
@@ -564,8 +621,8 @@
     },
     "DotOrHotTarget": {
       "enum": [
-        "damage",
-        "wound"
+        "damageRepair",
+        "woundRepair"
       ],
       "type": "string"
     },
@@ -1719,6 +1776,12 @@
                 "brain": {
                   "type": "string"
                 },
+                "firewallHealth": {
+                  "$ref": "#/definitions/AppMeshHealthData"
+                },
+                "firewallRating": {
+                  "type": "number"
+                },
                 "inherentArmor": {
                   "additionalProperties": false,
                   "properties": {
@@ -1817,6 +1880,8 @@
               },
               "required": [
                 "brain",
+                "firewallHealth",
+                "firewallRating",
                 "inherentArmor",
                 "isSwarm",
                 "meshHealth",
@@ -4005,6 +4070,12 @@
                     }
                   ]
                 },
+                "firewallHealth": {
+                  "$ref": "#/definitions/AppMeshHealthData"
+                },
+                "firewallRating": {
+                  "type": "number"
+                },
                 "meshHealth": {
                   "$ref": "#/definitions/MeshHealthData"
                 },
@@ -4092,6 +4163,8 @@
                 "effectStates",
                 "effects",
                 "fabricator",
+                "firewallHealth",
+                "firewallRating",
                 "meshHealth",
                 "resistEffectsCheck",
                 "state",
@@ -6740,9 +6813,6 @@
                   },
                   "type": "array"
                 },
-                "firewallRating": {
-                  "type": "number"
-                },
                 "meshAttacks": {
                   "enum": [
                     0,
@@ -6752,7 +6822,7 @@
                   "type": "number"
                 },
                 "meshHealth": {
-                  "$ref": "#/definitions/MeshHealthData"
+                  "$ref": "#/definitions/AppMeshHealthData"
                 },
                 "primaryAttack": {
                   "$ref": "#/definitions/SoftwareAttackData"
@@ -6885,7 +6955,6 @@
                 "activation",
                 "category",
                 "effects",
-                "firewallRating",
                 "meshAttacks",
                 "meshHealth",
                 "primaryAttack",
@@ -8895,22 +8964,6 @@
       ],
       "type": "string"
     },
-    "HealsOverTime": {
-      "additionalProperties": false,
-      "properties": {
-        "damage": {
-          "$ref": "#/definitions/HealthTick"
-        },
-        "wound": {
-          "$ref": "#/definitions/HealthTick"
-        }
-      },
-      "required": [
-        "damage",
-        "wound"
-      ],
-      "type": "object"
-    },
     "HealthEffect": {
       "additionalProperties": false,
       "properties": {
@@ -8965,8 +9018,8 @@
         }
       },
       "required": [
-        "amount",
         "interval",
+        "amount",
         "stat",
         "technologicallyAided",
         "type"
@@ -9202,12 +9255,34 @@
           "minimum": 1,
           "type": "number"
         },
+        "crash": {
+          "additionalProperties": false,
+          "properties": {
+            "damage": {
+              "minimum": 0,
+              "type": "number"
+            },
+            "turnsTillReboot": {
+              "type": "number"
+            },
+            "wounds": {
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          "required": [
+            "damage",
+            "turnsTillReboot",
+            "wounds"
+          ],
+          "type": "object"
+        },
         "damage": {
           "minimum": 0,
           "type": "number"
         },
-        "hot": {
-          "$ref": "#/definitions/HealsOverTime"
+        "damageRepair": {
+          "$ref": "#/definitions/HealthTick"
         },
         "log": {
           "items": {
@@ -9215,8 +9290,8 @@
           },
           "type": "array"
         },
-        "reboot": {
-          "type": "number"
+        "woundRepair": {
+          "$ref": "#/definitions/HealthTick"
         },
         "wounds": {
           "minimum": 0,
@@ -9225,10 +9300,11 @@
       },
       "required": [
         "baseDurability",
+        "crash",
         "damage",
-        "hot",
+        "damageRepair",
         "log",
-        "reboot",
+        "woundRepair",
         "wounds"
       ],
       "type": "object"
@@ -9833,9 +9909,7 @@
         "appAsService",
         "appAsWare",
         "meshService",
-        "meshware",
-        "firewall",
-        "operatingSystem"
+        "meshware"
       ],
       "type": "string"
     },
@@ -9986,10 +10060,10 @@
         "id": {
           "type": "string"
         },
-        "timestamp": {
+        "realTimeMS": {
           "type": "number"
         },
-        "worldTime": {
+        "worldTimeMS": {
           "type": "number"
         }
       },
@@ -9997,12 +10071,12 @@
         "failed",
         "heal",
         "id",
-        "timestamp",
-        "worldTime"
+        "realTimeMS",
+        "worldTimeMS"
       ],
       "type": "object"
     },
-    "StringID<structure--792-945--782-946--782-948--774-949--696-951--678-951--643-952--0-2350>": {
+    "StringID<structure--787-940--777-941--777-943--769-944--713-946--678-946--643-947--0-2345>": {
       "additionalProperties": false,
       "properties": {
         "armorPiercing": {
@@ -10041,7 +10115,7 @@
       ],
       "type": "object"
     },
-    "StringID<structure--817-970--807-971--807-973--799-974--697-976--679-976--643-977--0-2380>": {
+    "StringID<structure--812-965--802-966--802-968--794-969--713-971--679-971--643-972--0-2375>": {
       "additionalProperties": false,
       "properties": {
         "armorPiercing": {
@@ -10190,20 +10264,23 @@
           "minimum": 0,
           "type": "number"
         },
+        "damageRepair": {
+          "$ref": "#/definitions/HealthTick"
+        },
         "dots": {
           "items": {
-            "$ref": "#/definitions/StringID%3Cstructure--792-945--782-946--782-948--774-949--696-951--678-951--643-952--0-2350%3E"
+            "$ref": "#/definitions/StringID%3Cstructure--787-940--777-941--777-943--769-944--713-946--678-946--643-947--0-2345%3E"
           },
           "type": "array"
-        },
-        "hot": {
-          "$ref": "#/definitions/HealsOverTime"
         },
         "log": {
           "items": {
             "$ref": "#/definitions/StringID%3CHealthModification%3E"
           },
           "type": "array"
+        },
+        "woundRepair": {
+          "$ref": "#/definitions/HealthTick"
         },
         "wounds": {
           "minimum": 0,
@@ -10213,9 +10290,10 @@
       "required": [
         "baseDurability",
         "damage",
+        "damageRepair",
         "dots",
-        "hot",
         "log",
+        "woundRepair",
         "wounds"
       ],
       "type": "object"

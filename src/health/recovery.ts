@@ -29,8 +29,8 @@ export const createMentalHealthAttempt = createFeature<
 }));
 
 export enum DotOrHotTarget {
-  Damage = 'damage',
-  Wound = 'wound',
+  Damage = 'damageRepair',
+  Wound = 'woundRepair',
 }
 
 export enum RecoveryConditions {
@@ -114,8 +114,8 @@ export const setupHealthRecoveries = (
 ) => {
   // TODO: Also need healing timeframe duration effect
   const groups = {
-    damage: new Map<HealingSlot, HealthRecovery>(),
-    wound: new Map<HealingSlot, HealthRecovery>(),
+    [DotOrHotTarget.Damage]: new Map<HealingSlot, HealthRecovery>(),
+    [DotOrHotTarget.Wound]: new Map<HealingSlot, HealthRecovery>(),
   } as const;
 
   const innate = biological ? HealingSlot.OwnHealing : HealingSlot.Aided;

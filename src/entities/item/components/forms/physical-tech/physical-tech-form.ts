@@ -75,6 +75,7 @@ export class PhysicalTechForm extends ItemFormBase {
       effectGroups,
       hasActivation,
       hasUse,
+      hasMeshHealth,
     } = this.item;
     const { disabled } = this;
     // TODO Fabrication
@@ -102,6 +103,7 @@ export class PhysicalTechForm extends ItemFormBase {
             deviceType,
             fabricator,
             activationAction,
+            firewallRating,
           }) => [
             renderSelectField(wareType, enumValues(PhysicalWare), {
               ...emptyTextDash,
@@ -125,6 +127,9 @@ export class PhysicalTechForm extends ItemFormBase {
               ...emptyTextDash,
               disabled: !!embedded,
             }),
+            hasMeshHealth
+              ? renderNumberField(firewallRating, { min: 1, max: 99 })
+              : '',
             renderSelectField(fabricator, enumValues(FabType), emptyTextDash),
           ],
         })}
@@ -156,7 +161,7 @@ export class PhysicalTechForm extends ItemFormBase {
                     renderSelectField(
                       resistEffectsCheck,
                       enumValues(AptitudeType),
-                      { emptyText: localize("none")},
+                      { emptyText: localize('none') },
                     ),
                     renderTimeField(usedEffectsDuration, {
                       permanentLabel: localize('indefinite'),

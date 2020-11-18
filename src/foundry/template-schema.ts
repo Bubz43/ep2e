@@ -76,11 +76,12 @@ import type {
 } from '@src/features/skills';
 import type { BiologicalHealthData } from '@src/health/biological-health';
 import type { HealthType } from '@src/health/health';
-import type { MeshHealthData } from '@src/health/mesh-health';
+import type { MeshHealthData } from '@src/health/full-mesh-health';
 import type { MentalHealthData } from '@src/health/mental-health';
 import type { RecoveryConditions } from '@src/health/recovery';
 import type { SyntheticHealthData } from '@src/health/synthetic-health';
 import type { JsonValue } from 'type-fest';
+import type { AppMeshHealthData } from '@src/health/app-mesh-health';
 
 type StringID<T> = T & { id: string };
 type TopLevel = Record<string, JsonValue>;
@@ -255,6 +256,8 @@ type SyntheticShellData = {
   painFilter: boolean;
   recoveryConditions: RecoveryConditions;
   physicalHealth: SyntheticHealthData;
+  firewallRating: number;
+  firewallHealth: AppMeshHealthData;
   meshHealth: MeshHealthData;
   brain: string;
   size: Size;
@@ -612,14 +615,13 @@ type SoftwareData = {
   secondaryAttack: SoftwareAttackData;
   category: string;
   serviceDuration: number;
-  meshHealth: MeshHealthData;
+  meshHealth: AppMeshHealthData;
   skills: StringID<
     | (FieldSkillData & { fieldSkill: FieldSkillType })
     | (SkillData & { skillType: SkillType })
   >[];
   activation: '' | Exclude<ActionType, ActionType.Task>;
   meshAttacks: 0 | 1 | 2;
-  firewallRating: number;
   state: {
     equipped: boolean;
     activated: boolean;
@@ -633,6 +635,8 @@ type PhysicalTechData = {
     ['Common', 'Cost', 'GearTraits', 'Copyable', 'GearState']
   >;
   meshHealth: MeshHealthData;
+  firewallRating: number;
+  firewallHealth: AppMeshHealthData;
   effects: StringID<Effect>[];
   activatedEffects: StringID<Effect>[];
   wareType: '' | PhysicalWare;

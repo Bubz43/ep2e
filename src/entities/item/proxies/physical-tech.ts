@@ -3,13 +3,14 @@ import type { ObtainableEffects } from '@src/entities/applied-effects';
 import type { ItemType } from '@src/entities/entity-types';
 import { localize } from '@src/foundry/localization';
 import { HealthType } from '@src/health/health';
-import { MeshHealth } from '@src/health/mesh-health';
+import { MeshHealth } from '@src/health/full-mesh-health';
 import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { compact } from 'remeda';
 import { Copyable, Equippable, Gear, Purchasable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
+import { AppMeshHealth } from '@src/health/app-mesh-health';
 
 class Base extends ItemProxyBase<ItemType.PhysicalTech> {}
 export class PhysicalTech
@@ -75,6 +76,10 @@ export class PhysicalTech
     return this.effectStates === EffectStates.PassiveAndUsable;
   }
 
+  get hasMeshHealth() {
+    return !!this.deviceType;
+  }
+
   @LazyGetter()
   get effectGroups() {
     const { effects, activatedEffects, hasActivation } = this;
@@ -105,9 +110,18 @@ export class PhysicalTech
       statMods: undefined,
       updater: this.updater.prop('data', 'meshHealth').nestedStore(),
       source: localize('host'),
-      homeDevices: 1, // TODO
-      autoRepair: true,
+      homeDevices: 1, // TODO,
+      deathRating: true
     });
+  }
+
+  @LazyGetter()
+  get firewallHealth() {
+    return new AppMeshHealth({
+      data: this.epData.firewallHealth,
+      source: localize("firewall"),
+      updater: this.updater.prop('data', "firewallHealth").nestedStore(),
+    })
   }
 
   getDataCopy(reset = false) {
