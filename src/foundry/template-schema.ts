@@ -645,11 +645,6 @@ type PhysicalTechData = {
   usedEffectsDuration: number;
   resistEffectsCheck: AptitudeType | '';
   onboardALI: boolean;
-  enableChecks: StringID<{
-    aptitude: AptitudeType,
-    when: string,
-    onSuccess: string;
-  }>[];
   state: {
     activated: boolean;
     embeddedEgos: string[];

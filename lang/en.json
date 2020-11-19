@@ -1285,6 +1285,11 @@
     "resistEffectsCheck": "Resist Effects Check",
     "usedEffectsDuration": "Used Effects Duration",
     "activationAction": "Activation Action",
+    "damageRepair": "Damage Repair",
+    "firewallHealth": "Firewall Health",
+    "onboardALI": "Onboard ALI",
+    "process": "Process",
+    "woundRepair": "Wound Repair",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
