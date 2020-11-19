@@ -32,6 +32,7 @@ import {
 import { pairList } from '@src/features/check-list';
 import type { AptitudeCheckInfoUpdateEvent } from '@src/features/components/aptitude-check-info-editor/aptitude-check-info-update-event';
 import type { EffectCreatedEvent } from '@src/features/components/effect-creator/effect-created-event';
+import { EffectType } from '@src/features/effects';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
 import { capitalize } from '@src/foundry/misc-helpers';
@@ -102,12 +103,7 @@ export class SoftwareForm extends ItemFormBase {
         ${renderUpdaterForm(updater.prop('data'), {
           disabled,
           slot: 'sidebar',
-          fields: ({
-            softwareType,
-            category,
-            activation,
-            meshAttacks,
-          }) => [
+          fields: ({ softwareType, category, activation, meshAttacks }) => [
             renderSelectField(softwareType, enumValues(SoftwareType)),
             renderTextField(category),
             html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
@@ -227,7 +223,6 @@ export class SoftwareForm extends ItemFormBase {
           renderNumberField(baseDurability, { min: 1 }),
       })}
       <health-state-form .health=${meshHealth}></health-state-form>
-
     `;
   }
 
@@ -243,7 +238,10 @@ export class SoftwareForm extends ItemFormBase {
           })
         : ''}
 
-      <effect-creator @effect-created=${this.addCreatedEffect}></effect-creator>
+      <effect-creator
+        .effectTypes=${enumValues(EffectType)}
+        @effect-created=${this.addCreatedEffect}
+      ></effect-creator>
     `;
   }
 

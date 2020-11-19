@@ -162,7 +162,7 @@ export const createEgoData = (): FullEgoData => {
   ]);
   return {
     name: 'Ego',
-    img: '',
+    img: CONST.DEFAULT_TOKEN,
     items: [],
     data: {
       ...duplicate(data),
@@ -268,26 +268,27 @@ export type ItemDatas = {
 
 export type NonEditableProps = 'type' | '_id';
 
+type ItemCreatorParams = Parameters<typeof createItemEntity>;
+
 export const setupItemOperations = (
   update: (cb: (items: ItemDatas[]) => ItemDatas[]) => Promise<unknown>,
 ): ItemOperations => ({
-  add: async (...partialDatas) => {
-    // TODO Make sure this doesn't fail because of permissions
-    const fullItems = (await ItemEP.create(partialDatas, {
-      temporary: true,
-    })) as ItemEP[];
+  add: async (...partials) => {
+    const completeItems = (partials as ItemCreatorParams).map(createItemEntity);
+    
     let ids: string[] = [];
     await update((itemDatas) => {
       ids = itemDatas.map(prop('_id'));
       const changed = [...itemDatas];
-      for (const item of fullItems) {
+      for (const item of completeItems) {
         const _id = uniqueStringID(ids);
         ids.push(_id);
-        changed.push({ ...item.dataCopy(), _id });
+        changed.push({ ...item, _id } as ItemDatas);
       }
       return changed;
     });
-    return ids.slice(-partialDatas.length);
+
+    return ids.slice(-partials.length);
   },
   update: async (...changedDatas) => {
     const ids = new Map(changedDatas.map((change) => [change._id, change]));
@@ -299,10 +300,10 @@ export const setupItemOperations = (
           : item;
       }),
     );
-    return [...ids.keys()]
+    return [...ids.keys()];
   },
   remove: async (...ids) => {
     await update(reject(({ _id }) => ids.includes(_id)));
-    return ids
+    return ids;
   },
 });

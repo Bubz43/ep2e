@@ -644,6 +644,12 @@ type PhysicalTechData = {
   activationAction: Exclude<ActionType, ActionType.Task>;
   usedEffectsDuration: number;
   resistEffectsCheck: AptitudeType | '';
+  onboardALI: boolean;
+  enableChecks: StringID<{
+    aptitude: AptitudeType,
+    when: string,
+    onSuccess: string;
+  }>[];
   state: {
     activated: boolean;
     embeddedEgos: string[];

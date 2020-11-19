@@ -7,6 +7,12 @@ import {
   renderTimeField,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
+import type { SlWindow } from '@src/components/window/window';
+import { openWindow } from '@src/components/window/window-controls';
+import {
+  ResizeOption,
+  SlWindowEventName,
+} from '@src/components/window/window-options';
 import {
   AptitudeType,
   DeviceType,
@@ -15,10 +21,13 @@ import {
   FabType,
   PhysicalWare,
 } from '@src/data-enums';
+import { renderEgoForm } from '@src/entities/actor/actor-views';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
+import { renderItemForm } from '@src/entities/item/item-views';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import { ActionType } from '@src/features/actions';
 import type { EffectCreatedEvent } from '@src/features/components/effect-creator/effect-created-event';
+import { EffectType } from '@src/features/effects';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import { CommonInterval } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
@@ -51,6 +60,10 @@ export class PhysicalTechForm extends ItemFormBase {
 
   @internalProperty() effectGroup: 'passive' | 'activated' = 'passive';
 
+  private egoSheet?: SlWindow | null;
+
+  private egoSheetKey = {};
+
   private readonly effectsOps = mapToObj(opsGroups, (group) => [
     group === 'effects' ? 'passive' : 'activated',
     addUpdateRemoveFeature(() => this.item.updater.prop('data', group).commit),
@@ -58,11 +71,41 @@ export class PhysicalTechForm extends ItemFormBase {
 
   update(changedProps: PropertyValues) {
     if (!this.item.hasActivation) this.effectGroup = 'passive';
+    if (this.egoSheet) this.openEgoSheet();
     super.update(changedProps);
   }
 
   private addCreatedEffect(ev: EffectCreatedEvent) {
     this.effectsOps[this.effectGroup].add({}, ev.effect);
+  }
+
+  private openEgoSheet() {
+    const { onboardALI, fullName } = this.item;
+    if (!onboardALI) return this.closeEgoSheet();
+    const { win, wasConnected } = openWindow(
+      {
+        key: this.egoSheetKey,
+        content: renderEgoForm(onboardALI),
+        adjacentEl: this,
+        forceFocus: !this.egoSheet,
+        name: `[${fullName} ${localize('onboardALI')}] ${onboardALI.name}`,
+      },
+      { resizable: ResizeOption.Vertical },
+    );
+
+    this.egoSheet = win;
+    if (!wasConnected) {
+      win.addEventListener(
+        SlWindowEventName.Closed,
+        () => (this.egoSheet = null),
+        { once: true },
+      );
+    }
+  }
+
+  private closeEgoSheet() {
+    this.egoSheet?.close();
+    this.egoSheet = null;
   }
 
   render() {
@@ -141,6 +184,19 @@ export class PhysicalTechForm extends ItemFormBase {
             fields: renderComplexityFields,
           })}
           ${deviceType ? this.renderMeshHealthSection() : ''}
+
+          <section>
+            <sl-header heading=${localize('onboardALI')}>
+            <mwc-icon-button slot="action" icon="launch" @click=${this.openEgoSheet}></mwc-icon-button>
+          </sl-header>
+            <sl-group label=${localize('skills')}
+              >${this.item.onboardALI.skills.map(
+                (skill, index, list) => html`
+                  <span ?data-comma=${index < list.length - 1}>${skill.fullName} ${skill.total}</span>
+                `,
+              )}</sl-group
+            >
+          </section>
 
           <section>
             <sl-header
@@ -234,12 +290,12 @@ export class PhysicalTechForm extends ItemFormBase {
     return html`
       <section class="history">
         <h3>${localize('history')}</h3>
-        <h4>${localize("meshHealth")}</h4>
+        <h4>${localize('meshHealth')}</h4>
         <health-log
           .health=${meshHealth}
           ?disabled=${this.disabled}
         ></health-log>
-        <h4>${localize("firewallHealth")}</h4>
+        <h4>${localize('firewallHealth')}</h4>
         <health-log
           .health=${firewallHealth}
           ?disabled=${this.disabled}
@@ -289,7 +345,10 @@ export class PhysicalTechForm extends ItemFormBase {
           })
         : ''}
 
-      <effect-creator @effect-created=${this.addCreatedEffect}></effect-creator>
+      <effect-creator
+        .effectTypes=${enumValues(EffectType)}
+        @effect-created=${this.addCreatedEffect}
+      ></effect-creator>
     `;
   }
 }

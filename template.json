@@ -769,7 +769,9 @@
       "activationAction": "automatic",
       "effectStates": "passive",
       "resistEffectsCheck": "",
+      "enableChecks": [],
       "usedEffectsDuration": 3000,
+      "onboardALI": false,
       "firewallRating": 30,
       "firewallHealth": {
         "baseDurability": 30,

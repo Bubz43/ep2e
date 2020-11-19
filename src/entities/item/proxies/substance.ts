@@ -23,7 +23,7 @@ import { deepMerge } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { pipe, uniq, map, createPipe, set, pathOr } from 'remeda';
+import { pipe, uniq, map, createPipe, set, pathOr, merge } from 'remeda';
 import type { Attacker, Stackable } from '../item-interfaces';
 import { Purchasable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
@@ -198,7 +198,7 @@ export class Substance
         updater: new UpdateStore({
           getData: () => data,
           isEditable: () => this.editable,
-          setData: (changed) => ops.update({ ...changed, _id: data._id }),
+          setData: createPipe(merge({ _id: data._id }), ops.update),
         }),
       };
     };

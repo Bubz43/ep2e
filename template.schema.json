@@ -4059,6 +4059,33 @@
                   },
                   "type": "array"
                 },
+                "enableChecks": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "aptitude": {
+                        "$ref": "#/definitions/AptitudeType"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "onSuccess": {
+                        "type": "string"
+                      },
+                      "when": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "aptitude",
+                      "id",
+                      "onSuccess",
+                      "when"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
                 "fabricator": {
                   "anyOf": [
                     {
@@ -4078,6 +4105,9 @@
                 },
                 "meshHealth": {
                   "$ref": "#/definitions/MeshHealthData"
+                },
+                "onboardALI": {
+                  "type": "boolean"
                 },
                 "resistEffectsCheck": {
                   "anyOf": [
@@ -4162,10 +4192,12 @@
                 "deviceType",
                 "effectStates",
                 "effects",
+                "enableChecks",
                 "fabricator",
                 "firewallHealth",
                 "firewallRating",
                 "meshHealth",
+                "onboardALI",
                 "resistEffectsCheck",
                 "state",
                 "templates",

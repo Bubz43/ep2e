@@ -103,6 +103,7 @@ import { ArmorForm } from './entities/item/components/forms/armor/armor-form';
 import { SoftwareForm } from './entities/item/components/forms/software/software-form';
 import { ItemCreator } from './entities/item/components/item-creator/item-creator';
 import { AptitudeCheckInfoEditor } from './features/components/aptitude-check-info-editor/aptitude-check-info-editor';
+import { ActorCreator } from './entities/actor/components/actor-creator/actor-creator';
 
 customElements.define('app-datepicker', Datepicker);
 
@@ -133,6 +134,7 @@ SlWindow;
 CompendiumList;
 
 // Actor
+ActorCreator;
 ItemTrash;
 EgoForm;
 EgoFormSkills;

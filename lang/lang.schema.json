@@ -1242,6 +1242,9 @@
             "damageOverTime": {
               "type": "string"
             },
+            "damageRepair": {
+              "type": "string"
+            },
             "damageType": {
               "type": "string"
             },
@@ -1648,6 +1651,9 @@
               "type": "string"
             },
             "firewall": {
+              "type": "string"
+            },
+            "firewallHealth": {
               "type": "string"
             },
             "firewallRating": {
@@ -2694,6 +2700,9 @@
             "onTest": {
               "type": "string"
             },
+            "onboardALI": {
+              "type": "string"
+            },
             "ongoing": {
               "type": "string"
             },
@@ -2923,6 +2932,9 @@
               "type": "string"
             },
             "privilege": {
+              "type": "string"
+            },
+            "process": {
               "type": "string"
             },
             "professionalTraining": {
@@ -4212,6 +4224,9 @@
             "woundModifier": {
               "type": "string"
             },
+            "woundRepair": {
+              "type": "string"
+            },
             "woundThreshold": {
               "type": "string"
             },
@@ -4528,6 +4543,7 @@
             "damageApplier",
             "damageFormula",
             "damageOverTime",
+            "damageRepair",
             "damageType",
             "damageValue",
             "damaged",
@@ -4664,6 +4680,7 @@
             "firearm",
             "firearmAmmo",
             "firewall",
+            "firewallHealth",
             "firewallRating",
             "firingMode",
             "firingModes",
@@ -5012,6 +5029,7 @@
             "offline",
             "on",
             "onTest",
+            "onboardALI",
             "ongoing",
             "online",
             "onset",
@@ -5089,6 +5107,7 @@
             "primaryMode",
             "prime",
             "privilege",
+            "process",
             "professionalTraining",
             "profile",
             "program",
@@ -5518,6 +5537,7 @@
             "worth",
             "wound",
             "woundModifier",
+            "woundRepair",
             "woundThreshold",
             "wounds",
             "woundsIgnored",

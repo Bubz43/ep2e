@@ -12,7 +12,7 @@ import { MeshHealth } from '@src/health/full-mesh-health';
 import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { compact } from 'remeda';
+import { compact, createPipe, merge } from 'remeda';
 import type { ItemProxy } from '../item';
 import { Copyable, Equippable, Gear, Purchasable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
@@ -86,7 +86,6 @@ export class PhysicalTech
     return !!this.deviceType;
   }
 
-
   @LazyGetter()
   get onboardALI() {
     const data = deepMerge(createEgoData(), this.epFlags?.onboardALI || {});
@@ -105,7 +104,7 @@ export class PhysicalTech
           data: itemData,
           updater: new UpdateStore({
             getData: () => itemData,
-            setData: (changed) => ops.update({ ...changed, _id: itemData._id }),
+            setData: createPipe(merge({ _id: itemData._id }), ops.update),
             isEditable: () => updater.editable,
           }),
         });
