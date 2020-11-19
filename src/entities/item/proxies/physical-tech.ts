@@ -1,16 +1,22 @@
 import { DeviceType, EffectStates } from '@src/data-enums';
+import { Ego } from '@src/entities/actor/ego';
 import type { ObtainableEffects } from '@src/entities/applied-effects';
-import type { ItemType } from '@src/entities/entity-types';
+import { ItemType } from '@src/entities/entity-types';
+import { createEgoData, setupItemOperations } from '@src/entities/models';
+import { UpdateStore } from '@src/entities/update-store';
 import { localize } from '@src/foundry/localization';
-import { HealthType } from '@src/health/health';
+import { deepMerge } from '@src/foundry/misc-helpers';
+import { EP } from '@src/foundry/system';
+import { AppMeshHealth } from '@src/health/app-mesh-health';
 import { MeshHealth } from '@src/health/full-mesh-health';
 import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { compact } from 'remeda';
+import type { ItemProxy } from '../item';
 import { Copyable, Equippable, Gear, Purchasable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
-import { AppMeshHealth } from '@src/health/app-mesh-health';
+import { Trait } from './trait';
 
 class Base extends ItemProxyBase<ItemType.PhysicalTech> {}
 export class PhysicalTech
@@ -78,6 +84,42 @@ export class PhysicalTech
 
   get hasMeshHealth() {
     return !!this.deviceType;
+  }
+
+  get onboardALI() {
+    const data = deepMerge(createEgoData(), this.epFlags?.onboardALI || {})
+    const updater = new UpdateStore({
+      getData: () => data,
+      setData: this.updater.prop("flags", EP.Name, "onboardALI").commit,
+      isEditable: () => this.editable
+    })
+    const items = new Map<string, ItemProxy>();
+    const itemOperations = setupItemOperations(items, updater.prop("items").commit);
+    for (const itemData of data.items) {
+      if (itemData.type === ItemType.Trait) {
+        const trait = new Trait({
+          lockSource: true,
+          embedded: data.name,
+          data: itemData,
+          updater: new UpdateStore({
+            getData: () => itemData,
+            setData: (changed) => itemOperations.update({ ...changed, _id: itemData._id }),
+            isEditable: () => updater.editable
+          })
+        })
+        items.set(trait.id, trait)
+      }
+    }
+
+
+    return new Ego({
+      data,
+      updater,
+      activeEffects: null,
+      actor: null,
+      items,
+      itemOperations: setupItemOperations(items, updater.prop("items").commit)
+    })
   }
 
   @LazyGetter()

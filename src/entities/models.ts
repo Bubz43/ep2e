@@ -1,14 +1,25 @@
 import type { SubstanceAttackData } from '@src/combat/attacks';
-import { StringID, stringID } from '@src/features/feature-helpers';
+import {
+  StringID,
+  stringID,
+  uniqueStringID,
+} from '@src/features/feature-helpers';
 import type { PsiInfluenceData } from '@src/features/psi-influence';
 import type { CommonEntityData, TokenData } from '@src/foundry/foundry-cont';
+import { deepMerge } from '@src/foundry/misc-helpers';
 import type { EP } from '@src/foundry/system';
 import type {
   EntityTemplates,
   AppliedSubstanceBase,
 } from '@src/foundry/template-schema';
+import type { ValOrValFN } from '@src/utility/helper-types';
+import { map, mapToObj, pick, reject } from 'remeda';
 import type { UnionToIntersection, SetOptional } from 'type-fest';
+import type { DeepPartial } from 'utility-types';
+import type { ItemOperations } from './actor/actor';
+import type { FullEgoData } from './actor/ego';
 import type { ActorType, sleeveTypes, ItemType } from './entity-types';
+import { ItemEP, ItemProxy } from './item/item';
 
 type EPEntity = keyof EntityTemplates;
 type EntityTypeTemplates<T extends EPEntity> = EntityTemplates[T]['templates'];
@@ -44,7 +55,7 @@ export type SleeveType = typeof sleeveTypes[number];
 
 type ActorFlags<T extends ActorType> = T extends ActorType.Character
   ? {
-  vehicle: ActorEntity<ActorType.SyntheticShell> | null;
+      vehicle: ActorEntity<ActorType.SyntheticShell> | null;
       [ItemType.Psi]: ItemEntity<ItemType.Psi> | null;
       substancesAwaitingOnset: StringID<
         AppliedSubstanceBase & {
@@ -63,9 +74,9 @@ type ActorFlags<T extends ActorType> = T extends ActorType.Character
 export type ActorEntity<T extends ActorType = ActorType> = CommonEntityData & {
   type: T;
   data: ActorModels[T];
-  token: SetOptional<Readonly<TokenData>, 'elevation' | '_id' | 'x' | 'y'>;
-  flags: Readonly<{ [EP.Name]?: Readonly<Partial<ActorFlags<T>>> }>;
-  items: readonly ItemDatas[];
+  token: SetOptional<TokenData, 'elevation' | '_id' | 'x' | 'y'>;
+  flags: { [EP.Name]?: Partial<ActorFlags<T>> };
+  items: ItemDatas[];
   effects: unknown[];
 };
 
@@ -132,6 +143,35 @@ export const createActorEntity = <T extends ActorType>({
   };
 };
 
+export const createEgoData = (): FullEgoData => {
+  const data = pick(game.system.model.Actor.character, [
+    'egoType',
+    'forkType',
+    'flex',
+    'threat',
+    'aptitudes',
+    'skills',
+    'fieldSkills',
+    'points',
+    'reps',
+    'settings',
+    'mentalHealth',
+    'motivations',
+    'characterDetails',
+    'threatDetails',
+  ]);
+  return {
+    name: 'Ego',
+    img: '',
+    items: [],
+    data: {
+      ...duplicate(data),
+      description: '',
+      reference: '',
+    },
+  };
+};
+
 export const createItemEntity = <T extends ItemType>({
   name,
   type,
@@ -175,8 +215,8 @@ type ItemFlags<T extends ItemType> = T extends ItemType.Psi
     }
   : T extends ItemType.PhysicalTech
   ? {
+      onboardALI: DeepPartial<FullEgoData> | null;
       firewall: ItemEntity<ItemType.Software> | null;
-      software: ItemEntity<ItemType.Software>[];
       fabrication: {
         printTime: number;
         elapsed: number;
@@ -227,3 +267,42 @@ export type ItemDatas = {
 }[ItemType];
 
 export type NonEditableProps = 'type' | '_id';
+
+export const setupItemOperations = (
+  items: Map<string, ItemProxy>,
+  update: (cb: (items: ItemDatas[]) => ItemDatas[]) => Promise<unknown>,
+): ItemOperations => {
+  return {
+    add: async (...partialDatas) => {
+      // TODO Make sure this doesn't fail because of permissions
+      const fullItems = (await ItemEP.create(partialDatas, {
+        temporary: true,
+      })) as ItemEP[];
+      const ids = [...items.keys()];
+      await update((itemDatas) => {
+        const changed = [...itemDatas];
+        for (const item of fullItems) {
+          const _id = uniqueStringID(ids);
+          ids.push(_id);
+          changed.push({ ...item.dataCopy(), _id });
+        }
+        return changed;
+      });
+      return ids.slice(-partialDatas.length);
+    },
+    update: async (...changedDatas) => {
+      const ids = new Map(changedDatas.map((change) => [change._id, change]));
+      update(
+        map((item) => {
+          const changed = ids.get(item._id);
+          return changed
+            ? deepMerge(item, changed as DeepPartial<typeof item>)
+            : item;
+        }),
+      );
+    },
+    remove: async (...ids) => {
+      await update(reject(({ _id }) => ids.includes(_id)));
+    },
+  };
+};

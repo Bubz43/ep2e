@@ -41,22 +41,22 @@ import type { ItemEP, ItemProxy } from '../item/item';
 import type { Psi } from '../item/proxies/psi';
 import type { Sleight } from '../item/proxies/sleight';
 import type { Trait } from '../item/proxies/trait';
-import type { ItemEntity } from '../models';
+import type { ItemDatas, ItemEntity } from '../models';
 import type { UpdateStore } from '../update-store';
 import type { ActorEP, ItemOperations } from './actor';
 
 export type FullEgoData = {
-  _id: string;
+  // _id: string;
   name: string;
   img: string;
   data: EgoData & CommonDetails;
+  items: ItemDatas[]
 };
 
 export class Ego {
   readonly data;
   readonly updater;
   readonly activeEffects;
-  readonly disabled;
   readonly actor;
   readonly items;
   readonly itemOperations;
@@ -66,7 +66,6 @@ export class Ego {
     data,
     updater,
     activeEffects,
-    disabled,
     actor,
     items,
     itemOperations,
@@ -75,8 +74,7 @@ export class Ego {
   }: {
     data: FullEgoData;
     updater: UpdateStore<FullEgoData>;
-    activeEffects: ReadonlyAppliedEffects;
-    disabled: boolean;
+    activeEffects: ReadonlyAppliedEffects | null;
     actor: ActorEP | null;
     items: Map<string, ItemProxy>;
     itemOperations: ItemOperations;
@@ -86,7 +84,6 @@ export class Ego {
     this.data = data;
     this.updater = updater;
     this.activeEffects = activeEffects;
-    this.disabled = disabled;
     this.actor = actor;
     this.items = items;
     this.itemOperations = itemOperations;
@@ -98,6 +95,10 @@ export class Ego {
     return point === CharacterPoint.Credits
       ? localize('credits')
       : `${localize(point)[0]}${localize('points')[0]}`.toLocaleUpperCase();
+  }
+
+  get disabled() {
+    return !this.updater.editable
   }
 
   private readonly commonSkills = new Map<SkillType, FullSkill>();
@@ -144,7 +145,7 @@ export class Ego {
   get mentalHealth() {
     return new MentalHealth({
       data: this.epData.mentalHealth,
-      statMods: this.activeEffects.getHealthStatMods(HealthType.Mental),
+      statMods: this.activeEffects?.getHealthStatMods(HealthType.Mental),
       willpower: this.aptitudes.wil,
       updater: this.updater.prop('data', 'mentalHealth').nestedStore(),
       source: this.name,

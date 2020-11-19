@@ -1,19 +1,16 @@
 import {
   AppliedEffects,
-  ReadonlyAppliedEffects,
+  ReadonlyAppliedEffects
 } from '@src/entities/applied-effects';
 import { ActorType, ItemType } from '@src/entities/entity-types';
-import { ItemEP, ItemProxy } from '@src/entities/item/item';
+import type { ItemProxy } from '@src/entities/item/item';
 import { openPsiFormWindow } from '@src/entities/item/item-views';
 import { Psi } from '@src/entities/item/proxies/psi';
-import { createItemEntity } from '@src/entities/models';
+import { setupItemOperations } from '@src/entities/models';
 import type { UpdateStore } from '@src/entities/update-store';
-import { uniqueStringID } from '@src/features/feature-helpers';
-import { deepMerge } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { lastEventPosition } from '@src/init';
-import { mapToObj, pipe, reject, map } from 'remeda';
-import type { DeepPartial } from 'utility-types';
+import { pipe } from 'remeda';
 import { Ego, FullEgoData } from '../ego';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 import { SyntheticShell } from './synthetic-shell';
@@ -40,44 +37,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         updater,
         items,
         actor: this.actor,
-        itemOperations: {
-          add: async (...partialDatas) => {
-            // TODO Make sure this doesn't fail because of permissions
-            const fullItems = (await ItemEP.create(partialDatas, {
-              temporary: true,
-            })) as ItemEP[];
-            const ids = [...items.keys()];
-            await updater.prop('items').commit((items) => {
-              const changed = [...items];
-              for (const item of fullItems) {
-                const _id = uniqueStringID(ids);
-                ids.push(_id);
-                changed.push({ ...item.dataCopy(), _id });
-              }
-              return items;
-            });
-            return ids.slice(-partialDatas.length);
-          },
-          update: async (...changedDatas) => {
-            const ids = mapToObj(changedDatas, (changed) => [
-              changed._id,
-              changed,
-            ]);
-            await updater.prop('items').commit(
-              map((item) => {
-                const changed = ids[item._id];
-                return changed
-                  ? deepMerge(item, changed as DeepPartial<typeof item>)
-                  : item;
-              }),
-            );
-          },
-          remove: async (...ids) => {
-            await updater
-              .prop('items')
-              .commit(reject(({ _id }) => ids.includes(_id)));
-          },
-        },
+        itemOperations: setupItemOperations(items, updater.prop("items").commit),
       });
     }
 
@@ -86,7 +46,6 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       updater: (this.updater as unknown) as UpdateStore<FullEgoData>,
       items: egoItems,
       activeEffects: this.appliedEffects,
-      disabled: this.disabled,
       actor: this.actor,
       itemOperations: this.itemOperations,
       psi:

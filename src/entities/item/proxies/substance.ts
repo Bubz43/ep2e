@@ -9,9 +9,10 @@ import {
   SubstanceType,
 } from '@src/data-enums';
 import { ItemType } from '@src/entities/entity-types';
-import type {
+import {
   DrugAppliedItem,
   ItemEntity,
+  setupItemOperations,
   SubstanceItemFlags,
 } from '@src/entities/models';
 import { UpdateStore } from '@src/entities/update-store';
@@ -22,7 +23,7 @@ import { deepMerge } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { pipe, uniq, map } from 'remeda';
+import { pipe, uniq, map, createPipe, set, pathOr } from 'remeda';
 import type { Attacker, Stackable } from '../item-interfaces';
 import { Purchasable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
@@ -180,55 +181,37 @@ export class Substance
   private getInstancedItems(
     group: 'alwaysAppliedItems' | 'severityAppliedItems',
   ) {
-    return new Map(
-      this.epFlags?.[group]?.map((item, index, list) => {
-        const commonInit = {
-          embedded: this.name,
-          lockSource: false,
-          alwaysDeletable: this.editable,
-          deleteSelf: () =>
-            this.updater.prop('flags', EP.Name, group).commit((items) => {
-              const set = new Set(items || []);
-              set.delete(item);
-              return [...set];
-            }),
-        };
-        return [
-          item._id,
-          item.type === ItemType.Trait
-            ? new Trait({
-                data: item,
-                ...commonInit,
-                updater: new UpdateStore({
-                  getData: () => item,
-                  isEditable: () => this.editable,
-                  setData: (updated) => {
-                    const updatedList = [...list];
-                    updatedList[index] = deepMerge(item, updated);
-                    this.updater
-                      .prop('flags', EP.Name, group)
-                      .commit(updatedList);
-                  },
-                }),
-              })
-            : new Sleight({
-                data: item,
-                ...commonInit,
-                updater: new UpdateStore({
-                  getData: () => item,
-                  isEditable: () => this.editable,
-                  setData: (updated) => {
-                    const updatedList = [...list];
-                    updatedList[index] = deepMerge(item, updated);
-                    this.updater
-                      .prop('flags', EP.Name, group)
-                      .commit(updatedList);
-                  },
-                }),
-              }),
-        ];
-      }) || [],
+    const items = new Map<string, Trait | Sleight>();
+    const ops = setupItemOperations(items, (datas) =>
+      this.updater
+        .prop('flags', EP.Name, group)
+        .commit((items) => datas(items || []) as typeof items),
     );
+
+    const proxyInit = <T extends ItemType>(data: ItemEntity<T>) => {
+      return {
+        data,
+        embedded: this.name,
+        lockSource: false,
+        alwaysDeletable: this.editable,
+        deleteSelf: () => ops.remove(data._id),
+        updater: new UpdateStore({
+          getData: () => data,
+          isEditable: () => this.editable,
+          setData: (changed) => ops.update({ ...changed, _id: data._id }),
+        }),
+      };
+    };
+
+    for (const itemData of this.epFlags?.[group] || []) {
+      items.set(
+        itemData._id,
+        itemData.type === ItemType.Trait
+          ? new Trait(proxyInit(itemData))
+          : new Sleight(proxyInit(itemData)),
+      );
+    }
+    return items;
   }
 
   addItemEffect(group: keyof SubstanceItemFlags, itemData: DrugAppliedItem) {

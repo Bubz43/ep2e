@@ -119,4 +119,6 @@ export abstract class ItemProxyBase<T extends ItemType> {
       regex.test(text),
     );
   }
+
+  
 }
