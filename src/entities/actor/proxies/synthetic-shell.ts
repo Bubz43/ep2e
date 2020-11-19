@@ -109,7 +109,7 @@ export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
     return new AppMeshHealth({
       data: this.epData.firewallHealth,
       updater: this.updater.prop("data", "firewallHealth").nestedStore(),
-      source: localize("firewall"),
+      source: `${localize("firewall")} (${this.epData.firewallRating})`,
     })
     }
 

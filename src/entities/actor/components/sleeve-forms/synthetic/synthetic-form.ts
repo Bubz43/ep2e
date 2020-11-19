@@ -138,18 +138,19 @@ export class SyntheticForm extends SleeveFormBase {
 
             return [
               notEmpty(availableBrains)
-                ? html`
-                    ${renderSelectField(brain, [...availableBrains.keys()], {
-                      emptyText: localize('default'),
-                      altLabel: (key) => availableBrains.get(key)!.fullName,
-                    })}
-                    <entity-form-sidebar-divider></entity-form-sidebar-divider>
-                  `
+                ? renderSelectField(brain, [...availableBrains.keys()], {
+                    emptyText: localize('default'),
+                    altLabel: (key) => availableBrains.get(key)!.fullName,
+                  })
                 : '',
-              renderSelectField(shellType, enumValues(ShellType)),
               nonDefaultBrain
                 ? ''
                 : renderNumberField(firewallRating, { min: 1, max: 99 }),
+              html`
+                <entity-form-sidebar-divider></entity-form-sidebar-divider>
+              `,
+              renderSelectField(shellType, enumValues(ShellType)),
+
               notEmpty(subtypes)
                 ? html`
                     ${renderSelectField(subtype, subtypes)}
@@ -365,16 +366,16 @@ export class SyntheticForm extends SleeveFormBase {
   private renderMeshHealthChangeHistory() {
     const { activeMeshHealth, disabled, activeFirewallHealth } = this.sleeve;
     return this.renderHealthHistorySection(html`
-        <h4>${localize("meshHealth")}</h4>
-        <health-log
-          .health=${activeMeshHealth}
-          ?disabled=${disabled}
-        ></health-log>
-        <h4>${localize("firewallHealth")}</h4>
-        <health-log
-          .health=${activeFirewallHealth}
-          ?disabled=${disabled}
-        ></health-log>
+      <h4>${localize('meshHealth')}</h4>
+      <health-log
+        .health=${activeMeshHealth}
+        ?disabled=${disabled}
+      ></health-log>
+      <h4>${localize('firewallHealth')}</h4>
+      <health-log
+        .health=${activeFirewallHealth}
+        ?disabled=${disabled}
+      ></health-log>
     `);
   }
 

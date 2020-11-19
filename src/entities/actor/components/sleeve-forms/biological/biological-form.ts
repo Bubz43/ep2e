@@ -182,6 +182,13 @@ export class BiologicalForm extends SleeveFormBase {
                       >${nonDefaultBrain.fullName}</span
                     ></health-item
                   >
+                  <health-item
+              clickable
+              ?disabled=${disabled}
+              .health=${nonDefaultBrain.firewallHealth}
+              @click=${this.setDrawerFromEvent(this.renderFirewallHealthEdit)}
+            >
+            </health-item>
                 </section>
               `
             : ''}
@@ -334,6 +341,24 @@ export class BiologicalForm extends SleeveFormBase {
         .regenUpdater=${updater.prop('data', 'meshHealth').nestedStore()}
       ></health-regen-settings-form>
     `;
+  }
+
+  private renderFirewallHealthEdit() {
+    const { nonDefaultBrain } = this.sleeve;
+
+    // TODO figure out better types so I don't have to do this nonsense
+    if (nonDefaultBrain) {
+      const { updater, firewallHealth } = nonDefaultBrain;
+      return html`
+        <h3>${nonDefaultBrain.name} ${localize('firewallHealth')}</h3>
+        ${renderUpdaterForm(updater.prop('data', 'firewallHealth'), {
+          fields: ({ baseDurability }) =>
+            renderNumberField(baseDurability, { min: 1 }),
+        })}
+        <health-state-form .health=${firewallHealth}></health-state-form>
+      `;
+    }
+    return html``;
   }
 
   private renderPoolEdit() {

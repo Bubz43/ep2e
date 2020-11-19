@@ -119,8 +119,8 @@ export class PhysicalTech
   get firewallHealth() {
     return new AppMeshHealth({
       data: this.epData.firewallHealth,
-      source: localize("firewall"),
       updater: this.updater.prop('data', "firewallHealth").nestedStore(),
+      source: `${localize("firewall")} (${this.epData.firewallRating})`,
     })
   }
 
