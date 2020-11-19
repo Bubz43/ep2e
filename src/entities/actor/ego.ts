@@ -78,7 +78,7 @@ export class Ego {
     activeEffects: ReadonlyAppliedEffects;
     disabled: boolean;
     actor: ActorEP | null;
-    items: Collection<ItemEP>;
+    items: Map<string, ItemProxy>;
     itemOperations: ItemOperations;
     psi?: Psi | null;
     addPsi?: (psiData: ItemEntity<ItemType.Psi>) => void;
@@ -220,9 +220,9 @@ export class Ego {
   get itemGroups() {
     const traits: Trait[] = [];
     const sleights: Sleight[] = [];
-    for (const { proxy: agent } of this.items) {
-      if (agent.type === ItemType.Trait) traits.push(agent);
-      else if (agent.type === ItemType.Sleight) sleights.push(agent);
+    for (const proxy of this.items.values()) {
+      if (proxy.type === ItemType.Trait) traits.push(proxy);
+      else if (proxy.type === ItemType.Sleight) sleights.push(proxy);
     }
     return { traits, sleights };
   }
@@ -331,7 +331,7 @@ export class Ego {
   }
 
   hasItemProxy(agent: ItemProxy | null | undefined) {
-    return this.items.get(agent?.id)?.proxy === agent;
+    return !!agent && this.items.get(agent?.id) === agent;
   }
 
   getCommonSkill(skill: SkillType) {

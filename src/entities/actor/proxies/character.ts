@@ -12,6 +12,7 @@ import { lastEventPosition } from '@src/init';
 import { pipe } from 'remeda';
 import { Ego, FullEgoData } from '../ego';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
+import { SyntheticShell } from './synthetic-shell';
 
 export class Character extends ActorProxyBase<ActorType.Character> {
   readonly ego;
@@ -21,8 +22,17 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   constructor(init: ActorProxyInit<ActorType.Character>) {
     super(init);
 
-    const sleeveItems = new Collection<ItemEP>();
-    const egoItems = new Collection<ItemEP>();
+    const sleeveItems = new Map<string, ItemProxy>();
+    const egoItems = new Map<string, ItemProxy>();
+
+    // if (this.epFlags?.vehicle) {
+    //   const { vehicle } = this.epFlags
+    //   const vehicle = new SyntheticShell({
+    //     data: vehicle,
+    //     updater: this.updater.prop("flags", EP.Name, "vehicle").nestedStore(),
+    //     items: 
+    //   })
+    // }
 
     this.ego = new Ego({
       data: this.data,
@@ -47,17 +57,16 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       addPsi: this.updater.prop('flags', EP.Name, ItemType.Psi).commit,
     });
 
-    for (const item of this.items) {
-      const { proxy } = item;
+    for (const proxy of this.items.values()) {
       switch (proxy.type) {
         case ItemType.Sleight: {
-          egoItems.set(item.id, item);
+          egoItems.set(proxy.id, proxy);
           // this.#appliedEffects.add(proxy.currentEffects)
           break;
         }
         case ItemType.Trait: {
           const collection = proxy.isMorphTrait ? sleeveItems : egoItems;
-          collection.set(item.id, item);
+          collection.set(proxy.id, proxy);
           this._appliedEffects.add(proxy.currentEffects);
           break;
         }

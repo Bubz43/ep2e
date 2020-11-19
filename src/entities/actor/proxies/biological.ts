@@ -51,9 +51,9 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
   @LazyGetter()
   get availableBrains() {
     const things = new Map<string, PhysicalTech>();
-    for (const { proxy: agent } of [...this.items]) {
-      if (agent.type === ItemType.PhysicalTech && agent.isBrain) {
-        things.set(agent.id, agent);
+    for (const proxy of this.items.values()) {
+      if (proxy.type === ItemType.PhysicalTech && proxy.isBrain) {
+        things.set(proxy.id, proxy);
       }
     }
     return things;
@@ -154,11 +154,11 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
     const traits: Trait[] = [];
     const ware: EquippableItem[] = [];
     const effects = new AppliedEffects();
-    for (const { proxy: agent } of this.items) {
-      switch (agent.type) {
+    for (const proxy of this.items.values()) {
+      switch (proxy.type) {
         case ItemType.Trait:
-          traits.push(agent);
-          effects.add(agent.currentEffects);
+          traits.push(proxy);
+          effects.add(proxy.currentEffects);
           break;
 
         case ItemType.Armor:
@@ -168,9 +168,9 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
         case ItemType.PhysicalTech:
         case ItemType.Railgun:
         case ItemType.SeekerWeapon: {
-          ware.push(agent);
-          if ('currentEffects' in agent) {
-            effects.add(agent.currentEffects);
+          ware.push(proxy);
+          if ('currentEffects' in proxy) {
+            effects.add(proxy.currentEffects);
           }
           break;
         }

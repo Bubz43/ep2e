@@ -195,7 +195,7 @@ export class ActorEP extends Actor {
     return {
       data,
       updater: (this.updater as unknown) as UpdateStore<typeof data>,
-      items: this.items || new Collection<ItemEP>(),
+      items: new Map((this.items || new Collection<ItemEP>()).map(({ proxy }) => [proxy.id, proxy])),
       itemOperations: this.itemOperations,
       actor: this,
     } as const;

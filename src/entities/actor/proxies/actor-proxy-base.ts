@@ -13,7 +13,7 @@ import { ActorEP, ItemOperations } from '../actor';
 export type ActorProxyInit<T extends ActorType> = {
   data: ActorEntity<T>;
   updater: UpdateStore<ActorEntity<T>>;
-  items: Collection<ItemEP>;
+  items: Map<string, ItemProxy>;
   itemOperations: ItemOperations;
   actor: ActorEP;
 };
@@ -21,7 +21,7 @@ export type ActorProxyInit<T extends ActorType> = {
 export abstract class ActorProxyBase<T extends ActorType> {
   protected data: ActorEntity<T>;
   readonly updater: UpdateStore<ActorEntity<T>>;
-  readonly items: Collection<ItemEP>;
+  readonly items: Map<string, ItemProxy>;
   readonly itemOperations: ItemOperations;
   readonly actor: ActorEP;
 
@@ -89,17 +89,17 @@ export abstract class ActorProxyBase<T extends ActorType> {
     // TODO: Replace temporary features
     return ActorEP.create({
       ...this.dataCopy(),
-      items: [...this.items].map((item) => item.dataCopy()),
+      items: [...this.items.values()].map((proxy) => proxy.getDataCopy(false)),
     });
   }
 
   hasItemProxy(agent: ItemProxy | null | undefined) {
-    return this.items.get(agent?.id)?.proxy === agent;
+    return !!agent && this.items.get(agent?.id) === agent;
   }
 
   protected get highestItemSort() {
     return [...this.items.values()].reduce(
-      (accum, { proxy: agent }) => Math.max(accum, agent.sort || 0),
+      (accum, { sort }) => Math.max(accum, sort || 0),
       0,
     );
   }

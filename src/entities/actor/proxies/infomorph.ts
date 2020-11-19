@@ -60,16 +60,16 @@ export class Infomorph extends ActorProxyBase<ActorType.Infomorph> {
     const traits: Trait[] = [];
     const ware: Software[] = [];
     const effects = new AppliedEffects();
-    for (const { proxy: agent } of this.items) {
-      switch (agent.type) {
+    for (const proxy of this.items.values()) {
+      switch (proxy.type) {
         case ItemType.Trait:
-          traits.push(agent);
-          effects.add(agent.currentEffects);
+          traits.push(proxy);
+          effects.add(proxy.currentEffects);
           break;
 
         case ItemType.Software:
-          effects.add(agent.currentEffects);
-          ware.push(agent);
+          effects.add(proxy.currentEffects);
+          ware.push(proxy);
           break;
 
         default:
