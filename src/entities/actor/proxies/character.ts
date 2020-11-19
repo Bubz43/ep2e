@@ -37,7 +37,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         updater,
         items,
         actor: this.actor,
-        itemOperations: setupItemOperations(items, updater.prop("items").commit),
+        itemOperations: setupItemOperations(updater.prop("items").commit),
       });
     }
 

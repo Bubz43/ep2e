@@ -13,7 +13,7 @@ import type {
   AppliedSubstanceBase,
 } from '@src/foundry/template-schema';
 import type { ValOrValFN } from '@src/utility/helper-types';
-import { map, mapToObj, pick, reject } from 'remeda';
+import { map, mapToObj, pick, prop, reject } from 'remeda';
 import type { UnionToIntersection, SetOptional } from 'type-fest';
 import type { DeepPartial } from 'utility-types';
 import type { ItemOperations } from './actor/actor';
@@ -269,40 +269,40 @@ export type ItemDatas = {
 export type NonEditableProps = 'type' | '_id';
 
 export const setupItemOperations = (
-  items: Map<string, ItemProxy>,
   update: (cb: (items: ItemDatas[]) => ItemDatas[]) => Promise<unknown>,
-): ItemOperations => {
-  return {
-    add: async (...partialDatas) => {
-      // TODO Make sure this doesn't fail because of permissions
-      const fullItems = (await ItemEP.create(partialDatas, {
-        temporary: true,
-      })) as ItemEP[];
-      const ids = [...items.keys()];
-      await update((itemDatas) => {
-        const changed = [...itemDatas];
-        for (const item of fullItems) {
-          const _id = uniqueStringID(ids);
-          ids.push(_id);
-          changed.push({ ...item.dataCopy(), _id });
-        }
-        return changed;
-      });
-      return ids.slice(-partialDatas.length);
-    },
-    update: async (...changedDatas) => {
-      const ids = new Map(changedDatas.map((change) => [change._id, change]));
-      update(
-        map((item) => {
-          const changed = ids.get(item._id);
-          return changed
-            ? deepMerge(item, changed as DeepPartial<typeof item>)
-            : item;
-        }),
-      );
-    },
-    remove: async (...ids) => {
-      await update(reject(({ _id }) => ids.includes(_id)));
-    },
-  };
-};
+): ItemOperations => ({
+  add: async (...partialDatas) => {
+    // TODO Make sure this doesn't fail because of permissions
+    const fullItems = (await ItemEP.create(partialDatas, {
+      temporary: true,
+    })) as ItemEP[];
+    let ids: string[] = [];
+    await update((itemDatas) => {
+      ids = itemDatas.map(prop('_id'));
+      const changed = [...itemDatas];
+      for (const item of fullItems) {
+        const _id = uniqueStringID(ids);
+        ids.push(_id);
+        changed.push({ ...item.dataCopy(), _id });
+      }
+      return changed;
+    });
+    return ids.slice(-partialDatas.length);
+  },
+  update: async (...changedDatas) => {
+    const ids = new Map(changedDatas.map((change) => [change._id, change]));
+    await update(
+      map((item) => {
+        const changed = ids.get(item._id);
+        return changed
+          ? deepMerge(item, changed as DeepPartial<typeof item>)
+          : item;
+      }),
+    );
+    return [...ids.keys()]
+  },
+  remove: async (...ids) => {
+    await update(reject(({ _id }) => ids.includes(_id)));
+    return ids
+  },
+});

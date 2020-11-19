@@ -182,7 +182,7 @@ export class Substance
     group: 'alwaysAppliedItems' | 'severityAppliedItems',
   ) {
     const items = new Map<string, Trait | Sleight>();
-    const ops = setupItemOperations(items, (datas) =>
+    const ops = setupItemOperations((datas) =>
       this.updater
         .prop('flags', EP.Name, group)
         .commit((items) => datas(items || []) as typeof items),

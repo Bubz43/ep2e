@@ -86,15 +86,17 @@ export class PhysicalTech
     return !!this.deviceType;
   }
 
+
+  @LazyGetter()
   get onboardALI() {
-    const data = deepMerge(createEgoData(), this.epFlags?.onboardALI || {})
+    const data = deepMerge(createEgoData(), this.epFlags?.onboardALI || {});
     const updater = new UpdateStore({
       getData: () => data,
-      setData: this.updater.prop("flags", EP.Name, "onboardALI").commit,
-      isEditable: () => this.editable
-    })
+      setData: this.updater.prop('flags', EP.Name, 'onboardALI').commit,
+      isEditable: () => this.editable,
+    });
     const items = new Map<string, ItemProxy>();
-    const itemOperations = setupItemOperations(items, updater.prop("items").commit);
+    const ops = setupItemOperations(updater.prop('items').commit);
     for (const itemData of data.items) {
       if (itemData.type === ItemType.Trait) {
         const trait = new Trait({
@@ -103,14 +105,13 @@ export class PhysicalTech
           data: itemData,
           updater: new UpdateStore({
             getData: () => itemData,
-            setData: (changed) => itemOperations.update({ ...changed, _id: itemData._id }),
-            isEditable: () => updater.editable
-          })
-        })
-        items.set(trait.id, trait)
+            setData: (changed) => ops.update({ ...changed, _id: itemData._id }),
+            isEditable: () => updater.editable,
+          }),
+        });
+        items.set(trait.id, trait);
       }
     }
-
 
     return new Ego({
       data,
@@ -118,8 +119,8 @@ export class PhysicalTech
       activeEffects: null,
       actor: null,
       items,
-      itemOperations: setupItemOperations(items, updater.prop("items").commit)
-    })
+      itemOperations: ops,
+    });
   }
 
   @LazyGetter()
@@ -153,7 +154,7 @@ export class PhysicalTech
       updater: this.updater.prop('data', 'meshHealth').nestedStore(),
       source: localize('host'),
       homeDevices: 1, // TODO,
-      deathRating: true
+      deathRating: true,
     });
   }
 
@@ -161,9 +162,9 @@ export class PhysicalTech
   get firewallHealth() {
     return new AppMeshHealth({
       data: this.epData.firewallHealth,
-      updater: this.updater.prop('data', "firewallHealth").nestedStore(),
-      source: `${localize("firewall")} (${this.epData.firewallRating})`,
-    })
+      updater: this.updater.prop('data', 'firewallHealth').nestedStore(),
+      source: `${localize('firewall')} (${this.epData.firewallRating})`,
+    });
   }
 
   getDataCopy(reset = false) {
