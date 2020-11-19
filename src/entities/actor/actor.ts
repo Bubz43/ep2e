@@ -29,7 +29,7 @@ type ItemUpdate = SetRequired<DeepPartial<ItemEntity>, '_id'>;
 export type ItemOperations = {
   add: (
     ...itemDatas: SetRequired<DeepPartial<ItemEntity>, 'type' | 'name'>[]
-  ) => Promise<ItemEP[]>;
+  ) => Promise<string[]>;
   update: (...itemDatas: ItemUpdate[]) => Promise<unknown>;
   remove: (...itemIds: string[]) => Promise<unknown>;
 };
@@ -96,16 +96,16 @@ export class ActorEP extends Actor {
       this.#itemOperations = {
         add: async (...itemDatas) => {
           await this.createOwnedItem(itemDatas);
-          const added = pipe(
+          const addedIDs = pipe(
             this.data.items.slice(-itemDatas.length),
-            map(({ _id }) => this.items?.get(_id)),
+            map(({ _id }) => _id),
             compact,
           );
           this.emitItemSocket({
             type: 'add',
-            itemIds: added.map(({ id }) => id),
+            itemIds: addedIDs,
           });
-          return added;
+          return addedIDs;
         },
         update: (...itemDatas) => {
           const itemIds: string[] = [];
@@ -195,7 +195,13 @@ export class ActorEP extends Actor {
     return {
       data,
       updater: (this.updater as unknown) as UpdateStore<typeof data>,
-      items: new Map((this.items || new Collection<ItemEP>()).map(({ proxy }) => [proxy.id, proxy])),
+      // TODO do this in this._prepareOwnedItems to avoid this additional iteration
+      items: new Map(
+        (this.items || new Collection<ItemEP>()).map(({ proxy }) => [
+          proxy.id,
+          proxy,
+        ]),
+      ),
       itemOperations: this.itemOperations,
       actor: this,
     } as const;

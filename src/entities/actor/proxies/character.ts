@@ -3,13 +3,17 @@ import {
   ReadonlyAppliedEffects,
 } from '@src/entities/applied-effects';
 import { ActorType, ItemType } from '@src/entities/entity-types';
-import type { ItemEP, ItemProxy } from '@src/entities/item/item';
+import { ItemEP, ItemProxy } from '@src/entities/item/item';
 import { openPsiFormWindow } from '@src/entities/item/item-views';
 import { Psi } from '@src/entities/item/proxies/psi';
+import { createItemEntity } from '@src/entities/models';
 import type { UpdateStore } from '@src/entities/update-store';
+import { uniqueStringID } from '@src/features/feature-helpers';
+import { deepMerge } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { lastEventPosition } from '@src/init';
-import { pipe } from 'remeda';
+import { mapToObj, pipe, reject, map } from 'remeda';
+import type { DeepPartial } from 'utility-types';
 import { Ego, FullEgoData } from '../ego';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 import { SyntheticShell } from './synthetic-shell';
@@ -25,14 +29,57 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     const sleeveItems = new Map<string, ItemProxy>();
     const egoItems = new Map<string, ItemProxy>();
 
-    // if (this.epFlags?.vehicle) {
-    //   const { vehicle } = this.epFlags
-    //   const vehicle = new SyntheticShell({
-    //     data: vehicle,
-    //     updater: this.updater.prop("flags", EP.Name, "vehicle").nestedStore(),
-    //     items: 
-    //   })
-    // }
+    if (this.epFlags?.vehicle) {
+      const { vehicle: vehicleData } = this.epFlags;
+      const updater = this.updater
+        .prop('flags', EP.Name, 'vehicle')
+        .nestedStore();
+      const items = new Map<string, ItemProxy>();
+      const vehicle = new SyntheticShell({
+        data: vehicleData,
+        updater,
+        items,
+        actor: this.actor,
+        itemOperations: {
+          add: async (...partialDatas) => {
+            // TODO Make sure this doesn't fail because of permissions
+            const fullItems = (await ItemEP.create(partialDatas, {
+              temporary: true,
+            })) as ItemEP[];
+            const ids = [...items.keys()];
+            await updater.prop('items').commit((items) => {
+              const changed = [...items];
+              for (const item of fullItems) {
+                const _id = uniqueStringID(ids);
+                ids.push(_id);
+                changed.push({ ...item.dataCopy(), _id });
+              }
+              return items;
+            });
+            return ids.slice(-partialDatas.length);
+          },
+          update: async (...changedDatas) => {
+            const ids = mapToObj(changedDatas, (changed) => [
+              changed._id,
+              changed,
+            ]);
+            await updater.prop('items').commit(
+              map((item) => {
+                const changed = ids[item._id];
+                return changed
+                  ? deepMerge(item, changed as DeepPartial<typeof item>)
+                  : item;
+              }),
+            );
+          },
+          remove: async (...ids) => {
+            await updater
+              .prop('items')
+              .commit(reject(({ _id }) => ids.includes(_id)));
+          },
+        },
+      });
+    }
 
     this.ego = new Ego({
       data: this.data,
