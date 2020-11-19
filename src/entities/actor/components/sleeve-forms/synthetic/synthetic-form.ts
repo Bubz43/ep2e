@@ -363,12 +363,18 @@ export class SyntheticForm extends SleeveFormBase {
   }
 
   private renderMeshHealthChangeHistory() {
-    const { activeMeshHealth, disabled } = this.sleeve;
+    const { activeMeshHealth, disabled, activeFirewallHealth } = this.sleeve;
     return this.renderHealthHistorySection(html`
-      <health-log
-        .health=${activeMeshHealth}
-        ?disabled=${disabled}
-      ></health-log>
+        <h4>${localize("meshHealth")}</h4>
+        <health-log
+          .health=${activeMeshHealth}
+          ?disabled=${disabled}
+        ></health-log>
+        <h4>${localize("firewallHealth")}</h4>
+        <health-log
+          .health=${activeFirewallHealth}
+          ?disabled=${disabled}
+        ></health-log>
     `);
   }
 

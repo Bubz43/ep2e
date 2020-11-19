@@ -219,17 +219,29 @@ export class PhysicalTechForm extends ItemFormBase {
           .health=${this.item.meshHealth}
           @click=${this.setDrawerFromEvent(this.renderMeshHealthEdit)}
         ></health-item>
+        <health-item
+          clickable
+          ?disabled=${this.disabled}
+          .health=${this.item.firewallHealth}
+          @click=${this.setDrawerFromEvent(this.renderFirewallHealthEdit)}
+        ></health-item>
       </section>
     `;
   }
 
   private renderHealthChangeHistory() {
-    const { meshHealth } = this.item;
+    const { meshHealth, firewallHealth } = this.item;
     return html`
       <section class="history">
         <h3>${localize('history')}</h3>
+        <h4>${localize("meshHealth")}</h4>
         <health-log
           .health=${meshHealth}
+          ?disabled=${this.disabled}
+        ></health-log>
+        <h4>${localize("firewallHealth")}</h4>
+        <health-log
+          .health=${firewallHealth}
           ?disabled=${this.disabled}
         ></health-log>
       </section>
@@ -249,6 +261,18 @@ export class PhysicalTechForm extends ItemFormBase {
         .health=${meshHealth}
         .regenUpdater=${updater.prop('data', 'meshHealth').nestedStore()}
       ></health-regen-settings-form>
+    `;
+  }
+
+  private renderFirewallHealthEdit() {
+    const { firewallHealth, updater } = this.item;
+    return html`
+      <h3>${localize('firewallHealth')}</h3>
+      ${renderUpdaterForm(updater.prop('data', 'firewallHealth'), {
+        fields: ({ baseDurability }) =>
+          renderNumberField(baseDurability, { min: 1 }),
+      })}
+      <health-state-form .health=${firewallHealth}></health-state-form>
     `;
   }
 

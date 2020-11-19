@@ -8,6 +8,7 @@ import { clamp } from 'remeda';
 import type { Class } from 'type-fest';
 import type { DeepReadonly } from 'utility-types';
 import type { CommonHealth } from './health';
+import { DotOrHotTarget } from './recovery';
 
 export type Health = CommonHealth &
   ObtainableEffects &
@@ -66,13 +67,13 @@ export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
 
     get regenState() {
       const { main, wound, recoveries } = this;
-      const damage = !!(main.damage.value && notEmpty(recoveries?.damage));
+      const damage = !!(main.damage.value && notEmpty(recoveries?.[DotOrHotTarget.Damage]));
       return {
         damage: damage,
         wound: !!(
           !damage &&
           wound?.wounds.value &&
-          notEmpty(recoveries?.wound)
+          notEmpty(recoveries?.[DotOrHotTarget.Wound])
         ),
       };
     }

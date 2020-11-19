@@ -30,7 +30,7 @@ export class HealthRegenSettingsForm extends LitElement {
       ${enumValues(DotOrHotTarget).map((target) =>
         renderUpdaterForm(this.regenUpdater.prop(target), {
           fields: ({ amount, interval }) => html`
-            <p>${localize(target)} ${localize('repair')}</p>
+            <p>${localize(target)}</p>
             ${[
               renderTimeField(interval),
               interval.value ? renderFormulaField(amount) : '',
