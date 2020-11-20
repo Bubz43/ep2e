@@ -48,6 +48,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       activeEffects: this.appliedEffects,
       actor: this.actor,
       itemOperations: this.itemOperations,
+      allowSleights: true,
       psi:
         this.epFlags?.psi &&
         new Psi({

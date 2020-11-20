@@ -2,6 +2,7 @@
 @use "scss/mixins" as *;
 
 @include dataComma;
+@include resetUnorderedList;
 
 * {
   box-sizing: border-box;
@@ -18,4 +19,19 @@
 
 .effect-group-form {
   margin-bottom: 0.25rem;
+}
+
+.ali-skills {
+  display: flex;
+  flex-flow: row wrap;
+  padding: 0.25rem;
+}
+
+.ali-skill {
+  display: flex;
+  margin-right: 0.5ch;
+  .skill-info {
+    @include truncate(250px);
+    display: inline-block;
+  }
 }

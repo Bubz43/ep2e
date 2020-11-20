@@ -219,15 +219,12 @@ export enum SoftwareType {
   AppAsWare = 'appAsWare',
   MeshService = 'meshService',
   Meshware = 'meshware',
-  // Firewall = 'firewall',
-  // OperatingSystem = 'operatingSystem',
 }
 
-export enum EffectStates {
-  Passive = 'passive',
-  PassiveAndActivated = 'passiveAndActivated',
-  PassiveOrActivated = 'passiveOrActivated',
-  PassiveAndUsable = 'passiveAndUsable',
+export enum Activation {
+  None = "none",
+  Toggle = "toggle",
+  Use = "use"
 }
 
 export enum GearTrait {

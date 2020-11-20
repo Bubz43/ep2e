@@ -1290,6 +1290,7 @@
     "onboardALI": "Onboard ALI",
     "process": "Process",
     "woundRepair": "Wound Repair",
+    "PassiveEffectsWhenActivated": "Passive effects are not applied when activated",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

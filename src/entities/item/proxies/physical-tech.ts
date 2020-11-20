@@ -1,8 +1,8 @@
-import { DeviceType, EffectStates } from '@src/data-enums';
+import { Activation, DeviceType } from '@src/data-enums';
 import { Ego } from '@src/entities/actor/ego';
 import type { ObtainableEffects } from '@src/entities/applied-effects';
 import { ItemType } from '@src/entities/entity-types';
-import { createEgoData, setupItemOperations } from '@src/entities/models';
+import { createEgoData, DefaultEgos, setupItemOperations } from '@src/entities/models';
 import { UpdateStore } from '@src/entities/update-store';
 import { localize } from '@src/foundry/localization';
 import { deepMerge } from '@src/foundry/misc-helpers';
@@ -43,19 +43,23 @@ export class PhysicalTech
   }
 
   get activated() {
-    return this.hasActivation && this.state.activated;
+    return this.hasToggleActivation && this.state.activated;
   }
 
-  get effectStates() {
-    return this.epData.effectStates;
+  get activation() {
+    return this.epData.activation
   }
 
   get hasActivation() {
-    return this.effectStates !== EffectStates.Passive;
+    return this.activation !== Activation.None;
+  }
+
+  get hasToggleActivation() {
+    return this.activation === Activation.Toggle
   }
 
   get effects() {
-    return this.epData.effects;
+    return this.epData.passiveEffects;
   }
 
   get activatedEffects() {
@@ -70,25 +74,26 @@ export class PhysicalTech
     return this.deviceType === DeviceType.Host;
   }
 
-  get onlyLocalEffects() {
-    return this.effectStates !== EffectStates.PassiveAndUsable;
-  }
 
   get activationAction() {
     return this.epData.activationAction;
   }
 
-  get hasUse() {
-    return this.effectStates === EffectStates.PassiveAndUsable;
+  get hasUseActivation() {
+    return this.activation === Activation.Use;
   }
 
   get hasMeshHealth() {
     return !!this.deviceType;
   }
 
+  get hasOnboardALI() {
+    return !!this.deviceType && this.epData.onboardALI
+  }
+
   @LazyGetter()
   get onboardALI() {
-    const data = deepMerge(createEgoData(), this.epFlags?.onboardALI || {});
+    const data = deepMerge(DefaultEgos.ali, this.epFlags?.onboardALI ?? {});
     const updater = new UpdateStore({
       getData: () => data,
       setData: this.updater.prop('flags', EP.Name, 'onboardALI').commit,
@@ -119,13 +124,13 @@ export class PhysicalTech
       actor: null,
       items,
       itemOperations: ops,
+      allowSleights: false
     });
   }
 
   @LazyGetter()
   get effectGroups() {
     const { effects, activatedEffects, hasActivation } = this;
-    // TODO Figure out if passive effects are applied when toggled;
     const group = new Map<'passive' | 'activated', typeof effects>();
     if (notEmpty(effects)) group.set('passive', effects);
     if (hasActivation && notEmpty(activatedEffects))
@@ -135,13 +140,10 @@ export class PhysicalTech
 
   @LazyGetter()
   get currentEffects() {
-    const { effects, activatedEffects, activated, onlyLocalEffects } = this;
+    const { activated } = this;
     return {
-      source: this.name,
-      effects: compact([
-        effects,
-        activated && onlyLocalEffects && activatedEffects,
-      ]).flat(),
+      source: `${this.name} ${activated ? `(${localize("activated")})` : ""}`,
+      effects: activated ? this.effects : this.activatedEffects,
     };
   }
 
@@ -151,8 +153,8 @@ export class PhysicalTech
       data: this.epData.meshHealth,
       statMods: undefined,
       updater: this.updater.prop('data', 'meshHealth').nestedStore(),
-      source: localize('host'),
-      homeDevices: 1, // TODO,
+      source: localize('mindState'),
+      homeDevices: 1,
       deathRating: true,
     });
   }

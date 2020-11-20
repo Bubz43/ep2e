@@ -62,6 +62,8 @@ export class Ego {
   readonly itemOperations;
   readonly psi;
   readonly addPsi;
+  readonly allowSleights;
+
   constructor({
     data,
     updater,
@@ -71,13 +73,15 @@ export class Ego {
     itemOperations,
     psi,
     addPsi,
+    allowSleights
   }: {
     data: FullEgoData;
     updater: UpdateStore<FullEgoData>;
     activeEffects: ReadonlyAppliedEffects | null;
     actor: ActorEP | null;
     items: Map<string, ItemProxy>;
-    itemOperations: ItemOperations;
+      itemOperations: ItemOperations;
+    allowSleights: boolean
     psi?: Psi | null;
     addPsi?: (psiData: ItemEntity<ItemType.Psi>) => void;
   }) {
@@ -89,6 +93,7 @@ export class Ego {
     this.itemOperations = itemOperations;
     this.psi = psi;
     this.addPsi = addPsi;
+    this.allowSleights = allowSleights
   }
 
   static formatPoint(point: CharacterPoint) {
@@ -139,6 +144,10 @@ export class Ego {
 
   get useThreat() {
     return this.settings.useThreat;
+  }
+
+  get trackMentalHealth() {
+    return this.settings.trackMentalHealth
   }
 
   @LazyGetter()
@@ -312,9 +321,9 @@ export class Ego {
           proxy.selectLevelAndAdd(this.itemOperations.add);
         } else this.itemOperations.add(proxy.getDataCopy(true));
       }
-    } else if (proxy.type === ItemType.Sleight) {
+    } else if (proxy.type === ItemType.Sleight && this.allowSleights) {
       this.itemOperations.add(proxy.getDataCopy(true));
-    } else if (proxy.type === ItemType.Psi) {
+    } else if (proxy.type === ItemType.Psi && this.allowSleights) {
       if (this.psi)
         notify(
           NotificationType.Info,

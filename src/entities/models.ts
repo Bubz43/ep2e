@@ -1,4 +1,5 @@
 import type { SubstanceAttackData } from '@src/combat/attacks';
+import { EgoType } from '@src/data-enums';
 import {
   StringID,
   stringID,
@@ -6,6 +7,7 @@ import {
 } from '@src/features/feature-helpers';
 import type { PsiInfluenceData } from '@src/features/psi-influence';
 import type { CommonEntityData, TokenData } from '@src/foundry/foundry-cont';
+import { localize } from '@src/foundry/localization';
 import { deepMerge } from '@src/foundry/misc-helpers';
 import type { EP } from '@src/foundry/system';
 import type {
@@ -13,12 +15,14 @@ import type {
   AppliedSubstanceBase,
 } from '@src/foundry/template-schema';
 import type { ValOrValFN } from '@src/utility/helper-types';
+import { LazyGetter } from 'lazy-get-decorator';
 import { map, mapToObj, pick, prop, reject } from 'remeda';
 import type { UnionToIntersection, SetOptional } from 'type-fest';
 import type { DeepPartial } from 'utility-types';
 import type { ItemOperations } from './actor/actor';
 import type { FullEgoData } from './actor/ego';
 import type { ActorType, sleeveTypes, ItemType } from './entity-types';
+import { createDefaultItem } from './item/default-items';
 import { ItemEP, ItemProxy } from './item/item';
 
 type EPEntity = keyof EntityTemplates;
@@ -172,6 +176,31 @@ export const createEgoData = (): FullEgoData => {
   };
 };
 
+export abstract class DefaultEgos {
+  @LazyGetter()
+  static get ali() {
+    const ego = createEgoData();
+    ego.data.settings = {
+      trackMentalHealth: true,
+      canDefault: false,
+      trackPoints: false,
+      trackReputations: false,
+      threatDetails: false,
+      useThreat: false,
+      characterDetails: false,
+    };
+    const trait = createDefaultItem.realWorldNaivete();
+    const otherTraitId = uniqueStringID([trait._id]);
+    ego.items.push(trait, {
+      ...createDefaultItem.enhancedBehavior(localize('obedient'), 3),
+      _id: otherTraitId,
+    });
+
+    ego.data.egoType = localize(EgoType.ALI);
+    return ego;
+  }
+}
+
 export const createItemEntity = <T extends ItemType>({
   name,
   type,
@@ -275,7 +304,7 @@ export const setupItemOperations = (
 ): ItemOperations => ({
   add: async (...partials) => {
     const completeItems = (partials as ItemCreatorParams).map(createItemEntity);
-    
+
     let ids: string[] = [];
     await update((itemDatas) => {
       ids = itemDatas.map(prop('_id'));

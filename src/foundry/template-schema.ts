@@ -11,6 +11,7 @@ import type {
   ThrownWeaponAttackData,
 } from '@src/combat/attacks';
 import type {
+  Activation,
   AptitudeType,
   AreaEffectType,
   AttackTrait,
@@ -21,7 +22,6 @@ import type {
   Complexity,
   DeviceType,
   DrugAddiction,
-  EffectStates,
   EgoSetting,
   ExplosiveSize,
   ExplosiveType,
@@ -637,10 +637,10 @@ type PhysicalTechData = {
   meshHealth: MeshHealthData;
   firewallRating: number;
   firewallHealth: AppMeshHealthData;
-  effects: StringID<Effect>[];
+  passiveEffects: StringID<Effect>[];
   activatedEffects: StringID<Effect>[];
   wareType: '' | PhysicalWare;
-  effectStates: EffectStates;
+  activation: Activation;
   activationAction: Exclude<ActionType, ActionType.Task>;
   usedEffectsDuration: number;
   resistEffectsCheck: AptitudeType | '';

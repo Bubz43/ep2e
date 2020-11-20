@@ -1,5 +1,6 @@
 import {
   emptyTextDash,
+  renderLabeledCheckbox,
   renderNumberField,
   renderRadioFields,
   renderSelectField,
@@ -14,16 +15,15 @@ import {
   SlWindowEventName,
 } from '@src/components/window/window-options';
 import {
+  Activation,
   AptitudeType,
   DeviceType,
-  EffectStates,
   enumValues,
   FabType,
   PhysicalWare,
 } from '@src/data-enums';
 import { renderEgoForm } from '@src/entities/actor/actor-views';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
-import { renderItemForm } from '@src/entities/item/item-views';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import { ActionType } from '@src/features/actions';
 import type { EffectCreatedEvent } from '@src/features/components/effect-creator/effect-created-event';
@@ -46,7 +46,7 @@ import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './physical-tech-form.scss';
 
-const opsGroups = ['effects', 'activatedEffects'] as const;
+const opsGroups = ['passiveEffects', 'activatedEffects'] as const;
 
 @customElement('physical-tech-form')
 export class PhysicalTechForm extends ItemFormBase {
@@ -65,7 +65,7 @@ export class PhysicalTechForm extends ItemFormBase {
   private egoSheetKey = {};
 
   private readonly effectsOps = mapToObj(opsGroups, (group) => [
-    group === 'effects' ? 'passive' : 'activated',
+    group,
     addUpdateRemoveFeature(() => this.item.updater.prop('data', group).commit),
   ]);
 
@@ -76,7 +76,7 @@ export class PhysicalTechForm extends ItemFormBase {
   }
 
   private addCreatedEffect(ev: EffectCreatedEvent) {
-    this.effectsOps[this.effectGroup].add({}, ev.effect);
+    this.effectsOps[`${this.effectGroup}Effects` as const].add({}, ev.effect);
   }
 
   private openEgoSheet() {
@@ -117,8 +117,10 @@ export class PhysicalTechForm extends ItemFormBase {
       deviceType,
       effectGroups,
       hasActivation,
-      hasUse,
+      hasUseActivation: hasUseActivation,
       hasMeshHealth,
+      onboardALI,
+      hasOnboardALI,
     } = this.item;
     const { disabled } = this;
     // TODO Fabrication
@@ -141,12 +143,13 @@ export class PhysicalTechForm extends ItemFormBase {
           slot: 'sidebar',
           fields: ({
             category,
-            effectStates,
             wareType,
             deviceType,
             fabricator,
+            activation,
             activationAction,
             firewallRating,
+            onboardALI,
           }) => [
             renderSelectField(wareType, enumValues(PhysicalWare), {
               ...emptyTextDash,
@@ -154,9 +157,9 @@ export class PhysicalTechForm extends ItemFormBase {
             }),
             renderTextField(category),
             html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
-            renderSelectField(effectStates, enumValues(EffectStates), {
+            renderSelectField(activation, enumValues(Activation), {
               disableOptions: notEmpty(this.item.epData.activatedEffects)
-                ? [EffectStates.Passive]
+                ? [Activation.None]
                 : undefined,
             }),
             hasActivation
@@ -171,7 +174,10 @@ export class PhysicalTechForm extends ItemFormBase {
               disabled: !!embedded,
             }),
             hasMeshHealth
-              ? renderNumberField(firewallRating, { min: 1, max: 99 })
+              ? [
+                  renderNumberField(firewallRating, { min: 1, max: 99 }),
+                  renderLabeledCheckbox(onboardALI),
+                ]
               : '',
             renderSelectField(fabricator, enumValues(FabType), emptyTextDash),
           ],
@@ -184,32 +190,66 @@ export class PhysicalTechForm extends ItemFormBase {
             fields: renderComplexityFields,
           })}
           ${deviceType ? this.renderMeshHealthSection() : ''}
-
-          <section>
-            <sl-header heading=${localize('onboardALI')}>
-            <mwc-icon-button slot="action" icon="launch" @click=${this.openEgoSheet}></mwc-icon-button>
-          </sl-header>
-            <sl-group label=${localize('skills')}
-              >${this.item.onboardALI.skills.map(
-                (skill, index, list) => html`
-                  <span ?data-comma=${index < list.length - 1}>${skill.fullName} ${skill.total}</span>
-                `,
-              )}</sl-group
-            >
-          </section>
+          ${hasOnboardALI
+            ? html`
+                <section>
+                  <sl-header heading=${localize('onboardALI')}>
+                    <mwc-icon-button
+                      slot="action"
+                      icon="launch"
+                      @click=${this.openEgoSheet}
+                    ></mwc-icon-button>
+                  </sl-header>
+                  ${onboardALI.trackMentalHealth
+                    ? html`
+                        <health-item .health=${onboardALI.mentalHealth}
+                          ><span slot="source"
+                            >${localize('mentalHealth')}</span
+                          ></health-item
+                        >
+                      `
+                    : ''}
+                  <sl-group label=${localize("skills")}><ul class="ali-skills">
+                    ${onboardALI.skills.map(
+                      (skill, index, list) => html`
+                        <li
+                          class="ali-skill"
+                          ?data-comma=${index < list.length - 1}
+                        >
+                          <span class="skill-info"
+                            >${skill.fullName} ${skill.total}</span
+                          >
+                        </li>
+                      `,
+                    )}
+                  </ul></sl-group>
+                </section>
+              `
+            : ''}
 
           <section>
             <sl-header
               heading=${localize('effects')}
-              ?hideBorder=${effectGroups.size === 0 && !hasUse}
-              ><mwc-icon-button
+              ?hideBorder=${effectGroups.size === 0 && !hasUseActivation}
+            >
+              ${this.item.hasToggleActivation
+                ? html`
+                    <mwc-icon
+                      slot="info"
+                      data-tooltip=${localize('PassiveEffectsWhenActivated')}
+                      @mouseover=${tooltip.fromData}
+                      >info</mwc-icon
+                    >
+                  `
+                : ''}
+              <mwc-icon-button
                 icon="add"
                 slot="action"
                 @click=${this.setDrawerFromEvent(this.renderEffectCreator)}
                 ?disabled=${disabled}
               ></mwc-icon-button
             ></sl-header>
-            ${hasUse
+            ${hasUseActivation
               ? renderUpdaterForm(updater.prop('data'), {
                   disabled,
                   classes: 'activation-form',
@@ -234,7 +274,7 @@ export class PhysicalTechForm extends ItemFormBase {
                         hasActivation ? localize(key) : undefined,
                       )}
                       .effects=${group}
-                      .operations=${this.effectsOps[key]}
+                      .operations=${this.effectsOps[`${key}Effects` as const]}
                       ?disabled=${disabled}
                     ></item-form-effects-list>
                   `

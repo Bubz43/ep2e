@@ -219,6 +219,9 @@
               ],
               "type": "object"
             },
+            "PassiveEffectsWhenActivated": {
+              "type": "string"
+            },
             "SHORT": {
               "additionalProperties": false,
               "properties": {
@@ -4257,6 +4260,7 @@
             "DESCRIPTIONS",
             "FORMATABLE",
             "FULL",
+            "PassiveEffectsWhenActivated",
             "SHORT",
             "Watts-MacLeod",
             "a-z",

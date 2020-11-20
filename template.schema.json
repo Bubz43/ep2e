@@ -95,6 +95,14 @@
       ],
       "type": "string"
     },
+    "Activation": {
+      "enum": [
+        "none",
+        "toggle",
+        "use"
+      ],
+      "type": "string"
+    },
     "ActiveSkillCategory": {
       "enum": [
         "combat",
@@ -722,15 +730,6 @@
           "$ref": "#/definitions/MovementEffect"
         }
       ]
-    },
-    "EffectStates": {
-      "enum": [
-        "passive",
-        "passiveAndActivated",
-        "passiveOrActivated",
-        "passiveAndUsable"
-      ],
-      "type": "string"
     },
     "EgoRepData": {
       "additionalProperties": false,
@@ -3602,6 +3601,9 @@
                   },
                   "type": "array"
                 },
+                "activation": {
+                  "$ref": "#/definitions/Activation"
+                },
                 "activationAction": {
                   "enum": [
                     "automatic",
@@ -3624,10 +3626,30 @@
                     }
                   ]
                 },
-                "effectStates": {
-                  "$ref": "#/definitions/EffectStates"
+                "fabricator": {
+                  "anyOf": [
+                    {
+                      "const": "",
+                      "type": "string"
+                    },
+                    {
+                      "$ref": "#/definitions/FabType"
+                    }
+                  ]
                 },
-                "effects": {
+                "firewallHealth": {
+                  "$ref": "#/definitions/AppMeshHealthData"
+                },
+                "firewallRating": {
+                  "type": "number"
+                },
+                "meshHealth": {
+                  "$ref": "#/definitions/MeshHealthData"
+                },
+                "onboardALI": {
+                  "type": "boolean"
+                },
+                "passiveEffects": {
                   "items": {
                     "anyOf": [
                       {
@@ -4059,29 +4081,6 @@
                   },
                   "type": "array"
                 },
-                "fabricator": {
-                  "anyOf": [
-                    {
-                      "const": "",
-                      "type": "string"
-                    },
-                    {
-                      "$ref": "#/definitions/FabType"
-                    }
-                  ]
-                },
-                "firewallHealth": {
-                  "$ref": "#/definitions/AppMeshHealthData"
-                },
-                "firewallRating": {
-                  "type": "number"
-                },
-                "meshHealth": {
-                  "$ref": "#/definitions/MeshHealthData"
-                },
-                "onboardALI": {
-                  "type": "boolean"
-                },
                 "resistEffectsCheck": {
                   "anyOf": [
                     {
@@ -4160,16 +4159,16 @@
               },
               "required": [
                 "activatedEffects",
+                "activation",
                 "activationAction",
                 "category",
                 "deviceType",
-                "effectStates",
-                "effects",
                 "fabricator",
                 "firewallHealth",
                 "firewallRating",
                 "meshHealth",
                 "onboardALI",
+                "passiveEffects",
                 "resistEffectsCheck",
                 "state",
                 "templates",
