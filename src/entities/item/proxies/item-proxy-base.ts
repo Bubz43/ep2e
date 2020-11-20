@@ -120,5 +120,9 @@ export abstract class ItemProxyBase<T extends ItemType> {
     );
   }
 
+  onDelete() {
+    
+  }
+
   
 }

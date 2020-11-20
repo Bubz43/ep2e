@@ -1,8 +1,24 @@
+import {
+  closeWindow,
+  getWindow,
+  openOrRenderWindow,
+  openWindow,
+} from '@src/components/window/window-controls';
+import {
+  ResizeOption,
+  SlWindowEventName,
+} from '@src/components/window/window-options';
 import { Activation, DeviceType } from '@src/data-enums';
+import { renderEgoForm } from '@src/entities/actor/actor-views';
 import { Ego } from '@src/entities/actor/ego';
 import type { ObtainableEffects } from '@src/entities/applied-effects';
 import { ItemType } from '@src/entities/entity-types';
-import { createEgoData, DefaultEgos, setupItemOperations } from '@src/entities/models';
+import {
+  createEgoData,
+  DefaultEgos,
+  ItemEntity,
+  setupItemOperations,
+} from '@src/entities/models';
 import { UpdateStore } from '@src/entities/update-store';
 import { localize } from '@src/foundry/localization';
 import { deepMerge } from '@src/foundry/misc-helpers';
@@ -12,18 +28,47 @@ import { MeshHealth } from '@src/health/full-mesh-health';
 import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { compact, createPipe, merge } from 'remeda';
+import { compact, createPipe, forEach, merge } from 'remeda';
+import { traverseActiveElements } from 'weightless';
 import type { ItemProxy } from '../item';
 import { Copyable, Equippable, Gear, Purchasable } from '../item-mixins';
+import { renderItemForm } from '../item-views';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
+import { Sleight } from './sleight';
 import { Trait } from './trait';
 
 class Base extends ItemProxyBase<ItemType.PhysicalTech> {}
 export class PhysicalTech
   extends mix(Base).with(Purchasable, Gear, Equippable, Copyable)
   implements ObtainableEffects {
+  private static aliItemWindows = new WeakMap<Function, Map<string, {}>>();
+
+  private static aliItemInstances = new WeakMap<object, Map<string, ItemProxy>>();
+
   constructor(init: ItemProxyInit<ItemType.PhysicalTech>) {
     super(init);
+    const aliWindow = getWindow(this.aliSetter);
+    if (aliWindow?.isConnected) {
+      if (this.hasOnboardALI) this.onboardALI.openForm?.();
+      else closeWindow(this.aliSetter);
+    }
+    const { openEgoWindows } = this;
+    if (notEmpty(openEgoWindows)) {
+      const { items } = this.onboardALI;
+      for (const [id, key] of openEgoWindows) {
+        const item = items.get(id);
+        if (item) item.openForm?.()
+        else {
+          closeWindow(key)
+          openEgoWindows.delete(id)
+        }
+      }
+    }
+
+  }
+
+  private get aliSetter() {
+    return this.updater.prop('flags', EP.Name, 'onboardALI').commit;
   }
 
   get fullType() {
@@ -47,7 +92,7 @@ export class PhysicalTech
   }
 
   get activation() {
-    return this.epData.activation
+    return this.epData.activation;
   }
 
   get hasActivation() {
@@ -55,7 +100,7 @@ export class PhysicalTech
   }
 
   get hasToggleActivation() {
-    return this.activation === Activation.Toggle
+    return this.activation === Activation.Toggle;
   }
 
   get effects() {
@@ -74,7 +119,6 @@ export class PhysicalTech
     return this.deviceType === DeviceType.Host;
   }
 
-
   get activationAction() {
     return this.epData.activationAction;
   }
@@ -88,44 +132,122 @@ export class PhysicalTech
   }
 
   get hasOnboardALI() {
-    return !!this.deviceType && this.epData.onboardALI
+    return !!this.deviceType && this.epData.onboardALI;
+  }
+
+  private get openEgoWindows() {
+    return PhysicalTech.aliItemWindows.get(this.aliSetter);
   }
 
   @LazyGetter()
   get onboardALI() {
-    const data = deepMerge(DefaultEgos.ali, this.epFlags?.onboardALI ?? {});
+    const egoData = deepMerge(DefaultEgos.ali, this.epFlags?.onboardALI ?? {});
     const updater = new UpdateStore({
-      getData: () => data,
-      setData: this.updater.prop('flags', EP.Name, 'onboardALI').commit,
+      getData: () => egoData,
+      setData: this.aliSetter,
       isEditable: () => this.editable,
     });
-    const items = new Map<string, ItemProxy>();
-    const ops = setupItemOperations(updater.prop('items').commit);
-    for (const itemData of data.items) {
-      if (itemData.type === ItemType.Trait) {
-        const trait = new Trait({
-          lockSource: true,
-          embedded: data.name,
-          data: itemData,
-          updater: new UpdateStore({
-            getData: () => itemData,
-            setData: createPipe(merge({ _id: itemData._id }), ops.update),
-            isEditable: () => updater.editable,
-          }),
-        });
-        items.set(trait.id, trait);
-      }
+    let items = PhysicalTech.aliItemInstances.get(this.updater);
+    if (!items) {
+      items = new Map();
+      PhysicalTech.aliItemInstances.set(this.updater, items);
     }
+    const beforeOp = forEach<string>(id => {
+      PhysicalTech.aliItemInstances.get(this.updater)?.delete(id)
+    })
+    const ops = setupItemOperations(updater.prop('items').commit, {
+      update: beforeOp,
+      remove: beforeOp
+    });
 
-    return new Ego({
-      data,
+    const ego = new Ego({
+      data: egoData,
       updater,
       activeEffects: null,
       actor: null,
       items,
       itemOperations: ops,
-      allowSleights: false
+      allowSleights: false,
+      openForm: () => {
+       openOrRenderWindow({
+          key: this.aliSetter,
+          content: renderEgoForm(ego),
+          resizable: ResizeOption.Vertical,
+          name: `[${this.name} ${localize('onboardALI')}] ${ego.name}`,
+        });
+    
+      },
     });
+
+    const proxyInit = <T extends ItemType>(data: ItemEntity<T>) => {
+      return {
+        data,
+        embedded: this.name,
+        lockSource: false,
+        alwaysDeletable: this.editable,
+        deleteSelf: () => ops.remove(data._id),
+        updater: new UpdateStore({
+          getData: () => data,
+          isEditable: () => this.editable,
+          setData: createPipe(merge({ _id: data._id }), ops.update),
+        }),
+      };
+    };
+
+    for (const itemData of egoData.items) {
+      const { _id } = itemData;
+      if (items.has(_id)) continue;
+      if (itemData.type === ItemType.Trait) {
+        const trait = new Trait({
+          ...proxyInit(itemData),
+          openForm: () => this.openEgoItem(_id),
+        });
+        items.set(trait.id, trait);
+      } else if (itemData.type === ItemType.Sleight) {
+        const sleight = new Sleight({
+          ...proxyInit(itemData),
+          openForm: () => this.openEgoItem(_id),
+        });
+        items.set(sleight.id, sleight)
+      }
+    }
+
+
+    return ego;
+  }
+
+  private openEgoItem(id: string) {
+    const item = this.onboardALI.items.get(id);
+    if (!item) return;
+    let { openEgoWindows } = this;
+    if (!openEgoWindows) {
+      openEgoWindows = new Map()
+      PhysicalTech.aliItemWindows.set(this.aliSetter, openEgoWindows);
+    }
+    let key = openEgoWindows.get(id);
+    if (!key) {
+      key = {};
+      openEgoWindows.set(id, key);
+    }
+    const { win, wasConnected } =openOrRenderWindow({
+      key,
+      content: renderItemForm(item),
+      name: `[${this.onboardALI.name}] ${item.fullName}`,
+      resizable: ResizeOption.Vertical,
+    });
+    if (!wasConnected) {
+      win.addEventListener(SlWindowEventName.Closed, () => {
+        this.openEgoWindows?.delete(id)
+      }, { once: true })
+    }
+  }
+
+  onDelete() {
+    closeWindow(this.aliSetter);
+    const wins = this.openEgoWindows
+    wins?.forEach(closeWindow)
+    PhysicalTech.aliItemWindows.delete(this.aliSetter)
+    super.onDelete();
   }
 
   @LazyGetter()
@@ -142,7 +264,7 @@ export class PhysicalTech
   get currentEffects() {
     const { activated } = this;
     return {
-      source: `${this.name} ${activated ? `(${localize("activated")})` : ""}`,
+      source: `${this.name} ${activated ? `(${localize('activated')})` : ''}`,
       effects: activated ? this.effects : this.activatedEffects,
     };
   }

@@ -63,7 +63,7 @@ export class Ego {
   readonly psi;
   readonly addPsi;
   readonly allowSleights;
-
+  readonly openForm;
   constructor({
     data,
     updater,
@@ -73,7 +73,8 @@ export class Ego {
     itemOperations,
     psi,
     addPsi,
-    allowSleights
+    allowSleights,
+    openForm
   }: {
     data: FullEgoData;
     updater: UpdateStore<FullEgoData>;
@@ -83,7 +84,8 @@ export class Ego {
       itemOperations: ItemOperations;
     allowSleights: boolean
     psi?: Psi | null;
-    addPsi?: (psiData: ItemEntity<ItemType.Psi>) => void;
+      addPsi?: (psiData: ItemEntity<ItemType.Psi>) => void;
+    openForm?: () => void
   }) {
     this.data = data;
     this.updater = updater;
@@ -94,6 +96,7 @@ export class Ego {
     this.psi = psi;
     this.addPsi = addPsi;
     this.allowSleights = allowSleights
+    this.openForm = openForm;
   }
 
   static formatPoint(point: CharacterPoint) {

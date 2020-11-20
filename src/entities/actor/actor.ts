@@ -30,8 +30,8 @@ export type ItemOperations = {
   add: (
     ...itemDatas: SetRequired<DeepPartial<ItemEntity>, 'type' | 'name'>[]
   ) => Promise<string[]>;
-  update: (...itemDatas: ItemUpdate[]) => Promise<unknown>;
-  remove: (...itemIds: string[]) => Promise<unknown>;
+  update: (...itemDatas: ItemUpdate[]) => Promise<string[]>;
+  remove: (...itemIds: string[]) => Promise<string[]>;
 };
 
 export type ActorProxy = ReturnType<ActorEP['createProxy']>;
@@ -107,14 +107,16 @@ export class ActorEP extends Actor {
           });
           return addedIDs;
         },
-        update: (...itemDatas) => {
+        update: async (...itemDatas) => {
           const itemIds: string[] = [];
           for (const { _id } of itemDatas) {
             this.items?.get(_id)?.invalidate();
             itemIds.push(_id);
           }
           this.emitItemSocket({ itemIds, type: 'update' });
-          return this.updateOwnedItem(itemDatas);
+          await this.updateOwnedItem(itemDatas);
+
+          return itemIds;
         },
         remove: async (...itemIds) => {
           this.emitItemSocket({ type: 'remove', itemIds });
@@ -136,8 +138,8 @@ export class ActorEP extends Actor {
           //       .commit(favs);
           //   }
           // }
-
-          return this.deleteOwnedItem(itemIds);
+          await this.deleteOwnedItem(itemIds);
+          return itemIds;
         },
       };
     }

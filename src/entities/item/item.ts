@@ -1,8 +1,10 @@
+import type { ArmorType } from '@src/features/active-armor';
 import { LazyGetter } from 'lazy-get-decorator';
-import type { Mutable, RequireAtLeastOne } from 'type-fest';
+import type { Constructor } from 'lit-element';
+import type { Class, Mutable, RequireAtLeastOne } from 'type-fest';
 import type { ActorEP } from '../actor/actor';
 import { ItemType, ActorType } from '../entity-types';
-import type { ItemDatas } from '../models';
+import type { ItemDatas, ItemEntity } from '../models';
 import { UpdateStore } from '../update-store';
 import { EntitySubscription, Subscribable } from '../update-subcriptions';
 import { ItemEPSheet } from './item-sheet';
@@ -24,12 +26,19 @@ import { Substance } from './proxies/substance';
 import { ThrownWeapon } from './proxies/thrown-weapon';
 import { Trait } from './proxies/trait';
 
-type Operations = {
-  openForm?: () => void;
-  deleteSelf?: () => void;
-};
-
 export type ItemProxy = ReturnType<ItemEP['createProxy']>;
+
+// type Proxies<T = ItemProxy> = {
+//   [key in ItemType]: T extends { type: key } ? T : never;
+// };
+
+// type Pargs = {
+//   [key in ItemType]: key extends ItemType.Armor
+//     ? typeof Armor
+//     : key extends ItemType.BeamWeapon
+//     ? typeof BeamWeapon
+//     : never;
+// };
 
 export type RangedWeapon =
   | BeamWeapon
@@ -217,6 +226,7 @@ export class ItemEP extends Item {
   _onDelete(options: unknown, userId: string) {
     super._onDelete(options, userId);
     this._subscribers.unsubscribeAll();
+    this.proxy.onDelete();
   }
 
   matchRegexp(regex: RegExp) {

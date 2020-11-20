@@ -1,5 +1,6 @@
 import { debounceFn } from '@src/utility/decorators';
 import { TemplateResult, render } from 'lit-html';
+import { traverseActiveElements } from 'weightless';
 import { SlWindow } from './window';
 import { ResizeOption, SlWindowEventName } from './window-options';
 
@@ -10,7 +11,7 @@ export type WindowOpenSettings = {
   content: TemplateResult;
   name: SlWindow['name'];
   forceFocus?: boolean;
-  adjacentEl?: HTMLElement | null | false;
+  adjacentEl?: Element | null | false;
 };
 
 export type WindowOpenOptions = Partial<{
@@ -41,7 +42,8 @@ export const openWindow = (
 
   const wasConnected = win?.isConnected;
   const apply = !wasConnected || !renderOnly;
-  if (apply && adjacentEl) win.positionAdjacentToElement(adjacentEl);
+  if (apply && adjacentEl instanceof HTMLElement)
+    win.positionAdjacentToElement(adjacentEl);
 
   if (!wasConnected) {
     SlWindow.container.append(win);
@@ -67,6 +69,29 @@ export const closeWindow = (key: object) => {
         win.close();
       })
     : existed;
+};
+
+export const openOrRenderWindow = ({
+  key,
+  content,
+  name,
+  resizable,
+}: {
+  key: Object;
+  content: TemplateResult;
+  name: string;
+  resizable: ResizeOption;
+}) => {
+  return openWindow(
+    {
+      key,
+      content,
+      name,
+      forceFocus: true,
+      adjacentEl: traverseActiveElements(),
+    },
+    { resizable, renderOnly: true },
+  );
 };
 
 export const getWindow = (key: Object) => {

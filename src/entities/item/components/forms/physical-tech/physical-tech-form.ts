@@ -60,10 +60,6 @@ export class PhysicalTechForm extends ItemFormBase {
 
   @internalProperty() effectGroup: 'passive' | 'activated' = 'passive';
 
-  private egoSheet?: SlWindow | null;
-
-  private egoSheetKey = {};
-
   private readonly effectsOps = mapToObj(opsGroups, (group) => [
     group,
     addUpdateRemoveFeature(() => this.item.updater.prop('data', group).commit),
@@ -71,7 +67,6 @@ export class PhysicalTechForm extends ItemFormBase {
 
   update(changedProps: PropertyValues) {
     if (!this.item.hasActivation) this.effectGroup = 'passive';
-    if (this.egoSheet) this.openEgoSheet();
     super.update(changedProps);
   }
 
@@ -79,34 +74,6 @@ export class PhysicalTechForm extends ItemFormBase {
     this.effectsOps[`${this.effectGroup}Effects` as const].add({}, ev.effect);
   }
 
-  private openEgoSheet() {
-    const { onboardALI, fullName } = this.item;
-    if (!onboardALI) return this.closeEgoSheet();
-    const { win, wasConnected } = openWindow(
-      {
-        key: this.egoSheetKey,
-        content: renderEgoForm(onboardALI),
-        adjacentEl: this,
-        forceFocus: !this.egoSheet,
-        name: `[${fullName} ${localize('onboardALI')}] ${onboardALI.name}`,
-      },
-      { resizable: ResizeOption.Vertical },
-    );
-
-    this.egoSheet = win;
-    if (!wasConnected) {
-      win.addEventListener(
-        SlWindowEventName.Closed,
-        () => (this.egoSheet = null),
-        { once: true },
-      );
-    }
-  }
-
-  private closeEgoSheet() {
-    this.egoSheet?.close();
-    this.egoSheet = null;
-  }
 
   render() {
     const {
@@ -197,7 +164,7 @@ export class PhysicalTechForm extends ItemFormBase {
                     <mwc-icon-button
                       slot="action"
                       icon="launch"
-                      @click=${this.openEgoSheet}
+                      @click=${this.item.onboardALI.openForm}
                     ></mwc-icon-button>
                   </sl-header>
                   ${onboardALI.trackMentalHealth
