@@ -270,16 +270,20 @@ export class EgoForm extends mix(LitElement).with(
 
         <sl-dropzone ?disabled=${disabled} @drop=${this.handleItemDrop}>
           <sl-header
-            heading="${localize('traits')} & ${localize('sleights')}"
+            heading="${localize('traits')} ${this.ego.allowSleights
+              ? `& ${localize('sleights')}`
+              : ''}"
             itemCount=${traits.length + sleights.length}
             ?hideBorder=${!psi && traits.length + sleights.length === 0}
           >
-            <mwc-icon
-              slot="info"
-              data-tooltip=${localize('DESCRIPTIONS', 'OnlyEgoItems')}
-              @mouseover=${tooltip.fromData}
-              >info</mwc-icon
-            >
+            ${this.ego.allowSleights
+              ? html` <mwc-icon
+                  slot="info"
+                  data-tooltip=${localize('DESCRIPTIONS', 'OnlyEgoItems')}
+                  @mouseover=${tooltip.fromData}
+                  >info</mwc-icon
+                >`
+              : ''}
           </sl-header>
           ${psi
             ? html`
