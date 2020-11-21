@@ -26,13 +26,16 @@ p.label {
   padding: 0.25rem;
   li {
     list-style: none;
+    margin-right: 0.5ch;
     @include dataComma();
+    @include textButton();
+    button {
+      display: inline-flex;
+    }
     .skill-name {
       @include truncate(250px);
       display: inline-block;
-    }
-    button {
-      @include textButton
+      margin-right: 0.5ch;
     }
   }
 }

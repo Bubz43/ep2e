@@ -163,7 +163,7 @@ export class SoftwareForm extends ItemFormBase {
 
           ${hasMeshAttacks ? this.renderMeshAttacks() : ''}
 
-          <section>
+          <section class=${effectGroups.size === 0 ? "mini" : ""}>
             <sl-header
               heading=${localize('effects')}
               ?hideBorder=${effectGroups.size === 0}
@@ -190,19 +190,20 @@ export class SoftwareForm extends ItemFormBase {
             )}
           </section>
 
-          <section>
+          <section class=${skills.length === 0 ? "mini" : ""}>
             <sl-header
               heading=${localize('skills')}
               ?hideBorder=${skills.length === 0}
             >
+              <mwc-icon-button
+                icon="add"
+                slot="action"
+                @click=${this.setDrawerFromEvent(this.renderSkillCreator)}
+                ?disabled=${disabled}
+              ></mwc-icon-button>
             </sl-header>
-            <mwc-icon-button
-              icon="add"
-              slot="action"
-              @click=${this.setDrawerFromEvent(this.renderSkillCreator)}
-              ?disabled=${disabled}
-            ></mwc-icon-button>
-            <sl-animated-list class="skills">
+
+           ${notEmpty(skills) ? html` <sl-animated-list class="skills">
               ${repeat(
                 skills,
                 idProp,
@@ -240,7 +241,7 @@ export class SoftwareForm extends ItemFormBase {
                   </li>
                 `,
               )}
-            </sl-animated-list>
+            </sl-animated-list>` : ""}
           </section>
         </div>
 
