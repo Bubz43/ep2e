@@ -16,7 +16,7 @@ header {
   display: flex;
   max-height: 24px;
   align-items: center;
-  padding: 0 0.5ch;
+  padding: 0 1ch;
 }
 
 :host([flipped]) {
@@ -32,7 +32,7 @@ header {
 h2 {
   text-transform: uppercase;
   text-align: right;
-  font-size: larger;
+  font-size: large;
   transform: translateY(0.3rem);
   letter-spacing: 1px;
   flex: 1;
@@ -49,5 +49,6 @@ h2 {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
   border-left: 1px inset;
-  border-color: var(--color-border);
+  border-color: alphav(var(--color-grey), 0.25);
+  background: rgba(black, 0.09);
 }

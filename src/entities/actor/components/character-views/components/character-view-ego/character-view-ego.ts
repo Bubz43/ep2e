@@ -90,7 +90,7 @@ export class CharacterViewEgo extends LitElement {
         </button>
       </header>
 
-      <sl-section heading=${localize('aptitudes')}>
+      <sl-section heading=${localize('aptitudes')} flipped>
         <sl-group
           slot="control"
           class="initiative"
@@ -110,7 +110,7 @@ export class CharacterViewEgo extends LitElement {
           : ''}
       </sl-section>
 
-      <sl-section heading=${localize('skills')}>
+      <sl-section heading=${localize('skills')} flipped>
         ${renderAutoForm({
           classes: 'skill-controls',
           storeOnInput: true,

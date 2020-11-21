@@ -40,7 +40,7 @@ const isButton = (target: EventTarget | null): target is HTMLElement => {
 };
 
 const shadowAnimationOptions = {
-  duration: 200,
+  duration: 250,
   fill: 'forwards',
   delay: 50,
   easing: 'ease-out',

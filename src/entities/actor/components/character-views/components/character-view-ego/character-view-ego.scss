@@ -88,10 +88,10 @@ header {
 .skills-list {
   column-count: 2;
   column-gap: 0;
-  padding: 0.35rem 0;
+  padding: 0.25rem 0;
   overflow: hidden;
   font-size: 14px;
-  font-weight: lighter;
+  // font-weight: lighter;
   &.single-column {
     column-count: 1;
   }
@@ -103,7 +103,7 @@ header {
   .divider {
     border-top: 1px solid var(--color-border);
     column-span: all;
-    margin: 0.2rem 4px;
+    margin: 0.25rem 0;
     list-style: none;
   }
 
@@ -112,7 +112,7 @@ header {
 }
 
 .skill-item {
-  padding: 0.1rem 0.5rem;
+  padding: 0 0.5rem;
   transition: opacity 200ms, transform 200ms;
   .skill-name {
     @include truncate(150px);

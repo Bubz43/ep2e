@@ -22,8 +22,8 @@
   height: max-content;
   background: linear-gradient(
     45deg,
+    alphav(var(--color-bg), 0.75),
     alphav(var(--color-bg-alt), 0.75),
-    alphav(var(--color-bg), 0.75)
   );
   grid-template-rows: repeat(2, min-content) 1fr;
 }
