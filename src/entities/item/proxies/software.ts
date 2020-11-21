@@ -81,7 +81,7 @@ export class Software
   }
 
   get skills() {
-    return this.epData.skills
+    return this.epData.skills;
   }
 
   @LazyGetter()

@@ -22,7 +22,7 @@ import {
   FabType,
   PhysicalWare,
 } from '@src/data-enums';
-import { renderEgoForm } from "@src/entities/components/render-ego-form";
+import { renderEgoForm } from '@src/entities/components/render-ego-form';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import { ActionType } from '@src/features/actions';
@@ -195,7 +195,9 @@ export class PhysicalTechForm extends ItemFormBase {
               `
             : ''}
 
-          <section class=${effectGroups.size === 0 && !hasUseActivation ? "mini" : ""}>
+          <section
+            class=${effectGroups.size === 0 && !hasUseActivation ? 'mini' : ''}
+          >
             <sl-header
               heading=${localize('effects')}
               ?hideBorder=${effectGroups.size === 0 && !hasUseActivation}

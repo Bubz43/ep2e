@@ -9,7 +9,7 @@ import {
   SlWindowEventName,
 } from '@src/components/window/window-options';
 import { Activation, DeviceType } from '@src/data-enums';
-import { renderEgoForm } from "@src/entities/components/render-ego-form";
+import { renderEgoForm } from '@src/entities/components/render-ego-form';
 import { Ego } from '@src/entities/actor/ego';
 import type { ObtainableEffects } from '@src/entities/applied-effects';
 import { ItemType } from '@src/entities/entity-types';

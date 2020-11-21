@@ -7,7 +7,9 @@ import { renderEgoForm } from '../components/render-ego-form';
 import type { Sleeve } from './sleeves';
 
 export const renderCharacterView = (proxy: Character, token: MaybeToken) => {
-  return renderEgoForm(proxy.ego);
+  return html`
+    <character-view .character=${proxy} .token=${token}></character-view>
+  `;
 };
 
 export const renderSleeveForm = (proxy: Sleeve, token: MaybeToken) => {

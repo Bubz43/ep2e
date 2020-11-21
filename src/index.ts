@@ -1,4 +1,8 @@
 // Side Effects
+import './foundry/prototype-overrides';
+import './init';
+import 'web-animations-js';
+
 // Material Components
 import '@material/mwc-button';
 import '@material/mwc-checkbox';
@@ -19,14 +23,15 @@ import '@material/mwc-snackbar';
 import '@material/mwc-switch';
 import '@material/mwc-tab-bar';
 import '@material/mwc-dialog';
+
 // import '@tinymce/tinymce-webcomponent'; // TODO Test this out further
 import { Datepicker } from 'app-datepicker/dist/datepicker';
-import 'web-animations-js';
-// Misc
-// import 'web-dialog';
+customElements.define('app-datepicker', Datepicker);
+
 // Weightless Components
 import 'weightless/label';
 import 'weightless/list-item';
+
 import { AnimatedList } from './components/animated-list/animated-list';
 import { DateField } from './components/date-field/date-field';
 import { DeleteButton } from './components/delete-button/delete-button';
@@ -72,12 +77,10 @@ import { EffectCreator } from './features/components/effect-creator/effect-creat
 import { EffectEditor } from './features/components/effect-editor/effect-editor';
 import { FormMotivationItem } from './features/components/form-motivation-item/form-motivation-item';
 import { TagEditor } from './features/components/tag-editor/tag-editor';
-import './foundry/prototype-overrides';
 import { HealthItem } from './health/components/health-item/health-item';
 import { HealthLog } from './health/components/health-log/health-log';
 import { HealthRegenSettingsForm } from './health/components/health-regen-settings-form/health-regen-settings-form';
 import { HealthStateForm } from './health/components/health-state-form/health-state-form';
-import './init';
 import { EgoFormThreatStress } from './entities/components/ego-form/ego-form-threat-stress';
 import { EgoFormRep } from './entities/components/ego-form/ego-form-rep';
 import { PhysicalServiceForm } from './entities/item/components/forms/physical-service/physical-service-form';
@@ -105,8 +108,7 @@ import { ItemCreator } from './entities/item/components/item-creator/item-creato
 import { AptitudeCheckInfoEditor } from './features/components/aptitude-check-info-editor/aptitude-check-info-editor';
 import { ActorCreator } from './entities/actor/components/actor-creator/actor-creator';
 import { CharacterView } from './entities/actor/components/character-views/character-view';
-
-customElements.define('app-datepicker', Datepicker);
+import { CharacterViewEgo } from './entities/actor/components/character-views/components/character-view-ego/character-view-ego';
 
 // Generic Components
 Field;
@@ -137,7 +139,10 @@ CompendiumList;
 // Actor
 ActorCreator;
 ItemTrash;
+
+// Character
 CharacterView;
+CharacterViewEgo;
 
 // Ego
 EgoForm;

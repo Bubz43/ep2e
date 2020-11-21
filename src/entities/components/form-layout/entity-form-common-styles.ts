@@ -8,7 +8,7 @@ export const entityFormCommonStyles = css`
     background: linear-gradient(45deg, var(--color-bg), var(--color-bg-alt));
   }
 
-  [slot="details"] > .mini {
+  [slot='details'] > .mini {
     padding: 0 1rem;
   }
 

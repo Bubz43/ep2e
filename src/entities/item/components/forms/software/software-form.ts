@@ -163,7 +163,7 @@ export class SoftwareForm extends ItemFormBase {
 
           ${hasMeshAttacks ? this.renderMeshAttacks() : ''}
 
-          <section class=${effectGroups.size === 0 ? "mini" : ""}>
+          <section class=${effectGroups.size === 0 ? 'mini' : ''}>
             <sl-header
               heading=${localize('effects')}
               ?hideBorder=${effectGroups.size === 0}
@@ -190,7 +190,7 @@ export class SoftwareForm extends ItemFormBase {
             )}
           </section>
 
-          <section class=${skills.length === 0 ? "mini" : ""}>
+          <section class=${skills.length === 0 ? 'mini' : ''}>
             <sl-header
               heading=${localize('skills')}
               ?hideBorder=${skills.length === 0}
@@ -203,45 +203,49 @@ export class SoftwareForm extends ItemFormBase {
               ></mwc-icon-button>
             </sl-header>
 
-           ${notEmpty(skills) ? html` <sl-animated-list class="skills">
-              ${repeat(
-                skills,
-                idProp,
-                (skill, index) => html`
-                  <li ?data-comma=${index < skills.length - 1}>
-                    <sl-popover
-                      .renderOnDemand=${() => html`
-                        <sl-popover-section
-                          heading="${localize('edit')} ${localize('skill')}"
+            ${notEmpty(skills)
+              ? html` <sl-animated-list class="skills">
+                  ${repeat(
+                    skills,
+                    idProp,
+                    (skill, index) => html`
+                      <li ?data-comma=${index < skills.length - 1}>
+                        <sl-popover
+                          .renderOnDemand=${() => html`
+                            <sl-popover-section
+                              heading="${localize('edit')} ${localize('skill')}"
+                            >
+                              <delete-button
+                                slot="action"
+                                @delete=${this.skillOps.removeCallback(
+                                  skill.id,
+                                )}
+                              ></delete-button>
+                              ${renderSubmitForm({
+                                props: skill,
+                                update: this.skillOps.update,
+                                fields: ({ name, specialization, total }) => [
+                                  renderTextField(name, { required: true }),
+                                  renderTextField(specialization),
+                                  renderNumberField(total, { min: 1, max: 99 }),
+                                ],
+                              })}
+                            </sl-popover-section>
+                          `}
                         >
-                          <delete-button
-                            slot="action"
-                            @delete=${this.skillOps.removeCallback(skill.id)}
-                          ></delete-button>
-                          ${renderSubmitForm({
-                            props: skill,
-                            update: this.skillOps.update,
-                            fields: ({ name, specialization, total }) => [
-                              renderTextField(name, { required: true }),
-                              renderTextField(specialization),
-                              renderNumberField(total, { min: 1, max: 99 }),
-                            ],
-                          })}
-                        </sl-popover-section>
-                      `}
-                    >
-                      <button slot="base" ?disabled=${disabled}>
-                        <span class="skill-name"
-                          >${skill.name}${skill.specialization
-                            ? ` (${skill.specialization})`
-                            : ''}:</span
-                        ><span class="skill-total">${skill.total}</span>
-                      </button>
-                    </sl-popover>
-                  </li>
-                `,
-              )}
-            </sl-animated-list>` : ""}
+                          <button slot="base" ?disabled=${disabled}>
+                            <span class="skill-name"
+                              >${skill.name}${skill.specialization
+                                ? ` (${skill.specialization})`
+                                : ''}:</span
+                            ><span class="skill-total">${skill.total}</span>
+                          </button>
+                        </sl-popover>
+                      </li>
+                    `,
+                  )}
+                </sl-animated-list>`
+              : ''}
           </section>
         </div>
 
