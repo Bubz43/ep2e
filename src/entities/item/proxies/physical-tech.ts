@@ -1,23 +1,21 @@
 import {
   closeWindow,
   getWindow,
-  openOrRenderWindow,
-  openWindow,
+  openOrRenderWindow
 } from '@src/components/window/window-controls';
 import {
   ResizeOption,
-  SlWindowEventName,
+  SlWindowEventName
 } from '@src/components/window/window-options';
 import { Activation, DeviceType } from '@src/data-enums';
-import { renderEgoForm } from '@src/entities/components/render-ego-form';
 import { Ego } from '@src/entities/actor/ego';
 import type { ObtainableEffects } from '@src/entities/applied-effects';
+import { renderEgoForm } from '@src/entities/components/render-ego-form';
 import { ItemType } from '@src/entities/entity-types';
 import {
-  createEgoData,
   DefaultEgos,
-  ItemEntity,
-  setupItemOperations,
+
+  setupItemOperations
 } from '@src/entities/models';
 import { UpdateStore } from '@src/entities/update-store';
 import { localize } from '@src/foundry/localization';
@@ -28,13 +26,11 @@ import { MeshHealth } from '@src/health/full-mesh-health';
 import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { compact, createPipe, forEach, merge } from 'remeda';
-import { traverseActiveElements } from 'weightless';
+import { createPipe, forEach, merge } from 'remeda';
 import type { ItemProxy } from '../item';
 import { Copyable, Equippable, Gear, Purchasable } from '../item-mixins';
 import { renderItemForm } from '../item-views';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
-import { Sleight } from './sleight';
 import { Trait } from './trait';
 
 class Base extends ItemProxyBase<ItemType.PhysicalTech> {}

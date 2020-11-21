@@ -11,17 +11,18 @@
 :host {
   display: grid;
   grid-template-areas: 
-  "header header"
+  // "header header"
   "side tab-bar"
   "side content";
-  grid-template-columns: min-content 1fr;  
+  grid-template-columns: 400px 1fr;  
   gap: 0.5rem;
   min-width: 100%;
-  width: 912px;
+  width: 800px;
   min-height: 500px;
   height: max-content;
   background: hsla(260, 97%, 2%, 0.55);
-  grid-template-rows: repeat(2, min-content) 1fr;
+  background: linear-gradient(to bottom, alphav(var(--color-bg-alt), 0.5), alphav(var(--color-bg), 0.5));
+  grid-template-rows: repeat(1, min-content) 1fr;
 }
 
 .side {
@@ -58,7 +59,6 @@ mwc-tab-bar {
   max-width: 400px;
   min-width: max-content;
   place-self: center;
-  margin-top: -1rem;
   --mdc-theme-primary: var(--color-primary-alt);
   --mdc-tab-height: calc(50px - 0.5rem);
 }

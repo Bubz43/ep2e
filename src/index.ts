@@ -109,6 +109,7 @@ import { AptitudeCheckInfoEditor } from './features/components/aptitude-check-in
 import { ActorCreator } from './entities/actor/components/actor-creator/actor-creator';
 import { CharacterView } from './entities/actor/components/character-views/character-view';
 import { CharacterViewEgo } from './entities/actor/components/character-views/components/character-view-ego/character-view-ego';
+import { CharacterViewSleeve } from './entities/actor/components/character-views/components/character-view-sleeve/character-view-sleeve';
 
 // Generic Components
 Field;
@@ -143,6 +144,7 @@ ItemTrash;
 // Character
 CharacterView;
 CharacterViewEgo;
+CharacterViewSleeve;
 
 // Ego
 EgoForm;

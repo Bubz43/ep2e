@@ -1,11 +1,134 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+@include resetUnorderedList();
+
 * {
   box-sizing: border-box;
 }
 
 :host {
-  display: block;
-  
+  display: grid;
+  gap: 0.5rem;
+  grid-auto-rows: min-content;
+}
+
+sl-section {
+  margin: 0 0.25rem;
+}
+
+header {
+  padding: 0.75rem 1rem; 
+  button {
+    all: unset;
+    border-bottom: 1px solid var(--color-border);
+    font-family: var(--font-2);
+    @include truncate(350px);
+    .name {
+      font-size: larger;
+      margin-right: 0.25ch;
+    }
+    .details {
+      color: var(--color-text-lighter);
+    }
+    &:hover,
+    &:focus {
+      cursor: pointer;
+      border-bottom-color: var(--color-text-lighter);
+    }
+  }
+}
+
+.mental-health-view {
+  border-top: 1px solid var(--color-border);
+}
+
+.aptitudes-list {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+
+
+.initiative {
+  margin-left: 0.75ch;
+}
+
+
+.aptitude {
+  &-item {
+    padding: 0.25rem 0.5rem;
+  }
+  &-name {
+    font-size: large;
+    text-align: center;
+  }
+  &-points {
+    font-size: larger;
+    margin-right: 0.5ch;
+    min-width: 2ch;
+    text-align: center;
+  }
+  &-check {
+    border-bottom: 1px solid currentColor;
+    height: min-content;
+    min-width: 2ch;
+    text-align: center;
+  }
+  &-values {
+    display: flex;
+  }
+}
+
+
+.skill-controls {
+  @include inputReset();
+  input {
+    border: none;
+    margin-left: 0.5ch;
+  }
+}
+
+.skills-list {
+  column-count: 2;
+  column-gap: 0;
+  padding: 0.35rem 0;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: lighter;
+  &.single-column {
+    column-count: 1;
+  }
+  > * {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .divider {
+    border-top: 1px solid var(--color-border);
+    column-span: all;
+    margin: 0.2rem 4px;
+    list-style: none;
+  }
+
+
+
+}
+
+.skill-item {
+  padding: 0.1rem 0.5rem;
+  transition: opacity 200ms, transform 200ms;
+  .skill-name {
+    @include truncate(150px);
+    display: inline-block;
+  }
+  .skill-total {
+    margin-left: 1ch;
+  }
+
+  &.filtered {
+    opacity: 0.5;
+    transform: translateX(0.5rem);
+    border-color: transparent;
+  }
 }

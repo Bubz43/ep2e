@@ -30,7 +30,7 @@ header {
 h2 {
   text-transform: uppercase;
   text-align: right;
-  font-size: 1.25rem;
+  font-size: larger;
   transform: translateY(0.3rem);
   letter-spacing: 1px;
   flex: 1;
@@ -47,5 +47,5 @@ h2 {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
   border-left: 1px inset;
-  border-color: alphav(var(--color-primary), 0.7);
+  border-color: var(--color-border);
 }

@@ -1,10 +1,11 @@
 import type { TabBar } from '@material/mwc-tab-bar';
 import { localize } from '@src/foundry/localization';
 import { notEmpty } from '@src/utility/helpers';
-import { customElement, html, query } from 'lit-element';
+import { customElement, html, PropertyValues, query } from 'lit-element';
 import { nothing } from 'lit-html';
 import { cache } from 'lit-html/directives/cache';
 import { classMap } from 'lit-html/directives/class-map';
+import { first } from 'remeda';
 import { CharacterViewBase } from './character-view-base';
 import styles from './character-view.scss';
 
@@ -21,8 +22,20 @@ export class CharacterView extends CharacterViewBase {
   @query('.tabbed-content')
   tabbedSection!: HTMLElement;
 
-  @query('mwc-tab-bar')
+  @query('#primary-tabs')
   tabBar?: TabBar;
+
+  updated(changedProps: PropertyValues) {
+    const { tabBar } = this;
+    if (tabBar) {
+      requestAnimationFrame(() => {
+        const tabElements = [...tabBar.querySelectorAll("mwc-tab")];
+        const activeElement = tabElements[tabBar.activeIndex];
+        if (!activeElement?.active) first(tabElements)?.click();
+      });
+    }
+    super.updated(changedProps);
+  }
 
   private changeTab() {
     this.requestUpdate();
@@ -46,9 +59,15 @@ export class CharacterView extends CharacterViewBase {
   render() {
     const showPsi = !!(this.character.psi || notEmpty(this.character.sleights));
     return html`
+      <div class="side">
+        <character-view-ego
+          .character=${this.character}
+          .ego=${this.character.ego}
+        ></character-view-ego>
+      </div>
       ${this.renderDrawer()}
 
-      <mwc-tab-bar @MDCTabBar:activated=${this.changeTab}>
+      <mwc-tab-bar id="primary-tabs" @MDCTabBar:activated=${this.changeTab}>
         ${tabs.map((tab) =>
           showPsi || tab !== 'psi'
             ? html` <mwc-tab label=${localize(tab)}></mwc-tab> `
