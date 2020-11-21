@@ -29,7 +29,7 @@ export class CharacterView extends CharacterViewBase {
     const { tabBar } = this;
     if (tabBar) {
       requestAnimationFrame(() => {
-        const tabElements = [...tabBar.querySelectorAll("mwc-tab")];
+        const tabElements = [...tabBar.querySelectorAll('mwc-tab')];
         const activeElement = tabElements[tabBar.activeIndex];
         if (!activeElement?.active) first(tabElements)?.click();
       });
@@ -59,6 +59,11 @@ export class CharacterView extends CharacterViewBase {
   render() {
     const showPsi = !!(this.character.psi || notEmpty(this.character.sleights));
     return html`
+      <character-view-header
+        .character=${this.character}
+        .token=${this.token}
+      ></character-view-header>
+
       <div class="side">
         <character-view-ego
           .character=${this.character}

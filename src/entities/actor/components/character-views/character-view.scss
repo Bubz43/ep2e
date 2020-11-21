@@ -11,7 +11,7 @@
 :host {
   display: grid;
   grid-template-areas: 
-  // "header header"
+  "header header"
   "side tab-bar"
   "side content";
   grid-template-columns: 400px 1fr;  
@@ -22,7 +22,11 @@
   height: max-content;
   background: hsla(260, 97%, 2%, 0.55);
   background: linear-gradient(to bottom, alphav(var(--color-bg-alt), 0.5), alphav(var(--color-bg), 0.5));
-  grid-template-rows: repeat(1, min-content) 1fr;
+  grid-template-rows: repeat(2, min-content) 1fr;
+}
+
+character-view-header {
+  grid-area: header;
 }
 
 .side {
@@ -61,6 +65,7 @@ mwc-tab-bar {
   place-self: center;
   --mdc-theme-primary: var(--color-primary-alt);
   --mdc-tab-height: calc(50px - 0.5rem);
+  margin-top: -0.5rem;
 }
 
 .drawer {

@@ -110,6 +110,7 @@ import { ActorCreator } from './entities/actor/components/actor-creator/actor-cr
 import { CharacterView } from './entities/actor/components/character-views/character-view';
 import { CharacterViewEgo } from './entities/actor/components/character-views/components/character-view-ego/character-view-ego';
 import { CharacterViewSleeve } from './entities/actor/components/character-views/components/character-view-sleeve/character-view-sleeve';
+import { CharacterViewHeader } from './entities/actor/components/character-views/components/character-view-header/character-view-header';
 
 // Generic Components
 Field;
@@ -143,6 +144,7 @@ ItemTrash;
 
 // Character
 CharacterView;
+CharacterViewHeader;
 CharacterViewEgo;
 CharacterViewSleeve;
 

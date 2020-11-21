@@ -23,9 +23,9 @@ export class ItemTrash extends LitElement {
 
   static styles = [styles];
 
-  @internalProperty() private indexesToRestore?: number[] = [];
-
   @property({ attribute: false }) proxy!: ActorProxy;
+
+  @internalProperty() private indexesToRestore?: number[] = [];
 
   private saveRestoreIndex(ev: SelectedEvent) {
     if (isEventMulti(ev)) {
