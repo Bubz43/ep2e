@@ -18,7 +18,7 @@ import '@material/mwc-slider';
 import '@material/mwc-snackbar';
 import '@material/mwc-switch';
 import '@material/mwc-tab-bar';
-import "@material/mwc-dialog";
+import '@material/mwc-dialog';
 // import '@tinymce/tinymce-webcomponent'; // TODO Test this out further
 import { Datepicker } from 'app-datepicker/dist/datepicker';
 import 'web-animations-js';

@@ -100,18 +100,18 @@ export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
       updater: this.updater.prop('data', 'meshHealth').nestedStore(),
       source: localize('mindState'),
       homeDevices: 1, // TODO,
-      deathRating: true
+      deathRating: true,
     });
   }
 
-  @LazyGetter() 
+  @LazyGetter()
   get firewallHealth() {
     return new AppMeshHealth({
       data: this.epData.firewallHealth,
-      updater: this.updater.prop("data", "firewallHealth").nestedStore(),
-      source: `${localize("firewall")} (${this.epData.firewallRating})`,
-    })
-    }
+      updater: this.updater.prop('data', 'firewallHealth').nestedStore(),
+      source: `${localize('firewall')} (${this.epData.firewallRating})`,
+    });
+  }
 
   get activeMeshHealth() {
     const { nonDefaultBrain } = this;
@@ -120,7 +120,9 @@ export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
 
   get activeFirewallHealth() {
     const { nonDefaultBrain } = this;
-    return nonDefaultBrain ? nonDefaultBrain.firewallHealth : this.firewallHealth;
+    return nonDefaultBrain
+      ? nonDefaultBrain.firewallHealth
+      : this.firewallHealth;
   }
 
   addNewItemProxy(proxy: ItemProxy | null | undefined) {

@@ -50,7 +50,7 @@ export type FullEgoData = {
   name: string;
   img: string;
   data: EgoData & CommonDetails;
-  items: ItemDatas[]
+  items: ItemDatas[];
 };
 
 export class Ego {
@@ -74,18 +74,18 @@ export class Ego {
     psi,
     addPsi,
     allowSleights,
-    openForm
+    openForm,
   }: {
     data: FullEgoData;
     updater: UpdateStore<FullEgoData>;
     activeEffects: ReadonlyAppliedEffects | null;
     actor: ActorEP | null;
     items: Map<string, ItemProxy>;
-      itemOperations: ItemOperations;
-    allowSleights: boolean
+    itemOperations: ItemOperations;
+    allowSleights: boolean;
     psi?: Psi | null;
-      addPsi?: (psiData: ItemEntity<ItemType.Psi>) => void;
-    openForm?: () => void
+    addPsi?: (psiData: ItemEntity<ItemType.Psi>) => void;
+    openForm?: () => void;
   }) {
     this.data = data;
     this.updater = updater;
@@ -95,7 +95,7 @@ export class Ego {
     this.itemOperations = itemOperations;
     this.psi = psi;
     this.addPsi = addPsi;
-    this.allowSleights = allowSleights
+    this.allowSleights = allowSleights;
     this.openForm = openForm;
   }
 
@@ -106,7 +106,7 @@ export class Ego {
   }
 
   get disabled() {
-    return !this.updater.editable
+    return !this.updater.editable;
   }
 
   private readonly commonSkills = new Map<SkillType, FullSkill>();
@@ -150,7 +150,7 @@ export class Ego {
   }
 
   get trackMentalHealth() {
-    return this.settings.trackMentalHealth
+    return this.settings.trackMentalHealth;
   }
 
   @LazyGetter()

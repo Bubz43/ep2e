@@ -63,10 +63,7 @@ export const renderListToOptions = <T extends ReadonlyArray<string>>({
 
 type FieldSlots = Partial<{ before: TemplateResult; after: TemplateResult }>;
 type FieldOptions = Partial<
-  Pick<
-    Field,
-    'helpText' | 'helpPersistent' | 'validationMessage' | 'dirty'
-  >
+  Pick<Field, 'helpText' | 'helpPersistent' | 'validationMessage' | 'dirty'>
 > &
   FieldSlots;
 

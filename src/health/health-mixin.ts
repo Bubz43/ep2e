@@ -67,7 +67,9 @@ export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
 
     get regenState() {
       const { main, wound, recoveries } = this;
-      const damage = !!(main.damage.value && notEmpty(recoveries?.[DotOrHotTarget.Damage]));
+      const damage = !!(
+        main.damage.value && notEmpty(recoveries?.[DotOrHotTarget.Damage])
+      );
       return {
         damage: damage,
         wound: !!(

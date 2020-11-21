@@ -43,7 +43,10 @@ export class PhysicalTech
   implements ObtainableEffects {
   private static aliItemWindows = new WeakMap<Function, Map<string, {}>>();
 
-  private static aliItemInstances = new WeakMap<object, Map<string, ItemProxy>>();
+  private static aliItemInstances = new WeakMap<
+    object,
+    Map<string, ItemProxy>
+  >();
 
   constructor(init: ItemProxyInit<ItemType.PhysicalTech>) {
     super(init);
@@ -57,14 +60,13 @@ export class PhysicalTech
       const { items } = this.onboardALI;
       for (const [id, key] of openEgoWindows) {
         const item = items.get(id);
-        if (item) item.openForm?.()
+        if (item) item.openForm?.();
         else {
-          closeWindow(key)
-          openEgoWindows.delete(id)
+          closeWindow(key);
+          openEgoWindows.delete(id);
         }
       }
     }
-
   }
 
   private get aliSetter() {
@@ -152,12 +154,12 @@ export class PhysicalTech
       items = new Map();
       PhysicalTech.aliItemInstances.set(this.updater, items);
     }
-    const beforeOp = forEach<string>(id => {
-      PhysicalTech.aliItemInstances.get(this.updater)?.delete(id)
-    })
+    const beforeOp = forEach<string>((id) => {
+      PhysicalTech.aliItemInstances.get(this.updater)?.delete(id);
+    });
     const ops = setupItemOperations(updater.prop('items').commit, {
       update: beforeOp,
-      remove: beforeOp
+      remove: beforeOp,
     });
 
     const ego = new Ego({
@@ -169,13 +171,12 @@ export class PhysicalTech
       itemOperations: ops,
       allowSleights: false,
       openForm: () => {
-       openOrRenderWindow({
+        openOrRenderWindow({
           key: this.aliSetter,
           content: renderEgoForm(ego),
           resizable: ResizeOption.Vertical,
           name: `[${this.name} ${localize('onboardALI')}] ${ego.name}`,
         });
-    
       },
     });
 
@@ -208,10 +209,9 @@ export class PhysicalTech
           ...proxyInit(itemData),
           openForm: () => this.openEgoItem(_id),
         });
-        items.set(sleight.id, sleight)
+        items.set(sleight.id, sleight);
       }
     }
-
 
     return ego;
   }
@@ -221,7 +221,7 @@ export class PhysicalTech
     if (!item) return;
     let { openEgoWindows } = this;
     if (!openEgoWindows) {
-      openEgoWindows = new Map()
+      openEgoWindows = new Map();
       PhysicalTech.aliItemWindows.set(this.aliSetter, openEgoWindows);
     }
     let key = openEgoWindows.get(id);
@@ -229,24 +229,28 @@ export class PhysicalTech
       key = {};
       openEgoWindows.set(id, key);
     }
-    const { win, wasConnected } =openOrRenderWindow({
+    const { win, wasConnected } = openOrRenderWindow({
       key,
       content: renderItemForm(item),
       name: `[${this.onboardALI.name}] ${item.fullName}`,
       resizable: ResizeOption.Vertical,
     });
     if (!wasConnected) {
-      win.addEventListener(SlWindowEventName.Closed, () => {
-        this.openEgoWindows?.delete(id)
-      }, { once: true })
+      win.addEventListener(
+        SlWindowEventName.Closed,
+        () => {
+          this.openEgoWindows?.delete(id);
+        },
+        { once: true },
+      );
     }
   }
 
   onDelete() {
     closeWindow(this.aliSetter);
-    const wins = this.openEgoWindows
-    wins?.forEach(closeWindow)
-    PhysicalTech.aliItemWindows.delete(this.aliSetter)
+    const wins = this.openEgoWindows;
+    wins?.forEach(closeWindow);
+    PhysicalTech.aliItemWindows.delete(this.aliSetter);
     super.onDelete();
   }
 

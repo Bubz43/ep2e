@@ -30,8 +30,10 @@ export class Software
 
   get fullType() {
     const { softwareType, category } = this;
-    const localType = localize(softwareType)
-    return localType === category || !category ? localType : `${localType} (${category})`
+    const localType = localize(softwareType);
+    return localType === category || !category
+      ? localType
+      : `${localType} (${category})`;
   }
 
   get category() {
@@ -76,6 +78,10 @@ export class Software
 
   get hasMeshAttacks() {
     return this.epData.meshAttacks > 0;
+  }
+
+  get skills() {
+    return this.epData.skills
   }
 
   @LazyGetter()

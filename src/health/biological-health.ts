@@ -21,21 +21,22 @@ import {
 import { HealthMixin } from './health-mixin';
 import type { HealsOverTime } from './recovery';
 
-export type BiologicalHealthData = BasicHealthData & HealsOverTime &  {
-  /**
-   * @minimum 1
-   */
-  baseDurability: number;
-  bleedingOut: boolean;
-  dots: StringID<{
-    formula: string;
-    armorPiercing: boolean;
-    armorRemoving: boolean;
-    armorUsed: ArmorType[];
-    duration: number;
-    elapsed: number;
-  }>[];
-};
+export type BiologicalHealthData = BasicHealthData &
+  HealsOverTime & {
+    /**
+     * @minimum 1
+     */
+    baseDurability: number;
+    bleedingOut: boolean;
+    dots: StringID<{
+      formula: string;
+      armorPiercing: boolean;
+      armorRemoving: boolean;
+      armorUsed: ArmorType[];
+      duration: number;
+      elapsed: number;
+    }>[];
+  };
 
 type Init = HealthInit<BiologicalHealthData> & {
   isSwarm: boolean;

@@ -13,7 +13,11 @@ import {
   renderTextareaField,
   renderTextField,
 } from '@src/components/field/fields';
-import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
+import {
+  renderAutoForm,
+  renderSubmitForm,
+  renderUpdaterForm,
+} from '@src/components/form/forms';
 import {
   AptitudeType,
   AttackTrait,
@@ -33,7 +37,7 @@ import { pairList } from '@src/features/check-list';
 import type { AptitudeCheckInfoUpdateEvent } from '@src/features/components/aptitude-check-info-editor/aptitude-check-info-update-event';
 import type { EffectCreatedEvent } from '@src/features/components/effect-creator/effect-created-event';
 import { EffectType } from '@src/features/effects';
-import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
+import { addUpdateRemoveFeature, idProp } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
 import { capitalize } from '@src/foundry/misc-helpers';
 import { formatDamageType, HealthType } from '@src/health/health';
@@ -47,6 +51,7 @@ import {
   PropertyValues,
 } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
+import { repeat } from 'lit-html/directives/repeat';
 import { compact, createPipe, difference, map, mapToObj, objOf } from 'remeda';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
@@ -71,6 +76,10 @@ export class SoftwareForm extends ItemFormBase {
     addUpdateRemoveFeature(() => this.item.updater.prop('data', group).commit),
   ]);
 
+  private readonly skillOps = addUpdateRemoveFeature(
+    () => this.item.updater.prop('data', 'skills').commit,
+  );
+
   update(changedProps: PropertyValues) {
     if (!this.item.hasActivation) this.effectGroup = 'passive';
     super.update(changedProps);
@@ -87,6 +96,7 @@ export class SoftwareForm extends ItemFormBase {
       effectGroups,
       hasActivation,
       hasMeshAttacks,
+      skills,
     } = this.item;
     const { disabled } = this;
     return html`
@@ -179,6 +189,59 @@ export class SoftwareForm extends ItemFormBase {
                 : '',
             )}
           </section>
+
+          <section>
+            <sl-header
+              heading=${localize('skills')}
+              ?hideBorder=${skills.length === 0}
+            >
+            </sl-header>
+            <mwc-icon-button
+              icon="add"
+              slot="action"
+              @click=${this.setDrawerFromEvent(this.renderSkillCreator)}
+              ?disabled=${disabled}
+            ></mwc-icon-button>
+            <sl-animated-list class="skills">
+              ${repeat(
+                skills,
+                idProp,
+                (skill, index) => html`
+                  <li ?data-comma=${index < skills.length - 1}>
+                    <sl-popover
+                      .renderOnDemand=${() => html`
+                        <sl-popover-section
+                          heading="${localize('edit')} ${localize('skill')}"
+                        >
+                          <delete-button
+                            slot="action"
+                            @delete=${this.skillOps.removeCallback(skill.id)}
+                          ></delete-button>
+                          ${renderSubmitForm({
+                            props: skill,
+                            update: this.skillOps.update,
+                            fields: ({ name, specialization, total }) => [
+                              renderTextField(name, { required: true }),
+                              renderTextField(specialization),
+                              renderNumberField(total, { min: 1, max: 99 }),
+                            ],
+                          })}
+                        </sl-popover-section>
+                      `}
+                    >
+                      <button slot="base" ?disabled=${disabled}>
+                        <span class="skill-name"
+                          >${skill.name}${skill.specialization
+                            ? ` (${skill.specialization})`
+                            : ''}:</span
+                        ><span class="skill-total">${skill.total}</span>
+                      </button>
+                    </sl-popover>
+                  </li>
+                `,
+              )}
+            </sl-animated-list>
+          </section>
         </div>
 
         <editor-wrapper
@@ -188,6 +251,25 @@ export class SoftwareForm extends ItemFormBase {
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
+    `;
+  }
+
+  private renderSkillCreator() {
+    return html`
+      <h3>${localize('add')} ${localize('skill')}</h3>
+      ${renderSubmitForm({
+        props: {
+          name: '',
+          specialization: '',
+          total: 1,
+        },
+        update: this.skillOps.add,
+        fields: ({ name, specialization, total }) => [
+          renderTextField(name, { required: true }),
+          renderTextField(specialization),
+          renderNumberField(total, { min: 1, max: 99 }),
+        ],
+      })}
     `;
   }
 

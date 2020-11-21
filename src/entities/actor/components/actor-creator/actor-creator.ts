@@ -155,7 +155,6 @@ export class ActorCreator extends LitElement {
           renderLabeledCheckbox(actorLink),
         ],
       })}
-
     `;
   }
 }

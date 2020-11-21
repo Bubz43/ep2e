@@ -5,7 +5,11 @@ import {
   SourcedEffect,
 } from '@src/features/effects';
 import { createFeature } from '@src/features/feature-helpers';
-import { prettyMilliseconds, currentWorldTimeMS, Timestamp } from '@src/features/time';
+import {
+  prettyMilliseconds,
+  currentWorldTimeMS,
+  Timestamp,
+} from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { averageRoll } from '@src/foundry/rolls';
 

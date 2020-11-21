@@ -1,15 +1,13 @@
 import {
   AptitudeType,
-  enumValues, PoolEffectUsability, PoolType,
-
-  RechargeType
+  enumValues,
+  PoolEffectUsability,
+  PoolType,
+  RechargeType,
 } from '@src/data-enums';
 import { localize } from '@src/foundry/localization';
 import { healthLabels, HealthStat, HealthType } from '@src/health/health';
-import {
-  DotOrHotTarget,
-  formatAutoHealing
-} from '@src/health/recovery';
+import { DotOrHotTarget, formatAutoHealing } from '@src/health/recovery';
 import { withSign } from '@src/utility/helpers';
 import { anyPass, clamp, compact, createPipe, map, purry } from 'remeda';
 import type { Action, ActionSubtype } from './actions';
@@ -18,10 +16,11 @@ import { createFeature } from './feature-helpers';
 import { Movement, MovementRate } from './movement';
 import type { RepBase } from './reputations';
 import {
-  fieldSkillName, FieldSkillType,
-
+  fieldSkillName,
+  FieldSkillType,
   isFieldSkill,
-  Skill, SkillType
+  Skill,
+  SkillType,
 } from './skills';
 import { formatEffectTags, SpecialTest, Tag, TagType } from './tags';
 import { CommonInterval, prettyMilliseconds } from './time';

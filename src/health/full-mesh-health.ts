@@ -16,16 +16,16 @@ import {
 import { HealthMixin } from './health-mixin';
 import type { HealsOverTime } from './recovery';
 
-export type MeshHealthData = BasicHealthData & HealsOverTime & {
-  /**
-   * @minimum 1
-   */
-  baseDurability: number;
-  crash: Omit<BasicHealthData, "log"> & {
-    turnsTillReboot: number
-  }
-};
-
+export type MeshHealthData = BasicHealthData &
+  HealsOverTime & {
+    /**
+     * @minimum 1
+     */
+    baseDurability: number;
+    crash: Omit<BasicHealthData, 'log'> & {
+      turnsTillReboot: number;
+    };
+  };
 
 type Init = HealthInit<MeshHealthData> & {
   homeDevices: number;

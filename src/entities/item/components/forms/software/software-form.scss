@@ -19,3 +19,20 @@ p.label {
   @include listLabel();
   margin-bottom: 0.25rem;
 }
+
+.skills {
+  display: flex;
+  flex-flow: row wrap;
+  padding: 0.25rem;
+  li {
+    list-style: none;
+    @include dataComma();
+    .skill-name {
+      @include truncate(250px);
+      display: inline-block;
+    }
+    button {
+      @include textButton
+    }
+  }
+}

@@ -195,7 +195,7 @@ export abstract class DefaultEgos {
       ...createDefaultItem.enhancedBehavior(localize('obedient'), 3),
       _id: otherTraitId,
     });
-    ego.name = localize("deviceALI")
+    ego.name = localize('deviceALI');
 
     ego.data.egoType = localize(EgoType.ALI);
     return ego;
@@ -302,7 +302,7 @@ type ItemCreatorParams = Parameters<typeof createItemEntity>;
 
 export const setupItemOperations = (
   update: (cb: (items: ItemDatas[]) => ItemDatas[]) => Promise<unknown>,
-  before?: Partial<Record<"update" | "remove", (ids: string[]) => void>>
+  before?: Partial<Record<'update' | 'remove', (ids: string[]) => void>>,
 ): ItemOperations => ({
   add: async (...partials) => {
     const completeItems = (partials as ItemCreatorParams).map(createItemEntity);
@@ -319,13 +319,13 @@ export const setupItemOperations = (
       return changed;
     });
 
-    const newIds = ids.slice(-partials.length)
+    const newIds = ids.slice(-partials.length);
     return newIds;
   },
   update: async (...changedDatas) => {
     const idMap = new Map(changedDatas.map((change) => [change._id, change]));
-    const ids =[...idMap.keys()] 
-    before?.update?.(ids)
+    const ids = [...idMap.keys()];
+    before?.update?.(ids);
     await update(
       map((item) => {
         const changed = idMap.get(item._id);
@@ -337,7 +337,7 @@ export const setupItemOperations = (
     return ids;
   },
   remove: async (...ids) => {
-    before?.remove?.(ids)
+    before?.remove?.(ids);
     await update(reject(({ _id }) => ids.includes(_id)));
     return ids;
   },

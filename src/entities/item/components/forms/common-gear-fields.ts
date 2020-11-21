@@ -59,10 +59,9 @@ export const complexityForm = {
   cssClass: 'complexity',
 } as const;
 
-export const renderGearTraitCheckboxes: FieldPropsRenderer<Record<
-  GearTrait,
-  boolean
->> = (gearTraits) => {
+export const renderGearTraitCheckboxes: FieldPropsRenderer<
+  Record<GearTrait, boolean>
+> = (gearTraits) => {
   const checkboxes: TemplateResult[] = [];
   for (const trait of enumValues(GearTrait)) {
     checkboxes.push(renderLabeledCheckbox(gearTraits[trait]));
@@ -70,10 +69,9 @@ export const renderGearTraitCheckboxes: FieldPropsRenderer<Record<
   return checkboxes;
 };
 
-export const renderWeaponTraitCheckboxes: FieldPropsRenderer<Record<
-  RangedWeaponTrait,
-  boolean
->> = (traits) => {
+export const renderWeaponTraitCheckboxes: FieldPropsRenderer<
+  Record<RangedWeaponTrait, boolean>
+> = (traits) => {
   const checkboxes: TemplateResult[] = [];
   for (const trait of enumValues(RangedWeaponTrait)) {
     checkboxes.push(renderLabeledCheckbox(traits[trait]));

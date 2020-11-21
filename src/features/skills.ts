@@ -190,14 +190,16 @@ export enum CommonPilotField {
   Space = 'space',
 }
 
-export const fieldSkillInfo: Readonly<Record<
-  FieldSkillType,
-  {
-    aptitudes: ReadonlyArray<AptitudeType>;
-    categories: ReadonlyArray<ActiveSkillCategory | KnowSkillCategory>;
-    sampleFields: ReadonlyArray<LangEntry>;
-  }
->> = {
+export const fieldSkillInfo: Readonly<
+  Record<
+    FieldSkillType,
+    {
+      aptitudes: ReadonlyArray<AptitudeType>;
+      categories: ReadonlyArray<ActiveSkillCategory | KnowSkillCategory>;
+      sampleFields: ReadonlyArray<LangEntry>;
+    }
+  >
+> = {
   [FieldSkillType.Exotic]: {
     get aptitudes() {
       return enumValues(AptitudeType);

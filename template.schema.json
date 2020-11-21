@@ -436,7 +436,7 @@
         },
         "dots": {
           "items": {
-            "$ref": "#/definitions/StringID%3Cstructure--812-965--802-966--802-968--794-969--713-971--679-971--643-972--0-2375%3E"
+            "$ref": "#/definitions/StringID%3Cstructure--825-992--815-993--815-995--805-996--715-1000--679-1000--643-1001--0-2404%3E"
           },
           "type": "array"
         },
@@ -6838,75 +6838,28 @@
                 },
                 "skills": {
                   "items": {
-                    "anyOf": [
-                      {
-                        "additionalProperties": false,
-                        "properties": {
-                          "category": {
-                            "anyOf": [
-                              {
-                                "$ref": "#/definitions/ActiveSkillCategory"
-                              },
-                              {
-                                "$ref": "#/definitions/KnowSkillCategory"
-                              }
-                            ]
-                          },
-                          "field": {
-                            "type": "string"
-                          },
-                          "fieldSkill": {
-                            "$ref": "#/definitions/FieldSkillType"
-                          },
-                          "id": {
-                            "type": "string"
-                          },
-                          "linkedAptitude": {
-                            "$ref": "#/definitions/AptitudeType"
-                          },
-                          "points": {
-                            "type": "number"
-                          },
-                          "specialization": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "category",
-                          "field",
-                          "fieldSkill",
-                          "id",
-                          "linkedAptitude",
-                          "points",
-                          "specialization"
-                        ],
-                        "type": "object"
+                    "additionalProperties": false,
+                    "properties": {
+                      "id": {
+                        "type": "string"
                       },
-                      {
-                        "additionalProperties": false,
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "points": {
-                            "type": "number"
-                          },
-                          "skillType": {
-                            "$ref": "#/definitions/SkillType"
-                          },
-                          "specialization": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "points",
-                          "skillType",
-                          "specialization"
-                        ],
-                        "type": "object"
+                      "name": {
+                        "type": "string"
+                      },
+                      "specialization": {
+                        "type": "string"
+                      },
+                      "total": {
+                        "type": "number"
                       }
-                    ]
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "specialization",
+                      "total"
+                    ],
+                    "type": "object"
                   },
                   "type": "array"
                 },
@@ -10079,7 +10032,7 @@
       ],
       "type": "object"
     },
-    "StringID<structure--787-940--777-941--777-943--769-944--713-946--678-946--643-947--0-2345>": {
+    "StringID<structure--798-965--788-966--788-968--778-969--714-973--678-973--643-974--0-2372>": {
       "additionalProperties": false,
       "properties": {
         "armorPiercing": {
@@ -10118,7 +10071,7 @@
       ],
       "type": "object"
     },
-    "StringID<structure--812-965--802-966--802-968--794-969--713-971--679-971--643-972--0-2375>": {
+    "StringID<structure--825-992--815-993--815-995--805-996--715-1000--679-1000--643-1001--0-2404>": {
       "additionalProperties": false,
       "properties": {
         "armorPiercing": {
@@ -10272,7 +10225,7 @@
         },
         "dots": {
           "items": {
-            "$ref": "#/definitions/StringID%3Cstructure--787-940--777-941--777-943--769-944--713-946--678-946--643-947--0-2345%3E"
+            "$ref": "#/definitions/StringID%3Cstructure--798-965--788-966--788-968--778-969--714-973--678-973--643-974--0-2372%3E"
           },
           "type": "array"
         },

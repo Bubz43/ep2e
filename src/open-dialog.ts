@@ -10,14 +10,14 @@ export const openDialog = (content: (dialog: Dialog) => void) => {
   let dialog = overlay.querySelector('mwc-dialog');
   if (!dialog) {
     dialog = new Dialog();
-    dialog.style.zIndex = '50'
-    dialog.slot = "foundry-apps";
+    dialog.style.zIndex = '50';
+    dialog.slot = 'foundry-apps';
     overlay.append(dialog);
     dialog.addEventListener('closed', () => {
       if (focusSource?.isConnected && focusSource instanceof HTMLElement) {
         focusSource.focus();
       }
-      dialog && render(nothing, dialog)
+      dialog && render(nothing, dialog);
     });
   }
   dialog.style.setProperty('--mdc-dialog-min-width', null);

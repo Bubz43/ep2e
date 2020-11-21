@@ -74,7 +74,6 @@ export class PhysicalTechForm extends ItemFormBase {
     this.effectsOps[`${this.effectGroup}Effects` as const].add({}, ev.effect);
   }
 
-
   render() {
     const {
       updater,
@@ -176,20 +175,22 @@ export class PhysicalTechForm extends ItemFormBase {
                         >
                       `
                     : ''}
-                  <sl-group label=${localize("skills")}><ul class="ali-skills">
-                    ${onboardALI.skills.map(
-                      (skill, index, list) => html`
-                        <li
-                          class="ali-skill"
-                          ?data-comma=${index < list.length - 1}
-                        >
-                          <span class="skill-info"
-                            >${skill.fullName} ${skill.total}</span
+                  <sl-group label=${localize('skills')}
+                    ><ul class="ali-skills">
+                      ${onboardALI.skills.map(
+                        (skill, index, list) => html`
+                          <li
+                            class="ali-skill"
+                            ?data-comma=${index < list.length - 1}
                           >
-                        </li>
-                      `,
-                    )}
-                  </ul></sl-group>
+                            <span class="skill-info"
+                              >${skill.fullName} ${skill.total}</span
+                            >
+                          </li>
+                        `,
+                      )}
+                    </ul></sl-group
+                  >
                 </section>
               `
             : ''}

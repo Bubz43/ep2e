@@ -1313,7 +1313,10 @@ type LangEntries =
   | 'process'
   | 'damageRepair'
   | 'woundRepair'
-  | 'firewallHealth' | "onboardALI" | "PassiveEffectsWhenActivated" | "deviceALI"
+  | 'firewallHealth'
+  | 'onboardALI'
+  | 'PassiveEffectsWhenActivated'
+  | 'deviceALI';
 type FullNames =
   | 'cog'
   | 'int'

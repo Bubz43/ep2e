@@ -1,15 +1,13 @@
 import {
-  renderFormulaField, renderTimeField
+  renderFormulaField,
+  renderTimeField,
 } from '@src/components/field/fields';
 import { renderUpdaterForm } from '@src/components/form/forms';
 import { enumValues } from '@src/data-enums';
 import type { UpdateStore } from '@src/entities/update-store';
 import { localize } from '@src/foundry/localization';
 import type { Health } from '@src/health/health-mixin';
-import {
-  DotOrHotTarget,
-  HealsOverTime
-} from '@src/health/recovery';
+import { DotOrHotTarget, HealsOverTime } from '@src/health/recovery';
 import { customElement, html, LitElement, property } from 'lit-element';
 import styles from './health-regen-settings-form.scss';
 

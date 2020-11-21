@@ -222,9 +222,9 @@ export enum SoftwareType {
 }
 
 export enum Activation {
-  None = "none",
-  Toggle = "toggle",
-  Use = "use"
+  None = 'none',
+  Toggle = 'toggle',
+  Use = 'use',
 }
 
 export enum GearTrait {

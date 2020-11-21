@@ -237,7 +237,7 @@ const effectFieldFunctions = {
 };
 
 export const effectFields = (effect: FieldProps<Effect>) => {
-  return (effectFieldFunctions[effect.type.value] as FieldPropsRenderer<
-    Effect
-  >)(effect);
+  return (effectFieldFunctions[
+    effect.type.value
+  ] as FieldPropsRenderer<Effect>)(effect);
 };

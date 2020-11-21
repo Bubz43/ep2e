@@ -616,10 +616,7 @@ type SoftwareData = {
   category: string;
   serviceDuration: number;
   meshHealth: AppMeshHealthData;
-  skills: StringID<
-    | (FieldSkillData & { fieldSkill: FieldSkillType })
-    | (SkillData & { skillType: SkillType })
-  >[];
+  skills: StringID<{ name: string; specialization: string; total: number }>[];
   activation: '' | Exclude<ActionType, ActionType.Task>;
   meshAttacks: 0 | 1 | 2;
   state: {

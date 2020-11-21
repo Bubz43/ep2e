@@ -183,12 +183,14 @@ export class BiologicalForm extends SleeveFormBase {
                     ></health-item
                   >
                   <health-item
-              clickable
-              ?disabled=${disabled}
-              .health=${nonDefaultBrain.firewallHealth}
-              @click=${this.setDrawerFromEvent(this.renderFirewallHealthEdit)}
-            >
-            </health-item>
+                    clickable
+                    ?disabled=${disabled}
+                    .health=${nonDefaultBrain.firewallHealth}
+                    @click=${this.setDrawerFromEvent(
+                      this.renderFirewallHealthEdit,
+                    )}
+                  >
+                  </health-item>
                 </section>
               `
             : ''}

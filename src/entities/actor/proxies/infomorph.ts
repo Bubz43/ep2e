@@ -51,7 +51,7 @@ export class Infomorph extends ActorProxyBase<ActorType.Infomorph> {
       updater: this.updater.prop('data', 'meshHealth').nestedStore(),
       source: localize('mindState'),
       homeDevices: 1, // TODO
-      deathRating: true
+      deathRating: true,
     });
   }
 

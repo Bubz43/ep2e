@@ -15,7 +15,6 @@ export type ItemProxyInit<T extends ItemType> = {
   alwaysDeletable?: boolean;
 };
 
-
 export abstract class ItemProxyBase<T extends ItemType> {
   readonly data;
   readonly updater: UpdateStore<ItemEntity<T>>;
@@ -48,7 +47,6 @@ export abstract class ItemProxyBase<T extends ItemType> {
     this.alwaysDeletable = alwaysDeletable;
     // this.actorIdentifiers = actorIdentifiers;
   }
-
 
   get textInfo(): string[] {
     return [];
@@ -122,9 +120,5 @@ export abstract class ItemProxyBase<T extends ItemType> {
     );
   }
 
-  onDelete() {
-    
-  }
-
-  
+  onDelete() {}
 }

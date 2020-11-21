@@ -1,6 +1,6 @@
 import {
   AppliedEffects,
-  ReadonlyAppliedEffects
+  ReadonlyAppliedEffects,
 } from '@src/entities/applied-effects';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
@@ -37,7 +37,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         updater,
         items,
         actor: this.actor,
-        itemOperations: setupItemOperations(updater.prop("items").commit),
+        itemOperations: setupItemOperations(updater.prop('items').commit),
       });
     }
 

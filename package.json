@@ -48,7 +48,7 @@
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-proposal-decorators": "^7.12.1",
     "@babel/plugin-transform-typescript": "^7.12.1",
-    "@babel/preset-typescript": "^7.12.1",
+    "@babel/preset-typescript": "^7.12.7",
     "@snowpack/plugin-babel": "^2.1.4",
     "@snowpack/plugin-dotenv": "^2.0.4",
     "@snowpack/plugin-optimize": "^0.2.9",
@@ -69,7 +69,7 @@
     "tinymce": "^5.6.0",
     "ts-json-schema-generator": "^0.78.0",
     "type-fest": "^0.19.0",
-    "typescript": "^4.2.0-dev.20201120",
+    "typescript": "^4.2.0-dev.20201121",
     "utility-types": "^3.10.0"
   }
 }

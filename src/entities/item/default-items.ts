@@ -1,14 +1,29 @@
-import { MorphCost, Complexity, TraitType, TraitSource, SoftwareType, AptitudeType } from "@src/data-enums";
-import { ActionSubtype } from "@src/features/actions";
-import { createEffect, Effect, DurationEffectTarget } from "@src/features/effects";
-import { uniqueStringID, stringID, StringID, addFeature } from "@src/features/feature-helpers";
-import { TagType, SpecialTest } from "@src/features/tags";
-import { localize } from "@src/foundry/localization";
-import { range, pipe } from "remeda";
-import { ActorType, ItemType } from "../entity-types";
-import { createActorEntity, createItemEntity } from "../models";
-import type { Trait } from "./proxies/trait";
-
+import {
+  MorphCost,
+  Complexity,
+  TraitType,
+  TraitSource,
+  SoftwareType,
+  AptitudeType,
+} from '@src/data-enums';
+import { ActionSubtype } from '@src/features/actions';
+import {
+  createEffect,
+  Effect,
+  DurationEffectTarget,
+} from '@src/features/effects';
+import {
+  uniqueStringID,
+  stringID,
+  StringID,
+  addFeature,
+} from '@src/features/feature-helpers';
+import { TagType, SpecialTest } from '@src/features/tags';
+import { localize } from '@src/foundry/localization';
+import { range, pipe } from 'remeda';
+import { ActorType, ItemType } from '../entity-types';
+import { createActorEntity, createItemEntity } from '../models';
+import type { Trait } from './proxies/trait';
 
 const defaultReference = (pageNumber: number) =>
   `Eclipse Phase Second Editon p. ${pageNumber}`;
@@ -18,11 +33,11 @@ const defaultReference = (pageNumber: number) =>
 export const createDefaultSleeve = () => {
   const uniqueIds = range(0, 3).reduce(
     (accum) => [...accum, uniqueStringID(accum)],
-    [] as string[]
+    [] as string[],
   );
   const sleeve = createActorEntity({
     type: ActorType.Infomorph,
-    name: localize("digimorph"),
+    name: localize('digimorph'),
     data: {
       description: `<p>Digimorphs are bare-bones mind emulations, though customizable and widely
       used. By default, an ego that evacuates (or is forked from) a cyberbrain is run
@@ -52,7 +67,7 @@ export const createDefaultSleeve = () => {
 const exoticMorphology = (level: 1 | 2 | 3) => {
   return createItemEntity({
     type: ItemType.Trait,
-    name: localize("exoticMorphology"),
+    name: localize('exoticMorphology'),
     data: {
       traitType: TraitType.Negative,
       source: TraitSource.Morph,
@@ -71,7 +86,7 @@ const exoticMorphology = (level: 1 | 2 | 3) => {
             id: stringID(),
             ...createEffect.successTest({
               modifier: -10 * lvl,
-              requirement: "not original morph type",
+              requirement: 'not original morph type',
               tags: [{ type: TagType.Special, test: SpecialTest.Integration }],
             }),
           },
@@ -87,7 +102,7 @@ const exoticMorphology = (level: 1 | 2 | 3) => {
 
 const enhancedBehavior = (subtype: string, level: number) => {
   const requirement = `Witheld from behavior/emotion`;
-  const levels: Trait["levels"] = [
+  const levels: Trait['levels'] = [
     {
       cost: 1,
       effects: pipe(
@@ -96,27 +111,27 @@ const enhancedBehavior = (subtype: string, level: number) => {
           createEffect.successTest({
             modifier: -10,
             requirement,
-          })
+          }),
         ),
         addFeature(
           createEffect.misc({
             description: `You are encouraged to pursue the behavior and associate
             it with positive feelings; emotions are boosted.`,
-          })
-        )
+          }),
+        ),
       ),
       id: stringID(),
     },
   ];
   return createItemEntity({
     type: ItemType.Trait,
-    name: localize("enhancedBehavior"),
+    name: localize('enhancedBehavior'),
     data: {
       traitType: TraitType.Negative,
       source: TraitSource.Ego,
       reference: defaultReference(78),
       subtype,
-      state: { level, triggered: false }, 
+      state: { level, triggered: false },
       levels: pipe(
         levels,
         addFeature({
@@ -127,14 +142,14 @@ const enhancedBehavior = (subtype: string, level: number) => {
               createEffect.successTest({
                 modifier: -20,
                 requirement,
-              })
+              }),
             ),
             addFeature(
               createEffect.misc({
                 description: `You are driven to engage in the specified behavior;
                 emotions are exaggerated. Holding back requires a WIL Check.`,
-              })
-            )
+              }),
+            ),
           ),
         }),
         addFeature({
@@ -145,17 +160,17 @@ const enhancedBehavior = (subtype: string, level: number) => {
               createEffect.successTest({
                 modifier: -20,
                 requirement,
-              })
+              }),
             ),
             addFeature(
               createEffect.misc({
                 description: `The behavior is enforced; emotions are compulsory
                 and ongoing. If restrained from the conduct or the emotion is
                 suppressed, suffer SV 1d6.`,
-              })
-            )
+              }),
+            ),
           ),
-        })
+        }),
       ),
       description: `<p>Your conduct or moods are modified. This may be due to conditioning and reprogramming via time-accelerated psychosurgery ▶294,
       drugs, genetic tweaks, psi, or other factors. This may have been a
@@ -167,7 +182,7 @@ const enhancedBehavior = (subtype: string, level: number) => {
 
 const realWorldNaivete = () => {
   return createItemEntity({
-    name: localize("realWorldNaivete"),
+    name: localize('realWorldNaivete'),
     type: ItemType.Trait,
     data: {
       traitType: TraitType.Negative,
@@ -204,7 +219,7 @@ const realWorldNaivete = () => {
 const digitalSpeed = () => {
   return createItemEntity({
     type: ItemType.Trait,
-    name: localize("digitalSpeed"),
+    name: localize('digitalSpeed'),
     data: {
       traitType: TraitType.Positive,
       source: TraitSource.Morph,
@@ -235,7 +250,7 @@ const digitalSpeed = () => {
 const mnemonicsWare = () => {
   return createItemEntity({
     type: ItemType.Software,
-    name: localize("mnemonics"),
+    name: localize('mnemonics'),
     data: {
       complexity: Complexity.Minor,
       restricted: false,
@@ -249,13 +264,18 @@ const mnemonicsWare = () => {
       ego when it resleeves, but the modifier applies only for memories
       that were recorded when mnemonics ware is present. Mnemonics
       systems are included in all cyberbrains.</p>`,
-      state: { equipped: true, activated: false, serviceElapsed: 0, paused: false },
+      state: {
+        equipped: true,
+        activated: false,
+        serviceElapsed: 0,
+        paused: false,
+      },
       effects: [
         {
           id: stringID(),
           ...createEffect.successTest({
             modifier: 20,
-            requirement: localize("memoryRelated"),
+            requirement: localize('memoryRelated'),
             tags: [
               {
                 type: TagType.AptitudeChecks,

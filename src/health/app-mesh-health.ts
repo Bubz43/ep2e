@@ -4,24 +4,21 @@ import { merge, pipe } from 'remeda';
 import type { MeshHealthData } from './full-mesh-health';
 import {
   applyHealthModification,
-
   BasicHealthData,
-
   CommonHealth,
   HealthInit,
   HealthMain,
   HealthModification,
   HealthType,
   HealthWounds,
-  initializeHealthData
+  initializeHealthData,
 } from './health';
 import { HealthMixin } from './health-mixin';
 import type { DotOrHotTarget } from './recovery';
 
+export type AppMeshHealthData = Omit<MeshHealthData, DotOrHotTarget>;
 
-export type AppMeshHealthData = Omit<MeshHealthData, DotOrHotTarget>
-
-type Init = HealthInit<AppMeshHealthData> 
+type Init = HealthInit<AppMeshHealthData>;
 
 class MeshHealthBase implements CommonHealth {
   readonly main: HealthMain;
@@ -40,7 +37,7 @@ class MeshHealthBase implements CommonHealth {
     this.main = {
       damage,
       durability,
-      deathRating
+      deathRating,
     };
     this.wound = wound;
   }
