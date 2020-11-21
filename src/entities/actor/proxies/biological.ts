@@ -14,10 +14,21 @@ import { format, localize } from '@src/foundry/localization';
 import { BiologicalHealth } from '@src/health/biological-health';
 import { HealthType } from '@src/health/health';
 import { LazyGetter } from 'lazy-get-decorator';
+import mix from 'mix-with/lib';
 import { flatMap, flatMapToObj } from 'remeda';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
+import { PhysicalSleeve, SleeveInfo } from './physical-sleeve-mixin';
 
-export class Biological extends ActorProxyBase<ActorType.Biological> {
+class BiologicalBase extends ActorProxyBase<ActorType.Biological> {
+  get subtype() {
+    return this.epData.subtype;
+  }
+}
+
+export class Biological extends mix(BiologicalBase).with(
+  SleeveInfo,
+  PhysicalSleeve,
+) {
   private _localEffects?: AppliedEffects;
   private _outsideEffects?: ReadonlyAppliedEffects;
   readonly sleeved;
@@ -35,10 +46,6 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
     this.sleeved = sleeved;
   }
 
-  get pools() {
-    return this.epData.pools;
-  }
-
   get activeEffects() {
     return this._outsideEffects ?? this.itemGroups.effects;
   }
@@ -46,6 +53,10 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
   get nonDefaultBrain() {
     const { brain } = this.epData;
     return brain ? this.availableBrains.get(brain) : null;
+  }
+
+  get sex() {
+    return this.epData.sex
   }
 
   @LazyGetter()
@@ -57,26 +68,6 @@ export class Biological extends ActorProxyBase<ActorType.Biological> {
       }
     }
     return things;
-  }
-
-  get subtype() {
-    return this.epData.subtype;
-  }
-
-  get isSwarm() {
-    return this.epData.isSwarm;
-  }
-
-  get movementRates() {
-    return this.epData.movementRates;
-  }
-
-  get reachBonus() {
-    return this.isSwarm ? 0 : this.epData.reach;
-  }
-
-  get prehensileLimbs() {
-    return this.epData.prehensileLimbs;
   }
 
   @LazyGetter()

@@ -1,4 +1,4 @@
-import { openWindow } from '@src/components/window/window-controls';
+import { openOrRenderWindow, openWindow } from '@src/components/window/window-controls';
 import { ResizeOption } from '@src/components/window/window-options';
 import { html } from 'lit-html';
 import { ItemType } from '../entity-types';
@@ -162,23 +162,12 @@ export const renderItemForm = (proxy: ItemProxy) => {
   }
 };
 
-export const openPsiFormWindow = ({
-  psi,
-  forceFocus,
-  adjacentEl,
-}: {
-  psi: Psi;
-  forceFocus?: boolean;
-  adjacentEl?: HTMLElement;
-}) => {
-  return openWindow(
-    {
-      key: psi.updater,
-      content: renderItemForm(psi),
-      name: psi.name,
-      forceFocus,
-      adjacentEl,
-    },
-    { resizable: ResizeOption.Vertical },
-  );
+export const openPsiFormWindow = (psi: Psi) => {
+  return openOrRenderWindow({
+    key: psi.updater,
+    content: renderItemForm(psi),
+    name: psi.name,
+    resizable: ResizeOption.Vertical
+  })
+
 };

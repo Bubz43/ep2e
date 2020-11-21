@@ -16,14 +16,16 @@ export type ActorProxyInit<T extends ActorType> = {
   items: Map<string, ItemProxy>;
   itemOperations: ItemOperations;
   actor: ActorEP;
+  openForm?: () => unknown;
 };
 
 export abstract class ActorProxyBase<T extends ActorType> {
-  protected data: ActorEntity<T>;
-  readonly updater: UpdateStore<ActorEntity<T>>;
-  readonly items: Map<string, ItemProxy>;
-  readonly itemOperations: ItemOperations;
-  readonly actor: ActorEP;
+  protected data;
+  readonly updater;
+  readonly items;
+  readonly itemOperations;
+  readonly actor;
+  readonly openForm;
 
   constructor({
     data,
@@ -31,19 +33,21 @@ export abstract class ActorProxyBase<T extends ActorType> {
     items,
     itemOperations,
     actor,
+    openForm,
   }: ActorProxyInit<T>) {
     this.data = data;
     this.updater = updater;
     this.items = items;
     this.itemOperations = itemOperations;
     this.actor = actor;
+    this.openForm = openForm;
   }
 
   get itemTrash() {
     return this.actor.itemTrash;
   }
 
-  protected get epData() {
+  get epData() {
     return this.data.data;
   }
 
@@ -104,33 +108,30 @@ export abstract class ActorProxyBase<T extends ActorType> {
     );
   }
 
-  protected addLinkedWindow(
+  protected addLinkedWindow<T extends object>(
     updater: UpdateStore<any>,
-    onViableUpdate: (actor: ActorEP) => boolean,
-    {
-      win,
-      wasConnected,
-    }: Pick<ReturnType<typeof openWindow>, 'win' | 'wasConnected'>,
+    findData: (actor: ActorEP) => T | null | undefined | false,
+    renderWindow: (
+      val: T,
+    ) => Pick<ReturnType<typeof openWindow>, 'win' | 'wasConnected'>,
   ) {
     const { actor } = this;
     actor.subscriptions.subscribe(updater, {
       onEntityUpdate: (actor) => {
-        if (onViableUpdate(actor) === false) {
-          actor.subscriptions.unsubscribe(updater);
-        }
+        const entity = findData(actor);
+        if (entity) {
+          const { win, wasConnected } = renderWindow(entity);
+          if (!wasConnected) {
+            win.addEventListener(
+              SlWindowEventName.Closed,
+              () => actor.subscriptions.unsubscribe(updater),
+              { once: true },
+            );
+          }
+        } else closeWindow(updater);
       },
       onSubEnd: () => closeWindow(updater),
     });
-    if (!wasConnected) {
-      win.addEventListener(
-        SlWindowEventName.Closed,
-        () => {
-          actor.subscriptions.unsubscribe(updater);
-          closeWindow(updater);
-        },
-        { once: true },
-      );
-    }
   }
 
   matchRegexp(regex: RegExp) {

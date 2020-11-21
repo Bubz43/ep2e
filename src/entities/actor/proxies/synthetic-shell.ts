@@ -16,8 +16,16 @@ import { SyntheticHealth } from '@src/health/synthetic-health';
 import { LazyGetter } from 'lazy-get-decorator';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 import { AppMeshHealth } from '@src/health/app-mesh-health';
+import mix from 'mix-with/lib';
+import { PhysicalSleeve, SleeveInfo } from './physical-sleeve-mixin';
 
-export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
+class SyntheticBase extends ActorProxyBase<ActorType.SyntheticShell> {
+  get subtype() {
+    return this.epData.subtype
+  }
+}
+
+export class SyntheticShell extends mix(SyntheticBase).with(SleeveInfo, PhysicalSleeve) {
   private _localEffects?: AppliedEffects;
   private _outsideEffects?: ReadonlyAppliedEffects;
   readonly sleeved;
@@ -34,14 +42,6 @@ export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
     if (activeEffects) this._outsideEffects = activeEffects;
 
     this.sleeved = sleeved;
-  }
-
-  get pools() {
-    return this.epData.pools;
-  }
-
-  get subtype() {
-    return this.epData.subtype;
   }
 
   get activeEffects() {
@@ -64,21 +64,6 @@ export class SyntheticShell extends ActorProxyBase<ActorType.SyntheticShell> {
     return things;
   }
 
-  get isSwarm() {
-    return this.epData.isSwarm;
-  }
-
-  get movementRates() {
-    return this.epData.movementRates;
-  }
-
-  get reachBonus() {
-    return this.isSwarm ? 0 : this.epData.reach;
-  }
-
-  get prehensileLimbs() {
-    return this.epData.prehensileLimbs;
-  }
 
   @LazyGetter()
   get physicalHealth() {

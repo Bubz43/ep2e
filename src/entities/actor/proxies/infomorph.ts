@@ -12,8 +12,16 @@ import { HealthType } from '@src/health/health';
 import { MeshHealth } from '@src/health/full-mesh-health';
 import { LazyGetter } from 'lazy-get-decorator';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
+import mix from 'mix-with/lib';
+import { SleeveInfo } from './physical-sleeve-mixin';
 
-export class Infomorph extends ActorProxyBase<ActorType.Infomorph> {
+class InfomorphBase extends ActorProxyBase<ActorType.Infomorph> {
+  get subtype() {
+    return localize(this.type)
+  }
+}
+
+export class Infomorph extends mix(InfomorphBase).with(SleeveInfo) {
   private _localEffects?: AppliedEffects;
   private _outsideEffects?: ReadonlyAppliedEffects;
   readonly sleeved;
@@ -29,14 +37,6 @@ export class Infomorph extends ActorProxyBase<ActorType.Infomorph> {
     super(init);
     if (activeEffects) this._outsideEffects = activeEffects;
     this.sleeved = sleeved;
-  }
-
-  get subtype() {
-    return localize(this.type);
-  }
-
-  get pools() {
-    return this.epData.pools;
   }
 
   get activeEffects() {

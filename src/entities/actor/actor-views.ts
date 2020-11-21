@@ -1,9 +1,9 @@
-import { localize } from '@src/foundry/localization';
+import { openOrRenderWindow } from '@src/components/window/window-controls';
+import { ResizeOption } from '@src/components/window/window-options';
 import { html } from 'lit-html';
 import { ActorType } from '../entity-types';
 import type { MaybeToken } from './actor';
 import type { Character } from './proxies/character';
-import { renderEgoForm } from '../components/render-ego-form';
 import type { Sleeve } from './sleeves';
 
 export const renderCharacterView = (proxy: Character, token: MaybeToken) => {
@@ -12,16 +12,22 @@ export const renderCharacterView = (proxy: Character, token: MaybeToken) => {
   `;
 };
 
-export const renderSleeveForm = (proxy: Sleeve, token: MaybeToken) => {
-  return renderSpecificSleeveForm(proxy, token);
+
+
+export const openSleeveForm = (sleeve: Sleeve) => {
+  return openOrRenderWindow({
+    key: sleeve.updater,
+    content: renderSleeveForm(sleeve),
+    name: sleeve.name,
+    resizable: ResizeOption.Vertical,
+  });
 };
 
-const renderSpecificSleeveForm = (proxy: Sleeve, token: MaybeToken) => {
+export const renderSleeveForm = (proxy: Sleeve) => {
   switch (proxy.type) {
     case ActorType.Infomorph:
       return html`<infomorph-form
           .sleeve=${proxy}
-          .token=${token}
         ></infomorph-form>
         <entity-form-footer
           slot="footer"
@@ -30,7 +36,6 @@ const renderSpecificSleeveForm = (proxy: Sleeve, token: MaybeToken) => {
     case ActorType.Biological:
       return html`<biological-form
           .sleeve=${proxy}
-          .token=${token}
         ></biological-form>
         <entity-form-footer
           slot="footer"
@@ -38,7 +43,7 @@ const renderSpecificSleeveForm = (proxy: Sleeve, token: MaybeToken) => {
         ></entity-form-footer> `;
     case ActorType.SyntheticShell:
       return html`
-        <synthetic-form .sleeve=${proxy} .token=${token}></synthetic-form>
+        <synthetic-form .sleeve=${proxy}></synthetic-form>
         <entity-form-footer
           slot="footer"
           .updater=${proxy.updater.prop('data').nestedStore()}

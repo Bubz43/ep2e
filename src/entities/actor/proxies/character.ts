@@ -13,18 +13,21 @@ import type { ItemProxy } from '@src/entities/item/item';
 import { openPsiFormWindow } from '@src/entities/item/item-views';
 import { Psi } from '@src/entities/item/proxies/psi';
 import type { Sleight } from '@src/entities/item/proxies/sleight';
-import { ActorEntity, setupItemOperations } from '@src/entities/models';
+import type { ActorEntity, SleeveType } from '@src/entities/models';
 import type { UpdateStore } from '@src/entities/update-store';
-import { totalModifiers, EffectType } from '@src/features/effects';
+import { EffectType, totalModifiers } from '@src/features/effects';
 import { EP } from '@src/foundry/system';
-import { lastEventPosition } from '@src/init';
-import { pipe } from 'remeda';
+import { openSleeveForm } from '../actor-views';
 import { Ego, FullEgoData } from '../ego';
+import type { Sleeve } from '../sleeves';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
+import { Biological } from './biological';
+import { Infomorph } from './infomorph';
 import { SyntheticShell } from './synthetic-shell';
 
 export class Character extends ActorProxyBase<ActorType.Character> {
   readonly ego;
+  readonly sleeve?: Sleeve | null;
 
   private _appliedEffects = new AppliedEffects();
   readonly sleights: Sleight[] = [];
@@ -40,6 +43,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     this.vehicle = vehicle && this.setupVehicle(vehicle);
 
     this.ego = this.setupEgo(egoItems);
+    this.sleeve = this.setupSleeve(sleeveItems);
 
     this.setupItems(sleeveItems, egoItems);
 
@@ -87,18 +91,48 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     });
   }
 
+  private setupSleeve(sleeveItems: Map<string, ItemProxy>) {
+    const { biological, syntheticShell, infomorph } = this.epFlags ?? {};
+    return biological
+      ? new Biological(this.sleeveInit(biological, sleeveItems))
+      : syntheticShell
+      ? new SyntheticShell(this.sleeveInit(syntheticShell, sleeveItems))
+      : infomorph
+      ? new Infomorph(this.sleeveInit(infomorph, sleeveItems))
+      : null;
+  }
+
   private setupVehicle(data: ActorEntity<ActorType.SyntheticShell>) {
     const updater = this.updater
       .prop('flags', EP.Name, 'vehicle')
       .nestedStore();
     const items = new Map<string, ItemProxy>();
     return new SyntheticShell({
-      data,
-      updater,
       items,
+      data,
+      activeEffects: this.appliedEffects,
+      itemOperations: this.itemOperations,
+      sleeved: true,
       actor: this.actor,
-      itemOperations: setupItemOperations(updater.prop('items').commit),
+      openForm: this.openSleeveForm.bind(this),
+      updater,
     });
+  }
+
+  private sleeveInit<T extends SleeveType>(
+    data: ActorEntity<T>,
+    items: Map<string, ItemProxy>,
+  ) {
+    return {
+      items,
+      data,
+      activeEffects: this.appliedEffects,
+      itemOperations: this.itemOperations,
+      sleeved: true,
+      actor: this.actor,
+      updater: this.updater.prop('flags', EP.Name, data.type).nestedStore(),
+      openForm: this.openSleeveForm.bind(this),
+    };
   }
 
   private setupItems(
@@ -145,24 +179,24 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     // TODO
   }
 
+  openSleeveForm() {
+    const { sleeve } = this;
+    if (!sleeve) return;
+    this.addLinkedWindow(
+      sleeve.updater,
+      ({ agent }) => agent.type === ActorType.Character && agent.sleeve,
+      openSleeveForm,
+    );
+  }
+
   openPsiForm() {
     const { psi } = this;
     if (!psi) return;
     const { updater } = psi;
     this.addLinkedWindow(
       updater,
-      (actor) => {
-        return actor.agent.type === ActorType.Character && actor.agent.psi
-          ? openPsiFormWindow({ psi: actor.agent.psi }) && true
-          : false;
-      },
-      openPsiFormWindow({
-        psi,
-        forceFocus: true,
-        adjacentEl: pipe(lastEventPosition?.composedPath()[0], (el) =>
-          el instanceof HTMLElement ? el : undefined,
-        ),
-      }),
+      ({ agent }) => agent.type === ActorType.Character && agent.psi,
+      openPsiFormWindow,
     );
   }
 }
