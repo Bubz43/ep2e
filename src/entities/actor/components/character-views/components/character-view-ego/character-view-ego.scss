@@ -50,9 +50,6 @@ header {
 
 
 
-.initiative {
-  margin-left: 0.75ch;
-}
 
 
 .aptitude {
@@ -85,7 +82,6 @@ header {
   @include inputReset();
   input {
     border: none;
-    margin-left: 0.5ch;
   }
 }
 

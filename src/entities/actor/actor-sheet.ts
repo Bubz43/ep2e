@@ -52,7 +52,7 @@ export class ActorEPSheet implements EntitySheet {
     const { agent } = this.actor;
     return agent.type === ActorType.Character
       ? renderCharacterView(agent, this._token)
-      : renderSleeveForm(agent, this._token);
+      : renderSleeveForm(agent);
   }
 
   bringToTop() {

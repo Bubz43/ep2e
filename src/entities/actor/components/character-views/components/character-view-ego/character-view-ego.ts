@@ -4,21 +4,22 @@ import { AptitudeType, enumValues } from '@src/data-enums';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
 import {
-  FullSkill,
-  isFieldSkill,
   Skill,
-  skillFilterCheck,
+  skillFilterCheck
 } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
-import { listOrEmptyString, notEmpty, safeMerge } from '@src/utility/helpers';
+import { notEmpty, safeMerge } from '@src/utility/helpers';
 import {
   customElement,
-  LitElement,
-  property,
+
+
   html,
-  internalProperty,
-  queryAll,
-  PropertyValues,
+  internalProperty, LitElement,
+  property,
+
+
+
+  PropertyValues, queryAll
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { live } from 'lit-html/directives/live';
@@ -104,7 +105,7 @@ export class CharacterViewEgo extends LitElement {
               <health-item
                 class="mental-health-view"
                 .health=${this.ego.mentalHealth}
-              ></health-item>
+              ><span slot="source">${localize("mentalHealth")}</span></health-item>
             `
           : ''}
       </sl-section>

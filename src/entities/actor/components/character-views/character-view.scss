@@ -10,23 +10,27 @@
 
 :host {
   display: grid;
-  grid-template-areas: 
-  "header header"
-  "side tab-bar"
-  "side content";
-  grid-template-columns: 400px 1fr;  
-  gap: 0.5rem;
+  grid-template-areas:
+    'header header'
+    'side tab-bar'
+    'side content';
+  grid-template-columns: 400px 1fr;
+  column-gap: 0.5rem;
   min-width: 100%;
   width: 800px;
   min-height: 500px;
   height: max-content;
-  background: hsla(260, 97%, 2%, 0.55);
-  background: linear-gradient(to bottom, alphav(var(--color-bg-alt), 0.5), alphav(var(--color-bg), 0.5));
+  background: linear-gradient(
+    45deg,
+    alphav(var(--color-bg-alt), 0.75),
+    alphav(var(--color-bg), 0.75)
+  );
   grid-template-rows: repeat(2, min-content) 1fr;
 }
 
 character-view-header {
   grid-area: header;
+  z-index: 1;
 }
 
 .side {
@@ -37,6 +41,17 @@ character-view-header {
   overflow-x: hidden;
   max-height: calc(100vh - 150px);
   min-height: 100%;
+
+  character-view-ego {
+    padding: 0.5rem 0;
+  }
+
+  .sleeve-select {
+    padding: 0.5rem;
+    display: grid;
+    place-items: center;
+    border-top: 1px solid var(--color-border);
+  }
 }
 
 .tabbed-content {
@@ -57,7 +72,6 @@ character-view-header {
   }
 }
 
-
 mwc-tab-bar {
   grid-area: tab-bar;
   max-width: 400px;
@@ -65,13 +79,12 @@ mwc-tab-bar {
   place-self: center;
   --mdc-theme-primary: var(--color-primary-alt);
   --mdc-tab-height: calc(50px - 0.5rem);
-  margin-top: -0.5rem;
 }
 
 .drawer {
   grid-area: side;
   display: none;
-  grid-template-areas: "content";
+  grid-template-areas: 'content';
   grid-template-rows: 1fr;
   > * {
     grid-area: content;

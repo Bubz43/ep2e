@@ -1,0 +1,31 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  
+}
+
+ul {
+  margin: 0;
+  padding-left: 1.7rem;
+
+}
+
+h3 {
+  margin-left: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25rem;
+}
+
+.effect-effects {
+  color: var(--color-text-lighter);
+}
+
+.summary-value {
+  color: var(--color-text-lighter);
+}

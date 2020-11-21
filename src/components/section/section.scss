@@ -16,6 +16,7 @@ header {
   display: flex;
   max-height: 24px;
   align-items: center;
+  padding: 0 0.5ch;
 }
 
 :host([flipped]) {
@@ -24,6 +25,7 @@ header {
   }
   h2 {
     text-align: left;
+
   }
 }
 

@@ -7,6 +7,10 @@ import { localize } from '@src/foundry/localization';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { range } from 'remeda';
+import {
+  CharacterDrawerRenderer,
+  CharacterDrawerRenderEvent,
+} from '../../character-drawer-render-event';
 import styles from './character-view-header.scss';
 
 @customElement('character-view-header')
@@ -27,6 +31,13 @@ export class CharacterViewHeader extends LitElement {
   })
   token?: MaybeToken;
 
+  private requestDrawerRender(ev: Event) {
+    const { renderer } = (ev.currentTarget as HTMLElement).dataset;
+    this.dispatchEvent(
+      new CharacterDrawerRenderEvent(renderer as CharacterDrawerRenderer),
+    );
+  }
+
   render() {
     const img = this.token?.data.img || this.character.img;
     const name = this.token?.data.name || this.character.name;
@@ -37,6 +48,7 @@ export class CharacterViewHeader extends LitElement {
         <mwc-button
           class="effects-toggle"
           dense
+          data-renderer=${CharacterDrawerRenderer.Effects}
           label="${localize('effects')}: ${this.character.appliedEffects.total}"
         ></mwc-button>
 

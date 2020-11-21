@@ -58,6 +58,7 @@ export class CharacterView extends CharacterViewBase {
 
   render() {
     const showPsi = !!(this.character.psi || notEmpty(this.character.sleights));
+    // TODO Disable controls if token is not on scene
     return html`
       <character-view-header
         .character=${this.character}
@@ -69,6 +70,23 @@ export class CharacterView extends CharacterViewBase {
           .character=${this.character}
           .ego=${this.character.ego}
         ></character-view-ego>
+        ${this.character.sleeve
+          ? html`
+              <character-view-sleeve
+                .character=${this.character}
+                .sleeve=${this.character.sleeve}
+              ></character-view-sleeve>
+            `
+          : html`
+              <div class="sleeve-select">
+                <mwc-button
+                  raised
+                  ?disabled=${this.character.disabled}
+                  label="${localize("select")} ${localize("sleeve")}"
+                  @click=${() => this.toggleDrawerContent(this.renderResleeve)}
+                ></mwc-button>
+              </div>
+            `}
       </div>
       ${this.renderDrawer()}
 

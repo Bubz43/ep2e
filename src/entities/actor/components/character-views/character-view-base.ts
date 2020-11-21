@@ -1,6 +1,6 @@
 import { throttle } from '@src/utility/decorators';
 import { internalProperty, LitElement, property, query } from 'lit-element';
-import type { TemplateResult } from 'lit-html';
+import { html, TemplateResult } from 'lit-html';
 import { traverseActiveElements } from 'weightless';
 import type { MaybeToken } from '../../actor';
 import type { Character } from '../../proxies/character';
@@ -26,17 +26,22 @@ export abstract class CharacterViewBase extends LitElement {
     super.disconnectedCallback();
   }
 
+  firstUpdated() {
+    this.addEventListener("character-drawer-render", ({ renderer }) => {
+      this.toggleDrawerContent(this[`render${renderer}` as const])
+    })
+  }
+
   protected renderDrawerContent() {
     return this.drawerContentRenderer?.call(this) ?? '';
   }
 
   @throttle(400, true)
   protected toggleDrawerContent(fn: () => TemplateResult) {
-    if (this.drawerContentRenderer === fn) {
-      this.closeDrawer();
-      if (this.drawerOpener?.isConnected) this.drawerOpener.focus();
-    } else {
+    if (this.drawerContentRenderer === fn) this.closeDrawer();
+    else {
       const active = traverseActiveElements();
+      console.log(active);
       if (active instanceof HTMLElement) this.drawerOpener = active;
       this.drawerContentRenderer = fn;
     }
@@ -50,15 +55,26 @@ export abstract class CharacterViewBase extends LitElement {
         () => {
           this.drawerContentRenderer = null;
           this.drawer.classList.remove('closing');
+          if (this.drawerOpener?.isConnected) this.drawerOpener.focus();
         },
         { once: true },
       );
-    } else {
-      this.drawerContentRenderer = null;
-    }
+    } else this.drawerContentRenderer = null;
   }
 
   get drawerIsOpen() {
     return !!this.drawerContentRenderer;
+  }
+
+  renderResleeve() {
+    return html``;
+  }
+
+  renderEffects() {
+    return html`
+      <effects-viewer
+        .effects=${this.character.appliedEffects}
+      ></effects-viewer>
+    `;
   }
 }
