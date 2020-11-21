@@ -1,0 +1,36 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: flex;
+  flex-flow: column;
+  
+}
+
+li[divider] {
+  border-color: var(--color-border);
+}
+
+h2 {
+  @include boldHeading();
+}
+
+.item {
+  height: 30px;
+}
+
+.item-type {
+  color: var(--color-text-lighter);
+}
+
+.controls {
+  margin-top: auto;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}

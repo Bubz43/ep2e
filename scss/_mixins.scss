@@ -29,6 +29,12 @@
   }
 }
 
+@mixin boldHeading() {
+    margin-left: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.25rem;
+}
+
 @mixin inputReset() {
   input[type="number"] {
     -moz-appearance: textfield !important;

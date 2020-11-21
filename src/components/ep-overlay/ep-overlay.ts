@@ -102,9 +102,9 @@ export class EPOverlay extends LitElement {
     let mainCharacter: MainCharacter | null = null;
     for (const token of controlled) {
       const { actor } = token;
-      if (!mainCharacter && actor?.agent?.type === ActorType.Character) {
+      if (!mainCharacter && actor?.proxy?.type === ActorType.Character) {
         mainCharacter = {
-          character: actor.agent,
+          character: actor.proxy,
           token,
         };
       } else {
@@ -113,9 +113,9 @@ export class EPOverlay extends LitElement {
     }
     if (!mainCharacter) {
       const { character } = game.user;
-      if (character?.agent.type === ActorType.Character) {
+      if (character?.proxy.type === ActorType.Character) {
         mainCharacter = {
-          character: character.agent,
+          character: character.proxy,
           token: first(character.getActiveTokens(true)),
         };
       }

@@ -50,7 +50,7 @@ PlayerConfig.prototype.getData = function () {
   return {
     ...original,
     actors: original.actors.filter(
-      (actor) => actor.agent.type === ActorType.Character,
+      (actor) => actor.proxy.type === ActorType.Character,
     ),
   };
 };

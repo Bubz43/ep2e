@@ -43,8 +43,8 @@ export const onCombatUpdate = async () => {
         toDelete.push(combatant._id);
         continue;
       }
-      if (combatant.actor?.agent.type === ActorType.Character) {
-        characters.add(combatant.actor.agent);
+      if (combatant.actor?.proxy.type === ActorType.Character) {
+        characters.add(combatant.actor.proxy);
       }
 
       if (tookInitiative) tookInit.push(combatant);
@@ -108,13 +108,13 @@ export const onCombatTrackerRender = (_: CombatTracker, [el]: JQuery) => {
       const combatentEl = el.closest<HTMLElement>('.combatant')!;
       const { combatantId } = combatentEl.dataset;
       const combatant = combatantId ? CombatantHelpers.get(combatantId) : null;
-      if (combatant?.actor?.agent.type === ActorType.Character) {
+      if (combatant?.actor?.proxy.type === ActorType.Character) {
         render(
           html`
             <initiative-controls
               .combat=${combat}
               .combatant=${combatant}
-              .character=${combatant.actor.agent}
+              .character=${combatant.actor.proxy}
               .innerHTML=${el.innerHTML}
               ?disabled=${!combatant.owner}
             ></initiative-controls>

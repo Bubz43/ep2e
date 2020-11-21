@@ -1316,7 +1316,7 @@ type LangEntries =
   | 'firewallHealth'
   | 'onboardALI'
   | 'PassiveEffectsWhenActivated'
-  | 'deviceALI';
+  | 'deviceALI' | "selected" | "keep"
 type FullNames =
   | 'cog'
   | 'int'

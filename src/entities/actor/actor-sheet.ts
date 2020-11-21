@@ -49,7 +49,7 @@ export class ActorEPSheet implements EntitySheet {
   }
 
   get content() {
-    const { agent } = this.actor;
+    const { proxy: agent } = this.actor;
     return agent.type === ActorType.Character
       ? renderCharacterView(agent, this._token)
       : renderSleeveForm(agent);

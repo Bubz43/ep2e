@@ -66,7 +66,9 @@ export abstract class CharacterViewBase extends LitElement {
   }
 
   renderResleeve() {
-    return html``;
+    return html`
+    <character-view-resleeve .character=${this.character}></character-view-resleeve>
+    `;
   }
 
   renderEffects() {

@@ -128,8 +128,8 @@ export const advanceWorldTime = async (
 ) => {
   game.time.advance(Math.round(milliseconds / 1000));
   for (const actor of actors) {
-    if (actor.agent.type === ActorType.Character) {
-      await actor.agent.storeTimeAdvance(milliseconds);
+    if (actor.proxy.type === ActorType.Character) {
+      await actor.proxy.storeTimeAdvance(milliseconds);
     }
   }
   updateManyActors([...actors]);

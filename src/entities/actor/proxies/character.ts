@@ -19,7 +19,7 @@ import { EffectType, totalModifiers } from '@src/features/effects';
 import { EP } from '@src/foundry/system';
 import { openSleeveForm } from '../actor-views';
 import { Ego, FullEgoData } from '../ego';
-import type { Sleeve } from '../sleeves';
+import { isSleeveItem, Sleeve } from '../sleeves';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 import { Biological } from './biological';
 import { Infomorph } from './infomorph';
@@ -139,7 +139,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     sleeveItems: Map<string, ItemProxy>,
     egoItems: Map<string, ItemProxy>,
   ) {
-    for (const proxy of this.items.values()) {
+    for (const proxy of this.items.values()) {      
       switch (proxy.type) {
         case ItemType.Sleight: {
           egoItems.set(proxy.id, proxy);
@@ -154,6 +154,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         }
 
         default:
+          if (isSleeveItem(proxy)) sleeveItems.set(proxy.id, proxy);
           break;
       }
     }
@@ -184,7 +185,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     if (!sleeve) return;
     this.addLinkedWindow(
       sleeve.updater,
-      ({ agent }) => agent.type === ActorType.Character && agent.sleeve,
+      ({ proxy: agent }) => agent.type === ActorType.Character && agent.sleeve,
       openSleeveForm,
     );
   }
@@ -195,7 +196,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     const { updater } = psi;
     this.addLinkedWindow(
       updater,
-      ({ agent }) => agent.type === ActorType.Character && agent.psi,
+      ({ proxy: agent }) => agent.type === ActorType.Character && agent.psi,
       openPsiFormWindow,
     );
   }

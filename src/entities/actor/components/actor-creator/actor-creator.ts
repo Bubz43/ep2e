@@ -130,7 +130,7 @@ export class ActorCreator extends LitElement {
   get availableSleeves() {
     console.log('got sleeves');
     return [...game.actors].flatMap((actor) =>
-      actor.agent.type === ActorType.Character ? [] : actor.agent,
+      actor.proxy.type === ActorType.Character ? [] : actor.proxy,
     );
   }
 

@@ -116,22 +116,32 @@ export abstract class ActorProxyBase<T extends ActorType> {
     ) => Pick<ReturnType<typeof openWindow>, 'win' | 'wasConnected'>,
   ) {
     const { actor } = this;
+    const existed = actor.subscriptions.hasSubscriber(updater);
     actor.subscriptions.subscribe(updater, {
       onEntityUpdate: (actor) => {
         const entity = findData(actor);
-        if (entity) {
-          const { win, wasConnected } = renderWindow(entity);
-          if (!wasConnected) {
-            win.addEventListener(
-              SlWindowEventName.Closed,
-              () => actor.subscriptions.unsubscribe(updater),
-              { once: true },
-            );
-          }
-        } else closeWindow(updater);
+        if (entity) renderWindow(entity)
+        
+        else closeWindow(updater);
       },
       onSubEnd: () => closeWindow(updater),
+
     });
+
+    if (!existed) {
+      const entity = findData(actor);
+      if (!entity) return;
+      const { win, wasConnected } = renderWindow(entity);
+      if (!wasConnected) {
+        win.addEventListener(
+          SlWindowEventName.Closed,
+          () => actor.subscriptions.unsubscribe(updater),
+          { once: true },
+        );
+      }
+    }
+
+   
   }
 
   matchRegexp(regex: RegExp) {

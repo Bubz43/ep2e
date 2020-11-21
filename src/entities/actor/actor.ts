@@ -162,7 +162,7 @@ export class ActorEP extends Actor {
     return this.data.type;
   }
 
-  get agent() {
+  get proxy() {
     if (!this.#proxy || this.invalidated) {
       console.time('Create actor proxy');
       const agent = this.createProxy();
@@ -172,6 +172,8 @@ export class ActorEP extends Actor {
     this.invalidated = false;
     return this.#proxy;
   }
+
+  private openForm = () => this.sheet.render(true)
 
   private createProxy() {
     const { data } = this;
@@ -206,6 +208,7 @@ export class ActorEP extends Actor {
       ),
       itemOperations: this.itemOperations,
       actor: this,
+      openForm: this.openForm
     } as const;
   }
 

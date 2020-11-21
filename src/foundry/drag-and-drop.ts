@@ -269,9 +269,9 @@ export const actorDroptoActorAgent = async (drop: ActorDrop) => {
   if (drop.pack) {
     const pack = game.packs.get(drop.pack);
     const actor = await pack?.getEntity(drop.id);
-    if (actor instanceof ActorEP) return actor.agent;
+    if (actor instanceof ActorEP) return actor.proxy;
   }
-  return game.actors.get(drop.id)?.agent;
+  return game.actors.get(drop.id)?.proxy;
 };
 
 export const itemDropToItemProxy = async (drop: ItemDrop) => {

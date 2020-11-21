@@ -4,6 +4,7 @@ import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
 import { localize } from '@src/foundry/localization';
+import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { range } from 'remeda';
@@ -45,6 +46,16 @@ export class CharacterViewHeader extends LitElement {
       <img src=${img} />
       <h2>${name}</h2>
       <div class="actions">
+        <mwc-icon-button
+          ?disabled=${this.character.disabled}
+          data-tooltip=${localize('resleeve')}
+          icon="groups"
+          @mouseenter=${tooltip.fromData}
+          @focus=${tooltip.fromData}
+          data-renderer=${CharacterDrawerRenderer.Resleeve}
+          @click=${this.requestDrawerRender}
+        ></mwc-icon-button>
+
         <mwc-button
           class="effects-toggle"
           dense

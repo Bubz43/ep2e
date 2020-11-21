@@ -5,9 +5,9 @@ import {
 } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { notEmpty } from '@src/utility/helpers';
-import { pipe, filter } from 'remeda';
+import { pipe, filter, createPipe, flatMap } from 'remeda';
 import { ItemType, sleeveTypes } from '../entity-types';
-import type { ItemEP } from '../item/item';
+import type { ItemEP, ItemProxy } from '../item/item';
 import type { ActorEntity, SleeveType } from '../models';
 import { ActorEP } from './actor';
 import type { Biological } from './proxies/biological';
@@ -17,11 +17,9 @@ import type { SyntheticShell } from './proxies/synthetic-shell';
 
 export type Sleeve = Biological | SyntheticShell | Infomorph;
 
-export type SleeveGroup = [Sleeve, ActorEP];
-
 export type ResleevingSettings = {
   character: Character;
-  into: [ActorEntity<SleeveType>, ActorEP | undefined];
+  into: Sleeve;
   keepCurrent: boolean;
   keepInto: boolean;
 };
@@ -80,53 +78,38 @@ export type ResleeveOptions = Pick<
 //   return currentActor;
 // };
 
-// export const isSleeveItem = ({ agent }: ItemEP) => {
-//   switch (agent.type) {
-//     case ItemType.Trait:
-//       return agent.isMorphTrait;
+export const isSleeveItem = (proxy: ItemProxy) => {
+  switch (proxy.type) {
+    case ItemType.Trait:
+      return proxy.isMorphTrait;
 
-//     case ItemType.Psi:
-//     case ItemType.Sleight:
-//     case ItemType.Explosive:
-//     case ItemType.Substance:
-//     case ItemType.PhysicalService:
-//     case ItemType.FirearmAmmo:
-//     case ItemType.ThrownWeapon:
-//       return false;
+    case ItemType.Psi:
+    case ItemType.Sleight:
+    case ItemType.Explosive:
+    case ItemType.Substance:
+    case ItemType.PhysicalService:
+    case ItemType.FirearmAmmo:
+    case ItemType.ThrownWeapon:
+      return false;
 
-//     case ItemType.Software:
-//       return agent.requiresInstallation && agent.equipped;
+    case ItemType.Software:
+      return proxy.equipped;
 
-//     default:
-//       return !!agent.wareType && agent.equipped;
-//   }
-// };
-
-const isSleeve = (agent: ActorEP['agent']): agent is Sleeve => {
-  return sleeveTypes.some((type) => agent.type === type);
-};
-
-export const getSleeves = (actors: ActorEP[]) => {
-  const sleeves: SleeveGroup[] = [];
-  for (const actor of actors) {
-    if (isSleeve(actor.agent)) {
-      sleeves.push([actor.agent, actor]);
-    }
-    // switch (actor.agent.type) {
-    //   case ActorType.Biological:
-    //   case ActorType.SyntheticShell:
-    //     sleeves.push([actor.agent, actor]);
-    //     break;
-
-    //   default:
-    //     break;
-    // }
+    default:
+      return !!proxy.wareType && proxy.equipped;
   }
-  return sleeves;
 };
+
+const isSleeve = (proxy: ActorEP['proxy']): proxy is Sleeve => {
+  return sleeveTypes.some((type) => proxy.type === type);
+};
+
+export const getSleeves = flatMap<ActorEP, Sleeve>(({ proxy }) =>
+  isSleeve(proxy) ? proxy : [],
+);
 
 export const sleevePacks = async () => {
-  const packs: { name: string; sleeves: SleeveGroup[] }[] = [];
+  const packs: { name: string; sleeves: Sleeve[] }[] = [];
   for (const pack of game.packs) {
     if (packEntityIs(pack, ActorEP) && packIsVisible(pack)) {
       const actors = await pack.getContent();
@@ -137,7 +120,7 @@ export const sleevePacks = async () => {
   return packs;
 };
 
-export const sleeveActors = () => {
+export const gameSleeves = () => {
   return pipe(
     game.actors.entries,
     filter((a) => a.owner),
