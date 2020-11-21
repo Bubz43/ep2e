@@ -2,8 +2,8 @@ import { localize } from '@src/foundry/localization';
 import { html } from 'lit-html';
 import { ActorType } from '../entity-types';
 import type { MaybeToken } from './actor';
-import type { Ego } from './ego';
 import type { Character } from './proxies/character';
+import { renderEgoForm } from '../components/render-ego-form';
 import type { Sleeve } from './sleeves';
 
 export const renderCharacterView = (proxy: Character, token: MaybeToken) => {
@@ -13,14 +13,6 @@ export const renderCharacterView = (proxy: Character, token: MaybeToken) => {
 export const renderSleeveForm = (proxy: Sleeve, token: MaybeToken) => {
   return renderSpecificSleeveForm(proxy, token);
 };
-
-export const renderEgoForm = (ego: Ego) => html`
-  <ego-form .ego=${ego}></ego-form>
-  <entity-form-footer
-    slot="footer"
-    .updater=${ego.updater.prop('data').nestedStore()}
-  ></entity-form-footer>
-`;
 
 const renderSpecificSleeveForm = (proxy: Sleeve, token: MaybeToken) => {
   switch (proxy.type) {

@@ -22,7 +22,7 @@ import {
   FabType,
   PhysicalWare,
 } from '@src/data-enums';
-import { renderEgoForm } from '@src/entities/actor/actor-views';
+import { renderEgoForm } from "@src/entities/components/render-ego-form";
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import { ActionType } from '@src/features/actions';

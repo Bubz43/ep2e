@@ -6,6 +6,7 @@ import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
 import { openPsiFormWindow } from '@src/entities/item/item-views';
 import { Psi } from '@src/entities/item/proxies/psi';
+import type { Sleight } from '@src/entities/item/proxies/sleight';
 import { setupItemOperations } from '@src/entities/models';
 import type { UpdateStore } from '@src/entities/update-store';
 import { EP } from '@src/foundry/system';
@@ -19,6 +20,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   readonly ego;
 
   private _appliedEffects = new AppliedEffects();
+  readonly sleights: Sleight[] = [];
 
   constructor(init: ActorProxyInit<ActorType.Character>) {
     super(init);

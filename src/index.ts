@@ -104,6 +104,7 @@ import { SoftwareForm } from './entities/item/components/forms/software/software
 import { ItemCreator } from './entities/item/components/item-creator/item-creator';
 import { AptitudeCheckInfoEditor } from './features/components/aptitude-check-info-editor/aptitude-check-info-editor';
 import { ActorCreator } from './entities/actor/components/actor-creator/actor-creator';
+import { CharacterView } from './entities/actor/components/character-views/character-view';
 
 customElements.define('app-datepicker', Datepicker);
 
@@ -136,6 +137,7 @@ CompendiumList;
 // Actor
 ActorCreator;
 ItemTrash;
+CharacterView;
 
 // Ego
 EgoForm;

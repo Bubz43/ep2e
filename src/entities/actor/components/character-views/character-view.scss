@@ -1,0 +1,110 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+@include styled-scrollbars;
+@include widgetless-number-inputs;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: grid;
+  grid-template-areas: 
+  "header header"
+  "side tab-bar"
+  "side content";
+  grid-template-columns: min-content 1fr;  
+  gap: 0.5rem;
+  min-width: 100%;
+  width: 912px;
+  min-height: 500px;
+  height: max-content;
+  background: hsla(260, 97%, 2%, 0.55);
+  grid-template-rows: repeat(2, min-content) 1fr;
+}
+
+.side {
+  grid-area: side;
+  display: grid;
+  background: alphav(var(--color-bg), 0.5);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: calc(100vh - 150px);
+  min-height: 100%;
+}
+
+.tabbed-content {
+  display: flex;
+  flex-flow: column;
+  gap: 0.25rem;
+  grid-area: content;
+
+  height: 200px;
+  min-height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 0.5rem;
+  padding-left: 0;
+
+  &.no-scroll {
+    overflow: visible;
+  }
+}
+
+
+mwc-tab-bar {
+  grid-area: tab-bar;
+  max-width: 400px;
+  min-width: max-content;
+  place-self: center;
+  margin-top: -1rem;
+  --mdc-theme-primary: var(--color-primary-alt);
+  --mdc-tab-height: calc(50px - 0.5rem);
+}
+
+.drawer {
+  grid-area: side;
+  display: none;
+  grid-template-areas: "content";
+  grid-template-rows: 1fr;
+  > * {
+    grid-area: content;
+  }
+  background: linear-gradient(45deg, var(--color-bg), var(--color-bg-alt));
+  height: 500px;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  transform: translateX(-100%);
+
+  &.open,
+  &.closing {
+    display: grid;
+  }
+
+  &.open {
+    @include animate-css(slideInLeft, 400ms);
+  }
+
+  &.closing {
+    @include animate-css(slideOutLeft, 400ms);
+  }
+
+  .close-drawer {
+    margin: 0.5rem 0.5rem 0 auto;
+    border-radius: 100%;
+    background: rgba(black, 0.8);
+    position: sticky;
+    top: 0.5rem;
+    z-index: 10;
+    color: var(--color-text-lighter);
+    align-self: baseline;
+    --mdc-icon-button-size: 30px;
+    --mdc-icon-size: 20px;
+    &:hover,
+    &:focus-within {
+      color: var(--color-text);
+    }
+  }
+}
