@@ -16,6 +16,8 @@ export class Details extends mix(LitElement).with(LazyRipple) {
 
   @property({ type: Boolean, reflect: true }) disabled = false;
 
+  @property({ type: Boolean, reflect: true }) endArrow = false;
+
   @property({ type: String }) summary = '';
 
   toggleOpen() {
@@ -36,7 +38,7 @@ export class Details extends mix(LitElement).with(LazyRipple) {
         @keydown=${clickIfEnter}
         tabindex=${this.disabled ? '-1' : '0'}
       >
-        <mwc-icon class="icon">arrow_right</mwc-icon>
+        <mwc-icon class="icon">${this.endArrow ? "arrow_left" : "arrow_right"}</mwc-icon>
         <div class="full-summary">
           <div class="summary"><slot name="summary">${this.summary}</slot></div>
           <div class="info"><slot name="info"></slot></div>

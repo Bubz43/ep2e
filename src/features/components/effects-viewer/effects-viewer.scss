@@ -1,6 +1,7 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+
 * {
   box-sizing: border-box;
 }
@@ -12,8 +13,7 @@
 
 ul {
   margin: 0;
-  padding-left: 1.7rem;
-
+  padding-left: 1.6rem;
 }
 
 h3 {

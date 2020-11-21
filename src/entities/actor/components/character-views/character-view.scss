@@ -36,8 +36,11 @@ character-view-header {
 .side {
   grid-area: side;
   display: grid;
-  background: alphav(var(--color-bg), 0.5);
-  overflow-y: scroll;
+  background: linear-gradient(
+    to bottom,
+    alphav(var(--color-bg), 0.25)
+    alphav(var(--color-bg-alt), 0.25),
+  );  overflow-y: scroll;
   overflow-x: hidden;
   max-height: calc(100vh - 150px);
   min-height: 100%;

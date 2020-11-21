@@ -27,7 +27,7 @@ export class EffectsViewer extends LitElement {
     const group = this.effects.getGroup(type);
     return notEmpty(group)
       ? html`
-          <sl-details>
+          <sl-details endArrow>
             <span slot="summary"
               >${localize(type)}
               <span class="summary-value">${group.length}</span></span

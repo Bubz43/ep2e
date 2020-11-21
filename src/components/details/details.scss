@@ -27,6 +27,18 @@
   }
 }
 
+:host([endarrow]) {
+  .toggle {
+    flex-flow: row-reverse;
+  }
+}
+
+:host([open][endarrow]) {
+  .icon {
+    transform: rotate(-90deg);
+  }
+}
+
 :host(:not([disabled])) {
   .toggle {
     cursor: pointer;
@@ -43,7 +55,7 @@
 }
 
 .icon {
-  transition: transform 50ms ease-in-out;
+  transition: transform 100ms;
   opacity: 0.8;
 }
 

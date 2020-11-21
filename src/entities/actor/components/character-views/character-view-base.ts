@@ -41,7 +41,6 @@ export abstract class CharacterViewBase extends LitElement {
     if (this.drawerContentRenderer === fn) this.closeDrawer();
     else {
       const active = traverseActiveElements();
-      console.log(active);
       if (active instanceof HTMLElement) this.drawerOpener = active;
       this.drawerContentRenderer = fn;
     }

@@ -48,8 +48,9 @@ export class CharacterViewHeader extends LitElement {
         <mwc-button
           class="effects-toggle"
           dense
-          data-renderer=${CharacterDrawerRenderer.Effects}
           label="${localize('effects')}: ${this.character.appliedEffects.total}"
+          data-renderer=${CharacterDrawerRenderer.Effects}
+          @click=${this.requestDrawerRender}
         ></mwc-button>
 
         <sl-popover
