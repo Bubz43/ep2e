@@ -51,7 +51,7 @@ import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
 import mix from 'mix-with/lib';
 import { createPipe, identity, map, toPairs } from 'remeda';
-import { Ego } from '../../ego';
+import { Ego } from '../../actor/ego';
 import styles from './ego-form.scss';
 
 const renderAptitudeField = ([, apt]: [

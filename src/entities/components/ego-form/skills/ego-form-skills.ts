@@ -29,7 +29,7 @@ import {
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
 import { mapToObj } from 'remeda';
-import type { Ego } from '../../../ego';
+import type { Ego } from '../../../actor/ego';
 import styles from './ego-form-skills.scss';
 
 const renderControlFields: FieldPropsRenderer<

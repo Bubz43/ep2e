@@ -48,11 +48,11 @@ import { TimeField } from './components/time-field/time-field';
 import { ToolTip } from './components/tooltip/tooltip';
 import { ValueStatus } from './components/value-status/value-status';
 import { SlWindow } from './components/window/window';
-import { EgoForm } from './entities/actor/components/ego-form/ego-form';
-import { EgoFormFieldSkill } from './entities/actor/components/ego-form/skills/ego-form-field-skill';
-import { EgoFormFieldSkillCreator } from './entities/actor/components/ego-form/skills/ego-form-field-skill-creator';
-import { EgoFormSkill } from './entities/actor/components/ego-form/skills/ego-form-skill';
-import { EgoFormSkills } from './entities/actor/components/ego-form/skills/ego-form-skills';
+import { EgoForm } from './entities/components/ego-form/ego-form';
+import { EgoFormFieldSkill } from './entities/components/ego-form/skills/ego-form-field-skill';
+import { EgoFormFieldSkillCreator } from './entities/components/ego-form/skills/ego-form-field-skill-creator';
+import { EgoFormSkill } from './entities/components/ego-form/skills/ego-form-skill';
+import { EgoFormSkills } from './entities/components/ego-form/skills/ego-form-skills';
 import { ItemTrash } from './entities/actor/components/item-trash/item-trash';
 import { SleeveFormAquisition } from './entities/actor/components/sleeve-forms/acquisition/sleeve-form-acquisition';
 import { BiologicalForm } from './entities/actor/components/sleeve-forms/biological/biological-form';
@@ -78,8 +78,8 @@ import { HealthLog } from './health/components/health-log/health-log';
 import { HealthRegenSettingsForm } from './health/components/health-regen-settings-form/health-regen-settings-form';
 import { HealthStateForm } from './health/components/health-state-form/health-state-form';
 import './init';
-import { EgoFormThreatStress } from './entities/actor/components/ego-form/ego-form-threat-stress';
-import { EgoFormRep } from './entities/actor/components/ego-form/ego-form-rep';
+import { EgoFormThreatStress } from './entities/components/ego-form/ego-form-threat-stress';
+import { EgoFormRep } from './entities/components/ego-form/ego-form-rep';
 import { PhysicalServiceForm } from './entities/item/components/forms/physical-service/physical-service-form';
 import { TraitForm } from './entities/item/components/forms/trait/trait-form';
 import { SleightForm } from './entities/item/components/forms/sleight/sleight-form';
@@ -136,6 +136,8 @@ CompendiumList;
 // Actor
 ActorCreator;
 ItemTrash;
+
+// Ego
 EgoForm;
 EgoFormSkills;
 EgoFormSkill;

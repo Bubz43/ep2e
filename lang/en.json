@@ -1291,6 +1291,7 @@
     "process": "Process",
     "woundRepair": "Wound Repair",
     "PassiveEffectsWhenActivated": "Passive effects are not applied when activated",
+    "deviceALI": "Device ALI",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

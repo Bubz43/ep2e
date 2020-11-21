@@ -11,7 +11,7 @@ import { enumValues, MinStressOption } from '@src/data-enums';
 import type { UpdateActions } from '@src/entities/update-store';
 import { localize } from '@src/foundry/localization';
 import { customElement, LitElement, property, html } from 'lit-element';
-import type { Ego } from '../../ego';
+import type { Ego } from '../../actor/ego';
 import styles from './ego-form-threat-stress.scss';
 
 @customElement('ego-form-threat-stress')

@@ -143,7 +143,9 @@ export class PhysicalTech
 
   @LazyGetter()
   get onboardALI() {
-    const egoData = deepMerge(DefaultEgos.ali, this.epFlags?.onboardALI ?? {});
+    const egoData = this.epFlags?.onboardALI
+      ? deepMerge(DefaultEgos.ali, this.epFlags?.onboardALI ?? {})
+      : DefaultEgos.ali;
     const updater = new UpdateStore({
       getData: () => egoData,
       setData: this.aliSetter,
@@ -180,43 +182,31 @@ export class PhysicalTech
       },
     });
 
-    const proxyInit = <T extends ItemType>(data: ItemEntity<T>) => {
-      return {
-        data,
-        embedded: this.name,
-        lockSource: false,
-        alwaysDeletable: this.editable,
-        deleteSelf: () => ops.remove(data._id),
-        updater: new UpdateStore({
-          getData: () => data,
-          isEditable: () => this.editable,
-          setData: createPipe(merge({ _id: data._id }), ops.update),
-        }),
-      };
-    };
-
     for (const itemData of egoData.items) {
       const { _id } = itemData;
       if (items.has(_id)) continue;
       if (itemData.type === ItemType.Trait) {
         const trait = new Trait({
-          ...proxyInit(itemData),
-          openForm: () => this.openEgoItem(_id),
+          data: itemData,
+          embedded: this.name,
+          lockSource: false,
+          alwaysDeletable: this.editable,
+          deleteSelf: () => ops.remove(itemData._id),
+          updater: new UpdateStore({
+            getData: () => itemData,
+            isEditable: () => this.editable,
+            setData: createPipe(merge({ _id: itemData._id }), ops.update),
+          }),
+          openForm: () => this.openEgoItemForm(_id),
         });
         items.set(trait.id, trait);
-      } else if (itemData.type === ItemType.Sleight) {
-        const sleight = new Sleight({
-          ...proxyInit(itemData),
-          openForm: () => this.openEgoItem(_id),
-        });
-        items.set(sleight.id, sleight);
       }
     }
 
     return ego;
   }
 
-  private openEgoItem(id: string) {
+  private openEgoItemForm(id: string) {
     const item = this.onboardALI.items.get(id);
     if (!item) return;
     let { openEgoWindows } = this;
@@ -238,9 +228,7 @@ export class PhysicalTech
     if (!wasConnected) {
       win.addEventListener(
         SlWindowEventName.Closed,
-        () => {
-          this.openEgoWindows?.delete(id);
-        },
+        () => this.openEgoWindows?.delete(id),
         { once: true },
       );
     }

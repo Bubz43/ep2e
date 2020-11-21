@@ -175,7 +175,7 @@ export class PhysicalTechForm extends ItemFormBase {
                         >
                       `
                     : ''}
-                  <sl-group label=${localize('skills')}
+                  <sl-group label=${localize('skills')} class="skills"
                     ><ul class="ali-skills">
                       ${onboardALI.skills.map(
                         (skill, index, list) => html`
@@ -195,7 +195,7 @@ export class PhysicalTechForm extends ItemFormBase {
               `
             : ''}
 
-          <section>
+          <section class=${effectGroups.size === 0 && !hasUseActivation ? "mini" : ""}>
             <sl-header
               heading=${localize('effects')}
               ?hideBorder=${effectGroups.size === 0 && !hasUseActivation}
