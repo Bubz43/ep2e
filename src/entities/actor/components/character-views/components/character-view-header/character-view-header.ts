@@ -98,8 +98,8 @@ export class CharacterViewHeader extends LitElement {
   }) {
     return html` <mwc-icon-button
       ?disabled=${this.character.disabled}
-      data-tooltip=${tooltip}
-      icon="icon"
+      data-tooltip=${tooltipText}
+      icon=${icon}
       @mouseenter=${tooltip.fromData}
       @focus=${tooltip.fromData}
       data-renderer=${renderer}
