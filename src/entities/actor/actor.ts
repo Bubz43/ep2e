@@ -7,6 +7,7 @@ import { pipe, map, compact, flatMap, forEach, reject } from 'remeda';
 import type { SetRequired } from 'type-fest';
 import type { DeepPartial } from 'utility-types';
 import { ActorType, ItemType, sleeveTypes } from '../entity-types';
+import type { ActorIdentifiers } from '../find-entities';
 import type { ItemEP } from '../item/item';
 import type {
   ActorDatas,
@@ -48,6 +49,14 @@ export class ActorEP extends Actor {
   #itemOperations?: ItemOperations;
 
   private invalidated = true;
+
+  get identifiers(): ActorIdentifiers {
+    return {
+      actorId: this.id,
+      tokenId: this.isToken && this.token?.id,
+      sceneId: this.isToken && this.token?.scene?.id
+    }
+  }
 
   get updater() {
     if (!this.#updater)

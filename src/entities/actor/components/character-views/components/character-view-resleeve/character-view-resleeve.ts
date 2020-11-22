@@ -2,9 +2,10 @@ import { renderLabeledCheckbox } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { Sleeve, gameSleeves } from '@src/entities/actor/sleeves';
-import { ItemType } from '@src/entities/entity-types';
+import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
 import { idProp } from '@src/features/feature-helpers';
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
@@ -21,7 +22,7 @@ import {
 } from 'lit-element';
 import { render } from 'lit-html';
 import { repeat } from 'lit-html/directives/repeat';
-import { mapValues, reject, sortBy } from 'remeda';
+import { equals, mapValues, reject, sortBy } from 'remeda';
 import styles from './character-view-resleeve.scss';
 
 @customElement('character-view-resleeve')
@@ -92,20 +93,24 @@ export class CharacterViewResleeve extends LitElement {
         }
       } else await sleeve.createActor();
       if (sleeve.type !== this.selectedSleeve.type) {
-        this.character.updater.prop('flags', EP.Name, sleeve.type).store(null);
+        await this.character.updater
+          .prop('flags', EP.Name, sleeve.type)
+          .commit(null);
       }
-      if (notEmpty(sleeve.items)) {
-        await this.character.itemOperations.remove(
-          ...reject([...sleeve.items.keys()], (id) => this.keptItems.has(id)),
-        );
-      }
+    }
+
+    if (sleeve && notEmpty(sleeve.items)) {
+      await this.character.itemOperations.remove(
+        ...reject([...sleeve.items.keys()], (id) => this.keptItems.has(id)),
+      );
     }
 
     const { items } = this.selectedSleeve;
     const data = this.selectedSleeve.dataCopy();
     data.items = [];
+
     // TODO Brain
-    await this.character.itemOperations.add(
+    const added = await this.character.itemOperations.add(
       ...[...items.values()].map((item) => {
         if ('equipped' in item) {
           const data = item.getDataCopy(false);
@@ -116,6 +121,23 @@ export class CharacterViewResleeve extends LitElement {
         return item.getDataCopy(false);
       }),
     );
+
+    const nonDefaultBrain =
+      'nonDefaultBrain' in this.selectedSleeve &&
+      this.selectedSleeve.nonDefaultBrain;
+
+    if (data.type !== ActorType.Infomorph && nonDefaultBrain) {
+      const newBrain = [
+        ...(this.character.actor.items?.values() || []),
+      ].find(({ proxy }) => equals(proxy.epData, nonDefaultBrain.epData));
+      if (newBrain) data.data.brain = newBrain.id;
+      else
+        notify(
+          NotificationType.Error,
+          `Unable to find ${nonDefaultBrain.name}`,
+        );
+    }
+
     await this.character.updater
       .prop('flags', EP.Name, this.selectedSleeve.type)
       .commit(data);

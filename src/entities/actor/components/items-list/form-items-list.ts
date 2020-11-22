@@ -19,6 +19,11 @@ export class FormItemsList extends LitElement {
 
   @property({ type: String }) label = '';
 
+  @property({ attribute: false }) dragStartHandler?: (
+    ev: DragEvent,
+    item: ItemProxy,
+  ) => void;
+
   private openItemMenu(item: ItemProxy) {
     return (ev: MouseEvent) => {
       openMenu({
@@ -27,6 +32,7 @@ export class FormItemsList extends LitElement {
             label: localize('delete'),
             callback: () => item.deleteSelf?.(),
             icon: html`<mwc-icon>delete</mwc-icon>`,
+            disabled: !item.editable && !item.alwaysDeletable,
           },
         ],
         position: ev,
@@ -45,7 +51,11 @@ export class FormItemsList extends LitElement {
           sortBy(items, (i) => i.fullName),
           idProp,
           (item, index) => html`
-            <li ?data-comma=${index < commaTarget}>
+            <li
+              ?data-comma=${index < commaTarget}
+              draggable=${this.dragStartHandler ? 'true' : 'false'}
+              @dragstart=${(ev: DragEvent) => this.dragStartHandler?.(ev, item)}
+            >
               <button
                 @click=${item.openForm}
                 @contextmenu=${this.openItemMenu(item)}

@@ -116,6 +116,7 @@ export class InfomorphForm extends SleeveFormBase {
             ${notEmpty(itemGroups.ware)
               ? html`
                   <form-items-list
+                  .dragStartHandler=${this.itemDragStart}
                     .items=${itemGroups.ware}
                     label=${localize('software')}
                   ></form-items-list>
@@ -124,6 +125,7 @@ export class InfomorphForm extends SleeveFormBase {
             ${notEmpty(itemGroups.traits)
               ? html`
                   <form-items-list
+                  .dragStartHandler=${this.itemDragStart}
                     .items=${itemGroups.traits}
                     label=${localize('traits')}
                   ></form-items-list>

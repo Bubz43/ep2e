@@ -54,12 +54,17 @@ export class DropZone extends mix(LitElement).with(LazyRipple) {
   };
 
   private removeBackgroundHighlight = (ev: DragEvent) => {
-    if (ev.type === "dragleave" && ev.target !== this) return;
-    if (ev.type === 'drop' && this.hasAttribute("outlined")) {
+    if (ev.type === 'dragleave' && ev.target !== this) return;
+    if (ev.type === 'drop' && this.hasAttribute('outlined')) {
+      const { position } = this.style;
+      this.style.position = 'relative';
       this.rippleHandlers.startPress(ev);
       requestAnimationFrame(() => {
         this.rippleHandlers.endPress();
-        setTimeout(() => (DropZone.highlighted = null), 350);
+        setTimeout(() => {
+          DropZone.highlighted = null;
+          this.style.position = position;
+        }, 350);
       });
     } else DropZone.highlighted = null;
   };

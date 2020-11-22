@@ -6,6 +6,7 @@ export type ActorIdentifiers = {
   sceneId?: string | null;
 };
 
+
 export const findActor = (ids: ActorIdentifiers) => {
   if (ids.tokenId && ids.sceneId) {
     if (!ids.actorId && ids.sceneId === activeCanvas()?.scene.id) {

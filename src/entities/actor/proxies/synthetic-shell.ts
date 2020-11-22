@@ -124,56 +124,39 @@ export class SyntheticShell extends mix(SyntheticBase).with(
       );
     }
 
-    switch (proxy.type) {
-      case ItemType.Trait: {
-        if (proxy.isMorphTrait) {
-          if (proxy.hasMultipleLevels) {
-            proxy.selectLevelAndAdd(this.itemOperations.add);
-          } else {
-            this.itemOperations.add(proxy.getDataCopy(true));
-          }
+    if (proxy.type === ItemType.Trait) {
+      if (proxy.isMorphTrait) {
+        if (proxy.hasMultipleLevels) {
+          proxy.selectLevelAndAdd(this.itemOperations.add);
         } else {
-          notify(
-            NotificationType.Error,
-            localize('DESCRIPTIONS', 'OnlyMorphTraits'),
-          );
+          this.itemOperations.add(proxy.getDataCopy(true));
         }
-        break;
+      } else {
+        notify(
+          NotificationType.Error,
+          localize('DESCRIPTIONS', 'OnlyMorphTraits'),
+        );
       }
-
-      case ItemType.Armor:
-      case ItemType.BeamWeapon:
-      case ItemType.Firearm:
-      case ItemType.MeleeWeapon:
-      case ItemType.PhysicalTech:
-      case ItemType.Railgun:
-      case ItemType.SeekerWeapon: {
-        if (proxy.isWare) {
-          const copy = proxy.getDataCopy(true);
-          copy.data.state.equipped = true;
-          this.itemOperations.add(copy);
-        } else {
-          notify(
-            NotificationType.Error,
-            localize('DESCRIPTIONS', 'OnlyWareItems'),
-          );
-        }
-        break;
-      }
-
-      case ItemType.Software: {
+    } else if ('wareType' in proxy) {
+      if (proxy.isWare) {
         const copy = proxy.getDataCopy(true);
         copy.data.state.equipped = true;
         this.itemOperations.add(copy);
-        break;
-      }
-
-      default:
+      } else {
         notify(
           NotificationType.Error,
-          localize('DESCRIPTIONS', 'OnlyPhysicalMorphItems'),
+          localize('DESCRIPTIONS', 'OnlyWareItems'),
         );
-        break;
+      }
+    } else if (proxy.type === ItemType.Software) {
+      const copy = proxy.getDataCopy(true);
+      copy.data.state.equipped = true;
+      this.itemOperations.add(copy);
+    } else {
+      notify(
+        NotificationType.Error,
+        localize('DESCRIPTIONS', 'OnlyPhysicalMorphItems'),
+      );
     }
   }
 
@@ -184,33 +167,17 @@ export class SyntheticShell extends mix(SyntheticBase).with(
     const software: Software[] = [];
     const effects = new AppliedEffects();
     for (const proxy of this.items.values()) {
-      switch (proxy.type) {
-        case ItemType.Trait:
-          traits.push(proxy);
-          effects.add(proxy.currentEffects);
-          break;
-
-        case ItemType.Armor:
-        case ItemType.BeamWeapon:
-        case ItemType.Firearm:
-        case ItemType.MeleeWeapon:
-        case ItemType.PhysicalTech:
-        case ItemType.Railgun:
-        case ItemType.SeekerWeapon: {
-          ware.push(proxy);
-          if ('currentEffects' in proxy) {
-            effects.add(proxy.currentEffects);
-          }
-          break;
-        }
-
-        case ItemType.Software: {
-          software.push(proxy);
+      if (proxy.type === ItemType.Trait) {
+        traits.push(proxy);
+        effects.add(proxy.currentEffects);
+      } else if (proxy.type === ItemType.Software) {
+        software.push(proxy);
+        effects.add(proxy.currentEffects);
+      } else if ("equipped" in proxy) {
+        ware.push(proxy);
+        if ('currentEffects' in proxy) {
           effects.add(proxy.currentEffects);
         }
-
-        default:
-          break;
       }
     }
     return { traits, ware, effects, software };

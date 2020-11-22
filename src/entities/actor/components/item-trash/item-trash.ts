@@ -33,7 +33,7 @@ export class ItemTrash extends LitElement {
     }
   }
 
-  private restoreItems() {
+  private async restoreItems() {
     const toAdd: ItemEntity[] = [];
     const { itemTrash } = this.proxy.actor;
     const newTrash = new Set(itemTrash);
@@ -43,13 +43,19 @@ export class ItemTrash extends LitElement {
       toAdd.push(item);
     }
     this.proxy.actor.itemTrash = [...newTrash];
-    this.proxy.itemOperations.add(...toAdd);
+    await this.proxy.itemOperations.add(...toAdd);
     this.indexesToRestore = [];
+    this.emitTrashChanged()
   }
 
   private emptyTrash() {
     this.proxy.actor.itemTrash = [];
+    this.emitTrashChanged();
     this.requestUpdate();
+  }
+
+  private emitTrashChanged() {
+    this.dispatchEvent(new CustomEvent("trash-changed", { bubbles: true, composed: true }))
   }
 
   render() {

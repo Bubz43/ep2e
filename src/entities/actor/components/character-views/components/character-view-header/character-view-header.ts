@@ -36,6 +36,10 @@ export class CharacterViewHeader extends LitElement {
     );
   }
 
+  private updateFromChange() {
+    this.requestUpdate()
+  }
+
   render() {
     const img = this.token?.data.img || this.character.img;
     const name = this.token?.data.name || this.character.name;
@@ -64,6 +68,7 @@ export class CharacterViewHeader extends LitElement {
         <sl-popover
           class="restore-popover"
           .closeEvents=${['option-selected']}
+          @trash-changed=${this.updateFromChange}
           placement=${Placement.Right}
           .renderOnDemand=${this.renderItemTrash}
           unpadded

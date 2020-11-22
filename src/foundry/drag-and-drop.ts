@@ -1,5 +1,6 @@
 import { enumValues } from '@src/data-enums';
 import { ActorEP } from '@src/entities/actor/actor';
+import type { ActorIdentifiers } from '@src/entities/find-entities';
 import { ItemEP } from '@src/entities/item/item';
 import type { ItemEntity } from '@src/entities/models';
 import { Effect, EffectType } from '@src/features/effects';
@@ -57,15 +58,15 @@ const dropChecker = <T extends DropType, D = Drops[T]>(
 export const dragSource = () => source as Readonly<typeof source>;
 
 const setDragImage = (el: HTMLElement) => {
-  let dragImage = document.querySelector(".drag-image")
+  let dragImage = document.querySelector('.drag-image');
   if (!dragImage) {
-    dragImage = document.createElement("div")
-    dragImage.classList.add("drag-image");
+    dragImage = document.createElement('div');
+    dragImage.classList.add('drag-image');
     document.body.append(dragImage);
   }
-  dragImage.textContent = el.textContent
-  return dragImage
-}
+  dragImage.textContent = el.textContent;
+  return dragImage;
+};
 
 export const setDragSource = (ev: DragEvent, drop: Drop) => {
   const el = ev
@@ -84,7 +85,7 @@ export const setDragSource = (ev: DragEvent, drop: Drop) => {
   );
 
   if (el instanceof HTMLElement && el.textContent) {
-    ev.dataTransfer?.setDragImage(setDragImage(el), 20, 20)
+    ev.dataTransfer?.setDragImage(setDragImage(el), 20, 20);
   }
 
   source.element = el;
@@ -137,12 +138,12 @@ export type JournalEntryDrop = SimpleDrop<DropType.JournalEntry>;
 export type SceneDrop = SimpleDrop<DropType.Scene>;
 
 export type ItemDrop =
-  | KnownDrop<{
-      type: DropType.Item;
-      actorId?: string;
-      tokenId?: string;
-      data: ItemEntity;
-    }>
+  | KnownDrop<
+      {
+        type: DropType.Item;
+        data: ItemEntity;
+      } & ActorIdentifiers
+    >
   | KnownDrop<{
       type: DropType.Item;
       pack: string;
