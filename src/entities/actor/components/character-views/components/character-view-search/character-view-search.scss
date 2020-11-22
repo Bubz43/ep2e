@@ -1,0 +1,89 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+@include styled-scrollbars;
+@include resetUnorderedList;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  
+}
+
+header {
+  position: sticky;
+    top: 0;
+    padding: 0.5rem;
+    z-index: 1;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg);
+}
+
+
+.filters {
+  min-height: 30px;
+  margin: 0.5rem 1rem;
+
+  > * {
+    margin: 1px 0;
+    &:hover, 
+    &:focus-within {
+      --mdc-theme-primary: var(--color-negative);
+    }
+  }
+}
+
+label {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  color: var(--color-text);
+  &:focus-within {
+    color: var(--color-secondary);
+  }
+  input {
+    background: transparent;
+    font-family: var(--font-1);
+    border: none;
+    flex: 1;
+    padding: 0.25rem 1rem;
+    font-size: 1rem;
+    color: var(--color-text);
+    &::placeholder {
+      text-transform: capitalize;
+    }
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.results-list {
+  display: grid;
+  grid-auto-rows: min-content;
+  gap: 0.5rem;
+  > *:not(:last-child) {
+    border-bottom: 1px solid alphav(var(--color-border), 0.5);
+  }
+
+  .no-results {
+    margin: 0.5rem auto;
+    border-bottom: 1px solid alphav(var(--color-border), 0.5);
+  }
+}
+
+
+.item-proxy {
+  padding: 0 0.5rem;
+  [slot="before"] {
+    margin-right: 1ch;
+    display: inline-block;
+    min-width: 2rem;
+  }
+  .proxy-type {
+    color: var(--color-text-lighter);
+  }
+}

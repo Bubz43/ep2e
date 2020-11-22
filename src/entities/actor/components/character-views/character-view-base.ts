@@ -11,9 +11,12 @@ export abstract class CharacterViewBase extends LitElement {
   @property({ attribute: false }) character!: Character;
 
   @property({
-    attribute: false, hasChanged(value, oldValue) {
-    return !value || !oldValue || (value === oldValue)
-  } }) token?: MaybeToken;
+    attribute: false,
+    hasChanged(value, oldValue) {
+      return !value || !oldValue || value === oldValue;
+    },
+  })
+  token?: MaybeToken;
 
   @internalProperty() protected drawerContentRenderer:
     | (() => TemplateResult)
@@ -81,6 +84,14 @@ export abstract class CharacterViewBase extends LitElement {
       <effects-viewer
         .effects=${this.character.appliedEffects}
       ></effects-viewer>
+    `;
+  }
+
+  renderSearch() {
+    return html`
+      <character-view-search
+        .character=${this.character}
+      ></character-view-search>
     `;
   }
 }

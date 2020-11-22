@@ -113,6 +113,7 @@ import { CharacterViewSleeve } from './entities/actor/components/character-views
 import { CharacterViewHeader } from './entities/actor/components/character-views/components/character-view-header/character-view-header';
 import { EffectsViewer } from './features/components/effects-viewer/effects-viewer';
 import { CharacterViewResleeve } from './entities/actor/components/character-views/components/character-view-resleeve/character-view-resleeve';
+import { CharacterViewSearch } from './entities/actor/components/character-views/components/character-view-search/character-view-search';
 
 // Generic Components
 Field;
@@ -150,6 +151,7 @@ CharacterViewHeader;
 CharacterViewEgo;
 CharacterViewSleeve;
 CharacterViewResleeve;
+CharacterViewSearch;
 
 // Ego
 EgoForm;

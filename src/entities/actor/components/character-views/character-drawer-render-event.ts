@@ -1,8 +1,8 @@
-import type { TemplateResult } from 'lit-html';
 
 export enum CharacterDrawerRenderer {
   Resleeve = 'Resleeve',
   Effects = 'Effects',
+  Search = "Search"
 }
 
 export class CharacterDrawerRenderEvent extends Event {

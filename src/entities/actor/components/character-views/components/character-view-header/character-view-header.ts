@@ -7,7 +7,7 @@ import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
 import {
   CharacterDrawerRenderer,
-  CharacterDrawerRenderEvent
+  CharacterDrawerRenderEvent,
 } from '../../character-drawer-render-event';
 import styles from './character-view-header.scss';
 
@@ -24,7 +24,7 @@ export class CharacterViewHeader extends LitElement {
   @property({
     attribute: false,
     hasChanged(value, oldValue) {
-      return !value || !oldValue || (value === oldValue)
+      return !value || !oldValue || value === oldValue;
     },
   })
   token?: MaybeToken;
@@ -37,7 +37,7 @@ export class CharacterViewHeader extends LitElement {
   }
 
   private updateFromChange() {
-    this.requestUpdate()
+    this.requestUpdate();
   }
 
   render() {
@@ -47,15 +47,16 @@ export class CharacterViewHeader extends LitElement {
       <img src=${img} />
       <h2>${name}</h2>
       <div class="actions">
-        <mwc-icon-button
-          ?disabled=${this.character.disabled}
-          data-tooltip=${localize('resleeve')}
-          icon="groups"
-          @mouseenter=${tooltip.fromData}
-          @focus=${tooltip.fromData}
-          data-renderer=${CharacterDrawerRenderer.Resleeve}
-          @click=${this.requestDrawerRender}
-        ></mwc-icon-button>
+        ${this.renderActionIconButton({
+          icon: 'search',
+          tooltipText: localize('search'),
+          renderer: CharacterDrawerRenderer.Search,
+        })}
+        ${this.renderActionIconButton({
+          icon: 'groups',
+          tooltipText: localize('resleeve'),
+          renderer: CharacterDrawerRenderer.Resleeve,
+        })}
 
         <mwc-button
           class="effects-toggle"
@@ -84,6 +85,26 @@ export class CharacterViewHeader extends LitElement {
         </sl-popover>
       </div>
     `;
+  }
+
+  private renderActionIconButton({
+    icon,
+    tooltipText,
+    renderer,
+  }: {
+    icon: string;
+    tooltipText: string;
+    renderer: CharacterDrawerRenderer;
+  }) {
+    return html` <mwc-icon-button
+      ?disabled=${this.character.disabled}
+      data-tooltip=${tooltip}
+      icon="icon"
+      @mouseenter=${tooltip.fromData}
+      @focus=${tooltip.fromData}
+      data-renderer=${renderer}
+      @click=${this.requestDrawerRender}
+    ></mwc-icon-button>`;
   }
 
   private renderItemTrash = () => {
