@@ -6,16 +6,14 @@ import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { createPipe } from 'remeda';
-import type { Stackable } from '../item-interfaces';
-import { Copyable, Purchasable } from '../item-mixins';
+import { Copyable, Purchasable, Stackable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 import { Substance } from './substance';
 
 class Base extends ItemProxyBase<ItemType.FirearmAmmo> {}
 
 export class FirearmAmmo
-  extends mix(Base).with(Purchasable, Copyable)
-  implements Stackable {
+  extends mix(Base).with(Purchasable, Copyable, Stackable) {
   readonly loaded;
   constructor({
     loaded,
@@ -35,10 +33,6 @@ export class FirearmAmmo
 
   get hasMultipleModes() {
     return this.modes.length > 1;
-  }
-
-  get quantity() {
-    return this.epData.quantity;
   }
 
   @LazyGetter()

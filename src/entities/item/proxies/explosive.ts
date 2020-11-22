@@ -13,16 +13,16 @@ import { HealthType } from '@src/health/health';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { compact, createPipe } from 'remeda';
-import type { Attacker, Stackable } from '../item-interfaces';
-import { Copyable, Purchasable } from '../item-mixins';
+import type { Attacker } from '../item-interfaces';
+import { Copyable, Purchasable, Stackable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 import { Substance } from './substance';
 
 class Base extends ItemProxyBase<ItemType.Explosive> {}
 
 export class Explosive
-  extends mix(Base).with(Purchasable, Copyable)
-  implements Stackable, Attacker<ExplosiveAttackData, ExplosiveAttack> {
+  extends mix(Base).with(Purchasable, Copyable, Stackable)
+  implements Attacker<ExplosiveAttackData, ExplosiveAttack> {
   readonly loaded;
   constructor({
     loaded,
@@ -127,9 +127,6 @@ export class Explosive
     return this.epData.size;
   }
 
-  get quantity() {
-    return this.epData.quantity;
-  }
 
   get fullType() {
     return this.explosiveType === ExplosiveType.Generic

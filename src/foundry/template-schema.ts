@@ -141,12 +141,14 @@ type ItemTemplates = Template<'Common', CommonDetails> &
   Template<'Cost', GearCost & { quality: GearQuality }> &
   Template<'GearTraits', GearTraits> &
   Template<'Copyable', Copyable> &
-  Template<'GearState', GearState>;
+  Template<'GearState', GearState> & 
+  Template<"Stackable", { quantity: number, state: { stashed: boolean }}>
 type ActorTemplates = Template<'Common', CommonDetails> &
   Template<'Mobile', { movementRates: StringID<MovementRate>[] }> &
   Template<'Acquisition', Acquisition> &
   Template<'PoolData', { pools: MorphPoolsData }> &
   Template<'Conditions', { conditions: ConditionType[] }>;
+
 
 type UseActorTemplate<T extends (keyof ActorTemplates)[]> = T;
 type UseItemTemplate<T extends (keyof ItemTemplates)[]> = T;
@@ -386,9 +388,8 @@ type SleightData = {
 };
 
 type SubstanceData = {
-  templates: UseItemTemplate<['Common', 'Cost', 'Copyable']>;
+  templates: UseItemTemplate<['Common', 'Cost', 'Copyable', "Stackable"]>;
   category: string;
-  quantity: number;
   quantityPerCost: number;
   consumeOnUse: boolean;
   substanceType: SubstanceType;
@@ -420,7 +421,6 @@ type SubstanceData = {
     wearOffStress: string;
     notes: string;
   };
-  state: { stashed: boolean };
 };
 
 type PsiData = {
@@ -461,10 +461,9 @@ type ArmorData = {
 } & Omit<GearTraits, 'concealable'>;
 
 type ExplosiveData = {
-  templates: UseItemTemplate<['Common', 'Cost', 'Copyable']>;
+  templates: UseItemTemplate<['Common', 'Cost', 'Copyable', "Stackable"]>;
   explosiveType: ExplosiveType;
   size: ExplosiveSize;
-  quantity: number;
   unitsPerComplexity: number;
   sticky: boolean;
   areaEffect: '' | AreaEffectType;
@@ -475,7 +474,6 @@ type ExplosiveData = {
   hasSecondaryMode: boolean;
   primaryAttack: ExplosiveAttackData;
   secondaryAttack: ExplosiveAttackData;
-  state: { stashed: boolean };
 };
 
 type MeleeWeaponData = {
@@ -495,8 +493,7 @@ type MeleeWeaponData = {
 };
 
 type ThrownWeaponData = {
-  templates: UseItemTemplate<['Common', 'Cost', 'GearTraits', 'Copyable']>;
-  quantity: number;
+  templates: UseItemTemplate<['Common', 'Cost', 'GearTraits', 'Copyable', "Stackable"]>;
   quantityPerCost: number;
   primaryAttack: ThrownWeaponAttackData;
   exoticSkill: string;
@@ -565,16 +562,14 @@ type FirearmData = RangedWeaponDataBase &
   };
 
 type FirearmAmmoData = {
-  templates: UseItemTemplate<['Common', 'Cost', 'Copyable']>;
+  templates: UseItemTemplate<['Common', 'Cost', 'Copyable', "Stackable"]>;
   ammoClass: KineticWeaponClass;
-  quantity: number;
   roundsPerComplexity: number;
   carryPayload: boolean;
   /**
    * @minItems 1
    */
   modes: StringID<FirearmAmmoModeData>[];
-  state: { stashed: boolean };
 };
 
 type RailgunData = RangedWeaponDataBase &

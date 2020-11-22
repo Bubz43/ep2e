@@ -69,6 +69,17 @@ export const Gear = (cls: HasEpData<Record<GearTrait, boolean>>) => {
   };
 };
 
+export const Stackable = (cls: HasEpData<{ quantity: number, state: { stashed: boolean } }>) => {
+  return class extends cls {
+    get quantity() {
+      return this.epData.quantity
+    }
+    get stashed() {
+      return this.epData.state.stashed
+    }
+  }
+}
+
 export const RangedWeapon = (
   cls: HasEpData<
     {

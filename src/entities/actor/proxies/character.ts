@@ -9,7 +9,7 @@ import {
 } from '@src/entities/applied-effects';
 import { renderEgoForm } from '@src/entities/components/render-ego-form';
 import { ActorType, ItemType } from '@src/entities/entity-types';
-import type { EquippableItem, ItemProxy } from '@src/entities/item/item';
+import type { ConsumableItem, EquippableItem, ItemProxy } from '@src/entities/item/item';
 import { openPsiFormWindow } from '@src/entities/item/item-views';
 import { Psi } from '@src/entities/item/proxies/psi';
 import type { Sleight } from '@src/entities/item/proxies/sleight';
@@ -35,8 +35,9 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
   readonly sleights: Sleight[] = [];
   readonly traits: Trait[] = [];
-  readonly equipped: Exclude<ItemProxy, Psi | Sleight | Trait>[] = [];
-  readonly stashed: EquippableItem[] = [];
+  readonly equipped: EquippableItem[] = [];
+  readonly consumables: ConsumableItem[] = [];
+  readonly stashed: (EquippableItem | ConsumableItem)[] = [];
 
   constructor(init: ActorProxyInit<ActorType.Character>) {
     super(init);
@@ -145,9 +146,15 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     egoItems: Map<string, ItemProxy>,
   ) {
     for (const proxy of this.items.values()) {
+      if ("equipped" in proxy) {
+        this[proxy.equipped ? "equipped" : "stashed"].push(proxy)
+      } else if ("quantity" in proxy) {
+        
+      }
       switch (proxy.type) {
         case ItemType.Sleight: {
           egoItems.set(proxy.id, proxy);
+          
           // this.#appliedEffects.add(proxy.currentEffects)
           break;
         }

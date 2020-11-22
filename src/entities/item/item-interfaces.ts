@@ -3,7 +3,3 @@ export interface Attacker<Data, Full> {
   setupAttack(data: Data, defaultLabel: string): Full;
 }
 
-export interface Stackable {
-  readonly quantity: number;
-  // TODO isSame(entity: this): boolean;
-}

@@ -23,8 +23,8 @@ import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { createPipe, map, merge, pipe, uniq } from 'remeda';
-import type { Attacker, Stackable } from '../item-interfaces';
-import { Copyable, Purchasable } from '../item-mixins';
+import type { Attacker } from '../item-interfaces';
+import { Copyable, Purchasable, Stackable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 import { Sleight } from './sleight';
 import { Trait } from './trait';
@@ -33,8 +33,8 @@ export type SubstanceUse = Substance['applicationMethods'][number] | 'use';
 
 class Base extends ItemProxyBase<ItemType.Substance> {}
 export class Substance
-  extends mix(Base).with(Purchasable, Copyable)
-  implements Stackable, Attacker<SubstanceAttackData, SubstanceAttack> {
+  extends mix(Base).with(Purchasable, Copyable, Stackable)
+  implements  Attacker<SubstanceAttackData, SubstanceAttack> {
   static onsetTime(application: SubstanceUse) {
     switch (application) {
       case SubstanceApplicationMethod.Inhalation:
@@ -64,10 +64,6 @@ export class Substance
 
   get applicationMethods(): ('app' | SubstanceApplicationMethod)[] {
     return this.isElectronic ? ['app'] : this.epData.application;
-  }
-
-  get quantity() {
-    return this.epData.quantity;
   }
 
   get fullName() {
