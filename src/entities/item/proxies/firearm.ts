@@ -25,7 +25,7 @@ import {
   takeWhile,
 } from 'remeda';
 import type { Attacker } from '../item-interfaces';
-import { Equippable, Gear, Purchasable, RangedWeapon } from '../item-mixins';
+import { Copyable, Equippable, Gear, Purchasable, RangedWeapon } from '../item-mixins';
 import { FirearmAmmo } from './firearm-ammo';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
@@ -39,7 +39,7 @@ class Base extends ItemProxyBase<ItemType.Firearm> {
   }
 }
 export class Firearm
-  extends mix(Base).with(Purchasable, Gear, Equippable, RangedWeapon)
+  extends mix(Base).with(Purchasable, Gear, Equippable, RangedWeapon, Copyable)
   implements Attacker<KineticWeaponAttackData, KineticWeaponAttack> {
   readonly nestedShape;
 

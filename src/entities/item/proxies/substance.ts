@@ -25,7 +25,7 @@ import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { pipe, uniq, map, createPipe, set, pathOr, merge } from 'remeda';
 import type { Attacker, Stackable } from '../item-interfaces';
-import { Purchasable } from '../item-mixins';
+import { Copyable, Purchasable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 import { Sleight } from './sleight';
 import { Trait } from './trait';
@@ -34,7 +34,7 @@ export type SubstanceUse = Substance['applicationMethods'][number] | 'use';
 
 class Base extends ItemProxyBase<ItemType.Substance> {}
 export class Substance
-  extends mix(Base).with(Purchasable)
+  extends mix(Base).with(Purchasable, Copyable)
   implements Stackable, Attacker<SubstanceAttackData, SubstanceAttack> {
   static onsetTime(application: SubstanceUse) {
     switch (application) {

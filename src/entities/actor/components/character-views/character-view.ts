@@ -111,7 +111,9 @@ export class CharacterView extends CharacterViewBase {
   }
 
   private renderStatus() {
-    return html``;
+    return html`
+    
+    `;
   }
 
   protected renderDrawer() {

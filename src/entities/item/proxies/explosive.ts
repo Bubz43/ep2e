@@ -14,14 +14,14 @@ import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { compact, createPipe } from 'remeda';
 import type { Attacker, Stackable } from '../item-interfaces';
-import { Purchasable } from '../item-mixins';
+import { Copyable, Purchasable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 import { Substance } from './substance';
 
 class Base extends ItemProxyBase<ItemType.Explosive> {}
 
 export class Explosive
-  extends mix(Base).with(Purchasable)
+  extends mix(Base).with(Purchasable, Copyable)
   implements Stackable, Attacker<ExplosiveAttackData, ExplosiveAttack> {
   readonly loaded;
   constructor({

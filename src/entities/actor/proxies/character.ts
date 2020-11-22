@@ -9,10 +9,11 @@ import {
 } from '@src/entities/applied-effects';
 import { renderEgoForm } from '@src/entities/components/render-ego-form';
 import { ActorType, ItemType } from '@src/entities/entity-types';
-import type { ItemProxy } from '@src/entities/item/item';
+import type { EquippableItem, ItemProxy } from '@src/entities/item/item';
 import { openPsiFormWindow } from '@src/entities/item/item-views';
 import { Psi } from '@src/entities/item/proxies/psi';
 import type { Sleight } from '@src/entities/item/proxies/sleight';
+import type { Trait } from '@src/entities/item/proxies/trait';
 import type { ActorEntity, SleeveType } from '@src/entities/models';
 import type { UpdateStore } from '@src/entities/update-store';
 import { EffectType, totalModifiers } from '@src/features/effects';
@@ -28,10 +29,14 @@ import { SyntheticShell } from './synthetic-shell';
 export class Character extends ActorProxyBase<ActorType.Character> {
   readonly ego;
   readonly sleeve?: Sleeve | null;
+  readonly vehicle?: SyntheticShell | null;
 
   private _appliedEffects = new AppliedEffects();
+
   readonly sleights: Sleight[] = [];
-  readonly vehicle?: SyntheticShell | null;
+  readonly traits: Trait[] = [];
+  readonly equipped: Exclude<ItemProxy, Psi | Sleight | Trait>[] = [];
+  readonly stashed: EquippableItem[] = []
 
   constructor(init: ActorProxyInit<ActorType.Character>) {
     super(init);

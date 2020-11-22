@@ -3134,10 +3134,14 @@
                   "properties": {
                     "elapsed": {
                       "type": "number"
+                    },
+                    "started": {
+                      "type": "boolean"
                     }
                   },
                   "required": [
-                    "elapsed"
+                    "elapsed",
+                    "started"
                   ],
                   "type": "object"
                 },

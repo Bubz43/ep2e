@@ -15,7 +15,7 @@ import { HealthType } from '@src/health/health';
 import mix from 'mix-with/lib';
 import { difference } from 'remeda';
 import type { Attacker } from '../item-interfaces';
-import { Equippable, Gear, Purchasable, RangedWeapon } from '../item-mixins';
+import { Copyable, Equippable, Gear, Purchasable, RangedWeapon } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
 class Base extends ItemProxyBase<ItemType.BeamWeapon> {
@@ -24,7 +24,7 @@ class Base extends ItemProxyBase<ItemType.BeamWeapon> {
   }
 }
 export class BeamWeapon
-  extends mix(Base).with(Gear, Purchasable, Equippable, RangedWeapon)
+  extends mix(Base).with(Gear, Purchasable, Equippable, RangedWeapon, Copyable)
   implements Attacker<BeamWeaponAttackData, BeamWeaponAttack> {
   static readonly possibleAccessories = difference(
     enumValues(RangedWeaponAccessory),

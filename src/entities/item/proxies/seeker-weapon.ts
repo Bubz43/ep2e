@@ -10,7 +10,7 @@ import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { compact, concat, difference, map } from 'remeda';
-import { Equippable, Gear, Purchasable, RangedWeapon } from '../item-mixins';
+import { Copyable, Equippable, Gear, Purchasable, RangedWeapon } from '../item-mixins';
 import { Explosive } from './explosive';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
@@ -25,6 +25,7 @@ export class SeekerWeapon extends mix(Base).with(
   Equippable,
   Gear,
   RangedWeapon,
+  Copyable
 ) {
   static readonly possibleAccessories = difference(
     enumValues(RangedWeaponAccessory),

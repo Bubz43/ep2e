@@ -1,3 +1,4 @@
+import type { RangedWeaponAccessory } from '@src/data-enums';
 import type { ArmorType } from '@src/features/active-armor';
 import { LazyGetter } from 'lazy-get-decorator';
 import type { Constructor } from 'lit-element';
@@ -28,52 +29,13 @@ import { Trait } from './proxies/trait';
 
 export type ItemProxy = ReturnType<ItemEP['createProxy']>;
 
-// type Proxies<T = ItemProxy> = {
-//   [key in ItemType]: T extends { type: key } ? T : never;
-// };
-
-// type Pargs = {
-//   [key in ItemType]: key extends ItemType.Armor
-//     ? typeof Armor
-//     : key extends ItemType.BeamWeapon
-//     ? typeof BeamWeapon
-//     : never;
-// };
-
-export type RangedWeapon =
-  | BeamWeapon
-  | Railgun
-  | Firearm
-  | SprayWeapon
-  | SeekerWeapon;
-
-export type EquippableItem =
-  | Armor
-  | Software
-  | MeleeWeapon
-  | PhysicalTech
-  | RangedWeapon;
-
-export type CopyableItem =
-  | Substance
-  | Armor
-  | Explosive
-  | MeleeWeapon
-  | PhysicalTech
-  | RangedWeapon
-  | FirearmAmmo
-  | ThrownWeapon;
-
-export type InventoryItem =
-  | Armor
-  | Software
-  | Explosive
-  | Substance
-  | MeleeWeapon
-  | PhysicalTech
-  | RangedWeapon
-  | FirearmAmmo
-  | ThrownWeapon;
+export type ConsumableItem = Extract<ItemProxy, { quantity: number }>;
+export type EquippableItem = Extract<ItemProxy, { equipped: boolean }>;
+export type CopyableItem = Extract<ItemProxy, { isBlueprint: boolean }>;
+export type RangedWeapon = Extract<
+  ItemProxy,
+  { accessories: RangedWeaponAccessory[] }
+>;
 
 export class ItemEP extends Item {
   private invalidated = true;

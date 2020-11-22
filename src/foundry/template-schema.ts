@@ -657,7 +657,7 @@ type PhysicalServiceData = {
   serviceType: PhysicalServiceType;
   reputations: StringID<RepBase>[];
   duration: number;
-  state: { elapsed: number };
+  state: { elapsed: number, started: boolean  };
 };
 
 export interface EntityTemplates {

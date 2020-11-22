@@ -66,6 +66,10 @@ export class PhysicalService extends mix(Base).with(Purchasable) {
     return this.reputations.some(repRefreshTimerActive);
   }
 
+  get equipped() {
+    return this.epData.state.started
+  }
+
   findRep(id: string) {
     return this.reputations.find(matchID(id));
   }
