@@ -39,3 +39,11 @@ header {
     }
   }
 }
+
+.pools {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+  font-size: 14px;
+  border-top: 1px solid alphav(var(--color-border), 0.5);
+}

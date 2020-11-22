@@ -76,7 +76,9 @@ header {
 
 .skill-controls {
   @include inputReset();
+  height: 1.25rem;
   input {
+    height: 1.25rem;
     border: none;
     padding: 0;
   }
@@ -120,5 +122,66 @@ header {
     opacity: 0.5;
     transform: translateX(0.5rem);
     border-color: transparent;
+  }
+}
+
+.rep-list {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+.rep-item {
+  display: inline-grid;
+  // width: 130px;
+  grid-template-areas:
+    'name name score'
+    'favors favors favors';
+  grid-auto-rows: min-content;
+  place-items: center;
+  gap: 2px;
+  position: relative;
+  font-size: 1.1rem;
+  padding: 0.25rem 0.25rem 0.5rem;
+  z-index: 0;
+  &:focus {
+    outline: none;
+  }
+
+  .rep-acronym {
+    grid-area: name;
+    text-transform: lowercase;
+    transform: translateY(-1px);
+    z-index: 1;
+  }
+
+  .rep-score {
+    grid-area: score;
+    justify-self: baseline;
+  }
+
+  .favors {
+    grid-area: favors;
+  }
+
+  .rep-info {
+    display: flex;
+    justify-content: space-between;
+    white-space: nowrap;
+    width: 60px;
+  }
+  .favors {
+    grid-area: favors;
+    --mdc-icon-size: 1.1rem;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: 1.1rem;
+    margin-top: -0.25rem;
+    gap: 0.25rem;
+    color: alphav(var(--color-text), 0.7);
+    z-index: 1;
+    span {
+      display: flex;
+    }
   }
 }

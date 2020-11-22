@@ -1,6 +1,8 @@
 import type { Character } from '@src/entities/actor/proxies/character';
 import type { Sleeve } from '@src/entities/actor/sleeves';
+import type { ReadonlyPool } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
+import { notEmpty } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { compact } from 'remeda';
 import styles from './character-view-sleeve.scss';
@@ -33,8 +35,24 @@ export class CharacterViewSleeve extends LitElement {
           >
         </button>
       </header>
+
+      ${notEmpty(this.character.pools)
+        ? html`
+            <ul class="pools">
+              ${[...this.character.pools.values()].map(this.renderPool)}
+            </ul>
+          `
+        : ''}
     `;
   }
+
+  private renderPool = (pool: ReadonlyPool) => html`
+    <pool-item
+      slot="base"
+      .pool=${pool}
+      ?disabled=${this.character.disabled || pool.disabled}
+    ></pool-item>
+  `;
 }
 
 declare global {

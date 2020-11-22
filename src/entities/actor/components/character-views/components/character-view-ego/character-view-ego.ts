@@ -3,6 +3,7 @@ import { renderAutoForm } from '@src/components/form/forms';
 import { AptitudeType, enumValues } from '@src/data-enums';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
+import { maxFavors } from '@src/features/reputations';
 import { Skill, skillFilterCheck } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { notEmpty, safeMerge } from '@src/utility/helpers';
@@ -17,7 +18,7 @@ import {
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { live } from 'lit-html/directives/live';
-import { compact, first, reject } from 'remeda';
+import { compact, first, range, reject } from 'remeda';
 import styles from './character-view-ego.scss';
 
 @customElement('character-view-ego')
@@ -138,6 +139,16 @@ export class CharacterViewEgo extends LitElement {
             : ''}
         </ul>
       </sl-section>
+
+      ${this.ego.trackReputations
+        ? html`
+            <sl-section heading=${localize('reputations')} flipped>
+              <ul class="rep-list">
+                ${this.ego.trackedReps.map(this.renderRep)}
+              </ul>
+            </sl-section>
+          `
+        : ''}
     `;
   }
 
@@ -167,6 +178,33 @@ export class CharacterViewEgo extends LitElement {
       <span class="skill-name">${skill.fullName}</span>
       <span class="skill-total" slot="after">${skill.total}</span>
     </wl-list-item>`;
+  };
+
+  private renderRep = (rep: Ego['trackedReps'][number]) => {
+    return html`
+      <li class="rep-item">
+          <span title=${rep.network} class="rep-acronym">${rep.acronym}</span>
+          <span class="rep-score">${rep.score}</span>
+        <div class="favors">
+          ${[...maxFavors].map(([favor, max]) => {
+            const usedAmount = rep[favor];
+            return html`
+              <span title=${localize(favor)}>
+                ${range(1, max + 1).map(
+                  (favorNumber) => html`
+                    <mwc-icon
+                      >${usedAmount >= favorNumber
+                        ? 'check_box'
+                        : 'check_box_outline_blank'}</mwc-icon
+                    >
+                  `,
+                )}
+              </span>
+            `;
+          })}
+        </div>
+      </li>
+    `;
   };
 }
 

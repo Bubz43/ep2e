@@ -1,0 +1,97 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: inline-flex;
+  
+}
+
+:host([disabled]) {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+
+.pool {
+  flex: 1;
+  display: grid;
+  grid-template-areas:
+    "value"
+    "name";
+  place-items: center;
+  width: 105px;
+  padding: 0.5rem;
+  position: relative;
+  &.insight {
+    --filter-color: var(--color-secondary);
+  }
+  &.moxie {
+    --filter-color: var(--color-primary);
+  }
+  &.vigor,
+  &.threat {
+    --filter-color: var(--color-negative);
+  }
+  &.flex {
+    --filter-color: var(--color-text-lighter);
+  }
+
+  &:hover,
+  &:focus-within {
+    filter: drop-shadow(0px 0px 4px var(--filter-color));
+    cursor: pointer;
+    outline: none;
+    img {
+      transform: scale(1.25);
+    }
+  }
+
+  &.disabled {
+    pointer-events: none;
+  }
+  img {
+    grid-area: 1 / 1 / -1 / -1;
+    filter: invert(25%) opacity(35%);
+    transition: transform 50ms ease-in-out;
+    height: 40px;
+    display: block;
+    z-index: 0;
+  }
+
+  .pool-value {
+    font-size: 1.6rem;
+    text-align: center;
+    grid-area: value;
+    text-shadow: black 2px 3px 4px;
+    width: 100%;
+    position: relative;
+    font-family: var(--font-2);
+
+    small {
+      &::before {
+        content: "/";
+      }
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      opacity: 0.85;
+      font-size: 1rem;
+    }
+  }
+
+  .pool-name {
+    grid-area: name;
+    text-align: center;
+    border-top: 1px solid alphav(var(--color-text-lighter), 0.1);
+    text-transform: uppercase;
+    width: 100%;
+    text-shadow: 1px 2px 3px black;
+    letter-spacing: 1px;
+    font-family: var(--font-2);
+    font-size: 13px;
+  }
+}

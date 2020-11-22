@@ -3,6 +3,7 @@ import {
   openOrRenderWindow,
 } from '@src/components/window/window-controls';
 import { ResizeOption } from '@src/components/window/window-options';
+import { enumValues, PoolType } from '@src/data-enums';
 import {
   AppliedEffects,
   ReadonlyAppliedEffects,
@@ -21,7 +22,10 @@ import type { Trait } from '@src/entities/item/proxies/trait';
 import type { ActorEntity, SleeveType } from '@src/entities/models';
 import type { UpdateStore } from '@src/entities/update-store';
 import { EffectType, totalModifiers } from '@src/features/effects';
+import { Pool } from '@src/features/pool';
 import { EP } from '@src/foundry/system';
+import { LazyGetter } from 'lazy-get-decorator';
+import { difference } from 'remeda';
 import { openSleeveForm } from '../actor-views';
 import { Ego, FullEgoData } from '../ego';
 import { isSleeveItem, Sleeve } from '../sleeves';
@@ -29,6 +33,11 @@ import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 import { Biological } from './biological';
 import { Infomorph } from './infomorph';
 import { SyntheticShell } from './synthetic-shell';
+
+const nonThreat = difference(enumValues(PoolType), [
+  PoolType.Threat,
+]) as Exclude<PoolType, PoolType.Threat>[];
+
 
 export class Character extends ActorProxyBase<ActorType.Character> {
   readonly ego;
@@ -176,6 +185,68 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       }
     }
   }
+
+  get pools() {
+    return this.poolHolder.poolMap
+  } 
+
+  @LazyGetter()
+  protected get poolMap() {
+    const { useThreat } = this.ego;
+    const { spentPools } = this.epData;
+    if (useThreat) {
+      return new Map([
+        [
+          PoolType.Threat,
+          new Pool({
+            type: PoolType.Threat,
+            initialValue: this.epData.threat,
+            spent: spentPools.threat,
+          }),
+        ],
+      ]);
+    }
+
+    const pools = new Map(
+      nonThreat.map(
+        (type) =>
+          [
+            type,
+            new Pool({
+              type,
+              initialValue:
+                (this.sleeve?.pools[type] || 0) +
+                (type === PoolType.Flex ? this.ego.flex : 0),
+              spent: spentPools[type],
+            }),
+          ] as const
+      )
+    );
+
+    for (const effect of this._appliedEffects.getGroup(EffectType.Pool)) {
+      pools.get(effect.pool)?.addEffect(effect);
+    }
+    pools.forEach(({ max }, type, pools) => max || pools.delete(type));
+
+    return pools;
+  }
+
+  get poolHolder() {
+    if (this.actor.isToken && this.ego.useThreat) {
+      const original = game.actors.get(this.actor.id);
+      if (
+        original?.proxy.type === ActorType.Character &&
+        original.proxy.ego.useThreat
+      ) {
+        return original.proxy;
+      }
+    }
+    return this;
+  }
+
+
+
+  
 
   get psi() {
     return this.ego.psi;

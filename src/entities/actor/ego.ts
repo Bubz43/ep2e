@@ -153,6 +153,10 @@ export class Ego {
     return this.settings.trackMentalHealth;
   }
 
+  get trackReputations() {
+    return this.settings.trackReputations
+  }
+
   @LazyGetter()
   get mentalHealth() {
     return new MentalHealth({
