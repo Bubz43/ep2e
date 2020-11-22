@@ -62,15 +62,16 @@ character-view-header {
 .tabbed-content {
   display: flex;
   flex-flow: column;
-  gap: 0.25rem;
   grid-area: content;
 
   height: 200px;
   min-height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
-  padding: 0.5rem;
+  padding: 0.25rem;
   padding-left: 0;
+  border-top: 1px solid var(--color-border);
+  margin-top: -1px;
 
   &.no-scroll {
     overflow: visible;

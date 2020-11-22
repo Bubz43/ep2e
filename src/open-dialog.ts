@@ -11,7 +11,7 @@ export const openDialog = (content: (dialog: Dialog) => void) => {
   if (!dialog) {
     dialog = new Dialog();
     dialog.style.zIndex = '50';
-    dialog.slot = 'foundry-apps';
+    dialog.slot = 'dialog';
     overlay.append(dialog);
     dialog.addEventListener('closed', () => {
       if (focusSource?.isConnected && focusSource instanceof HTMLElement) {

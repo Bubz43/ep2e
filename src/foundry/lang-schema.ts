@@ -1411,6 +1411,7 @@ export type Formatable = {
   AlreadyHasItem: ['ownerName', 'itemName'];
   MismatchedAmmoClasses: ['firearm', 'ammo'];
   CannotLoadMissileSize: ['missileSize', 'availableSizes'];
+  SleevePermanentlyDeleted: ["name"]
 };
 
 export interface Lang {

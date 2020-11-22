@@ -1387,7 +1387,8 @@
       "ArmorReduced": "{armor} armor reduced by {value}.",
       "AlreadyHasItem": "{ownerName} already has {itemName}.",
       "MismatchedAmmoClasses": "Ammo is: [ {ammo} ] but weapon is {firearm}",
-      "CannotLoadMissileSize": "Missile must be [ {availableSizes} ] but is {missileSize}"
+      "CannotLoadMissileSize": "Missile must be [ {availableSizes} ] but is {missileSize}",
+      "SleevePermanentlyDeleted": "{name} and all its items will be permanently erased."
     }
   }
 }

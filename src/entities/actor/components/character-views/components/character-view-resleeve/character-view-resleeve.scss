@@ -6,8 +6,9 @@
 }
 
 :host {
-  display: flex;
-  flex-flow: column;
+  display: grid;
+  grid-auto-rows: min-content;
+  gap: 1rem;
 }
 
 li[divider] {
@@ -31,8 +32,13 @@ h2 {
   padding: 0.5rem 1rem;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  border-top: 2px solid var(--color-border);
+
+  submit-button {
+    margin-left: auto;
+  }
 }
+
 
 [slot="action"] {
   margin-right: 1ch;

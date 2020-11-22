@@ -1,11 +1,15 @@
+import { renderLabeledCheckbox } from '@src/components/field/fields';
+import { renderAutoForm } from '@src/components/form/forms';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { Sleeve, gameSleeves } from '@src/entities/actor/sleeves';
 import { ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
 import { idProp } from '@src/features/feature-helpers';
-import { localize } from '@src/foundry/localization';
+import { format, localize } from '@src/foundry/localization';
+import { userCan } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { tooltip } from '@src/init';
+import { openDialog } from '@src/open-dialog';
 import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import {
@@ -15,8 +19,9 @@ import {
   html,
   internalProperty,
 } from 'lit-element';
+import { render } from 'lit-html';
 import { repeat } from 'lit-html/directives/repeat';
-import { reject, sortBy } from 'remeda';
+import { mapValues, reject, sortBy } from 'remeda';
 import styles from './character-view-resleeve.scss';
 
 @customElement('character-view-resleeve')
@@ -33,6 +38,10 @@ export class CharacterViewResleeve extends LitElement {
 
   private keptItems = new Set<string>();
 
+  private resleeveOptions = {
+    keepCurrent: false,
+  };
+
   disconnectedCallback() {
     this.cleanup();
     super.connectedCallback();
@@ -41,16 +50,47 @@ export class CharacterViewResleeve extends LitElement {
   private cleanup() {
     this.keptItems.clear();
     this.selectedSleeve = null;
+    this.resleeveOptions = mapValues(this.resleeveOptions, () => false);
   }
 
   private toggleKeptItem(id: string) {
     if (this.keptItems.has(id)) this.keptItems.delete(id);
     else this.keptItems.add(id);
   }
-  private async resleeve() {
+  private async resleeve(ev: Event) {
     if (!this.selectedSleeve) return;
     const { sleeve } = this.character;
     if (sleeve) {
+      if (!this.resleeveOptions.keepCurrent) {
+        if (ev instanceof CustomEvent && 'action' in ev.detail) {
+          if (ev.detail.action !== 'confirm') return;
+        } else {
+          return openDialog((dialog) => {
+            dialog.heading = `${localize('confirm')} ${localize('resleeve')}`;
+            render(
+              html`
+                <p>
+                  ${format('SleevePermanentlyDeleted', { name: sleeve.name })}
+                </p>
+                <mwc-button
+                  slot="secondaryAction"
+                  dialogAction="cancel"
+                  label=${localize('cancel')}
+                ></mwc-button>
+                <mwc-button
+                  slot="primaryAction"
+                  dialogAction="confirm"
+                  label=${localize('confirm')}
+                ></mwc-button>
+              `,
+              dialog,
+            );
+            dialog.addEventListener('closed', this.resleeve.bind(this), {
+              once: true,
+            });
+          });
+        }
+      } else await sleeve.createActor();
       if (sleeve.type !== this.selectedSleeve.type) {
         this.character.updater.prop('flags', EP.Name, sleeve.type).store(null);
       }
@@ -96,17 +136,43 @@ export class CharacterViewResleeve extends LitElement {
 
   render() {
     return html`
-      <h2>${localize('resleeve')}</h2>
-      ${this.character.sleeve ? this.renderCurrent(this.character.sleeve) : ''}
-      <sl-header heading="${localize('selected')} ${localize('sleeve')}">
-        <mwc-icon-button
-          slot="action"
-          icon="person_search"
-          @click=${this.openSelectionList}
-        ></mwc-icon-button>
-      </sl-header>
-      ${this.selectedSleeve ? this.renderSelected(this.selectedSleeve) : ''}
+      <section>
+        <h2>${localize('resleeve')}</h2>
+        ${this.character.sleeve
+          ? this.renderCurrent(this.character.sleeve)
+          : ''}
+      </section>
+      <section>
+        <sl-header heading="${localize('selected')} ${localize('sleeve')}">
+          <mwc-icon-button
+            slot="action"
+            icon="person_search"
+            @click=${this.openSelectionList}
+          ></mwc-icon-button>
+        </sl-header>
+        ${this.selectedSleeve ? this.renderSelected(this.selectedSleeve) : ''}
+      </section>
       <div class="controls">
+        ${renderAutoForm({
+          props: this.resleeveOptions,
+          classes: 'option-form',
+          update: (changed, original) =>
+            (this.resleeveOptions = { ...original, ...changed }),
+          fields: ({ keepCurrent }) => [
+            this.character.sleeve
+              ? renderLabeledCheckbox(
+                  {
+                    ...keepCurrent,
+                    label: `${localize('keep')} ${localize('current')}`,
+                  },
+                  {
+                    disabled: !userCan('ACTOR_CREATE'),
+                    tooltipText: 'Requires actor creator privileges',
+                  },
+                )
+              : '',
+          ],
+        })}
         <submit-button
           @click=${this.resleeve}
           ?complete=${!!this.selectedSleeve}

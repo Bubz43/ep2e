@@ -142,6 +142,9 @@
                 "OnCheckFailure": {
                   "type": "string"
                 },
+                "SleevePermanentlyDeleted": {
+                  "type": "string"
+                },
                 "TakeSVWhenWearsOff": {
                   "type": "string"
                 }
@@ -155,7 +158,8 @@
                 "ArmorReduced",
                 "AlreadyHasItem",
                 "MismatchedAmmoClasses",
-                "CannotLoadMissileSize"
+                "CannotLoadMissileSize",
+                "SleevePermanentlyDeleted"
               ],
               "type": "object"
             },

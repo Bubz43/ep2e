@@ -34,6 +34,10 @@
   ::slotted(*) {
     pointer-events: initial;
   }
+
+  ::slotted(mwc-dialog:not([open])) {
+    pointer-events: none;
+  }
 }
 
 scene-view {

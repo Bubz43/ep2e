@@ -398,6 +398,7 @@ export class EPOverlay extends LitElement {
 
           <!-- <user-view></user-view> -->
           <event-list></event-list>
+          <slot name="dialog"></slot>
           <slot name="tooltip"></slot>
         `,
       )}

@@ -27,7 +27,7 @@ body {
 }
 
 mwc-dialog {
-  --mdc-theme-surface: #{alphav(var(--color-bg), 0.96)};
+  --mdc-theme-surface: #{lightv(var(--color-bg-alt), 1.2)};
   > * {
     overflow: hidden;
     &[slot] {
