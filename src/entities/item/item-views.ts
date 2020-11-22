@@ -1,4 +1,7 @@
-import { openOrRenderWindow, openWindow } from '@src/components/window/window-controls';
+import {
+  openOrRenderWindow,
+  openWindow,
+} from '@src/components/window/window-controls';
 import { ResizeOption } from '@src/components/window/window-options';
 import { html } from 'lit-html';
 import { ItemType } from '../entity-types';
@@ -167,7 +170,6 @@ export const openPsiFormWindow = (psi: Psi) => {
     key: psi.updater,
     content: renderItemForm(psi),
     name: psi.name,
-    resizable: ResizeOption.Vertical
-  })
-
+    resizable: ResizeOption.Vertical,
+  });
 };

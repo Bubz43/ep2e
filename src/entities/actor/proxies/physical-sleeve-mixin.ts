@@ -20,17 +20,17 @@ export const SleeveInfo = (
 ) => {
   return class extends cls {
     get acquisition() {
-      return this.epData.acquisition
+      return this.epData.acquisition;
     }
 
     get conditions() {
-      return this.epData.conditions
+      return this.epData.conditions;
     }
 
     get pools() {
-      return this.epData.pools
+      return this.epData.pools;
     }
-  }
+  };
 };
 
 export const PhysicalSleeve = (

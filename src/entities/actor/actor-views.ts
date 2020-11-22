@@ -12,8 +12,6 @@ export const renderCharacterView = (proxy: Character, token: MaybeToken) => {
   `;
 };
 
-
-
 export const openSleeveForm = (sleeve: Sleeve) => {
   return openOrRenderWindow({
     key: sleeve.updater,
@@ -26,17 +24,13 @@ export const openSleeveForm = (sleeve: Sleeve) => {
 export const renderSleeveForm = (proxy: Sleeve) => {
   switch (proxy.type) {
     case ActorType.Infomorph:
-      return html`<infomorph-form
-          .sleeve=${proxy}
-        ></infomorph-form>
+      return html`<infomorph-form .sleeve=${proxy}></infomorph-form>
         <entity-form-footer
           slot="footer"
           .updater=${proxy.updater.prop('data').nestedStore()}
         ></entity-form-footer> `;
     case ActorType.Biological:
-      return html`<biological-form
-          .sleeve=${proxy}
-        ></biological-form>
+      return html`<biological-form .sleeve=${proxy}></biological-form>
         <entity-form-footer
           slot="footer"
           .updater=${proxy.updater.prop('data').nestedStore()}

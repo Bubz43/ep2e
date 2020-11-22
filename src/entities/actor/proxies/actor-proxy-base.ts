@@ -120,12 +120,10 @@ export abstract class ActorProxyBase<T extends ActorType> {
     actor.subscriptions.subscribe(updater, {
       onEntityUpdate: (actor) => {
         const entity = findData(actor);
-        if (entity) renderWindow(entity)
-        
+        if (entity) renderWindow(entity);
         else closeWindow(updater);
       },
       onSubEnd: () => closeWindow(updater),
-
     });
 
     if (!existed) {
@@ -140,8 +138,6 @@ export abstract class ActorProxyBase<T extends ActorType> {
         );
       }
     }
-
-   
   }
 
   matchRegexp(regex: RegExp) {

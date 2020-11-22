@@ -173,7 +173,7 @@ export class ActorEP extends Actor {
     return this.#proxy;
   }
 
-  private openForm = () => this.sheet.render(true)
+  private openForm = () => this.sheet.render(true);
 
   private createProxy() {
     const { data } = this;
@@ -208,7 +208,7 @@ export class ActorEP extends Actor {
       ),
       itemOperations: this.itemOperations,
       actor: this,
-      openForm: this.openForm
+      openForm: this.openForm,
     } as const;
   }
 

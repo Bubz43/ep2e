@@ -17,7 +17,7 @@ import { SleeveInfo } from './physical-sleeve-mixin';
 
 class InfomorphBase extends ActorProxyBase<ActorType.Infomorph> {
   get subtype() {
-    return localize(this.type)
+    return localize(this.type);
   }
 }
 

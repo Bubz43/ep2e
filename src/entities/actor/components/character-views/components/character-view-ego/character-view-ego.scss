@@ -18,7 +18,7 @@ sl-section {
 }
 
 header {
-  padding: 0.75rem 1rem; 
+  padding: 0.75rem 1rem;
   button {
     all: unset;
     border-bottom: 1px solid var(--color-border);
@@ -48,10 +48,6 @@ header {
   grid-template-columns: repeat(6, 1fr);
 }
 
-
-
-
-
 .aptitude {
   &-item {
     padding: 0.25rem 0.5rem;
@@ -76,7 +72,6 @@ header {
     display: flex;
   }
 }
-
 
 .skill-controls {
   @include inputReset();
@@ -106,9 +101,6 @@ header {
     margin: 0.25rem 0;
     list-style: none;
   }
-
-
-
 }
 
 .skill-item {

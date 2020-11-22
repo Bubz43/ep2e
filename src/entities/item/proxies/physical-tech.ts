@@ -1,22 +1,18 @@
 import {
   closeWindow,
   getWindow,
-  openOrRenderWindow
+  openOrRenderWindow,
 } from '@src/components/window/window-controls';
 import {
   ResizeOption,
-  SlWindowEventName
+  SlWindowEventName,
 } from '@src/components/window/window-options';
 import { Activation, DeviceType } from '@src/data-enums';
 import { Ego } from '@src/entities/actor/ego';
 import type { ObtainableEffects } from '@src/entities/applied-effects';
 import { renderEgoForm } from '@src/entities/components/render-ego-form';
 import { ItemType } from '@src/entities/entity-types';
-import {
-  DefaultEgos,
-
-  setupItemOperations
-} from '@src/entities/models';
+import { DefaultEgos, setupItemOperations } from '@src/entities/models';
 import { UpdateStore } from '@src/entities/update-store';
 import { localize } from '@src/foundry/localization';
 import { deepMerge } from '@src/foundry/misc-helpers';

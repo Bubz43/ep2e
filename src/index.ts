@@ -161,7 +161,7 @@ EgoFormThreatStress;
 EgoFormRep;
 
 // Feature Views
-EffectsViewer
+EffectsViewer;
 
 // Feature Editors
 EffectCreator;

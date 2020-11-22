@@ -67,7 +67,7 @@ export class PhysicalService extends mix(Base).with(Purchasable) {
   }
 
   get equipped() {
-    return this.epData.state.started
+    return this.epData.state.started;
   }
 
   findRep(id: string) {

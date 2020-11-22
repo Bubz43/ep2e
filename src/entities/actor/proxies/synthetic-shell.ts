@@ -21,11 +21,14 @@ import { PhysicalSleeve, SleeveInfo } from './physical-sleeve-mixin';
 
 class SyntheticBase extends ActorProxyBase<ActorType.SyntheticShell> {
   get subtype() {
-    return this.epData.subtype
+    return this.epData.subtype;
   }
 }
 
-export class SyntheticShell extends mix(SyntheticBase).with(SleeveInfo, PhysicalSleeve) {
+export class SyntheticShell extends mix(SyntheticBase).with(
+  SleeveInfo,
+  PhysicalSleeve,
+) {
   private _localEffects?: AppliedEffects;
   private _outsideEffects?: ReadonlyAppliedEffects;
   readonly sleeved;
@@ -63,7 +66,6 @@ export class SyntheticShell extends mix(SyntheticBase).with(SleeveInfo, Physical
     }
     return things;
   }
-
 
   @LazyGetter()
   get physicalHealth() {

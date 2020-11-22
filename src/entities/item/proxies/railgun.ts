@@ -18,7 +18,13 @@ import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { compact, difference } from 'remeda';
 import type { Attacker } from '../item-interfaces';
-import { Copyable, Equippable, Gear, Purchasable, RangedWeapon } from '../item-mixins';
+import {
+  Copyable,
+  Equippable,
+  Gear,
+  Purchasable,
+  RangedWeapon,
+} from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
 class Base extends ItemProxyBase<ItemType.Railgun> {

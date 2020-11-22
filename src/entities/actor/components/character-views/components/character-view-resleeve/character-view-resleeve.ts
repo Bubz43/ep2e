@@ -50,20 +50,23 @@ export class CharacterViewResleeve extends LitElement {
         this.character.updater.prop('flags', EP.Name, sleeve.type).store(null);
       }
       if (notEmpty(sleeve.items)) {
-        await this.character.itemOperations.remove(...reject([...sleeve.items.keys()], id => this.keptItems.has(id)))
+        await this.character.itemOperations.remove(
+          ...reject([...sleeve.items.keys()], (id) => this.keptItems.has(id)),
+        );
       }
     }
-  
-   
+
     const { items } = this.selectedSleeve;
     const data = this.selectedSleeve.dataCopy();
     data.items = [];
     // TODO Brain
-    await this.character.itemOperations.add(...[...items.values()].map(item => item.getDataCopy(false)))
+    await this.character.itemOperations.add(
+      ...[...items.values()].map((item) => item.getDataCopy(false)),
+    );
     await this.character.updater
       .prop('flags', EP.Name, this.selectedSleeve.type)
       .commit(data);
-    
+
     this.keptItems.clear();
   }
 
@@ -109,25 +112,27 @@ export class CharacterViewResleeve extends LitElement {
           <span slot="secondary">${localize(sleeve.type)}</span>
         </mwc-list-item>
         <li divider></li>
-    
-        ${repeat(sortBy([...sleeve.items.values()], i => i.type === ItemType.Trait), idProp, (item) => {
-          if (item.type === ItemType.Trait) return this.renderItem(item);
-          const selected = this.keptItems.has(item.id);
-          return html`
-            <mwc-check-list-item
-              class="item"
-              ?selected=${selected}
-              @click=${() => this.toggleKeptItem(item.id)}
-            >
-              <span
-                >${item.fullName}
-                <span class="item-type"
-                  >${item.fullType}</span
-                ></span
+
+        ${repeat(
+          sortBy([...sleeve.items.values()], (i) => i.type === ItemType.Trait),
+          idProp,
+          (item) => {
+            if (item.type === ItemType.Trait) return this.renderItem(item);
+            const selected = this.keptItems.has(item.id);
+            return html`
+              <mwc-check-list-item
+                class="item"
+                ?selected=${selected}
+                @click=${() => this.toggleKeptItem(item.id)}
               >
-            </mwc-check-list-item>
-          `;
-        })}
+                <span
+                  >${item.fullName}
+                  <span class="item-type">${item.fullType}</span></span
+                >
+              </mwc-check-list-item>
+            `;
+          },
+        )}
       </mwc-list>
     `;
   }
@@ -141,26 +146,23 @@ export class CharacterViewResleeve extends LitElement {
           <span slot="secondary">${localize(sleeve.type)}</span>
         </mwc-list-item>
         <li divider></li>
-        ${repeat(
-          sleeve.items.values(),
-          idProp,
-          this.renderItem)}
+        ${repeat(sleeve.items.values(), idProp, this.renderItem)}
       </mwc-list>
     `;
   }
 
   private renderItem = (item: ItemProxy) => {
-    return html`  <mwc-list-item class="item" noninteractive>
-    <span
-      >${item.fullName}
-      <span class="item-type"
-        >${item.type === ItemType.Trait
-          ? localize(item.type)
-          : item.fullType}</span
-      ></span
-    >
-  </mwc-list-item>`
-  }
+    return html` <mwc-list-item class="item" noninteractive>
+      <span
+        >${item.fullName}
+        <span class="item-type"
+          >${item.type === ItemType.Trait
+            ? localize(item.type)
+            : item.fullType}</span
+        ></span
+      >
+    </mwc-list-item>`;
+  };
 }
 
 declare global {

@@ -3,23 +3,17 @@ import { renderAutoForm } from '@src/components/form/forms';
 import { AptitudeType, enumValues } from '@src/data-enums';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
-import {
-  Skill,
-  skillFilterCheck
-} from '@src/features/skills';
+import { Skill, skillFilterCheck } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { notEmpty, safeMerge } from '@src/utility/helpers';
 import {
   customElement,
-
-
   html,
-  internalProperty, LitElement,
+  internalProperty,
+  LitElement,
   property,
-
-
-
-  PropertyValues, queryAll
+  PropertyValues,
+  queryAll,
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { live } from 'lit-html/directives/live';
@@ -105,7 +99,10 @@ export class CharacterViewEgo extends LitElement {
               <health-item
                 class="mental-health-view"
                 .health=${this.ego.mentalHealth}
-              ><span slot="source">${localize("mentalHealth")}</span></health-item>
+                ><span slot="source"
+                  >${localize('mentalHealth')}</span
+                ></health-item
+              >
             `
           : ''}
       </sl-section>
@@ -165,8 +162,7 @@ export class CharacterViewEgo extends LitElement {
       clickable
       class="skill-item ${classMap({ filtered })}"
       ?disabled=${this.disabled}
-      tabindex=${live(filtered ? "-1" : "0")}
-
+      tabindex=${live(filtered ? '-1' : '0')}
     >
       <span class="skill-name">${skill.fullName}</span>
       <span class="skill-total" slot="after">${skill.total}</span>

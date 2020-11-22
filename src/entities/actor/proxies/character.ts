@@ -36,7 +36,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   readonly sleights: Sleight[] = [];
   readonly traits: Trait[] = [];
   readonly equipped: Exclude<ItemProxy, Psi | Sleight | Trait>[] = [];
-  readonly stashed: EquippableItem[] = []
+  readonly stashed: EquippableItem[] = [];
 
   constructor(init: ActorProxyInit<ActorType.Character>) {
     super(init);
@@ -144,7 +144,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     sleeveItems: Map<string, ItemProxy>,
     egoItems: Map<string, ItemProxy>,
   ) {
-    for (const proxy of this.items.values()) {      
+    for (const proxy of this.items.values()) {
       switch (proxy.type) {
         case ItemType.Sleight: {
           egoItems.set(proxy.id, proxy);

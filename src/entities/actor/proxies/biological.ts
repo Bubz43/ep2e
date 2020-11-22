@@ -56,7 +56,7 @@ export class Biological extends mix(BiologicalBase).with(
   }
 
   get sex() {
-    return this.epData.sex
+    return this.epData.sex;
   }
 
   @LazyGetter()

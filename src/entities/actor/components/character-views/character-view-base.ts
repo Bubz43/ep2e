@@ -27,9 +27,9 @@ export abstract class CharacterViewBase extends LitElement {
   }
 
   firstUpdated() {
-    this.addEventListener("character-drawer-render", ({ renderer }) => {
-      this.toggleDrawerContent(this[`render${renderer}` as const])
-    })
+    this.addEventListener('character-drawer-render', ({ renderer }) => {
+      this.toggleDrawerContent(this[`render${renderer}` as const]);
+    });
   }
 
   protected renderDrawerContent() {
@@ -67,7 +67,9 @@ export abstract class CharacterViewBase extends LitElement {
 
   renderResleeve() {
     return html`
-    <character-view-resleeve .character=${this.character}></character-view-resleeve>
+      <character-view-resleeve
+        .character=${this.character}
+      ></character-view-resleeve>
     `;
   }
 

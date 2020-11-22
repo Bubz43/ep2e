@@ -82,7 +82,7 @@ export class CharacterView extends CharacterViewBase {
                 <mwc-button
                   raised
                   ?disabled=${this.character.disabled}
-                  label="${localize("select")} ${localize("sleeve")}"
+                  label="${localize('select')} ${localize('sleeve')}"
                   @click=${() => this.toggleDrawerContent(this.renderResleeve)}
                 ></mwc-button>
               </div>
@@ -111,9 +111,7 @@ export class CharacterView extends CharacterViewBase {
   }
 
   private renderStatus() {
-    return html`
-    
-    `;
+    return html``;
   }
 
   protected renderDrawer() {
