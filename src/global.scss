@@ -26,6 +26,16 @@ body {
   }
 }
 
+.drag-image {
+  position: absolute;
+  left: -1000px;
+  background: var(--color-grey);
+  box-shadow: 0 0 4px black;
+  padding: 0.25rem 0.5rem;
+  border-radius: 7px;
+  @include truncate(250px);
+}
+
 mwc-dialog {
   --mdc-theme-surface: #{lightv(var(--color-bg-alt), 1.2)};
   > * {

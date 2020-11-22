@@ -56,6 +56,17 @@ const dropChecker = <T extends DropType, D = Drops[T]>(
 
 export const dragSource = () => source as Readonly<typeof source>;
 
+const setDragImage = (el: HTMLElement) => {
+  let dragImage = document.querySelector(".drag-image")
+  if (!dragImage) {
+    dragImage = document.createElement("div")
+    dragImage.classList.add("drag-image");
+    document.body.append(dragImage);
+  }
+  dragImage.textContent = el.textContent
+  return dragImage
+}
+
 export const setDragSource = (ev: DragEvent, drop: Drop) => {
   const el = ev
     .composedPath()
@@ -71,6 +82,10 @@ export const setDragSource = (ev: DragEvent, drop: Drop) => {
     },
     { once: true },
   );
+
+  if (el instanceof HTMLElement && el.textContent) {
+    ev.dataTransfer?.setDragImage(setDragImage(el), 20, 20)
+  }
 
   source.element = el;
   source.data = drop;

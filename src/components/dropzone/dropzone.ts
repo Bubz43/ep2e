@@ -32,22 +32,30 @@ export class DropZone extends mix(LitElement).with(LazyRipple) {
 
   @property({ type: Boolean }) disabled = false;
 
+  private internalDrag = false;
+
   firstUpdated() {
     this.addEventListener('dragover', this.setOutline);
     this.addEventListener('dragenter', this.setOutline);
-
+    this.addEventListener('dragstart', () => {
+      this.internalDrag = true;
+      this.addEventListener('dragend', () => (this.internalDrag = false), {
+        once: true,
+      });
+    });
     for (const event of dragEvents) {
       this.addEventListener(event, this.removeBackgroundHighlight);
     }
   }
 
   private setOutline = () => {
-    if (this.disabled) return;
+    if (this.disabled || this.internalDrag) return;
     DropZone.highlighted = this;
   };
 
   private removeBackgroundHighlight = (ev: DragEvent) => {
-    if (ev.type === 'drop') {
+    if (ev.type === "dragleave" && ev.target !== this) return;
+    if (ev.type === 'drop' && this.hasAttribute("outlined")) {
       this.rippleHandlers.startPress(ev);
       requestAnimationFrame(() => {
         this.rippleHandlers.endPress();

@@ -1,6 +1,7 @@
 import type { TabBar } from '@material/mwc-tab-bar';
 import type { ItemProxy } from '@src/entities/item/item';
 import { idProp } from '@src/features/feature-helpers';
+import { DropType, setDragSource } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, PropertyValues, query } from 'lit-element';
@@ -138,9 +139,7 @@ export class CharacterView extends CharacterViewBase {
       </sl-dropzone>
 
       <sl-dropzone ?disabled=${disabled}>
-        <sl-header
-          heading=${localize('stashed')}
-        ></sl-header>
+        <sl-header heading=${localize('stashed')}></sl-header>
         ${notEmpty(stashed) ? this.renderItemList(stashed) : ''}
       </sl-dropzone>
     `;
@@ -153,7 +152,20 @@ export class CharacterView extends CharacterViewBase {
           proxies,
           idProp,
           (proxy) => html`
-            <wl-list-item draggable="true" clickable class="item-proxy" @click=${proxy.openForm}>
+            <wl-list-item
+              draggable="true"
+              @dragstart=${(ev: DragEvent) => {
+                setDragSource(ev, {
+                  type: DropType.Item,
+                  actorId: this.character.id,
+                  tokenId: this.token?.id,
+                  data: proxy.data,
+                });
+              }}
+              clickable
+              class="item-proxy"
+              @click=${proxy.openForm}
+            >
               ${proxy.nonDefaultImg
                 ? html` <img slot="before" height="32px" src=${proxy.img} /> `
                 : ''}
@@ -181,7 +193,7 @@ export class CharacterView extends CharacterViewBase {
           ? html`
               <mwc-icon-button
                 class="close-drawer"
-                icon="arrow_back"
+                icon="close"
                 @click=${this.closeDrawer}
               ></mwc-icon-button>
               ${this.renderDrawerContent()}

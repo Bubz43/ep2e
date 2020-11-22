@@ -1,16 +1,13 @@
 import { Placement } from '@src/components/popover/popover-options';
-import { RechargeType } from '@src/data-enums';
 import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Character } from '@src/entities/actor/proxies/character';
-import { ActorType } from '@src/entities/entity-types';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
-import { customElement, LitElement, property, html } from 'lit-element';
-import { range } from 'remeda';
+import { customElement, html, LitElement, property } from 'lit-element';
 import {
   CharacterDrawerRenderer,
-  CharacterDrawerRenderEvent,
+  CharacterDrawerRenderEvent
 } from '../../character-drawer-render-event';
 import styles from './character-view-header.scss';
 
@@ -26,8 +23,8 @@ export class CharacterViewHeader extends LitElement {
 
   @property({
     attribute: false,
-    hasChanged() {
-      return true;
+    hasChanged(value, oldValue) {
+      return !value || !oldValue || (value === oldValue)
     },
   })
   token?: MaybeToken;
