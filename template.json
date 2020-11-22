@@ -440,6 +440,12 @@
       "thrownWeapon"
     ],
     "templates": {
+      "Stackable": {
+        "quantity": 5,
+        "state": {
+          "stashed": false
+        }
+      },
       "Common": {
         "description": "",
         "reference": ""
@@ -550,14 +556,12 @@
       "templates": [
         "Common",
         "Cost",
-        "Copyable"
+        "Copyable",
+        "Stackable"
       ],
       "addiction": "",
       "addictionMod": 0,
       "hasSeverity": false,
-      "state": {
-        "stashed": false
-      },
       "application": [
         "dermal",
         "inhalation",
@@ -584,7 +588,6 @@
       "consumeOnUse": true,
       "substanceType": "drug",
       "isAntidote": false,
-      "quantity": 5,
       "quantityPerCost": 5,
       "severity": {
         "check": "som",
@@ -609,21 +612,18 @@
       "templates": [
         "Common",
         "Cost",
-        "Copyable"
+        "Copyable",
+        "Stackable"
       ],
       "areaEffect": "",
       "explosiveType": "grenade",
       "containSubstance": false,
-      "quantity": 5,
       "areaEffectRadius": 0,
       "size": "micro",
       "sticky": true,
       "unitsPerComplexity": 5,
       "dosesPerUnit": 1,
       "hasSecondaryMode": false,
-      "state": {
-        "stashed": false
-      },
       "primaryAttack": {
         "armorUsed": "",
         "attackTraits": [],
@@ -746,7 +746,8 @@
       "reputations": [],
       "serviceType": "generic",
       "state": {
-        "elapsed": 0
+        "elapsed": 0,
+        "equipped": false
       },
       "templates": [
         "Common",
@@ -974,6 +975,12 @@
       "wareType": ""
     },
     "firearmAmmo": {
+      "templates": [
+        "Common",
+        "Cost",
+        "Copyable",
+        "Stackable"
+      ],
       "ammoClass": "heavyPistol",
       "quantity": 100,
       "carryPayload": false,
@@ -989,14 +996,6 @@
           "notes": "",
           "id": "_defaultID"
         }
-      ],
-      "state": {
-        "stashed": false
-      },
-      "templates": [
-        "Common",
-        "Cost",
-        "Copyable"
       ]
     },
     "railgun": {
@@ -1075,15 +1074,15 @@
       }
     },
     "thrownWeapon": {
-      "exoticSkill": "",
-      "quantity": 5,
-      "quantityPerCost": 5,
       "templates": [
         "Common",
         "Cost",
         "GearTraits",
-        "Copyable"
+        "Copyable",
+        "Stackable"
       ],
+      "exoticSkill": "",
+      "quantityPerCost": 5,
       "primaryAttack": {
         "armorPiercing": false,
         "attackTraits": [],

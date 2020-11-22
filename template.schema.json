@@ -2694,26 +2694,11 @@
                 "primaryAttack": {
                   "$ref": "#/definitions/ExplosiveAttackData"
                 },
-                "quantity": {
-                  "type": "number"
-                },
                 "secondaryAttack": {
                   "$ref": "#/definitions/ExplosiveAttackData"
                 },
                 "size": {
                   "$ref": "#/definitions/ExplosiveSize"
-                },
-                "state": {
-                  "additionalProperties": false,
-                  "properties": {
-                    "stashed": {
-                      "type": "boolean"
-                    }
-                  },
-                  "required": [
-                    "stashed"
-                  ],
-                  "type": "object"
                 },
                 "sticky": {
                   "type": "boolean"
@@ -2731,10 +2716,14 @@
                     {
                       "const": "Copyable",
                       "type": "string"
+                    },
+                    {
+                      "const": "Stackable",
+                      "type": "string"
                     }
                   ],
-                  "maxItems": 3,
-                  "minItems": 3,
+                  "maxItems": 4,
+                  "minItems": 4,
                   "type": "array"
                 },
                 "unitsPerComplexity": {
@@ -2749,10 +2738,8 @@
                 "explosiveType",
                 "hasSecondaryMode",
                 "primaryAttack",
-                "quantity",
                 "secondaryAttack",
                 "size",
-                "state",
                 "sticky",
                 "templates",
                 "unitsPerComplexity"
@@ -2950,18 +2937,6 @@
                 "roundsPerComplexity": {
                   "type": "number"
                 },
-                "state": {
-                  "additionalProperties": false,
-                  "properties": {
-                    "stashed": {
-                      "type": "boolean"
-                    }
-                  },
-                  "required": [
-                    "stashed"
-                  ],
-                  "type": "object"
-                },
                 "templates": {
                   "items": [
                     {
@@ -2975,10 +2950,14 @@
                     {
                       "const": "Copyable",
                       "type": "string"
+                    },
+                    {
+                      "const": "Stackable",
+                      "type": "string"
                     }
                   ],
-                  "maxItems": 3,
-                  "minItems": 3,
+                  "maxItems": 4,
+                  "minItems": 4,
                   "type": "array"
                 }
               },
@@ -2988,7 +2967,6 @@
                 "modes",
                 "quantity",
                 "roundsPerComplexity",
-                "state",
                 "templates"
               ],
               "type": "object"
@@ -3135,13 +3113,13 @@
                     "elapsed": {
                       "type": "number"
                     },
-                    "started": {
+                    "equipped": {
                       "type": "boolean"
                     }
                   },
                   "required": [
                     "elapsed",
-                    "started"
+                    "equipped"
                   ],
                   "type": "object"
                 },
@@ -7546,9 +7524,6 @@
                 "isAntidote": {
                   "type": "boolean"
                 },
-                "quantity": {
-                  "type": "number"
-                },
                 "quantityPerCost": {
                   "type": "number"
                 },
@@ -8024,18 +7999,6 @@
                   ],
                   "type": "object"
                 },
-                "state": {
-                  "additionalProperties": false,
-                  "properties": {
-                    "stashed": {
-                      "type": "boolean"
-                    }
-                  },
-                  "required": [
-                    "stashed"
-                  ],
-                  "type": "object"
-                },
                 "substanceType": {
                   "$ref": "#/definitions/SubstanceType"
                 },
@@ -8052,10 +8015,14 @@
                     {
                       "const": "Copyable",
                       "type": "string"
+                    },
+                    {
+                      "const": "Stackable",
+                      "type": "string"
                     }
                   ],
-                  "maxItems": 3,
-                  "minItems": 3,
+                  "maxItems": 4,
+                  "minItems": 4,
                   "type": "array"
                 }
               },
@@ -8069,10 +8036,8 @@
                 "consumeOnUse",
                 "hasSeverity",
                 "isAntidote",
-                "quantity",
                 "quantityPerCost",
                 "severity",
-                "state",
                 "substanceType",
                 "templates"
               ],
@@ -8164,6 +8129,31 @@
                     "twoHanded"
                   ],
                   "type": "object"
+                },
+                "Stackable": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "quantity": {
+                      "type": "number"
+                    },
+                    "state": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "stashed": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "stashed"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "quantity",
+                    "state"
+                  ],
+                  "type": "object"
                 }
               },
               "required": [
@@ -8171,7 +8161,8 @@
                 "Copyable",
                 "Cost",
                 "GearState",
-                "GearTraits"
+                "GearTraits",
+                "Stackable"
               ],
               "type": "object"
             },
@@ -8183,9 +8174,6 @@
                 },
                 "primaryAttack": {
                   "$ref": "#/definitions/ThrownWeaponAttackData"
-                },
-                "quantity": {
-                  "type": "number"
                 },
                 "quantityPerCost": {
                   "type": "number"
@@ -8207,17 +8195,20 @@
                     {
                       "const": "Copyable",
                       "type": "string"
+                    },
+                    {
+                      "const": "Stackable",
+                      "type": "string"
                     }
                   ],
-                  "maxItems": 4,
-                  "minItems": 4,
+                  "maxItems": 5,
+                  "minItems": 5,
                   "type": "array"
                 }
               },
               "required": [
                 "exoticSkill",
                 "primaryAttack",
-                "quantity",
                 "quantityPerCost",
                 "templates"
               ],

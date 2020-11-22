@@ -1,11 +1,15 @@
 import type { TabBar } from '@material/mwc-tab-bar';
+import type { ItemProxy } from '@src/entities/item/item';
+import { idProp } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, PropertyValues, query } from 'lit-element';
 import { nothing } from 'lit-html';
 import { cache } from 'lit-html/directives/cache';
 import { classMap } from 'lit-html/directives/class-map';
+import { repeat } from 'lit-html/directives/repeat';
 import { first } from 'remeda';
+import { stopEvent } from 'weightless';
 import { CharacterViewBase } from './character-view-base';
 import styles from './character-view.scss';
 
@@ -111,7 +115,50 @@ export class CharacterView extends CharacterViewBase {
   }
 
   private renderStatus() {
-    return html``;
+    const { traits, equipped, consumables, stashed } = this.character;
+    return html`
+      <sl-header
+        heading=${localize('traits')}
+        ?hideBorder=${traits.length === 0}
+      ></sl-header>
+      ${notEmpty(traits) ? this.renderItemList(traits) : ''}
+      ${notEmpty(consumables)
+        ? html`
+            <sl-header heading=${localize('consumables')}></sl-header>
+            ${this.renderItemList(consumables)}
+          `
+        : ''}
+
+      <sl-header heading=${localize('equipped')}></sl-header>
+      ${notEmpty(equipped) ? this.renderItemList(equipped) : ''}
+
+      <sl-header
+        heading=${localize('stashed')}
+        ?hideBorder=${stashed.length === 0}
+      ></sl-header>
+      ${notEmpty(stashed) ? this.renderItemList(stashed) : ''}
+    `;
+  }
+
+  private renderItemList(proxies: ItemProxy[]) {
+    return html`
+      <sl-animated-list class="proxy-list">
+        ${repeat(
+          proxies,
+          idProp,
+          (proxy) => html`
+            <wl-list-item clickable class="item-proxy" @click=${proxy.openForm}>
+              <span>${proxy.name}</span>
+              <delete-button
+                slot="after"
+                @delete=${proxy.deleteSelf}
+                @click=${stopEvent}
+              ></delete-button>
+            </wl-list-item>
+          `,
+        )}
+      </sl-animated-list>
+    `;
   }
 
   protected renderDrawer() {

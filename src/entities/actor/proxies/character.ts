@@ -149,7 +149,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       if ("equipped" in proxy) {
         this[proxy.equipped ? "equipped" : "stashed"].push(proxy)
       } else if ("quantity" in proxy) {
-        
+        this[proxy.stashed ? "stashed" : "consumables"].push(proxy)
       }
       switch (proxy.type) {
         case ItemType.Sleight: {
@@ -161,6 +161,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         case ItemType.Trait: {
           const collection = proxy.isMorphTrait ? sleeveItems : egoItems;
           collection.set(proxy.id, proxy);
+          this.traits.push(proxy)
           this._appliedEffects.add(proxy.currentEffects);
           break;
         }

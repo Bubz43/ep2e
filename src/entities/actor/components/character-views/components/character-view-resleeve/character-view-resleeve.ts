@@ -61,7 +61,15 @@ export class CharacterViewResleeve extends LitElement {
     data.items = [];
     // TODO Brain
     await this.character.itemOperations.add(
-      ...[...items.values()].map((item) => item.getDataCopy(false)),
+      ...[...items.values()].map((item) => {
+        if ("equipped" in item) {
+          const data = item.getDataCopy(false);
+          data.data.state.equipped = true;
+          return data
+        }
+        
+        return item.getDataCopy(false)
+      }),
     );
     await this.character.updater
       .prop('flags', EP.Name, this.selectedSleeve.type)

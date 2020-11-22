@@ -566,6 +566,7 @@ type FirearmAmmoData = {
   ammoClass: KineticWeaponClass;
   roundsPerComplexity: number;
   carryPayload: boolean;
+  quantity: number;
   /**
    * @minItems 1
    */
@@ -652,7 +653,7 @@ type PhysicalServiceData = {
   serviceType: PhysicalServiceType;
   reputations: StringID<RepBase>[];
   duration: number;
-  state: { elapsed: number; started: boolean };
+  state: { elapsed: number; equipped: boolean };
 };
 
 export interface EntityTemplates {

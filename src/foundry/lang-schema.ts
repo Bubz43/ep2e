@@ -1318,7 +1318,7 @@ type LangEntries =
   | 'PassiveEffectsWhenActivated'
   | 'deviceALI'
   | 'selected'
-  | 'keep';
+  | 'keep' | "stashed"
 type FullNames =
   | 'cog'
   | 'int'

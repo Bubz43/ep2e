@@ -45,6 +45,12 @@ character-view-header {
     padding: 0.5rem 0;
   }
 
+  character-view-sleeve {
+    background: alphav(var(--color-grey), 0.05);
+    margin-top: auto;
+    border-top: 1px solid alphav(var(--color-border), 0.5);
+  }
+
   .sleeve-select {
     padding: 0.5rem;
     display: grid;
@@ -124,4 +130,9 @@ mwc-tab-bar {
       color: var(--color-text);
     }
   }
+}
+
+
+.item-proxy {
+  padding: 0.25rem 0.5rem;
 }
