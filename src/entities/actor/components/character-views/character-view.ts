@@ -115,13 +115,16 @@ export class CharacterView extends CharacterViewBase {
   }
 
   private renderStatus() {
-    const { traits, equipped, consumables, stashed } = this.character;
+    const { traits, equipped, consumables, stashed, disabled } = this.character;
     return html`
-      <sl-header
-        heading=${localize('traits')}
-        ?hideBorder=${traits.length === 0}
-      ></sl-header>
-      ${notEmpty(traits) ? this.renderItemList(traits) : ''}
+      <sl-dropzone ?disabled=${disabled}>
+        <sl-header
+          heading=${localize('traits')}
+          ?hideBorder=${traits.length === 0}
+        ></sl-header>
+        ${notEmpty(traits) ? this.renderItemList(traits) : ''}
+      </sl-dropzone>
+
       ${notEmpty(consumables)
         ? html`
             <sl-header heading=${localize('consumables')}></sl-header>
@@ -129,14 +132,17 @@ export class CharacterView extends CharacterViewBase {
           `
         : ''}
 
-      <sl-header heading=${localize('equipped')}></sl-header>
-      ${notEmpty(equipped) ? this.renderItemList(equipped) : ''}
+      <sl-dropzone ?disabled=${disabled}>
+        <sl-header heading=${localize('equipped')}></sl-header>
+        ${notEmpty(equipped) ? this.renderItemList(equipped) : ''}
+      </sl-dropzone>
 
-      <sl-header
-        heading=${localize('stashed')}
-        ?hideBorder=${stashed.length === 0}
-      ></sl-header>
-      ${notEmpty(stashed) ? this.renderItemList(stashed) : ''}
+      <sl-dropzone ?disabled=${disabled}>
+        <sl-header
+          heading=${localize('stashed')}
+        ></sl-header>
+        ${notEmpty(stashed) ? this.renderItemList(stashed) : ''}
+      </sl-dropzone>
     `;
   }
 
@@ -147,11 +153,14 @@ export class CharacterView extends CharacterViewBase {
           proxies,
           idProp,
           (proxy) => html`
-            <wl-list-item clickable class="item-proxy" @click=${proxy.openForm}>
+            <wl-list-item draggable="true" clickable class="item-proxy" @click=${proxy.openForm}>
               ${proxy.nonDefaultImg
                 ? html` <img slot="before" height="32px" src=${proxy.img} /> `
                 : ''}
-              <span>${proxy.fullName} <span class="proxy-type">${proxy.fullType}</span></span>
+              <span
+                >${proxy.fullName}
+                <span class="proxy-type">${proxy.fullType}</span></span
+              >
               <delete-button
                 slot="after"
                 @delete=${proxy.deleteSelf}

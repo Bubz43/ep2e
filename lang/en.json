@@ -1292,6 +1292,9 @@
     "woundRepair": "Wound Repair",
     "PassiveEffectsWhenActivated": "Passive effects are not applied when activated",
     "deviceALI": "Device ALI",
+    "keep": "Keep",
+    "selected": "Selected",
+    "stashed": "Stashed",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

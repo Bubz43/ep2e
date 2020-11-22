@@ -1335,6 +1335,9 @@
             "detonate": {
               "type": "string"
             },
+            "deviceALI": {
+              "type": "string"
+            },
             "deviceManagement": {
               "type": "string"
             },
@@ -2209,6 +2212,9 @@
               "type": "string"
             },
             "jovian": {
+              "type": "string"
+            },
+            "keep": {
               "type": "string"
             },
             "keepOpen": {
@@ -3342,6 +3348,9 @@
             "selectFreePush": {
               "type": "string"
             },
+            "selected": {
+              "type": "string"
+            },
             "self": {
               "type": "string"
             },
@@ -3583,6 +3592,9 @@
               "type": "string"
             },
             "stash": {
+              "type": "string"
+            },
+            "stashed": {
               "type": "string"
             },
             "stat": {
@@ -4577,6 +4589,7 @@
             "detail",
             "details",
             "detonate",
+            "deviceALI",
             "deviceManagement",
             "deviceType",
             "devices",
@@ -4869,6 +4882,7 @@
             "jammer",
             "jamming",
             "jovian",
+            "keep",
             "keepOpen",
             "keepQuiet",
             "keepingQuiet",
@@ -5246,6 +5260,7 @@
             "seekerWeapon",
             "select",
             "selectFreePush",
+            "selected",
             "self",
             "semiAuto",
             "server",
@@ -5327,6 +5342,7 @@
             "started",
             "starting",
             "stash",
+            "stashed",
             "stat",
             "state",
             "stateOfTheArt",

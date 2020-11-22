@@ -22,7 +22,7 @@
   ::slotted([slot='tag']) {
     border: 1px solid var(--color-grey);
     background: alphav(var(--color-grey), 0.5);
-    padding: 1px 2px;
+    padding: 0.15rem 0.25rem;
     letter-spacing: 0.5px;
     border-radius: 2px;
     @include animate-css(fadeIn, 200ms);

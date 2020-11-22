@@ -12,8 +12,8 @@
     "gen:lang-schema": "./node_modules/.bin/ts-json-schema-generator --tsconfig tsconfig.json --path ./src/foundry/lang-schema.ts --no-type-check -t Lang --strict-tuples -o ./lang/lang.schema.json"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/Bubz43/ep2e"
+    "type": "git",
+    "url": "https://github.com/Bubz43/ep2e"
   },
   "dependencies": {
     "@a11y/focus-trap": "^1.0.5",
@@ -73,7 +73,7 @@
     "tinymce": "^5.6.0",
     "ts-json-schema-generator": "^0.78.0",
     "type-fest": "^0.19.0",
-    "typescript": "^4.2.0-dev.20201121",
+    "typescript": "^4.2.0-dev.20201122",
     "utility-types": "^3.10.0"
   }
 }

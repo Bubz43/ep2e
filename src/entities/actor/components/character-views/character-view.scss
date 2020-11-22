@@ -20,11 +20,12 @@
   min-height: 500px;
   height: max-content;
   background: linear-gradient(
-    to right,
-    alphav(var(--color-bg), 0.75),
-    alphav(var(--color-bg-alt), 0.75)
+    45deg,
+    alphav(var(--color-grey), 0.1),
+    alphav(var(--color-grey), 0.05)
   );
   grid-template-rows: repeat(2, min-content) 1fr;
+
 }
 
 character-view-header {
@@ -45,7 +46,7 @@ character-view-header {
   }
 
   character-view-sleeve {
-    background: alphav(var(--color-grey), 0.05);
+    background: alphav(var(--color-bg), 0.1);
     margin-top: auto;
     border-top: 1px solid alphav(var(--color-border), 0.5);
   }
@@ -81,7 +82,7 @@ mwc-tab-bar {
   max-width: 400px;
   min-width: max-content;
   place-self: center;
-  --mdc-theme-primary: var(--color-primary-alt);
+  --mdc-theme-primary: var(--color-grey);
   --mdc-tab-height: calc(50px - 0.5rem);
 }
 
@@ -148,4 +149,9 @@ mwc-tab-bar {
   .proxy-type {
     color: var(--color-text-lighter);
   }
+}
+
+sl-dropzone {
+  padding: 0.5rem;
+  position: relative;
 }

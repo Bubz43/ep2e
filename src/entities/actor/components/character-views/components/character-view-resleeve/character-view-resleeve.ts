@@ -5,6 +5,7 @@ import type { ItemProxy } from '@src/entities/item/item';
 import { idProp } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
+import { tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import {
@@ -33,9 +34,13 @@ export class CharacterViewResleeve extends LitElement {
   private keptItems = new Set<string>();
 
   disconnectedCallback() {
+    this.cleanup();
+    super.connectedCallback();
+  }
+
+  private cleanup() {
     this.keptItems.clear();
     this.selectedSleeve = null;
-    super.connectedCallback();
   }
 
   private toggleKeptItem(id: string) {
@@ -62,20 +67,20 @@ export class CharacterViewResleeve extends LitElement {
     // TODO Brain
     await this.character.itemOperations.add(
       ...[...items.values()].map((item) => {
-        if ("equipped" in item) {
+        if ('equipped' in item) {
           const data = item.getDataCopy(false);
           data.data.state.equipped = true;
-          return data
+          return data;
         }
-        
-        return item.getDataCopy(false)
+
+        return item.getDataCopy(false);
       }),
     );
     await this.character.updater
       .prop('flags', EP.Name, this.selectedSleeve.type)
       .commit(data);
 
-    this.keptItems.clear();
+    this.cleanup();
   }
 
   private openSelectionList() {
@@ -84,7 +89,7 @@ export class CharacterViewResleeve extends LitElement {
         label: `${sleeve.name} (${localize(sleeve.type)})`,
         activated: this.selectedSleeve === sleeve,
         callback: () => (this.selectedSleeve = sleeve),
-        icon: html`<img src=${sleeve.img} />`
+        icon: html`<img src=${sleeve.img} />`,
       })),
     });
   }
@@ -93,10 +98,10 @@ export class CharacterViewResleeve extends LitElement {
     return html`
       <h2>${localize('resleeve')}</h2>
       ${this.character.sleeve ? this.renderCurrent(this.character.sleeve) : ''}
-      <sl-header heading=${localize('selected')}>
+      <sl-header heading="${localize('selected')} ${localize('sleeve')}">
         <mwc-icon-button
           slot="action"
-          icon="list"
+          icon="person_search"
           @click=${this.openSelectionList}
         ></mwc-icon-button>
       </sl-header>
@@ -113,7 +118,18 @@ export class CharacterViewResleeve extends LitElement {
 
   private renderCurrent(sleeve: Sleeve) {
     return html`
-      <sl-header heading=${localize('current')}></sl-header>
+      <sl-header heading="${localize('current')} ${localize('sleeve')}">
+        <mwc-icon
+          slot="info"
+          data-tooltip="${localize('check')} ${localize(
+            'gear',
+          ).toLocaleLowerCase()} ${localize('to')} ${localize(
+            'keep',
+          ).toLocaleLowerCase()}"
+          @mouseover=${tooltip.fromData}
+          >info</mwc-icon
+        >
+      </sl-header>
       <mwc-list class="current-sleeve" multi>
         <mwc-list-item graphic="medium" twoline @click=${sleeve.openForm}>
           <img slot="graphic" src=${sleeve.img} />
