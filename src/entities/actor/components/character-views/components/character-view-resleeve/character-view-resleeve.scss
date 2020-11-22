@@ -33,3 +33,7 @@ h2 {
   align-items: center;
   justify-content: flex-end;
 }
+
+[slot="action"] {
+  margin-right: 1ch;
+}

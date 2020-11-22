@@ -84,6 +84,7 @@ export class CharacterViewResleeve extends LitElement {
         label: `${sleeve.name} (${localize(sleeve.type)})`,
         activated: this.selectedSleeve === sleeve,
         callback: () => (this.selectedSleeve = sleeve),
+        icon: html`<img src=${sleeve.img} />`
       })),
     });
   }

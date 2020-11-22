@@ -15,13 +15,12 @@
     'side tab-bar'
     'side content';
   grid-template-columns: 400px 1fr;
-  column-gap: 0.5rem;
   min-width: 100%;
   width: 800px;
   min-height: 500px;
   height: max-content;
   background: linear-gradient(
-    45deg,
+    to right,
     alphav(var(--color-bg), 0.75),
     alphav(var(--color-bg-alt), 0.75)
   );
@@ -132,7 +131,21 @@ mwc-tab-bar {
   }
 }
 
+.proxy-list {
+  display: grid;
+  grid-auto-rows: min-content;
+  gap: 0.1rem;
+  padding: 0.1rem 0;
+}
 
 .item-proxy {
-  padding: 0.25rem 0.5rem;
+  padding: 0 0.5rem;
+  [slot="before"] {
+    margin-right: 1ch;
+    display: inline-block;
+    min-width: 2rem;
+  }
+  .proxy-type {
+    color: var(--color-text-lighter);
+  }
 }

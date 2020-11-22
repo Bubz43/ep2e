@@ -148,7 +148,10 @@ export class CharacterView extends CharacterViewBase {
           idProp,
           (proxy) => html`
             <wl-list-item clickable class="item-proxy" @click=${proxy.openForm}>
-              <span>${proxy.name}</span>
+              ${proxy.nonDefaultImg
+                ? html` <img slot="before" height="32px" src=${proxy.img} /> `
+                : ''}
+              <span>${proxy.fullName} <span class="proxy-type">${proxy.fullType}</span></span>
               <delete-button
                 slot="after"
                 @delete=${proxy.deleteSelf}
