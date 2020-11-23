@@ -1,8 +1,9 @@
 import {
-  renderTimeField,
   renderFormulaField,
   renderNumberField,
   renderRadioFields,
+  renderTextField,
+  renderTimeField,
 } from '@src/components/field/fields';
 import {
   renderAutoForm,
@@ -12,21 +13,20 @@ import {
 import { enumValues, RechargeType } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { addFeature, StringID } from '@src/features/feature-helpers';
-import type { Recharge } from '@src/features/recharge';
 import {
   ActiveRecharge,
   createTemporaryFeature,
 } from '@src/features/temporary';
-import { CommonInterval } from '@src/features/time';
+import { CommonInterval, currentWorldTimeMS, prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { rollFormula } from '@src/foundry/rolls';
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
-  LitElement,
-  property,
   html,
   internalProperty,
+  LitElement,
+  property,
 } from 'lit-element';
 import styles from './character-view-recharge.scss';
 
@@ -86,32 +86,42 @@ export class CharacterViewRecharge extends LitElement {
             })}
           </fieldset>`
         : ''}
-      ${enumValues(RechargeType).map(
-        (type) =>
-          html`
-            <fieldset class="recharge-field">
-              <legend>${localize(type)}</legend>
-              ${renderUpdaterForm(updater.prop('data', type), {
-                disabled,
-                fields: ({ taken, refreshTimer }) => [
-                  renderNumberField(taken, {
-                    min: 0,
-                    max: recharges[type].max,
-                  }),
-                  renderTimeField(
-                    {
-                      ...refreshTimer,
-                      label: localize('progressTowardsRefresh'),
-                    },
-                    { max: CommonInterval.Day },
-                  ),
-                ],
-              })}
-            </fieldset>
-          `,
-      )}
+      ${enumValues(RechargeType).map(this.renderRechargeFields)}
     `;
   }
+
+  private renderRechargeFields = (type: RechargeType) => {
+    const recharge = this.character.recharges[type];
+    const { timer, taken, max } = recharge;
+    return html`
+      <fieldset class="recharge-field">
+        <legend>${localize(type)}</legend>
+        ${renderAutoForm({
+          disabled: this.character.disabled,
+          props: { taken, refreshIn: timer.remaining },
+          update: ({ taken, refreshIn }) => {
+            this.character.updater.prop('data', type).commit({
+              taken,
+              refreshTimer:
+                typeof refreshIn === 'number'
+                  ? currentWorldTimeMS() - (CommonInterval.Day - refreshIn)
+                  : undefined,
+            });
+          },
+          fields: ({ taken, refreshIn }) => [
+            renderNumberField(taken, {
+              min: 0,
+              max,
+            }),
+            taken.value ?renderTimeField(refreshIn, {
+              min: 0,
+              max: CommonInterval.Day,
+            }) : ""
+          ],
+        })}
+      </fieldset>
+    `;
+  };
 
   private renderRechargeCompletion(activeRecharge: StringID<ActiveRecharge>) {
     return html`
@@ -151,10 +161,12 @@ export class CharacterViewRecharge extends LitElement {
       },
       fields: ({ timeframe, formula }) => [
         renderTimeField(timeframe, { whenZero: localize('instant') }),
-        renderFormulaField({
-          ...formula,
-          label: localize('poolsRegained'),
-        }),
+        recharge.type === RechargeType.Short
+          ? renderFormulaField({
+              ...formula,
+              label: localize('poolsRegained'),
+            })
+          : html`<p>${localize('regainAllPools')}</p>`,
       ],
     });
   }

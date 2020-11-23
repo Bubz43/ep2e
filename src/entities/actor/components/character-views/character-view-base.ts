@@ -87,10 +87,6 @@ export abstract class CharacterViewBase extends LitElement {
 
   renderEffects() {
     return html`
-      <character-view-drawer-heading
-        >${localize('effects')}</character-view-drawer-heading
-      >
-
       <effects-viewer
         .effects=${this.character.appliedEffects}
       ></effects-viewer>

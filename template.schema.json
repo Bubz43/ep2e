@@ -1655,42 +1655,94 @@
                 },
                 "temporary": {
                   "items": {
-                    "additionalProperties": false,
-                    "properties": {
-                      "duration": {
-                        "type": "number"
+                    "anyOf": [
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "duration": {
+                            "type": "number"
+                          },
+                          "endOn": {
+                            "const": "recharge",
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "rechargeType": {
+                            "$ref": "#/definitions/RechargeType"
+                          },
+                          "regainedPoints": {
+                            "type": "number"
+                          },
+                          "startTime": {
+                            "type": "number"
+                          },
+                          "type": {
+                            "const": "activeRecharge",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "duration",
+                          "endOn",
+                          "id",
+                          "rechargeType",
+                          "regainedPoints",
+                          "startTime",
+                          "type"
+                        ],
+                        "type": "object"
                       },
-                      "endOn": {
-                        "const": "recharge",
-                        "type": "string"
-                      },
-                      "id": {
-                        "type": "string"
-                      },
-                      "rechargeType": {
-                        "$ref": "#/definitions/RechargeType"
-                      },
-                      "regainedPoints": {
-                        "type": "number"
-                      },
-                      "startTime": {
-                        "type": "number"
-                      },
-                      "type": {
-                        "const": "activeRecharge",
-                        "type": "string"
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "duration": {
+                            "type": "number"
+                          },
+                          "effects": {
+                            "items": {
+                              "$ref": "#/definitions/StringID%3CEffect%3E"
+                            },
+                            "type": "array"
+                          },
+                          "endOn": {
+                            "anyOf": [
+                              {
+                                "const": "",
+                                "type": "string"
+                              },
+                              {
+                                "$ref": "#/definitions/TemporaryFeatureEnd"
+                              }
+                            ]
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "source": {
+                            "type": "string"
+                          },
+                          "startTime": {
+                            "type": "number"
+                          },
+                          "type": {
+                            "const": "effects",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "duration",
+                          "effects",
+                          "endOn",
+                          "id",
+                          "source",
+                          "startTime",
+                          "type"
+                        ],
+                        "type": "object"
                       }
-                    },
-                    "required": [
-                      "duration",
-                      "endOn",
-                      "id",
-                      "rechargeType",
-                      "regainedPoints",
-                      "startTime",
-                      "type"
-                    ],
-                    "type": "object"
+                    ]
                   },
                   "type": "array"
                 },
@@ -9985,6 +10037,435 @@
       ],
       "type": "object"
     },
+    "StringID<Effect>": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "modifier": {
+              "type": "number"
+            },
+            "type": {
+              "const": "initiative",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "modifier",
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "modifier": {
+              "type": "number"
+            },
+            "pool": {
+              "enum": [
+                "insight",
+                "moxie",
+                "vigor",
+                "flex"
+              ],
+              "type": "string"
+            },
+            "type": {
+              "const": "pool",
+              "type": "string"
+            },
+            "usabilityModification": {
+              "anyOf": [
+                {
+                  "const": "",
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/definitions/PoolEffectUsability"
+                }
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "modifier",
+            "pool",
+            "type",
+            "usabilityModification"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "description": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "type": {
+              "const": "misc",
+              "type": "string"
+            },
+            "unique": {
+              "anyOf": [
+                {
+                  "const": "",
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/definitions/UniqueEffectType"
+                }
+              ]
+            }
+          },
+          "required": [
+            "description",
+            "id",
+            "type",
+            "unique"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "modifier": {
+              "type": "number"
+            },
+            "requirement": {
+              "type": "string"
+            },
+            "tags": {
+              "items": {
+                "$ref": "#/definitions/Tag"
+              },
+              "type": "array"
+            },
+            "toOpponent": {
+              "type": "boolean"
+            },
+            "type": {
+              "const": "successTest",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "modifier",
+            "requirement",
+            "tags",
+            "toOpponent",
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "health": {
+              "$ref": "#/definitions/HealthType"
+            },
+            "id": {
+              "type": "string"
+            },
+            "modifier": {
+              "type": "number"
+            },
+            "stat": {
+              "$ref": "#/definitions/HealthStat"
+            },
+            "type": {
+              "const": "health",
+              "type": "string"
+            }
+          },
+          "required": [
+            "health",
+            "id",
+            "modifier",
+            "stat",
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "energy": {
+              "type": "number"
+            },
+            "id": {
+              "type": "string"
+            },
+            "kinetic": {
+              "type": "number"
+            },
+            "layerable": {
+              "type": "boolean"
+            },
+            "mental": {
+              "type": "number"
+            },
+            "mesh": {
+              "type": "number"
+            },
+            "type": {
+              "const": "armor",
+              "type": "string"
+            }
+          },
+          "required": [
+            "energy",
+            "id",
+            "kinetic",
+            "layerable",
+            "mental",
+            "mesh",
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "modifier": {
+              "type": "number"
+            },
+            "recharge": {
+              "$ref": "#/definitions/RechargeType"
+            },
+            "stat": {
+              "$ref": "#/definitions/RechargeStat"
+            },
+            "type": {
+              "const": "recharge",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "modifier",
+            "recharge",
+            "stat",
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "halve": {
+              "type": "boolean"
+            },
+            "id": {
+              "type": "string"
+            },
+            "modifier": {
+              "type": "number"
+            },
+            "subtype": {
+              "$ref": "#/definitions/DurationEffectTarget"
+            },
+            "taskType": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/ActionSubtype"
+                },
+                {
+                  "const": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "type": {
+              "const": "duration",
+              "type": "string"
+            }
+          },
+          "required": [
+            "halve",
+            "id",
+            "modifier",
+            "subtype",
+            "taskType",
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "amount": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "interval": {
+              "type": "number"
+            },
+            "stat": {
+              "$ref": "#/definitions/DotOrHotTarget"
+            },
+            "technologicallyAided": {
+              "type": "boolean"
+            },
+            "type": {
+              "const": "healthRecovery",
+              "type": "string"
+            }
+          },
+          "required": [
+            "amount",
+            "id",
+            "interval",
+            "stat",
+            "technologicallyAided",
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "dvModifier": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "type": {
+              "const": "melee",
+              "type": "string"
+            }
+          },
+          "required": [
+            "dvModifier",
+            "id",
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "negativeRangeModifiersMultiplier": {
+              "type": "number"
+            },
+            "type": {
+              "const": "ranged",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "negativeRangeModifiersMultiplier",
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "aptitudeMultiplier": {
+              "type": "number"
+            },
+            "field": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "linkedAptitude": {
+              "$ref": "#/definitions/AptitudeType"
+            },
+            "skillType": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/SkillType"
+                },
+                {
+                  "$ref": "#/definitions/FieldSkillType"
+                }
+              ]
+            },
+            "specialization": {
+              "type": "string"
+            },
+            "total": {
+              "type": "number"
+            },
+            "type": {
+              "const": "skill",
+              "type": "string"
+            }
+          },
+          "required": [
+            "aptitudeMultiplier",
+            "field",
+            "id",
+            "linkedAptitude",
+            "skillType",
+            "specialization",
+            "total",
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "base": {
+              "type": "number"
+            },
+            "full": {
+              "type": "number"
+            },
+            "id": {
+              "type": "string"
+            },
+            "mode": {
+              "$ref": "#/definitions/MovementEffectMode"
+            },
+            "movementType": {
+              "$ref": "#/definitions/Movement"
+            },
+            "type": {
+              "const": "movement",
+              "type": "string"
+            }
+          },
+          "required": [
+            "base",
+            "full",
+            "id",
+            "mode",
+            "movementType",
+            "type"
+          ],
+          "type": "object"
+        }
+      ]
+    },
     "StringID<HealthModification>": {
       "additionalProperties": false,
       "properties": {
@@ -10321,6 +10802,14 @@
           "$ref": "#/definitions/SpecialTag"
         }
       ]
+    },
+    "TemporaryFeatureEnd": {
+      "enum": [
+        "recharge",
+        "nextAction",
+        "resleeve"
+      ],
+      "type": "string"
     },
     "ThreatLevel": {
       "enum": [

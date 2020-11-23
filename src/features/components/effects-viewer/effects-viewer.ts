@@ -18,6 +18,7 @@ export class EffectsViewer extends LitElement {
 
   render() {
     return html`
+      <character-view-drawer-heading>${localize("effects")}</character-view-drawer-heading>
       ${enumValues(EffectType).map(this.renderEffectTypes)}
     `;
   }

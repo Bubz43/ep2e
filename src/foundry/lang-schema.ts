@@ -1318,7 +1318,7 @@ type LangEntries =
   | 'PassiveEffectsWhenActivated'
   | 'deviceALI'
   | 'selected'
-  | 'keep' | "stashed"
+  | 'keep' | "stashed" | "regainAllPools"
 type FullNames =
   | 'cog'
   | 'int'

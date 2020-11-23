@@ -76,14 +76,15 @@ export const onCombatUpdate = async () => {
         CombatantHelpers.updateMany,
       ),
     );
-    await pipe(
-      [...characters],
-      map((character) => {
-        character.storeTimeAdvance(CommonInterval.Turn);
-        return character.actor;
-      }),
-      updateManyActors,
-    );
+    // TODO Advance world time
+    // await pipe(
+    //   [...characters],
+    //   map((character) => {
+    //     character.storeTimeAdvance(CommonInterval.Turn);
+    //     return character.actor;
+    //   }),
+    //   updateManyActors,
+    // );
   }
 };
 

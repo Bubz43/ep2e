@@ -22,7 +22,7 @@ fieldset {
 
 .recharge-field {
   sl-form {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 245px;
   }
 }
 
@@ -33,8 +33,17 @@ recharge-completion {
 .recharge-init {
   sl-form {
     &:last-of-type {
-      grid-template-columns: 1fr 1fr;
       padding: 0rem 1rem 1rem;
+      p {
+        margin: 0;
+        height: 53px;
+        display: grid;
+        place-items: center;
+      }
+      :nth-child(2n) {
+        margin-left: auto;
+        width: max-content;
+      }
     }
   }
 }

@@ -39,7 +39,6 @@ img {
   > mwc-icon-button {
     margin-right: 0.25rem;
     padding-right: 0.25rem;
-    // border-right: 1px solid alphav(var(--color-border), 0.75);
   }
   .restore-popover {
     margin-left: auto;
@@ -132,7 +131,6 @@ mwc-list-item {
   align-items: center;
   margin-right: 0.25rem;
   padding-right: 1ch;
-  border-right: 1px solid alphav(var(--color-border), 0.75);
   color: var(--color-text-lighter);
   cursor: pointer;
   border-radius: 4px;
@@ -151,14 +149,10 @@ mwc-list-item {
     pointer-events: none;
   }
 
-  > mwc-icon {
-    --mdc-icon-size: 22px;
-    margin-left: 0.25rem;
-  }
 }
 
 .recharge {
-  --mdc-icon-size: 18px;
+  --mdc-icon-size: 20px;
   display: flex;
   align-items: center;
   margin-left: 1ch;
