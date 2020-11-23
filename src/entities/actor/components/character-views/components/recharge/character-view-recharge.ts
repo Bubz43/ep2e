@@ -10,6 +10,7 @@ import {
   renderSubmitForm,
   renderUpdaterForm,
 } from '@src/components/form/forms';
+import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { enumValues, RechargeType } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { addFeature, StringID } from '@src/features/feature-helpers';
@@ -17,7 +18,7 @@ import {
   ActiveRecharge,
   createTemporaryFeature,
 } from '@src/features/temporary';
-import { CommonInterval, currentWorldTimeMS, prettyMilliseconds } from '@src/features/time';
+import { CommonInterval, currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { rollFormula } from '@src/foundry/rolls';
 import { notEmpty } from '@src/utility/helpers';
@@ -28,10 +29,11 @@ import {
   LitElement,
   property,
 } from 'lit-element';
+import mix from 'mix-with/lib';
 import styles from './character-view-recharge.scss';
 
 @customElement('character-view-recharge')
-export class CharacterViewRecharge extends LitElement {
+export class CharacterViewRecharge extends mix(LitElement).with(UseWorldTime) {
   static get is() {
     return 'character-view-recharge' as const;
   }
@@ -43,13 +45,7 @@ export class CharacterViewRecharge extends LitElement {
   @internalProperty() rechargeType = RechargeType.Short;
 
   render() {
-    const {
-      disabled,
-      pools,
-      updater,
-      recharges,
-      activeRecharge,
-    } = this.character;
+    const { disabled, pools, updater, activeRecharge } = this.character;
     return html`
       <character-view-drawer-heading
         >${localize('recharge')}</character-view-drawer-heading
@@ -113,10 +109,12 @@ export class CharacterViewRecharge extends LitElement {
               min: 0,
               max,
             }),
-            taken.value ?renderTimeField(refreshIn, {
-              min: 0,
-              max: CommonInterval.Day,
-            }) : ""
+            taken.value
+              ? renderTimeField(refreshIn, {
+                  min: 0,
+                  max: CommonInterval.Day,
+                })
+              : '',
           ],
         })}
       </fieldset>

@@ -4,7 +4,12 @@ import { withSign } from '@src/utility/helpers';
 import { clamp } from 'remeda';
 import { RechargeEffect, RechargeStat } from './effects';
 import { toMilliseconds } from './modify-milliseconds';
-import { CommonInterval, currentWorldTimeMS, getElapsedTime } from './time';
+import {
+  CommonInterval,
+  currentWorldTimeMS,
+  getElapsedTime,
+  prettyMilliseconds,
+} from './time';
 
 const baseRechargeInfo = {
   [RechargeType.Short]: {
@@ -91,9 +96,17 @@ export class Recharge {
     }
   }
 
+  get finalRefresh() {
+    const current = currentWorldTimeMS();
+    return clamp(this.refreshTimer, {
+      min: current - CommonInterval.Day,
+      max: current,
+    });
+  }
+
   get timer() {
-    const elapsed = getElapsedTime(this.refreshTimer);
     const max = CommonInterval.Day;
+    const elapsed = getElapsedTime(this.finalRefresh);
     return {
       label: localize(this.type),
       elapsed,

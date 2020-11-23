@@ -16,3 +16,14 @@
     pointer-events: initial;
   }
 }
+
+.time-controls {
+  display: flex;
+  align-items: center;
+  margin-left: 5rem;
+  sl-form {
+    height: 12px;
+
+  }
+}
+
