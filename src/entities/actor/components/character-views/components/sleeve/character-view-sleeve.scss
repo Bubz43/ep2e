@@ -16,7 +16,8 @@
   border-right-width: 1px;
   border-left: none;
   overflow: hidden;
-  min-width: 350px;}
+  min-width: 350px;
+}
 
 header {
   padding: 0.5rem 1rem;
@@ -48,5 +49,4 @@ header {
   justify-content: space-evenly;
   font-size: 14px;
   border-top: 1px solid alphav(var(--color-border), 0.5);
-  
 }

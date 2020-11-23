@@ -142,14 +142,13 @@ type ItemTemplates = Template<'Common', CommonDetails> &
   Template<'Cost', GearCost & { quality: GearQuality }> &
   Template<'GearTraits', GearTraits> &
   Template<'Copyable', Copyable> &
-  Template<'GearState', GearState> & 
-  Template<"Stackable", { quantity: number, state: { stashed: boolean }}>
+  Template<'GearState', GearState> &
+  Template<'Stackable', { quantity: number; state: { stashed: boolean } }>;
 type ActorTemplates = Template<'Common', CommonDetails> &
   Template<'Mobile', { movementRates: StringID<MovementRate>[] }> &
   Template<'Acquisition', Acquisition> &
   Template<'PoolData', { pools: MorphPoolsData }> &
   Template<'Conditions', { conditions: ConditionType[] }>;
-
 
 type UseActorTemplate<T extends (keyof ActorTemplates)[]> = T;
 type UseItemTemplate<T extends (keyof ItemTemplates)[]> = T;
@@ -389,7 +388,7 @@ type SleightData = {
 };
 
 type SubstanceData = {
-  templates: UseItemTemplate<['Common', 'Cost', 'Copyable', "Stackable"]>;
+  templates: UseItemTemplate<['Common', 'Cost', 'Copyable', 'Stackable']>;
   category: string;
   quantityPerCost: number;
   consumeOnUse: boolean;
@@ -462,7 +461,7 @@ type ArmorData = {
 } & Omit<GearTraits, 'concealable'>;
 
 type ExplosiveData = {
-  templates: UseItemTemplate<['Common', 'Cost', 'Copyable', "Stackable"]>;
+  templates: UseItemTemplate<['Common', 'Cost', 'Copyable', 'Stackable']>;
   explosiveType: ExplosiveType;
   size: ExplosiveSize;
   unitsPerComplexity: number;
@@ -494,7 +493,9 @@ type MeleeWeaponData = {
 };
 
 type ThrownWeaponData = {
-  templates: UseItemTemplate<['Common', 'Cost', 'GearTraits', 'Copyable', "Stackable"]>;
+  templates: UseItemTemplate<
+    ['Common', 'Cost', 'GearTraits', 'Copyable', 'Stackable']
+  >;
   quantityPerCost: number;
   primaryAttack: ThrownWeaponAttackData;
   exoticSkill: string;
@@ -563,7 +564,7 @@ type FirearmData = RangedWeaponDataBase &
   };
 
 type FirearmAmmoData = {
-  templates: UseItemTemplate<['Common', 'Cost', 'Copyable', "Stackable"]>;
+  templates: UseItemTemplate<['Common', 'Cost', 'Copyable', 'Stackable']>;
   ammoClass: KineticWeaponClass;
   roundsPerComplexity: number;
   carryPayload: boolean;

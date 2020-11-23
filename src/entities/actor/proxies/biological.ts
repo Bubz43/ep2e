@@ -107,7 +107,7 @@ export class Biological extends mix(BiologicalBase).with(
           localize('DESCRIPTIONS', 'OnlyMorphTraits'),
         );
       }
-    } else if ("wareType" in proxy) {
+    } else if ('wareType' in proxy) {
       if (proxy.isWare) {
         const copy = proxy.getDataCopy(true);
         copy.data.state.equipped = true;
@@ -124,8 +124,6 @@ export class Biological extends mix(BiologicalBase).with(
         localize('DESCRIPTIONS', 'OnlyPhysicalMorphItems'),
       );
     }
-
-
   }
 
   @LazyGetter()
@@ -137,7 +135,7 @@ export class Biological extends mix(BiologicalBase).with(
       if (proxy.type === ItemType.Trait) {
         traits.push(proxy);
         effects.add(proxy.currentEffects);
-      } else if ("equipped" in proxy) {
+      } else if ('equipped' in proxy) {
         ware.push(proxy);
         if ('currentEffects' in proxy) {
           effects.add(proxy.currentEffects);

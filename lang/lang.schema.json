@@ -3136,7 +3136,13 @@
             "refresh": {
               "type": "string"
             },
+            "refreshIn": {
+              "type": "string"
+            },
             "refreshTimer": {
+              "type": "string"
+            },
+            "regainAllPools": {
               "type": "string"
             },
             "regainedPoints": {
@@ -3248,6 +3254,9 @@
               "type": "string"
             },
             "resultImproved": {
+              "type": "string"
+            },
+            "rewind": {
               "type": "string"
             },
             "rez": {
@@ -5192,7 +5201,9 @@
             "ref",
             "reference",
             "refresh",
+            "refreshIn",
             "refreshTimer",
+            "regainAllPools",
             "regainedPoints",
             "regional",
             "reload",
@@ -5230,6 +5241,7 @@
             "resultEffects",
             "resultEffectsAvailable",
             "resultImproved",
+            "rewind",
             "rez",
             "robotic",
             "robotics",

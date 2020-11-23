@@ -12,8 +12,11 @@ import { Substance } from './substance';
 
 class Base extends ItemProxyBase<ItemType.FirearmAmmo> {}
 
-export class FirearmAmmo
-  extends mix(Base).with(Purchasable, Copyable, Stackable) {
+export class FirearmAmmo extends mix(Base).with(
+  Purchasable,
+  Copyable,
+  Stackable,
+) {
   readonly loaded;
   constructor({
     loaded,

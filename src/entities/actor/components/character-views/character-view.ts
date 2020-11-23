@@ -89,7 +89,8 @@ export class CharacterView extends CharacterViewBase {
                   raised
                   ?disabled=${this.character.disabled}
                   label="${localize('select')} ${localize('sleeve')}"
-                  @click=${() => this.toggleDrawerRenderer(CharacterDrawerRenderer.Resleeve)}
+                  @click=${() =>
+                    this.toggleDrawerRenderer(CharacterDrawerRenderer.Resleeve)}
                 ></mwc-button>
               </div>
             `}
@@ -192,7 +193,6 @@ export class CharacterView extends CharacterViewBase {
       <focus-trap class="drawer ${classMap({ open: drawerIsOpen })}">
         ${drawerIsOpen
           ? html`
-             
               ${this.renderDrawerContent()}
               <mwc-icon-button
                 class="close-drawer"

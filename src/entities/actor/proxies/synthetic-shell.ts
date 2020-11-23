@@ -173,7 +173,7 @@ export class SyntheticShell extends mix(SyntheticBase).with(
       } else if (proxy.type === ItemType.Software) {
         software.push(proxy);
         effects.add(proxy.currentEffects);
-      } else if ("equipped" in proxy) {
+      } else if ('equipped' in proxy) {
         ware.push(proxy);
         if ('currentEffects' in proxy) {
           effects.add(proxy.currentEffects);

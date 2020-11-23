@@ -122,16 +122,13 @@ export const currentWorldTimeMS = () => {
   return toMilliseconds({ seconds: game.time.worldTime });
 };
 
-export const advanceWorldTime = async (
-  milliseconds: number,
-) => {
+export const advanceWorldTime = async (milliseconds: number) => {
   game.time.advance(Math.round(milliseconds / 1000));
 };
 
 export const getElapsedTime = (worldTimestampMS: number) => {
-  return currentWorldTimeMS() - worldTimestampMS
-}
-
+  return currentWorldTimeMS() - worldTimestampMS;
+};
 
 // export const onWorldTimeUpdate = (_: number, delta: number) => {
 //   const deltaMS = toMilliseconds({ seconds: delta });

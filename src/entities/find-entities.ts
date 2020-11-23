@@ -4,9 +4,8 @@ export type ActorIdentifiers = {
   actorId?: string | null;
   tokenId?: string | null;
   sceneId?: string | null;
-  uuid?: string | null
+  uuid?: string | null;
 };
-
 
 export const findActor = (ids: ActorIdentifiers) => {
   if (ids.tokenId && ids.sceneId) {

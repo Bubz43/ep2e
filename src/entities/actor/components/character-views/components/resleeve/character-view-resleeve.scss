@@ -15,7 +15,6 @@ li[divider] {
   border-color: var(--color-border);
 }
 
-
 .item {
   height: 30px;
 }
@@ -39,7 +38,6 @@ li[divider] {
   }
 }
 
-
-[slot="action"] {
+[slot='action'] {
   margin-right: 1ch;
 }

@@ -1295,6 +1295,9 @@
     "keep": "Keep",
     "selected": "Selected",
     "stashed": "Stashed",
+    "refreshIn": "Refresh In",
+    "regainAllPools": "Regain All Pools",
+    "rewind": "Rewind",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

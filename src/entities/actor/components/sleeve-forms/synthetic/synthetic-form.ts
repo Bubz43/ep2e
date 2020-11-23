@@ -308,7 +308,7 @@ export class SyntheticForm extends SleeveFormBase {
               return notEmpty(group)
                 ? html`
                     <form-items-list
-                    .dragStartHandler=${this.itemDragStart}
+                      .dragStartHandler=${this.itemDragStart}
                       .items=${group}
                       label=${localize(key)}
                     ></form-items-list>

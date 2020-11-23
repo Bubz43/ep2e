@@ -13,7 +13,7 @@ export type SystemSocketData = {
   combatant: CombatantSocket;
   itemChange:
     | ({ actorId: string } & ItemChange)
-  | ({ tokenId: string; sceneId: string } & ItemChange);
+    | ({ tokenId: string; sceneId: string } & ItemChange);
   actorChanged: ActorIdentifiers;
 };
 

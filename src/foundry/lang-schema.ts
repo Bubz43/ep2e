@@ -1318,7 +1318,11 @@ type LangEntries =
   | 'PassiveEffectsWhenActivated'
   | 'deviceALI'
   | 'selected'
-  | 'keep' | "stashed" | "regainAllPools" | "rewind"
+  | 'keep'
+  | 'stashed'
+  | 'regainAllPools'
+  | 'rewind'
+  | 'refreshIn';
 type FullNames =
   | 'cog'
   | 'int'
@@ -1411,7 +1415,7 @@ export type Formatable = {
   AlreadyHasItem: ['ownerName', 'itemName'];
   MismatchedAmmoClasses: ['firearm', 'ammo'];
   CannotLoadMissileSize: ['missileSize', 'availableSizes'];
-  SleevePermanentlyDeleted: ["name"]
+  SleevePermanentlyDeleted: ['name'];
 };
 
 export interface Lang {

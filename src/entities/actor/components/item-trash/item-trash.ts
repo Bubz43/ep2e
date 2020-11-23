@@ -45,7 +45,7 @@ export class ItemTrash extends LitElement {
     this.proxy.actor.itemTrash = [...newTrash];
     await this.proxy.itemOperations.add(...toAdd);
     this.indexesToRestore = [];
-    this.emitTrashChanged()
+    this.emitTrashChanged();
   }
 
   private emptyTrash() {
@@ -55,7 +55,9 @@ export class ItemTrash extends LitElement {
   }
 
   private emitTrashChanged() {
-    this.dispatchEvent(new CustomEvent("trash-changed", { bubbles: true, composed: true }))
+    this.dispatchEvent(
+      new CustomEvent('trash-changed', { bubbles: true, composed: true }),
+    );
   }
 
   render() {

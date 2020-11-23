@@ -107,6 +107,7 @@ export class Recharge {
   get timer() {
     const max = CommonInterval.Day;
     const elapsed = getElapsedTime(this.finalRefresh);
+
     return {
       label: localize(this.type),
       elapsed,

@@ -25,7 +25,6 @@
     alphav(var(--color-grey), 0.05)
   );
   grid-template-rows: repeat(2, min-content) 1fr;
-
 }
 
 character-view-header {
@@ -142,7 +141,7 @@ mwc-tab-bar {
 
 .item-proxy {
   padding: 0 0.5rem;
-  [slot="before"] {
+  [slot='before'] {
     margin-right: 1ch;
     display: inline-block;
     min-width: 2rem;

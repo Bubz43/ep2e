@@ -12,7 +12,7 @@ export abstract class SleeveFormBase extends FormDrawer(LitElement) {
     setDragDrop(ev, {
       ...actor.identifiers,
       type: DropType.Item,
-      data: item.data
+      data: item.data,
     });
   };
 }

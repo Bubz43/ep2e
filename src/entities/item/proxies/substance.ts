@@ -34,7 +34,7 @@ export type SubstanceUse = Substance['applicationMethods'][number] | 'use';
 class Base extends ItemProxyBase<ItemType.Substance> {}
 export class Substance
   extends mix(Base).with(Purchasable, Copyable, Stackable)
-  implements  Attacker<SubstanceAttackData, SubstanceAttack> {
+  implements Attacker<SubstanceAttackData, SubstanceAttack> {
   static onsetTime(application: SubstanceUse) {
     switch (application) {
       case SubstanceApplicationMethod.Inhalation:

@@ -24,7 +24,10 @@ import type { UpdateStore } from '@src/entities/update-store';
 import { EffectType, totalModifiers } from '@src/features/effects';
 import { Pool, Pools } from '@src/features/pool';
 import { Recharge } from '@src/features/recharge';
-import { TemporaryFeatureEnd, TemporaryFeatureType } from '@src/features/temporary';
+import {
+  TemporaryFeatureEnd,
+  TemporaryFeatureType,
+} from '@src/features/temporary';
 import { currentWorldTimeMS } from '@src/features/time';
 import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
@@ -216,23 +219,23 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
   completeRecharge(
     recharge: RechargeType,
-    newSpentPools: Map<PoolType, number>
+    newSpentPools: Map<PoolType, number>,
   ) {
     for (const poolType of enumValues(PoolType)) {
       this.updater
-        .prop("data", "spentPools", poolType)
+        .prop('data', 'spentPools', poolType)
         .store(newSpentPools.get(poolType) || 0);
     }
 
     this.updater
-      .prop("data", recharge)
+      .prop('data', recharge)
       .store(({ taken, refreshTimer }) => {
         return {
           taken: taken + 1,
-          refreshTimer: taken === 0 ? currentWorldTimeMS() : refreshTimer
-        }
+          refreshTimer: taken === 0 ? currentWorldTimeMS() : refreshTimer,
+        };
       })
-      .prop("data", "temporary")
+      .prop('data', 'temporary')
       .commit(reject((temp) => temp.endOn === TemporaryFeatureEnd.Recharge));
   }
 

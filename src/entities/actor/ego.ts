@@ -154,7 +154,7 @@ export class Ego {
   }
 
   get trackReputations() {
-    return this.settings.trackReputations
+    return this.settings.trackReputations;
   }
 
   @LazyGetter()

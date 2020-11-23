@@ -183,8 +183,8 @@ export class CharacterViewEgo extends LitElement {
   private renderRep = (rep: Ego['trackedReps'][number]) => {
     return html`
       <li class="rep-item">
-          <span title=${rep.network} class="rep-acronym">${rep.acronym}</span>
-          <span class="rep-score">${rep.score}</span>
+        <span title=${rep.network} class="rep-acronym">${rep.acronym}</span>
+        <span class="rep-score">${rep.score}</span>
         <div class="favors">
           ${[...maxFavors].map(([favor, max]) => {
             const usedAmount = rep[favor];

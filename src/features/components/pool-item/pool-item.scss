@@ -7,7 +7,6 @@
 
 :host {
   display: inline-flex;
-  
 }
 
 :host([disabled]) {
@@ -15,13 +14,12 @@
   opacity: 0.5;
 }
 
-
 .pool {
   flex: 1;
   display: grid;
   grid-template-areas:
-    "value"
-    "name";
+    'value'
+    'name';
   place-items: center;
   width: 105px;
   padding: 0.5rem;
@@ -73,7 +71,7 @@
 
     small {
       &::before {
-        content: "/";
+        content: '/';
       }
       position: absolute;
       right: 0;

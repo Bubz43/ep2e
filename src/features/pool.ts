@@ -120,6 +120,6 @@ export class Pools extends Map<PoolType, Pool> {
       this.get(effect.pool)?.addEffect(effect);
     }
     this.forEach(({ max }, type, pools) => max || pools.delete(type));
-    return this
-  } 
+    return this;
+  }
 }

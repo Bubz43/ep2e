@@ -160,7 +160,6 @@ CharacterViewRecharge;
 CharacterViewRechargeCompletion;
 CharacterViewDrawerHeading;
 
-
 // Ego
 EgoForm;
 EgoFormSkills;

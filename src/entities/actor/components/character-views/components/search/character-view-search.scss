@@ -10,18 +10,16 @@
 
 :host {
   display: block;
-  
 }
 
 header {
   position: sticky;
-    top: 0;
-    padding: 0.5rem;
-    z-index: 1;
-    border-bottom: 1px solid var(--color-border);
-    background: var(--color-bg);
+  top: 0;
+  padding: 0.5rem;
+  z-index: 1;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg);
 }
-
 
 .filters {
   min-height: 30px;
@@ -29,7 +27,7 @@ header {
 
   > * {
     margin: 1px 0;
-    &:hover, 
+    &:hover,
     &:focus-within {
       --mdc-theme-primary: var(--color-negative);
     }
@@ -75,10 +73,9 @@ label {
   }
 }
 
-
 .item-proxy {
   padding: 0 0.5rem;
-  [slot="before"] {
+  [slot='before'] {
     margin-right: 1ch;
     display: inline-block;
     min-width: 2rem;

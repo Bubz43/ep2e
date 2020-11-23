@@ -127,7 +127,6 @@ export class Explosive
     return this.epData.size;
   }
 
-
   get fullType() {
     return this.explosiveType === ExplosiveType.Generic
       ? localize(this.type)

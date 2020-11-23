@@ -1,25 +1,24 @@
-import { LazyRipple } from "@src/components/mixins/lazy-ripple";
-import type { ReadonlyPool } from "@src/features/pool";
-import { localize } from "@src/foundry/localization";
-import { clickIfEnter } from "@src/utility/helpers";
-import { customElement, LitElement, property, html } from "lit-element";
-import { classMap } from "lit-html/directives/class-map";
-import { ifDefined } from "lit-html/directives/if-defined";
-import mix from "mix-with/lib";
-import styles from "./pool-item.scss";
+import { LazyRipple } from '@src/components/mixins/lazy-ripple';
+import type { ReadonlyPool } from '@src/features/pool';
+import { localize } from '@src/foundry/localization';
+import { clickIfEnter } from '@src/utility/helpers';
+import { customElement, LitElement, property, html } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
+import { ifDefined } from 'lit-html/directives/if-defined';
+import mix from 'mix-with/lib';
+import styles from './pool-item.scss';
 
-@customElement("pool-item")
+@customElement('pool-item')
 export class PoolItem extends mix(LitElement).with(LazyRipple) {
   static get is() {
-    return "pool-item" as const;
+    return 'pool-item' as const;
   }
 
   static styles = [styles];
 
-  @property({ attribute: false }) pool!: ReadonlyPool
+  @property({ attribute: false }) pool!: ReadonlyPool;
 
   @property({ type: Boolean }) disabled = false;
-
 
   render() {
     const { pool, disabled } = this;
@@ -38,7 +37,7 @@ export class PoolItem extends mix(LitElement).with(LazyRipple) {
         @focus="${this.handleRippleFocus}"
         @blur="${this.handleRippleBlur}"
         @mousedown="${this.handleRippleMouseDown}"
-        tabindex=${ifDefined(nonUsable ? undefined : "0")}
+        tabindex=${ifDefined(nonUsable ? undefined : '0')}
       >
         ${this.renderRipple()}
         <img src=${pool.icon} class="pool-image" />
@@ -53,6 +52,6 @@ export class PoolItem extends mix(LitElement).with(LazyRipple) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "pool-item": PoolItem;
+    'pool-item': PoolItem;
   }
 }

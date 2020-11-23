@@ -49,7 +49,9 @@ export class SceneView extends LitElement {
 
   private advanceTime() {
     if (this.timeChange) {
-      advanceWorldTime(this.positiveTimeChange ? this.timeChange : -this.timeChange);
+      advanceWorldTime(
+        this.positiveTimeChange ? this.timeChange : -this.timeChange,
+      );
     }
     this.timeChange = 0;
   }
@@ -137,7 +139,11 @@ export class SceneView extends LitElement {
           noDebounce: true,
           props: { change: this.timeChange },
           update: ({ change = 0 }) => (this.timeChange = change),
-          fields: ({ change }) => renderTimeField({ ...change, label: '' }),
+          fields: ({ change }) =>
+            renderTimeField(
+              { ...change, label: '' },
+              { whenZero: localize('now') },
+            ),
         })}
         <submit-button
           label=${localize(this.positiveTimeChange ? 'advance' : 'rewind')}
