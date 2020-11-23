@@ -108,13 +108,16 @@ import { ItemCreator } from './entities/item/components/item-creator/item-creato
 import { AptitudeCheckInfoEditor } from './features/components/aptitude-check-info-editor/aptitude-check-info-editor';
 import { ActorCreator } from './entities/actor/components/actor-creator/actor-creator';
 import { CharacterView } from './entities/actor/components/character-views/character-view';
-import { CharacterViewEgo } from './entities/actor/components/character-views/components/character-view-ego/character-view-ego';
-import { CharacterViewSleeve } from './entities/actor/components/character-views/components/character-view-sleeve/character-view-sleeve';
-import { CharacterViewHeader } from './entities/actor/components/character-views/components/character-view-header/character-view-header';
+import { CharacterViewEgo } from './entities/actor/components/character-views/components/ego/character-view-ego';
+import { CharacterViewSleeve } from './entities/actor/components/character-views/components/sleeve/character-view-sleeve';
+import { CharacterViewHeader } from './entities/actor/components/character-views/components/header/character-view-header';
 import { EffectsViewer } from './features/components/effects-viewer/effects-viewer';
-import { CharacterViewResleeve } from './entities/actor/components/character-views/components/character-view-resleeve/character-view-resleeve';
-import { CharacterViewSearch } from './entities/actor/components/character-views/components/character-view-search/character-view-search';
+import { CharacterViewResleeve } from './entities/actor/components/character-views/components/resleeve/character-view-resleeve';
+import { CharacterViewSearch } from './entities/actor/components/character-views/components/search/character-view-search';
 import { PoolItem } from './features/components/pool-item/pool-item';
+import { CharacterViewRecharge } from './entities/actor/components/character-views/components/recharge/character-view-recharge';
+import { CharacterViewDrawerHeading } from './entities/actor/components/character-views/components/drawer-heading/character-view-drawer-heading';
+import { CharacterViewRechargeCompletion } from './entities/actor/components/character-views/components/recharge/character-view-recharge-completion';
 
 // Generic Components
 Field;
@@ -153,6 +156,10 @@ CharacterViewEgo;
 CharacterViewSleeve;
 CharacterViewResleeve;
 CharacterViewSearch;
+CharacterViewRecharge;
+CharacterViewRechargeCompletion;
+CharacterViewDrawerHeading;
+
 
 // Ego
 EgoForm;

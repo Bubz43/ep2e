@@ -1,0 +1,135 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  
+}
+
+mwc-button {
+  width: 100%;
+}
+
+.pool-controls {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+wl-list-item {
+  --list-item-bg: transparent;
+  pointer-events: none;
+}
+
+.info {
+  display: grid;
+  grid-template-areas:
+    "regained regained"
+    "missing unspent";
+
+  .regained {
+    grid-area: regained;
+  }
+
+  .missing {
+    grid-area: missing;
+  }
+
+  .unspent {
+    grid-area: unspent;
+  }
+    gap: 0.5rem;
+  place-items: center;
+}
+
+.numbers,
+.new-values {
+  font-family: var(--font-alt);
+  font-weight: bold;
+}
+
+.value {
+  min-width: 2ch;
+  display: inline-block;
+}
+
+.new-values {
+  color: var(--color-primary-alt);
+  margin-left: 1rem;
+}
+
+.before {
+  width: 100px;
+  display: flex;
+  justify-content: space-between;
+  white-space: nowrap;
+}
+
+.to-new {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.control-buttons {
+  display: flex;
+  position: relative;
+  z-index: 2;
+  > * {
+    position: relative;
+    z-index: 3;
+    --mdc-icon-size: 20px;
+    line-height: 0;
+    padding: 0px;
+    margin: 0 1px;
+
+    &:not([disabled]) {
+      pointer-events: all;
+    }
+  }
+}
+
+.complete-buttons {
+  display: grid;
+  grid-auto-flow: column;
+  margin-top: 0.5rem;
+}
+
+.complete-recharge {
+  &.missing {
+    --mdc-theme-primary: var(--color-text-lighter);
+  }
+}
+
+button {
+  --mdc-icon-size: 20px;
+  line-height: 0;
+  padding: 0;
+  transition: opacity 125ms ease-in-out 50ms;
+  transition-delay: 50ms;
+  background: rgba(black, 0.2);
+  border: 1px solid darkslategray;
+  outline: 0;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  &[disabled] {
+    pointer-events: none;
+    color: grey;
+  }
+  &:hover {
+    background: var(--color-primary);
+  }
+  &:active {
+    transform: scale(1.1);
+  }
+}
+
+.right-arrow {
+  transform: scale(1.5) translateY(-1px);
+}

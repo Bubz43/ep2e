@@ -1,7 +1,10 @@
 import { RechargeType } from '@src/data-enums';
+import { localize } from '@src/foundry/localization';
+import { withSign } from '@src/utility/helpers';
 import { clamp } from 'remeda';
 import { RechargeEffect, RechargeStat } from './effects';
 import { toMilliseconds } from './modify-milliseconds';
+import { CommonInterval, currentWorldTimeMS, getElapsedTime } from './time';
 
 const baseRechargeInfo = {
   [RechargeType.Short]: {
@@ -86,5 +89,26 @@ export class Recharge {
         this.#poolRecoverMod += modifier;
         break;
     }
+  }
+
+  get timer() {
+    const elapsed = getElapsedTime(this.refreshTimer);
+    const max = CommonInterval.Day;
+    return {
+      label: localize(this.type),
+      elapsed,
+      max,
+      remaining: max - elapsed,
+    };
+  }
+
+  get startInfo() {
+    const { timeframe, poolRecoverMod, type } = this;
+    const baseRecovery = type === RechargeType.Short ? '1d6' : '-1';
+    const formula = poolRecoverMod
+      ? `${baseRecovery} ${withSign(poolRecoverMod)}`
+      : baseRecovery;
+
+    return { timeframe, formula };
   }
 }

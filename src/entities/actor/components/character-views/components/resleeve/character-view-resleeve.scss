@@ -15,9 +15,6 @@ li[divider] {
   border-color: var(--color-border);
 }
 
-h2 {
-  @include boldHeading();
-}
 
 .item {
   height: 30px;

@@ -82,6 +82,7 @@ import type { RecoveryConditions } from '@src/health/recovery';
 import type { SyntheticHealthData } from '@src/health/synthetic-health';
 import type { JsonValue } from 'type-fest';
 import type { AppMeshHealthData } from '@src/health/app-mesh-health';
+import type { TemporaryFeature } from '@src/features/temporary';
 
 type StringID<T> = T & { id: string };
 type TopLevel = Record<string, JsonValue>;
@@ -199,7 +200,7 @@ type CharacterData = EgoData & {
     unslavedDevices: string[];
     systemDefenders: string[];
   };
-  // temporary: StringID<TemporaryFeature>[];
+  temporary: StringID<TemporaryFeature>[];
   spentPools: Record<PoolType, number>;
   // accountShells: StringID<AccountShell>[];
   // TODO toggle psi

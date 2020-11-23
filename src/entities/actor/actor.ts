@@ -48,8 +48,8 @@ export class ActorEP extends Actor {
   // #identifiers?: ActorIdentifiers;
   #itemOperations?: ItemOperations;
 
-  private invalidated = true;
-  declare hasPrepared: boolean
+  declare private invalidated: boolean;
+  declare private hasPrepared: boolean
 
   get identifiers(): ActorIdentifiers {
     return {

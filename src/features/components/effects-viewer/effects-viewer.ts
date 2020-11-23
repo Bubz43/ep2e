@@ -18,7 +18,6 @@ export class EffectsViewer extends LitElement {
 
   render() {
     return html`
-      <h2>${localize('effects')}</h2>
       ${enumValues(EffectType).map(this.renderEffectTypes)}
     `;
   }

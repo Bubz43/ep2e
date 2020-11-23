@@ -1,10 +1,12 @@
 import { Placement } from '@src/components/popover/popover-options';
+import { RechargeType } from '@src/data-enums';
 import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
+import { range } from 'remeda';
 import {
   CharacterDrawerRenderer,
   CharacterDrawerRenderEvent,
@@ -43,6 +45,7 @@ export class CharacterViewHeader extends LitElement {
   render() {
     const img = this.token?.data.img || this.character.img;
     const name = this.token?.data.name || this.character.name;
+
     return html`
       <img src=${img} />
       <h2>${name}</h2>
@@ -66,6 +69,10 @@ export class CharacterViewHeader extends LitElement {
           @click=${this.requestDrawerRender}
         ></mwc-button>
 
+        ${this.character.poolHolder === this.character
+          ? this.renderRecharges()
+          : ''}
+
         <sl-popover
           class="restore-popover"
           .closeEvents=${['option-selected']}
@@ -85,6 +92,37 @@ export class CharacterViewHeader extends LitElement {
         </sl-popover>
       </div>
     `;
+  }
+
+  private renderRecharges() {
+    return html` <button
+      class="recharges"
+      ?disabled=${this.character.disabled}
+      data-renderer=${CharacterDrawerRenderer.Recharge}
+      @click=${this.requestDrawerRender}
+      data-tooltip=${localize('recharge')}
+      @mouseover=${tooltip.fromData}
+      @focus=${tooltip.fromData}
+    >
+      ${Object.values(this.character.recharges).map(
+        ({ type, taken, max }) => html`
+          <div class="recharge">
+            <span class="recharge-type"
+              >${localize(type === RechargeType.Short ? 'short' : 'long')}</span
+            >
+            ${range(0, max).map(
+              (box) => html`
+                <mwc-icon
+                  >${taken > box
+                    ? 'check_box'
+                    : 'check_box_outline_blank'}</mwc-icon
+                >
+              `,
+            )}
+          </div>
+        `,
+      )}
+    </button>`;
   }
 
   private renderActionIconButton({

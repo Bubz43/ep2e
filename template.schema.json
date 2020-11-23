@@ -1653,6 +1653,47 @@
                   "minItems": 1,
                   "type": "array"
                 },
+                "temporary": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "duration": {
+                        "type": "number"
+                      },
+                      "endOn": {
+                        "const": "recharge",
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "rechargeType": {
+                        "$ref": "#/definitions/RechargeType"
+                      },
+                      "regainedPoints": {
+                        "type": "number"
+                      },
+                      "startTime": {
+                        "type": "number"
+                      },
+                      "type": {
+                        "const": "activeRecharge",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "duration",
+                      "endOn",
+                      "id",
+                      "rechargeType",
+                      "regainedPoints",
+                      "startTime",
+                      "type"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
                 "threat": {
                   "type": "number"
                 },
@@ -1728,6 +1769,7 @@
                 "spentPools",
                 "tasks",
                 "templates",
+                "temporary",
                 "threat",
                 "threatDetails"
               ],

@@ -1,0 +1,44 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: flex;
+  flex-flow: column;
+}
+
+fieldset {
+  &:first-of-type {
+    margin-top: auto;
+  }
+  border: none;
+  sl-form {
+    grid-auto-flow: column;
+  }
+}
+
+.recharge-field {
+  sl-form {
+    grid-template-columns: 1fr;
+  }
+}
+
+recharge-completion {
+  padding: 0 1rem 1rem;
+}
+
+.recharge-init {
+  sl-form {
+    &:last-of-type {
+      grid-template-columns: 1fr 1fr;
+      padding: 0rem 1rem 1rem;
+    }
+  }
+}
+
+.total-spent {
+  color: var(--color-text-lighter);
+}

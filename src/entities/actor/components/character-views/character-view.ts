@@ -11,6 +11,7 @@ import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
 import { first } from 'remeda';
 import { stopEvent } from 'weightless';
+import { CharacterDrawerRenderer } from './character-drawer-render-event';
 import { CharacterViewBase } from './character-view-base';
 import styles from './character-view.scss';
 
@@ -88,7 +89,7 @@ export class CharacterView extends CharacterViewBase {
                   raised
                   ?disabled=${this.character.disabled}
                   label="${localize('select')} ${localize('sleeve')}"
-                  @click=${() => this.toggleDrawerContent(this.renderResleeve)}
+                  @click=${() => this.toggleDrawerRenderer(CharacterDrawerRenderer.Resleeve)}
                 ></mwc-button>
               </div>
             `}

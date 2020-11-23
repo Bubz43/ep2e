@@ -177,7 +177,9 @@ export class CharacterViewResleeve extends LitElement {
   render() {
     return html`
       <section>
-        <h2>${localize('resleeve')}</h2>
+        <character-view-drawer-heading
+          >${localize('resleeve')}</character-view-drawer-heading
+        >
         ${this.character.sleeve
           ? this.renderCurrent(this.character.sleeve)
           : ''}

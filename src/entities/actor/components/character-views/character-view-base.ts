@@ -1,9 +1,11 @@
+import { localize } from '@src/foundry/localization';
 import { throttle } from '@src/utility/decorators';
 import { internalProperty, LitElement, property, query } from 'lit-element';
 import { html, TemplateResult } from 'lit-html';
 import { traverseActiveElements } from 'weightless';
 import type { MaybeToken } from '../../actor';
 import type { Character } from '../../proxies/character';
+import type { CharacterDrawerRenderer } from './character-drawer-render-event';
 
 export abstract class CharacterViewBase extends LitElement {
   protected abstract renderDrawer(): TemplateResult;
@@ -34,8 +36,12 @@ export abstract class CharacterViewBase extends LitElement {
 
   firstUpdated() {
     this.addEventListener('character-drawer-render', ({ renderer }) => {
-      this.toggleDrawerContent(this[`render${renderer}` as const]);
+      this.toggleDrawerRenderer(renderer);
     });
+  }
+
+  protected toggleDrawerRenderer(renderer: CharacterDrawerRenderer) {
+    this.toggleDrawerContent(this[`render${renderer}` as const]);
   }
 
   protected renderDrawerContent() {
@@ -81,6 +87,10 @@ export abstract class CharacterViewBase extends LitElement {
 
   renderEffects() {
     return html`
+      <character-view-drawer-heading
+        >${localize('effects')}</character-view-drawer-heading
+      >
+
       <effects-viewer
         .effects=${this.character.appliedEffects}
       ></effects-viewer>
@@ -92,6 +102,14 @@ export abstract class CharacterViewBase extends LitElement {
       <character-view-search
         .character=${this.character}
       ></character-view-search>
+    `;
+  }
+
+  renderRecharge() {
+    return html`
+      <character-view-recharge
+        .character=${this.character}
+      ></character-view-recharge>
     `;
   }
 }

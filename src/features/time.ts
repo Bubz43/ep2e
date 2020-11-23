@@ -124,16 +124,14 @@ export const currentWorldTimeMS = () => {
 
 export const advanceWorldTime = async (
   milliseconds: number,
-  actors: Set<ActorEP>,
 ) => {
   game.time.advance(Math.round(milliseconds / 1000));
-  for (const actor of actors) {
-    if (actor.proxy.type === ActorType.Character) {
-      await actor.proxy.storeTimeAdvance(milliseconds);
-    }
-  }
-  updateManyActors([...actors]);
 };
+
+export const getElapsedTime = (worldTimestampMS: number) => {
+  return currentWorldTimeMS() - worldTimestampMS
+}
+
 
 // export const onWorldTimeUpdate = (_: number, delta: number) => {
 //   const deltaMS = toMilliseconds({ seconds: delta });

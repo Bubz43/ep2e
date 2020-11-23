@@ -2,7 +2,7 @@ import { PoolType, PoolEffectUsability, AptitudeType } from '@src/data-enums';
 import { EP } from '@src/foundry/system';
 import { localImage } from '@src/utility/images';
 import { clamp } from 'remeda';
-import type { PoolEffect } from './effects';
+import type { PoolEffect, SourcedEffect } from './effects';
 
 type PoolInit = {
   type: PoolType;
@@ -108,4 +108,18 @@ export class Pool {
         return PoolType.Moxie;
     }
   }
+}
+
+export class Pools extends Map<PoolType, Pool> {
+  get totalSpent() {
+    return [...this.values()].reduce((accum, pool) => accum + pool.spent, 0);
+  }
+
+  addEffects(effects: ReadonlyArray<SourcedEffect<PoolEffect>>) {
+    for (const effect of effects) {
+      this.get(effect.pool)?.addEffect(effect);
+    }
+    this.forEach(({ max }, type, pools) => max || pools.delete(type));
+    return this
+  } 
 }

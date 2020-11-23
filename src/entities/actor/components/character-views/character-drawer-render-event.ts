@@ -2,7 +2,8 @@
 export enum CharacterDrawerRenderer {
   Resleeve = 'Resleeve',
   Effects = 'Effects',
-  Search = "Search"
+  Search = "Search",
+  Recharge = "Recharge"
 }
 
 export class CharacterDrawerRenderEvent extends Event {

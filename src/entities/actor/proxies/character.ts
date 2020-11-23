@@ -3,7 +3,7 @@ import {
   openOrRenderWindow,
 } from '@src/components/window/window-controls';
 import { ResizeOption } from '@src/components/window/window-options';
-import { enumValues, PoolType } from '@src/data-enums';
+import { enumValues, PoolType, RechargeType } from '@src/data-enums';
 import {
   AppliedEffects,
   ReadonlyAppliedEffects,
@@ -22,10 +22,13 @@ import type { Trait } from '@src/entities/item/proxies/trait';
 import type { ActorEntity, SleeveType } from '@src/entities/models';
 import type { UpdateStore } from '@src/entities/update-store';
 import { EffectType, totalModifiers } from '@src/features/effects';
-import { Pool } from '@src/features/pool';
+import { Pool, Pools } from '@src/features/pool';
+import { Recharge } from '@src/features/recharge';
+import { TemporaryFeatureEnd, TemporaryFeatureType } from '@src/features/temporary';
+import { currentWorldTimeMS } from '@src/features/time';
 import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
-import { difference } from 'remeda';
+import { difference, first, flatMap, mapToObj, pipe, reject } from 'remeda';
 import { openSleeveForm } from '../actor-views';
 import { Ego, FullEgoData } from '../ego';
 import { isSleeveItem, Sleeve } from '../sleeves';
@@ -37,7 +40,6 @@ import { SyntheticShell } from './synthetic-shell';
 const nonThreat = difference(enumValues(PoolType), [
   PoolType.Threat,
 ]) as Exclude<PoolType, PoolType.Threat>[];
-
 
 export class Character extends ActorProxyBase<ActorType.Character> {
   readonly ego;
@@ -186,16 +188,63 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     }
   }
 
+  @LazyGetter()
+  get recharges() {
+    const inBiological = this.sleeve?.type === ActorType.Biological;
+    const recharges = mapToObj(enumValues(RechargeType), (type) => [
+      type,
+      new Recharge({ type, inBiological, ...this.epData[type] }),
+    ]);
+
+    for (const effect of this._appliedEffects.getGroup(EffectType.Recharge)) {
+      recharges[effect.recharge].addEffect(effect);
+    }
+
+    return recharges;
+  }
+
+  @LazyGetter()
+  get activeRecharge() {
+    return pipe(
+      this.epData.temporary,
+      flatMap((temp) =>
+        temp.type === TemporaryFeatureType.ActiveRecharge ? temp : [],
+      ),
+      first(),
+    );
+  }
+
+  completeRecharge(
+    recharge: RechargeType,
+    newSpentPools: Map<PoolType, number>
+  ) {
+    for (const poolType of enumValues(PoolType)) {
+      this.updater
+        .prop("data", "spentPools", poolType)
+        .store(newSpentPools.get(poolType) || 0);
+    }
+
+    this.updater
+      .prop("data", recharge)
+      .store(({ taken, refreshTimer }) => {
+        return {
+          taken: taken + 1,
+          refreshTimer: taken === 0 ? currentWorldTimeMS() : refreshTimer
+        }
+      })
+      .prop("data", "temporary")
+      .commit(reject((temp) => temp.endOn === TemporaryFeatureEnd.Recharge));
+  }
+
   get pools() {
-    return this.poolHolder.poolMap
-  } 
+    return this.poolHolder.poolMap;
+  }
 
   @LazyGetter()
   protected get poolMap() {
-    const { useThreat } = this.ego;
     const { spentPools } = this.epData;
-    if (useThreat) {
-      return new Map([
+    if (this.ego.useThreat) {
+      return new Pools([
         [
           PoolType.Threat,
           new Pool({
@@ -207,7 +256,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       ]);
     }
 
-    const pools = new Map(
+    return new Pools(
       nonThreat.map(
         (type) =>
           [
@@ -219,16 +268,9 @@ export class Character extends ActorProxyBase<ActorType.Character> {
                 (type === PoolType.Flex ? this.ego.flex : 0),
               spent: spentPools[type],
             }),
-          ] as const
-      )
-    );
-
-    for (const effect of this._appliedEffects.getGroup(EffectType.Pool)) {
-      pools.get(effect.pool)?.addEffect(effect);
-    }
-    pools.forEach(({ max }, type, pools) => max || pools.delete(type));
-
-    return pools;
+          ] as const,
+      ),
+    ).addEffects(this._appliedEffects.getGroup(EffectType.Pool));
   }
 
   get poolHolder() {
@@ -244,10 +286,6 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     return this;
   }
 
-
-
-  
-
   get psi() {
     return this.ego.psi;
   }
@@ -262,10 +300,6 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
   acceptItemAgent(agent: ItemProxy) {
     return { accept: true } as const;
-  }
-
-  async storeTimeAdvance(milliseconds: number) {
-    // TODO
   }
 
   openSleeveForm() {
