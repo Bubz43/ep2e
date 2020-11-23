@@ -31,20 +31,26 @@ recharge-completion {
 }
 
 .recharge-init {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  display: flex;
+  flex-flow: row wrap;
+  padding: 0 1rem;
   sl-form {
-    &:last-of-type {
-      padding: 0rem 1rem 1rem;
-      p {
-        margin: 0;
-        height: 53px;
-        display: grid;
-        place-items: center;
-      }
-      :nth-child(2n) {
-        margin-left: auto;
-        width: max-content;
+    display: contents;
+    &:first-of-type {
+      :first-child {
+        flex: 1;
+        min-width: 100px;
       }
     }
+  }
+  p {
+    height: 53px;
+    display: grid;
+    place-items: center;
+    margin: 0 0.5rem;
+    flex: 1;
   }
 }
 

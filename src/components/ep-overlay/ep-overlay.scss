@@ -8,12 +8,12 @@
 :host {
   display: grid;
   grid-template-areas:
-    'scene app-controls'
-    'nav chat'
-    'controls chat'
-    '.. chat';
+    'scene time app-controls'
+    'nav time chat'
+    'controls .. chat'
+    '.. .. chat';
 
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr auto auto;
 
   grid-template-rows: repeat(3, min-content) 1fr;
 
@@ -42,6 +42,12 @@
 
 scene-view {
   grid-area: scene;
+}
+
+world-time-controls {
+  grid-area: time;
+  align-self: baseline;
+  margin: 0.5rem;
 }
 
 .nav-wrapper {

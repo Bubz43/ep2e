@@ -23,7 +23,7 @@ export class SubmitButton extends ButtonBase {
 
   @property({ type: Boolean, reflect: true }) complete = false;
 
-  @property({ type: Boolean }) raised = true;
+  @property({ type: Boolean, reflect: true }) raised = true;
 
   @property({ type: String }) icon = 'save_alt';
 

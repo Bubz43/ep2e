@@ -4,6 +4,7 @@ import type { ReadonlyPool } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
 import { compact } from 'remeda';
 import styles from './character-view-sleeve.scss';
 
@@ -21,11 +22,16 @@ export class CharacterViewSleeve extends LitElement {
 
   render() {
     const { sleeve } = this;
+    const physicalHealth = "physicalHealth" in sleeve && sleeve.physicalHealth;
+    const meshHealth = "activeMeshHealth" in sleeve &&  sleeve.activeMeshHealth;
+    const movement = "movementRates" in sleeve && sleeve.movementRates;
+    const isInfomorph = !physicalHealth;
     return html`
       <header>
         <button @click=${this.sleeve.openForm}>
-          <span class="name">${this.sleeve.name}</span>
-          <span class="details">
+          ${this.sleeve.name}
+        </button>
+        <span class="details">
             ${compact([
               'size' in sleeve && localize(sleeve.size),
               sleeve.subtype || localize(sleeve.type),
@@ -33,12 +39,15 @@ export class CharacterViewSleeve extends LitElement {
               'sex' in sleeve && sleeve.sex,
             ]).join(' • ')}</span
           >
-        </button>
       </header>
+
+      ${compact([physicalHealth, meshHealth]).map(health => html`
+      <health-item .health=${health}></health-item>
+      `)}
 
       ${notEmpty(this.character.pools)
         ? html`
-            <ul class="pools">
+            <ul class="pools ${classMap({ full: this.character.pools.size === 4})}">
               ${[...this.character.pools.values()].map(this.renderPool)}
             </ul>
           `

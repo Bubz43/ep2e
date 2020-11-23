@@ -286,6 +286,9 @@
                 "insanityRating": {
                   "type": "string"
                 },
+                "longRecharge": {
+                  "type": "string"
+                },
                 "low": {
                   "type": "string"
                 },
@@ -320,6 +323,9 @@
                   "type": "string"
                 },
                 "semiAuto": {
+                  "type": "string"
+                },
+                "shortRecharge": {
                   "type": "string"
                 },
                 "singleShot": {
@@ -390,7 +396,9 @@
                 "hardware",
                 "cyberware",
                 "nanoware",
-                "meshware"
+                "meshware",
+                "shortRecharge",
+                "longRecharge"
               ],
               "type": "object"
             },

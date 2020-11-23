@@ -1379,7 +1379,9 @@
       "cyberware": "Cyber",
       "hardware": "Hard",
       "meshware": "Mesh",
-      "nanoware": "Nano"
+      "nanoware": "Nano",
+      "shortRecharge": "Short",
+      "longRecharge": "Long"
     },
     "FORMATABLE": {
       "NoMatching": "No {name} ({type})  found.",

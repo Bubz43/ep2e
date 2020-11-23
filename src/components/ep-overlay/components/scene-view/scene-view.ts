@@ -11,7 +11,11 @@ import { render } from 'lit-html';
 import { openDialog } from '@src/open-dialog';
 import styles from './scene-view.scss';
 import { renderAutoForm, renderSubmitForm } from '@src/components/form/forms';
-import { advanceWorldTime, CommonInterval } from '@src/features/time';
+import {
+  advanceWorldTime,
+  CommonInterval,
+  currentWorldTimeMS,
+} from '@src/features/time';
 import { renderTimeField } from '@src/components/field/fields';
 
 @customElement('scene-view')
@@ -21,10 +25,6 @@ export class SceneView extends LitElement {
   }
 
   static styles = [styles];
-
-  @internalProperty() positiveTimeChange = true;
-
-  @internalProperty() timeChange = 0;
 
   private environmentUnsub: (() => void) | null = null;
 
@@ -47,14 +47,6 @@ export class SceneView extends LitElement {
     this.requestUpdate();
   };
 
-  private advanceTime() {
-    if (this.timeChange) {
-      advanceWorldTime(
-        this.positiveTimeChange ? this.timeChange : -this.timeChange,
-      );
-    }
-    this.timeChange = 0;
-  }
 
   private toggleHooks(hook: 'on' | 'off') {
     const { updateFromHook: callback } = this;
@@ -71,9 +63,7 @@ export class SceneView extends LitElement {
     }
   }
 
-  private toggleTimeAdvance() {
-    this.positiveTimeChange = !this.positiveTimeChange;
-  }
+
 
   private openFormsDialog() {
     if (!game.user.isGM) return;
@@ -124,35 +114,10 @@ export class SceneView extends LitElement {
       <sl-group label=${localize('gravity')}>${gravity}</sl-group>
 
       ${vacuum ? html`<span>${localize('inVacuum')}</span>` : ''}
-      ${isGM ? this.renderTimeControls() : ''}
     `;
   }
 
-  private renderTimeControls() {
-    return html`
-      <div class="time-controls">
-        <mwc-icon-button
-          icon=${this.positiveTimeChange ? 'fast_forward' : 'fast_rewind'}
-          @click=${this.toggleTimeAdvance}
-        ></mwc-icon-button>
-        ${renderAutoForm({
-          noDebounce: true,
-          props: { change: this.timeChange },
-          update: ({ change = 0 }) => (this.timeChange = change),
-          fields: ({ change }) =>
-            renderTimeField(
-              { ...change, label: '' },
-              { whenZero: localize('now') },
-            ),
-        })}
-        <submit-button
-          label=${localize(this.positiveTimeChange ? 'advance' : 'rewind')}
-          ?complete=${!!this.timeChange}
-          @click=${this.advanceTime}
-        ></submit-button>
-      </div>
-    `;
-  }
+
 }
 
 declare global {

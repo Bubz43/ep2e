@@ -1,6 +1,6 @@
 import { RechargeType } from '@src/data-enums';
 import { localize } from '@src/foundry/localization';
-import { withSign } from '@src/utility/helpers';
+import { nonNegative, withSign } from '@src/utility/helpers';
 import { clamp } from 'remeda';
 import { RechargeEffect, RechargeStat } from './effects';
 import { toMilliseconds } from './modify-milliseconds';
@@ -96,23 +96,16 @@ export class Recharge {
     }
   }
 
-  get finalRefresh() {
-    const current = currentWorldTimeMS();
-    return clamp(this.refreshTimer, {
-      min: current - CommonInterval.Day,
-      max: current,
-    });
-  }
 
   get timer() {
     const max = CommonInterval.Day;
-    const elapsed = getElapsedTime(this.finalRefresh);
+    const elapsed = getElapsedTime(this.refreshTimer);
 
     return {
       label: localize(this.type),
       elapsed,
       max,
-      remaining: max - elapsed,
+      remaining: nonNegative(max - elapsed),
     };
   }
 

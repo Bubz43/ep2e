@@ -176,7 +176,7 @@ export class TimeField extends LitElement {
           `,
       })}
 
-      <footer></footer>
+      <footer part="footer"></footer>
     `;
   }
 }

@@ -43,6 +43,10 @@ export class Infomorph extends mix(InfomorphBase).with(SleeveInfo) {
     return this._outsideEffects ?? this.itemGroups.effects;
   }
 
+  get activeMeshHealth() {
+    return this.meshHealth
+  }
+
   @LazyGetter()
   get meshHealth() {
     return new MeshHealth({

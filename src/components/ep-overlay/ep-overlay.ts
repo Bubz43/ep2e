@@ -354,56 +354,58 @@ export class EPOverlay extends LitElement {
               ></controlled-character> -->
             `
           : '',
-      )}
-      ${guard(
-        [],
-        () => html`
-          <!-- <scene-view><slot name="navigation"></slot></scene-view> -->
-          <slot
-            name="foundry-apps"
-            @slotchange=${this.switchWindowZ}
-            @pointerdown=${this.switchWindowZ}
-          ></slot>
-          <slot
-            id="windows"
-            @slotchange=${this.switchWindowZ}
-            @pointerdown=${this.switchWindowZ}
-          ></slot>
-          <scene-view></scene-view>
-          <div class="nav-wrapper">
-            <slot name="navigation"></slot>
-          </div>
-          <div class="controls-wrapper">
-            <slot name="controls"></slot>
-          </div>
-
-          <div
-            class="chat-wrapper"
-            @mouseenter=${this.toggleChatPointers}
-            @mouseleave=${this.toggleChatPointers}
-          >
-            <slot name="chat"></slot>
-          </div>
-
-          <ul class="foundry-app-controls">
-            <slot name="app-controls"></slot>
-            <wl-list-item
-              clickable
-              class="menu-toggle"
-              @click=${() => ui.menu.toggle()}
-            >
-              <img src="icons/fvtt.png" height="30px" />
-            </wl-list-item>
-          </ul>
-
-          <!-- <user-view></user-view> -->
-          <event-list></event-list>
-          <slot name="dialog"></slot>
-          <slot name="tooltip"></slot>
-        `,
-      )}
+    )}
+      ${game.user.isGM ? html`
+      <world-time-controls></world-time-controls>
+      ` : ""}
+      ${this.staticElements}
     `;
   }
+
+  private staticElements = html`
+    <!-- <scene-view><slot name="navigation"></slot></scene-view> -->
+    <slot
+      name="foundry-apps"
+      @slotchange=${this.switchWindowZ}
+      @pointerdown=${this.switchWindowZ}
+    ></slot>
+    <slot
+      id="windows"
+      @slotchange=${this.switchWindowZ}
+      @pointerdown=${this.switchWindowZ}
+    ></slot>
+    <scene-view></scene-view>
+    <div class="nav-wrapper">
+      <slot name="navigation"></slot>
+    </div>
+    <div class="controls-wrapper">
+      <slot name="controls"></slot>
+    </div>
+
+    <div
+      class="chat-wrapper"
+      @mouseenter=${this.toggleChatPointers}
+      @mouseleave=${this.toggleChatPointers}
+    >
+      <slot name="chat"></slot>
+    </div>
+
+    <ul class="foundry-app-controls">
+      <slot name="app-controls"></slot>
+      <wl-list-item
+        clickable
+        class="menu-toggle"
+        @click=${() => ui.menu.toggle()}
+      >
+        <img src="icons/fvtt.png" height="30px" />
+      </wl-list-item>
+    </ul>
+
+    <!-- <user-view></user-view> -->
+    <event-list></event-list>
+    <slot name="dialog"></slot>
+    <slot name="tooltip"></slot>
+  `;
 }
 
 declare global {

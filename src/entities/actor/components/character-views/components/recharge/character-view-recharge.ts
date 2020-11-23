@@ -2,6 +2,7 @@ import {
   renderFormulaField,
   renderNumberField,
   renderRadioFields,
+  renderSelectField,
   renderTextField,
   renderTimeField,
 } from '@src/components/field/fields';
@@ -60,7 +61,9 @@ export class CharacterViewRecharge extends mix(LitElement).with(UseWorldTime) {
                   if (recharge) this.rechargeType = recharge;
                 },
                 fields: ({ recharge }) =>
-                  renderRadioFields(recharge, enumValues(RechargeType)),
+                  renderSelectField(recharge, enumValues(RechargeType), {
+                    altLabel: (type) => localize('SHORT', type),
+                  }),
               })}
               ${this.renderRechargeForm()}
             </div>
@@ -112,7 +115,7 @@ export class CharacterViewRecharge extends mix(LitElement).with(UseWorldTime) {
             taken.value
               ? renderTimeField(refreshIn, {
                   min: 0,
-                  max: CommonInterval.Day,
+                  whenZero: '0',
                 })
               : '',
           ],

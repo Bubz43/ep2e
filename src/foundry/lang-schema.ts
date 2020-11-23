@@ -1377,7 +1377,7 @@ export type Abbreviation =
   | 'hardware'
   | 'cyberware'
   | 'nanoware'
-  | 'meshware';
+  | 'meshware' | "shortRecharge" | "longRecharge"
 export type DescriptionEntry =
   | 'medicineHeal'
   | 'invalidRollFormula'

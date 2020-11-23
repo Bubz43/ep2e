@@ -73,16 +73,14 @@ export class CharacterViewEgo extends LitElement {
 
     return html`
       <header>
-        <button @click=${this.ego.openForm}>
-          <span class="name">${this.ego.name}</span>
-          <span class="details">
-            ${compact([
-              this.ego.egoType,
-              this.ego.forkStatus &&
-                `${localize(this.ego.forkStatus)} ${localize('fork')}`,
-            ]).join(' • ')}</span
-          >
-        </button>
+        <button @click=${this.ego.openForm}>${this.ego.name}</button>
+        <span class="details">
+          ${compact([
+            this.ego.egoType,
+            this.ego.forkStatus &&
+              `${localize(this.ego.forkStatus)} ${localize('fork')}`,
+          ]).join(' • ')}</span
+        >
       </header>
 
       <sl-section heading=${localize('aptitudes')} flipped>

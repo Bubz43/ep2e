@@ -118,6 +118,7 @@ import { PoolItem } from './features/components/pool-item/pool-item';
 import { CharacterViewRecharge } from './entities/actor/components/character-views/components/recharge/character-view-recharge';
 import { CharacterViewDrawerHeading } from './entities/actor/components/character-views/components/drawer-heading/character-view-drawer-heading';
 import { CharacterViewRechargeCompletion } from './entities/actor/components/character-views/components/recharge/character-view-recharge-completion';
+import { WorldTimeControls } from './features/components/world-time-controls/world-time-controls';
 
 // Generic Components
 Field;
@@ -179,6 +180,7 @@ EffectEditor;
 TagEditor;
 FormMotivationItem;
 AptitudeCheckInfoEditor;
+WorldTimeControls;
 
 // Entity Form Layout Components
 EntityFormHeader;

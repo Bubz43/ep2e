@@ -24,22 +24,19 @@ header {
     border-bottom: 1px solid var(--color-border);
     font-family: var(--font-2);
     @include truncate(350px);
-    font-size: small;
-    .name {
-      font-size: 1rem;
+    font-size: 1rem;
       margin-right: 0.25ch;
-    }
-    .details {
-      color: var(--color-text-lighter);
-    }
+
     &:hover,
     &:focus {
       cursor: pointer;
       border-bottom-color: var(--color-text-lighter);
     }
   }
+  .details {
+    color: var(--color-text-lighter);
+  }
 }
-
 .mental-health-view {
   border-top: 1px solid var(--color-border);
 }
