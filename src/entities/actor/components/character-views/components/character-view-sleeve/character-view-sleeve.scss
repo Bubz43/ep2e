@@ -1,6 +1,8 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+@include resetUnorderedList();
+
 * {
   box-sizing: border-box;
 }
@@ -46,4 +48,5 @@ header {
   justify-content: space-evenly;
   font-size: 14px;
   border-top: 1px solid alphav(var(--color-border), 0.5);
+  
 }

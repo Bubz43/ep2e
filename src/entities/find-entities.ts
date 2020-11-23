@@ -4,6 +4,7 @@ export type ActorIdentifiers = {
   actorId?: string | null;
   tokenId?: string | null;
   sceneId?: string | null;
+  uuid?: string | null
 };
 
 

@@ -1,13 +1,14 @@
 import { renderLabeledCheckbox } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import type { Character } from '@src/entities/actor/proxies/character';
-import { Sleeve, gameSleeves } from '@src/entities/actor/sleeves';
+import { Sleeve, gameSleeves, isSleeve } from '@src/entities/actor/sleeves';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
 import { idProp } from '@src/features/feature-helpers';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
+import { addEPSocketHandler } from '@src/foundry/socket';
 import { EP } from '@src/foundry/system';
 import { tooltip } from '@src/init';
 import { openDialog } from '@src/open-dialog';
@@ -43,6 +44,21 @@ export class CharacterViewResleeve extends LitElement {
     keepCurrent: false,
   };
 
+  private socketListener: (() => void) | null = null;
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.socketListener = addEPSocketHandler('actorChanged', (identifiers) => {
+      if (
+        this.selectedSleeve &&
+        equals(this.selectedSleeve.actor.identifiers, identifiers)
+      ) {
+        const { proxy } = this.selectedSleeve.actor;
+        this.selectedSleeve = isSleeve(proxy) ? proxy : null;
+      }
+    });
+  }
+
   disconnectedCallback() {
     this.cleanup();
     super.connectedCallback();
@@ -52,6 +68,8 @@ export class CharacterViewResleeve extends LitElement {
     this.keptItems.clear();
     this.selectedSleeve = null;
     this.resleeveOptions = mapValues(this.resleeveOptions, () => false);
+    this.socketListener?.();
+    this.socketListener = null;
   }
 
   private toggleKeptItem(id: string) {
@@ -198,7 +216,7 @@ export class CharacterViewResleeve extends LitElement {
         <submit-button
           @click=${this.resleeve}
           ?complete=${!!this.selectedSleeve}
-          label=${localize('resleeve')}
+          label=${localize(this.character.sleeve ? 'resleeve' : 'sleeve')}
         ></submit-button>
       </div>
     `;
@@ -210,7 +228,7 @@ export class CharacterViewResleeve extends LitElement {
         <mwc-icon
           slot="info"
           data-tooltip="${localize('check')} ${localize(
-            'gear',
+            'ware',
           ).toLocaleLowerCase()} ${localize('to')} ${localize(
             'keep',
           ).toLocaleLowerCase()}"

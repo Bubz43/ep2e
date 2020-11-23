@@ -180,8 +180,16 @@ header {
     gap: 0.25rem;
     color: alphav(var(--color-text), 0.7);
     z-index: 1;
+    mwc-icon {
+      transition: color 100ms;
+    }
     span {
       display: flex;
+      &:hover {
+        mwc-icon {
+          color: var(--color-grey);
+        }
+      }
     }
   }
 }

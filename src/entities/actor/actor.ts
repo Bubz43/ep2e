@@ -49,12 +49,14 @@ export class ActorEP extends Actor {
   #itemOperations?: ItemOperations;
 
   private invalidated = true;
+  declare hasPrepared: boolean
 
   get identifiers(): ActorIdentifiers {
     return {
       actorId: this.id,
       tokenId: this.isToken && this.token?.id,
-      sceneId: this.isToken && this.token?.scene?.id
+      sceneId: this.isToken && this.token?.scene?.id,
+      uuid: this.uuid
     }
   }
 
@@ -228,6 +230,8 @@ export class ActorEP extends Actor {
   prepareData() {
     super.prepareData();
     this.invalidated = true;
+    if (this.hasPrepared) emitEPSocket({ actorChanged: this.identifiers }, true)
+    else this.hasPrepared = true
   }
 
   render(force: boolean, context: Record<string, unknown>) {

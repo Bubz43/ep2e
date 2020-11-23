@@ -57,4 +57,7 @@
   .favor-label {
     color: var(--color-text-lighter);
   }
+  mwc-icon-button[disabled] {
+    color: var(--color-text-lighter);
+  }
 }

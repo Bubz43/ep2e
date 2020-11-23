@@ -1,5 +1,6 @@
 import type { CombatantSocket } from '@src/combat/combatant-commands';
 import type { ItemOperations } from '@src/entities/actor/actor';
+import type { ActorIdentifiers } from '@src/entities/find-entities';
 import { once } from 'remeda';
 import { EP } from './system';
 
@@ -12,7 +13,8 @@ export type SystemSocketData = {
   combatant: CombatantSocket;
   itemChange:
     | ({ actorId: string } & ItemChange)
-    | ({ tokenId: string; sceneId: string } & ItemChange);
+  | ({ tokenId: string; sceneId: string } & ItemChange);
+  actorChanged: ActorIdentifiers;
 };
 
 type SystemSocketEvent = keyof SystemSocketData;

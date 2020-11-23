@@ -48,7 +48,6 @@ export class CharacterViewSleeve extends LitElement {
 
   private renderPool = (pool: ReadonlyPool) => html`
     <pool-item
-      slot="base"
       .pool=${pool}
       ?disabled=${this.character.disabled || pool.disabled}
     ></pool-item>

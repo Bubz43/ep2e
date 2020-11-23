@@ -40,6 +40,7 @@ export class EgoFormRep extends LitElement {
             onIcon="favorite"
             offIcon="favorite_border"
             @click=${() => this.repOps.commit({ track: !track.value })}
+            ?disabled=${this.disabled}
           ></mwc-icon-button-toggle>
           <span class="rep-name"
             >${localize('FULL', this.network)}

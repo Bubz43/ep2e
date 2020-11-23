@@ -46,7 +46,7 @@ character-view-header {
   }
 
   character-view-sleeve {
-    background: alphav(var(--color-bg), 0.1);
+    background: alphav(var(--color-bg-alt), 0.75);
     margin-top: auto;
     border-top: 1px solid alphav(var(--color-border), 0.5);
   }

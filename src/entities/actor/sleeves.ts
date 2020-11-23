@@ -100,7 +100,7 @@ export const isSleeveItem = (proxy: ItemProxy) => {
   }
 };
 
-const isSleeve = (proxy: ActorEP['proxy']): proxy is Sleeve => {
+export const isSleeve = (proxy: ActorEP['proxy']): proxy is Sleeve => {
   return sleeveTypes.some((type) => proxy.type === type);
 };
 
