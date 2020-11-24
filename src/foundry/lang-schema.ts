@@ -1322,7 +1322,7 @@ type LangEntries =
   | 'stashed'
   | 'regainAllPools'
   | 'rewind'
-  | 'refreshIn';
+  | 'refreshIn' | "spend"
 type FullNames =
   | 'cog'
   | 'int'

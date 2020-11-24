@@ -193,9 +193,9 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
               );
             },
             fields: ({ advance, multiplier }) => [
-              renderTimeField(advance, {
+              renderTimeField({...advance, label: `${localize("spend")} ${localize("time")}`}, {
                 min: 0,
-                max: this.character.accumulatedTime,
+                max: Math.min(remaining, this.character.accumulatedTime),
               }),
               renderNumberField(multiplier, { min: 1 }),
             ],

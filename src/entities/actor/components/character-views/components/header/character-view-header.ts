@@ -77,10 +77,10 @@ export class CharacterViewHeader extends LitElement {
         ${this.character.poolHolder === this.character
           ? this.renderRecharges()
           : ''}
-
-        <sl-popover
+      </div>
+      <sl-popover
           class="restore-popover"
-          .closeEvents=${['option-selected']}
+          .closeEvents=${['trash-changed']}
           @trash-changed=${this.updateFromChange}
           placement=${Placement.Right}
           .renderOnDemand=${this.renderItemTrash}
@@ -95,7 +95,6 @@ export class CharacterViewHeader extends LitElement {
           >
           </mwc-icon-button>
         </sl-popover>
-      </div>
     `;
   }
 

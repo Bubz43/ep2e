@@ -1,5 +1,5 @@
 import { localize } from '@src/foundry/localization';
-import { throttle } from '@src/utility/decorators';
+import { debounce, throttle } from '@src/utility/decorators';
 import { internalProperty, LitElement, property, query } from 'lit-element';
 import { html, TemplateResult } from 'lit-html';
 import { traverseActiveElements } from 'weightless';
@@ -48,7 +48,7 @@ export abstract class CharacterViewBase extends LitElement {
     return this.drawerContentRenderer?.call(this) ?? '';
   }
 
-  @throttle(400, true)
+  @debounce(200, true)
   protected toggleDrawerContent(fn: () => TemplateResult) {
     if (this.drawerContentRenderer === fn) this.closeDrawer();
     else {

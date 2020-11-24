@@ -75,6 +75,11 @@ character-view-header {
   &.no-scroll {
     overflow: visible;
   }
+
+  > * {
+    @include animate-css(fadeIn, 200ms);
+    animation-fill-mode: none !important;
+  }
 }
 
 mwc-tab-bar {
@@ -118,7 +123,7 @@ mwc-tab-bar {
     margin-left: auto;
     padding: 0.25rem;
     width: min-content;
-    background: var(--color-border);
+    background: alphav(var(--color-border), 0.8);
     box-shadow: -1px 1px 2px black;
     position: sticky;
     top: 0;

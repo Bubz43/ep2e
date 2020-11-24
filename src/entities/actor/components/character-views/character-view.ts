@@ -194,9 +194,13 @@ export class CharacterView extends CharacterViewBase {
         ${drawerIsOpen
           ? html`
               ${this.renderDrawerContent()}
-              <wl-list-item class="close-drawer" clickable                 @click=${this.closeDrawer}
-><mwc-icon>close</mwc-icon></wl-list-item>
-           
+              <wl-list-item
+                role="button"
+                class="close-drawer"
+                clickable
+                @click=${this.closeDrawer}
+                ><mwc-icon>close</mwc-icon></wl-list-item
+              >
             `
           : nothing}
       </focus-trap>
