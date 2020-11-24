@@ -4,6 +4,7 @@ import { clamp } from 'remeda';
 import { safeMerge } from '../utility/helpers';
 import { createFeature } from './feature-helpers';
 import { toMilliseconds } from './modify-milliseconds';
+import { currentWorldTimeMS } from './time';
 
 export enum ActionType {
   Automatic = 'automatic',
@@ -29,11 +30,20 @@ export type Action = {
 export type ActiveTaskAction = {
   name: string;
   timeframe: number;
-  elapsedTime: number;
   paused: boolean;
   actionSubtype: ActionSubtype;
   failed: boolean;
+  startTime: number;
 };
+
+export const createActiveTask = createFeature<
+  ActiveTaskAction,
+  'name' | 'timeframe' | "actionSubtype"
+>(() => ({
+  startTime: currentWorldTimeMS(),
+  paused: false,
+  failed: false
+}));
 
 export const createAction = createFeature<Action>(() => ({
   type: ActionType.Automatic,

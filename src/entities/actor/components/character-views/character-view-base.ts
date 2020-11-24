@@ -108,4 +108,10 @@ export abstract class CharacterViewBase extends LitElement {
       ></character-view-recharge>
     `;
   }
+
+  renderTime() {
+    return html`
+      <character-view-time .character=${this.character}></character-view-time>
+    `;
+  }
 }

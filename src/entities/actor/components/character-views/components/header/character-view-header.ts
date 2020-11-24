@@ -56,6 +56,11 @@ export class CharacterViewHeader extends LitElement {
           renderer: CharacterDrawerRenderer.Search,
         })}
         ${this.renderActionIconButton({
+          icon: 'schedule',
+          tooltipText: localize('time'),
+          renderer: CharacterDrawerRenderer.Time,
+        })}
+        ${this.renderActionIconButton({
           icon: 'groups',
           tooltipText: localize('resleeve'),
           renderer: CharacterDrawerRenderer.Resleeve,
