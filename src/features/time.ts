@@ -1,6 +1,7 @@
 import type { ActorEP } from '@src/entities/actor/actor';
 import { ActorType } from '@src/entities/entity-types';
 import { updateManyActors } from '@src/foundry/misc-helpers';
+import { nonNegative } from '@src/utility/helpers';
 import { localize, LangEntry } from '../foundry/localization';
 import { createFeature } from './feature-helpers';
 import { parseMilliseconds, toMilliseconds } from './modify-milliseconds';
@@ -127,7 +128,7 @@ export const advanceWorldTime = async (milliseconds: number) => {
 };
 
 export const getElapsedTime = (worldTimestampMS: number) => {
-  return currentWorldTimeMS() - worldTimestampMS;
+  return currentWorldTimeMS() - worldTimestampMS
 };
 
 // export const onWorldTimeUpdate = (_: number, delta: number) => {

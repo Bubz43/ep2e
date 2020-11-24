@@ -212,7 +212,7 @@ type CharacterData = EgoData & {
   }>[];
   favoriteItems: string[];
   tasks: StringID<ActiveTaskAction>[];
-  accumulatedTime: number;
+  accumulatedTimeStart: number;
   // log: StringID<CharacterLogEntry>[];
   appliedSubstances: StringID<
     AppliedSubstanceBase & {

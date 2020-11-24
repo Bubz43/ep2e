@@ -849,7 +849,7 @@
             "character": {
               "additionalProperties": false,
               "properties": {
-                "accumulatedTime": {
+                "accumulatedTimeStart": {
                   "type": "number"
                 },
                 "appliedSubstances": {
@@ -1610,9 +1610,6 @@
                       "actionSubtype": {
                         "$ref": "#/definitions/ActionSubtype"
                       },
-                      "elapsedTime": {
-                        "type": "number"
-                      },
                       "failed": {
                         "type": "boolean"
                       },
@@ -1625,18 +1622,25 @@
                       "paused": {
                         "type": "boolean"
                       },
-                      "timeframe": {
+                      "startTime": {
+                        "type": "number"
+                      },
+                      "timeTaken": {
+                        "type": "number"
+                      },
+                      "timeToComplete": {
                         "type": "number"
                       }
                     },
                     "required": [
                       "actionSubtype",
-                      "elapsedTime",
                       "failed",
                       "id",
                       "name",
                       "paused",
-                      "timeframe"
+                      "startTime",
+                      "timeTaken",
+                      "timeToComplete"
                     ],
                     "type": "object"
                   },
@@ -1796,7 +1800,7 @@
                 }
               },
               "required": [
-                "accumulatedTime",
+                "accumulatedTimeStart",
                 "appliedSubstances",
                 "aptitudes",
                 "characterDetails",

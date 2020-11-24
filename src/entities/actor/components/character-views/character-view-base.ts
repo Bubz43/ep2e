@@ -67,6 +67,7 @@ export abstract class CharacterViewBase extends LitElement {
           this.drawerContentRenderer = null;
           this.drawer.classList.remove('closing');
           if (this.drawerOpener?.isConnected) this.drawerOpener.focus();
+          this.drawerOpener = null;
         },
         { once: true },
       );

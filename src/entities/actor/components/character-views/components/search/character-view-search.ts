@@ -3,7 +3,7 @@ import { renderAutoForm } from '@src/components/form/forms';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { setDragSource, DropType } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
-import { notEmpty } from '@src/utility/helpers';
+import { notEmpty, searchRegExp } from '@src/utility/helpers';
 import {
   customElement,
   LitElement,
@@ -32,47 +32,24 @@ export class CharacterViewSearch extends LitElement {
 
   @query('input') private searchInput!: HTMLInputElement;
 
-  private filters = new Set<string>();
-
   async connectedCallback() {
     super.connectedCallback();
     await this.updateComplete;
     setTimeout(() => this.searchInput.focus(), 100);
   }
 
-  @eventOptions({ capture: true })
-  private addFilter(ev: KeyboardEvent) {
-    setTimeout(() => {
-      if (ev.key === 'Enter') {
-        if (this.search.trim()) {
-          this.filters.add(this.search.trim());
-          this.search = '';
-        } else this.requestUpdate();
-      }
-    }, 10);
-  }
-
-  private removeFilter(filter: string) {
-    this.filters.delete(filter);
-    if (this.search === filter) this.search = '';
-    this.requestUpdate();
-  }
-
-  private getFilteredItems(regexs: RegExp[]) {
+  private getFilteredItems(regex: RegExp) {
     return [...this.character.items.values()].filter((proxy) =>
-      regexs.every((regex) => proxy.matchRegexp(regex)),
+      proxy.matchRegexp(regex),
     );
   }
 
   render() {
-    const { filters, search: searchString } = this;
+    const { search: searchString } = this;
     const search = searchString.trim();
-    const strings = new Set(compact([...filters, search]));
-    const showItems = notEmpty(strings);
-    const regexs = [...strings].map((string) => new RegExp(string, 'i'));
-    const items = showItems && this.getFilteredItems(regexs);
+    const showItems = notEmpty(search);
+    const items = showItems && this.getFilteredItems(searchRegExp(search));
     return html`
-      <header @keydown=${this.addFilter}>
         ${renderAutoForm({
           classes: 'controls',
           storeOnInput: true,
@@ -89,25 +66,7 @@ export class CharacterViewSearch extends LitElement {
             </label>
           `,
         })}
-      </header>
 
-      <sl-animated-list class="filters">
-        ${repeat(
-          strings,
-          (string) => string === search || string,
-          (filter) => html`
-            <mwc-button
-              dense
-              unelevated
-              tabindex="-1"
-              class="filter"
-              @click=${() => this.removeFilter(filter)}
-            >
-              ${filter}
-            </mwc-button>
-          `,
-        )}
-      </sl-animated-list>
 
       ${this.hasUpdated && items
         ? html`

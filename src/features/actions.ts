@@ -29,7 +29,8 @@ export type Action = {
 
 export type ActiveTaskAction = {
   name: string;
-  timeframe: number;
+  timeToComplete: number;
+  timeTaken: number;
   paused: boolean;
   actionSubtype: ActionSubtype;
   failed: boolean;
@@ -38,12 +39,22 @@ export type ActiveTaskAction = {
 
 export const createActiveTask = createFeature<
   ActiveTaskAction,
-  'name' | 'timeframe' | "actionSubtype"
+  'name' | 'timeToComplete' | "actionSubtype"
 >(() => ({
   startTime: currentWorldTimeMS(),
   paused: false,
-  failed: false
+  failed: false,
+  timeTaken: 0,
 }));
+
+export const taskState = ({ timeTaken, timeToComplete }: ActiveTaskAction) => {
+  return {
+    completed: timeTaken >= timeToComplete,
+    progress: timeTaken / timeToComplete,
+    indefinite: timeToComplete < 0,
+    remaining: timeToComplete - timeTaken
+  }
+}
 
 export const createAction = createFeature<Action>(() => ({
   type: ActionType.Automatic,

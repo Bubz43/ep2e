@@ -115,16 +115,17 @@ mwc-tab-bar {
   }
 
   .close-drawer {
-    margin: 0.5rem 0.5rem 0 auto;
-    border-radius: 100%;
-    background: rgba(black, 0.8);
+    margin-left: auto;
+    padding: 0.25rem;
+    width: min-content;
+    background: var(--color-border);
+    box-shadow: -1px 1px 2px black;
     position: sticky;
-    top: 0.5rem;
+    top: 0;
     z-index: 10;
     color: var(--color-text-lighter);
     align-self: baseline;
-    --mdc-icon-button-size: 30px;
-    --mdc-icon-size: 20px;
+    --mdc-icon-size: 1rem;
     &:hover,
     &:focus-within {
       color: var(--color-text);

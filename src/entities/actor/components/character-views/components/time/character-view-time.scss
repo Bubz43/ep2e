@@ -6,6 +6,115 @@
 }
 
 :host {
-  display: block;
+  display: grid;
+  grid-auto-rows: min-content;
+  gap: 1rem;
   
 }
+
+sl-header {
+  padding: 0 0.5rem;
+}
+
+sl-animated-list {
+  padding: 0.1rem 1rem;
+  --mdc-linear-progress-buffer-color: var(--color-border);
+  max-width: 450px;
+  position: relative;
+}
+
+li {
+  list-style: none;
+  padding: 0.25rem 0.5rem;
+
+  .name {
+    @include truncate(100%);
+    display: inline-block;
+  }
+
+  .ready {
+    color: var(--color-secondary);
+    font-weight: bold;
+  }
+
+  .expired {
+    font-weight: bold;
+    color: var(--color-negative);
+  }
+
+  .remaining {
+    color: var(--color-text-lighter);
+    text-transform: lowercase;
+  }
+}
+
+.accumulated {
+  margin-left: 1rem;
+  padding: 0.25rem;
+  border-left: 1px solid var(--color-grey);;
+  display: flex;
+}
+
+.task-creator {
+  margin: 1rem;
+  padding: 0 1rem 1rem;
+  border: 1px solid var(--color-grey);
+  background: var(--color-bg);
+  border-radius: 4px;
+  @include animate-css(fadeInLeft, 300ms);
+  sl-form {
+    grid-template-columns: 1fr 1fr;
+    > sl-field:first-of-type {
+      grid-column: span 2;
+    }
+  }
+}
+
+.task-creator-toggle {
+  &.active {
+    color: var(--color-secondary);
+  }
+}
+
+
+.task-actions {
+  position: relative;
+  li {
+    display: grid;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    grid-template-areas:
+      "name more"
+      "prog prog"
+      "adv adv";
+
+    .name {
+      all: unset;
+      grid-area: name;
+      &:hover {
+        text-shadow: var(--text-highlight);
+      }
+      &[disabled] {
+        pointer-events: none;
+      }
+    }
+
+    mwc-linear-progress {
+      grid-area: prog;
+    }
+
+    mwc-icon-button,
+    delete-button {
+      grid-area: more;
+      --mdc-icon-button-size: 30px;
+      justify-self: end;
+    }
+    .advance-form {
+      grid-area: adv;
+      grid-template-columns: 1fr 1fr;
+      padding: 0.25rem;
+      @include animate-css(fadeInDown, 300ms);
+    }
+  }
+}
+

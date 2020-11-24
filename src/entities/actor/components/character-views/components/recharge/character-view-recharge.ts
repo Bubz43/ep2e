@@ -108,10 +108,7 @@ export class CharacterViewRecharge extends mix(LitElement).with(UseWorldTime) {
             });
           },
           fields: ({ taken, refreshIn }) => [
-            renderNumberField(taken, {
-              min: 0,
-              max,
-            }),
+            renderNumberField(taken, { min: 0, max }),
             taken.value
               ? renderTimeField(refreshIn, {
                   min: 0,

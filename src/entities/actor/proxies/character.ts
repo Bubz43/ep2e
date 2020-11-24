@@ -28,8 +28,9 @@ import {
   TemporaryFeatureEnd,
   TemporaryFeatureType,
 } from '@src/features/temporary';
-import { currentWorldTimeMS } from '@src/features/time';
+import { currentWorldTimeMS, getElapsedTime } from '@src/features/time';
 import { EP } from '@src/foundry/system';
+import { nonNegative } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import { difference, first, flatMap, mapToObj, pipe, reject } from 'remeda';
 import { openSleeveForm } from '../actor-views';
@@ -189,6 +190,10 @@ export class Character extends ActorProxyBase<ActorType.Character> {
           break;
       }
     }
+  }
+
+  get accumulatedTime() {
+    return nonNegative(getElapsedTime(this.epData.accumulatedTimeStart))
   }
 
   @LazyGetter()

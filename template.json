@@ -240,7 +240,7 @@
         "rez": 0,
         "credits": 0
       },
-      "accumulatedTime": 0,
+      "accumulatedTimeStart": 0,
       "tasks": [],
       "reps": {
         "@Rep": {
