@@ -232,6 +232,22 @@ type ItemData<T extends ItemType> = WithTemplates<
   EntityTemplates['Item'][T]
 >;
 
+type CopyableItemType =
+  | ItemType.PhysicalTech
+  | ItemType.Armor
+  | ItemType.Substance
+  | ItemType.Explosive
+  | ItemType.BeamWeapon
+  | ItemType.Railgun
+  | ItemType.Firearm
+  | ItemType.FirearmAmmo
+  | ItemType.SprayWeapon
+  | ItemType.SeekerWeapon;
+
+export type BlueprintSource = {
+  [key in CopyableItemType]: ItemEntity<key>
+}[CopyableItemType]
+
 type ItemFlags<T extends ItemType> = T extends ItemType.Psi
   ? { influences: readonly StringID<PsiInfluenceData>[] }
   : T extends ItemType.Substance
@@ -246,16 +262,9 @@ type ItemFlags<T extends ItemType> = T extends ItemType.Psi
   : T extends ItemType.PhysicalTech
   ? {
       onboardALI: DeepPartial<FullEgoData> | null;
-      firewall: ItemEntity<ItemType.Software> | null;
-      fabrication: {
-        printTime: number;
-        elapsed: number;
-      };
+      gland: [ItemEntity<ItemType.Substance>] | null;
+      blueprint: [BlueprintSource] | null;
     }
-  : T extends ItemType.Sleight
-  ? { temporary: boolean }
-  : T extends ItemType.Trait
-  ? { temporary: boolean }
   : T extends ItemType.Firearm
   ? {
       specialAmmo: [ItemEntity<ItemType.FirearmAmmo>] | null;

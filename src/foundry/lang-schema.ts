@@ -1323,7 +1323,7 @@ type LangEntries =
   | 'regainAllPools'
   | 'rewind'
   | 'refreshIn'
-  | 'spend';
+  | 'spend' | "fabber"
 type FullNames =
   | 'cog'
   | 'int'

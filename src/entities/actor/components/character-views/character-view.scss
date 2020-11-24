@@ -77,7 +77,7 @@ character-view-header {
   }
 
   > * {
-    @include animate-css(fadeIn, 200ms);
+    @include animate-css(fadeIn, 500ms);
     animation-fill-mode: none !important;
   }
 }

@@ -125,6 +125,7 @@ export type BlueprintData = {
   blueprintType: '' | BlueprintType;
   used: boolean;
   cracked: boolean;
+  // TODO unusual feedstock
 };
 
 type Copyable = {
@@ -639,11 +640,14 @@ type PhysicalTechData = {
   activationAction: Exclude<ActionType, ActionType.Task>;
   usedEffectsDuration: number;
   resistEffectsCheck: AptitudeType | '';
+
+  fabPrintDuration: number;
   onboardALI: boolean;
   state: {
     activated: boolean;
     embeddedEgos: string[];
     onboardAliDeleted: boolean;
+    fabStartTime: number;
   };
   deviceType: '' | DeviceType;
   category: string;

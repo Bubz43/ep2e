@@ -45,6 +45,7 @@ import { difference, mapToObj } from 'remeda';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './physical-tech-form.scss';
+import { renderItemForm } from '@src/entities/item/item-views';
 
 const opsGroups = ['passiveEffects', 'activatedEffects'] as const;
 
@@ -60,14 +61,90 @@ export class PhysicalTechForm extends ItemFormBase {
 
   @internalProperty() effectGroup: 'passive' | 'activated' = 'passive';
 
+  private glandSheet?: SlWindow | null;
+
+  private blueprintSheet?: SlWindow | null;
+
+  private glandSheetKey = {};
+
+  private blueprintSheetKey = {};
+
   private readonly effectsOps = mapToObj(opsGroups, (group) => [
     group,
     addUpdateRemoveFeature(() => this.item.updater.prop('data', group).commit),
   ]);
 
+  disconnectedCallback() {
+    this.closeGlandSheet();
+    this.closeBlueprintSheet();
+    super.disconnectedCallback();
+  }
+
   update(changedProps: PropertyValues) {
     if (!this.item.hasActivation) this.effectGroup = 'passive';
+    if (this.blueprintSheet) this.openBlueprintSheet();
+    if (this.glandSheet) this.openGlandSheet();
     super.update(changedProps);
+  }
+
+  private openGlandSheet() {
+    const { glandedSubstance, fullName } = this.item;
+    if (!glandedSubstance) return this.closeGlandSheet();
+
+    const { win, wasConnected } = openWindow(
+      {
+        key: this.glandSheetKey,
+        content: renderItemForm(glandedSubstance),
+        adjacentEl: this,
+        forceFocus: !this.glandSheet,
+        name: `[${fullName} ${localize('gland')}] ${glandedSubstance.fullName}`,
+      },
+      { resizable: ResizeOption.Vertical },
+    );
+
+    this.glandSheet = win;
+    if (!wasConnected) {
+      win.addEventListener(
+        SlWindowEventName.Closed,
+        () => (this.glandSheet = null),
+        { once: true },
+      );
+    }
+  }
+
+  private closeGlandSheet() {
+    this.glandSheet?.close();
+    this.glandSheet = null;
+  }
+
+  private openBlueprintSheet() {
+    const { itemBlueprint, fullName } = this.item;
+    if (!itemBlueprint) return this.closeBlueprintSheet();
+
+    const { win, wasConnected } = openWindow(
+      {
+        key: this.blueprintSheetKey,
+        content: renderItemForm(itemBlueprint),
+        adjacentEl: this,
+        forceFocus: !this.blueprintSheet,
+        name: `[${fullName} ${localize('fab')}] ${itemBlueprint.fullName}`,
+      },
+      { resizable: ResizeOption.Vertical },
+    );
+
+    this.blueprintSheet = win;
+    if (!wasConnected) {
+      win.addEventListener(
+        SlWindowEventName.Closed,
+        () => (this.blueprintSheet = null),
+        { once: true },
+      );
+    }
+  }
+
+  private closeBlueprintSheet() {
+    this.blueprintSheet?.close();
+    this.blueprintSheet = null;
   }
 
   private addCreatedEffect(ev: EffectCreatedEvent) {
@@ -83,7 +160,7 @@ export class PhysicalTechForm extends ItemFormBase {
       deviceType,
       effectGroups,
       hasActivation,
-      hasUseActivation: hasUseActivation,
+      hasUseActivation,
       hasMeshHealth,
       onboardALI,
       hasOnboardALI,
@@ -145,7 +222,10 @@ export class PhysicalTechForm extends ItemFormBase {
                   renderLabeledCheckbox(onboardALI),
                 ]
               : '',
-            renderSelectField(fabricator, enumValues(FabType), emptyTextDash),
+            renderSelectField(fabricator, enumValues(FabType), {
+              ...emptyTextDash,
+              disabled: this.item.disableFabTypeChange,
+            }),
           ],
         })}
 
@@ -193,6 +273,9 @@ export class PhysicalTechForm extends ItemFormBase {
                   >
                 </section>
               `
+            : ''}
+          ${this.item.fabricatorType
+            ? this.renderFabSection(this.item.fabricatorType)
             : ''}
 
           <section
@@ -260,6 +343,80 @@ export class PhysicalTechForm extends ItemFormBase {
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
+    `;
+  }
+
+  private renderFabSection(fabType: FabType) {
+    if (fabType === FabType.Gland) {
+      const { glandedSubstance, updater } = this.item;
+      return html`
+        <sl-dropzone ?disabled=${this.disabled}>
+          <sl-header heading="${localize('gland')} ${localize('substance')}">
+            ${renderUpdaterForm(updater.prop('data'), {
+              disabled: this.disabled,
+              fields: ({ fabPrintDuration }) => {
+                renderTimeField(
+                  {
+                    ...fabPrintDuration,
+                    value: fabPrintDuration.value || CommonInterval.Hour * 4,
+                  },
+                  { min: 0 },
+                );
+              },
+            })}
+          </sl-header>
+          ${glandedSubstance
+            ? html`
+                <div class="addon">
+                  <span class="addon-name">${glandedSubstance.name}</span>
+                  <span class="addon-type">${glandedSubstance.fullType}</span>
+                  <mwc-icon-button
+                    icon="launch"
+                    @click=${this.openGlandSheet}
+                  ></mwc-icon-button>
+                  <delete-button
+                    ?disabled=${this.disabled}
+                    @delete=${glandedSubstance.deleteSelf}
+                  ></delete-button>
+                </div>
+              `
+            : ''}
+        </sl-dropzone>
+      `;
+    }
+    const { itemBlueprint, updater } = this.item;
+
+    return html`
+      <sl-dropzone>
+        <sl-header heading="${localize(fabType)} ${localize('fabber')}">
+          ${itemBlueprint
+            ? renderUpdaterForm(updater.prop('data'), {
+                disabled: this.disabled,
+                fields: ({ fabPrintDuration }) => {
+                  renderTimeField(fabPrintDuration, {
+                    min: CommonInterval.Turn,
+                  });
+                },
+              })
+            : ''}
+        </sl-header>
+        ${itemBlueprint
+          ? html`
+              <div class="addon">
+                <span class="addon-name">${itemBlueprint.name}</span>
+                <span class="addon-type">${itemBlueprint.fullType}</span>
+                <mwc-icon-button
+                  icon="launch"
+                  @click=${this.openBlueprintSheet}
+                ></mwc-icon-button>
+                <delete-button
+                  ?disabled=${this.disabled}
+                  @delete=${itemBlueprint.deleteSelf}
+                ></delete-button>
+              </div>
+            `
+          : ''}
+      </sl-dropzone>
     `;
   }
 

@@ -774,6 +774,7 @@
       "usedEffectsDuration": 3000,
       "onboardALI": false,
       "firewallRating": 30,
+      "fabPrintDuration": 0,
       "firewallHealth": {
         "baseDurability": 30,
         "crash": {
@@ -786,6 +787,7 @@
         "wounds": 0
       },
       "state": {
+        "fabStartTime": 0,
         "activated": false,
         "embeddedEgos": [],
         "onboardAliDeleted": false

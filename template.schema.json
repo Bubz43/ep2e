@@ -3706,6 +3706,9 @@
                     }
                   ]
                 },
+                "fabPrintDuration": {
+                  "type": "number"
+                },
                 "fabricator": {
                   "anyOf": [
                     {
@@ -4184,6 +4187,9 @@
                       },
                       "type": "array"
                     },
+                    "fabStartTime": {
+                      "type": "number"
+                    },
                     "onboardAliDeleted": {
                       "type": "boolean"
                     }
@@ -4191,7 +4197,8 @@
                   "required": [
                     "activated",
                     "embeddedEgos",
-                    "onboardAliDeleted"
+                    "onboardAliDeleted",
+                    "fabStartTime"
                   ],
                   "type": "object"
                 },
@@ -4243,6 +4250,7 @@
                 "activationAction",
                 "category",
                 "deviceType",
+                "fabPrintDuration",
                 "fabricator",
                 "firewallHealth",
                 "firewallRating",

@@ -70,57 +70,15 @@ h2 {
 }
 
 .effects-toggle {
-  --mdc-theme-primary: var(--color-text-lighter);
+  --mdc-theme-primary: #{lightv(var(--color-grey), 1.2)};
 }
 
 mwc-icon-button {
   --mdc-icon-button-size: 28px;
   --mdc-icon-size: 22px;
-  color: var(--color-text-lighter);
+  color: lightv(var(--color-grey), 1.2);
 }
 
-a {
-  display: inline-block;
-  margin-top: 4px;
-  @include truncate(250px);
-  &:hover {
-    text-decoration: underline;
-    cursor: pointer;
-  }
-}
-
-.restore-menu {
-  max-height: 50vh;
-  overflow-y: auto;
-  .restore-commit {
-    position: sticky;
-    bottom: 0;
-    background: var(--color-bg);
-  }
-}
-
-li[divider] {
-  border-color: var(--color-border);
-}
-
-mwc-list-item {
-  [slot='graphic'] {
-    color: var(--color-text);
-  }
-  &[disabled] {
-    [slot='graphic'] {
-      color: var(--color-text-disabled);
-    }
-  }
-}
-
-.restore-button {
-  transition: box-shadow 1s ease-in-out;
-  border-radius: 100%;
-  &:not([disabled]) {
-    box-shadow: 0 0 0.5rem var(--color-secondary);
-  }
-}
 
 .recharges {
   all: unset;
@@ -129,7 +87,7 @@ mwc-list-item {
   align-items: center;
   margin-right: 0.25rem;
   padding-right: 1ch;
-  color: var(--color-text-lighter);
+  color: lightv(var(--color-grey), 1.2);
   height: 28px;
   cursor: pointer;
   border-radius: 4px;

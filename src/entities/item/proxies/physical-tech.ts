@@ -7,12 +7,17 @@ import {
   ResizeOption,
   SlWindowEventName,
 } from '@src/components/window/window-options';
-import { Activation, DeviceType } from '@src/data-enums';
+import { Activation, DeviceType, FabType } from '@src/data-enums';
 import { Ego } from '@src/entities/actor/ego';
 import type { ObtainableEffects } from '@src/entities/applied-effects';
 import { renderEgoForm } from '@src/entities/components/render-ego-form';
 import { ItemType } from '@src/entities/entity-types';
-import { DefaultEgos, setupItemOperations } from '@src/entities/models';
+import {
+  BlueprintSource,
+  DefaultEgos,
+  ItemEntity,
+  setupItemOperations,
+} from '@src/entities/models';
 import { UpdateStore } from '@src/entities/update-store';
 import { localize } from '@src/foundry/localization';
 import { deepMerge } from '@src/foundry/misc-helpers';
@@ -26,7 +31,16 @@ import { createPipe, forEach, merge } from 'remeda';
 import type { ItemProxy } from '../item';
 import { Copyable, Equippable, Gear, Purchasable } from '../item-mixins';
 import { renderItemForm } from '../item-views';
+import { Armor } from './armor';
+import { BeamWeapon } from './beam-weapon';
+import { Explosive } from './explosive';
+import { Firearm } from './firearm';
+import { FirearmAmmo } from './firearm-ammo';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
+import { Railgun } from './railgun';
+import { SeekerWeapon } from './seeker-weapon';
+import { SprayWeapon } from './spray-weapon';
+import { Substance } from './substance';
 import { Trait } from './trait';
 
 class Base extends ItemProxyBase<ItemType.PhysicalTech> {}
@@ -234,6 +248,24 @@ export class PhysicalTech
     super.onDelete();
   }
 
+  get fabricatorType() {
+    return this.epData.fabricator;
+  }
+
+  get disableFabTypeChange() {
+    switch (this.fabricatorType) {
+      case FabType.Gland:
+        return !!this.glandedSubstance;
+
+      case FabType.General:
+      case FabType.Specialized:
+        return !!this.itemBlueprint;
+
+      default:
+        return false;
+    }
+  }
+
   @LazyGetter()
   get effectGroups() {
     const { effects, activatedEffects, hasActivation } = this;
@@ -274,9 +306,68 @@ export class PhysicalTech
     });
   }
 
+  @LazyGetter()
+  get glandedSubstance() {
+    const substance = this.epFlags?.gland?.[0];
+    return (
+      substance &&
+      new Substance({
+        loaded: true,
+        data: substance,
+        embedded: this.name,
+        deleteSelf: () => this.glandCommiter(null)
+      })
+    );
+  }
+
+  private get glandCommiter() {
+    return this.updater.prop("flags", EP.Name, "gland").commit
+  }
+
+
+
+  @LazyGetter()
+  get itemBlueprint() {
+    const data = this.epFlags?.blueprint?.[0];
+    const init = <T extends ItemType>(data: ItemEntity<T>) => ({
+      data,
+      loaded: true,
+      embedded: this.name,
+      deleteSelf: () => this.itemBlueprintCommiter(null)
+    });
+    if (!data) return null;
+    switch (data.type) {
+      case ItemType.Armor:
+        return new Armor(init(data));
+      case ItemType.PhysicalTech:
+        return new PhysicalTech(init(data));
+      case ItemType.Substance:
+        return new Substance(init(data));
+      case ItemType.Explosive:
+        return new Explosive(init(data));
+      case ItemType.BeamWeapon:
+        return new BeamWeapon(init(data));
+      case ItemType.Railgun:
+        return new Railgun({ ...init(data), nestedShape: false });
+      case ItemType.Firearm:
+        return new Firearm({ ...init(data), nestedShape: false });
+      case ItemType.FirearmAmmo:
+        return new FirearmAmmo(init(data));
+      case ItemType.SprayWeapon:
+        return new SprayWeapon(init(data));
+      case ItemType.SeekerWeapon:
+        return new SeekerWeapon(init(data));
+    }
+  }
+
+  private get itemBlueprintCommiter() {
+    return this.updater.prop("flags", EP.Name, "blueprint").commit
+  }
+
   getDataCopy(reset = false) {
     const copy = super.getDataCopy(reset);
     copy.data.state = {
+      fabStartTime: 0,
       equipped: false,
       disabled: false,
       activated: false,
