@@ -46,6 +46,13 @@ import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './physical-tech-form.scss';
 import { renderItemForm } from '@src/entities/item/item-views';
+import {
+  DropType,
+  handleDrop,
+  itemDropToItemProxy,
+} from '@src/foundry/drag-and-drop';
+import { ItemType } from '@src/entities/entity-types';
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
 
 const opsGroups = ['passiveEffects', 'activatedEffects'] as const;
 
@@ -86,6 +93,25 @@ export class PhysicalTechForm extends ItemFormBase {
     if (this.glandSheet) this.openGlandSheet();
     super.update(changedProps);
   }
+
+  private addDrop = handleDrop(async ({ ev, data }) => {
+    if (this.disabled || data?.type !== DropType.Item) return;
+    const blueprintDrop =
+      (ev.currentTarget as HTMLElement).dataset.drop === 'blueprint';
+    const proxy = await itemDropToItemProxy(data);
+    if (blueprintDrop) {
+      if (proxy && "isBlueprint" in proxy && proxy.isBlueprint) {
+        this.item.addItemBlueprint(proxy)
+      } else notify(NotificationType.Error, localize("itemMustBeBlueprint"))
+    } else {
+      if (proxy?.type !== ItemType.Substance || proxy.isElectronic) {
+        notify(
+          NotificationType.Error,
+          localize('DESCRIPTIONS', 'NonElectronicSubstanceOnly'),
+        );
+      } else this.item.addSubstanceToGland(proxy);
+    }
+  });
 
   private openGlandSheet() {
     const { glandedSubstance, fullName } = this.item;
@@ -350,8 +376,8 @@ export class PhysicalTechForm extends ItemFormBase {
     if (fabType === FabType.Gland) {
       const { glandedSubstance, updater } = this.item;
       return html`
-        <sl-dropzone ?disabled=${this.disabled}>
-          <sl-header heading="${localize('gland')} ${localize('substance')}">
+        <sl-dropzone ?disabled=${this.disabled} @drop=${this.addDrop}>
+          <sl-header heading="${localize('gland')} ${localize('substance')}" ?hideBorder=${!glandedSubstance}>
             ${renderUpdaterForm(updater.prop('data'), {
               disabled: this.disabled,
               fields: ({ fabPrintDuration }) => {
@@ -387,8 +413,12 @@ export class PhysicalTechForm extends ItemFormBase {
     const { itemBlueprint, updater } = this.item;
 
     return html`
-      <sl-dropzone>
-        <sl-header heading="${localize(fabType)} ${localize('fabber')}">
+      <sl-dropzone
+        ?disabled=${this.disabled}
+        @drop=${this.addDrop}
+        data-drop="blueprint"
+      >
+        <sl-header heading="${localize(fabType)} ${localize('fabber')}" ?hideBorder=${!itemBlueprint}>
           ${itemBlueprint
             ? renderUpdaterForm(updater.prop('data'), {
                 disabled: this.disabled,

@@ -158,10 +158,6 @@ export class Trait
     return this.epData.state;
   }
 
-  get isTemporary() {
-    return !!this.epFlags?.temporary;
-  }
-
   get fullName() {
     const { levelIndex, subtype, triggered, embedded, levels } = this;
     const parts = compact([

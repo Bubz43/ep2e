@@ -28,7 +28,7 @@ import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { createPipe, forEach, merge } from 'remeda';
-import type { ItemProxy } from '../item';
+import type { CopyableItem, ItemProxy } from '../item';
 import { Copyable, Equippable, Gear, Purchasable } from '../item-mixins';
 import { renderItemForm } from '../item-views';
 import { Armor } from './armor';
@@ -320,6 +320,10 @@ export class PhysicalTech
     );
   }
 
+  addSubstanceToGland(substance: Substance) {
+    this.glandCommiter([substance.getDataCopy(true)])
+  } 
+
   private get glandCommiter() {
     return this.updater.prop("flags", EP.Name, "gland").commit
   }
@@ -358,6 +362,11 @@ export class PhysicalTech
       case ItemType.SeekerWeapon:
         return new SeekerWeapon(init(data));
     }
+  }
+
+  addItemBlueprint(blueprint: CopyableItem) {
+    // TODO set print time based off complexity
+    this.itemBlueprintCommiter([blueprint.getDataCopy(true)])
   }
 
   private get itemBlueprintCommiter() {

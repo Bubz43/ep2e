@@ -1405,7 +1405,8 @@ export type DescriptionEntry =
   | 'OnlyEgoItems'
   | 'OnlyEgoTraits'
   | 'EgoAlreadyHasPsi'
-  | 'CannotAddPsi';
+  | 'CannotAddPsi'
+  | "NonElectronicSubstanceOnly"
 
 // TODO Look into using data keys as pattern to validate json string
 export type Formatable = {
