@@ -66,9 +66,11 @@ export class ItemTrash extends LitElement {
         ${this.proxy.actor.itemTrash.map((data) => {
           const { proxy: agent } = new ItemEP(data, {});
           return html`
-            <mwc-check-list-item twoline left>
-              <span>${agent.fullName}</span>
-              <span slot="secondary">${localize(agent.type)}</span>
+            <mwc-check-list-item>
+              <span
+                >${agent.fullName}
+                <span class="type">${localize(agent.type)}</span>
+              </span>
             </mwc-check-list-item>
           `;
         })}
@@ -82,15 +84,18 @@ export class ItemTrash extends LitElement {
           <mwc-icon slot="graphic">restore</mwc-icon>
           <span>${localize('restore')}</span>
         </mwc-list-item>
+        ${notEmpty(this.proxy.itemTrash) && !notEmpty(this.indexesToRestore)
+          ? html` <li divider></li>
+              <mwc-list-item
+                graphic="icon"
+                @delete=${this.emptyTrash}
+                @click=${this.emptyTrash}
+              >
+                <mwc-icon slot="graphic">delete_forever</mwc-icon>
+                <span>${localize('empty')} ${localize('itemTrash')}</span>
+              </mwc-list-item>`
+          : ''}
       </mwc-list>
-      ${notEmpty(this.proxy.itemTrash)
-        ? html`<delete-button
-            data-tooltip="${localize('empty')} ${localize('itemTrash')}"
-            @mouseover=${tooltip.fromData}
-            @focus=${tooltip.fromData}
-            @delete=${this.emptyTrash}
-          ></delete-button>`
-        : ''}
     `;
   }
 }

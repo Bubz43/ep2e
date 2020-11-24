@@ -38,6 +38,12 @@ mwc-list-item {
       color: var(--color-text-disabled);
     }
   }
+
+
+}
+
+mwc-check-list-item {
+  height: 40px;
 }
 
 .restore-button {
@@ -46,4 +52,8 @@ mwc-list-item {
   &:not([disabled]) {
     box-shadow: 0 0 0.5rem var(--color-secondary);
   }
+}
+
+.type {
+  color: var(--color-text-lighter);
 }
