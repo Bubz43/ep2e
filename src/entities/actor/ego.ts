@@ -426,7 +426,7 @@ export class Ego {
             'SHORT',
             'moderate',
           )} ${localize('refresh')}`,
-          elapsed: rep.refreshTimer,
+          elapsed: rep.refreshStartTime,
           max: CommonInterval.Week,
           id: rep.network,
         });
@@ -445,8 +445,8 @@ export class Ego {
         this.updater
           .prop('data', 'reps', network)
           .store((rep) =>
-            rep.refreshTimer >= CommonInterval.Week
-              ? { ...rep, refreshTimer: 0, minor: 0, moderate: 0 }
+            rep.refreshStartTime >= CommonInterval.Week
+              ? { ...rep, refreshStartTime: 0, minor: 0, moderate: 0 }
               : rep,
           );
       }
@@ -461,7 +461,7 @@ export class Ego {
         .prop('data', 'reps', network)
         .store((rep) =>
           repRefreshTimerActive(rep)
-            ? { ...rep, refreshTimer: rep.refreshTimer + advance }
+            ? { ...rep, refreshStartTime: rep.refreshStartTime + advance }
             : rep,
         );
     }

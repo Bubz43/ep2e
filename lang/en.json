@@ -1298,6 +1298,7 @@
     "refreshIn": "Refresh In",
     "regainAllPools": "Regain All Pools",
     "rewind": "Rewind",
+    "spend": "Spend",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

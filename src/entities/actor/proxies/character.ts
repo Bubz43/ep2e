@@ -234,10 +234,10 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
     this.updater
       .prop('data', recharge)
-      .store(({ taken, refreshTimer }) => {
+      .store(({ taken, refreshStartTime: refreshTimer }) => {
         return {
           taken: taken + 1,
-          refreshTimer: taken === 0 ? currentWorldTimeMS() : refreshTimer,
+          refreshStartTime: taken === 0 ? currentWorldTimeMS() : refreshTimer,
         };
       })
       .prop('data', 'temporary')

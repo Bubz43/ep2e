@@ -31,7 +31,7 @@ export type RechargeData = Readonly<{
   /**
    * @minimum 0
    */
-  refreshTimer: number;
+  refreshStartTime: number;
 }>;
 
 type RechargeInit = RechargeData & {
@@ -41,18 +41,18 @@ type RechargeInit = RechargeData & {
 
 export type ReadonlyRecharge = Omit<Recharge, 'addEffect'>;
 export class Recharge {
-  readonly type: RechargeType;
-  readonly taken: number;
-  readonly refreshTimer: number;
+  readonly type;
+  readonly taken;
+  readonly refreshStartTimer;
 
   #poolRecoverMod = 0;
   #timeframe: number;
   #max: number;
 
-  constructor({ type, inBiological, taken, refreshTimer }: RechargeInit) {
+  constructor({ type, inBiological, taken, refreshStartTime }: RechargeInit) {
     this.type = type;
     this.taken = taken;
-    this.refreshTimer = refreshTimer;
+    this.refreshStartTimer = refreshStartTime;
 
     this.#max = baseRechargeInfo[this.type].max;
 
@@ -98,7 +98,7 @@ export class Recharge {
 
   get timer() {
     const max = CommonInterval.Day;
-    const elapsed = getElapsedTime(this.refreshTimer);
+    const elapsed = getElapsedTime(this.refreshStartTimer);
 
     return {
       label: localize(this.type),

@@ -3585,6 +3585,9 @@
             "specificTarget": {
               "type": "string"
             },
+            "spend": {
+              "type": "string"
+            },
             "spentPools": {
               "type": "string"
             },
@@ -5356,6 +5359,7 @@
             "specialization",
             "specialized",
             "specificTarget",
+            "spend",
             "spentPools",
             "sprayWeapon",
             "stance",

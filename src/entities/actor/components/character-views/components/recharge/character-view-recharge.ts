@@ -101,7 +101,7 @@ export class CharacterViewRecharge extends mix(LitElement).with(UseWorldTime) {
           update: ({ taken, refreshIn }) => {
             this.character.updater.prop('data', type).commit({
               taken,
-              refreshTimer:
+              refreshStartTime:
                 typeof refreshIn === 'number'
                   ? currentWorldTimeMS() - (CommonInterval.Day - refreshIn)
                   : undefined,

@@ -743,7 +743,7 @@
         "moderate": {
           "type": "number"
         },
-        "refreshTimer": {
+        "refreshStartTime": {
           "type": "number"
         },
         "score": {
@@ -757,7 +757,7 @@
         "major",
         "minor",
         "moderate",
-        "refreshTimer",
+        "refreshStartTime",
         "score",
         "track"
       ],
@@ -3181,7 +3181,7 @@
                       "network": {
                         "type": "string"
                       },
-                      "refreshTimer": {
+                      "refreshStartTime": {
                         "type": "number"
                       },
                       "score": {
@@ -3195,7 +3195,7 @@
                       "minor",
                       "moderate",
                       "network",
-                      "refreshTimer",
+                      "refreshStartTime",
                       "score"
                     ],
                     "type": "object"
@@ -3208,15 +3208,15 @@
                 "state": {
                   "additionalProperties": false,
                   "properties": {
-                    "elapsed": {
-                      "type": "number"
-                    },
                     "equipped": {
                       "type": "boolean"
+                    },
+                    "serviceStartTime": {
+                      "type": "number"
                     }
                   },
                   "required": [
-                    "elapsed",
+                    "serviceStartTime",
                     "equipped"
                   ],
                   "type": "object"
@@ -9606,7 +9606,7 @@
     "RechargeData": {
       "additionalProperties": false,
       "properties": {
-        "refreshTimer": {
+        "refreshStartTime": {
           "minimum": 0,
           "type": "number"
         },
@@ -9617,7 +9617,7 @@
       },
       "required": [
         "taken",
-        "refreshTimer"
+        "refreshStartTime"
       ],
       "type": "object"
     },

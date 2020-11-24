@@ -1,6 +1,6 @@
 import { clamp } from 'remeda';
 import { createFeature, StringID } from './feature-helpers';
-import { CommonInterval } from './time';
+import { CommonInterval, currentWorldTimeMS } from './time';
 import { toMilliseconds } from './modify-milliseconds';
 
 export enum Favor {
@@ -24,7 +24,7 @@ export enum RepNetwork {
 
 export type RepData = {
   score: number;
-  refreshTimer: number;
+  refreshStartTime: number;
 } & Record<ConsumableFavor, number>;
 
 export type EgoRepData = RepData & { track: boolean };
@@ -42,31 +42,15 @@ export type RepWithIdentifier = RepBase & { identifier: RepIdentifier };
 
 export const createRep = createFeature<RepBase, 'acronym' | 'network'>(() => ({
   score: 10,
-  refreshTimer: 0,
+  refreshStartTime: 0,
   [Favor.Minor]: 0,
   [Favor.Moderate]: 0,
   [Favor.Major]: 0,
 }));
 
-export const repRefreshTimerActive = ({
-  minor,
-  moderate,
-  refreshTimer,
-}: RepData) => !!(minor || moderate);
+export const repRefreshTimerActive = ({ minor, moderate }: RepData) =>
+  !!(minor || moderate);
 
-export const refreshRep = (
-  refreshTimer: number,
-  advance: number,
-): Partial<RepData> => {
-  const advancedTimer = refreshTimer + advance;
-  return advancedTimer >= CommonInterval.Week
-    ? {
-        [Favor.Minor]: 0,
-        [Favor.Moderate]: 0,
-        refreshTimer: 0,
-      }
-    : { refreshTimer: advancedTimer };
-};
 
 export type RepUse = {
   favor?: ConsumableFavor;
@@ -82,10 +66,12 @@ export const repModification = ({
   ...(favor ? useRepFavor(rep, favor) : {}),
 });
 
-const useRepFavor = (rep: RepData, favor: ConsumableFavor) => ({
+const useRepFavor = (rep: RepData, favor: ConsumableFavor): Partial<RepData> => ({
   [favor]: clamp(rep[favor] + 1, { max: maxFavors.get(favor) }),
-  refreshTimer:
-    favor === Favor.Major || repRefreshTimerActive(rep) ? rep.refreshTimer : 0,
+  refreshStartTime:
+    favor === Favor.Major || repRefreshTimerActive(rep)
+      ? rep.refreshStartTime
+      : currentWorldTimeMS(),
 });
 
 export const maxFavors: ReadonlyMap<ConsumableFavor, number> = new Map([

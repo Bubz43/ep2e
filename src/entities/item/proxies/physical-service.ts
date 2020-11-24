@@ -104,7 +104,7 @@ export class PhysicalService extends mix(Base).with(Purchasable) {
               'SHORT',
               'moderate',
             )} ${localize('refresh')}`,
-            elapsed: rep.refreshTimer,
+            elapsed: rep.refreshStartTime,
             max: CommonInterval.Week,
             id: `${this.id}-${rep.id}`,
           }
@@ -118,8 +118,8 @@ export class PhysicalService extends mix(Base).with(Purchasable) {
         .prop('data', 'reputations')
         .store(
           map((rep) =>
-            rep.refreshTimer >= CommonInterval.Week
-              ? { ...rep, refreshTimer: 0, minor: 0, moderate: 0 }
+            rep.refreshStartTime >= CommonInterval.Week
+              ? { ...rep, refreshStartTime: 0, minor: 0, moderate: 0 }
               : rep,
           ),
         );
