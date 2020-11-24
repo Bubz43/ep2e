@@ -64,7 +64,7 @@ type ActorFlags<T extends ActorType> = T extends ActorType.Character
       substancesAwaitingOnset: StringID<
         AppliedSubstanceBase & {
           onsetTime: number;
-          elapsedOnset: number;
+          onsetStartTime: number;
           items: DrugAppliedItem[];
           damage: SubstanceAttackData;
         }

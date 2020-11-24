@@ -44,11 +44,7 @@ export class CharacterViewSleeve extends LitElement {
       )}
       ${notEmpty(this.character.pools)
         ? html`
-            <ul
-              class="pools ${classMap({
-                full: this.character.pools.size === 4,
-              })}"
-            >
+            <ul class="pools">
               ${[...this.character.pools.values()].map(this.renderPool)}
             </ul>
           `

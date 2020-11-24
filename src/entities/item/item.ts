@@ -7,7 +7,7 @@ import type { ActorEP } from '../actor/actor';
 import { ItemType, ActorType } from '../entity-types';
 import type { ItemDatas, ItemEntity } from '../models';
 import { UpdateStore } from '../update-store';
-import { EntitySubscription, Subscribable } from '../update-subcriptions';
+import { EntitySubscription } from '../update-subcriptions';
 import { ItemEPSheet } from './item-sheet';
 import { Armor } from './proxies/armor';
 import { BeamWeapon } from './proxies/beam-weapon';
@@ -51,7 +51,7 @@ export class ItemEP extends Item {
   }
 
   get subscriptions() {
-    return this._subscribers as Subscribable<this>;
+    return this._subscribers
   }
 
   @LazyGetter()

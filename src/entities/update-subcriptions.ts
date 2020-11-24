@@ -3,10 +3,7 @@ export type EntitySubCallbacks<T> = {
   onSubEnd?: () => void;
 };
 
-export type Subscribable<T> = Omit<
-  EntitySubscription<T>,
-  'updateSubscribers' | 'unsubscribeAll'
->;
+
 export class EntitySubscription<T> {
   #subs = new Map<object, EntitySubCallbacks<T>>();
 

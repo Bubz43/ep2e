@@ -1,19 +1,19 @@
 import { SlWindow } from '@src/components/window/window';
 import {
-  openWindow,
   closeWindow,
+  openWindow,
 } from '@src/components/window/window-controls';
-import { ResizeOption } from '@src/components/window/window-options';
-import { handleDrop, isKnownDrop } from '@src/foundry/drag-and-drop';
-import type {
-  EntitySheet,
-  EntitySheetOptions,
-} from '@src/foundry/foundry-cont';
+import {
+  ResizeOption,
+  SlWindowEventName,
+} from '@src/components/window/window-options';
+import type { EntitySheet } from '@src/foundry/foundry-cont';
+import { MutateEvent, mutatePlaceableHook } from '@src/foundry/hook-setups';
 import { localize } from '@src/foundry/localization';
 import {
-  userCan,
-  importFromCompendium,
   activeCanvas,
+  importFromCompendium,
+  userCan,
 } from '@src/foundry/misc-helpers';
 import { debounce } from '@src/utility/decorators';
 import { assignStyles } from '@src/utility/dom';
@@ -28,7 +28,7 @@ type Unsub = (() => void) | null;
 
 export class ActorEPSheet implements EntitySheet {
   private _token?: Token | null;
-
+  declare token: unknown | null;
   private unsub: Unsub;
 
   private window: SlWindow | null = null;
@@ -38,7 +38,23 @@ export class ActorEPSheet implements EntitySheet {
       onEntityUpdate: () => this.render(false),
       onSubEnd: () => this.close(),
     });
+    Hooks.on('canvasReady', this.checkToken);
   }
+
+  private get windowKey() {
+    return this.actor.isToken && this.actor.token
+      ? this.actor.token
+      : this.actor;
+  }
+
+  private checkToken = () => {
+    if (this._token && this.actor.isToken) {
+      if (this._token.scene?.id !== activeCanvas()?.scene.id) {
+        this.actor.subscriptions.unsubscribeAll();
+        this.close();
+      }
+    }
+  };
 
   get rendered() {
     return !!this.window?.isConnected;
@@ -99,9 +115,9 @@ export class ActorEPSheet implements EntitySheet {
   private openWindow(force: boolean) {
     const { name: actorName } = this.actor;
     const { name: tokenName } = this._token ?? {};
-    const { win, windowExisted } = openWindow(
+    const { win, wasConnected } = openWindow(
       {
-        key: this.actor,
+        key: this.windowKey,
         content: html` ${this.windowHeaderButtons} ${this.content} `,
         name:
           actorName !== tokenName
@@ -114,28 +130,13 @@ export class ActorEPSheet implements EntitySheet {
       },
       { resizable: ResizeOption.Both },
     );
-    // if (!windowExisted) win.addEventListener('drop', this.unpackDrop);
-
+    if (!wasConnected) {
+      win.addEventListener(SlWindowEventName.Closed, () => this.close(), {
+        once: true,
+      });
+    }
     this.window = win;
   }
-
-  // private unpackDrop = handleDrop(({ ev, drop }) => {
-  //   if (
-  //     this.actor.agent.type === ActorType.Character ||
-  //     !isKnownDrop(drop) ||
-  //     !this.actor.agent.editable
-  //   )
-  //     return;
-  //   if ('actorId' in drop) {
-  //     if (
-  //       drop.actorId === this.actor.data._id ||
-  //       (drop.tokenId && drop.tokenId === this._token?.data._id)
-  //     ) {
-  //       return;
-  //     }
-  //   }
-  //   this.actor.agent.handleDrop({ ev, drop });
-  // });
 
   getAdjacentEl() {
     const { actor } = this;
@@ -171,6 +172,7 @@ export class ActorEPSheet implements EntitySheet {
   }
 
   render(force: boolean, { token }: { token?: Token | null } = {}) {
+    console.log('actor render');
     if (!force && !this.rendered) return this;
 
     if (force) {
@@ -193,8 +195,9 @@ export class ActorEPSheet implements EntitySheet {
   async close() {
     this.unsub?.();
     this.unsub = null;
-    closeWindow(this.actor);
-    // this.window?.removeEventListener('drop', this.unpackDrop);
+    this.token = null;
+    closeWindow(this.windowKey);
+    Hooks.off('canvasReady', this.checkToken);
     this.window = null;
     return this;
   }

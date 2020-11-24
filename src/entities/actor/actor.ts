@@ -1,6 +1,6 @@
 import type { EntitySheet, TokenData } from '@src/foundry/foundry-cont';
 import { localize } from '@src/foundry/localization';
-import { canViewActor } from '@src/foundry/misc-helpers';
+import { activeCanvas, canViewActor } from '@src/foundry/misc-helpers';
 import { SystemSocketData, emitEPSocket } from '@src/foundry/socket';
 import { EP } from '@src/foundry/system';
 import { pipe, map, compact, flatMap, forEach, reject } from 'remeda';
@@ -17,7 +17,7 @@ import type {
   NonEditableProps,
 } from '../models';
 import { UpdateStore } from '../update-store';
-import { EntitySubscription, Subscribable } from '../update-subcriptions';
+import { EntitySubscription } from '../update-subcriptions';
 import { ActorEPSheet } from './actor-sheet';
 import type { ActorProxyInit } from './proxies/actor-proxy-base';
 import { Biological } from './proxies/biological';
@@ -71,6 +71,7 @@ export class ActorEP extends Actor {
   }
 
   get editable() {
+    // (!this.isToken || this.token?.scene?.id === activeCanvas()?.scene.id)
     return this.owner && (!this.compendium || !this.compendium.locked);
   }
 
@@ -158,7 +159,7 @@ export class ActorEP extends Actor {
   }
 
   get subscriptions() {
-    return this.#subscribers as Subscribable<this>;
+    return this.#subscribers
   }
 
   get isTokenTemplate() {
@@ -228,6 +229,7 @@ export class ActorEP extends Actor {
   }
 
   prepareData() {
+    console.log("actor prepare");
     super.prepareData();
     this.invalidated = true;
     if (this.hasPrepared)

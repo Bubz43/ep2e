@@ -10,6 +10,7 @@ import {
   RefreshTimer,
   CommonInterval,
   refreshAvailable,
+  getElapsedTime,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { LazyGetter } from 'lazy-get-decorator';
@@ -33,7 +34,7 @@ export class PhysicalService extends mix(Base).with(Purchasable) {
   }
 
   get elapsedDuration() {
-    return this.epData.state.elapsed;
+    return getElapsedTime(this.epData.state.serviceStartTime);
   }
 
   get expirationProgress() {

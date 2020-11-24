@@ -39,7 +39,6 @@ export class UpdateStore<T extends UpdateStoreData> {
   constructor(private callbacks: DataCallbacks<T>) {}
   private updatedData = {} as DeepPartial<T>;
   private _editable = false;
-  private recheckEditable = true;
   private actionCache = new Map<string, UpdateStoreActions<any, this>>();
 
   private commitsDisabled = false;
@@ -75,11 +74,7 @@ export class UpdateStore<T extends UpdateStoreData> {
   }
 
   get editable() {
-    if (this.recheckEditable) {
-      this._editable = this.callbacks.isEditable();
-      this.recheckEditable = false;
-    }
-    return this._editable;
+    return this.callbacks.isEditable()
   }
 
   readonly commit = async () =>
