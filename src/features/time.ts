@@ -128,7 +128,7 @@ export const advanceWorldTime = async (milliseconds: number) => {
 };
 
 export const getElapsedTime = (worldTimestampMS: number) => {
-  return currentWorldTimeMS() - worldTimestampMS
+  return currentWorldTimeMS() - worldTimestampMS;
 };
 
 // export const onWorldTimeUpdate = (_: number, delta: number) => {

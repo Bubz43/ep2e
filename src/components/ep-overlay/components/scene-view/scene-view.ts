@@ -47,7 +47,6 @@ export class SceneView extends LitElement {
     this.requestUpdate();
   };
 
-
   private toggleHooks(hook: 'on' | 'off') {
     const { updateFromHook: callback } = this;
     Hooks[hook]('canvasReady', callback);
@@ -62,8 +61,6 @@ export class SceneView extends LitElement {
       mutatePlaceableHook({ entity: Token, hook, event, callback });
     }
   }
-
-
 
   private openFormsDialog() {
     if (!game.user.isGM) return;
@@ -116,8 +113,6 @@ export class SceneView extends LitElement {
       ${vacuum ? html`<span>${localize('inVacuum')}</span>` : ''}
     `;
   }
-
-
 }
 
 declare global {

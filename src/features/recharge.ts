@@ -96,7 +96,6 @@ export class Recharge {
     }
   }
 
-
   get timer() {
     const max = CommonInterval.Day;
     const elapsed = getElapsedTime(this.refreshTimer);

@@ -9,7 +9,6 @@
   display: grid;
   grid-auto-rows: min-content;
   gap: 1rem;
-  
 }
 
 sl-header {
@@ -51,7 +50,7 @@ li {
 .accumulated {
   margin-left: 1rem;
   padding: 0.25rem;
-  border-left: 1px solid var(--color-grey);;
+  border-left: 1px solid var(--color-grey);
   display: flex;
 }
 
@@ -76,7 +75,6 @@ li {
   }
 }
 
-
 .task-actions {
   position: relative;
   li {
@@ -84,9 +82,9 @@ li {
     align-items: center;
     padding: 0.25rem 0.5rem;
     grid-template-areas:
-      "name more"
-      "prog prog"
-      "adv adv";
+      'name more'
+      'prog prog'
+      'adv adv';
 
     .name {
       all: unset;
@@ -117,4 +115,3 @@ li {
     }
   }
 }
-

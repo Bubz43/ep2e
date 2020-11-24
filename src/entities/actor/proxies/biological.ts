@@ -71,7 +71,7 @@ export class Biological extends mix(BiologicalBase).with(
   }
 
   get activeMeshHealth() {
-    return this.nonDefaultBrain?.meshHealth
+    return this.nonDefaultBrain?.meshHealth;
   }
 
   @LazyGetter()

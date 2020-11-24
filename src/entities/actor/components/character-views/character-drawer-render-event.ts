@@ -3,7 +3,7 @@ export enum CharacterDrawerRenderer {
   Effects = 'Effects',
   Search = 'Search',
   Recharge = 'Recharge',
-  Time = 'Time'
+  Time = 'Time',
 }
 
 export class CharacterDrawerRenderEvent extends Event {

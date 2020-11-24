@@ -354,10 +354,10 @@ export class EPOverlay extends LitElement {
               ></controlled-character> -->
             `
           : '',
-    )}
-      ${game.user.isGM ? html`
-      <world-time-controls></world-time-controls>
-      ` : ""}
+      )}
+      ${game.user.isGM
+        ? html` <world-time-controls></world-time-controls> `
+        : ''}
       ${this.staticElements}
     `;
   }

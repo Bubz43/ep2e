@@ -50,24 +50,22 @@ export class CharacterViewSearch extends LitElement {
     const showItems = notEmpty(search);
     const items = showItems && this.getFilteredItems(searchRegExp(search));
     return html`
-        ${renderAutoForm({
-          classes: 'controls',
-          storeOnInput: true,
-          props: { search },
-          update: ({ search = '' }) => (this.search = search),
-          fields: ({ search }) => html`
-            <label>
-              <mwc-icon>search</mwc-icon>
-              ${renderTextInput(search, {
-                search: true,
-                maxLength: 35,
-                placeholder: `${localize('search')} ${localize('components')}`,
-              })}
-            </label>
-          `,
-        })}
-
-
+      ${renderAutoForm({
+        classes: 'controls',
+        storeOnInput: true,
+        props: { search },
+        update: ({ search = '' }) => (this.search = search),
+        fields: ({ search }) => html`
+          <label>
+            <mwc-icon>search</mwc-icon>
+            ${renderTextInput(search, {
+              search: true,
+              maxLength: 35,
+              placeholder: `${localize('search')} ${localize('components')}`,
+            })}
+          </label>
+        `,
+      })}
       ${this.hasUpdated && items
         ? html`
             <ul class="results-list">

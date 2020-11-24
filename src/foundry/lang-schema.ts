@@ -1322,7 +1322,8 @@ type LangEntries =
   | 'stashed'
   | 'regainAllPools'
   | 'rewind'
-  | 'refreshIn' | "spend"
+  | 'refreshIn'
+  | 'spend';
 type FullNames =
   | 'cog'
   | 'int'
@@ -1377,7 +1378,9 @@ export type Abbreviation =
   | 'hardware'
   | 'cyberware'
   | 'nanoware'
-  | 'meshware' | "shortRecharge" | "longRecharge"
+  | 'meshware'
+  | 'shortRecharge'
+  | 'longRecharge';
 export type DescriptionEntry =
   | 'medicineHeal'
   | 'invalidRollFormula'

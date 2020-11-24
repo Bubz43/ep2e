@@ -79,22 +79,22 @@ export class CharacterViewHeader extends LitElement {
           : ''}
       </div>
       <sl-popover
-          class="restore-popover"
-          .closeEvents=${['trash-changed']}
-          @trash-changed=${this.updateFromChange}
-          placement=${Placement.Right}
-          .renderOnDemand=${this.renderItemTrash}
-          unpadded
+        class="restore-popover"
+        .closeEvents=${['trash-changed']}
+        @trash-changed=${this.updateFromChange}
+        placement=${Placement.Right}
+        .renderOnDemand=${this.renderItemTrash}
+        unpadded
+      >
+        <mwc-icon-button
+          icon="restore_from_trash"
+          class="restore-button"
+          ?disabled=${!notEmpty(this.character.actor.itemTrash) ||
+          this.character.disabled}
+          slot="base"
         >
-          <mwc-icon-button
-            icon="restore_from_trash"
-            class="restore-button"
-            ?disabled=${!notEmpty(this.character.actor.itemTrash) ||
-            this.character.disabled}
-            slot="base"
-          >
-          </mwc-icon-button>
-        </sl-popover>
+        </mwc-icon-button>
+      </sl-popover>
     `;
   }
 

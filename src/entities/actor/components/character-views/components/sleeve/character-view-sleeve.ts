@@ -22,32 +22,33 @@ export class CharacterViewSleeve extends LitElement {
 
   render() {
     const { sleeve } = this;
-    const physicalHealth = "physicalHealth" in sleeve && sleeve.physicalHealth;
-    const meshHealth = "activeMeshHealth" in sleeve &&  sleeve.activeMeshHealth;
-    const movement = "movementRates" in sleeve && sleeve.movementRates;
+    const physicalHealth = 'physicalHealth' in sleeve && sleeve.physicalHealth;
+    const meshHealth = 'activeMeshHealth' in sleeve && sleeve.activeMeshHealth;
+    const movement = 'movementRates' in sleeve && sleeve.movementRates;
     const isInfomorph = !physicalHealth;
     return html`
       <header>
-        <button @click=${this.sleeve.openForm}>
-          ${this.sleeve.name}
-        </button>
+        <button @click=${this.sleeve.openForm}>${this.sleeve.name}</button>
         <span class="details">
-            ${compact([
-              'size' in sleeve && localize(sleeve.size),
-              sleeve.subtype || localize(sleeve.type),
-              'isSwarm' in sleeve && sleeve.isSwarm && localize('swarm'),
-              'sex' in sleeve && sleeve.sex,
-            ]).join(' • ')}</span
-          >
+          ${compact([
+            'size' in sleeve && localize(sleeve.size),
+            sleeve.subtype || localize(sleeve.type),
+            'isSwarm' in sleeve && sleeve.isSwarm && localize('swarm'),
+            'sex' in sleeve && sleeve.sex,
+          ]).join(' • ')}</span
+        >
       </header>
 
-      ${compact([physicalHealth, meshHealth]).map(health => html`
-      <health-item .health=${health}></health-item>
-      `)}
-
+      ${compact([physicalHealth, meshHealth]).map(
+        (health) => html` <health-item .health=${health}></health-item> `,
+      )}
       ${notEmpty(this.character.pools)
         ? html`
-            <ul class="pools ${classMap({ full: this.character.pools.size === 4})}">
+            <ul
+              class="pools ${classMap({
+                full: this.character.pools.size === 4,
+              })}"
+            >
               ${[...this.character.pools.values()].map(this.renderPool)}
             </ul>
           `

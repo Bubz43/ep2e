@@ -44,7 +44,7 @@ export class Infomorph extends mix(InfomorphBase).with(SleeveInfo) {
   }
 
   get activeMeshHealth() {
-    return this.meshHealth
+    return this.meshHealth;
   }
 
   @LazyGetter()

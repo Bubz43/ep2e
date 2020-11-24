@@ -193,7 +193,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   }
 
   get accumulatedTime() {
-    return nonNegative(getElapsedTime(this.epData.accumulatedTimeStart))
+    return nonNegative(getElapsedTime(this.epData.accumulatedTimeStart));
   }
 
   @LazyGetter()
