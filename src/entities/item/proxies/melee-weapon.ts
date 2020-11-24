@@ -14,7 +14,7 @@ import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { createPipe } from 'remeda';
 import type { Attacker } from '../item-interfaces';
-import { Equippable, Gear, Purchasable } from '../item-mixins';
+import { Copyable, Equippable, Gear, Purchasable } from '../item-mixins';
 import { Explosive } from './explosive';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 import { Substance } from './substance';
@@ -22,7 +22,7 @@ import { Substance } from './substance';
 class MeleeWeaponBase extends ItemProxyBase<ItemType.MeleeWeapon> {}
 
 export class MeleeWeapon
-  extends mix(MeleeWeaponBase).with(Gear, Purchasable, Equippable)
+  extends mix(MeleeWeaponBase).with(Gear, Purchasable, Equippable, Copyable)
   implements Attacker<MeleeWeaponAttackData, MeleeWeaponAttack> {
   constructor(init: ItemProxyInit<ItemType.MeleeWeapon>) {
     super(init);

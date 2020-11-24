@@ -242,7 +242,9 @@ type CopyableItemType =
   | ItemType.Firearm
   | ItemType.FirearmAmmo
   | ItemType.SprayWeapon
-  | ItemType.SeekerWeapon;
+  | ItemType.SeekerWeapon
+  | ItemType.MeleeWeapon
+  | ItemType.ThrownWeapon
 
 export type BlueprintSource = {
   [key in CopyableItemType]: ItemEntity<key>

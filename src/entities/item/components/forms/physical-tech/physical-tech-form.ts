@@ -100,9 +100,9 @@ export class PhysicalTechForm extends ItemFormBase {
       (ev.currentTarget as HTMLElement).dataset.drop === 'blueprint';
     const proxy = await itemDropToItemProxy(data);
     if (blueprintDrop) {
-      if (proxy && "isBlueprint" in proxy && proxy.isBlueprint) {
-        this.item.addItemBlueprint(proxy)
-      } else notify(NotificationType.Error, localize("itemMustBeBlueprint"))
+      if (proxy && 'isBlueprint' in proxy && proxy.isBlueprint) {
+        this.item.addItemBlueprint(proxy);
+      } else notify(NotificationType.Error, localize('itemMustBeBlueprint'));
     } else {
       if (proxy?.type !== ItemType.Substance || proxy.isElectronic) {
         notify(
@@ -377,20 +377,21 @@ export class PhysicalTechForm extends ItemFormBase {
       const { glandedSubstance, updater } = this.item;
       return html`
         <sl-dropzone ?disabled=${this.disabled} @drop=${this.addDrop}>
-          <sl-header heading="${localize('gland')} ${localize('substance')}" ?hideBorder=${!glandedSubstance}>
-            ${renderUpdaterForm(updater.prop('data'), {
-              disabled: this.disabled,
-              fields: ({ fabPrintDuration }) => {
-                renderTimeField(
-                  {
-                    ...fabPrintDuration,
-                    value: fabPrintDuration.value || CommonInterval.Hour * 4,
-                  },
-                  { min: 0 },
-                );
-              },
-            })}
-          </sl-header>
+          <sl-header
+            heading="${localize('gland')} ${localize('substance')}"
+          ></sl-header>
+
+          ${renderUpdaterForm(updater.prop('data'), {
+            disabled: this.disabled,
+            fields: ({ fabPrintDuration }) =>
+              renderTimeField(
+                {
+                  ...fabPrintDuration,
+                  value: fabPrintDuration.value || CommonInterval.Hour * 4,
+                },
+                { min: 0 },
+              ),
+          })}
           ${glandedSubstance
             ? html`
                 <div class="addon">
@@ -418,15 +419,18 @@ export class PhysicalTechForm extends ItemFormBase {
         @drop=${this.addDrop}
         data-drop="blueprint"
       >
-        <sl-header heading="${localize(fabType)} ${localize('fabber')}" ?hideBorder=${!itemBlueprint}>
+        <sl-header
+          heading="${localize(fabType)} ${localize('fabber')}"
+          ?hideBorder=${!itemBlueprint}
+        >
           ${itemBlueprint
             ? renderUpdaterForm(updater.prop('data'), {
                 disabled: this.disabled,
-                fields: ({ fabPrintDuration }) => {
+                slot: 'action',
+                fields: ({ fabPrintDuration }) =>
                   renderTimeField(fabPrintDuration, {
                     min: CommonInterval.Turn,
-                  });
-                },
+                  }),
               })
             : ''}
         </sl-header>

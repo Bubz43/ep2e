@@ -37,10 +37,12 @@ import { Explosive } from './explosive';
 import { Firearm } from './firearm';
 import { FirearmAmmo } from './firearm-ammo';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
+import { MeleeWeapon } from './melee-weapon';
 import { Railgun } from './railgun';
 import { SeekerWeapon } from './seeker-weapon';
 import { SprayWeapon } from './spray-weapon';
 import { Substance } from './substance';
+import { ThrownWeapon } from './thrown-weapon';
 import { Trait } from './trait';
 
 class Base extends ItemProxyBase<ItemType.PhysicalTech> {}
@@ -361,6 +363,10 @@ export class PhysicalTech
         return new SprayWeapon(init(data));
       case ItemType.SeekerWeapon:
         return new SeekerWeapon(init(data));
+      case ItemType.MeleeWeapon:
+        return new MeleeWeapon(init(data))
+      case ItemType.ThrownWeapon:
+        return new ThrownWeapon(init(data))
     }
   }
 

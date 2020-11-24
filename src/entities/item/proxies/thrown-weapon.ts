@@ -11,13 +11,13 @@ import { HealthType } from '@src/health/health';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import type { Attacker } from '../item-interfaces';
-import { Purchasable, Stackable } from '../item-mixins';
+import { Copyable, Purchasable, Stackable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 import { Substance } from './substance';
 
 class Base extends ItemProxyBase<ItemType.ThrownWeapon> {}
 export class ThrownWeapon
-  extends mix(Base).with(Purchasable, Stackable)
+  extends mix(Base).with(Purchasable, Stackable, Copyable)
   implements Attacker<ThrownWeaponAttackData, ThrownWeaponAttack> {
   constructor(init: ItemProxyInit<ItemType.ThrownWeapon>) {
     super(init);
