@@ -1,4 +1,5 @@
 import type { RechargeType } from '@src/data-enums';
+import { localize } from '@src/foundry/localization';
 import type { Effect } from './effects';
 import { createFeature, StringID } from './feature-helpers';
 import { CommonInterval, currentWorldTimeMS } from './time';
@@ -18,6 +19,7 @@ type Base<T extends { type: TemporaryFeatureType }> = T & {
   startTime: number;
   duration: number;
   endOn: '' | TemporaryFeatureEnd;
+  name: string;
 };
 
 export type ActiveRecharge = Base<{
@@ -28,7 +30,6 @@ export type ActiveRecharge = Base<{
 }>;
 
 export type TemporaryEffects = Base<{
-  source: string;
   type: TemporaryFeatureType.Effects;
   effects: StringID<Effect>[];
 }>;
@@ -38,13 +39,14 @@ export type TemporaryFeature = ActiveRecharge | TemporaryEffects;
 const activeRecharge = createFeature<
   ActiveRecharge,
   'rechargeType' | 'duration' | 'regainedPoints'
->(() => ({
+>(({rechargeType}) => ({
   startTime: currentWorldTimeMS(),
   endOn: TemporaryFeatureEnd.Recharge,
   type: TemporaryFeatureType.ActiveRecharge,
+  name: localize(rechargeType)
 }));
 
-const effects = createFeature<TemporaryEffects, 'source'>(() => ({
+const effects = createFeature<TemporaryEffects, 'name'>(() => ({
   effects: [],
   startTime: currentWorldTimeMS(),
   type: TemporaryFeatureType.Effects,

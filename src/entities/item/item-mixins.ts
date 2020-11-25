@@ -177,6 +177,7 @@ export const Service = (cls: HasEpData<{
     }
   
     get remainingDuration() {
+      console.log(this.elapsedDuration, this.serviceDuration)
       return this.serviceDuration - this.elapsedDuration;
     }
     get isExpired() {

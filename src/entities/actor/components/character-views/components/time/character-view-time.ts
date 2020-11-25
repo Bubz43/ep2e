@@ -94,7 +94,12 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
         ${localize('controls')}</character-view-drawer-heading
       >
 
-      ${this.renderTaskActions()} ${this.renderRefreshTimers()}
+      ${[
+        this.renderTaskActions(),
+        this.renderTemporaryFeatures(),
+        this.renderTemporaryServices(),
+        this.renderRefreshTimers(),
+      ]}
     `;
   }
 
@@ -269,9 +274,45 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
     `;
   }
 
+  private renderTemporaryFeatures() {
+    const { temporaryFeatures } = this.character;
+    return html`
+      <section class="temporary-features">
+        <sl-header
+          heading=${localize('ongoing')}
+          itemCount=${temporaryFeatures.length}
+        ></sl-header>
+
+        <sl-animated-list>
+          ${repeat(temporaryFeatures, idProp, (feature) => {
+            const elapsed = getElapsedTime(feature.startTime);
+            const done = elapsed >= feature.duration
+            return html`
+              <li>
+                <span class="name">
+                  ${done
+                    ? html`
+                        <span class="ready">${localize('completed')}</span>
+                      `
+                    : ''}
+                  ${feature.name}
+                  ${!done ? html`
+                  <span class="remaining">${prettyMilliseconds(nonNegative(feature.duration - elapsed))}</span>
+                  ` : ""}
+                </span>
+                <mwc-linear-progress
+                  progress=${elapsed / feature.duration}
+                ></mwc-linear-progress>
+              </li>
+            `;
+          })}
+        </sl-animated-list>
+      </section>
+    `;
+  }
+
   private renderTemporaryServices() {
     const { temporaryServices } = this.character.equippedGroups;
-    const { disabled } = this.character;
     return html`
       <section class="services">
         <sl-header

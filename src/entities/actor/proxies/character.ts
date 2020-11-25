@@ -127,7 +127,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       if (item.type === ItemType.PhysicalService) {
         services.push(item);
         if (!item.isIndefiniteService) {
-          temporaryServices.push(item)
+          temporaryServices.push(item);
           if (item.isExpired) expiredServices.push(item);
         }
         if (item.isFakeEgoId) fakeIDs.push(item);
@@ -135,7 +135,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         if (item.isService) {
           services.push(item);
           if (!item.isIndefiniteService) {
-            temporaryServices.push(item)
+            temporaryServices.push(item);
             if (item.isExpired) expiredServices.push(item);
           }
         }
@@ -145,7 +145,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       services,
       fakeIDs,
       expiredServices,
-      temporaryServices
+      temporaryServices,
     };
   }
 
@@ -158,17 +158,21 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         this.equippedGroups.services,
         (service) => service.isIndefiniteService,
       ).length +
-      this.tasks.length
+      this.tasks.length +
+      this.temporaryFeatures.length
     );
   }
 
   get requiresAttention() {
     // TODO substances/fabbers/batteries
     return (
-      !!this.activeDurations &&
-      (notEmpty(this.equippedGroups.expiredServices) ||
-        this.timers.some(refreshAvailable) ||
-        this.tasks.some((task) => task.state.completed))
+      (!!this.activeDurations &&
+        (notEmpty(this.equippedGroups.expiredServices) ||
+          this.timers.some(refreshAvailable) ||
+          this.tasks.some((task) => task.state.completed))) ||
+      this.temporaryFeatures.some(
+        ({ startTime, duration }) => getElapsedTime(startTime) >= duration,
+      )
     );
   }
 
@@ -213,10 +217,14 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     return recharges;
   }
 
+  get temporaryFeatures() {
+    return this.epData.temporary;
+  }
+
   @LazyGetter()
   get activeRecharge() {
     return pipe(
-      this.epData.temporary,
+      this.temporaryFeatures,
       flatMap((temp) =>
         temp.type === TemporaryFeatureType.ActiveRecharge ? temp : [],
       ),
