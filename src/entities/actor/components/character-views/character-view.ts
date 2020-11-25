@@ -105,6 +105,8 @@ export class CharacterView extends CharacterViewBase {
       }
       return;
     }
+
+    
     
     if ('equipped' in proxy) {
       const copy = proxy.getDataCopy(true);

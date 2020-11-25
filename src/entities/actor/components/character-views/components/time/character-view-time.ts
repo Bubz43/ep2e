@@ -26,6 +26,7 @@ import {
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
+import { nonNegative } from '@src/utility/helpers';
 import {
   customElement,
   html,
@@ -252,7 +253,46 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
   private renderTemporaryServices() {
     return html``;
   }
-  private renderRefreshTimers() {}
+
+  private renderRefreshTimers() {
+    const { timers } = this.character;
+    if (timers.length === 0) return '';
+
+    return html`
+      <section class="refresh-timers">
+        <sl-header
+          heading="${localize('refresh')} ${localize('timers')}"
+          itemCount=${timers.length}
+        ></sl-header>
+        <sl-animated-list>
+              ${repeat(timers, idProp, ({ label, max, elapsed }) => {
+                const remaining = nonNegative(max - elapsed);
+                return html`
+                  <li>
+                    <span class="name"
+                      >${!remaining
+                        ? html`<span class="ready"
+                            >[${localize("ready")}]</span
+                          >`
+                        : ""}
+                      ${label}
+                      ${remaining
+                        ? html`<span class="remaining"
+                            >${prettyMilliseconds(remaining)}
+                            ${localize("remaining")}</span
+                          >`
+                        : ""}
+                    </span>
+                    <mwc-linear-progress
+                      progress=${elapsed / max}
+                    ></mwc-linear-progress>
+                  </li>
+                `;
+              })}
+            </sl-animated-list>
+      </section>
+    `;
+  }
 }
 
 declare global {

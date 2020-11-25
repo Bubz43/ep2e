@@ -99,7 +99,6 @@ export class PhysicalService extends mix(Base).with(Purchasable) {
     }));
   }
 
-  @LazyGetter()
   get refreshTimers(): RefreshTimer[] {
     return this.reputations.flatMap((rep) =>
       repRefreshTimerActive(rep)
@@ -110,7 +109,7 @@ export class PhysicalService extends mix(Base).with(Purchasable) {
               'SHORT',
               'moderate',
             )} ${localize('refresh')}`,
-            elapsed: rep.refreshStartTime,
+            elapsed: getElapsedTime(rep.refreshStartTime),
             max: CommonInterval.Week,
             id: `${this.id}-${rep.id}`,
           }

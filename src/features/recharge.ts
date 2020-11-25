@@ -43,7 +43,7 @@ export type ReadonlyRecharge = Omit<Recharge, 'addEffect'>;
 export class Recharge {
   readonly type;
   readonly taken;
-  readonly refreshStartTimer;
+  readonly refreshStartTime;
 
   #poolRecoverMod = 0;
   #timeframe: number;
@@ -52,7 +52,7 @@ export class Recharge {
   constructor({ type, inBiological, taken, refreshStartTime }: RechargeInit) {
     this.type = type;
     this.taken = taken;
-    this.refreshStartTimer = refreshStartTime;
+    this.refreshStartTime = refreshStartTime;
 
     this.#max = baseRechargeInfo[this.type].max;
 
@@ -98,7 +98,7 @@ export class Recharge {
 
   get timer() {
     const max = CommonInterval.Day;
-    const elapsed = getElapsedTime(this.refreshStartTimer);
+    const elapsed = getElapsedTime(this.refreshStartTime);
 
     return {
       label: localize(this.type),

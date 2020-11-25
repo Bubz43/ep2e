@@ -28,7 +28,13 @@ import {
   TemporaryFeatureEnd,
   TemporaryFeatureType,
 } from '@src/features/temporary';
-import { currentWorldTimeMS, getElapsedTime } from '@src/features/time';
+import {
+  CommonInterval,
+  currentWorldTimeMS,
+  getElapsedTime,
+  RefreshTimer,
+} from '@src/features/time';
+import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import { nonNegative } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
@@ -76,10 +82,185 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     if (egoFormWindow?.isConnected) this.ego.openForm?.();
   }
 
+  @LazyGetter()
   get initiative() {
     return (
       totalModifiers(this.appliedEffects.getGroup(EffectType.Initiative)) +
       this.ego.baseInitiative
+    );
+  }
+
+  get accumulatedTime() {
+    return nonNegative(getElapsedTime(this.epData.accumulatedTimeStart));
+  }
+
+  @LazyGetter()
+  get fakeIDs() {
+    return this.equipped.flatMap((item) =>
+      item.type === ItemType.PhysicalService && item.isFakeEgoId ? item : [],
+    );
+  }
+
+  get timers() {
+    return [
+      ...this.rechargeRefreshTimers,
+      ...this.ego.repRefreshTimers,
+      ...this.fakeIDs.flatMap(fake => fake.refreshTimers)
+    ]
+  }
+
+  get rechargeRefreshTimers() {
+    const timers: RefreshTimer[] = [];
+
+    for (const rechargeType of enumValues(RechargeType)) {
+      const { taken, refreshStartTime } = this.recharges[rechargeType];
+      if (taken) {
+        timers.push({
+          label: localize(rechargeType),
+          elapsed: getElapsedTime(refreshStartTime),
+          max: CommonInterval.Day,
+          id: rechargeType,
+        });
+      }
+    }
+
+    return timers;
+  }
+
+  @LazyGetter()
+  get recharges() {
+    const inBiological = this.sleeve?.type === ActorType.Biological;
+    const recharges = mapToObj(enumValues(RechargeType), (type) => [
+      type,
+      new Recharge({ type, inBiological, ...this.epData[type] }),
+    ]);
+
+    for (const effect of this._appliedEffects.getGroup(EffectType.Recharge)) {
+      recharges[effect.recharge].addEffect(effect);
+    }
+
+    return recharges;
+  }
+
+  @LazyGetter()
+  get activeRecharge() {
+    return pipe(
+      this.epData.temporary,
+      flatMap((temp) =>
+        temp.type === TemporaryFeatureType.ActiveRecharge ? temp : [],
+      ),
+      first(),
+    );
+  }
+
+  completeRecharge(
+    recharge: RechargeType,
+    newSpentPools: Map<PoolType, number>,
+  ) {
+    for (const poolType of enumValues(PoolType)) {
+      this.updater
+        .prop('data', 'spentPools', poolType)
+        .store(newSpentPools.get(poolType) || 0);
+    }
+
+    this.updater
+      .prop('data', recharge)
+      .store(({ taken, refreshStartTime }) => {
+        return {
+          taken: taken + 1,
+          refreshStartTime:
+            taken === 0 ? currentWorldTimeMS() : refreshStartTime,
+        };
+      })
+      .prop('data', 'temporary')
+      .commit(reject((temp) => temp.endOn === TemporaryFeatureEnd.Recharge));
+  }
+
+  get pools() {
+    return this.poolHolder.poolMap;
+  }
+
+  @LazyGetter()
+  protected get poolMap() {
+    const { spentPools } = this.epData;
+    return this.ego.useThreat
+      ? new Pools([
+          [
+            PoolType.Threat,
+            new Pool({
+              type: PoolType.Threat,
+              initialValue: this.epData.threat,
+              spent: spentPools.threat,
+            }),
+          ],
+        ])
+      : new Pools(
+          nonThreat.map(
+            (type) =>
+              [
+                type,
+                new Pool({
+                  type,
+                  initialValue:
+                    (this.sleeve?.pools[type] || 0) +
+                    (type === PoolType.Flex ? this.ego.flex : 0),
+                  spent: spentPools[type],
+                }),
+              ] as const,
+          ),
+        ).addEffects(this._appliedEffects.getGroup(EffectType.Pool));
+  }
+
+  get poolHolder() {
+    if (this.actor.isToken && this.ego.useThreat) {
+      const original = game.actors.get(this.actor.id);
+      if (
+        original?.proxy.type === ActorType.Character &&
+        original.proxy.ego.useThreat
+      ) {
+        return original.proxy;
+      }
+    }
+    return this;
+  }
+
+  get psi() {
+    return this.ego.psi;
+  }
+
+  get subtype() {
+    return this.ego.egoType;
+  }
+
+  get appliedEffects() {
+    return this._appliedEffects as ReadonlyAppliedEffects;
+  }
+
+  acceptItemAgent(agent: ItemProxy) {
+    return { accept: true } as const;
+  }
+
+  openSleeveForm() {
+    const { sleeve } = this;
+    if (!sleeve) return;
+    this.addLinkedWindow(
+      sleeve.updater,
+      ({ proxy }) =>
+        proxy.type === ActorType.Character &&
+        proxy.sleeve?.type === sleeve.type &&
+        proxy.sleeve,
+      openSleeveForm,
+    );
+  }
+
+  openPsiForm() {
+    const { psi } = this;
+    if (!psi) return;
+    const { updater } = psi;
+    this.addLinkedWindow(
+      updater,
+      ({ proxy: agent }) => agent.type === ActorType.Character && agent.psi,
+      openPsiFormWindow,
     );
   }
 
@@ -168,12 +349,11 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       if ('equipped' in proxy) {
         this[proxy.equipped ? 'equipped' : 'stashed'].push(proxy);
         if (proxy.equipped) {
-          if ("currentEffects" in proxy) {
-            this._appliedEffects.add(proxy.currentEffects)
+          if ('currentEffects' in proxy) {
+            this._appliedEffects.add(proxy.currentEffects);
           }
           if (isSleeveItem(proxy)) sleeveItems.set(proxy.id, proxy);
         }
-       
       } else if ('stashed' in proxy) {
         this[proxy.stashed ? 'stashed' : 'consumables'].push(proxy);
       } else if (proxy.type === ItemType.Trait) {
@@ -183,151 +363,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         this._appliedEffects.add(proxy.currentEffects);
       } else if (proxy.type === ItemType.Sleight) {
         egoItems.set(proxy.id, proxy);
-
-      }
-    
-    }
-  }
-
-  get accumulatedTime() {
-    return nonNegative(getElapsedTime(this.epData.accumulatedTimeStart));
-  }
-
-  @LazyGetter()
-  get recharges() {
-    const inBiological = this.sleeve?.type === ActorType.Biological;
-    const recharges = mapToObj(enumValues(RechargeType), (type) => [
-      type,
-      new Recharge({ type, inBiological, ...this.epData[type] }),
-    ]);
-
-    for (const effect of this._appliedEffects.getGroup(EffectType.Recharge)) {
-      recharges[effect.recharge].addEffect(effect);
-    }
-
-    return recharges;
-  }
-
-  @LazyGetter()
-  get activeRecharge() {
-    return pipe(
-      this.epData.temporary,
-      flatMap((temp) =>
-        temp.type === TemporaryFeatureType.ActiveRecharge ? temp : [],
-      ),
-      first(),
-    );
-  }
-
-  completeRecharge(
-    recharge: RechargeType,
-    newSpentPools: Map<PoolType, number>,
-  ) {
-    for (const poolType of enumValues(PoolType)) {
-      this.updater
-        .prop('data', 'spentPools', poolType)
-        .store(newSpentPools.get(poolType) || 0);
-    }
-
-    this.updater
-      .prop('data', recharge)
-      .store(({ taken, refreshStartTime: refreshTimer }) => {
-        return {
-          taken: taken + 1,
-          refreshStartTime: taken === 0 ? currentWorldTimeMS() : refreshTimer,
-        };
-      })
-      .prop('data', 'temporary')
-      .commit(reject((temp) => temp.endOn === TemporaryFeatureEnd.Recharge));
-  }
-
-  get pools() {
-    return this.poolHolder.poolMap;
-  }
-
-  @LazyGetter()
-  protected get poolMap() {
-    const { spentPools } = this.epData;
-    if (this.ego.useThreat) {
-      return new Pools([
-        [
-          PoolType.Threat,
-          new Pool({
-            type: PoolType.Threat,
-            initialValue: this.epData.threat,
-            spent: spentPools.threat,
-          }),
-        ],
-      ]);
-    }
-
-    return new Pools(
-      nonThreat.map(
-        (type) =>
-          [
-            type,
-            new Pool({
-              type,
-              initialValue:
-                (this.sleeve?.pools[type] || 0) +
-                (type === PoolType.Flex ? this.ego.flex : 0),
-              spent: spentPools[type],
-            }),
-          ] as const,
-      ),
-    ).addEffects(this._appliedEffects.getGroup(EffectType.Pool));
-  }
-
-  get poolHolder() {
-    if (this.actor.isToken && this.ego.useThreat) {
-      const original = game.actors.get(this.actor.id);
-      if (
-        original?.proxy.type === ActorType.Character &&
-        original.proxy.ego.useThreat
-      ) {
-        return original.proxy;
       }
     }
-    return this;
   }
 
-  get psi() {
-    return this.ego.psi;
-  }
-
-  get subtype() {
-    return this.ego.egoType;
-  }
-
-  get appliedEffects() {
-    return this._appliedEffects as ReadonlyAppliedEffects;
-  }
-
-  acceptItemAgent(agent: ItemProxy) {
-    return { accept: true } as const;
-  }
-
-  openSleeveForm() {
-    const { sleeve } = this;
-    if (!sleeve) return;
-    this.addLinkedWindow(
-      sleeve.updater,
-      ({ proxy }) =>
-        proxy.type === ActorType.Character &&
-        proxy.sleeve?.type === sleeve.type &&
-        proxy.sleeve,
-      openSleeveForm,
-    );
-  }
-
-  openPsiForm() {
-    const { psi } = this;
-    if (!psi) return;
-    const { updater } = psi;
-    this.addLinkedWindow(
-      updater,
-      ({ proxy: agent }) => agent.type === ActorType.Character && agent.psi,
-      openPsiFormWindow,
-    );
-  }
 }

@@ -172,7 +172,6 @@ export class ActorEPSheet implements EntitySheet {
   }
 
   render(force: boolean, { token }: { token?: Token | null } = {}) {
-    console.log('actor render');
     if (!force && !this.rendered) return this;
 
     if (force) {
