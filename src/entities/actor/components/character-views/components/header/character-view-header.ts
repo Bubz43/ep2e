@@ -1,3 +1,4 @@
+import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { Placement } from '@src/components/popover/popover-options';
 import { RechargeType } from '@src/data-enums';
 import type { MaybeToken } from '@src/entities/actor/actor';
@@ -6,6 +7,8 @@ import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
+import mix from 'mix-with/lib';
 import { range } from 'remeda';
 import {
   CharacterDrawerRenderer,
@@ -14,7 +17,7 @@ import {
 import styles from './character-view-header.scss';
 
 @customElement('character-view-header')
-export class CharacterViewHeader extends LitElement {
+export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
   static get is() {
     return 'character-view-header' as const;
   }
@@ -56,7 +59,7 @@ export class CharacterViewHeader extends LitElement {
           renderer: CharacterDrawerRenderer.Search,
         })}
         ${this.renderActionIconButton({
-          icon: 'schedule',
+          icon: 'access_time',
           tooltipText: localize('time'),
           renderer: CharacterDrawerRenderer.Time,
         })}
@@ -99,6 +102,7 @@ export class CharacterViewHeader extends LitElement {
   }
 
   private renderRecharges() {
+    const { activeRecharge, timeTillRechargeComplete } = this.character;
     return html` <button
       class="recharges"
       ?disabled=${this.character.disabled}
@@ -110,7 +114,12 @@ export class CharacterViewHeader extends LitElement {
     >
       ${Object.values(this.character.recharges).map(
         ({ type, taken, max }) => html`
-          <div class="recharge">
+          <div
+            class="recharge ${classMap({
+              active: activeRecharge?.rechargeType === type,
+              ready: !timeTillRechargeComplete,
+            })}"
+          >
             <span class="recharge-type"
               >${localize(type === RechargeType.Short ? 'short' : 'long')}</span
             >

@@ -621,7 +621,7 @@ type SoftwareData = {
   state: {
     equipped: boolean;
     activated: boolean;
-    serviceElapsed: number;
+    serviceStartTime: number;
     paused: boolean;
   };
 };
@@ -658,7 +658,7 @@ type PhysicalServiceData = {
   templates: UseItemTemplate<['Common', 'Cost']>;
   serviceType: PhysicalServiceType;
   reputations: StringID<RepBase>[];
-  duration: number;
+  serviceDuration: number;
   state: { serviceStartTime: number; equipped: boolean };
 };
 

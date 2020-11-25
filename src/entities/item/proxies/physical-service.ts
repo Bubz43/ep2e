@@ -17,33 +17,13 @@ import { toggle } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { map } from 'remeda';
-import { Purchasable } from '../item-mixins';
+import { Purchasable, Service } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
 class Base extends ItemProxyBase<ItemType.PhysicalService> {}
-export class PhysicalService extends mix(Base).with(Purchasable) {
+export class PhysicalService extends mix(Base).with(Purchasable, Service) {
   constructor(init: ItemProxyInit<ItemType.PhysicalService>) {
     super(init);
-  }
-
-  get serviceDuration() {
-    return this.epData.duration;
-  }
-
-  get isIndefiniteService() {
-    return this.serviceDuration < 0;
-  }
-
-  get elapsedDuration() {
-    return getElapsedTime(this.epData.state.serviceStartTime);
-  }
-
-  get expirationProgress() {
-    return this.elapsedDuration / this.serviceDuration;
-  }
-
-  get remainingDuration() {
-    return this.serviceDuration - this.elapsedDuration;
   }
 
   get serviceType() {
@@ -56,12 +36,6 @@ export class PhysicalService extends mix(Base).with(Purchasable) {
 
   get reputations() {
     return this.epData.reputations;
-  }
-
-  get isExpired() {
-    return (
-      !this.isIndefiniteService && this.elapsedDuration >= this.serviceDuration
-    );
   }
 
   get hasActiveRepRefreshTimers() {
@@ -123,7 +97,7 @@ export class PhysicalService extends mix(Base).with(Purchasable) {
         .prop('data', 'reputations')
         .store(
           map((rep) =>
-            rep.refreshStartTime >= CommonInterval.Week
+            getElapsedTime(rep.refreshStartTime) >= CommonInterval.Week
               ? { ...rep, refreshStartTime: 0, minor: 0, moderate: 0 }
               : rep,
           ),

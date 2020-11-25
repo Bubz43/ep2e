@@ -126,7 +126,7 @@ mwc-tab-bar {
     background: alphav(var(--color-border), 0.8);
     box-shadow: -1px 1px 2px black;
     position: sticky;
-    top: 0;
+    top: 1px;
     z-index: 10;
     color: var(--color-text-lighter);
     align-self: baseline;

@@ -6966,14 +6966,14 @@
                     "paused": {
                       "type": "boolean"
                     },
-                    "serviceElapsed": {
+                    "serviceStartTime": {
                       "type": "number"
                     }
                   },
                   "required": [
                     "equipped",
                     "activated",
-                    "serviceElapsed",
+                    "serviceStartTime",
                     "paused"
                   ],
                   "type": "object"

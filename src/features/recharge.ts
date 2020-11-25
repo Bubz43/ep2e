@@ -9,6 +9,7 @@ import {
   currentWorldTimeMS,
   getElapsedTime,
   prettyMilliseconds,
+  RefreshTimer,
 } from './time';
 
 const baseRechargeInfo = {
@@ -77,6 +78,7 @@ export class Recharge {
   get available() {
     return clamp(this.max - this.taken, { min: 0, max: this.max });
   }
+
 
   addEffect({ stat, modifier, recharge }: RechargeEffect) {
     if (recharge !== this.type) return;

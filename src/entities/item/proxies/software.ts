@@ -7,6 +7,7 @@ import { SoftwareType } from '@src/data-enums';
 import type { ObtainableEffects } from '@src/entities/applied-effects';
 import type { ItemType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
+import { getElapsedTime } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { AppMeshHealth } from '@src/health/app-mesh-health';
 import { MeshHealth } from '@src/health/full-mesh-health';
@@ -15,14 +16,14 @@ import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { compact } from 'remeda';
 import type { Attacker } from '../item-interfaces';
-import { Purchasable } from '../item-mixins';
+import { Purchasable, Service } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
 const serviceTypes = [SoftwareType.AppAsService, SoftwareType.MeshService];
 
 class Base extends ItemProxyBase<ItemType.Software> {}
 export class Software
-  extends mix(Base).with(Purchasable)
+  extends mix(Base).with(Purchasable, Service)
   implements ObtainableEffects, Attacker<SoftwareAttackData, SoftwareAttack> {
   constructor(init: ItemProxyInit<ItemType.Software>) {
     super(init);
@@ -83,6 +84,8 @@ export class Software
   get skills() {
     return this.epData.skills;
   }
+
+
 
   toggleEquipped() {
     return this.updater.prop("data", "state", "equipped").commit(toggle)

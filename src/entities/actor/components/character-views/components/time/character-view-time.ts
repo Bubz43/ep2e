@@ -8,10 +8,12 @@ import { renderAutoForm, renderSubmitForm } from '@src/components/form/forms';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
+import { UpdateStore } from '@src/entities/update-store';
 import {
   ActionSubtype,
   ActiveTaskAction,
   createActiveTask,
+  TaskState,
   taskState,
 } from '@src/features/actions';
 import {
@@ -23,10 +25,11 @@ import {
   currentWorldTimeMS,
   getElapsedTime,
   prettyMilliseconds,
+  refreshAvailable,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
-import { nonNegative } from '@src/utility/helpers';
+import { nonNegative, notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
@@ -68,6 +71,22 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
     () => this.character.updater.prop('data', 'tasks').commit,
   );
 
+  private async refreshAllReady() {
+    const { ego, equippedGroups, updater } = this.character;
+    await updater.batchCommits(async () => {
+      await ego.refreshReps(), await this.character.refreshRecharges();
+    });
+    const fakeIdUpdaters = equippedGroups.fakeIDs.flatMap((fake) => {
+      fake.storeRepRefresh();
+      return fake.updater.isEmpty ? [] : fake.updater;
+    });
+    if (notEmpty(fakeIdUpdaters)) {
+      this.character.itemOperations.update(
+        ...UpdateStore.prepUpdateMany(fakeIdUpdaters),
+      );
+    }
+  }
+
   render() {
     return html`
       <character-view-drawer-heading
@@ -75,12 +94,12 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
         ${localize('controls')}</character-view-drawer-heading
       >
 
-      ${this.renderTaskActions()}
+      ${this.renderTaskActions()} ${this.renderRefreshTimers()}
     `;
   }
 
   private renderTaskActions() {
-    const { accumulatedTimeStart, tasks } = this.character.epData;
+    const { tasks } = this.character;
     return html`
       <section class="task-actions">
         <sl-header heading=${localize('tasks')} itomCount=${tasks.length}>
@@ -145,8 +164,8 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
     `;
   }
 
-  private renderTask = (task: StringID<ActiveTaskAction>) => {
-    const { completed, remaining, progress, indefinite } = taskState(task);
+  private renderTask = (task: Character["tasks"][number]) => {
+    const { completed, remaining, progress, indefinite } = task.state
     return html` <li>
       <button
         class="name"
@@ -256,40 +275,51 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
 
   private renderRefreshTimers() {
     const { timers } = this.character;
-    if (timers.length === 0) return '';
 
     return html`
       <section class="refresh-timers">
         <sl-header
           heading="${localize('refresh')} ${localize('timers')}"
           itemCount=${timers.length}
-        ></sl-header>
+        >
+          ${timers.some(refreshAvailable)
+            ? html`
+                <mwc-button
+                  ?disabled=${this.character.disabled}
+                  slot="action"
+                  icon="refresh"
+                  @click=${this.refreshAllReady}
+                  label="${localize('refresh')} ${localize('all')} ${localize(
+                    'ready',
+                  )}"
+                ></mwc-button>
+              `
+            : ''}
+        </sl-header>
         <sl-animated-list>
-              ${repeat(timers, idProp, ({ label, max, elapsed }) => {
-                const remaining = nonNegative(max - elapsed);
-                return html`
-                  <li>
-                    <span class="name"
-                      >${!remaining
-                        ? html`<span class="ready"
-                            >[${localize("ready")}]</span
-                          >`
-                        : ""}
-                      ${label}
-                      ${remaining
-                        ? html`<span class="remaining"
-                            >${prettyMilliseconds(remaining)}
-                            ${localize("remaining")}</span
-                          >`
-                        : ""}
-                    </span>
-                    <mwc-linear-progress
-                      progress=${elapsed / max}
-                    ></mwc-linear-progress>
-                  </li>
-                `;
-              })}
-            </sl-animated-list>
+          ${repeat(timers, idProp, ({ label, max, elapsed }) => {
+            const remaining = nonNegative(max - elapsed);
+            return html`
+              <li>
+                <span class="name"
+                  >${!remaining
+                    ? html`<span class="ready">[${localize('ready')}]</span>`
+                    : ''}
+                  ${label}
+                  ${remaining
+                    ? html`<span class="remaining"
+                        >${prettyMilliseconds(remaining)}
+                        ${localize('remaining')}</span
+                      >`
+                    : ''}
+                </span>
+                <mwc-linear-progress
+                  progress=${elapsed / max}
+                ></mwc-linear-progress>
+              </li>
+            `;
+          })}
+        </sl-animated-list>
       </section>
     `;
   }

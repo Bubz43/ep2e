@@ -66,7 +66,7 @@ export class PhysicalServiceForm extends ItemFormBase {
               ${renderUpdaterForm(updater.prop('data'), {
                 disabled,
                 classes: 'primary-fields-form',
-                fields: ({ serviceType, duration }) => [
+                fields: ({ serviceType, serviceDuration: duration }) => [
                   renderSelectField(
                     serviceType,
                     enumValues(PhysicalServiceType),

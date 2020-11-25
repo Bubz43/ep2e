@@ -118,6 +118,17 @@ mwc-icon-button {
   > mwc-icon {
     color: var(--color-grey);
   }
+
+  &.active {
+    color: var(--color-secondary);
+    mwc-icon {
+      color: var(--color-secondary);
+    }
+    &.ready {
+      @include animate-css(bounce, 2s, infinite);
+      text-shadow: 0 0 4px black;
+    }
+  }
 }
 
 

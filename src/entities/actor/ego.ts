@@ -452,7 +452,7 @@ export class Ego {
       }
     }
 
-    return this.updater;
+    return this.updater.commit();
   }
 
 

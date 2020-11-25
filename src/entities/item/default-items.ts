@@ -267,7 +267,7 @@ const mnemonicsWare = () => {
       state: {
         equipped: true,
         activated: false,
-        serviceElapsed: 0,
+        serviceStartTime: 0,
         paused: false,
       },
       effects: [

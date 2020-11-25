@@ -1,7 +1,14 @@
 import { renderNumberField } from '@src/components/field/fields';
 import { renderUpdaterForm } from '@src/components/form/forms';
 import type { UpdateActions } from '@src/entities/update-store';
-import { EgoRepData, maxFavors, RepNetwork } from '@src/features/reputations';
+import {
+  EgoRepData,
+  Favor,
+  maxFavors,
+  RepNetwork,
+  repRefreshTimerActive,
+} from '@src/features/reputations';
+import { currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { range } from 'remeda';
@@ -67,6 +74,11 @@ export class EgoFormRep extends LitElement {
                                 ? 1
                                 : 2
                               : favorNumber,
+                            refreshStartTime:
+                              !repRefreshTimerActive(repData) &&
+                              favor !== Favor.Major
+                                ? currentWorldTimeMS()
+                                : undefined,
                           })}
                         ?disabled=${this.disabled}
                         icon=${used ? 'check_box' : 'check_box_outline_blank'}

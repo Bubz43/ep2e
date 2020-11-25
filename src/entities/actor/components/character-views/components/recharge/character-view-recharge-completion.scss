@@ -7,10 +7,15 @@
 
 :host {
   display: block;
+  padding: 0 0.5rem;
 }
 
 mwc-button {
   width: 100%;
+}
+
+p {
+  text-align: center;
 }
 
 .pool-controls {
@@ -96,6 +101,7 @@ wl-list-item {
 .complete-buttons {
   display: grid;
   grid-auto-flow: column;
+  gap: 0.5rem;
   margin-top: 0.5rem;
 }
 

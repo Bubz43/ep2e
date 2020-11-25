@@ -1,5 +1,6 @@
 import { renderNumberField } from '@src/components/field/fields';
 import { renderSubmitForm } from '@src/components/form/forms';
+import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { PoolType, RechargeType } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { removeFeature, StringID } from '@src/features/feature-helpers';
@@ -13,6 +14,7 @@ import {
   html,
   internalProperty,
 } from 'lit-element';
+import mix from 'mix-with/lib';
 import styles from './character-view-recharge-completion.scss';
 
 type InternalPool = Record<'oldPoints' | 'newPoints' | 'max', number>;
@@ -24,7 +26,7 @@ type CompletionState = {
 };
 
 @customElement('character-view-recharge-completion')
-export class CharacterViewRechargeCompletion extends LitElement {
+export class CharacterViewRechargeCompletion extends mix(LitElement).with(UseWorldTime) {
   static get is() {
     return 'character-view-recharge-completion' as const;
   }
@@ -137,13 +139,12 @@ export class CharacterViewRechargeCompletion extends LitElement {
 
   render() {
     const { state, activeRecharge, overrideDuration, regained } = this;
-    const { disabled } = this.character;
-    const remainingTime =
-      activeRecharge.duration - getElapsedTime(activeRecharge.startTime);
-    if (remainingTime && !overrideDuration) {
+    const { disabled, timeTillRechargeComplete } = this.character;
+
+    if (timeTillRechargeComplete && !overrideDuration) {
       return html`
         <p>
-          ${prettyMilliseconds(remainingTime, {
+          ${prettyMilliseconds(timeTillRechargeComplete, {
             compact: false,
           })}
           ${localize('remaining').toLocaleLowerCase()}...

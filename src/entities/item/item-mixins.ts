@@ -7,6 +7,7 @@ import {
   RangedWeaponAccessory,
   RangedWeaponTrait,
 } from '@src/data-enums';
+import { getElapsedTime } from '@src/features/time';
 import type { BlueprintData } from '@src/foundry/template-schema';
 import type { Class } from 'type-fest';
 import type { UpdateActions } from '../update-store';
@@ -156,3 +157,33 @@ export const RangedWeapon = (
     }
   };
 };
+
+export const Service = (cls: HasEpData<{
+  serviceDuration: number,
+  state: { serviceStartTime: number }
+}>) => {
+  return class extends cls {
+    get serviceDuration() {
+      return this.epData.serviceDuration;
+    }
+    get isIndefiniteService() {
+      return this.serviceDuration < 0;
+    }
+    get elapsedDuration() {
+      return getElapsedTime(this.epData.state.serviceStartTime);
+    }
+    get expirationProgress() {
+      return this.elapsedDuration / this.serviceDuration;
+    }
+  
+    get remainingDuration() {
+      return this.serviceDuration - this.elapsedDuration;
+    }
+    get isExpired() {
+      return (
+        !this.isIndefiniteService && this.elapsedDuration >= this.serviceDuration
+      );
+    }
+  
+  }
+}

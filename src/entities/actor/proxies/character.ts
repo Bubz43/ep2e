@@ -16,11 +16,14 @@ import type {
   ItemProxy,
 } from '@src/entities/item/item';
 import { openPsiFormWindow } from '@src/entities/item/item-views';
+import type { PhysicalService } from '@src/entities/item/proxies/physical-service';
 import { Psi } from '@src/entities/item/proxies/psi';
 import type { Sleight } from '@src/entities/item/proxies/sleight';
+import type { Software } from '@src/entities/item/proxies/software';
 import type { Trait } from '@src/entities/item/proxies/trait';
 import type { ActorEntity, SleeveType } from '@src/entities/models';
 import type { UpdateStore } from '@src/entities/update-store';
+import { taskState } from '@src/features/actions';
 import { EffectType, totalModifiers } from '@src/features/effects';
 import { Pool, Pools } from '@src/features/pool';
 import { Recharge } from '@src/features/recharge';
@@ -32,11 +35,12 @@ import {
   CommonInterval,
   currentWorldTimeMS,
   getElapsedTime,
+  refreshAvailable,
   RefreshTimer,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
-import { nonNegative } from '@src/utility/helpers';
+import { nonNegative, notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import { difference, first, flatMap, mapToObj, pipe, reject } from 'remeda';
 import { openSleeveForm } from '../actor-views';
@@ -82,6 +86,16 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     if (egoFormWindow?.isConnected) this.ego.openForm?.();
   }
 
+  async spendPool(...pools: { pool: PoolType; points: number }[]) {
+    const { updater } = this.poolHolder;
+    for (const { pool, points } of pools) {
+      this.poolHolder.updater
+        .prop('data', 'spentPools', pool)
+        .store((spent) => spent + points);
+    }
+    await updater.commit();
+  }
+
   @LazyGetter()
   get initiative() {
     return (
@@ -95,9 +109,56 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   }
 
   @LazyGetter()
-  get fakeIDs() {
-    return this.equipped.flatMap((item) =>
-      item.type === ItemType.PhysicalService && item.isFakeEgoId ? item : [],
+  get tasks() {
+    return this.epData.tasks.map((task) => ({
+      ...task,
+      state: taskState(task),
+    }));
+  }
+
+  @LazyGetter()
+  get equippedGroups() {
+    const services: (PhysicalService | Software)[] = [];
+    const fakeIDs: PhysicalService[] = [];
+    const expiredServices: typeof services = [];
+    // TODO Weapons && active use && fabbers
+    for (const item of this.equipped) {
+      if (item.type === ItemType.PhysicalService) {
+        services.push(item);
+        if (item.isExpired) expiredServices.push(item);
+        if (item.isFakeEgoId) fakeIDs.push(item);
+      } else if (item.type === ItemType.Software) {
+        if (item.isService) services.push(item);
+        if (item.isExpired) expiredServices.push(item);
+      }
+    }
+    return {
+      services,
+      fakeIDs,
+      expiredServices,
+    };
+  }
+
+  @LazyGetter()
+  get activeDurations() {
+    // TODO substances/fabbers/batteries
+    return (
+      this.timers.length +
+      reject(
+        this.equippedGroups.services,
+        (service) => service.isIndefiniteService,
+      ).length +
+      this.tasks.length
+    );
+  }
+
+  get requiresAttention() {
+    // TODO substances/fabbers/batteries
+    return (
+      !!this.activeDurations &&
+      (notEmpty(this.equippedGroups.expiredServices) ||
+        this.timers.some(refreshAvailable) ||
+        this.tasks.some((task) => task.state.completed))
     );
   }
 
@@ -105,8 +166,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     return [
       ...this.rechargeRefreshTimers,
       ...this.ego.repRefreshTimers,
-      ...this.fakeIDs.flatMap(fake => fake.refreshTimers)
-    ]
+      ...this.equippedGroups.fakeIDs.flatMap((fake) => fake.refreshTimers),
+    ];
   }
 
   get rechargeRefreshTimers() {
@@ -153,6 +214,15 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     );
   }
 
+  get timeTillRechargeComplete() {
+    const { activeRecharge } = this;
+    return activeRecharge
+      ? nonNegative(
+          activeRecharge.duration - getElapsedTime(activeRecharge.startTime),
+        )
+      : 0;
+  }
+
   completeRecharge(
     recharge: RechargeType,
     newSpentPools: Map<PoolType, number>,
@@ -174,6 +244,17 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       })
       .prop('data', 'temporary')
       .commit(reject((temp) => temp.endOn === TemporaryFeatureEnd.Recharge));
+  }
+
+  refreshRecharges() {
+    if (this.rechargeRefreshTimers.some(refreshAvailable)) {
+      for (const rechargeType of enumValues(RechargeType)) {
+        this.updater
+          .prop('data', rechargeType)
+          .store({ taken: 0, refreshStartTime: 0 });
+      }
+    }
+    return this.updater.commit();
   }
 
   get pools() {
@@ -366,5 +447,4 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       }
     }
   }
-
 }
