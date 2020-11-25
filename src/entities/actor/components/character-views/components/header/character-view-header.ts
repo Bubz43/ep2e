@@ -6,7 +6,13 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
-import { customElement, html, LitElement, property } from 'lit-element';
+import {
+  customElement,
+  html,
+  LitElement,
+  property,
+  TemplateResult,
+} from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import mix from 'mix-with/lib';
 import { range } from 'remeda';
@@ -62,6 +68,14 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
           icon: 'access_time',
           tooltipText: localize('time'),
           renderer: CharacterDrawerRenderer.Time,
+          content: this.character.activeDurations
+            ? html`
+                <sl-notification-coin
+                  value=${this.character.activeDurations}
+                  ?actionRequired=${this.character.requiresAttention}
+                ></sl-notification-coin>
+              `
+            : undefined,
         })}
         ${this.renderActionIconButton({
           icon: 'groups',
@@ -142,10 +156,12 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
     icon,
     tooltipText,
     renderer,
+    content,
   }: {
     icon: string;
     tooltipText: string;
     renderer: CharacterDrawerRenderer;
+    content?: TemplateResult;
   }) {
     return html` <mwc-icon-button
       ?disabled=${this.character.disabled}
@@ -155,7 +171,8 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
       @focus=${tooltip.fromData}
       data-renderer=${renderer}
       @click=${this.requestDrawerRender}
-    ></mwc-icon-button>`;
+      >${content || ''}</mwc-icon-button
+    >`;
   }
 
   private renderItemTrash = () => {

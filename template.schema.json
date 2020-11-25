@@ -3156,9 +3156,6 @@
             "physicalService": {
               "additionalProperties": false,
               "properties": {
-                "duration": {
-                  "type": "number"
-                },
                 "reputations": {
                   "items": {
                     "additionalProperties": false,
@@ -3202,6 +3199,9 @@
                   },
                   "type": "array"
                 },
+                "serviceDuration": {
+                  "type": "number"
+                },
                 "serviceType": {
                   "$ref": "#/definitions/PhysicalServiceType"
                 },
@@ -3238,8 +3238,8 @@
                 }
               },
               "required": [
-                "duration",
                 "reputations",
+                "serviceDuration",
                 "serviceType",
                 "state",
                 "templates"

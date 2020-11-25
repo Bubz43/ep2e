@@ -684,7 +684,7 @@
       "activatedEffects": [],
       "effects": [],
       "category": "",
-      "serviceDuration": 0,
+      "serviceDuration": -1,
       "skills": [],
       "activation": "",
       "meshAttacks": 0,
@@ -702,7 +702,7 @@
       "state": {
         "activated": false,
         "equipped": false,
-        "serviceElapsed": 0,
+        "serviceStartTime": 0,
         "paused": false
       },
       "primaryAttack": {
@@ -743,7 +743,7 @@
       }
     },
     "physicalService": {
-      "duration": -1,
+      "serviceDuration": -1,
       "reputations": [],
       "serviceType": "generic",
       "state": {
