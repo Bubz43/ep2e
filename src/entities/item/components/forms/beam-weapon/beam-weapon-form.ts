@@ -117,21 +117,13 @@ export class BeamWeaponForm extends ItemFormBase {
             ${renderUpdaterForm(updater.prop('data', 'battery'), {
               disabled,
               classes: 'battery-form',
-              fields: ({ charge, recharge, max }) => [
+              fields: ({ charge, max }) => [
                 renderNumberField(max, { min: 1 }),
                 renderNumberField(
                   { ...charge, value: Math.min(max.value, charge.value) },
                   { min: 0, max: max.value },
                 ),
-                renderTimeField(
-                  {
-                    ...recharge,
-                    label: `${localize('progressTowards')} ${localize(
-                      'recharge',
-                    )}`,
-                  },
-                  { min: 0, max: toMilliseconds({ hours: 4 }) },
-                ),
+                // TODO Check battery recharge
               ],
             })}
           </section>
