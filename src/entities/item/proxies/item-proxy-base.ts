@@ -48,6 +48,11 @@ export abstract class ItemProxyBase<T extends ItemType> {
     // this.actorIdentifiers = actorIdentifiers;
   }
 
+  get dataActions() {
+    return this.updater.prop("data").commit
+  }
+
+
   get textInfo(): string[] {
     return [];
   }

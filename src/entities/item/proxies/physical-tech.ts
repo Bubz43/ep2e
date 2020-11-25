@@ -13,12 +13,11 @@ import type { ObtainableEffects } from '@src/entities/applied-effects';
 import { renderEgoForm } from '@src/entities/components/render-ego-form';
 import { ItemType } from '@src/entities/entity-types';
 import {
-  BlueprintSource,
   DefaultEgos,
   ItemEntity,
   setupItemOperations,
 } from '@src/entities/models';
-import { UpdateStore } from '@src/entities/update-store';
+import { UpdateActions, UpdateStore } from '@src/entities/update-store';
 import { localize } from '@src/foundry/localization';
 import { deepMerge } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
@@ -45,7 +44,11 @@ import { Substance } from './substance';
 import { ThrownWeapon } from './thrown-weapon';
 import { Trait } from './trait';
 
-class Base extends ItemProxyBase<ItemType.PhysicalTech> {}
+class Base extends ItemProxyBase<ItemType.PhysicalTech> {
+  get updateState() {
+    return this.updater.prop('data', 'state');
+  }
+}
 export class PhysicalTech
   extends mix(Base).with(Purchasable, Gear, Equippable, Copyable)
   implements ObtainableEffects {
@@ -147,6 +150,10 @@ export class PhysicalTech
 
   private get openEgoWindows() {
     return PhysicalTech.aliItemWindows.get(this.aliSetter);
+  }
+
+  toggleActivation() {
+    return this.updateState.commit({ activated: !this.activated })
   }
 
   @LazyGetter()
@@ -280,10 +287,11 @@ export class PhysicalTech
 
   @LazyGetter()
   get currentEffects() {
-    const { activated } = this;
+    const { hasToggleActivation, activated } = this;
     return {
       source: `${this.name} ${activated ? `(${localize('activated')})` : ''}`,
-      effects: activated ? this.effects : this.activatedEffects,
+      effects:
+        hasToggleActivation && activated ? this.activatedEffects : this.effects,
     };
   }
 
@@ -317,20 +325,18 @@ export class PhysicalTech
         loaded: true,
         data: substance,
         embedded: this.name,
-        deleteSelf: () => this.glandCommiter(null)
+        deleteSelf: () => this.glandCommiter(null),
       })
     );
   }
 
   addSubstanceToGland(substance: Substance) {
-    this.glandCommiter([substance.getDataCopy(true)])
-  } 
-
-  private get glandCommiter() {
-    return this.updater.prop("flags", EP.Name, "gland").commit
+    this.glandCommiter([substance.getDataCopy(true)]);
   }
 
-
+  private get glandCommiter() {
+    return this.updater.prop('flags', EP.Name, 'gland').commit;
+  }
 
   @LazyGetter()
   get itemBlueprint() {
@@ -339,7 +345,7 @@ export class PhysicalTech
       data,
       loaded: true,
       embedded: this.name,
-      deleteSelf: () => this.itemBlueprintCommiter(null)
+      deleteSelf: () => this.itemBlueprintCommiter(null),
     });
     if (!data) return null;
     switch (data.type) {
@@ -364,19 +370,19 @@ export class PhysicalTech
       case ItemType.SeekerWeapon:
         return new SeekerWeapon(init(data));
       case ItemType.MeleeWeapon:
-        return new MeleeWeapon(init(data))
+        return new MeleeWeapon(init(data));
       case ItemType.ThrownWeapon:
-        return new ThrownWeapon(init(data))
+        return new ThrownWeapon(init(data));
     }
   }
 
   addItemBlueprint(blueprint: CopyableItem) {
     // TODO set print time based off complexity
-    this.itemBlueprintCommiter([blueprint.getDataCopy(true)])
+    this.itemBlueprintCommiter([blueprint.getDataCopy(true)]);
   }
 
   private get itemBlueprintCommiter() {
-    return this.updater.prop("flags", EP.Name, "blueprint").commit
+    return this.updater.prop('flags', EP.Name, 'blueprint').commit;
   }
 
   getDataCopy(reset = false) {

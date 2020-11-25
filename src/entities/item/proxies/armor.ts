@@ -6,7 +6,11 @@ import mix from 'mix-with/lib';
 import { Copyable, Equippable, Purchasable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
-class Base extends ItemProxyBase<ItemType.Armor> {}
+class Base extends ItemProxyBase<ItemType.Armor> {
+  get updateState() {
+    return this.updater.prop("data", "state")
+  }
+}
 export class Armor
   extends mix(Base).with(Equippable, Purchasable, Copyable)
   implements ObtainableEffects {
@@ -55,7 +59,6 @@ export class Armor
 
   get armorEffect() {
     const { layerable } = this;
-
     return createEffect.armor({
       ...this.currentArmorValues,
       layerable,

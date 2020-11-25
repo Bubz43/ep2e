@@ -28,6 +28,9 @@ class Base extends ItemProxyBase<ItemType.BeamWeapon> {
   get weaponTraits() {
     return enumValues(RangedWeaponTrait).filter((trait) => this.epData[trait]);
   }
+  get updateState() {
+    return this.updater.prop("data", "state")
+  }
 }
 export class BeamWeapon
   extends mix(Base).with(Gear, Purchasable, Equippable, RangedWeapon, Copyable)

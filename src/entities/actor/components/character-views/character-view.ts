@@ -1,7 +1,14 @@
 import type { TabBar } from '@material/mwc-tab-bar';
+import type { DropZone } from '@src/components/dropzone/dropzone';
+import { ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
 import { idProp } from '@src/features/feature-helpers';
-import { DropType, setDragSource } from '@src/foundry/drag-and-drop';
+import {
+  DropType,
+  handleDrop,
+  itemDropToItemProxy,
+  setDragSource,
+} from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, PropertyValues, query } from 'lit-element';
@@ -16,6 +23,13 @@ import { CharacterViewBase } from './character-view-base';
 import styles from './character-view.scss';
 
 const tabs = ['status', 'combat', 'psi'] as const;
+
+enum ItemGroup {
+  Traits,
+  Consumables,
+  Stashed,
+  Equipped,
+}
 
 @customElement('character-view')
 export class CharacterView extends CharacterViewBase {
@@ -61,6 +75,51 @@ export class CharacterView extends CharacterViewBase {
         return this.renderStatus();
     }
   }
+
+  private addItem = handleDrop(async ({ ev, data }) => {
+    if (this.character.disabled || data?.type !== DropType.Item) {
+      ev.preventDefault();
+      return;
+    }
+    const dropzone = ev.currentTarget as DropZone;
+    const group = Number(dropzone.dataset.group) as ItemGroup;
+    const proxy = await itemDropToItemProxy(data);
+    if (!proxy) {
+      ev.preventDefault();
+      return;
+    }
+
+    if (this.character.hasItemProxy(proxy)) {
+      // TODO sort
+      // console.log("owned", proxy)
+      if (group === ItemGroup.Equipped) {
+        if ('equipped' in proxy && !proxy.equipped) {
+          proxy.toggleEquipped();
+        }
+      } else if (group === ItemGroup.Stashed) {
+        if ('equipped' in proxy && proxy.equipped) {
+          proxy.toggleEquipped();
+        } else if ('stashed' in proxy && !proxy.stashed) {
+          proxy.toggleStashed();
+        }
+      }
+      return;
+    }
+    
+    if ('equipped' in proxy) {
+      const copy = proxy.getDataCopy(true);
+      copy.data.state.equipped = group === ItemGroup.Equipped;
+      this.character.itemOperations.add(copy);
+    } else if ('stashed' in proxy) {
+      const copy = proxy.getDataCopy(true);
+      copy.data.state.stashed = group === ItemGroup.Stashed;
+      this.character.itemOperations.add(copy);
+    } else {
+      if (proxy.type === ItemType.Sleight || proxy.type === ItemType.Psi) {
+        this.character.ego.addNewItemProxy(proxy);
+      } else this.character.itemOperations.add(proxy.getDataCopy(true));
+    }
+  });
 
   render() {
     const showPsi = !!(this.character.psi || notEmpty(this.character.sleights));
@@ -120,40 +179,58 @@ export class CharacterView extends CharacterViewBase {
   private renderStatus() {
     const { traits, equipped, consumables, stashed, disabled } = this.character;
     return html`
-      <sl-dropzone ?disabled=${disabled}>
-        <sl-header
-          heading=${localize('traits')}
-          ?hideBorder=${traits.length === 0}
-        ></sl-header>
-        ${notEmpty(traits) ? this.renderItemList(traits) : ''}
-      </sl-dropzone>
+      <sl-animated-list
+        ><sl-dropzone
+          @drop=${this.addItem}
+          ?disabled=${disabled}
+          data-group=${ItemGroup.Traits}
+        >
+          <sl-header
+            heading=${localize('traits')}
+            ?hideBorder=${traits.length === 0}
+          ></sl-header>
+          ${notEmpty(traits) ? this.renderItemList(traits) : ''}
+        </sl-dropzone>
 
-      ${notEmpty(consumables)
-        ? html`
-            <sl-header heading=${localize('consumables')}></sl-header>
-            ${this.renderItemList(consumables)}
-          `
-        : ''}
+        ${notEmpty(consumables)
+          ? html`
+              <sl-dropzone
+                @drop=${this.addItem}
+                ?disabled=${disabled}
+                data-group=${ItemGroup.Consumables}
+              >
+                <sl-header heading=${localize('consumables')}></sl-header>
+                ${this.renderItemList(consumables)}
+              </sl-dropzone>
+            `
+          : ''}
 
-      <sl-dropzone ?disabled=${disabled}>
-        <sl-header heading=${localize('equipped')}></sl-header>
-        ${notEmpty(equipped) ? this.renderItemList(equipped) : ''}
-      </sl-dropzone>
+        <sl-dropzone
+          @drop=${this.addItem}
+          ?disabled=${disabled}
+          data-group=${ItemGroup.Equipped}
+        >
+          <sl-header heading=${localize('equipped')}></sl-header>
+          ${notEmpty(equipped) ? this.renderItemList(equipped) : ''}
+        </sl-dropzone>
 
-      <sl-dropzone ?disabled=${disabled}>
-        <sl-header heading=${localize('stashed')}></sl-header>
-        ${notEmpty(stashed) ? this.renderItemList(stashed) : ''}
-      </sl-dropzone>
+        <sl-dropzone
+          @drop=${this.addItem}
+          ?disabled=${disabled}
+          data-group=${ItemGroup.Stashed}
+        >
+          <sl-header heading=${localize('stashed')}></sl-header>
+          ${notEmpty(stashed) ? this.renderItemList(stashed) : ''}
+        </sl-dropzone></sl-animated-list
+      >
     `;
   }
 
   private renderItemList(proxies: ItemProxy[]) {
     return html`
-      <sl-animated-list class="proxy-list">
-        ${repeat(
-          proxies,
-          idProp,
-          (proxy) => html`
+      <sl-animated-list class="proxy-list" fadeOnly>
+        ${repeat(proxies, idProp, (proxy) => {
+          return html`
             <wl-list-item
               draggable="true"
               @dragstart=${(ev: DragEvent) => {
@@ -171,18 +248,69 @@ export class CharacterView extends CharacterViewBase {
               ${proxy.nonDefaultImg
                 ? html` <img slot="before" height="32px" src=${proxy.img} /> `
                 : ''}
-              <span
+              <span class="proxy-info"
                 >${proxy.fullName}
                 <span class="proxy-type">${proxy.fullType}</span></span
               >
+
+              ${proxy.type === ItemType.Software && proxy.hasActivation
+                ? html`
+                    <mwc-icon-button
+                      class="toggle ${classMap({ activated: proxy.activated })}"
+                      icon="settings_power"
+                      slot="after"
+                      @click=${(ev: Event) => {
+                        stopEvent(ev);
+                        proxy.toggleActivation();
+                      }}
+                    ></mwc-icon-button>
+                  `
+                : ''}
+              ${proxy.type === ItemType.PhysicalTech &&
+              proxy.hasToggleActivation
+                ? html`
+                    <mwc-icon-button
+                      class="toggle ${classMap({ activated: proxy.activated })}"
+                      icon="power_settings_new"
+                      slot="after"
+                      @click=${(ev: Event) => {
+                        stopEvent(ev);
+                        proxy.toggleActivation();
+                      }}
+                    ></mwc-icon-button>
+                  `
+                : ''}
+              ${'toggleEquipped' in proxy
+                ? html`
+                    <mwc-icon-button
+                      slot="after"
+                      @click=${(ev: Event) => {
+                        stopEvent(ev);
+                        proxy.toggleEquipped();
+                      }}
+                      icon=${proxy.equipped ? 'archive' : 'unarchive'}
+                    ></mwc-icon-button>
+                  `
+                : 'toggleStashed' in proxy
+                ? html`
+                    <mwc-icon-button
+                      slot="after"
+                      @click=${(ev: Event) => {
+                        stopEvent(ev);
+                        proxy.toggleStashed();
+                      }}
+                      icon=${proxy.stashed ? 'unarchive' : 'archive'}
+                    ></mwc-icon-button>
+                  `
+                : ''}
               <delete-button
                 slot="after"
                 @delete=${proxy.deleteSelf}
                 @click=${stopEvent}
               ></delete-button>
             </wl-list-item>
-          `,
-        )}
+          `;
+        })}
       </sl-animated-list>
     `;
   }

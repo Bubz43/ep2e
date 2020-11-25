@@ -19,6 +19,15 @@ sl-section {
 
 header {
   padding: 0.5rem 1rem;
+  // .label {
+  //   text-transform: uppercase;
+  //   display: grid;
+  //   float: left;
+  //   font-size: small;
+  //   font-family: var(--font-mono);
+  //   place-items: center;
+  //   margin-right: 0.5rem;
+  // }
   button {
     all: unset;
     border-bottom: 1px solid var(--color-border);

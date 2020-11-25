@@ -10,7 +10,11 @@ import { Copyable, Purchasable, Stackable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 import { Substance } from './substance';
 
-class Base extends ItemProxyBase<ItemType.FirearmAmmo> {}
+class Base extends ItemProxyBase<ItemType.FirearmAmmo> {
+  get updateState() {
+    return this.updater.prop("data", "state")
+  }
+}
 
 export class FirearmAmmo extends mix(Base).with(
   Purchasable,

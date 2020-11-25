@@ -19,7 +19,11 @@ import { Explosive } from './explosive';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 import { Substance } from './substance';
 
-class MeleeWeaponBase extends ItemProxyBase<ItemType.MeleeWeapon> {}
+class MeleeWeaponBase extends ItemProxyBase<ItemType.MeleeWeapon> {
+  get updateState() {
+    return this.updater.prop("data", "state")
+  }
+}
 
 export class MeleeWeapon
   extends mix(MeleeWeaponBase).with(Gear, Purchasable, Equippable, Copyable)

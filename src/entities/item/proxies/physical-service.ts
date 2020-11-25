@@ -13,6 +13,7 @@ import {
   getElapsedTime,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
+import { toggle } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { map } from 'remeda';
@@ -73,6 +74,10 @@ export class PhysicalService extends mix(Base).with(Purchasable) {
 
   findRep(id: string) {
     return this.reputations.find(matchID(id));
+  }
+
+  toggleEquipped() {
+    return this.updater.prop("data", "state", "equipped").commit(toggle)
   }
 
   useRep({ id, ...use }: RepUse & { id: string }) {

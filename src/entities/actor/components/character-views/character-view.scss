@@ -143,6 +143,7 @@ mwc-tab-bar {
   grid-auto-rows: min-content;
   gap: 0.1rem;
   padding: 0.1rem 0;
+  position: relative;
 }
 
 .item-proxy {
@@ -155,9 +156,22 @@ mwc-tab-bar {
   .proxy-type {
     color: var(--color-text-lighter);
   }
+
+  --mdc-icon-button-size: 2rem;
+  [slot="after"] {
+    margin-left: 0;
+    color: var(--color-text-lighter);
+  }
 }
 
 sl-dropzone {
   padding: 0.5rem;
   position: relative;
+}
+
+
+.toggle {
+  &.activated {
+    color: var(--color-secondary);
+  }
 }

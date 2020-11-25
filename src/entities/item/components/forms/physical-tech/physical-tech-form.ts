@@ -192,7 +192,6 @@ export class PhysicalTechForm extends ItemFormBase {
       hasOnboardALI,
     } = this.item;
     const { disabled } = this;
-    // TODO Fabrication
     return html`
       <entity-form-layout>
         <entity-form-header

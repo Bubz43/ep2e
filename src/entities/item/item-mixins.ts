@@ -9,6 +9,7 @@ import {
 } from '@src/data-enums';
 import type { BlueprintData } from '@src/foundry/template-schema';
 import type { Class } from 'type-fest';
+import type { UpdateActions } from '../update-store';
 
 type HasEpData<T, E = {}> = Class<{ epData: T } & E>;
 
@@ -31,10 +32,13 @@ export const Purchasable = (
 };
 
 export const Equippable = (
-  cls: HasEpData<{
-    state: { equipped: boolean };
-    wareType: PhysicalWare | '';
-  }>,
+  cls: HasEpData<
+    {
+      state: { equipped: boolean };
+      wareType: PhysicalWare | '';
+    },
+    { updateState: UpdateActions<{ equipped: boolean }> }
+  >,
 ) => {
   return class extends cls {
     get equipped() {
@@ -45,6 +49,9 @@ export const Equippable = (
     }
     get isWare() {
       return !!this.wareType;
+    }
+    toggleEquipped() {
+      return this.updateState.commit({ equipped: !this.equipped });
     }
   };
 };
@@ -70,7 +77,10 @@ export const Gear = (cls: HasEpData<Record<GearTrait, boolean>>) => {
 };
 
 export const Stackable = (
-  cls: HasEpData<{ quantity: number; state: { stashed: boolean } }>,
+  cls: HasEpData<
+    { quantity: number; state: { stashed: boolean } },
+    { updateState: UpdateActions<{ stashed: boolean }> }
+  >,
 ) => {
   return class extends cls {
     get quantity() {
@@ -78,6 +88,9 @@ export const Stackable = (
     }
     get stashed() {
       return this.epData.state.stashed;
+    }
+    toggleStashed() {
+      return this.updateState.commit({ stashed: !this.stashed })
     }
   };
 };

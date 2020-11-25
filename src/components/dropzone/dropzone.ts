@@ -58,12 +58,16 @@ export class DropZone extends mix(LitElement).with(LazyRipple) {
     if (ev.type === 'drop' && this.hasAttribute('outlined')) {
       const { position } = this.style;
       this.style.position = 'relative';
+      if (ev.defaultPrevented) {
+        this.style.setProperty("--mdc-ripple-color", "var(--color-negative)");
+      }
       this.rippleHandlers.startPress(ev);
       requestAnimationFrame(() => {
         this.rippleHandlers.endPress();
         setTimeout(() => {
           DropZone.highlighted = null;
           this.style.position = position;
+          this.style.setProperty("--mdc-ripple-color", null)
         }, 350);
       });
     } else DropZone.highlighted = null;

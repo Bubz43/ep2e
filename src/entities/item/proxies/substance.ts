@@ -31,7 +31,11 @@ import { Trait } from './trait';
 
 export type SubstanceUse = Substance['applicationMethods'][number] | 'use';
 
-class Base extends ItemProxyBase<ItemType.Substance> {}
+class Base extends ItemProxyBase<ItemType.Substance> {
+  get updateState() {
+    return this.updater.prop("data", "state")
+  }
+}
 export class Substance
   extends mix(Base).with(Purchasable, Copyable, Stackable)
   implements Attacker<SubstanceAttackData, SubstanceAttack> {

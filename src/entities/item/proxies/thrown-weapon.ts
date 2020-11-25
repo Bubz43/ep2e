@@ -15,7 +15,11 @@ import { Copyable, Purchasable, Stackable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 import { Substance } from './substance';
 
-class Base extends ItemProxyBase<ItemType.ThrownWeapon> {}
+class Base extends ItemProxyBase<ItemType.ThrownWeapon> {
+  get updateState() {
+    return this.updater.prop("data", "state")
+  }
+}
 export class ThrownWeapon
   extends mix(Base).with(Purchasable, Stackable, Copyable)
   implements Attacker<ThrownWeaponAttackData, ThrownWeaponAttack> {

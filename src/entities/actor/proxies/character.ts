@@ -167,28 +167,25 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     for (const proxy of this.items.values()) {
       if ('equipped' in proxy) {
         this[proxy.equipped ? 'equipped' : 'stashed'].push(proxy);
-      } else if ('quantity' in proxy) {
-        this[proxy.stashed ? 'stashed' : 'consumables'].push(proxy);
-      }
-      switch (proxy.type) {
-        case ItemType.Sleight: {
-          egoItems.set(proxy.id, proxy);
-
-          // this.#appliedEffects.add(proxy.currentEffects)
-          break;
-        }
-        case ItemType.Trait: {
-          const collection = proxy.isMorphTrait ? sleeveItems : egoItems;
-          collection.set(proxy.id, proxy);
-          this.traits.push(proxy);
-          this._appliedEffects.add(proxy.currentEffects);
-          break;
-        }
-
-        default:
+        if (proxy.equipped) {
+          if ("currentEffects" in proxy) {
+            this._appliedEffects.add(proxy.currentEffects)
+          }
           if (isSleeveItem(proxy)) sleeveItems.set(proxy.id, proxy);
-          break;
+        }
+       
+      } else if ('stashed' in proxy) {
+        this[proxy.stashed ? 'stashed' : 'consumables'].push(proxy);
+      } else if (proxy.type === ItemType.Trait) {
+        const collection = proxy.isMorphTrait ? sleeveItems : egoItems;
+        collection.set(proxy.id, proxy);
+        this.traits.push(proxy);
+        this._appliedEffects.add(proxy.currentEffects);
+      } else if (proxy.type === ItemType.Sleight) {
+        egoItems.set(proxy.id, proxy);
+
       }
+    
     }
   }
 

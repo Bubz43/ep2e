@@ -18,7 +18,11 @@ import { Copyable, Purchasable, Stackable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 import { Substance } from './substance';
 
-class Base extends ItemProxyBase<ItemType.Explosive> {}
+class Base extends ItemProxyBase<ItemType.Explosive> {
+  get updateState() {
+    return this.updater.prop("data", "state")
+  }
+}
 
 export class Explosive
   extends mix(Base).with(Purchasable, Copyable, Stackable)

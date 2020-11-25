@@ -10,7 +10,7 @@ import { ArmorType } from '@src/features/active-armor';
 import { localize } from '@src/foundry/localization';
 import { AppMeshHealth } from '@src/health/app-mesh-health';
 import { MeshHealth } from '@src/health/full-mesh-health';
-import { notEmpty } from '@src/utility/helpers';
+import { notEmpty, toggle } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { compact } from 'remeda';
@@ -82,6 +82,14 @@ export class Software
 
   get skills() {
     return this.epData.skills;
+  }
+
+  toggleEquipped() {
+    return this.updater.prop("data", "state", "equipped").commit(toggle)
+  }
+
+  toggleActivation() {
+    return this.updater.prop("data", "state", "activated").commit(toggle);
   }
 
   @LazyGetter()

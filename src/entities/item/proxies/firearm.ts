@@ -43,6 +43,9 @@ class Base extends ItemProxyBase<ItemType.Firearm> {
       fixed && RangedWeaponTrait.Fixed,
     ]);
   }
+  get updateState() {
+    return this.updater.prop("data", "state")
+  }
 }
 export class Firearm
   extends mix(Base).with(Purchasable, Gear, Equippable, RangedWeapon, Copyable)
