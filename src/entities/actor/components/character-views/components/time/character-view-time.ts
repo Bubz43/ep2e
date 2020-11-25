@@ -164,8 +164,8 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
     `;
   }
 
-  private renderTask = (task: Character["tasks"][number]) => {
-    const { completed, remaining, progress, indefinite } = task.state
+  private renderTask = (task: Character['tasks'][number]) => {
+    const { completed, remaining, progress, indefinite } = task.state;
     return html` <li>
       <button
         class="name"
@@ -270,7 +270,46 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
   }
 
   private renderTemporaryServices() {
-    return html``;
+    const { temporaryServices } = this.character.equippedGroups;
+    const { disabled } = this.character;
+    return html`
+      <section class="services">
+        <sl-header
+          heading="${localize('temporary')} ${localize('services')}"
+          itemCount=${temporaryServices.length}
+        >
+        </sl-header>
+        <sl-animated-list class="temporary-services" transformOrigin="bottom">
+          ${repeat(temporaryServices, idProp, (service) => {
+            const { isExpired } = service;
+            return html`
+              <li>
+                <span class="name"
+                  >${isExpired
+                    ? html`<span class="expired"
+                        >[${localize('expired')}]</span
+                      >`
+                    : ''}
+                  ${service.fullName}
+                  ${isExpired
+                    ? ''
+                    : html`
+                        <span class="remaining"
+                          >${prettyMilliseconds(service.remainingDuration)}
+                          ${localize('remaining').toLocaleLowerCase()}</span
+                        >
+                      `}
+                </span>
+
+                <mwc-linear-progress
+                  progress=${service.expirationProgress}
+                ></mwc-linear-progress>
+              </li>
+            `;
+          })}
+        </sl-animated-list>
+      </section>
+    `;
   }
 
   private renderRefreshTimers() {

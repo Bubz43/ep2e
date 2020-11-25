@@ -70,10 +70,10 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
           renderer: CharacterDrawerRenderer.Time,
           content: this.character.activeDurations
             ? html`
-                <sl-notification-coin
+                <notification-coin
                   value=${this.character.activeDurations}
                   ?actionRequired=${this.character.requiresAttention}
-                ></sl-notification-coin>
+                ></notification-coin>
               `
             : undefined,
         })}

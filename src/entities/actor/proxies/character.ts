@@ -119,23 +119,33 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   @LazyGetter()
   get equippedGroups() {
     const services: (PhysicalService | Software)[] = [];
+    const temporaryServices: typeof services = [];
     const fakeIDs: PhysicalService[] = [];
     const expiredServices: typeof services = [];
     // TODO Weapons && active use && fabbers
     for (const item of this.equipped) {
       if (item.type === ItemType.PhysicalService) {
         services.push(item);
-        if (item.isExpired) expiredServices.push(item);
+        if (!item.isIndefiniteService) {
+          temporaryServices.push(item)
+          if (item.isExpired) expiredServices.push(item);
+        }
         if (item.isFakeEgoId) fakeIDs.push(item);
       } else if (item.type === ItemType.Software) {
-        if (item.isService) services.push(item);
-        if (item.isExpired) expiredServices.push(item);
+        if (item.isService) {
+          services.push(item);
+          if (!item.isIndefiniteService) {
+            temporaryServices.push(item)
+            if (item.isExpired) expiredServices.push(item);
+          }
+        }
       }
     }
     return {
       services,
       fakeIDs,
       expiredServices,
+      temporaryServices
     };
   }
 
