@@ -69,4 +69,6 @@
 
 .description {
   padding: 0 1rem;
+  @include animate-css(fadeIn, 250ms);
+  animation-delay: 250ms;
 }

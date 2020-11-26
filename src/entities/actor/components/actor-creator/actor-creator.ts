@@ -34,8 +34,7 @@ import {
 import { createPipe, flatMapToObj } from 'remeda';
 import { ActorEP } from '../../actor';
 import { createDigimorph } from '../../default-actors';
-import { Infomorph } from '../../proxies/infomorph';
-import { getSleeves, Sleeve } from '../../sleeves';
+import { ownedSleeves, Sleeve } from '../../sleeves';
 import styles from './actor-creator.scss';
 
 enum ActorKind {
@@ -303,6 +302,7 @@ export class ActorCreator extends LitElement {
         ${enumValues(ActorKind).map(
           (kind) => html`
             <mwc-tab
+            minWidth
               isFadingIndicator
               label=${localize(kind)}
               @click=${() => (this.actorKind = kind)}
@@ -376,11 +376,11 @@ export class ActorCreator extends LitElement {
           props: this.characterData,
           update: this.updateCharacterData,
           fields: ({ name, template, folder }) => [
+            renderSelectField(template, enumValues(CharacterTemplate)),
             renderTextField(
               { ...name, label: `${localize('ego')} ${localize('name')}` },
               { required: true },
             ),
-            renderSelectField(template, enumValues(CharacterTemplate)),
             notEmpty(folders)
               ? renderSelectField(folder, Object.keys(folders), {
                   emptyText: '-',
@@ -394,7 +394,7 @@ export class ActorCreator extends LitElement {
           placement=${Placement.Left}
           .renderOnDemand=${() => html`
             <mwc-list>
-              ${getSleeves(game.actors.entries).map((sleeve) => {
+              ${ownedSleeves().map((sleeve) => {
                 return html`
                   <mwc-list-item
                     twoline

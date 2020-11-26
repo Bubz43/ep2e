@@ -1,7 +1,7 @@
 import { renderLabeledCheckbox } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import type { Character } from '@src/entities/actor/proxies/character';
-import { Sleeve, gameSleeves, isSleeve } from '@src/entities/actor/sleeves';
+import { Sleeve, ownedSleeves, isSleeve } from '@src/entities/actor/sleeves';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
 import { idProp } from '@src/features/feature-helpers';
@@ -165,7 +165,7 @@ export class CharacterViewResleeve extends LitElement {
 
   private openSelectionList() {
     openMenu({
-      content: gameSleeves().map((sleeve) => ({
+      content: ownedSleeves().map((sleeve) => ({
         label: `${sleeve.name} (${localize(sleeve.type)})`,
         activated: this.selectedSleeve === sleeve,
         callback: () => (this.selectedSleeve = sleeve),

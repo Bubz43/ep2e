@@ -120,7 +120,7 @@ export const sleevePacks = async () => {
   return packs;
 };
 
-export const gameSleeves = () => {
+export const ownedSleeves = () => {
   return pipe(
     game.actors.entries,
     filter((a) => a.owner),
