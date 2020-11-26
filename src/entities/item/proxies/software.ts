@@ -7,7 +7,7 @@ import { SoftwareType } from '@src/data-enums';
 import type { ObtainableEffects } from '@src/entities/applied-effects';
 import type { ItemType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
-import { getElapsedTime } from '@src/features/time';
+import { currentWorldTimeMS, getElapsedTime } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { AppMeshHealth } from '@src/health/app-mesh-health';
 import { MeshHealth } from '@src/health/full-mesh-health';
@@ -85,14 +85,17 @@ export class Software
     return this.epData.skills;
   }
 
-
-
   toggleEquipped() {
-    return this.updater.prop("data", "state", "equipped").commit(toggle)
+    return this.updater
+      .prop('data', 'state')
+      .commit(({ equipped, serviceStartTime }) => ({
+        equipped: !equipped,
+        serviceStartTime: equipped ? serviceStartTime : currentWorldTimeMS(),
+      }));
   }
 
   toggleActivation() {
-    return this.updater.prop("data", "state", "activated").commit(toggle);
+    return this.updater.prop('data', 'state', 'activated').commit(toggle);
   }
 
   @LazyGetter()
@@ -147,5 +150,18 @@ export class Software
         ? [createBaseAttackFormula(damageFormula)]
         : [],
     };
+  }
+
+  getDataCopy(reset = false) {
+    const copy = super.getDataCopy(reset);
+    if (reset) {
+      copy.data.state = {
+        activated: false,
+        equipped: false,
+        paused: false,
+        serviceStartTime: currentWorldTimeMS(),
+      };
+    }
+    return copy;
   }
 }

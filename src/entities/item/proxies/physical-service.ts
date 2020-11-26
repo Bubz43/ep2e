@@ -11,12 +11,13 @@ import {
   CommonInterval,
   refreshAvailable,
   getElapsedTime,
+  currentWorldTimeMS,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { toggle } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { map } from 'remeda';
+import { map, set } from 'remeda';
 import { Purchasable, Service } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
@@ -51,7 +52,12 @@ export class PhysicalService extends mix(Base).with(Purchasable, Service) {
   }
 
   toggleEquipped() {
-    return this.updater.prop("data", "state", "equipped").commit(toggle)
+    return this.updater
+      .prop('data', 'state')
+      .commit(({ equipped, serviceStartTime }) => ({
+        equipped: !equipped,
+        serviceStartTime: equipped ? serviceStartTime : currentWorldTimeMS(),
+      }));
   }
 
   useRep({ id, ...use }: RepUse & { id: string }) {
@@ -109,13 +115,13 @@ export class PhysicalService extends mix(Base).with(Purchasable, Service) {
   getDataCopy(reset = false) {
     const copy = super.getDataCopy(reset);
     if (reset) {
-      copy.data = {
-        ...copy.data,
-        reputations: this.reputations.map((rep) => ({
-          ...rep,
-          refreshTimer: 0,
-        })),
+      copy.data.state = {
+        equipped: false,
+        serviceStartTime: currentWorldTimeMS(),
       };
+      copy.data.reputations.forEach(
+        set('refreshStartTime', currentWorldTimeMS()),
+      );
     }
     return copy;
   }

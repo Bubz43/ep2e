@@ -190,6 +190,7 @@ export class CharacterView extends CharacterViewBase {
           <sl-header
             heading=${localize('traits')}
             ?hideBorder=${traits.length === 0}
+            itemCount=${traits.length}
           ></sl-header>
           ${notEmpty(traits) ? this.renderItemList(traits) : ''}
         </sl-dropzone>
@@ -201,7 +202,7 @@ export class CharacterView extends CharacterViewBase {
                 ?disabled=${disabled}
                 data-group=${ItemGroup.Consumables}
               >
-                <sl-header heading=${localize('consumables')}></sl-header>
+                <sl-header heading=${localize('consumables')} itemCount=${consumables.length}></sl-header>
                 ${this.renderItemList(consumables)}
               </sl-dropzone>
             `
@@ -212,7 +213,7 @@ export class CharacterView extends CharacterViewBase {
           ?disabled=${disabled}
           data-group=${ItemGroup.Equipped}
         >
-          <sl-header heading=${localize('equipped')}></sl-header>
+          <sl-header heading=${localize('equipped')} itemCount=${equipped.length}></sl-header>
           ${notEmpty(equipped) ? this.renderItemList(equipped) : ''}
         </sl-dropzone>
 
@@ -221,7 +222,7 @@ export class CharacterView extends CharacterViewBase {
           ?disabled=${disabled}
           data-group=${ItemGroup.Stashed}
         >
-          <sl-header heading=${localize('stashed')}></sl-header>
+          <sl-header heading=${localize('stashed')} itemCount=${stashed.length}></sl-header>
           ${notEmpty(stashed) ? this.renderItemList(stashed) : ''}
         </sl-dropzone></sl-animated-list
       >
