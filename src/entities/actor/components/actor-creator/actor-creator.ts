@@ -6,6 +6,7 @@ import {
 } from '@src/components/field/fields';
 import type { Form } from '@src/components/form/form';
 import { renderAutoForm } from '@src/components/form/forms';
+import { Placement } from '@src/components/popover/popover-options';
 import type { SubmitButton } from '@src/components/submit-button/submit-button';
 import { closeWindow } from '@src/components/window/window-controls';
 import { enumValues } from '@src/data-enums';
@@ -127,7 +128,7 @@ export class ActorCreator extends LitElement {
 
   private get folders() {
     return flatMapToObj([...game.folders], ({ displayed, data }) =>
-      data.type === 'Item' && displayed ? [[data._id, data.name]] : [],
+      data.type === 'Actor' && displayed ? [[data._id, data.name]] : [],
     );
   }
 
@@ -153,22 +154,21 @@ export class ActorCreator extends LitElement {
     }
   }
 
-  private createActor(data: { type: ActorType; name?: string, folder?: string }) {
+  private createActor(data: {
+    type: ActorType;
+    name?: string;
+    folder?: string;
+  }) {
     const { renderSheet, actorLink } = this.options;
     return ActorEP.create(
       {
         ...data,
         name: data.name || `${localize('new')} ${localize(data.type)}`,
-        folder: this.folder,
         token: { actorLink },
       },
       { renderSheet },
     );
   }
-
-  private setActorKind = ({ actorKind }: { actorKind?: ActorKind }) => {
-    if (actorKind) this.actorKind = actorKind;
-  };
 
   private updateOptions = (options: Partial<ActorCreator['options']>) => {
     this.options = safeMerge(this.options, options);
@@ -191,7 +191,7 @@ export class ActorCreator extends LitElement {
       const { proxy } = await this.createActor({
         name: this.characterData.name,
         type: ActorType.Character,
-        folder: this.characterData.folder
+        folder: this.characterData.folder,
       });
       if (proxy.type === ActorType.Character) {
         const { selectedSleeve } = this;
@@ -286,11 +286,10 @@ export class ActorCreator extends LitElement {
       await this.createActor(this.sleeveData);
       this.sleeveData.name = '';
     }
+    await this.requestUpdate();
+    this.selectedSleeve = null;
     if (this.options.closeOnCreate) closeWindow(ActorCreator);
-    else {
-      await this.requestUpdate();
-      requestAnimationFrame(() => this.isConnected && this.focusFirstInput());
-    }
+    else if (this.isConnected) this.focusFirstInput();
   }
 
   render() {
@@ -300,13 +299,18 @@ export class ActorCreator extends LitElement {
         ? this.characterForm()
         : this.sleeveForm();
     return html`
-      ${renderAutoForm({
-        props: { actorKind },
-        noDebounce: true,
-        update: this.setActorKind,
-        fields: ({ actorKind }) =>
-          renderRadioFields(actorKind, enumValues(ActorKind)),
-      })}
+      <mwc-tab-bar>
+        ${enumValues(ActorKind).map(
+          (kind) => html`
+            <mwc-tab
+              isFadingIndicator
+              label=${localize(kind)}
+              @click=${() => (this.actorKind = kind)}
+            ></mwc-tab>
+          `,
+        )}
+      </mwc-tab-bar>
+     
       <div class="main-form" @keydown=${this.clickSubmit}>${form}</div>
 
       ${renderAutoForm({
@@ -387,12 +391,12 @@ export class ActorCreator extends LitElement {
         })}
 
         <sl-popover
+          placement=${Placement.Left}
           .renderOnDemand=${() => html`
             <mwc-list>
               ${getSleeves(game.actors.entries).map((sleeve) => {
                 return html`
                   <mwc-list-item
-                    ?selected=${sleeve === this.selectedSleeve}
                     twoline
                     graphic="medium"
                     @click=${() => (this.selectedSleeve = sleeve)}

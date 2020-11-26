@@ -13,3 +13,13 @@
   min-height: 300px;
   gap: 0.25rem;
 }
+
+
+sl-popover {
+  display: block;
+}
+
+mwc-tab-bar {
+  --mdc-theme-primary: var(--color-primary-alt);
+  margin-bottom: 0.5rem;
+}
