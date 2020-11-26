@@ -21,7 +21,7 @@ import { Substance } from './substance';
 
 class MeleeWeaponBase extends ItemProxyBase<ItemType.MeleeWeapon> {
   get updateState() {
-    return this.updater.prop("data", "state")
+    return this.updater.prop('data', 'state');
   }
 }
 

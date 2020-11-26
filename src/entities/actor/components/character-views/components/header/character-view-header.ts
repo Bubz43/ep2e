@@ -86,7 +86,11 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
           `;
         })}
         <li divider></li>
-        <mwc-list-item graphic="medium" @click=${this.editImg} style="height: 40px">
+        <mwc-list-item
+          graphic="medium"
+          @click=${this.editImg}
+          style="height: 40px"
+        >
           <mwc-icon slot="graphic">insert_photo</mwc-icon>
           <span>${localize('select')}</span>
         </mwc-list-item>

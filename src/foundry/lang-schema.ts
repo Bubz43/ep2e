@@ -1323,7 +1323,8 @@ type LangEntries =
   | 'regainAllPools'
   | 'rewind'
   | 'refreshIn'
-  | 'spend' | "fabber"
+  | 'spend'
+  | 'fabber';
 type FullNames =
   | 'cog'
   | 'int'
@@ -1406,7 +1407,7 @@ export type DescriptionEntry =
   | 'OnlyEgoTraits'
   | 'EgoAlreadyHasPsi'
   | 'CannotAddPsi'
-  | "NonElectronicSubstanceOnly"
+  | 'NonElectronicSubstanceOnly';
 
 // TODO Look into using data keys as pattern to validate json string
 export type Formatable = {

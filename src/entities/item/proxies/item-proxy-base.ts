@@ -49,9 +49,8 @@ export abstract class ItemProxyBase<T extends ItemType> {
   }
 
   get dataActions() {
-    return this.updater.prop("data").commit
+    return this.updater.prop('data').commit;
   }
-
 
   get textInfo(): string[] {
     return [];

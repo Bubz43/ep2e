@@ -51,7 +51,7 @@ export class ItemEP extends Item {
   }
 
   get subscriptions() {
-    return this._subscribers
+    return this._subscribers;
   }
 
   @LazyGetter()

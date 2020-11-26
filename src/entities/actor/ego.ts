@@ -452,7 +452,6 @@ export class Ego {
     return this.updater.commit();
   }
 
-
   acceptItemAgent(agent: ItemProxy) {
     if (Ego.egoItems.includes(agent.type)) {
       return { accept: true } as const;

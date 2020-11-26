@@ -44,7 +44,7 @@ class Base extends ItemProxyBase<ItemType.Firearm> {
     ]);
   }
   get updateState() {
-    return this.updater.prop("data", "state")
+    return this.updater.prop('data', 'state');
   }
 }
 export class Firearm

@@ -91,7 +91,7 @@ export const Stackable = (
       return this.epData.state.stashed;
     }
     toggleStashed() {
-      return this.updateState.commit({ stashed: !this.stashed })
+      return this.updateState.commit({ stashed: !this.stashed });
     }
   };
 };
@@ -158,10 +158,12 @@ export const RangedWeapon = (
   };
 };
 
-export const Service = (cls: HasEpData<{
-  serviceDuration: number,
-  state: { serviceStartTime: number }
-}>) => {
+export const Service = (
+  cls: HasEpData<{
+    serviceDuration: number;
+    state: { serviceStartTime: number };
+  }>,
+) => {
   return class extends cls {
     get serviceDuration() {
       return this.epData.serviceDuration;
@@ -175,16 +177,16 @@ export const Service = (cls: HasEpData<{
     get expirationProgress() {
       return this.elapsedDuration / this.serviceDuration;
     }
-  
+
     get remainingDuration() {
-      console.log(this.elapsedDuration, this.serviceDuration)
+      console.log(this.elapsedDuration, this.serviceDuration);
       return this.serviceDuration - this.elapsedDuration;
     }
     get isExpired() {
       return (
-        !this.isIndefiniteService && this.elapsedDuration >= this.serviceDuration
+        !this.isIndefiniteService &&
+        this.elapsedDuration >= this.serviceDuration
       );
     }
-  
-  }
-}
+  };
+};

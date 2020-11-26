@@ -84,7 +84,11 @@ export const setDragSource = (ev: DragEvent, drop: Drop) => {
     { once: true },
   );
 
-  if (el instanceof HTMLElement && el.textContent && !el.matches(".directory-item.actor")) {
+  if (
+    el instanceof HTMLElement &&
+    el.textContent &&
+    !el.matches('.directory-item.actor')
+  ) {
     ev.dataTransfer?.setDragImage(setDragImage(el), 20, 20);
   }
 

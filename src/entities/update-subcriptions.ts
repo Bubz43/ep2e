@@ -3,7 +3,6 @@ export type EntitySubCallbacks<T> = {
   onSubEnd?: () => void;
 };
 
-
 export class EntitySubscription<T> {
   #subs = new Map<object, EntitySubCallbacks<T>>();
 

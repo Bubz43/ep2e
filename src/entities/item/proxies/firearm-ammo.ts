@@ -12,7 +12,7 @@ import { Substance } from './substance';
 
 class Base extends ItemProxyBase<ItemType.FirearmAmmo> {
   get updateState() {
-    return this.updater.prop("data", "state")
+    return this.updater.prop('data', 'state');
   }
 }
 

@@ -159,7 +159,7 @@ export class ActorEP extends Actor {
   }
 
   get subscriptions() {
-    return this.#subscribers
+    return this.#subscribers;
   }
 
   get isTokenTemplate() {
@@ -229,7 +229,7 @@ export class ActorEP extends Actor {
   }
 
   prepareData() {
-    console.log("actor prepare");
+    console.log('actor prepare');
     super.prepareData();
     this.invalidated = true;
     if (this.hasPrepared)

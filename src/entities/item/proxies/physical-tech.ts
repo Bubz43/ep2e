@@ -153,7 +153,7 @@ export class PhysicalTech
   }
 
   toggleActivation() {
-    return this.updateState.commit({ activated: !this.activated })
+    return this.updateState.commit({ activated: !this.activated });
   }
 
   @LazyGetter()

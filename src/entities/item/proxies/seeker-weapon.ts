@@ -25,7 +25,7 @@ class Base extends ItemProxyBase<ItemType.SeekerWeapon> {
     return enumValues(RangedWeaponTrait).filter((trait) => this.epData[trait]);
   }
   get updateState() {
-    return this.updater.prop("data", "state")
+    return this.updater.prop('data', 'state');
   }
 }
 

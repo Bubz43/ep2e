@@ -73,7 +73,9 @@ export class CharacterViewEgo extends LitElement {
 
     return html`
       <header>
-      <!-- <span class="label">${localize("ego").split("").map(char => html`<span>${char}</span>`)}</span> -->
+        <!-- <span class="label">${localize('ego')
+          .split('')
+          .map((char) => html`<span>${char}</span>`)}</span> -->
         <button @click=${this.ego.openForm}>${this.ego.name}</button>
         <span class="details">
           ${compact([

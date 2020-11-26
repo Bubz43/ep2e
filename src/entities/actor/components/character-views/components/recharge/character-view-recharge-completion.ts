@@ -26,7 +26,9 @@ type CompletionState = {
 };
 
 @customElement('character-view-recharge-completion')
-export class CharacterViewRechargeCompletion extends mix(LitElement).with(UseWorldTime) {
+export class CharacterViewRechargeCompletion extends mix(LitElement).with(
+  UseWorldTime,
+) {
   static get is() {
     return 'character-view-recharge-completion' as const;
   }

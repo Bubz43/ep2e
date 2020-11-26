@@ -59,7 +59,7 @@ export class DropZone extends mix(LitElement).with(LazyRipple) {
       const { position } = this.style;
       this.style.position = 'relative';
       if (ev.defaultPrevented) {
-        this.style.setProperty("--mdc-ripple-color", "var(--color-negative)");
+        this.style.setProperty('--mdc-ripple-color', 'var(--color-negative)');
       }
       this.rippleHandlers.startPress(ev);
       requestAnimationFrame(() => {
@@ -67,7 +67,7 @@ export class DropZone extends mix(LitElement).with(LazyRipple) {
         setTimeout(() => {
           DropZone.highlighted = null;
           this.style.position = position;
-          this.style.setProperty("--mdc-ripple-color", null)
+          this.style.setProperty('--mdc-ripple-color', null);
         }, 350);
       });
     } else DropZone.highlighted = null;

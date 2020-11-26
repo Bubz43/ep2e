@@ -64,7 +64,6 @@ export class BeamWeaponForm extends mix(Base).with(UseWorldTime) {
     styles,
   ];
 
-
   render() {
     const { updater, type, accessories, attacks } = this.item;
     const { disabled } = this;
@@ -125,11 +124,13 @@ export class BeamWeaponForm extends mix(Base).with(UseWorldTime) {
               update: (changed, orig) => {
                 const max = changed.max ?? orig.max;
                 const charge = changed.charge ?? orig.charge;
-                const diff = max - charge
-                this.item.updater.prop("data", "battery").commit({
+                const diff = max - charge;
+                this.item.updater.prop('data', 'battery').commit({
                   ...changed,
-                  recharge: (diff / max) * CommonInterval.Hour * 4 + currentWorldTimeMS()
-                })
+                  recharge:
+                    (diff / max) * CommonInterval.Hour * 4 +
+                    currentWorldTimeMS(),
+                });
               },
               disabled,
               classes: 'battery-form',

@@ -74,7 +74,7 @@ export class UpdateStore<T extends UpdateStoreData> {
   }
 
   get editable() {
-    return this.callbacks.isEditable()
+    return this.callbacks.isEditable();
   }
 
   readonly commit = async () =>

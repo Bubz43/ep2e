@@ -276,7 +276,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
 
   private renderTemporaryFeatures() {
     const { temporaryFeatures } = this.character;
-    if (temporaryFeatures.length === 0) return "";
+    if (temporaryFeatures.length === 0) return '';
     return html`
       <section class="temporary-features">
         <sl-header
@@ -287,7 +287,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
         <sl-animated-list>
           ${repeat(temporaryFeatures, idProp, (feature) => {
             const elapsed = getElapsedTime(feature.startTime);
-            const done = elapsed >= feature.duration
+            const done = elapsed >= feature.duration;
             return html`
               <li>
                 <span class="name">
@@ -297,9 +297,15 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
                       `
                     : ''}
                   ${feature.name}
-                  ${!done ? html`
-                  <span class="remaining">${prettyMilliseconds(nonNegative(feature.duration - elapsed))}</span>
-                  ` : ""}
+                  ${!done
+                    ? html`
+                        <span class="remaining"
+                          >${prettyMilliseconds(
+                            nonNegative(feature.duration - elapsed),
+                          )}</span
+                        >
+                      `
+                    : ''}
                 </span>
                 <mwc-linear-progress
                   progress=${elapsed / feature.duration}
@@ -314,7 +320,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
 
   private renderTemporaryServices() {
     const { temporaryServices } = this.character.equippedGroups;
-    if (temporaryServices.length === 0) return "";
+    if (temporaryServices.length === 0) return '';
     return html`
       <section class="services">
         <sl-header

@@ -244,7 +244,7 @@ export class CharacterView extends CharacterViewBase {
   private renderItemList(proxies: ItemProxy[]) {
     return html`
       <sl-animated-list class="proxy-list" stagger fadeOnly>
-        ${repeat(sortBy(proxies, prop("fullName")), idProp, (proxy) => {
+        ${repeat(sortBy(proxies, prop('fullName')), idProp, (proxy) => {
           return html`
             <wl-list-item
               draggable="true"

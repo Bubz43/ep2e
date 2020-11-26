@@ -39,11 +39,11 @@ export type TemporaryFeature = ActiveRecharge | TemporaryEffects;
 const activeRecharge = createFeature<
   ActiveRecharge,
   'rechargeType' | 'duration' | 'regainedPoints'
->(({rechargeType}) => ({
+>(({ rechargeType }) => ({
   startTime: currentWorldTimeMS(),
   endOn: TemporaryFeatureEnd.Recharge,
   type: TemporaryFeatureType.ActiveRecharge,
-  name: localize(rechargeType)
+  name: localize(rechargeType),
 }));
 
 const effects = createFeature<TemporaryEffects, 'name'>(() => ({

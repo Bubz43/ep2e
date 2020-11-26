@@ -51,7 +51,6 @@ export const createRep = createFeature<RepBase, 'acronym' | 'network'>(() => ({
 export const repRefreshTimerActive = ({ minor, moderate }: RepData) =>
   !!(minor || moderate);
 
-
 export type RepUse = {
   favor?: ConsumableFavor;
   burnedRep?: number;
@@ -66,7 +65,10 @@ export const repModification = ({
   ...(favor ? useRepFavor(rep, favor) : {}),
 });
 
-const useRepFavor = (rep: RepData, favor: ConsumableFavor): Partial<RepData> => ({
+const useRepFavor = (
+  rep: RepData,
+  favor: ConsumableFavor,
+): Partial<RepData> => ({
   [favor]: clamp(rep[favor] + 1, { max: maxFavors.get(favor) }),
   refreshStartTime:
     favor === Favor.Major || repRefreshTimerActive(rep)

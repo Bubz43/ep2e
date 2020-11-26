@@ -244,11 +244,11 @@ type CopyableItemType =
   | ItemType.SprayWeapon
   | ItemType.SeekerWeapon
   | ItemType.MeleeWeapon
-  | ItemType.ThrownWeapon
+  | ItemType.ThrownWeapon;
 
 export type BlueprintSource = {
-  [key in CopyableItemType]: ItemEntity<key>
-}[CopyableItemType]
+  [key in CopyableItemType]: ItemEntity<key>;
+}[CopyableItemType];
 
 type ItemFlags<T extends ItemType> = T extends ItemType.Psi
   ? { influences: readonly StringID<PsiInfluenceData>[] }

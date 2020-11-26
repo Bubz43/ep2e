@@ -56,7 +56,7 @@ export const taskState = ({ timeTaken, timeToComplete }: ActiveTaskAction) => {
   };
 };
 
-export type TaskState = ReturnType<typeof taskState>
+export type TaskState = ReturnType<typeof taskState>;
 
 export const createAction = createFeature<Action>(() => ({
   type: ActionType.Automatic,

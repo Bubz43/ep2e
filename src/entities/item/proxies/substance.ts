@@ -33,7 +33,7 @@ export type SubstanceUse = Substance['applicationMethods'][number] | 'use';
 
 class Base extends ItemProxyBase<ItemType.Substance> {
   get updateState() {
-    return this.updater.prop("data", "state")
+    return this.updater.prop('data', 'state');
   }
 }
 export class Substance

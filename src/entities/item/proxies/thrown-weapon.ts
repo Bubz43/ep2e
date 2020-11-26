@@ -17,7 +17,7 @@ import { Substance } from './substance';
 
 class Base extends ItemProxyBase<ItemType.ThrownWeapon> {
   get updateState() {
-    return this.updater.prop("data", "state")
+    return this.updater.prop('data', 'state');
   }
 }
 export class ThrownWeapon

@@ -37,7 +37,7 @@ class Base extends ItemProxyBase<ItemType.SprayWeapon> {
     ]);
   }
   get updateState() {
-    return this.updater.prop("data", "state")
+    return this.updater.prop('data', 'state');
   }
 }
 export class SprayWeapon
