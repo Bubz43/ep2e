@@ -15,6 +15,7 @@ import {
   emptyTextDash,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
+import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import {
   AreaEffectType,
   AttackTrait,
@@ -27,10 +28,12 @@ import { BeamWeapon } from '@src/entities/item/proxies/beam-weapon';
 import { pairList } from '@src/features/check-list';
 import { FiringMode } from '@src/features/firing-modes';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
+import { CommonInterval, currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
+import mix from 'mix-with/lib';
 import { createPipe, identity, map, objOf } from 'remeda';
 import {
   accessoriesListStyles,
@@ -44,8 +47,12 @@ import {
 import { ItemFormBase } from '../item-form-base';
 import styles from './beam-weapon-form.scss';
 
+class Base extends ItemFormBase {
+  @property({ attribute: false }) item!: BeamWeapon;
+}
+
 @customElement('beam-weapon-form')
-export class BeamWeaponForm extends ItemFormBase {
+export class BeamWeaponForm extends mix(Base).with(UseWorldTime) {
   static get is() {
     return 'beam-weapon-form' as const;
   }
@@ -57,7 +64,6 @@ export class BeamWeaponForm extends ItemFormBase {
     styles,
   ];
 
-  @property({ attribute: false }) item!: BeamWeapon;
 
   render() {
     const { updater, type, accessories, attacks } = this.item;
@@ -114,7 +120,17 @@ export class BeamWeaponForm extends ItemFormBase {
 
           <section>
             <sl-header heading=${localize('battery')}></sl-header>
-            ${renderUpdaterForm(updater.prop('data', 'battery'), {
+            ${renderAutoForm({
+              props: this.item.battery,
+              update: (changed, orig) => {
+                const max = changed.max ?? orig.max;
+                const charge = changed.charge ?? orig.charge;
+                const diff = max - charge
+                this.item.updater.prop("data", "battery").commit({
+                  ...changed,
+                  recharge: (diff / max) * CommonInterval.Hour * 4 + currentWorldTimeMS()
+                })
+              },
               disabled,
               classes: 'battery-form',
               fields: ({ charge, max }) => [
@@ -123,7 +139,6 @@ export class BeamWeaponForm extends ItemFormBase {
                   { ...charge, value: Math.min(max.value, charge.value) },
                   { min: 0, max: max.value },
                 ),
-                // TODO Check battery recharge
               ],
             })}
           </section>

@@ -12,6 +12,7 @@ import {
   renderTextInput,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
+import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import {
   enumValues,
   KineticWeaponClass,
@@ -26,6 +27,11 @@ import { idProp } from '@src/features/feature-helpers';
 import { FiringMode } from '@src/features/firing-modes';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
 import {
+  CommonInterval,
+  currentWorldTimeMS,
+  prettyMilliseconds,
+} from '@src/features/time';
+import {
   DropType,
   handleDrop,
   itemDropToItemProxy,
@@ -35,6 +41,7 @@ import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
+import mix from 'mix-with/lib';
 import { createPipe, identity, map, mapToObj, objOf } from 'remeda';
 import {
   accessoriesListStyles,
@@ -48,8 +55,12 @@ import {
 import { ItemFormBase } from '../item-form-base';
 import styles from './railgun-form.scss';
 
+class Base extends ItemFormBase {
+  @property({ attribute: false }) item!: Railgun;
+}
+
 @customElement('railgun-form')
-export class RailgunForm extends ItemFormBase {
+export class RailgunForm extends mix(Base).with(UseWorldTime) {
   static get is() {
     return 'railgun-form' as const;
   }
@@ -60,8 +71,6 @@ export class RailgunForm extends ItemFormBase {
     accessoriesListStyles,
     styles,
   ];
-
-  @property({ attribute: false }) item!: Railgun;
 
   private renderSidebarFields = renderKineticWeaponSidebar.bind(this);
 
@@ -208,7 +217,19 @@ export class RailgunForm extends ItemFormBase {
 
           <section>
             <sl-header heading=${localize('battery')}></sl-header>
-            ${renderUpdaterForm(updater.prop('data', 'battery'), {
+            ${renderAutoForm({
+              props: this.item.battery,
+              update: (changed, orig) => {
+                const max = changed.max ?? orig.max;
+                const charge = changed.charge ?? orig.charge;
+                const diff = max - charge;
+                this.item.updater.prop('data', 'battery').commit({
+                  ...changed,
+                  recharge:
+                    (diff / max) * CommonInterval.Hour * 4 +
+                    currentWorldTimeMS(),
+                });
+              },
               disabled,
               classes: 'battery-form',
               fields: ({ charge, max }) => [
@@ -217,8 +238,6 @@ export class RailgunForm extends ItemFormBase {
                   { ...charge, value: Math.min(max.value, charge.value) },
                   { min: 0, max: max.value },
                 ),
-                           // TODO Check battery recharge
-
               ],
             })}
           </section>

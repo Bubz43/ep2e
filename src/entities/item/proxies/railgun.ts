@@ -11,7 +11,11 @@ import {
 import type { ItemType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import { uniqueStringID } from '@src/features/feature-helpers';
-import { currentWorldTimeMS, CommonInterval } from '@src/features/time';
+import {
+  currentWorldTimeMS,
+  CommonInterval,
+  prettyMilliseconds,
+} from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import { HealthType } from '@src/health/health';
@@ -37,7 +41,7 @@ class Base extends ItemProxyBase<ItemType.Railgun> {
     ]);
   }
   get updateState() {
-    return this.updater.prop("data", "state")
+    return this.updater.prop('data', 'state');
   }
 }
 export class Railgun
@@ -79,13 +83,15 @@ export class Railgun
     return this.epData.battery;
   }
 
-  
   get rechargedBattery() {
     const { max, charge } = this.battery;
     const diff = this.battery.recharge - currentWorldTimeMS();
-    return diff <= 0
-      ? max - charge
-      : Math.floor((diff / (CommonInterval.Hour * 4)) * max);
+    const chargeDiff = max - charge;
+    const maxGain = clamp(
+      Math.floor((diff / (CommonInterval.Hour * 4)) * max),
+      { max: chargeDiff },
+    );
+    return diff <= 0 ? max - charge : Math.abs(maxGain - chargeDiff);
   }
 
   get totalCharge() {

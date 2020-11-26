@@ -65,9 +65,12 @@ export class BeamWeapon
   get rechargedBattery() {
     const { max, charge } = this.battery;
     const diff = this.battery.recharge - currentWorldTimeMS();
-    return diff <= 0
-      ? max - charge
-      : Math.floor((diff / (CommonInterval.Hour * 4)) * max);
+    const chargeDiff = max - charge;
+    const maxGain = clamp(
+      Math.floor((diff / (CommonInterval.Hour * 4)) * max),
+      { max: chargeDiff },
+    );
+    return diff <= 0 ? max - charge : Math.abs(maxGain - chargeDiff);
   }
 
   get totalCharge() {
