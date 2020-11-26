@@ -120,6 +120,7 @@ import { CharacterViewDrawerHeading } from './entities/actor/components/characte
 import { CharacterViewRechargeCompletion } from './entities/actor/components/character-views/components/recharge/character-view-recharge-completion';
 import { WorldTimeControls } from './features/components/world-time-controls/world-time-controls';
 import { CharacterViewTime } from './entities/actor/components/character-views/components/time/character-view-time';
+import { ItemCard } from './entities/actor/components/item-card/item-card';
 
 // Generic Components
 Field;
@@ -162,6 +163,7 @@ CharacterViewRecharge;
 CharacterViewRechargeCompletion;
 CharacterViewDrawerHeading;
 CharacterViewTime;
+ItemCard;
 
 // Ego
 EgoForm;

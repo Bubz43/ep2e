@@ -142,26 +142,6 @@ mwc-tab-bar {
   position: relative;
 }
 
-.item-proxy {
-  padding: 0 0.5rem;
-  .proxy-name {
-    margin-left: 0.5ch;
-  }
-  [slot='before'] {
-    margin-right: 0.5ch;
-    display: inline-block;
-    min-width: 2rem;
-  }
-  .proxy-type {
-    color: var(--color-text-lighter);
-  }
-
-  --mdc-icon-button-size: 2rem;
-  [slot='after'] {
-    margin-left: 0;
-    color: var(--color-text-lighter);
-  }
-}
 
 sl-dropzone {
   padding: 0.5rem 0;
@@ -175,4 +155,10 @@ sl-dropzone {
   &.activated {
     color: var(--color-secondary);
   }
+}
+
+.item-lists {
+  display: grid;
+  grid-auto-rows: min-content;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
 }

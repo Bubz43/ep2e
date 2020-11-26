@@ -1,0 +1,72 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: flex;
+  flex-flow: column;
+  transition: padding 250ms ease-in-out; 
+  will-change: padding;
+}
+
+:host([expanded]) {
+  padding: 0.5rem;
+  margin: 0.25rem 0.5rem;
+  box-shadow: 0 0 4px black;
+  background: alphav(var(--color-grey), 0.1);
+  .header {
+    img {
+      height: 46px;
+    }
+    .info {
+      display: grid;
+    }
+  }
+}
+
+
+.header {
+  all: unset;
+  display: grid;
+  grid-template-columns:  min-content 1fr max-content;
+  align-items: center;
+  padding: 0 0 0 0.5rem;
+  --mdc-icon-button-size: 2rem;
+  position: relative;
+  cursor: pointer;
+  grid-template-areas: 
+  "img info buttons";
+  img {
+    grid-area: img;
+    margin-right: 0.5ch;
+    display: inline-block;
+    min-width: 2rem;
+    pointer-events: none;
+  }
+
+  .info {
+    grid-area: info;
+    display: block;
+    flex: 1;
+    pointer-events: none;
+    margin-left: 0.5ch;
+    @include truncate(100%);
+  }
+
+  .buttons {
+    grid-area: buttons;
+  }
+
+
+  .type,
+  .buttons {
+    color: var(--color-text-lighter);
+  }
+}
+
+.description {
+  padding: 0 1rem;
+}

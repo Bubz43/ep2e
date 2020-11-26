@@ -31,7 +31,12 @@ const parseData = (ev: DragEvent) => {
   } catch {
     drop = null;
   }
-  return { ev, drop, srcEl: source.element, data: source.data };
+  return {
+    ev,
+    drop,
+    srcEl: source.element,
+    data: source.data || (isKnownDrop(drop) ? drop : null),
+  };
 };
 
 type KnownDrop<T extends { type: DropType }> = T;

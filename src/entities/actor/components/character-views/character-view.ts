@@ -180,7 +180,7 @@ export class CharacterView extends CharacterViewBase {
   private renderStatus() {
     const { traits, equipped, consumables, stashed, disabled } = this.character;
     return html`
-      <div class="items-list">
+      <div class="item-lists">
         <sl-dropzone
           @drop=${this.addItem}
           ?disabled=${disabled}
@@ -194,9 +194,7 @@ export class CharacterView extends CharacterViewBase {
           ${notEmpty(traits) ? this.renderItemList(traits) : ''}
         </sl-dropzone>
 
-        ${notEmpty(consumables)
-          ? html`
-              <sl-dropzone
+        <sl-dropzone
                 @drop=${this.addItem}
                 ?disabled=${disabled}
                 data-group=${ItemGroup.Consumables}
@@ -207,8 +205,6 @@ export class CharacterView extends CharacterViewBase {
                 ></sl-header>
                 ${this.renderItemList(consumables)}
               </sl-dropzone>
-            `
-          : ''}
 
         <sl-dropzone
           @drop=${this.addItem}
@@ -243,89 +239,20 @@ export class CharacterView extends CharacterViewBase {
 
   private renderItemList(proxies: ItemProxy[]) {
     return html`
-      <sl-animated-list class="proxy-list" stagger fadeOnly>
+      <sl-animated-list
+        class="proxy-list"
+        stagger
+        skipExitAnimation
+        fadeOnly
+      >
         ${repeat(sortBy(proxies, prop('fullName')), idProp, (proxy) => {
-          return html`
-            <wl-list-item
-              draggable="true"
-              @dragstart=${(ev: DragEvent) => {
-                setDragSource(ev, {
-                  type: DropType.Item,
-                  actorId: this.character.id,
-                  tokenId: this.token?.id,
-                  data: proxy.data,
-                });
-              }}
-              clickable
-              class="item-proxy"
-              @click=${proxy.openForm}
-            >
-              ${proxy.nonDefaultImg
-                ? html` <img slot="before" height="32px" src=${proxy.img} /> `
-                : ''}
-              <span class="proxy-info"
-                ><span class="proxy-name">${proxy.fullName}</span>
-                <span class="proxy-type">${proxy.fullType}</span></span
-              >
-
-              ${proxy.type === ItemType.Software && proxy.hasActivation
-                ? html`
-                    <mwc-icon-button
-                      class="toggle ${classMap({ activated: proxy.activated })}"
-                      icon="settings_power"
-                      slot="after"
-                      @click=${(ev: Event) => {
-                        stopEvent(ev);
-                        proxy.toggleActivation();
-                      }}
-                    ></mwc-icon-button>
-                  `
-                : ''}
-              ${proxy.type === ItemType.PhysicalTech &&
-              proxy.hasToggleActivation
-                ? html`
-                    <mwc-icon-button
-                      class="toggle ${classMap({ activated: proxy.activated })}"
-                      icon="power_settings_new"
-                      slot="after"
-                      @click=${(ev: Event) => {
-                        stopEvent(ev);
-                        proxy.toggleActivation();
-                      }}
-                    ></mwc-icon-button>
-                  `
-                : ''}
-              ${'toggleEquipped' in proxy
-                ? html`
-                    <mwc-icon-button
-                      slot="after"
-                      @click=${(ev: Event) => {
-                        stopEvent(ev);
-                        proxy.toggleEquipped();
-                      }}
-                      icon=${proxy.equipped ? 'archive' : 'unarchive'}
-                    ></mwc-icon-button>
-                  `
-                : 'toggleStashed' in proxy
-                ? html`
-                    <mwc-icon-button
-                      slot="after"
-                      @click=${(ev: Event) => {
-                        stopEvent(ev);
-                        proxy.toggleStashed();
-                      }}
-                      icon=${proxy.stashed ? 'unarchive' : 'archive'}
-                    ></mwc-icon-button>
-                  `
-                : ''}
-              <delete-button
-                slot="after"
-                tabindex="-1"
-                @delete=${proxy.deleteSelf}
-                @click=${stopEvent}
-              ></delete-button>
-            </wl-list-item>
-          `;
+          return html`<item-card draggable="true" @dragstart=${(ev: DragEvent) => {
+            setDragSource(ev, {
+              type: DropType.Item,
+              ...this.character.actor.identifiers,
+              data: proxy.data
+            })
+          }} .item=${proxy}></item-card>`;
         })}
       </sl-animated-list>
     `;
