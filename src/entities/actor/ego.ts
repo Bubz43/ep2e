@@ -422,10 +422,7 @@ export class Ego {
     for (const rep of this.reps.values()) {
       if (repRefreshTimerActive(rep)) {
         timers.push({
-          label: `${rep.acronym} ${localize('SHORT', 'minor')}/${localize(
-            'SHORT',
-            'moderate',
-          )} ${localize('refresh')}`,
+          label: `${rep.acronym} ${localize('favor')} ${localize('refresh')}`,
           elapsed: getElapsedTime(rep.refreshStartTime),
           max: CommonInterval.Week,
           id: rep.network,

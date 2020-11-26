@@ -9,21 +9,56 @@
 
 :host {
   display: grid;
-  padding: 0.5rem 0.75rem;
+  padding: 0 0.75rem;
   box-shadow: 0 3px 3px -3px rgba(0, 0, 0, 0.75);
-  grid-template-columns: min-content 1fr min-content;
-  background: rgba(black, 0.05);
-  min-width: 450px;
-  column-gap: 1rem;
+  background: linear-gradient(235deg, alphav(var(--color-bg-alt), 0.8), transparent);
+    column-gap: 1rem;
+  grid: 0.75rem auto auto 0.75rem / min-content 1fr min-content;
   grid-template-areas:
+    'img .. ..'
     'img name name'
-    'img actions trash';
+    'img actions trash'
+    'img .. ..';
 }
 
-img {
+.image-wrapper {
   grid-area: img;
-  height: 60px;
-  filter: drop-shadow(1px 2px 4px black);
+  place-self: center;
+  &[open] {
+    button {
+      outline: solid var(--color-secondary);
+    }
+  }
+  button {
+    all: unset;
+    display: block;
+    cursor: pointer;
+    outline-offset: 1px;
+    &[disabled] {
+      pointer-events: none;
+    }
+    &:focus {
+      outline: solid var(--color-secondary);
+    }
+    &:hover {
+      filter: drop-shadow(1px 2px 4px var(--color-secondary));
+    }
+
+    img {
+      height: 72px;
+      filter: drop-shadow(0 0 4px black);
+      display: block;
+    }
+  }
+}
+
+.images {
+  li[divider] {
+    border-color: var(--color-border);
+  }
+  mwc-icon {
+    color: var(--color-text);
+  }
 }
 
 .actions {
@@ -79,7 +114,6 @@ mwc-icon-button {
   color: lightv(var(--color-grey), 1.2);
 }
 
-
 .recharges {
   all: unset;
   align-self: stretch;
@@ -108,7 +142,7 @@ mwc-icon-button {
 }
 
 .recharge {
-  --mdc-icon-size: 20px;
+  --mdc-icon-size: 22px;
   display: flex;
   align-items: center;
   margin-left: 1ch;
@@ -130,7 +164,6 @@ mwc-icon-button {
     }
   }
 }
-
 
 .restore-button {
   transition: box-shadow 1s ease-in-out;

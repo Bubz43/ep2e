@@ -59,7 +59,7 @@ export class EntityFormHeader extends LitElement {
   private updateImage = (img: string) => this.updateActions.commit({ img });
 
   private editImg() {
-    const { originalValue, commit } = this.updateActions;
+    const { originalValue } = this.updateActions;
     openImagePicker(this, originalValue().img, this.updateImage);
   }
 

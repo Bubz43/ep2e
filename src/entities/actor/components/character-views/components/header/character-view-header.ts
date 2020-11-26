@@ -3,8 +3,10 @@ import { Placement } from '@src/components/popover/popover-options';
 import { RechargeType } from '@src/data-enums';
 import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Character } from '@src/entities/actor/proxies/character';
+import { closeImagePicker, openImagePicker } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
+import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
@@ -15,7 +17,7 @@ import {
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import mix from 'mix-with/lib';
-import { range } from 'remeda';
+import { compact, range } from 'remeda';
 import {
   CharacterDrawerRenderer,
   CharacterDrawerRenderEvent,
@@ -40,6 +42,11 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
   })
   token?: MaybeToken;
 
+  disconnectedCallback() {
+    closeImagePicker(this);
+    super.disconnectedCallback();
+  }
+
   private requestDrawerRender(ev: Event) {
     const { renderer } = (ev.currentTarget as HTMLElement).dataset;
     this.dispatchEvent(
@@ -51,12 +58,50 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
     this.requestUpdate();
   }
 
+  private get img() {
+    return this.token?.data.img || this.character.img;
+  }
+
+  private setImg = (img: string) => {
+    if (this.token) this.token.update({ img }, {});
+    else this.character.updater.prop('img').commit(img);
+  };
+
+  private editImg() {
+    openImagePicker(this, this.img, this.setImg);
+  }
+
+  private imgSelect = () =>
+    html`
+      <mwc-list class="images">
+        ${compact([this.character, this.character.sleeve]).map((entity) => {
+          return html`
+            <mwc-list-item
+              graphic="medium"
+              @click=${() => this.setImg(entity.img)}
+            >
+              <img src=${entity.img} slot="graphic" />
+              <span>${entity.name}</span>
+            </mwc-list-item>
+          `;
+        })}
+        <li divider></li>
+        <mwc-list-item graphic="medium" @click=${this.editImg} style="height: 40px">
+          <mwc-icon slot="graphic">insert_photo</mwc-icon>
+          <span>${localize('select')}</span>
+        </mwc-list-item>
+      </mwc-list>
+    `;
+
   render() {
-    const img = this.token?.data.img || this.character.img;
     const name = this.token?.data.name || this.character.name;
 
     return html`
-      <img src=${img} />
+      <sl-popover class="image-wrapper" .renderOnDemand=${this.imgSelect}>
+        <button slot="base" ?disabled=${this.character.disabled}>
+          <img src=${this.img} />
+        </button>
+      </sl-popover>
       <h2>${name}</h2>
       <div class="actions">
         ${this.renderActionIconButton({

@@ -276,6 +276,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
 
   private renderTemporaryFeatures() {
     const { temporaryFeatures } = this.character;
+    if (temporaryFeatures.length === 0) return "";
     return html`
       <section class="temporary-features">
         <sl-header
@@ -313,11 +314,13 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
 
   private renderTemporaryServices() {
     const { temporaryServices } = this.character.equippedGroups;
+    if (temporaryServices.length === 0) return "";
     return html`
       <section class="services">
         <sl-header
           heading="${localize('temporary')} ${localize('services')}"
           itemCount=${temporaryServices.length}
+          ?hideBorder=${temporaryServices.length === 0}
         >
         </sl-header>
         <sl-animated-list class="temporary-services" transformOrigin="bottom">
@@ -361,6 +364,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
         <sl-header
           heading="${localize('refresh')} ${localize('timers')}"
           itemCount=${timers.length}
+          ?hideBorder=${timers.length === 0}
         >
           ${timers.some(refreshAvailable)
             ? html`

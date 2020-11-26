@@ -85,10 +85,7 @@ export class PhysicalService extends mix(Base).with(Purchasable, Service) {
         ? {
             label: `${this.name} - ${localize('fakeId')} | ${
               rep.acronym
-            } ${localize('SHORT', 'minor')}/${localize(
-              'SHORT',
-              'moderate',
-            )} ${localize('refresh')}`,
+            } ${localize('favor')} ${localize('refresh')}`,
             elapsed: getElapsedTime(rep.refreshStartTime),
             max: CommonInterval.Week,
             id: `${this.id}-${rep.id}`,

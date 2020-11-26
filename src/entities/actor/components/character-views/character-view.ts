@@ -10,13 +10,14 @@ import {
   setDragSource,
 } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
+import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, PropertyValues, query } from 'lit-element';
 import { nothing } from 'lit-html';
 import { cache } from 'lit-html/directives/cache';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
-import { first } from 'remeda';
+import { first, prop, sortBy } from 'remeda';
 import { stopEvent } from 'weightless';
 import { CharacterDrawerRenderer } from './character-drawer-render-event';
 import { CharacterViewBase } from './character-view-base';
@@ -106,8 +107,6 @@ export class CharacterView extends CharacterViewBase {
       return;
     }
 
-    
-    
     if ('equipped' in proxy) {
       const copy = proxy.getDataCopy(true);
       copy.data.state.equipped = group === ItemGroup.Equipped;
@@ -181,8 +180,8 @@ export class CharacterView extends CharacterViewBase {
   private renderStatus() {
     const { traits, equipped, consumables, stashed, disabled } = this.character;
     return html`
-      <sl-animated-list
-        ><sl-dropzone
+      <div class="items-list">
+        <sl-dropzone
           @drop=${this.addItem}
           ?disabled=${disabled}
           data-group=${ItemGroup.Traits}
@@ -202,7 +201,10 @@ export class CharacterView extends CharacterViewBase {
                 ?disabled=${disabled}
                 data-group=${ItemGroup.Consumables}
               >
-                <sl-header heading=${localize('consumables')} itemCount=${consumables.length}></sl-header>
+                <sl-header
+                  heading=${localize('consumables')}
+                  itemCount=${consumables.length}
+                ></sl-header>
                 ${this.renderItemList(consumables)}
               </sl-dropzone>
             `
@@ -213,7 +215,10 @@ export class CharacterView extends CharacterViewBase {
           ?disabled=${disabled}
           data-group=${ItemGroup.Equipped}
         >
-          <sl-header heading=${localize('equipped')} itemCount=${equipped.length}></sl-header>
+          <sl-header
+            heading=${localize('equipped')}
+            itemCount=${equipped.length}
+          ></sl-header>
           ${notEmpty(equipped) ? this.renderItemList(equipped) : ''}
         </sl-dropzone>
 
@@ -222,17 +227,24 @@ export class CharacterView extends CharacterViewBase {
           ?disabled=${disabled}
           data-group=${ItemGroup.Stashed}
         >
-          <sl-header heading=${localize('stashed')} itemCount=${stashed.length}></sl-header>
+          <sl-header heading=${localize('stashed')} itemCount=${stashed.length}>
+            <mwc-icon
+              slot="info"
+              @mouseenter=${tooltip.fromData}
+              data-tooltip="Items apply no effects and are not tracked"
+              >info</mwc-icon
+            >
+          </sl-header>
           ${notEmpty(stashed) ? this.renderItemList(stashed) : ''}
-        </sl-dropzone></sl-animated-list
-      >
+        </sl-dropzone>
+      </div>
     `;
   }
 
   private renderItemList(proxies: ItemProxy[]) {
     return html`
-      <sl-animated-list class="proxy-list" fadeOnly>
-        ${repeat(proxies, idProp, (proxy) => {
+      <sl-animated-list class="proxy-list" stagger fadeOnly>
+        ${repeat(sortBy(proxies, prop("fullName")), idProp, (proxy) => {
           return html`
             <wl-list-item
               draggable="true"
@@ -252,7 +264,7 @@ export class CharacterView extends CharacterViewBase {
                 ? html` <img slot="before" height="32px" src=${proxy.img} /> `
                 : ''}
               <span class="proxy-info"
-                >${proxy.fullName}
+                ><span class="proxy-name">${proxy.fullName}</span>
                 <span class="proxy-type">${proxy.fullType}</span></span
               >
 
@@ -308,6 +320,7 @@ export class CharacterView extends CharacterViewBase {
                 : ''}
               <delete-button
                 slot="after"
+                tabindex="-1"
                 @delete=${proxy.deleteSelf}
                 @click=${stopEvent}
               ></delete-button>

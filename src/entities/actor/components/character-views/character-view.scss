@@ -22,7 +22,7 @@
   background: linear-gradient(
     45deg,
     alphav(var(--color-grey), 0.1),
-    alphav(var(--color-grey), 0.05)
+    alphav(var(--color-grey), 0.06)
   );
   grid-template-rows: repeat(2, min-content) 1fr;
 }
@@ -45,7 +45,7 @@ character-view-header {
   }
 
   character-view-sleeve {
-    background: alphav(var(--color-bg-alt), 0.75);
+    background: rgba(black, 0.09);
     margin-top: auto;
     border-top: 1px solid alphav(var(--color-border), 0.5);
   }
@@ -67,14 +67,11 @@ character-view-header {
   min-height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
-  padding: 0.25rem;
+  padding: 0.25rem 0;
   padding-left: 0;
   border-top: 1px solid var(--color-border);
   margin-top: -1px;
-
-  &.no-scroll {
-    overflow: visible;
-  }
+  background: rgba(black, 0.09);
 
   > * {
     @include animate-css(fadeIn, 500ms);
@@ -138,6 +135,8 @@ mwc-tab-bar {
   }
 }
 
+
+
 .proxy-list {
   display: grid;
   grid-auto-rows: min-content;
@@ -148,8 +147,11 @@ mwc-tab-bar {
 
 .item-proxy {
   padding: 0 0.5rem;
+  .proxy-name {
+    margin-left: 0.5ch;
+  }
   [slot='before'] {
-    margin-right: 1ch;
+    margin-right: 0.5ch;
     display: inline-block;
     min-width: 2rem;
   }
@@ -165,8 +167,12 @@ mwc-tab-bar {
 }
 
 sl-dropzone {
-  padding: 0.5rem;
-  position: relative;
+  padding: 0.5rem 0;
+  sl-header {
+    padding: 0 0.75rem;
+    border-color: var(--color-border)
+
+  }
 }
 
 
