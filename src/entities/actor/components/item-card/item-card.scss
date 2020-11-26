@@ -8,8 +8,16 @@
 :host {
   display: flex;
   flex-flow: column;
-  transition: padding 250ms ease-in-out; 
+  transition: padding 200ms ease-in-out; 
   will-change: padding;
+}
+
+:host([noanimate]) {
+  transition: none;
+  will-change: unset;
+  .description {
+    animation: none;
+  }
 }
 
 :host([expanded]) {
@@ -19,10 +27,11 @@
   background: alphav(var(--color-grey), 0.1);
   .header {
     img {
-      height: 46px;
+      height: 54px;
     }
     .info {
       display: grid;
+      padding: 0.25rem 0;
     }
   }
 }
@@ -69,6 +78,12 @@
 
 .description {
   padding: 0 1rem;
-  @include animate-css(fadeIn, 250ms);
-  animation-delay: 250ms;
+  @include animate-css(fadeIn, 125ms);
+  animation-delay: 125ms;
+}
+
+.toggle {
+  &.activated {
+    color: var(--color-secondary);
+  }
 }

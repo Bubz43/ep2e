@@ -195,16 +195,16 @@ export class CharacterView extends CharacterViewBase {
         </sl-dropzone>
 
         <sl-dropzone
-                @drop=${this.addItem}
-                ?disabled=${disabled}
-                data-group=${ItemGroup.Consumables}
-              >
-                <sl-header
-                  heading=${localize('consumables')}
-                  itemCount=${consumables.length}
-                ></sl-header>
-                ${this.renderItemList(consumables)}
-              </sl-dropzone>
+          @drop=${this.addItem}
+          ?disabled=${disabled}
+          data-group=${ItemGroup.Consumables}
+        >
+          <sl-header
+            heading=${localize('consumables')}
+            itemCount=${consumables.length}
+          ></sl-header>
+          ${this.renderItemList(consumables)}
+        </sl-dropzone>
 
         <sl-dropzone
           @drop=${this.addItem}
@@ -239,21 +239,23 @@ export class CharacterView extends CharacterViewBase {
 
   private renderItemList(proxies: ItemProxy[]) {
     return html`
-      <sl-animated-list
-        class="proxy-list"
-        stagger
-        skipExitAnimation
-        fadeOnly
-      >
-        ${repeat(sortBy(proxies, prop('fullName')), idProp, (proxy) => {
-          return html`<item-card draggable="true" @dragstart=${(ev: DragEvent) => {
-            setDragSource(ev, {
-              type: DropType.Item,
-              ...this.character.actor.identifiers,
-              data: proxy.data
-            })
-          }} .item=${proxy}></item-card>`;
-        })}
+      <sl-animated-list class="proxy-list" stagger skipExitAnimation fadeOnly>
+        ${repeat(
+          sortBy(proxies, prop('fullName')),
+          idProp,
+          (proxy) => html`<item-card
+            ?animateInitial=${!!this.hasUpdated}
+            draggable="true"
+            @dragstart=${(ev: DragEvent) => {
+              setDragSource(ev, {
+                type: DropType.Item,
+                ...this.character.actor.identifiers,
+                data: proxy.data,
+              });
+            }}
+            .item=${proxy}
+          ></item-card>`,
+        )}
       </sl-animated-list>
     `;
   }

@@ -28,10 +28,28 @@ export class ItemCard extends LazyRipple(LitElement) {
 
   @property({ type: Boolean, reflect: true }) expanded = false;
 
-  @query(".header", true) headerButton!: HTMLElement
+  @property({ type: Boolean, reflect: true }) noAnimate = false;
+
+  @property({ type: Boolean }) animateInitial = false;
+
+  @query('.header', true) headerButton!: HTMLElement;
 
   firstUpdated() {
-    this.addEventListener("dragend", () => this.handleRippleDeactivate())
+    this.addEventListener('dragend', () => this.handleRippleDeactivate());
+    if (this.animateInitial) {
+      this.animate(
+        {
+          backgroundColor: [
+            `transparent`,
+            'var(--color-primary)',
+            'var(--color-primary)',
+            'var(--color-primary)',
+            'transparent',
+          ],
+        },
+        { duration: 750, easing: 'ease-in-out' },
+      );
+    }
   }
 
   private toggleExpanded(ev: Event) {
@@ -49,9 +67,9 @@ export class ItemCard extends LazyRipple(LitElement) {
       header: { heading: this.item.fullName },
       content: [
         {
-          label: localize("form"),
+          label: localize('form'),
           icon: html`<mwc-icon>launch</mwc-icon>`,
-          callback: this.item.openForm ?? noop
+          callback: this.item.openForm ?? noop,
         },
         {
           label: localize('delete'),
@@ -63,11 +81,11 @@ export class ItemCard extends LazyRipple(LitElement) {
   }
 
   get textContent() {
-    return this.headerButton.textContent || this.item.name
+    return this.headerButton.textContent || this.item.name;
   }
 
   set textContent(value: string) {
-    this.append(value)
+    this.append(value);
   }
 
   render() {
@@ -75,7 +93,7 @@ export class ItemCard extends LazyRipple(LitElement) {
     const { nonDefaultImg } = item;
     return html`
       <header
-        role='button'
+        role="button"
         tabindex="0"
         class="header"
         @keydown=${clickIfEnter}
@@ -140,7 +158,6 @@ export class ItemCard extends LazyRipple(LitElement) {
       ${this.expanded
         ? html`
             <enriched-html
-
               class="description"
               content=${item.description ||
               `<p>${localize('no')} ${localize('description')}</p>`}

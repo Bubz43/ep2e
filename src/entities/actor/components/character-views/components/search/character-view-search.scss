@@ -49,25 +49,14 @@ label {
 .results-list {
   display: grid;
   grid-auto-rows: min-content;
-  gap: 0.5rem;
-  > *:not(:last-child) {
-    border-bottom: 1px solid alphav(var(--color-border), 0.5);
+  gap: 0.1rem;
+
+  > * {
+    @include animate-css(fadeIn, 100ms);
   }
 
   .no-results {
     margin: 0.5rem auto;
-    border-bottom: 1px solid alphav(var(--color-border), 0.5);
-  }
-}
-
-.item-proxy {
-  padding: 0 0.5rem;
-  [slot='before'] {
-    margin-right: 1ch;
-    display: inline-block;
-    min-width: 2rem;
-  }
-  .proxy-type {
-    color: var(--color-text-lighter);
+    font-size: large;
   }
 }

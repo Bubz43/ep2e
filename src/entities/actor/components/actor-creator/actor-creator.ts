@@ -18,7 +18,7 @@ import { FieldSkillType, createFieldSkillData } from '@src/features/skills';
 import { MutateEvent, mutateEntityHook } from '@src/foundry/hook-setups';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
-import { notEmpty, safeMerge } from '@src/utility/helpers';
+import { clickIfEnter, notEmpty, safeMerge } from '@src/utility/helpers';
 import { ready } from 'jquery';
 import { LazyGetter } from 'lazy-get-decorator';
 import {
@@ -32,6 +32,7 @@ import {
   PropertyValues,
 } from 'lit-element';
 import { createPipe, flatMapToObj } from 'remeda';
+import { stopEvent } from 'weightless';
 import { ActorEP } from '../../actor';
 import { createDigimorph } from '../../default-actors';
 import { ownedSleeves, Sleeve } from '../../sleeves';
@@ -148,7 +149,7 @@ export class ActorCreator extends LitElement {
 
   @eventOptions({ capture: true })
   private clickSubmit(ev: KeyboardEvent) {
-    if (ev.key === 'Enter') {
+    if (ev.key === 'Enter' && ev.target instanceof HTMLInputElement) {
       this.submitButton?.click();
     }
   }
@@ -302,7 +303,7 @@ export class ActorCreator extends LitElement {
         ${enumValues(ActorKind).map(
           (kind) => html`
             <mwc-tab
-            minWidth
+              minWidth
               isFadingIndicator
               label=${localize(kind)}
               @click=${() => (this.actorKind = kind)}
@@ -310,7 +311,7 @@ export class ActorCreator extends LitElement {
           `,
         )}
       </mwc-tab-bar>
-     
+
       <div class="main-form" @keydown=${this.clickSubmit}>${form}</div>
 
       ${renderAutoForm({
@@ -398,6 +399,7 @@ export class ActorCreator extends LitElement {
                 return html`
                   <mwc-list-item
                     twoline
+                    @keydown=${clickIfEnter}
                     graphic="medium"
                     @click=${() => (this.selectedSleeve = sleeve)}
                   >
@@ -408,7 +410,13 @@ export class ActorCreator extends LitElement {
             </mwc-list>
           `}
         >
-          <mwc-list-item slot="base" graphic="medium" twoline>
+          <mwc-list-item
+            slot="base"
+            graphic="medium"
+            twoline
+            tabindex="0"
+            @keydown=${clickIfEnter}
+          >
             ${this.renderSleeveItemContent(
               this.selectedSleeve || this.defaultSleeveData,
             )}

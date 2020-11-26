@@ -72,36 +72,22 @@ export class CharacterViewSearch extends LitElement {
               ${repeat(
                 items,
                 identity,
-                (proxy) => html` <wl-list-item
-                  draggable="true"
-                  @dragstart=${(ev: DragEvent) => {
-                    setDragSource(ev, {
-                      ...this.character.actor.identifiers,
-                      type: DropType.Item,
-                      data: proxy.data,
-                    });
-                  }}
-                  clickable
-                  class="item-proxy"
-                  @click=${proxy.openForm}
-                >
-                  ${proxy.nonDefaultImg
-                    ? html`
-                        <img slot="before" height="32px" src=${proxy.img} />
-                      `
-                    : ''}
-                  <span
-                    >${proxy.fullName}
-                    <span class="proxy-type">${proxy.fullType}</span></span
-                  >
-                  <delete-button
-                    slot="after"
-                    @delete=${proxy.deleteSelf}
-                    @click=${stopEvent}
-                  ></delete-button>
-                </wl-list-item>`,
-              )}
-              ${notEmpty(items)
+                (proxy) =>
+                  html`<item-card
+                    draggable="true"
+                    expanded
+                    noAnimate
+                    @dragstart=${(ev: DragEvent) => {
+                      setDragSource(ev, {
+                        type: DropType.Item,
+                        ...this.character.actor.identifiers,
+                        data: proxy.data,
+                      });
+                    }}
+                    .item=${proxy}
+                  ></item-card>`,
+      )}
+                ${notEmpty(items)
                 ? ''
                 : html`<li class="no-results">${localize('noResults')}</li>`}
             </ul>
