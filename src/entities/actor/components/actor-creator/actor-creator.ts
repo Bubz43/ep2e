@@ -1,12 +1,23 @@
-import { renderLabeledCheckbox } from '@src/components/field/fields';
+import {
+  renderLabeledCheckbox,
+  renderRadioFields,
+  renderSelectField,
+  renderTextField,
+} from '@src/components/field/fields';
 import type { Form } from '@src/components/form/form';
 import { renderAutoForm } from '@src/components/form/forms';
 import type { SubmitButton } from '@src/components/submit-button/submit-button';
-import { ActorType } from '@src/entities/entity-types';
+import { closeWindow } from '@src/components/window/window-controls';
+import { enumValues } from '@src/data-enums';
+import { ActorType, sleeveTypes } from '@src/entities/entity-types';
+import { createDefaultItem } from '@src/entities/item/default-items';
 import type { SleeveType } from '@src/entities/models';
+import { addFeature } from '@src/features/feature-helpers';
+import { FieldSkillType, createFieldSkillData } from '@src/features/skills';
 import { MutateEvent, mutateEntityHook } from '@src/foundry/hook-setups';
 import { localize } from '@src/foundry/localization';
-import { safeMerge } from '@src/utility/helpers';
+import { EP } from '@src/foundry/system';
+import { notEmpty, safeMerge } from '@src/utility/helpers';
 import { ready } from 'jquery';
 import { LazyGetter } from 'lazy-get-decorator';
 import {
@@ -19,7 +30,11 @@ import {
   eventOptions,
   PropertyValues,
 } from 'lit-element';
-import { flatMapToObj } from 'remeda';
+import { createPipe, flatMapToObj } from 'remeda';
+import { ActorEP } from '../../actor';
+import { createDigimorph } from '../../default-actors';
+import { Infomorph } from '../../proxies/infomorph';
+import { getSleeves, Sleeve } from '../../sleeves';
 import styles from './actor-creator.scss';
 
 enum ActorKind {
@@ -51,6 +66,10 @@ export class ActorCreator extends LitElement {
 
   @internalProperty() private characterTemplate = CharacterTemplate.PC;
 
+  @internalProperty() private selectedSleeve: Sleeve | null = null;
+
+  private defaultSleeveData = createDigimorph();
+
   private options = {
     renderSheet: true,
     closeOnCreate: true,
@@ -60,14 +79,17 @@ export class ActorCreator extends LitElement {
   private characterData = {
     name: '',
     template: CharacterTemplate.PC,
+    folder: '',
   };
 
   private sleeveData: {
     name: string;
     type: SleeveType;
+    folder: string;
   } = {
     name: '',
     type: ActorType.Biological,
+    folder: '',
   };
 
   async connectedCallback() {
@@ -79,14 +101,19 @@ export class ActorCreator extends LitElement {
 
   disconnectedCallback() {
     this.toggleHooks('off');
-    LazyGetter().reset(this.availableSleeves);
     super.disconnectedCallback();
   }
 
-  updated(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues) {
     if (changedProps.has('folder')) {
-      this.focusFirstInput();
+      this.sleeveData.folder = this.folder || '';
+      this.characterData.folder = this.folder || '';
     }
+    super.update(changedProps);
+  }
+
+  updated(changedProps: PropertyValues) {
+    if (changedProps.has('folder')) this.focusFirstInput();
     super.updated(changedProps);
   }
 
@@ -126,20 +153,162 @@ export class ActorCreator extends LitElement {
     }
   }
 
-  @LazyGetter()
-  get availableSleeves() {
-    console.log('got sleeves');
-    return [...game.actors].flatMap((actor) =>
-      actor.proxy.type === ActorType.Character ? [] : actor.proxy,
+  private createActor(data: { type: ActorType; name?: string, folder?: string }) {
+    const { renderSheet, actorLink } = this.options;
+    return ActorEP.create(
+      {
+        ...data,
+        name: data.name || `${localize('new')} ${localize(data.type)}`,
+        folder: this.folder,
+        token: { actorLink },
+      },
+      { renderSheet },
     );
   }
+
+  private setActorKind = ({ actorKind }: { actorKind?: ActorKind }) => {
+    if (actorKind) this.actorKind = actorKind;
+  };
 
   private updateOptions = (options: Partial<ActorCreator['options']>) => {
     this.options = safeMerge(this.options, options);
   };
 
+  private updateCharacterData = (
+    data: Partial<ActorCreator['characterData']>,
+  ) => {
+    this.characterData = safeMerge(this.characterData, data);
+    this.requestUpdate();
+  };
+
+  private updateSleeveData = (data: Partial<ActorCreator['sleeveData']>) => {
+    this.sleeveData = safeMerge(this.sleeveData, data);
+    this.requestUpdate();
+  };
+
+  private async create() {
+    if (this.actorKind === ActorKind.Character) {
+      const { proxy } = await this.createActor({
+        name: this.characterData.name,
+        type: ActorType.Character,
+        folder: this.characterData.folder
+      });
+      if (proxy.type === ActorType.Character) {
+        const { selectedSleeve } = this;
+        const sleeveData = selectedSleeve?.dataCopy() || this.defaultSleeveData;
+        const itemsToAdd = [...sleeveData.items];
+        if (this.characterData.template === CharacterTemplate.Muse) {
+          if (!selectedSleeve && sleeveData.type === ActorType.Infomorph) {
+            sleeveData.data.acquisition.resource = '';
+            sleeveData.data.meshHealth.baseDurability = 20;
+            sleeveData.data.description = `<p>Default infomorph for ALIs.</p>`;
+            sleeveData.name = `${localize('ali')} ${localize('morph')}`;
+          }
+          itemsToAdd.push(
+            createDefaultItem.enhancedBehavior(localize('obedient'), 3),
+            createDefaultItem.realWorldNaivete(),
+          );
+        }
+        await proxy.itemOperations.add(...itemsToAdd);
+        const { updater } = proxy;
+        if (this.characterData.template === CharacterTemplate.Muse) {
+          const specialization = '';
+          updater
+            .prop('data', 'settings')
+            .store({
+              canDefault: false,
+              trackPoints: false,
+              trackReputations: false,
+              characterDetails: false,
+              threatDetails: false,
+              useThreat: false,
+            })
+            .prop('data', 'skills')
+            .store({
+              infosec: { points: 20, specialization },
+              interface: { points: 50, specialization },
+              perceive: { points: 20, specialization },
+              program: { points: 20, specialization },
+              research: { points: 20, specialization },
+            })
+            .prop('data', 'fieldSkills', FieldSkillType.Hardware)
+            .store(
+              addFeature(
+                createFieldSkillData({
+                  field: localize('electronics'),
+                  points: 20,
+                }),
+              ),
+            )
+            .prop('data', 'fieldSkills', FieldSkillType.Know)
+            .store(
+              createPipe(
+                addFeature(
+                  createFieldSkillData({
+                    points: 50,
+                    field: localize('accounting'),
+                  }),
+                ),
+                addFeature(
+                  createFieldSkillData({
+                    points: 50,
+                    field: localize('psychology'),
+                  }),
+                ),
+                addFeature(
+                  createFieldSkillData({
+                    points: 30,
+                    field: '-----',
+                  }),
+                ),
+                addFeature(
+                  createFieldSkillData({
+                    points: 30,
+                    field: '-----',
+                  }),
+                ),
+              ),
+            );
+        } else if (this.characterData.template === CharacterTemplate.Threat) {
+          updater.prop('data', 'settings').store({
+            trackPoints: false,
+            characterDetails: false,
+            threatDetails: true,
+            useThreat: true,
+          });
+        }
+        await updater
+          .prop('flags', EP.Name, sleeveData.type)
+          .commit(sleeveData);
+      }
+      this.characterData.name = '';
+    } else {
+      await this.createActor(this.sleeveData);
+      this.sleeveData.name = '';
+    }
+    if (this.options.closeOnCreate) closeWindow(ActorCreator);
+    else {
+      await this.requestUpdate();
+      requestAnimationFrame(() => this.isConnected && this.focusFirstInput());
+    }
+  }
+
   render() {
+    const { actorKind } = this;
+    const { form, ready } =
+      actorKind === ActorKind.Character
+        ? this.characterForm()
+        : this.sleeveForm();
     return html`
+      ${renderAutoForm({
+        props: { actorKind },
+        noDebounce: true,
+        update: this.setActorKind,
+        fields: ({ actorKind }) =>
+          renderRadioFields(actorKind, enumValues(ActorKind)),
+      })}
+      <div class="main-form" @keydown=${this.clickSubmit}>${form}</div>
+
       ${renderAutoForm({
         classes: 'options-form',
         props: this.options,
@@ -155,6 +324,103 @@ export class ActorCreator extends LitElement {
           renderLabeledCheckbox(actorLink),
         ],
       })}
+
+      <submit-button
+        class="create-button"
+        label="${localize('create')} ${localize(actorKind)}"
+        ?complete=${ready}
+        @submit-attempt=${() => {
+          this.actorForm.IsValid({ report: true });
+          if (ready) this.create();
+        }}
+      ></submit-button>
+    `;
+  }
+
+  private sleeveForm() {
+    const { folders } = this;
+    return {
+      ready: !!this.sleeveData.name,
+      form: renderAutoForm({
+        storeOnInput: true,
+        noDebounce: true,
+        props: this.sleeveData,
+        update: this.updateSleeveData,
+        fields: ({ type, name, folder }) => [
+          renderSelectField(type, sleeveTypes),
+          renderTextField(name, { required: true }),
+          notEmpty(folders)
+            ? renderSelectField(folder, Object.keys(folders), {
+                emptyText: '-',
+                altLabel: (id) => folders[id],
+              })
+            : '',
+        ],
+      }),
+    };
+  }
+
+  private characterForm() {
+    const { folders } = this;
+
+    return {
+      ready: !!this.characterData.name,
+      form: html`
+        ${renderAutoForm({
+          storeOnInput: true,
+          noDebounce: true,
+          props: this.characterData,
+          update: this.updateCharacterData,
+          fields: ({ name, template, folder }) => [
+            renderTextField(
+              { ...name, label: `${localize('ego')} ${localize('name')}` },
+              { required: true },
+            ),
+            renderSelectField(template, enumValues(CharacterTemplate)),
+            notEmpty(folders)
+              ? renderSelectField(folder, Object.keys(folders), {
+                  emptyText: '-',
+                  altLabel: (id) => folders[id],
+                })
+              : '',
+          ],
+        })}
+
+        <sl-popover
+          .renderOnDemand=${() => html`
+            <mwc-list>
+              ${getSleeves(game.actors.entries).map((sleeve) => {
+                return html`
+                  <mwc-list-item
+                    ?selected=${sleeve === this.selectedSleeve}
+                    twoline
+                    graphic="medium"
+                    @click=${() => (this.selectedSleeve = sleeve)}
+                  >
+                    ${this.renderSleeveItemContent(sleeve)}
+                  </mwc-list-item>
+                `;
+              })}
+            </mwc-list>
+          `}
+        >
+          <mwc-list-item slot="base" graphic="medium" twoline>
+            ${this.renderSleeveItemContent(
+              this.selectedSleeve || this.defaultSleeveData,
+            )}
+          </mwc-list-item>
+        </sl-popover>
+      `,
+    };
+  }
+
+  private renderSleeveItemContent(
+    sleeve: Pick<Sleeve, 'img' | 'name' | 'type'>,
+  ) {
+    return html`
+      <img slot="graphic" src=${sleeve.img} />
+      <span>${sleeve.name}</span>
+      <span slot="secondary">${localize(sleeve.type)}</span>
     `;
   }
 }

@@ -6,5 +6,10 @@
 }
 
 :host {
-  display: block;
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  padding: 0.5rem 1rem 1rem;
+  width: 375px;
+  min-height: 300px;
+  gap: 0.25rem;
 }

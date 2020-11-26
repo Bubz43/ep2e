@@ -3,6 +3,7 @@ import {
   openWindow,
 } from '@src/components/window/window-controls';
 import type { ActorEP } from '@src/entities/actor/actor';
+import { ActorCreator } from '@src/entities/actor/components/actor-creator/actor-creator';
 import { ActorType } from '@src/entities/entity-types';
 import { ItemCreator } from '@src/entities/item/components/item-creator/item-creator';
 import type { ItemDataEvent } from '@src/entities/item/components/item-creator/item-data-event';
@@ -20,6 +21,7 @@ import { stopEvent } from 'weightless';
 import { isKnownDrop, setDragSource } from './drag-and-drop';
 import { navMenuListener } from './foundry-apps';
 import type { TokenData } from './foundry-cont';
+import { localize } from './localization';
 import { activeCanvas, convertMenuOptions } from './misc-helpers';
 import { activeTokenStatusEffects } from './token-helpers';
 
@@ -573,7 +575,24 @@ ItemDirectory.prototype._onCreateEntity = async function (ev: Event) {
         @item-data=${itemCreate}
         folder=${ifDefined(ev.currentTarget.dataset.folder)}
       ></item-creator>`,
-      name: 'Item Creator',
+      name: `${localize('item')} ${localize('creator')}`,
+      adjacentEl: ev.currentTarget,
+    });
+  }
+};
+
+ActorDirectory.prototype._onCreateEntity = async function (ev: Event) {
+  stopEvent(ev);
+
+  if (ev.currentTarget instanceof HTMLElement) {
+    openWindow({
+      key: ActorCreator,
+      content: html`
+        <actor-creator
+          folder=${ifDefined(ev.currentTarget.dataset.folder)}
+        ></actor-creator>
+      `,
+      name: `${localize('actor')} ${localize('creator')}`,
       adjacentEl: ev.currentTarget,
     });
   }

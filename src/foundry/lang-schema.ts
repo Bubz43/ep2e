@@ -1324,7 +1324,7 @@ type LangEntries =
   | 'rewind'
   | 'refreshIn'
   | 'spend'
-  | 'fabber';
+  | 'fabber' | "creator"
 type FullNames =
   | 'cog'
   | 'int'
