@@ -378,6 +378,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
                   ?disabled=${this.character.disabled}
                   slot="action"
                   icon="refresh"
+                  dense
                   @click=${this.refreshAllReady}
                   label="${localize('refresh')} ${localize('all')} ${localize(
                     'ready',
@@ -387,27 +388,15 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
             : ''}
         </sl-header>
         <sl-animated-list>
-          ${repeat(timers, idProp, ({ label, max, elapsed, remaining }) => {
-            return html`
-              <li>
-                <span class="name"
-                  >${!remaining
-                    ? html`<span class="ready">[${localize('ready')}]</span>`
-                    : ''}
-                  ${label}
-                  ${remaining
-                    ? html`<span class="remaining"
-                        >${prettyMilliseconds(remaining)}
-                        ${localize('remaining')}</span
-                      >`
-                    : ''}
-                </span>
-                <mwc-linear-progress
-                  progress=${elapsed / max}
-                ></mwc-linear-progress>
-              </li>
-            `;
-          })}
+          ${repeat(
+            timers,
+            idProp,
+            (timer) => html`
+              <character-view-time-item
+                .timer=${timer}
+              ></character-view-time-item>
+            `,
+          )}
         </sl-animated-list>
       </section>
     `;

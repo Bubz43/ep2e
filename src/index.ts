@@ -123,6 +123,7 @@ import { CharacterViewTime } from './entities/actor/components/character-views/c
 import { ItemCard } from './entities/actor/components/item-card/item-card';
 import { ItemCardFabber } from './entities/actor/components/item-card/item-card-fabber';
 import { CharacterViewItemGroup } from './entities/actor/components/character-views/components/item-group/character-view-item-group';
+import { CharacterViewTimeItem } from './entities/actor/components/character-views/components/time/character-view-time-item';
 
 // Generic Components
 Field;
@@ -166,6 +167,7 @@ CharacterViewRechargeCompletion;
 CharacterViewDrawerHeading;
 CharacterViewItemGroup;
 CharacterViewTime;
+CharacterViewTimeItem;
 ItemCard;
 ItemCardFabber;
 

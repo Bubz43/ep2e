@@ -2,6 +2,7 @@ import type { ActorEP } from '@src/entities/actor/actor';
 import { ActorType } from '@src/entities/entity-types';
 import { updateManyActors } from '@src/foundry/misc-helpers';
 import { nonNegative } from '@src/utility/helpers';
+import { clamp } from 'remeda';
 import { localize, LangEntry } from '../foundry/localization';
 import { createFeature } from './feature-helpers';
 import { parseMilliseconds, toMilliseconds } from './modify-milliseconds';
@@ -117,12 +118,14 @@ export type RefreshTimer = {
   id: string;
   startTime: number;
   updateStartTime: (newStartTime: number) => void;
+  progress: number;
+  img?: string;
 };
 
 export const createRefreshTimer = (
   props: Pick<
     RefreshTimer,
-    'label' | 'max' | 'id' | 'startTime' | 'updateStartTime'
+    'label' | 'max' | 'id' | 'startTime' | 'updateStartTime' | 'img'
   >,
 ): RefreshTimer => ({
   ...props,
@@ -131,6 +134,9 @@ export const createRefreshTimer = (
   },
   get remaining() {
     return nonNegative(this.max - this.elapsed);
+  },
+  get progress() {
+    return clamp((this.elapsed / this.max) * 100, { min: 0, max: 100 });
   },
 });
 
