@@ -25,10 +25,10 @@ import {
 } from '@src/features/skills';
 import {
   CommonInterval,
-  createRefreshTimer,
+  createLiveTimeState,
   getElapsedTime,
   refreshAvailable,
-  RefreshTimer,
+  LiveTimeState,
 } from '@src/features/time';
 import { notify, NotificationType } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
@@ -420,13 +420,13 @@ export class Ego {
 
   @LazyGetter()
   get repRefreshTimers() {
-    const timers: RefreshTimer[] = [];
+    const timers: LiveTimeState[] = [];
     for (const rep of this.reps.values()) {
       if (repRefreshTimerActive(rep)) {
         timers.push(
-          createRefreshTimer({
+          createLiveTimeState({
             label: `${rep.acronym} ${localize('favor')} ${localize('refresh')}`,
-            max: CommonInterval.Week,
+            duration: CommonInterval.Week,
             id: rep.network,
             startTime: rep.refreshStartTime,
             updateStartTime: this.updater.prop(

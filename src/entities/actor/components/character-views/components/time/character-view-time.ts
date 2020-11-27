@@ -275,44 +275,27 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
   }
 
   private renderTemporaryFeatures() {
-    const { temporaryFeatures } = this.character;
+    const { temporaryFeatures, disabled } = this.character;
     if (temporaryFeatures.length === 0) return '';
     return html`
-      <section class="temporary-features">
+      <section>
         <sl-header
           heading=${localize('ongoing')}
           itemCount=${temporaryFeatures.length}
         ></sl-header>
 
         <sl-animated-list>
-          ${repeat(temporaryFeatures, idProp, (feature) => {
-            const elapsed = getElapsedTime(feature.startTime);
-            const done = elapsed >= feature.duration;
-            return html`
-              <li>
-                <span class="name">
-                  ${done
-                    ? html`
-                        <span class="ready">${localize('completed')}</span>
-                      `
-                    : ''}
-                  ${feature.name}
-                  ${!done
-                    ? html`
-                        <span class="remaining"
-                          >${prettyMilliseconds(
-                            nonNegative(feature.duration - elapsed),
-                          )}</span
-                        >
-                      `
-                    : ''}
-                </span>
-                <mwc-linear-progress
-                  progress=${elapsed / feature.duration}
-                ></mwc-linear-progress>
-              </li>
-            `;
-          })}
+          ${repeat(
+            temporaryFeatures,
+            idProp,
+            (feature) => html`
+              <character-view-time-item
+                ?disabled=${disabled}
+                .timeState=${feature.timeState}
+                completion="completed"
+              ></character-view-time-item>
+            `,
+          )}
         </sl-animated-list>
       </section>
     `;
@@ -329,44 +312,24 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
           ?hideBorder=${temporaryServices.length === 0}
         >
         </sl-header>
-        <sl-animated-list class="temporary-services" transformOrigin="bottom">
-          ${repeat(temporaryServices, idProp, (service) => {
-            const { isExpired } = service;
-            return html`
-              <li>
-                <span class="name"
-                  >${isExpired
-                    ? html`<span class="expired"
-                        >[${localize('expired')}]</span
-                      >`
-                    : ''}
-                  ${service.fullName}
-                  ${isExpired
-                    ? ''
-                    : html`
-                        <span class="remaining"
-                          >${prettyMilliseconds(service.remainingDuration)}
-                          ${localize('remaining').toLocaleLowerCase()}</span
-                        >
-                      `}
-                </span>
-
-                <mwc-linear-progress
-                  progress=${service.expirationProgress}
-                ></mwc-linear-progress>
-              </li>
-            `;
-          })}
+        <sl-animated-list  transformOrigin="bottom">
+          ${repeat(temporaryServices, idProp, (service) => html`
+              <character-view-time-item
+                completion="expired"
+                ?disabled=${this.character.disabled}
+                .timeState=${service.timeState}
+              ></character-view-time-item>
+            `)}
         </sl-animated-list>
       </section>
     `;
   }
 
   private renderRefreshTimers() {
-    const { timers } = this.character;
+    const { timers, disabled } = this.character;
 
     return html`
-      <section class="refresh-timers">
+      <section>
         <sl-header
           heading="${localize('refresh')} ${localize('timers')}"
           itemCount=${timers.length}
@@ -375,7 +338,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
           ${timers.some(refreshAvailable)
             ? html`
                 <mwc-button
-                  ?disabled=${this.character.disabled}
+                  ?disabled=${disabled}
                   slot="action"
                   icon="refresh"
                   dense
@@ -393,7 +356,9 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
             idProp,
             (timer) => html`
               <character-view-time-item
-                .timer=${timer}
+                .timeState=${timer}
+                completion="ready"
+                ?disabled=${disabled}
               ></character-view-time-item>
             `,
           )}

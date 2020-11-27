@@ -7,7 +7,7 @@ import {
   RangedWeaponAccessory,
   RangedWeaponTrait,
 } from '@src/data-enums';
-import { getElapsedTime } from '@src/features/time';
+import { createLiveTimeState, getElapsedTime } from '@src/features/time';
 import type { BlueprintData } from '@src/foundry/template-schema';
 import type { Class } from 'type-fest';
 import type { UpdateActions } from '../update-store';
@@ -159,10 +159,18 @@ export const RangedWeapon = (
 };
 
 export const Service = (
-  cls: HasEpData<{
-    serviceDuration: number;
-    state: { serviceStartTime: number };
-  }>,
+  cls: HasEpData<
+    {
+      serviceDuration: number;
+      state: { serviceStartTime: number };
+    },
+    {
+      type: string;
+      id: string;
+      name: string;
+      updateState: UpdateActions<{ serviceStartTime: number }>;
+    }
+  >,
 ) => {
   return class extends cls {
     get serviceDuration() {
@@ -179,9 +187,21 @@ export const Service = (
     }
 
     get remainingDuration() {
-      console.log(this.elapsedDuration, this.serviceDuration);
       return this.serviceDuration - this.elapsedDuration;
     }
+
+    get timeState() {
+      return createLiveTimeState({
+        label: this.name,
+        duration: this.serviceDuration,
+        id: `${this.type}-${this.id}`,
+        startTime: this.epData.state.serviceStartTime,
+        updateStartTime: (newTime) => {
+          this.updateState.commit({ serviceStartTime: newTime })
+        },
+      });
+    }
+
     get isExpired() {
       return (
         !this.isIndefiniteService &&
