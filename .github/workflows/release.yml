@@ -28,8 +28,8 @@ jobs:
           name: Release ${{ steps.get-version.outputs.version }}
           draft: false
           prerelease: false
-          token: ${{secrets.GITHUB_TOKEN}}
-          artifacts: './latest.zip' './system.json'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          artifacts: './latest.zip, ./releases/latest/download/system.json'
           tag: ${{ steps.get-version.outputs.version }}
 
 
