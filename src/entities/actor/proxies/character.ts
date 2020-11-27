@@ -25,6 +25,7 @@ import type { ActorEntity, SleeveType } from '@src/entities/models';
 import type { UpdateStore } from '@src/entities/update-store';
 import { taskState } from '@src/features/actions';
 import { EffectType, totalModifiers } from '@src/features/effects';
+import { updateFeature } from '@src/features/feature-helpers';
 import { Pool, Pools } from '@src/features/pool';
 import { Recharge } from '@src/features/recharge';
 import {
@@ -33,11 +34,11 @@ import {
 } from '@src/features/temporary';
 import {
   CommonInterval,
-  createRefreshTimer,
+  createLiveTimeState,
   currentWorldTimeMS,
   getElapsedTime,
   refreshAvailable,
-  RefreshTimer,
+  LiveTimeState,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
@@ -171,12 +172,11 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         (notEmpty(this.equippedGroups.expiredServices) ||
           this.timers.some(refreshAvailable) ||
           this.tasks.some((task) => task.state.completed))) ||
-      this.temporaryFeatures.some(
-        ({ startTime, duration }) => getElapsedTime(startTime) >= duration,
-      )
+      this.temporaryFeatures.some(({ timeState }) => !timeState.remaining)
     );
   }
 
+  @LazyGetter()
   get timers() {
     return [
       ...this.rechargeRefreshTimers,
@@ -185,17 +185,18 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     ];
   }
 
+  @LazyGetter()
   get rechargeRefreshTimers() {
-    const timers: RefreshTimer[] = [];
+    const timers: LiveTimeState[] = [];
 
     for (const rechargeType of enumValues(RechargeType)) {
       const { taken, refreshStartTime } = this.recharges[rechargeType];
       if (taken) {
         timers.push(
-          createRefreshTimer({
+          createLiveTimeState({
             id: rechargeType,
             label: localize(rechargeType),
-            max: CommonInterval.Day,
+            duration: CommonInterval.Day,
             startTime: refreshStartTime,
             updateStartTime: this.updater.prop(
               'data',
@@ -225,8 +226,23 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     return recharges;
   }
 
+  @LazyGetter()
   get temporaryFeatures() {
-    return this.epData.temporary;
+    return this.epData.temporary.map((temp) => ({
+      ...temp,
+      timeState: createLiveTimeState({
+        label: temp.name,
+        duration: temp.duration,
+        startTime: temp.startTime,
+        id: `temporary-${temp.id}`,
+        updateStartTime: (startTime) =>
+          this.updater
+            .prop('data', 'temporary')
+            .commit((temps) =>
+              updateFeature(temps, { id: temp.id, startTime }),
+            ),
+      }),
+    }));
   }
 
   @LazyGetter()
@@ -241,12 +257,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   }
 
   get timeTillRechargeComplete() {
-    const { activeRecharge } = this;
-    return activeRecharge
-      ? nonNegative(
-          activeRecharge.duration - getElapsedTime(activeRecharge.startTime),
-        )
-      : 0;
+    return this.activeRecharge?.timeState.remaining ?? 0;
   }
 
   completeRecharge(
@@ -258,16 +269,13 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         .prop('data', 'spentPools', poolType)
         .store(newSpentPools.get(poolType) || 0);
     }
-
+    // TODO Psi
     this.updater
       .prop('data', recharge)
-      .store(({ taken, refreshStartTime }) => {
-        return {
-          taken: taken + 1,
-          refreshStartTime:
-            taken === 0 ? currentWorldTimeMS() : refreshStartTime,
-        };
-      })
+      .store(({ taken, refreshStartTime }) => ({
+        taken: taken + 1,
+        refreshStartTime: taken === 0 ? currentWorldTimeMS() : refreshStartTime,
+      }))
       .prop('data', 'temporary')
       .commit(reject((temp) => temp.endOn === TemporaryFeatureEnd.Recharge));
   }

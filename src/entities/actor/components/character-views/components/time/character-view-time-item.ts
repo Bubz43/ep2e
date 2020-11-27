@@ -2,10 +2,10 @@ import { renderSlider } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import {
-  createRefreshTimer,
+  createLiveTimeState,
   currentWorldTimeMS,
   prettyMilliseconds,
-  RefreshTimer,
+  LiveTimeState,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import {
@@ -26,24 +26,35 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
 
   static styles = [styles];
 
-  @property({ attribute: false }) timer!: RefreshTimer;
+  @property({ attribute: false }) timeState!: LiveTimeState;
 
   @property({ type: Boolean }) disabled = false;
+
+  @property({ type: String }) completion: "ready" | "expired" | "completed" = "ready";
 
   @internalProperty() private editing = false;
 
   @internalProperty() private prog = 0;
 
+  @internalProperty() private updatedState = false;
+
   update(changedProps: PropertyValues) {
-    if (this.editing && changedProps.get('timer') !== undefined) {
-      this.prog = this.timer.progress;
+    if (this.editing && changedProps.get('timeState') !== undefined) {
+      this.prog = this.timeState.progress;
+    }
+    super.update(changedProps);
+  }
+
+  updated(changedProps: PropertyValues) {
+    if (this.updatedState && changedProps.has("timeState")) {
+      this.updatedState = false;
     }
     super.update(changedProps);
   }
 
   private toggleEditing() {
     this.editing = !this.editing;
-    if (this.editing) this.prog = this.timer.progress;
+    if (this.editing) this.prog = this.timeState.progress;
     else this.applyProgress();
   }
 
@@ -52,28 +63,29 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
   }
 
   private applyProgress() {
-    this.timer.updateStartTime(
-      currentWorldTimeMS() - this.timer.max * (this.prog / 100),
+    this.timeState.updateStartTime(
+      currentWorldTimeMS() - this.timeState.duration * (this.prog / 100),
     );
+    this.updatedState = true;
   }
 
   private get updatedStartTime() {
-    return currentWorldTimeMS() - this.timer.max * (this.prog / 100);
+    return currentWorldTimeMS() - this.timeState.duration * (this.prog / 100);
   }
 
-  private get activeTimer() {
-    return this.editing
-      ? createRefreshTimer({ ...this.timer, startTime: this.updatedStartTime })
-      : this.timer;
+  private get activeTimeState() {
+    return this.editing || this.updatedState
+      ? createLiveTimeState({ ...this.timeState, startTime: this.updatedStartTime })
+      : this.timeState;
   }
 
   render() {
-    const { label, remaining, img } = this.activeTimer;
+    const { label, remaining, img } = this.activeTimeState;
     return html`
       ${img ? html` <img height="20px" src=${img} /> ` : ''}
       <span class="name"
         >${!remaining
-          ? html`<span class="ready">[${localize('ready')}]</span>`
+          ? html`<span class=${this.completion}>[${localize(this.completion)}]</span>`
           : ''}
         ${label}
         ${remaining
@@ -92,11 +104,11 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
             </button>`
           : ''}
       </div>
-      ${this.editing
+      ${this.editing && !this.disabled
         ? this.renderProgressForm()
         : html`
             <mwc-linear-progress
-              progress=${this.timer.progress / 100}
+              progress=${this.activeTimeState.progress / 100}
             ></mwc-linear-progress>
           `}
     `;

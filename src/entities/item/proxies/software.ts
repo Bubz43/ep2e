@@ -1,16 +1,15 @@
 import {
   createBaseAttackFormula,
   SoftwareAttack,
-  SoftwareAttackData,
+  SoftwareAttackData
 } from '@src/combat/attacks';
 import { SoftwareType } from '@src/data-enums';
 import type { ObtainableEffects } from '@src/entities/applied-effects';
 import type { ItemType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
-import { currentWorldTimeMS, getElapsedTime } from '@src/features/time';
+import { currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { AppMeshHealth } from '@src/health/app-mesh-health';
-import { MeshHealth } from '@src/health/full-mesh-health';
 import { notEmpty, toggle } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
@@ -21,7 +20,11 @@ import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
 const serviceTypes = [SoftwareType.AppAsService, SoftwareType.MeshService];
 
-class Base extends ItemProxyBase<ItemType.Software> {}
+class Base extends ItemProxyBase<ItemType.Software> {
+  get updateState() {
+    return this.updater.prop('data', 'state');
+  }
+}
 export class Software
   extends mix(Base).with(Purchasable, Service)
   implements ObtainableEffects, Attacker<SoftwareAttackData, SoftwareAttack> {

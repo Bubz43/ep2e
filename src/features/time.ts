@@ -110,10 +110,10 @@ export const prettyOnset = (onset: number) => {
   return `${localize('active')} ${label}`.toLocaleLowerCase();
 };
 
-export type RefreshTimer = {
+export type LiveTimeState = {
   label: string;
   elapsed: number;
-  max: number;
+  duration: number;
   remaining: number;
   id: string;
   startTime: number;
@@ -122,26 +122,25 @@ export type RefreshTimer = {
   img?: string;
 };
 
-export const createRefreshTimer = (
-  props: Pick<
-    RefreshTimer,
-    'label' | 'max' | 'id' | 'startTime' | 'updateStartTime' | 'img'
+export const createLiveTimeState = (
+  staticParts: Pick<
+    LiveTimeState,
+    'label' | 'duration' | 'id' | 'startTime' | 'updateStartTime' | 'img'
   >,
-): RefreshTimer => ({
-  ...props,
+): Readonly<LiveTimeState> => ({
+  ...staticParts,
   get elapsed() {
     return getElapsedTime(this.startTime);
   },
   get remaining() {
-    return nonNegative(this.max - this.elapsed);
+    return nonNegative(this.duration - this.elapsed);
   },
   get progress() {
-    return clamp((this.elapsed / this.max) * 100, { min: 0, max: 100 });
+    return clamp((this.elapsed / this.duration) * 100, { min: 0, max: 100 });
   },
 });
 
-export const refreshAvailable = ({ elapsed, max }: RefreshTimer) =>
-  elapsed >= max;
+export const refreshAvailable = ({ remaining }: LiveTimeState) => !remaining;
 
 export const currentWorldTimeMS = () => {
   return toMilliseconds({ seconds: game.time.worldTime });
