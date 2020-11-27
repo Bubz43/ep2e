@@ -1673,6 +1673,9 @@
                           "id": {
                             "type": "string"
                           },
+                          "name": {
+                            "type": "string"
+                          },
                           "rechargeType": {
                             "$ref": "#/definitions/RechargeType"
                           },
@@ -1691,6 +1694,7 @@
                           "duration",
                           "endOn",
                           "id",
+                          "name",
                           "rechargeType",
                           "regainedPoints",
                           "startTime",
@@ -1724,7 +1728,7 @@
                           "id": {
                             "type": "string"
                           },
-                          "source": {
+                          "name": {
                             "type": "string"
                           },
                           "startTime": {
@@ -1740,7 +1744,7 @@
                           "effects",
                           "endOn",
                           "id",
-                          "source",
+                          "name",
                           "startTime",
                           "type"
                         ],

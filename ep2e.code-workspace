@@ -7,24 +7,25 @@
   "settings": {
     "typescript.tsdk": "node_modules\\typescript\\lib",
     "json.schemas": [
+
     
       {
         "fileMatch": [
           "template.json"
         ],
-        "url": "/template.schema.json"
+        "url": "/schemas/template.schema.json"
       },
       {
         "fileMatch": [
           "system.json"
         ],
-        "url": "/system.schema.json"
+        "url": "/schemas/system.schema.json"
       },
       { 
         "fileMatch": [
           "/lang/*.json"
         ],
-        "url": "/lang/lang.schema.json"
+        "url": "/schemas/lang.schema.json"
       }
     ],
   

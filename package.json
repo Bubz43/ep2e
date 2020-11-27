@@ -6,9 +6,9 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "format:scss": "prettier --write \"src/**/*.scss\"",
     "lint": "prettier --check \"src/**/*.ts\"",
-    "gen:template-schema": "./node_modules/.bin/ts-json-schema-generator --tsconfig tsconfig.json --path ./src/foundry/template-schema.ts --no-type-check -t EntityTemplates --strict-tuples -o template.schema.json",
-    "gen:system-schema": "./node_modules/.bin/ts-json-schema-generator --tsconfig tsconfig.json --path ./src/foundry/system.ts --no-type-check -t SystemSchema --strict-tuples -o system.schema.json",
-    "gen:lang-schema": "./node_modules/.bin/ts-json-schema-generator --tsconfig tsconfig.json --path ./src/foundry/lang-schema.ts --no-type-check -t Lang --strict-tuples -o ./lang/lang.schema.json"
+    "gen:template-schema": "./node_modules/.bin/ts-json-schema-generator --tsconfig tsconfig.json --path ./src/foundry/template-schema.ts --no-type-check -t EntityTemplates --strict-tuples -o ./schemas/template.schema.json",
+    "gen:system-schema": "./node_modules/.bin/ts-json-schema-generator --tsconfig tsconfig.json --path ./src/foundry/system.ts --no-type-check -t SystemSchema --strict-tuples -o ./schemas/system.schema.json",
+    "gen:lang-schema": "./node_modules/.bin/ts-json-schema-generator --tsconfig tsconfig.json --path ./src/foundry/lang-schema.ts --no-type-check -t Lang --strict-tuples -o ./schemas/lang.schema.json"
   },
   "repository": {
     "type": "git",
