@@ -18,6 +18,7 @@ jobs:
         with:
           files: packs/ build/ body-init.css darkMCE.css system.json template.json lang/en.json 
           dest: latest.zip
+          recursize: false
 
       - name: Get Version
         shell: bash
