@@ -3,22 +3,20 @@ import { ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
 import { idProp } from '@src/features/feature-helpers';
 import {
-  DropType, handleDrop,
-
+  DropType,
+  handleDrop,
   itemDropToItemProxy,
-  setDragDrop
+  setDragDrop,
 } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
-
-
-  html, LitElement,
+  html,
+  LitElement,
   property,
-
-  PropertyValues
+  PropertyValues,
 } from 'lit-element';
 import { nothing } from 'lit-html';
 import { cache } from 'lit-html/directives/cache';
@@ -44,15 +42,9 @@ export class CharacterViewItemGroup extends LitElement {
 
   private hasExpanded = false;
 
-  update(changedProps: PropertyValues) {
-    if (this.hasUpdated && !this.hasExpanded) {
-      if (!this.collapsed) this.hasExpanded = true;
-    }
-    super.update(changedProps);
-  }
-
-  firstUpdated() {
-    this.hasExpanded = !this.collapsed;
+  updated(changedProps: PropertyValues) {
+    if (!this.hasExpanded && !this.collapsed) this.hasExpanded = true;
+    super.updated(changedProps);
   }
 
   private toggleCollapse() {

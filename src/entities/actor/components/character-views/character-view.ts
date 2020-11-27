@@ -126,6 +126,7 @@ export class CharacterView extends CharacterViewBase {
       <character-view-item-group
         .character=${this.character}
         group=${group}
+        ?collapsed=${group === ItemGroup.Stashed}
       ></character-view-item-group>
     `;
   };

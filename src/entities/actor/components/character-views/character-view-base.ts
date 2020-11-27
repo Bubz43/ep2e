@@ -11,8 +11,8 @@ import type { CharacterDrawerRenderer } from './character-drawer-render-event';
 export enum ItemGroup {
   Traits = "traits",
   Consumables = "consumables",
-  Stashed = "stashed",
   Equipped = "equipped",
+  Stashed = "stashed",
 }
 
 export abstract class CharacterViewBase extends LitElement {
