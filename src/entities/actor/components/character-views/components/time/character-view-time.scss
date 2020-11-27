@@ -22,31 +22,6 @@ sl-animated-list {
   position: relative;
 }
 
-li {
-  list-style: none;
-  padding: 0.25rem 0.5rem;
-
-  .name {
-    @include truncate(100%);
-    display: inline-block;
-  }
-
-  .ready {
-    color: var(--color-secondary);
-    font-weight: bold;
-  }
-
-  .expired {
-    font-weight: bold;
-    color: var(--color-negative);
-  }
-
-  .remaining {
-    color: var(--color-text-lighter);
-    text-transform: lowercase;
-  }
-}
-
 .accumulated {
   margin-left: 1rem;
   padding: 0.25rem;
@@ -80,11 +55,22 @@ li {
   li {
     display: grid;
     align-items: center;
-    padding: 0.25rem 0.5rem;
+    padding: 0.25rem 1rem;
     grid-template-areas:
       'name more'
       'prog prog'
       'adv adv';
+
+      .ready {
+        color: var(--color-secondary);
+        font-weight: bold;
+      }
+
+      .remaining {
+        color: var(--color-text-lighter);
+        text-transform: lowercase;
+      }
+    
 
     .name {
       all: unset;
@@ -110,8 +96,8 @@ li {
     .advance-form {
       grid-area: adv;
       grid-template-columns: 1fr 1fr;
-      padding: 0.25rem;
-      @include animate-css(fadeInDown, 300ms);
+      padding: 0.25rem 0;
+      @include animate-css(fadeIn, 300ms);
     }
   }
 }
