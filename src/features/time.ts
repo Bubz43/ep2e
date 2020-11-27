@@ -120,7 +120,10 @@ export type RefreshTimer = {
 };
 
 export const createRefreshTimer = (
-  props: Pick<RefreshTimer, 'label' | 'max' | 'id' | 'startTime' | "updateStartTime">,
+  props: Pick<
+    RefreshTimer,
+    'label' | 'max' | 'id' | 'startTime' | 'updateStartTime'
+  >,
 ): RefreshTimer => ({
   ...props,
   get elapsed() {

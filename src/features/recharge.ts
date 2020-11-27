@@ -4,11 +4,7 @@ import { nonNegative, withSign } from '@src/utility/helpers';
 import { clamp } from 'remeda';
 import { RechargeEffect, RechargeStat } from './effects';
 import { toMilliseconds } from './modify-milliseconds';
-import {
-  CommonInterval,
-
-  getElapsedTime
-} from './time';
+import { CommonInterval, getElapsedTime } from './time';
 
 const baseRechargeInfo = {
   [RechargeType.Short]: {
