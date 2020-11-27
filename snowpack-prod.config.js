@@ -7,7 +7,7 @@ module.exports = {
   plugins: [
     '@snowpack/plugin-babel',
     '@snowpack/plugin-dotenv',
-    '@snowpack/plugin-typescript',
+    // '@snowpack/plugin-typescript',
     ['./snowpack-tagged-scss.js', { style: 'compressed' }],
     '@snowpack/plugin-optimize',
   ],
