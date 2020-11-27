@@ -39,7 +39,6 @@ export type RepBase = {
 } & RepData;
 
 export type RepWithIdentifier = RepBase & { identifier: RepIdentifier };
-
 export const createRep = createFeature<RepBase, 'acronym' | 'network'>(() => ({
   score: 10,
   refreshStartTime: 0,
