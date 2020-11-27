@@ -9,6 +9,8 @@ import {
 } from '@src/data-enums';
 import { createLiveTimeState, getElapsedTime } from '@src/features/time';
 import type { BlueprintData } from '@src/foundry/template-schema';
+import { nonNegative } from '@src/utility/helpers';
+import { LazyGetter } from 'lazy-get-decorator';
 import type { Class } from 'type-fest';
 import type { UpdateActions } from '../update-store';
 
@@ -80,7 +82,9 @@ export const Gear = (cls: HasEpData<Record<GearTrait, boolean>>) => {
 export const Stackable = (
   cls: HasEpData<
     { quantity: number; state: { stashed: boolean } },
-    { updateState: UpdateActions<{ stashed: boolean }> }
+    {
+      updateState: UpdateActions<{ stashed: boolean }>,
+  updateQuantity: UpdateActions<{ quantity: number }>  }
   >,
 ) => {
   return class extends cls {
@@ -92,6 +96,9 @@ export const Stackable = (
     }
     toggleStashed() {
       return this.updateState.commit({ stashed: !this.stashed });
+    }
+    setQuantity(newQuantity: number) {
+      this.updateQuantity.commit({ quantity: nonNegative(newQuantity) })
     }
   };
 };
@@ -172,24 +179,19 @@ export const Service = (
     }
   >,
 ) => {
-  return class extends cls {
+  class ServiceTimeInfo extends cls {
     get serviceDuration() {
       return this.epData.serviceDuration;
     }
     get isIndefiniteService() {
       return this.serviceDuration < 0;
     }
-    get elapsedDuration() {
-      return getElapsedTime(this.epData.state.serviceStartTime);
-    }
-    get expirationProgress() {
-      return this.elapsedDuration / this.serviceDuration;
+
+    get isExpired() {
+      return !this.isIndefiniteService && !this.timeState.remaining;
     }
 
-    get remainingDuration() {
-      return this.serviceDuration - this.elapsedDuration;
-    }
-
+    @LazyGetter()
     get timeState() {
       return createLiveTimeState({
         label: this.name,
@@ -197,16 +199,10 @@ export const Service = (
         id: `${this.type}-${this.id}`,
         startTime: this.epData.state.serviceStartTime,
         updateStartTime: (newTime) => {
-          this.updateState.commit({ serviceStartTime: newTime })
+          this.updateState.commit({ serviceStartTime: newTime });
         },
       });
     }
-
-    get isExpired() {
-      return (
-        !this.isIndefiniteService &&
-        this.elapsedDuration >= this.serviceDuration
-      );
-    }
-  };
+  }
+  return ServiceTimeInfo;
 };
