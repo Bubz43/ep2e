@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+
+      - run: npm install
+      - run: npm run build
       - uses: papeloto/action-zip@v1
         with:
           files: packs/ build/ body-init.css darkMCE.css system.json template.json lang/en.json 
