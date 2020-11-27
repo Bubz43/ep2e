@@ -10,24 +10,26 @@ jobs:
     runs-on: ubuntu/latest
     steps:
       - uses: actions/checkout@v2
-      - uses: papeloto/action-zip@v1
-        with:
-          files: packs/ build/ body-init.css darkMCE.css system.json template.json lang/en.json 
-          dest: latest.zip
+      # - uses: papeloto/action-zip@v1
+      #   with:
+      #     files: packs/ build/ body-init.css darkMCE.css system.json template.json lang/en.json 
+      #     dest: latest.zip
 
       - name: Get Version
         shell: bash
         id: get-version
         run: echo "::set-output name=version::$(node ./.github/workflows/get-version.js)"
 
-      - name: Create Release
-        id: create-release
-        uses: ncipollo/release-action@v1
-        with:
-          allowUpdates: true
-          name: Release ${{ steps.get-version.outputs.version }}
-          draft: false
-          prerelease: false
-          token: ${{secrets.GITHUB_TOKEN}}
-          artifacts: ./latest.zip ./system.json
-          tag: ${{ steps.get-version.outputs.version }}
+      # - name: Create Release
+      #   id: create-release
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     allowUpdates: true
+      #     name: Release ${{ steps.get-version.outputs.version }}
+      #     draft: false
+      #     prerelease: false
+      #     token: ${{secrets.GITHUB_TOKEN}}
+      #     artifacts: ./latest.zip ./system.json
+      #     tag: ${{ steps.get-version.outputs.version }}
+
+
