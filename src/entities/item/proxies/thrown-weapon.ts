@@ -19,6 +19,9 @@ class Base extends ItemProxyBase<ItemType.ThrownWeapon> {
   get updateState() {
     return this.updater.prop('data', 'state');
   }
+  get updateQuantity() {
+    return this.updater.prop("data")
+  }
 }
 export class ThrownWeapon
   extends mix(Base).with(Purchasable, Stackable, Copyable)

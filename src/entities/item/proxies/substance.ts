@@ -35,6 +35,9 @@ class Base extends ItemProxyBase<ItemType.Substance> {
   get updateState() {
     return this.updater.prop('data', 'state');
   }
+  get updateQuantity() {
+    return this.updater.prop("data")
+  }
 }
 export class Substance
   extends mix(Base).with(Purchasable, Copyable, Stackable)
