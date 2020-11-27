@@ -51,10 +51,6 @@ label {
   grid-auto-rows: min-content;
   gap: 0.1rem;
 
-  > * {
-    @include animate-css(fadeIn, 100ms);
-  }
-
   .no-results {
     margin: 0.5rem auto;
     font-size: large;

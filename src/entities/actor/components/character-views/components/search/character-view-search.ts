@@ -1,6 +1,7 @@
 import { renderTextInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import type { Character } from '@src/entities/actor/proxies/character';
+import { idProp } from '@src/features/feature-helpers';
 import { DropType, setDragDrop } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import { notEmpty, searchRegExp } from '@src/utility/helpers';
@@ -82,7 +83,7 @@ export class CharacterViewSearch extends LitElement {
             <ul class="results-list">
               ${repeat(
                 sortBy(items, i => i.name),
-                identity,
+                idProp,
                 (proxy) =>
                   html`<item-card
                     allowDrag

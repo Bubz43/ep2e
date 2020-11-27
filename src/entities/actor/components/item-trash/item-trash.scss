@@ -21,7 +21,6 @@ delete-button {
   .restore-commit {
     position: sticky;
     bottom: 0;
-    background: var(--color-bg);
   }
 }
 
@@ -30,6 +29,7 @@ li[divider] {
 }
 
 mwc-list-item {
+  height: 46px;
   [slot='graphic'] {
     color: var(--color-text);
   }

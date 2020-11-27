@@ -76,7 +76,7 @@ export class ItemTrash extends LitElement {
         })}
         <li divider></li>
         <mwc-list-item
-          graphic="avatar"
+          graphic="icon"
           ?disabled=${!notEmpty(this.indexesToRestore)}
           @click=${this.restoreItems}
           class="restore-commit"
