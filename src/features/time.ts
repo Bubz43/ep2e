@@ -113,8 +113,23 @@ export type RefreshTimer = {
   label: string;
   elapsed: number;
   max: number;
+  remaining: number;
   id: string;
+  startTime: number;
+  updateStartTime: (newStartTime: number) => void;
 };
+
+export const createRefreshTimer = (
+  props: Pick<RefreshTimer, 'label' | 'max' | 'id' | 'startTime' | "updateStartTime">,
+): RefreshTimer => ({
+  ...props,
+  get elapsed() {
+    return getElapsedTime(this.startTime);
+  },
+  get remaining() {
+    return nonNegative(this.max - this.elapsed);
+  },
+});
 
 export const refreshAvailable = ({ elapsed, max }: RefreshTimer) =>
   elapsed >= max;

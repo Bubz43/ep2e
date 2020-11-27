@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "snowpack build --watch",
-    "build": "snowpack --config ./snowpack-prod.config.js build && node scripts/archive.js",
+    "build": "snowpack --config ./snowpack-prod.config.js build && node scripts/sync-system.js",
     "test": "echo \"This template does not include a test runner by default.\" && exit 1",
     "format": "prettier --write \"src/**/*.ts\"",
     "format:scss": "prettier --write \"src/**/*.scss\"",

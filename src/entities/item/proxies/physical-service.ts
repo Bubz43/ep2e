@@ -12,12 +12,13 @@ import {
   refreshAvailable,
   getElapsedTime,
   currentWorldTimeMS,
+  createRefreshTimer,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
-import { toggle } from '@src/utility/helpers';
+import { nonNegative, toggle } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { map, set } from 'remeda';
+import { createPipe, map, merge, objOf, set } from 'remeda';
 import { Purchasable, Service } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
@@ -80,18 +81,26 @@ export class PhysicalService extends mix(Base).with(Purchasable, Service) {
   }
 
   get refreshTimers(): RefreshTimer[] {
-    return this.reputations.flatMap((rep) =>
-      repRefreshTimerActive(rep)
-        ? {
+    return this.reputations.flatMap((rep) => {
+      return repRefreshTimerActive(rep)
+        ? createRefreshTimer({
             label: `${this.name} - ${localize('fakeId')} | ${
               rep.acronym
             } ${localize('favor')} ${localize('refresh')}`,
-            elapsed: getElapsedTime(rep.refreshStartTime),
             max: CommonInterval.Week,
             id: `${this.id}-${rep.id}`,
-          }
-        : [],
-    );
+            startTime: rep.refreshStartTime,
+            updateStartTime: (refreshStartTime) => {
+              this.updater.prop('data', 'reputations').commit((reps) =>
+                updateFeature(reps, {
+                  refreshStartTime: refreshStartTime,
+                  id: rep.id,
+                }),
+              );
+            },
+          })
+        : [];
+    });
   }
 
   storeRepRefresh() {
