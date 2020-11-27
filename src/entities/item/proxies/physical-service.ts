@@ -80,6 +80,7 @@ export class PhysicalService extends mix(Base).with(Purchasable, Service) {
     }));
   }
 
+  @LazyGetter()
   get refreshTimers(): RefreshTimer[] {
     return this.reputations.flatMap((rep) => {
       return repRefreshTimerActive(rep)

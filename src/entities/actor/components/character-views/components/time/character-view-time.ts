@@ -388,7 +388,6 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
         </sl-header>
         <sl-animated-list>
           ${repeat(timers, idProp, ({ label, max, elapsed, remaining }) => {
-            const remaining = nonNegative(max - elapsed);
             return html`
               <li>
                 <span class="name"

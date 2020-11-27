@@ -25,6 +25,7 @@ import {
 } from '@src/features/skills';
 import {
   CommonInterval,
+  createRefreshTimer,
   getElapsedTime,
   refreshAvailable,
   RefreshTimer,
@@ -417,16 +418,25 @@ export class Ego {
     return rep;
   }
 
+  @LazyGetter()
   get repRefreshTimers() {
     const timers: RefreshTimer[] = [];
     for (const rep of this.reps.values()) {
       if (repRefreshTimerActive(rep)) {
-        timers.push({
-          label: `${rep.acronym} ${localize('favor')} ${localize('refresh')}`,
-          elapsed: getElapsedTime(rep.refreshStartTime),
-          max: CommonInterval.Week,
-          id: rep.network,
-        });
+        timers.push(
+          createRefreshTimer({
+            label: `${rep.acronym} ${localize('favor')} ${localize('refresh')}`,
+            max: CommonInterval.Week,
+            id: rep.network,
+            startTime: rep.refreshStartTime,
+            updateStartTime: this.updater.prop(
+              'data',
+              'reps',
+              (rep.identifier as { networkId: RepNetwork }).networkId,
+              'refreshStartTime',
+            ).commit,
+          }),
+        );
       }
     }
     return timers;

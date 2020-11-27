@@ -1,8 +1,8 @@
 {
+  "version": 0.657,
   "name": "ep2e",
   "title": "Eclipse Phase 2e",
   "description": "Eclipse Phase 2e Game System.",
-  "version": 0.6565,
   "author": "Bubz",
   "esmodules": [
     "./build/_dist_/index.js"
@@ -15,8 +15,8 @@
   "gridUnits": "m",
   "minimumCoreVersion": "0.7.7",
   "socket": true,
-  "manifest": "https://github.com/Bubz43/ep2e/releases/download/0.6565/system.json",
-  "download": "https://github.com/Bubz43/ep2e/releases/download/0.6565/latest.zip",
+  "manifest": "https://github.com/Bubz43/ep2e/releases/download/0.657/system.json",
+  "download": "https://github.com/Bubz43/ep2e/releases/download/0.657/latest.zip",
   "url": "https://github.com/Bubz43/ep2e",
   "languages": [
     {

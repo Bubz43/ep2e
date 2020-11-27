@@ -33,6 +33,7 @@ import {
 } from '@src/features/temporary';
 import {
   CommonInterval,
+  createRefreshTimer,
   currentWorldTimeMS,
   getElapsedTime,
   refreshAvailable,
@@ -190,12 +191,19 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     for (const rechargeType of enumValues(RechargeType)) {
       const { taken, refreshStartTime } = this.recharges[rechargeType];
       if (taken) {
-        timers.push({
-          label: localize(rechargeType),
-          elapsed: getElapsedTime(refreshStartTime),
-          max: CommonInterval.Day,
-          id: rechargeType,
-        });
+        timers.push(
+          createRefreshTimer({
+            id: rechargeType,
+            label: localize(rechargeType),
+            max: CommonInterval.Day,
+            startTime: refreshStartTime,
+            updateStartTime: this.updater.prop(
+              'data',
+              rechargeType,
+              'refreshStartTime',
+            ).commit,
+          }),
+        );
       }
     }
 
