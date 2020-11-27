@@ -1,3 +1,4 @@
+import { tooltip } from '@src/init';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import styles from './enriched-html.scss';
@@ -30,10 +31,12 @@ const entityLinkHandler = (anchor: JQuery, eventType: string) => {
 const inlineRollHandler = async (anchor: JQuery, eventType: string) => {
   if (anchor.hasClass('inline-result')) {
     const roll = Roll.fromJSON(unescape(anchor[0].dataset.roll!)) as Roll;
-    const tooltip = (await roll.getTooltip()) as string;
-    // TODO Re add this
-    // overlay.tooltip.attach(
-    //   { el: anchor[0], content: html`${unsafeHTML(tooltip)}`, position: "left-start" }    );
+    const tooltipContent = (await roll.getTooltip()) as string;
+    tooltip.attach({
+      el: anchor[0],
+      content: html`${unsafeHTML(tooltipContent)}`,
+      position: 'left-start',
+    });
   } else if (eventType !== 'mouseover')
     anchor.one('click', TextEditor._onClickInlineRoll).trigger('click');
 };
