@@ -6,21 +6,18 @@
 }
 
 :host {
-  display: flex;
-  flex-flow: column;
-  transition: padding 200ms ease-in-out; 
-  will-change: padding;
+  display: grid;
 }
 
 :host([noanimate]) {
-  transition: none;
-  will-change: unset;
   .description {
     animation: none;
   }
 }
 
+
 :host([expanded]) {
+  gap: 0.25rem;
   padding: 0.5rem;
   margin: 0.25rem 0.5rem;
   box-shadow: 0 0 4px black;
@@ -38,7 +35,6 @@
 
 
 .header {
-  all: unset;
   display: grid;
   grid-template-columns:  min-content 1fr max-content;
   align-items: center;
@@ -48,6 +44,11 @@
   cursor: pointer;
   grid-template-areas: 
   "img info buttons";
+
+
+  &:focus {
+    outline: none;
+  }
   img {
     grid-area: img;
     margin-right: 0.5ch;
@@ -67,6 +68,8 @@
 
   .buttons {
     grid-area: buttons;
+    display: flex;
+    align-items: center;
   }
 
   .type {
@@ -79,10 +82,20 @@
   }
 }
 
+@keyframes slideIn {
+  from {
+    transform: translateY(-0.5rem);
+    opacity: 0
+  }
+  10% {
+    transform: translateY(-0.5rem);
+    opacity: 0
+  }
+}
+
 .description {
   padding: 0 1rem;
-  @include animate-css(fadeIn, 125ms);
-  animation-delay: 125ms;
+  animation: slideIn 200ms ease-out;
 }
 
 .toggle {

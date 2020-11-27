@@ -73,13 +73,13 @@ const setDragImage = (el: HTMLElement) => {
   return dragImage;
 };
 
-export const setDragSource = (ev: DragEvent, drop: Drop) => {
+export const onlySetDragSource = (ev: DragEvent, drop: Drop) => {
   const el = ev
     .composedPath()
     .find(
       (e) => e instanceof HTMLElement && e.getAttribute('draggable') === 'true',
     ) as HTMLElement | undefined;
-
+  
   el?.addEventListener(
     'dragend',
     () => {
@@ -286,7 +286,7 @@ export const handleDrop = (handler: DropHandler) =>
 export const dragValue = (check: unknown) => (check ? 'true' : 'false');
 
 export const setDragDrop = (ev: DragEvent, drop: Drop) => {
-  setDragSource(ev, drop);
+  onlySetDragSource(ev, drop);
   ev.dataTransfer?.setData('text/plain', JSON.stringify(drop));
 };
 

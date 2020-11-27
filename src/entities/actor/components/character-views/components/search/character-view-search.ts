@@ -1,7 +1,7 @@
 import { renderTextInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import type { Character } from '@src/entities/actor/proxies/character';
-import { setDragSource, DropType } from '@src/foundry/drag-and-drop';
+import { DropType, setDragDrop } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import { notEmpty, searchRegExp } from '@src/utility/helpers';
 import {
@@ -14,8 +14,9 @@ import {
   eventOptions,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { compact, identity } from 'remeda';
+import { compact, identity, sortBy } from 'remeda';
 import { stopEvent } from 'weightless';
+import { ItemCard } from '../../../item-card/item-card';
 import styles from './character-view-search.scss';
 
 @customElement('character-view-search')
@@ -44,6 +45,16 @@ export class CharacterViewSearch extends LitElement {
     );
   }
 
+  private dragItemCard(ev: DragEvent) {
+    if (ev.currentTarget instanceof ItemCard) {
+      setDragDrop(ev, {
+        type: DropType.Item,
+        ...this.character.actor.identifiers,
+        data: ev.currentTarget.item.data,
+      });
+    }
+  }
+
   render() {
     const { search: searchString } = this;
     const search = searchString.trim();
@@ -70,24 +81,18 @@ export class CharacterViewSearch extends LitElement {
         ? html`
             <ul class="results-list">
               ${repeat(
-                items,
+                sortBy(items, i => i.name),
                 identity,
                 (proxy) =>
                   html`<item-card
-                    draggable="true"
+                    allowDrag
                     expanded
                     noAnimate
-                    @dragstart=${(ev: DragEvent) => {
-                      setDragSource(ev, {
-                        type: DropType.Item,
-                        ...this.character.actor.identifiers,
-                        data: proxy.data,
-                      });
-                    }}
+                    @dragstart=${this.dragItemCard}
                     .item=${proxy}
                   ></item-card>`,
-      )}
-                ${notEmpty(items)
+              )}
+              ${notEmpty(items)
                 ? ''
                 : html`<li class="no-results">${localize('noResults')}</li>`}
             </ul>

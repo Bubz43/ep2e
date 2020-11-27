@@ -18,7 +18,7 @@ import { html, render } from 'lit-html';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { compact, first, mapToObj, noop, pipe } from 'remeda';
 import { stopEvent } from 'weightless';
-import { isKnownDrop, setDragSource } from './drag-and-drop';
+import { isKnownDrop, onlySetDragSource } from './drag-and-drop';
 import { navMenuListener } from './foundry-apps';
 import type { TokenData } from './foundry-cont';
 import { localize } from './localization';
@@ -494,7 +494,7 @@ DragDrop.prototype._handleDragStart = function (ev: DragEvent) {
     console.log(error);
   }
   if (isKnownDrop(data)) {
-    setDragSource(ev, data);
+    onlySetDragSource(ev, data);
   }
 };
 

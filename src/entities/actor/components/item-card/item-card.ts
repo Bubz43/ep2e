@@ -6,12 +6,12 @@ import { openMenu } from '@src/open-menu';
 import { clickIfEnter } from '@src/utility/helpers';
 import {
   customElement,
-  LitElement,
-  property,
-  html,
-  internalProperty,
-  query,
+
+
+  html, LitElement,
+  property
 } from 'lit-element';
+import { cache } from 'lit-html/directives/cache';
 import { classMap } from 'lit-html/directives/class-map';
 import { noop } from 'remeda';
 import styles from './item-card.scss';
@@ -32,7 +32,7 @@ export class ItemCard extends LazyRipple(LitElement) {
 
   @property({ type: Boolean }) animateInitial = false;
 
-  @query('.header', true) headerButton!: HTMLElement;
+  @property({ type: Boolean }) allowDrag = false;
 
   firstUpdated() {
     this.addEventListener('dragend', () => this.handleRippleDeactivate());
@@ -80,22 +80,15 @@ export class ItemCard extends LazyRipple(LitElement) {
     });
   }
 
-  get textContent() {
-    return this.headerButton.textContent || this.item.name;
-  }
-
-  set textContent(value: string) {
-    this.append(value);
-  }
-
   render() {
     const { item } = this;
     const { nonDefaultImg } = item;
     return html`
-      <header
+      <div
         role="button"
         tabindex="0"
         class="header"
+        draggable=${this.allowDrag ? 'true' : 'false'}
         @keydown=${clickIfEnter}
         @click=${this.toggleExpanded}
         @focus="${this.handleRippleFocus}"
@@ -154,8 +147,11 @@ export class ItemCard extends LazyRipple(LitElement) {
         </span>
 
         ${this.renderRipple()}
-      </header>
-      ${this.expanded
+      </div>
+      ${this.item.type === ItemType.PhysicalTech && this.item.fabricatorType
+        ? html`<item-card-fabber .fabber=${this.item}></item-card-fabber>`
+        : ''}
+      ${cache(this.expanded
         ? html`
             <enriched-html
               class="description"
@@ -163,7 +159,7 @@ export class ItemCard extends LazyRipple(LitElement) {
               `<p>${localize('no')} ${localize('description')}</p>`}
             ></enriched-html>
           `
-        : ''}
+        : html``)}
     `;
   }
 }

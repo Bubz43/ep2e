@@ -1,0 +1,29 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: grid;
+  grid: min-content min-content / min-content 1fr;
+  row-gap: 1px;
+  font-size: 0.8rem;
+  padding: 0 1.5rem;
+
+  > span {
+    display: inline-block;
+    @include truncate(100%);
+  }
+  img {
+    display: block;
+    margin-right: 0.5ch;
+  }
+  .nested-type {
+    color:  var(--color-text-lighter);;
+  }
+  mwc-linear-progress {
+    grid-column: span 2;
+  }
+}

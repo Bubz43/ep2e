@@ -71,9 +71,7 @@ export class EnrichedHTML extends LitElement {
         media="all"
       />
       <link rel="stylesheet" href="css/mce.css" media="all" />
-      <!-- <div class="enriched-content"> -->
       ${unsafeHTML(TextEditor.enrichHTML(this.content))}
-      <!-- </div> -->
     `;
   }
 }

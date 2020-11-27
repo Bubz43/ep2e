@@ -18,12 +18,20 @@ import {
   setupItemOperations,
 } from '@src/entities/models';
 import { UpdateActions, UpdateStore } from '@src/entities/update-store';
+import { acquisitionTime } from '@src/features/complexity';
+import { toMilliseconds } from '@src/features/modify-milliseconds';
+import {
+  CommonInterval,
+  currentWorldTimeMS,
+  getElapsedTime,
+  prettyMilliseconds,
+} from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { deepMerge } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { AppMeshHealth } from '@src/health/app-mesh-health';
 import { MeshHealth } from '@src/health/full-mesh-health';
-import { notEmpty } from '@src/utility/helpers';
+import { nonNegative, notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { createPipe, forEach, merge } from 'remeda';
@@ -376,6 +384,32 @@ export class PhysicalTech
     }
   }
 
+  get fabricatedItem() {
+    return this.fabricatorType === FabType.Gland
+      ? this.glandedSubstance
+      : this.fabricatorType
+      ? this.itemBlueprint
+      : null;
+  }
+
+  get printProgress() {
+    const { fabPrintDuration } = this.epData;
+
+    const duration =
+      this.fabricatorType === FabType.Gland
+        ? fabPrintDuration || toMilliseconds({ hours: 4 })
+        : this.fabricatedItem
+        ? acquisitionTime[this.fabricatedItem.cost.complexity]
+        : CommonInterval.Turn;
+    const { fabStartTime } = this.state;
+    const elapsed = getElapsedTime(fabStartTime);
+    return {
+      duration,
+      elapsed,
+      remaining: nonNegative(duration - elapsed),
+    };
+  }
+
   addItemBlueprint(blueprint: CopyableItem) {
     // TODO set print time based off complexity
     this.itemBlueprintCommiter([blueprint.getDataCopy(true)]);
@@ -388,7 +422,7 @@ export class PhysicalTech
   getDataCopy(reset = false) {
     const copy = super.getDataCopy(reset);
     copy.data.state = {
-      fabStartTime: 0,
+      fabStartTime: currentWorldTimeMS(),
       equipped: false,
       disabled: false,
       activated: false,

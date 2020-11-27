@@ -7,7 +7,7 @@ import {
   DropType,
   handleDrop,
   itemDropToItemProxy,
-  setDragSource,
+  setDragDrop
 } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
@@ -18,7 +18,7 @@ import { cache } from 'lit-html/directives/cache';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
 import { first, prop, sortBy } from 'remeda';
-import { stopEvent } from 'weightless';
+import { ItemCard } from '../item-card/item-card';
 import { CharacterDrawerRenderer } from './character-drawer-render-event';
 import { CharacterViewBase } from './character-view-base';
 import styles from './character-view.scss';
@@ -77,7 +77,7 @@ export class CharacterView extends CharacterViewBase {
     }
   }
 
-  private addItem = handleDrop(async ({ ev, data }) => {
+  private addItem = handleDrop(async ({ ev, drop, data }) => {
     if (this.character.disabled || data?.type !== DropType.Item) {
       ev.preventDefault();
       return;
@@ -92,7 +92,6 @@ export class CharacterView extends CharacterViewBase {
 
     if (this.character.hasItemProxy(proxy)) {
       // TODO sort
-      // console.log("owned", proxy)
       if (group === ItemGroup.Equipped) {
         if ('equipped' in proxy && !proxy.equipped) {
           proxy.toggleEquipped();
@@ -121,6 +120,16 @@ export class CharacterView extends CharacterViewBase {
       } else this.character.itemOperations.add(proxy.getDataCopy(true));
     }
   });
+
+  private dragItemCard(ev: DragEvent) {
+    if (ev.currentTarget instanceof ItemCard) {
+      setDragDrop(ev, {
+        type: DropType.Item,
+        ...this.character.actor.identifiers,
+        data: ev.currentTarget.item.data,
+      });
+    }
+  }
 
   render() {
     const showPsi = !!(this.character.psi || notEmpty(this.character.sleights));
@@ -245,14 +254,8 @@ export class CharacterView extends CharacterViewBase {
           idProp,
           (proxy) => html`<item-card
             ?animateInitial=${!!this.hasUpdated}
-            draggable="true"
-            @dragstart=${(ev: DragEvent) => {
-              setDragSource(ev, {
-                type: DropType.Item,
-                ...this.character.actor.identifiers,
-                data: proxy.data,
-              });
-            }}
+            allowDrag
+            @dragstart=${this.dragItemCard}
             .item=${proxy}
           ></item-card>`,
         )}
