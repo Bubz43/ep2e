@@ -125,14 +125,14 @@ export class ItemCard extends LazyRipple(LitElement) {
                 ></mwc-icon-button>
               `
             : ''}
-          ${'toggleEquipped' in item
+          ${'toggleEquipped' in item && !item.equipped
             ? html`
                 <mwc-icon-button
                   @click=${() => item.toggleEquipped()}
                   icon=${item.equipped ? 'archive' : 'unarchive'}
                 ></mwc-icon-button>
               `
-            : 'toggleStashed' in item
+            : 'toggleStashed' in item && item.stashed
             ? html`
                 <mwc-icon-button
                   @click=${() => item.toggleStashed()}
@@ -151,15 +151,12 @@ export class ItemCard extends LazyRipple(LitElement) {
       ${this.item.type === ItemType.PhysicalTech && this.item.fabricatorType
         ? html`<item-card-fabber .fabber=${this.item}></item-card-fabber>`
         : ''}
-      ${cache(this.expanded
-        ? html`
-            <enriched-html
+      <enriched-html
+      ?hidden=${!this.expanded}
               class="description"
               content=${item.description ||
               `<p>${localize('no')} ${localize('description')}</p>`}
             ></enriched-html>
-          `
-        : html``)}
     `;
   }
 }

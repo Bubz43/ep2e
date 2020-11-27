@@ -7,7 +7,7 @@ import {
   DropType,
   handleDrop,
   itemDropToItemProxy,
-  setDragDrop
+  setDragDrop,
 } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
@@ -46,6 +46,8 @@ export class CharacterView extends CharacterViewBase {
   @query('#primary-tabs')
   tabBar?: TabBar;
 
+  private collapsedItemGroups = new Set([ItemGroup.Stashed]);
+
   updated(changedProps: PropertyValues) {
     const { tabBar } = this;
     if (tabBar) {
@@ -76,6 +78,14 @@ export class CharacterView extends CharacterViewBase {
         return this.renderStatus();
     }
   }
+
+  private toggleCollapsedGroup(ev: Event) {
+    const group = Number((ev.currentTarget as HTMLElement).dataset.group) as ItemGroup;
+    if (this.collapsedItemGroups.has(group)) this.collapsedItemGroups.delete(group);
+    else this.collapsedItemGroups.add(group);
+    this.requestUpdate()
+  }
+
 
   private addItem = handleDrop(async ({ ev, drop, data }) => {
     if (this.character.disabled || data?.type !== DropType.Item) {
@@ -199,8 +209,11 @@ export class CharacterView extends CharacterViewBase {
             heading=${localize('traits')}
             ?hideBorder=${traits.length === 0}
             itemCount=${traits.length}
-          ></sl-header>
-          ${notEmpty(traits) ? this.renderItemList(traits) : ''}
+          > ${notEmpty(traits) ? this.renderItemGroupToggle(ItemGroup.Traits) : ""}
+          </sl-header>
+          ${notEmpty(traits)
+            ? this.renderItemList(traits, ItemGroup.Traits)
+            : ''}
         </sl-dropzone>
 
         <sl-dropzone
@@ -211,8 +224,8 @@ export class CharacterView extends CharacterViewBase {
           <sl-header
             heading=${localize('consumables')}
             itemCount=${consumables.length}
-          ></sl-header>
-          ${this.renderItemList(consumables)}
+          >${notEmpty(consumables) ? this.renderItemGroupToggle(ItemGroup.Consumables) : ""}</sl-header>
+          ${this.renderItemList(consumables, ItemGroup.Consumables)}
         </sl-dropzone>
 
         <sl-dropzone
@@ -223,8 +236,10 @@ export class CharacterView extends CharacterViewBase {
           <sl-header
             heading=${localize('equipped')}
             itemCount=${equipped.length}
-          ></sl-header>
-          ${notEmpty(equipped) ? this.renderItemList(equipped) : ''}
+          >${notEmpty(equipped) ? this.renderItemGroupToggle(ItemGroup.Equipped) : ""}</sl-header>
+          ${notEmpty(equipped)
+            ? this.renderItemList(equipped, ItemGroup.Equipped)
+            : ''}
         </sl-dropzone>
 
         <sl-dropzone
@@ -238,29 +253,52 @@ export class CharacterView extends CharacterViewBase {
               @mouseenter=${tooltip.fromData}
               data-tooltip="Items apply no effects and are not tracked"
               >info</mwc-icon
-            >
+            >${notEmpty(stashed) ? this.renderItemGroupToggle(ItemGroup.Stashed) : ""}
           </sl-header>
-          ${notEmpty(stashed) ? this.renderItemList(stashed) : ''}
+          ${notEmpty(stashed)
+            ? this.renderItemList(stashed, ItemGroup.Stashed)
+            : ''}
         </sl-dropzone>
       </div>
     `;
   }
 
-  private renderItemList(proxies: ItemProxy[]) {
+  private renderItemGroupToggle(group: ItemGroup) {
+    const collapsed = this.collapsedItemGroups.has(group);
     return html`
-      <sl-animated-list class="proxy-list" stagger skipExitAnimation fadeOnly>
-        ${repeat(
-          sortBy(proxies, prop('fullName')),
-          idProp,
-          (proxy) => html`<item-card
-            ?animateInitial=${!!this.hasUpdated}
-            allowDrag
-            @dragstart=${this.dragItemCard}
-            .item=${proxy}
-          ></item-card>`,
-        )}
-      </sl-animated-list>
+      <mwc-icon-button
+        slot="action"
+        icon=${collapsed ? 'keyboard_arrow_left' : 'keyboard_arrow_down'}
+        data-group=${group}
+        @click=${this.toggleCollapsedGroup}
+      ></mwc-icon-button>
     `;
+  }
+
+  private renderItemList(proxies: ItemProxy[], group: ItemGroup) {
+    return cache(
+      this.collapsedItemGroups.has(group)
+        ? html``
+        : html`
+            <sl-animated-list
+              class="proxy-list"
+              stagger
+              skipExitAnimation
+              fadeOnly
+            >
+              ${repeat(
+                sortBy(proxies, prop('fullName')),
+                idProp,
+                (proxy) => html`<item-card
+                  ?animateInitial=${!!this.hasUpdated}
+                  allowDrag
+                  @dragstart=${this.dragItemCard}
+                  .item=${proxy}
+                ></item-card>`,
+              )}
+            </sl-animated-list>
+          `,
+    );
   }
 
   protected renderDrawer() {

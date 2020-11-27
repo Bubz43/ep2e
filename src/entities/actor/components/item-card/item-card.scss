@@ -96,6 +96,9 @@
 .description {
   padding: 0 1rem;
   animation: slideIn 200ms ease-out;
+  &[hidden] {
+    display: none;
+  }
 }
 
 .toggle {
