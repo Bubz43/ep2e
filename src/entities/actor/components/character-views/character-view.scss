@@ -134,29 +134,6 @@ mwc-tab-bar {
   }
 }
 
-.proxy-list {
-  display: grid;
-  grid-auto-rows: min-content;
-  gap: 0.1rem;
-  padding: 0.1rem 0;
-  position: relative;
-}
-
-
-sl-dropzone {
-  padding: 0.5rem 0;
-  sl-header {
-    padding: 0 0.75rem;
-    border-color: var(--color-border);
-  }
-}
-
-.toggle {
-  &.activated {
-    color: var(--color-secondary);
-  }
-}
-
 .item-lists {
   display: grid;
   grid-auto-rows: min-content;

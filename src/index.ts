@@ -122,6 +122,7 @@ import { WorldTimeControls } from './features/components/world-time-controls/wor
 import { CharacterViewTime } from './entities/actor/components/character-views/components/time/character-view-time';
 import { ItemCard } from './entities/actor/components/item-card/item-card';
 import { ItemCardFabber } from './entities/actor/components/item-card/item-card-fabber';
+import { CharacterViewItemGroup } from './entities/actor/components/character-views/components/item-group/character-view-item-group';
 
 // Generic Components
 Field;
@@ -163,6 +164,7 @@ CharacterViewSearch;
 CharacterViewRecharge;
 CharacterViewRechargeCompletion;
 CharacterViewDrawerHeading;
+CharacterViewItemGroup;
 CharacterViewTime;
 ItemCard;
 ItemCardFabber;

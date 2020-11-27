@@ -1,36 +1,17 @@
 import type { TabBar } from '@material/mwc-tab-bar';
-import type { DropZone } from '@src/components/dropzone/dropzone';
-import { ItemType } from '@src/entities/entity-types';
-import type { ItemProxy } from '@src/entities/item/item';
-import { idProp } from '@src/features/feature-helpers';
-import {
-  DropType,
-  handleDrop,
-  itemDropToItemProxy,
-  setDragDrop,
-} from '@src/foundry/drag-and-drop';
+import { enumValues } from '@src/data-enums';
 import { localize } from '@src/foundry/localization';
-import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, PropertyValues, query } from 'lit-element';
 import { nothing } from 'lit-html';
 import { cache } from 'lit-html/directives/cache';
 import { classMap } from 'lit-html/directives/class-map';
-import { repeat } from 'lit-html/directives/repeat';
-import { first, prop, sortBy } from 'remeda';
-import { ItemCard } from '../item-card/item-card';
+import { first } from 'remeda';
 import { CharacterDrawerRenderer } from './character-drawer-render-event';
-import { CharacterViewBase } from './character-view-base';
+import { CharacterViewBase, ItemGroup } from './character-view-base';
 import styles from './character-view.scss';
 
 const tabs = ['status', 'combat', 'psi'] as const;
-
-enum ItemGroup {
-  Traits,
-  Consumables,
-  Stashed,
-  Equipped,
-}
 
 @customElement('character-view')
 export class CharacterView extends CharacterViewBase {
@@ -45,8 +26,6 @@ export class CharacterView extends CharacterViewBase {
 
   @query('#primary-tabs')
   tabBar?: TabBar;
-
-  private collapsedItemGroups = new Set([ItemGroup.Stashed]);
 
   updated(changedProps: PropertyValues) {
     const { tabBar } = this;
@@ -76,68 +55,6 @@ export class CharacterView extends CharacterViewBase {
       case 'status':
       default:
         return this.renderStatus();
-    }
-  }
-
-  private toggleCollapsedGroup(ev: Event) {
-    const group = Number((ev.currentTarget as HTMLElement).dataset.group) as ItemGroup;
-    if (this.collapsedItemGroups.has(group)) this.collapsedItemGroups.delete(group);
-    else this.collapsedItemGroups.add(group);
-    this.requestUpdate()
-  }
-
-
-  private addItem = handleDrop(async ({ ev, drop, data }) => {
-    if (this.character.disabled || data?.type !== DropType.Item) {
-      ev.preventDefault();
-      return;
-    }
-    const dropzone = ev.currentTarget as DropZone;
-    const group = Number(dropzone.dataset.group) as ItemGroup;
-    const proxy = await itemDropToItemProxy(data);
-    if (!proxy) {
-      ev.preventDefault();
-      return;
-    }
-
-    if (this.character.hasItemProxy(proxy)) {
-      // TODO sort
-      if (group === ItemGroup.Equipped) {
-        if ('equipped' in proxy && !proxy.equipped) {
-          proxy.toggleEquipped();
-        }
-      } else if (group === ItemGroup.Stashed) {
-        if ('equipped' in proxy && proxy.equipped) {
-          proxy.toggleEquipped();
-        } else if ('stashed' in proxy && !proxy.stashed) {
-          proxy.toggleStashed();
-        }
-      }
-      return;
-    }
-
-    if ('equipped' in proxy) {
-      const copy = proxy.getDataCopy(true);
-      copy.data.state.equipped = group === ItemGroup.Equipped;
-      this.character.itemOperations.add(copy);
-    } else if ('stashed' in proxy) {
-      const copy = proxy.getDataCopy(true);
-      copy.data.state.stashed = group === ItemGroup.Stashed;
-      this.character.itemOperations.add(copy);
-    } else {
-      if (proxy.type === ItemType.Sleight || proxy.type === ItemType.Psi) {
-        this.character.ego.addNewItemProxy(proxy);
-      } else this.character.itemOperations.add(proxy.getDataCopy(true));
-    }
-  });
-
-  private dragItemCard(ev: DragEvent) {
-    if (ev.currentTarget instanceof ItemCard) {
-      setDragDrop(ev, {
-        type: DropType.Item,
-        ...this.character.actor.identifiers,
-        data: ev.currentTarget.item.data,
-      });
     }
   }
 
@@ -197,109 +114,21 @@ export class CharacterView extends CharacterViewBase {
   }
 
   private renderStatus() {
-    const { traits, equipped, consumables, stashed, disabled } = this.character;
     return html`
       <div class="item-lists">
-        <sl-dropzone
-          @drop=${this.addItem}
-          ?disabled=${disabled}
-          data-group=${ItemGroup.Traits}
-        >
-          <sl-header
-            heading=${localize('traits')}
-            ?hideBorder=${traits.length === 0}
-            itemCount=${traits.length}
-          > ${notEmpty(traits) ? this.renderItemGroupToggle(ItemGroup.Traits) : ""}
-          </sl-header>
-          ${notEmpty(traits)
-            ? this.renderItemList(traits, ItemGroup.Traits)
-            : ''}
-        </sl-dropzone>
-
-        <sl-dropzone
-          @drop=${this.addItem}
-          ?disabled=${disabled}
-          data-group=${ItemGroup.Consumables}
-        >
-          <sl-header
-            heading=${localize('consumables')}
-            itemCount=${consumables.length}
-          >${notEmpty(consumables) ? this.renderItemGroupToggle(ItemGroup.Consumables) : ""}</sl-header>
-          ${this.renderItemList(consumables, ItemGroup.Consumables)}
-        </sl-dropzone>
-
-        <sl-dropzone
-          @drop=${this.addItem}
-          ?disabled=${disabled}
-          data-group=${ItemGroup.Equipped}
-        >
-          <sl-header
-            heading=${localize('equipped')}
-            itemCount=${equipped.length}
-          >${notEmpty(equipped) ? this.renderItemGroupToggle(ItemGroup.Equipped) : ""}</sl-header>
-          ${notEmpty(equipped)
-            ? this.renderItemList(equipped, ItemGroup.Equipped)
-            : ''}
-        </sl-dropzone>
-
-        <sl-dropzone
-          @drop=${this.addItem}
-          ?disabled=${disabled}
-          data-group=${ItemGroup.Stashed}
-        >
-          <sl-header heading=${localize('stashed')} itemCount=${stashed.length}>
-            <mwc-icon
-              slot="info"
-              @mouseenter=${tooltip.fromData}
-              data-tooltip="Items apply no effects and are not tracked"
-              >info</mwc-icon
-            >${notEmpty(stashed) ? this.renderItemGroupToggle(ItemGroup.Stashed) : ""}
-          </sl-header>
-          ${notEmpty(stashed)
-            ? this.renderItemList(stashed, ItemGroup.Stashed)
-            : ''}
-        </sl-dropzone>
+        ${enumValues(ItemGroup).map(this.renderItemGroup)}
       </div>
     `;
   }
 
-  private renderItemGroupToggle(group: ItemGroup) {
-    const collapsed = this.collapsedItemGroups.has(group);
+  private renderItemGroup = (group: ItemGroup) => {
     return html`
-      <mwc-icon-button
-        slot="action"
-        icon=${collapsed ? 'keyboard_arrow_left' : 'keyboard_arrow_down'}
-        data-group=${group}
-        @click=${this.toggleCollapsedGroup}
-      ></mwc-icon-button>
+      <character-view-item-group
+        .character=${this.character}
+        group=${group}
+      ></character-view-item-group>
     `;
-  }
-
-  private renderItemList(proxies: ItemProxy[], group: ItemGroup) {
-    return cache(
-      this.collapsedItemGroups.has(group)
-        ? html``
-        : html`
-            <sl-animated-list
-              class="proxy-list"
-              stagger
-              skipExitAnimation
-              fadeOnly
-            >
-              ${repeat(
-                sortBy(proxies, prop('fullName')),
-                idProp,
-                (proxy) => html`<item-card
-                  ?animateInitial=${!!this.hasUpdated}
-                  allowDrag
-                  @dragstart=${this.dragItemCard}
-                  .item=${proxy}
-                ></item-card>`,
-              )}
-            </sl-animated-list>
-          `,
-    );
-  }
+  };
 
   protected renderDrawer() {
     const { drawerIsOpen } = this;

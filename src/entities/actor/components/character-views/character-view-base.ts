@@ -7,6 +7,14 @@ import type { MaybeToken } from '../../actor';
 import type { Character } from '../../proxies/character';
 import type { CharacterDrawerRenderer } from './character-drawer-render-event';
 
+
+export enum ItemGroup {
+  Traits = "traits",
+  Consumables = "consumables",
+  Stashed = "stashed",
+  Equipped = "equipped",
+}
+
 export abstract class CharacterViewBase extends LitElement {
   protected abstract renderDrawer(): TemplateResult;
 

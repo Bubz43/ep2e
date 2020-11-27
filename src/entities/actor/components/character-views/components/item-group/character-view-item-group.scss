@@ -1,0 +1,27 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  
+}
+
+sl-dropzone {
+  padding: 0.5rem 0;
+  sl-header {
+    padding: 0 0.75rem;
+    border-color: var(--color-border);
+  }
+}
+
+.proxy-list {
+  display: grid;
+  grid-auto-rows: min-content;
+  gap: 0.1rem;
+  padding: 0.1rem 0;
+  position: relative;
+}
