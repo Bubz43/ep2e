@@ -29,7 +29,7 @@ jobs:
           draft: false
           prerelease: false
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: './latest.zip, ./system.json, ./template.json'
+          artifacts: './latest.zip, ./system.json'
           tag: ${{ steps.get-version.outputs.version }}
 
 
