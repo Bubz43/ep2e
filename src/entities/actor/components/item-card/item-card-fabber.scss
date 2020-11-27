@@ -11,14 +11,12 @@
   font-size: 0.8rem;
   padding: 0 0.75rem;
   grid: min-content 4px / min-content 1fr min-content;
-  grid-template-areas: 
-  "img name actions"
-  "prog prog prog";
+  grid-template-areas:
+    'img name actions'
+    'prog prog prog';
 
   position: relative;
-
 }
-
 
 .name {
   grid-area: name;
@@ -33,7 +31,7 @@ img {
 }
 
 .nested-type {
-  color:  var(--color-text-lighter);;
+  color: var(--color-text-lighter);
 }
 
 .actions {
@@ -43,7 +41,7 @@ img {
   gap: 0.5ch;
   --mdc-icon-size: 1rem;
   z-index: 1;
-    @include textButton()
+  @include textButton();
 }
 
 mwc-linear-progress,

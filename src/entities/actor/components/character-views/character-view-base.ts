@@ -7,12 +7,11 @@ import type { MaybeToken } from '../../actor';
 import type { Character } from '../../proxies/character';
 import type { CharacterDrawerRenderer } from './character-drawer-render-event';
 
-
 export enum ItemGroup {
-  Traits = "traits",
-  Consumables = "consumables",
-  Equipped = "equipped",
-  Stashed = "stashed",
+  Traits = 'traits',
+  Consumables = 'consumables',
+  Equipped = 'equipped',
+  Stashed = 'stashed',
 }
 
 export abstract class CharacterViewBase extends LitElement {

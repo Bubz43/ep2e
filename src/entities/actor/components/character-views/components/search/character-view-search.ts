@@ -82,7 +82,7 @@ export class CharacterViewSearch extends LitElement {
         ? html`
             <ul class="results-list">
               ${repeat(
-                sortBy(items, i => i.name),
+                sortBy(items, (i) => i.name),
                 idProp,
                 (proxy) =>
                   html`<item-card

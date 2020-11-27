@@ -15,7 +15,6 @@
   }
 }
 
-
 :host([expanded]) {
   gap: 0.25rem;
   padding: 0.5rem;
@@ -33,18 +32,15 @@
   }
 }
 
-
 .header {
   display: grid;
-  grid-template-columns:  min-content 1fr max-content;
+  grid-template-columns: min-content 1fr max-content;
   align-items: center;
   padding: 0 0 0 0.5rem;
   --mdc-icon-button-size: 2rem;
   position: relative;
   cursor: pointer;
-  grid-template-areas: 
-  "img info buttons";
-
+  grid-template-areas: 'img info buttons';
 
   &:focus {
     outline: none;
@@ -85,11 +81,11 @@
 @keyframes slideIn {
   from {
     transform: translateY(-0.5rem);
-    opacity: 0
+    opacity: 0;
   }
   10% {
     transform: translateY(-0.5rem);
-    opacity: 0
+    opacity: 0;
   }
 }
 

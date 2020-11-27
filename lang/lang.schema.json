@@ -26,6 +26,9 @@
                 "EgoAlreadyHasPsi": {
                   "type": "string"
                 },
+                "NonElectronicSubstanceOnly": {
+                  "type": "string"
+                },
                 "OnlyEgoItems": {
                   "type": "string"
                 },
@@ -111,7 +114,8 @@
                 "OnlyEgoItems",
                 "OnlyEgoTraits",
                 "EgoAlreadyHasPsi",
-                "CannotAddPsi"
+                "CannotAddPsi",
+                "NonElectronicSubstanceOnly"
               ],
               "type": "object"
             },
@@ -1197,6 +1201,9 @@
             "create": {
               "type": "string"
             },
+            "creator": {
+              "type": "string"
+            },
             "credits": {
               "type": "string"
             },
@@ -1597,6 +1604,9 @@
               "type": "string"
             },
             "fab": {
+              "type": "string"
+            },
+            "fabber": {
               "type": "string"
             },
             "fabricator": {
@@ -2950,6 +2960,9 @@
               "type": "string"
             },
             "prime": {
+              "type": "string"
+            },
+            "printDuration": {
               "type": "string"
             },
             "privilege": {
@@ -4563,6 +4576,7 @@
             "cracked",
             "crashed",
             "create",
+            "creator",
             "credits",
             "criminal",
             "criticalCheckFailure",
@@ -4697,6 +4711,7 @@
             "extropian",
             "fRep",
             "fab",
+            "fabber",
             "fabricator",
             "face",
             "faction",
@@ -5148,6 +5163,7 @@
             "primaryAttack",
             "primaryMode",
             "prime",
+            "printDuration",
             "privilege",
             "process",
             "professionalTraining",

@@ -1299,6 +1299,9 @@
     "regainAllPools": "Regain All Pools",
     "rewind": "Rewind",
     "spend": "Spend",
+    "creator": "Creator",
+    "fabber": "Fabber",
+    "printDuration": "Print Duration",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
@@ -1323,7 +1326,8 @@
       "CannotAddPsi": "Cannot add PSI to ego.",
       "EgoAlreadyHasPsi": "Ego already has PSI.",
       "OnlyEgoItems": "Only ego traits, sleights and PSI can be added.",
-      "OnlyEgoTraits": "Only ego traits can be added"
+      "OnlyEgoTraits": "Only ego traits can be added",
+      "NonElectronicSubstanceOnly": "Non-electronic substance only"
     },
     "FULL": {
       "cog": "Cognition",

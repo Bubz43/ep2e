@@ -79,7 +79,7 @@ export const onlySetDragSource = (ev: DragEvent, drop: Drop) => {
     .find(
       (e) => e instanceof HTMLElement && e.getAttribute('draggable') === 'true',
     ) as HTMLElement | undefined;
-  
+
   el?.addEventListener(
     'dragend',
     () => {

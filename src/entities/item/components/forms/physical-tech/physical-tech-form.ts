@@ -382,11 +382,12 @@ export class PhysicalTechForm extends ItemFormBase {
 
           ${renderUpdaterForm(updater.prop('data'), {
             disabled: this.disabled,
-            classes: "fab-duration-form",
+            classes: 'fab-duration-form',
             fields: ({ fabPrintDuration }) =>
               renderTimeField(
                 {
                   ...fabPrintDuration,
+                  label: localize('printDuration'),
                   value: fabPrintDuration.value || CommonInterval.Hour * 4,
                 },
                 { min: 0 },
@@ -423,18 +424,20 @@ export class PhysicalTechForm extends ItemFormBase {
           heading="${localize(fabType)} ${localize('fabber')}"
           ?hideBorder=${!itemBlueprint}
         >
-
         </sl-header>
         ${itemBlueprint
-            ? renderUpdaterForm(updater.prop('data'), {
-                disabled: this.disabled,
-                classes: "fab-duration-form",
-                fields: ({ fabPrintDuration }) =>
-                  renderTimeField(fabPrintDuration, {
+          ? renderUpdaterForm(updater.prop('data'), {
+              disabled: this.disabled,
+              classes: 'fab-duration-form',
+              fields: ({ fabPrintDuration }) =>
+                renderTimeField(
+                  { ...fabPrintDuration, label: localize('printDuration') },
+                  {
                     min: CommonInterval.Turn,
-                  }),
-              })
-            : ''}
+                  },
+                ),
+            })
+          : ''}
         ${itemBlueprint
           ? html`
               <div class="addon">

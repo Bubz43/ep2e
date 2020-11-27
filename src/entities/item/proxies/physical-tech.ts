@@ -408,7 +408,7 @@ export class PhysicalTech
       duration,
       elapsed,
       remaining: nonNegative(duration - elapsed),
-      progress: clamp(elapsed / duration * 100, { min: 0, max: 100 })
+      progress: clamp((elapsed / duration) * 100, { min: 0, max: 100 }),
     };
   }
 
