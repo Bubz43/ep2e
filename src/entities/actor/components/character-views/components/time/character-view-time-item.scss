@@ -1,0 +1,66 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: grid;
+  row-gap: 1px;
+  padding: 0.25rem 1rem;
+  position: relative;
+  grid: min-content 4px / min-content 1fr min-content;
+  grid-template-areas:
+    'img name actions'
+    'prog prog prog';
+}
+
+img {
+  grid-area: img;
+  display: block;
+  margin-right: 0.5ch;
+}
+
+.name {
+  grid-area: name;
+  @include truncate(100%);
+  display: inline-block;
+}
+
+.ready {
+  color: var(--color-secondary);
+  font-weight: bold;
+}
+
+.expired {
+  font-weight: bold;
+  color: var(--color-negative);
+}
+
+.remaining {
+  color: var(--color-text-lighter);
+  text-transform: lowercase;
+}
+
+.actions {
+  grid-area: actions;
+  display: grid;
+  grid-auto-flow: column;
+  gap: 0.5ch;
+  --mdc-icon-size: 1.25em;
+  z-index: 1;
+  @include textButton();
+}
+
+mwc-linear-progress,
+sl-form {
+  grid-area: prog;
+}
+
+sl-form {
+  position: absolute;
+  top: -1.435rem;
+  width: 100%;
+  z-index: 0;
+}
