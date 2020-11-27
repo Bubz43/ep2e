@@ -34,7 +34,7 @@ import { MeshHealth } from '@src/health/full-mesh-health';
 import { nonNegative, notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { createPipe, forEach, merge } from 'remeda';
+import { createPipe, forEach, merge, clamp } from 'remeda';
 import type { CopyableItem, ItemProxy } from '../item';
 import { Copyable, Equippable, Gear, Purchasable } from '../item-mixins';
 import { renderItemForm } from '../item-views';
@@ -392,7 +392,7 @@ export class PhysicalTech
       : null;
   }
 
-  get printProgress() {
+  get printStatus() {
     const { fabPrintDuration } = this.epData;
 
     const duration =
@@ -403,10 +403,12 @@ export class PhysicalTech
         : CommonInterval.Turn;
     const { fabStartTime } = this.state;
     const elapsed = getElapsedTime(fabStartTime);
+
     return {
       duration,
       elapsed,
       remaining: nonNegative(duration - elapsed),
+      progress: clamp(elapsed / duration * 100, { min: 0, max: 100 })
     };
   }
 

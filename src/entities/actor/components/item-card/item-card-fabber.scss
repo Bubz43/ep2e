@@ -7,23 +7,53 @@
 
 :host {
   display: grid;
-  grid: min-content min-content / min-content 1fr;
   row-gap: 1px;
   font-size: 0.8rem;
-  padding: 0 1rem;
+  padding: 0 0.75rem;
+  grid: min-content 4px / min-content 1fr min-content;
+  grid-template-areas: 
+  "img name actions"
+  "prog prog prog";
 
-  > span {
-    display: inline-block;
-    @include truncate(100%);
-  }
-  img {
-    display: block;
-    margin-right: 0.5ch;
-  }
-  .nested-type {
-    color:  var(--color-text-lighter);;
-  }
-  mwc-linear-progress {
-    grid-column: span 2;
-  }
+  position: relative;
+
+}
+
+
+.name {
+  grid-area: name;
+  display: inline-block;
+  @include truncate(100%);
+}
+
+img {
+  grid-area: img;
+  display: block;
+  margin-right: 0.5ch;
+}
+
+.nested-type {
+  color:  var(--color-text-lighter);;
+}
+
+.actions {
+  grid-area: actions;
+  display: grid;
+  grid-auto-flow: column;
+  gap: 0.5ch;
+  --mdc-icon-size: 1rem;
+  z-index: 1;
+    @include textButton()
+}
+
+mwc-linear-progress,
+sl-form {
+  grid-area: prog;
+}
+
+sl-form {
+  position: absolute;
+  top: -1.435rem;
+  width: 100%;
+  z-index: 0;
 }

@@ -4,13 +4,7 @@ import type { ItemProxy } from '@src/entities/item/item';
 import { localize } from '@src/foundry/localization';
 import { openMenu } from '@src/open-menu';
 import { clickIfEnter } from '@src/utility/helpers';
-import {
-  customElement,
-
-
-  html, LitElement,
-  property
-} from 'lit-element';
+import { customElement, html, LitElement, property } from 'lit-element';
 import { cache } from 'lit-html/directives/cache';
 import { classMap } from 'lit-html/directives/class-map';
 import { noop } from 'remeda';
@@ -148,15 +142,21 @@ export class ItemCard extends LazyRipple(LitElement) {
 
         ${this.renderRipple()}
       </div>
-      ${this.item.type === ItemType.PhysicalTech && this.item.fabricatorType
-        ? html`<item-card-fabber .fabber=${this.item}></item-card-fabber>`
+      ${this.expanded
+        ? html`
+            ${this.item.type === ItemType.PhysicalTech &&
+            this.item.fabricatorType
+              ? html`<item-card-fabber .fabber=${this.item}></item-card-fabber>`
+              : ''}
+          `
         : ''}
+
       <enriched-html
-      ?hidden=${!this.expanded}
-              class="description"
-              content=${item.description ||
-              `<p>${localize('no')} ${localize('description')}</p>`}
-            ></enriched-html>
+        ?hidden=${!this.expanded}
+        class="description"
+        content=${item.description ||
+        `<p>${localize('no')} ${localize('description')}</p>`}
+      ></enriched-html>
     `;
   }
 }

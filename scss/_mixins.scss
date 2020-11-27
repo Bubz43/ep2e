@@ -136,6 +136,10 @@
     &:focus {
       text-shadow: var(--text-highlight);
     }
+    &[disabled] {
+      color: var(--color-text-disabled);
+      pointer-events: none;
+    }
   }
 }
 
