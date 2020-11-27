@@ -49,6 +49,7 @@ img {
   display: grid;
   grid-auto-flow: column;
   gap: 0.5ch;
+  margin-left: 0.5ch;
   --mdc-icon-size: 1.25em;
   z-index: 1;
   @include textButton();
