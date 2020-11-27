@@ -14,27 +14,25 @@ jobs:
 
       - run: npm install
       - run: npm run build
-      - uses: papeloto/action-zip@v1
-        with:
-          files: packs/ build/ body-init.css darkMCE.css system.json template.json lang/en.json 
-          dest: latest.zip
-          recursize: false
 
-      - name: Get Version
-        shell: bash
-        id: get-version
-        run: echo "::set-output name=version::$(node ./.github/workflows/get-version.js)"
+
+      - name: get version
+          id: version
+          uses: notiz-dev/github-action-json-property@release
+          with: 
+            path: 'system.json'
+            prop_path: 'version'
 
       - name: Create Release
         id: create-release
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          name: Release ${{ steps.get-version.outputs.version }}
+          name: Release ${{ steps.version.outputs.prop }}
           draft: false
           prerelease: false
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './latest.zip, ./system.json'
-          tag: ${{ steps.get-version.outputs.version }}
+          tag: ${{ steps.version.outputs.prop }}
 
 
