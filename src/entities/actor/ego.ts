@@ -425,7 +425,7 @@ export class Ego {
       if (repRefreshTimerActive(rep)) {
         timers.push(
           createLiveTimeState({
-            label: `${rep.acronym} ${localize('favor')} ${localize('refresh')}`,
+            label: `${rep.acronym} ${localize('favor')} ${localize('refresh')}`.toLocaleLowerCase(),
             duration: CommonInterval.Week,
             id: rep.network,
             startTime: rep.refreshStartTime,

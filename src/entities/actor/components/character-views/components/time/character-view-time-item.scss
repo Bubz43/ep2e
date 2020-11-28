@@ -11,9 +11,14 @@
   padding: 0.25rem 1rem;
   position: relative;
   grid: min-content 4px / min-content 1fr min-content;
+  align-items: center;
   grid-template-areas:
     'img name actions'
     'prog prog prog';
+
+    ::slotted([slot="action"]) {
+      --mdc-icon-size: 1.1em;
+    }
 }
 
 img {
@@ -50,9 +55,12 @@ img {
   grid-auto-flow: column;
   gap: 0.5ch;
   margin-left: 0.5ch;
-  --mdc-icon-size: 1.25em;
+  --mdc-icon-size: 1.1em;
   z-index: 1;
   @include textButton();
+  button {
+    display: inline-flex;
+  }
 }
 
 mwc-linear-progress,

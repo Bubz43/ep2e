@@ -30,6 +30,7 @@ export class ItemCard extends LazyRipple(LitElement) {
 
   firstUpdated() {
     this.addEventListener('dragend', () => this.handleRippleDeactivate());
+    this.addEventListener("contextmenu", ev => this.openMenu(ev))
     if (this.animateInitial) {
       this.animate(
         {
@@ -56,7 +57,7 @@ export class ItemCard extends LazyRipple(LitElement) {
     super.handleRippleMouseDown(ev);
   }
 
-  private openMenu() {
+  private openMenu(ev: MouseEvent) {
     const { item } = this;
     openMenu({
       header: { heading: item.fullName },
@@ -83,6 +84,7 @@ export class ItemCard extends LazyRipple(LitElement) {
           disabled: !item.editable && !item.alwaysDeletable,
         },
       ]),
+      position: (ev.currentTarget === this ? ev : undefined)
     });
   }
 
