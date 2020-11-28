@@ -22,8 +22,10 @@ import { acquisitionTime } from '@src/features/complexity';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
 import {
   CommonInterval,
+  createLiveTimeState,
   currentWorldTimeMS,
   getElapsedTime,
+  LiveTimeState,
   prettyMilliseconds,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
@@ -392,6 +394,19 @@ export class PhysicalTech
       : null;
   }
 
+  get printDuration() {
+    const { fabPrintDuration } = this.epData;
+    return this.fabricatorType === FabType.Gland
+    ? fabPrintDuration || toMilliseconds({ hours: 4 })
+    : this.fabricatedItem
+    ? acquisitionTime[this.fabricatedItem.cost.complexity]
+    : CommonInterval.Turn;
+  }
+
+  get isActiveFabber() {
+    return this.fabricatorType && !!this.fabricatedItem
+  }
+
   get printStatus() {
     const { fabPrintDuration } = this.epData;
 
@@ -410,6 +425,19 @@ export class PhysicalTech
       remaining: nonNegative(duration - elapsed),
       progress: clamp((elapsed / duration) * 100, { min: 0, max: 100 }),
     };
+  }
+
+  @LazyGetter()
+  get printState(): LiveTimeState {
+    return createLiveTimeState({
+      duration: this.printDuration,
+      img: this.fabricatedItem?.nonDefaultImg,
+      id: `${this.type}-${this.id}`,
+      label: this.name,
+      startTime: this.state.fabStartTime,
+      updateStartTime: this.updater.prop("data", "state", "fabStartTime").commit
+    })
+
   }
 
   addItemBlueprint(blueprint: CopyableItem) {

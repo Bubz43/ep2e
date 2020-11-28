@@ -17,6 +17,7 @@ import type {
 } from '@src/entities/item/item';
 import { openPsiFormWindow } from '@src/entities/item/item-views';
 import type { PhysicalService } from '@src/entities/item/proxies/physical-service';
+import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import { Psi } from '@src/entities/item/proxies/psi';
 import type { Sleight } from '@src/entities/item/proxies/sleight';
 import type { Software } from '@src/entities/item/proxies/software';
@@ -124,7 +125,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     const temporaryServices: typeof services = [];
     const fakeIDs: PhysicalService[] = [];
     const expiredServices: typeof services = [];
-    // TODO Weapons && active use && fabbers
+    const activeFabbers: PhysicalTech[] = [];
+    // TODO Weapons && active use
     for (const item of this.equipped) {
       if (item.type === ItemType.PhysicalService) {
         services.push(item);
@@ -141,6 +143,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
             if (item.isExpired) expiredServices.push(item);
           }
         }
+      } else if (item.type === ItemType.PhysicalTech && item.isActiveFabber) {
+        activeFabbers.push(item);
       }
     }
     return {
@@ -148,6 +152,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       fakeIDs,
       expiredServices,
       temporaryServices,
+      activeFabbers,
     };
   }
 
