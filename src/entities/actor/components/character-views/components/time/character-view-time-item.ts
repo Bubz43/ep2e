@@ -18,6 +18,9 @@ import {
 } from 'lit-element';
 import styles from './character-view-time-item.scss';
 
+/**
+ * @slot action - only visible when not editing
+ */
 @customElement('character-view-time-item')
 export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
   static get is() {
@@ -30,7 +33,8 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
 
   @property({ type: Boolean }) disabled = false;
 
-  @property({ type: String }) completion: "ready" | "expired" | "completed" = "ready";
+  @property({ type: String }) completion: 'ready' | 'expired' | 'completed' =
+    'ready';
 
   @internalProperty() private editing = false;
 
@@ -46,7 +50,7 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
   }
 
   updated(changedProps: PropertyValues) {
-    if (this.updatedState && changedProps.has("timeState")) {
+    if (this.updatedState && changedProps.has('timeState')) {
       this.updatedState = false;
     }
     super.update(changedProps);
@@ -75,7 +79,10 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
 
   private get activeTimeState() {
     return this.editing || this.updatedState
-      ? createLiveTimeState({ ...this.timeState, startTime: this.updatedStartTime })
+      ? createLiveTimeState({
+          ...this.timeState,
+          startTime: this.updatedStartTime,
+        })
       : this.timeState;
   }
 
@@ -85,7 +92,9 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
       ${img ? html` <img height="20px" src=${img} /> ` : ''}
       <span class="name"
         >${!remaining
-          ? html`<span class=${this.completion}>[${localize(this.completion)}]</span>`
+          ? html`<span class=${this.completion}
+              >[${localize(this.completion)}]</span
+            >`
           : ''}
         ${label}
         ${remaining
@@ -95,6 +104,7 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
           : ''}
       </span>
       <div class="actions">
+        ${this.editing ? '' : html` <slot name="action"></slot> `}
         <button @click=${this.toggleEditing} ?disabled=${this.disabled}>
           <mwc-icon>${this.editing ? 'save' : 'edit'}</mwc-icon>
         </button>

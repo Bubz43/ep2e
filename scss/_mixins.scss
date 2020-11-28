@@ -129,6 +129,7 @@
 @mixin textButton() {
   button {
     all: unset;
+    display: inline-block;
     &:not([disabled]):hover {
       cursor: pointer;
       color: functions.satv(var(--color-secondary), 1.2);
