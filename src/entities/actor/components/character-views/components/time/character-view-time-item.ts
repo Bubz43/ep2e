@@ -54,6 +54,8 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
       this.updatedState = false;
     }
     super.update(changedProps);
+    const blah = new Intl.RelativeTimeFormat("en", { style: "narrow" })
+    blah.format(3, "days")
   }
 
   private toggleEditing() {
