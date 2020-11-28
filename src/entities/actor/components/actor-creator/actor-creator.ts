@@ -393,22 +393,34 @@ export class ActorCreator extends LitElement {
 
         <sl-popover
           placement=${Placement.Left}
-          .renderOnDemand=${() => html`
-            <mwc-list>
-              ${ownedSleeves().map((sleeve) => {
-                return html`
-                  <mwc-list-item
-                    twoline
-                    @keydown=${clickIfEnter}
-                    graphic="medium"
-                    @click=${() => (this.selectedSleeve = sleeve)}
-                  >
-                    ${this.renderSleeveItemContent(sleeve)}
-                  </mwc-list-item>
-                `;
-              })}
-            </mwc-list>
-          `}
+          .renderOnDemand=${() => {
+            const available = ownedSleeves();
+            return html`
+              <mwc-list>
+                ${notEmpty(available)
+                  ? ownedSleeves().map(
+                      (sleeve) => html`
+                        <mwc-list-item
+                          twoline
+                          @keydown=${clickIfEnter}
+                          graphic="medium"
+                          @click=${() => (this.selectedSleeve = sleeve)}
+                        >
+                          ${this.renderSleeveItemContent(sleeve)}
+                        </mwc-list-item>
+                      `,
+                    )
+                  : html`
+                      <mwc-list-item>
+                        <span
+                          >${localize('no')} ${localize('sleeves')}
+                          ${localize('available')}</span
+                        >
+                      </mwc-list-item>
+                    `}
+              </mwc-list>
+            `;
+          }}
         >
           <mwc-list-item
             slot="base"
