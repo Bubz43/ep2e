@@ -94,6 +94,12 @@ export class PhysicalTech
     return this.updater.prop('flags', EP.Name, 'onboardALI').commit;
   }
 
+  get fullName() {
+    return this.isActiveFabber
+      ? `${this.name} [${this.fabricatedItem?.name}]`
+      : this.name;
+  }
+
   get fullType() {
     const { wareType, category } = this;
     const localType = localize(wareType || this.type);
@@ -397,14 +403,14 @@ export class PhysicalTech
   get printDuration() {
     const { fabPrintDuration } = this.epData;
     return this.fabricatorType === FabType.Gland
-    ? fabPrintDuration || toMilliseconds({ hours: 4 })
-    : this.fabricatedItem
-    ? acquisitionTime[this.fabricatedItem.cost.complexity]
-    : CommonInterval.Turn;
+      ? fabPrintDuration || toMilliseconds({ hours: 4 })
+      : this.fabricatedItem
+      ? acquisitionTime[this.fabricatedItem.cost.complexity]
+      : CommonInterval.Turn;
   }
 
   get isActiveFabber() {
-    return this.fabricatorType && !!this.fabricatedItem
+    return this.fabricatorType && !!this.fabricatedItem;
   }
 
   get printStatus() {
@@ -433,11 +439,11 @@ export class PhysicalTech
       duration: this.printDuration,
       img: this.fabricatedItem?.nonDefaultImg,
       id: `${this.type}-${this.id}`,
-      label: this.name,
+      label: this.fullName,
       startTime: this.state.fabStartTime,
-      updateStartTime: this.updater.prop("data", "state", "fabStartTime").commit
-    })
-
+      updateStartTime: this.updater.prop('data', 'state', 'fabStartTime')
+        .commit,
+    });
   }
 
   addItemBlueprint(blueprint: CopyableItem) {

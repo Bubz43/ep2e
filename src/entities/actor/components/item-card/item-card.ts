@@ -7,7 +7,7 @@ import { clickIfEnter } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { cache } from 'lit-html/directives/cache';
 import { classMap } from 'lit-html/directives/class-map';
-import { noop } from 'remeda';
+import { compact, noop } from 'remeda';
 import styles from './item-card.scss';
 
 @customElement('item-card')
@@ -57,20 +57,32 @@ export class ItemCard extends LazyRipple(LitElement) {
   }
 
   private openMenu() {
+    const { item } = this;
     openMenu({
-      header: { heading: this.item.fullName },
-      content: [
-        {
+      header: { heading: item.fullName },
+      content: compact([
+        'toggleStashed' in item &&
+          !item.stashed && {
+            label: localize('stash'),
+            callback: item.toggleStashed.bind(item),
+          },
+        'toggleEquipped' in item &&
+          item.equipped && {
+            label: localize('unequip'),
+            callback: item.toggleEquipped.bind(item),
+          },
+        item.openForm && {
           label: localize('form'),
           icon: html`<mwc-icon>launch</mwc-icon>`,
-          callback: this.item.openForm ?? noop,
+          callback: item.openForm,
         },
-        {
+        item.deleteSelf && {
           label: localize('delete'),
           icon: html`<mwc-icon>delete_forever</mwc-icon>`,
-          callback: this.item.deleteSelf ?? noop,
+          callback: item.deleteSelf,
+          disabled: !item.editable && !item.alwaysDeletable,
         },
-      ],
+      ]),
     });
   }
 
