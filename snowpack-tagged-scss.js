@@ -123,7 +123,7 @@ module.exports = function sassPlugin(_, { native, compilerOptions = {} } = {}) {
       });
       const index = filePath.indexOf('src');
       const afterSrc = [...filePath.slice(index)].reduce(
-        (accum, char) => (char === '\\' ? [...accum, '..'] : accum),
+        (accum, char) => (char === '\\' || char === '//' ? [...accum, '..'] : accum),
         [],
       );
       // Handle the output.

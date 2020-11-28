@@ -229,7 +229,6 @@ export class ActorEP extends Actor {
   }
 
   prepareData() {
-    console.log('actor prepare');
     super.prepareData();
     this.invalidated = true;
     if (this.hasPrepared)
