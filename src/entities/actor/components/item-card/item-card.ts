@@ -63,13 +63,13 @@ export class ItemCard extends LazyRipple(LitElement) {
       header: { heading: item.fullName },
       content: compact([
         'toggleStashed' in item &&
-          !item.stashed && {
-            label: localize('stash'),
+         {
+            label: localize(item.stashed ? "carry" : 'stash'),
             callback: item.toggleStashed.bind(item),
           },
         'toggleEquipped' in item &&
-          item.equipped && {
-            label: localize('unequip'),
+          {
+            label: localize(item.equipped ? 'unequip' : "equip"),
             callback: item.toggleEquipped.bind(item),
           },
         item.openForm && {
