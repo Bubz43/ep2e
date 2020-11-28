@@ -95,7 +95,8 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
       >
 
       ${[
-        this.renderTaskActions(),
+      this.renderTaskActions(),
+        this.renderFabricators(),
         this.renderTemporaryFeatures(),
         this.renderTemporaryServices(),
         this.renderRefreshTimers(),
@@ -274,6 +275,32 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
     `;
   }
 
+  private renderFabricators() {
+    const { activeFabbers } = this.character.equippedGroups;
+    if (activeFabbers.length === 0) return '';
+    return html`
+      <section>
+        <sl-header
+          heading=${localize('fabbersAndGlands')}
+          itemCount=${activeFabbers.length}
+        ></sl-header>
+        <sl-animated-list>
+          ${repeat(
+            activeFabbers,
+            idProp,
+            (fabber) => html`
+              <character-view-time-item
+                ?disabled=${this.character.disabled}
+                .timeState=${fabber.printState}
+                completion="completed"
+              ></character-view-time-item>
+            `,
+          )}
+        </sl-animated-list>
+      </section>
+    `;
+  }
+
   private renderTemporaryFeatures() {
     const { temporaryFeatures, disabled } = this.character;
     if (temporaryFeatures.length === 0) return '';
@@ -312,14 +339,18 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
           ?hideBorder=${temporaryServices.length === 0}
         >
         </sl-header>
-        <sl-animated-list  transformOrigin="bottom">
-          ${repeat(temporaryServices, idProp, (service) => html`
+        <sl-animated-list transformOrigin="bottom">
+          ${repeat(
+            temporaryServices,
+            idProp,
+            (service) => html`
               <character-view-time-item
                 completion="expired"
                 ?disabled=${this.character.disabled}
                 .timeState=${service.timeState}
               ></character-view-time-item>
-            `)}
+            `,
+          )}
         </sl-animated-list>
       </section>
     `;
