@@ -1326,7 +1326,7 @@ type LangEntries =
   | 'spend'
   | 'fabber'
   | 'creator'
-  | 'printDuration' | "fabbersAndGlands"
+  | 'printDuration' | "fabbersAndGlands" | "carry"
 type FullNames =
   | 'cog'
   | 'int'
