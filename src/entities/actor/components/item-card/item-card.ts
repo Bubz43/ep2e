@@ -155,7 +155,10 @@ export class ItemCard extends LazyRipple(LitElement) {
         ${this.renderRipple()}
       </div>
       ${this.expanded
-        ? html`
+      ? html`
+        ${this.item.type === ItemType.PhysicalTech && this.item.hasOnboardALI && this.item.onboardALI?.trackMentalHealth ? html`
+        <health-item .health=${this.item.onboardALI.mentalHealth}></health-item>
+        ` : ""}
             ${this.item.type === ItemType.PhysicalTech &&
             this.item.fabricatorType
               ? html`<item-card-fabber .fabber=${this.item}></item-card-fabber>`

@@ -85,6 +85,12 @@ export class CharacterViewItemGroup extends LitElement {
         } else if ('stashed' in proxy && !proxy.stashed) {
           proxy.toggleStashed();
         }
+      } else if (
+        group === ItemGroup.Consumables &&
+        'stashed' in proxy &&
+        proxy.stashed
+      ) {
+        proxy.toggleStashed();
       }
       return;
     }
