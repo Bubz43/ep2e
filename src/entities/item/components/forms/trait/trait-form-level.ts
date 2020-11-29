@@ -5,6 +5,7 @@ import {
 } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
+import { openMenu } from '@src/open-menu';
 import { customElement, LitElement, property, html } from 'lit-element';
 import styles from './trait-form-level.scss';
 import { UpdatedTraitLevelEvent } from './updated-trait-level-event';
@@ -72,11 +73,12 @@ export class TraitFormLevel extends LitElement {
     );
   }
 
+
   render() {
     return html`
       <sl-header>
         <span slot="heading">${this.heading} ${this.renderCostInfo()}</span>
-        ${this.index !== 0
+        ${this.index !== 0 && this.level.effects.length === 0
           ? html`
               <mwc-icon-button
                 slot="action"
