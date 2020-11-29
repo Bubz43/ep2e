@@ -108,6 +108,10 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     );
   }
 
+  get networkSettings() {
+    return this.epData.network
+  }
+
   get accumulatedTime() {
     return nonNegative(getElapsedTime(this.epData.accumulatedTimeStart));
   }
@@ -127,6 +131,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     const fakeIDs: PhysicalService[] = [];
     const expiredServices: typeof services = [];
     const activeFabbers: PhysicalTech[] = [];
+    const devices: PhysicalTech[] = [];
     // TODO Weapons && active use
     for (const item of this.equipped) {
       if (item.type === ItemType.PhysicalService) {
@@ -144,8 +149,9 @@ export class Character extends ActorProxyBase<ActorType.Character> {
             if (item.isExpired) expiredServices.push(item);
           }
         }
-      } else if (item.type === ItemType.PhysicalTech && item.isActiveFabber) {
-        activeFabbers.push(item);
+      } else if (item.type === ItemType.PhysicalTech) {
+        if (item.isActiveFabber) activeFabbers.push(item);
+        if (item.deviceType) devices.push(item);
       }
     }
     return {
@@ -154,6 +160,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       expiredServices,
       temporaryServices,
       activeFabbers,
+      devices,
     };
   }
 
@@ -466,30 +473,30 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     sleeveItems: Map<string, ItemProxy>,
     egoItems: Map<string, ItemProxy>,
   ) {
-    const { masterDeviceId, unslavedDevices } = this.epData.network;
+    const { masterDeviceId, unslavedDevices } = this.networkSettings;
     let masterDevice: Character['masterDevice'] = null;
-    for (const proxy of this.items.values()) {
-      if (proxy.type === ItemType.PhysicalTech) {
-        if (proxy.id === masterDeviceId) masterDevice === proxy;
-        else proxy.slaved = !unslavedDevices.includes(proxy.id);
+    for (const item of this.items.values()) {
+      if (item.type === ItemType.PhysicalTech) {
+        if (item.id === masterDeviceId && item.deviceType) masterDevice = item;
+        else item.slaved = !unslavedDevices.includes(item.id);
       }
-      if ('equipped' in proxy) {
-        this[proxy.equipped ? 'equipped' : 'stashed'].push(proxy);
-        if (proxy.equipped) {
-          if ('currentEffects' in proxy) {
-            this._appliedEffects.add(proxy.currentEffects);
+      if ('equipped' in item) {
+        this[item.equipped ? 'equipped' : 'stashed'].push(item);
+        if (item.equipped) {
+          if ('currentEffects' in item) {
+            this._appliedEffects.add(item.currentEffects);
           }
-          if (isSleeveItem(proxy)) sleeveItems.set(proxy.id, proxy);
+          if (isSleeveItem(item)) sleeveItems.set(item.id, item);
         }
-      } else if ('stashed' in proxy) {
-        this[proxy.stashed ? 'stashed' : 'consumables'].push(proxy);
-      } else if (proxy.type === ItemType.Trait) {
-        const collection = proxy.isMorphTrait ? sleeveItems : egoItems;
-        collection.set(proxy.id, proxy);
-        this.traits.push(proxy);
-        this._appliedEffects.add(proxy.currentEffects);
-      } else if (proxy.type === ItemType.Sleight) {
-        egoItems.set(proxy.id, proxy);
+      } else if ('stashed' in item) {
+        this[item.stashed ? 'stashed' : 'consumables'].push(item);
+      } else if (item.type === ItemType.Trait) {
+        const collection = item.isMorphTrait ? sleeveItems : egoItems;
+        collection.set(item.id, item);
+        this.traits.push(item);
+        this._appliedEffects.add(item.currentEffects);
+      } else if (item.type === ItemType.Sleight) {
+        egoItems.set(item.id, item);
       }
     }
     return masterDevice;

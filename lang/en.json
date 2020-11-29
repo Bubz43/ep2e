@@ -1305,6 +1305,7 @@
     "carry": "Carry",
     "fabbersAndGlands": "Fabbers & Glands",
     "masterDevice": "Master Device",
+    "slaved": "Slaved",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

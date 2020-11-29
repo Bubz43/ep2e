@@ -1326,7 +1326,7 @@ type LangEntries =
   | 'spend'
   | 'fabber'
   | 'creator'
-  | 'printDuration' | "fabbersAndGlands" | "carry" | "masterDevice"
+  | 'printDuration' | "fabbersAndGlands" | "carry" | "masterDevice" | "slaved"
 type FullNames =
   | 'cog'
   | 'int'

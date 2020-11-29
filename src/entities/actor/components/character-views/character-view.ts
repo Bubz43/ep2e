@@ -64,7 +64,6 @@ export class CharacterView extends CharacterViewBase {
 
   render() {
     const showPsi = !!(this.character.psi || notEmpty(this.character.sleights));
-    // TODO Disable controls if token is not on scene
     return html`
       <character-view-header
         .character=${this.character}
@@ -134,6 +133,12 @@ export class CharacterView extends CharacterViewBase {
               >${masterDevice?.fullName ?? '-'}</sl-group
             >
           </div>
+          ${masterDevice ? html`
+          <health-item clickable .health=${masterDevice.meshHealth}>
+          <span slot="source">${localize("meshHealth")} </span>
+        </health-item>
+          <health-item clickable .health=${masterDevice.firewallHealth}></health-item>
+          ` : ""}
         </section>
         ${enumValues(ItemGroup).map(this.renderItemGroup)}
       </div>

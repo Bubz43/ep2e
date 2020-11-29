@@ -3518,6 +3518,9 @@
             "slacker": {
               "type": "string"
             },
+            "slaved": {
+              "type": "string"
+            },
             "sleeve": {
               "type": "string"
             },
@@ -5360,6 +5363,7 @@
             "skills",
             "skrik",
             "slacker",
+            "slaved",
             "sleeve",
             "sleeved",
             "sleeves",

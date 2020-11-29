@@ -1,7 +1,9 @@
 import type { Character } from '@src/entities/actor/proxies/character';
 import type { Sleeve } from '@src/entities/actor/sleeves';
+import { ActorType } from '@src/entities/entity-types';
 import type { ReadonlyPool } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
+import { HealthType } from '@src/health/health';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
@@ -39,9 +41,18 @@ export class CharacterViewSleeve extends LitElement {
         >
       </header>
 
-      ${compact([physicalHealth, meshHealth]).map(
-        (health) => html` <health-item .health=${health}></health-item> `,
-      )}
+      ${physicalHealth
+        ? html` <health-item .health=${physicalHealth}> </health-item> `
+        : ''}
+      ${meshHealth
+        ? html` <health-item .health=${meshHealth}>
+            ${sleeve.type !== ActorType.Infomorph && sleeve.nonDefaultBrain
+              ? html`
+                  <span slot="source">${sleeve.nonDefaultBrain.name}</span>
+                `
+              : ''}
+          </health-item>`
+        : ''}
       ${notEmpty(this.character.pools)
         ? html`
             <ul class="pools">
