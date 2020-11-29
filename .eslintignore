@@ -2,3 +2,4 @@
 /node_modules/
 /scripts/
 snowpack-tagged-scss.js
+snowpack-prod.config.js

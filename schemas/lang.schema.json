@@ -2384,6 +2384,9 @@
             "manuallyToggled": {
               "type": "string"
             },
+            "masterDevice": {
+              "type": "string"
+            },
             "match": {
               "type": "string"
             },
@@ -4979,6 +4982,7 @@
             "made",
             "major",
             "manuallyToggled",
+            "masterDevice",
             "match",
             "max",
             "maxUses",

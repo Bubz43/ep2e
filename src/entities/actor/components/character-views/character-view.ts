@@ -58,6 +58,10 @@ export class CharacterView extends CharacterViewBase {
     }
   }
 
+  private toggleNetworkSettings() {
+    this.toggleDrawerRenderer(CharacterDrawerRenderer.NetworkSettings);
+  }
+
   render() {
     const showPsi = !!(this.character.psi || notEmpty(this.character.sleights));
     // TODO Disable controls if token is not on scene
@@ -119,10 +123,16 @@ export class CharacterView extends CharacterViewBase {
       <div class="status">
         <section>
           <sl-header heading=${localize('network')}>
-          <mwc-icon-button slot="action" icon="settings"></mwc-icon-button>
-        </sl-header>
+            <mwc-icon-button
+              slot="action"
+              icon="settings"
+              @click=${this.toggleNetworkSettings}
+            ></mwc-icon-button>
+          </sl-header>
           <div class="network">
-            <sl-group label=${localize("masterDevice")}>${masterDevice?.fullName ?? "-"}</sl-group>
+            <sl-group label=${localize('masterDevice')}
+              >${masterDevice?.fullName ?? '-'}</sl-group
+            >
           </div>
         </section>
         ${enumValues(ItemGroup).map(this.renderItemGroup)}

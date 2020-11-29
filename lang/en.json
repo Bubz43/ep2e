@@ -1302,6 +1302,9 @@
     "creator": "Creator",
     "fabber": "Fabber",
     "printDuration": "Print Duration",
+    "carry": "Carry",
+    "fabbersAndGlands": "Fabbers & Glands",
+    "masterDevice": "Master Device",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

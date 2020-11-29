@@ -122,4 +122,12 @@ export abstract class CharacterViewBase extends LitElement {
       <character-view-time .character=${this.character}></character-view-time>
     `;
   }
+
+  renderNetworkSettings() {
+    return html`
+      <character-view-network-settings
+        .character=${this.character}
+      ></character-view-network-settings>
+    `;
+  }
 }

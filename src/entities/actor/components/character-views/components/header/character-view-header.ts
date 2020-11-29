@@ -131,6 +131,11 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
           tooltipText: localize('resleeve'),
           renderer: CharacterDrawerRenderer.Resleeve,
         })}
+        ${this.renderActionIconButton({
+          icon: 'wifi',
+          tooltipText: `${localize('network')} ${localize('settings')}`,
+          renderer: CharacterDrawerRenderer.NetworkSettings,
+        })}
 
         <mwc-button
           class="effects-toggle"
