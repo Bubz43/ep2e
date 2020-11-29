@@ -2,6 +2,7 @@ import { LazyRipple } from '@src/components/mixins/lazy-ripple';
 import { ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
 import { itemMenuOptions } from '@src/entities/item/item-views';
+import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import { format, localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
@@ -146,21 +147,9 @@ export class ItemCard extends LazyRipple(LitElement) {
         ${this.renderRipple()}
       </div>
       ${this.expanded
-        ? html`
-            ${this.item.type === ItemType.PhysicalTech &&
-            this.item.hasOnboardALI &&
-            this.item.onboardALI?.trackMentalHealth
-              ? html`
-                  <health-item
-                    .health=${this.item.onboardALI.mentalHealth}
-                  ></health-item>
-                `
-              : ''}
-            ${this.item.type === ItemType.PhysicalTech &&
-            this.item.fabricatorType
-              ? html`<item-card-fabber .fabber=${this.item}></item-card-fabber>`
-              : ''}
-          `
+        ? this.item.type === ItemType.PhysicalTech
+          ? this.renderTechParts(this.item)
+          : ''
         : ''}
 
       <enriched-html
@@ -169,6 +158,32 @@ export class ItemCard extends LazyRipple(LitElement) {
         .content=${item.description ||
         `<p>${localize('no')} ${localize('description')}</p>`}
       ></enriched-html>
+    `;
+  }
+
+  private renderTechParts(tech: PhysicalTech) {
+    /*
+      ${tech.slaved
+              ? ''
+              : html`
+                  <health-item .health=${tech.firewallHealth}></health-item>
+                `}
+    */
+    return html`
+      ${tech.deviceType
+        ? html`
+            <health-item .health=${tech.meshHealth}></health-item>
+          
+          `
+        : ''}
+      ${tech.hasOnboardALI && tech.onboardALI?.trackMentalHealth
+        ? html`
+            <health-item .health=${tech.onboardALI.mentalHealth}></health-item>
+          `
+        : ''}
+      ${tech.fabricatorType
+        ? html`<item-card-fabber .fabber=${tech}></item-card-fabber>`
+        : ''}
     `;
   }
 }

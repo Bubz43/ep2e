@@ -69,8 +69,6 @@ export class PhysicalTech
     Map<string, ItemProxy>
     >();
   
-  slaved = false;
-
   constructor(init: ItemProxyInit<ItemType.PhysicalTech>) {
     super(init);
     const aliWindow = getWindow(this.aliSetter);

@@ -117,7 +117,7 @@ export class CharacterView extends CharacterViewBase {
   }
 
   private renderStatus() {
-    const { masterDevice } = this.character;
+    const { masterDevice } = this.character.equippedGroups;
     return html`
       <div class="status">
         <section>

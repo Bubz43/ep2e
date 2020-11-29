@@ -4,7 +4,7 @@ import { DeviceType } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { localize } from '@src/foundry/localization';
 import { customElement, LitElement, property, html } from 'lit-element';
-import { flatMapToObj, mapToObj } from 'remeda';
+import { compact, flatMapToObj, mapToObj } from 'remeda';
 import styles from './character-view-network-settings.scss';
 
 @customElement('character-view-network-settings')
@@ -29,15 +29,12 @@ export class CharacterViewNetworkSettings extends LitElement {
   }
 
   render() {
-    const {
-      updater,
-      disabled,
-      masterDevice,
-      equippedGroups,
-      networkSettings,
-    } = this.character;
-    const { devices } = equippedGroups;
-    const hosts = mapToObj(devices, (device) => [device.id, device.name]);
+    const { updater, disabled, equippedGroups } = this.character;
+    const { devices, masterDevice } = equippedGroups;
+    const nonMasterDevices = mapToObj(
+      compact([masterDevice, ...devices.keys()]),
+      (device) => [device.id, device.name],
+    );
     return html`
       <character-view-drawer-heading
         >${localize('network')}
@@ -49,26 +46,29 @@ export class CharacterViewNetworkSettings extends LitElement {
         fields: ({ masterDeviceId }) =>
           renderSelectField(
             { ...masterDeviceId, label: localize('masterDevice') },
-            Object.keys(hosts),
-            { emptyText: '-', altLabel: (id) => hosts[id] },
+            Object.keys(nonMasterDevices),
+            { emptyText: '-', altLabel: (id) => nonMasterDevices[id] },
           ),
       })}
 
       <mwc-list multi>
-        <li class="devices-header"><span>${localize("devices")}</span> <span>${localize("slaved")}</span></li>
+        <li class="devices-header">
+          <span>${localize('devices')}</span> <span>${localize('slaved')}</span>
+        </li>
         <li divider></li>
-        ${devices.map((device) =>
-          device === masterDevice
-            ? ''
-            : html`
-                <mwc-check-list-item
-                  ?selected=${device.slaved}
-                  @click=${() => this.toggleUnslaved(device.id)}
-                  >${device.fullName}</mwc-check-list-item
-                >
-              `,
+        ${[...devices].map(
+          ([device, slaved]) =>
+            html`
+              <mwc-check-list-item
+                ?selected=${slaved}
+                @click=${() => this.toggleUnslaved(device.id)}
+                >${device.fullName}</mwc-check-list-item
+              >
+            `,
         )}
       </mwc-list>
+
+      // TODO Account Shells
     `;
   }
 }

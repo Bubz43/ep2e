@@ -70,7 +70,6 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   readonly equipped: EquippableItem[] = [];
   readonly consumables: ConsumableItem[] = [];
   readonly stashed: (EquippableItem | ConsumableItem)[] = [];
-  readonly masterDevice: PhysicalTech | null;
 
   constructor(init: ActorProxyInit<ActorType.Character>) {
     super(init);
@@ -84,7 +83,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     this.ego = this.setupEgo(egoItems);
     this.sleeve = this.setupSleeve(sleeveItems);
 
-    this.masterDevice = this.setupItems(sleeveItems, egoItems);
+    this.setupItems(sleeveItems, egoItems);
 
     const egoFormWindow = getWindow(this.updater);
     if (egoFormWindow?.isConnected) this.ego.openForm?.();
@@ -109,7 +108,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   }
 
   get networkSettings() {
-    return this.epData.network
+    return this.epData.network;
   }
 
   get accumulatedTime() {
@@ -131,7 +130,9 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     const fakeIDs: PhysicalService[] = [];
     const expiredServices: typeof services = [];
     const activeFabbers: PhysicalTech[] = [];
-    const devices: PhysicalTech[] = [];
+    const devices = new Map<PhysicalTech, boolean>();
+    let masterDevice: PhysicalTech | null = null;
+    const { masterDeviceId, unslavedDevices } = this.networkSettings;
     // TODO Weapons && active use
     for (const item of this.equipped) {
       if (item.type === ItemType.PhysicalService) {
@@ -151,7 +152,10 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         }
       } else if (item.type === ItemType.PhysicalTech) {
         if (item.isActiveFabber) activeFabbers.push(item);
-        if (item.deviceType) devices.push(item);
+        if (item.deviceType) {
+          if (item.id === masterDeviceId) masterDevice = item;
+          else devices.set(item, !unslavedDevices.includes(item.id));
+        }
       }
     }
     return {
@@ -161,6 +165,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       temporaryServices,
       activeFabbers,
       devices,
+      masterDevice,
     };
   }
 
@@ -473,13 +478,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     sleeveItems: Map<string, ItemProxy>,
     egoItems: Map<string, ItemProxy>,
   ) {
-    const { masterDeviceId, unslavedDevices } = this.networkSettings;
-    let masterDevice: Character['masterDevice'] = null;
     for (const item of this.items.values()) {
-      if (item.type === ItemType.PhysicalTech) {
-        if (item.id === masterDeviceId && item.deviceType) masterDevice = item;
-        else item.slaved = !unslavedDevices.includes(item.id);
-      }
       if ('equipped' in item) {
         this[item.equipped ? 'equipped' : 'stashed'].push(item);
         if (item.equipped) {
@@ -499,6 +498,5 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         egoItems.set(item.id, item);
       }
     }
-    return masterDevice;
   }
 }
