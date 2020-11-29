@@ -1,13 +1,7 @@
 import { renderTimeField } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { advanceWorldTime } from '@src/features/time';
-import {
-  customElement,
-
-
-  html,
-  internalProperty, LitElement
-} from 'lit-element';
+import { customElement, html, internalProperty, LitElement } from 'lit-element';
 import styles from './world-time-controls.scss';
 
 @customElement('world-time-controls')

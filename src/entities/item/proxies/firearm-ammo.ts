@@ -15,7 +15,7 @@ class Base extends ItemProxyBase<ItemType.FirearmAmmo> {
     return this.updater.prop('data', 'state');
   }
   get updateQuantity() {
-    return this.updater.prop("data")
+    return this.updater.prop('data');
   }
 }
 
@@ -47,7 +47,7 @@ export class FirearmAmmo extends mix(Base).with(
 
   get defaultMode() {
     const [mode] = this.modes;
-    if (!mode) throw new Error("Firearm Ammo must have at least one mode");
+    if (!mode) throw new Error('Firearm Ammo must have at least one mode');
     return mode;
   }
 

@@ -36,7 +36,7 @@ class Base extends ItemProxyBase<ItemType.Substance> {
     return this.updater.prop('data', 'state');
   }
   get updateQuantity() {
-    return this.updater.prop("data")
+    return this.updater.prop('data');
   }
 }
 export class Substance

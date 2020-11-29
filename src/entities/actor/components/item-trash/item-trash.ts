@@ -43,7 +43,6 @@ export class ItemTrash extends LitElement {
         newTrash.delete(item);
         toAdd.push(item);
       }
-    
     }
     this.proxy.actor.itemTrash = [...newTrash];
     await this.proxy.itemOperations.add(...toAdd);

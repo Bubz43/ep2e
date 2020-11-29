@@ -133,12 +133,17 @@ export class CharacterView extends CharacterViewBase {
               >${masterDevice?.fullName ?? '-'}</sl-group
             >
           </div>
-          ${masterDevice ? html`
-          <health-item clickable .health=${masterDevice.meshHealth}>
-          <span slot="source">${localize("meshHealth")} </span>
-        </health-item>
-          <health-item clickable .health=${masterDevice.firewallHealth}></health-item>
-          ` : ""}
+          ${masterDevice
+            ? html`
+                <health-item clickable .health=${masterDevice.meshHealth}>
+                  <span slot="source">${localize('meshHealth')} </span>
+                </health-item>
+                <health-item
+                  clickable
+                  .health=${masterDevice.firewallHealth}
+                ></health-item>
+              `
+            : ''}
         </section>
         ${enumValues(ItemGroup).map(this.renderItemGroup)}
       </div>

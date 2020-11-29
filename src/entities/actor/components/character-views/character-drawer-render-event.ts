@@ -4,7 +4,7 @@ export enum CharacterDrawerRenderer {
   Search = 'Search',
   Recharge = 'Recharge',
   Time = 'Time',
-  NetworkSettings = 'NetworkSettings'
+  NetworkSettings = 'NetworkSettings',
 }
 
 export class CharacterDrawerRenderEvent extends Event {

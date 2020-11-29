@@ -120,8 +120,8 @@ export class Trait
 
   get defaultLevel() {
     const [level] = this.levels;
-    if(!level) throw new Error("Trait must have at least one level")
-    return level
+    if (!level) throw new Error('Trait must have at least one level');
+    return level;
   }
 
   get levelInfo() {

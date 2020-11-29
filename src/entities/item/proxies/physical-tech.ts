@@ -67,8 +67,8 @@ export class PhysicalTech
   private static aliItemInstances = new WeakMap<
     object,
     Map<string, ItemProxy>
-    >();
-  
+  >();
+
   constructor(init: ItemProxyInit<ItemType.PhysicalTech>) {
     super(init);
     const aliWindow = getWindow(this.aliSetter);

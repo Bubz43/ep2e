@@ -61,16 +61,15 @@ sl-animated-list {
       'prog prog'
       'adv adv';
 
-      .ready {
-        color: var(--color-secondary);
-        font-weight: bold;
-      }
+    .ready {
+      color: var(--color-secondary);
+      font-weight: bold;
+    }
 
-      .remaining {
-        color: var(--color-text-lighter);
-        text-transform: lowercase;
-      }
-    
+    .remaining {
+      color: var(--color-text-lighter);
+      text-transform: lowercase;
+    }
 
     .name {
       all: unset;

@@ -225,7 +225,7 @@ type CharacterData = EgoData & {
   >[];
   combatState: {
     complexAim: boolean;
-    fullDefense: "" | FullDefenseType;
+    fullDefense: '' | FullDefenseType;
   };
 } & Record<RechargeType, RechargeData>;
 

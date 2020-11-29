@@ -83,8 +83,9 @@ export const Stackable = (
   cls: HasEpData<
     { quantity: number; state: { stashed: boolean } },
     {
-      updateState: UpdateActions<{ stashed: boolean }>,
-  updateQuantity: UpdateActions<{ quantity: number }>  }
+      updateState: UpdateActions<{ stashed: boolean }>;
+      updateQuantity: UpdateActions<{ quantity: number }>;
+    }
   >,
 ) => {
   return class extends cls {
@@ -98,7 +99,7 @@ export const Stackable = (
       return this.updateState.commit({ stashed: !this.stashed });
     }
     setQuantity(newQuantity: number) {
-      this.updateQuantity.commit({ quantity: nonNegative(newQuantity) })
+      this.updateQuantity.commit({ quantity: nonNegative(newQuantity) });
     }
   };
 };

@@ -42,7 +42,6 @@ Application.prototype._injectHTML = function (html: JQuery, options: unknown) {
     this._element = html;
     html.hide().fadeIn(200);
   }
-
 };
 
 const { getData } = PlayerConfig.prototype;

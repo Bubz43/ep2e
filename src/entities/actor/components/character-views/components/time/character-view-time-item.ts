@@ -113,8 +113,7 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
           ? html`<button @click=${this.discardChanges}>
               <mwc-icon>clear</mwc-icon>
             </button>`
-      : html` <slot name="action"></slot> `}
-          
+          : html` <slot name="action"></slot> `}
       </div>
       ${this.editing && !this.disabled
         ? this.renderProgressForm()

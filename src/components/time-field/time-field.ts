@@ -150,7 +150,7 @@ export class TimeField extends LitElement {
                 <mwc-formfield
                   alignEnd
                   title=${part.label}
-                  label=${part.label[0]}
+                  label=${part.label[0]!}
                 >
                   ${renderNumberInput(part, {
                     min:

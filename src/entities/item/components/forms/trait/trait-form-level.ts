@@ -73,7 +73,6 @@ export class TraitFormLevel extends LitElement {
     );
   }
 
-
   render() {
     return html`
       <sl-header>

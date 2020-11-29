@@ -531,6 +531,6 @@ export enum ExsurgentStrain {
 }
 
 export enum FullDefenseType {
-  Physical = "physical",
-  Mental = "mental"
+  Physical = 'physical',
+  Mental = 'mental',
 }

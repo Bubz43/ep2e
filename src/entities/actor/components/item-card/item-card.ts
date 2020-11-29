@@ -171,10 +171,7 @@ export class ItemCard extends LazyRipple(LitElement) {
     */
     return html`
       ${tech.deviceType
-        ? html`
-            <health-item .health=${tech.meshHealth}></health-item>
-          
-          `
+        ? html` <health-item .health=${tech.meshHealth}></health-item> `
         : ''}
       ${tech.hasOnboardALI && tech.onboardALI?.trackMentalHealth
         ? html`

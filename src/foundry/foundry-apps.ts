@@ -42,10 +42,9 @@ export const confirmFloatingAppPositions = () => {
     if (!(v instanceof Application)) return;
     const [el] = v.element || [];
     if (el instanceof HTMLElement) {
-      const moved = (await repositionIfNeeded(el));
+      const moved = await repositionIfNeeded(el);
       moved && updateAppPositionFromEl(v, el);
     }
-
   });
 };
 

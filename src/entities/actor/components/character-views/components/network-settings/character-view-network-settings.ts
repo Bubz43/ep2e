@@ -47,7 +47,7 @@ export class CharacterViewNetworkSettings extends LitElement {
           renderSelectField(
             { ...masterDeviceId, label: localize('masterDevice') },
             Object.keys(nonMasterDevices),
-            { emptyText: '-', altLabel: (id) => nonMasterDevices[id] || id},
+            { emptyText: '-', altLabel: (id) => nonMasterDevices[id] || id },
           ),
       })}
 

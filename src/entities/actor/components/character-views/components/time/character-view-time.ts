@@ -116,7 +116,9 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
             header: { heading: item.fullName },
             content: itemMenuOptions(item),
           })}
-      ><mwc-icon>more_vert</mwc-icon></button>
+      >
+        <mwc-icon>more_vert</mwc-icon>
+      </button>
     `;
   }
 

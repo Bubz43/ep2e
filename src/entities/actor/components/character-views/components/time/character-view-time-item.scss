@@ -16,9 +16,9 @@
     'img name actions'
     'prog prog prog';
 
-    ::slotted([slot="action"]) {
-      --mdc-icon-size: 1.1em;
-    }
+  ::slotted([slot='action']) {
+    --mdc-icon-size: 1.1em;
+  }
 }
 
 img {

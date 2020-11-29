@@ -1,7 +1,7 @@
 import {
   createBaseAttackFormula,
   SoftwareAttack,
-  SoftwareAttackData
+  SoftwareAttackData,
 } from '@src/combat/attacks';
 import { SoftwareType } from '@src/data-enums';
 import type { ObtainableEffects } from '@src/entities/applied-effects';

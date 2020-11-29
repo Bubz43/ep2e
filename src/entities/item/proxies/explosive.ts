@@ -23,7 +23,7 @@ class Base extends ItemProxyBase<ItemType.Explosive> {
     return this.updater.prop('data', 'state');
   }
   get updateQuantity() {
-    return this.updater.prop("data")
+    return this.updater.prop('data');
   }
 }
 

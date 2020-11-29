@@ -40,7 +40,7 @@ export const createDigimorph = () => {
       createDefaultItem.exoticMorphology(3),
       createDefaultItem.digitalSpeed(),
       createDefaultItem.mnemonicsWare(),
-    ].map(set("_id", newUniqueId())),
+    ].map(set('_id', newUniqueId())),
   });
   return sleeve;
 };
