@@ -25,7 +25,8 @@ li[divider] {
 
 .controls {
   position: sticky;
-  bottom: 0;
+  bottom: -1px;
+  height: calc(100% + 1px);
   background: var(--color-bg);
   margin-top: auto;
   padding: 0.5rem 1rem;

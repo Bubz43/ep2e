@@ -135,8 +135,14 @@ mwc-tab-bar {
   }
 }
 
-.item-lists {
+.status {
   display: grid;
   grid-auto-rows: min-content;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+
+  sl-header,
+  character-view-item-group::part(header) {
+    padding: 0px 0.75rem;
+    border-color: var(--color-border);
+  }
 }

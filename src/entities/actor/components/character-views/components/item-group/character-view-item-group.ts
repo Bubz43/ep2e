@@ -26,6 +26,9 @@ import { ItemCard } from '../../../item-card/item-card';
 import { ItemGroup } from '../../character-view-base';
 import styles from './character-view-item-group.scss';
 
+/**
+ * @part header
+ */
 @customElement('character-view-item-group')
 export class CharacterViewItemGroup extends LitElement {
   static get is() {
@@ -122,6 +125,7 @@ export class CharacterViewItemGroup extends LitElement {
           heading=${localize(this.group)}
           ?hideBorder=${items.length === 0}
           itemCount=${items.length}
+          part="header"
         >
           ${this.renderInfo()}
           ${notEmpty(items) ? this.renderCollapseToggle() : ''}

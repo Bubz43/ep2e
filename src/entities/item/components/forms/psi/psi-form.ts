@@ -336,7 +336,7 @@ export class PsiForm extends ItemFormBase {
                       ? html`
                           <p class="description">
                             <enriched-html
-                              content=${description}
+                              .content=${description}
                             ></enriched-html>
                           </p>
                         `

@@ -122,6 +122,9 @@
             "FORMATABLE": {
               "additionalProperties": false,
               "properties": {
+                "ActionToActivate": {
+                  "type": "string"
+                },
                 "AlreadyHasItem": {
                   "type": "string"
                 },
@@ -163,7 +166,8 @@
                 "AlreadyHasItem",
                 "MismatchedAmmoClasses",
                 "CannotLoadMissileSize",
-                "SleevePermanentlyDeleted"
+                "SleevePermanentlyDeleted",
+                "ActionToActivate"
               ],
               "type": "object"
             },
@@ -997,6 +1001,9 @@
             "carried": {
               "type": "string"
             },
+            "carry": {
+              "type": "string"
+            },
             "carryPayload": {
               "type": "string"
             },
@@ -1607,6 +1614,9 @@
               "type": "string"
             },
             "fabber": {
+              "type": "string"
+            },
+            "fabbersAndGlands": {
               "type": "string"
             },
             "fabricator": {
@@ -4508,6 +4518,7 @@
             "capacity",
             "career",
             "carried",
+            "carry",
             "carryPayload",
             "category",
             "cause",
@@ -4712,6 +4723,7 @@
             "fRep",
             "fab",
             "fabber",
+            "fabbersAndGlands",
             "fabricator",
             "face",
             "faction",

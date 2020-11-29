@@ -1,6 +1,8 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+@include styled-scrollbars;
+
 * {
   box-sizing: border-box;
 }
@@ -92,6 +94,8 @@
 .description {
   padding: 0 1rem;
   animation: slideIn 200ms ease-out;
+  max-height: 250px;
+  overflow: auto;
   &[hidden] {
     display: none;
   }

@@ -1,7 +1,8 @@
 import { LazyRipple } from '@src/components/mixins/lazy-ripple';
 import { ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
-import { localize } from '@src/foundry/localization';
+import { format, localize } from '@src/foundry/localization';
+import { tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import { clickIfEnter } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
@@ -115,12 +116,15 @@ export class ItemCard extends LazyRipple(LitElement) {
         </span>
 
         <span class="buttons">
-          ${item.type === ItemType.Software && item.hasActivation
+          ${item.type === ItemType.Software && item.activation
             ? html`
                 <mwc-icon-button
                   class="toggle ${classMap({ activated: item.activated })}"
                   icon="settings_power"
                   @click=${() => item.toggleActivation()}
+                  data-tooltip=${format("ActionToActivate", { action: localize(item.activation )})}
+                  @mouseover=${tooltip.fromData}
+                  @focus=${tooltip.fromData}
                 ></mwc-icon-button>
               `
             : ''}
@@ -130,6 +134,9 @@ export class ItemCard extends LazyRipple(LitElement) {
                   class="toggle ${classMap({ activated: item.activated })}"
                   icon="power_settings_new"
                   @click=${() => item.toggleActivation()}
+                  data-tooltip=${format("ActionToActivate", { action: localize(item.activationAction )})}
+                  @mouseover=${tooltip.fromData}
+                  @focus=${tooltip.fromData}
                 ></mwc-icon-button>
               `
             : ''}
@@ -171,7 +178,7 @@ export class ItemCard extends LazyRipple(LitElement) {
       <enriched-html
         ?hidden=${!this.expanded}
         class="description"
-        content=${item.description ||
+        .content=${item.description ||
         `<p>${localize('no')} ${localize('description')}</p>`}
       ></enriched-html>
     `;

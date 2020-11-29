@@ -27,6 +27,7 @@ import type {
   ExplosiveType,
   FabType,
   Fork,
+  FullDefenseType,
   GearQuality,
   GearTrait,
   KineticWeaponClass,
@@ -224,9 +225,7 @@ type CharacterData = EgoData & {
   >[];
   combatState: {
     complexAim: boolean;
-    physicalFullDefense: boolean;
-    mentalFullDefense: boolean;
-    trackStandardAmmo: boolean;
+    fullDefense: "" | FullDefenseType;
   };
 } & Record<RechargeType, RechargeData>;
 

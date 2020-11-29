@@ -70,6 +70,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   readonly equipped: EquippableItem[] = [];
   readonly consumables: ConsumableItem[] = [];
   readonly stashed: (EquippableItem | ConsumableItem)[] = [];
+  readonly masterDevice: PhysicalTech | null;
 
   constructor(init: ActorProxyInit<ActorType.Character>) {
     super(init);
@@ -83,7 +84,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     this.ego = this.setupEgo(egoItems);
     this.sleeve = this.setupSleeve(sleeveItems);
 
-    this.setupItems(sleeveItems, egoItems);
+    this.masterDevice = this.setupItems(sleeveItems, egoItems);
 
     const egoFormWindow = getWindow(this.updater);
     if (egoFormWindow?.isConnected) this.ego.openForm?.();
@@ -465,7 +466,13 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     sleeveItems: Map<string, ItemProxy>,
     egoItems: Map<string, ItemProxy>,
   ) {
+    const { masterDeviceId, unslavedDevices } = this.epData.network;
+    let masterDevice: Character['masterDevice'] = null;
     for (const proxy of this.items.values()) {
+      if (proxy.type === ItemType.PhysicalTech) {
+        if (proxy.id === masterDeviceId) masterDevice === proxy;
+        else proxy.slaved = !unslavedDevices.includes(proxy.id);
+      }
       if ('equipped' in proxy) {
         this[proxy.equipped ? 'equipped' : 'stashed'].push(proxy);
         if (proxy.equipped) {
@@ -485,5 +492,6 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         egoItems.set(proxy.id, proxy);
       }
     }
+    return masterDevice;
   }
 }

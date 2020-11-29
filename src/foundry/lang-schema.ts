@@ -1326,7 +1326,7 @@ type LangEntries =
   | 'spend'
   | 'fabber'
   | 'creator'
-  | 'printDuration' | "fabbersAndGlands" | "carry"
+  | 'printDuration' | "fabbersAndGlands" | "carry" | "masterDevice"
 type FullNames =
   | 'cog'
   | 'int'
@@ -1423,6 +1423,7 @@ export type Formatable = {
   MismatchedAmmoClasses: ['firearm', 'ammo'];
   CannotLoadMissileSize: ['missileSize', 'availableSizes'];
   SleevePermanentlyDeleted: ['name'];
+  ActionToActivate: ["action"]
 };
 
 export interface Lang {

@@ -114,8 +114,17 @@ export class CharacterView extends CharacterViewBase {
   }
 
   private renderStatus() {
+    const { masterDevice } = this.character;
     return html`
-      <div class="item-lists">
+      <div class="status">
+        <section>
+          <sl-header heading=${localize('network')}>
+          <mwc-icon-button slot="action" icon="settings"></mwc-icon-button>
+        </sl-header>
+          <div class="network">
+            <sl-group label=${localize("masterDevice")}>${masterDevice?.fullName ?? "-"}</sl-group>
+          </div>
+        </section>
         ${enumValues(ItemGroup).map(this.renderItemGroup)}
       </div>
     `;

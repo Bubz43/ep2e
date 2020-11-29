@@ -529,3 +529,8 @@ export enum ExsurgentStrain {
   Whisper = 'whisper',
   Xenomorph = 'xenomorph',
 }
+
+export enum FullDefenseType {
+  Physical = "physical",
+  Mental = "mental"
+}
