@@ -1,5 +1,5 @@
 import { render, html } from 'lit-html';
-import { first } from 'remeda';
+import { compact, first } from 'remeda';
 import type { RawEditorSettings } from 'tinymce';
 import { onChatMessageRender } from './chat/message-hooks';
 import { onCombatTrackerRender, onCombatUpdate } from './combat/combat-hooks';
@@ -73,20 +73,21 @@ Hooks.once('init', () => {
   CONFIG.TinyMCE.content_css.push(`${EP.Path}/darkMCE.css`);
   (CONFIG.TinyMCE as RawEditorSettings).skin = 'oxide-dark';
   CONFIG.Combat.initiative.decimals = 2;
-
-  CONFIG.statusEffects = [CONFIG.statusEffects[0]].concat(
-    enumValues(ConditionType).map((condition) => ({
+  CONFIG.statusEffects = compact([
+    CONFIG.statusEffects[0],
+    ...enumValues(ConditionType).map((condition) => ({
       icon: conditionIcons[condition],
       id: condition as string,
       label: `${EP.LocalizationNamespace}.${condition}`,
     })),
-  );
+  ]);
 
   applicationHook({
     app: PlayerList,
     hook: 'on',
     event: 'render',
     callback: (app, [el]) => {
+      if (!el) return;
       el.querySelector(`[data-user-id="${game.user.id}"]`)?.remove();
       if (game.users.entries.some((user) => !user.active)) {
         const frag = new DocumentFragment();
@@ -253,7 +254,7 @@ for (const app of [ActorDirectory, ItemDirectory]) {
     hook: 'on',
     event: 'render',
     callback: (_, [list]) =>
-      list.querySelectorAll<HTMLLIElement>('.entity').forEach((listItem) => {
+      list?.querySelectorAll<HTMLLIElement>('.entity').forEach((listItem) => {
         const { entityId } = listItem.dataset;
         listItem.tabIndex = 0;
         const entity =
@@ -279,7 +280,7 @@ applicationHook({
   event: 'render',
   callback: (_, [list]) => {
     if (!game.user.isGM) return;
-    const footer = list.querySelector<HTMLElement>('.directory-footer');
+    const footer = list?.querySelector<HTMLElement>('.directory-footer');
     if (footer) {
       const frag = new DocumentFragment();
       render(

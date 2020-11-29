@@ -1,7 +1,7 @@
 import { MorphCost, Complexity } from '@src/data-enums';
 import { uniqueStringID } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
-import { range } from 'remeda';
+import { range, set } from 'remeda';
 import { ActorType } from '../entity-types';
 import { createDefaultItem } from '../item/default-items';
 import { createActorEntity } from '../models';
@@ -10,10 +10,12 @@ const defaultReference = (pageNumber: number) =>
   `Eclipse Phase Second Editon p. ${pageNumber}`;
 
 export const createDigimorph = () => {
-  const uniqueIds = range(0, 3).reduce(
-    (accum) => [...accum, uniqueStringID(accum)],
-    [] as string[],
-  );
+  const uniqueIds: string[] = [];
+  const newUniqueId = () => {
+    const id = uniqueStringID(uniqueIds);
+    uniqueIds.push(id);
+    return id;
+  };
   const sleeve = createActorEntity({
     type: ActorType.Infomorph,
     name: localize('digimorph'),
@@ -38,7 +40,7 @@ export const createDigimorph = () => {
       createDefaultItem.exoticMorphology(3),
       createDefaultItem.digitalSpeed(),
       createDefaultItem.mnemonicsWare(),
-    ].map((item, index) => ({ ...item, _id: uniqueIds[index] })),
+    ].map(set("_id", newUniqueId())),
   });
   return sleeve;
 };

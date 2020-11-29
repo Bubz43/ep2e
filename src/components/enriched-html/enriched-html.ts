@@ -29,11 +29,13 @@ const entityLinkHandler = (anchor: JQuery, eventType: string) => {
 };
 
 const inlineRollHandler = async (anchor: JQuery, eventType: string) => {
+  const [el] = anchor;
+  if (!el) return;
   if (anchor.hasClass('inline-result')) {
-    const roll = Roll.fromJSON(unescape(anchor[0].dataset.roll!)) as Roll;
+    const roll = Roll.fromJSON(unescape(el.dataset.roll!)) as Roll;
     const tooltipContent = (await roll.getTooltip()) as string;
     tooltip.attach({
-      el: anchor[0],
+      el,
       content: html`${unsafeHTML(tooltipContent)}`,
       position: 'left-start',
     });

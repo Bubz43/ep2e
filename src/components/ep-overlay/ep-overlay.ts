@@ -304,7 +304,7 @@ export class EPOverlay extends LitElement {
             const { currentTarget } = ev;
             if (_popout && notEmpty(_popout.element)) {
               const [element] = _popout.element;
-              if (element.classList.contains('minimized')) _popout.maximize();
+              if (element?.classList.contains('minimized')) _popout.maximize();
               _popout.bringToTop();
             } else {
               tabApp.renderPopout();

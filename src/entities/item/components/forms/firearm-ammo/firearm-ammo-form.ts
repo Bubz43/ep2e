@@ -76,7 +76,7 @@ export class FirearmAmmoForm extends ItemFormBase {
   update(changedProps: PropertyValues) {
     const { modes } = this.item;
     const mode = modes.find(matchID(this.editingModeId));
-    if (!mode) this.editingModeId = modes[0].id;
+    if (!mode) this.editingModeId = this.item.defaultMode.id;
     if (this.payloadSheet) this.openPayloadSheet();
 
     super.update(changedProps);
@@ -330,7 +330,7 @@ export class FirearmAmmoForm extends ItemFormBase {
               renderSelectField(
                 { ...mode, label: `${localize('edit')} ${mode.label}` },
                 Object.keys(modeMap),
-                { altLabel: (id) => modeMap[id] },
+                { altLabel: (id) => modeMap[id] || id },
               ),
           })
         : ''}

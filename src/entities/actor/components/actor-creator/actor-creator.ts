@@ -357,7 +357,7 @@ export class ActorCreator extends LitElement {
           notEmpty(folders)
             ? renderSelectField(folder, Object.keys(folders), {
                 emptyText: '-',
-                altLabel: (id) => folders[id],
+                altLabel: (id) => folders[id] || id,
               })
             : '',
         ],
@@ -385,7 +385,7 @@ export class ActorCreator extends LitElement {
             notEmpty(folders)
               ? renderSelectField(folder, Object.keys(folders), {
                   emptyText: '-',
-                  altLabel: (id) => folders[id],
+                  altLabel: (id) => folders[id] || id,
                 })
               : '',
           ],

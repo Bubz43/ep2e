@@ -89,7 +89,7 @@ export const onCombatUpdate = async () => {
 };
 
 export const onCombatTrackerRender = (_: CombatTracker, [el]: JQuery) => {
-  // pulseCombatant();
+  if (!el) return;
   if (isSurpriseRound()) {
     const roundTitle = el.querySelector<HTMLElement>('.encounters h3');
     if (roundTitle) {

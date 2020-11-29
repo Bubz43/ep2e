@@ -121,7 +121,7 @@ export const renderSelectField = <T extends ReadonlyArray<LangEntry | string>>(
     disableOptions?: T;
   } = {},
 ) => {
-  const confirmedVal = emptyText === undefined && !value ? list[0] : value;
+  const confirmedVal = emptyText === undefined && !value ? list[0]! : value;
   // const labelFn = altLabel || localize;
   // const altField = html`
   //   <mwc-select

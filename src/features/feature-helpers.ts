@@ -115,7 +115,8 @@ const _updateFeature = <T extends FeatureWithID>(
 ) => {
   const mutable = [...list];
   const index = mutable.findIndex(matchID(update.id));
-  index !== -1 && mutable.splice(index, 1, safeMerge(list[index], update) as T);
+  index !== -1 &&
+    mutable.splice(index, 1, (safeMerge(list[index]!, update) as unknown) as T);
   return mutable;
 };
 

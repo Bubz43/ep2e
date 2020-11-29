@@ -41,8 +41,11 @@ export const confirmFloatingAppPositions = () => {
   Object.values(ui.windows).forEach(async (v) => {
     if (!(v instanceof Application)) return;
     const [el] = v.element || [];
-    const moved = el instanceof HTMLElement && (await repositionIfNeeded(el));
-    moved && updateAppPositionFromEl(v, el);
+    if (el instanceof HTMLElement) {
+      const moved = (await repositionIfNeeded(el));
+      moved && updateAppPositionFromEl(v, el);
+    }
+
   });
 };
 

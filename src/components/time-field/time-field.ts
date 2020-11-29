@@ -156,7 +156,7 @@ export class TimeField extends LitElement {
                     min:
                       index > 0 &&
                       range(0, index).some(
-                        (i) => props[timeIntervals[i]].value > 0,
+                        (i) => props[timeIntervals[i]!].value > 0,
                       )
                         ? -1
                         : interval === 'seconds' &&

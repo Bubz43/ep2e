@@ -45,6 +45,12 @@ export class FirearmAmmo extends mix(Base).with(
     return this.modes.length > 1;
   }
 
+  get defaultMode() {
+    const [mode] = this.modes;
+    if (!mode) throw new Error("Firearm Ammo must have at least one mode");
+    return mode;
+  }
+
   @LazyGetter()
   get modes() {
     return this.epData.modes.map((type, index) => ({

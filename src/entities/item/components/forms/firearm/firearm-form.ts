@@ -400,7 +400,7 @@ export class FirearmForm extends ItemFormBase {
               .commit(Number(mode) || 0),
           fields: ({ mode }) =>
             renderSelectField(mode, Object.keys(ammoModes), {
-              altLabel: (modeId) => ammoModes[modeId],
+              altLabel: (modeId) => ammoModes[modeId] || modeId,
             }),
         })}
         <sl-group label=${localize('availableShots')}

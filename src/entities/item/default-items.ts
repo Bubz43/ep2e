@@ -20,7 +20,7 @@ import {
 } from '@src/features/feature-helpers';
 import { TagType, SpecialTest } from '@src/features/tags';
 import { localize } from '@src/foundry/localization';
-import { range, pipe } from 'remeda';
+import { range, pipe, set } from 'remeda';
 import { ActorType, ItemType } from '../entity-types';
 import { createActorEntity, createItemEntity } from '../models';
 import type { Trait } from './proxies/trait';
@@ -31,10 +31,12 @@ const defaultReference = (pageNumber: number) =>
 // TODO Eventually Replace these with refernces to compendium entries
 
 export const createDefaultSleeve = () => {
-  const uniqueIds = range(0, 3).reduce(
-    (accum) => [...accum, uniqueStringID(accum)],
-    [] as string[],
-  );
+  const uniqueIds: string[] = [];
+  const newUniqueId = () => {
+    const id = uniqueStringID(uniqueIds);
+    uniqueIds.push(id);
+    return id;
+  };
   const sleeve = createActorEntity({
     type: ActorType.Infomorph,
     name: localize('digimorph'),
@@ -55,11 +57,9 @@ export const createDefaultSleeve = () => {
         baseDurability: 25,
       },
     },
-    items: [
-      exoticMorphology(3),
-      digitalSpeed(),
-      mnemonicsWare(),
-    ].map((item, index) => ({ ...item, _id: uniqueIds[index] })),
+    items: [exoticMorphology(3), digitalSpeed(), mnemonicsWare()].map(
+      set('_id', newUniqueId()),
+    ),
   });
   return sleeve;
 };

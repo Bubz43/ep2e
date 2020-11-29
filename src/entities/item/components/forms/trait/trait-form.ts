@@ -77,7 +77,7 @@ export class TraitForm extends ItemFormBase {
   private setupLevels(current: number[]) {
     const { levels } = this;
     range(0, 4).forEach((_, index) => {
-      const atIndex = current[index] || levels[index - 1] + 1;
+      const atIndex = current[index] || levels[index - 1]! + 1;
       const previous = levels[index - 1] || 0;
       levels[index] = previous >= atIndex ? previous + 1 : atIndex;
     });
@@ -109,7 +109,7 @@ export class TraitForm extends ItemFormBase {
 
   private copyEffectsToLevel({ currentTarget }: Event) {
     if (currentTarget instanceof TraitFormLevel) {
-      const baseEffects = this.item.levels[0].effects;
+      const baseEffects = this.item.defaultLevel.effects;
       const multiplied = baseEffects.map((effect) => ({
         ...multiplyEffectModifier(effect, currentTarget.index + 1),
         id: effect.id,
@@ -278,7 +278,7 @@ export class TraitForm extends ItemFormBase {
                     this.item.costInfo
                   }`,
                 },
-                { min: list[index - 1] + 1 || 1 },
+                { min: list[index - 1]! + 1 || 1 },
               ),
           }),
         )}

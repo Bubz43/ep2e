@@ -261,7 +261,7 @@ export class Ego {
         });
       }
     }
-    if (groups.length === 1) {
+    if (groups.length === 1 && groups[0]) {
       groups[0].label = `${localize('rez')} ${localize('points')}`;
     }
     return groups;

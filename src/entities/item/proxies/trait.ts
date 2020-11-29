@@ -118,8 +118,14 @@ export class Trait
     return clamp(this.state.level, this.levelRange);
   }
 
+  get defaultLevel() {
+    const [level] = this.levels;
+    if(!level) throw new Error("Trait must have at least one level")
+    return level
+  }
+
   get levelInfo() {
-    return this.levels[this.levelIndex] || this.levels[0];
+    return this.levels[this.levelIndex] || this.defaultLevel;
   }
 
   get isPositive() {

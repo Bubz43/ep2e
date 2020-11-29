@@ -104,10 +104,10 @@ export class EgoFormFieldSkillCreator extends LitElement {
     const { aptitudes, categories } = this.fieldSkillInfo;
     this.fieldSkillData = safeMerge(this.fieldSkillData, props);
 
-    if (!aptitudes.includes(this.fieldSkillData.linkedAptitude)) {
+    if (!aptitudes.includes(this.fieldSkillData.linkedAptitude) && aptitudes[0]) {
       this.fieldSkillData.linkedAptitude = aptitudes[0];
     }
-    if (!categories.includes(this.fieldSkillData.category)) {
+    if (!categories.includes(this.fieldSkillData.category) && categories[0]) {
       this.fieldSkillData.category = categories[0];
     }
     return this.requestUpdate();

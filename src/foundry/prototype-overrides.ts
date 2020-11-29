@@ -36,10 +36,13 @@ Application.prototype._injectHTML = function (html: JQuery, options: unknown) {
     return;
   }
   const [el] = html;
-  el.slot = 'foundry-apps';
-  document.querySelector('ep-overlay')?.append(el);
-  this._element = html;
-  html.hide().fadeIn(200);
+  if (el) {
+    el.slot = 'foundry-apps';
+    document.querySelector('ep-overlay')?.append(el);
+    this._element = html;
+    html.hide().fadeIn(200);
+  }
+
 };
 
 const { getData } = PlayerConfig.prototype;
@@ -314,7 +317,7 @@ Compendium.prototype._renderInner = async function () {
 Compendium.prototype._replaceHTML = noop;
 
 SidebarDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
-  jqueryEl[0].addEventListener('contextmenu', (ev) => {
+  jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
     const entityLi = findMatchingElement(ev, '.entity, .folder .folder-header');
     if (!entityLi) return;
     const jqueryLi = $(entityLi);
@@ -354,7 +357,7 @@ SidebarDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
 };
 
 CombatTracker.prototype._contextMenu = function (jqueryEl: JQuery) {
-  jqueryEl[0].addEventListener('contextmenu', (ev) => {
+  jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
     const item = findMatchingElement(ev, '.directory-item');
     if (!item) return;
     const targetEl = $(item);
@@ -375,7 +378,7 @@ CombatTracker.prototype._contextMenu = function (jqueryEl: JQuery) {
 };
 
 PlayerList.prototype.activateListeners = function (jqueryEl: JQuery) {
-  jqueryEl[0].addEventListener('contextmenu', (ev) => {
+  jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
     const item = findMatchingElement(ev, '.player');
     if (!item) return;
     const targetEl = $(item);
@@ -397,11 +400,11 @@ SceneNavigation.prototype.activateListeners = function (jqueryEl: JQuery) {
   scenes.click(this._onClickScene.bind(this));
   jqueryEl.find('#nav-toggle').click(this._onToggleNav.bind(this));
 
-  jqueryEl[0].addEventListener('contextmenu', navMenuListener);
+  jqueryEl[0]?.addEventListener('contextmenu', navMenuListener);
 };
 
 CompendiumDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
-  jqueryEl[0].addEventListener('contextmenu', (ev) => {
+  jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
     const item = findMatchingElement(ev, '.compendium-pack');
     if (!item) return;
     const entryOptions = this._getEntryContextOptions();
@@ -422,7 +425,7 @@ CompendiumDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
 };
 
 ChatLog.prototype._contextMenu = function (jqueryEl: JQuery) {
-  jqueryEl[0].addEventListener('contextmenu', (ev) => {
+  jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
     const item = findMatchingElement(ev, '.message');
     if (!item) return;
     // TODO Alter/Replace Chat popout

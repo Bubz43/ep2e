@@ -22,7 +22,6 @@ import {
   eventOptions,
 } from 'lit-element';
 import { flatMapToObj, sortBy } from 'remeda';
-import type { ItemProxy } from '../../item';
 import styles from './item-creator.scss';
 import { ItemDataEvent } from './item-data-event';
 
@@ -111,7 +110,8 @@ export class ItemCreator extends LitElement {
   private updateFromHook = () => this.requestUpdate();
 
   private setInitialType() {
-    if (notEmpty(this.allowedTypes)) this.itemData.type = this.allowedTypes[0];
+    if (notEmpty(this.allowedTypes))
+      this.itemData.type = this.allowedTypes[0] || ItemType.Trait;
   }
 
   private focusFirstInput() {
@@ -183,7 +183,7 @@ export class ItemCreator extends LitElement {
             notEmpty(folders) && this.showFolders
               ? renderSelectField(folder, Object.keys(folders), {
                   emptyText: '-',
-                  altLabel: (id) => folders[id],
+                  altLabel: (id) => folders[id] || id,
                 })
               : '',
           ],

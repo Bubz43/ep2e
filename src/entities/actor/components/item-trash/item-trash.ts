@@ -39,8 +39,11 @@ export class ItemTrash extends LitElement {
     const newTrash = new Set(itemTrash);
     for (const index of this.indexesToRestore || []) {
       const item = itemTrash[index];
-      newTrash.delete(item);
-      toAdd.push(item);
+      if (item) {
+        newTrash.delete(item);
+        toAdd.push(item);
+      }
+    
     }
     this.proxy.actor.itemTrash = [...newTrash];
     await this.proxy.itemOperations.add(...toAdd);

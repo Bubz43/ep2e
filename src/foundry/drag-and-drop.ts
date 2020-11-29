@@ -309,7 +309,7 @@ export const itemDropToItemProxy = async (drop: ItemDrop) => {
   } else {
     const actor = drop.tokenId
       ? game.actors.tokens[drop.tokenId] ||
-        (drop.actorId && game.actors.get(drop.actorId))
+        (drop.actorId ? game.actors.get(drop.actorId) : null)
       : drop.actorId
       ? game.actors.get(drop.actorId)
       : null;

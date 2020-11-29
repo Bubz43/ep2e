@@ -15,6 +15,7 @@
     /* LitElement - Add decorator support! */
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "noUncheckedIndexedAccess": true,
     /* Additional Options */
     "strict": true,
     "skipLibCheck": true,

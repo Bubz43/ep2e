@@ -38,7 +38,7 @@ export class EffectCreator extends LitElement {
   @internalProperty() effectType!: EffectType;
 
   connectedCallback() {
-    this.effectType = this.effectTypes[0];
+    this.effectType = this.effectTypes[0] || EffectType.Initiative;
     super.connectedCallback();
   }
 

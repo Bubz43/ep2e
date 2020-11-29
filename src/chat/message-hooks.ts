@@ -33,6 +33,7 @@ const iconTemplate = html`<i
 ></i>`.getTemplateElement();
 
 export const onChatMessageRender = (message: ChatMessageEP, [el]: JQuery) => {
+  if (!el) return;
   const content = el.querySelector<HTMLElement>('.message-content')!;
   const { speaker, whisper, blind, flags } = message.data;
   const epData = flags[EP.Name];
