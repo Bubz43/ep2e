@@ -54,8 +54,8 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
       this.updatedState = false;
     }
     super.update(changedProps);
-    const blah = new Intl.RelativeTimeFormat("en", { style: "narrow" })
-    blah.format(3, "days")
+    const blah = new Intl.RelativeTimeFormat('en', { style: 'narrow' });
+    blah.format(3, 'days');
   }
 
   private toggleEditing() {
@@ -106,7 +106,6 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
           : ''}
       </span>
       <div class="actions">
-        ${this.editing ? '' : html` <slot name="action"></slot> `}
         <button @click=${this.toggleEditing} ?disabled=${this.disabled}>
           <mwc-icon>${this.editing ? 'save' : 'edit'}</mwc-icon>
         </button>
@@ -114,7 +113,8 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
           ? html`<button @click=${this.discardChanges}>
               <mwc-icon>clear</mwc-icon>
             </button>`
-          : ''}
+      : html` <slot name="action"></slot> `}
+          
       </div>
       ${this.editing && !this.disabled
         ? this.renderProgressForm()

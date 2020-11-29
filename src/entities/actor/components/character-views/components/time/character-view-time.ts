@@ -8,6 +8,8 @@ import { renderAutoForm, renderSubmitForm } from '@src/components/form/forms';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
+import type { ItemProxy } from '@src/entities/item/item';
+import { itemMenuOptions } from '@src/entities/item/item-views';
 import { UpdateStore } from '@src/entities/update-store';
 import {
   ActionSubtype,
@@ -29,6 +31,7 @@ import {
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
+import { openMenu } from '@src/open-menu';
 import { nonNegative, notEmpty } from '@src/utility/helpers';
 import {
   customElement,
@@ -95,12 +98,25 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
       >
 
       ${[
-      this.renderTaskActions(),
+        this.renderTaskActions(),
         this.renderFabricators(),
         this.renderTemporaryFeatures(),
         this.renderTemporaryServices(),
         this.renderRefreshTimers(),
       ]}
+    `;
+  }
+
+  private renderItemMenuButton(item: ItemProxy) {
+    return html`
+      <button
+        slot="action"
+        @click=${() =>
+          openMenu({
+            header: { heading: item.fullName },
+            content: itemMenuOptions(item),
+          })}
+      ><mwc-icon>more_vert</mwc-icon></button>
     `;
   }
 
@@ -293,7 +309,8 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
                 ?disabled=${this.character.disabled}
                 .timeState=${fabber.printState}
                 completion="completed"
-              ></character-view-time-item>
+                >${this.renderItemMenuButton(fabber)}</character-view-time-item
+              >
             `,
           )}
         </sl-animated-list>
@@ -348,7 +365,8 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
                 completion="expired"
                 ?disabled=${this.character.disabled}
                 .timeState=${service.timeState}
-              ></character-view-time-item>
+                >${this.renderItemMenuButton(service)}</character-view-time-item
+              >
             `,
           )}
         </sl-animated-list>

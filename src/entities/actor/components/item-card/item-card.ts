@@ -1,6 +1,7 @@
 import { LazyRipple } from '@src/components/mixins/lazy-ripple';
 import { ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
+import { itemMenuOptions } from '@src/entities/item/item-views';
 import { format, localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
@@ -31,7 +32,7 @@ export class ItemCard extends LazyRipple(LitElement) {
 
   firstUpdated() {
     this.addEventListener('dragend', () => this.handleRippleDeactivate());
-    this.addEventListener("contextmenu", ev => this.openMenu(ev))
+    this.addEventListener('contextmenu', (ev) => this.openMenu(ev));
     if (this.animateInitial) {
       this.animate(
         {
@@ -59,33 +60,10 @@ export class ItemCard extends LazyRipple(LitElement) {
   }
 
   private openMenu(ev: MouseEvent) {
-    const { item } = this;
     openMenu({
-      header: { heading: item.fullName },
-      content: compact([
-        'toggleStashed' in item &&
-         {
-            label: localize(item.stashed ? "carry" : 'stash'),
-            callback: item.toggleStashed.bind(item),
-          },
-        'toggleEquipped' in item &&
-          {
-            label: localize(item.equipped ? 'unequip' : "equip"),
-            callback: item.toggleEquipped.bind(item),
-          },
-        item.openForm && {
-          label: localize('form'),
-          icon: html`<mwc-icon>launch</mwc-icon>`,
-          callback: item.openForm,
-        },
-        item.deleteSelf && {
-          label: localize('delete'),
-          icon: html`<mwc-icon>delete_forever</mwc-icon>`,
-          callback: item.deleteSelf,
-          disabled: !item.editable && !item.alwaysDeletable,
-        },
-      ]),
-      position: (ev.currentTarget === this ? ev : undefined)
+      header: { heading: this.item.fullName },
+      content: itemMenuOptions(this.item),
+      position: ev.currentTarget === this ? ev : undefined,
     });
   }
 
@@ -122,7 +100,9 @@ export class ItemCard extends LazyRipple(LitElement) {
                   class="toggle ${classMap({ activated: item.activated })}"
                   icon="settings_power"
                   @click=${() => item.toggleActivation()}
-                  data-tooltip=${format("ActionToActivate", { action: localize(item.activation )})}
+                  data-tooltip=${format('ActionToActivate', {
+                    action: localize(item.activation),
+                  })}
                   @mouseover=${tooltip.fromData}
                   @focus=${tooltip.fromData}
                 ></mwc-icon-button>
@@ -134,7 +114,9 @@ export class ItemCard extends LazyRipple(LitElement) {
                   class="toggle ${classMap({ activated: item.activated })}"
                   icon="power_settings_new"
                   @click=${() => item.toggleActivation()}
-                  data-tooltip=${format("ActionToActivate", { action: localize(item.activationAction )})}
+                  data-tooltip=${format('ActionToActivate', {
+                    action: localize(item.activationAction),
+                  })}
                   @mouseover=${tooltip.fromData}
                   @focus=${tooltip.fromData}
                 ></mwc-icon-button>
@@ -164,10 +146,16 @@ export class ItemCard extends LazyRipple(LitElement) {
         ${this.renderRipple()}
       </div>
       ${this.expanded
-      ? html`
-        ${this.item.type === ItemType.PhysicalTech && this.item.hasOnboardALI && this.item.onboardALI?.trackMentalHealth ? html`
-        <health-item .health=${this.item.onboardALI.mentalHealth}></health-item>
-        ` : ""}
+        ? html`
+            ${this.item.type === ItemType.PhysicalTech &&
+            this.item.hasOnboardALI &&
+            this.item.onboardALI?.trackMentalHealth
+              ? html`
+                  <health-item
+                    .health=${this.item.onboardALI.mentalHealth}
+                  ></health-item>
+                `
+              : ''}
             ${this.item.type === ItemType.PhysicalTech &&
             this.item.fabricatorType
               ? html`<item-card-fabber .fabber=${this.item}></item-card-fabber>`

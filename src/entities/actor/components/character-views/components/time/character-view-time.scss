@@ -101,3 +101,7 @@ sl-animated-list {
     }
   }
 }
+
+character-view-time-item {
+  @include textButton();
+}

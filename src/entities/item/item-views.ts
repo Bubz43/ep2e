@@ -3,7 +3,10 @@ import {
   openWindow,
 } from '@src/components/window/window-controls';
 import { ResizeOption } from '@src/components/window/window-options';
+import { localize } from '@src/foundry/localization';
+import type { MWCMenuOption } from '@src/open-menu';
 import { html } from 'lit-html';
+import { compact } from 'remeda';
 import { ItemType } from '../entity-types';
 import type { ItemProxy } from './item';
 import type { Psi } from './proxies/psi';
@@ -173,3 +176,26 @@ export const openPsiFormWindow = (psi: Psi) => {
     resizable: ResizeOption.Vertical,
   });
 };
+
+export const itemMenuOptions = (item: ItemProxy): MWCMenuOption[] =>
+  compact([
+    'toggleStashed' in item && {
+      label: localize(item.stashed ? 'carry' : 'stash'),
+      callback: item.toggleStashed.bind(item),
+    },
+    'toggleEquipped' in item && {
+      label: localize(item.equipped ? 'unequip' : 'equip'),
+      callback: item.toggleEquipped.bind(item),
+    },
+    item.openForm && {
+      label: localize('form'),
+      icon: html`<mwc-icon>launch</mwc-icon>`,
+      callback: item.openForm,
+    },
+    item.deleteSelf && {
+      label: localize('delete'),
+      icon: html`<mwc-icon>delete_forever</mwc-icon>`,
+      callback: item.deleteSelf,
+      disabled: !item.editable && !item.alwaysDeletable,
+    },
+  ]);

@@ -27,7 +27,7 @@ const setupMenu = () => {
   return menu;
 };
 
-type MWCMenuOption =
+export type MWCMenuOption =
   | (MenuOption & { activated?: boolean; sublabel?: string })
   | MenuDivider;
 
