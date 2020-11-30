@@ -184,10 +184,10 @@ export const influenceInfo = (influence: PsiInfluence) => {
 export const influenceTimeframe = (influence: TemporaryInfluence) => {
   switch (influence.type) {
     case PsiInfluenceType.Motivation:
-      return toMilliseconds({ hours: rollFormula('1d6').total || 0 });
+      return toMilliseconds({ hours: rollFormula('1d6')?.total || 0 });
 
     case PsiInfluenceType.Trait:
-      return toMilliseconds({ minutes: rollFormula('1d6').total || 0 });
+      return toMilliseconds({ minutes: rollFormula('1d6')?.total || 0 });
 
     case PsiInfluenceType.Unique: {
       return influence.duration;

@@ -35,7 +35,7 @@ type TurnSettings = Partial<{
 const rollInitiative = (combatant: Combatant, formula?: string) => {
   return (
     rollFormula(formula || game.combat?._getInitiativeFormula(combatant) || '')
-      .total || 0
+      ?.total || 0
   );
 };
 

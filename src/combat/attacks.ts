@@ -1,8 +1,7 @@
 import type {
-  AptitudeType,
   AreaEffectType,
   AttackTrait,
-  FirearmAmmoModifierType,
+  FirearmAmmoModifierType
 } from '@src/data-enums';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
 import type { FirearmAmmo } from '@src/entities/item/proxies/firearm-ammo';
@@ -11,6 +10,7 @@ import type { ArmorType } from '@src/features/active-armor';
 import type { AptitudeCheckInfo } from '@src/features/aptitude-check-result-info';
 import type { FiringMode } from '@src/features/firing-modes';
 import { localize } from '@src/foundry/localization';
+import type { LabeledFormula } from '@src/foundry/rolls';
 import type { HealthType } from '@src/health/health';
 
 type FiringModeList = {
@@ -20,7 +20,21 @@ type FiringModeList = {
   firingModes: FiringMode[];
 };
 
-export type LabeledFormula = { label: string; formula: string };
+
+
+// export const rollLabeledFormulas = (
+//   formulas: LabeledFormula[],
+// ): RolledFormula[] => {
+//   return formulas.flatMap(({ formula, label }) => {
+//     const { roll } = rollFormula(formula) ?? {};
+//     return roll
+//       ? {
+//           label,
+//           roll: roll.,
+//         }
+//       : [];
+//   });
+// };
 
 type FullAttack<T extends { damageFormula: string }> = Omit<
   T,

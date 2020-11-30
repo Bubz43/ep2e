@@ -1,3 +1,4 @@
+import { createMessage } from '@src/chat/create-message';
 import {
   renderCheckbox,
   renderLabeledCheckbox,
@@ -20,6 +21,7 @@ import {
   EgoType,
   enumValues,
   Fork,
+  MinStressOption,
   ThreatLevel,
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
@@ -40,7 +42,8 @@ import {
 } from '@src/foundry/drag-and-drop';
 import { notify, NotificationType } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
-import { hardeningTypes } from '@src/health/mental-health';
+import { rollLabeledFormulas } from '@src/foundry/rolls';
+import { hardeningTypes, StressType } from '@src/health/mental-health';
 import { gameSettings, tooltip } from '@src/init';
 import { debounce } from '@src/utility/decorators';
 import type { FieldProps, FieldPropsRenderer } from '@src/utility/field-values';
@@ -105,6 +108,31 @@ export class EgoForm extends mix(LitElement).with(
 
   protected shouldRenderTab(tab: EgoForm['tabs'][number]) {
     return tab !== 'reps' || this.ego.settings.trackReputations;
+  }
+
+  private rollStress() {
+    const { stressTestValue, actor } = this.ego;
+    createMessage({
+      entity: actor,
+      data: {
+        stress: {
+          rolledFormulas: rollLabeledFormulas([
+            {
+              label: localize('stressValue'),
+              formula: stressTestValue.sv,
+            },
+          ]),
+          notes: stressTestValue.notes,
+          minStress:
+            stressTestValue.minStressOption === MinStressOption.Half
+              ? 'half'
+              : stressTestValue.minStressOption === MinStressOption.Value
+              ? stressTestValue.minSV || 1
+              : '',
+          stressType: StressType.TheUnknown,
+        },
+      },
+    });
   }
 
   render() {
@@ -177,6 +205,7 @@ export class EgoForm extends mix(LitElement).with(
                     slot="action"
                     label="${localize('SHORT', 'stressValue')}: ${this.ego
                       .stressValueInfo.value}"
+                    @click=${this.rollStress}
                   ></mwc-button>
                 </sl-header>
                 <div class="threat-details">

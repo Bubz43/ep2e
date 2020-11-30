@@ -7,27 +7,17 @@ export type RollInfo = {
   roll?: RollData;
 };
 
-export const setupRollInfo = (
-  unrolled: Pick<RollInfo, 'label' | 'formula'>[],
-) => {
-  return unrolled.map((part) => {
-    const { total = 0, roll: rollInstance } = rollFormula(part.formula);
-    return {
-      ...part,
-      result: total,
-      roll: rollInstance ? rollInstance.toJSON() : undefined,
-    };
-  });
-};
+export type LabeledFormula = { label: string; formula: string };
 
-export const rollInfoTotal = (rolls: RollInfo[]) => {
-  const fullFormula = cleanFormula(
-    rolls.map(({ formula }) => formula).join('+'),
-  );
-  return {
-    fullFormula,
-    total: rolls.reduce((accum, { result }) => accum + result, 0),
-  };
+export type RolledFormula = { label: string; roll: RollData };
+
+export const rollLabeledFormulas = (
+  formulas: LabeledFormula[],
+): RolledFormula[] => {
+  return formulas.flatMap(({ formula, label }) => {
+    const roll = rollFormula(formula)?.toJSON();
+    return roll ? { roll, label } : [];
+  });
 };
 
 const preRolled = {
@@ -57,16 +47,13 @@ export const rollFormula = (
   formula: string,
   data: Record<string, number> = {},
 ) => {
+  let roll: Roll | null = null;
   try {
-    const roll = new Roll(formula, data).roll();
-    return {
-      roll,
-      total: Number(roll.total),
-    };
+    roll = new Roll(formula, data).roll();
   } catch (err) {
     console.log(err);
   }
-  return {};
+  return roll;
 };
 
 const cleanedFormulas = new Map<string, string>();

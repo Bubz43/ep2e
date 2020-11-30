@@ -26,7 +26,8 @@ const validateNumberInput = (input: HTMLInputElement) => {
 const validateFormulaInput = (input: HTMLInputElement) => {
   const { value } = input;
   if (value) {
-    const { total } = rollFormula(value);
+    const { total } = rollFormula(value) ?? {};
+    
     if (isInvalidNumber(total)) {
       // notify(
       //   NotificationType.Error,

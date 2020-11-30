@@ -1,12 +1,12 @@
-import type { MessageData } from "@src/chat/message-data";
-import type { ChatMessageEP } from "@src/entities/chat-message";
-import { customElement, LitElement, property, html } from "lit-element";
-import styles from "./message-content.scss";
+import type { MessageData } from '@src/chat/message-data';
+import type { ChatMessageEP } from '@src/entities/chat-message';
+import { customElement, LitElement, property, html } from 'lit-element';
+import styles from './message-content.scss';
 
-@customElement("message-content")
+@customElement('message-content')
 export class MessageContent extends LitElement {
   static get is() {
-    return "message-content" as const;
+    return 'message-content' as const;
   }
 
   static styles = [styles];
@@ -16,14 +16,17 @@ export class MessageContent extends LitElement {
   @property({ type: Object }) data!: MessageData;
 
   render() {
+    const { stress } = this.data;
     return html`
-      
+      ${stress
+        ? html` <message-stress-test .stress=${stress}></message-stress-test> `
+        : ''}
     `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "message-content": MessageContent;
+    'message-content': MessageContent;
   }
 }

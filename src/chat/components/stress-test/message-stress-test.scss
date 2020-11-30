@@ -1,0 +1,17 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: grid;
+  grid-template-areas: 
+  "type min-label"
+  "stress min"
+  "notes notes"
+  "rolls rolls";
+  
+  
+}

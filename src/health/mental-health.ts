@@ -17,7 +17,7 @@ import {
 import { HealthMixin } from './health-mixin';
 import type { NaturalMentalHealAttempt } from './recovery';
 
-export enum Stress {
+export enum StressType {
   Alienation = 'alienation',
   Helplessness = 'helplessness',
   TheUnknown = 'theUnknown',
@@ -44,9 +44,9 @@ export type MentalHealthData = BasicHealthData & {
 };
 
 export const hardeningTypes = [
-  Stress.Alienation,
-  Stress.Helplessness,
-  Stress.Violence,
+  StressType.Alienation,
+  StressType.Helplessness,
+  StressType.Violence,
 ] as const;
 
 type Init = HealthInit<MentalHealthData> & {
