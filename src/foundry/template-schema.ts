@@ -155,6 +155,13 @@ type ActorTemplates = Template<'Common', CommonDetails> &
 type UseActorTemplate<T extends (keyof ActorTemplates)[]> = T;
 type UseItemTemplate<T extends (keyof ItemTemplates)[]> = T;
 
+type StressTestData = {
+  sv: string;
+  minStressOption: MinStressOption;
+  minSV: number;
+  notes: string;
+};
+
 export type EgoData = {
   egoType: string;
   forkType: '' | Fork;
@@ -173,12 +180,7 @@ export type EgoData = {
     niche: string;
     numbers: string;
     level: ThreatLevel;
-    stress: {
-      sv: string;
-      minStressOption: MinStressOption;
-      minSV: number;
-      notes: string;
-    };
+    stress: StressTestData;
   };
 };
 
@@ -200,11 +202,11 @@ type CharacterData = EgoData & {
     masterDeviceId: string;
     unslavedDevices: string[];
     systemDefenders: string[];
+  // accountShells: StringID<AccountShell>[];
+
   };
   temporary: StringID<TemporaryFeature>[];
   spentPools: Record<PoolType, number>;
-  // accountShells: StringID<AccountShell>[];
-  // TODO toggle psi
   purchaseLog: StringID<{
     name: string;
     date: string;
@@ -280,8 +282,6 @@ type BiologicalData = {
       'Mobile',
       'Acquisition',
       'PoolData',
-      // "FullMeshHealth",
-      // "Firewall",
       'Conditions',
     ]
   >;

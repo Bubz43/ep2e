@@ -1,4 +1,4 @@
-import type { MessageData } from '@src/chat/create-message';
+import type { MessageData } from '@src/chat/message-data';
 import { setDragDrop, DropType } from '@src/foundry/drag-and-drop';
 import { EP } from '@src/foundry/system';
 import { notEmpty } from '@src/utility/helpers';

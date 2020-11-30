@@ -68,7 +68,10 @@ export class CharacterViewNetworkSettings extends LitElement {
         )}
       </mwc-list>
 
-      // TODO Account Shells
+      <section>
+        <sl-header heading=${localize("accountShells")}></sl-header>
+        // TODO
+        </section>
     `;
   }
 }

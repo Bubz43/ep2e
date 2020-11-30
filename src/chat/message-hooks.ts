@@ -38,6 +38,7 @@ export const onChatMessageRender = (message: ChatMessageEP, [el]: JQuery) => {
   const { speaker, whisper, blind, flags } = message.data;
   const epData = flags[EP.Name];
 
+  // TODO mapKeys but with typescript string const
   const speakerToId = mapKeys(speaker, (k) => k + 'Id') as ActorIdentifiers;
 
   const img = speakerToId.tokenId
@@ -45,10 +46,9 @@ export const onChatMessageRender = (message: ChatMessageEP, [el]: JQuery) => {
     : speakerToId.actorId
     ? findActor(speakerToId)?.img
     : message.user?.avatar;
-  if (img) {
-    el.style.setProperty('--header-icon', `url("/${img}")`);
-    el.classList.add('has-icon');
-  }
+  const imgEl = new Image();
+  imgEl.src = img || CONST.DEFAULT_TOKEN;
+  el.querySelector('.message-header')?.append(imgEl);
 
   // TODO This is wonky if message is whisper
   if (message.user && message.user.name !== message.alias) {
@@ -58,10 +58,10 @@ export const onChatMessageRender = (message: ChatMessageEP, [el]: JQuery) => {
     );
   }
 
-  if (message.roll && message.isContentVisible) {
-    el.querySelector('.dice-roll')?.setAttribute('draggable', 'true');
-    el.addEventListener('dragstart', (ev) => message.setRollDrag(ev));
-  }
+  // if (message.roll && message.isContentVisible) {
+  //   el.querySelector('.dice-roll')?.setAttribute('draggable', 'true');
+  //   el.addEventListener('dragstart', (ev) => message.setRollDrag(ev));
+  // }
 
   if (el.matches('.blind, .whisper')) {
     el.querySelector('.message-metadata')?.prepend(

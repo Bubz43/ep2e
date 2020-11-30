@@ -1,6 +1,8 @@
 import { ActorEP, ActorProxy } from '@src/entities/actor/actor';
 import type { ChatMessageEP } from '@src/entities/chat-message';
 import { EP } from '@src/foundry/system';
+import type { RequireAtLeastOne } from 'type-fest';
+import type { MessageData } from './message-data';
 
 export enum MessageVisibility {
   Public = 'public',
@@ -8,20 +10,20 @@ export enum MessageVisibility {
   Blind = 'blind',
 }
 
-export type MessageData = {};
 
-export type MessageOptions = Partial<{
+export type MessageInit = {
+  data: MessageData;
   content: string;
   visibility: MessageVisibility;
   roll: Roll;
   flavor: string;
   alias: string;
   entity: Token | ActorEP | ActorProxy | null;
-}>;
+}
 
 export const messageContentPlaceholder = '_';
 
-const splitEntity = (entity: MessageOptions['entity']) => {
+const splitEntity = (entity: MessageInit['entity']) => {
   return {
     actor: entity instanceof ActorEP ? entity : entity?.actor,
     token: entity instanceof Token ? entity : null,
@@ -29,15 +31,15 @@ const splitEntity = (entity: MessageOptions['entity']) => {
 };
 
 export const createMessage = async (
-  data: MessageData,
   {
     content = messageContentPlaceholder,
     visibility = MessageVisibility.Public,
+    data,
     roll,
     flavor,
     alias,
     entity,
-  }: MessageOptions = {},
+  }: RequireAtLeastOne<MessageInit, "content" | "data" | "roll">,
 ): Promise<ChatMessageEP> => {
   const { actor, token } = splitEntity(entity);
   const chatMessageData: Partial<ChatMessageEP['data']> = {
