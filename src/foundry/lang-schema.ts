@@ -1330,7 +1330,7 @@ type LangEntries =
   | 'fabbersAndGlands'
   | 'carry'
   | 'masterDevice'
-  | 'slaved';
+  | 'slaved' | "rewound" | "advanced"
 type FullNames =
   | 'cog'
   | 'int'
@@ -1428,6 +1428,7 @@ export type Formatable = {
   CannotLoadMissileSize: ['missileSize', 'availableSizes'];
   SleevePermanentlyDeleted: ['name'];
   ActionToActivate: ['action'];
+  ModifiedTime: ["direction", "amount"]
 };
 
 export interface Lang {

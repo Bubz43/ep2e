@@ -566,9 +566,13 @@ sl-tooltip {
   }
 
   .message-content {
-    padding: 0.25rem 0.5rem;
     font-size: 1rem;
+    &.non-ep {
+      padding: 0.25rem 0.5rem;
+
+    }
   }
+
 
   .message-metadata {
     color: var(--color-text-lighter);
@@ -597,10 +601,12 @@ sl-tooltip {
 
   .whisper-to {
     grid-area: whisper;
+    color: var(--color-text-lighter)
   }
 
   .flavor-text {
     grid-area: flavor;
+    color: var(--color-text-lighter);
   }
 
   &.whisper {

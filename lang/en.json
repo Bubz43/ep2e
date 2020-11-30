@@ -1306,6 +1306,8 @@
     "fabbersAndGlands": "Fabbers & Glands",
     "masterDevice": "Master Device",
     "slaved": "Slaved",
+    "advanced": "Advanced",
+    "rewound": "Rewound",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
@@ -1403,7 +1405,8 @@
       "MismatchedAmmoClasses": "Ammo is: [ {ammo} ] but weapon is {firearm}",
       "CannotLoadMissileSize": "Missile must be [ {availableSizes} ] but is {missileSize}",
       "SleevePermanentlyDeleted": "{name} and all its items will be permanently erased.",
-      "ActionToActivate": "{action} action to activate"
+      "ActionToActivate": "{action} action to activate",
+      "ModifiedTime": "{direction} time by {amount}."
     }
   }
 }

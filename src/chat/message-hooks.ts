@@ -80,25 +80,13 @@ export const onChatMessageRender = (message: ChatMessageEP, [el]: JQuery) => {
       !message.roll && innerHTML.trim() !== messageContentPlaceholder;
     render(
       html`
-        <message-content
-          .message=${message}
-          .data=${epData}
-          ?blind=${blind && !whisper.includes(game.user.id)}
-          ?new=${createdChatMessages.has(message)}
-        >
+        <message-content .message=${message} .data=${epData}>
           ${showContent ? unsafeHTML(innerHTML) : nothing}
         </message-content>
       `,
       content,
     );
-  } else {
-    render(
-      html`
-        <div class="non-ep-content">${unsafeHTML(content.innerHTML)}</div>
-      `,
-      content,
-    );
-  }
+  } else content.classList.add('non-ep');
 
   if (updatedChatMessages.has(message)) {
     el.addEventListener(

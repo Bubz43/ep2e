@@ -140,6 +140,9 @@
                 "MismatchedAmmoClasses": {
                   "type": "string"
                 },
+                "ModifiedTime": {
+                  "type": "string"
+                },
                 "NoMatching": {
                   "type": "string"
                 },
@@ -167,7 +170,8 @@
                 "MismatchedAmmoClasses",
                 "CannotLoadMissileSize",
                 "SleevePermanentlyDeleted",
-                "ActionToActivate"
+                "ActionToActivate",
+                "ModifiedTime"
               ],
               "type": "object"
             },
@@ -534,6 +538,9 @@
               "type": "string"
             },
             "advancePersonalTime": {
+              "type": "string"
+            },
+            "advanced": {
               "type": "string"
             },
             "aerospace": {
@@ -3293,6 +3300,9 @@
             "rewind": {
               "type": "string"
             },
+            "rewound": {
+              "type": "string"
+            },
             "rez": {
               "type": "string"
             },
@@ -4369,6 +4379,7 @@
             "admin",
             "advance",
             "advancePersonalTime",
+            "advanced",
             "aerospace",
             "age",
             "aggressive",
@@ -5288,6 +5299,7 @@
             "resultEffectsAvailable",
             "resultImproved",
             "rewind",
+            "rewound",
             "rez",
             "robotic",
             "robotics",

@@ -1,7 +1,8 @@
+import { createMessage } from '@src/chat/create-message';
 import { renderTimeField } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
-import { advanceWorldTime } from '@src/features/time';
-import { localize } from '@src/foundry/localization';
+import { advanceWorldTime, prettyMilliseconds } from '@src/features/time';
+import { format, localize } from '@src/foundry/localization';
 import { customElement, html, internalProperty, LitElement } from 'lit-element';
 import styles from './world-time-controls.scss';
 
@@ -18,6 +19,12 @@ export class WorldTimeControls extends LitElement {
   private modifyTime(forwards: boolean) {
     // TODO Chat Message
     this.timeChange && advanceWorldTime(this.timeChange * (forwards ? 1 : -1));
+    createMessage({
+      content: format('ModifiedTime', {
+        direction: localize(forwards ? 'advanced' : 'rewound'),
+        amount: prettyMilliseconds(this.timeChange),
+      }),
+    });
     this.timeChange = 0;
   }
 
@@ -45,7 +52,7 @@ export class WorldTimeControls extends LitElement {
         fields: ({ change }) =>
           renderTimeField(
             { ...change, label: '' },
-            { whenZero: `${localize("modify")} ${localize('time')}` },
+            { whenZero: `${localize('modify')} ${localize('time')}` },
           ),
       })}
       <mwc-icon-button

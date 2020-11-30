@@ -125,6 +125,7 @@ import { ItemCardFabber } from './entities/actor/components/item-card/item-card-
 import { CharacterViewItemGroup } from './entities/actor/components/character-views/components/item-group/character-view-item-group';
 import { CharacterViewTimeItem } from './entities/actor/components/character-views/components/time/character-view-time-item';
 import { CharacterViewNetworkSettings } from './entities/actor/components/character-views/components/network-settings/character-view-network-settings';
+import { MessageContent } from './chat/components/message-content/message-content';
 
 // Generic Components
 Field;
@@ -242,3 +243,7 @@ HealthStateForm;
 EPOverlay;
 SceneView;
 EnvironmentForms;
+
+
+// Chat
+MessageContent;

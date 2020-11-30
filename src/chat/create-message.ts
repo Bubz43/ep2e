@@ -11,7 +11,7 @@ export enum MessageVisibility {
 }
 
 
-export type MessageInit = {
+export type MessageInit = Partial<{
   data: MessageData;
   content: string;
   visibility: MessageVisibility;
@@ -19,7 +19,7 @@ export type MessageInit = {
   flavor: string;
   alias: string;
   entity: Token | ActorEP | ActorProxy | null;
-}
+}>
 
 export const messageContentPlaceholder = '_';
 
