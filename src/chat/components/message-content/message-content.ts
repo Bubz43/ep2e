@@ -16,8 +16,9 @@ export class MessageContent extends LitElement {
   @property({ type: Object }) data!: MessageData;
 
   render() {
-    const { stress } = this.data;
+    const { header, stress } = this.data;
     return html`
+      ${header ? html` <message-header .data=${header}></message-header> ` : ''}
       ${stress
         ? html` <message-stress-test .stress=${stress}></message-stress-test> `
         : ''}

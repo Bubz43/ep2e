@@ -8,6 +8,14 @@ export type StressTestMessageData = {
   notes: string;
 }
 
+export type MessageHeaderData = {
+  heading: string;
+  subheadings?: string | string[];
+  img?: string;
+  description?: string;
+}
+
 export type MessageData = Partial<{
+  header: MessageHeaderData;
   stress: StressTestMessageData;
 }>

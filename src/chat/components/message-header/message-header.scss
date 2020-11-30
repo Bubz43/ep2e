@@ -1,0 +1,67 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: grid;
+  min-width: 280px;
+  
+}
+
+header {
+  display: flex;
+
+ 
+
+}
+
+.headings {
+  display: grid;
+  position: relative;
+  flex: 1;
+  text-align: left;
+  margin-left: 0.75rem;
+  padding: 0.5rem 0;
+  display: block;
+  &.with-img {
+    max-width: 240px;;
+  }
+
+  > * {
+    display: inline-block;
+    max-width: 100%;
+  }
+  .details {
+    display: block;
+    font-family: var(--font-2);;
+    font-size: 0.7rem;;
+    text-transform: capitalize;
+  }
+}
+
+h3 {
+  align-self: end;
+  font-size: 1rem;
+}
+
+h3,
+h4 {
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+}
+
+img {
+  display: block;
+  place-self: center;
+  margin: 0.25rem 0.5rem;
+  min-width: 48px;
+}
+
+
+h4 {
+  color: var(--color-text-lighter);
+}

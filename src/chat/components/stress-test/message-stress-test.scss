@@ -6,12 +6,58 @@
 }
 
 :host {
-  display: grid;
-  grid-template-areas: 
-  "type min-label"
-  "stress min"
-  "notes notes"
-  "rolls rolls";
-  
-  
+  display: block;
+  padding: 0.25rem 0.5rem;
+
+
+}
+
+mwc-icon-button {
+  float: right;
+  color: var(--color-text-lighter);
+  --mdc-icon-size: 20px;
+  --mdc-icon-button-size: 28px;
+}
+
+mwc-button {
+  --mdc-theme-primary: var(--color-negative);
+  margin-bottom: 0.25rem;
+}
+
+.rolls {
+  clear: both;
+  [divider] {
+    border-color: var(--color-border);
+    &:first-of-type {
+      margin: 0.5rem 0 0;
+    }
+  }
+}
+
+.roll-info {
+  display: flex;
+  align-items: center;
+  b {
+    margin-right: 1ch;
+    font-size: 1.5rem;
+    display: inline-block;
+    min-width: 2ch;
+    text-align: center;
+  }
+
+  .roll-label,
+  .roll-formula {
+    display: block;
+    @include truncate(180px);
+  }
+  .roll-formula {
+    margin-bottom: -0.25rem;
+  }
+  .roll-label {
+    color: var(--color-text-lighter);
+  }
+}
+
+.damage-info {
+  color: var(--color-text-lighter);
 }

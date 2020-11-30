@@ -1,7 +1,11 @@
+import type { MultiSelectedEvent } from '@material/mwc-list/mwc-list-foundation';
 import type { StressTestMessageData } from '@src/chat/message-data';
+import { format, localize } from '@src/foundry/localization';
 import { cleanFormula, RollData } from '@src/foundry/rolls';
 import { formatDamageType, HealthType } from '@src/health/health';
 import { overlay, tooltip } from '@src/init';
+import { notEmpty } from '@src/utility/helpers';
+import { localImage } from '@src/utility/images';
 import {
   customElement,
   LitElement,
@@ -28,6 +32,11 @@ export class MessageStressTest extends LitElement {
 
   toggleFormulas() {
     this.viewFormulas = !this.viewFormulas;
+  }
+
+  private setIgnored(ev: MultiSelectedEvent) {
+    this.usedRollParts = ev.detail.index;
+    this.requestUpdate();
   }
 
   get rolls() {
@@ -68,9 +77,61 @@ export class MessageStressTest extends LitElement {
     const { rolls, totals } = this;
     const { minStress, stressType, notes } = this.stress;
     return html`
-      <mwc-button dense>
-      ${formatDamageType(HealthType.Mental)} ${totals.damageValue}
+      <mwc-button dense unelevated class="stress-value">
+        ${formatDamageType(HealthType.Mental)}: ${totals.damageValue}
       </mwc-button>
+
+      ${minStress
+        ? html`
+            <mwc-button dense unelevated class="min-stress-value"
+              >   ${localize('minSV')}:  ${
+            minStress === 'half' ? Math.ceil(totals.damageValue / 2) : minStress
+          }</mwc-button dense unelevated
+            >
+          `
+        : ''}
+      ${notEmpty(this.stress.rolledFormulas)
+        ? html` <mwc-icon-button
+            class="formulas-toggle"
+            @click=${this.toggleFormulas}
+          >
+            <img src=${localImage('icons/cubes.svg')} />
+          </mwc-icon-button>`
+      : ''}
+
+      <div class="damage-info">
+        ${totals.formula} ${localize("stress")} ${localize("from")} ${localize(stressType)}.
+        ${notes ? html`<div>${notes}</div>` : ""}
+      </div>
+        
+        ${this.viewFormulas ? this.renderRolls() : ""}
+
+    `;
+  }
+
+  private renderRolls() {
+    return html`
+      <mwc-list class="rolls" @selected=${this.setIgnored} multi>
+        <li divider></li>
+        ${this.stress.rolledFormulas.map(
+          ({ label, roll }, index) => html`
+            <mwc-check-list-item
+              @mouseover=${this.rollTooltip(roll)}
+              ?selected=${!this.usedRollParts || this.usedRollParts.has(index)}
+            >
+              <span class="roll-info">
+                <b>${roll.total}</b>
+                <span>
+                  <span class="roll-formula" title=${roll.formula}
+                    >${roll.formula}</span
+                  >
+                  <span class="roll-label" title=${label}>${label}</span>
+                </span>
+              </span>
+            </mwc-check-list-item>
+          `,
+        )}
+      </mwc-list>
     `;
   }
 }

@@ -1,9 +1,9 @@
 import { AreaEffectType } from '@src/data-enums';
 import { localize } from '@src/foundry/localization';
-import { cleanFormula } from '@src/foundry/rolls';
+import { cleanFormula, LabeledFormula } from '@src/foundry/rolls';
 import { notEmpty } from '@src/utility/helpers';
 import { compact, map, pipe } from 'remeda';
-import type { LabeledFormula, UsedAttackArmor } from './attacks';
+import type {  UsedAttackArmor } from './attacks';
 
 export const formatArmorUsed = ({
   armorPiercing,

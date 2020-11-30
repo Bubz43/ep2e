@@ -127,6 +127,7 @@ import { CharacterViewTimeItem } from './entities/actor/components/character-vie
 import { CharacterViewNetworkSettings } from './entities/actor/components/character-views/components/network-settings/character-view-network-settings';
 import { MessageContent } from './chat/components/message-content/message-content';
 import { MessageStressTest } from './chat/components/stress-test/message-stress-test';
+import { MessageHeader } from './chat/components/message-header/message-header';
 
 // Generic Components
 Field;
@@ -247,5 +248,6 @@ EnvironmentForms;
 
 
 // Chat
+MessageHeader;
 MessageContent;
 MessageStressTest;

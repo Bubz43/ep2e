@@ -115,6 +115,9 @@ export class EgoForm extends mix(LitElement).with(
     createMessage({
       entity: actor,
       data: {
+        header: {
+          heading: localize("stressfulExperience")
+        },
         stress: {
           rolledFormulas: rollLabeledFormulas([
             {
