@@ -14,6 +14,7 @@
   background: alphav(var(--color-bg), 0.15);
   border-radius: 100px;
   box-shadow: 0 0 2px black;
+  transition: background 75ms;
 
   sl-form {
     height: 12px;
@@ -28,4 +29,9 @@
       display: none;
     }
   }
+}
+
+:host(:hover),
+:host(:focus-within) {
+  background: alphav(var(--color-bg-alt), 0.95);
 }

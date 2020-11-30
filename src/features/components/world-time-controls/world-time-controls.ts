@@ -1,6 +1,7 @@
 import { renderTimeField } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { advanceWorldTime } from '@src/features/time';
+import { localize } from '@src/foundry/localization';
 import { customElement, html, internalProperty, LitElement } from 'lit-element';
 import styles from './world-time-controls.scss';
 
@@ -41,7 +42,11 @@ export class WorldTimeControls extends LitElement {
         noDebounce: true,
         props: { change: this.timeChange },
         update: ({ change = 0 }) => (this.timeChange = change),
-        fields: ({ change }) => renderTimeField({ ...change, label: '' }),
+        fields: ({ change }) =>
+          renderTimeField(
+            { ...change, label: '' },
+            { whenZero: `${localize("modify")} ${localize('time')}` },
+          ),
       })}
       <mwc-icon-button
         ?disabled=${disabled}
