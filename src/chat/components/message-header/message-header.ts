@@ -43,7 +43,7 @@ export class MessageHeader extends LitElement {
           : ''}
       </header>
 
-      ${description
+      ${description && this.descriptionOpen
         ? html`
             <enriched-html
               class="description"

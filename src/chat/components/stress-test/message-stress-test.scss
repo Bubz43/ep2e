@@ -12,14 +12,14 @@
 
 }
 
-mwc-icon-button {
+.formulas-toggle {
   float: right;
   color: var(--color-text-lighter);
-  --mdc-icon-size: 20px;
-  --mdc-icon-button-size: 28px;
+  // --mdc-icon-size: 20px;
+  // --mdc-icon-button-size: 28px;
 }
 
-mwc-button {
+mwc-button[unelevated] {
   --mdc-theme-primary: var(--color-negative);
   margin-bottom: 0.25rem;
 }
@@ -60,4 +60,5 @@ mwc-button {
 
 .damage-info {
   color: var(--color-text-lighter);
+  padding-left: 0.5ch;
 }

@@ -8,7 +8,7 @@
 :host {
   display: grid;
   min-width: 280px;
-  
+  border-bottom: 1px solid alphav(var(--color-border), 0.5);
 }
 
 header {
@@ -63,5 +63,11 @@ img {
 
 
 h4 {
+  color: var(--color-text-lighter);
+}
+
+.description {
+  margin: 0 0.75rem 0.5rem;
+  font-size: 15px;
   color: var(--color-text-lighter);
 }

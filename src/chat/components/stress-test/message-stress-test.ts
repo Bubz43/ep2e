@@ -91,12 +91,13 @@ export class MessageStressTest extends LitElement {
           `
         : ''}
       ${notEmpty(this.stress.rolledFormulas)
-        ? html` <mwc-icon-button
+      ? html` <mwc-button
+        dense
             class="formulas-toggle"
             @click=${this.toggleFormulas}
           >
-            <img src=${localImage('icons/cubes.svg')} />
-          </mwc-icon-button>`
+            <img src=${localImage('icons/cubes.svg')} height="20px" />
+          </mwc-button>`
       : ''}
 
       <div class="damage-info">
@@ -105,7 +106,6 @@ export class MessageStressTest extends LitElement {
       </div>
         
         ${this.viewFormulas ? this.renderRolls() : ""}
-
     `;
   }
 

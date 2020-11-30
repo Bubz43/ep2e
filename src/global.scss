@@ -520,6 +520,7 @@ sl-tooltip {
 }
 
 .message {
+  display: block;
   background: linear-gradient(
     to left,
     alphav(var(--color-bg), 0.96),
@@ -620,7 +621,6 @@ sl-tooltip {
   }
   .message {
     border: none !important;
-    padding-left: 1rem;
     width: 100%;
   }
 }

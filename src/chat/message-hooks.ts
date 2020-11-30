@@ -48,6 +48,7 @@ export const onChatMessageRender = (message: ChatMessageEP, [el]: JQuery) => {
     : message.user?.avatar;
   const imgEl = new Image();
   imgEl.src = img || CONST.DEFAULT_TOKEN;
+  imgEl.loading = "lazy";
   el.querySelector('.message-header')?.append(imgEl);
 
   // TODO This is wonky if message is whisper
