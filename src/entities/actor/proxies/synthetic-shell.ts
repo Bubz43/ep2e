@@ -21,7 +21,7 @@ import { PhysicalSleeve, SleeveInfo } from './physical-sleeve-mixin';
 import type { ActorHealth } from '@src/health/health-mixin';
 import { compact } from 'remeda';
 
-class SyntheticBase extends ActorProxyBase<ActorType.SyntheticShell> {
+class SyntheticBase extends ActorProxyBase<ActorType.Synthetic> {
   get subtype() {
     return this.epData.subtype;
   }
@@ -39,7 +39,7 @@ export class SyntheticShell extends mix(SyntheticBase).with(
     activeEffects,
     sleeved,
     ...init
-  }: ActorProxyInit<ActorType.SyntheticShell> & {
+  }: ActorProxyInit<ActorType.Synthetic> & {
     activeEffects?: ReadonlyAppliedEffects;
     sleeved?: boolean;
   }) {

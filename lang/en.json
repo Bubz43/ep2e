@@ -1308,6 +1308,9 @@
     "slaved": "Slaved",
     "advanced": "Advanced",
     "rewound": "Rewound",
+    "from": "From",
+    "harm": "Harm",
+    "picker": "Picker",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

@@ -2,7 +2,10 @@ import type { MultiSelectedEvent } from '@material/mwc-list/mwc-list-foundation'
 import type { StressTestMessageData } from '@src/chat/message-data';
 import type { UsedRollPartsEvent } from '@src/combat/components/rolled-formulas-list/used-roll-parts-event';
 import { createStressDamage, StressDamage } from '@src/combat/damages';
-import { getControlledTokenActors, pickOrDefaultActor } from '@src/entities/find-entities';
+import {
+  getControlledTokenActors,
+  pickOrDefaultActor,
+} from '@src/entities/find-entities';
 import { format, localize } from '@src/foundry/localization';
 import { cleanFormula, RollData } from '@src/foundry/rolls';
 import { HealthPicker } from '@src/health/components/health-picker/health-picker';
@@ -88,7 +91,7 @@ export class MessageStressTest extends LitElement {
   }
 
   private openHealthPicker(damage: StressDamage) {
-    pickOrDefaultActor((actor) => HealthPicker.openWindow(actor))
+    pickOrDefaultActor((actor) => HealthPicker.openWindow(actor, this));
   }
 
   render() {
@@ -133,6 +136,7 @@ export class MessageStressTest extends LitElement {
       ${this.viewFormulas
         ? html`
             <rolled-formulas-list
+            .rolledFormulas=${this.stress.rolledFormulas}
               @used-roll-parts=${this.setUsedRollParts}
             ></rolled-formulas-list>
           `

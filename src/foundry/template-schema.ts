@@ -136,7 +136,7 @@ type Copyable = {
 type GearState = { state: { equipped: boolean; disabled: boolean } };
 
 type ActorTypeTemplates = AT<ActorType.Character, CharacterData> &
-  AT<ActorType.SyntheticShell, SyntheticShellData> &
+  AT<ActorType.Synthetic, SyntheticShellData> &
   AT<ActorType.Biological, BiologicalData> &
   AT<ActorType.Infomorph, InfomorphData>;
 

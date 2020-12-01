@@ -118,7 +118,7 @@
     "ActorType": {
       "enum": [
         "character",
-        "syntheticShell",
+        "synthetic",
         "infomorph",
         "biological"
       ],
@@ -436,7 +436,7 @@
         },
         "dots": {
           "items": {
-            "$ref": "#/definitions/StringID%3Cstructure--825-992--815-993--815-995--805-996--715-1000--679-1000--643-1001--0-2404%3E"
+            "$ref": "#/definitions/StringID%3Cstructure-847064237-825-992-847064237-815-993-847064237-815-995-847064237-805-996-847064237-715-1000-847064237-679-1000-847064237-643-1001-847064237-0-2404%3E"
           },
           "type": "array"
         },
@@ -1016,21 +1016,21 @@
                     "complexAim": {
                       "type": "boolean"
                     },
-                    "mentalFullDefense": {
-                      "type": "boolean"
-                    },
-                    "physicalFullDefense": {
-                      "type": "boolean"
-                    },
-                    "trackStandardAmmo": {
-                      "type": "boolean"
+                    "fullDefense": {
+                      "anyOf": [
+                        {
+                          "const": "",
+                          "type": "string"
+                        },
+                        {
+                          "$ref": "#/definitions/FullDefenseType"
+                        }
+                      ]
                     }
                   },
                   "required": [
                     "complexAim",
-                    "physicalFullDefense",
-                    "mentalFullDefense",
-                    "trackStandardAmmo"
+                    "fullDefense"
                   ],
                   "type": "object"
                 },
@@ -1871,7 +1871,7 @@
               ],
               "type": "object"
             },
-            "syntheticShell": {
+            "synthetic": {
               "additionalProperties": false,
               "properties": {
                 "brain": {
@@ -2105,7 +2105,7 @@
             "biological",
             "character",
             "infomorph",
-            "syntheticShell",
+            "synthetic",
             "templates",
             "types"
           ],
@@ -9013,6 +9013,13 @@
       ],
       "type": "string"
     },
+    "FullDefenseType": {
+      "enum": [
+        "physical",
+        "mental"
+      ],
+      "type": "string"
+    },
     "GearQuality": {
       "enum": [
         "topOfTheLine",
@@ -10566,7 +10573,7 @@
       ],
       "type": "object"
     },
-    "StringID<structure--798-965--788-966--788-968--778-969--714-973--678-973--643-974--0-2372>": {
+    "StringID<structure-1564620705-798-965-1564620705-788-966-1564620705-788-968-1564620705-778-969-1564620705-714-973-1564620705-678-973-1564620705-643-974-1564620705-0-2372>": {
       "additionalProperties": false,
       "properties": {
         "armorPiercing": {
@@ -10605,7 +10612,7 @@
       ],
       "type": "object"
     },
-    "StringID<structure--825-992--815-993--815-995--805-996--715-1000--679-1000--643-1001--0-2404>": {
+    "StringID<structure-847064237-825-992-847064237-815-993-847064237-815-995-847064237-805-996-847064237-715-1000-847064237-679-1000-847064237-643-1001-847064237-0-2404>": {
       "additionalProperties": false,
       "properties": {
         "armorPiercing": {
@@ -10759,7 +10766,7 @@
         },
         "dots": {
           "items": {
-            "$ref": "#/definitions/StringID%3Cstructure--798-965--788-966--788-968--778-969--714-973--678-973--643-974--0-2372%3E"
+            "$ref": "#/definitions/StringID%3Cstructure-1564620705-798-965-1564620705-788-966-1564620705-788-968-1564620705-778-969-1564620705-714-973-1564620705-678-973-1564620705-643-974-1564620705-0-2372%3E"
           },
           "type": "array"
         },

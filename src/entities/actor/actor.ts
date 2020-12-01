@@ -209,7 +209,7 @@ export class ActorEP extends Actor {
       case ActorType.Biological:
         return new Biological(this.proxyInit(data));
 
-      case ActorType.SyntheticShell:
+      case ActorType.Synthetic:
         return new SyntheticShell(this.proxyInit(data));
 
       case ActorType.Infomorph:

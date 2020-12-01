@@ -35,7 +35,7 @@ export const renderSleeveForm = (proxy: Sleeve) => {
           slot="footer"
           .updater=${proxy.updater.prop('data').nestedStore()}
         ></entity-form-footer> `;
-    case ActorType.SyntheticShell:
+    case ActorType.Synthetic:
       return html`
         <synthetic-form .sleeve=${proxy}></synthetic-form>
         <entity-form-footer

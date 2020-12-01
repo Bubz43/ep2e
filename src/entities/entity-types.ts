@@ -1,13 +1,13 @@
 export enum ActorType {
   Character = 'character',
-  SyntheticShell = 'syntheticShell',
+  Synthetic = 'synthetic',
   Infomorph = 'infomorph',
   Biological = 'biological',
 }
 
 export const sleeveTypes = [
   ActorType.Biological,
-  ActorType.SyntheticShell,
+  ActorType.Synthetic,
   ActorType.Infomorph,
 ] as const;
 

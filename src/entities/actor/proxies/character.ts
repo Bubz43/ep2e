@@ -459,7 +459,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       : null;
   }
 
-  private setupVehicle(data: ActorEntity<ActorType.SyntheticShell>) {
+  private setupVehicle(data: ActorEntity<ActorType.Synthetic>) {
     const updater = this.updater
       .prop('flags', EP.Name, 'vehicle')
       .nestedStore();

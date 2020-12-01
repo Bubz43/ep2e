@@ -9,10 +9,9 @@
 
 :host {
   display: grid;
-  gap: 0.25rem;
   min-width: 325px;
   sl-form {
-    padding: 0 0.5rem;
+    padding: 0.25rem 0.5rem;
     .radio-fields {
       justify-content: flex-start !important;
     }
@@ -21,6 +20,7 @@
 
 sl-popover {
   width: 100%;
+  margin-top: 0.25rem;
   mwc-button {
     width: 100%;
   }
@@ -39,4 +39,8 @@ mwc-tab-bar {
 mwc-list-item {
   border-bottom: 1px solid var(--color-border);
 
+}
+
+p {
+  text-align: center;
 }

@@ -3,7 +3,7 @@
     "types": [
       "biological",
       "character",
-      "syntheticShell",
+      "synthetic",
       "infomorph"
     ],
     "templates": {
@@ -104,7 +104,7 @@
         "wounds": 0
       }
     },
-    "syntheticShell": {
+    "synthetic": {
       "templates": [
         "Common",
         "Mobile",
@@ -405,9 +405,7 @@
       "appliedSubstances": [],
       "combatState": {
         "complexAim": false,
-        "mentalFullDefense": false,
-        "physicalFullDefense": false,
-        "trackStandardAmmo": false
+        "fullDefense":""
       },
       "mentalHealth": {
         "alienation": 0,

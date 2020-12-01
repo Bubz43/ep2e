@@ -59,7 +59,7 @@ export type SleeveType = typeof sleeveTypes[number];
 
 type ActorFlags<T extends ActorType> = T extends ActorType.Character
   ? {
-      vehicle: ActorEntity<ActorType.SyntheticShell> | null;
+      vehicle: ActorEntity<ActorType.Synthetic> | null;
       [ItemType.Psi]: ItemEntity<ItemType.Psi> | null;
       substancesAwaitingOnset: StringID<
         AppliedSubstanceBase & {

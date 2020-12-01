@@ -1770,6 +1770,9 @@
             "freelancer": {
               "type": "string"
             },
+            "from": {
+              "type": "string"
+            },
             "full": {
               "type": "string"
             },
@@ -1876,6 +1879,9 @@
               "type": "string"
             },
             "hardware": {
+              "type": "string"
+            },
+            "harm": {
               "type": "string"
             },
             "harsh": {
@@ -2908,6 +2914,9 @@
               "type": "string"
             },
             "physicalTech": {
+              "type": "string"
+            },
+            "picker": {
               "type": "string"
             },
             "pierce": {
@@ -4789,6 +4798,7 @@
             "freeFall",
             "freePush",
             "freelancer",
+            "from",
             "full",
             "fullAuto",
             "fullMove",
@@ -4825,6 +4835,7 @@
             "hardening",
             "hardsuit",
             "hardware",
+            "harm",
             "harsh",
             "hasActivation",
             "hasActiveState",
@@ -5169,6 +5180,7 @@
             "physicalService",
             "physicalServices",
             "physicalTech",
+            "picker",
             "pierce",
             "pilot",
             "placeEgo",
