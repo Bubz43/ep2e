@@ -130,6 +130,7 @@ import { MessageStressTest } from './chat/components/stress-test/message-stress-
 import { MessageHeader } from './chat/components/message-header/message-header';
 import { RolledFormulasList } from './combat/components/rolled-formulas-list/rolled-formulas-list';
 import { MentalHealthStressEditor } from './health/components/mental-health-stress-editor/mental-health-stress-editor';
+import { HealthPicker } from './health/components/health-picker/health-picker';
 
 // Generic Components
 Field;
@@ -243,6 +244,7 @@ HealthLog;
 HealthRegenSettingsForm;
 HealthStateForm;
 MentalHealthStressEditor;
+HealthPicker;
 
 // Overlay
 EPOverlay;
