@@ -84,7 +84,7 @@ export class HealthPicker extends LitElement {
     const health =
       this.selectedHealth &&
       filteredHealths.includes(this.selectedHealth) &&
-      this.selectedHealth;
+      this.selectedHealth || filteredHealths[0];
     const { name, img } = this.actor.tokenOrLocalInfo;
     return html`
       <mwc-list-item graphic="medium" noninteractive>
@@ -100,29 +100,33 @@ export class HealthPicker extends LitElement {
           renderRadioFields(mode, ['heal', 'harm']),
         ],
       })}
-      ${health
-        ? html`
-            <sl-popover
-              .renderOnDemand=${() => html`
-                ${filteredHealths.map(
-                  (health) => html`
-                    <health-item
-                      .health=${health}
-                      clickable
-                      @click=${() => (this.selectedHealth = health)}
-                    ></health-item>
-                  `,
-                )}
-              `}
-            >
+      <sl-popover
+        .renderOnDemand=${() => html`
+          <ul class="healths">
+          ${filteredHealths.map(
+            (health) => html`
+              <health-item
+                .health=${health}
+                clickable
+                @click=${() => (this.selectedHealth = health)}
+              ></health-item>
+            `,
+          )}
+          </ul>
+        `}
+      >
+        ${health
+          ? html`
               <health-item
                 slot="base"
                 .health=${health}
                 clickable
               ></health-item>
-            </sl-popover>
-          `
-        : ''}
+            `
+      : html`
+      <mwc-button slot="base">${localize("select")} ${localize("health")}</mwc-button>
+          `}
+      </sl-popover>
     `;
   }
 }

@@ -1,11 +1,27 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+@include resetUnorderedList();
+
 * {
   box-sizing: border-box;
 }
 
 :host {
-  display: block;
-  
+  display: grid;
+  min-width: 350px;
+  sl-form {
+    padding: 0.5rem;
+  }
+}
+
+sl-popover {
+  width: 100%;
+  mwc-button {
+    width: 100%;
+  }
+}
+
+.healths {
+  min-width: 350px;
 }
