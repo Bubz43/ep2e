@@ -14,6 +14,7 @@ import {
   PsiInfluenceData,
   PsiInfluenceType,
 } from '@src/features/psi-influence';
+import { assignStyles } from '@src/utility/dom';
 import { isJsonObject } from '@src/utility/helpers';
 import { createPipe } from 'remeda';
 import type { JsonObject } from 'type-fest';

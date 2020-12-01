@@ -15,7 +15,7 @@ export class ChatMessageEP extends ChatMessage {
   _onUpdate(...args: any[]) {
     //@ts-ignore
     super._onUpdate(...args);
-    // Object.values(this.apps).forEach((app) => app.render(true));
+    Object.values(this.apps).forEach((app) => app.render(true));
   }
 
   get updater() {

@@ -521,12 +521,8 @@ sl-tooltip {
 
 .message {
   display: block;
-  background: linear-gradient(
-    to left,
-    alphav(var(--color-bg), 0.96),
-    alphav(var(--color-bg-alt), 0.96)
-  );
-  background: alphav(var(--color-bg), 0.96);
+  background: transparent;
+  background: alphav(var(--color-bg), 0.9);
   width: calc(100% - 1rem);
   color: var(--color-text);
   border: 2px groove var(--color-border) !important;
@@ -552,28 +548,37 @@ sl-tooltip {
     column-gap: 0.5rem;
     align-items: center;
     position: relative;
+ 
+    background:  alphav(var(--color-grey), 0.15);
+
+    .image-wrapper {
+      grid-area: img;
+      align-self: start;
+      filter: drop-shadow(2px 3px 3px black);
+      pointer-events: none;
+    }
 
     img {
       all: unset;
-      grid-area: 1 / 1 / -1 / -1;
       width: 2rem;
       position: absolute;
       transform: translate(-70%, -0.1rem);
-      align-self: start;
-      filter: drop-shadow(1px 3px 3px black);
-      pointer-events: none;
       z-index: 10;
     }
   }
 
   .message-content {
     font-size: 1rem;
+    background: linear-gradient(
+      to bottom,
+      alphav(var(--color-bg-alt), 0.8),
+      alphav(var(--color-bg), 0.8),
+
+    );
     &.non-ep {
       padding: 0.25rem 0.5rem;
-
     }
   }
-
 
   .message-metadata {
     color: var(--color-text-lighter);
@@ -602,7 +607,7 @@ sl-tooltip {
 
   .whisper-to {
     grid-area: whisper;
-    color: var(--color-text-lighter)
+    color: var(--color-text-lighter);
   }
 
   .flavor-text {
@@ -612,15 +617,46 @@ sl-tooltip {
 
   &.whisper {
     background: var(--color-bg);
+    .message-header {
+      background: var(--color-bg);
+    }
   }
 }
 
 .chat-popout {
   .window-content {
     overflow: visible;
+    height: max-content;
+    padding: 0;
   }
   .message {
     border: none !important;
     width: 100%;
+    max-height: 50vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    .message-header {
+      grid-template-areas:
+        'img sender meta'
+        'whisper whisper whisper'
+        'flavor flavor flavor';
+      grid-template-columns: auto 1fr auto;
+
+      .whisper-to {
+        margin-top: 0.25rem;
+      }
+
+      .image-wrapper {
+        filter: none;
+        display: grid;
+        place-items: center;
+      }
+      img {
+        position: static;
+        transform: none;
+        z-index: unset;
+      }
+    }
   }
 }
