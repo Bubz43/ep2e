@@ -1,6 +1,7 @@
 import type { MultiSelectedEvent } from '@material/mwc-list/mwc-list-foundation';
 import type { StressTestMessageData } from '@src/chat/message-data';
 import type { UsedRollPartsEvent } from '@src/combat/components/rolled-formulas-list/used-roll-parts-event';
+import { createStressDamage, StressDamage } from '@src/combat/damages';
 import { format, localize } from '@src/foundry/localization';
 import { cleanFormula, RollData } from '@src/foundry/rolls';
 import { formatDamageType, HealthType } from '@src/health/health';
@@ -57,23 +58,57 @@ export class MessageStressTest extends LitElement {
     return { damageValue, formula };
   }
 
+  private get minStress() {
+    const { damageValue, formula } = this.totals;
+    const { minStress } = this.stress;
+    if (!minStress) return { damageValue, formula };
+    if (minStress === 'half')
+      return {
+        formula: cleanFormula(`(${formula}) / 2`),
+        damageValue: Math.ceil(damageValue / 2),
+      };
+    return {
+      formula: String(minStress),
+      damageValue: minStress,
+    };
+  }
+
   private setUsedRollParts(ev: UsedRollPartsEvent) {
     this.usedRollParts = ev.usedRollParts;
+  }
+
+  private applyDamage() {
+    this.openHealthPicker(createStressDamage(this.totals));
+  }
+
+  private applyMinDamage() {
+    this.openHealthPicker(createStressDamage(this.minStress));
+  }
+
+  private openHealthPicker(damage: StressDamage) {
+    
   }
 
   render() {
     const { totals } = this;
     const { minStress, stressType, notes } = this.stress;
     return html`
-      <mwc-button dense unelevated class="stress-value">
+      <mwc-button
+        dense
+        unelevated
+        class="stress-value"
+        @click=${this.applyDamage}
+      >
         ${formatDamageType(HealthType.Mental)}: ${totals.damageValue}
       </mwc-button>
 
       ${minStress
         ? html`
-            <mwc-button dense unelevated class="min-stress-value"
-              >   ${localize('minSV')}:  ${
-            minStress === 'half' ? Math.ceil(totals.damageValue / 2) : minStress
+            <mwc-button dense unelevated class="min-stress-value" @click=${
+              this.applyMinDamage
+            }
+              >${localize('minSV')}: ${
+            this.minStress.damageValue
           }</mwc-button dense unelevated
             >
           `

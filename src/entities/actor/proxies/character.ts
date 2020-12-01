@@ -43,9 +43,18 @@ import {
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
+import type { ActorHealth } from '@src/health/health-mixin';
 import { nonNegative, notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
-import { difference, first, flatMap, mapToObj, pipe, reject } from 'remeda';
+import {
+  compact,
+  difference,
+  first,
+  flatMap,
+  mapToObj,
+  pipe,
+  reject,
+} from 'remeda';
 import { openSleeveForm } from '../actor-views';
 import { Ego, FullEgoData } from '../ego';
 import { isSleeveItem, Sleeve } from '../sleeves';
@@ -97,6 +106,23 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         .store((spent) => spent + points);
     }
     await updater.commit();
+  }
+
+  get healths(): {
+    health: ActorHealth;
+    getHealth: (actor: Character['actor']) => ActorHealth | null;
+  }[] {
+    return compact([
+      this.ego.trackMentalHealth && {
+        health: this.ego.mentalHealth,
+        getHealth: ({ proxy }) => {
+          return proxy.type === ActorType.Character &&
+            proxy.ego.trackMentalHealth
+            ? proxy.ego.mentalHealth
+            : null;
+        },
+      },
+    ]);
   }
 
   @LazyGetter()

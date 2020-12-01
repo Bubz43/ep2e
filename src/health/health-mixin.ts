@@ -7,8 +7,13 @@ import { LazyGetter } from 'lazy-get-decorator';
 import { clamp } from 'remeda';
 import type { Class } from 'type-fest';
 import type { DeepReadonly } from 'utility-types';
+import type { AppMeshHealth } from './app-mesh-health';
+import type { BiologicalHealth } from './biological-health';
+import type { MeshHealth } from './full-mesh-health';
 import type { CommonHealth } from './health';
+import type { MentalHealth } from './mental-health';
 import { DotOrHotTarget } from './recovery';
+import type { SyntheticHealth } from './synthetic-health';
 
 export type Health = CommonHealth &
   ObtainableEffects &
@@ -23,6 +28,13 @@ export type Health = CommonHealth &
       wound: boolean;
     };
   }>;
+
+export type ActorHealth =
+  | MentalHealth
+  | BiologicalHealth
+  | SyntheticHealth
+  | MeshHealth
+  | AppMeshHealth;
 
 export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
   class HealthInfo extends cls implements Health, ObtainableEffects {

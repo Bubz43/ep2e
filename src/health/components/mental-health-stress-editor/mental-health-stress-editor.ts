@@ -48,9 +48,11 @@ export class MentalHealthStressEditor extends LitElement {
 
   private get damage() {
     return Math.ceil(
-      this.editableStress.value * this.editableStress.multiplier,
+      this.editableStress.damageValue * this.editableStress.multiplier,
     );
   }
+
+
 
   render() {
     const { damage } = this;
@@ -61,7 +63,7 @@ export class MentalHealthStressEditor extends LitElement {
           props: this.editableStress,
           update: (changed, orig) =>
             (this.editableStress = { ...orig, ...changed }),
-          fields: ({ value, stressType }) => [
+          fields: ({ damageValue: value, stressType }) => [
             renderNumberField(value, { min: 0 }),
             renderSelectField(stressType, enumValues(StressType)),
           ],

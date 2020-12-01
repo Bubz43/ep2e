@@ -1330,7 +1330,7 @@ type LangEntries =
   | 'fabbersAndGlands'
   | 'carry'
   | 'masterDevice'
-  | 'slaved' | "rewound" | "advanced" | "from"
+  | 'slaved' | "rewound" | "advanced" | "from" | "picker";
 type FullNames =
   | 'cog'
   | 'int'
