@@ -40,13 +40,9 @@ export class HealthPicker extends LitElement {
 
   @property({ type: Object }) damage?: Damage;
 
-  @internalProperty() private options: {
-    type: HealthType;
-    mode: 'heal' | 'harm';
-  } = {
-    type: HealthType.Physical,
-    mode: 'heal',
-  };
+  @internalProperty() healthType = HealthType.Physical;
+
+  @internalProperty() mode: 'heal' | 'harm' = 'heal';
 
   @internalProperty() private selectedHealth: ActorHealth | null = null;
 
@@ -75,16 +71,17 @@ export class HealthPicker extends LitElement {
 
   private get filteredHealths() {
     return this.actor.proxy.healths.filter(
-      ({ type }) => type === this.options.type,
+      ({ type }) => type === this.healthType,
     );
   }
 
   render() {
     const { filteredHealths } = this;
-    const health =
-      this.selectedHealth &&
-      filteredHealths.includes(this.selectedHealth) &&
-      this.selectedHealth || filteredHealths[0];
+    const currentHealth =
+      (this.selectedHealth &&
+        filteredHealths.includes(this.selectedHealth) &&
+        this.selectedHealth) ||
+      filteredHealths[0];
     const { name, img } = this.actor.tokenOrLocalInfo;
     return html`
       <mwc-list-item graphic="medium" noninteractive>
@@ -92,41 +89,52 @@ export class HealthPicker extends LitElement {
         <span>${name}</span>
       </mwc-list-item>
 
-      ${renderAutoForm({
-        props: this.options,
-        update: (changed, orig) => (this.options = { ...orig, ...changed }),
-        fields: ({ type, mode }) => [
-          renderRadioFields(type, enumValues(HealthType)),
-          renderRadioFields(mode, ['heal', 'harm']),
-        ],
-      })}
+      <mwc-tab-bar>
+        ${enumValues(HealthType).map(
+          (type) => html`
+            <mwc-tab
+              label=${localize(type)}
+              @click=${() => (this.healthType = type)}
+            ></mwc-tab>
+          `,
+        )}
+      </mwc-tab-bar>
+
       <sl-popover
         .renderOnDemand=${() => html`
           <ul class="healths">
-          ${filteredHealths.map(
-            (health) => html`
-              <health-item
-                .health=${health}
-                clickable
-                @click=${() => (this.selectedHealth = health)}
-              ></health-item>
-            `,
-          )}
+            ${filteredHealths.map(
+              (health) =>  html`
+                <health-item
+                  .health=${health}
+                  clickable
+                  @click=${() => (this.selectedHealth = health)}
+                ></health-item>
+              `,
+            )}
           </ul>
         `}
       >
-        ${health
+        ${currentHealth
           ? html`
               <health-item
                 slot="base"
-                .health=${health}
+                .health=${currentHealth}
                 clickable
               ></health-item>
             `
-      : html`
-      <mwc-button slot="base">${localize("select")} ${localize("health")}</mwc-button>
-          `}
+          : html`
+              <mwc-button slot="base"
+                >${localize('select')} ${localize('health')}</mwc-button
+              >
+            `}
       </sl-popover>
+
+      ${renderAutoForm({
+        props: { mode: this.mode },
+        update: ({ mode }) => mode && (this.mode = mode),
+        fields: ({ mode }) => [renderRadioFields(mode, ['heal', 'harm'])],
+      })}
     `;
   }
 }

@@ -9,9 +9,13 @@
 
 :host {
   display: grid;
-  min-width: 350px;
+  gap: 0.25rem;
+  min-width: 325px;
   sl-form {
-    padding: 0.5rem;
+    padding: 0 0.5rem;
+    .radio-fields {
+      justify-content: flex-start !important;
+    }
   }
 }
 
@@ -20,8 +24,19 @@ sl-popover {
   mwc-button {
     width: 100%;
   }
+  
 }
 
 .healths {
   min-width: 350px;
+}
+
+mwc-tab-bar {
+  --mdc-theme-primary: var(--color-grey);
+
+}
+
+mwc-list-item {
+  border-bottom: 1px solid var(--color-border);
+
 }
