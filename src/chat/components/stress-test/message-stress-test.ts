@@ -2,6 +2,7 @@ import type { MultiSelectedEvent } from '@material/mwc-list/mwc-list-foundation'
 import type { StressTestMessageData } from '@src/chat/message-data';
 import type { UsedRollPartsEvent } from '@src/combat/components/rolled-formulas-list/used-roll-parts-event';
 import { createStressDamage, StressDamage } from '@src/combat/damages';
+import { getControlledTokenActors } from '@src/entities/find-entities';
 import { format, localize } from '@src/foundry/localization';
 import { cleanFormula, RollData } from '@src/foundry/rolls';
 import { formatDamageType, HealthType } from '@src/health/health';
@@ -86,7 +87,10 @@ export class MessageStressTest extends LitElement {
   }
 
   private openHealthPicker(damage: StressDamage) {
-    
+    const controlled = getControlledTokenActors();
+    if (notEmpty(controlled)) {
+      
+    }
   }
 
   render() {

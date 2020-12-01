@@ -1,4 +1,10 @@
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
+import { localize } from '@src/foundry/localization';
 import { activeCanvas } from '@src/foundry/misc-helpers';
+import { openMenu } from '@src/open-menu';
+import { html } from 'lit-html';
+import { uniq } from 'remeda';
+import type { ActorEP } from './actor/actor';
 
 export type ActorIdentifiers = {
   actorId?: string | null;
@@ -32,6 +38,30 @@ export const findToken = ({ actorId, tokenId, sceneId }: ActorIdentifiers) => {
     if (tokenData) return new Token(tokenData, scene);
   }
   return;
+};
+
+export const getControlledTokenActors = () => {
+  return uniq(
+    activeCanvas()?.tokens.controlled.flatMap(({ actor }) => actor || []) || [],
+  );
+};
+
+export const pickOrDefaultActor = (callback: (actor: ActorEP) => void) => {
+  const controlledActors = getControlledTokenActors();
+  if (controlledActors.length > 1) {
+    openMenu({
+      content: controlledActors.map((actor) => ({
+        label: actor.name,
+        icon: html`<img
+          src=${actor.isToken && actor.token ? actor.token.data.img : actor.img}
+        />`,
+        callback: () => callback(actor),
+      })),
+    });
+    // TODO open menu
+  } else if (controlledActors[0])  callback(controlledActors[0]);
+   else if (game.user.character) callback(game.user.character);
+  else notify(NotificationType.Info, 'No controlled actors'); // TODO localize
 };
 
 // export const getMainCharacter = (notifyIfNone: boolean) => {
