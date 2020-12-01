@@ -174,6 +174,18 @@ export class ActorEP extends Actor {
     return this.data.type;
   }
 
+  get tokenOrLocalInfo() {
+    return this.isToken && this.token
+      ? {
+          img: this.token.data.img,
+          name: this.token.name,
+        }
+      : {
+          img: this.img,
+          name: this.name,
+        };
+  }
+
   get proxy() {
     if (!this.#proxy || this.invalidated) {
       console.time('Create actor proxy');

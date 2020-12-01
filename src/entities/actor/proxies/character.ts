@@ -108,20 +108,12 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     await updater.commit();
   }
 
-  get healths(): {
-    health: ActorHealth;
-    getHealth: (actor: Character['actor']) => ActorHealth | null;
-  }[] {
+  get healths(): ActorHealth[] {
     return compact([
-      this.ego.trackMentalHealth && {
-        health: this.ego.mentalHealth,
-        getHealth: ({ proxy }) => {
-          return proxy.type === ActorType.Character &&
-            proxy.ego.trackMentalHealth
-            ? proxy.ego.mentalHealth
-            : null;
-        },
-      },
+      this.ego.trackMentalHealth && this.ego.mentalHealth,
+      // TODO Vehicle
+      // TODO Item Healths
+      ...(this.sleeve?.healths ?? []),
     ]);
   }
 

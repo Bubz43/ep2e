@@ -50,17 +50,18 @@ export const pickOrDefaultActor = (callback: (actor: ActorEP) => void) => {
   const controlledActors = getControlledTokenActors();
   if (controlledActors.length > 1) {
     openMenu({
-      content: controlledActors.map((actor) => ({
-        label: actor.name,
-        icon: html`<img
-          src=${actor.isToken && actor.token ? actor.token.data.img : actor.img}
-        />`,
-        callback: () => callback(actor),
-      })),
+      content: controlledActors.map((actor) => {
+        const { name, img } = actor.tokenOrLocalInfo;
+        return {
+          label: name,
+          icon: html`<img src=${img} />`,
+          callback: () => callback(actor),
+        };
+      }),
     });
     // TODO open menu
-  } else if (controlledActors[0])  callback(controlledActors[0]);
-   else if (game.user.character) callback(game.user.character);
+  } else if (controlledActors[0]) callback(controlledActors[0]);
+  else if (game.user.character) callback(game.user.character);
   else notify(NotificationType.Info, 'No controlled actors'); // TODO localize
 };
 

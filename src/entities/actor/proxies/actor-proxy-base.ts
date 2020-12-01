@@ -27,6 +27,8 @@ export abstract class ActorProxyBase<T extends ActorType> {
   readonly actor;
   readonly openForm;
 
+  abstract get subtype(): string;
+
   constructor({
     data,
     updater,
@@ -67,7 +69,6 @@ export abstract class ActorProxyBase<T extends ActorType> {
     return this.data.type;
   }
 
-  abstract get subtype(): string;
 
   get editable() {
     return this.updater.editable;

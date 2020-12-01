@@ -13,9 +13,10 @@ import { notify, NotificationType } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
 import { BiologicalHealth } from '@src/health/biological-health';
 import { HealthType } from '@src/health/health';
+import type { ActorHealth } from '@src/health/health-mixin';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { flatMap, flatMapToObj } from 'remeda';
+import { compact, flatMap, flatMapToObj } from 'remeda';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 import { PhysicalSleeve, SleeveInfo } from './physical-sleeve-mixin';
 
@@ -44,6 +45,10 @@ export class Biological extends mix(BiologicalBase).with(
     super(init);
     if (activeEffects) this._outsideEffects = activeEffects;
     this.sleeved = sleeved;
+  }
+
+  get healths(): ActorHealth[] {
+    return compact([this.activeMeshHealth, this.physicalHealth]);
   }
 
   get activeEffects() {

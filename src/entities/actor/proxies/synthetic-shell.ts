@@ -18,6 +18,8 @@ import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 import { AppMeshHealth } from '@src/health/app-mesh-health';
 import mix from 'mix-with/lib';
 import { PhysicalSleeve, SleeveInfo } from './physical-sleeve-mixin';
+import type { ActorHealth } from '@src/health/health-mixin';
+import { compact } from 'remeda';
 
 class SyntheticBase extends ActorProxyBase<ActorType.SyntheticShell> {
   get subtype() {
@@ -45,6 +47,15 @@ export class SyntheticShell extends mix(SyntheticBase).with(
     if (activeEffects) this._outsideEffects = activeEffects;
 
     this.sleeved = sleeved;
+  }
+
+  get healths(): ActorHealth[] {
+    // TODO Only return firewall health if not slaved
+    return compact([
+      this.activeMeshHealth,
+      this.activeFirewallHealth,
+      this.physicalHealth,
+    ]);
   }
 
   get activeEffects() {

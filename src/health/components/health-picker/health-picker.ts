@@ -1,8 +1,11 @@
 import type { Damage } from '@src/combat/damages';
+import { renderRadioFields } from '@src/components/field/fields';
+import { renderAutoForm } from '@src/components/form/forms';
 import {
   closeWindow,
   openWindow,
 } from '@src/components/window/window-controls';
+import { enumValues } from '@src/data-enums';
 import type { ActorEP } from '@src/entities/actor/actor';
 import { localize } from '@src/foundry/localization';
 import { HealthType } from '@src/health/health';
@@ -45,13 +48,12 @@ export class HealthPicker extends LitElement {
     mode: 'heal',
   };
 
-  private actorUnsub: (() => void) | null = null;
+  @internalProperty() private selectedHealth: ActorHealth | null = null;
 
-  private getHealth: ((actor: ActorEP) => ActorHealth | null) | null = null;
+  private actorUnsub: (() => void) | null = null;
 
   disconnectedCallback() {
     this.cleanupSub();
-    this.getHealth = null;
     super.disconnectedCallback();
   }
 
@@ -71,10 +73,56 @@ export class HealthPicker extends LitElement {
     this.actorUnsub = null;
   }
 
+  private get filteredHealths() {
+    return this.actor.proxy.healths.filter(
+      ({ type }) => type === this.options.type,
+    );
+  }
+
   render() {
-    const health = this.getHealth?.(this.actor);
+    const { filteredHealths } = this;
+    const health =
+      this.selectedHealth &&
+      filteredHealths.includes(this.selectedHealth) &&
+      this.selectedHealth;
+    const { name, img } = this.actor.tokenOrLocalInfo;
     return html`
-      ${health ? html` <health-item .health=${health}></health-item> ` : ''}
+      <mwc-list-item graphic="medium" noninteractive>
+        <img slot="graphic" src=${img} />
+        <span>${name}</span>
+      </mwc-list-item>
+
+      ${renderAutoForm({
+        props: this.options,
+        update: (changed, orig) => (this.options = { ...orig, ...changed }),
+        fields: ({ type, mode }) => [
+          renderRadioFields(type, enumValues(HealthType)),
+          renderRadioFields(mode, ['heal', 'harm']),
+        ],
+      })}
+      ${health
+        ? html`
+            <sl-popover
+              .renderOnDemand=${() => html`
+                ${filteredHealths.map(
+                  (health) => html`
+                    <health-item
+                      .health=${health}
+                      clickable
+                      @click=${() => (this.selectedHealth = health)}
+                    ></health-item>
+                  `,
+                )}
+              `}
+            >
+              <health-item
+                slot="base"
+                .health=${health}
+                clickable
+              ></health-item>
+            </sl-popover>
+          `
+        : ''}
     `;
   }
 }

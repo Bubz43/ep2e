@@ -14,6 +14,7 @@ import { LazyGetter } from 'lazy-get-decorator';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 import mix from 'mix-with/lib';
 import { SleeveInfo } from './physical-sleeve-mixin';
+import type { ActorHealth } from '@src/health/health-mixin';
 
 class InfomorphBase extends ActorProxyBase<ActorType.Infomorph> {
   get subtype() {
@@ -37,6 +38,10 @@ export class Infomorph extends mix(InfomorphBase).with(SleeveInfo) {
     super(init);
     if (activeEffects) this._outsideEffects = activeEffects;
     this.sleeved = sleeved;
+  }
+
+  get healths(): ActorHealth[] {
+    return [this.meshHealth]
   }
 
   get activeEffects() {
