@@ -17,13 +17,13 @@ export class WorldTimeControls extends LitElement {
   @internalProperty() timeChange = 0;
 
   private modifyTime(forwards: boolean) {
-    // TODO Chat Message
     this.timeChange && advanceWorldTime(this.timeChange * (forwards ? 1 : -1));
     createMessage({
       content: format('ModifiedTime', {
         direction: localize(forwards ? 'advanced' : 'rewound'),
         amount: prettyMilliseconds(this.timeChange),
       }),
+      entity: null
     });
     this.timeChange = 0;
   }

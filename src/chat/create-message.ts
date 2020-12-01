@@ -10,7 +10,6 @@ export enum MessageVisibility {
   Blind = 'blind',
 }
 
-
 export type MessageInit = Partial<{
   data: MessageData;
   content: string;
@@ -19,7 +18,7 @@ export type MessageInit = Partial<{
   flavor: string;
   alias: string;
   entity: Token | ActorEP | ActorProxy | null;
-}>
+}>;
 
 export const messageContentPlaceholder = '_';
 
@@ -30,29 +29,33 @@ const splitEntity = (entity: MessageInit['entity']) => {
   };
 };
 
-export const createMessage = async (
-  {
-    content = messageContentPlaceholder,
-    visibility = MessageVisibility.Public,
-    data,
-    roll,
-    flavor,
-    alias,
-    entity,
-  }: RequireAtLeastOne<MessageInit, "content" | "data" | "roll">,
-): Promise<ChatMessageEP> => {
+export const createMessage = async ({
+  content = messageContentPlaceholder,
+  visibility = MessageVisibility.Public,
+  data,
+  roll,
+  flavor,
+  alias,
+  entity,
+}: RequireAtLeastOne<
+  MessageInit,
+  'content' | 'data' | 'roll'
+>): Promise<ChatMessageEP> => {
   const { actor, token } = splitEntity(entity);
   const chatMessageData: Partial<ChatMessageEP['data']> = {
     content,
     flavor,
     roll,
     flags: { [EP.Name]: data, core: { canPopout: true } },
-    speaker: ChatMessage.getSpeaker({
-      alias: alias || entity?.name,
-      scene: token?.scene,
-      actor,
-      token,
-    }),
+    speaker:
+      entity === null
+        ? { alias }
+        : ChatMessage.getSpeaker({
+            alias: alias || entity?.name,
+            scene: token?.scene,
+            actor,
+            token,
+          }),
     type: roll ? CONST.CHAT_MESSAGE_TYPES.ROLL : undefined,
     blind: visibility === MessageVisibility.Blind,
     whisper:

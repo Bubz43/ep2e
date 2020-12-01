@@ -361,12 +361,12 @@ declare global {
       flavor?: string | null;
       blind: boolean;
       whisper: string[];
-      speaker: {
+      speaker: Partial<{
         actor: string | null;
         alias: string | null;
         scene: string | null;
         token: string | null;
-      };
+      }>;
       content: string;
       roll?: Roll | string | null;
       user: string;

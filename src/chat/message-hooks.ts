@@ -46,16 +46,16 @@ export const onChatMessageRender = (message: ChatMessageEP, [el]: JQuery) => {
     : speakerToId.actorId
     ? findActor(speakerToId)?.img
     : message.user?.avatar;
-  const frag = new DocumentFragment();
+  const fragment = new DocumentFragment();
   render(
     html`
       <div class="image-wrapper">
         <img src=${img || CONST.DEFAULT_TOKEN} loading="lazy" />
       </div>
     `,
-    frag,
+    fragment,
   );
-  el.querySelector('.message-header')?.append(frag);
+  el.querySelector('.message-header')?.append(fragment);
 
   // TODO This is wonky if message is whisper
   if (message.user && message.user.name !== message.alias) {
