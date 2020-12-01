@@ -1,0 +1,25 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  
+}
+
+.stress-damage {
+  display: flex;
+  sl-form {
+    grid-auto-flow: column;
+  }
+}
+
+.change {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  // display: flex;
+  // justify-content: space-around;
+}

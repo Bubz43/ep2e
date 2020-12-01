@@ -216,15 +216,3 @@ export const applyHealthModification = (
       };
   }
 };
-
-// export const healthDiff = <T extends CommonHealth>(
-//   originalHealth: T,
-//   newHealth: T
-// ) => ({
-//   damage: newHealth.main.damage.value - originalHealth.main.damage.value,
-//   wounds:
-//     (newHealth.wound?.wounds.value || 0) -
-//     (originalHealth.wound?.wounds.value || 0),
-//   damageLabel: originalHealth.main.damage.label,
-//   woundLabel: originalHealth.wound?.wounds.label,
-// });

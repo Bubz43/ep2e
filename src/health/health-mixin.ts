@@ -83,6 +83,15 @@ export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
     get log() {
       return this.data.log;
     }
+
+    computeWounds(damage: number) {
+      return this.wound
+        ? clamp(Math.floor(damage / (this.wound.woundThreshold.value || 1)), {
+            max: damage,
+            min: 0,
+          })
+        : 0;
+    }
   }
 
   return HealthInfo;

@@ -47,13 +47,13 @@ const omitUndefined = <T extends MergableObject>(obj: T) => {
 type MergableObject = Record<PropertyKey, JsonValue | undefined>;
 /**
  * Removes any values of undefined from objects, then returns merged object.
- * @param a the first object
- * @param b the second object. Overwrites a.
+ * @param baseObject the first object
+ * @param overridingObject the second object. Overwrites a.
  */
 export const safeMerge = <A extends MergableObject, B extends MergableObject>(
-  a: A,
-  b: B,
-) => ({ ...omitUndefined(a), ...omitUndefined(b) });
+  baseObject: A,
+  overridingObject: B,
+) => ({ ...omitUndefined(baseObject), ...omitUndefined(overridingObject) });
 
 export const whenNotEmpty = <T extends SizableObject, N, E>(
   obj: T | null | undefined,

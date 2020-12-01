@@ -128,6 +128,8 @@ import { CharacterViewNetworkSettings } from './entities/actor/components/charac
 import { MessageContent } from './chat/components/message-content/message-content';
 import { MessageStressTest } from './chat/components/stress-test/message-stress-test';
 import { MessageHeader } from './chat/components/message-header/message-header';
+import { RolledFormulasList } from './combat/components/rolled-formulas-list/rolled-formulas-list';
+import { MentalHealthStressEditor } from './health/components/mental-health-stress-editor/mental-health-stress-editor';
 
 // Generic Components
 Field;
@@ -240,12 +242,15 @@ HealthItem;
 HealthLog;
 HealthRegenSettingsForm;
 HealthStateForm;
+MentalHealthStressEditor;
 
 // Overlay
 EPOverlay;
 SceneView;
 EnvironmentForms;
 
+// Combat
+RolledFormulasList;
 
 // Chat
 MessageHeader;

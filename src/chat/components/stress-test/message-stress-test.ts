@@ -1,5 +1,6 @@
 import type { MultiSelectedEvent } from '@material/mwc-list/mwc-list-foundation';
 import type { StressTestMessageData } from '@src/chat/message-data';
+import type { UsedRollPartsEvent } from '@src/combat/components/rolled-formulas-list/used-roll-parts-event';
 import { format, localize } from '@src/foundry/localization';
 import { cleanFormula, RollData } from '@src/foundry/rolls';
 import { formatDamageType, HealthType } from '@src/health/health';
@@ -28,15 +29,10 @@ export class MessageStressTest extends LitElement {
 
   @internalProperty() private viewFormulas = false;
 
-  private usedRollParts?: Set<number>;
+  @internalProperty() usedRollParts?: ReadonlySet<number>;
 
   toggleFormulas() {
     this.viewFormulas = !this.viewFormulas;
-  }
-
-  private setIgnored(ev: MultiSelectedEvent) {
-    this.usedRollParts = ev.detail.index;
-    this.requestUpdate();
   }
 
   get rolls() {
@@ -61,20 +57,12 @@ export class MessageStressTest extends LitElement {
     return { damageValue, formula };
   }
 
-  private rollTooltip(data: RollData) {
-    return async ({ currentTarget }: MouseEvent) => {
-      tooltip.attach({
-        el: currentTarget as HTMLElement,
-        content: html`${unsafeHTML(
-          (await Roll.fromData(data).getTooltip()) as string,
-        )}`,
-        position: 'left-start',
-      });
-    };
+  private setUsedRollParts(ev: UsedRollPartsEvent) {
+    this.usedRollParts = ev.usedRollParts;
   }
 
   render() {
-    const { rolls, totals } = this;
+    const { totals } = this;
     const { minStress, stressType, notes } = this.stress;
     return html`
       <mwc-button dense unelevated class="stress-value">
@@ -91,47 +79,27 @@ export class MessageStressTest extends LitElement {
           `
         : ''}
       ${notEmpty(this.stress.rolledFormulas)
-      ? html` <mwc-button
-        dense
+        ? html` <mwc-button
+            dense
             class="formulas-toggle"
             @click=${this.toggleFormulas}
           >
             <img src=${localImage('icons/cubes.svg')} height="20px" />
           </mwc-button>`
-      : ''}
+        : ''}
 
       <div class="damage-info">
-        ${totals.formula} ${localize("stress")} ${localize("from")} ${localize(stressType)}.
-        ${notes ? html`<div>${notes}</div>` : ""}
+        ${totals.formula} ${localize('stress')} ${localize('from')}
+        ${localize(stressType)}. ${notes ? html`<div>${notes}</div>` : ''}
       </div>
-        
-        ${this.viewFormulas ? this.renderRolls() : ""}
-    `;
-  }
 
-  private renderRolls() {
-    return html`
-      <mwc-list class="rolls" @selected=${this.setIgnored} multi>
-        <li divider></li>
-        ${this.stress.rolledFormulas.map(
-          ({ label, roll }, index) => html`
-            <mwc-check-list-item
-              @mouseover=${this.rollTooltip(roll)}
-              ?selected=${!this.usedRollParts || this.usedRollParts.has(index)}
-            >
-              <span class="roll-info">
-                <b>${roll.total}</b>
-                <span>
-                  <span class="roll-formula" title=${roll.formula}
-                    >${roll.formula}</span
-                  >
-                  <span class="roll-label" title=${label}>${label}</span>
-                </span>
-              </span>
-            </mwc-check-list-item>
-          `,
-        )}
-      </mwc-list>
+      ${this.viewFormulas
+        ? html`
+            <rolled-formulas-list
+              @used-roll-parts=${this.setUsedRollParts}
+            ></rolled-formulas-list>
+          `
+        : ''}
     `;
   }
 }

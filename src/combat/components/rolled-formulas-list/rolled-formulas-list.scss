@@ -1,0 +1,45 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  
+}
+
+.rolls {
+  [divider] {
+    border-color: var(--color-border);
+    &:first-of-type {
+      margin: 0.5rem 0 0;
+    }
+  }
+}
+
+
+.roll-info {
+  display: flex;
+  align-items: center;
+  b {
+    margin-right: 1ch;
+    font-size: 1.5rem;
+    display: inline-block;
+    min-width: 2ch;
+    text-align: center;
+  }
+
+  .roll-label,
+  .roll-formula {
+    display: block;
+    @include truncate(180px);
+  }
+  .roll-formula {
+    margin-bottom: -0.25rem;
+  }
+  .roll-label {
+    color: var(--color-text-lighter);
+  }
+}

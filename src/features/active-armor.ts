@@ -1,7 +1,7 @@
 import { enumValues } from '@src/data-enums';
-import { nonNegative } from '@src/utility/helpers';
+import { nonNegative, notEmpty } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
-import { clamp } from 'remeda';
+import { clamp, pipe } from 'remeda';
 
 export enum ArmorType {
   Energy = 'energy',
@@ -74,44 +74,44 @@ export class ActiveArmor extends Map<ArmorKey, number> {
     }
   }
 
-  // mitigateDamage({
-  //   damage,
-  //   armorUsed,
-  //   armorPiercing: pierce = false,
-  //   additionalArmor = 0,
-  // }: Pick<DamageInfo, "damage" | "armorUsed" | "armorPiercing" | "additionalArmor">) {
-  //   const remainingDamage = pipe(
-  //     Math.round(damage),
-  //     (damage) =>
-  //       damage -
-  //       ActiveArmor.maybePierced({ armorValue: additionalArmor, pierce }),
-  //     nonNegative
-  //   );
-  //   if (!notEmpty(armorUsed)) return { appliedDamage: remainingDamage };
+  mitigateDamage({
+    damage,
+    armorUsed,
+    armorPiercing: pierce = false,
+    additionalArmor = 0,
+  }: { damage: number, armorUsed: ArmorType[], armorPiercing: boolean, additionalArmor: number }) {
+    const remainingDamage = pipe(
+      Math.round(damage),
+      (damage) =>
+        damage -
+        ActiveArmor.maybePierced({ armorValue: additionalArmor, pierce }),
+      nonNegative
+    );
+    if (!notEmpty(armorUsed)) return { appliedDamage: remainingDamage };
 
-  //   const uniqueArmors = new Set(armorUsed);
-  //   const damageSplit = Math.floor(remainingDamage / uniqueArmors.size);
-  //   const remainder = remainingDamage % uniqueArmors.size;
-  //   const instances = [...uniqueArmors].map(
-  //     (armor, index) =>
-  //       [armor, damageSplit + (index === 0 ? remainder : 0)] as const
-  //   );
+    const uniqueArmors = new Set(armorUsed);
+    const damageSplit = Math.floor(remainingDamage / uniqueArmors.size);
+    const remainder = remainingDamage % uniqueArmors.size;
+    const instances = [...uniqueArmors].map(
+      (armor, index) =>
+        [armor, damageSplit + (index === 0 ? remainder : 0)] as const
+    );
 
-  //   const personalArmorUsed = new Map<ArmorType, number>();
+    const personalArmorUsed = new Map<ArmorType, number>();
+      
+    let appliedDamage = 0;
+    for (const [armor, dv] of instances) {
+      const armorValue = ActiveArmor.maybePierced({
+        armorValue: this.get(armor),
+        pierce,
+      });
+      const afterArmor = nonNegative(dv - armorValue);
+      appliedDamage += afterArmor;
+      personalArmorUsed.set(armor, dv - afterArmor);
+    }
 
-  //   let appliedDamage = 0;
-  //   for (const [armor, dv] of instances) {
-  //     const armorValue = ActiveArmor.maybePierced({
-  //       armorValue: this.get(armor),
-  //       pierce,
-  //     });
-  //     const afterArmor = nonNegative(dv - armorValue);
-  //     appliedDamage += afterArmor;
-  //     personalArmorUsed.set(armor, dv - afterArmor);
-  //   }
-
-  //   return { appliedDamage, personalArmorUsed };
-  // }
+    return { appliedDamage, personalArmorUsed };
+  }
 
   // setupArmors({
   //   armorEffects,
