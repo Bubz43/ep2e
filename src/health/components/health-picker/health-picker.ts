@@ -84,9 +84,10 @@ export class HealthPicker extends LitElement {
       filteredHealths[0];
     const { name, img } = this.actor.tokenOrLocalInfo;
     return html`
-      <mwc-list-item graphic="medium" noninteractive>
+      <mwc-list-item graphic="medium" noninteractive twoline>
         <img slot="graphic" src=${img} />
         <span>${name}</span>
+        <span slot="secondary">${localize(this.actor.type)}</span>
       </mwc-list-item>
 
       <mwc-tab-bar>
