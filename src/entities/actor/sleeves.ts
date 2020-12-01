@@ -13,9 +13,9 @@ import { ActorEP } from './actor';
 import type { Biological } from './proxies/biological';
 import type { Character } from './proxies/character';
 import type { Infomorph } from './proxies/infomorph';
-import type { SyntheticShell } from './proxies/synthetic-shell';
+import type { Synthetic } from './proxies/synthetic';
 
-export type Sleeve = Biological | SyntheticShell | Infomorph;
+export type Sleeve = Biological | Synthetic | Infomorph;
 
 export type ResleevingSettings = {
   character: Character;

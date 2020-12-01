@@ -3,7 +3,7 @@ import { localize } from '@src/foundry/localization';
 import { cleanFormula, LabeledFormula } from '@src/foundry/rolls';
 import { notEmpty } from '@src/utility/helpers';
 import { compact, map, pipe } from 'remeda';
-import type {  UsedAttackArmor } from './attacks';
+import type { UsedAttackArmor } from './attacks';
 
 export const formatArmorUsed = ({
   armorPiercing,

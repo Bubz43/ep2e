@@ -23,7 +23,7 @@ export class WorldTimeControls extends LitElement {
         direction: localize(forwards ? 'advanced' : 'rewound'),
         amount: prettyMilliseconds(this.timeChange),
       }),
-      entity: null
+      entity: null,
     });
     this.timeChange = 0;
   }

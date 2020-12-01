@@ -61,7 +61,7 @@ import { isSleeveItem, Sleeve } from '../sleeves';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 import { Biological } from './biological';
 import { Infomorph } from './infomorph';
-import { SyntheticShell } from './synthetic-shell';
+import { Synthetic } from './synthetic';
 
 const nonThreat = difference(enumValues(PoolType), [
   PoolType.Threat,
@@ -70,7 +70,7 @@ const nonThreat = difference(enumValues(PoolType), [
 export class Character extends ActorProxyBase<ActorType.Character> {
   readonly ego;
   readonly sleeve?: Sleeve | null;
-  readonly vehicle?: SyntheticShell | null;
+  readonly vehicle?: Synthetic | null;
 
   private _appliedEffects = new AppliedEffects();
 
@@ -453,7 +453,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     return biological
       ? new Biological(this.sleeveInit(biological, sleeveItems))
       : syntheticShell
-      ? new SyntheticShell(this.sleeveInit(syntheticShell, sleeveItems))
+      ? new Synthetic(this.sleeveInit(syntheticShell, sleeveItems))
       : infomorph
       ? new Infomorph(this.sleeveInit(infomorph, sleeveItems))
       : null;
@@ -464,7 +464,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       .prop('flags', EP.Name, 'vehicle')
       .nestedStore();
     const items = new Map<string, ItemProxy>();
-    return new SyntheticShell({
+    return new Synthetic({
       items,
       data,
       activeEffects: this.appliedEffects,

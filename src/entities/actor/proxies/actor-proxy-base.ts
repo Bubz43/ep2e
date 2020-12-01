@@ -69,7 +69,6 @@ export abstract class ActorProxyBase<T extends ActorType> {
     return this.data.type;
   }
 
-
   get editable() {
     return this.updater.editable;
   }

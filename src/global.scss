@@ -548,8 +548,8 @@ sl-tooltip {
     column-gap: 0.5rem;
     align-items: center;
     position: relative;
- 
-    background:  alphav(var(--color-grey), 0.15);
+
+    background: alphav(var(--color-grey), 0.15);
 
     .image-wrapper {
       grid-area: img;
@@ -572,8 +572,7 @@ sl-tooltip {
     background: linear-gradient(
       to bottom,
       alphav(var(--color-bg-alt), 0.8),
-      alphav(var(--color-bg), 0.8),
-
+      alphav(var(--color-bg), 0.8)
     );
     &.non-ep {
       padding: 0.25rem 0.5rem;

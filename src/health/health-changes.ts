@@ -9,6 +9,8 @@ type CommonDamage<T extends { type: HealthType }> = {
   armorPiercing: boolean;
   multiplier: 0.5 | 1 | 2;
   armorUsed: ArmorType[];
+  source: string;
+  kind: 'damage';
 } & T;
 
 export type StressDamage = CommonDamage<{
@@ -26,6 +28,14 @@ export type MeshDamage = CommonDamage<{
 
 export type Damage = StressDamage | PhysicalDamage | MeshDamage;
 
+export type Heal = {
+  type: HealthType;
+  damage: number;
+  wounds: number;
+  source: string;
+  kind: 'heal';
+};
+
 type RequiredFields = 'formula' | 'damageValue';
 
 export const createStressDamage = createFeature<StressDamage, RequiredFields>(
@@ -35,6 +45,8 @@ export const createStressDamage = createFeature<StressDamage, RequiredFields>(
     multiplier: 1,
     armorUsed: [],
     type: HealthType.Mental,
+    source: '',
+    kind: 'damage',
   }),
 );
 
@@ -46,6 +58,8 @@ export const createPhysicalDamage = createFeature<
   multiplier: 1,
   armorUsed: [],
   type: HealthType.Physical,
+  source: '',
+  kind: 'damage',
 }));
 
 export const createMeshDamage = createFeature<MeshDamage, RequiredFields>(
@@ -54,5 +68,7 @@ export const createMeshDamage = createFeature<MeshDamage, RequiredFields>(
     multiplier: 1,
     armorUsed: [],
     type: HealthType.Mesh,
+    source: '',
+    kind: 'damage',
   }),
 );

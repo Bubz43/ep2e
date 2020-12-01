@@ -1,7 +1,7 @@
 import type {
   AreaEffectType,
   AttackTrait,
-  FirearmAmmoModifierType
+  FirearmAmmoModifierType,
 } from '@src/data-enums';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
 import type { FirearmAmmo } from '@src/entities/item/proxies/firearm-ammo';
@@ -19,8 +19,6 @@ type FiringModeList = {
    */
   firingModes: FiringMode[];
 };
-
-
 
 // export const rollLabeledFormulas = (
 //   formulas: LabeledFormula[],

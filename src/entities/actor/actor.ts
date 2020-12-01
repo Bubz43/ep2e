@@ -23,7 +23,7 @@ import type { ActorProxyInit } from './proxies/actor-proxy-base';
 import { Biological } from './proxies/biological';
 import { Character } from './proxies/character';
 import { Infomorph } from './proxies/infomorph';
-import { SyntheticShell } from './proxies/synthetic-shell';
+import { Synthetic } from './proxies/synthetic';
 
 type ItemUpdate = SetRequired<DeepPartial<ItemEntity>, '_id'>;
 
@@ -210,7 +210,7 @@ export class ActorEP extends Actor {
         return new Biological(this.proxyInit(data));
 
       case ActorType.Synthetic:
-        return new SyntheticShell(this.proxyInit(data));
+        return new Synthetic(this.proxyInit(data));
 
       case ActorType.Infomorph:
         return new Infomorph(this.proxyInit(data));

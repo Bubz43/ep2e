@@ -116,8 +116,8 @@ export class EgoForm extends mix(LitElement).with(
       entity: actor,
       data: {
         header: {
-          heading: localize("stressfulExperience"),
-          description: this.ego.epData.description
+          heading: localize('stressfulExperience'),
+          description: this.ego.epData.description,
         },
         stress: {
           rolledFormulas: rollLabeledFormulas([

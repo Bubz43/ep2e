@@ -1,6 +1,9 @@
-import type { Damage } from '@src/combat/damages';
-import { renderRadioFields } from '@src/components/field/fields';
-import { renderAutoForm } from '@src/components/form/forms';
+import type { Damage, Heal } from '@src/health/health-changes';
+import {
+  renderNumberField,
+  renderRadioFields,
+} from '@src/components/field/fields';
+import { renderAutoForm, renderSubmitForm } from '@src/components/form/forms';
 import { Placement } from '@src/components/popover/popover-options';
 import {
   closeWindow,
@@ -10,32 +13,47 @@ import { enumValues } from '@src/data-enums';
 import type { ActorEP } from '@src/entities/actor/actor';
 import { ActorType } from '@src/entities/entity-types';
 import { localize } from '@src/foundry/localization';
-import { HealthType } from '@src/health/health';
-import type { ActorHealth, Health } from '@src/health/health-mixin';
+import {
+  createHealthModification,
+  HealthModificationMode,
+  HealthType,
+} from '@src/health/health';
+import type { ActorHealth } from '@src/health/health-mixin';
 import {
   customElement,
+  html,
+  internalProperty,
   LitElement,
   property,
-  html,
   PropertyValues,
-  internalProperty,
 } from 'lit-element';
 import { compact } from 'remeda';
-import styles from './health-picker.scss';
+import styles from './health-editor.scss';
+import { MentalHealth } from '@src/health/mental-health';
 
-@customElement('health-picker')
-export class HealthPicker extends LitElement {
+@customElement('health-editor')
+export class HealthEditor extends LitElement {
   static get is() {
-    return 'health-picker' as const;
+    return 'health-editor' as const;
   }
 
   static styles = [styles];
 
-  static openWindow(actor: ActorEP, adjacentEl?: HTMLElement) {
+  static openWindow({
+    actor,
+    adjacentEl,
+    change,
+  }: {
+    actor: ActorEP;
+    adjacentEl?: HTMLElement;
+    change?: HealthEditor['change'];
+  }) {
     return openWindow({
-      key: HealthPicker,
-      name: `${localize('health')} ${localize('picker')}`,
-      content: html` <health-picker .actor=${actor}></health-picker> `,
+      key: HealthEditor,
+      name: `${localize('health')} ${localize('editor')}`,
+      content: html`
+        <health-editor .actor=${actor} .change=${change}></health-editor>
+      `,
       adjacentEl,
       forceFocus: true,
     });
@@ -43,7 +61,7 @@ export class HealthPicker extends LitElement {
 
   @property({ attribute: false }) actor!: ActorEP;
 
-  @property({ type: Object }) change?: Damage;
+  @property({ type: Object }) change?: Damage | Heal | null;
 
   @internalProperty() healthType = HealthType.Physical;
 
@@ -55,6 +73,7 @@ export class HealthPicker extends LitElement {
 
   disconnectedCallback() {
     this.cleanupSub();
+    this.change = null;
     super.disconnectedCallback();
   }
 
@@ -63,7 +82,7 @@ export class HealthPicker extends LitElement {
       this.cleanupSub();
       this.actor.subscriptions.subscribe(this, {
         onEntityUpdate: () => this.requestUpdate(),
-        onSubEnd: () => closeWindow(HealthPicker),
+        onSubEnd: () => closeWindow(HealthEditor),
       });
     }
     if (changedProps.has('change') && this.change) {
@@ -82,6 +101,19 @@ export class HealthPicker extends LitElement {
     return this.actor.proxy.healths.filter(
       ({ type }) => type === this.healthType,
     );
+  }
+
+  private get damage() {
+    return this.change?.kind === 'damage' &&
+      this.change.type === this.healthType
+      ? this.change
+      : null;
+  }
+
+  private get heal() {
+    return this.change?.kind === 'heal' && this.change.type === this.healthType
+      ? this.change
+      : null;
   }
 
   render() {
@@ -120,7 +152,8 @@ export class HealthPicker extends LitElement {
       </mwc-tab-bar>
 
       ${currentHealth
-        ? html` <sl-popover
+        ? html`
+            <sl-popover
               placement=${Placement.Left}
               .renderOnDemand=${() => html`
                 <ul class="healths">
@@ -147,7 +180,11 @@ export class HealthPicker extends LitElement {
               props: { mode: this.mode },
               update: ({ mode }) => mode && (this.mode = mode),
               fields: ({ mode }) => [renderRadioFields(mode, ['heal', 'harm'])],
-            })}`
+            })}
+            ${this.mode === 'heal'
+              ? this.renderHealForm(currentHealth, this.heal)
+              : this.renderDamageEditor(currentHealth, this.damage)}
+          `
         : html`
             <p>
               ${localize('no')} ${localize(this.healthType)}
@@ -156,10 +193,61 @@ export class HealthPicker extends LitElement {
           `}
     `;
   }
+
+  private renderDamageEditor(health: ActorHealth, change?: Damage | null) {
+    // TODO Apply change
+    if (health instanceof MentalHealth) {
+      const stress = change?.type === HealthType.Mental ? change : null;
+      return html`
+        <mental-health-stress-editor
+          .health=${health}
+          .stress=${stress}
+        ></mental-health-stress-editor>
+      `;
+    }
+
+    // TODO Physical and Mesh
+    return '';
+  }
+
+  private renderHealForm(health: ActorHealth, change?: Heal | null) {
+    const { main, wound } = health;
+    return renderSubmitForm({
+      props: change || { damage: 0, wounds: 0 },
+      update: ({ damage = 0, wounds = 0 }) => {
+        health.applyModification(
+          createHealthModification({
+            mode: HealthModificationMode.Heal,
+            damage,
+            wounds,
+            source: change?.source || localize('editor'),
+          }),
+        );
+      },
+      fields: ({ damage, wounds }) => [
+        renderNumberField(
+          { ...damage, label: main.damage.label },
+          {
+            min: 0,
+            max: main.damage.value,
+          },
+        ),
+        wound
+          ? renderNumberField(
+              { ...wounds, label: wound.wounds.label },
+              {
+                min: 0,
+                max: wound.wounds.value,
+              },
+            )
+          : '',
+      ],
+    });
+  }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'health-picker': HealthPicker;
+    'health-editor': HealthEditor;
   }
 }

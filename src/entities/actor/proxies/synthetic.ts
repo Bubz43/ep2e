@@ -27,7 +27,7 @@ class SyntheticBase extends ActorProxyBase<ActorType.Synthetic> {
   }
 }
 
-export class SyntheticShell extends mix(SyntheticBase).with(
+export class Synthetic extends mix(SyntheticBase).with(
   SleeveInfo,
   PhysicalSleeve,
 ) {

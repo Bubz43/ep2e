@@ -79,13 +79,18 @@ export class ActiveArmor extends Map<ArmorKey, number> {
     armorUsed,
     armorPiercing: pierce = false,
     additionalArmor = 0,
-  }: { damage: number, armorUsed: ArmorType[], armorPiercing: boolean, additionalArmor: number }) {
+  }: {
+    damage: number;
+    armorUsed: ArmorType[];
+    armorPiercing: boolean;
+    additionalArmor: number;
+  }) {
     const remainingDamage = pipe(
       Math.round(damage),
       (damage) =>
         damage -
         ActiveArmor.maybePierced({ armorValue: additionalArmor, pierce }),
-      nonNegative
+      nonNegative,
     );
     if (!notEmpty(armorUsed)) return { appliedDamage: remainingDamage };
 
@@ -94,11 +99,11 @@ export class ActiveArmor extends Map<ArmorKey, number> {
     const remainder = remainingDamage % uniqueArmors.size;
     const instances = [...uniqueArmors].map(
       (armor, index) =>
-        [armor, damageSplit + (index === 0 ? remainder : 0)] as const
+        [armor, damageSplit + (index === 0 ? remainder : 0)] as const,
     );
 
     const personalArmorUsed = new Map<ArmorType, number>();
-      
+
     let appliedDamage = 0;
     for (const [armor, dv] of instances) {
       const armorValue = ActiveArmor.maybePierced({

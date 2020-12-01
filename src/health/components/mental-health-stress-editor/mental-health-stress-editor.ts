@@ -1,4 +1,4 @@
-import { createStressDamage, StressDamage } from '@src/combat/damages';
+import { createStressDamage, StressDamage } from '@src/health/health-changes';
 import {
   renderNumberField,
   renderSelectField,
@@ -28,13 +28,15 @@ export class MentalHealthStressEditor extends LitElement {
 
   @property({ attribute: false }) health!: MentalHealth;
 
-  @property({ type: Object }) stress!: StressDamage;
+  @property({ type: Object }) stress?: StressDamage | null;
 
   @internalProperty() private editableStress!: StressDamage;
 
   update(changedProps: PropertyValues) {
     if (changedProps.has('stress')) {
-      this.editableStress = createStressDamage(this.stress);
+      this.editableStress = createStressDamage(
+        this.stress || { damageValue: 0, formula: '' },
+      );
     }
     super.update(changedProps);
   }
@@ -51,8 +53,6 @@ export class MentalHealthStressEditor extends LitElement {
       this.editableStress.damageValue * this.editableStress.multiplier,
     );
   }
-
-
 
   render() {
     const { damage } = this;

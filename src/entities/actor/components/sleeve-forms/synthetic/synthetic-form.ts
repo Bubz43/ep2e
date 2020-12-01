@@ -11,7 +11,7 @@ import {
   renderUpdaterForm,
 } from '@src/components/form/forms';
 import { BotType, enumValues, ShellType, VehicleType } from '@src/data-enums';
-import type { SyntheticShell } from '@src/entities/actor/proxies/synthetic-shell';
+import type { Synthetic } from '@src/entities/actor/proxies/synthetic';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import type { UpdateStore } from '@src/entities/update-store';
 import { renderMovementRateFields } from '@src/features/components/movement-rate-fields';
@@ -45,7 +45,7 @@ export class SyntheticForm extends SleeveFormBase {
 
   static styles = [entityFormCommonStyles, styles];
 
-  @property({ attribute: false }) sleeve!: SyntheticShell;
+  @property({ attribute: false }) sleeve!: Synthetic;
 
   private movementOperations = addUpdateRemoveFeature(
     () => this.sleeve.updater.prop('data', 'movementRates').commit,

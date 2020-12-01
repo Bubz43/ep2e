@@ -41,7 +41,7 @@ export class Infomorph extends mix(InfomorphBase).with(SleeveInfo) {
   }
 
   get healths(): ActorHealth[] {
-    return [this.meshHealth]
+    return [this.meshHealth];
   }
 
   get activeEffects() {

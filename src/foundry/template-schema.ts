@@ -202,8 +202,7 @@ type CharacterData = EgoData & {
     masterDeviceId: string;
     unslavedDevices: string[];
     systemDefenders: string[];
-  // accountShells: StringID<AccountShell>[];
-
+    // accountShells: StringID<AccountShell>[];
   };
   temporary: StringID<TemporaryFeature>[];
   spentPools: Record<PoolType, number>;
@@ -277,13 +276,7 @@ type SyntheticShellData = {
 
 type BiologicalData = {
   templates: UseActorTemplate<
-    [
-      'Common',
-      'Mobile',
-      'Acquisition',
-      'PoolData',
-      'Conditions',
-    ]
+    ['Common', 'Mobile', 'Acquisition', 'PoolData', 'Conditions']
   >;
   subtype: string;
   sex: string;

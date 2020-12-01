@@ -69,9 +69,9 @@ export class CharacterViewNetworkSettings extends LitElement {
       </mwc-list>
 
       <section>
-        <sl-header heading=${localize("accountShells")}></sl-header>
+        <sl-header heading=${localize('accountShells')}></sl-header>
         // TODO
-        </section>
+      </section>
     `;
   }
 }

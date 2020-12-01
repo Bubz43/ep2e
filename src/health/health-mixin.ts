@@ -37,8 +37,6 @@ export type ActorHealth =
   | MeshHealth
   | AppMeshHealth;
 
-
-
 export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
   class HealthInfo extends cls implements Health, ObtainableEffects {
     @LazyGetter()
