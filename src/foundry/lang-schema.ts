@@ -1334,8 +1334,7 @@ type LangEntries =
   | 'rewound'
   | 'advanced'
   | 'from'
-  | 'picker'
-  | 'harm';
+  | 'picker';
 type FullNames =
   | 'cog'
   | 'int'

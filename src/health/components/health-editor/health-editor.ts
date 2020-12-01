@@ -30,6 +30,7 @@ import {
 import { compact } from 'remeda';
 import styles from './health-editor.scss';
 import { MentalHealth } from '@src/health/mental-health';
+import type { HealthModificationEvent } from '@src/health/health-modification-event';
 
 @customElement('health-editor')
 export class HealthEditor extends LitElement {
@@ -65,7 +66,7 @@ export class HealthEditor extends LitElement {
 
   @internalProperty() healthType = HealthType.Physical;
 
-  @internalProperty() mode: 'heal' | 'harm' = 'heal';
+  @internalProperty() mode: 'heal' | 'damage' = 'heal';
 
   @internalProperty() private selectedHealth: ActorHealth | null = null;
 
@@ -87,6 +88,7 @@ export class HealthEditor extends LitElement {
     }
     if (changedProps.has('change') && this.change) {
       this.healthType = this.change.type;
+      this.mode = this.change.kind;
     }
     super.update(changedProps);
   }
@@ -177,9 +179,12 @@ export class HealthEditor extends LitElement {
             </sl-popover>
 
             ${renderAutoForm({
+              classes: 'mode-form',
               props: { mode: this.mode },
               update: ({ mode }) => mode && (this.mode = mode),
-              fields: ({ mode }) => [renderRadioFields(mode, ['heal', 'harm'])],
+              fields: ({ mode }) => [
+                renderRadioFields(mode, ['heal', 'damage']),
+              ],
             })}
             ${this.mode === 'heal'
               ? this.renderHealForm(currentHealth, this.heal)
@@ -200,6 +205,8 @@ export class HealthEditor extends LitElement {
       const stress = change?.type === HealthType.Mental ? change : null;
       return html`
         <mental-health-stress-editor
+          @health-modification=${(ev: HealthModificationEvent) =>
+            health.applyModification(ev.modification)}
           .health=${health}
           .stress=${stress}
         ></mental-health-stress-editor>
@@ -214,6 +221,7 @@ export class HealthEditor extends LitElement {
     const { main, wound } = health;
     return renderSubmitForm({
       props: change || { damage: 0, wounds: 0 },
+      classes: 'heal-editor',
       update: ({ damage = 0, wounds = 0 }) => {
         health.applyModification(
           createHealthModification({

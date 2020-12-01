@@ -7,18 +7,27 @@
 
 :host {
   display: block;
+  width: 300px;
+  margin: auto;
+}
+
+
+.change {
+  display: flex;
+  justify-content: space-around;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
 }
 
 .stress-damage {
-  display: flex;
+  display: grid;
+  grid-template-columns:  1fr 1fr;
   sl-form {
-    grid-auto-flow: column;
+    display: contents;
   }
 }
 
-.change {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  // display: flex;
-  // justify-content: space-around;
+submit-button {
+  width: 100%;
+  margin-bottom: 0.5rem;
 }

@@ -449,11 +449,11 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   }
 
   private setupSleeve(sleeveItems: Map<string, ItemProxy>) {
-    const { biological, syntheticShell, infomorph } = this.epFlags ?? {};
+    const { biological, synthetic, infomorph } = this.epFlags ?? {};
     return biological
       ? new Biological(this.sleeveInit(biological, sleeveItems))
-      : syntheticShell
-      ? new Synthetic(this.sleeveInit(syntheticShell, sleeveItems))
+      : synthetic
+      ? new Synthetic(this.sleeveInit(synthetic, sleeveItems))
       : infomorph
       ? new Infomorph(this.sleeveInit(infomorph, sleeveItems))
       : null;

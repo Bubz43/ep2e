@@ -1,5 +1,6 @@
 import { createStressDamage, StressDamage } from '@src/health/health-changes';
 import {
+  renderFormulaField,
   renderNumberField,
   renderSelectField,
 } from '@src/components/field/fields';
@@ -17,7 +18,12 @@ import {
   PropertyValues,
 } from 'lit-element';
 import styles from './mental-health-stress-editor.scss';
+import { HealthModificationEvent } from '@src/health/health-modification-event';
+import { createHealthModification, HealthModificationMode } from '@src/health/health';
 
+/**
+ * @fires health-modification - HealthModificationEvent
+ */
 @customElement('mental-health-stress-editor')
 export class MentalHealthStressEditor extends LitElement {
   static get is() {
@@ -54,24 +60,42 @@ export class MentalHealthStressEditor extends LitElement {
     );
   }
 
+  private emitChange() {
+    if (this.editableStress.damageValue) {
+      this.dispatchEvent(new HealthModificationEvent(createHealthModification({
+        mode: HealthModificationMode.Inflict,
+        damage: this.damage,
+        wounds: this.health.computeWounds(this.damage),
+        source: this.stress?.source || localize("editor"),
+      })))
+    }
+  }
+
   render() {
     const { damage } = this;
     const wounds = this.health.computeWounds(damage);
+    // TODO Armor
     return html`
       <div class="stress-damage">
         ${renderAutoForm({
+          classes: 'stress-form',
           props: this.editableStress,
+          noDebounce: true,
           update: (changed, orig) =>
             (this.editableStress = { ...orig, ...changed }),
-          fields: ({ damageValue: value, stressType }) => [
-            renderNumberField(value, { min: 0 }),
+          fields: ({ damageValue, stressType, formula }) => [
+            renderFormulaField(formula),
+            renderNumberField(
+              { ...damageValue, label: localize('stress') },
+              { min: 0 },
+            ),
             renderSelectField(stressType, enumValues(StressType)),
           ],
         })}
         <mwc-button
           dense
           label=${localize('SHORT', 'armorPiercing')}
-          outlined
+          ?outlined=${!this.editableStress.armorPiercing}
           ?unelevated=${this.editableStress.armorPiercing}
           @click=${this.toggleArmorPiercing}
         ></mwc-button>
@@ -87,6 +111,12 @@ export class MentalHealthStressEditor extends LitElement {
             `
           : ''}
       </div>
+
+      <submit-button
+        label=${localize('inflict')}
+        ?complete=${!!this.editableStress.damageValue}
+        @submit-attempt=${this.emitChange}
+      ></submit-button>
     `;
   }
 }

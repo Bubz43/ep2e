@@ -10,12 +10,12 @@
 :host {
   display: grid;
   min-width: 325px;
-  sl-form {
-    padding: 0.25rem 0.5rem;
-    .radio-fields {
-      justify-content: flex-start !important;
-    }
-  }
+
+}
+.mode-form {
+  padding: 0.25rem 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 0.5rem;
 }
 
 sl-popover {
@@ -40,4 +40,9 @@ mwc-list-item {
 
 p {
   text-align: center;
+}
+
+.heal-editor {
+  grid-template-columns: 1fr 1fr;
+  padding: 0 0.5rem 0.5rem
 }
