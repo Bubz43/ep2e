@@ -463,7 +463,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       data: this.data,
       updater: (this.updater as unknown) as UpdateStore<FullEgoData>,
       items: egoItems,
-      activeEffects: this.appliedEffects,
+      activeEffects: this._appliedEffects,
       actor: this.actor,
       itemOperations: this.itemOperations,
       allowSleights: true,
