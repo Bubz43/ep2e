@@ -18,6 +18,7 @@ import {
   HealthType,
   initializeHealthData,
 } from './health';
+import type { DamageOverTime } from './health-changes';
 import { HealthMixin } from './health-mixin';
 import type { HealsOverTime } from './recovery';
 
@@ -27,14 +28,7 @@ export type SyntheticHealthData = BasicHealthData &
      * @minimum 1
      */
     baseDurability: number;
-    dots: StringID<{
-      formula: string;
-      armorPiercing: boolean;
-      armorRemoving: boolean;
-      armorUsed: ArmorType[];
-      duration: number;
-      elapsed: number;
-    }>[];
+    dots: StringID<DamageOverTime>[];
   };
 
 type Init = HealthInit<SyntheticHealthData> & {

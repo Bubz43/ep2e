@@ -84,6 +84,7 @@ import type { SyntheticHealthData } from '@src/health/synthetic-health';
 import type { JsonValue } from 'type-fest';
 import type { AppMeshHealthData } from '@src/health/app-mesh-health';
 import type { TemporaryFeature } from '@src/features/temporary';
+import type { ArmorDamage } from '@src/health/health-changes';
 
 type StringID<T> = T & { id: string };
 type TopLevel = Record<string, JsonValue>;
@@ -150,7 +151,8 @@ type ActorTemplates = Template<'Common', CommonDetails> &
   Template<'Mobile', { movementRates: StringID<MovementRate>[] }> &
   Template<'Acquisition', Acquisition> &
   Template<'PoolData', { pools: MorphPoolsData }> &
-  Template<'Conditions', { conditions: ConditionType[] }>;
+  Template<'Conditions', { conditions: ConditionType[] }> &
+  Template<'DamagedArmor', { damageArmor: StringID<ArmorDamage>[] }>;
 
 type UseActorTemplate<T extends (keyof ActorTemplates)[]> = T;
 type UseItemTemplate<T extends (keyof ItemTemplates)[]> = T;
@@ -236,6 +238,7 @@ type InfomorphData = {
       'Common',
       'Acquisition',
       'PoolData',
+      'DamagedArmor',
       // "Firewall",
       'Conditions',
     ]
@@ -249,7 +252,14 @@ type InfomorphData = {
 
 type SyntheticShellData = {
   templates: UseActorTemplate<
-    ['Common', 'Mobile', 'Acquisition', 'PoolData', 'Conditions']
+    [
+      'Common',
+      'Mobile',
+      'Acquisition',
+      'PoolData',
+      'Conditions',
+      'DamagedArmor',
+    ]
   >;
   shellType: ShellType;
   subtype: '' | VehicleType | BotType;
@@ -276,7 +286,14 @@ type SyntheticShellData = {
 
 type BiologicalData = {
   templates: UseActorTemplate<
-    ['Common', 'Mobile', 'Acquisition', 'PoolData', 'Conditions']
+    [
+      'Common',
+      'Mobile',
+      'Acquisition',
+      'PoolData',
+      'Conditions',
+      'DamagedArmor',
+    ]
   >;
   subtype: string;
   sex: string;

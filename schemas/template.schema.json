@@ -436,7 +436,7 @@
         },
         "dots": {
           "items": {
-            "$ref": "#/definitions/StringID%3Cstructure-847064237-825-992-847064237-815-993-847064237-815-995-847064237-805-996-847064237-715-1000-847064237-679-1000-847064237-643-1001-847064237-0-2404%3E"
+            "$ref": "#/definitions/StringID%3CDamageOverTime%3E"
           },
           "type": "array"
         },
@@ -821,10 +821,14 @@
                     {
                       "const": "Conditions",
                       "type": "string"
+                    },
+                    {
+                      "const": "DamagedArmor",
+                      "type": "string"
                     }
                   ],
-                  "maxItems": 5,
-                  "minItems": 5,
+                  "maxItems": 6,
+                  "minItems": 6,
                   "type": "array"
                 },
                 "unarmedDV": {
@@ -1856,12 +1860,16 @@
                       "type": "string"
                     },
                     {
+                      "const": "DamagedArmor",
+                      "type": "string"
+                    },
+                    {
                       "const": "Conditions",
                       "type": "string"
                     }
                   ],
-                  "maxItems": 4,
-                  "minItems": 4,
+                  "maxItems": 5,
+                  "minItems": 5,
                   "type": "array"
                 }
               },
@@ -1969,10 +1977,14 @@
                     {
                       "const": "Conditions",
                       "type": "string"
+                    },
+                    {
+                      "const": "DamagedArmor",
+                      "type": "string"
                     }
                   ],
-                  "maxItems": 5,
-                  "minItems": 5,
+                  "maxItems": 6,
+                  "minItems": 6,
                   "type": "array"
                 },
                 "unarmedDV": {
@@ -2033,6 +2045,50 @@
                   ],
                   "type": "object"
                 },
+                "DamagedArmor": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "damageArmor": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "energy": {
+                            "type": "number"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "kinetic": {
+                            "type": "number"
+                          },
+                          "mental": {
+                            "type": "number"
+                          },
+                          "mesh": {
+                            "type": "number"
+                          },
+                          "source": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "energy",
+                          "id",
+                          "kinetic",
+                          "mental",
+                          "mesh",
+                          "source"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "damageArmor"
+                  ],
+                  "type": "object"
+                },
                 "Mobile": {
                   "additionalProperties": false,
                   "properties": {
@@ -2086,6 +2142,7 @@
                 "Acquisition",
                 "Common",
                 "Conditions",
+                "DamagedArmor",
                 "Mobile",
                 "PoolData"
               ],
@@ -10060,6 +10117,49 @@
       ],
       "type": "object"
     },
+    "StringID<DamageOverTime>": {
+      "additionalProperties": false,
+      "properties": {
+        "armorPiercing": {
+          "type": "boolean"
+        },
+        "armorRemoving": {
+          "type": "boolean"
+        },
+        "armorUsed": {
+          "items": {
+            "$ref": "#/definitions/ArmorType"
+          },
+          "type": "array"
+        },
+        "duration": {
+          "type": "number"
+        },
+        "formula": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "startTime": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "armorPiercing",
+        "armorRemoving",
+        "armorUsed",
+        "duration",
+        "formula",
+        "id",
+        "source",
+        "startTime"
+      ],
+      "type": "object"
+    },
     "StringID<Effect>": {
       "anyOf": [
         {
@@ -10573,84 +10673,6 @@
       ],
       "type": "object"
     },
-    "StringID<structure-1564620705-798-965-1564620705-788-966-1564620705-788-968-1564620705-778-969-1564620705-714-973-1564620705-678-973-1564620705-643-974-1564620705-0-2372>": {
-      "additionalProperties": false,
-      "properties": {
-        "armorPiercing": {
-          "type": "boolean"
-        },
-        "armorRemoving": {
-          "type": "boolean"
-        },
-        "armorUsed": {
-          "items": {
-            "$ref": "#/definitions/ArmorType"
-          },
-          "type": "array"
-        },
-        "duration": {
-          "type": "number"
-        },
-        "elapsed": {
-          "type": "number"
-        },
-        "formula": {
-          "type": "string"
-        },
-        "id": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "armorPiercing",
-        "armorRemoving",
-        "armorUsed",
-        "duration",
-        "elapsed",
-        "formula",
-        "id"
-      ],
-      "type": "object"
-    },
-    "StringID<structure-847064237-825-992-847064237-815-993-847064237-815-995-847064237-805-996-847064237-715-1000-847064237-679-1000-847064237-643-1001-847064237-0-2404>": {
-      "additionalProperties": false,
-      "properties": {
-        "armorPiercing": {
-          "type": "boolean"
-        },
-        "armorRemoving": {
-          "type": "boolean"
-        },
-        "armorUsed": {
-          "items": {
-            "$ref": "#/definitions/ArmorType"
-          },
-          "type": "array"
-        },
-        "duration": {
-          "type": "number"
-        },
-        "elapsed": {
-          "type": "number"
-        },
-        "formula": {
-          "type": "string"
-        },
-        "id": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "armorPiercing",
-        "armorRemoving",
-        "armorUsed",
-        "duration",
-        "elapsed",
-        "formula",
-        "id"
-      ],
-      "type": "object"
-    },
     "SubstanceApplicationMethod": {
       "enum": [
         "dermal",
@@ -10766,7 +10788,7 @@
         },
         "dots": {
           "items": {
-            "$ref": "#/definitions/StringID%3Cstructure-1564620705-798-965-1564620705-788-966-1564620705-788-968-1564620705-778-969-1564620705-714-973-1564620705-678-973-1564620705-643-974-1564620705-0-2372%3E"
+            "$ref": "#/definitions/StringID%3CDamageOverTime%3E"
           },
           "type": "array"
         },

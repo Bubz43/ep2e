@@ -33,6 +33,9 @@
       },
       "Conditions": {
         "conditions": []
+      },
+      "DamagedArmor": {
+        "damageArmor": []
       }
     },
     "biological": {
@@ -41,7 +44,8 @@
         "Mobile",
         "Acquisition",
         "PoolData",
-        "Conditions"
+        "Conditions",
+        "DamagedArmor"
       ],
       "prehensileLimbs": 2,
       "sex": "",
@@ -78,6 +82,7 @@
         "Common",
         "Acquisition",
         "PoolData",
+        "DamagedArmor",
         "Conditions"
       ],
       "meshHealth": {
@@ -110,7 +115,8 @@
         "Mobile",
         "Acquisition",
         "PoolData",
-        "Conditions"
+        "Conditions",
+        "DamagedArmor"
       ],
       "passengers": 1,
       "prehensileLimbs": 2,

@@ -36,6 +36,20 @@ export type Heal = {
   kind: 'heal';
 };
 
+export type DamageOverTime = {
+  formula: string;
+  armorPiercing: boolean;
+  armorRemoving: boolean;
+  armorUsed: ArmorType[];
+  source: string;
+  duration: number;
+  startTime: number;
+}
+
+export type ArmorDamage = Record<ArmorType, number> & {
+  source: string;
+}
+
 type RequiredFields = 'formula' | 'damageValue';
 
 export const createStressDamage = createFeature<StressDamage, RequiredFields>(
