@@ -45,3 +45,18 @@ header {
   justify-content: space-evenly;
   border-top: 1px solid alphav(var(--color-border), 0.5);
 }
+
+.armor-rating,
+.movement {
+  margin: 0 1rem 0.25rem 1rem;
+  font-size: 14px;
+  line-height: 1rem;
+  > span {
+    white-space: nowrap;
+  }
+  .armor-value,
+  .movement-rate {
+    color: var(--color-text-lighter);
+    margin-right: 0.5ch;
+  }
+}

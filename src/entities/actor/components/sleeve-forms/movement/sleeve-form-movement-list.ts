@@ -34,7 +34,7 @@ export class SleeveFormMovementList extends LitElement {
   @property({ type: Boolean }) disabled = false;
 
   render() {
-    const { granted, modify } = this.effects;
+    const { granted } = this.effects;
     const hasGranted = notEmpty(granted);
     return html`
       <sl-animated-list class="movement-list" skipExitAnimation>

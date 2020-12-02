@@ -1,6 +1,8 @@
 import type { Character } from '@src/entities/actor/proxies/character';
 import type { Sleeve } from '@src/entities/actor/sleeves';
 import { ActorType } from '@src/entities/entity-types';
+import { ArmorType } from '@src/features/active-armor';
+import type { MovementRate } from '@src/features/movement';
 import type { ReadonlyPool } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import { HealthType } from '@src/health/health';
@@ -28,6 +30,7 @@ export class CharacterViewSleeve extends LitElement {
     const meshHealth = 'activeMeshHealth' in sleeve && sleeve.activeMeshHealth;
     const movement = 'movementRates' in sleeve && sleeve.movementRates;
     const isInfomorph = !physicalHealth;
+    const { armor } = this.character;
     return html`
       <header>
         <button @click=${this.sleeve.openForm}>${this.sleeve.name}</button>
@@ -40,7 +43,36 @@ export class CharacterViewSleeve extends LitElement {
           ]).join(' • ')}</span
         >
       </header>
-
+      ${movement ? this.renderMovement(movement) : ''}
+      ${!isInfomorph ||
+      [ArmorType.Mental, ArmorType.Mesh].some((type) => armor.get(type))
+        ? html` <sl-group label=${localize('armorRating')} class="armor-rating">
+            ${isInfomorph
+              ? ''
+              : html`<span
+                    class="physical-armor"
+                    title="${localize('energy')} / ${localize('kinetic')}"
+                  >
+                    ${armor.get(ArmorType.Energy)} /
+                    ${armor.get(ArmorType.Kinetic)},
+                  </span>
+                  <span
+                    >${localize('layers')}
+                    <span class="armor-value"
+                      >${armor.get('layers')}</span
+                    ></span
+                  >`}
+            ${[ArmorType.Mental, ArmorType.Mesh].map((type) => {
+              const value = armor.get(type);
+              return value
+                ? html`<span
+                    >${localize(type)}
+                    <span class="armor-value">${value}</span></span
+                  >`
+                : '';
+            })}
+          </sl-group>`
+        : ''}
       ${physicalHealth
         ? html` <health-item .health=${physicalHealth}> </health-item> `
         : ''}
@@ -69,6 +101,14 @@ export class CharacterViewSleeve extends LitElement {
       ?disabled=${this.character.disabled || pool.disabled}
     ></pool-item>
   `;
+
+  private renderArmor() {
+    return html``;
+  }
+
+  private renderMovement(movement: MovementRate[]) {
+    return html``;
+  }
 }
 
 declare global {
