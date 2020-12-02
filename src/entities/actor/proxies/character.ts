@@ -108,6 +108,16 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       }
     }
 
+    if (this.sleeve?.type === ActorType.Synthetic) {
+      this._appliedEffects.add(this.sleeve.inherentArmorEffect);
+      if (this.sleeve.painFilterActive) {
+        this._appliedEffects.add({
+          source: localize("painFilter"),
+          effects: Synthetic.painFilterEffects
+        })
+      }
+    }
+
     // TODO do something with overburdened/encumbered movement
     this.armor = new ActiveArmor(
       this._appliedEffects.getGroup(EffectType.Armor),
