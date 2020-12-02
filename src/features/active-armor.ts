@@ -1,7 +1,15 @@
 import { enumValues } from '@src/data-enums';
+import type {
+  AddEffects,
+  ObtainableEffects,
+} from '@src/entities/applied-effects';
+import { localize } from '@src/foundry/localization';
 import { nonNegative, notEmpty } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
 import { clamp, pipe } from 'remeda';
+import { ActionSubtype } from './actions';
+import { ArmorEffect, createEffect, SourcedEffect } from './effects';
+import { TagType } from './tags';
 
 export enum ArmorType {
   Energy = 'energy',
@@ -17,12 +25,69 @@ export type ReadonlyArmor = Omit<
   'setupArmors' | 'set' | 'delete' | 'clear'
 >;
 
-export class ActiveArmor extends Map<ArmorKey, number> {
+export class ActiveArmor
+  extends Map<ArmorKey, number>
+  implements ObtainableEffects {
   private positiveArmorSources = new Set<ArmorType>();
+  private _layerPenalty?: AddEffects;
+  private _overburdened?: AddEffects;
+  readonly currentEffects: AddEffects[] = [];
 
-  // #layerPenalty?: AddEffects;
+  constructor(
+    public readonly armorSources: ReadonlyArray<SourcedEffect<ArmorEffect>>,
+    public readonly som: number | null,
+  ) {
+    super();
+    const armorTypes = enumValues(ArmorType);
+    for (const source of armorSources) {
+      if (!source.layerable) this.incrementLayers();
+      for (const armor of armorTypes) {
+        const value = source[armor];
+        if (value > 0) this.positiveArmorSources.add(armor);
+        this.addValue(armor, value);
+      }
+    }
 
-  // #overburdened?: AddEffects;
+    const { excessLayers, highestPhysicalArmor } = this;
+
+    if (excessLayers > 0) {
+      this._layerPenalty = {
+        source: `${localize('armorLayerPenalty')} x${excessLayers}`,
+        effects: [
+          createEffect.successTest({
+            modifier: excessLayers * -20,
+            tags: [
+              {
+                type: TagType.Action,
+                subtype: ActionSubtype.Physical,
+                action: '',
+              },
+            ],
+          }),
+        ],
+      };
+      this.currentEffects.push(this._layerPenalty);
+    }
+
+    if (som && highestPhysicalArmor > som) {
+      this._overburdened = {
+        source: localize('overburdened'),
+        effects: [
+          createEffect.successTest({
+            modifier: -20,
+            tags: [
+              {
+                type: TagType.Action,
+                subtype: ActionSubtype.Physical,
+                action: '',
+              },
+            ],
+          }),
+        ],
+      };
+      this.currentEffects.push(this._overburdened);
+    }
+  }
 
   static maybePierced({
     armorValue,
@@ -63,15 +128,6 @@ export class ActiveArmor extends Map<ArmorKey, number> {
 
   private addValue(armor: ArmorType, value: number) {
     return value ? this.set(armor, this.get(armor) + value) : this;
-  }
-
-  addInherentShellArmor(
-    inherent: Record<ArmorType.Energy | ArmorType.Kinetic, number>,
-  ) {
-    this.incrementLayers();
-    for (const type of [ArmorType.Energy, ArmorType.Kinetic] as const) {
-      this.set(type, this.get(type) + inherent[type]);
-    }
   }
 
   mitigateDamage({
@@ -118,58 +174,13 @@ export class ActiveArmor extends Map<ArmorKey, number> {
     return { appliedDamage, personalArmorUsed };
   }
 
-  // setupArmors({
-  //   armorEffects,
-  //   som,
-  // }: {
-  //   armorEffects: ReadonlyArray<ArmorEffect>;
-  //   som: number | null;
-  // }) {
-  //   const armorTypes = enumValues(ArmorType);
-  //   // TODO: List of armor notes for special resitancess
-  //   for (const armorEffect of armorEffects) {
-  //     if (!armorEffect.layerable) this.incrementLayers();
-  //     for (const armor of armorTypes) {
-  //       const value = armorEffect[armor];
-  //       if (value > 0) this.positiveArmorSources.add(armor);
-  //       this.addValue(armor, value);
-  //     }
-  //   }
+  get isOverburdened() {
+    return !!this._overburdened;
+  }
 
-  //   const effectsFromArmor: AddEffects[] = [];
-
-  //   const { excessLayers, highestPhysicalArmor } = this;
-
-  //   if (excessLayers > 0) {
-  //     this.#layerPenalty = {
-  //       source: `${localize("armorLayerPenalty")} x${excessLayers}`,
-  //       effects: [
-  //         createEffect.successTest({
-  //           modifier: excessLayers * -20,
-  //           tags: [{ type: TagType.Action, subtype: ActionSubtype.Physical, action: "" }],
-  //         }),
-  //       ],
-  //     };
-  //     effectsFromArmor.push(this.#layerPenalty);
-  //   }
-
-  //   if (som && highestPhysicalArmor > som) {
-  //     this.#overburdened = {
-  //       source: localize("overburdened"),
-  //       effects: [
-  //         createEffect.successTest({
-  //           modifier: -20,
-  //           tags: [{ type: TagType.Action, subtype: ActionSubtype.Physical, action: "" }],
-  //         }),
-  //         // TODO Halve movement
-  //       ],
-  //     };
-  //     effectsFromArmor.push(this.#overburdened);
-  //   }
-  //   // TODO Encumbered
-
-  //   return effectsFromArmor;
-  // }
+  isEncumbered(physicalDurability: number) {
+    return this.highestPhysicalArmor > physicalDurability;
+  }
 
   get icon() {
     return localImage(

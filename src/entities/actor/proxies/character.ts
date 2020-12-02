@@ -25,6 +25,7 @@ import type { Trait } from '@src/entities/item/proxies/trait';
 import type { ActorEntity, SleeveType } from '@src/entities/models';
 import type { UpdateStore } from '@src/entities/update-store';
 import { taskState } from '@src/features/actions';
+import { ActiveArmor } from '@src/features/active-armor';
 import { EffectType, totalModifiers } from '@src/features/effects';
 import { updateFeature } from '@src/features/feature-helpers';
 import { Pool, Pools } from '@src/features/pool';
@@ -74,11 +75,15 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
   private _appliedEffects = new AppliedEffects();
 
+  readonly armor;
+
   readonly sleights: Sleight[] = [];
   readonly traits: Trait[] = [];
   readonly equipped: EquippableItem[] = [];
   readonly consumables: ConsumableItem[] = [];
   readonly stashed: (EquippableItem | ConsumableItem)[] = [];
+
+  private appliedHealthEffects = false;
 
   constructor(init: ActorProxyInit<ActorType.Character>) {
     super(init);
@@ -94,6 +99,22 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
     this.setupItems(sleeveItems, egoItems);
 
+    for (const temp of this.epData.temporary) {
+      if (temp.type === TemporaryFeatureType.Effects) {
+        this._appliedEffects.add({
+          source: temp.name,
+          effects: temp.effects,
+        });
+      }
+    }
+
+    // TODO do something with overburdened/encumbered movement
+    this.armor = new ActiveArmor(
+      this._appliedEffects.getGroup(EffectType.Armor),
+      this.ego.aptitudes.som,
+    );
+    this._appliedEffects.add(this.armor.currentEffects);
+
     const egoFormWindow = getWindow(this.updater);
     if (egoFormWindow?.isConnected) this.ego.openForm?.();
   }
@@ -106,6 +127,18 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         .store((spent) => spent + points);
     }
     await updater.commit();
+  }
+
+  get primaryHealths(): ActorHealth[] {
+    const { sleeve } = this;
+    const healths: ActorHealth[] = [];
+    if (this.ego.trackMentalHealth) healths.push(this.ego.mentalHealth);
+    if (sleeve) {
+      if (sleeve.type !== ActorType.Infomorph)
+        healths.push(sleeve.physicalHealth);
+      if (sleeve.activeMeshHealth) healths.push(sleeve.activeMeshHealth);
+    }
+    return healths;
   }
 
   get healths(): ActorHealth[] {
@@ -189,7 +222,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
   @LazyGetter()
   get activeDurations() {
-    // TODO substances/fabbers/batteries
+    // TODO substances/batteries
     return (
       this.timers.length +
       reject(
@@ -197,18 +230,22 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         (service) => service.isIndefiniteService,
       ).length +
       this.tasks.length +
-      this.temporaryFeatures.length
+      this.temporaryFeatures.length +
+      this.equippedGroups.activeFabbers.length
     );
   }
 
   get requiresAttention() {
-    // TODO substances/fabbers/batteries
+    // TODO substances/batteries
     return (
       (!!this.activeDurations &&
         (notEmpty(this.equippedGroups.expiredServices) ||
           this.timers.some(refreshAvailable) ||
           this.tasks.some((task) => task.state.completed))) ||
-      this.temporaryFeatures.some(({ timeState }) => !timeState.remaining)
+      this.temporaryFeatures.some(({ timeState }) => !timeState.remaining) ||
+      this.equippedGroups.activeFabbers.some(
+        (fabber) => !fabber.printState.remaining,
+      )
     );
   }
 
@@ -384,6 +421,12 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   }
 
   get appliedEffects() {
+    if (!this.appliedHealthEffects) {
+      for (const health of this.primaryHealths) {
+        this._appliedEffects.add(health.currentEffects);
+      }
+      this.appliedHealthEffects = true;
+    }
     return this._appliedEffects as ReadonlyAppliedEffects;
   }
 
@@ -483,7 +526,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     return {
       items,
       data,
-      activeEffects: this.appliedEffects,
+      activeEffects: this._appliedEffects,
       itemOperations: this.itemOperations,
       sleeved: true,
       actor: this.actor,

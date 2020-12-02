@@ -30,14 +30,14 @@ export class ItemCardFabber extends UseWorldTime(LitElement) {
 
   update(changedProps: PropertyValues) {
     if (this.editing && changedProps.get('fabber') !== undefined) {
-      this.prog = this.fabber.printStatus.progress;
+      this.prog = this.fabber.printState.progress;
     }
     super.update(changedProps);
   }
 
   private toggleEditing() {
     this.editing = !this.editing;
-    if (this.editing) this.prog = this.fabber.printStatus.progress;
+    if (this.editing) this.prog = this.fabber.printState.progress;
     else this.applyProgress();
   }
 
@@ -50,12 +50,12 @@ export class ItemCardFabber extends UseWorldTime(LitElement) {
       .prop('data', 'state', 'fabStartTime')
       .commit(
         currentWorldTimeMS() -
-          this.fabber.printStatus.duration * (this.prog / 100),
+          this.fabber.printState.duration * (this.prog / 100),
       );
   }
 
   render() {
-    const { fabricatedItem, printStatus } = this.fabber;
+    const { fabricatedItem, printState } = this.fabber;
 
     return html`
       ${fabricatedItem?.nonDefaultImg
@@ -84,7 +84,7 @@ export class ItemCardFabber extends UseWorldTime(LitElement) {
               ? this.renderProgressForm()
               : html`
                   <mwc-linear-progress
-                    progress=${printStatus.progress / 100}
+                    progress=${printState.progress / 100}
                   ></mwc-linear-progress>
                 `}
           `

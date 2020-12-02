@@ -413,26 +413,6 @@ export class PhysicalTech
     return this.fabricatorType && !!this.fabricatedItem;
   }
 
-  get printStatus() {
-    const { fabPrintDuration } = this.epData;
-
-    const duration =
-      this.fabricatorType === FabType.Gland
-        ? fabPrintDuration || toMilliseconds({ hours: 4 })
-        : this.fabricatedItem
-        ? acquisitionTime[this.fabricatedItem.cost.complexity]
-        : CommonInterval.Turn;
-    const { fabStartTime } = this.state;
-    const elapsed = getElapsedTime(fabStartTime);
-
-    return {
-      duration,
-      elapsed,
-      remaining: nonNegative(duration - elapsed),
-      progress: clamp((elapsed / duration) * 100, { min: 0, max: 100 }),
-    };
-  }
-
   @LazyGetter()
   get printState(): LiveTimeState {
     return createLiveTimeState({

@@ -32,7 +32,7 @@ export type AddEffects = {
 export type ReadonlyAppliedEffects = Omit<AppliedEffects, 'add'>;
 
 export interface ObtainableEffects {
-  readonly currentEffects: AddEffects | null;
+  readonly currentEffects: AddEffects | AddEffects[] | null;
 }
 
 const defaultSuccessTestEffects = (): SourcedEffect<SuccessTestEffect>[] => [
@@ -143,10 +143,14 @@ export class AppliedEffects {
     );
   }
 
-  add = (effecsToAdd: AddEffects | null | undefined) => {
-    if (!effecsToAdd) return;
+  add = (toAdd: AddEffects | AddEffects[] | null | undefined) => {
+    if (!toAdd) return;
+    if (Array.isArray(toAdd)) {
+      toAdd.forEach(this.add)
+      return;
+    }
 
-    const { source, effects } = effecsToAdd;
+    const { source, effects } = toAdd;
 
     for (const effect of effects) {
       ++this.#total;

@@ -46,7 +46,9 @@ export class EffectEditor extends LitElement {
 
   update(changedProps: PropertyValues) {
     if (changedProps.has('effect')) {
-      this.internalEffect = duplicate(this.effect);
+      this.internalEffect = createEffect[this.effect.type](
+        duplicate(this.effect) as any,
+      );
     }
     super.update(changedProps);
   }
