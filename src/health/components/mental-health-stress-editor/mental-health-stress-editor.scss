@@ -7,8 +7,9 @@
 
 :host {
   display: block;
-  width: 300px;
-  margin: auto;
+  padding: 0 1rem;
+  max-width: 300px;
+  min-width: 100%;
 }
 
 
@@ -30,4 +31,23 @@
 submit-button {
   width: 100%;
   margin-bottom: 0.5rem;
+} 
+
+.armors {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.2rem;
+}
+
+.armor {
+  padding: 0.2rem 0.4rem;
+  text-align: center;
+  border: 1px groove var(--color-grey);
+  white-space: nowrap;
+  font-size: 15px;
+  &.active {
+    background: alphav(var(--color-grey), 0.2);
+    border: 1px outset var(--color-grey);
+
+  }
 }

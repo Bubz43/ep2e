@@ -139,7 +139,7 @@ export class ActiveArmor
     damage: number;
     armorUsed: ArmorType[];
     armorPiercing: boolean;
-    additionalArmor: number;
+    additionalArmor?: number;
   }) {
     const remainingDamage = pipe(
       Math.round(damage),
@@ -148,9 +148,13 @@ export class ActiveArmor
         ActiveArmor.maybePierced({ armorValue: additionalArmor, pierce }),
       nonNegative,
     );
-    if (!notEmpty(armorUsed)) return { appliedDamage: remainingDamage };
+    const onlyWithValues = armorUsed.filter((armor) => this.getClamped(armor));
+    if (onlyWithValues.length === 0) {
+      return { appliedDamage: remainingDamage };
+    }
+   
 
-    const uniqueArmors = new Set(armorUsed);
+    const uniqueArmors = new Set(onlyWithValues);
     const damageSplit = Math.floor(remainingDamage / uniqueArmors.size);
     const remainder = remainingDamage % uniqueArmors.size;
     const instances = [...uniqueArmors].map(

@@ -118,6 +118,12 @@ export class HealthEditor extends LitElement {
       : null;
   }
 
+  private get armor() {
+    return this.actor.proxy.type === ActorType.Character
+      ? this.actor.proxy.armor
+      : null;
+  }
+
   render() {
     const { filteredHealths } = this;
     const currentHealth =
@@ -127,7 +133,7 @@ export class HealthEditor extends LitElement {
       filteredHealths[0];
     const { name, img } = this.actor.tokenOrLocalInfo;
     return html`
-      <mwc-list-item graphic="medium" noninteractive twoline>
+      <mwc-list-item graphic="medium" twoline @click=${() => this.actor.sheet.render(true)}>
         <img slot="graphic" src=${img} />
         <span>${name}</span>
         <span slot="secondary"
@@ -200,7 +206,6 @@ export class HealthEditor extends LitElement {
   }
 
   private renderDamageEditor(health: ActorHealth, change?: Damage | null) {
-    // TODO Apply change
     if (health instanceof MentalHealth) {
       const stress = change?.type === HealthType.Mental ? change : null;
       return html`
@@ -209,6 +214,7 @@ export class HealthEditor extends LitElement {
             health.applyModification(ev.modification)}
           .health=${health}
           .stress=${stress}
+          .armor=${this.armor}
         ></mental-health-stress-editor>
       `;
     }

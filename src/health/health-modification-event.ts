@@ -1,3 +1,4 @@
+import type { ArmorType } from '@src/features/active-armor';
 import type { HealthModification } from './health';
 
 export class HealthModificationEvent extends Event {
@@ -5,7 +6,10 @@ export class HealthModificationEvent extends Event {
     return 'health-modification' as const;
   }
 
-  constructor(public readonly modification: Readonly<HealthModification>) {
+  constructor(
+    public readonly modification: Readonly<HealthModification>,
+    public readonly armorUsed?: Map<ArmorType, number>,
+  ) {
     super(HealthModificationEvent.is, { bubbles: true, composed: true });
   }
 }
