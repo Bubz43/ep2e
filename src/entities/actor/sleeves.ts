@@ -1,14 +1,11 @@
 import {
-  userCan,
   packEntityIs,
-  packIsVisible,
+  packIsVisible
 } from '@src/foundry/misc-helpers';
-import { EP } from '@src/foundry/system';
 import { notEmpty } from '@src/utility/helpers';
-import { pipe, filter, createPipe, flatMap } from 'remeda';
+import { filter, flatMap, pipe } from 'remeda';
 import { ItemType, sleeveTypes } from '../entity-types';
-import type { ItemEP, ItemProxy } from '../item/item';
-import type { ActorEntity, SleeveType } from '../models';
+import type { ItemProxy } from '../item/item';
 import { ActorEP } from './actor';
 import type { Biological } from './proxies/biological';
 import type { Character } from './proxies/character';
@@ -29,54 +26,6 @@ export type ResleeveOptions = Pick<
   'keepCurrent' | 'keepInto'
 >;
 
-// export const resleeve = async ({
-//   character,
-//   into,
-//   keepCurrent,
-//   keepInto,
-// }: ResleevingSettings) => {
-//   const { sleeve: currentSleeve, actor: currentActor } = character;
-//   const [newSleeve, sleeveActor] = into;
-//   const sleeveItems = currentSleeve?.items;
-
-//   if (currentSleeve) {
-//     character.actor.subscriptions.unsubscribe(currentSleeve.updater);
-//     if (keepCurrent) {
-//       if (!userCan("ACTOR_CREATE"))
-//         throw new Error("User cannot create actors.");
-//       await currentSleeve.createActor();
-//     }
-
-//     if (newSleeve.type !== currentSleeve.type) {
-//       character.updater.prop("flags", EP.Name, currentSleeve.type).store(null);
-//     }
-//   }
-
-//   await currentActor.deleteOwnedItem(
-//     [...(sleeveItems || [])].map((item) => item.id)
-//   );
-
-//   const { items } = newSleeve;
-//   await character.updater
-//     .prop("flags", EP.Name, newSleeve.type)
-//     .commit(
-//       (sleeve) =>
-//         mergeObject(
-//           newSleeve,
-//           { items: [] },
-//           { inplace: false }
-//         ) as typeof sleeve
-//     );
-
-//   if (notEmpty(items)) {
-//     await currentActor.createOwnedItem(duplicate(items));
-//   }
-
-//   if (!keepInto && sleeveActor && game.actors.has(sleeveActor.id)) {
-//     await sleeveActor.delete({});
-//   }
-//   return currentActor;
-// };
 
 export const isSleeveItem = (proxy: ItemProxy) => {
   switch (proxy.type) {

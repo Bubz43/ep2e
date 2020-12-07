@@ -635,6 +635,10 @@ sl-tooltip {
     overflow-x: hidden;
     overflow-y: auto;
 
+    .message-content {
+      padding: 0.5rem;
+    }
+
     .message-header {
       grid-template-areas:
         'img sender meta'

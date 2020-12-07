@@ -48,9 +48,8 @@ header {
 
 .armor-rating,
 .movement {
-  margin: 0 1rem 0.25rem 1rem;
-  font-size: 14px;
-  line-height: 1rem;
+  margin: 0 1rem;
+  font-size: 1rem;
   > span {
     white-space: nowrap;
   }
@@ -59,4 +58,8 @@ header {
     color: var(--color-text-lighter);
     margin-right: 0.5ch;
   }
+}
+
+health-item {
+  --health-item-padding: 0.25rem 1rem;
 }

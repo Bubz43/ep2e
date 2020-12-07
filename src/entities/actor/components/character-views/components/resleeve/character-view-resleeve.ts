@@ -4,6 +4,7 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import { Sleeve, ownedSleeves, isSleeve } from '@src/entities/actor/sleeves';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
+import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import { idProp } from '@src/features/feature-helpers';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';

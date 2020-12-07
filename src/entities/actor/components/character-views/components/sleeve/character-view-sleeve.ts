@@ -28,9 +28,8 @@ export class CharacterViewSleeve extends LitElement {
     const { sleeve } = this;
     const physicalHealth = 'physicalHealth' in sleeve && sleeve.physicalHealth;
     const meshHealth = 'activeMeshHealth' in sleeve && sleeve.activeMeshHealth;
-    const movement = 'movementRates' in sleeve && sleeve.movementRates;
     const isInfomorph = !physicalHealth;
-    const { armor } = this.character;
+    const { armor, movementRates } = this.character;
     return html`
       <header>
         <button @click=${this.sleeve.openForm}>${this.sleeve.name}</button>
@@ -43,7 +42,18 @@ export class CharacterViewSleeve extends LitElement {
           ]).join(' • ')}</span
         >
       </header>
-      ${movement ? this.renderMovement(movement) : ''}
+      ${notEmpty(movementRates)
+        ? html` <sl-group label=${localize('movement')} class="movement">
+            ${movementRates.map(
+              ({ type, base, full }, index, list) => html`
+                <span
+                  >${localize(type)}
+                  <span class="movement-rate">${base} / ${full}${index < list.length - 1 ? "," : ""}</span></span
+                >
+              `,
+            )}
+          </sl-group>`
+        : ''}
       ${!isInfomorph ||
       [ArmorType.Mental, ArmorType.Mesh].some((type) => armor.get(type))
         ? html` <sl-group label=${localize('armorRating')} class="armor-rating">
@@ -101,14 +111,6 @@ export class CharacterViewSleeve extends LitElement {
       ?disabled=${this.character.disabled || pool.disabled}
     ></pool-item>
   `;
-
-  private renderArmor() {
-    return html``;
-  }
-
-  private renderMovement(movement: MovementRate[]) {
-    return html``;
-  }
 }
 
 declare global {

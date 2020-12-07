@@ -146,12 +146,12 @@ slot#windows {
   max-height: calc(100vh - 40px);
   height: 100%;
   min-height: 320px;
-  width: 360px;
+  width: 320px;
   overflow: visible;
   border-right: none;
   border-bottom: none;
   border-top-left-radius: 3px;
-
+  justify-self: end;
   &:active,
   &:focus-within {
     z-index: 100;
