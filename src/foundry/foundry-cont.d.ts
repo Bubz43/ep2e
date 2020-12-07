@@ -260,9 +260,15 @@ declare global {
   interface SceneControls {
     activeControl: string;
   }
+
+  interface DiceTerm {
+    number: number;
+  }
+
   interface Roll {
     readonly formula: string;
     readonly total: number | null;
+    readonly terms: (DiceTerm | string | number)[];
     toJSON(): {
       class: 'Roll';
       dice: unknown[];

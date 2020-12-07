@@ -149,12 +149,11 @@ export class ActiveArmor
       nonNegative,
     );
     const onlyWithValues = armorUsed.filter((armor) => this.getClamped(armor));
-    if (onlyWithValues.length === 0) {
+    if (armorUsed.length === 0) {
       return { appliedDamage: remainingDamage };
     }
-   
 
-    const uniqueArmors = new Set(onlyWithValues);
+    const uniqueArmors = new Set(armorUsed);
     const damageSplit = Math.floor(remainingDamage / uniqueArmors.size);
     const remainder = remainingDamage % uniqueArmors.size;
     const instances = [...uniqueArmors].map(
@@ -174,7 +173,7 @@ export class ActiveArmor
       appliedDamage += afterArmor;
       personalArmorUsed.set(armor, dv - afterArmor);
     }
-
+    console.log(appliedDamage);
     return { appliedDamage, personalArmorUsed };
   }
 

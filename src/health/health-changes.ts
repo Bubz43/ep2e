@@ -3,15 +3,17 @@ import { createFeature } from '@src/features/feature-helpers';
 import { HealthType } from '@src/health/health';
 import { StressType } from '@src/health/mental-health';
 
-type CommonDamage<T extends { type: HealthType }> = {
-  formula: string;
-  damageValue: number;
+type Base = {
+  reduceAVbyDV: boolean;
   armorPiercing: boolean;
   multiplier: 0.5 | 1 | 2;
   armorUsed: ArmorType[];
   source: string;
   kind: 'damage';
-} & T;
+};
+
+type CommonDamage<T extends { type: HealthType }> = Base &
+  T & { damageValue: number; formula: string };
 
 export type StressDamage = CommonDamage<{
   stressType: StressType;
@@ -44,23 +46,28 @@ export type DamageOverTime = {
   source: string;
   duration: number;
   startTime: number;
-}
+};
 
 export type ArmorDamage = Record<ArmorType, number> & {
   source: string;
-}
+};
 
 type RequiredFields = 'formula' | 'damageValue';
 
+const common: Base = {
+  multiplier: 1,
+  armorPiercing: false,
+  reduceAVbyDV: false,
+  armorUsed: [],
+  kind: 'damage',
+  source: '',
+};
+
 export const createStressDamage = createFeature<StressDamage, RequiredFields>(
   () => ({
+    ...common,
     stressType: StressType.TheUnknown,
-    armorPiercing: false,
-    multiplier: 1,
-    armorUsed: [],
     type: HealthType.Mental,
-    source: '',
-    kind: 'damage',
   }),
 );
 
@@ -68,21 +75,13 @@ export const createPhysicalDamage = createFeature<
   PhysicalDamage,
   RequiredFields
 >(() => ({
-  armorPiercing: false,
-  multiplier: 1,
-  armorUsed: [],
+  ...common,
   type: HealthType.Physical,
-  source: '',
-  kind: 'damage',
 }));
 
 export const createMeshDamage = createFeature<MeshDamage, RequiredFields>(
   () => ({
-    armorPiercing: false,
-    multiplier: 1,
-    armorUsed: [],
+    ...common,
     type: HealthType.Mesh,
-    source: '',
-    kind: 'damage',
   }),
 );

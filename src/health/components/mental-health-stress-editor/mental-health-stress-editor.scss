@@ -6,7 +6,8 @@
 }
 
 :host {
-  display: block;
+  display: grid;
+  gap: 0.25rem;
   padding: 0 1rem;
   max-width: 300px;
   min-width: 100%;
@@ -20,9 +21,18 @@
   font-size: 1rem;
 }
 
+.armor-toggles {
+  display: grid;
+  grid-column: span 2;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.25rem;
+  --mdc-theme-primary: var(--color-negative);
+}
+
 .stress-damage {
   display: grid;
   grid-template-columns:  1fr 1fr;
+  padding: 0.25rem 0;
   sl-form {
     display: contents;
   }
@@ -39,7 +49,8 @@ submit-button {
   gap: 0.2rem;
 }
 
-.armor {
+.armor,
+.min-toggle {
   padding: 0.2rem 0.4rem;
   text-align: center;
   border: 1px groove var(--color-grey);

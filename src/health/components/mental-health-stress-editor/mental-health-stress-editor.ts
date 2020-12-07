@@ -8,7 +8,7 @@ import { renderAutoForm } from '@src/components/form/forms';
 import { enumValues } from '@src/data-enums';
 import { localize } from '@src/foundry/localization';
 import { MentalHealth, StressType } from '@src/health/mental-health';
-import { safeMerge, withSign } from '@src/utility/helpers';
+import { nonNegative, safeMerge, withSign } from '@src/utility/helpers';
 import {
   customElement,
   LitElement,
@@ -24,6 +24,8 @@ import {
   HealthModificationMode,
 } from '@src/health/health';
 import { ActiveArmor, ArmorType } from '@src/features/active-armor';
+import { rollFormula } from '@src/foundry/rolls';
+import { set } from 'remeda';
 
 /**
  * @fires health-modification - HealthModificationEvent
@@ -44,11 +46,18 @@ export class MentalHealthStressEditor extends LitElement {
 
   @internalProperty() private editableStress!: StressDamage;
 
+  @internalProperty() private overrides?: Partial<{
+    takeMinimum: boolean;
+    damage: number;
+    wounds: number;
+  }>;
+
   update(changedProps: PropertyValues) {
     if (changedProps.has('stress')) {
       this.editableStress = createStressDamage(
         this.stress || { damageValue: 0, formula: '' },
       );
+      this.overrides = {};
     }
     super.update(changedProps);
   }
@@ -58,6 +67,21 @@ export class MentalHealthStressEditor extends LitElement {
       ...this.editableStress,
       armorPiercing: !this.editableStress.armorPiercing,
     };
+  }
+
+  private toggleArmorReduce() {
+    this.editableStress = {
+      ...this.editableStress,
+      reduceAVbyDV: !this.editableStress.reduceAVbyDV,
+    };
+  }
+
+  private toggleTakeMinimum() {
+    this.overrides = set(
+      this.overrides || {},
+      'takeMinimum',
+      !this.overrides?.takeMinimum,
+    );
   }
 
   private toggleUsedArmor(armor: ArmorType) {
@@ -82,12 +106,27 @@ export class MentalHealthStressEditor extends LitElement {
       armorPiercing: this.editableStress.armorPiercing,
       armorUsed: this.editableStress.armorUsed,
     });
-    const damage = armorUsed?.appliedDamage ?? this.damage;
+    let damage = armorUsed?.appliedDamage ?? this.damage;
+
+    const roll = rollFormula(this.editableStress.formula);
+    const max = nonNegative(
+      (roll?.terms || []).reduce<number>((accum, term, index, list) => {
+        if (term instanceof DiceTerm) accum += term.number;
+        else if (typeof term === 'number' && list[index - 1] === '+')
+          accum += term;
+        return accum;
+      }, 0),
+    );
+
+    if (this.overrides?.takeMinimum) damage = Math.min(max, damage);
+
     const wounds = this.health.computeWounds(damage);
+
     return {
       damage,
       wounds,
-      armorUsed: armorUsed?.personalArmorUsed
+      armorUsed: armorUsed?.personalArmorUsed,
+      minimumDV: max,
     };
   }
 
@@ -102,14 +141,15 @@ export class MentalHealthStressEditor extends LitElement {
             wounds,
             source: this.stress?.source || localize('editor'),
           }),
-          armorUsed
+          armorUsed,
         ),
       );
     }
   }
 
   render() {
-    const { damage, wounds } = this.computed;
+    const { damage, wounds, minimumDV } = this.computed;
+
     return html`
       <div class="stress-damage">
         ${renderAutoForm({
@@ -124,16 +164,25 @@ export class MentalHealthStressEditor extends LitElement {
               { ...damageValue, label: localize('stress') },
               { min: 0 },
             ),
-            renderSelectField(stressType, enumValues(StressType)),
+            // renderSelectField(stressType, enumValues(StressType)),
           ],
         })}
-        <mwc-button
-          dense
-          label=${localize('SHORT', 'armorPiercing')}
-          ?outlined=${!this.editableStress.armorPiercing}
-          ?unelevated=${this.editableStress.armorPiercing}
-          @click=${this.toggleArmorPiercing}
-        ></mwc-button>
+        <div class="armor-toggles">
+          <mwc-button
+            dense
+            label=${localize('armorPiercing')}
+            ?outlined=${!this.editableStress.armorPiercing}
+            ?unelevated=${this.editableStress.armorPiercing}
+            @click=${this.toggleArmorPiercing}
+          ></mwc-button>
+          <mwc-button
+            ?outlined=${!this.editableStress.reduceAVbyDV}
+            ?unelevated=${this.editableStress.reduceAVbyDV}
+            dense
+            label=${localize('reduceAVbyDV')}
+            @click=${this.toggleArmorReduce}
+          ></mwc-button>
+        </div>
       </div>
 
       ${this.armor
@@ -154,6 +203,14 @@ export class MentalHealthStressEditor extends LitElement {
             </div>
           `
         : ''}
+
+      <wl-list-item
+        clickable
+        @click=${this.toggleTakeMinimum}
+        role="button"
+        class="min-toggle ${this.overrides?.takeMinimum ? 'active' : ''}"
+        ><span>${localize('take')} ${localize('minimum')} ${localize("damage")}: ${Math.min(minimumDV, damage)}</span>
+      </wl-list-item>
 
       <div class="change">
         <sl-group label=${localize('stress')}>${withSign(damage)}</sl-group>
