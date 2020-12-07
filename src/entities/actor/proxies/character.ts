@@ -28,6 +28,7 @@ import { taskState } from '@src/features/actions';
 import { ActiveArmor } from '@src/features/active-armor';
 import { EffectType, totalModifiers } from '@src/features/effects';
 import { updateFeature } from '@src/features/feature-helpers';
+import type { MovementRate } from '@src/features/movement';
 import { Pool, Pools } from '@src/features/pool';
 import { Recharge } from '@src/features/recharge';
 import {
@@ -112,9 +113,9 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       this._appliedEffects.add(this.sleeve.inherentArmorEffect);
       if (this.sleeve.painFilterActive) {
         this._appliedEffects.add({
-          source: localize("painFilter"),
-          effects: Synthetic.painFilterEffects
-        })
+          source: localize('painFilter'),
+          effects: Synthetic.painFilterEffects,
+        });
       }
     }
 
@@ -127,6 +128,26 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
     const egoFormWindow = getWindow(this.updater);
     if (egoFormWindow?.isConnected) this.ego.openForm?.();
+  }
+
+  @LazyGetter()
+  get movementRates(): MovementRate[] {
+    if (!this.sleeve || this.sleeve.type === ActorType.Infomorph) return [];
+    const { movementRates } = this.sleeve;
+    const { movementEffects } = this._appliedEffects;
+    const movements = [...movementRates, ...movementEffects.granted];
+    return notEmpty(movementEffects.modify)
+      ? movements.map((movement) => {
+          const mods = movementEffects.modify.get(movement.type);
+          return mods
+            ? {
+                type: movement.type,
+                base: nonNegative(movement.base + mods.baseModification),
+                full: nonNegative(movement.full + mods.fullModification),
+              }
+            : movement;
+        })
+      : movements;
   }
 
   async spendPool(...pools: { pool: PoolType; points: number }[]) {

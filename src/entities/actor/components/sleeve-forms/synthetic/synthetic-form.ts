@@ -13,7 +13,6 @@ import {
 import { BotType, enumValues, ShellType, VehicleType } from '@src/data-enums';
 import type { Synthetic } from '@src/entities/actor/proxies/synthetic';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
-import type { UpdateStore } from '@src/entities/update-store';
 import { renderMovementRateFields } from '@src/features/components/movement-rate-fields';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import { defaultMovement } from '@src/features/movement';
@@ -25,7 +24,6 @@ import {
 } from '@src/foundry/drag-and-drop';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
-import type { HealsOverTime } from '@src/health/recovery';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property, TemplateResult } from 'lit-element';

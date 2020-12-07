@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const execa = require('execa');
 const npmRunPath = require('npm-run-path');
+const scssPlugin = require("@snowpack/plugin-sass")
 
 const IMPORT_REGEX = /\@(use|import)\s*['"](.*?)['"]/g;
 
@@ -26,6 +27,8 @@ function scanSassImports(fileContents, filePath, fileExt) {
       return path.resolve(path.dirname(filePath), s);
     });
 }
+
+// TODO import scss plugin and call inside but return different object
 
 module.exports = function sassPlugin(_, { native, compilerOptions = {} } = {}) {
   /** A map of partially resolved imports to the files that imported them. */

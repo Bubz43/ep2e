@@ -37,7 +37,16 @@ module.exports = {
     /* ... */
   },
   alias: {
-    "@src": "./src",
+    '@src': './src',
     /* ... */
+  },
+  experiments: {
+    // TODO try this out instead of plugin
+    // optimize: {
+    //   entrypoints: ["src/index.ts"],
+    //   bundle: true,
+    //   minify: true,
+    //   target: 'es2020',
+    // },
   },
 };
