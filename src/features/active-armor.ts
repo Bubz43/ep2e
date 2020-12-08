@@ -35,13 +35,13 @@ export class ActiveArmor
   readonly currentEffects: AddEffects[] = [];
 
   constructor(
-    public readonly armorSources: ReadonlyArray<SourcedEffect<ArmorEffect>>,
+    public readonly sources: ReadonlyArray<SourcedEffect<ArmorEffect>>,
     som: number | null,
     public readonly damagedArmor?: ArmorDamage[] | null
   ) {
     super();
     const armorTypes = enumValues(ArmorType);
-    for (const source of armorSources) {
+    for (const source of sources) {
       if (!source.layerable) this.incrementLayers();
       for (const armor of armorTypes) {
         const value = source[armor];
@@ -53,7 +53,7 @@ export class ActiveArmor
     if (notEmpty(damagedArmor)) {
       for (const damage of damagedArmor) {
         for (const armor of armorTypes) {
-          this.addValue(armor, damage[armor])
+          this.addValue(armor, -damage[armor])
         }
       }
     }

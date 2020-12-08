@@ -16,7 +16,7 @@ import mix from 'mix-with/lib';
 import { SleeveInfo } from './physical-sleeve-mixin';
 import type { ActorHealth } from '@src/health/health-mixin';
 import { ArmorType } from '@src/features/active-armor';
-import { addFeature } from '@src/features/feature-helpers';
+import { addFeature, removeFeature } from '@src/features/feature-helpers';
 import { identity, mapToObj } from 'remeda';
 import { enumValues } from '@src/data-enums';
 
@@ -68,6 +68,10 @@ export class Infomorph extends mix(InfomorphBase).with(SleeveInfo) {
           ]),
         }),
       );
+  }
+
+  removeArmorDamage(id: string) {
+    return this.updater.prop("data", "damagedArmor").commit(removeFeature(id))
   }
 
   @LazyGetter()

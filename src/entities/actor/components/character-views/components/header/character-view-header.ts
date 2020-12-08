@@ -8,6 +8,7 @@ import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
+import { localImage } from '@src/utility/images';
 import {
   customElement,
   html,
@@ -16,6 +17,7 @@ import {
   TemplateResult,
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
+import { ifDefined } from 'lit-html/directives/if-defined';
 import mix from 'mix-with/lib';
 import { compact, range } from 'remeda';
 import {
@@ -126,6 +128,13 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
               `
             : undefined,
         })}
+        <!-- ${this.renderActionIconButton({
+          icon: undefined,
+          tooltipText: localize("armor"),
+          renderer: CharacterDrawerRenderer.Armor,
+          content: html`<img src=${localImage("icons/armor/shield.svg")} />`
+
+        })} -->
         ${this.renderActionIconButton({
           icon: 'groups',
           tooltipText: localize('resleeve'),
@@ -136,6 +145,7 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
           tooltipText: `${localize('network')} ${localize('settings')}`,
           renderer: CharacterDrawerRenderer.NetworkSettings,
         })}
+
 
         <mwc-button
           class="effects-toggle"
@@ -212,7 +222,7 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
     renderer,
     content,
   }: {
-    icon: string;
+    icon: string | undefined;
     tooltipText: string;
     renderer: CharacterDrawerRenderer;
     content?: TemplateResult;
@@ -220,7 +230,7 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
     return html` <mwc-icon-button
       ?disabled=${this.character.disabled}
       data-tooltip=${tooltipText}
-      icon=${icon}
+      icon=${ifDefined(icon)}
       @mouseenter=${tooltip.fromData}
       @focus=${tooltip.fromData}
       data-renderer=${renderer}

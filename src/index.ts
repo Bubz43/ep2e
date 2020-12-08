@@ -55,6 +55,7 @@ import { ValueStatus } from './components/value-status/value-status';
 import { SlWindow } from './components/window/window';
 import { ActorCreator } from './entities/actor/components/actor-creator/actor-creator';
 import { CharacterView } from './entities/actor/components/character-views/character-view';
+import { CharacterViewArmor } from './entities/actor/components/character-views/components/armor/character-view-armor';
 import { CharacterViewDrawerHeading } from './entities/actor/components/character-views/components/drawer-heading/character-view-drawer-heading';
 import { CharacterViewEgo } from './entities/actor/components/character-views/components/ego/character-view-ego';
 import { CharacterViewHeader } from './entities/actor/components/character-views/components/header/character-view-header';
@@ -173,6 +174,7 @@ CharacterViewItemGroup;
 CharacterViewTime;
 CharacterViewTimeItem;
 CharacterViewNetworkSettings;
+CharacterViewArmor;
 ItemCard;
 ItemCardFabber;
 

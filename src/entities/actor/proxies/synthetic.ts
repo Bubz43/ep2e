@@ -22,7 +22,7 @@ import type { ActorHealth } from '@src/health/health-mixin';
 import { compact, identity, mapToObj } from 'remeda';
 import { SkillType } from '@src/features/skills';
 import { createTag, TagType } from '@src/features/tags';
-import { addFeature } from '@src/features/feature-helpers';
+import { addFeature, removeFeature } from '@src/features/feature-helpers';
 import { ArmorType } from '@src/features/active-armor';
 import { enumValues } from '@src/data-enums';
 
@@ -90,6 +90,10 @@ export class Synthetic extends mix(SyntheticBase).with(
           ]),
         }),
       );
+  }
+
+  removeArmorDamage(id: string) {
+    return this.updater.prop("data", "damagedArmor").commit(removeFeature(id))
   }
 
   get activeEffects() {

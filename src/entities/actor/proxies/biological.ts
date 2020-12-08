@@ -9,7 +9,7 @@ import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import type { Trait } from '@src/entities/item/proxies/trait';
 import { ArmorType } from '@src/features/active-armor';
 import { EffectType } from '@src/features/effects';
-import { addFeature } from '@src/features/feature-helpers';
+import { addFeature, removeFeature } from '@src/features/feature-helpers';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
 import { BiologicalHealth } from '@src/health/biological-health';
@@ -78,6 +78,10 @@ export class Biological extends mix(BiologicalBase).with(
           ]),
         }),
       );
+  }
+
+  removeArmorDamage(id: string) {
+    return this.updater.prop("data", "damagedArmor").commit(removeFeature(id))
   }
 
   @LazyGetter()

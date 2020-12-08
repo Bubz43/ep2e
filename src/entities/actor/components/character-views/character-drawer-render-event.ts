@@ -5,6 +5,7 @@ export enum CharacterDrawerRenderer {
   Recharge = 'Recharge',
   Time = 'Time',
   NetworkSettings = 'NetworkSettings',
+  Armor = "Armor"
 }
 
 export class CharacterDrawerRenderEvent extends Event {

@@ -10,6 +10,10 @@ import { notEmpty } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { compact } from 'remeda';
+import {
+  CharacterDrawerRenderer,
+  CharacterDrawerRenderEvent,
+} from '../../character-drawer-render-event';
 import styles from './character-view-sleeve.scss';
 
 @customElement('character-view-sleeve')
@@ -23,6 +27,12 @@ export class CharacterViewSleeve extends LitElement {
   @property({ attribute: false }) character!: Character;
 
   @property({ attribute: false }) sleeve!: Sleeve;
+
+  private viewArmor() {
+    this.dispatchEvent(
+      new CharacterDrawerRenderEvent(CharacterDrawerRenderer.Armor),
+    );
+  }
 
   render() {
     const { sleeve } = this;
@@ -48,41 +58,43 @@ export class CharacterViewSleeve extends LitElement {
               ({ type, base, full }, index, list) => html`
                 <span
                   >${localize(type)}
-                  <span class="movement-rate">${base} / ${full}${index < list.length - 1 ? "," : ""}</span></span
+                  <span class="movement-rate"
+                    >${base} /
+                    ${full}${index < list.length - 1 ? ',' : ''}</span
+                  ></span
                 >
               `,
             )}
           </sl-group>`
         : ''}
-      ${!isInfomorph ||
-      [ArmorType.Mental, ArmorType.Mesh].some((type) => armor.get(type))
-        ? html` <sl-group label=${localize('armorRating')} class="armor-rating">
-            ${isInfomorph
-              ? ''
-              : html`<span
-                    class="physical-armor"
-                    title="${localize('energy')} / ${localize('kinetic')}"
-                  >
-                    ${armor.get(ArmorType.Energy)} /
-                    ${armor.get(ArmorType.Kinetic)},
-                  </span>
-                  <span
-                    >${localize('layers')}
-                    <span class="armor-value"
-                      >${armor.get('layers')}</span
-                    ></span
-                  >`}
-            ${[ArmorType.Mental, ArmorType.Mesh].map((type) => {
-              const value = armor.get(type);
-              return value
-                ? html`<span
-                    >${localize(type)}
-                    <span class="armor-value">${value}</span></span
-                  >`
-                : '';
-            })}
-          </sl-group>`
-        : ''}
+      ${html` <sl-group
+        label=${localize('armorRating')}
+        class="armor-rating"
+        @click=${this.viewArmor}
+      >
+        ${isInfomorph
+          ? ''
+          : html`<span
+                class="physical-armor"
+                title="${localize('energy')} / ${localize('kinetic')}"
+              >
+                ${armor.get(ArmorType.Energy)} /
+                ${armor.get(ArmorType.Kinetic)},
+              </span>
+              <span
+                >${localize('layers')}
+                <span class="armor-value">${armor.get('layers')}</span></span
+              >`}
+        ${[ArmorType.Mental, ArmorType.Mesh].map((type) => {
+          const value = armor.get(type);
+          return value
+            ? html`<span
+                >${localize(type)}
+                <span class="armor-value">${value}</span></span
+              >`
+            : '';
+        })}
+      </sl-group>`}
       ${physicalHealth
         ? html` <health-item .health=${physicalHealth}> </health-item> `
         : ''}

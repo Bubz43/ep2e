@@ -130,4 +130,10 @@ export abstract class CharacterViewBase extends LitElement {
       ></character-view-network-settings>
     `;
   }
+
+  renderArmor() {
+    return html`
+      <character-view-armor .character=${this.character}></character-view-armor>
+    `
+  }
 }
