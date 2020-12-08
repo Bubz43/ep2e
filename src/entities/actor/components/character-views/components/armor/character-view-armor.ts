@@ -40,6 +40,7 @@ export class CharacterViewArmor extends LitElement {
         >${localize('armor')}</character-view-drawer-heading
       >
 
+      <div class="movement-modifiers">
       ${overburdened
         ? html`
             <sl-group label=${localize('overburdened')}
@@ -54,9 +55,12 @@ export class CharacterViewArmor extends LitElement {
             >
           `
         : ''}
+      </div>
 
       <sl-header
-        >${localize('sources')}
+      heading=${localize('sources')}
+      itemCount=${armor.sources.length}
+        >
         <sl-group slot="action" label=${localize('layers')}
           >${armor.get('layers')}</sl-group
         >
@@ -69,7 +73,7 @@ export class CharacterViewArmor extends LitElement {
         )}
       </ul>
 
-      <sl-header>${localize('armorReduction')}</sl-header>
+      <sl-header heading=${localize('armorReduction')}></sl-header>
       <sl-animated-list>
         ${this.character.sleeve?.epData.damagedArmor.map(
           ({ source, id, ...armors }) => html`
