@@ -17,7 +17,7 @@ import { LazyGetter } from 'lazy-get-decorator';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 import { AppMeshHealth } from '@src/health/app-mesh-health';
 import mix from 'mix-with/lib';
-import { PhysicalSleeve, SleeveInfo } from './physical-sleeve-mixin';
+import { PhysicalSleeve, SleeveInfo } from './sleeve-mixins';
 import type { ActorHealth } from '@src/health/health-mixin';
 import { compact, identity, mapToObj } from 'remeda';
 import { SkillType } from '@src/features/skills';
@@ -29,6 +29,9 @@ import { enumValues } from '@src/data-enums';
 class SyntheticBase extends ActorProxyBase<ActorType.Synthetic> {
   get subtype() {
     return this.epData.subtype;
+  }
+  get damagedArmorUpdater() {
+    return this.updater.prop("data", "damagedArmor");
   }
 }
 
@@ -78,23 +81,6 @@ export class Synthetic extends mix(SyntheticBase).with(
     ]);
   }
 
-  addArmorDamage(reduction: Map<ArmorType, number>, source: string) {
-    return this.updater
-      .prop('data', 'damagedArmor')
-      .commit(
-        addFeature({
-          source,
-          ...mapToObj(enumValues(ArmorType), (armor) => [
-            armor,
-            reduction.get(armor) || 0,
-          ]),
-        }),
-      );
-  }
-
-  removeArmorDamage(id: string) {
-    return this.updater.prop("data", "damagedArmor").commit(removeFeature(id))
-  }
 
   get activeEffects() {
     return this._outsideEffects ?? this.itemGroups.effects;

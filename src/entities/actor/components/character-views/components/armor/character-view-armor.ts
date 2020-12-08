@@ -1,10 +1,18 @@
+import { renderSubmitForm } from '@src/components/form/forms';
 import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import { EffectType, formatEffect, Source } from '@src/features/effects';
 import { localize } from '@src/foundry/localization';
-import { customElement, LitElement, property, html } from 'lit-element';
+import {
+  customElement,
+  LitElement,
+  property,
+  html,
+  internalProperty,
+} from 'lit-element';
+import { mapToObj } from 'remeda';
 import styles from './character-view-armor.scss';
 
 @customElement('character-view-armor')
@@ -16,6 +24,12 @@ export class CharacterViewArmor extends LitElement {
   static styles = [styles];
 
   @property({ attribute: false }) character!: Character;
+
+  @internalProperty() private reductionCreator = false;
+
+  private toggleReductionCreator() {
+    this.reductionCreator = !this.reductionCreator;
+  }
 
   private get movementModifiers() {
     if (
@@ -34,7 +48,6 @@ export class CharacterViewArmor extends LitElement {
   render() {
     const { encumbered, overburdened } = this.movementModifiers;
     const { armor, disabled } = this.character;
-    // TODO manually add and remove armor reduction
     return html`
       <character-view-drawer-heading
         >${localize('armor')}</character-view-drawer-heading
@@ -44,14 +57,14 @@ export class CharacterViewArmor extends LitElement {
         ${overburdened
           ? html`
               <sl-group label=${localize('overburdened')}
-                >${localize("DESCRIPTIONS", "Overburdened")}</sl-group
+                >${localize('DESCRIPTIONS', 'Overburdened')}</sl-group
               >
             `
           : ''}
         ${encumbered
           ? html`
               <sl-group label=${localize('encumbered')}
-                >${localize("DESCRIPTIONS", "Encumbered")}</sl-group
+                >${localize('DESCRIPTIONS', 'Encumbered')}</sl-group
               >
             `
           : ''}
@@ -76,7 +89,15 @@ export class CharacterViewArmor extends LitElement {
       </section>
 
       <section>
-        <sl-header heading=${localize('armorReduction')}></sl-header>
+        <sl-header heading=${localize('armorReduction')}>
+          <mwc-icon-button
+            @click=${this.toggleReductionCreator}
+            ?disabled=${disabled}
+            icon="add"
+            class=${this.reductionCreator ? 'active' : ''}
+          ></mwc-icon-button>
+        </sl-header>
+        ${this.reductionCreator ? this.renderReductionCreator() : ""}
         <sl-animated-list>
           ${this.character.sleeve?.epData.damagedArmor.map(
             ({ source, id, ...armors }) => html`
@@ -102,6 +123,21 @@ export class CharacterViewArmor extends LitElement {
         </sl-animated-list>
       </section>
     `;
+  }
+
+  private renderReductionCreator() {
+    return html`
+    ${renderSubmitForm({
+      props: { source: "", ...mapToObj(enumValues(ArmorType), type => [type, 0])},
+      update: (changed, orig) => {
+        const damage = { ...orig, ...changed };
+        this.character.sleeve?.addArmorDamage(damage, damage.source);
+      },
+      fields: ({ source, ...armors}) => [
+
+      ]
+    })}
+    `
   }
 }
 

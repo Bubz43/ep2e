@@ -13,7 +13,7 @@ import { MeshHealth } from '@src/health/full-mesh-health';
 import { LazyGetter } from 'lazy-get-decorator';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 import mix from 'mix-with/lib';
-import { SleeveInfo } from './physical-sleeve-mixin';
+import { SleeveInfo } from './sleeve-mixins';
 import type { ActorHealth } from '@src/health/health-mixin';
 import { ArmorType } from '@src/features/active-armor';
 import { addFeature, removeFeature } from '@src/features/feature-helpers';
@@ -23,6 +23,9 @@ import { enumValues } from '@src/data-enums';
 class InfomorphBase extends ActorProxyBase<ActorType.Infomorph> {
   get subtype() {
     return localize(this.type);
+  }
+  get damagedArmorUpdater() {
+    return this.updater.prop("data", "damagedArmor");
   }
 }
 
@@ -54,24 +57,6 @@ export class Infomorph extends mix(InfomorphBase).with(SleeveInfo) {
 
   get activeMeshHealth() {
     return this.meshHealth;
-  }
-
-  addArmorDamage(reduction: Map<ArmorType, number>, source: string) {
-    return this.updater
-      .prop('data', 'damagedArmor')
-      .commit(
-        addFeature({
-          source,
-          ...mapToObj(enumValues(ArmorType), (armor) => [
-            armor,
-            reduction.get(armor) || 0,
-          ]),
-        }),
-      );
-  }
-
-  removeArmorDamage(id: string) {
-    return this.updater.prop("data", "damagedArmor").commit(removeFeature(id))
   }
 
   @LazyGetter()

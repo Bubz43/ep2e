@@ -1,22 +1,30 @@
+import { enumValues } from '@src/data-enums';
+import type { UpdateActions } from '@src/entities/update-store';
+import { ArmorType } from '@src/features/active-armor';
 import type { ConditionType } from '@src/features/conditions';
-import type { StringID } from '@src/features/feature-helpers';
+import { addFeature, removeFeature, StringID } from '@src/features/feature-helpers';
 import type { MovementRate } from '@src/features/movement';
 import type { Size } from '@src/features/size';
 import type {
   AcquisitionData,
   MorphPoolsData,
 } from '@src/foundry/template-schema';
+import type { ArmorDamage } from '@src/health/health-changes';
 import type { RecoveryConditions } from '@src/health/recovery';
+import { mapToObj } from 'remeda';
 import type { Class } from 'type-fest';
 
 type HasEpData<T, E = {}> = Class<{ epData: T } & E>;
 
 export const SleeveInfo = (
-  cls: HasEpData<{
-    acquisition: AcquisitionData;
-    conditions: ConditionType[];
-    pools: MorphPoolsData;
-  }>,
+  cls: HasEpData<
+    {
+      acquisition: AcquisitionData;
+      conditions: ConditionType[];
+      pools: MorphPoolsData;
+    },
+    { damagedArmorUpdater: UpdateActions<StringID<ArmorDamage>[]> }
+  >,
 ) => {
   return class extends cls {
     get acquisition() {
@@ -30,6 +38,28 @@ export const SleeveInfo = (
     get pools() {
       return this.epData.pools;
     }
+
+    addArmorDamage(
+      reduction: Map<ArmorType, number> | Record<ArmorType, number>,
+      source: string,
+    ) {
+      return this.damagedArmorUpdater.commit(
+        addFeature({
+          source,
+          ...(reduction instanceof Map
+            ? mapToObj(enumValues(ArmorType), (armor) => [
+                armor,
+                reduction.get(armor) || 0,
+              ])
+            : reduction),
+        }),
+      );
+    }
+  
+    removeArmorDamage(id: string) {
+      return this.damagedArmorUpdater.commit(removeFeature(id));
+    }
+  
   };
 };
 

@@ -1,4 +1,3 @@
-import { enumValues } from '@src/data-enums';
 import {
   AppliedEffects,
   ReadonlyAppliedEffects
@@ -7,9 +6,7 @@ import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { EquippableItem, ItemProxy } from '@src/entities/item/item';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import type { Trait } from '@src/entities/item/proxies/trait';
-import { ArmorType } from '@src/features/active-armor';
 import { EffectType } from '@src/features/effects';
-import { addFeature, removeFeature } from '@src/features/feature-helpers';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
 import { BiologicalHealth } from '@src/health/biological-health';
@@ -17,13 +14,16 @@ import { HealthType } from '@src/health/health';
 import type { ActorHealth } from '@src/health/health-mixin';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { compact, mapToObj } from 'remeda';
+import { compact } from 'remeda';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
-import { PhysicalSleeve, SleeveInfo } from './physical-sleeve-mixin';
+import { PhysicalSleeve, SleeveInfo } from './sleeve-mixins';
 
 class BiologicalBase extends ActorProxyBase<ActorType.Biological> {
   get subtype() {
     return this.epData.subtype;
+  }
+  get damagedArmorUpdater() {
+    return this.updater.prop("data", "damagedArmor");
   }
 }
 
@@ -65,24 +65,6 @@ export class Biological extends mix(BiologicalBase).with(
     return this.epData.sex;
   }
   
-  
-  addArmorDamage(reduction: Map<ArmorType, number>, source: string) {
-    return this.updater
-      .prop('data', 'damagedArmor')
-      .commit(
-        addFeature({
-          source,
-          ...mapToObj(enumValues(ArmorType), (armor) => [
-            armor,
-            reduction.get(armor) || 0,
-          ]),
-        }),
-      );
-  }
-
-  removeArmorDamage(id: string) {
-    return this.updater.prop("data", "damagedArmor").commit(removeFeature(id))
-  }
 
   @LazyGetter()
   get availableBrains() {
