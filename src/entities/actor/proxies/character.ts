@@ -119,10 +119,10 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       }
     }
 
-    // TODO do something with overburdened/encumbered movement
     this.armor = new ActiveArmor(
       this._appliedEffects.getGroup(EffectType.Armor),
       this.ego.aptitudes.som,
+      this.sleeve?.epData.damagedArmor
     );
     this._appliedEffects.add(this.armor.currentEffects);
 

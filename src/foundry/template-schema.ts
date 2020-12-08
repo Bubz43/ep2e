@@ -152,7 +152,7 @@ type ActorTemplates = Template<'Common', CommonDetails> &
   Template<'Acquisition', Acquisition> &
   Template<'PoolData', { pools: MorphPoolsData }> &
   Template<'Conditions', { conditions: ConditionType[] }> &
-  Template<'DamagedArmor', { damageArmor: StringID<ArmorDamage>[] }>;
+  Template<'DamagedArmor', { damagedArmor: StringID<ArmorDamage>[] }>;
 
 type UseActorTemplate<T extends (keyof ActorTemplates)[]> = T;
 type UseItemTemplate<T extends (keyof ItemTemplates)[]> = T;

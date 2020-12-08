@@ -4,6 +4,7 @@ import type {
   ObtainableEffects,
 } from '@src/entities/applied-effects';
 import { localize } from '@src/foundry/localization';
+import type { ArmorDamage } from '@src/health/health-changes';
 import { nonNegative, notEmpty } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
 import { clamp, pipe } from 'remeda';
@@ -35,7 +36,8 @@ export class ActiveArmor
 
   constructor(
     public readonly armorSources: ReadonlyArray<SourcedEffect<ArmorEffect>>,
-    public readonly som: number | null,
+    som: number | null,
+    public readonly damagedArmor?: ArmorDamage[] | null
   ) {
     super();
     const armorTypes = enumValues(ArmorType);
@@ -45,6 +47,14 @@ export class ActiveArmor
         const value = source[armor];
         if (value > 0) this.positiveArmorSources.add(armor);
         this.addValue(armor, value);
+      }
+    }
+    // TODO See if I should apply armor damage before or after getting highest physical armor
+    if (notEmpty(damagedArmor)) {
+      for (const damage of damagedArmor) {
+        for (const armor of armorTypes) {
+          this.addValue(armor, damage[armor])
+        }
       }
     }
 

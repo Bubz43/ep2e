@@ -1881,9 +1881,6 @@
             "hardware": {
               "type": "string"
             },
-            "harm": {
-              "type": "string"
-            },
             "harsh": {
               "type": "string"
             },
@@ -2518,6 +2515,9 @@
               "type": "string"
             },
             "minimissile": {
+              "type": "string"
+            },
+            "minimum": {
               "type": "string"
             },
             "minimumStress": {
@@ -4835,7 +4835,6 @@
             "hardening",
             "hardsuit",
             "hardware",
-            "harm",
             "harsh",
             "hasActivation",
             "hasActiveState",
@@ -5048,6 +5047,7 @@
             "mini",
             "minigrenade",
             "minimissile",
+            "minimum",
             "minimumStress",
             "minor",
             "minute",

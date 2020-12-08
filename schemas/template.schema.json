@@ -2048,7 +2048,7 @@
                 "DamagedArmor": {
                   "additionalProperties": false,
                   "properties": {
-                    "damageArmor": {
+                    "damagedArmor": {
                       "items": {
                         "additionalProperties": false,
                         "properties": {
@@ -2085,7 +2085,7 @@
                     }
                   },
                   "required": [
-                    "damageArmor"
+                    "damagedArmor"
                   ],
                   "type": "object"
                 },
