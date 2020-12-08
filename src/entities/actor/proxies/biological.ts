@@ -16,7 +16,7 @@ import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { compact } from 'remeda';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
-import { PhysicalSleeve, SleeveInfo } from './sleeve-mixins';
+import { PhysicalSleeve, SleeveInfo } from '../sleeve-mixins';
 
 class BiologicalBase extends ActorProxyBase<ActorType.Biological> {
   get subtype() {

@@ -9,6 +9,7 @@
   display: grid;
   grid-template-rows: min-content 1fr;
   gap: 1rem;
+  height: calc(100% - 1px);
 }
 
 li[divider] {

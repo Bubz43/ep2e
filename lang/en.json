@@ -1311,6 +1311,7 @@
     "from": "From",
     "picker": "Picker",
     "minimum": "Minimum",
+    "browse": "Browse",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

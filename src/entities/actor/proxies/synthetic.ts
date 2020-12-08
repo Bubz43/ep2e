@@ -17,7 +17,7 @@ import { LazyGetter } from 'lazy-get-decorator';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 import { AppMeshHealth } from '@src/health/app-mesh-health';
 import mix from 'mix-with/lib';
-import { PhysicalSleeve, SleeveInfo } from './sleeve-mixins';
+import { PhysicalSleeve, SleeveInfo } from '../sleeve-mixins';
 import type { ActorHealth } from '@src/health/health-mixin';
 import { compact, identity, mapToObj } from 'remeda';
 import { SkillType } from '@src/features/skills';
@@ -103,7 +103,7 @@ export class Synthetic extends mix(SyntheticBase).with(
     const { source, ...armors } = this.epData.inherentArmor;
     return {
       source: source || localize('frame'),
-      effects: [createEffect.armor({ ...armors, layerable: true })],
+      effects: [createEffect.armor({ ...armors, layerable: false })],
     };
   }
 

@@ -78,15 +78,15 @@ export class CharacterViewSleeve extends LitElement {
                 class="physical-armor"
                 title="${localize('energy')} / ${localize('kinetic')}"
               >
-                ${armor.get(ArmorType.Energy)} /
-                ${armor.get(ArmorType.Kinetic)},
+                ${armor.getClamped(ArmorType.Energy)} /
+                ${armor.getClamped(ArmorType.Kinetic)},
               </span>
               <span
                 >${localize('layers')}
                 <span class="armor-value">${armor.get('layers')}</span></span
               >`}
         ${[ArmorType.Mental, ArmorType.Mesh].map((type) => {
-          const value = armor.get(type);
+          const value = armor.getClamped(type);
           return value
             ? html`<span
                 >${localize(type)}

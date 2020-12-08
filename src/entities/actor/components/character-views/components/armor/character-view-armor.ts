@@ -1,3 +1,7 @@
+import {
+  renderNumberField,
+  renderTextField,
+} from '@src/components/field/fields';
 import { renderSubmitForm } from '@src/components/form/forms';
 import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
@@ -82,7 +86,9 @@ export class CharacterViewArmor extends LitElement {
         <ul>
           ${armor.sources.map(
             (effect) => html`
-              <li>[${effect[Source]}] ${formatEffect(effect)}</li>
+              <li class="armor-source">
+                <span>${effect[Source]}</span> ${formatEffect(effect)}
+              </li>
             `,
           )}
         </ul>
@@ -94,29 +100,30 @@ export class CharacterViewArmor extends LitElement {
             @click=${this.toggleReductionCreator}
             ?disabled=${disabled}
             icon="add"
+            slot="action"
             class=${this.reductionCreator ? 'active' : ''}
           ></mwc-icon-button>
         </sl-header>
-        ${this.reductionCreator ? this.renderReductionCreator() : ""}
+        ${this.reductionCreator ? this.renderReductionCreator() : ''}
         <sl-animated-list>
           ${this.character.sleeve?.epData.damagedArmor.map(
             ({ source, id, ...armors }) => html`
-              <wl-list-item
-                clickable
-                ?disabled=${this.character.disabled}
-                @click=${() => this.character.sleeve?.removeArmorDamage(id)}
-              >
+              <wl-list-item>
                 <span slot="before">${source}</span>
                 <span
-                  >${enumValues(ArmorType).map((type, index, list) => {
-                    const reduction = armors[type];
-                    return reduction
-                      ? `${localize(type)}: ${-reduction}${
+                  >${enumValues(ArmorType)
+                    .filter((type) => armors[type])
+                    .map(
+                      (type, index, list) =>
+                        `${localize(type)} ${-armors[type]}${
                           index < list.length - 1 ? ', ' : ''
-                        }`
-                      : '';
-                  })}</span
+                        }`,
+                    )}</span
                 >
+                <delete-button
+                  slot="after"
+                  @delete=${() => this.character.sleeve?.removeArmorDamage(id)}
+                ></delete-button>
               </wl-list-item>
             `,
           )}
@@ -127,17 +134,24 @@ export class CharacterViewArmor extends LitElement {
 
   private renderReductionCreator() {
     return html`
-    ${renderSubmitForm({
-      props: { source: "", ...mapToObj(enumValues(ArmorType), type => [type, 0])},
-      update: (changed, orig) => {
-        const damage = { ...orig, ...changed };
-        this.character.sleeve?.addArmorDamage(damage, damage.source);
-      },
-      fields: ({ source, ...armors}) => [
-
-      ]
-    })}
-    `
+      ${renderSubmitForm({
+        classes: 'reduction-form',
+        props: {
+          source: '',
+          ...mapToObj(enumValues(ArmorType), (type) => [type, 0]),
+        },
+        update: (changed, orig) => {
+          const damage = { ...orig, ...changed };
+          this.character.sleeve?.addArmorDamage(damage, damage.source);
+        },
+        fields: ({ source, ...armors }) => [
+          renderTextField(source, { required: true }),
+          enumValues(ArmorType).map((type) =>
+            renderNumberField(armors[type], { min: 0 }),
+          ),
+        ],
+      })}
+    `;
   }
 }
 

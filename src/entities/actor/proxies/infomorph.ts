@@ -13,7 +13,7 @@ import { MeshHealth } from '@src/health/full-mesh-health';
 import { LazyGetter } from 'lazy-get-decorator';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 import mix from 'mix-with/lib';
-import { SleeveInfo } from './sleeve-mixins';
+import { SleeveInfo } from '../sleeve-mixins';
 import type { ActorHealth } from '@src/health/health-mixin';
 import { ArmorType } from '@src/features/active-armor';
 import { addFeature, removeFeature } from '@src/features/feature-helpers';

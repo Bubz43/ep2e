@@ -17,3 +17,24 @@
 sl-group[slot="action"] {
   margin-right: 1rem;
 }
+
+mwc-icon-button[slot="action"] {
+  &.active {
+    color: var(--color-secondary);
+  }
+}
+
+.armor-source {
+  color: var(--color-text-lighter);
+  span {
+    color: var(--color-text);
+  }
+}
+
+.reduction-form {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  padding: 0.5rem 1rem;
+  :first-child {
+    grid-column: span 4;
+  }
+}
