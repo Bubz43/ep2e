@@ -15,6 +15,10 @@ import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 import mix from 'mix-with/lib';
 import { SleeveInfo } from './physical-sleeve-mixin';
 import type { ActorHealth } from '@src/health/health-mixin';
+import { ArmorType } from '@src/features/active-armor';
+import { addFeature } from '@src/features/feature-helpers';
+import { identity, mapToObj } from 'remeda';
+import { enumValues } from '@src/data-enums';
 
 class InfomorphBase extends ActorProxyBase<ActorType.Infomorph> {
   get subtype() {
@@ -50,6 +54,20 @@ export class Infomorph extends mix(InfomorphBase).with(SleeveInfo) {
 
   get activeMeshHealth() {
     return this.meshHealth;
+  }
+
+  addArmorDamage(reduction: Map<ArmorType, number>, source: string) {
+    return this.updater
+      .prop('data', 'damagedArmor')
+      .commit(
+        addFeature({
+          source,
+          ...mapToObj(enumValues(ArmorType), (armor) => [
+            armor,
+            reduction.get(armor) || 0,
+          ]),
+        }),
+      );
   }
 
   @LazyGetter()

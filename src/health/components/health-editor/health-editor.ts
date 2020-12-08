@@ -27,10 +27,13 @@ import {
   property,
   PropertyValues,
 } from 'lit-element';
-import { compact } from 'remeda';
+import { compact, fromPairs } from 'remeda';
 import styles from './health-editor.scss';
 import { MentalHealth } from '@src/health/mental-health';
 import type { HealthModificationEvent } from '@src/health/health-modification-event';
+import { notEmpty } from '@src/utility/helpers';
+import { addFeature } from '@src/features/feature-helpers';
+import { isSleeve } from '@src/entities/actor/sleeves';
 
 @customElement('health-editor')
 export class HealthEditor extends LitElement {
@@ -124,16 +127,40 @@ export class HealthEditor extends LitElement {
       : null;
   }
 
-  render() {
+  private applyModification({
+    modification,
+    armorReduction,
+  }: HealthModificationEvent) {
+    this.actor.updater.batchCommits(async () => {
+      await this.currentHealth?.applyModification(modification);
+      if (notEmpty(armorReduction)) {
+        const sleeve = isSleeve(this.actor.proxy)
+          ? this.actor.proxy
+          : this.actor.proxy.sleeve;
+        await sleeve?.addArmorDamage(armorReduction, modification.source);
+      }
+    });
+  }
+
+  private get currentHealth() {
     const { filteredHealths } = this;
-    const currentHealth =
+    return (
       (this.selectedHealth &&
         filteredHealths.includes(this.selectedHealth) &&
         this.selectedHealth) ||
-      filteredHealths[0];
+      filteredHealths[0]
+    );
+  }
+
+  render() {
+    const { filteredHealths, currentHealth } = this;
     const { name, img } = this.actor.tokenOrLocalInfo;
     return html`
-      <mwc-list-item graphic="medium" twoline @click=${() => this.actor.sheet.render(true)}>
+      <mwc-list-item
+        graphic="medium"
+        twoline
+        @click=${() => this.actor.sheet.render(true)}
+      >
         <img slot="graphic" src=${img} />
         <span>${name}</span>
         <span slot="secondary"
@@ -210,8 +237,7 @@ export class HealthEditor extends LitElement {
       const stress = change?.type === HealthType.Mental ? change : null;
       return html`
         <mental-health-stress-editor
-          @health-modification=${(ev: HealthModificationEvent) =>
-            health.applyModification(ev.modification)}
+          @health-modification=${this.applyModification}
           .health=${health}
           .stress=${stress}
           .armor=${this.armor}

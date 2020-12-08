@@ -1,7 +1,9 @@
+import { enumValues } from '@src/data-enums';
 import type { ArmorType } from '@src/features/active-armor';
 import { createFeature } from '@src/features/feature-helpers';
 import { HealthType } from '@src/health/health';
 import { StressType } from '@src/health/mental-health';
+import { mapToObj } from 'remeda';
 
 type Base = {
   reduceAVbyDV: boolean;
@@ -51,6 +53,7 @@ export type DamageOverTime = {
 export type ArmorDamage = Record<ArmorType, number> & {
   source: string;
 };
+
 
 type RequiredFields = 'formula' | 'damageValue';
 

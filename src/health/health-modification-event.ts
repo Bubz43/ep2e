@@ -8,7 +8,7 @@ export class HealthModificationEvent extends Event {
 
   constructor(
     public readonly modification: Readonly<HealthModification>,
-    public readonly armorUsed?: Map<ArmorType, number>,
+    public readonly armorReduction?: Map<ArmorType, number>,
   ) {
     super(HealthModificationEvent.is, { bubbles: true, composed: true });
   }

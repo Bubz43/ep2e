@@ -141,7 +141,7 @@ export class MentalHealthStressEditor extends LitElement {
             wounds,
             source: this.stress?.source || localize('editor'),
           }),
-          armorUsed,
+          this.editableStress.reduceAVbyDV ? armorUsed : undefined,
         ),
       );
     }

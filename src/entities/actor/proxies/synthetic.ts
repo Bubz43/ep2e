@@ -19,9 +19,12 @@ import { AppMeshHealth } from '@src/health/app-mesh-health';
 import mix from 'mix-with/lib';
 import { PhysicalSleeve, SleeveInfo } from './physical-sleeve-mixin';
 import type { ActorHealth } from '@src/health/health-mixin';
-import { compact } from 'remeda';
+import { compact, identity, mapToObj } from 'remeda';
 import { SkillType } from '@src/features/skills';
 import { createTag, TagType } from '@src/features/tags';
+import { addFeature } from '@src/features/feature-helpers';
+import { ArmorType } from '@src/features/active-armor';
+import { enumValues } from '@src/data-enums';
 
 class SyntheticBase extends ActorProxyBase<ActorType.Synthetic> {
   get subtype() {
@@ -46,7 +49,7 @@ export class Synthetic extends mix(SyntheticBase).with(
       }),
       createEffect.successTest({
         modifier: -10,
-        requirement: "To notice damage",
+        requirement: 'To notice damage',
         tags: [createTag.skill({ skillType: SkillType.Perceive })],
       }),
     ];
@@ -75,6 +78,20 @@ export class Synthetic extends mix(SyntheticBase).with(
     ]);
   }
 
+  addArmorDamage(reduction: Map<ArmorType, number>, source: string) {
+    return this.updater
+      .prop('data', 'damagedArmor')
+      .commit(
+        addFeature({
+          source,
+          ...mapToObj(enumValues(ArmorType), (armor) => [
+            armor,
+            reduction.get(armor) || 0,
+          ]),
+        }),
+      );
+  }
+
   get activeEffects() {
     return this._outsideEffects ?? this.itemGroups.effects;
   }
@@ -95,7 +112,7 @@ export class Synthetic extends mix(SyntheticBase).with(
   get inherentArmorEffect() {
     const { source, ...armors } = this.epData.inherentArmor;
     return {
-      source: source || localize("frame"),
+      source: source || localize('frame'),
       effects: [createEffect.armor({ ...armors, layerable: true })],
     };
   }

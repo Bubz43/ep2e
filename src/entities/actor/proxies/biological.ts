@@ -1,22 +1,23 @@
+import { enumValues } from '@src/data-enums';
 import {
   AppliedEffects,
-  ReadonlyAppliedEffects,
+  ReadonlyAppliedEffects
 } from '@src/entities/applied-effects';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { EquippableItem, ItemProxy } from '@src/entities/item/item';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
-import type { Software } from '@src/entities/item/proxies/software';
 import type { Trait } from '@src/entities/item/proxies/trait';
-import type { ActorEntity } from '@src/entities/models';
+import { ArmorType } from '@src/features/active-armor';
 import { EffectType } from '@src/features/effects';
-import { notify, NotificationType } from '@src/foundry/foundry-apps';
+import { addFeature } from '@src/features/feature-helpers';
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
 import { BiologicalHealth } from '@src/health/biological-health';
 import { HealthType } from '@src/health/health';
 import type { ActorHealth } from '@src/health/health-mixin';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { compact, flatMap, flatMapToObj } from 'remeda';
+import { compact, mapToObj } from 'remeda';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 import { PhysicalSleeve, SleeveInfo } from './physical-sleeve-mixin';
 
@@ -62,6 +63,21 @@ export class Biological extends mix(BiologicalBase).with(
 
   get sex() {
     return this.epData.sex;
+  }
+  
+  
+  addArmorDamage(reduction: Map<ArmorType, number>, source: string) {
+    return this.updater
+      .prop('data', 'damagedArmor')
+      .commit(
+        addFeature({
+          source,
+          ...mapToObj(enumValues(ArmorType), (armor) => [
+            armor,
+            reduction.get(armor) || 0,
+          ]),
+        }),
+      );
   }
 
   @LazyGetter()
