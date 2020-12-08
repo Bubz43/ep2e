@@ -1309,8 +1309,8 @@
     "advanced": "Advanced",
     "rewound": "Rewound",
     "from": "From",
-    "harm": "Harm",
     "picker": "Picker",
+    "minimum": "Minimum",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

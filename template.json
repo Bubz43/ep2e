@@ -35,7 +35,7 @@
         "conditions": []
       },
       "DamagedArmor": {
-        "damageArmor": []
+        "damagedArmor": []
       }
     },
     "biological": {
