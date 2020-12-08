@@ -33,7 +33,10 @@ module.exports = {
     /* ... */
   },
   alias: {
-    "@src": "./src",
+    '@src': './src',
     /* ... */
   },
+  // experiments: {
+  //   source: 'skypack',
+  // },
 };

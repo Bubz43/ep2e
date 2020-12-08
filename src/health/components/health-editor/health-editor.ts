@@ -96,6 +96,20 @@ export class HealthEditor extends LitElement {
     super.update(changedProps);
   }
 
+  updated(changedProps: PropertyValues) {
+    if (changedProps.has('healthType')) {
+      requestAnimationFrame(() => {
+        this.renderRoot
+          .querySelector<HTMLElement>(
+            `mwc-tab[data-health="${this.healthType}"]`,
+          )
+          ?.click();
+      });
+    }
+
+    super.update(changedProps);
+  }
+
   private cleanupSub() {
     this.actorUnsub?.();
     this.actorUnsub = null;
@@ -180,6 +194,7 @@ export class HealthEditor extends LitElement {
             <mwc-tab
               isFadingIndicator
               label=${localize(type)}
+              data-health=${type}
               @click=${() => (this.healthType = type)}
             ></mwc-tab>
           `,

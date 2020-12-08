@@ -94,7 +94,7 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
           style="height: 40px"
         >
           <mwc-icon slot="graphic">insert_photo</mwc-icon>
-          <span>${localize('select')}</span>
+          <span>${localize('browse')}</span>
         </mwc-list-item>
       </mwc-list>
     `;

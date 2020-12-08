@@ -112,7 +112,7 @@ export class MentalHealthStressEditor extends LitElement {
     const max = nonNegative(
       (roll?.terms || []).reduce<number>((accum, term, index, list) => {
         if (term instanceof DiceTerm) accum += term.number;
-        else if (typeof term === 'number' && list[index - 1] === '+')
+        else if (typeof term === 'number' && (list[index - 1] === '+' || index === 0))
           accum += term;
         return accum;
       }, 0),

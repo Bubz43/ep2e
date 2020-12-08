@@ -41,62 +41,66 @@ export class CharacterViewArmor extends LitElement {
       >
 
       <div class="movement-modifiers">
-      ${overburdened
-        ? html`
-            <sl-group label=${localize('overburdened')}
-              >// TODO: Movement is reduced by half</sl-group
-            >
-          `
-        : ''}
-      ${encumbered
-        ? html`
-            <sl-group label=${localize('encumbered')}
-              >// TODO: Cannot Move</sl-group
-            >
-          `
-        : ''}
+        ${overburdened
+          ? html`
+              <sl-group label=${localize('overburdened')}
+                >${localize("DESCRIPTIONS", "Overburdened")}</sl-group
+              >
+            `
+          : ''}
+        ${encumbered
+          ? html`
+              <sl-group label=${localize('encumbered')}
+                >${localize("DESCRIPTIONS", "Encumbered")}</sl-group
+              >
+            `
+          : ''}
       </div>
 
-      <sl-header
-      heading=${localize('sources')}
-      itemCount=${armor.sources.length}
+      <section>
+        <sl-header
+          heading=${localize('sources')}
+          itemCount=${armor.sources.length}
         >
-        <sl-group slot="action" label=${localize('layers')}
-          >${armor.get('layers')}</sl-group
-        >
-      </sl-header>
-      <ul>
-        ${armor.sources.map(
-          (effect) => html`
-            <li>[${effect[Source]}] ${formatEffect(effect)}</li>
-          `,
-        )}
-      </ul>
+          <sl-group slot="action" label=${localize('layers')}
+            >${armor.get('layers')}</sl-group
+          >
+        </sl-header>
+        <ul>
+          ${armor.sources.map(
+            (effect) => html`
+              <li>[${effect[Source]}] ${formatEffect(effect)}</li>
+            `,
+          )}
+        </ul>
+      </section>
 
-      <sl-header heading=${localize('armorReduction')}></sl-header>
-      <sl-animated-list>
-        ${this.character.sleeve?.epData.damagedArmor.map(
-          ({ source, id, ...armors }) => html`
-            <wl-list-item
-              clickable
-              ?disabled=${this.character.disabled}
-              @click=${() => this.character.sleeve?.removeArmorDamage(id)}
-            >
-              <span slot="before">${source}</span>
-              <span
-                >${enumValues(ArmorType).map((type, index, list) => {
-                  const reduction = armors[type];
-                  return reduction
-                    ? `${localize(type)}: ${-reduction}${
-                        index < list.length - 1 ? ', ' : ''
-                      }`
-                    : '';
-                })}</span
+      <section>
+        <sl-header heading=${localize('armorReduction')}></sl-header>
+        <sl-animated-list>
+          ${this.character.sleeve?.epData.damagedArmor.map(
+            ({ source, id, ...armors }) => html`
+              <wl-list-item
+                clickable
+                ?disabled=${this.character.disabled}
+                @click=${() => this.character.sleeve?.removeArmorDamage(id)}
               >
-            </wl-list-item>
-          `,
-        )}
-      </sl-animated-list>
+                <span slot="before">${source}</span>
+                <span
+                  >${enumValues(ArmorType).map((type, index, list) => {
+                    const reduction = armors[type];
+                    return reduction
+                      ? `${localize(type)}: ${-reduction}${
+                          index < list.length - 1 ? ', ' : ''
+                        }`
+                      : '';
+                  })}</span
+                >
+              </wl-list-item>
+            `,
+          )}
+        </sl-animated-list>
+      </section>
     `;
   }
 }

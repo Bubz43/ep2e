@@ -1336,7 +1336,9 @@
       "EgoAlreadyHasPsi": "Ego already has PSI.",
       "OnlyEgoItems": "Only ego traits, sleights and PSI can be added.",
       "OnlyEgoTraits": "Only ego traits can be added",
-      "NonElectronicSubstanceOnly": "Non-electronic substance only"
+      "NonElectronicSubstanceOnly": "Non-electronic substance only",
+      "Encumbered": "Cannot Move",
+      "Overburdened": "Movement is reduced by half"
     },
     "FULL": {
       "cog": "Cognition",

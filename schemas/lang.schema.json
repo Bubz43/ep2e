@@ -26,6 +26,9 @@
                 "EgoAlreadyHasPsi": {
                   "type": "string"
                 },
+                "Encumbered": {
+                  "type": "string"
+                },
                 "NonElectronicSubstanceOnly": {
                   "type": "string"
                 },
@@ -48,6 +51,9 @@
                   "type": "string"
                 },
                 "OnlyWarePoolBonus": {
+                  "type": "string"
+                },
+                "Overburdened": {
                   "type": "string"
                 },
                 "blinded": {
@@ -115,7 +121,9 @@
                 "OnlyEgoTraits",
                 "EgoAlreadyHasPsi",
                 "CannotAddPsi",
-                "NonElectronicSubstanceOnly"
+                "NonElectronicSubstanceOnly",
+                "Overburdened",
+                "Encumbered"
               ],
               "type": "object"
             },
@@ -958,6 +966,9 @@
               "type": "string"
             },
             "brinker": {
+              "type": "string"
+            },
+            "browse": {
               "type": "string"
             },
             "burn": {
@@ -4528,6 +4539,7 @@
             "brain",
             "breakTool",
             "brinker",
+            "browse",
             "burn",
             "burnRep",
             "burnedRep",

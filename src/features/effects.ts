@@ -354,11 +354,11 @@ const format = (effect: Effect): (string | number)[] => {
       ];
     case EffectType.Armor:
       return [
-        effect.layerable ? `[${localize('armorLayer')}]` : '',
+        // effect.layerable ? `[${localize('armorLayer')}]` : '',
         enumValues(ArmorType)
           .flatMap((armor) => {
             const value = effect[armor];
-            return value ? `${withSign(value)} ${localize(armor)}` : [];
+            return value ? `${localize(armor)} ${effect.layerable ? withSign(value) : value}` : [];
           })
           .join(', '),
       ];
