@@ -133,21 +133,30 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   @LazyGetter()
   get movementRates(): MovementRate[] {
     if (!this.sleeve || this.sleeve.type === ActorType.Infomorph) return [];
-    const { movementRates } = this.sleeve;
+    const { movementRates, physicalHealth } = this.sleeve;
     const { movementEffects } = this._appliedEffects;
     const movements = [...movementRates, ...movementEffects.granted];
-    return notEmpty(movementEffects.modify)
-      ? movements.map((movement) => {
-          const mods = movementEffects.modify.get(movement.type);
-          return mods
-            ? {
-                type: movement.type,
-                base: nonNegative(movement.base + mods.baseModification),
-                full: nonNegative(movement.full + mods.fullModification),
-              }
-            : movement;
-        })
-      : movements;
+
+    if (this.armor.isEncumbered(physicalHealth.main.durability.value)) {
+      return movements.map((movement) => ({ ...movement, base: 0, full: 0 }));
+    }
+
+    const { isOverburdened } = this.armor;
+    if (isOverburdened || notEmpty(movementEffects.modify)) {
+      const change = (initial: number, mod: number) =>
+        Math.ceil(nonNegative(initial + mod) / (isOverburdened ? 2 : 1));
+      return movements.map((movement) => {
+        const mods = movementEffects.modify.get(movement.type);
+        return mods
+          ? {
+              type: movement.type,
+              base: change(movement.base, mods.baseModification),
+              full: change(movement.full, mods.fullModification),
+            }
+          : movement;
+      });
+    }
+    return movements;
   }
 
   async spendPool(...pools: { pool: PoolType; points: number }[]) {

@@ -148,10 +148,8 @@ export class ActiveArmor
         ActiveArmor.maybePierced({ armorValue: additionalArmor, pierce }),
       nonNegative,
     );
-    const onlyWithValues = armorUsed.filter((armor) => this.getClamped(armor));
-    if (armorUsed.length === 0) {
-      return { appliedDamage: remainingDamage };
-    }
+    if (armorUsed.length === 0)   return { appliedDamage: remainingDamage };
+    
 
     const uniqueArmors = new Set(armorUsed);
     const damageSplit = Math.floor(remainingDamage / uniqueArmors.size);
