@@ -5,8 +5,9 @@ import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import type { ReadonlyPool } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
-import { notEmpty } from '@src/utility/helpers';
+import { clickIfEnter, notEmpty } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
 import { compact } from 'remeda';
 import {
   CharacterDrawerRenderer,
@@ -50,35 +51,60 @@ export class CharacterViewSleeve extends LitElement {
           ]).join(' • ')}</span
         >
       </header>
-      ${notEmpty(movementRates)
-        ? html` <sl-group label=${localize('movement')} class="movement">
-            ${movementRates.map(
-              ({ type, base, full }, index, list) => html`
-                <span
-                  >${localize(type)}
-                  <span class="movement-rate"
-                    >${base} /
-                    ${full}${index < list.length - 1 ? ',' : ''}</span
-                  ></span
-                >
-              `,
-            )}
-          </sl-group>`
-        : ''}
 
-      <div class="armor" @click=${this.viewArmor}>
-        <span class="label">${localize('armorRating')}</span>
-        <span class="layers">${localize('layers')} ${armor.get('layers')}</span>
+      
+      <div
+        class="armor"
+        @click=${this.viewArmor}
+        @keydown=${clickIfEnter}
+        tabindex="0"
+        role="button"
+      >
+        <span class="label"
+          >${localize('armorRating')}
+          <span class="layers">
+            ${armor.get('layers')} ${localize('layers')}</span
+          ></span
+        >
+        <span class="info">
+          ${armor.concealable
+            ? html`<span>${localize('concealable')}</span>`
+            : ''}
+        </span>
         <span class="values"
           >${enumValues(ArmorType).map((type) => {
-            // TODO show if lowered
             const value = armor.getClamped(type);
-            return value
-              ? html`<span class="value">${localize(type)} ${value}</span>`
+            const reduced = armor.reducedArmoors.has(type);
+            return value || reduced
+              ? html`<span class="value ${classMap({ reduced })}"
+                  >${localize(type)} ${value}</span
+                >`
               : '';
           })}</span
         >
       </div>
+
+      ${notEmpty(movementRates)
+        ? html`
+            <div class="movement">
+              <span class="label">${localize('movement')}</span>
+              <div class="rates">
+                ${movementRates.map(
+                  ({ type, base, full }, index, list) => html`
+                    <span class="movement-rate"
+                      >${localize(type)}
+                      <span class="rate"
+                        >${base} /
+                        ${full}</span
+                      ></span
+                    >
+                  `,
+                )}</div
+              >
+            </div>
+          `
+        : ''}
+
 
       ${physicalHealth
         ? html` <health-item .health=${physicalHealth}> </health-item> `

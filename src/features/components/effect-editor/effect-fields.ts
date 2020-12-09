@@ -111,13 +111,15 @@ const ranged: FieldPropsRenderer<RangedEffect> = ({
 }) => renderNumberField(negativeRangeModifiersMultiplier, { min: 0, max: 5 });
 
 const armor: FieldPropsRenderer<ArmorEffect> = ({
-  layerable: layer,
+  layerable,
+  concealable,
   ...props
 }) => [
   enumValues(ArmorType).map((type) =>
     renderNumberField(props[type], { min: 0 }),
   ),
-  renderLabeledCheckbox(layer),
+    renderLabeledCheckbox(layerable),
+  renderLabeledCheckbox(concealable)
 ];
 
 const health: FieldPropsRenderer<HealthEffect> = ({

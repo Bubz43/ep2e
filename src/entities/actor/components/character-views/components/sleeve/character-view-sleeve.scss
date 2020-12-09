@@ -43,46 +43,76 @@ header {
 .pools {
   display: flex;
   justify-content: space-evenly;
-  border-top: 1px solid alphav(var(--color-border), 0.5);
 }
 
-.armor-rating,
-.movement {
-  margin: 0 1rem;
-  font-size: 1rem;
-  > span {
-    white-space: nowrap;
-  }
-  .armor-value,
-  .movement-rate {
-    color: var(--color-text-lighter);
-    margin-right: 0.5ch;
-  }
-}
 
 health-item {
   --health-item-padding: 0.25rem 1rem;
 }
 
+// .movement,
+.armor {
+  &:hover {
+    background: alphav(var(--color-text), 0.06);
+  }
+  &:focus{
+    background: alphav(var(--color-text), 0.08);
+    outline: none;
+  }
+  &:active {
+    background: alphav(var(--color-text), 0.1);
+  }
+}
+
+.movement {
+  padding: 0.15rem 1rem 0.35rem;
+  .label {
+    font-size: large;
+    margin-left: 0.5rem;
+  }
+  .rates {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(179px, 1fr));
+    gap: 0.25rem;
+
+  }
+  .movement-rate {
+    text-align: center;
+    background: alphav(var(--color-bg-alt), 0.75);
+    white-space: nowrap;
+    flex: 1;
+  }
+  .rate {
+    color: var(--color-text-lighter);
+    margin-right: 0.5ch;
+  }
+}
+
 .armor {
   display: grid;
   grid-template-areas:
-    'label layers'
+    'label info'
     'values values';
-  display: flex;
-  flex-flow: row wrap;
-  grid-template-columns: min-content;
-  padding: 0.25rem 1rem;
+
+  grid-template-columns: 1fr 1fr;
+  padding: 0.15rem 1rem 0.35rem;
+  cursor: pointer;
   .label {
     grid-area: label;
     font-size: large;
     white-space: nowrap;
-    margin: 0 0.5rem;
+    margin: 0 0 0 0.5rem;
   }
-  .layers {
-    grid-area: layers;
+  .info {
+    grid-area: info;
     color: var(--color-text-lighter);
     align-self: end;
+    justify-self: end;
+    font-size: large;
+    margin-right: 0.5rem;
+  }
+  .layers {
+    color: var(--color-text-lighter);
   }
   .values {
     grid-area: values;
@@ -90,11 +120,13 @@ health-item {
     grid-auto-flow: column;
     grid-auto-columns: 1fr;
     column-gap: 0.25rem;
-    flex: 1;
     .value {
       text-align: center;
-      background: alphav(var(--color-grey), 0.25);
+      background: alphav(var(--color-bg-alt), 0.75);
       white-space: nowrap;
+      &.reduced {
+        color: lightv(var(--color-negative), 1.5);
+      }
     }
   }
 }

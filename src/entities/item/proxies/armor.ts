@@ -58,10 +58,11 @@ export class Armor
   }
 
   get armorEffect() {
-    const { layerable } = this;
+    const { layerable, concealable } = this.armorState;
     return createEffect.armor({
       ...this.currentArmorValues,
       layerable,
+      concealable
     });
   }
 

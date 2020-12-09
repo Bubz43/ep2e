@@ -10,6 +10,7 @@ import {
 import type { MovementRate } from '@src/features/movement';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
+import { openMenu } from '@src/open-menu';
 import { notEmpty, withSign } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
@@ -77,7 +78,22 @@ export class SleeveFormMovementList extends LitElement {
           </sl-popover-section>
         `}
       >
-        <button slot="base" ?disabled=${this.disabled}>
+        <button
+          slot="base"
+          ?disabled=${this.disabled}
+          @contextmenu=${(ev: MouseEvent) => {
+            openMenu({
+              content: [
+                {
+                  label: localize('delete'),
+                  icon: html`<mwc-icon>delete_forever</mwc-icon>`,
+                  callback: this.operations.removeCallback(movement.id),
+                },
+              ],
+              position: ev
+            });
+          }}
+        >
           ${localize(movement.type)}
           ${movement.base}${baseModification
             ? html`<sup>(${withSign(baseModification)})</sup>`

@@ -33,6 +33,8 @@ export class ActiveArmor
   private _layerPenalty?: AddEffects;
   private _overburdened?: AddEffects;
   readonly currentEffects: AddEffects[] = [];
+  readonly reducedArmoors = new Set<ArmorType>()
+  concealable = true;
 
   constructor(
     public readonly sources: ReadonlyArray<SourcedEffect<ArmorEffect>>,
@@ -41,8 +43,10 @@ export class ActiveArmor
   ) {
     super();
     const armorTypes = enumValues(ArmorType);
+    console.log(sources);
     for (const source of sources) {
       if (!source.layerable) this.incrementLayers();
+      if (this.concealable) this.concealable = source.concealable;
       for (const armor of armorTypes) {
         const value = source[armor];
         if (value > 0) this.positiveArmorSources.add(armor);
@@ -137,7 +141,8 @@ export class ActiveArmor
   }
 
   private addValue(armor: ArmorType, value: number) {
-    return value ? this.set(armor, this.get(armor) + value) : this;
+    if (value) this.set(armor, this.get(armor) + value);
+    if (value < 0) this.reducedArmoors.add(armor);
   }
 
   mitigateDamage({

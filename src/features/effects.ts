@@ -105,6 +105,7 @@ export type HealthRecoveryEffect = {
 export type ArmorEffect = Record<ArmorType, number> & {
   type: EffectType.Armor;
   layerable: boolean;
+  concealable: boolean;
 };
 
 export type DurationEffect = {
@@ -261,6 +262,7 @@ const armor = createFeature<ArmorEffect>(() => ({
   mental: 0,
   mesh: 0,
   layerable: false,
+  concealable: false,
 }));
 
 const healthRecovery = createFeature<HealthRecoveryEffect>(() => ({
