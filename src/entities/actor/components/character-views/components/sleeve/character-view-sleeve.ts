@@ -1,14 +1,12 @@
+import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import type { Sleeve } from '@src/entities/actor/sleeves';
 import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
-import type { MovementRate } from '@src/features/movement';
 import type { ReadonlyPool } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
-import { HealthType } from '@src/health/health';
 import { notEmpty } from '@src/utility/helpers';
-import { customElement, LitElement, property, html } from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map';
+import { customElement, html, LitElement, property } from 'lit-element';
 import { compact } from 'remeda';
 import {
   CharacterDrawerRenderer,
@@ -67,34 +65,21 @@ export class CharacterViewSleeve extends LitElement {
             )}
           </sl-group>`
         : ''}
-      ${html` <sl-group
-        label=${localize('armorRating')}
-        class="armor-rating"
-        @click=${this.viewArmor}
-      >
-        ${isInfomorph
-          ? ''
-          : html`<span
-                class="physical-armor"
-                title="${localize('energy')} / ${localize('kinetic')}"
-              >
-                ${armor.getClamped(ArmorType.Energy)} /
-                ${armor.getClamped(ArmorType.Kinetic)},
-              </span>
-              <span
-                >${localize('layers')}
-                <span class="armor-value">${armor.get('layers')}</span></span
-              >`}
-        ${[ArmorType.Mental, ArmorType.Mesh].map((type) => {
-          const value = armor.getClamped(type);
-          return value
-            ? html`<span
-                >${localize(type)}
-                <span class="armor-value">${value}</span></span
-              >`
-            : '';
-        })}
-      </sl-group>`}
+
+      <div class="armor" @click=${this.viewArmor}>
+        <span class="label">${localize('armorRating')}</span>
+        <span class="layers">${localize('layers')} ${armor.get('layers')}</span>
+        <span class="values"
+          >${enumValues(ArmorType).map((type) => {
+            // TODO show if lowered
+            const value = armor.getClamped(type);
+            return value
+              ? html`<span class="value">${localize(type)} ${value}</span>`
+              : '';
+          })}</span
+        >
+      </div>
+
       ${physicalHealth
         ? html` <health-item .health=${physicalHealth}> </health-item> `
         : ''}

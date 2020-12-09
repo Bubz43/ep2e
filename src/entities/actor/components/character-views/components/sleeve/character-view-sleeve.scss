@@ -63,3 +63,39 @@ header {
 health-item {
   --health-item-padding: 0.25rem 1rem;
 }
+
+.armor {
+  display: grid;
+  grid-template-areas: 
+  "label layers"
+  "values values";
+  display: flex;
+  flex-flow: row wrap;
+  grid-template-columns: min-content;
+  padding: 0.25rem 1rem;
+  .label {
+    grid-area: label;
+    font-size: large;
+    white-space: nowrap;
+    margin: 0 0.5rem;
+  }
+  .layers {
+    grid-area: layers;
+    color: var(--color-text-lighter);
+    align-self: end;
+  }
+  .values {
+    grid-area: values;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    column-gap: 0.25rem;
+    flex: 1;
+    .value {
+      text-align: center;
+      background: alphav(var(--color-grey), 0.25);
+     white-space: nowrap;
+     
+    }
+  }
+}

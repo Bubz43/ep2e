@@ -268,7 +268,8 @@ table {
 
 #navigation {
   position: relative;
-  width: calc(100% - 350px);
+  // width: calc(100% - 350px);
+  width: 100%;
   pointer-events: none;
   flex: 1;
   min-height: 42px;
