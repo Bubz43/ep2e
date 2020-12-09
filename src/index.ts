@@ -25,6 +25,7 @@ import 'web-animations-js';
 // Weightless Components
 import 'weightless/label';
 import 'weightless/list-item';
+import { MessageHealthChange } from './chat/components/health-change/message-health-change';
 import { MessageContent } from './chat/components/message-content/message-content';
 import { MessageHeader } from './chat/components/message-header/message-header';
 import { MessageStressTest } from './chat/components/stress-test/message-stress-test';
@@ -257,3 +258,4 @@ RolledFormulasList;
 MessageHeader;
 MessageContent;
 MessageStressTest;
+MessageHealthChange;

@@ -27,13 +27,14 @@ import {
   property,
   PropertyValues,
 } from 'lit-element';
-import { compact, fromPairs } from 'remeda';
+import { compact, fromPairs, identity, mapToObj } from 'remeda';
 import styles from './health-editor.scss';
 import { MentalHealth } from '@src/health/mental-health';
-import type { HealthModificationEvent } from '@src/health/health-modification-event';
+import { HealthModificationEvent } from '@src/health/health-modification-event';
 import { notEmpty } from '@src/utility/helpers';
 import { addFeature } from '@src/features/feature-helpers';
 import { isSleeve } from '@src/entities/actor/sleeves';
+import { createMessage, MessageVisibility } from '@src/chat/create-message';
 
 @customElement('health-editor')
 export class HealthEditor extends LitElement {
@@ -110,6 +111,13 @@ export class HealthEditor extends LitElement {
     super.update(changedProps);
   }
 
+  firstUpdated() {
+    this.addEventListener(
+      HealthModificationEvent.is,
+      this.applyModification.bind(this),
+    );
+  }
+
   private cleanupSub() {
     this.actorUnsub?.();
     this.actorUnsub = null;
@@ -145,8 +153,24 @@ export class HealthEditor extends LitElement {
     modification,
     armorReduction,
   }: HealthModificationEvent) {
+    const { currentHealth } = this;
+    if (!currentHealth) return;
+    createMessage({
+      data: {
+        header: { heading: localize(currentHealth.type) },
+        healthChange: {
+          ...modification,
+          healthType: currentHealth.type,
+          passedThreshold: '', // TODO
+          reducedArmor: armorReduction
+            ? mapToObj([...armorReduction], identity)
+            : undefined,
+        },
+      },
+      visibility: MessageVisibility.WhisperGM,
+    });
     this.actor.updater.batchCommits(async () => {
-      await this.currentHealth?.applyModification(modification);
+      await currentHealth.applyModification(modification);
       if (notEmpty(armorReduction)) {
         const sleeve = isSleeve(this.actor.proxy)
           ? this.actor.proxy
@@ -252,7 +276,6 @@ export class HealthEditor extends LitElement {
       const stress = change?.type === HealthType.Mental ? change : null;
       return html`
         <mental-health-stress-editor
-          @health-modification=${this.applyModification}
           .health=${health}
           .stress=${stress}
           .armor=${this.armor}
@@ -270,13 +293,15 @@ export class HealthEditor extends LitElement {
       props: change || { damage: 0, wounds: 0 },
       classes: 'heal-editor',
       update: ({ damage = 0, wounds = 0 }) => {
-        health.applyModification(
-          createHealthModification({
-            mode: HealthModificationMode.Heal,
-            damage,
-            wounds,
-            source: change?.source || localize('editor'),
-          }),
+        this.dispatchEvent(
+          new HealthModificationEvent(
+            createHealthModification({
+              mode: HealthModificationMode.Heal,
+              damage,
+              wounds,
+              source: change?.source || localize('editor'),
+            }),
+          ),
         );
       },
       fields: ({ damage, wounds }) => [
