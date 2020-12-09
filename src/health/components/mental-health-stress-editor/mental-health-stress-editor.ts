@@ -7,7 +7,11 @@ import {
 import { renderAutoForm } from '@src/components/form/forms';
 import { enumValues } from '@src/data-enums';
 import { localize } from '@src/foundry/localization';
-import { MentalHealth, StressType } from '@src/health/mental-health';
+import {
+  hardeningTypes,
+  MentalHealth,
+  StressType,
+} from '@src/health/mental-health';
 import { nonNegative, safeMerge, withSign } from '@src/utility/helpers';
 import {
   customElement,
@@ -25,7 +29,7 @@ import {
 } from '@src/health/health';
 import { ActiveArmor, ArmorType } from '@src/features/active-armor';
 import { rollFormula } from '@src/foundry/rolls';
-import { set } from 'remeda';
+import { range, set } from 'remeda';
 
 /**
  * @fires health-modification - HealthModificationEvent
@@ -143,6 +147,7 @@ export class MentalHealthStressEditor extends LitElement {
             damage,
             wounds,
             source: this.stress?.source || localize('editor'),
+            stressType: this.editableStress.stressType,
           }),
           this.editableStress.reduceAVbyDV ? armorUsed : undefined,
         ),
@@ -154,6 +159,36 @@ export class MentalHealthStressEditor extends LitElement {
     const { damage, wounds, minimumDV } = this.computed;
 
     return html`
+      ${renderAutoForm({
+        props: this.editableStress,
+        noDebounce: true,
+        update: (changed, orig) =>
+          (this.editableStress = { ...orig, ...changed }),
+        fields: ({ stressType }) =>
+          renderSelectField(stressType, enumValues(StressType)),
+      })}
+
+      <ul class="hardening">
+        ${hardeningTypes.map((type) => {
+          const val = this.health.hardening[type];
+          return html`
+            <li>
+              ${localize(type)}
+              <div>
+                ${range(0, 5).map(
+                  (place) =>
+                    html`<mwc-icon
+                      >${place < val
+                        ? 'check_box'
+                        : 'check_box_outline_blank'}</mwc-icon
+                    >`,
+                )}
+              </div>
+            </li>
+          `;
+        })}
+      </ul>
+
       <div class="stress-damage">
         ${renderAutoForm({
           classes: 'stress-form',
@@ -167,7 +202,6 @@ export class MentalHealthStressEditor extends LitElement {
               { ...damageValue, label: localize('stress') },
               { min: 0 },
             ),
-            // renderSelectField(stressType, enumValues(StressType)),
           ],
         })}
         <div class="armor-toggles">

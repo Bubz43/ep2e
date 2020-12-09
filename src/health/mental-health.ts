@@ -9,6 +9,7 @@ import {
   HealthInit,
   HealthMain,
   HealthModification,
+  HealthModificationMode,
   HealthStatMods,
   HealthType,
   HealthWounds,
@@ -120,8 +121,26 @@ class MentalHealthBase implements CommonHealth {
     return pick(this.init.data, hardeningTypes);
   }
 
+  private canHarden(
+    stressType: HealthModification['stressType'],
+  ): stressType is typeof hardeningTypes[number] {
+    return !!(
+      stressType &&
+      stressType !== StressType.TheUnknown &&
+      this.hardening[stressType] < 5
+    );
+  }
+
   applyModification(modification: HealthModification) {
-    return this.init.updater
+    const { updater } = this.init;
+    if (
+      modification.mode === HealthModificationMode.Inflict &&
+      modification.wounds && 
+      this.canHarden(modification.stressType)
+    ) {
+      updater.prop(modification.stressType).store((val) => val + 1);
+    }
+    return updater
       .prop('')
       .commit((data) => applyHealthModification(data, modification));
   }

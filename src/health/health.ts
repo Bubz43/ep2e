@@ -14,6 +14,7 @@ import { LangEntry, localize } from '@src/foundry/localization';
 import type { ValuedProp } from '@src/utility/field-values';
 import { nonNegative } from '@src/utility/helpers';
 import { pipe, clamp } from 'remeda';
+import type { StressType } from './mental-health';
 import type { HealthRecoveries } from './recovery';
 
 type HealthProp<T extends LangEntry | Abbreviation> = ValuedProp<number, T>;
@@ -52,6 +53,7 @@ export type HealthModification = Timestamp & {
   damage: number;
   wounds: number;
   source: string;
+  stressType: StressType | null;
 };
 
 export const createHealthModification = createFeature<
@@ -60,6 +62,7 @@ export const createHealthModification = createFeature<
 >(
   () => ({
     source: localize('unknown'),
+    stressType: null,
     ...createTimestamp({}),
   }),
   ({ damage, wounds, ...data }) => ({

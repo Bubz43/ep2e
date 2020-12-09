@@ -356,7 +356,6 @@ const format = (effect: Effect): (string | number)[] => {
       ];
     case EffectType.Armor:
       return [
-        // effect.layerable ? `[${localize('armorLayer')}]` : '',
         enumValues(ArmorType)
           .flatMap((armor) => {
             const value = effect[armor];
@@ -367,6 +366,7 @@ const format = (effect: Effect): (string | number)[] => {
               : [];
           })
           .join(', '),
+        effect.concealable ? `(${localize("concealable")})` : ""
       ];
 
     case EffectType.Recharge:

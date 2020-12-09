@@ -19,7 +19,7 @@ export class Section extends LitElement {
         <slot name="control"></slot>
         <h2>${this.heading}</h2>
       </header>
-      <div class="content">
+      <div class="content" part="content">
         <slot></slot>
       </div>
     `;

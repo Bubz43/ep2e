@@ -1,6 +1,8 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+@include resetUnorderedList();
+
 * {
   box-sizing: border-box;
 }
@@ -58,5 +60,14 @@ submit-button {
   &.active {
     background: alphav(var(--color-grey), 0.2);
     border: 1px outset var(--color-grey);
+  }
+}
+
+.hardening {
+  li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+    --mdc-icon-size: 1.25rem;
   }
 }
