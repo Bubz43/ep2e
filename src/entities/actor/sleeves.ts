@@ -1,7 +1,4 @@
-import {
-  packEntityIs,
-  packIsVisible
-} from '@src/foundry/misc-helpers';
+import { packEntityIs, packIsVisible } from '@src/foundry/misc-helpers';
 import { notEmpty } from '@src/utility/helpers';
 import { filter, flatMap, pipe } from 'remeda';
 import { ItemType, sleeveTypes } from '../entity-types';
@@ -25,7 +22,6 @@ export type ResleeveOptions = Pick<
   ResleevingSettings,
   'keepCurrent' | 'keepInto'
 >;
-
 
 export const isSleeveItem = (proxy: ItemProxy) => {
   switch (proxy.type) {

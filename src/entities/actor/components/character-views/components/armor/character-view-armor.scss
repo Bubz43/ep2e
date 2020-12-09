@@ -7,18 +7,17 @@
 
 :host {
   display: block;
-  
 }
 
 .movement-modifiers {
   padding: 0 1.5rem;
 }
 
-sl-group[slot="action"] {
+sl-group[slot='action'] {
   margin-right: 1rem;
 }
 
-mwc-icon-button[slot="action"] {
+mwc-icon-button[slot='action'] {
   &.active {
     color: var(--color-secondary);
   }

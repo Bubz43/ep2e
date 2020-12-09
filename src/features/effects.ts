@@ -358,7 +358,11 @@ const format = (effect: Effect): (string | number)[] => {
         enumValues(ArmorType)
           .flatMap((armor) => {
             const value = effect[armor];
-            return value ? `${localize(armor)} ${effect.layerable ? withSign(value) : value}` : [];
+            return value
+              ? `${localize(armor)} ${
+                  effect.layerable ? withSign(value) : value
+                }`
+              : [];
           })
           .join(', '),
       ];

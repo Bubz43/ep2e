@@ -34,8 +34,7 @@ export class HealthLog extends LitElement {
               <span slot="secondary"
                 >${damage} ${this.health.main.damage.label}, ${wounds}
                 ${this.health.wound?.wounds.label}
-                </span
-              >
+              </span>
             </mwc-list-item>
           `,
         )}

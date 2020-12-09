@@ -31,7 +31,7 @@ class SyntheticBase extends ActorProxyBase<ActorType.Synthetic> {
     return this.epData.subtype;
   }
   get damagedArmorUpdater() {
-    return this.updater.prop("data", "damagedArmor");
+    return this.updater.prop('data', 'damagedArmor');
   }
 }
 
@@ -80,7 +80,6 @@ export class Synthetic extends mix(SyntheticBase).with(
       this.physicalHealth,
     ]);
   }
-
 
   get activeEffects() {
     return this._outsideEffects ?? this.itemGroups.effects;

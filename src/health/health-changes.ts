@@ -54,7 +54,6 @@ export type ArmorDamage = Record<ArmorType, number> & {
   source: string;
 };
 
-
 type RequiredFields = 'formula' | 'damageValue';
 
 const common: Base = {

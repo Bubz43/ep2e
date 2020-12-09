@@ -25,7 +25,7 @@ class InfomorphBase extends ActorProxyBase<ActorType.Infomorph> {
     return localize(this.type);
   }
   get damagedArmorUpdater() {
-    return this.updater.prop("data", "damagedArmor");
+    return this.updater.prop('data', 'damagedArmor');
   }
 }
 

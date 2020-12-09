@@ -37,7 +37,7 @@ export class ActiveArmor
   constructor(
     public readonly sources: ReadonlyArray<SourcedEffect<ArmorEffect>>,
     som: number | null,
-    public readonly damagedArmor?: ArmorDamage[] | null
+    public readonly damagedArmor?: ArmorDamage[] | null,
   ) {
     super();
     const armorTypes = enumValues(ArmorType);
@@ -53,7 +53,7 @@ export class ActiveArmor
     if (notEmpty(damagedArmor)) {
       for (const damage of damagedArmor) {
         for (const armor of armorTypes) {
-          this.addValue(armor, -damage[armor])
+          this.addValue(armor, -damage[armor]);
         }
       }
     }
@@ -158,8 +158,7 @@ export class ActiveArmor
         ActiveArmor.maybePierced({ armorValue: additionalArmor, pierce }),
       nonNegative,
     );
-    if (armorUsed.length === 0)   return { appliedDamage: remainingDamage };
-    
+    if (armorUsed.length === 0) return { appliedDamage: remainingDamage };
 
     const uniqueArmors = new Set(armorUsed);
     const damageSplit = Math.floor(remainingDamage / uniqueArmors.size);

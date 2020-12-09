@@ -2,7 +2,11 @@ import { enumValues } from '@src/data-enums';
 import type { UpdateActions } from '@src/entities/update-store';
 import { ArmorType } from '@src/features/active-armor';
 import type { ConditionType } from '@src/features/conditions';
-import { addFeature, removeFeature, StringID } from '@src/features/feature-helpers';
+import {
+  addFeature,
+  removeFeature,
+  StringID,
+} from '@src/features/feature-helpers';
 import type { MovementRate } from '@src/features/movement';
 import type { Size } from '@src/features/size';
 import type {
@@ -55,11 +59,10 @@ export const SleeveInfo = (
         }),
       );
     }
-  
+
     removeArmorDamage(id: string) {
       return this.damagedArmorUpdater.commit(removeFeature(id));
     }
-  
   };
 };
 

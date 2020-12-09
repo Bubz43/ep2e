@@ -130,10 +130,9 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
         })}
         <!-- ${this.renderActionIconButton({
           icon: undefined,
-          tooltipText: localize("armor"),
+          tooltipText: localize('armor'),
           renderer: CharacterDrawerRenderer.Armor,
-          content: html`<img src=${localImage("icons/armor/shield.svg")} />`
-
+          content: html`<img src=${localImage('icons/armor/shield.svg')} />`,
         })} -->
         ${this.renderActionIconButton({
           icon: 'groups',
@@ -145,7 +144,6 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
           tooltipText: `${localize('network')} ${localize('settings')}`,
           renderer: CharacterDrawerRenderer.NetworkSettings,
         })}
-
 
         <mwc-button
           class="effects-toggle"

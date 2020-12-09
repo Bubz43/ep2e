@@ -10,7 +10,6 @@
 :host {
   display: grid;
   min-width: 375px;
-
 }
 .mode-form {
   padding: 0.25rem 0.5rem;
@@ -44,5 +43,5 @@ p {
 
 .heal-editor {
   grid-template-columns: 1fr 1fr;
-  padding: 0 0.5rem 0.5rem
+  padding: 0 0.5rem 0.5rem;
 }

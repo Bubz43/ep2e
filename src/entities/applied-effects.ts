@@ -146,7 +146,7 @@ export class AppliedEffects {
   add = (toAdd: AddEffects | AddEffects[] | null | undefined) => {
     if (!toAdd) return;
     if (Array.isArray(toAdd)) {
-      toAdd.forEach(this.add)
+      toAdd.forEach(this.add);
       return;
     }
 

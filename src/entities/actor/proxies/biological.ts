@@ -1,6 +1,6 @@
 import {
   AppliedEffects,
-  ReadonlyAppliedEffects
+  ReadonlyAppliedEffects,
 } from '@src/entities/applied-effects';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { EquippableItem, ItemProxy } from '@src/entities/item/item';
@@ -23,7 +23,7 @@ class BiologicalBase extends ActorProxyBase<ActorType.Biological> {
     return this.epData.subtype;
   }
   get damagedArmorUpdater() {
-    return this.updater.prop("data", "damagedArmor");
+    return this.updater.prop('data', 'damagedArmor');
   }
 }
 
@@ -64,7 +64,6 @@ export class Biological extends mix(BiologicalBase).with(
   get sex() {
     return this.epData.sex;
   }
-  
 
   @LazyGetter()
   get availableBrains() {

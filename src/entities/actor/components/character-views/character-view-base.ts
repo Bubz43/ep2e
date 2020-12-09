@@ -134,6 +134,6 @@ export abstract class CharacterViewBase extends LitElement {
   renderArmor() {
     return html`
       <character-view-armor .character=${this.character}></character-view-armor>
-    `
+    `;
   }
 }

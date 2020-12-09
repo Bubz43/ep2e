@@ -1334,7 +1334,9 @@ type LangEntries =
   | 'rewound'
   | 'advanced'
   | 'from'
-  | 'picker' | "minimum" | "browse";
+  | 'picker'
+  | 'minimum'
+  | 'browse';
 type FullNames =
   | 'cog'
   | 'int'
@@ -1418,8 +1420,8 @@ export type DescriptionEntry =
   | 'EgoAlreadyHasPsi'
   | 'CannotAddPsi'
   | 'NonElectronicSubstanceOnly'
-  | "Overburdened"
-  | "Encumbered"
+  | 'Overburdened'
+  | 'Encumbered';
 
 // TODO Look into using data keys as pattern to validate json string
 export type Formatable = {

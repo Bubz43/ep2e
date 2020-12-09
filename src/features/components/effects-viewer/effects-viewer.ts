@@ -40,7 +40,7 @@ export class EffectsViewer extends LitElement {
                   <li>
                     <span class="effect-source"> ${effect[Source]} </span>
 
-                      ${formatEffect(effect)}
+                    ${formatEffect(effect)}
                   </li>
                 `,
               )}

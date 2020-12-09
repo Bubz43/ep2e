@@ -13,7 +13,6 @@
   min-width: 100%;
 }
 
-
 .change {
   display: flex;
   justify-content: space-around;
@@ -31,7 +30,7 @@
 
 .stress-damage {
   display: grid;
-  grid-template-columns:  1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   padding: 0.25rem 0;
   sl-form {
     display: contents;
@@ -41,7 +40,7 @@
 submit-button {
   width: 100%;
   margin-bottom: 0.5rem;
-} 
+}
 
 .armors {
   display: grid;
@@ -59,6 +58,5 @@ submit-button {
   &.active {
     background: alphav(var(--color-grey), 0.2);
     border: 1px outset var(--color-grey);
-
   }
 }

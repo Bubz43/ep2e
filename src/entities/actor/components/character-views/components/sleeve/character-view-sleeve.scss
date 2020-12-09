@@ -66,9 +66,9 @@ health-item {
 
 .armor {
   display: grid;
-  grid-template-areas: 
-  "label layers"
-  "values values";
+  grid-template-areas:
+    'label layers'
+    'values values';
   display: flex;
   flex-flow: row wrap;
   grid-template-columns: min-content;
@@ -94,8 +94,7 @@ health-item {
     .value {
       text-align: center;
       background: alphav(var(--color-grey), 0.25);
-     white-space: nowrap;
-     
+      white-space: nowrap;
     }
   }
 }

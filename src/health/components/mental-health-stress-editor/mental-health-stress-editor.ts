@@ -112,7 +112,10 @@ export class MentalHealthStressEditor extends LitElement {
     const max = nonNegative(
       (roll?.terms || []).reduce<number>((accum, term, index, list) => {
         if (term instanceof DiceTerm) accum += term.number;
-        else if (typeof term === 'number' && (list[index - 1] === '+' || index === 0))
+        else if (
+          typeof term === 'number' &&
+          (list[index - 1] === '+' || index === 0)
+        )
           accum += term;
         return accum;
       }, 0),
@@ -209,7 +212,10 @@ export class MentalHealthStressEditor extends LitElement {
         @click=${this.toggleTakeMinimum}
         role="button"
         class="min-toggle ${this.overrides?.takeMinimum ? 'active' : ''}"
-        ><span>${localize('take')} ${localize('minimum')} ${localize("damage")}: ${Math.min(minimumDV, damage)}</span>
+        ><span
+          >${localize('take')} ${localize('minimum')} ${localize('damage')}:
+          ${Math.min(minimumDV, damage)}</span
+        >
       </wl-list-item>
 
       <div class="change">
