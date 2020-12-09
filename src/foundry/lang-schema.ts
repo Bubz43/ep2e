@@ -1336,7 +1336,7 @@ type LangEntries =
   | 'from'
   | 'picker'
   | 'minimum'
-  | 'browse';
+  | 'browse' | 'encounteringThreat';
 type FullNames =
   | 'cog'
   | 'int'

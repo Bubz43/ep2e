@@ -1523,6 +1523,9 @@
             "enclaver": {
               "type": "string"
             },
+            "encounteringThreat": {
+              "type": "string"
+            },
             "encumbered": {
               "type": "string"
             },
@@ -4724,6 +4727,7 @@
             "embeddedEgos",
             "empty",
             "enclaver",
+            "encounteringThreat",
             "encumbered",
             "end",
             "endOfNextTurn",

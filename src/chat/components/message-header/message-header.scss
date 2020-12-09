@@ -22,7 +22,6 @@ header {
   text-align: left;
   margin-left: 0.75rem;
   padding: 0.5rem 0;
-  display: block;
   &.with-img {
     max-width: 240px;
   }
@@ -31,6 +30,7 @@ header {
     display: inline-block;
     max-width: 100%;
   }
+  
   .details {
     display: block;
     font-family: var(--font-2);
@@ -41,7 +41,9 @@ header {
 
 h3 {
   align-self: end;
-  font-size: 1rem;
+  font-size: large;
+  place-self: center;
+  @include truncate(100%);
 }
 
 h3,
@@ -54,8 +56,7 @@ h4 {
 img {
   display: block;
   place-self: center;
-  margin: 0.25rem 0.5rem;
-  min-width: 48px;
+  margin: 0.3rem 0.75rem;
 }
 
 h4 {

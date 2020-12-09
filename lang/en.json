@@ -1312,6 +1312,7 @@
     "picker": "Picker",
     "minimum": "Minimum",
     "browse": "Browse",
+    "encounteringThreat": "Encountering Threat",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

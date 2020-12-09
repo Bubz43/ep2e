@@ -76,12 +76,26 @@ export class MessageStressTest extends LitElement {
     this.usedRollParts = ev.usedRollParts;
   }
 
+  private get source() {
+    return this.stress.source || localize('stressfulExperience');
+  }
+
   private applyDamage() {
-    this.openHealthPicker(createStressDamage(this.totals));
+    this.openHealthPicker(
+      createStressDamage({
+        source: this.source,
+        ...this.totals,
+      }),
+    );
   }
 
   private applyMinDamage() {
-    this.openHealthPicker(createStressDamage(this.minStress));
+    this.openHealthPicker(
+      createStressDamage({
+        source: this.source,
+        ...this.minStress,
+      }),
+    );
   }
 
   private openHealthPicker(damage: StressDamage) {

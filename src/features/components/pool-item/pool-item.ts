@@ -2,7 +2,7 @@ import { LazyRipple } from '@src/components/mixins/lazy-ripple';
 import type { ReadonlyPool } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import { clickIfEnter } from '@src/utility/helpers';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, LitElement, property, html, internalProperty } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import mix from 'mix-with/lib';
@@ -46,6 +46,7 @@ export class PoolItem extends mix(LitElement).with(LazyRipple) {
         </div>
         <div class="pool-name">${localize(pool.type)}</div>
       </div>
+   
     `;
   }
 }

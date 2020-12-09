@@ -38,7 +38,7 @@ export class MessageHeader extends LitElement {
 
         ${img
           ? html`
-              <img class="main-image" src=${img} height="48px" loading="lazy" />
+              <img class="main-image" src=${img} height="40px" loading="lazy" />
             `
           : ''}
       </header>

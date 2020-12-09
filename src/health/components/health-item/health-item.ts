@@ -74,7 +74,7 @@ export class HealthItem<T extends Health = Health> extends mix(LitElement).with(
             2}"
           ></div>
 
-          ${deathRating
+          ${(main.deathRating?.value || 0) > main.durability.value
             ? html` <div class="bar" style="--percent: ${deathRating};"></div> `
             : ''}
         </div>

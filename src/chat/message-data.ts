@@ -8,6 +8,7 @@ export type StressTestMessageData = {
   minStress: '' | 'half' | number;
   stressType: StressType;
   notes: string;
+  source?: string;
 };
 
 export type HealthChangeMessageData = HealthModification & {

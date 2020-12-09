@@ -48,16 +48,22 @@ export class HealthEditor extends LitElement {
     actor,
     adjacentEl,
     change,
+    initialHealth,
   }: {
     actor: ActorEP;
     adjacentEl?: HTMLElement;
     change?: HealthEditor['change'];
+    initialHealth?: ActorHealth;
   }) {
     return openWindow({
       key: HealthEditor,
       name: `${localize('health')} ${localize('editor')}`,
       content: html`
-        <health-editor .actor=${actor} .change=${change}></health-editor>
+        <health-editor
+          .actor=${actor}
+          .change=${change}
+          .health=${initialHealth}
+        ></health-editor>
       `,
       adjacentEl,
       forceFocus: true,
@@ -67,6 +73,8 @@ export class HealthEditor extends LitElement {
   @property({ attribute: false }) actor!: ActorEP;
 
   @property({ type: Object }) change?: Damage | Heal | null;
+
+  @property({ attribute: false }) health?: ActorHealth | null;
 
   @internalProperty() healthType = HealthType.Physical;
 
@@ -93,6 +101,12 @@ export class HealthEditor extends LitElement {
     if (changedProps.has('change') && this.change) {
       this.healthType = this.change.type;
       this.mode = this.change.kind;
+    }
+    if (
+      changedProps.get('health') !== undefined &&
+      this.health?.type === this.healthType
+    ) {
+      this.selectedHealth = this.health;
     }
     super.update(changedProps);
   }
@@ -149,19 +163,24 @@ export class HealthEditor extends LitElement {
       : null;
   }
 
-  private applyModification({
+  private async applyModification({
     modification,
     armorReduction,
   }: HealthModificationEvent) {
     const { currentHealth } = this;
     if (!currentHealth) return;
-    createMessage({
+    await createMessage({
       data: {
-        header: { heading: localize(currentHealth.type) },
+        header: {
+          heading: `${currentHealth.source} ${localize(
+            currentHealth.type,
+          )} ${localize('health')}`,
+          img: currentHealth.icon
+        },
         healthChange: {
           ...modification,
           healthType: currentHealth.type,
-          passedThreshold: '', // TODO
+          passedThreshold: '', // TODO figure out when to put this
           reducedArmor: armorReduction
             ? mapToObj([...armorReduction], identity)
             : undefined,
@@ -169,6 +188,7 @@ export class HealthEditor extends LitElement {
       },
       visibility: MessageVisibility.WhisperGM,
     });
+
     this.actor.updater.batchCommits(async () => {
       await currentHealth.applyModification(modification);
       if (notEmpty(armorReduction)) {

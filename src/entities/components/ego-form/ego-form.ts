@@ -116,8 +116,7 @@ export class EgoForm extends mix(LitElement).with(
       entity: actor,
       data: {
         header: {
-          heading: localize('stressfulExperience'),
-          description: this.ego.epData.description,
+          heading: localize('encounteringThreat'),
         },
         stress: {
           rolledFormulas: rollLabeledFormulas([
@@ -134,6 +133,7 @@ export class EgoForm extends mix(LitElement).with(
               ? stressTestValue.minSV || 1
               : '',
           stressType: StressType.TheUnknown,
+          source: localize("encounteringThreat")
         },
       },
     });
@@ -203,14 +203,18 @@ export class EgoForm extends mix(LitElement).with(
           ? html`
               <section>
                 <sl-header heading=${localize('threatDetails')}>
-                  <mwc-button
-                    class="stress-roll"
-                    dense
-                    slot="action"
-                    label="${localize('SHORT', 'stressValue')}: ${this.ego
-                      .stressValueInfo.value}"
-                    @click=${this.rollStress}
-                  ></mwc-button>
+                  ${this.ego.stressValueInfo.value
+                    ? html`
+                        <mwc-button
+                          class="stress-roll"
+                          dense
+                          slot="action"
+                          label="${localize('SHORT', 'stressValue')}: ${this.ego
+                            .stressValueInfo.value}"
+                          @click=${this.rollStress}
+                        ></mwc-button>
+                      `
+                    : ''}
                 </sl-header>
                 <div class="threat-details">
                   ${renderUpdaterForm(updater.prop('data', 'threatDetails'), {
