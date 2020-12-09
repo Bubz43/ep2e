@@ -47,7 +47,7 @@ header {
 
 
 health-item {
-  --health-item-padding: 0.25rem 1rem;
+  --health-item-padding: 0.3rem 1rem;
 }
 
 // .movement,
@@ -66,15 +66,24 @@ health-item {
 
 .movement {
   padding: 0.15rem 1rem 0.35rem;
+  display: grid;
+  grid-template-areas: 
+  "label info"
+  "rates rates";
   .label {
     font-size: large;
     margin-left: 0.5rem;
+    grid-area: label;
   }
   .rates {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(179px, 1fr));
     gap: 0.25rem;
+    grid-area: rates;
 
+  }
+  .info {
+    grid-area: info;
   }
   .movement-rate {
     text-align: center;
@@ -120,10 +129,13 @@ health-item {
     grid-auto-flow: column;
     grid-auto-columns: 1fr;
     column-gap: 0.25rem;
-    .value {
+    .rating {
       text-align: center;
       background: alphav(var(--color-bg-alt), 0.75);
       white-space: nowrap;
+      .value {
+        color: var(--color-text-lighter);
+      }
       &.reduced {
         color: lightv(var(--color-negative), 1.5);
       }

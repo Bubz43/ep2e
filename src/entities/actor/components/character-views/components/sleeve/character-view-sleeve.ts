@@ -37,8 +37,7 @@ export class CharacterViewSleeve extends LitElement {
     const { sleeve } = this;
     const physicalHealth = 'physicalHealth' in sleeve && sleeve.physicalHealth;
     const meshHealth = 'activeMeshHealth' in sleeve && sleeve.activeMeshHealth;
-    const isInfomorph = !physicalHealth;
-    const { armor, movementRates } = this.character;
+    const { armor, movementRates, movementModifiers } = this.character;
     return html`
       <header>
         <button @click=${this.sleeve.openForm}>${this.sleeve.name}</button>
@@ -52,7 +51,6 @@ export class CharacterViewSleeve extends LitElement {
         >
       </header>
 
-      
       <div
         class="armor"
         @click=${this.viewArmor}
@@ -76,8 +74,8 @@ export class CharacterViewSleeve extends LitElement {
             const value = armor.getClamped(type);
             const reduced = armor.reducedArmoors.has(type);
             return value || reduced
-              ? html`<span class="value ${classMap({ reduced })}"
-                  >${localize(type)} ${value}</span
+              ? html`<span class="rating ${classMap({ reduced })}"
+                  >${localize(type)} <span class="value">${value}</span></span
                 >`
               : '';
           })}</span
@@ -88,24 +86,25 @@ export class CharacterViewSleeve extends LitElement {
         ? html`
             <div class="movement">
               <span class="label">${localize('movement')}</span>
+              <span class="info">
+                ${(['encumbered', 'overburdened'] as const).map((mod) => {
+                  const val = movementModifiers[mod];
+                  return val ? localize(mod) : '';
+                })}
+              </span>
               <div class="rates">
                 ${movementRates.map(
-                  ({ type, base, full }, index, list) => html`
+                  ({ type, base, full }) => html`
                     <span class="movement-rate"
                       >${localize(type)}
-                      <span class="rate"
-                        >${base} /
-                        ${full}</span
-                      ></span
+                      <span class="rate">${base} / ${full}</span></span
                     >
                   `,
-                )}</div
-              >
+                )}
+              </div>
             </div>
           `
         : ''}
-
-
       ${physicalHealth
         ? html` <health-item .health=${physicalHealth}> </health-item> `
         : ''}

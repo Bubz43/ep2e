@@ -139,11 +139,14 @@ mwc-tab-bar {
   display: grid;
   grid-auto-rows: min-content;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 0.1rem;
 
   sl-header,
   character-view-item-group::part(header) {
     padding: 0px 0.75rem;
-    border-color: var(--color-border);
+    border: none;
+    background: alphav(var(--color-border), 0.25);
+   
   }
 
   .network {

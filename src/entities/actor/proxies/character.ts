@@ -130,21 +130,32 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     if (egoFormWindow?.isConnected) this.ego.openForm?.();
   }
 
+  get movementModifiers() {
+    return !this.sleeve || this.sleeve.type === ActorType.Infomorph
+      ? {}
+      : {
+          encumbered: this.armor.isEncumbered(
+            this.sleeve.physicalHealth.main.durability.value,
+          ),
+          overburdened: this.armor.isOverburdened,
+        };
+
+  }
+
   @LazyGetter()
   get movementRates(): MovementRate[] {
     if (!this.sleeve || this.sleeve.type === ActorType.Infomorph) return [];
     const { movementRates, physicalHealth } = this.sleeve;
     const { movementEffects } = this._appliedEffects;
     const movements = [...movementRates, ...movementEffects.granted];
-
-    if (this.armor.isEncumbered(physicalHealth.main.durability.value)) {
+    const {encumbered, overburdened} = this.movementModifiers
+    if (encumbered) {
       return movements.map((movement) => ({ ...movement, base: 0, full: 0 }));
     }
 
-    const { isOverburdened } = this.armor;
-    if (isOverburdened || notEmpty(movementEffects.modify)) {
+    if (overburdened || notEmpty(movementEffects.modify)) {
       const change = (initial: number, mod: number) =>
-        Math.ceil(nonNegative(initial + mod) / (isOverburdened ? 2 : 1));
+        Math.ceil(nonNegative(initial + mod) / (overburdened ? 2 : 1));
       return movements.map((movement) => {
         const mods = movementEffects.modify.get(movement.type);
         return mods

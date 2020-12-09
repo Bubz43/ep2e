@@ -35,22 +35,9 @@ export class CharacterViewArmor extends LitElement {
     this.reductionCreator = !this.reductionCreator;
   }
 
-  private get movementModifiers() {
-    if (
-      !this.character.sleeve ||
-      this.character.sleeve.type === ActorType.Infomorph
-    )
-      return {};
-    return {
-      encumbered: this.character.armor.isEncumbered(
-        this.character.sleeve.physicalHealth.main.durability.value,
-      ),
-      overburdened: this.character.armor.isOverburdened,
-    };
-  }
 
   render() {
-    const { encumbered, overburdened } = this.movementModifiers;
+    const { encumbered, overburdened } = this.character.movementModifiers;
     const { armor, disabled } = this.character;
     return html`
       <character-view-drawer-heading
