@@ -22,10 +22,19 @@ export class MessageHealthChange extends MessageElement {
   }
 
   private formatChange() {
-    const { mode, damage, wounds, healthType, stressType, source } = this.healthChange;
-  
+    const {
+      mode,
+      damage,
+      wounds,
+      healthType,
+      stressType,
+      source,
+    } = this.healthChange;
+
     const [damageLabel, woundLabel] = this.labels;
-    const values = html`<span slot="secondary">${damage} ${damageLabel}, ${wounds} ${woundLabel}</span>`;
+    const values = html`<span slot="secondary"
+      >${damage} ${damageLabel}, ${wounds} ${woundLabel}</span
+    >`;
     switch (mode) {
       case HealthModificationMode.Edit:
         return html`${source} ${localize('setHealthTo')} ${values} `;
@@ -34,21 +43,17 @@ export class MessageHealthChange extends MessageElement {
         return html`${source} ${localize('healed')} ${values}`;
 
       case HealthModificationMode.Inflict:
-        return html`${source} ${localize('inflicted')} ${values} 
-        <!-- ${
-          healthType === HealthType.Mental && stressType
-            ? html`<div>${localize("from")} ${localize(stressType)}</div>`
-            : ''
-          } -->
-        `;
+        return html`${source} ${localize('inflicted')} ${values}`;
     }
   }
 
   render() {
+    // TODO Roll glitch, knockdown, bleedout, crash, etc.
     return html`
       <mwc-list>
-      <mwc-list-item noninteractive twoline>${this.formatChange()}</mwc-list-item>
-
+        <mwc-list-item noninteractive twoline
+          >${this.formatChange()}</mwc-list-item
+        >
       </mwc-list>
     `;
   }
