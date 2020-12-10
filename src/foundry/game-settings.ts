@@ -92,20 +92,23 @@ export const registerEPSettings = once(() => {
       ),
   });
 
-  const glitchOnMeshWounds = registerSystemSetting<boolean>("glitchOnMeshWounds", {
-    name: `${EP.LocalizationNamespace}.glitchOnMeshWounds`,
-    scope: 'world',
-    hint: "Apply optional cumulative 10% change to suffer glitch per mesh wound.",
-    config: true,
-    default: false,
-    type: Boolean,
-
-  })
+  const glitchOnMeshWounds = registerSystemSetting<boolean>(
+    'glitchOnMeshWounds',
+    {
+      name: `${EP.LocalizationNamespace}.glitchOnMeshWounds`,
+      scope: 'world',
+      hint:
+        'Apply optional cumulative 10% change to suffer glitch per mesh wound.',
+      config: true,
+      default: false,
+      type: Boolean,
+    },
+  );
 
   return {
     systemMigrationVersion,
     environment,
     credits,
-    glitchOnMeshWounds
+    glitchOnMeshWounds,
   } as const;
 });

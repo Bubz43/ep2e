@@ -1,10 +1,14 @@
-import { renderFormulaField, renderNumberField, renderTextField } from '@src/components/field/fields';
+import {
+  renderFormulaField,
+  renderNumberField,
+  renderTextField,
+} from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { localize } from '@src/foundry/localization';
 import type { BiologicalHealth } from '@src/health/biological-health';
 import {
   createPhysicalDamage,
-  PhysicalDamage
+  PhysicalDamage,
 } from '@src/health/health-changes';
 import type { SyntheticHealth } from '@src/health/synthetic-health';
 import { customElement, html } from 'lit-element';
@@ -25,14 +29,14 @@ export class PhysicalHealthDamageEditor extends HealthEditBase<
 
   render() {
     return html`
-       <div class="damage-settings">
+      <div class="damage-settings">
         ${renderAutoForm({
           props: this.editableDamage,
           noDebounce: true,
           update: (changed, orig) =>
             (this.editableDamage = { ...orig, ...changed }),
           fields: ({ damageValue, source, formula }) => [
-            renderTextField(source, { placeholder: localize("editor")}),
+            renderTextField(source, { placeholder: localize('editor') }),
             renderFormulaField(formula),
             renderNumberField(
               { ...damageValue, label: localize('damage') },

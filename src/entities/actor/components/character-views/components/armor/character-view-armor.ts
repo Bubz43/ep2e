@@ -35,7 +35,6 @@ export class CharacterViewArmor extends LitElement {
     this.reductionCreator = !this.reductionCreator;
   }
 
-
   render() {
     const { encumbered, overburdened } = this.character.movementModifiers;
     const { armor, disabled } = this.character;

@@ -62,7 +62,7 @@ export class Armor
     return createEffect.armor({
       ...this.currentArmorValues,
       layerable,
-      concealable
+      concealable,
     });
   }
 

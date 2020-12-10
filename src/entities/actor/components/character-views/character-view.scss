@@ -43,7 +43,6 @@ character-view-sleeve,
   background: alphav(var(--color-bg), 0.1);
 }
 
-
 .side {
   grid-area: side;
   display: grid;
@@ -62,12 +61,10 @@ character-view-sleeve,
   }
   character-view-ego {
     margin: 0.25rem;
-  
   }
 
   character-view-sleeve {
     margin: auto 0.25rem 0.25rem;
-
   }
 
   .sleeve-select {
@@ -164,7 +161,6 @@ mwc-tab-bar {
     padding: 0px 0.75rem;
     border: none;
     background: alphav(var(--color-border), 0.25);
-   
   }
 
   .network {

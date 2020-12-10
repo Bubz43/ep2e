@@ -33,7 +33,7 @@ export class ActiveArmor
   private _layerPenalty?: AddEffects;
   private _overburdened?: AddEffects;
   readonly currentEffects: AddEffects[] = [];
-  readonly reducedArmoors = new Set<ArmorType>()
+  readonly reducedArmoors = new Set<ArmorType>();
   concealable = true;
 
   constructor(

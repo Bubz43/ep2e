@@ -530,8 +530,6 @@ sl-tooltip {
   margin: 0 0 0.25rem 0 !important;
   border-radius: 0.5rem 0px 0px 0.25rem !important;
 
-  
-
   &.new {
     @include animate-css(fadeInLeftBig, 300ms);
     animation-fill-mode: none !important;
@@ -542,7 +540,6 @@ sl-tooltip {
     backface-visibility: hidden;
     animation-fill-mode: none;
   }
-
 
   .message-header,
   .message-content {

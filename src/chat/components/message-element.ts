@@ -1,5 +1,5 @@
-import { LitElement } from "lit-element";
-import { ChatMessageRequestEvent } from "../chat-message-request-event";
+import { LitElement } from 'lit-element';
+import { ChatMessageRequestEvent } from '../chat-message-request-event';
 
 export class MessageElement extends LitElement {
   get message() {

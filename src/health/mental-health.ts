@@ -135,7 +135,7 @@ class MentalHealthBase implements CommonHealth {
     const { updater } = this.init;
     if (
       modification.mode === HealthModificationMode.Inflict &&
-      modification.wounds && 
+      modification.wounds &&
       this.canHarden(modification.stressType)
     ) {
       updater.prop(modification.stressType).store((val) => val + 1);

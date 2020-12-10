@@ -366,7 +366,7 @@ const format = (effect: Effect): (string | number)[] => {
               : [];
           })
           .join(', '),
-        effect.concealable ? `(${localize("concealable")})` : ""
+        effect.concealable ? `(${localize('concealable')})` : '',
       ];
 
     case EffectType.Recharge:

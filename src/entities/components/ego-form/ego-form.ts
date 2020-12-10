@@ -133,7 +133,7 @@ export class EgoForm extends mix(LitElement).with(
               ? stressTestValue.minSV || 1
               : '',
           stressType: StressType.TheUnknown,
-          source: localize("encounteringThreat")
+          source: localize('encounteringThreat'),
         },
       },
     });

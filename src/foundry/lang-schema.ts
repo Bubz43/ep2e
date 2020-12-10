@@ -1336,7 +1336,14 @@ type LangEntries =
   | 'from'
   | 'picker'
   | 'minimum'
-  | 'browse' | 'encounteringThreat' |  "glitchOnMeshWounds" | "glitch" | "versus" | "disorientation" | "acuteStress" | "unconsciousness"
+  | 'browse'
+  | 'encounteringThreat'
+  | 'glitchOnMeshWounds'
+  | 'glitch'
+  | 'versus'
+  | 'disorientation'
+  | 'acuteStress'
+  | 'unconsciousness';
 type FullNames =
   | 'cog'
   | 'int'
@@ -1393,7 +1400,8 @@ export type Abbreviation =
   | 'nanoware'
   | 'meshware'
   | 'shortRecharge'
-  | 'longRecharge' | "versus"
+  | 'longRecharge'
+  | 'versus';
 export type DescriptionEntry =
   | 'medicineHeal'
   | 'invalidRollFormula'
@@ -1421,7 +1429,11 @@ export type DescriptionEntry =
   | 'CannotAddPsi'
   | 'NonElectronicSubstanceOnly'
   | 'Overburdened'
-  | 'Encumbered' | "TheBodyDies" | "DestroyedBeyondRepair" | "PermanentEgoMeltdown" | "PermanentlyCorrupted"
+  | 'Encumbered'
+  | 'TheBodyDies'
+  | 'DestroyedBeyondRepair'
+  | 'PermanentEgoMeltdown'
+  | 'PermanentlyCorrupted';
 
 // TODO Look into using data keys as pattern to validate json string
 export type Formatable = {

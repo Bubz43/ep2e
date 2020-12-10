@@ -31,8 +31,8 @@ export class MentalHealthStressEditor extends HealthEditBase<
   }
 
   static get styles() {
-    return [super.styles, styles] as CSSResult[]
-  };
+    return [super.styles, styles] as CSSResult[];
+  }
 
   protected createEditable() {
     return createStressDamage(this.damage || { damageValue: 0, formula: '' });
@@ -84,7 +84,7 @@ export class MentalHealthStressEditor extends HealthEditBase<
           update: (changed, orig) =>
             (this.editableDamage = { ...orig, ...changed }),
           fields: ({ damageValue, source, formula }) => [
-            renderTextField(source, { placeholder: localize("editor")}),
+            renderTextField(source, { placeholder: localize('editor') }),
             renderFormulaField(formula),
             renderNumberField(
               { ...damageValue, label: localize('stress') },

@@ -1,5 +1,6 @@
 import { renderNumberField } from '@src/components/field/fields';
 import { renderUpdaterForm } from '@src/components/form/forms';
+import { ActorType } from '@src/entities/entity-types';
 import { localize } from '@src/foundry/localization';
 import { HealthEditor } from '@src/health/components/health-editor/health-editor';
 import { hardeningTypes } from '@src/health/mental-health';
@@ -159,22 +160,30 @@ export abstract class CharacterViewBase extends LitElement {
                 renderNumberField(hardenings[type], { min: 0, max: 5 }),
               ),
           },
-    )}
+        )}
 
-    <mwc-button @click=${() => HealthEditor.openWindow({
-      actor: this.character.actor,
-      initialHealth: this.character.ego.mentalHealth
-    })}>${localize("heal")} / ${localize("damage")}</mwc-button>
-        
-        <sl-details summary=${localize("history")}>
-        <health-log
-          .health=${this.character.ego.mentalHealth}
-          ?disabled=${this.character.disabled}
-        ></health-log>
+        <mwc-button
+          @click=${() =>
+            HealthEditor.openWindow({
+              actor: this.character.actor,
+              initialHealth: this.character.ego.mentalHealth,
+            })}
+          >${localize('heal')} / ${localize('damage')}</mwc-button
+        >
+
+        <sl-details summary=${localize('history')}>
+          <health-log
+            .health=${this.character.ego.mentalHealth}
+            ?disabled=${this.character.disabled}
+          ></health-log>
         </sl-details>
-
-      
       </section>
     `;
+  }
+
+  renderSleevePhysicalHealth() {
+    const { sleeve } = this.character;
+    if (!sleeve || sleeve?.type === ActorType.Infomorph) return html``;
+    return html``;
   }
 }

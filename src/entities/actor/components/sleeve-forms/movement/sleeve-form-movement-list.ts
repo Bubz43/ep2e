@@ -90,7 +90,7 @@ export class SleeveFormMovementList extends LitElement {
                   callback: this.operations.removeCallback(movement.id),
                 },
               ],
-              position: ev
+              position: ev,
             });
           }}
         >

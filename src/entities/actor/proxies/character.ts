@@ -139,7 +139,6 @@ export class Character extends ActorProxyBase<ActorType.Character> {
           ),
           overburdened: this.armor.isOverburdened,
         };
-
   }
 
   @LazyGetter()
@@ -148,7 +147,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     const { movementRates, physicalHealth } = this.sleeve;
     const { movementEffects } = this._appliedEffects;
     const movements = [...movementRates, ...movementEffects.granted];
-    const {encumbered, overburdened} = this.movementModifiers
+    const { encumbered, overburdened } = this.movementModifiers;
     if (encumbered) {
       return movements.map((movement) => ({ ...movement, base: 0, full: 0 }));
     }

@@ -19,7 +19,10 @@ import {
 import { classMap } from 'lit-html/directives/class-map';
 import { live } from 'lit-html/directives/live';
 import { compact, first, range, reject } from 'remeda';
-import { CharacterDrawerRenderer, CharacterDrawerRenderEvent } from '../../character-drawer-render-event';
+import {
+  CharacterDrawerRenderer,
+  CharacterDrawerRenderEvent,
+} from '../../character-drawer-render-event';
 import styles from './character-view-ego.scss';
 
 @customElement('character-view-ego')
@@ -70,7 +73,9 @@ export class CharacterViewEgo extends LitElement {
   }
 
   private requestMentalHealthDrawer() {
-    this.dispatchEvent(new CharacterDrawerRenderEvent(CharacterDrawerRenderer.MentalHealth))
+    this.dispatchEvent(
+      new CharacterDrawerRenderEvent(CharacterDrawerRenderer.MentalHealth),
+    );
   }
 
   render() {
@@ -104,8 +109,8 @@ export class CharacterViewEgo extends LitElement {
         ${this.ego.trackMentalHealth
           ? html`
               <health-item
-              @click=${this.requestMentalHealthDrawer}
-              clickable
+                @click=${this.requestMentalHealthDrawer}
+                clickable
                 class="mental-health-view"
                 .health=${this.ego.mentalHealth}
                 ><span slot="source"

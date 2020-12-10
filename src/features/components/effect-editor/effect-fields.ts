@@ -118,8 +118,8 @@ const armor: FieldPropsRenderer<ArmorEffect> = ({
   enumValues(ArmorType).map((type) =>
     renderNumberField(props[type], { min: 0 }),
   ),
-    renderLabeledCheckbox(layerable),
-  renderLabeledCheckbox(concealable)
+  renderLabeledCheckbox(layerable),
+  renderLabeledCheckbox(concealable),
 ];
 
 const health: FieldPropsRenderer<HealthEffect> = ({

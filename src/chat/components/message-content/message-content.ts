@@ -17,7 +17,7 @@ export class MessageContent extends LitElement {
   @property({ type: Object }) data!: MessageData;
 
   @property({ type: Boolean }) disabled = false;
-  
+
   firstUpdated() {
     this.addEventListener(ChatMessageRequestEvent.is, (ev) => {
       if (ev instanceof ChatMessageRequestEvent) {
@@ -30,15 +30,19 @@ export class MessageContent extends LitElement {
 
   render() {
     const { header, stress, healthChange } = this.data;
-    if (!this.message.isContentVisible) return "";
+    if (!this.message.isContentVisible) return '';
     return html`
       ${header ? html` <message-header .data=${header}></message-header> ` : ''}
       ${stress
         ? html` <message-stress-test .stress=${stress}></message-stress-test> `
-      : ''}
-        ${healthChange ? html`
-        <message-health-change .healthChange=${healthChange}></message-health-change>
-        ` : ""}
+        : ''}
+      ${healthChange
+        ? html`
+            <message-health-change
+              .healthChange=${healthChange}
+            ></message-health-change>
+          `
+        : ''}
     `;
   }
 }

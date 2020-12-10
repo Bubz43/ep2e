@@ -1,6 +1,10 @@
 import type { ArmorType } from '@src/features/active-armor';
 import type { RolledFormula } from '@src/foundry/rolls';
-import type { HealthModification, HealthStat, HealthType } from '@src/health/health';
+import type {
+  HealthModification,
+  HealthStat,
+  HealthType,
+} from '@src/health/health';
 import type { StressType } from '@src/health/mental-health';
 
 export type StressTestMessageData = {
@@ -15,8 +19,8 @@ export type HealthChangeMessageData = HealthModification & {
   healthType: HealthType;
   killing?: boolean;
   biological?: boolean;
-  reducedArmor?: Partial<Record<ArmorType, number>>
-}
+  reducedArmor?: Partial<Record<ArmorType, number>>;
+};
 
 export type MessageHeaderData = {
   heading: string;

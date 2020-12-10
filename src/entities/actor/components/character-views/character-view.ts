@@ -96,12 +96,13 @@ export class CharacterView extends CharacterViewBase {
       </div>
       ${this.renderDrawer()}
 
-      <!-- <mwc-tab-bar id="primary-tabs" @MDCTabBar:activated=${this.changeTab}>
+      <!-- <mwc-tab-bar id="primary-tabs" @MDCTabBar:activated=${this
+        .changeTab}>
         ${tabs.map((tab) =>
-          showPsi || tab !== 'psi'
-            ? html` <mwc-tab label=${localize(tab)}></mwc-tab> `
-            : '',
-        )}
+        showPsi || tab !== 'psi'
+          ? html` <mwc-tab label=${localize(tab)}></mwc-tab> `
+          : '',
+      )}
       </mwc-tab-bar> -->
 
       <section class="tabbed-content">${cache(this.tabbedContent)}</section>
