@@ -1347,10 +1347,10 @@
       "NonElectronicSubstanceOnly": "Non-electronic substance only",
       "Encumbered": "Cannot Move",
       "Overburdened": "Movement is reduced by half",
-      "DestroyedBeyondRepair": "Destroyed beyond repair",
-      "PermanentEgoMeltdown": "Permanent ego meltdown",
-      "PermanentlyCorrupted": "Permanently corrupted",
-      "TheBodyDies": "The body dies"
+      "DestroyedBeyondRepair": "Destroyed Beyond Repair...",
+      "PermanentEgoMeltdown": "Permanent Ego Meltdown...",
+      "PermanentlyCorrupted": "Permanently Corrupted...",
+      "TheBodyDies": "The Body Dies..."
     },
     "FULL": {
       "cog": "Cognition",

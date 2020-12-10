@@ -106,6 +106,7 @@ export const onChatMessageRender = (message: ChatMessageEP, [el]: JQuery) => {
     );
     el.classList.add('updated');
   } else if (createdChatMessages.has(message)) {
+    console.log(message);
     el.addEventListener('animationend', () => el.classList.remove('new'), {
       once: true,
     });

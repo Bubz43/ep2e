@@ -116,8 +116,7 @@ export class MessageHealthChange extends MessageElement {
       case HealthType.Mesh:
         return gameSettings.glitchOnMeshWounds.current
           ? html`
-              <mwc-list-item hasMeta @click=${this.rollGlitchCheck}>
-                ${checkIcon()}
+              <mwc-list-item @click=${this.rollGlitchCheck}>
                 <span>
                   ${localize('roll')} ${localize('glitch')} ${localize('check')}
                   ${wounds * 10}%</span
