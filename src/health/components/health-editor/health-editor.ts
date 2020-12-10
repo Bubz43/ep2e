@@ -2,6 +2,7 @@ import type { Damage, Heal } from '@src/health/health-changes';
 import {
   renderNumberField,
   renderRadioFields,
+  renderTextField,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderSubmitForm } from '@src/components/form/forms';
 import { Placement } from '@src/components/popover/popover-options';
@@ -338,23 +339,25 @@ export class HealthEditor extends LitElement {
   }
 
   private renderHealForm(health: ActorHealth, change?: Heal | null) {
+    // TODO check this works properly with change
     const { main, wound } = health;
     return renderSubmitForm({
-      props: change || { damage: 0, wounds: 0 },
+      props: change || { damage: 0, wounds: 0, source: '' },
       classes: 'heal-editor',
-      update: ({ damage = 0, wounds = 0 }) => {
+      update: ({ damage = 0, wounds = 0, source }) => {
         this.dispatchEvent(
           new HealthModificationEvent(
             createHealthModification({
               mode: HealthModificationMode.Heal,
               damage,
               wounds,
-              source: change?.source || localize('editor'),
+              source: source || change?.source || localize('editor'),
             }),
           ),
         );
       },
-      fields: ({ damage, wounds }) => [
+      fields: ({ damage, wounds, source }) => [
+        renderTextField(source, { placeholder: localize('editor') }),
         renderNumberField(
           { ...damage, label: main.damage.label },
           {

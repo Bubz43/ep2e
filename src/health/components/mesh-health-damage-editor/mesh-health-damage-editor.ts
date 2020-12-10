@@ -26,7 +26,7 @@ export class MeshHealthDamageEditor extends HealthEditBase<AppMeshHealth | MeshH
           update: (changed, orig) =>
             (this.editableDamage = { ...orig, ...changed }),
           fields: ({ damageValue, source, formula }) => [
-            renderTextField(source),
+            renderTextField(source, { placeholder: localize("editor")}),
             renderFormulaField(formula),
             renderNumberField(
               { ...damageValue, label: localize('damage') },

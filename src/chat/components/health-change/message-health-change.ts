@@ -85,10 +85,10 @@ export class MessageHealthChange extends MessageElement {
             : 'DestroyedBeyondRepair',
         );
       case HealthType.Mental:
-        return localize("DESCRIPTIONS", "PermanentEgoMeltdown")
-      
+        return localize('DESCRIPTIONS', 'PermanentEgoMeltdown');
+
       case HealthType.Mesh:
-        return localize("DESCRIPTIONS", "PermanentlyCorrupted")
+        return localize('DESCRIPTIONS', 'PermanentlyCorrupted');
     }
   }
 
@@ -101,13 +101,21 @@ export class MessageHealthChange extends MessageElement {
         >
         <li divider></li>
 
-        ${this.healthChange.killing
-          ? html` <mwc-list-item noninteractive>${this.formatDeath()}</mwc-list-item> `
-          : this.healthChange.wounds
-          ? html` ${this.renderWoundChecks()} `
+        ${this.healthChange.mode === HealthModificationMode.Inflict
+          ? this.renderInflictedOptions()
           : ''}
       </mwc-list>
     `;
+  }
+
+  private renderInflictedOptions() {
+    return this.healthChange.killing
+      ? html`
+          <mwc-list-item noninteractive>${this.formatDeath()}</mwc-list-item>
+        `
+      : this.healthChange.wounds
+      ? html` ${this.renderWoundChecks()} `
+      : '';
   }
 
   private renderWoundChecks() {
