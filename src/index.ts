@@ -127,6 +127,8 @@ import { HealthLog } from './health/components/health-log/health-log';
 import { HealthRegenSettingsForm } from './health/components/health-regen-settings-form/health-regen-settings-form';
 import { HealthStateForm } from './health/components/health-state-form/health-state-form';
 import { MentalHealthStressEditor } from './health/components/mental-health-stress-editor/mental-health-stress-editor';
+import { MeshHealthDamageEditor } from './health/components/mesh-health-damage-editor/mesh-health-damage-editor';
+import { PhysicalHealthDamageEditor } from './health/components/physical-health-damage-editor/physical-health-damage-editor';
 import './init';
 
 customElements.define('app-datepicker', Datepicker);
@@ -244,6 +246,8 @@ HealthLog;
 HealthRegenSettingsForm;
 HealthStateForm;
 MentalHealthStressEditor;
+PhysicalHealthDamageEditor;
+MeshHealthDamageEditor;
 HealthEditor;
 
 // Overlay

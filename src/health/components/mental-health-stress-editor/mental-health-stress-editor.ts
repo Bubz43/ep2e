@@ -2,6 +2,7 @@ import {
   renderFormulaField,
   renderNumberField,
   renderSelectField,
+  renderTextField,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { enumValues } from '@src/data-enums';
@@ -12,11 +13,11 @@ import {
   MentalHealth,
   StressType,
 } from '@src/health/mental-health';
-import { customElement, html } from 'lit-element';
+import { CSSResult, customElement, html } from 'lit-element';
 import { range } from 'remeda';
 import { HealthEditBase } from '../health-edit-base';
 import styles from './mental-health-stress-editor.scss';
-import commonStyles from "../health-edit-base.scss";
+
 /**
  * @fires health-modification - HealthModificationEvent
  */
@@ -29,7 +30,9 @@ export class MentalHealthStressEditor extends HealthEditBase<
     return 'mental-health-stress-editor' as const;
   }
 
-  static styles = [commonStyles, styles];
+  static get styles() {
+    return [super.styles, styles] as CSSResult[]
+  };
 
   protected createEditable() {
     return createStressDamage(this.damage || { damageValue: 0, formula: '' });
@@ -74,14 +77,14 @@ export class MentalHealthStressEditor extends HealthEditBase<
         })}
       </ul>
 
-      <div class="stress-damage">
+      <div class="damage-settings">
         ${renderAutoForm({
-          classes: 'stress-form',
           props: this.editableDamage,
           noDebounce: true,
           update: (changed, orig) =>
             (this.editableDamage = { ...orig, ...changed }),
-          fields: ({ damageValue, stressType, formula }) => [
+          fields: ({ damageValue, source, formula }) => [
+            renderTextField(source),
             renderFormulaField(formula),
             renderNumberField(
               { ...damageValue, label: localize('stress') },

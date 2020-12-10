@@ -36,6 +36,7 @@ import { addFeature } from '@src/features/feature-helpers';
 import { isSleeve } from '@src/entities/actor/sleeves';
 import { createMessage, MessageVisibility } from '@src/chat/create-message';
 import { BiologicalHealth } from '@src/health/biological-health';
+import { SyntheticHealth } from '@src/health/synthetic-health';
 
 @customElement('health-editor')
 export class HealthEditor extends LitElement {
@@ -75,7 +76,13 @@ export class HealthEditor extends LitElement {
 
   @property({ type: Object }) change?: Damage | Heal | null;
 
-  @property({ attribute: false, hasChanged() { return true } }) health?: ActorHealth | null;
+  @property({
+    attribute: false,
+    hasChanged() {
+      return true;
+    },
+  })
+  health?: ActorHealth | null;
 
   @internalProperty() healthType = HealthType.Physical;
 
@@ -294,19 +301,40 @@ export class HealthEditor extends LitElement {
   }
 
   private renderDamageEditor(health: ActorHealth, change?: Damage | null) {
-    if (health instanceof MentalHealth) {
-      const stress = change?.type === HealthType.Mental ? change : null;
-      return html`
-        <mental-health-stress-editor
-          .health=${health}
-          .damage=${stress}
-          .armor=${this.armor}
-        ></mental-health-stress-editor>
-      `;
-    }
+    switch (health.type) {
+      case HealthType.Mental: {
+        const stress = change?.type === HealthType.Mental ? change : null;
+        return html`
+          <mental-health-stress-editor
+            .health=${health}
+            .damage=${stress}
+            .armor=${this.armor}
+          ></mental-health-stress-editor>
+        `;
+      }
 
-    // TODO Physical and Mesh
-    return '';
+      case HealthType.Physical: {
+        const damage = change?.type === HealthType.Physical ? change : null;
+        return html`
+          <physical-health-damage-editor
+            .health=${health}
+            .damage=${damage}
+            .armor=${this.armor}
+          ></physical-health-damage-editor>
+        `;
+      }
+
+      case HealthType.Mesh: {
+        const damage = change?.type === HealthType.Physical ? change : null;
+        return html`
+          <mesh-health-damage-editor
+            .health=${health}
+            .damage=${damage}
+            .armor=${this.armor}
+          ></mesh-health-damage-editor>
+        `;
+      }
+    }
   }
 
   private renderHealForm(health: ActorHealth, change?: Heal | null) {

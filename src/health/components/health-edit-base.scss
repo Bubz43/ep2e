@@ -1,3 +1,31 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+
+:host {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0 1rem;
+  max-width: 300px;
+  min-width: 100%;
+}
+
+.damage-settings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 0.25rem 0;
+  sl-form {
+    display: contents;
+    :first-child {
+      grid-column: span 2;
+    }
+  }
+}
+
 .change {
   display: flex;
   justify-content: space-around;

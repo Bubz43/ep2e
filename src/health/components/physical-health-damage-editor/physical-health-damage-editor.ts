@@ -1,22 +1,28 @@
-import { renderFormulaField, renderNumberField, renderTextField } from "@src/components/field/fields";
-import { renderAutoForm } from "@src/components/form/forms";
-import { localize } from "@src/foundry/localization";
-import type { AppMeshHealth } from "@src/health/app-mesh-health";
-import type { MeshHealth } from "@src/health/full-mesh-health";
-import { createMeshDamage, MeshDamage } from "@src/health/health-changes";
-import { customElement, html } from "lit-element";
-import { HealthEditBase } from "../health-edit-base";
+import { renderFormulaField, renderNumberField, renderTextField } from '@src/components/field/fields';
+import { renderAutoForm } from '@src/components/form/forms';
+import { localize } from '@src/foundry/localization';
+import type { BiologicalHealth } from '@src/health/biological-health';
+import {
+  createPhysicalDamage,
+  PhysicalDamage
+} from '@src/health/health-changes';
+import type { SyntheticHealth } from '@src/health/synthetic-health';
+import { customElement, html } from 'lit-element';
+import { HealthEditBase } from '../health-edit-base';
 
-@customElement("mesh-health-damage-editor")
-export class MeshHealthDamageEditor extends HealthEditBase<AppMeshHealth | MeshHealth, MeshDamage> {
+@customElement('physical-health-damage-editor')
+export class PhysicalHealthDamageEditor extends HealthEditBase<
+  BiologicalHealth | SyntheticHealth,
+  PhysicalDamage
+> {
   static get is() {
-    return "mesh-health-damage-editor" as const;
+    return 'physical-health-damage-editor' as const;
   }
 
   protected createEditable() {
-    return createMeshDamage(this.damage || { damageValue: 0, formula: ''})
+    return createPhysicalDamage(this.damage || { damageValue: 0, formula: '' });
   }
-  
+
   render() {
     return html`
        <div class="damage-settings">
@@ -59,6 +65,6 @@ export class MeshHealthDamageEditor extends HealthEditBase<AppMeshHealth | MeshH
 
 declare global {
   interface HTMLElementTagNameMap {
-    "mesh-health-damage-editor": MeshHealthDamageEditor;
+    'physical-health-damage-editor': PhysicalHealthDamageEditor;
   }
 }

@@ -3,32 +3,12 @@
 
 @include resetUnorderedList();
 
-* {
-  box-sizing: border-box;
-}
-
-:host {
-  display: grid;
-  gap: 0.25rem;
-  padding: 0 1rem;
-  max-width: 300px;
-  min-width: 100%;
-}
-
-.stress-damage {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  padding: 0.25rem 0;
-  sl-form {
-    display: contents;
-  }
-}
-
 .hardening {
   li {
     display: flex;
     justify-content: space-between;
     padding: 0 1rem;
     --mdc-icon-size: 1.25rem;
+    color: var(--color-text-lighter);
   }
 }

@@ -15,12 +15,17 @@ import { createHealthModification, HealthModificationMode } from '../health';
 import type { Damage } from '../health-changes';
 import type { ActorHealth } from '../health-mixin';
 import { HealthModificationEvent } from '../health-modification-event';
+import styles from "./health-edit-base.scss";
 
 export abstract class HealthEditBase<
   H extends ActorHealth,
   D extends Damage
 > extends LitElement {
   protected abstract createEditable(): D;
+
+  static get styles() {
+    return [styles]
+  }
 
   @property({ attribute: false }) health!: H;
 
