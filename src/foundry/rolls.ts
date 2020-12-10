@@ -51,7 +51,7 @@ export const rollFormula = (
   try {
     roll = new Roll(formula, data).roll();
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
   return roll;
 };

@@ -12,6 +12,7 @@
 }
 
 :host([clickable]) {
+  z-index: 0;
   .view {
     cursor: pointer;
   }

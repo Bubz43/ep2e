@@ -75,7 +75,7 @@ export class HealthEditor extends LitElement {
 
   @property({ type: Object }) change?: Damage | Heal | null;
 
-  @property({ attribute: false }) health?: ActorHealth | null;
+  @property({ attribute: false, hasChanged() { return true } }) health?: ActorHealth | null;
 
   @internalProperty() healthType = HealthType.Physical;
 
@@ -99,21 +99,19 @@ export class HealthEditor extends LitElement {
         onSubEnd: () => closeWindow(HealthEditor),
       });
     }
-    if (changedProps.has('change') && this.change) {
+    if (changedProps.has('health') && this.health) {
+      this.healthType = this.health.type;
+      this.selectedHealth = this.health;
+    } else if (changedProps.has('change') && this.change) {
       this.healthType = this.change.type;
       this.mode = this.change.kind;
     }
-    if (
-      changedProps.get('health') !== undefined &&
-      this.health?.type === this.healthType
-    ) {
-      this.selectedHealth = this.health;
-    }
+
     super.update(changedProps);
   }
 
   updated(changedProps: PropertyValues) {
-    if (changedProps.has('healthType')) {
+    if (changedProps.has('healthType') || changedProps.has('health')) {
       requestAnimationFrame(() => {
         this.renderRoot
           .querySelector<HTMLElement>(
@@ -301,7 +299,7 @@ export class HealthEditor extends LitElement {
       return html`
         <mental-health-stress-editor
           .health=${health}
-          .stress=${stress}
+          .damage=${stress}
           .armor=${this.armor}
         ></mental-health-stress-editor>
       `;

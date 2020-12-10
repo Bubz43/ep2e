@@ -1,4 +1,8 @@
+import { renderNumberField } from '@src/components/field/fields';
+import { renderUpdaterForm } from '@src/components/form/forms';
 import { localize } from '@src/foundry/localization';
+import { HealthEditor } from '@src/health/components/health-editor/health-editor';
+import { hardeningTypes } from '@src/health/mental-health';
 import { debounce, throttle } from '@src/utility/decorators';
 import { internalProperty, LitElement, property, query } from 'lit-element';
 import { html, TemplateResult } from 'lit-html';
@@ -134,6 +138,43 @@ export abstract class CharacterViewBase extends LitElement {
   renderArmor() {
     return html`
       <character-view-armor .character=${this.character}></character-view-armor>
+    `;
+  }
+
+  renderMentalHealth() {
+    return html`
+      <section>
+        <character-view-drawer-heading
+          >${localize('mentalHealth')}</character-view-drawer-heading
+        >
+        <health-state-form
+          .health=${this.character.ego.mentalHealth}
+        ></health-state-form>
+        <p class="hardening-label">${localize('hardening')}</p>
+        ${renderUpdaterForm(
+          this.character.ego.updater.prop('data', 'mentalHealth'),
+          {
+            fields: (hardenings) =>
+              hardeningTypes.map((type) =>
+                renderNumberField(hardenings[type], { min: 0, max: 5 }),
+              ),
+          },
+    )}
+
+    <mwc-button @click=${() => HealthEditor.openWindow({
+      actor: this.character.actor,
+      initialHealth: this.character.ego.mentalHealth
+    })}>${localize("heal")} / ${localize("damage")}</mwc-button>
+        
+        <sl-details summary=${localize("history")}>
+        <health-log
+          .health=${this.character.ego.mentalHealth}
+          ?disabled=${this.character.disabled}
+        ></health-log>
+        </sl-details>
+
+      
+      </section>
     `;
   }
 }
