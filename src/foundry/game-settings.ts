@@ -70,25 +70,6 @@ export const registerEPSettings = once(() => {
       default: 0,
     },
   );
-  // type BottomRightCoor = { right: string; bottom: string };
-  // const uiState = registerSystemSetting<{
-  //   // navToggle: boolean;
-  //   // chatCoor: BottomRightCoor;
-  //   // controlsCoor: BottomRightCoor;
-  //   controlled: BottomRightCoor;
-  //   // chatHeight: string;
-  // }>("uiState", {
-  //   scope: "client",
-  //   config: false,
-  //   default: {
-  //     // navToggle: true,
-  //     // chatCoor: { right: px(4), bottom: px(40) },
-  //     controlled: { right: px(350), bottom: px(40) },
-  //     // controlsCoor: { right: px(320 ), bottom: "unset "},
-  //     // chatHeight: "100%",
-  //   },
-  // });
-
   const environment = registerSystemSetting('environment', {
     scope: 'world',
     config: false,
@@ -111,10 +92,20 @@ export const registerEPSettings = once(() => {
       ),
   });
 
+  const glitchOnMeshWounds = registerSystemSetting<boolean>("glitchOnMeshWounds", {
+    name: `${EP.LocalizationNamespace}.glitchOnMeshWounds`,
+    scope: 'world',
+    hint: "Apply optional cumulative 10% change to suffer glitch per mesh wound.",
+    config: true,
+    default: false,
+    type: Boolean,
+
+  })
+
   return {
     systemMigrationVersion,
-    // uiState,
     environment,
     credits,
+    glitchOnMeshWounds
   } as const;
 });

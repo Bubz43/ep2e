@@ -1336,7 +1336,7 @@ type LangEntries =
   | 'from'
   | 'picker'
   | 'minimum'
-  | 'browse' | 'encounteringThreat';
+  | 'browse' | 'encounteringThreat' |  "glitchOnMeshWounds" | "glitch" | "versus" | "disorientation" | "acuteStress" | "unconsciousness"
 type FullNames =
   | 'cog'
   | 'int'
@@ -1393,7 +1393,7 @@ export type Abbreviation =
   | 'nanoware'
   | 'meshware'
   | 'shortRecharge'
-  | 'longRecharge';
+  | 'longRecharge' | "versus"
 export type DescriptionEntry =
   | 'medicineHeal'
   | 'invalidRollFormula'
