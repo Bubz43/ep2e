@@ -184,6 +184,60 @@ export abstract class CharacterViewBase extends LitElement {
   renderSleevePhysicalHealth() {
     const { sleeve } = this.character;
     if (!sleeve || sleeve?.type === ActorType.Infomorph) return html``;
-    return html``;
+    const { physicalHealth: health } = sleeve;
+    return html`
+      <section>
+        <character-view-drawer-heading
+          >${localize('physicalHealth')}</character-view-drawer-heading
+        >
+        <health-state-form .health=${health}></health-state-form>
+
+        <mwc-button
+          @click=${() =>
+            HealthEditor.openWindow({
+              actor: this.character.actor,
+              initialHealth: health,
+            })}
+          >${localize('heal')} / ${localize('damage')}</mwc-button
+        >
+
+        <sl-details summary=${localize('history')}>
+          <health-log
+            .health=${health}
+            ?disabled=${this.character.disabled}
+          ></health-log>
+        </sl-details>
+      </section>
+    `;
+  }
+
+  renderSleeveMeshHealth() {
+    const { sleeve } = this.character;
+    if (!sleeve || !sleeve.activeMeshHealth) return html``;
+    const { activeMeshHealth: health } = sleeve;
+    return html`
+      <section>
+        <character-view-drawer-heading
+          >${localize('meshHealth')}</character-view-drawer-heading
+        >
+        <health-state-form .health=${health}></health-state-form>
+
+        <mwc-button
+          @click=${() =>
+            HealthEditor.openWindow({
+              actor: this.character.actor,
+              initialHealth: health,
+            })}
+          >${localize('heal')} / ${localize('damage')}</mwc-button
+        >
+
+        <sl-details summary=${localize('history')}>
+          <health-log
+            .health=${health}
+            ?disabled=${this.character.disabled}
+          ></health-log>
+        </sl-details>
+      </section>
+    `;
   }
 }

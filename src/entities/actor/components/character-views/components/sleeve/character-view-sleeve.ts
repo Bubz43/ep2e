@@ -28,9 +28,19 @@ export class CharacterViewSleeve extends LitElement {
   @property({ attribute: false }) sleeve!: Sleeve;
 
   private viewArmor() {
-    this.dispatchEvent(
-      new CharacterDrawerRenderEvent(CharacterDrawerRenderer.Armor),
-    );
+    this.requestDrawer(CharacterDrawerRenderer.Armor)
+  }
+
+  private viewMeshHealth() {
+    this.requestDrawer(CharacterDrawerRenderer.SleeveMeshHealth)
+  }
+
+  private viewPhysicalHealth() {
+    this.requestDrawer(CharacterDrawerRenderer.SleevePhysicalHealth)
+  }
+
+  private requestDrawer(renderer: CharacterDrawerRenderer) {
+    this.dispatchEvent(new CharacterDrawerRendererEvent(renderer))
   }
 
   render() {
@@ -106,10 +116,10 @@ export class CharacterViewSleeve extends LitElement {
           `
         : ''}
       ${physicalHealth
-        ? html` <health-item .health=${physicalHealth}> </health-item> `
+        ? html` <health-item clickable @click=${this.viewPhysicalHealth} .health=${physicalHealth}> </health-item> `
         : ''}
       ${meshHealth
-        ? html` <health-item .health=${meshHealth}>
+        ? html` <health-item clickable @click=${this.viewMeshHealth} .health=${meshHealth}>
             ${sleeve.type !== ActorType.Infomorph && sleeve.nonDefaultBrain
               ? html`
                   <span slot="source">${sleeve.nonDefaultBrain.name}</span>
