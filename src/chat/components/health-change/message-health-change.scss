@@ -9,3 +9,16 @@
   display: block;
   
 }
+
+li[divider] {
+  border-color: alphav(var(--color-border), 0.5);
+  &:last-child {
+    display: none;
+  }
+}
+
+mwc-list-item {
+  mwc-icon {
+    color: var(--color-grey)
+  }
+}

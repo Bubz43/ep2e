@@ -2,9 +2,12 @@ import type { HealthChangeMessageData } from '@src/chat/message-data';
 import { localize } from '@src/foundry/localization';
 import { HealthModificationMode, HealthType } from '@src/health/health';
 import { gameSettings } from '@src/init';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, property, html } from 'lit-element';
 import { MessageElement } from '../message-element';
 import styles from './message-health-change.scss';
+
+const checkIcon = () =>
+  html`<mwc-icon slot="meta">check_circle_outline</mwc-icon>`;
 
 @customElement('message-health-change')
 export class MessageHealthChange extends MessageElement {
@@ -72,15 +75,38 @@ export class MessageHealthChange extends MessageElement {
     }
   }
 
+  private formatDeath() {
+    switch (this.healthChange.healthType) {
+      case HealthType.Physical:
+        return localize(
+          'DESCRIPTIONS',
+          this.healthChange.biological
+            ? 'TheBodyDies'
+            : 'DestroyedBeyondRepair',
+        );
+      case HealthType.Mental:
+        return localize("DESCRIPTIONS", "PermanentEgoMeltdown")
+      
+      case HealthType.Mesh:
+        return localize("DESCRIPTIONS", "PermanentlyCorrupted")
+    }
+  }
+
   render() {
-    // TODO Roll glitch, knockdown, bleedout, crash, etc.
+    // TODO bleedout/crash
     return html`
       <mwc-list>
         <mwc-list-item noninteractive twoline
           >${this.formatChange()}</mwc-list-item
         >
+        <li divider></li>
+
+        ${this.healthChange.killing
+          ? html` <mwc-list-item noninteractive>${this.formatDeath()}</mwc-list-item> `
+          : this.healthChange.wounds
+          ? html` ${this.renderWoundChecks()} `
+          : ''}
       </mwc-list>
-      ${this.healthChange.wounds ? this.renderWoundChecks() : ''}
     `;
   }
 
@@ -90,36 +116,46 @@ export class MessageHealthChange extends MessageElement {
       case HealthType.Mesh:
         return gameSettings.glitchOnMeshWounds.current
           ? html`
-              <mwc-list-item @click=${this.rollGlitchCheck}
-                >${localize('roll')} ${localize('glitch')} ${localize('check')}
-                ${wounds * 10}%</mwc-list-item
+              <mwc-list-item hasMeta @click=${this.rollGlitchCheck}>
+                ${checkIcon()}
+                <span>
+                  ${localize('roll')} ${localize('glitch')} ${localize('check')}
+                  ${wounds * 10}%</span
+                ></mwc-list-item
               >
             `
           : '';
       case HealthType.Mental:
         return html`
           <mwc-list-item
+            hasMeta
             @click=${wounds === 1
               ? this.startDisorientationCheck
               : this.startAcuteStressCheck}
-            >${localize('wil')} ${localize('check')}
-            ${localize('SHORT', 'versus')}
-            ${localize(
-              wounds === 1 ? 'disorientation' : 'acuteStress',
-            )}</mwc-list-item
+          >
+            ${checkIcon()}
+            <span
+              >${localize('wil')} ${localize('check')}
+              ${localize('SHORT', 'versus')}
+              ${localize(wounds === 1 ? 'disorientation' : 'acuteStress')}</span
+            ></mwc-list-item
           >
         `;
 
       case HealthType.Physical:
         return html`
           <mwc-list-item
+            hasMeta
             @click=${wounds === 1
               ? this.startKnockdownCheck
               : this.startUnconsciousnessCheck}
           >
-            ${localize('som')} ${localize('check')}
-            ${localize('SHORT', 'versus')}
-            ${localize(wounds === 1 ? 'knockdown' : 'unconsciousness')}
+            ${checkIcon()}
+            <span>
+              ${localize('som')} ${localize('check')}
+              ${localize('SHORT', 'versus')}
+              ${localize(wounds === 1 ? 'knockdown' : 'unconsciousness')}</span
+            >
           </mwc-list-item>
         `;
     }

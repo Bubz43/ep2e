@@ -13,7 +13,8 @@ export type StressTestMessageData = {
 
 export type HealthChangeMessageData = HealthModification & {
   healthType: HealthType;
-  passedThreshold: "" | HealthStat.Durability | HealthStat.DeathRating
+  killing?: boolean;
+  biological?: boolean;
   reducedArmor?: Partial<Record<ArmorType, number>>
 }
 

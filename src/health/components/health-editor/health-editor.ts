@@ -35,6 +35,7 @@ import { notEmpty } from '@src/utility/helpers';
 import { addFeature } from '@src/features/feature-helpers';
 import { isSleeve } from '@src/entities/actor/sleeves';
 import { createMessage, MessageVisibility } from '@src/chat/create-message';
+import { BiologicalHealth } from '@src/health/biological-health';
 
 @customElement('health-editor')
 export class HealthEditor extends LitElement {
@@ -175,12 +176,15 @@ export class HealthEditor extends LitElement {
           heading: `${currentHealth.source} ${localize(
             currentHealth.type,
           )} ${localize('health')}`,
-          img: currentHealth.icon
+          img: currentHealth.icon,
         },
         healthChange: {
           ...modification,
           healthType: currentHealth.type,
-          passedThreshold: '', // TODO figure out when to put this
+          biological: currentHealth instanceof BiologicalHealth,
+          killing:
+            modification.mode === HealthModificationMode.Inflict &&
+            modification.damage >= currentHealth.killingDamage,
           reducedArmor: armorReduction
             ? mapToObj([...armorReduction], identity)
             : undefined,

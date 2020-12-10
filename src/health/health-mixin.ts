@@ -3,7 +3,7 @@ import type { ObtainableEffects } from '@src/entities/applied-effects';
 import { createEffect } from '@src/features/effects';
 import { TagType } from '@src/features/tags';
 import { localize } from '@src/foundry/localization';
-import { notEmpty } from '@src/utility/helpers';
+import { nonNegative, notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import { clamp } from 'remeda';
 import type { Class } from 'type-fest';
@@ -104,6 +104,11 @@ export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
             min: 0,
           })
         : 0;
+    }
+
+    get killingDamage() {
+      const target = this.main.deathRating?.value || this.main.durability.value;
+      return nonNegative(target - this.main.damage.value)
     }
   }
 

@@ -1313,6 +1313,12 @@
     "minimum": "Minimum",
     "browse": "Browse",
     "encounteringThreat": "Encountering Threat",
+    "acuteStress": "Acute Stress",
+    "disorientation": "Disorientation",
+    "glitch": "Glitch",
+    "glitchOnMeshWounds": "Glitch on Mesh Wounds",
+    "unconsciousness": "Unconsciousness",
+    "versus": "versus",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
@@ -1340,7 +1346,11 @@
       "OnlyEgoTraits": "Only ego traits can be added",
       "NonElectronicSubstanceOnly": "Non-electronic substance only",
       "Encumbered": "Cannot Move",
-      "Overburdened": "Movement is reduced by half"
+      "Overburdened": "Movement is reduced by half",
+      "DestroyedBeyondRepair": "Destroyed beyond repair",
+      "PermanentEgoMeltdown": "Permanent ego meltdown",
+      "PermanentlyCorrupted": "Permanently corrupted",
+      "TheBodyDies": "The body dies"
     },
     "FULL": {
       "cog": "Cognition",
@@ -1399,7 +1409,8 @@
       "meshware": "Mesh",
       "nanoware": "Nano",
       "shortRecharge": "Short",
-      "longRecharge": "Long"
+      "longRecharge": "Long",
+      "versus": "VS."
     },
     "FORMATABLE": {
       "NoMatching": "No {name} ({type})  found.",

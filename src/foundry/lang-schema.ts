@@ -1421,7 +1421,7 @@ export type DescriptionEntry =
   | 'CannotAddPsi'
   | 'NonElectronicSubstanceOnly'
   | 'Overburdened'
-  | 'Encumbered';
+  | 'Encumbered' | "TheBodyDies" | "DestroyedBeyondRepair" | "PermanentEgoMeltdown" | "PermanentlyCorrupted"
 
 // TODO Look into using data keys as pattern to validate json string
 export type Formatable = {

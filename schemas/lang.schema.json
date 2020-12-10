@@ -23,6 +23,9 @@
                 "CannotAddPsi": {
                   "type": "string"
                 },
+                "DestroyedBeyondRepair": {
+                  "type": "string"
+                },
                 "EgoAlreadyHasPsi": {
                   "type": "string"
                 },
@@ -54,6 +57,15 @@
                   "type": "string"
                 },
                 "Overburdened": {
+                  "type": "string"
+                },
+                "PermanentEgoMeltdown": {
+                  "type": "string"
+                },
+                "PermanentlyCorrupted": {
+                  "type": "string"
+                },
+                "TheBodyDies": {
                   "type": "string"
                 },
                 "blinded": {
@@ -123,7 +135,11 @@
                 "CannotAddPsi",
                 "NonElectronicSubstanceOnly",
                 "Overburdened",
-                "Encumbered"
+                "Encumbered",
+                "TheBodyDies",
+                "DestroyedBeyondRepair",
+                "PermanentEgoMeltdown",
+                "PermanentlyCorrupted"
               ],
               "type": "object"
             },
@@ -363,6 +379,9 @@
                 "traumasIgnored": {
                   "type": "string"
                 },
+                "versus": {
+                  "type": "string"
+                },
                 "veryHigh": {
                   "type": "string"
                 },
@@ -418,7 +437,8 @@
                 "nanoware",
                 "meshware",
                 "shortRecharge",
-                "longRecharge"
+                "longRecharge",
+                "versus"
               ],
               "type": "object"
             },
@@ -510,6 +530,9 @@
               "type": "string"
             },
             "actorLink": {
+              "type": "string"
+            },
+            "acuteStress": {
               "type": "string"
             },
             "add": {
@@ -1412,6 +1435,9 @@
             "disorder": {
               "type": "string"
             },
+            "disorientation": {
+              "type": "string"
+            },
             "distance": {
               "type": "string"
             },
@@ -1833,6 +1859,12 @@
               "type": "string"
             },
             "glands": {
+              "type": "string"
+            },
+            "glitch": {
+              "type": "string"
+            },
+            "glitchOnMeshWounds": {
               "type": "string"
             },
             "goal": {
@@ -4100,6 +4132,9 @@
             "unconscious": {
               "type": "string"
             },
+            "unconsciousness": {
+              "type": "string"
+            },
             "undamaged": {
               "type": "string"
             },
@@ -4221,6 +4256,9 @@
               "type": "string"
             },
             "venusian": {
+              "type": "string"
+            },
+            "versus": {
               "type": "string"
             },
             "veryFast": {
@@ -4390,6 +4428,7 @@
             "activeRecharge",
             "actor",
             "actorLink",
+            "acuteStress",
             "add",
             "addiction",
             "addictionMod",
@@ -4690,6 +4729,7 @@
             "disarmDifficulty",
             "disguise",
             "disorder",
+            "disorientation",
             "distance",
             "distracted",
             "distribute",
@@ -4831,6 +4871,8 @@
             "generic",
             "gland",
             "glands",
+            "glitch",
+            "glitchOnMeshWounds",
             "goal",
             "goals",
             "grant",
@@ -5586,6 +5628,7 @@
             "unarmedDV",
             "unarmedMelee",
             "unconscious",
+            "unconsciousness",
             "undamaged",
             "underclass",
             "undo",
@@ -5627,6 +5670,7 @@
             "variable",
             "vehicle",
             "venusian",
+            "versus",
             "veryFast",
             "veryHigh",
             "veryLarge",
