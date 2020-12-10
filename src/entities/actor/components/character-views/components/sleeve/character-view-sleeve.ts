@@ -40,7 +40,7 @@ export class CharacterViewSleeve extends LitElement {
   }
 
   private requestDrawer(renderer: CharacterDrawerRenderer) {
-    this.dispatchEvent(new CharacterDrawerRendererEvent(renderer))
+    this.dispatchEvent(new CharacterDrawerRenderEvent(renderer))
   }
 
   render() {

@@ -3,8 +3,9 @@ import { renderUpdaterForm } from '@src/components/form/forms';
 import { ActorType } from '@src/entities/entity-types';
 import { localize } from '@src/foundry/localization';
 import { HealthEditor } from '@src/health/components/health-editor/health-editor';
+import type { ActorHealth } from '@src/health/health-mixin';
 import { hardeningTypes } from '@src/health/mental-health';
-import { debounce, throttle } from '@src/utility/decorators';
+import { debounce } from '@src/utility/decorators';
 import { internalProperty, LitElement, property, query } from 'lit-element';
 import { html, TemplateResult } from 'lit-html';
 import { traverseActiveElements } from 'weightless';
@@ -90,6 +91,15 @@ export abstract class CharacterViewBase extends LitElement {
     return !!this.drawerContentRenderer;
   }
 
+  protected openHealthEditor(health: ActorHealth) {
+    const active = traverseActiveElements()
+    HealthEditor.openWindow({
+      actor: this.character.actor,
+      initialHealth: health,
+      adjacentEl: active instanceof HTMLElement ? active : undefined,
+    });
+  }
+
   renderResleeve() {
     return html`
       <character-view-resleeve
@@ -163,11 +173,7 @@ export abstract class CharacterViewBase extends LitElement {
         )}
 
         <mwc-button
-          @click=${() =>
-            HealthEditor.openWindow({
-              actor: this.character.actor,
-              initialHealth: this.character.ego.mentalHealth,
-            })}
+          @click=${() => this.openHealthEditor(this.character.ego.mentalHealth)}
           >${localize('heal')} / ${localize('damage')}</mwc-button
         >
 
@@ -192,12 +198,7 @@ export abstract class CharacterViewBase extends LitElement {
         >
         <health-state-form .health=${health}></health-state-form>
 
-        <mwc-button
-          @click=${() =>
-            HealthEditor.openWindow({
-              actor: this.character.actor,
-              initialHealth: health,
-            })}
+        <mwc-button @click=${() => this.openHealthEditor(health)}
           >${localize('heal')} / ${localize('damage')}</mwc-button
         >
 
@@ -213,7 +214,7 @@ export abstract class CharacterViewBase extends LitElement {
 
   renderSleeveMeshHealth() {
     const { sleeve } = this.character;
-    if (!sleeve || !sleeve.activeMeshHealth) return html``;
+    if (!sleeve?.activeMeshHealth) return html``;
     const { activeMeshHealth: health } = sleeve;
     return html`
       <section>
@@ -222,12 +223,7 @@ export abstract class CharacterViewBase extends LitElement {
         >
         <health-state-form .health=${health}></health-state-form>
 
-        <mwc-button
-          @click=${() =>
-            HealthEditor.openWindow({
-              actor: this.character.actor,
-              initialHealth: health,
-            })}
+        <mwc-button @click=${() => this.openHealthEditor(health)}
           >${localize('heal')} / ${localize('damage')}</mwc-button
         >
 
