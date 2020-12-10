@@ -43,7 +43,7 @@ p {
 
 .heal-editor {
   grid-template-columns: 1fr 1fr;
-  padding: 0 0.5rem 0.5rem;
+  padding: 0.25rem 1rem 1rem;
   :first-child {
     grid-column: span 2;
   }

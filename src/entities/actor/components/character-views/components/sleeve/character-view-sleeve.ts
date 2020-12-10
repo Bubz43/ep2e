@@ -5,10 +5,13 @@ import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import type { ReadonlyPool } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
+import { HealthEditor } from '@src/health/components/health-editor/health-editor';
+import type { ActorHealth } from '@src/health/health-mixin';
 import { clickIfEnter, notEmpty } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { compact } from 'remeda';
+import { traverseActiveElements } from 'weightless';
 import {
   CharacterDrawerRenderer,
   CharacterDrawerRenderEvent,
@@ -42,6 +45,16 @@ export class CharacterViewSleeve extends LitElement {
   private requestDrawer(renderer: CharacterDrawerRenderer) {
     this.dispatchEvent(new CharacterDrawerRenderEvent(renderer))
   }
+
+  protected openHealthEditor(health: ActorHealth) {
+    const active = traverseActiveElements()
+    HealthEditor.openWindow({
+      actor: this.character.actor,
+      initialHealth: health,
+      adjacentEl: active instanceof HTMLElement ? active : undefined,
+    });
+  }
+
 
   render() {
     const { sleeve } = this;
@@ -116,10 +129,10 @@ export class CharacterViewSleeve extends LitElement {
           `
         : ''}
       ${physicalHealth
-        ? html` <health-item clickable @click=${this.viewPhysicalHealth} .health=${physicalHealth}> </health-item> `
+        ? html` <health-item @contextmenu=${() => this.openHealthEditor(physicalHealth)} clickable @click=${this.viewPhysicalHealth} .health=${physicalHealth}> </health-item> `
         : ''}
       ${meshHealth
-        ? html` <health-item clickable @click=${this.viewMeshHealth} .health=${meshHealth}>
+        ? html` <health-item @contextmenu=${() => this.openHealthEditor(meshHealth)} clickable @click=${this.viewMeshHealth} .health=${meshHealth}>
             ${sleeve.type !== ActorType.Infomorph && sleeve.nonDefaultBrain
               ? html`
                   <span slot="source">${sleeve.nonDefaultBrain.name}</span>

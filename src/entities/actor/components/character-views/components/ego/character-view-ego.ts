@@ -6,6 +6,7 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import { maxFavors } from '@src/features/reputations';
 import { Skill, skillFilterCheck } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
+import { HealthEditor } from '@src/health/components/health-editor/health-editor';
 import { notEmpty, safeMerge } from '@src/utility/helpers';
 import {
   customElement,
@@ -19,6 +20,7 @@ import {
 import { classMap } from 'lit-html/directives/class-map';
 import { live } from 'lit-html/directives/live';
 import { compact, first, range, reject } from 'remeda';
+import { traverseActiveElements } from 'weightless';
 import {
   CharacterDrawerRenderer,
   CharacterDrawerRenderEvent,
@@ -78,6 +80,15 @@ export class CharacterViewEgo extends LitElement {
     );
   }
 
+  protected openHealthEditor() {
+    const active = traverseActiveElements()
+    HealthEditor.openWindow({
+      actor: this.character.actor,
+      initialHealth: this.ego.mentalHealth,
+      adjacentEl: active instanceof HTMLElement ? active : undefined,
+    });
+  }
+
   render() {
     const { active, know } = this.ego.groupedSkills;
 
@@ -110,6 +121,7 @@ export class CharacterViewEgo extends LitElement {
           ? html`
               <health-item
                 @click=${this.requestMentalHealthDrawer}
+                @contextmenu=${this.openHealthEditor}
                 clickable
                 class="mental-health-view"
                 .health=${this.ego.mentalHealth}
