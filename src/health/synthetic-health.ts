@@ -4,6 +4,7 @@ import type {
   SourcedEffect,
 } from '@src/features/effects';
 import type { StringID } from '@src/features/feature-helpers';
+import { currentWorldTimeMS } from '@src/features/time';
 import { mapProps } from '@src/utility/field-values';
 import { localImage } from '@src/utility/images';
 import { LazyGetter } from 'lazy-get-decorator';
@@ -15,13 +16,14 @@ import {
   HealthInit,
   HealthMain,
   HealthModification,
+  HealthModificationMode,
   HealthStatMods,
   HealthType,
   initializeHealthData,
 } from './health';
 import type { DamageOverTime } from './health-changes';
 import { HealthMixin } from './health-mixin';
-import { HealsOverTime, setupRecoveries } from './recovery';
+import { HealingSlot, HealsOverTime, setupRecoveries } from './recovery';
 
 export type SyntheticHealthData = BasicHealthData &
   HealsOverTime & {
@@ -101,4 +103,26 @@ class SyntheticHealthBase implements CommonHealth {
   }
 }
 
-export class SyntheticHealth extends HealthMixin(SyntheticHealthBase) {}
+export class SyntheticHealth extends HealthMixin(SyntheticHealthBase) {
+  applyModification(modification: HealthModification) {
+    const { updater } = this.init;
+    if (modification.mode === HealthModificationMode.Inflict) {
+      if (!this.regenState) {
+        updater
+          .prop('aidedHealTickStartTime')
+          .store(currentWorldTimeMS())
+          .prop('ownHealTickStartTime')
+          .store(currentWorldTimeMS());
+      }
+    }
+    return updater
+      .prop('')
+      .commit((data) => applyHealthModification(data, modification));
+  }
+
+  logHeal(slot: HealingSlot) {
+    return this.init.updater
+      .prop(`${slot}HealTickStartTime` as const)
+      .commit(currentWorldTimeMS());
+  }
+}

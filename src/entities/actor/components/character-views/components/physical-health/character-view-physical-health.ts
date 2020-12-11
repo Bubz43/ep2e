@@ -4,6 +4,7 @@ import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
+import { rollFormula, rollLabeledFormulas } from '@src/foundry/rolls';
 import type { BiologicalHealth } from '@src/health/biological-health';
 import { HealthType } from '@src/health/health';
 import { DotOrHotTarget, HealingSlot, Recovery } from '@src/health/recovery';
@@ -28,17 +29,27 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
     this.character.openHealthEditor(this.health);
   }
 
-  private rollHeal(target: DotOrHotTarget, heal: Recovery) {
-    // createMessage({
-    //   data: {
-    //     header: { heading: localize("healthRecovery") },
-    //     heal: {
-    //       source: heal.source,
-    //       healthType: HealthType.Physical,
-
-    //     }
-    //   }
-    // })
+  private async rollHeal(target: DotOrHotTarget, heal: Recovery) {
+    await createMessage({
+      data: {
+        header: { heading: localize('healthRecovery') },
+        heal: {
+          source: heal.source,
+          healthType: HealthType.Physical,
+          ...(target === DotOrHotTarget.Damage
+            ? {
+                damageFormulas: rollLabeledFormulas([
+                  {
+                    label: localize('heal'),
+                    formula: heal.amount,
+                  },
+                ]),
+              }
+            : { wounds: rollFormula(heal.amount)?.total || 0 }),
+        },
+      },
+    });
+    await this.health.logHeal(heal.slot);
   }
 
   render() {
@@ -67,7 +78,11 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
                       const heal = heals.get(slot);
                       return heal
                         ? html`
-                            <wl-list-item clickable @click=${() => this.rollHeal(target, heal)}>
+                            <wl-list-item
+                            ?disabled=${this.character.disabled}
+                              clickable
+                              @click=${() => this.rollHeal(target, heal)}
+                            >
                               <span slot="before">${heal.source}</span>
                               <span
                                 >${heal.amount}

@@ -22,7 +22,7 @@ import {
 } from './health';
 import type { DamageOverTime } from './health-changes';
 import { HealthMixin } from './health-mixin';
-import { HealsOverTime, setupRecoveries } from './recovery';
+import { HealingSlot, HealsOverTime, setupRecoveries } from './recovery';
 
 export type BiologicalHealthData = BasicHealthData &
   HealsOverTime & {
@@ -118,5 +118,11 @@ export class BiologicalHealth extends HealthMixin(BiologicalHealthBase) {
     return updater
       .prop('')
       .commit((data) => applyHealthModification(data, modification));
+  }
+
+  logHeal(slot: HealingSlot) {
+    return this.init.updater
+      .prop(`${slot}HealTickStartTime` as const)
+      .commit(currentWorldTimeMS());
   }
 }
