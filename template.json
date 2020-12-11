@@ -68,7 +68,7 @@
           "interval": 86400000
         },
         "woundRepair": {
-          "amount": "1",
+          "amount": 1,
           "interval": 86400000
         },
         "log": [],
@@ -93,7 +93,7 @@
           "interval": 86400000
         },
         "woundRepair": {
-          "amount": "1",
+          "amount": 1,
           "interval": 86400000
         },
         "log": [],
@@ -141,7 +141,7 @@
           "interval": 0
         },
         "woundRepair": {
-          "amount": "",
+          "amount": 1,
           "interval": 0
         },
         "log": [],
@@ -170,7 +170,7 @@
           "interval": 86400000
         },
         "woundRepair": {
-          "amount": "1",
+          "amount": 1,
           "interval": 86400000
         },
         "log": [],
@@ -800,7 +800,7 @@
           "interval": 86400000
         },
         "woundRepair": {
-          "amount": "1",
+          "amount": 1,
           "interval": 86400000
         },
         "log": [],

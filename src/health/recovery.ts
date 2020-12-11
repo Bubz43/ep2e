@@ -54,8 +54,8 @@ export type HealthTick = {
 export type HealsOverTime = {
   ownHealTickStartTime: number;
   aidedHealTickStartTime: number;
-  [DotOrHotTarget.Damage]: HealthTick;
-  [DotOrHotTarget.Wound]: { amount: number, interval: number };
+  damageRepair: HealthTick;
+  woundRepair: { amount: number, interval: number };
 }
 export type BasicTickInfo = Pick<HealthTick, 'amount' | 'interval'>;
 

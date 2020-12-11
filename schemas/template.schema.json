@@ -424,22 +424,6 @@
     "BiologicalHealthData": {
       "additionalProperties": false,
       "properties": {
-        "__computed": {
-          "additionalProperties": false,
-          "properties": {
-            "amount": {
-              "type": "number"
-            },
-            "interval": {
-              "type": "number"
-            }
-          },
-          "required": [
-            "amount",
-            "interval"
-          ],
-          "type": "object"
-        },
         "aidedHealTickStartTime": {
           "type": "number"
         },
@@ -453,6 +437,9 @@
         "damage": {
           "minimum": 0,
           "type": "number"
+        },
+        "damageRepair": {
+          "$ref": "#/definitions/HealthTick"
         },
         "dots": {
           "items": {
@@ -469,20 +456,37 @@
         "ownHealTickStartTime": {
           "type": "number"
         },
+        "woundRepair": {
+          "additionalProperties": false,
+          "properties": {
+            "amount": {
+              "type": "number"
+            },
+            "interval": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "amount",
+            "interval"
+          ],
+          "type": "object"
+        },
         "wounds": {
           "minimum": 0,
           "type": "number"
         }
       },
       "required": [
-        "__computed",
         "aidedHealTickStartTime",
         "baseDurability",
         "bleedingOut",
         "damage",
+        "damageRepair",
         "dots",
         "log",
         "ownHealTickStartTime",
+        "woundRepair",
         "wounds"
       ],
       "type": "object"
@@ -9275,6 +9279,22 @@
       ],
       "type": "string"
     },
+    "HealthTick": {
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "type": "string"
+        },
+        "interval": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "amount",
+        "interval"
+      ],
+      "type": "object"
+    },
     "HealthType": {
       "enum": [
         "mental",
@@ -9465,22 +9485,6 @@
     "MeshHealthData": {
       "additionalProperties": false,
       "properties": {
-        "__computed": {
-          "additionalProperties": false,
-          "properties": {
-            "amount": {
-              "type": "number"
-            },
-            "interval": {
-              "type": "number"
-            }
-          },
-          "required": [
-            "amount",
-            "interval"
-          ],
-          "type": "object"
-        },
         "aidedHealTickStartTime": {
           "type": "number"
         },
@@ -9514,6 +9518,9 @@
           "minimum": 0,
           "type": "number"
         },
+        "damageRepair": {
+          "$ref": "#/definitions/HealthTick"
+        },
         "log": {
           "items": {
             "$ref": "#/definitions/StringID%3CHealthModification%3E"
@@ -9523,19 +9530,36 @@
         "ownHealTickStartTime": {
           "type": "number"
         },
+        "woundRepair": {
+          "additionalProperties": false,
+          "properties": {
+            "amount": {
+              "type": "number"
+            },
+            "interval": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "amount",
+            "interval"
+          ],
+          "type": "object"
+        },
         "wounds": {
           "minimum": 0,
           "type": "number"
         }
       },
       "required": [
-        "__computed",
         "aidedHealTickStartTime",
         "baseDurability",
         "crash",
         "damage",
+        "damageRepair",
         "log",
         "ownHealTickStartTime",
+        "woundRepair",
         "wounds"
       ],
       "type": "object"
@@ -10909,22 +10933,6 @@
     "SyntheticHealthData": {
       "additionalProperties": false,
       "properties": {
-        "__computed": {
-          "additionalProperties": false,
-          "properties": {
-            "amount": {
-              "type": "number"
-            },
-            "interval": {
-              "type": "number"
-            }
-          },
-          "required": [
-            "amount",
-            "interval"
-          ],
-          "type": "object"
-        },
         "aidedHealTickStartTime": {
           "type": "number"
         },
@@ -10935,6 +10943,9 @@
         "damage": {
           "minimum": 0,
           "type": "number"
+        },
+        "damageRepair": {
+          "$ref": "#/definitions/HealthTick"
         },
         "dots": {
           "items": {
@@ -10951,19 +10962,36 @@
         "ownHealTickStartTime": {
           "type": "number"
         },
+        "woundRepair": {
+          "additionalProperties": false,
+          "properties": {
+            "amount": {
+              "type": "number"
+            },
+            "interval": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "amount",
+            "interval"
+          ],
+          "type": "object"
+        },
         "wounds": {
           "minimum": 0,
           "type": "number"
         }
       },
       "required": [
-        "__computed",
         "aidedHealTickStartTime",
         "baseDurability",
         "damage",
+        "damageRepair",
         "dots",
         "log",
         "ownHealTickStartTime",
+        "woundRepair",
         "wounds"
       ],
       "type": "object"
