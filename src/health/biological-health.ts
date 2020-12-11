@@ -4,6 +4,7 @@ import type {
   SourcedEffect,
 } from '@src/features/effects';
 import type { StringID } from '@src/features/feature-helpers';
+import { currentWorldTimeMS } from '@src/features/time';
 import { mapProps } from '@src/utility/field-values';
 import { localImage } from '@src/utility/images';
 import { LazyGetter } from 'lazy-get-decorator';
@@ -15,6 +16,7 @@ import {
   HealthInit,
   HealthMain,
   HealthModification,
+  HealthModificationMode,
   HealthStatMods,
   HealthType,
   initializeHealthData,
@@ -60,7 +62,6 @@ class BiologicalHealthBase implements CommonHealth {
       deathRating,
     };
     if (!init.isSwarm) this.wound = wound;
-
   }
 
   @LazyGetter()
@@ -103,4 +104,20 @@ class BiologicalHealthBase implements CommonHealth {
   }
 }
 
-export class BiologicalHealth extends HealthMixin(BiologicalHealthBase) {}
+export class BiologicalHealth extends HealthMixin(BiologicalHealthBase) {
+  applyModification(modification: HealthModification) {
+    const { updater } = this.init;
+    if (modification.mode === HealthModificationMode.Inflict) {
+      if (!this.regenState) {
+        updater
+          .prop('aidedHealTickStartTime')
+          .store(currentWorldTimeMS())
+          .prop('ownHealTickStartTime')
+          .store(currentWorldTimeMS());
+      }
+    }
+    return updater
+      .prop('')
+      .commit((data) => applyHealthModification(data, modification));
+  }
+}

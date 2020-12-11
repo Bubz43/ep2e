@@ -41,6 +41,13 @@ export type Heal = {
   kind: 'heal';
 };
 
+export const createHeal = createFeature<Heal, "type">(() => ({
+  damage: 0,
+  wounds: 0,
+  source: "",
+  kind: "heal"
+}))
+
 export type DamageOverTime = {
   formula: string;
   armorPiercing: boolean;

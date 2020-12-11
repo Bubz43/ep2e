@@ -35,6 +35,11 @@ export class MessageStressTest extends LitElement {
     this.viewFormulas = !this.viewFormulas;
   }
 
+  private setUsedRollParts(ev: UsedRollPartsEvent) {
+    this.usedRollParts = ev.usedRollParts;
+  }
+
+
   get rolls() {
     const { usedRollParts } = this;
     return usedRollParts
@@ -72,10 +77,7 @@ export class MessageStressTest extends LitElement {
     };
   }
 
-  private setUsedRollParts(ev: UsedRollPartsEvent) {
-    this.usedRollParts = ev.usedRollParts;
-  }
-
+ 
   private get source() {
     return this.stress.source || localize('stressfulExperience');
   }

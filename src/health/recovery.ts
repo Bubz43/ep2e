@@ -9,10 +9,12 @@ import {
   prettyMilliseconds,
   currentWorldTimeMS,
   Timestamp,
+  getElapsedTime,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { capitalize } from '@src/foundry/misc-helpers';
 import { averageRoll } from '@src/foundry/rolls';
+import { nonNegative } from '@src/utility/helpers';
 
 export enum NaturalMentalHeal {
   Stress = 'stress',
@@ -47,8 +49,6 @@ export enum RecoveryConditions {
 export type HealthTick = {
   amount: string;
   interval: number;
-  // lastUnaidedTick: number;
-  // lastAidedTick: number;
 };
 
 export type HealsOverTime = {
@@ -113,11 +113,10 @@ export const tickRate = ({ amount, interval }: BasicTickInfo) =>
 export const healingSlotToProp = (slot: HealingSlot) =>
   slot === HealingSlot.Aided ? 'lastAidedTick' : 'lastUnaidedTick';
 
-type Recovery = {
-  amount: string;
-  interval: number;
+type Recovery = HealthTick & {
   slot: HealingSlot;
   source: string;
+  readonly timeToTick: number
 };
 
 export const setupRecoveries = ({
@@ -137,16 +136,19 @@ export const setupRecoveries = ({
     unused: new Map<DotOrHotTarget, Recovery[]>(),
   } as const;
 
-  const innate = biological ? HealingSlot.OwnHealing : HealingSlot.Aided;
+  const slot = biological ? HealingSlot.OwnHealing : HealingSlot.Aided;
 
   for (const stat of enumValues(DotOrHotTarget)) {
     const group = groups[stat];
     const data = hot[stat];
     if (data.amount && data.interval > 0) {
-      group.set(innate, {
+      group.set(slot, {
         ...data,
-        slot: innate,
+        slot,
         source: localize('own'),
+        get timeToTick() {
+          return nonNegative(data.interval - getElapsedTime(hot[`${slot}HealTickStartTime` as const]))
+        }
       });
     }
    
@@ -172,6 +174,9 @@ export const setupRecoveries = ({
       interval,
       slot,
       source: effect[Source],
+      get timeToTick() {
+        return nonNegative(interval - getElapsedTime(hot[`${slot}HealTickStartTime` as const]))
+      }
     });
   }
 

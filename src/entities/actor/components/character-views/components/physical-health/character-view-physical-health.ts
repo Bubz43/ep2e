@@ -1,3 +1,4 @@
+import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { prettyMilliseconds } from '@src/features/time';
@@ -10,7 +11,7 @@ import { customElement, LitElement, property, html } from 'lit-element';
 import styles from './character-view-physical-health.scss';
 
 @customElement('character-view-physical-health')
-export class CharacterViewPhysicalHealth extends LitElement {
+export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
   static get is() {
     return 'character-view-physical-health' as const;
   }
@@ -27,7 +28,7 @@ export class CharacterViewPhysicalHealth extends LitElement {
 
   render() {
     const { health } = this;
-    const { regenState } = health;
+    const { regenState, recoveries } = health;
     return html`
       <character-view-drawer-heading
         >${localize('physicalHealth')}</character-view-drawer-heading
@@ -38,11 +39,10 @@ export class CharacterViewPhysicalHealth extends LitElement {
         >${localize('heal')} / ${localize('damage')}</mwc-button
       >
 
-
       <section>
         <sl-header heading=${localize('recovery')}></sl-header>
         ${enumValues(DotOrHotTarget).map((target) => {
-          const heals = health.recoveries[target];
+          const heals = recoveries[target];
           return notEmpty(heals)
             ? html`
                 <figure>
@@ -59,11 +59,14 @@ export class CharacterViewPhysicalHealth extends LitElement {
                                 ${localize('per').toLocaleLowerCase()}
                                 ${prettyMilliseconds(heal.interval)}</span
                               >
-                              ${regenState === target ? html`
-                              <span slot="after">
-                                
-                              </span>
-                              ` : ""}
+                              ${regenState === target
+                                ? html`
+                                    <span slot="after">
+                                      ${localize('tick')} ${localize('in')}
+                                      ${prettyMilliseconds(heal.timeToTick)}
+                                    </span>
+                                  `
+                                : ''}
                             </wl-list-item>
                           `
                         : '';
