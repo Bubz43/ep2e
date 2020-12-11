@@ -35,7 +35,7 @@ export type BiologicalHealthData = BasicHealthData &
 type Init = HealthInit<BiologicalHealthData> & {
   isSwarm: boolean;
   statMods: HealthStatMods | undefined;
-  recovery: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
+  recoveryEffects: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
 };
 
 class BiologicalHealthBase implements CommonHealth {
@@ -59,14 +59,18 @@ class BiologicalHealthBase implements CommonHealth {
       deathRating,
     };
     if (!init.isSwarm) this.wound = wound;
+
+
   }
 
   get data() {
     return this.init.data;
+    
   }
 
   get type() {
     return HealthType.Physical;
+
   }
 
   get source() {

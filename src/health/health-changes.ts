@@ -1,6 +1,7 @@
 import { enumValues } from '@src/data-enums';
 import type { ArmorType } from '@src/features/active-armor';
 import { createFeature } from '@src/features/feature-helpers';
+import { currentWorldTimeMS } from '@src/features/time';
 import { HealthType } from '@src/health/health';
 import { StressType } from '@src/health/mental-health';
 import { mapToObj } from 'remeda';
@@ -43,12 +44,22 @@ export type Heal = {
 export type DamageOverTime = {
   formula: string;
   armorPiercing: boolean;
-  armorRemoving: boolean;
+  reduceAVbyDV: boolean;
   armorUsed: ArmorType[];
   source: string;
   duration: number;
   startTime: number;
 };
+
+export const createDamageOverTime = createFeature<
+  DamageOverTime,
+  'formula' | 'source' | 'duration'
+>(() => ({
+  armorPiercing: false,
+  reduceAVbyDV: false,
+  armorUsed: [],
+  startTime: currentWorldTimeMS(),
+}));
 
 export type ArmorDamage = Record<ArmorType, number> & {
   source: string;

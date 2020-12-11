@@ -46,13 +46,14 @@ export enum RecoveryConditions {
 export type HealthTick = {
   amount: string;
   interval: number;
-  lastUnaidedTick: number;
-  lastAidedTick: number;
+  // lastUnaidedTick: number;
+  // lastAidedTick: number;
 };
 
 export type HealsOverTime = {
-  [key in DotOrHotTarget]: HealthTick;
-};
+  ownHealTickStartTime: number;
+  aidedHealTickStartTime: number;
+} & { [key in DotOrHotTarget]: HealthTick };
 
 export type BasicTickInfo = Pick<HealthTick, 'amount' | 'interval'>;
 
@@ -111,6 +112,31 @@ export const tickRate = ({ amount, interval }: BasicTickInfo) =>
 export const healingSlotToProp = (slot: HealingSlot) =>
   slot === HealingSlot.Aided ? 'lastAidedTick' : 'lastUnaidedTick';
 
+type Recovery = {
+  amount: string;
+  interval: number;
+  
+  }
+
+const setupRecoveries = ({
+  hot,
+  biological,
+  effects = [],
+  conditions,
+}: {
+  hot: HealsOverTime;
+  biological: boolean;
+  effects: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
+  conditions: RecoveryConditions;
+}) => {
+  const groups = {
+    [DotOrHotTarget.Damage]: new Map<HealingSlot, Recovery>(),
+    [DotOrHotTarget.Wound]: new Map<HealingSlot, Recovery>(),
+  } as const;
+
+
+};
+
 export const setupHealthRecoveries = (
   hot: HealsOverTime,
   biological: boolean,
@@ -123,8 +149,8 @@ export const setupHealthRecoveries = (
   } as const;
 
   const innate = biological ? HealingSlot.OwnHealing : HealingSlot.Aided;
-  const getTimeSince = (stat: DotOrHotTarget, slot: HealingSlot) =>
-    hot[stat][healingSlotToProp(slot)];
+  const getTimeSince = (slot: HealingSlot) =>
+    hot[`${slot}HealTickStartTime` as const];
 
   for (const stat of enumValues(DotOrHotTarget)) {
     const group = groups[stat];
@@ -132,7 +158,7 @@ export const setupHealthRecoveries = (
       ...hot[stat],
       slot: innate,
       source: localize('innate'),
-      timeSinceTick: getTimeSince(stat, innate),
+      timeSinceTick: getTimeSince(innate),
     });
   }
 
@@ -150,7 +176,7 @@ export const setupHealthRecoveries = (
       interval,
       slot,
       source: effect[Source],
-      timeSinceTick: current?.timeSinceTick || getTimeSince(stat, slot),
+      timeSinceTick: current?.timeSinceTick || getTimeSince(slot),
     });
   }
 

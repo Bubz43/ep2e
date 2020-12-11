@@ -202,6 +202,13 @@ export abstract class CharacterViewBase extends LitElement {
           >${localize('heal')} / ${localize('damage')}</mwc-button
         >
 
+<section>
+<sl-header heading=${localize("damageOverTime")}>
+<mwc-icon-button icon="add"></mwc-icon-button>
+</sl-header>
+
+</section>
+
         <sl-details summary=${localize('history')}>
           <health-log
             .health=${health}

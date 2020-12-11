@@ -24,7 +24,16 @@ import {
 } from 'lit-element';
 import { render } from 'lit-html';
 import { repeat } from 'lit-html/directives/repeat';
-import { equals, mapValues, reject, sortBy } from 'remeda';
+import {
+  compact,
+  equals,
+  find,
+  map,
+  mapValues,
+  pipe,
+  reject,
+  sortBy,
+} from 'remeda';
 import styles from './character-view-resleeve.scss';
 
 @customElement('character-view-resleeve')
@@ -128,7 +137,6 @@ export class CharacterViewResleeve extends LitElement {
     const data = this.selectedSleeve.dataCopy();
     data.items = [];
 
-    // TODO Brain
     const added = await this.character.itemOperations.add(
       ...[...items.values()].map((item) => {
         if ('equipped' in item) {
@@ -146,15 +154,25 @@ export class CharacterViewResleeve extends LitElement {
       this.selectedSleeve.nonDefaultBrain;
 
     if (data.type !== ActorType.Infomorph && nonDefaultBrain) {
-      const newBrain = [
-        ...(this.character.actor.items?.values() || []),
-      ].find(({ proxy }) => equals(proxy.epData, nonDefaultBrain.epData));
-      if (newBrain) data.data.brain = newBrain.id;
-      else
-        notify(
-          NotificationType.Error,
-          `Unable to find ${nonDefaultBrain.name}`,
-        );
+      const { items } = this.character.actor;
+      pipe(
+        added,
+        map((id) => items?.get(id)?.proxy),
+        compact,
+        find(
+          (proxy) =>
+            proxy.name === nonDefaultBrain.name &&
+            equals(proxy.epData, nonDefaultBrain.epData) &&
+            equals(proxy.data.flags, nonDefaultBrain.data.flags)
+        ),
+        (brain) =>
+          brain
+            ? (data.data.brain = brain.id)
+            : notify(
+                NotificationType.Error,
+                `Unable to find ${nonDefaultBrain.name}`,
+              ),
+      );
     }
 
     await this.character.updater

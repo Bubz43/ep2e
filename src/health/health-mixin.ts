@@ -1,4 +1,3 @@
-import type { ActorEP } from '@src/entities/actor/actor';
 import type { ObtainableEffects } from '@src/entities/applied-effects';
 import { createEffect } from '@src/features/effects';
 import { TagType } from '@src/features/tags';
@@ -36,6 +35,7 @@ export type ActorHealth =
   | SyntheticHealth
   | MeshHealth
   | AppMeshHealth;
+  
 
 export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
   class HealthInfo extends cls implements Health, ObtainableEffects {
