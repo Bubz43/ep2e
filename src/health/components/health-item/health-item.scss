@@ -72,7 +72,7 @@
   .regen-available {
     align-self: center;
     margin-right: 0.5ch;
-    filter: grayscale(1);
+    filter: opacity(0.5);
     &.ready {
       @include animate-css(pulse, 1s, Infinite);
       filter: drop-shadow(0 0 3px var(--color-secondary));

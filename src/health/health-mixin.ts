@@ -118,6 +118,13 @@ export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
       const target = this.main.deathRating?.value || this.main.durability.value;
       return nonNegative(target - this.main.damage.value);
     }
+
+    get common() {
+      return {
+        damage: this.main.damage.value,
+        wounds: this.wound?.wounds.value
+      }
+    }
   }
 
   return HealthInfo;

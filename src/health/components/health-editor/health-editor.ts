@@ -28,7 +28,7 @@ import {
   property,
   PropertyValues,
 } from 'lit-element';
-import { compact, fromPairs, identity, mapToObj } from 'remeda';
+import { clamp, compact, fromPairs, identity, mapToObj } from 'remeda';
 import styles from './health-editor.scss';
 import { MentalHealth } from '@src/health/mental-health';
 import { HealthModificationEvent } from '@src/health/health-modification-event';
@@ -343,8 +343,8 @@ export class HealthEditor extends LitElement {
     const { main, wound } = health;
     const props = {
       source: change?.source || "",
-      damage: Math.min((change?.damage || 0, main.damage.value)),
-      wounds: Math.min((change?.wounds || 0), wound?.wounds.value || 0)
+      damage: clamp(change?.damage || 0, { max: main.damage.value}),
+      wounds: clamp(change?.wounds || 0, { max: wound?.wounds.value || 0})
     }
     return renderSubmitForm({
       props,

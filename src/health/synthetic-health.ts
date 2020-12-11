@@ -23,7 +23,7 @@ import {
 } from './health';
 import type { DamageOverTime } from './health-changes';
 import { HealthMixin } from './health-mixin';
-import { HealingSlot, HealsOverTime, setupRecoveries } from './recovery';
+import { DotOrHotTarget, HealingSlot, HealsOverTime, setupRecoveries } from './recovery';
 
 export type SyntheticHealthData = BasicHealthData &
   HealsOverTime & {
@@ -106,7 +106,7 @@ class SyntheticHealthBase implements CommonHealth {
 export class SyntheticHealth extends HealthMixin(SyntheticHealthBase) {
   applyModification(modification: HealthModification) {
     const { updater } = this.init;
-    if (modification.mode === HealthModificationMode.Inflict) {
+    if (modification.mode !== HealthModificationMode.Heal || (this.regenState === DotOrHotTarget.Damage && modification.damage >= this.main.damage.value)) {
       if (!this.regenState) {
         updater
           .prop('aidedHealTickStartTime')

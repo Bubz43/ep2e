@@ -22,7 +22,7 @@ import {
 } from './health';
 import type { DamageOverTime } from './health-changes';
 import { HealthMixin } from './health-mixin';
-import { HealingSlot, HealsOverTime, setupRecoveries } from './recovery';
+import { DotOrHotTarget, HealingSlot, HealsOverTime, setupRecoveries } from './recovery';
 
 export type BiologicalHealthData = BasicHealthData &
   HealsOverTime & {
@@ -104,9 +104,37 @@ class BiologicalHealthBase implements CommonHealth {
 }
 
 export class BiologicalHealth extends HealthMixin(BiologicalHealthBase) {
+  private resetRegenStartTimes() {
+    this.init.updater
+          .prop('aidedHealTickStartTime')
+          .store(currentWorldTimeMS())
+          .prop('ownHealTickStartTime')
+          .store(currentWorldTimeMS());
+  }
   applyModification(modification: HealthModification) {
     const { updater } = this.init;
-    if (modification.mode === HealthModificationMode.Inflict) {
+    const { damage, wounds } = this.common;
+    switch (modification.mode) {
+      case HealthModificationMode.Edit: {
+        if (!damage && modification.damage) this.resetRegenStartTimes();
+        else if (!wounds && modification.wounds) this.resetRegenStartTimes();
+        else if (wounds && !damage && modification.damage) this.resetRegenStartTimes();
+        break;
+      }
+      case HealthModificationMode.Inflict: {
+        break;
+      }
+      
+      case HealthModificationMode.Heal: {
+        if (damage && modification.damage >= damage) this.resetRegenStartTimes();
+        else 
+        break;
+      }
+    }
+    if (modification.mode !== HealthModificationMode.Heal) {
+      // if (this.regenState !== )
+    }
+    if (modification.mode !== HealthModificationMode.Heal || (this.regenState === DotOrHotTarget.Damage && modification.damage >= this.main.damage.value)) {
       if (!this.regenState) {
         updater
           .prop('aidedHealTickStartTime')
