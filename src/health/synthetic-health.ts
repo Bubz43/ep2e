@@ -23,7 +23,12 @@ import {
 } from './health';
 import type { DamageOverTime } from './health-changes';
 import { HealthMixin } from './health-mixin';
-import { DotOrHotTarget, HealingSlot, HealsOverTime, setupRecoveries } from './recovery';
+import {
+  DotOrHotTarget,
+  HealingSlot,
+  HealsOverTime,
+  setupRecoveries,
+} from './recovery';
 
 export type SyntheticHealthData = BasicHealthData &
   HealsOverTime & {
@@ -104,18 +109,37 @@ class SyntheticHealthBase implements CommonHealth {
 }
 
 export class SyntheticHealth extends HealthMixin(SyntheticHealthBase) {
+  private resetRegenStartTimes() {
+    this.init.updater
+      .prop('aidedHealTickStartTime')
+      .store(currentWorldTimeMS())
+      .prop('ownHealTickStartTime')
+      .store(currentWorldTimeMS());
+  }
+  
   applyModification(modification: HealthModification) {
-    const { updater } = this.init;
-    if (modification.mode !== HealthModificationMode.Heal || (this.regenState === DotOrHotTarget.Damage && modification.damage >= this.main.damage.value)) {
-      if (!this.regenState) {
-        updater
-          .prop('aidedHealTickStartTime')
-          .store(currentWorldTimeMS())
-          .prop('ownHealTickStartTime')
-          .store(currentWorldTimeMS());
+    const { damage, wounds } = this.common;
+    switch (modification.mode) {
+      case HealthModificationMode.Edit: {
+        if (!damage && modification.damage) this.resetRegenStartTimes();
+        else if (damage && !modification.damage) this.resetRegenStartTimes();
+        else if (!wounds && modification.wounds) this.resetRegenStartTimes();
+        else if (wounds && !damage && modification.damage) this.resetRegenStartTimes();
+        break;
+      }
+      case HealthModificationMode.Inflict: {
+        if (!damage && modification.damage) this.resetRegenStartTimes();
+        else if (!wounds && modification.wounds) this.resetRegenStartTimes();
+        else if (wounds && !damage && modification.damage) this.resetRegenStartTimes();
+        break;
+      }
+      
+      case HealthModificationMode.Heal: {
+        if (damage && modification.damage >= damage) this.resetRegenStartTimes();
+        break;
       }
     }
-    return updater
+    return this.init.updater
       .prop('')
       .commit((data) => applyHealthModification(data, modification));
   }

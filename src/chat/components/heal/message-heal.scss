@@ -20,9 +20,9 @@ mwc-button[unelevated] {
   --mdc-theme-primary: #{lightv(var(--color-secondary), 0.7)};
   filter: hue-rotate(-40deg);
   margin-bottom: 0.25rem;
-  &.full-width {
-    width: 100%;
-  }
+  width: 100%;
+
+ 
 }
 
 .heal-info {

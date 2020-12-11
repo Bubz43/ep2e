@@ -7,7 +7,12 @@ import { localize } from '@src/foundry/localization';
 import { rollFormula, rollLabeledFormulas } from '@src/foundry/rolls';
 import type { BiologicalHealth } from '@src/health/biological-health';
 import { HealthType } from '@src/health/health';
-import { DotOrHotTarget, HealingSlot, Recovery } from '@src/health/recovery';
+import {
+  DotOrHotTarget,
+  formatAutoHealing,
+  HealingSlot,
+  Recovery,
+} from '@src/health/recovery';
 import type { SyntheticHealth } from '@src/health/synthetic-health';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
@@ -30,6 +35,7 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
   }
 
   private async rollHeal(target: DotOrHotTarget, heal: Recovery) {
+    // TODO Account for multiple instances
     await createMessage({
       data: {
         header: { heading: localize('healthRecovery') },
@@ -48,7 +54,7 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
             : { wounds: rollFormula(heal.amount)?.total || 0 }),
         },
       },
-      visibility: MessageVisibility.WhisperGM
+      visibility: MessageVisibility.WhisperGM,
     });
     await this.health.logHeal(heal.slot);
   }
@@ -56,6 +62,8 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
   render() {
     const { health } = this;
     const { regenState, recoveries } = health;
+    // TODO Account for passing intervals
+    // TODO Conditions
     return html`
       <character-view-drawer-heading
         >${localize('physicalHealth')}</character-view-drawer-heading
@@ -80,16 +88,12 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
                       return heal
                         ? html`
                             <wl-list-item
-                            ?disabled=${this.character.disabled}
+                              ?disabled=${this.character.disabled}
                               clickable
                               @click=${() => this.rollHeal(target, heal)}
                             >
                               <span slot="before">${heal.source}</span>
-                              <span
-                                >${heal.amount}
-                                ${localize('per').toLocaleLowerCase()}
-                                ${prettyMilliseconds(heal.interval)}</span
-                              >
+                              <span>${formatAutoHealing(heal)} </span>
                               ${regenState === target
                                 ? html`
                                     <span slot="after">
@@ -111,7 +115,7 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
 
       <section>
         <sl-header heading=${localize('damageOverTime')}>
-          <mwc-icon-button icon="add"></mwc-icon-button>
+          <mwc-icon-button icon="add" slot="action"></mwc-icon-button>
         </sl-header>
       </section>
 

@@ -99,7 +99,7 @@ export class MessageHeal extends LitElement {
     const [damageLabel, woundLabel] = labels;
     const hasFormulas = notEmpty(this.heal.damageFormulas)
     return html`
-      <mwc-button dense unelevated class="heal-values ${classMap({ "full-width": !hasFormulas})}" @click=${this.applyHeal}>
+      <mwc-button dense unelevated class="heal-values" @click=${this.applyHeal}>
         ${damageHealTotals.damageValue || 0} ${damageLabel}, ${heal.wounds || 0}
         ${woundLabel}
       </mwc-button>
