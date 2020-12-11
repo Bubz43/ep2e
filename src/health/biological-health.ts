@@ -6,6 +6,7 @@ import type {
 import type { StringID } from '@src/features/feature-helpers';
 import { mapProps } from '@src/utility/field-values';
 import { localImage } from '@src/utility/images';
+import { LazyGetter } from 'lazy-get-decorator';
 import { merge, pipe } from 'remeda';
 import {
   applyHealthModification,
@@ -20,7 +21,7 @@ import {
 } from './health';
 import type { DamageOverTime } from './health-changes';
 import { HealthMixin } from './health-mixin';
-import type { HealsOverTime } from './recovery';
+import { HealsOverTime, HealthRecoveries, setupRecoveries } from './recovery';
 
 export type BiologicalHealthData = BasicHealthData &
   HealsOverTime & {
@@ -60,17 +61,23 @@ class BiologicalHealthBase implements CommonHealth {
     };
     if (!init.isSwarm) this.wound = wound;
 
+  }
 
+  @LazyGetter()
+  get recoveries() {
+    return setupRecoveries({
+      hot: this.init.data,
+      biological: true,
+      effects: this.init.recoveryEffects,
+    });
   }
 
   get data() {
     return this.init.data;
-    
   }
 
   get type() {
     return HealthType.Physical;
-
   }
 
   get source() {

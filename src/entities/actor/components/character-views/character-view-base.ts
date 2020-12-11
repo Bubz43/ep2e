@@ -1,11 +1,15 @@
 import { renderNumberField } from '@src/components/field/fields';
 import { renderUpdaterForm } from '@src/components/form/forms';
+import { enumValues } from '@src/data-enums';
 import { ActorType } from '@src/entities/entity-types';
+import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { HealthEditor } from '@src/health/components/health-editor/health-editor';
 import type { ActorHealth } from '@src/health/health-mixin';
 import { hardeningTypes } from '@src/health/mental-health';
+import { DotOrHotTarget, HealingSlot } from '@src/health/recovery';
 import { debounce } from '@src/utility/decorators';
+import { notEmpty } from '@src/utility/helpers';
 import { internalProperty, LitElement, property, query } from 'lit-element';
 import { html, TemplateResult } from 'lit-html';
 import { traverseActiveElements } from 'weightless';
@@ -92,7 +96,7 @@ export abstract class CharacterViewBase extends LitElement {
   }
 
   protected openHealthEditor(health: ActorHealth) {
-    const active = traverseActiveElements()
+    const active = traverseActiveElements();
     HealthEditor.openWindow({
       actor: this.character.actor,
       initialHealth: health,
@@ -202,12 +206,42 @@ export abstract class CharacterViewBase extends LitElement {
           >${localize('heal')} / ${localize('damage')}</mwc-button
         >
 
-<section>
-<sl-header heading=${localize("damageOverTime")}>
-<mwc-icon-button icon="add"></mwc-icon-button>
-</sl-header>
+        <section>
+          <sl-header heading=${localize('recovery')}></sl-header>
+          ${enumValues(DotOrHotTarget).map((target) => {
+            const heals = health.recoveries[target];
+            return notEmpty(heals)
+              ? html`
+                  <figure>
+                    <figcaption>${localize(target)}</figcaption>
+                    <ul>
+                      ${enumValues(HealingSlot).map((slot) => {
+                        const heal = heals.get(slot);
+                        return heal
+                          ? html`
+                              <wl-list-item>
+                                <span slot="before">${heal.source}</span>
+                                <span>${heal.amount}</span>
+                                <span slot="after"
+                                  >${localize('per')}
+                                  ${prettyMilliseconds(heal.interval)}</span
+                                >
+                              </wl-list-item>
+                            `
+                          : '';
+                      })}
+                    </ul>
+                  </figure>
+                `
+              : '';
+          })}
+        </section>
 
-</section>
+        <section>
+          <sl-header heading=${localize('damageOverTime')}>
+            <mwc-icon-button icon="add"></mwc-icon-button>
+          </sl-header>
+        </section>
 
         <sl-details summary=${localize('history')}>
           <health-log

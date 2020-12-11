@@ -11,6 +11,7 @@ import {
   Timestamp,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
+import { capitalize } from '@src/foundry/misc-helpers';
 import { averageRoll } from '@src/foundry/rolls';
 
 export enum NaturalMentalHeal {
@@ -115,26 +116,67 @@ export const healingSlotToProp = (slot: HealingSlot) =>
 type Recovery = {
   amount: string;
   interval: number;
-  
-  }
+  slot: HealingSlot;
+  source: string;
+};
 
-const setupRecoveries = ({
+export const setupRecoveries = ({
   hot,
   biological,
   effects = [],
-  conditions,
+  // conditions,
 }: {
   hot: HealsOverTime;
   biological: boolean;
   effects: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
-  conditions: RecoveryConditions;
+  // conditions: RecoveryConditions;
 }) => {
   const groups = {
     [DotOrHotTarget.Damage]: new Map<HealingSlot, Recovery>(),
     [DotOrHotTarget.Wound]: new Map<HealingSlot, Recovery>(),
+    unused: new Map<DotOrHotTarget, Recovery[]>(),
   } as const;
 
+  const innate = biological ? HealingSlot.OwnHealing : HealingSlot.Aided;
 
+  for (const stat of enumValues(DotOrHotTarget)) {
+    const group = groups[stat];
+    group.set(innate, {
+      ...hot[stat],
+      slot: innate,
+      source: localize('own'),
+    });
+  }
+
+  for (const effect of effects) {
+    const { amount, stat, technologicallyAided, interval } = effect;
+    if (!amount || interval <= 0) continue;
+
+    const group = groups[stat];
+    const slot =
+      technologicallyAided || !biological
+        ? HealingSlot.Aided
+        : HealingSlot.OwnHealing;
+    const current = group.get(slot);
+    if (current && tickRate(current) > tickRate(effect)) {
+      const unused = groups.unused.get(stat)
+      if (unused) unused.push(current)
+      else groups.unused.set(stat, [current]);
+    }
+    group.set(slot, {
+      amount,
+      interval,
+      slot,
+      source: effect[Source],
+    });
+  }
+
+  for (const stat of enumValues(DotOrHotTarget)) {
+    groups[stat].forEach(({ amount, interval }, slot, map) => {
+      if (!amount || interval <= 0) map.delete(slot);
+    });
+  }
+  return groups
 };
 
 export const setupHealthRecoveries = (
@@ -189,4 +231,4 @@ export const setupHealthRecoveries = (
   return groups;
 };
 
-export type HealthRecoveries = ReturnType<typeof setupHealthRecoveries>;
+export type HealthRecoveries = ReturnType<typeof setupRecoveries>;
