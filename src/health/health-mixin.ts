@@ -23,10 +23,7 @@ export type Health = CommonHealth &
       deathRating: number | null;
       dead: boolean;
     };
-    regenState: {
-      damage: boolean;
-      wound: boolean;
-    };
+    regenState: DotOrHotTarget | null;
   }>;
 
 export type ActorHealth =
@@ -83,14 +80,13 @@ export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
       const damage = !!(
         main.damage.value && notEmpty(recoveries?.[DotOrHotTarget.Damage])
       );
-      return {
-        damage: damage,
-        wound: !!(
-          !damage &&
-          wound?.wounds.value &&
-          notEmpty(recoveries?.[DotOrHotTarget.Wound])
-        ),
-      };
+      const wounds = !!(
+        !damage &&
+        wound?.wounds.value &&
+        notEmpty(recoveries?.[DotOrHotTarget.Wound])
+      )
+      return damage ? DotOrHotTarget.Damage : wounds ? DotOrHotTarget.Wound : null;
+
     }
 
     get log() {

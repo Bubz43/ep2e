@@ -45,6 +45,7 @@ import {
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
+import { HealthEditor } from '@src/health/components/health-editor/health-editor';
 import type { ActorHealth } from '@src/health/health-mixin';
 import { nonNegative, notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
@@ -57,6 +58,7 @@ import {
   pipe,
   reject,
 } from 'remeda';
+import { traverseActiveElements } from 'weightless';
 import { openSleeveForm } from '../actor-views';
 import { Ego, FullEgoData } from '../ego';
 import { isSleeveItem, Sleeve } from '../sleeves';
@@ -506,6 +508,15 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       ({ proxy: agent }) => agent.type === ActorType.Character && agent.psi,
       openPsiFormWindow,
     );
+  }
+
+  openHealthEditor(health: ActorHealth) {
+    const active = traverseActiveElements();
+    HealthEditor.openWindow({
+      actor: this.actor,
+      initialHealth: health,
+      adjacentEl: active instanceof HTMLElement ? active : undefined,
+    });
   }
 
   private setupEgo(egoItems: Map<string, ItemProxy>) {

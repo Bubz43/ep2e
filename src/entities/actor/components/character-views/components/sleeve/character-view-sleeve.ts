@@ -46,15 +46,6 @@ export class CharacterViewSleeve extends LitElement {
     this.dispatchEvent(new CharacterDrawerRenderEvent(renderer))
   }
 
-  protected openHealthEditor(health: ActorHealth) {
-    const active = traverseActiveElements()
-    HealthEditor.openWindow({
-      actor: this.character.actor,
-      initialHealth: health,
-      adjacentEl: active instanceof HTMLElement ? active : undefined,
-    });
-  }
-
 
   render() {
     const { sleeve } = this;
@@ -129,10 +120,10 @@ export class CharacterViewSleeve extends LitElement {
           `
         : ''}
       ${physicalHealth
-        ? html` <health-item @contextmenu=${() => this.openHealthEditor(physicalHealth)} clickable @click=${this.viewPhysicalHealth} .health=${physicalHealth}> </health-item> `
+        ? html` <health-item @contextmenu=${() => this.character.openHealthEditor(physicalHealth)} clickable @click=${this.viewPhysicalHealth} .health=${physicalHealth}> </health-item> `
         : ''}
       ${meshHealth
-        ? html` <health-item @contextmenu=${() => this.openHealthEditor(meshHealth)} clickable @click=${this.viewMeshHealth} .health=${meshHealth}>
+        ? html` <health-item @contextmenu=${() => this.character.openHealthEditor(meshHealth)} clickable @click=${this.viewMeshHealth} .health=${meshHealth}>
             ${sleeve.type !== ActorType.Infomorph && sleeve.nonDefaultBrain
               ? html`
                   <span slot="source">${sleeve.nonDefaultBrain.name}</span>

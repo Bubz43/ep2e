@@ -1,3 +1,4 @@
+import { LazyRipple } from '@src/components/mixins/lazy-ripple';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
@@ -10,7 +11,7 @@ import {
 } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
-import { notEmpty } from '@src/utility/helpers';
+import { clickIfEnter, notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
@@ -30,7 +31,7 @@ import styles from './character-view-item-group.scss';
  * @part header
  */
 @customElement('character-view-item-group')
-export class CharacterViewItemGroup extends LitElement {
+export class CharacterViewItemGroup extends LazyRipple(LitElement) {
   static get is() {
     return 'character-view-item-group' as const;
   }
@@ -115,6 +116,7 @@ export class CharacterViewItemGroup extends LitElement {
 
   render() {
     const items = this.character[this.group];
+    const hasItems = notEmpty(items);
     return html`
       <sl-dropzone
         @drop=${this.addItem}
@@ -123,12 +125,21 @@ export class CharacterViewItemGroup extends LitElement {
       >
         <sl-header
           heading=${localize(this.group)}
-          ?hideBorder=${items.length === 0}
+          ?hideBorder=${!hasItems}
           itemCount=${items.length}
+          @click=${this.toggleCollapse}
+          @focus="${this.handleRippleFocus}"
+          @blur="${this.handleRippleBlur}"
+          @mousedown="${this.handleRippleMouseDown}"
+          @mouseenter="${this.handleRippleMouseEnter}"
+          @mouseleave="${this.handleRippleMouseLeave}"
+          @keydown=${clickIfEnter}
+          tabindex=${hasItems ? 0 : -1}
           part="header"
         >
           ${this.renderInfo()}
-          ${notEmpty(items) ? this.renderCollapseToggle() : ''}
+          <span slot="action">${this.renderRipple(!hasItems)}</span>
+          ${hasItems ? this.renderCollapseToggle() : ''}
         </sl-header>
         ${notEmpty(items) ? this.renderItemList(items) : ''}
       </sl-dropzone>
@@ -152,11 +163,9 @@ export class CharacterViewItemGroup extends LitElement {
 
   private renderCollapseToggle() {
     return html`
-      <mwc-icon-button
-        slot="action"
-        icon=${this.collapsed ? 'keyboard_arrow_left' : 'keyboard_arrow_down'}
-        @click=${this.toggleCollapse}
-      ></mwc-icon-button>
+      <mwc-icon slot="action">
+        ${this.collapsed ? 'keyboard_arrow_left' : 'keyboard_arrow_down'}
+      </mwc-icon>
     `;
   }
 

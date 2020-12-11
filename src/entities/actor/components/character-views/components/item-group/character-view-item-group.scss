@@ -21,3 +21,14 @@ sl-dropzone {
   padding: 0.1rem 0;
   position: relative;
 }
+
+[part="header"] {
+  position: relative;
+  outline: none;
+  &[tabindex="0"] {
+    cursor: pointer;
+  }
+  mwc-ripple {
+    cursor: pointer;
+  }
+}

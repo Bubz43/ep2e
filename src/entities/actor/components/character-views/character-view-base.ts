@@ -95,15 +95,6 @@ export abstract class CharacterViewBase extends LitElement {
     return !!this.drawerContentRenderer;
   }
 
-  protected openHealthEditor(health: ActorHealth) {
-    const active = traverseActiveElements();
-    HealthEditor.openWindow({
-      actor: this.character.actor,
-      initialHealth: health,
-      adjacentEl: active instanceof HTMLElement ? active : undefined,
-    });
-  }
-
   renderResleeve() {
     return html`
       <character-view-resleeve
@@ -177,7 +168,7 @@ export abstract class CharacterViewBase extends LitElement {
         )}
 
         <mwc-button
-          @click=${() => this.openHealthEditor(this.character.ego.mentalHealth)}
+          @click=${() => this.character.openHealthEditor(this.character.ego.mentalHealth)}
           >${localize('heal')} / ${localize('damage')}</mwc-button
         >
 
@@ -194,63 +185,10 @@ export abstract class CharacterViewBase extends LitElement {
   renderSleevePhysicalHealth() {
     const { sleeve } = this.character;
     if (!sleeve || sleeve?.type === ActorType.Infomorph) return html``;
-    const { physicalHealth: health } = sleeve;
-    return html`
-      <section>
-        <character-view-drawer-heading
-          >${localize('physicalHealth')}</character-view-drawer-heading
-        >
-        <health-state-form .health=${health}></health-state-form>
-
-        <mwc-button @click=${() => this.openHealthEditor(health)}
-          >${localize('heal')} / ${localize('damage')}</mwc-button
-        >
-
-        <section>
-          <sl-header heading=${localize('recovery')}></sl-header>
-          ${enumValues(DotOrHotTarget).map((target) => {
-            const heals = health.recoveries[target];
-            return notEmpty(heals)
-              ? html`
-                  <figure>
-                    <figcaption>${localize(target)}</figcaption>
-                    <ul>
-                      ${enumValues(HealingSlot).map((slot) => {
-                        const heal = heals.get(slot);
-                        return heal
-                          ? html`
-                              <wl-list-item>
-                                <span slot="before">${heal.source}</span>
-                                <span>${heal.amount}</span>
-                                <span slot="after"
-                                  >${localize('per')}
-                                  ${prettyMilliseconds(heal.interval)}</span
-                                >
-                              </wl-list-item>
-                            `
-                          : '';
-                      })}
-                    </ul>
-                  </figure>
-                `
-              : '';
-          })}
-        </section>
-
-        <section>
-          <sl-header heading=${localize('damageOverTime')}>
-            <mwc-icon-button icon="add"></mwc-icon-button>
-          </sl-header>
-        </section>
-
-        <sl-details summary=${localize('history')}>
-          <health-log
-            .health=${health}
-            ?disabled=${this.character.disabled}
-          ></health-log>
-        </sl-details>
-      </section>
-    `;
+    return html`<character-view-physical-health
+      .health=${sleeve.physicalHealth}
+      .character=${this.character}
+    ></character-view-physical-health>`;
   }
 
   renderSleeveMeshHealth() {
@@ -264,7 +202,7 @@ export abstract class CharacterViewBase extends LitElement {
         >
         <health-state-form .health=${health}></health-state-form>
 
-        <mwc-button @click=${() => this.openHealthEditor(health)}
+        <mwc-button @click=${() => this.character.openHealthEditor(health)}
           >${localize('heal')} / ${localize('damage')}</mwc-button
         >
 

@@ -81,12 +81,7 @@ export class CharacterViewEgo extends LitElement {
   }
 
   protected openHealthEditor() {
-    const active = traverseActiveElements()
-    HealthEditor.openWindow({
-      actor: this.character.actor,
-      initialHealth: this.ego.mentalHealth,
-      adjacentEl: active instanceof HTMLElement ? active : undefined,
-    });
+    this.character.openHealthEditor(this.ego.mentalHealth)
   }
 
   render() {

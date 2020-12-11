@@ -141,11 +141,15 @@ export const setupRecoveries = ({
 
   for (const stat of enumValues(DotOrHotTarget)) {
     const group = groups[stat];
-    group.set(innate, {
-      ...hot[stat],
-      slot: innate,
-      source: localize('own'),
-    });
+    const data = hot[stat];
+    if (data.amount && data.interval > 0) {
+      group.set(innate, {
+        ...data,
+        slot: innate,
+        source: localize('own'),
+      });
+    }
+   
   }
 
   for (const effect of effects) {
@@ -171,11 +175,7 @@ export const setupRecoveries = ({
     });
   }
 
-  for (const stat of enumValues(DotOrHotTarget)) {
-    groups[stat].forEach(({ amount, interval }, slot, map) => {
-      if (!amount || interval <= 0) map.delete(slot);
-    });
-  }
+
   return groups
 };
 

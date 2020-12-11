@@ -62,6 +62,7 @@ import { CharacterViewEgo } from './entities/actor/components/character-views/co
 import { CharacterViewHeader } from './entities/actor/components/character-views/components/header/character-view-header';
 import { CharacterViewItemGroup } from './entities/actor/components/character-views/components/item-group/character-view-item-group';
 import { CharacterViewNetworkSettings } from './entities/actor/components/character-views/components/network-settings/character-view-network-settings';
+import { CharacterViewPhysicalHealth } from './entities/actor/components/character-views/components/physical-health/character-view-physical-health';
 import { CharacterViewRecharge } from './entities/actor/components/character-views/components/recharge/character-view-recharge';
 import { CharacterViewRechargeCompletion } from './entities/actor/components/character-views/components/recharge/character-view-recharge-completion';
 import { CharacterViewResleeve } from './entities/actor/components/character-views/components/resleeve/character-view-resleeve';
@@ -178,6 +179,7 @@ CharacterViewTime;
 CharacterViewTimeItem;
 CharacterViewNetworkSettings;
 CharacterViewArmor;
+CharacterViewPhysicalHealth;
 ItemCard;
 ItemCardFabber;
 
