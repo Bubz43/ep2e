@@ -119,6 +119,7 @@ export class CharacterView extends CharacterViewBase {
 
   private renderStatus() {
     const { masterDevice } = this.character.equippedGroups;
+    const { sleights, psi } = this.character
     return html`
       <div class="status">
         <section>
@@ -145,6 +146,19 @@ export class CharacterView extends CharacterViewBase {
                 ></health-item>
               `
             : ''}
+        </section>
+        ${psi ? html`
+        <section>
+          <sl-header heading=${localize("psi")}></sl-header>
+        </section>
+        ` : ""}
+        ${psi || notEmpty(sleights) ? html`
+        <section>
+          <sl-header heading=${localize("sleights")} itemCount=${sleights.length}></sl-header>
+        </section>
+        ` : ""}
+        <section>
+          <sl-header heading=${localize("attacks")}></sl-header>
         </section>
         ${enumValues(ItemGroup).map(this.renderItemGroup)}
       </div>

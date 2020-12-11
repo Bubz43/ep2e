@@ -31,6 +31,9 @@
       display: grid;
       padding: 0.25rem 0;
     }
+    .more {
+      opacity: 1;
+    }
   }
 }
 
@@ -44,6 +47,12 @@
   cursor: pointer;
   grid-template-areas: 'img info buttons';
 
+  &:hover,
+  &:focus {
+    .more {
+      opacity: 1;
+    }
+  }
   &:focus {
     outline: none;
   }
@@ -77,6 +86,10 @@
   .type,
   .buttons {
     color: var(--color-text-lighter);
+  }
+  .more {
+    opacity: 0;
+    transition: opacity 50ms;
   }
 }
 

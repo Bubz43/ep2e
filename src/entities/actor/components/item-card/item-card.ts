@@ -139,6 +139,7 @@ export class ItemCard extends LazyRipple(LitElement) {
               `
             : ''}
           <mwc-icon-button
+                  class="more"
             icon="more_vert"
             @click=${this.openMenu}
           ></mwc-icon-button>
