@@ -288,6 +288,9 @@
     "ArmorEffect": {
       "additionalProperties": false,
       "properties": {
+        "concealable": {
+          "type": "boolean"
+        },
         "energy": {
           "type": "number"
         },
@@ -309,6 +312,7 @@
         }
       },
       "required": [
+        "concealable",
         "energy",
         "kinetic",
         "layerable",
@@ -420,6 +424,9 @@
     "BiologicalHealthData": {
       "additionalProperties": false,
       "properties": {
+        "aidedHealTickStartTime": {
+          "type": "number"
+        },
         "baseDurability": {
           "minimum": 1,
           "type": "number"
@@ -446,6 +453,9 @@
           },
           "type": "array"
         },
+        "ownHealTickStartTime": {
+          "type": "number"
+        },
         "woundRepair": {
           "$ref": "#/definitions/HealthTick"
         },
@@ -455,12 +465,14 @@
         }
       },
       "required": [
+        "aidedHealTickStartTime",
         "baseDurability",
         "bleedingOut",
         "damage",
         "damageRepair",
         "dots",
         "log",
+        "ownHealTickStartTime",
         "woundRepair",
         "wounds"
       ],
@@ -2354,6 +2366,9 @@
                       {
                         "additionalProperties": false,
                         "properties": {
+                          "concealable": {
+                            "type": "boolean"
+                          },
                           "energy": {
                             "type": "number"
                           },
@@ -2378,6 +2393,7 @@
                           }
                         },
                         "required": [
+                          "concealable",
                           "energy",
                           "id",
                           "kinetic",
@@ -3478,6 +3494,9 @@
                       {
                         "additionalProperties": false,
                         "properties": {
+                          "concealable": {
+                            "type": "boolean"
+                          },
                           "energy": {
                             "type": "number"
                           },
@@ -3502,6 +3521,7 @@
                           }
                         },
                         "required": [
+                          "concealable",
                           "energy",
                           "id",
                           "kinetic",
@@ -3961,6 +3981,9 @@
                       {
                         "additionalProperties": false,
                         "properties": {
+                          "concealable": {
+                            "type": "boolean"
+                          },
                           "energy": {
                             "type": "number"
                           },
@@ -3985,6 +4008,7 @@
                           }
                         },
                         "required": [
+                          "concealable",
                           "energy",
                           "id",
                           "kinetic",
@@ -4862,6 +4886,9 @@
                       {
                         "additionalProperties": false,
                         "properties": {
+                          "concealable": {
+                            "type": "boolean"
+                          },
                           "energy": {
                             "type": "number"
                           },
@@ -4886,6 +4913,7 @@
                           }
                         },
                         "required": [
+                          "concealable",
                           "energy",
                           "id",
                           "kinetic",
@@ -5294,6 +5322,9 @@
                       {
                         "additionalProperties": false,
                         "properties": {
+                          "concealable": {
+                            "type": "boolean"
+                          },
                           "energy": {
                             "type": "number"
                           },
@@ -5318,6 +5349,7 @@
                           }
                         },
                         "required": [
+                          "concealable",
                           "energy",
                           "id",
                           "kinetic",
@@ -5726,6 +5758,9 @@
                       {
                         "additionalProperties": false,
                         "properties": {
+                          "concealable": {
+                            "type": "boolean"
+                          },
                           "energy": {
                             "type": "number"
                           },
@@ -5750,6 +5785,7 @@
                           }
                         },
                         "required": [
+                          "concealable",
                           "energy",
                           "id",
                           "kinetic",
@@ -6257,6 +6293,9 @@
                       {
                         "additionalProperties": false,
                         "properties": {
+                          "concealable": {
+                            "type": "boolean"
+                          },
                           "energy": {
                             "type": "number"
                           },
@@ -6281,6 +6320,7 @@
                           }
                         },
                         "required": [
+                          "concealable",
                           "energy",
                           "id",
                           "kinetic",
@@ -6701,6 +6741,9 @@
                       {
                         "additionalProperties": false,
                         "properties": {
+                          "concealable": {
+                            "type": "boolean"
+                          },
                           "energy": {
                             "type": "number"
                           },
@@ -6725,6 +6768,7 @@
                           }
                         },
                         "required": [
+                          "concealable",
                           "energy",
                           "id",
                           "kinetic",
@@ -7387,6 +7431,9 @@
                           {
                             "additionalProperties": false,
                             "properties": {
+                              "concealable": {
+                                "type": "boolean"
+                              },
                               "energy": {
                                 "type": "number"
                               },
@@ -7411,6 +7458,7 @@
                               }
                             },
                             "required": [
+                              "concealable",
                               "energy",
                               "id",
                               "kinetic",
@@ -7883,6 +7931,9 @@
                           {
                             "additionalProperties": false,
                             "properties": {
+                              "concealable": {
+                                "type": "boolean"
+                              },
                               "energy": {
                                 "type": "number"
                               },
@@ -7907,6 +7958,7 @@
                               }
                             },
                             "required": [
+                              "concealable",
                               "energy",
                               "id",
                               "kinetic",
@@ -8559,6 +8611,9 @@
                             {
                               "additionalProperties": false,
                               "properties": {
+                                "concealable": {
+                                  "type": "boolean"
+                                },
                                 "energy": {
                                   "type": "number"
                                 },
@@ -8583,6 +8638,7 @@
                                 }
                               },
                               "required": [
+                                "concealable",
                                 "energy",
                                 "id",
                                 "kinetic",
@@ -9170,19 +9226,11 @@
         },
         "interval": {
           "type": "number"
-        },
-        "lastAidedTick": {
-          "type": "number"
-        },
-        "lastUnaidedTick": {
-          "type": "number"
         }
       },
       "required": [
         "amount",
-        "interval",
-        "lastUnaidedTick",
-        "lastAidedTick"
+        "interval"
       ],
       "type": "object"
     },
@@ -9376,6 +9424,9 @@
     "MeshHealthData": {
       "additionalProperties": false,
       "properties": {
+        "aidedHealTickStartTime": {
+          "type": "number"
+        },
         "baseDurability": {
           "minimum": 1,
           "type": "number"
@@ -9415,6 +9466,9 @@
           },
           "type": "array"
         },
+        "ownHealTickStartTime": {
+          "type": "number"
+        },
         "woundRepair": {
           "$ref": "#/definitions/HealthTick"
         },
@@ -9424,11 +9478,13 @@
         }
       },
       "required": [
+        "aidedHealTickStartTime",
         "baseDurability",
         "crash",
         "damage",
         "damageRepair",
         "log",
+        "ownHealTickStartTime",
         "woundRepair",
         "wounds"
       ],
@@ -10117,13 +10173,19 @@
       ],
       "type": "object"
     },
+    "StressType": {
+      "enum": [
+        "alienation",
+        "helplessness",
+        "theUnknown",
+        "violence"
+      ],
+      "type": "string"
+    },
     "StringID<DamageOverTime>": {
       "additionalProperties": false,
       "properties": {
         "armorPiercing": {
-          "type": "boolean"
-        },
-        "armorRemoving": {
           "type": "boolean"
         },
         "armorUsed": {
@@ -10141,6 +10203,9 @@
         "id": {
           "type": "string"
         },
+        "reduceAVbyDV": {
+          "type": "boolean"
+        },
         "source": {
           "type": "string"
         },
@@ -10150,11 +10215,11 @@
       },
       "required": [
         "armorPiercing",
-        "armorRemoving",
         "armorUsed",
         "duration",
         "formula",
         "id",
+        "reduceAVbyDV",
         "source",
         "startTime"
       ],
@@ -10327,6 +10392,9 @@
         {
           "additionalProperties": false,
           "properties": {
+            "concealable": {
+              "type": "boolean"
+            },
             "energy": {
               "type": "number"
             },
@@ -10351,6 +10419,7 @@
             }
           },
           "required": [
+            "concealable",
             "energy",
             "id",
             "kinetic",
@@ -10607,6 +10676,16 @@
         "source": {
           "type": "string"
         },
+        "stressType": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/StressType"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
         "worldTimeMS": {
           "type": "number"
         },
@@ -10620,6 +10699,7 @@
         "mode",
         "realTimeMS",
         "source",
+        "stressType",
         "worldTimeMS",
         "wounds"
       ],
@@ -10775,6 +10855,9 @@
     "SyntheticHealthData": {
       "additionalProperties": false,
       "properties": {
+        "aidedHealTickStartTime": {
+          "type": "number"
+        },
         "baseDurability": {
           "minimum": 1,
           "type": "number"
@@ -10798,6 +10881,9 @@
           },
           "type": "array"
         },
+        "ownHealTickStartTime": {
+          "type": "number"
+        },
         "woundRepair": {
           "$ref": "#/definitions/HealthTick"
         },
@@ -10807,11 +10893,13 @@
         }
       },
       "required": [
+        "aidedHealTickStartTime",
         "baseDurability",
         "damage",
         "damageRepair",
         "dots",
         "log",
+        "ownHealTickStartTime",
         "woundRepair",
         "wounds"
       ],

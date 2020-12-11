@@ -14,9 +14,9 @@ import {
   initializeHealthData,
 } from './health';
 import { HealthMixin } from './health-mixin';
-import type { DotOrHotTarget } from './recovery';
+import type { HealsOverTime } from './recovery';
 
-export type AppMeshHealthData = Omit<MeshHealthData, DotOrHotTarget>;
+export type AppMeshHealthData = Omit<MeshHealthData, keyof HealsOverTime>;
 
 type Init = HealthInit<AppMeshHealthData>;
 
