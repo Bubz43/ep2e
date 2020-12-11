@@ -424,6 +424,22 @@
     "BiologicalHealthData": {
       "additionalProperties": false,
       "properties": {
+        "__computed": {
+          "additionalProperties": false,
+          "properties": {
+            "amount": {
+              "type": "number"
+            },
+            "interval": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "amount",
+            "interval"
+          ],
+          "type": "object"
+        },
         "aidedHealTickStartTime": {
           "type": "number"
         },
@@ -437,9 +453,6 @@
         "damage": {
           "minimum": 0,
           "type": "number"
-        },
-        "damageRepair": {
-          "$ref": "#/definitions/HealthTick"
         },
         "dots": {
           "items": {
@@ -456,24 +469,20 @@
         "ownHealTickStartTime": {
           "type": "number"
         },
-        "woundRepair": {
-          "$ref": "#/definitions/HealthTick"
-        },
         "wounds": {
           "minimum": 0,
           "type": "number"
         }
       },
       "required": [
+        "__computed",
         "aidedHealTickStartTime",
         "baseDurability",
         "bleedingOut",
         "damage",
-        "damageRepair",
         "dots",
         "log",
         "ownHealTickStartTime",
-        "woundRepair",
         "wounds"
       ],
       "type": "object"
@@ -2477,7 +2486,7 @@
                       {
                         "additionalProperties": false,
                         "properties": {
-                          "amount": {
+                          "damageAmount": {
                             "type": "string"
                           },
                           "id": {
@@ -2495,15 +2504,19 @@
                           "type": {
                             "const": "healthRecovery",
                             "type": "string"
+                          },
+                          "woundAmount": {
+                            "type": "number"
                           }
                         },
                         "required": [
-                          "amount",
+                          "damageAmount",
                           "id",
                           "interval",
                           "stat",
                           "technologicallyAided",
-                          "type"
+                          "type",
+                          "woundAmount"
                         ],
                         "type": "object"
                       },
@@ -3605,7 +3618,7 @@
                       {
                         "additionalProperties": false,
                         "properties": {
-                          "amount": {
+                          "damageAmount": {
                             "type": "string"
                           },
                           "id": {
@@ -3623,15 +3636,19 @@
                           "type": {
                             "const": "healthRecovery",
                             "type": "string"
+                          },
+                          "woundAmount": {
+                            "type": "number"
                           }
                         },
                         "required": [
-                          "amount",
+                          "damageAmount",
                           "id",
                           "interval",
                           "stat",
                           "technologicallyAided",
-                          "type"
+                          "type",
+                          "woundAmount"
                         ],
                         "type": "object"
                       },
@@ -4092,7 +4109,7 @@
                       {
                         "additionalProperties": false,
                         "properties": {
-                          "amount": {
+                          "damageAmount": {
                             "type": "string"
                           },
                           "id": {
@@ -4110,15 +4127,19 @@
                           "type": {
                             "const": "healthRecovery",
                             "type": "string"
+                          },
+                          "woundAmount": {
+                            "type": "number"
                           }
                         },
                         "required": [
-                          "amount",
+                          "damageAmount",
                           "id",
                           "interval",
                           "stat",
                           "technologicallyAided",
-                          "type"
+                          "type",
+                          "woundAmount"
                         ],
                         "type": "object"
                       },
@@ -4997,7 +5018,7 @@
                       {
                         "additionalProperties": false,
                         "properties": {
-                          "amount": {
+                          "damageAmount": {
                             "type": "string"
                           },
                           "id": {
@@ -5015,15 +5036,19 @@
                           "type": {
                             "const": "healthRecovery",
                             "type": "string"
+                          },
+                          "woundAmount": {
+                            "type": "number"
                           }
                         },
                         "required": [
-                          "amount",
+                          "damageAmount",
                           "id",
                           "interval",
                           "stat",
                           "technologicallyAided",
-                          "type"
+                          "type",
+                          "woundAmount"
                         ],
                         "type": "object"
                       },
@@ -5433,7 +5458,7 @@
                       {
                         "additionalProperties": false,
                         "properties": {
-                          "amount": {
+                          "damageAmount": {
                             "type": "string"
                           },
                           "id": {
@@ -5451,15 +5476,19 @@
                           "type": {
                             "const": "healthRecovery",
                             "type": "string"
+                          },
+                          "woundAmount": {
+                            "type": "number"
                           }
                         },
                         "required": [
-                          "amount",
+                          "damageAmount",
                           "id",
                           "interval",
                           "stat",
                           "technologicallyAided",
-                          "type"
+                          "type",
+                          "woundAmount"
                         ],
                         "type": "object"
                       },
@@ -5869,7 +5898,7 @@
                       {
                         "additionalProperties": false,
                         "properties": {
-                          "amount": {
+                          "damageAmount": {
                             "type": "string"
                           },
                           "id": {
@@ -5887,15 +5916,19 @@
                           "type": {
                             "const": "healthRecovery",
                             "type": "string"
+                          },
+                          "woundAmount": {
+                            "type": "number"
                           }
                         },
                         "required": [
-                          "amount",
+                          "damageAmount",
                           "id",
                           "interval",
                           "stat",
                           "technologicallyAided",
-                          "type"
+                          "type",
+                          "woundAmount"
                         ],
                         "type": "object"
                       },
@@ -6404,7 +6437,7 @@
                       {
                         "additionalProperties": false,
                         "properties": {
-                          "amount": {
+                          "damageAmount": {
                             "type": "string"
                           },
                           "id": {
@@ -6422,15 +6455,19 @@
                           "type": {
                             "const": "healthRecovery",
                             "type": "string"
+                          },
+                          "woundAmount": {
+                            "type": "number"
                           }
                         },
                         "required": [
-                          "amount",
+                          "damageAmount",
                           "id",
                           "interval",
                           "stat",
                           "technologicallyAided",
-                          "type"
+                          "type",
+                          "woundAmount"
                         ],
                         "type": "object"
                       },
@@ -6852,7 +6889,7 @@
                       {
                         "additionalProperties": false,
                         "properties": {
-                          "amount": {
+                          "damageAmount": {
                             "type": "string"
                           },
                           "id": {
@@ -6870,15 +6907,19 @@
                           "type": {
                             "const": "healthRecovery",
                             "type": "string"
+                          },
+                          "woundAmount": {
+                            "type": "number"
                           }
                         },
                         "required": [
-                          "amount",
+                          "damageAmount",
                           "id",
                           "interval",
                           "stat",
                           "technologicallyAided",
-                          "type"
+                          "type",
+                          "woundAmount"
                         ],
                         "type": "object"
                       },
@@ -7542,7 +7583,7 @@
                           {
                             "additionalProperties": false,
                             "properties": {
-                              "amount": {
+                              "damageAmount": {
                                 "type": "string"
                               },
                               "id": {
@@ -7560,15 +7601,19 @@
                               "type": {
                                 "const": "healthRecovery",
                                 "type": "string"
+                              },
+                              "woundAmount": {
+                                "type": "number"
                               }
                             },
                             "required": [
-                              "amount",
+                              "damageAmount",
                               "id",
                               "interval",
                               "stat",
                               "technologicallyAided",
-                              "type"
+                              "type",
+                              "woundAmount"
                             ],
                             "type": "object"
                           },
@@ -8042,7 +8087,7 @@
                           {
                             "additionalProperties": false,
                             "properties": {
-                              "amount": {
+                              "damageAmount": {
                                 "type": "string"
                               },
                               "id": {
@@ -8060,15 +8105,19 @@
                               "type": {
                                 "const": "healthRecovery",
                                 "type": "string"
+                              },
+                              "woundAmount": {
+                                "type": "number"
                               }
                             },
                             "required": [
-                              "amount",
+                              "damageAmount",
                               "id",
                               "interval",
                               "stat",
                               "technologicallyAided",
-                              "type"
+                              "type",
+                              "woundAmount"
                             ],
                             "type": "object"
                           },
@@ -8722,7 +8771,7 @@
                             {
                               "additionalProperties": false,
                               "properties": {
-                                "amount": {
+                                "damageAmount": {
                                   "type": "string"
                                 },
                                 "id": {
@@ -8740,15 +8789,19 @@
                                 "type": {
                                   "const": "healthRecovery",
                                   "type": "string"
+                                },
+                                "woundAmount": {
+                                  "type": "number"
                                 }
                               },
                               "required": [
-                                "amount",
+                                "damageAmount",
                                 "id",
                                 "interval",
                                 "stat",
                                 "technologicallyAided",
-                                "type"
+                                "type",
+                                "woundAmount"
                               ],
                               "type": "object"
                             },
@@ -9181,7 +9234,7 @@
     "HealthRecoveryEffect": {
       "additionalProperties": false,
       "properties": {
-        "amount": {
+        "damageAmount": {
           "type": "string"
         },
         "interval": {
@@ -9196,11 +9249,15 @@
         "type": {
           "const": "healthRecovery",
           "type": "string"
+        },
+        "woundAmount": {
+          "type": "number"
         }
       },
       "required": [
         "interval",
-        "amount",
+        "damageAmount",
+        "woundAmount",
         "stat",
         "technologicallyAided",
         "type"
@@ -9217,22 +9274,6 @@
         "deathRating"
       ],
       "type": "string"
-    },
-    "HealthTick": {
-      "additionalProperties": false,
-      "properties": {
-        "amount": {
-          "type": "string"
-        },
-        "interval": {
-          "type": "number"
-        }
-      },
-      "required": [
-        "amount",
-        "interval"
-      ],
-      "type": "object"
     },
     "HealthType": {
       "enum": [
@@ -9424,6 +9465,22 @@
     "MeshHealthData": {
       "additionalProperties": false,
       "properties": {
+        "__computed": {
+          "additionalProperties": false,
+          "properties": {
+            "amount": {
+              "type": "number"
+            },
+            "interval": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "amount",
+            "interval"
+          ],
+          "type": "object"
+        },
         "aidedHealTickStartTime": {
           "type": "number"
         },
@@ -9457,9 +9514,6 @@
           "minimum": 0,
           "type": "number"
         },
-        "damageRepair": {
-          "$ref": "#/definitions/HealthTick"
-        },
         "log": {
           "items": {
             "$ref": "#/definitions/StringID%3CHealthModification%3E"
@@ -9469,23 +9523,19 @@
         "ownHealTickStartTime": {
           "type": "number"
         },
-        "woundRepair": {
-          "$ref": "#/definitions/HealthTick"
-        },
         "wounds": {
           "minimum": 0,
           "type": "number"
         }
       },
       "required": [
+        "__computed",
         "aidedHealTickStartTime",
         "baseDurability",
         "crash",
         "damage",
-        "damageRepair",
         "log",
         "ownHealTickStartTime",
-        "woundRepair",
         "wounds"
       ],
       "type": "object"
@@ -10503,7 +10553,7 @@
         {
           "additionalProperties": false,
           "properties": {
-            "amount": {
+            "damageAmount": {
               "type": "string"
             },
             "id": {
@@ -10521,15 +10571,19 @@
             "type": {
               "const": "healthRecovery",
               "type": "string"
+            },
+            "woundAmount": {
+              "type": "number"
             }
           },
           "required": [
-            "amount",
+            "damageAmount",
             "id",
             "interval",
             "stat",
             "technologicallyAided",
-            "type"
+            "type",
+            "woundAmount"
           ],
           "type": "object"
         },
@@ -10855,6 +10909,22 @@
     "SyntheticHealthData": {
       "additionalProperties": false,
       "properties": {
+        "__computed": {
+          "additionalProperties": false,
+          "properties": {
+            "amount": {
+              "type": "number"
+            },
+            "interval": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "amount",
+            "interval"
+          ],
+          "type": "object"
+        },
         "aidedHealTickStartTime": {
           "type": "number"
         },
@@ -10865,9 +10935,6 @@
         "damage": {
           "minimum": 0,
           "type": "number"
-        },
-        "damageRepair": {
-          "$ref": "#/definitions/HealthTick"
         },
         "dots": {
           "items": {
@@ -10884,23 +10951,19 @@
         "ownHealTickStartTime": {
           "type": "number"
         },
-        "woundRepair": {
-          "$ref": "#/definitions/HealthTick"
-        },
         "wounds": {
           "minimum": 0,
           "type": "number"
         }
       },
       "required": [
+        "__computed",
         "aidedHealTickStartTime",
         "baseDurability",
         "damage",
-        "damageRepair",
         "dots",
         "log",
         "ownHealTickStartTime",
-        "woundRepair",
         "wounds"
       ],
       "type": "object"

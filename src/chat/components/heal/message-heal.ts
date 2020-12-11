@@ -1,9 +1,13 @@
 import type { MessageHealData } from '@src/chat/message-data';
 import type { UsedRollPartsEvent } from '@src/combat/components/rolled-formulas-list/used-roll-parts-event';
 import { pickOrDefaultActor } from '@src/entities/find-entities';
+import { localize } from '@src/foundry/localization';
 import { cleanFormula } from '@src/foundry/rolls';
 import { HealthEditor } from '@src/health/components/health-editor/health-editor';
+import { HealthType } from '@src/health/health';
 import { createHeal } from '@src/health/health-changes';
+import { notEmpty } from '@src/utility/helpers';
+import { localImage } from '@src/utility/images';
 import {
   customElement,
   LitElement,
@@ -11,6 +15,7 @@ import {
   html,
   internalProperty,
 } from 'lit-element';
+import { compact } from 'remeda';
 import styles from './message-heal.scss';
 
 @customElement('message-heal')
@@ -74,14 +79,48 @@ export class MessageHeal extends LitElement {
     );
   }
 
+  private get labels(): [string, string] {
+    switch (this.heal.healthType) {
+      case HealthType.Mental:
+        return [localize('stress'), localize('traumas')];
+      case HealthType.Physical:
+        return [localize('damage'), localize('wounds')];
+      case HealthType.Mesh:
+        return [
+          `${localize('mesh')} ${localize('damage')}`,
+          `${localize('mesh')} ${localize('wounds')}`,
+        ];
+    }
+  }
+
   render() {
-    const { damageHealTotals } = this;
+    const { damageHealTotals, heal, labels } = this;
+    const [damageLabel, woundLabel] = labels;
     return html`
-      <div class="heal-info"></div>
-      ${this.viewFormulas && this.heal.damageFormulas
+      <mwc-button dense unelevated class="heal-values" @click=${this.applyHeal}>
+        ${damageHealTotals.damageValue || 0} ${damageLabel}, ${heal.wounds || 0}
+        ${woundLabel}
+      </mwc-button>
+      ${notEmpty(this.heal.damageFormulas)
+        ? html` <mwc-button
+            dense
+            class="formulas-toggle"
+            @click=${this.toggleFormulas}
+          >
+            <img src=${localImage('icons/cubes.svg')} height="20px" />
+          </mwc-button>`
+        : ''}
+      ${damageHealTotals.formula
+        ? html`
+            <div class="heal-info">
+              ${damageHealTotals.formula} ${damageLabel}
+            </div>
+          `
+        : ''}
+      ${this.viewFormulas && heal.damageFormulas
         ? html`
             <rolled-formulas-list
-              .rolledFormulas=${this.heal.damageFormulas}
+              .rolledFormulas=${heal.damageFormulas}
               @used-roll-parts=${this.setUsedRollParts}
             ></rolled-formulas-list>
           `

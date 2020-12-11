@@ -135,13 +135,17 @@ const health: FieldPropsRenderer<HealthEffect> = ({
 ];
 
 const healthRecovery: FieldPropsRenderer<HealthRecoveryEffect> = ({
-  amount,
+  damageAmount,
+  woundAmount,
   interval,
   stat,
   technologicallyAided,
 }) => [
-  renderFormulaField(amount),
   renderRadioFields(stat, enumValues(DotOrHotTarget)),
+  stat.value === DotOrHotTarget.Damage
+    ? renderFormulaField(damageAmount)
+    : renderNumberField(woundAmount, { min: 1 }),
+
   renderTimeField(interval),
   renderLabeledCheckbox(technologicallyAided),
   html`

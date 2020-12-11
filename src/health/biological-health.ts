@@ -1,4 +1,3 @@
-import type { ArmorType } from '@src/features/active-armor';
 import type {
   HealthRecoveryEffect,
   SourcedEffect,
@@ -23,7 +22,7 @@ import {
 } from './health';
 import type { DamageOverTime } from './health-changes';
 import { HealthMixin } from './health-mixin';
-import { HealsOverTime, HealthRecoveries, setupRecoveries } from './recovery';
+import { HealsOverTime, setupRecoveries } from './recovery';
 
 export type BiologicalHealthData = BasicHealthData &
   HealsOverTime & {

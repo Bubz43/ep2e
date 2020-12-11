@@ -54,8 +54,9 @@ export type HealthTick = {
 export type HealsOverTime = {
   ownHealTickStartTime: number;
   aidedHealTickStartTime: number;
-} & { [key in DotOrHotTarget]: HealthTick };
-
+  [DotOrHotTarget.Damage]: HealthTick;
+  [DotOrHotTarget.Wound]: { amount: number, interval: number };
+}
 export type BasicTickInfo = Pick<HealthTick, 'amount' | 'interval'>;
 
 export enum HealingSlot {
@@ -113,18 +114,18 @@ export const tickRate = ({ amount, interval }: BasicTickInfo) =>
 export const healingSlotToProp = (slot: HealingSlot) =>
   slot === HealingSlot.Aided ? 'lastAidedTick' : 'lastUnaidedTick';
 
-type Recovery = HealthTick & {
+export type Recovery = HealthTick & {
   slot: HealingSlot;
   source: string;
-  readonly timeToTick: number
+  readonly timeToTick: number;
 };
 
 export const setupRecoveries = ({
   hot,
   biological,
   effects = [],
-  // conditions,
-}: {
+}: // conditions,
+{
   hot: HealsOverTime;
   biological: boolean;
   effects: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
@@ -140,22 +141,30 @@ export const setupRecoveries = ({
 
   for (const stat of enumValues(DotOrHotTarget)) {
     const group = groups[stat];
-    const data = hot[stat];
-    if (data.amount && data.interval > 0) {
+    const { amount, ...data } = hot[stat];
+    if (amount && data.interval > 0) {
       group.set(slot, {
         ...data,
+        amount: String(amount),
         slot,
         source: localize('own'),
         get timeToTick() {
-          return nonNegative(data.interval - getElapsedTime(hot[`${slot}HealTickStartTime` as const]))
-        }
+          return nonNegative(
+            data.interval -
+              getElapsedTime(hot[`${slot}HealTickStartTime` as const]),
+          );
+        },
       });
     }
-   
   }
 
   for (const effect of effects) {
-    const { amount, stat, technologicallyAided, interval } = effect;
+    const { stat, technologicallyAided, interval } = effect;
+    const amount =
+      stat === DotOrHotTarget.Damage
+        ? effect.damageAmount
+        : String(effect.woundAmount);
+
     if (!amount || interval <= 0) continue;
 
     const group = groups[stat];
@@ -164,9 +173,9 @@ export const setupRecoveries = ({
         ? HealingSlot.Aided
         : HealingSlot.OwnHealing;
     const current = group.get(slot);
-    if (current && tickRate(current) > tickRate(effect)) {
-      const unused = groups.unused.get(stat)
-      if (unused) unused.push(current)
+    if (current && tickRate(current) > tickRate({ amount, interval })) {
+      const unused = groups.unused.get(stat);
+      if (unused) unused.push(current);
       else groups.unused.set(stat, [current]);
     }
     group.set(slot, {
@@ -175,65 +184,15 @@ export const setupRecoveries = ({
       slot,
       source: effect[Source],
       get timeToTick() {
-        return nonNegative(interval - getElapsedTime(hot[`${slot}HealTickStartTime` as const]))
-      }
-    });
-  }
-
-
-  return groups
-};
-
-export const setupHealthRecoveries = (
-  hot: HealsOverTime,
-  biological: boolean,
-  effects: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>> = [],
-) => {
-  // TODO: Also need healing timeframe duration effect
-  const groups = {
-    [DotOrHotTarget.Damage]: new Map<HealingSlot, HealthRecovery>(),
-    [DotOrHotTarget.Wound]: new Map<HealingSlot, HealthRecovery>(),
-  } as const;
-
-  const innate = biological ? HealingSlot.OwnHealing : HealingSlot.Aided;
-  const getTimeSince = (slot: HealingSlot) =>
-    hot[`${slot}HealTickStartTime` as const];
-
-  for (const stat of enumValues(DotOrHotTarget)) {
-    const group = groups[stat];
-    group.set(innate, {
-      ...hot[stat],
-      slot: innate,
-      source: localize('innate'),
-      timeSinceTick: getTimeSince(innate),
-    });
-  }
-
-  for (const effect of effects) {
-    const { amount, stat, technologicallyAided, interval } = effect;
-    const group = groups[stat];
-    const slot =
-      technologicallyAided || !biological
-        ? HealingSlot.Aided
-        : HealingSlot.OwnHealing;
-    const current = group.get(slot);
-    if (!amount || (current && tickRate(current) > tickRate(effect))) continue;
-    group.set(slot, {
-      amount,
-      interval,
-      slot,
-      source: effect[Source],
-      timeSinceTick: current?.timeSinceTick || getTimeSince(slot),
-    });
-  }
-
-  for (const stat of enumValues(DotOrHotTarget)) {
-    groups[stat].forEach(({ amount, interval }, slot, map) => {
-      if (!amount || interval <= 0) map.delete(slot);
+        return nonNegative(
+          interval - getElapsedTime(hot[`${slot}HealTickStartTime` as const]),
+        );
+      },
     });
   }
 
   return groups;
 };
+
 
 export type HealthRecoveries = ReturnType<typeof setupRecoveries>;

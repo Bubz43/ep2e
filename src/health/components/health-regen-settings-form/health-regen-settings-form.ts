@@ -1,5 +1,6 @@
 import {
   renderFormulaField,
+  renderNumberField,
   renderTimeField,
 } from '@src/components/field/fields';
 import { renderUpdaterForm } from '@src/components/form/forms';
@@ -25,17 +26,24 @@ export class HealthRegenSettingsForm extends LitElement {
 
   render() {
     return html`
-      ${enumValues(DotOrHotTarget).map((target) =>
-        renderUpdaterForm(this.regenUpdater.prop(target), {
-          fields: ({ amount, interval }) => html`
-            <p>${localize(target)}</p>
-            ${[
-              renderTimeField(interval),
-              interval.value ? renderFormulaField(amount) : '',
-            ]}
-          `,
-        }),
-      )}
+      ${renderUpdaterForm(this.regenUpdater.prop(DotOrHotTarget.Damage), {
+        fields: ({ amount, interval }) => html`
+          <p>${localize(DotOrHotTarget.Damage)}</p>
+          ${[
+            renderTimeField(interval),
+            interval.value ? renderFormulaField(amount) : '',
+          ]}
+        `,
+      })}
+      ${renderUpdaterForm(this.regenUpdater.prop(DotOrHotTarget.Wound), {
+        fields: ({ amount, interval }) => html`
+          <p>${localize(DotOrHotTarget.Wound)}</p>
+          ${[
+            renderTimeField(interval),
+            interval.value ? renderNumberField(amount, { min: 1 }) : '',
+          ]}
+        `,
+      })}
     `;
   }
 }

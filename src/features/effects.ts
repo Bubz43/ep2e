@@ -96,7 +96,8 @@ export type RangedEffect = {
 
 export type HealthRecoveryEffect = {
   interval: number;
-  amount: string;
+  damageAmount: string;
+  woundAmount: number;
   stat: DotOrHotTarget;
   technologicallyAided: boolean;
   type: EffectType.HealthRecovery;
@@ -267,7 +268,8 @@ const armor = createFeature<ArmorEffect>(() => ({
 
 const healthRecovery = createFeature<HealthRecoveryEffect>(() => ({
   type: EffectType.HealthRecovery,
-  amount: '1d10',
+  damageAmount: '1d10',
+  woundAmount: 1,
   interval: CommonInterval.Hour,
   stat: DotOrHotTarget.Damage,
   technologicallyAided: true,

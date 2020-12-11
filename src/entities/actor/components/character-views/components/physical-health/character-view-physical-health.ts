@@ -1,10 +1,12 @@
+import { createMessage } from '@src/chat/create-message';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import type { BiologicalHealth } from '@src/health/biological-health';
-import { DotOrHotTarget, HealingSlot } from '@src/health/recovery';
+import { HealthType } from '@src/health/health';
+import { DotOrHotTarget, HealingSlot, Recovery } from '@src/health/recovery';
 import type { SyntheticHealth } from '@src/health/synthetic-health';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
@@ -24,6 +26,19 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
 
   private openHealthEditor() {
     this.character.openHealthEditor(this.health);
+  }
+
+  private rollHeal(target: DotOrHotTarget, heal: Recovery) {
+    // createMessage({
+    //   data: {
+    //     header: { heading: localize("healthRecovery") },
+    //     heal: {
+    //       source: heal.source,
+    //       healthType: HealthType.Physical,
+
+    //     }
+    //   }
+    // })
   }
 
   render() {
@@ -52,7 +67,7 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
                       const heal = heals.get(slot);
                       return heal
                         ? html`
-                            <wl-list-item>
+                            <wl-list-item clickable @click=${() => this.rollHeal(target, heal)}>
                               <span slot="before">${heal.source}</span>
                               <span
                                 >${heal.amount}
