@@ -1,4 +1,4 @@
-import { createMessage } from '@src/chat/create-message';
+import { createMessage, MessageVisibility } from '@src/chat/create-message';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
@@ -48,6 +48,7 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
             : { wounds: rollFormula(heal.amount)?.total || 0 }),
         },
       },
+      visibility: MessageVisibility.WhisperGM
     });
     await this.health.logHeal(heal.slot);
   }

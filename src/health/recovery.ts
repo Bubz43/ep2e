@@ -95,7 +95,7 @@ export const recoveryConditionsLabel = (condition: RecoveryConditions) => {
 };
 
 export const formatAutoHealing = (
-  { amount, interval }: BasicTickInfo,
+  { amount, interval }: { amount: string | number, interval: number },
   conditions = RecoveryConditions.Normal,
 ) => {
   return [
@@ -147,7 +147,7 @@ export const setupRecoveries = ({
         ...data,
         amount: String(amount),
         slot,
-        source: localize('own'),
+        source: `${localize('own')} ${localize("healing")}`,
         get timeToTick() {
           return nonNegative(
             data.interval -

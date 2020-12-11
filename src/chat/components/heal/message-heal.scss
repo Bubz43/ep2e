@@ -7,5 +7,22 @@
 
 :host {
   display: block;
-  
+  padding: 0.25rem 0.5rem;
+}
+
+.formulas-toggle {
+  float: right;
+  color: var(--color-text-lighter);
+}
+
+
+mwc-button[unelevated] {
+  --mdc-theme-primary: #{lightv(var(--color-secondary), 0.7)};
+  filter: hue-rotate(-40deg);
+  margin-bottom: 0.25rem;
+}
+
+.heal-info {
+  color: var(--color-text-lighter);
+  padding-left: 0.5ch;
 }

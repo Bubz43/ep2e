@@ -341,10 +341,17 @@ export class HealthEditor extends LitElement {
   private renderHealForm(health: ActorHealth, change?: Heal | null) {
     // TODO check this works properly with change
     const { main, wound } = health;
+    const props = {
+      source: change?.source || "",
+      damage: Math.min((change?.damage || 0, main.damage.value)),
+      wounds: Math.min((change?.wounds || 0), wound?.wounds.value || 0)
+    }
     return renderSubmitForm({
-      props: change || { damage: 0, wounds: 0, source: '' },
+      props,
       classes: 'heal-editor',
-      update: ({ damage = 0, wounds = 0, source }) => {
+      submitEmpty: true,
+      update: (changed, orig) => {
+        const { damage, wounds, source } = { ...orig, ...changed };
         this.dispatchEvent(
           new HealthModificationEvent(
             createHealthModification({

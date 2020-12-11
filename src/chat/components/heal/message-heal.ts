@@ -113,7 +113,7 @@ export class MessageHeal extends LitElement {
       ${damageHealTotals.formula
         ? html`
             <div class="heal-info">
-              ${damageHealTotals.formula} ${damageLabel}
+             ${localize("recover")}  ${damageHealTotals.formula} ${damageLabel}
             </div>
           `
         : ''}

@@ -1319,6 +1319,8 @@
     "glitchOnMeshWounds": "Glitch on Mesh Wounds",
     "unconsciousness": "Unconsciousness",
     "versus": "versus",
+    "tick": "Tick",
+    "recover": "Recover",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

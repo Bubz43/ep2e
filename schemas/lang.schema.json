@@ -3199,6 +3199,9 @@
             "recon": {
               "type": "string"
             },
+            "recover": {
+              "type": "string"
+            },
             "recovery": {
               "type": "string"
             },
@@ -3974,6 +3977,9 @@
               "type": "string"
             },
             "thrustVector": {
+              "type": "string"
+            },
+            "tick": {
               "type": "string"
             },
             "time": {
@@ -5317,6 +5323,7 @@
             "recharges",
             "reclaimer",
             "recon",
+            "recover",
             "recovery",
             "recreational",
             "recurring",
@@ -5576,6 +5583,7 @@
             "thrownAttack",
             "thrownWeapon",
             "thrustVector",
+            "tick",
             "time",
             "timeAdvance",
             "timeSinceStressAccrued",

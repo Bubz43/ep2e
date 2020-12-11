@@ -349,13 +349,19 @@ const format = (effect: Effect): (string | number)[] => {
         effect.health === HealthType.Mental ? '' : localize(effect.health),
         healthLabels(effect.health, effect.stat),
       ];
-    case EffectType.HealthRecovery:
+    case EffectType.HealthRecovery: {
+      const amount =
+        effect.stat === DotOrHotTarget.Damage
+          ? effect.damageAmount
+          : effect.woundAmount;
       return [
         localize('heal'),
         `${localize(effect.stat)}:`,
-        formatAutoHealing(effect),
+        formatAutoHealing({ amount, interval: effect.interval }),
         effect.technologicallyAided ? `[${localize('tech')}]` : '',
       ];
+    }
+
     case EffectType.Armor:
       return [
         enumValues(ArmorType)
