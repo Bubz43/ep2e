@@ -1,7 +1,9 @@
 import { LazyRipple } from '@src/components/mixins/lazy-ripple';
+import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import type { Health } from '@src/health/health-mixin';
+import { localImage } from '@src/utility/images';
 import { customElement, html, LitElement, property, query } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { ifDefined } from 'lit-html/directives/if-defined';
@@ -15,6 +17,7 @@ import styles from './health-item.scss';
 @customElement('health-item')
 export class HealthItem<T extends Health = Health> extends mix(LitElement).with(
   LazyRipple,
+  UseWorldTime
 ) {
   static get is() {
     return 'health-item' as const;
@@ -80,6 +83,9 @@ export class HealthItem<T extends Health = Health> extends mix(LitElement).with(
         </div>
 
         <section class="damage-info">
+          ${health.regenState ? html`
+          <img class="regen-available ${classMap({ ready: health.readyRegen })}" height="22px" src=${localImage("icons/health/auto-repair.svg")} />
+          ` : ""}
           ${mini
             ? ''
             : html`<div

@@ -61,6 +61,7 @@
 .health-type {
   grid-area: type;
   margin-left: 0.25rem;
+  @include truncate(100%);
 }
 
 .damage-info {
@@ -68,6 +69,15 @@
   justify-self: end;
   display: flex;
   margin-right: 0.25rem;
+  .regen-available {
+    align-self: center;
+    margin-right: 0.5ch;
+    filter: grayscale(1);
+    &.ready {
+      @include animate-css(pulse, 1s, Infinite);
+      filter: drop-shadow(0 0 3px var(--color-secondary));
+    }
+  }
 }
 
 .damage {

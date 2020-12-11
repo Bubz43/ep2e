@@ -14,4 +14,8 @@
 
 figure {
   margin: 0.5rem 1rem;
+  figcaption {
+    font-size: large;
+    color: var(--color-text-lighter);
+  }
 }

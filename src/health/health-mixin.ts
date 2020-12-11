@@ -24,6 +24,7 @@ export type Health = CommonHealth &
       dead: boolean;
     };
     regenState: DotOrHotTarget | null;
+    readyRegen: boolean;
   }>;
 
 export type ActorHealth =
@@ -32,7 +33,6 @@ export type ActorHealth =
   | SyntheticHealth
   | MeshHealth
   | AppMeshHealth;
-  
 
 export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
   class HealthInfo extends cls implements Health, ObtainableEffects {
@@ -84,9 +84,21 @@ export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
         !damage &&
         wound?.wounds.value &&
         notEmpty(recoveries?.[DotOrHotTarget.Wound])
-      )
-      return damage ? DotOrHotTarget.Damage : wounds ? DotOrHotTarget.Wound : null;
+      );
+      return damage
+        ? DotOrHotTarget.Damage
+        : wounds
+        ? DotOrHotTarget.Wound
+        : null;
+    }
 
+    get readyRegen() {
+      const { regenState, recoveries } = this;
+      return regenState
+        ? [...(recoveries?.[regenState].values() || [])].some(
+            (recovery) => !recovery.timeToTick,
+          )
+        : false;
     }
 
     get log() {

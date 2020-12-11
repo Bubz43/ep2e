@@ -15,6 +15,7 @@ import {
   html,
   internalProperty,
 } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
 import { compact } from 'remeda';
 import styles from './message-heal.scss';
 
@@ -96,12 +97,13 @@ export class MessageHeal extends LitElement {
   render() {
     const { damageHealTotals, heal, labels } = this;
     const [damageLabel, woundLabel] = labels;
+    const hasFormulas = notEmpty(this.heal.damageFormulas)
     return html`
-      <mwc-button dense unelevated class="heal-values" @click=${this.applyHeal}>
+      <mwc-button dense unelevated class="heal-values ${classMap({ "full-width": !hasFormulas})}" @click=${this.applyHeal}>
         ${damageHealTotals.damageValue || 0} ${damageLabel}, ${heal.wounds || 0}
         ${woundLabel}
       </mwc-button>
-      ${notEmpty(this.heal.damageFormulas)
+      ${hasFormulas
         ? html` <mwc-button
             dense
             class="formulas-toggle"
