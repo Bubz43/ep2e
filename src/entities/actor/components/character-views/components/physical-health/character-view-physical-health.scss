@@ -19,3 +19,7 @@ figure {
     color: var(--color-text-lighter);
   }
 }
+
+.conditions-button {
+  --mdc-theme-primary: var(--color-grey)
+}

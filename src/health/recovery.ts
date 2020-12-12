@@ -15,6 +15,7 @@ import { localize } from '@src/foundry/localization';
 import { capitalize } from '@src/foundry/misc-helpers';
 import { averageRoll } from '@src/foundry/rolls';
 import { nonNegative } from '@src/utility/helpers';
+import { compact } from 'remeda';
 
 export enum NaturalMentalHeal {
   Stress = 'stress',
@@ -98,14 +99,20 @@ export const formatAutoHealing = (
   { amount, interval }: { amount: string | number; interval: number },
   conditions = RecoveryConditions.Normal,
 ) => {
-  return [
+  return compact([
     amount || '-',
     localize('per').toLocaleLowerCase(),
-    prettyMilliseconds(interval * recoveryMultiplier(conditions), {
+    prettyMilliseconds(interval, {
       compact: true,
       approx: true,
     }),
-  ].join(' ');
+    conditions !== RecoveryConditions.Normal
+      ? `(${prettyMilliseconds(interval * recoveryMultiplier(conditions), {
+          compact: true,
+          approx: true,
+        })})`
+      : '',
+  ]).join(' ');
 };
 
 export const tickRate = ({ amount, interval }: BasicTickInfo) =>
@@ -150,7 +157,7 @@ export const setupRecoveries = ({
         source: `${localize('own')} ${localize('healing')}`,
         get timeToTick() {
           return nonNegative(
-            (data.interval * recoveryMultiplier(conditions)) -
+            data.interval * recoveryMultiplier(conditions) -
               getElapsedTime(hot[`${slot}HealTickStartTime` as const]),
           );
         },

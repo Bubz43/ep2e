@@ -15,6 +15,7 @@ import {
   HealingSlot,
   Recovery,
   RecoveryConditions,
+  recoveryMultiplier,
 } from '@src/health/recovery';
 import type { SyntheticHealth } from '@src/health/synthetic-health';
 import { openMenu } from '@src/open-menu';
@@ -67,17 +68,18 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
 
   private recoveryConditionsMenu() {
     openMenu({
-      header: { heading: `${localize("recovery")} ${localize("conditions")}` },
-      content: enumValues(RecoveryConditions).map(condition => ({
+      header: { heading: `${localize('recovery')} ${localize('conditions')}` },
+      content: enumValues(RecoveryConditions).map((condition) => ({
         label: localize(condition),
         callback: () => this.sleeve.updateRecoveryConditions(condition),
-      }))
-    })
+      })),
+    });
   }
 
   render() {
     const { health } = this;
     const { regenState, recoveries } = health;
+    const { recoveryConditions } = this.sleeve;
     // TODO Account for passing intervals
     // TODO Conditions
     return html`
@@ -92,7 +94,12 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
 
       <section>
         <sl-header heading=${localize('recovery')}>
-          <mwc-button dense slot="action" @click=${this.recoveryConditionsMenu}>${localize(this.sleeve.recoveryConditions)} ${localize("conditions")}</mwc-button>
+          <mwc-button dense slot="action" @click=${this.recoveryConditionsMenu} class="conditions-button"
+            >${localize(recoveryConditions)} ${localize('conditions')}
+            ${recoveryConditions !== RecoveryConditions.Normal
+              ? `x${recoveryMultiplier(recoveryConditions)}`
+              : ''}</mwc-button
+          >
         </sl-header>
         ${enumValues(DotOrHotTarget).map((target) => {
           const heals = recoveries[target];
@@ -111,7 +118,9 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
                               @click=${() => this.rollHeal(target, heal)}
                             >
                               <span slot="before">${heal.source}</span>
-                              <span>${formatAutoHealing(heal)} </span>
+                              <span
+                                >${formatAutoHealing(heal, recoveryConditions)}
+                              </span>
                               ${regenState === target
                                 ? html`
                                     <span slot="after">
