@@ -1,0 +1,27 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  padding: 0.25rem 0.5rem;
+}
+
+.formulas-toggle {
+  float: right;
+  color: var(--color-text-lighter);
+}
+
+mwc-button[unelevated] {
+  --mdc-theme-primary: var(--color-negative);
+  margin-bottom: 0.25rem;
+  width: 100%;
+}
+
+.damage-info {
+  color: var(--color-text-lighter);
+  padding-left: 0.5ch;
+}

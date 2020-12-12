@@ -25,6 +25,7 @@ import 'web-animations-js';
 // Weightless Components
 import 'weightless/label';
 import 'weightless/list-item';
+import { MessageDamage } from './chat/components/damage/message-damage';
 import { MessageHeal } from './chat/components/heal/message-heal';
 import { MessageHealthChange } from './chat/components/health-change/message-health-change';
 import { MessageContent } from './chat/components/message-content/message-content';
@@ -267,3 +268,4 @@ MessageContent;
 MessageStressTest;
 MessageHealthChange;
 MessageHeal;
+MessageDamage;

@@ -2,7 +2,11 @@ import type {
   HealthRecoveryEffect,
   SourcedEffect,
 } from '@src/features/effects';
-import { addFeature, StringID } from '@src/features/feature-helpers';
+import {
+  addFeature,
+  StringID,
+  updateFeature,
+} from '@src/features/feature-helpers';
 import { currentWorldTimeMS } from '@src/features/time';
 import { mapProps } from '@src/utility/field-values';
 import { localImage } from '@src/utility/images';
@@ -22,7 +26,12 @@ import {
 } from './health';
 import type { DamageOverTime } from './health-changes';
 import { HealthMixin } from './health-mixin';
-import { HealingSlot, HealsOverTime, RecoveryConditions, setupRecoveries } from './recovery';
+import {
+  HealingSlot,
+  HealsOverTime,
+  RecoveryConditions,
+  setupRecoveries,
+} from './recovery';
 
 export type BiologicalHealthData = BasicHealthData &
   HealsOverTime & {
@@ -38,7 +47,7 @@ type Init = HealthInit<BiologicalHealthData> & {
   isSwarm: boolean;
   statMods: HealthStatMods | undefined;
   recoveryEffects: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
-  recoveryConditions: RecoveryConditions
+  recoveryConditions: RecoveryConditions;
 };
 
 class BiologicalHealthBase implements CommonHealth {
@@ -70,7 +79,7 @@ class BiologicalHealthBase implements CommonHealth {
       hot: this.init.data,
       biological: true,
       effects: this.init.recoveryEffects,
-      conditions: this.init.recoveryConditions
+      conditions: this.init.recoveryConditions,
     });
   }
 
@@ -108,12 +117,12 @@ class BiologicalHealthBase implements CommonHealth {
 export class BiologicalHealth extends HealthMixin(BiologicalHealthBase) {
   private resetRegenStartTimes() {
     this.init.updater
-          .prop('aidedHealTickStartTime')
-          .store(currentWorldTimeMS())
-          .prop('ownHealTickStartTime')
-          .store(currentWorldTimeMS());
+      .prop('aidedHealTickStartTime')
+      .store(currentWorldTimeMS())
+      .prop('ownHealTickStartTime')
+      .store(currentWorldTimeMS());
   }
-  
+
   applyModification(modification: HealthModification) {
     const { updater } = this.init;
     const { damage, wounds } = this.common;
@@ -122,22 +131,25 @@ export class BiologicalHealth extends HealthMixin(BiologicalHealthBase) {
         if (!damage && modification.damage) this.resetRegenStartTimes();
         else if (damage && !modification.damage) this.resetRegenStartTimes();
         else if (!wounds && modification.wounds) this.resetRegenStartTimes();
-        else if (wounds && !damage && modification.damage) this.resetRegenStartTimes();
+        else if (wounds && !damage && modification.damage)
+          this.resetRegenStartTimes();
         break;
       }
       case HealthModificationMode.Inflict: {
         if (!damage && modification.damage) this.resetRegenStartTimes();
         else if (!wounds && modification.wounds) this.resetRegenStartTimes();
-        else if (wounds && !damage && modification.damage) this.resetRegenStartTimes();
+        else if (wounds && !damage && modification.damage)
+          this.resetRegenStartTimes();
         break;
       }
-      
+
       case HealthModificationMode.Heal: {
-        if (damage && modification.damage >= damage) this.resetRegenStartTimes();
+        if (damage && modification.damage >= damage)
+          this.resetRegenStartTimes();
         break;
       }
     }
-  
+
     return updater
       .prop('')
       .commit((data) => applyHealthModification(data, modification));
@@ -150,6 +162,6 @@ export class BiologicalHealth extends HealthMixin(BiologicalHealthBase) {
   }
 
   addDamageOverTime(dot: DamageOverTime) {
-    return this.init.updater.prop("dots").commit(addFeature(dot))
+    return this.init.updater.prop('dots').commit(addFeature(dot));
   }
 }

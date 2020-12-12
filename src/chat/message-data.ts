@@ -16,6 +16,15 @@ export type StressTestMessageData = {
   source?: string;
 };
 
+export type DamageMessageData = {
+  rolledFormulas: RolledFormula[];
+  damageType: HealthType.Mesh | HealthType.Physical;
+  source: string;
+  armorPiercing: boolean;
+  reduceAVbyDV: boolean;
+  armorUsed: ArmorType[];
+}
+
 export type MessageHealData = RequireAtLeastOne<{
   source: string;
   damageFormulas?: RolledFormula[];
@@ -42,6 +51,7 @@ export type MessageHeaderData = {
 export type MessageData = Partial<{
   header: MessageHeaderData;
   stress: StressTestMessageData;
+  damage: DamageMessageData;
   healthChange: HealthChangeMessageData;
   heal: MessageHealData;
 }>;

@@ -14,6 +14,7 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import type { Infomorph } from '@src/entities/actor/proxies/infomorph';
 import type { Sleeve } from '@src/entities/actor/sleeves';
 import { ArmorType } from '@src/features/active-armor';
+import type { StringID } from '@src/features/feature-helpers';
 import {
   CommonInterval,
   currentWorldTimeMS,
@@ -23,7 +24,7 @@ import { localize } from '@src/foundry/localization';
 import { rollFormula, rollLabeledFormulas } from '@src/foundry/rolls';
 import type { BiologicalHealth } from '@src/health/biological-health';
 import { HealthType } from '@src/health/health';
-import { createDamageOverTime } from '@src/health/health-changes';
+import { createDamageOverTime, DamageOverTime } from '@src/health/health-changes';
 import {
   DotOrHotTarget,
   formatAutoHealing,
@@ -43,7 +44,7 @@ import {
   internalProperty,
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
-import { compact } from 'remeda';
+import { compact, pick } from 'remeda';
 import styles from './character-view-physical-health.scss';
 
 @customElement('character-view-physical-health')
@@ -70,6 +71,25 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
     this.character.openHealthEditor(this.health);
   }
 
+  private async rollDamageOverTime(dot: StringID<DamageOverTime>) {
+        // TODO Account for multiple instances
+
+    createMessage({
+      data: {
+        header: { heading: `${dot.source} ${localize("damageOverTime")}` },
+        damage: {
+          ...pick(dot, ["armorPiercing", "armorUsed", "reduceAVbyDV", "source"]),
+          rolledFormulas: rollLabeledFormulas([{
+            label: localize("damage"),
+            formula: dot.formula
+          }]),
+          damageType: HealthType.Physical
+        }
+      },
+      entity: this.character.actor
+    })
+  }
+
   private async rollHeal(target: DotOrHotTarget, heal: Recovery) {
     // TODO Account for multiple instances
     await createMessage({
@@ -90,7 +110,8 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
             : { wounds: rollFormula(heal.amount)?.total || 0 }),
         },
       },
-      visibility: MessageVisibility.WhisperGM,
+      // visibility: MessageVisibility.WhisperGM,
+      entity: this.character.actor
     });
     await this.health.logHeal(heal.slot);
   }
@@ -193,7 +214,7 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
         <sl-animated-list>
           ${this.health.data.dots.map(
             (dot) => html`
-              <wl-list-item>
+              <wl-list-item clickable @click=${() => this.rollDamageOverTime(dot)}>
                 <span slot="before">${dot.source}</span>
                 <span>${dot.formula}</span>
               </wl-list-item>
