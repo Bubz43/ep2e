@@ -1321,6 +1321,7 @@
     "versus": "versus",
     "tick": "Tick",
     "recover": "Recover",
+    "closeOnSave": "Close on Save",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

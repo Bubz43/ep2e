@@ -45,7 +45,7 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
     // TODO Account for multiple instances
     await createMessage({
       data: {
-        header: { heading: localize('healthRecovery') },
+        header: { heading: `${heal.source} ${localize('healthRecovery')}` },
         heal: {
           source: heal.source,
           healthType: HealthType.Physical,
@@ -94,7 +94,12 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
 
       <section>
         <sl-header heading=${localize('recovery')}>
-          <mwc-button dense slot="action" @click=${this.recoveryConditionsMenu} class="conditions-button"
+          <mwc-button
+            dense
+            slot="action"
+            @click=${this.recoveryConditionsMenu}
+            ?disabled=${this.character.disabled}
+            class="conditions-button"
             >${localize(recoveryConditions)} ${localize('conditions')}
             ${recoveryConditions !== RecoveryConditions.Normal
               ? `x${recoveryMultiplier(recoveryConditions)}`

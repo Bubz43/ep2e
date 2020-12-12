@@ -1,5 +1,6 @@
 import type { Damage, Heal } from '@src/health/health-changes';
 import {
+  renderLabeledCheckbox,
   renderNumberField,
   renderRadioFields,
   renderTextField,
@@ -85,11 +86,13 @@ export class HealthEditor extends LitElement {
   })
   health?: ActorHealth | null;
 
-  @internalProperty() healthType = HealthType.Physical;
+  @internalProperty() private healthType = HealthType.Physical;
 
-  @internalProperty() mode: 'heal' | 'damage' = 'heal';
+  @internalProperty() private mode: 'heal' | 'damage' = 'heal';
 
   @internalProperty() private selectedHealth: ActorHealth | null = null;
+
+  @internalProperty() private closeOnSubmit = false;
 
   private actorUnsub: (() => void) | null = null;
 
@@ -199,7 +202,7 @@ export class HealthEditor extends LitElement {
       visibility: MessageVisibility.WhisperGM,
     });
 
-    this.actor.updater.batchCommits(async () => {
+    await this.actor.updater.batchCommits(async () => {
       await currentHealth.applyModification(modification);
       if (notEmpty(armorReduction)) {
         const sleeve = isSleeve(this.actor.proxy)
@@ -208,6 +211,8 @@ export class HealthEditor extends LitElement {
         await sleeve?.addArmorDamage(armorReduction, modification.source);
       }
     });
+
+    if (this.closeOnSubmit) closeWindow(HealthEditor)
   }
 
   private get currentHealth() {
@@ -282,10 +287,14 @@ export class HealthEditor extends LitElement {
 
             ${renderAutoForm({
               classes: 'mode-form',
-              props: { mode: this.mode },
-              update: ({ mode }) => mode && (this.mode = mode),
-              fields: ({ mode }) => [
+              props: { mode: this.mode, closeOnSave: this.closeOnSubmit },
+              update: ({ mode, closeOnSave: closeonSave }) => {
+                if (mode) this.mode = mode;
+                if (closeonSave !== undefined) this.closeOnSubmit = closeonSave
+              },
+              fields: ({ mode, closeOnSave }) => [
                 renderRadioFields(mode, ['heal', 'damage']),
+                renderLabeledCheckbox(closeOnSave)
               ],
             })}
             ${this.mode === 'heal'

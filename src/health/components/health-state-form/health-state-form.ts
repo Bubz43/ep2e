@@ -1,5 +1,5 @@
 import { renderNumberField } from '@src/components/field/fields';
-import { renderAutoForm } from '@src/components/form/forms';
+import { renderAutoForm, renderSubmitForm } from '@src/components/form/forms';
 import { localize } from '@src/foundry/localization';
 import {
   createHealthModification,
@@ -21,7 +21,7 @@ export class HealthStateForm extends LitElement {
 
   render() {
     return html`
-      ${renderAutoForm({
+      ${renderSubmitForm({
         classes: 'health-state',
         props: this.health.data,
         update: ({

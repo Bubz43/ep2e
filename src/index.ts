@@ -20,7 +20,7 @@ import '@material/mwc-snackbar';
 import '@material/mwc-switch';
 import '@material/mwc-tab-bar';
 // import '@tinymce/tinymce-webcomponent'; // TODO Test this out further
-import { Datepicker } from 'app-datepicker/dist/datepicker';
+// import { Datepicker } from 'app-datepicker/dist/datepicker';
 import 'web-animations-js';
 // Weightless Components
 import 'weightless/label';
@@ -133,13 +133,13 @@ import { MeshHealthDamageEditor } from './health/components/mesh-health-damage-e
 import { PhysicalHealthDamageEditor } from './health/components/physical-health-damage-editor/physical-health-damage-editor';
 import './init';
 
-customElements.define('app-datepicker', Datepicker);
+// customElements.define('app-datepicker', Datepicker);
 
 // Generic Components
 Field;
 Form;
 AnimatedList;
-DateField;
+// DateField;
 DeleteButton;
 Details;
 DropZone;

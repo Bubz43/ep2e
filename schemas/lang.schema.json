@@ -1114,6 +1114,9 @@
             "close": {
               "type": "string"
             },
+            "closeOnSave": {
+              "type": "string"
+            },
             "coat": {
               "type": "string"
             },
@@ -4628,6 +4631,7 @@
             "classification",
             "clear",
             "close",
+            "closeOnSave",
             "coat",
             "coatAmmunition",
             "coatWeapon",

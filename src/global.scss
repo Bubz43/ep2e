@@ -521,7 +521,6 @@ sl-tooltip {
 
 .message {
   display: block;
-  background: transparent;
   background: alphav(var(--color-bg), 0.9);
   width: calc(100% - 1rem);
   color: var(--color-text);

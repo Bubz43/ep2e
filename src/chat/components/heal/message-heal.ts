@@ -112,7 +112,7 @@ export class MessageHeal extends LitElement {
             <img src=${localImage('icons/cubes.svg')} height="20px" />
           </mwc-button>`
         : ''}
-      ${damageHealTotals.formula
+      ${damageHealTotals.formula || hasFormulas
         ? html`
             <div class="heal-info">
              ${localize("recover")}  ${damageHealTotals.formula} ${damageLabel}
