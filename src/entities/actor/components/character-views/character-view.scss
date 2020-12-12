@@ -51,6 +51,8 @@ character-view-sleeve,
   max-height: calc(100vh - 150px);
   min-height: 100%;
   background: rgba(black, 0.03);
+  scrollbar-color: #77889980 #28272700;
+
   &::-webkit-scrollbar {
     width: 2px;
     height: 10px;
@@ -59,6 +61,7 @@ character-view-sleeve,
     box-shadow: 0 0 1px transparent inset;
     border-radius: 0px;
   }
+
   character-view-ego {
     margin: 0.25rem;
   }
