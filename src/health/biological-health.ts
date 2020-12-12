@@ -2,7 +2,7 @@ import type {
   HealthRecoveryEffect,
   SourcedEffect,
 } from '@src/features/effects';
-import type { StringID } from '@src/features/feature-helpers';
+import { addFeature, StringID } from '@src/features/feature-helpers';
 import { currentWorldTimeMS } from '@src/features/time';
 import { mapProps } from '@src/utility/field-values';
 import { localImage } from '@src/utility/images';
@@ -22,7 +22,7 @@ import {
 } from './health';
 import type { DamageOverTime } from './health-changes';
 import { HealthMixin } from './health-mixin';
-import { DotOrHotTarget, HealingSlot, HealsOverTime, RecoveryConditions, setupRecoveries } from './recovery';
+import { HealingSlot, HealsOverTime, RecoveryConditions, setupRecoveries } from './recovery';
 
 export type BiologicalHealthData = BasicHealthData &
   HealsOverTime & {
@@ -147,5 +147,9 @@ export class BiologicalHealth extends HealthMixin(BiologicalHealthBase) {
     return this.init.updater
       .prop(`${slot}HealTickStartTime` as const)
       .commit(currentWorldTimeMS());
+  }
+
+  addDamageOverTime(dot: DamageOverTime) {
+    return this.init.updater.prop("dots").commit(addFeature(dot))
   }
 }

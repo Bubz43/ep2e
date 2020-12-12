@@ -3,7 +3,7 @@ import type {
   HealthRecoveryEffect,
   SourcedEffect,
 } from '@src/features/effects';
-import type { StringID } from '@src/features/feature-helpers';
+import { addFeature, StringID } from '@src/features/feature-helpers';
 import { currentWorldTimeMS } from '@src/features/time';
 import { mapProps } from '@src/utility/field-values';
 import { localImage } from '@src/utility/images';
@@ -112,6 +112,7 @@ class SyntheticHealthBase implements CommonHealth {
 }
 
 export class SyntheticHealth extends HealthMixin(SyntheticHealthBase) {
+  
   private resetRegenStartTimes() {
     this.init.updater
       .prop('aidedHealTickStartTime')
@@ -151,5 +152,9 @@ export class SyntheticHealth extends HealthMixin(SyntheticHealthBase) {
     return this.init.updater
       .prop(`${slot}HealTickStartTime` as const)
       .commit(currentWorldTimeMS());
+  }
+
+  addDamageOverTime(dot: DamageOverTime) {
+    return this.init.updater.prop("dots").commit(addFeature(dot))
   }
 }

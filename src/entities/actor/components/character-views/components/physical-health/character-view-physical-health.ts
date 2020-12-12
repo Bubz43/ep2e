@@ -1,14 +1,29 @@
 import { createMessage, MessageVisibility } from '@src/chat/create-message';
+import {
+  emptyTextDash,
+  renderFormulaField,
+  renderLabeledCheckbox,
+  renderSelectField,
+  renderTextField,
+  renderTimeField,
+} from '@src/components/field/fields';
+import { renderSubmitForm } from '@src/components/form/forms';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import type { Infomorph } from '@src/entities/actor/proxies/infomorph';
 import type { Sleeve } from '@src/entities/actor/sleeves';
-import { prettyMilliseconds } from '@src/features/time';
+import { ArmorType } from '@src/features/active-armor';
+import {
+  CommonInterval,
+  currentWorldTimeMS,
+  prettyMilliseconds,
+} from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { rollFormula, rollLabeledFormulas } from '@src/foundry/rolls';
 import type { BiologicalHealth } from '@src/health/biological-health';
 import { HealthType } from '@src/health/health';
+import { createDamageOverTime } from '@src/health/health-changes';
 import {
   DotOrHotTarget,
   formatAutoHealing,
@@ -20,7 +35,15 @@ import {
 import type { SyntheticHealth } from '@src/health/synthetic-health';
 import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
-import { customElement, LitElement, property, html } from 'lit-element';
+import {
+  customElement,
+  LitElement,
+  property,
+  html,
+  internalProperty,
+} from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
+import { compact } from 'remeda';
 import styles from './character-view-physical-health.scss';
 
 @customElement('character-view-physical-health')
@@ -36,6 +59,12 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
   @property({ attribute: false }) sleeve!: Exclude<Sleeve, Infomorph>;
 
   @property({ attribute: false }) health!: BiologicalHealth | SyntheticHealth;
+
+  @internalProperty() private dotForm = false;
+
+  private toggleDotForm() {
+    this.dotForm = !this.dotForm;
+  }
 
   private openHealthEditor() {
     this.character.openHealthEditor(this.health);
@@ -86,11 +115,15 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
       <character-view-drawer-heading
         >${localize('physicalHealth')}</character-view-drawer-heading
       >
-      <health-state-form .health=${health}></health-state-form>
 
-      <mwc-button @click=${this.openHealthEditor}
+      <mwc-button
+        class="heal-damage"
+        icon="launch"
+        @click=${this.openHealthEditor}
         >${localize('heal')} / ${localize('damage')}</mwc-button
       >
+
+      <health-state-form .health=${health}></health-state-form>
 
       <section>
         <sl-header heading=${localize('recovery')}>
@@ -147,8 +180,26 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
 
       <section>
         <sl-header heading=${localize('damageOverTime')}>
-          <mwc-icon-button icon="add" slot="action"></mwc-icon-button>
+          <mwc-icon-button
+            ?disabled=${this.character.disabled}
+            class="dot-toggle ${classMap({ active: this.dotForm })}"
+            icon="add"
+            slot="action"
+            @click=${this.toggleDotForm}
+          ></mwc-icon-button>
         </sl-header>
+        ${this.dotForm ? this.renderDamageOverTimeCreator() : ''}
+
+        <sl-animated-list>
+          ${this.health.data.dots.map(
+            (dot) => html`
+              <wl-list-item>
+                <span slot="before">${dot.source}</span>
+                <span>${dot.formula}</span>
+              </wl-list-item>
+            `,
+          )}
+        </sl-animated-list>
       </section>
 
       <sl-details summary=${localize('history')}>
@@ -158,6 +209,43 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
         ></health-log>
       </sl-details>
     `;
+  }
+
+  private renderDamageOverTimeCreator() {
+    return renderSubmitForm({
+      classes: 'dot-creator',
+      props: {
+        ...createDamageOverTime({
+          formula: '1d6',
+          source: '',
+          duration: CommonInterval.Turn,
+        }),
+        armor: ArmorType.Kinetic,
+      },
+      update: (changed, orig) => {
+        const { armor, ...dot } = { ...orig, ...changed };
+        this.health.addDamageOverTime({
+          ...dot,
+          startTime: currentWorldTimeMS(),
+          armorUsed: compact([armor]),
+        });
+      },
+      fields: ({
+        formula,
+        armorPiercing,
+        reduceAVbyDV,
+        source,
+        duration,
+        armor,
+      }) => [
+        renderTextField(source, { required: true }),
+        renderFormulaField(formula, { required: true }),
+        renderSelectField(armor, enumValues(ArmorType), emptyTextDash),
+        renderLabeledCheckbox(armorPiercing),
+        renderLabeledCheckbox(reduceAVbyDV),
+        renderTimeField(duration, { min: CommonInterval.Turn }),
+      ],
+    });
   }
 }
 

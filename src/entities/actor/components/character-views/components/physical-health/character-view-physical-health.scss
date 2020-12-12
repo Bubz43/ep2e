@@ -8,8 +8,33 @@
 }
 
 :host {
-  display: block;
+  display: grid;
+  grid-auto-rows: min-content;
+  gap: 0.25rem;
   
+}
+
+.dot-creator {
+  margin: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid var(--color-border);
+  grid-template-columns: 1fr;
+  :nth-child(3n),
+  submit-button {
+    grid-column: span 2;
+  }
+}
+
+.dot-toggle {
+  &.active {
+    color: var(--color-secondary);
+  }
+}
+
+.heal-damage {
+  width: calc(100% - 2rem);
+  margin:  -0.25rem 1rem 0;
+
 }
 
 health-state-form {
