@@ -55,8 +55,8 @@ export type HealsOverTime = {
   ownHealTickStartTime: number;
   aidedHealTickStartTime: number;
   damageRepair: HealthTick;
-  woundRepair: { amount: number, interval: number };
-}
+  woundRepair: { amount: number; interval: number };
+};
 export type BasicTickInfo = Pick<HealthTick, 'amount' | 'interval'>;
 
 export enum HealingSlot {
@@ -95,7 +95,7 @@ export const recoveryConditionsLabel = (condition: RecoveryConditions) => {
 };
 
 export const formatAutoHealing = (
-  { amount, interval }: { amount: string | number, interval: number },
+  { amount, interval }: { amount: string | number; interval: number },
   conditions = RecoveryConditions.Normal,
 ) => {
   return [
@@ -124,12 +124,12 @@ export const setupRecoveries = ({
   hot,
   biological,
   effects = [],
-}: // conditions,
-{
+  conditions,
+}: {
   hot: HealsOverTime;
   biological: boolean;
   effects: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
-  // conditions: RecoveryConditions;
+  conditions: RecoveryConditions;
 }) => {
   const groups = {
     [DotOrHotTarget.Damage]: new Map<HealingSlot, Recovery>(),
@@ -147,10 +147,10 @@ export const setupRecoveries = ({
         ...data,
         amount: String(amount),
         slot,
-        source: `${localize('own')} ${localize("healing")}`,
+        source: `${localize('own')} ${localize('healing')}`,
         get timeToTick() {
           return nonNegative(
-            data.interval -
+            (data.interval * recoveryMultiplier(conditions)) -
               getElapsedTime(hot[`${slot}HealTickStartTime` as const]),
           );
         },
@@ -185,7 +185,8 @@ export const setupRecoveries = ({
       source: effect[Source],
       get timeToTick() {
         return nonNegative(
-          interval - getElapsedTime(hot[`${slot}HealTickStartTime` as const]),
+          interval * recoveryMultiplier(conditions) -
+            getElapsedTime(hot[`${slot}HealTickStartTime` as const]),
         );
       },
     });
@@ -193,6 +194,5 @@ export const setupRecoveries = ({
 
   return groups;
 };
-
 
 export type HealthRecoveries = ReturnType<typeof setupRecoveries>;

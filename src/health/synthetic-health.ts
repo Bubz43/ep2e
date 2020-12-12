@@ -27,6 +27,7 @@ import {
   DotOrHotTarget,
   HealingSlot,
   HealsOverTime,
+  RecoveryConditions,
   setupRecoveries,
 } from './recovery';
 
@@ -43,6 +44,7 @@ type Init = HealthInit<SyntheticHealthData> & {
   isSwarm: boolean;
   statMods: HealthStatMods | undefined;
   recoveryEffects: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
+  recoveryConditions: RecoveryConditions
 };
 
 class SyntheticHealthBase implements CommonHealth {
@@ -74,6 +76,7 @@ class SyntheticHealthBase implements CommonHealth {
       hot: this.init.data,
       biological: true,
       effects: this.init.recoveryEffects,
+      conditions: this.init.recoveryConditions
     });
   }
 

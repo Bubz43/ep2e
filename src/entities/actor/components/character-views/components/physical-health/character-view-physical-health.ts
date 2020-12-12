@@ -2,6 +2,8 @@ import { createMessage, MessageVisibility } from '@src/chat/create-message';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
+import type { Infomorph } from '@src/entities/actor/proxies/infomorph';
+import type { Sleeve } from '@src/entities/actor/sleeves';
 import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { rollFormula, rollLabeledFormulas } from '@src/foundry/rolls';
@@ -12,8 +14,10 @@ import {
   formatAutoHealing,
   HealingSlot,
   Recovery,
+  RecoveryConditions,
 } from '@src/health/recovery';
 import type { SyntheticHealth } from '@src/health/synthetic-health';
+import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import styles from './character-view-physical-health.scss';
@@ -27,6 +31,8 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
   static styles = [styles];
 
   @property({ attribute: false }) character!: Character;
+
+  @property({ attribute: false }) sleeve!: Exclude<Sleeve, Infomorph>;
 
   @property({ attribute: false }) health!: BiologicalHealth | SyntheticHealth;
 
@@ -59,6 +65,16 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
     await this.health.logHeal(heal.slot);
   }
 
+  private recoveryConditionsMenu() {
+    openMenu({
+      header: { heading: `${localize("recovery")} ${localize("conditions")}` },
+      content: enumValues(RecoveryConditions).map(condition => ({
+        label: localize(condition),
+        callback: () => this.sleeve.updateRecoveryConditions(condition),
+      }))
+    })
+  }
+
   render() {
     const { health } = this;
     const { regenState, recoveries } = health;
@@ -75,7 +91,9 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
       >
 
       <section>
-        <sl-header heading=${localize('recovery')}></sl-header>
+        <sl-header heading=${localize('recovery')}>
+          <mwc-button dense slot="action" @click=${this.recoveryConditionsMenu}>${localize(this.sleeve.recoveryConditions)} ${localize("conditions")}</mwc-button>
+        </sl-header>
         ${enumValues(DotOrHotTarget).map((target) => {
           const heals = recoveries[target];
           return notEmpty(heals)

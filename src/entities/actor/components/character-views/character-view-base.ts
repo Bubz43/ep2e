@@ -187,6 +187,7 @@ export abstract class CharacterViewBase extends LitElement {
     if (!sleeve || sleeve?.type === ActorType.Infomorph) return html``;
     return html`<character-view-physical-health
       .health=${sleeve.physicalHealth}
+      .sleeve=${sleeve}
       .character=${this.character}
     ></character-view-physical-health>`;
   }

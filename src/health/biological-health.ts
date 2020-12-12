@@ -22,7 +22,7 @@ import {
 } from './health';
 import type { DamageOverTime } from './health-changes';
 import { HealthMixin } from './health-mixin';
-import { DotOrHotTarget, HealingSlot, HealsOverTime, setupRecoveries } from './recovery';
+import { DotOrHotTarget, HealingSlot, HealsOverTime, RecoveryConditions, setupRecoveries } from './recovery';
 
 export type BiologicalHealthData = BasicHealthData &
   HealsOverTime & {
@@ -38,6 +38,7 @@ type Init = HealthInit<BiologicalHealthData> & {
   isSwarm: boolean;
   statMods: HealthStatMods | undefined;
   recoveryEffects: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
+  recoveryConditions: RecoveryConditions
 };
 
 class BiologicalHealthBase implements CommonHealth {
@@ -69,6 +70,7 @@ class BiologicalHealthBase implements CommonHealth {
       hot: this.init.data,
       biological: true,
       effects: this.init.recoveryEffects,
+      conditions: this.init.recoveryConditions
     });
   }
 

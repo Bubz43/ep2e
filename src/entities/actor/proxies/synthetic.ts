@@ -25,6 +25,7 @@ import { createTag, TagType } from '@src/features/tags';
 import { addFeature, removeFeature } from '@src/features/feature-helpers';
 import { ArmorType } from '@src/features/active-armor';
 import { enumValues } from '@src/data-enums';
+import type { RecoveryConditions } from '@src/health/recovery';
 
 class SyntheticBase extends ActorProxyBase<ActorType.Synthetic> {
   get subtype() {
@@ -106,6 +107,11 @@ export class Synthetic extends mix(SyntheticBase).with(
     };
   }
 
+  updateRecoveryConditions(conditions: RecoveryConditions) {
+    return this.updater.prop("data", "recoveryConditions").commit(conditions)
+  }
+
+
   @LazyGetter()
   get availableBrains() {
     const things = new Map<string, PhysicalTech>();
@@ -126,6 +132,7 @@ export class Synthetic extends mix(SyntheticBase).with(
       source: this.epData.inherentArmor.source || localize('frame'),
       isSwarm: this.isSwarm,
       recoveryEffects: this.activeEffects.getGroup(EffectType.HealthRecovery),
+      recoveryConditions: this.epData.recoveryConditions
     });
   }
 

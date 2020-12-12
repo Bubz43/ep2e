@@ -17,6 +17,7 @@ import mix from 'mix-with/lib';
 import { compact } from 'remeda';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 import { PhysicalSleeve, SleeveInfo } from '../sleeve-mixins';
+import type { RecoveryConditions } from '@src/health/recovery';
 
 class BiologicalBase extends ActorProxyBase<ActorType.Biological> {
   get subtype() {
@@ -65,6 +66,10 @@ export class Biological extends mix(BiologicalBase).with(
     return this.epData.sex;
   }
 
+  updateRecoveryConditions(conditions: RecoveryConditions) {
+    return this.updater.prop("data", "recoveryConditions").commit(conditions)
+  }
+
   @LazyGetter()
   get availableBrains() {
     const things = new Map<string, PhysicalTech>();
@@ -89,6 +94,7 @@ export class Biological extends mix(BiologicalBase).with(
       source: localize('frame'),
       isSwarm: this.isSwarm,
       recoveryEffects: this.activeEffects.getGroup(EffectType.HealthRecovery),
+      recoveryConditions: this.epData.recoveryConditions
     });
   }
 
