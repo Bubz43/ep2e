@@ -75,10 +75,14 @@ ego-form-skills {
 
 .character-details-form {
   padding: 0.5rem 0 0;
+  margin-bottom: -0.5rem;
   display: block;
   column-count: 2;
   > * {
     break-inside: avoid;
+  }
+  > sl-field:last-of-type {
+    margin-top: 3px;
   }
 }
 

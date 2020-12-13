@@ -68,8 +68,9 @@ input {
 
 .goals-list {
   grid-area: goals;
-  margin-bottom: 0.25rem;
+  margin: 0.25rem 0;
   li {
+    padding: 0 1.5rem;
     list-style: none;
     display: grid;
     grid-template-columns: auto 1fr auto;

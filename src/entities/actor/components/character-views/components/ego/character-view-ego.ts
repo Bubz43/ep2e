@@ -3,6 +3,8 @@ import { renderAutoForm } from '@src/components/form/forms';
 import { AptitudeType, enumValues } from '@src/data-enums';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
+import { idProp } from '@src/features/feature-helpers';
+import { MotivationStance } from '@src/features/motivations';
 import { maxFavors } from '@src/features/reputations';
 import { Skill, skillFilterCheck } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
@@ -19,7 +21,8 @@ import {
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { live } from 'lit-html/directives/live';
-import { compact, first, range, reject } from 'remeda';
+import { repeat } from 'lit-html/directives/repeat';
+import { compact, first, prop, range, reject } from 'remeda';
 import { traverseActiveElements } from 'weightless';
 import {
   CharacterDrawerRenderer,
@@ -39,8 +42,7 @@ export class CharacterViewEgo extends LitElement {
 
   @property({ attribute: false }) ego!: Ego;
 
-  @queryAll('.skill-item')
-  skillItems!: NodeListOf<HTMLElement>;
+  @internalProperty() private expanded = false;
 
   @internalProperty()
   private skillControls = {
@@ -48,11 +50,18 @@ export class CharacterViewEgo extends LitElement {
     singleColumn: false,
   };
 
+  @queryAll('.skill-item')
+  skillItems!: NodeListOf<HTMLElement>;
+
   private skillFilterCheck!: ReturnType<typeof skillFilterCheck>;
 
   update(changedProps: PropertyValues) {
     this.skillFilterCheck = skillFilterCheck(this.skillControls.filter);
     super.update(changedProps);
+  }
+
+  private toggleExpanded() {
+    this.expanded = !this.expanded;
   }
 
   private updateSkillControls = (
@@ -81,12 +90,13 @@ export class CharacterViewEgo extends LitElement {
   }
 
   protected openHealthEditor() {
-    this.character.openHealthEditor(this.ego.mentalHealth)
+    this.character.openHealthEditor(this.ego.mentalHealth);
   }
 
   render() {
     const { active, know } = this.ego.groupedSkills;
-
+    const { filteredMotivations, settings } = this.ego;
+    const showMore = this.ego.description || notEmpty(this.ego.details)
     return html`
       <header>
         <!-- <span class="label">${localize('ego')
@@ -100,7 +110,63 @@ export class CharacterViewEgo extends LitElement {
               `${localize(this.ego.forkStatus)} ${localize('fork')}`,
           ]).join(' • ')}</span
         >
+        ${showMore
+          ? html`
+              <mwc-icon-button
+                icon=${this.expanded
+                  ? 'keyboard_arrow_down'
+                  : 'keyboard_arrow_left'}
+                @click=${this.toggleExpanded}
+              ></mwc-icon-button>
+            `
+          : ''}
       </header>
+      ${settings.trackPoints
+        ? html`
+            <sl-animated-list class="resource-points">
+              ${repeat(
+                this.ego.points,
+                prop('point'),
+                ({ label, value }) => html`
+                  <li>${label} <span class="value">${value}</span></li>
+                `,
+              )}
+            </sl-animated-list>
+          `
+        : ''}
+      ${notEmpty(filteredMotivations)
+        ? html`
+            <sl-animated-list class="motivations-list"
+              >${repeat(
+                filteredMotivations,
+                idProp,
+                this.renderMotivation,
+              )}</sl-animated-list
+            >
+          `
+        : ''}
+      ${this.expanded && showMore
+        ? html`
+            ${notEmpty(this.ego.details)
+              ? html`
+                  <div class="details">
+                    ${this.ego.details.map(
+                      ({ label, value }) => html`
+                        <span class="details">${label} <span class="value">${value}</span></span>
+                      `,
+                    )}
+                  </div>
+                `
+              : ''}
+            ${this.ego.description
+              ? html`
+                  <enriched-html
+                    .content=${this.ego.description}
+                  ></enriched-html>
+                `
+              : ''}
+          `
+        : ''}
 
       <sl-section heading=${localize('aptitudes')} flipped>
         <sl-group
@@ -193,7 +259,7 @@ export class CharacterViewEgo extends LitElement {
       clickable
       class="skill-item ${classMap({ filtered })}"
       ?disabled=${this.disabled}
-      tabindex=${live(filtered ? '-1' : '0')}
+      tabindex=${live(filtered ? -1 : 0)}
     >
       <span class="skill-name">${skill.fullName}</span>
       <span class="skill-total" slot="after">${skill.total}</span>
@@ -223,6 +289,21 @@ export class CharacterViewEgo extends LitElement {
             `;
           })}
         </div>
+      </li>
+    `;
+  };
+
+  private renderMotivation = (motivation: Ego['motivations'][number]) => {
+    // TODO heal stress
+    // TODO Show goals
+    return html`
+      <li class="motivation">
+        <mwc-icon class=${motivation.stance}
+          >${motivation.stance === MotivationStance.Support
+            ? 'add'
+            : 'remove'}</mwc-icon
+        >
+        ${motivation.cause}
       </li>
     `;
   };
