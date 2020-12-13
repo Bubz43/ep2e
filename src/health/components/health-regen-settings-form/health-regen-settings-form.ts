@@ -8,7 +8,7 @@ import { enumValues } from '@src/data-enums';
 import type { UpdateStore } from '@src/entities/update-store';
 import { localize } from '@src/foundry/localization';
 import type { Health } from '@src/health/health-mixin';
-import { DotOrHotTarget, HealsOverTime } from '@src/health/recovery';
+import { HealOverTimeTarget, HealsOverTime } from '@src/health/recovery';
 import { customElement, html, LitElement, property } from 'lit-element';
 import styles from './health-regen-settings-form.scss';
 
@@ -26,18 +26,18 @@ export class HealthRegenSettingsForm extends LitElement {
 
   render() {
     return html`
-      ${renderUpdaterForm(this.regenUpdater.prop(DotOrHotTarget.Damage), {
+      ${renderUpdaterForm(this.regenUpdater.prop(HealOverTimeTarget.Damage), {
         fields: ({ amount, interval }) => html`
-          <p>${localize(DotOrHotTarget.Damage)}</p>
+          <p>${localize(HealOverTimeTarget.Damage)}</p>
           ${[
             renderTimeField(interval),
             interval.value ? renderFormulaField(amount) : '',
           ]}
         `,
       })}
-      ${renderUpdaterForm(this.regenUpdater.prop(DotOrHotTarget.Wound), {
+      ${renderUpdaterForm(this.regenUpdater.prop(HealOverTimeTarget.Wound), {
         fields: ({ amount, interval }) => html`
-          <p>${localize(DotOrHotTarget.Wound)}</p>
+          <p>${localize(HealOverTimeTarget.Wound)}</p>
           ${[
             renderTimeField(interval),
             interval.value ? renderNumberField(amount, { min: 1 }) : '',

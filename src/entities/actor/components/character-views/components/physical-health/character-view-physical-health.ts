@@ -26,7 +26,7 @@ import type { BiologicalHealth } from '@src/health/biological-health';
 import { HealthType } from '@src/health/health';
 import { createDamageOverTime, DamageOverTime } from '@src/health/health-changes';
 import {
-  DotOrHotTarget,
+  HealOverTimeTarget,
   formatAutoHealing,
   HealingSlot,
   Recovery,
@@ -90,7 +90,7 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
     })
   }
 
-  private async rollHeal(target: DotOrHotTarget, heal: Recovery) {
+  private async rollHeal(target: HealOverTimeTarget, heal: Recovery) {
     // TODO Account for multiple instances
     await createMessage({
       data: {
@@ -98,7 +98,7 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
         heal: {
           source: heal.source,
           healthType: HealthType.Physical,
-          ...(target === DotOrHotTarget.Damage
+          ...(target === HealOverTimeTarget.Damage
             ? {
                 damageFormulas: rollLabeledFormulas([
                   {
@@ -160,7 +160,7 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
               : ''}</mwc-button
           >
         </sl-header>
-        ${enumValues(DotOrHotTarget).map((target) => {
+        ${enumValues(HealOverTimeTarget).map((target) => {
           const heals = recoveries[target];
           return notEmpty(heals)
             ? html`

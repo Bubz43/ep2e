@@ -12,7 +12,7 @@ import type { BiologicalHealth } from './biological-health';
 import type { MeshHealth } from './full-mesh-health';
 import type { CommonHealth } from './health';
 import type { MentalHealth } from './mental-health';
-import { DotOrHotTarget } from './recovery';
+import { HealOverTimeTarget } from './recovery';
 import type { SyntheticHealth } from './synthetic-health';
 
 export type Health = CommonHealth &
@@ -23,7 +23,7 @@ export type Health = CommonHealth &
       deathRating: number | null;
       dead: boolean;
     };
-    regenState: DotOrHotTarget | null;
+    regenState: HealOverTimeTarget | null;
     readyRegen: boolean;
   }>;
 
@@ -78,17 +78,17 @@ export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
     get regenState() {
       const { main, wound, recoveries } = this;
       const damage = !!(
-        main.damage.value && notEmpty(recoveries?.[DotOrHotTarget.Damage])
+        main.damage.value && notEmpty(recoveries?.[HealOverTimeTarget.Damage])
       );
       const wounds = !!(
         !damage &&
         wound?.wounds.value &&
-        notEmpty(recoveries?.[DotOrHotTarget.Wound])
+        notEmpty(recoveries?.[HealOverTimeTarget.Wound])
       );
       return damage
-        ? DotOrHotTarget.Damage
+        ? HealOverTimeTarget.Damage
         : wounds
-        ? DotOrHotTarget.Wound
+        ? HealOverTimeTarget.Wound
         : null;
     }
 

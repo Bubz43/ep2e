@@ -7,7 +7,7 @@ import { localize } from '@src/foundry/localization';
 import { HealthEditor } from '@src/health/components/health-editor/health-editor';
 import type { ActorHealth } from '@src/health/health-mixin';
 import { hardeningTypes } from '@src/health/mental-health';
-import { DotOrHotTarget, HealingSlot } from '@src/health/recovery';
+import { HealOverTimeTarget, HealingSlot } from '@src/health/recovery';
 import { debounce } from '@src/utility/decorators';
 import { notEmpty } from '@src/utility/helpers';
 import { internalProperty, LitElement, property, query } from 'lit-element';
@@ -148,38 +148,10 @@ export abstract class CharacterViewBase extends LitElement {
   }
 
   renderMentalHealth() {
-    return html`
-      <section>
-        <character-view-drawer-heading
-          >${localize('mentalHealth')}</character-view-drawer-heading
-        >
-        <health-state-form
-          .health=${this.character.ego.mentalHealth}
-        ></health-state-form>
-        <p class="hardening-label">${localize('hardening')}</p>
-        ${renderUpdaterForm(
-          this.character.ego.updater.prop('data', 'mentalHealth'),
-          {
-            fields: (hardenings) =>
-              hardeningTypes.map((type) =>
-                renderNumberField(hardenings[type], { min: 0, max: 5 }),
-              ),
-          },
-        )}
-
-        <mwc-button
-          @click=${() => this.character.openHealthEditor(this.character.ego.mentalHealth)}
-          >${localize('heal')} / ${localize('damage')}</mwc-button
-        >
-
-        <sl-details summary=${localize('history')}>
-          <health-log
-            .health=${this.character.ego.mentalHealth}
-            ?disabled=${this.character.disabled}
-          ></health-log>
-        </sl-details>
-      </section>
-    `;
+    return html`<character-view-mental-health
+      .health=${this.character.ego.mentalHealth}
+      .character=${this.character}
+    ></character-view-mental-health>`;
   }
 
   renderSleevePhysicalHealth() {
@@ -195,25 +167,11 @@ export abstract class CharacterViewBase extends LitElement {
   renderSleeveMeshHealth() {
     const { sleeve } = this.character;
     if (!sleeve?.activeMeshHealth) return html``;
-    const { activeMeshHealth: health } = sleeve;
     return html`
-      <section>
-        <character-view-drawer-heading
-          >${localize('meshHealth')}</character-view-drawer-heading
-        >
-        <health-state-form .health=${health}></health-state-form>
-
-        <mwc-button @click=${() => this.character.openHealthEditor(health)}
-          >${localize('heal')} / ${localize('damage')}</mwc-button
-        >
-
-        <sl-details summary=${localize('history')}>
-          <health-log
-            .health=${health}
-            ?disabled=${this.character.disabled}
-          ></health-log>
-        </sl-details>
-      </section>
+      <character-view-mesh-health
+        .character=${this.character}
+        .health=${sleeve?.activeMeshHealth}
+      ></character-view-mesh-health>
     `;
   }
 }

@@ -44,6 +44,7 @@ export class PhysicalHealthDamageEditor extends HealthEditBase<
             ),
           ],
         })}
+        ${this.armor ? html`
         <div class="armor-toggles">
           <mwc-button
             dense
@@ -60,6 +61,8 @@ export class PhysicalHealthDamageEditor extends HealthEditBase<
             @click=${this.toggleArmorReduce}
           ></mwc-button>
         </div>
+        ` : ""}
+      
       </div>
 
       ${this.renderCommon()}

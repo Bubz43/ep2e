@@ -36,7 +36,7 @@ export const createMentalHealthAttempt = createFeature<
   worldTimeMS: currentWorldTimeMS(),
 }));
 
-export enum DotOrHotTarget {
+export enum HealOverTimeTarget {
   Damage = 'damageRepair',
   Wound = 'woundRepair',
 }
@@ -73,7 +73,7 @@ export type HealthRecovery = BasicTickInfo & {
 
 export type Recoveries = {
   readonly recoveries: HealthRecoveries;
-  readonly activeRegens: Record<DotOrHotTarget, boolean>;
+  readonly activeRegens: Record<HealOverTimeTarget, boolean>;
 };
 
 export const recoveryMultiplier = (condition: RecoveryConditions) => {
@@ -139,14 +139,14 @@ export const setupRecoveries = ({
   conditions: RecoveryConditions;
 }) => {
   const groups = {
-    [DotOrHotTarget.Damage]: new Map<HealingSlot, Recovery>(),
-    [DotOrHotTarget.Wound]: new Map<HealingSlot, Recovery>(),
-    unused: new Map<DotOrHotTarget, Recovery[]>(),
+    [HealOverTimeTarget.Damage]: new Map<HealingSlot, Recovery>(),
+    [HealOverTimeTarget.Wound]: new Map<HealingSlot, Recovery>(),
+    unused: new Map<HealOverTimeTarget, Recovery[]>(),
   } as const;
 
   const slot = biological ? HealingSlot.OwnHealing : HealingSlot.Aided;
 
-  for (const stat of enumValues(DotOrHotTarget)) {
+  for (const stat of enumValues(HealOverTimeTarget)) {
     const group = groups[stat];
     const { amount, ...data } = hot[stat];
     if (amount && data.interval > 0) {
@@ -168,7 +168,7 @@ export const setupRecoveries = ({
   for (const effect of effects) {
     const { stat, technologicallyAided, interval } = effect;
     const amount =
-      stat === DotOrHotTarget.Damage
+      stat === HealOverTimeTarget.Damage
         ? effect.damageAmount
         : String(effect.woundAmount);
 

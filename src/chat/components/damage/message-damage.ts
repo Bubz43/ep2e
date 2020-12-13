@@ -18,6 +18,7 @@ import {
   html,
   internalProperty,
 } from 'lit-element';
+import { omit } from 'remeda';
 import styles from './message-damage.scss';
 
 @customElement('message-damage')
@@ -43,7 +44,8 @@ export class MessageDamage extends LitElement {
   }
 
   private applyDamage() {
-    const data = { ...this.totals, source: this.damage.source };
+  
+    const data = { ...this.totals, ...omit(this.damage, ["rolledFormulas"]) };
     pickOrDefaultActor((actor) =>
       HealthEditor.openWindow({
         actor,

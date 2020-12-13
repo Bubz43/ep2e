@@ -63,6 +63,8 @@ import { CharacterViewDrawerHeading } from './entities/actor/components/characte
 import { CharacterViewEgo } from './entities/actor/components/character-views/components/ego/character-view-ego';
 import { CharacterViewHeader } from './entities/actor/components/character-views/components/header/character-view-header';
 import { CharacterViewItemGroup } from './entities/actor/components/character-views/components/item-group/character-view-item-group';
+import { CharacterViewMentalHealth } from './entities/actor/components/character-views/components/mental-health/character-view-mental-health';
+import { CharacterViewMeshHealth } from './entities/actor/components/character-views/components/mesh-health/character-view-mesh-health';
 import { CharacterViewNetworkSettings } from './entities/actor/components/character-views/components/network-settings/character-view-network-settings';
 import { CharacterViewPhysicalHealth } from './entities/actor/components/character-views/components/physical-health/character-view-physical-health';
 import { CharacterViewRecharge } from './entities/actor/components/character-views/components/recharge/character-view-recharge';
@@ -182,6 +184,8 @@ CharacterViewTimeItem;
 CharacterViewNetworkSettings;
 CharacterViewArmor;
 CharacterViewPhysicalHealth;
+CharacterViewMeshHealth;
+CharacterViewMentalHealth;
 ItemCard;
 ItemCardFabber;
 

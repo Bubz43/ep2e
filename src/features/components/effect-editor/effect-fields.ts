@@ -43,7 +43,7 @@ import { Movement } from '@src/features/movement';
 import { SkillType, FieldSkillType } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { HealthType, HealthStat, healthLabels } from '@src/health/health';
-import { DotOrHotTarget } from '@src/health/recovery';
+import { HealOverTimeTarget } from '@src/health/recovery';
 import type { FieldPropsRenderer, FieldProps } from '@src/utility/field-values';
 import { html } from 'lit-html';
 
@@ -141,8 +141,8 @@ const healthRecovery: FieldPropsRenderer<HealthRecoveryEffect> = ({
   stat,
   technologicallyAided,
 }) => [
-  renderRadioFields(stat, enumValues(DotOrHotTarget)),
-  stat.value === DotOrHotTarget.Damage
+  renderRadioFields(stat, enumValues(HealOverTimeTarget)),
+  stat.value === HealOverTimeTarget.Damage
     ? renderFormulaField(damageAmount)
     : renderNumberField(woundAmount, { min: 1 }),
 

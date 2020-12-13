@@ -200,6 +200,7 @@ export class HealthEditor extends LitElement {
         },
       },
       visibility: MessageVisibility.WhisperGM,
+      entity: this.actor
     });
 
     await this.actor.updater.batchCommits(async () => {
@@ -212,6 +213,7 @@ export class HealthEditor extends LitElement {
       }
     });
 
+    this.change = null;
     if (this.closeOnSubmit) closeWindow(HealthEditor)
   }
 

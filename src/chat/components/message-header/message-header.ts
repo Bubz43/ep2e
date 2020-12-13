@@ -30,7 +30,7 @@ export class MessageHeader extends LitElement {
     return html`
       <header>
         <div class="headings ${img ? 'with-image' : ''}">
-          <h3>${heading}</h3>
+          <h3 title=${heading}>${heading}</h3>
           ${notEmpty(subheadings)
             ? html`<h4 class="details">${[subheadings].flat().join(' • ')}</h4>`
             : ''}

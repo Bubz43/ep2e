@@ -24,7 +24,7 @@ import {
 import type { DamageOverTime } from './health-changes';
 import { HealthMixin } from './health-mixin';
 import {
-  DotOrHotTarget,
+  HealOverTimeTarget,
   HealingSlot,
   HealsOverTime,
   RecoveryConditions,

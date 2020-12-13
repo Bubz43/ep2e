@@ -1,0 +1,33 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+@include resetUnorderedList();
+
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: grid;
+  grid-auto-rows: min-content;
+  gap: 0.25rem;
+  
+}
+.heal-damage {
+  width: calc(100% - 2rem);
+  margin:  -0.25rem 1rem 0;
+
+}
+
+health-state-form {
+  margin: 0 1rem;
+}
+
+figure {
+  margin: 0.5rem 1rem;
+  figcaption {
+    font-size: large;
+    color: var(--color-text-lighter);
+  }
+}

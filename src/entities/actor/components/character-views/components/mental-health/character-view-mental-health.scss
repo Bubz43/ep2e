@@ -1,0 +1,17 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: grid;
+  grid-auto-rows: min-content;
+  gap: 0.25rem;  
+}
+
+
+health-state-form {
+  margin: 0 1rem;
+}

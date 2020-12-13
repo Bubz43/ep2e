@@ -41,7 +41,7 @@ export class MeshHealthDamageEditor extends HealthEditBase<
             ),
           ],
         })}
-        <div class="armor-toggles">
+        ${this.armor ? html`<div class="armor-toggles">
           <mwc-button
             dense
             label=${localize('armorPiercing')}
@@ -56,7 +56,7 @@ export class MeshHealthDamageEditor extends HealthEditBase<
             label=${localize('reduceAVbyDV')}
             @click=${this.toggleArmorReduce}
           ></mwc-button>
-        </div>
+        </div>` : ""}
       </div>
 
       ${this.renderCommon()}

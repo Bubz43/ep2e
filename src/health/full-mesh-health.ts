@@ -1,5 +1,7 @@
+import { currentWorldTimeMS } from '@src/features/time';
 import { mapProps } from '@src/utility/field-values';
 import { localImage } from '@src/utility/images';
+import { LazyGetter } from 'lazy-get-decorator';
 import { merge, pipe } from 'remeda';
 import {
   applyHealthModification,
@@ -8,13 +10,14 @@ import {
   HealthInit,
   HealthMain,
   HealthModification,
+  HealthModificationMode,
   HealthStatMods,
   HealthType,
   HealthWounds,
   initializeHealthData,
 } from './health';
 import { HealthMixin } from './health-mixin';
-import type { HealsOverTime } from './recovery';
+import { HealingSlot, HealsOverTime, RecoveryConditions, setupRecoveries } from './recovery';
 
 export type MeshHealthData = BasicHealthData &
   HealsOverTime & {
@@ -57,6 +60,16 @@ class MeshHealthBase implements CommonHealth {
     this.wound = wound;
   }
 
+  @LazyGetter()
+  get recoveries() {
+    return setupRecoveries({
+      hot: this.init.data,
+      biological: true,
+      effects: [],
+      conditions: RecoveryConditions.Normal,
+    });
+  }
+
   get data() {
     return this.init.data;
   }
@@ -89,4 +102,51 @@ class MeshHealthBase implements CommonHealth {
   }
 }
 
-export class MeshHealth extends HealthMixin(MeshHealthBase) {}
+export class MeshHealth extends HealthMixin(MeshHealthBase) {
+  private resetRegenStartTimes() {
+    this.init.updater
+      .prop('aidedHealTickStartTime')
+      .store(currentWorldTimeMS())
+      .prop('ownHealTickStartTime')
+      .store(currentWorldTimeMS());
+  }
+
+  applyModification(modification: HealthModification) {
+    const { updater } = this.init;
+    const { damage, wounds } = this.common;
+    switch (modification.mode) {
+      case HealthModificationMode.Edit: {
+        if (!damage && modification.damage) this.resetRegenStartTimes();
+        else if (damage && !modification.damage) this.resetRegenStartTimes();
+        else if (!wounds && modification.wounds) this.resetRegenStartTimes();
+        else if (wounds && !damage && modification.damage)
+          this.resetRegenStartTimes();
+        break;
+      }
+      case HealthModificationMode.Inflict: {
+        if (!damage && modification.damage) this.resetRegenStartTimes();
+        else if (!wounds && modification.wounds) this.resetRegenStartTimes();
+        else if (wounds && !damage && modification.damage)
+          this.resetRegenStartTimes();
+        break;
+      }
+
+      case HealthModificationMode.Heal: {
+        if (damage && modification.damage >= damage)
+          this.resetRegenStartTimes();
+        break;
+      }
+    }
+
+    return updater
+      .prop('')
+      .commit((data) => applyHealthModification(data, modification));
+  }
+
+  logHeal(slot: HealingSlot) {
+    return this.init.updater
+      .prop(`${slot}HealTickStartTime` as const)
+      .commit(currentWorldTimeMS());
+  }
+
+}

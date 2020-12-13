@@ -7,7 +7,7 @@ import {
 } from '@src/data-enums';
 import { localize } from '@src/foundry/localization';
 import { healthLabels, HealthStat, HealthType } from '@src/health/health';
-import { DotOrHotTarget, formatAutoHealing } from '@src/health/recovery';
+import { HealOverTimeTarget, formatAutoHealing } from '@src/health/recovery';
 import { withSign } from '@src/utility/helpers';
 import { anyPass, clamp, compact, createPipe, map, purry } from 'remeda';
 import type { Action, ActionSubtype } from './actions';
@@ -98,7 +98,7 @@ export type HealthRecoveryEffect = {
   interval: number;
   damageAmount: string;
   woundAmount: number;
-  stat: DotOrHotTarget;
+  stat: HealOverTimeTarget;
   technologicallyAided: boolean;
   type: EffectType.HealthRecovery;
 };
@@ -271,7 +271,7 @@ const healthRecovery = createFeature<HealthRecoveryEffect>(() => ({
   damageAmount: '1d10',
   woundAmount: 1,
   interval: CommonInterval.Hour,
-  stat: DotOrHotTarget.Damage,
+  stat: HealOverTimeTarget.Damage,
   technologicallyAided: true,
 }));
 
@@ -351,7 +351,7 @@ const format = (effect: Effect): (string | number)[] => {
       ];
     case EffectType.HealthRecovery: {
       const amount =
-        effect.stat === DotOrHotTarget.Damage
+        effect.stat === HealOverTimeTarget.Damage
           ? effect.damageAmount
           : effect.woundAmount;
       return [
