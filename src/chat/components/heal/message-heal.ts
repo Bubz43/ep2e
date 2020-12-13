@@ -85,19 +85,15 @@ export class MessageHeal extends LitElement {
       case HealthType.Mental:
         return [localize('stress'), localize('traumas')];
       case HealthType.Physical:
-        return [localize('damage'), localize('wounds')];
       case HealthType.Mesh:
-        return [
-          `${localize('mesh')} ${localize('damage')}`,
-          `${localize('mesh')} ${localize('wounds')}`,
-        ];
+        return [localize('damage'), localize('wounds')];
     }
   }
 
   render() {
     const { damageHealTotals, heal, labels } = this;
     const [damageLabel, woundLabel] = labels;
-    const hasFormulas = notEmpty(this.heal.damageFormulas)
+    const hasFormulas = notEmpty(this.heal.damageFormulas);
     return html`
       <mwc-button dense unelevated class="heal-values" @click=${this.applyHeal}>
         ${damageHealTotals.damageValue || 0} ${damageLabel}, ${heal.wounds || 0}
@@ -112,13 +108,12 @@ export class MessageHeal extends LitElement {
             <img src=${localImage('icons/cubes.svg')} height="20px" />
           </mwc-button>`
         : ''}
-      ${damageHealTotals.formula || hasFormulas
-        ? html`
-            <div class="heal-info">
-             ${localize("recover")}  ${damageHealTotals.formula} ${damageLabel}
-            </div>
-          `
-        : ''}
+      <div class="heal-info">
+        ${damageHealTotals.formula || hasFormulas
+          ? ` ${localize('recover')} ${damageHealTotals.formula} ${localize(this.heal.healthType)} ${damageLabel}`
+          : localize(`${this.heal.healthType}Health` as const)}
+      </div>
+
       ${this.viewFormulas && heal.damageFormulas
         ? html`
             <rolled-formulas-list

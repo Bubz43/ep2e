@@ -2,7 +2,7 @@ import { currentWorldTimeMS } from '@src/features/time';
 import { mapProps } from '@src/utility/field-values';
 import { localImage } from '@src/utility/images';
 import { LazyGetter } from 'lazy-get-decorator';
-import { merge, pipe } from 'remeda';
+import { merge, pick, pipe } from 'remeda';
 import {
   applyHealthModification,
   BasicHealthData,
@@ -111,9 +111,11 @@ export class MeshHealth extends HealthMixin(MeshHealthBase) {
       .store(currentWorldTimeMS());
   }
 
+ 
   applyModification(modification: HealthModification) {
     const { updater } = this.init;
     const { damage, wounds } = this.common;
+    const { value: dur } = this.main.durability;
     switch (modification.mode) {
       case HealthModificationMode.Edit: {
         if (!damage && modification.damage) this.resetRegenStartTimes();
@@ -121,6 +123,10 @@ export class MeshHealth extends HealthMixin(MeshHealthBase) {
         else if (!wounds && modification.wounds) this.resetRegenStartTimes();
         else if (wounds && !damage && modification.damage)
           this.resetRegenStartTimes();
+        
+        if (damage < dur && modification.damage >= dur) {
+          updater.prop("crash").store(pick(modification, ["damage", "wounds"]))
+        }
         break;
       }
       case HealthModificationMode.Inflict: {
@@ -128,6 +134,13 @@ export class MeshHealth extends HealthMixin(MeshHealthBase) {
         else if (!wounds && modification.wounds) this.resetRegenStartTimes();
         else if (wounds && !damage && modification.damage)
           this.resetRegenStartTimes();
+        
+          if (damage < dur && modification.damage + damage >= dur) {
+            updater.prop("crash").store({
+              damage: damage + modification.damage,
+              wounds: (wounds || 0) + modification.wounds
+            })
+          }
         break;
       }
 
