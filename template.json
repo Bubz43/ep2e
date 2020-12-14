@@ -413,7 +413,8 @@
         "log": [],
         "naturalHealAttempts": [],
         "violence": 0,
-        "wounds": 0
+        "wounds": 0,
+        "lastGainedStressTime": 0
       }
     }
   },

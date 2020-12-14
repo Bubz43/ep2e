@@ -1,6 +1,8 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+@include resetUnorderedList();
+
 * {
   box-sizing: border-box;
 }
@@ -14,4 +16,19 @@
 
 health-state-form {
   margin: 0 1rem;
+}
+
+figcaption {
+  font-size: large;
+}
+
+.hardening {
+  li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+    --mdc-icon-button-size: 1.75rem;
+    --mdc-icon-size: 1.25rem;
+    color: var(--color-text-lighter);
+  }
 }

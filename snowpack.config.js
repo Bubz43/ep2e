@@ -1,8 +1,8 @@
 /** @type {import("snowpack").SnowpackUserConfig } */
 module.exports = {
   mount: {
-    public: '/',
-    src: '/_dist_',
+    public: { url: '/', static: true },
+    src: { url: '/dist' },
   },
   plugins: [
     '@snowpack/plugin-babel',
@@ -17,7 +17,7 @@ module.exports = {
     rollup: {
       plugins: [
         require('rollup-plugin-livereload')({
-          watch: 'build/_dist_',
+          watch: 'build/dist',
         }),
       ],
     },

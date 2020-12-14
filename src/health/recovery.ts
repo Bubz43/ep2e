@@ -12,7 +12,6 @@ import {
   getElapsedTime,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
-import { capitalize } from '@src/foundry/misc-helpers';
 import { averageRoll } from '@src/foundry/rolls';
 import { nonNegative } from '@src/utility/helpers';
 import { compact } from 'remeda';

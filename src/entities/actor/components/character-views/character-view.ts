@@ -11,7 +11,6 @@ import { CharacterDrawerRenderer } from './character-drawer-render-event';
 import { CharacterViewBase, ItemGroup } from './character-view-base';
 import styles from './character-view.scss';
 
-const tabs = ['status', 'combat', 'psi'] as const;
 
 @customElement('character-view')
 export class CharacterView extends CharacterViewBase {
@@ -20,43 +19,6 @@ export class CharacterView extends CharacterViewBase {
   }
 
   static styles = [styles];
-
-  @query('.tabbed-content')
-  tabbedSection!: HTMLElement;
-
-  @query('#primary-tabs')
-  tabBar?: TabBar;
-
-  updated(changedProps: PropertyValues) {
-    const { tabBar } = this;
-    if (tabBar) {
-      requestAnimationFrame(() => {
-        const tabElements = [...tabBar.querySelectorAll('mwc-tab')];
-        const activeElement = tabElements[tabBar.activeIndex];
-        if (!activeElement?.active) first(tabElements)?.click();
-      });
-    }
-    super.updated(changedProps);
-  }
-
-  private changeTab() {
-    this.requestUpdate();
-  }
-
-  private get tabbedContent() {
-    const index = this.tabBar?.activeIndex || 0;
-    switch (tabs[index]) {
-      case 'psi':
-        return this.renderPsi();
-
-      case 'combat':
-        return this.renderCombat();
-
-      case 'status':
-      default:
-        return this.renderStatus();
-    }
-  }
 
   private toggleNetworkSettings() {
     this.toggleDrawerRenderer(CharacterDrawerRenderer.NetworkSettings);
@@ -96,16 +58,8 @@ export class CharacterView extends CharacterViewBase {
       </div>
       ${this.renderDrawer()}
 
-      <!-- <mwc-tab-bar id="primary-tabs" @MDCTabBar:activated=${this
-        .changeTab}>
-        ${tabs.map((tab) =>
-        showPsi || tab !== 'psi'
-          ? html` <mwc-tab label=${localize(tab)}></mwc-tab> `
-          : '',
-      )}
-      </mwc-tab-bar> -->
 
-      <section class="tabbed-content">${cache(this.tabbedContent)}</section>
+      <section class="tabbed-content">${this.renderStatus()}</section>
     `;
   }
 

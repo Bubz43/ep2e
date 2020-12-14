@@ -652,13 +652,6 @@
       ],
       "type": "string"
     },
-    "DotOrHotTarget": {
-      "enum": [
-        "damageRepair",
-        "woundRepair"
-      ],
-      "type": "string"
-    },
     "DrugAddiction": {
       "enum": [
         "mental",
@@ -2500,7 +2493,7 @@
                             "type": "number"
                           },
                           "stat": {
-                            "$ref": "#/definitions/DotOrHotTarget"
+                            "$ref": "#/definitions/HealOverTimeTarget"
                           },
                           "technologicallyAided": {
                             "type": "boolean"
@@ -3632,7 +3625,7 @@
                             "type": "number"
                           },
                           "stat": {
-                            "$ref": "#/definitions/DotOrHotTarget"
+                            "$ref": "#/definitions/HealOverTimeTarget"
                           },
                           "technologicallyAided": {
                             "type": "boolean"
@@ -4123,7 +4116,7 @@
                             "type": "number"
                           },
                           "stat": {
-                            "$ref": "#/definitions/DotOrHotTarget"
+                            "$ref": "#/definitions/HealOverTimeTarget"
                           },
                           "technologicallyAided": {
                             "type": "boolean"
@@ -5032,7 +5025,7 @@
                             "type": "number"
                           },
                           "stat": {
-                            "$ref": "#/definitions/DotOrHotTarget"
+                            "$ref": "#/definitions/HealOverTimeTarget"
                           },
                           "technologicallyAided": {
                             "type": "boolean"
@@ -5472,7 +5465,7 @@
                             "type": "number"
                           },
                           "stat": {
-                            "$ref": "#/definitions/DotOrHotTarget"
+                            "$ref": "#/definitions/HealOverTimeTarget"
                           },
                           "technologicallyAided": {
                             "type": "boolean"
@@ -5912,7 +5905,7 @@
                             "type": "number"
                           },
                           "stat": {
-                            "$ref": "#/definitions/DotOrHotTarget"
+                            "$ref": "#/definitions/HealOverTimeTarget"
                           },
                           "technologicallyAided": {
                             "type": "boolean"
@@ -6451,7 +6444,7 @@
                             "type": "number"
                           },
                           "stat": {
-                            "$ref": "#/definitions/DotOrHotTarget"
+                            "$ref": "#/definitions/HealOverTimeTarget"
                           },
                           "technologicallyAided": {
                             "type": "boolean"
@@ -6903,7 +6896,7 @@
                             "type": "number"
                           },
                           "stat": {
-                            "$ref": "#/definitions/DotOrHotTarget"
+                            "$ref": "#/definitions/HealOverTimeTarget"
                           },
                           "technologicallyAided": {
                             "type": "boolean"
@@ -7597,7 +7590,7 @@
                                 "type": "number"
                               },
                               "stat": {
-                                "$ref": "#/definitions/DotOrHotTarget"
+                                "$ref": "#/definitions/HealOverTimeTarget"
                               },
                               "technologicallyAided": {
                                 "type": "boolean"
@@ -8101,7 +8094,7 @@
                                 "type": "number"
                               },
                               "stat": {
-                                "$ref": "#/definitions/DotOrHotTarget"
+                                "$ref": "#/definitions/HealOverTimeTarget"
                               },
                               "technologicallyAided": {
                                 "type": "boolean"
@@ -8785,7 +8778,7 @@
                                   "type": "number"
                                 },
                                 "stat": {
-                                  "$ref": "#/definitions/DotOrHotTarget"
+                                  "$ref": "#/definitions/HealOverTimeTarget"
                                 },
                                 "technologicallyAided": {
                                   "type": "boolean"
@@ -9202,6 +9195,13 @@
       ],
       "type": "string"
     },
+    "HealOverTimeTarget": {
+      "enum": [
+        "damageRepair",
+        "woundRepair"
+      ],
+      "type": "string"
+    },
     "HealthEffect": {
       "additionalProperties": false,
       "properties": {
@@ -9245,7 +9245,7 @@
           "type": "number"
         },
         "stat": {
-          "$ref": "#/definitions/DotOrHotTarget"
+          "$ref": "#/definitions/HealOverTimeTarget"
         },
         "technologicallyAided": {
           "type": "boolean"
@@ -9449,6 +9449,9 @@
           "minimum": 0,
           "type": "number"
         },
+        "lastGainedStressTime": {
+          "type": "number"
+        },
         "log": {
           "items": {
             "$ref": "#/definitions/StringID%3CHealthModification%3E"
@@ -9475,6 +9478,7 @@
         "alienation",
         "damage",
         "helplessness",
+        "lastGainedStressTime",
         "log",
         "naturalHealAttempts",
         "violence",
@@ -10587,7 +10591,7 @@
               "type": "number"
             },
             "stat": {
-              "$ref": "#/definitions/DotOrHotTarget"
+              "$ref": "#/definitions/HealOverTimeTarget"
             },
             "technologicallyAided": {
               "type": "boolean"

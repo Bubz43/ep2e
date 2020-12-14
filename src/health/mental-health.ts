@@ -1,7 +1,8 @@
 import type { StringID } from '@src/features/feature-helpers';
+import { currentWorldTimeMS, getElapsedTime } from '@src/features/time';
 import { mapProps } from '@src/utility/field-values';
 import { localImage } from '@src/utility/images';
-import { pick } from 'remeda';
+import { clamp, pick } from 'remeda';
 import {
   applyHealthModification,
   BasicHealthData,
@@ -41,6 +42,7 @@ export type MentalHealthData = BasicHealthData & {
    * @maximum 5
    */
   violence: number;
+  lastGainedStressTime: number;
   naturalHealAttempts: StringID<NaturalMentalHealAttempt>[];
 };
 
@@ -121,6 +123,16 @@ class MentalHealthBase implements CommonHealth {
     return pick(this.init.data, hardeningTypes);
   }
 
+  updateHardening(hardening: typeof hardeningTypes[number], newVal: number) {
+    return this.init.updater
+      .prop(hardening)
+      .commit(clamp(newVal, { min: 0, max: 5 }));
+  }
+
+  get timeSinceLastStress() {
+    return getElapsedTime(this.data.lastGainedStressTime);
+  }
+
   private canHarden(
     stressType: HealthModification['stressType'],
   ): stressType is typeof hardeningTypes[number] {
@@ -139,6 +151,13 @@ class MentalHealthBase implements CommonHealth {
       this.canHarden(modification.stressType)
     ) {
       updater.prop(modification.stressType).store((val) => val + 1);
+    }
+    if (
+      modification.mode === HealthModificationMode.Inflict ||
+      (modification.mode === HealthModificationMode.Edit &&
+        modification.damage > this.main.damage.value)
+    ) {
+      updater.prop('lastGainedStressTime').commit(currentWorldTimeMS());
     }
     return updater
       .prop('')
