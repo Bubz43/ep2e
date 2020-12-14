@@ -1,4 +1,4 @@
-import type { StringID } from '@src/features/feature-helpers';
+import { addFeature, StringID } from '@src/features/feature-helpers';
 import { currentWorldTimeMS, getElapsedTime } from '@src/features/time';
 import { mapProps } from '@src/utility/field-values';
 import { localImage } from '@src/utility/images';
@@ -134,9 +134,28 @@ class MentalHealthBase implements CommonHealth {
   }
 
   get timeSinceHealAttempt() {
-    const lastAttempt = last(this.data.naturalHealAttempts)
-    return lastAttempt ? getElapsedTime(lastAttempt.worldTimeMS) : null
+    const lastAttempt = last(this.data.naturalHealAttempts);
+    return lastAttempt ? getElapsedTime(lastAttempt.worldTimeMS) : null;
   }
+
+  logNaturalHeal(attempt: NaturalMentalHealAttempt) {
+    return this.init.updater
+      .prop('naturalHealAttempts')
+      .commit(addFeature(attempt));
+  }
+
+  get common() {
+    return {
+      damage: this.main.damage.value,
+      wounds: this.wound.wounds.value
+    }
+  }
+
+  // get timeToNaturalHeal() {
+  //   const { timeSinceHealAttempt, timeSinceLastStress } = this;
+  //   if (timeSinceHealAttempt === null || timeSinceLastStress < timeSinceHealAttempt)
+
+  // }
 
   private canHarden(
     stressType: HealthModification['stressType'],

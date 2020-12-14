@@ -24,12 +24,11 @@ export enum NaturalMentalHeal {
 
 export type NaturalMentalHealAttempt = {
   heal: NaturalMentalHeal;
-  failed: boolean;
 } & Timestamp;
 
 export const createMentalHealthAttempt = createFeature<
   NaturalMentalHealAttempt,
-  'heal' | 'failed'
+  'heal'
 >(() => ({
   realTimeMS: Date.now(),
   worldTimeMS: currentWorldTimeMS(),
