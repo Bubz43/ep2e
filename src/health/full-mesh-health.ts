@@ -1,4 +1,4 @@
-import { currentWorldTimeMS } from '@src/features/time';
+import { CommonInterval, currentWorldTimeMS } from '@src/features/time';
 import { mapProps } from '@src/utility/field-values';
 import { localImage } from '@src/utility/images';
 import { LazyGetter } from 'lazy-get-decorator';
@@ -17,7 +17,12 @@ import {
   initializeHealthData,
 } from './health';
 import { HealthMixin } from './health-mixin';
-import { HealingSlot, HealsOverTime, RecoveryConditions, setupRecoveries } from './recovery';
+import {
+  HealingSlot,
+  HealsOverTime,
+  RecoveryConditions,
+  setupRecoveries,
+} from './recovery';
 
 export type MeshHealthData = BasicHealthData &
   HealsOverTime & {
@@ -25,9 +30,8 @@ export type MeshHealthData = BasicHealthData &
      * @minimum 1
      */
     baseDurability: number;
-    crash: Omit<BasicHealthData, 'log'> & {
-      turnsTillReboot: number;
-    };
+    rebootEndTime: number;
+    crash: Omit<BasicHealthData, 'log'>;
   };
 
 type Init = HealthInit<MeshHealthData> & {
@@ -111,7 +115,6 @@ export class MeshHealth extends HealthMixin(MeshHealthBase) {
       .store(currentWorldTimeMS());
   }
 
- 
   applyModification(modification: HealthModification) {
     const { updater } = this.init;
     const { damage, wounds } = this.common;
@@ -123,9 +126,9 @@ export class MeshHealth extends HealthMixin(MeshHealthBase) {
         else if (!wounds && modification.wounds) this.resetRegenStartTimes();
         else if (wounds && !damage && modification.damage)
           this.resetRegenStartTimes();
-        
+
         if (damage < dur && modification.damage >= dur) {
-          updater.prop("crash").store(pick(modification, ["damage", "wounds"]))
+          updater.prop('crash').store(pick(modification, ['damage', 'wounds'])).prop("rebootEndTime").store(-1);
         }
         break;
       }
@@ -134,13 +137,13 @@ export class MeshHealth extends HealthMixin(MeshHealthBase) {
         else if (!wounds && modification.wounds) this.resetRegenStartTimes();
         else if (wounds && !damage && modification.damage)
           this.resetRegenStartTimes();
-        
-          if (damage < dur && modification.damage + damage >= dur) {
-            updater.prop("crash").store({
-              damage: damage + modification.damage,
-              wounds: (wounds || 0) + modification.wounds
-            })
-          }
+
+        if (damage < dur && modification.damage + damage >= dur) {
+          updater.prop('crash').store({
+            damage: damage + modification.damage,
+            wounds: (wounds || 0) + modification.wounds,
+          }).prop("rebootEndTime").store(-1)
+        }
         break;
       }
 
@@ -162,4 +165,18 @@ export class MeshHealth extends HealthMixin(MeshHealthBase) {
       .commit(currentWorldTimeMS());
   }
 
+  get isCrashed() {
+    return this.common.damage >= this.main.durability.value;
+  }
+
+  setRebootTime(turns: number) {
+    return this.init.updater
+      .prop('rebootEndTime')
+      .commit(currentWorldTimeMS() + CommonInterval.Turn * turns);
+  }
+
+  get timeToReboot() {
+    const { rebootEndTime } = this.data;
+    return rebootEndTime >= 0 ? rebootEndTime - currentWorldTimeMS() : null
+  }
 }

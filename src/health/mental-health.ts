@@ -144,19 +144,6 @@ class MentalHealthBase implements CommonHealth {
       .commit(addFeature(attempt));
   }
 
-  get common() {
-    return {
-      damage: this.main.damage.value,
-      wounds: this.wound.wounds.value
-    }
-  }
-
-  // get timeToNaturalHeal() {
-  //   const { timeSinceHealAttempt, timeSinceLastStress } = this;
-  //   if (timeSinceHealAttempt === null || timeSinceLastStress < timeSinceHealAttempt)
-
-  // }
-
   private canHarden(
     stressType: HealthModification['stressType'],
   ): stressType is typeof hardeningTypes[number] {

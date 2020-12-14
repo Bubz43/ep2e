@@ -1,20 +1,26 @@
-import { createMessage } from "@src/chat/create-message";
-import { enumValues } from "@src/data-enums";
-import type { Character } from "@src/entities/actor/proxies/character";
-import { prettyMilliseconds } from "@src/features/time";
-import { localize } from "@src/foundry/localization";
-import { rollLabeledFormulas, rollFormula } from "@src/foundry/rolls";
-import type { MeshHealth } from "@src/health/full-mesh-health";
-import { HealthType } from "@src/health/health";
-import { formatAutoHealing, HealingSlot, HealOverTimeTarget, Recovery } from "@src/health/recovery";
-import { notEmpty } from "@src/utility/helpers";
-import { customElement, LitElement, property, html } from "lit-element";
-import styles from "./character-view-mesh-health.scss";
+import { createMessage } from '@src/chat/create-message';
+import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
+import { enumValues } from '@src/data-enums';
+import type { Character } from '@src/entities/actor/proxies/character';
+import { prettyMilliseconds } from '@src/features/time';
+import { localize } from '@src/foundry/localization';
+import { rollLabeledFormulas, rollFormula } from '@src/foundry/rolls';
+import type { MeshHealth } from '@src/health/full-mesh-health';
+import { HealthType } from '@src/health/health';
+import {
+  formatAutoHealing,
+  HealingSlot,
+  HealOverTimeTarget,
+  Recovery,
+} from '@src/health/recovery';
+import { notEmpty } from '@src/utility/helpers';
+import { customElement, LitElement, property, html } from 'lit-element';
+import styles from './character-view-mesh-health.scss';
 
-@customElement("character-view-mesh-health")
-export class CharacterViewMeshHealth extends LitElement {
+@customElement('character-view-mesh-health')
+export class CharacterViewMeshHealth extends UseWorldTime(LitElement) {
   static get is() {
-    return "character-view-mesh-health" as const;
+    return 'character-view-mesh-health' as const;
   }
 
   static styles = [styles];
@@ -48,14 +54,26 @@ export class CharacterViewMeshHealth extends LitElement {
         },
       },
       // visibility: MessageVisibility.WhisperGM,
-      entity: this.character.actor
+      entity: this.character.actor,
     });
     await this.health.logHeal(heal.slot);
   }
 
+  private async rollReboot() {
+    const roll = rollFormula('1d6');
+    if (roll) {
+      await createMessage({
+        roll,
+        entity: this.character.actor,
+        flavor: `${localize('reboot')} ${localize('turns')}`,
+      });
+      this.health.setRebootTime(roll.total);
+    }
+  }
+
   render() {
     const { health } = this;
-    const { regenState, recoveries } = health;
+    const { regenState, recoveries, isCrashed, timeToReboot } = health;
     // TODO Account for passing intervals
     // TODO Conditions
     return html`
@@ -72,10 +90,27 @@ export class CharacterViewMeshHealth extends LitElement {
 
       <health-state-form .health=${health}></health-state-form>
 
+      ${isCrashed
+        ? html`
+            ${timeToReboot !== null
+              ? html`
+                  <sl-group label=${localize('timeToReboot')}
+                    >${prettyMilliseconds(timeToReboot)}</sl-group
+                  >
+                `
+              : html`
+                  <mwc-button
+                    label="${localize('start')} ${localize('reboot')}"
+                    @click=${this.rollReboot}
+                    ?disabled=${this.character.disabled}
+                  ></mwc-button>
+                `}
+            <sl-group></sl-group>
+          `
+        : ''}
+
       <section>
-        <sl-header heading=${localize('recovery')}>
-      
-        </sl-header>
+        <sl-header heading=${localize('recovery')}> </sl-header>
         ${enumValues(HealOverTimeTarget).map((target) => {
           const heals = recoveries[target];
           return notEmpty(heals)
@@ -93,9 +128,7 @@ export class CharacterViewMeshHealth extends LitElement {
                               @click=${() => this.rollHeal(target, heal)}
                             >
                               <span slot="before">${heal.source}</span>
-                              <span
-                                >${formatAutoHealing(heal)}
-                              </span>
+                              <span>${formatAutoHealing(heal)} </span>
                               ${regenState === target
                                 ? html`
                                     <span slot="after">
@@ -115,8 +148,6 @@ export class CharacterViewMeshHealth extends LitElement {
         })}
       </section>
 
-   
-
       <sl-details summary=${localize('history')}>
         <health-log
           .health=${health}
@@ -125,11 +156,10 @@ export class CharacterViewMeshHealth extends LitElement {
       </sl-details>
     `;
   }
-
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "character-view-mesh-health": CharacterViewMeshHealth;
+    'character-view-mesh-health': CharacterViewMeshHealth;
   }
 }

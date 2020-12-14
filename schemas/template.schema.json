@@ -138,9 +138,6 @@
               "minimum": 0,
               "type": "number"
             },
-            "turnsTillReboot": {
-              "type": "number"
-            },
             "wounds": {
               "minimum": 0,
               "type": "number"
@@ -148,7 +145,6 @@
           },
           "required": [
             "damage",
-            "turnsTillReboot",
             "wounds"
           ],
           "type": "object"
@@ -163,6 +159,9 @@
           },
           "type": "array"
         },
+        "rebootEndTime": {
+          "type": "number"
+        },
         "wounds": {
           "minimum": 0,
           "type": "number"
@@ -173,6 +172,7 @@
         "wounds",
         "log",
         "baseDurability",
+        "rebootEndTime",
         "crash"
       ],
       "type": "object"
@@ -9503,9 +9503,6 @@
               "minimum": 0,
               "type": "number"
             },
-            "turnsTillReboot": {
-              "type": "number"
-            },
             "wounds": {
               "minimum": 0,
               "type": "number"
@@ -9513,7 +9510,6 @@
           },
           "required": [
             "damage",
-            "turnsTillReboot",
             "wounds"
           ],
           "type": "object"
@@ -9532,6 +9528,9 @@
           "type": "array"
         },
         "ownHealTickStartTime": {
+          "type": "number"
+        },
+        "rebootEndTime": {
           "type": "number"
         },
         "woundRepair": {
@@ -9563,6 +9562,7 @@
         "damageRepair",
         "log",
         "ownHealTickStartTime",
+        "rebootEndTime",
         "woundRepair",
         "wounds"
       ],
@@ -10810,9 +10810,6 @@
     "StringID<NaturalMentalHealAttempt>": {
       "additionalProperties": false,
       "properties": {
-        "failed": {
-          "type": "boolean"
-        },
         "heal": {
           "$ref": "#/definitions/NaturalMentalHeal"
         },
@@ -10827,7 +10824,6 @@
         }
       },
       "required": [
-        "failed",
         "heal",
         "id",
         "realTimeMS",
