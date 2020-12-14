@@ -24,7 +24,10 @@ import { localize } from '@src/foundry/localization';
 import { rollFormula, rollLabeledFormulas } from '@src/foundry/rolls';
 import type { BiologicalHealth } from '@src/health/biological-health';
 import { HealthType } from '@src/health/health';
-import { createDamageOverTime, DamageOverTime } from '@src/health/health-changes';
+import {
+  createDamageOverTime,
+  DamageOverTime,
+} from '@src/health/health-changes';
 import {
   HealOverTimeTarget,
   formatAutoHealing,
@@ -72,22 +75,29 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
   }
 
   private async rollDamageOverTime(dot: StringID<DamageOverTime>) {
-        // TODO Account for multiple instances
+    // TODO Account for multiple instances
 
     createMessage({
       data: {
-        header: { heading: `${dot.source} ${localize("damageOverTime")}` },
+        header: { heading: `${dot.source} ${localize('damageOverTime')}` },
         damage: {
-          ...pick(dot, ["armorPiercing", "armorUsed", "reduceAVbyDV", "source"]),
-          rolledFormulas: rollLabeledFormulas([{
-            label: localize("damage"),
-            formula: dot.formula
-          }]),
-          damageType: HealthType.Physical
-        }
+          ...pick(dot, [
+            'armorPiercing',
+            'armorUsed',
+            'reduceAVbyDV',
+            'source',
+          ]),
+          rolledFormulas: rollLabeledFormulas([
+            {
+              label: localize('damage'),
+              formula: dot.formula,
+            },
+          ]),
+          damageType: HealthType.Physical,
+        },
       },
-      entity: this.character.actor
-    })
+      entity: this.character.actor,
+    });
   }
 
   private async rollHeal(target: HealOverTimeTarget, heal: Recovery) {
@@ -111,7 +121,7 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
         },
       },
       // visibility: MessageVisibility.WhisperGM,
-      entity: this.character.actor
+      entity: this.character.actor,
     });
     await this.health.logHeal(heal.slot);
   }
@@ -167,30 +177,32 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
                 <figure>
                   <figcaption>${localize(target)}</figcaption>
                   <ul>
-                    ${enumValues(HealingSlot).map((slot) => {
-                      const heal = heals.get(slot);
-                      return heal
-                        ? html`
-                            <wl-list-item
-                              ?disabled=${this.character.disabled}
-                              clickable
-                              @click=${() => this.rollHeal(target, heal)}
-                            >
-                              <span slot="before">${heal.source}</span>
-                              <span
-                                >${formatAutoHealing(heal, recoveryConditions)}
-                              </span>
-                              ${regenState === target
-                                ? html`
-                                    <span slot="after">
-                                      ${localize('tick')} ${localize('in')}
-                                      ${prettyMilliseconds(heal.timeToTick)}
-                                    </span>
-                                  `
-                                : ''}
-                            </wl-list-item>
-                          `
-                        : '';
+                    ${[...heals.values()].map((heal) => {
+                      const timeToTick =
+                        regenState === target && heal.timeToTick;
+                      return html`
+                        <wl-list-item
+                          class="heal ${timeToTick === 0 ? 'ready' : ''}"
+                          ?disabled=${this.character.disabled}
+                          clickable
+                          @click=${() => this.rollHeal(target, heal)}
+                        >
+                          <span slot="before">${heal.source}</span>
+                          <span
+                            >${formatAutoHealing(heal, recoveryConditions)}
+                          </span>
+                          ${timeToTick !== false
+                            ? html`
+                                <span slot="after">
+                                  ${timeToTick === 0
+                                    ? localize('ready')
+                                    : ` ${localize('tick')} ${localize('in')}
+                                  ${prettyMilliseconds(heal.timeToTick)}`}
+                                </span>
+                              `
+                            : ''}
+                        </wl-list-item>
+                      `;
                     })}
                   </ul>
                 </figure>
@@ -214,7 +226,10 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
         <sl-animated-list>
           ${this.health.data.dots.map(
             (dot) => html`
-              <wl-list-item clickable @click=${() => this.rollDamageOverTime(dot)}>
+              <wl-list-item
+                clickable
+                @click=${() => this.rollDamageOverTime(dot)}
+              >
                 <span slot="before">${dot.source}</span>
                 <span>${dot.formula}</span>
               </wl-list-item>

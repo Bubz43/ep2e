@@ -2,7 +2,7 @@ import type { StringID } from '@src/features/feature-helpers';
 import { currentWorldTimeMS, getElapsedTime } from '@src/features/time';
 import { mapProps } from '@src/utility/field-values';
 import { localImage } from '@src/utility/images';
-import { clamp, pick } from 'remeda';
+import { clamp, last, pick } from 'remeda';
 import {
   applyHealthModification,
   BasicHealthData,
@@ -131,6 +131,11 @@ class MentalHealthBase implements CommonHealth {
 
   get timeSinceLastStress() {
     return getElapsedTime(this.data.lastGainedStressTime);
+  }
+
+  get timeSinceHealAttempt() {
+    const lastAttempt = last(this.data.naturalHealAttempts)
+    return lastAttempt ? getElapsedTime(lastAttempt.worldTimeMS) : null
   }
 
   private canHarden(

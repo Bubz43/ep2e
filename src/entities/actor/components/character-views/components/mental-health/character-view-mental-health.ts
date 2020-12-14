@@ -1,6 +1,7 @@
-import { renderNumberField } from '@src/components/field/fields';
-import { renderUpdaterForm } from '@src/components/form/forms';
+
+import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import type { Character } from '@src/entities/actor/proxies/character';
+import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { hardeningTypes, MentalHealth } from '@src/health/mental-health';
 import { customElement, LitElement, property, html } from 'lit-element';
@@ -8,7 +9,7 @@ import { range } from 'remeda';
 import styles from './character-view-mental-health.scss';
 
 @customElement('character-view-mental-health')
-export class CharacterViewMentalHealth extends LitElement {
+export class CharacterViewMentalHealth extends UseWorldTime(LitElement) {
   static get is() {
     return 'character-view-mental-health' as const;
   }
@@ -24,9 +25,17 @@ export class CharacterViewMentalHealth extends LitElement {
   }
 
   render() {
-    return html` <section>
+    const { timeSinceHealAttempt } = this.health;
+    // TODO show natural heals and attempt them
+    return html`
+     
       <character-view-drawer-heading
         >${localize('mentalHealth')}</character-view-drawer-heading
+      >
+
+      <mwc-button
+        @click=${this.openHealthEditor}
+        >${localize('heal')} / ${localize('damage')}</mwc-button
       >
       <health-state-form
         .health=${this.character.ego.mentalHealth}
@@ -43,7 +52,11 @@ export class CharacterViewMentalHealth extends LitElement {
                   ${range(0, 5).map((place) => {
                     const checked = place < val;
                     return html`<mwc-icon-button
-                    @click=${() => this.health.updateHardening(type, checked ? place : place + 1)}
+                      @click=${() =>
+                        this.health.updateHardening(
+                          type,
+                          checked ? place : place + 1,
+                        )}
                       ?disabled=${this.character.disabled}
                       icon=${checked ? 'check_box' : 'check_box_outline_blank'}
                     ></mwc-icon-button>`;
@@ -54,13 +67,21 @@ export class CharacterViewMentalHealth extends LitElement {
           })}
         </ul>
       </figure>
-   
 
-      <mwc-button
-        @click=${() =>
-          this.character.openHealthEditor(this.character.ego.mentalHealth)}
-        >${localize('heal')} / ${localize('damage')}</mwc-button
+      <sl-group label=${localize('timeSinceStressAccrued')}
+        >${prettyMilliseconds(this.health.timeSinceLastStress)}</sl-group
       >
+      ${timeSinceHealAttempt !== null
+        ? html`
+            <sl-group label=${localize('timeSinceNaturalHealAttempt')}
+              >${prettyMilliseconds(timeSinceHealAttempt)}</sl-group
+            >
+          `
+      : ''}
+        
+        <section>
+        <sl-header heading=${localize("naturalHeal")}></sl-header>
+        </section>
 
       <sl-details summary=${localize('history')}>
         <health-log
@@ -68,7 +89,7 @@ export class CharacterViewMentalHealth extends LitElement {
           ?disabled=${this.character.disabled}
         ></health-log>
       </sl-details>
-    </section>`;
+    `;
   }
 }
 

@@ -52,3 +52,9 @@ figure {
 .conditions-button {
   --mdc-theme-primary: var(--color-grey)
 }
+
+.heal {
+  &.ready {
+    box-shadow: 0 0 4px var(--color-secondary);
+  }
+}

@@ -1343,7 +1343,7 @@ type LangEntries =
   | 'versus'
   | 'disorientation'
   | 'acuteStress'
-  | 'unconsciousness' | "tick" | "recover" | "closeOnSave"
+  | 'unconsciousness' | "tick" | "recover" | "closeOnSave" |"timeSinceNaturalHealAttempt" | "naturalHeal"
 type FullNames =
   | 'cog'
   | 'int'
