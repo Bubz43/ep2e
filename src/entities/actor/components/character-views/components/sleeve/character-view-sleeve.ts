@@ -1,8 +1,11 @@
+import { renderLabeledCheckbox } from '@src/components/field/fields';
+import { renderSubmitForm } from '@src/components/form/forms';
 import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import type { Sleeve } from '@src/entities/actor/sleeves';
 import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
+import { conditionIcons, ConditionType } from '@src/features/conditions';
 import type { ReadonlyPool } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import { HealthEditor } from '@src/health/components/health-editor/health-editor';
@@ -10,7 +13,7 @@ import type { ActorHealth } from '@src/health/health-mixin';
 import { clickIfEnter, notEmpty } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
-import { compact } from 'remeda';
+import { compact, mapToObj } from 'remeda';
 import { traverseActiveElements } from 'weightless';
 import {
   CharacterDrawerRenderer,
@@ -31,27 +34,27 @@ export class CharacterViewSleeve extends LitElement {
   @property({ attribute: false }) sleeve!: Sleeve;
 
   private viewArmor() {
-    this.requestDrawer(CharacterDrawerRenderer.Armor)
+    this.requestDrawer(CharacterDrawerRenderer.Armor);
   }
 
   private viewMeshHealth() {
-    this.requestDrawer(CharacterDrawerRenderer.SleeveMeshHealth)
+    this.requestDrawer(CharacterDrawerRenderer.SleeveMeshHealth);
   }
 
   private viewPhysicalHealth() {
-    this.requestDrawer(CharacterDrawerRenderer.SleevePhysicalHealth)
+    this.requestDrawer(CharacterDrawerRenderer.SleevePhysicalHealth);
   }
 
   private requestDrawer(renderer: CharacterDrawerRenderer) {
-    this.dispatchEvent(new CharacterDrawerRenderEvent(renderer))
+    this.dispatchEvent(new CharacterDrawerRenderEvent(renderer));
   }
-
 
   render() {
     const { sleeve } = this;
     const physicalHealth = 'physicalHealth' in sleeve && sleeve.physicalHealth;
     const meshHealth = 'activeMeshHealth' in sleeve && sleeve.activeMeshHealth;
     const { armor, movementRates, movementModifiers } = this.character;
+    const { conditions } = sleeve;
     return html`
       <header>
         <button @click=${this.sleeve.openForm}>${this.sleeve.name}</button>
@@ -64,6 +67,47 @@ export class CharacterViewSleeve extends LitElement {
           ]).join(' • ')}</span
         >
       </header>
+
+      <div class="conditions">
+        ${notEmpty(conditions)
+          ? html`
+              <sl-popover
+                .renderOnDemand=${() => {
+                  const props = mapToObj(
+                    enumValues(ConditionType),
+                    (condition) => [condition, conditions.includes(condition)],
+                  );
+                  return renderSubmitForm({
+                    classes: 'conditions-form',
+                    props,
+                    update: (changed, orig) => {
+                      this.sleeve.updateConditions(
+                        enumValues(ConditionType).filter(
+                          (condition) => changed[condition] ?? orig[condition],
+                        ),
+                      );
+                    },
+                    fields: (conditions) =>
+                      enumValues(ConditionType).map((condition) =>
+                        renderLabeledCheckbox(conditions[condition]),
+                      ),
+                  });
+                }}
+              >
+                <mwc-button
+                  slot="base"
+                  dense
+                  ?disabled=${this.character.disabled}
+                  >${localize('conditions')}</mwc-button
+                >
+              </sl-popover>
+              ${conditions.map(
+                (condition) =>
+                  html`<img src=${conditionIcons[condition]} height="16px" />`,
+              )}
+            `
+          : `${localize('no')} ${localize('conditions')}`}
+      </div>
 
       <div
         class="armor"
@@ -120,10 +164,24 @@ export class CharacterViewSleeve extends LitElement {
           `
         : ''}
       ${physicalHealth
-        ? html` <health-item @contextmenu=${() => this.character.openHealthEditor(physicalHealth)} clickable @click=${this.viewPhysicalHealth} .health=${physicalHealth}> </health-item> `
+        ? html`
+            <health-item
+              @contextmenu=${() =>
+                this.character.openHealthEditor(physicalHealth)}
+              clickable
+              @click=${this.viewPhysicalHealth}
+              .health=${physicalHealth}
+            >
+            </health-item>
+          `
         : ''}
       ${meshHealth
-        ? html` <health-item @contextmenu=${() => this.character.openHealthEditor(meshHealth)} clickable @click=${this.viewMeshHealth} .health=${meshHealth}>
+        ? html` <health-item
+            @contextmenu=${() => this.character.openHealthEditor(meshHealth)}
+            clickable
+            @click=${this.viewMeshHealth}
+            .health=${meshHealth}
+          >
             ${sleeve.type !== ActorType.Infomorph && sleeve.nonDefaultBrain
               ? html`
                   <span slot="source">${sleeve.nonDefaultBrain.name}</span>

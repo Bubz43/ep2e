@@ -184,9 +184,9 @@ Token.prototype.toggleEffect = async function (
     } else {
       const newConditions = new Set(this.actor.conditions);
       const active = !newConditions.delete(condition);
-      // await this.actor.agent.updateConditions(
-      //   active ? [...newConditions, condition] : [...newConditions]
-      // );
+      await this.actor.proxy.updateConditions(
+        active ? [...newConditions, condition] : [...newConditions]
+      );
     }
   }
 

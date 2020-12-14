@@ -78,8 +78,10 @@ export class CharacterViewMeshHealth extends UseWorldTime(LitElement) {
     // TODO Conditions
     return html`
       <character-view-drawer-heading
-        >${localize('physicalHealth')}</character-view-drawer-heading
+        >${localize('meshHealth')}</character-view-drawer-heading
       >
+
+      <health-item .health=${health}></health-item>
 
       <mwc-button
         class="heal-damage"
@@ -105,7 +107,6 @@ export class CharacterViewMeshHealth extends UseWorldTime(LitElement) {
                     ?disabled=${this.character.disabled}
                   ></mwc-button>
                 `}
-            <sl-group></sl-group>
           `
         : ''}
 

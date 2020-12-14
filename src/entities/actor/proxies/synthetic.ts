@@ -26,6 +26,7 @@ import { addFeature, removeFeature } from '@src/features/feature-helpers';
 import { ArmorType } from '@src/features/active-armor';
 import { enumValues } from '@src/data-enums';
 import type { RecoveryConditions } from '@src/health/recovery';
+import type { ConditionType } from '@src/features/conditions';
 
 class SyntheticBase extends ActorProxyBase<ActorType.Synthetic> {
   get subtype() {
@@ -71,6 +72,10 @@ export class Synthetic extends mix(SyntheticBase).with(
     if (activeEffects) this._outsideEffects = activeEffects;
 
     this.sleeved = sleeved;
+  }
+
+  updateConditions(conditions: ConditionType[]) {
+    return this.updater.prop("data", "conditions").commit(conditions)
   }
 
   get healths(): ActorHealth[] {

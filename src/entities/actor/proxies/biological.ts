@@ -18,6 +18,7 @@ import { compact } from 'remeda';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 import { PhysicalSleeve, SleeveInfo } from '../sleeve-mixins';
 import type { RecoveryConditions } from '@src/health/recovery';
+import type { ConditionType } from '@src/features/conditions';
 
 class BiologicalBase extends ActorProxyBase<ActorType.Biological> {
   get subtype() {
@@ -47,6 +48,10 @@ export class Biological extends mix(BiologicalBase).with(
     super(init);
     if (activeEffects) this._outsideEffects = activeEffects;
     this.sleeved = sleeved;
+  }
+
+  updateConditions(conditions: ConditionType[]) {
+    return this.updater.prop("data", "conditions").commit(conditions)
   }
 
   get healths(): ActorHealth[] {

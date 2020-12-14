@@ -19,6 +19,7 @@ import { ArmorType } from '@src/features/active-armor';
 import { addFeature, removeFeature } from '@src/features/feature-helpers';
 import { identity, mapToObj } from 'remeda';
 import { enumValues } from '@src/data-enums';
+import type { ConditionType } from '@src/features/conditions';
 
 class InfomorphBase extends ActorProxyBase<ActorType.Infomorph> {
   get subtype() {
@@ -45,6 +46,10 @@ export class Infomorph extends mix(InfomorphBase).with(SleeveInfo) {
     super(init);
     if (activeEffects) this._outsideEffects = activeEffects;
     this.sleeved = sleeved;
+  }
+
+  updateConditions(conditions: ConditionType[]) {
+    return this.updater.prop("data", "conditions").commit(conditions)
   }
 
   get healths(): ActorHealth[] {

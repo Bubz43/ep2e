@@ -26,6 +26,7 @@ import type { ActorEntity, SleeveType } from '@src/entities/models';
 import type { UpdateStore } from '@src/entities/update-store';
 import { taskState } from '@src/features/actions';
 import { ActiveArmor } from '@src/features/active-armor';
+import type { ConditionType } from '@src/features/conditions';
 import { EffectType, totalModifiers } from '@src/features/effects';
 import { updateFeature } from '@src/features/feature-helpers';
 import type { MovementRate } from '@src/features/movement';
@@ -130,6 +131,10 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
     const egoFormWindow = getWindow(this.updater);
     if (egoFormWindow?.isConnected) this.ego.openForm?.();
+  }
+
+  updateConditions(conditions: ConditionType[]) {
+    return this.sleeve?.updateConditions(conditions);
   }
 
   get movementModifiers() {
