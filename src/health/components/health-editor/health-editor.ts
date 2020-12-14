@@ -92,7 +92,7 @@ export class HealthEditor extends LitElement {
 
   @internalProperty() private selectedHealth: ActorHealth | null = null;
 
-  @internalProperty() private closeOnSubmit = false;
+  @internalProperty() private closeOnSubmit = true;
 
   private actorUnsub: (() => void) | null = null;
 

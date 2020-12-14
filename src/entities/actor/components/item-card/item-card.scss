@@ -99,9 +99,6 @@
   animation: slideIn 200ms ease-out;
   max-height: 250px;
   overflow: auto;
-  &[hidden] {
-    display: none;
-  }
 }
 
 .toggle {

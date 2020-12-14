@@ -16,11 +16,8 @@
   font-family: Jost;
   margin: 0.5rem 0;
   font-size: 15px;
-  > p {
-    // margin: 0 !important;
-    margin-top: 0 !important;
-    text-overflow: ellipsis;
-    overflow: hidden;
+  > p:first-of-type {
+    margin: 0 !important;
   }
 }
 

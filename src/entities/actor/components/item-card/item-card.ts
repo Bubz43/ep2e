@@ -148,17 +148,19 @@ export class ItemCard extends LazyRipple(LitElement) {
         ${this.renderRipple()}
       </div>
       ${this.expanded
-        ? this.item.type === ItemType.PhysicalTech
+      ? html`
+      ${this.item.type === ItemType.PhysicalTech
           ? this.renderTechParts(this.item)
-          : ''
-        : ''}
-
-      <enriched-html
-        ?hidden=${!this.expanded}
+          : ''}
+            <enriched-html
         class="description"
         .content=${item.description ||
         `<p>${localize('no')} ${localize('description')}</p>`}
       ></enriched-html>
+        `
+        : ''}
+
+    
     `;
   }
 

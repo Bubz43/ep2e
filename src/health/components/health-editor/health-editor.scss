@@ -9,7 +9,8 @@
 
 :host {
   display: grid;
-  min-width: 375px;
+  min-width: 400px;
+  --health-item-padding: 0.5rem 1rem;
 }
 .mode-form {
   padding: 0.25rem 0.5rem;
