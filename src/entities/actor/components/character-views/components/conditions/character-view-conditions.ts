@@ -1,4 +1,5 @@
 import type { MultiSelectedEvent } from '@material/mwc-list/mwc-list-foundation';
+import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import {
@@ -27,7 +28,7 @@ import { compact } from 'remeda';
 import styles from './character-view-conditions.scss';
 
 @customElement('character-view-conditions')
-export class CharacterViewConditions extends LitElement {
+export class CharacterViewConditions extends UseWorldTime(LitElement) {
   static get is() {
     return 'character-view-conditions' as const;
   }

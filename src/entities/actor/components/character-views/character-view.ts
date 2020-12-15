@@ -64,7 +64,8 @@ export class CharacterView extends CharacterViewBase {
 
       <div class="sections">
         <section class="status">
-          <div class="conditions">
+          <sl-header heading=${localize("status")}></sl-header>
+         <div> <div class="conditions">
             <mwc-button
               class="conditions-toggle"
               @click=${this.viewConditions}
@@ -82,7 +83,7 @@ export class CharacterView extends CharacterViewBase {
                       />`,
                   )}
                 `
-              : `${localize('none')}`}
+              : html`<span>${localize('none')}</span>`}
           </div>
 
           ${notEmpty(pools)
@@ -91,7 +92,7 @@ export class CharacterView extends CharacterViewBase {
                   ${[...pools.values()].map(this.renderPool)}
                 </ul>
               `
-            : ''}
+            : ''}</div>
         </section>
         <section>
           <sl-header heading=${localize('network')}>
