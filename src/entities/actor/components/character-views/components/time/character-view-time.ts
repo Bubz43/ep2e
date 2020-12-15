@@ -58,6 +58,10 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
 
   @internalProperty() private taskCreator = false;
 
+  private readonly temporaryFeatureOps = addUpdateRemoveFeature(() => 
+    this.character.updater.prop("data", "temporary").commit
+  )
+
   private readonly expandedTasks = new Set<string>();
 
   private toggleExpandedTask(taskId: string) {
@@ -339,7 +343,9 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
                 ?disabled=${disabled}
                 .timeState=${feature.timeState}
                 completion="completed"
-              ></character-view-time-item>
+              >
+              <delete-button slot="action" @delete=${this.temporaryFeatureOps.removeCallback(feature.id)}></delete-button>
+            </character-view-time-item>
             `,
           )}
         </sl-animated-list>

@@ -1,10 +1,28 @@
 import type { MultiSelectedEvent } from '@material/mwc-list/mwc-list-foundation';
 import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
-import { ConditionType, getConditionEffects } from '@src/features/conditions';
+import {
+  conditionIcons,
+  ConditionType,
+  getConditionEffects,
+} from '@src/features/conditions';
 import { formatEffect } from '@src/features/effects';
+import { addFeature } from '@src/features/feature-helpers';
+import {
+  createTemporaryFeature,
+  TemporaryCondition,
+  TemporaryFeatureType,
+} from '@src/features/temporary';
+import { LiveTimeState, prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
-import { customElement, LitElement, property, html, internalProperty } from 'lit-element';
+import { notEmpty } from '@src/utility/helpers';
+import {
+  customElement,
+  LitElement,
+  property,
+  html,
+  internalProperty,
+} from 'lit-element';
 import { compact } from 'remeda';
 import styles from './character-view-conditions.scss';
 
@@ -21,7 +39,7 @@ export class CharacterViewConditions extends LitElement {
   @internalProperty() private viewEffects = false;
 
   private toggleViewEffects() {
-    this.viewEffects = !this.viewEffects
+    this.viewEffects = !this.viewEffects;
   }
 
   private get conditions() {
@@ -38,28 +56,76 @@ export class CharacterViewConditions extends LitElement {
 
   render() {
     const { conditions } = this;
+    const { disabled, temporaryFeatures } = this.character;
+    const temporary = temporaryFeatures.reduce((accum, temp) => {
+      if (temp.type === TemporaryFeatureType.Condition) {
+        accum.get(temp.condition)?.push(temp) ??
+          accum.set(temp.condition, [temp]);
+      }
+      return accum;
+    }, new Map<ConditionType, (TemporaryCondition & { timeState: LiveTimeState })[]>());
+
     return html`
       <character-view-drawer-heading
         >${localize('conditions')}</character-view-drawer-heading
       >
 
-    <mwc-icon-button class="effects-toggle" @click=${this.toggleViewEffects} icon=${this.viewEffects ? "unfold_less" : "unfold_more"}></mwc-icon-button>
+      ${notEmpty(temporary)
+        ? html`
+            <section>
+              <sl-header heading=${localize('temporary')}></sl-header>
+              ${[...temporary].map(
+                ([condition, list]) => html`
+                  <figure>
+                    <figcaption>${localize(condition)}</figcaption>
+                    <ul>
+                      ${list.map(
+                        (temp) => html`
+                          <wl-list-item>
+                            <span slot="before">${temp.name}</span>
+                            <span
+                              >${prettyMilliseconds(temp.timeState.remaining)}
+                              ${localize('remaining')}</span
+                            >
+                          </wl-list-item>
+                        `,
+                      )}
+                    </ul>
+                  </figure>
+                `,
+              )}
+            </section>
+          `
+        : ''}
 
+      <mwc-button
+        @click=${this.toggleViewEffects}
+        class="effects-toggle"
+        icon=${this.viewEffects ? 'unfold_less' : 'unfold_more'}
+        >${localize(this.viewEffects ? 'hide' : 'view')}
+        ${localize('effects')}</mwc-button
+      >
 
       <mwc-list multi @selected=${this.setConditions}>
         ${enumValues(ConditionType).map(
           (condition) => html`
             <mwc-check-list-item
-              left
+              hasMeta
+              graphic="icon"
+              ?disabled=${disabled}
               ?selected=${conditions.includes(condition)}
             >
               <span>${localize(condition)}</span>
-             
+              <img slot="graphic" src=${conditionIcons[condition]} />
             </mwc-check-list-item>
-           ${this.viewEffects ? html` <p class="condition-effects">${getConditionEffects(condition)
-                .map(formatEffect)
-            .join('. ')}</p>
-                <li divider padded></li>` : ""}
+            ${this.viewEffects
+              ? html` <p class="condition-effects">
+                    ${getConditionEffects(condition)
+                      .map(formatEffect)
+                      .join('. ')}
+                  </p>
+                  <li divider padded></li>`
+              : ''}
           `,
         )}
       </mwc-list>

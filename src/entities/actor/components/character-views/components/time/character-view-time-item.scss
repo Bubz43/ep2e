@@ -53,10 +53,12 @@ img {
   grid-area: actions;
   display: grid;
   grid-auto-flow: column;
+  align-items: center;
   gap: 0.5ch;
   margin-left: 0.5ch;
   --mdc-icon-size: 1.1em;
   z-index: 1;
+  height: 28px;
   @include textButton();
   button {
     display: inline-flex;

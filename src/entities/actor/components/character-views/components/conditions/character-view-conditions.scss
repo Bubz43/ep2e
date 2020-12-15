@@ -1,6 +1,8 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+@include resetUnorderedList();
+
 * {
   box-sizing: border-box;
 }
@@ -26,6 +28,5 @@ li[divider] {
 }
 
 .effects-toggle {
-  margin: 0 1rem 0 auto;
-  --mdc-icon-button-size: 2rem;
+  --mdc-theme-primary: var(--color-grey)
 }

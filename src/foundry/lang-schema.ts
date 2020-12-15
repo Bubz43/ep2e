@@ -1348,7 +1348,7 @@ type LangEntries =
   | 'recover'
   | 'closeOnSave'
   | 'timeSinceNaturalHealAttempt'
-  | 'naturalHeal' | "ago" | "timeToReboot"
+  | 'naturalHeal' | "ago" | "timeToReboot" | "hide"
 type FullNames =
   | 'cog'
   | 'int'
