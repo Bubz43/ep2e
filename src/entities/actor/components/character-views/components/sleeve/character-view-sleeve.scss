@@ -43,10 +43,7 @@ header {
   }
 }
 
-.pools {
-  display: flex;
-  justify-content: space-evenly;
-}
+
 
 health-item {
   --health-item-padding: 0.3rem 1rem;
@@ -144,20 +141,3 @@ health-item {
   }
 }
 
-.conditions {
-  margin: 0 1rem;
-  display: flex;
-  align-items: center;
-  img {
-    margin-left: 0.25rem;
-  }
-}
-
-.conditions-form {
-  grid-template-columns: 1fr 1fr;
-  padding: 0.5rem
-}
-
-.conditions-toggle {
-  z-index: 0;
-}

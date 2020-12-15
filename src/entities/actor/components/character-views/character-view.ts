@@ -1,12 +1,11 @@
-import type { TabBar } from '@material/mwc-tab-bar';
 import { enumValues } from '@src/data-enums';
+import { conditionIcons } from '@src/features/conditions';
+import type { ReadonlyPool } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import { notEmpty } from '@src/utility/helpers';
-import { customElement, html, PropertyValues, query } from 'lit-element';
+import { customElement, html } from 'lit-element';
 import { nothing } from 'lit-html';
-import { cache } from 'lit-html/directives/cache';
 import { classMap } from 'lit-html/directives/class-map';
-import { first } from 'remeda';
 import { CharacterDrawerRenderer } from './character-drawer-render-event';
 import { CharacterViewBase, ItemGroup } from './character-view-base';
 import styles from './character-view.scss';
@@ -23,10 +22,14 @@ export class CharacterView extends CharacterViewBase {
     this.toggleDrawerRenderer(CharacterDrawerRenderer.NetworkSettings);
   }
 
+  private viewConditions() {
+    this.toggleDrawerRenderer(CharacterDrawerRenderer.Conditions);
+  }
+
   render() {
-    const showPsi = !!(this.character.psi || notEmpty(this.character.sleights));
     const { masterDevice } = this.character.equippedGroups;
-    const { sleights, psi } = this.character;
+    const { sleights, psi, conditions, pools } = this.character;
+
     return html`
       <character-view-header
         .character=${this.character}
@@ -60,6 +63,36 @@ export class CharacterView extends CharacterViewBase {
       ${this.renderDrawer()}
 
       <div class="sections">
+        <section class="status">
+          <div class="conditions">
+            <mwc-button
+              class="conditions-toggle"
+              @click=${this.viewConditions}
+              dense
+              >${localize('conditions')}</mwc-button
+            >
+            ${notEmpty(conditions)
+              ? html`
+                  ${conditions.map(
+                    (condition) =>
+                      html`<img
+                        src=${conditionIcons[condition]}
+                        title=${localize(condition)}
+                        height="20px"
+                      />`,
+                  )}
+                `
+              : `${localize('none')}`}
+          </div>
+
+          ${notEmpty(pools)
+            ? html`
+                <ul class="pools">
+                  ${[...pools.values()].map(this.renderPool)}
+                </ul>
+              `
+            : ''}
+        </section>
         <section>
           <sl-header heading=${localize('network')}>
             <mwc-icon-button
@@ -139,6 +172,13 @@ export class CharacterView extends CharacterViewBase {
       </focus-trap>
     `;
   }
+
+  private renderPool = (pool: ReadonlyPool) => html`
+    <pool-item
+      .pool=${pool}
+      ?disabled=${this.character.disabled || pool.disabled}
+    ></pool-item>
+  `;
 }
 
 declare global {

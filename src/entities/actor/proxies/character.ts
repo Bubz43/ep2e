@@ -223,6 +223,10 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     return nonNegative(getElapsedTime(this.epData.accumulatedTimeStart));
   }
 
+  get conditions() {
+    return this.sleeve?.conditions ?? []
+  }
+
   @LazyGetter()
   get tasks() {
     return this.epData.tasks.map((task) => ({

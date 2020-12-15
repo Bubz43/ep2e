@@ -3,8 +3,6 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import type { Sleeve } from '@src/entities/actor/sleeves';
 import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
-import { conditionIcons } from '@src/features/conditions';
-import type { ReadonlyPool } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import { clickIfEnter, notEmpty } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
@@ -88,27 +86,6 @@ export class CharacterViewSleeve extends LitElement {
           ]).join(' • ')}</span
         >
       </header>
-
-      <div class="conditions">
-        <mwc-button
-          class="conditions-toggle"
-          @click=${this.viewConditions}
-          dense
-          >${localize('conditions')}</mwc-button
-        >
-        ${notEmpty(conditions)
-          ? html`
-              ${conditions.map(
-                (condition) =>
-                  html`<img
-                    src=${conditionIcons[condition]}
-                    title=${localize(condition)}
-                    height="20px"
-                  />`,
-              )}
-            `
-          : `${localize('none')}`}
-      </div>
 
       ${notEmpty(armor)
         ? html`
@@ -194,22 +171,11 @@ export class CharacterViewSleeve extends LitElement {
               : ''}
           </health-item>`
         : ''}
-      ${notEmpty(this.character.pools)
-        ? html`
-            <ul class="pools">
-              ${[...this.character.pools.values()].map(this.renderPool)}
-            </ul>
-          `
-        : ''}
+  
     `;
   }
 
-  private renderPool = (pool: ReadonlyPool) => html`
-    <pool-item
-      .pool=${pool}
-      ?disabled=${this.character.disabled || pool.disabled}
-    ></pool-item>
-  `;
+
 }
 
 declare global {

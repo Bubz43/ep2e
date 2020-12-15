@@ -42,9 +42,6 @@ export class CharacterViewConditions extends LitElement {
     this.viewEffects = !this.viewEffects;
   }
 
-  private get conditions() {
-    return this.character.sleeve?.conditions ?? [];
-  }
 
   private setConditions(ev: MultiSelectedEvent) {
     this.character.updateConditions(
@@ -55,8 +52,7 @@ export class CharacterViewConditions extends LitElement {
   }
 
   render() {
-    const { conditions } = this;
-    const { disabled, temporaryFeatures } = this.character;
+    const { disabled, temporaryFeatures, conditions } = this.character;
     const temporary = temporaryFeatures.reduce((accum, temp) => {
       if (temp.type === TemporaryFeatureType.Condition) {
         accum.get(temp.condition)?.push(temp) ??

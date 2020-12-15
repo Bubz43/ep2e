@@ -155,3 +155,19 @@ character-view-sleeve,
   }
 }
 
+
+
+.conditions {
+  margin: 0 1rem;
+  display: flex;
+  align-items: center;
+  img {
+    margin-left: 0.25rem;
+  }
+}
+
+
+.pools {
+  display: flex;
+  justify-content: space-evenly;
+}
