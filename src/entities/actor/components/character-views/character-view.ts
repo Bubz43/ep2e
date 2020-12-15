@@ -11,7 +11,6 @@ import { CharacterDrawerRenderer } from './character-drawer-render-event';
 import { CharacterViewBase, ItemGroup } from './character-view-base';
 import styles from './character-view.scss';
 
-
 @customElement('character-view')
 export class CharacterView extends CharacterViewBase {
   static get is() {
@@ -26,6 +25,8 @@ export class CharacterView extends CharacterViewBase {
 
   render() {
     const showPsi = !!(this.character.psi || notEmpty(this.character.sleights));
+    const { masterDevice } = this.character.equippedGroups;
+    const { sleights, psi } = this.character;
     return html`
       <character-view-header
         .character=${this.character}
@@ -58,24 +59,7 @@ export class CharacterView extends CharacterViewBase {
       </div>
       ${this.renderDrawer()}
 
-
-      <section class="tabbed-content">${this.renderStatus()}</section>
-    `;
-  }
-
-  private renderPsi() {
-    return html``;
-  }
-
-  private renderCombat() {
-    return html``;
-  }
-
-  private renderStatus() {
-    const { masterDevice } = this.character.equippedGroups;
-    const { sleights, psi } = this.character
-    return html`
-      <div class="status">
+      <div class="sections">
         <section>
           <sl-header heading=${localize('network')}>
             <mwc-icon-button
@@ -101,18 +85,25 @@ export class CharacterView extends CharacterViewBase {
               `
             : ''}
         </section>
-        ${psi ? html`
+        ${psi
+          ? html`
+              <section>
+                <sl-header heading=${localize('psi')}></sl-header>
+              </section>
+            `
+          : ''}
+        ${psi || notEmpty(sleights)
+          ? html`
+              <section>
+                <sl-header
+                  heading=${localize('sleights')}
+                  itemCount=${sleights.length}
+                ></sl-header>
+              </section>
+            `
+          : ''}
         <section>
-          <sl-header heading=${localize("psi")}></sl-header>
-        </section>
-        ` : ""}
-        ${psi || notEmpty(sleights) ? html`
-        <section>
-          <sl-header heading=${localize("sleights")} itemCount=${sleights.length}></sl-header>
-        </section>
-        ` : ""}
-        <section>
-          <sl-header heading=${localize("attacks")}></sl-header>
+          <sl-header heading=${localize('attacks')}></sl-header>
         </section>
         ${enumValues(ItemGroup).map(this.renderItemGroup)}
       </div>

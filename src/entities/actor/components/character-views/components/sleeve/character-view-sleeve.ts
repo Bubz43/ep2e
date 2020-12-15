@@ -1,23 +1,18 @@
-import { renderLabeledCheckbox } from '@src/components/field/fields';
-import { renderSubmitForm } from '@src/components/form/forms';
 import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import type { Sleeve } from '@src/entities/actor/sleeves';
 import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
-import { conditionIcons, ConditionType } from '@src/features/conditions';
+import { conditionIcons } from '@src/features/conditions';
 import type { ReadonlyPool } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
-import { HealthEditor } from '@src/health/components/health-editor/health-editor';
-import type { ActorHealth } from '@src/health/health-mixin';
 import { clickIfEnter, notEmpty } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
-import { compact, mapToObj } from 'remeda';
-import { traverseActiveElements } from 'weightless';
+import { compact } from 'remeda';
 import {
   CharacterDrawerRenderer,
-  CharacterDrawerRenderEvent,
+  CharacterDrawerRenderEvent
 } from '../../character-drawer-render-event';
 import styles from './character-view-sleeve.scss';
 
@@ -95,50 +90,61 @@ export class CharacterViewSleeve extends LitElement {
       </header>
 
       <div class="conditions">
-        <mwc-button class="conditions-toggle" @click=${this.viewConditions} dense
+        <mwc-button
+          class="conditions-toggle"
+          @click=${this.viewConditions}
+          dense
           >${localize('conditions')}</mwc-button
         >
         ${notEmpty(conditions)
           ? html`
               ${conditions.map(
                 (condition) =>
-                  html`<img src=${conditionIcons[condition]} height="16px" />`,
+                  html`<img
+                    src=${conditionIcons[condition]}
+                    title=${localize(condition)}
+                    height="20px"
+                  />`,
               )}
             `
           : `${localize('none')}`}
       </div>
 
-      <div
-        class="armor"
-        @click=${this.viewArmor}
-        @keydown=${clickIfEnter}
-        tabindex="0"
-        role="button"
-      >
-        <span class="label"
-          >${localize('armorRating')}
-          <span class="layers">
-            ${armor.get('layers')} ${localize('layers')}</span
-          ></span
-        >
-        <span class="info">
-          ${armor.concealable
-            ? html`<span>${localize('concealable')}</span>`
-            : ''}
-        </span>
-        <span class="values"
-          >${enumValues(ArmorType).map((type) => {
-            const value = armor.getClamped(type);
-            const reduced = armor.reducedArmoors.has(type);
-            return value || reduced
-              ? html`<span class="rating ${classMap({ reduced })}"
-                  >${localize(type)} <span class="value">${value}</span></span
-                >`
-              : '';
-          })}</span
-        >
-      </div>
-
+      ${notEmpty(armor)
+        ? html`
+            <div
+              class="armor"
+              @click=${this.viewArmor}
+              @keydown=${clickIfEnter}
+              tabindex="0"
+              role="button"
+            >
+              <span class="label"
+                >${localize('armorRating')}
+                <span class="layers">
+                  ${armor.get('layers')} ${localize('layers')}</span
+                ></span
+              >
+              <span class="info">
+                ${armor.concealable
+                  ? html`<span>${localize('concealable')}</span>`
+                  : ''}
+              </span>
+              <span class="values"
+                >${enumValues(ArmorType).map((type) => {
+                  const value = armor.getClamped(type);
+                  const reduced = armor.reducedArmoors.has(type);
+                  return value || reduced
+                    ? html`<span class="rating ${classMap({ reduced })}"
+                        >${localize(type)}
+                        <span class="value">${value}</span></span
+                      >`
+                    : '';
+                })}</span
+              >
+            </div>
+          `
+        : ''}
       ${notEmpty(movementRates)
         ? html`
             <div class="movement">

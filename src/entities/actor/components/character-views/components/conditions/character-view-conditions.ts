@@ -65,6 +65,8 @@ export class CharacterViewConditions extends LitElement {
       return accum;
     }, new Map<ConditionType, (TemporaryCondition & { timeState: LiveTimeState })[]>());
 
+    // TODO Conditions from substances
+
     return html`
       <character-view-drawer-heading
         >${localize('conditions')}</character-view-drawer-heading
