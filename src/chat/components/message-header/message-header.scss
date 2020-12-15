@@ -8,7 +8,6 @@
 :host {
   display: grid;
   min-width: 280px;
-  border-bottom: 1px solid alphav(var(--color-border), 0.5);
 }
 
 header {
@@ -36,6 +35,7 @@ header {
     font-family: var(--font-2);
     font-size: 0.7rem;
     text-transform: capitalize;
+    text-align: center;
   }
 }
 

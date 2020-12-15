@@ -1,7 +1,10 @@
 import { enumValues } from '@src/data-enums';
+import { PoolItem } from '@src/features/components/pool-item/pool-item';
 import { conditionIcons } from '@src/features/conditions';
 import type { ReadonlyPool } from '@src/features/pool';
+import { poolActionOptions } from '@src/features/pools';
 import { localize } from '@src/foundry/localization';
+import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html } from 'lit-element';
 import { nothing } from 'lit-html';
@@ -24,6 +27,18 @@ export class CharacterView extends CharacterViewBase {
 
   private viewConditions() {
     this.toggleDrawerRenderer(CharacterDrawerRenderer.Conditions);
+  }
+
+  private openPoolMenu(ev: MouseEvent) {
+    if (ev.currentTarget instanceof PoolItem) {
+      const { type } = ev.currentTarget.pool
+      openMenu({
+        header: { heading: localize(type) },
+        content: poolActionOptions(this.character, type),
+        position: ev
+      })
+    }
+  
   }
 
   render() {
@@ -176,6 +191,7 @@ export class CharacterView extends CharacterViewBase {
 
   private renderPool = (pool: ReadonlyPool) => html`
     <pool-item
+    @click=${this.openPoolMenu}
       .pool=${pool}
       ?disabled=${this.character.disabled || pool.disabled}
     ></pool-item>

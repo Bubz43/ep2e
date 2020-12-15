@@ -18,6 +18,8 @@
 
   ::slotted([slot='action']) {
     --mdc-icon-size: 1.1em;
+    --mdc-icon-button-size: 1.25em;
+
   }
 }
 
@@ -57,6 +59,7 @@ img {
   gap: 0.5ch;
   margin-left: 0.5ch;
   --mdc-icon-size: 1.1em;
+  
   z-index: 1;
   height: 28px;
   @include textButton();

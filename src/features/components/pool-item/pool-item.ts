@@ -28,7 +28,7 @@ export class PoolItem extends mix(LitElement).with(LazyRipple) {
 
   render() {
     const { pool, disabled } = this;
-    const nonUsable = disabled || !pool.available || pool.disabled;
+    const nonUsable = disabled  || pool.disabled;
     // TODO: Add some indicator that pool is disable by effect
     return html`
       <div

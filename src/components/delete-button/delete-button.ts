@@ -46,6 +46,7 @@ export class DeleteButton extends LitElement {
   }
 
   render() {
+    // TODO just use an icon button
     return html`
       <div>
         <wl-list-item

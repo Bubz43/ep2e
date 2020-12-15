@@ -112,7 +112,7 @@ export class HealthItem<T extends Health = Health> extends mix(LitElement).with(
                     ? html`
                         <div title=${wound.woundsIgnored.label}>
                           <img
-                            src="${EP.Path}/icons/health/interdiction.svg"
+                            src=${localImage("icons/health/interdiction.svg")}
                             class="wound-icon ignored"
                           /><span class="wound-value"
                             >${wound.woundsIgnored.value}</span
