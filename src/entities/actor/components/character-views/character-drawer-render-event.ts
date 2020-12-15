@@ -8,7 +8,8 @@ export enum CharacterDrawerRenderer {
   Armor = 'Armor',
   MentalHealth = 'MentalHealth',
   SleeveMeshHealth = "SleeveMeshHealth",
-  SleevePhysicalHealth = "SleevePhysicalHealth"
+  SleevePhysicalHealth = "SleevePhysicalHealth",
+  Conditions = "Conditions",
 }
 
 export class CharacterDrawerRenderEvent extends Event {

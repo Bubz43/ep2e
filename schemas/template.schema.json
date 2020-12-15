@@ -131,23 +131,8 @@
           "minimum": 1,
           "type": "number"
         },
-        "crash": {
-          "additionalProperties": false,
-          "properties": {
-            "damage": {
-              "minimum": 0,
-              "type": "number"
-            },
-            "wounds": {
-              "minimum": 0,
-              "type": "number"
-            }
-          },
-          "required": [
-            "damage",
-            "wounds"
-          ],
-          "type": "object"
+        "crashWounds": {
+          "type": "number"
         },
         "damage": {
           "minimum": 0,
@@ -173,7 +158,7 @@
         "log",
         "baseDurability",
         "rebootEndTime",
-        "crash"
+        "crashWounds"
       ],
       "type": "object"
     },
@@ -9496,23 +9481,8 @@
           "minimum": 1,
           "type": "number"
         },
-        "crash": {
-          "additionalProperties": false,
-          "properties": {
-            "damage": {
-              "minimum": 0,
-              "type": "number"
-            },
-            "wounds": {
-              "minimum": 0,
-              "type": "number"
-            }
-          },
-          "required": [
-            "damage",
-            "wounds"
-          ],
-          "type": "object"
+        "crashWounds": {
+          "type": "number"
         },
         "damage": {
           "minimum": 0,
@@ -9557,7 +9527,7 @@
       "required": [
         "aidedHealTickStartTime",
         "baseDurability",
-        "crash",
+        "crashWounds",
         "damage",
         "damageRepair",
         "log",

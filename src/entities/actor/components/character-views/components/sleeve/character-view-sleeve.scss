@@ -144,7 +144,17 @@ health-item {
   }
 }
 
+.conditions {
+  margin: 0 1rem;
+  display: flex;
+  align-items: center;
+}
+
 .conditions-form {
   grid-template-columns: 1fr 1fr;
   padding: 0.5rem
+}
+
+.conditions-toggle {
+  z-index: 0;
 }

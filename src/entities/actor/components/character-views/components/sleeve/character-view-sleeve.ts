@@ -45,6 +45,10 @@ export class CharacterViewSleeve extends LitElement {
     this.requestDrawer(CharacterDrawerRenderer.SleevePhysicalHealth);
   }
 
+  private viewConditions() {
+    this.requestDrawer(CharacterDrawerRenderer.Conditions);
+  }
+
   private requestDrawer(renderer: CharacterDrawerRenderer) {
     this.dispatchEvent(new CharacterDrawerRenderEvent(renderer));
   }
@@ -55,25 +59,9 @@ export class CharacterViewSleeve extends LitElement {
     const meshHealth = 'activeMeshHealth' in sleeve && sleeve.activeMeshHealth;
     const { armor, movementRates, movementModifiers } = this.character;
     const { conditions } = sleeve;
-    return html`
-      <header>
-        <button @click=${this.sleeve.openForm}>${this.sleeve.name}</button>
-        <span class="details">
-          ${compact([
-            'size' in sleeve && localize(sleeve.size),
-            sleeve.subtype || localize(sleeve.type),
-            'isSwarm' in sleeve && sleeve.isSwarm && localize('swarm'),
-            'sex' in sleeve && sleeve.sex,
-          ]).join(' • ')}</span
-        >
-      </header>
 
-      <div class="conditions">
-        ${notEmpty(conditions)
-          ? html`
-              <sl-popover
-                .renderOnDemand=${() => {
-                  const props = mapToObj(
+    /*
+ const props = mapToObj(
                     enumValues(ConditionType),
                     (condition) => [condition, conditions.includes(condition)],
                   );
@@ -92,21 +80,32 @@ export class CharacterViewSleeve extends LitElement {
                         renderLabeledCheckbox(conditions[condition]),
                       ),
                   });
-                }}
-              >
-                <mwc-button
-                  slot="base"
-                  dense
-                  ?disabled=${this.character.disabled}
-                  >${localize('conditions')}</mwc-button
-                >
-              </sl-popover>
+    */
+    return html`
+      <header>
+        <button @click=${this.sleeve.openForm}>${this.sleeve.name}</button>
+        <span class="details">
+          ${compact([
+            'size' in sleeve && localize(sleeve.size),
+            sleeve.subtype || localize(sleeve.type),
+            'isSwarm' in sleeve && sleeve.isSwarm && localize('swarm'),
+            'sex' in sleeve && sleeve.sex,
+          ]).join(' • ')}</span
+        >
+      </header>
+
+      <div class="conditions">
+        <mwc-button class="conditions-toggle" @click=${this.viewConditions} dense
+          >${localize('conditions')}</mwc-button
+        >
+        ${notEmpty(conditions)
+          ? html`
               ${conditions.map(
                 (condition) =>
                   html`<img src=${conditionIcons[condition]} height="16px" />`,
               )}
             `
-          : `${localize('no')} ${localize('conditions')}`}
+          : `${localize('none')}`}
       </div>
 
       <div

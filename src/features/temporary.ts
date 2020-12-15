@@ -1,5 +1,6 @@
 import type { RechargeType } from '@src/data-enums';
 import { localize } from '@src/foundry/localization';
+import type { ConditionType } from './conditions';
 import type { Effect } from './effects';
 import { createFeature, StringID } from './feature-helpers';
 import { CommonInterval, currentWorldTimeMS } from './time';
@@ -13,6 +14,7 @@ export enum TemporaryFeatureEnd {
 export enum TemporaryFeatureType {
   ActiveRecharge = 'activeRecharge',
   Effects = 'effects',
+  Condition = 'condition',
 }
 
 type Base<T extends { type: TemporaryFeatureType }> = T & {
@@ -34,7 +36,15 @@ export type TemporaryEffects = Base<{
   effects: StringID<Effect>[];
 }>;
 
-export type TemporaryFeature = ActiveRecharge | TemporaryEffects;
+export type TemporaryCondition = Base<{
+  type: TemporaryFeatureType.Condition;
+  condition: ConditionType;
+}>;
+
+export type TemporaryFeature =
+  | ActiveRecharge
+  | TemporaryEffects
+  | TemporaryCondition;
 
 const activeRecharge = createFeature<
   ActiveRecharge,
@@ -54,7 +64,17 @@ const effects = createFeature<TemporaryEffects, 'name'>(() => ({
   endOn: '',
 }));
 
+const condition = createFeature<TemporaryCondition, 'name' | 'condition'>(
+  () => ({
+    type: TemporaryFeatureType.Condition,
+    duration: CommonInterval.Turn,
+    endOn: '',
+    startTime: currentWorldTimeMS(),
+  }),
+);
+
 export const createTemporaryFeature = {
   activeRecharge,
   effects,
+  condition
 } as const;

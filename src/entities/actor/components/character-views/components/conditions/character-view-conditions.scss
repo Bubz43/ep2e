@@ -1,0 +1,31 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: flex;
+  flex-flow: column;
+  
+}
+
+.condition-effects {
+  color: var(--color-text-lighter);
+  margin: 0.25rem 1rem 1rem;
+}
+mwc-check-list-item {
+  height: 2.5rem;
+}
+li[divider] {
+  border-color: var(--color-border);
+  &:last-of-type {
+    display: none
+  }
+}
+
+.effects-toggle {
+  margin: 0 1rem 0 auto;
+  --mdc-icon-button-size: 2rem;
+}

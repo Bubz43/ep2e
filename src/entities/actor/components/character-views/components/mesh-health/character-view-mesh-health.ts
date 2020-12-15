@@ -71,6 +71,10 @@ export class CharacterViewMeshHealth extends UseWorldTime(LitElement) {
     }
   }
 
+  private reboot() {
+    this.health.reboot();
+  }
+
   render() {
     const { health } = this;
     const { regenState, recoveries, isCrashed, timeToReboot } = health;
@@ -94,19 +98,18 @@ export class CharacterViewMeshHealth extends UseWorldTime(LitElement) {
 
       ${isCrashed
         ? html`
-            ${timeToReboot !== null
-              ? html`
-                  <sl-group label=${localize('timeToReboot')}
-                    >${prettyMilliseconds(timeToReboot)}</sl-group
-                  >
-                `
-              : html`
-                  <mwc-button
+            <div class="crash-state">
+            ${timeToReboot === null ? html` <mwc-button
                     label="${localize('start')} ${localize('reboot')}"
                     @click=${this.rollReboot}
                     ?disabled=${this.character.disabled}
-                  ></mwc-button>
-                `}
+                  ></mwc-button>` : timeToReboot <= 0 ? html`
+                  <mwc-button unelevated @click=${this.reboot}>${localize("reboot")}</mwc-button>
+                  ` : html` <sl-group label=${localize('timeToReboot')}
+                    >${prettyMilliseconds(timeToReboot)}</sl-group
+                  >`}
+        
+            </div>
           `
         : ''}
 

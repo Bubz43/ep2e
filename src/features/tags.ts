@@ -144,8 +144,8 @@ export const formatTag = (tag: Tag) => {
   switch (tag.type) {
     case TagType.Action:
       return `${uniq([
-        localize(tag.subtype ? tag.subtype : 'all'),
         localize(tag.action ? tag.action : 'all'),
+        localize(tag.subtype ? tag.subtype : 'all'),
       ]).join(' ')} ${localize('actions')}`;
 
     case TagType.AptitudeChecks:

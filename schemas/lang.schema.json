@@ -586,6 +586,9 @@
             "agi": {
               "type": "string"
             },
+            "ago": {
+              "type": "string"
+            },
             "ai": {
               "type": "string"
             },
@@ -2686,6 +2689,9 @@
             "narcoalgorithm": {
               "type": "string"
             },
+            "naturalHeal": {
+              "type": "string"
+            },
             "naturalHealAttempts": {
               "type": "string"
             },
@@ -3991,7 +3997,13 @@
             "timeAdvance": {
               "type": "string"
             },
+            "timeSinceNaturalHealAttempt": {
+              "type": "string"
+            },
             "timeSinceStressAccrued": {
+              "type": "string"
+            },
+            "timeToReboot": {
               "type": "string"
             },
             "timeframe": {
@@ -4455,6 +4467,7 @@
             "age",
             "aggressive",
             "agi",
+            "ago",
             "ai",
             "aided",
             "aidedHealing",
@@ -5155,6 +5168,7 @@
             "nanodrug",
             "nanoware",
             "narcoalgorithm",
+            "naturalHeal",
             "naturalHealAttempts",
             "nautical",
             "nauticalCraft",
@@ -5590,7 +5604,9 @@
             "tick",
             "time",
             "timeAdvance",
+            "timeSinceNaturalHealAttempt",
             "timeSinceStressAccrued",
+            "timeToReboot",
             "timeframe",
             "timeframes",
             "timer",

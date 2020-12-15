@@ -174,4 +174,8 @@ export abstract class CharacterViewBase extends LitElement {
       ></character-view-mesh-health>
     `;
   }
+
+  renderConditions() {
+    return html`<character-view-conditions .character=${this.character}></character-view-conditions>`
+  }
 }

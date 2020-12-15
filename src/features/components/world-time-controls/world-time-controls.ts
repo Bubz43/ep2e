@@ -21,7 +21,7 @@ export class WorldTimeControls extends LitElement {
     createMessage({
       content: format('ModifiedTime', {
         direction: localize(forwards ? 'advanced' : 'rewound'),
-        amount: prettyMilliseconds(this.timeChange),
+        amount: prettyMilliseconds(this.timeChange, {compact: false }),
       }),
       entity: null,
     });
