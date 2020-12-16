@@ -167,7 +167,7 @@ export const setupRecoveries = ({
         timeState: createLiveTimeState({
           duration: data.interval * recoveryMultiplier(conditions),
           startTime: hot[key],
-          label: `${source} (${localize(stat)})`,
+          label: source,
           id: `${stat}-${slot}`,
           updateStartTime: (newStartTime) =>
             updateStartTime({ [key]: newStartTime }),
@@ -205,7 +205,7 @@ export const setupRecoveries = ({
       timeState: createLiveTimeState({
         duration: effect.interval * recoveryMultiplier(conditions),
         startTime: hot[key],
-        label: `${effect[Source]} (${localize(stat)})`,
+        label: effect[Source],
         id: `${stat}-${slot}`,
         updateStartTime: (newStartTime) =>
           updateStartTime({ [key]: newStartTime }),

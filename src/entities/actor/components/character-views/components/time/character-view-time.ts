@@ -121,28 +121,28 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
         <sl-header
           heading="${localize('heal')}/${localize('repair')}"
         ></sl-header>
-          ${regeningHealths.map((health) => {
-            const { regenState, recoveries } = health;
-            const heals = regenState && recoveries?.[regenState]?.values()
-            return heals ? html`
-            <figure class='heal-recoveries'>
-            <figcaption>${health.source} [${localize(`${health.type}Health` as const)}]</figcaption>
-            ${[...heals].map(heal => {
-             
-             return html`
-               <character-view-time-item
-               ?disabled=${disabled}
-               .timeState=${heal.timeState}
-               completion="ready"
-             >
-             
-             </character-view-time-item>
-           `;
-           })}
-            </figure>
-            ` : ""
-         
-          })}
+        ${regeningHealths.map((health) => {
+          const { activeRecoveries, regenState } = health;
+          return notEmpty(activeRecoveries) && regenState
+            ? html`
+                <figure class="heal-recoveries">
+                  <figcaption>
+                    ${health.source}
+                    (${localize(`${health.type}Health` as const)},
+                    ${localize(regenState)})
+                  </figcaption>
+                  ${[...activeRecoveries.values()].map((heal) => html`
+                      <character-view-time-item
+                        ?disabled=${disabled}
+                        .timeState=${heal.timeState}
+                        completion="ready"
+                      >
+                      </character-view-time-item>
+                    `)}
+                </figure>
+              `
+            : '';
+        })}
       </section>
     `;
   }
