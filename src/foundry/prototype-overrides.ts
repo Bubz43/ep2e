@@ -185,7 +185,7 @@ Token.prototype.toggleEffect = async function (
       const newConditions = new Set(this.actor.conditions);
       const active = !newConditions.delete(condition);
       await this.actor.proxy.updateConditions(
-        active ? [...newConditions, condition] : [...newConditions]
+        active ? [...newConditions, condition] : [...newConditions],
       );
     }
   }

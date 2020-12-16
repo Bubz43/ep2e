@@ -39,7 +39,6 @@ export class MessageStressTest extends LitElement {
     this.usedRollParts = ev.usedRollParts;
   }
 
-
   get rolls() {
     const { usedRollParts } = this;
     return usedRollParts
@@ -77,7 +76,6 @@ export class MessageStressTest extends LitElement {
     };
   }
 
- 
   private get source() {
     return this.stress.source || localize('stressfulExperience');
   }

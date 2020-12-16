@@ -7,9 +7,9 @@ export enum CharacterDrawerRenderer {
   NetworkSettings = 'NetworkSettings',
   Armor = 'Armor',
   MentalHealth = 'MentalHealth',
-  SleeveMeshHealth = "SleeveMeshHealth",
-  SleevePhysicalHealth = "SleevePhysicalHealth",
-  Conditions = "Conditions",
+  SleeveMeshHealth = 'SleeveMeshHealth',
+  SleevePhysicalHealth = 'SleevePhysicalHealth',
+  Conditions = 'Conditions',
 }
 
 export class CharacterDrawerRenderEvent extends Event {

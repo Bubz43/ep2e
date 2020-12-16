@@ -34,7 +34,7 @@ export class MessageContent extends LitElement {
     return html`
       ${header ? html` <message-header .data=${header}></message-header> ` : ''}
       ${heal ? html` <message-heal .heal=${heal}></message-heal> ` : ''}
-      ${damage ? html`<message-damage .damage=${damage}></message-damage>` : ""}
+      ${damage ? html`<message-damage .damage=${damage}></message-damage>` : ''}
       ${stress
         ? html` <message-stress-test .stress=${stress}></message-stress-test> `
         : ''}

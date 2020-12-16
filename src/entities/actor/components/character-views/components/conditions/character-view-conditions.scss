@@ -10,7 +10,6 @@
 :host {
   display: flex;
   flex-flow: column;
-  
 }
 
 .condition-effects {
@@ -23,10 +22,10 @@ mwc-check-list-item {
 li[divider] {
   border-color: var(--color-border);
   &:last-of-type {
-    display: none
+    display: none;
   }
 }
 
 .effects-toggle {
-  --mdc-theme-primary: var(--color-grey)
+  --mdc-theme-primary: var(--color-grey);
 }

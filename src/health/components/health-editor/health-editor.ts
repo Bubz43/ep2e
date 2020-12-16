@@ -200,7 +200,7 @@ export class HealthEditor extends LitElement {
         },
       },
       visibility: MessageVisibility.WhisperGM,
-      entity: this.actor
+      entity: this.actor,
     });
 
     await this.actor.updater.batchCommits(async () => {
@@ -214,7 +214,7 @@ export class HealthEditor extends LitElement {
     });
 
     this.change = null;
-    if (this.closeOnSubmit) closeWindow(HealthEditor)
+    if (this.closeOnSubmit) closeWindow(HealthEditor);
   }
 
   private get currentHealth() {
@@ -292,11 +292,11 @@ export class HealthEditor extends LitElement {
               props: { mode: this.mode, closeOnSave: this.closeOnSubmit },
               update: ({ mode, closeOnSave: closeonSave }) => {
                 if (mode) this.mode = mode;
-                if (closeonSave !== undefined) this.closeOnSubmit = closeonSave
+                if (closeonSave !== undefined) this.closeOnSubmit = closeonSave;
               },
               fields: ({ mode, closeOnSave }) => [
                 renderRadioFields(mode, ['heal', 'damage']),
-                renderLabeledCheckbox(closeOnSave)
+                renderLabeledCheckbox(closeOnSave),
               ],
             })}
             ${this.mode === 'heal'
@@ -353,10 +353,10 @@ export class HealthEditor extends LitElement {
     // TODO check this works properly with change
     const { main, wound } = health;
     const props = {
-      source: change?.source || "",
-      damage: clamp(change?.damage || 0, { max: main.damage.value}),
-      wounds: clamp(change?.wounds || 0, { max: wound?.wounds.value || 0})
-    }
+      source: change?.source || '',
+      damage: clamp(change?.damage || 0, { max: main.damage.value }),
+      wounds: clamp(change?.wounds || 0, { max: wound?.wounds.value || 0 }),
+    };
     return renderSubmitForm({
       props,
       classes: 'heal-editor',

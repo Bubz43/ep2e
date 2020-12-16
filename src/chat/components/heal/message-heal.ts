@@ -110,7 +110,9 @@ export class MessageHeal extends LitElement {
         : ''}
       <div class="heal-info">
         ${damageHealTotals.formula || hasFormulas
-          ? ` ${localize('recover')} ${damageHealTotals.formula} ${localize(this.heal.healthType)} ${damageLabel}`
+          ? ` ${localize('recover')} ${damageHealTotals.formula} ${localize(
+              this.heal.healthType,
+            )} ${damageLabel}`
           : localize(`${this.heal.healthType}Health` as const)}
       </div>
 

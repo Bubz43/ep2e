@@ -51,7 +51,7 @@ export class Biological extends mix(BiologicalBase).with(
   }
 
   updateConditions(conditions: ConditionType[]) {
-    return this.updater.prop("data", "conditions").commit(conditions)
+    return this.updater.prop('data', 'conditions').commit(conditions);
   }
 
   get healths(): ActorHealth[] {
@@ -72,7 +72,7 @@ export class Biological extends mix(BiologicalBase).with(
   }
 
   updateRecoveryConditions(conditions: RecoveryConditions) {
-    return this.updater.prop("data", "recoveryConditions").commit(conditions)
+    return this.updater.prop('data', 'recoveryConditions').commit(conditions);
   }
 
   @LazyGetter()
@@ -99,7 +99,7 @@ export class Biological extends mix(BiologicalBase).with(
       source: localize('frame'),
       isSwarm: this.isSwarm,
       recoveryEffects: this.activeEffects.getGroup(EffectType.HealthRecovery),
-      recoveryConditions: this.epData.recoveryConditions
+      recoveryConditions: this.epData.recoveryConditions,
     });
   }
 

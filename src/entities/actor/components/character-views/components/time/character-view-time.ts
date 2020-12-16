@@ -131,14 +131,16 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
                     (${localize(`${health.type}Health` as const)},
                     ${localize(regenState)})
                   </figcaption>
-                  ${[...activeRecoveries.values()].map((heal) => html`
+                  ${[...activeRecoveries.values()].map(
+                    (heal) => html`
                       <character-view-time-item
                         ?disabled=${disabled}
                         .timeState=${heal.timeState}
                         completion="ready"
                       >
                       </character-view-time-item>
-                    `)}
+                    `,
+                  )}
                 </figure>
               `
             : '';

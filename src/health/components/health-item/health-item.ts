@@ -17,7 +17,7 @@ import styles from './health-item.scss';
 @customElement('health-item')
 export class HealthItem<T extends Health = Health> extends mix(LitElement).with(
   LazyRipple,
-  UseWorldTime
+  UseWorldTime,
 ) {
   static get is() {
     return 'health-item' as const;
@@ -83,9 +83,17 @@ export class HealthItem<T extends Health = Health> extends mix(LitElement).with(
         </div>
 
         <section class="damage-info">
-          ${health.regenState ? html`
-          <img class="regen-available ${classMap({ ready: health.readyRegen })}" height="22px" src=${localImage("icons/health/auto-repair.svg")} />
-          ` : ""}
+          ${health.regenState
+            ? html`
+                <img
+                  class="regen-available ${classMap({
+                    ready: health.readyRegen,
+                  })}"
+                  height="22px"
+                  src=${localImage('icons/health/auto-repair.svg')}
+                />
+              `
+            : ''}
           ${mini
             ? ''
             : html`<div
@@ -112,7 +120,7 @@ export class HealthItem<T extends Health = Health> extends mix(LitElement).with(
                     ? html`
                         <div title=${wound.woundsIgnored.label}>
                           <img
-                            src=${localImage("icons/health/interdiction.svg")}
+                            src=${localImage('icons/health/interdiction.svg')}
                             class="wound-icon ignored"
                           /><span class="wound-value"
                             >${wound.woundsIgnored.value}</span

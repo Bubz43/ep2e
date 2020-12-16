@@ -44,8 +44,7 @@ export class MessageDamage extends LitElement {
   }
 
   private applyDamage() {
-  
-    const data = { ...this.totals, ...omit(this.damage, ["rolledFormulas"]) };
+    const data = { ...this.totals, ...omit(this.damage, ['rolledFormulas']) };
     pickOrDefaultActor((actor) =>
       HealthEditor.openWindow({
         actor,

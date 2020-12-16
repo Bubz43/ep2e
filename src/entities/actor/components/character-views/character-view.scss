@@ -104,10 +104,7 @@ character-view-sleeve,
     padding: 0.5rem;
   }
   --health-item-padding: 0.25rem 0.75rem;
-
-  
 }
-
 
 .drawer {
   grid-area: side;
@@ -137,7 +134,7 @@ character-view-sleeve,
   }
 
   .close-drawer {
-    margin:0 3px 0 auto;
+    margin: 0 3px 0 auto;
     padding: 0.25rem;
     width: min-content;
     background: alphav(var(--color-border), 0.8);
@@ -155,8 +152,6 @@ character-view-sleeve,
   }
 }
 
-
-
 .conditions {
   display: flex;
   align-items: center;
@@ -166,7 +161,6 @@ character-view-sleeve,
     margin-left: 0.25rem;
   }
 }
-
 
 .pools {
   display: flex;

@@ -10,7 +10,7 @@ import { classMap } from 'lit-html/directives/class-map';
 import { compact } from 'remeda';
 import {
   CharacterDrawerRenderer,
-  CharacterDrawerRenderEvent
+  CharacterDrawerRenderEvent,
 } from '../../character-drawer-render-event';
 import styles from './character-view-sleeve.scss';
 
@@ -171,11 +171,8 @@ export class CharacterViewSleeve extends LitElement {
               : ''}
           </health-item>`
         : ''}
-  
     `;
   }
-
-
 }
 
 declare global {

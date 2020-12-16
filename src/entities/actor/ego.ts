@@ -136,12 +136,12 @@ export class Ego {
   }
 
   get description() {
-    return this.epData.description
+    return this.epData.description;
   }
 
   @LazyGetter()
   get filteredMotivations() {
-    return this.motivations.filter(motivation => motivation.cause)
+    return this.motivations.filter((motivation) => motivation.cause);
   }
 
   get settings() {
@@ -256,8 +256,12 @@ export class Ego {
   }
 
   @LazyGetter()
-  get points(): { label: string; value: number, point: CharacterPoint }[] {
-    const groups: { label: string; value: number, point: CharacterPoint }[] = [];
+  get points(): { label: string; value: number; point: CharacterPoint }[] {
+    const groups: {
+      label: string;
+      value: number;
+      point: CharacterPoint;
+    }[] = [];
     if (!this.epData.settings.trackPoints) return groups;
 
     const { points } = this.epData;
@@ -267,7 +271,7 @@ export class Ego {
         groups.push({
           label: Ego.formatPoint(point),
           value,
-          point
+          point,
         });
       }
     }

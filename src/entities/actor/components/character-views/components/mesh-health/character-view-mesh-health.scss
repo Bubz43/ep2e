@@ -3,7 +3,6 @@
 
 @include resetUnorderedList();
 
-
 * {
   box-sizing: border-box;
 }
@@ -12,12 +11,10 @@
   display: grid;
   grid-auto-rows: min-content;
   gap: 0.25rem;
-  
 }
 .heal-damage {
   width: calc(100% - 2rem);
-  margin:  -0.25rem 1rem 0;
-
+  margin: -0.25rem 1rem 0;
 }
 
 health-state-form {

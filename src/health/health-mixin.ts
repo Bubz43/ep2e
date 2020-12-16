@@ -116,8 +116,8 @@ export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
     }
 
     get activeRecoveries() {
-      const { regenState, recoveries } = this
-      return regenState && recoveries?.[regenState]
+      const { regenState, recoveries } = this;
+      return regenState && recoveries?.[regenState];
     }
 
     get killingDamage() {
@@ -128,8 +128,8 @@ export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
     get common() {
       return {
         damage: this.main.damage.value,
-        wounds: this.wound?.wounds.value
-      }
+        wounds: this.wound?.wounds.value,
+      };
     }
   }
 

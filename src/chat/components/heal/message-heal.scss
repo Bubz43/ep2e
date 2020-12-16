@@ -15,14 +15,11 @@
   color: var(--color-text-lighter);
 }
 
-
 mwc-button[unelevated] {
   --mdc-theme-primary: #{lightv(var(--color-secondary), 0.7)};
   filter: hue-rotate(-40deg);
   margin-bottom: 0.25rem;
   width: 100%;
-
- 
 }
 
 .heal-info {

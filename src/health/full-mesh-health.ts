@@ -141,7 +141,7 @@ export class MeshHealth extends HealthMixin(MeshHealthBase) {
         }
         break;
       }
-        
+
       case HealthModificationMode.Inflict: {
         if (!damage && modification.damage) this.resetRegenStartTimes();
         else if (this.regenState !== HealOverTimeTarget.Damage) {

@@ -93,14 +93,12 @@ export class CharacterViewEgo extends LitElement {
     this.character.openHealthEditor(this.ego.mentalHealth);
   }
 
-  
   render() {
     const { active, know } = this.ego.groupedSkills;
     const { filteredMotivations, settings } = this.ego;
-    const showMore = this.ego.description || notEmpty(this.ego.details)
+    const showMore = this.ego.description || notEmpty(this.ego.details);
     return html`
       <header>
-     
         <button @click=${this.ego.openForm}>${this.ego.name}</button>
         <span class="details">
           ${compact([
@@ -112,9 +110,7 @@ export class CharacterViewEgo extends LitElement {
         ${showMore
           ? html`
               <mwc-icon-button
-                icon=${this.expanded
-                  ? 'unfold_less'
-                  : 'unfold_more'}
+                icon=${this.expanded ? 'unfold_less' : 'unfold_more'}
                 @click=${this.toggleExpanded}
               ></mwc-icon-button>
             `
@@ -151,7 +147,9 @@ export class CharacterViewEgo extends LitElement {
                   <div class="details">
                     ${this.ego.details.map(
                       ({ label, value }) => html`
-                        <span class="details">${label} <span class="value">${value}</span></span>
+                        <span class="details"
+                          >${label} <span class="value">${value}</span></span
+                        >
                       `,
                     )}
                   </div>
@@ -165,8 +163,7 @@ export class CharacterViewEgo extends LitElement {
                 `
               : ''}
           `
-      : ''}
-        
+        : ''}
 
       <sl-section heading=${localize('aptitudes')} flipped>
         <sl-group

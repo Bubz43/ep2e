@@ -22,10 +22,10 @@ sl-dropzone {
   position: relative;
 }
 
-[part="header"] {
+[part='header'] {
   position: relative;
   outline: none;
-  &[tabindex="0"] {
+  &[tabindex='0'] {
     cursor: pointer;
   }
   mwc-ripple {

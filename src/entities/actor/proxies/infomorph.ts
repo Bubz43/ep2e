@@ -49,7 +49,7 @@ export class Infomorph extends mix(InfomorphBase).with(SleeveInfo) {
   }
 
   updateConditions(conditions: ConditionType[]) {
-    return this.updater.prop("data", "conditions").commit(conditions)
+    return this.updater.prop('data', 'conditions').commit(conditions);
   }
 
   get healths(): ActorHealth[] {

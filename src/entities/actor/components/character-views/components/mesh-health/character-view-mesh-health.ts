@@ -99,16 +99,21 @@ export class CharacterViewMeshHealth extends UseWorldTime(LitElement) {
       ${isCrashed
         ? html`
             <div class="crash-state">
-            ${timeToReboot === null ? html` <mwc-button
+              ${timeToReboot === null
+                ? html` <mwc-button
                     label="${localize('start')} ${localize('reboot')}"
                     @click=${this.rollReboot}
                     ?disabled=${this.character.disabled}
-                  ></mwc-button>` : timeToReboot <= 0 ? html`
-                  <mwc-button unelevated @click=${this.reboot}>${localize("reboot")}</mwc-button>
-                  ` : html` <sl-group label=${localize('timeToReboot')}
+                  ></mwc-button>`
+                : timeToReboot <= 0
+                ? html`
+                    <mwc-button unelevated @click=${this.reboot}
+                      >${localize('reboot')}</mwc-button
+                    >
+                  `
+                : html` <sl-group label=${localize('timeToReboot')}
                     >${prettyMilliseconds(timeToReboot)}</sl-group
                   >`}
-        
             </div>
           `
         : ''}
@@ -137,7 +142,9 @@ export class CharacterViewMeshHealth extends UseWorldTime(LitElement) {
                                 ? html`
                                     <span slot="after">
                                       ${localize('tick')} ${localize('in')}
-                                      ${prettyMilliseconds(heal.timeState.remaining)}
+                                      ${prettyMilliseconds(
+                                        heal.timeState.remaining,
+                                      )}
                                     </span>
                                   `
                                 : ''}

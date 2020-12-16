@@ -176,6 +176,8 @@ export abstract class CharacterViewBase extends LitElement {
   }
 
   renderConditions() {
-    return html`<character-view-conditions .character=${this.character}></character-view-conditions>`
+    return html`<character-view-conditions
+      .character=${this.character}
+    ></character-view-conditions>`;
   }
 }

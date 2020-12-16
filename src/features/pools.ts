@@ -157,31 +157,31 @@ const moxie: PoolOptionGetter = ({ character, pool }) => {
         const used = rep[type];
         return used
           ? {
-              label: `[${rep.acronym.toLocaleUpperCase()}] ${localize("refresh")} ${localize(type)} ${localize("favor")} (${
-                index + 1
-              })`,
+              label: `[${rep.acronym.toLocaleUpperCase()}] ${localize(
+                'refresh',
+              )} ${localize(type)} ${localize('favor')} (${index + 1})`,
               disabled: points > pool.available,
               callback: () => {
                 character.updater
-                  .prop("data", "reps", network, type)
+                  .prop('data', 'reps', network, type)
                   .store(used - 1);
                 character.spendPool({ pool: pool.type, points });
               },
             }
           : [];
       });
-    }
+    },
   );
 
   return compact([
     ...repOptions,
-    ...(["acquireClue", "negateGaffe"] as const).map((message) =>
-      messageOnly({ label: localize(message), pool, character })
+    ...(['acquireClue', 'negateGaffe'] as const).map((message) =>
+      messageOnly({ label: localize(message), pool, character }),
     ),
     ...(character.psi?.hasVariableInfection
       ? ([
           messageOnly({
-            label: `${localize("avoid")} ${localize("infectionTest")}`,
+            label: `${localize('avoid')} ${localize('infectionTest')}`,
             pool,
             character,
           }),
@@ -192,65 +192,66 @@ const moxie: PoolOptionGetter = ({ character, pool }) => {
 
 const flex: PoolOptionGetter = ({ character, pool }) =>
   narrativeControl.map((control) =>
-    messageOnly({ label: localize(control), character, pool })
+    messageOnly({ label: localize(control), character, pool }),
   );
 
-  export const poolActionOptions = (character: Character, poolType: PoolType) => {
-    const pool = character.pools.get(poolType);
-    const available = pool?.disabled ? 0 : pool?.available || 0;
-    const options: MenuOption[] = linkedAptitudes[poolType].flatMap(
-      (aptitudeType) => linkedAptitudePoints.map((point) => ({
-        label: `${withSign(5 * point)} ${localize("linkedAptitude")} ${localize(aptitudeType)} ${localize("modifier")}`,
+export const poolActionOptions = (character: Character, poolType: PoolType) => {
+  const pool = character.pools.get(poolType);
+  const available = pool?.disabled ? 0 : pool?.available || 0;
+  const options: MenuOption[] = linkedAptitudes[poolType].flatMap(
+    (aptitudeType) =>
+      linkedAptitudePoints.map((point) => ({
+        label: `${withSign(5 * point)} ${localize('linkedAptitude')} ${localize(
+          aptitudeType,
+        )} ${localize('modifier')}`,
         disabled: point > available,
         callback: async () => {
-          character.updater.prop("data", "temporary").store(
+          character.updater.prop('data', 'temporary').store(
             addFeature(
               createLinkedAptitude({
                 pool: poolType,
                 aptitude: aptitudeType,
                 points: point,
-              })
-            )
+              }),
+            ),
           );
           character.spendPool({ pool: poolType, points: point });
         },
-      }))
-    );
-  
-  
-    switch (pool?.type) {
-      case PoolType.Insight:
-        options.push(...[insight({ character, pool })].flat());
-        break;
-  
-      case PoolType.Moxie:
-        options.push(
-          ignore({ character, pool, toIgnore: "trauma" }),
-          ...[moxie({ character, pool })].flat()
-        );
-        break;
-  
-      case PoolType.Vigor:
-        options.push(ignore({ character, pool, toIgnore: "wound" }));
-        break;
-  
-      case PoolType.Threat:
-        options.push(
-          ...(["trauma", "wound"] as const).map((toIgnore) =>
-            ignore({ character, pool, toIgnore })
-          )
-        );
-  
-        break;
-  
-      case PoolType.Flex:
-        options.push(...[flex({ character, pool })].flat());
-        break;
-  
-      default:
-        break;
-    }
-  
-    return options;
-  };
-  
+      })),
+  );
+
+  switch (pool?.type) {
+    case PoolType.Insight:
+      options.push(...[insight({ character, pool })].flat());
+      break;
+
+    case PoolType.Moxie:
+      options.push(
+        ignore({ character, pool, toIgnore: 'trauma' }),
+        ...[moxie({ character, pool })].flat(),
+      );
+      break;
+
+    case PoolType.Vigor:
+      options.push(ignore({ character, pool, toIgnore: 'wound' }));
+      break;
+
+    case PoolType.Threat:
+      options.push(
+        ...(['trauma', 'wound'] as const).map((toIgnore) =>
+          ignore({ character, pool, toIgnore }),
+        ),
+      );
+
+      break;
+
+    case PoolType.Flex:
+      options.push(...[flex({ character, pool })].flat());
+      break;
+
+    default:
+      break;
+  }
+
+  return options;
+};

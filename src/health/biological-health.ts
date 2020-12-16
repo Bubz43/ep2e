@@ -81,7 +81,7 @@ class BiologicalHealthBase implements CommonHealth {
       biological: true,
       effects: this.init.recoveryEffects,
       conditions: this.init.recoveryConditions,
-      updateStartTime: this.init.updater.prop("").commit
+      updateStartTime: this.init.updater.prop('').commit,
     });
   }
 
@@ -137,7 +137,7 @@ export class BiologicalHealth extends HealthMixin(BiologicalHealthBase) {
           else if (wounds && !damage && modification.damage)
             this.resetRegenStartTimes();
         }
-     
+
         break;
       }
       case HealthModificationMode.Inflict: {
@@ -147,7 +147,7 @@ export class BiologicalHealth extends HealthMixin(BiologicalHealthBase) {
           else if (wounds && !damage && modification.damage)
             this.resetRegenStartTimes();
         }
-      
+
         break;
       }
 

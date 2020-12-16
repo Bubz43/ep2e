@@ -31,7 +31,6 @@
       display: grid;
       padding: 0.25rem 0;
     }
-
   }
 }
 
@@ -44,7 +43,6 @@
   position: relative;
   cursor: pointer;
   grid-template-areas: 'img info buttons';
-
 
   &:focus {
     outline: none;
@@ -80,7 +78,6 @@
   .buttons {
     color: var(--color-text-lighter);
   }
-
 }
 
 @keyframes slideIn {

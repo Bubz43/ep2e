@@ -1,14 +1,14 @@
-import { LazyRipple } from "@src/components/mixins/lazy-ripple";
-import type { ConsumableItem } from "@src/entities/item/item";
-import { itemMenuOptions } from "@src/entities/item/item-views";
-import { openMenu } from "@src/open-menu";
-import { customElement, LitElement, property, html } from "lit-element";
-import styles from "./consumable-card.scss";
+import { LazyRipple } from '@src/components/mixins/lazy-ripple';
+import type { ConsumableItem } from '@src/entities/item/item';
+import { itemMenuOptions } from '@src/entities/item/item-views';
+import { openMenu } from '@src/open-menu';
+import { customElement, LitElement, property, html } from 'lit-element';
+import styles from './consumable-card.scss';
 
-@customElement("consumable-card")
+@customElement('consumable-card')
 export class ConsumableCard extends LazyRipple(LitElement) {
   static get is() {
-    return "consumable-card" as const;
+    return 'consumable-card' as const;
   }
 
   static styles = [styles];
@@ -63,14 +63,12 @@ export class ConsumableCard extends LazyRipple(LitElement) {
   render() {
     const { item } = this;
     const { nonDefaultImg } = item;
-    return html`
-      
-    `;
+    return html``;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "consumable-card": ConsumableCard;
+    'consumable-card': ConsumableCard;
   }
 }

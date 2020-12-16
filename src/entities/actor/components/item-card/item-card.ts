@@ -139,7 +139,7 @@ export class ItemCard extends LazyRipple(LitElement) {
               `
             : ''}
           <mwc-icon-button
-                  class="more"
+            class="more"
             icon="more_vert"
             @click=${this.openMenu}
           ></mwc-icon-button>
@@ -148,19 +148,17 @@ export class ItemCard extends LazyRipple(LitElement) {
         ${this.renderRipple()}
       </div>
       ${this.expanded
-      ? html`
-      ${this.item.type === ItemType.PhysicalTech
-          ? this.renderTechParts(this.item)
-          : ''}
+        ? html`
+            ${this.item.type === ItemType.PhysicalTech
+              ? this.renderTechParts(this.item)
+              : ''}
             <enriched-html
-        class="description"
-        .content=${item.description ||
-        `<p>${localize('no')} ${localize('description')}</p>`}
-      ></enriched-html>
-        `
+              class="description"
+              .content=${item.description ||
+              `<p>${localize('no')} ${localize('description')}</p>`}
+            ></enriched-html>
+          `
         : ''}
-
-    
     `;
   }
 

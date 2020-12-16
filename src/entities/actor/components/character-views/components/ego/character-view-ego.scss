@@ -11,7 +11,7 @@
   display: grid;
   gap: 0.5rem;
   grid-auto-rows: min-content;
-  height: max-content
+  height: max-content;
 }
 
 sl-section {
@@ -206,7 +206,6 @@ header {
   }
 }
 
-
 .motivations-list {
   display: flex;
   flex-flow: row wrap;
@@ -243,7 +242,7 @@ header {
     list-style: none;
   }
   .value {
-    color:  var(--color-text-lighter);
+    color: var(--color-text-lighter);
   }
 }
 
@@ -254,7 +253,7 @@ header {
     @include truncate(100%);
   }
   .value {
-    color: var(--color-text-lighter)
+    color: var(--color-text-lighter);
   }
 }
 

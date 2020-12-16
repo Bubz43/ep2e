@@ -76,5 +76,5 @@ const condition = createFeature<TemporaryCondition, 'name' | 'condition'>(
 export const createTemporaryFeature = {
   activeRecharge,
   effects,
-  condition
+  condition,
 } as const;

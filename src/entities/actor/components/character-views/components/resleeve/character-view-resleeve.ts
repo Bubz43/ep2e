@@ -163,7 +163,7 @@ export class CharacterViewResleeve extends LitElement {
           (proxy) =>
             proxy.name === nonDefaultBrain.name &&
             equals(proxy.epData, nonDefaultBrain.epData) &&
-            equals(proxy.data.flags, nonDefaultBrain.data.flags)
+            equals(proxy.data.flags, nonDefaultBrain.data.flags),
         ),
         (brain) =>
           brain

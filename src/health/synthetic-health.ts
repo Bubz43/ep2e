@@ -44,7 +44,7 @@ type Init = HealthInit<SyntheticHealthData> & {
   isSwarm: boolean;
   statMods: HealthStatMods | undefined;
   recoveryEffects: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
-  recoveryConditions: RecoveryConditions
+  recoveryConditions: RecoveryConditions;
 };
 
 class SyntheticHealthBase implements CommonHealth {
@@ -77,7 +77,7 @@ class SyntheticHealthBase implements CommonHealth {
       biological: true,
       effects: this.init.recoveryEffects,
       conditions: this.init.recoveryConditions,
-      updateStartTime: this.init.updater.prop("").commit
+      updateStartTime: this.init.updater.prop('').commit,
     });
   }
 
@@ -113,7 +113,6 @@ class SyntheticHealthBase implements CommonHealth {
 }
 
 export class SyntheticHealth extends HealthMixin(SyntheticHealthBase) {
-  
   private resetRegenStartTimes() {
     this.init.updater
       .prop('aidedHealTickStartTime')
@@ -121,7 +120,7 @@ export class SyntheticHealth extends HealthMixin(SyntheticHealthBase) {
       .prop('ownHealTickStartTime')
       .store(currentWorldTimeMS());
   }
-  
+
   applyModification(modification: HealthModification) {
     const { damage, wounds } = this.common;
     switch (modification.mode) {
@@ -133,7 +132,7 @@ export class SyntheticHealth extends HealthMixin(SyntheticHealthBase) {
           else if (wounds && !damage && modification.damage)
             this.resetRegenStartTimes();
         }
-     
+
         break;
       }
       case HealthModificationMode.Inflict: {
@@ -143,12 +142,13 @@ export class SyntheticHealth extends HealthMixin(SyntheticHealthBase) {
           else if (wounds && !damage && modification.damage)
             this.resetRegenStartTimes();
         }
-      
+
         break;
       }
-      
+
       case HealthModificationMode.Heal: {
-        if (damage && modification.damage >= damage) this.resetRegenStartTimes();
+        if (damage && modification.damage >= damage)
+          this.resetRegenStartTimes();
         break;
       }
     }
@@ -164,6 +164,6 @@ export class SyntheticHealth extends HealthMixin(SyntheticHealthBase) {
   }
 
   addDamageOverTime(dot: DamageOverTime) {
-    return this.init.updater.prop("dots").commit(addFeature(dot))
+    return this.init.updater.prop('dots').commit(addFeature(dot));
   }
 }

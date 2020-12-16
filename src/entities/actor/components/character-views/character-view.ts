@@ -31,14 +31,13 @@ export class CharacterView extends CharacterViewBase {
 
   private openPoolMenu(ev: MouseEvent) {
     if (ev.currentTarget instanceof PoolItem) {
-      const { type } = ev.currentTarget.pool
+      const { type } = ev.currentTarget.pool;
       openMenu({
         header: { heading: localize(type) },
         content: poolActionOptions(this.character, type),
-        position: ev
-      })
+        position: ev,
+      });
     }
-  
   }
 
   render() {
@@ -79,35 +78,37 @@ export class CharacterView extends CharacterViewBase {
 
       <div class="sections">
         <section class="status">
-          <sl-header heading=${localize("status")}></sl-header>
-         <div> <div class="conditions">
-            <mwc-button
-              class="conditions-toggle"
-              @click=${this.viewConditions}
-              dense
-              >${localize('conditions')}</mwc-button
-            >
-            ${notEmpty(conditions)
-              ? html`
-                  ${conditions.map(
-                    (condition) =>
-                      html`<img
-                        src=${conditionIcons[condition]}
-                        title=${localize(condition)}
-                        height="20px"
-                      />`,
-                  )}
-                `
-              : html`<span>${localize('none')}</span>`}
-          </div>
+          <sl-header heading=${localize('status')}></sl-header>
+          <div>
+            <div class="conditions">
+              <mwc-button
+                class="conditions-toggle"
+                @click=${this.viewConditions}
+                dense
+                >${localize('conditions')}</mwc-button
+              >
+              ${notEmpty(conditions)
+                ? html`
+                    ${conditions.map(
+                      (condition) =>
+                        html`<img
+                          src=${conditionIcons[condition]}
+                          title=${localize(condition)}
+                          height="20px"
+                        />`,
+                    )}
+                  `
+                : html`<span>${localize('none')}</span>`}
+            </div>
 
-          ${notEmpty(pools)
-            ? html`
-                <ul class="pools">
-                  ${[...pools.values()].map(this.renderPool)}
-                </ul>
-              `
-            : ''}</div>
+            ${notEmpty(pools)
+              ? html`
+                  <ul class="pools">
+                    ${[...pools.values()].map(this.renderPool)}
+                  </ul>
+                `
+              : ''}
+          </div>
         </section>
         <section>
           <sl-header heading=${localize('network')}>
@@ -191,7 +192,7 @@ export class CharacterView extends CharacterViewBase {
 
   private renderPool = (pool: ReadonlyPool) => html`
     <pool-item
-    @click=${this.openPoolMenu}
+      @click=${this.openPoolMenu}
       .pool=${pool}
       ?disabled=${this.character.disabled || pool.disabled}
     ></pool-item>

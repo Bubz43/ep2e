@@ -75,7 +75,7 @@ export class Synthetic extends mix(SyntheticBase).with(
   }
 
   updateConditions(conditions: ConditionType[]) {
-    return this.updater.prop("data", "conditions").commit(conditions)
+    return this.updater.prop('data', 'conditions').commit(conditions);
   }
 
   get healths(): ActorHealth[] {
@@ -113,9 +113,8 @@ export class Synthetic extends mix(SyntheticBase).with(
   }
 
   updateRecoveryConditions(conditions: RecoveryConditions) {
-    return this.updater.prop("data", "recoveryConditions").commit(conditions)
+    return this.updater.prop('data', 'recoveryConditions').commit(conditions);
   }
-
 
   @LazyGetter()
   get availableBrains() {
@@ -137,7 +136,7 @@ export class Synthetic extends mix(SyntheticBase).with(
       source: this.epData.inherentArmor.source || localize('frame'),
       isSwarm: this.isSwarm,
       recoveryEffects: this.activeEffects.getGroup(EffectType.HealthRecovery),
-      recoveryConditions: this.epData.recoveryConditions
+      recoveryConditions: this.epData.recoveryConditions,
     });
   }
 

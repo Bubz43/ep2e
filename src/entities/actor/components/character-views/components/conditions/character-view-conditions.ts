@@ -43,7 +43,6 @@ export class CharacterViewConditions extends UseWorldTime(LitElement) {
     this.viewEffects = !this.viewEffects;
   }
 
-
   private setConditions(ev: MultiSelectedEvent) {
     this.character.updateConditions(
       compact(

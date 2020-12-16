@@ -23,14 +23,17 @@ export type DamageMessageData = {
   armorPiercing: boolean;
   reduceAVbyDV: boolean;
   armorUsed: ArmorType[];
-}
+};
 
-export type MessageHealData = RequireAtLeastOne<{
-  source: string;
-  damageFormulas?: RolledFormula[];
-  wounds?: number;
-  healthType: HealthType;
-}, "damageFormulas" | "wounds">
+export type MessageHealData = RequireAtLeastOne<
+  {
+    source: string;
+    damageFormulas?: RolledFormula[];
+    wounds?: number;
+    healthType: HealthType;
+  },
+  'damageFormulas' | 'wounds'
+>;
 
 export type HealthChangeMessageData = HealthModification & {
   healthType: HealthType;
@@ -38,8 +41,6 @@ export type HealthChangeMessageData = HealthModification & {
   biological?: boolean;
   reducedArmor?: Partial<Record<ArmorType, number>>;
 };
-
-
 
 export type MessageHeaderData = {
   heading: string;

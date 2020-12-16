@@ -41,22 +41,24 @@ export class MeshHealthDamageEditor extends HealthEditBase<
             ),
           ],
         })}
-        ${this.armor ? html`<div class="armor-toggles">
-          <mwc-button
-            dense
-            label=${localize('armorPiercing')}
-            ?outlined=${!this.editableDamage.armorPiercing}
-            ?unelevated=${this.editableDamage.armorPiercing}
-            @click=${this.toggleArmorPiercing}
-          ></mwc-button>
-          <mwc-button
-            ?outlined=${!this.editableDamage.reduceAVbyDV}
-            ?unelevated=${this.editableDamage.reduceAVbyDV}
-            dense
-            label=${localize('reduceAVbyDV')}
-            @click=${this.toggleArmorReduce}
-          ></mwc-button>
-        </div>` : ""}
+        ${this.armor
+          ? html`<div class="armor-toggles">
+              <mwc-button
+                dense
+                label=${localize('armorPiercing')}
+                ?outlined=${!this.editableDamage.armorPiercing}
+                ?unelevated=${this.editableDamage.armorPiercing}
+                @click=${this.toggleArmorPiercing}
+              ></mwc-button>
+              <mwc-button
+                ?outlined=${!this.editableDamage.reduceAVbyDV}
+                ?unelevated=${this.editableDamage.reduceAVbyDV}
+                dense
+                label=${localize('reduceAVbyDV')}
+                @click=${this.toggleArmorReduce}
+              ></mwc-button>
+            </div>`
+          : ''}
       </div>
 
       ${this.renderCommon()}
