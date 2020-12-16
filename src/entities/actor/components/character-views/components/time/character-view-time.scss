@@ -1,6 +1,7 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+
 * {
   box-sizing: border-box;
 }
@@ -103,4 +104,14 @@ sl-animated-list {
 
 character-view-time-item {
   @include textButton();
+}
+
+.heal-recoveries {
+  margin: 0.5rem;
+  figcaption {
+    font-size: large;
+  }
+  character-view-time-item {
+    padding: 0;
+  }
 }

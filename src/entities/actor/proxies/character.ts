@@ -283,7 +283,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
   @LazyGetter()
   get regeningHealths() {
-    return this.healths.filter(({ regenState }) => regenState)
+    return this.healths.filter(({ regenState }) => regenState);
   }
 
   @LazyGetter()
@@ -298,7 +298,10 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       this.tasks.length +
       this.temporaryFeatures.length +
       this.equippedGroups.activeFabbers.length +
-      this.regeningHealths.length
+      this.regeningHealths.reduce(
+        (accum, { activeRecoveries }) => accum + (activeRecoveries?.size || 0),
+        0,
+      )
     );
   }
 
@@ -313,10 +316,11 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       this.equippedGroups.activeFabbers.some(
         (fabber) => !fabber.printState.remaining,
       ) ||
-      this.healths.some(health => {
-        const heals = health.regenState && health.recoveries?.[health.regenState]
-        return [...(heals?.values() || [])].some(regen => regen.timeState.remaining <= 0)
-      })
+      this.healths.some((health) =>
+        [...(health.activeRecoveries?.values() || [])].some(
+          ({ timeState }) => !timeState.remaining,
+        ),
+      )
     );
   }
 

@@ -128,14 +128,22 @@ export class SyntheticHealth extends HealthMixin(SyntheticHealthBase) {
       case HealthModificationMode.Edit: {
         if (!damage && modification.damage) this.resetRegenStartTimes();
         else if (damage && !modification.damage) this.resetRegenStartTimes();
-        else if (!wounds && modification.wounds) this.resetRegenStartTimes();
-        else if (wounds && !damage && modification.damage) this.resetRegenStartTimes();
+        else if (this.regenState !== HealOverTimeTarget.Damage) {
+          if (!wounds && modification.wounds) this.resetRegenStartTimes();
+          else if (wounds && !damage && modification.damage)
+            this.resetRegenStartTimes();
+        }
+     
         break;
       }
       case HealthModificationMode.Inflict: {
         if (!damage && modification.damage) this.resetRegenStartTimes();
-        else if (!wounds && modification.wounds) this.resetRegenStartTimes();
-        else if (wounds && !damage && modification.damage) this.resetRegenStartTimes();
+        else if (this.regenState !== HealOverTimeTarget.Damage) {
+          if (!wounds && modification.wounds) this.resetRegenStartTimes();
+          else if (wounds && !damage && modification.damage)
+            this.resetRegenStartTimes();
+        }
+      
         break;
       }
       

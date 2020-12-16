@@ -121,26 +121,28 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
         <sl-header
           heading="${localize('heal')}/${localize('repair')}"
         ></sl-header>
-        <ul>
           ${regeningHealths.map((health) => {
             const { regenState, recoveries } = health;
             const heals = regenState && recoveries?.[regenState]?.values()
-            return heals ? [...heals].map(heal => {
+            return heals ? html`
+            <figure class='heal-recoveries'>
+            <figcaption>${health.source} [${localize(`${health.type}Health` as const)}]</figcaption>
+            ${[...heals].map(heal => {
              
-              return html`
-                <character-view-time-item
-                ?disabled=${disabled}
-                .timeState=${heal.timeState}
-                completion="ready"
-              >
-              
-              </character-view-time-item>
-            <li>${health.source} - ${heal.source} - ${prettyMilliseconds(heal.timeState.remaining)}</li>
-            `;
-            }) : ""
+             return html`
+               <character-view-time-item
+               ?disabled=${disabled}
+               .timeState=${heal.timeState}
+               completion="ready"
+             >
+             
+             </character-view-time-item>
+           `;
+           })}
+            </figure>
+            ` : ""
          
           })}
-        </ul>
       </section>
     `;
   }

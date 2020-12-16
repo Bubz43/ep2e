@@ -115,6 +115,11 @@ export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
         : 0;
     }
 
+    get activeRecoveries() {
+      const { regenState, recoveries } = this
+      return regenState && recoveries?.[regenState]
+    }
+
     get killingDamage() {
       const target = this.main.deathRating?.value || this.main.durability.value;
       return nonNegative(target - this.main.damage.value);

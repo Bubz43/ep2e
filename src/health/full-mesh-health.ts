@@ -20,6 +20,7 @@ import {
 import { HealthMixin } from './health-mixin';
 import {
   HealingSlot,
+  HealOverTimeTarget,
   HealsOverTime,
   RecoveryConditions,
   setupRecoveries,
@@ -72,7 +73,7 @@ class MeshHealthBase implements CommonHealth {
       biological: true,
       effects: [],
       conditions: RecoveryConditions.Normal,
-      updateStartTime: this.init.updater.prop("").commit
+      updateStartTime: this.init.updater.prop('').commit,
     });
   }
 
@@ -125,9 +126,11 @@ export class MeshHealth extends HealthMixin(MeshHealthBase) {
       case HealthModificationMode.Edit: {
         if (!damage && modification.damage) this.resetRegenStartTimes();
         else if (damage && !modification.damage) this.resetRegenStartTimes();
-        else if (!wounds && modification.wounds) this.resetRegenStartTimes();
-        else if (wounds && !damage && modification.damage)
-          this.resetRegenStartTimes();
+        else if (this.regenState !== HealOverTimeTarget.Damage) {
+          if (!wounds && modification.wounds) this.resetRegenStartTimes();
+          else if (wounds && !damage && modification.damage)
+            this.resetRegenStartTimes();
+        }
 
         if (damage < dur && modification.damage >= dur) {
           updater
@@ -140,9 +143,11 @@ export class MeshHealth extends HealthMixin(MeshHealthBase) {
       }
       case HealthModificationMode.Inflict: {
         if (!damage && modification.damage) this.resetRegenStartTimes();
-        else if (!wounds && modification.wounds) this.resetRegenStartTimes();
-        else if (wounds && !damage && modification.damage)
-          this.resetRegenStartTimes();
+        else if (this.regenState !== HealOverTimeTarget.Damage) {
+          if (!wounds && modification.wounds) this.resetRegenStartTimes();
+          else if (wounds && !damage && modification.damage)
+            this.resetRegenStartTimes();
+        }
 
         if (damage < dur && modification.damage + damage >= dur) {
           updater
@@ -194,8 +199,8 @@ export class MeshHealth extends HealthMixin(MeshHealthBase) {
     const keptDamage = nonNegative(damage - dur);
     const keptWounds = nonNegative(wounds - crashWounds);
     return this.init.updater.prop('').commit({
-      damage: 0 +keptDamage,
-      wounds: 0 +keptWounds,
+      damage: 0 + keptDamage,
+      wounds: 0 + keptWounds,
       crashWounds: 0,
       rebootEndTime: -1,
     });

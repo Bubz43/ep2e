@@ -101,7 +101,9 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
         ${label}
         ${remaining
           ? html`<span class="remaining"
-              >${prettyMilliseconds(remaining)} ${localize('remaining')}</span
+              >${this.completion === 'ready' ? `${localize('readyIn')}` : ''}
+              ${prettyMilliseconds(remaining)}
+              ${this.completion !== 'ready' ? localize('remaining') : ''}</span
             >`
           : ''}
       </span>
