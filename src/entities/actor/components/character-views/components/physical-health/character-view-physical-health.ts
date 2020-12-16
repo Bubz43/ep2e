@@ -179,7 +179,7 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
                   <ul>
                     ${[...heals.values()].map((heal) => {
                       const timeToTick =
-                        regenState === target && heal.timeToTick;
+                        regenState === target && heal.timeState.remaining;
                       return html`
                         <wl-list-item
                           class="heal ${timeToTick === 0 ? 'ready' : ''}"
@@ -197,7 +197,7 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
                                   ${timeToTick === 0
                                     ? localize('ready')
                                     : ` ${localize('tick')} ${localize('in')}
-                                  ${prettyMilliseconds(heal.timeToTick)}`}
+                                  ${prettyMilliseconds(timeToTick)}`}
                                 </span>
                               `
                             : ''}

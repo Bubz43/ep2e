@@ -76,7 +76,8 @@ class SyntheticHealthBase implements CommonHealth {
       hot: this.init.data,
       biological: true,
       effects: this.init.recoveryEffects,
-      conditions: this.init.recoveryConditions
+      conditions: this.init.recoveryConditions,
+      updateStartTime: this.init.updater.prop("").commit
     });
   }
 

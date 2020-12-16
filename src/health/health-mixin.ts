@@ -97,7 +97,7 @@ export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
       const { regenState, recoveries } = this;
       return regenState
         ? [...(recoveries?.[regenState].values() || [])].some(
-            (recovery) => !recovery.timeToTick,
+            (recovery) => !recovery.timeState.remaining,
           )
         : false;
     }

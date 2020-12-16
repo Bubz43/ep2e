@@ -315,7 +315,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       ) ||
       this.healths.some(health => {
         const heals = health.regenState && health.recoveries?.[health.regenState]
-        return [...(heals?.values() || [])].some(regen => regen.timeToTick <= 0)
+        return [...(heals?.values() || [])].some(regen => regen.timeState.remaining <= 0)
       })
     );
   }

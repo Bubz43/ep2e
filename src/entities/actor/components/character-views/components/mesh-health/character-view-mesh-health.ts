@@ -137,7 +137,7 @@ export class CharacterViewMeshHealth extends UseWorldTime(LitElement) {
                                 ? html`
                                     <span slot="after">
                                       ${localize('tick')} ${localize('in')}
-                                      ${prettyMilliseconds(heal.timeToTick)}
+                                      ${prettyMilliseconds(heal.timeState.remaining)}
                                     </span>
                                   `
                                 : ''}

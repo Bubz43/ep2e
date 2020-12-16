@@ -72,6 +72,7 @@ class MeshHealthBase implements CommonHealth {
       biological: true,
       effects: [],
       conditions: RecoveryConditions.Normal,
+      updateStartTime: this.init.updater.prop("").commit
     });
   }
 

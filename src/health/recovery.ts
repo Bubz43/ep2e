@@ -10,6 +10,8 @@ import {
   currentWorldTimeMS,
   Timestamp,
   getElapsedTime,
+  LiveTimeState,
+  createLiveTimeState,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { averageRoll } from '@src/foundry/rolls';
@@ -122,7 +124,7 @@ export const healingSlotToProp = (slot: HealingSlot) =>
 export type Recovery = HealthTick & {
   slot: HealingSlot;
   source: string;
-  readonly timeToTick: number;
+  timeState: LiveTimeState;
 };
 
 export const setupRecoveries = ({
@@ -130,11 +132,18 @@ export const setupRecoveries = ({
   biological,
   effects = [],
   conditions,
+  updateStartTime,
 }: {
   hot: HealsOverTime;
   biological: boolean;
   effects: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
   conditions: RecoveryConditions;
+  updateStartTime: (
+    update: Pick<
+      Partial<HealsOverTime>,
+      'aidedHealTickStartTime' | 'ownHealTickStartTime'
+    >,
+  ) => void;
 }) => {
   const groups = {
     [HealOverTimeTarget.Damage]: new Map<HealingSlot, Recovery>(),
@@ -148,17 +157,21 @@ export const setupRecoveries = ({
     const group = groups[stat];
     const { amount, ...data } = hot[stat];
     if (amount && data.interval > 0) {
+      const source = `${localize('own')} ${localize('healing')}`;
+      const key = `${slot}HealTickStartTime` as const;
       group.set(slot, {
         ...data,
         amount: String(amount),
         slot,
-        source: `${localize('own')} ${localize('healing')}`,
-        get timeToTick() {
-          return nonNegative(
-            data.interval * recoveryMultiplier(conditions) -
-              getElapsedTime(hot[`${slot}HealTickStartTime` as const]),
-          );
-        },
+        source,
+        timeState: createLiveTimeState({
+          duration: data.interval * recoveryMultiplier(conditions),
+          startTime: hot[key],
+          label: source,
+          id: `${stat}-${slot}`,
+          updateStartTime: (newStartTime) =>
+            updateStartTime({ [key]: newStartTime }),
+        }),
       });
     }
   }
@@ -183,17 +196,20 @@ export const setupRecoveries = ({
       if (unused) unused.push(current);
       else groups.unused.set(stat, [current]);
     }
+    const key = `${slot}HealTickStartTime` as const;
     group.set(slot, {
       amount,
       interval,
       slot,
       source: effect[Source],
-      get timeToTick() {
-        return nonNegative(
-          interval * recoveryMultiplier(conditions) -
-            getElapsedTime(hot[`${slot}HealTickStartTime` as const]),
-        );
-      },
+      timeState: createLiveTimeState({
+        duration: effect.interval * recoveryMultiplier(conditions),
+        startTime: hot[key],
+        label: effect[Source],
+        id: `${stat}-${slot}`,
+        updateStartTime: (newStartTime) =>
+          updateStartTime({ [key]: newStartTime }),
+      }),
     });
   }
 

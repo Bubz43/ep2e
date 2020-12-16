@@ -80,6 +80,7 @@ class BiologicalHealthBase implements CommonHealth {
       biological: true,
       effects: this.init.recoveryEffects,
       conditions: this.init.recoveryConditions,
+      updateStartTime: this.init.updater.prop("").commit
     });
   }
 

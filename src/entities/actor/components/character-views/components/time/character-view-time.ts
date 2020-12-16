@@ -24,6 +24,7 @@ import {
   StringID,
 } from '@src/features/feature-helpers';
 import {
+  createLiveTimeState,
   currentWorldTimeMS,
   getElapsedTime,
   prettyMilliseconds,
@@ -113,7 +114,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
   }
 
   private renderRegens() {
-    const { regeningHealths } = this.character;
+    const { regeningHealths, disabled } = this.character;
     if (regeningHealths.length === 0) return '';
     return html`
       <section>
@@ -124,9 +125,19 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
           ${regeningHealths.map((health) => {
             const { regenState, recoveries } = health;
             const heals = regenState && recoveries?.[regenState]?.values()
-            return heals ? [...heals].map(heal => html`
-            <li>${health.source} - ${heal.source} - ${prettyMilliseconds(heal.timeToTick)}</li>
-            `) : ""
+            return heals ? [...heals].map(heal => {
+             
+              return html`
+                <character-view-time-item
+                ?disabled=${disabled}
+                .timeState=${heal.timeState}
+                completion="ready"
+              >
+              
+              </character-view-time-item>
+            <li>${health.source} - ${heal.source} - ${prettyMilliseconds(heal.timeState.remaining)}</li>
+            `;
+            }) : ""
          
           })}
         </ul>
