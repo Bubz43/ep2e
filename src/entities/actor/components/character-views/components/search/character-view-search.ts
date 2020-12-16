@@ -1,6 +1,7 @@
 import { renderTextInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import type { Character } from '@src/entities/actor/proxies/character';
+import { renderItemCard } from '@src/entities/item/item-views';
 import { idProp } from '@src/features/feature-helpers';
 import { DropType, setDragDrop } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
@@ -46,7 +47,7 @@ export class CharacterViewSearch extends LitElement {
     );
   }
 
-  private dragItemCard(ev: DragEvent) {
+  private dragItemCard = (ev: DragEvent) => {
     if (ev.currentTarget instanceof ItemCard) {
       setDragDrop(ev, {
         type: DropType.Item,
@@ -54,7 +55,7 @@ export class CharacterViewSearch extends LitElement {
         data: ev.currentTarget.item.data,
       });
     }
-  }
+  };
 
   render() {
     const { search: searchString } = this;
@@ -85,13 +86,12 @@ export class CharacterViewSearch extends LitElement {
                 sortBy(items, (i) => i.name),
                 idProp,
                 (proxy) =>
-                  html`<item-card
-                    allowDrag
-                    expanded
-                    noAnimate
-                    @dragstart=${this.dragItemCard}
-                    .item=${proxy}
-                  ></item-card>`,
+                  renderItemCard(proxy, {
+                    allowDrag: true,
+                    expanded: true,
+                    noAnimate: true,
+                    handleDragStart: this.dragItemCard,
+                  }),
               )}
               ${notEmpty(items)
                 ? ''

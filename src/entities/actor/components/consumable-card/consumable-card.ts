@@ -1,7 +1,10 @@
 import { LazyRipple } from '@src/components/mixins/lazy-ripple';
+import { ItemType } from '@src/entities/entity-types';
 import type { ConsumableItem } from '@src/entities/item/item';
 import { itemMenuOptions } from '@src/entities/item/item-views';
+import { localize } from '@src/foundry/localization';
 import { openMenu } from '@src/open-menu';
+import { clickIfEnter } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import styles from './consumable-card.scss';
 
@@ -60,10 +63,75 @@ export class ConsumableCard extends LazyRipple(LitElement) {
     });
   }
 
+  private openSubstanceuseMenu(ev: MouseEvent) {
+    if (this.item.type === ItemType.Substance) {
+      
+    }
+  }
+
   render() {
     const { item } = this;
-    const { nonDefaultImg } = item;
-    return html``;
+    const { nonDefaultImg, editable } = item;
+    return html`
+      <div
+        role="button"
+        tabindex="0"
+        class="header"
+        draggable=${this.allowDrag ? 'true' : 'false'}
+        @keydown=${clickIfEnter}
+        @click=${this.toggleExpanded}
+        @focus="${this.handleRippleFocus}"
+        @blur="${this.handleRippleBlur}"
+        @mousedown="${this.handleRippleMouseDown}"
+        @mouseenter="${this.handleRippleMouseEnter}"
+        @mouseleave="${this.handleRippleMouseLeave}"
+      >
+        ${nonDefaultImg
+          ? html` <img height="32px" src=${nonDefaultImg} /> `
+          : ''}
+
+        <span class="info">
+          <span class="name">${item.fullName}</span>
+          <span class="type">${item.fullType}</span>
+        </span>
+
+        <span class="buttons">
+          ${item.stashed
+            ? html`
+                <mwc-icon-button
+                  @click=${() => item.toggleStashed()}
+                  icon=${item.stashed ? 'unarchive' : 'archive'}
+                  ?disabled=${!editable}
+                ></mwc-icon-button>
+              `
+            : item.type === ItemType.Substance
+            ? html`
+                <mwc-icon-button
+                  icon="change_circle"
+                  @click=${this.openSubstanceuseMenu}
+                  ?disabled=${!editable}
+                ></mwc-icon-button>
+              `
+            : ''}
+          <mwc-icon-button
+            class="more"
+            icon="more_vert"
+            @click=${this.openMenu}
+          ></mwc-icon-button>
+        </span>
+
+        ${this.renderRipple()}
+      </div>
+      ${this.expanded
+        ? html`
+            <enriched-html
+              class="description"
+              .content=${item.description ||
+              `<p>${localize('no')} ${localize('description')}</p>`}
+            ></enriched-html>
+          `
+        : ''}
+    `;
   }
 }
 

@@ -1,10 +1,105 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+@include styled-scrollbars;
+
 * {
   box-sizing: border-box;
 }
 
 :host {
-  display: block;
+  display: grid;
+}
+
+:host([noanimate]) {
+  .description {
+    animation: none;
+  }
+}
+
+:host([expanded]) {
+  gap: 0.25rem;
+  padding: 0.5rem;
+  margin: 0.25rem 0.5rem;
+  box-shadow: 0 0 4px black;
+  background: alphav(var(--color-grey), 0.1);
+  .header {
+    img {
+      height: 51px;
+    }
+    .info {
+      display: grid;
+      padding: 0.25rem 0;
+    }
+  }
+}
+
+.header {
+  display: grid;
+  grid-template-columns: min-content 1fr max-content;
+  align-items: center;
+  padding: 0 0 0 0.5rem;
+  --mdc-icon-button-size: 2rem;
+  position: relative;
+  cursor: pointer;
+  grid-template-areas: 'img info buttons';
+
+  &:focus {
+    outline: none;
+  }
+  img {
+    grid-area: img;
+    margin-right: 0.5ch;
+    display: inline-block;
+    min-width: 2rem;
+    pointer-events: none;
+  }
+
+  .info {
+    grid-area: info;
+    display: block;
+    flex: 1;
+    pointer-events: none;
+    margin-left: 0.5ch;
+    @include truncate(100%);
+  }
+
+  .buttons {
+    grid-area: buttons;
+    display: flex;
+    align-items: center;
+  }
+
+  .type {
+    font-size: 0.9rem;
+  }
+
+  .type,
+  .buttons {
+    color: var(--color-text-lighter);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-0.5rem);
+    opacity: 0;
+  }
+  10% {
+    transform: translateY(-0.5rem);
+    opacity: 0;
+  }
+}
+
+.description {
+  padding: 0 1rem;
+  animation: slideIn 200ms ease-out;
+  max-height: 250px;
+  overflow: auto;
+}
+
+.toggle {
+  &.activated {
+    color: var(--color-secondary);
+  }
 }

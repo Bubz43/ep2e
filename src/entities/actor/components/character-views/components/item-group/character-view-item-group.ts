@@ -2,6 +2,7 @@ import { LazyRipple } from '@src/components/mixins/lazy-ripple';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
+import { renderItemCard } from '@src/entities/item/item-views';
 import { idProp } from '@src/features/feature-helpers';
 import {
   DropType,
@@ -55,7 +56,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
     this.collapsed = !this.collapsed;
   }
 
-  private dragItemCard(ev: DragEvent) {
+  private dragItemCard = (ev: DragEvent) => {
     if (ev.currentTarget instanceof ItemCard) {
       setDragDrop(ev, {
         type: DropType.Item,
@@ -63,7 +64,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
         data: ev.currentTarget.item.data,
       });
     }
-  }
+  };
 
   private addItem = handleDrop(async ({ ev, drop, data }) => {
     if (this.character.disabled || data?.type !== DropType.Item) {
@@ -180,15 +181,12 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
               skipExitAnimation
               fadeOnly
             >
-              ${repeat(
-                sortBy(proxies, prop('fullName')),
-                idProp,
-                (proxy) => html`<item-card
-                  ?animateInitial=${this.hasExpanded}
-                  allowDrag
-                  @dragstart=${this.dragItemCard}
-                  .item=${proxy}
-                ></item-card>`,
+              ${repeat(sortBy(proxies, prop('fullName')), idProp, (proxy) =>
+                renderItemCard(proxy, {
+                  animateInitial: this.hasExpanded,
+                  allowDrag: true,
+                  handleDragStart: this.dragItemCard,
+                }),
               )}
             </sl-animated-list>
           `,

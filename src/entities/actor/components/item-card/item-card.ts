@@ -70,7 +70,7 @@ export class ItemCard extends LazyRipple(LitElement) {
 
   render() {
     const { item } = this;
-    const { nonDefaultImg } = item;
+    const { nonDefaultImg, editable } = item;
     return html`
       <div
         role="button"
@@ -106,6 +106,7 @@ export class ItemCard extends LazyRipple(LitElement) {
                   })}
                   @mouseover=${tooltip.fromData}
                   @focus=${tooltip.fromData}
+                  ?disabled=${!editable}
                 ></mwc-icon-button>
               `
             : ''}
@@ -120,6 +121,7 @@ export class ItemCard extends LazyRipple(LitElement) {
                   })}
                   @mouseover=${tooltip.fromData}
                   @focus=${tooltip.fromData}
+                  ?disabled=${!editable}
                 ></mwc-icon-button>
               `
             : ''}
@@ -128,6 +130,7 @@ export class ItemCard extends LazyRipple(LitElement) {
                 <mwc-icon-button
                   @click=${() => item.toggleEquipped()}
                   icon=${item.equipped ? 'archive' : 'unarchive'}
+                  ?disabled=${!editable}
                 ></mwc-icon-button>
               `
             : 'toggleStashed' in item && item.stashed
@@ -135,6 +138,7 @@ export class ItemCard extends LazyRipple(LitElement) {
                 <mwc-icon-button
                   @click=${() => item.toggleStashed()}
                   icon=${item.stashed ? 'unarchive' : 'archive'}
+                  ?disabled=${!editable}
                 ></mwc-icon-button>
               `
             : ''}
