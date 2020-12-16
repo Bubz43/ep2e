@@ -75,6 +75,7 @@ export const HealthMixin = <T extends Class<CommonHealth>>(cls: T) => {
       };
     }
 
+    @LazyGetter()
     get regenState() {
       const { main, wound, recoveries } = this;
       const damage = !!(

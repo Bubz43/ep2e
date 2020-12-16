@@ -58,9 +58,9 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
 
   @internalProperty() private taskCreator = false;
 
-  private readonly temporaryFeatureOps = addUpdateRemoveFeature(() => 
-    this.character.updater.prop("data", "temporary").commit
-  )
+  private readonly temporaryFeatureOps = addUpdateRemoveFeature(
+    () => this.character.updater.prop('data', 'temporary').commit,
+  );
 
   private readonly expandedTasks = new Set<string>();
 
@@ -104,10 +104,33 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
       ${[
         this.renderTaskActions(),
         this.renderFabricators(),
+        this.renderRegens(),
         this.renderTemporaryFeatures(),
         this.renderTemporaryServices(),
         this.renderRefreshTimers(),
       ]}
+    `;
+  }
+
+  private renderRegens() {
+    const { regeningHealths } = this.character;
+    if (regeningHealths.length === 0) return '';
+    return html`
+      <section>
+        <sl-header
+          heading="${localize('heal')}/${localize('repair')}"
+        ></sl-header>
+        <ul>
+          ${regeningHealths.map((health) => {
+            const { regenState, recoveries } = health;
+            const heals = regenState && recoveries?.[regenState]?.values()
+            return heals ? [...heals].map(heal => html`
+            <li>${health.source} - ${heal.source} - ${prettyMilliseconds(heal.timeToTick)}</li>
+            `) : ""
+         
+          })}
+        </ul>
+      </section>
     `;
   }
 
@@ -344,8 +367,11 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
                 .timeState=${feature.timeState}
                 completion="completed"
               >
-              <delete-button slot="action" @delete=${this.temporaryFeatureOps.removeCallback(feature.id)}></delete-button>
-            </character-view-time-item>
+                <delete-button
+                  slot="action"
+                  @delete=${this.temporaryFeatureOps.removeCallback(feature.id)}
+                ></delete-button>
+              </character-view-time-item>
             `,
           )}
         </sl-animated-list>

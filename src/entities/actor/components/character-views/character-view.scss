@@ -137,7 +137,7 @@ character-view-sleeve,
   }
 
   .close-drawer {
-    margin-left: auto;
+    margin:0 3px 0 auto;
     padding: 0.25rem;
     width: min-content;
     background: alphav(var(--color-border), 0.8);

@@ -165,7 +165,8 @@ export class CharacterViewEgo extends LitElement {
                 `
               : ''}
           `
-        : ''}
+      : ''}
+        
 
       <sl-section heading=${localize('aptitudes')} flipped>
         <sl-group
