@@ -562,11 +562,11 @@ export class SubstanceForm extends ItemFormBase {
       <h3>${localize('alwaysApplied')}</h3>
       ${renderUpdaterForm(updater, {
         fields: ({ duration, wearOffStress }) => [
+          renderFormulaField(wearOffStress),
           renderTimeField(duration, {
             permanentLabel: localize('indefinite'),
             min: CommonInterval.Turn,
           }),
-          renderFormulaField(wearOffStress),
         ],
       })}
       <p class="label">${localize('damage')}</p>
@@ -644,32 +644,31 @@ export class SubstanceForm extends ItemFormBase {
           reduceAVbyDV,
           armorPiercing,
         }) => [
-          renderFormulaField(damageFormula),
-          damageFormula.value
-            ? [
-                html`<sl-popover
-                  .renderOnDemand=${() => this.renderArmorUsedForm(group)}
-                  placement=${Placement.Right}
+          [
+            renderFormulaField(damageFormula),
+            renderSelectField(damageType, enumValues(HealthType)),
+
+            html`<sl-popover
+              .renderOnDemand=${() => this.renderArmorUsedForm(group)}
+              placement=${Placement.Right}
+            >
+              <wl-list-item slot="base" clickable>
+                <span>${localize('armorUsed')}</span>
+                <span class="list-values"
+                  >${notEmpty(damage.armorUsed)
+                    ? map(damage.armorUsed, localize).join(', ')
+                    : localize('none')}</span
                 >
-                  <wl-list-item slot="base" clickable>
-                    <span>${localize('armorUsed')}</span>
-                    <span class="list-values"
-                      >${notEmpty(damage.armorUsed)
-                        ? map(damage.armorUsed, localize).join(', ')
-                        : localize('none')}</span
-                    >
-                  </wl-list-item>
-                </sl-popover>`,
-                renderSelectField(damageType, enumValues(HealthType)),
-                notEmpty(damage.armorUsed)
-                  ? [
-                      renderLabeledCheckbox(armorPiercing),
-                      renderLabeledCheckbox(reduceAVbyDV),
-                    ]
-                  : '',
-                renderLabeledCheckbox(perTurn),
-              ]
-            : '',
+              </wl-list-item>
+            </sl-popover>`,
+            notEmpty(damage.armorUsed)
+              ? [
+                  renderLabeledCheckbox(armorPiercing),
+                  renderLabeledCheckbox(reduceAVbyDV),
+                ]
+              : '',
+            renderLabeledCheckbox(perTurn),
+          ]
         ],
       })}
     `;

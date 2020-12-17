@@ -1,4 +1,5 @@
 import type { MessageHeaderData } from '@src/chat/message-data';
+import { localize } from '@src/foundry/localization';
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
@@ -6,7 +7,10 @@ import {
   property,
   html,
   internalProperty,
+  PropertyValues,
 } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
+import { ifDefined } from 'lit-html/directives/if-defined';
 import styles from './message-header.scss';
 
 @customElement('message-header')
@@ -24,6 +28,16 @@ export class MessageHeader extends LitElement {
   private toggleDescription() {
     this.descriptionOpen = !this.descriptionOpen;
   }
+
+  // updated(changedProps: PropertyValues) {
+  //   if (this.data.description) {
+  //     requestAnimationFrame(() => {
+  //       const enrichedEL = this.renderRoot.querySelector("enriched-html");
+
+  //     })
+  //   }
+  //   super.updated(changedProps)
+  // }
 
   render() {
     const { img, heading, subheadings, description } = this.data;
@@ -43,12 +57,14 @@ export class MessageHeader extends LitElement {
           : ''}
       </header>
 
-      ${description && this.descriptionOpen
+      ${description
         ? html`
-            <enriched-html
-              class="description"
-              .content=${description}
-            ></enriched-html>
+              <enriched-html
+                @click=${this.toggleDescription}
+                class="description ${classMap({ expanded: this.descriptionOpen})}"
+                .content=${description}
+              ></enriched-html>
+           
           `
         : html``}
     `;

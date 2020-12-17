@@ -3,11 +3,13 @@
 
 * {
   box-sizing: border-box;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 :host {
   display: block;
-  max-width: 280px;
+  max-width: 240px;
   min-width: 100%;
   line-height: 1.5em;
   // letter-spacing: 0.5px;

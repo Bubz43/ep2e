@@ -70,26 +70,30 @@ export class ConsumableCard extends LazyRipple(LitElement) {
     const { item } = this;
     if (item.type === ItemType.Substance) {
       openMenu({
-        header: { heading: `${localize("use")} ${item.name}` },
-        content: item.applicationMethods.map(method => ({
+        header: { heading: `${localize('use')} ${item.name}` },
+        content: item.applicationMethods.map((method) => ({
           label: localize(method),
           callback: async () => {
             await createMessage({
               data: {
-                header: { heading: item.name, img: item.nonDefaultImg, subheadings: item.fullType },
+                header: {
+                  heading: item.name,
+                  img: item.nonDefaultImg,
+                  subheadings: item.fullType,
+                  description: item.description,
+                },
                 substanceUse: {
                   substance: item.getDataCopy(),
-                  useMethod: method
-                }
+                  useMethod: method,
+                },
               },
-              entity: item.actor
-            })
-            item.useUnit()
-          }
+              entity: item.actor,
+            });
+            item.useUnit();
+          },
         })),
-        position: ev
-
-      })
+        position: ev,
+      });
     }
   }
 
@@ -147,14 +151,14 @@ export class ConsumableCard extends LazyRipple(LitElement) {
         ${this.renderRipple()}
       </div>
       ${this.expanded
-      ? html`
-        ${renderAutoForm({
-          classes: "quantity-form",
-          disabled: !editable,
-          props: { quantity: item.quantity },
-          update: item.updateQuantity.commit,
-          fields: ({quantity}) => renderNumberField(quantity, { min: 0})
-        })}
+        ? html`
+            ${renderAutoForm({
+              classes: 'quantity-form',
+              disabled: !editable,
+              props: { quantity: item.quantity },
+              update: item.updateQuantity.commit,
+              fields: ({ quantity }) => renderNumberField(quantity, { min: 0 }),
+            })}
             <enriched-html
               class="description"
               .content=${item.description ||

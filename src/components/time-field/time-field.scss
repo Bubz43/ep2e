@@ -52,11 +52,11 @@
 .infinite-toggle {
   border: 0;
   padding: 0;
+  outline: none;
   font-size: 1.7rem;
   color: var(--color-text-lighter);
   line-height: 1rem;
   background: transparent;
-  outline: none;
   position: absolute;
   right: 0.75rem;
   transform: translateY(0.2rem);
@@ -74,6 +74,7 @@
   &:not([disabled]) {
     cursor: pointer;
     &:focus {
+      color: var(--color-primary-alt);
       text-shadow: var(--text-highlight);
     }
   }

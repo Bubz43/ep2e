@@ -126,7 +126,8 @@ export class TimeField extends LitElement {
           `
         : ''}
       ${permanentLabel
-        ? html`
+      ? html`
+        
             <button
               class="infinite-toggle ${infinite ? 'infinite' : ''}"
               ?disabled=${disabled}
