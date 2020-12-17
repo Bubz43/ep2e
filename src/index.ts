@@ -28,8 +28,8 @@ import 'weightless/list-item';
 import { MessageDamage } from './chat/components/damage/message-damage';
 import { MessageHeal } from './chat/components/heal/message-heal';
 import { MessageHealthChange } from './chat/components/health-change/message-health-change';
-import { MessageContent } from './chat/components/message-content/message-content';
-import { MessageHeader } from './chat/components/message-header/message-header';
+import { MessageContent } from './chat/components/content/message-content';
+import { MessageHeader } from './chat/components/header/message-header';
 import { MessageStressTest } from './chat/components/stress-test/message-stress-test';
 import { RolledFormulasList } from './combat/components/rolled-formulas-list/rolled-formulas-list';
 import { AnimatedList } from './components/animated-list/animated-list';
@@ -137,6 +137,7 @@ import { MentalHealthStressEditor } from './health/components/mental-health-stre
 import { MeshHealthDamageEditor } from './health/components/mesh-health-damage-editor/mesh-health-damage-editor';
 import { PhysicalHealthDamageEditor } from './health/components/physical-health-damage-editor/physical-health-damage-editor';
 import './init';
+import { MessageSubstanceUse } from './chat/components/substance/message-substance-use';
 
 // customElements.define('app-datepicker', Datepicker);
 
@@ -277,3 +278,4 @@ MessageStressTest;
 MessageHealthChange;
 MessageHeal;
 MessageDamage;
+MessageSubstanceUse

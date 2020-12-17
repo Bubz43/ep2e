@@ -19,7 +19,6 @@ import { MutateEvent, mutateEntityHook } from '@src/foundry/hook-setups';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import { clickIfEnter, notEmpty, safeMerge } from '@src/utility/helpers';
-import { ready } from 'jquery';
 import { LazyGetter } from 'lazy-get-decorator';
 import {
   customElement,

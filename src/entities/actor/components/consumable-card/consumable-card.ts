@@ -1,3 +1,5 @@
+import { renderNumberField } from '@src/components/field/fields';
+import { renderAutoForm } from '@src/components/form/forms';
 import { LazyRipple } from '@src/components/mixins/lazy-ripple';
 import { ItemType } from '@src/entities/entity-types';
 import type { ConsumableItem } from '@src/entities/item/item';
@@ -65,7 +67,7 @@ export class ConsumableCard extends LazyRipple(LitElement) {
 
   private openSubstanceuseMenu(ev: MouseEvent) {
     if (this.item.type === ItemType.Substance) {
-      
+
     }
   }
 
@@ -123,7 +125,14 @@ export class ConsumableCard extends LazyRipple(LitElement) {
         ${this.renderRipple()}
       </div>
       ${this.expanded
-        ? html`
+      ? html`
+        ${renderAutoForm({
+          classes: "quantity-form",
+          disabled: !editable,
+          props: { quantity: item.quantity },
+          update: item.updateQuantity.commit,
+          fields: ({quantity}) => renderNumberField(quantity, { min: 0})
+        })}
             <enriched-html
               class="description"
               .content=${item.description ||

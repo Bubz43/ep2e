@@ -1,3 +1,7 @@
+import type { SubstanceApplicationMethod } from '@src/data-enums';
+import type { ItemType } from '@src/entities/entity-types';
+import type { SubstanceUseMethod } from '@src/entities/item/proxies/substance';
+import type { ItemEntity } from '@src/entities/models';
 import type { ArmorType } from '@src/features/active-armor';
 import type { RolledFormula } from '@src/foundry/rolls';
 import type {
@@ -42,6 +46,11 @@ export type HealthChangeMessageData = HealthModification & {
   reducedArmor?: Partial<Record<ArmorType, number>>;
 };
 
+export type SubstanceUseData = {
+  substance: ItemEntity<ItemType.Substance>,
+  useMethod: SubstanceUseMethod;
+}
+
 export type MessageHeaderData = {
   heading: string;
   subheadings?: string | string[];
@@ -55,4 +64,5 @@ export type MessageData = Partial<{
   damage: DamageMessageData;
   healthChange: HealthChangeMessageData;
   heal: MessageHealData;
+  substanceUse: SubstanceUseData;
 }>;

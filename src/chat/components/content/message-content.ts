@@ -29,7 +29,14 @@ export class MessageContent extends LitElement {
   }
 
   render() {
-    const { header, stress, healthChange, heal, damage } = this.data;
+    const {
+      header,
+      stress,
+      healthChange,
+      heal,
+      damage,
+      substanceUse,
+    } = this.data;
     if (!this.message.isContentVisible) return '';
     return html`
       ${header ? html` <message-header .data=${header}></message-header> ` : ''}
@@ -44,6 +51,11 @@ export class MessageContent extends LitElement {
               .healthChange=${healthChange}
             ></message-health-change>
           `
+        : ''}
+      ${substanceUse
+        ? html`<message-substance-use
+            .substanceUse=${substanceUse}
+          ></message-substance-use>`
         : ''}
     `;
   }

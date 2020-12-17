@@ -29,7 +29,7 @@ import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 import { Sleight } from './sleight';
 import { Trait } from './trait';
 
-export type SubstanceUse = Substance['applicationMethods'][number] | 'use';
+export type SubstanceUseMethod = Substance['applicationMethods'][number] | 'use';
 
 class Base extends ItemProxyBase<ItemType.Substance> {
   get updateState() {
@@ -42,7 +42,7 @@ class Base extends ItemProxyBase<ItemType.Substance> {
 export class Substance
   extends mix(Base).with(Purchasable, Copyable, Stackable)
   implements Attacker<SubstanceAttackData, SubstanceAttack> {
-  static onsetTime(application: SubstanceUse) {
+  static onsetTime(application: SubstanceUseMethod) {
     switch (application) {
       case SubstanceApplicationMethod.Inhalation:
         return toMilliseconds({ seconds: 3 });
