@@ -1,3 +1,4 @@
+import type { ActorEP } from '@src/entities/actor/actor';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import { noop } from 'remeda';
@@ -13,6 +14,7 @@ export type ItemProxyInit<T extends ItemType> = {
   openForm?: () => void;
   deleteSelf?: () => void;
   alwaysDeletable?: boolean;
+  actor?: ActorEP | null;
 };
 
 export abstract class ItemProxyBase<T extends ItemType> {
@@ -21,7 +23,7 @@ export abstract class ItemProxyBase<T extends ItemType> {
   readonly openForm?;
   readonly deleteSelf?;
   readonly alwaysDeletable: boolean;
-
+  readonly actor;
   embedded;
   usable = true;
 
@@ -32,6 +34,7 @@ export abstract class ItemProxyBase<T extends ItemType> {
     openForm,
     deleteSelf,
     alwaysDeletable = false,
+    actor
   }: ItemProxyInit<T>) {
     this.data = data;
     this.updater =
@@ -45,6 +48,7 @@ export abstract class ItemProxyBase<T extends ItemType> {
     this.openForm = openForm;
     this.deleteSelf = deleteSelf;
     this.alwaysDeletable = alwaysDeletable;
+    this.actor = actor
     // this.actorIdentifiers = actorIdentifiers;
   }
 

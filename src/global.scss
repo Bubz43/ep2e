@@ -58,7 +58,7 @@ li[divider] {
 }
 
 mwc-menu {
-  --mdc-theme-surface: #{lightv(var(--color-grey), 0.35)};
+  --mdc-theme-surface: #{lightv(var(--color-bg), 1.45)};
   --mdc-menu-item-height: 2rem;
   --mdc-menu-min-width: 200px;
   --mdc-list-vertical-padding: 0.25rem;

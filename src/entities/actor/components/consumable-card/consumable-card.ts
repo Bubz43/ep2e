@@ -1,3 +1,4 @@
+import { createMessage } from '@src/chat/create-message';
 import { renderNumberField } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { LazyRipple } from '@src/components/mixins/lazy-ripple';
@@ -66,8 +67,29 @@ export class ConsumableCard extends LazyRipple(LitElement) {
   }
 
   private openSubstanceuseMenu(ev: MouseEvent) {
-    if (this.item.type === ItemType.Substance) {
+    const { item } = this;
+    if (item.type === ItemType.Substance) {
+      openMenu({
+        header: { heading: `${localize("use")} ${item.name}` },
+        content: item.applicationMethods.map(method => ({
+          label: localize(method),
+          callback: async () => {
+            await createMessage({
+              data: {
+                header: { heading: item.name, img: item.nonDefaultImg, subheadings: item.fullType },
+                substanceUse: {
+                  substance: item.getDataCopy(),
+                  useMethod: method
+                }
+              },
+              entity: item.actor
+            })
+            item.useUnit()
+          }
+        })),
+        position: ev
 
+      })
     }
   }
 
@@ -111,7 +133,7 @@ export class ConsumableCard extends LazyRipple(LitElement) {
                 <mwc-icon-button
                   icon="change_circle"
                   @click=${this.openSubstanceuseMenu}
-                  ?disabled=${!editable}
+                  ?disabled=${!editable || item.quantity === 0}
                 ></mwc-icon-button>
               `
             : ''}

@@ -101,6 +101,9 @@ export const Stackable = (
     setQuantity(newQuantity: number) {
       this.updateQuantity.commit({ quantity: nonNegative(newQuantity) });
     }
+    useUnit() {
+      return this.updateQuantity.commit({ quantity: nonNegative(this.quantity - 1)})
+    }
   };
 };
 

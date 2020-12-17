@@ -180,6 +180,7 @@ export class ItemEP extends Item {
       data,
       updater: (this.updater as unknown) as UpdateStore<T>,
       embedded: this.actor?.name,
+      actor: this.actor,
       ...this.operations,
       // actorIdentifiers: this.actor?.identifiers,
     } as const;
