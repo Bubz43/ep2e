@@ -1326,6 +1326,10 @@
     "naturalHeal": "Natural Heal",
     "timeSinceNaturalHealAttempt": "Time since natural heal attempt",
     "timeToReboot": "Time to reboot",
+    "applicationMethod": "Application Method",
+    "hide": "Hide",
+    "less": "Less",
+    "more": "More",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

@@ -709,6 +709,9 @@
             "application": {
               "type": "string"
             },
+            "applicationMethod": {
+              "type": "string"
+            },
             "applicationMethods": {
               "type": "string"
             },
@@ -1981,6 +1984,9 @@
             "helplessness": {
               "type": "string"
             },
+            "hide": {
+              "type": "string"
+            },
             "high": {
               "type": "string"
             },
@@ -2368,6 +2374,9 @@
             "leastPoints": {
               "type": "string"
             },
+            "less": {
+              "type": "string"
+            },
             "level": {
               "type": "string"
             },
@@ -2621,6 +2630,9 @@
               "type": "string"
             },
             "modular": {
+              "type": "string"
+            },
+            "more": {
               "type": "string"
             },
             "morph": {
@@ -4508,6 +4520,7 @@
             "appAsWare",
             "applicable",
             "application",
+            "applicationMethod",
             "applicationMethods",
             "applied",
             "appliedSubstance",
@@ -4932,6 +4945,7 @@
             "heavy",
             "heavyPistol",
             "helplessness",
+            "hide",
             "high",
             "history",
             "holdoutPistol",
@@ -5061,6 +5075,7 @@
             "layers",
             "learn",
             "leastPoints",
+            "less",
             "level",
             "levels",
             "light",
@@ -5146,6 +5161,7 @@
             "modifiers",
             "modify",
             "modular",
+            "more",
             "morph",
             "morphPoints",
             "morphTraits",

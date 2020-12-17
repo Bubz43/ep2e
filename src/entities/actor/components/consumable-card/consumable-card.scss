@@ -24,7 +24,7 @@
   box-shadow: 0 0 4px black;
   background: alphav(var(--color-grey), 0.1);
   .header {
-    img {
+    .icon {
       height: 51px;
     }
     .info {
@@ -42,13 +42,13 @@
   --mdc-icon-button-size: 2rem;
   position: relative;
   cursor: pointer;
-  grid-template-areas: 'img info buttons';
+  grid-template-areas: 'icon info buttons';
 
   &:focus {
     outline: none;
   }
-  img {
-    grid-area: img;
+  .icon {
+    grid-area: icon;
     margin-right: 0.5ch;
     display: inline-block;
     min-width: 2rem;
@@ -107,4 +107,12 @@
 .quantity-form {
   width: 33%;
   margin-left: auto;
+}
+
+mwc-icon-button {
+  &[disabled] {
+    img {
+      opacity: 0.5;
+    }
+  }
 }

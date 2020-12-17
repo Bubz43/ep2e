@@ -14,6 +14,7 @@ import { openMenu } from '@src/open-menu';
 import { clickIfEnter } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
 import { customElement, LitElement, property, html } from 'lit-element';
+import { stopEvent } from 'weightless';
 import styles from './consumable-card.scss';
 
 @customElement('consumable-card')
@@ -96,6 +97,7 @@ export class ConsumableCard extends LazyRipple(LitElement) {
     }
   }
 
+
   render() {
     const { item } = this;
     const { nonDefaultImg, editable } = item;
@@ -114,7 +116,7 @@ export class ConsumableCard extends LazyRipple(LitElement) {
         @mouseleave="${this.handleRippleMouseLeave}"
       >
         ${nonDefaultImg
-          ? html` <img height="32px" src=${nonDefaultImg} /> `
+          ? html` <img class="icon" height="32px" src=${nonDefaultImg} /> `
           : ''}
 
         <span class="info">
@@ -126,6 +128,7 @@ export class ConsumableCard extends LazyRipple(LitElement) {
           ${item.stashed
             ? html`
                 <mwc-icon-button
+                
                   @click=${() => item.toggleStashed()}
                   icon=${item.stashed ? 'unarchive' : 'archive'}
                   ?disabled=${!editable}
@@ -144,7 +147,7 @@ export class ConsumableCard extends LazyRipple(LitElement) {
                         @mouseover=${tooltip.fromData}
                       >
                         <img
-                          src=${localImage('icons/actions/changed-heart.svg')}
+                          src=${localImage('icons/actions/chained-heart.svg')}
                         />
                       </mwc-icon-button>
                     `

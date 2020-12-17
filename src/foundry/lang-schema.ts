@@ -1351,7 +1351,7 @@ type LangEntries =
   | 'naturalHeal'
   | 'ago'
   | 'timeToReboot'
-  | 'hide' | "less" | "more"
+  | 'hide' | "less" | "more" | "applicationMethod"
 type FullNames =
   | 'cog'
   | 'int'

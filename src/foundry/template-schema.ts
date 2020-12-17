@@ -412,7 +412,6 @@ type SubstanceData = {
   application: SubstanceApplicationMethod[];
   addiction: '' | DrugAddiction;
   addictionMod: number;
-  isAntidote: boolean;
   hasSeverity: boolean;
   alwaysApplied: {
     effects: StringID<Effect>[];

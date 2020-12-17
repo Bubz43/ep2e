@@ -54,6 +54,7 @@ export type HealthModification = Timestamp & {
   wounds: number;
   source: string;
   stressType: StressType | null;
+  cumulativeDotID: string | null;
 };
 
 export const createHealthModification = createFeature<
@@ -63,6 +64,7 @@ export const createHealthModification = createFeature<
   () => ({
     source: localize('unknown'),
     stressType: null,
+    cumulativeDotID: null,
     ...createTimestamp({}),
   }),
   ({ damage, wounds, ...data }) => ({

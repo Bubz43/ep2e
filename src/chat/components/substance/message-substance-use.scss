@@ -6,11 +6,17 @@
 }
 
 :host {
-  display: flex;
-  flex-flow: row wrap;
-  align-items: center;
+  display: grid;
+  gap: 0.25rem;
   padding: 0.25rem 1rem;
-  > * {
-    margin-right: 0.25ch;
-  }
+
+}
+
+h4 {
+  margin: 0;
+  font-weight: normal;
+}
+
+.damage-roll {
+  color: var(--color-negative)
 }

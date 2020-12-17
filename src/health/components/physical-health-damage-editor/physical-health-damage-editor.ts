@@ -6,12 +6,14 @@ import {
 import { renderAutoForm } from '@src/components/form/forms';
 import { localize } from '@src/foundry/localization';
 import type { BiologicalHealth } from '@src/health/biological-health';
+import { createHealthModification, HealthModificationMode } from '@src/health/health';
 import {
   createPhysicalDamage,
   PhysicalDamage,
 } from '@src/health/health-changes';
 import type { SyntheticHealth } from '@src/health/synthetic-health';
 import { customElement, html } from 'lit-element';
+import { pipe, reverse, takeWhile } from 'remeda';
 import { HealthEditBase } from '../health-edit-base';
 
 @customElement('physical-health-damage-editor')
@@ -27,7 +29,24 @@ export class PhysicalHealthDamageEditor extends HealthEditBase<
     return createPhysicalDamage(this.damage || { damageValue: 0, formula: '' });
   }
 
+  protected createModification() {
+    return {
+      ...super.createModification(),
+      cumulativeDotID: this.damage?.cumulativeDotID || null
+    }
+  }
+
   render() {
+    if (this.damage?.cumulativeDotID) {
+      const { cumulativeDotID } = this.damage;
+      pipe(
+        this.health.log,
+        reverse(),
+        takeWhile(entry => entry.cumulativeDotID === cumulativeDotID),
+        console.log
+      )
+    }
+    // TODO cumulative damage
     return html`
       <div class="damage-settings">
         ${renderAutoForm({

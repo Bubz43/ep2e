@@ -1,4 +1,3 @@
-import type { SubstanceApplicationMethod } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
 import type { SubstanceUseMethod } from '@src/entities/item/proxies/substance';
 import type { ItemEntity } from '@src/entities/models';
@@ -6,8 +5,8 @@ import type { ArmorType } from '@src/features/active-armor';
 import type { RolledFormula } from '@src/foundry/rolls';
 import type {
   HealthModification,
-  HealthStat,
-  HealthType,
+
+  HealthType
 } from '@src/health/health';
 import type { StressType } from '@src/health/mental-health';
 import type { RequireAtLeastOne } from 'type-fest';
@@ -27,6 +26,7 @@ export type DamageMessageData = {
   armorPiercing: boolean;
   reduceAVbyDV: boolean;
   armorUsed: ArmorType[];
+  cumulativeDotID?: string;
 };
 
 export type MessageHealData = RequireAtLeastOne<

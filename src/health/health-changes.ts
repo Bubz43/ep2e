@@ -25,6 +25,7 @@ export type StressDamage = CommonDamage<{
 
 export type PhysicalDamage = CommonDamage<{
   type: HealthType.Physical;
+  cumulativeDotID: string;
 }>;
 
 export type MeshDamage = CommonDamage<{
@@ -97,6 +98,7 @@ export const createPhysicalDamage = createFeature<
 >(() => ({
   ...common,
   type: HealthType.Physical,
+  cumulativeDotID: "",
 }));
 
 export const createMeshDamage = createFeature<MeshDamage, RequiredFields>(
