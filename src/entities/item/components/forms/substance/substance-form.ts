@@ -224,6 +224,7 @@ export class SubstanceForm extends ItemFormBase {
             addiction,
             addictionMod,
             hasSeverity,
+            consumeOnUse
           }) => [
             renderSelectField(
               { ...substanceType, label: localize('type') },
@@ -236,7 +237,8 @@ export class SubstanceForm extends ItemFormBase {
                   enumValues(SubstanceClassification),
                 ),
             renderTextField(category, { listId: 'drug-categories' }),
-            renderLabeledCheckbox(hasSeverity),
+              renderLabeledCheckbox(hasSeverity),
+            renderLabeledCheckbox(consumeOnUse),
             isDrug
               ? html`
                   ${this.drugCategoryTemplate}

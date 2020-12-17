@@ -7,9 +7,12 @@ import type { ConsumableItem } from '@src/entities/item/item';
 import { itemMenuOptions } from '@src/entities/item/item-views';
 import { Substance } from '@src/entities/item/proxies/substance';
 import { prettyMilliseconds } from '@src/features/time';
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
+import { tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import { clickIfEnter } from '@src/utility/helpers';
+import { localImage } from '@src/utility/images';
 import { customElement, LitElement, property, html } from 'lit-element';
 import styles from './consumable-card.scss';
 
@@ -71,15 +74,25 @@ export class ConsumableCard extends LazyRipple(LitElement) {
   private openSubstanceuseMenu(ev: MouseEvent) {
     const { item } = this;
     if (item.type === ItemType.Substance) {
-      if (item.applicationMethods.length === 1) item.use(item.applicationMethods[0]!)
-      else openMenu({
-        header: { heading: `${localize('use')} ${item.name}` },
-        content: item.applicationMethods.map((method) => ({
-          label: `${localize(method)} - ${localize("onset")}: ${prettyMilliseconds(Substance.onsetTime(method))}`,
-          callback: () => item.use(method),
-        })),
-        position: ev,
-      });
+      if (item.applicationMethods.length === 1)
+        item.use(item.applicationMethods[0]!);
+      else
+        openMenu({
+          header: { heading: `${localize('use')} ${item.name}` },
+          content: item.applicationMethods.map((method) => ({
+            label: `${localize(method)} - ${localize(
+              'onset',
+            )}: ${prettyMilliseconds(Substance.onsetTime(method))}`,
+            callback: () => item.use(method),
+          })),
+          position: ev,
+        });
+    }
+  }
+
+  private addictionTest() {
+    if (this.item.type === ItemType.Substance) {
+      notify(NotificationType.Info, `TODO WIL Check`);
     }
   }
 
@@ -120,11 +133,29 @@ export class ConsumableCard extends LazyRipple(LitElement) {
               `
             : item.type === ItemType.Substance
             ? html`
+                ${item.isAddictive
+                  ? html`
+                      <mwc-icon-button
+                        @click=${this.addictionTest}
+                        ?disabled=${!editable}
+                        data-tooltip="${localize('addiction')} ${localize(
+                          'test',
+                        )}"
+                        @mouseover=${tooltip.fromData}
+                      >
+                        <img
+                          src=${localImage('icons/actions/changed-heart.svg')}
+                        />
+                      </mwc-icon-button>
+                    `
+                  : ''}
                 <mwc-icon-button
-                  icon="change_circle"
                   @click=${this.openSubstanceuseMenu}
                   ?disabled=${!editable || item.quantity === 0}
-                ></mwc-icon-button>
+                  data-tooltip=${localize('use')}
+                  @mouseover=${tooltip.fromData}
+                  ><img src=${localImage('icons/actions/pill-drop.svg')} />
+                </mwc-icon-button>
               `
             : ''}
           <mwc-icon-button

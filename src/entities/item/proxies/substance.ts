@@ -188,6 +188,10 @@ export class Substance
     return this.epData.hasSeverity;
   }
 
+  get consumeOnUse() {
+    return this.epData.consumeOnUse
+  }
+
   private getInstancedItems(
     group: 'alwaysAppliedItems' | 'severityAppliedItems',
   ) {
@@ -274,6 +278,6 @@ export class Substance
       },
       entity: this.actor,
     });
-    this.useUnit();
+    if (this.consumeOnUse) this.useUnit();
   }
 }
