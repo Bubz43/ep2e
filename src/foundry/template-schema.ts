@@ -186,15 +186,6 @@ export type EgoData = {
   };
 };
 
-export type AppliedSubstanceBase = {
-  duration: number;
-  effects: Effect[];
-  name: string;
-  type: SubstanceType;
-  classification: SubstanceClassification | SubstanceType.Chemical;
-  wearOffStress: string;
-  conditions: ConditionType[];
-};
 
 type CharacterData = EgoData & {
   templates: ['Common'];
@@ -219,13 +210,6 @@ type CharacterData = EgoData & {
   tasks: StringID<ActiveTaskAction>[];
   accumulatedTimeStart: number;
   // log: StringID<CharacterLogEntry>[];
-  appliedSubstances: StringID<
-    AppliedSubstanceBase & {
-      elapsed: number;
-      itemIds: string[];
-      damage: SubstanceAttackData & { ticks: number };
-    }
-  >[];
   combatState: {
     complexAim: boolean;
     fullDefense: '' | FullDefenseType;

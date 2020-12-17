@@ -5,6 +5,7 @@ import { openMenu } from '@src/open-menu';
 import { html } from 'lit-html';
 import { uniq } from 'remeda';
 import type { ActorEP } from './actor/actor';
+import { ActorType } from './entity-types';
 
 export type ActorIdentifiers = {
   actorId?: string | null;
@@ -46,7 +47,7 @@ export const getControlledTokenActors = () => {
   );
 };
 
-export const pickOrDefaultActor = (callback: (actor: ActorEP) => void) => {
+export const pickOrDefaultActor = (callback: (actor: ActorEP) => void, onlyCharacters = false) => {
   const controlledActors = getControlledTokenActors();
   if (controlledActors.length > 1) {
     openMenu({
@@ -56,10 +57,10 @@ export const pickOrDefaultActor = (callback: (actor: ActorEP) => void) => {
           label: name,
           icon: html`<img src=${img} />`,
           callback: () => callback(actor),
+          disabled: onlyCharacters && actor.type !== ActorType.Character
         };
       }),
     });
-    // TODO open menu
   } else if (controlledActors[0]) callback(controlledActors[0]);
   else if (game.user.character) callback(game.user.character);
   else notify(NotificationType.Info, 'No controlled actors'); // TODO localize

@@ -391,7 +391,6 @@
           "notes": ""
         }
       },
-      "appliedSubstances": [],
       "combatState": {
         "complexAim": false,
         "fullDefense": ""
@@ -576,7 +575,6 @@
       "classification": "biochem",
       "consumeOnUse": true,
       "substanceType": "drug",
-      "isAntidote": false,
       "quantityPerCost": 5,
       "severity": {
         "check": "som",

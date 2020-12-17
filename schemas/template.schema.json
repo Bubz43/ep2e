@@ -270,43 +270,6 @@
       ],
       "type": "string"
     },
-    "ArmorEffect": {
-      "additionalProperties": false,
-      "properties": {
-        "concealable": {
-          "type": "boolean"
-        },
-        "energy": {
-          "type": "number"
-        },
-        "kinetic": {
-          "type": "number"
-        },
-        "layerable": {
-          "type": "boolean"
-        },
-        "mental": {
-          "type": "number"
-        },
-        "mesh": {
-          "type": "number"
-        },
-        "type": {
-          "const": "armor",
-          "type": "string"
-        }
-      },
-      "required": [
-        "concealable",
-        "energy",
-        "kinetic",
-        "layerable",
-        "mental",
-        "mesh",
-        "type"
-      ],
-      "type": "object"
-    },
     "ArmorType": {
       "enum": [
         "energy",
@@ -645,43 +608,6 @@
       ],
       "type": "string"
     },
-    "DurationEffect": {
-      "additionalProperties": false,
-      "properties": {
-        "halve": {
-          "type": "boolean"
-        },
-        "modifier": {
-          "type": "number"
-        },
-        "subtype": {
-          "$ref": "#/definitions/DurationEffectTarget"
-        },
-        "taskType": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ActionSubtype"
-            },
-            {
-              "const": "",
-              "type": "string"
-            }
-          ]
-        },
-        "type": {
-          "const": "duration",
-          "type": "string"
-        }
-      },
-      "required": [
-        "type",
-        "subtype",
-        "modifier",
-        "taskType",
-        "halve"
-      ],
-      "type": "object"
-    },
     "DurationEffectTarget": {
       "enum": [
         "effectDuration",
@@ -690,49 +616,6 @@
         "healingTimeframes"
       ],
       "type": "string"
-    },
-    "Effect": {
-      "anyOf": [
-        {
-          "$ref": "#/definitions/InitiativeEffect"
-        },
-        {
-          "$ref": "#/definitions/PoolEffect"
-        },
-        {
-          "$ref": "#/definitions/MiscEffect"
-        },
-        {
-          "$ref": "#/definitions/SuccessTestEffect"
-        },
-        {
-          "$ref": "#/definitions/HealthEffect"
-        },
-        {
-          "$ref": "#/definitions/ArmorEffect"
-        },
-        {
-          "$ref": "#/definitions/RechargeEffect"
-        },
-        {
-          "$ref": "#/definitions/DurationEffect"
-        },
-        {
-          "$ref": "#/definitions/HealthRecoveryEffect"
-        },
-        {
-          "$ref": "#/definitions/MeleeEffect"
-        },
-        {
-          "$ref": "#/definitions/RangedEffect"
-        },
-        {
-          "$ref": "#/definitions/SkillEffect"
-        },
-        {
-          "$ref": "#/definitions/MovementEffect"
-        }
-      ]
     },
     "EgoRepData": {
       "additionalProperties": false,
@@ -858,121 +741,6 @@
               "properties": {
                 "accumulatedTimeStart": {
                   "type": "number"
-                },
-                "appliedSubstances": {
-                  "items": {
-                    "additionalProperties": false,
-                    "properties": {
-                      "classification": {
-                        "anyOf": [
-                          {
-                            "$ref": "#/definitions/SubstanceClassification"
-                          },
-                          {
-                            "const": "chemical",
-                            "type": "string"
-                          }
-                        ]
-                      },
-                      "conditions": {
-                        "items": {
-                          "$ref": "#/definitions/ConditionType"
-                        },
-                        "type": "array"
-                      },
-                      "damage": {
-                        "additionalProperties": false,
-                        "properties": {
-                          "armorPiercing": {
-                            "type": "boolean"
-                          },
-                          "armorUsed": {
-                            "items": {
-                              "$ref": "#/definitions/ArmorType"
-                            },
-                            "type": "array"
-                          },
-                          "attackTraits": {
-                            "items": {
-                              "$ref": "#/definitions/AttackTrait"
-                            },
-                            "type": "array"
-                          },
-                          "damageFormula": {
-                            "type": "string"
-                          },
-                          "damageType": {
-                            "$ref": "#/definitions/HealthType"
-                          },
-                          "perTurn": {
-                            "type": "boolean"
-                          },
-                          "reduceAVbyDV": {
-                            "type": "boolean"
-                          },
-                          "ticks": {
-                            "type": "number"
-                          }
-                        },
-                        "required": [
-                          "armorPiercing",
-                          "armorUsed",
-                          "attackTraits",
-                          "damageFormula",
-                          "damageType",
-                          "perTurn",
-                          "reduceAVbyDV",
-                          "ticks"
-                        ],
-                        "type": "object"
-                      },
-                      "duration": {
-                        "type": "number"
-                      },
-                      "effects": {
-                        "items": {
-                          "$ref": "#/definitions/Effect"
-                        },
-                        "type": "array"
-                      },
-                      "elapsed": {
-                        "type": "number"
-                      },
-                      "id": {
-                        "type": "string"
-                      },
-                      "itemIds": {
-                        "items": {
-                          "type": "string"
-                        },
-                        "type": "array"
-                      },
-                      "name": {
-                        "type": "string"
-                      },
-                      "type": {
-                        "$ref": "#/definitions/SubstanceType"
-                      },
-                      "wearOffStress": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "classification",
-                      "conditions",
-                      "damage",
-                      "duration",
-                      "effects",
-                      "elapsed",
-                      "id",
-                      "itemIds",
-                      "name",
-                      "type",
-                      "wearOffStress"
-                    ],
-                    "type": "object"
-                  },
-                  "type": "array"
                 },
                 "aptitudes": {
                   "$ref": "#/definitions/Aptitudes"
@@ -1756,6 +1524,51 @@
                           "type"
                         ],
                         "type": "object"
+                      },
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "condition": {
+                            "$ref": "#/definitions/ConditionType"
+                          },
+                          "duration": {
+                            "type": "number"
+                          },
+                          "endOn": {
+                            "anyOf": [
+                              {
+                                "const": "",
+                                "type": "string"
+                              },
+                              {
+                                "$ref": "#/definitions/TemporaryFeatureEnd"
+                              }
+                            ]
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "startTime": {
+                            "type": "number"
+                          },
+                          "type": {
+                            "const": "condition",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "condition",
+                          "duration",
+                          "endOn",
+                          "id",
+                          "name",
+                          "startTime",
+                          "type"
+                        ],
+                        "type": "object"
                       }
                     ]
                   },
@@ -1812,7 +1625,6 @@
               },
               "required": [
                 "accumulatedTimeStart",
-                "appliedSubstances",
                 "aptitudes",
                 "characterDetails",
                 "combatState",
@@ -7763,9 +7575,6 @@
                 "hasSeverity": {
                   "type": "boolean"
                 },
-                "isAntidote": {
-                  "type": "boolean"
-                },
                 "quantityPerCost": {
                   "type": "number"
                 },
@@ -8285,7 +8094,6 @@
                 "classification",
                 "consumeOnUse",
                 "hasSeverity",
-                "isAntidote",
                 "quantityPerCost",
                 "severity",
                 "substanceType",
@@ -9187,31 +8995,6 @@
       ],
       "type": "string"
     },
-    "HealthEffect": {
-      "additionalProperties": false,
-      "properties": {
-        "health": {
-          "$ref": "#/definitions/HealthType"
-        },
-        "modifier": {
-          "type": "number"
-        },
-        "stat": {
-          "$ref": "#/definitions/HealthStat"
-        },
-        "type": {
-          "const": "health",
-          "type": "string"
-        }
-      },
-      "required": [
-        "type",
-        "health",
-        "stat",
-        "modifier"
-      ],
-      "type": "object"
-    },
     "HealthModificationMode": {
       "enum": [
         "edit",
@@ -9219,39 +9002,6 @@
         "inflict"
       ],
       "type": "string"
-    },
-    "HealthRecoveryEffect": {
-      "additionalProperties": false,
-      "properties": {
-        "damageAmount": {
-          "type": "string"
-        },
-        "interval": {
-          "type": "number"
-        },
-        "stat": {
-          "$ref": "#/definitions/HealOverTimeTarget"
-        },
-        "technologicallyAided": {
-          "type": "boolean"
-        },
-        "type": {
-          "const": "healthRecovery",
-          "type": "string"
-        },
-        "woundAmount": {
-          "type": "number"
-        }
-      },
-      "required": [
-        "interval",
-        "damageAmount",
-        "woundAmount",
-        "stat",
-        "technologicallyAided",
-        "type"
-      ],
-      "type": "object"
     },
     "HealthStat": {
       "enum": [
@@ -9287,23 +9037,6 @@
         "physical"
       ],
       "type": "string"
-    },
-    "InitiativeEffect": {
-      "additionalProperties": false,
-      "properties": {
-        "modifier": {
-          "type": "number"
-        },
-        "type": {
-          "const": "initiative",
-          "type": "string"
-        }
-      },
-      "required": [
-        "type",
-        "modifier"
-      ],
-      "type": "object"
     },
     "KineticWeaponAttackData": {
       "additionalProperties": false,
@@ -9366,23 +9099,6 @@
       "required": [
         "type",
         "aptitude"
-      ],
-      "type": "object"
-    },
-    "MeleeEffect": {
-      "additionalProperties": false,
-      "properties": {
-        "dvModifier": {
-          "type": "string"
-        },
-        "type": {
-          "const": "melee",
-          "type": "string"
-        }
-      },
-      "required": [
-        "type",
-        "dvModifier"
       ],
       "type": "object"
     },
@@ -9546,35 +9262,6 @@
       ],
       "type": "string"
     },
-    "MiscEffect": {
-      "additionalProperties": false,
-      "properties": {
-        "description": {
-          "type": "string"
-        },
-        "type": {
-          "const": "misc",
-          "type": "string"
-        },
-        "unique": {
-          "anyOf": [
-            {
-              "const": "",
-              "type": "string"
-            },
-            {
-              "$ref": "#/definitions/UniqueEffectType"
-            }
-          ]
-        }
-      },
-      "required": [
-        "type",
-        "unique",
-        "description"
-      ],
-      "type": "object"
-    },
     "MorphCost": {
       "enum": [
         "gearPoints",
@@ -9633,35 +9320,6 @@
       ],
       "type": "string"
     },
-    "MovementEffect": {
-      "additionalProperties": false,
-      "properties": {
-        "base": {
-          "type": "number"
-        },
-        "full": {
-          "type": "number"
-        },
-        "mode": {
-          "$ref": "#/definitions/MovementEffectMode"
-        },
-        "movementType": {
-          "$ref": "#/definitions/Movement"
-        },
-        "type": {
-          "const": "movement",
-          "type": "string"
-        }
-      },
-      "required": [
-        "base",
-        "full",
-        "mode",
-        "movementType",
-        "type"
-      ],
-      "type": "object"
-    },
     "MovementEffectMode": {
       "enum": [
         "grant",
@@ -9693,45 +9351,6 @@
       ],
       "type": "string"
     },
-    "PoolEffect": {
-      "additionalProperties": false,
-      "properties": {
-        "modifier": {
-          "type": "number"
-        },
-        "pool": {
-          "enum": [
-            "insight",
-            "moxie",
-            "vigor",
-            "flex"
-          ],
-          "type": "string"
-        },
-        "type": {
-          "const": "pool",
-          "type": "string"
-        },
-        "usabilityModification": {
-          "anyOf": [
-            {
-              "const": "",
-              "type": "string"
-            },
-            {
-              "$ref": "#/definitions/PoolEffectUsability"
-            }
-          ]
-        }
-      },
-      "required": [
-        "type",
-        "pool",
-        "modifier",
-        "usabilityModification"
-      ],
-      "type": "object"
-    },
     "PoolEffectUsability": {
       "enum": [
         "usableTwice",
@@ -9749,23 +9368,6 @@
         "increasedRange"
       ],
       "type": "string"
-    },
-    "RangedEffect": {
-      "additionalProperties": false,
-      "properties": {
-        "negativeRangeModifiersMultiplier": {
-          "type": "number"
-        },
-        "type": {
-          "const": "ranged",
-          "type": "string"
-        }
-      },
-      "required": [
-        "type",
-        "negativeRangeModifiersMultiplier"
-      ],
-      "type": "object"
     },
     "RangedWeaponAccessory": {
       "enum": [
@@ -9798,31 +9400,6 @@
       "required": [
         "taken",
         "refreshStartTime"
-      ],
-      "type": "object"
-    },
-    "RechargeEffect": {
-      "additionalProperties": false,
-      "properties": {
-        "modifier": {
-          "type": "number"
-        },
-        "recharge": {
-          "$ref": "#/definitions/RechargeType"
-        },
-        "stat": {
-          "$ref": "#/definitions/RechargeStat"
-        },
-        "type": {
-          "const": "recharge",
-          "type": "string"
-        }
-      },
-      "required": [
-        "type",
-        "recharge",
-        "stat",
-        "modifier"
       ],
       "type": "object"
     },
@@ -9933,50 +9510,6 @@
       "required": [
         "points",
         "specialization"
-      ],
-      "type": "object"
-    },
-    "SkillEffect": {
-      "additionalProperties": false,
-      "properties": {
-        "aptitudeMultiplier": {
-          "type": "number"
-        },
-        "field": {
-          "type": "string"
-        },
-        "linkedAptitude": {
-          "$ref": "#/definitions/AptitudeType"
-        },
-        "skillType": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/SkillType"
-            },
-            {
-              "$ref": "#/definitions/FieldSkillType"
-            }
-          ]
-        },
-        "specialization": {
-          "type": "string"
-        },
-        "total": {
-          "type": "number"
-        },
-        "type": {
-          "const": "skill",
-          "type": "string"
-        }
-      },
-      "required": [
-        "skillType",
-        "field",
-        "specialization",
-        "type",
-        "total",
-        "aptitudeMultiplier",
-        "linkedAptitude"
       ],
       "type": "object"
     },
@@ -10713,6 +10246,12 @@
     "StringID<HealthModification>": {
       "additionalProperties": false,
       "properties": {
+        "cumulativeDotID": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "damage": {
           "type": "number"
         },
@@ -10746,6 +10285,7 @@
         }
       },
       "required": [
+        "cumulativeDotID",
         "damage",
         "id",
         "mode",
@@ -10867,38 +10407,6 @@
         "toxin"
       ],
       "type": "string"
-    },
-    "SuccessTestEffect": {
-      "additionalProperties": false,
-      "properties": {
-        "modifier": {
-          "type": "number"
-        },
-        "requirement": {
-          "type": "string"
-        },
-        "tags": {
-          "items": {
-            "$ref": "#/definitions/Tag"
-          },
-          "type": "array"
-        },
-        "toOpponent": {
-          "type": "boolean"
-        },
-        "type": {
-          "const": "successTest",
-          "type": "string"
-        }
-      },
-      "required": [
-        "type",
-        "tags",
-        "modifier",
-        "requirement",
-        "toOpponent"
-      ],
-      "type": "object"
     },
     "SyntheticHealthData": {
       "additionalProperties": false,

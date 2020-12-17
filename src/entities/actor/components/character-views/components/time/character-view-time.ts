@@ -104,12 +104,37 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
 
       ${[
         this.renderTaskActions(),
+        this.renderAppliedSubstances(),
         this.renderFabricators(),
         this.renderRegens(),
         this.renderTemporaryFeatures(),
         this.renderTemporaryServices(),
         this.renderRefreshTimers(),
       ]}
+    `;
+  }
+
+  private renderAppliedSubstances() {
+    const { substancesAwaitingOnset, disabled } = this.character;
+    // TODO onset substances
+    if (substancesAwaitingOnset.length === 0) return '';
+    return html`
+      <section>
+        <sl-header heading=${localize('substancesAwaitingOnset')}></sl-header>
+        <sl-animated-list>
+          ${repeat(
+            substancesAwaitingOnset,
+            idProp,
+            ({ timeState }) => html`
+              <character-view-time-item
+                ?disabled=${disabled}
+                .timeState=${timeState}
+                completion="ready"
+              ></character-view-time-item>
+            `,
+          )}
+        </sl-animated-list>
+      </section>
     `;
   }
 

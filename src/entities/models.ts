@@ -1,3 +1,4 @@
+import type { SubstanceUseData } from '@src/chat/message-data';
 import type { SubstanceAttackData } from '@src/combat/attacks';
 import { EgoType } from '@src/data-enums';
 import {
@@ -10,10 +11,7 @@ import type { CommonEntityData, TokenData } from '@src/foundry/foundry-cont';
 import { localize } from '@src/foundry/localization';
 import { deepMerge } from '@src/foundry/misc-helpers';
 import type { EP } from '@src/foundry/system';
-import type {
-  EntityTemplates,
-  AppliedSubstanceBase,
-} from '@src/foundry/template-schema';
+import type { EntityTemplates } from '@src/foundry/template-schema';
 import type { ValOrValFN } from '@src/utility/helper-types';
 import { LazyGetter } from 'lazy-get-decorator';
 import { map, mapToObj, pick, prop, reject } from 'remeda';
@@ -57,21 +55,23 @@ export type ActorModels = {
 
 export type SleeveType = typeof sleeveTypes[number];
 
+// export type AppliedSubstanceBase = {
+//   duration: number;
+//   effects: Effect[];
+//   name: string;
+//   type: SubstanceType;
+//   classification: SubstanceClassification | SubstanceType.Chemical;
+//   wearOffStress: string;
+//   conditions: ConditionType[];
+// };
+
 type ActorFlags<T extends ActorType> = T extends ActorType.Character
   ? {
       vehicle: ActorEntity<ActorType.Synthetic> | null;
       [ItemType.Psi]: ItemEntity<ItemType.Psi> | null;
       substancesAwaitingOnset: StringID<
-        AppliedSubstanceBase & {
-          onsetTime: number;
-          onsetStartTime: number;
-          items: DrugAppliedItem[];
-          damage: SubstanceAttackData;
-        }
+        SubstanceUseData & { onsetStartTime: number }
       >[];
-      // remoteControlling:
-      //   | (ActorIdentifiers & { immersed?: boolean })
-      //   | null;
     } & { [key in SleeveType]: ActorEntity<key> | null }
   : never;
 

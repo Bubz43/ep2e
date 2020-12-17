@@ -3811,6 +3811,9 @@
             "substances": {
               "type": "string"
             },
+            "substancesAwaitingOnset": {
+              "type": "string"
+            },
             "substrain": {
               "type": "string"
             },
@@ -5554,6 +5557,7 @@
             "substance",
             "substanceType",
             "substances",
+            "substancesAwaitingOnset",
             "substrain",
             "subsumedEgos",
             "subtype",

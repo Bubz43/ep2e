@@ -1330,6 +1330,7 @@
     "hide": "Hide",
     "less": "Less",
     "more": "More",
+    "substancesAwaitingOnset": "Substances Awaiting Onset",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

@@ -21,9 +21,10 @@ import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import { Psi } from '@src/entities/item/proxies/psi';
 import type { Sleight } from '@src/entities/item/proxies/sleight';
 import type { Software } from '@src/entities/item/proxies/software';
+import { Substance } from '@src/entities/item/proxies/substance';
 import type { Trait } from '@src/entities/item/proxies/trait';
 import type { ActorEntity, SleeveType } from '@src/entities/models';
-import type { UpdateStore } from '@src/entities/update-store';
+import { UpdateStore } from '@src/entities/update-store';
 import { taskState } from '@src/features/actions';
 import { ActiveArmor } from '@src/features/active-armor';
 import type { ConditionType } from '@src/features/conditions';
@@ -52,10 +53,12 @@ import { nonNegative, notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import {
   compact,
+  createPipe,
   difference,
   first,
   flatMap,
   mapToObj,
+  merge,
   pipe,
   reject,
 } from 'remeda';
@@ -228,6 +231,51 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   }
 
   @LazyGetter()
+  get substancesAwaitingOnset() {
+    return (
+      this.epFlags?.substancesAwaitingOnset?.map((awaitingOnset) => {
+        const substance = new Substance({
+          embedded: this.name,
+          loaded: true,
+          data: awaitingOnset.substance,
+          updater: new UpdateStore({
+            getData: () => awaitingOnset.substance,
+            isEditable: () => this.editable,
+            setData: (data) => {
+              this.updater
+                .prop('flags', EP.Name, 'substancesAwaitingOnset')
+                .commit((list) =>
+                  updateFeature(list || [], { ...data, id: awaitingOnset.id }),
+                );
+            },
+          }),
+        });
+        return {
+          ...awaitingOnset,
+          timeState: createLiveTimeState({
+            img: substance.nonDefaultImg,
+            id: `awaiting-onset-${awaitingOnset.id}`,
+            duration: Substance.onsetTime(awaitingOnset.useMethod),
+            startTime: awaitingOnset.onsetStartTime,
+            label: substance.name,
+            updateStartTime: (newStartTime) => {
+              this.updater
+                .prop('flags', EP.Name, 'substancesAwaitingOnset')
+                .commit((list) =>
+                  updateFeature(list || [], {
+                    onsetStartTime: newStartTime,
+                    id: awaitingOnset.id,
+                  }),
+                );
+            },
+          }),
+          substance,
+        };
+      }) ?? []
+    );
+  }
+
+  @LazyGetter()
   get tasks() {
     return this.epData.tasks.map((task) => ({
       ...task,
@@ -301,7 +349,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       this.regeningHealths.reduce(
         (accum, { activeRecoveries }) => accum + (activeRecoveries?.size || 0),
         0,
-      )
+      ) +
+      this.substancesAwaitingOnset.length
     );
   }
 
@@ -320,7 +369,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         [...(health.activeRecoveries?.values() || [])].some(
           ({ timeState }) => !timeState.remaining,
         ),
-      )
+      ) ||
+      this.substancesAwaitingOnset.some(({ timeState}) => !timeState.remaining)
     );
   }
 

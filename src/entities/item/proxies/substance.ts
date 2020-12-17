@@ -136,14 +136,11 @@ export class Substance
       ...this.epData.alwaysApplied,
       damage: this.attacks.primary,
       items: this.alwaysAppliedItems,
-      get hasInstantDamage(): boolean {
-        return notEmpty(this.damage.rollFormulas) && !this.damage.perTurn;
-      },
       get viable(): boolean {
         return (
           notEmpty(this.items) ||
           notEmpty(this.effects) ||
-          (notEmpty(this.damage.rollFormulas) && this.damage.perTurn)
+          notEmpty(this.damage.rollFormulas)
         );
       },
     };
@@ -157,9 +154,6 @@ export class Substance
         localize('severity'),
       ),
       items: this.severityAppliedItems,
-      get hasInstantDamage(): boolean {
-        return notEmpty(this.damage.rollFormulas) && !this.damage.perTurn;
-      },
       get hasEffects(): boolean {
         return (
           notEmpty(this.items) ||
@@ -170,7 +164,7 @@ export class Substance
       get viable(): boolean {
         return (
           this.hasEffects ||
-          (notEmpty(this.damage.rollFormulas) && this.damage.perTurn)
+         notEmpty( this.damage.rollFormulas)
         );
       },
     };
@@ -265,42 +259,38 @@ export class Substance
   }
 
   async use(method: SubstanceUseMethod) {
-    const data: MessageData = {
-      header: {
-        heading: this.name,
-        img: this.nonDefaultImg,
-        subheadings: this.fullType,
-        description: this.description,
-      },
-    };
-    if (this.alwaysApplied.hasInstantDamage) {
-      const {
-        label,
-        damageType,
-        attackTraits,
-        perTurn,
-        rollFormulas,
-        ...attack
-      } = this.alwaysApplied.damage;
+   
+    // if (this.alwaysApplied.hasInstantDamage) {
+    //   const {
+    //     label,
+    //     damageType,
+    //     attackTraits,
+    //     perTurn,
+    //     rollFormulas,
+    //     ...attack
+    //   } = this.alwaysApplied.damage;
 
-      data.damage = {
-        ...attack,
-        rolledFormulas: rollLabeledFormulas(rollFormulas),
-        source: `${this.name} ${label}`,
-        damageType,
-      };
-    }
-    if (
-      this.alwaysApplied.viable ||
-      (this.hasSeverity && this.severity.viable)
-    ) {
-      data.substanceUse = {
-        substance: this.getDataCopy(),
-        useMethod: method,
-      };
-    }
-
-    await createMessage({ data, entity: this.actor });
+    //   data.damage = {
+    //     ...attack,
+    //     rolledFormulas: rollLabeledFormulas(rollFormulas),
+    //     source: `${this.name} ${label}`,
+    //     damageType,
+    //   };
+    // }
+   
+    await createMessage({
+      data: {
+        header: {
+          heading: this.name,
+          img: this.nonDefaultImg,
+          subheadings: this.fullType,
+          description: this.description,
+        },
+        substanceUse: {
+          substance: this.getDataCopy(),
+          useMethod: method,
+        }
+    }, entity: this.actor });
     if (this.consumeOnUse) this.useUnit();
   }
 }

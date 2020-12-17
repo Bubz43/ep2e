@@ -175,15 +175,11 @@ export class ActorEP extends Actor {
   }
 
   get tokenOrLocalInfo() {
-    return this.isToken && this.token
-      ? {
-          img: this.token.data.img,
-          name: this.token.name,
-        }
-      : {
-          img: this.img,
-          name: this.name,
-        };
+    const token = this.isToken ? this.token : this.getActiveTokens(true)[0];
+    return {
+      img: token?.data.img || this.img,
+      name: token?.name || this.name,
+    };
   }
 
   get proxy() {

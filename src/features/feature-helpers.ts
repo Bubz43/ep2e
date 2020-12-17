@@ -72,12 +72,12 @@ export const matchID = (id: string | undefined) => (feature: { id: string }) =>
   id === feature.id;
 
 export function addFeature<T extends FeatureWithID>(
-  list: ReadonlyArray<T>,
+  list: ReadonlyArray<T> | null | undefined,
   feature: Omit<T, 'id'>,
 ): T[];
 export function addFeature<T extends FeatureWithID>(
   feature: Omit<T, 'id'>,
-): (list: ReadonlyArray<T>) => T[];
+): (list: ReadonlyArray<T> | null | undefined) => T[];
 export function addFeature() {
   return purry(_addFeature, arguments);
 }
@@ -105,9 +105,9 @@ export function updateFeature() {
 }
 
 const _addFeature = <T extends FeatureWithID>(
-  list: ReadonlyArray<T>,
+  list: ReadonlyArray<T> | null | undefined,
   feature: Omit<T, 'id'>,
-) => [...list, { ...feature, id: uniqueStringID(existingIds(list)) }] as T[];
+) => [...list || [], { ...feature, id: uniqueStringID(existingIds(list || [])) }] as T[];
 
 const _updateFeature = <T extends FeatureWithID>(
   list: ReadonlyArray<T>,

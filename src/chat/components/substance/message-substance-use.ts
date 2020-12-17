@@ -1,7 +1,12 @@
 import type { SubstanceUseData } from '@src/chat/message-data';
 import { enumValues, SubstanceApplicationMethod } from '@src/data-enums';
+import { ActorType } from '@src/entities/entity-types';
+import { pickOrDefaultActor } from '@src/entities/find-entities';
 import { Substance } from '@src/entities/item/proxies/substance';
+import { addFeature } from '@src/features/feature-helpers';
+import { currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
+import { EP } from '@src/foundry/system';
 import { withSign } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import styles from './message-substance-use.scss';
@@ -16,33 +21,46 @@ export class MessageSubstanceUse extends LitElement {
 
   @property({ type: Object }) substanceUse!: SubstanceUseData;
 
-  get showMethod() {
-    const { useMethod } = this.substanceUse;
-    return useMethod !== 'app' && useMethod !== 'use';
-  }
-
   get substance() {
     return new Substance({
       loaded: false,
       embedded: null,
       data: this.substanceUse.substance,
-    })
+    });
+  }
+
+  applySubstance() {
+    pickOrDefaultActor((actor) => {
+      if (actor.proxy.type === ActorType.Character) {
+        actor.proxy.updater
+          .prop('flags', EP.Name, 'substancesAwaitingOnset')
+          .commit(
+            addFeature({
+              ...this.substanceUse,
+              onsetStartTime: currentWorldTimeMS(),
+            }),
+          );
+      }
+    }, true);
   }
 
   render() {
-    const { substance, showMethod } = this;
+    const { substance } = this;
     const always = substance.alwaysApplied;
     const severity = substance.hasSeverity ? substance.severity : null;
     return html`
-      ${showMethod
+      <mwc-button @click=${this.applySubstance} dense unelevated
+        >${localize('apply')} ${localize('substance')}</mwc-button
+      >
+      ${this.substanceUse.useMethod !== 'use'
         ? html`
-            <h4>
+            <p>
               ${localize('applicationMethod')}:
               ${localize(this.substanceUse.useMethod)}
-            </h4>
+            </p>
           `
         : ''}
-      ${always.viable
+      <!-- ${always.viable
         ? html`
             <mwc-button dense unelevated class="effects"
               >${localize('applyEffects')}</mwc-button
@@ -59,13 +77,6 @@ export class MessageSubstanceUse extends LitElement {
                   : ''}</mwc-button
               >
               ${localize('SHORT', 'versus')}
-              ${severity.hasInstantDamage
-                ? html`
-                    <mwc-button dense unelevated class="damage-roll"
-                      >${localize('damage')}</mwc-button
-                    >
-                  `
-                : ''}
               ${severity.hasEffects
                 ? html`
                     <mwc-button class="effects" dense unelevated
@@ -75,7 +86,7 @@ export class MessageSubstanceUse extends LitElement {
                 : ''}
             </div>
           `
-        : ''}
+        : ''} -->
     `;
   }
 }
