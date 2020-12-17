@@ -29,16 +29,6 @@ export class MessageHeader extends LitElement {
     this.descriptionOpen = !this.descriptionOpen;
   }
 
-  // updated(changedProps: PropertyValues) {
-  //   if (this.data.description) {
-  //     requestAnimationFrame(() => {
-  //       const enrichedEL = this.renderRoot.querySelector("enriched-html");
-
-  //     })
-  //   }
-  //   super.updated(changedProps)
-  // }
-
   render() {
     const { img, heading, subheadings, description } = this.data;
     return html`

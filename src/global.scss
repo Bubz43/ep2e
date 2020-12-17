@@ -63,7 +63,7 @@ mwc-menu {
   --mdc-menu-min-width: 200px;
   --mdc-list-vertical-padding: 0.25rem;
   li[divider] {
-    border-color: var(--color-bg);
+    border-color: var(--color-border);
     margin: 0.25rem 0;
   }
   --mdc-theme-text-primary-on-background: var(--color-text);

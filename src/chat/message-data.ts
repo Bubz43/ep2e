@@ -16,13 +16,13 @@ export type StressTestMessageData = {
   rolledFormulas: RolledFormula[];
   minStress: '' | 'half' | number;
   stressType: StressType;
-  notes: string;
+  notes?: string;
   source?: string;
 };
 
 export type DamageMessageData = {
   rolledFormulas: RolledFormula[];
-  damageType: HealthType.Mesh | HealthType.Physical;
+  damageType: HealthType;
   source: string;
   armorPiercing: boolean;
   reduceAVbyDV: boolean;

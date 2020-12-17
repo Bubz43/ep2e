@@ -5,6 +5,8 @@ import { LazyRipple } from '@src/components/mixins/lazy-ripple';
 import { ItemType } from '@src/entities/entity-types';
 import type { ConsumableItem } from '@src/entities/item/item';
 import { itemMenuOptions } from '@src/entities/item/item-views';
+import { Substance } from '@src/entities/item/proxies/substance';
+import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { openMenu } from '@src/open-menu';
 import { clickIfEnter } from '@src/utility/helpers';
@@ -69,28 +71,12 @@ export class ConsumableCard extends LazyRipple(LitElement) {
   private openSubstanceuseMenu(ev: MouseEvent) {
     const { item } = this;
     if (item.type === ItemType.Substance) {
-      openMenu({
+      if (item.applicationMethods.length === 1) item.use(item.applicationMethods[0]!)
+      else openMenu({
         header: { heading: `${localize('use')} ${item.name}` },
         content: item.applicationMethods.map((method) => ({
-          label: localize(method),
-          callback: async () => {
-            await createMessage({
-              data: {
-                header: {
-                  heading: item.name,
-                  img: item.nonDefaultImg,
-                  subheadings: item.fullType,
-                  description: item.description,
-                },
-                substanceUse: {
-                  substance: item.getDataCopy(),
-                  useMethod: method,
-                },
-              },
-              entity: item.actor,
-            });
-            item.useUnit();
-          },
+          label: `${localize(method)} - ${localize("onset")}: ${prettyMilliseconds(Substance.onsetTime(method))}`,
+          callback: () => item.use(method),
         })),
         position: ev,
       });

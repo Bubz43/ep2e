@@ -570,6 +570,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
           deleteSelf: () =>
             this.updater.prop('flags', EP.Name, ItemType.Psi).commit(null),
           openForm: () => this.openPsiForm(),
+          actor: this.actor,
         }),
       addPsi: this.updater.prop('flags', EP.Name, ItemType.Psi).commit,
     });

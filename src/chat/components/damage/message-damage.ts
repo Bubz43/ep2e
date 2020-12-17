@@ -8,6 +8,7 @@ import { formatDamageType, HealthType } from '@src/health/health';
 import {
   createMeshDamage,
   createPhysicalDamage,
+  createStressDamage,
 } from '@src/health/health-changes';
 import { notEmpty } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
@@ -52,6 +53,8 @@ export class MessageDamage extends LitElement {
         change:
           this.damage.damageType === HealthType.Physical
             ? createPhysicalDamage(data)
+            : this.damage.damageType === HealthType.Mental
+            ? createStressDamage(data)
             : createMeshDamage(data),
       }),
     );
@@ -103,7 +106,8 @@ export class MessageDamage extends LitElement {
         : ''}
 
       <div class="damage-info">
-        ${totals.formula} ${localize(damageType)} ${localize('damage')}
+        ${totals.formula} ${localize(damageType)}
+        ${localize(damageType === HealthType.Mental ? 'stress' : 'damage')}
       </div>
 
       ${this.viewFormulas

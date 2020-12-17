@@ -1,3 +1,4 @@
+import { createMessage } from '@src/chat/create-message';
 import {
   createBaseAttackFormula,
   SubstanceAttack,
@@ -19,7 +20,10 @@ import { UpdateStore } from '@src/entities/update-store';
 import { uniqueStringID } from '@src/features/feature-helpers';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
 import { localize } from '@src/foundry/localization';
+import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { EP } from '@src/foundry/system';
+import { HealthType } from '@src/health/health';
+import { StressType } from '@src/health/mental-health';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { createPipe, map, merge, pipe, uniq } from 'remeda';
@@ -29,7 +33,7 @@ import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 import { Sleight } from './sleight';
 import { Trait } from './trait';
 
-export type SubstanceUseMethod = Substance['applicationMethods'][number] | 'use';
+export type SubstanceUseMethod = Substance['applicationMethods'][number];
 
 class Base extends ItemProxyBase<ItemType.Substance> {
   get updateState() {
@@ -69,8 +73,12 @@ export class Substance
     this.loaded = loaded;
   }
 
-  get applicationMethods(): ('app' | SubstanceApplicationMethod)[] {
-    return this.isElectronic ? ['app'] : this.epData.application;
+  get applicationMethods(): ('app' | 'use' | SubstanceApplicationMethod)[] {
+    return this.isChemical
+      ? ['use']
+      : this.isElectronic
+      ? ['app']
+      : this.epData.application;
   }
 
   get fullName() {
@@ -78,10 +86,10 @@ export class Substance
   }
 
   get fullType() {
-    return [
+    return uniq([
       this.category,
-      ...pipe([this.classification, this.substanceType], uniq(), map(localize)),
-    ].join(' ');
+      ...map([this.classification, this.substanceType], localize),
+    ]).join(' ');
   }
 
   get category() {
@@ -222,5 +230,50 @@ export class Substance
       const _id = uniqueStringID(changed.map((i) => i._id));
       return [...changed, { ...itemData, _id }] as typeof changed;
     });
+  }
+
+  async use(method: SubstanceUseMethod) {
+    const header = {
+      heading: this.name,
+      img: this.nonDefaultImg,
+      subheadings: this.fullType,
+      description: this.description,
+    };
+    const { primary } = this.attacks;
+    if (primary.rollFormulas.length && !primary.perTurn) {
+      const {
+        label,
+        damageType,
+        attackTraits,
+        perTurn,
+        rollFormulas,
+        ...attack
+      } = primary;
+      const rolledFormulas = rollLabeledFormulas(primary.rollFormulas);
+      const source = `${this.name} ${primary.label}`;
+      await createMessage({
+        data: {
+          header,
+          damage: {
+            ...attack,
+            rolledFormulas,
+            source,
+            damageType,
+          },
+        },
+        entity: this.actor,
+      });
+    }
+    await createMessage({
+      data: {
+        header,
+        substanceUse: {
+          substance: this.getDataCopy(),
+          useMethod: method,
+        },
+      },
+      entity: this.actor,
+    });
+    this.useUnit();
   }
 }
