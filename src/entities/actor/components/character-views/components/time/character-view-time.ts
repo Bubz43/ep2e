@@ -181,9 +181,29 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
 
   private renderAppliedSubstances() {
     const { awaitingOnsetSubstances, appliedSubstances, disabled } = this.character;
-    // TODO onset substances
     return html`
-      <section>
+    ${notEmpty(appliedSubstances) ? html`
+    <section>
+        <sl-header heading=${localize('applied')}></sl-header>
+        <sl-animated-list>
+          ${repeat(
+            appliedSubstances,
+            idProp,
+            (substance) => html`
+              <character-view-time-item
+                ?disabled=${disabled}
+                .timeState=${substance.appliedInfo.timeState}
+                completion="expired"
+              >
+              ${this.renderItemMenuButton(substance)}
+              </character-view-time-item>
+            `,
+          )}
+        </sl-animated-list>
+      </section>
+    ` : ""}
+    ${notEmpty(awaitingOnsetSubstances) ? html`
+    <section>
         <sl-header heading=${localize('substancesAwaitingOnset')}></sl-header>
         <sl-animated-list>
           ${repeat(
@@ -205,6 +225,8 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
           )}
         </sl-animated-list>
       </section>
+    ` : ""}
+    
     `;
   }
 

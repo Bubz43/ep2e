@@ -10,6 +10,7 @@ import {
   SubstanceClassification,
   SubstanceType,
 } from '@src/data-enums';
+import type { AddEffects } from '@src/entities/applied-effects';
 import { ItemType } from '@src/entities/entity-types';
 import {
   AppliedSubstanceState,
@@ -355,36 +356,42 @@ export class Substance
     return copy;
   }
 
-  // getOnsetInfo({
-  //   startTime,
-  //   applySeverity,
-  //   modifyingEffects,
-  //   finishedEffects
-  // }: Omit<OnsetSubstanceData, 'substance'>) {
-  //   // TODO apply modifying effects
+  @LazyGetter()
+  get appliedInfo() {
+    const { applied } = this.epFlags ?? {};
+    const effects: AddEffects[] = [];
+    const items: (Trait | Sleight)[] = [];
+    // TODO Damage/Conditions and apply effects to effects/duration
+    const { alwaysApplied, severity, hasSeverity } = this;
+    let duration = alwaysApplied.duration
 
-  //   // const elapsed = getElapsedTime(startTime);
-  //   const { alwaysApplied, severity, hasSeverity } = this;
-  //   const effects: AddEffects[] = [];
-  //   const items: (Trait | Sleight)[] = [];
-  //   // TODO Damage
-  //   if (!finishedEffects.includes("always")) {
-  //     effects.push({
-  //       source: this.name,
-  //       effects: alwaysApplied.effects
-  //     })
-  //     items.push(...alwaysApplied.items.values())
-  //   }
-  //   if (hasSeverity && !finishedEffects.includes("severity")) {
-  //     effects.push({
-  //       source: `${this.name} (${localize("severity")})`,
-  //       effects: severity.effects
-  //     })
-  //     items.push(...severity.items.values())
-  //   }
+    if (!applied?.finishedEffects?.includes("always")) {
+      effects.push({
+        source: this.name,
+        effects: alwaysApplied.effects
+      })
+      items.push(...alwaysApplied.items.values())
+    }
+    if (hasSeverity && applied?.applySeverity && !applied.finishedEffects?.includes("severity")) {
+      effects.push({
+        source: `${this.name} (${localize("severity")})`,
+        effects: severity.effects
+      })
+      items.push(...severity.items.values())
+      if (severity.duration > duration) duration = severity.duration
+    }
+    return {
+      effects,
+      items,
+      timeState: createLiveTimeState({
+        id: `applied-${this.id}`,
+        img: this.nonDefaultImg,
+        label: this.name,
+        duration,
+        startTime: applied?.startTime || (currentWorldTimeMS() - duration),
+        updateStartTime: this.updater.prop("flags", EP.Name, "applied", "startTime").commit
+      })
+    }
+  }
 
-  //   return {
-
-  //   };
-  // }
 }

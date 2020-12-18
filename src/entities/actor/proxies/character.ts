@@ -312,7 +312,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         (accum, { activeRecoveries }) => accum + (activeRecoveries?.size || 0),
         0,
       ) +
-      this.awaitingOnsetSubstances.length
+      this.awaitingOnsetSubstances.length +
+      this.appliedSubstances.length
     );
   }
 
@@ -334,7 +335,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       ) ||
       this.awaitingOnsetSubstances.some(
         ({ awaitingOnsetTimeState }) => !awaitingOnsetTimeState.remaining,
-      )
+      ) || 
+      this.appliedSubstances.some(({ appliedInfo}) => !appliedInfo.timeState.remaining)
     );
   }
 
@@ -644,7 +646,13 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         if (item.appliedState === 'applied') this.appliedSubstances.push(item);
         else {
           this.awaitingOnsetSubstances.push(item);
-          // TODO add effects
+          const { effects, items } = item.appliedInfo;
+          this._appliedEffects.add(effects)
+          for (const substanceItem of items) {
+            if (substanceItem.type === ItemType.Trait) this.traits.push(substanceItem)
+            else this.sleights.push(substanceItem)
+          }
+          // TODO Damage/conditions
         }
         continue;
       }
