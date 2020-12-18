@@ -136,7 +136,16 @@ export class ActorEP extends Actor {
             itemIds,
             flatMap((id) => this.getOwnedItem(id) || []),
             forEach((item) => {
-              this.itemTrash.push(item.dataCopy());
+              if (
+                !(
+                  item.proxy.type === ItemType.Substance &&
+                  item.proxy.appliedState
+                )
+              ) {
+                this.itemTrash.push(item.dataCopy());
+              }
+               
+
               item?._onDelete({}, game.user.id);
             }),
           );

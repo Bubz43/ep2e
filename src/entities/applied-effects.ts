@@ -56,10 +56,10 @@ export class AppliedEffects {
     Map<HealthStat, number>
   >();
 
-  #total = 0;
+  private _total = 0;
 
   get total() {
-    return this.#total;
+    return this._total;
   }
 
   get uniqueEffects() {
@@ -188,7 +188,7 @@ export class AppliedEffects {
     const { source, effects } = toAdd;
 
     for (const effect of effects) {
-      ++this.#total;
+      ++this._total;
       const collection = this.groups.get(effect.type);
       const sourcedEffect: SourcedEffect<typeof effect> = Object.assign(
         effect,

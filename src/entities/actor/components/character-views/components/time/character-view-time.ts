@@ -152,10 +152,13 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
           },
         });
       }
-      this.character.itemOperations.add(substance.createApplied({
+      const { add, remove } = this.character.itemOperations;
+      await add(substance.createApplied({
         applySeverity,
         modifyingEffects:[],
       }))
+      await remove(id)
+      
    
     }
   }

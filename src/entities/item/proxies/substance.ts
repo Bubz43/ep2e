@@ -5,6 +5,8 @@ import {
   SubstanceAttack,
   SubstanceAttackData,
 } from '@src/combat/attacks';
+import { closeWindow, openOrRenderWindow } from '@src/components/window/window-controls';
+import { ResizeOption } from '@src/components/window/window-options';
 import {
   SubstanceApplicationMethod,
   SubstanceClassification,
@@ -31,6 +33,7 @@ import mix from 'mix-with/lib';
 import { createPipe, map, merge, uniq } from 'remeda';
 import type { Attacker } from '../item-interfaces';
 import { Copyable, Purchasable, Stackable } from '../item-mixins';
+import { renderItemForm } from '../item-views';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 import { Sleight } from './sleight';
 import { Trait } from './trait';
@@ -265,28 +268,58 @@ export class Substance
         .commit((items) => datas(items || []) as typeof items),
     );
 
-    const proxyInit = <T extends ItemType>(data: ItemEntity<T>) => {
-      return {
-        data,
+    const proxyInit = (data: ItemEntity<ItemType.Trait> | ItemEntity<ItemType.Sleight>) => {
+      const init = {
         embedded: this.name,
         lockSource: false,
         alwaysDeletable: !this.appliedState && this.editable,
         temporary: !!this.appliedState,
         deleteSelf: this.appliedState ? undefined : () => ops.remove(data._id),
+     
+      };
+      // TODO have open form work like on physical tech and sync with updates
+      if (data.type === ItemType.Trait) {
+        const trait: Trait = new Trait({
+          ...init,
+          data,
+          updater: new UpdateStore({
+            getData: () => data,
+            isEditable: () => this.editable,
+            setData: createPipe(merge({ _id: data._id }), ops.update),
+          }),
+          openForm: () => openOrRenderWindow({
+            key: data,
+            content: renderItemForm(trait),
+            resizable: ResizeOption.Vertical,
+            name: trait.fullName
+          })
+        })
+        return trait
+      }
+      const sleight: Sleight = new Sleight({
+        ...init,
+        data,
         updater: new UpdateStore({
           getData: () => data,
           isEditable: () => this.editable,
           setData: createPipe(merge({ _id: data._id }), ops.update),
         }),
-      };
+        openForm: () => openOrRenderWindow({
+          key: data,
+          content: renderItemForm(sleight),
+          resizable: ResizeOption.Vertical,
+          name: sleight.fullName
+        })
+      })
+      return sleight;
     };
 
     for (const itemData of this.epFlags?.[group] || []) {
+
       items.set(
         itemData._id,
-        itemData.type === ItemType.Trait
-          ? new Trait(proxyInit(itemData))
-          : new Sleight(proxyInit(itemData)),
+        proxyInit(itemData)
+     
       );
     }
     return items;
@@ -336,6 +369,7 @@ export class Substance
         }
       }
     }
+    copy.data.quantity = 1
     return copy
   }
 
@@ -353,7 +387,13 @@ export class Substance
         }
       }
     }
+    copy.data.quantity = 1
     return copy;
+  }
+
+  onDelete() {
+    [...this.alwaysAppliedItems.values(), ...this.severityAppliedItems.values()].forEach(item => closeWindow(item.data))
+    super.onDelete()
   }
 
   @LazyGetter()

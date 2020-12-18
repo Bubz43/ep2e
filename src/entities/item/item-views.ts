@@ -231,7 +231,7 @@ export const renderItemCard = (
       ?expanded=${expanded}
       ?noAnimate=${noAnimate}
       ?animateInitial=${animateInitial}
-      ?allowDrag=${allowDrag}
+      ?allowDrag=${"temporary" in item && item.temporary ? false : allowDrag}
       @dragstart=${handleDragStart}
     ></item-card>
   `;

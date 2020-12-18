@@ -90,8 +90,12 @@ export class ItemCard extends LazyRipple(LitElement) {
           : ''}
 
         <span class="info">
+        ${"temporary" in item && item.temporary ? html`
+          <span class="temporary">${localize("temporary")}</span>
+          ` : ""}
           <span class="name">${item.fullName}</span>
           <span class="type">${item.fullType}</span>
+         
         </span>
 
         <span class="buttons">

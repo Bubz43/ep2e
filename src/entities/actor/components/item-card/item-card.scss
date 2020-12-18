@@ -30,6 +30,7 @@
     .info {
       display: grid;
       padding: 0.25rem 0;
+      white-space: unset;
     }
   }
 }
@@ -62,6 +63,16 @@
     pointer-events: none;
     margin-left: 0.5ch;
     @include truncate(100%);
+    // position: relative;
+    .temporary {
+      color: var(--color-secondary);
+      // z-index: 0;
+      // position: absolute;
+      // top: 0;
+      // left: 0;
+      // right: 0;
+      // bottom: 0;
+    }
   }
 
   .buttons {

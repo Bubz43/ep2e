@@ -298,7 +298,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
   @LazyGetter()
   get activeDurations() {
-    // TODO substances/batteries/health regens
+    // TODO batteries
     return (
       this.timers.length +
       reject(
@@ -318,7 +318,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   }
 
   get requiresAttention() {
-    // TODO substances/batteries
+    // TODO batteries
     return (
       (!!this.activeDurations &&
         (notEmpty(this.equippedGroups.expiredServices) ||
@@ -335,8 +335,10 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       ) ||
       this.awaitingOnsetSubstances.some(
         ({ awaitingOnsetTimeState }) => !awaitingOnsetTimeState.remaining,
-      ) || 
-      this.appliedSubstances.some(({ appliedInfo}) => !appliedInfo.timeState.remaining)
+      ) ||
+      this.appliedSubstances.some(
+        ({ appliedInfo }) => !appliedInfo.timeState.remaining,
+      )
     );
   }
 
@@ -643,17 +645,21 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   ) {
     for (const item of this.items.values()) {
       if (item.type === ItemType.Substance && item.appliedState) {
-        if (item.appliedState === 'applied') this.appliedSubstances.push(item);
-        else {
-          this.awaitingOnsetSubstances.push(item);
+        if (item.appliedState === 'applied') {
+          this.appliedSubstances.push(item);
           const { effects, items } = item.appliedInfo;
-          this._appliedEffects.add(effects)
+          this._appliedEffects.add(effects);
           for (const substanceItem of items) {
-            if (substanceItem.type === ItemType.Trait) this.traits.push(substanceItem)
-            else this.sleights.push(substanceItem)
+            if (substanceItem.type === ItemType.Trait) {
+              this.traits.push(substanceItem);
+              this._appliedEffects.add(substanceItem.currentEffects);
+            } else {
+              this.sleights.push(substanceItem);
+              // TODO add sleight effects if passive
+            }
           }
           // TODO Damage/conditions
-        }
+        } else this.awaitingOnsetSubstances.push(item);
         continue;
       }
       if ('equipped' in item) {
