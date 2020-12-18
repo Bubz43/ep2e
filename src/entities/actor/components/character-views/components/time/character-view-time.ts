@@ -1,3 +1,4 @@
+import { createMessage } from '@src/chat/create-message';
 import {
   renderNumberField,
   renderSelectField,
@@ -19,6 +20,7 @@ import {
   taskState,
 } from '@src/features/actions';
 import {
+  addFeature,
   addUpdateRemoveFeature,
   idProp,
   matchID,
@@ -32,6 +34,8 @@ import {
   refreshAvailable,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
+import { rollLabeledFormulas } from '@src/foundry/rolls';
+import { EP } from '@src/foundry/system';
 import { tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import { nonNegative, notEmpty } from '@src/utility/helpers';
@@ -96,10 +100,67 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
     }
   }
 
-  private startSubstance(id: string) {
-    const substanceUse = this.character.substancesAwaitingOnset.find(matchID(id))
+  private async startSubstance(id: string) {
+    const substanceUse = this.character.substancesAwaitingOnset.find(
+      matchID(id),
+    );
     if (substanceUse) {
-      
+      const applySeverity = true
+      // TODO Check vs severity
+      const { alwaysApplied, severity, messageHeader, hasSeverity, name } = substanceUse.substance;
+      if (alwaysApplied.hasInstantDamage) {
+        const {
+          label,
+          damageType,
+          attackTraits,
+          perTurn,
+          rollFormulas,
+          ...attack
+        } = alwaysApplied.damage;
+
+        await createMessage({
+          data: {
+            header: messageHeader,
+            damage: {
+              ...attack,
+              rolledFormulas: rollLabeledFormulas(rollFormulas),
+              source: `${name} ${label}`,
+              damageType,
+            },
+          },
+        });
+      }
+      if (applySeverity && hasSeverity && severity.hasInstantDamage) {
+        const {
+          label,
+          damageType,
+          attackTraits,
+          perTurn,
+          rollFormulas,
+          ...attack
+        } = severity.damage;
+
+        await createMessage({
+          data: {
+            header: messageHeader,
+            damage: {
+              ...attack,
+              rolledFormulas: rollLabeledFormulas(rollFormulas),
+              source: `${name} ${label}`,
+              damageType,
+            },
+          },
+        });
+      }
+      this.character.updater.prop('flags', EP.Name, 'onsetSubstances').commit(
+        addFeature({
+          substance: substanceUse.substance.getDataCopy(),
+          startTime: currentWorldTimeMS(),
+          applySeverity,
+          modifyingEffects: [],
+          finishedEffects: ""
+        }),
+      );
     }
   }
 
@@ -354,7 +415,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
               {},
               createActiveTask({
                 name,
-                timeToComplete: timeframe,
+                timeframe: timeframe,
                 actionSubtype,
                 failed: false,
               }),

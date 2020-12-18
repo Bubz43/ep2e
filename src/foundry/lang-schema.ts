@@ -1351,7 +1351,7 @@ type LangEntries =
   | 'naturalHeal'
   | 'ago'
   | 'timeToReboot'
-  | 'hide' | "less" | "more" | "applicationMethod" | "substancesAwaitingOnset"
+  | 'hide' | "less" | "more" | "applicationMethod" | "substancesAwaitingOnset" | "halveDrugEffects"
 type FullNames =
   | 'cog'
   | 'int'

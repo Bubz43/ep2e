@@ -1331,6 +1331,7 @@
     "less": "Less",
     "more": "More",
     "substancesAwaitingOnset": "Substances Awaiting Onset",
+    "halveDrugEffects": "Halve Drug Effects",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

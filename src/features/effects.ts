@@ -27,8 +27,9 @@ import { CommonInterval, prettyMilliseconds } from './time';
 
 export enum UniqueEffectType {
   NoFlipFlop = 'noFlipFlop',
-  AllowRemoteControl = 'allowRemoteControl',
-  Modular = 'modular',
+  HalveDrugEffects = "halveDrugEffects"
+  // AllowRemoteControl = 'allowRemoteControl',
+  // Modular = 'modular',
 }
 
 

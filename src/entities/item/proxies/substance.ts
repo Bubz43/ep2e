@@ -1,5 +1,5 @@
 import { createMessage } from '@src/chat/create-message';
-import type { MessageData } from '@src/chat/message-data';
+import type { MessageHeaderData } from '@src/chat/message-data';
 import {
   createBaseAttackFormula,
   SubstanceAttack,
@@ -14,21 +14,20 @@ import { ItemType } from '@src/entities/entity-types';
 import {
   DrugAppliedItem,
   ItemEntity,
+  OnsetSubstanceData,
   setupItemOperations,
   SubstanceItemFlags,
 } from '@src/entities/models';
 import { UpdateStore } from '@src/entities/update-store';
 import { uniqueStringID } from '@src/features/feature-helpers';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
+import { getElapsedTime } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
-import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { EP } from '@src/foundry/system';
-import { HealthType } from '@src/health/health';
-import { StressType } from '@src/health/mental-health';
 import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { createPipe, map, merge, pipe, uniq } from 'remeda';
+import { createPipe, map, merge, uniq } from 'remeda';
 import type { Attacker } from '../item-interfaces';
 import { Copyable, Purchasable, Stackable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
@@ -136,12 +135,14 @@ export class Substance
       ...this.epData.alwaysApplied,
       damage: this.attacks.primary,
       items: this.alwaysAppliedItems,
+      get hasInstantDamage(): boolean {
+        return notEmpty(this.damage.rollFormulas) && !this.damage.perTurn;
+      },
+      get hasEffects(): boolean {
+        return notEmpty(this.items) || notEmpty(this.effects);
+      },
       get viable(): boolean {
-        return (
-          notEmpty(this.items) ||
-          notEmpty(this.effects) ||
-          notEmpty(this.damage.rollFormulas)
-        );
+        return this.hasEffects || notEmpty(this.damage.rollFormulas);
       },
     };
   }
@@ -154,6 +155,9 @@ export class Substance
         localize('severity'),
       ),
       items: this.severityAppliedItems,
+      get hasInstantDamage(): boolean {
+        return notEmpty(this.damage.rollFormulas) && !this.damage.perTurn;
+      },
       get hasEffects(): boolean {
         return (
           notEmpty(this.items) ||
@@ -162,10 +166,7 @@ export class Substance
         );
       },
       get viable(): boolean {
-        return (
-          this.hasEffects ||
-         notEmpty( this.damage.rollFormulas)
-        );
+        return this.hasEffects || notEmpty(this.damage.rollFormulas);
       },
     };
   }
@@ -258,39 +259,43 @@ export class Substance
     });
   }
 
-  async use(method: SubstanceUseMethod) {
-   
-    // if (this.alwaysApplied.hasInstantDamage) {
-    //   const {
-    //     label,
-    //     damageType,
-    //     attackTraits,
-    //     perTurn,
-    //     rollFormulas,
-    //     ...attack
-    //   } = this.alwaysApplied.damage;
+  get messageHeader(): MessageHeaderData {
+    return {
+      heading: this.name,
+      img: this.nonDefaultImg,
+      subheadings: this.fullType,
+      description: this.description,
+    }
+  }
 
-    //   data.damage = {
-    //     ...attack,
-    //     rolledFormulas: rollLabeledFormulas(rollFormulas),
-    //     source: `${this.name} ${label}`,
-    //     damageType,
-    //   };
-    // }
-   
+  async use(method: SubstanceUseMethod) {
+  
+
     await createMessage({
       data: {
-        header: {
-          heading: this.name,
-          img: this.nonDefaultImg,
-          subheadings: this.fullType,
-          description: this.description,
-        },
+        header: this.messageHeader,
         substanceUse: {
           substance: this.getDataCopy(),
           useMethod: method,
-        }
-    }, entity: this.actor });
+        },
+      },
+      entity: this.actor,
+    });
     if (this.consumeOnUse) this.useUnit();
+  }
+
+  getOnsetInfo({
+    startTime,
+    applySeverity,
+    modifyingEffects,
+  }: Omit<OnsetSubstanceData, 'substance'>) {
+    const elapsed = getElapsedTime(startTime);
+    const { alwaysApplied, severity, hasSeverity } = this;
+    
+    // TODO apply modifying effects
+
+    return {
+      elapsed,
+    };
   }
 }

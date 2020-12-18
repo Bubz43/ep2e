@@ -38,6 +38,7 @@ import {
   Effect,
   MovementEffect,
   MovementEffectMode,
+  UniqueEffectType,
 } from '@src/features/effects';
 import { Movement } from '@src/features/movement';
 import { SkillType, FieldSkillType } from '@src/features/skills';
@@ -101,7 +102,7 @@ const initiative: WithAllProps<InitiativeEffect> = ({ modifier }) =>
   renderNumberField(modifier, { min: -20, max: 20 });
 
 const misc: WithAllProps<MiscEffect> = ({ unique, description }) => [
-  // renderSelectField(unique, enumValues(UniqueEffectType), { emptyText: "-" }),
+  renderSelectField(unique, enumValues(UniqueEffectType), { emptyText: "-" }),
   renderTextareaField(description, { required: true }),
 ];
 

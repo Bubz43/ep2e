@@ -1,6 +1,7 @@
 import type { SubstanceUseData } from '@src/chat/message-data';
 import type { SubstanceAttackData } from '@src/combat/attacks';
 import { EgoType } from '@src/data-enums';
+import type { Effect } from '@src/features/effects';
 import {
   StringID,
   stringID,
@@ -55,6 +56,14 @@ export type ActorModels = {
 
 export type SleeveType = typeof sleeveTypes[number];
 
+export type OnsetSubstanceData = {
+  startTime: number;
+  substance: ItemEntity<ItemType.Substance>;
+  applySeverity: boolean;
+  modifyingEffects: StringID<Effect>[];
+  finishedEffects: "" | "always" | "severity"
+}
+
 type ActorFlags<T extends ActorType> = T extends ActorType.Character
   ? {
       vehicle: ActorEntity<ActorType.Synthetic> | null;
@@ -62,12 +71,7 @@ type ActorFlags<T extends ActorType> = T extends ActorType.Character
       substancesAwaitingOnset: StringID<
         SubstanceUseData & { onsetStartTime: number }
       >[];
-      onsetSubstances: StringID<{
-        durationStartTime: number;
-        duration: number;
-        substance: ItemEntity<ItemType.Substance>;
-        applySeverity: boolean;
-      }>[];
+      onsetSubstances: StringID<OnsetSubstanceData>[];
     } & { [key in SleeveType]: ActorEntity<key> | null }
   : never;
 

@@ -28,7 +28,11 @@ import { UpdateStore } from '@src/entities/update-store';
 import { taskState } from '@src/features/actions';
 import { ActiveArmor } from '@src/features/active-armor';
 import type { ConditionType } from '@src/features/conditions';
-import { EffectType, totalModifiers } from '@src/features/effects';
+import {
+  DurationEffectTarget,
+  EffectType,
+  totalModifiers,
+} from '@src/features/effects';
 import { updateFeature } from '@src/features/feature-helpers';
 import type { MovementRate } from '@src/features/movement';
 import { Pool, Pools } from '@src/features/pool';
@@ -46,6 +50,7 @@ import {
   LiveTimeState,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
+import { deepMerge } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { HealthEditor } from '@src/health/components/health-editor/health-editor';
 import type { ActorHealth } from '@src/health/health-mixin';
@@ -131,6 +136,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       this.sleeve?.epData.damagedArmor,
     );
     this._appliedEffects.add(this.armor.currentEffects);
+
 
     const egoFormWindow = getWindow(this.updater);
     if (egoFormWindow?.isConnected) this.ego.openForm?.();
@@ -245,7 +251,10 @@ export class Character extends ActorProxyBase<ActorType.Character> {
               this.updater
                 .prop('flags', EP.Name, 'substancesAwaitingOnset')
                 .commit((list) =>
-                  updateFeature(list || [], { ...data, id: awaitingOnset.id }),
+                  updateFeature(list || [], {
+                    id: awaitingOnset.id,
+                    substance: deepMerge(awaitingOnset.substance, data),
+                  }),
                 );
             },
           }),
@@ -276,11 +285,41 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   }
 
   @LazyGetter()
+  get onsetSubstances() {
+    return this.epFlags?.onsetSubstances?.map(
+      ({  substance, id, ...state }) => {
+        const substanceCls = new Substance({
+          embedded: this.name,
+          loaded: true,
+          data: substance,
+          updater: new UpdateStore({
+            getData: () => substance,
+            isEditable: () => this.editable,
+            setData: (data) => {
+              this.updater
+                .prop('flags', EP.Name, 'onsetSubstances')
+                .commit((list) =>
+                  updateFeature(list || [], {
+                    id,
+                    substance: deepMerge(substance, data),
+                  }),
+                );
+            },
+          }),
+        });
+        return {
+          substance: substanceCls,
+          state: substanceCls.getOnsetInfo(state)
+        }
+      },
+    );
+  }
+
+  @LazyGetter()
   get tasks() {
-    // TODO apply duration effects
     return this.epData.tasks.map((task) => ({
       ...task,
-      state: taskState(task),
+      state: taskState(task, this.appliedEffects.taskTimeframeEffects),
     }));
   }
 
@@ -371,7 +410,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
           ({ timeState }) => !timeState.remaining,
         ),
       ) ||
-      this.substancesAwaitingOnset.some(({ timeState}) => !timeState.remaining)
+      this.substancesAwaitingOnset.some(({ timeState }) => !timeState.remaining)
     );
   }
 

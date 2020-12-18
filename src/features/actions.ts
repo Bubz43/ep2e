@@ -1,7 +1,9 @@
 import { AptitudeType } from '@src/data-enums';
+import type { AppliedEffects } from '@src/entities/applied-effects';
 import { localize } from '@src/foundry/localization';
-import { clamp } from 'remeda';
-import { safeMerge } from '../utility/helpers';
+import { clamp, compact } from 'remeda';
+import { notEmpty, safeMerge } from '../utility/helpers';
+import type { DurationEffect } from './effects';
 import { createFeature } from './feature-helpers';
 import { toMilliseconds } from './modify-milliseconds';
 import { currentWorldTimeMS } from './time';
@@ -29,7 +31,7 @@ export type Action = {
 
 export type ActiveTaskAction = {
   name: string;
-  timeToComplete: number;
+  timeframe: number;
   timeTaken: number;
   paused: boolean;
   actionSubtype: ActionSubtype;
@@ -39,7 +41,7 @@ export type ActiveTaskAction = {
 
 export const createActiveTask = createFeature<
   ActiveTaskAction,
-  'name' | 'timeToComplete' | 'actionSubtype'
+  'name' | 'timeframe' | 'actionSubtype'
 >(() => ({
   startTime: currentWorldTimeMS(),
   paused: false,
@@ -47,12 +49,22 @@ export const createActiveTask = createFeature<
   timeTaken: 0,
 }));
 
-export const taskState = ({ timeTaken, timeToComplete }: ActiveTaskAction) => {
+export const taskState = (
+  { timeTaken, timeframe, actionSubtype }: ActiveTaskAction,
+  effects: AppliedEffects['taskTimeframeEffects'],
+) => {
+  const multipliers = compact([
+    effects.get(''),
+    effects.get(actionSubtype),
+  ]).flat();
+  const finalTimeframe = notEmpty(multipliers)
+    ? multipliers.reduce((accum, { modifier }) => accum * modifier || 1, timeframe)
+    : timeframe;
   return {
-    completed: timeTaken >= timeToComplete,
-    progress: timeTaken / timeToComplete,
-    indefinite: timeToComplete < 0,
-    remaining: timeToComplete - timeTaken,
+    completed: timeTaken >= finalTimeframe,
+    progress: timeTaken / finalTimeframe,
+    indefinite: finalTimeframe < 0,
+    remaining: finalTimeframe - timeTaken,
   };
 };
 

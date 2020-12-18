@@ -1,6 +1,7 @@
 import type { PoolType } from '@src/data-enums';
 import {
   createEffect,
+  DurationEffect,
   durationEffectMultiplier,
   DurationEffectTarget,
   Effect,
@@ -23,7 +24,8 @@ import type {
   HealthStat,
   HealthStatMods,
 } from '@src/health/health';
-import { pipe, concat, filter, allPass, clamp } from 'remeda';
+import { LazyGetter } from 'lazy-get-decorator';
+import { pipe, concat, filter, allPass, clamp, groupBy } from 'remeda';
 
 export type AddEffects = {
   source: string;
@@ -127,7 +129,7 @@ export class AppliedEffects {
   get healthRecovery() {
     const recovery = this.getGroup(EffectType.HealthRecovery);
     const timeframeMultipliers: number[] = [];
-    for (const effect of this.getGroup(EffectType.Duration)) {
+    for (const effect of this.durationEffects.healingTimeframes ?? []) {
       if (effect.subtype === DurationEffectTarget.HealingTimeframes) {
         if (effect.halve) timeframeMultipliers.push(0.5);
         else if (effect.modifier)
@@ -138,6 +140,22 @@ export class AppliedEffects {
       recovery,
       timeframeMultipliers,
     };
+  }
+
+  @LazyGetter()
+  get durationEffects() {
+    return groupBy(
+      this.getGroup(EffectType.Duration),
+      (item) => item.subtype,
+    ) as Partial<Record<DurationEffectTarget, SourcedEffect<DurationEffect>[]>>;
+  }
+
+  get taskTimeframeEffects() {
+    const effects = new Map<DurationEffect["taskType"], SourcedEffect<DurationEffect>[]>()
+    for (const effect of this.durationEffects.taskActionTimeframe || []) {
+      effects.get(effect.taskType)?.push(effect) ?? effects.set(effect.taskType, [effect])
+    }
+    return effects
   }
 
   initiativeTotal(baseInitiative: number) {
