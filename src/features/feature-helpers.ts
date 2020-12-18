@@ -6,11 +6,11 @@ import type { UpdateActions } from '../entities/update-store';
 import type { FormInstance } from '@src/components/form/forms';
 // import type { FormInstance } from 'src/components/form/forms';
 
-type Feature = Record<string, JsonValue>;
+type Feature = Record<string, JsonValue | undefined>;
 
 type FeatureWithID = Feature & { id: string };
 
-export type StringID<T extends {}> = T & { id: string }; // Merge<T, { id: string }>;
+export type StringID<T extends {}> = T & { id: string }; 
 
 export const idProp = <T extends { id: string | number }>(item: T) => item.id;
 
@@ -56,7 +56,7 @@ export type AddUpdateRemoveFeature<T extends FeatureWithID> = {
 
 type CreateFn<T extends Feature, R extends keyof T = never> = (
   seed: SetRequired<Partial<T>, R>,
-) => SetOptional<T, R>;
+) => SetOptional<Required<T>, R>;
 
 export const createFeature = <T extends Feature, R extends keyof T = never>(
   fn: CreateFn<T, R>,

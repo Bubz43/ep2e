@@ -527,23 +527,16 @@ export const matchesSkill = (skill: Skill) => (action: Action) => {
   });
 };
 
-// const doubledEffects = new WeakMap<Effect, Effect | null>();
-export const multiplyEffectModifier = (effect: Effect, multiplier = 2) => {
-  // let doubled = doubledEffects.get(effect) || null;
-  // if (doubled === undefined) {
+export const multiplyEffectModifier = (effect: Effect, multiplier: number) => {
   if (effect.type === EffectType.Armor) {
     const copy = { ...effect };
-    enumValues(ArmorType).forEach((armor) => (copy[armor] *= multiplier));
+    for (const armor of enumValues(ArmorType)) {
+      copy[armor] = Math.ceil(copy[armor] * multiplier)
+    }
     return copy;
   } else if ('modifier' in effect && effect.modifier) {
-    const { modifier } = effect;
-    if (typeof modifier === 'number') {
-      return { ...effect, modifier: effect.modifier * multiplier };
-    }
+    return { ...effect, modifier: Math.ceil(effect.modifier * multiplier) };
   }
-  // }
-  // doubledEffects.set(effect, doubled || null);
-  // return doubled || effect;
   return effect;
 };
 

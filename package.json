@@ -63,7 +63,7 @@
     "@types/snowpack-env": "^2.3.2",
     "@types/socket.io": "^2.1.12",
     "archiver": "^5.1.0",
-    "pixi.js": "^5.3.4",
+    "pixi.js": "^5.3.5",
     "prettier": "^2.2.1",
     "rollup": "^2.35.1",
     "rollup-plugin-license": "^2.2.0",

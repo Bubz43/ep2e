@@ -21,6 +21,7 @@ import {
 import {
   addUpdateRemoveFeature,
   idProp,
+  matchID,
   StringID,
 } from '@src/features/feature-helpers';
 import {
@@ -95,6 +96,13 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
     }
   }
 
+  private startSubstance(id: string) {
+    const substanceUse = this.character.substancesAwaitingOnset.find(matchID(id))
+    if (substanceUse) {
+      
+    }
+  }
+
   render() {
     return html`
       <character-view-drawer-heading
@@ -125,12 +133,18 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
           ${repeat(
             substancesAwaitingOnset,
             idProp,
-            ({ timeState }) => html`
+            ({ timeState, id }) => html`
               <character-view-time-item
                 ?disabled=${disabled}
                 .timeState=${timeState}
                 completion="ready"
-              ></character-view-time-item>
+              >
+                <mwc-icon-button
+                  slot="action"
+                  icon="not_started"
+                  @click=${() => this.startSubstance(id)}
+                ></mwc-icon-button>
+              </character-view-time-item>
             `,
           )}
         </sl-animated-list>

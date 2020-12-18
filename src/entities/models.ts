@@ -55,16 +55,6 @@ export type ActorModels = {
 
 export type SleeveType = typeof sleeveTypes[number];
 
-// export type AppliedSubstanceBase = {
-//   duration: number;
-//   effects: Effect[];
-//   name: string;
-//   type: SubstanceType;
-//   classification: SubstanceClassification | SubstanceType.Chemical;
-//   wearOffStress: string;
-//   conditions: ConditionType[];
-// };
-
 type ActorFlags<T extends ActorType> = T extends ActorType.Character
   ? {
       vehicle: ActorEntity<ActorType.Synthetic> | null;
@@ -72,6 +62,12 @@ type ActorFlags<T extends ActorType> = T extends ActorType.Character
       substancesAwaitingOnset: StringID<
         SubstanceUseData & { onsetStartTime: number }
       >[];
+      onsetSubstances: StringID<{
+        durationStartTime: number;
+        duration: number;
+        substance: ItemEntity<ItemType.Substance>;
+        applySeverity: boolean;
+      }>[];
     } & { [key in SleeveType]: ActorEntity<key> | null }
   : never;
 
