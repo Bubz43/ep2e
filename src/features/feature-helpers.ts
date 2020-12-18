@@ -60,9 +60,9 @@ type CreateFn<T extends Feature, R extends keyof T = never> = (
 
 export const createFeature = <T extends Feature, R extends keyof T = never>(
   fn: CreateFn<T, R>,
-  transformer: (feature: T) => T = identity,
+  transformer: (feature: Required<T>) => Required<T> = identity,
 ) => (seed: SetRequired<Partial<T>, R>) => {
-  return transformer((safeMerge(fn(seed), seed) as unknown) as T);
+  return transformer((safeMerge(fn(seed), seed) as unknown) as Required<T>);
 };
 
 const existingIds = (list: ReadonlyArray<FeatureWithID>) =>

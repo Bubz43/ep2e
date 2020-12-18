@@ -277,6 +277,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
   @LazyGetter()
   get tasks() {
+    // TODO apply duration effects
     return this.epData.tasks.map((task) => ({
       ...task,
       state: taskState(task),
@@ -426,6 +427,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
   @LazyGetter()
   get temporaryFeatures() {
+    // TODO apply effect duration effects to effect features
     return this.epData.temporary.map((temp) => ({
       ...temp,
       timeState: createLiveTimeState({

@@ -36,7 +36,7 @@ export class EffectEditor extends LitElement {
 
   @property({ type: Object }) effect!: Effect | StringID<Effect>;
 
-  @internalProperty() internalEffect!: Effect;
+  @internalProperty() internalEffect!: Required<Effect>;
 
   @query('sl-form')
   form!: Form;

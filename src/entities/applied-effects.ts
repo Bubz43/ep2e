@@ -1,6 +1,7 @@
 import type { PoolType } from '@src/data-enums';
 import {
   createEffect,
+  durationEffectMultiplier,
   DurationEffectTarget,
   Effect,
   EffectType,
@@ -121,6 +122,22 @@ export class AppliedEffects {
     return (this.groups.get(type) || ([] as unknown)) as ReadonlyArray<
       Readonly<SourcedEffect<ReturnType<typeof createEffect[T]>>>
     >;
+  }
+
+  get healthRecovery() {
+    const recovery = this.getGroup(EffectType.HealthRecovery);
+    const timeframeMultipliers: number[] = [];
+    for (const effect of this.getGroup(EffectType.Duration)) {
+      if (effect.subtype === DurationEffectTarget.HealingTimeframes) {
+        if (effect.halve) timeframeMultipliers.push(0.5);
+        else if (effect.modifier)
+          timeframeMultipliers.push(durationEffectMultiplier(effect.modifier));
+      }
+    }
+    return {
+      recovery,
+      timeframeMultipliers,
+    };
   }
 
   initiativeTotal(baseInitiative: number) {

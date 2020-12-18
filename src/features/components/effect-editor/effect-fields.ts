@@ -47,7 +47,9 @@ import { HealOverTimeTarget } from '@src/health/recovery';
 import type { FieldPropsRenderer, FieldProps } from '@src/utility/field-values';
 import { html } from 'lit-html';
 
-const successTest: FieldPropsRenderer<SuccessTestEffect> = ({
+type WithAllProps<T> = FieldPropsRenderer<Required<T>>
+
+const successTest: WithAllProps<SuccessTestEffect> = ({
   modifier,
   requirement,
   toOpponent,
@@ -65,7 +67,7 @@ const successTest: FieldPropsRenderer<SuccessTestEffect> = ({
   </p>`,
 ];
 
-const pool: FieldPropsRenderer<PoolEffect> = ({
+const pool: WithAllProps<PoolEffect> = ({
   pool,
   modifier,
   usabilityModification,
@@ -83,7 +85,7 @@ const pool: FieldPropsRenderer<PoolEffect> = ({
     : '',
 ];
 
-const recharge: FieldPropsRenderer<RechargeEffect> = ({
+const recharge: WithAllProps<RechargeEffect> = ({
   recharge,
   stat,
   modifier,
@@ -95,22 +97,22 @@ const recharge: FieldPropsRenderer<RechargeEffect> = ({
     : renderNumberField(modifier, { min: -1, max: 1 }),
 ];
 
-const initiative: FieldPropsRenderer<InitiativeEffect> = ({ modifier }) =>
+const initiative: WithAllProps<InitiativeEffect> = ({ modifier }) =>
   renderNumberField(modifier, { min: -20, max: 20 });
 
-const misc: FieldPropsRenderer<MiscEffect> = ({ unique, description }) => [
+const misc: WithAllProps<MiscEffect> = ({ unique, description }) => [
   // renderSelectField(unique, enumValues(UniqueEffectType), { emptyText: "-" }),
   renderTextareaField(description, { required: true }),
 ];
 
-const melee: FieldPropsRenderer<MeleeEffect> = ({ dvModifier }) =>
+const melee: WithAllProps<MeleeEffect> = ({ dvModifier }) =>
   renderFormulaField(dvModifier, { required: true });
 
-const ranged: FieldPropsRenderer<RangedEffect> = ({
+const ranged: WithAllProps<RangedEffect> = ({
   negativeRangeModifiersMultiplier,
 }) => renderNumberField(negativeRangeModifiersMultiplier, { min: 0, max: 5 });
 
-const armor: FieldPropsRenderer<ArmorEffect> = ({
+const armor: WithAllProps<ArmorEffect> = ({
   layerable,
   concealable,
   ...props
@@ -122,7 +124,7 @@ const armor: FieldPropsRenderer<ArmorEffect> = ({
   renderLabeledCheckbox(concealable),
 ];
 
-const health: FieldPropsRenderer<HealthEffect> = ({
+const health: WithAllProps<HealthEffect> = ({
   health,
   modifier,
   stat,
@@ -134,7 +136,7 @@ const health: FieldPropsRenderer<HealthEffect> = ({
   renderNumberField(modifier),
 ];
 
-const healthRecovery: FieldPropsRenderer<HealthRecoveryEffect> = ({
+const healthRecovery: WithAllProps<HealthRecoveryEffect> = ({
   damageAmount,
   woundAmount,
   interval,
@@ -157,7 +159,7 @@ const healthRecovery: FieldPropsRenderer<HealthRecoveryEffect> = ({
   `,
 ];
 
-const duration: FieldPropsRenderer<DurationEffect> = ({
+const duration: WithAllProps<DurationEffect> = ({
   subtype,
   modifier,
   taskType,
@@ -181,7 +183,7 @@ const duration: FieldPropsRenderer<DurationEffect> = ({
           <div class="duration-slider-field">
             <span>${formatDurationPercentage(modifier.value)}</span>
             ${renderSlider(modifier, {
-              min: -200,
+              min: -100,
               max: 200,
               step: 25,
               markers: true,
@@ -191,7 +193,7 @@ const duration: FieldPropsRenderer<DurationEffect> = ({
   ];
 };
 
-const skill: FieldPropsRenderer<SkillEffect> = ({
+const skill: WithAllProps<SkillEffect> = ({
   field,
   specialization,
   skillType,
@@ -214,7 +216,7 @@ const skill: FieldPropsRenderer<SkillEffect> = ({
     : '',
 ];
 
-const movement: FieldPropsRenderer<MovementEffect> = ({
+const movement: WithAllProps<MovementEffect> = ({
   movementType,
   base,
   full,
@@ -242,8 +244,8 @@ const effectFieldFunctions = {
   movement,
 };
 
-export const effectFields = (effect: FieldProps<Effect>) => {
+export const effectFields = (effect: FieldProps<Required<Effect>>) => {
   return (effectFieldFunctions[
     effect.type.value
-  ] as FieldPropsRenderer<Effect>)(effect);
+  ] as WithAllProps<Effect>)(effect);
 };

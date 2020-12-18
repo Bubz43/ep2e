@@ -135,7 +135,7 @@ export class Synthetic extends mix(SyntheticBase).with(
       updater: this.updater.prop('data', 'physicalHealth').nestedStore(),
       source: this.epData.inherentArmor.source || localize('frame'),
       isSwarm: this.isSwarm,
-      recoveryEffects: this.activeEffects.getGroup(EffectType.HealthRecovery),
+      recoveryEffects: this.activeEffects.healthRecovery,
       recoveryConditions: this.epData.recoveryConditions,
     });
   }

@@ -1,3 +1,4 @@
+import type { AppliedEffects } from '@src/entities/applied-effects';
 import type { ArmorType } from '@src/features/active-armor';
 import type {
   HealthRecoveryEffect,
@@ -43,7 +44,7 @@ export type SyntheticHealthData = BasicHealthData &
 type Init = HealthInit<SyntheticHealthData> & {
   isSwarm: boolean;
   statMods: HealthStatMods | undefined;
-  recoveryEffects: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
+  recoveryEffects: AppliedEffects["healthRecovery"]
   recoveryConditions: RecoveryConditions;
 };
 

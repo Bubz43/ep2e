@@ -31,10 +31,18 @@ export enum UniqueEffectType {
   Modular = 'modular',
 }
 
+
+export enum DurationEffectTarget {
+  EffectDuration = 'effectDuration',
+  TaskActionTimeframe = 'taskActionTimeframe',
+  Drugs = 'drugOrToxin',
+  HealingTimeframes = 'healingTimeframes',
+}
+
 export enum EffectType {
   Initiative = 'initiative',
   Pool = 'pool',
-  Misc = 'misc',
+  Misc = 'misc', 
   SuccessTest = 'successTest',
   Health = 'health',
   HealthRecovery = 'healthRecovery',
@@ -130,12 +138,6 @@ export type RechargeEffect = {
   modifier: number;
 };
 
-export enum DurationEffectTarget {
-  EffectDuration = 'effectDuration',
-  TaskActionTimeframe = 'taskActionTimeframe',
-  Drugs = 'drugOrToxin',
-  HealingTimeframes = 'healingTimeframes',
-}
 
 export type SkillEffect = {
   skillType: SkillType | FieldSkillType;
@@ -450,8 +452,12 @@ const format = (effect: Effect): (string | number)[] => {
 export const formatDurationPercentage = (modifier: number) => {
   return `${localize(modifier < 0 ? 'reduced' : 'increased')} ${localize(
     'by',
-  )} ${modifier}%`.toLocaleLowerCase();
+  )} ${Math.abs(modifier)}%`.toLocaleLowerCase();
 };
+
+export const durationEffectMultiplier = (modifier: number) => {
+  return 1 + modifier / 100
+}
 
 export const formatEffect = createPipe(
   format,

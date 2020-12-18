@@ -1,4 +1,5 @@
 import { enumValues } from '@src/data-enums';
+import type { AppliedEffects } from '@src/entities/applied-effects';
 import {
   HealthRecoveryEffect,
   Source,
@@ -130,13 +131,13 @@ export type Recovery = HealthTick & {
 export const setupRecoveries = ({
   hot,
   biological,
-  effects = [],
+  effects,
   conditions,
   updateStartTime,
 }: {
   hot: HealsOverTime;
   biological: boolean;
-  effects: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
+  effects: AppliedEffects["healthRecovery"]
   conditions: RecoveryConditions;
   updateStartTime: (
     update: Pick<
@@ -152,6 +153,9 @@ export const setupRecoveries = ({
   } as const;
 
   const slot = biological ? HealingSlot.OwnHealing : HealingSlot.Aided;
+  const multipliers = [recoveryMultiplier(conditions), ...effects.timeframeMultipliers]
+  const setupDuration = (interval: number) =>
+    Math.ceil(multipliers.reduce((accum, mp) => accum * mp, interval));
 
   for (const stat of enumValues(HealOverTimeTarget)) {
     const group = groups[stat];
@@ -165,7 +169,7 @@ export const setupRecoveries = ({
         slot,
         source,
         timeState: createLiveTimeState({
-          duration: data.interval * recoveryMultiplier(conditions),
+          duration: setupDuration(data.interval),
           startTime: hot[key],
           label: source,
           id: `${stat}-${slot}`,
@@ -176,7 +180,7 @@ export const setupRecoveries = ({
     }
   }
 
-  for (const effect of effects) {
+  for (const effect of effects.recovery) {
     const { stat, technologicallyAided, interval } = effect;
     const amount =
       stat === HealOverTimeTarget.Damage
@@ -203,7 +207,7 @@ export const setupRecoveries = ({
       slot,
       source: effect[Source],
       timeState: createLiveTimeState({
-        duration: effect.interval * recoveryMultiplier(conditions),
+        duration: setupDuration(effect.interval),
         startTime: hot[key],
         label: effect[Source],
         id: `${stat}-${slot}`,

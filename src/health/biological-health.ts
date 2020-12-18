@@ -1,3 +1,4 @@
+import type { AppliedEffects } from '@src/entities/applied-effects';
 import type {
   HealthRecoveryEffect,
   SourcedEffect,
@@ -47,7 +48,7 @@ export type BiologicalHealthData = BasicHealthData &
 type Init = HealthInit<BiologicalHealthData> & {
   isSwarm: boolean;
   statMods: HealthStatMods | undefined;
-  recoveryEffects: ReadonlyArray<SourcedEffect<HealthRecoveryEffect>>;
+  recoveryEffects: AppliedEffects["healthRecovery"]
   recoveryConditions: RecoveryConditions;
 };
 
