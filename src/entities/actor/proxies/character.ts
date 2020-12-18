@@ -21,10 +21,10 @@ import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import { Psi } from '@src/entities/item/proxies/psi';
 import type { Sleight } from '@src/entities/item/proxies/sleight';
 import type { Software } from '@src/entities/item/proxies/software';
-import { Substance } from '@src/entities/item/proxies/substance';
+import type { Substance } from '@src/entities/item/proxies/substance';
 import type { Trait } from '@src/entities/item/proxies/trait';
 import type { ActorEntity, SleeveType } from '@src/entities/models';
-import { UpdateStore } from '@src/entities/update-store';
+import type { UpdateStore } from '@src/entities/update-store';
 import { taskState } from '@src/features/actions';
 import { ActiveArmor } from '@src/features/active-armor';
 import type { ConditionType } from '@src/features/conditions';
@@ -93,6 +93,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   readonly traits: Trait[] = [];
   readonly equipped: EquippableItem[] = [];
   readonly consumables: ConsumableItem[] = [];
+  readonly awaitingOnsetSubstances: Substance[] = [];
+  readonly appliedSubstances: Substance[] = [];
   readonly stashed: (EquippableItem | ConsumableItem)[] = [];
 
   private appliedHealthEffects = false;
@@ -136,7 +138,6 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       this.sleeve?.epData.damagedArmor,
     );
     this._appliedEffects.add(this.armor.currentEffects);
-
 
     const egoFormWindow = getWindow(this.updater);
     if (egoFormWindow?.isConnected) this.ego.openForm?.();
@@ -237,85 +238,6 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   }
 
   @LazyGetter()
-  get substancesAwaitingOnset() {
-    return (
-      this.epFlags?.substancesAwaitingOnset?.map((awaitingOnset) => {
-        const substance = new Substance({
-          embedded: this.name,
-          loaded: true,
-          data: awaitingOnset.substance,
-          updater: new UpdateStore({
-            getData: () => awaitingOnset.substance,
-            isEditable: () => this.editable,
-            setData: (data) => {
-              this.updater
-                .prop('flags', EP.Name, 'substancesAwaitingOnset')
-                .commit((list) =>
-                  updateFeature(list || [], {
-                    id: awaitingOnset.id,
-                    substance: deepMerge(awaitingOnset.substance, data),
-                  }),
-                );
-            },
-          }),
-        });
-        return {
-          ...awaitingOnset,
-          timeState: createLiveTimeState({
-            img: substance.nonDefaultImg,
-            id: `awaiting-onset-${awaitingOnset.id}`,
-            duration: Substance.onsetTime(awaitingOnset.useMethod),
-            startTime: awaitingOnset.onsetStartTime,
-            label: substance.name,
-            updateStartTime: (newStartTime) => {
-              this.updater
-                .prop('flags', EP.Name, 'substancesAwaitingOnset')
-                .commit((list) =>
-                  updateFeature(list || [], {
-                    onsetStartTime: newStartTime,
-                    id: awaitingOnset.id,
-                  }),
-                );
-            },
-          }),
-          substance,
-        };
-      }) ?? []
-    );
-  }
-
-  @LazyGetter()
-  get onsetSubstances() {
-    return this.epFlags?.onsetSubstances?.map(
-      ({  substance, id, ...state }) => {
-        const substanceCls = new Substance({
-          embedded: this.name,
-          loaded: true,
-          data: substance,
-          updater: new UpdateStore({
-            getData: () => substance,
-            isEditable: () => this.editable,
-            setData: (data) => {
-              this.updater
-                .prop('flags', EP.Name, 'onsetSubstances')
-                .commit((list) =>
-                  updateFeature(list || [], {
-                    id,
-                    substance: deepMerge(substance, data),
-                  }),
-                );
-            },
-          }),
-        });
-        return {
-          substance: substanceCls,
-          state: substanceCls.getOnsetInfo(state)
-        }
-      },
-    );
-  }
-
-  @LazyGetter()
   get tasks() {
     return this.epData.tasks.map((task) => ({
       ...task,
@@ -390,7 +312,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         (accum, { activeRecoveries }) => accum + (activeRecoveries?.size || 0),
         0,
       ) +
-      this.substancesAwaitingOnset.length
+      this.awaitingOnsetSubstances.length
     );
   }
 
@@ -410,7 +332,9 @@ export class Character extends ActorProxyBase<ActorType.Character> {
           ({ timeState }) => !timeState.remaining,
         ),
       ) ||
-      this.substancesAwaitingOnset.some(({ timeState }) => !timeState.remaining)
+      this.awaitingOnsetSubstances.some(
+        ({ awaitingOnsetTimeState }) => !awaitingOnsetTimeState.remaining,
+      )
     );
   }
 
@@ -716,6 +640,14 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     egoItems: Map<string, ItemProxy>,
   ) {
     for (const item of this.items.values()) {
+      if (item.type === ItemType.Substance && item.appliedState) {
+        if (item.appliedState === 'applied') this.appliedSubstances.push(item);
+        else {
+          this.awaitingOnsetSubstances.push(item);
+          // TODO add effects
+        }
+        continue;
+      }
       if ('equipped' in item) {
         this[item.equipped ? 'equipped' : 'stashed'].push(item);
         if (item.equipped) {

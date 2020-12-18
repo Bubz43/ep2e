@@ -32,14 +32,9 @@ export class MessageSubstanceUse extends LitElement {
   applySubstance() {
     pickOrDefaultActor((actor) => {
       if (actor.proxy.type === ActorType.Character) {
-        actor.proxy.updater
-          .prop('flags', EP.Name, 'substancesAwaitingOnset')
-          .commit(
-            addFeature({
-              ...this.substanceUse,
-              onsetStartTime: currentWorldTimeMS(),
-            }),
-          );
+        actor.itemOperations.add(
+          this.substance.createAwaitingOnset(this.substanceUse.useMethod),
+        );
       }
     }, true);
   }

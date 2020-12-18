@@ -101,13 +101,13 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
   }
 
   private async startSubstance(id: string) {
-    const substanceUse = this.character.substancesAwaitingOnset.find(
+    const substance = this.character.awaitingOnsetSubstances.find(
       matchID(id),
     );
-    if (substanceUse) {
+    if (substance) {
       const applySeverity = true
       // TODO Check vs severity
-      const { alwaysApplied, severity, messageHeader, hasSeverity, name } = substanceUse.substance;
+      const { alwaysApplied, severity, messageHeader, hasSeverity, name } = substance;
       if (alwaysApplied.hasInstantDamage) {
         const {
           label,
@@ -152,15 +152,11 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
           },
         });
       }
-      this.character.updater.prop('flags', EP.Name, 'onsetSubstances').commit(
-        addFeature({
-          substance: substanceUse.substance.getDataCopy(),
-          startTime: currentWorldTimeMS(),
-          applySeverity,
-          modifyingEffects: [],
-          finishedEffects: ""
-        }),
-      );
+      this.character.itemOperations.add(substance.createApplied({
+        applySeverity,
+        modifyingEffects:[],
+      }))
+   
     }
   }
 
@@ -184,20 +180,19 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
   }
 
   private renderAppliedSubstances() {
-    const { substancesAwaitingOnset, disabled } = this.character;
+    const { awaitingOnsetSubstances, appliedSubstances, disabled } = this.character;
     // TODO onset substances
-    if (substancesAwaitingOnset.length === 0) return '';
     return html`
       <section>
         <sl-header heading=${localize('substancesAwaitingOnset')}></sl-header>
         <sl-animated-list>
           ${repeat(
-            substancesAwaitingOnset,
+            awaitingOnsetSubstances,
             idProp,
-            ({ timeState, id }) => html`
+            ({ awaitingOnsetTimeState, id }) => html`
               <character-view-time-item
                 ?disabled=${disabled}
-                .timeState=${timeState}
+                .timeState=${awaitingOnsetTimeState}
                 completion="ready"
               >
                 <mwc-icon-button

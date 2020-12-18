@@ -23,6 +23,7 @@ import type { FullEgoData } from './actor/ego';
 import type { ActorType, sleeveTypes, ItemType } from './entity-types';
 import { createDefaultItem } from './item/default-items';
 import { ItemEP, ItemProxy } from './item/item';
+import type { SubstanceUseMethod } from './item/proxies/substance';
 
 type EPEntity = keyof EntityTemplates;
 type EntityTypeTemplates<T extends EPEntity> = EntityTemplates[T]['templates'];
@@ -56,22 +57,10 @@ export type ActorModels = {
 
 export type SleeveType = typeof sleeveTypes[number];
 
-export type OnsetSubstanceData = {
-  startTime: number;
-  substance: ItemEntity<ItemType.Substance>;
-  applySeverity: boolean;
-  modifyingEffects: StringID<Effect>[];
-  finishedEffects: "" | "always" | "severity"
-}
-
 type ActorFlags<T extends ActorType> = T extends ActorType.Character
   ? {
       vehicle: ActorEntity<ActorType.Synthetic> | null;
       [ItemType.Psi]: ItemEntity<ItemType.Psi> | null;
-      substancesAwaitingOnset: StringID<
-        SubstanceUseData & { onsetStartTime: number }
-      >[];
-      onsetSubstances: StringID<OnsetSubstanceData>[];
     } & { [key in SleeveType]: ActorEntity<key> | null }
   : never;
 
@@ -250,10 +239,23 @@ export type BlueprintSource = {
   [key in CopyableItemType]: ItemEntity<key>;
 }[CopyableItemType];
 
+export type AppliedSubstanceState = {
+        startTime: number;
+        applySeverity: boolean;
+        modifyingEffects: StringID<Effect>[];
+        finishedEffects: ('always' | 'severity')[];
+      }
+
 type ItemFlags<T extends ItemType> = T extends ItemType.Psi
   ? { influences: readonly StringID<PsiInfluenceData>[] }
   : T extends ItemType.Substance
-  ? SubstanceItemFlags
+  ? SubstanceItemFlags & {
+      awaitingOnset: null | {
+        useMethod: SubstanceUseMethod;
+        onsetStartTime: number;
+      };
+      applied: null | AppliedSubstanceState;
+    }
   : T extends ItemType.Explosive
   ? { substance: null | [ItemEntity<ItemType.Substance>] }
   : T extends ItemType.MeleeWeapon

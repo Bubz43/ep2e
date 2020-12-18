@@ -12,16 +12,16 @@ import {
 } from '@src/data-enums';
 import { ItemType } from '@src/entities/entity-types';
 import {
+  AppliedSubstanceState,
   DrugAppliedItem,
   ItemEntity,
-  OnsetSubstanceData,
   setupItemOperations,
   SubstanceItemFlags,
 } from '@src/entities/models';
 import { UpdateStore } from '@src/entities/update-store';
 import { uniqueStringID } from '@src/features/feature-helpers';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
-import { getElapsedTime } from '@src/features/time';
+import { createLiveTimeState, currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import { notEmpty } from '@src/utility/helpers';
@@ -66,13 +66,52 @@ export class Substance
   }
 
   readonly loaded;
+  readonly appliedState: '' | 'awaitingOnset' | 'applied';
+
   constructor({
     loaded,
     ...init
-  }: ItemProxyInit<ItemType.Substance> & { loaded: boolean }) {
+  }: ItemProxyInit<ItemType.Substance> & {
+    loaded: boolean;
+  }) {
     super(init);
     this.loaded = loaded;
+    this.appliedState = this.epFlags?.awaitingOnset
+      ? 'awaitingOnset'
+      : this.epFlags?.applied
+      ? 'applied'
+      : '';
   }
+
+  @LazyGetter()
+  get awaitingOnsetTimeState() {
+    const { awaitingOnset } = this.epFlags || {}
+    // TODO Think of something better than throwing error, returning null is weird here
+    if (!awaitingOnset) throw new Error("Substance is not awaiting onset");
+    return createLiveTimeState({
+      img: this.nonDefaultImg,
+      id: `awaiting-onset-${this.id}`,
+      duration: Substance.onsetTime(awaitingOnset.useMethod),
+      startTime: awaitingOnset.onsetStartTime,
+      label: this.name,
+      updateStartTime: this.updater.prop("flags", EP.Name, "awaitingOnset", "onsetStartTime").commit
+    })
+  }
+
+  // @LazyGetter()
+  // get appliedTimeState() {
+  //   const { applied } = this.epFlags || {}
+  //       // TODO Think of something better than throwing error, returning null is weird here
+  //   if (!applied) throw new Error("Substance is not applied");
+  //   return createLiveTimeState({
+  //     img: this.nonDefaultImg,
+  //     id: `awaiting-onset-${this.id}`,
+  //     duration: ,
+  //     startTime: applied.startTime,
+  //     label: this.name,
+  //     updateStartTime: this.updater.prop("flags", EP.Name, "applied", "startTime").commit
+  //   })
+  // }
 
   get applicationMethods(): ('app' | 'use' | SubstanceApplicationMethod)[] {
     return this.isChemical
@@ -230,8 +269,9 @@ export class Substance
         data,
         embedded: this.name,
         lockSource: false,
-        alwaysDeletable: this.editable,
-        deleteSelf: () => ops.remove(data._id),
+        alwaysDeletable: !this.appliedState && this.editable,
+        temporary: !!this.appliedState,
+        deleteSelf: this.appliedState ? undefined : () => ops.remove(data._id),
         updater: new UpdateStore({
           getData: () => data,
           isEditable: () => this.editable,
@@ -265,12 +305,10 @@ export class Substance
       img: this.nonDefaultImg,
       subheadings: this.fullType,
       description: this.description,
-    }
+    };
   }
 
   async use(method: SubstanceUseMethod) {
-  
-
     await createMessage({
       data: {
         header: this.messageHeader,
@@ -284,18 +322,69 @@ export class Substance
     if (this.consumeOnUse) this.useUnit();
   }
 
-  getOnsetInfo({
-    startTime,
-    applySeverity,
-    modifyingEffects,
-  }: Omit<OnsetSubstanceData, 'substance'>) {
-    const elapsed = getElapsedTime(startTime);
-    const { alwaysApplied, severity, hasSeverity } = this;
-    
-    // TODO apply modifying effects
-
-    return {
-      elapsed,
-    };
+  createAwaitingOnset(method: SubstanceUseMethod) {
+    const copy = this.getDataCopy();
+    const { awaitingOnset, applied, ...items} = copy.flags[EP.Name] || {}
+    copy.flags = {
+      ...copy.flags,
+      [EP.Name]: {
+        ...items,
+        awaitingOnset: {
+          useMethod: method,
+          onsetStartTime: currentWorldTimeMS()
+        }
+      }
+    }
+    return copy
   }
+
+  createApplied(state: Omit<AppliedSubstanceState, "startTime" | "finishedEffects">) {
+    const copy = this.getDataCopy();
+    const { awaitingOnset, applied, ...items} = copy.flags[EP.Name] || {}
+    copy.flags = {
+      ...copy.flags,
+      [EP.Name]: {
+        ...items,
+        applied: {
+          ...state,
+          startTime: currentWorldTimeMS(),
+          finishedEffects: [],
+        }
+      }
+    }
+    return copy;
+  }
+
+  // getOnsetInfo({
+  //   startTime,
+  //   applySeverity,
+  //   modifyingEffects,
+  //   finishedEffects
+  // }: Omit<OnsetSubstanceData, 'substance'>) {
+  //   // TODO apply modifying effects
+
+  //   // const elapsed = getElapsedTime(startTime);
+  //   const { alwaysApplied, severity, hasSeverity } = this;
+  //   const effects: AddEffects[] = [];
+  //   const items: (Trait | Sleight)[] = [];
+  //   // TODO Damage
+  //   if (!finishedEffects.includes("always")) {
+  //     effects.push({
+  //       source: this.name,
+  //       effects: alwaysApplied.effects
+  //     })
+  //     items.push(...alwaysApplied.items.values())
+  //   }
+  //   if (hasSeverity && !finishedEffects.includes("severity")) {
+  //     effects.push({
+  //       source: `${this.name} (${localize("severity")})`,
+  //       effects: severity.effects
+  //     })
+  //     items.push(...severity.items.values())
+  //   }
+
+  //   return {
+
+  //   };
+  // }
 }

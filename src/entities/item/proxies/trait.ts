@@ -13,13 +13,15 @@ export class Trait
   extends ItemProxyBase<ItemType.Trait>
   implements ObtainableEffects {
   readonly lockSource;
-
+  readonly temporary;
   constructor({
     lockSource,
+    temporary,
     ...init
-  }: ItemProxyInit<ItemType.Trait> & { lockSource: boolean }) {
+  }: ItemProxyInit<ItemType.Trait> & { lockSource: boolean, temporary?: boolean }) {
     super(init);
     this.lockSource = lockSource;
+    this.temporary = temporary;
   }
 
   @LazyGetter()
