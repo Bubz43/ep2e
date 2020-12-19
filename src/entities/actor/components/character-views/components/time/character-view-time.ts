@@ -101,13 +101,17 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
   }
 
   private async startSubstance(id: string) {
-    const substance = this.character.awaitingOnsetSubstances.find(
-      matchID(id),
-    );
+    const substance = this.character.awaitingOnsetSubstances.find(matchID(id));
     if (substance) {
-      const applySeverity = true
+      const applySeverity = true;
       // TODO Check vs severity
-      const { alwaysApplied, severity, messageHeader, hasSeverity, name } = substance;
+      const {
+        alwaysApplied,
+        severity,
+        messageHeader,
+        hasSeverity,
+        name,
+      } = substance;
       if (alwaysApplied.hasInstantDamage) {
         const {
           label,
@@ -153,13 +157,13 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
         });
       }
       const { add, remove } = this.character.itemOperations;
-      await add(substance.createApplied({
-        applySeverity,
-        modifyingEffects:[],
-      }))
-      await remove(id)
-      
-   
+      await add(
+        substance.createApplied({
+          applySeverity,
+          modifyingEffects: [],
+        }),
+      );
+      await remove(id);
     }
   }
 
@@ -183,53 +187,67 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
   }
 
   private renderAppliedSubstances() {
-    const { awaitingOnsetSubstances, appliedSubstances, disabled } = this.character;
+    const {
+      awaitingOnsetSubstances,
+      appliedSubstances,
+      disabled,
+    } = this.character;
     return html`
-    ${notEmpty(appliedSubstances) ? html`
-    <section>
-        <sl-header heading=${localize('applied')}></sl-header>
-        <sl-animated-list>
-          ${repeat(
-            appliedSubstances,
-            idProp,
-            (substance) => html`
-              <character-view-time-item
-                ?disabled=${disabled}
-                .timeState=${substance.appliedInfo.timeState}
-                completion="expired"
-              >
-              ${this.renderItemMenuButton(substance)}
-              </character-view-time-item>
-            `,
-          )}
-        </sl-animated-list>
-      </section>
-    ` : ""}
-    ${notEmpty(awaitingOnsetSubstances) ? html`
-    <section>
-        <sl-header heading=${localize('substancesAwaitingOnset')}></sl-header>
-        <sl-animated-list>
-          ${repeat(
-            awaitingOnsetSubstances,
-            idProp,
-            ({ awaitingOnsetTimeState, id }) => html`
-              <character-view-time-item
-                ?disabled=${disabled}
-                .timeState=${awaitingOnsetTimeState}
-                completion="ready"
-              >
-                <mwc-icon-button
-                  slot="action"
-                  icon="play_arrow"
-                  @click=${() => this.startSubstance(id)}
-                ></mwc-icon-button>
-              </character-view-time-item>
-            `,
-          )}
-        </sl-animated-list>
-      </section>
-    ` : ""}
-    
+      ${notEmpty(appliedSubstances)
+        ? html`
+            <section>
+              <sl-header
+                heading="=${localize('applied')} ${localize('substances')}"
+              ></sl-header>
+              <sl-animated-list>
+                ${repeat(
+                  appliedSubstances,
+                  idProp,
+                  (substance) => html`
+                    <character-view-time-item
+                      ?disabled=${disabled}
+                      .timeState=${substance.appliedInfo.timeState}
+                      completion="expired"
+                    >
+                      ${this.renderItemMenuButton(substance)}
+                    </character-view-time-item>
+                  `,
+                )}
+              </sl-animated-list>
+            </section>
+          `
+        : ''}
+      ${notEmpty(awaitingOnsetSubstances)
+        ? html`
+            <section>
+              <sl-header
+                heading=${localize('substancesAwaitingOnset')}
+              ></sl-header>
+              <sl-animated-list>
+                ${repeat(
+                  awaitingOnsetSubstances,
+                  idProp,
+                  (substance) => html`
+                    <character-view-time-item
+                      ?disabled=${disabled}
+                      .timeState=${substance.awaitingOnsetTimeState}
+                      completion="ready"
+                    >
+                      <mwc-icon-button
+                        slot="action"
+                        icon="play_arrow"
+                        data-tooltip=${localize('start')}
+                        @mouseover=${tooltip.fromData}
+                        @click=${() => this.startSubstance(substance.id)}
+                      ></mwc-icon-button>
+                      ${this.renderItemMenuButton(substance)}
+                    </character-view-time-item>
+                  `,
+                )}
+              </sl-animated-list>
+            </section>
+          `
+        : ''}
     `;
   }
 
@@ -271,16 +289,15 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
 
   private renderItemMenuButton(item: ItemProxy) {
     return html`
-      <button
-        slot="action"
+      <mwc-icon-button
         @click=${() =>
           openMenu({
             header: { heading: item.fullName },
             content: itemMenuOptions(item),
           })}
-      >
-        <mwc-icon>more_vert</mwc-icon>
-      </button>
+        slot="action"
+        icon="more_vert"
+      ></mwc-icon-button>
     `;
   }
 

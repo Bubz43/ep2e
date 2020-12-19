@@ -108,13 +108,11 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
           : ''}
       </span>
       <div class="actions">
-        <button @click=${this.toggleEditing} ?disabled=${this.disabled}>
-          <mwc-icon>${this.editing ? 'save' : 'edit'}</mwc-icon>
-        </button>
+        <mwc-icon-button icon="${this.editing ? 'save' : 'edit'}" @click=${this.toggleEditing} ?disabled=${this.disabled}>
+        </mwc-icon-button>
         ${this.editing
-          ? html`<button @click=${this.discardChanges}>
-              <mwc-icon>clear</mwc-icon>
-            </button>`
+          ? html`<mwc-icon-button @click=${this.discardChanges} icon="clear">
+            </mwc-icon-button>`
           : html` <slot name="action"></slot> `}
       </div>
       ${this.editing && !this.disabled
