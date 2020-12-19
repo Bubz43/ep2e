@@ -1,4 +1,3 @@
-import { createMessage } from '@src/chat/create-message';
 import { renderNumberField } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { LazyRipple } from '@src/components/mixins/lazy-ripple';
@@ -14,7 +13,6 @@ import { openMenu } from '@src/open-menu';
 import { clickIfEnter } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
 import { customElement, LitElement, property, html } from 'lit-element';
-import { stopEvent } from 'weightless';
 import styles from './consumable-card.scss';
 
 @customElement('consumable-card')
@@ -76,7 +74,7 @@ export class ConsumableCard extends LazyRipple(LitElement) {
     const { item } = this;
     if (item.type === ItemType.Substance) {
       if (item.applicationMethods.length === 1)
-        item.use(item.applicationMethods[0]!);
+        item.createMessage(item.applicationMethods[0]!);
       else
         openMenu({
           header: { heading: `${localize('use')} ${item.name}` },
@@ -84,7 +82,7 @@ export class ConsumableCard extends LazyRipple(LitElement) {
             label: `${localize(method)} - ${localize(
               'onset',
             )}: ${prettyMilliseconds(Substance.onsetTime(method))}`,
-            callback: () => item.use(method),
+            callback: () => item.createMessage(method),
           })),
           position: ev,
         });

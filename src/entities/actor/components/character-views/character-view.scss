@@ -152,6 +152,12 @@ character-view-sleeve,
   }
 }
 
+.status-items {
+  > *:not(:last-child) {
+    border-bottom: 1px solid alphav(var(--color-border), 0.5);
+  }
+}
+
 .conditions {
   display: flex;
   align-items: center;
@@ -160,6 +166,12 @@ character-view-sleeve,
   img {
     margin-left: 0.25rem;
   }
+}
+
+.no-substances-message {
+  padding: 0.25rem 0.75rem;
+  margin: 0;
+  color: var(--color-text-lighter);
 }
 
 .pools {

@@ -1,9 +1,20 @@
-import { enumValues } from '@src/data-enums';
+import { enumValues, SubstanceApplicationMethod } from '@src/data-enums';
+import { ItemType } from '@src/entities/entity-types';
+import {
+  Substance,
+  SubstanceUseMethod,
+} from '@src/entities/item/proxies/substance';
 import { PoolItem } from '@src/features/components/pool-item/pool-item';
 import { conditionIcons } from '@src/features/conditions';
 import { idProp } from '@src/features/feature-helpers';
 import type { ReadonlyPool } from '@src/features/pool';
 import { poolActionOptions } from '@src/features/pools';
+import { prettyMilliseconds } from '@src/features/time';
+import {
+  DropType,
+  handleDrop,
+  itemDropToItemProxy,
+} from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
@@ -43,9 +54,43 @@ export class CharacterView extends CharacterViewBase {
     }
   }
 
+  private applyDroppedSubstance = handleDrop(async ({ ev, data }) => {
+    if (data?.type === DropType.Item && !this.character.disabled) {
+      const item = await itemDropToItemProxy(data);
+      if (item?.type !== ItemType.Substance || !item.quantity) return;
+      const addSubstance = async (method: SubstanceUseMethod) => {
+        await this.character.itemOperations.add(
+          item.createAwaitingOnset(method),
+        );
+        if (item.actor && item.editable) item.useUnit();
+      };
+      if (item.applicationMethods.length === 1)
+        addSubstance(item.applicationMethods[0]!);
+      else {
+        openMenu({
+          header: { heading: `${localize('apply')} ${item.name}` },
+          content: item.applicationMethods.map((method) => ({
+            label: `${localize(method)} - ${localize(
+              'onset',
+            )}: ${prettyMilliseconds(Substance.onsetTime(method))}`,
+            callback: () => addSubstance(method),
+          })),
+          position: ev,
+        });
+      }
+    }
+  });
+
   render() {
     const { masterDevice } = this.character.equippedGroups;
-    const { awaitingOnsetSubstances, activeSubstances: appliedSubstances, psi, conditions, pools } = this.character;
+    const {
+      awaitingOnsetSubstances,
+      activeSubstances,
+      psi,
+      conditions,
+      pools,
+      disabled,
+    } = this.character;
 
     return html`
       <character-view-header
@@ -69,7 +114,7 @@ export class CharacterView extends CharacterViewBase {
               <div class="sleeve-select">
                 <mwc-button
                   raised
-                  ?disabled=${this.character.disabled}
+                  ?disabled=${disabled}
                   label="${localize('select')} ${localize('sleeve')}"
                   @click=${() =>
                     this.toggleDrawerRenderer(CharacterDrawerRenderer.Resleeve)}
@@ -82,7 +127,7 @@ export class CharacterView extends CharacterViewBase {
       <div class="sections">
         <section class="status">
           <sl-header heading=${localize('status')}></sl-header>
-          <div>
+          <div class="status-items">
             <div class="conditions">
               <mwc-button
                 class="conditions-toggle"
@@ -104,16 +149,65 @@ export class CharacterView extends CharacterViewBase {
                 : html`<span>${localize('none')}</span>`}
             </div>
 
-            ${notEmpty(appliedSubstances) ? html`
-            <sl-animated-list>
-            ${repeat(appliedSubstances, idProp, substance => html`
-            <wl-list-item>
-            <span slot="before">${substance.name}</span>
-            
-            </wl-list-item>
-            `)}
-            </sl-animated-list>
-            ` : ""}
+            <sl-dropzone
+              class="applied-substances"
+              ?disabled=${disabled}
+              @drop=${this.applyDroppedSubstance}
+            >
+              ${activeSubstances.length + awaitingOnsetSubstances.length === 0
+                ? html`
+                    <p class="no-substances-message"></p>
+                      ${localize('no')} ${localize('applied')}
+                      ${localize('substances')}.
+                    </p>
+                  `
+                : html`
+                    ${notEmpty(activeSubstances)
+                      ? html`
+                          <sl-details
+                            open
+                            summary="${localize('active')} ${localize(
+                              'substances',
+                            )} (${activeSubstances.length})"
+                          >
+                            <sl-animated-list>
+                              ${repeat(
+                                activeSubstances,
+                                idProp,
+                                (substance) => html`
+                                  <wl-list-item>
+                                    <span slot="before">${substance.name}</span>
+                                  </wl-list-item>
+                                `,
+                              )}
+                            </sl-animated-list>
+                          </sl-details>
+                        `
+                      : ''}
+                    ${notEmpty(awaitingOnsetSubstances)
+                      ? html`
+                          <sl-details
+                            open
+                            summary="${localize(
+                              'substancesAwaitingOnset',
+                            )} (${awaitingOnsetSubstances.length})"
+                          >
+                            <sl-animated-list>
+                              ${repeat(
+                                awaitingOnsetSubstances,
+                                idProp,
+                                (substance) => html`
+                                  <wl-list-item>
+                                    <span slot="before">${substance.name}</span>
+                                  </wl-list-item>
+                                `,
+                              )}
+                            </sl-animated-list></sl-details
+                          >
+                        `
+                      : ''}
+                  `}
+            </sl-dropzone>
 
             ${notEmpty(pools)
               ? html`
@@ -149,8 +243,7 @@ export class CharacterView extends CharacterViewBase {
               `
             : ''}
         </section>
-       
-   
+
         <section>
           <sl-header heading=${localize('attacks')}></sl-header>
         </section>
@@ -167,7 +260,12 @@ export class CharacterView extends CharacterViewBase {
   }
 
   private renderItemGroup = (group: ItemGroup) => {
-    if (group === ItemGroup.Sleights && (!this.character.psi && !this.character.sleights.length)) return ""
+    if (
+      group === ItemGroup.Sleights &&
+      !this.character.psi &&
+      !this.character.sleights.length
+    )
+      return '';
     return html`
       <character-view-item-group
         .character=${this.character}

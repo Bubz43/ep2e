@@ -418,7 +418,7 @@ export class Substance
     };
   }
 
-  async use(method: SubstanceUseMethod) {
+  async createMessage(method: SubstanceUseMethod) {
     await createMessage({
       data: {
         header: this.messageHeader,

@@ -24,6 +24,7 @@ import { nothing } from 'lit-html';
 import { cache } from 'lit-html/directives/cache';
 import { repeat } from 'lit-html/directives/repeat';
 import { prop, sortBy } from 'remeda';
+import { ConsumableCard } from '../../../consumable-card/consumable-card';
 import { ItemCard } from '../../../item-card/item-card';
 import { ItemGroup } from '../../character-view-base';
 import styles from './character-view-item-group.scss';
@@ -57,7 +58,8 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
   }
 
   private dragItemCard = (ev: DragEvent) => {
-    if (ev.currentTarget instanceof ItemCard) {
+    // TODO have base item card class
+    if (ev.currentTarget instanceof ItemCard || ev.currentTarget instanceof ConsumableCard) {
       setDragDrop(ev, {
         type: DropType.Item,
         ...this.character.actor.identifiers,

@@ -3,7 +3,7 @@ import { AptitudeType, enumValues, PoolType } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { localize } from '@src/foundry/localization';
 import { HealthStat, HealthType } from '@src/health/health';
-import type { MenuOption } from '@src/open-menu';
+import type { MenuOption, MWCMenuOption } from '@src/open-menu';
 import { notEmpty, withSign } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
 import { html } from 'lit-html';
@@ -198,7 +198,7 @@ const flex: PoolOptionGetter = ({ character, pool }) =>
 export const poolActionOptions = (character: Character, poolType: PoolType) => {
   const pool = character.pools.get(poolType);
   const available = pool?.disabled ? 0 : pool?.available || 0;
-  const options: MenuOption[] = linkedAptitudes[poolType].flatMap(
+  const options: MWCMenuOption[] = linkedAptitudes[poolType].flatMap(
     (aptitudeType) =>
       linkedAptitudePoints.map((point) => ({
         label: `${withSign(5 * point)} ${localize('linkedAptitude')} ${localize(
@@ -219,6 +219,7 @@ export const poolActionOptions = (character: Character, poolType: PoolType) => {
         },
       })),
   );
+  options.push("divider")
 
   switch (pool?.type) {
     case PoolType.Insight:

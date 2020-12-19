@@ -7,6 +7,12 @@
 
 :host {
   display: block;
+  transition: outline 50ms;
+}
+
+:host([ready]) {
+  outline: 2px dashed var(--color-grey);
+  outline-offset: -2px;
 }
 
 :host([outlined]) {
