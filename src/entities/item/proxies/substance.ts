@@ -36,7 +36,7 @@ import { EP } from '@src/foundry/system';
 import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { createPipe, map, merge, uniq } from 'remeda';
+import { createPipe, last, map, merge, uniq } from 'remeda';
 import type { Attacker } from '../item-interfaces';
 import { Copyable, Purchasable, Stackable } from '../item-mixins';
 import { renderItemForm } from '../item-views';
@@ -394,8 +394,18 @@ export class Substance
   addItemEffect(group: keyof SubstanceItemFlags, itemData: DrugAppliedItem) {
     this.updater.prop('flags', EP.Name, group).commit((items) => {
       const changed = [...(items || [])];
-      const _id = uniqueStringID(changed.map((i) => i._id));
-      return [...changed, { ...itemData, _id }] as typeof changed;
+      const _id = uniqueStringID(
+        changed.map((i) => last(i._id.split('-')) || i._id),
+      );
+      return [
+        ...changed,
+        {
+          ...itemData,
+          _id: `${this.id}-${
+            group === 'alwaysAppliedItems' ? 'always' : 'severity'
+          }-${_id}`,
+        },
+      ] as typeof changed;
     });
   }
 
