@@ -49,6 +49,8 @@ export type HealthChangeMessageData = HealthModification & {
 export type SubstanceUseData = {
   substance: ItemEntity<ItemType.Substance>,
   useMethod: SubstanceUseMethod;
+  doses?: number;
+  appliedTo?: string[];
 }
 
 export type MessageHeaderData = {

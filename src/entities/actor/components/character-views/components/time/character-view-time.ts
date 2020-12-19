@@ -220,7 +220,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
               >
                 <mwc-icon-button
                   slot="action"
-                  icon="not_started"
+                  icon="play_arrow"
                   @click=${() => this.startSubstance(id)}
                 ></mwc-icon-button>
               </character-view-time-item>

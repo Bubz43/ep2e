@@ -1,18 +1,16 @@
 import type { SubstanceUseData } from '@src/chat/message-data';
-import { enumValues, SubstanceApplicationMethod } from '@src/data-enums';
 import { ActorType } from '@src/entities/entity-types';
 import { pickOrDefaultActor } from '@src/entities/find-entities';
 import { Substance } from '@src/entities/item/proxies/substance';
-import { addFeature } from '@src/features/feature-helpers';
-import { currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
-import { withSign } from '@src/utility/helpers';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { notEmpty } from '@src/utility/helpers';
+import { customElement, html, property } from 'lit-element';
+import { MessageElement } from '../message-element';
 import styles from './message-substance-use.scss';
 
 @customElement('message-substance-use')
-export class MessageSubstanceUse extends LitElement {
+export class MessageSubstanceUse extends MessageElement {
   static get is() {
     return 'message-substance-use' as const;
   }
@@ -29,9 +27,17 @@ export class MessageSubstanceUse extends LitElement {
     });
   }
 
+  get setData() {
+    return this.getUpdater('substanceUse').commit;
+  }
+
   applySubstance() {
-    pickOrDefaultActor((actor) => {
+    pickOrDefaultActor(async (actor) => {
       if (actor.proxy.type === ActorType.Character) {
+        this.setData({
+          appliedTo: (this.substanceUse.appliedTo || []).concat(actor.name),
+        });
+
         actor.itemOperations.add(
           this.substance.createAwaitingOnset(this.substanceUse.useMethod),
         );
@@ -39,49 +45,55 @@ export class MessageSubstanceUse extends LitElement {
     }, true);
   }
 
+  private removeAppliedTo(ev: Event) {
+    if (this.disabled || !this.substanceUse.appliedTo) return;
+    const index = Number((ev.currentTarget as HTMLElement).dataset.index)
+    const newList = [...this.substanceUse.appliedTo];
+    newList.splice(index, 1);
+    this.setData({ appliedTo: newList });
+  }
+
   render() {
-    const { substance } = this;
-    const always = substance.alwaysApplied;
-    const severity = substance.hasSeverity ? substance.severity : null;
+    const { useMethod, doses, appliedTo } = this.substanceUse;
     return html`
       <mwc-button @click=${this.applySubstance} dense unelevated
-        >${localize('apply')} ${localize('substance')}</mwc-button
+        >${localize('apply')}
+        ${localize(this.substance.substanceType)}</mwc-button
       >
-      ${this.substanceUse.useMethod !== 'use'
-        ? html`
-            <p>
-              ${localize('applicationMethod')}:
-              ${localize(this.substanceUse.useMethod)}
-            </p>
-          `
-        : ''}
-      <!-- ${always.viable
-        ? html`
-            <mwc-button dense unelevated class="effects"
-              >${localize('applyEffects')}</mwc-button
-            >
-          `
-        : ''}
-      ${severity?.viable
-        ? html`
-            <div class="severity">
-              <mwc-button dense unelevated class="check"
-                >${localize(severity.check)} ${localize('check')}
-                ${severity.checkMod
-                  ? withSign(severity.checkMod)
-                  : ''}</mwc-button
+      <div>
+        ${useMethod !== 'use'
+          ? html`
+              <sl-group label=${localize('applicationMethod')}>
+                ${localize(this.substanceUse.useMethod)}</sl-group
               >
-              ${localize('SHORT', 'versus')}
-              ${severity.hasEffects
-                ? html`
-                    <mwc-button class="effects" dense unelevated
-                      >${localize('effects')}</mwc-button
-                    >
-                  `
-                : ''}
-            </div>
-          `
-        : ''} -->
+            `
+          : ''}
+        ${doses
+          ? html` <sl-group label=${localize('doses')}>${doses}</sl-group> `
+          : ''}
+        ${notEmpty(appliedTo) ? this.renderAppliedTo(appliedTo) : ''}
+      </div>
+    `;
+  }
+
+  private renderAppliedTo(names: string[]) {
+    const { disabled } = this;
+    return html`
+      <sl-group label="  ${localize('applied')} ${localize('to')}"
+        >${names.map(
+          (name, index, list) => html`
+            <wl-list-item
+              class="applied-to"
+              ?clickable=${!disabled}
+              data-index=${index}
+              @click=${this.removeAppliedTo}
+            >
+              ${name}${index < list.length - 1 ? ',' : ''}
+              ${disabled ? '' : html` <mwc-icon>clear</mwc-icon> `}
+            </wl-list-item>
+          `,
+        )}</sl-group
+      >
     `;
   }
 }

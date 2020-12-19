@@ -201,6 +201,7 @@ export class SubstanceForm extends ItemFormBase {
       isAddictive,
       isDrug,
       loaded,
+      appliedState
     } = this.item;
     const { disabled } = this;
     return html`
@@ -282,7 +283,7 @@ export class SubstanceForm extends ItemFormBase {
                 disabled,
                 classes: 'quantity-form',
                 fields: ({ quantity, quantityPerCost }) => [
-                  loaded
+                  loaded || appliedState
                     ? html`<div></div>`
                     : renderNumberField(quantity, { min: 0 }),
                   renderNumberField(quantityPerCost, { min: 1 }),

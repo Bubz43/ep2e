@@ -36,7 +36,7 @@ const conditionIconPairs = [
 
 export const conditionIcons = fromPairs(conditionIconPairs);
 
-export const iconToCondition = new Map(
+export const iconToCondition = new Map<string, ConditionType>(
   conditionIconPairs.map(([condition, icon]) => [icon, condition]),
 );
 

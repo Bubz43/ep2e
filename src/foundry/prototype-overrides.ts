@@ -238,6 +238,30 @@ TokenHUD.prototype._getStatusEffectChoices = function () {
   });
 };
 
+const { _render } = ChatLog.prototype
+ChatLog.prototype._render = async function (...args) {
+  setTimeout(() => {
+    _render.call(this, ...args)
+  }, 1500);
+}
+
+// Object.defineProperties(Token.prototype, {
+//   w: {
+//     enumerable: true,
+//     get() {
+//       return this.data.width * (activeCanvas()?.grid?.w || 1)
+//     }
+//   },
+//   h: {
+//     enumerable: true,
+//     get() {
+//       return this.data.height * (activeCanvas()?.grid?.h || 1)
+//     }
+//   }
+// })
+
+
+
 // TODO: Delay this to check for migration first
 // const barCache = new WeakMap<PIXI.Graphics, number>();
 // const bars = ["bar1", "bar2"] as const;

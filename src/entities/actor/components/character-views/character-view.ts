@@ -1,6 +1,7 @@
 import { enumValues } from '@src/data-enums';
 import { PoolItem } from '@src/features/components/pool-item/pool-item';
 import { conditionIcons } from '@src/features/conditions';
+import { idProp } from '@src/features/feature-helpers';
 import type { ReadonlyPool } from '@src/features/pool';
 import { poolActionOptions } from '@src/features/pools';
 import { localize } from '@src/foundry/localization';
@@ -44,7 +45,7 @@ export class CharacterView extends CharacterViewBase {
 
   render() {
     const { masterDevice } = this.character.equippedGroups;
-    const { sleights, psi, conditions, pools } = this.character;
+    const { awaitingOnsetSubstances, appliedSubstances, psi, conditions, pools } = this.character;
 
     return html`
       <character-view-header
@@ -102,6 +103,17 @@ export class CharacterView extends CharacterViewBase {
                   `
                 : html`<span>${localize('none')}</span>`}
             </div>
+
+            ${notEmpty(appliedSubstances) ? html`
+            <sl-animated-list>
+            ${repeat(appliedSubstances, idProp, substance => html`
+            <wl-list-item>
+            <span slot="before">${substance.name}</span>
+            
+            </wl-list-item>
+            `)}
+            </sl-animated-list>
+            ` : ""}
 
             ${notEmpty(pools)
               ? html`
