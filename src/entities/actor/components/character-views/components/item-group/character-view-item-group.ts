@@ -122,7 +122,6 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
       <sl-dropzone
         @drop=${this.addItem}
         ?disabled=${this.character.disabled}
-        data-group=${ItemGroup.Traits}
       >
         <sl-header
           heading=${localize(this.group)}

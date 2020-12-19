@@ -246,6 +246,14 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   }
 
   @LazyGetter()
+  get itemsIncludingTemporary() {
+    return [
+      ...this.items.values(),
+      ...this.appliedSubstances.flatMap((i) => i.appliedInfo.items),
+    ];
+  }
+
+  @LazyGetter()
   get equippedGroups() {
     const services: (PhysicalService | Software)[] = [];
     const temporaryServices: typeof services = [];

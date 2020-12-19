@@ -9,6 +9,8 @@ import { notEmpty } from '@src/utility/helpers';
 import { customElement, html } from 'lit-element';
 import { nothing } from 'lit-html';
 import { classMap } from 'lit-html/directives/class-map';
+import { repeat } from 'lit-html/directives/repeat';
+import { identity } from 'remeda';
 import { CharacterDrawerRenderer } from './character-drawer-render-event';
 import { CharacterViewBase, ItemGroup } from './character-view-base';
 import styles from './character-view.scss';
@@ -135,6 +137,11 @@ export class CharacterView extends CharacterViewBase {
               `
             : ''}
         </section>
+       
+   
+        <section>
+          <sl-header heading=${localize('attacks')}></sl-header>
+        </section>
         ${psi
           ? html`
               <section>
@@ -142,25 +149,13 @@ export class CharacterView extends CharacterViewBase {
               </section>
             `
           : ''}
-        ${psi || notEmpty(sleights)
-          ? html`
-              <section>
-                <sl-header
-                  heading=${localize('sleights')}
-                  itemCount=${sleights.length}
-                ></sl-header>
-              </section>
-            `
-          : ''}
-        <section>
-          <sl-header heading=${localize('attacks')}></sl-header>
-        </section>
-        ${enumValues(ItemGroup).map(this.renderItemGroup)}
+        ${repeat(enumValues(ItemGroup), identity, this.renderItemGroup)}
       </div>
     `;
   }
 
   private renderItemGroup = (group: ItemGroup) => {
+    if (group === ItemGroup.Sleights && (!this.character.psi && !this.character.sleights.length)) return ""
     return html`
       <character-view-item-group
         .character=${this.character}

@@ -9,7 +9,10 @@ import {
   closeWindow,
   openOrRenderWindow,
 } from '@src/components/window/window-controls';
-import { ResizeOption } from '@src/components/window/window-options';
+import {
+  ResizeOption,
+  SlWindowEventName,
+} from '@src/components/window/window-options';
 import {
   SubstanceApplicationMethod,
   SubstanceClassification,
@@ -107,6 +110,21 @@ export class Substance
 
   private get itemWindowKeys() {
     return Substance.appliedItemWindows.get(this.updater);
+  }
+
+  private getItemWindowKey(group: 'always' | 'severity', id: string) {
+    let { itemWindowKeys } = this;
+    if (!itemWindowKeys) {
+      itemWindowKeys = new Map();
+      Substance.appliedItemWindows.set(this.updater, itemWindowKeys);
+    }
+    const fullID = `${group}___${id}`;
+    let key = itemWindowKeys.get(fullID);
+    if (!key) {
+      key = {};
+      itemWindowKeys.set(fullID, key);
+    }
+    return key;
   }
 
   @LazyGetter()
@@ -270,17 +288,6 @@ export class Substance
     return this.epData.consumeOnUse;
   }
 
-  private getItemWindowKey(group: 'always' | 'severity', id: string) {
-    const { itemWindowKeys } = this;
-    const fullID = `${group}___${id}`;
-    let key = itemWindowKeys?.get(fullID);
-    if (!key) {
-      key = {};
-      itemWindowKeys?.set(fullID, key);
-    }
-    return key;
-  }
-
   private getInstancedItems(
     group: 'alwaysAppliedItems' | 'severityAppliedItems',
   ) {
@@ -298,10 +305,10 @@ export class Substance
         embedded: this.name,
         lockSource: false,
         alwaysDeletable: !this.appliedState && this.editable,
-        temporary: !!this.appliedState,
+        temporary: this.appliedState ? this.name : '',
         deleteSelf: this.appliedState ? undefined : () => ops.remove(data._id),
       };
-      // TODO have open form work like on physical tech and sync with updates
+      // TODO clean this up to avoid duplication
       if (data.type === ItemType.Trait) {
         const trait: Trait = new Trait({
           ...init,
@@ -312,8 +319,8 @@ export class Substance
             setData: createPipe(merge({ _id: data._id }), ops.update),
           }),
           openForm: this.appliedState
-            ? () =>
-                openOrRenderWindow({
+            ? () => {
+                const { win, windowExisted } = openOrRenderWindow({
                   key: this.getItemWindowKey(
                     group === 'alwaysAppliedItems' ? 'always' : 'severity',
                     data._id,
@@ -321,7 +328,21 @@ export class Substance
                   content: renderItemForm(trait),
                   resizable: ResizeOption.Vertical,
                   name: trait.fullName,
-                })
+                });
+                if (!windowExisted) {
+                  win.addEventListener(
+                    SlWindowEventName.Closed,
+                    () => {
+                      this.itemWindowKeys?.delete(
+                        `${
+                          group === 'alwaysAppliedItems' ? 'always' : 'severity'
+                        }___${data._id}`,
+                      );
+                    },
+                    { once: true },
+                  );
+                }
+              }
             : undefined,
         });
         return trait;
@@ -335,8 +356,8 @@ export class Substance
           setData: createPipe(merge({ _id: data._id }), ops.update),
         }),
         openForm: this.appliedState
-          ? () =>
-              openOrRenderWindow({
+          ? () => {
+              const { win, windowExisted } = openOrRenderWindow({
                 key: this.getItemWindowKey(
                   group === 'alwaysAppliedItems' ? 'always' : 'severity',
                   data._id,
@@ -344,7 +365,21 @@ export class Substance
                 content: renderItemForm(sleight),
                 resizable: ResizeOption.Vertical,
                 name: sleight.fullName,
-              })
+              });
+              if (!windowExisted) {
+                win.addEventListener(
+                  SlWindowEventName.Closed,
+                  () => {
+                    this.itemWindowKeys?.delete(
+                      `${
+                        group === 'alwaysAppliedItems' ? 'always' : 'severity'
+                      }___${data._id}`,
+                    );
+                  },
+                  { once: true },
+                );
+              }
+            }
           : undefined,
       });
       return sleight;
@@ -389,11 +424,25 @@ export class Substance
 
   createAwaitingOnset(method: SubstanceUseMethod) {
     const copy = this.getDataCopy();
-    const { awaitingOnset, applied, ...items } = copy.flags[EP.Name] || {};
+    const {
+      awaitingOnset,
+      applied,
+      alwaysAppliedItems,
+      severityAppliedItems,
+      ...more
+    } = copy.flags[EP.Name] || {};
     copy.flags = {
       ...copy.flags,
       [EP.Name]: {
-        ...items,
+        ...more,
+        alwaysAppliedItems: alwaysAppliedItems?.map((i) => ({
+          ...i,
+          _id: `${this.id}-always-${i._id}`,
+        })),
+        severityAppliedItems: severityAppliedItems?.map((i) => ({
+          ...i,
+          _id: `${this.id}-severity-${i._id}`,
+        })),
         awaitingOnset: {
           useMethod: method,
           onsetStartTime: currentWorldTimeMS(),
@@ -408,11 +457,25 @@ export class Substance
     state: Omit<AppliedSubstanceState, 'startTime' | 'finishedEffects'>,
   ) {
     const copy = this.getDataCopy();
-    const { awaitingOnset, applied, ...items } = copy.flags[EP.Name] || {};
+    const {
+      awaitingOnset,
+      applied,
+      alwaysAppliedItems,
+      severityAppliedItems,
+      ...more
+    } = copy.flags[EP.Name] || {};
     copy.flags = {
       ...copy.flags,
       [EP.Name]: {
-        ...items,
+        ...more,
+        alwaysAppliedItems: alwaysAppliedItems?.map((i) => ({
+          ...i,
+          _id: `${this.id}-always-${i._id}`,
+        })),
+        severityAppliedItems: severityAppliedItems?.map((i) => ({
+          ...i,
+          _id: `${this.id}-severity-${i._id}`,
+        })),
         applied: {
           ...state,
           startTime: currentWorldTimeMS(),
@@ -425,7 +488,8 @@ export class Substance
   }
 
   onDelete() {
-    this.itemWindowKeys?.forEach(closeWindow)
+    this.itemWindowKeys?.forEach(closeWindow);
+    Substance.appliedItemWindows.delete(this.updater);
     super.onDelete();
   }
 

@@ -17,9 +17,8 @@ sl-dropzone {
 .proxy-list {
   display: grid;
   grid-auto-rows: min-content;
-  gap: 0.1rem;
-  padding: 0.1rem 0;
   position: relative;
+
 }
 
 [part='header'] {

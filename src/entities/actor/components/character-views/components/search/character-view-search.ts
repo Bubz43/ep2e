@@ -8,16 +8,14 @@ import { localize } from '@src/foundry/localization';
 import { notEmpty, searchRegExp } from '@src/utility/helpers';
 import {
   customElement,
-  LitElement,
-  property,
   html,
   internalProperty,
+  LitElement,
+  property,
   query,
-  eventOptions,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { compact, identity, sortBy } from 'remeda';
-import { stopEvent } from 'weightless';
+import { sortBy } from 'remeda';
 import { ItemCard } from '../../../item-card/item-card';
 import styles from './character-view-search.scss';
 
@@ -42,7 +40,7 @@ export class CharacterViewSearch extends LitElement {
   }
 
   private getFilteredItems(regex: RegExp) {
-    return [...this.character.items.values()].filter((proxy) =>
+    return this.character.itemsIncludingTemporary.filter((proxy) =>
       proxy.matchRegexp(regex),
     );
   }

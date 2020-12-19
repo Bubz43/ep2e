@@ -1,15 +1,5 @@
-import { renderNumberField } from '@src/components/field/fields';
-import { renderUpdaterForm } from '@src/components/form/forms';
-import { enumValues } from '@src/data-enums';
 import { ActorType } from '@src/entities/entity-types';
-import { prettyMilliseconds } from '@src/features/time';
-import { localize } from '@src/foundry/localization';
-import { HealthEditor } from '@src/health/components/health-editor/health-editor';
-import type { ActorHealth } from '@src/health/health-mixin';
-import { hardeningTypes } from '@src/health/mental-health';
-import { HealOverTimeTarget, HealingSlot } from '@src/health/recovery';
 import { debounce } from '@src/utility/decorators';
-import { notEmpty } from '@src/utility/helpers';
 import { internalProperty, LitElement, property, query } from 'lit-element';
 import { html, TemplateResult } from 'lit-html';
 import { traverseActiveElements } from 'weightless';
@@ -18,6 +8,7 @@ import type { Character } from '../../proxies/character';
 import type { CharacterDrawerRenderer } from './character-drawer-render-event';
 
 export enum ItemGroup {
+  Sleights = "sleights",
   Traits = 'traits',
   Consumables = 'consumables',
   Equipped = 'equipped',

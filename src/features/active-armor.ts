@@ -43,7 +43,6 @@ export class ActiveArmor
   ) {
     super();
     const armorTypes = enumValues(ArmorType);
-    console.log(sources);
     for (const source of sources) {
       if (!source.layerable) this.incrementLayers();
       if (this.concealable) this.concealable = source.concealable;
