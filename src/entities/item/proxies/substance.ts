@@ -5,7 +5,10 @@ import {
   SubstanceAttack,
   SubstanceAttackData,
 } from '@src/combat/attacks';
-import { closeWindow, openOrRenderWindow } from '@src/components/window/window-controls';
+import {
+  closeWindow,
+  openOrRenderWindow,
+} from '@src/components/window/window-controls';
 import { ResizeOption } from '@src/components/window/window-options';
 import {
   SubstanceApplicationMethod,
@@ -68,6 +71,7 @@ export class Substance
         return 0;
     }
   }
+  private static appliedItemWindows = new WeakMap<object, Map<string, {}>>();
 
   readonly loaded;
   readonly appliedState: '' | 'awaitingOnset' | 'applied';
@@ -85,37 +89,45 @@ export class Substance
       : this.epFlags?.applied
       ? 'applied'
       : '';
+
+    if (this.appliedState) {
+      const { itemWindowKeys } = this;
+      if (notEmpty(itemWindowKeys)) {
+        const { alwaysAppliedItems, severityAppliedItems } = this;
+        for (const stringID of itemWindowKeys.keys()) {
+          const [namespace, id] = stringID.split('___');
+          const group =
+            namespace === 'always' ? alwaysAppliedItems : severityAppliedItems;
+          const item = id && group.get(id);
+          item && item.openForm?.();
+        }
+      }
+    }
+  }
+
+  private get itemWindowKeys() {
+    return Substance.appliedItemWindows.get(this.updater);
   }
 
   @LazyGetter()
   get awaitingOnsetTimeState() {
-    const { awaitingOnset } = this.epFlags || {}
+    const { awaitingOnset } = this.epFlags || {};
     // TODO Think of something better than throwing error, returning null is weird here
-    if (!awaitingOnset) throw new Error("Substance is not awaiting onset");
+    if (!awaitingOnset) throw new Error('Substance is not awaiting onset');
     return createLiveTimeState({
       img: this.nonDefaultImg,
       id: `awaiting-onset-${this.id}`,
       duration: Substance.onsetTime(awaitingOnset.useMethod),
       startTime: awaitingOnset.onsetStartTime,
       label: this.name,
-      updateStartTime: this.updater.prop("flags", EP.Name, "awaitingOnset", "onsetStartTime").commit
-    })
+      updateStartTime: this.updater.prop(
+        'flags',
+        EP.Name,
+        'awaitingOnset',
+        'onsetStartTime',
+      ).commit,
+    });
   }
-
-  // @LazyGetter()
-  // get appliedTimeState() {
-  //   const { applied } = this.epFlags || {}
-  //       // TODO Think of something better than throwing error, returning null is weird here
-  //   if (!applied) throw new Error("Substance is not applied");
-  //   return createLiveTimeState({
-  //     img: this.nonDefaultImg,
-  //     id: `awaiting-onset-${this.id}`,
-  //     duration: ,
-  //     startTime: applied.startTime,
-  //     label: this.name,
-  //     updateStartTime: this.updater.prop("flags", EP.Name, "applied", "startTime").commit
-  //   })
-  // }
 
   get applicationMethods(): ('app' | 'use' | SubstanceApplicationMethod)[] {
     return this.isChemical
@@ -258,6 +270,17 @@ export class Substance
     return this.epData.consumeOnUse;
   }
 
+  private getItemWindowKey(group: 'always' | 'severity', id: string) {
+    const { itemWindowKeys } = this;
+    const fullID = `${group}___${id}`;
+    let key = itemWindowKeys?.get(fullID);
+    if (!key) {
+      key = {};
+      itemWindowKeys?.set(fullID, key);
+    }
+    return key;
+  }
+
   private getInstancedItems(
     group: 'alwaysAppliedItems' | 'severityAppliedItems',
   ) {
@@ -268,14 +291,15 @@ export class Substance
         .commit((items) => datas(items || []) as typeof items),
     );
 
-    const proxyInit = (data: ItemEntity<ItemType.Trait> | ItemEntity<ItemType.Sleight>) => {
+    const proxyInit = (
+      data: ItemEntity<ItemType.Trait> | ItemEntity<ItemType.Sleight>,
+    ) => {
       const init = {
         embedded: this.name,
         lockSource: false,
         alwaysDeletable: !this.appliedState && this.editable,
         temporary: !!this.appliedState,
         deleteSelf: this.appliedState ? undefined : () => ops.remove(data._id),
-     
       };
       // TODO have open form work like on physical tech and sync with updates
       if (data.type === ItemType.Trait) {
@@ -287,14 +311,20 @@ export class Substance
             isEditable: () => this.editable,
             setData: createPipe(merge({ _id: data._id }), ops.update),
           }),
-          openForm: () => openOrRenderWindow({
-            key: data,
-            content: renderItemForm(trait),
-            resizable: ResizeOption.Vertical,
-            name: trait.fullName
-          })
-        })
-        return trait
+          openForm: this.appliedState
+            ? () =>
+                openOrRenderWindow({
+                  key: this.getItemWindowKey(
+                    group === 'alwaysAppliedItems' ? 'always' : 'severity',
+                    data._id,
+                  ),
+                  content: renderItemForm(trait),
+                  resizable: ResizeOption.Vertical,
+                  name: trait.fullName,
+                })
+            : undefined,
+        });
+        return trait;
       }
       const sleight: Sleight = new Sleight({
         ...init,
@@ -304,23 +334,24 @@ export class Substance
           isEditable: () => this.editable,
           setData: createPipe(merge({ _id: data._id }), ops.update),
         }),
-        openForm: () => openOrRenderWindow({
-          key: data,
-          content: renderItemForm(sleight),
-          resizable: ResizeOption.Vertical,
-          name: sleight.fullName
-        })
-      })
+        openForm: this.appliedState
+          ? () =>
+              openOrRenderWindow({
+                key: this.getItemWindowKey(
+                  group === 'alwaysAppliedItems' ? 'always' : 'severity',
+                  data._id,
+                ),
+                content: renderItemForm(sleight),
+                resizable: ResizeOption.Vertical,
+                name: sleight.fullName,
+              })
+          : undefined,
+      });
       return sleight;
     };
 
     for (const itemData of this.epFlags?.[group] || []) {
-
-      items.set(
-        itemData._id,
-        proxyInit(itemData)
-     
-      );
+      items.set(itemData._id, proxyInit(itemData));
     }
     return items;
   }
@@ -358,24 +389,26 @@ export class Substance
 
   createAwaitingOnset(method: SubstanceUseMethod) {
     const copy = this.getDataCopy();
-    const { awaitingOnset, applied, ...items} = copy.flags[EP.Name] || {}
+    const { awaitingOnset, applied, ...items } = copy.flags[EP.Name] || {};
     copy.flags = {
       ...copy.flags,
       [EP.Name]: {
         ...items,
         awaitingOnset: {
           useMethod: method,
-          onsetStartTime: currentWorldTimeMS()
-        }
-      }
-    }
-    copy.data.quantity = 1
-    return copy
+          onsetStartTime: currentWorldTimeMS(),
+        },
+      },
+    };
+    copy.data.quantity = 1;
+    return copy;
   }
 
-  createApplied(state: Omit<AppliedSubstanceState, "startTime" | "finishedEffects">) {
+  createApplied(
+    state: Omit<AppliedSubstanceState, 'startTime' | 'finishedEffects'>,
+  ) {
     const copy = this.getDataCopy();
-    const { awaitingOnset, applied, ...items} = copy.flags[EP.Name] || {}
+    const { awaitingOnset, applied, ...items } = copy.flags[EP.Name] || {};
     copy.flags = {
       ...copy.flags,
       [EP.Name]: {
@@ -384,16 +417,16 @@ export class Substance
           ...state,
           startTime: currentWorldTimeMS(),
           finishedEffects: [],
-        }
-      }
-    }
-    copy.data.quantity = 1
+        },
+      },
+    };
+    copy.data.quantity = 1;
     return copy;
   }
 
   onDelete() {
-    [...this.alwaysAppliedItems.values(), ...this.severityAppliedItems.values()].forEach(item => closeWindow(item.data))
-    super.onDelete()
+    this.itemWindowKeys?.forEach(closeWindow)
+    super.onDelete();
   }
 
   @LazyGetter()
@@ -403,22 +436,26 @@ export class Substance
     const items: (Trait | Sleight)[] = [];
     // TODO Damage/Conditions and apply effects to effects/duration
     const { alwaysApplied, severity, hasSeverity } = this;
-    let duration = alwaysApplied.duration
+    let duration = alwaysApplied.duration;
 
-    if (!applied?.finishedEffects?.includes("always")) {
+    if (!applied?.finishedEffects?.includes('always')) {
       effects.push({
         source: this.name,
-        effects: alwaysApplied.effects
-      })
-      items.push(...alwaysApplied.items.values())
+        effects: alwaysApplied.effects,
+      });
+      items.push(...alwaysApplied.items.values());
     }
-    if (hasSeverity && applied?.applySeverity && !applied.finishedEffects?.includes("severity")) {
+    if (
+      hasSeverity &&
+      applied?.applySeverity &&
+      !applied.finishedEffects?.includes('severity')
+    ) {
       effects.push({
-        source: `${this.name} (${localize("severity")})`,
-        effects: severity.effects
-      })
-      items.push(...severity.items.values())
-      if (severity.duration > duration) duration = severity.duration
+        source: `${this.name} (${localize('severity')})`,
+        effects: severity.effects,
+      });
+      items.push(...severity.items.values());
+      if (severity.duration > duration) duration = severity.duration;
     }
     return {
       effects,
@@ -428,10 +465,14 @@ export class Substance
         img: this.nonDefaultImg,
         label: this.name,
         duration,
-        startTime: applied?.startTime || (currentWorldTimeMS() - duration),
-        updateStartTime: this.updater.prop("flags", EP.Name, "applied", "startTime").commit
-      })
-    }
+        startTime: applied?.startTime || currentWorldTimeMS() - duration,
+        updateStartTime: this.updater.prop(
+          'flags',
+          EP.Name,
+          'applied',
+          'startTime',
+        ).commit,
+      }),
+    };
   }
-
 }
