@@ -1,5 +1,7 @@
 import type { MessageData } from '@src/chat/message-data';
 import { setDragDrop, DropType } from '@src/foundry/drag-and-drop';
+import { gmIsConnected } from '@src/foundry/misc-helpers';
+import { emitEPSocket } from '@src/foundry/socket';
 import { EP } from '@src/foundry/system';
 import { notEmpty } from '@src/utility/helpers';
 import { findActor, findToken } from './find-entities';
@@ -22,8 +24,12 @@ export class ChatMessageEP extends ChatMessage {
     if (!this.#updater) {
       this.#updater = new UpdateStore({
         getData: () => this.data,
-        setData: this.update.bind(this),
-        isEditable: () => this.editable,
+        setData: (update) => {
+          if (!this.editable)
+            emitEPSocket({ messageData: { ...update, _id: this.data._id } });
+          else this.update(update);
+        },
+        isEditable: gmIsConnected,
       });
     }
     return this.#updater;

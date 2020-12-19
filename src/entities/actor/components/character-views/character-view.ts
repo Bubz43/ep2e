@@ -45,7 +45,7 @@ export class CharacterView extends CharacterViewBase {
 
   render() {
     const { masterDevice } = this.character.equippedGroups;
-    const { awaitingOnsetSubstances, appliedSubstances, psi, conditions, pools } = this.character;
+    const { awaitingOnsetSubstances, activeSubstances: appliedSubstances, psi, conditions, pools } = this.character;
 
     return html`
       <character-view-header

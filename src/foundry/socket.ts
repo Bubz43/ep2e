@@ -1,7 +1,9 @@
 import type { CombatantSocket } from '@src/combat/combatant-commands';
 import type { ItemOperations } from '@src/entities/actor/actor';
+import type { ChatMessageEP } from '@src/entities/chat-message';
 import type { ActorIdentifiers } from '@src/entities/find-entities';
 import { once } from 'remeda';
+import type { DeepPartial } from 'utility-types';
 import { EP } from './system';
 
 type ItemChange = {
@@ -15,6 +17,7 @@ export type SystemSocketData = {
     | ({ actorId: string } & ItemChange)
     | ({ tokenId: string; sceneId: string } & ItemChange);
   actorChanged: ActorIdentifiers;
+  messageData: DeepPartial<ChatMessageEP["data"]> & { _id: string }
 };
 
 type SystemSocketEvent = keyof SystemSocketData;

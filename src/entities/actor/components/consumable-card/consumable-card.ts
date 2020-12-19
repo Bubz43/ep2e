@@ -172,13 +172,13 @@ export class ConsumableCard extends LazyRipple(LitElement) {
       </div>
       ${this.expanded
         ? html`
-            ${renderAutoForm({
+            ${item.type !== ItemType.Substance || !item.appliedState ? renderAutoForm({
               classes: 'quantity-form',
               disabled: !editable,
               props: { quantity: item.quantity },
               update: item.updateQuantity.commit,
               fields: ({ quantity }) => renderNumberField(quantity, { min: 0 }),
-            })}
+            }) : ""}
             <enriched-html
               class="description"
               .content=${item.description ||

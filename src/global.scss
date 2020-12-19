@@ -35,6 +35,7 @@ body {
   @include truncate(250px);
 }
 
+
 mwc-dialog {
   --mdc-theme-surface: #{lightv(var(--color-bg-alt), 1.2)};
   > * {
@@ -524,7 +525,7 @@ sl-tooltip {
   background: alphav(var(--color-bg), 0.9);
   width: calc(100% - 1rem);
   color: var(--color-text);
-  border: 2px groove var(--color-border) !important;
+  border: 2px solid var(--color-border) !important;
   padding: 0;
   margin: 0 0 0.25rem 0 !important;
   border-radius: 0.5rem 0px 0px 0.25rem !important;

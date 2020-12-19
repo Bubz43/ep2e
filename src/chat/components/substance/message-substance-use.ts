@@ -34,8 +34,9 @@ export class MessageSubstanceUse extends MessageElement {
   applySubstance() {
     pickOrDefaultActor(async (actor) => {
       if (actor.proxy.type === ActorType.Character) {
+        
         this.setData({
-          appliedTo: (this.substanceUse.appliedTo || []).concat(actor.name),
+          appliedTo: [...(this.substanceUse.appliedTo || []), actor.tokenOrLocalInfo.name],
         });
 
         actor.itemOperations.add(
@@ -50,7 +51,7 @@ export class MessageSubstanceUse extends MessageElement {
     const index = Number((ev.currentTarget as HTMLElement).dataset.index)
     const newList = [...this.substanceUse.appliedTo];
     newList.splice(index, 1);
-    this.setData({ appliedTo: newList });
+    this.getUpdater('substanceUse').commit({ appliedTo: newList });
   }
 
   render() {

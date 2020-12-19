@@ -103,6 +103,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
   private async startSubstance(id: string) {
     const substance = this.character.awaitingOnsetSubstances.find(matchID(id));
     if (substance) {
+      
       const applySeverity = true;
       // TODO Check vs severity
       const {
@@ -157,13 +158,15 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
         });
       }
       const { add, remove } = this.character.itemOperations;
-      await add(
-        substance.createApplied({
-          applySeverity,
-          modifyingEffects: [],
-        }),
-      );
       await remove(id);
+      requestAnimationFrame(() => {
+        add(
+          substance.createApplied({
+            applySeverity,
+            modifyingEffects: [],
+          }),
+        );
+     })
     }
   }
 
@@ -189,7 +192,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
   private renderAppliedSubstances() {
     const {
       awaitingOnsetSubstances,
-      appliedSubstances,
+      activeSubstances: appliedSubstances,
       disabled,
     } = this.character;
     return html`
@@ -197,7 +200,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
         ? html`
             <section>
               <sl-header
-                heading="=${localize('applied')} ${localize('substances')}"
+                heading="${localize('applied')} ${localize('substances')}"
               ></sl-header>
               <sl-animated-list>
                 ${repeat(

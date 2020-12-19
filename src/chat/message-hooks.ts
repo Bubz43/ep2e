@@ -5,6 +5,8 @@ import {
   findActor,
 } from '@src/entities/find-entities';
 import { mutateEntityHook, MutateEvent } from '@src/foundry/hook-setups';
+import { isGamemaster } from '@src/foundry/misc-helpers';
+import { addEPSocketHandler } from '@src/foundry/socket';
 import { EP } from '@src/foundry/system';
 import { html, render, nothing } from 'lit-html';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
@@ -31,6 +33,13 @@ mutateEntityHook({
 const iconTemplate = html`<i
   class="far fa-eye-slash"
 ></i>`.getTemplateElement();
+
+
+addEPSocketHandler("messageData", data => {
+  if (isGamemaster()) {
+    game.messages.get(data._id)?.update(data)
+  }
+})
 
 export const onChatMessageRender = (message: ChatMessageEP, [el]: JQuery) => {
   if (!el) return;

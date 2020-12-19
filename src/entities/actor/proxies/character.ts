@@ -94,7 +94,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   readonly equipped: EquippableItem[] = [];
   readonly consumables: ConsumableItem[] = [];
   readonly awaitingOnsetSubstances: Substance[] = [];
-  readonly appliedSubstances: Substance[] = [];
+  readonly activeSubstances: Substance[] = [];
   readonly stashed: (EquippableItem | ConsumableItem)[] = [];
 
   private appliedHealthEffects = false;
@@ -248,9 +248,9 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   @LazyGetter()
   get itemsIncludingTemporary() {
     return [
-      ...this.items.values(),
-      ...this.appliedSubstances.flatMap((i) => i.appliedInfo.items),
-    ];
+      [...this.items.values()].filter(i => i.type === ItemType.Substance && i.appliedState),
+      this.activeSubstances.flatMap((i) => i.appliedInfo.items),
+    ].flat();
   }
 
   @LazyGetter()
@@ -321,7 +321,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         0,
       ) +
       this.awaitingOnsetSubstances.length +
-      this.appliedSubstances.length
+      this.activeSubstances.length
     );
   }
 
@@ -344,7 +344,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       this.awaitingOnsetSubstances.some(
         ({ awaitingOnsetTimeState }) => !awaitingOnsetTimeState.remaining,
       ) ||
-      this.appliedSubstances.some(
+      this.activeSubstances.some(
         ({ appliedInfo }) => !appliedInfo.timeState.remaining,
       )
     );
@@ -654,7 +654,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     for (const item of this.items.values()) {
       if (item.type === ItemType.Substance && item.appliedState) {
         if (item.appliedState === 'applied') {
-          this.appliedSubstances.push(item);
+          this.activeSubstances.push(item);
           const { effects, items } = item.appliedInfo;
           this._appliedEffects.add(effects);
           for (const substanceItem of items) {

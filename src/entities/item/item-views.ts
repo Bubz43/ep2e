@@ -221,7 +221,7 @@ export const renderItemCard = (
         ?expanded=${expanded}
         ?noAnimate=${noAnimate}
         ?animateInitial=${animateInitial}
-        ?allowDrag=${allowDrag}
+        ?allowDrag=${item.type === ItemType.Substance && item.appliedState ? false : allowDrag}
         @dragstart=${handleDragStart}
       ></consumable-card>
     `;
