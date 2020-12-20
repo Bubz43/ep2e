@@ -4,6 +4,7 @@ import type { ItemEntity } from '@src/entities/models';
 import type { ArmorType } from '@src/features/active-armor';
 import type { RolledFormula } from '@src/foundry/rolls';
 import type { HealthModification, HealthType } from '@src/health/health';
+import type { RollMultiplier } from '@src/health/health-changes';
 import type { StressType } from '@src/health/mental-health';
 import type { RequireAtLeastOne } from 'type-fest';
 
@@ -23,6 +24,8 @@ export type DamageMessageData = {
   reduceAVbyDV: boolean;
   armorUsed: ArmorType[];
   cumulativeDotID?: string;
+  multiplier?: RollMultiplier;
+
 };
 
 export type MessageHealData = RequireAtLeastOne<

@@ -56,7 +56,10 @@ export class EffectEditor extends LitElement {
   firstUpdated() {
     this.addEventListener(
       'keydown',
-      (ev) => ev.key === 'Enter' && this.submitButton.click(),
+      (ev) =>
+        ev.key === 'Enter' &&
+        ev.composedPath().some((el) => el instanceof HTMLInputElement) &&
+        this.submitButton.click(),
       { capture: true },
     );
   }

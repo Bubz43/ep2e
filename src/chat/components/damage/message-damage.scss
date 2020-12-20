@@ -25,3 +25,21 @@ mwc-button[unelevated] {
   color: var(--color-text-lighter);
   padding-left: 0.5ch;
 }
+
+.multiplier {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid alphav(var(--color-border), 0.5);
+  margin-top: 0.5rem;
+  padding: 0 0.25rem;
+  span {
+    color: var(--color-text-lighter);
+  }
+  .radios {
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+  
+  }
+}

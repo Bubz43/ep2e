@@ -21,14 +21,15 @@ import {
 import type { AddEffects } from '@src/entities/applied-effects';
 import { ItemType } from '@src/entities/entity-types';
 import {
-  AppliedSubstanceState,
+  ActiveSubstanceState,
   DrugAppliedItem,
   ItemEntity,
   setupItemOperations,
   SubstanceItemFlags,
 } from '@src/entities/models';
 import { UpdateStore } from '@src/entities/update-store';
-import { stringID, uniqueStringID } from '@src/features/feature-helpers';
+import type { Effect } from '@src/features/effects';
+import { addFeature, StringID, stringID, uniqueStringID } from '@src/features/feature-helpers';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
 import { createLiveTimeState, currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
@@ -463,7 +464,7 @@ export class Substance
     return;
   }
 
-  updateAppliedState(newState: AppliedSubstanceState) {
+  updateAppliedState(newState: ActiveSubstanceState) {
     return this.updater.prop('flags', EP.Name, 'active').commit(newState);
   }
 
@@ -505,18 +506,24 @@ export class Substance
     return copy;
   }
 
-  makeActive(
-    state: Omit<AppliedSubstanceState, 'startTime' | 'finishedEffects'>,
-  ) {
+  makeActive(modifyingEffects: Effect[]) {
+    const hidden = this.epFlags?.awaitingOnset?.hidden ?? false;
+    const state: ActiveSubstanceState = {
+      modifyingEffects: modifyingEffects.reduce(
+        (accum, effect) => addFeature(accum, effect),
+        [] as StringID<Effect>[],
+      ),
+      applySeverity: false,
+      hidden,
+      startTime: currentWorldTimeMS(),
+      finishedEffects: [],
+    };
+
     return this.updater
       .prop('flags', EP.Name, 'awaitingOnset')
       .store(null)
       .prop('flags', EP.Name, 'active')
-      .commit({
-        ...state,
-        startTime: currentWorldTimeMS(),
-        finishedEffects: [],
-      });
+      .commit(state);
   }
 
   onDelete() {

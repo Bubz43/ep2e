@@ -7,16 +7,9 @@
 
 :host {
   display: block;
+  border-top: 1px solid alphav(var(--color-border), 0.5);
 }
 
-.rolls {
-  [divider] {
-    border-color: var(--color-border);
-    &:first-of-type {
-      margin: 0.5rem 0 0;
-    }
-  }
-}
 
 .roll-info {
   display: flex;

@@ -235,7 +235,7 @@ export type BlueprintSource = {
   [key in CopyableItemType]: ItemEntity<key>;
 }[CopyableItemType];
 
-export type AppliedSubstanceState = {
+export type ActiveSubstanceState = {
   startTime: number;
   applySeverity: boolean;
   modifyingEffects: StringID<Effect>[];
@@ -252,7 +252,7 @@ type ItemFlags<T extends ItemType> = T extends ItemType.Psi
         onsetStartTime: number;
         hidden: boolean;
       };
-      active: null | AppliedSubstanceState;
+      active: null | ActiveSubstanceState;
     }
   : T extends ItemType.Explosive
   ? { substance: null | [ItemEntity<ItemType.Substance>] }

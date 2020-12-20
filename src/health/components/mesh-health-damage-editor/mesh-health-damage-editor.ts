@@ -7,7 +7,8 @@ import { renderAutoForm } from '@src/components/form/forms';
 import { localize } from '@src/foundry/localization';
 import type { AppMeshHealth } from '@src/health/app-mesh-health';
 import type { MeshHealth } from '@src/health/full-mesh-health';
-import { createMeshDamage, MeshDamage } from '@src/health/health-changes';
+import { formatDamageType } from '@src/health/health';
+import { createMeshDamage, MeshDamage, RollMultiplier } from '@src/health/health-changes';
 import { customElement, html } from 'lit-element';
 import { HealthEditBase } from '../health-edit-base';
 
@@ -40,6 +41,37 @@ export class MeshHealthDamageEditor extends HealthEditBase<
               { min: 0 },
             ),
           ],
+        })}
+           ${renderAutoForm({
+          props: { multiplier: String(this.editableDamage.multiplier) },
+          update: ({ multiplier }) =>
+            (this.editableDamage = {
+              ...this.editableDamage,
+              multiplier: (Number(multiplier) || 1) as RollMultiplier,
+            }),
+          fields: ({ multiplier }) => html`
+            <div class="multiplier">
+              <span>${localize('multiplier')}</span>
+              <div class="radios">
+                ${[0.5, 1, 2]
+                  .map(String)
+                  .map(
+                    (mp) => html`
+                      <mwc-formfield label=${mp}>
+                        <mwc-radio
+                          name=${multiplier.prop}
+                          value=${mp}
+                          ?checked=${mp === multiplier.value}
+                        ></mwc-radio
+                      ></mwc-formfield>
+                    `,
+                  )}
+              </div>
+              ${this.editableDamage.multiplier !== 1 ? html`
+        <span>${formatDamageType(this.health.type)} ${this.damageValue}</span>
+        ` : ""}
+            </div>
+          `,
         })}
         ${this.armor
           ? html`<div class="armor-toggles">

@@ -1,3 +1,4 @@
+import type { MultiSelectedEvent } from '@material/mwc-list/mwc-list-foundation';
 import { renderLabeledCheckbox } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { enumValues, SubstanceApplicationMethod } from '@src/data-enums';
@@ -8,7 +9,8 @@ import {
 } from '@src/entities/item/proxies/substance';
 import { PoolItem } from '@src/features/components/pool-item/pool-item';
 import { conditionIcons } from '@src/features/conditions';
-import { idProp } from '@src/features/feature-helpers';
+import { formatEffect, Source } from '@src/features/effects';
+import { idProp, matchID } from '@src/features/feature-helpers';
 import type { ReadonlyPool } from '@src/features/pool';
 import { poolActionOptions } from '@src/features/pools';
 import { prettyMilliseconds } from '@src/features/time';
@@ -26,7 +28,7 @@ import { customElement, html, internalProperty } from 'lit-element';
 import { nothing, TemplateResult } from 'lit-html';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
-import { identity } from 'remeda';
+import { compact, identity } from 'remeda';
 import { traverseActiveElements } from 'weightless';
 import { CharacterDrawerRenderer } from './character-drawer-render-event';
 import { CharacterViewBase, ItemGroup } from './character-view-base';
@@ -139,6 +141,57 @@ export class CharacterView extends CharacterViewBase {
       }
     }
   });
+
+  private openSubstanceActivationDialog(id: string) {
+    const substance = this.character.awaitingOnsetSubstances.find(matchID(id));
+    if (!substance) return;
+
+    const { substanceEffects } = this.character.appliedEffects;
+
+    if (substanceEffects.length === 0) {
+      substance.makeActive([]);
+      return;
+    }
+
+    let usingEffects: number[] = [];
+
+    this.dispatchEvent(
+      new RenderDialogEvent(html`
+        <mwc-dialog heading="${localize('activate')} ${substance.appliedName}">
+          <mwc-list
+            multi
+            @selected=${(ev: MultiSelectedEvent) =>
+              (usingEffects = [...ev.detail.index])}
+          >
+            ${substanceEffects.map((effect) => {
+              return html`
+                <mwc-check-list-item twoline>
+                  <span>${effect[Source]}</span>
+                  <span slot="secondary">${formatEffect(effect)}</span>
+                </mwc-check-list-item>
+              `;
+            })}
+          </mwc-list>
+
+          <mwc-button slot="secondaryAction" dialogAction="cancel"
+            >${localize('cancel')}</mwc-button
+          >
+          <mwc-button
+            raised
+            slot="primaryAction"
+            dialogAction="start"
+            @click=${() => {
+              const finalEffects = compact(
+                usingEffects.map((index) => substanceEffects[index]),
+              );
+              substance.makeActive(finalEffects);
+            }}
+            >${localize('start')}</mwc-button
+          >
+        </mwc-dialog>
+      `),
+    );
+  }
 
   render() {
     const { masterDevice } = this.character.equippedGroups;
@@ -283,10 +336,11 @@ export class CharacterView extends CharacterViewBase {
                                       icon="play_arrow"
                                       data-tooltip=${localize('start')}
                                       @mouseover=${tooltip.fromData}
-                                      @click=${() =>
-                                        this.character.startSubstance(
+                                      @click=${() => {
+                                        this.openSubstanceActivationDialog(
                                           substance.id,
-                                        )}
+                                        );
+                                      }}
                                     ></mwc-icon-button>
                                   </character-view-time-item>
                                 `,

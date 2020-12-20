@@ -1,4 +1,5 @@
 import {
+  emptyTextDash,
   renderFormulaField,
   renderNumberField,
   renderSelectField,
@@ -7,7 +8,8 @@ import {
 import { renderAutoForm } from '@src/components/form/forms';
 import { enumValues } from '@src/data-enums';
 import { localize } from '@src/foundry/localization';
-import { createStressDamage, StressDamage } from '@src/health/health-changes';
+import { formatDamageType } from '@src/health/health';
+import { createStressDamage, RollMultiplier, StressDamage } from '@src/health/health-changes';
 import {
   hardeningTypes,
   MentalHealth,
@@ -53,7 +55,7 @@ export class MentalHealthStressEditor extends HealthEditBase<
         update: (changed, orig) =>
           (this.editableDamage = { ...orig, ...changed }),
         fields: ({ stressType }) =>
-          renderSelectField(stressType, enumValues(StressType)),
+          renderSelectField(stressType, enumValues(StressType), emptyTextDash),
       })}
 
       <ul class="hardening">
@@ -91,6 +93,37 @@ export class MentalHealthStressEditor extends HealthEditBase<
               { min: 0 },
             ),
           ],
+        })}
+           ${renderAutoForm({
+          props: { multiplier: String(this.editableDamage.multiplier) },
+          update: ({ multiplier }) =>
+            (this.editableDamage = {
+              ...this.editableDamage,
+              multiplier: (Number(multiplier) || 1) as RollMultiplier,
+            }),
+          fields: ({ multiplier }) => html`
+            <div class="multiplier">
+              <span>${localize('multiplier')}</span>
+              <div class="radios">
+                ${[0.5, 1, 2]
+                  .map(String)
+                  .map(
+                    (mp) => html`
+                      <mwc-formfield label=${mp}>
+                        <mwc-radio
+                          name=${multiplier.prop}
+                          value=${mp}
+                          ?checked=${mp === multiplier.value}
+                        ></mwc-radio
+                      ></mwc-formfield>
+                    `,
+                  )}
+              </div>
+              ${this.editableDamage.multiplier !== 1 ? html`
+        <span>${formatDamageType(this.health.type)} ${this.damageValue}</span>
+        ` : ""}
+            </div>
+          `,
         })}
         ${this.armor
           ? html` <div class="armor-toggles">

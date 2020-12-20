@@ -1,5 +1,7 @@
 import type { DamageMessageData } from '@src/chat/message-data';
 import type { UsedRollPartsEvent } from '@src/combat/components/rolled-formulas-list/used-roll-parts-event';
+import { renderRadioFields } from '@src/components/field/fields';
+import { renderAutoForm } from '@src/components/form/forms';
 import { pickOrDefaultActor } from '@src/entities/find-entities';
 import { localize } from '@src/foundry/localization';
 import { cleanFormula } from '@src/foundry/rolls';
@@ -9,6 +11,7 @@ import {
   createMeshDamage,
   createPhysicalDamage,
   createStressDamage,
+  RollMultiplier,
 } from '@src/health/health-changes';
 import { notEmpty } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
@@ -18,6 +21,7 @@ import {
   property,
   html,
   internalProperty,
+  PropertyValues,
 } from 'lit-element';
 import { omit } from 'remeda';
 import styles from './message-damage.scss';
@@ -36,6 +40,15 @@ export class MessageDamage extends LitElement {
 
   @internalProperty() usedRollParts?: ReadonlySet<number>;
 
+  @internalProperty() multiplier: RollMultiplier = 1;
+
+  update(changedProps: PropertyValues) {
+    if (changedProps.has('damage')) {
+      this.multiplier = this.damage.multiplier ?? 1;
+    }
+    super.update(changedProps);
+  }
+
   toggleFormulas() {
     this.viewFormulas = !this.viewFormulas;
   }
@@ -45,7 +58,11 @@ export class MessageDamage extends LitElement {
   }
 
   private applyDamage() {
-    const data = { ...this.totals, ...omit(this.damage, ['rolledFormulas']) };
+    const data = {
+      ...this.totals,
+      ...omit(this.damage, ['rolledFormulas']),
+      multiplier: this.multiplier,
+    };
     pickOrDefaultActor((actor) =>
       HealthEditor.openWindow({
         actor,
@@ -83,7 +100,7 @@ export class MessageDamage extends LitElement {
   }
 
   render() {
-    const { totals } = this;
+    const { totals, multiplier } = this;
     const { damageType } = this.damage;
     return html`
       <mwc-button
@@ -92,7 +109,8 @@ export class MessageDamage extends LitElement {
         class="stress-value"
         @click=${this.applyDamage}
       >
-        ${formatDamageType(damageType)}: ${totals.damageValue}
+        ${formatDamageType(damageType)}:
+        ${Math.ceil(totals.damageValue * multiplier)}
       </mwc-button>
 
       ${notEmpty(this.damage.rolledFormulas)
@@ -106,12 +124,38 @@ export class MessageDamage extends LitElement {
         : ''}
 
       <div class="damage-info">
-        ${totals.formula} ${localize(damageType)}
+        ${multiplier === 1 || !totals.formula
+          ? totals.formula
+          : `(${totals.formula}) x${this.multiplier}`}
+        ${localize(damageType)}
         ${localize(damageType === HealthType.Mental ? 'stress' : 'damage')}
       </div>
 
       ${this.viewFormulas
         ? html`
+            ${renderAutoForm({
+              props: { multiplier: String(this.multiplier) },
+              update: ({ multiplier }) =>
+                (this.multiplier = (Number(multiplier) || 1) as RollMultiplier),
+              fields: ({ multiplier }) => html`
+                <div class="multiplier">
+                  <span>${localize('multiplier')}</span>
+                  <div class="radios">
+                    ${([0.5, 1, 2]).map(String).map(
+                      (mp) => html`
+                        <mwc-formfield label=${mp}>
+                          <mwc-radio
+                            name=${multiplier.prop}
+                            value=${mp}
+                            ?checked=${mp === multiplier.value}
+                          ></mwc-radio
+                        ></mwc-formfield>
+                      `,
+                    )}
+                  </div>
+                </div>
+              `,
+            })}
             <rolled-formulas-list
               .rolledFormulas=${this.damage.rolledFormulas}
               @used-roll-parts=${this.setUsedRollParts}

@@ -181,29 +181,29 @@ export class Character extends ActorProxyBase<ActorType.Character> {
           },
         });
       }
-      if (applySeverity && hasSeverity && severity.hasInstantDamage) {
-        const {
-          label,
-          damageType,
-          attackTraits,
-          perTurn,
-          rollFormulas,
-          ...attack
-        } = severity.damage;
+      // if (applySeverity && hasSeverity && severity.hasInstantDamage) {
+      //   const {
+      //     label,
+      //     damageType,
+      //     attackTraits,
+      //     perTurn,
+      //     rollFormulas,
+      //     ...attack
+      //   } = severity.damage;
 
-        await createMessage({
-          data: {
-            header: { ...messageHeader, hidden },
-            damage: {
-              ...attack,
-              rolledFormulas: rollLabeledFormulas(rollFormulas),
-              source: `${name} ${label}`,
-              damageType,
-            },
-          },
-        });
-      }
-      substance.makeActive({ applySeverity, modifyingEffects: [], hidden });
+      //   await createMessage({
+      //     data: {
+      //       header: { ...messageHeader, hidden },
+      //       damage: {
+      //         ...attack,
+      //         rolledFormulas: rollLabeledFormulas(rollFormulas),
+      //         source: `${name} ${label}`,
+      //         damageType,
+      //       },
+      //     },
+      //   });
+      // }
+      substance.makeActive([]);
     }
   }
 

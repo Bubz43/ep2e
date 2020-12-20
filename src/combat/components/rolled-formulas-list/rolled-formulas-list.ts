@@ -47,7 +47,6 @@ export class RolledFormulasList extends LitElement {
   render() {
     return html`
       <mwc-list class="rolls" @selected=${this.setUsed} multi>
-        <li divider></li>
         ${this.rolledFormulas.map(
           ({ label, roll }, index) => html`
             <mwc-check-list-item

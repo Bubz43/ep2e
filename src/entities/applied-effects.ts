@@ -14,6 +14,7 @@ import {
   Source,
   SourcedEffect,
   SuccessTestEffect,
+  UniqueEffectType,
 } from '@src/features/effects';
 import type { Movement, MovementRate } from '@src/features/movement';
 import { SkillType } from '@src/features/skills';
@@ -25,7 +26,7 @@ import type {
   HealthStatMods,
 } from '@src/health/health';
 import { LazyGetter } from 'lazy-get-decorator';
-import { pipe, concat, filter, allPass, clamp, groupBy } from 'remeda';
+import { pipe, concat, filter, allPass, clamp, groupBy, compact } from 'remeda';
 
 export type AddEffects = {
   source: string;
@@ -140,6 +141,15 @@ export class AppliedEffects {
       recovery,
       timeframeMultipliers,
     };
+  }
+
+  get substanceEffects() {
+    return [
+      ...this.getGroup(EffectType.Misc).filter(
+        (effect) => effect.unique === UniqueEffectType.HalveDrugEffects,
+      ),
+      ...(this.durationEffects.drugOrToxin || []),
+    ];
   }
 
   @LazyGetter()
