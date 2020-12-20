@@ -29,26 +29,7 @@ sl-animated-list {
   display: flex;
 }
 
-.task-creator {
-  margin: 1rem;
-  padding: 0 1rem 1rem;
-  border: 1px solid var(--color-grey);
-  background: var(--color-bg);
-  border-radius: 4px;
-  @include animate-css(fadeInLeft, 300ms);
-  sl-form {
-    grid-template-columns: 1fr 1fr;
-    > sl-field:first-of-type {
-      grid-column: span 2;
-    }
-  }
-}
 
-.task-creator-toggle {
-  &.active {
-    color: var(--color-secondary);
-  }
-}
 
 .task-actions {
   position: relative;

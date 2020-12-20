@@ -2,21 +2,13 @@ import { getCurrentEnvironment } from '@src/features/environment';
 import {
   mutateEntityHook,
   MutateEvent,
-  mutatePlaceableHook,
+  mutatePlaceableHook
 } from '@src/foundry/hook-setups';
 import { localize } from '@src/foundry/localization';
-import { gameSettings, overlay } from '@src/init';
-import { customElement, html, internalProperty, LitElement } from 'lit-element';
-import { render } from 'lit-html';
-import { openDialog } from '@src/open-dialog';
+import { gameSettings } from '@src/init';
+import { RenderDialogEvent } from '@src/open-dialog';
+import { customElement, html, LitElement } from 'lit-element';
 import styles from './scene-view.scss';
-import { renderAutoForm, renderSubmitForm } from '@src/components/form/forms';
-import {
-  advanceWorldTime,
-  CommonInterval,
-  currentWorldTimeMS,
-} from '@src/features/time';
-import { renderTimeField } from '@src/components/field/fields';
 
 @customElement('scene-view')
 export class SceneView extends LitElement {
@@ -64,28 +56,13 @@ export class SceneView extends LitElement {
 
   private openFormsDialog() {
     if (!game.user.isGM) return;
-    openDialog((dialog) => {
-      dialog.style.setProperty('--mdc-dialog-min-width', '600px');
-      return render(
-        html`<environment-forms></environment-forms>
-          <mwc-button
-            slot="primaryAction"
-            dialogAction="close"
-            label=${localize('close')}
-          ></mwc-button> `,
-        dialog,
-      );
-    });
-    // openDialog({
-    //   $content: (dialog) => {
-    //     dialog.style.setProperty('--dialog-width:', '600px');
-    //     dialog.style.zIndex = '50';
-    //     dialog.slot = 'foundry-apps';
-    //     return render(html`<environment-forms></environment-forms>`, dialog);
-    //   },
-    //   center: true,
-    //   $container: overlay,
-    // });
+    this.dispatchEvent(new RenderDialogEvent(html`
+    <mwc-dialog hideActions open style="--mdc-dialog-min-width: 600px">
+    <environment-forms></environment-forms>
+    </mwc-dialog>
+    `))
+   
+
   }
 
   render() {

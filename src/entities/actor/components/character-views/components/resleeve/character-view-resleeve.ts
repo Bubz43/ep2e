@@ -12,7 +12,7 @@ import { userCan } from '@src/foundry/misc-helpers';
 import { addEPSocketHandler } from '@src/foundry/socket';
 import { EP } from '@src/foundry/system';
 import { tooltip } from '@src/init';
-import { openDialog } from '@src/open-dialog';
+import { RenderDialogEvent } from '@src/open-dialog';
 import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import {
@@ -94,11 +94,9 @@ export class CharacterViewResleeve extends LitElement {
         if (ev instanceof CustomEvent && 'action' in ev.detail) {
           if (ev.detail.action !== 'confirm') return;
         } else {
-          return openDialog((dialog) => {
-            dialog.heading = `${localize('confirm')} ${localize('resleeve')}`;
-            render(
-              html`
-                <p>
+          this.dispatchEvent(new RenderDialogEvent(html`
+          <mwc-dialog heading="${localize("confirm")} ${localize("resleeve")}" @closed=${this.resleeve.bind(this)}>
+          <p>
                   ${format('SleevePermanentlyDeleted', { name: sleeve.name })}
                 </p>
                 <mwc-button
@@ -111,13 +109,33 @@ export class CharacterViewResleeve extends LitElement {
                   dialogAction="confirm"
                   label=${localize('confirm')}
                 ></mwc-button>
-              `,
-              dialog,
-            );
-            dialog.addEventListener('closed', this.resleeve.bind(this), {
-              once: true,
-            });
-          });
+        </mwc-dialog>
+          `))
+          return
+          // return openDialog((dialog) => {
+          //   dialog.heading = `${localize('confirm')} ${localize('resleeve')}`;
+          //   render(
+          //     html`
+          //       <p>
+          //         ${format('SleevePermanentlyDeleted', { name: sleeve.name })}
+          //       </p>
+          //       <mwc-button
+          //         slot="secondaryAction"
+          //         dialogAction="cancel"
+          //         label=${localize('cancel')}
+          //       ></mwc-button>
+          //       <mwc-button
+          //         slot="primaryAction"
+          //         dialogAction="confirm"
+          //         label=${localize('confirm')}
+          //       ></mwc-button>
+          //     `,
+          //     dialog,
+          //   );
+          //   dialog.addEventListener('closed', this.resleeve.bind(this), {
+          //     once: true,
+          //   });
+          // });
         }
       } else await sleeve.createActor();
       if (sleeve.type !== this.selectedSleeve.type) {

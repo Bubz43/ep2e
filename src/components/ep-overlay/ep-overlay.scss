@@ -40,6 +40,14 @@
   }
 }
 
+mwc-dialog {
+  z-index: 100000;
+  pointer-events: all;
+  > * {
+    pointer-events: all;
+  }
+}
+
 scene-view {
   grid-area: scene;
 }

@@ -4,6 +4,7 @@ import { positionApp } from '@src/foundry/foundry-apps';
 import { applicationHook } from '@src/foundry/hook-setups';
 import { activeCanvas } from '@src/foundry/misc-helpers';
 import { tooltip } from '@src/init';
+import { RenderDialogEvent } from '@src/open-dialog';
 import { debounceFn } from '@src/utility/decorators';
 import { resizeElement, toggleTouchAction } from '@src/utility/dom';
 import { notEmpty } from '@src/utility/helpers';
@@ -15,7 +16,7 @@ import {
   property,
   query,
 } from 'lit-element';
-import { render } from 'lit-html';
+import { render, TemplateResult } from 'lit-html';
 import { cache } from 'lit-html/directives/cache';
 import { guard } from 'lit-html/directives/guard';
 import { first } from 'remeda';
@@ -67,7 +68,26 @@ export class EPOverlay extends LitElement {
   @query('event-list', true)
   eventList!: EventList;
 
+  @internalProperty() private dialogTemplate: TemplateResult | null = null;
+
+
   firstUpdated() {
+    this.addEventListener(RenderDialogEvent.is, async (ev) => {
+      ev.stopPropagation();
+      this.dialogTemplate = ev.dialogTemplate;
+      await this.updateComplete;
+      requestAnimationFrame(() => {
+        const dialog = this.renderRoot.querySelector("mwc-dialog");
+        if (!dialog) this.dialogTemplate = null;
+        else {
+          if (!dialog.open) dialog.open = true;
+      
+          dialog.addEventListener("closed", () => {
+            this.dialogTemplate = null;
+          }, { once: true })
+        }
+      })
+    });
     for (const event of ['render', 'close'] as const) {
       applicationHook({
         app: SidebarTab,
@@ -359,6 +379,8 @@ export class EPOverlay extends LitElement {
         ? html` <world-time-controls></world-time-controls> `
         : ''}
       ${this.staticElements}
+      ${this.dialogTemplate || ''}
+
     `;
   }
 

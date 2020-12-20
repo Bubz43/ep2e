@@ -16,10 +16,11 @@ import {
   itemDropToItemProxy,
 } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
+import { RenderDialogEvent } from '@src/open-dialog';
 import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
-import { customElement, html } from 'lit-element';
-import { nothing } from 'lit-html';
+import { customElement, html, internalProperty } from 'lit-element';
+import { nothing, TemplateResult } from 'lit-html';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
 import { identity } from 'remeda';
@@ -34,6 +35,34 @@ export class CharacterView extends CharacterViewBase {
   }
 
   static styles = [styles];
+
+  @internalProperty() private dialogTemplate: TemplateResult | null = null;
+
+  firstUpdated() {
+    this.addEventListener(RenderDialogEvent.is, async (ev) => {
+      ev.stopPropagation();
+      this.dialogTemplate = ev.dialogTemplate;
+      await this.updateComplete;
+      requestAnimationFrame(() => {
+        const dialog = this.renderRoot.querySelector("mwc-dialog");
+        if (!dialog) this.dialogTemplate = null;
+        else {
+          if (!dialog.open) dialog.open = true;
+          const checkGlobal = (ev: Event) => {
+            if (!ev.composedPath().includes(this)) {
+              dialog.open = false;
+            }
+          }
+          window.addEventListener("mousedown", checkGlobal)
+          dialog.addEventListener("closed", () => {
+            this.dialogTemplate = null;
+            window.removeEventListener("mousedown", checkGlobal)
+          }, { once: true })
+        }
+      })
+    });
+    super.firstUpdated();
+  }
 
   private toggleNetworkSettings() {
     this.toggleDrawerRenderer(CharacterDrawerRenderer.NetworkSettings);
@@ -156,7 +185,7 @@ export class CharacterView extends CharacterViewBase {
             >
               ${activeSubstances.length + awaitingOnsetSubstances.length === 0
                 ? html`
-                    <p class="no-substances-message"></p>
+                    <p class="no-substances-message">
                       ${localize('no')} ${localize('applied')}
                       ${localize('substances')}.
                     </p>
@@ -256,6 +285,8 @@ export class CharacterView extends CharacterViewBase {
           : ''}
         ${repeat(enumValues(ItemGroup), identity, this.renderItemGroup)}
       </div>
+
+      ${this.dialogTemplate || ''}
     `;
   }
 

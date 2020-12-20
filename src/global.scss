@@ -36,15 +36,15 @@ body {
 }
 
 
-mwc-dialog {
-  --mdc-theme-surface: #{lightv(var(--color-bg-alt), 1.2)};
-  > * {
-    overflow: hidden;
-    &[slot] {
-      --mdc-theme-primary: var(--color-primary-alt);
-    }
-  }
-}
+// mwc-dialog {
+//   --mdc-theme-surface: #{lightv(var(--color-bg-alt), 1.2)};
+//   > * {
+//     overflow: hidden;
+//     &[slot] {
+//       --mdc-theme-primary: var(--color-primary-alt);
+//     }
+//   }
+// }
 
 #logo {
   display: none;

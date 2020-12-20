@@ -37,6 +37,7 @@ import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { EP } from '@src/foundry/system';
 import { tooltip } from '@src/init';
+import { RenderDialogEvent } from '@src/open-dialog';
 import { openMenu } from '@src/open-menu';
 import { nonNegative, notEmpty } from '@src/utility/helpers';
 import {
@@ -62,8 +63,6 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
 
   @property({ attribute: false }) character!: Character;
 
-  @internalProperty() private taskCreator = false;
-
   private readonly temporaryFeatureOps = addUpdateRemoveFeature(
     () => this.character.updater.prop('data', 'temporary').commit,
   );
@@ -76,8 +75,16 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
     this.requestUpdate();
   }
 
-  private toggleTaskCreator() {
-    this.taskCreator = !this.taskCreator;
+  private openTaskCreator() {
+    this.dispatchEvent(
+      new RenderDialogEvent(
+        html`<mwc-dialog hideActions heading="${localize('new')} ${localize('task')}" open
+          >${this.renderTaskCreator()}
+         </mwc-button>
+          </mwc-dialog
+        >`,
+      ),
+    );
   }
 
   private readonly taskOps = addUpdateRemoveFeature(
@@ -103,7 +110,6 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
   private async startSubstance(id: string) {
     const substance = this.character.awaitingOnsetSubstances.find(matchID(id));
     if (substance) {
-      
       const applySeverity = true;
       // TODO Check vs severity
       const {
@@ -166,7 +172,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
             modifyingEffects: [],
           }),
         );
-     })
+      });
     }
   }
 
@@ -308,23 +314,19 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
     const { tasks } = this.character;
     return html`
       <section class="task-actions">
-        <sl-header heading=${localize('tasks')} itomCount=${tasks.length}>
+        <sl-header heading=${localize('tasks')} itemCount=${tasks.length}>
           <mwc-icon-button
-            @click=${this.toggleTaskCreator}
+            @click=${this.openTaskCreator}
             ?disabled=${this.character.disabled}
             slot="action"
             icon="add_task"
             data-tooltip="${localize('add')} ${localize('task')}"
             @mouseover=${tooltip.fromData}
             @focus=${tooltip.fromData}
-            class="task-creator-toggle ${classMap({
-              active: this.taskCreator,
-            })}"
           ></mwc-icon-button>
         </sl-header>
 
         ${this.renderAccumulated()}
-        ${this.taskCreator ? this.renderTaskCreator() : ''}
 
         <sl-animated-list transformOrigin="bottom">
           ${repeat(tasks, idProp, this.renderTask)}
@@ -438,40 +440,37 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
 
   private renderTaskCreator() {
     return html`
-      <fieldset class="task-creator">
-        <legend>${localize('new')} ${localize('task')}</legend>
-        ${renderSubmitForm({
-          props: {
-            name: '',
-            timeframe: 0,
-            actionSubtype: ActionSubtype.Mesh,
-          },
-          update: ({
-            name = '',
-            timeframe = 0,
-            actionSubtype = ActionSubtype.Mesh,
-          }) =>
-            this.taskOps.add(
-              {},
-              createActiveTask({
-                name,
-                timeframe: timeframe,
-                actionSubtype,
-                failed: false,
-              }),
-            ),
-          fields: ({ name, timeframe, actionSubtype }) => [
-            renderTextField(name, { required: true }),
-            renderTimeField(timeframe, {
-              permanentLabel: localize('indefinite'),
+      ${renderSubmitForm({
+        props: {
+          name: '',
+          timeframe: 0,
+          actionSubtype: ActionSubtype.Mesh,
+        },
+        update: ({
+          name = '',
+          timeframe = 0,
+          actionSubtype = ActionSubtype.Mesh,
+        }) =>
+          this.taskOps.add(
+            {},
+            createActiveTask({
+              name,
+              timeframe: timeframe,
+              actionSubtype,
+              failed: false,
             }),
-            renderSelectField(
-              { ...actionSubtype, label: localize('type') },
-              enumValues(ActionSubtype),
-            ),
-          ],
-        })}
-      </fieldset>
+          ),
+        fields: ({ name, timeframe, actionSubtype }) => [
+          renderTextField(name, { required: true }),
+          renderTimeField(timeframe, {
+            permanentLabel: localize('indefinite'),
+          }),
+          renderSelectField(
+            { ...actionSubtype, label: localize('type') },
+            enumValues(ActionSubtype),
+          ),
+        ],
+      })}
     `;
   }
 

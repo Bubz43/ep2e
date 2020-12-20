@@ -1,5 +1,5 @@
 import { Dialog } from '@material/mwc-dialog';
-import { nothing, render } from 'lit-html';
+import { nothing, render, TemplateResult } from 'lit-html';
 import { traverseActiveElements } from 'weightless';
 import { overlay } from './init';
 
@@ -26,3 +26,20 @@ export const openDialog = (content: (dialog: Dialog) => void) => {
   content(dialog);
   dialog.open = true;
 };
+
+export class RenderDialogEvent extends Event {
+   static get is() {
+    return "render-dialog" as const;
+  }
+
+   constructor(public readonly dialogTemplate: TemplateResult) {
+     super(RenderDialogEvent.is, { bubbles: true, composed: true });
+    
+  }
+}
+
+declare global {
+  interface HTMLElementEventMap {
+    "render-dialog": RenderDialogEvent;
+  }
+}
