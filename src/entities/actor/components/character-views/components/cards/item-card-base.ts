@@ -86,7 +86,7 @@ export abstract class ItemCardBase extends LazyRipple(LitElement) {
         @mouseleave="${this.handleRippleMouseLeave}"
       >
         ${nonDefaultImg
-          ? html` <img height="32px" src=${nonDefaultImg} /> `
+          ? html` <img class="icon" height="32px" src=${nonDefaultImg} /> `
           : ''}
 
         <span class="info">

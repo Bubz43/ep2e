@@ -459,7 +459,7 @@ export class Substance
   }
 
   use() {
-    if (this.consumeOnUse) return this.useUnit();
+    if (this.consumeOnUse) return this.consumeUnit();
     return;
   }
 

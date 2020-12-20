@@ -25,7 +25,7 @@
   background: alphav(var(--color-grey), 0.1);
 
   .header {
-    img {
+    .icon {
       height: 51px;
     }
     .info {
@@ -54,7 +54,7 @@
   &:focus {
     outline: none;
   }
-  img {
+  .icon {
     grid-area: img;
     margin-right: 0.5ch;
     display: inline-block;
@@ -114,5 +114,13 @@
 .toggle {
   &.activated {
     color: var(--color-secondary);
+  }
+}
+
+mwc-icon-button {
+  &[disabled] {
+    img {
+      opacity: 0.5;
+    }
   }
 }

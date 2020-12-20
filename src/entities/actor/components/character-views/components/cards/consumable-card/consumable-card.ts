@@ -1,6 +1,7 @@
 import {
   renderLabeledCheckbox,
-  renderNumberField
+  renderNumberField,
+  renderNumberInput,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { ItemType } from '@src/entities/entity-types';
@@ -23,7 +24,7 @@ export class ConsumableCard extends ItemCardBase {
   }
 
   static get styles() {
-    return [...super.styles, styles]
+    return [...super.styles, styles];
   }
 
   @property({ attribute: false }) item!: ConsumableItem;
@@ -61,6 +62,14 @@ export class ConsumableCard extends ItemCardBase {
     if (this.item.type === ItemType.Substance) {
       notify(NotificationType.Info, `TODO WIL Check`);
     }
+  }
+
+  private deductQuantity() {
+    this.item.consumeUnit();
+  }
+
+  private increaseQuantity() {
+    this.item.setQuantity(this.item.quantity + 1);
   }
 
   renderHeaderButtons() {
@@ -108,7 +117,21 @@ export class ConsumableCard extends ItemCardBase {
           disabled: !editable,
           props: { quantity: item.quantity },
           update: item.updateQuantity.commit,
-          fields: ({ quantity }) => renderNumberField(quantity, { min: 0 }),
+          fields: ({ quantity }) => html`
+            <div class="quantity">
+              <mwc-icon-button
+                icon="keyboard_arrow_left"
+                ?disabled=${!editable || quantity.value === 0}
+                @click=${this.deductQuantity}
+              ></mwc-icon-button>
+              ${renderNumberInput(quantity, { min: 0, max: 9999 })}
+              <mwc-icon-button
+                icon="keyboard_arrow_right"
+                ?disabled=${!editable || quantity.value === 9999}
+                @click=${this.increaseQuantity}
+              ></mwc-icon-button>
+            </div>
+          `,
         })
       : ''}`;
   }

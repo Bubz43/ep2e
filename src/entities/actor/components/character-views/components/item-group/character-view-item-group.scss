@@ -30,3 +30,13 @@ sl-dropzone {
     cursor: pointer;
   }
 }
+
+
+.toggle-icon {
+  display: inline-block;
+  --mdc-icon-size: 1.75rem;
+  transition: transform 100ms ease-in-out;
+  &.collapsed {
+    transform: rotateZ(90deg)
+  }
+}

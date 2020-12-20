@@ -26,6 +26,7 @@ import {
 } from 'lit-element';
 import { nothing } from 'lit-html';
 import { cache } from 'lit-html/directives/cache';
+import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
 import { reject } from 'remeda';
 import { ItemGroup } from '../../character-view-base';
@@ -255,7 +256,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
         >
           ${this.renderInfo()}
           <span slot="action">${this.renderRipple(!hasItems)}</span>
-          ${hasItems ? this.renderCollapseToggle() : ''}
+          ${hasItems ? this.renderToggleIcon() : ''}
         </sl-header>
         ${notEmpty(items) ? this.renderItemList() : ''}
       </sl-dropzone>
@@ -277,10 +278,13 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
     }
   }
 
-  private renderCollapseToggle() {
+  private renderToggleIcon() {
     return html`
-      <mwc-icon slot="action">
-        ${this.collapsed ? 'keyboard_arrow_left' : 'keyboard_arrow_down'}
+      <mwc-icon
+        slot="action"
+        class="toggle-icon ${classMap({ collapsed: this.collapsed })}"
+      >
+        keyboard_arrow_down
       </mwc-icon>
     `;
   }

@@ -230,7 +230,7 @@ export class FirearmAmmoForm extends ItemFormBase {
                     ? html`<div></div>`
                     : renderNumberField(
                         { ...quantity, label: localize('rounds') },
-                        { min: 0 },
+                        { min: 0, max: 9999 },
                       ),
                   renderNumberField(roundsPerComplexity, { min: 1 }),
                 ],

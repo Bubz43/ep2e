@@ -1,15 +1,26 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
-.quantity-form {
-  width: 33%;
-  margin-left: auto;
-}
-
-mwc-icon-button {
-  &[disabled] {
-    img {
-      opacity: 0.5;
+.quantity {
+  display: flex;
+  align-items: center;
+  --mdc-icon-button-size: 1.5rem;
+  padding: 0.25rem 0.5rem 0;
+  input {
+    all: unset;
+    font-family: var(--font-1);
+    width: 4ch;
+    text-align: center;
+    color: var(--color-text);
+    border-bottom: 1px solid var(--color-border);
+    &:focus {
+      border-color: var(--color-secondary);
     }
+    &[disabled] {
+      color: var(--color-text-disabled);
+      pointer-events: none;
+      border: none;
+    }
+   
   }
 }

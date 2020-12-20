@@ -210,7 +210,7 @@ export class ThrownWeaponForm extends ItemFormBase {
                 disabled,
                 classes: 'quantity-form',
                 fields: ({ quantity, quantityPerCost }) => [
-                  renderNumberField(quantity, { min: 0 }),
+                  renderNumberField(quantity, { min: 0, max: 9999 }),
                   renderNumberField(quantityPerCost, { min: 1 }),
                 ],
               })}

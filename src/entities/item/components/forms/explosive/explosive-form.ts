@@ -209,7 +209,7 @@ export class ExplosiveForm extends ItemFormBase {
                 fields: ({ quantity, unitsPerComplexity }) => [
                   loaded
                     ? html`<div></div>`
-                    : renderNumberField(quantity, { min: 0 }),
+                    : renderNumberField(quantity, { min: 0, max: 9999 }),
                   renderNumberField(unitsPerComplexity, { min: 1, max: 99 }),
                 ],
               })}

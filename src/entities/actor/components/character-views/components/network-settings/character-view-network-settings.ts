@@ -51,7 +51,7 @@ export class CharacterViewNetworkSettings extends LitElement {
           ),
       })}
 
-      <mwc-list multi>
+      ${masterDevice ? html`<mwc-list multi>
         <li class="devices-header">
           <span>${localize('devices')}</span> <span>${localize('slaved')}</span>
         </li>
@@ -67,7 +67,7 @@ export class CharacterViewNetworkSettings extends LitElement {
             `,
         )}
       </mwc-list>
-
+` : ""}
       <section>
         <sl-header heading=${localize('accountShells')}></sl-header>
         // TODO
