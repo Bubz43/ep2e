@@ -48,7 +48,7 @@ export type BiologicalHealthData = BasicHealthData &
 type Init = HealthInit<BiologicalHealthData> & {
   isSwarm: boolean;
   statMods: HealthStatMods | undefined;
-  recoveryEffects: AppliedEffects["healthRecovery"]
+  recoveryEffects: AppliedEffects['healthRecovery'];
   recoveryConditions: RecoveryConditions;
 };
 

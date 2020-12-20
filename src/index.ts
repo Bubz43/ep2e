@@ -278,4 +278,4 @@ MessageStressTest;
 MessageHealthChange;
 MessageHeal;
 MessageDamage;
-MessageSubstanceUse
+MessageSubstanceUse;

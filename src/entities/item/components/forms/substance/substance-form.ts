@@ -201,7 +201,7 @@ export class SubstanceForm extends ItemFormBase {
       isAddictive,
       isDrug,
       loaded,
-      appliedState
+      appliedState,
     } = this.item;
     const { disabled } = this;
     return html`
@@ -225,7 +225,7 @@ export class SubstanceForm extends ItemFormBase {
             addiction,
             addictionMod,
             hasSeverity,
-            consumeOnUse
+            consumeOnUse,
           }) => [
             renderSelectField(
               { ...substanceType, label: localize('type') },
@@ -238,7 +238,7 @@ export class SubstanceForm extends ItemFormBase {
                   enumValues(SubstanceClassification),
                 ),
             renderTextField(category, { listId: 'drug-categories' }),
-              renderLabeledCheckbox(hasSeverity),
+            renderLabeledCheckbox(hasSeverity),
             renderLabeledCheckbox(consumeOnUse),
             isDrug
               ? html`
@@ -671,7 +671,7 @@ export class SubstanceForm extends ItemFormBase {
                 ]
               : '',
             renderLabeledCheckbox(perTurn),
-          ]
+          ],
         ],
       })}
     `;

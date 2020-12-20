@@ -221,15 +221,15 @@ export class CharacterView extends CharacterViewBase {
                                 (substance) => {
                                   // TODO show more detailed stuff and toggle each state
                                   return html`
-                                   <character-view-time-item
-                                    ?disabled=${disabled}
-                                    .timeState=${substance.appliedInfo.timeState}
-                                    completion="expired"
-                                    .item=${substance}
-                                  >
-                                  
-                                  </character-view-time-item>
-                                `;
+                                    <character-view-time-item
+                                      ?disabled=${disabled}
+                                      .timeState=${substance.appliedInfo
+                                        .timeState}
+                                      completion="expired"
+                                      .item=${substance}
+                                    >
+                                    </character-view-time-item>
+                                  `;
                                 },
                               )}
                             </sl-animated-list>

@@ -34,7 +34,7 @@ export abstract class ItemProxyBase<T extends ItemType> {
     openForm,
     deleteSelf,
     alwaysDeletable = false,
-    actor
+    actor,
   }: ItemProxyInit<T>) {
     this.data = data;
     this.updater =
@@ -48,7 +48,7 @@ export abstract class ItemProxyBase<T extends ItemType> {
     this.openForm = openForm;
     this.deleteSelf = deleteSelf;
     this.alwaysDeletable = alwaysDeletable;
-    this.actor = actor
+    this.actor = actor;
     // this.actorIdentifiers = actorIdentifiers;
   }
 

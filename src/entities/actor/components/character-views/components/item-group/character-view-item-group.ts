@@ -59,7 +59,10 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
 
   private dragItemCard = (ev: DragEvent) => {
     // TODO have base item card class
-    if (ev.currentTarget instanceof ItemCard || ev.currentTarget instanceof ConsumableCard) {
+    if (
+      ev.currentTarget instanceof ItemCard ||
+      ev.currentTarget instanceof ConsumableCard
+    ) {
       setDragDrop(ev, {
         type: DropType.Item,
         ...this.character.actor.identifiers,
@@ -121,10 +124,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
     const items = this.character[this.group];
     const hasItems = notEmpty(items);
     return html`
-      <sl-dropzone
-        @drop=${this.addItem}
-        ?disabled=${this.character.disabled}
-      >
+      <sl-dropzone @drop=${this.addItem} ?disabled=${this.character.disabled}>
         <sl-header
           heading=${localize(this.group)}
           ?hideBorder=${!hasItems}

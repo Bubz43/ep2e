@@ -10,7 +10,7 @@ type Feature = Record<string, JsonValue | undefined>;
 
 type FeatureWithID = Feature & { id: string };
 
-export type StringID<T extends {}> = T & { id: string }; 
+export type StringID<T extends {}> = T & { id: string };
 
 export const idProp = <T extends { id: string | number }>(item: T) => item.id;
 
@@ -107,7 +107,11 @@ export function updateFeature() {
 const _addFeature = <T extends FeatureWithID>(
   list: ReadonlyArray<T> | null | undefined,
   feature: Omit<T, 'id'>,
-) => [...list || [], { ...feature, id: uniqueStringID(existingIds(list || [])) }] as T[];
+) =>
+  [
+    ...(list || []),
+    { ...feature, id: uniqueStringID(existingIds(list || [])) },
+  ] as T[];
 
 const _updateFeature = <T extends FeatureWithID>(
   list: ReadonlyArray<T>,

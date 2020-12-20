@@ -18,7 +18,10 @@ export class Trait
     lockSource,
     temporary,
     ...init
-  }: ItemProxyInit<ItemType.Trait> & { lockSource: boolean, temporary?: string }) {
+  }: ItemProxyInit<ItemType.Trait> & {
+    lockSource: boolean;
+    temporary?: string;
+  }) {
     super(init);
     this.lockSource = lockSource;
     this.temporary = temporary;

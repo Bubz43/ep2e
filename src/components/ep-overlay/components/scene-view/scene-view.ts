@@ -2,7 +2,7 @@ import { getCurrentEnvironment } from '@src/features/environment';
 import {
   mutateEntityHook,
   MutateEvent,
-  mutatePlaceableHook
+  mutatePlaceableHook,
 } from '@src/foundry/hook-setups';
 import { localize } from '@src/foundry/localization';
 import { gameSettings } from '@src/init';
@@ -56,13 +56,13 @@ export class SceneView extends LitElement {
 
   private openFormsDialog() {
     if (!game.user.isGM) return;
-    this.dispatchEvent(new RenderDialogEvent(html`
-    <mwc-dialog hideActions open style="--mdc-dialog-min-width: 600px">
-    <environment-forms></environment-forms>
-    </mwc-dialog>
-    `))
-   
-
+    this.dispatchEvent(
+      new RenderDialogEvent(html`
+        <mwc-dialog hideActions open style="--mdc-dialog-min-width: 600px">
+          <environment-forms></environment-forms>
+        </mwc-dialog>
+      `),
+    );
   }
 
   render() {

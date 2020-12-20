@@ -238,10 +238,10 @@ TokenHUD.prototype._getStatusEffectChoices = function () {
   });
 };
 
-const { _render } = ChatLog.prototype
+const { _render } = ChatLog.prototype;
 ChatLog.prototype._render = async function (...args) {
   setTimeout(() => _render.call(this, ...args), 1500);
-}
+};
 
 // Object.defineProperties(Token.prototype, {
 //   w: {
@@ -257,8 +257,6 @@ ChatLog.prototype._render = async function (...args) {
 //     }
 //   }
 // })
-
-
 
 // TODO: Delay this to check for migration first
 // const barCache = new WeakMap<PIXI.Graphics, number>();

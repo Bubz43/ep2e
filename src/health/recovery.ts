@@ -137,7 +137,7 @@ export const setupRecoveries = ({
 }: {
   hot: HealsOverTime;
   biological: boolean;
-  effects: AppliedEffects["healthRecovery"]
+  effects: AppliedEffects['healthRecovery'];
   conditions: RecoveryConditions;
   updateStartTime: (
     update: Pick<
@@ -153,7 +153,10 @@ export const setupRecoveries = ({
   } as const;
 
   const slot = biological ? HealingSlot.OwnHealing : HealingSlot.Aided;
-  const multipliers = [recoveryMultiplier(conditions), ...effects.timeframeMultipliers]
+  const multipliers = [
+    recoveryMultiplier(conditions),
+    ...effects.timeframeMultipliers,
+  ];
   const setupDuration = (interval: number) =>
     Math.ceil(multipliers.reduce((accum, mp) => accum * mp, interval));
 

@@ -221,7 +221,9 @@ export const renderItemCard = (
         ?expanded=${expanded}
         ?noAnimate=${noAnimate}
         ?animateInitial=${animateInitial}
-        ?allowDrag=${item.type === ItemType.Substance && item.appliedState ? false : allowDrag}
+        ?allowDrag=${item.type === ItemType.Substance && item.appliedState
+          ? false
+          : allowDrag}
         @dragstart=${handleDragStart}
       ></consumable-card>
     `;
@@ -231,7 +233,7 @@ export const renderItemCard = (
       ?expanded=${expanded}
       ?noAnimate=${noAnimate}
       ?animateInitial=${animateInitial}
-      ?allowDrag=${"temporary" in item && item.temporary ? false : allowDrag}
+      ?allowDrag=${'temporary' in item && item.temporary ? false : allowDrag}
       @dragstart=${handleDragStart}
     ></item-card>
   `;

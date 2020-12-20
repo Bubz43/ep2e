@@ -1359,7 +1359,8 @@ type LangEntries =
   | 'halveDrugEffects'
   | 'controlled'
   | 'actors'
-  | 'characters' | "done";
+  | 'characters'
+  | 'done';
 type FullNames =
   | 'cog'
   | 'int'

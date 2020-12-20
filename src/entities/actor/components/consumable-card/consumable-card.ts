@@ -95,7 +95,6 @@ export class ConsumableCard extends LazyRipple(LitElement) {
     }
   }
 
-
   render() {
     const { item } = this;
     const { nonDefaultImg, editable } = item;
@@ -126,7 +125,6 @@ export class ConsumableCard extends LazyRipple(LitElement) {
           ${item.stashed
             ? html`
                 <mwc-icon-button
-                
                   @click=${() => item.toggleStashed()}
                   icon=${item.stashed ? 'unarchive' : 'archive'}
                   ?disabled=${!editable}
@@ -170,13 +168,16 @@ export class ConsumableCard extends LazyRipple(LitElement) {
       </div>
       ${this.expanded
         ? html`
-            ${item.type !== ItemType.Substance || !item.appliedState ? renderAutoForm({
-              classes: 'quantity-form',
-              disabled: !editable,
-              props: { quantity: item.quantity },
-              update: item.updateQuantity.commit,
-              fields: ({ quantity }) => renderNumberField(quantity, { min: 0 }),
-            }) : ""}
+            ${item.type !== ItemType.Substance || !item.appliedState
+              ? renderAutoForm({
+                  classes: 'quantity-form',
+                  disabled: !editable,
+                  props: { quantity: item.quantity },
+                  update: item.updateQuantity.commit,
+                  fields: ({ quantity }) =>
+                    renderNumberField(quantity, { min: 0 }),
+                })
+              : ''}
             <enriched-html
               class="description"
               .content=${item.description ||

@@ -78,7 +78,9 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
   private openTaskCreator() {
     this.dispatchEvent(
       new RenderDialogEvent(
-        html`<mwc-dialog hideActions heading="${localize('new')} ${localize('task')}" open
+        html`<mwc-dialog hideActions heading="${localize('new')} ${localize(
+          'task',
+        )}" open
           >${this.renderTaskCreator()}
          </mwc-button>
           </mwc-dialog
@@ -106,7 +108,6 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
       );
     }
   }
-
 
   render() {
     return html`
@@ -180,7 +181,8 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
                         icon="play_arrow"
                         data-tooltip=${localize('start')}
                         @mouseover=${tooltip.fromData}
-                        @click=${() => this.character.startSubstance(substance.id)}
+                        @click=${() =>
+                          this.character.startSubstance(substance.id)}
                       ></mwc-icon-button>
                     </character-view-time-item>
                   `,
@@ -411,8 +413,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
                 .timeState=${fabber.printState}
                 completion="completed"
                 .item=${fabber}
-                ></character-view-time-item
-              >
+              ></character-view-time-item>
             `,
           )}
         </sl-animated-list>
@@ -473,8 +474,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
                 ?disabled=${this.character.disabled}
                 .timeState=${service.timeState}
                 .item=${service}
-                ></character-view-time-item
-              >
+              ></character-view-time-item>
             `,
           )}
         </sl-animated-list>

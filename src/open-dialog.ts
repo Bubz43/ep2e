@@ -28,18 +28,17 @@ export const openDialog = (content: (dialog: Dialog) => void) => {
 };
 
 export class RenderDialogEvent extends Event {
-   static get is() {
-    return "render-dialog" as const;
+  static get is() {
+    return 'render-dialog' as const;
   }
 
-   constructor(public readonly dialogTemplate: TemplateResult) {
-     super(RenderDialogEvent.is, { bubbles: true, composed: true });
-    
+  constructor(public readonly dialogTemplate: TemplateResult) {
+    super(RenderDialogEvent.is, { bubbles: true, composed: true });
   }
 }
 
 declare global {
   interface HTMLElementEventMap {
-    "render-dialog": RenderDialogEvent;
+    'render-dialog': RenderDialogEvent;
   }
 }

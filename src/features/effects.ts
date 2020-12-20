@@ -27,11 +27,10 @@ import { CommonInterval, prettyMilliseconds } from './time';
 
 export enum UniqueEffectType {
   NoFlipFlop = 'noFlipFlop',
-  HalveDrugEffects = "halveDrugEffects"
+  HalveDrugEffects = 'halveDrugEffects',
   // AllowRemoteControl = 'allowRemoteControl',
   // Modular = 'modular',
 }
-
 
 export enum DurationEffectTarget {
   EffectDuration = 'effectDuration',
@@ -43,7 +42,7 @@ export enum DurationEffectTarget {
 export enum EffectType {
   Initiative = 'initiative',
   Pool = 'pool',
-  Misc = 'misc', 
+  Misc = 'misc',
   SuccessTest = 'successTest',
   Health = 'health',
   HealthRecovery = 'healthRecovery',
@@ -138,7 +137,6 @@ export type RechargeEffect = {
   stat: RechargeStat;
   modifier: number;
 };
-
 
 export type SkillEffect = {
   skillType: SkillType | FieldSkillType;
@@ -457,8 +455,8 @@ export const formatDurationPercentage = (modifier: number) => {
 };
 
 export const durationEffectMultiplier = (modifier: number) => {
-  return 1 + modifier / 100
-}
+  return 1 + modifier / 100;
+};
 
 export const formatEffect = createPipe(
   format,
@@ -538,7 +536,7 @@ export const multiplyEffectModifier = (effect: Effect, multiplier: number) => {
   if (effect.type === EffectType.Armor) {
     const copy = { ...effect };
     for (const armor of enumValues(ArmorType)) {
-      copy[armor] = Math.ceil(copy[armor] * multiplier)
+      copy[armor] = Math.ceil(copy[armor] * multiplier);
     }
     return copy;
   } else if ('modifier' in effect && effect.modifier) {

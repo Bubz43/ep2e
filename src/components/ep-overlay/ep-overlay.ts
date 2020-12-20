@@ -71,7 +71,6 @@ export class EPOverlay extends LitElement {
 
   @internalProperty() private dialogTemplate: TemplateResult | null = null;
 
-
   firstUpdated() {
     this.addEventListener(RenderDialogEvent.is, async (ev) => {
       ev.stopPropagation();
@@ -80,19 +79,26 @@ export class EPOverlay extends LitElement {
 
       await this.updateComplete;
       requestAnimationFrame(() => {
-        const dialog = this.renderRoot.querySelector("mwc-dialog");
+        const dialog = this.renderRoot.querySelector('mwc-dialog');
         if (!dialog) this.dialogTemplate = null;
         else {
           if (!dialog.open) dialog.open = true;
-      
-          dialog.addEventListener("closed", () => {
-            if (focusSource?.isConnected && focusSource instanceof HTMLElement) {
-              focusSource.focus();
-            }
-            this.dialogTemplate = null;
-          }, { once: true })
+
+          dialog.addEventListener(
+            'closed',
+            () => {
+              if (
+                focusSource?.isConnected &&
+                focusSource instanceof HTMLElement
+              ) {
+                focusSource.focus();
+              }
+              this.dialogTemplate = null;
+            },
+            { once: true },
+          );
         }
-      })
+      });
     });
     for (const event of ['render', 'close'] as const) {
       applicationHook({
@@ -384,9 +390,7 @@ export class EPOverlay extends LitElement {
       ${game.user.isGM
         ? html` <world-time-controls></world-time-controls> `
         : ''}
-      ${this.staticElements}
-      ${this.dialogTemplate || ''}
-
+      ${this.staticElements} ${this.dialogTemplate || ''}
     `;
   }
 

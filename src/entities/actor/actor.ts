@@ -144,7 +144,6 @@ export class ActorEP extends Actor {
               ) {
                 this.itemTrash.push(item.dataCopy());
               }
-               
 
               item?._onDelete({}, game.user.id);
             }),

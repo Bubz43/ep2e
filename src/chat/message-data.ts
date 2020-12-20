@@ -3,11 +3,7 @@ import type { SubstanceUseMethod } from '@src/entities/item/proxies/substance';
 import type { ItemEntity } from '@src/entities/models';
 import type { ArmorType } from '@src/features/active-armor';
 import type { RolledFormula } from '@src/foundry/rolls';
-import type {
-  HealthModification,
-
-  HealthType
-} from '@src/health/health';
+import type { HealthModification, HealthType } from '@src/health/health';
 import type { StressType } from '@src/health/mental-health';
 import type { RequireAtLeastOne } from 'type-fest';
 
@@ -47,11 +43,11 @@ export type HealthChangeMessageData = HealthModification & {
 };
 
 export type SubstanceUseData = {
-  substance: ItemEntity<ItemType.Substance>,
+  substance: ItemEntity<ItemType.Substance>;
   useMethod: SubstanceUseMethod;
   doses?: number;
   appliedTo?: string[];
-}
+};
 
 export type MessageHeaderData = {
   heading: string;

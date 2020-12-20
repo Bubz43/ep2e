@@ -240,11 +240,11 @@ export type BlueprintSource = {
 }[CopyableItemType];
 
 export type AppliedSubstanceState = {
-        startTime: number;
-        applySeverity: boolean;
-        modifyingEffects: StringID<Effect>[];
-        finishedEffects: ('always' | 'severity')[];
-      }
+  startTime: number;
+  applySeverity: boolean;
+  modifyingEffects: StringID<Effect>[];
+  finishedEffects: ('always' | 'severity')[];
+};
 
 type ItemFlags<T extends ItemType> = T extends ItemType.Psi
   ? { influences: readonly StringID<PsiInfluenceData>[] }

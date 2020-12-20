@@ -94,7 +94,7 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
             },
           ]),
           damageType: HealthType.Physical,
-          cumulativeDotID: dot.id
+          cumulativeDotID: dot.id,
         },
       },
       entity: this.character.actor,

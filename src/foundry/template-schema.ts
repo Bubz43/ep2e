@@ -186,7 +186,6 @@ export type EgoData = {
   };
 };
 
-
 type CharacterData = EgoData & {
   templates: ['Common'];
   fakeId: string;

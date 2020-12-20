@@ -219,7 +219,7 @@ export const poolActionOptions = (character: Character, poolType: PoolType) => {
         },
       })),
   );
-  options.push("divider")
+  options.push('divider');
 
   switch (pool?.type) {
     case PoolType.Insight:

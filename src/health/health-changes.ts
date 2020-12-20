@@ -98,7 +98,7 @@ export const createPhysicalDamage = createFeature<
 >(() => ({
   ...common,
   type: HealthType.Physical,
-  cumulativeDotID: "",
+  cumulativeDotID: '',
 }));
 
 export const createMeshDamage = createFeature<MeshDamage, RequiredFields>(

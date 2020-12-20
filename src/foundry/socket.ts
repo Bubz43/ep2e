@@ -17,7 +17,7 @@ export type SystemSocketData = {
     | ({ actorId: string } & ItemChange)
     | ({ tokenId: string; sceneId: string } & ItemChange);
   actorChanged: ActorIdentifiers;
-  messageData: DeepPartial<ChatMessageEP["data"]> & { _id: string }
+  messageData: DeepPartial<ChatMessageEP['data']> & { _id: string };
 };
 
 type SystemSocketEvent = keyof SystemSocketData;

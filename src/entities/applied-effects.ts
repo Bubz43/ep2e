@@ -151,11 +151,15 @@ export class AppliedEffects {
   }
 
   get taskTimeframeEffects() {
-    const effects = new Map<DurationEffect["taskType"], SourcedEffect<DurationEffect>[]>()
+    const effects = new Map<
+      DurationEffect['taskType'],
+      SourcedEffect<DurationEffect>[]
+    >();
     for (const effect of this.durationEffects.taskActionTimeframe || []) {
-      effects.get(effect.taskType)?.push(effect) ?? effects.set(effect.taskType, [effect])
+      effects.get(effect.taskType)?.push(effect) ??
+        effects.set(effect.taskType, [effect]);
     }
-    return effects
+    return effects;
   }
 
   initiativeTotal(baseInitiative: number) {

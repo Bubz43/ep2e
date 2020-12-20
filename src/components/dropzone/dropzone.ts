@@ -35,15 +35,15 @@ export class DropZone extends mix(LitElement).with(LazyRipple) {
   private internalDrag = false;
 
   connectedCallback() {
-    window.addEventListener("dragstart", this.setReady)
-    window.addEventListener("dragend", this.removeReady)
-    super.connectedCallback()
+    window.addEventListener('dragstart', this.setReady);
+    window.addEventListener('dragend', this.removeReady);
+    super.connectedCallback();
   }
 
   disconnectCallback() {
-    window.removeEventListener("dragstart", this.setReady)
-    window.removeEventListener("dragend", this.removeReady)
-    super.disconnectedCallback()
+    window.removeEventListener('dragstart', this.setReady);
+    window.removeEventListener('dragend', this.removeReady);
+    super.disconnectedCallback();
   }
 
   firstUpdated() {
@@ -62,10 +62,10 @@ export class DropZone extends mix(LitElement).with(LazyRipple) {
 
   private readonly setReady = () => {
     // TODO check if drop is viable at dragstart
-    if (!this.disabled && !this.internalDrag) this.setAttribute("ready", "")
-  }
+    if (!this.disabled && !this.internalDrag) this.setAttribute('ready', '');
+  };
 
-  private readonly removeReady = () => this.removeAttribute("ready")
+  private readonly removeReady = () => this.removeAttribute('ready');
 
   private setOutline = () => {
     if (this.disabled || this.internalDrag) return;

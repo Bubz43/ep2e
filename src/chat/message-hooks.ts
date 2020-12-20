@@ -34,12 +34,11 @@ const iconTemplate = html`<i
   class="far fa-eye-slash"
 ></i>`.getTemplateElement();
 
-
-addEPSocketHandler("messageData", data => {
+addEPSocketHandler('messageData', (data) => {
   if (isGamemaster()) {
-    game.messages.get(data._id)?.update(data)
+    game.messages.get(data._id)?.update(data);
   }
-})
+});
 
 export const onChatMessageRender = (message: ChatMessageEP, [el]: JQuery) => {
   if (!el) return;

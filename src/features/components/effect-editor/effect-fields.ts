@@ -48,7 +48,7 @@ import { HealOverTimeTarget } from '@src/health/recovery';
 import type { FieldPropsRenderer, FieldProps } from '@src/utility/field-values';
 import { html } from 'lit-html';
 
-type WithAllProps<T> = FieldPropsRenderer<Required<T>>
+type WithAllProps<T> = FieldPropsRenderer<Required<T>>;
 
 const successTest: WithAllProps<SuccessTestEffect> = ({
   modifier,
@@ -102,7 +102,7 @@ const initiative: WithAllProps<InitiativeEffect> = ({ modifier }) =>
   renderNumberField(modifier, { min: -20, max: 20 });
 
 const misc: WithAllProps<MiscEffect> = ({ unique, description }) => [
-  renderSelectField(unique, enumValues(UniqueEffectType), { emptyText: "-" }),
+  renderSelectField(unique, enumValues(UniqueEffectType), { emptyText: '-' }),
   renderTextareaField(description, { required: true }),
 ];
 
@@ -125,11 +125,7 @@ const armor: WithAllProps<ArmorEffect> = ({
   renderLabeledCheckbox(concealable),
 ];
 
-const health: WithAllProps<HealthEffect> = ({
-  health,
-  modifier,
-  stat,
-}) => [
+const health: WithAllProps<HealthEffect> = ({ health, modifier, stat }) => [
   renderSelectField(health, enumValues(HealthType)),
   renderSelectField(stat, enumValues(HealthStat), {
     altLabel: (healthStat) => healthLabels(health.value, healthStat),
@@ -246,7 +242,7 @@ const effectFieldFunctions = {
 };
 
 export const effectFields = (effect: FieldProps<Required<Effect>>) => {
-  return (effectFieldFunctions[
-    effect.type.value
-  ] as WithAllProps<Effect>)(effect);
+  return (effectFieldFunctions[effect.type.value] as WithAllProps<Effect>)(
+    effect,
+  );
 };

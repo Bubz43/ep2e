@@ -58,7 +58,10 @@ export const taskState = (
     effects.get(actionSubtype),
   ]).flat();
   const finalTimeframe = notEmpty(multipliers)
-    ? multipliers.reduce((accum, { modifier }) => accum * modifier || 1, timeframe)
+    ? multipliers.reduce(
+        (accum, { modifier }) => accum * modifier || 1,
+        timeframe,
+      )
     : timeframe;
   return {
     completed: timeTaken >= finalTimeframe,

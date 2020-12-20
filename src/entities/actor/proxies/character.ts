@@ -214,7 +214,6 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     }
   }
 
-
   updateConditions(conditions: ConditionType[]) {
     return this.sleeve?.updateConditions(conditions);
   }
@@ -320,7 +319,9 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   @LazyGetter()
   get itemsIncludingTemporary() {
     return [
-      [...this.items.values()].filter(i => i.type === ItemType.Substance && i.appliedState),
+      [...this.items.values()].filter(
+        (i) => i.type === ItemType.Substance && i.appliedState,
+      ),
       this.activeSubstances.flatMap((i) => i.appliedInfo.items),
     ].flat();
   }

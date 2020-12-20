@@ -6,7 +6,10 @@ import {
 import { renderAutoForm } from '@src/components/form/forms';
 import { localize } from '@src/foundry/localization';
 import type { BiologicalHealth } from '@src/health/biological-health';
-import { createHealthModification, HealthModificationMode } from '@src/health/health';
+import {
+  createHealthModification,
+  HealthModificationMode,
+} from '@src/health/health';
 import {
   createPhysicalDamage,
   PhysicalDamage,
@@ -32,8 +35,8 @@ export class PhysicalHealthDamageEditor extends HealthEditBase<
   protected createModification() {
     return {
       ...super.createModification(),
-      cumulativeDotID: this.damage?.cumulativeDotID || null
-    }
+      cumulativeDotID: this.damage?.cumulativeDotID || null,
+    };
   }
 
   render() {
@@ -42,9 +45,9 @@ export class PhysicalHealthDamageEditor extends HealthEditBase<
       pipe(
         this.health.log,
         reverse(),
-        takeWhile(entry => entry.cumulativeDotID === cumulativeDotID),
-        console.log
-      )
+        takeWhile((entry) => entry.cumulativeDotID === cumulativeDotID),
+        console.log,
+      );
     }
     // TODO cumulative damage
     return html`

@@ -21,7 +21,9 @@ export class MessageElement extends LitElement {
     return this.nonInteractive || !this.message.editable;
   }
 
-  getUpdater<T extends keyof MessageData>(key: T): UpdateActions<MessageData[T]> {
-    return this.message.updater.prop("flags", EP.Name, key)
+  getUpdater<T extends keyof MessageData>(
+    key: T,
+  ): UpdateActions<MessageData[T]> {
+    return this.message.updater.prop('flags', EP.Name, key);
   }
 }

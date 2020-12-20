@@ -84,9 +84,8 @@ export class MessageDamage extends LitElement {
 
   render() {
     const { totals } = this;
-    const { damageType, } = this.damage;
+    const { damageType } = this.damage;
     return html`
-
       <mwc-button
         dense
         unelevated

@@ -49,12 +49,13 @@ export class MessageHeader extends LitElement {
 
       ${description
         ? html`
-              <enriched-html
-                @click=${this.toggleDescription}
-                class="description ${classMap({ expanded: this.descriptionOpen})}"
-                .content=${description}
-              ></enriched-html>
-           
+            <enriched-html
+              @click=${this.toggleDescription}
+              class="description ${classMap({
+                expanded: this.descriptionOpen,
+              })}"
+              .content=${description}
+            ></enriched-html>
           `
         : html``}
     `;

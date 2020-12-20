@@ -126,7 +126,8 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
               <slot name="action"></slot> ${this.item
                 ? html` <mwc-icon-button
                     @click=${() =>
-                      this.item && openMenu({
+                      this.item &&
+                      openMenu({
                         header: { heading: this.item.fullName },
                         content: itemMenuOptions(this.item),
                       })}
