@@ -16,6 +16,7 @@ import {
   itemDropToItemProxy,
 } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
+import { tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
 import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
@@ -217,11 +218,19 @@ export class CharacterView extends CharacterViewBase {
                               ${repeat(
                                 activeSubstances,
                                 idProp,
-                                (substance) => html`
-                                  <wl-list-item>
-                                    <span slot="before">${substance.name}</span>
-                                  </wl-list-item>
-                                `,
+                                (substance) => {
+                                  // TODO show more detailed stuff and toggle each state
+                                  return html`
+                                   <character-view-time-item
+                                    ?disabled=${disabled}
+                                    .timeState=${substance.appliedInfo.timeState}
+                                    completion="expired"
+                                    .item=${substance}
+                                  >
+                                  
+                                  </character-view-time-item>
+                                `;
+                                },
                               )}
                             </sl-animated-list>
                           </sl-details>
@@ -240,9 +249,23 @@ export class CharacterView extends CharacterViewBase {
                                 awaitingOnsetSubstances,
                                 idProp,
                                 (substance) => html`
-                                  <wl-list-item>
-                                    <span slot="before">${substance.name}</span>
-                                  </wl-list-item>
+                                  <character-view-time-item
+                                    ?disabled=${disabled}
+                                    .timeState=${substance.awaitingOnsetTimeState}
+                                    completion="ready"
+                                    .item=${substance}
+                                  >
+                                    <mwc-icon-button
+                                      slot="action"
+                                      icon="play_arrow"
+                                      data-tooltip=${localize('start')}
+                                      @mouseover=${tooltip.fromData}
+                                      @click=${() =>
+                                        this.character.startSubstance(
+                                          substance.id,
+                                        )}
+                                    ></mwc-icon-button>
+                                  </character-view-time-item>
                                 `,
                               )}
                             </sl-animated-list></sl-details

@@ -1,3 +1,4 @@
+import { createMessage } from '@src/chat/create-message';
 import {
   getWindow,
   openOrRenderWindow,
@@ -33,7 +34,7 @@ import {
   EffectType,
   totalModifiers,
 } from '@src/features/effects';
-import { updateFeature } from '@src/features/feature-helpers';
+import { matchID, updateFeature } from '@src/features/feature-helpers';
 import type { MovementRate } from '@src/features/movement';
 import { Pool, Pools } from '@src/features/pool';
 import { Recharge } from '@src/features/recharge';
@@ -51,6 +52,7 @@ import {
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { deepMerge } from '@src/foundry/misc-helpers';
+import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { EP } from '@src/foundry/system';
 import { HealthEditor } from '@src/health/components/health-editor/health-editor';
 import type { ActorHealth } from '@src/health/health-mixin';
@@ -142,6 +144,76 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     const egoFormWindow = getWindow(this.updater);
     if (egoFormWindow?.isConnected) this.ego.openForm?.();
   }
+
+  async startSubstance(id: string) {
+    const substance = this.awaitingOnsetSubstances.find(matchID(id));
+    if (substance) {
+      const applySeverity = true;
+      // TODO Check vs severity
+      const {
+        alwaysApplied,
+        severity,
+        messageHeader,
+        hasSeverity,
+        name,
+      } = substance;
+      if (alwaysApplied.hasInstantDamage) {
+        const {
+          label,
+          damageType,
+          attackTraits,
+          perTurn,
+          rollFormulas,
+          ...attack
+        } = alwaysApplied.damage;
+
+        await createMessage({
+          data: {
+            header: messageHeader,
+            damage: {
+              ...attack,
+              rolledFormulas: rollLabeledFormulas(rollFormulas),
+              source: `${name} ${label}`,
+              damageType,
+            },
+          },
+        });
+      }
+      if (applySeverity && hasSeverity && severity.hasInstantDamage) {
+        const {
+          label,
+          damageType,
+          attackTraits,
+          perTurn,
+          rollFormulas,
+          ...attack
+        } = severity.damage;
+
+        await createMessage({
+          data: {
+            header: messageHeader,
+            damage: {
+              ...attack,
+              rolledFormulas: rollLabeledFormulas(rollFormulas),
+              source: `${name} ${label}`,
+              damageType,
+            },
+          },
+        });
+      }
+      const { add, remove } = this.itemOperations;
+      await remove(id);
+      requestAnimationFrame(() => {
+        add(
+          substance.createApplied({
+            applySeverity,
+            modifyingEffects: [],
+          }),
+        );
+      });
+    }
+  }
+
 
   updateConditions(conditions: ConditionType[]) {
     return this.sleeve?.updateConditions(conditions);

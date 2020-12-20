@@ -1,6 +1,8 @@
 import { renderSlider } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
+import type { ItemProxy } from '@src/entities/item/item';
+import { itemMenuOptions } from '@src/entities/item/item-views';
 import {
   createLiveTimeState,
   currentWorldTimeMS,
@@ -8,6 +10,7 @@ import {
   LiveTimeState,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
+import { openMenu } from '@src/open-menu';
 import {
   customElement,
   LitElement,
@@ -35,6 +38,8 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
 
   @property({ type: String }) completion: 'ready' | 'expired' | 'completed' =
     'ready';
+
+  @property({ attribute: false }) item?: ItemProxy;
 
   @internalProperty() private editing = false;
 
@@ -108,12 +113,28 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
           : ''}
       </span>
       <div class="actions">
-        <mwc-icon-button icon="${this.editing ? 'save' : 'edit'}" @click=${this.toggleEditing} ?disabled=${this.disabled}>
+        <mwc-icon-button
+          icon="${this.editing ? 'save' : 'edit'}"
+          @click=${this.toggleEditing}
+          ?disabled=${this.disabled}
+        >
         </mwc-icon-button>
         ${this.editing
           ? html`<mwc-icon-button @click=${this.discardChanges} icon="clear">
             </mwc-icon-button>`
-          : html` <slot name="action"></slot> `}
+          : html`
+              <slot name="action"></slot> ${this.item
+                ? html` <mwc-icon-button
+                    @click=${() =>
+                      this.item && openMenu({
+                        header: { heading: this.item.fullName },
+                        content: itemMenuOptions(this.item),
+                      })}
+                    slot="action"
+                    icon="more_vert"
+                  ></mwc-icon-button>`
+                : ''}
+            `}
       </div>
       ${this.editing && !this.disabled
         ? this.renderProgressForm()

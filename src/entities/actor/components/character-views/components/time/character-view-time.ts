@@ -107,74 +107,6 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
     }
   }
 
-  private async startSubstance(id: string) {
-    const substance = this.character.awaitingOnsetSubstances.find(matchID(id));
-    if (substance) {
-      const applySeverity = true;
-      // TODO Check vs severity
-      const {
-        alwaysApplied,
-        severity,
-        messageHeader,
-        hasSeverity,
-        name,
-      } = substance;
-      if (alwaysApplied.hasInstantDamage) {
-        const {
-          label,
-          damageType,
-          attackTraits,
-          perTurn,
-          rollFormulas,
-          ...attack
-        } = alwaysApplied.damage;
-
-        await createMessage({
-          data: {
-            header: messageHeader,
-            damage: {
-              ...attack,
-              rolledFormulas: rollLabeledFormulas(rollFormulas),
-              source: `${name} ${label}`,
-              damageType,
-            },
-          },
-        });
-      }
-      if (applySeverity && hasSeverity && severity.hasInstantDamage) {
-        const {
-          label,
-          damageType,
-          attackTraits,
-          perTurn,
-          rollFormulas,
-          ...attack
-        } = severity.damage;
-
-        await createMessage({
-          data: {
-            header: messageHeader,
-            damage: {
-              ...attack,
-              rolledFormulas: rollLabeledFormulas(rollFormulas),
-              source: `${name} ${label}`,
-              damageType,
-            },
-          },
-        });
-      }
-      const { add, remove } = this.character.itemOperations;
-      await remove(id);
-      requestAnimationFrame(() => {
-        add(
-          substance.createApplied({
-            applySeverity,
-            modifyingEffects: [],
-          }),
-        );
-      });
-    }
-  }
 
   render() {
     return html`
@@ -217,8 +149,8 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
                       ?disabled=${disabled}
                       .timeState=${substance.appliedInfo.timeState}
                       completion="expired"
+                      .item=${substance}
                     >
-                      ${this.renderItemMenuButton(substance)}
                     </character-view-time-item>
                   `,
                 )}
@@ -241,15 +173,15 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
                       ?disabled=${disabled}
                       .timeState=${substance.awaitingOnsetTimeState}
                       completion="ready"
+                      .item=${substance}
                     >
                       <mwc-icon-button
                         slot="action"
                         icon="play_arrow"
                         data-tooltip=${localize('start')}
                         @mouseover=${tooltip.fromData}
-                        @click=${() => this.startSubstance(substance.id)}
+                        @click=${() => this.character.startSubstance(substance.id)}
                       ></mwc-icon-button>
-                      ${this.renderItemMenuButton(substance)}
                     </character-view-time-item>
                   `,
                 )}
@@ -293,20 +225,6 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
             : '';
         })}
       </section>
-    `;
-  }
-
-  private renderItemMenuButton(item: ItemProxy) {
-    return html`
-      <mwc-icon-button
-        @click=${() =>
-          openMenu({
-            header: { heading: item.fullName },
-            content: itemMenuOptions(item),
-          })}
-        slot="action"
-        icon="more_vert"
-      ></mwc-icon-button>
     `;
   }
 
@@ -492,7 +410,8 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
                 ?disabled=${this.character.disabled}
                 .timeState=${fabber.printState}
                 completion="completed"
-                >${this.renderItemMenuButton(fabber)}</character-view-time-item
+                .item=${fabber}
+                ></character-view-time-item
               >
             `,
           )}
@@ -553,7 +472,8 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
                 completion="expired"
                 ?disabled=${this.character.disabled}
                 .timeState=${service.timeState}
-                >${this.renderItemMenuButton(service)}</character-view-time-item
+                .item=${service}
+                ></character-view-time-item
               >
             `,
           )}
