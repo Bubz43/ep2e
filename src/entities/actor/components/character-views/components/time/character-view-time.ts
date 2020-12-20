@@ -220,7 +220,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
           ></mwc-icon-button>
         </sl-header>
 
-        ${this.renderAccumulated()}
+        ${notEmpty(tasks) ? this.renderAccumulated() : ''}
 
         <sl-animated-list transformOrigin="bottom">
           ${repeat(tasks, idProp, this.renderTask)}
@@ -292,7 +292,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
           ></mwc-icon-button>`
         : html`
             <delete-button
-              @click=${this.taskOps.removeCallback(task.id)}
+              @delete=${this.taskOps.removeCallback(task.id)}
             ></delete-button>
           `}
       ${indefinite
@@ -344,16 +344,24 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
           name = '',
           timeframe = 0,
           actionSubtype = ActionSubtype.Mesh,
-        }) =>
-          this.taskOps.add(
-            {},
-            createActiveTask({
-              name,
-              timeframe: timeframe,
-              actionSubtype,
-              failed: false,
-            }),
-          ),
+        }) => {
+          this.character.updater.batchCommits(() => {
+            this.taskOps.add(
+              {},
+              createActiveTask({
+                name,
+                timeframe: timeframe,
+                actionSubtype,
+                failed: false,
+              }),
+            );
+            if (this.character.tasks.length === 0) {
+              this.character.updater
+                .prop('data', 'accumulatedTimeStart')
+                .commit(currentWorldTimeMS());
+            }
+          });
+        },
         fields: ({ name, timeframe, actionSubtype }) => [
           renderTextField(name, { required: true }),
           renderTimeField(timeframe, {

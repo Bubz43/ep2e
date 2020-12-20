@@ -34,10 +34,10 @@ character-view-header {
   z-index: 1;
 }
 
+
 character-view-ego,
 character-view-sleeve,
 .sections > * {
-  box-shadow: 0 0 4px black;
   border: none;
   border: 1px solid var(--color-border);
   background: alphav(var(--color-bg), 0.1);
