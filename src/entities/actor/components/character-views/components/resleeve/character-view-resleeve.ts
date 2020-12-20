@@ -94,9 +94,13 @@ export class CharacterViewResleeve extends LitElement {
         if (ev instanceof CustomEvent && 'action' in ev.detail) {
           if (ev.detail.action !== 'confirm') return;
         } else {
-          this.dispatchEvent(new RenderDialogEvent(html`
-          <mwc-dialog heading="${localize("confirm")} ${localize("resleeve")}" @closed=${this.resleeve.bind(this)}>
-          <p>
+          this.dispatchEvent(
+            new RenderDialogEvent(html`
+              <mwc-dialog
+                heading="${localize('confirm')} ${localize('resleeve')}"
+                @closed=${this.resleeve.bind(this)}
+              >
+                <p>
                   ${format('SleevePermanentlyDeleted', { name: sleeve.name })}
                 </p>
                 <mwc-button
@@ -109,33 +113,10 @@ export class CharacterViewResleeve extends LitElement {
                   dialogAction="confirm"
                   label=${localize('confirm')}
                 ></mwc-button>
-        </mwc-dialog>
-          `))
-          return
-          // return openDialog((dialog) => {
-          //   dialog.heading = `${localize('confirm')} ${localize('resleeve')}`;
-          //   render(
-          //     html`
-          //       <p>
-          //         ${format('SleevePermanentlyDeleted', { name: sleeve.name })}
-          //       </p>
-          //       <mwc-button
-          //         slot="secondaryAction"
-          //         dialogAction="cancel"
-          //         label=${localize('cancel')}
-          //       ></mwc-button>
-          //       <mwc-button
-          //         slot="primaryAction"
-          //         dialogAction="confirm"
-          //         label=${localize('confirm')}
-          //       ></mwc-button>
-          //     `,
-          //     dialog,
-          //   );
-          //   dialog.addEventListener('closed', this.resleeve.bind(this), {
-          //     once: true,
-          //   });
-          // });
+              </mwc-dialog>
+            `),
+          );
+          return;
         }
       } else await sleeve.createActor();
       if (sleeve.type !== this.selectedSleeve.type) {

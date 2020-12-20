@@ -24,6 +24,7 @@ import { nothing, TemplateResult } from 'lit-html';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
 import { identity } from 'remeda';
+import { traverseActiveElements } from 'weightless';
 import { CharacterDrawerRenderer } from './character-drawer-render-event';
 import { CharacterViewBase, ItemGroup } from './character-view-base';
 import styles from './character-view.scss';
@@ -42,9 +43,11 @@ export class CharacterView extends CharacterViewBase {
     this.addEventListener(RenderDialogEvent.is, async (ev) => {
       ev.stopPropagation();
       this.dialogTemplate = ev.dialogTemplate;
+      const focusSource = traverseActiveElements();
+
       await this.updateComplete;
       requestAnimationFrame(() => {
-        const dialog = this.renderRoot.querySelector("mwc-dialog");
+        const dialog = this.renderRoot.querySelector('mwc-dialog');
         if (!dialog) this.dialogTemplate = null;
         else {
           if (!dialog.open) dialog.open = true;
@@ -52,14 +55,26 @@ export class CharacterView extends CharacterViewBase {
             if (!ev.composedPath().includes(this)) {
               dialog.open = false;
             }
-          }
-          window.addEventListener("mousedown", checkGlobal)
-          dialog.addEventListener("closed", () => {
-            this.dialogTemplate = null;
-            window.removeEventListener("mousedown", checkGlobal)
-          }, { once: true })
+          };
+          window.addEventListener('mousedown', checkGlobal);
+          dialog.addEventListener(
+            'closed',
+            () => {
+              const newFocus = traverseActiveElements();
+              if (
+                !newFocus &&
+                focusSource?.isConnected &&
+                focusSource instanceof HTMLElement
+              ) {
+                focusSource.focus();
+              }
+              this.dialogTemplate = null;
+              window.removeEventListener('mousedown', checkGlobal);
+            },
+            { once: true },
+          );
         }
-      })
+      });
     });
     super.firstUpdated();
   }

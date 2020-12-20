@@ -20,6 +20,7 @@ import { render, TemplateResult } from 'lit-html';
 import { cache } from 'lit-html/directives/cache';
 import { guard } from 'lit-html/directives/guard';
 import { first } from 'remeda';
+import { traverseActiveElements } from 'weightless';
 import type { EventList } from '../event-list/event-list';
 import styles from './ep-overlay.scss';
 
@@ -75,6 +76,8 @@ export class EPOverlay extends LitElement {
     this.addEventListener(RenderDialogEvent.is, async (ev) => {
       ev.stopPropagation();
       this.dialogTemplate = ev.dialogTemplate;
+      const focusSource = traverseActiveElements();
+
       await this.updateComplete;
       requestAnimationFrame(() => {
         const dialog = this.renderRoot.querySelector("mwc-dialog");
@@ -83,6 +86,9 @@ export class EPOverlay extends LitElement {
           if (!dialog.open) dialog.open = true;
       
           dialog.addEventListener("closed", () => {
+            if (focusSource?.isConnected && focusSource instanceof HTMLElement) {
+              focusSource.focus();
+            }
             this.dialogTemplate = null;
           }, { once: true })
         }
