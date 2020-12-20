@@ -1360,7 +1360,8 @@ type LangEntries =
   | 'controlled'
   | 'actors'
   | 'characters'
-  | 'done' | "hidden"
+  | 'done'
+  | 'hidden';
 type FullNames =
   | 'cog'
   | 'int'

@@ -29,7 +29,8 @@ const setupMenu = () => {
 
 export type MWCMenuOption =
   | (MenuOption & { activated?: boolean; sublabel?: string })
-  | MenuDivider | TemplateResult
+  | MenuDivider
+  | TemplateResult;
 
 const renderMenuOption = (option: MWCMenuOption) => {
   if (option === 'divider') return html`<li divider></li>`;

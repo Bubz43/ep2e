@@ -157,7 +157,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         hasSeverity,
         name,
       } = substance;
-      const hidden = substance.epFlags?.awaitingOnset?.hidden ?? false
+      const hidden = substance.epFlags?.awaitingOnset?.hidden ?? false;
 
       if (alwaysApplied.hasInstantDamage) {
         const {
@@ -171,7 +171,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
         await createMessage({
           data: {
-            header: {...messageHeader, hidden},
+            header: { ...messageHeader, hidden },
             damage: {
               ...attack,
               rolledFormulas: rollLabeledFormulas(rollFormulas),
@@ -193,7 +193,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
         await createMessage({
           data: {
-            header: {...messageHeader, hidden},
+            header: { ...messageHeader, hidden },
             damage: {
               ...attack,
               rolledFormulas: rollLabeledFormulas(rollFormulas),
@@ -203,8 +203,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
           },
         });
       }
-      substance.makeActive({ applySeverity, modifyingEffects: [], hidden })
- 
+      substance.makeActive({ applySeverity, modifyingEffects: [], hidden });
     }
   }
 

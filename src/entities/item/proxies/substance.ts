@@ -28,7 +28,7 @@ import {
   SubstanceItemFlags,
 } from '@src/entities/models';
 import { UpdateStore } from '@src/entities/update-store';
-import { uniqueStringID } from '@src/features/feature-helpers';
+import { stringID, uniqueStringID } from '@src/features/feature-helpers';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
 import { createLiveTimeState, currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
@@ -110,13 +110,13 @@ export class Substance
 
   get appliedName() {
     if (this.appliedAndHidden) {
-      return game.user.isGM ? `??? {${this.name}}` : "???"
+      return game.user.isGM ? `??? {${this.name}}` : '???';
     }
-    return this.name
+    return this.name;
   }
 
   get appliedAndHidden() {
-    return !!(this.appliedState && this.epFlags?.[this.appliedState]?.hidden)
+    return !!(this.appliedState && this.epFlags?.[this.appliedState]?.hidden);
   }
 
   private get itemWindowKeys() {
@@ -337,7 +337,7 @@ export class Substance
             isEditable: () => this.editable,
             setData: createPipe(merge({ _id: data._id }), ops.update),
           }),
-          openForm: this.appliedState 
+          openForm: this.appliedState
             ? () => {
                 const { win, windowExisted } = openOrRenderWindow({
                   key: this.getItemWindowKey(
@@ -374,7 +374,7 @@ export class Substance
           isEditable: () => this.editable,
           setData: createPipe(merge({ _id: data._id }), ops.update),
         }),
-        openForm: this.appliedState 
+        openForm: this.appliedState
           ? () => {
               const { win, windowExisted } = openOrRenderWindow({
                 key: this.getItemWindowKey(
@@ -488,11 +488,11 @@ export class Substance
         ...more,
         alwaysAppliedItems: alwaysAppliedItems?.map((i) => ({
           ...i,
-          _id: `${this.id}-always-${i._id}`,
+          _id: `${stringID()}-${this.id}-always-${i._id}`,
         })),
         severityAppliedItems: severityAppliedItems?.map((i) => ({
           ...i,
-          _id: `${this.id}-severity-${i._id}`,
+          _id: `${stringID()}-${this.id}-severity-${i._id}`,
         })),
         awaitingOnset: {
           useMethod: method,
@@ -505,13 +505,19 @@ export class Substance
     return copy;
   }
 
-  makeActive(state: Omit<AppliedSubstanceState, 'startTime' | 'finishedEffects'>,) {
-    return this.updater.prop("flags", EP.Name, "awaitingOnset").store(null).prop("flags", EP.Name, "active").commit({
-      ...state,
-      startTime: currentWorldTimeMS(),
-      finishedEffects: [],
-    })
-  } 
+  makeActive(
+    state: Omit<AppliedSubstanceState, 'startTime' | 'finishedEffects'>,
+  ) {
+    return this.updater
+      .prop('flags', EP.Name, 'awaitingOnset')
+      .store(null)
+      .prop('flags', EP.Name, 'active')
+      .commit({
+        ...state,
+        startTime: currentWorldTimeMS(),
+        finishedEffects: [],
+      });
+  }
 
   onDelete() {
     this.itemWindowKeys?.forEach(closeWindow);

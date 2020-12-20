@@ -3,7 +3,7 @@ import type { Effect } from '@src/features/effects';
 import {
   StringID,
   stringID,
-  uniqueStringID
+  uniqueStringID,
 } from '@src/features/feature-helpers';
 import type { PsiInfluenceData } from '@src/features/psi-influence';
 import type { CommonEntityData, TokenData } from '@src/foundry/foundry-cont';
@@ -249,8 +249,8 @@ type ItemFlags<T extends ItemType> = T extends ItemType.Psi
   ? SubstanceItemFlags & {
       awaitingOnset: null | {
         useMethod: SubstanceUseMethod;
-      onsetStartTime: number;
-      hidden: boolean;
+        onsetStartTime: number;
+        hidden: boolean;
       };
       active: null | AppliedSubstanceState;
     }

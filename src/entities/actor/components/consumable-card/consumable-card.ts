@@ -89,7 +89,7 @@ export class ConsumableCard extends LazyRipple(LitElement) {
               update: ({ hidden = false }) => (isHidden = hidden),
               fields: ({ hidden }) => renderLabeledCheckbox(hidden),
             }),
-            "divider",
+            'divider',
             ...item.applicationMethods.map((method) => ({
               label: `${localize(method)} - ${localize(
                 'onset',

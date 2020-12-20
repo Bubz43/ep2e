@@ -112,24 +112,28 @@ export class CharacterView extends CharacterViewBase {
         );
         if (item.actor && item.editable) item.use();
       };
-      if (item.applicationMethods.length === 1 && this.character.hasItemProxy(item)) {
+      if (
+        item.applicationMethods.length === 1 &&
+        this.character.hasItemProxy(item)
+      ) {
         addSubstance(item.applicationMethods[0]!);
-      }
-      
-      else {
+      } else {
         openMenu({
           header: { heading: `${localize('apply')} ${item.name}` },
-          content: [ renderAutoForm({
-            props: { hidden: isHidden },
-            update: ({ hidden = false }) => (isHidden = hidden),
-            fields: ({ hidden }) => renderLabeledCheckbox(hidden),
-          }),
-          "divider",...item.applicationMethods.map((method) => ({
-            label: `${localize(method)} - ${localize(
-              'onset',
-            )}: ${prettyMilliseconds(Substance.onsetTime(method))}`,
-            callback: () => addSubstance(method),
-          }))],
+          content: [
+            renderAutoForm({
+              props: { hidden: isHidden },
+              update: ({ hidden = false }) => (isHidden = hidden),
+              fields: ({ hidden }) => renderLabeledCheckbox(hidden),
+            }),
+            'divider',
+            ...item.applicationMethods.map((method) => ({
+              label: `${localize(method)} - ${localize(
+                'onset',
+              )}: ${prettyMilliseconds(Substance.onsetTime(method))}`,
+              callback: () => addSubstance(method),
+            })),
+          ],
           position: ev,
         });
       }
@@ -242,8 +246,10 @@ export class CharacterView extends CharacterViewBase {
                                       <!-- <mwc-icon-button
                                         icon="settings"
                                         slot="action"
-                                        @click=${() => this
-                                          .openActiveSubstanceControls(substance.id)}
+                                        @click=${() =>
+                                        this.openActiveSubstanceControls(
+                                          substance.id,
+                                        )}
                                       ></mwc-icon-button> -->
                                     </character-view-time-item>
                                   `;

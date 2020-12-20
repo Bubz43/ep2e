@@ -50,7 +50,7 @@ export class MessageHeader extends LitElement {
                     }
                   : noop}
               >
-                ${hidden ? "??" : [subheadings].flat().join(' • ') }
+                ${hidden ? '??' : [subheadings].flat().join(' • ')}
               </h4>`
             : ''}
         </div>
@@ -68,16 +68,19 @@ export class MessageHeader extends LitElement {
               @click=${this.toggleDescription}
               class="description ${classMap({
                 expanded: this.descriptionOpen,
-                hidden: !!hidden
+                hidden: !!hidden,
               })}"
-               @mouseover=${hidden && game.user.isGM
-                  ? (ev: MouseEvent) => {
-                      tooltip.attach({
-                        el: ev.currentTarget as HTMLElement,
-                        content: html`<enriched-html style="min-width: 400px" content=${description}></enriched-html>`,
-                      });
-                    }
-                  : noop}
+              @mouseover=${hidden && game.user.isGM
+                ? (ev: MouseEvent) => {
+                    tooltip.attach({
+                      el: ev.currentTarget as HTMLElement,
+                      content: html`<enriched-html
+                        style="min-width: 400px"
+                        content=${description}
+                      ></enriched-html>`,
+                    });
+                  }
+                : noop}
               .content=${hidden ? `<p>??????</p>` : description}
             ></enriched-html>
           `

@@ -2,39 +2,26 @@ import {
   renderNumberField,
   renderSelectField,
   renderTextField,
-  renderTimeField
+  renderTimeField,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderSubmitForm } from '@src/components/form/forms';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { UpdateStore } from '@src/entities/update-store';
-import {
-  ActionSubtype,
-
-  createActiveTask
-} from '@src/features/actions';
-import {
-  addUpdateRemoveFeature,
-  idProp
-} from '@src/features/feature-helpers';
+import { ActionSubtype, createActiveTask } from '@src/features/actions';
+import { addUpdateRemoveFeature, idProp } from '@src/features/feature-helpers';
 import {
   currentWorldTimeMS,
   getElapsedTime,
   prettyMilliseconds,
-  refreshAvailable
+  refreshAvailable,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
 import { notEmpty } from '@src/utility/helpers';
-import {
-  customElement,
-  html,
-
-  LitElement,
-  property
-} from 'lit-element';
+import { customElement, html, LitElement, property } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import mix from 'mix-with/lib';
 import { createPipe, pathOr } from 'remeda';
