@@ -1332,6 +1332,11 @@
     "more": "More",
     "substancesAwaitingOnset": "Substances Awaiting Onset",
     "halveDrugEffects": "Halve Drug Effects",
+    "actors": "Actors",
+    "characters": "Characters",
+    "controlled": "Controlled",
+    "done": "Done",
+    "hidden": "Hidden",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

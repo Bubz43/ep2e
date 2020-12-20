@@ -532,6 +532,9 @@
             "actorLink": {
               "type": "string"
             },
+            "actors": {
+              "type": "string"
+            },
             "acuteStress": {
               "type": "string"
             },
@@ -1075,6 +1078,9 @@
             "characterDetails": {
               "type": "string"
             },
+            "characters": {
+              "type": "string"
+            },
             "charge": {
               "type": "string"
             },
@@ -1223,6 +1229,9 @@
               "type": "string"
             },
             "containSubstance": {
+              "type": "string"
+            },
+            "controlled": {
               "type": "string"
             },
             "controls": {
@@ -1460,6 +1469,9 @@
               "type": "string"
             },
             "distributedDevices": {
+              "type": "string"
+            },
+            "done": {
               "type": "string"
             },
             "doses": {
@@ -1921,6 +1933,9 @@
             "halve": {
               "type": "string"
             },
+            "halveDrugEffects": {
+              "type": "string"
+            },
             "halved": {
               "type": "string"
             },
@@ -1982,6 +1997,9 @@
               "type": "string"
             },
             "helplessness": {
+              "type": "string"
+            },
+            "hidden": {
               "type": "string"
             },
             "hide": {
@@ -4464,6 +4482,7 @@
             "activeRecharge",
             "actor",
             "actorLink",
+            "actors",
             "acuteStress",
             "add",
             "addiction",
@@ -4645,6 +4664,7 @@
             "changes",
             "character",
             "characterDetails",
+            "characters",
             "charge",
             "charging",
             "check",
@@ -4695,6 +4715,7 @@
             "consumables",
             "consumeOnUse",
             "containSubstance",
+            "controlled",
             "controls",
             "convert",
             "copy",
@@ -4774,6 +4795,7 @@
             "distribute",
             "distributed",
             "distributedDevices",
+            "done",
             "doses",
             "dosesPerShot",
             "dosesPerUnit",
@@ -4927,6 +4949,7 @@
             "hacking",
             "half",
             "halve",
+            "halveDrugEffects",
             "halved",
             "hard",
             "hardening",
@@ -4948,6 +4971,7 @@
             "heavy",
             "heavyPistol",
             "helplessness",
+            "hidden",
             "hide",
             "high",
             "history",

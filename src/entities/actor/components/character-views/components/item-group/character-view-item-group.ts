@@ -3,6 +3,7 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import { ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
 import { renderItemCard } from '@src/entities/item/item-views';
+import type { Trait } from '@src/entities/item/proxies/trait';
 import { idProp } from '@src/features/feature-helpers';
 import {
   DropType,
@@ -11,11 +12,14 @@ import {
   setDragDrop,
 } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
+import { performIntegerSort } from '@src/foundry/misc-helpers';
 import { tooltip } from '@src/init';
+import { throttle } from '@src/utility/decorators';
 import { clickIfEnter, notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
+  internalProperty,
   LitElement,
   property,
   PropertyValues,
@@ -23,11 +27,13 @@ import {
 import { nothing } from 'lit-html';
 import { cache } from 'lit-html/directives/cache';
 import { repeat } from 'lit-html/directives/repeat';
-import { prop, sortBy } from 'remeda';
+import { prop, reject, sortBy } from 'remeda';
 import { ConsumableCard } from '../../../consumable-card/consumable-card';
 import { ItemCard } from '../../../item-card/item-card';
 import { ItemGroup } from '../../character-view-base';
 import styles from './character-view-item-group.scss';
+
+const isTemporary = (item: ItemProxy) => !!(item as Trait).temporary;
 
 /**
  * @part header
@@ -46,11 +52,63 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
 
   @property({ type: Boolean }) collapsed = false;
 
+  @internalProperty() private targetItem: ItemProxy | null = null;
+
+  @internalProperty() private addDragAfter = false;
+
+  private draggedItem: ItemProxy | null = null;
+
   private hasExpanded = false;
+
+  disconnectedCallback() {
+    this.resetDraggedItems();
+    super.disconnectedCallback();
+  }
 
   updated(changedProps: PropertyValues) {
     if (!this.hasExpanded && !this.collapsed) this.hasExpanded = true;
     super.updated(changedProps);
+  }
+
+  private resetDraggedItems() {
+    this.draggedItem = null;
+    this.targetItem = null;
+    this.addDragAfter = false;
+  }
+
+  get items() {
+    return this.character[this.group] as ItemProxy[];
+  }
+
+  get sorted() {
+    const sorted = this.items.sort((a, b) => {
+      const tempA = isTemporary(a);
+      const tempB = isTemporary(b)
+      if (tempA && !tempB) return -1;
+      if (tempB && !tempA) return 1;
+      if (tempA && tempB) return a.name.localeCompare(b.name);
+      return a.sort - b.sort;
+    })
+    if (
+      this.draggedItem &&
+      this.targetItem &&
+      this.draggedItem !== this.targetItem
+    ) {
+      let currentIndex = -1;
+      let newIndex = -1;
+      for (let index = 0, length = sorted.length; index < length; index++) {
+        const el = sorted[index];
+        if (el === this.draggedItem) currentIndex = index;
+        else if (el === this.targetItem) newIndex = index;
+      }
+      if (newIndex !== -1 && currentIndex !== -1) {
+        if (currentIndex < newIndex) newIndex -= 1;
+        if (this.addDragAfter) newIndex += 1;
+        sorted.splice(currentIndex, 1);
+        sorted.splice(newIndex, 0, this.draggedItem);
+      }
+    }
+    return sorted;
   }
 
   private toggleCollapse() {
@@ -63,6 +121,16 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
       ev.currentTarget instanceof ItemCard ||
       ev.currentTarget instanceof ConsumableCard
     ) {
+      this.draggedItem = ev.currentTarget.item;
+      ev.currentTarget.addEventListener(
+        'dragend',
+        () => {
+          setTimeout(() => {
+            this.resetDraggedItems();
+          }, 100);
+        },
+        { once: true },
+      );
       setDragDrop(ev, {
         type: DropType.Item,
         ...this.character.actor.identifiers,
@@ -71,9 +139,49 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
     }
   };
 
+  @throttle(10, true)
+  private setDragBefore(ev: DragEvent) {
+    const card = ev.target as ItemCard | null;
+    if (this.draggedItem) {
+      const item = card?.item;
+      if (
+        item &&
+        card &&
+        item !== this.draggedItem &&
+        !isTemporary(item) &&
+        this.items.includes(item)
+      ) {
+        this.targetItem = item;
+        const { top, height } = card.getBoundingClientRect();
+        this.addDragAfter = ev.clientY >= top + height / 2;
+      }
+    }
+  }
+
   private addItem = handleDrop(async ({ ev, drop, data }) => {
     if (this.character.disabled || data?.type !== DropType.Item) {
       ev.preventDefault();
+      return;
+    }
+    if (this.draggedItem && this.targetItem) {
+      if (
+        [this.draggedItem, this.targetItem].includes(
+          (ev.target as ItemCard).item,
+        )
+      ) {
+        const sortStuff = performIntegerSort({
+          src: this.draggedItem,
+          target: this.targetItem,
+          siblings: reject(this.items, isTemporary),
+          sortBefore: !this.addDragAfter,
+        });
+        const groups = [...sortStuff].map(([item, sort]) => ({
+          _id: item.id,
+          sort,
+        }));
+        this.character.itemOperations.update(...groups);
+      }
+
       return;
     }
     const { group } = this;
@@ -143,7 +251,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
           <span slot="action">${this.renderRipple(!hasItems)}</span>
           ${hasItems ? this.renderCollapseToggle() : ''}
         </sl-header>
-        ${notEmpty(items) ? this.renderItemList(items) : ''}
+        ${notEmpty(items) ? this.renderItemList() : ''}
       </sl-dropzone>
     `;
   }
@@ -171,7 +279,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
     `;
   }
 
-  private renderItemList(proxies: ItemProxy[]) {
+  private renderItemList() {
     return cache(
       this.collapsed
         ? html``
@@ -181,8 +289,9 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
               stagger
               skipExitAnimation
               fadeOnly
+              @dragover=${this.setDragBefore}
             >
-              ${repeat(sortBy(proxies, prop('fullName')), idProp, (proxy) =>
+              ${repeat(this.sorted, idProp, (proxy) =>
                 renderItemCard(proxy, {
                   animateInitial: this.hasExpanded,
                   allowDrag: true,

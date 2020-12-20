@@ -27,6 +27,10 @@ export class Trait
     this.temporary = temporary;
   }
 
+  updateSort(newSort: number) {
+    return this.updater.prop("sort").commit(newSort)
+  }
+
   @LazyGetter()
   get currentEffects() {
     const { levelInfo, triggered, hasTriggers } = this;

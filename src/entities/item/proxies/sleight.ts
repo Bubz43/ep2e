@@ -10,4 +10,8 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
     super(init);
     this.temporary = temporary;
   }
+
+  updateSort(newSort: number) {
+    return this.updater.prop("sort").commit(newSort)
+  }
 }
