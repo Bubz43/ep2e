@@ -180,7 +180,7 @@ export const openPsiFormWindow = (psi: Psi) => {
 
 export const itemMenuOptions = (item: ItemProxy): MWCMenuOption[] => {
   return compact([
-    'toggleStashed' in item &&
+    item.editable && 'toggleStashed' in item &&
       (item.type !== ItemType.Substance || !item.appliedState) && {
         label: localize(item.stashed ? 'carry' : 'stash'),
         callback: item.toggleStashed.bind(item),

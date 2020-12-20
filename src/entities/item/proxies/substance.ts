@@ -3,20 +3,20 @@ import type { MessageHeaderData } from '@src/chat/message-data';
 import {
   createBaseAttackFormula,
   SubstanceAttack,
-  SubstanceAttackData,
+  SubstanceAttackData
 } from '@src/combat/attacks';
 import {
   closeWindow,
-  openOrRenderWindow,
+  openOrRenderWindow
 } from '@src/components/window/window-controls';
 import {
   ResizeOption,
-  SlWindowEventName,
+  SlWindowEventName
 } from '@src/components/window/window-options';
 import {
   SubstanceApplicationMethod,
   SubstanceClassification,
-  SubstanceType,
+  SubstanceType
 } from '@src/data-enums';
 import type { AddEffects } from '@src/entities/applied-effects';
 import { ItemType } from '@src/entities/entity-types';
@@ -25,7 +25,7 @@ import {
   DrugAppliedItem,
   ItemEntity,
   setupItemOperations,
-  SubstanceItemFlags,
+  SubstanceItemFlags
 } from '@src/entities/models';
 import { UpdateStore } from '@src/entities/update-store';
 import type { Effect } from '@src/features/effects';
@@ -456,11 +456,12 @@ export class Substance
       },
       entity: this.actor,
     });
-    this.use();
+    await this.use();
+    return
   }
 
   use() {
-    if (this.consumeOnUse) return this.consumeUnit();
+    if (this.consumeOnUse && this.editable) return this.consumeUnit();
     return;
   }
 

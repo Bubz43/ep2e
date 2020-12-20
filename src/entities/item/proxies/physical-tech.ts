@@ -1,11 +1,11 @@
 import {
   closeWindow,
   getWindow,
-  openOrRenderWindow,
+  openOrRenderWindow
 } from '@src/components/window/window-controls';
 import {
   ResizeOption,
-  SlWindowEventName,
+  SlWindowEventName
 } from '@src/components/window/window-options';
 import { Activation, DeviceType, FabType } from '@src/data-enums';
 import { Ego } from '@src/entities/actor/ego';
@@ -15,28 +15,27 @@ import { ItemType } from '@src/entities/entity-types';
 import {
   DefaultEgos,
   ItemEntity,
-  setupItemOperations,
+  setupItemOperations
 } from '@src/entities/models';
-import { UpdateActions, UpdateStore } from '@src/entities/update-store';
+import { UpdateStore } from '@src/entities/update-store';
 import { acquisitionTime } from '@src/features/complexity';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
 import {
   CommonInterval,
   createLiveTimeState,
   currentWorldTimeMS,
-  getElapsedTime,
-  LiveTimeState,
-  prettyMilliseconds,
+
+  LiveTimeState
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { deepMerge } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { AppMeshHealth } from '@src/health/app-mesh-health';
 import { MeshHealth } from '@src/health/full-mesh-health';
-import { nonNegative, notEmpty } from '@src/utility/helpers';
+import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { createPipe, forEach, merge, clamp } from 'remeda';
+import { createPipe, forEach, merge } from 'remeda';
 import type { CopyableItem, ItemProxy } from '../item';
 import { Copyable, Equippable, Gear, Purchasable } from '../item-mixins';
 import { renderItemForm } from '../item-views';

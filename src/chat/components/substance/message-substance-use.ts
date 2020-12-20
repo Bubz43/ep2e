@@ -66,7 +66,7 @@ export class MessageSubstanceUse extends MessageElement {
       <mwc-button @click=${this.applySubstance} dense unelevated
         >${localize('apply')} ${this.substance.partialType}</mwc-button
       >
-      <div>
+      <div class="groups">
         ${useMethod !== 'use'
           ? html`
               <sl-group label=${localize('applicationMethod')}>

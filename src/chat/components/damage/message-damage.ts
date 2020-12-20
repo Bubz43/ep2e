@@ -106,7 +106,7 @@ export class MessageDamage extends LitElement {
       <mwc-button
         dense
         unelevated
-        class="stress-value"
+        class="damage-value"
         @click=${this.applyDamage}
       >
         ${formatDamageType(damageType)}:

@@ -1,9 +1,13 @@
-import { renderSlider } from '@src/components/field/fields';
+import { renderLabeledCheckbox, renderSlider } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
+import { Substance } from '@src/entities/item/proxies/substance';
 import { currentWorldTimeMS, prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
+import { tooltip } from '@src/init';
+import { openMenu } from '@src/open-menu';
+import { localImage } from '@src/utility/images';
 import {
   customElement,
   LitElement,
@@ -54,8 +58,47 @@ export class ItemCardFabber extends UseWorldTime(LitElement) {
       );
   }
 
+  private async useGlandedSubstance(ev: MouseEvent) {
+    const { glandedSubstance: item } = this.fabber;
+    if (!item) return
+    if (item.applicationMethods.length === 1) {
+      await item.createMessage({ method: item.applicationMethods[0]! });
+      this.fabber.printState.updateStartTime(currentWorldTimeMS())
+      }
+    
+      else {
+        let isHidden = false;
+        openMenu({
+          header: { heading: `${localize('use')} ${item.name}` },
+          content: [
+            renderAutoForm({
+              props: { hidden: isHidden },
+              update: ({ hidden = false }) => (isHidden = hidden),
+              fields: ({ hidden }) => renderLabeledCheckbox(hidden),
+            }),
+            'divider',
+            ...item.applicationMethods.map((method) => ({
+              label: `${localize(method)} - ${localize(
+                'onset',
+              )}: ${prettyMilliseconds(Substance.onsetTime(method))}`,
+              callback: async () => {
+                await  item.createMessage({ method, hidden: isHidden });
+                this.fabber.printState.updateStartTime(currentWorldTimeMS())
+
+              },
+            })),
+          ],
+          position: ev,
+        });
+      }
+  }
+
   render() {
-    const { fabricatedItem, printState } = this.fabber;
+    const {
+      fabricatedItem,
+      printState,
+      editable,
+    } = this.fabber;
 
     return html`
       ${fabricatedItem?.nonDefaultImg
@@ -78,7 +121,21 @@ export class ItemCardFabber extends UseWorldTime(LitElement) {
                 ? html`<button @click=${this.discardChanges}>
                     <mwc-icon>clear</mwc-icon>
                   </button>`
-                : ''}
+                : html`
+                    ${!printState.remaining && this.fabber.glandedSubstance
+                      ? html`
+                          <mwc-icon-button
+                            @click=${this.useGlandedSubstance}
+                            ?disabled=${!editable}
+                            data-tooltip=${localize('use')}
+                            @mouseover=${tooltip.fromData}
+                            ><img
+                              src=${localImage('icons/actions/pill-drop.svg')}
+                            />
+                          </mwc-icon-button>
+                        `
+                      : ''}
+                  `}
             </div>
             ${this.editing
               ? this.renderProgressForm()
