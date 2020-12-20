@@ -28,8 +28,8 @@ import { nothing } from 'lit-html';
 import { cache } from 'lit-html/directives/cache';
 import { repeat } from 'lit-html/directives/repeat';
 import { prop, reject, sortBy } from 'remeda';
-import { ConsumableCard } from '../../../consumable-card/consumable-card';
-import { ItemCard } from '../../../item-card/item-card';
+import { ConsumableCard } from '../cards/consumable-card/consumable-card';
+import { ItemCard } from '../cards/item-card/item-card';
 import { ItemGroup } from '../../character-view-base';
 import styles from './character-view-item-group.scss';
 
@@ -87,7 +87,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
       if (tempA && !tempB) return -1;
       if (tempB && !tempA) return 1;
       if (tempA && tempB) return a.name.localeCompare(b.name);
-      return a.sort - b.sort;
+      return (a.sort - b.sort) || a.name.localeCompare(b.name);
     })
     if (
       this.draggedItem &&
@@ -139,7 +139,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
     }
   };
 
-  @throttle(10, true)
+  @throttle(40, true)
   private setDragBefore(ev: DragEvent) {
     const card = ev.target as ItemCard | null;
     if (this.draggedItem) {

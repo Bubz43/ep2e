@@ -1,0 +1,15 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+.quantity-form {
+  width: 33%;
+  margin-left: auto;
+}
+
+mwc-icon-button {
+  &[disabled] {
+    img {
+      opacity: 0.5;
+    }
+  }
+}

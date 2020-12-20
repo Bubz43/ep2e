@@ -16,7 +16,7 @@ import {
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { sortBy } from 'remeda';
-import { ItemCard } from '../../../item-card/item-card';
+import { ItemCard } from '../cards/item-card/item-card';
 import styles from './character-view-search.scss';
 
 @customElement('character-view-search')

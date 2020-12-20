@@ -7,7 +7,7 @@ import { localize } from '@src/foundry/localization';
 import type { MWCMenuOption } from '@src/open-menu';
 import { html } from 'lit-html';
 import { compact, noop } from 'remeda';
-import type { ItemCard } from '../actor/components/item-card/item-card';
+import type { ItemCard } from '../actor/components/character-views/components/cards/item-card/item-card';
 import { ItemType } from '../entity-types';
 import type { ItemProxy } from './item';
 import type { Psi } from './proxies/psi';

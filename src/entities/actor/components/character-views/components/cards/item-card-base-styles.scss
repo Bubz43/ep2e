@@ -69,7 +69,6 @@
     pointer-events: none;
     margin-left: 0.5ch;
     @include truncate(100%);
-    // position: relative;
     .temporary {
       color: var(--color-secondary);
     }

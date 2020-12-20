@@ -75,9 +75,9 @@ import { CharacterViewSearch } from './entities/actor/components/character-views
 import { CharacterViewSleeve } from './entities/actor/components/character-views/components/sleeve/character-view-sleeve';
 import { CharacterViewTime } from './entities/actor/components/character-views/components/time/character-view-time';
 import { CharacterViewTimeItem } from './entities/actor/components/character-views/components/time/character-view-time-item';
-import { ConsumableCard } from './entities/actor/components/consumable-card/consumable-card';
-import { ItemCard } from './entities/actor/components/item-card/item-card';
-import { ItemCardFabber } from './entities/actor/components/item-card/item-card-fabber';
+import { ConsumableCard } from './entities/actor/components/character-views/components/cards/consumable-card/consumable-card';
+import { ItemCard } from './entities/actor/components/character-views/components/cards/item-card/item-card';
+import { ItemCardFabber } from './entities/actor/components/character-views/components/cards/item-card/item-card-fabber';
 import { ItemTrash } from './entities/actor/components/item-trash/item-trash';
 import { FormItemsList } from './entities/actor/components/items-list/form-items-list';
 import { SleeveFormAquisition } from './entities/actor/components/sleeve-forms/acquisition/sleeve-form-acquisition';
