@@ -23,6 +23,8 @@
 
   background: linear-gradient(45deg, var(--color-bg-alt), var(--color-bg));
 
+  font-family: var(--font-1);
+
   ::slotted([slot='header']) {
     box-shadow: 0 0 5px black;
     border-bottom: 1px solid black;

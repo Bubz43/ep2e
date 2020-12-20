@@ -44,7 +44,6 @@ export class CharacterView extends CharacterViewBase {
       ev.stopPropagation();
       this.dialogTemplate = ev.dialogTemplate;
       const focusSource = traverseActiveElements();
-
       await this.updateComplete;
       requestAnimationFrame(() => {
         const dialog = this.renderRoot.querySelector('mwc-dialog');
