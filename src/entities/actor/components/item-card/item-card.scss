@@ -23,6 +23,7 @@
   margin: 0.25rem 0.5rem;
   box-shadow: 0 0 4px black;
   background: alphav(var(--color-grey), 0.1);
+
   .header {
     img {
       height: 51px;
@@ -37,6 +38,8 @@
     }
   }
 }
+
+
 
 .header {
   display: grid;

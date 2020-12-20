@@ -149,7 +149,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     const substance = this.awaitingOnsetSubstances.find(matchID(id));
     if (substance) {
       const applySeverity = true;
-      // TODO Check vs severity
+      // TODO Check vs severity and hidden and every other fucking thing
       const {
         alwaysApplied,
         severity,
@@ -157,6 +157,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         hasSeverity,
         name,
       } = substance;
+      const hidden = substance.epFlags?.awaitingOnset?.hidden ?? false
+
       if (alwaysApplied.hasInstantDamage) {
         const {
           label,
@@ -169,7 +171,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
         await createMessage({
           data: {
-            header: messageHeader,
+            header: {...messageHeader, hidden},
             damage: {
               ...attack,
               rolledFormulas: rollLabeledFormulas(rollFormulas),
@@ -191,7 +193,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
         await createMessage({
           data: {
-            header: messageHeader,
+            header: {...messageHeader, hidden},
             damage: {
               ...attack,
               rolledFormulas: rollLabeledFormulas(rollFormulas),
@@ -201,16 +203,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
           },
         });
       }
-      const { add, remove } = this.itemOperations;
-      await remove(id);
-      requestAnimationFrame(() => {
-        add(
-          substance.createApplied({
-            applySeverity,
-            modifyingEffects: [],
-          }),
-        );
-      });
+      substance.makeActive({ applySeverity, modifyingEffects: [], hidden })
+ 
     }
   }
 
@@ -320,7 +314,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   get itemsIncludingTemporary() {
     return [
       [...this.items.values()].filter(
-        (i) => i.type === ItemType.Substance && i.appliedState,
+        (i) => i.type !== ItemType.Substance || !i.appliedState,
       ),
       this.activeSubstances.flatMap((i) => i.appliedInfo.items),
     ].flat();
@@ -726,7 +720,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   ) {
     for (const item of this.items.values()) {
       if (item.type === ItemType.Substance && item.appliedState) {
-        if (item.appliedState === 'applied') {
+        if (item.appliedState === 'active') {
           this.activeSubstances.push(item);
           const { effects, items } = item.appliedInfo;
           this._appliedEffects.add(effects);

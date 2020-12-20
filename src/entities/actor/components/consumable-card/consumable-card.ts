@@ -1,4 +1,7 @@
-import { renderNumberField } from '@src/components/field/fields';
+import {
+  renderLabeledCheckbox,
+  renderNumberField,
+} from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { LazyRipple } from '@src/components/mixins/lazy-ripple';
 import { ItemType } from '@src/entities/entity-types';
@@ -13,6 +16,7 @@ import { openMenu } from '@src/open-menu';
 import { clickIfEnter } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
 import { customElement, LitElement, property, html } from 'lit-element';
+import { stopEvent } from 'weightless';
 import styles from './consumable-card.scss';
 
 @customElement('consumable-card')
@@ -74,18 +78,28 @@ export class ConsumableCard extends LazyRipple(LitElement) {
     const { item } = this;
     if (item.type === ItemType.Substance) {
       if (item.applicationMethods.length === 1)
-        item.createMessage(item.applicationMethods[0]!);
-      else
+        item.createMessage({ method: item.applicationMethods[0]! });
+      else {
+        let isHidden = false;
         openMenu({
           header: { heading: `${localize('use')} ${item.name}` },
-          content: item.applicationMethods.map((method) => ({
-            label: `${localize(method)} - ${localize(
-              'onset',
-            )}: ${prettyMilliseconds(Substance.onsetTime(method))}`,
-            callback: () => item.createMessage(method),
-          })),
+          content: [
+            renderAutoForm({
+              props: { hidden: isHidden },
+              update: ({ hidden = false }) => (isHidden = hidden),
+              fields: ({ hidden }) => renderLabeledCheckbox(hidden),
+            }),
+            "divider",
+            ...item.applicationMethods.map((method) => ({
+              label: `${localize(method)} - ${localize(
+                'onset',
+              )}: ${prettyMilliseconds(Substance.onsetTime(method))}`,
+              callback: () => item.createMessage({ method, hidden: isHidden }),
+            })),
+          ],
           position: ev,
         });
+      }
     }
   }
 

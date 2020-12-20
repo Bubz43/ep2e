@@ -320,6 +320,7 @@ declare global {
     readonly id: string;
     readonly viewedScene: string;
     can(permission: string): boolean;
+    readonly isGM: boolean;
     data: Readonly<
       CommonEntityData & {
         color: string;

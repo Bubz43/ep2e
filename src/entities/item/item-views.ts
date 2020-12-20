@@ -179,27 +179,29 @@ export const openPsiFormWindow = (psi: Psi) => {
 };
 
 export const itemMenuOptions = (item: ItemProxy): MWCMenuOption[] =>
-  compact([
-    'toggleStashed' in item && {
-      label: localize(item.stashed ? 'carry' : 'stash'),
-      callback: item.toggleStashed.bind(item),
-    },
-    'toggleEquipped' in item && {
-      label: localize(item.equipped ? 'unequip' : 'equip'),
-      callback: item.toggleEquipped.bind(item),
-    },
-    item.openForm && {
-      label: localize('form'),
-      icon: html`<mwc-icon>launch</mwc-icon>`,
-      callback: item.openForm,
-    },
-    item.deleteSelf && {
-      label: localize('delete'),
-      icon: html`<mwc-icon>delete_forever</mwc-icon>`,
-      callback: item.deleteSelf,
-      disabled: !item.editable && !item.alwaysDeletable,
-    },
-  ]);
+  {
+    return compact([
+      'toggleStashed' in item && (item.type !== ItemType.Substance || !item.appliedState) && {
+        label: localize(item.stashed ? 'carry' : 'stash'),
+        callback: item.toggleStashed.bind(item),
+      },
+      'toggleEquipped' in item && {
+        label: localize(item.equipped ? 'unequip' : 'equip'),
+        callback: item.toggleEquipped.bind(item),
+      },
+      item.openForm && (item.type !== ItemType.Substance || (game.user.isGM || !item.appliedAndHidden)) && {
+        label: localize('form'),
+        icon: html`<mwc-icon>launch</mwc-icon>`,
+        callback: item.openForm,
+      },
+      item.deleteSelf && {
+        label: localize('delete'),
+        icon: html`<mwc-icon>delete_forever</mwc-icon>`,
+        callback: item.deleteSelf,
+        disabled: !item.editable && !item.alwaysDeletable,
+      },
+    ]);
+  };
 
 export const renderItemCard = (
   item: ItemProxy,

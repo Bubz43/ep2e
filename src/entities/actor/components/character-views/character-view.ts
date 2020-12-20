@@ -1,3 +1,5 @@
+import { renderLabeledCheckbox } from '@src/components/field/fields';
+import { renderAutoForm } from '@src/components/form/forms';
 import { enumValues, SubstanceApplicationMethod } from '@src/data-enums';
 import { ItemType } from '@src/entities/entity-types';
 import {
@@ -102,23 +104,32 @@ export class CharacterView extends CharacterViewBase {
     if (data?.type === DropType.Item && !this.character.disabled) {
       const item = await itemDropToItemProxy(data);
       if (item?.type !== ItemType.Substance || !item.quantity) return;
+      let isHidden = false;
+
       const addSubstance = async (method: SubstanceUseMethod) => {
         await this.character.itemOperations.add(
-          item.createAwaitingOnset(method),
+          item.createAwaitingOnset({ method }),
         );
-        if (item.actor && item.editable) item.useUnit();
+        if (item.actor && item.editable) item.use();
       };
-      if (item.applicationMethods.length === 1)
+      if (item.applicationMethods.length === 1 && this.character.hasItemProxy(item)) {
         addSubstance(item.applicationMethods[0]!);
+      }
+      
       else {
         openMenu({
           header: { heading: `${localize('apply')} ${item.name}` },
-          content: item.applicationMethods.map((method) => ({
+          content: [ renderAutoForm({
+            props: { hidden: isHidden },
+            update: ({ hidden = false }) => (isHidden = hidden),
+            fields: ({ hidden }) => renderLabeledCheckbox(hidden),
+          }),
+          "divider",...item.applicationMethods.map((method) => ({
             label: `${localize(method)} - ${localize(
               'onset',
             )}: ${prettyMilliseconds(Substance.onsetTime(method))}`,
             callback: () => addSubstance(method),
-          })),
+          }))],
           position: ev,
         });
       }
@@ -228,6 +239,12 @@ export class CharacterView extends CharacterViewBase {
                                       completion="expired"
                                       .item=${substance}
                                     >
+                                      <!-- <mwc-icon-button
+                                        icon="settings"
+                                        slot="action"
+                                        @click=${() => this
+                                          .openActiveSubstanceControls(substance.id)}
+                                      ></mwc-icon-button> -->
                                     </character-view-time-item>
                                   `;
                                 },

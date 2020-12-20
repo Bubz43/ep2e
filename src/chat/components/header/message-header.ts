@@ -1,16 +1,15 @@
 import type { MessageHeaderData } from '@src/chat/message-data';
-import { localize } from '@src/foundry/localization';
+import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
-  LitElement,
-  property,
   html,
   internalProperty,
-  PropertyValues,
+  LitElement,
+  property,
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
-import { ifDefined } from 'lit-html/directives/if-defined';
+import { noop } from 'remeda';
 import styles from './message-header.scss';
 
 @customElement('message-header')
@@ -30,17 +29,33 @@ export class MessageHeader extends LitElement {
   }
 
   render() {
-    const { img, heading, subheadings, description } = this.data;
+    const { img, heading, subheadings, description, hidden } = this.data;
+    const visibleHeading = hidden ? '???' : heading;
+    // TODO show special hidden image which can reveal normal on hover for gm
     return html`
       <header>
-        <div class="headings ${img ? 'with-image' : ''}">
-          <h3 title=${heading}>${heading}</h3>
+        <div class="headings ${img && !hidden ? 'with-image' : ''}">
+          <h3 title=${game.user.isGM ? heading : visibleHeading}>
+            ${visibleHeading}
+          </h3>
           ${notEmpty(subheadings)
-            ? html`<h4 class="details">${[subheadings].flat().join(' • ')}</h4>`
+            ? html`<h4
+                class="details"
+                @mouseover=${hidden && game.user.isGM
+                  ? (ev: MouseEvent) => {
+                      tooltip.attach({
+                        el: ev.currentTarget as HTMLElement,
+                        content: [subheadings].flat().join(' • '),
+                      });
+                    }
+                  : noop}
+              >
+                ${hidden ? "??" : [subheadings].flat().join(' • ') }
+              </h4>`
             : ''}
         </div>
 
-        ${img
+        ${img && !hidden
           ? html`
               <img class="main-image" src=${img} height="40px" loading="lazy" />
             `
@@ -53,8 +68,17 @@ export class MessageHeader extends LitElement {
               @click=${this.toggleDescription}
               class="description ${classMap({
                 expanded: this.descriptionOpen,
+                hidden: !!hidden
               })}"
-              .content=${description}
+               @mouseover=${hidden && game.user.isGM
+                  ? (ev: MouseEvent) => {
+                      tooltip.attach({
+                        el: ev.currentTarget as HTMLElement,
+                        content: html`<enriched-html style="min-width: 400px" content=${description}></enriched-html>`,
+                      });
+                    }
+                  : noop}
+              .content=${hidden ? `<p>??????</p>` : description}
             ></enriched-html>
           `
         : html``}

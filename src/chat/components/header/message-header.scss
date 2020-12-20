@@ -19,7 +19,7 @@ header {
   position: relative;
   flex: 1;
   text-align: left;
-  margin-left: 0.75rem;
+  // margin-left: 0.75rem;
   padding: 0.5rem 0;
   &.with-img {
     max-width: 240px;
@@ -73,5 +73,8 @@ h4 {
 
   &.expanded {
     white-space: unset;
+  }
+  &.hidden {
+    text-align: center;
   }
 }

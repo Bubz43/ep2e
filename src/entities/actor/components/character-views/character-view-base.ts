@@ -1,4 +1,9 @@
+import { renderLabeledCheckbox } from '@src/components/field/fields';
+import { renderAutoForm } from '@src/components/form/forms';
 import { ActorType } from '@src/entities/entity-types';
+import { matchID } from '@src/features/feature-helpers';
+import { localize } from '@src/foundry/localization';
+import { RenderDialogEvent } from '@src/open-dialog';
 import { debounce } from '@src/utility/decorators';
 import { internalProperty, LitElement, property, query } from 'lit-element';
 import { html, TemplateResult } from 'lit-html';
@@ -84,6 +89,36 @@ export abstract class CharacterViewBase extends LitElement {
 
   get drawerIsOpen() {
     return !!this.drawerContentRenderer;
+  }
+
+  protected openActiveSubstanceControls(id: string) {
+    const substance = this.character.activeSubstances.find(matchID(id));
+    if (!substance?.epFlags?.active || this.character.disabled) return;
+    let appliedState = duplicate(substance.epFlags.active);
+    this.dispatchEvent(
+      new RenderDialogEvent(html`
+        <mwc-dialog open heading=${substance.name}>
+          ${renderAutoForm({
+            props: appliedState,
+            update: (change) => (appliedState = { ...appliedState, ...change }),
+            fields: ({ applySeverity }) => [
+              substance.hasSeverity ? renderLabeledCheckbox(applySeverity) : '',
+            ],
+          })}
+          <mwc-button dense slot="secondaryAction" dialogAction="cancel"
+            >${localize('cancel')}</mwc-button
+          >
+          <mwc-button
+            dense
+            slot="primaryAction"
+            dialogAction="confirm"
+            unelevated
+            @click=${() => substance.updateAppliedState(appliedState)}
+            >${localize('save')}</mwc-button
+          >
+        </mwc-dialog>
+      `),
+    );
   }
 
   renderResleeve() {

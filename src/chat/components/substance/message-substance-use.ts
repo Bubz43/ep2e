@@ -6,6 +6,7 @@ import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property } from 'lit-element';
+import { pipe } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-substance-use.scss';
 
@@ -42,7 +43,10 @@ export class MessageSubstanceUse extends MessageElement {
         });
 
         actor.itemOperations.add(
-          this.substance.createAwaitingOnset(this.substanceUse.useMethod),
+          this.substance.createAwaitingOnset({
+            method: this.substanceUse.useMethod,
+            hidden: this.substanceUse.hidden,
+          }),
         );
       }
     }, true);
@@ -60,8 +64,7 @@ export class MessageSubstanceUse extends MessageElement {
     const { useMethod, doses, appliedTo } = this.substanceUse;
     return html`
       <mwc-button @click=${this.applySubstance} dense unelevated
-        >${localize('apply')}
-        ${localize(this.substance.substanceType)}</mwc-button
+        >${localize('apply')} ${this.substance.partialType}</mwc-button
       >
       <div>
         ${useMethod !== 'use'

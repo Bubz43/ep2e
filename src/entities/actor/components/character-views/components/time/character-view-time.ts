@@ -1,53 +1,40 @@
-import { createMessage } from '@src/chat/create-message';
 import {
   renderNumberField,
   renderSelectField,
   renderTextField,
-  renderTimeField,
+  renderTimeField
 } from '@src/components/field/fields';
 import { renderAutoForm, renderSubmitForm } from '@src/components/form/forms';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
-import type { ItemProxy } from '@src/entities/item/item';
-import { itemMenuOptions } from '@src/entities/item/item-views';
 import { UpdateStore } from '@src/entities/update-store';
 import {
   ActionSubtype,
-  ActiveTaskAction,
-  createActiveTask,
-  TaskState,
-  taskState,
+
+  createActiveTask
 } from '@src/features/actions';
 import {
-  addFeature,
   addUpdateRemoveFeature,
-  idProp,
-  matchID,
-  StringID,
+  idProp
 } from '@src/features/feature-helpers';
 import {
-  createLiveTimeState,
   currentWorldTimeMS,
   getElapsedTime,
   prettyMilliseconds,
-  refreshAvailable,
+  refreshAvailable
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
-import { rollLabeledFormulas } from '@src/foundry/rolls';
-import { EP } from '@src/foundry/system';
 import { tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
-import { openMenu } from '@src/open-menu';
-import { nonNegative, notEmpty } from '@src/utility/helpers';
+import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
-  internalProperty,
+
   LitElement,
-  property,
+  property
 } from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
 import mix from 'mix-with/lib';
 import { createPipe, pathOr } from 'remeda';

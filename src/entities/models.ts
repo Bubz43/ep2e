@@ -1,11 +1,9 @@
-import type { SubstanceUseData } from '@src/chat/message-data';
-import type { SubstanceAttackData } from '@src/combat/attacks';
 import { EgoType } from '@src/data-enums';
 import type { Effect } from '@src/features/effects';
 import {
   StringID,
   stringID,
-  uniqueStringID,
+  uniqueStringID
 } from '@src/features/feature-helpers';
 import type { PsiInfluenceData } from '@src/features/psi-influence';
 import type { CommonEntityData, TokenData } from '@src/foundry/foundry-cont';
@@ -13,16 +11,14 @@ import { localize } from '@src/foundry/localization';
 import { deepMerge } from '@src/foundry/misc-helpers';
 import type { EP } from '@src/foundry/system';
 import type { EntityTemplates } from '@src/foundry/template-schema';
-import type { ValOrValFN } from '@src/utility/helper-types';
 import { LazyGetter } from 'lazy-get-decorator';
-import { map, mapToObj, pick, prop, reject } from 'remeda';
-import type { UnionToIntersection, SetOptional } from 'type-fest';
+import { map, pick, prop, reject } from 'remeda';
+import type { SetOptional, UnionToIntersection } from 'type-fest';
 import type { DeepPartial } from 'utility-types';
 import type { ItemOperations } from './actor/actor';
 import type { FullEgoData } from './actor/ego';
-import type { ActorType, sleeveTypes, ItemType } from './entity-types';
+import type { ActorType, ItemType, sleeveTypes } from './entity-types';
 import { createDefaultItem } from './item/default-items';
-import { ItemEP, ItemProxy } from './item/item';
 import type { SubstanceUseMethod } from './item/proxies/substance';
 
 type EPEntity = keyof EntityTemplates;
@@ -244,6 +240,7 @@ export type AppliedSubstanceState = {
   applySeverity: boolean;
   modifyingEffects: StringID<Effect>[];
   finishedEffects: ('always' | 'severity')[];
+  hidden: boolean;
 };
 
 type ItemFlags<T extends ItemType> = T extends ItemType.Psi
@@ -252,9 +249,10 @@ type ItemFlags<T extends ItemType> = T extends ItemType.Psi
   ? SubstanceItemFlags & {
       awaitingOnset: null | {
         useMethod: SubstanceUseMethod;
-        onsetStartTime: number;
+      onsetStartTime: number;
+      hidden: boolean;
       };
-      applied: null | AppliedSubstanceState;
+      active: null | AppliedSubstanceState;
     }
   : T extends ItemType.Explosive
   ? { substance: null | [ItemEntity<ItemType.Substance>] }

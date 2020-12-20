@@ -128,7 +128,6 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
                     @click=${() =>
                       this.item &&
                       openMenu({
-                        header: { heading: this.item.fullName },
                         content: itemMenuOptions(this.item),
                       })}
                     slot="action"

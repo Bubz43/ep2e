@@ -47,6 +47,7 @@ export type SubstanceUseData = {
   useMethod: SubstanceUseMethod;
   doses?: number;
   appliedTo?: string[];
+  hidden?: boolean;
 };
 
 export type MessageHeaderData = {
@@ -54,6 +55,7 @@ export type MessageHeaderData = {
   subheadings?: string | string[];
   img?: string;
   description?: string;
+  hidden?: boolean;
 };
 
 export type MessageData = Partial<{

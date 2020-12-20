@@ -36,7 +36,7 @@ import { EP } from '@src/foundry/system';
 import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { createPipe, last, map, merge, uniq } from 'remeda';
+import { createPipe, last, map, merge, pipe, uniq } from 'remeda';
 import type { Attacker } from '../item-interfaces';
 import { Copyable, Purchasable, Stackable } from '../item-mixins';
 import { renderItemForm } from '../item-views';
@@ -77,7 +77,7 @@ export class Substance
   private static appliedItemWindows = new WeakMap<object, Map<string, {}>>();
 
   readonly loaded;
-  readonly appliedState: '' | 'awaitingOnset' | 'applied';
+  readonly appliedState: '' | 'awaitingOnset' | 'active';
 
   constructor({
     loaded,
@@ -89,8 +89,8 @@ export class Substance
     this.loaded = loaded;
     this.appliedState = this.epFlags?.awaitingOnset
       ? 'awaitingOnset'
-      : this.epFlags?.applied
-      ? 'applied'
+      : this.epFlags?.active
+      ? 'active'
       : '';
 
     if (this.appliedState) {
@@ -106,6 +106,17 @@ export class Substance
         }
       }
     }
+  }
+
+  get appliedName() {
+    if (this.appliedAndHidden) {
+      return game.user.isGM ? `??? {${this.name}}` : "???"
+    }
+    return this.name
+  }
+
+  get appliedAndHidden() {
+    return !!(this.appliedState && this.epFlags?.[this.appliedState]?.hidden)
   }
 
   private get itemWindowKeys() {
@@ -137,7 +148,7 @@ export class Substance
       id: `awaiting-onset-${this.id}`,
       duration: Substance.onsetTime(awaitingOnset.useMethod),
       startTime: awaitingOnset.onsetStartTime,
-      label: this.name,
+      label: this.appliedName,
       updateStartTime: this.updater.prop(
         'flags',
         EP.Name,
@@ -164,6 +175,14 @@ export class Substance
       this.category,
       ...map([this.classification, this.substanceType], localize),
     ]).join(' ');
+  }
+
+  get partialType() {
+    return pipe(
+      [this.classification, this.substanceType],
+      uniq(),
+      map(localize),
+    ).join(' ');
   }
 
   get category() {
@@ -305,7 +324,7 @@ export class Substance
         embedded: this.name,
         lockSource: false,
         alwaysDeletable: !this.appliedState && this.editable,
-        temporary: this.appliedState ? this.name : '',
+        temporary: this.appliedState ? this.appliedName : '',
         deleteSelf: this.appliedState ? undefined : () => ops.remove(data._id),
       };
       // TODO clean this up to avoid duplication
@@ -318,7 +337,7 @@ export class Substance
             isEditable: () => this.editable,
             setData: createPipe(merge({ _id: data._id }), ops.update),
           }),
-          openForm: this.appliedState
+          openForm: this.appliedState 
             ? () => {
                 const { win, windowExisted } = openOrRenderWindow({
                   key: this.getItemWindowKey(
@@ -355,7 +374,7 @@ export class Substance
           isEditable: () => this.editable,
           setData: createPipe(merge({ _id: data._id }), ops.update),
         }),
-        openForm: this.appliedState
+        openForm: this.appliedState 
           ? () => {
               const { win, windowExisted } = openOrRenderWindow({
                 key: this.getItemWindowKey(
@@ -418,25 +437,47 @@ export class Substance
     };
   }
 
-  async createMessage(method: SubstanceUseMethod) {
+  async createMessage({
+    method,
+    hidden = false,
+  }: {
+    method: SubstanceUseMethod;
+    hidden?: boolean;
+  }) {
     await createMessage({
       data: {
-        header: this.messageHeader,
+        header: { ...this.messageHeader, hidden },
         substanceUse: {
           substance: this.getDataCopy(),
           useMethod: method,
+          hidden,
         },
       },
       entity: this.actor,
     });
-    if (this.consumeOnUse) this.useUnit();
+    this.use();
   }
 
-  createAwaitingOnset(method: SubstanceUseMethod) {
+  use() {
+    if (this.consumeOnUse) return this.useUnit();
+    return;
+  }
+
+  updateAppliedState(newState: AppliedSubstanceState) {
+    return this.updater.prop('flags', EP.Name, 'active').commit(newState);
+  }
+
+  createAwaitingOnset({
+    method,
+    hidden = false,
+  }: {
+    method: SubstanceUseMethod;
+    hidden?: boolean;
+  }) {
     const copy = this.getDataCopy();
     const {
       awaitingOnset,
-      applied,
+      active: active,
       alwaysAppliedItems,
       severityAppliedItems,
       ...more
@@ -456,6 +497,7 @@ export class Substance
         awaitingOnset: {
           useMethod: method,
           onsetStartTime: currentWorldTimeMS(),
+          hidden,
         },
       },
     };
@@ -463,39 +505,13 @@ export class Substance
     return copy;
   }
 
-  createApplied(
-    state: Omit<AppliedSubstanceState, 'startTime' | 'finishedEffects'>,
-  ) {
-    const copy = this.getDataCopy();
-    const {
-      awaitingOnset,
-      applied,
-      alwaysAppliedItems,
-      severityAppliedItems,
-      ...more
-    } = copy.flags[EP.Name] || {};
-    copy.flags = {
-      ...copy.flags,
-      [EP.Name]: {
-        ...more,
-        alwaysAppliedItems: alwaysAppliedItems?.map((i) => ({
-          ...i,
-          _id: `${this.id}-always-${i._id}`,
-        })),
-        severityAppliedItems: severityAppliedItems?.map((i) => ({
-          ...i,
-          _id: `${this.id}-severity-${i._id}`,
-        })),
-        applied: {
-          ...state,
-          startTime: currentWorldTimeMS(),
-          finishedEffects: [],
-        },
-      },
-    };
-    copy.data.quantity = 1;
-    return copy;
-  }
+  makeActive(state: Omit<AppliedSubstanceState, 'startTime' | 'finishedEffects'>,) {
+    return this.updater.prop("flags", EP.Name, "awaitingOnset").store(null).prop("flags", EP.Name, "active").commit({
+      ...state,
+      startTime: currentWorldTimeMS(),
+      finishedEffects: [],
+    })
+  } 
 
   onDelete() {
     this.itemWindowKeys?.forEach(closeWindow);
@@ -505,27 +521,27 @@ export class Substance
 
   @LazyGetter()
   get appliedInfo() {
-    const { applied } = this.epFlags ?? {};
+    const { active: active } = this.epFlags ?? {};
     const effects: AddEffects[] = [];
     const items: (Trait | Sleight)[] = [];
     // TODO Damage/Conditions and apply effects to effects/duration
     const { alwaysApplied, severity, hasSeverity } = this;
     let duration = alwaysApplied.duration;
 
-    if (!applied?.finishedEffects?.includes('always')) {
+    if (!active?.finishedEffects?.includes('always')) {
       effects.push({
-        source: this.name,
+        source: this.appliedName,
         effects: alwaysApplied.effects,
       });
       items.push(...alwaysApplied.items.values());
     }
     if (
       hasSeverity &&
-      applied?.applySeverity &&
-      !applied.finishedEffects?.includes('severity')
+      active?.applySeverity &&
+      !active.finishedEffects?.includes('severity')
     ) {
       effects.push({
-        source: `${this.name} (${localize('severity')})`,
+        source: `${this.appliedName} (${localize('severity')})`,
         effects: severity.effects,
       });
       items.push(...severity.items.values());
@@ -535,15 +551,15 @@ export class Substance
       effects,
       items,
       timeState: createLiveTimeState({
-        id: `applied-${this.id}`,
+        id: `active-${this.id}`,
         img: this.nonDefaultImg,
-        label: this.name,
+        label: this.appliedName,
         duration,
-        startTime: applied?.startTime || currentWorldTimeMS() - duration,
+        startTime: active?.startTime || currentWorldTimeMS() - duration,
         updateStartTime: this.updater.prop(
           'flags',
           EP.Name,
-          'applied',
+          'active',
           'startTime',
         ).commit,
       }),
