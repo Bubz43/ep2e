@@ -96,7 +96,7 @@ export const performIntegerSort = <T extends { id: string }>({
     sortBefore,
     sortKey: 'sort',
   }) as { target: T; update: { sort: number } }[];
-  return new Map(sorted.map(({ target, update }) => [target, update.sort]));
+  return sorted.map(({ target, update }) => [target, update.sort] as const);
 };
 
 type FoundryOption = {

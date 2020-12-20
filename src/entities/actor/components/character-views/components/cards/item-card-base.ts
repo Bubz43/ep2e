@@ -7,6 +7,8 @@ import { clickIfEnter } from '@src/utility/helpers';
 import { html, LitElement, property, TemplateResult } from 'lit-element';
 import styles from "./item-card-base-styles.scss";
 
+const rippleStates =  ["Hover", "Press", "Focus"] as const
+
 export abstract class ItemCardBase extends LazyRipple(LitElement) {
   declare abstract item: ItemProxy;
 
@@ -27,7 +29,10 @@ export abstract class ItemCardBase extends LazyRipple(LitElement) {
   @property({ type: Boolean }) allowDrag = false;
 
   firstUpdated() {
-    this.addEventListener('dragend', () => this.handleRippleDeactivate());
+    this.addEventListener('dragend', () => {
+      rippleStates.map(state => this.rippleHandlers[`end${state}` as const]())
+  
+    });
     this.addEventListener('contextmenu', (ev) => this.openMenu(ev));
     if (this.animateInitial) {
       this.animate(

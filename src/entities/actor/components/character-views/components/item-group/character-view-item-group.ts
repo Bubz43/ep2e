@@ -27,13 +27,21 @@ import {
 import { nothing } from 'lit-html';
 import { cache } from 'lit-html/directives/cache';
 import { repeat } from 'lit-html/directives/repeat';
-import { prop, reject, sortBy } from 'remeda';
-import { ConsumableCard } from '../cards/consumable-card/consumable-card';
-import { ItemCard } from '../cards/item-card/item-card';
+import { reject } from 'remeda';
 import { ItemGroup } from '../../character-view-base';
+import { ItemCardBase } from '../cards/item-card-base';
 import styles from './character-view-item-group.scss';
 
 const isTemporary = (item: ItemProxy) => !!(item as Trait).temporary;
+
+const sortItems = (a: ItemProxy, b: ItemProxy): number => {
+  const tempA = isTemporary(a);
+  const tempB = isTemporary(b);
+  if (tempA && !tempB) return -1;
+  if (tempB && !tempA) return 1;
+  if (tempA && tempB) return a.name.localeCompare(b.name);
+  return a.sort - b.sort;
+};
 
 /**
  * @part header
@@ -52,11 +60,15 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
 
   @property({ type: Boolean }) collapsed = false;
 
-  @internalProperty() private targetItem: ItemProxy | null = null;
+  @internalProperty() private dragTargetItem: ItemProxy | null = null;
 
-  @internalProperty() private addDragAfter = false;
+  @internalProperty() private sortAfter = false;
 
   private draggedItem: ItemProxy | null = null;
+
+  private cardRects = new Map<ItemCardBase, DOMRect>();
+
+  private droppedOnSelf = false;
 
   private hasExpanded = false;
 
@@ -65,15 +77,28 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
     super.disconnectedCallback();
   }
 
+  update(changedProps: PropertyValues) {
+    if (changedProps.has('character')) {
+      this.resetDraggedItems();
+    }
+    super.update(changedProps);
+  }
+
   updated(changedProps: PropertyValues) {
     if (!this.hasExpanded && !this.collapsed) this.hasExpanded = true;
     super.updated(changedProps);
   }
 
+  private toggleCollapse() {
+    this.collapsed = !this.collapsed;
+  }
+
   private resetDraggedItems() {
     this.draggedItem = null;
-    this.targetItem = null;
-    this.addDragAfter = false;
+    this.dragTargetItem = null;
+    this.sortAfter = false;
+    this.droppedOnSelf = false;
+    this.cardRects.clear();
   }
 
   get items() {
@@ -81,29 +106,22 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
   }
 
   get sorted() {
-    const sorted = this.items.sort((a, b) => {
-      const tempA = isTemporary(a);
-      const tempB = isTemporary(b)
-      if (tempA && !tempB) return -1;
-      if (tempB && !tempA) return 1;
-      if (tempA && tempB) return a.name.localeCompare(b.name);
-      return (a.sort - b.sort) || a.name.localeCompare(b.name);
-    })
+    const sorted = [...this.items].sort(sortItems);
     if (
+      this.draggedItem !== this.dragTargetItem &&
       this.draggedItem &&
-      this.targetItem &&
-      this.draggedItem !== this.targetItem
+      this.dragTargetItem
     ) {
       let currentIndex = -1;
       let newIndex = -1;
-      for (let index = 0, length = sorted.length; index < length; index++) {
-        const el = sorted[index];
-        if (el === this.draggedItem) currentIndex = index;
-        else if (el === this.targetItem) newIndex = index;
+      for (let index = 0, { length } = sorted; index < length; index++) {
+        const item = sorted[index];
+        if (item === this.draggedItem) currentIndex = index;
+        else if (item === this.dragTargetItem) newIndex = index;
       }
       if (newIndex !== -1 && currentIndex !== -1) {
         if (currentIndex < newIndex) newIndex -= 1;
-        if (this.addDragAfter) newIndex += 1;
+        if (this.sortAfter) newIndex += 1;
         sorted.splice(currentIndex, 1);
         sorted.splice(newIndex, 0, this.draggedItem);
       }
@@ -111,24 +129,12 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
     return sorted;
   }
 
-  private toggleCollapse() {
-    this.collapsed = !this.collapsed;
-  }
-
   private dragItemCard = (ev: DragEvent) => {
-    // TODO have base item card class
-    if (
-      ev.currentTarget instanceof ItemCard ||
-      ev.currentTarget instanceof ConsumableCard
-    ) {
+    if (ev.currentTarget instanceof ItemCardBase) {
       this.draggedItem = ev.currentTarget.item;
       ev.currentTarget.addEventListener(
         'dragend',
-        () => {
-          setTimeout(() => {
-            this.resetDraggedItems();
-          }, 100);
-        },
+        () => !this.droppedOnSelf && this.resetDraggedItems(),
         { once: true },
       );
       setDragDrop(ev, {
@@ -139,10 +145,10 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
     }
   };
 
-  @throttle(40, true)
-  private setDragBefore(ev: DragEvent) {
-    const card = ev.target as ItemCard | null;
+  @throttle(20, true)
+  private setDragTargetState(ev: DragEvent) {
     if (this.draggedItem) {
+      const card = ev.target as ItemCardBase | null;
       const item = card?.item;
       if (
         item &&
@@ -151,39 +157,40 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
         !isTemporary(item) &&
         this.items.includes(item)
       ) {
-        this.targetItem = item;
-        const { top, height } = card.getBoundingClientRect();
-        this.addDragAfter = ev.clientY >= top + height / 2;
+        this.dragTargetItem = item;
+        let rect = this.cardRects.get(card);
+        if (!rect) {
+          rect = card.getBoundingClientRect();
+          this.cardRects.set(card, rect);
+        }
+        const { top, height } = rect;
+        this.sortAfter = ev.clientY >= top + height / 2;
       }
     }
   }
 
-  private addItem = handleDrop(async ({ ev, drop, data }) => {
+  private addItem = handleDrop(async ({ ev, data }) => {
     if (this.character.disabled || data?.type !== DropType.Item) {
       ev.preventDefault();
+      this.resetDraggedItems();
       return;
     }
-    if (this.draggedItem && this.targetItem) {
-      if (
-        [this.draggedItem, this.targetItem].includes(
-          (ev.target as ItemCard).item,
-        )
-      ) {
-        const sortStuff = performIntegerSort({
-          src: this.draggedItem,
-          target: this.targetItem,
-          siblings: reject(this.items, isTemporary),
-          sortBefore: !this.addDragAfter,
-        });
-        const groups = [...sortStuff].map(([item, sort]) => ({
-          _id: item.id,
-          sort,
-        }));
-        this.character.itemOperations.update(...groups);
-      }
+    if (this.draggedItem) {
+      this.droppedOnSelf = true;
+      const { draggedItem, dragTargetItem } = this;
 
+      if (draggedItem && dragTargetItem) {
+        const itemsToUpdate = performIntegerSort({
+          src: draggedItem,
+          target: dragTargetItem,
+          siblings: reject(this.items, isTemporary),
+          sortBefore: !this.sortAfter,
+        }).map(([item, sort]) => ({ _id: item.id, sort }));
+        this.character.itemOperations.update(...itemsToUpdate);
+      } else this.resetDraggedItems();
       return;
     }
+
     const { group } = this;
     const proxy = await itemDropToItemProxy(data);
     if (!proxy) {
@@ -192,7 +199,6 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
     }
 
     if (this.character.hasItemProxy(proxy)) {
-      // TODO sort
       if (group === ItemGroup.Equipped) {
         if ('equipped' in proxy && !proxy.equipped) {
           proxy.toggleEquipped();
@@ -289,7 +295,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
               stagger
               skipExitAnimation
               fadeOnly
-              @dragover=${this.setDragBefore}
+              @dragover=${this.setDragTargetState}
             >
               ${repeat(this.sorted, idProp, (proxy) =>
                 renderItemCard(proxy, {
