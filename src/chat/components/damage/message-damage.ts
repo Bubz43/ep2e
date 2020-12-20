@@ -114,13 +114,13 @@ export class MessageDamage extends LitElement {
       </mwc-button>
 
       ${notEmpty(this.damage.rolledFormulas)
-        ? html` <mwc-button
+        ? html` <button
             dense
             class="formulas-toggle"
             @click=${this.toggleFormulas}
           >
             <img src=${localImage('icons/cubes.svg')} height="20px" />
-          </mwc-button>`
+          </button>`
         : ''}
 
       <div class="damage-info">

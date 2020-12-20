@@ -100,13 +100,13 @@ export class MessageHeal extends LitElement {
         ${woundLabel}
       </mwc-button>
       ${hasFormulas
-        ? html` <mwc-button
+        ? html` <button
             dense
             class="formulas-toggle"
             @click=${this.toggleFormulas}
           >
             <img src=${localImage('icons/cubes.svg')} height="20px" />
-          </mwc-button>`
+          </button>`
         : ''}
       <div class="heal-info">
         ${damageHealTotals.formula || hasFormulas
