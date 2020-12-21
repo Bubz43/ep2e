@@ -1,11 +1,11 @@
 import {
   closeWindow,
   getWindow,
-  openOrRenderWindow
+  openOrRenderWindow,
 } from '@src/components/window/window-controls';
 import {
   ResizeOption,
-  SlWindowEventName
+  SlWindowEventName,
 } from '@src/components/window/window-options';
 import { Activation, DeviceType, FabType } from '@src/data-enums';
 import { Ego } from '@src/entities/actor/ego';
@@ -15,7 +15,7 @@ import { ItemType } from '@src/entities/entity-types';
 import {
   DefaultEgos,
   ItemEntity,
-  setupItemOperations
+  setupItemOperations,
 } from '@src/entities/models';
 import { UpdateStore } from '@src/entities/update-store';
 import { acquisitionTime } from '@src/features/complexity';
@@ -24,8 +24,7 @@ import {
   CommonInterval,
   createLiveTimeState,
   currentWorldTimeMS,
-
-  LiveTimeState
+  LiveTimeState,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { deepMerge } from '@src/foundry/misc-helpers';

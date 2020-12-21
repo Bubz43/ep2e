@@ -12,6 +12,6 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
   }
 
   updateSort(newSort: number) {
-    return this.updater.prop("sort").commit(newSort)
+    return this.updater.prop('sort').commit(newSort);
   }
 }

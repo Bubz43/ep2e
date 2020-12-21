@@ -8,7 +8,11 @@ import { localize } from '@src/foundry/localization';
 import type { AppMeshHealth } from '@src/health/app-mesh-health';
 import type { MeshHealth } from '@src/health/full-mesh-health';
 import { formatDamageType } from '@src/health/health';
-import { createMeshDamage, MeshDamage, RollMultiplier } from '@src/health/health-changes';
+import {
+  createMeshDamage,
+  MeshDamage,
+  RollMultiplier,
+} from '@src/health/health-changes';
 import { customElement, html } from 'lit-element';
 import { HealthEditBase } from '../health-edit-base';
 
@@ -42,7 +46,7 @@ export class MeshHealthDamageEditor extends HealthEditBase<
             ),
           ],
         })}
-           ${renderAutoForm({
+        ${renderAutoForm({
           props: { multiplier: String(this.editableDamage.multiplier) },
           update: ({ multiplier }) =>
             (this.editableDamage = {
@@ -67,9 +71,14 @@ export class MeshHealthDamageEditor extends HealthEditBase<
                     `,
                   )}
               </div>
-              ${this.editableDamage.multiplier !== 1 ? html`
-        <span>${formatDamageType(this.health.type)} ${this.damageValue}</span>
-        ` : ""}
+              ${this.editableDamage.multiplier !== 1
+                ? html`
+                    <span
+                      >${formatDamageType(this.health.type)}
+                      ${this.damageValue}</span
+                    >
+                  `
+                : ''}
             </div>
           `,
         })}

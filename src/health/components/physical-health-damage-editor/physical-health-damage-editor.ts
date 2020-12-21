@@ -89,13 +89,17 @@ export class PhysicalHealthDamageEditor extends HealthEditBase<
                     `,
                   )}
               </div>
-              ${this.editableDamage.multiplier !== 1 ? html`
-        <span>${formatDamageType(this.health.type)} ${this.damageValue}</span>
-        ` : ""}
+              ${this.editableDamage.multiplier !== 1
+                ? html`
+                    <span
+                      >${formatDamageType(this.health.type)}
+                      ${this.damageValue}</span
+                    >
+                  `
+                : ''}
             </div>
           `,
         })}
-       
         ${this.armor
           ? html`
               <div class="armor-toggles">

@@ -73,7 +73,7 @@ export class ConsumableCard extends ItemCardBase {
   }
 
   private toggleStashed() {
-    return this.item.toggleStashed()
+    return this.item.toggleStashed();
   }
 
   renderHeaderButtons() {

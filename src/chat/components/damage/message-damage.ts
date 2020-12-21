@@ -141,17 +141,19 @@ export class MessageDamage extends LitElement {
                 <div class="multiplier">
                   <span>${localize('multiplier')}</span>
                   <div class="radios">
-                    ${([0.5, 1, 2]).map(String).map(
-                      (mp) => html`
-                        <mwc-formfield label=${mp}>
-                          <mwc-radio
-                            name=${multiplier.prop}
-                            value=${mp}
-                            ?checked=${mp === multiplier.value}
-                          ></mwc-radio
-                        ></mwc-formfield>
-                      `,
-                    )}
+                    ${[0.5, 1, 2]
+                      .map(String)
+                      .map(
+                        (mp) => html`
+                          <mwc-formfield label=${mp}>
+                            <mwc-radio
+                              name=${multiplier.prop}
+                              value=${mp}
+                              ?checked=${mp === multiplier.value}
+                            ></mwc-radio
+                          ></mwc-formfield>
+                        `,
+                      )}
                   </div>
                 </div>
               `,

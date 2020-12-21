@@ -291,23 +291,23 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
 
   private renderItemList() {
     return html`
-            <sl-animated-list
-              class="proxy-list"
-              stagger
-              skipExitAnimation
-              fadeOnly
-              @dragover=${this.setDragTargetState}
-              ?hidden=${this.collapsed}
-            >
-              ${repeat(this.sorted, idProp, (proxy) =>
-                renderItemCard(proxy, {
-                  animateInitial: this.hasExpanded,
-                  allowDrag: true,
-                  handleDragStart: this.dragItemCard,
-                }),
-              )}
-            </sl-animated-list>
-          `
+      <sl-animated-list
+        class="proxy-list"
+        stagger
+        skipExitAnimation
+        fadeOnly
+        @dragover=${this.setDragTargetState}
+        ?hidden=${this.collapsed}
+      >
+        ${repeat(this.sorted, idProp, (proxy) =>
+          renderItemCard(proxy, {
+            animateInitial: this.hasExpanded,
+            allowDrag: true,
+            handleDragStart: this.dragItemCard,
+          }),
+        )}
+      </sl-animated-list>
+    `;
   }
 }
 

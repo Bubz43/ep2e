@@ -3,20 +3,20 @@ import type { MessageHeaderData } from '@src/chat/message-data';
 import {
   createBaseAttackFormula,
   SubstanceAttack,
-  SubstanceAttackData
+  SubstanceAttackData,
 } from '@src/combat/attacks';
 import {
   closeWindow,
-  openOrRenderWindow
+  openOrRenderWindow,
 } from '@src/components/window/window-controls';
 import {
   ResizeOption,
-  SlWindowEventName
+  SlWindowEventName,
 } from '@src/components/window/window-options';
 import {
   SubstanceApplicationMethod,
   SubstanceClassification,
-  SubstanceType
+  SubstanceType,
 } from '@src/data-enums';
 import type { AddEffects } from '@src/entities/applied-effects';
 import { ItemType } from '@src/entities/entity-types';
@@ -25,11 +25,16 @@ import {
   DrugAppliedItem,
   ItemEntity,
   setupItemOperations,
-  SubstanceItemFlags
+  SubstanceItemFlags,
 } from '@src/entities/models';
 import { UpdateStore } from '@src/entities/update-store';
 import type { Effect } from '@src/features/effects';
-import { addFeature, StringID, stringID, uniqueStringID } from '@src/features/feature-helpers';
+import {
+  addFeature,
+  StringID,
+  stringID,
+  uniqueStringID,
+} from '@src/features/feature-helpers';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
 import { createLiveTimeState, currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
@@ -457,7 +462,7 @@ export class Substance
       entity: this.actor,
     });
     await this.use();
-    return
+    return;
   }
 
   use() {

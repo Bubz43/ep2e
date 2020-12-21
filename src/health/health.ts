@@ -53,7 +53,7 @@ export type HealthModification = Timestamp & {
   damage: number;
   wounds: number;
   source: string;
-  stressType: StressType | null | "";
+  stressType: StressType | null | '';
   cumulativeDotID: string | null;
 };
 

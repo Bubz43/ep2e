@@ -50,24 +50,25 @@ export class CharacterViewNetworkSettings extends LitElement {
             { emptyText: '-', altLabel: (id) => nonMasterDevices[id] || id },
           ),
       })}
-
-      ${masterDevice ? html`<mwc-list multi>
-        <li class="devices-header">
-          <span>${localize('devices')}</span> <span>${localize('slaved')}</span>
-        </li>
-        <li divider></li>
-        ${[...devices].map(
-          ([device, slaved]) =>
-            html`
-              <mwc-check-list-item
-                ?selected=${slaved}
-                @click=${() => this.toggleUnslaved(device.id)}
-                >${device.fullName}</mwc-check-list-item
-              >
-            `,
-        )}
-      </mwc-list>
-` : ""}
+      ${masterDevice
+        ? html`<mwc-list multi>
+            <li class="devices-header">
+              <span>${localize('devices')}</span>
+              <span>${localize('slaved')}</span>
+            </li>
+            <li divider></li>
+            ${[...devices].map(
+              ([device, slaved]) =>
+                html`
+                  <mwc-check-list-item
+                    ?selected=${slaved}
+                    @click=${() => this.toggleUnslaved(device.id)}
+                    >${device.fullName}</mwc-check-list-item
+                  >
+                `,
+            )}
+          </mwc-list> `
+        : ''}
       <section>
         <sl-header heading=${localize('accountShells')}></sl-header>
         // TODO

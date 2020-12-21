@@ -180,7 +180,8 @@ export const openPsiFormWindow = (psi: Psi) => {
 
 export const itemMenuOptions = (item: ItemProxy): MWCMenuOption[] => {
   return compact([
-    item.editable && 'toggleStashed' in item &&
+    item.editable &&
+      'toggleStashed' in item &&
       (item.type !== ItemType.Substance || !item.appliedState) && {
         label: localize(item.stashed ? 'carry' : 'stash'),
         callback: item.toggleStashed.bind(item),
@@ -221,14 +222,14 @@ export const renderItemCard = (
 ) => {
   if (item.type === ItemType.PhysicalTech) {
     return html`
-    <physical-tech-card
-      .item=${item}
-      ?expanded=${expanded}
-      ?noAnimate=${noAnimate}
-      ?animateInitial=${animateInitial}
-      @dragstart=${handleDragStart}
-    ></physical-tech-card>
-    `
+      <physical-tech-card
+        .item=${item}
+        ?expanded=${expanded}
+        ?noAnimate=${noAnimate}
+        ?animateInitial=${animateInitial}
+        @dragstart=${handleDragStart}
+      ></physical-tech-card>
+    `;
   }
   if ('stashed' in item)
     return html`

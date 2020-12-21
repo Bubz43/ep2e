@@ -6,7 +6,7 @@ import { HealthType } from '@src/health/health';
 import { StressType } from '@src/health/mental-health';
 import { mapToObj } from 'remeda';
 
-export type RollMultiplier = 0.5 | 1 | 2
+export type RollMultiplier = 0.5 | 1 | 2;
 
 type Base = {
   reduceAVbyDV: boolean;
@@ -21,7 +21,7 @@ type CommonDamage<T extends { type: HealthType }> = Base &
   T & { damageValue: number; formula: string };
 
 export type StressDamage = CommonDamage<{
-  stressType: StressType | "";
+  stressType: StressType | '';
   type: HealthType.Mental;
 }>;
 

@@ -30,7 +30,7 @@ export class PhysicalTechCard extends ItemCardBase {
   }
 
   private toggleActivation() {
-    this.item.toggleActivation()
+    this.item.toggleActivation();
   }
 
   private async useGlandedSubstance(ev: MouseEvent) {
@@ -110,7 +110,7 @@ export class PhysicalTechCard extends ItemCardBase {
       ${item.fabricatorType
         ? html`
             ${item.fabricatedItem
-        ? html`
+              ? html`
                   <character-view-time-item
                     ?disabled=${!item.editable}
                     .timeState=${item.printState}

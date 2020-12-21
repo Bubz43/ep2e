@@ -14,8 +14,6 @@ export class ItemCard extends ItemCardBase {
 
   @property({ attribute: false }) item!: ItemProxy;
 
- 
-
   renderHeaderButtons() {
     const { item } = this;
     const { editable } = item;
@@ -34,7 +32,6 @@ export class ItemCard extends ItemCardBase {
           ></mwc-icon-button>
         `
       : ''}
- 
     ${'toggleEquipped' in item && !item.equipped
       ? html`
           <mwc-icon-button
@@ -47,10 +44,8 @@ export class ItemCard extends ItemCardBase {
   }
 
   renderExpandedContent() {
-    return html``
+    return html``;
   }
-
-
 }
 
 declare global {

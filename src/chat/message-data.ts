@@ -25,7 +25,6 @@ export type DamageMessageData = {
   armorUsed: ArmorType[];
   cumulativeDotID?: string;
   multiplier?: RollMultiplier;
-
 };
 
 export type MessageHealData = RequireAtLeastOne<

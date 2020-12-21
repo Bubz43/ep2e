@@ -9,7 +9,11 @@ import { renderAutoForm } from '@src/components/form/forms';
 import { enumValues } from '@src/data-enums';
 import { localize } from '@src/foundry/localization';
 import { formatDamageType } from '@src/health/health';
-import { createStressDamage, RollMultiplier, StressDamage } from '@src/health/health-changes';
+import {
+  createStressDamage,
+  RollMultiplier,
+  StressDamage,
+} from '@src/health/health-changes';
 import {
   hardeningTypes,
   MentalHealth,
@@ -94,7 +98,7 @@ export class MentalHealthStressEditor extends HealthEditBase<
             ),
           ],
         })}
-           ${renderAutoForm({
+        ${renderAutoForm({
           props: { multiplier: String(this.editableDamage.multiplier) },
           update: ({ multiplier }) =>
             (this.editableDamage = {
@@ -119,9 +123,14 @@ export class MentalHealthStressEditor extends HealthEditBase<
                     `,
                   )}
               </div>
-              ${this.editableDamage.multiplier !== 1 ? html`
-        <span>${formatDamageType(this.health.type)} ${this.damageValue}</span>
-        ` : ""}
+              ${this.editableDamage.multiplier !== 1
+                ? html`
+                    <span
+                      >${formatDamageType(this.health.type)}
+                      ${this.damageValue}</span
+                    >
+                  `
+                : ''}
             </div>
           `,
         })}

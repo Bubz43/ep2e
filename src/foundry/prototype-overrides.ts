@@ -247,16 +247,16 @@ Object.defineProperties(Token.prototype, {
   w: {
     enumerable: true,
     get() {
-      return this.data.width * (activeCanvas()?.grid?.w ?? 100)
-    }
+      return this.data.width * (activeCanvas()?.grid?.w ?? 100);
+    },
   },
   h: {
     enumerable: true,
     get() {
-      return this.data.height * (activeCanvas()?.grid?.h ?? 100)
-    }
-  }
-})
+      return this.data.height * (activeCanvas()?.grid?.h ?? 100);
+    },
+  },
+});
 
 // TODO: Delay this to check for migration first
 // const barCache = new WeakMap<PIXI.Graphics, number>();
