@@ -52,27 +52,23 @@ export class CharacterViewConditions extends UseWorldTime(LitElement) {
   }
 
   render() {
-    const { disabled, temporaryFeatures, conditions } = this.character;
-    const temporary = temporaryFeatures.reduce((accum, temp) => {
-      if (temp.type === TemporaryFeatureType.Condition) {
-        accum.get(temp.condition)?.push(temp.timeState) ??
-          accum.set(temp.condition, [temp.timeState]);
-      }
-      return accum;
-    }, new Map<ConditionType, LiveTimeState[]>());
+    const {
+      disabled,
+      conditions,
+      temporaryConditionSources,
+    } = this.character;
 
-    // TODO Conditions from substances
 
     return html`
       <character-view-drawer-heading
         >${localize('conditions')}</character-view-drawer-heading
       >
 
-      ${notEmpty(temporary)
+      ${notEmpty(temporaryConditionSources)
         ? html`
             <section>
               <sl-header heading=${localize('temporary')}></sl-header>
-              ${[...temporary].map(
+              ${[...temporaryConditionSources].map(
                 ([condition, list]) => html`
                   <figure>
                     <figcaption>${localize(condition)}</figcaption>

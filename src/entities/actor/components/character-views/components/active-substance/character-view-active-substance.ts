@@ -89,7 +89,7 @@ export class CharacterViewActiveSubstance extends LitElement {
     if (severity.conditions)
       await this.character.addConditions(severity.conditions);
 
-    this.substance.updateAppliedState({ applySeverity: true });
+    substance.updateAppliedState({ applySeverity: true });
   }
 
   private cancelSeverity() {
@@ -119,7 +119,6 @@ export class CharacterViewActiveSubstance extends LitElement {
                 ?disabled=${disabled}
                 .timeState=${timeState}
                 completion="expired"
-                .item=${substance}
               >
               </character-view-time-item>`,
             )}
@@ -129,7 +128,6 @@ export class CharacterViewActiveSubstance extends LitElement {
               ?disabled=${disabled}
               .timeState=${timeState}
               completion="expired"
-              .item=${substance}
             >
             </character-view-time-item>
           `}

@@ -147,7 +147,9 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   }
 
   addConditions(conditions: ConditionType[]) {
-    return this.sleeve?.updateConditions(uniq([...this.conditions, ...conditions]))
+    return this.sleeve?.updateConditions(
+      uniq([...this.conditions, ...conditions]),
+    );
   }
 
   updateConditions(conditions: ConditionType[]) {
@@ -242,6 +244,37 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
   get conditions() {
     return this.sleeve?.conditions ?? [];
+  }
+
+  @LazyGetter()
+  get temporaryConditionSources() {
+    const temporary = this.temporaryFeatures.reduce((accum, temp) => {
+      if (temp.type === TemporaryFeatureType.Condition) {
+        accum.get(temp.condition)?.push(temp.timeState) ??
+          accum.set(temp.condition, [temp.timeState]);
+      }
+      return accum;
+    }, new Map<ConditionType, LiveTimeState[]>());
+
+    for (const { appliedInfo, severity, appliedName } of this
+      .activeSubstances) {
+      if (
+        appliedInfo.appliedSeverity &&
+        appliedInfo.multiTimeStates?.[1] &&
+        notEmpty(severity.conditions)
+      ) {
+        const timeState = {
+          ...appliedInfo.multiTimeStates?.[1],
+          label: `${appliedName} ${localize('severity')}`,
+        };
+
+        for (const condition of severity.conditions) {
+          temporary.get(condition)?.push(timeState) ??
+            temporary.set(condition, [timeState]);
+        }
+      }
+    }
+    return temporary;
   }
 
   @LazyGetter()
