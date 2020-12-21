@@ -258,15 +258,16 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
     for (const { appliedInfo, severity, appliedName } of this
       .activeSubstances) {
+      const severe = appliedInfo.multiTimeStates?.get('severe');
       if (
         appliedInfo.appliedSeverity &&
-        appliedInfo.multiTimeStates?.[1] &&
+        severe &&
         notEmpty(severity.conditions)
       ) {
-        const timeState = {
-          ...appliedInfo.multiTimeStates?.[1],
-          label: `${appliedName} ${localize('severity')}`,
-        };
+        const timeState = createLiveTimeState({
+          ...severe[0],
+          label: `${appliedName} ${localize('severe')} ${localize('effects')}`,
+        });
 
         for (const condition of severity.conditions) {
           temporary.get(condition)?.push(timeState) ??
@@ -387,7 +388,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         ({ awaitingOnsetTimeState }) => awaitingOnsetTimeState.completed,
       ) ||
       this.activeSubstances.some(
-        ({ appliedInfo }) => appliedInfo.timeState.completed,
+        ({ appliedInfo }) => appliedInfo.requiresAttention,
       )
     );
   }

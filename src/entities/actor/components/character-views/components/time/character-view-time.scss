@@ -90,3 +90,9 @@ character-view-time-item {
     color: var(--color-text-lighter);
   }
 }
+
+.active-substances {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.25rem;
+}

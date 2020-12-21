@@ -1361,7 +1361,7 @@ type LangEntries =
   | 'actors'
   | 'characters'
   | 'done'
-  | 'hidden' | "cummulative" | "beforeModifiers" | "resist";
+  | 'hidden' | "cummulative" | "beforeModifiers" | "resist" | "finished";
 type FullNames =
   | 'cog'
   | 'int'

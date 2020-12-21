@@ -10,7 +10,11 @@ import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { UpdateStore } from '@src/entities/update-store';
 import { ActionSubtype, createActiveTask } from '@src/features/actions';
-import { addUpdateRemoveFeature, idProp, matchID } from '@src/features/feature-helpers';
+import {
+  addUpdateRemoveFeature,
+  idProp,
+  matchID,
+} from '@src/features/feature-helpers';
 import {
   currentWorldTimeMS,
   getElapsedTime,
@@ -89,7 +93,9 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
     if (!substance) return;
 
     this.dispatchEvent(
-      new RenderDialogEvent(substanceActivationDialog(this.character, substance)),
+      new RenderDialogEvent(
+        substanceActivationDialog(this.character, substance),
+      ),
     );
   }
 
@@ -115,28 +121,25 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
   private renderAppliedSubstances() {
     const {
       awaitingOnsetSubstances,
-      activeSubstances: appliedSubstances,
+      activeSubstances,
       disabled,
     } = this.character;
     return html`
-      ${notEmpty(appliedSubstances)
+      ${notEmpty(activeSubstances)
         ? html`
             <section>
               <sl-header
-                heading="${localize('applied')} ${localize('substances')}"
+                heading="${localize('active')} ${localize('substances')}"
               ></sl-header>
-              <sl-animated-list>
+              <sl-animated-list class="active-substances">
                 ${repeat(
-                  appliedSubstances,
+                  activeSubstances,
                   idProp,
                   (substance) => html`
-                    <character-view-time-item
-                      ?disabled=${disabled}
-                      .timeState=${substance.appliedInfo.timeState}
-                      completion="expired"
-                      .item=${substance}
-                    >
-                    </character-view-time-item>
+                    <character-view-active-substance
+                      .substance=${substance}
+                      .character=${this.character}
+                    ></character-view-active-substance>
                   `,
                 )}
               </sl-animated-list>
@@ -389,6 +392,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
   private renderFabricators() {
     const { activeFabbers } = this.character.equippedGroups;
     if (activeFabbers.length === 0) return '';
+    // TODO option to not notify on complete
     return html`
       <section>
         <sl-header

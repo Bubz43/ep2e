@@ -7,13 +7,28 @@
 
 :host {
   display: block;
-  padding: 0 0.2rem;
+  padding: 0.25rem 0.5rem 0.5rem;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-grey);
 }
 
 character-view-time-item {
   padding: 0;
 }
 
+.name {
+  height: 2rem;
+  --mdc-list-item-graphic-margin: 0.5rem;
+  padding: 0 0.25rem;
+  border-bottom: 1px solid var(--color-border);
+  [slot="meta"] {
+    color: var(--color-text);
+  }
+  mwc-icon-button {
+    pointer-events: all;
+    --mdc-icon-button-size: 1.5rem;
+  }
+}
 
 .active-substance-actions {
   > * {
@@ -47,4 +62,24 @@ character-view-time-item {
       border: 1px solid var(--color-border);
     }
   }
+}
+
+.finished {
+  padding: 0.3rem 0;
+}
+
+.remove {
+  &.ready {
+    @include animate-css(pulse, 1s, infinite);
+    color: var(--color-secondary);
+  }
+}
+
+.multi-time {
+  &.finished {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around
+  }
+
 }

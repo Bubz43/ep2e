@@ -29,3 +29,10 @@ li[divider] {
 .effects-toggle {
   --mdc-theme-primary: var(--color-grey);
 }
+
+figure {
+  margin: 0.5rem;
+  figcaption {
+    color: var(--color-text-lighter);
+  }
+}

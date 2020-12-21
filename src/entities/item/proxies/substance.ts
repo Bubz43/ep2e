@@ -43,7 +43,11 @@ import {
   uniqueStringID,
 } from '@src/features/feature-helpers';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
-import { createLiveTimeState, currentWorldTimeMS } from '@src/features/time';
+import {
+  createLiveTimeState,
+  currentWorldTimeMS,
+  LiveTimeState,
+} from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { EP } from '@src/foundry/system';
@@ -621,6 +625,8 @@ export class Substance
       if (severity.duration > duration) duration = severity.duration;
     }
 
+    if (!applySeverity && !applyAlways) duration = 0;
+
     duration = applyDurationMultipliers({ duration, multipliers });
     const updateStartTime = this.updater.prop(
       'flags',
@@ -630,11 +636,46 @@ export class Substance
     ).commit;
     const timeStateId = `active-${this.id}`;
     const startTime = active?.startTime || currentWorldTimeMS() - duration;
+    const multi = new Map<
+      'base' | 'severe',
+      [timeState: LiveTimeState, finished: boolean]
+    >();
+    if (active?.applySeverity) {
+      multi
+        .set('base', [
+          createLiveTimeState({
+            id: timeStateId + 'always',
+            label: `${localize('base')} ${localize('effects')}`,
+            duration: applyDurationMultipliers({
+              duration: alwaysApplied.duration,
+              multipliers,
+            }),
+            startTime,
+            updateStartTime,
+          }),
+          active?.finishedEffects?.includes('always'),
+        ])
+        .set('severe', [
+          createLiveTimeState({
+            id: timeStateId + 'severity',
+            label: `${localize('severe')} ${localize('effects')}`,
+            duration: applyDurationMultipliers({
+              duration: severity.duration,
+              multipliers,
+            }),
+            startTime,
+            updateStartTime,
+          }),
+          active?.finishedEffects?.includes('severity'),
+        ]);
+    }
+
     return {
       effects,
       items,
       appliedAlways: applyAlways,
       appliedSeverity: applySeverity,
+      finishedEffects: active?.finishedEffects,
       conditions: applySeverity && severity.conditions,
       modifyingEffects: active?.modifyingEffects,
       applySeverity: active?.applySeverity ?? null,
@@ -646,30 +687,15 @@ export class Substance
         startTime,
         updateStartTime,
       }),
-      multiTimeStates: active?.applySeverity
-        ? [
-            createLiveTimeState({
-              id: timeStateId + 'always',
-              label: `${localize('base')} ${localize('effects')}`,
-              duration: applyDurationMultipliers({
-                duration: alwaysApplied.duration,
-                multipliers,
-              }),
-              startTime,
-              updateStartTime,
-            }),
-            createLiveTimeState({
-              id: timeStateId + 'severity',
-              label: `${localize('severe')} ${localize('effects')}`,
-              duration: applyDurationMultipliers({
-                duration: severity.duration,
-                multipliers,
-              }),
-              startTime,
-              updateStartTime,
-            }),
-          ] as const
-        : null,
+      multiTimeStates: multi,
+      get requiresAttention() {
+        return (
+          this.timeState.completed ||
+          !![...this.multiTimeStates.values() || []].some(
+            ([state, finished]) => state.completed && !finished,
+          )
+        );
+      },
     };
   }
 }
