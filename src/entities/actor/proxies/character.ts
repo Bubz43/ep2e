@@ -68,6 +68,7 @@ import {
   merge,
   pipe,
   reject,
+  uniq,
 } from 'remeda';
 import { traverseActiveElements } from 'weightless';
 import { openSleeveForm } from '../actor-views';
@@ -145,6 +146,9 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     if (egoFormWindow?.isConnected) this.ego.openForm?.();
   }
 
+  addConditions(conditions: ConditionType[]) {
+    return this.sleeve?.updateConditions(uniq([...this.conditions, ...conditions]))
+  }
 
   updateConditions(conditions: ConditionType[]) {
     return this.sleeve?.updateConditions(conditions);

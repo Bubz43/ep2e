@@ -14,6 +14,7 @@ import { LangEntry, localize } from '@src/foundry/localization';
 import type { ValuedProp } from '@src/utility/field-values';
 import { nonNegative } from '@src/utility/helpers';
 import { pipe, clamp } from 'remeda';
+import type { RollMultiplier } from './health-changes';
 import type { StressType } from './mental-health';
 import type { HealthRecoveries } from './recovery';
 
@@ -151,6 +152,10 @@ export const formatDamageType = (type: HealthType) => {
       return `${localize('SHORT', 'damageValue')}`;
   }
 };
+
+export const formatFormulaWithMultiplier = (formula: string, multiplier: RollMultiplier) => {
+  return multiplier === 1 || !formula ? formula : `(${formula}) x${multiplier}`
+}
 
 export const healthLabels = (healthType: HealthType, stat: HealthStat) =>
   localize(healthType === HealthType.Mental ? mentalHealthStats[stat] : stat);

@@ -1291,6 +1291,9 @@
             "criticalSuccess": {
               "type": "string"
             },
+            "cummulative": {
+              "type": "string"
+            },
             "cumulative": {
               "type": "string"
             },
@@ -4735,6 +4738,7 @@
             "criticalFailure",
             "criticalQuality",
             "criticalSuccess",
+            "cummulative",
             "cumulative",
             "current",
             "custom",

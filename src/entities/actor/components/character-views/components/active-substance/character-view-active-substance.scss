@@ -20,7 +20,31 @@ character-view-time-item {
     margin: 0.25rem 0 0;
   }
 
+  > span {
+    line-height: 2rem;
+
+  }
+
   .damage {
     --mdc-theme-primary: var(--color-negative);
+  }
+
+  .mods {
+    float: right;
+    --mdc-theme-primary: var(--color-grey);
+    ul {
+      padding-right: 1.5rem;
+    }
+  }
+  .severe-effects {
+    @include textButton();
+    display: inline-grid;
+    grid-auto-columns: max-content;
+    grid-auto-flow: column;
+    align-items: center;
+    gap: 0.5ch;
+    button {
+      border: 1px solid var(--color-border);
+    }
   }
 }

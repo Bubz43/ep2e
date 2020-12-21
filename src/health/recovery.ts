@@ -1,6 +1,7 @@
 import { enumValues } from '@src/data-enums';
 import type { AppliedEffects } from '@src/entities/applied-effects';
 import {
+  applyDurationMultipliers,
   HealthRecoveryEffect,
   Source,
   SourcedEffect,
@@ -157,8 +158,6 @@ export const setupRecoveries = ({
     recoveryMultiplier(conditions),
     ...effects.timeframeMultipliers,
   ];
-  const setupDuration = (interval: number) =>
-    Math.ceil(multipliers.reduce((accum, mp) => accum * mp, interval));
 
   for (const stat of enumValues(HealOverTimeTarget)) {
     const group = groups[stat];
@@ -172,7 +171,7 @@ export const setupRecoveries = ({
         slot,
         source,
         timeState: createLiveTimeState({
-          duration: setupDuration(data.interval),
+          duration: applyDurationMultipliers({ duration: data.interval, multipliers }),
           startTime: hot[key],
           label: source,
           id: `${stat}-${slot}`,
@@ -210,7 +209,7 @@ export const setupRecoveries = ({
       slot,
       source: effect[Source],
       timeState: createLiveTimeState({
-        duration: setupDuration(effect.interval),
+        duration: applyDurationMultipliers({ duration: effect.interval, multipliers }),
         startTime: hot[key],
         label: effect[Source],
         id: `${stat}-${slot}`,

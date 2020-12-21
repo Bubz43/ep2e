@@ -91,36 +91,6 @@ export abstract class CharacterViewBase extends LitElement {
     return !!this.drawerContentRenderer;
   }
 
-  protected openActiveSubstanceControls(id: string) {
-    const substance = this.character.activeSubstances.find(matchID(id));
-    if (!substance?.epFlags?.active || this.character.disabled) return;
-    let appliedState = duplicate(substance.epFlags.active);
-    this.dispatchEvent(
-      new RenderDialogEvent(html`
-        <mwc-dialog open heading=${substance.name}>
-          ${renderAutoForm({
-            props: appliedState,
-            update: (change) => (appliedState = { ...appliedState, ...change }),
-            fields: ({ applySeverity }) => [
-              substance.hasSeverity ? renderLabeledCheckbox(applySeverity) : '',
-            ],
-          })}
-          <mwc-button dense slot="secondaryAction" dialogAction="cancel"
-            >${localize('cancel')}</mwc-button
-          >
-          <mwc-button
-            dense
-            slot="primaryAction"
-            dialogAction="confirm"
-            unelevated
-            @click=${() => substance.updateAppliedState(appliedState)}
-            >${localize('save')}</mwc-button
-          >
-        </mwc-dialog>
-      `),
-    );
-  }
-
   renderResleeve() {
     return html`
       <character-view-resleeve

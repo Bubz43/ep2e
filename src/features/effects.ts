@@ -120,6 +120,10 @@ export type ArmorEffect = Record<ArmorType, number> & {
 export type DurationEffect = {
   type: EffectType.Duration;
   subtype: DurationEffectTarget;
+  /**
+   * @min -100
+   * @max 200
+   */
   modifier: number;
   taskType: ActionSubtype | '';
   cummulative?: boolean;
@@ -395,7 +399,8 @@ const format = (effect: Effect): (string | number)[] => {
         effect.subtype === DurationEffectTarget.TaskActionTimeframe
           ? localize(effect.taskType || 'all')
           : '',
-        localize(effect.subtype).toLowerCase(),
+        localize(effect.subtype),
+        localize("duration"),
         formatDurationPercentage(effect.modifier),
         effect.cummulative ? `(${localize('cumulative')})` : '',
       ];
@@ -459,21 +464,35 @@ export const durationEffectMultiplier = (modifier: number) => {
 export const extractDurationEffectMultipliers = (effects: DurationEffect[]) => {
   const multipliers: number[] = [];
   const cummulative: number[] = [];
-  
+
   for (const effect of effects) {
     if (effect.modifier) {
-      if (effect.cummulative) cummulative.push(effect.modifier)
-      else multipliers.push(durationEffectMultiplier(effect.modifier))
+      if (effect.cummulative) cummulative.push(effect.modifier);
+      else multipliers.push(durationEffectMultiplier(effect.modifier));
     }
   }
 
   if (notEmpty(cummulative)) {
-    const cummulativeTotal = cummulative.reduce((accum, mp) => accum += mp, 0)
-    if (cummulativeTotal) multipliers.push(durationEffectMultiplier(cummulativeTotal))
+    const cummulativeTotal = cummulative.reduce(
+      (accum, mp) => (accum += mp),
+      0,
+    );
+    if (cummulativeTotal)
+      multipliers.push(durationEffectMultiplier(cummulativeTotal));
   }
 
   return multipliers;
-}
+};
+
+export const applyDurationMultipliers = ({
+  duration,
+  multipliers,
+}: {
+  duration: number;
+  multipliers: number[];
+}) => {
+  return Math.ceil(multipliers.reduce((accum, mp) => accum * mp, duration));
+};
 
 export const formatEffect = createPipe(
   format,

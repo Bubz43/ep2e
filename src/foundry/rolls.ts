@@ -11,6 +11,7 @@ export type LabeledFormula = { label: string; formula: string };
 
 export type RolledFormula = { label: string; roll: RollData };
 
+
 export const rollLabeledFormulas = (
   formulas: LabeledFormula[],
 ): RolledFormula[] => {

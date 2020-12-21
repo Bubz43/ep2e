@@ -6,7 +6,11 @@ import { pickOrDefaultActor } from '@src/entities/find-entities';
 import { localize } from '@src/foundry/localization';
 import { cleanFormula } from '@src/foundry/rolls';
 import { HealthEditor } from '@src/health/components/health-editor/health-editor';
-import { formatDamageType, HealthType } from '@src/health/health';
+import {
+  formatDamageType,
+  formatFormulaWithMultiplier,
+  HealthType,
+} from '@src/health/health';
 import {
   createMeshDamage,
   createPhysicalDamage,
@@ -125,9 +129,7 @@ export class MessageDamage extends LitElement {
         : ''}
 
       <div class="damage-info">
-        ${multiplier === 1 || !totals.formula
-          ? totals.formula
-          : `(${totals.formula}) x${this.multiplier}`}
+        ${formatFormulaWithMultiplier(totals.formula, multiplier)}
         ${localize(damageType)}
         ${localize(damageType === HealthType.Mental ? 'stress' : 'damage')}
       </div>

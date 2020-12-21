@@ -28,7 +28,14 @@ import {
   SubstanceItemFlags,
 } from '@src/entities/models';
 import { UpdateStore } from '@src/entities/update-store';
-import { Effect, EffectType, UniqueEffectType } from '@src/features/effects';
+import {
+  applyDurationMultipliers,
+  DurationEffectTarget,
+  Effect,
+  EffectType,
+  extractDurationEffectMultipliers,
+  UniqueEffectType,
+} from '@src/features/effects';
 import {
   addFeature,
   StringID,
@@ -471,7 +478,7 @@ export class Substance
     return;
   }
 
-  updateAppliedState(newState: ActiveSubstanceState) {
+  updateAppliedState(newState: Partial<ActiveSubstanceState>) {
     return this.updater.prop('flags', EP.Name, 'active').commit(newState);
   }
 
@@ -517,11 +524,21 @@ export class Substance
     // TODO method that takes non onset substance and makes it active directly
     const hidden = this.epFlags?.awaitingOnset?.hidden ?? false;
     const state: ActiveSubstanceState = {
-      modifyingEffects: modifyingEffects.reduce(
-        (accum, effect) => addFeature(accum, effect),
-        [] as StringID<Effect>[],
-      ),
-      applySeverity: false,
+      modifyingEffects: modifyingEffects.reduce((accum, effect) => {
+        if (
+          effect.type === EffectType.Duration &&
+          effect.subtype === DurationEffectTarget.Drugs
+        ) {
+          accum.duration?.push(effect) ?? (accum.duration = [effect]);
+        } else if (
+          effect.type === EffectType.Misc &&
+          effect.unique === UniqueEffectType.HalveDrugEffects
+        ) {
+          accum.misc?.push(effect) ?? (accum.misc = [effect]);
+        }
+        return accum;
+      }, {} as ActiveSubstanceState['modifyingEffects']),
+      applySeverity: null,
       hidden,
       startTime: currentWorldTimeMS(),
       finishedEffects: [],
@@ -550,7 +567,9 @@ export class Substance
               (effect) =>
                 effect.type === EffectType.Misc &&
                 effect.unique === UniqueEffectType.HalveDrugEffects,
-            ) ? 0.5 : 1,
+            )
+              ? 0.5
+              : 1,
           },
         },
         entity: this.actor,
@@ -575,7 +594,8 @@ export class Substance
     const { active } = this.epFlags ?? {};
     const effects: AddEffects[] = [];
     const items: (Trait | Sleight)[] = [];
-    // TODO Damage/Conditions and apply effects to effects/duration
+    const multipliers = extractDurationEffectMultipliers(active?.modifyingEffects?.duration ?? []);
+
     const { alwaysApplied, severity, hasSeverity } = this;
     let duration = alwaysApplied.duration;
     const applyAlways = !active?.finishedEffects?.includes('always');
@@ -598,11 +618,16 @@ export class Substance
       items.push(...severity.items.values());
       if (severity.duration > duration) duration = severity.duration;
     }
+
+    duration = applyDurationMultipliers({duration, multipliers});
     return {
       effects,
       items,
+      appliedAlways: applyAlways,
+      appliedSeverity: applySeverity,
       conditions: applySeverity && severity.conditions,
       modifyingEffects: active?.modifyingEffects,
+      applySeverity: active?.applySeverity ?? null,
       timeState: createLiveTimeState({
         id: `active-${this.id}`,
         img: this.nonDefaultImg,

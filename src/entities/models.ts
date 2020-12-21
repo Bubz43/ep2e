@@ -1,5 +1,5 @@
 import { EgoType } from '@src/data-enums';
-import type { Effect } from '@src/features/effects';
+import type { DurationEffect, Effect, MiscEffect } from '@src/features/effects';
 import {
   StringID,
   stringID,
@@ -237,8 +237,11 @@ export type BlueprintSource = {
 
 export type ActiveSubstanceState = {
   startTime: number;
-  applySeverity: boolean;
-  modifyingEffects: StringID<Effect>[];
+  applySeverity: boolean | null;
+  modifyingEffects: Partial<{
+    duration: DurationEffect[],
+    misc: MiscEffect[]
+  }>
   finishedEffects: ('always' | 'severity')[];
   hidden: boolean;
 };

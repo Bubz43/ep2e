@@ -29,6 +29,7 @@ import type {
 import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import { pipe, concat, filter, allPass, clamp, groupBy, compact } from 'remeda';
+import type { ActiveSubstanceState } from './models';
 
 export type AddEffects = {
   source: string;
@@ -138,13 +139,14 @@ export class AppliedEffects {
     };
   }
 
-  get substanceEffects() {
-    return [
-      ...this.getGroup(EffectType.Misc).filter(
+  get substanceModifiers() {
+    return {
+      misc: this.getGroup(EffectType.Misc).filter(
         (effect) => effect.unique === UniqueEffectType.HalveDrugEffects,
       ),
-      ...(this.durationEffects.drugOrToxin || []),
-    ];
+      duration: this.durationEffects.drugOrToxin || []
+    }
+   
   }
 
   @LazyGetter()

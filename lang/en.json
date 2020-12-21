@@ -1337,6 +1337,7 @@
     "controlled": "Controlled",
     "done": "Done",
     "hidden": "Hidden",
+    "cummulative": "Cummulative",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
@@ -1428,7 +1429,8 @@
       "nanoware": "Nano",
       "shortRecharge": "Short",
       "longRecharge": "Long",
-      "versus": "VS."
+      "versus": "VS.",
+      "modifiers": "Mods"
     },
     "FORMATABLE": {
       "NoMatching": "No {name} ({type})  found.",

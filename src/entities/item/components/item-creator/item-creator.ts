@@ -150,7 +150,7 @@ export class ItemCreator extends LitElement {
 
   @eventOptions({ capture: true })
   private clickSubmit(ev: KeyboardEvent) {
-    if (ev.key === 'Enter') {
+    if (ev.key === 'Enter' && ev.target instanceof HTMLInputElement) {
       this.submitButton?.click();
     }
   }

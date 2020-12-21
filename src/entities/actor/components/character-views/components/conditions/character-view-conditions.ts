@@ -55,11 +55,11 @@ export class CharacterViewConditions extends UseWorldTime(LitElement) {
     const { disabled, temporaryFeatures, conditions } = this.character;
     const temporary = temporaryFeatures.reduce((accum, temp) => {
       if (temp.type === TemporaryFeatureType.Condition) {
-        accum.get(temp.condition)?.push(temp) ??
-          accum.set(temp.condition, [temp]);
+        accum.get(temp.condition)?.push(temp.timeState) ??
+          accum.set(temp.condition, [temp.timeState]);
       }
       return accum;
-    }, new Map<ConditionType, (TemporaryCondition & { timeState: LiveTimeState })[]>());
+    }, new Map<ConditionType, LiveTimeState[]>());
 
     // TODO Conditions from substances
 
@@ -78,11 +78,11 @@ export class CharacterViewConditions extends UseWorldTime(LitElement) {
                     <figcaption>${localize(condition)}</figcaption>
                     <ul>
                       ${list.map(
-                        (temp) => html`
+                        (timeState) => html`
                           <wl-list-item>
-                            <span slot="before">${temp.name}</span>
+                            <span slot="before">${timeState.label}</span>
                             <span
-                              >${prettyMilliseconds(temp.timeState.remaining)}
+                              >${prettyMilliseconds(timeState.remaining)}
                               ${localize('remaining')}</span
                             >
                           </wl-list-item>
