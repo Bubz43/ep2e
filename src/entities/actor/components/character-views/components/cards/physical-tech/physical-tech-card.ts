@@ -111,7 +111,6 @@ export class PhysicalTechCard extends ItemCardBase {
         ? html`
             ${item.fabricatedItem
         ? html`
-              <mwc-circular-progress progress=${item.printState.progress}></mwc-circular-progress>
                   <character-view-time-item
                     ?disabled=${!item.editable}
                     .timeState=${item.printState}

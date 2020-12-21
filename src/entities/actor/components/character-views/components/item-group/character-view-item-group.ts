@@ -290,16 +290,14 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
   }
 
   private renderItemList() {
-    return cache(
-      this.collapsed
-        ? html``
-        : html`
+    return html`
             <sl-animated-list
               class="proxy-list"
               stagger
               skipExitAnimation
               fadeOnly
               @dragover=${this.setDragTargetState}
+              ?hidden=${this.collapsed}
             >
               ${repeat(this.sorted, idProp, (proxy) =>
                 renderItemCard(proxy, {
@@ -309,8 +307,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
                 }),
               )}
             </sl-animated-list>
-          `,
-    );
+          `
   }
 }
 

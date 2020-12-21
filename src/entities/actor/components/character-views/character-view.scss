@@ -185,3 +185,16 @@ character-view-sleeve,
   display: flex;
   justify-content: space-evenly;
 }
+
+.active-substances {
+  display: grid;
+  gap: 0.25rem;
+  character-view-time-item {
+    padding: 0;
+  }
+}
+
+.active-substance-actions {
+  padding: 0.15rem 0;
+
+}

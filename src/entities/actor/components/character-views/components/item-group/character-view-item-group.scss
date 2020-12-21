@@ -18,6 +18,9 @@ sl-dropzone {
   display: grid;
   grid-auto-rows: min-content;
   position: relative;
+  &[hidden] {
+    display: none;
+  }
 }
 
 [part='header'] {

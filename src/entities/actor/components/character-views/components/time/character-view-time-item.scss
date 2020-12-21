@@ -5,6 +5,11 @@
   box-sizing: border-box;
 }
 
+@mixin buttonStyles() {
+  --mdc-icon-size: 0.9em;
+  --mdc-icon-button-size: 1.15em;
+}
+
 :host {
   display: grid;
   row-gap: 1px;
@@ -17,8 +22,7 @@
     'prog prog prog';
 
   ::slotted([slot='action']) {
-    --mdc-icon-size: 1em;
-    --mdc-icon-button-size: 1.25em;
+    @include buttonStyles;
   }
 }
 
@@ -56,8 +60,8 @@ img {
   grid-auto-flow: column;
   align-items: center;
   margin-left: 0.5ch;
-  --mdc-icon-size: 1em;
-  --mdc-icon-button-size: 1.25em;
+  @include buttonStyles;
+
   z-index: 1;
   // height: 28px;
 }
