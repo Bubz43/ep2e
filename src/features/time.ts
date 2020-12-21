@@ -112,13 +112,14 @@ export const prettyOnset = (onset: number) => {
 
 export type LiveTimeState = {
   label: string;
-  elapsed: number;
+  readonly elapsed: number;
   duration: number;
-  remaining: number;
+  readonly remaining: number;
   id: string;
   startTime: number;
   updateStartTime: (newStartTime: number) => void;
-  progress: number;
+  readonly progress: number;
+  readonly completed: boolean;
   img?: string;
 };
 
@@ -138,9 +139,12 @@ export const createLiveTimeState = (
   get progress() {
     return clamp((this.elapsed / this.duration) * 100, { min: 0, max: 100 });
   },
+  get completed() {
+    return this.remaining === 0;
+  }
 });
 
-export const refreshAvailable = ({ remaining }: LiveTimeState) => !remaining;
+export const refreshAvailable = ({ completed }: LiveTimeState) => completed;
 
 export const currentWorldTimeMS = () => {
   return toMilliseconds({ seconds: game.time.worldTime });

@@ -1,10 +1,12 @@
 import type { SubstanceUseData } from '@src/chat/message-data';
+import { substanceActivationDialog } from '@src/entities/actor/components/character-views/components/substance-activation-dialog';
 import { ActorType } from '@src/entities/entity-types';
 import { pickOrDefaultActor } from '@src/entities/find-entities';
 import { Substance } from '@src/entities/item/proxies/substance';
 import { matchID } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
+import { RenderDialogEvent } from '@src/open-dialog';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property } from 'lit-element';
 import { pipe } from 'remeda';
@@ -36,12 +38,9 @@ export class MessageSubstanceUse extends MessageElement {
   applySubstance() {
     pickOrDefaultActor(async (actor) => {
       if (actor.proxy.type === ActorType.Character) {
-        const { appliedTo, useMethod, hidden } = this.substanceUse
+        const { appliedTo, useMethod, hidden } = this.substanceUse;
         this.setData({
-          appliedTo: [
-            ...(appliedTo || []),
-            actor.tokenOrLocalInfo.name,
-          ],
+          appliedTo: [...(appliedTo || []), actor.tokenOrLocalInfo.name],
         });
 
         const [id] = await actor.itemOperations.add(
@@ -52,7 +51,15 @@ export class MessageSubstanceUse extends MessageElement {
         );
 
         if (Substance.onsetTime(useMethod) === 0) {
-          actor.proxy.awaitingOnsetSubstances.find(matchID(id))?.makeActive([])
+          const substance = actor.proxy.awaitingOnsetSubstances.find(
+            matchID(id),
+          );
+          substance &&
+            this.dispatchEvent(
+              new RenderDialogEvent(
+                substanceActivationDialog(actor.proxy, substance),
+              ),
+            );
         }
       }
     }, true);

@@ -513,6 +513,7 @@ export class Substance
   }
 
   makeActive(modifyingEffects: Effect[]) {
+    // TODO method that takes non onset substance and makes it active directly
     const hidden = this.epFlags?.awaitingOnset?.hidden ?? false;
     const state: ActiveSubstanceState = {
       modifyingEffects: modifyingEffects.reduce(

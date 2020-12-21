@@ -29,16 +29,11 @@ export class CharacterViewActiveSubstance extends LitElement {
         .item=${substance}
       >
       </character-view-time-item>
-      <div class="active-substance-actions">
-        <mwc-button dense unelevated>thing1</mwc-button>
-        <mwc-button
-          style="--mdc-theme-primary: var(--color-negative)"
-          dense
-          unelevated
-          >thing2</mwc-button
-        >
-        <mwc-button dense unelevated>thing3</mwc-button>
-      </div>
+      <sl-animated-list class="active-substance-actions">
+        ${!timeState.remaining ? html`
+        
+        ` : ""}
+      </sl-animated-list>
     `;
   }
 }

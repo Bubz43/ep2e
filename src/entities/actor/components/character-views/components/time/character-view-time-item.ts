@@ -94,11 +94,11 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
   }
 
   render() {
-    const { label, remaining, img } = this.activeTimeState;
+    const { label, remaining, completed, img } = this.activeTimeState;
     return html`
       ${img ? html` <img height="20px" src=${img} /> ` : ''}
       <span class="name"
-        >${!remaining
+        >${completed
           ? html`<span class=${this.completion}
               >[${localize(this.completion)}]</span
             >`

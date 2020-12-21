@@ -11,12 +11,6 @@ export const substanceActivationDialog = (
   substance: Substance,
 ) => {
   const { substanceEffects } = character.appliedEffects;
-
-  // if (substanceEffects.length === 0) {
-  //   substance.makeActive([]);
-  //   return;
-  // }
-
   let usingEffects: number[] = [];
 
   return html` <mwc-dialog

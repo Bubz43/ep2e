@@ -398,20 +398,20 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         (notEmpty(this.equippedGroups.expiredServices) ||
           this.timers.some(refreshAvailable) ||
           this.tasks.some((task) => task.state.completed))) ||
-      this.temporaryFeatures.some(({ timeState }) => !timeState.remaining) ||
+      this.temporaryFeatures.some(({ timeState }) => timeState.completed) ||
       this.equippedGroups.activeFabbers.some(
-        (fabber) => !fabber.printState.remaining,
+        (fabber) => fabber.printState.completed,
       ) ||
       this.healths.some((health) =>
         [...(health.activeRecoveries?.values() || [])].some(
-          ({ timeState }) => !timeState.remaining,
+          ({ timeState }) => timeState.completed,
         ),
       ) ||
       this.awaitingOnsetSubstances.some(
-        ({ awaitingOnsetTimeState }) => !awaitingOnsetTimeState.remaining,
+        ({ awaitingOnsetTimeState }) => awaitingOnsetTimeState.completed,
       ) ||
       this.activeSubstances.some(
-        ({ appliedInfo }) => !appliedInfo.timeState.remaining,
+        ({ appliedInfo }) => appliedInfo.timeState.completed,
       )
     );
   }
