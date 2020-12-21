@@ -8,7 +8,6 @@ import type { ValuedProp } from '../../../src/utility/field-values';
 import type { Checkbox } from '@material/mwc-checkbox';
 import type { Switch } from '@material/mwc-switch';
 import type { Radio } from '@material/mwc-radio';
-import { DatepickerValueUpdated } from 'app-datepicker/dist/custom_typings';
 import { tooltip } from '@src/init';
 import { noop } from 'remeda';
 
@@ -434,30 +433,6 @@ const clearSearchOnEscape = (ev: KeyboardEvent) => {
   }
 };
 
-type DateInputOptions = Partial<{
-  disabled: boolean;
-  required: boolean;
-  min: string;
-  max: string;
-}>;
-
-export const renderDateField = (
-  { value, label, prop }: ValuedProp<string>,
-  { min, max, disabled = false, required = false }: DateInputOptions = {},
-) => {
-  return html`
-    <sl-date-field
-      value=${live(value)}
-      label=${label}
-      min=${ifDefined(min)}
-      max=${ifDefined(max)}
-      ?disabled=${disabled}
-      ?required=${required}
-    >
-      <input type="date" name=${prop} hidden />
-    </sl-date-field>
-  `;
-};
 
 export const renderTextInput = (
   { value, prop }: ValuedProp<string>,

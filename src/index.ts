@@ -20,7 +20,6 @@ import '@material/mwc-snackbar';
 import '@material/mwc-switch';
 import '@material/mwc-tab-bar';
 // import '@tinymce/tinymce-webcomponent'; // TODO Test this out further
-// import { Datepicker } from 'app-datepicker/dist/datepicker';
 import 'web-animations-js';
 // Weightless Components
 import 'weightless/label';
@@ -33,7 +32,6 @@ import { MessageHeader } from './chat/components/header/message-header';
 import { MessageStressTest } from './chat/components/stress-test/message-stress-test';
 import { RolledFormulasList } from './combat/components/rolled-formulas-list/rolled-formulas-list';
 import { AnimatedList } from './components/animated-list/animated-list';
-import { DateField } from './components/date-field/date-field';
 import { DeleteButton } from './components/delete-button/delete-button';
 import { Details } from './components/details/details';
 import { DropZone } from './components/dropzone/dropzone';
@@ -140,7 +138,6 @@ import { MessageSubstanceUse } from './chat/components/substance/message-substan
 import { PhysicalTechCard } from './entities/actor/components/character-views/components/cards/physical-tech/physical-tech-card';
 import { CharacterViewActiveSubstance } from './entities/actor/components/character-views/components/active-substance/character-view-active-substance';
 
-// customElements.define('app-datepicker', Datepicker);
 
 // Generic Components
 Field;
