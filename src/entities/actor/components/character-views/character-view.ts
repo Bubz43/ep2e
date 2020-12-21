@@ -33,6 +33,7 @@ import { traverseActiveElements } from 'weightless';
 import { CharacterDrawerRenderer } from './character-drawer-render-event';
 import { CharacterViewBase, ItemGroup } from './character-view-base';
 import styles from './character-view.scss';
+import { substanceActivationDialog } from './components/substance-activation-dialog';
 
 @customElement('character-view')
 export class CharacterView extends CharacterViewBase {
@@ -109,10 +110,15 @@ export class CharacterView extends CharacterViewBase {
       let isHidden = false;
 
       const addSubstance = async (method: SubstanceUseMethod) => {
-        await this.character.itemOperations.add(
+        const [id] = await this.character.itemOperations.add(
           item.createAwaitingOnset({ method }),
         );
-        if (item.actor && item.editable) item.use();
+        if (item.actor && item.editable) await item.use();
+
+        if (Substance.onsetTime(method) === 0 && id) {
+          this.openSubstanceActivationDialog(id)
+        }
+
       };
       if (
         item.applicationMethods.length === 1 &&
@@ -146,50 +152,8 @@ export class CharacterView extends CharacterViewBase {
     const substance = this.character.awaitingOnsetSubstances.find(matchID(id));
     if (!substance) return;
 
-    const { substanceEffects } = this.character.appliedEffects;
-
-    if (substanceEffects.length === 0) {
-      substance.makeActive([]);
-      return;
-    }
-
-    let usingEffects: number[] = [];
-
     this.dispatchEvent(
-      new RenderDialogEvent(html`
-        <mwc-dialog heading="${localize('activate')} ${substance.appliedName}">
-          <mwc-list
-            multi
-            @selected=${(ev: MultiSelectedEvent) =>
-              (usingEffects = [...ev.detail.index])}
-          >
-            ${substanceEffects.map((effect) => {
-              return html`
-                <mwc-check-list-item twoline>
-                  <span>${effect[Source]}</span>
-                  <span slot="secondary">${formatEffect(effect)}</span>
-                </mwc-check-list-item>
-              `;
-            })}
-          </mwc-list>
-
-          <mwc-button slot="secondaryAction" dialogAction="cancel"
-            >${localize('cancel')}</mwc-button
-          >
-          <mwc-button
-            raised
-            slot="primaryAction"
-            dialogAction="start"
-            @click=${() => {
-              const finalEffects = compact(
-                usingEffects.map((index) => substanceEffects[index]),
-              );
-              substance.makeActive(finalEffects);
-            }}
-            >${localize('start')}</mwc-button
-          >
-        </mwc-dialog>
-      `),
+      new RenderDialogEvent(substanceActivationDialog(this.character, substance)),
     );
   }
 
@@ -286,41 +250,12 @@ export class CharacterView extends CharacterViewBase {
                               ${repeat(
                                 activeSubstances,
                                 idProp,
-                                (substance) => {
-                                  const { timeState } = substance.appliedInfo;
-                                  // TODO show more detailed stuff and toggle each state
-                                  return html`
-                                    <character-view-time-item
-                                      ?disabled=${disabled}
-                                      .timeState=${timeState}
-                                      completion="expired"
-                                      .item=${substance}
-                                    >
-                                      <!-- <mwc-icon-button
-                                        icon="settings"
-                                        slot="action"
-                                        @click=${() =>
-                                        this.openActiveSubstanceControls(
-                                          substance.id,
-                                        )}
-                                      ></mwc-icon-button> -->
-                                    </character-view-time-item>
-                                    <div class="active-substance-actions">
-                                      <mwc-button dense unelevated
-                                        >thing1</mwc-button
-                                      >
-                                      <mwc-button
-                                        style="--mdc-theme-primary: var(--color-negative)"
-                                        dense
-                                        unelevated
-                                        >thing2</mwc-button
-                                      >
-                                      <mwc-button dense unelevated
-                                        >thing3</mwc-button
-                                      >
-                                    </div>
-                                  `;
-                                },
+                                (substance) => html`
+                                  <character-view-active-substance
+                                    .substance=${substance}
+                                    .character=${this.character}
+                                  ></character-view-active-substance>
+                                `,
                               )}
                             </sl-animated-list>
                           </sl-details>

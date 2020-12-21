@@ -2,6 +2,7 @@ import type { SubstanceUseData } from '@src/chat/message-data';
 import { ActorType } from '@src/entities/entity-types';
 import { pickOrDefaultActor } from '@src/entities/find-entities';
 import { Substance } from '@src/entities/item/proxies/substance';
+import { matchID } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import { notEmpty } from '@src/utility/helpers';
@@ -35,19 +36,24 @@ export class MessageSubstanceUse extends MessageElement {
   applySubstance() {
     pickOrDefaultActor(async (actor) => {
       if (actor.proxy.type === ActorType.Character) {
+        const { appliedTo, useMethod, hidden } = this.substanceUse
         this.setData({
           appliedTo: [
-            ...(this.substanceUse.appliedTo || []),
+            ...(appliedTo || []),
             actor.tokenOrLocalInfo.name,
           ],
         });
 
-        actor.itemOperations.add(
+        const [id] = await actor.itemOperations.add(
           this.substance.createAwaitingOnset({
-            method: this.substanceUse.useMethod,
-            hidden: this.substanceUse.hidden,
+            method: useMethod,
+            hidden: hidden,
           }),
         );
+
+        if (Substance.onsetTime(useMethod) === 0) {
+          actor.proxy.awaitingOnsetSubstances.find(matchID(id))?.makeActive([])
+        }
       }
     }, true);
   }

@@ -138,6 +138,7 @@ import { PhysicalHealthDamageEditor } from './health/components/physical-health-
 import './init';
 import { MessageSubstanceUse } from './chat/components/substance/message-substance-use';
 import { PhysicalTechCard } from './entities/actor/components/character-views/components/cards/physical-tech/physical-tech-card';
+import { CharacterViewActiveSubstance } from './entities/actor/components/character-views/components/active-substance/character-view-active-substance';
 
 // customElements.define('app-datepicker', Datepicker);
 
@@ -190,6 +191,7 @@ CharacterViewPhysicalHealth;
 CharacterViewMeshHealth;
 CharacterViewMentalHealth;
 CharacterViewConditions;
+CharacterViewActiveSubstance;
 ItemCard;
 ConsumableCard;
 PhysicalTechCard;

@@ -72,7 +72,7 @@ export class EPOverlay extends LitElement {
   @internalProperty() private dialogTemplate: TemplateResult | null = null;
 
   firstUpdated() {
-    this.addEventListener(RenderDialogEvent.is, async (ev) => {
+    document.body.addEventListener(RenderDialogEvent.is, async (ev) => {
       ev.stopPropagation();
       this.dialogTemplate = ev.dialogTemplate;
       const focusSource = traverseActiveElements();
