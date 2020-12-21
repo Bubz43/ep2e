@@ -71,20 +71,24 @@ export class CharacterViewActiveSubstance extends LitElement {
 
       await createMessage({
         data: {
-          header: { ...substance.messageHeader, hidden: substance.appliedAndHidden },
+          header: {
+            ...substance.messageHeader,
+            hidden: substance.appliedAndHidden,
+          },
           damage: {
             ...attack,
             rolledFormulas: rollLabeledFormulas(rollFormulas),
             source: `${substance.appliedName} ${label}`,
             damageType,
-            multiplier: notEmpty(modifyingEffects?.misc)
-              ? 0.5
-              : 1,
+            multiplier: notEmpty(modifyingEffects?.misc) ? 0.5 : 1,
           },
         },
         entity: this.character,
       });
     }
+    if (severity.conditions)
+      await this.character.addConditions(severity.conditions);
+
     this.substance.updateAppliedState({ applySeverity: true });
   }
 
@@ -100,19 +104,36 @@ export class CharacterViewActiveSubstance extends LitElement {
       timeState,
       modifyingEffects,
       applySeverity,
+      multiTimeStates,
     } = substance.appliedInfo;
     const mods = compact([
       modifyingEffects?.duration,
       modifyingEffects?.misc,
     ]).flat();
     return html`
-      <character-view-time-item
-        ?disabled=${disabled}
-        .timeState=${timeState}
-        completion="expired"
-        .item=${substance}
-      >
-      </character-view-time-item>
+      ${notEmpty(multiTimeStates)
+        ? html`
+            <mwc-list-item> ${substance.appliedName} </mwc-list-item>
+            ${multiTimeStates.map(
+              (timeState) => html`<character-view-time-item
+                ?disabled=${disabled}
+                .timeState=${timeState}
+                completion="expired"
+                .item=${substance}
+              >
+              </character-view-time-item>`,
+            )}
+          `
+        : html`
+            <character-view-time-item
+              ?disabled=${disabled}
+              .timeState=${timeState}
+              completion="expired"
+              .item=${substance}
+            >
+            </character-view-time-item>
+          `}
+
       <sl-animated-list class="active-substance-actions">
         ${timeState.completed
           ? html`
@@ -155,16 +176,16 @@ export class CharacterViewActiveSubstance extends LitElement {
 
                   ${localize('severe')} ${localize('effects')}
                   <button
-                  data-tooltip="${localize("apply")} ${localize("effects")}"
-                  @mouseover=${tooltip.fromData}
+                    data-tooltip="${localize('apply')} ${localize('effects')}"
+                    @mouseover=${tooltip.fromData}
                     ?disabled=${disabled}
                     @click=${this.startSeverity}
                   >
                     <mwc-icon>done</mwc-icon>
                   </button>
                   <button
-                  data-tooltip="${localize("resist")} ${localize("effects")}"
-                  @mouseover=${tooltip.fromData}
+                    data-tooltip="${localize('resist')} ${localize('effects')}"
+                    @mouseover=${tooltip.fromData}
                     ?disabled=${disabled}
                     @click=${this.cancelSeverity}
                   >

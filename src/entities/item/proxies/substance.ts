@@ -594,7 +594,9 @@ export class Substance
     const { active } = this.epFlags ?? {};
     const effects: AddEffects[] = [];
     const items: (Trait | Sleight)[] = [];
-    const multipliers = extractDurationEffectMultipliers(active?.modifyingEffects?.duration ?? []);
+    const multipliers = extractDurationEffectMultipliers(
+      active?.modifyingEffects?.duration ?? [],
+    );
 
     const { alwaysApplied, severity, hasSeverity } = this;
     let duration = alwaysApplied.duration;
@@ -619,7 +621,15 @@ export class Substance
       if (severity.duration > duration) duration = severity.duration;
     }
 
-    duration = applyDurationMultipliers({duration, multipliers});
+    duration = applyDurationMultipliers({ duration, multipliers });
+    const updateStartTime = this.updater.prop(
+      'flags',
+      EP.Name,
+      'active',
+      'startTime',
+    ).commit;
+    const timeStateId = `active-${this.id}`;
+    const startTime = active?.startTime || currentWorldTimeMS() - duration;
     return {
       effects,
       items,
@@ -629,18 +639,37 @@ export class Substance
       modifyingEffects: active?.modifyingEffects,
       applySeverity: active?.applySeverity ?? null,
       timeState: createLiveTimeState({
-        id: `active-${this.id}`,
+        id: timeStateId,
         img: this.nonDefaultImg,
         label: this.appliedName,
         duration,
-        startTime: active?.startTime || currentWorldTimeMS() - duration,
-        updateStartTime: this.updater.prop(
-          'flags',
-          EP.Name,
-          'active',
-          'startTime',
-        ).commit,
+        startTime,
+        updateStartTime,
       }),
+      multiTimeStates: active?.applySeverity
+        ? [
+            createLiveTimeState({
+              id: timeStateId + 'always',
+              label: `${localize('base')} ${localize('effects')}`,
+              duration: applyDurationMultipliers({
+                duration: alwaysApplied.duration,
+                multipliers,
+              }),
+              startTime,
+              updateStartTime,
+            }),
+            createLiveTimeState({
+              id: timeStateId + 'severity',
+              label: `${localize('severe')} ${localize('effects')}`,
+              duration: applyDurationMultipliers({
+                duration: severity.duration,
+                multipliers,
+              }),
+              startTime,
+              updateStartTime,
+            }),
+          ] as const
+        : null,
     };
   }
 }
