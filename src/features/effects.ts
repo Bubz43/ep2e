@@ -8,7 +8,7 @@ import {
 import { localize } from '@src/foundry/localization';
 import { healthLabels, HealthStat, HealthType } from '@src/health/health';
 import { HealOverTimeTarget, formatAutoHealing } from '@src/health/recovery';
-import { withSign } from '@src/utility/helpers';
+import { nonNegative, notEmpty, withSign } from '@src/utility/helpers';
 import { anyPass, clamp, compact, createPipe, map, purry } from 'remeda';
 import type { Action, ActionSubtype } from './actions';
 import { ArmorType } from './active-armor';
@@ -453,8 +453,27 @@ export const formatDurationPercentage = (modifier: number) => {
 };
 
 export const durationEffectMultiplier = (modifier: number) => {
-  return 1 + modifier / 100;
+  return nonNegative(1 + modifier / 100);
 };
+
+export const extractDurationEffectMultipliers = (effects: DurationEffect[]) => {
+  const multipliers: number[] = [];
+  const cummulative: number[] = [];
+  
+  for (const effect of effects) {
+    if (effect.modifier) {
+      if (effect.cummulative) cummulative.push(effect.modifier)
+      else multipliers.push(durationEffectMultiplier(effect.modifier))
+    }
+  }
+
+  if (notEmpty(cummulative)) {
+    const cummulativeTotal = cummulative.reduce((accum, mp) => accum += mp, 0)
+    if (cummulativeTotal) multipliers.push(durationEffectMultiplier(cummulativeTotal))
+  }
+
+  return multipliers;
+}
 
 export const formatEffect = createPipe(
   format,

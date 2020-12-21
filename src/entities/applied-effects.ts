@@ -6,6 +6,7 @@ import {
   DurationEffectTarget,
   Effect,
   EffectType,
+  extractDurationEffectMultipliers,
   HealthEffect,
   MovementEffect,
   MovementEffectMode,
@@ -25,6 +26,7 @@ import type {
   HealthStat,
   HealthStatMods,
 } from '@src/health/health';
+import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import { pipe, concat, filter, allPass, clamp, groupBy, compact } from 'remeda';
 
@@ -128,24 +130,11 @@ export class AppliedEffects {
   }
 
   get healthRecovery() {
-    const recovery = this.getGroup(EffectType.HealthRecovery);
-    const timeframeMultipliers: number[] = [];
-    const cummulative: number[] = [];
-    for (const effect of this.durationEffects.healingTimeframes ?? []) {
-      if (effect.subtype === DurationEffectTarget.HealingTimeframes) {
-        if (effect.modifier) {
-          const multiplier = durationEffectMultiplier(effect.modifier);
-          if (effect.cummulative) cummulative.push(multiplier)
-          else timeframeMultipliers.push(multiplier)
-        }
-         
-      }
-    }
-    const cummulativeMultiplier = cummulative.reduce((accum, mp) => accum += mp, 0);
-    if (cummulativeMultiplier) timeframeMultipliers.push(cummulativeMultiplier)
     return {
-      recovery,
-      timeframeMultipliers,
+      recovery: this.getGroup(EffectType.HealthRecovery),
+      timeframeMultipliers: extractDurationEffectMultipliers(
+        this.durationEffects.healingTimeframes || [],
+      ),
     };
   }
 
