@@ -62,7 +62,8 @@ img {
   top: 50%;
   transform: translateY(-50%);
   z-index: 1;
-  border-radius: 100%;
+  opacity: 0.85;
+  // border-radius: 100%;
 }
 
 h4 {

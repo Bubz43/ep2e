@@ -28,7 +28,7 @@ import {
   SubstanceItemFlags,
 } from '@src/entities/models';
 import { UpdateStore } from '@src/entities/update-store';
-import type { Effect } from '@src/features/effects';
+import { Effect, EffectType, UniqueEffectType } from '@src/features/effects';
 import {
   addFeature,
   StringID,
@@ -38,6 +38,7 @@ import {
 import { toMilliseconds } from '@src/features/modify-milliseconds';
 import { createLiveTimeState, currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
+import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { EP } from '@src/foundry/system';
 import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
@@ -512,7 +513,7 @@ export class Substance
     return copy;
   }
 
-  makeActive(modifyingEffects: Effect[]) {
+  async makeActive(modifyingEffects: Effect[]) {
     // TODO method that takes non onset substance and makes it active directly
     const hidden = this.epFlags?.awaitingOnset?.hidden ?? false;
     const state: ActiveSubstanceState = {
@@ -525,6 +526,36 @@ export class Substance
       startTime: currentWorldTimeMS(),
       finishedEffects: [],
     };
+
+    const { alwaysApplied } = this;
+    if (alwaysApplied.hasInstantDamage) {
+      const {
+        label,
+        damageType,
+        attackTraits,
+        perTurn,
+        rollFormulas,
+        ...attack
+      } = alwaysApplied.damage;
+
+      await createMessage({
+        data: {
+          header: { ...this.messageHeader, hidden },
+          damage: {
+            ...attack,
+            rolledFormulas: rollLabeledFormulas(rollFormulas),
+            source: `${this.appliedName} ${label}`,
+            damageType,
+            multiplier: modifyingEffects.some(
+              (effect) =>
+                effect.type === EffectType.Misc &&
+                effect.unique === UniqueEffectType.HalveDrugEffects,
+            ) ? 0.5 : 1,
+          },
+        },
+        entity: this.actor,
+      });
+    }
 
     return this.updater
       .prop('flags', EP.Name, 'awaitingOnset')
@@ -541,25 +572,25 @@ export class Substance
 
   @LazyGetter()
   get appliedInfo() {
-    const { active: active } = this.epFlags ?? {};
+    const { active } = this.epFlags ?? {};
     const effects: AddEffects[] = [];
     const items: (Trait | Sleight)[] = [];
     // TODO Damage/Conditions and apply effects to effects/duration
     const { alwaysApplied, severity, hasSeverity } = this;
     let duration = alwaysApplied.duration;
-
-    if (!active?.finishedEffects?.includes('always')) {
+    const applyAlways = !active?.finishedEffects?.includes('always');
+    if (applyAlways) {
       effects.push({
         source: this.appliedName,
         effects: alwaysApplied.effects,
       });
       items.push(...alwaysApplied.items.values());
     }
-    if (
+    const applySeverity =
       hasSeverity &&
       active?.applySeverity &&
-      !active.finishedEffects?.includes('severity')
-    ) {
+      !active.finishedEffects?.includes('severity');
+    if (applySeverity) {
       effects.push({
         source: `${this.appliedName} (${localize('severity')})`,
         effects: severity.effects,
@@ -570,6 +601,8 @@ export class Substance
     return {
       effects,
       items,
+      conditions: applySeverity && severity.conditions,
+      modifyingEffects: active?.modifyingEffects,
       timeState: createLiveTimeState({
         id: `active-${this.id}`,
         img: this.nonDefaultImg,

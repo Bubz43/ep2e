@@ -11,9 +11,16 @@
   padding: 0.25rem 0.5rem;
 }
 
-.formulas-toggle {
+button.formulas-toggle {
   float: right;
-  color: var(--color-text-lighter);
+  padding: 0.25rem;
+
+  &.active {
+    filter: drop-shadow(1px 2px 4px var(--color-secondary));
+  }
+  &:hover {
+    filter: drop-shadow(1px 2px 4px var(--color-primary-alt));
+  }
 }
 
 mwc-button[unelevated] {

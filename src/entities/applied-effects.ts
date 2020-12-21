@@ -130,13 +130,19 @@ export class AppliedEffects {
   get healthRecovery() {
     const recovery = this.getGroup(EffectType.HealthRecovery);
     const timeframeMultipliers: number[] = [];
+    const cummulative: number[] = [];
     for (const effect of this.durationEffects.healingTimeframes ?? []) {
       if (effect.subtype === DurationEffectTarget.HealingTimeframes) {
-        if (effect.halve) timeframeMultipliers.push(0.5);
-        else if (effect.modifier)
-          timeframeMultipliers.push(durationEffectMultiplier(effect.modifier));
+        if (effect.modifier) {
+          const multiplier = durationEffectMultiplier(effect.modifier);
+          if (effect.cummulative) cummulative.push(multiplier)
+          else timeframeMultipliers.push(multiplier)
+        }
+         
       }
     }
+    const cummulativeMultiplier = cummulative.reduce((accum, mp) => accum += mp, 0);
+    if (cummulativeMultiplier) timeframeMultipliers.push(cummulativeMultiplier)
     return {
       recovery,
       timeframeMultipliers,

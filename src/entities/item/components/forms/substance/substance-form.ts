@@ -650,27 +650,20 @@ export class SubstanceForm extends ItemFormBase {
           [
             renderFormulaField(damageFormula),
             renderSelectField(damageType, enumValues(HealthType)),
-
-            html`<sl-popover
-              .renderOnDemand=${() => this.renderArmorUsedForm(group)}
-              placement=${Placement.Right}
-            >
-              <wl-list-item slot="base" clickable>
-                <span>${localize('armorUsed')}</span>
-                <span class="list-values"
-                  >${notEmpty(damage.armorUsed)
-                    ? map(damage.armorUsed, localize).join(', ')
-                    : localize('none')}</span
-                >
-              </wl-list-item>
-            </sl-popover>`,
+            renderLabeledCheckbox(perTurn),
+            html`
+            <p class="label">${localize("armorUsed")}</p>
+            ${this.renderArmorUsedForm(group)}
+           `,
             notEmpty(damage.armorUsed)
-              ? [
+              ? html`
+              <div class="divider"></div>
+              ${[
                   renderLabeledCheckbox(armorPiercing),
                   renderLabeledCheckbox(reduceAVbyDV),
-                ]
+                ]}
+              `
               : '',
-            renderLabeledCheckbox(perTurn),
           ],
         ],
       })}

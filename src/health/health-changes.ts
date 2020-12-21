@@ -3,7 +3,7 @@ import type { ArmorType } from '@src/features/active-armor';
 import { createFeature } from '@src/features/feature-helpers';
 import { currentWorldTimeMS } from '@src/features/time';
 import { HealthType } from '@src/health/health';
-import { StressType } from '@src/health/mental-health';
+import type { StressType } from '@src/health/mental-health';
 import { mapToObj } from 'remeda';
 
 export type RollMultiplier = 0.5 | 1 | 2;
@@ -89,7 +89,7 @@ const common: Base = {
 export const createStressDamage = createFeature<StressDamage, RequiredFields>(
   () => ({
     ...common,
-    stressType: StressType.TheUnknown,
+    stressType: "",
     type: HealthType.Mental,
   }),
 );

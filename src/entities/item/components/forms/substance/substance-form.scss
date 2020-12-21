@@ -73,3 +73,10 @@ form-items-list {
     }
   }
 }
+
+
+.divider {
+  width: 100%;
+  border-top: 1px solid var(--color-border);
+  margin: 0 0 0 0.5rem;
+}

@@ -13,9 +13,9 @@ import type { Character } from '../../proxies/character';
 import type { CharacterDrawerRenderer } from './character-drawer-render-event';
 
 export enum ItemGroup {
+  Consumables = 'consumables',
   Sleights = 'sleights',
   Traits = 'traits',
-  Consumables = 'consumables',
   Equipped = 'equipped',
   Stashed = 'stashed',
 }

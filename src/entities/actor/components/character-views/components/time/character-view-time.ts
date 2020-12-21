@@ -10,7 +10,7 @@ import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { UpdateStore } from '@src/entities/update-store';
 import { ActionSubtype, createActiveTask } from '@src/features/actions';
-import { addUpdateRemoveFeature, idProp } from '@src/features/feature-helpers';
+import { addUpdateRemoveFeature, idProp, matchID } from '@src/features/feature-helpers';
 import {
   currentWorldTimeMS,
   getElapsedTime,
@@ -25,6 +25,7 @@ import { customElement, html, LitElement, property } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import mix from 'mix-with/lib';
 import { createPipe, pathOr } from 'remeda';
+import { substanceActivationDialog } from '../substance-activation-dialog';
 import styles from './character-view-time.scss';
 
 @customElement('character-view-time')
@@ -81,6 +82,15 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
         ...UpdateStore.prepUpdateMany(fakeIdUpdaters),
       );
     }
+  }
+
+  private openSubstanceActivationDialog(id: string) {
+    const substance = this.character.awaitingOnsetSubstances.find(matchID(id));
+    if (!substance) return;
+
+    this.dispatchEvent(
+      new RenderDialogEvent(substanceActivationDialog(this.character, substance)),
+    );
   }
 
   render() {
@@ -156,7 +166,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
                         data-tooltip=${localize('start')}
                         @mouseover=${tooltip.fromData}
                         @click=${() =>
-                          this.character.startSubstance(substance.id)}
+                          this.openSubstanceActivationDialog(substance.id)}
                       ></mwc-icon-button>
                     </character-view-time-item>
                   `,

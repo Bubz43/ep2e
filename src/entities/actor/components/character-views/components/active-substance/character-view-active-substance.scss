@@ -7,7 +7,7 @@
 
 :host {
   display: block;
-  
+  padding: 0 0.2rem;
 }
 
 character-view-time-item {
@@ -17,10 +17,10 @@ character-view-time-item {
 
 .active-substance-actions {
   > * {
-    margin: 0.15rem 0;
+    margin: 0.25rem 0 0;
   }
 
   .damage {
-    color: var(--color-negative);
+    --mdc-theme-primary: var(--color-negative);
   }
 }

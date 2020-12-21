@@ -23,6 +23,7 @@ import {
   internalProperty,
   PropertyValues,
 } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
 import { omit } from 'remeda';
 import styles from './message-damage.scss';
 
@@ -116,7 +117,7 @@ export class MessageDamage extends LitElement {
       ${notEmpty(this.damage.rolledFormulas)
         ? html` <button
             dense
-            class="formulas-toggle"
+            class="formulas-toggle ${classMap({ active: this.viewFormulas })}"
             @click=${this.toggleFormulas}
           >
             <img src=${localImage('icons/cubes.svg')} height="20px" />

@@ -1,6 +1,7 @@
 import { createMessage } from '@src/chat/create-message';
 import type { Character } from '@src/entities/actor/proxies/character';
 import type { Substance } from '@src/entities/item/proxies/substance';
+import { EffectType } from '@src/features/effects';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { HealthType } from '@src/health/health';
@@ -23,20 +24,32 @@ export class CharacterViewActiveSubstance extends LitElement {
 
   @property({ attribute: false }) substance!: Substance;
 
+ 
+
   private async removeSubstance() {
-    const { alwaysApplied, severity, messageHeader, appliedAndHidden } = this.substance;
+    const {
+      alwaysApplied,
+      severity,
+      messageHeader,
+      appliedAndHidden,
+    } = this.substance;
     if (alwaysApplied.wearOffStress) {
       await createMessage({
         data: {
           header: { ...messageHeader, hidden: appliedAndHidden },
           damage: {
-            rolledFormulas: rollLabeledFormulas([{ label: localize("wearOffStress"), formula: alwaysApplied.wearOffStress }]),
+            rolledFormulas: rollLabeledFormulas([
+              {
+                label: localize('wearOffStress'),
+                formula: alwaysApplied.wearOffStress,
+              },
+            ]),
             damageType: HealthType.Mental,
             source: this.substance.appliedName,
-          }
+          },
         },
-        entity: this.character
-      })
+        entity: this.character,
+      });
     }
     this.substance.deleteSelf?.();
   }
@@ -45,7 +58,7 @@ export class CharacterViewActiveSubstance extends LitElement {
     const { disabled } = this.character;
     const { substance } = this;
     const { alwaysApplied, severity } = substance;
-    const { timeState } = substance.appliedInfo;
+    const { timeState, modifyingEffects } = substance.appliedInfo;
 
     return html`
       <character-view-time-item
@@ -59,8 +72,10 @@ export class CharacterViewActiveSubstance extends LitElement {
         ${timeState.completed
           ? html`
               <mwc-button
-              @click=${this.removeSubstance}
-              ?disabled=${disabled}
+                dense
+                unelevated
+                @click=${this.removeSubstance}
+                ?disabled=${disabled}
                 class=${classMap({ damage: !!alwaysApplied.wearOffStress })}
               >
                 ${localize('remove')}

@@ -145,67 +145,6 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     if (egoFormWindow?.isConnected) this.ego.openForm?.();
   }
 
-  async startSubstance(id: string) {
-    const substance = this.awaitingOnsetSubstances.find(matchID(id));
-    if (substance) {
-      const applySeverity = true;
-      // TODO Check vs severity and hidden and every other fucking thing
-      const {
-        alwaysApplied,
-        severity,
-        messageHeader,
-        hasSeverity,
-        name,
-      } = substance;
-      const hidden = substance.epFlags?.awaitingOnset?.hidden ?? false;
-
-      if (alwaysApplied.hasInstantDamage) {
-        const {
-          label,
-          damageType,
-          attackTraits,
-          perTurn,
-          rollFormulas,
-          ...attack
-        } = alwaysApplied.damage;
-
-        await createMessage({
-          data: {
-            header: { ...messageHeader, hidden },
-            damage: {
-              ...attack,
-              rolledFormulas: rollLabeledFormulas(rollFormulas),
-              source: `${name} ${label}`,
-              damageType,
-            },
-          },
-        });
-      }
-      // if (applySeverity && hasSeverity && severity.hasInstantDamage) {
-      //   const {
-      //     label,
-      //     damageType,
-      //     attackTraits,
-      //     perTurn,
-      //     rollFormulas,
-      //     ...attack
-      //   } = severity.damage;
-
-      //   await createMessage({
-      //     data: {
-      //       header: { ...messageHeader, hidden },
-      //       damage: {
-      //         ...attack,
-      //         rolledFormulas: rollLabeledFormulas(rollFormulas),
-      //         source: `${name} ${label}`,
-      //         damageType,
-      //       },
-      //     },
-      //   });
-      // }
-      substance.makeActive([]);
-    }
-  }
 
   updateConditions(conditions: ConditionType[]) {
     return this.sleeve?.updateConditions(conditions);

@@ -160,12 +160,8 @@ const duration: WithAllProps<DurationEffect> = ({
   subtype,
   modifier,
   taskType,
-  halve,
+  cummulative,
 }) => {
-  const canHalve = [
-    DurationEffectTarget.Drugs,
-    DurationEffectTarget.HealingTimeframes,
-  ].includes(subtype.value);
   return [
     renderSelectField(subtype, enumValues(DurationEffectTarget)),
     subtype.value === DurationEffectTarget.TaskActionTimeframe
@@ -173,20 +169,18 @@ const duration: WithAllProps<DurationEffect> = ({
           emptyText: localize('all'),
         })
       : '',
-    canHalve ? renderLabeledCheckbox(halve) : '',
-    canHalve && halve.value
-      ? ''
-      : html`
-          <div class="duration-slider-field">
-            <span>${formatDurationPercentage(modifier.value)}</span>
-            ${renderSlider(modifier, {
-              min: -100,
-              max: 200,
-              step: 25,
-              markers: true,
-            })}
-          </div>
-        `,
+    html`
+      <div class="duration-slider-field">
+        <span>${formatDurationPercentage(modifier.value)}</span>
+        ${renderSlider(modifier, {
+          min: -100,
+          max: 200,
+          step: 25,
+          markers: true,
+        })}
+      </div>
+    `,
+    renderLabeledCheckbox(cummulative),
   ];
 };
 

@@ -122,7 +122,7 @@ export type DurationEffect = {
   subtype: DurationEffectTarget;
   modifier: number;
   taskType: ActionSubtype | '';
-  halve: boolean;
+  cummulative?: boolean;
 };
 
 export enum RechargeStat {
@@ -204,6 +204,7 @@ const duration = createFeature<DurationEffect>(() => ({
   subtype: DurationEffectTarget.EffectDuration,
   modifier: 0,
   taskType: '',
+  cummulative: false,
   halve: false,
 }));
 
@@ -332,7 +333,10 @@ const format = (effect: Effect): (string | number)[] => {
     }
 
     case EffectType.Misc:
-      return [effect.unique ? `[${effect.unique}]` : '', effect.description];
+      return [
+        effect.unique ? `[${localize(effect.unique)}]` : '',
+        effect.description,
+      ];
 
     case EffectType.SuccessTest:
       return [
@@ -392,14 +396,8 @@ const format = (effect: Effect): (string | number)[] => {
           ? localize(effect.taskType || 'all')
           : '',
         localize(effect.subtype).toLowerCase(),
-        [
-          DurationEffectTarget.Drugs,
-          DurationEffectTarget.HealingTimeframes,
-        ].includes(effect.subtype) && effect.halve
-          ? `${localize('duration')} ${localize('halved')} (${localize(
-              'cumulative',
-            )})`.toLocaleLowerCase()
-          : formatDurationPercentage(effect.modifier),
+        formatDurationPercentage(effect.modifier),
+        effect.cummulative ? `(${localize('cumulative')})` : '',
       ];
 
     case EffectType.Melee:

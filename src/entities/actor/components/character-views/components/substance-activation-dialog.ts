@@ -10,6 +10,7 @@ export const substanceActivationDialog = (
   character: Character,
   substance: Substance,
 ) => {
+  const { alwaysApplied } = substance;
   const { substanceEffects } = character.appliedEffects;
   let usingEffects: number[] = [];
 
