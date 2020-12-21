@@ -38,33 +38,29 @@ export class PhysicalTechCard extends ItemCardBase {
     const { item: fabber } = this;
     const { glandedSubstance: item } = fabber;
     if (!item) return;
-    if (item.applicationMethods.length === 1) {
-      await item.createMessage({ method: item.applicationMethods[0]! });
-      fabber.printState.updateStartTime(currentWorldTimeMS());
-    } else {
-      let isHidden = false;
-      openMenu({
-        header: { heading: `${localize('use')} ${item.name}` },
-        content: [
-          renderAutoForm({
-            props: { hidden: isHidden },
-            update: ({ hidden = false }) => (isHidden = hidden),
-            fields: ({ hidden }) => renderLabeledCheckbox(hidden),
-          }),
-          'divider',
-          ...item.applicationMethods.map((method) => ({
-            label: `${localize(method)} - ${localize(
-              'onset',
-            )}: ${prettyMilliseconds(Substance.onsetTime(method))}`,
-            callback: async () => {
-              await item.createMessage({ method, hidden: isHidden });
-              fabber.printState.updateStartTime(currentWorldTimeMS());
-            },
-          })),
-        ],
-        position: ev,
-      });
-    }
+
+    let isHidden = false;
+    openMenu({
+      header: { heading: `${localize('use')} ${item.name}` },
+      content: [
+        renderAutoForm({
+          props: { hidden: isHidden },
+          update: ({ hidden = false }) => (isHidden = hidden),
+          fields: ({ hidden }) => renderLabeledCheckbox(hidden),
+        }),
+        'divider',
+        ...item.applicationMethods.map((method) => ({
+          label: `${localize(method)} - ${localize(
+            'onset',
+          )}: ${prettyMilliseconds(Substance.onsetTime(method))}`,
+          callback: async () => {
+            await item.createMessage({ method, hidden: isHidden });
+            fabber.printState.updateStartTime(currentWorldTimeMS());
+          },
+        })),
+      ],
+      position: ev,
+    });
   }
 
   renderHeaderButtons() {

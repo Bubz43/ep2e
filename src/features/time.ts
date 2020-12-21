@@ -111,16 +111,16 @@ export const prettyOnset = (onset: number) => {
 };
 
 export type LiveTimeState = {
+  img?: string;
   label: string;
-  readonly elapsed: number;
   duration: number;
-  readonly remaining: number;
   id: string;
   startTime: number;
   updateStartTime: (newStartTime: number) => void;
+  readonly elapsed: number;
+  readonly remaining: number;
   readonly progress: number;
   readonly completed: boolean;
-  img?: string;
 };
 
 export const createLiveTimeState = (
@@ -136,12 +136,13 @@ export const createLiveTimeState = (
   get remaining() {
     return nonNegative(this.duration - this.elapsed);
   },
+  get completed() {
+    return this.remaining === 0;
+  },
   get progress() {
     return clamp((this.elapsed / this.duration) * 100, { min: 0, max: 100 });
   },
-  get completed() {
-    return this.remaining === 0;
-  }
+ 
 });
 
 export const refreshAvailable = ({ completed }: LiveTimeState) => completed;

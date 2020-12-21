@@ -13,6 +13,14 @@
 character-view-time-item {
   padding: 0;
 }
+
+
 .active-substance-actions {
-  padding: 0.15rem 0;
+  > * {
+    margin: 0.15rem 0;
+  }
+
+  .damage {
+    color: var(--color-negative);
+  }
 }

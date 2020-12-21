@@ -11,7 +11,7 @@ import type { RequireAtLeastOne } from 'type-fest';
 export type StressTestMessageData = {
   rolledFormulas: RolledFormula[];
   minStress: '' | 'half' | number;
-  stressType: StressType;
+  stressType: StressType | "";
   notes?: string;
   source?: string;
 };
@@ -20,9 +20,9 @@ export type DamageMessageData = {
   rolledFormulas: RolledFormula[];
   damageType: HealthType;
   source: string;
-  armorPiercing: boolean;
-  reduceAVbyDV: boolean;
-  armorUsed: ArmorType[];
+  armorPiercing?: boolean;
+  reduceAVbyDV?: boolean;
+  armorUsed?: ArmorType[];
   cumulativeDotID?: string;
   multiplier?: RollMultiplier;
 };

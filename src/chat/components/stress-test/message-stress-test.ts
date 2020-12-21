@@ -139,8 +139,9 @@ export class MessageStressTest extends LitElement {
         : ''}
 
       <div class="damage-info">
-        ${totals.formula} ${localize('stress')} ${localize('from')}
-        ${localize(stressType)}. ${notes ? html`<div>${notes}</div>` : ''}
+        ${totals.formula} ${localize('stress')}
+        ${stressType ? `${localize('from')} ${localize(stressType)}` : ''}.
+        ${notes ? html`<div>${notes}</div>` : ''}
       </div>
 
       ${this.viewFormulas
