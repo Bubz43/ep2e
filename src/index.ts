@@ -75,8 +75,8 @@ import { CharacterViewSearch } from './entities/actor/components/character-views
 import { CharacterViewSleeve } from './entities/actor/components/character-views/components/sleeve/character-view-sleeve';
 import { CharacterViewTime } from './entities/actor/components/character-views/components/time/character-view-time';
 import { CharacterViewTimeItem } from './entities/actor/components/character-views/components/time/character-view-time-item';
-import { ConsumableCard } from './entities/actor/components/character-views/components/cards/consumable-card/consumable-card';
-import { ItemCard } from './entities/actor/components/character-views/components/cards/item-card/item-card';
+import { ConsumableCard } from './entities/actor/components/character-views/components/cards/consumable/consumable-card';
+import { ItemCard } from './entities/actor/components/character-views/components/cards/generic/item-card';
 import { ItemTrash } from './entities/actor/components/item-trash/item-trash';
 import { FormItemsList } from './entities/actor/components/items-list/form-items-list';
 import { SleeveFormAquisition } from './entities/actor/components/sleeve-forms/acquisition/sleeve-form-acquisition';
@@ -137,6 +137,7 @@ import { MeshHealthDamageEditor } from './health/components/mesh-health-damage-e
 import { PhysicalHealthDamageEditor } from './health/components/physical-health-damage-editor/physical-health-damage-editor';
 import './init';
 import { MessageSubstanceUse } from './chat/components/substance/message-substance-use';
+import { PhysicalTechCard } from './entities/actor/components/character-views/components/cards/physical-tech/physical-tech-card';
 
 // customElements.define('app-datepicker', Datepicker);
 
@@ -191,7 +192,7 @@ CharacterViewMentalHealth;
 CharacterViewConditions;
 ItemCard;
 ConsumableCard;
-
+PhysicalTechCard;
 // Ego
 EgoForm;
 EgoFormSkills;

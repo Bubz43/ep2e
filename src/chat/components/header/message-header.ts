@@ -34,7 +34,7 @@ export class MessageHeader extends LitElement {
     // TODO show special hidden image which can reveal normal on hover for gm
     return html`
       <header>
-        <div class="headings ${img && !hidden ? 'with-image' : ''}">
+        <div class="headings">
           <h3 title=${game.user.isGM ? heading : visibleHeading}>
             ${visibleHeading}
           </h3>

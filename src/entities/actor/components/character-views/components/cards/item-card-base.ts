@@ -70,7 +70,7 @@ export abstract class ItemCardBase extends LazyRipple(LitElement) {
 
   render() {
     const { item } = this;
-    const { nonDefaultImg, editable } = item;
+    const { nonDefaultImg } = item;
     return html`
       <div
         role="button"

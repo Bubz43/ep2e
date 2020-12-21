@@ -7,7 +7,7 @@ import { localize } from '@src/foundry/localization';
 import type { MWCMenuOption } from '@src/open-menu';
 import { html } from 'lit-html';
 import { compact, noop } from 'remeda';
-import type { ItemCard } from '../actor/components/character-views/components/cards/item-card/item-card';
+import type { ItemCard } from '../actor/components/character-views/components/cards/generic/item-card';
 import { ItemType } from '../entity-types';
 import type { ItemProxy } from './item';
 import type { Psi } from './proxies/psi';
@@ -219,6 +219,17 @@ export const renderItemCard = (
     'expanded' | 'noAnimate' | 'animateInitial' | 'allowDrag'
   > & { handleDragStart?: (ev: DragEvent) => void },
 ) => {
+  if (item.type === ItemType.PhysicalTech) {
+    return html`
+    <physical-tech-card
+      .item=${item}
+      ?expanded=${expanded}
+      ?noAnimate=${noAnimate}
+      ?animateInitial=${animateInitial}
+      @dragstart=${handleDragStart}
+    ></physical-tech-card>
+    `
+  }
   if ('stashed' in item)
     return html`
       <consumable-card

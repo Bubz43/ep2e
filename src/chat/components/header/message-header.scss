@@ -12,6 +12,7 @@
 
 header {
   display: flex;
+  position: relative;
 }
 
 .headings {
@@ -19,15 +20,15 @@ header {
   position: relative;
   flex: 1;
   text-align: left;
-  // margin-left: 0.75rem;
   padding: 0.5rem 0;
-  &.with-img {
-    max-width: 240px;
-  }
+  z-index: 2;
+  background: alphav(var(--color-bg), 0.1);
+
 
   > * {
     display: inline-block;
     max-width: 100%;
+    text-shadow: 0 0 4px black;
   }
 
   .details {
@@ -57,6 +58,9 @@ img {
   display: block;
   place-self: center;
   margin: 0.3rem 0.75rem;
+  position: absolute;
+  right: 0;
+  z-index: 1;
 }
 
 h4 {

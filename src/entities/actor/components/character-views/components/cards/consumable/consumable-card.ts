@@ -72,13 +72,17 @@ export class ConsumableCard extends ItemCardBase {
     this.item.setQuantity(this.item.quantity + 1);
   }
 
+  private toggleStashed() {
+    return this.item.toggleStashed()
+  }
+
   renderHeaderButtons() {
     const { item } = this;
     const { editable } = item;
     return html` ${item.stashed
       ? html`
           <mwc-icon-button
-            @click=${() => item.toggleStashed()}
+            @click=${this.toggleStashed}
             icon=${item.stashed ? 'unarchive' : 'archive'}
             ?disabled=${!editable}
           ></mwc-icon-button>
