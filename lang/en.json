@@ -1339,6 +1339,8 @@
     "hidden": "Hidden",
     "cummulative": "Cummulative",
     "resist": "Resist",
+    "beforeModifiers": "Before Modifiers",
+    "finished": "Finished",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
