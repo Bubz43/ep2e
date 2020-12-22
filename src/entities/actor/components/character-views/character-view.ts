@@ -115,9 +115,12 @@ export class CharacterView extends CharacterViewBase {
         );
         if (item.actor && item.editable) await item.use();
 
-        if (Substance.onsetTime(method) === 0 && id) {
-          this.openSubstanceActivationDialog(id);
-        }
+        await this.updateComplete;
+        setTimeout(() => {
+          if (Substance.onsetTime(method) === 0 && id) {
+            this.openSubstanceActivationDialog(id);
+          }
+        }, 1);
       };
       if (
         item.applicationMethods.length === 1 &&
@@ -149,15 +152,19 @@ export class CharacterView extends CharacterViewBase {
 
   private openSubstanceActivationDialog(id: string) {
     const substance = this.character.awaitingOnsetSubstances.find(matchID(id));
+    console.log(substance)
     if (!substance) return;
-    if (notEmpty(Object.values(this.character.appliedEffects.substanceModifiers).flat())) {
+    if (
+      notEmpty(
+        Object.values(this.character.appliedEffects.substanceModifiers).flat(),
+      )
+    ) {
       this.dispatchEvent(
         new RenderDialogEvent(
           substanceActivationDialog(this.character, substance),
         ),
       );
-    } else substance.makeActive([])
-  
+    } else substance.makeActive([]);
   }
 
   render() {

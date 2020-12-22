@@ -117,6 +117,8 @@ export class ActorEP extends Actor {
             type: 'add',
             itemIds: addedIDs,
           });
+          this.invalidated = true;
+
           return addedIDs;
         },
         update: async (...itemDatas) => {
@@ -127,7 +129,7 @@ export class ActorEP extends Actor {
           }
           this.emitItemSocket({ itemIds, type: 'update' });
           await this.updateOwnedItem(itemDatas);
-
+          this.invalidated = true;
           return itemIds;
         },
         remove: async (...itemIds) => {
@@ -149,16 +151,8 @@ export class ActorEP extends Actor {
             }),
           );
 
-          // if (this.agent.type === ActorType.Character) {
-          //   const { favoriteItemIds: favoriteItems } = this.agent;
-          //   const favs = reject(favoriteItems, (fav) => itemIds.includes(fav));
-          //   if (favs.length !== favoriteItems.length) {
-          //     await this.agent.updater
-          //       .prop('data', 'favoriteItems')
-          //       .commit(favs);
-          //   }
-          // }
           await this.deleteOwnedItem(itemIds);
+          this.invalidated = true;
           return itemIds;
         },
       };

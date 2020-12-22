@@ -536,11 +536,11 @@ export class Substance
     return copy;
   }
 
-  async makeActive(modifyingEffects: Effect[]) {
+  async makeActive(modifiers: Effect[]) {
     // TODO method that takes non onset substance and makes it active directly
     const hidden = this.epFlags?.awaitingOnset?.hidden ?? false;
     const state: ActiveSubstanceState = {
-      modifyingEffects: modifyingEffects.reduce((accum, effect) => {
+      modifyingEffects: modifiers.reduce((accum, effect) => {
         if (
           effect.type === EffectType.Duration &&
           effect.subtype === DurationEffectTarget.Drugs
@@ -579,7 +579,7 @@ export class Substance
             rolledFormulas: rollLabeledFormulas(rollFormulas),
             source: `${this.appliedName} ${label}`,
             damageType,
-            multiplier: modifyingEffects.some(
+            multiplier: modifiers.some(
               (effect) =>
                 effect.type === EffectType.Misc &&
                 effect.unique === UniqueEffectType.HalveDrugEffects,

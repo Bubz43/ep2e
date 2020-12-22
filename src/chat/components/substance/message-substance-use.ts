@@ -1,5 +1,6 @@
 import type { SubstanceUseData } from '@src/chat/message-data';
 import { substanceActivationDialog } from '@src/entities/actor/components/character-views/components/substance-activation-dialog';
+import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
 import { pickOrDefaultActor } from '@src/entities/find-entities';
 import { Substance } from '@src/entities/item/proxies/substance';
@@ -35,6 +36,19 @@ export class MessageSubstanceUse extends MessageElement {
     return this.getUpdater('substanceUse').commit;
   }
 
+  private openSubstanceActivationDialog(character: Character, id: string) {
+    const substance = character.awaitingOnsetSubstances.find(matchID(id));
+    if (!substance) return;
+    if (notEmpty(Object.values(character.appliedEffects.substanceModifiers).flat())) {
+      this.dispatchEvent(
+        new RenderDialogEvent(
+          substanceActivationDialog(character, substance),
+        ),
+      );
+    } else substance.makeActive([])
+  
+  }
+
   applySubstance() {
     pickOrDefaultActor(async (actor) => {
       if (actor.proxy.type === ActorType.Character) {
@@ -50,17 +64,11 @@ export class MessageSubstanceUse extends MessageElement {
           }),
         );
 
-        if (Substance.onsetTime(useMethod) === 0) {
-          const substance = actor.proxy.awaitingOnsetSubstances.find(
-            matchID(id),
-          );
-          substance &&
-            this.dispatchEvent(
-              new RenderDialogEvent(
-                substanceActivationDialog(actor.proxy, substance),
-              ),
-            );
-        }
+        setTimeout(() => {
+          if (Substance.onsetTime(useMethod) === 0 && id && actor.proxy.type === ActorType.Character) {
+            this.openSubstanceActivationDialog(actor.proxy, id)
+           }
+        }, 1);
       }
     }, true);
   }
