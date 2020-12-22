@@ -120,7 +120,10 @@ export class Substance
     if (this.appliedState) {
       const { itemWindowKeys } = this;
       if (notEmpty(itemWindowKeys)) {
-        const { baseAppliedItems: baseAppliedItems, severityAppliedItems } = this;
+        const {
+          baseAppliedItems: baseAppliedItems,
+          severityAppliedItems,
+        } = this;
         for (const stringID of itemWindowKeys.keys()) {
           const [namespace, id] = stringID.split('___');
           const group =
@@ -296,10 +299,7 @@ export class Substance
   @LazyGetter()
   get attacks() {
     return {
-      primary: this.setupAttack(
-        this.epData.base.damage,
-        localize('base'),
-      ),
+      primary: this.setupAttack(this.epData.base.damage, localize('base')),
       secondary: this.hasSeverity
         ? this.setupAttack(this.epData.severity.damage, localize('severity'))
         : null,
@@ -337,9 +337,7 @@ export class Substance
     return this.epData.consumeOnUse;
   }
 
-  private getInstancedItems(
-    group: keyof SubstanceItemFlags,
-  ) {
+  private getInstancedItems(group: keyof SubstanceItemFlags) {
     const items = new Map<string, Trait | Sleight>();
     const ops = setupItemOperations((datas) =>
       this.updater
@@ -627,9 +625,7 @@ export class Substance
       effects.push({
         source: this.appliedName,
         effects: halveDamageAndEffects
-          ? base.effects.map((effect) =>
-              multiplyEffectModifier(effect, 0.5),
-            )
+          ? base.effects.map((effect) => multiplyEffectModifier(effect, 0.5))
           : base.effects,
       });
       items.push(...base.items.values());

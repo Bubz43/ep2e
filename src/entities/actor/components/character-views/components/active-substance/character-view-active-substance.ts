@@ -274,7 +274,7 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
                   >
                     <mwc-icon-button
                       slot="action"
-                      data-tooltip="${localize("end")} ${localize("effects")}"
+                      data-tooltip="${localize('end')} ${localize('effects')}"
                       @mouseover=${tooltip.fromData}
                       class="remove ${classMap({
                         ready: nestedTimeState.completed,

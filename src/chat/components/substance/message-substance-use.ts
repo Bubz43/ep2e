@@ -39,14 +39,15 @@ export class MessageSubstanceUse extends MessageElement {
   private openSubstanceActivationDialog(character: Character, id: string) {
     const substance = character.awaitingOnsetSubstances.find(matchID(id));
     if (!substance) return;
-    if (notEmpty(Object.values(character.appliedEffects.substanceModifiers).flat())) {
+    if (
+      notEmpty(
+        Object.values(character.appliedEffects.substanceModifiers).flat(),
+      )
+    ) {
       this.dispatchEvent(
-        new RenderDialogEvent(
-          substanceActivationDialog(character, substance),
-        ),
+        new RenderDialogEvent(substanceActivationDialog(character, substance)),
       );
-    } else substance.makeActive([])
-  
+    } else substance.makeActive([]);
   }
 
   applySubstance() {
@@ -65,9 +66,13 @@ export class MessageSubstanceUse extends MessageElement {
         );
 
         setTimeout(() => {
-          if (Substance.onsetTime(useMethod) === 0 && id && actor.proxy.type === ActorType.Character) {
-            this.openSubstanceActivationDialog(actor.proxy, id)
-           }
+          if (
+            Substance.onsetTime(useMethod) === 0 &&
+            id &&
+            actor.proxy.type === ActorType.Character
+          ) {
+            this.openSubstanceActivationDialog(actor.proxy, id);
+          }
         }, 1);
       }
     }, true);

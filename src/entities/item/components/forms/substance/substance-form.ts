@@ -135,10 +135,7 @@ export class SubstanceForm extends ItemFormBase {
 
   private openItemSheet(group: Group, id: string) {
     const subItem = this.item[group].items.get(id);
-    const map =
-      group === 'base'
-        ? this.baseSheetKeys
-        : this.severitySheetKeys;
+    const map = group === 'base' ? this.baseSheetKeys : this.severitySheetKeys;
     let key = map.get(id);
     if (!key) {
       key = {};
@@ -169,10 +166,10 @@ export class SubstanceForm extends ItemFormBase {
   }
 
   private addCreatedEffect(ev: EffectCreatedEvent) {
-    (this.effectGroup === 'base'
-      ? this.effectOps
-      : this.severityEffectOps
-    ).add({}, ev.effect);
+    (this.effectGroup === 'base' ? this.effectOps : this.severityEffectOps).add(
+      {},
+      ev.effect,
+    );
   }
 
   private addItem = handleDrop(async ({ ev, data }) => {
@@ -379,9 +376,7 @@ export class SubstanceForm extends ItemFormBase {
     return html`
       <sl-dropzone ?disabled=${disabled} @drop=${this.addItem}>
         <sl-header
-          heading=${hasSeverity
-            ? `${localize('base')}`
-            : localize('effects')}
+          heading=${hasSeverity ? `${localize('base')}` : localize('effects')}
         >
           ${renderEffectInfo()} ${this.renderAddEffectButton('base')}
           <mwc-icon-button
@@ -391,9 +386,7 @@ export class SubstanceForm extends ItemFormBase {
             ?disabled=${disabled}
           ></mwc-icon-button>
         </sl-header>
-        <div class="effect-details">
-          ${this.renderCommonEffectInfo('base')}
-        </div>
+        <div class="effect-details">${this.renderCommonEffectInfo('base')}</div>
       </sl-dropzone>
 
       ${hasSeverity

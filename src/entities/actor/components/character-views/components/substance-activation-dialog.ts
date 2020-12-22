@@ -67,7 +67,6 @@ export const substanceActivationDialog = (
         `
       : ''}
 
-
     <mwc-button slot="secondaryAction" dialogAction="cancel"
       >${localize('cancel')}</mwc-button
     >

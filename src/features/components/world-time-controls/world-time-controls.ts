@@ -22,7 +22,7 @@ export class WorldTimeControls extends LitElement {
 
   firstUpdated() {
     addEPSocketHandler('worldTimeChange', (change) => {
-      this.changes = [...this.changes.slice(-3), change]
+      this.changes = [...this.changes.slice(-3), change];
     });
   }
 
@@ -33,7 +33,9 @@ export class WorldTimeControls extends LitElement {
         worldTimeChange: [
           Date.now(),
           format('ModifiedTime', {
-            direction: localize(forwards ? 'advanced' : 'rewound').toLocaleLowerCase(),
+            direction: localize(
+              forwards ? 'advanced' : 'rewound',
+            ).toLocaleLowerCase(),
             amount: prettyMilliseconds(this.timeChange, { compact: false }),
           }),
         ],

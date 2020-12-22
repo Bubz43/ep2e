@@ -276,7 +276,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
                         slot="action"
                         icon="sort"
                         class="sort-toggle ${this.allowSort ? 'active' : ''}"
-                        data-tooltip="${localize("toggle")} ${localize("sort")}"
+                        data-tooltip="${localize('toggle')} ${localize('sort')}"
                         @mouseover=${tooltip.fromData}
                       ></mwc-icon-button>
                     `}

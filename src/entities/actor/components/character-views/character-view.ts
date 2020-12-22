@@ -152,7 +152,7 @@ export class CharacterView extends CharacterViewBase {
 
   private openSubstanceActivationDialog(id: string) {
     const substance = this.character.awaitingOnsetSubstances.find(matchID(id));
-    console.log(substance)
+    console.log(substance);
     if (!substance) return;
     if (
       notEmpty(
