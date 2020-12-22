@@ -144,9 +144,9 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
       this.dispatchEvent(
         new RenderDialogEvent(html`
           <mwc-dialog
-            heading=${localize('end')}
+            heading="${localize('end')}
             ${localize('severe')}
-            ${localize('effects')}
+            ${localize('effects')}"
           >
             <mwc-list
               multi
@@ -274,6 +274,8 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
                   >
                     <mwc-icon-button
                       slot="action"
+                      data-tooltip="${localize("end")} ${localize("effects")}"
+                      @mouseover=${tooltip.fromData}
                       class="remove ${classMap({
                         ready: nestedTimeState.completed,
                       })}"

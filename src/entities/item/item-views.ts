@@ -227,6 +227,7 @@ export const renderItemCard = (
         ?expanded=${expanded}
         ?noAnimate=${noAnimate}
         ?animateInitial=${animateInitial}
+        ?allowDrag=${allowDrag}
         @dragstart=${handleDragStart}
       ></physical-tech-card>
     `;

@@ -20,7 +20,27 @@ export const substanceActivationDialog = (
   const modifiers = Object.values(substanceModifiers).flat();
   let usingEffects: number[] = [];
 
-  const { hasInstantDamage } = alwaysApplied;
+  // const { hasInstantDamage } = alwaysApplied;
+
+  /*
+<ul
+      style="display: grid;
+    justify-content: end; margin: 0.5rem 0;"
+    >
+      ${hasInstantDamage
+        ? html`
+            <li>
+              ${localize('roll')}
+              ${formatDamageType(alwaysApplied.damage.damageType)}
+              ${alwaysApplied.damage.rollFormulas
+                .map(prop('formula'))
+                .join('+')}
+              [${localize('beforeModifiers')}]
+            </li>
+          `
+        : ''}
+    </ul> 
+  */
   return html` <mwc-dialog
     heading="${localize('activate')} ${substance.appliedName}"
   >
@@ -47,23 +67,6 @@ export const substanceActivationDialog = (
         `
       : ''}
 
-    <ul
-      style="display: grid;
-    justify-content: end; margin: 0.5rem 0;"
-    >
-      ${hasInstantDamage
-        ? html`
-            <li>
-              ${localize('roll')}
-              ${formatDamageType(alwaysApplied.damage.damageType)}
-              ${alwaysApplied.damage.rollFormulas
-                .map(prop('formula'))
-                .join('+')}
-              [${localize('beforeModifiers')}]
-            </li>
-          `
-        : ''}
-    </ul>
 
     <mwc-button slot="secondaryAction" dialogAction="cancel"
       >${localize('cancel')}</mwc-button

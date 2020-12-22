@@ -91,12 +91,14 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
   private openSubstanceActivationDialog(id: string) {
     const substance = this.character.awaitingOnsetSubstances.find(matchID(id));
     if (!substance) return;
-
-    this.dispatchEvent(
-      new RenderDialogEvent(
-        substanceActivationDialog(this.character, substance),
-      ),
-    );
+    if (notEmpty(Object.values(this.character.appliedEffects.substanceModifiers).flat())) {
+      this.dispatchEvent(
+        new RenderDialogEvent(
+          substanceActivationDialog(this.character, substance),
+        ),
+      );
+    } else substance.makeActive([])
+  
   }
 
   render() {

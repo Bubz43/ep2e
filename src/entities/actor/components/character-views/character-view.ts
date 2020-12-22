@@ -150,12 +150,14 @@ export class CharacterView extends CharacterViewBase {
   private openSubstanceActivationDialog(id: string) {
     const substance = this.character.awaitingOnsetSubstances.find(matchID(id));
     if (!substance) return;
-
-    this.dispatchEvent(
-      new RenderDialogEvent(
-        substanceActivationDialog(this.character, substance),
-      ),
-    );
+    if (notEmpty(Object.values(this.character.appliedEffects.substanceModifiers).flat())) {
+      this.dispatchEvent(
+        new RenderDialogEvent(
+          substanceActivationDialog(this.character, substance),
+        ),
+      );
+    } else substance.makeActive([])
+  
   }
 
   render() {

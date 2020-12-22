@@ -73,8 +73,10 @@ export class CharacterViewConditions extends UseWorldTime(LitElement) {
                           <wl-list-item>
                             <span slot="before">${timeState.label}</span>
                             <span
-                              >${prettyMilliseconds(timeState.remaining)}
-                              ${localize('remaining')}</span
+                              >${timeState.completed
+                                ? localize('expired')
+                                : `${prettyMilliseconds(timeState.remaining)}
+                              ${localize('remaining')}`}</span
                             >
                           </wl-list-item>
                         `,
