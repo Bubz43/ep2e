@@ -38,7 +38,17 @@ sl-dropzone {
   display: inline-block;
   --mdc-icon-size: 1.75rem;
   transition: transform 100ms ease-in-out;
+  color: var(--color-text-lighter);
+
   &.collapsed {
     transform: rotateZ(90deg);
+  }
+}
+
+.sort-toggle {
+  --mdc-icon-size: 1.5rem;
+  color: var(--color-text-lighter);
+  &.active {
+    color: var(--color-secondary);
   }
 }

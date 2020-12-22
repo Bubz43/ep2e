@@ -65,6 +65,8 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
 
   @internalProperty() private sortAfter = false;
 
+  @internalProperty() private allowSort = false;
+
   private draggedItem: ItemProxy | null = null;
 
   private cardRects = new Map<ItemCardBase, DOMRect>();
@@ -81,6 +83,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
   update(changedProps: PropertyValues) {
     if (changedProps.has('character')) {
       this.resetDraggedItems();
+      if (this.allowSort && this.character.disabled) this.allowSort = false;
     }
     super.update(changedProps);
   }
@@ -92,6 +95,11 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
 
   private toggleCollapse() {
     this.collapsed = !this.collapsed;
+  }
+
+  private toggleAllowSort(ev: Event) {
+    ev.stopPropagation();
+    this.allowSort = !this.allowSort;
   }
 
   private resetDraggedItems() {
@@ -132,7 +140,9 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
 
   private dragItemCard = (ev: DragEvent) => {
     if (ev.currentTarget instanceof ItemCardBase) {
-      this.draggedItem = ev.currentTarget.item;
+      if (this.allowSort) {
+        this.draggedItem = ev.currentTarget.item;
+      }
       ev.currentTarget.addEventListener(
         'dragend',
         () => !this.droppedOnSelf && this.resetDraggedItems(),
@@ -256,7 +266,23 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
         >
           ${this.renderInfo()}
           <span slot="action">${this.renderRipple(!hasItems)}</span>
-          ${hasItems ? this.renderToggleIcon() : ''}
+          ${hasItems
+            ? html`
+                ${this.collapsed || this.character.disabled
+                  ? ''
+                  : html`
+                      <mwc-icon-button
+                        @click=${this.toggleAllowSort}
+                        slot="action"
+                        icon="sort"
+                        class="sort-toggle ${this.allowSort ? 'active' : ''}"
+                        data-tooltip="${localize("toggle")} ${localize("sort")}"
+                        @mouseover=${tooltip.fromData}
+                      ></mwc-icon-button>
+                    `}
+                ${this.renderToggleIcon()}
+              `
+            : ''}
         </sl-header>
         ${notEmpty(items) ? this.renderItemList() : ''}
       </sl-dropzone>
