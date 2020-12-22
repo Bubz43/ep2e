@@ -18,6 +18,7 @@ export type SystemSocketData = {
     | ({ tokenId: string; sceneId: string } & ItemChange);
   actorChanged: ActorIdentifiers;
   messageData: DeepPartial<ChatMessageEP['data']> & { _id: string };
+  worldTimeChange: [date: number, change: string]
 };
 
 type SystemSocketEvent = keyof SystemSocketData;

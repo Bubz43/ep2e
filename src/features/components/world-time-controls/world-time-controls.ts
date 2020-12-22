@@ -3,6 +3,7 @@ import { renderTimeField } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { advanceWorldTime, prettyMilliseconds } from '@src/features/time';
 import { format, localize } from '@src/foundry/localization';
+import { addEPSocketHandler, emitEPSocket } from '@src/foundry/socket';
 import { customElement, html, internalProperty, LitElement } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import styles from './world-time-controls.scss';
@@ -17,17 +18,28 @@ export class WorldTimeControls extends LitElement {
 
   @internalProperty() timeChange = 0;
 
-  private changes: [number, string][] = [];
+  @internalProperty() private changes: [number, string][] = [];
+
+  firstUpdated() {
+    addEPSocketHandler('worldTimeChange', (change) => {
+      this.changes = [...this.changes.slice(-3), change]
+    });
+  }
 
   private modifyTime(forwards: boolean) {
     this.timeChange && advanceWorldTime(this.timeChange * (forwards ? 1 : -1));
-    this.changes.push([
-      Date.now(),
-      format('ModifiedTime', {
-        direction: localize(forwards ? 'advanced' : 'rewound'),
-        amount: prettyMilliseconds(this.timeChange, { compact: false }),
-      }),
-    ]);
+    emitEPSocket(
+      {
+        worldTimeChange: [
+          Date.now(),
+          format('ModifiedTime', {
+            direction: localize(forwards ? 'advanced' : 'rewound'),
+            amount: prettyMilliseconds(this.timeChange, { compact: false }),
+          }),
+        ],
+      },
+      true,
+    );
 
     this.timeChange = 0;
   }
@@ -72,7 +84,7 @@ export class WorldTimeControls extends LitElement {
 
       <sl-animated-list class="changes" fadeOnly animationDuration="400">
         ${repeat(
-          this.changes.slice(-4),
+          this.changes,
           ([date]) => date,
           ([_, change]) => html`<li>${change}</li>`,
         )}
