@@ -83,7 +83,7 @@ const renderEffectInfo = () => html` <mwc-icon
 
 const itemKeys = ['traits', 'sleights'] as const;
 
-type Group = 'alwaysApplied' | 'severity';
+type Group = 'base' | 'severity';
 
 @customElement('substance-form')
 export class SubstanceForm extends ItemFormBase {
@@ -95,14 +95,14 @@ export class SubstanceForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: Substance;
 
-  @internalProperty() effectGroup: Group = 'alwaysApplied';
+  @internalProperty() effectGroup: Group = 'base';
 
-  private alwaysAppliedSheetKeys = new Map<string, {}>();
+  private baseSheetKeys = new Map<string, {}>();
 
   private severitySheetKeys = new Map<string, {}>();
 
   private effectOps = addUpdateRemoveFeature(
-    () => this.item.updater.prop('data', 'alwaysApplied', 'effects').commit,
+    () => this.item.updater.prop('data', 'base', 'effects').commit,
   );
 
   private severityEffectOps = addUpdateRemoveFeature(
@@ -111,12 +111,12 @@ export class SubstanceForm extends ItemFormBase {
 
   update(changedProps: PropertyValues) {
     if (!this.item.hasSeverity) {
-      this.effectGroup = 'alwaysApplied';
+      this.effectGroup = 'base';
       this.severitySheetKeys.forEach(closeWindow);
       this.severitySheetKeys.clear();
     }
-    for (const [id] of this.alwaysAppliedSheetKeys) {
-      this.openItemSheet('alwaysApplied', id);
+    for (const [id] of this.baseSheetKeys) {
+      this.openItemSheet('base', id);
     }
     for (const [id] of this.severitySheetKeys) {
       this.openItemSheet('severity', id);
@@ -126,7 +126,7 @@ export class SubstanceForm extends ItemFormBase {
   }
 
   disconnectedCallback() {
-    for (const map of [this.alwaysAppliedSheetKeys, this.severitySheetKeys]) {
+    for (const map of [this.baseSheetKeys, this.severitySheetKeys]) {
       map.forEach(closeWindow);
       map.clear();
     }
@@ -136,8 +136,8 @@ export class SubstanceForm extends ItemFormBase {
   private openItemSheet(group: Group, id: string) {
     const subItem = this.item[group].items.get(id);
     const map =
-      group === 'alwaysApplied'
-        ? this.alwaysAppliedSheetKeys
+      group === 'base'
+        ? this.baseSheetKeys
         : this.severitySheetKeys;
     let key = map.get(id);
     if (!key) {
@@ -169,7 +169,7 @@ export class SubstanceForm extends ItemFormBase {
   }
 
   private addCreatedEffect(ev: EffectCreatedEvent) {
-    (this.effectGroup === 'alwaysApplied'
+    (this.effectGroup === 'base'
       ? this.effectOps
       : this.severityEffectOps
     ).add({}, ev.effect);
@@ -182,7 +182,7 @@ export class SubstanceForm extends ItemFormBase {
     if (this.disabled) return;
     if (data?.type === DropType.Item) {
       const proxy = await itemDropToItemProxy(data);
-      const key = isSeverity ? 'severityAppliedItems' : 'alwaysAppliedItems';
+      const key = isSeverity ? 'severityAppliedItems' : 'baseAppliedItems';
       if (proxy?.type === ItemType.Trait) {
         if (proxy.hasMultipleLevels) {
           proxy.selectLevelAndAdd((data) => this.item.addItemEffect(key, data));
@@ -380,19 +380,19 @@ export class SubstanceForm extends ItemFormBase {
       <sl-dropzone ?disabled=${disabled} @drop=${this.addItem}>
         <sl-header
           heading=${hasSeverity
-            ? `${localize('alwaysApplied')}`
+            ? `${localize('base')}`
             : localize('effects')}
         >
-          ${renderEffectInfo()} ${this.renderAddEffectButton('alwaysApplied')}
+          ${renderEffectInfo()} ${this.renderAddEffectButton('base')}
           <mwc-icon-button
             slot="action"
             icon="edit"
-            @click=${this.setDrawerFromEvent(this.renderAlwaysAppliedEdit)}
+            @click=${this.setDrawerFromEvent(this.renderbaseEdit)}
             ?disabled=${disabled}
           ></mwc-icon-button>
         </sl-header>
         <div class="effect-details">
-          ${this.renderCommonEffectInfo('alwaysApplied')}
+          ${this.renderCommonEffectInfo('base')}
         </div>
       </sl-dropzone>
 
@@ -458,7 +458,7 @@ export class SubstanceForm extends ItemFormBase {
       ? html`<item-form-effects-list
           label=${localize('effects')}
           .effects=${effects}
-          .operations=${group === 'alwaysApplied'
+          .operations=${group === 'base'
             ? this.effectOps
             : this.severityEffectOps}
           ?disabled=${this.disabled}
@@ -551,7 +551,7 @@ export class SubstanceForm extends ItemFormBase {
             props: { group: this.effectGroup },
             update: ({ group }) => group && (this.effectGroup = group),
             fields: ({ group }) =>
-              renderRadioFields(group, ['alwaysApplied', 'severity']),
+              renderRadioFields(group, ['base', 'severity']),
           })
         : ''}
 
@@ -559,10 +559,10 @@ export class SubstanceForm extends ItemFormBase {
     `;
   }
 
-  private renderAlwaysAppliedEdit() {
-    const updater = this.item.updater.prop('data', 'alwaysApplied');
+  private renderbaseEdit() {
+    const updater = this.item.updater.prop('data', 'base');
     return html`
-      <h3>${localize('alwaysApplied')}</h3>
+      <h3>${localize('base')}</h3>
       ${renderUpdaterForm(updater, {
         fields: ({ duration, wearOffStress }) => [
           renderFormulaField(wearOffStress),
@@ -573,7 +573,7 @@ export class SubstanceForm extends ItemFormBase {
         ],
       })}
       <p class="label">${localize('damage')}</p>
-      ${this.renderEffectDamage('alwaysApplied')}
+      ${this.renderEffectDamage('base')}
       ${renderUpdaterForm(updater, {
         fields: ({ notes }) => renderTextareaField(notes),
       })}

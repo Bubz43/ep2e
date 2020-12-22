@@ -396,7 +396,7 @@ type SubstanceData = {
   addiction: '' | DrugAddiction;
   addictionMod: number;
   hasSeverity: boolean;
-  alwaysApplied: {
+  base: {
     effects: StringID<Effect>[];
     duration: number;
     damage: SubstanceAttackData;

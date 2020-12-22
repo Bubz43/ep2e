@@ -7081,7 +7081,16 @@
                 "addictionMod": {
                   "type": "number"
                 },
-                "alwaysApplied": {
+                "application": {
+                  "items": {
+                    "$ref": "#/definitions/SubstanceApplicationMethod"
+                  },
+                  "maxItems": 4,
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "base": {
                   "additionalProperties": false,
                   "properties": {
                     "damage": {
@@ -7544,15 +7553,6 @@
                     "notes"
                   ],
                   "type": "object"
-                },
-                "application": {
-                  "items": {
-                    "$ref": "#/definitions/SubstanceApplicationMethod"
-                  },
-                  "maxItems": 4,
-                  "minItems": 1,
-                  "type": "array",
-                  "uniqueItems": true
                 },
                 "category": {
                   "type": "string"
@@ -8078,8 +8078,8 @@
               "required": [
                 "addiction",
                 "addictionMod",
-                "alwaysApplied",
                 "application",
+                "base",
                 "category",
                 "classification",
                 "consumeOnUse",

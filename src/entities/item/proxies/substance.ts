@@ -120,11 +120,11 @@ export class Substance
     if (this.appliedState) {
       const { itemWindowKeys } = this;
       if (notEmpty(itemWindowKeys)) {
-        const { alwaysAppliedItems, severityAppliedItems } = this;
+        const { baseAppliedItems: baseAppliedItems, severityAppliedItems } = this;
         for (const stringID of itemWindowKeys.keys()) {
           const [namespace, id] = stringID.split('___');
           const group =
-            namespace === 'always' ? alwaysAppliedItems : severityAppliedItems;
+            namespace === 'base' ? baseAppliedItems : severityAppliedItems;
           const item = id && group.get(id);
           item && item.openForm?.();
         }
@@ -147,7 +147,7 @@ export class Substance
     return Substance.appliedItemWindows.get(this.updater);
   }
 
-  private getItemWindowKey(group: 'always' | 'severity', id: string) {
+  private getItemWindowKey(group: 'base' | 'severity', id: string) {
     let { itemWindowKeys } = this;
     if (!itemWindowKeys) {
       itemWindowKeys = new Map();
@@ -246,11 +246,11 @@ export class Substance
     );
   }
 
-  get alwaysApplied() {
+  get base() {
     return {
-      ...this.epData.alwaysApplied,
+      ...this.epData.base,
       damage: this.attacks.primary,
-      items: this.alwaysAppliedItems,
+      items: this.baseAppliedItems,
       get hasDamage(): boolean {
         return notEmpty(this.damage.rollFormulas);
       },
@@ -297,8 +297,8 @@ export class Substance
   get attacks() {
     return {
       primary: this.setupAttack(
-        this.epData.alwaysApplied.damage,
-        localize('alwaysApplied'),
+        this.epData.base.damage,
+        localize('base'),
       ),
       secondary: this.hasSeverity
         ? this.setupAttack(this.epData.severity.damage, localize('severity'))
@@ -320,8 +320,8 @@ export class Substance
   }
 
   @LazyGetter()
-  get alwaysAppliedItems() {
-    return this.getInstancedItems('alwaysAppliedItems');
+  get baseAppliedItems() {
+    return this.getInstancedItems('baseAppliedItems');
   }
 
   @LazyGetter()
@@ -338,7 +338,7 @@ export class Substance
   }
 
   private getInstancedItems(
-    group: 'alwaysAppliedItems' | 'severityAppliedItems',
+    group: keyof SubstanceItemFlags,
   ) {
     const items = new Map<string, Trait | Sleight>();
     const ops = setupItemOperations((datas) =>
@@ -371,7 +371,7 @@ export class Substance
             ? () => {
                 const { win, windowExisted } = openOrRenderWindow({
                   key: this.getItemWindowKey(
-                    group === 'alwaysAppliedItems' ? 'always' : 'severity',
+                    group === 'baseAppliedItems' ? 'base' : 'severity',
                     data._id,
                   ),
                   content: renderItemForm(trait),
@@ -384,7 +384,7 @@ export class Substance
                     () => {
                       this.itemWindowKeys?.delete(
                         `${
-                          group === 'alwaysAppliedItems' ? 'always' : 'severity'
+                          group === 'baseAppliedItems' ? 'base' : 'severity'
                         }___${data._id}`,
                       );
                     },
@@ -408,7 +408,7 @@ export class Substance
           ? () => {
               const { win, windowExisted } = openOrRenderWindow({
                 key: this.getItemWindowKey(
-                  group === 'alwaysAppliedItems' ? 'always' : 'severity',
+                  group === 'baseAppliedItems' ? 'base' : 'severity',
                   data._id,
                 ),
                 content: renderItemForm(sleight),
@@ -421,7 +421,7 @@ export class Substance
                   () => {
                     this.itemWindowKeys?.delete(
                       `${
-                        group === 'alwaysAppliedItems' ? 'always' : 'severity'
+                        group === 'baseAppliedItems' ? 'base' : 'severity'
                       }___${data._id}`,
                     );
                   },
@@ -451,7 +451,7 @@ export class Substance
         {
           ...itemData,
           _id: `${this.id}-${
-            group === 'alwaysAppliedItems' ? 'always' : 'severity'
+            group === 'baseAppliedItems' ? 'base' : 'severity'
           }-${_id}`,
         },
       ] as typeof changed;
@@ -509,7 +509,7 @@ export class Substance
     const {
       awaitingOnset,
       active: active,
-      alwaysAppliedItems,
+      baseAppliedItems,
       severityAppliedItems,
       ...more
     } = copy.flags[EP.Name] || {};
@@ -517,9 +517,9 @@ export class Substance
       ...copy.flags,
       [EP.Name]: {
         ...more,
-        alwaysAppliedItems: alwaysAppliedItems?.map((i) => ({
+        baseAppliedItems: baseAppliedItems?.map((i) => ({
           ...i,
-          _id: `${stringID()}-${this.id}-always-${i._id}`,
+          _id: `${stringID()}-${this.id}-base-${i._id}`,
         })),
         severityAppliedItems: severityAppliedItems?.map((i) => ({
           ...i,
@@ -560,8 +560,8 @@ export class Substance
       finishedEffects: [],
     };
 
-    const { alwaysApplied } = this;
-    if (alwaysApplied.hasInstantDamage) {
+    const { base } = this;
+    if (base.hasInstantDamage) {
       const {
         label,
         damageType,
@@ -569,7 +569,7 @@ export class Substance
         perTurn,
         rollFormulas,
         ...attack
-      } = alwaysApplied.damage;
+      } = base.damage;
 
       await createMessage({
         data: {
@@ -615,42 +615,42 @@ export class Substance
     );
     const dots: (DamageOverTime & { damageType: HealthType })[] = [];
 
-    const { alwaysApplied, severity, hasSeverity } = this;
+    const { base, severity, hasSeverity } = this;
     const halveDamageAndEffects = !!active?.modifyingEffects?.misc?.length;
     const damageMultiplier = halveDamageAndEffects ? 0.5 : 1;
     let duration = applyDurationMultipliers({
-      duration: alwaysApplied.duration,
+      duration: base.duration,
       multipliers,
     });
-    const applyAlways = !active?.finishedEffects?.includes('always');
-    if (applyAlways) {
+    const shouldApplyBase = !active?.finishedEffects?.includes('base');
+    if (shouldApplyBase) {
       effects.push({
         source: this.appliedName,
         effects: halveDamageAndEffects
-          ? alwaysApplied.effects.map((effect) =>
+          ? base.effects.map((effect) =>
               multiplyEffectModifier(effect, 0.5),
             )
-          : alwaysApplied.effects,
+          : base.effects,
       });
-      items.push(...alwaysApplied.items.values());
-      if (alwaysApplied.hasDamage && !alwaysApplied.hasInstantDamage) {
+      items.push(...base.items.values());
+      if (base.hasDamage && !base.hasInstantDamage) {
         dots.push({
           ...createDamageOverTime({
-            ...alwaysApplied.damage,
-            source: alwaysApplied.damage.label,
+            ...base.damage,
+            source: base.damage.label,
             duration,
-            formula: joinLabeledFormulas(alwaysApplied.damage.rollFormulas),
+            formula: joinLabeledFormulas(base.damage.rollFormulas),
             multiplier: damageMultiplier,
           }),
-          damageType: alwaysApplied.damage.damageType,
+          damageType: base.damage.damageType,
         });
       }
     }
-    const applySeverity =
+    const shouldApplySeverity =
       hasSeverity &&
       active?.applySeverity &&
       !active.finishedEffects?.includes('severity');
-    if (applySeverity) {
+    if (shouldApplySeverity) {
       effects.push({
         source: `${this.appliedName} (${localize('severity')})`,
         effects: halveDamageAndEffects
@@ -679,7 +679,7 @@ export class Substance
       }
     }
 
-    if (!applySeverity && !applyAlways) duration = 0;
+    if (!shouldApplySeverity && !shouldApplyBase) duration = 0;
 
     const updateStartTime = this.updater.prop(
       'flags',
@@ -697,16 +697,16 @@ export class Substance
       multi
         .set('base', [
           createLiveTimeState({
-            id: timeStateId + 'always',
+            id: timeStateId + 'base',
             label: `${localize('base')} ${localize('effects')}`,
             duration: applyDurationMultipliers({
-              duration: alwaysApplied.duration,
+              duration: base.duration,
               multipliers,
             }),
             startTime,
             updateStartTime,
           }),
-          active?.finishedEffects?.includes('always'),
+          active?.finishedEffects?.includes('base'),
         ])
         .set('severe', [
           createLiveTimeState({
@@ -726,10 +726,10 @@ export class Substance
     return {
       effects,
       items,
-      appliedAlways: applyAlways,
-      appliedSeverity: applySeverity,
+      appliedbase: shouldApplyBase,
+      appliedSeverity: shouldApplySeverity,
       finishedEffects: active?.finishedEffects,
-      conditions: applySeverity ? severity.conditions : null,
+      conditions: shouldApplySeverity ? severity.conditions : null,
       modifyingEffects: active?.modifyingEffects,
       applySeverity: active?.applySeverity ?? null,
       dots,

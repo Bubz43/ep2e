@@ -242,7 +242,7 @@ export type ActiveSubstanceState = {
     duration: DurationEffect[];
     misc: MiscEffect[];
   }>;
-  finishedEffects: ('always' | 'severity')[];
+  finishedEffects: ('base' | 'severity')[];
   hidden: boolean;
 };
 
@@ -292,7 +292,7 @@ export type DrugAppliedItem =
   | ItemEntity<ItemType.Trait>;
 
 export type SubstanceItemFlags = {
-  alwaysAppliedItems: DrugAppliedItem[];
+  baseAppliedItems: DrugAppliedItem[];
   severityAppliedItems: DrugAppliedItem[];
 };
 

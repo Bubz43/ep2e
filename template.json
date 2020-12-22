@@ -556,7 +556,7 @@
         "injection",
         "oral"
       ],
-      "alwaysApplied": {
+      "base": {
         "damage": {
           "damageFormula": "",
           "perTurn": false,

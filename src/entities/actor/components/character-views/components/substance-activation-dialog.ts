@@ -15,7 +15,7 @@ export const substanceActivationDialog = (
   character: Character,
   substance: Substance,
 ) => {
-  const { alwaysApplied } = substance;
+  const { base: alwaysApplied } = substance;
   const { substanceModifiers } = character.appliedEffects;
   const modifiers = Object.values(substanceModifiers).flat();
   let usingEffects: number[] = [];

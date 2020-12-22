@@ -36,7 +36,7 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
 
   @property({ attribute: false }) substance!: Substance;
 
-  private async rollWearOffStress(group: 'alwaysApplied' | 'severity') {
+  private async rollWearOffStress(group: 'base' | 'severity') {
     const { messageHeader, appliedAndHidden } = this.substance;
     const data = this.substance[group];
     if (data.wearOffStress) {
@@ -61,7 +61,7 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
 
   private async removeSubstance() {
     if (!this.substance.appliedInfo.appliedSeverity)
-      await this.rollWearOffStress('alwaysApplied');
+      await this.rollWearOffStress('base');
     this.substance.deleteSelf?.();
   }
 
@@ -113,13 +113,13 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
   private async endBaseEffects() {
     const { finishedEffects = [] } = this.substance.appliedInfo;
     if (!this.substance.appliedInfo.appliedSeverity) {
-      await this.rollWearOffStress('alwaysApplied');
+      await this.rollWearOffStress('base');
     }
 
     if (finishedEffects.includes('severity')) this.removeSubstance();
     else {
       this.substance.updateAppliedState({
-        finishedEffects: uniq(finishedEffects.concat('always')),
+        finishedEffects: uniq(finishedEffects.concat('base')),
       });
     }
   }
@@ -131,7 +131,7 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
     }
 
     const cleanup = async () => {
-      if (finishedEffects.includes('always')) await this.removeSubstance();
+      if (finishedEffects.includes('base')) await this.removeSubstance();
       else {
         await this.substance.updateAppliedState({
           finishedEffects: uniq(finishedEffects.concat('severity')),
@@ -306,7 +306,7 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
   private renderActions() {
     const { disabled } = this.character;
     const { substance } = this;
-    const { alwaysApplied, severity, hasSeverity } = substance;
+    const { base: alwaysApplied, severity, hasSeverity } = substance;
     const {
       timeState,
       modifyingEffects,
