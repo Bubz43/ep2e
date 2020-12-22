@@ -34,8 +34,8 @@ character-view-header {
   z-index: 1;
 }
 
-character-view-ego,
-character-view-sleeve,
+// character-view-ego,
+// character-view-sleeve,
 .sections > * {
   border: none;
   border: 1px solid var(--color-border);
@@ -61,13 +61,13 @@ character-view-sleeve,
     border-radius: 0px;
   }
 
-  character-view-ego {
-    margin: 0.25rem;
-  }
+  // character-view-ego {
+  //   margin: 0.25rem;
+  // }
 
-  character-view-sleeve {
-    margin: auto 0.25rem 0.25rem;
-  }
+  // character-view-sleeve {
+  //   margin: auto 0.25rem 0.25rem;
+  // }
 
   .sleeve-select {
     padding: 0.5rem;
@@ -83,13 +83,11 @@ character-view-sleeve,
   grid-auto-rows: min-content;
   grid-template-columns: repeat(auto-fit, minmax(375px, 1fr));
   gap: 0.25rem;
-  padding: 0 0.25rem;
   height: 200px;
   min-height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
-  padding: 0.25rem 0;
-  padding-left: 0;
+  padding: 0.25rem 0 0.25rem 0.25rem;
 
   background: rgba(black, 0.09);
   sl-header,

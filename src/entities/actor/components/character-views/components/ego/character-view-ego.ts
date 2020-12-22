@@ -1,5 +1,6 @@
 import { renderTextInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
+import { TabsMixin } from '@src/components/mixins/tabs-mixin';
 import { AptitudeType, enumValues } from '@src/data-enums';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
@@ -31,7 +32,7 @@ import {
 import styles from './character-view-ego.scss';
 
 @customElement('character-view-ego')
-export class CharacterViewEgo extends LitElement {
+export class CharacterViewEgo extends TabsMixin(["stats", "details"])(LitElement) {
   static get is() {
     return 'character-view-ego' as const;
   }
@@ -94,39 +95,54 @@ export class CharacterViewEgo extends LitElement {
   }
 
   render() {
-    const { active, know } = this.ego.groupedSkills;
     const { filteredMotivations, settings } = this.ego;
-    const showMore = this.ego.description || notEmpty(this.ego.details);
     return html`
       <header>
-        <button @click=${this.ego.openForm}>${this.ego.name}</button>
-        <span class="details">
-          ${compact([
-            this.ego.egoType,
-            this.ego.forkStatus &&
-              `${localize(this.ego.forkStatus)} ${localize('fork')}`,
-          ]).join(' • ')}</span
-        >
-        ${showMore
+        ${settings.trackPoints
           ? html`
-              <mwc-icon-button
-                icon=${this.expanded ? 'unfold_less' : 'unfold_more'}
-                @click=${this.toggleExpanded}
-              ></mwc-icon-button>
+              <sl-animated-list class="resource-points">
+                ${repeat(
+                  this.ego.points,
+                  prop('point'),
+                  ({ label, value }) => html`
+                    <li>${label} <span class="value">${value}</span></li>
+                  `,
+                )}
+              </sl-animated-list>
             `
           : ''}
+
+        <button class="name" @click=${this.ego.openForm}>
+          ${this.ego.name}
+        </button>
+        <span class="info">
+          ${compact([
+            `${this.ego.egoType} ${localize('ego')}`,
+            this.ego.forkStatus &&
+              `${localize(this.ego.forkStatus)} ${localize('fork')}`,
+          ]).join(' • ')}
+        </span>
+
+        <!-- <sl-group
+          class="initiative"
+          label=${localize('initiative')}
+          >${this.character.initiative}</sl-group
+        >
+   -->
       </header>
-      ${settings.trackPoints
+
+      ${this.ego.trackMentalHealth
         ? html`
-            <sl-animated-list class="resource-points">
-              ${repeat(
-                this.ego.points,
-                prop('point'),
-                ({ label, value }) => html`
-                  <li>${label} <span class="value">${value}</span></li>
-                `,
-              )}
-            </sl-animated-list>
+            <health-item
+              @click=${this.requestMentalHealthDrawer}
+              @contextmenu=${this.openHealthEditor}
+              clickable
+              class="mental-health-view"
+              .health=${this.ego.mentalHealth}
+              ><span slot="source"
+                >${localize('mentalHealth')}</span
+              ></health-item
+            >
           `
         : ''}
       ${notEmpty(filteredMotivations)
@@ -139,10 +155,105 @@ export class CharacterViewEgo extends LitElement {
               )}</sl-animated-list
             >
           `
-        : ''}
-      ${this.expanded && showMore
+      : ''}
+        
+        ${this.renderTabBar()}
+              ${this.renderTabbedContent(this.activeTab)}
+ 
+    `;
+    // return html`
+    //   <header class="header">
+    //     <button @click=${this.ego.openForm}>${this.ego.name}</button>
+    //     <span class="details">
+    //       ${compact([
+    //         this.ego.egoType,
+    //         this.ego.forkStatus &&
+    //           `${localize(this.ego.forkStatus)} ${localize('fork')}`,
+    //       ]).join(' • ')}</span
+    //     >
+    //     ${showMore
+    //       ? html`
+    //           <mwc-icon-button
+    //             icon=${this.expanded ? 'unfold_less' : 'unfold_more'}
+    //             @click=${this.toggleExpanded}
+    //           ></mwc-icon-button>
+    //         `
+    //       : ''}
+    //   </header>
+
+
+
+    //   <sl-section heading=${localize('skills')} flipped>
+  
+
+    //   </sl-section>
+
+
+    // `;
+  }
+
+  protected renderTabbedContent(tab: CharacterViewEgo["tabs"][number]) {
+    return tab === "stats" ? this.renderStats() : this.renderDetails();
+  }
+
+  protected renderStats() {
+    const { active, know } = this.ego.groupedSkills;
+
+    return html`
+       <div class="stats">
+       <ul class="aptitudes-list">
+          ${enumValues(AptitudeType).map(this.renderAptitude)}
+        </ul>
+
+      ${this.ego.trackReputations
         ? html`
-            ${notEmpty(this.ego.details)
+            <ul class="rep-list">
+            ${this.ego.trackedReps.map(this.renderRep)}
+          </ul>
+          `
+        : ''}
+  
+ 
+
+      <ul class="skills-list">
+        ${active?.map(this.renderSkill)}
+        ${notEmpty(know)
+          ? html`
+              <li class="divider" role="separator"></li>
+              ${know.map(this.renderSkill)}
+            `
+      : ''}
+          <li class="filter">
+          ${renderAutoForm({
+          classes: 'skill-controls',
+          storeOnInput: true,
+          noDebounce: true,
+          props: this.skillControls,
+          update: this.updateSkillControls,
+          fields: ({ filter }) => html`
+            <div
+              class="skill-filter"
+              @keypress=${this.findFirstUnfilteredSkill}
+            >
+              ${renderTextInput(filter, {
+                search: true,
+                placeholder: localize('filter'),
+              })}
+            </div>
+          `,
+        })}
+          </li>
+      </ul>
+       </div>
+
+     
+    `
+
+  }
+
+  protected renderDetails() {
+    return html`
+               ${notEmpty(this.ego.details)
               ? html`
                   <div class="details">
                     ${this.ego.details.map(
@@ -162,77 +273,7 @@ export class CharacterViewEgo extends LitElement {
                   ></enriched-html>
                 `
               : ''}
-          `
-        : ''}
-
-      <sl-section heading=${localize('aptitudes')} flipped>
-        <sl-group
-          slot="control"
-          class="initiative"
-          label=${localize('initiative')}
-          >${this.character.initiative}</sl-group
-        >
-        <ul class="aptitudes-list">
-          ${enumValues(AptitudeType).map(this.renderAptitude)}
-        </ul>
-        ${this.ego.trackMentalHealth
-          ? html`
-              <health-item
-                @click=${this.requestMentalHealthDrawer}
-                @contextmenu=${this.openHealthEditor}
-                clickable
-                class="mental-health-view"
-                .health=${this.ego.mentalHealth}
-                ><span slot="source"
-                  >${localize('mentalHealth')}</span
-                ></health-item
-              >
-            `
-          : ''}
-      </sl-section>
-
-      <sl-section heading=${localize('skills')} flipped>
-        ${renderAutoForm({
-          classes: 'skill-controls',
-          storeOnInput: true,
-          noDebounce: true,
-          slot: 'control',
-          props: this.skillControls,
-          update: this.updateSkillControls,
-          fields: ({ filter }) => html`
-            <div
-              class="skill-filter"
-              @keypress=${this.findFirstUnfilteredSkill}
-            >
-              ${renderTextInput(filter, {
-                search: true,
-                placeholder: localize('filter'),
-              })}
-            </div>
-          `,
-        })}
-
-        <ul class="skills-list">
-          ${active?.map(this.renderSkill)}
-          ${notEmpty(know)
-            ? html`
-                <li class="divider" role="separator"></li>
-                ${know.map(this.renderSkill)}
-              `
-            : ''}
-        </ul>
-      </sl-section>
-
-      ${this.ego.trackReputations
-        ? html`
-            <sl-section heading=${localize('reputations')} flipped>
-              <ul class="rep-list">
-                ${this.ego.trackedReps.map(this.renderRep)}
-              </ul>
-            </sl-section>
-          `
-        : ''}
-    `;
+    `
   }
 
   private renderAptitude = (type: AptitudeType) => {
@@ -295,12 +336,14 @@ export class CharacterViewEgo extends LitElement {
     // TODO Show goals
     return html`
       <li class="motivation">
-        <mwc-icon class=${motivation.stance}
-          >${motivation.stance === MotivationStance.Support
-            ? 'add'
-            : 'remove'}</mwc-icon
-        >
-        ${motivation.cause}
+        <button>
+          <mwc-icon class=${motivation.stance}
+            >${motivation.stance === MotivationStance.Support
+              ? 'add'
+              : 'remove'}</mwc-icon
+          >
+          ${motivation.cause}
+        </button>
       </li>
     `;
   };

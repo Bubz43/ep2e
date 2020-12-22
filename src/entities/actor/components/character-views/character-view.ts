@@ -189,7 +189,7 @@ export class CharacterView extends CharacterViewBase {
           .character=${this.character}
           .ego=${this.character.ego}
         ></character-view-ego>
-        ${this.character.sleeve
+        <!-- ${this.character.sleeve
           ? html`
               <character-view-sleeve
                 .character=${this.character}
@@ -206,7 +206,7 @@ export class CharacterView extends CharacterViewBase {
                     this.toggleDrawerRenderer(CharacterDrawerRenderer.Resleeve)}
                 ></mwc-button>
               </div>
-            `}
+            `} -->
       </div>
       ${this.renderDrawer()}
 
