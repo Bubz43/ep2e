@@ -97,7 +97,7 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
           cumulativeDotID: dot.id,
         },
       },
-      entity: this.character.actor,
+      entity: this.character,
     });
   }
 
@@ -122,7 +122,7 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
         },
       },
       // visibility: MessageVisibility.WhisperGM,
-      entity: this.character.actor,
+      entity: this.character,
     });
     await this.health.logHeal(heal.slot);
   }

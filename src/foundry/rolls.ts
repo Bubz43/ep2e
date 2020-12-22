@@ -1,3 +1,5 @@
+import { prop } from "remeda";
+
 export type RollData = ReturnType<Roll['toJSON']>;
 
 export type RollInfo = {
@@ -11,6 +13,7 @@ export type LabeledFormula = { label: string; formula: string };
 
 export type RolledFormula = { label: string; roll: RollData };
 
+export const joinLabeledFormulas = (formulas: LabeledFormula[]) => cleanFormula(formulas.map(prop("formula")).join(" + "))
 
 export const rollLabeledFormulas = (
   formulas: LabeledFormula[],

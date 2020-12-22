@@ -59,6 +59,7 @@ export type DamageOverTime = {
   source: string;
   duration: number;
   startTime: number;
+  multiplier: RollMultiplier;
 };
 
 export const createDamageOverTime = createFeature<
@@ -69,6 +70,7 @@ export const createDamageOverTime = createFeature<
   reduceAVbyDV: false,
   armorUsed: [],
   startTime: currentWorldTimeMS(),
+  multiplier: 1
 }));
 
 export type ArmorDamage = Record<ArmorType, number> & {

@@ -7,7 +7,7 @@ import { EffectType, formatEffect } from '@src/features/effects';
 import { idProp } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
-import { HealthType } from '@src/health/health';
+import { formatDamageType, HealthType } from '@src/health/health';
 import { createStressDamage } from '@src/health/health-changes';
 import { tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
@@ -16,7 +16,7 @@ import { customElement, LitElement, property, html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
-import { compact, uniq } from 'remeda';
+import { compact, pick, uniq } from 'remeda';
 import styles from './character-view-active-substance.scss';
 
 @customElement('character-view-active-substance')
@@ -33,13 +33,8 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
 
   @property({ attribute: false }) substance!: Substance;
 
-  private async removeSubstance() {
-    const {
-      alwaysApplied,
-      severity,
-      messageHeader,
-      appliedAndHidden,
-    } = this.substance;
+  private async rollBaseWearOffStress() {
+    const { alwaysApplied, messageHeader, appliedAndHidden } = this.substance;
     if (alwaysApplied.wearOffStress) {
       await createMessage({
         data: {
@@ -58,6 +53,12 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
         entity: this.character,
       });
     }
+  }
+
+  private async removeSubstance() {
+    const { appliedInfo } = this.substance;
+    if (!this.substance.appliedInfo.appliedSeverity)
+      await this.rollBaseWearOffStress();
     this.substance.deleteSelf?.();
   }
 
@@ -120,6 +121,35 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
       finishedEffects: uniq(finishedEffects.concat('severity')),
     });
   }
+
+  private rollDamageOverTime(index: number) {
+    const dot = this.substance.appliedInfo.dots[index]
+    if (dot) {
+      createMessage({
+        data: {
+          header: { heading: `${dot.source} ${localize('damageOverTime')}` },
+          damage: {
+            ...pick(dot, [
+              'armorPiercing',
+              'armorUsed',
+              'reduceAVbyDV',
+              'source',
+              'multiplier',
+              'damageType'
+            ]),
+            rolledFormulas: rollLabeledFormulas([
+              {
+                label: localize('damage'),
+                formula: dot.formula,
+              },
+            ]),
+            cumulativeDotID: this.substance.id,
+          },
+        },
+        entity: this.character,
+      });
+    }
+  } 
 
   render() {
     const { disabled } = this.character;
@@ -208,12 +238,30 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
       timeState,
       modifyingEffects,
       applySeverity,
+      dots,
     } = substance.appliedInfo;
     const mods = compact([
       modifyingEffects?.duration,
       modifyingEffects?.misc,
     ]).flat();
     return html` <sl-animated-list class="active-substance-actions">
+      ${notEmpty(mods)
+        ? html`
+            <sl-popover
+              class="mods"
+              .renderOnDemand=${() =>
+                html`<ul>
+                  ${mods.map(
+                    (effect) => html`<li>${formatEffect(effect)}</li>`,
+                  )}
+                </ul>`}
+            >
+              <mwc-button slot="base" dense
+                >${localize('SHORT', 'modifiers')}</mwc-button
+              >
+            </sl-popover>
+          `
+        : ''}
       ${timeState.completed
         ? html`
             <mwc-button
@@ -276,23 +324,16 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
             >`
           : ''
         : ''}
-      ${notEmpty(mods)
-        ? html`
-            <sl-popover
-              class="mods"
-              .renderOnDemand=${() =>
-                html`<ul>
-                  ${mods.map(
-                    (effect) => html`<li>${formatEffect(effect)}</li>`,
-                  )}
-                </ul>`}
-            >
-              <mwc-button slot="base" dense
-                >${localize('SHORT', 'modifiers')}</mwc-button
-              >
-            </sl-popover>
-          `
-        : ''}
+      ${dots.map(
+        ({ damageType, multiplier, formula }, index) => html`
+          <mwc-button dense class="damage" unelevated icon="repeat" trailingIcon @click=${() => this.rollDamageOverTime(index)}
+            >${formatDamageType(damageType)}
+            ${multiplier === 1
+              ? formula
+              : `(${formula}) x${multiplier}`}</mwc-button
+          >
+        `,
+      )}
     </sl-animated-list>`;
   }
 }

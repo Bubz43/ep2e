@@ -34,6 +34,7 @@ import {
   Effect,
   EffectType,
   extractDurationEffectMultipliers,
+  multiplyEffectModifier,
   UniqueEffectType,
 } from '@src/features/effects';
 import {
@@ -49,8 +50,13 @@ import {
   LiveTimeState,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
-import { rollLabeledFormulas } from '@src/foundry/rolls';
+import { joinLabeledFormulas, rollLabeledFormulas } from '@src/foundry/rolls';
 import { EP } from '@src/foundry/system';
+import type { HealthType } from '@src/health/health';
+import {
+  createDamageOverTime,
+  DamageOverTime,
+} from '@src/health/health-changes';
 import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
@@ -245,14 +251,17 @@ export class Substance
       ...this.epData.alwaysApplied,
       damage: this.attacks.primary,
       items: this.alwaysAppliedItems,
+      get hasDamage(): boolean {
+        return notEmpty(this.damage.rollFormulas);
+      },
       get hasInstantDamage(): boolean {
-        return notEmpty(this.damage.rollFormulas) && !this.damage.perTurn;
+        return this.hasDamage && !this.damage.perTurn;
       },
       get hasEffects(): boolean {
         return notEmpty(this.items) || notEmpty(this.effects);
       },
       get viable(): boolean {
-        return this.hasEffects || notEmpty(this.damage.rollFormulas);
+        return this.hasEffects || this.hasDamage;
       },
     };
   }
@@ -265,8 +274,11 @@ export class Substance
         localize('severity'),
       ),
       items: this.severityAppliedItems,
+      get hasDamage(): boolean {
+        return notEmpty(this.damage.rollFormulas);
+      },
       get hasInstantDamage(): boolean {
-        return notEmpty(this.damage.rollFormulas) && !this.damage.perTurn;
+        return this.hasDamage && !this.damage.perTurn;
       },
       get hasEffects(): boolean {
         return (
@@ -276,7 +288,7 @@ export class Substance
         );
       },
       get viable(): boolean {
-        return this.hasEffects || notEmpty(this.damage.rollFormulas);
+        return this.hasEffects || this.hasDamage;
       },
     };
   }
@@ -601,16 +613,38 @@ export class Substance
     const multipliers = extractDurationEffectMultipliers(
       active?.modifyingEffects?.duration ?? [],
     );
+    const dots: (DamageOverTime & { damageType: HealthType })[] = [];
 
     const { alwaysApplied, severity, hasSeverity } = this;
-    let duration = alwaysApplied.duration;
+    const halveDamageAndEffects = !!active?.modifyingEffects?.misc?.length;
+    const damageMultiplier = halveDamageAndEffects ? 0.5 : 1;
+    let duration = applyDurationMultipliers({
+      duration: alwaysApplied.duration,
+      multipliers,
+    });
     const applyAlways = !active?.finishedEffects?.includes('always');
     if (applyAlways) {
       effects.push({
         source: this.appliedName,
-        effects: alwaysApplied.effects,
+        effects: halveDamageAndEffects
+          ? alwaysApplied.effects.map((effect) =>
+              multiplyEffectModifier(effect, 0.5),
+            )
+          : alwaysApplied.effects,
       });
       items.push(...alwaysApplied.items.values());
+      if (alwaysApplied.hasDamage && !alwaysApplied.hasInstantDamage) {
+        dots.push({
+          ...createDamageOverTime({
+            ...alwaysApplied.damage,
+            source: alwaysApplied.damage.label,
+            duration,
+            formula: joinLabeledFormulas(alwaysApplied.damage.rollFormulas),
+            multiplier: damageMultiplier,
+          }),
+          damageType: alwaysApplied.damage.damageType,
+        });
+      }
     }
     const applySeverity =
       hasSeverity &&
@@ -619,15 +653,34 @@ export class Substance
     if (applySeverity) {
       effects.push({
         source: `${this.appliedName} (${localize('severity')})`,
-        effects: severity.effects,
+        effects: halveDamageAndEffects
+          ? severity.effects.map((effect) =>
+              multiplyEffectModifier(effect, 0.5),
+            )
+          : severity.effects,
       });
       items.push(...severity.items.values());
-      if (severity.duration > duration) duration = severity.duration;
+      const severityDuration = applyDurationMultipliers({
+        duration: severity.duration,
+        multipliers,
+      });
+      if (severityDuration > duration) duration = severityDuration;
+      if (severity.hasDamage && !severity.hasInstantDamage) {
+        dots.push(
+         {... createDamageOverTime({
+          ...severity.damage,
+          source: severity.damage.label,
+          duration,
+          formula: joinLabeledFormulas(severity.damage.rollFormulas),
+          multiplier: damageMultiplier,
+         }),
+          damageType: severity.damage.damageType}
+        );
+      }
     }
 
     if (!applySeverity && !applyAlways) duration = 0;
 
-    duration = applyDurationMultipliers({ duration, multipliers });
     const updateStartTime = this.updater.prop(
       'flags',
       EP.Name,
@@ -679,6 +732,7 @@ export class Substance
       conditions: applySeverity && severity.conditions,
       modifyingEffects: active?.modifyingEffects,
       applySeverity: active?.applySeverity ?? null,
+      dots,
       timeState: createLiveTimeState({
         id: timeStateId,
         img: this.nonDefaultImg,
@@ -691,7 +745,7 @@ export class Substance
       get requiresAttention() {
         return (
           this.timeState.completed ||
-          !![...this.multiTimeStates.values() || []].some(
+          !![...(this.multiTimeStates.values() || [])].some(
             ([state, finished]) => state.completed && !finished,
           )
         );
