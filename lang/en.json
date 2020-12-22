@@ -1445,7 +1445,7 @@
       "CannotLoadMissileSize": "Missile must be [ {availableSizes} ] but is {missileSize}",
       "SleevePermanentlyDeleted": "{name} and all its items will be permanently erased.",
       "ActionToActivate": "{action} action to activate",
-      "ModifiedTime": "{direction} time by {amount}."
+      "ModifiedTime": "Time {direction} by {amount}."
     }
   }
 }

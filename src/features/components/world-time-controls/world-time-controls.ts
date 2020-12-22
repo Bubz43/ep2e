@@ -33,7 +33,7 @@ export class WorldTimeControls extends LitElement {
         worldTimeChange: [
           Date.now(),
           format('ModifiedTime', {
-            direction: localize(forwards ? 'advanced' : 'rewound'),
+            direction: localize(forwards ? 'advanced' : 'rewound').toLocaleLowerCase(),
             amount: prettyMilliseconds(this.timeChange, { compact: false }),
           }),
         ],

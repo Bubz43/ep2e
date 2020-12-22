@@ -8,6 +8,7 @@
 :host {
   display: block;
   position: relative;
+  width: 325px;
 }
 
 .controls {
@@ -38,6 +39,9 @@
   &:focus-within {
     background: alphav(var(--color-bg-alt), 0.95);
   }
+  & + .changes {
+    top: 50px;
+  }
 }
 
 .changes {
@@ -46,7 +50,6 @@
   max-height: 4rem;
   display: flex;
   flex-flow: column-reverse;
-  top: 50px;
   justify-content: flex-end;
   width: 100%;
   align-items: flex-end;
