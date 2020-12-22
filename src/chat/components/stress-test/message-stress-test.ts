@@ -7,7 +7,6 @@ import { cleanFormula } from '@src/foundry/rolls';
 import { HealthEditor } from '@src/health/components/health-editor/health-editor';
 import { formatDamageType, HealthType } from '@src/health/health';
 import { notEmpty } from '@src/utility/helpers';
-import { localImage } from '@src/utility/images';
 import {
   customElement,
   html,

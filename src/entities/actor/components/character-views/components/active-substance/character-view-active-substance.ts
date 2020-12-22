@@ -1,4 +1,6 @@
+import type { MultiSelectedEvent } from '@material/mwc-list/mwc-list-foundation';
 import { createMessage } from '@src/chat/create-message';
+import { renderAutoForm } from '@src/components/form/forms';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { itemMenuOptions } from '@src/entities/item/item-views';
@@ -10,13 +12,14 @@ import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType, HealthType } from '@src/health/health';
 import { createStressDamage } from '@src/health/health-changes';
 import { tooltip } from '@src/init';
+import { RenderDialogEvent } from '@src/open-dialog';
 import { openMenu } from '@src/open-menu';
 import { notEmpty, withSign } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
-import { compact, pick, uniq } from 'remeda';
+import { compact, difference, map, mapToObj, pick, pipe, uniq } from 'remeda';
 import styles from './character-view-active-substance.scss';
 
 @customElement('character-view-active-substance')
@@ -33,9 +36,10 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
 
   @property({ attribute: false }) substance!: Substance;
 
-  private async rollBaseWearOffStress() {
-    const { alwaysApplied, messageHeader, appliedAndHidden } = this.substance;
-    if (alwaysApplied.wearOffStress) {
+  private async rollWearOffStress(group: 'alwaysApplied' | 'severity') {
+    const { messageHeader, appliedAndHidden } = this.substance;
+    const data = this.substance[group];
+    if (data.wearOffStress) {
       await createMessage({
         data: {
           header: { ...messageHeader, hidden: appliedAndHidden },
@@ -43,7 +47,7 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
             rolledFormulas: rollLabeledFormulas([
               {
                 label: localize('wearOffStress'),
-                formula: alwaysApplied.wearOffStress,
+                formula: data.wearOffStress,
               },
             ]),
             damageType: HealthType.Mental,
@@ -56,9 +60,8 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
   }
 
   private async removeSubstance() {
-    const { appliedInfo } = this.substance;
     if (!this.substance.appliedInfo.appliedSeverity)
-      await this.rollBaseWearOffStress();
+      await this.rollWearOffStress('alwaysApplied');
     this.substance.deleteSelf?.();
   }
 
@@ -107,19 +110,85 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
     return openMenu({ content: itemMenuOptions(this.substance), position: ev });
   }
 
-  private removeBaseEffects() {
+  private async endBaseEffects() {
     const { finishedEffects = [] } = this.substance.appliedInfo;
-    this.substance.updateAppliedState({
-      finishedEffects: uniq(finishedEffects.concat('always')),
-    });
+    if (!this.substance.appliedInfo.appliedSeverity) {
+      await this.rollWearOffStress('alwaysApplied');
+    }
+
+    if (finishedEffects.includes('severity')) this.removeSubstance();
+    else {
+      this.substance.updateAppliedState({
+        finishedEffects: uniq(finishedEffects.concat('always')),
+      });
+    }
   }
 
-  private removeSevereEffects() {
-    const { finishedEffects = [] } = this.substance.appliedInfo;
-    // TODO undo conditions
-    this.substance.updateAppliedState({
-      finishedEffects: uniq(finishedEffects.concat('severity')),
-    });
+  private async endSevereEffects() {
+    const { finishedEffects = [], conditions } = this.substance.appliedInfo;
+    if (!this.substance.appliedInfo.appliedSeverity) {
+      await this.rollWearOffStress('severity');
+    }
+
+    const cleanup = async () => {
+      if (finishedEffects.includes('always')) await this.removeSubstance();
+      else {
+        await this.substance.updateAppliedState({
+          finishedEffects: uniq(finishedEffects.concat('severity')),
+        });
+      }
+    };
+
+    if (notEmpty(conditions)) {
+      let removedConditions = new Set<number>();
+      this.dispatchEvent(
+        new RenderDialogEvent(html`
+          <mwc-dialog
+            heading=${localize('end')}
+            ${localize('severe')}
+            ${localize('effects')}
+          >
+            <mwc-list
+              multi
+              @selected=${(ev: MultiSelectedEvent) =>
+                (removedConditions = ev.detail.index)}
+            >
+              <mwc-list-item noninteractive
+                >${localize('remove')} ${localize('conditions')}</mwc-list-item
+              >
+              <li divider style="--border-color: var(--color-border);"></li>
+              ${conditions.map(
+                (condition) => html`
+                  <mwc-check-list-item selected
+                    >${localize(condition)}</mwc-check-list-item
+                  >
+                `,
+              )}
+            </mwc-list>
+            <mwc-button slot="secondaryAction" dialogAction="cancel"
+              >${localize('cancel')}</mwc-button
+            >
+            <mwc-button
+              unelevated
+              slot="primaryAction"
+              dialogAction="save"
+              @click=${async () => {
+                await cleanup();
+                const conditionsToRemove = compact(
+                  [...removedConditions].map((index) => conditions[index]),
+                );
+                if (notEmpty(conditionsToRemove)) {
+                  this.character.updateConditions(
+                    difference(this.character.conditions, conditionsToRemove),
+                  );
+                }
+              }}
+              >${localize('end')}</mwc-button
+            >
+          </mwc-dialog>
+        `),
+      );
+    } else cleanup();
   }
 
   private rollDamageOverTime(index: number) {
@@ -210,8 +279,8 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
                       })}"
                       icon="remove_circle_outline"
                       @click=${index === 0
-                        ? this.removeBaseEffects
-                        : this.removeSevereEffects}
+                        ? this.endBaseEffects
+                        : this.endSevereEffects}
                       ?disabled=${disabled}
                     ></mwc-icon-button>
                   </character-view-time-item>`;
@@ -264,7 +333,7 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
             </sl-popover>
           `
         : ''}
-      ${timeState.completed
+      ${!applySeverity && timeState.completed
         ? html`
             <mwc-button
               dense

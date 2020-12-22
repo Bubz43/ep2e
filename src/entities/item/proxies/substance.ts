@@ -729,7 +729,7 @@ export class Substance
       appliedAlways: applyAlways,
       appliedSeverity: applySeverity,
       finishedEffects: active?.finishedEffects,
-      conditions: applySeverity && severity.conditions,
+      conditions: applySeverity ? severity.conditions : null,
       modifyingEffects: active?.modifyingEffects,
       applySeverity: active?.applySeverity ?? null,
       dots,
