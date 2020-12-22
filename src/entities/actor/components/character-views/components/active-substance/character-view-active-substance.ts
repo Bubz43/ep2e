@@ -123,11 +123,14 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
   }
 
   private rollDamageOverTime(index: number) {
-    const dot = this.substance.appliedInfo.dots[index]
+    const dot = this.substance.appliedInfo.dots[index];
     if (dot) {
       createMessage({
         data: {
-          header: { heading: `${dot.source} ${localize('damageOverTime')}` },
+          header: {
+            heading: this.substance.appliedName,
+            subheadings: `${localize("damage")} ${localize("perTurn")}`,
+          },
           damage: {
             ...pick(dot, [
               'armorPiercing',
@@ -135,7 +138,7 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
               'reduceAVbyDV',
               'source',
               'multiplier',
-              'damageType'
+              'damageType',
             ]),
             rolledFormulas: rollLabeledFormulas([
               {
@@ -149,7 +152,7 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
         entity: this.character,
       });
     }
-  } 
+  }
 
   render() {
     const { disabled } = this.character;
@@ -179,7 +182,6 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
                 slot="meta"
               ></mwc-icon-button>
             </mwc-list-item>
-            ${this.renderActions()}
             <sl-animated-list
               class="multi-time ${classMap({
                 finished: finishedEffects?.length === 2,
@@ -225,8 +227,9 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
               .item=${substance}
             >
             </character-view-time-item>
-            ${this.renderActions()}
           `}
+          ${this.renderActions()}
+
     `;
   }
 
@@ -326,7 +329,13 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
         : ''}
       ${dots.map(
         ({ damageType, multiplier, formula }, index) => html`
-          <mwc-button dense class="damage" unelevated icon="repeat" trailingIcon @click=${() => this.rollDamageOverTime(index)}
+          <mwc-button
+            dense
+            class="damage"
+            unelevated
+            icon="repeat"
+            trailingIcon
+            @click=${() => this.rollDamageOverTime(index)}
             >${formatDamageType(damageType)}
             ${multiplier === 1
               ? formula

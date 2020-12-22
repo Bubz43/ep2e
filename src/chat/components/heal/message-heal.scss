@@ -1,7 +1,6 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
-@include textButton();
 
 * {
   box-sizing: border-box;
@@ -14,12 +13,12 @@
 
 .formulas-toggle {
   float: right;
-  color: var(--color-text-lighter);
+  --mdc-icon-button-size: 1.6rem;
 }
 
 mwc-button[unelevated] {
   --mdc-theme-primary: #{lightv(var(--color-secondary), 0.7)};
-  filter: hue-rotate(-40deg);
+  filter: saturate(0.8) hue-rotate(-40deg);
   margin-bottom: 0.25rem;
   width: 100%;
 }
@@ -28,4 +27,8 @@ mwc-button[unelevated] {
   color: var(--color-text-lighter);
   padding-left: 0.5ch;
   margin-top: 0.25ch;
+}
+
+rolled-formulas-list {
+  margin-top: 0.25rem;
 }

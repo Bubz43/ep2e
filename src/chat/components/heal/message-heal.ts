@@ -10,13 +10,12 @@ import { notEmpty } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
 import {
   customElement,
-  LitElement,
-  property,
+
+
   html,
-  internalProperty,
+  internalProperty, LitElement,
+  property
 } from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map';
-import { compact } from 'remeda';
 import styles from './message-heal.scss';
 
 @customElement('message-heal')
@@ -100,13 +99,13 @@ export class MessageHeal extends LitElement {
         ${woundLabel}
       </mwc-button>
       ${hasFormulas
-        ? html` <button
-            dense
-            class="formulas-toggle"
-            @click=${this.toggleFormulas}
-          >
-            <img src=${localImage('icons/cubes.svg')} height="20px" />
-          </button>`
+        ? html` <mwc-icon-button
+        class="formulas-toggle"
+        @click=${this.toggleFormulas}
+        icon=${this.viewFormulas ? "keyboard_arrow_down" : "keyboard_arrow_left"}
+      >
+
+      </mwc-icon-button>`
         : ''}
       <div class="heal-info">
         ${damageHealTotals.formula || hasFormulas

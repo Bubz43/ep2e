@@ -6,6 +6,11 @@
 }
 
 :host {
+  display: block;
+  position: relative;
+}
+
+.controls {
   display: flex;
   align-items: center;
   --mdc-icon-button-size: 2rem;
@@ -15,7 +20,7 @@
   border-radius: 100px;
   box-shadow: 0 0 2px black;
   transition: background 75ms;
-
+  pointer-events: all;
   sl-form {
     height: 12px;
   }
@@ -29,9 +34,36 @@
       display: none;
     }
   }
+  &:hover,
+  &:focus-within {
+    background: alphav(var(--color-bg-alt), 0.95);
+  }
 }
 
-:host(:hover),
-:host(:focus-within) {
-  background: alphav(var(--color-bg-alt), 0.95);
+.changes {
+  position: absolute;
+  padding: 0 0.5rem;
+  max-height: 4rem;
+  display: flex;
+  flex-flow: column-reverse;
+  top: 50px;
+  justify-content: flex-end;
+  width: 100%;
+  align-items: flex-end;
+  overflow: hidden;
+  text-shadow: 0 0 4px black;
+
+  >*{
+    animation-fill-mode: none !important;
+    opacity: 0.4;
+    transition: opacity 3s;
+    list-style: none;
+    &:nth-last-child(2) {
+      opacity: 0.6;
+    }
+    &:last-child {
+      opacity: 1;
+    }
+
+  }
 }

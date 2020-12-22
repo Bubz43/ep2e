@@ -84,15 +84,18 @@ export class MessageStressTest extends LitElement {
     this.openHealthPicker(
       createStressDamage({
         source: this.source,
+        stressType: this.stress.stressType,
         ...this.totals,
       }),
     );
   }
 
   private applyMinDamage() {
+  
     this.openHealthPicker(
       createStressDamage({
         source: this.source,
+        stressType: this.stress.stressType,
         ...this.minStress,
       }),
     );
@@ -129,18 +132,18 @@ export class MessageStressTest extends LitElement {
           `
         : ''}
       ${notEmpty(this.stress.rolledFormulas)
-        ? html` <mwc-button
-            dense
-            class="formulas-toggle"
-            @click=${this.toggleFormulas}
-          >
-            <img src=${localImage('icons/cubes.svg')} height="20px" />
-          </mwc-button>`
+        ? html` <mwc-icon-button
+        class="formulas-toggle"
+        @click=${this.toggleFormulas}
+        icon=${this.viewFormulas ? "keyboard_arrow_down" : "keyboard_arrow_left"}
+      >
+
+      </mwc-icon-button>`
         : ''}
 
       <div class="damage-info">
         ${totals.formula} ${localize('stress')}
-        ${stressType ? `${localize('from')} ${localize(stressType)}` : ''}.
+        ${stressType ? `${localize('from').toLocaleLowerCase()} ${localize(stressType)}` : ''}.
         ${notes ? html`<div>${notes}</div>` : ''}
       </div>
 

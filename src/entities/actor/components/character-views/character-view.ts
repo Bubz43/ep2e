@@ -310,7 +310,7 @@ export class CharacterView extends CharacterViewBase {
               : ''}
           </div>
         </section>
-        <section>
+        <!-- <section>
           <sl-header heading=${localize('network')}>
             <mwc-icon-button
               slot="action"
@@ -334,7 +334,7 @@ export class CharacterView extends CharacterViewBase {
                 ></health-item>
               `
             : ''}
-        </section>
+        </section> -->
 
         <section>
           <sl-header heading=${localize('attacks')}></sl-header>

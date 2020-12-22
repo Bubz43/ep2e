@@ -9,7 +9,10 @@
   display: block;
   padding: 0.25rem 0.5rem 0.5rem;
   background: var(--color-bg-alt);
-  border: 1px solid var(--color-grey);
+  border: 1px groove transparent;
+  border-left: 2px solid var(--color-grey);
+  box-shadow: 1px 0 5px black;
+  // filter: drop-shadow(2px 4px 6px black);
 }
 
 character-view-time-item {
@@ -21,7 +24,8 @@ character-view-time-item {
   --mdc-list-item-graphic-margin: 0.5rem;
   padding: 0 0.25rem;
   border-bottom: 1px solid var(--color-border);
-  [slot="meta"] {
+  font-size: large;
+  [slot='meta'] {
     color: var(--color-text);
   }
   mwc-icon-button {
@@ -32,12 +36,11 @@ character-view-time-item {
 
 .active-substance-actions {
   > * {
-    margin: 0.25rem 0 0;
+    margin: 0.5rem 0 0;
   }
 
   > span {
     line-height: 2rem;
-
   }
 
   .damage {
@@ -76,10 +79,11 @@ character-view-time-item {
 }
 
 .multi-time {
+  padding: 0.25rem 0;
   &.finished {
     display: flex;
     flex-flow: row wrap;
-    justify-content: space-around
+    justify-content: space-around;
   }
-
 }
+

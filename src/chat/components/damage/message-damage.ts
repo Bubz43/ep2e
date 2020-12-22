@@ -1,4 +1,5 @@
 import type { DamageMessageData } from '@src/chat/message-data';
+import { formatArmorUsed } from '@src/combat/attack-formatting';
 import type { UsedRollPartsEvent } from '@src/combat/components/rolled-formulas-list/used-roll-parts-event';
 import { renderRadioFields } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
@@ -107,6 +108,7 @@ export class MessageDamage extends LitElement {
   render() {
     const { totals, multiplier } = this;
     const { damageType } = this.damage;
+    
     return html`
       <mwc-button
         dense
@@ -119,13 +121,12 @@ export class MessageDamage extends LitElement {
       </mwc-button>
 
       ${notEmpty(this.damage.rolledFormulas)
-        ? html` <button
-            dense
-            class="formulas-toggle ${classMap({ active: this.viewFormulas })}"
+        ? html` <mwc-icon-button
+            class="formulas-toggle"
             @click=${this.toggleFormulas}
+            icon=${this.viewFormulas ? "keyboard_arrow_down" : "keyboard_arrow_left"}
           >
-            <img src=${localImage('icons/cubes.svg')} height="20px" />
-          </button>`
+          </mwc-icon-button>`
         : ''}
 
       <div class="damage-info">
@@ -133,9 +134,11 @@ export class MessageDamage extends LitElement {
         ${localize(damageType)}
         ${localize(damageType === HealthType.Mental ? 'stress' : 'damage')}
       </div>
+      <div class="armor-info">${formatArmorUsed(this.damage)}</div>
 
       ${this.viewFormulas
         ? html`
+
             ${renderAutoForm({
               props: { multiplier: String(this.multiplier) },
               update: ({ multiplier }) =>

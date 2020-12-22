@@ -9,7 +9,7 @@ export const formatArmorUsed = ({
   armorPiercing,
   reduceAVbyDV,
   armorUsed,
-}: UsedAttackArmor) => {
+}: Partial<UsedAttackArmor>) => {
   return notEmpty(armorUsed)
     ? pipe(
         [

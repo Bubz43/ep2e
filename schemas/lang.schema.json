@@ -346,6 +346,9 @@
                 "modifier": {
                   "type": "string"
                 },
+                "modifiers": {
+                  "type": "string"
+                },
                 "morphPoints": {
                   "type": "string"
                 },
@@ -438,7 +441,8 @@
                 "meshware",
                 "shortRecharge",
                 "longRecharge",
-                "versus"
+                "versus",
+                "modifiers"
               ],
               "type": "object"
             },
@@ -923,6 +927,9 @@
               "type": "string"
             },
             "beforeMitigation": {
+              "type": "string"
+            },
+            "beforeModifiers": {
               "type": "string"
             },
             "beta": {
@@ -1748,6 +1755,9 @@
               "type": "string"
             },
             "finalize": {
+              "type": "string"
+            },
+            "finished": {
               "type": "string"
             },
             "firePayload": {
@@ -3352,6 +3362,9 @@
             "reset": {
               "type": "string"
             },
+            "resist": {
+              "type": "string"
+            },
             "resistEffectsCheck": {
               "type": "string"
             },
@@ -4616,6 +4629,7 @@
             "battleRifle",
             "beamWeapon",
             "beforeMitigation",
+            "beforeModifiers",
             "beta",
             "beyondRange",
             "bio",
@@ -4891,6 +4905,7 @@
             "filter",
             "final",
             "finalize",
+            "finished",
             "firePayload",
             "firearm",
             "firearmAmmo",
@@ -5425,6 +5440,7 @@
             "requirement",
             "research",
             "reset",
+            "resist",
             "resistEffectsCheck",
             "resistInfection",
             "resistSubstanceOrDisease",

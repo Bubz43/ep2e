@@ -98,7 +98,7 @@ export class MessageSubstanceUse extends MessageElement {
   private renderAppliedTo(names: string[]) {
     const { disabled } = this;
     return html`
-      <sl-group label="  ${localize('applied')} ${localize('to')}"
+      <sl-group label="${localize('applied')} ${localize('to')}"
         >${names.map(
           (name, index, list) => html`
             <wl-list-item

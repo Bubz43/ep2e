@@ -387,9 +387,7 @@ export class EPOverlay extends LitElement {
             `
           : '',
       )}
-      ${game.user.isGM
-        ? html` <world-time-controls></world-time-controls> `
-        : ''}
+      <world-time-controls></world-time-controls>
       ${this.staticElements} ${this.dialogTemplate || ''}
     `;
   }

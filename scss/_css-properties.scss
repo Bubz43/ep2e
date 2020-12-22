@@ -27,12 +27,12 @@ body {
   --mdc-tab-height: 36px;
   --mdc-theme-surface: var(--color-bg);
   --mdc-theme-text-secondary-on-background: var(--color-text-lighter);
-  --mdc-linear-progress-buffer-color: var(--color-grey);
 
   --mdc-typography-button-font-family: var(--font-1);
   --mdc-typography-subtitle1-font-family: var(--font-1);
   --mdc-typography-body2-font-family: var(--font-1);
   --mdc-typography-body2-font-size: 1rem;
+  --mdc-linear-progress-buffer-color: var(--color-border);
 
   // --app-datepicker-accent-color: var(--color-secondary);
   // --app-datepicker-bg-color: var(--color-bg);

@@ -1,7 +1,6 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
-@include textButton();
 * {
   box-sizing: border-box;
 }
@@ -11,16 +10,10 @@
   padding: 0.25rem 0.5rem;
 }
 
-button.formulas-toggle {
+.formulas-toggle {
   float: right;
-  padding: 0.25rem;
-
-  &.active {
-    filter: drop-shadow(1px 2px 4px var(--color-secondary));
-  }
-  &:hover {
-    filter: drop-shadow(1px 2px 4px var(--color-primary-alt));
-  }
+    // --mdc-icon-button-size: 1.5rem;
+  
 }
 
 mwc-button[unelevated] {
@@ -49,4 +42,8 @@ mwc-button[unelevated] {
     justify-content: space-between;
     flex: 1;
   }
+}
+
+.armor-info {
+  padding: 0 0.25rem;
 }
