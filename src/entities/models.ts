@@ -239,9 +239,9 @@ export type ActiveSubstanceState = {
   startTime: number;
   applySeverity: boolean | null;
   modifyingEffects: Partial<{
-    duration: DurationEffect[],
-    misc: MiscEffect[]
-  }>
+    duration: DurationEffect[];
+    misc: MiscEffect[];
+  }>;
   finishedEffects: ('always' | 'severity')[];
   hidden: boolean;
 };

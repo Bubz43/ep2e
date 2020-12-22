@@ -433,7 +433,6 @@ const clearSearchOnEscape = (ev: KeyboardEvent) => {
   }
 };
 
-
 export const renderTextInput = (
   { value, prop }: ValuedProp<string>,
   {

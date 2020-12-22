@@ -171,7 +171,10 @@ export const setupRecoveries = ({
         slot,
         source,
         timeState: createLiveTimeState({
-          duration: applyDurationMultipliers({ duration: data.interval, multipliers }),
+          duration: applyDurationMultipliers({
+            duration: data.interval,
+            multipliers,
+          }),
           startTime: hot[key],
           label: source,
           id: `${stat}-${slot}`,
@@ -209,7 +212,10 @@ export const setupRecoveries = ({
       slot,
       source: effect[Source],
       timeState: createLiveTimeState({
-        duration: applyDurationMultipliers({ duration: effect.interval, multipliers }),
+        duration: applyDurationMultipliers({
+          duration: effect.interval,
+          multipliers,
+        }),
         startTime: hot[key],
         label: effect[Source],
         id: `${stat}-${slot}`,

@@ -42,7 +42,7 @@
 
 .changes {
   position: absolute;
-  padding: 0 0.5rem;
+  padding: 0 1rem 0 0;
   max-height: 4rem;
   display: flex;
   flex-flow: column-reverse;
@@ -53,10 +53,10 @@
   overflow: hidden;
   text-shadow: 0 0 4px black;
 
-  >*{
+  > * {
     animation-fill-mode: none !important;
     opacity: 0.4;
-    transition: opacity 3s;
+    transition: opacity 3s ease-out;
     list-style: none;
     &:nth-last-child(2) {
       opacity: 0.6;
@@ -64,6 +64,5 @@
     &:last-child {
       opacity: 1;
     }
-
   }
 }

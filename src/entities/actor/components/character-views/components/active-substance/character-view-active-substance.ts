@@ -129,7 +129,7 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
         data: {
           header: {
             heading: this.substance.appliedName,
-            subheadings: `${localize("damage")} ${localize("perTurn")}`,
+            subheadings: `${localize('damage')} ${localize('perTurn')}`,
           },
           damage: {
             ...pick(dot, [
@@ -228,8 +228,7 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
             >
             </character-view-time-item>
           `}
-          ${this.renderActions()}
-
+      ${this.renderActions()}
     `;
   }
 

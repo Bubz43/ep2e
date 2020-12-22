@@ -47,8 +47,10 @@ export const substanceActivationDialog = (
         `
       : ''}
 
-    <ul style="display: grid;
-    justify-content: end; margin: 0.5rem 0;">
+    <ul
+      style="display: grid;
+    justify-content: end; margin: 0.5rem 0;"
+    >
       ${hasInstantDamage
         ? html`
             <li>

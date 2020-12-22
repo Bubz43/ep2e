@@ -144,9 +144,8 @@ export class AppliedEffects {
       misc: this.getGroup(EffectType.Misc).filter(
         (effect) => effect.unique === UniqueEffectType.HalveDrugEffects,
       ),
-      duration: this.durationEffects.drugOrToxin || []
-    }
-   
+      duration: this.durationEffects.drugOrToxin || [],
+    };
   }
 
   @LazyGetter()

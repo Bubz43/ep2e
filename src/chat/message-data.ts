@@ -11,7 +11,7 @@ import type { RequireAtLeastOne } from 'type-fest';
 export type StressTestMessageData = {
   rolledFormulas: RolledFormula[];
   minStress: '' | 'half' | number;
-  stressType: StressType | "";
+  stressType: StressType | '';
   notes?: string;
   source?: string;
 };

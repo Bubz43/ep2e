@@ -116,9 +116,8 @@ export class CharacterView extends CharacterViewBase {
         if (item.actor && item.editable) await item.use();
 
         if (Substance.onsetTime(method) === 0 && id) {
-          this.openSubstanceActivationDialog(id)
+          this.openSubstanceActivationDialog(id);
         }
-
       };
       if (
         item.applicationMethods.length === 1 &&
@@ -153,7 +152,9 @@ export class CharacterView extends CharacterViewBase {
     if (!substance) return;
 
     this.dispatchEvent(
-      new RenderDialogEvent(substanceActivationDialog(this.character, substance)),
+      new RenderDialogEvent(
+        substanceActivationDialog(this.character, substance),
+      ),
     );
   }
 
@@ -324,16 +325,16 @@ export class CharacterView extends CharacterViewBase {
             >
           </div>
           ${masterDevice
-            ? html`
-                <health-item clickable .health=${masterDevice.meshHealth}>
-                  <span slot="source">${localize('meshHealth')} </span>
-                </health-item>
-                <health-item
-                  clickable
-                  .health=${masterDevice.firewallHealth}
-                ></health-item>
-              `
-            : ''}
+          ? html`
+              <health-item clickable .health=${masterDevice.meshHealth}>
+                <span slot="source">${localize('meshHealth')} </span>
+              </health-item>
+              <health-item
+                clickable
+                .health=${masterDevice.firewallHealth}
+              ></health-item>
+            `
+          : ''}
         </section> -->
 
         <section>

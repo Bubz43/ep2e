@@ -10,11 +10,10 @@ import { notEmpty } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
 import {
   customElement,
-
-
   html,
-  internalProperty, LitElement,
-  property
+  internalProperty,
+  LitElement,
+  property,
 } from 'lit-element';
 import styles from './message-heal.scss';
 
@@ -100,12 +99,13 @@ export class MessageHeal extends LitElement {
       </mwc-button>
       ${hasFormulas
         ? html` <mwc-icon-button
-        class="formulas-toggle"
-        @click=${this.toggleFormulas}
-        icon=${this.viewFormulas ? "keyboard_arrow_down" : "keyboard_arrow_left"}
-      >
-
-      </mwc-icon-button>`
+            class="formulas-toggle"
+            @click=${this.toggleFormulas}
+            icon=${this.viewFormulas
+              ? 'keyboard_arrow_down'
+              : 'keyboard_arrow_left'}
+          >
+          </mwc-icon-button>`
         : ''}
       <div class="heal-info">
         ${damageHealTotals.formula || hasFormulas

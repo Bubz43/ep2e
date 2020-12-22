@@ -105,7 +105,10 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
     // TODO Account for multiple instances
     await createMessage({
       data: {
-        header: { heading: heal.source, subheadings: localize('healthRecovery') },
+        header: {
+          heading: heal.source,
+          subheadings: localize('healthRecovery'),
+        },
         heal: {
           source: heal.source,
           healthType: HealthType.Physical,

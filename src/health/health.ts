@@ -153,9 +153,12 @@ export const formatDamageType = (type: HealthType) => {
   }
 };
 
-export const formatFormulaWithMultiplier = (formula: string, multiplier: RollMultiplier) => {
-  return multiplier === 1 || !formula ? formula : `(${formula}) x${multiplier}`
-}
+export const formatFormulaWithMultiplier = (
+  formula: string,
+  multiplier: RollMultiplier,
+) => {
+  return multiplier === 1 || !formula ? formula : `(${formula}) x${multiplier}`;
+};
 
 export const healthLabels = (healthType: HealthType, stat: HealthStat) =>
   localize(healthType === HealthType.Mental ? mentalHealthStats[stat] : stat);

@@ -108,7 +108,7 @@ export class MessageDamage extends LitElement {
   render() {
     const { totals, multiplier } = this;
     const { damageType } = this.damage;
-    
+
     return html`
       <mwc-button
         dense
@@ -124,7 +124,9 @@ export class MessageDamage extends LitElement {
         ? html` <mwc-icon-button
             class="formulas-toggle"
             @click=${this.toggleFormulas}
-            icon=${this.viewFormulas ? "keyboard_arrow_down" : "keyboard_arrow_left"}
+            icon=${this.viewFormulas
+              ? 'keyboard_arrow_down'
+              : 'keyboard_arrow_left'}
           >
           </mwc-icon-button>`
         : ''}
@@ -138,7 +140,6 @@ export class MessageDamage extends LitElement {
 
       ${this.viewFormulas
         ? html`
-
             ${renderAutoForm({
               props: { multiplier: String(this.multiplier) },
               update: ({ multiplier }) =>

@@ -52,12 +52,7 @@ export class CharacterViewConditions extends UseWorldTime(LitElement) {
   }
 
   render() {
-    const {
-      disabled,
-      conditions,
-      temporaryConditionSources,
-    } = this.character;
-
+    const { disabled, conditions, temporaryConditionSources } = this.character;
 
     return html`
       <character-view-drawer-heading

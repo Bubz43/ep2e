@@ -142,7 +142,6 @@ export const createLiveTimeState = (
   get progress() {
     return clamp((this.elapsed / this.duration) * 100, { min: 0, max: 100 });
   },
- 
 });
 
 export const refreshAvailable = ({ completed }: LiveTimeState) => completed;

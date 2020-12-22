@@ -652,17 +652,17 @@ export class SubstanceForm extends ItemFormBase {
             renderSelectField(damageType, enumValues(HealthType)),
             renderLabeledCheckbox(perTurn),
             html`
-            <p class="label">${localize("armorUsed")}</p>
-            ${this.renderArmorUsedForm(group)}
-           `,
+              <p class="label">${localize('armorUsed')}</p>
+              ${this.renderArmorUsedForm(group)}
+            `,
             notEmpty(damage.armorUsed)
               ? html`
-              <div class="divider"></div>
-              ${[
-                  renderLabeledCheckbox(armorPiercing),
-                  renderLabeledCheckbox(reduceAVbyDV),
-                ]}
-              `
+                  <div class="divider"></div>
+                  ${[
+                    renderLabeledCheckbox(armorPiercing),
+                    renderLabeledCheckbox(reduceAVbyDV),
+                  ]}
+                `
               : '',
           ],
         ],

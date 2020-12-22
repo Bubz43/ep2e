@@ -666,16 +666,16 @@ export class Substance
       });
       if (severityDuration > duration) duration = severityDuration;
       if (severity.hasDamage && !severity.hasInstantDamage) {
-        dots.push(
-         {... createDamageOverTime({
-          ...severity.damage,
-          source: severity.damage.label,
-          duration,
-          formula: joinLabeledFormulas(severity.damage.rollFormulas),
-          multiplier: damageMultiplier,
-         }),
-          damageType: severity.damage.damageType}
-        );
+        dots.push({
+          ...createDamageOverTime({
+            ...severity.damage,
+            source: severity.damage.label,
+            duration,
+            formula: joinLabeledFormulas(severity.damage.rollFormulas),
+            multiplier: damageMultiplier,
+          }),
+          damageType: severity.damage.damageType,
+        });
       }
     }
 

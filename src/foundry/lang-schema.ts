@@ -1361,7 +1361,11 @@ type LangEntries =
   | 'actors'
   | 'characters'
   | 'done'
-  | 'hidden' | "cummulative" | "beforeModifiers" | "resist" | "finished";
+  | 'hidden'
+  | 'cummulative'
+  | 'beforeModifiers'
+  | 'resist'
+  | 'finished';
 type FullNames =
   | 'cog'
   | 'int'
@@ -1419,7 +1423,8 @@ export type Abbreviation =
   | 'meshware'
   | 'shortRecharge'
   | 'longRecharge'
-  | 'versus' | "modifiers"
+  | 'versus'
+  | 'modifiers';
 export type DescriptionEntry =
   | 'medicineHeal'
   | 'invalidRollFormula'

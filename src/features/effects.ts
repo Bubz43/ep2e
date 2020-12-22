@@ -400,7 +400,7 @@ const format = (effect: Effect): (string | number)[] => {
           ? localize(effect.taskType || 'all')
           : '',
         localize(effect.subtype),
-        localize("duration"),
+        localize('duration'),
         formatDurationPercentage(effect.modifier),
         effect.cummulative ? `(${localize('cumulative')})` : '',
       ];

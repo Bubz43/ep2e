@@ -70,7 +70,7 @@ export const createDamageOverTime = createFeature<
   reduceAVbyDV: false,
   armorUsed: [],
   startTime: currentWorldTimeMS(),
-  multiplier: 1
+  multiplier: 1,
 }));
 
 export type ArmorDamage = Record<ArmorType, number> & {
@@ -91,7 +91,7 @@ const common: Base = {
 export const createStressDamage = createFeature<StressDamage, RequiredFields>(
   () => ({
     ...common,
-    stressType: "",
+    stressType: '',
     type: HealthType.Mental,
   }),
 );
