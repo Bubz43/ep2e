@@ -4,11 +4,13 @@ import type { Sleeve } from '@src/entities/actor/sleeves';
 import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import { localize } from '@src/foundry/localization';
+import { userCan } from '@src/foundry/misc-helpers';
 import { clickIfEnter, notEmpty } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
-import { compact } from 'remeda';
+import { repeat } from 'lit-html/directives/repeat';
+import { compact, identity, sortBy } from 'remeda';
 import {
   CharacterDrawerRenderer,
   CharacterDrawerRenderEvent,
@@ -48,6 +50,7 @@ export class CharacterViewSleeve extends LitElement {
     const physicalHealth = 'physicalHealth' in sleeve && sleeve.physicalHealth;
     const meshHealth = 'activeMeshHealth' in sleeve && sleeve.activeMeshHealth;
     const { armor, movementRates, movementModifiers } = this.character;
+    const canPlace = userCan('TEMPLATE_CREATE');
     return html`
       <header>
         <button class="name" @click=${this.sleeve.openForm}>
@@ -66,18 +69,20 @@ export class CharacterViewSleeve extends LitElement {
       ${notEmpty(armor)
         ? html`
             <div
-              class="armor"
+              class="armor  ${classMap({
+                'multi-row': armor.size > (armor.concealable ? 2 : 3),
+              })}"
               @click=${this.viewArmor}
               @keydown=${clickIfEnter}
               tabindex="0"
               role="button"
             >
-              <img src=${localImage('icons/armor/shield.svg')} height="40px" />
-       
-              <div class="values">
-                ${enumValues(ArmorType).map((type) => {
+              <img src=${localImage('icons/armor/shield.svg')} width="40px" />
+
+              <sl-animated-list class="values">
+                ${repeat(enumValues(ArmorType), identity, (type) => {
                   const value = armor.getClamped(type);
-                  const reduced = armor.reducedArmoors.has(type);
+                  const reduced = armor.reducedArmors.has(type);
                   return value || reduced
                     ? html`<span class="rating ${classMap({ reduced })}"
                         >${localize(type)}
@@ -85,15 +90,19 @@ export class CharacterViewSleeve extends LitElement {
                       >`
                     : '';
                 })}
+
                 <span class="rating info"
-                  >${localize('layers')} <span class="value"
-                    >${armor.get('layers')}</span
-                  ></span
+                  >${localize('layers')}
+                  <span class="value">${armor.layers}</span></span
                 >
-                ${armor.concealable ? html`
-                <span class="rating info">${localize("concealable")}</span>
-                ` : ""}
-              </div>
+                ${armor.concealable
+                  ? html`
+                      <span class="rating info"
+                        >${localize('concealable')}</span
+                      >
+                    `
+                  : ''}
+              </sl-animated-list>
             </div>
           `
         : ''}
@@ -123,28 +132,28 @@ export class CharacterViewSleeve extends LitElement {
               : ''}
           </health-item>`
         : ''}
-      ${notEmpty(movementRates)
-        ? html`
-            <div class="movement">
-              <span class="info">
-                ${(['encumbered', 'overburdened'] as const).map((mod) => {
-                  const val = movementModifiers[mod];
-                  return val
-                    ? html`<span class="mod">${localize(mod)}</span>`
-                    : '';
-                })}
-              </span>
-              ${movementRates.map(
+
+      <div class="movement">
+        ${(['encumbered', 'overburdened'] as const).map((mod) => {
+          const val = movementModifiers[mod];
+          return val ? html`<span class="mod">${localize(mod)}</span>` : '';
+        })}
+        ${notEmpty(movementRates)
+          ? html`
+              ${sortBy(movementRates, ({ type}) => localize(type).length).map(
                 ({ type, base, full }) => html`
                   <span class="movement-rate"
                     >${localize(type)}
-                    <span class="rate">${base} / ${full}</span></span
+                    <span class="rate"
+                      ><button ?disabled=${!canPlace}>${base}</button> /
+                      <button ?disabled=${!canPlace}>${full}</button></span
+                    ></span
                   >
                 `,
               )}
-            </div>
-          `
-        : ''}
+            `
+          : ''}
+      </div>
     `;
   }
 }

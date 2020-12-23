@@ -33,6 +33,11 @@ li[divider] {
 figure {
   margin: 0.5rem;
   figcaption {
+    display: flex;
+    align-items: center;
+    img {
+      margin-right: 0.5ch;
+    }
     color: var(--color-text-lighter);
   }
 }

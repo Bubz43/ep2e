@@ -63,7 +63,7 @@
     "@types/resize-observer-browser": "^0.1.4",
     "@types/snowpack-env": "^2.3.3",
     "@types/socket.io": "^2.1.12",
-    "@web/test-runner": "^0.11.0",
+    "@web/test-runner": "^0.11.1",
     "archiver": "^5.1.0",
     "pixi.js": "^5.3.6",
     "prettier": "^2.2.1",

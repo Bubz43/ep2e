@@ -18,7 +18,7 @@
 
 .armor-values-form {
   padding: 0.5rem 0 0;
-
+  grid-template-columns: 50% 50%;
   &.solo {
     display: flex;
     align-items: center;

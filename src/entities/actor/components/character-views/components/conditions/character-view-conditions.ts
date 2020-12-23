@@ -66,7 +66,7 @@ export class CharacterViewConditions extends UseWorldTime(LitElement) {
               ${[...temporaryConditionSources].map(
                 ([condition, list]) => html`
                   <figure>
-                    <figcaption>${localize(condition)}</figcaption>
+                    <figcaption><img src=${conditionIcons[condition]} height="22px" /> ${localize(condition)}</figcaption>
                     <ul>
                       ${list.map(
                         (timeState) => html`

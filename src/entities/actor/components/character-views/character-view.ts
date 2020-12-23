@@ -167,6 +167,13 @@ export class CharacterView extends CharacterViewBase {
     } else substance.makeActive([]);
   }
 
+  private toggleCondition(ev: Event) {
+    if (ev.currentTarget instanceof HTMLElement) {
+      const { condition } = ev.currentTarget.dataset;
+      condition && this.character.toggleCondition(condition as ConditionType);
+    }
+  }
+
   render() {
     const { masterDevice } = this.character.equippedGroups;
     const {
@@ -176,6 +183,7 @@ export class CharacterView extends CharacterViewBase {
       conditions,
       pools,
       disabled,
+      temporaryConditionSources,
     } = this.character;
 
     return html`
@@ -223,31 +231,31 @@ export class CharacterView extends CharacterViewBase {
                 >${localize('conditions')}</mwc-button
               >
               <div class="conditions-list">
-              ${enumValues(ConditionType).map(
-                (condition) => html`
-                  <img
-                    src=${conditionIcons[condition]}
-                    class=${conditions.includes(condition)  ?  "active": ''}
-                    data-tooltip=${localize(condition)}
-                    @mouseover=${tooltip.fromData}
-                    height="20px"
-
-                  />
-                `,
-              )}
+                ${enumValues(ConditionType).map(
+                  (condition) => html`
+                    <button
+                      ?disabled=${disabled}
+                      data-condition=${condition}
+                      @click=${this.toggleCondition}
+                      data-tooltip=${localize(condition)}
+                        @mouseover=${tooltip.fromData}
+                    >
+                      <img
+                        src=${conditionIcons[condition]}
+                        class=${conditions.includes(condition) ? 'active' : ''}
+                   
+                        height="22px"
+                      />
+                      ${temporaryConditionSources.has(condition)
+                        ? html`<notification-coin
+                            value=${temporaryConditionSources.get(condition)
+                              ?.length || 1}
+                          ></notification-coin>`
+                        : ''}
+                    </button>
+                  `,
+                )}
               </div>
-              <!-- ${notEmpty(conditions)
-                ? html`
-                    ${conditions.map(
-                      (condition) =>
-                        html`<img
-                          src=${conditionIcons[condition]}
-                          title=${localize(condition)}
-                          height="20px"
-                        />`,
-                    )}
-                  `
-                : html`<span>${localize('none')}</span>`} -->
             </div>
 
             <sl-dropzone

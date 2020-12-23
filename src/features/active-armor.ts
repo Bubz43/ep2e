@@ -33,7 +33,7 @@ export class ActiveArmor
   private _layerPenalty?: AddEffects;
   private _overburdened?: AddEffects;
   readonly currentEffects: AddEffects[] = [];
-  readonly reducedArmoors = new Set<ArmorType>();
+  readonly reducedArmors = new Set<ArmorType>();
   concealable = true;
 
   constructor(
@@ -120,8 +120,12 @@ export class ActiveArmor
     return super.get(key) || 0;
   }
 
+  get layers() {
+    return this.get("layers")
+  }
+
   get excessLayers() {
-    return clamp(this.get('layers') - 1, { min: 0 });
+    return clamp(this.layers - 1, { min: 0 });
   }
 
   get highestPhysicalArmor() {
@@ -141,7 +145,7 @@ export class ActiveArmor
 
   private addValue(armor: ArmorType, value: number) {
     if (value) this.set(armor, this.get(armor) + value);
-    if (value < 0) this.reducedArmoors.add(armor);
+    if (value < 0) this.reducedArmors.add(armor);
   }
 
   mitigateDamage({
@@ -201,6 +205,8 @@ export class ActiveArmor
       `icons/armor/${this.excessLayers ? 'layered-armor' : 'shield'}.svg`,
     );
   }
+
+  
 
   static physicalTypes = [ArmorType.Energy, ArmorType.Kinetic];
 

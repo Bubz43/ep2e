@@ -175,10 +175,19 @@ character-view-header {
     justify-content: space-evenly;
     flex: 1;
   }
+  @include textButton();
+  button {
+    position: relative;
+  }
+  notification-coin {
+    right: -2px;
+    top: -75%;
+  }
   img {
     opacity: 0.25;
     transition: opacity 300ms;
     display: block;
+    pointer-events: none;
     &.active {
       opacity: 1;
     }

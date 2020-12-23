@@ -152,10 +152,18 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     );
   }
 
+  toggleCondition(condition: ConditionType) {
+    const conditions = new Set(this.conditions);
+    conditions.delete(condition) || conditions.add(condition)
+   
+    return this.sleeve?.updateConditions([...conditions])
+  }
+
   updateConditions(conditions: ConditionType[]) {
     return this.sleeve?.updateConditions(conditions);
   }
 
+  @LazyGetter()
   get movementModifiers() {
     return !this.sleeve || this.sleeve.type === ActorType.Infomorph
       ? {}

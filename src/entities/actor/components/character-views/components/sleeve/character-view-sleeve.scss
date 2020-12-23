@@ -46,49 +46,38 @@ header {
 
 }
 
-.armor {
-  &:hover {
-    background: alphav(var(--color-text), 0.06);
-  }
-  &:focus {
-    background: alphav(var(--color-text), 0.08);
-    outline: none;
-  }
-  &:active {
-    background: alphav(var(--color-text), 0.1);
-  }
-}
+
 
 .movement {
-  padding: 0.25rem 0.5rem;
-  .info {
-    float: right;
-  }
+  display: flex;
+  align-items: center;
+  flex-flow: row wrap;
+
+  @include textButton();
+ 
   .mod,
   .movement-rate {
     display: inline-block;
     text-align: center;
     white-space: nowrap;
-    margin-bottom: 0.25rem;
+    margin: 0.15rem 0 0.15rem 0.25rem;
     padding: 0 0.5rem;
     border-radius: 3px;
-
+    flex: 1;
   }
   .mod {
     background: alphav(var(--color-negative), 0.2);
     border: 1px solid alphav(var(--color-negative), 0.25);
-    & + .mod {
-      margin-left: 0.5rem;
-    }
   }
 
   .movement-rate {
-    background: alphav(var(--color-grey), 0.1);
-    border: 1px solid alphav(var(--color-grey), 0.15);
+    background: alphav(var(--color-grey), 0.2);
+    border: 1px solid alphav(var(--color-grey), 0.25);
     .rate {
       color: var(--color-text-lighter);
       margin-right: 0.5ch;
     }
+    
   }
 
 }
@@ -100,29 +89,46 @@ header {
   align-items: center;
   position: relative;
   cursor: pointer;
-  z-index: 0;
   img {
     display: block;
-    // position: absolute;
-    // left: 0;
-    z-index: 0;
     opacity: 0.8;
+  }
+
+  &:hover {
+    background: alphav(var(--color-text), 0.06);
+  }
+  &:focus {
+    background: alphav(var(--color-text), 0.08);
+    outline: none;
+  }
+  &:active {
+    background: alphav(var(--color-text), 0.1);
+  }
+
+
+  &.multi-row {
+    .values {
+      display: block;
+      column-count: 3;
+    }
   }
 
   .values {
     grid-area: values;
-    z-index: 1;
     margin-left: -1.25rem;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(90px , 1fr));
-
     column-gap: 0.5ch;
+    
     flex: 1;
     .rating {
+      break-inside: avoid;
+      page-break-inside: avoid;
+      width: 100%;
       display: inline-block;
       text-align: center;
       white-space: nowrap;
-      margin-bottom: 0.25rem;
+      margin: 0.15rem 0;
       padding: 0 0.5rem;
       border-radius: 3px;
       background: alphav(var(--color-grey), 0.4);
@@ -140,6 +146,7 @@ header {
         background: alphav(var(--color-border), 0.45);
         border: 1px solid alphav(var(--color-border), 0.75);
       }
+
     }
   }
 
