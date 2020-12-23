@@ -198,6 +198,7 @@ export class CharacterView extends CharacterViewBase {
               <character-view-sleeve
                 .character=${this.character}
                 .sleeve=${this.character.sleeve}
+                .token=${this.token}
               ></character-view-sleeve>
             `
           : html`

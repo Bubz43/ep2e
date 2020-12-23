@@ -3,8 +3,9 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import type { Sleeve } from '@src/entities/actor/sleeves';
 import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
+import { createMeasuredTemplate } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
-import { userCan } from '@src/foundry/misc-helpers';
+import { activeCanvas, userCan } from '@src/foundry/misc-helpers';
 import { clickIfEnter, notEmpty } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
 import { customElement, html, LitElement, property } from 'lit-element';
@@ -29,6 +30,8 @@ export class CharacterViewSleeve extends LitElement {
 
   @property({ attribute: false }) sleeve!: Sleeve;
 
+  @property({ attribute: false }) token?: Token;
+
   private viewArmor() {
     this.requestDrawer(CharacterDrawerRenderer.Armor);
   }
@@ -43,6 +46,24 @@ export class CharacterViewSleeve extends LitElement {
 
   private requestDrawer(renderer: CharacterDrawerRenderer) {
     this.dispatchEvent(new CharacterDrawerRenderEvent(renderer));
+  }
+
+  private placeMovementPreviewTemplate(range: number) {
+    const canvas = activeCanvas();
+    const token = this.token || this.character.actor.getActiveTokens(true)[0]
+    if (!canvas || token?.scene !== canvas.scene) return;
+    const template = createMeasuredTemplate({
+      t: "circle",
+      distance: range,
+      fillColor: game.user.color,
+      ...token.center
+    })
+    // TODO listeners
+    const { activeLayer } = canvas;
+
+    template.draw()
+    template.layer.activate()
+    template.layer.preview?.addChild(template)
   }
 
   render() {

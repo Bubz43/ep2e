@@ -313,6 +313,14 @@ declare global {
     sheet: Application | null;
   }
 
+  interface MeasuredTemplate {
+    readonly layer: TemplateLayer;
+  }
+
+  interface PlaceablesLayer {
+    preview: PIXI.Container | null
+  }
+
   interface User {
     active: boolean;
     targets: Set<Token>;
@@ -321,6 +329,7 @@ declare global {
     readonly viewedScene: string;
     can(permission: string): boolean;
     readonly isGM: boolean;
+    readonly color: string;
     data: Readonly<
       CommonEntityData & {
         color: string;

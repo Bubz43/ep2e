@@ -73,6 +73,7 @@ export const activeCanvas = () => {
         stage: { scale: number };
         dimensions: Record<'size' | 'distance', number>;
         hud: HeadsUpDisplay;
+        activeLayer: CanvasLayers[keyof CanvasLayers];
       };
   return null;
 };
