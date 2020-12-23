@@ -170,7 +170,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   @LazyGetter()
   get movementRates(): MovementRate[] {
     if (!this.sleeve || this.sleeve.type === ActorType.Infomorph) return [];
-    const { movementRates, physicalHealth } = this.sleeve;
+    // TODO add prop that shows if movement has been changed to display in view
+    const { movementRates } = this.sleeve;
     const { movementEffects } = this._appliedEffects;
     const movements = [...movementRates, ...movementEffects.granted];
     const { encumbered, overburdened } = this.movementModifiers;

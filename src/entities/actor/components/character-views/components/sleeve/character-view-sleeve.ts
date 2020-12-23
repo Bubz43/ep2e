@@ -39,10 +39,6 @@ export class CharacterViewSleeve extends LitElement {
     this.requestDrawer(CharacterDrawerRenderer.SleevePhysicalHealth);
   }
 
-  private viewConditions() {
-    this.requestDrawer(CharacterDrawerRenderer.Conditions);
-  }
-
   private requestDrawer(renderer: CharacterDrawerRenderer) {
     this.dispatchEvent(new CharacterDrawerRenderEvent(renderer));
   }
@@ -54,7 +50,9 @@ export class CharacterViewSleeve extends LitElement {
     const { armor, movementRates, movementModifiers } = this.character;
     return html`
       <header>
-        <button class="name" @click=${this.sleeve.openForm}>${this.sleeve.name}</button>
+        <button class="name" @click=${this.sleeve.openForm}>
+          ${this.sleeve.name}
+        </button>
         <span class="info">
           ${compact([
             'size' in sleeve && localize(sleeve.size),
@@ -74,20 +72,10 @@ export class CharacterViewSleeve extends LitElement {
               tabindex="0"
               role="button"
             >
-            <img src=${localImage("icons/armor/shield.svg")} height="40px" />
-              <!-- <span class="label"
-                >${localize('armorRating')}
-                <span class="layers">
-                  ${armor.get('layers')} ${localize('layers')}</span
-                ></span
-              > -->
-              <!-- <span class="info">
-                ${armor.concealable
-                  ? html`<span>${localize('concealable')}</span>`
-                  : ''}
-              </span> -->
-              <div class="values"
-                >${enumValues(ArmorType).map((type) => {
+              <img src=${localImage('icons/armor/shield.svg')} height="40px" />
+       
+              <div class="values">
+                ${enumValues(ArmorType).map((type) => {
                   const value = armor.getClamped(type);
                   const reduced = armor.reducedArmoors.has(type);
                   return value || reduced
@@ -96,12 +84,19 @@ export class CharacterViewSleeve extends LitElement {
                         <span class="value">${value}</span></span
                       >`
                     : '';
-                })}</div
-              >
+                })}
+                <span class="rating info"
+                  >${localize('layers')} <span class="value"
+                    >${armor.get('layers')}</span
+                  ></span
+                >
+                ${armor.concealable ? html`
+                <span class="rating info">${localize("concealable")}</span>
+                ` : ""}
+              </div>
             </div>
           `
         : ''}
-    
       ${physicalHealth
         ? html`
             <health-item
@@ -128,27 +123,28 @@ export class CharacterViewSleeve extends LitElement {
               : ''}
           </health-item>`
         : ''}
-
-${notEmpty(movementRates)
+      ${notEmpty(movementRates)
         ? html`
             <div class="movement">
               <span class="info">
                 ${(['encumbered', 'overburdened'] as const).map((mod) => {
                   const val = movementModifiers[mod];
-                  return val ? html`<span class="mod">${localize(mod)}</span>` : '';
+                  return val
+                    ? html`<span class="mod">${localize(mod)}</span>`
+                    : '';
                 })}
               </span>
-                ${movementRates.map(
-                  ({ type, base, full }) => html`
-                    <span class="movement-rate"
-                      >${localize(type)}
-                      <span class="rate">${base} / ${full}</span></span
-                    >
-                  `,
-                )}
+              ${movementRates.map(
+                ({ type, base, full }) => html`
+                  <span class="movement-rate"
+                    >${localize(type)}
+                    <span class="rate">${base} / ${full}</span></span
+                  >
+                `,
+              )}
             </div>
           `
-        : ''} 
+        : ''}
     `;
   }
 }
