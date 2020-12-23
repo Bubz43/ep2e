@@ -10,41 +10,46 @@
 :host {
   display: grid;
   grid-auto-rows: min-content;
-
+// 
   overflow: hidden;
   min-width: 350px;
-  border: 1px solid var(--color-border);
-  border-top: none;
-  margin: 0 0.25rem
+  border: 1px groove var(--color-border);
+  background: linear-gradient(
+    45deg,
+    alphav(var(--color-bg), 0.75),
+    alphav(var(--color-bg-alt), 0.75)
+  );
+  // border-top: none;
+  // margin: 0 0.25rem
 }
 
 header {
-  padding: 0.5rem 1rem;
-  // background: alphav(var(--color-grey), 0.1);
-  // border-bottom: 1px solid var(--color-border);
-  button {
+  position: relative;
+  padding: 0.25rem 0.75rem;
+  // margin-top: 0.25rem;
+  text-shadow: 0 0 4px black;
+
+  .name {
     all: unset;
-    border-bottom: 1px solid var(--color-border);
-    font-family: var(--font-2);
-    @include truncate(350px);
-    font-size: 1rem;
+    font-size: larger;
+    display: block;
     margin-right: 0.25ch;
 
     &:hover,
     &:focus {
       cursor: pointer;
-      border-bottom-color: var(--color-text-lighter);
+      text-decoration: underline;
     }
   }
-  .details {
+  .info {
+    display: block;
     color: var(--color-text-lighter);
-    @include truncate(100%);
+    font-family: var(--font-2);
+    font-size: small;
   }
+
 }
 
-health-item {
-  --health-item-padding: 0.5rem 1rem;
-}
 
 // .movement,
 .armor {

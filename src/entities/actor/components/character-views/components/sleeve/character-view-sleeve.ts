@@ -51,33 +51,10 @@ export class CharacterViewSleeve extends LitElement {
     const physicalHealth = 'physicalHealth' in sleeve && sleeve.physicalHealth;
     const meshHealth = 'activeMeshHealth' in sleeve && sleeve.activeMeshHealth;
     const { armor, movementRates, movementModifiers } = this.character;
-    const { conditions } = sleeve;
-
-    /*
- const props = mapToObj(
-                    enumValues(ConditionType),
-                    (condition) => [condition, conditions.includes(condition)],
-                  );
-                  return renderSubmitForm({
-                    classes: 'conditions-form',
-                    props,
-                    update: (changed, orig) => {
-                      this.sleeve.updateConditions(
-                        enumValues(ConditionType).filter(
-                          (condition) => changed[condition] ?? orig[condition],
-                        ),
-                      );
-                    },
-                    fields: (conditions) =>
-                      enumValues(ConditionType).map((condition) =>
-                        renderLabeledCheckbox(conditions[condition]),
-                      ),
-                  });
-    */
     return html`
       <header>
-        <button @click=${this.sleeve.openForm}>${this.sleeve.name}</button>
-        <span class="details">
+        <button class="name" @click=${this.sleeve.openForm}>${this.sleeve.name}</button>
+        <span class="info">
           ${compact([
             'size' in sleeve && localize(sleeve.size),
             sleeve.subtype || localize(sleeve.type),
@@ -87,7 +64,7 @@ export class CharacterViewSleeve extends LitElement {
         >
       </header>
 
-      ${notEmpty(armor)
+      <!-- ${notEmpty(armor)
         ? html`
             <div
               class="armor"
@@ -144,7 +121,7 @@ export class CharacterViewSleeve extends LitElement {
               </div>
             </div>
           `
-        : ''}
+        : ''} -->
       ${physicalHealth
         ? html`
             <health-item

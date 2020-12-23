@@ -33,7 +33,7 @@ h3 {
   gap: 0.5ch;
   margin: 0;
   padding: 0;
-  font-size: larger;
+  font-size: var(--sl-header-font-size, larger);
   font-weight: bold;
   justify-self: start;
   flex: 1;

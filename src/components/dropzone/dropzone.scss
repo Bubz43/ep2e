@@ -8,16 +8,18 @@
 :host {
   display: block;
   transition: outline 50ms;
+  z-index: 1;
 }
 
-:host([ready]) {
+:host([ready]),
+:host([outlined]) {
   outline: 2px dashed var(--color-grey);
   outline-offset: -2px;
 }
 
+
 :host([outlined]) {
-  outline: 2px dashed var(--color-secondary);
-  outline-offset: -2px;
+  outline-color: var(--color-secondary);
   > * {
     pointer-events: none !important;
   }

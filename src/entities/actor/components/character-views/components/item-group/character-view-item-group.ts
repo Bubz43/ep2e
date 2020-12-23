@@ -139,21 +139,21 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
   }
 
   private dragItemCard = (ev: DragEvent) => {
-    if (ev.currentTarget instanceof ItemCardBase) {
-      if (this.allowSort) {
-        this.draggedItem = ev.currentTarget.item;
-      }
+    if (!(ev.currentTarget instanceof ItemCardBase)) return;
+    if (this.allowSort) {
+      this.draggedItem = ev.currentTarget.item;
       ev.currentTarget.addEventListener(
         'dragend',
         () => !this.droppedOnSelf && this.resetDraggedItems(),
         { once: true },
       );
-      setDragDrop(ev, {
-        type: DropType.Item,
-        ...this.character.actor.identifiers,
-        data: ev.currentTarget.item.data,
-      });
     }
+    
+    setDragDrop(ev, {
+      type: DropType.Item,
+      ...this.character.actor.identifiers,
+      data: ev.currentTarget.item.data,
+    });
   };
 
   @throttle(20, true)

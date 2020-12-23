@@ -34,11 +34,9 @@ character-view-header {
   z-index: 1;
 }
 
-// character-view-ego,
-// character-view-sleeve,
 .sections > * {
   border: none;
-  border: 1px solid var(--color-border);
+  border: 1px solid alphav(var(--color-border), 0.5);
   background: alphav(var(--color-bg), 0.1);
 }
 
@@ -68,6 +66,10 @@ character-view-header {
   //   margin: auto 0.25rem 0.25rem;
   // }
 
+  > * {
+    margin: 0.25rem;
+  }
+
   .sleeve-select {
     padding: 0.5rem;
     display: grid;
@@ -93,8 +95,17 @@ character-view-header {
   character-view-item-group::part(header) {
     padding: 0px 0.25rem 0 0.75rem;
     border: none;
-    background: alphav(var(--color-border), 0.25);
+    background: alphav(var(--color-bg-alt), 0.75);
+    // background: linear-gradient(
+    //   to bottom,
+    //   alphav(var(--color-bg), 0.85),
+    //   alphav(var(--color-bg-alt), 0.85)
+    // );
+    min-height: unset;
+    --sl-header-font-size: large;
   }
+
+
 
   .network {
     padding: 0.5rem;

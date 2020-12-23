@@ -9,47 +9,34 @@
 
 :host {
   display: grid;
-  // gap: 0.5rem;
   grid-auto-rows: min-content;
   height: max-content;
 }
 
+.ego-card {
+  border: 1px groove var(--color-border);
+  background: linear-gradient(
+    45deg,
+    alphav(var(--color-bg), 0.75),
+    alphav(var(--color-bg-alt), 0.75)
+  );
+}
 
 header {
   position: relative;
-  padding: 0.25rem 0.5rem;
-  margin-top: 0.25rem;
+  padding: 0.25rem 0.75rem;
   text-shadow: 0 0 4px black;
-  
-  // &::before {
-  //   content: '';
-  //   $size: 3.75rem;
-  //   height: $size;
-  //   width: $size;
-  //   position: absolute;
-  //   border-radius: 100%;
-  //   border: 2px solid var(--color-border);
-  //   // left: -2.5rem;
-  //   transform: translateX(-50%);
-  //   background: var(--color-bg);
-  //   z-index: -1;
-  //   opacity: 0.5;
-  //   top: 0;
-  // }
 
   .name {
     all: unset;
     font-size: larger;
     display: block;
-    // border-bottom: 1px solid var(--color-border);
-    // font-family: var(--font-2);
     margin-right: 0.25ch;
 
     &:hover,
     &:focus {
       cursor: pointer;
       text-decoration: underline;
-      // border-bottom-color: var(--color-text-lighter);
     }
   }
   .info {
@@ -58,8 +45,6 @@ header {
     font-family: var(--font-2);
     font-size: small;
   }
-
-  
 }
 
 .resource-points {
@@ -83,6 +68,7 @@ header {
   display: flex;
   flex-flow: row wrap;
   padding-left: 0.25rem;
+  margin-bottom: 0.5rem;
   position: relative;
 }
 
@@ -101,16 +87,6 @@ header {
       filter: hue-rotate(-30deg);
     }
   }
-}
-
-
-
-
-sl-section {
-  margin: 0 0.25rem;
-  // &:last-of-type::part(content) {
-  //   border-bottom: none;
-  // }
 }
 
 .header {
@@ -148,23 +124,24 @@ sl-section {
 .aptitudes-list {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-
 }
 .aptitudes-list,
 .rep-list,
 .skills-list {
-  // background: alphav(var(--color-grey), 0.03);
   background: alphav(var(--color-text), 0.01);
+  background: linear-gradient(
+    45deg,
+    alphav(var(--color-bg), 0.5),
+    alphav(var(--color-bg-alt), 0.5)
+  );
   margin: 0.25rem;
-  border: 2px groove var(--color-border);
+  border: 1px groove var(--color-border);
   padding: 0;
-  border-radius: 3px;
 }
 
 .aptitude {
   &-item {
     padding: 0.5rem 0.5rem 0.25rem;
-
   }
   &-name {
     text-align: center;
@@ -188,30 +165,22 @@ sl-section {
   }
 }
 
-health-item + mwc-tab-bar {
-  margin-top: 0;
-}
-
 mwc-tab-bar {
   --mdc-theme-primary: var(--color-grey);
-  --mdc-tab-height: 2.5rem;
-  // border-top: 1px solid var(--color-border);  
   margin: 0.25rem 0;
 }
 
 .skill-controls {
   @include inputReset();
-  // height: 1.25rem;
   input {
     text-align: center;
-    // height: 1.25rem;
     width: 100%;
     border: none;
-    padding: 0.25rem 0.5rem 0.25rem 0.5rem;
-    font-family: var(--font-3);;
-    // letter-spacing: 1px;
+    padding: 0.25rem 0.5rem;
+    font-family: var(--font-3);
+    background: rgba(black, 0.1);
     &:focus {
-      background: var(--color-bg);
+      background: rgba(black, 0.2);
     }
     &::-webkit-search-cancel-button {
       display: none;
@@ -222,7 +191,7 @@ mwc-tab-bar {
 .skills-list {
   column-count: 2;
   column-gap: 0;
-  $border: 2px groove var(--color-border);
+  $border: 1px groove var(--color-border);
   column-rule: $border;
   padding: 0.25rem 0 0;
   overflow: hidden;
@@ -247,7 +216,6 @@ mwc-tab-bar {
     column-span: all;
     list-style: none;
   }
-  
 }
 
 .skill-item {
@@ -337,10 +305,9 @@ mwc-tab-bar {
   }
 }
 
-
 .details {
   display: inline;
-  padding:  0.5rem;
+  padding: 0.5rem;
   > * {
     @include truncate(100%);
   }

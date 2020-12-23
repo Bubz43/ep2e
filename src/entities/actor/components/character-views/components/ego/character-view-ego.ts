@@ -32,7 +32,9 @@ import {
 import styles from './character-view-ego.scss';
 
 @customElement('character-view-ego')
-export class CharacterViewEgo extends TabsMixin(["stats", "details"])(LitElement) {
+export class CharacterViewEgo extends TabsMixin(['stats', 'details'])(
+  LitElement,
+) {
   static get is() {
     return 'character-view-ego' as const;
   }
@@ -97,7 +99,8 @@ export class CharacterViewEgo extends TabsMixin(["stats", "details"])(LitElement
   render() {
     const { filteredMotivations, settings } = this.ego;
     return html`
-      <header>
+     <section class="ego-card">
+     <header>
         ${settings.trackPoints
           ? html`
               <sl-animated-list class="resource-points">
@@ -122,8 +125,6 @@ export class CharacterViewEgo extends TabsMixin(["stats", "details"])(LitElement
               `${localize(this.ego.forkStatus)} ${localize('fork')}`,
           ]).join(' • ')}
         </span>
-
-  
       </header>
 
       ${this.ego.trackMentalHealth
@@ -150,101 +151,93 @@ export class CharacterViewEgo extends TabsMixin(["stats", "details"])(LitElement
               )}</sl-animated-list
             >
           `
-      : ''}
-        
-        ${this.renderTabBar()}
-              ${this.renderTabbedContent(this.activeTab)}
- 
+        : ''}
+     </section>
+      ${this.renderTabBar()} ${this.renderTabbedContent(this.activeTab)}
     `;
-  
   }
 
   protected renderTab(tab: LangEntry) {
-    return html` <mwc-tab data-tab=${tab} minWidth label=${localize(tab)}></mwc-tab> `;
+    return html`
+      <mwc-tab data-tab=${tab} minWidth label=${localize(tab)}></mwc-tab>
+    `;
   }
 
-  protected renderTabbedContent(tab: CharacterViewEgo["tabs"][number]) {
-    return tab === "stats" ? this.renderStats() : this.renderDetails();
+  protected renderTabbedContent(tab: CharacterViewEgo['tabs'][number]) {
+    return tab === 'stats' ? this.renderStats() : this.renderDetails();
   }
 
   protected renderStats() {
     const { active, know } = this.ego.groupedSkills;
 
     return html`
-       <div class="stats">
-       <ul class="aptitudes-list">
+      <div class="stats">
+        <ul class="aptitudes-list">
           ${enumValues(AptitudeType).map(this.renderAptitude)}
         </ul>
 
-      ${this.ego.trackReputations
-        ? html`
-            <ul class="rep-list">
-            ${this.ego.trackedReps.map(this.renderRep)}
-          </ul>
-          `
-        : ''}
-  
- 
-
-      <ul class="skills-list">
-        ${active?.map(this.renderSkill)}
-        ${notEmpty(know)
+        ${this.ego.trackReputations
           ? html`
-              <li class="divider" role="separator"></li>
-              ${know.map(this.renderSkill)}
+              <ul class="rep-list">
+                ${this.ego.trackedReps.map(this.renderRep)}
+              </ul>
             `
-      : ''}
+          : ''}
+
+        <ul class="skills-list">
+          ${active?.map(this.renderSkill)}
+          ${notEmpty(know)
+            ? html`
+                <li class="divider" role="separator"></li>
+                ${know.map(this.renderSkill)}
+              `
+            : ''}
           <li class="filter">
-          ${renderAutoForm({
-          classes: 'skill-controls',
-          storeOnInput: true,
-          noDebounce: true,
-          props: this.skillControls,
-          update: this.updateSkillControls,
-          fields: ({ filter }) => html`
-            <div
-              class="skill-filter"
-              @keypress=${this.findFirstUnfilteredSkill}
-            >
-              ${renderTextInput(filter, {
-                search: true,
-                placeholder: localize('filter'),
-              })}
-            </div>
-          `,
-        })}
+            ${renderAutoForm({
+              classes: 'skill-controls',
+              storeOnInput: true,
+              noDebounce: true,
+              props: this.skillControls,
+              update: this.updateSkillControls,
+              fields: ({ filter }) => html`
+                <div
+                  class="skill-filter"
+                  @keypress=${this.findFirstUnfilteredSkill}
+                >
+                  ${renderTextInput(filter, {
+                    search: true,
+                    placeholder: localize('filter'),
+                  })}
+                </div>
+              `,
+            })}
           </li>
-      </ul>
-       </div>
-
-     
-    `
-
+        </ul>
+      </div>
+    `;
   }
 
   protected renderDetails() {
     return html`
-               ${notEmpty(this.ego.details)
-              ? html`
-                  <div class="details">
-                    ${this.ego.details.map(
-                      ({ label, value }) => html`
-                        <span class="details"
-                          >${label} <span class="value">${value}</span></span
-                        >
-                      `,
-                    )}
-                  </div>
-                `
-              : ''}
-            ${this.ego.description
-              ? html`
-                  <enriched-html
-                    .content=${this.ego.description}
-                  ></enriched-html>
-                `
-              : ''}
-    `
+      ${notEmpty(this.ego.details)
+        ? html`
+            <div class="details">
+              ${this.ego.details.map(
+                ({ label, value }) => html`
+                  <span class="details"
+                    >${label} <span class="value">${value}</span></span
+                  >
+                `,
+              )}
+            </div>
+          `
+        : ''}
+      ${this.ego.description
+        ? html`
+            <enriched-html .content=${this.ego.description}></enriched-html>
+          `
+        : ''}
+    `;
   }
 
   private renderAptitude = (type: AptitudeType) => {
