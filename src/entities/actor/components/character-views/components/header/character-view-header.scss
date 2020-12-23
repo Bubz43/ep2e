@@ -20,9 +20,13 @@
   grid: 0.75rem auto auto 0.75rem / min-content 1fr min-content;
   grid-template-areas:
     'img .. ..'
-    'img name name'
+    'img name init'
     'img actions trash'
     'img .. ..';
+
+    .initiative {
+      grid-area: init;
+    }
 }
 
 .image-wrapper {
@@ -79,6 +83,7 @@
 
 .restore-popover {
   grid-area: trash;
+  justify-self: end;
 }
 
 h2 {

@@ -42,13 +42,15 @@ export const TabsMixin = <T extends LangEntry>(tabs: readonly T[]) => (
       return true;
     }
 
+    protected renderTab(tab: LangEntry) {
+      return html` <mwc-tab data-tab=${tab} label=${localize(tab)}></mwc-tab> `;
+    }
+
     protected renderTabBar(slot?: string) {
       const tabTemplates: TemplateResult[] = [];
       for (const tab of tabs) {
         if (this.shouldRenderTab(tab)) {
-          tabTemplates.push(html`
-            <mwc-tab data-tab=${tab} label=${localize(tab)}></mwc-tab>
-          `);
+          tabTemplates.push(this.renderTab(tab));
         }
       }
       return html`<mwc-tab-bar

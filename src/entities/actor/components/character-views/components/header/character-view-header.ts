@@ -109,6 +109,11 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
         </button>
       </sl-popover>
       <h2>${name}</h2>
+      <sl-group
+          class="initiative"
+          label=${localize('initiative')}
+          >${this.character.initiative}</sl-group
+        >
       <div class="actions">
         ${this.renderActionIconButton({
           icon: 'search',

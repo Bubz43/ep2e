@@ -48,6 +48,7 @@ sl-dropzone {
 .sort-toggle {
   --mdc-icon-size: 1.5rem;
   color: var(--color-text-lighter);
+  @include animate-css(fadeIn, 400ms);
   &.active {
     color: var(--color-secondary);
   }

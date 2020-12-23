@@ -44,7 +44,6 @@ character-view-header {
 
 .side {
   grid-area: side;
-  display: grid;
   overflow-y: scroll;
   overflow-x: hidden;
   max-height: calc(100vh - 150px);

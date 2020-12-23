@@ -153,7 +153,8 @@ sl-section {
 .aptitudes-list,
 .rep-list,
 .skills-list {
-  background: alphav(var(--color-bg-alt), 0.7);
+  // background: alphav(var(--color-grey), 0.03);
+  background: alphav(var(--color-text), 0.01);
   margin: 0.25rem;
   border: 2px groove var(--color-border);
   padding: 0;
@@ -206,11 +207,14 @@ mwc-tab-bar {
     // height: 1.25rem;
     width: 100%;
     border: none;
-    padding: 0.25rem 0.5rem 0.25rem 1.4rem;
+    padding: 0.25rem 0.5rem 0.25rem 0.5rem;
     font-family: var(--font-3);;
     // letter-spacing: 1px;
     &:focus {
       background: var(--color-bg);
+    }
+    &::-webkit-search-cancel-button {
+      display: none;
     }
   }
 }
@@ -335,7 +339,7 @@ mwc-tab-bar {
 
 
 .details {
-  // display: flex;
+  display: inline;
   padding:  0.5rem;
   > * {
     @include truncate(100%);

@@ -8,7 +8,7 @@ import { idProp } from '@src/features/feature-helpers';
 import { MotivationStance } from '@src/features/motivations';
 import { maxFavors } from '@src/features/reputations';
 import { Skill, skillFilterCheck } from '@src/features/skills';
-import { localize } from '@src/foundry/localization';
+import { LangEntry, localize } from '@src/foundry/localization';
 import { HealthEditor } from '@src/health/components/health-editor/health-editor';
 import { notEmpty, safeMerge } from '@src/utility/helpers';
 import {
@@ -123,12 +123,7 @@ export class CharacterViewEgo extends TabsMixin(["stats", "details"])(LitElement
           ]).join(' • ')}
         </span>
 
-        <!-- <sl-group
-          class="initiative"
-          label=${localize('initiative')}
-          >${this.character.initiative}</sl-group
-        >
-   -->
+  
       </header>
 
       ${this.ego.trackMentalHealth
@@ -161,35 +156,11 @@ export class CharacterViewEgo extends TabsMixin(["stats", "details"])(LitElement
               ${this.renderTabbedContent(this.activeTab)}
  
     `;
-    // return html`
-    //   <header class="header">
-    //     <button @click=${this.ego.openForm}>${this.ego.name}</button>
-    //     <span class="details">
-    //       ${compact([
-    //         this.ego.egoType,
-    //         this.ego.forkStatus &&
-    //           `${localize(this.ego.forkStatus)} ${localize('fork')}`,
-    //       ]).join(' • ')}</span
-    //     >
-    //     ${showMore
-    //       ? html`
-    //           <mwc-icon-button
-    //             icon=${this.expanded ? 'unfold_less' : 'unfold_more'}
-    //             @click=${this.toggleExpanded}
-    //           ></mwc-icon-button>
-    //         `
-    //       : ''}
-    //   </header>
-
-
-
-    //   <sl-section heading=${localize('skills')} flipped>
   
+  }
 
-    //   </sl-section>
-
-
-    // `;
+  protected renderTab(tab: LangEntry) {
+    return html` <mwc-tab data-tab=${tab} minWidth label=${localize(tab)}></mwc-tab> `;
   }
 
   protected renderTabbedContent(tab: CharacterViewEgo["tabs"][number]) {
