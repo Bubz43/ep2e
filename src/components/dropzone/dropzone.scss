@@ -17,7 +17,6 @@
   outline-offset: -2px;
 }
 
-
 :host([outlined]) {
   outline-color: var(--color-secondary);
   > * {

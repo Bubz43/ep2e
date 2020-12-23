@@ -99,60 +99,60 @@ export class CharacterViewEgo extends TabsMixin(['stats', 'details'])(
   render() {
     const { filteredMotivations, settings } = this.ego;
     return html`
-     <section class="ego-card">
-     <header>
-        ${settings.trackPoints
+      <section class="ego-card">
+        <header>
+          ${settings.trackPoints
+            ? html`
+                <sl-animated-list class="resource-points">
+                  ${repeat(
+                    this.ego.points,
+                    prop('point'),
+                    ({ label, value }) => html`
+                      <li>${label} <span class="value">${value}</span></li>
+                    `,
+                  )}
+                </sl-animated-list>
+              `
+            : ''}
+
+          <button class="name" @click=${this.ego.openForm}>
+            ${this.ego.name}
+          </button>
+          <span class="info">
+            ${compact([
+              `${this.ego.egoType} ${localize('ego')}`,
+              this.ego.forkStatus &&
+                `${localize(this.ego.forkStatus)} ${localize('fork')}`,
+            ]).join(' • ')}
+          </span>
+        </header>
+
+        ${this.ego.trackMentalHealth
           ? html`
-              <sl-animated-list class="resource-points">
-                ${repeat(
-                  this.ego.points,
-                  prop('point'),
-                  ({ label, value }) => html`
-                    <li>${label} <span class="value">${value}</span></li>
-                  `,
-                )}
-              </sl-animated-list>
+              <health-item
+                @click=${this.requestMentalHealthDrawer}
+                @contextmenu=${this.openHealthEditor}
+                clickable
+                class="mental-health-view"
+                .health=${this.ego.mentalHealth}
+                ><span slot="source"
+                  >${localize('mentalHealth')}</span
+                ></health-item
+              >
             `
           : ''}
-
-        <button class="name" @click=${this.ego.openForm}>
-          ${this.ego.name}
-        </button>
-        <span class="info">
-          ${compact([
-            `${this.ego.egoType} ${localize('ego')}`,
-            this.ego.forkStatus &&
-              `${localize(this.ego.forkStatus)} ${localize('fork')}`,
-          ]).join(' • ')}
-        </span>
-      </header>
-
-      ${this.ego.trackMentalHealth
-        ? html`
-            <health-item
-              @click=${this.requestMentalHealthDrawer}
-              @contextmenu=${this.openHealthEditor}
-              clickable
-              class="mental-health-view"
-              .health=${this.ego.mentalHealth}
-              ><span slot="source"
-                >${localize('mentalHealth')}</span
-              ></health-item
-            >
-          `
-        : ''}
-      ${notEmpty(filteredMotivations)
-        ? html`
-            <sl-animated-list class="motivations-list"
-              >${repeat(
-                filteredMotivations,
-                idProp,
-                this.renderMotivation,
-              )}</sl-animated-list
-            >
-          `
-        : ''}
-     </section>
+        ${notEmpty(filteredMotivations)
+          ? html`
+              <sl-animated-list class="motivations-list"
+                >${repeat(
+                  filteredMotivations,
+                  idProp,
+                  this.renderMotivation,
+                )}</sl-animated-list
+              >
+            `
+          : ''}
+      </section>
       ${this.renderTabBar()} ${this.renderTabbedContent(this.activeTab)}
     `;
   }

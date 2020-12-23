@@ -148,7 +148,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
         { once: true },
       );
     }
-    
+
     setDragDrop(ev, {
       type: DropType.Item,
       ...this.character.actor.identifiers,

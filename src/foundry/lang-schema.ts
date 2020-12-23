@@ -1365,7 +1365,8 @@ type LangEntries =
   | 'cummulative'
   | 'beforeModifiers'
   | 'resist'
-  | 'finished' | "stats"
+  | 'finished'
+  | 'stats';
 type FullNames =
   | 'cog'
   | 'int'

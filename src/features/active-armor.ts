@@ -121,7 +121,7 @@ export class ActiveArmor
   }
 
   get layers() {
-    return this.get("layers")
+    return this.get('layers');
   }
 
   get excessLayers() {
@@ -205,8 +205,6 @@ export class ActiveArmor
       `icons/armor/${this.excessLayers ? 'layered-armor' : 'shield'}.svg`,
     );
   }
-
-  
 
   static physicalTypes = [ArmorType.Energy, ArmorType.Kinetic];
 

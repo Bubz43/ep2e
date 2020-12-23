@@ -140,7 +140,7 @@ export class CharacterViewSleeve extends LitElement {
         })}
         ${notEmpty(movementRates)
           ? html`
-              ${sortBy(movementRates, ({ type}) => localize(type).length).map(
+              ${sortBy(movementRates, ({ type }) => localize(type).length).map(
                 ({ type, base, full }) => html`
                   <span class="movement-rate"
                     >${localize(type)}

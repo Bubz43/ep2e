@@ -238,12 +238,11 @@ export class CharacterView extends CharacterViewBase {
                       data-condition=${condition}
                       @click=${this.toggleCondition}
                       data-tooltip=${localize(condition)}
-                        @mouseover=${tooltip.fromData}
+                      @mouseover=${tooltip.fromData}
                     >
                       <img
                         src=${conditionIcons[condition]}
                         class=${conditions.includes(condition) ? 'active' : ''}
-                   
                         height="22px"
                       />
                       ${temporaryConditionSources.has(condition)

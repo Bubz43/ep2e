@@ -74,7 +74,7 @@ export class MeshHealthDamageEditor extends HealthEditBase<
               ${this.editableDamage.multiplier !== 1
                 ? html`
                     <span
-                      >${localize("SHORT", "damageValue")}
+                      >${localize('SHORT', 'damageValue')}
                       ${this.damageValue}</span
                     >
                   `

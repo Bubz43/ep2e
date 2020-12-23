@@ -141,10 +141,13 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       this.sleeve?.epData.damagedArmor,
     );
     this._appliedEffects.add(this.armor.currentEffects);
-    
-      for (const condition of this.conditions) {
-        this._appliedEffects.add({ source: localize(condition), effects: getConditionEffects(condition)})
-      }
+
+    for (const condition of this.conditions) {
+      this._appliedEffects.add({
+        source: localize(condition),
+        effects: getConditionEffects(condition),
+      });
+    }
 
     const egoFormWindow = getWindow(this.updater);
     if (egoFormWindow?.isConnected) this.ego.openForm?.();
@@ -158,9 +161,9 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
   toggleCondition(condition: ConditionType) {
     const conditions = new Set(this.conditions);
-    conditions.delete(condition) || conditions.add(condition)
-   
-    return this.sleeve?.updateConditions([...conditions])
+    conditions.delete(condition) || conditions.add(condition);
+
+    return this.sleeve?.updateConditions([...conditions]);
   }
 
   updateConditions(conditions: ConditionType[]) {

@@ -109,11 +109,9 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
         </button>
       </sl-popover>
       <h2>${name}</h2>
-      <sl-group
-          class="initiative"
-          label=${localize('initiative')}
-          >${this.character.initiative}</sl-group
-        >
+      <sl-group class="initiative" label=${localize('initiative')}
+        >${this.character.initiative}</sl-group
+      >
       <div class="actions">
         ${this.renderActionIconButton({
           icon: 'search',
@@ -149,11 +147,10 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
           tooltipText: `${localize('network')} ${localize('settings')}`,
           renderer: CharacterDrawerRenderer.NetworkSettings,
         })}
-
-${this.character.poolHolder === this.character
+        ${this.character.poolHolder === this.character
           ? this.renderRecharges()
-      : ''}
-          
+          : ''}
+
         <mwc-button
           class="effects-toggle"
           dense
@@ -161,8 +158,6 @@ ${this.character.poolHolder === this.character
           data-renderer=${CharacterDrawerRenderer.Effects}
           @click=${this.requestDrawerRender}
         ></mwc-button>
-
-      
       </div>
       <sl-popover
         class="restore-popover"

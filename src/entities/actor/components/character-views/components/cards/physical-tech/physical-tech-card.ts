@@ -83,15 +83,15 @@ export class PhysicalTechCard extends ItemCardBase {
             ></mwc-icon-button>
           `
         : ''}
-
-${item.equipped ? "" : html`
- <mwc-icon-button
-        @click=${this.toggleEquipped}
-        icon=${item.equipped ? 'archive' : 'unarchive'}
-        ?disabled=${!editable}
-      ></mwc-icon-button>
-`}
-     
+      ${item.equipped
+        ? ''
+        : html`
+            <mwc-icon-button
+              @click=${this.toggleEquipped}
+              icon=${item.equipped ? 'archive' : 'unarchive'}
+              ?disabled=${!editable}
+            ></mwc-icon-button>
+          `}
     `;
   }
 
