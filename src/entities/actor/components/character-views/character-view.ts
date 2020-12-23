@@ -8,7 +8,7 @@ import {
   SubstanceUseMethod,
 } from '@src/entities/item/proxies/substance';
 import { PoolItem } from '@src/features/components/pool-item/pool-item';
-import { conditionIcons } from '@src/features/conditions';
+import { conditionIcons, ConditionType } from '@src/features/conditions';
 import { formatEffect, Source } from '@src/features/effects';
 import { idProp, matchID } from '@src/features/feature-helpers';
 import type { ReadonlyPool } from '@src/features/pool';
@@ -185,7 +185,7 @@ export class CharacterView extends CharacterViewBase {
       ></character-view-header>
 
       <div class="side">
-      ${this.character.sleeve
+        ${this.character.sleeve
           ? html`
               <character-view-sleeve
                 .character=${this.character}
@@ -203,12 +203,11 @@ export class CharacterView extends CharacterViewBase {
                 ></mwc-button>
               </div>
             `}
-            
+
         <character-view-ego
           .character=${this.character}
           .ego=${this.character.ego}
         ></character-view-ego>
-    
       </div>
       ${this.renderDrawer()}
 
@@ -223,7 +222,21 @@ export class CharacterView extends CharacterViewBase {
                 dense
                 >${localize('conditions')}</mwc-button
               >
-              ${notEmpty(conditions)
+              <div class="conditions-list">
+              ${enumValues(ConditionType).map(
+                (condition) => html`
+                  <img
+                    src=${conditionIcons[condition]}
+                    class=${conditions.includes(condition)  ?  "active": ''}
+                    data-tooltip=${localize(condition)}
+                    @mouseover=${tooltip.fromData}
+                    height="20px"
+
+                  />
+                `,
+              )}
+              </div>
+              <!-- ${notEmpty(conditions)
                 ? html`
                     ${conditions.map(
                       (condition) =>
@@ -234,7 +247,7 @@ export class CharacterView extends CharacterViewBase {
                         />`,
                     )}
                   `
-                : html`<span>${localize('none')}</span>`}
+                : html`<span>${localize('none')}</span>`} -->
             </div>
 
             <sl-dropzone

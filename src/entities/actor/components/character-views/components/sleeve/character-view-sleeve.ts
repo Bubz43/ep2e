@@ -5,6 +5,7 @@ import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import { localize } from '@src/foundry/localization';
 import { clickIfEnter, notEmpty } from '@src/utility/helpers';
+import { localImage } from '@src/utility/images';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { compact } from 'remeda';
@@ -66,25 +67,26 @@ export class CharacterViewSleeve extends LitElement {
 
       ${notEmpty(armor)
         ? html`
-            <!-- <div
+            <div
               class="armor"
               @click=${this.viewArmor}
               @keydown=${clickIfEnter}
               tabindex="0"
               role="button"
             >
-              <span class="label"
+            <img src=${localImage("icons/armor/shield.svg")} height="40px" />
+              <!-- <span class="label"
                 >${localize('armorRating')}
                 <span class="layers">
                   ${armor.get('layers')} ${localize('layers')}</span
                 ></span
-              >
-              <span class="info">
+              > -->
+              <!-- <span class="info">
                 ${armor.concealable
                   ? html`<span>${localize('concealable')}</span>`
                   : ''}
-              </span>
-              <span class="values"
+              </span> -->
+              <div class="values"
                 >${enumValues(ArmorType).map((type) => {
                   const value = armor.getClamped(type);
                   const reduced = armor.reducedArmoors.has(type);
@@ -94,9 +96,9 @@ export class CharacterViewSleeve extends LitElement {
                         <span class="value">${value}</span></span
                       >`
                     : '';
-                })}</span
+                })}</div
               >
-            </div> -->
+            </div>
           `
         : ''}
     

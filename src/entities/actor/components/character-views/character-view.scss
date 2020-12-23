@@ -170,8 +170,18 @@ character-view-header {
   align-items: center;
   --mdc-theme-primary: var(--color-grey);
   padding: 0.25rem;
+  .conditions-list {
+    display: flex;
+    justify-content: space-evenly;
+    flex: 1;
+  }
   img {
-    margin-left: 0.25rem;
+    opacity: 0.25;
+    transition: opacity 300ms;
+    display: block;
+    &.active {
+      opacity: 1;
+    }
   }
 }
 

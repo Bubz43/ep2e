@@ -78,7 +78,7 @@ header {
     margin-bottom: 0.25rem;
     padding: 0 0.5rem;
     border-radius: 3px;
-    
+
   }
   .mod {
     background: alphav(var(--color-negative), 0.2);
@@ -100,47 +100,71 @@ header {
 }
 
 .armor {
-  display: grid;
-  grid-template-areas:
-    'label info'
-    'values values';
-
-  grid-template-columns: 1fr 1fr;
-  padding: 0.25rem 1rem 0.35rem;
+  // display: grid;
+  // grid-template-areas:
+  //   'label info'
+  //   'values values';
+  padding: 0 0.25rem;;
+  display: flex;
+  align-items: center;
+  position: relative;
   cursor: pointer;
-  .label {
-    grid-area: label;
-    font-size: large;
-    white-space: nowrap;
-    margin: 0 0 0 0.5rem;
+  z-index: 0;
+  img {
+    display: block;
+    // position: absolute;
+    // left: 0;
+    z-index: 0;
+    opacity: 0.35;
   }
-  .info {
-    grid-area: info;
-    color: var(--color-text-lighter);
-    align-self: end;
-    justify-self: end;
-    margin-right: 0.5rem;
-  }
-  .layers {
-    color: var(--color-text-lighter);
-    font-size: 1rem;
-  }
+
   .values {
     grid-area: values;
+    z-index: 1;
+    // padding-left: 1.5rem;
+    margin-left: -1rem;
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: 1fr;
-    column-gap: 0.25rem;
+    gap: 0.5ch;
     .rating {
+      display: inline-block;
       text-align: center;
-      background: alphav(var(--color-bg-alt), 0.75);
       white-space: nowrap;
+      margin-bottom: 0.25rem;
+      padding: 0 0.5rem;
+      border-radius: 3px;
+      background: alphav(var(--color-grey), 0.5);
+      border: 1px solid alphav(var(--color-grey), 0.65);
+      text-shadow: 0 0 3px black;
       .value {
         color: var(--color-text-lighter);
       }
       &.reduced {
-        color: lightv(var(--color-negative), 1.5);
+        .value {
+          color: lightv(var(--color-negative), 1.75);
+        }
       }
     }
   }
+
+  // grid-template-columns: 1fr 1fr;
+  // padding: 0.25rem 1rem 0.35rem;
+  // .label {
+  //   grid-area: label;
+  //   font-size: large;
+  //   white-space: nowrap;
+  //   margin: 0 0 0 0.5rem;
+  // }
+  // .info {
+  //   grid-area: info;
+  //   color: var(--color-text-lighter);
+  //   align-self: end;
+  //   justify-self: end;
+  //   margin-right: 0.5rem;
+  // }
+  // .layers {
+  //   color: var(--color-text-lighter);
+  //   font-size: 1rem;
+  // }
+
 }
