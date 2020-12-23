@@ -45,6 +45,10 @@ header {
     font-family: var(--font-2);
     font-size: small;
   }
+
+  &:last-child {
+    margin-bottom: 0.5rem;
+  }
 }
 
 .resource-points {
@@ -58,6 +62,7 @@ header {
     margin-left: 0.25rem;
     border-radius: 3px;
     list-style: none;
+    border: 1px solid alphav(var(--color-grey), 0.15);
   }
   .value {
     color: var(--color-text-lighter);

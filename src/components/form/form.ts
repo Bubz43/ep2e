@@ -183,9 +183,12 @@ export class Form extends LitElement {
     ev.stopPropagation();
     if (ev.key === 'Enter' && !ev.shiftKey) {
       this.validate(ev);
-      for (const button of this.submitButtons) {
-        (button as HTMLElement).click();
+      if (ev.target instanceof HTMLInputElement || ev.target instanceof HTMLTextAreaElement) {
+        for (const button of this.submitButtons) {
+          (button as HTMLElement).click();
+        }
       }
+    
     }
   }
 

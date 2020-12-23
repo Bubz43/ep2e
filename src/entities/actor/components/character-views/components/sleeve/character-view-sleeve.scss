@@ -66,35 +66,37 @@ header {
 }
 
 .movement {
-  padding: 0.15rem 1rem 0.35rem;
-  display: grid;
-  grid-template-areas:
-    'label info'
-    'rates rates';
-  .label {
-    font-size: large;
-    margin-left: 0.5rem;
-    grid-area: label;
-  }
-  .rates {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 0.25rem;
-    grid-area: rates;
-  }
+  padding: 0.25rem 0.5rem;
   .info {
-    grid-area: info;
+    float: right;
   }
+  .mod,
   .movement-rate {
+    display: inline-block;
     text-align: center;
-    background: alphav(var(--color-bg-alt), 0.75);
     white-space: nowrap;
-    flex: 1;
+    margin-bottom: 0.25rem;
+    padding: 0 0.5rem;
+    border-radius: 3px;
+    
   }
-  .rate {
-    color: var(--color-text-lighter);
-    margin-right: 0.5ch;
+  .mod {
+    background: alphav(var(--color-negative), 0.2);
+    border: 1px solid alphav(var(--color-negative), 0.25);
+    & + .mod {
+      margin-left: 0.5rem;
+    }
   }
+
+  .movement-rate {
+    background: alphav(var(--color-grey), 0.1);
+    border: 1px solid alphav(var(--color-grey), 0.15);
+    .rate {
+      color: var(--color-text-lighter);
+      margin-right: 0.5ch;
+    }
+  }
+
 }
 
 .armor {

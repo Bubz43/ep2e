@@ -107,6 +107,7 @@
   &.open {
     background: rgba(black, 0.4);
     pointer-events: initial;
+    z-index: 1;
     .drawer-content {
       transform: none;
     }

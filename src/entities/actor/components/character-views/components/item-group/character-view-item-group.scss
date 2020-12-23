@@ -12,6 +12,12 @@
 
 sl-dropzone {
   height: 100%;
+  &[ready],
+  &[outlined] {
+    [part='header'] {
+      z-index: -1;
+    }
+  }
 }
 
 .proxy-list {

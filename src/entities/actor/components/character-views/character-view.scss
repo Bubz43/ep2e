@@ -95,12 +95,12 @@ character-view-header {
   character-view-item-group::part(header) {
     padding: 0px 0.25rem 0 0.75rem;
     border: none;
-    background: alphav(var(--color-bg-alt), 0.75);
-    // background: linear-gradient(
-    //   to bottom,
-    //   alphav(var(--color-bg), 0.85),
-    //   alphav(var(--color-bg-alt), 0.85)
-    // );
+    // background: alphav(var(--color-bg-alt), 0.75);
+    background: linear-gradient(
+      to bottom,
+      alphav(var(--color-bg), 0.85),
+      alphav(var(--color-bg-alt), 0.85)
+    );
     min-height: unset;
     --sl-header-font-size: large;
   }

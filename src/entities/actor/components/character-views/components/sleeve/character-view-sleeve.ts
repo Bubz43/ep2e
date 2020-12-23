@@ -64,9 +64,9 @@ export class CharacterViewSleeve extends LitElement {
         >
       </header>
 
-      <!-- ${notEmpty(armor)
+      ${notEmpty(armor)
         ? html`
-            <div
+            <!-- <div
               class="armor"
               @click=${this.viewArmor}
               @keydown=${clickIfEnter}
@@ -96,32 +96,10 @@ export class CharacterViewSleeve extends LitElement {
                     : '';
                 })}</span
               >
-            </div>
+            </div> -->
           `
         : ''}
-      ${notEmpty(movementRates)
-        ? html`
-            <div class="movement">
-              <span class="label">${localize('movement')}</span>
-              <span class="info">
-                ${(['encumbered', 'overburdened'] as const).map((mod) => {
-                  const val = movementModifiers[mod];
-                  return val ? localize(mod) : '';
-                })}
-              </span>
-              <div class="rates">
-                ${movementRates.map(
-                  ({ type, base, full }) => html`
-                    <span class="movement-rate"
-                      >${localize(type)}
-                      <span class="rate">${base} / ${full}</span></span
-                    >
-                  `,
-                )}
-              </div>
-            </div>
-          `
-        : ''} -->
+    
       ${physicalHealth
         ? html`
             <health-item
@@ -148,6 +126,27 @@ export class CharacterViewSleeve extends LitElement {
               : ''}
           </health-item>`
         : ''}
+
+${notEmpty(movementRates)
+        ? html`
+            <div class="movement">
+              <span class="info">
+                ${(['encumbered', 'overburdened'] as const).map((mod) => {
+                  const val = movementModifiers[mod];
+                  return val ? html`<span class="mod">${localize(mod)}</span>` : '';
+                })}
+              </span>
+                ${movementRates.map(
+                  ({ type, base, full }) => html`
+                    <span class="movement-rate"
+                      >${localize(type)}
+                      <span class="rate">${base} / ${full}</span></span
+                    >
+                  `,
+                )}
+            </div>
+          `
+        : ''} 
     `;
   }
 }

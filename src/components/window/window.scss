@@ -39,6 +39,8 @@
   -webkit-backdrop-filter: blur(5px) contrast(85%);
   backdrop-filter: blur(5px) contrast(85%);
   box-shadow: 0px 6px 5px rgba(0, 0, 0, 0.712), 0 0 10px black, 0 0 1px white;
+  box-shadow: 0 0 10px black;
+
   // @supports (not (backdrop-filter: blur(3px) contrast(30%))) and
   //   (not (-webkit-backdrop-filter: blur(3px) contrast(30%))) {
   //   background: alphav(var(--color-bg), 0.97);
@@ -148,9 +150,10 @@ slot[name='footer'] {
 .heading {
   @include truncate(400px);
   margin: 0 2px 0 1rem;
-  font-size: 1.1rem;
+  font-size: larger;
   text-shadow: 0px 0px 10px black;
   flex: 1;
+  align-self: center;
 }
 
 .controls {
