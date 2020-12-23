@@ -28,7 +28,7 @@ import type { ActorEntity, SleeveType } from '@src/entities/models';
 import type { UpdateStore } from '@src/entities/update-store';
 import { taskState } from '@src/features/actions';
 import { ActiveArmor } from '@src/features/active-armor';
-import type { ConditionType } from '@src/features/conditions';
+import { ConditionType, getConditionEffects } from '@src/features/conditions';
 import {
   DurationEffectTarget,
   EffectType,
@@ -141,6 +141,10 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       this.sleeve?.epData.damagedArmor,
     );
     this._appliedEffects.add(this.armor.currentEffects);
+    
+      for (const condition of this.conditions) {
+        this._appliedEffects.add({ source: localize(condition), effects: getConditionEffects(condition)})
+      }
 
     const egoFormWindow = getWindow(this.updater);
     if (egoFormWindow?.isConnected) this.ego.openForm?.();

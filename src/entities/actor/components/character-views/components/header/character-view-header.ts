@@ -150,6 +150,10 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
           renderer: CharacterDrawerRenderer.NetworkSettings,
         })}
 
+${this.character.poolHolder === this.character
+          ? this.renderRecharges()
+      : ''}
+          
         <mwc-button
           class="effects-toggle"
           dense
@@ -158,9 +162,7 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
           @click=${this.requestDrawerRender}
         ></mwc-button>
 
-        ${this.character.poolHolder === this.character
-          ? this.renderRecharges()
-          : ''}
+      
       </div>
       <sl-popover
         class="restore-popover"
