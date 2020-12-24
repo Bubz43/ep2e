@@ -229,10 +229,10 @@ export class CharacterView extends CharacterViewBase {
               </div>
             `}
 
-        <!-- <character-view-tabbed-section
+        <character-view-tabbed-section
           .character=${this.character}
           .ego=${this.character.ego}
-        ></character-view-tabbed-section> -->
+        ></character-view-tabbed-section>
       </div>
       ${this.renderDrawer()}
 

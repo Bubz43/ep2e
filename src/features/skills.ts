@@ -3,6 +3,7 @@ import { LangEntry, localize } from '@src/foundry/localization';
 import { compact } from 'remeda';
 import type { SetRequired } from 'type-fest';
 import { createFeature } from './feature-helpers';
+import { Pool } from './pool';
 
 export type Aptitudes = Record<AptitudeType, number>;
 
@@ -264,6 +265,7 @@ export const skillFilterCheck = (filter: string) => {
         fullName,
         localize(category),
         linkedAptitude ? localize('FULL', linkedAptitude) : '',
+        linkedAptitude ? localize(Pool.linkedToAptitude(linkedAptitude)) : '',
         points === 0 ? localize('defaulting') : '',
       ]).join('__'),
     );

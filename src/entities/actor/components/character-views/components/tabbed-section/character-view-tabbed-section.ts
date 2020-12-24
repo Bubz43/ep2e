@@ -20,7 +20,7 @@ import {
 import { classMap } from 'lit-html/directives/class-map';
 import { live } from 'lit-html/directives/live';
 import { first, range, reject } from 'remeda';
-import styles from './tabbed-section.scss';
+import styles from './character-view-tabbed-section.scss';
 
 @customElement('character-view-tabbed-section')
 export class CharacterViewTabbedSection extends TabsMixin(['stats', 'details'])(
@@ -75,7 +75,8 @@ export class CharacterViewTabbedSection extends TabsMixin(['stats', 'details'])(
 
   render() {
     return html`
-      ${this.renderTabBar()} ${this.renderTabbedContent(this.activeTab)}
+    ${this.renderStats()}
+      <!-- ${this.renderTabBar()} ${this.renderTabbedContent(this.activeTab)} -->
     `;
   }
 

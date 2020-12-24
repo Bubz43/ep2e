@@ -50,8 +50,18 @@ character-view-header {
   min-height: 100%;
   background: rgba(black, 0.03);
   scrollbar-color: #77889980 #28272700;
-  padding: 0.5rem 0.25rem;;
+  padding: 0.25rem;;
   gap: 0.25rem;
+
+  > * {
+    height: max-content;
+    border: 1px groove var(--color-border);
+    background: linear-gradient(
+      45deg,
+      alphav(var(--color-bg), 0.8),
+      alphav(var(--color-bg-alt), 0.8)
+    );
+  }
 
   &::-webkit-scrollbar {
     width: 2px;

@@ -745,6 +745,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         this.traits.push(item);
         this._appliedEffects.add(item.currentEffects);
       } else if (item.type === ItemType.Sleight) {
+        this.sleights.push(item);
         egoItems.set(item.id, item);
       }
     }

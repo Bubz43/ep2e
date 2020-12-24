@@ -10,16 +10,6 @@
 :host {
   display: grid;
   grid-auto-rows: min-content;
-  overflow: hidden;
-  min-width: 350px;
-  border: 1px groove var(--color-border);
-  height: max-content;
-
-  background: linear-gradient(
-    45deg,
-    alphav(var(--color-bg), 0.8),
-    alphav(var(--color-bg-alt), 0.8)
-  );
 }
 
 header {

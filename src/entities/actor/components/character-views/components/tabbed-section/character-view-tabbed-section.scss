@@ -9,7 +9,6 @@
 
 :host {
   display: block;
-  
 }
 
 .aptitudes-list {
@@ -19,15 +18,17 @@
 .aptitudes-list,
 .rep-list,
 .skills-list {
-  background: alphav(var(--color-text), 0.01);
-  background: linear-gradient(
-    45deg,
-    alphav(var(--color-bg), 0.5),
-    alphav(var(--color-bg-alt), 0.5)
-  );
-  margin: 0.25rem;
-  border: 1px groove var(--color-border);
+  // background: linear-gradient(
+  //   45deg,
+  //   alphav(var(--color-bg), 0.5),
+  //   alphav(var(--color-bg-alt), 0.5)
+  // );
+  // margin: 0.25rem;
+  // border: 1px groove var(--color-border);
   padding: 0;
+  & + * {
+    border-top: 1px groove var(--color-border);
+  }
 }
 
 .aptitude {
@@ -78,6 +79,8 @@ mwc-tab-bar {
     }
   }
 }
+
+
 
 .skills-list {
   column-count: 2;
@@ -144,7 +147,7 @@ mwc-tab-bar {
   gap: 2px;
   position: relative;
   font-size: 1.1rem;
-  padding: 0.25rem 0.25rem 0.5rem;
+  padding: 0.25rem;
   z-index: 0;
   &:focus {
     outline: none;
