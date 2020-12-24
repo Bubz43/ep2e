@@ -308,6 +308,9 @@ export class CharacterViewEgo extends TabsMixin(['stats', 'details'])(
           >
           ${motivation.cause}
         </button>
+        ${motivation.goals.length ? html`
+        <notification-coin value=${motivation.goals.length}></notification-coin>
+        ` : ""}
       </li>
     `;
   };

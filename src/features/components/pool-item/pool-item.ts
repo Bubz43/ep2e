@@ -48,7 +48,7 @@ export class PoolItem extends mix(LitElement).with(LazyRipple) {
         ${this.renderRipple()}
         <img src=${pool.icon} class="pool-image" />
         <div class="pool-value">
-          ${pool.available} <small>${pool.max}</small>
+          <span class="points">${pool.available}</span> <small>${pool.max}</small>
         </div>
         <div class="pool-name">${localize(pool.type)}</div>
       </div>

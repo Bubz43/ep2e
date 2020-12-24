@@ -25,9 +25,6 @@ import {
   CharacterDrawerRenderEvent,
 } from '../../character-drawer-render-event';
 import styles from './character-view-sleeve.scss';
-import { distanceBetweenTokens } from '@src/foundry/token-helpers';
-import type { SplitIncludingDelimiters } from 'type-fest/delimiter-case';
-import type { Split } from 'type-fest/camel-case';
 
 @customElement('character-view-sleeve')
 export class CharacterViewSleeve extends LitElement {
@@ -41,7 +38,7 @@ export class CharacterViewSleeve extends LitElement {
 
   @property({ attribute: false }) sleeve!: Sleeve;
 
-  @property({ attribute: false }) token?: Token;
+  @property({ attribute: false }) token?: Token | null;
 
   private viewArmor() {
     this.requestDrawer(CharacterDrawerRenderer.Armor);

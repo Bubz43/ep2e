@@ -426,7 +426,8 @@ export class CharacterView extends CharacterViewBase {
     <pool-item
       @click=${this.openPoolMenu}
       .pool=${pool}
-      ?disabled=${this.character.disabled || pool.disabled}
+      ?disabled=${this.character.disabled}
+      ?wide=${this.character.pools.size <= 2}
     ></pool-item>
   `;
 }

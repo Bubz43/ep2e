@@ -14,6 +14,34 @@
   opacity: 0.5;
 }
 
+:host([wide]) {
+  // flex: 1;
+  justify-content: center;
+  .pool {
+    flex: 0;
+    display: flex;
+    width: unset;
+    justify-content: space-around;
+    
+    .points {
+      display: inline-block;
+      text-align: center;
+    }
+    .pool-value {
+      width: unset;
+      display: flex;
+      align-items: center;
+      padding: 0 0.5rem;
+      small {
+        position: relative;
+        bottom: -2px;
+        right: unset;
+      }
+
+    }
+  }
+}
+
 .pool {
   flex: 1;
   display: grid;
@@ -24,6 +52,7 @@
   width: 90px;
   padding: 0.5rem;
   position: relative;
+  height: 62px;
   &.insight {
     --filter-color: var(--color-secondary);
   }
@@ -58,6 +87,7 @@
     height: 40px;
     display: block;
     z-index: 0;
+    pointer-events: none;
   }
 
   .pool-value {

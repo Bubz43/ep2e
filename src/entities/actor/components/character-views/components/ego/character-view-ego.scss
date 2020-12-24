@@ -81,9 +81,9 @@ header {
   display: flex;
   align-items: center;
   padding-right: 0.5rem;
-  // background: alphav(var(--color-grey), 0.15);
   margin-left: 0.25rem;
   border-radius: 3px;
+  position: relative;
   @include textButton();
   mwc-icon {
     color: var(--color-negative);
@@ -91,6 +91,11 @@ header {
       color: var(--color-secondary);
       filter: hue-rotate(-30deg);
     }
+  }
+  notification-coin {
+    position: static;
+    margin-left: 0.5ch;
+    --coin-bg: #{alphav(var(--color-grey), 0.2)};
   }
 }
 

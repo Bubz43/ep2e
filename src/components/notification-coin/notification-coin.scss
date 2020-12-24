@@ -67,7 +67,7 @@
 }
 
 .value {
-  background: alphav(var(--color-primary), 0.8);
+  background: var(--coin-bg, alphav(var(--color-primary), 0.8));
 }
 
 .attention {
