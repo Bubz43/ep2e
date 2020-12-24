@@ -178,7 +178,7 @@ export class EgoForm extends mix(LitElement).with(
           ? html`
               <section>
                 <sl-header heading=${localize('threatDetails')}>
-                  ${this.ego.stressValueInfo.value
+                  ${this.ego.hasStressRoll
                     ? html`
                         <mwc-button
                           class="stress-roll"

@@ -132,6 +132,10 @@ export class Ego {
     });
   }
 
+  get hasStressRoll() {
+    return this.settings.threatDetails && !!this.stressValueInfo.value
+  }
+
   static formatPoint(point: CharacterPoint) {
     return point === CharacterPoint.Credits
       ? localize('credits')

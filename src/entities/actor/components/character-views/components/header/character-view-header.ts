@@ -74,7 +74,7 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
   }
 
   private rollStress() {
-    this.character.ego.rollStress()
+    this.character.ego.rollStress();
   }
 
   private imgSelect = () =>
@@ -114,24 +114,23 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
       </sl-popover>
       <h2>${name}</h2>
       <div class="additional">
-      <sl-group class="initiative" label=${localize('initiative')}
-        >${this.character.initiative}</sl-group
-      >
-      ${this.character.ego.stressValueInfo.value
-                    ? html`
-                        <mwc-button
-                          class="stress-roll"
-                          dense
-                          slot="action"
-                          label="${localize('SHORT', 'stressValue')}: ${this.character.ego
-                            .stressValueInfo.value}"
-                          @click=${this.rollStress}
-                        ></mwc-button>
-                      `
-      : ''}
-     
+        <sl-group class="initiative" label=${localize('initiative')}
+          >${this.character.initiative}</sl-group
+        >
+        ${this.character.ego.hasStressRoll
+          ? html`
+              <mwc-button
+                class="stress-roll"
+                dense
+                slot="action"
+                label="${localize('SHORT', 'stressValue')}: ${this.character.ego
+                  .stressValueInfo.value}"
+                @click=${this.rollStress}
+              ></mwc-button>
+            `
+          : ''}
       </div>
-    
+
       <div class="actions">
         ${this.renderActionIconButton({
           icon: 'search',
