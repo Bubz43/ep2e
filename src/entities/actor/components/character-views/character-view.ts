@@ -26,6 +26,7 @@ import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, internalProperty } from 'lit-element';
 import { nothing, TemplateResult } from 'lit-html';
+import { cache } from 'lit-html/directives/cache';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
 import { compact, identity } from 'remeda';
@@ -44,6 +45,8 @@ export class CharacterView extends CharacterViewBase {
   static styles = [styles];
 
   @internalProperty() private dialogTemplate: TemplateResult | null = null;
+
+  @internalProperty() private viewDetails = false;
 
   firstUpdated() {
     this.addEventListener(RenderDialogEvent.is, async (ev) => {
@@ -82,6 +85,14 @@ export class CharacterView extends CharacterViewBase {
       });
     });
     super.firstUpdated();
+  }
+
+  private showOverview() {
+    this.viewDetails = false;
+  }
+
+  private showDetails() {
+    this.viewDetails = true;
   }
 
   private toggleNetworkSettings() {
@@ -236,163 +247,228 @@ export class CharacterView extends CharacterViewBase {
       </div>
       ${this.renderDrawer()}
 
+
+      <mwc-tab-bar>
+          <mwc-tab
+            @click=${this.showOverview}
+            minWidth
+            label=${localize('overview')}
+          ></mwc-tab>
+          <mwc-tab
+            @click=${this.showDetails}
+            minWidth
+            label=${localize('details')}
+          ></mwc-tab>
+        </mwc-tab-bar>
+
       <div class="sections">
-        <section class="status">
-          <sl-header heading=${localize('status')}></sl-header>
-          <div class="status-items">
-            <div class="conditions">
-              <mwc-button
-                class="conditions-toggle"
-                @click=${this.viewConditions}
-                dense
-                >${localize('conditions')}</mwc-button
-              >
-              <div class="conditions-list">
-                ${enumValues(ConditionType).map(
-                  (condition) => html`
-                    <button
-                      ?disabled=${disabled}
-                      data-condition=${condition}
-                      @click=${this.toggleCondition}
-                      data-tooltip=${localize(condition)}
-                      @mouseover=${tooltip.fromData}
-                    >
-                      <img
-                        src=${conditionIcons[condition]}
-                        class=${conditions.includes(condition) ? 'active' : ''}
-                        height="22px"
-                      />
-                      ${temporaryConditionSources.has(condition)
-                        ? html`<notification-coin
-                            value=${temporaryConditionSources.get(condition)
-                              ?.length || 1}
-                          ></notification-coin>`
-                        : ''}
-                    </button>
-                  `,
-                )}
-              </div>
-            </div>
+     
 
-            <sl-dropzone
-              class="applied-substances"
-              ?disabled=${disabled}
-              @drop=${this.applyDroppedSubstance}
-            >
-              ${activeSubstances.length + awaitingOnsetSubstances.length === 0
-                ? html`
-                    <p class="no-substances-message">
-                      ${localize('no')} ${localize('applied')}
-                      ${localize('substances')}.
-                    </p>
-                  `
-                : html`
-                    ${notEmpty(activeSubstances)
-                      ? html`
-                          <sl-details
-                            open
-                            summary="${localize('active')} ${localize(
-                              'substances',
-                            )} (${activeSubstances.length})"
-                          >
-                            <sl-animated-list class="active-substances">
-                              ${repeat(
-                                activeSubstances,
-                                idProp,
-                                (substance) => html`
-                                  <character-view-active-substance
-                                    .substance=${substance}
-                                    .character=${this.character}
-                                  ></character-view-active-substance>
-                                `,
-                              )}
-                            </sl-animated-list>
-                          </sl-details>
-                        `
-                      : ''}
-                    ${notEmpty(awaitingOnsetSubstances)
-                      ? html`
-                          <sl-details
-                            open
-                            summary="${localize(
-                              'substancesAwaitingOnset',
-                            )} (${awaitingOnsetSubstances.length})"
-                          >
-                            <sl-animated-list>
-                              ${repeat(
-                                awaitingOnsetSubstances,
-                                idProp,
-                                (substance) => html`
-                                  <character-view-time-item
-                                    ?disabled=${disabled}
-                                    .timeState=${substance.awaitingOnsetTimeState}
-                                    completion="ready"
-                                    .item=${substance}
-                                  >
-                                    <mwc-icon-button
-                                      slot="action"
-                                      icon="play_arrow"
-                                      data-tooltip=${localize('start')}
-                                      @mouseover=${tooltip.fromData}
-                                      @click=${() => {
-                                        this.openSubstanceActivationDialog(
-                                          substance.id,
-                                        );
-                                      }}
-                                    ></mwc-icon-button>
-                                  </character-view-time-item>
-                                `,
-                              )}
-                            </sl-animated-list></sl-details
-                          >
-                        `
-                      : ''}
-                  `}
-            </sl-dropzone>
-
-            ${notEmpty(pools)
-              ? html`
-                  <ul class="pools">
-                    ${[...pools.values()].map(this.renderPool)}
-                  </ul>
-                `
-              : ''}
-          </div>
-        </section>
-        <!-- <section>
-          <sl-header heading=${localize('network')}>
-            <mwc-icon-button
-              slot="action"
-              icon="settings"
-              @click=${this.toggleNetworkSettings}
-            ></mwc-icon-button>
-          </sl-header>
-          <div class="network">
-            <sl-group label=${localize('masterDevice')}
-              >${masterDevice?.fullName ?? '-'}</sl-group
-            >
-          </div>
-          ${masterDevice
-          ? html`
-              <health-item clickable .health=${masterDevice.meshHealth}>
-                <span slot="source">${localize('meshHealth')} </span>
-              </health-item>
-              <health-item
-                clickable
-                .health=${masterDevice.firewallHealth}
-              ></health-item>
-            `
-          : ''}
-        </section> -->
-
-        <section>
-          <sl-header heading=${localize('attacks')}></sl-header>
-        </section>
-
-        ${repeat(enumValues(ItemGroup), identity, this.renderItemGroup)}
+       ${cache(this.viewDetails ? this.renderDetails() : this.renderOverview())}
       </div>
 
       ${this.dialogTemplate || ''}
+    `;
+  }
+
+  private renderOverview() {
+    const { masterDevice } = this.character.equippedGroups;
+    const {
+      awaitingOnsetSubstances,
+      activeSubstances,
+      psi,
+      conditions,
+      pools,
+      disabled,
+      temporaryConditionSources,
+    } = this.character;
+    return html`
+      <section class="status">
+        <sl-header heading=${localize('status')}></sl-header>
+        <div class="status-items">
+          <div class="conditions">
+            <mwc-button
+              class="conditions-toggle"
+              @click=${this.viewConditions}
+              dense
+              >${localize('conditions')}</mwc-button
+            >
+            <div class="conditions-list">
+              ${enumValues(ConditionType).map(
+                (condition) => html`
+                  <button
+                    ?disabled=${disabled}
+                    data-condition=${condition}
+                    @click=${this.toggleCondition}
+                    data-tooltip=${localize(condition)}
+                    @mouseover=${tooltip.fromData}
+                  >
+                    <img
+                      src=${conditionIcons[condition]}
+                      class=${conditions.includes(condition) ? 'active' : ''}
+                      height="22px"
+                    />
+                    ${temporaryConditionSources.has(condition)
+                      ? html`<notification-coin
+                          value=${temporaryConditionSources.get(condition)
+                            ?.length || 1}
+                        ></notification-coin>`
+                      : ''}
+                  </button>
+                `,
+              )}
+            </div>
+          </div>
+
+          <sl-dropzone
+            class="applied-substances"
+            ?disabled=${disabled}
+            @drop=${this.applyDroppedSubstance}
+          >
+            ${activeSubstances.length + awaitingOnsetSubstances.length === 0
+              ? html`
+                  <p class="no-substances-message">
+                    ${localize('no')} ${localize('applied')}
+                    ${localize('substances')}.
+                  </p>
+                `
+              : html`
+                  ${notEmpty(activeSubstances)
+                    ? html`
+                        <sl-details
+                          open
+                          summary="${localize('active')} ${localize(
+                            'substances',
+                          )} (${activeSubstances.length})"
+                        >
+                          <sl-animated-list class="active-substances">
+                            ${repeat(
+                              activeSubstances,
+                              idProp,
+                              (substance) => html`
+                                <character-view-active-substance
+                                  .substance=${substance}
+                                  .character=${this.character}
+                                ></character-view-active-substance>
+                              `,
+                            )}
+                          </sl-animated-list>
+                        </sl-details>
+                      `
+                    : ''}
+                  ${notEmpty(awaitingOnsetSubstances)
+                    ? html`
+                        <sl-details
+                          open
+                          summary="${localize(
+                            'substancesAwaitingOnset',
+                          )} (${awaitingOnsetSubstances.length})"
+                        >
+                          <sl-animated-list>
+                            ${repeat(
+                              awaitingOnsetSubstances,
+                              idProp,
+                              (substance) => html`
+                                <character-view-time-item
+                                  ?disabled=${disabled}
+                                  .timeState=${substance.awaitingOnsetTimeState}
+                                  completion="ready"
+                                  .item=${substance}
+                                >
+                                  <mwc-icon-button
+                                    slot="action"
+                                    icon="play_arrow"
+                                    data-tooltip=${localize('start')}
+                                    @mouseover=${tooltip.fromData}
+                                    @click=${() => {
+                                      this.openSubstanceActivationDialog(
+                                        substance.id,
+                                      );
+                                    }}
+                                  ></mwc-icon-button>
+                                </character-view-time-item>
+                              `,
+                            )}
+                          </sl-animated-list></sl-details
+                        >
+                      `
+                    : ''}
+                `}
+          </sl-dropzone>
+
+          ${notEmpty(pools)
+            ? html`
+                <ul class="pools">
+                  ${[...pools.values()].map(this.renderPool)}
+                </ul>
+              `
+            : ''}
+        </div>
+      </section>
+      <!-- <section>
+    <sl-header heading=${localize('network')}>
+      <mwc-icon-button
+        slot="action"
+        icon="settings"
+        @click=${this.toggleNetworkSettings}
+      ></mwc-icon-button>
+    </sl-header>
+    <div class="network">
+      <sl-group label=${localize('masterDevice')}
+        >${masterDevice?.fullName ?? '-'}</sl-group
+      >
+    </div>
+    ${masterDevice
+        ? html`
+            <health-item clickable .health=${masterDevice.meshHealth}>
+              <span slot="source">${localize('meshHealth')} </span>
+            </health-item>
+            <health-item
+              clickable
+              .health=${masterDevice.firewallHealth}
+            ></health-item>
+          `
+        : ''}
+  </section> -->
+
+      <section>
+        <sl-header heading=${localize('attacks')}></sl-header>
+      </section>
+
+      ${repeat(enumValues(ItemGroup), identity, this.renderItemGroup)}
+    `;
+  }
+
+  private renderDetails() {
+    const { ego, sleeve, psi } = this.character;
+    return html`
+    <sl-details open summary=${localize("ego")}>
+    ${notEmpty(ego.details)
+        ? html`
+            <div class="details">
+              ${ego.details.map(
+                ({ label, value }) => html`
+                  <span class="details"
+                    >${label} <span class="value">${value}</span></span
+                  >
+                `,
+              )}
+            </div>
+          `
+        : ''}
+      ${ego.description
+        ? html` <enriched-html .content=${ego.description}></enriched-html> `
+        : ''}
+  </sl-details>
+
+  ${psi ? html`
+  <sl-details open summary=${localize("psi")}></sl-details>
+  ` : ""}
+
+  ${sleeve ? html`
+  <sl-details open summary=${localize("sleeve")}></sl-details>
+  ` : ""}
+    
     `;
   }
 

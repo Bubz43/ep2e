@@ -199,17 +199,3 @@ mwc-tab-bar {
   }
 }
 
-.details {
-  display: inline;
-  padding: 0.5rem;
-  > * {
-    @include truncate(100%);
-  }
-  .value {
-    color: var(--color-text-lighter);
-  }
-}
-
-enriched-html {
-  padding: 0 1rem;
-}

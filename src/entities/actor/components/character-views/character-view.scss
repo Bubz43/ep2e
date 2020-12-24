@@ -34,6 +34,12 @@ character-view-header {
   z-index: 1;
 }
 
+mwc-tab-bar {
+  grid-area: tab-bar;
+  --mdc-theme-primary: var(--color-grey);
+
+}
+
 .sections > * {
   // border: 1px solid alphav(var(--color-border), 0.5);
   // background: alphav(var(--color-bg), 0.1);
@@ -69,7 +75,8 @@ character-view-header {
   min-height: 100%;
   background: rgba(black, 0.03);
   padding: 0.25rem;;
-  gap: 0.25rem;
+  gap: 0.5rem;
+  margin-left: 0.25rem;
 
   > * {
     height: max-content;
@@ -79,7 +86,7 @@ character-view-header {
       alphav(var(--color-bg), 0.8),
       alphav(var(--color-bg-alt), 0.8)
     );
-    box-shadow: 0 0 4px black
+    box-shadow: 1px 0 4px rgba(black, 0.75)
   }
 
 
@@ -103,6 +110,7 @@ character-view-header {
   overflow-y: scroll;
   overflow-x: hidden;
   padding: 0.25rem;
+  margin-right: 0.25rem;
 
   // background: rgba(black, 0.09);
   sl-header,
@@ -228,4 +236,19 @@ character-view-header {
 .active-substances {
   display: grid;
   gap: 0.25rem;
+}
+
+.details {
+  display: inline;
+  padding: 0.5rem;
+  > * {
+    @include truncate(100%);
+  }
+  .value {
+    color: var(--color-text-lighter);
+  }
+}
+
+enriched-html {
+  padding: 0 1rem;
 }
