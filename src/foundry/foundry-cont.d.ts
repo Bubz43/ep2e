@@ -1,5 +1,5 @@
 import type { ValueOf, Mutable, JsonObject, Class } from 'type-fest';
-import type { DeepPartial, PickByValue } from 'utility-types';
+import type { DeepPartial, PickByValue, ValuesType } from 'utility-types';
 import type * as PIXI from 'pixi.js';
 import type { Socket } from 'socket.io';
 import type { Combatant } from '@src/combat/combatant';
@@ -178,7 +178,12 @@ declare global {
 
   interface GridLayer {
     getSnappedPosition(x: number, y: number, interval: number): { x: number, y: number }
-    readonly type: CONST["GRID_TYPES"][keyof CONST["GRID_TYPES"]]
+    readonly type: ValuesType<CONST["GRID_TYPES"]>
+    highlightLayers: Record<string, GridHighlight>
+  }
+
+  interface GridHighlight {
+    positions: Set<`${number}.${number}`>
   }
 
   interface Token {

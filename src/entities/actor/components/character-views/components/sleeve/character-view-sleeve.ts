@@ -5,7 +5,9 @@ import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import {
   createMeasuredTemplate,
-  previewMeasuredTemplate,
+  getNormalizedTokenSize,
+  getTemplateGridHighlight,
+  placeMeasuredTemplate,
 } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
@@ -17,12 +19,15 @@ import { localImage } from '@src/utility/images';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
-import { compact, identity, pick, sortBy } from 'remeda';
+import { compact, identity, pick, sortBy, zip } from 'remeda';
 import {
   CharacterDrawerRenderer,
   CharacterDrawerRenderEvent,
 } from '../../character-drawer-render-event';
 import styles from './character-view-sleeve.scss';
+import { distanceBetweenTokens } from '@src/foundry/token-helpers';
+import type { SplitIncludingDelimiters } from 'type-fest/delimiter-case';
+import type { Split } from 'type-fest/camel-case';
 
 @customElement('character-view-sleeve')
 export class CharacterViewSleeve extends LitElement {
@@ -61,13 +66,35 @@ export class CharacterViewSleeve extends LitElement {
         ? token.center
         : { x: 0, y: 0 };
 
-    previewMeasuredTemplate(
+    const ids = await placeMeasuredTemplate(
       createMeasuredTemplate({
         ...center,
         t: 'circle',
         distance: range,
       }),
+      !!token,
     );
+    if (ids?.templateId) {
+      const highlighted = getTemplateGridHighlight(ids.templateId);
+      const canvas = readyCanvas();
+      if (highlighted && canvas) {
+        const { grid, tokens, dimensions } = canvas;
+        const { distance } = dimensions;
+        const positions = [...highlighted.positions].map((pos) => {
+          const [x = 0, y = 0] = pos.split('.').map(Number);
+          return { x, y };
+        });
+
+        const containedTokens = tokens.placeables.filter((token) => {
+          const { center } = token;
+          const hitSize = getNormalizedTokenSize(token) * 0.71 * distance;
+          return positions.some(
+            (pos) => grid.measureDistance(center, pos) <= hitSize,
+          );
+        });
+        console.log(containedTokens);
+      }
+    }
   }
 
   render() {
