@@ -6,7 +6,15 @@
 }
 
 :host {
-  display: block;
+  display: grid;
+  grid-auto-rows: min-content;
+  height: max-content;
+  border: 1px groove var(--color-border);
+  background: linear-gradient(
+    45deg,
+    alphav(var(--color-bg), 0.8),
+    alphav(var(--color-bg-alt), 0.8)
+  );
   
 }
 
@@ -15,6 +23,7 @@ header {
   position: relative;
   padding: 0.25rem 0.75rem;
   text-shadow: 0 0 4px black;
+
 
   .name {
     all: unset;
@@ -34,10 +43,6 @@ header {
     font-family: var(--font-2);
     font-size: small;
   }
-
-  &:last-child {
-    margin-bottom: 0.5rem;
-  }
 }
 
 .infection-tracker {
@@ -46,31 +51,29 @@ header {
     "bar bar bar"
     ".. chi free";
   grid-template-columns: 1fr 1fr 1fr;
+  padding: 0.5rem 0.5rem 0;
+  z-index: 0;
 }
 
-.rating-popover {
+.infection {
   grid-area: 1 / 1 / -1 / -1;
+  @include inputReset();
+  width: max-content;
+  margin-top: -0.25rem;
   z-index: 2;
-  width: min-content;
-}
+  input {
+    font-size: 26px;
+    text-align: center;
+    width: 3ch;
+    border: none;
 
-.infection-rating {
-  all: unset;
-  font-size: 26px;
-  text-align: center;
-  // transform: translateY(-0.5rem);
-  min-width: 2ch;
-  margin-left: 0.25rem;
-  cursor: pointer;
-  &:hover,
-  &:focus {
-    text-shadow: var(--text-highlight);
   }
 }
 
+
 .infection-progress {
   grid-area: bar;
-  --mdc-theme-primary: rgb(93, 29, 112, 0.8);
+  // --mdc-theme-primary: rgb(93, 29, 112, 0.8);
 }
 
 .progress-overlay {

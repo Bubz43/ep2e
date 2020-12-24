@@ -1,4 +1,7 @@
-import { renderNumberField } from '@src/components/field/fields';
+import {
+  renderNumberField,
+  renderNumberInput,
+} from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { Origin } from '@src/components/popover/popover-options';
 import { PsiPush, enumValues } from '@src/data-enums';
@@ -26,12 +29,17 @@ export class CharacterViewPsi extends LitElement {
   render() {
     return html`
       <header>
+     
         <button class="name" @click=${this.psi.openForm}>
           ${this.psi.name}
         </button>
+        <span class="info"
+          >${this.psi.strain} ${localize('substrain')} ${localize('level')}
+          ${this.psi.level}</span
+        >
       </header>
 
-      ${this.psi.hasVariableInfection ? this.renderInfectionTracker() : ""}
+      ${this.psi.hasVariableInfection ? this.renderInfectionTracker() : ''}
     `;
   }
 
@@ -44,19 +52,20 @@ export class CharacterViewPsi extends LitElement {
       level,
     } = this.psi;
 
-    const disabled = !editable;
     return html` <section class="infection-tracker">
-      <sl-popover
-        origin=${Origin.Inset}
-        center
-        class="rating-popover"
-        .renderOnDemand=${this.infectionEdit}
-        focusSelector="input"
-      >
-        <button slot="base" class="infection-rating" ?disabled=${disabled}>
-          ${infectionRating}
-        </button>
-      </sl-popover>
+      ${renderAutoForm({
+        classes: "infection",
+        disabled: !editable,
+        props: { infectionRating },
+        update: ({ infectionRating }) =>
+          infectionRating && this.psi.updateInfectionRating(infectionRating),
+        fields: ({ infectionRating }) =>
+          renderNumberInput(infectionRating, {
+            min: baseInfectionRating,
+            max: 99,
+          }),
+      })}
+     
 
       <mwc-linear-progress
         class="infection-progress"
@@ -64,38 +73,22 @@ export class CharacterViewPsi extends LitElement {
       ></mwc-linear-progress>
       <div
         class="progress-overlay"
-        style="width: ${baseInfectionRating}%"
+        style="width: calc(${baseInfectionRating}% + 1px)"
       ></div>
 
       <div
         class=${classMap({
-          "increased-chi": true,
+          'increased-chi': true,
           active: hasChiIncreasedEffect,
         })}
-        title="${localize(PsiPush.IncreasedEffect)} ${localize("psiChi")}"
+        title="${localize(PsiPush.IncreasedEffect)} ${localize('psiChi')}"
       >
-        ${localize("psiChi")} +
+        ${localize('psiChi')} +
       </div>
-      ${level > 1 ? this.renderFreePush() : ""}
+      ${level > 1 ? this.renderFreePush() : ''}
     </section>`;
   }
 
-  private infectionEdit = () => {
-    const { infectionRating, baseInfectionRating } = this.psi;
-    return renderAutoForm({
-      props: { infectionRating },
-      update: ({ infectionRating }) =>
-        infectionRating && this.psi.updateInfectionRating(infectionRating),
-      fields: ({ infectionRating }) =>
-        renderNumberField(infectionRating, {
-          ...this.psi.infectionClamp,
-          helpText: `${localize(
-            "baseInfectionRating"
-          )}: ${baseInfectionRating}`,
-          helpPersistent: true,
-        }),
-    });
-  };
 
 
   private renderFreePush() {
@@ -113,12 +106,12 @@ export class CharacterViewPsi extends LitElement {
         <div
           slot="base"
           class="free-push ${classMap(freePushClasses)}"
-          title=${localize("freePush")}
+          title=${localize('freePush')}
         >
           ${localize(
             freePushClasses.active
-              ? activeFreePush || "selectFreePush"
-              : "freePush"
+              ? activeFreePush || 'selectFreePush'
+              : 'freePush',
           )}
         </div>
       </sl-popover>
@@ -130,9 +123,9 @@ export class CharacterViewPsi extends LitElement {
     return html`
       <mwc-list>
         <mwc-radio-list-item
-          ?selected=${freePush === ""}
-          @click=${() => this.psi.updateFreePush("")}
-          >${localize("no")} ${localize("freePush")}</mwc-radio-list-item
+          ?selected=${freePush === ''}
+          @click=${() => this.psi.updateFreePush('')}
+          >${localize('no')} ${localize('freePush')}</mwc-radio-list-item
         >
         <li divider></li>
         ${enumValues(PsiPush).map(
@@ -142,7 +135,7 @@ export class CharacterViewPsi extends LitElement {
               @click=${() => this.psi.updateFreePush(push)}
               >${localize(push)}</mwc-radio-list-item
             >
-          `
+          `,
         )}
       </mwc-list>
     `;
