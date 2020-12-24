@@ -137,6 +137,7 @@ import './init';
 import { MessageSubstanceUse } from './chat/components/substance/message-substance-use';
 import { PhysicalTechCard } from './entities/actor/components/character-views/components/cards/physical-tech/physical-tech-card';
 import { CharacterViewActiveSubstance } from './entities/actor/components/character-views/components/active-substance/character-view-active-substance';
+import { CharacterViewTabbedSection } from './entities/actor/components/character-views/components/tabbed-section/tabbed-section';
 
 // Generic Components
 Field;
@@ -188,6 +189,7 @@ CharacterViewMeshHealth;
 CharacterViewMentalHealth;
 CharacterViewConditions;
 CharacterViewActiveSubstance;
+CharacterViewTabbedSection;
 ItemCard;
 ConsumableCard;
 PhysicalTechCard;

@@ -92,6 +92,10 @@ export class CharacterView extends CharacterViewBase {
     this.toggleDrawerRenderer(CharacterDrawerRenderer.Conditions);
   }
 
+  private viewResleeve() {
+    this.toggleDrawerRenderer(CharacterDrawerRenderer.Resleeve);
+  }
+
   private openPoolMenu(ev: MouseEvent) {
     if (ev.currentTarget instanceof PoolItem) {
       const { type } = ev.currentTarget.pool;
@@ -193,6 +197,10 @@ export class CharacterView extends CharacterViewBase {
       ></character-view-header>
 
       <div class="side">
+        <character-view-ego
+          .character=${this.character}
+          .ego=${this.character.ego}
+        ></character-view-ego>
         ${this.character.sleeve
           ? html`
               <character-view-sleeve
@@ -207,16 +215,15 @@ export class CharacterView extends CharacterViewBase {
                   raised
                   ?disabled=${disabled}
                   label="${localize('select')} ${localize('sleeve')}"
-                  @click=${() =>
-                    this.toggleDrawerRenderer(CharacterDrawerRenderer.Resleeve)}
+                  @click=${this.viewResleeve}
                 ></mwc-button>
               </div>
             `}
 
-        <character-view-ego
+        <character-view-tabbed-section
           .character=${this.character}
           .ego=${this.character.ego}
-        ></character-view-ego>
+        ></character-view-tabbed-section>
       </div>
       ${this.renderDrawer()}
 
