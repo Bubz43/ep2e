@@ -135,7 +135,7 @@ export class CharacterViewSleeve extends LitElement {
             </div>
           `
         : ''}
-      ${physicalHealth
+     <div class="healths ${physicalHealth && meshHealth ? "multiple" : ""}"> ${physicalHealth
         ? html`
             <health-item
               @contextmenu=${() =>
@@ -160,7 +160,7 @@ export class CharacterViewSleeve extends LitElement {
                 `
               : ''}
           </health-item>`
-        : ''}
+        : ''}</div>
 
       <div class="movement">
         ${(['encumbered', 'overburdened'] as const).map((mod) => {

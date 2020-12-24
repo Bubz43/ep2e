@@ -52,14 +52,22 @@ header {
   grid-area: 1 / 1 / -1 / -1;
   @include inputReset();
   width: max-content;
-  margin-top: -0.1rem;
+  margin-top: -0.25rem;
   z-index: 2;
   input {
     font-size: 26px;
     text-align: center;
-    width: 3ch;
+    border-radius: 100%;
+    width: 2.75ch;
+    height: 2.75ch;
     border: none;
-
+    &:hover {
+      box-shadow: 0 0 3px var(--color-grey);
+    }
+    &:focus {
+      box-shadow: 0 0 3px var(--color-secondary);
+      background: alphav(var(--color-bg), 0.5);
+    }
   }
 }
 
@@ -148,4 +156,11 @@ header {
       @include animate-css(pulse, 1.5s, infinite);
     }
   }
+}
+
+.actions {
+  padding: 0 0.5rem 0.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5ch;
 }

@@ -141,3 +141,14 @@ header {
     }
   }
 }
+
+
+.healths {
+  &.multiple {
+    --health-item-padding: 0.25rem 0.5rem;
+    padding-top: 0.25rem;
+    & + .movement {
+      padding-top: 0.25rem;
+    }
+  }
+}

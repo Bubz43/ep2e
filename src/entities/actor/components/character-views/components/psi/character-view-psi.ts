@@ -39,8 +39,18 @@ export class CharacterViewPsi extends LitElement {
         >
       </header>
 
-      ${this.psi.hasVariableInfection ? this.renderInfectionTracker() : ''}
+      ${this.psi.hasVariableInfection ? this.renderInfectionInfo() : ''}
     `;
+  }
+
+  private renderInfectionInfo() {
+    return html`
+    ${this.renderInfectionTracker()}
+    <div class="actions">
+      <mwc-button unelevated dense>${localize("infection")} ${localize("test")}</mwc-button>
+      <mwc-button unelevated dense>${localize("roll")} ${localize("influences")}</mwc-button>
+    </div>
+    `
   }
 
   private renderInfectionTracker() {

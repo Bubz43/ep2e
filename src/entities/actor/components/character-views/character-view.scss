@@ -35,9 +35,28 @@ character-view-header {
 }
 
 .sections > * {
-  border: none;
-  border: 1px solid alphav(var(--color-border), 0.5);
-  background: alphav(var(--color-bg), 0.1);
+  // border: 1px solid alphav(var(--color-border), 0.5);
+  // background: alphav(var(--color-bg), 0.1);
+  border: 1px groove var(--color-border);
+  background: linear-gradient(
+    45deg,
+    alphav(var(--color-bg), 0.5),
+    alphav(var(--color-bg-alt), 0.5)
+  );
+}
+
+.side,
+.sections {
+  scrollbar-color: #77889980 #28272700;
+
+  &::-webkit-scrollbar {
+    width: 2px;
+    height: 10px;
+  }
+  &::-webkit-scrollbar-track {
+    box-shadow: 0 0 1px transparent inset;
+    border-radius: 0px;
+  }
 }
 
 .side {
@@ -49,7 +68,6 @@ character-view-header {
   max-height: calc(100vh - 150px);
   min-height: 100%;
   background: rgba(black, 0.03);
-  scrollbar-color: #77889980 #28272700;
   padding: 0.25rem;;
   gap: 0.25rem;
 
@@ -63,14 +81,6 @@ character-view-header {
     );
   }
 
-  &::-webkit-scrollbar {
-    width: 2px;
-    height: 10px;
-  }
-  &::-webkit-scrollbar-track {
-    box-shadow: 0 0 1px transparent inset;
-    border-radius: 0px;
-  }
 
   .sleeve-select {
     padding: 0.5rem;
@@ -91,9 +101,9 @@ character-view-header {
   min-height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
-  padding: 0.25rem 0 0.25rem 0.25rem;
+  padding: 0.25rem;
 
-  background: rgba(black, 0.09);
+  // background: rgba(black, 0.09);
   sl-header,
   character-view-item-group::part(header) {
     padding: 0px 0.25rem 0 0.75rem;
@@ -104,8 +114,10 @@ character-view-header {
       alphav(var(--color-bg), 0.85),
       alphav(var(--color-bg-alt), 0.85)
     );
+    
     min-height: unset;
     --sl-header-font-size: large;
+    margin: 1px 0 0 1px;
   }
 
   .network {
