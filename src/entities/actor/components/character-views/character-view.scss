@@ -37,7 +37,7 @@ character-view-header {
 mwc-tab-bar {
   grid-area: tab-bar;
   --mdc-theme-primary: var(--color-grey);
-
+  margin-bottom: 0.25rem;
 }
 
 .sections > * {
@@ -109,15 +109,13 @@ mwc-tab-bar {
   min-height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
-  padding: 0.25rem;
+  padding: 0 0.25rem 0.25rem;
   margin-right: 0.25rem;
 
-  // background: rgba(black, 0.09);
   sl-header,
   character-view-item-group::part(header) {
     padding: 0px 0.25rem 0 0.75rem;
     border: none;
-    // background: alphav(var(--color-bg-alt), 0.75);
     background: linear-gradient(
       to bottom,
       alphav(var(--color-bg), 0.85),
@@ -239,16 +237,19 @@ mwc-tab-bar {
 }
 
 .details {
-  display: inline;
-  padding: 0.5rem;
-  > * {
-    @include truncate(100%);
-  }
+  column-count: 2;
+  border-bottom: 2px groove var(--color-border);
+    padding: 0 0.25rem 0.25rem;
+}
+
+.detail {
+  display: inline-block;
+  padding: 0.15rem;
   .value {
     color: var(--color-text-lighter);
   }
 }
 
 enriched-html {
-  padding: 0 1rem;
+  padding: 0 0.25rem;
 }

@@ -87,12 +87,8 @@ export class CharacterView extends CharacterViewBase {
     super.firstUpdated();
   }
 
-  private showOverview() {
-    this.viewDetails = false;
-  }
-
-  private showDetails() {
-    this.viewDetails = true;
+  private setTab(ev: CustomEvent<{ index: number }>) {
+    this.viewDetails = ev.detail.index === 1;
   }
 
   private toggleNetworkSettings() {
@@ -247,24 +243,21 @@ export class CharacterView extends CharacterViewBase {
       </div>
       ${this.renderDrawer()}
 
-
-      <mwc-tab-bar>
-          <mwc-tab
-            @click=${this.showOverview}
-            minWidth
-            label=${localize('overview')}
-          ></mwc-tab>
-          <mwc-tab
-            @click=${this.showDetails}
-            minWidth
-            label=${localize('details')}
-          ></mwc-tab>
-        </mwc-tab-bar>
+      <mwc-tab-bar @MDCTabBar:activated=${this.setTab}>
+        <mwc-tab
+          minWidth
+          label=${localize('overview')}
+        ></mwc-tab>
+        <mwc-tab
+          minWidth
+          label=${localize('details')}
+        ></mwc-tab>
+      </mwc-tab-bar>
 
       <div class="sections">
-     
-
-       ${cache(this.viewDetails ? this.renderDetails() : this.renderOverview())}
+        ${cache(
+          this.viewDetails ? this.renderDetails() : this.renderOverview(),
+        )}
       </div>
 
       ${this.dialogTemplate || ''}
@@ -441,34 +434,51 @@ export class CharacterView extends CharacterViewBase {
 
   private renderDetails() {
     const { ego, sleeve, psi } = this.character;
+    // TODO sleeve details, sex, limbs, reach, acquisition
     return html`
-    <sl-details open summary=${localize("ego")}>
-    ${notEmpty(ego.details)
+      <sl-details open summary=${localize('ego')}>
+        ${notEmpty(ego.details)
+          ? html`
+              <div class="details">
+                ${ego.details.map(
+                  ({ label, value }) => html`
+                    <span class="detail"
+                      >${label} <span class="value">${value}</span></span
+                    >
+                  `,
+                )}
+              </div>
+            `
+          : ''}
+        ${ego.description
+          ? html` <enriched-html .content=${ego.description}></enriched-html> `
+          : ''}
+      </sl-details>
+
+      ${psi
         ? html`
-            <div class="details">
-              ${ego.details.map(
-                ({ label, value }) => html`
-                  <span class="details"
-                    >${label} <span class="value">${value}</span></span
-                  >
-                `,
-              )}
-            </div>
+            <sl-details open summary=${localize('psi')}>
+              ${psi.description
+                ? html`
+                    <enriched-html .content=${psi.description}></enriched-html>
+                  `
+                : ''}
+            </sl-details>
           `
         : ''}
-      ${ego.description
-        ? html` <enriched-html .content=${ego.description}></enriched-html> `
+      ${sleeve
+        ? html`
+            <sl-details open summary=${localize('sleeve')}>
+              ${sleeve.description
+                ? html`
+                    <enriched-html
+                      .content=${sleeve.description}
+                    ></enriched-html>
+                  `
+                : ''}
+            </sl-details>
+          `
         : ''}
-  </sl-details>
-
-  ${psi ? html`
-  <sl-details open summary=${localize("psi")}></sl-details>
-  ` : ""}
-
-  ${sleeve ? html`
-  <sl-details open summary=${localize("sleeve")}></sl-details>
-  ` : ""}
-    
     `;
   }
 

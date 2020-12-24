@@ -74,6 +74,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
   private droppedOnSelf = false;
 
   private hasExpanded = false;
+  
 
   disconnectedCallback() {
     this.resetDraggedItems();

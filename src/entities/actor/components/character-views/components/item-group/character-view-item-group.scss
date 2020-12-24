@@ -56,8 +56,11 @@ sl-dropzone {
   --mdc-icon-button-size: 1.75rem;
   color: var(--color-text-lighter);
   opacity: 0;
-  @include animate-css(fadeIn, 300ms);
   animation-delay: 150ms;
+  &:not(.no-animation) {
+    @include animate-css(fadeIn, 300ms);
+
+  }
   &.active {
     color: var(--color-secondary);
   }
