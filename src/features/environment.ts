@@ -1,6 +1,6 @@
 import type { SceneEP } from '@src/entities/scene';
 import { MutateEvent, mutateEntityHook } from '@src/foundry/hook-setups';
-import { activeCanvas } from '@src/foundry/misc-helpers';
+import { activeCanvas } from "@src/foundry/canvas";
 import { gameSettings } from '@src/init';
 import { createFeature } from './feature-helpers';
 

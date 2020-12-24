@@ -22,7 +22,8 @@ import { isKnownDrop, onlySetDragSource } from './drag-and-drop';
 import { navMenuListener } from './foundry-apps';
 import type { TokenData } from './foundry-cont';
 import { localize } from './localization';
-import { activeCanvas, convertMenuOptions } from './misc-helpers';
+import { convertMenuOptions } from './misc-helpers';
+import { activeCanvas } from "./canvas";
 import { activeTokenStatusEffects } from './token-helpers';
 
 Entity.prototype.matchRegexp = function (regex: RegExp) {

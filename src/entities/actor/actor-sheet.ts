@@ -11,10 +11,10 @@ import type { EntitySheet } from '@src/foundry/foundry-cont';
 import { MutateEvent, mutatePlaceableHook } from '@src/foundry/hook-setups';
 import { localize } from '@src/foundry/localization';
 import {
-  activeCanvas,
   importFromCompendium,
   userCan,
 } from '@src/foundry/misc-helpers';
+import { activeCanvas } from "@src/foundry/canvas";
 import { debounce } from '@src/utility/decorators';
 import { assignStyles } from '@src/utility/dom';
 import { html } from 'lit-html';

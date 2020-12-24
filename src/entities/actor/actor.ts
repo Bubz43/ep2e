@@ -1,6 +1,7 @@
 import type { EntitySheet, TokenData } from '@src/foundry/foundry-cont';
 import { localize } from '@src/foundry/localization';
-import { activeCanvas, canViewActor } from '@src/foundry/misc-helpers';
+import { canViewActor } from '@src/foundry/misc-helpers';
+import { activeCanvas } from "@src/foundry/canvas";
 import { SystemSocketData, emitEPSocket } from '@src/foundry/socket';
 import { EP } from '@src/foundry/system';
 import { pipe, map, compact, flatMap, forEach, reject } from 'remeda';

@@ -2,7 +2,7 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
 import { positionApp } from '@src/foundry/foundry-apps';
 import { applicationHook } from '@src/foundry/hook-setups';
-import { activeCanvas } from '@src/foundry/misc-helpers';
+import { activeCanvas } from "@src/foundry/canvas";
 import { tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
 import { debounceFn } from '@src/utility/decorators';

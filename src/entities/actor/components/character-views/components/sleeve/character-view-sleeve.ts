@@ -5,13 +5,16 @@ import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import { createMeasuredTemplate } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
-import { activeCanvas, userCan } from '@src/foundry/misc-helpers';
+import { userCan } from '@src/foundry/misc-helpers';
+import { activeCanvas } from '@src/foundry/canvas';
+import { overlay } from '@src/init';
+import { debounceFn } from '@src/utility/decorators';
 import { clickIfEnter, notEmpty } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
-import { compact, identity, sortBy } from 'remeda';
+import { compact, identity, pick, sortBy } from 'remeda';
 import {
   CharacterDrawerRenderer,
   CharacterDrawerRenderEvent,
@@ -50,20 +53,73 @@ export class CharacterViewSleeve extends LitElement {
 
   private placeMovementPreviewTemplate(range: number) {
     const canvas = activeCanvas();
-    const token = this.token || this.character.actor.getActiveTokens(true)[0]
+    const token = this.token || this.character.actor.getActiveTokens(true)[0];
     if (!canvas || token?.scene !== canvas.scene) return;
     const template = createMeasuredTemplate({
-      t: "circle",
+      t: 'circle',
       distance: range,
       fillColor: game.user.color,
-      ...token.center
-    })
+      ...token.center,
+    });
     // TODO listeners
-    const { activeLayer } = canvas;
+    const { activeLayer, stage } = canvas;
 
-    template.draw()
-    template.layer.activate()
-    template.layer.preview?.addChild(template)
+    stage.on('mousemove', () => {});
+
+    template.draw();
+    template.layer.activate();
+    template.layer.preview?.addChild(template);
+
+    overlay.faded = true;
+
+    const moveTemplate = debounceFn(
+      (ev: PIXI.InteractionEvent) => {
+        ev.stopPropagation();
+        const center = ev.data.getLocalPosition(template.layer);
+        const { x, y } = canvas.grid.getSnappedPosition(center.x, center.y, 2);
+        template.data.x = x;
+        template.data.y = y;
+        template.refresh();
+      },
+      20,
+      true,
+    );
+
+    const confirm = () => {
+      cleanup();
+      const destination = canvas.grid.getSnappedPosition(
+        template.x,
+        template.y,
+        2,
+      );
+      canvas.scene.createEmbeddedEntity('MeasuredTemplate', {
+        ...template.data,
+        ...pick(destination, ['x', 'y']),
+      });
+    };
+
+    const cleanup = () => {
+      template.layer.preview?.removeChildren();
+      canvas.stage.off('mousemove', moveTemplate);
+      canvas.stage.off('mousedown', confirm);
+      canvas.app.view.oncontextmenu = null;
+      canvas.app.view.onwheel = null;
+      activeLayer.activate();
+    };
+
+    canvas.stage.on('mousemove', moveTemplate);
+    canvas.stage.on('mousedown', confirm);
+    canvas.app.view.oncontextmenu = cleanup;
+    canvas.app.view.onwheel = (ev) => {
+      if (ev.ctrlKey) ev.preventDefault(); // Avoid zooming the browser window
+      ev.stopPropagation();
+      const delta = canvas.grid.type > CONST.GRID_TYPES.SQUARE ? 30 : 15;
+      const snap = ev.shiftKey ? delta : 5;
+      if (template.data.direction) {
+        template.data.direction += snap * Math.sign(ev.deltaY);
+      }
+      template.refresh();
+    };
   }
 
   render() {
@@ -166,8 +222,19 @@ export class CharacterViewSleeve extends LitElement {
                   <span class="movement-rate"
                     >${localize(type)}
                     <span class="rate"
-                      ><button ?disabled=${!canPlace}>${base}</button> /
-                      <button ?disabled=${!canPlace}>${full}</button></span
+                      ><button
+                        ?disabled=${!canPlace || !base}
+                        @click=${() => this.placeMovementPreviewTemplate(base)}
+                      >
+                        ${base}
+                      </button>
+                      /
+                      <button
+                        ?disabled=${!canPlace || !full}
+                        @click=${() => this.placeMovementPreviewTemplate(full)}
+                      >
+                        ${full}
+                      </button></span
                     ></span
                   >
                 `,

@@ -7,8 +7,8 @@ import {
   isGamemaster,
   updateManyActors,
   gmIsConnected,
-  activeCanvas,
 } from '@src/foundry/misc-helpers';
+import { activeCanvas } from "@src/foundry/canvas";
 import { EP } from '@src/foundry/system';
 import { activeTokenStatusEffects } from '@src/foundry/token-helpers';
 import { debounceFn } from '@src/utility/decorators';

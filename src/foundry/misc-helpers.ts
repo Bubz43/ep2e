@@ -1,12 +1,11 @@
 import { html } from 'lit-html';
 import { pipe, filter, sortBy, first, map, prop, purry } from 'remeda';
 import type { Class, SetRequired } from 'type-fest';
-import type { CanvasLayers } from './foundry-cont';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { ActorEP } from '../entities/actor/actor';
-import type { SceneEP } from '../entities/scene';
 import { UpdateStore } from '@src/entities/update-store';
 import type { DeepPartial } from 'utility-types';
+import { activeCanvas } from './canvas';
 
 export const isGamemaster = () => {
   return (
@@ -63,19 +62,6 @@ export const importFromCompendium = (
     {},
     { renderSheet: true },
   );
-};
-
-export const activeCanvas = () => {
-  if (canvas instanceof Canvas && canvas.ready)
-    return canvas as Canvas &
-      CanvasLayers & {
-        scene: SceneEP;
-        stage: { scale: number };
-        dimensions: Record<'size' | 'distance', number>;
-        hud: HeadsUpDisplay;
-        activeLayer: CanvasLayers[keyof CanvasLayers];
-      };
-  return null;
 };
 
 export type GameCanvas = NonNullable<ReturnType<typeof activeCanvas>>;

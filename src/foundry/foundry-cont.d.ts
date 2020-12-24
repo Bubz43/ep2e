@@ -23,6 +23,7 @@ import type { EntityTemplates } from './template-schema';
 import type { UserHotbarEntry } from '@src/features/hotbar-entry';
 import type { MessageData } from '@src/chat/create-message';
 import type { TinyMCE, RawEditorSettings } from 'tinymce';
+import type { MeasuredTemplateData } from './canvas';
 // * Comment out canvas, game, ui from foundry.d.ts
 // * Add in context param to Entity.prototype._onUpdate
 // * Add generic type to collection
@@ -175,6 +176,10 @@ declare global {
     reduce<I>(evaluator: (accum: I, entry: T) => I, initial: I): I;
   }
 
+  interface GridLayer {
+    getSnappedPosition(x: number, y: number, interval: number): { x: number, y: number }
+  }
+
   interface Token {
     data: Readonly<TokenData>;
     scene?: SceneEP;
@@ -315,6 +320,7 @@ declare global {
 
   interface MeasuredTemplate {
     readonly layer: TemplateLayer;
+    data: MeasuredTemplateData;
   }
 
   interface PlaceablesLayer {

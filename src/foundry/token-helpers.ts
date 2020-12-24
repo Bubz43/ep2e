@@ -1,6 +1,6 @@
 import { conditionIcons } from '@src/features/conditions';
 import { first, pipe, concat, uniq } from 'remeda';
-import { activeCanvas } from './misc-helpers';
+import { activeCanvas } from "./canvas";
 
 export const panToToken = (token: Token) => {
   if (token?.isVisible && token.scene?.isView) {
