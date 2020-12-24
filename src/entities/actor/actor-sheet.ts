@@ -14,7 +14,7 @@ import {
   importFromCompendium,
   userCan,
 } from '@src/foundry/misc-helpers';
-import { activeCanvas } from "@src/foundry/canvas";
+import { readyCanvas } from "@src/foundry/canvas";
 import { debounce } from '@src/utility/decorators';
 import { assignStyles } from '@src/utility/dom';
 import { html } from 'lit-html';
@@ -49,7 +49,7 @@ export class ActorEPSheet implements EntitySheet {
 
   private checkToken = () => {
     if (this._token && this.actor.isToken) {
-      if (this._token.scene?.id !== activeCanvas()?.scene.id) {
+      if (this._token.scene?.id !== readyCanvas()?.scene.id) {
         this.actor.subscriptions.unsubscribeAll();
         this.close();
       }
@@ -178,7 +178,7 @@ export class ActorEPSheet implements EntitySheet {
       this._token =
         token ||
         (this.actor.token &&
-          activeCanvas()?.tokens.get(this.actor.token.data._id));
+          readyCanvas()?.tokens.get(this.actor.token.data._id));
     }
 
     this.openWindow(force);

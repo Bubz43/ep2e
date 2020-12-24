@@ -1,11 +1,11 @@
 import { conditionIcons } from '@src/features/conditions';
 import { first, pipe, concat, uniq } from 'remeda';
-import { activeCanvas } from "./canvas";
+import { readyCanvas } from "./canvas";
 
 export const panToToken = (token: Token) => {
   if (token?.isVisible && token.scene?.isView) {
     token.control();
-    activeCanvas()?.animatePan({
+    readyCanvas()?.animatePan({
       x: token.x,
       y: token.y,
       scale: undefined,
@@ -44,7 +44,7 @@ export const activeTokenStatusEffects = ({ data, actor }: Token) =>
 export const distanceBetweenTokens = (tokenA: Token, tokenB: Token) =>
   Math.round(
     Math.hypot(
-      activeCanvas()!.grid.measureDistance(tokenA.center, tokenB.center),
+      readyCanvas()!.grid.measureDistance(tokenA.center, tokenB.center),
       Math.abs(tokenA.data.elevation - tokenB.data.elevation),
     ) * 10,
   ) / 10;

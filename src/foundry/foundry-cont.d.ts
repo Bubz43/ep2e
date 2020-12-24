@@ -178,6 +178,7 @@ declare global {
 
   interface GridLayer {
     getSnappedPosition(x: number, y: number, interval: number): { x: number, y: number }
+    readonly type: CONST["GRID_TYPES"][keyof CONST["GRID_TYPES"]]
   }
 
   interface Token {

@@ -1,7 +1,7 @@
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import type { TokenData } from '@src/foundry/foundry-cont';
 import { localize } from '@src/foundry/localization';
-import { activeCanvas } from "@src/foundry/canvas";
+import { readyCanvas } from "@src/foundry/canvas";
 import { openMenu } from '@src/open-menu';
 import { html } from 'lit-html';
 import { uniq } from 'remeda';
@@ -29,7 +29,7 @@ const getTempToken = (tokenData: TokenData, scene: SceneEP) => {
 
 export const findActor = (ids: ActorIdentifiers) => {
   if (ids.tokenId && ids.sceneId) {
-    if (!ids.actorId && ids.sceneId === activeCanvas()?.scene.id) {
+    if (!ids.actorId && ids.sceneId === readyCanvas()?.scene.id) {
       return game.actors.tokens[ids.tokenId];
     }
     const token = findToken(ids);
@@ -39,7 +39,7 @@ export const findActor = (ids: ActorIdentifiers) => {
 };
 
 export const findToken = ({ actorId, tokenId, sceneId }: ActorIdentifiers) => {
-  const token = activeCanvas()?.tokens.placeables.find(
+  const token = readyCanvas()?.tokens.placeables.find(
     ({ id, scene, data }) =>
       id === tokenId &&
       scene?.id === sceneId &&
@@ -56,7 +56,7 @@ export const findToken = ({ actorId, tokenId, sceneId }: ActorIdentifiers) => {
 
 export const getControlledTokenActors = (onlyCharacters = false) => {
   return uniq(
-    activeCanvas()?.tokens.controlled.flatMap(({ actor }) =>
+    readyCanvas()?.tokens.controlled.flatMap(({ actor }) =>
       onlyCharacters
         ? actor?.type === ActorType.Character
           ? actor

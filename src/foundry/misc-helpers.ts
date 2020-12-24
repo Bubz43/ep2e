@@ -5,7 +5,6 @@ import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { ActorEP } from '../entities/actor/actor';
 import { UpdateStore } from '@src/entities/update-store';
 import type { DeepPartial } from 'utility-types';
-import { activeCanvas } from './canvas';
 
 export const isGamemaster = () => {
   return (
@@ -64,7 +63,6 @@ export const importFromCompendium = (
   );
 };
 
-export type GameCanvas = NonNullable<ReturnType<typeof activeCanvas>>;
 
 export const performIntegerSort = <T extends { id: string }>({
   src,

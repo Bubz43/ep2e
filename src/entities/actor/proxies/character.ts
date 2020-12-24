@@ -191,6 +191,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     const movements = [...movementRates, ...movementEffects.granted];
     const { encumbered, overburdened } = this.movementModifiers;
     if (encumbered) {
+      
       return movements.map((movement) => ({ ...movement, base: 0, full: 0 }));
     }
 

@@ -3,12 +3,15 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import type { Sleeve } from '@src/entities/actor/sleeves';
 import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
-import { createMeasuredTemplate } from '@src/foundry/canvas';
+import {
+  createMeasuredTemplate,
+  previewMeasuredTemplate,
+} from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
-import { activeCanvas } from '@src/foundry/canvas';
+import { readyCanvas } from '@src/foundry/canvas';
 import { overlay } from '@src/init';
-import { debounceFn } from '@src/utility/decorators';
+import { debounceFn, throttleFn } from '@src/utility/decorators';
 import { clickIfEnter, notEmpty } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
 import { customElement, html, LitElement, property } from 'lit-element';
@@ -51,75 +54,20 @@ export class CharacterViewSleeve extends LitElement {
     this.dispatchEvent(new CharacterDrawerRenderEvent(renderer));
   }
 
-  private placeMovementPreviewTemplate(range: number) {
-    const canvas = activeCanvas();
+  private async placeMovementPreviewTemplate(range: number) {
     const token = this.token || this.character.actor.getActiveTokens(true)[0];
-    if (!canvas || token?.scene !== canvas.scene) return;
-    const template = createMeasuredTemplate({
-      t: 'circle',
-      distance: range,
-      fillColor: game.user.color,
-      ...token.center,
-    });
-    // TODO listeners
-    const { activeLayer, stage } = canvas;
+    const center =
+      token && token?.scene === readyCanvas()?.scene
+        ? token.center
+        : { x: 0, y: 0 };
 
-    stage.on('mousemove', () => {});
-
-    template.draw();
-    template.layer.activate();
-    template.layer.preview?.addChild(template);
-
-    overlay.faded = true;
-
-    const moveTemplate = debounceFn(
-      (ev: PIXI.InteractionEvent) => {
-        ev.stopPropagation();
-        const center = ev.data.getLocalPosition(template.layer);
-        const { x, y } = canvas.grid.getSnappedPosition(center.x, center.y, 2);
-        template.data.x = x;
-        template.data.y = y;
-        template.refresh();
-      },
-      20,
-      true,
+    previewMeasuredTemplate(
+      createMeasuredTemplate({
+        ...center,
+        t: 'circle',
+        distance: range,
+      }),
     );
-
-    const confirm = () => {
-      cleanup();
-      const destination = canvas.grid.getSnappedPosition(
-        template.x,
-        template.y,
-        2,
-      );
-      canvas.scene.createEmbeddedEntity('MeasuredTemplate', {
-        ...template.data,
-        ...pick(destination, ['x', 'y']),
-      });
-    };
-
-    const cleanup = () => {
-      template.layer.preview?.removeChildren();
-      canvas.stage.off('mousemove', moveTemplate);
-      canvas.stage.off('mousedown', confirm);
-      canvas.app.view.oncontextmenu = null;
-      canvas.app.view.onwheel = null;
-      activeLayer.activate();
-    };
-
-    canvas.stage.on('mousemove', moveTemplate);
-    canvas.stage.on('mousedown', confirm);
-    canvas.app.view.oncontextmenu = cleanup;
-    canvas.app.view.onwheel = (ev) => {
-      if (ev.ctrlKey) ev.preventDefault(); // Avoid zooming the browser window
-      ev.stopPropagation();
-      const delta = canvas.grid.type > CONST.GRID_TYPES.SQUARE ? 30 : 15;
-      const snap = ev.shiftKey ? delta : 5;
-      if (template.data.direction) {
-        template.data.direction += snap * Math.sign(ev.deltaY);
-      }
-      template.refresh();
-    };
   }
 
   render() {

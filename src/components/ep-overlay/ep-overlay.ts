@@ -2,7 +2,7 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
 import { positionApp } from '@src/foundry/foundry-apps';
 import { applicationHook } from '@src/foundry/hook-setups';
-import { activeCanvas } from "@src/foundry/canvas";
+import { readyCanvas } from "@src/foundry/canvas";
 import { tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
 import { debounceFn } from '@src/utility/decorators';
@@ -122,7 +122,7 @@ export class EPOverlay extends LitElement {
   }
 
   private setupControlled = debounceFn(() => {
-    const controlled = (activeCanvas()?.tokens.controlled || []).sort(
+    const controlled = (readyCanvas()?.tokens.controlled || []).sort(
       (a, b) => {
         const { x: aX, y: aY } = a._validPosition;
         const { x: bX, y: bY } = b._validPosition;

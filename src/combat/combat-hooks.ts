@@ -8,7 +8,7 @@ import {
   updateManyActors,
   gmIsConnected,
 } from '@src/foundry/misc-helpers';
-import { activeCanvas } from "@src/foundry/canvas";
+import { readyCanvas } from "@src/foundry/canvas";
 import { EP } from '@src/foundry/system';
 import { activeTokenStatusEffects } from '@src/foundry/token-helpers';
 import { debounceFn } from '@src/utility/decorators';
@@ -125,7 +125,7 @@ export const onCombatTrackerRender = (_: CombatTracker, [el]: JQuery) => {
         const tokenEffects = combatentEl.querySelector<HTMLElement>(
           '.token-effects',
         );
-        const token = activeCanvas()?.tokens.get(combatant.tokenId);
+        const token = readyCanvas()?.tokens.get(combatant.tokenId);
         if (tokenEffects && token) {
           render(
             html`${activeTokenStatusEffects(token).map(

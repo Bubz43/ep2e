@@ -23,7 +23,7 @@ import { navMenuListener } from './foundry-apps';
 import type { TokenData } from './foundry-cont';
 import { localize } from './localization';
 import { convertMenuOptions } from './misc-helpers';
-import { activeCanvas } from "./canvas";
+import { readyCanvas } from "./canvas";
 import { activeTokenStatusEffects } from './token-helpers';
 
 Entity.prototype.matchRegexp = function (regex: RegExp) {
@@ -125,7 +125,7 @@ Token.prototype._onUpdate = function (
 ) {
   _onUpdate.call(this, data, options, userId);
   if ((data.overlayEffect || data.effects) && this.hasActiveHUD) {
-    activeCanvas()?.tokens.hud.refreshStatusIcons();
+    readyCanvas()?.tokens.hud.refreshStatusIcons();
   }
   this.actor?.render(false, {});
 };
@@ -141,7 +141,7 @@ Token.prototype.drawEffects = async function () {
     const promises: Promise<unknown>[] = [];
     const width =
       Math.round(
-        (canvas as ReturnType<typeof activeCanvas>)!.dimensions.size / 2 / 5,
+        (canvas as ReturnType<typeof readyCanvas>)!.dimensions.size / 2 / 5,
       ) * 2;
 
     const background = this.effects
@@ -191,7 +191,7 @@ Token.prototype.toggleEffect = async function (
     }
   }
 
-  if (this.hasActiveHUD) activeCanvas()?.tokens.hud.refreshStatusIcons();
+  if (this.hasActiveHUD) readyCanvas()?.tokens.hud.refreshStatusIcons();
   return this;
 };
 
@@ -248,13 +248,13 @@ Object.defineProperties(Token.prototype, {
   w: {
     enumerable: true,
     get() {
-      return this.data.width * (activeCanvas()?.grid?.w ?? 100);
+      return this.data.width * (readyCanvas()?.grid?.w ?? 100);
     },
   },
   h: {
     enumerable: true,
     get() {
-      return this.data.height * (activeCanvas()?.grid?.h ?? 100);
+      return this.data.height * (readyCanvas()?.grid?.h ?? 100);
     },
   },
 });
@@ -471,7 +471,7 @@ ChatMessage._getSpeakerFromUser = function ({
   alias?: string;
 }) {
   return {
-    scene: scene?.id ?? activeCanvas()?.scene?.id,
+    scene: scene?.id ?? readyCanvas()?.scene?.id,
     actor: null,
     token: null,
     alias: alias || user.name,
@@ -488,7 +488,7 @@ ChatMessage._getSpeakerFromActor = function ({
   alias?: string;
 }) {
   return {
-    scene: scene?.id ?? activeCanvas()?.scene?.id,
+    scene: scene?.id ?? readyCanvas()?.scene?.id,
     actor: actor.id,
     token: null,
     alias: alias || actor.name,
