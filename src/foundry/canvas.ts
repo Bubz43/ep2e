@@ -109,14 +109,21 @@ export const getTemplateGridHighlight = (templateId: string) => {
   return readyCanvas()?.grid.getHighlightLayer(`Template.${templateId}`);
 };
 
-export const getTokensWithinTemplate = (templateId: string) => {
+// TODO make this generic taking any placeable layer 
+export const getTokensWithinHighligtedTemplate = (templateId: string) => {
   const highlighted = getTemplateGridHighlight(templateId);
   const canvas = readyCanvas();
   const contained = new Set<Token>();
 
-  if (highlighted && canvas && notEmpty(highlighted.positions)) {
+  if (
+    highlighted &&
+    canvas &&
+    notEmpty(highlighted.positions) &&
+    notEmpty(canvas.tokens.placeables)
+  ) {
     const { grid, tokens, dimensions } = canvas;
     const { distance } = dimensions;
+    
     const positions = [...highlighted.positions].map((pos) => {
       const [x = 0, y = 0] = compact(pos.split('.').map(Number));
       return { x, y };

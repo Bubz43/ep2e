@@ -106,27 +106,49 @@ type EntityName = keyof PickByValue<
 >;
 export type EntityType = Config[EntityName]['entityClass'];
 
+interface PlaceableObject {
+  data: Record<string, unknown> & { _id?: string };
+}
+
+type LayerInfo<T extends PlaceableObject> = {
+  placeables: T[];
+  controlled: T[];
+  get(tokenId: string): T | null | undefined;
+  updateMany(
+    data: (Partial<T['data']> & { _id: string })[],
+    options?: unknown,
+  ): Promise<void>;
+};
+
+type Layer<
+  L extends PlaceablesLayer,
+  T extends PlaceableObject,
+  F = LayerInfo<T>
+> = Omit<L, keyof F> & F;
 export type CanvasLayers = {
   background: BackgroundLayer;
   tiles: TilesLayer;
   drawings: DrawingsLayer;
   grid: GridLayer;
-  templates: TemplateLayer;
+  templates: Layer<TemplateLayer, MeasuredTemplate>;
   walls: WallsLayer;
   notes: NotesLayer;
-  tokens: Omit<
-    TokenLayer,
-    'placeables' | 'controlled' | 'updateMany' | 'cycleTokens' | 'get'
-  > & {
-    placeables: Token[];
-    controlled: Token[];
-    get(tokenId: string): Token | null;
-    updateMany(
-      data: (Partial<TokenData> & { _id: string })[],
-      options?: unknown,
-    ): Promise<void>;
+  tokens: Omit<Layer<TokenLayer, Token>, "cycleTokens"> & {
     cycleTokens(forward: boolean, reset: boolean): boolean;
   };
+  // tokens: Omit<
+  //   TokenLayer,
+  //   'placeables' | 'controlled' | 'updateMany' | 'cycleTokens' | 'get'
+  // > & {
+  //   placeables: Token[];
+  //   controlled: Token[];
+  //   get(tokenId: string): Token | null;
+  //   updateMany(
+  //     data: (Partial<TokenData> & { _id: string })[],
+  //     options?: unknown,
+  //   ): Promise<void>;
+  //   cycleTokens(forward: boolean, reset: boolean): boolean;
+  // };
   lighting: LightingLayer;
   sight: SightLayer;
   sounds: SoundsLayer;
@@ -177,13 +199,17 @@ declare global {
   }
 
   interface GridLayer {
-    getSnappedPosition(x: number, y: number, interval: number): { x: number, y: number }
-    readonly type: ValuesType<CONST["GRID_TYPES"]>
-    highlightLayers: Record<string, GridHighlight>
+    getSnappedPosition(
+      x: number,
+      y: number,
+      interval: number,
+    ): { x: number; y: number };
+    readonly type: ValuesType<CONST['GRID_TYPES']>;
+    highlightLayers: Record<string, GridHighlight>;
   }
 
   interface GridHighlight {
-    positions: Set<`${number}.${number}`>
+    positions: Set<`${number}.${number}`>;
   }
 
   interface Token {
@@ -330,7 +356,7 @@ declare global {
   }
 
   interface PlaceablesLayer {
-    preview: PIXI.Container | null
+    preview: PIXI.Container | null;
   }
 
   interface User {

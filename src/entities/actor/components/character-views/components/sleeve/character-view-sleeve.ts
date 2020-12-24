@@ -66,7 +66,7 @@ export class CharacterViewSleeve extends LitElement {
         ? token.center
         : { x: 0, y: 0 };
 
-    const ids = await placeMeasuredTemplate(
+    placeMeasuredTemplate(
       createMeasuredTemplate({
         ...center,
         t: 'circle',
@@ -74,27 +74,7 @@ export class CharacterViewSleeve extends LitElement {
       }),
       !!token,
     );
-    if (ids?.templateId) {
-      const highlighted = getTemplateGridHighlight(ids.templateId);
-      const canvas = readyCanvas();
-      if (highlighted && canvas) {
-        const { grid, tokens, dimensions } = canvas;
-        const { distance } = dimensions;
-        const positions = [...highlighted.positions].map((pos) => {
-          const [x = 0, y = 0] = pos.split('.').map(Number);
-          return { x, y };
-        });
 
-        const containedTokens = tokens.placeables.filter((token) => {
-          const { center } = token;
-          const hitSize = getNormalizedTokenSize(token) * 0.71 * distance;
-          return positions.some(
-            (pos) => grid.measureDistance(center, pos) <= hitSize,
-          );
-        });
-        console.log(containedTokens);
-      }
-    }
   }
 
   render() {
