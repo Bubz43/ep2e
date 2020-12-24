@@ -51,10 +51,13 @@ export const placeMeasuredTemplate = (
         stage.off('mousemove', moveTemplate).off('mousedown', createTemplate);
         view.removeEventListener('context', cleanup);
         view.removeEventListener('wheel', rotateTemplate);
+        window.removeEventListener("keydown", closeOnEscape)
         originalLayer.activate();
         overlay.faded = false;
         if (ev) resolve(null);
       };
+
+      const closeOnEscape = (ev: KeyboardEvent) => ev.key === "Escape" && cleanup(ev)
 
       const createTemplate = async () => {
         cleanup();
@@ -100,6 +103,7 @@ export const placeMeasuredTemplate = (
       stage.on('mousemove', moveTemplate).on('mousedown', createTemplate);
       view.addEventListener('contextmenu', cleanup);
       view.addEventListener('wheel', rotateTemplate);
+      window.addEventListener("keydown", closeOnEscape )
       pan && canvas.pan(template.center);
     },
   );
@@ -109,7 +113,6 @@ export const getTemplateGridHighlight = (templateId: string) => {
   return readyCanvas()?.grid.getHighlightLayer(`Template.${templateId}`);
 };
 
-// TODO make this generic taking any placeable layer 
 export const getTokensWithinHighligtedTemplate = (templateId: string) => {
   const highlighted = getTemplateGridHighlight(templateId);
   const canvas = readyCanvas();

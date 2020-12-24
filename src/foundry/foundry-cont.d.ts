@@ -1,4 +1,4 @@
-import type { ValueOf, Mutable, JsonObject, Class } from 'type-fest';
+import type { ValueOf, Mutable, JsonObject, Class, ConditionalExcept, ConditionalPick } from 'type-fest';
 import type { DeepPartial, PickByValue, ValuesType } from 'utility-types';
 import type * as PIXI from 'pixi.js';
 import type { Socket } from 'socket.io';
@@ -128,23 +128,23 @@ type Layer<
 
 export type CanvasLayers = {
   background: BackgroundLayer;
-  tiles: TilesLayer;
-  drawings: DrawingsLayer;
+  tiles: Layer<TilesLayer, Tile>;
+  drawings: Layer<DrawingsLayer, Drawing>;
   grid: GridLayer;
   templates: Layer<TemplateLayer, MeasuredTemplate>;
-  walls: WallsLayer;
-  notes: NotesLayer;
+  walls: Layer<WallsLayer, Wall>;
+  notes: Layer<NotesLayer, Note>;
   tokens: Omit<Layer<TokenLayer, Token>, "cycleTokens"> & {
     cycleTokens(forward: boolean, reset: boolean): boolean;
   };
-  lighting: LightingLayer;
+  lighting: Layer<LightingLayer, AmbientLight>;
   sight: SightLayer;
-  sounds: SoundsLayer;
+  sounds: Layer<SoundsLayer, AmbientSound>;
   effects: EffectsLayer;
   controls: ControlsLayer;
 };
 
-// TODO extract placeable layers
+type PlaceableLayers = ConditionalPick <CanvasLayers, { placeables: any[]}>
 
 type CombatRoundInfo = {
   round: number | null;
