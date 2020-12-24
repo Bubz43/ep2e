@@ -124,7 +124,8 @@ type Layer<
   L extends PlaceablesLayer,
   T extends PlaceableObject,
   F = LayerInfo<T>
-> = Omit<L, keyof F> & F;
+  > = Omit<L, keyof F> & F;
+
 export type CanvasLayers = {
   background: BackgroundLayer;
   tiles: TilesLayer;
@@ -136,25 +137,14 @@ export type CanvasLayers = {
   tokens: Omit<Layer<TokenLayer, Token>, "cycleTokens"> & {
     cycleTokens(forward: boolean, reset: boolean): boolean;
   };
-  // tokens: Omit<
-  //   TokenLayer,
-  //   'placeables' | 'controlled' | 'updateMany' | 'cycleTokens' | 'get'
-  // > & {
-  //   placeables: Token[];
-  //   controlled: Token[];
-  //   get(tokenId: string): Token | null;
-  //   updateMany(
-  //     data: (Partial<TokenData> & { _id: string })[],
-  //     options?: unknown,
-  //   ): Promise<void>;
-  //   cycleTokens(forward: boolean, reset: boolean): boolean;
-  // };
   lighting: LightingLayer;
   sight: SightLayer;
   sounds: SoundsLayer;
   effects: EffectsLayer;
   controls: ControlsLayer;
 };
+
+// TODO extract placeable layers
 
 type CombatRoundInfo = {
   round: number | null;
