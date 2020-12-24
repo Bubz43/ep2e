@@ -111,32 +111,7 @@ export class EgoForm extends mix(LitElement).with(
   }
 
   private rollStress() {
-    const { stressTestValue, actor } = this.ego;
-    createMessage({
-      entity: actor,
-      data: {
-        header: {
-          heading: localize('encounteringThreat'),
-        },
-        stress: {
-          rolledFormulas: rollLabeledFormulas([
-            {
-              label: localize('stressValue'),
-              formula: stressTestValue.sv,
-            },
-          ]),
-          notes: stressTestValue.notes,
-          minStress:
-            stressTestValue.minStressOption === MinStressOption.Half
-              ? 'half'
-              : stressTestValue.minStressOption === MinStressOption.Value
-              ? stressTestValue.minSV || 1
-              : '',
-          stressType: StressType.TheUnknown,
-          source: localize('encounteringThreat'),
-        },
-      },
-    });
+    this.ego.rollStress();
   }
 
   render() {

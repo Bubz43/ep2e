@@ -51,7 +51,7 @@ export const placeMeasuredTemplate = (
         stage.off('mousemove', moveTemplate).off('mousedown', createTemplate);
         view.removeEventListener('context', cleanup);
         view.removeEventListener('wheel', rotateTemplate);
-        window.removeEventListener("keydown", closeOnEscape)
+        window.removeEventListener("keydown", closeOnEscape, { capture: true})
         originalLayer.activate();
         overlay.faded = false;
         if (ev) resolve(null);
@@ -103,7 +103,7 @@ export const placeMeasuredTemplate = (
       stage.on('mousemove', moveTemplate).on('mousedown', createTemplate);
       view.addEventListener('contextmenu', cleanup);
       view.addEventListener('wheel', rotateTemplate);
-      window.addEventListener("keydown", closeOnEscape )
+      window.addEventListener("keydown", closeOnEscape, { capture: true} )
       pan && canvas.pan(template.center);
     },
   );

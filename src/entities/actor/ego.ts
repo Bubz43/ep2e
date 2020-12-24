@@ -1,3 +1,4 @@
+import { createMessage } from '@src/chat/create-message';
 import {
   CharacterPoint,
   enumValues,
@@ -32,9 +33,10 @@ import {
 } from '@src/features/time';
 import { notify, NotificationType } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
+import { rollLabeledFormulas } from '@src/foundry/rolls';
 import type { EgoData, CommonDetails } from '@src/foundry/template-schema';
 import { HealthType } from '@src/health/health';
-import { MentalHealth } from '@src/health/mental-health';
+import { MentalHealth, StressType } from '@src/health/mental-health';
 import { LazyGetter } from 'lazy-get-decorator';
 import { groupBy, compact, map } from 'remeda';
 import type { ReadonlyAppliedEffects } from '../applied-effects';
@@ -99,6 +101,35 @@ export class Ego {
     this.addPsi = addPsi;
     this.allowSleights = allowSleights;
     this.openForm = openForm;
+  }
+
+  rollStress() {
+    const { stressTestValue, actor } = this;
+    createMessage({
+      entity: actor,
+      data: {
+        header: {
+          heading: localize('encounteringThreat'),
+        },
+        stress: {
+          rolledFormulas: rollLabeledFormulas([
+            {
+              label: localize('stressValue'),
+              formula: stressTestValue.sv,
+            },
+          ]),
+          notes: stressTestValue.notes,
+          minStress:
+            stressTestValue.minStressOption === MinStressOption.Half
+              ? 'half'
+              : stressTestValue.minStressOption === MinStressOption.Value
+              ? stressTestValue.minSV || 1
+              : '',
+          stressType: StressType.TheUnknown,
+          source: localize('encounteringThreat'),
+        },
+      },
+    });
   }
 
   static formatPoint(point: CharacterPoint) {

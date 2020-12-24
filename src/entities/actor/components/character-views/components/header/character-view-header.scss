@@ -17,15 +17,23 @@
     transparent
   );
   column-gap: 1rem;
-  grid: 0.75rem auto auto 0.75rem / min-content 1fr min-content;
+  grid: 0.75rem auto auto 0.75rem / min-content 1fr auto;
   grid-template-areas:
     'img .. ..'
-    'img name init'
+    'img name more'
     'img actions trash'
     'img .. ..';
 
+  .additional {
+    grid-area: more;
+    display: flex;
+    align-items: center;
+    .stress-roll {
+      --mdc-theme-primary: #{lightv(var(--color-negative), 1.2)};
+
+    }
+  }
   .initiative {
-    grid-area: init;
     margin-right: 0.5rem;
   }
 }
