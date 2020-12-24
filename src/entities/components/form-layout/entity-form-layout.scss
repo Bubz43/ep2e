@@ -73,7 +73,7 @@
 .drawer {
   grid-area: 1 / 1 / -1 / -1;
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
   display: flex;
   transition: background 350ms;
   .shim {
@@ -107,7 +107,6 @@
   &.open {
     background: rgba(black, 0.4);
     pointer-events: initial;
-    z-index: 1;
     .drawer-content {
       transform: none;
     }

@@ -726,7 +726,6 @@ export class Character extends ActorProxyBase<ActorType.Character> {
               // TODO add sleight effects if passive
             }
           }
-          // TODO Damage/conditions
         } else this.awaitingOnsetSubstances.push(item);
         continue;
       }

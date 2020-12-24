@@ -4,6 +4,7 @@ import { notEmpty } from '@src/utility/helpers';
 import { compact, pick } from 'remeda';
 import type { SetOptional } from 'type-fest';
 import type { ValuesType } from 'utility-types';
+import { stopEvent } from 'weightless';
 import type { SceneEP } from '../entities/scene';
 import type { CanvasLayers } from './foundry-cont';
 
@@ -51,13 +52,18 @@ export const placeMeasuredTemplate = (
         stage.off('mousemove', moveTemplate).off('mousedown', createTemplate);
         view.removeEventListener('context', cleanup);
         view.removeEventListener('wheel', rotateTemplate);
-        window.removeEventListener("keydown", closeOnEscape, { capture: true})
+        window.removeEventListener('keydown', closeOrSave, { capture: true });
         originalLayer.activate();
         overlay.faded = false;
         if (ev) resolve(null);
       };
 
-      const closeOnEscape = (ev: KeyboardEvent) => ev.key === "Escape" && cleanup(ev)
+      const closeOrSave = (ev: KeyboardEvent) => {
+        if (ev.key === 'Escape' || ev.key === 'Enter') stopEvent(ev);
+        ev.key === 'Escape'
+          ? cleanup(ev)
+          : ev.key === 'Enter' && createTemplate();
+      };
 
       const createTemplate = async () => {
         cleanup();
@@ -103,7 +109,7 @@ export const placeMeasuredTemplate = (
       stage.on('mousemove', moveTemplate).on('mousedown', createTemplate);
       view.addEventListener('contextmenu', cleanup);
       view.addEventListener('wheel', rotateTemplate);
-      window.addEventListener("keydown", closeOnEscape, { capture: true} )
+      window.addEventListener('keydown', closeOrSave, { capture: true });
       pan && canvas.pan(template.center);
     },
   );
@@ -126,7 +132,7 @@ export const getTokensWithinHighligtedTemplate = (templateId: string) => {
   ) {
     const { grid, tokens, dimensions } = canvas;
     const { distance } = dimensions;
-    
+
     const positions = [...highlighted.positions].map((pos) => {
       const [x = 0, y = 0] = compact(pos.split('.').map(Number));
       return { x, y };

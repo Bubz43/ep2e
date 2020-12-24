@@ -201,6 +201,15 @@ export class CharacterView extends CharacterViewBase {
           .character=${this.character}
           .ego=${this.character.ego}
         ></character-view-ego>
+
+        ${psi
+          ? html`
+              <character-view-psi
+                .character=${this.character}
+                .psi=${psi}
+              ></character-view-psi>
+            `
+          : ''}
         ${this.character.sleeve
           ? html`
               <character-view-sleeve
@@ -220,10 +229,10 @@ export class CharacterView extends CharacterViewBase {
               </div>
             `}
 
-        <character-view-tabbed-section
+        <!-- <character-view-tabbed-section
           .character=${this.character}
           .ego=${this.character.ego}
-        ></character-view-tabbed-section>
+        ></character-view-tabbed-section> -->
       </div>
       ${this.renderDrawer()}
 
@@ -379,13 +388,7 @@ export class CharacterView extends CharacterViewBase {
         <section>
           <sl-header heading=${localize('attacks')}></sl-header>
         </section>
-        ${psi
-          ? html`
-              <section>
-                <sl-header heading=${localize('psi')}></sl-header>
-              </section>
-            `
-          : ''}
+
         ${repeat(enumValues(ItemGroup), identity, this.renderItemGroup)}
       </div>
 

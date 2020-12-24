@@ -174,6 +174,65 @@ export class EgoForm extends mix(LitElement).with(
 
     return html`
       <div slot="details">
+        <sl-dropzone ?disabled=${disabled} @drop=${this.handleItemDrop}>
+          <sl-header
+            heading="${localize('traits')} ${this.ego.allowSleights
+              ? `& ${localize('sleights')}`
+              : ''}"
+            itemCount=${traits.length + sleights.length}
+            ?hideBorder=${!psi && traits.length + sleights.length === 0}
+          >
+            ${this.ego.allowSleights
+              ? html` <mwc-icon
+                  slot="info"
+                  data-tooltip=${localize('DESCRIPTIONS', 'OnlyEgoItems')}
+                  @mouseover=${tooltip.fromData}
+                  >info</mwc-icon
+                >`
+              : ''}
+          </sl-header>
+          ${psi
+            ? html`
+                <div class="psi">
+                  <span class="psi-info">
+                    <span class="psi-label">${localize('psi')}:</span>
+                    ${psi.fullName}
+                    <span class="psi-level"
+                      >${localize('level')} ${psi.level}</span
+                    >
+                  </span>
+                  ${psi.openForm
+                    ? html`
+                        <mwc-icon-button
+                          icon="launch"
+                          @click=${psi.openForm}
+                        ></mwc-icon-button>
+                      `
+                    : ''}
+                  ${psi.deleteSelf
+                    ? html`
+                        <delete-button
+                          ?disabled=${disabled}
+                          @delete=${psi.deleteSelf}
+                        ></delete-button>
+                      `
+                    : ''}
+                </div>
+              `
+            : ''}
+          ${itemGroupKeys.map((key) => {
+            const group = itemGroups[key];
+            return notEmpty(group)
+              ? html`
+                  <form-items-list
+                    .items=${group}
+                    label=${localize(key)}
+                  ></form-items-list>
+                `
+              : '';
+          })}
+        </sl-dropzone>
+
         ${settings.threatDetails
           ? html`
               <section>
@@ -279,65 +338,6 @@ export class EgoForm extends mix(LitElement).with(
             ${repeat(motivations, idProp, this.renderMotivationItem)}
           </sl-animated-list>
         </section>
-
-        <sl-dropzone ?disabled=${disabled} @drop=${this.handleItemDrop}>
-          <sl-header
-            heading="${localize('traits')} ${this.ego.allowSleights
-              ? `& ${localize('sleights')}`
-              : ''}"
-            itemCount=${traits.length + sleights.length}
-            ?hideBorder=${!psi && traits.length + sleights.length === 0}
-          >
-            ${this.ego.allowSleights
-              ? html` <mwc-icon
-                  slot="info"
-                  data-tooltip=${localize('DESCRIPTIONS', 'OnlyEgoItems')}
-                  @mouseover=${tooltip.fromData}
-                  >info</mwc-icon
-                >`
-              : ''}
-          </sl-header>
-          ${psi
-            ? html`
-                <div class="psi">
-                  <span class="psi-info">
-                    <span class="psi-label">${localize('psi')}:</span>
-                    ${psi.fullName}
-                    <span class="psi-level"
-                      >${localize('level')} ${psi.level}</span
-                    >
-                  </span>
-                  ${psi.openForm
-                    ? html`
-                        <mwc-icon-button
-                          icon="launch"
-                          @click=${psi.openForm}
-                        ></mwc-icon-button>
-                      `
-                    : ''}
-                  ${psi.deleteSelf
-                    ? html`
-                        <delete-button
-                          ?disabled=${disabled}
-                          @delete=${psi.deleteSelf}
-                        ></delete-button>
-                      `
-                    : ''}
-                </div>
-              `
-            : ''}
-          ${itemGroupKeys.map((key) => {
-            const group = itemGroups[key];
-            return notEmpty(group)
-              ? html`
-                  <form-items-list
-                    .items=${group}
-                    label=${localize(key)}
-                  ></form-items-list>
-                `
-              : '';
-          })}
-        </sl-dropzone>
 
         ${settings.trackMentalHealth
           ? html`
