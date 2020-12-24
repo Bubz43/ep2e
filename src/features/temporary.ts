@@ -15,6 +15,7 @@ export enum TemporaryFeatureType {
   ActiveRecharge = 'activeRecharge',
   Effects = 'effects',
   Condition = 'condition',
+  // TODO psi influence
 }
 
 type Base<T extends { type: TemporaryFeatureType }> = T & {
