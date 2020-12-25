@@ -604,7 +604,7 @@
       ],
       "areaEffect": "",
       "explosiveType": "grenade",
-      "containSubstance": false,
+      "useSubstance":"",
       "areaEffectRadius": 0,
       "size": "micro",
       "sticky": true,

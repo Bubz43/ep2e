@@ -1341,6 +1341,8 @@
     "resist": "Resist",
     "beforeModifiers": "Before Modifiers",
     "finished": "Finished",
+    "n/a": "N/A",
+    "stats": "Stats",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

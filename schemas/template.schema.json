@@ -2660,9 +2660,6 @@
                 "areaEffectRadius": {
                   "type": "number"
                 },
-                "containSubstance": {
-                  "type": "boolean"
-                },
                 "dosesPerUnit": {
                   "type": "number"
                 },
@@ -2709,12 +2706,22 @@
                 },
                 "unitsPerComplexity": {
                   "type": "number"
+                },
+                "useSubstance": {
+                  "anyOf": [
+                    {
+                      "const": "",
+                      "type": "string"
+                    },
+                    {
+                      "$ref": "#/definitions/SubstanceApplicationMethod"
+                    }
+                  ]
                 }
               },
               "required": [
                 "areaEffect",
                 "areaEffectRadius",
-                "containSubstance",
                 "dosesPerUnit",
                 "explosiveType",
                 "hasSecondaryMode",
@@ -2723,7 +2730,8 @@
                 "size",
                 "sticky",
                 "templates",
-                "unitsPerComplexity"
+                "unitsPerComplexity",
+                "useSubstance"
               ],
               "type": "object"
             },

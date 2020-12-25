@@ -2717,6 +2717,9 @@
             "muse": {
               "type": "string"
             },
+            "n/a": {
+              "type": "string"
+            },
             "name": {
               "type": "string"
             },
@@ -3786,6 +3789,9 @@
               "type": "string"
             },
             "staticModifiers": {
+              "type": "string"
+            },
+            "stats": {
               "type": "string"
             },
             "status": {
@@ -5225,6 +5231,7 @@
             "multiUse",
             "multiplier",
             "muse",
+            "n/a",
             "name",
             "nano",
             "nanodrug",
@@ -5582,6 +5589,7 @@
             "stateOfTheArt",
             "static",
             "staticModifiers",
+            "stats",
             "status",
             "steady",
             "sticky",
