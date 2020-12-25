@@ -61,12 +61,9 @@ header {
     width: 2.75ch;
     height: 2.75ch;
     border: none;
-    &:hover {
-      box-shadow: 0 0 3px var(--color-grey);
-    }
+ 
     &:focus {
-      box-shadow: 0 0 3px var(--color-secondary);
-      background: alphav(var(--color-bg), 0.5);
+      color: var(--color-secondary);
     }
   }
 }

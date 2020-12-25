@@ -137,8 +137,8 @@ import './init';
 import { MessageSubstanceUse } from './chat/components/substance/message-substance-use';
 import { PhysicalTechCard } from './entities/actor/components/character-views/components/cards/physical-tech/physical-tech-card';
 import { CharacterViewActiveSubstance } from './entities/actor/components/character-views/components/active-substance/character-view-active-substance';
-import { CharacterViewTabbedSection } from './entities/actor/components/character-views/components/tabbed-section/character-view-tabbed-section';
 import { CharacterViewPsi } from './entities/actor/components/character-views/components/psi/character-view-psi';
+import { CharacterViewTestActions } from './entities/actor/components/character-views/components/test-actions/character-view-stats';
 
 // Generic Components
 Field;
@@ -190,7 +190,7 @@ CharacterViewMeshHealth;
 CharacterViewMentalHealth;
 CharacterViewConditions;
 CharacterViewActiveSubstance;
-CharacterViewTabbedSection;
+CharacterViewTestActions;
 CharacterViewPsi;
 ItemCard;
 ConsumableCard;

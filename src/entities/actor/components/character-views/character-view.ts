@@ -36,6 +36,11 @@ import { CharacterViewBase, ItemGroup } from './character-view-base';
 import styles from './character-view.scss';
 import { substanceActivationDialog } from './components/substance-activation-dialog';
 
+type Detail = {
+  label: string;
+  value: string | number;
+};
+
 @customElement('character-view')
 export class CharacterView extends CharacterViewBase {
   static get is() {
@@ -236,22 +241,16 @@ export class CharacterView extends CharacterViewBase {
               </div>
             `}
 
-        <character-view-tabbed-section
+        <character-view-test-actions
           .character=${this.character}
           .ego=${this.character.ego}
-        ></character-view-tabbed-section>
+        ></character-view-test-actions>
       </div>
       ${this.renderDrawer()}
 
       <mwc-tab-bar @MDCTabBar:activated=${this.setTab}>
-        <mwc-tab
-          minWidth
-          label=${localize('overview')}
-        ></mwc-tab>
-        <mwc-tab
-          minWidth
-          label=${localize('details')}
-        ></mwc-tab>
+        <mwc-tab minWidth label=${localize('overview')}></mwc-tab>
+        <mwc-tab minWidth label=${localize('details')}></mwc-tab>
       </mwc-tab-bar>
 
       <div class="sections">
@@ -435,19 +434,14 @@ export class CharacterView extends CharacterViewBase {
   private renderDetails() {
     const { ego, sleeve, psi } = this.character;
     // TODO sleeve details, sex, limbs, reach, acquisition
+    const sleeveDetails: Detail[] | null | undefined = sleeve && compact([
+      "prehensileLimbs" in sleeve && { label: localize("prehensileLimbs"), value: sleeve.prehensileLimbs},
+    ])
     return html`
       <sl-details open summary=${localize('ego')}>
         ${notEmpty(ego.details)
           ? html`
-              <div class="details">
-                ${ego.details.map(
-                  ({ label, value }) => html`
-                    <span class="detail"
-                      >${label} <span class="value">${value}</span></span
-                    >
-                  `,
-                )}
-              </div>
+              <div class="details">${ego.details.map(this.renderDetail)}</div>
             `
           : ''}
         ${ego.description
@@ -469,6 +463,10 @@ export class CharacterView extends CharacterViewBase {
       ${sleeve
         ? html`
             <sl-details open summary=${localize('sleeve')}>
+
+            ${notEmpty(sleeveDetails) ? html`
+            <div class="details">${sleeveDetails.map(this.renderDetail)}</div>
+            ` : ""}
               ${sleeve.description
                 ? html`
                     <enriched-html
@@ -481,6 +479,11 @@ export class CharacterView extends CharacterViewBase {
         : ''}
     `;
   }
+
+  private renderDetail = ({ label, value }: Detail) => html` <span
+    class="detail"
+    >${label} <span class="value">${value}</span></span
+  >`;
 
   private renderItemGroup = (group: ItemGroup) => {
     if (

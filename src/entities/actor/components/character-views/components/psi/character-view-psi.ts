@@ -47,8 +47,8 @@ export class CharacterViewPsi extends LitElement {
     return html`
     ${this.renderInfectionTracker()}
     <div class="actions">
-      <mwc-button unelevated dense>${localize("infection")} ${localize("test")}</mwc-button>
-      <mwc-button unelevated dense>${localize("roll")} ${localize("influences")}</mwc-button>
+      <mwc-button dense>${localize("infection")} ${localize("test")}</mwc-button>
+      <mwc-button dense>${localize("roll")} ${localize("influences")}</mwc-button>
     </div>
     `
   }

@@ -28,7 +28,7 @@ export class MessageStressTest extends LitElement {
 
   @internalProperty() private viewFormulas = false;
 
-  @internalProperty() usedRollParts?: ReadonlySet<number>;
+  @internalProperty() private usedRollParts?: ReadonlySet<number>;
 
   toggleFormulas() {
     this.viewFormulas = !this.viewFormulas;
@@ -40,6 +40,7 @@ export class MessageStressTest extends LitElement {
 
   get rolls() {
     const { usedRollParts } = this;
+    console.log(this.usedRollParts);
     return usedRollParts
       ? this.stress.rolledFormulas.filter((_, index) =>
           usedRollParts?.has(index),
@@ -64,11 +65,14 @@ export class MessageStressTest extends LitElement {
     const { damageValue, formula } = this.totals;
     const { minStress } = this.stress;
     if (!minStress) return { damageValue, formula };
-    if (minStress === 'half')
+    if (minStress === 'half') {
+      // TODO better indication that min sv is halved
       return {
-        formula: cleanFormula(`(${formula}) / 2`),
+        formula: formula && cleanFormula(`(${formula}) / 2`),
         damageValue: Math.ceil(damageValue / 2),
       };
+    }
+     
     return {
       formula: String(minStress),
       damageValue: minStress,

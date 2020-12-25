@@ -63,7 +63,7 @@
     "@types/resize-observer-browser": "^0.1.4",
     "@types/snowpack-env": "^2.3.3",
     "@types/socket.io": "^2.1.12",
-    "@web/test-runner": "^0.11.1",
+    "@web/test-runner": "^0.11.3",
     "archiver": "^5.1.0",
     "pixi.js": "^5.3.6",
     "prettier": "^2.2.1",
@@ -74,7 +74,7 @@
     "tinymce": "^5.6.2",
     "ts-json-schema-generator": "^0.82.0",
     "type-fest": "^0.20.2",
-    "typescript": "^4.2.0-dev.20201224",
+    "typescript": "^4.2.0-dev.20201225",
     "utility-types": "^3.10.0"
   }
 }

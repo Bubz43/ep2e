@@ -1,37 +1,26 @@
-import { renderTextInput } from '@src/components/field/fields';
-import { renderAutoForm } from '@src/components/form/forms';
-import { TabsMixin } from '@src/components/mixins/tabs-mixin';
-import { AptitudeType, enumValues } from '@src/data-enums';
-import type { Ego } from '@src/entities/actor/ego';
-import type { Character } from '@src/entities/actor/proxies/character';
-import { maxFavors } from '@src/features/reputations';
-import { Skill, skillFilterCheck } from '@src/features/skills';
-import { LangEntry, localize } from '@src/foundry/localization';
-import { notEmpty, safeMerge } from '@src/utility/helpers';
-import {
-  customElement,
-  html,
-  internalProperty,
-  LitElement,
-  property,
-  PropertyValues,
-  queryAll,
-} from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map';
-import { live } from 'lit-html/directives/live';
-import { first, range, reject } from 'remeda';
-import styles from './character-view-tabbed-section.scss';
+import { renderTextInput } from "@src/components/field/fields";
+import { renderAutoForm } from "@src/components/form/forms";
+import { enumValues, AptitudeType } from "@src/data-enums";
+import type { Ego } from "@src/entities/actor/ego";
+import type { Character } from "@src/entities/actor/proxies/character";
+import { maxFavors } from "@src/features/reputations";
+import { skillFilterCheck, Skill } from "@src/features/skills";
+import { LangEntry, localize } from "@src/foundry/localization";
+import { safeMerge, notEmpty } from "@src/utility/helpers";
+import { customElement, LitElement, property, html, internalProperty, PropertyValues, queryAll } from "lit-element";
+import { classMap } from "lit-html/directives/class-map";
+import { live } from "lit-html/directives/live";
+import { reject, first, range } from "remeda";
+import styles from "./character-view-test-actions.scss";
 
-@customElement('character-view-tabbed-section')
-export class CharacterViewTabbedSection extends TabsMixin(['stats', 'details'])(
-  LitElement,
-) {
+@customElement("character-view-test-actions")
+export class CharacterViewTestActions extends LitElement {
   static get is() {
-    return 'character-view-tabbed-section' as const;
+    return "character-view-test-actions" as const;
   }
 
   static get styles() {
-    return [styles];
+     return [styles];
   }
 
   @property({ attribute: false }) character!: Character;
@@ -55,7 +44,7 @@ export class CharacterViewTabbedSection extends TabsMixin(['stats', 'details'])(
   }
 
   private updateSkillControls = (
-    changed: Partial<CharacterViewTabbedSection['skillControls']>,
+    changed: Partial<CharacterViewTestActions['skillControls']>,
   ) => {
     this.skillControls = safeMerge(this.skillControls, changed);
   };
@@ -74,25 +63,6 @@ export class CharacterViewTabbedSection extends TabsMixin(['stats', 'details'])(
   }
 
   render() {
-    return html`
-    ${this.renderStats()}
-      <!-- ${this.renderTabBar()} ${this.renderTabbedContent(this.activeTab)} -->
-    `;
-  }
-
-  protected renderTab(tab: LangEntry) {
-    return html`
-      <mwc-tab data-tab=${tab} minWidth label=${localize(tab)}></mwc-tab>
-    `;
-  }
-
-  protected renderTabbedContent(
-    tab: CharacterViewTabbedSection['tabs'][number],
-  ) {
-    return tab === 'stats' ? this.renderStats() : this.renderDetails();
-  }
-
-  protected renderStats() {
     const { active, know } = this.ego.groupedSkills;
 
     return html`
@@ -142,28 +112,7 @@ export class CharacterViewTabbedSection extends TabsMixin(['stats', 'details'])(
     `;
   }
 
-  protected renderDetails() {
-    return html`
-      ${notEmpty(this.ego.details)
-        ? html`
-            <div class="details">
-              ${this.ego.details.map(
-                ({ label, value }) => html`
-                  <span class="details"
-                    >${label} <span class="value">${value}</span></span
-                  >
-                `,
-              )}
-            </div>
-          `
-        : ''}
-      ${this.ego.description
-        ? html`
-            <enriched-html .content=${this.ego.description}></enriched-html>
-          `
-        : ''}
-    `;
-  }
+
 
   private renderAptitude = (type: AptitudeType) => {
     const points = this.ego.aptitudes[type];
@@ -223,6 +172,6 @@ export class CharacterViewTabbedSection extends TabsMixin(['stats', 'details'])(
 
 declare global {
   interface HTMLElementTagNameMap {
-    'character-view-tabbed-section': CharacterViewTabbedSection;
+    "character-view-test-actions": CharacterViewTestActions;
   }
 }

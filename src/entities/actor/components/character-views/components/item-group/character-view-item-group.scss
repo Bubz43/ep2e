@@ -7,7 +7,11 @@
 
 :host {
   display: block;
+}
+
+:host([collapsed]) {
   height: min-content;
+
 }
 
 sl-dropzone {
@@ -29,7 +33,7 @@ sl-dropzone {
   }
 }
 
-[part='header'] {
+[part='header'] { 
   position: relative;
   outline: none;
   &[tabindex='0'] {

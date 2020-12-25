@@ -59,7 +59,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
 
   @property({ attribute: false }) character!: Character;
 
-  @property({ type: Boolean }) collapsed = false;
+  @property({ type: Boolean, reflect: true }) collapsed = false;
 
   @internalProperty() private dragTargetItem: ItemProxy | null = null;
 
