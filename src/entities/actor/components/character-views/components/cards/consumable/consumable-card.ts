@@ -117,11 +117,11 @@ export class ConsumableCard extends ItemCardBase {
     const { editable } = item;
     return html` ${item.type !== ItemType.Substance || !item.appliedState
       ? renderAutoForm({
-          classes: 'quantity-form',
-          disabled: !editable,
-          props: { quantity: item.quantity },
-          update: item.updateQuantity.commit,
-          fields: ({ quantity }) => html`
+        classes: 'quantity-form',
+        disabled: !editable,
+        props: { quantity: item.quantity },
+        update: item.updateQuantity.commit,
+        fields: ({ quantity }) => html`
             <div class="quantity">
               <mwc-icon-button
                 icon="keyboard_arrow_left"
@@ -136,8 +136,12 @@ export class ConsumableCard extends ItemCardBase {
               ></mwc-icon-button>
             </div>
           `,
-        })
-      : ''}`;
+      })
+      : ''}
+      ${item.type === ItemType.Explosive ? html`
+      <character-view-explosive-attacks .explosive=${item}></character-view-explosive-attacks>
+      ` : ""}
+      `;
   }
 }
 

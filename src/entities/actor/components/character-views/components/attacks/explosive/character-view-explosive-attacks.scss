@@ -1,11 +1,101 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+@include resetUnorderedList();
+
 * {
   box-sizing: border-box;
 }
 
 :host {
-  display: block;
+  display: flex;
+  flex-flow: column;
+}
+
+.shared {
+  display: flex;
+  justify-content: space-around;
+  flex-flow: row wrap;
+margin-top: 0.25rem;
+> * {
+  padding: 0 0.5rem;
+  border: 1px solid var(--color-border);
+  background: alphav(var(--color-border), 0.5);
+}
+}
+
+.area-effect {
+  .area-values {
+    color: var(--color-text-lighter);
+  }
+}
+
+ul {
+  display: grid;
+  gap: 0.25rem;
+  font-size: small;
+}
+
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0 0.25rem;
+  border: 2px solid var(--color-grey);
+  border-top: none;
+  border-bottom: none;
+  background: alphav(var(--color-text), 0.05);
+  .info {
+    padding: 0 0.5rem;
+  }
+  .label {
+    font-size: 1rem;
+  }
+
+  .main {
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+
+  .actions {
+    display: grid;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0;
+    --mdc-theme-primary: var(--color-grey);
+    @include textButton();
+    // margin-right: calc(-0.25rem - 1px);
+    button {
+      // transform: rotate3d(1,1,1, 5deg);
+      text-transform: uppercase;
+      font-size: 1rem;
+      color: var(--color-grey);
+      border: 1px solid currentColor;
+      border-right: none;
+      padding: 0 0.5rem;
+      justify-content: center;
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+      font-size: 0.9rem;
+      span {
+        display: inline-block;
+        transition: transform 50ms ease-in;
+      }
+      &:active {
+        span {
+          transform: scale3d(0.97, 0.97, 0.97);
+        }
+      }
+      &:focus {
+        text-shadow: none;
+        box-shadow: 0 0 3px var(--color-secondary);
+      }
+    }
+  }
   
+}
+
+.additional {
+  color: var(--color-text-lighter);
+  font-size: small;
 }

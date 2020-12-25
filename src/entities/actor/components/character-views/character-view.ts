@@ -426,16 +426,23 @@ export class CharacterView extends CharacterViewBase {
 
       <section>
         <sl-header heading=${localize('attacks')}></sl-header>
-        ${this.character.consumables.map((consumable) => {
-          if (consumable.type !== ItemType.Explosive) return '';
-          return html`
-            <character-view-explosive-attacks
-              .character=${this.character}
-              .token=${this.token}
-              .explosive=${consumable}
-            ></character-view-explosive-attacks>
-          `;
-        })}
+        <ul class="attacks">
+          ${this.character.consumables.map((consumable) => {
+            if (consumable.type !== ItemType.Explosive) return '';
+            return html`
+              <li>
+                <header>
+                  ${consumable.fullName}
+                  <span class="type">${consumable.fullType}</span>
+                </header>
+                <character-view-explosive-attacks
+                
+                  .explosive=${consumable}
+                ></character-view-explosive-attacks>
+              </li>
+            `;
+          })}
+        </ul>
       </section>
 
       ${repeat(enumValues(ItemGroup), identity, this.renderItemGroup)}

@@ -41,7 +41,7 @@ export class Explosive
 
   get fullName() {
     const { substance } = this;
-    return `${this.name} ${substance ? `(${substance.name})` : ''}`;
+    return `${this.name} (${this.quantity})  ${substance ? `[${substance.name}]` : ''}`;
   }
 
   get isMissile() {
@@ -132,6 +132,10 @@ export class Explosive
 
   get size() {
     return this.epData.size;
+  }
+
+  get sticky() {
+    return this.epData.sticky
   }
 
   get fullType() {

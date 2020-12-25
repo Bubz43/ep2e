@@ -35,10 +35,10 @@ export const formatAreaEffect = (
 ) => {
   return areaEffect
     ? `${localize(areaEffect)}${
-        areaEffectRadius
-          ? areaEffect !== AreaEffectType.Centered
-            ? ` (${areaEffectRadius} m)`
-            : ` (–2 DV/m)`
+        areaEffect === AreaEffectType.Centered
+          ? ` (–2 DV/m)`
+          : areaEffectRadius
+          ? ` (${areaEffectRadius} m)`
           : ''
       }`
     : fallback;
