@@ -63,7 +63,6 @@ export const importFromCompendium = (
   );
 };
 
-
 export const performIntegerSort = <T extends { id: string }>({
   src,
   target,

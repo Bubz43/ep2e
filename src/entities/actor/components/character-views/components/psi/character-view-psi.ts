@@ -29,7 +29,6 @@ export class CharacterViewPsi extends LitElement {
   render() {
     return html`
       <header>
-     
         <button class="name" @click=${this.psi.openForm}>
           ${this.psi.name}
         </button>
@@ -45,12 +44,16 @@ export class CharacterViewPsi extends LitElement {
 
   private renderInfectionInfo() {
     return html`
-    ${this.renderInfectionTracker()}
-    <div class="actions">
-      <mwc-button dense>${localize("infection")} ${localize("test")}</mwc-button>
-      <mwc-button dense>${localize("roll")} ${localize("influences")}</mwc-button>
-    </div>
-    `
+      ${this.renderInfectionTracker()}
+      <div class="actions">
+        <mwc-button dense
+          >${localize('infection')} ${localize('test')}</mwc-button
+        >
+        <mwc-button dense
+          >${localize('roll')} ${localize('influences')}</mwc-button
+        >
+      </div>
+    `;
   }
 
   private renderInfectionTracker() {
@@ -64,7 +67,7 @@ export class CharacterViewPsi extends LitElement {
 
     return html` <section class="infection-tracker">
       ${renderAutoForm({
-        classes: "infection",
+        classes: 'infection',
         disabled: !editable,
         props: { infectionRating },
         update: ({ infectionRating }) =>
@@ -75,7 +78,6 @@ export class CharacterViewPsi extends LitElement {
             max: 99,
           }),
       })}
-     
 
       <mwc-linear-progress
         class="infection-progress"
@@ -98,8 +100,6 @@ export class CharacterViewPsi extends LitElement {
       ${level > 1 ? this.renderFreePush() : ''}
     </section>`;
   }
-
-
 
   private renderFreePush() {
     const { hasFreePushEffect, activeFreePush } = this.psi;

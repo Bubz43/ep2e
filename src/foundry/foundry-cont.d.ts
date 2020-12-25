@@ -1,4 +1,11 @@
-import type { ValueOf, Mutable, JsonObject, Class, ConditionalExcept, ConditionalPick } from 'type-fest';
+import type {
+  ValueOf,
+  Mutable,
+  JsonObject,
+  Class,
+  ConditionalExcept,
+  ConditionalPick,
+} from 'type-fest';
 import type { DeepPartial, PickByValue, ValuesType } from 'utility-types';
 import type * as PIXI from 'pixi.js';
 import type { Socket } from 'socket.io';
@@ -124,7 +131,7 @@ type Layer<
   L extends PlaceablesLayer,
   T extends PlaceableObject,
   F = LayerInfo<T>
-  > = Omit<L, keyof F> & F;
+> = Omit<L, keyof F> & F;
 
 export type CanvasLayers = {
   background: BackgroundLayer;
@@ -134,7 +141,7 @@ export type CanvasLayers = {
   templates: Layer<TemplateLayer, MeasuredTemplate>;
   walls: Layer<WallsLayer, Wall>;
   notes: Layer<NotesLayer, Note>;
-  tokens: Omit<Layer<TokenLayer, Token>, "cycleTokens"> & {
+  tokens: Omit<Layer<TokenLayer, Token>, 'cycleTokens'> & {
     cycleTokens(forward: boolean, reset: boolean): boolean;
   };
   lighting: Layer<LightingLayer, AmbientLight>;
@@ -144,7 +151,7 @@ export type CanvasLayers = {
   controls: ControlsLayer;
 };
 
-type PlaceableLayers = ConditionalPick <CanvasLayers, { placeables: any[]}>
+type PlaceableLayers = ConditionalPick<CanvasLayers, { placeables: any[] }>;
 
 type CombatRoundInfo = {
   round: number | null;

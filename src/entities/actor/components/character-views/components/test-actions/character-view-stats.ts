@@ -1,26 +1,34 @@
-import { renderTextInput } from "@src/components/field/fields";
-import { renderAutoForm } from "@src/components/form/forms";
-import { enumValues, AptitudeType } from "@src/data-enums";
-import type { Ego } from "@src/entities/actor/ego";
-import type { Character } from "@src/entities/actor/proxies/character";
-import { maxFavors } from "@src/features/reputations";
-import { skillFilterCheck, Skill } from "@src/features/skills";
-import { LangEntry, localize } from "@src/foundry/localization";
-import { safeMerge, notEmpty } from "@src/utility/helpers";
-import { customElement, LitElement, property, html, internalProperty, PropertyValues, queryAll } from "lit-element";
-import { classMap } from "lit-html/directives/class-map";
-import { live } from "lit-html/directives/live";
-import { reject, first, range } from "remeda";
-import styles from "./character-view-test-actions.scss";
+import { renderTextInput } from '@src/components/field/fields';
+import { renderAutoForm } from '@src/components/form/forms';
+import { enumValues, AptitudeType } from '@src/data-enums';
+import type { Ego } from '@src/entities/actor/ego';
+import type { Character } from '@src/entities/actor/proxies/character';
+import { maxFavors } from '@src/features/reputations';
+import { skillFilterCheck, Skill } from '@src/features/skills';
+import { LangEntry, localize } from '@src/foundry/localization';
+import { safeMerge, notEmpty } from '@src/utility/helpers';
+import {
+  customElement,
+  LitElement,
+  property,
+  html,
+  internalProperty,
+  PropertyValues,
+  queryAll,
+} from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
+import { live } from 'lit-html/directives/live';
+import { reject, first, range } from 'remeda';
+import styles from './character-view-test-actions.scss';
 
-@customElement("character-view-test-actions")
+@customElement('character-view-test-actions')
 export class CharacterViewTestActions extends LitElement {
   static get is() {
-    return "character-view-test-actions" as const;
+    return 'character-view-test-actions' as const;
   }
 
   static get styles() {
-     return [styles];
+    return [styles];
   }
 
   @property({ attribute: false }) character!: Character;
@@ -112,8 +120,6 @@ export class CharacterViewTestActions extends LitElement {
     `;
   }
 
-
-
   private renderAptitude = (type: AptitudeType) => {
     const points = this.ego.aptitudes[type];
     return html` <wl-list-item
@@ -172,6 +178,6 @@ export class CharacterViewTestActions extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "character-view-test-actions": CharacterViewTestActions;
+    'character-view-test-actions': CharacterViewTestActions;
   }
 }

@@ -73,7 +73,7 @@ mwc-tab-bar {
   overflow-x: hidden;
   max-height: calc(100vh - 150px);
   min-height: 100%;
-  padding: 0.5rem 0.25rem;;
+  padding: 0.5rem 0.25rem;
   gap: 0.5rem;
   margin-left: 0.25rem;
 
@@ -90,11 +90,9 @@ mwc-tab-bar {
     &:not(character-view-test-actions) {
       border-left-width: 0.25rem;
       border-left-style: solid;
-      box-shadow: -2px 0 5px rgba(black, 0.75)
+      box-shadow: -2px 0 5px rgba(black, 0.75);
     }
-
   }
-
 
   .sleeve-select {
     padding: 0.5rem;
@@ -127,7 +125,7 @@ mwc-tab-bar {
       alphav(var(--color-bg), 0.85),
       alphav(var(--color-bg-alt), 0.85)
     );
-    
+
     min-height: unset;
     --sl-header-font-size: large;
     margin: 1px 0 0 1px;
@@ -240,8 +238,6 @@ mwc-tab-bar {
 .active-substances {
   display: grid;
   gap: 0.25rem;
-
-  
 }
 
 .sections {
@@ -253,7 +249,7 @@ mwc-tab-bar {
 .details {
   column-count: 2;
   border-bottom: 2px groove var(--color-border);
-    padding: 0 0.25rem 0.25rem;
+  padding: 0 0.25rem 0.25rem;
 }
 
 .detail {

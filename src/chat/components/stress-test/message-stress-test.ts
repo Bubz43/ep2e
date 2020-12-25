@@ -72,7 +72,7 @@ export class MessageStressTest extends LitElement {
         damageValue: Math.ceil(damageValue / 2),
       };
     }
-     
+
     return {
       formula: String(minStress),
       damageValue: minStress,

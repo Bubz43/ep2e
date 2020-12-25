@@ -133,7 +133,7 @@ export class Ego {
   }
 
   get hasStressRoll() {
-    return this.settings.threatDetails && !!this.stressValueInfo.value
+    return this.settings.threatDetails && !!this.stressValueInfo.value;
   }
 
   static formatPoint(point: CharacterPoint) {

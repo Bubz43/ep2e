@@ -8,15 +8,12 @@
 :host {
   display: grid;
   grid-auto-rows: min-content;
-  
 }
-
 
 header {
   position: relative;
   padding: 0.25rem 0.75rem;
   text-shadow: 0 0 4px black;
-
 
   .name {
     all: unset;
@@ -41,8 +38,8 @@ header {
 .infection-tracker {
   display: grid;
   grid-template-areas:
-    "bar bar bar"
-    ".. chi free";
+    'bar bar bar'
+    '.. chi free';
   grid-template-columns: 1fr 1fr 1fr;
   padding: 0.5rem 0.5rem 0;
   z-index: 0;
@@ -61,13 +58,12 @@ header {
     width: 2.75ch;
     height: 2.75ch;
     border: none;
- 
+
     &:focus {
       color: var(--color-secondary);
     }
   }
 }
-
 
 .infection-progress {
   grid-area: bar;
@@ -90,7 +86,7 @@ header {
   width: fit-content;
   transform: translate(-1px, -0.75rem);
   &::before {
-    content: "|";
+    content: '|';
     display: block;
     filter: brightness(130%);
   }
@@ -141,7 +137,7 @@ header {
     cursor: pointer;
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       display: block;
       top: 100%;

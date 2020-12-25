@@ -71,7 +71,6 @@ export class CharacterViewSleeve extends LitElement {
       }),
       !!token,
     );
-
   }
 
   render() {
@@ -135,32 +134,34 @@ export class CharacterViewSleeve extends LitElement {
             </div>
           `
         : ''}
-     <div class="healths ${physicalHealth && meshHealth ? "multiple" : ""}"> ${physicalHealth
-        ? html`
-            <health-item
-              @contextmenu=${() =>
-                this.character.openHealthEditor(physicalHealth)}
+      <div class="healths ${physicalHealth && meshHealth ? 'multiple' : ''}">
+        ${physicalHealth
+          ? html`
+              <health-item
+                @contextmenu=${() =>
+                  this.character.openHealthEditor(physicalHealth)}
+                clickable
+                @click=${this.viewPhysicalHealth}
+                .health=${physicalHealth}
+              >
+              </health-item>
+            `
+          : ''}
+        ${meshHealth
+          ? html` <health-item
+              @contextmenu=${() => this.character.openHealthEditor(meshHealth)}
               clickable
-              @click=${this.viewPhysicalHealth}
-              .health=${physicalHealth}
+              @click=${this.viewMeshHealth}
+              .health=${meshHealth}
             >
-            </health-item>
-          `
-        : ''}
-      ${meshHealth
-        ? html` <health-item
-            @contextmenu=${() => this.character.openHealthEditor(meshHealth)}
-            clickable
-            @click=${this.viewMeshHealth}
-            .health=${meshHealth}
-          >
-            ${sleeve.type !== ActorType.Infomorph && sleeve.nonDefaultBrain
-              ? html`
-                  <span slot="source">${sleeve.nonDefaultBrain.name}</span>
-                `
-              : ''}
-          </health-item>`
-        : ''}</div>
+              ${sleeve.type !== ActorType.Infomorph && sleeve.nonDefaultBrain
+                ? html`
+                    <span slot="source">${sleeve.nonDefaultBrain.name}</span>
+                  `
+                : ''}
+            </health-item>`
+          : ''}
+      </div>
 
       <div class="movement">
         ${(['encumbered', 'overburdened'] as const).map((mod) => {

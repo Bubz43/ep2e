@@ -8,7 +8,7 @@ import {
   updateManyActors,
   gmIsConnected,
 } from '@src/foundry/misc-helpers';
-import { readyCanvas } from "@src/foundry/canvas";
+import { readyCanvas } from '@src/foundry/canvas';
 import { EP } from '@src/foundry/system';
 import { activeTokenStatusEffects } from '@src/foundry/token-helpers';
 import { debounceFn } from '@src/utility/decorators';

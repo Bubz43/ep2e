@@ -23,7 +23,7 @@ import { navMenuListener } from './foundry-apps';
 import type { TokenData } from './foundry-cont';
 import { localize } from './localization';
 import { convertMenuOptions } from './misc-helpers';
-import { readyCanvas } from "./canvas";
+import { readyCanvas } from './canvas';
 import { activeTokenStatusEffects } from './token-helpers';
 
 Entity.prototype.matchRegexp = function (regex: RegExp) {

@@ -14,7 +14,7 @@ import {
 } from '@src/features/environment';
 import { openImagePicker, closeImagePicker } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
-import { readyCanvas } from "@src/foundry/canvas";
+import { readyCanvas } from '@src/foundry/canvas';
 import { EP } from '@src/foundry/system';
 import { gameSettings } from '@src/init';
 import type { FieldPropsRenderer } from '@src/utility/field-values';

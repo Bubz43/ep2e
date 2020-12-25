@@ -434,9 +434,14 @@ export class CharacterView extends CharacterViewBase {
   private renderDetails() {
     const { ego, sleeve, psi } = this.character;
     // TODO sleeve details, sex, limbs, reach, acquisition
-    const sleeveDetails: Detail[] | null | undefined = sleeve && compact([
-      "prehensileLimbs" in sleeve && { label: localize("prehensileLimbs"), value: sleeve.prehensileLimbs},
-    ])
+    const sleeveDetails: Detail[] | null | undefined =
+      sleeve &&
+      compact([
+        'prehensileLimbs' in sleeve && {
+          label: localize('prehensileLimbs'),
+          value: sleeve.prehensileLimbs,
+        },
+      ]);
     return html`
       <sl-details open summary=${localize('ego')}>
         ${notEmpty(ego.details)
@@ -463,10 +468,13 @@ export class CharacterView extends CharacterViewBase {
       ${sleeve
         ? html`
             <sl-details open summary=${localize('sleeve')}>
-
-            ${notEmpty(sleeveDetails) ? html`
-            <div class="details">${sleeveDetails.map(this.renderDetail)}</div>
-            ` : ""}
+              ${notEmpty(sleeveDetails)
+                ? html`
+                    <div class="details">
+                      ${sleeveDetails.map(this.renderDetail)}
+                    </div>
+                  `
+                : ''}
               ${sleeve.description
                 ? html`
                     <enriched-html
