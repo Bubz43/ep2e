@@ -18,9 +18,9 @@
   flex-flow: row wrap;
 margin-top: 0.25rem;
 > * {
-  padding: 0 0.5rem;
-  border: 1px solid var(--color-border);
-  background: alphav(var(--color-border), 0.5);
+  padding: 0 0.75rem;
+  border: 1px solid var(--color-bg);
+  background: rgba(black, 0.35);
 }
 }
 
@@ -45,11 +45,13 @@ li {
   border-top: none;
   border-bottom: none;
   background: alphav(var(--color-text), 0.05);
+  background: rgba(black, 0.25);
   .info {
-    padding: 0 0.5rem;
+    padding: 0 0.75rem;
   }
   .label {
     font-size: 1rem;
+    letter-spacing: 1px;
   }
 
   .main {
