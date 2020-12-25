@@ -139,6 +139,7 @@ import { PhysicalTechCard } from './entities/actor/components/character-views/co
 import { CharacterViewActiveSubstance } from './entities/actor/components/character-views/components/active-substance/character-view-active-substance';
 import { CharacterViewPsi } from './entities/actor/components/character-views/components/psi/character-view-psi';
 import { CharacterViewTestActions } from './entities/actor/components/character-views/components/test-actions/character-view-stats';
+import { CharacterViewExplosiveAttacks } from './entities/actor/components/character-views/components/attacks/explosive/character-view-explosive-attacks';
 
 // Generic Components
 Field;
@@ -192,6 +193,7 @@ CharacterViewConditions;
 CharacterViewActiveSubstance;
 CharacterViewTestActions;
 CharacterViewPsi;
+CharacterViewExplosiveAttacks;
 ItemCard;
 ConsumableCard;
 PhysicalTechCard;
