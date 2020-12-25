@@ -29,6 +29,7 @@ import {
   enumValues,
   ExplosiveSize,
   ExplosiveType,
+  SubstanceApplicationMethod,
   WeaponAttackType,
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
@@ -155,7 +156,7 @@ export class ExplosiveForm extends ItemFormBase {
             explosiveType,
             size,
             sticky,
-            containSubstance,
+            useSubstance,
             hasSecondaryMode,
             areaEffect: areaEffectType,
             areaEffectRadius: radius,
@@ -172,9 +173,16 @@ export class ExplosiveForm extends ItemFormBase {
                   { disabled: loaded },
                 )
               : '',
+            renderSelectField(
+              useSubstance,
+              [
+                SubstanceApplicationMethod.Dermal,
+                SubstanceApplicationMethod.Inhalation,
+              ],
+              { emptyText: localize('n/a') },
+            ),
             html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
             renderLabeledCheckbox(sticky),
-            renderLabeledCheckbox(containSubstance),
             renderLabeledCheckbox({
               ...hasSecondaryMode,
               label: localize('secondaryMode'),

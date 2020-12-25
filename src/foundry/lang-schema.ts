@@ -1366,7 +1366,7 @@ type LangEntries =
   | 'beforeModifiers'
   | 'resist'
   | 'finished'
-  | 'stats';
+  | 'stats' | "n/a";
 type FullNames =
   | 'cog'
   | 'int'

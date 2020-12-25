@@ -2,6 +2,7 @@ import type { MultiSelectedEvent } from '@material/mwc-list/mwc-list-foundation'
 import { renderLabeledCheckbox } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { enumValues, SubstanceApplicationMethod } from '@src/data-enums';
+import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisition';
 import { ItemType } from '@src/entities/entity-types';
 import {
   Substance,
@@ -437,6 +438,7 @@ export class CharacterView extends CharacterViewBase {
     const sleeveDetails: Detail[] | null | undefined =
       sleeve &&
       compact([
+        ...morphAcquisitionDetails(sleeve.acquisition),
         'prehensileLimbs' in sleeve && {
           label: localize('prehensileLimbs'),
           value: sleeve.prehensileLimbs,

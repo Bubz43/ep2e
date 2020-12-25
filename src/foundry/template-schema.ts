@@ -460,9 +460,8 @@ type ExplosiveData = {
   sticky: boolean;
   areaEffect: '' | AreaEffectType;
   areaEffectRadius: number;
-  containSubstance: boolean;
+  useSubstance: "" | SubstanceApplicationMethod;
   dosesPerUnit: number;
-  // TODO drug/toxin doses?
   hasSecondaryMode: boolean;
   primaryAttack: ExplosiveAttackData;
   secondaryAttack: ExplosiveAttackData;

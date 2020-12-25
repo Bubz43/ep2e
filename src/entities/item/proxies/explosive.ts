@@ -111,7 +111,7 @@ export class Explosive
   }
 
   get canContainSubstance() {
-    return this.epData.containSubstance;
+    return !!this.epData.useSubstance;
   }
 
   get hasSecondaryMode() {
