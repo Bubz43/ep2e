@@ -40,7 +40,6 @@ export class MessageStressTest extends LitElement {
 
   get rolls() {
     const { usedRollParts } = this;
-    console.log(this.usedRollParts);
     return usedRollParts
       ? this.stress.rolledFormulas.filter((_, index) =>
           usedRollParts?.has(index),

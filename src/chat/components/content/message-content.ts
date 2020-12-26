@@ -36,6 +36,7 @@ export class MessageContent extends LitElement {
       heal,
       damage,
       substanceUse,
+      explosiveUse,
     } = this.data;
     if (!this.message.isContentVisible) return '';
     return html`
@@ -50,6 +51,13 @@ export class MessageContent extends LitElement {
             <message-health-change
               .healthChange=${healthChange}
             ></message-health-change>
+          `
+        : ''}
+      ${explosiveUse
+        ? html`
+            <message-explosive
+              .explosiveUse=${explosiveUse}
+            ></message-explosive>
           `
         : ''}
       ${substanceUse

@@ -1,3 +1,4 @@
+import type { MessageHeaderData } from '@src/chat/message-data';
 import type { ActorEP } from '@src/entities/actor/actor';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
@@ -126,6 +127,15 @@ export abstract class ItemProxyBase<T extends ItemType> {
     return [this.fullName, this.fullType, localize(this.type)].some((text) =>
       regex.test(text),
     );
+  }
+
+  get messageHeader(): MessageHeaderData {
+    return {
+      heading: this.name,
+      subheadings: this.fullType,
+      img: this.nonDefaultImg,
+      description: this.description
+    }
   }
 
   onDelete() {}

@@ -1,0 +1,28 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  
+}
+
+.state {
+  font-size: large;
+  text-align: center;
+  margin: 0.25rem;
+}
+
+.actions {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 0.5rem;
+  .detonate {
+    --mdc-theme-primary: var(--color-negative);
+  }
+}

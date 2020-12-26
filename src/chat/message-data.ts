@@ -1,3 +1,4 @@
+import type { ExplosiveTrigger } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
 import type { SubstanceUseMethod } from '@src/entities/item/proxies/substance';
 import type { ItemEntity } from '@src/entities/models';
@@ -35,7 +36,9 @@ export type MessageHealData = RequireAtLeastOne<
     healthType: HealthType;
   },
   'damageFormulas' | 'wounds'
->;
+  >;
+
+
 
 export type HealthChangeMessageData = HealthModification & {
   healthType: HealthType;
@@ -52,6 +55,15 @@ export type SubstanceUseData = {
   hidden?: boolean;
 };
 
+export type ExplosiveMessageData = {
+  explosive: ItemEntity<ItemType.Explosive>;
+  trigger: ExplosiveTrigger;
+  timerDuration?: number;
+  duration?: number;
+  state?: "" | "detonated" | "reclaimed";
+  attack?: "primary" | "secondary";
+}
+
 export type MessageHeaderData = {
   heading: string;
   subheadings?: string | string[];
@@ -65,6 +77,7 @@ export type MessageData = Partial<{
   stress: StressTestMessageData;
   damage: DamageMessageData;
   healthChange: HealthChangeMessageData;
+  explosiveUse: ExplosiveMessageData;
   heal: MessageHealData;
   substanceUse: SubstanceUseData;
 }>;

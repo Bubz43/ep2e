@@ -1,4 +1,3 @@
-// Side Effects
 // Material Components
 import '@material/mwc-button';
 import '@material/mwc-checkbox';
@@ -140,6 +139,7 @@ import { CharacterViewActiveSubstance } from './entities/actor/components/charac
 import { CharacterViewPsi } from './entities/actor/components/character-views/components/psi/character-view-psi';
 import { CharacterViewTestActions } from './entities/actor/components/character-views/components/test-actions/character-view-stats';
 import { CharacterViewExplosiveAttacks } from './entities/actor/components/character-views/components/attacks/explosive/character-view-explosive-attacks';
+import { MessageExplosive } from './chat/components/explosive/message-explosive';
 
 // Generic Components
 Field;
@@ -282,3 +282,4 @@ MessageHealthChange;
 MessageHeal;
 MessageDamage;
 MessageSubstanceUse;
+MessageExplosive;

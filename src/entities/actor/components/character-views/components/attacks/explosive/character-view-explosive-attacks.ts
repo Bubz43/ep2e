@@ -1,8 +1,10 @@
+import { createMessage } from '@src/chat/create-message';
 import {
   formatAreaEffect,
   formatArmorUsed,
 } from '@src/combat/attack-formatting';
 import type { ExplosiveAttack } from '@src/combat/attacks';
+import { ExplosiveTrigger } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
 import { prettyMilliseconds } from '@src/features/time';
@@ -13,6 +15,7 @@ import { clickIfEnter, notEmpty } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { map } from 'remeda';
+import { requestCharacter } from '../../../character-request-event';
 import styles from './character-view-explosive-attacks.scss';
 
 @customElement('character-view-explosive-attacks')
@@ -25,9 +28,21 @@ export class CharacterViewExplosiveAttacks extends LitElement {
     return [styles];
   }
 
-
   @property({ attribute: false }) explosive!: Explosive;
 
+  private createMessage() {
+    const { token, character } = requestCharacter(this);
+    createMessage({
+      data: {
+        header: this.explosive.messageHeader,
+        explosiveUse: {
+          explosive: this.explosive.getDataCopy(),
+          trigger: ExplosiveTrigger.Impact,
+        }
+      },
+      entity: token || character,
+    });
+  }
 
   render() {
     const {
@@ -76,9 +91,12 @@ export class CharacterViewExplosiveAttacks extends LitElement {
           </div>
         </div>
         <div class="actions">
-          <button @keydown=${clickIfEnter} dense outlined><span>${localize('throw')}</span></button>
-          <button @keydown=${clickIfEnter} dense outlined><span>${localize('plant')}</span></button>
-
+          <button @keydown=${clickIfEnter} dense outlined>
+            <span>${localize('throw')}</span>
+          </button>
+          <button @keydown=${clickIfEnter} dense outlined @click=${this.createMessage}>
+            <span>${localize('plant')}</span>
+          </button>
         </div>
       </li>
     `;
