@@ -80,4 +80,5 @@ export type MessageData = Partial<{
   explosiveUse: ExplosiveMessageData;
   heal: MessageHealData;
   substanceUse: SubstanceUseData;
+  fromMessageId: string;
 }>;

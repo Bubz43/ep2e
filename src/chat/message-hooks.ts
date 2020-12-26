@@ -89,7 +89,10 @@ export const onChatMessageRender = (message: ChatMessageEP, [el]: JQuery) => {
     message.user?.data.color || 'currentColor',
   );
 
+
+
   if (epData) {
+    // TODO add from before header
     const { innerHTML } = content;
     const showContent =
       !message.roll && innerHTML.trim() !== messageContentPlaceholder;
