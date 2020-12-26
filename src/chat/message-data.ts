@@ -61,7 +61,7 @@ export type ExplosiveMessageData = {
   timerDuration?: number;
   duration?: number;
   state?: "" | "detonated" | "reclaimed";
-  attack?: "primary" | "secondary";
+  attackType?: "primary" | "secondary";
 }
 
 export type MessageHeaderData = {

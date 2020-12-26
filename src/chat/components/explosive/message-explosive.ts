@@ -1,11 +1,13 @@
 import type { ExplosiveMessageData } from '@src/chat/message-data';
 import { Explosive } from '@src/entities/item/proxies/explosive';
 import { localize } from '@src/foundry/localization';
+import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { customElement, LitElement, property, html } from 'lit-element';
+import { MessageElement } from '../message-element';
 import styles from './message-explosive.scss';
 
 @customElement('message-explosive')
-export class MessageExplosive extends LitElement {
+export class MessageExplosive extends MessageElement {
   static get is() {
     return 'message-explosive' as const;
   }
@@ -24,6 +26,26 @@ export class MessageExplosive extends LitElement {
     });
   }
 
+  private async detonate() {
+    const { explosive } = this;
+    const { attackType = 'primary' } = this.explosiveUse;
+    const { rollFormulas, damageType, armorPiercing, armorUsed, reduceAVbyDV, substance } =
+      explosive.attacks[attackType] || explosive.attacks.primary;
+    // TODO substance
+    await this.message.createSimilar({
+      damage: {
+        damageType,
+        armorPiercing,
+        armorUsed,
+        reduceAVbyDV,
+        rolledFormulas: rollLabeledFormulas(rollFormulas),
+        source: explosive.name,
+      },
+    });
+
+    this.getUpdater("explosiveUse").commit({ state: "detonated"})
+  }
+
   render() {
     // const { explosive } = this;
     const { state, trigger, timerDuration, duration } = this.explosiveUse;
@@ -34,7 +56,7 @@ export class MessageExplosive extends LitElement {
         ? html` <p class="state">${localize(state)}</p> `
         : html`
             <div class="actions">
-              <mwc-button dense class="detonate"
+              <mwc-button dense class="detonate" @click=${this.detonate}
                 >${localize('detonate')}</mwc-button
               >
               <mwc-button dense class="reclaim"

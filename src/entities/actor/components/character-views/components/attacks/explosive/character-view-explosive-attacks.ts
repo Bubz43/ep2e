@@ -30,18 +30,19 @@ export class CharacterViewExplosiveAttacks extends LitElement {
 
   @property({ attribute: false }) explosive!: Explosive;
 
-  private createMessage() {
+  private async createMessage() {
     const { token, character } = requestCharacter(this);
-    createMessage({
+    await createMessage({
       data: {
         header: this.explosive.messageHeader,
         explosiveUse: {
           explosive: this.explosive.getDataCopy(),
           trigger: ExplosiveTrigger.Impact,
-        }
+        },
       },
       entity: token || character,
     });
+    this.explosive.consumeUnit();
   }
 
   render() {
@@ -50,6 +51,7 @@ export class CharacterViewExplosiveAttacks extends LitElement {
 
       sticky,
     } = this.explosive;
+    // TODO Place template choose trigger etc
     return html`
       <ul class="attacks">
         ${this.renderAttack(attacks.primary)}
@@ -66,6 +68,7 @@ export class CharacterViewExplosiveAttacks extends LitElement {
   }
 
   private renderAttack(attack: ExplosiveAttack) {
+    const disabled = !this.explosive.editable || this.explosive.quantity === 0;
     return html`
       <li>
         <div class="info">
@@ -91,10 +94,18 @@ export class CharacterViewExplosiveAttacks extends LitElement {
           </div>
         </div>
         <div class="actions">
-          <button @keydown=${clickIfEnter} dense outlined>
+          <button
+            ?disabled=${disabled}
+            @keydown=${clickIfEnter}
+            @click=${this.createMessage}
+          >
             <span>${localize('throw')}</span>
           </button>
-          <button @keydown=${clickIfEnter} dense outlined @click=${this.createMessage}>
+          <button
+            ?disabled=${disabled}
+            @keydown=${clickIfEnter}
+            @click=${this.createMessage}
+          >
             <span>${localize('plant')}</span>
           </button>
         </div>

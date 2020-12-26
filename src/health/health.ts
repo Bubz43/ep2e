@@ -157,7 +157,9 @@ export const formatFormulaWithMultiplier = (
   formula: string,
   multiplier: RollMultiplier,
 ) => {
-  return multiplier === 1 || !formula ? formula : `(${formula}) x${multiplier}`;
+  return !formula || multiplier === 1
+    ? formula
+    : `(${formula}) ${multiplier === 2 ? '×2' : '÷2'}`;
 };
 
 export const healthLabels = (healthType: HealthType, stat: HealthStat) =>

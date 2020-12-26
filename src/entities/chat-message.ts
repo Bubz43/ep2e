@@ -10,7 +10,7 @@ import { UpdateStore } from './update-store';
 export class ChatMessageEP extends ChatMessage {
   #updater?: UpdateStore<this['data']>;
 
-  get epFlags() {
+  get epFlags(): MessageData | undefined | null {
     return this.data.flags[EP.Name];
   }
 
@@ -66,9 +66,15 @@ export class ChatMessageEP extends ChatMessage {
 
   createSimilar(data: MessageData) {
     const { _id, user, timestamp, flags, ...common } = this.data;
+    // TODO figure out why type of epflags is any
+    const { header } = this.epFlags ?? {}
     const chatMessageData: Partial<ChatMessageEP['data']> = {
       ...common,
-      flags: { [EP.Name]: data, core: { canPopout: true } },
+      flags: {
+        [EP.Name]: {
+          ...data,
+          header: data.header ?? header,
+      }, core: { canPopout: true } },
     };
     return ChatMessage.create(chatMessageData, {});
   }
