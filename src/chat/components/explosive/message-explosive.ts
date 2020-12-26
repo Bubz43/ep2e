@@ -1,4 +1,7 @@
-import type { ExplosiveMessageData } from '@src/chat/message-data';
+import type {
+  DamageMessageData,
+  ExplosiveMessageData,
+} from '@src/chat/message-data';
 import { Explosive } from '@src/entities/item/proxies/explosive';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
@@ -29,21 +32,31 @@ export class MessageExplosive extends MessageElement {
   private async detonate() {
     const { explosive } = this;
     const { attackType = 'primary' } = this.explosiveUse;
-    const { rollFormulas, damageType, armorPiercing, armorUsed, reduceAVbyDV, substance } =
-      explosive.attacks[attackType] || explosive.attacks.primary;
+    const {
+      rollFormulas,
+      damageType,
+      armorPiercing,
+      armorUsed,
+      reduceAVbyDV,
+      substance,
+    } = explosive.attacks[attackType] || explosive.attacks.primary;
+    const damage: DamageMessageData = {
+      damageType,
+      armorPiercing,
+      armorUsed,
+      reduceAVbyDV,
+      rolledFormulas: rollLabeledFormulas(rollFormulas),
+      source: explosive.name,
+    };
     // TODO substance
-    await this.message.createSimilar({
-      damage: {
-        damageType,
-        armorPiercing,
-        armorUsed,
-        reduceAVbyDV,
-        rolledFormulas: rollLabeledFormulas(rollFormulas),
-        source: explosive.name,
-      },
-    });
-
-    this.getUpdater("explosiveUse").commit({ state: "detonated"})
+    if (this.message.isLatest) {
+      this.getUpdater('explosiveUse').store({ state: 'detonated' });
+      this.getUpdater("damage").commit(damage)
+    } else {
+      await this.message.createSimilar({ damage });
+      this.getUpdater('explosiveUse').commit({ state: 'detonated' });
+    }
+  
   }
 
   render() {

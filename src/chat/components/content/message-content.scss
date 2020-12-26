@@ -3,12 +3,11 @@
 
 * {
   box-sizing: border-box;
+  & + * {
+    border-top: 1px solid alphav(var(--color-border), 0.5);
+  }
 }
 
 :host {
   display: grid;
-}
-
-message-header + * {
-  border-top: 1px solid alphav(var(--color-border), 0.5);
 }

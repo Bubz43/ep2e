@@ -4,13 +4,35 @@ import { gmIsConnected } from '@src/foundry/misc-helpers';
 import { emitEPSocket } from '@src/foundry/socket';
 import { EP } from '@src/foundry/system';
 import { notEmpty } from '@src/utility/helpers';
+import { last } from 'remeda';
 import { findActor, findToken } from './find-entities';
 import { UpdateStore } from './update-store';
 
 export class ChatMessageEP extends ChatMessage {
   #updater?: UpdateStore<this['data']>;
-
-  get epFlags(): MessageData | undefined | null {
+  declare data: {
+    flags: {
+      [EP.Name]?: MessageData;
+      core?: { canPopout?: boolean };
+    };
+    flavor?: string | null;
+    blind: boolean;
+    whisper: string[];
+    speaker: Partial<{
+      actor: string | null;
+      alias: string | null;
+      scene: string | null;
+      token: string | null;
+    }>;
+    content: string;
+    roll?: Roll | string | null;
+    user: string;
+    type: number;
+    timestamp: number;
+    _id: string;
+    sound: string | null;
+  };
+  get epFlags() {
     return this.data.flags[EP.Name];
   }
 
@@ -66,7 +88,6 @@ export class ChatMessageEP extends ChatMessage {
 
   createSimilar(data: MessageData) {
     const { _id, user, timestamp, flags, ...common } = this.data;
-    // TODO figure out why type of epflags is any
     const { header } = this.epFlags ?? {}
     const chatMessageData: Partial<ChatMessageEP['data']> = {
       ...common,
@@ -74,9 +95,14 @@ export class ChatMessageEP extends ChatMessage {
         [EP.Name]: {
           ...data,
           header: data.header ?? header,
+          fromMessageId: data.fromMessageId ?? this.id,
       }, core: { canPopout: true } },
     };
     return ChatMessage.create(chatMessageData, {});
+  }
+
+  get isLatest() {
+    return last(game.messages._source)?._id === this.id
   }
 
   setRollDrag(ev: DragEvent) {

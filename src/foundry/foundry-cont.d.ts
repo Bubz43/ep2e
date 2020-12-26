@@ -163,6 +163,7 @@ type Col<T extends Entity> = Omit<Collection<T>, 'get'> & {
   [Symbol.iterator](): IterableIterator<T>;
   get(id: string, options?: { strict: Boolean }): T | null;
   render(force: boolean): unknown;
+  _source: T["data"][]
 };
 
 type GameCollections = {
@@ -404,28 +405,6 @@ declare global {
 
   interface ChatMessage {
     apps: Record<string | number, Application>;
-    data: {
-      flags: {
-        [EP.Name]?: MessageData;
-        core?: { canPopout?: boolean };
-      };
-      flavor?: string | null;
-      blind: boolean;
-      whisper: string[];
-      speaker: Partial<{
-        actor: string | null;
-        alias: string | null;
-        scene: string | null;
-        token: string | null;
-      }>;
-      content: string;
-      roll?: Roll | string | null;
-      user: string;
-      type: number;
-      timestamp: number;
-      _id: string;
-      sound: string | null;
-    };
     user: UserEP | undefined;
     _roll?: Roll | null;
   }
