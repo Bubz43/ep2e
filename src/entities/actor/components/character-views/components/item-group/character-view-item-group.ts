@@ -45,7 +45,8 @@ const sortItems = (a: ItemProxy, b: ItemProxy): number => {
 };
 
 /**
- * @part header
+ * @csspart header
+ * 
  */
 @customElement('character-view-item-group')
 export class CharacterViewItemGroup extends LazyRipple(LitElement) {

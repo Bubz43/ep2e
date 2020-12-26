@@ -9,6 +9,7 @@ module.exports = {
     '@snowpack/plugin-dotenv',
     '@snowpack/plugin-typescript',
     './snowpack-tagged-scss.js',
+
   ],
   install: [
     /* ... */
@@ -24,7 +25,7 @@ module.exports = {
     /* ... */
   },
   devOptions: {
-    /* ... */
+    // hmr: true,
   },
   buildOptions: {
     clean: true,
@@ -35,9 +36,6 @@ module.exports = {
   },
   alias: {
     '@src': './src',
-    /* ... */
   },
-  // experiments: {
-  //   source: 'skypack',
-  // },
+
 };

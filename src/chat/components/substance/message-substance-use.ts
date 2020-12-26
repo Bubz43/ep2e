@@ -130,6 +130,7 @@ export class MessageSubstanceUse extends MessageElement {
   }
 }
 
+
 declare global {
   interface HTMLElementTagNameMap {
     'message-substance-use': MessageSubstanceUse;
