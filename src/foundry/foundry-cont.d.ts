@@ -6,7 +6,7 @@ import type {
   ConditionalExcept,
   ConditionalPick,
 } from 'type-fest';
-import type { DeepPartial, PickByValue, ValuesType } from 'utility-types';
+import type { DeepPartial, DeepReadonly, PickByValue, ValuesType } from 'utility-types';
 import type * as PIXI from 'pixi.js';
 import type { Socket } from 'socket.io';
 import type { Combatant } from '@src/combat/combatant';
@@ -163,7 +163,7 @@ type Col<T extends Entity> = Omit<Collection<T>, 'get'> & {
   [Symbol.iterator](): IterableIterator<T>;
   get(id: string, options?: { strict: Boolean }): T | null;
   render(force: boolean): unknown;
-  _source: T["data"][]
+  readonly _source: DeepReadonly<T["data"][]>
 };
 
 type GameCollections = {

@@ -26,11 +26,17 @@ export const formatArmorUsed = ({
 export const formatLabeledFormulas = (formulas: LabeledFormula[]) =>
   cleanFormula(formulas.map(({ formula }) => formula).join('+'));
 
+// TODO modifiers
+export type AreaEffect = {
+  areaEffect: '' | AreaEffectType;
+  areaEffectRadius: number;
+};
+
 export const formatAreaEffect = (
   {
     areaEffect,
     areaEffectRadius,
-  }: { areaEffect: '' | AreaEffectType; areaEffectRadius: number },
+  }: AreaEffect,
   fallback = '-',
 ) => {
   return areaEffect

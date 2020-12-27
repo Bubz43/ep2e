@@ -1,3 +1,4 @@
+import type { AreaEffect } from '@src/combat/attack-formatting';
 import type { ExplosiveTrigger } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
 import type { SubstanceUseMethod } from '@src/entities/item/proxies/substance';
@@ -26,6 +27,7 @@ export type DamageMessageData = {
   armorUsed?: ArmorType[];
   cumulativeDotID?: string;
   multiplier?: RollMultiplier;
+  areaEffect?: AreaEffect;
 };
 
 export type MessageHealData = RequireAtLeastOne<
