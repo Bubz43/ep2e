@@ -1,4 +1,5 @@
 import { createMessage } from '@src/chat/create-message';
+import type { ExplosiveSettings } from '@src/chat/message-data';
 import {
   formatAreaEffect,
   formatArmorUsed,
@@ -29,14 +30,14 @@ export class CharacterViewExplosiveAttacks extends LitElement {
 
   @property({ attribute: false }) explosive!: Explosive;
 
-  private async createMessage() {
+  private async createMessage(ev: Event | CustomEvent<ExplosiveSettings>) {
     const { token, character } = requestCharacter(this);
     await createMessage({
       data: {
         header: this.explosive.messageHeader,
         explosiveUse: {
+          ...(ev instanceof CustomEvent ? ev.detail : { trigger: ExplosiveTrigger.Impact }),
           explosive: this.explosive.getDataCopy(),
-          trigger: ExplosiveTrigger.Impact,
         },
       },
       entity: token || character,
@@ -93,13 +94,27 @@ export class CharacterViewExplosiveAttacks extends LitElement {
           </div>
         </div>
         <div class="actions">
-          <button
-            ?disabled=${disabled}
-            @keydown=${clickIfEnter}
-            @click=${this.createMessage}
+          <sl-popover
+            .renderOnDemand=${() => html`
+              <explosive-settings-form
+                .explosive=${this.explosive}
+                requireSubmit
+                @explosive-settings=${((ev: CustomEvent<ExplosiveSettings>) => {
+
+                })}
+              ></explosive-settings-form>
+            `}
           >
-            <span>${localize('throw')}</span>
-          </button>
+            <button
+              slot="base"
+              ?disabled=${disabled}
+              @keydown=${clickIfEnter}
+              @click=${this.createMessage}
+            >
+              <span>${localize('throw')}</span>
+            </button>
+          </sl-popover>
+
           <button
             ?disabled=${disabled}
             @keydown=${clickIfEnter}

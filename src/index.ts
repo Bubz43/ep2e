@@ -140,6 +140,7 @@ import { CharacterViewPsi } from './entities/actor/components/character-views/co
 import { CharacterViewTestActions } from './entities/actor/components/character-views/components/test-actions/character-view-stats';
 import { CharacterViewExplosiveAttacks } from './entities/actor/components/character-views/components/attacks/explosive/character-view-explosive-attacks';
 import { MessageExplosive } from './chat/components/explosive/message-explosive';
+import { ExplosiveSettingsForm } from './entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
 
 // Generic Components
 Field;
@@ -194,9 +195,12 @@ CharacterViewActiveSubstance;
 CharacterViewTestActions;
 CharacterViewPsi;
 CharacterViewExplosiveAttacks;
+ExplosiveSettingsForm;
+//Item Cards
 ItemCard;
 ConsumableCard;
 PhysicalTechCard;
+
 // Ego
 EgoForm;
 EgoFormSkills;

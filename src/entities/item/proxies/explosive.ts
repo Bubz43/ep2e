@@ -1,11 +1,10 @@
 import {
   createBaseAttackFormula,
   ExplosiveAttack,
-  ExplosiveAttackData,
+  ExplosiveAttackData
 } from '@src/combat/attacks';
-import { ExplosiveType, ExplosiveSize } from '@src/data-enums';
+import { ExplosiveSize, ExplosiveType } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
-import type { ItemEntity } from '@src/entities/models';
 import { UpdateStore } from '@src/entities/update-store';
 import { localize } from '@src/foundry/localization';
 import { deepMerge, toTuple } from '@src/foundry/misc-helpers';

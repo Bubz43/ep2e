@@ -1,6 +1,7 @@
 import type {
   DamageMessageData,
   ExplosiveMessageData,
+  UsedExplosiveState,
 } from '@src/chat/message-data';
 import {
   pickOrDefaultActor,
@@ -54,13 +55,8 @@ export class MessageExplosive extends MessageElement {
       source: explosive.name,
     };
     // TODO substance
-    if (this.message.isLatest) {
-      this.getUpdater('explosiveUse').store({ state: 'detonated' });
-      this.getUpdater('damage').commit(damage);
-    } else {
-      await this.message.createSimilar({ damage });
-      this.getUpdater('explosiveUse').commit({ state: 'detonated' });
-    }
+    const { _id } = await this.message.createSimilar({ damage });
+    this.getUpdater('explosiveUse').commit({ state: ['detonated', _id] });
   }
 
   private async reclaim() {
@@ -69,23 +65,34 @@ export class MessageExplosive extends MessageElement {
       const [sameExplosive] = pipe(
         [character.items.get(explosive.id), ...character.items.values()],
         compact,
-        flatMap(i => i.type === explosive.type && i.isSameAs(explosive) ? i : []),
+        flatMap((i) =>
+          i.type === explosive.type && i.isSameAs(explosive) ? i : [],
+        ),
       );
-      if (sameExplosive) await sameExplosive.setQuantity(val => val + 1)
-      else await character.itemOperations.add(explosive.getDataCopy())
+      if (sameExplosive) await sameExplosive.setQuantity((val) => val + 1);
+      else {
+        const copy = explosive.getDataCopy();
+        copy.data.quantity = 1;
+        await character.itemOperations.add(copy);
+      }
 
-      this.getUpdater('explosiveUse').commit({ state: 'reclaimed' });
+      this.getUpdater('explosiveUse').commit({
+        state: ['reclaimed', character.actor.tokenOrLocalInfo.name],
+      });
     });
   }
 
   render() {
     const { editable } = this.message;
     const { state, trigger, timerDuration, duration } = this.explosiveUse;
+
     // TODO change trigger and durations
     return html`
-      <sl-group label=${localize('trigger')}>${localize(trigger)}</sl-group>
+      <div class="info">
+        <sl-group label=${localize('trigger')}>${localize(trigger)}</sl-group>
+      </div>
       ${state
-        ? html` <p class="state">${localize(state)}</p> `
+        ? this.renderExplosiveState(state)
         : editable
         ? html`
             <div class="actions">
@@ -98,6 +105,15 @@ export class MessageExplosive extends MessageElement {
             </div>
           `
         : ''}
+    `;
+  }
+
+  private renderExplosiveState([type, idOrName]: UsedExplosiveState) {
+    // TODO link to generated message
+    return html`
+      <p class="state">
+        ${localize(type)}
+      </p>
     `;
   }
 }

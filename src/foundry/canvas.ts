@@ -22,6 +22,11 @@ export type MeasuredTemplateData = {
   _id?: string;
 };
 
+export type PlacedTemplateIDs = {
+  templateId: string;
+  sceneId: string;
+}
+
 export const createMeasuredTemplate = ({
   user = game.user.id,
   fillColor = game.user.color,
@@ -39,7 +44,7 @@ export const placeMeasuredTemplate = (
   const canvas = readyCanvas();
   if (!canvas) return null;
 
-  return new Promise<{ templateId: string; sceneId: string } | null>(
+  return new Promise<PlacedTemplateIDs | null>(
     async (resolve) => {
       const { activeLayer: originalLayer, stage, grid, scene } = canvas;
       const { view } = canvas.app;

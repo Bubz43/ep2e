@@ -4,6 +4,7 @@ import type { ItemType } from '@src/entities/entity-types';
 import type { SubstanceUseMethod } from '@src/entities/item/proxies/substance';
 import type { ItemEntity } from '@src/entities/models';
 import type { ArmorType } from '@src/features/active-armor';
+import type { PlacedTemplateIDs } from '@src/foundry/canvas';
 import type { RolledFormula } from '@src/foundry/rolls';
 import type { HealthModification, HealthType } from '@src/health/health';
 import type { RollMultiplier } from '@src/health/health-changes';
@@ -55,14 +56,20 @@ export type SubstanceUseData = {
   hidden?: boolean;
 };
 
-export type ExplosiveMessageData = {
-  explosive: ItemEntity<ItemType.Explosive>;
+export type ExplosiveSettings = {
+  template?: PlacedTemplateIDs | null;
   trigger: ExplosiveTrigger;
   timerDuration?: number;
   duration?: number;
-  state?: '' | 'detonated' | 'reclaimed';
   attackType?: 'primary' | 'secondary';
-};
+}
+
+export type UsedExplosiveState = ['detonated' | 'reclaimed', string]
+
+export type ExplosiveMessageData = ExplosiveSettings & {
+  explosive: ItemEntity<ItemType.Explosive>;
+  state?: null | UsedExplosiveState;
+}
 
 export type MessageHeaderData = {
   heading: string;
