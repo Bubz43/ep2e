@@ -5,6 +5,8 @@ import {
   formatArmorUsed,
 } from '@src/combat/attack-formatting';
 import type { ExplosiveAttack } from '@src/combat/attacks';
+import type { SlWindow } from '@src/components/window/window';
+import { openWindow } from '@src/components/window/window-controls';
 import { ExplosiveTrigger } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
@@ -12,10 +14,12 @@ import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
+import { openDialog } from '@src/open-dialog';
 import { clickIfEnter, notEmpty } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { map } from 'remeda';
 import { requestCharacter } from '../../../character-request-event';
+import { ExplosiveSettingsForm } from '../explosive-settings/explosive-settings-form';
 import styles from './character-view-explosive-attacks.scss';
 
 @customElement('character-view-explosive-attacks')
@@ -30,13 +34,17 @@ export class CharacterViewExplosiveAttacks extends LitElement {
 
   @property({ attribute: false }) explosive!: Explosive;
 
+  private win: SlWindow | null = null;
+
   private async createMessage(ev: Event | CustomEvent<ExplosiveSettings>) {
     const { token, character } = requestCharacter(this);
     await createMessage({
       data: {
         header: this.explosive.messageHeader,
         explosiveUse: {
-          ...(ev instanceof CustomEvent ? ev.detail : { trigger: ExplosiveTrigger.Impact }),
+          ...(ev instanceof CustomEvent
+            ? ev.detail
+            : { trigger: ExplosiveTrigger.Impact }),
           explosive: this.explosive.getDataCopy(),
         },
       },
@@ -94,24 +102,14 @@ export class CharacterViewExplosiveAttacks extends LitElement {
           </div>
         </div>
         <div class="actions">
-          <sl-popover
-          .closeEvents=${["explosive-settings"]}
-            .renderOnDemand=${() => html`
-              <explosive-settings-form
-                .explosive=${this.explosive}
-                requireSubmit
-                @explosive-settings=${this.createMessage}
-              ></explosive-settings-form>
-            `}
+          <button
+            slot="base"
+            ?disabled=${disabled}
+            @keydown=${clickIfEnter}
+            @click=${this.openExplosiveSettingsDialog}
           >
-            <button
-              slot="base"
-              ?disabled=${disabled}
-              @keydown=${clickIfEnter}
-            >
-              <span>${localize('throw')}</span>
-            </button>
-          </sl-popover>
+            <span>${localize('throw')}</span>
+          </button>
 
           <button
             ?disabled=${disabled}
@@ -123,6 +121,25 @@ export class CharacterViewExplosiveAttacks extends LitElement {
         </div>
       </li>
     `;
+  }
+
+  private openExplosiveSettingsDialog(ev: Event) {
+    const { token, character } = requestCharacter(this)
+    const { win, wasConnected } = openWindow({
+      key: ExplosiveSettingsForm,
+      name: `${this.explosive.name} ${localize("settings")}`,
+      adjacentEl: (ev.currentTarget instanceof HTMLElement ? ev.currentTarget : this),
+      content: html`
+        <explosive-settings-form
+            .token=${token}
+            .character=${character}
+            .explosive=${this.explosive}
+            requireSubmit
+            @explosive-settings=${this.createMessage.bind(this)}
+          ></explosive-settings-form>
+      `
+    })
+ 
   }
 }
 declare global {

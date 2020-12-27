@@ -132,7 +132,7 @@ type LayerInfo<T extends PlaceableObject> = {
   ): Promise<void>;
 };
 
-type Layer<
+type PlaceableLayer<
   L extends PlaceablesLayer,
   T extends PlaceableObject,
   F = LayerInfo<T>
@@ -140,18 +140,18 @@ type Layer<
 
 export type CanvasLayers = {
   background: BackgroundLayer;
-  tiles: Layer<TilesLayer, Tile>;
-  drawings: Layer<DrawingsLayer, Drawing>;
+  tiles: PlaceableLayer<TilesLayer, Tile>;
+  drawings: PlaceableLayer<DrawingsLayer, Drawing>;
   grid: GridLayer;
-  templates: Layer<TemplateLayer, MeasuredTemplate>;
-  walls: Layer<WallsLayer, Wall>;
-  notes: Layer<NotesLayer, Note>;
-  tokens: Omit<Layer<TokenLayer, Token>, 'cycleTokens'> & {
+  templates: PlaceableLayer<TemplateLayer, MeasuredTemplate>;
+  walls: PlaceableLayer<WallsLayer, Wall>;
+  notes: PlaceableLayer<NotesLayer, Note>;
+  tokens: Omit<PlaceableLayer<TokenLayer, Token>, 'cycleTokens'> & {
     cycleTokens(forward: boolean, reset: boolean): boolean;
   };
-  lighting: Layer<LightingLayer, AmbientLight>;
+  lighting: PlaceableLayer<LightingLayer, AmbientLight>;
   sight: SightLayer;
-  sounds: Layer<SoundsLayer, AmbientSound>;
+  sounds: PlaceableLayer<SoundsLayer, AmbientSound>;
   effects: EffectsLayer;
   controls: ControlsLayer;
 };

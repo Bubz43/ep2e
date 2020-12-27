@@ -1430,6 +1430,9 @@
             "detonate": {
               "type": "string"
             },
+            "detonated": {
+              "type": "string"
+            },
             "deviceALI": {
               "type": "string"
             },
@@ -3026,7 +3029,13 @@
             "pilot": {
               "type": "string"
             },
+            "place": {
+              "type": "string"
+            },
             "placeEgo": {
+              "type": "string"
+            },
+            "plant": {
               "type": "string"
             },
             "plasmaCutter": {
@@ -3246,6 +3255,12 @@
               "type": "string"
             },
             "recharges": {
+              "type": "string"
+            },
+            "reclaim": {
+              "type": "string"
+            },
+            "reclaimed": {
               "type": "string"
             },
             "reclaimer": {
@@ -3498,6 +3513,9 @@
               "type": "string"
             },
             "second": {
+              "type": "string"
+            },
+            "secondary": {
               "type": "string"
             },
             "secondaryAttack": {
@@ -3965,6 +3983,9 @@
             "targetDistance": {
               "type": "string"
             },
+            "targets": {
+              "type": "string"
+            },
             "task": {
               "type": "string"
             },
@@ -4026,6 +4047,9 @@
               "type": "string"
             },
             "threatLevel": {
+              "type": "string"
+            },
+            "throw": {
               "type": "string"
             },
             "throwingKnives": {
@@ -4365,6 +4389,9 @@
               "type": "string"
             },
             "violence": {
+              "type": "string"
+            },
+            "visible": {
               "type": "string"
             },
             "visionBased": {
@@ -4802,6 +4829,7 @@
             "detail",
             "details",
             "detonate",
+            "detonated",
             "deviceALI",
             "deviceManagement",
             "deviceType",
@@ -5334,7 +5362,9 @@
             "picker",
             "pierce",
             "pilot",
+            "place",
             "placeEgo",
+            "plant",
             "plasmaCutter",
             "playerCharacter",
             "players",
@@ -5408,6 +5438,8 @@
             "receded",
             "recharge",
             "recharges",
+            "reclaim",
+            "reclaimed",
             "reclaimer",
             "recon",
             "recover",
@@ -5492,6 +5524,7 @@
             "scum",
             "search",
             "second",
+            "secondary",
             "secondaryAttack",
             "secondaryMode",
             "seconds",
@@ -5647,6 +5680,7 @@
             "takingTime",
             "target",
             "targetDistance",
+            "targets",
             "task",
             "taskAction",
             "taskActionTimeframe",
@@ -5668,6 +5702,7 @@
             "threat",
             "threatDetails",
             "threatLevel",
+            "throw",
             "throwingKnives",
             "throwingRange",
             "thrownAttack",
@@ -5781,6 +5816,7 @@
             "view",
             "vigor",
             "violence",
+            "visible",
             "visionBased",
             "walker",
             "ware",

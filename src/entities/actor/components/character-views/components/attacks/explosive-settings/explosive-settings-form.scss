@@ -23,3 +23,31 @@ sl-form {
 submit-button {
   margin-top: auto;
 }
+
+.template {
+  display: flex;
+  align-items: center;
+  font-size: large;
+  padding: 0 1rem;
+  --mdc-theme-primary: var(--color-grey);
+  > div {
+    flex: 1;
+  }
+  > * + * {
+    margin-left: 0.5ch;
+  }
+}
+
+
+.targets {
+  padding: 0 1rem;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  font-size: large;
+  min-height: 40px;
+  > * {
+    display: block;
+    margin: 0.25rem 0.25rem 0.25rem 0 ;
+  }
+}

@@ -27,7 +27,7 @@ export type PlacedTemplateIDs = {
   sceneId: string;
 }
 
-export const createMeasuredTemplate = ({
+export const createTemporaryMeasuredTemplate = ({
   user = game.user.id,
   fillColor = game.user.color,
   direction = 0,
@@ -48,6 +48,7 @@ export const placeMeasuredTemplate = (
     async (resolve) => {
       const { activeLayer: originalLayer, stage, grid, scene } = canvas;
       const { view } = canvas.app;
+      const controlled = originalLayer instanceof PlaceablesLayer && (originalLayer.controlled as PlaceableObject[]);
 
       (await template.draw()).layer.activate().preview?.addChild(template);
       overlay.faded = true;
@@ -55,11 +56,12 @@ export const placeMeasuredTemplate = (
       const cleanup = (ev?: Event) => {
         template.layer.preview?.removeChildren();
         stage.off('mousemove', moveTemplate).off('mousedown', createTemplate);
-        view.removeEventListener('context', cleanup);
+        view.removeEventListener('contextmenu', cleanup);
         view.removeEventListener('wheel', rotateTemplate);
         window.removeEventListener('keydown', closeOrSave, { capture: true });
         originalLayer.activate();
         overlay.faded = false;
+        controlled && controlled.forEach(placeable => placeable.control({ releaseOthers: false }))
         if (ev) resolve(null);
       };
 
@@ -70,7 +72,8 @@ export const placeMeasuredTemplate = (
           : ev.key === 'Enter' && createTemplate();
       };
 
-      const createTemplate = async () => {
+      const createTemplate = async (ev?: PIXI.InteractionEvent) => {
+        ev?.stopPropagation();
         cleanup();
         const savedTemplateData: MeasuredTemplateData | null = await scene.createEmbeddedEntity(
           'MeasuredTemplate',
@@ -91,7 +94,7 @@ export const placeMeasuredTemplate = (
 
       const moveTemplate = throttleFn(
         (ev: PIXI.InteractionEvent) => {
-          ev.stopPropagation();
+          console.log(ev);
           const center = ev.data.getLocalPosition(template.layer);
           const { x, y } = grid.getSnappedPosition(center.x, center.y, 2);
           template.data.x = x;
@@ -112,7 +115,7 @@ export const placeMeasuredTemplate = (
       };
 
       stage.on('mousemove', moveTemplate).on('mousedown', createTemplate);
-      view.addEventListener('contextmenu', cleanup);
+      view.addEventListener('contextmenu', cleanup,);
       view.addEventListener('wheel', rotateTemplate);
       window.addEventListener('keydown', closeOrSave, { capture: true });
       pan && canvas.pan(template.center);
@@ -124,7 +127,7 @@ export const getTemplateGridHighlight = (templateId: string) => {
   return readyCanvas()?.grid.getHighlightLayer(`Template.${templateId}`);
 };
 
-export const getTokensWithinHighligtedTemplate = (templateId: string) => {
+export const getVisibleTokensWithinHighligtedTemplate = (templateId: string) => {
   const highlighted = getTemplateGridHighlight(templateId);
   const canvas = readyCanvas();
   const contained = new Set<Token>();
@@ -149,7 +152,7 @@ export const getTokensWithinHighligtedTemplate = (templateId: string) => {
       const within = positions.some(
         (pos) => grid.measureDistance(center, pos) <= hitSize,
       );
-      if (within) contained.add(token);
+      if (within && token.isVisible) contained.add(token);
     }
   }
 

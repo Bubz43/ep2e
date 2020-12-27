@@ -4,7 +4,7 @@ import type { Sleeve } from '@src/entities/actor/sleeves';
 import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import {
-  createMeasuredTemplate,
+  createTemporaryMeasuredTemplate,
   getNormalizedTokenSize,
   getTemplateGridHighlight,
   placeMeasuredTemplate,
@@ -64,7 +64,7 @@ export class CharacterViewSleeve extends LitElement {
         : { x: 0, y: 0 };
 
     placeMeasuredTemplate(
-      createMeasuredTemplate({
+      createTemporaryMeasuredTemplate({
         ...center,
         t: 'circle',
         distance: range,

@@ -16,11 +16,13 @@
   top: 20%;
   width: max-content;
   transition: box-shadow 75ms ease-in-out,
-    -webkit-backdrop-filter 75ms ease-in-out, backdrop-filter 75ms ease-in-out,
-    background 75ms ease-in-out;
+    -webkit-backdrop-filter 75ms ease-in-out, backdrop-filter 75ms ease-in-out;
   box-shadow: 0 0 6px black;
 
-  background: rgba(black, 0.75);
+  background-color: rgba(black, 0.75);
+// background-image: url("https://www.transparenttextures.com/patterns/3px-tile.png");
+// background-image: url("https://www.transparenttextures.com/patterns/dark-mosaic.png");
+
   max-height: 100%;
   max-width: 100%;
 

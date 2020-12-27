@@ -1372,7 +1372,7 @@ type LangEntries =
   | 'plant'
   | 'reclaim'
   | 'detonated'
-  | 'reclaimed' | "secondary"
+  | 'reclaimed' | "secondary" | "place" | "visible" | "targets";
 type FullNames =
   | 'cog'
   | 'int'
