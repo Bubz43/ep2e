@@ -6,6 +6,20 @@
 }
 
 :host {
-  display: grid;
-  gap: 0.25rem;
+  display: flex;
+  flex-flow: column;
+  padding: 0.5rem;
+  > * + * {
+    margin-top: 0.25rem;
+  }
+}
+
+sl-form {
+  height: 200px;
+  width: 275px;
+  padding: 0 0.5rem;
+}
+
+submit-button {
+  margin-top: auto;
 }

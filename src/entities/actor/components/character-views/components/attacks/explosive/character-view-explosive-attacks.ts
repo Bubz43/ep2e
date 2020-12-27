@@ -95,13 +95,12 @@ export class CharacterViewExplosiveAttacks extends LitElement {
         </div>
         <div class="actions">
           <sl-popover
+          .closeEvents=${["explosive-settings"]}
             .renderOnDemand=${() => html`
               <explosive-settings-form
                 .explosive=${this.explosive}
                 requireSubmit
-                @explosive-settings=${((ev: CustomEvent<ExplosiveSettings>) => {
-
-                })}
+                @explosive-settings=${this.createMessage}
               ></explosive-settings-form>
             `}
           >
@@ -109,7 +108,6 @@ export class CharacterViewExplosiveAttacks extends LitElement {
               slot="base"
               ?disabled=${disabled}
               @keydown=${clickIfEnter}
-              @click=${this.createMessage}
             >
               <span>${localize('throw')}</span>
             </button>

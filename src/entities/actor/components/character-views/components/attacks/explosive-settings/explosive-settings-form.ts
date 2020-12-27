@@ -109,6 +109,7 @@ export class ExplosiveSettingsForm extends LitElement {
       ${this.requireSubmit
         ? html`
             <submit-button
+            complete
               @submit-attempt=${this.emitSettings}
               label=${localize('confirm')}
             ></submit-button>
