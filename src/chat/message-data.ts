@@ -38,9 +38,7 @@ export type MessageHealData = RequireAtLeastOne<
     healthType: HealthType;
   },
   'damageFormulas' | 'wounds'
-  >;
-
-
+>;
 
 export type HealthChangeMessageData = HealthModification & {
   healthType: HealthType;
@@ -62,9 +60,9 @@ export type ExplosiveMessageData = {
   trigger: ExplosiveTrigger;
   timerDuration?: number;
   duration?: number;
-  state?: "" | "detonated" | "reclaimed";
-  attackType?: "primary" | "secondary";
-}
+  state?: '' | 'detonated' | 'reclaimed';
+  attackType?: 'primary' | 'secondary';
+};
 
 export type MessageHeaderData = {
   heading: string;

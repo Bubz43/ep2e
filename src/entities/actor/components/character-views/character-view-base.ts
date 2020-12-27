@@ -10,7 +10,10 @@ import { html, TemplateResult } from 'lit-html';
 import { traverseActiveElements } from 'weightless';
 import type { MaybeToken } from '../../actor';
 import type { Character } from '../../proxies/character';
-import { CharacterDrawerRenderer, CharacterDrawerRenderEvent } from './character-drawer-render-event';
+import {
+  CharacterDrawerRenderer,
+  CharacterDrawerRenderEvent,
+} from './character-drawer-render-event';
 import { CharacterRequestEvent } from './character-request-event';
 
 export enum ItemGroup {
@@ -55,8 +58,8 @@ export abstract class CharacterViewBase extends LitElement {
     this.addEventListener(CharacterRequestEvent.is, (ev) => {
       ev.character = this.character;
       ev.token = this.token;
-      ev.stopPropagation()
-    })
+      ev.stopPropagation();
+    });
   }
 
   protected toggleDrawerRenderer(renderer: CharacterDrawerRenderer) {

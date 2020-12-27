@@ -460,7 +460,7 @@ type ExplosiveData = {
   sticky: boolean;
   areaEffect: '' | AreaEffectType;
   areaEffectRadius: number;
-  useSubstance: "" | SubstanceApplicationMethod;
+  useSubstance: '' | SubstanceApplicationMethod;
   dosesPerUnit: number;
   hasSecondaryMode: boolean;
   primaryAttack: ExplosiveAttackData;

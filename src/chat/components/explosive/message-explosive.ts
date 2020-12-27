@@ -51,12 +51,11 @@ export class MessageExplosive extends MessageElement {
     // TODO substance
     if (this.message.isLatest) {
       this.getUpdater('explosiveUse').store({ state: 'detonated' });
-      this.getUpdater("damage").commit(damage)
+      this.getUpdater('damage').commit(damage);
     } else {
       await this.message.createSimilar({ damage });
       this.getUpdater('explosiveUse').commit({ state: 'detonated' });
     }
-  
   }
 
   render() {

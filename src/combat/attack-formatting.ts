@@ -33,10 +33,7 @@ export type AreaEffect = {
 };
 
 export const formatAreaEffect = (
-  {
-    areaEffect,
-    areaEffectRadius,
-  }: AreaEffect,
+  { areaEffect, areaEffectRadius }: AreaEffect,
   fallback = '-',
 ) => {
   return areaEffect

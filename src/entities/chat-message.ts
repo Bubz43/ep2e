@@ -88,7 +88,7 @@ export class ChatMessageEP extends ChatMessage {
 
   createSimilar(data: MessageData) {
     const { _id, user, timestamp, flags, ...common } = this.data;
-    const { header } = this.epFlags ?? {}
+    const { header } = this.epFlags ?? {};
     const chatMessageData: Partial<ChatMessageEP['data']> = {
       ...common,
       flags: {
@@ -96,13 +96,15 @@ export class ChatMessageEP extends ChatMessage {
           ...data,
           header: data.header ?? header,
           fromMessageId: data.fromMessageId ?? this.id,
-      }, core: { canPopout: true } },
+        },
+        core: { canPopout: true },
+      },
     };
     return ChatMessage.create(chatMessageData, {});
   }
 
   get isLatest() {
-    return last(game.messages._source)?._id === this.id
+    return last(game.messages._source)?._id === this.id;
   }
 
   setRollDrag(ev: DragEvent) {

@@ -16,12 +16,12 @@
   display: flex;
   justify-content: space-around;
   flex-flow: row wrap;
-margin-top: 0.25rem;
-> * {
-  padding: 0 0.75rem;
-  border: 1px solid var(--color-bg);
-  background: rgba(black, 0.35);
-}
+  margin-top: 0.25rem;
+  > * {
+    padding: 0 0.75rem;
+    border: 1px solid var(--color-bg);
+    background: rgba(black, 0.35);
+  }
 }
 
 .area-effect {
@@ -94,7 +94,6 @@ li {
       }
     }
   }
-  
 }
 
 .additional {

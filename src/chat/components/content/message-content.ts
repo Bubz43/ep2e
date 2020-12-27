@@ -52,8 +52,8 @@ export class MessageContent extends LitElement {
         ? html`<message-substance-use
             .substanceUse=${substanceUse}
           ></message-substance-use>`
-      : ''}
-             ${heal ? html` <message-heal .heal=${heal}></message-heal> ` : ''}
+        : ''}
+      ${heal ? html` <message-heal .heal=${heal}></message-heal> ` : ''}
       ${damage ? html`<message-damage .damage=${damage}></message-damage>` : ''}
       ${stress
         ? html` <message-stress-test .stress=${stress}></message-stress-test> `

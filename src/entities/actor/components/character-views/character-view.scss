@@ -182,7 +182,6 @@ mwc-tab-bar {
     }
     &:focus-within {
       box-shadow: -1px 1px 2px var(--color-grey);
-
     }
   }
 }
@@ -268,14 +267,13 @@ enriched-html {
   padding: 0 0.25rem;
 }
 
-
 .attacks {
   li {
     background: var(--color-bg-alt);
     box-shadow: 0 0 4px black;
     padding: 0.55rem;
     margin: 0.55rem;
-    border: 1px solid var(--color-border);;
+    border: 1px solid var(--color-border);
   }
   header {
     text-align: center;

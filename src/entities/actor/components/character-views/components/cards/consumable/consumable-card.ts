@@ -115,33 +115,38 @@ export class ConsumableCard extends ItemCardBase {
   renderExpandedContent() {
     const { item } = this;
     const { editable } = item;
-    return html` ${item.type !== ItemType.Substance || !item.appliedState
-      ? renderAutoForm({
-        classes: 'quantity-form',
-        disabled: !editable,
-        props: { quantity: item.quantity },
-        update: item.updateQuantity.commit,
-        fields: ({ quantity }) => html`
-            <div class="quantity">
-              <mwc-icon-button
-                icon="keyboard_arrow_left"
-                ?disabled=${!editable || quantity.value === 0}
-                @click=${this.deductQuantity}
-              ></mwc-icon-button>
-              ${renderNumberInput(quantity, { min: 0, max: 9999 })}
-              <mwc-icon-button
-                icon="keyboard_arrow_right"
-                ?disabled=${!editable || quantity.value === 9999}
-                @click=${this.increaseQuantity}
-              ></mwc-icon-button>
-            </div>
-          `,
-      })
-      : ''}
-      ${item.type === ItemType.Explosive ? html`
-      <character-view-explosive-attacks .explosive=${item}></character-view-explosive-attacks>
-      ` : ""}
-      `;
+    return html`
+      ${item.type !== ItemType.Substance || !item.appliedState
+        ? renderAutoForm({
+            classes: 'quantity-form',
+            disabled: !editable,
+            props: { quantity: item.quantity },
+            update: item.updateQuantity.commit,
+            fields: ({ quantity }) => html`
+              <div class="quantity">
+                <mwc-icon-button
+                  icon="keyboard_arrow_left"
+                  ?disabled=${!editable || quantity.value === 0}
+                  @click=${this.deductQuantity}
+                ></mwc-icon-button>
+                ${renderNumberInput(quantity, { min: 0, max: 9999 })}
+                <mwc-icon-button
+                  icon="keyboard_arrow_right"
+                  ?disabled=${!editable || quantity.value === 9999}
+                  @click=${this.increaseQuantity}
+                ></mwc-icon-button>
+              </div>
+            `,
+          })
+        : ''}
+      ${item.type === ItemType.Explosive
+        ? html`
+            <character-view-explosive-attacks
+              .explosive=${item}
+            ></character-view-explosive-attacks>
+          `
+        : ''}
+    `;
   }
 }
 

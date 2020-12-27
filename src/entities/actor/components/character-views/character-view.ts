@@ -436,7 +436,6 @@ export class CharacterView extends CharacterViewBase {
                   <span class="type">${consumable.fullType}</span>
                 </header>
                 <character-view-explosive-attacks
-                
                   .explosive=${consumable}
                 ></character-view-explosive-attacks>
               </li>

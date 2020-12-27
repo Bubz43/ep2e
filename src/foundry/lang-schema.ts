@@ -1366,7 +1366,13 @@ type LangEntries =
   | 'beforeModifiers'
   | 'resist'
   | 'finished'
-  | 'stats' | "n/a" | "throw" | "plant" | "reclaim" | "detonated" | "reclaimed"
+  | 'stats'
+  | 'n/a'
+  | 'throw'
+  | 'plant'
+  | 'reclaim'
+  | 'detonated'
+  | 'reclaimed';
 type FullNames =
   | 'cog'
   | 'int'

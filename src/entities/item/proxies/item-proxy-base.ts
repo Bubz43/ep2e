@@ -134,8 +134,8 @@ export abstract class ItemProxyBase<T extends ItemType> {
       heading: this.name,
       subheadings: this.fullType,
       img: this.nonDefaultImg,
-      description: this.description
-    }
+      description: this.description,
+    };
   }
 
   onDelete() {}
