@@ -13,7 +13,6 @@ import { joinLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
 import { clickIfEnter, notEmpty } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map';
 import { map } from 'remeda';
 import { requestCharacter } from '../../../character-request-event';
 import styles from './character-view-explosive-attacks.scss';

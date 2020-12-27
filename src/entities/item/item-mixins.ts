@@ -9,6 +9,7 @@ import {
 } from '@src/data-enums';
 import { createLiveTimeState, getElapsedTime } from '@src/features/time';
 import type { BlueprintData } from '@src/foundry/template-schema';
+import type { ValueSetter } from '@src/utility/helper-types';
 import { nonNegative } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import type { Class } from 'type-fest';
@@ -98,8 +99,12 @@ export const Stackable = (
     toggleStashed() {
       return this.updateState.commit({ stashed: !this.stashed });
     }
-    setQuantity(newQuantity: number) {
-      this.updateQuantity.commit({ quantity: nonNegative(newQuantity) });
+    setQuantity(newQuantity: ValueSetter<number>) {
+      const quantity =
+        typeof newQuantity === 'function'
+          ? newQuantity(this.quantity)
+          : newQuantity;
+      return this.updateQuantity.commit({ quantity: nonNegative(quantity) });
     }
     consumeUnit() {
       return this.updateQuantity.commit({

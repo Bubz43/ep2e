@@ -2,10 +2,15 @@ import type {
   DamageMessageData,
   ExplosiveMessageData,
 } from '@src/chat/message-data';
+import {
+  pickOrDefaultActor,
+  pickOrDefaultCharacter,
+} from '@src/entities/find-entities';
 import { Explosive } from '@src/entities/item/proxies/explosive';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { customElement, LitElement, property, html } from 'lit-element';
+import { compact, find, flatMap, pipe, uniq } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-explosive.scss';
 
@@ -58,24 +63,41 @@ export class MessageExplosive extends MessageElement {
     }
   }
 
+  private async reclaim() {
+    pickOrDefaultCharacter(async (character) => {
+      const { explosive } = this;
+      const [sameExplosive] = pipe(
+        [character.items.get(explosive.id), ...character.items.values()],
+        compact,
+        flatMap(i => i.type === explosive.type && i.isSameAs(explosive) ? i : []),
+      );
+      if (sameExplosive) await sameExplosive.setQuantity(val => val + 1)
+      else await character.itemOperations.add(explosive.getDataCopy())
+
+      this.getUpdater('explosiveUse').commit({ state: 'reclaimed' });
+    });
+  }
+
   render() {
-    // const { explosive } = this;
+    const { editable } = this.message;
     const { state, trigger, timerDuration, duration } = this.explosiveUse;
     // TODO change trigger and durations
     return html`
       <sl-group label=${localize('trigger')}>${localize(trigger)}</sl-group>
       ${state
         ? html` <p class="state">${localize(state)}</p> `
-        : html`
+        : editable
+        ? html`
             <div class="actions">
               <mwc-button dense class="detonate" @click=${this.detonate}
                 >${localize('detonate')}</mwc-button
               >
-              <mwc-button dense class="reclaim"
+              <mwc-button dense class="reclaim" @click=${this.reclaim}
                 >${localize('reclaim')}</mwc-button
               >
             </div>
-          `}
+          `
+        : ''}
     `;
   }
 }

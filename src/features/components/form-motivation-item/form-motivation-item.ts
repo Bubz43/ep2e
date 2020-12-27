@@ -18,7 +18,6 @@ import {
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { debounce } from '@src/utility/decorators';
-import type { ValOrValFN } from '@src/utility/helper-types';
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,

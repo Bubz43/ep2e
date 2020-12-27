@@ -5,6 +5,7 @@ import {
 } from '@src/combat/attacks';
 import { ExplosiveType, ExplosiveSize } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
+import type { ItemEntity } from '@src/entities/models';
 import { UpdateStore } from '@src/entities/update-store';
 import { localize } from '@src/foundry/localization';
 import { deepMerge, toTuple } from '@src/foundry/misc-helpers';
@@ -12,7 +13,7 @@ import { EP } from '@src/foundry/system';
 import { HealthType } from '@src/health/health';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { compact, createPipe } from 'remeda';
+import { compact, createPipe, equals, omit } from 'remeda';
 import type { Attacker } from '../item-interfaces';
 import { Copyable, Purchasable, Stackable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
@@ -180,5 +181,27 @@ export class Explosive
 
   private get updateSubstance() {
     return this.updater.prop('flags', EP.Name, 'substance').commit;
+  }
+
+  private static readonly commonGetters: ReadonlyArray<keyof Explosive> = [
+    'name',
+    'quality',
+    'description',
+    'cost',
+    'isBlueprint',
+    'size',
+    'sticky',
+  ];
+
+  isSameAs(explosive: Explosive) {
+    return (
+      Explosive.commonGetters.every((prop) =>
+        equals(this[prop], explosive[prop]),
+      ) &&
+      equals(
+        omit(this.epData, ['blueprint', 'quantity', 'state']),
+        omit(explosive.epData, ['blueprint', 'quantity', 'state']),
+      ) && equals(this.epFlags, explosive.epFlags)
+    );
   }
 }

@@ -35,7 +35,8 @@ export type CopyableItem = Extract<ItemProxy, { isBlueprint: boolean }>;
 export type RangedWeapon = Extract<
   ItemProxy,
   { accessories: RangedWeaponAccessory[] }
->;
+  >;
+
 
 export class ItemEP extends Item {
   private invalidated = true;

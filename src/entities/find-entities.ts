@@ -8,6 +8,7 @@ import { uniq } from 'remeda';
 import type { ActorEP } from './actor/actor';
 import { ActorType } from './entity-types';
 import type { SceneEP } from './scene';
+import type { Character } from './actor/proxies/character';
 
 export type ActorIdentifiers = {
   actorId?: string | null;
@@ -66,12 +67,18 @@ export const getControlledTokenActors = (onlyCharacters = false) => {
   );
 };
 
+export const pickOrDefaultCharacter = (callback: (character: Character) => void) => {
+  pickOrDefaultActor((actor => {
+    if (actor.proxy.type !== ActorType.Character) throw new Error("Wrong actor type")
+    callback(actor.proxy)
+  }), true)
+}
+
 export const pickOrDefaultActor = (
   callback: (actor: ActorEP) => void,
   onlyCharacters = false,
 ) => {
   const controlledActors = getControlledTokenActors(onlyCharacters);
-  console.log(controlledActors);
   if (controlledActors.length > 1) {
     openMenu({
       content: controlledActors.map((actor) => {
