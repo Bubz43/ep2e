@@ -1376,7 +1376,7 @@ type LangEntries =
   | 'secondary'
   | 'place'
   | 'visible'
-  | 'targets';
+  | 'targets' | "adjust";
 type FullNames =
   | 'cog'
   | 'int'

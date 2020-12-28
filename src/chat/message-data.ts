@@ -62,6 +62,8 @@ export type ExplosiveSettings = {
   timerDuration?: number;
   duration?: number;
   attackType?: 'primary' | 'secondary';
+  centeredReduction?: number;
+  uniformBlastRadius?: number;
 };
 
 export type UsedExplosiveState = ['detonated' | 'reclaimed', string];
