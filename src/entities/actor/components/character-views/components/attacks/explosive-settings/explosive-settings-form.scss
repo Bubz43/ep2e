@@ -46,7 +46,13 @@ submit-button {
   align-items: center;
   font-size: large;
   min-height: 40px;
-  > * {
+  --mdc-icon-button-size: 2rem;
+  position: relative;
+  sl-animated-list {
+    display: contents
+  }
+  > *,
+  sl-animated-list > * {
     display: block;
     margin: 0.25rem 0.25rem 0.25rem 0 ;
   }

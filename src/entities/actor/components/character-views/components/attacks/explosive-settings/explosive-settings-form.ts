@@ -26,6 +26,8 @@ import {
   internalProperty,
   PropertyValues,
 } from 'lit-element';
+import { repeat } from 'lit-html/directives/repeat';
+import { identity } from 'remeda';
 import styles from './explosive-settings-form.scss';
 
 @customElement('explosive-settings-form')
@@ -199,9 +201,19 @@ export class ExplosiveSettingsForm extends LitElement {
       </div>
       <div class="targets">
         <div>${localize('visible')} ${localize('targets')}</div>
-        ${[...this.targets].map(
-          (target) => html` <img src=${target.data.img} height="32px" /> `,
-        )}
+        ${template
+          ? html`<mwc-icon-button
+              icon="refresh"
+              @click=${this.getTargets}
+            ></mwc-icon-button>`
+          : ''}
+        <sl-animated-list>
+          ${repeat(
+            this.targets,
+            identity,
+            (target) => html` <img src=${target.data.img} height="32px" /> `,
+          )}
+        </sl-animated-list>
       </div>
       ${renderAutoForm({
         props: this.formProps,

@@ -1,7 +1,7 @@
 import { overlay } from '@src/init';
 import { throttleFn } from '@src/utility/decorators';
 import { notEmpty } from '@src/utility/helpers';
-import { compact, pick } from 'remeda';
+import { compact, forEach, intersection, pick, pipe } from 'remeda';
 import type { SetOptional } from 'type-fest';
 import type { ValuesType } from 'utility-types';
 import { stopEvent } from 'weightless';
@@ -25,7 +25,7 @@ export type MeasuredTemplateData = {
 export type PlacedTemplateIDs = {
   templateId: string;
   sceneId: string;
-}
+};
 
 export const createTemporaryMeasuredTemplate = ({
   user = game.user.id,
@@ -44,90 +44,96 @@ export const placeMeasuredTemplate = (
   const canvas = readyCanvas();
   if (!canvas) return null;
 
-  return new Promise<PlacedTemplateIDs | null>(
-    async (resolve) => {
-      const { activeLayer: originalLayer, stage, grid, scene } = canvas;
-      const { view } = canvas.app;
-      const controlled = originalLayer instanceof PlaceablesLayer && (originalLayer.controlled as PlaceableObject[]);
+  return new Promise<PlacedTemplateIDs | null>(async (resolve) => {
+    const { activeLayer: originalLayer, stage, grid, scene, tokens } = canvas;
+    const { view } = canvas.app;
+    const controlled =
+      originalLayer === tokens ? originalLayer.controlled : null;
 
-      (await template.draw()).layer.activate().preview?.addChild(template);
-      overlay.faded = true;
+    (await template.draw()).layer.activate().preview?.addChild(template);
+    overlay.faded = true;
 
-      const cleanup = (ev?: Event) => {
-        template.layer.preview?.removeChildren();
-        stage.off('mousemove', moveTemplate).off('mousedown', createTemplate);
-        view.removeEventListener('contextmenu', cleanup);
-        view.removeEventListener('wheel', rotateTemplate);
-        window.removeEventListener('keydown', closeOrSave, { capture: true });
-        originalLayer.activate();
-        overlay.faded = false;
-        controlled && controlled.forEach(placeable => placeable.control({ releaseOthers: false }))
-        if (ev) resolve(null);
-      };
-
-      const closeOrSave = (ev: KeyboardEvent) => {
-        if (ev.key === 'Escape' || ev.key === 'Enter') stopEvent(ev);
-        ev.key === 'Escape'
-          ? cleanup(ev)
-          : ev.key === 'Enter' && createTemplate();
-      };
-
-      const createTemplate = async (ev?: PIXI.InteractionEvent) => {
-        ev?.stopPropagation();
-        cleanup();
-        const savedTemplateData: MeasuredTemplateData | null = await scene.createEmbeddedEntity(
-          'MeasuredTemplate',
-          {
-            ...template.data,
-            ...grid.getSnappedPosition(template.x, template.y, 2),
-          },
-        );
-        resolve(
-          savedTemplateData?._id
-            ? {
-                templateId: savedTemplateData._id,
-                sceneId: scene.data._id,
-              }
-            : null,
-        );
-      };
-
-      const moveTemplate = throttleFn(
-        (ev: PIXI.InteractionEvent) => {
-          console.log(ev);
-          const center = ev.data.getLocalPosition(template.layer);
-          const { x, y } = grid.getSnappedPosition(center.x, center.y, 2);
-          template.data.x = x;
-          template.data.y = y;
-          template.refresh();
-        },
-        20,
-        true,
-      );
-
-      const rotateTemplate = (ev: WheelEvent) => {
-        if (ev.ctrlKey) return;
-        ev.stopPropagation();
-        const delta = canvas.grid.type > CONST.GRID_TYPES.SQUARE ? 30 : 15;
-        const snap = ev.shiftKey ? delta : 5;
-        template.data.direction += snap * Math.sign(ev.deltaY);
+    const moveTemplate = throttleFn(
+      (ev: PIXI.InteractionEvent) => {
+        const center = ev.data.getLocalPosition(template.layer);
+        const { x, y } = grid.getSnappedPosition(center.x, center.y, 2);
+        template.data.x = x;
+        template.data.y = y;
         template.refresh();
-      };
+      },
+      20,
+      true,
+    );
 
-      stage.on('mousemove', moveTemplate).on('mousedown', createTemplate);
-      view.addEventListener('contextmenu', cleanup,);
-      view.addEventListener('wheel', rotateTemplate);
-      window.addEventListener('keydown', closeOrSave, { capture: true });
-      pan && canvas.pan(template.center);
-    },
-  );
+    stage.on('mousemove', moveTemplate).on('mousedown', createTemplate);
+    view.addEventListener('contextmenu', cleanup);
+    view.addEventListener('wheel', rotateTemplate);
+    window.addEventListener('keydown', cancelOrSave, { capture: true });
+    pan && canvas.pan(template.center);
+
+    function cleanup(ev?: Event) {
+      stage.off('mousemove', moveTemplate).off('mousedown', createTemplate);
+      view.removeEventListener('contextmenu', cleanup);
+      view.removeEventListener('wheel', rotateTemplate);
+      window.removeEventListener('keydown', cancelOrSave, { capture: true });
+      template.layer.preview?.removeChildren();
+      originalLayer.activate();
+      overlay.faded = false;
+      if (controlled && originalLayer === tokens) {
+        pipe(
+          controlled,
+          intersection(originalLayer.placeables),
+          forEach((token) => token.control({ releaseOthers: false })),
+        );
+      }
+      if (ev) resolve(null);
+    }
+
+    function cancelOrSave(ev: KeyboardEvent) {
+      if (['Escape', 'Enter'].includes(ev.key)) stopEvent(ev);
+      ev.key === 'Escape'
+        ? cleanup(ev)
+        : ev.key === 'Enter' && createTemplate();
+    }
+
+    async function createTemplate(ev?: PIXI.InteractionEvent) {
+      ev?.stopPropagation();
+      cleanup();
+      const savedTemplateData: MeasuredTemplateData | null = await scene.createEmbeddedEntity(
+        MeasuredTemplate.embeddedName,
+        {
+          ...template.data,
+          ...grid.getSnappedPosition(template.x, template.y, 2),
+        },
+      );
+      resolve(
+        savedTemplateData?._id
+          ? {
+              templateId: savedTemplateData._id,
+              sceneId: scene.data._id,
+            }
+          : null,
+      );
+    }
+
+    function rotateTemplate(ev: WheelEvent) {
+      if (ev.ctrlKey) return;
+      ev.stopPropagation();
+      const delta = grid.type > CONST.GRID_TYPES.SQUARE ? 30 : 15;
+      const snap = ev.shiftKey ? delta : 5;
+      template.data.direction += snap * Math.sign(ev.deltaY);
+      template.refresh();
+    }
+  });
 };
 
 export const getTemplateGridHighlight = (templateId: string) => {
   return readyCanvas()?.grid.getHighlightLayer(`Template.${templateId}`);
 };
 
-export const getVisibleTokensWithinHighligtedTemplate = (templateId: string) => {
+export const getVisibleTokensWithinHighligtedTemplate = (
+  templateId: string,
+) => {
   const highlighted = getTemplateGridHighlight(templateId);
   const canvas = readyCanvas();
   const contained = new Set<Token>();
@@ -152,7 +158,10 @@ export const getVisibleTokensWithinHighligtedTemplate = (templateId: string) => 
       const within = positions.some(
         (pos) => grid.measureDistance(center, pos) <= hitSize,
       );
-      if (within && token.isVisible) contained.add(token);
+      if (within) {
+        if (token.isVisible) contained.add(token);
+      }
+      // if (within && token.isVisible) contained.add(token);
     }
   }
 
