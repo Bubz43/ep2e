@@ -1,7 +1,7 @@
 import {
   createBaseAttackFormula,
   ExplosiveAttack,
-  ExplosiveAttackData
+  ExplosiveAttackData,
 } from '@src/combat/attacks';
 import { ExplosiveSize, ExplosiveType } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
@@ -200,7 +200,8 @@ export class Explosive
       equals(
         omit(this.epData, ['blueprint', 'quantity', 'state']),
         omit(explosive.epData, ['blueprint', 'quantity', 'state']),
-      ) && equals(this.epFlags, explosive.epFlags)
+      ) &&
+      equals(this.epFlags, explosive.epFlags)
     );
   }
 }

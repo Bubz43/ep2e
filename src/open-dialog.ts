@@ -41,7 +41,5 @@ declare global {
 }
 
 export const openDialog = (el: HTMLElement, template: TemplateResult) => {
-  el.dispatchEvent(new RenderDialogEvent(template))
-}
-
-
+  el.dispatchEvent(new RenderDialogEvent(template));
+};

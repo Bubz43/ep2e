@@ -6,7 +6,7 @@ import { ArmorType } from '@src/features/active-armor';
 import {
   createTemporaryMeasuredTemplate,
   getNormalizedTokenSize,
-  getTemplateGridHighlight,
+  getTemplateGridHighlightLayer,
   placeMeasuredTemplate,
 } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';

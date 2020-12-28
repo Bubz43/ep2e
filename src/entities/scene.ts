@@ -30,6 +30,4 @@ export class SceneEP extends Scene {
       ? `${navName} ${game.user.isGM ? `(${sceneName})` : ''}`
       : sceneName;
   }
-
-  
 }

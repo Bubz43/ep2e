@@ -11,4 +11,6 @@ export type PossibleArg<R, A = undefined> = (
   ...arg: undefined extends A ? [A?] : [A]
 ) => R;
 
-export type ValueSetter<T> = T extends Function ? never : T | ((currentValue: T) => T)
+export type ValueSetter<T> = T extends Function
+  ? never
+  : T | ((currentValue: T) => T);

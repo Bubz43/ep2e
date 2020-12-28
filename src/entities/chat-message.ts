@@ -100,7 +100,9 @@ export class ChatMessageEP extends ChatMessage {
         core: { canPopout: true },
       },
     };
-    return ChatMessage.create(chatMessageData, {}) as Promise<ChatMessageEP["data"]>;
+    return ChatMessage.create(chatMessageData, {}) as Promise<
+      ChatMessageEP['data']
+    >;
   }
 
   get isLatest() {

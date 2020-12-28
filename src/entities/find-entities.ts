@@ -67,12 +67,15 @@ export const getControlledTokenActors = (onlyCharacters = false) => {
   );
 };
 
-export const pickOrDefaultCharacter = (callback: (character: Character) => void) => {
-  pickOrDefaultActor((actor => {
-    if (actor.proxy.type !== ActorType.Character) throw new Error("Wrong actor type")
-    callback(actor.proxy)
-  }), true)
-}
+export const pickOrDefaultCharacter = (
+  callback: (character: Character) => void,
+) => {
+  pickOrDefaultActor((actor) => {
+    if (actor.proxy.type !== ActorType.Character)
+      throw new Error('Wrong actor type');
+    callback(actor.proxy);
+  }, true);
+};
 
 export const pickOrDefaultActor = (
   callback: (actor: ActorEP) => void,

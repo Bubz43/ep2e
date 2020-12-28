@@ -749,5 +749,4 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       }
     }
   }
-
 }

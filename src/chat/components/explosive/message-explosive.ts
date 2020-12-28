@@ -110,11 +110,7 @@ export class MessageExplosive extends MessageElement {
 
   private renderExplosiveState([type, idOrName]: UsedExplosiveState) {
     // TODO link to generated message
-    return html`
-      <p class="state">
-        ${localize(type)}
-      </p>
-    `;
+    return html` <p class="state">${localize(type)}</p> `;
   }
 }
 

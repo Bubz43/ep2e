@@ -127,14 +127,17 @@ export const placeMeasuredTemplate = (
   });
 };
 
-export const getTemplateGridHighlight = (templateId: string) => {
+export const getNormalizedTokenSize = ({ data }: Token) =>
+  Math.min(data.height, data.width) * data.scale;
+
+export const getTemplateGridHighlightLayer = (templateId: string) => {
   return readyCanvas()?.grid.getHighlightLayer(`Template.${templateId}`);
 };
 
 export const getVisibleTokensWithinHighligtedTemplate = (
   templateId: string,
 ) => {
-  const highlighted = getTemplateGridHighlight(templateId);
+  const highlighted = getTemplateGridHighlightLayer(templateId);
   const canvas = readyCanvas();
   const contained = new Set<Token>();
 
@@ -158,18 +161,12 @@ export const getVisibleTokensWithinHighligtedTemplate = (
       const within = positions.some(
         (pos) => grid.measureDistance(center, pos) <= hitSize,
       );
-      if (within) {
-        if (token.isVisible) contained.add(token);
-      }
-      // if (within && token.isVisible) contained.add(token);
+      if (within && token.isVisible) contained.add(token);
     }
   }
 
   return contained;
 };
-
-export const getNormalizedTokenSize = ({ data }: Token) =>
-  Math.min(data.height, data.width) * data.scale;
 
 type CanvasProps = {
   scene: SceneEP;

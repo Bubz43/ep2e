@@ -368,9 +368,8 @@ export class EPOverlay extends LitElement {
   }
 
   private toggleChatPointers({ type }: MouseEvent) {
-      document.getElementById('chat-log')!.style.pointerEvents =
+    document.getElementById('chat-log')!.style.pointerEvents =
       type === 'mouseenter' ? 'initial' : '';
-
   }
 
   render() {

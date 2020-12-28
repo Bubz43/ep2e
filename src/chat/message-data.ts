@@ -62,14 +62,14 @@ export type ExplosiveSettings = {
   timerDuration?: number;
   duration?: number;
   attackType?: 'primary' | 'secondary';
-}
+};
 
-export type UsedExplosiveState = ['detonated' | 'reclaimed', string]
+export type UsedExplosiveState = ['detonated' | 'reclaimed', string];
 
 export type ExplosiveMessageData = ExplosiveSettings & {
   explosive: ItemEntity<ItemType.Explosive>;
   state?: null | UsedExplosiveState;
-}
+};
 
 export type MessageHeaderData = {
   heading: string;

@@ -124,22 +124,22 @@ export class CharacterViewExplosiveAttacks extends LitElement {
   }
 
   private openExplosiveSettingsDialog(ev: Event) {
-    const { token, character } = requestCharacter(this)
+    const { token, character } = requestCharacter(this);
     const { win, wasConnected } = openWindow({
       key: ExplosiveSettingsForm,
-      name: `${this.explosive.name} ${localize("settings")}`,
-      adjacentEl: (ev.currentTarget instanceof HTMLElement ? ev.currentTarget : this),
+      name: `${this.explosive.name} ${localize('settings')}`,
+      adjacentEl:
+        ev.currentTarget instanceof HTMLElement ? ev.currentTarget : this,
       content: html`
         <explosive-settings-form
-            .token=${token}
-            .character=${character}
-            .explosive=${this.explosive}
-            requireSubmit
-            @explosive-settings=${this.createMessage.bind(this)}
-          ></explosive-settings-form>
-      `
-    })
- 
+          .token=${token}
+          .character=${character}
+          .explosive=${this.explosive}
+          requireSubmit
+          @explosive-settings=${this.createMessage.bind(this)}
+        ></explosive-settings-form>
+      `,
+    });
   }
 }
 declare global {

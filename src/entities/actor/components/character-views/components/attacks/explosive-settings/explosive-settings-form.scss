@@ -38,7 +38,6 @@ submit-button {
   }
 }
 
-
 .targets {
   padding: 0 1rem;
   display: flex;
@@ -49,11 +48,11 @@ submit-button {
   --mdc-icon-button-size: 2rem;
   position: relative;
   sl-animated-list {
-    display: contents
+    display: contents;
   }
   > *,
   sl-animated-list > * {
     display: block;
-    margin: 0.25rem 0.25rem 0.25rem 0 ;
+    margin: 0.25rem 0.25rem 0.25rem 0;
   }
 }
