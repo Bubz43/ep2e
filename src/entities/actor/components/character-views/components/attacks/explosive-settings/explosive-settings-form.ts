@@ -14,7 +14,7 @@ import {
   readyCanvas,
   placeMeasuredTemplate,
   createTemporaryMeasuredTemplate,
-  getVisibleTokensWithinHighligtedTemplate,
+  getVisibleTokensWithinHighlightedTemplate,
 } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
@@ -155,7 +155,7 @@ export class ExplosiveSettingsForm extends LitElement {
 
   private getTargets() {
     if (this.settings.template) {
-      this.targets = getVisibleTokensWithinHighligtedTemplate(
+      this.targets = getVisibleTokensWithinHighlightedTemplate(
         this.settings.template.templateId,
       );
       this.requestUpdate();

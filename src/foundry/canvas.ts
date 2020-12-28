@@ -134,7 +134,7 @@ export const getTemplateGridHighlightLayer = (templateId: string) => {
   return readyCanvas()?.grid.getHighlightLayer(`Template.${templateId}`);
 };
 
-export const getVisibleTokensWithinHighligtedTemplate = (
+export const getVisibleTokensWithinHighlightedTemplate = (
   templateId: string,
 ) => {
   const highlighted = getTemplateGridHighlightLayer(templateId);
