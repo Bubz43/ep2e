@@ -178,7 +178,7 @@ export class PsiForm extends ItemFormBase {
   private handleDrop = handleDrop(async ({ ev, srcEl, data }) => {
     if (this.disabled) return;
     const target = ev.currentTarget as DropZone;
-    const roll = Number(target.dataset.roll) as InfluenceRoll;
+    const roll = Number(target.dataset['roll']) as InfluenceRoll;
     const targetInfluence = this.item.fullInfluences[roll];
     if (!targetInfluence || target.contains(srcEl ?? null)) return;
     if (data?.type === DropType.PsiInfluence) {

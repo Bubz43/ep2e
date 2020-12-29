@@ -13,6 +13,7 @@ type Base = {
   armorPiercing: boolean;
   multiplier: RollMultiplier;
   armorUsed: ArmorType[];
+  additionalArmor: number;
   source: string;
   kind: 'damage';
 };
@@ -84,6 +85,7 @@ const common: Base = {
   armorPiercing: false,
   reduceAVbyDV: false,
   armorUsed: [],
+  additionalArmor: 0,
   kind: 'damage',
   source: '',
 };

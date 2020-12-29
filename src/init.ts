@@ -266,9 +266,9 @@ for (const app of [ActorDirectory, ItemDirectory]) {
         if (isItem(entity)) {
           listItem.querySelector<HTMLElement>('.entity-name > a')!.textContent =
             entity.proxy.fullName;
-          listItem.dataset.type = entity.proxy.fullType;
+          listItem.dataset['type'] = entity.proxy.fullType;
         } else {
-          listItem.dataset.type = localize(entity.type);
+          listItem.dataset['type'] = localize(entity.type);
         }
       }),
   });

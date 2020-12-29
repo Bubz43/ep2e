@@ -28,6 +28,7 @@
     "alwaysStrict": true,
     // "useDefineForClassFields": true,
     "allowSyntheticDefaultImports": true,
-    "importsNotUsedAsValues": "error"
+    "importsNotUsedAsValues": "error",
+    "noPropertyAccessFromIndexSignature": true
   }
 }

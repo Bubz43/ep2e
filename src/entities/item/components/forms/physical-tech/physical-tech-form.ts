@@ -97,7 +97,7 @@ export class PhysicalTechForm extends ItemFormBase {
   private addDrop = handleDrop(async ({ ev, data }) => {
     if (this.disabled || data?.type !== DropType.Item) return;
     const blueprintDrop =
-      (ev.currentTarget as HTMLElement).dataset.drop === 'blueprint';
+      (ev.currentTarget as HTMLElement).dataset['drop'] === 'blueprint';
     const proxy = await itemDropToItemProxy(data);
     if (blueprintDrop) {
       if (proxy && 'isBlueprint' in proxy && proxy.isBlueprint) {

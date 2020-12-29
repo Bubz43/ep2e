@@ -48,6 +48,7 @@ export class PhysicalHealthDamageEditor extends HealthEditBase<
       );
     }
     // TODO cumulative damage
+    // TODO additional armor
     return html`
       <div class="damage-settings">
         ${renderAutoForm({

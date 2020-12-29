@@ -20,7 +20,7 @@ import {
 } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
-import { rollLimit } from '@src/foundry/rolls';
+import { averageRoll, rollLimit } from '@src/foundry/rolls';
 import { nonNegative } from '@src/utility/helpers';
 import {
   customElement,
@@ -126,10 +126,9 @@ export class ExplosiveSettingsForm extends LitElement {
     };
   }
 
-  private get maxDamage() {
-    return this.attack.rollFormulas.reduce((accum, { formula }) => {
-      return accum + rollLimit(formula, 'max');
-    }, 0);
+  private get averageDamage() {
+    return this.attack.rollFormulas.reduce((accum, { formula }) => accum + averageRoll(formula), 0);
+   
   }
 
   private async setTemplate() {
@@ -147,7 +146,7 @@ export class ExplosiveSettingsForm extends LitElement {
         : {
             t: 'circle',
             distance: clamp(
-              nonNegative(this.maxDamage) / this.explosiveDistances.centered,
+              nonNegative(this.averageDamage) / this.explosiveDistances.centered,
               { min: 1 },
             ),
           } as const;
@@ -210,7 +209,9 @@ export class ExplosiveSettingsForm extends LitElement {
                 ${localize('action')})</span
               >
               ${areaEffect === AreaEffectType.Centered
-                ? renderAutoForm({
+        ? renderAutoForm({
+          storeOnInput: true,
+          
                     props: {
                       centeredReduction: this.explosiveDistances.centered,
                     },
@@ -228,6 +229,7 @@ export class ExplosiveSettingsForm extends LitElement {
                       ),
                   })
                 : renderAutoForm({
+                  storeOnInput: true,
                     props: {
                       uniformBlastRadius: this.explosiveDistances.uniform,
                     },
@@ -243,6 +245,7 @@ export class ExplosiveSettingsForm extends LitElement {
           `
         : ''}
       ${renderAutoForm({
+        classes: "settings-form",
         props: this.formProps,
         update: this.updateSettings,
         fields: ({ trigger, timerDuration, duration, attackType }) => [

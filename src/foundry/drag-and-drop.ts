@@ -56,7 +56,7 @@ const dropChecker = <T extends DropType, D = Drops[T]>(
 ) => (droppedData: unknown): droppedData is D => {
   return !!(
     isJsonObject(droppedData) &&
-    droppedData.type === type &&
+    droppedData['type'] === type &&
     finalCheck(droppedData as JsonObject & { type: T })
   );
 };
@@ -193,7 +193,7 @@ const isHotbarEntry = (
 ): data is JsonObject & { type: HotbarEntryType } => {
   return (
     isJsonObject(data) &&
-    (Object.values(HotbarEntryType) as unknown[]).includes(data.type)
+    (Object.values(HotbarEntryType) as unknown[]).includes(data['type'])
   );
 };
 
@@ -205,8 +205,8 @@ const isFullHotbarEntry = dropChecker(
   DropType.FullHotbarEntry,
   ({ data }) =>
     isHotbarEntry(data) &&
-    typeof data.id === 'string' &&
-    typeof data.cell === 'number',
+    typeof data['id'] === 'string' &&
+    typeof data['cell'] === 'number',
 );
 
 const isRollDrop = dropChecker(
@@ -231,15 +231,15 @@ const isItemDrop = dropChecker(DropType.Item, (itemDrop) => {
 const isEffectDrop = dropChecker(DropType.Effect, ({ effect }) => {
   return (
     isJsonObject(effect) &&
-    enumValues(EffectType).some((t) => t === effect.type)
+    enumValues(EffectType).some((t) => t === effect['type'])
   );
 });
 
 const isInfluenceDrop = dropChecker(DropType.PsiInfluence, ({ influence }) => {
   return (
     isJsonObject(influence) &&
-    typeof influence.type === 'string' &&
-    (enumValues(PsiInfluenceType) as string[]).includes(influence.type)
+    typeof influence['type'] === 'string' &&
+    (enumValues(PsiInfluenceType) as string[]).includes(influence['type'])
   );
 });
 
@@ -275,9 +275,9 @@ const droppedChecks: Record<DropType, (dropped: unknown) => boolean> = {
 export const isKnownDrop = (droppedData: unknown): droppedData is Drop => {
   return !!(
     isJsonObject(droppedData) &&
-    typeof droppedData.type === 'string' &&
-    droppedData.type in droppedChecks &&
-    droppedChecks[droppedData.type as DropType](droppedData)
+    typeof droppedData['type'] === 'string' &&
+    droppedData['type'] in droppedChecks &&
+    droppedChecks[droppedData['type'] as DropType](droppedData)
   );
 };
 

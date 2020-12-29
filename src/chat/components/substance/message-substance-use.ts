@@ -80,7 +80,7 @@ export class MessageSubstanceUse extends MessageElement {
 
   private removeAppliedTo(ev: Event) {
     if (this.disabled || !this.substanceUse.appliedTo) return;
-    const index = Number((ev.currentTarget as HTMLElement).dataset.index);
+    const index = Number((ev.currentTarget as HTMLElement).dataset['index']);
     const newList = [...this.substanceUse.appliedTo];
     newList.splice(index, 1);
     this.getUpdater('substanceUse').commit({ appliedTo: newList });

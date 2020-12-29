@@ -596,7 +596,7 @@ ItemDirectory.prototype._onCreateEntity = async function (ev: Event) {
         showFolders
         @close-creator=${closeCreator}
         @item-data=${itemCreate}
-        folder=${ifDefined(ev.currentTarget.dataset.folder)}
+        folder=${ifDefined(ev.currentTarget.dataset['folder'])}
       ></item-creator>`,
       name: `${localize('item')} ${localize('creator')}`,
       adjacentEl: ev.currentTarget,
@@ -612,7 +612,7 @@ ActorDirectory.prototype._onCreateEntity = async function (ev: Event) {
       key: ActorCreator,
       content: html`
         <actor-creator
-          folder=${ifDefined(ev.currentTarget.dataset.folder)}
+          folder=${ifDefined(ev.currentTarget.dataset['folder'])}
         ></actor-creator>
       `,
       name: `${localize('actor')} ${localize('creator')}`,

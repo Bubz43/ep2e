@@ -316,7 +316,7 @@ export class EPOverlay extends LitElement {
     ).map((tabLink) => {
       const { title, dataset } = tabLink;
       const icon = tabLink.querySelector('i.fas');
-      const tabName = dataset.tab as keyof typeof ui;
+      const tabName = dataset['tab'] as keyof typeof ui;
       if (tabName === 'chat') return '';
       const tabApp = ui[tabName];
       if (!(tabApp instanceof SidebarTab)) return '';

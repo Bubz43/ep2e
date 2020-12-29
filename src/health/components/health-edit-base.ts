@@ -10,7 +10,7 @@ import {
   property,
   PropertyValues,
 } from 'lit-element';
-import { set } from 'remeda';
+import { pick, set } from 'remeda';
 import { createHealthModification, HealthModificationMode } from '../health';
 import type { Damage } from '../health-changes';
 import type { ActorHealth } from '../health-mixin';
@@ -113,8 +113,7 @@ export abstract class HealthEditBase<
   protected get computed() {
     const armorUsed = this.armor?.mitigateDamage({
       damage: this.damageValue,
-      armorPiercing: this.editableDamage.armorPiercing,
-      armorUsed: this.editableDamage.armorUsed,
+      ...pick(this.editableDamage, ["armorPiercing", "armorUsed", "additionalArmor"])
     });
     let damage = armorUsed?.appliedDamage ?? this.damageValue;
 

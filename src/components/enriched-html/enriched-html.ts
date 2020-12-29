@@ -32,7 +32,7 @@ const inlineRollHandler = async (anchor: JQuery, eventType: string) => {
   const [el] = anchor;
   if (!el) return;
   if (anchor.hasClass('inline-result')) {
-    const roll = Roll.fromJSON(unescape(el.dataset.roll!)) as Roll;
+    const roll = Roll.fromJSON(unescape(el.dataset['roll']!)) as Roll;
     const tooltipContent = (await roll.getTooltip()) as string;
     tooltip.attach({
       el,

@@ -37,10 +37,10 @@ export class ToolTip extends LitElement {
   }
 
   fromData = ({ currentTarget: el }: Event) => {
-    if (el instanceof HTMLElement && el.dataset.tooltip) {
+    if (el instanceof HTMLElement && el.dataset['tooltip']) {
       this.attach({
         el,
-        content: el.dataset.tooltip,
+        content: el.dataset['tooltip'],
         position: 'bottom-middle',
       });
     }
