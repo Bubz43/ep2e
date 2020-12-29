@@ -1,8 +1,8 @@
 import { enumValues } from '@src/data-enums';
 import { ActiveArmor, ArmorType } from '@src/features/active-armor';
 import { localize } from '@src/foundry/localization';
-import { rollFormula } from '@src/foundry/rolls';
-import { nonNegative, withSign } from '@src/utility/helpers';
+import { rollFormula, rollLimit } from '@src/foundry/rolls';
+import { nonNegative, notEmpty, withSign } from '@src/utility/helpers';
 import {
   html,
   internalProperty,
@@ -111,26 +111,27 @@ export abstract class HealthEditBase<
   }
 
   protected get computed() {
-    const armorUsed = this.armor?.mitigateDamage({
+    const armorUsed = ActiveArmor.mitigateDamage({
+      armor: this.armor,
       damage: this.damageValue,
       ...pick(this.editableDamage, ["armorPiercing", "armorUsed", "additionalArmor"])
     });
     let damage = armorUsed?.appliedDamage ?? this.damageValue;
 
-    const roll = rollFormula(this.editableDamage.formula);
-    const max = nonNegative(
-      (roll?.terms || []).reduce<number>((accum, term, index, list) => {
-        if (term instanceof DiceTerm) accum += term.number;
-        else if (
-          typeof term === 'number' &&
-          (list[index - 1] === '+' || index === 0)
-        )
-          accum += term;
-        return accum;
-      }, 0),
-    );
+    const minDV = rollLimit(this.editableDamage.formula, "min");
+    // const max = nonNegative(
+    //   (roll?.terms || []).reduce<number>((accum, term, index, list) => {
+    //     if (term instanceof DiceTerm) accum += term.number;
+    //     else if (
+    //       typeof term === 'number' &&
+    //       (list[index - 1] === '+' || index === 0)
+    //     )
+    //       accum += term;
+    //     return accum;
+    //   }, 0),
+    // );
 
-    if (this.overrides?.takeMinimum) damage = Math.min(max, damage);
+    if (this.overrides?.takeMinimum) damage = Math.min(minDV, damage);
 
     const wounds = this.health.computeWounds(damage);
 
@@ -138,7 +139,7 @@ export abstract class HealthEditBase<
       damage,
       wounds,
       armorUsed: armorUsed?.personalArmorUsed,
-      minimumDV: max,
+      minimumDV: minDV,
     };
   }
 
@@ -146,7 +147,7 @@ export abstract class HealthEditBase<
     const { damage, wounds, minimumDV } = this.computed;
 
     return html`
-      ${this.armor
+      ${notEmpty(this.armor)
         ? html`
             <div class="armors">
               ${enumValues(ArmorType).map((armor) => {

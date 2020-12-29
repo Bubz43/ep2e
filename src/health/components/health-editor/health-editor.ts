@@ -168,10 +168,9 @@ export class HealthEditor extends LitElement {
   }
 
   private get armor() {
-    const armor = this.actor.proxy.type === ActorType.Character
+    return this.actor.proxy.type === ActorType.Character
       ? this.actor.proxy.armor
       : null;
-    return notEmpty(armor) ? armor : null
   }
 
   private async applyModification({
