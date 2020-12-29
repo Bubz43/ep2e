@@ -1,6 +1,7 @@
 import {
   renderFormulaField,
   renderNumberField,
+  renderNumberInput,
   renderTextField,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
@@ -48,7 +49,6 @@ export class PhysicalHealthDamageEditor extends HealthEditBase<
       );
     }
     // TODO cumulative damage
-    // TODO additional armor
     return html`
       <div class="damage-settings">
         ${renderAutoForm({
@@ -122,6 +122,15 @@ export class PhysicalHealthDamageEditor extends HealthEditBase<
             `
           : ''}
       </div>
+
+      ${renderAutoForm({
+        props: { additionalArmor: this.editableDamage.additionalArmor },
+        update: (changed, orig) =>
+          (this.editableDamage = { ...this.editableDamage, ...changed }),
+        fields: ({ additionalArmor }) => html`
+        <mwc-formfield label=${additionalArmor.label}>${renderNumberInput(additionalArmor, { min: 0})}</mwc-formfield>
+        `
+      })}
 
       ${this.renderCommon()}
     `;
