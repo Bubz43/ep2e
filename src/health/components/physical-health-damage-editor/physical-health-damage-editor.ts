@@ -14,7 +14,7 @@ import {
   RollMultiplier,
 } from '@src/health/health-changes';
 import type { SyntheticHealth } from '@src/health/synthetic-health';
-import { customElement, html } from 'lit-element';
+import {  customElement, html } from 'lit-element';
 import { pipe, reverse, takeWhile } from 'remeda';
 import { HealthEditBase } from '../health-edit-base';
 
@@ -22,7 +22,9 @@ import { HealthEditBase } from '../health-edit-base';
 export class PhysicalHealthDamageEditor extends HealthEditBase<
   BiologicalHealth | SyntheticHealth,
   PhysicalDamage
-> {
+  > {
+
+  
   static get is() {
     return 'physical-health-damage-editor' as const;
   }
@@ -124,11 +126,12 @@ export class PhysicalHealthDamageEditor extends HealthEditBase<
       </div>
 
       ${renderAutoForm({
+        classes: "additional-armor-form",
         props: { additionalArmor: this.editableDamage.additionalArmor },
-        update: (changed, orig) =>
+        update: (changed) =>
           (this.editableDamage = { ...this.editableDamage, ...changed }),
         fields: ({ additionalArmor }) => html`
-        <mwc-formfield label=${additionalArmor.label}>${renderNumberInput(additionalArmor, { min: 0})}</mwc-formfield>
+        <mwc-formfield alignEnd label=${additionalArmor.label}>${renderNumberInput(additionalArmor, { min: 0})}</mwc-formfield>
         `
       })}
 

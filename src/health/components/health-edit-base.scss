@@ -84,3 +84,13 @@ submit-button {
     padding: 0 0.5rem;
   }
 }
+
+.additional-armor-form {
+  place-items: center;
+  @include inputReset();
+  input {
+    width: 5ch;
+    text-align: center;
+    
+  }
+}
