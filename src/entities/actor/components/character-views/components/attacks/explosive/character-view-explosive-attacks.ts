@@ -1,5 +1,4 @@
 import { createMessage } from '@src/chat/create-message';
-import { ExplosiveSettings } from "@src/chat/explosive-settings";
 import {
   formatAreaEffect,
   formatArmorUsed
@@ -8,6 +7,7 @@ import type { ExplosiveAttack } from '@src/combat/attacks';
 import type { SlWindow } from '@src/components/window/window';
 import { openWindow } from '@src/components/window/window-controls';
 import { ExplosiveTrigger } from '@src/data-enums';
+import type { ExplosiveSettings } from '@src/entities/explosive-settings';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
 import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';

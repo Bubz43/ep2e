@@ -1,15 +1,26 @@
-import { ExplosiveSettings } from '@src/chat/explosive-settings';
 import { formatAreaEffect } from '@src/combat/attack-formatting';
 import {
+  emptyTextDash,
   renderNumberField,
+  renderNumberInput,
   renderRadioFields,
   renderSelectField,
   renderTimeField,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
-import { AreaEffectType, Demolition, enumValues, ExplosiveTrigger } from '@src/data-enums';
+import {
+  AreaEffectType,
+  Demolition,
+  enumValues,
+  ExplosiveTrigger,
+} from '@src/data-enums';
 import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Character } from '@src/entities/actor/proxies/character';
+import {
+  createDemolitionSetting,
+  DemolitionSetting,
+  ExplosiveSettings,
+} from '@src/entities/explosive-settings';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
 import { CommonInterval } from '@src/features/time';
 import {
@@ -23,6 +34,10 @@ import {
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
 import { averageRoll, rollLimit } from '@src/foundry/rolls';
+import {
+  isSuccessfullTestResult,
+  SuccessTestResult,
+} from '@src/success-test/success-test';
 import { nonNegative } from '@src/utility/helpers';
 import {
   customElement,
@@ -125,7 +140,7 @@ export class ExplosiveSettingsForm extends LitElement {
     return {
       uniform:
         this.settings.uniformBlastRadius || this.explosive.areaEffectRadius,
-      centered: this.settings.centeredReduction || 2,
+      centered: this.settings.centeredReduction || -2,
     };
   }
 
@@ -215,12 +230,34 @@ export class ExplosiveSettingsForm extends LitElement {
   }
 
   private get triggerOptions() {
+    const options = enumValues(ExplosiveTrigger);
     return this.isPlacing
-      ? enumValues(ExplosiveTrigger)
-      : difference(enumValues(ExplosiveTrigger), [
+      ? options
+      : difference(options, [
           ExplosiveTrigger.Airburst,
           ExplosiveTrigger.Impact,
         ]);
+  }
+
+  private get demolitionOptions() {
+    const options = enumValues(Demolition);
+    return this.explosive.areaEffect === AreaEffectType.Centered
+      ? options
+      : difference(options, [Demolition.ShapeCentered]);
+  }
+
+  private setDemolitionOption = (option: Demolition | undefined | '') => {
+    this.settings.demolition = option ? createDemolitionSetting(option) : null;
+    this.requestUpdate();
+  };
+
+  private updateDemolitionSetting = <T extends DemolitionSetting>(changed: Partial<T>, original: T) => {
+    this.settings.demolition = { ...original, ...changed };
+    this.requestUpdate();
+  }
+
+  private get demolitionType() {
+    return this.settings.demolition?.type || '';
   }
 
   render() {
@@ -232,52 +269,26 @@ export class ExplosiveSettingsForm extends LitElement {
       ${this.isPlacing
         ? html` <h2>${localize('place')} ${localize('explosive')}</h2> `
         : ''}
-      ${areaEffect
-        ? html`
-            <section class="area-effect">
-              <header>
-                <h3>${localize(areaEffect)} ${localize('areaEffect')}</h3>
-                <p>
-                  ${localize('quick')} ${localize('action')} ${localize('to')}
-                  ${localize('adjust')}
-                </p>
-              </header>
-              ${areaEffect === AreaEffectType.Centered
-                ? renderAutoForm({
-                    storeOnInput: true,
-
-                    props: {
-                      centeredReduction: this.explosiveDistances.centered,
-                    },
-                    update: this.updateSettings,
-                    fields: ({ centeredReduction }) =>
-                      renderNumberField(
-                        {
-                          ...centeredReduction,
-                          label: `${localize(
-                            'SHORT',
-                            'damageValue',
-                          )} ${localize('reduction')}/m`,
-                        },
-                        { min: 2, max: 20 },
-                      ),
-                  })
-                : renderAutoForm({
-                    storeOnInput: true,
-                    props: {
-                      uniformBlastRadius: this.explosiveDistances.uniform,
-                    },
-                    update: this.updateSettings,
-                    fields: ({ uniformBlastRadius }) =>
-                      renderNumberField(uniformBlastRadius, {
-                        min: 0,
-                        max: this.explosive.areaEffectRadius,
-                      }),
-                  })}
-            </section>
-            <!--
-            ${userCan('TEMPLATE_CREATE') ? this.renderTemplateEditor() : ''} -->
-          `
+      ${areaEffect ? this.renderAreaEffect(areaEffect) : ''}
+      ${this.isPlacing
+        ? html`<section class="demolition">
+            ${renderAutoForm({
+              props: { demolition: this.demolitionType } as const,
+              update: ({ demolition }) => this.setDemolitionOption(demolition),
+              fields: ({ demolition }) =>
+                renderSelectField(
+                  demolition,
+                  this.demolitionOptions,
+                  emptyTextDash,
+                ),
+            })}
+            ${this.settings.demolition
+              ? this.renderDemolitionForm(this.settings.demolition)
+              : ''}
+          </section> `
+        : ''}
+      ${areaEffect && userCan('TEMPLATE_CREATE')
+        ? this.renderTemplateEditor()
         : ''}
       <!-- ${renderAutoForm({
         classes: 'settings-form',
@@ -304,6 +315,85 @@ export class ExplosiveSettingsForm extends LitElement {
           `
         : ''} -->
     `;
+  }
+
+  private renderAreaEffect(areaEffect: AreaEffectType) {
+    return html`<section class="area-effect">
+      <span
+        >${localize(areaEffect)} ${localize('areaEffect')}
+        ${areaEffect === AreaEffectType.Centered
+          ? renderAutoForm({
+              storeOnInput: true,
+
+              props: {
+                centeredReduction: this.explosiveDistances.centered,
+              },
+              update: this.updateSettings,
+              fields: ({ centeredReduction }) =>
+                html`${renderNumberInput(centeredReduction, {
+                  max: -2,
+                  min: -20,
+                })}
+                DV/m`,
+            })
+          : renderAutoForm({
+              storeOnInput: true,
+              props: {
+                uniformBlastRadius: this.explosiveDistances.uniform,
+              },
+              update: this.updateSettings,
+              fields: ({ uniformBlastRadius }) =>
+                html`${renderNumberInput(uniformBlastRadius, {
+                  min: 1,
+                  max: this.explosive.areaEffectRadius,
+                })}
+                ${localize('meter')} ${localize('radius')}`,
+            })}
+      </span>
+      <p>
+        ${localize('quick')} ${localize('action')} ${localize('to')}
+        ${localize('adjust')}
+      </p>
+    </section> `;
+  }
+
+  private renderDemolitionForm(setting: DemolitionSetting) {
+    switch (setting.type) {
+      case Demolition.DamageAgainsStructures:
+        return renderAutoForm({
+          props: setting,
+          update: this.updateDemolitionSetting,
+          fields: ({ testResult }) =>
+            renderSelectField(
+              testResult,
+              enumValues(SuccessTestResult).filter(isSuccessfullTestResult),
+            ),
+        });
+
+      case Demolition.DisarmDifficulty:
+        return renderAutoForm({
+          props: setting,
+          update: this.updateDemolitionSetting,
+          fields: ({ testResult, roll }) => [
+            renderNumberField(roll, { min: 0, max: 99 }),
+            renderSelectField(
+              testResult,
+              enumValues(SuccessTestResult).filter(isSuccessfullTestResult),
+            ),
+          ],
+        });
+
+      case Demolition.ShapeCentered:
+        return renderAutoForm({
+          props: setting,
+          update: this.updateDemolitionSetting,
+          fields: ({ angle }) => [
+            renderNumberField(angle, { min: 1, max: 359 }),
+          ],
+        });
+      case Demolition.StructuralWeakpoint:
+        return html``;
+    }
   }
 
   private renderTemplateEditor() {

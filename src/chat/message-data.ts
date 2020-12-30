@@ -8,7 +8,7 @@ import type { HealthModification, HealthType } from '@src/health/health';
 import type { RollMultiplier } from '@src/health/health-changes';
 import type { StressType } from '@src/health/mental-health';
 import type { RequireAtLeastOne } from 'type-fest';
-import { ExplosiveSettings } from '../entities/explosive-settings';
+import type { ExplosiveSettings } from '../entities/explosive-settings';
 
 export type StressTestMessageData = {
   rolledFormulas: RolledFormula[];

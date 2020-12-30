@@ -27,6 +27,7 @@ sl-dropzone {
   display: grid;
   grid-auto-rows: min-content;
   position: relative;
+  padding: 0.25rem 0;
   &[hidden] {
     display: none;
   }

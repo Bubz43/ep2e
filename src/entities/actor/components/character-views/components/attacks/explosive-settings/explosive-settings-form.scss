@@ -25,18 +25,52 @@ h2 {
 }
 
 .area-effect {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  h3 {
-    margin: 0;
-    font-weight: normal;
-  }
+  @include inputReset();
+  padding: 0 0.5rem;
   p {
     margin: 0;
     color: var(--color-text-lighter);
   }
+  sl-form {
+    display: contents;
+  }
+  input {
+    text-align: center;
+  }
   
+}
+
+.template {
+  display: flex;
+  align-items: center;
+  font-size: large;
+  padding: 0 1rem;
+  --mdc-theme-primary: var(--color-grey);
+  > div {
+    flex: 1;
+  }
+  > * + * {
+    margin-left: 0.5ch;
+  }
+}
+
+.targets {
+  padding: 0 1rem;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  font-size: large;
+  min-height: 40px;
+  --mdc-icon-button-size: 2rem;
+  position: relative;
+  sl-animated-list {
+    display: contents;
+  }
+  > *,
+  sl-animated-list > * {
+    display: block;
+    margin: 0.25rem 0.25rem 0.25rem 0;
+  }
 }
 
 // .settings-form {
@@ -49,35 +83,4 @@ h2 {
 //   margin-top: auto;
 // }
 
-// .template {
-//   display: flex;
-//   align-items: center;
-//   font-size: large;
-//   padding: 0 1rem;
-//   --mdc-theme-primary: var(--color-grey);
-//   > div {
-//     flex: 1;
-//   }
-//   > * + * {
-//     margin-left: 0.5ch;
-//   }
-// }
 
-// .targets {
-//   padding: 0 1rem;
-//   display: flex;
-//   flex-flow: row wrap;
-//   align-items: center;
-//   font-size: large;
-//   min-height: 40px;
-//   --mdc-icon-button-size: 2rem;
-//   position: relative;
-//   sl-animated-list {
-//     display: contents;
-//   }
-//   > *,
-//   sl-animated-list > * {
-//     display: block;
-//     margin: 0.25rem 0.25rem 0.25rem 0;
-//   }
-// }
