@@ -31,7 +31,7 @@ import {
   PropertyValues,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { clamp, identity } from 'remeda';
+import { clamp, difference, identity } from 'remeda';
 import styles from './explosive-settings-form.scss';
 
 @customElement('explosive-settings-form')
@@ -127,8 +127,10 @@ export class ExplosiveSettingsForm extends LitElement {
   }
 
   private get averageDamage() {
-    return this.attack.rollFormulas.reduce((accum, { formula }) => accum + averageRoll(formula), 0);
-   
+    return this.attack.rollFormulas.reduce(
+      (accum, { formula }) => accum + averageRoll(formula),
+      0,
+    );
   }
 
   private async setTemplate() {
@@ -139,21 +141,22 @@ export class ExplosiveSettingsForm extends LitElement {
         : { x: 0, y: 0 };
     const data =
       this.explosive.areaEffect === AreaEffectType.Uniform
-        ? {
+        ? ({
             t: 'circle',
             distance: this.explosiveDistances.uniform,
-          } as const
-        : {
+          } as const)
+        : ({
             t: 'circle',
             distance: clamp(
-              nonNegative(this.averageDamage) / this.explosiveDistances.centered,
+              nonNegative(this.averageDamage) /
+                this.explosiveDistances.centered,
               { min: 1 },
             ),
-          } as const;
+          } as const);
     const ids = await placeMeasuredTemplate(
       createTemporaryMeasuredTemplate({
         ...center,
-        ...data
+        ...data,
       }),
       !!token,
     );
@@ -191,27 +194,43 @@ export class ExplosiveSettingsForm extends LitElement {
     }
   }
 
+  private get isPlacing() {
+    return !!this.settings.placing;
+  }
+
+  private get triggerOptions() {
+    return this.isPlacing
+      ? enumValues(ExplosiveTrigger)
+      : difference(enumValues(ExplosiveTrigger), [
+          ExplosiveTrigger.Airburst,
+          ExplosiveTrigger.Impact,
+        ]);
+  }
+
   render() {
     const { hasSecondaryMode, areaEffect } = this.explosive;
     const { attack } = this;
     // TODO plant and hardware: explosives
     // TODO make centered cone
     return html`
+      ${this.isPlacing
+        ? html` <h2>${localize('place')} ${localize('explosive')}</h2> `
+        : ''}
       ${areaEffect
         ? html`
-            <div class="area-effect">
-              <span class="label">${localize('areaEffect')}</span>
-              ${formatAreaEffect(this.explosive)}
-            </div>
-            <div class="area-effect-adjustments">
-              <span class="label"
-                >${localize('adjust')} (${localize('quick')}
-                ${localize('action')})</span
-              >
+            <section class="area-effect">
+            
+              <header>
+                <h3>${localize(areaEffect)} ${localize('areaEffect')}</h3>
+                <p>
+                  ${localize('quick')} ${localize('action')} ${localize('to')}
+                  ${localize('adjust')}
+                </p>
+              </header>
               ${areaEffect === AreaEffectType.Centered
-        ? renderAutoForm({
-          storeOnInput: true,
-          
+                ? renderAutoForm({
+                    storeOnInput: true,
+
                     props: {
                       centeredReduction: this.explosiveDistances.centered,
                     },
@@ -229,7 +248,7 @@ export class ExplosiveSettingsForm extends LitElement {
                       ),
                   })
                 : renderAutoForm({
-                  storeOnInput: true,
+                    storeOnInput: true,
                     props: {
                       uniformBlastRadius: this.explosiveDistances.uniform,
                     },
@@ -240,19 +259,20 @@ export class ExplosiveSettingsForm extends LitElement {
                         max: this.explosive.areaEffectRadius,
                       }),
                   })}
-            </div>
-            ${userCan('TEMPLATE_CREATE') ? this.renderTemplateEditor() : ''}
+            </section>
+            <!--
+            ${userCan('TEMPLATE_CREATE') ? this.renderTemplateEditor() : ''} -->
           `
         : ''}
-      ${renderAutoForm({
-        classes: "settings-form",
+      <!-- ${renderAutoForm({
+        classes: 'settings-form',
         props: this.formProps,
         update: this.updateSettings,
         fields: ({ trigger, timerDuration, duration, attackType }) => [
           hasSecondaryMode
             ? renderRadioFields(attackType, ['primary', 'secondary'])
             : '',
-          renderSelectField(trigger, enumValues(ExplosiveTrigger)),
+          renderSelectField(trigger, this.triggerOptions),
           trigger.value === ExplosiveTrigger.Timer
             ? renderTimeField(timerDuration, { min: CommonInterval.Turn })
             : '',
@@ -267,7 +287,7 @@ export class ExplosiveSettingsForm extends LitElement {
               label=${localize('confirm')}
             ></submit-button>
           `
-        : ''}
+        : ''} -->
     `;
   }
 

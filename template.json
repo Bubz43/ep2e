@@ -605,7 +605,7 @@
       "areaEffect": "",
       "explosiveType": "grenade",
       "useSubstance":"",
-      "areaEffectRadius": 0,
+      "areaEffectRadius": 10,
       "size": "micro",
       "sticky": true,
       "unitsPerComplexity": 5,

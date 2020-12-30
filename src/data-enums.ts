@@ -375,11 +375,6 @@ export enum AreaEffectType {
   Cone = 'cone',
 }
 
-export enum ExplosiveSpecial {
-  Payload = 'payload',
-  SecondaryAttackMode = 'secondaryAttack',
-}
-
 export enum CalledShot {
   BypassArmor = 'bypassArmor',
   Disarm = 'disarm',
@@ -436,7 +431,7 @@ export enum ExplosiveTrigger {
 
 export enum Demolitions {
   DamageAgainsStructures = 'damageAgainstStructures',
-  Shape = 'shape',
+  ShapeCentered = 'shape',
   StructuralWeakpoint = 'structuralWeakpoint',
   DisarmDifficulty = 'disarmDifficulty',
 }

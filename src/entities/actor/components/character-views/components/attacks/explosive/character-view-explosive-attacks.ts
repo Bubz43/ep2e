@@ -2,21 +2,19 @@ import { createMessage } from '@src/chat/create-message';
 import type { ExplosiveSettings } from '@src/chat/message-data';
 import {
   formatAreaEffect,
-  formatArmorUsed,
+  formatArmorUsed
 } from '@src/combat/attack-formatting';
 import type { ExplosiveAttack } from '@src/combat/attacks';
 import type { SlWindow } from '@src/components/window/window';
 import { openWindow } from '@src/components/window/window-controls';
 import { ExplosiveTrigger } from '@src/data-enums';
-import type { Character } from '@src/entities/actor/proxies/character';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
 import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
-import { openDialog } from '@src/open-dialog';
 import { clickIfEnter, notEmpty } from '@src/utility/helpers';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, html, LitElement, property } from 'lit-element';
 import { map } from 'remeda';
 import { requestCharacter } from '../../../character-request-event';
 import { ExplosiveSettingsForm } from '../explosive-settings/explosive-settings-form';
@@ -114,13 +112,34 @@ export class CharacterViewExplosiveAttacks extends LitElement {
           <button
             ?disabled=${disabled}
             @keydown=${clickIfEnter}
-            @click=${this.createMessage}
+            @click=${this.openExplosivePlacingWindow}
           >
-            <span>${localize('plant')}</span>
+            <span>${localize('place')}</span>
           </button>
         </div>
       </li>
     `;
+  }
+
+  private openExplosivePlacingWindow(ev: Event) {
+    const { token, character } = requestCharacter(this);
+    const initialSettings: Partial<ExplosiveSettings> = { placing: true };
+    const { win, wasConnected } = openWindow({
+      key: ExplosiveSettingsForm,
+      name: `${this.explosive.name} ${localize('settings')}`,
+      adjacentEl:
+        ev.currentTarget instanceof HTMLElement ? ev.currentTarget : this,
+      content: html`
+        <explosive-settings-form
+          .token=${token}
+          .character=${character}
+          .explosive=${this.explosive}
+          requireSubmit
+          @explosive-settings=${this.createMessage.bind(this)}
+          .initialSettings=${initialSettings}
+        ></explosive-settings-form>
+      `,
+    });
   }
 
   private openExplosiveSettingsDialog(ev: Event) {

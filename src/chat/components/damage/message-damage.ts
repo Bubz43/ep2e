@@ -1,7 +1,6 @@
 import type { DamageMessageData } from '@src/chat/message-data';
 import { formatArmorUsed } from '@src/combat/attack-formatting';
 import type { UsedRollPartsEvent } from '@src/combat/components/rolled-formulas-list/used-roll-parts-event';
-import { renderRadioFields } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { pickOrDefaultActor } from '@src/entities/find-entities';
 import { localize } from '@src/foundry/localization';
@@ -10,25 +9,26 @@ import { HealthEditor } from '@src/health/components/health-editor/health-editor
 import {
   formatDamageType,
   formatFormulaWithMultiplier,
-  HealthType,
+  HealthType
 } from '@src/health/health';
 import {
   createMeshDamage,
   createPhysicalDamage,
   createStressDamage,
-  RollMultiplier,
+  RollMultiplier
 } from '@src/health/health-changes';
 import { notEmpty } from '@src/utility/helpers';
-import { localImage } from '@src/utility/images';
 import {
   customElement,
-  LitElement,
-  property,
+
+
   html,
-  internalProperty,
-  PropertyValues,
+  internalProperty, LitElement,
+  property,
+
+
+  PropertyValues
 } from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map';
 import { omit } from 'remeda';
 import styles from './message-damage.scss';
 
