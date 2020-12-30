@@ -1356,6 +1356,9 @@
     "testResult": "Test Result",
     "angle": "Angle",
     "degrees": "Degrees",
+    "detonationPeriod": "Detonation Period",
+    "adjust": "Adjust",
+    "meter": "Meter",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

@@ -84,12 +84,12 @@ export class MessageExplosive extends MessageElement {
 
   render() {
     const { editable } = this.message;
-    const { state, trigger, timerDuration, duration } = this.explosiveUse;
+    const { state, trigger, duration } = this.explosiveUse;
 
     // TODO change trigger and durations
     return html`
       <div class="info">
-        <sl-group label=${localize('trigger')}>${localize(trigger)}</sl-group>
+        <sl-group label=${localize('trigger')}>${localize(trigger.type)}</sl-group>
       </div>
       ${state
         ? this.renderExplosiveState(state)

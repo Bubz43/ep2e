@@ -98,7 +98,9 @@ export class ExplosiveSettingsForm extends LitElement {
 
   private get defaultSettings(): ExplosiveSettings {
     return {
-      trigger: createExplosiveTriggerSetting(ExplosiveTrigger.Impact),
+      trigger: createExplosiveTriggerSetting(
+        this.isPlacing ? ExplosiveTrigger.Signal : ExplosiveTrigger.Impact,
+      ),
       ...(this.initialSettings ?? {}),
     };
   }
@@ -116,7 +118,7 @@ export class ExplosiveSettingsForm extends LitElement {
   }
 
   private emitSettings() {
-    if ("startTime" in this.settings.trigger) {
+    if ('startTime' in this.settings.trigger) {
       this.settings.trigger.startTime = currentWorldTimeMS();
     }
     this.dispatchEvent(
@@ -228,7 +230,7 @@ export class ExplosiveSettingsForm extends LitElement {
   }
 
   private get isPlacing() {
-    return !!this.settings.placing;
+    return !!this.initialSettings?.placing;
   }
 
   private get triggerOptions() {
@@ -454,35 +456,41 @@ export class ExplosiveSettingsForm extends LitElement {
     const { hasSecondaryMode, areaEffect } = this.explosive;
     const { attack } = this;
     return html`${renderAutoForm({
-      classes: 'settings-form',
-      props: this.formProps,
-      update: this.updateSettings,
-      fields: ({ duration, attackType }) => [
-        hasSecondaryMode
-          ? renderRadioFields(attackType, ['primary', 'secondary'], {
-              altLabel: (key) =>
-                this.explosive.attacks[key]?.label || localize(key),
-            })
-          : '',
-        attack.duration ? renderTimeField(duration) : '',
-      ],
-    })}
-    ${renderAutoForm({
-      noDebounce: this.requireSubmit,
-      props: this.settings.trigger,
-      update: ({ type }) => type && this.setTriggerOption(type),
-      fields: ({ type }) => renderSelectField(type, this.triggerOptions),
-    })}
-    ${this.renderTriggerForm(this.settings.trigger)}
-    ${this.requireSubmit
-      ? html`
-          <submit-button
-            complete
-            @submit-attempt=${this.emitSettings}
-            label=${localize('confirm')}
-          ></submit-button>
-        `
-      : ''}`;
+        classes: 'settings-form',
+        props: this.formProps,
+        update: this.updateSettings,
+        fields: ({ duration, attackType }) => [
+          hasSecondaryMode
+            ? renderRadioFields(attackType, ['primary', 'secondary'], {
+                altLabel: (key) =>
+                  this.explosive.attacks[key]?.label || localize(key),
+              })
+            : '',
+          attack.duration ? renderTimeField(duration) : '',
+        ],
+      })}
+      <div class="trigger-settings">
+        ${renderAutoForm({
+          noDebounce: this.requireSubmit,
+          props: this.settings.trigger,
+          update: ({ type }) => type && this.setTriggerOption(type),
+          fields: ({ type }) =>
+            renderSelectField(
+              { ...type, label: localize('trigger') },
+              this.triggerOptions,
+            ),
+        })}
+        ${this.renderTriggerForm(this.settings.trigger)}
+      </div>
+      ${this.requireSubmit
+        ? html`
+            <submit-button
+              complete
+              @submit-attempt=${this.emitSettings}
+              label=${localize('confirm')}
+            ></submit-button>
+          `
+        : ''}`;
   }
 
   private renderTriggerForm(settings: ExplosiveTriggerSettings) {

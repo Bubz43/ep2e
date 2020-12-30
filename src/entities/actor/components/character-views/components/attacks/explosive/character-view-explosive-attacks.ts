@@ -7,7 +7,7 @@ import type { ExplosiveAttack } from '@src/combat/attacks';
 import type { SlWindow } from '@src/components/window/window';
 import { openWindow } from '@src/components/window/window-controls';
 import { ExplosiveTrigger } from '@src/data-enums';
-import type { ExplosiveSettings } from '@src/entities/explosive-settings';
+import { createExplosiveTriggerSetting, ExplosiveSettings } from '@src/entities/explosive-settings';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
 import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
@@ -32,8 +32,6 @@ export class CharacterViewExplosiveAttacks extends LitElement {
 
   @property({ attribute: false }) explosive!: Explosive;
 
-  private win: SlWindow | null = null;
-
   private async createMessage(ev: Event | CustomEvent<ExplosiveSettings>) {
     const { token, character } = requestCharacter(this);
     await createMessage({
@@ -42,7 +40,7 @@ export class CharacterViewExplosiveAttacks extends LitElement {
         explosiveUse: {
           ...(ev instanceof CustomEvent
             ? ev.detail
-            : { trigger: ExplosiveTrigger.Impact }),
+            : { trigger: createExplosiveTriggerSetting(ExplosiveTrigger.Signal) }),
           explosive: this.explosive.getDataCopy(),
         },
       },
