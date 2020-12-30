@@ -114,11 +114,15 @@ export abstract class HealthEditBase<
     const armorUsed = ActiveArmor.mitigateDamage({
       armor: this.armor,
       damage: this.damageValue,
-      ...pick(this.editableDamage, ["armorPiercing", "armorUsed", "additionalArmor"])
+      ...pick(this.editableDamage, [
+        'armorPiercing',
+        'armorUsed',
+        'additionalArmor',
+      ]),
     });
     let damage = armorUsed?.appliedDamage ?? this.damageValue;
 
-    const minDV = rollLimit(this.editableDamage.formula, "min");
+    const minDV = rollLimit(this.editableDamage.formula, 'min');
     // const max = nonNegative(
     //   (roll?.terms || []).reduce<number>((accum, term, index, list) => {
     //     if (term instanceof DiceTerm) accum += term.number;

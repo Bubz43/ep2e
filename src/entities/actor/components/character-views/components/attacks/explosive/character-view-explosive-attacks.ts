@@ -1,7 +1,7 @@
 import { createMessage } from '@src/chat/create-message';
 import {
   formatAreaEffect,
-  formatArmorUsed
+  formatArmorUsed,
 } from '@src/combat/attack-formatting';
 import type { ExplosiveAttack } from '@src/combat/attacks';
 import type { SlWindow } from '@src/components/window/window';

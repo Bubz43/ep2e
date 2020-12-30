@@ -153,48 +153,45 @@ export class ActiveArmor
     armorUsed,
     armorPiercing: pierce = false,
     additionalArmor = 0,
-    armor
+    armor,
   }: {
     damage: number;
     armorUsed: ArmorType[];
     armorPiercing: boolean;
-      additionalArmor?: number;
-    armor?: ActiveArmor | null
-    
-    }) {
-      const remainingDamage = pipe(
-        Math.round(damage),
-        (damage) =>
-          damage -
-          ActiveArmor.maybePierced({ armorValue: additionalArmor, pierce }),
-        nonNegative,
-      );
-      if (armorUsed.length === 0) return { appliedDamage: remainingDamage };
-  
-      const uniqueArmors = new Set(armorUsed);
-      const damageSplit = Math.floor(remainingDamage / uniqueArmors.size);
-      const remainder = remainingDamage % uniqueArmors.size;
-      const instances = [...uniqueArmors].map(
-        (armor, index) =>
-          [armor, damageSplit + (index === 0 ? remainder : 0)] as const,
-      );
-  
-      const personalArmorUsed = new Map<ArmorType, number>();
-  
-      let appliedDamage = 0;
-      for (const [armorType, dv] of instances) {
-        const armorValue = ActiveArmor.maybePierced({
-          armorValue: armor?.get(armorType) || 0,
-          pierce,
-        });
-        const afterArmor = nonNegative(dv - armorValue);
-        appliedDamage += afterArmor;
-        personalArmorUsed.set(armorType, dv - afterArmor);
-      }
-      return { appliedDamage, personalArmorUsed };
+    additionalArmor?: number;
+    armor?: ActiveArmor | null;
+  }) {
+    const remainingDamage = pipe(
+      Math.round(damage),
+      (damage) =>
+        damage -
+        ActiveArmor.maybePierced({ armorValue: additionalArmor, pierce }),
+      nonNegative,
+    );
+    if (armorUsed.length === 0) return { appliedDamage: remainingDamage };
+
+    const uniqueArmors = new Set(armorUsed);
+    const damageSplit = Math.floor(remainingDamage / uniqueArmors.size);
+    const remainder = remainingDamage % uniqueArmors.size;
+    const instances = [...uniqueArmors].map(
+      (armor, index) =>
+        [armor, damageSplit + (index === 0 ? remainder : 0)] as const,
+    );
+
+    const personalArmorUsed = new Map<ArmorType, number>();
+
+    let appliedDamage = 0;
+    for (const [armorType, dv] of instances) {
+      const armorValue = ActiveArmor.maybePierced({
+        armorValue: armor?.get(armorType) || 0,
+        pierce,
+      });
+      const afterArmor = nonNegative(dv - armorValue);
+      appliedDamage += afterArmor;
+      personalArmorUsed.set(armorType, dv - afterArmor);
+    }
+    return { appliedDamage, personalArmorUsed };
   }
-
-
 
   get isOverburdened() {
     return !!this._overburdened;

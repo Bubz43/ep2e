@@ -9,25 +9,22 @@ import { HealthEditor } from '@src/health/components/health-editor/health-editor
 import {
   formatDamageType,
   formatFormulaWithMultiplier,
-  HealthType
+  HealthType,
 } from '@src/health/health';
 import {
   createMeshDamage,
   createPhysicalDamage,
   createStressDamage,
-  RollMultiplier
+  RollMultiplier,
 } from '@src/health/health-changes';
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
-
-
   html,
-  internalProperty, LitElement,
+  internalProperty,
+  LitElement,
   property,
-
-
-  PropertyValues
+  PropertyValues,
 } from 'lit-element';
 import { omit } from 'remeda';
 import styles from './message-damage.scss';

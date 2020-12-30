@@ -1376,7 +1376,13 @@ type LangEntries =
   | 'secondary'
   | 'place'
   | 'visible'
-  | 'targets' | "adjust" | "meter" | "demolition" | "testResult" | "angle" | "degrees"
+  | 'targets'
+  | 'adjust'
+  | 'meter'
+  | 'demolition'
+  | 'testResult'
+  | 'angle'
+  | 'degrees';
 type FullNames =
   | 'cog'
   | 'int'

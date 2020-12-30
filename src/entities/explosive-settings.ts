@@ -25,14 +25,14 @@ type ImpactTrigger = Trigger<{
   type: ExplosiveTrigger.Impact;
 }>;
 
+type SignalTrigger = Trigger<{
+  type: ExplosiveTrigger.Signal;
+}>;
+
 type ProximityTrigger = Trigger<{
   type: ExplosiveTrigger.Proximity;
   radius: number;
   startTime: number;
-}>;
-
-type SignalTrigger = Trigger<{
-  type: ExplosiveTrigger.Signal;
 }>;
 
 type TimerTrigger = Trigger<{

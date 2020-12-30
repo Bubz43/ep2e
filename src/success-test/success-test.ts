@@ -25,7 +25,6 @@ enum ResultTier {
 
 const getRank = (result: SuccessTestResult) => ResultTier[capitalize(result)];
 
-
 export const isSuccessfullTestResult = createPipe(
   getRank,
   (rank) => rank >= ResultTier.Success,
