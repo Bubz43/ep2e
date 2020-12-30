@@ -8,14 +8,25 @@
 :host {
   display: flex;
   flex-flow: column;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem;
   background: linear-gradient(
     to bottom,
     alphav(var(--color-bg), 0.7),
     alphav(var(--color-bg-alt), 0.7)
   );
-  > * + * {
-    margin-top: 0.25rem;
+ 
+  > *:not(h2):not(submit-button) {
+    border-left: 3px solid var(--color-border);
+    &:hover {
+      border-left-color: alphav(var(--color-grey), 0.5);
+    }
+    &:focus-within {
+      border-left-color: var(--color-grey);
+    }
+    & + * {
+      margin-top: 0.5rem;
+
+    }
   }
 }
 
@@ -26,10 +37,11 @@ h2 {
 
 .area-effect {
   @include inputReset();
-  padding: 0 0.5rem;
+  padding: 0.25rem 0.5rem;
   p {
     margin: 0;
     color: var(--color-text-lighter);
+    font-size: small;
   }
   sl-form {
     display: contents;
@@ -40,12 +52,19 @@ h2 {
   
 }
 
+.demolition {
+  sl-form {
+    grid-auto-flow: column;
+  }
+}
+
 .template {
   display: flex;
   align-items: center;
   font-size: large;
   padding: 0 1rem;
   --mdc-theme-primary: var(--color-grey);
+
   > div {
     flex: 1;
   }

@@ -159,7 +159,8 @@ export class ExplosiveSettingsForm extends LitElement {
     const { areaEffect } = this.explosive;
     if (areaEffect === AreaEffectType.Centered) {
       const distance = clamp(
-        nonNegative(this.averageDamage) / this.explosiveDistances.centered,
+        nonNegative(this.averageDamage) /
+          Math.abs(this.explosiveDistances.centered),
         { min: 1 },
       );
       return this.settings.demolition?.type === Demolition.ShapeCentered
@@ -233,11 +234,12 @@ export class ExplosiveSettingsForm extends LitElement {
   private get triggerOptions() {
     const options = enumValues(ExplosiveTrigger);
     return this.isPlacing
-      ? options
-      : difference(options, [
-          ExplosiveTrigger.Airburst,
-          ExplosiveTrigger.Impact,
-        ]);
+     ?difference(options, [
+      ExplosiveTrigger.Airburst,
+      ExplosiveTrigger.Impact,
+    ])
+      : options
+       
   }
 
   private get demolitionOptions() {
@@ -248,18 +250,19 @@ export class ExplosiveSettingsForm extends LitElement {
   }
 
   private setDemolitionOption = (option: Demolition | undefined | '') => {
-    this.settings.demolition = option ? createDemolitionSetting(option) : null;
-    this.requestUpdate();
+    option
+      ? this.updateDemolitionSetting({}, createDemolitionSetting(option))
+      : this.updateSettings({ demolition: null });
   };
 
   private updateDemolitionSetting = <T extends DemolitionSetting>(
     changed: Partial<T>,
     original: T,
   ) => {
-    this.settings.demolition = { ...original, ...changed };
+    this.updateSettings({ demolition: { ...original, ...changed } });
     const { template, demolition } = this.settings;
     if (template && demolition?.type === Demolition.ShapeCentered) {
-      updatePlacedTemplate(template, { angle: demolition.angle });
+      updatePlacedTemplate(template, { t: 'cone', angle: demolition.angle });
     }
     this.requestUpdate();
   };
@@ -269,10 +272,7 @@ export class ExplosiveSettingsForm extends LitElement {
   }
 
   render() {
-    const { hasSecondaryMode, areaEffect } = this.explosive;
-    const { attack } = this;
-    // TODO plant and hardware: explosives
-    // TODO make centered cone
+    const { areaEffect } = this.explosive;
     return html`
       ${this.isPlacing
         ? html` <h2>${localize('place')} ${localize('explosive')}</h2> `
@@ -281,11 +281,15 @@ export class ExplosiveSettingsForm extends LitElement {
       ${this.isPlacing
         ? html`<section class="demolition">
             ${renderAutoForm({
+              noDebounce: true,
               props: { demolition: this.demolitionType } as const,
               update: ({ demolition }) => this.setDemolitionOption(demolition),
               fields: ({ demolition }) =>
                 renderSelectField(
-                  demolition,
+                  {
+                    ...demolition,
+                    label: `${demolition.label} ${localize('settings')}`,
+                  },
                   this.demolitionOptions,
                   emptyTextDash,
                 ),
@@ -297,31 +301,9 @@ export class ExplosiveSettingsForm extends LitElement {
         : ''}
       ${areaEffect && userCan('TEMPLATE_CREATE')
         ? this.renderTemplateEditor()
-        : ''}
-      <!-- ${renderAutoForm({
-        classes: 'settings-form',
-        props: this.formProps,
-        update: this.updateSettings,
-        fields: ({ trigger, timerDuration, duration, attackType }) => [
-          hasSecondaryMode
-            ? renderRadioFields(attackType, ['primary', 'secondary'])
-            : '',
-          renderSelectField(trigger, this.triggerOptions),
-          trigger.value === ExplosiveTrigger.Timer
-            ? renderTimeField(timerDuration, { min: CommonInterval.Turn })
-            : '',
-          attack.duration ? renderTimeField(duration) : '',
-        ],
-      })}
-      ${this.requireSubmit
-        ? html`
-            <submit-button
-              complete
-              @submit-attempt=${this.emitSettings}
-              label=${localize('confirm')}
-            ></submit-button>
-          `
-        : ''} -->
+      : ''}
+        
+        ${this.renderCommonSettings()}
     `;
   }
 
@@ -393,10 +375,11 @@ export class ExplosiveSettingsForm extends LitElement {
 
       case Demolition.ShapeCentered:
         return renderAutoForm({
+          storeOnInput: true,
           props: setting,
           update: this.updateDemolitionSetting,
           fields: ({ angle }) => [
-            renderNumberField(angle, { min: 1, max: 359 }),
+            renderNumberField({...angle, label: `${angle.label} (${localize("degrees")})`}, { min: 1, max: 359 }),
           ],
         });
       case Demolition.StructuralWeakpoint:
@@ -454,6 +437,35 @@ export class ExplosiveSettingsForm extends LitElement {
           )}
         </sl-animated-list>
       </div>`;
+  }
+
+  private renderCommonSettings() {
+    const { hasSecondaryMode, areaEffect } = this.explosive;
+    const { attack } = this;
+    return html`${renderAutoForm({
+      classes: 'settings-form',
+      props: this.formProps,
+      update: this.updateSettings,
+      fields: ({ trigger, timerDuration, duration, attackType }) => [
+        hasSecondaryMode
+          ? renderRadioFields(attackType, ['primary', 'secondary'], { altLabel: (key) => this.explosive.attacks[key]?.label || localize(key)})
+          : '',
+        renderSelectField(trigger, this.triggerOptions),
+        trigger.value === ExplosiveTrigger.Timer
+          ? renderTimeField(timerDuration, { min: CommonInterval.Turn })
+          : '',
+        attack.duration ? renderTimeField(duration) : '',
+      ],
+    })}
+    ${this.requireSubmit
+      ? html`
+          <submit-button
+            complete
+            @submit-attempt=${this.emitSettings}
+            label=${localize('confirm')}
+          ></submit-button>
+        `
+      : ''}`;
   }
 }
 

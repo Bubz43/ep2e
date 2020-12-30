@@ -569,6 +569,9 @@
             "adjacentTargets": {
               "type": "string"
             },
+            "adjust": {
+              "type": "string"
+            },
             "admin": {
               "type": "string"
             },
@@ -1404,6 +1407,9 @@
               "type": "string"
             },
             "deleted": {
+              "type": "string"
+            },
+            "demolition": {
               "type": "string"
             },
             "demolitions": {
@@ -2568,6 +2574,9 @@
               "type": "string"
             },
             "meshware": {
+              "type": "string"
+            },
+            "meter": {
               "type": "string"
             },
             "meters": {
@@ -4034,6 +4043,9 @@
             "test": {
               "type": "string"
             },
+            "testResult": {
+              "type": "string"
+            },
             "tests": {
               "type": "string"
             },
@@ -4542,6 +4554,7 @@
             "additionalDv",
             "additionalNotes",
             "adjacentTargets",
+            "adjust",
             "admin",
             "advance",
             "advancePersonalTime",
@@ -4821,6 +4834,7 @@
             "delayTurn",
             "delete",
             "deleted",
+            "demolition",
             "demolitions",
             "derived",
             "dermal",
@@ -5209,6 +5223,7 @@
             "meshHealth",
             "meshService",
             "meshware",
+            "meter",
             "meters",
             "micro",
             "microgravity",
@@ -5697,6 +5712,7 @@
             "temporaryEffects",
             "temporaryItem",
             "test",
+            "testResult",
             "tests",
             "theUnknown",
             "threat",

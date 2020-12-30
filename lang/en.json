@@ -1352,6 +1352,10 @@
     "targets": "Targets",
     "throw": "Throw",
     "visible": "Visible",
+    "demolition": "Demolition",
+    "testResult": "Test Result",
+    "angle": "Angle",
+    "degrees": "Degrees",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
