@@ -24,7 +24,6 @@ export type MeasuredTemplateData = {
   _id?: string;
 };
 
-
 export type PlacedTemplateIDs = {
   templateId: string;
   sceneId: string;
@@ -128,6 +127,18 @@ export const placeMeasuredTemplate = (
       template.refresh();
     }
   });
+};
+
+export const updatePlacedTemplate = (
+  ids: PlacedTemplateIDs,
+  changed: Partial<MeasuredTemplateData>,
+) => {
+  return game.scenes
+    .get(ids.sceneId)
+    ?.updateEmbeddedEntity(MeasuredTemplate.embeddedName, {
+      ...changed,
+      _id: ids.templateId,
+    });
 };
 
 export const getNormalizedTokenSize = ({ data }: Token) =>

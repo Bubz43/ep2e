@@ -30,6 +30,7 @@ import {
   getVisibleTokensWithinHighlightedTemplate,
   MeasuredTemplateType,
   MeasuredTemplateData,
+  updatePlacedTemplate,
 } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
@@ -209,10 +210,10 @@ export class ExplosiveSettingsForm extends LitElement {
   }
 
   private editTemplate() {
-    if (this.settings.template) {
-      readyCanvas()
-        ?.templates.get(this.settings.template.templateId)
-        ?.sheet.render(true);
+    const { templateId, sceneId } = this.settings.template ?? {};
+    const canvas = readyCanvas();
+    if (templateId && canvas?.scene.id === sceneId) {
+      canvas?.templates.get(templateId)?.sheet.render(true);
     }
   }
 
@@ -251,10 +252,17 @@ export class ExplosiveSettingsForm extends LitElement {
     this.requestUpdate();
   };
 
-  private updateDemolitionSetting = <T extends DemolitionSetting>(changed: Partial<T>, original: T) => {
+  private updateDemolitionSetting = <T extends DemolitionSetting>(
+    changed: Partial<T>,
+    original: T,
+  ) => {
     this.settings.demolition = { ...original, ...changed };
+    const { template, demolition } = this.settings;
+    if (template && demolition?.type === Demolition.ShapeCentered) {
+      updatePlacedTemplate(template, { angle: demolition.angle });
+    }
     this.requestUpdate();
-  }
+  };
 
   private get demolitionType() {
     return this.settings.demolition?.type || '';
