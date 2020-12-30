@@ -18,8 +18,10 @@ import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Character } from '@src/entities/actor/proxies/character';
 import {
   createDemolitionSetting,
+  createExplosiveTriggerSetting,
   DemolitionSetting,
   ExplosiveSettings,
+  ExplosiveTriggerSettings,
 } from '@src/entities/explosive-settings';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
 import { CommonInterval } from '@src/features/time';
@@ -96,19 +98,14 @@ export class ExplosiveSettingsForm extends LitElement {
 
   private get defaultSettings(): ExplosiveSettings {
     return {
-      trigger: ExplosiveTrigger.Impact,
+      trigger: createExplosiveTriggerSetting(ExplosiveTrigger.Impact),
       ...(this.initialSettings ?? {}),
     };
   }
 
   private get formProps() {
-    const {
-      trigger,
-      timerDuration = CommonInterval.Turn,
-      duration = 0,
-      attackType = 'primary',
-    } = this.settings;
-    return { trigger, timerDuration, duration, attackType };
+    const { duration = 0, attackType = 'primary' } = this.settings;
+    return { duration, attackType };
   }
 
   get attack() {
@@ -194,24 +191,24 @@ export class ExplosiveSettingsForm extends LitElement {
       !!token,
     );
     if (ids) {
-      this.updateSettings({ template: ids });
+      this.updateSettings({ templateIDs: ids });
       this.getTargets();
     }
   }
 
   private async removeTemplate() {
-    if (this.settings.template) {
-      const { sceneId, templateId } = this.settings.template;
+    if (this.settings.templateIDs) {
+      const { sceneId, templateId } = this.settings.templateIDs;
       await game.scenes
         .get(sceneId)
         ?.deleteEmbeddedEntity(MeasuredTemplate.embeddedName, templateId);
       this.targets.clear();
-      this.updateSettings({ template: null });
+      this.updateSettings({ templateIDs: null });
     }
   }
 
   private editTemplate() {
-    const { templateId, sceneId } = this.settings.template ?? {};
+    const { templateId, sceneId } = this.settings.templateIDs ?? {};
     const canvas = readyCanvas();
     if (templateId && canvas?.scene.id === sceneId) {
       canvas?.templates.get(templateId)?.sheet.render(true);
@@ -219,9 +216,9 @@ export class ExplosiveSettingsForm extends LitElement {
   }
 
   private getTargets() {
-    if (this.settings.template) {
+    if (this.settings.templateIDs) {
       this.targets = getVisibleTokensWithinHighlightedTemplate(
-        this.settings.template.templateId,
+        this.settings.templateIDs.templateId,
       );
       this.requestUpdate();
     }
@@ -234,12 +231,11 @@ export class ExplosiveSettingsForm extends LitElement {
   private get triggerOptions() {
     const options = enumValues(ExplosiveTrigger);
     return this.isPlacing
-     ?difference(options, [
-      ExplosiveTrigger.Airburst,
-      ExplosiveTrigger.Impact,
-    ])
-      : options
-       
+      ? difference(options, [
+          ExplosiveTrigger.Airburst,
+          ExplosiveTrigger.Impact,
+        ])
+      : options;
   }
 
   private get demolitionOptions() {
@@ -249,22 +245,32 @@ export class ExplosiveSettingsForm extends LitElement {
       : difference(options, [Demolition.ShapeCentered]);
   }
 
-  private setDemolitionOption = (option: Demolition | undefined | '') => {
+  private setDemolitionOption(option: Demolition | undefined | '') {
     option
       ? this.updateDemolitionSetting({}, createDemolitionSetting(option))
       : this.updateSettings({ demolition: null });
-  };
+  }
 
   private updateDemolitionSetting = <T extends DemolitionSetting>(
     changed: Partial<T>,
     original: T,
   ) => {
     this.updateSettings({ demolition: { ...original, ...changed } });
-    const { template, demolition } = this.settings;
+    const { templateIDs: template, demolition } = this.settings;
     if (template && demolition?.type === Demolition.ShapeCentered) {
       updatePlacedTemplate(template, { t: 'cone', angle: demolition.angle });
     }
-    this.requestUpdate();
+  };
+
+  private setTriggerOption(option: ExplosiveTrigger) {
+    this.updateSettings({ trigger: createExplosiveTriggerSetting(option) });
+  }
+
+  private updateTriggerSettings = <T extends ExplosiveTriggerSettings>(
+    changed: Partial<T>,
+    original: T,
+  ) => {
+    this.updateSettings({ trigger: { ...original, ...changed } });
   };
 
   private get demolitionType() {
@@ -281,7 +287,7 @@ export class ExplosiveSettingsForm extends LitElement {
       ${this.isPlacing
         ? html`<section class="demolition">
             ${renderAutoForm({
-              noDebounce: true,
+              noDebounce: this.requireSubmit,
               props: { demolition: this.demolitionType } as const,
               update: ({ demolition }) => this.setDemolitionOption(demolition),
               fields: ({ demolition }) =>
@@ -301,9 +307,8 @@ export class ExplosiveSettingsForm extends LitElement {
         : ''}
       ${areaEffect && userCan('TEMPLATE_CREATE')
         ? this.renderTemplateEditor()
-      : ''}
-        
-        ${this.renderCommonSettings()}
+        : ''}
+      ${this.renderCommonSettings()}
     `;
   }
 
@@ -379,7 +384,10 @@ export class ExplosiveSettingsForm extends LitElement {
           props: setting,
           update: this.updateDemolitionSetting,
           fields: ({ angle }) => [
-            renderNumberField({...angle, label: `${angle.label} (${localize("degrees")})`}, { min: 1, max: 359 }),
+            renderNumberField(
+              { ...angle, label: `${angle.label} (${localize('degrees')})` },
+              { min: 1, max: 359 },
+            ),
           ],
         });
       case Demolition.StructuralWeakpoint:
@@ -388,7 +396,7 @@ export class ExplosiveSettingsForm extends LitElement {
   }
 
   private renderTemplateEditor() {
-    const { template } = this.settings;
+    const { templateIDs: template } = this.settings;
 
     return html` <div class="template">
         <div>${localize('template')}</div>
@@ -446,17 +454,23 @@ export class ExplosiveSettingsForm extends LitElement {
       classes: 'settings-form',
       props: this.formProps,
       update: this.updateSettings,
-      fields: ({ trigger, timerDuration, duration, attackType }) => [
+      fields: ({ duration, attackType }) => [
         hasSecondaryMode
-          ? renderRadioFields(attackType, ['primary', 'secondary'], { altLabel: (key) => this.explosive.attacks[key]?.label || localize(key)})
-          : '',
-        renderSelectField(trigger, this.triggerOptions),
-        trigger.value === ExplosiveTrigger.Timer
-          ? renderTimeField(timerDuration, { min: CommonInterval.Turn })
+          ? renderRadioFields(attackType, ['primary', 'secondary'], {
+              altLabel: (key) =>
+                this.explosive.attacks[key]?.label || localize(key),
+            })
           : '',
         attack.duration ? renderTimeField(duration) : '',
       ],
     })}
+    ${renderAutoForm({
+      noDebounce: this.requireSubmit,
+      props: this.settings.trigger,
+      update: ({ type }) => type && this.setTriggerOption(type),
+      fields: ({ type }) => renderSelectField(type, this.triggerOptions),
+    })}
+    ${this.renderTriggerForm(this.settings.trigger)}
     ${this.requireSubmit
       ? html`
           <submit-button
@@ -466,6 +480,40 @@ export class ExplosiveSettingsForm extends LitElement {
           ></submit-button>
         `
       : ''}`;
+  }
+
+  private renderTriggerForm(settings: ExplosiveTriggerSettings) {
+    switch (settings.type) {
+      case ExplosiveTrigger.Impact:
+      case ExplosiveTrigger.Signal:
+        return '';
+
+      case ExplosiveTrigger.Airburst:
+        return renderAutoForm({
+          props: settings,
+          update: this.updateTriggerSettings,
+          fields: ({ distance }) => renderNumberField(distance, { min: 1 }), // TODO max?
+        });
+
+      case ExplosiveTrigger.Proximity:
+        return renderAutoForm({
+          props: settings,
+          update: this.updateTriggerSettings,
+          fields: ({ radius }) =>
+            renderNumberField(
+              { ...radius, label: `${radius.label} (${localize('meters')})` },
+              { min: 0.1, max: 3 },
+            ),
+        });
+
+      case ExplosiveTrigger.Timer:
+        return renderAutoForm({
+          props: settings,
+          update: this.updateTriggerSettings,
+          fields: ({ detonationPeriod }) =>
+            renderTimeField(detonationPeriod, { min: CommonInterval.Turn }),
+        });
+    }
   }
 }
 
