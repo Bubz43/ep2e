@@ -24,7 +24,7 @@ import {
   ExplosiveTriggerSettings,
 } from '@src/entities/explosive-settings';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
-import { CommonInterval } from '@src/features/time';
+import { CommonInterval, currentWorldTimeMS } from '@src/features/time';
 import {
   readyCanvas,
   placeMeasuredTemplate,
@@ -116,6 +116,9 @@ export class ExplosiveSettingsForm extends LitElement {
   }
 
   private emitSettings() {
+    if ("startTime" in this.settings.trigger) {
+      this.settings.trigger.startTime = currentWorldTimeMS();
+    }
     this.dispatchEvent(
       new CustomEvent('explosive-settings', {
         bubbles: true,
