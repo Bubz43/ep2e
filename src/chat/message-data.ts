@@ -1,16 +1,14 @@
 import type { AreaEffect } from '@src/combat/attack-formatting';
-import type { ExplosiveTrigger } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
 import type { SubstanceUseMethod } from '@src/entities/item/proxies/substance';
 import type { ItemEntity } from '@src/entities/models';
 import type { ArmorType } from '@src/features/active-armor';
-import type { PlacedTemplateIDs } from '@src/foundry/canvas';
 import type { RolledFormula } from '@src/foundry/rolls';
 import type { HealthModification, HealthType } from '@src/health/health';
 import type { RollMultiplier } from '@src/health/health-changes';
 import type { StressType } from '@src/health/mental-health';
-import type { SuccessTestResult } from '@src/success-test/success-test';
 import type { RequireAtLeastOne } from 'type-fest';
+import { ExplosiveSettings } from '../entities/explosive-settings';
 
 export type StressTestMessageData = {
   rolledFormulas: RolledFormula[];
@@ -55,18 +53,6 @@ export type SubstanceUseData = {
   doses?: number;
   appliedTo?: string[];
   hidden?: boolean;
-};
-
-export type ExplosiveSettings = {
-  placing?: boolean;
-  template?: PlacedTemplateIDs | null;
-  trigger: ExplosiveTrigger;
-  timerDuration?: number;
-  duration?: number;
-  attackType?: 'primary' | 'secondary';
-  centeredReduction?: number;
-  uniformBlastRadius?: number;
-  disarmDifficulty?: [roll: number, testResult: SuccessTestResult]
 };
 
 export type UsedExplosiveState = ['detonated' | 'reclaimed', string];

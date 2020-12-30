@@ -12,7 +12,7 @@ export enum SuccessTestResult {
   CriticalSuccess = 'criticalSuccess',
 }
 
-enum SuccessTestResultTier {
+enum ResultTier {
   CriticalFailure,
   SuperiorFailureX2,
   SuperiorFailure,
@@ -23,11 +23,16 @@ enum SuccessTestResultTier {
   CriticalSuccess,
 }
 
-const successTestResultRank = (result: SuccessTestResult) => {
-  return SuccessTestResultTier[capitalize(result)];
-};
+const getRank = (result: SuccessTestResult) => ResultTier[capitalize(result)];
+
 
 export const isSuccessfullTestResult = createPipe(
-  successTestResultRank,
-  (rank) => rank >= SuccessTestResultTier.Success,
+  getRank,
+  (rank) => rank >= ResultTier.Success,
 );
+
+// export type SuccessResult =
+//   | SuccessTestResult.Success
+//   | SuccessTestResult.SuperiorSuccess
+//   | SuccessTestResult.SuperiorSuccessX2
+//   | SuccessTestResult.CriticalSuccess;

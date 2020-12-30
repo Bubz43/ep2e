@@ -1,5 +1,5 @@
 import { createMessage } from '@src/chat/create-message';
-import type { ExplosiveSettings } from '@src/chat/message-data';
+import { ExplosiveSettings } from "@src/chat/explosive-settings";
 import {
   formatAreaEffect,
   formatArmorUsed

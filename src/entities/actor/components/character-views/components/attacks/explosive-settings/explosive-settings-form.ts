@@ -1,4 +1,4 @@
-import type { ExplosiveSettings } from '@src/chat/message-data';
+import { ExplosiveSettings } from '@src/chat/explosive-settings';
 import { formatAreaEffect } from '@src/combat/attack-formatting';
 import {
   renderNumberField,
@@ -7,7 +7,7 @@ import {
   renderTimeField,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
-import { AreaEffectType, enumValues, ExplosiveTrigger } from '@src/data-enums';
+import { AreaEffectType, Demolition, enumValues, ExplosiveTrigger } from '@src/data-enums';
 import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Character } from '@src/entities/actor/proxies/character';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
@@ -17,6 +17,8 @@ import {
   placeMeasuredTemplate,
   createTemporaryMeasuredTemplate,
   getVisibleTokensWithinHighlightedTemplate,
+  MeasuredTemplateType,
+  MeasuredTemplateData,
 } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
@@ -32,6 +34,7 @@ import {
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { clamp, difference, identity } from 'remeda';
+import type { SetOptional } from 'type-fest';
 import styles from './explosive-settings-form.scss';
 
 @customElement('explosive-settings-form')
@@ -133,30 +136,43 @@ export class ExplosiveSettingsForm extends LitElement {
     );
   }
 
+  private get templateData(): SetOptional<
+    Pick<MeasuredTemplateData, 't' | 'distance' | 'angle'>,
+    'angle'
+  > {
+    const { areaEffect } = this.explosive;
+    if (areaEffect === AreaEffectType.Centered) {
+      const distance = clamp(
+        nonNegative(this.averageDamage) / this.explosiveDistances.centered,
+        { min: 1 },
+      );
+      return this.settings.demolition?.type === Demolition.ShapeCentered
+        ? {
+            t: 'cone',
+            distance,
+            angle: this.settings.demolition.angle,
+          }
+        : {
+            t: 'circle',
+            distance,
+          };
+    }
+    return {
+      t: 'circle',
+      distance: this.explosiveDistances.uniform,
+    };
+  }
+
   private async setTemplate() {
     const token = this.getToken();
     const center =
       token && token?.scene === readyCanvas()?.scene
         ? token.center
         : { x: 0, y: 0 };
-    const data =
-      this.explosive.areaEffect === AreaEffectType.Uniform
-        ? ({
-            t: 'circle',
-            distance: this.explosiveDistances.uniform,
-          } as const)
-        : ({
-            t: 'circle',
-            distance: clamp(
-              nonNegative(this.averageDamage) /
-                this.explosiveDistances.centered,
-              { min: 1 },
-            ),
-          } as const);
     const ids = await placeMeasuredTemplate(
       createTemporaryMeasuredTemplate({
         ...center,
-        ...data,
+        ...this.templateData,
       }),
       !!token,
     );
@@ -219,7 +235,6 @@ export class ExplosiveSettingsForm extends LitElement {
       ${areaEffect
         ? html`
             <section class="area-effect">
-            
               <header>
                 <h3>${localize(areaEffect)} ${localize('areaEffect')}</h3>
                 <p>

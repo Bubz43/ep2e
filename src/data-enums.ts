@@ -429,7 +429,7 @@ export enum ExplosiveTrigger {
   Timer = 'timer',
 }
 
-export enum Demolitions {
+export enum Demolition {
   DamageAgainsStructures = 'damageAgainstStructures',
   ShapeCentered = 'shape',
   StructuralWeakpoint = 'structuralWeakpoint',

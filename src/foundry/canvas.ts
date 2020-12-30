@@ -8,8 +8,10 @@ import { stopEvent } from 'weightless';
 import type { SceneEP } from '../entities/scene';
 import type { CanvasLayers } from './foundry-cont';
 
+export type MeasuredTemplateType = keyof typeof CONFIG['MeasuredTemplate']['types'];
+
 export type MeasuredTemplateData = {
-  t: keyof typeof CONFIG['MeasuredTemplate']['types'];
+  t: MeasuredTemplateType;
   user: string;
   x: number;
   y: number;
@@ -21,6 +23,7 @@ export type MeasuredTemplateData = {
   texture?: string;
   _id?: string;
 };
+
 
 export type PlacedTemplateIDs = {
   templateId: string;
