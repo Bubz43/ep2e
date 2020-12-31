@@ -151,7 +151,7 @@ export class ExplosiveSettingsForm extends LitElement {
   }
 
   private updateSettings = (changed: Partial<ExplosiveSettings>) => {
-    this.settings = { ...this.settings, ...changed };
+    this.settings = { ...this.settings, duration: this.attack.duration, ...changed };
     if (!this.requireSubmit) this.emitSettings();
   };
 
@@ -481,7 +481,7 @@ export class ExplosiveSettingsForm extends LitElement {
                   this.explosive.attacks[key]?.label || localize(key),
               })
             : '',
-          attack.duration ? renderTimeField(duration) : '',
+          // attack.duration ? renderTimeField(duration) : '',
         ],
       })}
       <div class="trigger-settings">

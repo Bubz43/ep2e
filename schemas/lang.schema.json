@@ -689,6 +689,9 @@
             "anarchist": {
               "type": "string"
             },
+            "angle": {
+              "type": "string"
+            },
             "animalHandler": {
               "type": "string"
             },
@@ -741,6 +744,9 @@
               "type": "string"
             },
             "applyTo": {
+              "type": "string"
+            },
+            "applyableFor": {
               "type": "string"
             },
             "apps": {
@@ -1397,6 +1403,15 @@
             "defineRelationship": {
               "type": "string"
             },
+            "defuse": {
+              "type": "string"
+            },
+            "defused": {
+              "type": "string"
+            },
+            "degrees": {
+              "type": "string"
+            },
             "delay": {
               "type": "string"
             },
@@ -1437,6 +1452,9 @@
               "type": "string"
             },
             "detonated": {
+              "type": "string"
+            },
+            "detonationPeriod": {
               "type": "string"
             },
             "deviceALI": {
@@ -4331,6 +4349,9 @@
             "useMuse": {
               "type": "string"
             },
+            "useSubstance": {
+              "type": "string"
+            },
             "useThreat": {
               "type": "string"
             },
@@ -4594,6 +4615,7 @@
             "ammunition",
             "amount",
             "anarchist",
+            "angle",
             "animalHandler",
             "animalHandling",
             "antidote",
@@ -4612,6 +4634,7 @@
             "applyCoating",
             "applyEffects",
             "applyTo",
+            "applyableFor",
             "apps",
             "aptitude",
             "aptitudeCheck",
@@ -4830,6 +4853,9 @@
             "defending",
             "defineEnvironment",
             "defineRelationship",
+            "defuse",
+            "defused",
+            "degrees",
             "delay",
             "delayTurn",
             "delete",
@@ -4844,6 +4870,7 @@
             "details",
             "detonate",
             "detonated",
+            "detonationPeriod",
             "deviceALI",
             "deviceManagement",
             "deviceType",
@@ -5808,6 +5835,7 @@
             "useFirewall",
             "useMeshArmor",
             "useMuse",
+            "useSubstance",
             "useThreat",
             "used",
             "usedEffectsDuration",

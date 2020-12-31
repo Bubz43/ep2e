@@ -348,23 +348,18 @@ export class SlWindow extends LitElement {
   private resetSize(ev: Event) {
     if (ev.composedPath().some(isButton)) return;
 
-    if (this.minimized) this.minimized = false;
-    else if (this.resizable !== ResizeOption.None) {
-      const { height, width } = this.contentContainer.style;
-      if (height || width)
-        assignStyles(this.contentContainer, { height: '', width: '' });
-      // else
-      //   assignStyles(this.contentContainer, {
-      //     height:
-      //       this.resizable !== ResizeOption.Horizontal
-      //         ? px(window.innerHeight)
-      //         : "",
-      //     width:
-      //       this.resizable !== ResizeOption.Vertical
-      //         ? px(window.innerWidth)
-      //         : "",
-      //   });
+    if (this.minimized) {
+      this.minimized = false;
+      return;
     }
+    if (this.resizable !== ResizeOption.None) {
+      const { height, width } = this.contentContainer.style;
+      if (height || width) {
+        assignStyles(this.contentContainer, { height: '', width: '' });
+        return;
+      }
+    }
+    repositionIfNeeded(this);
   }
 
   private resize(ev: PointerEvent) {
@@ -467,6 +462,16 @@ export class SlWindow extends LitElement {
     }
   }
 
+  private get bounds() {
+    return {
+      offsetWidth:
+        window.innerWidth +
+        this.offsetWidth -
+        clamp(Math.min(this.offsetWidth, 400), { min: 100 }),
+      offsetHeight: window.innerHeight + this.offsetHeight - 32,
+    };
+  }
+
   private startDrag(ev: PointerEvent) {
     if (
       ev.defaultPrevented ||
@@ -481,12 +486,13 @@ export class SlWindow extends LitElement {
       element: this,
       ev,
       onEnd: toggleTouchAction(this),
+      bounds: this.bounds,
     });
   }
 
   @debounce(400)
   private confirmPosition() {
-    repositionIfNeeded(this);
+    repositionIfNeeded(this, this.bounds);
   }
 
   private setupResizeObserver() {

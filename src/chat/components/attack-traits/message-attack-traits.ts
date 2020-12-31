@@ -60,7 +60,7 @@ export class MessageAttackTraits extends mix(MessageElement).with(
       ${timeState
         ? html`
             <div class="time-state">
-              ${localize('remaining')}
+              ${localize('applyableFor')}
               ${prettyMilliseconds(timeState.remaining)}
             </div>
           `

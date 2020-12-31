@@ -58,6 +58,19 @@ export class CharacterViewExplosiveAttacks extends LitElement {
     const { attacks, editable, sticky } = this.explosive;
     // TODO Place template choose trigger etc
     return html`
+  
+      <ul class="attacks">
+        ${this.renderAttack(attacks.primary)}
+        ${attacks.secondary ? this.renderAttack(attacks.secondary) : ''}
+      </ul>
+      <div class="shared">
+        ${sticky ? html`<div>${localize('sticky')}</div>` : ''}
+        <div class="area-effect">
+          ${localize('areaEffect')}
+          <span class="area-values"> ${formatAreaEffect(this.explosive)} </span>
+        </div>
+      </div>
+      
       <div class="actions">
         ${this.explosive.explosiveType === ExplosiveType.Grenade
           ? html`
@@ -78,17 +91,6 @@ export class CharacterViewExplosiveAttacks extends LitElement {
         >
           <span>${localize('place')}</span>
         </mwc-button>
-      </div>
-      <ul class="attacks">
-        ${this.renderAttack(attacks.primary)}
-        ${attacks.secondary ? this.renderAttack(attacks.secondary) : ''}
-      </ul>
-      <div class="shared">
-        ${sticky ? html`<div>${localize('sticky')}</div>` : ''}
-        <div class="area-effect">
-          ${localize('areaEffect')}
-          <span class="area-values"> ${formatAreaEffect(this.explosive)} </span>
-        </div>
       </div>
     `;
   }

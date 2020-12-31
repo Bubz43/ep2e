@@ -1359,6 +1359,7 @@
     "detonationPeriod": "Detonation Period",
     "adjust": "Adjust",
     "meter": "Meter",
+    "applyableFor": "Applyable For",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
