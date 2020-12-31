@@ -1382,7 +1382,7 @@ type LangEntries =
   | 'demolition'
   | 'testResult'
   | 'angle'
-  | 'degrees' | "detonationPeriod"
+  | 'degrees' | "detonationPeriod" | "defuse" | "defused" | "useSubstance"
 type FullNames =
   | 'cog'
   | 'int'

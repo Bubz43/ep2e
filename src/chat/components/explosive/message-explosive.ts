@@ -84,7 +84,7 @@ export class MessageExplosive extends MessageElement {
   }
 
   private editSettings() {
-    const hmm = ExplosiveSettingsForm.openWindow({
+    ExplosiveSettingsForm.openWindow({
       explosive: this.explosive,
       initialSettings: this.explosiveUse,
       requireSubmit: true,
@@ -93,6 +93,10 @@ export class MessageExplosive extends MessageElement {
         this.getUpdater('explosiveUse').commit,
       ),
     });
+  }
+
+  private attemptDefusal() {
+    // TODO check
   }
 
   render() {
@@ -112,18 +116,24 @@ export class MessageExplosive extends MessageElement {
       </div>
       ${state
         ? this.renderExplosiveState(state)
-        : editable
-        ? html`
+        : html`
             <div class="actions">
-              <mwc-button dense class="detonate" @click=${this.detonate}
-                >${localize('detonate')}</mwc-button
+              ${editable
+                ? html`
+                    <mwc-button dense class="detonate" @click=${this.detonate}
+                      >${localize('detonate')}</mwc-button
+                    >
+                    <mwc-button dense class="reclaim" @click=${this.reclaim}
+                      >${localize('reclaim')}</mwc-button
+                    >
+                  `
+                : ''}
+              <mwc-button dense class="defuse" @click=${this.attemptDefusal}
+                >${localize('defuse')}</mwc-button
               >
-              <mwc-button dense class="reclaim" @click=${this.reclaim}
-                >${localize('reclaim')}</mwc-button
-              >
+           
             </div>
-          `
-        : ''}
+          `}
     `;
   }
 

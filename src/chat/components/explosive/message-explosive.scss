@@ -18,9 +18,9 @@
 }
 
 .actions {
-  display: grid;
-  grid-auto-flow: column;
-  gap: 0.5rem;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
   .detonate {
     --mdc-theme-primary: var(--color-negative);
   }

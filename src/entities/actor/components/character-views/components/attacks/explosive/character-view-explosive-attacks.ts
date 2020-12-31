@@ -55,13 +55,30 @@ export class CharacterViewExplosiveAttacks extends LitElement {
   }
 
   render() {
-    const {
-      attacks,
-
-      sticky,
-    } = this.explosive;
+    const { attacks, editable, sticky } = this.explosive;
     // TODO Place template choose trigger etc
     return html`
+      <div class="actions">
+        ${this.explosive.explosiveType === ExplosiveType.Grenade
+          ? html`
+              <mwc-button
+                dense
+                ?disabled=${!editable}
+                @click=${this.openExplosiveSettingsDialog}
+              >
+                <span>${localize('throw')}</span>
+              </mwc-button>
+            `
+          : ''}
+
+        <mwc-button
+          dense
+          ?disabled=${!editable}
+          @click=${this.openExplosivePlacingWindow}
+        >
+          <span>${localize('place')}</span>
+        </mwc-button>
+      </div>
       <ul class="attacks">
         ${this.renderAttack(attacks.primary)}
         ${attacks.secondary ? this.renderAttack(attacks.secondary) : ''}
@@ -102,28 +119,6 @@ export class CharacterViewExplosiveAttacks extends LitElement {
             ${attack.notes}
           </div>
         </div>
-        <div class="actions">
-          ${this.explosive.explosiveType === ExplosiveType.Grenade
-            ? html`
-                <button
-                  slot="base"
-                  ?disabled=${disabled}
-                  @keydown=${clickIfEnter}
-                  @click=${this.openExplosiveSettingsDialog}
-                >
-                  <span>${localize('throw')}</span>
-                </button>
-              `
-            : ''}
-
-          <button
-            ?disabled=${disabled}
-            @keydown=${clickIfEnter}
-            @click=${this.openExplosivePlacingWindow}
-          >
-            <span>${localize('place')}</span>
-          </button>
-        </div>
       </li>
     `;
   }
@@ -135,15 +130,15 @@ export class CharacterViewExplosiveAttacks extends LitElement {
       requireSubmit: true,
       update: this.createMessage.bind(this),
       initialSettings,
-    })
+    });
   }
 
   private openExplosiveSettingsDialog(ev: Event) {
     const blah = ExplosiveSettingsForm.openWindow({
       explosive: this.explosive,
       requireSubmit: true,
-      update: this.createMessage.bind(this)
-    })
+      update: this.createMessage.bind(this),
+    });
   }
 }
 declare global {

@@ -55,7 +55,7 @@ export type SubstanceUseData = {
   hidden?: boolean;
 };
 
-export type UsedExplosiveState = ['detonated' | 'reclaimed', string];
+export type UsedExplosiveState = ['detonated' | 'reclaimed' | "defused", string];
 
 export type ExplosiveMessageData = ExplosiveSettings & {
   explosive: ItemEntity<ItemType.Explosive>;

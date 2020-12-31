@@ -7,7 +7,7 @@ import {
   renderTimeField,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
-import { openWindow } from '@src/components/window/window-controls';
+import { closeWindow, openWindow } from '@src/components/window/window-controls';
 import {
   AreaEffectType,
   Demolition,
@@ -80,7 +80,10 @@ export class ExplosiveSettingsForm extends LitElement {
           .explosive=${props.explosive}
           ?requireSubmit=${props.requireSubmit}
           .initialSettings=${props.initialSettings}
-          @explosive-settings=${props.update}
+          @explosive-settings=${(ev: CustomEvent<ExplosiveSettings>) => {
+            props.update(ev);
+            closeWindow(ExplosiveSettingsForm);
+          }}
         ></explosive-settings-form>
       `,
     });
