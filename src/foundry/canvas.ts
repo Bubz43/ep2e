@@ -1,3 +1,4 @@
+import { ActorType } from '@src/entities/entity-types';
 import { overlay } from '@src/init';
 import { throttleFn } from '@src/utility/decorators';
 import { notEmpty } from '@src/utility/helpers';
@@ -33,11 +34,13 @@ export const createTemporaryMeasuredTemplate = ({
   user = game.user.id,
   fillColor = game.user.color,
   direction = 0,
+  x = 0,
+  y = 0,
   ...data
 }: SetOptional<
   Omit<MeasuredTemplateData, '_id'>,
-  'user' | 'fillColor' | 'direction'
->) => new MeasuredTemplate({ ...data, user, fillColor, direction });
+  'user' | 'fillColor' | 'direction' | "x" | "y"
+>) => new MeasuredTemplate({ ...data, user, fillColor, direction, x, y });
 
 export const placeMeasuredTemplate = (
   template: MeasuredTemplate,
@@ -190,6 +193,17 @@ type CanvasProps = {
   activeLayer: ValuesType<CanvasLayers>;
   app: PIXI.Application;
   pan: (location: Partial<Record<'x' | 'y' | 'scale', number>>) => void;
+};
+
+export const controlledToken = () => {
+  const canvas = readyCanvas();
+  if (!canvas) return null;
+  const { controlled } = canvas.tokens;
+  return (
+    controlled.find((t) => t.actor?.type === ActorType.Character) ??
+    controlled[0] ??
+    game.user.character?.getActiveTokens(true)[0]
+  );
 };
 
 export const readyCanvas = () =>

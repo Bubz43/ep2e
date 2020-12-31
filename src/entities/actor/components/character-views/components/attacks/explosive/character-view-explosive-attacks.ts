@@ -6,8 +6,11 @@ import {
 import type { ExplosiveAttack } from '@src/combat/attacks';
 import type { SlWindow } from '@src/components/window/window';
 import { openWindow } from '@src/components/window/window-controls';
-import { ExplosiveTrigger } from '@src/data-enums';
-import { createExplosiveTriggerSetting, ExplosiveSettings } from '@src/entities/explosive-settings';
+import { ExplosiveTrigger, ExplosiveType } from '@src/data-enums';
+import {
+  createExplosiveTriggerSetting,
+  ExplosiveSettings,
+} from '@src/entities/explosive-settings';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
 import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
@@ -40,7 +43,9 @@ export class CharacterViewExplosiveAttacks extends LitElement {
         explosiveUse: {
           ...(ev instanceof CustomEvent
             ? ev.detail
-            : { trigger: createExplosiveTriggerSetting(ExplosiveTrigger.Signal) }),
+            : {
+                trigger: createExplosiveTriggerSetting(ExplosiveTrigger.Signal),
+              }),
           explosive: this.explosive.getDataCopy(),
         },
       },
@@ -98,14 +103,18 @@ export class CharacterViewExplosiveAttacks extends LitElement {
           </div>
         </div>
         <div class="actions">
-          <button
-            slot="base"
-            ?disabled=${disabled}
-            @keydown=${clickIfEnter}
-            @click=${this.openExplosiveSettingsDialog}
-          >
-            <span>${localize('throw')}</span>
-          </button>
+          ${this.explosive.explosiveType === ExplosiveType.Grenade
+            ? html`
+                <button
+                  slot="base"
+                  ?disabled=${disabled}
+                  @keydown=${clickIfEnter}
+                  @click=${this.openExplosiveSettingsDialog}
+                >
+                  <span>${localize('throw')}</span>
+                </button>
+              `
+            : ''}
 
           <button
             ?disabled=${disabled}
@@ -120,43 +129,21 @@ export class CharacterViewExplosiveAttacks extends LitElement {
   }
 
   private openExplosivePlacingWindow(ev: Event) {
-    const { token, character } = requestCharacter(this);
-    const initialSettings: Partial<ExplosiveSettings> = { placing: true };
-    const { win, wasConnected } = openWindow({
-      key: ExplosiveSettingsForm,
-      name: `${this.explosive.name} ${localize('settings')}`,
-      adjacentEl:
-        ev.currentTarget instanceof HTMLElement ? ev.currentTarget : this,
-      content: html`
-        <explosive-settings-form
-          .token=${token}
-          .character=${character}
-          .explosive=${this.explosive}
-          requireSubmit
-          @explosive-settings=${this.createMessage.bind(this)}
-          .initialSettings=${initialSettings}
-        ></explosive-settings-form>
-      `,
-    });
+    const initialSettings = { placing: true };
+    const { win, wasConnected } = ExplosiveSettingsForm.openWindow({
+      explosive: this.explosive,
+      requireSubmit: true,
+      update: this.createMessage.bind(this),
+      initialSettings,
+    })
   }
 
   private openExplosiveSettingsDialog(ev: Event) {
-    const { token, character } = requestCharacter(this);
-    const { win, wasConnected } = openWindow({
-      key: ExplosiveSettingsForm,
-      name: `${this.explosive.name} ${localize('settings')}`,
-      adjacentEl:
-        ev.currentTarget instanceof HTMLElement ? ev.currentTarget : this,
-      content: html`
-        <explosive-settings-form
-          .token=${token}
-          .character=${character}
-          .explosive=${this.explosive}
-          requireSubmit
-          @explosive-settings=${this.createMessage.bind(this)}
-        ></explosive-settings-form>
-      `,
-    });
+    const blah = ExplosiveSettingsForm.openWindow({
+      explosive: this.explosive,
+      requireSubmit: true,
+      update: this.createMessage.bind(this)
+    })
   }
 }
 declare global {

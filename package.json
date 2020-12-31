@@ -28,14 +28,12 @@
     "@material/mwc-list": "^0.20.0",
     "@material/mwc-menu": "^0.20.0",
     "@material/mwc-radio": "^0.20.0",
-    "@material/mwc-select": "^0.20.0",
     "@material/mwc-slider": "^0.20.0",
     "@material/mwc-snackbar": "^0.20.0",
     "@material/mwc-switch": "^0.20.0",
     "@material/mwc-tab": "^0.20.0",
     "@material/mwc-tab-bar": "^0.20.0",
     "@material/mwc-textarea": "^0.20.0",
-    "@material/mwc-textfield": "^0.20.0",
     "@tinymce/tinymce-webcomponent": "^1.0.2",
     "lazy-get-decorator": "^2.2.0",
     "lit-element": "^2.4.0",
@@ -63,7 +61,7 @@
     "@types/resize-observer-browser": "^0.1.4",
     "@types/snowpack-env": "^2.3.3",
     "@types/socket.io": "^2.1.12",
-    "@web/test-runner": "^0.11.6",
+    "@web/test-runner": "^0.11.7",
     "archiver": "^5.1.0",
     "pixi.js": "^5.3.7",
     "prettier": "^2.2.1",
@@ -74,7 +72,7 @@
     "tinymce": "^5.6.2",
     "ts-json-schema-generator": "^0.82.0",
     "type-fest": "^0.20.2",
-    "typescript": "^4.2.0-dev.20201230",
+    "typescript": "^4.2.0-dev.20201231",
     "utility-types": "^3.10.0"
   }
 }

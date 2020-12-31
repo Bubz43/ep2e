@@ -274,6 +274,7 @@ declare global {
   }
 
   interface Scene {
+    _viewPosition: { x: number, y: number, scale: number };
     data: {
       flags: {
         [EP.Name]?: {

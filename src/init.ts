@@ -30,19 +30,24 @@ import { localize } from './foundry/localization';
 import { addEPSocketHandler, setupSystemSocket } from './foundry/socket';
 import { EP } from './foundry/system';
 
-for (const link of [
-  'https://fonts.googleapis.com/css?family=Material+Icons&display=block',
-  'https://fonts.googleapis.com/css?family=Roboto:300,400,500',
-  'https://fonts.googleapis.com/css?family=Rubik:300,400,700&display=swap',
-  'https://fonts.googleapis.com/css?family=Jost:300,400,700&display=swap',
-  'https://fonts.googleapis.com/css?family=Spartan:300,400,700&display=swap',
-  'https://fonts.googleapis.com/css?family=Fira+Code&display=swap',
-]) {
-  const fontEl = document.createElement('link');
-  fontEl.rel = 'stylesheet';
-  fontEl.href = link;
-  document.head.appendChild(fontEl);
-}
+(function () {
+  const frag = new DocumentFragment();
+  render(
+    html`
+      ${[
+        'https://fonts.googleapis.com/css?family=Material+Icons&display=block',
+        'https://fonts.googleapis.com/css?family=Roboto:300,400,500',
+        'https://fonts.googleapis.com/css?family=Rubik:300,400,700&display=swap',
+        'https://fonts.googleapis.com/css?family=Jost:300,400,700&display=swap',
+        'https://fonts.googleapis.com/css?family=Spartan:300,400,700&display=swap',
+        'https://fonts.googleapis.com/css?family=Fira+Code&display=swap',
+      ].map((link) => html` <link rel="stylesheet" href=${link} /> `)}
+    `,
+    frag,
+  );
+  document.head.appendChild(frag);
+})();
+
 
 export let gameSettings: ReturnType<typeof registerEPSettings>;
 export let overlay: EPOverlay;

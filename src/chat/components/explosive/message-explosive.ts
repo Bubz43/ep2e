@@ -3,6 +3,7 @@ import type {
   ExplosiveMessageData,
   UsedExplosiveState,
 } from '@src/chat/message-data';
+import { ExplosiveSettingsForm } from '@src/entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
 import {
   pickOrDefaultActor,
   pickOrDefaultCharacter,
@@ -11,7 +12,7 @@ import { Explosive } from '@src/entities/item/proxies/explosive';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { customElement, LitElement, property, html } from 'lit-element';
-import { compact, find, flatMap, pipe, uniq } from 'remeda';
+import { compact, createPipe, find, flatMap, pipe, prop, uniq } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-explosive.scss';
 
@@ -82,6 +83,18 @@ export class MessageExplosive extends MessageElement {
     });
   }
 
+  private editSettings() {
+    const hmm = ExplosiveSettingsForm.openWindow({
+      explosive: this.explosive,
+      initialSettings: this.explosiveUse,
+      requireSubmit: true,
+      update: createPipe(
+        prop('detail'),
+        this.getUpdater('explosiveUse').commit,
+      ),
+    });
+  }
+
   render() {
     const { editable } = this.message;
     const { state, trigger, duration } = this.explosiveUse;
@@ -89,7 +102,13 @@ export class MessageExplosive extends MessageElement {
     // TODO change trigger and durations
     return html`
       <div class="info">
-        <sl-group label=${localize('trigger')}>${localize(trigger.type)}</sl-group>
+        <sl-group label=${localize('trigger')}
+          >${localize(trigger.type)}</sl-group
+        >
+        <mwc-icon-button
+          icon="edit"
+          @click=${this.editSettings}
+        ></mwc-icon-button>
       </div>
       ${state
         ? this.renderExplosiveState(state)

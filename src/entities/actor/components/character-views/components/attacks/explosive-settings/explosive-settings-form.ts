@@ -1,4 +1,3 @@
-import { formatAreaEffect } from '@src/combat/attack-formatting';
 import {
   emptyTextDash,
   renderNumberField,
@@ -8,14 +7,13 @@ import {
   renderTimeField,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
+import { openWindow } from '@src/components/window/window-controls';
 import {
   AreaEffectType,
   Demolition,
   enumValues,
   ExplosiveTrigger,
 } from '@src/data-enums';
-import type { MaybeToken } from '@src/entities/actor/actor';
-import type { Character } from '@src/entities/actor/proxies/character';
 import {
   createDemolitionSetting,
   createExplosiveTriggerSetting,
@@ -26,17 +24,17 @@ import {
 import type { Explosive } from '@src/entities/item/proxies/explosive';
 import { CommonInterval, currentWorldTimeMS } from '@src/features/time';
 import {
-  readyCanvas,
-  placeMeasuredTemplate,
+  controlledToken,
   createTemporaryMeasuredTemplate,
   getVisibleTokensWithinHighlightedTemplate,
-  MeasuredTemplateType,
   MeasuredTemplateData,
+  placeMeasuredTemplate,
+  readyCanvas,
   updatePlacedTemplate,
 } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
-import { averageRoll, rollLimit } from '@src/foundry/rolls';
+import { averageRoll } from '@src/foundry/rolls';
 import {
   isSuccessfullTestResult,
   SuccessTestResult,
@@ -44,15 +42,16 @@ import {
 import { nonNegative } from '@src/utility/helpers';
 import {
   customElement,
-  LitElement,
-  property,
   html,
   internalProperty,
+  LitElement,
+  property,
   PropertyValues,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { clamp, difference, identity } from 'remeda';
 import type { SetOptional } from 'type-fest';
+import { traverseActiveElements } from 'weightless';
 import styles from './explosive-settings-form.scss';
 
 @customElement('explosive-settings-form')
@@ -65,9 +64,27 @@ export class ExplosiveSettingsForm extends LitElement {
     return [styles];
   }
 
-  @property({ attribute: false }) token?: MaybeToken;
-
-  @property({ attribute: false }) character?: Character | null;
+  static openWindow(
+    props: Pick<
+      ExplosiveSettingsForm,
+      'explosive' | 'requireSubmit' | 'initialSettings'
+    > & { update: (newSettings: CustomEvent<ExplosiveSettings>) => void },
+  ) {
+    const adjacentEl = traverseActiveElements();
+    return openWindow({
+      key: ExplosiveSettingsForm,
+      name: `${props.explosive.name} ${localize('settings')}`,
+      adjacentEl: adjacentEl instanceof HTMLElement ? adjacentEl : null,
+      content: html`
+        <explosive-settings-form
+          .explosive=${props.explosive}
+          ?requireSubmit=${props.requireSubmit}
+          .initialSettings=${props.initialSettings}
+          @explosive-settings=${props.update}
+        ></explosive-settings-form>
+      `,
+    });
+  }
 
   @property({ attribute: false }) explosive!: Explosive;
 
@@ -135,10 +152,6 @@ export class ExplosiveSettingsForm extends LitElement {
     if (!this.requireSubmit) this.emitSettings();
   };
 
-  private getToken() {
-    return this.token || this.character?.actor.getActiveTokens(true)[0];
-  }
-
   private get explosiveDistances() {
     return {
       uniform:
@@ -183,11 +196,10 @@ export class ExplosiveSettingsForm extends LitElement {
   }
 
   private async setTemplate() {
-    const token = this.getToken();
-    const center =
-      token && token?.scene === readyCanvas()?.scene
-        ? token.center
-        : { x: 0, y: 0 };
+    const token = controlledToken();
+    const center = token?.center ??
+      readyCanvas()?.scene._viewPosition ?? { x: 0, y: 0 };
+
     const ids = await placeMeasuredTemplate(
       createTemporaryMeasuredTemplate({
         ...center,
