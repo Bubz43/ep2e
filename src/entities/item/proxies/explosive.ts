@@ -41,9 +41,10 @@ export class Explosive
   }
 
   get fullName() {
-    const { substance } = this;
-    return `${this.name} (${this.quantity})  ${
-      substance ? `[${substance.name}]` : ''
+    return `${this.name} (${this.quantity}) ${
+      this.canContainSubstance
+        ? `[${this.substance?.name || localize('empty')}]`
+        : ''
     }`;
   }
 
@@ -94,7 +95,14 @@ export class Explosive
   }
 
   setupAttack(
-    { label, damageFormula, armorUsed, attackTraits, armorPiercing, ...data }: ExplosiveAttackData,
+    {
+      label,
+      damageFormula,
+      armorUsed,
+      attackTraits,
+      armorPiercing,
+      ...data
+    }: ExplosiveAttackData,
     defaultLabel: string,
   ): ExplosiveAttack {
     const { areaEffect, areaEffectRadius } = this;
@@ -111,7 +119,7 @@ export class Explosive
       areaEffectRadius,
       damageType: HealthType.Physical,
       substance: this.canContainSubstance ? this.substance : null,
-      ...(notEmpty(attackTraits) ? data : { duration: 0, notes: ""})
+      ...(notEmpty(attackTraits) ? data : { duration: 0, notes: '' }),
     };
   }
 

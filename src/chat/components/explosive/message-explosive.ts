@@ -1,4 +1,5 @@
 import type {
+  AttackTraitData,
   DamageMessageData,
   ExplosiveMessageData,
   UsedExplosiveState,
@@ -11,6 +12,7 @@ import {
   pickOrDefaultCharacter,
 } from '@src/entities/find-entities';
 import { Explosive } from '@src/entities/item/proxies/explosive';
+import { currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { notEmpty } from '@src/utility/helpers';
@@ -52,20 +54,37 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
       armorUsed,
       reduceAVbyDV,
       substance,
+      attackTraits,
+      duration,
+      notes,
     } = explosive.attacks[attackType] || explosive.attacks.primary;
 
     const createdIds: string[] = [];
-    if (notEmpty(rollFormulas)) {
-      const damage: DamageMessageData = {
-        damageType,
-        armorPiercing,
-        armorUsed,
-        reduceAVbyDV,
-        rolledFormulas: rollLabeledFormulas(rollFormulas),
-        source: explosive.name,
-      };
+    const damage: DamageMessageData | undefined = notEmpty(rollFormulas)
+      ? {
+          damageType,
+          armorPiercing,
+          armorUsed,
+          reduceAVbyDV,
+          rolledFormulas: rollLabeledFormulas(rollFormulas),
+          source: explosive.name,
+        }
+      : undefined;
 
-      const { _id } = await this.message.createSimilar({ damage });
+    const attackTraitInfo: AttackTraitData | undefined = notEmpty(attackTraits)
+      ? {
+          traits: attackTraits,
+          duration,
+          notes,
+          startTime: duration ? currentWorldTimeMS() : undefined,
+        }
+      : undefined;
+
+    if (damage || attackTraitInfo) {
+      const { _id } = await this.message.createSimilar({
+        damage,
+        attackTraitInfo,
+      });
       createdIds.push(_id);
     }
 
@@ -78,7 +97,7 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
             substance.substanceType === SubstanceType.Chemical
               ? 'use'
               : explosive.epData.useSubstance ||
-              substance.applicationMethods[0]!,
+                substance.applicationMethods[0]!,
           doses: explosive.epData.dosesPerUnit,
         },
       });
