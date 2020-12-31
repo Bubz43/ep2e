@@ -356,7 +356,6 @@ export class SlWindow extends LitElement {
       const { height, width } = this.contentContainer.style;
       if (height || width) {
         assignStyles(this.contentContainer, { height: '', width: '' });
-        return;
       }
     }
     repositionIfNeeded(this);
