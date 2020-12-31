@@ -520,7 +520,7 @@ sl-tooltip {
   border-radius: 0.5rem 0px 0px 0.25rem !important;
 
   &.new {
-    @include animate-css(fadeInLeftBig, 300ms);
+    @include animate-css(fadeInLeftBig, 500ms);
     animation-fill-mode: none !important;
   }
 

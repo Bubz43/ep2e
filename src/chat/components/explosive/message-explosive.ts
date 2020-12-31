@@ -3,6 +3,8 @@ import type {
   ExplosiveMessageData,
   UsedExplosiveState,
 } from '@src/chat/message-data';
+import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
+import { SubstanceType } from '@src/data-enums';
 import { ExplosiveSettingsForm } from '@src/entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
 import {
   pickOrDefaultActor,
@@ -11,13 +13,17 @@ import {
 import { Explosive } from '@src/entities/item/proxies/explosive';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
+import { notEmpty } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
+import mix from 'mix-with/lib';
 import { compact, createPipe, find, flatMap, pipe, prop, uniq } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-explosive.scss';
 
+// TODO only use world time when time state
+
 @customElement('message-explosive')
-export class MessageExplosive extends MessageElement {
+export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
   static get is() {
     return 'message-explosive' as const;
   }
@@ -47,17 +53,41 @@ export class MessageExplosive extends MessageElement {
       reduceAVbyDV,
       substance,
     } = explosive.attacks[attackType] || explosive.attacks.primary;
-    const damage: DamageMessageData = {
-      damageType,
-      armorPiercing,
-      armorUsed,
-      reduceAVbyDV,
-      rolledFormulas: rollLabeledFormulas(rollFormulas),
-      source: explosive.name,
-    };
-    // TODO substance
-    const { _id } = await this.message.createSimilar({ damage });
-    this.getUpdater('explosiveUse').commit({ state: ['detonated', _id] });
+
+    const createdIds: string[] = [];
+    if (notEmpty(rollFormulas)) {
+      const damage: DamageMessageData = {
+        damageType,
+        armorPiercing,
+        armorUsed,
+        reduceAVbyDV,
+        rolledFormulas: rollLabeledFormulas(rollFormulas),
+        source: explosive.name,
+      };
+
+      const { _id } = await this.message.createSimilar({ damage });
+      createdIds.push(_id);
+    }
+
+    if (substance) {
+      const { _id } = await this.message.createSimilar({
+        header: substance.messageHeader,
+        substanceUse: {
+          substance: substance.getDataCopy(),
+          useMethod:
+            substance.substanceType === SubstanceType.Chemical
+              ? 'use'
+              : explosive.epData.useSubstance ||
+              substance.applicationMethods[0]!,
+          doses: explosive.epData.dosesPerUnit,
+        },
+      });
+      createdIds.push(_id);
+    }
+
+    this.getUpdater('explosiveUse').commit({
+      state: ['detonated', createdIds],
+    });
   }
 
   private async reclaim() {
@@ -131,7 +161,6 @@ export class MessageExplosive extends MessageElement {
               <mwc-button dense class="defuse" @click=${this.attemptDefusal}
                 >${localize('defuse')}</mwc-button
               >
-           
             </div>
           `}
     `;

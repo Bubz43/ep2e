@@ -1,0 +1,21 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  padding: 0.25rem 0.5rem;
+}
+
+.traits {
+  --mdc-theme-primary: var(--color-negative);
+  display: flex;
+  flex-flow: row wrap;
+  > * {
+    flex: 1;
+    margin: 0 0.1rem 0.1rem 0;;
+  }
+}

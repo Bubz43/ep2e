@@ -38,6 +38,12 @@
   }
 }
 
+.substance {
+  .type {
+    color: var(--color-text-lighter);
+  }
+}
+
 ul {
   display: grid;
   gap: 0.25rem;

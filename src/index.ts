@@ -141,6 +141,7 @@ import { CharacterViewTestActions } from './entities/actor/components/character-
 import { CharacterViewExplosiveAttacks } from './entities/actor/components/character-views/components/attacks/explosive/character-view-explosive-attacks';
 import { MessageExplosive } from './chat/components/explosive/message-explosive';
 import { ExplosiveSettingsForm } from './entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
+import { MessageAttackTraits } from './chat/components/attack-traits/message-attack-traits';
 
 // Generic Components
 Field;
@@ -287,3 +288,4 @@ MessageHeal;
 MessageDamage;
 MessageSubstanceUse;
 MessageExplosive;
+MessageAttackTraits;

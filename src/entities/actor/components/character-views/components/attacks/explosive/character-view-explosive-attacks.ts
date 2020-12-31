@@ -94,7 +94,6 @@ export class CharacterViewExplosiveAttacks extends LitElement {
   }
 
   private renderAttack(attack: ExplosiveAttack) {
-    const disabled = !this.explosive.editable || this.explosive.quantity === 0;
     return html`
       <li>
         <div class="info">
@@ -111,6 +110,15 @@ export class CharacterViewExplosiveAttacks extends LitElement {
               : ''}
             ${map(attack.attackTraits, localize).join(', ')}
           </div>
+
+          ${attack.substance
+            ? html`
+                <div class="substance">
+                  ${attack.substance.name}
+                  <span class="type">${attack.substance.fullType}</span>
+                </div>
+              `
+            : ''}
 
           <div class="additional">
             ${attack.duration

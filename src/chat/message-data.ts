@@ -1,4 +1,5 @@
 import type { AreaEffect } from '@src/combat/attack-formatting';
+import type { AttackTrait } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
 import type { SubstanceUseMethod } from '@src/entities/item/proxies/substance';
 import type { ItemEntity } from '@src/entities/models';
@@ -55,12 +56,19 @@ export type SubstanceUseData = {
   hidden?: boolean;
 };
 
-export type UsedExplosiveState = ['detonated' | 'reclaimed' | "defused", string];
+export type UsedExplosiveState = ['detonated' | 'reclaimed' | "defused", string[]];
 
 export type ExplosiveMessageData = ExplosiveSettings & {
   explosive: ItemEntity<ItemType.Explosive>;
   state?: null | UsedExplosiveState;
 };
+
+export type AttackTraitData = {
+  traits: AttackTrait[],
+  duration?: number;
+  notes?: string;
+  startTime?: number;
+}
 
 export type MessageHeaderData = {
   heading: string;
@@ -74,6 +82,7 @@ export type MessageData = Partial<{
   header: MessageHeaderData;
   stress: StressTestMessageData;
   damage: DamageMessageData;
+  attackTraitInfo: AttackTraitData;
   healthChange: HealthChangeMessageData;
   explosiveUse: ExplosiveMessageData;
   heal: MessageHealData;

@@ -37,6 +37,7 @@ export class MessageContent extends LitElement {
       damage,
       substanceUse,
       explosiveUse,
+      attackTraitInfo,
     } = this.data;
     if (!this.message.isContentVisible) return '';
     return html`
@@ -57,6 +58,13 @@ export class MessageContent extends LitElement {
       ${damage ? html`<message-damage .damage=${damage}></message-damage>` : ''}
       ${stress
         ? html` <message-stress-test .stress=${stress}></message-stress-test> `
+        : ''}
+      ${attackTraitInfo
+        ? html`
+            <message-attack-traits
+              .attackTraitInfo=${attackTraitInfo}
+            ></message-attack-traits>
+          `
         : ''}
       ${healthChange
         ? html`

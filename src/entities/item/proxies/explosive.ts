@@ -10,6 +10,7 @@ import { localize } from '@src/foundry/localization';
 import { deepMerge, toTuple } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { HealthType } from '@src/health/health';
+import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { compact, createPipe, equals, omit } from 'remeda';
@@ -93,22 +94,24 @@ export class Explosive
   }
 
   setupAttack(
-    { label, damageFormula, armorUsed, ...data }: ExplosiveAttackData,
+    { label, damageFormula, armorUsed, attackTraits, armorPiercing, ...data }: ExplosiveAttackData,
     defaultLabel: string,
   ): ExplosiveAttack {
     const { areaEffect, areaEffectRadius } = this;
     return {
-      ...data,
+      attackTraits,
+      armorPiercing,
       armorUsed: compact([armorUsed]),
       rollFormulas: damageFormula
         ? [createBaseAttackFormula(damageFormula)]
         : [],
-      armorPiercing: false,
       reduceAVbyDV: false,
       label: this.hasSecondaryMode ? label || defaultLabel : '',
       areaEffect,
       areaEffectRadius,
       damageType: HealthType.Physical,
+      substance: this.canContainSubstance ? this.substance : null,
+      ...(notEmpty(attackTraits) ? data : { duration: 0, notes: ""})
     };
   }
 
