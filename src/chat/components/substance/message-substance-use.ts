@@ -9,6 +9,7 @@ import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import { RenderDialogEvent } from '@src/open-dialog';
 import { notEmpty } from '@src/utility/helpers';
+import { LazyGetter } from 'lazy-get-decorator';
 import { customElement, html, property } from 'lit-element';
 import { pipe } from 'remeda';
 import { MessageElement } from '../message-element';
@@ -24,6 +25,7 @@ export class MessageSubstanceUse extends MessageElement {
 
   @property({ type: Object }) substanceUse!: SubstanceUseData;
 
+  @LazyGetter()
   get substance() {
     return new Substance({
       loaded: false,
@@ -87,8 +89,21 @@ export class MessageSubstanceUse extends MessageElement {
   }
 
   render() {
-    const { useMethod, doses, appliedTo } = this.substanceUse;
+    const {
+      useMethod,
+      doses,
+      appliedTo,
+      showHeader,
+      hidden,
+    } = this.substanceUse;
     return html`
+      ${showHeader
+        ? html`
+            <message-header
+              .data=${{ ...this.substance.messageHeader, hidden }}
+            ></message-header>
+          `
+        : ''}
       <mwc-button @click=${this.applySubstance} dense unelevated
         >${localize('apply')} ${this.substance.partialType}</mwc-button
       >

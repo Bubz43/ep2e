@@ -1360,6 +1360,9 @@
     "adjust": "Adjust",
     "meter": "Meter",
     "applyableFor": "Applyable For",
+    "defuse": "Defuse",
+    "defused": "Defused",
+    "useSubstance": "Use Substance",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

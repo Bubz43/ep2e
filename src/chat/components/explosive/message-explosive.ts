@@ -2,6 +2,7 @@ import type {
   AttackTraitData,
   DamageMessageData,
   ExplosiveMessageData,
+  SubstanceUseData,
   UsedExplosiveState,
 } from '@src/chat/message-data';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
@@ -59,7 +60,6 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
       notes,
     } = explosive.attacks[attackType] || explosive.attacks.primary;
 
-    const createdIds: string[] = [];
     const damage: DamageMessageData | undefined = notEmpty(rollFormulas)
       ? {
           damageType,
@@ -80,18 +80,8 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
         }
       : undefined;
 
-    if (damage || attackTraitInfo) {
-      const { _id } = await this.message.createSimilar({
-        damage,
-        attackTraitInfo,
-      });
-      createdIds.push(_id);
-    }
-
-    if (substance) {
-      const { _id } = await this.message.createSimilar({
-        header: substance.messageHeader,
-        substanceUse: {
+    const substanceUse: SubstanceUseData | undefined = substance
+      ? {
           substance: substance.getDataCopy(),
           useMethod:
             substance.substanceType === SubstanceType.Chemical
@@ -99,14 +89,17 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
               : explosive.epData.useSubstance ||
                 substance.applicationMethods[0]!,
           doses: explosive.epData.dosesPerUnit,
-        },
-      });
-      createdIds.push(_id);
-    }
+          showHeader: true,
+        }
+      : undefined;
 
-    this.getUpdater('explosiveUse').commit({
-      state: ['detonated', createdIds],
+    const { _id } = await this.message.createSimilar({
+      damage,
+      attackTraitInfo,
+      substanceUse,
     });
+
+    this.getUpdater('explosiveUse').commit({ state: ['detonated', _id] });
   }
 
   private async reclaim() {
