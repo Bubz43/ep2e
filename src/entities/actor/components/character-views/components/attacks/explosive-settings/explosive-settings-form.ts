@@ -1,3 +1,4 @@
+import { getCenteredDistance } from '@src/combat/area-effect';
 import {
   emptyTextDash,
   renderNumberField,
@@ -176,11 +177,12 @@ export class ExplosiveSettingsForm extends LitElement {
   > {
     const { areaEffect } = this.explosive;
     if (areaEffect === AreaEffectType.Centered) {
-      const distance = clamp(
-        nonNegative(this.averageDamage) /
-          Math.abs(this.explosiveDistances.centered),
-        { min: 1 },
-      );
+      const distance = getCenteredDistance(this.averageDamage, this.explosiveDistances.centered)
+      // const distance = clamp(
+      //   nonNegative(this.averageDamage) /
+      //     Math.abs(this.explosiveDistances.centered),
+      //   { min: 1 },
+      // );
       return this.settings.demolition?.type === Demolition.ShapeCentered
         ? {
             t: 'cone',
