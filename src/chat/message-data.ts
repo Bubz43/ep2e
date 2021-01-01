@@ -1,9 +1,11 @@
-import type { AreaEffect } from '@src/combat/attack-formatting';
+import type { AreaEffect } from '@src/combat/area-effect';
+import type { BasicAreaEffectData } from '@src/combat/attack-formatting';
 import type { AreaEffectType, AttackTrait } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
 import type { SubstanceUseMethod } from '@src/entities/item/proxies/substance';
 import type { ItemEntity } from '@src/entities/models';
 import type { ArmorType } from '@src/features/active-armor';
+import type { PlacedTemplateIDs } from '@src/foundry/canvas';
 import type { RolledFormula } from '@src/foundry/rolls';
 import type { HealthModification, HealthType } from '@src/health/health';
 import type { RollMultiplier } from '@src/health/health-changes';
@@ -28,7 +30,7 @@ export type DamageMessageData = {
   armorUsed?: ArmorType[];
   cumulativeDotID?: string;
   multiplier?: RollMultiplier;
-  areaEffect?: AreaEffect;
+  areaEffect?: BasicAreaEffectData;
 };
 
 export type MessageHealData = RequireAtLeastOne<
@@ -79,14 +81,11 @@ export type MessageHeaderData = {
   hidden?: boolean;
 };
 
-// export type AreaEffectData = {
-//   areaEffect: AreaEffectType;
-//   centeredReduction?: number;
-//   uniformBlastRadius?: number;
-// }
+export type MessageAreaEffectData = AreaEffect & PlacedTemplateIDs
 
 export type MessageData = Partial<{
   header: MessageHeaderData;
+  areaEffect: MessageAreaEffectData;
   stress: StressTestMessageData;
   damage: DamageMessageData;
   attackTraitInfo: AttackTraitData;

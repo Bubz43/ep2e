@@ -142,6 +142,7 @@ import { CharacterViewExplosiveAttacks } from './entities/actor/components/chara
 import { MessageExplosive } from './chat/components/explosive/message-explosive';
 import { ExplosiveSettingsForm } from './entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
 import { MessageAttackTraits } from './chat/components/attack-traits/message-attack-traits';
+import { MessageAreaEffect } from './chat/components/area-effect/message-area-effect';
 
 // Generic Components
 Field;
@@ -289,3 +290,4 @@ MessageDamage;
 MessageSubstanceUse;
 MessageExplosive;
 MessageAttackTraits;
+MessageAreaEffect;

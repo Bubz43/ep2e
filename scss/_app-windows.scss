@@ -2,9 +2,12 @@
 
 .app {
   font-size: 14px;
-  *:not(i):not(mwc-icon) {
-    font-family: var(--font-3);
+  &:not(.chat-popout) {
+    *:not(i):not(mwc-icon) {
+      font-family: var(--font-3);
+    }
   }
+ 
   &.scene-sheet {
     max-width: 600px;
     max-height: calc(100vh - 200px);

@@ -1,3 +1,4 @@
+import type { MessageAreaEffectData } from "@src/chat/message-data";
 import { customElement, LitElement, property, html } from "lit-element";
 import styles from "./message-area-effect.scss";
 
@@ -11,6 +12,13 @@ export class MessageAreaEffect extends LitElement {
      return [styles];
   }
 
+  @property({ type: Object }) areaEffect!: MessageAreaEffectData;
+
+  render() {
+    return html`
+      
+    `;
+  }
   
 }
 

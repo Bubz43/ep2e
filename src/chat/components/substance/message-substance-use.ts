@@ -104,7 +104,7 @@ export class MessageSubstanceUse extends MessageElement {
             ></message-header>
           `
         : ''}
-      <mwc-button @click=${this.applySubstance} dense unelevated
+     <div class="substance-info"> <mwc-button @click=${this.applySubstance} dense unelevated
         >${localize('apply')} ${this.substance.partialType}</mwc-button
       >
       <div class="groups">
@@ -119,7 +119,7 @@ export class MessageSubstanceUse extends MessageElement {
           ? html` <sl-group label=${localize('doses')}>${doses}</sl-group> `
           : ''}
         ${notEmpty(appliedTo) ? this.renderAppliedTo(appliedTo) : ''}
-      </div>
+      </div></div>
     `;
   }
 

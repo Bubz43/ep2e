@@ -27,13 +27,13 @@ export const formatLabeledFormulas = (formulas: LabeledFormula[]) =>
   cleanFormula(formulas.map(({ formula }) => formula).join('+'));
 
 // TODO modifiers
-export type AreaEffect = {
+export type BasicAreaEffectData = {
   areaEffect: '' | AreaEffectType;
   areaEffectRadius: number;
 };
 
 export const formatAreaEffect = (
-  { areaEffect, areaEffectRadius }: AreaEffect,
+  { areaEffect, areaEffectRadius }: BasicAreaEffectData,
   fallback = '-',
 ) => {
   return areaEffect

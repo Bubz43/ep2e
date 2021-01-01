@@ -38,21 +38,24 @@ export class MessageContent extends LitElement {
       substanceUse,
       explosiveUse,
       attackTraitInfo,
+      areaEffect,
     } = this.data;
     if (!this.message.isContentVisible) return '';
     return html`
       ${header ? html` <message-header .data=${header}></message-header> ` : ''}
+      ${areaEffect
+        ? html`
+            <message-area-effect
+              .areaEffect=${areaEffect}
+            ></message-area-effect>
+          `
+        : ''}
       ${explosiveUse
         ? html`
             <message-explosive
               .explosiveUse=${explosiveUse}
             ></message-explosive>
           `
-        : ''}
-      ${substanceUse
-        ? html`<message-substance-use
-            .substanceUse=${substanceUse}
-          ></message-substance-use>`
         : ''}
       ${heal ? html` <message-heal .heal=${heal}></message-heal> ` : ''}
       ${damage ? html`<message-damage .damage=${damage}></message-damage>` : ''}
@@ -65,6 +68,11 @@ export class MessageContent extends LitElement {
               .attackTraitInfo=${attackTraitInfo}
             ></message-attack-traits>
           `
+        : ''}
+      ${substanceUse
+        ? html`<message-substance-use
+            .substanceUse=${substanceUse}
+          ></message-substance-use>`
         : ''}
       ${healthChange
         ? html`
