@@ -5,7 +5,6 @@ import {
 } from '@src/combat/attack-formatting';
 import type { ExplosiveAttack } from '@src/combat/attacks';
 import type { SlWindow } from '@src/components/window/window';
-import { openWindow } from '@src/components/window/window-controls';
 import { ExplosiveTrigger, ExplosiveType } from '@src/data-enums';
 import {
   createExplosiveTriggerSetting,
@@ -16,7 +15,7 @@ import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
-import { clickIfEnter, notEmpty } from '@src/utility/helpers';
+import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { map } from 'remeda';
 import { requestCharacter } from '../../../character-request-event';
@@ -34,6 +33,13 @@ export class CharacterViewExplosiveAttacks extends LitElement {
   }
 
   @property({ attribute: false }) explosive!: Explosive;
+
+  private settingsWindow?: SlWindow | null = null;
+
+  updated() {
+    const popout = this.settingsWindow?.querySelector(ExplosiveSettingsForm.is);
+    if (popout) popout.explosive = this.explosive;
+  }
 
   private async createMessage(ev: Event | CustomEvent<ExplosiveSettings>) {
     const { token, character } = requestCharacter(this);
@@ -58,7 +64,6 @@ export class CharacterViewExplosiveAttacks extends LitElement {
     const { attacks, editable, sticky } = this.explosive;
     // TODO Place template choose trigger etc
     return html`
-  
       <ul class="attacks">
         ${this.renderAttack(attacks.primary)}
         ${attacks.secondary ? this.renderAttack(attacks.secondary) : ''}
@@ -70,7 +75,7 @@ export class CharacterViewExplosiveAttacks extends LitElement {
           <span class="area-values"> ${formatAreaEffect(this.explosive)} </span>
         </div>
       </div>
-      
+
       <div class="actions">
         ${this.explosive.explosiveType === ExplosiveType.Grenade
           ? html`
@@ -133,7 +138,7 @@ export class CharacterViewExplosiveAttacks extends LitElement {
     `;
   }
 
-  private openExplosivePlacingWindow(ev: Event) {
+  private openExplosivePlacingWindow() {
     const initialSettings = { placing: true };
     const { win, wasConnected } = ExplosiveSettingsForm.openWindow({
       explosive: this.explosive,
@@ -143,7 +148,7 @@ export class CharacterViewExplosiveAttacks extends LitElement {
     });
   }
 
-  private openExplosiveSettingsDialog(ev: Event) {
+  private openExplosiveSettingsDialog() {
     const blah = ExplosiveSettingsForm.openWindow({
       explosive: this.explosive,
       requireSubmit: true,
