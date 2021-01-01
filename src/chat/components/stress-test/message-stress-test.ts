@@ -156,6 +156,7 @@ export class MessageStressTest extends LitElement {
             <rolled-formulas-list
               .rolledFormulas=${this.stress.rolledFormulas}
               @used-roll-parts=${this.setUsedRollParts}
+              .usedRollParts=${this.usedRollParts}
             ></rolled-formulas-list>
           `
         : ''}

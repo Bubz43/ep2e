@@ -25,11 +25,10 @@ export class RolledFormulasList extends LitElement {
 
   @property({ type: Array }) rolledFormulas: RolledFormula[] = [];
 
-  @internalProperty() private usedRollParts?: Set<number>;
+  @property({ attribute: false }) usedRollParts?: ReadonlySet<number>;
 
   private setUsed(ev: MultiSelectedEvent) {
-    this.usedRollParts = new Set(ev.detail.index);
-    this.dispatchEvent(new UsedRollPartsEvent(new Set(this.usedRollParts)));
+    this.dispatchEvent(new UsedRollPartsEvent(new Set(ev.detail.index)));
   }
 
   private rollTooltip(data: RollData) {

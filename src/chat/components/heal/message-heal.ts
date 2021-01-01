@@ -120,6 +120,7 @@ export class MessageHeal extends LitElement {
             <rolled-formulas-list
               .rolledFormulas=${heal.damageFormulas}
               @used-roll-parts=${this.setUsedRollParts}
+              .usedRollParts=${this.usedRollParts}
             ></rolled-formulas-list>
           `
         : ''}

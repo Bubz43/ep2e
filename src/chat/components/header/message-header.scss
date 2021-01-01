@@ -75,7 +75,7 @@ h4 {
   font-size: 14px;
   color: var(--color-text-lighter);
   white-space: nowrap;
-  border-top: 1px solid alphav(var(--color-border), 0.5);
+  border-top: 2px groove alphav(var(--color-border), 0.5);
   padding: 0.5rem 1rem;
 
   &.expanded {

@@ -164,6 +164,7 @@ export class MessageDamage extends LitElement {
             })}
             <rolled-formulas-list
               .rolledFormulas=${this.damage.rolledFormulas}
+              .usedRollParts=${this.usedRollParts}
               @used-roll-parts=${this.setUsedRollParts}
             ></rolled-formulas-list>
           `

@@ -81,7 +81,9 @@ export type MessageHeaderData = {
   hidden?: boolean;
 };
 
-export type MessageAreaEffectData = AreaEffect & PlacedTemplateIDs
+export type MessageAreaEffectData = AreaEffect & {
+  templateIDs?: PlacedTemplateIDs | null
+}
 
 export type MessageData = Partial<{
   header: MessageHeaderData;

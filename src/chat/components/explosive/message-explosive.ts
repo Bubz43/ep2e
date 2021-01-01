@@ -2,11 +2,13 @@ import type {
   AttackTraitData,
   DamageMessageData,
   ExplosiveMessageData,
+  MessageAreaEffectData,
   SubstanceUseData,
   UsedExplosiveState,
 } from '@src/chat/message-data';
+import type { AreaEffect } from '@src/combat/area-effect';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
-import { SubstanceType } from '@src/data-enums';
+import { AreaEffectType, Demolition, SubstanceType } from '@src/data-enums';
 import { ExplosiveSettingsForm } from '@src/entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
 import {
   pickOrDefaultActor,
@@ -47,7 +49,13 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
 
   private async detonate() {
     const { explosive } = this;
-    const { attackType = 'primary' } = this.explosiveUse;
+    const {
+      attackType = 'primary',
+      centeredReduction,
+      uniformBlastRadius,
+      templateIDs,
+      demolition,
+    } = this.explosiveUse;
     const {
       rollFormulas,
       damageType,
@@ -93,7 +101,27 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
         }
       : undefined;
 
+    const areaEffect: MessageAreaEffectData | undefined =
+      explosive.areaEffect === AreaEffectType.Centered
+        ? {
+            type: explosive.areaEffect,
+            dvReduction: centeredReduction || -2,
+            templateIDs,
+            angle:
+              demolition?.type === Demolition.ShapeCentered
+                ? demolition.angle
+                : undefined,
+          }
+        : explosive.areaEffect === AreaEffectType.Uniform
+        ? {
+            type: explosive.areaEffect,
+            radius: uniformBlastRadius || explosive.areaEffectRadius || 1,
+            templateIDs,
+          }
+        : undefined;
+
     const { _id } = await this.message.createSimilar({
+      areaEffect,
       damage,
       attackTraitInfo,
       substanceUse,

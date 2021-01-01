@@ -12,4 +12,13 @@
 
 p {
   margin: 0;
+  text-align: center;
+  .falloff {
+    color: var(--color-text-lighter);
+  }
+}
+
+.shaped {
+  font-size: small;
+  color: var(--color-text-lighter);
 }

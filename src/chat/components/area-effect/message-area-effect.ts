@@ -16,29 +16,38 @@ export class MessageAreaEffect extends LitElement {
 
   @property({ type: Object }) areaEffect!: MessageAreaEffectData;
 
-  private formatAreaEffect() {
+  private formatFalloff() {
     const { areaEffect } = this;
     // TODO Shaped centered
     switch (areaEffect.type) {
       case AreaEffectType.Centered:
-        return `${localize(areaEffect.type)} ${localize('areaEffect')} (${
-          areaEffect.dvReduction || -2
-        })`;
+        return `${areaEffect.dvReduction || -2} ${localize("SHORT", "damageValue")}/m`;
       case AreaEffectType.Cone:
-        return `${localize(areaEffect.type)} ${localize(
-          'areaEffect',
-        )} (${localize('range')} ${areaEffect.range})`;
+        return `${localize('range')} ${areaEffect.range}`;
 
       case AreaEffectType.Uniform:
-        return `${localize(areaEffect.type)} ${localize('areaEffect')} (${
-          areaEffect.radius
-        }m. ${localize('radius')})`;
+        return `${areaEffect.radius}m. ${localize('radius')}`;
     }
   }
 
   render() {
     // TODO Template
-    return html` <p>${this.formatAreaEffect()}</p> `;
+    const { areaEffect } = this;
+    return html`
+      <p>
+        ${localize(areaEffect.type)} ${localize('areaEffect')}
+        <span class="falloff">${this.formatFalloff()}</span>
+      </p>
+
+      ${areaEffect.type === AreaEffectType.Centered && areaEffect.angle
+        ? html`
+            <p class="shaped">
+              ${localize('shaped')} ${localize('to')} ${areaEffect.angle}°
+              ${localize('angle').toLocaleLowerCase()}
+            </p>
+          `
+        : ''}
+    `;
   }
 }
 
