@@ -1,6 +1,5 @@
 import { renderLabeledCheckbox } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
-import { ItemType } from '@src/entities/entity-types';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import { Substance } from '@src/entities/item/proxies/substance';
 import { currentWorldTimeMS, prettyMilliseconds } from '@src/features/time';
@@ -8,7 +7,7 @@ import { format, localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import { localImage } from '@src/utility/images';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, html, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { ItemCardBase } from '../item-card-base';
 import styles from './physical-tech-card.scss';
@@ -110,7 +109,7 @@ export class PhysicalTechCard extends ItemCardBase {
         ? html`
             ${item.fabricatedItem
               ? html`
-                  <character-view-time-item
+                  <time-state-item
                     ?disabled=${!item.editable}
                     .timeState=${item.printState}
                   >
@@ -127,7 +126,7 @@ export class PhysicalTechCard extends ItemCardBase {
                             />
                           </mwc-icon-button>
                         `
-                      : ''}</character-view-time-item
+                      : ''}</time-state-item
                   >
                 `
               : html`<div class="available-fab">${localize('available')}</div>`}

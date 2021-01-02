@@ -6,28 +6,28 @@ import { itemMenuOptions } from '@src/entities/item/item-views';
 import {
   createLiveTimeState,
   currentWorldTimeMS,
-  prettyMilliseconds,
   LiveTimeState,
+  prettyMilliseconds,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { openMenu } from '@src/open-menu';
 import {
   customElement,
-  LitElement,
-  property,
   html,
   internalProperty,
+  LitElement,
+  property,
   PropertyValues,
 } from 'lit-element';
-import styles from './character-view-time-item.scss';
+import styles from './time-state-item.scss';
 
 /**
  * @slot action - only visible when not editing
  */
-@customElement('character-view-time-item')
+@customElement('time-state-item')
 export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
   static get is() {
-    return 'character-view-time-item' as const;
+    return 'time-state-item' as const;
   }
 
   static styles = [styles];
@@ -106,7 +106,9 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
         ${label}
         ${remaining
           ? html`<span class="remaining"
-              >${this.completion === 'ready' ? `${this.readyLabel || localize('readyIn')}` : ''}
+              >${this.completion === 'ready'
+                ? `${this.readyLabel || localize('readyIn')}`
+                : ''}
               ${prettyMilliseconds(remaining)}
               ${this.completion !== 'ready' ? localize('remaining') : ''}</span
             >`
@@ -164,6 +166,6 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'character-view-time-item': CharacterViewTimeItem;
+    'time-state-item': CharacterViewTimeItem;
   }
 }

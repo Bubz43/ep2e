@@ -71,7 +71,7 @@ import { CharacterViewResleeve } from './entities/actor/components/character-vie
 import { CharacterViewSearch } from './entities/actor/components/character-views/components/search/character-view-search';
 import { CharacterViewSleeve } from './entities/actor/components/character-views/components/sleeve/character-view-sleeve';
 import { CharacterViewTime } from './entities/actor/components/character-views/components/time/character-view-time';
-import { CharacterViewTimeItem } from './entities/actor/components/character-views/components/time/character-view-time-item';
+import { CharacterViewTimeItem } from './features/components/time-state-item/time-state-item';
 import { ConsumableCard } from './entities/actor/components/character-views/components/cards/consumable/consumable-card';
 import { ItemCard } from './entities/actor/components/character-views/components/cards/generic/item-card';
 import { ItemTrash } from './entities/actor/components/item-trash/item-trash';

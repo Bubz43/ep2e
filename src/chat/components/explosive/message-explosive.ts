@@ -24,7 +24,6 @@ import {
   CommonInterval,
   createLiveTimeState,
   currentWorldTimeMS,
-  prettyMilliseconds,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
@@ -195,11 +194,9 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
 
   render() {
     const { state, trigger } = this.explosiveUse;
-    if (state) return html`${this.renderExplosiveState(state)}`;
-    const { explosive } = this;
-    const { editable } = this.message;
+    const { explosive, disabled } = this;
     return html`
-      ${editable
+      ${!disabled
         ? html`
             <div class="settings">
               ${explosive.hasSecondaryMode
@@ -212,41 +209,50 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
               <div class="trigger-option">
                 ${localize(trigger.type)} ${localize('trigger')}
               </div>
-              <div class="controls">
-                <mwc-icon-button
-                  icon="undo"
-                  @click=${this.reclaim}
-                ></mwc-icon-button>
-                <mwc-icon-button
-                  icon="settings"
-                  @click=${this.editSettings}
-                ></mwc-icon-button>
-              </div>
+              ${state
+                ? ''
+                : html`
+                    <div class="controls">
+                      <mwc-icon-button
+                        icon="undo"
+                        @click=${this.reclaim}
+                      ></mwc-icon-button>
+                      <mwc-icon-button
+                        icon="settings"
+                        @click=${this.editSettings}
+                      ></mwc-icon-button>
+                    </div>
+                  `}
             </div>
           `
         : ''}
+      ${state
+        ? this.renderExplosiveState(state)
+        : html`
+            <div class="detonation-info">
+              ${trigger.type === ExplosiveTrigger.Proximity
+                ? this.renderProximityTriggerInfo(trigger)
+                : trigger.type === ExplosiveTrigger.Timer
+                ? this.renderTimerTriggerInfo(trigger)
+                : trigger.type === ExplosiveTrigger.Airburst
+                ? html`<p class="trigger-info">
+                    ${`${localize('explodeAfter')} ${
+                      trigger.distance
+                    } ${localize('meters')}`.toLocaleLowerCase()}
+                  </p>`
+                : ''}
+            </div>
 
-      <div class="detonation-info">
-        ${trigger.type === ExplosiveTrigger.Proximity
-          ? this.renderProximityTriggerInfo(trigger)
-          : trigger.type === ExplosiveTrigger.Timer
-          ? this.renderTimerTriggerInfo(trigger)
-          : trigger.type === ExplosiveTrigger.Airburst
-          ? html`<p class="trigger-info">
-              ${`${localize('explodeAfter')} ${trigger.distance} ${localize("meters")}`.toLocaleLowerCase()}
-            </p>`
-          : ''}
-      </div>
-
-      ${editable
-        ? html` <mwc-button
-            outlined
-            dense
-            class="detonate"
-            @click=${this.detonate}
-            >${localize('detonate')}</mwc-button
-          >`
-        : ''}
+            ${!disabled
+              ? html` <mwc-button
+                  outlined
+                  dense
+                  class="detonate"
+                  @click=${this.detonate}
+                  >${localize('detonate')}</mwc-button
+                >`
+              : ''}
+          `}
 
       <!-- <div class="actions">
         <mwc-button dense class="defuse" @click=${this.attemptDefusal}
@@ -258,7 +264,7 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
 
   private renderTimerTriggerInfo(trigger: TimerTrigger) {
     return html`
-      <character-view-time-item
+      <time-state-item
         readyLabel=${localize('in')}
         .timeState=${createLiveTimeState({
           label: `${localize('detonation')}`,
@@ -272,7 +278,7 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
         })}
         completion="ready"
         ?disabled=${this.disabled}
-      ></character-view-time-item>
+      ></time-state-item>
     `;
   }
 
@@ -290,12 +296,12 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
       </p>
       ${timer
         ? html`
-            <character-view-time-item
+            <time-state-item
               readyLabel=${localize('in')}
               .timeState=${timer}
               completion="ready"
               ?disabled=${this.disabled}
-            ></character-view-time-item>
+            ></time-state-item>
           `
         : html`
             <mwc-button

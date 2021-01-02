@@ -51,7 +51,6 @@
     --mdc-icon-size: 1.25rem;
     --mdc-icon-button-size: 1.5rem;
   }
-
 }
 
 .trigger-info,
@@ -72,6 +71,12 @@ p {
   margin: 0 0.5rem;
 }
 
-character-view-time-item {
+time-state-item {
   padding: 0.25rem 0.5rem;
+}
+
+.state {
+  text-transform: uppercase;
+  color: var(--color-text-disabled);
+  letter-spacing: 1px;
 }

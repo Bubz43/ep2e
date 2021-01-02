@@ -1,7 +1,6 @@
-import type { MultiSelectedEvent } from '@material/mwc-list/mwc-list-foundation';
 import { renderLabeledCheckbox } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
-import { enumValues, SubstanceApplicationMethod } from '@src/data-enums';
+import { enumValues } from '@src/data-enums';
 import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisition';
 import { ItemType } from '@src/entities/entity-types';
 import {
@@ -10,7 +9,6 @@ import {
 } from '@src/entities/item/proxies/substance';
 import { PoolItem } from '@src/features/components/pool-item/pool-item';
 import { conditionIcons, ConditionType } from '@src/features/conditions';
-import { formatEffect, Source } from '@src/features/effects';
 import { idProp, matchID } from '@src/features/feature-helpers';
 import type { ReadonlyPool } from '@src/features/pool';
 import { poolActionOptions } from '@src/features/pools';
@@ -362,7 +360,7 @@ export class CharacterView extends CharacterViewBase {
                               awaitingOnsetSubstances,
                               idProp,
                               (substance) => html`
-                                <character-view-time-item
+                                <time-state-item
                                   ?disabled=${disabled}
                                   .timeState=${substance.awaitingOnsetTimeState}
                                   completion="ready"
@@ -379,7 +377,7 @@ export class CharacterView extends CharacterViewBase {
                                       );
                                     }}
                                   ></mwc-icon-button>
-                                </character-view-time-item>
+                                </time-state-item>
                               `,
                             )}
                           </sl-animated-list></sl-details

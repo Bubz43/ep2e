@@ -162,7 +162,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
                   awaitingOnsetSubstances,
                   idProp,
                   (substance) => html`
-                    <character-view-time-item
+                    <time-state-item
                       ?disabled=${disabled}
                       .timeState=${substance.awaitingOnsetTimeState}
                       completion="ready"
@@ -176,7 +176,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
                         @click=${() =>
                           this.openSubstanceActivationDialog(substance.id)}
                       ></mwc-icon-button>
-                    </character-view-time-item>
+                    </time-state-item>
                   `,
                 )}
               </sl-animated-list>
@@ -206,12 +206,12 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
                   </figcaption>
                   ${[...activeRecoveries.values()].map(
                     (heal) => html`
-                      <character-view-time-item
+                      <time-state-item
                         ?disabled=${disabled}
                         .timeState=${heal.timeState}
                         completion="ready"
                       >
-                      </character-view-time-item>
+                      </time-state-item>
                     `,
                   )}
                 </figure>
@@ -409,12 +409,12 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
             activeFabbers,
             idProp,
             (fabber) => html`
-              <character-view-time-item
+              <time-state-item
                 ?disabled=${this.character.disabled}
                 .timeState=${fabber.printState}
                 completion="completed"
                 .item=${fabber}
-              ></character-view-time-item>
+              ></time-state-item>
             `,
           )}
         </sl-animated-list>
@@ -437,7 +437,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
             temporaryFeatures,
             idProp,
             (feature) => html`
-              <character-view-time-item
+              <time-state-item
                 ?disabled=${disabled}
                 .timeState=${feature.timeState}
                 completion="completed"
@@ -446,7 +446,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
                   slot="action"
                   @delete=${this.temporaryFeatureOps.removeCallback(feature.id)}
                 ></delete-button>
-              </character-view-time-item>
+              </time-state-item>
             `,
           )}
         </sl-animated-list>
@@ -470,12 +470,12 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
             temporaryServices,
             idProp,
             (service) => html`
-              <character-view-time-item
+              <time-state-item
                 completion="expired"
                 ?disabled=${this.character.disabled}
                 .timeState=${service.timeState}
                 .item=${service}
-              ></character-view-time-item>
+              ></time-state-item>
             `,
           )}
         </sl-animated-list>
@@ -513,11 +513,11 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
             timers,
             idProp,
             (timer) => html`
-              <character-view-time-item
+              <time-state-item
                 .timeState=${timer}
                 completion="ready"
                 ?disabled=${disabled}
-              ></character-view-time-item>
+              ></time-state-item>
             `,
           )}
         </sl-animated-list>

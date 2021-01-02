@@ -1,25 +1,22 @@
 import type { MultiSelectedEvent } from '@material/mwc-list/mwc-list-foundation';
 import { createMessage } from '@src/chat/create-message';
-import { renderAutoForm } from '@src/components/form/forms';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { itemMenuOptions } from '@src/entities/item/item-views';
 import type { Substance } from '@src/entities/item/proxies/substance';
-import { EffectType, formatEffect } from '@src/features/effects';
-import { idProp } from '@src/features/feature-helpers';
+import { formatEffect } from '@src/features/effects';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType, HealthType } from '@src/health/health';
-import { createStressDamage } from '@src/health/health-changes';
 import { tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
 import { openMenu } from '@src/open-menu';
 import { notEmpty, withSign } from '@src/utility/helpers';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, html, LitElement, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
-import { compact, difference, map, mapToObj, pick, pipe, uniq } from 'remeda';
+import { compact, difference, pick, uniq } from 'remeda';
 import styles from './character-view-active-substance.scss';
 
 @customElement('character-view-active-substance')
@@ -267,7 +264,7 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
                       </div>
                     `;
                   }
-                  return html`<character-view-time-item
+                  return html`<time-state-item
                     ?disabled=${disabled}
                     .timeState=${nestedTimeState}
                     completion="expired"
@@ -285,19 +282,19 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
                         : this.endSevereEffects}
                       ?disabled=${disabled}
                     ></mwc-icon-button>
-                  </character-view-time-item>`;
+                  </time-state-item>`;
                 },
               )}</sl-animated-list
             >
           `
         : html`
-            <character-view-time-item
+            <time-state-item
               ?disabled=${disabled}
               .timeState=${timeState}
               completion="expired"
               .item=${substance}
             >
-            </character-view-time-item>
+            </time-state-item>
           `}
       ${this.renderActions()}
     `;
