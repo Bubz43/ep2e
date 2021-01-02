@@ -1364,6 +1364,7 @@
     "defused": "Defused",
     "useSubstance": "Use Substance",
     "shaped": "Shaped",
+    "triggerRadius": "Trigger Radius",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

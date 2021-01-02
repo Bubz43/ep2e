@@ -165,6 +165,7 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
       explosive: this.explosive,
       initialSettings: this.explosiveUse,
       requireSubmit: true,
+      adjacentEl: this,
       update: createPipe(
         prop('detail'),
         this.getUpdater('explosiveUse').commit,
@@ -192,25 +193,49 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
   render() {
     const { state, trigger } = this.explosiveUse;
     if (state) return html`${this.renderExplosiveState(state)}`;
+    const { explosive } = this;
+    const { editable } = this.message;
     return html`
-      <mwc-icon-button icon="undo" @click=${this.reclaim}></mwc-icon-button>
-      <mwc-icon-button
-        icon="edit"
-        @click=${this.editSettings}
-      ></mwc-icon-button>
+      ${editable
+        ? html`
+            <div class="settings">
+              ${explosive.hasSecondaryMode
+                ? html`<div class="attack-mode">
+                    ${explosive.attacks[
+                      this.explosiveUse.attackType || 'primary'
+                    ]?.label}
+                  </div>`
+                : ''}
+              <div class="trigger-option">
+                ${localize(trigger.type)} ${localize('trigger')}
+              </div>
+             <div class="controls"> <mwc-icon-button
+                icon="undo"
+                @click=${this.reclaim}
+              ></mwc-icon-button>
+              <mwc-icon-button
+                icon="settings"
+                @click=${this.editSettings}
+              ></mwc-icon-button></div>
+            </div>
+          `
+        : ''}
+
       <div class="detonation-info">
         ${trigger.type === ExplosiveTrigger.Proximity
           ? this.renderProximityTriggerInfo(trigger)
-          : html`
-              <sl-group label=${localize('trigger')}
-                >${localize(trigger.type)}</sl-group
-              >
-            `}
-
-        <mwc-button dense class="detonate" @click=${this.detonate}
-          >${localize('detonate')}</mwc-button
-        >
+          : ''}
       </div>
+
+      ${editable
+        ? html` <mwc-button
+            outlined
+            dense
+            class="detonate"
+            @click=${this.detonate}
+            >${localize('detonate')}</mwc-button
+          >`
+        : ''}
 
       <div class="actions">
         <mwc-button dense class="defuse" @click=${this.attemptDefusal}
@@ -227,9 +252,8 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
         : null;
     return html`
       <p class="trigger-info">
-        ${trigger.radius} m. ${localize('proximity')}
-        ${localize('triggerRadius')} ${localize('on')}
-        ${localize(trigger.targets || 'movement')}
+        ${`${trigger.radius} m. ${localize('triggerRadius')} ${localize('on')}
+        ${localize(trigger.targets || 'any')} ${localize("movement")}`.toLocaleLowerCase()}
       </p>
       ${timer
         ? html`

@@ -75,9 +75,9 @@ export class ExplosiveSettingsForm extends LitElement {
     props: Pick<
       ExplosiveSettingsForm,
       'explosive' | 'requireSubmit' | 'initialSettings'
-    > & { update: (newSettings: CustomEvent<ExplosiveSettings>) => void },
+    > & { update: (newSettings: CustomEvent<ExplosiveSettings>) => void, adjacentEl?: HTMLElement },
   ) {
-    const adjacentEl = traverseActiveElements();
+    const adjacentEl = props.adjacentEl || traverseActiveElements();
     return openWindow({
       key: ExplosiveSettingsForm,
       name: `${props.explosive.name} ${localize('settings')}`,
@@ -530,6 +530,7 @@ export class ExplosiveSettingsForm extends LitElement {
       case ExplosiveTrigger.Proximity:
         return renderAutoForm({
           props: settings,
+          classes: "proximity-form",
           update: this.updateTriggerSettings,
           fields: ({ radius, targets }) => [
             renderNumberField(

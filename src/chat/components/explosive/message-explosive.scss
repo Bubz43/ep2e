@@ -9,7 +9,6 @@
   display: grid;
   gap: 0.25rem;
   padding: 0.25rem 0.5rem;
-  --mdc-icon-button-size: 1.5rem;
 }
 
 .state {
@@ -22,11 +21,56 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
-  .detonate {
-    --mdc-theme-primary: var(--color-negative);
-  }
 }
 
 .info {
   padding: 0 0.5rem;
+}
+
+.settings {
+  display: grid;
+  align-items: center;
+  grid-template-areas: 'mode controls' 'trigger controls';
+  grid-auto-rows: min-content;
+  grid-template-columns: 1fr auto;
+  padding: 0 0.5rem;
+
+  .attack-mode {
+    grid-area: mode;
+    & + .trigger-option {
+      color: var(--color-text-lighter);
+      font-size: small;
+    }
+  }
+  .trigger-option {
+    grid-area: trigger;
+    font-size: large;
+  }
+  .controls {
+    grid-area: controls;
+    --mdc-icon-size: 1.25rem;
+    --mdc-icon-button-size: 1.5rem;
+  }
+
+}
+
+.trigger-info {
+  color: var(--color-text-lighter);
+  font-size: small;
+}
+
+.trigger-countdown {
+  padding: 0.15rem 0;
+}
+
+.detonate {
+  --mdc-theme-primary: var(--color-negative);
+  width: 100%;
+}
+
+p {
+  margin: 0 0.5rem;
+}
+
+.attack-mode {
 }

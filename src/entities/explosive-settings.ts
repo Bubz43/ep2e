@@ -65,7 +65,7 @@ export const createExplosiveTriggerSetting = (
       return { type };
 
     case ExplosiveTrigger.Proximity:
-      return { type, radius: 3, targets: "" };
+      return { type, radius: 3, targets: "", };
 
     case ExplosiveTrigger.Timer:
       return {
