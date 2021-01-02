@@ -461,7 +461,7 @@ export class CharacterView extends CharacterViewBase {
         },
       ]);
     return html`
-      <sl-details open summary=${localize('ego')}>
+      <sl-details open summary="${localize('ego')} - ${ego.name}">
         ${notEmpty(ego.details)
           ? html`
               <div class="details">${ego.details.map(this.renderDetail)}</div>
@@ -474,7 +474,7 @@ export class CharacterView extends CharacterViewBase {
 
       ${psi
         ? html`
-            <sl-details open summary=${localize('psi')}>
+            <sl-details open summary="${localize('psi')} - ${psi.name}">
               ${psi.description
                 ? html`
                     <enriched-html .content=${psi.description}></enriched-html>
@@ -485,7 +485,7 @@ export class CharacterView extends CharacterViewBase {
         : ''}
       ${sleeve
         ? html`
-            <sl-details open summary=${localize('sleeve')}>
+            <sl-details open summary="${localize('sleeve')} - ${sleeve.name}">
               ${notEmpty(sleeveDetails)
                 ? html`
                     <div class="details">

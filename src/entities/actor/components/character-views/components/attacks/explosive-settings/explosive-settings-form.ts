@@ -18,6 +18,7 @@ import {
   enumValues,
   ExplosiveTrigger,
 } from '@src/data-enums';
+import { ActorType } from '@src/entities/entity-types';
 import {
   createDemolitionSetting,
   createExplosiveTriggerSetting,
@@ -530,11 +531,17 @@ export class ExplosiveSettingsForm extends LitElement {
         return renderAutoForm({
           props: settings,
           update: this.updateTriggerSettings,
-          fields: ({ radius }) =>
+          fields: ({ radius, targets }) => [
             renderNumberField(
               { ...radius, label: `${radius.label} (${localize('meters')})` },
               { min: 0.1, max: 3 },
             ),
+            renderSelectField(
+              targets,
+              [ActorType.Biological, ActorType.Synthetic],
+              { emptyText: localize('any') },
+            ),
+          ],
         });
 
       case ExplosiveTrigger.Timer:

@@ -2,6 +2,7 @@ import { Demolition, ExplosiveTrigger } from '@src/data-enums';
 import { CommonInterval, currentWorldTimeMS } from '@src/features/time';
 import type { PlacedTemplateIDs } from '@src/foundry/canvas';
 import { SuccessTestResult } from '@src/success-test/success-test';
+import type { ActorType } from './entity-types';
 
 export type ExplosiveSettings = {
   placing?: boolean;
@@ -29,10 +30,11 @@ type SignalTrigger = Trigger<{
   type: ExplosiveTrigger.Signal;
 }>;
 
-type ProximityTrigger = Trigger<{
+export type ProximityTrigger = Trigger<{
   type: ExplosiveTrigger.Proximity;
   radius: number;
-  startTime: number;
+  startTime?: number | null;
+  targets: ActorType.Biological | ActorType.Synthetic | ""
 }>;
 
 type TimerTrigger = Trigger<{
@@ -63,7 +65,7 @@ export const createExplosiveTriggerSetting = (
       return { type };
 
     case ExplosiveTrigger.Proximity:
-      return { type, radius: 3, startTime: currentWorldTimeMS() };
+      return { type, radius: 3, targets: "" };
 
     case ExplosiveTrigger.Timer:
       return {

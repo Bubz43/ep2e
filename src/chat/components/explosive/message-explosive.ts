@@ -4,16 +4,25 @@ import type {
   ExplosiveMessageData,
   MessageAreaEffectData,
   SubstanceUseData,
-  UsedExplosiveState
+  UsedExplosiveState,
 } from '@src/chat/message-data';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
-import { AreaEffectType, Demolition, SubstanceType } from '@src/data-enums';
-import { ExplosiveSettingsForm } from '@src/entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
 import {
-  pickOrDefaultCharacter
-} from '@src/entities/find-entities';
+  AreaEffectType,
+  Demolition,
+  ExplosiveTrigger,
+  SubstanceType,
+} from '@src/data-enums';
+import { ExplosiveSettingsForm } from '@src/entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
+import type { ProximityTrigger } from '@src/entities/explosive-settings';
+import { pickOrDefaultCharacter } from '@src/entities/find-entities';
 import { Explosive } from '@src/entities/item/proxies/explosive';
-import { currentWorldTimeMS } from '@src/features/time';
+import {
+  CommonInterval,
+  createLiveTimeState,
+  currentWorldTimeMS,
+  prettyMilliseconds,
+} from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { notEmpty } from '@src/utility/helpers';
@@ -167,39 +176,81 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
     // TODO check
   }
 
-  render() {
-    const { editable } = this.message;
-    const { state, trigger, duration } = this.explosiveUse;
+  private proximityActivationTimer(trigger: ProximityTrigger) {
+    return createLiveTimeState({
+      label: `${localize('proximity')} ${localize('activation')}`,
+      updateStartTime: (newStartTime) =>
+        this.getUpdater('explosiveUse').commit({
+          trigger: { ...trigger, startTime: newStartTime },
+        }),
+      startTime: trigger.startTime || currentWorldTimeMS(),
+      id: this.message.id,
+      duration: CommonInterval.Turn * 3,
+    });
+  }
 
-    // TODO change trigger and durations
+  render() {
+    const { state, trigger } = this.explosiveUse;
+    if (state) return html`${this.renderExplosiveState(state)}`;
     return html`
-      <div class="info">
-        <sl-group label=${localize('trigger')}
-          >${localize(trigger.type)}</sl-group
-        >
-        <mwc-icon-button
-          icon="edit"
-          @click=${this.editSettings}
-        ></mwc-icon-button>
-      </div>
-      ${state
-        ? this.renderExplosiveState(state)
-        : html`
-            <div class="actions">
-              ${editable
-                ? html`
-                    <mwc-button dense class="detonate" @click=${this.detonate}
-                      >${localize('detonate')}</mwc-button
-                    >
-                    <mwc-button dense class="reclaim" @click=${this.reclaim}
-                      >${localize('reclaim')}</mwc-button
-                    >
-                  `
-                : ''}
-              <mwc-button dense class="defuse" @click=${this.attemptDefusal}
-                >${localize('defuse')}</mwc-button
+      <mwc-icon-button icon="undo" @click=${this.reclaim}></mwc-icon-button>
+      <mwc-icon-button
+        icon="edit"
+        @click=${this.editSettings}
+      ></mwc-icon-button>
+      <div class="detonation-info">
+        ${trigger.type === ExplosiveTrigger.Proximity
+          ? this.renderProximityTriggerInfo(trigger)
+          : html`
+              <sl-group label=${localize('trigger')}
+                >${localize(trigger.type)}</sl-group
               >
-            </div>
+            `}
+
+        <mwc-button dense class="detonate" @click=${this.detonate}
+          >${localize('detonate')}</mwc-button
+        >
+      </div>
+
+      <div class="actions">
+        <mwc-button dense class="defuse" @click=${this.attemptDefusal}
+          >${localize('defuse')}</mwc-button
+        >
+      </div>
+    `;
+  }
+
+  private renderProximityTriggerInfo(trigger: ProximityTrigger) {
+    const timer =
+      typeof trigger.startTime === 'number'
+        ? this.proximityActivationTimer(trigger)
+        : null;
+    return html`
+      <p class="trigger-info">
+        ${trigger.radius} m. ${localize('proximity')}
+        ${localize('triggerRadius')} ${localize('on')}
+        ${localize(trigger.targets || 'movement')}
+      </p>
+      ${timer
+        ? html`
+            <p class="trigger-countdown">
+              [${localize('triggered')}] ${localize('activation')}
+              ${localize('in')}
+              ${prettyMilliseconds(
+                this.proximityActivationTimer(trigger).remaining,
+                { whenZero: `0 ${localize('turns')}` },
+              )}
+            </p>
+          `
+        : html`
+            <mwc-button
+              dense
+              @click=${() =>
+                this.getUpdater('explosiveUse').commit({
+                  trigger: { ...trigger, startTime: currentWorldTimeMS() },
+                })}
+              >${localize('trigger')}</mwc-button
+            >
           `}
     `;
   }
