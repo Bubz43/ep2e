@@ -4,24 +4,22 @@ import type {
   ExplosiveMessageData,
   MessageAreaEffectData,
   SubstanceUseData,
-  UsedExplosiveState,
+  UsedExplosiveState
 } from '@src/chat/message-data';
-import type { AreaEffect } from '@src/combat/area-effect';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { AreaEffectType, Demolition, SubstanceType } from '@src/data-enums';
 import { ExplosiveSettingsForm } from '@src/entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
 import {
-  pickOrDefaultActor,
-  pickOrDefaultCharacter,
+  pickOrDefaultCharacter
 } from '@src/entities/find-entities';
 import { Explosive } from '@src/entities/item/proxies/explosive';
 import { currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { notEmpty } from '@src/utility/helpers';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, html, property } from 'lit-element';
 import mix from 'mix-with/lib';
-import { compact, createPipe, find, flatMap, pipe, prop, uniq } from 'remeda';
+import { compact, createPipe, flatMap, pipe, prop } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-explosive.scss';
 

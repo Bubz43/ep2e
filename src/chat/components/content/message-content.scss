@@ -4,14 +4,17 @@
 * {
   box-sizing: border-box;
   & + * {
-    border-top: 1px solid alphav(var(--color-border), 0.5);
+    border-top: 1px groove alphav(var(--color-border), 0.5);
+    // grid-column: 2;
   }
 }
 
 :host {
   display: grid;
+  // grid-template-columns: 0.25rem 1fr 0.25rem;
 }
 
 message-header {
   border-bottom-color: var(--color-border);
+  // grid-column: span 3;
 }

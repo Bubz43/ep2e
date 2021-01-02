@@ -11,6 +11,7 @@
   display: grid;
   width: 400px;
   --health-item-padding: 0.5rem 1rem;
+  background: alphav(var(--color-bg), 0.75);
 }
 .mode-form {
   padding: 0.25rem 0.5rem;

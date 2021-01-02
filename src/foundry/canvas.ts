@@ -132,6 +132,22 @@ export const placeMeasuredTemplate = (
   });
 };
 
+export const deletePlacedTemplate = (ids: PlacedTemplateIDs | undefined | null) => {
+  if (!ids) return;
+  const { sceneId, templateId } = ids;
+  return game.scenes
+    .get(sceneId)
+    ?.deleteEmbeddedEntity(MeasuredTemplate.embeddedName, templateId);
+}
+
+export const editPlacedTemplate = (ids: PlacedTemplateIDs | null | undefined) => {
+  const { templateId, sceneId } = ids ?? {};
+  const canvas = readyCanvas();
+  if (templateId && canvas?.scene.id === sceneId) {
+    canvas?.templates.get(templateId)?.sheet.render(true);
+  }
+}
+
 export const updatePlacedTemplate = (
   ids: PlacedTemplateIDs,
   changed: Partial<MeasuredTemplateData>,

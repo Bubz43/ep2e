@@ -8,7 +8,10 @@ import {
   renderTimeField,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
-import { closeWindow, openWindow } from '@src/components/window/window-controls';
+import {
+  closeWindow,
+  openWindow,
+} from '@src/components/window/window-controls';
 import {
   AreaEffectType,
   Demolition,
@@ -27,6 +30,8 @@ import { CommonInterval, currentWorldTimeMS } from '@src/features/time';
 import {
   controlledToken,
   createTemporaryMeasuredTemplate,
+  deletePlacedTemplate,
+  editPlacedTemplate,
   getVisibleTokensWithinHighlightedTemplate,
   MeasuredTemplateData,
   placeMeasuredTemplate,
@@ -152,7 +157,11 @@ export class ExplosiveSettingsForm extends LitElement {
   }
 
   private updateSettings = (changed: Partial<ExplosiveSettings>) => {
-    this.settings = { ...this.settings, duration: this.attack.duration, ...changed };
+    this.settings = {
+      ...this.settings,
+      duration: this.attack.duration,
+      ...changed,
+    };
     if (!this.requireSubmit) this.emitSettings();
   };
 
@@ -177,7 +186,10 @@ export class ExplosiveSettingsForm extends LitElement {
   > {
     const { areaEffect } = this.explosive;
     if (areaEffect === AreaEffectType.Centered) {
-      const distance = getCenteredDistance(this.averageDamage, this.explosiveDistances.centered)
+      const distance = getCenteredDistance(
+        this.averageDamage,
+        this.explosiveDistances.centered,
+      );
       // const distance = clamp(
       //   nonNegative(this.averageDamage) /
       //     Math.abs(this.explosiveDistances.centered),
@@ -219,22 +231,13 @@ export class ExplosiveSettingsForm extends LitElement {
   }
 
   private async removeTemplate() {
-    if (this.settings.templateIDs) {
-      const { sceneId, templateId } = this.settings.templateIDs;
-      await game.scenes
-        .get(sceneId)
-        ?.deleteEmbeddedEntity(MeasuredTemplate.embeddedName, templateId);
-      this.targets.clear();
-      this.updateSettings({ templateIDs: null });
-    }
+    await deletePlacedTemplate(this.settings.templateIDs);
+    this.targets.clear();
+    this.updateSettings({ templateIDs: null });
   }
 
   private editTemplate() {
-    const { templateId, sceneId } = this.settings.templateIDs ?? {};
-    const canvas = readyCanvas();
-    if (templateId && canvas?.scene.id === sceneId) {
-      canvas?.templates.get(templateId)?.sheet.render(true);
-    }
+    editPlacedTemplate(this.settings.templateIDs);
   }
 
   private getTargets() {

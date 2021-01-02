@@ -100,6 +100,7 @@ export class MessageSubstanceUse extends MessageElement {
       ${showHeader
         ? html`
             <message-header
+            ?nested=${!!this.message.epFlags?.header}
               .data=${{ ...this.substance.messageHeader, hidden }}
             ></message-header>
           `

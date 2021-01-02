@@ -42,7 +42,7 @@ export class CharacterViewExplosiveAttacks extends LitElement {
   }
 
   private async createMessage(ev: Event | CustomEvent<ExplosiveSettings>) {
-    const { token, character } = requestCharacter(this);
+    const { token, character } = requestCharacter(this);    
     await createMessage({
       data: {
         header: this.explosive.messageHeader,

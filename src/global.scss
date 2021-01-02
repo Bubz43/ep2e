@@ -509,6 +509,7 @@ sl-tooltip {
   }
 }
 
+
 .message {
   display: block;
   background: alphav(var(--color-bg), 0.9);
@@ -534,7 +535,7 @@ sl-tooltip {
   .message-content {
     pointer-events: initial;
   }
-
+  
   .message-header {
     display: grid;
     grid-template-areas:
@@ -606,6 +607,7 @@ sl-tooltip {
     line-height: initial;
   }
 
+
   .whisper-to {
     grid-area: whisper;
     color: var(--color-text-lighter);
@@ -624,7 +626,6 @@ sl-tooltip {
   }
 }
 
-
 .chat-popout {
   .window-content {
     overflow: visible;
@@ -637,6 +638,7 @@ sl-tooltip {
     max-height: 50vh;
     overflow-x: hidden;
     overflow-y: auto;
+    border-radius: 0px !important;
 
     .message-content {
       padding: 0;

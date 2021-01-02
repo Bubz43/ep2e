@@ -22,7 +22,10 @@ export class MessageHeader extends LitElement {
 
   @property({ type: Object }) data!: MessageHeaderData;
 
+  @property({ type: Boolean, reflect: true }) nested = false;
+
   @internalProperty() descriptionOpen = false;
+
 
   private toggleDescription() {
     this.descriptionOpen = !this.descriptionOpen;

@@ -22,3 +22,35 @@ p {
   font-size: small;
   color: var(--color-text-lighter);
 }
+
+.template {
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  --mdc-icon-size: 1rem;
+  --mdc-icon-button-size: 1.25rem;
+  mwc-icon-button {
+    height: 1.25rem;
+  }
+  float: right;
+  color: var(--color-grey);
+  
+}
+
+.targets {
+  padding: 0 1rem;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  --mdc-icon-size: 1rem;
+  --mdc-icon-button-size: 1.25rem;
+  position: relative;
+  sl-animated-list {
+    display: contents;
+  }
+  > *,
+  sl-animated-list > * {
+    display: block;
+    margin: 0.25rem 0.25rem 0.25rem 0;
+  }
+}

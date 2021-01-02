@@ -21,8 +21,21 @@
     color: var(--color-text);
   }
 
+  &.minimized {
+    transition: border-radius 150ms ease-in-out;
+    border-radius: 7px;
+    .window-header {
+      border: none;
+    }
+  }
+
+  .window-header {
+    border-bottom: none;
+  }
+
   .window-content {
     background: var(--color-bg);
+    margin: 0 1px 1px;
 
     .form-header {
       color: var(--color-text);

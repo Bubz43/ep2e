@@ -7,7 +7,19 @@
 
 :host {
   display: grid;
-  min-width: 280px;
+}
+
+:host([nested]) {
+  .headings {
+    padding: 0.1rem 0;
+  }
+  h3 {
+    font-size: 1rem;
+  }
+  .details {
+    font-size: 0.65rem;
+
+  }
 }
 
 header {
@@ -22,7 +34,6 @@ header {
   text-align: left;
   padding: 0.3rem 0;
   z-index: 2;
-  background: alphav(var(--color-bg), 0.15);
 
   > * {
     display: inline-block;
@@ -58,7 +69,8 @@ img {
   place-self: center;
   margin: 0rem 0.75rem;
   position: absolute;
-  right: 0;
+  right: -4px;
+  
   top: 50%;
   transform: translateY(-50%);
   z-index: 1;
