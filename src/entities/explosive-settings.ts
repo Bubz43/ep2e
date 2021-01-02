@@ -37,7 +37,7 @@ export type ProximityTrigger = Trigger<{
   targets: ActorType.Biological | ActorType.Synthetic | ""
 }>;
 
-type TimerTrigger = Trigger<{
+export type TimerTrigger = Trigger<{
   type: ExplosiveTrigger.Timer;
   detonationPeriod: number;
   startTime: number;

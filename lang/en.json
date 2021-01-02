@@ -1365,6 +1365,8 @@
     "useSubstance": "Use Substance",
     "shaped": "Shaped",
     "triggerRadius": "Trigger Radius",
+    "detonation": "Detonation",
+    "explodeAfter": "Explode After",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

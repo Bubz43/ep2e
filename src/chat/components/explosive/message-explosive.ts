@@ -14,7 +14,10 @@ import {
   SubstanceType,
 } from '@src/data-enums';
 import { ExplosiveSettingsForm } from '@src/entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
-import type { ProximityTrigger } from '@src/entities/explosive-settings';
+import type {
+  ProximityTrigger,
+  TimerTrigger,
+} from '@src/entities/explosive-settings';
 import { pickOrDefaultCharacter } from '@src/entities/find-entities';
 import { Explosive } from '@src/entities/item/proxies/explosive';
 import {
@@ -179,7 +182,7 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
 
   private proximityActivationTimer(trigger: ProximityTrigger) {
     return createLiveTimeState({
-      label: `${localize('proximity')} ${localize('activation')}`,
+      label: localize('activation'),
       updateStartTime: (newStartTime) =>
         this.getUpdater('explosiveUse').commit({
           trigger: { ...trigger, startTime: newStartTime },
@@ -209,14 +212,16 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
               <div class="trigger-option">
                 ${localize(trigger.type)} ${localize('trigger')}
               </div>
-             <div class="controls"> <mwc-icon-button
-                icon="undo"
-                @click=${this.reclaim}
-              ></mwc-icon-button>
-              <mwc-icon-button
-                icon="settings"
-                @click=${this.editSettings}
-              ></mwc-icon-button></div>
+              <div class="controls">
+                <mwc-icon-button
+                  icon="undo"
+                  @click=${this.reclaim}
+                ></mwc-icon-button>
+                <mwc-icon-button
+                  icon="settings"
+                  @click=${this.editSettings}
+                ></mwc-icon-button>
+              </div>
             </div>
           `
         : ''}
@@ -224,6 +229,12 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
       <div class="detonation-info">
         ${trigger.type === ExplosiveTrigger.Proximity
           ? this.renderProximityTriggerInfo(trigger)
+          : trigger.type === ExplosiveTrigger.Timer
+          ? this.renderTimerTriggerInfo(trigger)
+          : trigger.type === ExplosiveTrigger.Airburst
+          ? html`<p class="trigger-info">
+              ${`${localize('explodeAfter')} ${trigger.distance} ${localize("meters")}`.toLocaleLowerCase()}
+            </p>`
           : ''}
       </div>
 
@@ -237,11 +248,31 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
           >`
         : ''}
 
-      <div class="actions">
+      <!-- <div class="actions">
         <mwc-button dense class="defuse" @click=${this.attemptDefusal}
           >${localize('defuse')}</mwc-button
         >
-      </div>
+      </div> -->
+    `;
+  }
+
+  private renderTimerTriggerInfo(trigger: TimerTrigger) {
+    return html`
+      <character-view-time-item
+        readyLabel=${localize('in')}
+        .timeState=${createLiveTimeState({
+          label: `${localize('detonation')}`,
+          updateStartTime: (newStartTime) =>
+            this.getUpdater('explosiveUse').commit({
+              trigger: { ...trigger, startTime: newStartTime },
+            }),
+          startTime: trigger.startTime,
+          id: this.message.id,
+          duration: trigger.detonationPeriod,
+        })}
+        completion="ready"
+        ?disabled=${this.disabled}
+      ></character-view-time-item>
     `;
   }
 
@@ -253,18 +284,18 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
     return html`
       <p class="trigger-info">
         ${`${trigger.radius} m. ${localize('triggerRadius')} ${localize('on')}
-        ${localize(trigger.targets || 'any')} ${localize("movement")}`.toLocaleLowerCase()}
+        ${localize(trigger.targets || 'any')} ${localize(
+          'movement',
+        )}`.toLocaleLowerCase()}
       </p>
       ${timer
         ? html`
-            <p class="trigger-countdown">
-              [${localize('triggered')}] ${localize('activation')}
-              ${localize('in')}
-              ${prettyMilliseconds(
-                this.proximityActivationTimer(trigger).remaining,
-                { whenZero: `0 ${localize('turns')}` },
-              )}
-            </p>
+            <character-view-time-item
+              readyLabel=${localize('in')}
+              .timeState=${timer}
+              completion="ready"
+              ?disabled=${this.disabled}
+            ></character-view-time-item>
           `
         : html`
             <mwc-button

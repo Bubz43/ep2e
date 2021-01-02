@@ -27,7 +27,7 @@ mutateEntityHook({
 //   entity: ChatMessage,
 //   hook: 'on',
 //   event: MutateEvent.Update,
-//   callback: (message) => updatedChatMessages.add(message),
+//   callback: (message) =>  updatedChatMessages.add(message),
 // });
 
 const iconTemplate = html`<i

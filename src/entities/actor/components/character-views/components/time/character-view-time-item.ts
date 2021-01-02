@@ -41,6 +41,8 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
 
   @property({ attribute: false }) item?: ItemProxy;
 
+  @property({ type: String }) readyLabel?: string;
+
   @internalProperty() private editing = false;
 
   @internalProperty() private prog = 0;
@@ -59,8 +61,6 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
       this.updatedState = false;
     }
     super.update(changedProps);
-    const blah = new Intl.RelativeTimeFormat('en', { style: 'narrow' });
-    blah.format(3, 'days');
   }
 
   private toggleEditing() {
@@ -106,7 +106,7 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
         ${label}
         ${remaining
           ? html`<span class="remaining"
-              >${this.completion === 'ready' ? `${localize('readyIn')}` : ''}
+              >${this.completion === 'ready' ? `${this.readyLabel || localize('readyIn')}` : ''}
               ${prettyMilliseconds(remaining)}
               ${this.completion !== 'ready' ? localize('remaining') : ''}</span
             >`

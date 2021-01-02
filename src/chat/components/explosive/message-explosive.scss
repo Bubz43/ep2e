@@ -54,13 +54,13 @@
 
 }
 
-.trigger-info {
+.trigger-info,
+.trigger-countdown {
   color: var(--color-text-lighter);
   font-size: small;
-}
-
-.trigger-countdown {
-  padding: 0.15rem 0;
+  &::first-letter {
+    text-transform: capitalize;
+  }
 }
 
 .detonate {
@@ -72,5 +72,6 @@ p {
   margin: 0 0.5rem;
 }
 
-.attack-mode {
+character-view-time-item {
+  padding: 0.25rem 0.5rem;
 }

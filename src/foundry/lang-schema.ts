@@ -1388,7 +1388,7 @@ type LangEntries =
   | 'defused'
   | 'useSubstance'
   | 'applyableFor'
-  | 'shaped' | "triggerRadius"
+  | 'shaped' | "triggerRadius" | "detonation" | "explodeAfter"
 type FullNames =
   | 'cog'
   | 'int'

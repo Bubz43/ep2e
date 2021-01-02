@@ -50,7 +50,7 @@ export class MessageAttackTraits extends mix(MessageElement).with(
           (trait) => html`
             <mwc-button
               dense
-              unelevated
+              outlined
               label=${localize(trait)}
               @click=${() => this.applyTrait(trait)}
             ></mwc-button>
