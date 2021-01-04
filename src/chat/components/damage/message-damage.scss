@@ -45,4 +45,7 @@ mwc-button[unelevated] {
 
 .armor-info {
   padding: 0 0.25rem;
+  & ~ * {
+    @include animate-css(fadeInDown, 400ms);
+  }
 }

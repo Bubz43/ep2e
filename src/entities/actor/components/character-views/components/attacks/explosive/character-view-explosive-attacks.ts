@@ -42,7 +42,7 @@ export class CharacterViewExplosiveAttacks extends LitElement {
   }
 
   private async createMessage(ev: Event | CustomEvent<ExplosiveSettings>) {
-    const { token, character } = requestCharacter(this);    
+    const { token, character } = requestCharacter(this);
     await createMessage({
       data: {
         header: this.explosive.messageHeader,
@@ -64,10 +64,6 @@ export class CharacterViewExplosiveAttacks extends LitElement {
     const { attacks, editable, sticky } = this.explosive;
     // TODO Place template choose trigger etc
     return html`
-      <ul class="attacks">
-        ${this.renderAttack(attacks.primary)}
-        ${attacks.secondary ? this.renderAttack(attacks.secondary) : ''}
-      </ul>
       <div class="shared">
         ${sticky ? html`<div>${localize('sticky')}</div>` : ''}
         <div class="area-effect">
@@ -75,6 +71,10 @@ export class CharacterViewExplosiveAttacks extends LitElement {
           <span class="area-values"> ${formatAreaEffect(this.explosive)} </span>
         </div>
       </div>
+      <ul class="attacks">
+        ${this.renderAttack(attacks.primary)}
+        ${attacks.secondary ? this.renderAttack(attacks.secondary) : ''}
+      </ul>
 
       <div class="actions">
         ${this.explosive.explosiveType === ExplosiveType.Grenade
@@ -103,37 +103,25 @@ export class CharacterViewExplosiveAttacks extends LitElement {
   private renderAttack(attack: ExplosiveAttack) {
     return html`
       <li>
-        <div class="info">
-          ${this.explosive.hasSecondaryMode
-            ? html` <div class="label">${attack.label}</div> `
-            : ''}
-          <div class="main">
-            ${notEmpty(attack.rollFormulas)
-              ? html`
-                  ${formatDamageType(attack.damageType)}
-                  ${joinLabeledFormulas(attack.rollFormulas)}
-                  ${formatArmorUsed(attack)}.
-                `
-              : ''}
-            ${map(attack.attackTraits, localize).join(', ')}
-          </div>
-
-          ${attack.substance
+        ${this.explosive.hasSecondaryMode
+          ? html` <span class="label">${attack.label}</span> `
+          : ''}
+        <span>
+          ${notEmpty(attack.rollFormulas)
             ? html`
-                <div class="substance">
-                  ${attack.substance.name}
-                  <span class="type">${attack.substance.fullType}</span>
-                </div>
+                ${formatDamageType(attack.damageType)}
+                ${joinLabeledFormulas(attack.rollFormulas)}
+                ${formatArmorUsed(attack)}.
               `
             : ''}
-
-          <div class="additional">
-            ${attack.duration
-              ? `${localize('lasts')} ${prettyMilliseconds(attack.duration)}`
-              : ''}
-            ${attack.notes}
-          </div>
-        </div>
+          ${notEmpty(attack.attackTraits)
+            ? `${map(attack.attackTraits, localize).join(', ')}.`
+            : ''}
+          ${attack.duration
+            ? `${localize('lasts')} ${prettyMilliseconds(attack.duration)}.`
+            : ''}
+          ${attack.notes}</span
+        >
       </li>
     `;
   }

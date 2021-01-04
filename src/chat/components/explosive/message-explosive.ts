@@ -195,6 +195,7 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
   render() {
     const { state, trigger } = this.explosiveUse;
     const { explosive, disabled } = this;
+    // TODO detonation options 
     return html`
       ${!disabled
         ? html`

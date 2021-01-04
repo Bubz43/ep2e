@@ -6,12 +6,9 @@ import { pickOrDefaultActor } from '@src/entities/find-entities';
 import { Substance } from '@src/entities/item/proxies/substance';
 import { matchID } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
-import { EP } from '@src/foundry/system';
 import { RenderDialogEvent } from '@src/open-dialog';
 import { notEmpty } from '@src/utility/helpers';
-import { LazyGetter } from 'lazy-get-decorator';
 import { customElement, html, property } from 'lit-element';
-import { pipe } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-substance-use.scss';
 
@@ -25,7 +22,6 @@ export class MessageSubstanceUse extends MessageElement {
 
   @property({ type: Object }) substanceUse!: SubstanceUseData;
 
-  @LazyGetter()
   get substance() {
     return new Substance({
       loaded: false,
@@ -96,31 +92,34 @@ export class MessageSubstanceUse extends MessageElement {
       showHeader,
       hidden,
     } = this.substanceUse;
+    const { substance } = this;
     return html`
       ${showHeader
         ? html`
             <message-header
-            ?nested=${!!this.message.epFlags?.header}
-              .data=${{ ...this.substance.messageHeader, hidden }}
+              ?nested=${!!this.message.epFlags?.header}
+              .data=${{ ...substance.messageHeader, hidden }}
             ></message-header>
           `
         : ''}
-     <div class="substance-info"> <mwc-button @click=${this.applySubstance} dense unelevated
-        >${localize('apply')} ${this.substance.partialType}</mwc-button
-      >
-      <div class="groups">
-        ${useMethod !== 'use'
-          ? html`
-              <sl-group label=${localize('applicationMethod')}>
-                ${localize(this.substanceUse.useMethod)}</sl-group
-              >
-            `
-          : ''}
-        ${doses
-          ? html` <sl-group label=${localize('doses')}>${doses}</sl-group> `
-          : ''}
-        ${notEmpty(appliedTo) ? this.renderAppliedTo(appliedTo) : ''}
-      </div></div>
+      <div class="substance-info">
+        <mwc-button @click=${this.applySubstance} dense unelevated
+          >${localize('apply')} ${substance.partialType}</mwc-button
+        >
+        <div class="groups">
+          ${useMethod !== 'use'
+            ? html`
+                <sl-group label=${localize('applicationMethod')}>
+                  ${localize(this.substanceUse.useMethod)}</sl-group
+                >
+              `
+            : ''}
+          ${doses
+            ? html` <sl-group label=${localize('doses')}>${doses}</sl-group> `
+            : ''}
+          ${notEmpty(appliedTo) ? this.renderAppliedTo(appliedTo) : ''}
+        </div>
+      </div>
     `;
   }
 

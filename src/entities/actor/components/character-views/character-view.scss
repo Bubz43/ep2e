@@ -284,14 +284,14 @@ enriched-html {
   li {
     background: var(--color-bg-alt);
     box-shadow: 0 0 4px black;
-    padding: 0.55rem;
     margin: 0.55rem;
     border: 1px solid var(--color-border);
+    border-radius: 7px;
+    overflow: hidden;
   }
   header {
-    text-align: center;
-    font-size: large;
-    margin-bottom: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    background: alphav(var(--color-bg), 0.9);
   }
   .type {
     color: var(--color-text-lighter);
