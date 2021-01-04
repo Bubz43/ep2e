@@ -9,6 +9,7 @@
 
 :host {
   display: grid;
+  padding: 0 0.5rem;
 }
 
 .actions {
@@ -39,15 +40,20 @@
 
 ul {
   display: grid;
-  gap: 0.5rem;
+  list-style: inside;
 }
 
 li {
-  padding: 0 0.75rem;
+  padding: 0.25rem 0.5rem;
   font-size: 0.9rem;
+  color: var(--color-text-lighter);
+  * {
+    color: var(--color-text);
+  }
   .label {
     font-size: 1rem;
     letter-spacing: 1px; 
+    color: var(--color-text);
    & ~ * {
       color: var(--color-text-lighter);
     }

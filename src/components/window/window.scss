@@ -15,7 +15,7 @@
   left: 30%;
   top: 20%;
   width: max-content;
-  box-shadow: 0 0 6px black, 0 0 1px rgba(255, 255, 255, 0.493);
+  box-shadow: 0 0 6px black;
   background-color: rgba(black, 0.75);
   max-height: 100%;
   max-width: 100%;
@@ -31,7 +31,7 @@
 }
 
 :host([focused]) {
-  box-shadow: 0 0 10px black, 0 0 1px rgba(255, 255, 255, 0.493);
+  box-shadow: 0 0 10px black;
 
   #header {
     &:not(.alt) {
@@ -164,12 +164,15 @@ slot[name='footer'] {
   min-width: 100%;
   min-height: max-content;
   max-height: 100%;
-  max-width: 100%;
+  max-width: calc(100% - 2px);
   overflow: auto;
   display: flex;
   flex-flow: column;
   transform-origin: top;
+  box-sizing: content-box !important;
   // z-index: 2;
+  border: 1px solid alphav(var(--color-border), 0.5);
+    border-top: none;
 
   ::slotted(*) {
     overflow-x: hidden;
@@ -230,14 +233,14 @@ slot[name='footer'] {
 .horizontal-resize {
   width: 8px;
   top: 0;
-  right: -8px;
+  right: -6px;
   height: calc(100% - 12px);
   cursor: ew-resize;
   height: 100%;
 
   &.alt {
     right: unset;
-    left: -8px;
+    left: -6px;
     height: 100%;
   }
 }

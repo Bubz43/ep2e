@@ -8,6 +8,7 @@ import { PsiPush, enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import type { Psi } from '@src/entities/item/proxies/psi';
 import { localize } from '@src/foundry/localization';
+import { openMenu } from '@src/open-menu';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import styles from './character-view-psi.scss';
@@ -25,6 +26,25 @@ export class CharacterViewPsi extends LitElement {
   @property({ attribute: false }) character!: Character;
 
   @property({ attribute: false }) psi!: Psi;
+
+  private openFreePushMenu() {
+    const { freePush } = this.psi;
+    openMenu({
+      header: { heading: localize('freePush') },
+      content: [
+        {
+          label: `${localize('no')} ${localize('freePush')}`,
+          callback: () => this.psi.updateFreePush(''),
+          activated: !freePush,
+        },
+        ...enumValues(PsiPush).map((push) => ({
+          label: localize(push),
+          callback: () => this.psi.updateFreePush(push),
+          activated: freePush === push,
+        })),
+      ],
+    });
+  }
 
   render() {
     return html`
@@ -108,48 +128,20 @@ export class CharacterViewPsi extends LitElement {
       selection: hasFreePushEffect && !activeFreePush,
     };
     return html`
-      <sl-popover
-        class="free-push-popover"
-        unpadded
-        .renderOnDemand=${this.freePushEdit}
+      <button
+        @click=${this.openFreePushMenu}
+        class="free-push ${classMap(freePushClasses)}"
+        title=${localize('freePush')}
+        ?disabled=${!hasFreePushEffect}
       >
-        <div
-          slot="base"
-          class="free-push ${classMap(freePushClasses)}"
-          title=${localize('freePush')}
-        >
-          ${localize(
-            freePushClasses.active
-              ? activeFreePush || 'selectFreePush'
-              : 'freePush',
-          )}
-        </div>
-      </sl-popover>
+        ${localize(
+          freePushClasses.active
+            ? activeFreePush || 'selectFreePush'
+            : 'freePush',
+        )}
+      </button>
     `;
   }
-
-  private freePushEdit = () => {
-    const { freePush } = this.psi;
-    return html`
-      <mwc-list>
-        <mwc-radio-list-item
-          ?selected=${freePush === ''}
-          @click=${() => this.psi.updateFreePush('')}
-          >${localize('no')} ${localize('freePush')}</mwc-radio-list-item
-        >
-        <li divider></li>
-        ${enumValues(PsiPush).map(
-          (push) => html`
-            <mwc-radio-list-item
-              ?selected=${push === freePush}
-              @click=${() => this.psi.updateFreePush(push)}
-              >${localize(push)}</mwc-radio-list-item
-            >
-          `,
-        )}
-      </mwc-list>
-    `;
-  };
 }
 
 declare global {

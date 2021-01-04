@@ -12,8 +12,8 @@
 }
 
 :host([noanimate]) {
-  .description {
-    animation: none;
+  * {
+    animation: none !important;
   }
 }
 
@@ -39,7 +39,12 @@
         display: inline-block;
       }
     }
+    & ~ * {
+      animation: slideIn 200ms ease-out;
+
+    }
   }
+
 }
 
 .header {
@@ -107,7 +112,6 @@
 
 .description {
   padding: 0 1rem;
-  animation: slideIn 200ms ease-out;
   max-height: 250px;
   overflow: auto;
 }

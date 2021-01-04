@@ -17,7 +17,7 @@ import { joinLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
-import { map } from 'remeda';
+import { compact, map } from 'remeda';
 import { requestCharacter } from '../../../character-request-event';
 import { ExplosiveSettingsForm } from '../explosive-settings/explosive-settings-form';
 import styles from './character-view-explosive-attacks.scss';
@@ -101,27 +101,26 @@ export class CharacterViewExplosiveAttacks extends LitElement {
   }
 
   private renderAttack(attack: ExplosiveAttack) {
+    const info = compact([
+      notEmpty(attack.rollFormulas) &&
+        [
+          formatDamageType(attack.damageType),
+        joinLabeledFormulas(attack.rollFormulas),
+          formatArmorUsed(attack),
+        ].join(' '),
+      notEmpty(attack.attackTraits) &&
+        map(attack.attackTraits, localize).join(', '),
+      attack.duration &&
+        `${localize('lasts')} ${prettyMilliseconds(attack.duration)}`,
+      attack.notes,
+    ]).join('. ');
+    if (!this.explosive.hasSecondaryMode && !info) return '';
     return html`
       <li>
         ${this.explosive.hasSecondaryMode
           ? html` <span class="label">${attack.label}</span> `
           : ''}
-        <span>
-          ${notEmpty(attack.rollFormulas)
-            ? html`
-                ${formatDamageType(attack.damageType)}
-                ${joinLabeledFormulas(attack.rollFormulas)}
-                ${formatArmorUsed(attack)}.
-              `
-            : ''}
-          ${notEmpty(attack.attackTraits)
-            ? `${map(attack.attackTraits, localize).join(', ')}.`
-            : ''}
-          ${attack.duration
-            ? `${localize('lasts')} ${prettyMilliseconds(attack.duration)}.`
-            : ''}
-          ${attack.notes}</span
-        >
+        <span> ${info.endsWith(".") ? info : `${info}.`}</span>
       </li>
     `;
   }

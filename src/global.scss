@@ -338,35 +338,7 @@ table {
   }
 }
 
-.quick-test-popover {
-  // display: grid;
-  // place-items: center;
-  align-self: center;
-  flex: 0;
-  height: 24px;
-}
 
-.quick-test-button {
-  padding: 0;
-  background: transparent;
-  color: var(--color-primary-alt);
-
-  align-self: flex-end;
-  line-height: 16px;
-  border-right: 1px solid alphav(var(--color-text), 0.1);
-  padding: 0 0.5rem;
-  text-align: center;
-  height: 100%;
-  border-radius: 0px;
-  font-size: 1rem;
-  &:hover {
-    color: var(--color-text);
-  }
-}
-
-.quick-test-form {
-  line-height: 14px;
-}
 
 #sidebar {
   display: none;
@@ -552,7 +524,7 @@ sl-tooltip {
     position: relative;
     z-index: 1;
     background: alphav(var(--color-grey), 0.15);
-
+    border-top-left-radius: 0.5rem;
     .image-wrapper {
       grid-area: img;
       align-self: start;
@@ -650,7 +622,7 @@ sl-tooltip {
         'whisper whisper whisper'
         'flavor flavor flavor';
       grid-template-columns: auto 1fr auto;
-
+      border-top-left-radius: none;
       .whisper-to {
         margin-top: 0.25rem;
       }

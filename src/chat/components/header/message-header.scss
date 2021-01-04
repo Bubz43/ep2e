@@ -12,6 +12,7 @@
 
 :host([nested]) {
   border-top: 1px solid var(--color-border);
+  margin: 0 0.5rem;
   header {
     background: alphav(var(--color-bg), 0.25);
   }

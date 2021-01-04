@@ -77,6 +77,12 @@ header {
   z-index: 1;
 }
 
+.free-push {
+  all: unset;;
+  grid-area: free;
+
+}
+
 .increased-chi,
 .free-push {
   position: relative;
@@ -107,27 +113,18 @@ header {
   grid-area: chi;
 }
 
-.free-push-popover {
-  grid-area: free;
-  mwc-list {
-    [divider] {
-      border-color: var(--color-border);
-    }
-    mwc-radio-list-item {
-      height: 36px;
-    }
-  }
-}
 
 .free-push {
   pointer-events: none;
   width: fit-content;
   @include truncate(120px);
+
   &.active {
     pointer-events: initial;
     cursor: pointer;
 
-    &:hover {
+    &:hover,
+    &:focus {
       text-shadow: var(--text-highlight);
     }
   }
