@@ -39,6 +39,7 @@ export class MessageContent extends LitElement {
       explosiveUse,
       attackTraitInfo,
       areaEffect,
+      meleeAttack,
     } = this.data;
     if (!this.message.isContentVisible) return '';
     return html`
@@ -48,6 +49,13 @@ export class MessageContent extends LitElement {
             <message-area-effect
               .areaEffect=${areaEffect}
             ></message-area-effect>
+          `
+        : ''}
+      ${meleeAttack
+        ? html`
+            <message-melee-attack
+              .meleeAttack=${meleeAttack}
+            ></message-melee-attack>
           `
         : ''}
       ${explosiveUse

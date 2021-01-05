@@ -1,33 +1,26 @@
 import type {
-  AttackTraitData,
-  DamageMessageData,
   ExplosiveMessageData,
-  MessageAreaEffectData,
-  SubstanceUseData,
-  UsedExplosiveState,
+
+
+  UsedExplosiveState
 } from '@src/chat/message-data';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import {
-  AreaEffectType,
-  Demolition,
-  ExplosiveTrigger,
-  SubstanceType,
+  ExplosiveTrigger
 } from '@src/data-enums';
 import { ExplosiveSettingsForm } from '@src/entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
-import type {
-  ProximityTrigger,
-  TimerTrigger,
-} from '@src/entities/weapon-settings';
 import { pickOrDefaultCharacter } from '@src/entities/find-entities';
 import { Explosive } from '@src/entities/item/proxies/explosive';
+import type {
+  ProximityTrigger,
+  TimerTrigger
+} from '@src/entities/weapon-settings';
 import {
   CommonInterval,
   createLiveTimeState,
-  currentWorldTimeMS,
+  currentWorldTimeMS
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
-import { rollLabeledFormulas } from '@src/foundry/rolls';
-import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property } from 'lit-element';
 import mix from 'mix-with/lib';
 import { compact, createPipe, flatMap, pipe, prop } from 'remeda';
@@ -46,7 +39,7 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
     return [styles];
   }
 
-  @property({ attribute: false }) explosiveUse!: ExplosiveMessageData;
+  @property({ type: Object }) explosiveUse!: ExplosiveMessageData;
 
   get explosive() {
     return new Explosive({

@@ -145,6 +145,7 @@ import { MessageAttackTraits } from './chat/components/attack-traits/message-att
 import { MessageAreaEffect } from './chat/components/area-effect/message-area-effect';
 import { CharacterViewMeleeWeaponAttacks } from './entities/actor/components/character-views/components/attacks/melee-weapon/character-view-melee-weapon-attacks';
 import { WeaponCard } from './entities/actor/components/character-views/components/cards/weapon/weapon-card';
+import { MessageMeleeAttack } from './chat/components/melee-attack/message-melee-attack';
 
 // Generic Components
 Field;
@@ -295,3 +296,4 @@ MessageSubstanceUse;
 MessageExplosive;
 MessageAttackTraits;
 MessageAreaEffect;
+MessageMeleeAttack

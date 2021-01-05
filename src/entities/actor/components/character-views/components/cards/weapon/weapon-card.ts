@@ -1,3 +1,4 @@
+import { ItemType } from '@src/entities/entity-types';
 import type { RangedWeapon } from '@src/entities/item/item';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import { customElement, LitElement, property, html } from 'lit-element';
@@ -15,6 +16,10 @@ export class WeaponCard extends ItemCardBase {
   }
 
   @property({ attribute: false }) item!: MeleeWeapon | RangedWeapon;
+
+  private toggleEquipped() {
+    this.item.toggleEquipped();
+  }
 
   renderHeaderButtons() {
     const { item } = this;

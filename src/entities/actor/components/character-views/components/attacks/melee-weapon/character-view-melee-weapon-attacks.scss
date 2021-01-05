@@ -22,13 +22,14 @@
 .shared {
   display: flex;
   flex-flow: row wrap;
-  margin: 0.25rem 0;
+  padding: 0.25rem 0.5rem;
 }
 
 
 ul {
   display: grid;
   list-style: inside;
+  margin-bottom: 0.25rem;
 }
 
 wl-list-item {

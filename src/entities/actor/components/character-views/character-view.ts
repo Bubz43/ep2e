@@ -424,7 +424,7 @@ export class CharacterView extends CharacterViewBase {
 
       <section>
         <sl-header heading=${localize('attacks')}></sl-header>
-        <ul class="attacks">
+        <sl-animated-list class="attacks">
           ${repeat(
             this.character.weapons.melee,
             idProp,
@@ -454,7 +454,7 @@ export class CharacterView extends CharacterViewBase {
               </li>
             `,
           )}
-        </ul>
+        </sl-animated-list>
       </section>
 
       ${repeat(enumValues(ItemGroup), identity, this.renderItemGroup)}

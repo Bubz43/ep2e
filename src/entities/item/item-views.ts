@@ -9,7 +9,8 @@ import { html } from 'lit-html';
 import { compact, noop } from 'remeda';
 import type { ItemCard } from '../actor/components/character-views/components/cards/generic/item-card';
 import { ItemType } from '../entity-types';
-import type { ItemProxy } from './item';
+import type { ItemProxy, RangedWeapon } from './item';
+import type { MeleeWeapon } from './proxies/melee-weapon';
 import type { Psi } from './proxies/psi';
 
 export const renderItemForm = (proxy: ItemProxy) => {
