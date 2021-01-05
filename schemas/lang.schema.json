@@ -1454,6 +1454,9 @@
             "detonated": {
               "type": "string"
             },
+            "detonation": {
+              "type": "string"
+            },
             "detonationPeriod": {
               "type": "string"
             },
@@ -1680,6 +1683,9 @@
               "type": "string"
             },
             "expired": {
+              "type": "string"
+            },
+            "explodeAfter": {
               "type": "string"
             },
             "exploration": {
@@ -3617,6 +3623,9 @@
             "shapeName": {
               "type": "string"
             },
+            "shaped": {
+              "type": "string"
+            },
             "shapes": {
               "type": "string"
             },
@@ -4221,6 +4230,9 @@
               "type": "string"
             },
             "trigger": {
+              "type": "string"
+            },
+            "triggerRadius": {
               "type": "string"
             },
             "triggered": {
@@ -4870,6 +4882,7 @@
             "details",
             "detonate",
             "detonated",
+            "detonation",
             "detonationPeriod",
             "deviceALI",
             "deviceManagement",
@@ -4946,6 +4959,7 @@
             "expend",
             "expending",
             "expired",
+            "explodeAfter",
             "exploration",
             "explorer",
             "explosive",
@@ -5591,6 +5605,7 @@
             "shape",
             "shapeChanging",
             "shapeName",
+            "shaped",
             "shapes",
             "shared",
             "shell",
@@ -5793,6 +5808,7 @@
             "traumas",
             "traumasIgnored",
             "trigger",
+            "triggerRadius",
             "triggered",
             "triggeredEffects",
             "triggers",
