@@ -9,3 +9,18 @@
   display: block;
   
 }
+
+.settings {
+  padding: 0 0.5rem;
+  text-align: center;
+}
+
+.additional {
+  display: flex;
+  flex-flow: row wrap;
+  padding: 0.25rem 0.5rem;
+  border-top: 2px groove alphav(var(--color-border), 0.5);
+  > * {
+    flex: 1;
+  }
+}

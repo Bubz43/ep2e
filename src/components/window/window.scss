@@ -45,6 +45,7 @@
       }
     }
   }
+
 }
 
 :host([minimized]) {
@@ -161,7 +162,7 @@ slot[name='footer'] {
 }
 
 .content {
-  min-width: 100%;
+  min-width: calc(100% - 2px);
   min-height: max-content;
   max-height: 100%;
   max-width: calc(100% - 2px);
@@ -171,7 +172,7 @@ slot[name='footer'] {
   transform-origin: top;
   box-sizing: content-box !important;
   // z-index: 2;
-  border: 1px solid alphav(var(--color-border), 0.5);
+  border: 1px solid alphav(var(--color-grey), 0.25);;
   border-top: none;
 
   ::slotted(*) {

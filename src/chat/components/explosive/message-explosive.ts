@@ -1,24 +1,20 @@
 import type {
   ExplosiveMessageData,
-
-
-  UsedExplosiveState
+  UsedExplosiveState,
 } from '@src/chat/message-data';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
-import {
-  ExplosiveTrigger
-} from '@src/data-enums';
+import { ExplosiveTrigger } from '@src/data-enums';
 import { ExplosiveSettingsForm } from '@src/entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
 import { pickOrDefaultCharacter } from '@src/entities/find-entities';
 import { Explosive } from '@src/entities/item/proxies/explosive';
 import type {
   ProximityTrigger,
-  TimerTrigger
+  TimerTrigger,
 } from '@src/entities/weapon-settings';
 import {
   CommonInterval,
   createLiveTimeState,
-  currentWorldTimeMS
+  currentWorldTimeMS,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { customElement, html, property } from 'lit-element';
@@ -156,7 +152,7 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
           `
         : ''}
       ${state
-        ? this.renderExplosiveState(state)
+        ? ''
         : html`
             <div class="detonation-info">
               ${trigger.type === ExplosiveTrigger.Proximity
@@ -171,23 +167,17 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
                   </p>`
                 : ''}
             </div>
-
-            ${!disabled
-              ? html` <mwc-button
-                  outlined
-                  dense
-                  class="detonate"
-                  @click=${this.detonate}
-                  >${localize('detonate')}</mwc-button
-                >`
-              : ''}
           `}
-
-      <!-- <div class="actions">
-        <mwc-button dense class="defuse" @click=${this.attemptDefusal}
-          >${localize('defuse')}</mwc-button
-        >
-      </div> -->
+      ${!disabled
+        ? html` <mwc-button
+            outlined
+            dense
+            class="detonate"
+            @click=${this.detonate}
+            ?disabled=${disabled || !!state}
+            >${localize(state?.[0] ?? 'detonate')}</mwc-button
+          >`
+        : ''}
     `;
   }
 
@@ -245,10 +235,6 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
     `;
   }
 
-  private renderExplosiveState([type, idOrName]: UsedExplosiveState) {
-    // TODO link to generated message
-    return html` <p class="state">${localize(type)}</p> `;
-  }
 }
 
 declare global {
