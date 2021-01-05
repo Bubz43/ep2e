@@ -134,39 +134,44 @@ export class MessageDamage extends LitElement {
         ${localize(damageType === HealthType.Mental ? 'stress' : 'damage')}
       </div>
       <div class="armor-info">${formatArmorUsed(this.damage)}</div>
-
+      ${this.damage.notes
+        ? html`<div class="notes">${this.damage.notes}</div>`
+        : ''}
       ${this.viewFormulas
         ? html`
-            ${renderAutoForm({
-              props: { multiplier: String(this.multiplier) },
-              update: ({ multiplier }) =>
-                (this.multiplier = (Number(multiplier) || 1) as RollMultiplier),
-              fields: ({ multiplier }) => html`
-                <div class="multiplier">
-                  <span>${localize('multiplier')}</span>
-                  <div class="radios">
-                    ${[0.5, 1, 2]
-                      .map(String)
-                      .map(
-                        (mp) => html`
-                          <mwc-formfield label=${mp}>
-                            <mwc-radio
-                              name=${multiplier.prop}
-                              value=${mp}
-                              ?checked=${mp === multiplier.value}
-                            ></mwc-radio
-                          ></mwc-formfield>
-                        `,
-                      )}
+            <div class="additional">
+              ${renderAutoForm({
+                props: { multiplier: String(this.multiplier) },
+                update: ({ multiplier }) =>
+                  (this.multiplier = (Number(multiplier) ||
+                    1) as RollMultiplier),
+                fields: ({ multiplier }) => html`
+                  <div class="multiplier">
+                    <span>${localize('multiplier')}</span>
+                    <div class="radios">
+                      ${[0.5, 1, 2]
+                        .map(String)
+                        .map(
+                          (mp) => html`
+                            <mwc-formfield label=${mp}>
+                              <mwc-radio
+                                name=${multiplier.prop}
+                                value=${mp}
+                                ?checked=${mp === multiplier.value}
+                              ></mwc-radio
+                            ></mwc-formfield>
+                          `,
+                        )}
+                    </div>
                   </div>
-                </div>
-              `,
-            })}
-            <rolled-formulas-list
-              .rolledFormulas=${this.damage.rolledFormulas}
-              .usedRollParts=${this.usedRollParts}
-              @used-roll-parts=${this.setUsedRollParts}
-            ></rolled-formulas-list>
+                `,
+              })}
+              <rolled-formulas-list
+                .rolledFormulas=${this.damage.rolledFormulas}
+                .usedRollParts=${this.usedRollParts}
+                @used-roll-parts=${this.setUsedRollParts}
+              ></rolled-formulas-list>
+            </div>
           `
         : ''}
     `;

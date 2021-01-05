@@ -31,6 +31,7 @@ export type DamageMessageData = {
   cumulativeDotID?: string;
   multiplier?: RollMultiplier;
   areaEffect?: BasicAreaEffectData;
+  notes?: string
 };
 
 export type MessageHealData = RequireAtLeastOne<

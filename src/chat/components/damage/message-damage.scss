@@ -43,9 +43,16 @@ mwc-button[unelevated] {
   }
 }
 
-.armor-info {
+.armor-info,
+.notes {
   padding: 0 0.25rem;
-  & ~ * {
-    @include animate-css(fadeInDown, 400ms);
-  }
+}
+
+.notes {
+  color: var(--color-text-lighter)
+}
+
+.additional {
+  @include animate-css(fadeInDown, 400ms);
+
 }

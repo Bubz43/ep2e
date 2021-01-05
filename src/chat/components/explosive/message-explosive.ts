@@ -77,6 +77,8 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
       notes,
     } = explosive.attacks[attackType] || explosive.attacks.primary;
 
+    // TODO apply demolition effects
+
     const damage: DamageMessageData | undefined = notEmpty(rollFormulas)
       ? {
           damageType,
@@ -193,9 +195,9 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
   }
 
   render() {
-    const { state, trigger } = this.explosiveUse;
+    const { state, trigger, demolition } = this.explosiveUse;
     const { explosive, disabled } = this;
-    // TODO detonation options 
+    // TODO detonation options
     return html`
       ${!disabled
         ? html`
@@ -206,6 +208,13 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
                       this.explosiveUse.attackType || 'primary'
                     ]?.label}
                   </div>`
+                : ''}
+              ${demolition
+                ? html`
+                    <div class="demolition-option">
+                      ${localize(demolition.type)}
+                    </div>
+                  `
                 : ''}
               <div class="trigger-option">
                 ${localize(trigger.type)} ${localize('trigger')}
