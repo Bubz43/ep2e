@@ -78,9 +78,8 @@ header {
 }
 
 .free-push {
-  all: unset;;
+  all: unset;
   grid-area: free;
-
 }
 
 .increased-chi,
@@ -112,7 +111,6 @@ header {
 .increased-chi {
   grid-area: chi;
 }
-
 
 .free-push {
   pointer-events: none;

@@ -49,10 +49,9 @@ mwc-button[unelevated] {
 }
 
 .notes {
-  color: var(--color-text-lighter)
+  color: var(--color-text-lighter);
 }
 
 .additional {
   @include animate-css(fadeInDown, 400ms);
-
 }

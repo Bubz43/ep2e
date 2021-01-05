@@ -116,7 +116,7 @@ export class MessageAreaEffect extends MessageElement {
     }
   }
 
-  private async setTemplate() {
+  private async setTemplate(ev: MouseEvent) {
     const center = readyCanvas()?.scene._viewPosition ?? { x: 0, y: 0 };
 
     const templateIDs = await placeMeasuredTemplate(

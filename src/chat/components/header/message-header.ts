@@ -26,7 +26,6 @@ export class MessageHeader extends LitElement {
 
   @internalProperty() descriptionOpen = false;
 
-
   private toggleDescription() {
     this.descriptionOpen = !this.descriptionOpen;
   }

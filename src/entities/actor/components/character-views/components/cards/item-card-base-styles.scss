@@ -28,6 +28,7 @@
   .header {
     border-bottom: 2px groove var(--color-border);
     padding: 0.25rem 0 0.25rem 0.5rem;
+    background: alphav(var(--color-grey), 0.05);
     .icon {
       height: 51px;
     }
@@ -41,10 +42,8 @@
     }
     & ~ * {
       animation: slideIn 200ms ease-out;
-
     }
   }
-
 }
 
 .header {

@@ -371,13 +371,15 @@ export class ExplosiveForm extends ItemFormBase {
         update: createPipe(change, objOf('attackTraits'), updater.commit),
         fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
       })}
-      ${notEmpty(updater.originalValue().attackTraits) ? renderUpdaterForm(updater, {
-        disabled,
-        fields: ({ duration, notes }) => [
-          renderTimeField(duration, { whenZero: localize('instant') }),
-          renderTextareaField(notes),
-        ],
-      }) : ""}
+      ${notEmpty(updater.originalValue().attackTraits)
+        ? renderUpdaterForm(updater, {
+            disabled,
+            fields: ({ duration, notes }) => [
+              renderTimeField(duration, { whenZero: localize('instant') }),
+              renderTextareaField(notes),
+            ],
+          })
+        : ''}
     `;
   }
 }

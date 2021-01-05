@@ -10,12 +10,6 @@
   padding: 0.25rem 0.5rem;
 }
 
-.state {
-  font-size: large;
-  text-align: center;
-  margin: 0.25rem;
-}
-
 .actions {
   display: flex;
   flex-flow: row wrap;
@@ -29,7 +23,7 @@
 .settings {
   display: grid;
   align-items: center;
-  grid-template-areas: 'mode controls''trigger controls';
+  grid-template-areas: 'mode controls' 'trigger controls';
   grid-auto-rows: min-content;
   grid-template-columns: 1fr auto;
   padding: 0 0.5rem;
@@ -85,4 +79,5 @@ time-state-item {
   text-transform: uppercase;
   color: var(--color-text-disabled);
   letter-spacing: 1px;
+  text-align: center;
 }

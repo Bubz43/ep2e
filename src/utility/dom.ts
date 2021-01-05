@@ -266,26 +266,6 @@ export const resizeElement = ({
   return element;
 };
 
-type PositioningOptions = {
-  toEl: HTMLElement | DOMRect;
-  element: HTMLElement;
-  preferRight?: boolean;
-  spacing?: number;
-  bounds?: Bounds;
-};
-
-const placeToRight = ({ right, spacing }: { right: number; spacing: number }) =>
-  right + spacing;
-const placeToLeft = ({
-  left,
-  offsetWidth,
-  spacing,
-}: {
-  left: number;
-  offsetWidth: number;
-  spacing: number;
-}) => left - offsetWidth - spacing;
-
 export const togglePointerEvents = (el: HTMLElement) => {
   el.style.pointerEvents = 'none';
   return () => (el.style.pointerEvents = '');

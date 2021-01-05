@@ -159,7 +159,7 @@ export const formatFormulaWithMultiplier = (
 ) => {
   return !formula || multiplier === 1
     ? formula
-    : `(${formula}) ${multiplier === 2 ? '×2' : '÷2'}`;
+    : `(${formula}) ${multiplier === 0.5 ? '÷2' : `×${multiplier}`}`;
 };
 
 export const healthLabels = (healthType: HealthType, stat: HealthStat) =>

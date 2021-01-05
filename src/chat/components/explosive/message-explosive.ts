@@ -57,87 +57,9 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
   }
 
   private async detonate() {
-    const { explosive } = this;
-    const {
-      attackType = 'primary',
-      centeredReduction,
-      uniformBlastRadius,
-      templateIDs,
-      demolition,
-    } = this.explosiveUse;
-    const {
-      rollFormulas,
-      damageType,
-      armorPiercing,
-      armorUsed,
-      reduceAVbyDV,
-      substance,
-      attackTraits,
-      duration,
-      notes,
-    } = explosive.attacks[attackType] || explosive.attacks.primary;
-
-    // TODO apply demolition effects
-
-    const damage: DamageMessageData | undefined = notEmpty(rollFormulas)
-      ? {
-          damageType,
-          armorPiercing,
-          armorUsed,
-          reduceAVbyDV,
-          rolledFormulas: rollLabeledFormulas(rollFormulas),
-          source: explosive.name,
-        }
-      : undefined;
-
-    const attackTraitInfo: AttackTraitData | undefined = notEmpty(attackTraits)
-      ? {
-          traits: attackTraits,
-          duration,
-          notes,
-          startTime: duration ? currentWorldTimeMS() : undefined,
-        }
-      : undefined;
-
-    const substanceUse: SubstanceUseData | undefined = substance
-      ? {
-          substance: substance.getDataCopy(),
-          useMethod:
-            substance.substanceType === SubstanceType.Chemical
-              ? 'use'
-              : explosive.epData.useSubstance ||
-                substance.applicationMethods[0]!,
-          doses: explosive.epData.dosesPerUnit,
-          showHeader: true,
-        }
-      : undefined;
-
-    const areaEffect: MessageAreaEffectData | undefined =
-      explosive.areaEffect === AreaEffectType.Centered
-        ? {
-            type: explosive.areaEffect,
-            dvReduction: centeredReduction || -2,
-            templateIDs,
-            angle:
-              demolition?.type === Demolition.ShapeCentered
-                ? demolition.angle
-                : undefined,
-          }
-        : explosive.areaEffect === AreaEffectType.Uniform
-        ? {
-            type: explosive.areaEffect,
-            radius: uniformBlastRadius || explosive.areaEffectRadius || 1,
-            templateIDs,
-          }
-        : undefined;
-
-    const { _id } = await this.message.createSimilar({
-      areaEffect,
-      damage,
-      attackTraitInfo,
-      substanceUse,
-    });
-
+    const { _id } = await this.message.createSimilar(
+      this.explosive.detonationMessageData(this.explosiveUse),
+    );
     this.getUpdater('explosiveUse').commit({ state: ['detonated', _id] });
   }
 
@@ -209,7 +131,7 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
                     ]?.label}
                   </div>`
                 : ''}
-          
+
               <div class="trigger-option">
                 ${localize(trigger.type)} ${localize('trigger')}
               </div>
@@ -229,12 +151,15 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
                   `}
             </div>
             ${demolition
-                ? html`
-                    <sl-group class="demo-option" label=   ${localize("demolitions")} >
+              ? html`
+                  <sl-group
+                    class="demo-option"
+                    label=${localize('demolitions')}
+                  >
                     ${localize(demolition.type)}
-                    </sl-group>
-                  `
-                : ''}
+                  </sl-group>
+                `
+              : ''}
           `
         : ''}
       ${state

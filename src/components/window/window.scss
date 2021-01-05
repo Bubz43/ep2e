@@ -172,7 +172,7 @@ slot[name='footer'] {
   box-sizing: content-box !important;
   // z-index: 2;
   border: 1px solid alphav(var(--color-border), 0.5);
-    border-top: none;
+  border-top: none;
 
   ::slotted(*) {
     overflow-x: hidden;

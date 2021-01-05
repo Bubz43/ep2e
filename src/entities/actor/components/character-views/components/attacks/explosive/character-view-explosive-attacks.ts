@@ -105,7 +105,7 @@ export class CharacterViewExplosiveAttacks extends LitElement {
       notEmpty(attack.rollFormulas) &&
         [
           formatDamageType(attack.damageType),
-        joinLabeledFormulas(attack.rollFormulas),
+          joinLabeledFormulas(attack.rollFormulas),
           formatArmorUsed(attack),
         ].join(' '),
       notEmpty(attack.attackTraits) &&
@@ -120,7 +120,7 @@ export class CharacterViewExplosiveAttacks extends LitElement {
         ${this.explosive.hasSecondaryMode
           ? html` <span class="label">${attack.label}</span> `
           : ''}
-        <span> ${info.endsWith(".") ? info : `${info}.`}</span>
+        <span> ${info.endsWith('.') ? info : `${info}.`}</span>
       </li>
     `;
   }

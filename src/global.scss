@@ -338,8 +338,6 @@ table {
   }
 }
 
-
-
 #sidebar {
   display: none;
 }
@@ -481,7 +479,6 @@ sl-tooltip {
   }
 }
 
-
 .message {
   display: block;
   background: alphav(var(--color-bg), 0.9);
@@ -507,7 +504,7 @@ sl-tooltip {
   .message-content {
     pointer-events: initial;
   }
-  
+
   .message-header {
     display: grid;
     grid-template-areas:
@@ -552,7 +549,6 @@ sl-tooltip {
       padding: 0.25rem 0.5rem;
     }
   }
-  
 
   .message-metadata {
     color: var(--color-text-lighter);
@@ -578,7 +574,6 @@ sl-tooltip {
   .message-sender {
     line-height: initial;
   }
-
 
   .whisper-to {
     grid-area: whisper;

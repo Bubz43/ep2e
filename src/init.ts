@@ -48,7 +48,6 @@ import { EP } from './foundry/system';
   document.head.appendChild(frag);
 })();
 
-
 export let gameSettings: ReturnType<typeof registerEPSettings>;
 export let overlay: EPOverlay;
 export let tooltip: ToolTip;

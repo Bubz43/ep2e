@@ -31,7 +31,7 @@ export type DamageMessageData = {
   cumulativeDotID?: string;
   multiplier?: RollMultiplier;
   areaEffect?: BasicAreaEffectData;
-  notes?: string
+  notes?: string;
 };
 
 export type MessageHealData = RequireAtLeastOne<
@@ -60,7 +60,10 @@ export type SubstanceUseData = {
   showHeader?: boolean;
 };
 
-export type UsedExplosiveState = ['detonated' | 'reclaimed' | "defused", string];
+export type UsedExplosiveState = [
+  'detonated' | 'reclaimed' | 'defused',
+  string,
+];
 
 export type ExplosiveMessageData = ExplosiveSettings & {
   explosive: ItemEntity<ItemType.Explosive>;
@@ -68,11 +71,11 @@ export type ExplosiveMessageData = ExplosiveSettings & {
 };
 
 export type AttackTraitData = {
-  traits: AttackTrait[],
+  traits: AttackTrait[];
   duration?: number;
   notes?: string;
   startTime?: number;
-}
+};
 
 export type MessageHeaderData = {
   heading: string;
@@ -83,8 +86,8 @@ export type MessageHeaderData = {
 };
 
 export type MessageAreaEffectData = AreaEffect & {
-  templateIDs?: PlacedTemplateIDs | null
-}
+  templateIDs?: PlacedTemplateIDs | null;
+};
 
 export type MessageData = Partial<{
   header: MessageHeaderData;

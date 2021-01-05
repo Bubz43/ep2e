@@ -34,7 +34,7 @@ export type ProximityTrigger = Trigger<{
   type: ExplosiveTrigger.Proximity;
   radius: number;
   startTime?: number | null;
-  targets: ActorType.Biological | ActorType.Synthetic | ""
+  targets: ActorType.Biological | ActorType.Synthetic | '';
 }>;
 
 export type TimerTrigger = Trigger<{
@@ -65,7 +65,7 @@ export const createExplosiveTriggerSetting = (
       return { type };
 
     case ExplosiveTrigger.Proximity:
-      return { type, radius: 3, targets: "", };
+      return { type, radius: 3, targets: '' };
 
     case ExplosiveTrigger.Timer:
       return {

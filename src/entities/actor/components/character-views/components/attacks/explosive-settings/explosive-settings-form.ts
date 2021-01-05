@@ -75,7 +75,10 @@ export class ExplosiveSettingsForm extends LitElement {
     props: Pick<
       ExplosiveSettingsForm,
       'explosive' | 'requireSubmit' | 'initialSettings'
-    > & { update: (newSettings: CustomEvent<ExplosiveSettings>) => void, adjacentEl?: HTMLElement },
+    > & {
+      update: (newSettings: CustomEvent<ExplosiveSettings>) => void;
+      adjacentEl?: HTMLElement;
+    },
   ) {
     const adjacentEl = props.adjacentEl || traverseActiveElements();
     return openWindow({
@@ -252,16 +255,6 @@ export class ExplosiveSettingsForm extends LitElement {
 
   private get isPlacing() {
     return !!this.initialSettings?.placing;
-  }
-
-  private get triggerOptions() {
-    const options = enumValues(ExplosiveTrigger);
-    return this.isPlacing
-      ? difference(options, [
-          ExplosiveTrigger.Airburst,
-          ExplosiveTrigger.Impact,
-        ])
-      : options;
   }
 
   private get demolitionOptions() {
@@ -498,7 +491,7 @@ export class ExplosiveSettingsForm extends LitElement {
           fields: ({ type }) =>
             renderSelectField(
               { ...type, label: localize('trigger') },
-              this.triggerOptions,
+              enumValues(ExplosiveTrigger),
             ),
         })}
         ${this.renderTriggerForm(this.settings.trigger)}
@@ -530,7 +523,7 @@ export class ExplosiveSettingsForm extends LitElement {
       case ExplosiveTrigger.Proximity:
         return renderAutoForm({
           props: settings,
-          classes: "proximity-form",
+          classes: 'proximity-form',
           update: this.updateTriggerSettings,
           fields: ({ radius, targets }) => [
             renderNumberField(

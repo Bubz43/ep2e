@@ -61,7 +61,6 @@ export class DropZone extends mix(LitElement).with(LazyRipple) {
   }
 
   private readonly setReady = () => {
-    // TODO check if drop is viable at dragstart
     if (!this.disabled && !this.internalDrag && dragSource().element)
       this.setAttribute('ready', '');
   };
