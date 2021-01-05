@@ -46,7 +46,7 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
           : ''}
         ${payload
           ? html`<sl-group label=${localize('payload')}
-              >${payload.name}</sl-group
+              >${payload.name} ${payload.canContainSubstance && payload.substance ? `(${payload.substance.name})` : ""}</sl-group
             >`
           : ''}
       </div>

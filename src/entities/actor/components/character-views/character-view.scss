@@ -222,6 +222,7 @@ mwc-tab-bar {
   notification-coin {
     right: -2px;
     top: -75%;
+    --coin-bg: var(--color-border);
   }
   img {
     opacity: 0.25;
@@ -291,7 +292,7 @@ enriched-html {
     overflow: hidden;
   }
   header {
-    padding: 0.25rem 0.5rem;
+    padding: 0.25rem 0.75rem;
     background: alphav(var(--color-bg), 0.9);
   }
   .type {

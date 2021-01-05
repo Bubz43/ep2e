@@ -14,7 +14,8 @@
     alphav(var(--color-bg), 0.7),
     alphav(var(--color-bg-alt), 0.7)
   );
-  width: 325px;
+  min-width: 350px;
+    width: 100%;
 
   > *:not(h2):not(submit-button) {
     border-left: 3px solid var(--color-border);
