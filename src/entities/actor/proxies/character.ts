@@ -153,6 +153,18 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     if (egoFormWindow?.isConnected) this.ego.openForm?.();
   }
 
+  @LazyGetter()
+  get weapons() {
+    return {
+      explosives: this.consumables.flatMap(
+        (c) => c.type === ItemType.Explosive ? c : [],
+      ),
+      melee: this.equipped.flatMap(
+        (e) => e.type === ItemType.MeleeWeapon ? e : [],
+      ),
+    };
+  }
+
   addConditions(conditions: ConditionType[]) {
     return this.sleeve?.updateConditions(
       uniq([...this.conditions, ...conditions]),

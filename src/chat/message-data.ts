@@ -104,6 +104,7 @@ export type MessageData = Partial<{
   attackTraitInfo: AttackTraitData;
   healthChange: HealthChangeMessageData;
   explosiveUse: ExplosiveMessageData;
+  meleeAttack: MeleeWeaponMessageData;
   heal: MessageHealData;
   substanceUse: SubstanceUseData;
   fromMessageId: string;

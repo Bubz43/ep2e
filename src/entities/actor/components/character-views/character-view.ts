@@ -425,20 +425,35 @@ export class CharacterView extends CharacterViewBase {
       <section>
         <sl-header heading=${localize('attacks')}></sl-header>
         <ul class="attacks">
-          ${this.character.consumables.map((consumable) => {
-            if (consumable.type !== ItemType.Explosive) return '';
-            return html`
+          ${repeat(
+            this.character.weapons.melee,
+            idProp,
+            (weapon) => html`
               <li>
                 <header>
-                  ${consumable.fullName}
-                  <span class="type">${consumable.fullType}</span>
+                  ${weapon.name} <span class="type">${weapon.fullType}</span>
+                </header>
+                <character-view-melee-weapon-attacks
+                  .weapon=${weapon}
+                ></character-view-melee-weapon-attacks>
+              </li>
+            `,
+          )}
+          ${repeat(
+            this.character.weapons.explosives,
+            idProp,
+            (explosive) => html`
+              <li>
+                <header>
+                  ${explosive.fullName}
+                  <span class="type">${explosive.fullType}</span>
                 </header>
                 <character-view-explosive-attacks
-                  .explosive=${consumable}
+                  .explosive=${explosive}
                 ></character-view-explosive-attacks>
               </li>
-            `;
-          })}
+            `,
+          )}
         </ul>
       </section>
 

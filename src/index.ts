@@ -144,6 +144,7 @@ import { ExplosiveSettingsForm } from './entities/actor/components/character-vie
 import { MessageAttackTraits } from './chat/components/attack-traits/message-attack-traits';
 import { MessageAreaEffect } from './chat/components/area-effect/message-area-effect';
 import { CharacterViewMeleeWeaponAttacks } from './entities/actor/components/character-views/components/attacks/melee-weapon/character-view-melee-weapon-attacks';
+import { WeaponCard } from './entities/actor/components/character-views/components/cards/weapon/weapon-card';
 
 // Generic Components
 Field;
@@ -204,6 +205,7 @@ ExplosiveSettingsForm;
 ItemCard;
 ConsumableCard;
 PhysicalTechCard;
+WeaponCard;
 
 // Ego
 EgoForm;

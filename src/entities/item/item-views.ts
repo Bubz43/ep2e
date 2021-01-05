@@ -207,6 +207,10 @@ export const itemMenuOptions = (item: ItemProxy): MWCMenuOption[] => {
   ]);
 };
 
+const isWeapon = (item: ItemProxy): item is MeleeWeapon | RangedWeapon => {
+  return item.type.includes("Weapon")
+}
+
 export const renderItemCard = (
   item: ItemProxy,
   {
@@ -231,6 +235,18 @@ export const renderItemCard = (
         @dragstart=${handleDragStart}
       ></physical-tech-card>
     `;
+  }
+  if (isWeapon(item)) {
+    return html`
+     <weapon-card
+        .item=${item}
+        ?expanded=${expanded}
+        ?noAnimate=${noAnimate}
+        ?animateInitial=${animateInitial}
+        ?allowDrag=${allowDrag}
+        @dragstart=${handleDragStart}
+      ></weapon-card>
+    `
   }
   if ('stashed' in item)
     return html`
