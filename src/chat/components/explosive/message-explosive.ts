@@ -209,13 +209,7 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
                     ]?.label}
                   </div>`
                 : ''}
-              ${demolition
-                ? html`
-                    <div class="demolition-option">
-                      ${localize(demolition.type)}
-                    </div>
-                  `
-                : ''}
+          
               <div class="trigger-option">
                 ${localize(trigger.type)} ${localize('trigger')}
               </div>
@@ -234,6 +228,13 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
                     </div>
                   `}
             </div>
+            ${demolition
+                ? html`
+                    <sl-group class="demo-option" label=   ${localize("demolitions")} >
+                    ${localize(demolition.type)}
+                    </sl-group>
+                  `
+                : ''}
           `
         : ''}
       ${state

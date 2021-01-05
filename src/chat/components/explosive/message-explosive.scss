@@ -29,7 +29,7 @@
 .settings {
   display: grid;
   align-items: center;
-  grid-template-areas: 'mode controls' 'trigger controls';
+  grid-template-areas: 'mode controls''trigger controls';
   grid-auto-rows: min-content;
   grid-template-columns: 1fr auto;
   padding: 0 0.5rem;
@@ -41,6 +41,7 @@
       font-size: small;
     }
   }
+
   .trigger-option {
     grid-area: trigger;
     font-size: large;
@@ -50,6 +51,11 @@
     --mdc-icon-size: 1.25rem;
     --mdc-icon-button-size: 1.5rem;
   }
+}
+
+.demo-option {
+  flex-flow: wrap;
+  padding: 0.25rem 0.5rem;
 }
 
 .trigger-info,
