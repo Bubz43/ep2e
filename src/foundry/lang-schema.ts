@@ -1391,7 +1391,7 @@ type LangEntries =
   | 'shaped'
   | 'triggerRadius'
   | 'detonation'
-  | 'explodeAfter';
+  | 'explodeAfter' | "extraWeapon"
 type FullNames =
   | 'cog'
   | 'int'

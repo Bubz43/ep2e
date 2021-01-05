@@ -74,6 +74,8 @@ export type ExplosiveMessageData = ExplosiveSettings & {
 
 export type MeleeWeaponMessageData = MeleeWeaponSettings & {
   weapon: ItemEntity<ItemType.MeleeWeapon>;
+  appliedCoating?: boolean;
+  appliedPayload?: boolean;
   // TODO maybe additional info for tracking coating state etc
 }
 
