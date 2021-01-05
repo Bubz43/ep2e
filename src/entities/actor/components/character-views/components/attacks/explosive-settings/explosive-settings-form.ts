@@ -25,7 +25,7 @@ import {
   DemolitionSetting,
   ExplosiveSettings,
   ExplosiveTriggerSettings,
-} from '@src/entities/explosive-settings';
+} from '@src/entities/weapon-settings';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
 import { CommonInterval, currentWorldTimeMS } from '@src/features/time';
 import {

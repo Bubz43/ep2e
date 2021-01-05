@@ -18,7 +18,7 @@ import {
   SubstanceType,
 } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
-import type { ExplosiveSettings } from '@src/entities/explosive-settings';
+import type { ExplosiveSettings } from '@src/entities/weapon-settings';
 import { UpdateStore } from '@src/entities/update-store';
 import { currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';

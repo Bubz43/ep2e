@@ -143,6 +143,7 @@ import { MessageExplosive } from './chat/components/explosive/message-explosive'
 import { ExplosiveSettingsForm } from './entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
 import { MessageAttackTraits } from './chat/components/attack-traits/message-attack-traits';
 import { MessageAreaEffect } from './chat/components/area-effect/message-area-effect';
+import { CharacterViewMeleeWeaponAttacks } from './entities/actor/components/character-views/components/attacks/melee-weapon/character-view-melee-weapon-attacks';
 
 // Generic Components
 Field;
@@ -197,6 +198,7 @@ CharacterViewActiveSubstance;
 CharacterViewTestActions;
 CharacterViewPsi;
 CharacterViewExplosiveAttacks;
+CharacterViewMeleeWeaponAttacks;
 ExplosiveSettingsForm;
 //Item Cards
 ItemCard;

@@ -13,6 +13,8 @@ import { localize } from '@src/foundry/localization';
 import type { LabeledFormula } from '@src/foundry/rolls';
 import type { HealthType } from '@src/health/health';
 
+export type AttackType = "primary" | "secondary";
+
 type FiringModeList = {
   /**
    * @minItems 1

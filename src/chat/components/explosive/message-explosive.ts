@@ -17,7 +17,7 @@ import { ExplosiveSettingsForm } from '@src/entities/actor/components/character-
 import type {
   ProximityTrigger,
   TimerTrigger,
-} from '@src/entities/explosive-settings';
+} from '@src/entities/weapon-settings';
 import { pickOrDefaultCharacter } from '@src/entities/find-entities';
 import { Explosive } from '@src/entities/item/proxies/explosive';
 import {

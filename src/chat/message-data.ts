@@ -1,7 +1,9 @@
 import type { AreaEffect } from '@src/combat/area-effect';
 import type { BasicAreaEffectData } from '@src/combat/attack-formatting';
+import type { AttackType } from '@src/combat/attacks';
 import type { AreaEffectType, AttackTrait } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
+import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import type { SubstanceUseMethod } from '@src/entities/item/proxies/substance';
 import type { ItemEntity } from '@src/entities/models';
 import type { ArmorType } from '@src/features/active-armor';
@@ -11,7 +13,7 @@ import type { HealthModification, HealthType } from '@src/health/health';
 import type { RollMultiplier } from '@src/health/health-changes';
 import type { StressType } from '@src/health/mental-health';
 import type { RequireAtLeastOne } from 'type-fest';
-import type { ExplosiveSettings } from '../entities/explosive-settings';
+import type { ExplosiveSettings, MeleeWeaponSettings } from '../entities/weapon-settings';
 
 export type StressTestMessageData = {
   rolledFormulas: RolledFormula[];
@@ -69,6 +71,11 @@ export type ExplosiveMessageData = ExplosiveSettings & {
   explosive: ItemEntity<ItemType.Explosive>;
   state?: null | UsedExplosiveState;
 };
+
+export type MeleeWeaponMessageData = MeleeWeaponSettings & {
+  weapon: ItemEntity<ItemType.MeleeWeapon>;
+  // TODO maybe additional info for tracking coating state etc
+}
 
 export type AttackTraitData = {
   traits: AttackTrait[];

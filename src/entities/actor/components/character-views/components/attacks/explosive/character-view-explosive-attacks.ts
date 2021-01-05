@@ -9,7 +9,7 @@ import { ExplosiveTrigger, ExplosiveType } from '@src/data-enums';
 import {
   createExplosiveTriggerSetting,
   ExplosiveSettings,
-} from '@src/entities/explosive-settings';
+} from '@src/entities/weapon-settings';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
 import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
@@ -41,6 +41,10 @@ export class CharacterViewExplosiveAttacks extends LitElement {
     if (popout) popout.explosive = this.explosive;
   }
 
+  disconnected() {
+    this.settingsWindow = null;
+  }
+
   private async createMessage(ev: Event | CustomEvent<ExplosiveSettings>) {
     const { token, character } = requestCharacter(this);
     await createMessage({
@@ -62,7 +66,6 @@ export class CharacterViewExplosiveAttacks extends LitElement {
 
   render() {
     const { attacks, editable, sticky } = this.explosive;
-    // TODO Place template choose trigger etc
     return html`
       <div class="shared">
         ${sticky ? html`<div>${localize('sticky')}</div>` : ''}
@@ -127,20 +130,20 @@ export class CharacterViewExplosiveAttacks extends LitElement {
 
   private openExplosivePlacingWindow() {
     const initialSettings = { placing: true };
-    const { win, wasConnected } = ExplosiveSettingsForm.openWindow({
+    this.settingsWindow = ExplosiveSettingsForm.openWindow({
       explosive: this.explosive,
       requireSubmit: true,
       update: this.createMessage.bind(this),
       initialSettings,
-    });
+    }).win;
   }
 
   private openExplosiveSettingsDialog() {
-    const blah = ExplosiveSettingsForm.openWindow({
+    this.settingsWindow = ExplosiveSettingsForm.openWindow({
       explosive: this.explosive,
       requireSubmit: true,
       update: this.createMessage.bind(this),
-    });
+    }).win;
   }
 }
 declare global {

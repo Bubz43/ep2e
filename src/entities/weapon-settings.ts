@@ -1,3 +1,4 @@
+import type { AttackType } from '@src/combat/attacks';
 import { Demolition, ExplosiveTrigger } from '@src/data-enums';
 import { CommonInterval, currentWorldTimeMS } from '@src/features/time';
 import type { PlacedTemplateIDs } from '@src/foundry/canvas';
@@ -9,7 +10,7 @@ export type ExplosiveSettings = {
   templateIDs?: PlacedTemplateIDs | null;
   trigger: ExplosiveTriggerSettings;
   duration?: number;
-  attackType?: 'primary' | 'secondary';
+  attackType?: AttackType;
   centeredReduction?: number;
   uniformBlastRadius?: number;
   demolition?: DemolitionSetting | null;
@@ -131,3 +132,12 @@ export const createDemolitionSetting = (
       return { type };
   }
 };
+
+export type MeleeWeaponSettings = {
+  attackType?: AttackType;
+  unarmedDV?: string;
+  touchOnly?: boolean;
+  aggressive?: boolean;
+  charging?: boolean;
+  extraWeapon?: boolean;
+}
