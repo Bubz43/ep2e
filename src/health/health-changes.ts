@@ -4,9 +4,10 @@ import { createFeature } from '@src/features/feature-helpers';
 import { currentWorldTimeMS } from '@src/features/time';
 import { HealthType } from '@src/health/health';
 import type { StressType } from '@src/health/mental-health';
-import { mapToObj } from 'remeda';
 
-export type RollMultiplier = 0.5 | 1 | 2;
+export const rollMultipliers = [0.5, 1, 2, 3] as const;
+
+export type RollMultiplier = typeof rollMultipliers[number];
 
 type Base = {
   reduceAVbyDV: boolean;

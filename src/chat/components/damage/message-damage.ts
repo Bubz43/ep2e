@@ -1,7 +1,7 @@
 import type { DamageMessageData } from '@src/chat/message-data';
 import { formatArmorUsed } from '@src/combat/attack-formatting';
 import type { UsedRollPartsEvent } from '@src/combat/components/rolled-formulas-list/used-roll-parts-event';
-import { renderNumberInput } from '@src/components/field/fields';
+import { renderNumberInput, renderSlider } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { pickOrDefaultActor } from '@src/entities/find-entities';
 import { localize } from '@src/foundry/localization';
@@ -17,6 +17,7 @@ import {
   createPhysicalDamage,
   createStressDamage,
   RollMultiplier,
+  rollMultipliers,
 } from '@src/health/health-changes';
 import { notEmpty } from '@src/utility/helpers';
 import {
@@ -143,23 +144,35 @@ export class MessageDamage extends LitElement {
       ${this.viewFormulas
         ? html`
             <div class="additional">
-              ${renderAutoForm({
+              <sl-group label=${localize('multiplier')} class="multiplier">
+                ${rollMultipliers.map(
+                  (multiplier) =>
+                    html`<button @click=${() => this.multiplier = multiplier}
+                      class="${multiplier === this.multiplier
+                        ? 'active'
+                        : ''}"
+                    >
+                      ${multiplier}
+                    </button>`,
+                )}
+              </sl-group>
+              <!-- ${renderAutoForm({
                 noDebounce: true,
                 props: { multiplier: this.multiplier },
                 update: ({ multiplier }) =>
                   multiplier &&
                   (this.multiplier = multiplier as RollMultiplier),
                 fields: ({ multiplier }) => html`
-                  <mwc-formfield alignEnd label=${localize("multiplier")}
-                    > ${renderNumberInput(multiplier, {
+                  <mwc-formfield alignEnd label=${localize('multiplier')}>
+                    ${renderNumberInput(multiplier, {
                       min: 0.5,
                       step: 0.5,
                       max: 5,
-                    })}</mwc-formfield
-                  >
+                    })}
+                  </mwc-formfield>
                 `,
-              })}
-         
+              })} -->
+
               <rolled-formulas-list
                 .rolledFormulas=${this.damage.rolledFormulas}
                 .usedRollParts=${this.usedRollParts}
