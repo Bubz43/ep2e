@@ -1,6 +1,7 @@
 import type { DamageMessageData } from '@src/chat/message-data';
 import { formatArmorUsed } from '@src/combat/attack-formatting';
 import type { UsedRollPartsEvent } from '@src/combat/components/rolled-formulas-list/used-roll-parts-event';
+import { renderNumberInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { pickOrDefaultActor } from '@src/entities/find-entities';
 import { localize } from '@src/foundry/localization';
@@ -117,23 +118,25 @@ export class MessageDamage extends LitElement {
         ${Math.ceil(totals.damageValue * multiplier)}
       </mwc-button>
 
-      ${notEmpty(this.damage.rolledFormulas)
-        ? html` <mwc-icon-button
-            class="formulas-toggle"
-            @click=${this.toggleFormulas}
-            icon=${this.viewFormulas
-              ? 'keyboard_arrow_down'
-              : 'keyboard_arrow_left'}
-          >
-          </mwc-icon-button>`
-        : ''}
+      <div class="info">
+        <div class="damage-info">
+          ${formatFormulaWithMultiplier(totals.formula, multiplier)}
+          ${localize(damageType)}
+          ${localize(damageType === HealthType.Mental ? 'stress' : 'damage')}
+        </div>
 
-      <div class="damage-info">
-        ${formatFormulaWithMultiplier(totals.formula, multiplier)}
-        ${localize(damageType)}
-        ${localize(damageType === HealthType.Mental ? 'stress' : 'damage')}
+        <div class="armor-info">${formatArmorUsed(this.damage)}</div>
+        ${notEmpty(this.damage.rolledFormulas)
+          ? html` <mwc-icon-button
+              class="formulas-toggle"
+              @click=${this.toggleFormulas}
+              icon=${this.viewFormulas
+                ? 'keyboard_arrow_down'
+                : 'keyboard_arrow_left'}
+            >
+            </mwc-icon-button>`
+          : ''}
       </div>
-      <div class="armor-info">${formatArmorUsed(this.damage)}</div>
       ${this.damage.notes
         ? html`<div class="notes">${this.damage.notes}</div>`
         : ''}
@@ -141,31 +144,22 @@ export class MessageDamage extends LitElement {
         ? html`
             <div class="additional">
               ${renderAutoForm({
-                props: { multiplier: String(this.multiplier) },
+                noDebounce: true,
+                props: { multiplier: this.multiplier },
                 update: ({ multiplier }) =>
-                  (this.multiplier = (Number(multiplier) ||
-                    1) as RollMultiplier),
+                  multiplier &&
+                  (this.multiplier = multiplier as RollMultiplier),
                 fields: ({ multiplier }) => html`
-                  <div class="multiplier">
-                    <span>${localize('multiplier')}</span>
-                    <div class="radios">
-                      ${[0.5, 1, 2]
-                        .map(String)
-                        .map(
-                          (mp) => html`
-                            <mwc-formfield label=${mp}>
-                              <mwc-radio
-                                name=${multiplier.prop}
-                                value=${mp}
-                                ?checked=${mp === multiplier.value}
-                              ></mwc-radio
-                            ></mwc-formfield>
-                          `,
-                        )}
-                    </div>
-                  </div>
+                  <mwc-formfield alignEnd label=${localize("multiplier")}
+                    > ${renderNumberInput(multiplier, {
+                      min: 0.5,
+                      step: 0.5,
+                      max: 5,
+                    })}</mwc-formfield
+                  >
                 `,
               })}
+         
               <rolled-formulas-list
                 .rolledFormulas=${this.damage.rolledFormulas}
                 .usedRollParts=${this.usedRollParts}

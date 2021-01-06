@@ -1,0 +1,21 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: flex;
+  flex-flow: column;
+  padding: 0.5rem;
+  background: linear-gradient(
+    to bottom,
+    alphav(var(--color-bg), 0.7),
+    alphav(var(--color-bg-alt), 0.7)
+  );
+  min-width: 350px;
+    width: 100%;
+  
+}
+

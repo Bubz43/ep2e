@@ -151,7 +151,11 @@ export class Ego {
   private readonly repMap = new Map<
     RepNetwork,
     RepWithIdentifier & { track: boolean }
-  >();
+    >();
+  
+  get img() {
+    return this.data.img
+  }
 
   get epData() {
     return this.data.data;

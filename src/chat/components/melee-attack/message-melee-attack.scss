@@ -13,6 +13,8 @@
 .settings {
   padding: 0 0.5rem;
   text-align: center;
+  --mdc-icon-button-size: 1.5rem;
+  --mdc-icon-size: 1.25rem;
 }
 
 .additional {
@@ -20,4 +22,13 @@
   gap: 0.25rem;
   padding: 0.25rem 0.5rem;
   border-top: 2px groove alphav(var(--color-border), 0.5);
+}
+
+.options {
+  color:  var(--color-text-lighter);
+  font-family: var(--font-2);
+  text-align: center;
+  margin: 0;
+  padding: 0.25rem;
+  font-size: small;
 }

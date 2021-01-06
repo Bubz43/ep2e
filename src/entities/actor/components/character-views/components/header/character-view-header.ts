@@ -77,35 +77,9 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
     this.character.ego.rollStress();
   }
 
-  private imgSelect = () =>
-    html`
-      <mwc-list class="images">
-        ${compact([this.character, this.character.sleeve]).map((entity) => {
-          return html`
-            <mwc-list-item
-              graphic="medium"
-              @click=${() => this.setImg(entity.img)}
-            >
-              <img src=${entity.img} slot="graphic" />
-              <span>${entity.name}</span>
-            </mwc-list-item>
-          `;
-        })}
-        <li divider></li>
-        <mwc-list-item
-          graphic="medium"
-          @click=${this.editImg}
-          style="height: 40px"
-        >
-          <mwc-icon slot="graphic">insert_photo</mwc-icon>
-          <span>${localize('browse')}</span>
-        </mwc-list-item>
-      </mwc-list>
-    `;
-
   render() {
     const name = this.token?.data.name || this.character.name;
-
+    // TODO show list of active tokens on scene with active one being token this is passed
     return html`
       <sl-popover class="image-wrapper" .renderOnDemand=${this.imgSelect}>
         <button slot="base" ?disabled=${this.character.disabled}>
@@ -114,6 +88,7 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
       </sl-popover>
       <h2>${name}</h2>
       <div class="additional">
+    
         <sl-group class="initiative" label=${localize('initiative')}
           >${this.character.initiative}</sl-group
         >
@@ -197,6 +172,32 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
       </sl-popover>
     `;
   }
+
+  private imgSelect = () =>
+    html`
+      <mwc-list class="images">
+        ${compact([this.character.ego, this.character.sleeve]).map(
+          (entity) => html`
+            <mwc-list-item
+              graphic="medium"
+              @click=${() => this.setImg(entity.img)}
+            >
+              <img src=${entity.img} slot="graphic" />
+              <span>${entity.name}</span>
+            </mwc-list-item>
+          `,
+        )}
+        <li divider></li>
+        <mwc-list-item
+          graphic="medium"
+          @click=${this.editImg}
+          style="height: 40px"
+        >
+          <mwc-icon slot="graphic">insert_photo</mwc-icon>
+          <span>${localize('browse')}</span>
+        </mwc-list-item>
+      </mwc-list>
+    `;
 
   private renderRecharges() {
     const { activeRecharge, timeTillRechargeComplete } = this.character;

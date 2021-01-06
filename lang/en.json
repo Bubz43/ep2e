@@ -1367,6 +1367,7 @@
     "triggerRadius": "Trigger Radius",
     "detonation": "Detonation",
     "explodeAfter": "Explode After",
+    "extraWeapon": "Extra Weapon",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

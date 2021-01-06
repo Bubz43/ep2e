@@ -10,10 +10,23 @@
   padding: 0.25rem 0.5rem;
 }
 
-.formulas-toggle {
-  float: right;
-  // --mdc-icon-button-size: 1.5rem;
+.info {
+  display: grid;
+  grid-template-areas: "damage toggle" "armor toggle";
+  grid-template-columns: 1fr min-content;
+  .damage-info {
+    grid-area: damage;
+  }
+  .armor-info {
+    grid-area: armor;
+  }
+  .formulas-toggle {
+    grid-area: toggle;
+    --mdc-icon-button-size: 1.5rem;
+    place-self: center;
+  }
 }
+
 
 mwc-button[unelevated] {
   --mdc-theme-primary: var(--color-negative);
@@ -26,22 +39,15 @@ mwc-button[unelevated] {
   padding-left: 0.5ch;
 }
 
-.multiplier {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-top: 1px solid alphav(var(--color-border), 0.5);
-  margin-top: 0.5rem;
-  padding: 0 0.25rem;
-  span {
-    color: var(--color-text-lighter);
-  }
-  .radios {
-    display: flex;
-    justify-content: space-between;
-    flex: 1;
+mwc-formfield {
+  @include inputReset();
+  width: max-content;
+  margin: 0 0.5rem 0.25rem;
+  input {
+    text-align: center;
   }
 }
+
 
 .armor-info,
 .notes {
@@ -54,4 +60,8 @@ mwc-button[unelevated] {
 
 .additional {
   @include animate-css(fadeInDown, 400ms);
+  border: 1px solid var(--color-border);
+  padding: 0.25rem;
+  box-shadow: 0 0 4px black;
+
 }
