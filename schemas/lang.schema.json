@@ -1715,6 +1715,9 @@
             "extraTarget": {
               "type": "string"
             },
+            "extraWeapon": {
+              "type": "string"
+            },
             "extropian": {
               "type": "string"
             },
@@ -4969,6 +4972,7 @@
             "extra",
             "extraAction",
             "extraTarget",
+            "extraWeapon",
             "extropian",
             "fRep",
             "fab",
