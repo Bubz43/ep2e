@@ -2,6 +2,7 @@ import { openOrRenderWindow } from '@src/components/window/window-controls';
 import { ResizeOption } from '@src/components/window/window-options';
 import { html } from 'lit-html';
 import { ActorType } from '../entity-types';
+import type { UpdateStore } from '../update-store';
 import type { MaybeToken } from './actor';
 import type { Character } from './proxies/character';
 import type { Sleeve } from './sleeves';
@@ -13,9 +14,21 @@ export const renderCharacterView = (proxy: Character, token: MaybeToken) => {
 };
 
 export const openSleeveForm = (sleeve: Sleeve) => {
+  const updater = ((sleeve.updater as unknown) as UpdateStore<{
+    data: { reference: string };
+  }>)
+    .prop('data')
+    .nestedStore();
+
   return openOrRenderWindow({
     key: sleeve.updater,
-    content: renderSleeveForm(sleeve),
+    content: html`
+      ${renderSleeveForm(sleeve)}
+      <entity-form-footer
+        slot="footer"
+        .updater=${updater}
+      ></entity-form-footer>
+    `,
     name: sleeve.name,
     resizable: ResizeOption.Vertical,
   });
@@ -24,24 +37,10 @@ export const openSleeveForm = (sleeve: Sleeve) => {
 export const renderSleeveForm = (proxy: Sleeve) => {
   switch (proxy.type) {
     case ActorType.Infomorph:
-      return html`<infomorph-form .sleeve=${proxy}></infomorph-form>
-        <entity-form-footer
-          slot="footer"
-          .updater=${proxy.updater.prop('data').nestedStore()}
-        ></entity-form-footer> `;
+      return html`<infomorph-form .sleeve=${proxy}></infomorph-form> `;
     case ActorType.Biological:
-      return html`<biological-form .sleeve=${proxy}></biological-form>
-        <entity-form-footer
-          slot="footer"
-          .updater=${proxy.updater.prop('data').nestedStore()}
-        ></entity-form-footer> `;
+      return html`<biological-form .sleeve=${proxy}></biological-form> `;
     case ActorType.Synthetic:
-      return html`
-        <synthetic-form .sleeve=${proxy}></synthetic-form>
-        <entity-form-footer
-          slot="footer"
-          .updater=${proxy.updater.prop('data').nestedStore()}
-        ></entity-form-footer>
-      `;
+      return html` <synthetic-form .sleeve=${proxy}></synthetic-form> `;
   }
 };
