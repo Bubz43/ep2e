@@ -11,6 +11,7 @@ import { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { HealthType } from '@src/health/health';
+import { SuccessTestResult } from '@src/success-test/success-test';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { compact, concat, map, pick, pipe } from 'remeda';
@@ -42,6 +43,7 @@ export class MessageMeleeAttack extends MessageElement {
       meleeWeapon: this.weapon,
       requireSubmit: true,
       adjacentEl: this,
+      editTestResult: true,
       update: ({ detail }) => this.getUpdater('meleeAttack').commit(detail),
     });
   }
@@ -107,6 +109,7 @@ export class MessageMeleeAttack extends MessageElement {
       name,
       hasSecondaryAttack,
     } = this.weapon;
+
     const {
       attackType = 'primary',
       unarmedDV,
@@ -116,10 +119,10 @@ export class MessageMeleeAttack extends MessageElement {
       extraWeapon,
       appliedCoating,
       appliedPayload,
+      testResult
     } = this.meleeAttack;
 
     const { disabled } = this;
-    // TODO apply unarmed
 
     const attack = attacks[attackType] || attacks.primary;
 
@@ -133,11 +136,24 @@ export class MessageMeleeAttack extends MessageElement {
             'notes',
             'reduceAVbyDV',
           ]),
-          source: `${name} ${hasSecondaryAttack ? `[${attack.label}]` : ''}`,
+        source: `${name} ${hasSecondaryAttack ? `[${attack.label}]` : ''}`,
+          multiplier: testResult === SuccessTestResult.CriticalSuccess ? 2 : 1,
           rolledFormulas: pipe(
             attack.rollFormulas,
             concat(
               compact([
+                testResult === SuccessTestResult.SuperiorSuccess && {
+                  label: localize(testResult),
+                  formula: "+1d6"
+                },
+                testResult === SuccessTestResult.SuperiorSuccessX2 && {
+                  label: localize(testResult),
+                  formula: "+2d6"
+                },
+                augmentUnarmed && {
+                  label: localize("unarmedDV"),
+                  formula: unarmedDV || "0",
+                },
                 aggressive && {
                   label: localize('aggressive'),
                   formula: '+1d10',

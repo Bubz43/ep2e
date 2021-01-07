@@ -156,22 +156,7 @@ export class MessageDamage extends LitElement {
                     </button>`,
                 )}
               </sl-group>
-              <!-- ${renderAutoForm({
-                noDebounce: true,
-                props: { multiplier: this.multiplier },
-                update: ({ multiplier }) =>
-                  multiplier &&
-                  (this.multiplier = multiplier as RollMultiplier),
-                fields: ({ multiplier }) => html`
-                  <mwc-formfield alignEnd label=${localize('multiplier')}>
-                    ${renderNumberInput(multiplier, {
-                      min: 0.5,
-                      step: 0.5,
-                      max: 5,
-                    })}
-                  </mwc-formfield>
-                `,
-              })} -->
+
 
               <rolled-formulas-list
                 .rolledFormulas=${this.damage.rolledFormulas}

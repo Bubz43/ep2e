@@ -1,15 +1,19 @@
 import {
+  emptyTextDash,
   renderFormulaField,
   renderLabeledCheckbox,
+  renderSelectField,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import {
   closeWindow,
   openWindow,
 } from '@src/components/window/window-controls';
+import { enumValues } from '@src/data-enums';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import type { MeleeWeaponSettings } from '@src/entities/weapon-settings';
 import { localize } from '@src/foundry/localization';
+import { SuccessTestResult } from '@src/success-test/success-test';
 import {
   customElement,
   LitElement,
@@ -35,7 +39,7 @@ export class MeleeSettingsForm extends LitElement {
   static openWindow(
     props: Pick<
       MeleeSettingsForm,
-      'meleeWeapon' | 'requireSubmit' | 'initialSettings'
+      'meleeWeapon' | 'requireSubmit' | 'initialSettings' | 'editTestResult'
     > & {
       update: (newSettings: CustomEvent<MeleeWeaponSettings>) => void;
       adjacentEl?: HTMLElement;
@@ -66,6 +70,8 @@ export class MeleeSettingsForm extends LitElement {
 
   @property({ type: Object }) initialSettings?: Partial<MeleeWeaponSettings>;
 
+  @property({ type: Boolean }) editTestResult = false;
+
   @internalProperty() private settings: MeleeWeaponSettings = {};
 
   update(changedProps: PropertyValues) {
@@ -73,7 +79,7 @@ export class MeleeSettingsForm extends LitElement {
       changedProps.get('meleeWeapon') !== undefined ||
       changedProps.has('initialSettings')
     ) {
-      this.settings = {...this.initialSettings || {}};
+      this.settings = { ...(this.initialSettings || {}) };
     }
 
     super.update(changedProps);
@@ -111,6 +117,7 @@ export class MeleeSettingsForm extends LitElement {
       aggressive = false,
       charging = false,
       extraWeapon = false,
+      testResult = SuccessTestResult.Success,
     } = this.settings;
     return {
       unarmedDV,
@@ -118,6 +125,7 @@ export class MeleeSettingsForm extends LitElement {
       aggressive,
       charging,
       extraWeapon,
+      testResult,
     };
   }
 
@@ -127,13 +135,21 @@ export class MeleeSettingsForm extends LitElement {
         props: this.formProps,
         update: this.updateSettings,
         fields: ({
+          testResult,
           unarmedDV,
           touchOnly,
           aggressive,
           charging,
           extraWeapon,
         }) => [
-          renderFormulaField(unarmedDV),
+          this.editTestResult
+            ? renderSelectField(
+                testResult,
+                enumValues(SuccessTestResult),
+                emptyTextDash,
+              )
+            : '',
+          this.meleeWeapon.augmentUnarmed ? renderFormulaField(unarmedDV) : '',
           map(
             [touchOnly, aggressive, charging, extraWeapon],
             renderLabeledCheckbox,
@@ -142,7 +158,11 @@ export class MeleeSettingsForm extends LitElement {
       })}
       ${this.requireSubmit
         ? html`
-            <submit-button label=${localize("save")} complete @click=${this.emitSettings}></submit-button>
+            <submit-button
+              label=${localize('save')}
+              complete
+              @click=${this.emitSettings}
+            ></submit-button>
           `
         : ''}
     `;
