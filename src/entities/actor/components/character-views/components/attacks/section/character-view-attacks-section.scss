@@ -1,0 +1,57 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  
+}
+
+:host([collapsed]) {
+  height: min-content;
+}
+
+
+[part='header'] {
+  position: relative;
+  outline: none;
+  &[tabindex='0'] {
+    cursor: pointer;
+  }
+  mwc-ripple {
+    cursor: pointer;
+  }
+}
+
+.toggle-icon {
+  display: inline-block;
+  --mdc-icon-size: 1.75rem;
+  transition: transform 100ms ease-in-out;
+  color: var(--color-text-lighter);
+
+  &.collapsed {
+    transform: rotateZ(90deg);
+  }
+}
+
+.attacks {
+  position: relative;
+  li {
+    background: var(--color-bg-alt);
+    box-shadow: 0 0 4px black;
+    margin: 0.55rem;
+    border: 1px solid var(--color-border);
+    border-radius: 7px;
+    overflow: hidden;
+  }
+  header {
+    padding: 0.25rem 0.75rem;
+    background: alphav(var(--color-bg), 0.9);
+  }
+  .type {
+    color: var(--color-text-lighter);
+  }
+}

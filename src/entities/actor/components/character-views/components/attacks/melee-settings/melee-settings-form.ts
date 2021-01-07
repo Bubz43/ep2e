@@ -55,6 +55,7 @@ export class MeleeSettingsForm extends LitElement {
           .meleeWeapon=${props.meleeWeapon}
           ?requireSubmit=${props.requireSubmit}
           .initialSettings=${props.initialSettings}
+          ?editTestResult=${props.editTestResult}
           @melee-settings=${(ev: CustomEvent<MeleeWeaponSettings>) => {
             props.update(ev);
             closeWindow(MeleeSettingsForm);

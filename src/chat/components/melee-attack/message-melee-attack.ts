@@ -180,11 +180,15 @@ export class MessageMeleeAttack extends MessageElement {
     return html`
       <div class="settings">
         ${hasSecondaryAttack ? attack.label : ''}
-        <mwc-icon-button
-          icon="settings"
-          @click=${this.editSettings}
-          ?disabled=${disabled}
-        ></mwc-icon-button>
+        ${disabled
+          ? ''
+          : html`
+              <mwc-icon-button
+                icon="settings"
+                @click=${this.editSettings}
+                ?disabled=${disabled}
+              ></mwc-icon-button>
+            `}
       </div>
       ${notEmpty(options) || testResult
         ? html`

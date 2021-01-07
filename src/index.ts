@@ -146,6 +146,7 @@ import { MessageAreaEffect } from './chat/components/area-effect/message-area-ef
 import { CharacterViewMeleeWeaponAttacks } from './entities/actor/components/character-views/components/attacks/melee-weapon/character-view-melee-weapon-attacks';
 import { WeaponCard } from './entities/actor/components/character-views/components/cards/weapon/weapon-card';
 import { MessageMeleeAttack } from './chat/components/melee-attack/message-melee-attack';
+import { CharacterViewAttacksSection } from './entities/actor/components/character-views/components/attacks/section/character-view-attacks-section';
 
 // Generic Components
 Field;
@@ -202,6 +203,7 @@ CharacterViewPsi;
 CharacterViewExplosiveAttacks;
 CharacterViewMeleeWeaponAttacks;
 ExplosiveSettingsForm;
+CharacterViewAttacksSection;
 //Item Cards
 ItemCard;
 ConsumableCard;

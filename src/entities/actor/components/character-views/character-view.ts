@@ -421,41 +421,10 @@ export class CharacterView extends CharacterViewBase {
           `
         : ''}
   </section> -->
-
-      <section>
-        <sl-header heading=${localize('attacks')}></sl-header>
-        <sl-animated-list class="attacks">
-          ${repeat(
-            this.character.weapons.melee,
-            idProp,
-            (weapon) => html`
-              <li>
-                <header>
-                  ${weapon.name} <span class="type">${weapon.fullType}</span>
-                </header>
-                <character-view-melee-weapon-attacks
-                  .weapon=${weapon}
-                ></character-view-melee-weapon-attacks>
-              </li>
-            `,
-          )}
-          ${repeat(
-            this.character.weapons.explosives,
-            idProp,
-            (explosive) => html`
-              <li>
-                <header>
-                  ${explosive.fullName}
-                  <span class="type">${explosive.fullType}</span>
-                </header>
-                <character-view-explosive-attacks
-                  .explosive=${explosive}
-                ></character-view-explosive-attacks>
-              </li>
-            `,
-          )}
-        </sl-animated-list>
-      </section>
+      <character-view-attacks-section
+        .character=${this.character}
+        .token=${this.token}
+      ></character-view-attacks-section>
 
       ${repeat(enumValues(ItemGroup), identity, this.renderItemGroup)}
     `;
