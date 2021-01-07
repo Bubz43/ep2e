@@ -213,7 +213,7 @@ export class Ego {
       data: this.epData.mentalHealth,
       statMods: this.activeEffects?.getHealthStatMods(HealthType.Mental),
       willpower: this.aptitudes.wil,
-      updater: this.updater.prop('data', 'mentalHealth').nestedStore(),
+      updater: this.updater.path('data', 'mentalHealth').nestedStore(),
       source: this.name,
     });
   }
@@ -484,7 +484,7 @@ export class Ego {
             duration: CommonInterval.Week,
             id: rep.network,
             startTime: rep.refreshStartTime,
-            updateStartTime: this.updater.prop(
+            updateStartTime: this.updater.path(
               'data',
               'reps',
               (rep.identifier as { networkId: RepNetwork }).networkId,
@@ -505,7 +505,7 @@ export class Ego {
     if (this.repRefreshTimers.some(refreshAvailable)) {
       for (const network of enumValues(RepNetwork)) {
         this.updater
-          .prop('data', 'reps', network)
+          .path('data', 'reps', network)
           .store((rep) =>
             getElapsedTime(rep.refreshStartTime) >= CommonInterval.Week
               ? { ...rep, refreshStartTime: 0, minor: 0, moderate: 0 }

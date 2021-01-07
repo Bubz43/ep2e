@@ -151,13 +151,13 @@ export class SprayWeaponForm extends ItemFormBase {
         <entity-form-header
           noDefaultImg
           slot="header"
-          .updateActions=${updater.prop('')}
+          .updateActions=${updater.path('')}
           type=${localize(type)}
           ?disabled=${disabled}
         >
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.prop('data'), {
+        ${renderUpdaterForm(updater.path('data'), {
           disabled,
           slot: 'sidebar',
           fields: ({ wareType, range, fixed, long, payloadUse, ...traits }) => [
@@ -188,7 +188,7 @@ export class SprayWeaponForm extends ItemFormBase {
         })}
 
         <div slot="details">
-          ${renderUpdaterForm(updater.prop('data'), {
+          ${renderUpdaterForm(updater.path('data'), {
             disabled,
             classes: complexityForm.cssClass,
             fields: renderComplexityFields,
@@ -198,7 +198,7 @@ export class SprayWeaponForm extends ItemFormBase {
           <sl-dropzone ?disabled=${!firePayload} @drop=${this.addDrop}>
             <sl-header heading=${localize('ammo')}
               >${firePayload
-                ? renderUpdaterForm(updater.prop('data'), {
+                ? renderUpdaterForm(updater.path('data'), {
                     disabled,
                     classes: 'doses-form',
                     slot: 'action',
@@ -225,7 +225,7 @@ export class SprayWeaponForm extends ItemFormBase {
               },
               update: ({ value, max }) => {
                 if (max !== undefined)
-                  this.item.updater.prop('data', 'ammo', 'max').commit(max);
+                  this.item.updater.path('data', 'ammo', 'max').commit(max);
                 else if (value !== undefined) this.item.updateAmmoValue(value);
               },
               disabled,
@@ -259,7 +259,7 @@ export class SprayWeaponForm extends ItemFormBase {
                       >info</mwc-icon
                     >
                     ${payload
-                      ? renderUpdaterForm(payload.updater.prop('data'), {
+                      ? renderUpdaterForm(payload.updater.path('data'), {
                           disabled,
                           classes: 'payload-quantity-form',
                           slot: 'action',
@@ -301,7 +301,7 @@ export class SprayWeaponForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.prop('data', 'description')}
+          .updateActions=${updater.path('data', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -383,7 +383,7 @@ export class SprayWeaponForm extends ItemFormBase {
   }
 
   private renderAttackEdit() {
-    const updater = this.item.updater.prop('data', 'primaryAttack');
+    const updater = this.item.updater.path('data', 'primaryAttack');
     const [pairedTraits, changeTraits] = pairList(
       updater.originalValue().attackTraits,
       enumValues(AttackTrait),
@@ -427,7 +427,7 @@ export class SprayWeaponForm extends ItemFormBase {
     return renderRangedAccessoriesEdit(
       this.item.accessories,
       SprayWeapon.possibleAccessories,
-      this.item.updater.prop('data', 'accessories').commit,
+      this.item.updater.path('data', 'accessories').commit,
     );
   }
 }

@@ -60,14 +60,14 @@ export const onCombatUpdate = async () => {
         forEach(
           (updater) =>
             updater
-              .prop('initiative')
+              .path('initiative')
               .store((i) =>
                 String(
                   parseFloat(i || '0') -
                     CombatantHelpers.tempTakeInitiativeBonus,
                 ),
               )
-              .prop('flags', EP.Name, 'tookInitiative')
+              .path('flags', EP.Name, 'tookInitiative')
               .store(false),
           // .prop("flags", EP.Name, "nonPhysical")
           // .store(false)

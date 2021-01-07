@@ -204,13 +204,13 @@ export class MeleeWeaponForm extends ItemFormBase {
         <entity-form-header
           noDefaultImg
           slot="header"
-          .updateActions=${updater.prop('')}
+          .updateActions=${updater.path('')}
           type=${localize(type)}
           ?disabled=${disabled}
         >
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.prop('data'), {
+        ${renderUpdaterForm(updater.path('data'), {
           disabled,
           slot: 'sidebar',
           fields: ({
@@ -250,7 +250,7 @@ export class MeleeWeaponForm extends ItemFormBase {
             <sl-header heading=${localize('details')}></sl-header>
             <div class="detail-forms">
              
-              ${renderUpdaterForm(updater.prop('data'), {
+              ${renderUpdaterForm(updater.path('data'), {
                 disabled,
                 classes: complexityForm.cssClass,
                 fields: renderComplexityFields,
@@ -266,7 +266,7 @@ ${renderAutoForm({
                 update: ({ skillOption, exotic }) => {
                   if (exotic !== undefined) {
                     this.item.updater
-                      .prop('data', 'exoticSkill')
+                      .path('data', 'exoticSkill')
                       .commit(exotic);
                   } else if (skillOption) {
                     this.skillOption = skillOption;
@@ -275,7 +275,7 @@ ${renderAutoForm({
                       !this.item.exoticSkillName
                     ) {
                       this.item.updater
-                        .prop('data', 'exoticSkill')
+                        .path('data', 'exoticSkill')
                         .commit(this.item.name);
                     }
                   }
@@ -384,7 +384,7 @@ ${renderAutoForm({
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.prop('data', 'description')}
+          .updateActions=${updater.path('data', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -451,7 +451,7 @@ ${renderAutoForm({
   }
 
   private renderAttackEdit(type: WeaponAttackType) {
-    const updater = this.item.updater.prop('data', type);
+    const updater = this.item.updater.path('data', type);
     const { hasSecondaryAttack } = this.item;
     const { disabled } = this;
     const [pairedTraits, change] = pairList(

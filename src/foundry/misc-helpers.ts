@@ -137,7 +137,7 @@ export const updateManyActors = async (actors: ActorEP[]): Promise<unknown> => {
                 isEditable: () => true,
                 setData: (update) => tokenActor.update(update),
               })
-                .prop('actorData')
+                .path('actorData')
                 .append(tokenActor.updater as any), // Deep partial on actorData messes this up
           ),
           UpdateStore.prepUpdateMany,

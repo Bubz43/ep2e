@@ -213,7 +213,7 @@ export class ActorCreator extends LitElement {
         if (this.characterData.template === CharacterTemplate.Muse) {
           const specialization = '';
           updater
-            .prop('data', 'settings')
+            .path('data', 'settings')
             .store({
               canDefault: false,
               trackPoints: false,
@@ -222,7 +222,7 @@ export class ActorCreator extends LitElement {
               threatDetails: false,
               useThreat: false,
             })
-            .prop('data', 'skills')
+            .path('data', 'skills')
             .store({
               infosec: { points: 20, specialization },
               interface: { points: 50, specialization },
@@ -230,7 +230,7 @@ export class ActorCreator extends LitElement {
               program: { points: 20, specialization },
               research: { points: 20, specialization },
             })
-            .prop('data', 'fieldSkills', FieldSkillType.Hardware)
+            .path('data', 'fieldSkills', FieldSkillType.Hardware)
             .store(
               addFeature(
                 createFieldSkillData({
@@ -239,7 +239,7 @@ export class ActorCreator extends LitElement {
                 }),
               ),
             )
-            .prop('data', 'fieldSkills', FieldSkillType.Know)
+            .path('data', 'fieldSkills', FieldSkillType.Know)
             .store(
               createPipe(
                 addFeature(
@@ -269,7 +269,7 @@ export class ActorCreator extends LitElement {
               ),
             );
         } else if (this.characterData.template === CharacterTemplate.Threat) {
-          updater.prop('data', 'settings').store({
+          updater.path('data', 'settings').store({
             trackPoints: false,
             characterDetails: false,
             threatDetails: true,
@@ -277,7 +277,7 @@ export class ActorCreator extends LitElement {
           });
         }
         await updater
-          .prop('flags', EP.Name, sleeveData.type)
+          .path('flags', EP.Name, sleeveData.type)
           .commit(sleeveData);
       }
       this.characterData.name = '';

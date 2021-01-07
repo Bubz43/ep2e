@@ -46,7 +46,7 @@ export class FirearmAmmoTransformer extends LitElement {
   private updateFirearmForms() {
     if (!equals(this.modeStates, this.firearm.ammoData.modeSettings)) {
       this.firearm.updater
-        .prop('data', 'ammo', 'modeSettings')
+        .path('data', 'ammo', 'modeSettings')
         .commit(this.modeStates);
     }
   }

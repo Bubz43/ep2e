@@ -12,10 +12,10 @@ import { Substance } from './substance';
 
 class Base extends ItemProxyBase<ItemType.FirearmAmmo> {
   get updateState() {
-    return this.updater.prop('data', 'state');
+    return this.updater.path('data', 'state');
   }
   get updateQuantity() {
-    return this.updater.prop('data');
+    return this.updater.path('data');
   }
 }
 
@@ -99,6 +99,6 @@ export class FirearmAmmo extends mix(Base).with(
   }
 
   private get updatePayload() {
-    return this.updater.prop('flags', EP.Name, 'payload').commit;
+    return this.updater.path('flags', EP.Name, 'payload').commit;
   }
 }

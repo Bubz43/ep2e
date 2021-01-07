@@ -21,7 +21,7 @@ import { Substance } from './substance';
 
 class MeleeWeaponBase extends ItemProxyBase<ItemType.MeleeWeapon> {
   get updateState() {
-    return this.updater.prop('data', 'state');
+    return this.updater.path('data', 'state');
   }
 }
 
@@ -146,10 +146,10 @@ export class MeleeWeapon
   }
 
   private get updatePayload() {
-    return this.updater.prop('flags', EP.Name, 'payload').commit;
+    return this.updater.path('flags', EP.Name, 'payload').commit;
   }
 
   private get updateCoating() {
-    return this.updater.prop('flags', EP.Name, 'coating').commit;
+    return this.updater.path('flags', EP.Name, 'coating').commit;
   }
 }

@@ -33,7 +33,7 @@ class SyntheticBase extends ActorProxyBase<ActorType.Synthetic> {
     return this.epData.subtype;
   }
   get damagedArmorUpdater() {
-    return this.updater.prop('data', 'damagedArmor');
+    return this.updater.path('data', 'damagedArmor');
   }
 }
 
@@ -75,7 +75,7 @@ export class Synthetic extends mix(SyntheticBase).with(
   }
 
   updateConditions(conditions: ConditionType[]) {
-    return this.updater.prop('data', 'conditions').commit(conditions);
+    return this.updater.path('data', 'conditions').commit(conditions);
   }
 
   get healths(): ActorHealth[] {
@@ -113,7 +113,7 @@ export class Synthetic extends mix(SyntheticBase).with(
   }
 
   updateRecoveryConditions(conditions: RecoveryConditions) {
-    return this.updater.prop('data', 'recoveryConditions').commit(conditions);
+    return this.updater.path('data', 'recoveryConditions').commit(conditions);
   }
 
   @LazyGetter()
@@ -132,7 +132,7 @@ export class Synthetic extends mix(SyntheticBase).with(
     return new SyntheticHealth({
       data: this.epData.physicalHealth,
       statMods: this.activeEffects.getHealthStatMods(HealthType.Physical),
-      updater: this.updater.prop('data', 'physicalHealth').nestedStore(),
+      updater: this.updater.path('data', 'physicalHealth').nestedStore(),
       source: this.epData.inherentArmor.source || localize('frame'),
       isSwarm: this.isSwarm,
       recoveryEffects: this.activeEffects.healthRecovery,
@@ -145,7 +145,7 @@ export class Synthetic extends mix(SyntheticBase).with(
     return new MeshHealth({
       data: this.epData.meshHealth,
       statMods: this.activeEffects?.getHealthStatMods(HealthType.Mesh),
-      updater: this.updater.prop('data', 'meshHealth').nestedStore(),
+      updater: this.updater.path('data', 'meshHealth').nestedStore(),
       source: localize('mindState'),
       homeDevices: 1, // TODO,
       deathRating: true,
@@ -156,7 +156,7 @@ export class Synthetic extends mix(SyntheticBase).with(
   get firewallHealth() {
     return new AppMeshHealth({
       data: this.epData.firewallHealth,
-      updater: this.updater.prop('data', 'firewallHealth').nestedStore(),
+      updater: this.updater.path('data', 'firewallHealth').nestedStore(),
       source: `${localize('firewall')} (${this.epData.firewallRating})`,
     });
   }

@@ -117,13 +117,13 @@ export class RailgunForm extends mix(Base).with(UseWorldTime) {
         <entity-form-header
           noDefaultImg
           slot="header"
-          .updateActions=${updater.prop('')}
+          .updateActions=${updater.path('')}
           type=${localize(type)}
           ?disabled=${disabled}
         >
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.prop('data'), {
+        ${renderUpdaterForm(updater.path('data'), {
           disabled,
           slot: 'sidebar',
           fields: this.renderSidebarFields,
@@ -143,7 +143,7 @@ export class RailgunForm extends mix(Base).with(UseWorldTime) {
                       classes: 'shape-name-form',
                       update: ({ shapeName }) => {
                         this.item.updater
-                          .prop('data', 'shapeName')
+                          .path('data', 'shapeName')
                           .commit(shapeName || this.item.shapeName);
                         this.requestUpdate();
                       },
@@ -181,7 +181,7 @@ export class RailgunForm extends mix(Base).with(UseWorldTime) {
                 </sl-dropzone>
               `
             : ''}
-          ${renderUpdaterForm(updater.prop('data'), {
+          ${renderUpdaterForm(updater.path('data'), {
             disabled,
             classes: complexityForm.cssClass,
             fields: renderComplexityFields,
@@ -190,7 +190,7 @@ export class RailgunForm extends mix(Base).with(UseWorldTime) {
 
           <section>
             <sl-header heading=${localize('ammo')}></sl-header>
-            ${renderUpdaterForm(updater.prop('data', 'ammo'), {
+            ${renderUpdaterForm(updater.path('data', 'ammo'), {
               disabled,
               classes: 'ammo-form',
               fields: ({ value, max, ammoClass }) => [
@@ -223,7 +223,7 @@ export class RailgunForm extends mix(Base).with(UseWorldTime) {
                 const max = changed.max ?? orig.max;
                 const charge = changed.charge ?? orig.charge;
                 const diff = max - charge;
-                this.item.updater.prop('data', 'battery').commit({
+                this.item.updater.path('data', 'battery').commit({
                   ...changed,
                   recharge:
                     (diff / max) * CommonInterval.Hour * 4 +
@@ -265,7 +265,7 @@ export class RailgunForm extends mix(Base).with(UseWorldTime) {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.prop('data', 'description')}
+          .updateActions=${updater.path('data', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -315,7 +315,7 @@ export class RailgunForm extends mix(Base).with(UseWorldTime) {
 
   private renderAttackEdit() {
     return renderKineticAttackEdit(
-      this.item.updater.prop('data', 'primaryAttack'),
+      this.item.updater.path('data', 'primaryAttack'),
     );
   }
 
@@ -323,7 +323,7 @@ export class RailgunForm extends mix(Base).with(UseWorldTime) {
     return renderRangedAccessoriesEdit(
       this.item.accessories,
       Railgun.possibleAccessories,
-      this.item.updater.prop('data', 'accessories').commit,
+      this.item.updater.path('data', 'accessories').commit,
     );
   }
 }

@@ -134,20 +134,20 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
   }
 
   updateFreePush(push: Psi['freePush']) {
-    return this.updater.prop('data', 'state', 'freePush').commit(push);
+    return this.updater.path('data', 'state', 'freePush').commit(push);
   }
 
   updateLevel(newLevel: 1 | 2 | 3) {
     this.updater
-      .prop('data', 'level')
+      .path('data', 'level')
       .store(newLevel)
-      .prop('data', 'state', 'infectionRating')
+      .path('data', 'state', 'infectionRating')
       .commit(clamp({ min: newLevel * 10, max: 99 }));
   }
 
   updateInfectionRating(newRating: number) {
     return this.updater
-      .prop('data', 'state', 'infectionRating')
+      .path('data', 'state', 'infectionRating')
       .commit(clamp(newRating, this.infectionClamp));
   }
 
@@ -161,7 +161,7 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
 
   setupDefaultInfluences() {
     return this.updater
-      .prop('flags', EP.Name, 'influences')
+      .path('flags', EP.Name, 'influences')
       .commit(createDefaultPsiInfluences());
   }
 
@@ -172,7 +172,7 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
       ) => NonNullable<Psi['influencesData']>,
     ) => {
       await this.updater
-        .prop('flags', EP.Name, 'influences')
+        .path('flags', EP.Name, 'influences')
         .commit(callback(this.influencesData || []));
     };
   }

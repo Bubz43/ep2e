@@ -227,7 +227,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     const { updater } = this.poolHolder;
     for (const { pool, points } of pools) {
       this.poolHolder.updater
-        .prop('data', 'spentPools', pool)
+        .path('data', 'spentPools', pool)
         .store((spent) => spent + points);
     }
     await updater.commit();
@@ -443,7 +443,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
             label: localize(rechargeType),
             duration: CommonInterval.Day,
             startTime: refreshStartTime,
-            updateStartTime: this.updater.prop(
+            updateStartTime: this.updater.path(
               'data',
               rechargeType,
               'refreshStartTime',
@@ -483,7 +483,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         id: `temporary-${temp.id}`,
         updateStartTime: (startTime) =>
           this.updater
-            .prop('data', 'temporary')
+            .path('data', 'temporary')
             .commit((temps) =>
               updateFeature(temps, { id: temp.id, startTime }),
             ),
@@ -512,17 +512,17 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   ) {
     for (const poolType of enumValues(PoolType)) {
       this.updater
-        .prop('data', 'spentPools', poolType)
+        .path('data', 'spentPools', poolType)
         .store(newSpentPools.get(poolType) || 0);
     }
     // TODO Psi
     this.updater
-      .prop('data', recharge)
+      .path('data', recharge)
       .store(({ taken, refreshStartTime }) => ({
         taken: taken + 1,
         refreshStartTime: taken === 0 ? currentWorldTimeMS() : refreshStartTime,
       }))
-      .prop('data', 'temporary')
+      .path('data', 'temporary')
       .commit(reject((temp) => temp.endOn === TemporaryFeatureEnd.Recharge));
   }
 
@@ -530,7 +530,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     if (this.rechargeRefreshTimers.some(refreshAvailable)) {
       for (const rechargeType of enumValues(RechargeType)) {
         this.updater
-          .prop('data', rechargeType)
+          .path('data', rechargeType)
           .store({ taken: 0, refreshStartTime: 0 });
       }
     }
@@ -662,15 +662,15 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         new Psi({
           data: this.epFlags.psi,
           updater: this.updater
-            .prop('flags', EP.Name, ItemType.Psi)
+            .path('flags', EP.Name, ItemType.Psi)
             .nestedStore(),
           embedded: this.name,
           deleteSelf: () =>
-            this.updater.prop('flags', EP.Name, ItemType.Psi).commit(null),
+            this.updater.path('flags', EP.Name, ItemType.Psi).commit(null),
           openForm: () => this.openPsiForm(),
           actor: this.actor,
         }),
-      addPsi: this.updater.prop('flags', EP.Name, ItemType.Psi).commit,
+      addPsi: this.updater.path('flags', EP.Name, ItemType.Psi).commit,
     });
   }
 
@@ -687,7 +687,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
   private setupVehicle(data: ActorEntity<ActorType.Synthetic>) {
     const updater = this.updater
-      .prop('flags', EP.Name, 'vehicle')
+      .path('flags', EP.Name, 'vehicle')
       .nestedStore();
     const items = new Map<string, ItemProxy>();
     return new Synthetic({
@@ -713,7 +713,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       itemOperations: this.itemOperations,
       sleeved: true,
       actor: this.actor,
-      updater: this.updater.prop('flags', EP.Name, data.type).nestedStore(),
+      updater: this.updater.path('flags', EP.Name, data.type).nestedStore(),
       openForm: this.openSleeveForm.bind(this),
     };
   }

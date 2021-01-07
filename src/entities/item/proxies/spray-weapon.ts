@@ -37,7 +37,7 @@ class Base extends ItemProxyBase<ItemType.SprayWeapon> {
     ]);
   }
   get updateState() {
-    return this.updater.prop('data', 'state');
+    return this.updater.path('data', 'state');
   }
 }
 export class SprayWeapon
@@ -90,15 +90,15 @@ export class SprayWeapon
 
   updateAmmoValue(newValue: number) {
     return this.payloadUse === SprayPayload.FirePayload
-      ? this.payload?.updater.prop('data', 'quantity').commit(newValue)
-      : this.updater.prop('data', 'ammo', 'value').commit(newValue);
+      ? this.payload?.updater.path('data', 'quantity').commit(newValue)
+      : this.updater.path('data', 'ammo', 'value').commit(newValue);
   }
 
   spendAmmo(amount: number) {
     const { payloadUse, payload } = this;
     if (payloadUse && payload) {
       payload.updater
-        .prop('data', 'quantity')
+        .path('data', 'quantity')
         .store((quantity) =>
           nonNegative(
             quantity -
@@ -110,7 +110,7 @@ export class SprayWeapon
         );
     }
     return this.updater
-      .prop('data', 'ammo', 'value')
+      .path('data', 'ammo', 'value')
       .commit(nonNegative(this.ammoState.value - amount));
   }
 
@@ -149,7 +149,7 @@ export class SprayWeapon
           data: payload,
           embedded: this.name,
           loaded: true,
-          updater: this.updater.prop('flags', EP.Name, 'payload').nestedStore(),
+          updater: this.updater.path('flags', EP.Name, 'payload').nestedStore(),
           deleteSelf: () => this.removePayload(),
         })
       : null;
@@ -168,6 +168,6 @@ export class SprayWeapon
   }
 
   private get updatePayload() {
-    return this.updater.prop('flags', EP.Name, 'payload').commit;
+    return this.updater.path('flags', EP.Name, 'payload').commit;
   }
 }

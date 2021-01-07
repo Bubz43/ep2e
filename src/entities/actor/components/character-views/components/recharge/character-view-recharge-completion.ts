@@ -135,7 +135,7 @@ export class CharacterViewRechargeCompletion extends mix(LitElement).with(
 
   private cancelRecharge() {
     this.character.updater
-      .prop('data', 'temporary')
+      .path('data', 'temporary')
       .commit(removeFeature(this.activeRecharge.id));
   }
 

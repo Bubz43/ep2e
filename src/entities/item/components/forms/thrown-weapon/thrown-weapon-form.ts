@@ -141,13 +141,13 @@ export class ThrownWeaponForm extends ItemFormBase {
         <entity-form-header
           noDefaultImg
           slot="header"
-          .updateActions=${updater.prop('')}
+          .updateActions=${updater.path('')}
           type=${localize(type)}
           ?disabled=${disabled}
         >
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.prop('data'), {
+        ${renderUpdaterForm(updater.path('data'), {
           disabled,
           slot: 'sidebar',
           fields: renderGearTraitCheckboxes,
@@ -167,7 +167,7 @@ export class ThrownWeaponForm extends ItemFormBase {
                 update: ({ skillOption, exotic }) => {
                   if (exotic !== undefined) {
                     this.item.updater
-                      .prop('data', 'exoticSkill')
+                      .path('data', 'exoticSkill')
                       .commit(exotic);
                   } else if (skillOption) {
                     this.skillOption = skillOption;
@@ -176,7 +176,7 @@ export class ThrownWeaponForm extends ItemFormBase {
                       !this.item.exoticSkillName
                     ) {
                       this.item.updater
-                        .prop('data', 'exoticSkill')
+                        .path('data', 'exoticSkill')
                         .commit(this.item.name);
                     }
                   }
@@ -201,12 +201,12 @@ export class ThrownWeaponForm extends ItemFormBase {
                   })}
                 `,
               })}
-              ${renderUpdaterForm(updater.prop('data'), {
+              ${renderUpdaterForm(updater.path('data'), {
                 classes: complexityForm.cssClass,
                 disabled,
                 fields: renderComplexityFields,
               })}
-              ${renderUpdaterForm(updater.prop('data'), {
+              ${renderUpdaterForm(updater.path('data'), {
                 disabled,
                 classes: 'quantity-form',
                 fields: ({ quantity, quantityPerCost }) => [
@@ -252,7 +252,7 @@ export class ThrownWeaponForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.prop('data', 'description')}
+          .updateActions=${updater.path('data', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -300,7 +300,7 @@ export class ThrownWeaponForm extends ItemFormBase {
   }
 
   private renderAttackEdit() {
-    const updater = this.item.updater.prop('data', 'primaryAttack');
+    const updater = this.item.updater.path('data', 'primaryAttack');
     const { disabled } = this;
     const { attackTraits } = updater.originalValue();
     const attackTraitsObj = mapToObj(enumValues(AttackTrait), (trait) => [

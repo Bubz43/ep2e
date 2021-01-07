@@ -106,7 +106,7 @@ export class EgoFormSkills extends LitElement {
   private fieldOperations = mapToObj(enumValues(FieldSkillType), (type) => [
     type,
     addUpdateRemoveFeature(
-      () => this.ego.updater.prop('data', 'fieldSkills', type).commit,
+      () => this.ego.updater.path('data', 'fieldSkills', type).commit,
     ),
   ]);
 
@@ -289,7 +289,7 @@ export class EgoFormSkills extends LitElement {
                     .skill=${skill as FullSkill}
                     ?disabled=${disabled}
                     ?filtered=${this.filteredSkills.has(skill)}
-                    .skillUpdate=${updater.prop(
+                    .skillUpdate=${updater.path(
                       'data',
                       'skills',
                       (skill as FullSkill).skill,

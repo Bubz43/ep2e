@@ -72,10 +72,10 @@ export type SubstanceUseMethod = Substance['applicationMethods'][number];
 
 class Base extends ItemProxyBase<ItemType.Substance> {
   get updateState() {
-    return this.updater.prop('data', 'state');
+    return this.updater.path('data', 'state');
   }
   get updateQuantity() {
-    return this.updater.prop('data');
+    return this.updater.path('data');
   }
 }
 export class Substance
@@ -176,7 +176,7 @@ export class Substance
       duration: Substance.onsetTime(awaitingOnset.useMethod),
       startTime: awaitingOnset.onsetStartTime,
       label: this.appliedName,
-      updateStartTime: this.updater.prop(
+      updateStartTime: this.updater.path(
         'flags',
         EP.Name,
         'awaitingOnset',
@@ -341,7 +341,7 @@ export class Substance
     const items = new Map<string, Trait | Sleight>();
     const ops = setupItemOperations((datas) =>
       this.updater
-        .prop('flags', EP.Name, group)
+        .path('flags', EP.Name, group)
         .commit((items) => datas(items || []) as typeof items),
     );
 
@@ -439,7 +439,7 @@ export class Substance
   }
 
   addItemEffect(group: keyof SubstanceItemFlags, itemData: DrugAppliedItem) {
-    this.updater.prop('flags', EP.Name, group).commit((items) => {
+    this.updater.path('flags', EP.Name, group).commit((items) => {
       const changed = [...(items || [])];
       const _id = uniqueStringID(
         changed.map((i) => last(i._id.split('-')) || i._id),
@@ -493,7 +493,7 @@ export class Substance
   }
 
   updateAppliedState(newState: Partial<ActiveSubstanceState>) {
-    return this.updater.prop('flags', EP.Name, 'active').commit(newState);
+    return this.updater.path('flags', EP.Name, 'active').commit(newState);
   }
 
   createAwaitingOnset({
@@ -591,9 +591,9 @@ export class Substance
     }
 
     return this.updater
-      .prop('flags', EP.Name, 'awaitingOnset')
+      .path('flags', EP.Name, 'awaitingOnset')
       .store(null)
-      .prop('flags', EP.Name, 'active')
+      .path('flags', EP.Name, 'active')
       .commit(state);
   }
 
@@ -677,7 +677,7 @@ export class Substance
 
     if (!shouldApplySeverity && !shouldApplyBase) duration = 0;
 
-    const updateStartTime = this.updater.prop(
+    const updateStartTime = this.updater.path(
       'flags',
       EP.Name,
       'active',

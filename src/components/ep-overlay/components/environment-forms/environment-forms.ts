@@ -100,7 +100,7 @@ export class EnvironmentForms extends LitElement {
           props: createEnvironmentOverrides(environmentOverrides || {}),
           update: (changed, existing) =>
             scene.updater
-              .prop('flags', EP.Name, 'environmentOverrides')
+              .path('flags', EP.Name, 'environmentOverrides')
               .commit({ ...existing, ...changed }),
           fields: ({ name, gravity, vacuum, img, notes }) =>
             map([name, gravity, vacuum, img, notes], renderSwitch),
@@ -109,7 +109,7 @@ export class EnvironmentForms extends LitElement {
           props: createEnvironment(environment || {}),
           update: (changed, existing) =>
             scene.updater
-              .prop('flags', EP.Name, 'environment')
+              .path('flags', EP.Name, 'environment')
               .commit({ ...existing, ...changed }),
           fields: renderEnvironmentFields,
         }),

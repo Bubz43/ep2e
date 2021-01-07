@@ -28,7 +28,7 @@ export class Trait
   }
 
   updateSort(newSort: number) {
-    return this.updater.prop('sort').commit(newSort);
+    return this.updater.path('sort').commit(newSort);
   }
 
   @LazyGetter()
@@ -88,11 +88,11 @@ export class Trait
   }
 
   toggleTriggered() {
-    return this.updater.prop('data', 'state', 'triggered').commit(toggle);
+    return this.updater.path('data', 'state', 'triggered').commit(toggle);
   }
 
   updateLevel(levelIndex: number) {
-    return this.updater.prop('data', 'state', 'level').commit(levelIndex);
+    return this.updater.path('data', 'state', 'level').commit(levelIndex);
   }
 
   get fullType() {

@@ -52,7 +52,7 @@ export class TraitForm extends ItemFormBase {
   @internalProperty() addEffectLevel = 0;
 
   private readonly levelOps = addUpdateRemoveFeature(
-    () => this.item.updater.prop('data', 'levels').commit,
+    () => this.item.updater.path('data', 'levels').commit,
   );
 
   update(changedProps: PropertyValues) {
@@ -90,7 +90,7 @@ export class TraitForm extends ItemFormBase {
   private updateLevels() {
     const { levels, updater } = this.item;
     const { levels: levelCosts, levelCount } = this;
-    updater.prop('data', 'levels').commit(() =>
+    updater.path('data', 'levels').commit(() =>
       take(levelCosts, levelCount).reduce((accum, cost, index) => {
         const existing = accum[index];
         return existing
@@ -161,7 +161,7 @@ export class TraitForm extends ItemFormBase {
         <entity-form-header
           noDefaultImg
           slot="header"
-          .updateActions=${updater.prop('')}
+          .updateActions=${updater.path('')}
           type=${localize(type)}
           ?disabled=${disabled}
         >
@@ -175,7 +175,7 @@ export class TraitForm extends ItemFormBase {
               : html`
                   <sl-header heading=${localize('details')}>
                     ${!!triggers && embedded
-                      ? renderUpdaterForm(updater.prop('data', 'state'), {
+                      ? renderUpdaterForm(updater.path('data', 'state'), {
                           slot: 'action',
                           fields: ({ triggered }) =>
                             renderLabeledSwitch(triggered, { alignEnd: true }),
@@ -200,7 +200,7 @@ export class TraitForm extends ItemFormBase {
                     ></mwc-icon-button>
                   </sl-header>
                 `}
-            ${renderUpdaterForm(updater.prop('data'), {
+            ${renderUpdaterForm(updater.path('data'), {
               disabled,
               classes: 'info-form',
               fields: ({ traitType, subtype, source }) => [
@@ -237,7 +237,7 @@ export class TraitForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.prop('data', 'description')}
+          .updateActions=${updater.path('data', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -283,7 +283,7 @@ export class TraitForm extends ItemFormBase {
           }),
         )}
       </div>
-      ${renderUpdaterForm(this.item.updater.prop('data'), {
+      ${renderUpdaterForm(this.item.updater.path('data'), {
         classes: 'text-areas',
         fields: ({ restrictions, triggers }) => [
           renderTextareaField(restrictions),

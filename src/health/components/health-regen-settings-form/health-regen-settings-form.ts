@@ -26,7 +26,7 @@ export class HealthRegenSettingsForm extends LitElement {
 
   render() {
     return html`
-      ${renderUpdaterForm(this.regenUpdater.prop(HealOverTimeTarget.Damage), {
+      ${renderUpdaterForm(this.regenUpdater.path(HealOverTimeTarget.Damage), {
         fields: ({ amount, interval }) => html`
           <p>${localize(HealOverTimeTarget.Damage)}</p>
           ${[
@@ -35,7 +35,7 @@ export class HealthRegenSettingsForm extends LitElement {
           ]}
         `,
       })}
-      ${renderUpdaterForm(this.regenUpdater.prop(HealOverTimeTarget.Wound), {
+      ${renderUpdaterForm(this.regenUpdater.path(HealOverTimeTarget.Wound), {
         fields: ({ amount, interval }) => html`
           <p>${localize(HealOverTimeTarget.Wound)}</p>
           ${[

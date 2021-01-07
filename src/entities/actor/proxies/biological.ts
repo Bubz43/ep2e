@@ -25,7 +25,7 @@ class BiologicalBase extends ActorProxyBase<ActorType.Biological> {
     return this.epData.subtype;
   }
   get damagedArmorUpdater() {
-    return this.updater.prop('data', 'damagedArmor');
+    return this.updater.path('data', 'damagedArmor');
   }
 }
 
@@ -51,7 +51,7 @@ export class Biological extends mix(BiologicalBase).with(
   }
 
   updateConditions(conditions: ConditionType[]) {
-    return this.updater.prop('data', 'conditions').commit(conditions);
+    return this.updater.path('data', 'conditions').commit(conditions);
   }
 
   get healths(): ActorHealth[] {
@@ -72,7 +72,7 @@ export class Biological extends mix(BiologicalBase).with(
   }
 
   updateRecoveryConditions(conditions: RecoveryConditions) {
-    return this.updater.prop('data', 'recoveryConditions').commit(conditions);
+    return this.updater.path('data', 'recoveryConditions').commit(conditions);
   }
 
   @LazyGetter()
@@ -95,7 +95,7 @@ export class Biological extends mix(BiologicalBase).with(
     return new BiologicalHealth({
       data: this.epData.physicalHealth,
       statMods: this.activeEffects.getHealthStatMods(HealthType.Physical),
-      updater: this.updater.prop('data', 'physicalHealth').nestedStore(),
+      updater: this.updater.path('data', 'physicalHealth').nestedStore(),
       source: localize('frame'),
       isSwarm: this.isSwarm,
       recoveryEffects: this.activeEffects.healthRecovery,

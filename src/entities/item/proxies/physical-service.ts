@@ -24,7 +24,7 @@ import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
 class Base extends ItemProxyBase<ItemType.PhysicalService> {
   get updateState() {
-    return this.updater.prop('data', 'state');
+    return this.updater.path('data', 'state');
   }
 }
 export class PhysicalService extends mix(Base).with(Purchasable, Service) {
@@ -58,7 +58,7 @@ export class PhysicalService extends mix(Base).with(Purchasable, Service) {
 
   toggleEquipped() {
     return this.updater
-      .prop('data', 'state')
+      .path('data', 'state')
       .commit(({ equipped, serviceStartTime }) => ({
         equipped: !equipped,
         serviceStartTime: equipped ? serviceStartTime : currentWorldTimeMS(),
@@ -68,7 +68,7 @@ export class PhysicalService extends mix(Base).with(Purchasable, Service) {
   useRep({ id, ...use }: RepUse & { id: string }) {
     const rep = this.findRep(id);
     if (!rep) return;
-    return this.updater.prop('data', 'reputations').commit((reps) =>
+    return this.updater.path('data', 'reputations').commit((reps) =>
       updateFeature(reps, {
         id,
         ...repModification({ rep, ...use }),
@@ -96,7 +96,7 @@ export class PhysicalService extends mix(Base).with(Purchasable, Service) {
             id: `${this.id}-${rep.id}`,
             startTime: rep.refreshStartTime,
             updateStartTime: (refreshStartTime) => {
-              this.updater.prop('data', 'reputations').commit((reps) =>
+              this.updater.path('data', 'reputations').commit((reps) =>
                 updateFeature(reps, {
                   refreshStartTime: refreshStartTime,
                   id: rep.id,
@@ -111,7 +111,7 @@ export class PhysicalService extends mix(Base).with(Purchasable, Service) {
   storeRepRefresh() {
     if (this.refreshTimers.some(refreshAvailable)) {
       this.updater
-        .prop('data', 'reputations')
+        .path('data', 'reputations')
         .store(
           map((rep) =>
             getElapsedTime(rep.refreshStartTime) >= CommonInterval.Week

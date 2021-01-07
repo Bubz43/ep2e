@@ -66,7 +66,7 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
 
   private setImg = (img: string) => {
     if (this.token) this.token.update({ img }, {});
-    else this.character.updater.prop('img').commit(img);
+    else this.character.updater.path('img').commit(img);
   };
 
   private editImg() {

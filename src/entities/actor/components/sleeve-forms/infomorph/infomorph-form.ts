@@ -52,7 +52,7 @@ export class InfomorphForm extends SleeveFormBase {
       <entity-form-layout noSidebar>
         <entity-form-header
           slot="header"
-          .updateActions=${updater.prop('')}
+          .updateActions=${updater.path('')}
           type=${localize(type)}
           ?disabled=${disabled}
         >
@@ -60,7 +60,7 @@ export class InfomorphForm extends SleeveFormBase {
         </entity-form-header>
         <div slot="details">
           <sleeve-form-acquisition
-            .updateActions=${updater.prop('data', 'acquisition')}
+            .updateActions=${updater.path('data', 'acquisition')}
             ?disabled=${disabled}
           ></sleeve-form-acquisition>
           <sleeve-form-pools
@@ -136,7 +136,7 @@ export class InfomorphForm extends SleeveFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.prop('data', 'description')}
+          .updateActions=${updater.path('data', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -164,14 +164,14 @@ export class InfomorphForm extends SleeveFormBase {
     const { meshHealth, updater } = this.sleeve;
     return html`
       <h3>${localize('meshHealth')}</h3>
-      ${renderUpdaterForm(updater.prop('data', 'meshHealth'), {
+      ${renderUpdaterForm(updater.path('data', 'meshHealth'), {
         fields: ({ baseDurability }) =>
           renderNumberField(baseDurability, { min: 1 }),
       })}
       <health-state-form .health=${meshHealth}></health-state-form>
       <health-regen-settings-form
         .health=${meshHealth}
-        .regenUpdater=${updater.prop('data', 'meshHealth').nestedStore()}
+        .regenUpdater=${updater.path('data', 'meshHealth').nestedStore()}
       ></health-regen-settings-form>
     `;
   }
@@ -179,7 +179,7 @@ export class InfomorphForm extends SleeveFormBase {
   private renderPoolEdit() {
     return html`
       <h3>${localize('pools')}</h3>
-      ${renderPoolEditForm(this.sleeve.updater.prop('data', 'pools'))}
+      ${renderPoolEditForm(this.sleeve.updater.path('data', 'pools'))}
     `;
   }
 }

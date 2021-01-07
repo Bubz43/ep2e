@@ -73,7 +73,7 @@ class MeshHealthBase implements CommonHealth {
       biological: true,
       effects: { recovery: [], timeframeMultipliers: [] },
       conditions: RecoveryConditions.Normal,
-      updateStartTime: this.init.updater.prop('').commit,
+      updateStartTime: this.init.updater.path('').commit,
     });
   }
 
@@ -100,21 +100,21 @@ class MeshHealthBase implements CommonHealth {
   applyModification(modification: HealthModification) {
     // TODO Crashed vs not crashed
     return this.init.updater
-      .prop('')
+      .path('')
       .commit((data) => applyHealthModification(data, modification));
   }
 
   resetLog() {
-    return this.init.updater.prop('log').commit([]);
+    return this.init.updater.path('log').commit([]);
   }
 }
 
 export class MeshHealth extends HealthMixin(MeshHealthBase) {
   private resetRegenStartTimes() {
     this.init.updater
-      .prop('aidedHealTickStartTime')
+      .path('aidedHealTickStartTime')
       .store(currentWorldTimeMS())
-      .prop('ownHealTickStartTime')
+      .path('ownHealTickStartTime')
       .store(currentWorldTimeMS());
   }
 
@@ -134,9 +134,9 @@ export class MeshHealth extends HealthMixin(MeshHealthBase) {
 
         if (damage < dur && modification.damage >= dur) {
           updater
-            .prop('crashWounds')
+            .path('crashWounds')
             .store(modification.wounds)
-            .prop('rebootEndTime')
+            .path('rebootEndTime')
             .store(-1);
         }
         break;
@@ -152,9 +152,9 @@ export class MeshHealth extends HealthMixin(MeshHealthBase) {
 
         if (damage < dur && modification.damage + damage >= dur) {
           updater
-            .prop('crashWounds')
+            .path('crashWounds')
             .store((wounds || 0) + modification.wounds)
-            .prop('rebootEndTime')
+            .path('rebootEndTime')
             .store(-1);
         }
         break;
@@ -168,13 +168,13 @@ export class MeshHealth extends HealthMixin(MeshHealthBase) {
     }
 
     return updater
-      .prop('')
+      .path('')
       .commit((data) => applyHealthModification(data, modification));
   }
 
   logHeal(slot: HealingSlot) {
     return this.init.updater
-      .prop(`${slot}HealTickStartTime` as const)
+      .path(`${slot}HealTickStartTime` as const)
       .commit(currentWorldTimeMS());
   }
 
@@ -184,7 +184,7 @@ export class MeshHealth extends HealthMixin(MeshHealthBase) {
 
   setRebootTime(turns: number) {
     return this.init.updater
-      .prop('rebootEndTime')
+      .path('rebootEndTime')
       .commit(currentWorldTimeMS() + CommonInterval.Turn * turns);
   }
 
@@ -199,7 +199,7 @@ export class MeshHealth extends HealthMixin(MeshHealthBase) {
     const { value: dur } = this.main.durability;
     const keptDamage = nonNegative(damage - dur);
     const keptWounds = nonNegative(wounds - crashWounds);
-    return this.init.updater.prop('').commit({
+    return this.init.updater.path('').commit({
       damage: 0 + keptDamage,
       wounds: 0 + keptWounds,
       crashWounds: 0,

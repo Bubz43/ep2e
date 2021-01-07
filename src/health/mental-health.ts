@@ -125,7 +125,7 @@ class MentalHealthBase implements CommonHealth {
 
   updateHardening(hardening: typeof hardeningTypes[number], newVal: number) {
     return this.init.updater
-      .prop(hardening)
+      .path(hardening)
       .commit(clamp(newVal, { min: 0, max: 5 }));
   }
 
@@ -140,7 +140,7 @@ class MentalHealthBase implements CommonHealth {
 
   logNaturalHeal(attempt: NaturalMentalHealAttempt) {
     return this.init.updater
-      .prop('naturalHealAttempts')
+      .path('naturalHealAttempts')
       .commit(addFeature(attempt));
   }
 
@@ -161,22 +161,22 @@ class MentalHealthBase implements CommonHealth {
       modification.wounds &&
       this.canHarden(modification.stressType)
     ) {
-      updater.prop(modification.stressType).store((val) => val + 1);
+      updater.path(modification.stressType).store((val) => val + 1);
     }
     if (
       modification.mode === HealthModificationMode.Inflict ||
       (modification.mode === HealthModificationMode.Edit &&
         modification.damage > this.main.damage.value)
     ) {
-      updater.prop('lastGainedStressTime').commit(currentWorldTimeMS());
+      updater.path('lastGainedStressTime').commit(currentWorldTimeMS());
     }
     return updater
-      .prop('')
+      .path('')
       .commit((data) => applyHealthModification(data, modification));
   }
 
   resetLog() {
-    return this.init.updater.prop('log').commit([]);
+    return this.init.updater.path('log').commit([]);
   }
 }
 

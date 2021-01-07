@@ -54,7 +54,7 @@ import { Trait } from './trait';
 
 class Base extends ItemProxyBase<ItemType.PhysicalTech> {
   get updateState() {
-    return this.updater.prop('data', 'state');
+    return this.updater.path('data', 'state');
   }
 }
 export class PhysicalTech
@@ -89,7 +89,7 @@ export class PhysicalTech
   }
 
   private get aliSetter() {
-    return this.updater.prop('flags', EP.Name, 'onboardALI').commit;
+    return this.updater.path('flags', EP.Name, 'onboardALI').commit;
   }
 
   get fullName() {
@@ -188,7 +188,7 @@ export class PhysicalTech
     const beforeOp = forEach<string>((id) => {
       PhysicalTech.aliItemInstances.get(this.updater)?.delete(id);
     });
-    const ops = setupItemOperations(updater.prop('items').commit, {
+    const ops = setupItemOperations(updater.path('items').commit, {
       update: beforeOp,
       remove: beforeOp,
     });
@@ -314,7 +314,7 @@ export class PhysicalTech
     return new MeshHealth({
       data: this.epData.meshHealth,
       statMods: undefined,
-      updater: this.updater.prop('data', 'meshHealth').nestedStore(),
+      updater: this.updater.path('data', 'meshHealth').nestedStore(),
       source: localize('mindState'),
       homeDevices: 1,
       deathRating: true,
@@ -325,7 +325,7 @@ export class PhysicalTech
   get firewallHealth() {
     return new AppMeshHealth({
       data: this.epData.firewallHealth,
-      updater: this.updater.prop('data', 'firewallHealth').nestedStore(),
+      updater: this.updater.path('data', 'firewallHealth').nestedStore(),
       source: `${localize('firewall')} (${this.epData.firewallRating})`,
     });
   }
@@ -349,7 +349,7 @@ export class PhysicalTech
   }
 
   private get glandCommiter() {
-    return this.updater.prop('flags', EP.Name, 'gland').commit;
+    return this.updater.path('flags', EP.Name, 'gland').commit;
   }
 
   @LazyGetter()
@@ -419,7 +419,7 @@ export class PhysicalTech
       id: `${this.type}-${this.id}`,
       label: this.fullName,
       startTime: this.state.fabStartTime,
-      updateStartTime: this.updater.prop('data', 'state', 'fabStartTime')
+      updateStartTime: this.updater.path('data', 'state', 'fabStartTime')
         .commit,
     });
   }
@@ -430,7 +430,7 @@ export class PhysicalTech
   }
 
   private get itemBlueprintCommiter() {
-    return this.updater.prop('flags', EP.Name, 'blueprint').commit;
+    return this.updater.path('flags', EP.Name, 'blueprint').commit;
   }
 
   getDataCopy(reset = false) {

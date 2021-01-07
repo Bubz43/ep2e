@@ -20,7 +20,7 @@ export const renderItemForm = (proxy: ItemProxy) => {
         <physical-tech-form .item=${proxy}></physical-tech-form>
         <entity-form-footer
           slot="footer"
-          .updater=${proxy.updater.prop('data').nestedStore()}
+          .updater=${proxy.updater.path('data').nestedStore()}
         ></entity-form-footer>
       `;
 
@@ -29,7 +29,7 @@ export const renderItemForm = (proxy: ItemProxy) => {
         <melee-weapon-form .item=${proxy}></melee-weapon-form>
         <entity-form-footer
           slot="footer"
-          .updater=${proxy.updater.prop('data').nestedStore()}
+          .updater=${proxy.updater.path('data').nestedStore()}
         ></entity-form-footer>
       `;
 
@@ -38,7 +38,7 @@ export const renderItemForm = (proxy: ItemProxy) => {
         <thrown-weapon-form .item=${proxy}></thrown-weapon-form>
         <entity-form-footer
           slot="footer"
-          .updater=${proxy.updater.prop('data').nestedStore()}
+          .updater=${proxy.updater.path('data').nestedStore()}
         ></entity-form-footer>
       `;
 
@@ -47,7 +47,7 @@ export const renderItemForm = (proxy: ItemProxy) => {
         <firearm-ammo-form .item=${proxy}></firearm-ammo-form>
         <entity-form-footer
           slot="footer"
-          .updater=${proxy.updater.prop('data').nestedStore()}
+          .updater=${proxy.updater.path('data').nestedStore()}
         ></entity-form-footer>
       `;
 
@@ -56,7 +56,7 @@ export const renderItemForm = (proxy: ItemProxy) => {
         <physical-service-form .item=${proxy}></physical-service-form>
         <entity-form-footer
           slot="footer"
-          .updater=${proxy.updater.prop('data').nestedStore()}
+          .updater=${proxy.updater.path('data').nestedStore()}
         ></entity-form-footer>
       `;
 
@@ -65,7 +65,7 @@ export const renderItemForm = (proxy: ItemProxy) => {
         <trait-form .item=${proxy}></trait-form>
         <entity-form-footer
           slot="footer"
-          .updater=${proxy.updater.prop('data').nestedStore()}
+          .updater=${proxy.updater.path('data').nestedStore()}
         ></entity-form-footer>
       `;
 
@@ -74,7 +74,7 @@ export const renderItemForm = (proxy: ItemProxy) => {
         <armor-form .item=${proxy}></armor-form>
         <entity-form-footer
           slot="footer"
-          .updater=${proxy.updater.prop('data').nestedStore()}
+          .updater=${proxy.updater.path('data').nestedStore()}
         ></entity-form-footer>
       `;
 
@@ -83,7 +83,7 @@ export const renderItemForm = (proxy: ItemProxy) => {
         <software-form .item=${proxy}></software-form>
         <entity-form-footer
           slot="footer"
-          .updater=${proxy.updater.prop('data').nestedStore()}
+          .updater=${proxy.updater.path('data').nestedStore()}
         ></entity-form-footer>
       `;
 
@@ -92,7 +92,7 @@ export const renderItemForm = (proxy: ItemProxy) => {
         <sleight-form .item=${proxy}></sleight-form>
         <entity-form-footer
           slot="footer"
-          .updater=${proxy.updater.prop('data').nestedStore()}
+          .updater=${proxy.updater.path('data').nestedStore()}
         ></entity-form-footer>
       `;
 
@@ -101,7 +101,7 @@ export const renderItemForm = (proxy: ItemProxy) => {
         <psi-form .item=${proxy}></psi-form>
         <entity-form-footer
           slot="footer"
-          .updater=${proxy.updater.prop('data').nestedStore()}
+          .updater=${proxy.updater.path('data').nestedStore()}
         ></entity-form-footer>
       `;
 
@@ -110,7 +110,7 @@ export const renderItemForm = (proxy: ItemProxy) => {
         <substance-form .item=${proxy}></substance-form>
         <entity-form-footer
           slot="footer"
-          .updater=${proxy.updater.prop('data').nestedStore()}
+          .updater=${proxy.updater.path('data').nestedStore()}
         ></entity-form-footer>
       `;
 
@@ -119,7 +119,7 @@ export const renderItemForm = (proxy: ItemProxy) => {
         <explosive-form .item=${proxy}></explosive-form>
         <entity-form-footer
           slot="footer"
-          .updater=${proxy.updater.prop('data').nestedStore()}
+          .updater=${proxy.updater.path('data').nestedStore()}
         ></entity-form-footer>
       `;
 
@@ -128,7 +128,7 @@ export const renderItemForm = (proxy: ItemProxy) => {
         <railgun-form .item=${proxy}></railgun-form>
         <entity-form-footer
           slot="footer"
-          .updater=${proxy.updater.prop('data').nestedStore()}
+          .updater=${proxy.updater.path('data').nestedStore()}
         ></entity-form-footer>
       `;
 
@@ -137,7 +137,7 @@ export const renderItemForm = (proxy: ItemProxy) => {
         <firearm-form .item=${proxy}></firearm-form>
         <entity-form-footer
           slot="footer"
-          .updater=${proxy.updater.prop('data').nestedStore()}
+          .updater=${proxy.updater.path('data').nestedStore()}
         ></entity-form-footer>
       `;
 
@@ -146,7 +146,7 @@ export const renderItemForm = (proxy: ItemProxy) => {
         <spray-weapon-form .item=${proxy}></spray-weapon-form>
         <entity-form-footer
           slot="footer"
-          .updater=${proxy.updater.prop('data').nestedStore()}
+          .updater=${proxy.updater.path('data').nestedStore()}
         ></entity-form-footer>
       `;
 
@@ -155,7 +155,7 @@ export const renderItemForm = (proxy: ItemProxy) => {
         <beam-weapon-form .item=${proxy}></beam-weapon-form>
         <entity-form-footer
           slot="footer"
-          .updater=${proxy.updater.prop('data').nestedStore()}
+          .updater=${proxy.updater.path('data').nestedStore()}
         ></entity-form-footer>
       `;
 
@@ -164,7 +164,7 @@ export const renderItemForm = (proxy: ItemProxy) => {
         <seeker-weapon-form .item=${proxy}></seeker-weapon-form>
         <entity-form-footer
           slot="footer"
-          .updater=${proxy.updater.prop('data').nestedStore()}
+          .updater=${proxy.updater.path('data').nestedStore()}
         ></entity-form-footer>
       `;
   }

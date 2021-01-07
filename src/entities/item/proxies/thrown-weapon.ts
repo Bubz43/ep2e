@@ -17,10 +17,10 @@ import { Substance } from './substance';
 
 class Base extends ItemProxyBase<ItemType.ThrownWeapon> {
   get updateState() {
-    return this.updater.prop('data', 'state');
+    return this.updater.path('data', 'state');
   }
   get updateQuantity() {
-    return this.updater.prop('data');
+    return this.updater.path('data');
   }
 }
 export class ThrownWeapon
@@ -71,7 +71,7 @@ export class ThrownWeapon
             isEditable: () => this.editable,
             setData: (changed) => {
               this.updater
-                .prop('flags', EP.Name, 'coating')
+                .path('flags', EP.Name, 'coating')
                 .commit([mergeObject(substance, changed, { inplace: false })]);
             },
           }),
@@ -84,10 +84,10 @@ export class ThrownWeapon
     const substanceData =
       substance instanceof Substance ? substance.getDataCopy() : substance;
     substanceData.data = { ...substanceData.data, quantity: 1 };
-    this.updater.prop('flags', EP.Name, 'coating').commit([substanceData]);
+    this.updater.path('flags', EP.Name, 'coating').commit([substanceData]);
   }
 
   removeCoating() {
-    this.updater.prop('flags', EP.Name, 'coating').commit(null);
+    this.updater.path('flags', EP.Name, 'coating').commit(null);
   }
 }
