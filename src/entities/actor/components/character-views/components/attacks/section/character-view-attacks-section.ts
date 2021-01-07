@@ -5,6 +5,7 @@ import { idProp } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
 import { clickIfEnter } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
 import styles from './character-view-attacks-section.scss';
 
@@ -31,10 +32,12 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
     this.collapsed = !this.collapsed;
   }
 
+
   render() {
     return html`
       <sl-header
         part="header"
+        hideBorder
         heading=${localize('attacks')}
         @click=${this.toggleCollapse}
         @focus="${this.handleRippleFocus}"
@@ -43,6 +46,7 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
         @mouseenter="${this.handleRippleMouseEnter}"
         @mouseleave="${this.handleRippleMouseLeave}"
         @keydown=${clickIfEnter}
+        tabindex="0"
       >
         <span slot="action">${this.renderRipple()}</span>
         <mwc-icon
@@ -52,7 +56,7 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
           keyboard_arrow_down
         </mwc-icon>
       </sl-header>
-      <sl-animated-list class="attacks">
+      <sl-animated-list class="attacks" ?hidden=${this.collapsed}>
         ${repeat(
           this.character.weapons.melee,
           idProp,

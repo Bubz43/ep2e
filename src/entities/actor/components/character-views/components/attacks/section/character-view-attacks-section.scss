@@ -54,4 +54,7 @@
   .type {
     color: var(--color-text-lighter);
   }
+  &[hidden] {
+    display: none;
+  }
 }
