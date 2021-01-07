@@ -119,7 +119,7 @@ export class MessageMeleeAttack extends MessageElement {
       extraWeapon,
       appliedCoating,
       appliedPayload,
-      testResult
+      testResult,
     } = this.meleeAttack;
 
     const { disabled } = this;
@@ -136,7 +136,7 @@ export class MessageMeleeAttack extends MessageElement {
             'notes',
             'reduceAVbyDV',
           ]),
-        source: `${name} ${hasSecondaryAttack ? `[${attack.label}]` : ''}`,
+          source: `${name} ${hasSecondaryAttack ? `[${attack.label}]` : ''}`,
           multiplier: testResult === SuccessTestResult.CriticalSuccess ? 2 : 1,
           rolledFormulas: pipe(
             attack.rollFormulas,
@@ -144,15 +144,15 @@ export class MessageMeleeAttack extends MessageElement {
               compact([
                 testResult === SuccessTestResult.SuperiorSuccess && {
                   label: localize(testResult),
-                  formula: "+1d6"
+                  formula: '+1d6',
                 },
                 testResult === SuccessTestResult.SuperiorSuccessX2 && {
                   label: localize(testResult),
-                  formula: "+2d6"
+                  formula: '+2d6',
                 },
                 augmentUnarmed && {
-                  label: localize("unarmedDV"),
-                  formula: unarmedDV || "0",
+                  label: localize('unarmedDV'),
+                  formula: unarmedDV || '0',
                 },
                 aggressive && {
                   label: localize('aggressive'),
@@ -186,8 +186,12 @@ export class MessageMeleeAttack extends MessageElement {
           ?disabled=${disabled}
         ></mwc-icon-button>
       </div>
-      ${notEmpty(options)
-        ? html` <p class="options">${map(options, localize).join('  •  ')}</p> `
+      ${notEmpty(options) || testResult
+        ? html`
+            <p class="options">
+              ${map(compact([testResult, ...options]), localize).join('  •  ')}
+            </p>
+          `
         : ''}
       ${damage
         ? html` <message-damage .damage=${damage}></message-damage> `
