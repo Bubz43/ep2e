@@ -88,7 +88,6 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
       </sl-popover>
       <h2>${name}</h2>
       <div class="additional">
-    
         <sl-group class="initiative" label=${localize('initiative')}
           >${this.character.initiative}</sl-group
         >

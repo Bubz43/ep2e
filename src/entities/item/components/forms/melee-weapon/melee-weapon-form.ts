@@ -197,6 +197,7 @@ export class MeleeWeaponForm extends ItemFormBase {
       coating,
       payload,
       exoticSkillName,
+      path
     } = this.item;
     const { disabled } = this;
     return html`

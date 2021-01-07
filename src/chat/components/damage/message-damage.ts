@@ -54,6 +54,10 @@ export class MessageDamage extends LitElement {
     super.update(changedProps);
   }
 
+  private setMultiplier(ev: CustomEvent<RollMultiplier>) {
+    this.multiplier = ev.detail;
+  }
+
   toggleFormulas() {
     this.viewFormulas = !this.viewFormulas;
   }
@@ -144,18 +148,8 @@ export class MessageDamage extends LitElement {
       ${this.viewFormulas
         ? html`
             <div class="additional">
-              <sl-group label=${localize('multiplier')} class="multiplier">
-                ${rollMultipliers.map(
-                  (multiplier) =>
-                    html`<button @click=${() => this.multiplier = multiplier}
-                      class="${multiplier === this.multiplier
-                        ? 'active'
-                        : ''}"
-                    >
-                      ${multiplier}
-                    </button>`,
-                )}
-              </sl-group>
+            <multiplier-select multiplier=${this.multiplier} @roll-multiplier=${this.setMultiplier}></multiplier-select>
+          
 
 
               <rolled-formulas-list

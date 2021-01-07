@@ -1,5 +1,6 @@
 import type { MessageHeaderData } from '@src/chat/message-data';
 import type { ActorEP } from '@src/entities/actor/actor';
+import type { EntityPath } from '@src/entities/path';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import { noop } from 'remeda';
@@ -16,6 +17,7 @@ export type ItemProxyInit<T extends ItemType> = {
   deleteSelf?: () => void;
   alwaysDeletable?: boolean;
   actor?: ActorEP | null;
+  path?: EntityPath
 };
 
 export abstract class ItemProxyBase<T extends ItemType> {
@@ -27,6 +29,7 @@ export abstract class ItemProxyBase<T extends ItemType> {
   readonly actor;
   embedded;
   usable = true;
+  readonly path;
 
   constructor({
     data,
@@ -36,6 +39,7 @@ export abstract class ItemProxyBase<T extends ItemType> {
     deleteSelf,
     alwaysDeletable = false,
     actor,
+    path
   }: ItemProxyInit<T>) {
     this.data = data;
     this.updater =
@@ -50,6 +54,7 @@ export abstract class ItemProxyBase<T extends ItemType> {
     this.deleteSelf = deleteSelf;
     this.alwaysDeletable = alwaysDeletable;
     this.actor = actor;
+    this.path = path
     // this.actorIdentifiers = actorIdentifiers;
   }
 

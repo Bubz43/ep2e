@@ -11,7 +11,8 @@
   color: var(--color-text);
   grid-template-areas:
     'avatar form form'
-    'avatar tags type';
+    'avatar tags type'
+    'path path path';
   // gap: 0 0.5rem;
   grid-template-columns: min-content 1fr;
   // box-shadow: 0 5px 5px -5px black;
@@ -27,6 +28,14 @@
     border-radius: 2px;
     @include animate-css(fadeIn, 200ms);
   }
+}
+
+.path {
+  grid-area: path;
+  margin-top: -0.2rem;
+  color: var(--color-text-lighter);
+  display: flex;
+  align-items: center;
 }
 
 .type {

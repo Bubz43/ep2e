@@ -148,11 +148,14 @@ import { WeaponCard } from './entities/actor/components/character-views/componen
 import { MessageMeleeAttack } from './chat/components/melee-attack/message-melee-attack';
 import { CharacterViewAttacksSection } from './entities/actor/components/character-views/components/attacks/section/character-view-attacks-section';
 import { AptitudeCheckControls } from './success-test/components/aptitude-check-controls';
+import { MultiplierSelect } from './combat/components/multiplier-select/multiplier-select';
 
 // Generic Components
 Field;
 Form;
 AnimatedList;
+MultiplierSelect;
+
 // DateField;
 DeleteButton;
 Details;

@@ -167,7 +167,8 @@ export class Ego {
 
   get baseInitiative() {
     const { ref, int } = this.aptitudes;
-    return parseFloat(((ref + int) / 5).toFixed(1));
+    const base = (ref + int) / 5;
+    return Math.round(base * 100) / 100
   }
 
   get motivations() {

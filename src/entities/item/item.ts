@@ -1,11 +1,11 @@
 import type { RangedWeaponAccessory } from '@src/data-enums';
-import type { ArmorType } from '@src/features/active-armor';
+import { localize } from '@src/foundry/localization';
 import { LazyGetter } from 'lazy-get-decorator';
-import type { Constructor } from 'lit-element';
-import type { Class, Mutable, RequireAtLeastOne } from 'type-fest';
+import type { Mutable } from 'type-fest';
 import type { ActorEP } from '../actor/actor';
-import { ItemType, ActorType } from '../entity-types';
-import type { ItemDatas, ItemEntity } from '../models';
+import { ActorType, ItemType } from '../entity-types';
+import type { ItemDatas } from '../models';
+import type { EntityPath } from '../path';
 import { UpdateStore } from '../update-store';
 import { EntitySubscription } from '../update-subcriptions';
 import { ItemEPSheet } from './item-sheet';
@@ -52,6 +52,13 @@ export class ItemEP extends Item {
 
   get subscriptions() {
     return this._subscribers;
+  }
+
+  @LazyGetter()
+  get path(): EntityPath {
+    if (this.actor) return [...this.actor.path, { name: localize("items")}, this ]
+    if (game.items.has(this.id)) return [{ name: localize("items")}, this]
+    return []
   }
 
   @LazyGetter()
@@ -181,6 +188,7 @@ export class ItemEP extends Item {
       updater: (this.updater as unknown) as UpdateStore<T>,
       embedded: this.actor?.name,
       actor: this.actor,
+      path: this.path,
       ...this.operations,
       // actorIdentifiers: this.actor?.identifiers,
     } as const;

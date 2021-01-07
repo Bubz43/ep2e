@@ -25,6 +25,7 @@ import { Biological } from './proxies/biological';
 import { Character } from './proxies/character';
 import { Infomorph } from './proxies/infomorph';
 import { Synthetic } from './proxies/synthetic';
+import type { EntityPath } from '../path';
 
 type ItemUpdate = SetRequired<DeepPartial<ItemEntity>, '_id'>;
 
@@ -49,6 +50,8 @@ export class ActorEP extends Actor {
   // #identifiers?: ActorIdentifiers;
   #itemOperations?: ItemOperations;
 
+  #path?: EntityPath;
+
   private declare invalidated: boolean;
   private declare hasPrepared: boolean;
 
@@ -69,6 +72,27 @@ export class ActorEP extends Actor {
         setData: (changedData) => this.update(changedData, {}),
       });
     return this.#updater;
+  }
+
+  get path() {
+    if (!this.#path) {
+      if (this.isToken && this.token) {
+        if (!this.token.scene) this.#path = [];
+        else {
+          this.#path = [
+            this.token.scene,
+            this.token,
+          ];
+        }
+      } else if (game.actors.has(this.id)) {
+        this.#path = compact([
+          { name: localize('actors') },
+          this.folder && { name: this.folder.name },
+          this
+        ]);
+      } else this.#path = []
+    }
+    return this.#path;
   }
 
   get editable() {
@@ -232,6 +256,7 @@ export class ActorEP extends Actor {
       itemOperations: this.itemOperations,
       actor: this,
       openForm: this.openForm,
+      path: this.path
     } as const;
   }
 

@@ -11,8 +11,12 @@ import {
   PropertyValues,
 } from 'lit-element';
 import { pick, set } from 'remeda';
-import { createHealthModification, HealthModificationMode } from '../health';
-import type { Damage } from '../health-changes';
+import {
+  createHealthModification,
+  formatDamageType,
+  HealthModificationMode,
+} from '../health';
+import type { Damage, RollMultiplier } from '../health-changes';
 import type { ActorHealth } from '../health-mixin';
 import { HealthModificationEvent } from '../health-modification-event';
 import styles from './health-edit-base.scss';
@@ -47,6 +51,10 @@ export abstract class HealthEditBase<
       this.overrides = {};
     }
     super.update(changedProps);
+  }
+
+  protected setMultiplier(ev: CustomEvent<RollMultiplier>) {
+    this.editableDamage = { ...this.editableDamage, multiplier: ev.detail };
   }
 
   protected createModification() {
@@ -196,6 +204,25 @@ export abstract class HealthEditBase<
         ?complete=${!!this.editableDamage.damageValue}
         @submit-attempt=${this.emitChange}
       ></submit-button>
+    `;
+  }
+
+  protected renderMultiplier() {
+    return html`
+      <div class="multiplier">
+        <multiplier-select
+          multiplier=${this.editableDamage.multiplier}
+          @roll-multiplier=${this.setMultiplier}
+        ></multiplier-select>
+
+        ${this.editableDamage.multiplier !== 1
+          ? html`
+              <span
+                >${formatDamageType(this.health.type)} ${this.damageValue}</span
+              >
+            `
+          : ''}
+      </div>
     `;
   }
 }
