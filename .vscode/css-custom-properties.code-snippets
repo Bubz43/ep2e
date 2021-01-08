@@ -17,82 +17,82 @@
 	// }
 
 	"color-primary": {
-		"scope": "scss",
+		"scope": "scss,typescript",
 		"prefix": "vp",
 		"body": ["var(--color-primary)"]
 	},
 	"color-primary-alt": {
-		"scope": "scss",
+		"scope": "scss,typescript",
 		"prefix": "vpa",
 		"body": ["var(--color-primary-alt)"]
 	},
 	"color-secondary": {
-		"scope": "scss",
+		"scope": "scss,typescript",
 		"prefix": "vs",
 		"body": ["var(--color-secondary)"]
 	},
 	"color-background": {
-		"scope": "scss",
+		"scope": "scss,typescript",
 		"prefix": "vb",
 		"body": ["var(--color-bg)"]
 	},
 	"color-background-alt": {
-		"scope": "scss",
+		"scope": "scss,typescript",
 		"prefix": "vba",
 		"body": ["var(--color-bg-alt)"]
 	},
 	"color-disabled": {
-		"scope": "scss",
+		"scope": "scss,typescript",
 		"prefix": "vd",
 		"body": ["var(--color-disabled)"]
 	},
 	"color-negative": {
-		"scope": "scss",
+		"scope": "scss,typescript",
 		"prefix": "vn",
 		"body": ["var(--color-negative)"]
 	},
 	"color-text": {
-		"scope": "scss",
+		"scope": "scss,typescript",
 		"prefix": "vt",
 		"body": ["var(--color-text)"]
 	},
 	"color-text-lighter": {
-		"scope": "scss",
+		"scope": "scss,typescript",
 		"prefix": "vtl",
 		"body": ["var(--color-text-lighter)"]
 	},
 	"color-text-disabled": {
-		"scope": "scss",
+		"scope": "scss,typescript",
 		"prefix": "vtd",
 		"body": ["var(--color-text-disabled)"]
 	},
 	"color-grey": {
-		"scope": "scss",
+		"scope": "scss,typescript",
 		"prefix": "vg",
 		"body": ["var(--color-grey)"]
 	},
 	"color-border": {
-		"scope": "scss",
+		"scope": "scss,typescript",
 		"prefix": "vbc",
 		"body": ["var(--color-border)"]
 	},
 	"font-1": {
-		"scope": "scss",
+		"scope": "scss,typescript",
 		"prefix": "f1",
 		"body": "font-family: var(--font-1);"
 	},
 	"font-2": {
-		"scope": "scss",
+		"scope": "scss,typescript",
 		"prefix": "f2",
 		"body": "font-family: var(--font-2);"
 	},
 	"font-3": {
-		"scope": "scss",
+		"scope": "scss,typescript",
 		"prefix": "f3",
 		"body": "font-family: var(--font-3);"
 	},
 	"font-mono": {
-		"scope": "scss",
+		"scope": "scss,typescript",
 		"prefix": "fm",
 		"body": "font-family: var(--font-mono);"
 	} 

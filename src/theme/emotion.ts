@@ -6,7 +6,6 @@ export const createContainedStyles = (key: string) => {
   const e = createEmotion({
     container: styleContainer,
     key,
-    // speedy: true
   });
 
   return {
