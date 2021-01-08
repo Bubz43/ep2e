@@ -27,7 +27,12 @@ declare module 'solid-js' {
         RequiredProps<key>;
     };
 
-    interface IntrinsicElements extends Customs {}
+    interface ImgHTMLAttributes<HTMLImageElement> extends SolidJSX.HTMLAttributes<T> {
+      loading?: "lazy"
+    }
+
+    interface IntrinsicElements extends Customs {
+    }
 
     // interface IntrinsicElements {
     //   "sl-window": { name: string }

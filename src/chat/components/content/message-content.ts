@@ -14,7 +14,7 @@ export class MessageContent extends LitElement {
 
   @property({ attribute: false }) message!: ChatMessageEP;
 
-  @property({ type: Object }) data!: MessageData;
+  @property({ type: Object, }) data!: MessageData;
 
   @property({ type: Boolean }) disabled = false;
 
