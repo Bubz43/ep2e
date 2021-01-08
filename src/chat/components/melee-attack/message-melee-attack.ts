@@ -12,11 +12,17 @@ import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { HealthType } from '@src/health/health';
 import { SuccessTestResult } from '@src/success-test/success-test';
+import { colorFunctions, cssFonts, cssVar } from '@src/theme/css-vars';
+import { createContainedStyles } from '@src/theme/emotion';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { compact, concat, map, pick, pipe } from 'remeda';
 import { MessageElement } from '../message-element';
-import styles from './message-melee-attack.scss';
+// import styles from './message-melee-attack.scss';
+
+const { css, injectGlobal, getCSSResult } = createContainedStyles(
+  'message-melee-attack',
+);
 
 @customElement('message-melee-attack')
 export class MessageMeleeAttack extends MessageElement {
@@ -25,7 +31,7 @@ export class MessageMeleeAttack extends MessageElement {
   }
 
   static get styles() {
-    return [styles];
+    return [getCSSResult()];
   }
 
   @property({ type: Object }) meleeAttack!: MeleeWeaponMessageData;
@@ -178,7 +184,7 @@ export class MessageMeleeAttack extends MessageElement {
 
     // TODO edit settings
     return html`
-      <div class="settings">
+      <div class=${settings}>
         ${hasSecondaryAttack ? attack.label : ''}
         ${disabled
           ? ''
@@ -192,7 +198,7 @@ export class MessageMeleeAttack extends MessageElement {
       </div>
       ${notEmpty(options) || testResult
         ? html`
-            <p class="options">
+            <p class=${optionsClass}>
               ${map(compact([testResult, ...options]), localize).join('  •  ')}
             </p>
           `
@@ -208,7 +214,7 @@ export class MessageMeleeAttack extends MessageElement {
           `
         : ''}
       ${coating || payload
-        ? html`<div class="additional">
+        ? html`<div class=${additional}>
             ${coating
               ? html`
                   <mwc-button
@@ -237,6 +243,41 @@ export class MessageMeleeAttack extends MessageElement {
     `;
   }
 }
+
+
+injectGlobal`
+  * {
+    box-sizing: border-box;
+  }
+  
+  :host {
+    display: block;
+  }
+`;
+
+const settings = css`
+  padding: 0 0.5rem;
+  text-align: center;
+  --mdc-icon-button-size: 1.5rem;
+  --mdc-icon-size: 1.25rem;
+`;
+
+const additional = css`
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-top: 2px groove ${colorFunctions.alphav('--color-border', 0.5)};
+`;
+
+const optionsClass = css`
+  color: ${cssVar("--color-text-lighter")};
+  ${cssFonts.font3}
+  text-align: center;
+  margin: 0;
+  padding: 0.25rem 0.5rem;
+  font-size: small;
+`;
+
 
 declare global {
   interface HTMLElementTagNameMap {

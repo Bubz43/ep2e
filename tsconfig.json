@@ -5,6 +5,7 @@
     "target": "esnext",
     "moduleResolution": "node",
     "jsx": "preserve",
+    "jsxImportSource": "solid-js",
     "baseUrl": "./",
     /* paths - If you configure Snowpack import aliases, add them here. */
     "paths": {

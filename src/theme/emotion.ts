@@ -6,6 +6,7 @@ export const createContainedStyles = (key: string) => {
   const e = createEmotion({
     container: styleContainer,
     key,
+    speedy: false
   });
 
   return {
@@ -18,3 +19,5 @@ export const createContainedStyles = (key: string) => {
   }
   
 }
+
+export const { css: containedCSS, getCSSResult: getContainedCSSResult } = createContainedStyles("overlay");

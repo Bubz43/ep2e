@@ -96,6 +96,15 @@ world-time-controls {
   }
 }
 
+.solid-root {
+  display: block;
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  z-index: 40;
+  overflow: hidden;
+}
+
 slot[name='foundry-apps'],
 slot#windows {
   display: block;

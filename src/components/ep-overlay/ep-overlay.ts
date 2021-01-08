@@ -23,6 +23,11 @@ import { first } from 'remeda';
 import { traverseActiveElements } from 'weightless';
 import type { EventList } from '../event-list/event-list';
 import styles from './ep-overlay.scss';
+import { render as renderSolid } from "solid-js/web";
+import { SolidBase } from '@src/solid-base';
+import { getContainedCSSResult } from '@src/theme/emotion';
+
+
 
 const relevantHooks = [
   'updateScene',
@@ -47,7 +52,7 @@ export class EPOverlay extends LitElement {
     return 'ep-overlay' as const;
   }
 
-  static styles = [styles];
+  static styles = [styles, getContainedCSSResult()];
 
   @property({ reflect: true }) protected ready = false;
 
@@ -119,6 +124,8 @@ export class EPOverlay extends LitElement {
     // window.addEventListener("resize", () => this.confirmPositions());
     // requestAnimationFrame(() => this.confirmPositions());
     relevantHooks.forEach((hook) => Hooks.on(hook, this.setupControlled));
+
+    renderSolid(() => SolidBase({}), this.renderRoot.querySelector(".solid-root")!)
   }
 
   private setupControlled = debounceFn(() => {
@@ -392,6 +399,7 @@ export class EPOverlay extends LitElement {
 
   private staticElements = html`
     <!-- <scene-view><slot name="navigation"></slot></scene-view> -->
+    <div class="solid-root"></div>
     <slot
       name="foundry-apps"
       @slotchange=${this.switchWindowZ}

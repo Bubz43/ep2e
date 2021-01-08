@@ -143,6 +143,8 @@ export class SlWindow extends LitElement {
 
   @property({ type: String }) resizable = ResizeOption.None;
 
+  @property({ attribute: false }) afterCloseAnimation: (win: this) => void = (win => win.remove())
+
   @query('header') private header!: HTMLElement;
 
   @query('.content') private contentContainer!: HTMLElement;
@@ -231,7 +233,7 @@ export class SlWindow extends LitElement {
         { duration: 200 },
       ).onfinish = () => {
         this.style.pointerEvents = '';
-        this.remove();
+        this.afterCloseAnimation(this)
         resolve();
         this.closing = false;
         this.emit(SlWindowEventName.Closed);

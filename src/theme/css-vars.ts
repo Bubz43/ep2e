@@ -1,11 +1,12 @@
 import { mapToObj } from "remeda";
 
-export const cssColors = [
+const cssColors = [
   '--color-primary',
   '--color-primary-alt',
   '--color-secondary',
   '--color-bg',
   '--color-background-alt',
+  '--color-border',
   '--color-disabled',
   '--color-text',
   '--color-text-lighter',
