@@ -11,6 +11,16 @@ export class AptitudeCheckControls extends LitElement {
      return [styles];
   }
 
+  render() {
+  
+    return html`
+    <style>
+      .things {
+        color: rgba(0, 0, 0, 0)
+      }
+    </style>
+    `
+  }
   
 }
 

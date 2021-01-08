@@ -10,6 +10,7 @@ import {
   openWindow,
 } from '@src/components/window/window-controls';
 import { enumValues } from '@src/data-enums';
+import { createContainedStyles } from '@src/emotion';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import type { MeleeWeaponSettings } from '@src/entities/weapon-settings';
 import { localize } from '@src/foundry/localization';
@@ -21,10 +22,14 @@ import {
   html,
   internalProperty,
   PropertyValues,
+  unsafeCSS,
 } from 'lit-element';
 import { map } from 'remeda';
 import { traverseActiveElements } from 'weightless';
-import styles from './melee-settings-form.scss';
+
+const { css, injectGlobal, getCSSResult } = createContainedStyles(
+  'melee-settings-form',
+);
 
 @customElement('melee-settings-form')
 export class MeleeSettingsForm extends LitElement {
@@ -33,7 +38,7 @@ export class MeleeSettingsForm extends LitElement {
   }
 
   static get styles() {
-    return [styles];
+    return [getCSSResult()];
   }
 
   static openWindow(
@@ -157,6 +162,10 @@ export class MeleeSettingsForm extends LitElement {
           ),
         ],
       })}
+      <div class=${div}>
+        Just in div
+        <p class=${nested}>nested</p>
+      </div>
       ${this.requireSubmit
         ? html`
             <submit-button
@@ -169,6 +178,38 @@ export class MeleeSettingsForm extends LitElement {
     `;
   }
 }
+
+
+injectGlobal`
+  * {
+    box-sizing: border-box;
+  }
+
+  :host {
+    display: flex;
+    flex-flow: column;
+    padding: 0.5rem;
+    background: linear-gradient(
+      to bottom,
+      var(--color-bg),
+      var(--color-bg-alt)
+    );
+    min-width: 350px;
+    width: 100%;
+    
+  }
+`;
+const div = css`
+  padding: 1rem;
+`;
+const nested = css`
+  background: black;
+  ${div} & {
+    padding: 4rem;
+    outline: 3px solid red;
+  }
+`;
+
 
 declare global {
   interface HTMLElementTagNameMap {
