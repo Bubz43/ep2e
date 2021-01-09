@@ -137,7 +137,7 @@ import { MessageSubstanceUse } from './chat/components/substance/message-substan
 import { PhysicalTechCard } from './entities/actor/components/character-views/components/cards/physical-tech/physical-tech-card';
 import { CharacterViewActiveSubstance } from './entities/actor/components/character-views/components/active-substance/character-view-active-substance';
 import { CharacterViewPsi } from './entities/actor/components/character-views/components/psi/character-view-psi';
-import { CharacterViewTestActions } from './entities/actor/components/character-views/components/test-actions/character-view-stats';
+import { CharacterViewTestActions } from './entities/actor/components/character-views/components/test-actions/character-view-test-actions';
 import { CharacterViewExplosiveAttacks } from './entities/actor/components/character-views/components/attacks/explosive/character-view-explosive-attacks';
 import { MessageExplosive } from './chat/components/explosive/message-explosive';
 import { ExplosiveSettingsForm } from './entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';

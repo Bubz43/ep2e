@@ -1,3 +1,4 @@
+import { SlWindowEventName } from '@src/components/window/window-options';
 import { ChatMessageEP } from '@src/entities/chat-message';
 import { mutateEntityHook, MutateEvent } from '@src/foundry/hook-setups';
 import { overlay } from '@src/init';
@@ -179,6 +180,7 @@ export const ChatLogEP: Component = () => {
     }
   };
 
+
   return (
     <div class={container}>
       <ol class={messages} ref={list}>
@@ -202,15 +204,11 @@ export const ChatLogEP: Component = () => {
       </ol>
       <For each={state.popouts}>
         {(data) => (
-          <Portal useShadow mount={overlay}>
+          <Portal  useShadow mount={overlay}>
             <style>{getContainedCSSResult().cssText}</style>
             <sl-window
               name="Message"
-              afterCloseAnimation={() => {
-                setState('popouts', (popouts) =>
-                  popouts.filter(({ _id }) => _id !== data._id),
-                );
-              }}
+         
             >
               <ChatMessageItem data={data} />
             </sl-window>

@@ -417,8 +417,8 @@ PlayerList.prototype.activateListeners = function (jqueryEl: JQuery) {
 
 SceneNavigation.prototype.activateListeners = function (jqueryEl: JQuery) {
   const scenes = jqueryEl.find('.scene');
-  scenes.click(this._onClickScene.bind(this));
-  jqueryEl.find('#nav-toggle').click(this._onToggleNav.bind(this));
+  scenes.on("click", this._onClickScene.bind(this));
+  jqueryEl.find('#nav-toggle').on("click", this._onToggleNav.bind(this));
 
   jqueryEl[0]?.addEventListener('contextmenu', navMenuListener);
 };

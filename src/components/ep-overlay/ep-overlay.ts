@@ -125,7 +125,7 @@ export class EPOverlay extends LitElement {
     // requestAnimationFrame(() => this.confirmPositions());
     relevantHooks.forEach((hook) => Hooks.on(hook, this.setupControlled));
 
-    renderSolid(() => SolidBase({}), this.renderRoot.querySelector(".solid-root")!)
+    // renderSolid(() => SolidBase({}), this.renderRoot.querySelector(".solid-root")!)
   }
 
   private setupControlled = debounceFn(() => {

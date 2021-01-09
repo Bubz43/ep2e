@@ -57,7 +57,7 @@ export class WorldTimeControls extends LitElement {
   render() {
     const disabled = this.timeChange === 0;
     return html`
-      ${game.user.isGM
+      ${game.user.isGM || true
         ? html`<div class="controls">
             <mwc-icon-button
               ?disabled=${disabled}

@@ -70,6 +70,10 @@ export class CharacterViewTestActions extends LitElement {
     return this.character.disabled;
   }
 
+  private startAptitudeTest(aptitude: AptitudeType) {
+    
+  }
+
   render() {
     const { active, know } = this.ego.groupedSkills;
 
@@ -126,6 +130,7 @@ export class CharacterViewTestActions extends LitElement {
       clickable
       ?disabled=${this.disabled}
       class="aptitude-item"
+      @click=${() => this.startAptitudeTest(type)}
     >
       <span class="aptitude-name">${localize(type)}</span>
       <div class="aptitude-values">
