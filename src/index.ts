@@ -148,6 +148,7 @@ import { WeaponCard } from './entities/actor/components/character-views/componen
 import { MessageMeleeAttack } from './chat/components/melee-attack/message-melee-attack';
 import { CharacterViewAttacksSection } from './entities/actor/components/character-views/components/attacks/section/character-view-attacks-section';
 import { MultiplierSelect } from './combat/components/multiplier-select/multiplier-select';
+import { AptitudeCheckControls } from './success-test/components/aptitude-check-controls/aptitude-check-controls';
 
 // Generic Components
 Field;
@@ -302,3 +303,6 @@ MessageExplosive;
 MessageAttackTraits;
 MessageAreaEffect;
 MessageMeleeAttack
+
+// SuccessTest
+AptitudeCheckControls;

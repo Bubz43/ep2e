@@ -524,14 +524,14 @@ export const matchAllEffects = (action: Action) => () => true;
 
 export const matchesAptitude = (
   aptitude: AptitudeType,
-  getSpecial: () => SpecialTest | '' | undefined,
+  // getSpecial: () => SpecialTest | '' | undefined,
 ) => (action: Action) => {
-  const special = getSpecial();
+  // const special = getSpecial();
   return anyEffectTagPasses(
     matchesAction(action),
     (tag) => tag.type === TagType.AptitudeChecks && tag.aptitude === aptitude,
-    (tag) =>
-      !!(special && tag.type === TagType.Special) && tag.test === special,
+    // (tag) =>
+    //   (special && tag.type === TagType.Special) && tag.test === special,
   );
 };
 

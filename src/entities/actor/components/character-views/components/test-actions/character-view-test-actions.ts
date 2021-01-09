@@ -1,11 +1,14 @@
 import { renderTextInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
+import { openWindow } from '@src/components/window/window-controls';
+import { ResizeOption } from '@src/components/window/window-options';
 import { enumValues, AptitudeType } from '@src/data-enums';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { maxFavors } from '@src/features/reputations';
 import { skillFilterCheck, Skill } from '@src/features/skills';
 import { LangEntry, localize } from '@src/foundry/localization';
+import { AptitudeCheck } from '@src/success-test/aptitude-check';
 import { safeMerge, notEmpty } from '@src/utility/helpers';
 import {
   customElement,
@@ -19,6 +22,7 @@ import {
 import { classMap } from 'lit-html/directives/class-map';
 import { live } from 'lit-html/directives/live';
 import { reject, first, range } from 'remeda';
+import { traverseActiveElements } from 'weightless';
 import styles from './character-view-test-actions.scss';
 
 @customElement('character-view-test-actions')
@@ -71,7 +75,14 @@ export class CharacterViewTestActions extends LitElement {
   }
 
   private startAptitudeTest(aptitude: AptitudeType) {
-    
+    const check = new AptitudeCheck({ ego: this.character.ego, aptitude, character: this.character });
+    openWindow({
+      name: `${localize("successTest")} - ${localize("aptitudeCheck")}`,
+      key: this,
+      content: html`<aptitude-check-controls .test=${check}></aptitude-check-controls>`,
+      adjacentEl: traverseActiveElements(),
+      
+    }, { resizable: ResizeOption.Both})
   }
 
   render() {

@@ -26,6 +26,7 @@ import styles from './ep-overlay.scss';
 import { render as renderSolid } from "solid-js/web";
 import { SolidBase } from '@src/solid-base';
 import { getContainedCSSResult } from '@src/theme/emotion';
+import { ChatLogEP } from '@src/chat/components/ChatLogEP';
 
 
 
@@ -124,8 +125,6 @@ export class EPOverlay extends LitElement {
     // window.addEventListener("resize", () => this.confirmPositions());
     // requestAnimationFrame(() => this.confirmPositions());
     relevantHooks.forEach((hook) => Hooks.on(hook, this.setupControlled));
-
-    // renderSolid(() => SolidBase({}), this.renderRoot.querySelector(".solid-root")!)
   }
 
   private setupControlled = debounceFn(() => {
