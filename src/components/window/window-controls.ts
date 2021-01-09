@@ -10,6 +10,7 @@ export type WindowOpenSettings = {
   key: object;
   content: TemplateResult;
   name: SlWindow['name'];
+  img?: string;
   forceFocus?: boolean;
   adjacentEl?: Element | null | false;
 };
@@ -21,7 +22,7 @@ export type WindowOpenOptions = Partial<{
 }>;
 
 export const openWindow = (
-  { key, content, name, forceFocus, adjacentEl }: WindowOpenSettings,
+  { key, content, name, forceFocus, adjacentEl, img }: WindowOpenSettings,
   {
     resizable = ResizeOption.None,
     clearContentOnClose = false,
@@ -36,6 +37,7 @@ export const openWindow = (
   }
 
   win.name = name;
+  win.img = img;
   win.resizable = resizable;
   win.clearContentOnClose = clearContentOnClose;
   render(content, win);

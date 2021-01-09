@@ -156,11 +156,11 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   @LazyGetter()
   get weapons() {
     return {
-      explosives: this.consumables.flatMap(
-        (c) => c.type === ItemType.Explosive ? c : [],
+      explosives: this.consumables.flatMap((c) =>
+        c.type === ItemType.Explosive ? c : [],
       ),
-      melee: this.equipped.flatMap(
-        (e) => e.type === ItemType.MeleeWeapon ? e : [],
+      melee: this.equipped.flatMap((e) =>
+        e.type === ItemType.MeleeWeapon ? e : [],
       ),
     };
   }
@@ -257,8 +257,11 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   @LazyGetter()
   get initiative() {
     return (
-      totalModifiers(this.appliedEffects.getGroup(EffectType.Initiative)) +
-      this.ego.baseInitiative
+      Math.round(
+        (totalModifiers(this.appliedEffects.getGroup(EffectType.Initiative)) +
+          this.ego.baseInitiative) *
+          100,
+      ) / 100
     );
   }
 

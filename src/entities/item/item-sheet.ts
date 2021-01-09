@@ -101,6 +101,7 @@ export class ItemEPSheet implements EntitySheet {
         key: this.item,
         content: html`${this.windowHeaderButtons} ${this.content}`,
         name: this.item.proxy.fullName,
+        img: this.item.proxy.nonDefaultImg,
         forceFocus: force,
         adjacentEl: !this.rendered && this.getAdjacentEl(),
       },

@@ -139,10 +139,11 @@ export class SlWindow extends LitElement {
   })
   name = 'New Window';
 
+  @property({ type: String }) img?: string;
+
   @property({ type: Boolean }) clearContentOnClose = false;
 
   @property({ type: String }) resizable = ResizeOption.None;
-
 
   @query('header') private header!: HTMLElement;
 
@@ -232,7 +233,7 @@ export class SlWindow extends LitElement {
         { duration: 200 },
       ).onfinish = () => {
         this.style.pointerEvents = '';
-    
+
         resolve();
         this.closing = false;
         this.emit(SlWindowEventName.Closed);
@@ -517,6 +518,10 @@ export class SlWindow extends LitElement {
   }
 
   render() {
+    const heading = html`<div class="heading">
+    ${this.img ? html`<img height="24px" src=${this.img} />` : ''}
+    <span>${this.name}</span>
+  </div>`
     return html`
       <header
         id="header"
@@ -524,13 +529,13 @@ export class SlWindow extends LitElement {
         @pointerdown=${this.startDrag}
       >
         ${this.minimized
-          ? html`<div class="heading">${this.name}</div>`
+          ? heading
           : html` <slot
               name="header"
               @slotchange=${this.toggleHeaderVisibility}
               @pointerdown=${this.gainFocus}
             >
-              <div class="heading">${this.name}</div>
+              ${heading}
             </slot>`}
         <slot name="header-button"> </slot>
 
@@ -585,6 +590,8 @@ export class SlWindow extends LitElement {
         : ''}
     `;
   }
+
+
 }
 
 declare global {
