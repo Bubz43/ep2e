@@ -1,20 +1,18 @@
 import { ChatMessageEP } from '@src/entities/chat-message';
 import { mutateEntityHook, MutateEvent } from '@src/foundry/hook-setups';
+import { overlay } from '@src/init';
 import { colorFunctions } from '@src/theme/css-vars';
-import { containedCSS as css } from '@src/theme/emotion';
+import { containedCSS as css, getContainedCSSResult } from '@src/theme/emotion';
 import { nonNegative, notEmpty } from '@src/utility/helpers';
-import { concat, map, pipe, take, reverse } from 'remeda';
 import {
   Component,
-  createState,
-  onMount,
-  reconcile,
-  For,
-  Show,
-  produce,
   createEffect,
   createSignal,
+  createState,
+  For,
+  onMount,
 } from 'solid-js';
+import { Portal } from 'solid-js/web';
 import { ChatMessageItem } from './ChatMessageItem';
 
 const container = css`
@@ -60,6 +58,7 @@ export const ChatLogEP: Component = () => {
     list: [...game.messages.values()]
       .slice(-CONFIG.ChatMessage.batchSize)
       .map((message) => duplicate(message.data)),
+    popouts: [] as ChatMessageEP['data'][],
   });
   const [onBottom, setOnBottom] = createSignal(false);
   const [unseen, setUnseen] = createSignal(0);
@@ -72,7 +71,6 @@ export const ChatLogEP: Component = () => {
 
   const scrollBottom = () => {
     requestAnimationFrame(() => scrollTarget?.scrollIntoView());
-
   };
 
   createEffect(() => {
@@ -84,10 +82,10 @@ export const ChatLogEP: Component = () => {
 
   createEffect(() => {
     if (onBottom()) {
-      setState("list", list => list.slice(-CONFIG.ChatMessage.batchSize))
+      setState('list', (list) => list.slice(-CONFIG.ChatMessage.batchSize));
       setUnseen(0);
     }
-  })
+  });
 
   onMount(() => {
     scrollBottom();
@@ -135,6 +133,11 @@ export const ChatLogEP: Component = () => {
         ({ _id }) => _id === message._id,
         duplicate(message.data),
       );
+      setState(
+        'popouts',
+        ({ _id }) => _id === message._id,
+        duplicate(message.data),
+      );
     },
   });
   mutateEntityHook({
@@ -158,17 +161,36 @@ export const ChatLogEP: Component = () => {
     event: MutateEvent.Delete,
     callback: (message) => {
       setState('list', (list) => list.filter(({ _id }) => _id !== message.id));
+      setState('popouts', (popouts) =>
+        popouts.filter(({ _id }) => _id !== message.id),
+      );
     },
   });
   const setSeen = () => {
     if (unseen()) setUnseen(unseen() - 1);
   };
+
+  const openPopout = (id: string) => {
+    const index = state.popouts.findIndex((i) => i._id === id);
+    if (index === -1) {
+      const message = game.messages.get(id);
+      message &&
+        setState('popouts', (list) => [...list, duplicate(message.data)]);
+    }
+  };
+
   return (
     <div class={container}>
       <ol class={messages} ref={list}>
         <li class={hiddenItem} ref={listStart}></li>
         <For each={state.list}>
-          {(data) => <ChatMessageItem setSeen={setSeen} data={data} />}
+          {(data) => (
+            <ChatMessageItem
+              openPopout={openPopout}
+              setSeen={setSeen}
+              data={data}
+            />
+          )}
         </For>
         <li class={hiddenItem} ref={scrollTarget}>
           {unseen() && (
@@ -178,6 +200,23 @@ export const ChatLogEP: Component = () => {
           )}
         </li>
       </ol>
+      <For each={state.popouts}>
+        {(data) => (
+          <Portal useShadow mount={overlay}>
+            <style>{getContainedCSSResult().cssText}</style>
+            <sl-window
+              name="Message"
+              afterCloseAnimation={() => {
+                setState('popouts', (popouts) =>
+                  popouts.filter(({ _id }) => _id !== data._id),
+                );
+              }}
+            >
+              <ChatMessageItem data={data} />
+            </sl-window>
+          </Portal>
+        )}
+      </For>
     </div>
   );
 };

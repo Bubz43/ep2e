@@ -26,9 +26,15 @@ import { html } from 'lit-html';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 
 const message = css`
+  sl-window & {
+    width: 300px;
+    border: none;
+    border-radius: 0;
+    box-shadow: 0 0 0px black;
+  }
   display: block;
   background: ${colorFunctions.alphav('--color-bg', 0.9)};
-  width: calc(100% - 1rem);
+  width: 100%;
   border: 2px solid ${cssVar('--color-border')};
   padding: 0;
   border-radius: 0.5rem 0px 0px 0.25rem;
@@ -51,6 +57,13 @@ const header = css`
   z-index: 1;
   background: ${colorFunctions.alphav('--color-grey', 0.15)};
   border-top-left-radius: 0.5rem;
+
+  sl-window & {
+    grid-template-columns: auto 1fr auto;
+    padding-bottom: 0;
+    border-top-left-radius: 0;
+    background: transparent;
+  }
 `;
 
 const imageWrapper = css`
@@ -66,6 +79,12 @@ const imageWrapper = css`
       position: absolute;
       transform: translate(-70%, -0.1rem);
       z-index: 10;
+    }
+  }
+  sl-window & {
+    img {
+      position: static;
+      transform: none;
     }
   }
 `;
@@ -86,7 +105,8 @@ const messageContent = css`
 
 export const ChatMessageItem: Component<{
   data: ChatMessageEP['data'];
-  setSeen: () => void;
+  setSeen?: () => void;
+  openPopout?: (id: string) => void;
 }> = (props) => {
   const [sinceCreated, setSinceCreated] = createSignal(
     timeSince(props.data.timestamp),
@@ -129,7 +149,7 @@ export const ChatMessageItem: Component<{
       intObs = new IntersectionObserver(
         ([entry], obs) => {
           if (entry?.intersectionRatio) {
-            props.setSeen();
+            props.setSeen?.();
             obs.disconnect();
             intObs = null;
           }
@@ -141,12 +161,16 @@ export const ChatMessageItem: Component<{
   });
 
   onCleanup(() => {
-    if (intObs) props.setSeen();
+    if (intObs) props.setSeen?.();
     clearTimeout(timeout);
     intObs?.disconnect();
   });
   return (
-    <li class={message} ref={listItem}>
+    <li
+      class={message}
+      ref={listItem}
+      onContextMenu={() => props.openPopout?.(props.data._id)}
+    >
       <header class={header}>
         <div class={imageWrapper}>
           <img src={img() || CONST.DEFAULT_TOKEN} loading="lazy" width="32px" />

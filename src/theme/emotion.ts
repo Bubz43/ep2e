@@ -13,7 +13,7 @@ export const createContainedStyles = (key: string) => {
     ...e,
     getCSSResult: () => {
       const result = unsafeCSS(styleContainer.textContent)
-      e.flush()
+      // e.flush()
       return result;
     }
   }
