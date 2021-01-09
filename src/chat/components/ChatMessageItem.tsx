@@ -3,9 +3,12 @@ import {
   Component,
   createEffect,
   createMemo,
+  createResource,
   createSignal,
+  Match,
   onCleanup,
   onMount,
+  Switch,
 } from 'solid-js';
 import { Show } from 'solid-js/web';
 import { containedCSS as css } from '@src/theme/emotion';
@@ -16,6 +19,11 @@ import {
   findToken,
 } from '@src/entities/find-entities';
 import { mapKeys } from 'remeda';
+import type { RollData } from '@src/foundry/rolls';
+import { tooltip } from '@src/init';
+import { data } from 'jquery';
+import { html } from 'lit-html';
+import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 
 const message = css`
   display: block;
@@ -62,6 +70,20 @@ const imageWrapper = css`
   }
 `;
 
+const enrichedContent = css`
+  font-size: 1rem;
+  padding: 0.25rem 0.5rem;
+  margin: 0;
+`;
+
+const messageContent = css`
+  background: linear-gradient(
+    to bottom,
+    ${colorFunctions.alphav('--color-background-alt', 0.8)},
+    ${colorFunctions.alphav('--color-bg', 0.8)}
+  );
+`;
+
 export const ChatMessageItem: Component<{
   data: ChatMessageEP['data'];
   setSeen: () => void;
@@ -86,6 +108,18 @@ export const ChatMessageItem: Component<{
       : user?.avatar;
   });
 
+  const rollData = createMemo(() => {
+    let data: RollData | null = null;
+    if (props.data.roll) {
+      try {
+        data = JSON.parse(props.data.roll);
+      } catch {
+        console.log(data);
+      }
+    }
+    return data;
+  });
+
   let listItem: HTMLLIElement | undefined = undefined;
   let intObs: IntersectionObserver | null = null;
 
@@ -93,19 +127,21 @@ export const ChatMessageItem: Component<{
     requestAnimationFrame(() => {
       if (!listItem?.parentElement) return;
       intObs = new IntersectionObserver(
-        ([entry], intObs) => {
+        ([entry], obs) => {
           if (entry?.intersectionRatio) {
             props.setSeen();
-            intObs.disconnect();
+            obs.disconnect();
+            intObs = null;
           }
         },
         { root: listItem.parentElement },
-      )
-      intObs.observe(listItem)
+      );
+      intObs.observe(listItem);
     });
   });
 
   onCleanup(() => {
+    if (intObs) props.setSeen();
     clearTimeout(timeout);
     intObs?.disconnect();
   });
@@ -117,12 +153,59 @@ export const ChatMessageItem: Component<{
         </div>
         {user?.name || 'User'} {sinceCreated()}
       </header>
-      {props.data.flags.ep2e && (
-        <message-content
-          message={game.messages.get(props.data._id)!}
-          data={props.data.flags.ep2e}
-        ></message-content>
-      )}
+      <div class={messageContent}>
+        {props.data.flags.ep2e && (
+          <message-content
+            message={game.messages.get(props.data._id)!}
+            data={props.data.flags.ep2e}
+          ></message-content>
+        )}
+
+        <Switch>
+          <Match when={rollData()}>
+            {(data) => <MessageRoll rollData={data} />}
+          </Match>
+          <Match when={props.data.content && props.data.content !== '_'}>
+            <enriched-html
+              class={enrichedContent}
+              content={props.data.content}
+            ></enriched-html>
+          </Match>
+        </Switch>
+      </div>
     </li>
+  );
+};
+
+const rollEl = css`
+  text-align: center;
+  padding: 0.25rem;
+  > div {
+    height: 0.4rem;
+    width: 100%;
+    border: 1px solid ${cssVar('--color-border')};
+    border-left: none;
+    border-right: none;
+  }
+`;
+
+const MessageRoll: Component<{ rollData: RollData }> = (props) => {
+  return (
+    <div
+      class={rollEl}
+      onMouseEnter={async (ev) => {
+        tooltip.attach({
+          el: ev.currentTarget,
+          content: html`${unsafeHTML(
+            (await Roll.fromData(props.rollData).getTooltip()) as string,
+          )}`,
+          position: 'left-start',
+        });
+      }}
+    >
+      {props.rollData.formula}
+      <div></div>
+      {props.rollData.total}
+    </div>
   );
 };

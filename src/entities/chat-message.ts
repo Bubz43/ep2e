@@ -1,6 +1,7 @@
 import type { MessageData } from '@src/chat/message-data';
 import { setDragDrop, DropType } from '@src/foundry/drag-and-drop';
 import { gmIsConnected } from '@src/foundry/misc-helpers';
+import type { RollData } from '@src/foundry/rolls';
 import { emitEPSocket } from '@src/foundry/socket';
 import { EP } from '@src/foundry/system';
 import { notEmpty } from '@src/utility/helpers';
@@ -25,7 +26,7 @@ export class ChatMessageEP extends ChatMessage {
       token: string | null;
     }>;
     content: string;
-    roll?: Roll | string | null;
+    roll?: string | null // RollData;
     user: string;
     type: number;
     timestamp: number;

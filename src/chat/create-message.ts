@@ -45,7 +45,7 @@ export const createMessage = async ({
   const chatMessageData: Partial<ChatMessageEP['data']> = {
     content,
     flavor,
-    roll,
+    roll: roll ? JSON.stringify(roll): null,
     flags: { [EP.Name]: data, core: { canPopout: true } },
     speaker:
       entity === null
