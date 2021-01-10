@@ -29,6 +29,7 @@ import type { SuccessTestModifier } from './success-test';
 import AptitudeCheckPopout from "./components/AptitudeCheckPopout.svelte"
 import { overlay } from '@src/init';
 
+
 export type AptitudeCheckInit = {
   ego: Ego;
   aptitude?: AptitudeType;
@@ -182,7 +183,7 @@ export class AptitudeCheck extends EventTarget {
   private static winUnsub: (() => void) | null = null;
   private static called = false;
   static openWindow(aptitude: AptitudeType, actor: ActorEP) {
- 
+
     
     AptitudeCheck.called = true;
     AptitudeCheck.winUnsub?.();

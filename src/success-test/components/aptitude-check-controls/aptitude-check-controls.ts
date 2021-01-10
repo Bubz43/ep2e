@@ -74,10 +74,7 @@ export class AptitudeCheckControls extends LitElement {
       modifiers,
     } = this.test;
 
-    
-
     return html`
-    
       <div class="sections">
         <section>
           <span class="vertical-text">${localize('check')}</span>
@@ -100,7 +97,6 @@ export class AptitudeCheckControls extends LitElement {
             >
           </div>
         </section>
-        
 
         <div class="actions">
           <span class="vertical-text">${localize('action')}</span>
@@ -123,7 +119,10 @@ export class AptitudeCheckControls extends LitElement {
                   ${pools.map(
                     (pool) => html`
                       <li class="pool">
-                        <pool-item ?disabled=${!pool.available} .pool=${pool}></pool-item>
+                        <pool-item
+                          ?disabled=${!pool.available}
+                          .pool=${pool}
+                        ></pool-item>
                         <div>
                           ${enumValues(PreTestPoolAction).map((action) => {
                             const pair = [pool, action] as const;
@@ -153,7 +152,10 @@ export class AptitudeCheckControls extends LitElement {
           itemCount=${withSign(this.test.totalModifiers)}
           heading=${localize('modifiers')}
         >
-          <sl-popover focusSelector="input[type='number']" slot="action" .renderOnDemand=${() => html`    <sl-popover-section
+          <sl-popover
+            focusSelector="input[type='number']"
+            slot="action"
+            .renderOnDemand=${() => html` <sl-popover-section
               heading="${localize('add')} ${localize('modifier')}"
             >
               ${renderSubmitForm({
@@ -170,8 +172,9 @@ export class AptitudeCheckControls extends LitElement {
                   renderNumberField(value, { min: -95, max: 95 }),
                 ],
               })}
-            </sl-popover-section>`}>
-              <mwc-icon-button slot="base" icon="add"></mwc-icon-button>
+            </sl-popover-section>`}
+          >
+            <mwc-icon-button slot="base" icon="add"></mwc-icon-button>
           </sl-popover>
         </sl-header>
         <sl-animated-list transformOrigin="top">
