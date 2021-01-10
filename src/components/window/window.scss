@@ -157,6 +157,8 @@ slot[name='footer'] {
   img {
     display: inline-block;
     filter: drop-shadow(1px 2px 3px black);
+    transition: height 200ms;
+
   }
 }
 

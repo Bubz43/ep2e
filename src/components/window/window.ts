@@ -349,18 +349,18 @@ export class SlWindow extends LitElement {
   }
 
   private resetSize(ev: Event) {
-    if (ev.composedPath().some(isButton)) return;
+    // if (ev.composedPath().some(isButton)) return;
 
-    if (this.minimized) {
-      this.minimized = false;
-      return;
-    }
-    if (this.resizable !== ResizeOption.None) {
+    // if (this.minimized) {
+    //   this.minimized = false;
+    //   return;
+    // }
+    // if (this.resizable !== ResizeOption.None) {
       const { height, width } = this.contentContainer.style;
       if (height || width) {
         assignStyles(this.contentContainer, { height: '', width: '' });
       }
-    }
+    // }
     repositionIfNeeded(this);
   }
 
@@ -525,7 +525,7 @@ export class SlWindow extends LitElement {
     return html`
       <header
         id="header"
-        @dblclick=${this.resetSize}
+        @dblclick=${this.toggleMinimize}
         @pointerdown=${this.startDrag}
       >
         ${this.minimized
@@ -540,14 +540,14 @@ export class SlWindow extends LitElement {
         <slot name="header-button"> </slot>
 
         <div class="controls">
-          <wl-list-item
+          <!-- <wl-list-item
             class="minimize-button"
             role="button"
             clickable
             @click=${this.toggleMinimize}
           >
             <mwc-icon>${this.minimized ? 'open_in_full' : 'remove'}</mwc-icon>
-          </wl-list-item>
+          </wl-list-item> -->
           <wl-list-item
             class="close-button"
             role="button"
@@ -573,6 +573,7 @@ export class SlWindow extends LitElement {
                 class="resize-handle ${option}-resize"
                 data-resize=${option}
                 @pointerdown=${this.resize}
+                @dblclick=${this.resetSize}
                 ?hidden=${hidden}
               ></div>
               ${option === ResizeOption.Both
@@ -582,6 +583,7 @@ export class SlWindow extends LitElement {
                       class="resize-handle ${option}-resize alt"
                       data-resize=${option}
                       @pointerdown=${this.resize}
+                      @dblclick=${this.resetSize}
                       ?hidden=${hidden}
                     ></div>
                   `}

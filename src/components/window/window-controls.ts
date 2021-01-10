@@ -40,18 +40,40 @@ export const attachWindow = <T>(initialProps: WindowProps<T>) => {
   return new WindowController(initialProps)
 };
 
-type WinState<T, S> = {
+type WinState<S, D> = {
   unsub?: () => void;
   called: boolean;
-  controller?: WindowController<T>;
+  controller?: WindowController<D>;
   open?: (subData: S | null) => void;
   readonly relative: Element | null;
   cleanup: () => void;
 };
 
-export const attachWindowFactory = <T>(open: (props: T) => void) => {
-  const factory = new WeakMap()
-}
+// export const attachWindowFactory = <Key extends object, D, S = WinState<Key, D>>(setupOpen: (state: S) => (obj: S | null) => void) => {
+//   const factory = new WeakMap<Key, S>();
+//   const get = (key: Key) => {
+//     const state = factory.get(key);
+//     if (state) {
+//       state.called = true;
+//       state.open?.(key)
+//     } else {
+//       const state: S = {
+//         called: true,
+//         cleanup() {
+//           factory.delete(key);
+//           this.unsub?.();
+//           delete this.controller;
+//         },
+//         get relative() {
+//           return this.called ? traverseActiveElements() : null;
+//         },
+//       }
+
+//       state.open = setupOpen(state)
+
+//     }
+//   }
+// }
 
 const windows = new WeakMap<object, SlWindow>();
 
