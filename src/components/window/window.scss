@@ -49,7 +49,7 @@
 }
 
 :host([minimized]) {
-  overflow: hidden;
+  // overflow: hidden;
 
   slot[name='footer'] {
     display: none;
@@ -58,6 +58,14 @@
     background: alphav(var(--color-grey), 0.2);
     .heading {
       max-width: 200px;
+      height: 28px;
+      overflow: visible;
+      img {
+        height: 36px;
+        margin-left: -0.75rem;
+        filter: drop-shadow(2px 4px 6px black);
+
+      }
     }
     ::slotted([slot='header']) {
       pointer-events: none;
@@ -144,7 +152,7 @@ slot[name='footer'] {
   display: flex;
   align-items: center;
   > * {
-    margin-left: 0.5ch;
+    margin-left: 0.25ch;
   }
   img {
     display: inline-block;

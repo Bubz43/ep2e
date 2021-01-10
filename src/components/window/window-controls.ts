@@ -40,6 +40,19 @@ export const attachWindow = <T>(initialProps: WindowProps<T>) => {
   return new WindowController(initialProps)
 };
 
+type WinState<T, S> = {
+  unsub?: () => void;
+  called: boolean;
+  controller?: WindowController<T>;
+  open?: (subData: S | null) => void;
+  readonly relative: Element | null;
+  cleanup: () => void;
+};
+
+export const attachWindowFactory = <T>(open: (props: T) => void) => {
+  const factory = new WeakMap()
+}
+
 const windows = new WeakMap<object, SlWindow>();
 
 export type WindowOpenSettings = {

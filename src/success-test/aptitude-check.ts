@@ -199,11 +199,13 @@ export class AptitudeCheck extends EventTarget {
         cleanup() {
           AptitudeCheck.winStates.delete(actor);
           this.unsub?.();
+          delete this.controller;
         },
         get relative() {
           return this.called ? traverseActiveElements() : null;
         },
       };
+      AptitudeCheck.winStates.set(actor, state);
 
       state.open = (actor: ActorEP | null) => {
         if (actor?.proxy.type !== ActorType.Character) {
