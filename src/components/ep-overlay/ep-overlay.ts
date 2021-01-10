@@ -1,10 +1,11 @@
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
+import { readyCanvas } from '@src/foundry/canvas';
 import { positionApp } from '@src/foundry/foundry-apps';
 import { applicationHook } from '@src/foundry/hook-setups';
-import { readyCanvas } from '@src/foundry/canvas';
 import { tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
+import { getContainedCSSResult } from '@src/theme/emotion';
 import { debounceFn } from '@src/utility/decorators';
 import { resizeElement, toggleTouchAction } from '@src/utility/dom';
 import { notEmpty } from '@src/utility/helpers';
@@ -14,19 +15,14 @@ import {
   internalProperty,
   LitElement,
   property,
-  query,
+  query
 } from 'lit-element';
 import { render, TemplateResult } from 'lit-html';
 import { cache } from 'lit-html/directives/cache';
-import { guard } from 'lit-html/directives/guard';
 import { first } from 'remeda';
 import { traverseActiveElements } from 'weightless';
 import type { EventList } from '../event-list/event-list';
 import styles from './ep-overlay.scss';
-import { render as renderSolid } from "solid-js/web";
-import { SolidBase } from '@src/solid-base';
-import { getContainedCSSResult } from '@src/theme/emotion';
-import { ChatLogEP } from '@src/chat/components/ChatLogEP';
 
 
 
@@ -55,7 +51,7 @@ export class EPOverlay extends LitElement {
 
   static styles = [styles, getContainedCSSResult()];
 
-  @property({ reflect: true }) protected ready = false;
+  @property({ type: Boolean, reflect: true }) ready = false;
 
   @property({ attribute: false }) mainCharacter: MainCharacter | null = null;
 
@@ -398,7 +394,6 @@ export class EPOverlay extends LitElement {
 
   private staticElements = html`
     <!-- <scene-view><slot name="navigation"></slot></scene-view> -->
-    <div class="solid-root"></div>
     <slot
       name="foundry-apps"
       @slotchange=${this.switchWindowZ}
