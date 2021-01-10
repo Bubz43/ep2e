@@ -51,7 +51,7 @@ export class EntityFormLayout extends LitElement {
     if (resizeObsAvailable) {
       const host = this.getHost();
       if (host) {
-        this.resizeObs = new ResizeObserver(([entry]) => {
+        this.resizeObs = new ResizeObserver(([entry]: ResizeObserverEntry[]) => {
           entry &&
             requestAnimationFrame(() => {
               const { offsetHeight } = entry.target as HTMLElement;

@@ -53,7 +53,9 @@ export class AptitudeCheckControls extends LitElement {
   }
 
   private emitCompleted() {
-    this.dispatchEvent(new CustomEvent("test-completed", { bubbles: true, composed: true }))
+    this.dispatchEvent(
+      new CustomEvent('test-completed', { bubbles: true, composed: true }),
+    );
   }
 
   render() {
@@ -64,6 +66,7 @@ export class AptitudeCheckControls extends LitElement {
       pools,
       aptitudeTotal,
       modifierEffects,
+      activeEffects,
     } = this.test;
 
     return html`
@@ -131,21 +134,28 @@ export class AptitudeCheckControls extends LitElement {
 
       <section class="modifiers">
         <sl-header heading=${localize('modifiers')}></sl-header>
-        <sl-animated-list transformOrigin="top" skipExitAnimation skipEntranceAnimation>
+        <sl-animated-list
+          transformOrigin="top"
+          skipExitAnimation
+          skipEntranceAnimation
+        >
           ${repeat(modifierEffects, identity, (effect) => {
             const useWhen =
               effect.requirement && `${localize('when')} ${effect.requirement}`;
             return html`
               <wl-list-item
                 ?clickable=${!!useWhen}
-                @click=${(ev: Event) => {
-                  useWhen &&
-                    (ev.currentTarget as HTMLElement)
-                      .querySelector('span')
-                      ?.classList.toggle('active');
+                @click=${() => {
+                  useWhen && this.test.toggleActiveEffect(effect);
                 }}
               >
-                <span slot="before" class=${useWhen ? 'tall' : 'active'}></span>
+                <span
+                  slot="before"
+                  class=${classMap({
+                    tall: !!useWhen,
+                    active: !useWhen || activeEffects.has(effect),
+                  })}
+                ></span>
                 <span class="source" title=${effect[Source]}
                   >${effect[Source]}</span
                 >
@@ -158,14 +168,15 @@ export class AptitudeCheckControls extends LitElement {
                     `
                   : ''}
               </wl-list-item>
-              
             `;
           })}
         </sl-animated-list>
       </section>
 
       <footer>
-        <mwc-button @click=${this.emitCompleted} raised>${localize("roll")}</mwc-button>
+        <mwc-button @click=${this.emitCompleted} raised
+          >${localize('roll')}</mwc-button
+        >
       </footer>
     `;
   }

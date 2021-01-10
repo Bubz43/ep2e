@@ -17,7 +17,7 @@ import {
   createAction,
   defaultCheckActionSubtype,
 } from '@src/features/actions';
-import { matchesAptitude } from '@src/features/effects';
+import { matchesAptitude, SuccessTestEffect } from '@src/features/effects';
 import { stringID } from '@src/features/feature-helpers';
 import { Pool } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
@@ -46,6 +46,10 @@ export class AptitudeCheck extends EventTarget {
   };
   readonly action: Action;
 
+  readonly activeEffects = new WeakSet<SuccessTestEffect>();
+
+  
+
   constructor({ ego, aptitude, character, token, action }: AptitudeCheckInit) {
     super();
     this.ego = ego;
@@ -66,9 +70,16 @@ export class AptitudeCheck extends EventTarget {
     );
   }
 
+  toggleActiveEffect(effect: SuccessTestEffect) {
+    
+    if (this.activeEffects.has(effect)) this.activeEffects.delete(effect)
+    else this.activeEffects.add(effect); 
+    this.notify();
+  }
+
   get aptitudeTotal() {
     const { aptitude, halve } = this.state;
-    const base = this.ego.aptitudes[aptitude] * 3;
+    const base = this.ego.aptitudes[aptitude] * 3; 
     return halve ? Math.round(base / 2) : base;
   }
 
