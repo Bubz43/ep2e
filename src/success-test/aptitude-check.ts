@@ -1,11 +1,3 @@
-import {
-  openWindow,
-  closeWindow,
-} from '@src/components/window/window-controls';
-import {
-  ResizeOption,
-  SlWindowEventName,
-} from '@src/components/window/window-options';
 import { AptitudeType, PoolType } from '@src/data-enums';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import type { Ego } from '@src/entities/actor/ego';
@@ -15,20 +7,16 @@ import {
   Action,
   ActionType,
   createAction,
-  defaultCheckActionSubtype,
+  defaultCheckActionSubtype
 } from '@src/features/actions';
 import { matchesAptitude, SuccessTestEffect } from '@src/features/effects';
 import { stringID } from '@src/features/feature-helpers';
 import { Pool, PreTestPoolAction } from '@src/features/pool';
-import { localize } from '@src/foundry/localization';
-import { debounce } from '@src/utility/decorators';
-import { html } from 'lit-html';
-import { compact, equals } from 'remeda';
-import { traverseActiveElements } from 'weightless';
-import type { SuccessTestModifier } from './success-test';
-import AptitudeCheckPopout from "./components/AptitudeCheckPopout.svelte"
 import { overlay } from '@src/init';
-
+import { debounce } from '@src/utility/decorators';
+import { compact, equals } from 'remeda';
+import AptitudeCheckPopout from "./components/AptitudeCheckPopout.svelte";
+import type { SuccessTestModifier } from './success-test';
 
 export type AptitudeCheckInit = {
   ego: Ego;
@@ -182,6 +170,7 @@ export class AptitudeCheck extends EventTarget {
 
   private static winUnsub: (() => void) | null = null;
   private static called = false;
+  private static popout?: AptitudeCheckPopout | null = null;
   static openWindow(aptitude: AptitudeType, actor: ActorEP) {
 
     
@@ -195,36 +184,49 @@ export class AptitudeCheck extends EventTarget {
           aptitude,
           character,
         });
-        const thing = new AptitudeCheckPopout({
-          target: overlay,
-          props: { check, cleanup: () => thing.$destroy() }
-        })
-        const { win, wasConnected } = openWindow(
-          {
-            name: `${localize('successTest')} - ${localize('aptitudeCheck')}`,
-            key: AptitudeCheck,
-            content: html`<aptitude-check-controls
-              @test-completed=${() => closeWindow(AptitudeCheck)}
-              .test=${check}
-            ></aptitude-check-controls>`,
-            adjacentEl: AptitudeCheck.called ? traverseActiveElements() : null,
-          },
-          { resizable: ResizeOption.Vertical },
-        );
-        AptitudeCheck.called = false;
+        if (!this.popout) {
+          this.popout = new AptitudeCheckPopout({
+            target: overlay,
+            props: { check, cleanup: () => {
+              this.popout?.$destroy()
+              this.winUnsub?.();
+              this.popout = null
+              this.winUnsub = null
+            } }
+          })
+        } else this.popout.$set({ check })
+     
+        // const { win, wasConnected } = openWindow(
+        //   {
+        //     name: `${localize('successTest')} - ${localize('aptitudeCheck')}`,
+        //     key: AptitudeCheck,
+        //     content: html`<aptitude-check-controls
+        //       @test-completed=${() => closeWindow(AptitudeCheck)}
+        //       .test=${check}
+        //     ></aptitude-check-controls>`,
+        //     adjacentEl: AptitudeCheck.called ? traverseActiveElements() : null,
+        //   },
+        //   { resizable: ResizeOption.Vertical },
+        // );
+        // AptitudeCheck.called = false;
 
-        if (!wasConnected) {
-          win.addEventListener(
-            SlWindowEventName.Closed,
-            () => {
-              console.log('moop');
-              AptitudeCheck.winUnsub?.();
-              AptitudeCheck.winUnsub = null;
-            },
-            { once: true },
-          );
-        }
-      } else closeWindow(AptitudeCheck);
+        // if (!wasConnected) {
+        //   win.addEventListener(
+        //     SlWindowEventName.Closed,
+        //     () => {
+        //       console.log('moop');
+        //       AptitudeCheck.winUnsub?.();
+        //       AptitudeCheck.winUnsub = null;
+        //     },
+        //     { once: true },
+        //   );
+        // }
+      } else {
+        // this.winUnsub?.();
+        this.popout?.$set({ close: true })
+
+        // closeWindow(AptitudeCheck);
+      }
     };
     AptitudeCheck.winUnsub = actor.subscribe(open);
   }

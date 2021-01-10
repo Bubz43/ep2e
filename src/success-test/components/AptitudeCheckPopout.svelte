@@ -1,4 +1,6 @@
 <script lang="ts">
+import type { SlWindow } from '@src/components/window/window';
+
   import { AptitudeType, enumValues } from '@src/data-enums';
   import { ActionSubtype, ActionType } from '@src/features/actions';
   import { PreTestPoolAction } from '@src/features/pool';
@@ -8,12 +10,20 @@
 
   import type { AptitudeCheck } from '../aptitude-check';
 
+
+
+
   export let check: AptitudeCheck;
   export let cleanup: () => void;
+  export let close = false;
+
+  let win: SlWindow;
+
+  $: close && win.close()
 </script>
 
 
-<sl-window noremove={true} name="moop" on:sl-window-closed={cleanup}>
+<sl-window noremove={true} name="moop" on:sl-window-closed={cleanup} bind:this={win}>
   <div class="controls">
     <div class="sections">
       <section>

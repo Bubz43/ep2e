@@ -8,8 +8,8 @@ declare module '*.scss' {
 }
 
 declare module "*.svelte" {
-  import { SvelteComponent } from "svelte"
-  const component: SvelteComponent;
+  import { SvelteComponentTyped } from "svelte"
+  const component: SvelteComponentTyped;
   export default component
 }
 

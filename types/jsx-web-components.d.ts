@@ -31,6 +31,7 @@ declare namespace svelte.JSX {
   interface IntrinsicElements extends Customs {}
 }
 
+
 // import { JSX as SolidJSX } from 'solid-js';
 
 // declare module 'solid-js' {

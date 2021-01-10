@@ -4,6 +4,34 @@ import { traverseActiveElements } from 'weightless';
 import { SlWindow } from './window';
 import { ResizeOption, SlWindowEventName } from './window-options';
 
+type WindowProps<T> = Pick<SlWindow, 'name' | 'img' | 'resizable'> & {
+  renderTemplate: (props: T) => TemplateResult;
+  renderProps: T;
+  cleanup: () => void
+};
+
+export const setupWindow = <T>(initialProps: WindowProps<T>) => {
+  const win = new SlWindow();
+  const { renderTemplate } = initialProps;
+
+  let cleanup = initialProps.cleanup
+
+  const update = (props: Partial<Omit<WindowProps<T>, 'renderTemplate'>>) => {
+    if (props.name) win.name = props.name;
+    if ('img' in props) win.img = props.img;
+    if (props.resizable) win.resizable = props.resizable;
+    if (props.cleanup) cleanup = props.cleanup
+    if (props.renderProps) render(renderTemplate(props.renderProps), win);
+  };
+
+  update(initialProps);
+
+  return {
+    win,
+    update,
+  }
+};
+
 const windows = new WeakMap<object, SlWindow>();
 
 export type WindowOpenSettings = {
@@ -22,10 +50,7 @@ export type WindowOpenOptions = Partial<{
 
 export const openWindow = (
   { key, content, name, forceFocus, adjacentEl, img }: WindowOpenSettings,
-  {
-    resizable = ResizeOption.None,
-    renderOnly = false,
-  }: WindowOpenOptions = {},
+  { resizable = ResizeOption.None, renderOnly = false }: WindowOpenOptions = {},
 ) => {
   let win = windows.get(key);
   const windowExisted = !!win;
