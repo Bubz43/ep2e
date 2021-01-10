@@ -91,7 +91,18 @@ footer {
 
   div {
     display: grid;
-    grid-template-rows: repeat(2, 36px);
+    align-items: center
+  }
+
+  @include textButton();
+
+  button {
+    padding: 0 0.5rem;
+    justify-content: center;
+    text-align: center;
+    &.active {
+      box-shadow: 0 0 1px 2px var(--color-secondary) inset;
+    }
   }
 }
 
@@ -118,13 +129,30 @@ footer {
   height: 200px;
   min-height: 100%;
 
+  transition: opacity 200ms ease-in-out;
+
+  &.ignored {
+    opacity: 0.5;
+  }
+
   sl-header {
     border-color: var(--color-border);
   }
   sl-animated-list {
     max-width: 300px;
-    > * {
+    font-size: 15px;
+  }
+
+  wl-list-item {
+    padding: 0 1rem;
+    transition: background 100ms ease-in-out;
+    &.tall {
       padding: 0.25rem 1rem;
+    }
+    &:hover {
+      mwc-icon {
+        color: var(--color-negative);
+      }
     }
   }
 
@@ -139,16 +167,34 @@ footer {
   }
 
   [slot='before'] {
-    border: 1px solid var(--color-grey);
     width: 0.25rem;
+  }
+
+  mwc-icon[slot='before'] {
+    margin-left: -0.6rem;
+    margin-right: 1.6rem
+  }
+
+  span[slot='before'] {
+    border: 1px solid var(--color-grey);
     height: 2rem;
     margin-right: 1rem;
+
     &:not(.tall) {
       opacity: 0;
+      height: 1.5rem;
     }
 
     &.active {
       background: var(--color-grey);
     }
   }
+}
+
+.totals {
+  display: grid;
+  grid-auto-flow: column;
+  place-items: center;
+  padding: 0.25rem;
+  gap: 0.25rem;
 }

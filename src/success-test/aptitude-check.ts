@@ -19,12 +19,13 @@ import {
 } from '@src/features/actions';
 import { matchesAptitude, SuccessTestEffect } from '@src/features/effects';
 import { stringID } from '@src/features/feature-helpers';
-import { Pool } from '@src/features/pool';
+import { Pool, PreTestPoolAction } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import { debounce } from '@src/utility/decorators';
 import { html } from 'lit-html';
-import { compact } from 'remeda';
+import { compact, equals } from 'remeda';
 import { traverseActiveElements } from 'weightless';
+import type { SuccessTestModifier } from './success-test';
 
 export type AptitudeCheckInit = {
   ego: Ego;
@@ -47,8 +48,8 @@ export class AptitudeCheck extends EventTarget {
   readonly action: Action;
 
   readonly activeEffects = new WeakSet<SuccessTestEffect>();
-
-  
+  activePool: Readonly<[Pool, PreTestPoolAction]> | null = null;
+  modifiers = new Set<SuccessTestModifier>();
 
   constructor({ ego, aptitude, character, token, action }: AptitudeCheckInit) {
     super();
@@ -70,16 +71,34 @@ export class AptitudeCheck extends EventTarget {
     );
   }
 
+  addModifier(modifier: SuccessTestModifier) {
+    this.modifiers.add(modifier);
+    this.notify()
+  }
+
+  removeModifier(modifier: SuccessTestModifier) {
+    this.modifiers.delete(modifier);
+    this.notify()
+  }
+
+  toggleActivePool(active: AptitudeCheck['activePool']) {
+    const poolMod = this.activePool?.[0].testModifier;
+    poolMod && this.removeModifier(poolMod)
+    this.activePool = equals(active, this.activePool) ? null : active;
+    if (this.activePool?.[1] === PreTestPoolAction.Bonus)
+      this.addModifier(this.activePool[0].testModifier)
+    this.notify();
+  }
+
   toggleActiveEffect(effect: SuccessTestEffect) {
-    
-    if (this.activeEffects.has(effect)) this.activeEffects.delete(effect)
-    else this.activeEffects.add(effect); 
+    if (this.activeEffects.has(effect)) this.activeEffects.delete(effect);
+    else this.activeEffects.add(effect);
     this.notify();
   }
 
   get aptitudeTotal() {
     const { aptitude, halve } = this.state;
-    const base = this.ego.aptitudes[aptitude] * 3; 
+    const base = this.ego.aptitudes[aptitude] * 3;
     return halve ? Math.round(base / 2) : base;
   }
 
@@ -104,6 +123,25 @@ export class AptitudeCheck extends EventTarget {
         false,
       ) ?? []
     );
+  }
+
+  get ignoreMods() {
+    return this.activePool?.[1] === PreTestPoolAction.IgnoreMods;
+  }
+
+  get target() {
+    return this.aptitudeTotal + (this.ignoreMods ? 0 : this.totalModifiers);
+  }
+
+  get totalModifiers() {
+    return this.modifierEffects.reduce(
+      (accum, effect) =>
+        accum +
+        (effect.requirement && !this.activeEffects.has(effect)
+          ? 0
+          : effect.modifier),
+      0,
+    ) + [...this.modifiers].reduce((accum, { value }) => accum + value, 0)
   }
 
   updateState = (newState: Partial<AptitudeCheck['state']>) => {
@@ -155,12 +193,13 @@ export class AptitudeCheck extends EventTarget {
           {
             name: `${localize('successTest')} - ${localize('aptitudeCheck')}`,
             key: AptitudeCheck,
-            content: html`<aptitude-check-controls @test-completed=${() => closeWindow(AptitudeCheck)}
+            content: html`<aptitude-check-controls
+              @test-completed=${() => closeWindow(AptitudeCheck)}
               .test=${check}
             ></aptitude-check-controls>`,
             adjacentEl: AptitudeCheck.called ? traverseActiveElements() : null,
           },
-          { resizable: ResizeOption.Both },
+          { resizable: ResizeOption.Vertical },
         );
         AptitudeCheck.called = false;
 
@@ -168,7 +207,7 @@ export class AptitudeCheck extends EventTarget {
           win.addEventListener(
             SlWindowEventName.Closed,
             () => {
-              console.log("moop")
+              console.log('moop');
               AptitudeCheck.winUnsub?.();
               AptitudeCheck.winUnsub = null;
             },

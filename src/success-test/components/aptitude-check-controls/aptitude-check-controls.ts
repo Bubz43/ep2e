@@ -1,23 +1,27 @@
 import {
-  renderSelectField,
   renderLabeledCheckbox,
+  renderNumberField,
+  renderSelectField,
+  renderTextField,
 } from '@src/components/field/fields';
-import { renderAutoForm } from '@src/components/form/forms';
-import { enumValues, AptitudeType } from '@src/data-enums';
-import { ActionType, ActionSubtype } from '@src/features/actions';
+import { renderAutoForm, renderSubmitForm } from '@src/components/form/forms';
+import { AptitudeType, enumValues } from '@src/data-enums';
+import { ActionSubtype, ActionType } from '@src/features/actions';
 import { Source } from '@src/features/effects';
+import { PreTestPoolAction } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import type { AptitudeCheck } from '@src/success-test/aptitude-check';
-import { notEmpty } from '@src/utility/helpers';
+import { notEmpty, withSign } from '@src/utility/helpers';
 import {
   customElement,
+  html,
   LitElement,
   property,
-  html,
   PropertyValues,
 } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
-import { identity } from 'remeda';
+import { equals, identity } from 'remeda';
 import styles from './aptitude-check-controls.scss';
 
 @customElement('aptitude-check-controls')
@@ -60,13 +64,14 @@ export class AptitudeCheckControls extends LitElement {
 
   render() {
     const {
-      ego,
       state,
       action,
       pools,
-      aptitudeTotal,
       modifierEffects,
       activeEffects,
+      activePool,
+      ignoreMods,
+      modifiers,
     } = this.test;
 
     return html`
@@ -114,14 +119,21 @@ export class AptitudeCheckControls extends LitElement {
                   ${pools.map(
                     (pool) => html`
                       <li class="pool">
-                        <pool-item .pool=${pool}></pool-item>
+                        <pool-item ?disabled=${!pool.available} .pool=${pool}></pool-item>
                         <div>
-                          <mwc-formfield label="+20"
-                            ><mwc-radio ?disabled=${!pool.available}></mwc-radio
-                          ></mwc-formfield>
-                          <mwc-formfield label="Ignore Mods"
-                            ><mwc-radio ?disabled=${!pool.available}></mwc-radio
-                          ></mwc-formfield>
+                          ${enumValues(PreTestPoolAction).map((action) => {
+                            const pair = [pool, action] as const;
+                            const active = equals(pair, activePool);
+                            return html`
+                              <button
+                                ?disabled=${!pool.available}
+                                class=${classMap({ active })}
+                                @click=${() => this.test.toggleActivePool(pair)}
+                              >
+                                ${localize(action)}
+                              </button>
+                            `;
+                          })}
                         </div>
                       </li>
                     `,
@@ -132,18 +144,39 @@ export class AptitudeCheckControls extends LitElement {
           : ''}
       </div>
 
-      <section class="modifiers">
-        <sl-header heading=${localize('modifiers')}></sl-header>
-        <sl-animated-list
-          transformOrigin="top"
-          skipExitAnimation
-          skipEntranceAnimation
+      <section class="modifiers ${classMap({ ignored: ignoreMods })}">
+        <sl-header
+          itemCount=${withSign(this.test.totalModifiers)}
+          heading=${localize('modifiers')}
         >
+          <sl-popover focusSelector="input[type='number']" slot="action" .renderOnDemand=${() => html`    <sl-popover-section
+              heading="${localize('add')} ${localize('modifier')}"
+            >
+              ${renderSubmitForm({
+                submitEmpty: true,
+                props: {
+                  name: localize('situational'),
+                  value: 10,
+                  temporary: true,
+                },
+                update: (changed, orig) =>
+                  this.test.addModifier({ ...orig, ...changed }),
+                fields: ({ name, value }) => [
+                  renderTextField(name, { required: true }),
+                  renderNumberField(value, { min: -95, max: 95 }),
+                ],
+              })}
+            </sl-popover-section>`}>
+              <mwc-icon-button slot="base" icon="add"></mwc-icon-button>
+          </sl-popover>
+        </sl-header>
+        <sl-animated-list transformOrigin="top">
           ${repeat(modifierEffects, identity, (effect) => {
             const useWhen =
               effect.requirement && `${localize('when')} ${effect.requirement}`;
             return html`
               <wl-list-item
+                class=${classMap({ tall: !!useWhen })}
                 ?clickable=${!!useWhen}
                 @click=${() => {
                   useWhen && this.test.toggleActiveEffect(effect);
@@ -159,7 +192,7 @@ export class AptitudeCheckControls extends LitElement {
                 <span class="source" title=${effect[Source]}
                   >${effect[Source]}</span
                 >
-                <span slot="after">${effect.modifier}</span>
+                <span slot="after">${withSign(effect.modifier)}</span>
                 ${useWhen
                   ? html`
                       <span class="requirement" title=${useWhen}
@@ -170,10 +203,30 @@ export class AptitudeCheckControls extends LitElement {
               </wl-list-item>
             `;
           })}
+          ${repeat(
+            modifiers,
+            identity,
+            (modifier) => html`
+              <wl-list-item
+                ?clickable=${!!modifier.temporary}
+                @click=${() =>
+                  modifier.temporary && this.test.removeModifier(modifier)}
+              >
+                ${modifier.temporary
+                  ? html` <mwc-icon slot="before">close</mwc-icon> `
+                  : html` <span slot="before"></span> `}
+                <span class="source">${modifier.name}</span>
+                <span slot="after">${withSign(modifier.value)}</span>
+              </wl-list-item>
+            `,
+          )}
         </sl-animated-list>
       </section>
 
       <footer>
+        <div class="totals">
+          <sl-group label=${localize('target')}>${this.test.target}</sl-group>
+        </div>
         <mwc-button @click=${this.emitCompleted} raised
           >${localize('roll')}</mwc-button
         >

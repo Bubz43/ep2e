@@ -30,6 +30,12 @@ export const isSuccessfullTestResult = createPipe(
   (rank) => rank >= ResultTier.Success,
 );
 
+export type SuccessTestModifier = {
+  name: string;
+  value: number;
+  temporary?: boolean;
+}
+
 // export type SuccessResult =
 //   | SuccessTestResult.Success
 //   | SuccessTestResult.SuperiorSuccess
