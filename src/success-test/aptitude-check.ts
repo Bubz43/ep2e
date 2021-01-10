@@ -26,6 +26,8 @@ import { html } from 'lit-html';
 import { compact, equals } from 'remeda';
 import { traverseActiveElements } from 'weightless';
 import type { SuccessTestModifier } from './success-test';
+import AptitudeCheckPopout from "./components/AptitudeCheckPopout.svelte"
+import { overlay } from '@src/init';
 
 export type AptitudeCheckInit = {
   ego: Ego;
@@ -155,6 +157,7 @@ export class AptitudeCheck extends EventTarget {
   subscribe(cb: (test: this) => void) {
     const handler = () => cb(this);
     this.addEventListener(eventKey, handler);
+    cb(this);
     return () => this.removeEventListener(eventKey, handler);
   }
 
@@ -179,6 +182,8 @@ export class AptitudeCheck extends EventTarget {
   private static winUnsub: (() => void) | null = null;
   private static called = false;
   static openWindow(aptitude: AptitudeType, actor: ActorEP) {
+ 
+    
     AptitudeCheck.called = true;
     AptitudeCheck.winUnsub?.();
     const open = (actor: ActorEP | null) => {
@@ -189,6 +194,10 @@ export class AptitudeCheck extends EventTarget {
           aptitude,
           character,
         });
+        const thing = new AptitudeCheckPopout({
+          target: overlay,
+          props: { check, cleanup: () => thing.$destroy() }
+        })
         const { win, wasConnected } = openWindow(
           {
             name: `${localize('successTest')} - ${localize('aptitudeCheck')}`,

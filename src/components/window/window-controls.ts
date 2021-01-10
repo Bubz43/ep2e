@@ -17,7 +17,6 @@ export type WindowOpenSettings = {
 
 export type WindowOpenOptions = Partial<{
   resizable: SlWindow['resizable'];
-  clearContentOnClose: boolean;
   renderOnly: boolean;
 }>;
 
@@ -25,7 +24,6 @@ export const openWindow = (
   { key, content, name, forceFocus, adjacentEl, img }: WindowOpenSettings,
   {
     resizable = ResizeOption.None,
-    clearContentOnClose = false,
     renderOnly = false,
   }: WindowOpenOptions = {},
 ) => {
@@ -39,7 +37,6 @@ export const openWindow = (
   win.name = name;
   win.img = img;
   win.resizable = resizable;
-  win.clearContentOnClose = clearContentOnClose;
   render(content, win);
 
   const wasConnected = win?.isConnected;

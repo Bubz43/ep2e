@@ -13,6 +13,8 @@
   grid-template-rows: 1fr auto;
   gap: 0.25rem;
   min-height: 300px;
+  padding: 0.5rem 1rem;
+
   .sections {
     grid-area: sections;
   }
@@ -28,7 +30,6 @@
     alphav(var(--color-bg), 0.8),
     alphav(var(--color-bg-alt), 0.8)
   );
-  padding: 0.5rem 1rem;
 }
 
 footer {
@@ -109,14 +110,12 @@ footer {
 
 .vertical-text {
   text-transform: uppercase;
-  // color: var(--color-text-lighter);
   writing-mode: vertical-lr;
   text-orientation: upright;
   letter-spacing: -0.25rem;
   padding: 0.25rem 0.35rem 0.5rem;
   font-size: small;
   width: min-content;
-
   border-right: 1px solid var(--color-border);
   background: var(--color-bg);
   text-align: center;

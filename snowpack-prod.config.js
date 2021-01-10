@@ -16,6 +16,7 @@ module.exports = {
     /* ... */
   ],
   installOptions: {
+    treeshake: true,
     rollup: {
       plugins: [
         require('rollup-plugin-license')({
@@ -33,6 +34,7 @@ module.exports = {
   },
   buildOptions: {
     clean: true,
+    
     /* ... */
   },
   proxy: {

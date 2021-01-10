@@ -7,6 +7,12 @@ declare module '*.scss' {
   export default style;
 }
 
+declare module "*.svelte" {
+  import { SvelteComponent } from "svelte"
+  const component: SvelteComponent;
+  export default component
+}
+
 
 /* CSS MODULES */
 declare module '*.module.css' {

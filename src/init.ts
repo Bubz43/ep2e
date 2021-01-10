@@ -30,6 +30,7 @@ import { localize } from './foundry/localization';
 import { addEPSocketHandler, setupSystemSocket } from './foundry/socket';
 import { EP } from './foundry/system';
 
+
 (function () {
   const frag = new DocumentFragment();
   render(

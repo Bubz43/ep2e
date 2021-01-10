@@ -133,6 +133,8 @@ export class SlWindow extends LitElement {
   })
   minimized = false;
 
+  @property({ type: Boolean }) noremove?: boolean;
+
   @property({ type: String })
   @observer(function (this: SlWindow, name: string) {
     this.emit(SlWindowEventName.NameChanged);
@@ -141,7 +143,6 @@ export class SlWindow extends LitElement {
 
   @property({ type: String }) img?: string;
 
-  @property({ type: Boolean }) clearContentOnClose = false;
 
   @property({ type: String }) resizable = ResizeOption.None;
 
@@ -237,8 +238,7 @@ export class SlWindow extends LitElement {
         resolve();
         this.closing = false;
         this.emit(SlWindowEventName.Closed);
-        this.remove();
-        if (this.clearContentOnClose) render(nothing, this);
+        if (!this.noremove) this.remove();
       };
     });
   }

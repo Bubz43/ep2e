@@ -74,7 +74,10 @@ export class AptitudeCheckControls extends LitElement {
       modifiers,
     } = this.test;
 
+    
+
     return html`
+    
       <div class="sections">
         <section>
           <span class="vertical-text">${localize('check')}</span>
@@ -97,6 +100,7 @@ export class AptitudeCheckControls extends LitElement {
             >
           </div>
         </section>
+        
 
         <div class="actions">
           <span class="vertical-text">${localize('action')}</span>
