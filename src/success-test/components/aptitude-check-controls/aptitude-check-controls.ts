@@ -52,6 +52,10 @@ export class AptitudeCheckControls extends LitElement {
     this.testUnsub = null;
   }
 
+  private emitCompleted() {
+    this.dispatchEvent(new CustomEvent("test-completed", { bubbles: true, composed: true }))
+  }
+
   render() {
     const {
       ego,
@@ -127,19 +131,42 @@ export class AptitudeCheckControls extends LitElement {
 
       <section class="modifiers">
         <sl-header heading=${localize('modifiers')}></sl-header>
-        <sl-animated-list>
-          ${repeat(
-            modifierEffects,
-            identity,
-            (effect) => html`
-              <wl-list-item ?clickable=${!!effect.requirement}>
-                <span>${effect[Source]}</span>
+        <sl-animated-list transformOrigin="top" skipExitAnimation skipEntranceAnimation>
+          ${repeat(modifierEffects, identity, (effect) => {
+            const useWhen =
+              effect.requirement && `${localize('when')} ${effect.requirement}`;
+            return html`
+              <wl-list-item
+                ?clickable=${!!useWhen}
+                @click=${(ev: Event) => {
+                  useWhen &&
+                    (ev.currentTarget as HTMLElement)
+                      .querySelector('span')
+                      ?.classList.toggle('active');
+                }}
+              >
+                <span slot="before" class=${useWhen ? 'tall' : 'active'}></span>
+                <span class="source" title=${effect[Source]}
+                  >${effect[Source]}</span
+                >
                 <span slot="after">${effect.modifier}</span>
+                ${useWhen
+                  ? html`
+                      <span class="requirement" title=${useWhen}
+                        >${useWhen}</span
+                      >
+                    `
+                  : ''}
               </wl-list-item>
-            `,
-          )}
+              
+            `;
+          })}
         </sl-animated-list>
       </section>
+
+      <footer>
+        <mwc-button @click=${this.emitCompleted} raised>${localize("roll")}</mwc-button>
+      </footer>
     `;
   }
 }

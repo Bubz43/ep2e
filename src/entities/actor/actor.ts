@@ -41,6 +41,8 @@ export type ActorProxy = ReturnType<ActorEP['createProxy']>;
 
 export type MaybeToken = Token | null | undefined;
 
+export type ActorSub = (data: ActorEP | null) => void
+
 export class ActorEP extends Actor {
   readonly #subscribers = new EntitySubscription<this>();
   itemTrash: ItemEP['data'][] = [];
@@ -54,6 +56,13 @@ export class ActorEP extends Actor {
 
   private declare invalidated: boolean;
   private declare hasPrepared: boolean;
+  private readonly subs = new Set<ActorSub>()
+
+  subscribe(sub: ActorSub) {
+    this.subs.add(sub)
+    sub(this);
+    return () => void this.subs.delete(sub)
+  }
 
   get identifiers(): ActorIdentifiers {
     return {
@@ -270,6 +279,8 @@ export class ActorEP extends Actor {
     if (this.hasPrepared)
       emitEPSocket({ actorChanged: this.identifiers }, true);
     else this.hasPrepared = true;
+
+    this.subs?.forEach(sub => sub(this))
   }
 
   render(force: boolean, context: Record<string, unknown>) {
@@ -281,6 +292,8 @@ export class ActorEP extends Actor {
     super._onDelete(options, userId);
     this.items?.forEach((item) => item.sheet?.close());
     this.#subscribers.unsubscribeAll();
+    this.subs.forEach(sub => sub(null))
+    this.subs.clear();
   }
 
   get conditions() {
