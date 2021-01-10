@@ -1,3 +1,8 @@
+import {
+  attachWindow,
+  WindowController,
+} from '@src/components/window/window-controls';
+import { ResizeOption } from '@src/components/window/window-options';
 import { AptitudeType, PoolType } from '@src/data-enums';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import type { Ego } from '@src/entities/actor/ego';
@@ -7,15 +12,17 @@ import {
   Action,
   ActionType,
   createAction,
-  defaultCheckActionSubtype
+  defaultCheckActionSubtype,
 } from '@src/features/actions';
 import { matchesAptitude, SuccessTestEffect } from '@src/features/effects';
 import { stringID } from '@src/features/feature-helpers';
 import { Pool, PreTestPoolAction } from '@src/features/pool';
+import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
 import { debounce } from '@src/utility/decorators';
+import { html } from 'lit-html';
 import { compact, equals } from 'remeda';
-import AptitudeCheckPopout from "./components/AptitudeCheckPopout.svelte";
+import { traverseActiveElements } from 'weightless';
 import type { SuccessTestModifier } from './success-test';
 
 export type AptitudeCheckInit = {
@@ -27,6 +34,15 @@ export type AptitudeCheckInit = {
 };
 
 const eventKey = `aptitude-check-${stringID()}`;
+
+type WinState = {
+  unsub?: () => void;
+  called: boolean;
+  controller?: WindowController<{ check: AptitudeCheck }>;
+  open?: (actor: ActorEP | null) => void;
+  readonly relative: Element | null;
+  cleanup: () => void;
+};
 
 export class AptitudeCheck extends EventTarget {
   readonly ego;
@@ -64,20 +80,20 @@ export class AptitudeCheck extends EventTarget {
 
   addModifier(modifier: SuccessTestModifier) {
     this.modifiers.add(modifier);
-    this.notify()
+    this.notify();
   }
 
   removeModifier(modifier: SuccessTestModifier) {
     this.modifiers.delete(modifier);
-    this.notify()
+    this.notify();
   }
 
   toggleActivePool(active: AptitudeCheck['activePool']) {
     const poolMod = this.activePool?.[0].testModifier;
-    poolMod && this.removeModifier(poolMod)
+    poolMod && this.removeModifier(poolMod);
     this.activePool = equals(active, this.activePool) ? null : active;
     if (this.activePool?.[1] === PreTestPoolAction.Bonus)
-      this.addModifier(this.activePool[0].testModifier)
+      this.addModifier(this.activePool[0].testModifier);
     this.notify();
   }
 
@@ -125,14 +141,16 @@ export class AptitudeCheck extends EventTarget {
   }
 
   get totalModifiers() {
-    return this.modifierEffects.reduce(
-      (accum, effect) =>
-        accum +
-        (effect.requirement && !this.activeEffects.has(effect)
-          ? 0
-          : effect.modifier),
-      0,
-    ) + [...this.modifiers].reduce((accum, { value }) => accum + value, 0)
+    return (
+      this.modifierEffects.reduce(
+        (accum, effect) =>
+          accum +
+          (effect.requirement && !this.activeEffects.has(effect)
+            ? 0
+            : effect.modifier),
+        0,
+      ) + [...this.modifiers].reduce((accum, { value }) => accum + value, 0)
+    );
   }
 
   updateState = (newState: Partial<AptitudeCheck['state']>) => {
@@ -168,66 +186,60 @@ export class AptitudeCheck extends EventTarget {
     );
   }
 
-  private static winUnsub: (() => void) | null = null;
-  private static called = false;
-  private static popout?: AptitudeCheckPopout | null = null;
-  static openWindow(aptitude: AptitudeType, actor: ActorEP) {
+  private static winStates = new WeakMap<ActorEP, WinState>();
 
-    
-    AptitudeCheck.called = true;
-    AptitudeCheck.winUnsub?.();
-    const open = (actor: ActorEP | null) => {
-      if (actor?.proxy.type === ActorType.Character) {
+  static openWindow(aptitude: AptitudeType, actor: ActorEP) {
+    const state = this.winStates.get(actor);
+    if (state) {
+      state.called = true;
+      state.open?.(actor);
+    } else {
+      const state: WinState = {
+        called: true,
+        cleanup() {
+          AptitudeCheck.winStates.delete(actor);
+          this.unsub?.();
+        },
+        get relative() {
+          return this.called ? traverseActiveElements() : null;
+        },
+      };
+
+      state.open = (actor: ActorEP | null) => {
+        if (actor?.proxy.type !== ActorType.Character) {
+          state.controller?.win.close();
+          return;
+        }
         const { proxy: character } = actor;
         const check = new AptitudeCheck({
           ego: character.ego,
           aptitude,
           character,
         });
-        if (!this.popout) {
-          this.popout = new AptitudeCheckPopout({
-            target: overlay,
-            props: { check, cleanup: () => {
-              this.popout?.$destroy()
-              this.winUnsub?.();
-              this.popout = null
-              this.winUnsub = null
-            } }
-          })
-        } else this.popout.$set({ check })
-     
-        // const { win, wasConnected } = openWindow(
-        //   {
-        //     name: `${localize('successTest')} - ${localize('aptitudeCheck')}`,
-        //     key: AptitudeCheck,
-        //     content: html`<aptitude-check-controls
-        //       @test-completed=${() => closeWindow(AptitudeCheck)}
-        //       .test=${check}
-        //     ></aptitude-check-controls>`,
-        //     adjacentEl: AptitudeCheck.called ? traverseActiveElements() : null,
-        //   },
-        //   { resizable: ResizeOption.Vertical },
-        // );
-        // AptitudeCheck.called = false;
 
-        // if (!wasConnected) {
-        //   win.addEventListener(
-        //     SlWindowEventName.Closed,
-        //     () => {
-        //       console.log('moop');
-        //       AptitudeCheck.winUnsub?.();
-        //       AptitudeCheck.winUnsub = null;
-        //     },
-        //     { once: true },
-        //   );
-        // }
-      } else {
-        // this.winUnsub?.();
-        this.popout?.$set({ close: true })
+        if (!state.controller) {
+          state.controller = attachWindow({
+            name: `${localize('successTest')} ${localize('aptitudeCheck')}`,
+            resizable: ResizeOption.Vertical,
+            renderTemplate: ({ check }) => html`
+              <aptitude-check-controls
+                .test=${check}
+                @test-completed=${() => state.controller?.win.close()}
+              ></aptitude-check-controls>
+            `,
+            renderProps: { check },
+            cleanup: () => state.cleanup(),
+            relativeElement: state.relative,
+          });
+        } else {
+          state.controller.update({
+            renderProps: { check },
+            relativeElement: state.relative,
+          });
+        }
+      };
 
-        // closeWindow(AptitudeCheck);
-      }
-    };
-    AptitudeCheck.winUnsub = actor.subscribe(open);
+      state.unsub = actor.subscribe(state.open)
+    }
   }
 }

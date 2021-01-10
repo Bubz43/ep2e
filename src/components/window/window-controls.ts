@@ -1,3 +1,4 @@
+import { overlay } from '@src/init';
 import { debounceFn } from '@src/utility/decorators';
 import { TemplateResult, render } from 'lit-html';
 import { traverseActiveElements } from 'weightless';
@@ -7,29 +8,36 @@ import { ResizeOption, SlWindowEventName } from './window-options';
 type WindowProps<T> = Pick<SlWindow, 'name' | 'img' | 'resizable'> & {
   renderTemplate: (props: T) => TemplateResult;
   renderProps: T;
-  cleanup: () => void
+  cleanup: () => void;
+  relativeElement?: Element | null;
 };
 
-export const setupWindow = <T>(initialProps: WindowProps<T>) => {
-  const win = new SlWindow();
-  const { renderTemplate } = initialProps;
-
-  let cleanup = initialProps.cleanup
-
-  const update = (props: Partial<Omit<WindowProps<T>, 'renderTemplate'>>) => {
-    if (props.name) win.name = props.name;
-    if ('img' in props) win.img = props.img;
-    if (props.resizable) win.resizable = props.resizable;
-    if (props.cleanup) cleanup = props.cleanup
-    if (props.renderProps) render(renderTemplate(props.renderProps), win);
-  };
-
-  update(initialProps);
-
-  return {
-    win,
-    update,
+export class WindowController<T> {
+  readonly win = new SlWindow();
+  private cleanup;
+  private readonly renderTemplate;
+  constructor(initialProps: WindowProps<T>) {
+    this.cleanup = initialProps.cleanup;
+    this.renderTemplate = initialProps.renderTemplate;
+    this.update(initialProps);
+    this.win.addEventListener(SlWindowEventName.Closed, () => this.cleanup());
+    overlay.append(this.win);
   }
+
+  update(props: Partial<Omit<WindowProps<T>, 'renderTemplate'>>) {
+    if (props.name) this.win.name = props.name;
+    if ('img' in props) this.win.img = props.img;
+    if (props.resizable) this.win.resizable = props.resizable;
+    if (props.cleanup) this.cleanup = props.cleanup;
+    if (props.renderProps)
+      render(this.renderTemplate(props.renderProps), this.win);
+    if (props.relativeElement instanceof HTMLElement)
+      this.win.positionAdjacentToElement(props.relativeElement);
+  };
+}
+
+export const attachWindow = <T>(initialProps: WindowProps<T>) => {
+  return new WindowController(initialProps)
 };
 
 const windows = new WeakMap<object, SlWindow>();
