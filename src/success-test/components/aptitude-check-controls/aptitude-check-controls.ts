@@ -115,33 +115,44 @@ export class AptitudeCheckControls extends LitElement {
           ? html`
               <section class="pools">
                 <span class="vertical-text">${localize('pools')}</span>
-                <ul>
-                  ${pools.map(
-                    (pool) => html`
-                      <li class="pool">
-                        <pool-item
-                          ?disabled=${!pool.available}
-                          .pool=${pool}
-                        ></pool-item>
-                        <div>
+                <div class="pool-actions">
+                  <header>
+                    <span class="label">${localize('ignoreMods')}</span>
+                    <span class="label">+20 ${localize('bonus')}</span>
+                  </header>
+                  <ul>
+                    ${pools.map(
+                      (pool) => html`
+                        <wl-list-item>
+                          <div>
+                            <span
+                              >${localize(pool.type)} <value-status value=${pool.available} max=${pool.max}></value-status></span
+                            >
+                          </div>
                           ${enumValues(PreTestPoolAction).map((action) => {
                             const pair = [pool, action] as const;
                             const active = equals(pair, activePool);
                             return html`
-                              <button
+                              <mwc-button
+                                slot=${action === PreTestPoolAction.IgnoreMods
+                                  ? 'before'
+                                  : 'after'}
+                                dense
                                 ?disabled=${!pool.available}
+                                ?outlined=${!active}
+                                ?unelevated=${active}
                                 class=${classMap({ active })}
                                 @click=${() => this.test.toggleActivePool(pair)}
                               >
-                                ${localize(action)}
-                              </button>
+                                <img height="20px" src=${pool.icon}
+                              /></mwc-button>
                             `;
                           })}
-                        </div>
-                      </li>
-                    `,
-                  )}
-                </ul>
+                        </wl-list-item>
+                      `,
+                    )}
+                  </ul>
+                </div>
               </section>
             `
           : ''}

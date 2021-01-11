@@ -86,16 +86,22 @@ export class AptitudeCheck extends EventTarget {
 
   toggleModifier(modifier: SuccessTestModifier) {
     this.modifiers.delete(modifier) || this.modifiers.add(modifier);
-    this.notify;
+    this.notify();
   }
+  
 
   toggleActivePool(active: AptitudeCheck['activePool']) {
-    const poolMod = this.activePool?.[0].testModifier;
-    poolMod && this.toggleModifier(poolMod);
+    this.togglePoolBonus()
     this.activePool = equals(active, this.activePool) ? null : active;
-    if (this.activePool?.[1] === PreTestPoolAction.Bonus)
-      this.toggleModifier(this.activePool[0].testModifier);
+      this.togglePoolBonus();
+
     this.notify();
+  }
+
+  private togglePoolBonus() {
+  if (this.activePool?.[1] === PreTestPoolAction.Bonus) {
+    this.toggleModifier(this.activePool[0].testModifier);
+  }
   }
 
   toggleActiveEffect(effect: SuccessTestEffect) {
@@ -190,6 +196,7 @@ export class AptitudeCheck extends EventTarget {
 
   updateState = (newState: Partial<AptitudeCheck['state']>) => {
     Object.assign(this.state, newState);
+    if (newState.aptitude) this.activePool = null;
   };
 
   updateAction = (newAction: Partial<Action>) => {
@@ -261,10 +268,10 @@ export class AptitudeCheck extends EventTarget {
             renderTemplate: ({ check }) => html`
               <aptitude-check-controls
                 .test=${check}
-                @test-completed=${() => {
+                @test-completed=${async () => {
                   state.controller?.win.close();
                   // TODO pools and actions and other nonsense
-                  createMessage({
+                  await createMessage({
                     data: {
                       header: {
                         heading: `${localize(
@@ -282,6 +289,8 @@ export class AptitudeCheck extends EventTarget {
                     },
                     entity: character,
                   });
+                  const pool = check.activePool?.[0];
+                  if (pool) character.spendPool({ pool: pool.type, points: 1 })
                 }}
               ></aptitude-check-controls>
             `,
@@ -295,6 +304,7 @@ export class AptitudeCheck extends EventTarget {
             relativeElement: state.relative,
           });
         }
+        state.called = false;
       };
 
       state.unsub = actor.subscribe(state.open);

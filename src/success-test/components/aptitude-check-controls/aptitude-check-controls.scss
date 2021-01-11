@@ -69,42 +69,91 @@ footer {
   }
 }
 
-.pools {
-  ul {
-    margin: 0;
-    padding: 0 0.25rem;
-    list-style: none;
-    display: grid;
-    grid-template-columns: 200px 200px;
-    align-items: center;
-    position: relative;
+.pool-actions {
+  @include resetUnorderedList();
+  flex: 1;
+  header {
+    display: flex;
+    justify-content: space-between;
+      padding: 0.25rem 0.75rem;
+
+    .label {
+      color: var(--color-text-lighter);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: small;
+    }
   }
-}
-.pool {
-  display: flex;
-  align-items: center;
-  pool-item {
-    pointer-events: none;
-    flex: 1;
-    padding: 0 0.25rem;
+
+  mwc-button {
+  --mdc-theme-primary: var(--color-secondary);
+  img {
+    filter: drop-shadow(2px 4px 6px black);
+  }
+  &[disabled] {
+    img {
+      opacity: 0.5;
+    }
+  }
+  }
+
+
+  wl-list-item {
+    padding: 0.25rem 1rem;
+    [slot="before"] {
+      margin-right: 0.25rem;
+    }
+    [slot="after"] {
+      margin-left: 0.25rem;
+    }
   }
 
   div {
-    display: grid;
+    display: flex;
     align-items: center;
-  }
-
-  @include textButton();
-
-  button {
-    padding: 0 0.5rem;
     justify-content: center;
-    text-align: center;
-    &.active {
-      box-shadow: 0 0 1px 2px var(--color-secondary) inset;
-    }
+    height: 30px;
   }
+
+
 }
+
+// .pools {
+//   ul {
+//     margin: 0;
+//     padding: 0 0.25rem;
+//     list-style: none;
+//     display: grid;
+//     grid-template-columns: 200px 200px;
+//     align-items: center;
+//     position: relative;
+//   }
+// }
+// .pool {
+//   display: flex;
+//   align-items: center;
+//   pool-item {
+//     pointer-events: none;
+//     flex: 1;
+//     padding: 0 0.25rem;
+//   }
+
+//   div {
+//     display: grid;
+//     align-items: center;
+//   }
+
+//   @include textButton();
+
+//   button {
+//     padding: 0 0.5rem;
+//     justify-content: center;
+//     text-align: center;
+//     &.active {
+//       box-shadow: 0 0 1px 2px var(--color-secondary) inset;
+//     }
+//   }
+// }
 
 .vertical-text {
   text-transform: uppercase;
@@ -142,13 +191,14 @@ footer {
 
   wl-list-item {
     padding: 0 1rem;
-    transition: background 100ms ease-in-out;
+    // transition: background 100ms ease-in-out;
     &.tall {
       padding: 0.25rem 1rem;
     }
+ 
     &:hover {
       mwc-icon {
-        color: var(--color-negative);
+        color: lightv(var(--color-negative), 2);
       }
     }
   }

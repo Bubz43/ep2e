@@ -128,8 +128,7 @@ mwc-icon-button {
 .part-toggle {
   all: unset;
   &:hover {
-    outline: 1px solid var(--color-primary);
-    outline-offset: 1px;
+    text-shadow: var(--text-highlight);
     cursor: pointer;
   }
 }

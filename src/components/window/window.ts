@@ -127,10 +127,6 @@ export class SlWindow extends LitElement {
   focused = false;
 
   @property({ type: Boolean, reflect: true })
-  @observer(function (this: SlWindow, old: boolean) {
-    this.emit(SlWindowEventName.MinimizeToggled);
-    this.animateMinimize();
-  })
   minimized = false;
 
   @property({ type: Boolean }) noremove?: boolean;
@@ -243,7 +239,20 @@ export class SlWindow extends LitElement {
   }
 
   toggleMinimize() {
+    const { offsetWidth, contentContainer } = this;
     this.minimized = !this.minimized;
+    requestAnimationFrame(() => {
+      
+      this.animate({
+        width: [px(offsetWidth), px(this.offsetWidth)]
+      }, { duration: 150, easing: "ease-in-out"})
+      if (!this.minimized) {
+        contentContainer.style.overflowX = "hidden"
+        contentContainer.animate({
+          opacity: [0, 0, 0.75, 1]
+        }, { duration: 350, easing: "ease-out"}).onfinish = () => contentContainer.style.overflowX = ""
+      }
+    })
   }
 
   gainFocus() {
@@ -324,42 +333,13 @@ export class SlWindow extends LitElement {
     };
   }
 
-  private static minimizeAnimationOptions = {
-    duration: 250,
-    easing: 'ease-in-out',
-  };
-
-  @throttle(200, true)
-  private animateMinimize() {
-    const { contentContainer } = this;
-
-    const { minimizeAnimationOptions } = SlWindow;
-    if (this.minimized) {
-      contentContainer.style.display = 'none';
-    } else {
-      if (contentContainer.style.display !== 'none') return;
-      contentContainer.style.display = '';
-      this.gainFocus();
-      contentContainer.animate(
-        { opacity: [0.25, 1] },
-        minimizeAnimationOptions,
-      ).onfinish = () => this.confirmPosition();
-    }
-  }
 
   private resetSize(ev: Event) {
-    // if (ev.composedPath().some(isButton)) return;
 
-    // if (this.minimized) {
-    //   this.minimized = false;
-    //   return;
-    // }
-    // if (this.resizable !== ResizeOption.None) {
     const { height, width } = this.contentContainer.style;
     if (height || width) {
       assignStyles(this.contentContainer, { height: '', width: '' });
     }
-    // }
     repositionIfNeeded(this);
   }
 
@@ -517,17 +497,12 @@ export class SlWindow extends LitElement {
   }
 
   render() {
+    /*
     const heading = html`<div class="heading">
       ${this.img ? html`<img height="24px" src=${this.img} />` : ''}
       <span>${this.name}</span>
     </div>`;
-    return html`
-      <header
-        id="header"
-        @dblclick=${this.toggleMinimize}
-        @pointerdown=${this.startDrag}
-      >
-        ${this.minimized
+   ${this.minimized
           ? heading
           : html` <slot
               name="header"
@@ -536,10 +511,8 @@ export class SlWindow extends LitElement {
             >
               ${heading}
             </slot>`}
-        <slot name="header-button"> </slot>
 
-        <div class="controls">
-          <!-- <wl-list-item
+               <!-- <wl-list-item
             class="minimize-button"
             role="button"
             clickable
@@ -547,6 +520,21 @@ export class SlWindow extends LitElement {
           >
             <mwc-icon>${this.minimized ? 'open_in_full' : 'remove'}</mwc-icon>
           </wl-list-item> -->
+    */
+    return html`
+      <header
+        id="header"
+        @dblclick=${this.toggleMinimize}
+        @pointerdown=${this.startDrag}
+      >
+        <div class="heading">
+          ${this.img ? html`<img height="24px" src=${this.img} />` : ''}
+          <span>${this.name}</span>
+        </div>
+
+        <slot name="header-button"> </slot>
+
+        <div class="controls">
           <wl-list-item
             class="close-button"
             role="button"

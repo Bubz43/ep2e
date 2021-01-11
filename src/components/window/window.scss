@@ -141,7 +141,6 @@ slot[name='footer'] {
 }
 
 .heading {
-  @include truncate(400px);
   padding: 0 0.25rem;
   font-size: larger;
   text-shadow: 0px 0px 10px black;
@@ -151,11 +150,11 @@ slot[name='footer'] {
   align-items: center;
   > * {
     margin-left: 0.25ch;
+      @include truncate(400px);
   }
   img {
     display: inline-block;
     filter: drop-shadow(1px 2px 3px black);
-    transition: height 200ms;
   }
 }
 
