@@ -1,6 +1,6 @@
 import type {
   DamageMessageData,
-  MeleeWeaponMessageData
+  MeleeWeaponMessageData,
 } from '@src/chat/message-data';
 import { SubstanceApplicationMethod } from '@src/data-enums';
 import { ExplosiveSettingsForm } from '@src/entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
@@ -15,7 +15,6 @@ import { customElement, html, property } from 'lit-element';
 import { compact, concat, map, pick, pipe } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-melee-attack.scss';
-
 
 @customElement('message-melee-attack')
 export class MessageMeleeAttack extends MessageElement {
@@ -236,8 +235,6 @@ export class MessageMeleeAttack extends MessageElement {
     `;
   }
 }
-
-
 
 declare global {
   interface HTMLElementTagNameMap {

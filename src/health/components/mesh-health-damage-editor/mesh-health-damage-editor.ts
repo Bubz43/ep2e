@@ -46,8 +46,7 @@ export class MeshHealthDamageEditor extends HealthEditBase<
             ),
           ],
         })}
-            ${this.renderMultiplier()}
-
+        ${this.renderMultiplier()}
         ${this.armor
           ? html`<div class="armor-toggles">
               <mwc-button

@@ -48,7 +48,7 @@ export class MessageSuccessTest extends MessageElement {
     result: SuccessTestResult;
   } | null = null;
 
-  private previewTimeout?: ReturnType<typeof setTimeout> 
+  private previewTimeout?: ReturnType<typeof setTimeout>;
 
   private setDefaultRoll(ev: Event) {
     if (ev.target instanceof HTMLInputElement) {
@@ -84,7 +84,7 @@ export class MessageSuccessTest extends MessageElement {
   // }
 
   private previewFlipFlopRoll() {
-    this.clearPreviewTimeout()
+    this.clearPreviewTimeout();
     const { roll, target, defaulting } = this.successTest;
     if (roll == null) return;
     const flipped = flipFlopRoll(roll);
@@ -95,7 +95,7 @@ export class MessageSuccessTest extends MessageElement {
   }
 
   private previewImproveResult() {
-        this.clearPreviewTimeout();
+    this.clearPreviewTimeout();
     const { roll, result } = this.successTest;
     if (roll == null || !result) return;
     this.preview = {
@@ -105,14 +105,13 @@ export class MessageSuccessTest extends MessageElement {
   }
 
   private endPreview() {
-    
     this.previewTimeout = setTimeout(() => {
-          this.preview = null;
+      this.preview = null;
     }, 100);
   }
 
   private clearPreviewTimeout() {
-    clearTimeout(this.previewTimeout)
+    clearTimeout(this.previewTimeout);
   }
   private getPoolActionState() {}
 

@@ -241,12 +241,11 @@ TokenHUD.prototype._getStatusEffectChoices = function () {
 
 const { _render } = ChatLog.prototype;
 ChatLog.prototype._render = async function (...args) {
-  console.log("moop1")
-  if (document.body.classList.contains("ready")) {
-    console.log("moop");
+  console.log('moop1');
+  if (document.body.classList.contains('ready')) {
+    console.log('moop');
     _render.call(this, ...args);
   }
-
 };
 
 Object.defineProperties(Token.prototype, {
@@ -422,8 +421,8 @@ PlayerList.prototype.activateListeners = function (jqueryEl: JQuery) {
 
 SceneNavigation.prototype.activateListeners = function (jqueryEl: JQuery) {
   const scenes = jqueryEl.find('.scene');
-  scenes.on("click", this._onClickScene.bind(this));
-  jqueryEl.find('#nav-toggle').on("click", this._onToggleNav.bind(this));
+  scenes.on('click', this._onClickScene.bind(this));
+  jqueryEl.find('#nav-toggle').on('click', this._onToggleNav.bind(this));
 
   jqueryEl[0]?.addEventListener('contextmenu', navMenuListener);
 };

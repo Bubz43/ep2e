@@ -6,18 +6,20 @@ export const createContainedStyles = (key: string) => {
   const e = createEmotion({
     container: styleContainer,
     key,
-    speedy: false
+    speedy: false,
   });
 
   return {
     ...e,
     getCSSResult: () => {
-      const result = unsafeCSS(styleContainer.textContent)
+      const result = unsafeCSS(styleContainer.textContent);
       // e.flush()
       return result;
-    }
-  }
-  
-}
+    },
+  };
+};
 
-export const { css: containedCSS, getCSSResult: getContainedCSSResult } = createContainedStyles("overlay");
+export const {
+  css: containedCSS,
+  getCSSResult: getContainedCSSResult,
+} = createContainedStyles('overlay');

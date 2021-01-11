@@ -82,7 +82,6 @@ export class AptitudeCheck extends EventTarget {
           subtype: defaultCheckActionSubtype(this.state.aptitude),
         }),
     );
-
   }
 
   toggleModifier(modifier: SuccessTestModifier) {

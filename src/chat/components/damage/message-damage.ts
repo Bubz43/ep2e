@@ -148,9 +148,10 @@ export class MessageDamage extends LitElement {
       ${this.viewFormulas
         ? html`
             <div class="additional">
-            <multiplier-select multiplier=${this.multiplier} @roll-multiplier=${this.setMultiplier}></multiplier-select>
-          
-
+              <multiplier-select
+                multiplier=${this.multiplier}
+                @roll-multiplier=${this.setMultiplier}
+              ></multiplier-select>
 
               <rolled-formulas-list
                 .rolledFormulas=${this.damage.rolledFormulas}

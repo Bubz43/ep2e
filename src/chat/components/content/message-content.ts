@@ -14,7 +14,7 @@ export class MessageContent extends LitElement {
 
   @property({ attribute: false }) message!: ChatMessageEP;
 
-  @property({ type: Object, }) data!: MessageData;
+  @property({ type: Object }) data!: MessageData;
 
   @property({ type: Boolean }) disabled = false;
 
@@ -40,7 +40,7 @@ export class MessageContent extends LitElement {
       attackTraitInfo,
       areaEffect,
       meleeAttack,
-      successTest
+      successTest,
     } = this.data;
     if (!this.message.isContentVisible) return '';
     return html`
@@ -52,7 +52,11 @@ export class MessageContent extends LitElement {
             ></message-area-effect>
           `
         : ''}
-        ${successTest ? html`<message-success-test .successTest=${successTest}></message-success-test>` : ""}
+      ${successTest
+        ? html`<message-success-test
+            .successTest=${successTest}
+          ></message-success-test>`
+        : ''}
       ${meleeAttack
         ? html`
             <message-melee-attack

@@ -20,7 +20,6 @@
   }
   .modifiers {
     grid-area: modifiers;
-
   }
   footer {
     grid-area: footer;
@@ -92,7 +91,7 @@ footer {
 
   div {
     display: grid;
-    align-items: center
+    align-items: center;
   }
 
   @include textButton();
@@ -106,7 +105,6 @@ footer {
     }
   }
 }
-
 
 .vertical-text {
   text-transform: uppercase;
@@ -171,7 +169,7 @@ footer {
 
   mwc-icon[slot='before'] {
     margin-left: -0.6rem;
-    margin-right: 1.6rem
+    margin-right: 1.6rem;
   }
 
   span[slot='before'] {

@@ -151,10 +151,10 @@ export class Ego {
   private readonly repMap = new Map<
     RepNetwork,
     RepWithIdentifier & { track: boolean }
-    >();
-  
+  >();
+
   get img() {
-    return this.data.img
+    return this.data.img;
   }
 
   get epData() {
@@ -168,7 +168,7 @@ export class Ego {
   get baseInitiative() {
     const { ref, int } = this.aptitudes;
     const base = (ref + int) / 5;
-    return Math.round(base * 100) / 100
+    return Math.round(base * 100) / 100;
   }
 
   get motivations() {

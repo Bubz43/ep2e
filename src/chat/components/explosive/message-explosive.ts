@@ -234,7 +234,6 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
           `}
     `;
   }
-
 }
 
 declare global {

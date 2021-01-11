@@ -197,7 +197,7 @@ export class MeleeWeaponForm extends ItemFormBase {
       coating,
       payload,
       exoticSkillName,
-      path
+      path,
     } = this.item;
     const { disabled } = this;
     return html`
@@ -250,14 +250,12 @@ export class MeleeWeaponForm extends ItemFormBase {
           <section>
             <sl-header heading=${localize('details')}></sl-header>
             <div class="detail-forms">
-             
               ${renderUpdaterForm(updater.path('data'), {
                 disabled,
                 classes: complexityForm.cssClass,
                 fields: renderComplexityFields,
               })}
-
-${renderAutoForm({
+              ${renderAutoForm({
                 classes: 'skill-form',
                 disabled,
                 props: {
@@ -300,8 +298,7 @@ ${renderAutoForm({
                     disabled: this.skillOption !== WeaponSkillOption.Exotic,
                   })}
                 `,
-})}
-              
+              })}
             </div>
           </section>
         </div>

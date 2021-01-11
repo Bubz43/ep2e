@@ -33,11 +33,11 @@ export class WindowController<T> {
       render(this.renderTemplate(props.renderProps), this.win);
     if (props.relativeElement instanceof HTMLElement)
       this.win.positionAdjacentToElement(props.relativeElement);
-  };
+  }
 }
 
 export const attachWindow = <T>(initialProps: WindowProps<T>) => {
-  return new WindowController(initialProps)
+  return new WindowController(initialProps);
 };
 
 type WinState<S, D> = {

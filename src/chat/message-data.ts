@@ -11,9 +11,15 @@ import type { RolledFormula } from '@src/foundry/rolls';
 import type { HealthModification, HealthType } from '@src/health/health';
 import type { RollMultiplier } from '@src/health/health-changes';
 import type { StressType } from '@src/health/mental-health';
-import type { SuccessTestModifier, SuccessTestResult } from '@src/success-test/success-test';
+import type {
+  SuccessTestModifier,
+  SuccessTestResult,
+} from '@src/success-test/success-test';
 import type { RequireAtLeastOne } from 'type-fest';
-import type { ExplosiveSettings, MeleeWeaponSettings } from '../entities/weapon-settings';
+import type {
+  ExplosiveSettings,
+  MeleeWeaponSettings,
+} from '../entities/weapon-settings';
 
 export type StressTestMessageData = {
   rolledFormulas: RolledFormula[];
@@ -77,7 +83,7 @@ export type MeleeWeaponMessageData = MeleeWeaponSettings & {
   appliedCoating?: boolean;
   appliedPayload?: boolean;
   // TODO maybe additional info for tracking coating state etc
-}
+};
 
 export type AttackTraitData = {
   traits: AttackTrait[];
@@ -104,9 +110,11 @@ export type SuccessTestMessage = {
   target: number;
   result?: SuccessTestResult | null;
   defaulting?: boolean;
-  linkedPool?: Exclude<PoolType, PoolType.Flex  | PoolType.Threat>
-  poolActions?: [pool: PoolType, action: PreTestPoolAction | PostTestPoolAction][] | null
-}
+  linkedPool?: Exclude<PoolType, PoolType.Flex | PoolType.Threat>;
+  poolActions?:
+    | [pool: PoolType, action: PreTestPoolAction | PostTestPoolAction][]
+    | null;
+};
 
 export type MessageData = Partial<{
   header: MessageHeaderData;

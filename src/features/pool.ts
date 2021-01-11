@@ -14,8 +14,8 @@ type PoolInit = {
 };
 
 export enum PostTestPoolAction {
-  Improve = "improveResult",
-  FlipFlop = "flipFlopRoll",
+  Improve = 'improveResult',
+  FlipFlop = 'flipFlopRoll',
 }
 
 export enum PreTestPoolAction {
@@ -74,7 +74,7 @@ export class Pool {
 
   @LazyGetter()
   get testModifier(): SuccessTestModifier {
-    return { name: localize(this.type), value: 20 }
+    return { name: localize(this.type), value: 20 };
   }
 
   addEffect({ modifier, usabilityModification }: PoolEffect) {

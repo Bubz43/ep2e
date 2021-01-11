@@ -24,7 +24,7 @@ import {
 } from 'lit-element';
 import { map } from 'remeda';
 import { traverseActiveElements } from 'weightless';
-import styles from "./melee-settings-form.scss";
+import styles from './melee-settings-form.scss';
 
 @customElement('melee-settings-form')
 export class MeleeSettingsForm extends LitElement {
@@ -169,8 +169,6 @@ export class MeleeSettingsForm extends LitElement {
     `;
   }
 }
-
-
 
 declare global {
   interface HTMLElementTagNameMap {

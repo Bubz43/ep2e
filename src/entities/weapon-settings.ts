@@ -141,4 +141,4 @@ export type MeleeWeaponSettings = {
   charging?: boolean;
   extraWeapon?: boolean;
   testResult?: SuccessTestResult;
-}
+};

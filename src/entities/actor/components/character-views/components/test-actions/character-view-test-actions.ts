@@ -4,7 +4,10 @@ import {
   closeWindow,
   openWindow,
 } from '@src/components/window/window-controls';
-import { ResizeOption, SlWindowEventName } from '@src/components/window/window-options';
+import {
+  ResizeOption,
+  SlWindowEventName,
+} from '@src/components/window/window-options';
 import { enumValues, AptitudeType } from '@src/data-enums';
 import type { ActorEP } from '@src/entities/actor/actor';
 import type { Ego } from '@src/entities/actor/ego';
@@ -80,7 +83,7 @@ export class CharacterViewTestActions extends LitElement {
   }
 
   private startAptitudeTest(aptitude: AptitudeType) {
-    AptitudeCheck.openWindow(aptitude, this.character.actor)
+    AptitudeCheck.openWindow(aptitude, this.character.actor);
   }
 
   render() {

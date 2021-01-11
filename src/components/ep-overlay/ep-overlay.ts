@@ -15,7 +15,7 @@ import {
   internalProperty,
   LitElement,
   property,
-  query
+  query,
 } from 'lit-element';
 import { render, TemplateResult } from 'lit-html';
 import { cache } from 'lit-html/directives/cache';
@@ -23,8 +23,6 @@ import { first } from 'remeda';
 import { traverseActiveElements } from 'weightless';
 import type { EventList } from '../event-list/event-list';
 import styles from './ep-overlay.scss';
-
-
 
 const relevantHooks = [
   'updateScene',

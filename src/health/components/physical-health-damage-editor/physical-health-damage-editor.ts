@@ -65,9 +65,7 @@ export class PhysicalHealthDamageEditor extends HealthEditBase<
             ),
           ],
         })}
-
         ${this.renderMultiplier()}
-   
         ${this.armor
           ? html`
               <div class="armor-toggles">

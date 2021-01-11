@@ -30,7 +30,6 @@ import { localize } from './foundry/localization';
 import { addEPSocketHandler, setupSystemSocket } from './foundry/socket';
 import { EP } from './foundry/system';
 
-
 (function () {
   const frag = new DocumentFragment();
   render(
@@ -48,7 +47,6 @@ import { EP } from './foundry/system';
   );
   document.head.appendChild(frag);
 })();
-
 
 export let gameSettings: ReturnType<typeof registerEPSettings>;
 export let overlay: EPOverlay;
@@ -149,7 +147,7 @@ Hooks.once('ready', async () => {
     tooltip = document.createElement('sl-tooltip');
     tooltip.slot = 'tooltip';
     overlay.append(tooltip);
-    document.body.classList.add('ready')
+    document.body.classList.add('ready');
     ui.chat.render(true);
     // overlay.stealElements()
   }, 150);

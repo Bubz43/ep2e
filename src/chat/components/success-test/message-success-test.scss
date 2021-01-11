@@ -29,12 +29,11 @@ sl-group {
   place-self: center;
 }
 
-  mwc-icon-button {
-    --mdc-icon-button-size: 1.25rem;
-    --mdc-icon-size: 1rem;
-    height: 1.25rem;
-  }
-
+mwc-icon-button {
+  --mdc-icon-button-size: 1.25rem;
+  --mdc-icon-size: 1rem;
+  height: 1.25rem;
+}
 
 .roll {
   sl-animated-list {
@@ -46,12 +45,12 @@ sl-group {
   }
 
   .edit-toggle {
-      visibility: hidden;
+    visibility: hidden;
   }
   &:hover,
   &:focus-within {
     .edit-toggle {
-        visibility: visible;
+      visibility: visible;
     }
   }
 }
@@ -63,22 +62,6 @@ sl-group {
     display: inline-block;
     min-width: 0.5ch;
   }
-}
-
-.results {
-  display: inline-grid;
-  grid-template-areas: "content";
-  > * {
-    grid-area: content;
-  }
-  .preview-result {
-    @include animate-css(fadeIn, 250ms);
-    & + span {
-      opacity: 0;
-          transition: opacity 250ms ease-in-out;
-    }
-  }
-  
 }
 
 .edit {
@@ -109,5 +92,4 @@ sl-group {
       }
     }
   }
-
 }

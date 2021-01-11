@@ -17,7 +17,7 @@ export type ItemProxyInit<T extends ItemType> = {
   deleteSelf?: () => void;
   alwaysDeletable?: boolean;
   actor?: ActorEP | null;
-  path?: EntityPath
+  path?: EntityPath;
 };
 
 export abstract class ItemProxyBase<T extends ItemType> {
@@ -39,7 +39,7 @@ export abstract class ItemProxyBase<T extends ItemType> {
     deleteSelf,
     alwaysDeletable = false,
     actor,
-    path
+    path,
   }: ItemProxyInit<T>) {
     this.data = data;
     this.updater =
@@ -54,7 +54,7 @@ export abstract class ItemProxyBase<T extends ItemType> {
     this.deleteSelf = deleteSelf;
     this.alwaysDeletable = alwaysDeletable;
     this.actor = actor;
-    this.path = path
+    this.path = path;
     // this.actorIdentifiers = actorIdentifiers;
   }
 

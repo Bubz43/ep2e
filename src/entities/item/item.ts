@@ -56,9 +56,10 @@ export class ItemEP extends Item {
 
   @LazyGetter()
   get path(): EntityPath {
-    if (this.actor) return [...this.actor.path, { name: localize("items")}, this ]
-    if (game.items.has(this.id)) return [{ name: localize("items")}, this]
-    return []
+    if (this.actor)
+      return [...this.actor.path, { name: localize('items') }, this];
+    if (game.items.has(this.id)) return [{ name: localize('items') }, this];
+    return [];
   }
 
   @LazyGetter()

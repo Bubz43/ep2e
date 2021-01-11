@@ -32,7 +32,6 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
     this.collapsed = !this.collapsed;
   }
 
-
   render() {
     return html`
       <sl-header

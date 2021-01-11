@@ -1,4 +1,4 @@
-import { mapToObj } from "remeda";
+import { mapToObj } from 'remeda';
 
 const cssColors = [
   '--color-primary',
@@ -13,25 +13,24 @@ const cssColors = [
   '--color-text-disabled',
   '--color-grey',
 ] as const;
- 
-const post = ["-h", "-s", "-l"] as const
 
-const spreadOut = mapToObj(cssColors, color => {
-  const [h, s, l] = post.map(p => `var(${color + p})`)
+const post = ['-h', '-s', '-l'] as const;
+
+const spreadOut = mapToObj(cssColors, (color) => {
+  const [h, s, l] = post.map((p) => `var(${color + p})`);
   return [color, { h, s, l }];
-})
+});
 
 export const cssFonts = {
   font1: 'font-family: var(--font-1);',
   font2: 'font-family: var(--font-2);',
   font3: 'font-family: var(--font-3);',
   fontMono: 'font-family: var(--font-mono);',
-} as const
+} as const;
 
-export const cssVar = (name: (typeof cssColors)[number]) => {
-  return `var(${name})`
-}
-
+export const cssVar = (name: typeof cssColors[number]) => {
+  return `var(${name})`;
+};
 
 // const hslVals = (name: string) => {
 //   const [h, s, l] = post.map(p => `var(${name + p})`)
@@ -42,16 +41,15 @@ export const cssVar = (name: (typeof cssColors)[number]) => {
 
 export const colorFunctions = {
   alphav: (prop: keyof typeof spreadOut, alpha: number) => {
-    const { h, s, l} = spreadOut[prop]
-    return `hsla(${h}, ${s}, ${l}, ${alpha})`
+    const { h, s, l } = spreadOut[prop];
+    return `hsla(${h}, ${s}, ${l}, ${alpha})`;
   },
   lightv: (prop: keyof typeof spreadOut, lightnessMultiplier: number) => {
-    const { h, s, l} = spreadOut[prop]
-    return `hsl(${h}, ${s}, calc(${l} * ${lightnessMultiplier}))`
+    const { h, s, l } = spreadOut[prop];
+    return `hsl(${h}, ${s}, calc(${l} * ${lightnessMultiplier}))`;
   },
   satv: (prop: keyof typeof spreadOut, saturationMultiplier: number) => {
-    const { h, s, l} = spreadOut[prop]
-    return `hsl(${h}, calc(${s} * ${saturationMultiplier}), ${l})`
-  }
-
-}
+    const { h, s, l } = spreadOut[prop];
+    return `hsl(${h}, calc(${s} * ${saturationMultiplier}), ${l})`;
+  },
+};

@@ -18,7 +18,7 @@ export type ActorProxyInit<T extends ActorType> = {
   itemOperations: ItemOperations;
   actor: ActorEP;
   openForm?: () => unknown;
-  path?: EntityPath
+  path?: EntityPath;
 };
 
 export abstract class ActorProxyBase<T extends ActorType> {
@@ -39,7 +39,7 @@ export abstract class ActorProxyBase<T extends ActorType> {
     itemOperations,
     actor,
     openForm,
-    path
+    path,
   }: ActorProxyInit<T>) {
     this.data = data;
     this.updater = updater;

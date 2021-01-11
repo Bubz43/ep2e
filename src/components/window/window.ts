@@ -143,7 +143,6 @@ export class SlWindow extends LitElement {
 
   @property({ type: String }) img?: string;
 
-
   @property({ type: String }) resizable = ResizeOption.None;
 
   @query('header') private header!: HTMLElement;
@@ -356,10 +355,10 @@ export class SlWindow extends LitElement {
     //   return;
     // }
     // if (this.resizable !== ResizeOption.None) {
-      const { height, width } = this.contentContainer.style;
-      if (height || width) {
-        assignStyles(this.contentContainer, { height: '', width: '' });
-      }
+    const { height, width } = this.contentContainer.style;
+    if (height || width) {
+      assignStyles(this.contentContainer, { height: '', width: '' });
+    }
     // }
     repositionIfNeeded(this);
   }
@@ -519,9 +518,9 @@ export class SlWindow extends LitElement {
 
   render() {
     const heading = html`<div class="heading">
-    ${this.img ? html`<img height="24px" src=${this.img} />` : ''}
-    <span>${this.name}</span>
-  </div>`
+      ${this.img ? html`<img height="24px" src=${this.img} />` : ''}
+      <span>${this.name}</span>
+    </div>`;
     return html`
       <header
         id="header"
@@ -592,8 +591,6 @@ export class SlWindow extends LitElement {
         : ''}
     `;
   }
-
-
 }
 
 declare global {

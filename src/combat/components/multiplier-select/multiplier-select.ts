@@ -28,15 +28,15 @@ export class MultiplierSelect extends LitElement {
   render() {
     return html`
       <span>${localize('multiplier')}</span>
-        ${rollMultipliers.map(
-          (multiplier) =>
-            html`<button
-              @click=${() => this.emitUpdate(multiplier)}
-              class="${multiplier === this.multiplier ? 'active' : ''}"
-            >
-              ${multiplier}
-            </button>`,
-        )}
+      ${rollMultipliers.map(
+        (multiplier) =>
+          html`<button
+            @click=${() => this.emitUpdate(multiplier)}
+            class="${multiplier === this.multiplier ? 'active' : ''}"
+          >
+            ${multiplier}
+          </button>`,
+      )}
     `;
   }
 }

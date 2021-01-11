@@ -1,6 +1,6 @@
 export type PathEntity = {
   name: string;
-  view?: () => void
-}
+  view?: () => void;
+};
 
-export type EntityPath = PathEntity[]
+export type EntityPath = PathEntity[];
