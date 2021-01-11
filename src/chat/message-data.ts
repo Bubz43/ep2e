@@ -1,10 +1,11 @@
 import type { AreaEffect } from '@src/combat/area-effect';
 import type { BasicAreaEffectData } from '@src/combat/attack-formatting';
-import type { AttackTrait } from '@src/data-enums';
+import type { AttackTrait, PoolType } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
 import type { SubstanceUseMethod } from '@src/entities/item/proxies/substance';
 import type { ItemEntity } from '@src/entities/models';
 import type { ArmorType } from '@src/features/active-armor';
+import type { PreTestPoolAction } from '@src/features/pool';
 import type { PlacedTemplateIDs } from '@src/foundry/canvas';
 import type { RolledFormula } from '@src/foundry/rolls';
 import type { HealthModification, HealthType } from '@src/health/health';
@@ -99,10 +100,11 @@ export type MessageAreaEffectData = AreaEffect & {
 
 export type SuccessTestMessage = {
   parts: SuccessTestModifier[];
-  roll: number;
+  roll?: number | null;
   target: number;
-  result: SuccessTestResult;
-  
+  result?: SuccessTestResult | null;
+  defaulting?: boolean;
+  preTestPool?: [pool: PoolType, action: PreTestPoolAction] | null;
 }
 
 export type MessageData = Partial<{

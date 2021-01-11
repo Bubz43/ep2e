@@ -2,10 +2,38 @@
 @use "scss/mixins" as *;
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 :host {
-    display: grid;
-    padding: 0.25rem 0.75rem;
+  display: grid;
+  padding: 0.25rem 0.75rem;
+}
+
+.edit {
+  display: flex;
+  align-items: center;
+  @include inputReset();
+  input {
+    width: 4ch;
+    text-align: center;
+    padding: 0;
+    margin-right: 0.5ch;
+    height: 23.33px;
+  }
+  .roll-edit {
+    input {
+      color: transparent !important;
+    }
+    &:focus-within,
+    &.filled {
+      input {
+        color: var(--color-text) !important;
+      }
+    }
+  }
+  mwc-icon-button {
+    --mdc-icon-button-size: 1.25rem;
+    --mdc-icon-size: 1rem;
+  }
 }

@@ -169,6 +169,9 @@ export class AptitudeCheck extends EventTarget {
       roll,
       result,
       target,
+      preTestPool: this.activePool
+        ? [this.activePool[0].type, this.activePool[1]]
+        : null,
     };
   }
 
@@ -251,9 +254,10 @@ export class AptitudeCheck extends EventTarget {
                   createMessage({
                     data: {
                       header: {
-                        heading: `${localize("FULL", check.state.aptitude)} ${localize(
-                          'check',
-                        )}`,
+                        heading: `${localize(
+                          'FULL',
+                          check.state.aptitude,
+                        )} ${localize('check')}`,
                         subheadings: [
                           map(
                             [check.action.type, check.action.subtype, 'action'],
