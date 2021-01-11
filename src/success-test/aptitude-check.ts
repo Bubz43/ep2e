@@ -1,3 +1,5 @@
+import { createMessage } from '@src/chat/create-message';
+import type { SuccessTestMessage } from '@src/chat/message-data';
 import {
   attachWindow,
   WindowController,
@@ -14,16 +16,20 @@ import {
   createAction,
   defaultCheckActionSubtype,
 } from '@src/features/actions';
-import { matchesAptitude, SuccessTestEffect } from '@src/features/effects';
+import {
+  matchesAptitude,
+  Source,
+  SuccessTestEffect,
+} from '@src/features/effects';
 import { stringID } from '@src/features/feature-helpers';
 import { Pool, PreTestPoolAction } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
 import { debounce } from '@src/utility/decorators';
 import { html } from 'lit-html';
-import { compact, equals } from 'remeda';
+import { compact, equals, map } from 'remeda';
 import { traverseActiveElements } from 'weightless';
-import type { SuccessTestModifier } from './success-test';
+import { rollSuccessTest, SuccessTestModifier } from './success-test';
 
 export type AptitudeCheckInit = {
   ego: Ego;
@@ -78,28 +84,22 @@ export class AptitudeCheck extends EventTarget {
     );
   }
 
-  addModifier(modifier: SuccessTestModifier) {
-    this.modifiers.add(modifier);
-    this.notify();
-  }
-
-  removeModifier(modifier: SuccessTestModifier) {
-    this.modifiers.delete(modifier);
-    this.notify();
+  toggleModifier(modifier: SuccessTestModifier) {
+    this.modifiers.delete(modifier) || this.modifiers.add(modifier);
+    this.notify;
   }
 
   toggleActivePool(active: AptitudeCheck['activePool']) {
     const poolMod = this.activePool?.[0].testModifier;
-    poolMod && this.removeModifier(poolMod);
+    poolMod && this.toggleModifier(poolMod);
     this.activePool = equals(active, this.activePool) ? null : active;
     if (this.activePool?.[1] === PreTestPoolAction.Bonus)
-      this.addModifier(this.activePool[0].testModifier);
+      this.toggleModifier(this.activePool[0].testModifier);
     this.notify();
   }
 
   toggleActiveEffect(effect: SuccessTestEffect) {
-    if (this.activeEffects.has(effect)) this.activeEffects.delete(effect);
-    else this.activeEffects.add(effect);
+    this.activeEffects.delete(effect) || this.activeEffects.add(effect);
     this.notify();
   }
 
@@ -151,6 +151,25 @@ export class AptitudeCheck extends EventTarget {
         0,
       ) + [...this.modifiers].reduce((accum, { value }) => accum + value, 0)
     );
+  }
+
+  get messageData(): SuccessTestMessage {
+    const { roll, result, target } = rollSuccessTest({ target: this.target });
+    return {
+      parts: [
+        { name: localize(this.state.aptitude), value: this.aptitudeTotal },
+        ...this.modifierEffects.flatMap(
+          (effect) =>
+            !effect.requirement || this.activeEffects.has(effect)
+              ? { name: effect[Source], value: effect.modifier }
+              : [],
+          ...this.modifiers,
+        ),
+      ],
+      roll,
+      result,
+      target,
+    };
   }
 
   updateState = (newState: Partial<AptitudeCheck['state']>) => {
@@ -221,12 +240,32 @@ export class AptitudeCheck extends EventTarget {
 
         if (!state.controller) {
           state.controller = attachWindow({
-            name: `${localize('successTest')} ${localize('aptitudeCheck')}`,
+            name: `${localize('successTest')} - ${localize('aptitudeCheck')}`,
             resizable: ResizeOption.Vertical,
             renderTemplate: ({ check }) => html`
               <aptitude-check-controls
                 .test=${check}
-                @test-completed=${() => state.controller?.win.close()}
+                @test-completed=${() => {
+                  state.controller?.win.close();
+                  // TODO pools and actions and other nonsense
+                  createMessage({
+                    data: {
+                      header: {
+                        heading: `${localize("FULL", check.state.aptitude)} ${localize(
+                          'check',
+                        )}`,
+                        subheadings: [
+                          map(
+                            [check.action.type, check.action.subtype, 'action'],
+                            localize,
+                          ).join(' '),
+                        ],
+                      },
+                      successTest: check.messageData,
+                    },
+                    entity: character,
+                  });
+                }}
               ></aptitude-check-controls>
             `,
             renderProps: { check },
@@ -241,7 +280,7 @@ export class AptitudeCheck extends EventTarget {
         }
       };
 
-      state.unsub = actor.subscribe(state.open)
+      state.unsub = actor.subscribe(state.open);
     }
   }
 }

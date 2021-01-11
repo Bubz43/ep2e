@@ -150,6 +150,7 @@ import { MessageMeleeAttack } from './chat/components/melee-attack/message-melee
 import { CharacterViewAttacksSection } from './entities/actor/components/character-views/components/attacks/section/character-view-attacks-section';
 import { MultiplierSelect } from './combat/components/multiplier-select/multiplier-select';
 import { AptitudeCheckControls } from './success-test/components/aptitude-check-controls/aptitude-check-controls';
+import { MessageSuccessTest } from './chat/components/success-test/message-success-test';
 
 // Generic Components
 Field;
@@ -303,7 +304,8 @@ MessageSubstanceUse;
 MessageExplosive;
 MessageAttackTraits;
 MessageAreaEffect;
-MessageMeleeAttack
+MessageMeleeAttack;
+MessageSuccessTest;
 
 // SuccessTest
 AptitudeCheckControls;

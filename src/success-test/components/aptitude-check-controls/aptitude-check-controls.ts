@@ -166,7 +166,7 @@ export class AptitudeCheckControls extends LitElement {
                   temporary: true,
                 },
                 update: (changed, orig) =>
-                  this.test.addModifier({ ...orig, ...changed }),
+                  this.test.toggleModifier({ ...orig, ...changed }),
                 fields: ({ name, value }) => [
                   renderTextField(name, { required: true }),
                   renderNumberField(value, { min: -95, max: 95 }),
@@ -217,7 +217,7 @@ export class AptitudeCheckControls extends LitElement {
               <wl-list-item
                 ?clickable=${!!modifier.temporary}
                 @click=${() =>
-                  modifier.temporary && this.test.removeModifier(modifier)}
+                  modifier.temporary && this.test.toggleModifier(modifier)}
               >
                 ${modifier.temporary
                   ? html` <mwc-icon slot="before">close</mwc-icon> `

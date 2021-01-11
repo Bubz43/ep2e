@@ -1,9 +1,7 @@
 import type { AreaEffect } from '@src/combat/area-effect';
 import type { BasicAreaEffectData } from '@src/combat/attack-formatting';
-import type { AttackType } from '@src/combat/attacks';
-import type { AreaEffectType, AttackTrait } from '@src/data-enums';
+import type { AttackTrait } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
-import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import type { SubstanceUseMethod } from '@src/entities/item/proxies/substance';
 import type { ItemEntity } from '@src/entities/models';
 import type { ArmorType } from '@src/features/active-armor';
@@ -12,6 +10,7 @@ import type { RolledFormula } from '@src/foundry/rolls';
 import type { HealthModification, HealthType } from '@src/health/health';
 import type { RollMultiplier } from '@src/health/health-changes';
 import type { StressType } from '@src/health/mental-health';
+import type { SuccessTestModifier, SuccessTestResult } from '@src/success-test/success-test';
 import type { RequireAtLeastOne } from 'type-fest';
 import type { ExplosiveSettings, MeleeWeaponSettings } from '../entities/weapon-settings';
 
@@ -98,6 +97,14 @@ export type MessageAreaEffectData = AreaEffect & {
   templateIDs?: PlacedTemplateIDs | null;
 };
 
+export type SuccessTestMessage = {
+  parts: SuccessTestModifier[];
+  roll: number;
+  target: number;
+  result: SuccessTestResult;
+  
+}
+
 export type MessageData = Partial<{
   header: MessageHeaderData;
   areaEffect: MessageAreaEffectData;
@@ -110,4 +117,5 @@ export type MessageData = Partial<{
   heal: MessageHealData;
   substanceUse: SubstanceUseData;
   fromMessageId: string;
+  successTest: SuccessTestMessage;
 }>;
