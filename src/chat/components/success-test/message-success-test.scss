@@ -8,6 +8,77 @@
 :host {
   display: grid;
   padding: 0.25rem 0.75rem;
+  grid-template-columns: 1fr auto;
+}
+
+.groups {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 0.5ch;
+  > :last-child {
+    grid-column: span 2;
+  }
+}
+
+sl-group {
+  width: max-content;
+}
+
+.pool-actions {
+  display: flex;
+  place-self: center;
+}
+
+  mwc-icon-button {
+    --mdc-icon-button-size: 1.25rem;
+    --mdc-icon-size: 1rem;
+    height: 1.25rem;
+  }
+
+
+.roll {
+  sl-animated-list {
+    display: inline-block;
+    position: relative;
+  }
+  span {
+    display: inline-block;
+  }
+
+  .edit-toggle {
+      visibility: hidden;
+  }
+  &:hover,
+  &:focus-within {
+    .edit-toggle {
+        visibility: visible;
+    }
+  }
+}
+
+.result-chars {
+  display: inline-block;
+  position: relative;
+  span {
+    display: inline-block;
+    min-width: 0.5ch;
+  }
+}
+
+.results {
+  display: inline-grid;
+  grid-template-areas: "content";
+  > * {
+    grid-area: content;
+  }
+  .preview-result {
+    @include animate-css(fadeIn, 250ms);
+    & + span {
+      opacity: 0;
+          transition: opacity 250ms ease-in-out;
+    }
+  }
+  
 }
 
 .edit {
@@ -15,7 +86,7 @@
   align-items: center;
   @include inputReset();
   input {
-    width: 4ch;
+    width: 3ch;
     text-align: center;
     padding: 0;
     margin-right: 0.5ch;
@@ -25,15 +96,18 @@
     input {
       color: transparent !important;
     }
+    & ~ * {
+      visibility: hidden;
+    }
     &:focus-within,
     &.filled {
       input {
         color: var(--color-text) !important;
       }
+      & ~ * {
+        visibility: visible;
+      }
     }
   }
-  mwc-icon-button {
-    --mdc-icon-button-size: 1.25rem;
-    --mdc-icon-size: 1rem;
-  }
+
 }

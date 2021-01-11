@@ -5,7 +5,7 @@ import type { ItemType } from '@src/entities/entity-types';
 import type { SubstanceUseMethod } from '@src/entities/item/proxies/substance';
 import type { ItemEntity } from '@src/entities/models';
 import type { ArmorType } from '@src/features/active-armor';
-import type { PreTestPoolAction } from '@src/features/pool';
+import type { PostTestPoolAction, PreTestPoolAction } from '@src/features/pool';
 import type { PlacedTemplateIDs } from '@src/foundry/canvas';
 import type { RolledFormula } from '@src/foundry/rolls';
 import type { HealthModification, HealthType } from '@src/health/health';
@@ -104,7 +104,8 @@ export type SuccessTestMessage = {
   target: number;
   result?: SuccessTestResult | null;
   defaulting?: boolean;
-  preTestPool?: [pool: PoolType, action: PreTestPoolAction] | null;
+  linkedPool?: Exclude<PoolType, PoolType.Flex  | PoolType.Threat>
+  poolActions?: [pool: PoolType, action: PreTestPoolAction | PostTestPoolAction][] | null
 }
 
 export type MessageData = Partial<{

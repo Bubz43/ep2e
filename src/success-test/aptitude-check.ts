@@ -1,4 +1,4 @@
-import { createMessage } from '@src/chat/create-message';
+import { createMessage, MessageVisibility } from '@src/chat/create-message';
 import type { SuccessTestMessage } from '@src/chat/message-data';
 import {
   attachWindow,
@@ -82,6 +82,7 @@ export class AptitudeCheck extends EventTarget {
           subtype: defaultCheckActionSubtype(this.state.aptitude),
         }),
     );
+
   }
 
   toggleModifier(modifier: SuccessTestModifier) {
@@ -109,6 +110,10 @@ export class AptitudeCheck extends EventTarget {
     return halve ? Math.round(base / 2) : base;
   }
 
+  get linkedPool() {
+    return Pool.linkedToAptitude(this.state.aptitude);
+  }
+
   get pools() {
     const pools: Pool[] = [];
     if (!this.character) return pools;
@@ -117,8 +122,9 @@ export class AptitudeCheck extends EventTarget {
       const threat = poolMap.get(PoolType.Threat);
       if (threat) pools.push(threat);
     } else {
-      const linked = Pool.linkedToAptitude(this.state.aptitude);
-      pools.push(...compact([poolMap.get(linked), poolMap.get(PoolType.Flex)]));
+      pools.push(
+        ...compact([poolMap.get(this.linkedPool), poolMap.get(PoolType.Flex)]),
+      );
     }
     return pools;
   }
@@ -169,8 +175,9 @@ export class AptitudeCheck extends EventTarget {
       roll,
       result,
       target,
-      preTestPool: this.activePool
-        ? [this.activePool[0].type, this.activePool[1]]
+      linkedPool: this.linkedPool,
+      poolActions: this.activePool
+        ? [[this.activePool[0].type, this.activePool[1]]]
         : null,
     };
   }

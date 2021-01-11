@@ -14,8 +14,8 @@ type PoolInit = {
 };
 
 export enum PostTestPoolAction {
-  Improve,
-  FlipFlop,
+  Improve = "improveResult",
+  FlipFlop = "flipFlopRoll",
 }
 
 export enum PreTestPoolAction {

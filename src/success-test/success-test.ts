@@ -1,6 +1,6 @@
 import { capitalize } from '@src/foundry/misc-helpers';
 import { notEmpty } from '@src/utility/helpers';
-import { clamp, createPipe, range } from 'remeda';
+import { clamp, createPipe, pipe, range, reverse } from 'remeda';
 
 export enum SuccessTestResult {
   CriticalFailure = 'criticalFailure',
@@ -67,6 +67,30 @@ export class Percentile extends DiceTerm {
   static DENOMINATION = 'p';
 }
 
+export const improveSuccessTestResult = (result: SuccessTestResult) => {
+  switch (result) {
+    case SuccessTestResult.SuperiorSuccess:
+      return SuccessTestResult.SuperiorSuccessX2;
+
+    case SuccessTestResult.Success:
+      return SuccessTestResult.SuperiorSuccess;
+
+    case SuccessTestResult.CriticalFailure:
+      return SuccessTestResult.Failure;
+
+    default:
+      return result;
+  }
+};
+
+export const flipFlopRoll = (roll: number) => {
+  const stringRoll = String(roll);
+  return Number(
+    stringRoll.length === 1
+      ? stringRoll + 0
+      : [...stringRoll].reverse().join(''),
+  );
+};
 const isCriticalRoll = (roll: number) => {
   const [a, b] = String(roll);
   return a === b;

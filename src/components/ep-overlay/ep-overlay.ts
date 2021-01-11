@@ -158,7 +158,7 @@ export class EPOverlay extends LitElement {
     this.requestUpdate();
   }, 1);
 
-  private stealElements() {
+  stealElements() {
     for (const id of ['chat', 'navigation', 'controls']) {
       const el = document.getElementById(id);
       if (el) {
