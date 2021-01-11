@@ -2,6 +2,7 @@ import { customElement, LitElement, property, html } from 'lit-element';
 import styles from './popover-section.scss';
 
 /**
+ * @csspart content
  * @slot action
  * @slot
  */
@@ -21,7 +22,7 @@ export class PopoverSection extends LitElement {
         <h4>${this.heading}</h4>
         <slot name="action"></slot>
       </header>
-      <div class="content">
+      <div class="content" part="content">
         <slot></slot>
       </div>
     `;

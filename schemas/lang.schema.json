@@ -1829,6 +1829,9 @@
             "flex": {
               "type": "string"
             },
+            "flipFlopRoll": {
+              "type": "string"
+            },
             "flipRoll": {
               "type": "string"
             },
@@ -2166,6 +2169,9 @@
               "type": "string"
             },
             "implantedWare": {
+              "type": "string"
+            },
+            "improveResult": {
               "type": "string"
             },
             "improved": {
@@ -2859,6 +2865,9 @@
               "type": "string"
             },
             "normal": {
+              "type": "string"
+            },
+            "not": {
               "type": "string"
             },
             "notFound": {
@@ -5010,6 +5019,7 @@
             "fixed",
             "flashSuppressor",
             "flex",
+            "flipFlopRoll",
             "flipRoll",
             "folder",
             "for",
@@ -5123,6 +5133,7 @@
             "impairmentModifier",
             "implanted",
             "implantedWare",
+            "improveResult",
             "improved",
             "improvised",
             "in",
@@ -5354,6 +5365,7 @@
             "nonAddictive",
             "none",
             "normal",
+            "not",
             "notFound",
             "notes",
             "now",

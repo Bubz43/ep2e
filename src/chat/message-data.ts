@@ -111,6 +111,7 @@ export type SuccessTestMessage = {
   result?: SuccessTestResult | null;
   defaulting?: boolean;
   linkedPool?: Exclude<PoolType, PoolType.Flex | PoolType.Threat>;
+  ignoredModifiers?: number;
   poolActions?:
     | [pool: PoolType, action: PreTestPoolAction | PostTestPoolAction][]
     | null;

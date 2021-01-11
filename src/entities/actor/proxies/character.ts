@@ -33,6 +33,7 @@ import {
   DurationEffectTarget,
   EffectType,
   totalModifiers,
+  UniqueEffectType,
 } from '@src/features/effects';
 import { matchID, updateFeature } from '@src/features/feature-helpers';
 import type { MovementRate } from '@src/features/movement';
@@ -151,6 +152,10 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
     const egoFormWindow = getWindow(this.updater);
     if (egoFormWindow?.isConnected) this.ego.openForm?.();
+  }
+
+  get cannotFlipFlop() {
+    return this.appliedEffects.getGroup(EffectType.Misc).some(({ unique}) => unique === UniqueEffectType.NoFlipFlop)
   }
 
   @LazyGetter()

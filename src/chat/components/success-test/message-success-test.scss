@@ -1,13 +1,15 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+@include resetUnorderedList();
+
 * {
   box-sizing: border-box;
 }
 
 :host {
   display: grid;
-  padding: 0.25rem 0.75rem;
+  padding: 0.25rem 0.5rem 0.25rem 0.75rem;
   grid-template-columns: 1fr auto;
 }
 
@@ -27,12 +29,17 @@ sl-group {
 .pool-actions {
   display: flex;
   place-self: center;
+
+  mwc-icon-button {
+    --mdc-icon-button-size: 1.75rem;
+    --mdc-icon-size: 1.5rem;
+  }
 }
 
 mwc-icon-button {
   --mdc-icon-button-size: 1.25rem;
   --mdc-icon-size: 1rem;
-  height: 1.25rem;
+  height: var(--mdc-icon-button-size);
 }
 
 .roll {
@@ -91,5 +98,38 @@ mwc-icon-button {
         visibility: visible;
       }
     }
+  }
+}
+
+.pool-selector {
+  max-width: 225px;
+  --mdc-list-item-graphic-margin: 0.5rem;
+  &::part(content) {
+    padding: 0;
+  }
+  mwc-list-item:not([twoline]) {
+    height: 2.75rem;
+  }
+}
+
+.used-parts {
+  padding: 0.25rem 0;
+  min-width: 150px;
+  > *:not(.divider) {
+    padding: 0.25rem 1rem;
+  }
+
+  .divider {
+    margin: 0.25rem;
+    border-top: 1px solid var(--color-border);
+  }
+}
+
+.part-toggle {
+  all: unset;
+  &:hover {
+    outline: 1px solid var(--color-primary);
+    outline-offset: 1px;
+    cursor: pointer;
   }
 }

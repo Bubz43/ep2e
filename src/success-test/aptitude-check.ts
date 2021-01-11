@@ -160,20 +160,27 @@ export class AptitudeCheck extends EventTarget {
 
   get messageData(): SuccessTestMessage {
     const { roll, result, target } = rollSuccessTest({ target: this.target });
+    const { ignoreMods } = this;
+    const parts: SuccessTestModifier[] = [
+      { name: `${localize(this.state.aptitude)} x${this.state.halve ? 1.5 : 3}`, value: this.aptitudeTotal },
+    ];
+    if (!ignoreMods) {
+       parts.push(
+         ...this.modifierEffects.flatMap(
+           (effect) =>
+             !effect.requirement || this.activeEffects.has(effect)
+               ? { name: effect[Source], value: effect.modifier }
+               : [],
+           ...this.modifiers,
+         ),
+       );
+    }
     return {
-      parts: [
-        { name: localize(this.state.aptitude), value: this.aptitudeTotal },
-        ...this.modifierEffects.flatMap(
-          (effect) =>
-            !effect.requirement || this.activeEffects.has(effect)
-              ? { name: effect[Source], value: effect.modifier }
-              : [],
-          ...this.modifiers,
-        ),
-      ],
+      parts,
       roll,
       result,
       target,
+      ignoredModifiers: ignoreMods ? this.totalModifiers : undefined,
       linkedPool: this.linkedPool,
       poolActions: this.activePool
         ? [[this.activePool[0].type, this.activePool[1]]]

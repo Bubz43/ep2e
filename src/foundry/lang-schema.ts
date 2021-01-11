@@ -1394,7 +1394,7 @@ type LangEntries =
   | 'explodeAfter'
   | 'extraWeapon'
   | 'improveResult'
-  | 'flipFlopRoll';
+  | 'flipFlopRoll' | "not" | "cannot"
 type FullNames =
   | 'cog'
   | 'int'

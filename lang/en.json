@@ -1368,6 +1368,10 @@
     "detonation": "Detonation",
     "explodeAfter": "Explode After",
     "extraWeapon": "Extra Weapon",
+    "flipFlopRoll": "Flip-flop Roll",
+    "improveResult": "Improve Result",
+    "not": "Not",
+    "cannot": "Cannot",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

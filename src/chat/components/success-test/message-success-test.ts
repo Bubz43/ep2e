@@ -1,6 +1,8 @@
 import type { SuccessTestMessage } from '@src/chat/message-data';
 import { renderNumberInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
+import { Placement } from '@src/components/popover/popover-options';
+import { PoolType } from '@src/data-enums';
 import { ActorType } from '@src/entities/entity-types';
 import { PostTestPoolAction } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
@@ -12,6 +14,7 @@ import {
   improveSuccessTestResult,
   SuccessTestResult,
 } from '@src/success-test/success-test';
+import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   LitElement,
@@ -21,7 +24,7 @@ import {
   eventOptions,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { identity, pick } from 'remeda';
+import { compact, identity, pick } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-success-test.scss';
 
@@ -79,9 +82,9 @@ export class MessageSuccessTest extends MessageElement {
     if (ev.key === 'Enter') this.updateRoll();
   }
 
-  // private previewPoolAction(action: PostTestPoolAction) {
-  //   this[`preview${capitalize(action)}` as const]()
-  // }
+  private previewPoolAction(action: PostTestPoolAction) {
+    return this[`preview${capitalize(action)}` as const]();
+  }
 
   private previewFlipFlopRoll() {
     this.clearPreviewTimeout();
@@ -92,6 +95,7 @@ export class MessageSuccessTest extends MessageElement {
       roll: flipped,
       result: getSuccessTestResult({ roll: flipped, target, defaulting }),
     };
+    return this.preview;
   }
 
   private previewImproveResult() {
@@ -102,6 +106,7 @@ export class MessageSuccessTest extends MessageElement {
       roll,
       result: improveSuccessTestResult(result),
     };
+    return this.preview;
   }
 
   private endPreview() {
@@ -113,7 +118,6 @@ export class MessageSuccessTest extends MessageElement {
   private clearPreviewTimeout() {
     clearTimeout(this.previewTimeout);
   }
-  private getPoolActionState() {}
 
   render() {
     const {
@@ -168,31 +172,136 @@ export class MessageSuccessTest extends MessageElement {
               ></mwc-icon-button>`
             : ''}</sl-group
         >
-        <sl-group label=${localize('target')}>${target}</sl-group>
+        <sl-popover placement=${Placement.Left} .renderOnDemand=${this.renderUsedParts}>
+          <button slot="base" class="part-toggle">
+            <sl-group label=${localize('target')}>${target}</sl-group>
+          </button>
+        </sl-popover>
         <sl-group label=${localize('result')}>
           <sl-animated-list class="result-chars">
             ${this.spannedResult(localize(this.preview?.result ?? result))}
           </sl-animated-list>
         </sl-group>
       </div>
-      ${isCharacter && linkedPool
+      ${isCharacter && linkedPool && poolActions?.length !== 2
         ? html` <div class="pool-actions">
             ${roll === flipFlopRoll(roll)
               ? ''
-              : html` <mwc-icon-button
-                  icon="swap_horiz"
+              : html` <sl-popover
+                  placement=${Placement.Top}
                   @mouseover=${this.previewFlipFlopRoll}
                   @mouseout=${this.endPreview}
-                ></mwc-icon-button>`}
+                  .renderOnDemand=${() =>
+                    this.renderPoolPopover(PostTestPoolAction.FlipFlop)}
+                  ><mwc-icon-button
+                    slot="base"
+                    icon="swap_horiz"
+                  ></mwc-icon-button
+                ></sl-popover>`}
             ${result === improveSuccessTestResult(result)
               ? ''
-              : html` <mwc-icon-button
-                  icon="upgrade"
+              : html` <sl-popover
+                  placement=${Placement.Top}
                   @mouseover=${this.previewImproveResult}
                   @mouseout=${this.endPreview}
-                ></mwc-icon-button>`}
+                  .renderOnDemand=${() =>
+                    this.renderPoolPopover(PostTestPoolAction.Improve)}
+                  ><mwc-icon-button slot="base" icon="upgrade"></mwc-icon-button
+                ></sl-popover>`}
           </div>`
         : ''}
+    `;
+  }
+
+  private renderUsedParts = () => {
+    return html`
+    <ul class="used-parts">
+    ${this.successTest.parts.map(part => html`
+    <wl-list-item>
+    <span>${part.name}</span>
+    <span slot="after">${part.value}</span>
+    </wl-list-item>
+    `)}
+    ${this.successTest.ignoredModifiers != null ? html`
+    <li class="divider"></li>
+    <wl-list-item>
+    <span>${localize("ignoredModifiers")}</span>
+    <span slot="after">${this.successTest.ignoredModifiers}</span>
+    </wl-list-item>
+    ` : ""}
+    </ul>
+    `
+  }
+
+  private renderPoolPopover(action: PostTestPoolAction) {
+    const { linkedPool, poolActions } = this.successTest;
+    const { actor } = this.message;
+    if (!linkedPool || actor?.proxy.type !== ActorType.Character)
+      return html`
+        <p>${localize('no')} ${localize('available')} ${localize('pools')}</p>
+      `;
+    const { proxy: character } = actor;
+    const pools = compact(
+      [linkedPool, PoolType.Flex, PoolType.Threat].map((type) =>
+        character.pools.get(type),
+      ),
+    );
+
+    if (pools.length === 0)
+      return html`
+        <p>${localize('no')} ${localize('available')} ${localize('pools')}</p>
+      `;
+
+    if (action === PostTestPoolAction.FlipFlop && character.cannotFlipFlop) 
+    return html`
+    <p>${localize("cannot")} ${localize("flipFlopRoll")}</p>
+    `
+
+    const usedPool = poolActions?.[0]?.[0];
+
+    return html`
+      <sl-popover-section heading=${localize(action)} class="pool-selector">
+        <mwc-list>
+          ${pools.map((pool) => {
+            return usedPool && usedPool !== pool.type
+              ? ''
+              : html`
+                  <mwc-list-item
+                    graphic="icon"
+                    ?twoline=${!!usedPool}
+                    ?disabled=${!pool.available ||
+                    (usedPool && !pool.usableTwice)}
+                    @click=${() => {
+                      const preview = this.previewPoolAction(action);
+                      if (preview)
+                        this.getUpdater('successTest').commit({
+                          ...preview,
+                          poolActions: [
+                            ...(poolActions || []),
+                            [pool.type, action],
+                          ],
+                        });
+                    }}
+                  >
+                    <img src=${pool.icon} slot="graphic" />
+                    <span
+                      >${localize(pool.type)} (${pool.available} /
+                      ${pool.max})</span
+                    >
+                    ${usedPool
+                      ? html`
+                          <span slot="secondary">
+                            ${pool.usableTwice
+                              ? localize('usableTwice')
+                              : `${localize('not')} ${localize('usableTwice')}`}
+                          </span>
+                        `
+                      : ''}
+                  </mwc-list-item>
+                `;
+          })}
+        </mwc-list>
+      </sl-popover-section>
     `;
   }
 
