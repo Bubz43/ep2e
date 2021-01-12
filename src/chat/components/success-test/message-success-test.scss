@@ -11,12 +11,16 @@
   display: grid;
   padding: 0.25rem 0.5rem 0.25rem 0.75rem;
   grid-template-columns: 1fr auto;
+  grid-template-areas: 
+  "groups history"
+  "groups pools";
 }
 
 .groups {
   display: grid;
   grid-template-columns: max-content 1fr;
   column-gap: 0.5ch;
+  grid-area: groups;
   > :last-child {
     grid-column: span 2;
   }
@@ -26,9 +30,20 @@ sl-group {
   width: max-content;
 }
 
+.history {
+  grid-area: history;
+      height: 1rem;
+    align-self: center;
+    justify-self: end;
+    padding-right: 0.25rem;
+       color: var(--color-text-lighter)
+
+}
+
 .pool-actions {
   display: flex;
   place-self: center;
+  grid-area: pools;
 
   mwc-icon-button {
     --mdc-icon-button-size: 1.75rem;

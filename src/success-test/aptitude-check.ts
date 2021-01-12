@@ -194,22 +194,17 @@ export class AptitudeCheck extends EventTarget {
     }
     return {
       parts,
-      steps: [
+      states: [
         {
           target: clampedTarget,
           ...(this.state.autoRoll
             ? rollSuccessTest({ target: this.target })
             : {}),
-          action: this.activePool ? [this.activePool[0].type, this.activePool[1]] : null
+          action: this.activePool ? [this.activePool[0].type, this.activePool[1]] : "initial"
         },
       ],
-      // target: clampedTarget,
-      // ...(this.state.autoRoll ? rollSuccessTest({ target: this.target }) : {}),
       ignoredModifiers: ignoreMods ? this.totalModifiers : undefined,
       linkedPool: this.linkedPool,
-      // poolActions: this.activePool
-      //   ? [[this.activePool[0].type, this.activePool[1]]]
-      //   : null,
     };
   }
 

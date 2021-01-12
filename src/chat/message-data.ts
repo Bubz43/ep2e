@@ -104,25 +104,19 @@ export type MessageAreaEffectData = AreaEffect & {
   templateIDs?: PlacedTemplateIDs | null;
 };
 
-type TestStep = {
+type SuccessTestState = {
   roll?: number | null;
   target: number;
   result?: SuccessTestResult | null;
-  action?: "edit" | [pool: PoolType, action: PreTestPoolAction | PostTestPoolAction] | null
+  action: "edit" | [pool: PoolType, action: PreTestPoolAction | PostTestPoolAction] | "initial"
 };
 
 export type SuccessTestMessage = {
   parts: SuccessTestModifier[];
-  steps: TestStep[];
-  // roll?: number | null;
-  // target: number;
-  // result?: SuccessTestResult | null;
+  states: SuccessTestState[];
   defaulting?: boolean;
   linkedPool?: Exclude<PoolType, PoolType.Flex | PoolType.Threat>;
   ignoredModifiers?: number;
-  // poolActions?:
-  //   | [pool: PoolType, action: PreTestPoolAction | PostTestPoolAction][]
-  //   | null;
 };
 
 export type MessageData = Partial<{

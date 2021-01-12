@@ -8,6 +8,7 @@ import { PostTestPoolAction } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import { capitalize } from '@src/foundry/misc-helpers';
 import { tooltip } from '@src/init';
+import { RenderDialogEvent } from '@src/open-dialog';
 import {
   flipFlopRoll,
   getSuccessTestResult,
@@ -23,6 +24,7 @@ import {
   internalProperty,
   eventOptions,
 } from 'lit-element';
+import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
 import { compact, identity, last, pick } from 'remeda';
 import { MessageElement } from '../message-element';
@@ -60,12 +62,12 @@ export class MessageSuccessTest extends MessageElement {
   }
 
   private get currentState() {
-    return last(this.successTest.steps);
+    return last(this.successTest.states);
   }
 
   private get usedPoolActions() {
-    return this.successTest.steps.flatMap(({ action }) =>
-      Array.isArray(action) ? action : [],
+    return this.successTest.states.flatMap(({ action }) =>
+      Array.isArray(action) ? [action] : [],
     );
   }
 
@@ -84,14 +86,14 @@ export class MessageSuccessTest extends MessageElement {
       defaulting: this.successTest.defaulting,
       target,
     });
-    const steps = this.successTest.steps.concat({
+    const steps = this.successTest.states.concat({
       roll,
       target,
       result,
       action: 'edit',
     });
 
-    this.getUpdater('successTest').commit({ steps });
+    this.getUpdater('successTest').commit({ states: steps });
   }
 
   private startEditing() {
@@ -146,15 +148,49 @@ export class MessageSuccessTest extends MessageElement {
     clearTimeout(this.previewTimeout);
   }
 
+  private showLog() {
+        this.dispatchEvent(
+          new RenderDialogEvent(html`
+            <mwc-dialog
+              hideActions
+              heading=${ifDefined(this.message.epFlags?.header?.heading)}
+            >
+              <div
+                class="state-log"
+                style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem"
+              >
+                ${this.successTest.states.map(
+                  (state, index) => html`
+                    <sl-details summary=${index} open>
+                      <div class="pairs" style="display: grid">
+                        ${(['roll', 'target', 'result'] as const).map(
+                          (key) => html`
+                            <sl-group label=${localize(key)}
+                              >${key === 'result' && state.result
+                                ? localize(state.result)
+                                : state[key] ?? '-'}</sl-group
+                            >
+                          `,
+                        )}
+                      </div>
+                      <hr style="border-color: var(--color-border)" />
+                      ${typeof state.action === "string"
+                        ? localize(state.action)
+                        :  html`<sl-group label=${localize(state.action[0])}
+                            >${localize(state.action[1])}</sl-group
+                          > `
+                      }
+                    </sl-details>
+                  `,
+                )}
+              </div></mwc-dialog
+            >
+          `),
+        );
+  }
+
   render() {
-    const {
-      // roll,
-      // target,
-      // result,
-      defaulting,
-      // poolActions,
-      linkedPool,
-    } = this.successTest;
+    const { defaulting, linkedPool } = this.successTest;
     const { actor, editable } = this.message;
     const isCharacter = actor?.type === ActorType.Character;
     const { roll, target = this.partTotal, result } = this.currentState ?? {};
@@ -214,6 +250,10 @@ export class MessageSuccessTest extends MessageElement {
           </sl-animated-list>
         </sl-group>
       </div>
+   
+        <mwc-icon-button icon="change_history" class="history" @click=${this.showLog}
+          ></mwc-icon-button
+        >
       ${isCharacter && linkedPool && usedPoolActions?.length !== 2
         ? html` <div class="pool-actions">
             ${roll === flipFlopRoll(roll)
@@ -270,7 +310,7 @@ export class MessageSuccessTest extends MessageElement {
 
   private renderPoolPopover(action: PostTestPoolAction) {
     const { linkedPool } = this.successTest;
-    const { usedPoolActions } = this;;
+    const { usedPoolActions } = this;
     const { actor } = this.message;
     if (!linkedPool || actor?.proxy.type !== ActorType.Character)
       return html`
@@ -309,7 +349,7 @@ export class MessageSuccessTest extends MessageElement {
                       const preview = this.previewPoolAction(action);
                       if (preview) {
                         this.getUpdater('successTest').commit({
-                          steps: this.successTest.steps.concat({
+                          states: this.successTest.states.concat({
                             ...preview,
                             target: this.currentState?.target ?? this.partTotal,
                             action: [pool.type, action],
