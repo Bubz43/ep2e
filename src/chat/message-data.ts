@@ -104,17 +104,25 @@ export type MessageAreaEffectData = AreaEffect & {
   templateIDs?: PlacedTemplateIDs | null;
 };
 
-export type SuccessTestMessage = {
-  parts: SuccessTestModifier[];
+type TestStep = {
   roll?: number | null;
   target: number;
   result?: SuccessTestResult | null;
+  action?: "edit" | [pool: PoolType, action: PreTestPoolAction | PostTestPoolAction] | null
+};
+
+export type SuccessTestMessage = {
+  parts: SuccessTestModifier[];
+  steps: TestStep[];
+  // roll?: number | null;
+  // target: number;
+  // result?: SuccessTestResult | null;
   defaulting?: boolean;
   linkedPool?: Exclude<PoolType, PoolType.Flex | PoolType.Threat>;
   ignoredModifiers?: number;
-  poolActions?:
-    | [pool: PoolType, action: PreTestPoolAction | PostTestPoolAction][]
-    | null;
+  // poolActions?:
+  //   | [pool: PoolType, action: PreTestPoolAction | PostTestPoolAction][]
+  //   | null;
 };
 
 export type MessageData = Partial<{

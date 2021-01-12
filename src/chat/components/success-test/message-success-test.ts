@@ -24,7 +24,7 @@ import {
   eventOptions,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { compact, identity, pick } from 'remeda';
+import { compact, identity, last, pick } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-success-test.scss';
 
@@ -55,17 +55,43 @@ export class MessageSuccessTest extends MessageElement {
 
   private setDefaultRoll(ev: Event) {
     if (ev.target instanceof HTMLInputElement) {
-      this.setRoll ??= this.successTest.roll ?? 50;
+      this.setRoll ??= this.currentState?.roll ?? 50;
     }
+  }
+
+  private get currentState() {
+    return last(this.successTest.steps);
+  }
+
+  private get usedPoolActions() {
+    return this.successTest.steps.flatMap(({ action }) =>
+      Array.isArray(action) ? action : [],
+    );
+  }
+
+  private get partTotal() {
+    return this.successTest.parts.reduce(
+      (accum, { value }) => accum + value,
+      0,
+    );
   }
 
   private updateRoll() {
     const roll = this.setRoll ?? 50;
+    const target = this.currentState?.target ?? this.partTotal;
     const result = getSuccessTestResult({
       roll,
-      ...pick(this.successTest, ['defaulting', 'target']),
+      defaulting: this.successTest.defaulting,
+      target,
     });
-    this.getUpdater('successTest').commit({ roll, result });
+    const steps = this.successTest.steps.concat({
+      roll,
+      target,
+      result,
+      action: 'edit',
+    });
+
+    this.getUpdater('successTest').commit({ steps });
   }
 
   private startEditing() {
@@ -88,7 +114,8 @@ export class MessageSuccessTest extends MessageElement {
 
   private previewFlipFlopRoll() {
     this.clearPreviewTimeout();
-    const { roll, target, defaulting } = this.successTest;
+    const { defaulting } = this.successTest;
+    const { roll, target = this.partTotal } = this.currentState ?? {};
     if (roll == null) return;
     const flipped = flipFlopRoll(roll);
     this.preview = {
@@ -100,7 +127,7 @@ export class MessageSuccessTest extends MessageElement {
 
   private previewImproveResult() {
     this.clearPreviewTimeout();
-    const { roll, result } = this.successTest;
+    const { roll, result } = this.currentState ?? {};
     if (roll == null || !result) return;
     this.preview = {
       roll,
@@ -121,16 +148,17 @@ export class MessageSuccessTest extends MessageElement {
 
   render() {
     const {
-      parts,
-      roll,
-      target,
-      result,
+      // roll,
+      // target,
+      // result,
       defaulting,
-      poolActions,
+      // poolActions,
       linkedPool,
     } = this.successTest;
     const { actor, editable } = this.message;
     const isCharacter = actor?.type === ActorType.Character;
+    const { roll, target = this.partTotal, result } = this.currentState ?? {};
+    const { usedPoolActions } = this;
 
     if (this.editing || roll == null || !result) {
       return html`
@@ -186,7 +214,7 @@ export class MessageSuccessTest extends MessageElement {
           </sl-animated-list>
         </sl-group>
       </div>
-      ${isCharacter && linkedPool && poolActions?.length !== 2
+      ${isCharacter && linkedPool && usedPoolActions?.length !== 2
         ? html` <div class="pool-actions">
             ${roll === flipFlopRoll(roll)
               ? ''
@@ -241,7 +269,8 @@ export class MessageSuccessTest extends MessageElement {
   };
 
   private renderPoolPopover(action: PostTestPoolAction) {
-    const { linkedPool, poolActions } = this.successTest;
+    const { linkedPool } = this.successTest;
+    const { usedPoolActions } = this;;
     const { actor } = this.message;
     if (!linkedPool || actor?.proxy.type !== ActorType.Character)
       return html`
@@ -262,7 +291,7 @@ export class MessageSuccessTest extends MessageElement {
     if (action === PostTestPoolAction.FlipFlop && character.cannotFlipFlop)
       return html` <p>${localize('cannot')} ${localize('flipFlopRoll')}</p> `;
 
-    const usedPool = poolActions?.[0]?.[0];
+    const usedPool = usedPoolActions?.[0]?.[0];
 
     return html`
       <sl-popover-section heading=${localize(action)} class="pool-selector">
@@ -275,17 +304,18 @@ export class MessageSuccessTest extends MessageElement {
                     graphic="icon"
                     ?twoline=${!!usedPool}
                     ?disabled=${!pool.available ||
-                    (usedPool && !pool.usableTwice)}
+                    !!(usedPool && !pool.usableTwice)}
                     @click=${() => {
                       const preview = this.previewPoolAction(action);
-                      if (preview)
+                      if (preview) {
                         this.getUpdater('successTest').commit({
-                          ...preview,
-                          poolActions: [
-                            ...(poolActions || []),
-                            [pool.type, action],
-                          ],
+                          steps: this.successTest.steps.concat({
+                            ...preview,
+                            target: this.currentState?.target ?? this.partTotal,
+                            action: [pool.type, action],
+                          }),
                         });
+                      }
                     }}
                   >
                     <img src=${pool.icon} slot="graphic" />
@@ -330,10 +360,9 @@ export class MessageSuccessTest extends MessageElement {
         classes: `roll-edit ${
           this.editing || this.setRoll != null ? 'filled' : ''
         }`,
-        props: { roll: this.setRoll ?? this.successTest.roll ?? 50 },
+        props: { roll: this.setRoll ?? this.currentState?.roll ?? 50 },
         storeOnInput: true,
         update: ({ roll = 50 }) => {
-          console.log(this.hasUpdated);
           this.setRoll = roll;
         },
         fields: ({ roll }) => renderNumberInput(roll, { min: 0, max: 99 }),
