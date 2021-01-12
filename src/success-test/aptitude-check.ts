@@ -1,4 +1,8 @@
-import { createMessage, MessageVisibility, rollModeToVisibility } from '@src/chat/create-message';
+import {
+  createMessage,
+  MessageVisibility,
+  rollModeToVisibility,
+} from '@src/chat/create-message';
 import type { SuccessTestMessage } from '@src/chat/message-data';
 import {
   attachWindow,
@@ -31,7 +35,12 @@ import { LazyGetter } from 'lazy-get-decorator';
 import { html } from 'lit-html';
 import { compact, equals, map } from 'remeda';
 import { traverseActiveElements } from 'weightless';
-import { PreTestPool, rollSuccessTest, SuccessTestModifier, successTestTargetClamp } from './success-test';
+import {
+  PreTestPool,
+  rollSuccessTest,
+  SuccessTestModifier,
+  successTestTargetClamp,
+} from './success-test';
 
 export type AptitudeCheckInit = {
   ego: Ego;
@@ -68,7 +77,6 @@ export class AptitudeCheck extends EventTarget {
   activePool: PreTestPool = null;
   modifiers = new Set<SuccessTestModifier>();
 
-
   constructor({ ego, aptitude, character, token, action }: AptitudeCheckInit) {
     super();
     this.ego = ego;
@@ -79,7 +87,7 @@ export class AptitudeCheck extends EventTarget {
       aptitude: aptitude || AptitudeType.Willpower,
       multiplier: 3,
       visibility: rollModeToVisibility(game.settings.get('core', 'rollMode')),
-      autoRoll: true
+      autoRoll: true,
     });
 
     this.action = this.createNotifying(
@@ -96,13 +104,13 @@ export class AptitudeCheck extends EventTarget {
     this.notify();
   }
 
-  toggleActivePool(active: AptitudeCheck['activePool']) {
+  toggleActivePool = (active: AptitudeCheck['activePool']) => {
     this.togglePoolBonus();
     this.activePool = equals(active, this.activePool) ? null : active;
     this.togglePoolBonus();
 
     this.notify();
-  }
+  };
 
   private togglePoolBonus() {
     if (this.activePool?.[1] === PreTestPoolAction.Bonus) {
@@ -110,10 +118,10 @@ export class AptitudeCheck extends EventTarget {
     }
   }
 
-  toggleActiveEffect(effect: SuccessTestEffect) {
+  toggleActiveEffect = (effect: SuccessTestEffect) => {
     this.activeEffects.delete(effect) || this.activeEffects.add(effect);
     this.notify();
-  }
+  };
 
   get aptitudeTotal() {
     const { aptitude, multiplier } = this.state;
@@ -140,11 +148,16 @@ export class AptitudeCheck extends EventTarget {
   }
 
   get modifierEffects() {
-    return (
-      this.character?.appliedEffects.getMatchingSuccessTestEffects(
-        matchesAptitude(this.state.aptitude)(this.action),
-        false,
-      ) ?? []
+    return new Map(
+      (
+        this.character?.appliedEffects.getMatchingSuccessTestEffects(
+          matchesAptitude(this.state.aptitude)(this.action),
+          false,
+        ) ?? []
+      ).map((effect) => [
+        effect,
+        !effect.requirement || this.activeEffects.has(effect),
+      ]),
     );
   }
 
@@ -157,17 +170,13 @@ export class AptitudeCheck extends EventTarget {
   }
 
   get clampedTarget() {
-    return successTestTargetClamp(this.target)
+    return successTestTargetClamp(this.target);
   }
 
   get totalModifiers() {
     return (
-      this.modifierEffects.reduce(
-        (accum, effect) =>
-          accum +
-          (effect.requirement && !this.activeEffects.has(effect)
-            ? 0
-            : effect.modifier),
+      [...this.modifierEffects].reduce(
+        (accum, [effect, active]) => accum + (active ? 0 : effect.modifier),
         0,
       ) + [...this.modifiers].reduce((accum, { value }) => accum + value, 0)
     );
@@ -183,9 +192,9 @@ export class AptitudeCheck extends EventTarget {
     ];
     if (!ignoreMods) {
       parts.push(
-        ...this.modifierEffects.flatMap(
-          (effect) =>
-            !effect.requirement || this.activeEffects.has(effect)
+        ...[...this.modifierEffects].flatMap(
+          ([effect, active]) =>
+            active
               ? { name: effect[Source], value: effect.modifier }
               : [],
           ...this.modifiers,
@@ -200,7 +209,9 @@ export class AptitudeCheck extends EventTarget {
           ...(this.state.autoRoll
             ? rollSuccessTest({ target: this.target })
             : {}),
-          action: this.activePool ? [this.activePool[0].type, this.activePool[1]] : "initial"
+          action: this.activePool
+            ? [this.activePool[0].type, this.activePool[1]]
+            : 'initial',
         },
       ],
       ignoredModifiers: ignoreMods ? this.totalModifiers : undefined,

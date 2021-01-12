@@ -1,0 +1,100 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  border: 1px solid var(--color-border);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 200px;
+  min-height: 100%;
+  width: 350px;
+  transition: opacity 200ms ease-in-out;
+}
+
+:host([ignored]) {
+  opacity: 0.4;
+}
+
+sl-header {
+  border-color: var(--color-border);
+  background: rgba(black, 0.25);
+}
+sl-animated-list {
+  font-size: 15px;
+  padding: 0.25rem 0;
+}
+
+wl-list-item {
+  padding: 0 1rem;
+  &.tall {
+    padding: 0.25rem 1rem;
+  }
+
+  mwc-icon {
+    color: var(--color-text-lighter);
+  }
+
+  &:hover {
+    mwc-icon {
+      color: lightv(var(--color-negative), 2);
+    }
+  }
+}
+
+.source,
+.requirement {
+  display: inline-block;
+  @include truncate(200px);
+  min-width: 100%;
+}
+
+.requirement {
+  color: var(--color-text-lighter);
+}
+
+[slot='before'] {
+  width: 0.25rem;
+}
+
+mwc-icon[slot='before'] {
+  margin-left: -0.6rem;
+  margin-right: 1.6rem;
+}
+
+img[slot='before'] {
+  width: 1rem;
+  margin-left: -0.3rem;
+  margin-right: 0.55rem;
+}
+
+span[slot='before'] {
+  color: var(--color-secondary);
+  border: 1px solid currentColor;
+  height: 2rem;
+  margin-right: 1rem;
+
+  &:not(.tall) {
+    opacity: 0;
+    height: 1.5rem;
+  }
+
+  &.negative {
+    color: var(--color-negative);
+  }
+
+  &.active {
+    background: currentColor;
+    filter: drop-shadow(2px 4px 6px currentColor);
+    @include animate-css(pulse, 2s, infinite);
+  }
+}
+span[slot='after'] {
+  font-size: large;
+  font-family: var(--font-mono);
+  margin-left: 0.5rem;
+}

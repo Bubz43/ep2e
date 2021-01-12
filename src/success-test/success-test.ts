@@ -1,3 +1,4 @@
+import type { MessageVisibility } from '@src/chat/create-message';
 import type { Pool, PreTestPoolAction } from '@src/features/pool';
 import { capitalize } from '@src/foundry/misc-helpers';
 import { notEmpty } from '@src/utility/helpers';
@@ -33,6 +34,11 @@ export const isSuccessfullTestResult = createPipe(
 );
 
 export type PreTestPool = readonly [Pool, PreTestPoolAction] | null;
+
+export type SuccessTestRollState = {
+  visibility: MessageVisibility;
+  autoRoll: boolean;
+};
 
 export type SuccessTestModifier = {
   name: string;

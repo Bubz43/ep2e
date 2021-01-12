@@ -152,6 +152,9 @@ import { AptitudeCheckControls } from './success-test/components/aptitude-check-
 import { MessageSuccessTest } from './chat/components/success-test/message-success-test';
 import { SuccessTestActionForm } from './success-test/components/action-form/success-test-action-form';
 import { SuccessTestPoolControls } from './success-test/components/pool-controls/success-test-pool-controls';
+import { SuccessTestModifiersSection } from './success-test/components/modifiers-section/success-test-modifiers-section';
+import { SuccessTestSectionLabel } from './success-test/components/section-label/success-test-section-label';
+import { SuccessTestFooter } from './success-test/components/footer/success-test-footer';
 
 // Generic Components
 Field;
@@ -311,4 +314,7 @@ MessageSuccessTest;
 // SuccessTest
 AptitudeCheckControls;
 SuccessTestActionForm;
-SuccessTestPoolControls
+SuccessTestPoolControls;
+SuccessTestModifiersSection;
+SuccessTestSectionLabel;
+SuccessTestFooter

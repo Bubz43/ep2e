@@ -25,7 +25,7 @@
   .modifiers {
     grid-area: modifiers;
   }
-  footer {
+  .footer {
     grid-area: footer;
   }
   background: linear-gradient(
@@ -40,69 +40,6 @@
   margin-bottom: 0.25rem;
 }
 
-footer {
- display: grid;
-    grid-template-columns: 1fr auto auto;
-    column-gap: 1rem;
-  align-items: center;
-  padding: 0.5rem 0 0 0.5rem;
-  .settings {
-          display: grid;
-          width: 115px;
-
-    @include textButton();
-    --mdc-icon-size: 1.25rem;
-    .visibility {
-      @include truncate(100%);
-    }
-    // span {
-    //   display: flex;
-    //   align-items: center;
-    //   justify-content: space-between;
-    //   mwc-icon {
-    //     margin-right: 0.5ch;
-    //   }
-    // }
-    button {
-      justify-content: space-between;
-      align-items: center;
-  min-width: 100%;
-    }
-
-    .checkbox {
-      margin-right: 0.5ch;
-    }
-  }
-}
-
-.target {
-  display: grid;
-  text-align: center;
-  position: relative;
-  filter: drop-shadow(2px 4px 6px black);
-  .target-label {
-    border-top: 1px solid var(--color-grey);
-    text-align: center;
-    text-transform: uppercase;
-    color: var(--color-text-lighter);
-    letter-spacing: 1px;
-  }
-  .target-clamped {
-    font-size: x-large;
-    text-align: center;
-  }
-  .target-original {
-    position: absolute;
-    right: 0;
-    transition: opacity 300ms ease-in-out;
-    opacity: 0.5;
-    &[hidden] {
-      opacity: 0;
-    }
-  }
-
-}
-
 .sections {
   display: grid;
   grid-auto-rows: min-content;
@@ -113,122 +50,16 @@ footer {
     border: 1px solid var(--color-border);
     > *:not(.vertical-text) {
       align-self: center;
+      flex: 1;
     }
+  }
+  success-test-section-label {
+    border-right: 1px solid var(--color-border);
+    background: rgba(black, 0.25);
   }
 }
 
 .aptitude-info {
   grid-template-columns: auto auto 1fr;
   flex: 1;
-  // padding: 0 1rem;
-}
-
-
-
-
-.vertical-text {
-  text-transform: uppercase;
-  writing-mode: vertical-lr;
-  text-orientation: upright;
-  letter-spacing: -0.25rem;
-  padding: 0.25rem 0.35rem 0.5rem;
-  font-size: small;
-  width: min-content;
-  border-right: 1px solid var(--color-border);
-  background: rgba(black, 0.25);
-  text-align: center;
-}
-
-.modifiers {
-  border: 1px solid var(--color-border);
-  overflow-y: scroll;
-  overflow-x: hidden;
-  height: 200px;
-  min-height: 100%;
-  width: 350px;
-
-  transition: opacity 200ms ease-in-out;
-
-  &.ignored {
-    opacity: 0.5;
-  }
-
-  sl-header {
-    border-color: var(--color-border);
-    background: rgba(black, 0.25);
-  }
-  sl-animated-list {
-    font-size: 15px;
-    padding: 0.25rem 0;
-  }
-
-  wl-list-item {
-    padding: 0 1rem;
-    &.tall {
-      padding: 0.25rem 1rem;
-    }
-
-    mwc-icon {
-      color: var(--color-text-lighter);
-    }
-
-    &:hover {
-      mwc-icon {
-        color: lightv(var(--color-negative), 2);
-      }
-    }
-  }
-
-  .source,
-  .requirement {
-    display: inline-block;
-    @include truncate(200px);
-    min-width: 100%;
-  }
-
-  .requirement {
-    color: var(--color-text-lighter);
-  }
-
-  [slot='before'] {
-    width: 0.25rem;
-  }
-
-  mwc-icon[slot='before'] {
-    margin-left: -0.6rem;
-    margin-right: 1.6rem;
-  }
-
-  img[slot='before'] {
-    width: 1rem;
-    margin-left: -0.3rem;
-    margin-right: 0.55rem;
-  }
-
-  span[slot='before'] {
-    color: var(--color-secondary);
-    border: 1px solid currentColor;
-    height: 2rem;
-    margin-right: 1rem;
-
-    &:not(.tall) {
-      opacity: 0;
-      height: 1.5rem;
-    }
-
-    &.negative {
-      color: var(--color-negative);
-    }
-
-    &.active {
-      background: currentColor;
-      filter: drop-shadow(2px 4px 6px currentColor);
-      @include animate-css(pulse, 2s, infinite);
-    }
-  }
-  span[slot='after'] {
-    font-size: large;
-    font-family: var(--font-mono);
-    margin-left: 0.5rem;
-  }
 }

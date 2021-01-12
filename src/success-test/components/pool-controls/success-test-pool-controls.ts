@@ -54,7 +54,7 @@ export class SuccessTestPoolControls extends LitElement {
                         : 'after'}
                       dense
                       ?disabled=${!pool.available}
-                      ?outlined=${!active}
+                      ?outlined=${!isActive}
                       ?unelevated=${isActive}
                       @click=${() => toggleActive(pair)}
                     >

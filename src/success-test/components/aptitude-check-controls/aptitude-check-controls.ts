@@ -62,28 +62,16 @@ export class AptitudeCheckControls extends LitElement {
     this.testUnsub = null;
   }
 
-  private emitCompleted() {
-    this.dispatchEvent(
-      new CustomEvent('test-completed', { bubbles: true, composed: true }),
-    );
-  }
-
   render() {
     const {
       state,
       pools,
-      modifierEffects,
-      activeEffects,
       activePool,
       ignoreMods,
-      modifiers,
       character,
       token,
-      target
+      target,
     } = this.test;
-
-    const clamped = successTestTargetClamp(target)
-  
 
     return html`
       ${character
@@ -107,7 +95,9 @@ export class AptitudeCheckControls extends LitElement {
 
       <div class="sections">
         <section>
-          <span class="vertical-text">${localize('check')}</span>
+          <success-test-section-label
+            >${localize('check')}</success-test-section-label
+          >
           ${renderAutoForm({
             classes: 'aptitude-info',
             props: state,
@@ -136,164 +126,60 @@ export class AptitudeCheckControls extends LitElement {
         </section>
 
         <div class="actions">
-          <span class="vertical-text">${localize('action')}</span>
+          <success-test-section-label
+            >${localize('action')}</success-test-section-label
+          >
+
           <success-test-action-form
             .actionState=${{
               action: this.test.action,
               setAction: this.test.updateAction,
             }}
           ></success-test-action-form>
-
         </div>
 
         ${notEmpty(pools)
           ? html`
               <section class="pools">
-                <span class="vertical-text">${localize('pools')}</span>
-              <success-test-pool-controls .poolState=${{
-                pools,
-                active: activePool,
-                toggleActive: this.test.toggleActivePool
-              }}></success-test-pool-controls>
+                <success-test-section-label
+                  >${localize('pools')}</success-test-section-label
+                >
+
+                <success-test-pool-controls
+                  .poolState=${{
+                    pools,
+                    active: activePool,
+                    toggleActive: this.test.toggleActivePool,
+                  }}
+                ></success-test-pool-controls>
               </section>
             `
           : ''}
       </div>
 
-      <section class="modifiers ${classMap({ ignored: ignoreMods })}">
-        <sl-header
-          itemCount=${withSign(this.test.totalModifiers)}
-          heading=${localize('modifiers')}
-        >
-          <sl-popover
-            focusSelector="input[type='number']"
-            slot="action"
-            .renderOnDemand=${() => html` <sl-popover-section
-              heading="${localize('add')} ${localize('modifier')}"
-            >
-              ${renderSubmitForm({
-                submitEmpty: true,
-                props: {
-                  name: localize('situational'),
-                  value: 10,
-                  temporary: true,
-                },
-                update: (changed, orig) =>
-                  this.test.toggleModifier({ ...orig, ...changed }),
-                fields: ({ name, value }) => [
-                  renderTextField(name, { required: true }),
-                  renderNumberField(value, {
-                    min: -95,
-                    max: 95,
-                    required: true,
-                  }),
-                ],
-              })}
-            </sl-popover-section>`}
-          >
-            <mwc-icon-button slot="base" icon="add"></mwc-icon-button>
-          </sl-popover>
-        </sl-header>
-        <sl-animated-list transformOrigin="top">
-          ${repeat(modifierEffects, identity, (effect) => {
-            const useWhen =
-              effect.requirement && `${localize('when')} ${effect.requirement}`;
-            return html`
-              <wl-list-item
-                class=${classMap({ tall: !!useWhen })}
-                ?clickable=${!!useWhen}
-                @click=${() => {
-                  useWhen && this.test.toggleActiveEffect(effect);
-                }}
-              >
-                <span
-                  slot="before"
-                  class=${classMap({
-                    tall: !!useWhen,
-                    active: !useWhen || activeEffects.has(effect),
-                    negative: effect.modifier < 0,
-                  })}
-                ></span>
-                <span class="source" title=${effect[Source]}
-                  >${effect[Source]}</span
-                >
-                <span slot="after">${withSign(effect.modifier)}</span>
-                ${useWhen
-                  ? html`
-                      <span class="requirement" title=${useWhen}
-                        >${useWhen}</span
-                      >
-                    `
-                  : ''}
-              </wl-list-item>
-            `;
-          })}
-          ${repeat(
-            modifiers,
-            identity,
-            (modifier) => html`
-              <wl-list-item
-                ?clickable=${!!modifier.temporary}
-                @click=${() =>
-                  modifier.temporary && this.test.toggleModifier(modifier)}
-              >
-                ${modifier.temporary
-                  ? html` <mwc-icon slot="before">close</mwc-icon> `
-                  : modifier.icon
-                  ? html`<img src=${modifier.icon} slot="before" />`
-                  : html` <span slot="before"></span> `}
-                <span class="source">${modifier.name}</span>
-                <span slot="after">${withSign(modifier.value)}</span>
-              </wl-list-item>
-            `,
-          )}
-        </sl-animated-list>
-      </section>
+      <success-test-modifiers-section
+        class="modifiers"
+        ?ignored=${ignoreMods}
+        total=${this.test.totalModifiers}
+        .modifierStore=${{
+          effects: this.test.modifierEffects,
+          toggleEffect: this.test.toggleActiveEffect,
+          modifiers: this.test.modifiers,
+          toggleModifier: this.test.toggleModifier,
+        }}
+      ></success-test-modifiers-section>
 
-      <footer>
-        <div class="target">
-          <span class="target-original" ?hidden=${clamped === target}
-            >${target}</span
-          >
-          <span class="target-clamped">${clamped}</span>
-          <span class="target-label">${localize('target')}</span>
-        </div>
-        <div class="settings">
-          <button
-            @click=${() =>
-              openMenu({
-                content: enumValues(MessageVisibility).map((option) => ({
-                  label: localize(option),
-                  callback: () => {
-                    this.test.updateState({ visibility: option });
-                  },
-                  activated: option === state.visibility,
-                })),
-              })}
-          >
-            <span class="visibility">${localize(state.visibility)}</span>
-            <mwc-icon>keyboard_arrow_down</mwc-icon>
-          </button>
-
-          <button
-            @click=${() => this.test.updateState({ autoRoll: !state.autoRoll })}
-          >
-            <mwc-icon class="checkbox"
-              >${state.autoRoll
-                ? 'check_box'
-                : 'check_box_outline_blank'}</mwc-icon
-            >
-            Auto Roll
-          </button>
-        </div>
-        <mwc-button @click=${this.emitCompleted} raised
-          >${localize('start')} ${localize('test')}</mwc-button
-        >
-      </footer>
+      <success-test-footer
+        class="footer"
+        target=${target}
+        .rollState=${{
+          visibility: state.visibility,
+          autoRoll: state.autoRoll,
+          update: this.test.updateState,
+        }}
+      ></success-test-footer>
     `;
   }
-
-
 }
 
 declare global {
