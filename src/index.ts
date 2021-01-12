@@ -150,6 +150,8 @@ import { CharacterViewAttacksSection } from './entities/actor/components/charact
 import { MultiplierSelect } from './combat/components/multiplier-select/multiplier-select';
 import { AptitudeCheckControls } from './success-test/components/aptitude-check-controls/aptitude-check-controls';
 import { MessageSuccessTest } from './chat/components/success-test/message-success-test';
+import { SuccessTestActionForm } from './success-test/components/action-form/success-test-action-form';
+import { SuccessTestPoolControls } from './success-test/components/pool-controls/success-test-pool-controls';
 
 // Generic Components
 Field;
@@ -308,3 +310,5 @@ MessageSuccessTest;
 
 // SuccessTest
 AptitudeCheckControls;
+SuccessTestActionForm;
+SuccessTestPoolControls

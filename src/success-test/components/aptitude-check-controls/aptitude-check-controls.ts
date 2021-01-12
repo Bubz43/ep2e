@@ -137,55 +137,24 @@ export class AptitudeCheckControls extends LitElement {
 
         <div class="actions">
           <span class="vertical-text">${localize('action')}</span>
-          ${this.renderActionForm()}
+          <success-test-action-form
+            .actionState=${{
+              action: this.test.action,
+              setAction: this.test.updateAction,
+            }}
+          ></success-test-action-form>
+
         </div>
 
         ${notEmpty(pools)
           ? html`
               <section class="pools">
                 <span class="vertical-text">${localize('pools')}</span>
-                <div class="pool-actions">
-                  <header>
-                    <span class="label">${localize('ignoreMods')}</span>
-                    <span class="label">+20 ${localize('bonus')}</span>
-                  </header>
-                  <ul>
-                    ${pools.map(
-                      (pool) => html`
-                        <wl-list-item>
-                          <div>
-                            <span
-                              >${localize(pool.type)}
-                              <value-status
-                                value=${pool.available}
-                                max=${pool.max}
-                              ></value-status
-                            ></span>
-                          </div>
-                          ${enumValues(PreTestPoolAction).map((action) => {
-                            const pair = [pool, action] as const;
-                            const active = equals(pair, activePool);
-                            return html`
-                              <mwc-button
-                                slot=${action === PreTestPoolAction.IgnoreMods
-                                  ? 'before'
-                                  : 'after'}
-                                dense
-                                ?disabled=${!pool.available}
-                                ?outlined=${!active}
-                                ?unelevated=${active}
-                                class=${classMap({ active })}
-                                @click=${() => this.test.toggleActivePool(pair)}
-                              >
-                                <img height="20px" src=${pool.icon}
-                              /></mwc-button>
-                            `;
-                          })}
-                        </wl-list-item>
-                      `,
-                    )}
-                  </ul>
-                </div>
+              <success-test-pool-controls .poolState=${{
+                pools,
+                active: activePool,
+                toggleActive: this.test.toggleActivePool
+              }}></success-test-pool-controls>
               </section>
             `
           : ''}
@@ -309,12 +278,12 @@ export class AptitudeCheckControls extends LitElement {
           <button
             @click=${() => this.test.updateState({ autoRoll: !state.autoRoll })}
           >
-           <mwc-icon class="checkbox"
-                >${state.autoRoll
-                  ? 'check_box'
-                  : 'check_box_outline_blank'}</mwc-icon
-              >
-              Auto Roll
+            <mwc-icon class="checkbox"
+              >${state.autoRoll
+                ? 'check_box'
+                : 'check_box_outline_blank'}</mwc-icon
+            >
+            Auto Roll
           </button>
         </div>
         <mwc-button @click=${this.emitCompleted} raised
@@ -324,51 +293,7 @@ export class AptitudeCheckControls extends LitElement {
     `;
   }
 
-  private renderActionForm() {
-    const { action } = this.test;
-    const isTask = action.type === ActionType.Task;
-    // TODO task modifiers modifiers
-    return html`${renderAutoForm({
-      classes: `action-form ${action.type}`,
-      props: action,
-      noDebounce: true,
-      storeOnInput: true,
-      update: this.test.updateAction,
-      fields: ({ type, subtype, timeframe, timeMod }) => [
-        renderSelectField(type, enumValues(ActionType)),
-        renderSelectField(subtype, enumValues(ActionSubtype)),
-        html` <div
-          class="action-edits ${classMap({
-            'show-time': isTask || timeframe.value !== 0,
-          })}"
-        >
-          ${isTask
-            ? renderTimeField({
-                ...timeframe,
-                label: `${localize('initial')} ${localize('timeframe')}`,
-              })
-            : ''}
-          ${type.value !== ActionType.Automatic
-            ? html`
-                <div class="time-mod ${classMap({ task: isTask })}">
-                  <div class="take-time">${localize('takeTime')}</div>
-                  ${renderSlider(timeMod, {
-                    disabled: isTask && !timeframe.value,
-                    max: 6,
-                    min: isTask ? -3 : 0,
-                    step: 1,
-                    markers: true,
-                  })}
-                  ${isTask
-                    ? html` <div class="rush">${localize('rush')}</div> `
-                    : ''}
-                </div>
-              `
-            : ''}
-        </div>`,
-      ],
-    })}`;
-  }
+
 }
 
 declare global {

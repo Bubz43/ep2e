@@ -31,7 +31,7 @@ import { LazyGetter } from 'lazy-get-decorator';
 import { html } from 'lit-html';
 import { compact, equals, map } from 'remeda';
 import { traverseActiveElements } from 'weightless';
-import { rollSuccessTest, SuccessTestModifier, successTestTargetClamp } from './success-test';
+import { PreTestPool, rollSuccessTest, SuccessTestModifier, successTestTargetClamp } from './success-test';
 
 export type AptitudeCheckInit = {
   ego: Ego;
@@ -65,7 +65,7 @@ export class AptitudeCheck extends EventTarget {
   readonly action: Action;
 
   readonly activeEffects = new WeakSet<SuccessTestEffect>();
-  activePool: Readonly<[Pool, PreTestPoolAction]> | null = null;
+  activePool: PreTestPool = null;
   modifiers = new Set<SuccessTestModifier>();
 
 

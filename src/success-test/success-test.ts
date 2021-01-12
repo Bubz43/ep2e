@@ -1,3 +1,4 @@
+import type { Pool, PreTestPoolAction } from '@src/features/pool';
 import { capitalize } from '@src/foundry/misc-helpers';
 import { notEmpty } from '@src/utility/helpers';
 import { clamp, createPipe, pipe, range, reverse } from 'remeda';
@@ -30,6 +31,8 @@ export const isSuccessfullTestResult = createPipe(
   getRank,
   (rank) => rank >= ResultTier.Success,
 );
+
+export type PreTestPool = readonly [Pool, PreTestPoolAction] | null;
 
 export type SuccessTestModifier = {
   name: string;
