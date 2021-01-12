@@ -2,10 +2,13 @@ import {
   renderLabeledCheckbox,
   renderNumberField,
   renderSelectField,
+  renderSlider,
   renderTextField,
+  renderTimeField,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderSubmitForm } from '@src/components/form/forms';
 import { AptitudeType, enumValues } from '@src/data-enums';
+import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
 import { ActionSubtype, ActionType } from '@src/features/actions';
 import { Source } from '@src/features/effects';
 import { PreTestPoolAction } from '@src/features/pool';
@@ -72,9 +75,30 @@ export class AptitudeCheckControls extends LitElement {
       activePool,
       ignoreMods,
       modifiers,
+      character,
+      token,
     } = this.test;
 
     return html`
+      ${character
+        ? html`
+            <mwc-list-item
+              class="source"
+              @click=${() => character.actor.sheet.render(true)}
+              graphic="medium"
+              ?twoline=${!!character.sleeve}
+            >
+              <img slot="graphic" src=${token?.data.img ?? character.img} />
+              <span>${token?.data.name ?? character.name} </span>
+              ${character.sleeve
+                ? html`<span slot="secondary"
+                    >${formattedSleeveInfo(character.sleeve).join(' - ')}</span
+                  >`
+                : ''}
+            </mwc-list-item>
+          `
+        : ''}
+
       <div class="sections">
         <section>
           <span class="vertical-text">${localize('check')}</span>
@@ -103,15 +127,7 @@ export class AptitudeCheckControls extends LitElement {
 
         <div class="actions">
           <span class="vertical-text">${localize('action')}</span>
-          ${renderAutoForm({
-            props: action,
-            noDebounce: true,
-            update: this.test.updateAction,
-            fields: ({ type, subtype }) => [
-              renderSelectField(type, enumValues(ActionType)),
-              renderSelectField(subtype, enumValues(ActionSubtype)),
-            ],
-          })}
+          ${this.renderActionForm()}
         </div>
 
         ${notEmpty(pools)
@@ -260,6 +276,52 @@ export class AptitudeCheckControls extends LitElement {
         >
       </footer>
     `;
+  }
+
+  private renderActionForm() {
+    const { action } = this.test;
+    const isTask = action.type === ActionType.Task;
+    // TODO task modifiers modifiers
+    return html`${renderAutoForm({
+      classes: `action-form ${isTask ? 'task' : ''}`,
+      props: action,
+      noDebounce: true,
+      storeOnInput: true,
+      update: this.test.updateAction,
+      fields: ({ type, subtype, timeframe, timeMod }) => [
+        renderSelectField(type, enumValues(ActionType)),
+        renderSelectField(subtype, enumValues(ActionSubtype)),
+        html` <div
+          class="action-edits ${classMap({
+            'show-time': isTask || timeframe.value !== 0,
+          })}"
+        >
+          ${isTask
+            ? renderTimeField({
+                ...timeframe,
+                label: `${localize('initial')} ${localize('timeframe')}`,
+              })
+            : ''}
+          ${type.value !== ActionType.Automatic
+            ? html`
+                <div class="time-mod ${classMap({ task: isTask })}">
+                  <div class="take-time">${localize('takeTime')}</div>
+                  ${renderSlider(timeMod, {
+                    disabled: isTask && !timeframe.value,
+                    max: 6,
+                    min: isTask ? -3 : 0,
+                    step: 1,
+                    markers: true,
+                  })}
+                  ${isTask
+                    ? html` <div class="rush">${localize('rush')}</div> `
+                    : ''}
+                </div>
+              `
+            : ''}
+        </div>`,
+      ],
+    })}`;
   }
 }
 

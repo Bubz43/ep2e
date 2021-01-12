@@ -55,14 +55,19 @@
   }
   #header {
     background: alphav(var(--color-grey), 0.2);
+    overflow: visible;
     .heading {
       max-width: 200px;
       height: 28px;
       overflow: visible;
+      span {
+        margin: 0 0 0 0.5rem;
+      }
       img {
         height: 36px;
         margin-left: -0.75rem;
         filter: drop-shadow(2px 4px 6px black);
+        transition: height 150ms 150ms ease-out;
       }
     }
     ::slotted([slot='header']) {
@@ -92,12 +97,14 @@ slot[name='footer'] {
   grid-template-columns: 1fr auto auto;
   position: relative;
   cursor: move;
-  height: min-content;
   background: alphav(var(--color-grey), 0.2);
 
   transition: background 100ms ease-in-out;
   min-width: 200px;
   z-index: 1;
+
+   height: 32px;
+  overflow: hidden;
   // z-index: 3;
   ::slotted(wl-list-item) {
     --list-item-padding: 4px;
@@ -145,16 +152,19 @@ slot[name='footer'] {
   font-size: larger;
   text-shadow: 0px 0px 10px black;
   flex: 1;
-  align-self: center;
   display: flex;
   align-items: center;
+  
   > * {
-    margin-left: 0.25ch;
     @include truncate(400px);
   }
   img {
     display: inline-block;
     filter: drop-shadow(1px 2px 3px black);
+        margin-left: 0.25ch;
+  }
+  span {
+    margin: 0 auto;
   }
 }
 

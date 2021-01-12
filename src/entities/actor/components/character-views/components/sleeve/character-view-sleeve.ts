@@ -1,6 +1,6 @@
 import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
-import type { Sleeve } from '@src/entities/actor/sleeves';
+import { formattedSleeveInfo, Sleeve } from '@src/entities/actor/sleeves';
 import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import {
@@ -85,12 +85,7 @@ export class CharacterViewSleeve extends LitElement {
           ${this.sleeve.name}
         </button>
         <span class="info">
-          ${compact([
-            'size' in sleeve && localize(sleeve.size),
-            sleeve.subtype || localize(sleeve.type),
-            'isSwarm' in sleeve && sleeve.isSwarm && localize('swarm'),
-            'sex' in sleeve && sleeve.sex,
-          ]).join(' • ')}</span
+          ${formattedSleeveInfo(sleeve).join(' • ')}</span
         >
       </header>
 

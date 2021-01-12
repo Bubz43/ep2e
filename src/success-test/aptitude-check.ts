@@ -15,6 +15,7 @@ import {
   ActionType,
   createAction,
   defaultCheckActionSubtype,
+  updateAction,
 } from '@src/features/actions';
 import {
   matchesAptitude,
@@ -26,6 +27,7 @@ import { Pool, PreTestPoolAction } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
 import { debounce } from '@src/utility/decorators';
+import { LazyGetter } from 'lazy-get-decorator';
 import { html } from 'lit-html';
 import { compact, equals, map } from 'remeda';
 import { traverseActiveElements } from 'weightless';
@@ -63,6 +65,7 @@ export class AptitudeCheck extends EventTarget {
   readonly activeEffects = new WeakSet<SuccessTestEffect>();
   activePool: Readonly<[Pool, PreTestPoolAction]> | null = null;
   modifiers = new Set<SuccessTestModifier>();
+
 
   constructor({ ego, aptitude, character, token, action }: AptitudeCheckInit) {
     super();
@@ -201,8 +204,23 @@ export class AptitudeCheck extends EventTarget {
   };
 
   updateAction = (newAction: Partial<Action>) => {
-    Object.assign(this.action, newAction);
+  
+    Object.assign(this.action, updateAction(this.action, newAction));
+    if (this.action.timeMod) {
+      const { timeMod } = this.action
+      const { modifierFromAction } = this;
+      modifierFromAction.value = timeMod < 0 ? timeMod * 20 : timeMod * 10;
+      modifierFromAction.name = `${localize(
+        timeMod < 0 ? 'rushing' : 'takingTime',
+      )} x${Math.abs(timeMod)}`;
+      this.modifiers.add(modifierFromAction)
+    } else this.modifiers.delete(this.modifierFromAction)
   };
+
+  @LazyGetter()
+  private get modifierFromAction(): SuccessTestModifier {
+    return { name: "", value: 0}
+  }
 
   subscribe(cb: (test: this) => void) {
     const handler = () => cb(this);

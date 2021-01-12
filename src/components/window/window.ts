@@ -246,7 +246,7 @@ export class SlWindow extends LitElement {
         {
           width: [px(offsetWidth), px(this.offsetWidth)],
         },
-        { duration: 150, easing: 'ease-in-out' },
+        { duration: 150 },
       );
       if (!this.minimized) {
         contentContainer.style.overflowX = 'hidden';
