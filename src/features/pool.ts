@@ -74,7 +74,7 @@ export class Pool {
 
   @LazyGetter()
   get testModifier(): SuccessTestModifier {
-    return { name: localize(this.type), value: 20 };
+    return { name: localize(this.type), value: 20, icon: this.icon };
   }
 
   addEffect({ modifier, usabilityModification }: PoolEffect) {

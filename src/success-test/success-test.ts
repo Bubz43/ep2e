@@ -35,6 +35,7 @@ export type SuccessTestModifier = {
   name: string;
   value: number;
   temporary?: boolean;
+  icon?: string;
 };
 
 export class Percentile extends DiceTerm {

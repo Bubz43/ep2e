@@ -56,7 +56,7 @@ export class AptitudeCheck extends EventTarget {
   readonly token;
   readonly state: {
     aptitude: AptitudeType;
-    halve: boolean;
+    multiplier: number;
   };
   readonly action: Action;
 
@@ -72,7 +72,7 @@ export class AptitudeCheck extends EventTarget {
 
     this.state = this.createNotifying({
       aptitude: aptitude || AptitudeType.Willpower,
-      halve: false,
+      multiplier: 3
     });
 
     this.action = this.createNotifying(
@@ -110,9 +110,8 @@ export class AptitudeCheck extends EventTarget {
   }
 
   get aptitudeTotal() {
-    const { aptitude, halve } = this.state;
-    const base = this.ego.aptitudes[aptitude] * 3;
-    return halve ? Math.round(base / 2) : base;
+    const { aptitude, multiplier } = this.state;
+    return Math.round(this.ego.aptitudes[aptitude] * multiplier);
   }
 
   get linkedPool() {
@@ -168,7 +167,7 @@ export class AptitudeCheck extends EventTarget {
     const { roll, result, target } = rollSuccessTest({ target: this.target });
     const { ignoreMods } = this;
     const parts: SuccessTestModifier[] = [
-      { name: `${localize(this.state.aptitude)} x${this.state.halve ? 1.5 : 3}`, value: this.aptitudeTotal },
+      { name: `${localize(this.state.aptitude)} x${this.state.multiplier}`, value: this.aptitudeTotal },
     ];
     if (!ignoreMods) {
        parts.push(

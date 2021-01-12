@@ -187,7 +187,6 @@ export const renderRadio = ({
     ?disabled=${disabled}
     @keydown=${clickOnEnter}
     style="margin-right: -.4rem"
-    ;
   ></mwc-radio>
 `;
 
@@ -310,7 +309,6 @@ export const renderSlider = (
     Partial<{ disabled: boolean; markers: boolean; pin: boolean }> = {},
 ) => html`
   <mwc-slider
-    value=${live(value)}
     .value=${live(value)}
     name=${prop}
     id=${prop}
@@ -335,8 +333,8 @@ export const renderNumberInput = (
 ) => html` <input
   type="number"
   name=${prop}
-  value=${live(value)}
-  .value=${live(value)}
+  value=${live(String(value))}
+  .value=${live(String(value))}
   min=${ifDefined(min)}
   max=${ifDefined(max)}
   step=${ifDefined(step)}
@@ -402,11 +400,10 @@ export const renderTimeField = (
 ) => {
   return html`
     <time-field
-      value=${live(value)}
       .value=${live(value)}
       label=${label}
-      min=${min}
-      max=${max}
+      min=${ifDefined(min)}
+      max=${ifDefined(max)}
       ?disabled=${disabled}
       permanentLabel=${ifDefined(permanentLabel)}
       whenZero=${ifDefined(whenZero)}
@@ -421,6 +418,7 @@ type TextFieldOptions = CommonOptions & {
   search?: boolean;
   placeholder?: string;
   maxLength?: number;
+  readonly?: boolean;
 };
 
 const clearSearchOnEscape = (ev: KeyboardEvent) => {
@@ -442,6 +440,7 @@ export const renderTextInput = (
     search,
     placeholder,
     maxLength,
+    readonly = false
   }: TextFieldOptions = {},
 ) => {
   return html`
@@ -454,6 +453,7 @@ export const renderTextInput = (
       placeholder=${ifDefined(placeholder)}
       ?disabled=${disabled}
       ?required=${required}
+      ?readonly=${readonly}
       maxlength=${ifDefined(maxLength)}
       list=${ifDefined(listId)}
     />

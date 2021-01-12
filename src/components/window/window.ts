@@ -561,6 +561,7 @@ export class SlWindow extends LitElement {
                 data-resize=${option}
                 @pointerdown=${this.resize}
                 @dblclick=${this.resetSize}
+                @contextmenu=${this.resetSize}
                 ?hidden=${hidden}
               ></div>
               ${option === ResizeOption.Both
@@ -571,6 +572,7 @@ export class SlWindow extends LitElement {
                       data-resize=${option}
                       @pointerdown=${this.resize}
                       @dblclick=${this.resetSize}
+                      @contextmenu=${this.resetSize}
                       ?hidden=${hidden}
                     ></div>
                   `}

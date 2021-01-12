@@ -39,7 +39,9 @@ footer {
 
 .sections {
   display: grid;
+  grid-auto-rows: min-content;
   gap: 0.25rem;
+  width: 350px;
   > * {
     display: flex;
     border: 1px solid var(--color-border);
@@ -49,17 +51,13 @@ footer {
   }
 }
 
-.aptitude-info {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  place-items: center;
+
+.aptitude-info{
+  grid-template-columns: auto auto 1fr;
   flex: 1;
-  sl-form {
-    display: contents;
-  }
-  sl-field {
-    width: 100%;
-  }
+  // padding: 0 1rem;
+
+
 }
 
 .actions {
@@ -75,7 +73,7 @@ footer {
   header {
     display: flex;
     justify-content: space-between;
-      padding: 0.25rem 0.75rem;
+      padding: 0.5rem 0.75rem 0;
 
     .label {
       color: var(--color-text-lighter);
@@ -118,42 +116,6 @@ footer {
 
 }
 
-// .pools {
-//   ul {
-//     margin: 0;
-//     padding: 0 0.25rem;
-//     list-style: none;
-//     display: grid;
-//     grid-template-columns: 200px 200px;
-//     align-items: center;
-//     position: relative;
-//   }
-// }
-// .pool {
-//   display: flex;
-//   align-items: center;
-//   pool-item {
-//     pointer-events: none;
-//     flex: 1;
-//     padding: 0 0.25rem;
-//   }
-
-//   div {
-//     display: grid;
-//     align-items: center;
-//   }
-
-//   @include textButton();
-
-//   button {
-//     padding: 0 0.5rem;
-//     justify-content: center;
-//     text-align: center;
-//     &.active {
-//       box-shadow: 0 0 1px 2px var(--color-secondary) inset;
-//     }
-//   }
-// }
 
 .vertical-text {
   text-transform: uppercase;
@@ -187,15 +149,19 @@ footer {
   sl-animated-list {
     max-width: 300px;
     font-size: 15px;
+    padding: 0.25rem 0;
   }
 
   wl-list-item {
     padding: 0 1rem;
-    // transition: background 100ms ease-in-out;
     &.tall {
       padding: 0.25rem 1rem;
     }
  
+    mwc-icon {
+      color: var(--color-text-lighter);
+    }
+
     &:hover {
       mwc-icon {
         color: lightv(var(--color-negative), 2);
@@ -222,8 +188,15 @@ footer {
     margin-right: 1.6rem;
   }
 
+  img[slot="before"] {
+    width: 1rem;
+       margin-left: -0.3rem;
+    margin-right: 0.55rem
+  }
+
   span[slot='before'] {
-    border: 1px solid var(--color-grey);
+    color: var(--color-secondary);
+    border: 1px solid currentColor;
     height: 2rem;
     margin-right: 1rem;
 
@@ -232,9 +205,20 @@ footer {
       height: 1.5rem;
     }
 
-    &.active {
-      background: var(--color-grey);
+    &.negative {
+      color: var(--color-negative);
     }
+
+    &.active {
+      background: currentColor;
+      filter: drop-shadow(2px 4px 6px currentColor);
+      @include animate-css(pulse, 2s, infinite);
+    }
+  }
+  span[slot="after"] {
+    font-size: large;
+    font-family: var(--font-mono);
+    margin-left: 0.5rem;
   }
 }
 
