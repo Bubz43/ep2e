@@ -1,3 +1,4 @@
+import { MessageVisibility } from '@src/chat/create-message';
 import {
   renderLabeledCheckbox,
   renderNumberField,
@@ -13,7 +14,9 @@ import { ActionSubtype, ActionType } from '@src/features/actions';
 import { Source } from '@src/features/effects';
 import { PreTestPoolAction } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
+import { openMenu } from '@src/open-menu';
 import type { AptitudeCheck } from '@src/success-test/aptitude-check';
+import { successTestTargetClamp } from '@src/success-test/success-test';
 import { notEmpty, withSign } from '@src/utility/helpers';
 import {
   customElement,
@@ -76,7 +79,11 @@ export class AptitudeCheckControls extends LitElement {
       modifiers,
       character,
       token,
+      target
     } = this.test;
+
+    const clamped = successTestTargetClamp(target)
+  
 
     return html`
       ${character
@@ -206,7 +213,11 @@ export class AptitudeCheckControls extends LitElement {
                   this.test.toggleModifier({ ...orig, ...changed }),
                 fields: ({ name, value }) => [
                   renderTextField(name, { required: true }),
-                  renderNumberField(value, { min: -95, max: 95 }),
+                  renderNumberField(value, {
+                    min: -95,
+                    max: 95,
+                    required: true,
+                  }),
                 ],
               })}
             </sl-popover-section>`}
@@ -271,11 +282,43 @@ export class AptitudeCheckControls extends LitElement {
       </section>
 
       <footer>
-        <div class="totals">
-          <sl-group label=${localize('target')}>${this.test.target}</sl-group>
+        <div class="target">
+          <span class="target-original" ?hidden=${clamped === target}
+            >${target}</span
+          >
+          <span class="target-clamped">${clamped}</span>
+          <span class="target-label">${localize('target')}</span>
+        </div>
+        <div class="settings">
+          <button
+            @click=${() =>
+              openMenu({
+                content: enumValues(MessageVisibility).map((option) => ({
+                  label: localize(option),
+                  callback: () => {
+                    this.test.updateState({ visibility: option });
+                  },
+                  activated: option === state.visibility,
+                })),
+              })}
+          >
+            <span class="visibility">${localize(state.visibility)}</span>
+            <mwc-icon>keyboard_arrow_down</mwc-icon>
+          </button>
+
+          <button
+            @click=${() => this.test.updateState({ autoRoll: !state.autoRoll })}
+          >
+           <mwc-icon class="checkbox"
+                >${state.autoRoll
+                  ? 'check_box'
+                  : 'check_box_outline_blank'}</mwc-icon
+              >
+              Auto Roll
+          </button>
         </div>
         <mwc-button @click=${this.emitCompleted} raised
-          >${localize('roll')}</mwc-button
+          >${localize('start')} ${localize('test')}</mwc-button
         >
       </footer>
     `;

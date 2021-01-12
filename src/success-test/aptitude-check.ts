@@ -1,4 +1,4 @@
-import { createMessage, MessageVisibility } from '@src/chat/create-message';
+import { createMessage, MessageVisibility, rollModeToVisibility } from '@src/chat/create-message';
 import type { SuccessTestMessage } from '@src/chat/message-data';
 import {
   attachWindow,
@@ -31,7 +31,7 @@ import { LazyGetter } from 'lazy-get-decorator';
 import { html } from 'lit-html';
 import { compact, equals, map } from 'remeda';
 import { traverseActiveElements } from 'weightless';
-import { rollSuccessTest, SuccessTestModifier } from './success-test';
+import { rollSuccessTest, SuccessTestModifier, successTestTargetClamp } from './success-test';
 
 export type AptitudeCheckInit = {
   ego: Ego;
@@ -59,6 +59,8 @@ export class AptitudeCheck extends EventTarget {
   readonly state: {
     aptitude: AptitudeType;
     multiplier: number;
+    visibility: MessageVisibility;
+    autoRoll: boolean;
   };
   readonly action: Action;
 
@@ -76,6 +78,8 @@ export class AptitudeCheck extends EventTarget {
     this.state = this.createNotifying({
       aptitude: aptitude || AptitudeType.Willpower,
       multiplier: 3,
+      visibility: rollModeToVisibility(game.settings.get('core', 'rollMode')),
+      autoRoll: true
     });
 
     this.action = this.createNotifying(
@@ -152,6 +156,10 @@ export class AptitudeCheck extends EventTarget {
     return this.aptitudeTotal + (this.ignoreMods ? 0 : this.totalModifiers);
   }
 
+  get clampedTarget() {
+    return successTestTargetClamp(this.target)
+  }
+
   get totalModifiers() {
     return (
       this.modifierEffects.reduce(
@@ -166,8 +174,7 @@ export class AptitudeCheck extends EventTarget {
   }
 
   get messageData(): SuccessTestMessage {
-    const { roll, result, target } = rollSuccessTest({ target: this.target });
-    const { ignoreMods } = this;
+    const { ignoreMods, clampedTarget } = this;
     const parts: SuccessTestModifier[] = [
       {
         name: `${localize(this.state.aptitude)} x${this.state.multiplier}`,
@@ -187,9 +194,8 @@ export class AptitudeCheck extends EventTarget {
     }
     return {
       parts,
-      roll,
-      result,
-      target,
+      target: clampedTarget,
+      ...(this.state.autoRoll ?  rollSuccessTest({ target: this.target }) : {}),
       ignoredModifiers: ignoreMods ? this.totalModifiers : undefined,
       linkedPool: this.linkedPool,
       poolActions: this.activePool
@@ -204,22 +210,21 @@ export class AptitudeCheck extends EventTarget {
   };
 
   updateAction = (newAction: Partial<Action>) => {
-  
     Object.assign(this.action, updateAction(this.action, newAction));
     if (this.action.timeMod) {
-      const { timeMod } = this.action
+      const { timeMod } = this.action;
       const { modifierFromAction } = this;
       modifierFromAction.value = timeMod < 0 ? timeMod * 20 : timeMod * 10;
       modifierFromAction.name = `${localize(
         timeMod < 0 ? 'rushing' : 'takingTime',
       )} x${Math.abs(timeMod)}`;
-      this.modifiers.add(modifierFromAction)
-    } else this.modifiers.delete(this.modifierFromAction)
+      this.modifiers.add(modifierFromAction);
+    } else this.modifiers.delete(this.modifierFromAction);
   };
 
   @LazyGetter()
   private get modifierFromAction(): SuccessTestModifier {
-    return { name: "", value: 0}
+    return { name: '', value: 0 };
   }
 
   subscribe(cb: (test: this) => void) {
@@ -229,7 +234,7 @@ export class AptitudeCheck extends EventTarget {
     return () => this.removeEventListener(eventKey, handler);
   }
 
-  @debounce(1)
+  @debounce(50)
   private notify() {
     this.dispatchEvent(new CustomEvent(eventKey));
   }
@@ -307,6 +312,7 @@ export class AptitudeCheck extends EventTarget {
                       successTest: check.messageData,
                     },
                     entity: character,
+                    visibility: check.state.visibility,
                   });
                   const pool = check.activePool?.[0];
                   if (pool) character.spendPool({ pool: pool.type, points: 1 });

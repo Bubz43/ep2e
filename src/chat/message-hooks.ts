@@ -23,12 +23,12 @@ mutateEntityHook({
   callback: (message) => createdChatMessages.add(message),
 });
 
-// mutateEntityHook({
-//   entity: ChatMessage,
-//   hook: 'on',
-//   event: MutateEvent.Update,
-//   callback: (message) =>  updatedChatMessages.add(message),
-// });
+mutateEntityHook({
+  entity: ChatMessage,
+  hook: 'on',
+  event: MutateEvent.Update,
+  callback: (message) =>  updatedChatMessages.add(message),
+});
 
 const iconTemplate = html`<i
   class="far fa-eye-slash"

@@ -137,14 +137,15 @@ export const rollSuccessTest = ({
   defaulting?: boolean;
 }) => {
   const { total: roll } = Percentile;
+  const clampedTarget = successTestTargetClamp(target);
   return {
     roll,
     result: getSuccessTestResult({
       roll,
-      target: successTestTargetClamp(target),
+      target: clampedTarget,
       defaulting,
     }),
-    target,
+    target: clampedTarget,
     defaulting,
   };
 };

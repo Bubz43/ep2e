@@ -10,6 +10,7 @@ const isInvalidNumber = (value: unknown) =>
   badNumbervalues.some((bad) => Object.is(bad, value));
 
 const validateNumberInput = (input: HTMLInputElement) => {
+  
   let value = Number(input.value);
   if (isInvalidNumber(value)) value = 0;
   if (input.hasAttribute('min')) value = Math.max(value, Number(input.min));
@@ -19,7 +20,7 @@ const validateNumberInput = (input: HTMLInputElement) => {
     if (decimals) value = Number(value.toFixed(decimals.length));
     else value -= value % Number(input.step);
   } else value = Math.round(value);
-  input.value = String(value);
+  if (input.value !== '') input.value = String(value);
   return value;
 };
 

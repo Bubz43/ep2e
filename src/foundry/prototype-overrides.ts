@@ -241,9 +241,7 @@ TokenHUD.prototype._getStatusEffectChoices = function () {
 
 const { _render } = ChatLog.prototype;
 ChatLog.prototype._render = async function (...args) {
-  console.log('moop1');
   if (document.body.classList.contains('ready')) {
-    console.log('moop');
     _render.call(this, ...args);
   }
 };
