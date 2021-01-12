@@ -72,7 +72,7 @@ export class AptitudeCheck extends EventTarget {
 
     this.state = this.createNotifying({
       aptitude: aptitude || AptitudeType.Willpower,
-      multiplier: 3
+      multiplier: 3,
     });
 
     this.action = this.createNotifying(
@@ -88,20 +88,19 @@ export class AptitudeCheck extends EventTarget {
     this.modifiers.delete(modifier) || this.modifiers.add(modifier);
     this.notify();
   }
-  
 
   toggleActivePool(active: AptitudeCheck['activePool']) {
-    this.togglePoolBonus()
+    this.togglePoolBonus();
     this.activePool = equals(active, this.activePool) ? null : active;
-      this.togglePoolBonus();
+    this.togglePoolBonus();
 
     this.notify();
   }
 
   private togglePoolBonus() {
-  if (this.activePool?.[1] === PreTestPoolAction.Bonus) {
-    this.toggleModifier(this.activePool[0].testModifier);
-  }
+    if (this.activePool?.[1] === PreTestPoolAction.Bonus) {
+      this.toggleModifier(this.activePool[0].testModifier);
+    }
   }
 
   toggleActiveEffect(effect: SuccessTestEffect) {
@@ -167,18 +166,21 @@ export class AptitudeCheck extends EventTarget {
     const { roll, result, target } = rollSuccessTest({ target: this.target });
     const { ignoreMods } = this;
     const parts: SuccessTestModifier[] = [
-      { name: `${localize(this.state.aptitude)} x${this.state.multiplier}`, value: this.aptitudeTotal },
+      {
+        name: `${localize(this.state.aptitude)} x${this.state.multiplier}`,
+        value: this.aptitudeTotal,
+      },
     ];
     if (!ignoreMods) {
-       parts.push(
-         ...this.modifierEffects.flatMap(
-           (effect) =>
-             !effect.requirement || this.activeEffects.has(effect)
-               ? { name: effect[Source], value: effect.modifier }
-               : [],
-           ...this.modifiers,
-         ),
-       );
+      parts.push(
+        ...this.modifierEffects.flatMap(
+          (effect) =>
+            !effect.requirement || this.activeEffects.has(effect)
+              ? { name: effect[Source], value: effect.modifier }
+              : [],
+          ...this.modifiers,
+        ),
+      );
     }
     return {
       parts,
@@ -289,7 +291,7 @@ export class AptitudeCheck extends EventTarget {
                     entity: character,
                   });
                   const pool = check.activePool?.[0];
-                  if (pool) character.spendPool({ pool: pool.type, points: 1 })
+                  if (pool) character.spendPool({ pool: pool.type, points: 1 });
                 }}
               ></aptitude-check-controls>
             `,

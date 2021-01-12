@@ -440,7 +440,7 @@ export const renderTextInput = (
     search,
     placeholder,
     maxLength,
-    readonly = false
+    readonly = false,
   }: TextFieldOptions = {},
 ) => {
   return html`

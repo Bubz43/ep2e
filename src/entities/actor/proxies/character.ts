@@ -155,7 +155,9 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   }
 
   get cannotFlipFlop() {
-    return this.appliedEffects.getGroup(EffectType.Misc).some(({ unique}) => unique === UniqueEffectType.NoFlipFlop)
+    return this.appliedEffects
+      .getGroup(EffectType.Misc)
+      .some(({ unique }) => unique === UniqueEffectType.NoFlipFlop);
   }
 
   @LazyGetter()

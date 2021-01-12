@@ -172,7 +172,10 @@ export class MessageSuccessTest extends MessageElement {
               ></mwc-icon-button>`
             : ''}</sl-group
         >
-        <sl-popover placement=${Placement.Left} .renderOnDemand=${this.renderUsedParts}>
+        <sl-popover
+          placement=${Placement.Left}
+          .renderOnDemand=${this.renderUsedParts}
+        >
           <button slot="base" class="part-toggle">
             <sl-group label=${localize('target')}>${target}</sl-group>
           </button>
@@ -215,23 +218,27 @@ export class MessageSuccessTest extends MessageElement {
 
   private renderUsedParts = () => {
     return html`
-    <ul class="used-parts">
-    ${this.successTest.parts.map(part => html`
-    <wl-list-item>
-    <span>${part.name}</span>
-    <span slot="after">${part.value}</span>
-    </wl-list-item>
-    `)}
-    ${this.successTest.ignoredModifiers != null ? html`
-    <li class="divider"></li>
-    <wl-list-item>
-    <span>${localize("ignoredModifiers")}</span>
-    <span slot="after">${this.successTest.ignoredModifiers}</span>
-    </wl-list-item>
-    ` : ""}
-    </ul>
-    `
-  }
+      <ul class="used-parts">
+        ${this.successTest.parts.map(
+          (part) => html`
+            <wl-list-item>
+              <span>${part.name}</span>
+              <span slot="after">${part.value}</span>
+            </wl-list-item>
+          `,
+        )}
+        ${this.successTest.ignoredModifiers != null
+          ? html`
+              <li class="divider"></li>
+              <wl-list-item>
+                <span>${localize('ignoredModifiers')}</span>
+                <span slot="after">${this.successTest.ignoredModifiers}</span>
+              </wl-list-item>
+            `
+          : ''}
+      </ul>
+    `;
+  };
 
   private renderPoolPopover(action: PostTestPoolAction) {
     const { linkedPool, poolActions } = this.successTest;
@@ -252,10 +259,8 @@ export class MessageSuccessTest extends MessageElement {
         <p>${localize('no')} ${localize('available')} ${localize('pools')}</p>
       `;
 
-    if (action === PostTestPoolAction.FlipFlop && character.cannotFlipFlop) 
-    return html`
-    <p>${localize("cannot")} ${localize("flipFlopRoll")}</p>
-    `
+    if (action === PostTestPoolAction.FlipFlop && character.cannotFlipFlop)
+      return html` <p>${localize('cannot')} ${localize('flipFlopRoll')}</p> `;
 
     const usedPool = poolActions?.[0]?.[0];
 

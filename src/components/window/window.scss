@@ -150,7 +150,7 @@ slot[name='footer'] {
   align-items: center;
   > * {
     margin-left: 0.25ch;
-      @include truncate(400px);
+    @include truncate(400px);
   }
   img {
     display: inline-block;

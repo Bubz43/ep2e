@@ -242,17 +242,22 @@ export class SlWindow extends LitElement {
     const { offsetWidth, contentContainer } = this;
     this.minimized = !this.minimized;
     requestAnimationFrame(() => {
-      
-      this.animate({
-        width: [px(offsetWidth), px(this.offsetWidth)]
-      }, { duration: 150, easing: "ease-in-out"})
+      this.animate(
+        {
+          width: [px(offsetWidth), px(this.offsetWidth)],
+        },
+        { duration: 150, easing: 'ease-in-out' },
+      );
       if (!this.minimized) {
-        contentContainer.style.overflowX = "hidden"
-        contentContainer.animate({
-          opacity: [0, 0, 0.75, 1]
-        }, { duration: 350, easing: "ease-out"}).onfinish = () => contentContainer.style.overflowX = ""
+        contentContainer.style.overflowX = 'hidden';
+        contentContainer.animate(
+          {
+            opacity: [0, 0, 0.75, 1],
+          },
+          { duration: 350, easing: 'ease-out' },
+        ).onfinish = () => (contentContainer.style.overflowX = '');
       }
-    })
+    });
   }
 
   gainFocus() {
@@ -333,9 +338,7 @@ export class SlWindow extends LitElement {
     };
   }
 
-
   private resetSize(ev: Event) {
-
     const { height, width } = this.contentContainer.style;
     if (height || width) {
       assignStyles(this.contentContainer, { height: '', width: '' });

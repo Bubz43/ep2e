@@ -78,21 +78,27 @@ export class AptitudeCheckControls extends LitElement {
       <div class="sections">
         <section>
           <span class="vertical-text">${localize('check')}</span>
-            ${renderAutoForm({
-              classes: "aptitude-info",
-              props: state,
-              storeOnInput: true,
-              noDebounce: true,
-              update: this.test.updateState,
-              fields: ({ aptitude, multiplier }) => [
-                renderSelectField(aptitude, enumValues(AptitudeType), {
-                  altLabel: (type) => localize('FULL', type),
-                }),
-                renderNumberField(multiplier, { min: 1.5, max: 3, step: 1.5}),
-                renderTextField({ label: localize("total"), value: String(this.test.aptitudeTotal), prop: ""}, { readonly: true})
-              ],
-            })}
-    
+          ${renderAutoForm({
+            classes: 'aptitude-info',
+            props: state,
+            storeOnInput: true,
+            noDebounce: true,
+            update: this.test.updateState,
+            fields: ({ aptitude, multiplier }) => [
+              renderSelectField(aptitude, enumValues(AptitudeType), {
+                altLabel: (type) => localize('FULL', type),
+              }),
+              renderNumberField(multiplier, { min: 1.5, max: 3, step: 1.5 }),
+              renderTextField(
+                {
+                  label: localize('total'),
+                  value: String(this.test.aptitudeTotal),
+                  prop: '',
+                },
+                { readonly: true },
+              ),
+            ],
+          })}
         </section>
 
         <div class="actions">
@@ -206,7 +212,7 @@ export class AptitudeCheckControls extends LitElement {
                   class=${classMap({
                     tall: !!useWhen,
                     active: !useWhen || activeEffects.has(effect),
-                    negative: effect.modifier < 0
+                    negative: effect.modifier < 0,
                   })}
                 ></span>
                 <span class="source" title=${effect[Source]}
@@ -234,7 +240,8 @@ export class AptitudeCheckControls extends LitElement {
               >
                 ${modifier.temporary
                   ? html` <mwc-icon slot="before">close</mwc-icon> `
-                  : modifier.icon ? html`<img src=${modifier.icon} slot="before" />` 
+                  : modifier.icon
+                  ? html`<img src=${modifier.icon} slot="before" />`
                   : html` <span slot="before"></span> `}
                 <span class="source">${modifier.name}</span>
                 <span slot="after">${withSign(modifier.value)}</span>
