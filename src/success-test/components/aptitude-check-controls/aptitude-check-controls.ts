@@ -68,7 +68,6 @@ export class AptitudeCheckControls extends LitElement {
   render() {
     const {
       state,
-      action,
       pools,
       modifierEffects,
       activeEffects,
@@ -83,7 +82,7 @@ export class AptitudeCheckControls extends LitElement {
       ${character
         ? html`
             <mwc-list-item
-              class="source"
+              class="entity"
               @click=${() => character.actor.sheet.render(true)}
               graphic="medium"
               ?twoline=${!!character.sleeve}
@@ -111,6 +110,10 @@ export class AptitudeCheckControls extends LitElement {
             fields: ({ aptitude, multiplier }) => [
               renderSelectField(aptitude, enumValues(AptitudeType), {
                 altLabel: (type) => localize('FULL', type),
+                helpText: `${localize('points')}: ${
+                  this.test.ego.aptitudes[aptitude.value]
+                }`,
+                helpPersistent: true,
               }),
               renderNumberField(multiplier, { min: 1.5, max: 3, step: 1.5 }),
               renderTextField(
@@ -283,7 +286,7 @@ export class AptitudeCheckControls extends LitElement {
     const isTask = action.type === ActionType.Task;
     // TODO task modifiers modifiers
     return html`${renderAutoForm({
-      classes: `action-form ${isTask ? 'task' : ''}`,
+      classes: `action-form ${action.type}`,
       props: action,
       noDebounce: true,
       storeOnInput: true,

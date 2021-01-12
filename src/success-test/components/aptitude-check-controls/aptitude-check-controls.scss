@@ -10,7 +10,7 @@
 :host {
   display: grid;
   grid-template-areas:
-    'source modifiers'
+    'entity modifiers'
     'sections modifiers'
     'sections footer';
   grid-template-rows: min-content 1fr auto;
@@ -34,8 +34,8 @@
   );
 }
 
-.source {
-  grid-area: source;
+.entity {
+  grid-area: entity;
   margin-bottom: 0.25rem;
 }
 
@@ -70,8 +70,12 @@ footer {
     flex: 1;
     grid-template-columns: 1fr 1fr;
     padding: 0.25rem 0;
+ 
     &:not(.task) {
     margin-bottom: -0.75rem;
+    }
+       &.automatic {
+      margin-bottom: 1rem;
     }
   }
 
@@ -190,7 +194,7 @@ footer {
   font-size: small;
   width: min-content;
   border-right: 1px solid var(--color-border);
-  background: var(--color-bg);
+  background: rgba(black, 0.25);
   text-align: center;
 }
 
