@@ -9,6 +9,7 @@ import { Skill, skillFilterCheck } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { AptitudeCheck } from '@src/success-test/aptitude-check';
 import { SkillTestControls } from '@src/success-test/components/skill-test-controls/skill-test-controls';
+import { addSkillTest } from '@src/success-test/components/SkillTests';
 import { notEmpty, safeMerge } from '@src/utility/helpers';
 import {
   customElement,
@@ -78,17 +79,22 @@ export class CharacterViewTestActions extends LitElement {
   }
 
   private startSkillTest(skill: Skill) {
-    SkillTestControls.openWindow({
+    addSkillTest({
+      actorId: this.character.id,
       skill,
-      entities: { actor: this.character.actor },
-      getState: (actor) => {
-        if (actor.proxy.type !== ActorType.Character) return null;
-        return {
-          ego: actor.proxy.ego,
-          character: actor.proxy,
-        };
-      },
+      getState: (actor) => actor.proxy.type === ActorType.Character ? ({ ego: actor.proxy.ego }) : null
     });
+    // SkillTestControls.openWindow({
+    //   skill,
+    //   entities: { actor: this.character.actor },
+    //   getState: (actor) => {
+    //     if (actor.proxy.type !== ActorType.Character) return null;
+    //     return {
+    //       ego: actor.proxy.ego,
+    //       character: actor.proxy,
+    //     };
+    //   },
+    // });
   }
 
   render() {

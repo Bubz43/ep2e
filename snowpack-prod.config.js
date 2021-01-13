@@ -1,7 +1,6 @@
 /** @type {import("snowpack").SnowpackUserConfig } */
 module.exports = {
   mount: {
-    public: { url: '/', static: true },
     src: { url: '/dist' },
   },
   plugins: [
@@ -9,10 +8,15 @@ module.exports = {
     '@snowpack/plugin-dotenv',
     // '@snowpack/plugin-typescript',
     ['./snowpack-tagged-scss.js', { compilerOptions: { style: 'compressed' } }],
-    '@snowpack/plugin-optimize',
   ],
-  packageOptions: {
+  optimize: {
     treeshake: true,
+    entrypoints: ['src/index.ts'],
+    bundle: true,
+    minify: true,
+    target: 'es2020',
+  },
+  packageOptions: {
     rollup: {
       plugins: [
         require('rollup-plugin-license')({
@@ -23,27 +27,13 @@ module.exports = {
         }),
       ],
     },
-    /* ... */
-  },
-  devOptions: {
-    /* ... */
   },
   buildOptions: {
     clean: true,
-
     /* ... */
   },
   alias: {
     '@src': './src',
     /* ... */
-  },
-  experiments: {
-    // TODO try this out instead of plugin
-    // optimize: {
-    //   entrypoints: ["src/index.ts"],
-    //   bundle: true,
-    //   minify: true,
-    //   target: 'es2020',
-    // },
   },
 };

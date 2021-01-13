@@ -17,6 +17,7 @@ import {
   PropertyValues,
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
+import type { Subscription } from 'rxjs';
 import styles from './action-form.scss';
 
 @customElement('st-action-form')
@@ -34,7 +35,7 @@ export class STActionForm extends LitElement {
 
   @internalProperty() private action!: Action;
 
-  private unsub?: { unsubscribe: () => void };
+  private unsub?: Subscription;;
 
   update(changedProps: PropertyValues) {
     if (changedProps.has('actionStore')) {

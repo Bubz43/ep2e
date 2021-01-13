@@ -16,6 +16,7 @@ import {
   PropertyValues,
   query,
 } from 'lit-element';
+import type { Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';
 import './action-form';
 import styles from './skill-test-controls.scss';
@@ -72,7 +73,7 @@ export class SkillTestControls extends LitElement {
   @query('sl-window')
   private win?: SlWindow;
 
-  private unsubs = new Set<(() => void) | { unsubscribe: () => void }>();
+  private subs = new Set<Subscription | Subscription["unsubscribe"]>();
 
   @internalProperty() private test?: {
     character?: Character;
@@ -80,36 +81,44 @@ export class SkillTestControls extends LitElement {
     action: CoolStore<Action>;
   };
 
-  connectedCallback() {
-    this.unsubs.add(
-      this.entities.actor.subscribe((actor) => {
-        const state = actor && this.getState(actor);
-        if (!state) this.win?.close();
-        else {
-          this.test = {
-            ...state,
-            action: new CoolStore(createAction({ type: ActionType.Quick })),
-          };
+  update(changedProps: PropertyValues) {
+    if (changedProps.has("entities")) {
+      this.unsub()
+   this.subs.add(
+     this.entities.actor.subscribe((actor) => {
+       const state = actor && this.getState(actor);
+       if (!state) this.win?.close();
+       else {
+         this.test = {
+           ...state,
+           action: new CoolStore(createAction({ type: ActionType.Quick })),
+         };
 
-          this.unsubs.add(
-            this.test.action
-              .getChanges()
-              .subscribe((state) => console.log(state)),
-          );
-        }
-      }),
-    );
-    super.connectedCallback();
+         this.subs.add(
+           this.test.action
+             .getChanges()
+             .subscribe((state) => console.log(state)),
+         );
+       }
+     }),
+   );
+    }
+ 
+    super.update(changedProps)
   }
 
   disconnectedCallback() {
-    this.unsubs.forEach((unsub) => {
-      if ('unsubscribe' in unsub) unsub.unsubscribe();
-      else unsub();
-    });
-    this.unsubs.clear();
+    this.unsub();
     SkillTestControls.openWindows.delete(this.entities.actor);
     super.disconnectedCallback();
+  }
+
+  private unsub() {
+        this.subs.forEach((unsub) => {
+          if ('unsubscribe' in unsub) unsub.unsubscribe();
+          else unsub();
+        });
+        this.subs.clear();
   }
 
   setState(init: Init) {

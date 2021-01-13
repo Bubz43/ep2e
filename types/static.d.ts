@@ -7,13 +7,6 @@ declare module '*.scss' {
   export default style;
 }
 
-declare module "*.svelte" {
-  import { SvelteComponentTyped } from "svelte"
-  const component: SvelteComponentTyped;
-  export default component
-}
-
-
 /* CSS MODULES */
 declare module '*.module.css' {
   const classes: { [key: string]: string };
