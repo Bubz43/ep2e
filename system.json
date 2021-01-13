@@ -8,7 +8,7 @@
     "./build/dist/index.js"
   ],
   "styles": [
-    "./build/dist/global.css"
+    "./build/dist/global.scss.css"
   ],
   "compatibleCoreVersion": "0.7.8",
   "gridDistance": 1,

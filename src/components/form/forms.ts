@@ -20,7 +20,7 @@ const styles = () => html` <style>
 
   select option,
   select optgroup {
-    background: rgb(30, 30, 30);
+    background: var(--color-bg-alt);
   }
 </style>`;
 

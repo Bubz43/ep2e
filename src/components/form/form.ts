@@ -30,7 +30,7 @@ export class Form extends LitElement {
 
   static styles = [styles];
 
-  @property({ type: Object }) validProperties!: Record<string, FieldValue>;
+  @property({ type: Object }) validProperties!: Record<string, unknown>;
 
   @property({ type: Boolean }) storeOnInput = false;
 

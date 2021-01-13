@@ -1,10 +1,8 @@
 const scssPlugin = require('@snowpack/plugin-sass');
 
-
 function stripFileExtension(filename) {
   return filename.split('.').slice(0, -1).join('.');
 }
-
 
 module.exports = function sassPlugin(_, { native, compilerOptions = {} } = {}) {
   const plugin = scssPlugin(_, { native, compilerOptions });
@@ -29,10 +27,10 @@ module.exports = function sassPlugin(_, { native, compilerOptions = {} } = {}) {
       return {
         '.css.js': `import {css} from '${afterSrc.join(
           '/',
-        )}/web_modules/lit-element.js';
+        )}/_snowpack/pkg/lit-element.js';
   
-                            const style = css\`${stdout}\`; 
-                            export default style`,
+        const style = css\`${stdout}\`; 
+        export default style`,
       };
     },
   };

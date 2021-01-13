@@ -5,17 +5,13 @@ module.exports = {
     src: { url: '/dist' },
   },
   plugins: [
-    '@snowpack/plugin-svelte',
     '@snowpack/plugin-babel',
     '@snowpack/plugin-dotenv',
     // '@snowpack/plugin-typescript',
     ['./snowpack-tagged-scss.js', { compilerOptions: { style: 'compressed' } }],
     '@snowpack/plugin-optimize',
   ],
-  install: [
-    /* ... */
-  ],
-  installOptions: {
+  packageOptions: {
     treeshake: true,
     rollup: {
       plugins: [
@@ -35,9 +31,6 @@ module.exports = {
   buildOptions: {
     clean: true,
 
-    /* ... */
-  },
-  proxy: {
     /* ... */
   },
   alias: {

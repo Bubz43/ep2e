@@ -3,5 +3,3 @@
 /scripts/
 snowpack-tagged-scss.js
 snowpack-prod.config.js
-snowpack-minify-literals.js
-svelte.config.js
