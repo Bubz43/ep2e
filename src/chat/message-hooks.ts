@@ -58,7 +58,7 @@ export const onChatMessageRender = (message: ChatMessageEP, [el]: JQuery) => {
   render(
     html`
       <div class="image-wrapper">
-        <img src=${img || CONST.DEFAULT_TOKEN} loading="lazy" />
+        <img src=${img || CONST.DEFAULT_TOKEN} loading="lazy" width="32px" />
       </div>
     `,
     fragment,

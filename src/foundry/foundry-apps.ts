@@ -32,7 +32,7 @@ export const positionApp = async <T extends PositionableApp>(
   }
   const [element] = (app.element || []) as JQuery;
   if (element instanceof HTMLElement) {
-    reposition(relative, element, { position: 'left' });
+    reposition(relative, element, { position: 'bottom' });
     updateAppPositionFromEl(app, element);
   }
 };

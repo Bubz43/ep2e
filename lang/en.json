@@ -786,7 +786,6 @@
     "distance": "Distance",
     "psiUser": "Psi User",
     "distracted": "Distracted",
-    "change": "Change",
     "conditional": "Conditional",
     "opposition": "Opposition",
     "psiInfluence": "Psi Influence",
@@ -1372,6 +1371,7 @@
     "improveResult": "Improve Result",
     "not": "Not",
     "cannot": "Cannot",
+    "change": "Change",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

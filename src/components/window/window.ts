@@ -280,7 +280,7 @@ export class SlWindow extends LitElement {
         });
       };
       requestAnimationFrame(() => {
-        const position = reposition(toEl, this, { position: 'left' });
+        const position = reposition(toEl, this, { position: "bottom" });
         // const { wentRight } = positionRelatively({
         //   toEl,
         //   element: this,

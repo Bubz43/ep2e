@@ -1058,6 +1058,9 @@
             "cancel": {
               "type": "string"
             },
+            "cannot": {
+              "type": "string"
+            },
             "capacity": {
               "type": "string"
             },
@@ -2951,6 +2954,9 @@
             "organic": {
               "type": "string"
             },
+            "original": {
+              "type": "string"
+            },
             "originalRange": {
               "type": "string"
             },
@@ -4762,6 +4768,7 @@
             "canDefault",
             "canOnlyGlandSubstances",
             "cancel",
+            "cannot",
             "capacity",
             "career",
             "carried",
@@ -5393,6 +5400,7 @@
             "oral",
             "orange",
             "organic",
+            "original",
             "originalRange",
             "outdated",
             "over",

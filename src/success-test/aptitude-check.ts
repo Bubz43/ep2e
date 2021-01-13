@@ -50,8 +50,6 @@ export type AptitudeCheckInit = {
   action?: Action;
 };
 
-const eventKey = `aptitude-check-${stringID()}`;
-
 type WinState = {
   unsub?: () => void;
   called: boolean;
@@ -61,7 +59,7 @@ type WinState = {
   cleanup: () => void;
 };
 
-export class AptitudeCheck extends EventTarget {
+export class AptitudeCheck  {
   readonly ego;
   readonly character;
   readonly token;
@@ -73,12 +71,13 @@ export class AptitudeCheck extends EventTarget {
   };
   readonly action: Action;
 
+  private subs = new Set<(test: this) => void>();
+
   readonly activeEffects = new WeakSet<SuccessTestEffect>();
   activePool: PreTestPool = null;
   modifiers = new Set<SuccessTestModifier>();
 
   constructor({ ego, aptitude, character, token, action }: AptitudeCheckInit) {
-    super();
     this.ego = ego;
     this.character = character;
     this.token = token;
@@ -99,10 +98,10 @@ export class AptitudeCheck extends EventTarget {
     );
   }
 
-  toggleModifier(modifier: SuccessTestModifier) {
+  toggleModifier = (modifier: SuccessTestModifier) => {
     this.modifiers.delete(modifier) || this.modifiers.add(modifier);
     this.notify();
-  }
+  };
 
   toggleActivePool = (active: AptitudeCheck['activePool']) => {
     this.togglePoolBonus();
@@ -176,7 +175,7 @@ export class AptitudeCheck extends EventTarget {
   get totalModifiers() {
     return (
       [...this.modifierEffects].reduce(
-        (accum, [effect, active]) => accum + (active ? 0 : effect.modifier),
+        (accum, [effect, active]) => accum + (active ? effect.modifier : 0),
         0,
       ) + [...this.modifiers].reduce((accum, { value }) => accum + value, 0)
     );
@@ -194,9 +193,7 @@ export class AptitudeCheck extends EventTarget {
       parts.push(
         ...[...this.modifierEffects].flatMap(
           ([effect, active]) =>
-            active
-              ? { name: effect[Source], value: effect.modifier }
-              : [],
+            active ? { name: effect[Source], value: effect.modifier } : [],
           ...this.modifiers,
         ),
       );
@@ -243,15 +240,16 @@ export class AptitudeCheck extends EventTarget {
   }
 
   subscribe(cb: (test: this) => void) {
-    const handler = () => cb(this);
-    this.addEventListener(eventKey, handler);
+    this.subs.add(cb);
     cb(this);
-    return () => this.removeEventListener(eventKey, handler);
+    return () => void this.subs.delete(cb)
   }
 
   @debounce(50)
   private notify() {
-    this.dispatchEvent(new CustomEvent(eventKey));
+    for (const callback of this.subs) {
+      callback(this)
+    }
   }
 
   private createNotifying<T extends { [key: string]: unknown }>(obj: T) {

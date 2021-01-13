@@ -149,48 +149,47 @@ export class MessageSuccessTest extends MessageElement {
   }
 
   private showLog() {
-        this.dispatchEvent(
-          new RenderDialogEvent(html`
-            <mwc-dialog
-              hideActions
-              heading=${ifDefined(this.message.epFlags?.header?.heading)}
-            >
-              <div
-                class="state-log"
-                style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem"
-              >
-                ${this.successTest.states.map(
-                  (state, index) => html`
-                    <sl-details summary=${index} open>
-                      <div class="pairs" style="display: grid">
-                        ${(['roll', 'target', 'result'] as const).map(
-                          (key) => html`
-                            <sl-group label=${localize(key)}
-                              >${key === 'result' && state.result
-                                ? localize(state.result)
-                                : state[key] ?? '-'}</sl-group
-                            >
-                          `,
-                        )}
-                      </div>
-                      <hr style="border-color: var(--color-border)" />
-                      ${typeof state.action === "string"
-                        ? localize(state.action)
-                        :  html`<sl-group label=${localize(state.action[0])}
-                            >${localize(state.action[1])}</sl-group
-                          > `
-                      }
-                    </sl-details>
-                  `,
-                )}
-              </div></mwc-dialog
-            >
-          `),
-        );
+    this.dispatchEvent(
+      new RenderDialogEvent(html`
+        <mwc-dialog
+          hideActions
+          heading=${ifDefined(this.message.epFlags?.header?.heading)}
+        >
+          <div
+            class="state-log"
+            style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem"
+          >
+            ${this.successTest.states.map(
+              (state, index) => html`
+                <sl-details summary=${index === 0 ? localize("original") : `${localize("change")} ${index}`} open>
+                  <div class="pairs" style="display: grid">
+                    ${(['roll', 'target', 'result'] as const).map(
+                      (key) => html`
+                        <sl-group label=${localize(key)}
+                          >${key === 'result' && state.result
+                            ? localize(state.result)
+                            : state[key] ?? '-'}</sl-group
+                        >
+                      `,
+                    )}
+                  </div>
+                  <hr style="border-color: var(--color-border)" />
+                  ${typeof state.action === 'string'
+                    ? localize(state.action)
+                    : html`<sl-group label=${localize(state.action[0])}
+                        >${localize(state.action[1])}</sl-group
+                      > `}
+                </sl-details>
+              `,
+            )}
+          </div></mwc-dialog
+        >
+      `),
+    );
   }
 
   render() {
-    const { defaulting, linkedPool } = this.successTest;
+    const { defaulting, linkedPool, states } = this.successTest;
     const { actor, editable } = this.message;
     const isCharacter = actor?.type === ActorType.Character;
     const { roll, target = this.partTotal, result } = this.currentState ?? {};
@@ -250,10 +249,15 @@ export class MessageSuccessTest extends MessageElement {
           </sl-animated-list>
         </sl-group>
       </div>
-   
-        <mwc-icon-button icon="change_history" class="history" @click=${this.showLog}
-          ></mwc-icon-button
-        >
+      ${states?.length > 1 || Array.isArray(states[0]?.action)
+        ? html`
+            <mwc-icon-button
+              icon="change_history"
+              class="history"
+              @click=${this.showLog}
+            ></mwc-icon-button>
+          `
+        : ''}
       ${isCharacter && linkedPool && usedPoolActions?.length !== 2
         ? html` <div class="pool-actions">
             ${roll === flipFlopRoll(roll)

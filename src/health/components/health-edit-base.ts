@@ -190,10 +190,10 @@ export abstract class HealthEditBase<
       </wl-list-item>
 
       <div class="change">
-        <sl-group label=${localize('stress')}>${withSign(damage)}</sl-group>
+        <sl-group label=${this.health.main.damage.label}>${withSign(damage)}</sl-group>
         ${this.health.wound
           ? html`
-              <sl-group label=${localize('traumas')}
+              <sl-group label=${this.health.wound.wounds.label}
                 >${withSign(wounds)}</sl-group
               >
             `

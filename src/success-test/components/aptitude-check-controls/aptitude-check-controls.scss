@@ -48,7 +48,7 @@
   > * {
     display: flex;
     border: 1px solid var(--color-border);
-    > *:not(.vertical-text) {
+    > *:not(success-test-section-label) {
       align-self: center;
       flex: 1;
     }
