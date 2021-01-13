@@ -5,7 +5,6 @@ import { positionApp } from '@src/foundry/foundry-apps';
 import { applicationHook } from '@src/foundry/hook-setups';
 import { tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
-import { getContainedCSSResult } from '@src/theme/emotion';
 import { debounceFn } from '@src/utility/decorators';
 import { resizeElement, toggleTouchAction } from '@src/utility/dom';
 import { notEmpty } from '@src/utility/helpers';
@@ -47,7 +46,7 @@ export class EPOverlay extends LitElement {
     return 'ep-overlay' as const;
   }
 
-  static styles = [styles, getContainedCSSResult()];
+  static styles = [styles];
 
   @property({ type: Boolean, reflect: true }) ready = false;
 

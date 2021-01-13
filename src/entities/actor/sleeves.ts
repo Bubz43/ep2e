@@ -74,7 +74,6 @@ export const ownedSleeves = () => {
   );
 };
 
-
 export const formattedSleeveInfo = (sleeve: Sleeve) => {
   return compact([
     'size' in sleeve && localize(sleeve.size),
@@ -82,5 +81,4 @@ export const formattedSleeveInfo = (sleeve: Sleeve) => {
     'isSwarm' in sleeve && sleeve.isSwarm && localize('swarm'),
     'sex' in sleeve && sleeve.sex,
   ]);
-  
-}
+};

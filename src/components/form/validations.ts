@@ -10,7 +10,6 @@ const isInvalidNumber = (value: unknown) =>
   badNumbervalues.some((bad) => Object.is(bad, value));
 
 const validateNumberInput = (input: HTMLInputElement) => {
-  
   let value = Number(input.value);
   if (isInvalidNumber(value)) value = 0;
   if (input.hasAttribute('min')) value = Math.max(value, Number(input.min));

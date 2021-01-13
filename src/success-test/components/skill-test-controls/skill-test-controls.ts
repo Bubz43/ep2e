@@ -4,25 +4,21 @@ import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
 import { Action, ActionType, createAction } from '@src/features/actions';
-import type { FullSkill, Skill } from '@src/features/skills';
+import type { Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
 import { CoolStore } from 'cool-store';
 import {
   customElement,
-  LitElement,
-  property,
   html,
+  internalProperty,
+  LitElement,
   PropertyValues,
   query,
-  internalProperty,
 } from 'lit-element';
-import styles from './skill-test-controls.scss';
-import "./action-form";
 import { traverseActiveElements } from 'weightless';
-import { writable } from 'svelte/store';
-import { subStore } from 'immer-loves-svelte';
-import { produce } from "immer"
+import './action-form';
+import styles from './skill-test-controls.scss';
 
 type Init = {
   skill: Skill;
@@ -51,11 +47,11 @@ export class SkillTestControls extends LitElement {
       win = new SkillTestControls();
       overlay.append(win);
       SkillTestControls.openWindows.set(init.entities.actor, win);
-    } 
+    }
     win.setState(init);
-    const source = traverseActiveElements()
+    const source = traverseActiveElements();
     if (source instanceof HTMLElement) {
-        requestAnimationFrame(() => win!.win?.positionAdjacentToElement(source))
+      requestAnimationFrame(() => win!.win?.positionAdjacentToElement(source));
     }
   }
 
@@ -84,55 +80,36 @@ export class SkillTestControls extends LitElement {
     action: CoolStore<Action>;
   };
 
-  update(changedProps: PropertyValues) {
-    if (changedProps.has('entities')) {
-      this.unsubscribe();
-      this.unsubs.add(
-        this.entities.actor.subscribe((actor) => {
-          if (!actor) this.win?.close();
-          else {
-            const state = this.getState(actor);
-            if (state) {
-                const blah = {
-                    ...state,
-                    action: createAction({ type: ActionType.Quick })
-                }
-                const a = writable(blah);
-                a.subscribe(hmm => console.log(hmm))
-                const b = subStore(a, d => d.action);
-                b.update(action => produce(action, recipe => {
-                    recipe.timeMod = 43
-                }))
-              this.test = {
-                ...state,
-                action: new CoolStore(createAction({ type: ActionType.Quick })),
-              };
-              
-              this.unsubs.add(
-                this.test.action
-                  .getChanges()
-                  .subscribe((state) => console.log(state)),
-              );
-            } else this.win?.close();
-          }
-        }),
-      );
-    }
-    super.update(changedProps);
+  connectedCallback() {
+    this.unsubs.add(
+      this.entities.actor.subscribe((actor) => {
+        const state = actor && this.getState(actor);
+        if (!state) this.win?.close();
+        else {
+          this.test = {
+            ...state,
+            action: new CoolStore(createAction({ type: ActionType.Quick })),
+          };
+
+          this.unsubs.add(
+            this.test.action
+              .getChanges()
+              .subscribe((state) => console.log(state)),
+          );
+        }
+      }),
+    );
+    super.connectedCallback();
   }
 
   disconnectedCallback() {
-    this.unsubscribe();
-    SkillTestControls.openWindows.delete(this.entities.actor);
-    super.disconnectedCallback();
-  }
-
-  private unsubscribe() {
     this.unsubs.forEach((unsub) => {
       if ('unsubscribe' in unsub) unsub.unsubscribe();
       else unsub();
     });
     this.unsubs.clear();
+    SkillTestControls.openWindows.delete(this.entities.actor);
+    super.disconnectedCallback();
   }
 
   setState(init: Init) {
@@ -191,8 +168,7 @@ export class SkillTestControls extends LitElement {
           <success-test-section-label
             >${localize('action')}</success-test-section-label
           >
-        <st-action-form .actionStore=${test.action}></st-action-form>
-        
+          <st-action-form .actionStore=${test.action}></st-action-form>
         </section>
       </div>
     `;

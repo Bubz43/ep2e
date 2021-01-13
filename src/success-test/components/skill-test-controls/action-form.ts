@@ -1,12 +1,23 @@
-import { renderSelectField, renderTimeField, renderSlider } from "@src/components/field/fields";
-import { renderAutoForm } from "@src/components/form/forms";
-import { enumValues } from "@src/data-enums";
-import { Action, ActionSubtype, ActionType } from "@src/features/actions";
-import { localize } from "@src/foundry/localization";
-import type { CoolStore } from "cool-store";
-import { customElement, LitElement, property, html, internalProperty, PropertyValues } from "lit-element";
-import { classMap } from "lit-html/directives/class-map";
-import styles from "./action-form.scss";
+import {
+  renderSelectField,
+  renderTimeField,
+  renderSlider,
+} from '@src/components/field/fields';
+import { renderAutoForm } from '@src/components/form/forms';
+import { enumValues } from '@src/data-enums';
+import { Action, ActionSubtype, ActionType } from '@src/features/actions';
+import { localize } from '@src/foundry/localization';
+import type { CoolStore } from 'cool-store';
+import {
+  customElement,
+  LitElement,
+  property,
+  html,
+  internalProperty,
+  PropertyValues,
+} from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
+import styles from './action-form.scss';
 
 @customElement('st-action-form')
 export class STActionForm extends LitElement {
@@ -91,7 +102,7 @@ export class STActionForm extends LitElement {
 }
 
 declare global {
-    interface HTMLElementTagNameMap {
-        "st-action-form": STActionForm;
-    }
+  interface HTMLElementTagNameMap {
+    'st-action-form': STActionForm;
+  }
 }

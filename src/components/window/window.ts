@@ -1,34 +1,24 @@
 import { debounce } from '@src/utility/decorators';
 import {
   assignStyles,
-
   dimensions,
-
-
-
-
-  dragElement, joinCoor, leftTop,
-
+  dragElement,
+  joinCoor,
+  leftTop,
   px,
-
-
-
-
-  repositionIfNeeded, resizeElement,
-
-
-  resizeObsAvailable, toggleTouchAction
+  repositionIfNeeded,
+  resizeElement,
+  resizeObsAvailable,
+  toggleTouchAction,
 } from '@src/utility/dom';
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
-
-
-  html, LitElement,
+  html,
+  LitElement,
   property,
-
   query,
-  TemplateResult
+  TemplateResult,
 } from 'lit-element';
 import { reposition } from 'nanopop';
 import { anyPass, clamp, mapToObj } from 'remeda';
@@ -281,7 +271,7 @@ export class SlWindow extends LitElement {
         });
       };
       requestAnimationFrame(() => {
-        const position = reposition(toEl, this, { position: "bottom" });
+        const position = reposition(toEl, this, { position: 'bottom' });
         // const { wentRight } = positionRelatively({
         //   toEl,
         //   element: this,

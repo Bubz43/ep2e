@@ -103,7 +103,7 @@ slot[name='footer'] {
   min-width: 200px;
   z-index: 1;
 
-   height: 32px;
+  height: 32px;
   overflow: hidden;
   // z-index: 3;
   ::slotted(wl-list-item) {
@@ -154,14 +154,14 @@ slot[name='footer'] {
   flex: 1;
   display: flex;
   align-items: center;
-  
+
   > * {
     @include truncate(400px);
   }
   img {
     display: inline-block;
     filter: drop-shadow(1px 2px 3px black);
-        margin-left: 0.25ch;
+    margin-left: 0.25ch;
   }
   span {
     margin: 0 auto;

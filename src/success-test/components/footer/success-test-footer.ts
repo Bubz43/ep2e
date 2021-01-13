@@ -1,10 +1,13 @@
-import { MessageVisibility } from "@src/chat/create-message";
-import { enumValues } from "@src/data-enums";
-import { localize } from "@src/foundry/localization";
-import { openMenu } from "@src/open-menu";
-import { SuccessTestRollState, successTestTargetClamp } from "@src/success-test/success-test";
-import { customElement, LitElement, property, html } from "lit-element";
-import styles from "./success-test-footer.scss";
+import { MessageVisibility } from '@src/chat/create-message';
+import { enumValues } from '@src/data-enums';
+import { localize } from '@src/foundry/localization';
+import { openMenu } from '@src/open-menu';
+import {
+  SuccessTestRollState,
+  successTestTargetClamp,
+} from '@src/success-test/success-test';
+import { customElement, LitElement, property, html } from 'lit-element';
+import styles from './success-test-footer.scss';
 
 @customElement('success-test-footer')
 export class SuccessTestFooter extends LitElement {
@@ -19,8 +22,8 @@ export class SuccessTestFooter extends LitElement {
   @property({ type: Number }) target = 0;
 
   @property({ type: Object }) rollState!: SuccessTestRollState & {
-      update: (changed: Partial<SuccessTestRollState>) => void
-  }
+    update: (changed: Partial<SuccessTestRollState>) => void;
+  };
 
   private emitCompleted() {
     this.dispatchEvent(
@@ -57,9 +60,7 @@ export class SuccessTestFooter extends LitElement {
           <mwc-icon>keyboard_arrow_down</mwc-icon>
         </button>
 
-        <button
-          @click=${() => state.update({ autoRoll: !state.autoRoll })}
-        >
+        <button @click=${() => state.update({ autoRoll: !state.autoRoll })}>
           <mwc-icon class="checkbox"
             >${state.autoRoll
               ? 'check_box'
@@ -76,7 +77,7 @@ export class SuccessTestFooter extends LitElement {
 }
 
 declare global {
-    interface HTMLElementTagNameMap {
-        "success-test-footer": SuccessTestFooter;
-    }
+  interface HTMLElementTagNameMap {
+    'success-test-footer': SuccessTestFooter;
+  }
 }

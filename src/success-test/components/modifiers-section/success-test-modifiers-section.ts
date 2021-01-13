@@ -1,14 +1,21 @@
-import { renderTextField, renderNumberField } from "@src/components/field/fields";
-import { renderSubmitForm } from "@src/components/form/forms";
-import { Source, SourcedEffect, SuccessTestEffect } from "@src/features/effects";
-import { localize } from "@src/foundry/localization";
-import type { SuccessTestModifier } from "@src/success-test/success-test";
-import { withSign } from "@src/utility/helpers";
-import { customElement, LitElement, property, html } from "lit-element";
-import { classMap } from "lit-html/directives/class-map";
-import { repeat } from "lit-html/directives/repeat";
-import { first, identity } from "remeda";
-import styles from "./success-test-modifiers-section.scss";
+import {
+  renderTextField,
+  renderNumberField,
+} from '@src/components/field/fields';
+import { renderSubmitForm } from '@src/components/form/forms';
+import {
+  Source,
+  SourcedEffect,
+  SuccessTestEffect,
+} from '@src/features/effects';
+import { localize } from '@src/foundry/localization';
+import type { SuccessTestModifier } from '@src/success-test/success-test';
+import { withSign } from '@src/utility/helpers';
+import { customElement, LitElement, property, html } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
+import { repeat } from 'lit-html/directives/repeat';
+import { first, identity } from 'remeda';
+import styles from './success-test-modifiers-section.scss';
 
 @customElement('success-test-modifiers-section')
 export class SuccessTestModifiersSection extends LitElement {
@@ -105,7 +112,8 @@ export class SuccessTestModifiersSection extends LitElement {
             <wl-list-item
               ?clickable=${!!modifier.temporary}
               @click=${() =>
-                modifier.temporary && this.modifierStore.toggleModifier(modifier)}
+                modifier.temporary &&
+                this.modifierStore.toggleModifier(modifier)}
             >
               ${modifier.temporary
                 ? html` <mwc-icon slot="before">close</mwc-icon> `
@@ -123,7 +131,7 @@ export class SuccessTestModifiersSection extends LitElement {
 }
 
 declare global {
-    interface HTMLElementTagNameMap {
-        "success-test-modifiers-section": SuccessTestModifiersSection;
-    }
+  interface HTMLElementTagNameMap {
+    'success-test-modifiers-section': SuccessTestModifiersSection;
+  }
 }

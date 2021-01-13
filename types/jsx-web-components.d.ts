@@ -10,27 +10,6 @@ type RequiredProps<key extends CustomTags> = key extends 'sl-window'
   ? { name: string }
   : {};
 
-type LowercaseAll<T extends { [key: string]: unknown }> = {
-  [key in keyof T as Lowercase<key>]: T[key];
-};
-
-declare namespace svelte.JSX {
-  type CustomElement<Element> = svelte.JSX.HTMLProps<Element> &
-    // LowercaseAll<
-    Partial<
-      Pick<
-        Element,
-        Exclude<keyof Element, keyof HTMLElement> // TODO figure out edge cases?
-      >
-    >;
-  // >
-  type Customs = {
-    [key in CustomTags]: CustomElement<HTMLElementTagNameMap[key]> &
-      RequiredProps<key>;
-  };
-  interface IntrinsicElements extends Customs {}
-}
-
 
 // import { JSX as SolidJSX } from 'solid-js';
 

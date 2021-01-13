@@ -4,11 +4,6 @@
     "prefix": "html-",
     "body": ["html`", "\t$1", "`"]
   },
-  "Inline CSS Template": {
-    "scope": "typescript, typescriptreact",
-    "prefix": "cc",
-    "body": ["const $1 = css`", "\t$2", "`;"]
-  },
   "LitElement Render": {
     "scope": "typescript",
     "prefix": "rend",
@@ -42,6 +37,28 @@
       ""
     ]
   },
+  "Custom Element connectedCallback":{
+    "scope": "typescript",
+    "prefix": "cC",
+    "body": [
+      "connectedCallback() {",
+      "\t$1",
+      "\tsuper.connectedCallback();",
+      "}",
+      ""
+    ]
+  },
+   "Custom Element disconnectedCallback":{
+    "scope": "typescript",
+    "prefix": "dC",
+    "body": [
+      "disconnectedCallback() {",
+      "\t$1",
+      "\tsuper.disconnectedCallback();",
+      "}",
+      ""
+    ]
+  },
   "Custom Element CSS Base": {
     "scope": "scss",
     "prefix": "host",
@@ -57,22 +74,6 @@
       "\tdisplay: block;",
       "\t$0",
       "}"
-    ]
-  },
-  "Emotion Inject Global ShadowDom": {
-    "scope": "typescript",
-    "prefix": "host",
-    "body": [
-      "injectGlobal`",
-      "\t* {",
-      "\t\tbox-sizing: border-box;",
-      "\t}",
-      "\t",
-      "\t:host {",
-      "\t\tdisplay: block;",
-      "\t\t$0",
-      "\t}",
-      "`"
     ]
   },
   "Testing Template": {
@@ -101,23 +102,5 @@
       "\t}",
       "}"
     ]
-  },
-  "Svelte Component": {
-    "scope": "svelte",
-    "prefix": "svelte",
-    "body": [
-      "<script lang=\"ts\">\r",
-      "\t$1",
-      "</script>\r",
-      "\r",
-      "<style type=\"text/scss\">\r",
-      "  @use \"scss/functions\" as *;\r",
-      "  @use \"scss/mixins\" as *;\r",
-      "",
-      "\t ",
-      "</style>\r",
-      ""
-    ],
-    "description": "Create a svelte component with ts and scss"
   }
 }

@@ -59,7 +59,7 @@ type WinState = {
   cleanup: () => void;
 };
 
-export class AptitudeCheck  {
+export class AptitudeCheck {
   readonly ego;
   readonly character;
   readonly token;
@@ -242,13 +242,13 @@ export class AptitudeCheck  {
   subscribe(cb: (test: this) => void) {
     this.subs.add(cb);
     cb(this);
-    return () => void this.subs.delete(cb)
+    return () => void this.subs.delete(cb);
   }
 
   @debounce(50)
   private notify() {
     for (const callback of this.subs) {
-      callback(this)
+      callback(this);
     }
   }
 

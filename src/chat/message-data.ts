@@ -108,7 +108,10 @@ type SuccessTestState = {
   roll?: number | null;
   target: number;
   result?: SuccessTestResult | null;
-  action: "edit" | [pool: PoolType, action: PreTestPoolAction | PostTestPoolAction] | "initial"
+  action:
+    | 'edit'
+    | [pool: PoolType, action: PreTestPoolAction | PostTestPoolAction]
+    | 'initial';
 };
 
 export type SuccessTestMessage = {

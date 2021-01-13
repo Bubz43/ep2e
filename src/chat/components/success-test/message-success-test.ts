@@ -161,7 +161,12 @@ export class MessageSuccessTest extends MessageElement {
           >
             ${this.successTest.states.map(
               (state, index) => html`
-                <sl-details summary=${index === 0 ? localize("original") : `${localize("change")} ${index}`} open>
+                <sl-details
+                  summary=${index === 0
+                    ? localize('original')
+                    : `${localize('change')} ${index}`}
+                  open
+                >
                   <div class="pairs" style="display: grid">
                     ${(['roll', 'target', 'result'] as const).map(
                       (key) => html`

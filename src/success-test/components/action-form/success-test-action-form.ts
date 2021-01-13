@@ -25,8 +25,7 @@ export class SuccessTestActionForm extends LitElement {
   @property({ type: Object }) actionState!: {
     action: Action;
     setAction: (change: Partial<Action>) => void;
-  }
-
+  };
 
   render() {
     const { action, setAction } = this.actionState;

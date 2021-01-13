@@ -27,7 +27,7 @@ export class SubmitButton extends ButtonBase {
 
   @property({ type: String }) icon = 'save_alt';
 
-  @property({ type: String })  label = "";
+  @property({ type: String }) label = '';
 
   firstUpdated() {
     this.addEventListener('click', (ev) => this.animateSubmit(ev));

@@ -2,12 +2,11 @@
 @use "scss/mixins" as *;
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 :host {
-    display: block;
-    
+  display: block;
 }
 
 .pool-actions {

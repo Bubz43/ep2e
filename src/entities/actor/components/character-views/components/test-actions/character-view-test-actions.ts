@@ -1,38 +1,27 @@
 import { renderTextInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
-import {
-  closeWindow,
-  openWindow,
-} from '@src/components/window/window-controls';
-import {
-  ResizeOption,
-  SlWindowEventName,
-} from '@src/components/window/window-options';
-import { enumValues, AptitudeType } from '@src/data-enums';
-import type { ActorEP } from '@src/entities/actor/actor';
+import { AptitudeType, enumValues } from '@src/data-enums';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
 import { maxFavors } from '@src/features/reputations';
-import { skillFilterCheck, Skill, FullSkill } from '@src/features/skills';
-import { LangEntry, localize } from '@src/foundry/localization';
+import { Skill, skillFilterCheck } from '@src/features/skills';
+import { localize } from '@src/foundry/localization';
 import { AptitudeCheck } from '@src/success-test/aptitude-check';
 import { SkillTestControls } from '@src/success-test/components/skill-test-controls/skill-test-controls';
-import { startSkillTest } from '@src/success-test/components/skill-tests';
-import { safeMerge, notEmpty } from '@src/utility/helpers';
+import { notEmpty, safeMerge } from '@src/utility/helpers';
 import {
   customElement,
-  LitElement,
-  property,
   html,
   internalProperty,
+  LitElement,
+  property,
   PropertyValues,
   queryAll,
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { live } from 'lit-html/directives/live';
-import { reject, first, range } from 'remeda';
-import { traverseActiveElements } from 'weightless';
+import { first, range, reject } from 'remeda';
 import styles from './character-view-test-actions.scss';
 
 @customElement('character-view-test-actions')
@@ -89,10 +78,10 @@ export class CharacterViewTestActions extends LitElement {
   }
 
   private startSkillTest(skill: Skill) {
-    startSkillTest({
+    SkillTestControls.openWindow({
       skill,
       entities: { actor: this.character.actor },
-      getSource: (actor) => {
+      getState: (actor) => {
         if (actor.proxy.type !== ActorType.Character) return null;
         return {
           ego: actor.proxy.ego,
@@ -100,17 +89,6 @@ export class CharacterViewTestActions extends LitElement {
         };
       },
     });
-    // SkillTestControls.openWindow({
-    //   skill,
-    //   entities: { actor: this.character.actor },
-    //   getState: (actor) => {
-    //     if (actor.proxy.type !== ActorType.Character) return null;
-    //     return {
-    //       ego: actor.proxy.ego,
-    //       character: actor.proxy
-    //     }
-    //   }
-    // })
   }
 
   render() {

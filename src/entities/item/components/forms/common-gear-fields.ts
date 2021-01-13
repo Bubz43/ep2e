@@ -177,7 +177,7 @@ export const renderKineticAttackEdit = (
     })}
     <p class="label">${localize('firingModes')}</p>
     ${renderFiringModeCheckboxes(
-      updater as unknown as UpdateActions<{ firingModes: FiringMode[] }>,
+      (updater as unknown) as UpdateActions<{ firingModes: FiringMode[] }>,
     )}
     ${renderUpdaterForm(updater, {
       fields: ({ notes }) => renderTextareaField(notes),

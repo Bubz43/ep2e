@@ -84,9 +84,7 @@ export class CharacterViewSleeve extends LitElement {
         <button class="name" @click=${this.sleeve.openForm}>
           ${this.sleeve.name}
         </button>
-        <span class="info">
-          ${formattedSleeveInfo(sleeve).join(' • ')}</span
-        >
+        <span class="info"> ${formattedSleeveInfo(sleeve).join(' • ')}</span>
       </header>
 
       ${notEmpty(armor)

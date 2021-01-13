@@ -2,11 +2,11 @@
 @use "scss/mixins" as *;
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 :host {
-      text-transform: uppercase;
+  text-transform: uppercase;
   writing-mode: vertical-lr;
   text-orientation: upright;
   letter-spacing: -0.25rem;
@@ -14,5 +14,4 @@
   font-size: small;
   width: min-content;
   text-align: center;
-    
 }
