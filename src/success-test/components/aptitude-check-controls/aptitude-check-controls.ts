@@ -125,7 +125,7 @@ export class AptitudeCheckControls extends LitElement {
           })}
         </section>
 
-        <div class="actions">
+        <section class="actions">
           <success-test-section-label
             >${localize('action')}</success-test-section-label
           >
@@ -136,7 +136,7 @@ export class AptitudeCheckControls extends LitElement {
               setAction: this.test.updateAction,
             }}
           ></success-test-action-form>
-        </div>
+        </section>
 
         ${notEmpty(pools)
           ? html`

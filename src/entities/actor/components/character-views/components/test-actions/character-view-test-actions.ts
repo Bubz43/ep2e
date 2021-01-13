@@ -14,9 +14,11 @@ import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
 import { maxFavors } from '@src/features/reputations';
-import { skillFilterCheck, Skill } from '@src/features/skills';
+import { skillFilterCheck, Skill, FullSkill } from '@src/features/skills';
 import { LangEntry, localize } from '@src/foundry/localization';
 import { AptitudeCheck } from '@src/success-test/aptitude-check';
+import { SkillTestControls } from '@src/success-test/components/skill-test-controls/skill-test-controls';
+import { startSkillTest } from '@src/success-test/components/skill-tests';
 import { safeMerge, notEmpty } from '@src/utility/helpers';
 import {
   customElement,
@@ -84,6 +86,31 @@ export class CharacterViewTestActions extends LitElement {
 
   private startAptitudeTest(aptitude: AptitudeType) {
     AptitudeCheck.openWindow(aptitude, this.character.actor);
+  }
+
+  private startSkillTest(skill: Skill) {
+    startSkillTest({
+      skill,
+      entities: { actor: this.character.actor },
+      getSource: (actor) => {
+        if (actor.proxy.type !== ActorType.Character) return null;
+        return {
+          ego: actor.proxy.ego,
+          character: actor.proxy,
+        };
+      },
+    });
+    // SkillTestControls.openWindow({
+    //   skill,
+    //   entities: { actor: this.character.actor },
+    //   getState: (actor) => {
+    //     if (actor.proxy.type !== ActorType.Character) return null;
+    //     return {
+    //       ego: actor.proxy.ego,
+    //       character: actor.proxy
+    //     }
+    //   }
+    // })
   }
 
   render() {
@@ -158,7 +185,8 @@ export class CharacterViewTestActions extends LitElement {
       clickable
       class="skill-item ${classMap({ filtered })}"
       ?disabled=${this.disabled}
-      tabindex=${live(filtered ? -1 : 0)}
+      .tabindex=${live(filtered ? -1 : 0)}
+      @click=${() => this.startSkillTest(skill)}
     >
       <span class="skill-name">${skill.fullName}</span>
       <span class="skill-total" slot="after">${skill.total}</span>

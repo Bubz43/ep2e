@@ -1,44 +1,57 @@
-import {
-  renderSelectField,
-  renderTimeField,
-  renderSlider,
-} from '@src/components/field/fields';
-import { renderAutoForm } from '@src/components/form/forms';
-import { enumValues } from '@src/data-enums';
-import { Action, ActionSubtype, ActionType } from '@src/features/actions';
-import { localize } from '@src/foundry/localization';
-import type { CoolStore } from 'cool-store';
-import { customElement, LitElement, property, html } from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map';
-import styles from './success-test-action-form.scss';
+import { renderSelectField, renderTimeField, renderSlider } from "@src/components/field/fields";
+import { renderAutoForm } from "@src/components/form/forms";
+import { enumValues } from "@src/data-enums";
+import { Action, ActionSubtype, ActionType } from "@src/features/actions";
+import { localize } from "@src/foundry/localization";
+import type { CoolStore } from "cool-store";
+import { customElement, LitElement, property, html, internalProperty, PropertyValues } from "lit-element";
+import { classMap } from "lit-html/directives/class-map";
+import styles from "./action-form.scss";
 
-@customElement('success-test-action-form')
-export class SuccessTestActionForm extends LitElement {
+@customElement('st-action-form')
+export class STActionForm extends LitElement {
   static get is() {
-    return 'success-test-action-form' as const;
+    return 'st-action-form' as const;
   }
 
   static get styles() {
     return [styles];
   }
 
-  @property({ type: Object }) actionState!: {
-    action: Action;
-    setAction: (change: Partial<Action>) => void;
+  @property({ attribute: false })
+  actionStore!: CoolStore<Action>;
+
+  @internalProperty() private action!: Action;
+
+  private unsub?: { unsubscribe: () => void };
+
+  update(changedProps: PropertyValues) {
+    if (changedProps.has('actionStore')) {
+      this.unsub?.unsubscribe();
+      this.unsub = this.actionStore
+        .getChanges()
+        .subscribe((state) => (this.action = state));
+    }
+    super.update(changedProps);
   }
 
+  disconnectedCallback() {
+    this.unsub?.unsubscribe();
+    super.disconnectedCallback();
+  }
 
   render() {
-    const { action, setAction } = this.actionState;
+    const { action } = this;
     const isTask = action.type === ActionType.Task;
-
+    console.log('render');
     return html`
       ${renderAutoForm({
         classes: `action-form ${action.type}`,
         props: action,
         noDebounce: true,
         storeOnInput: true,
-        update: setAction,
+        update: (changed) =>
+          this.actionStore.set((state) => void Object.assign(state, changed)),
         fields: ({ type, subtype, timeframe, timeMod }) => [
           renderSelectField(type, enumValues(ActionType)),
           renderSelectField(subtype, enumValues(ActionSubtype)),
@@ -78,7 +91,7 @@ export class SuccessTestActionForm extends LitElement {
 }
 
 declare global {
-  interface HTMLElementTagNameMap {
-    'success-test-action-form': SuccessTestActionForm;
-  }
+    interface HTMLElementTagNameMap {
+        "st-action-form": STActionForm;
+    }
 }

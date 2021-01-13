@@ -1,32 +1,39 @@
-import { throttle, debounce } from '@src/utility/decorators';
+import { debounce } from '@src/utility/decorators';
 import {
   assignStyles,
-  leftTop,
+
   dimensions,
+
+
+
+
+  dragElement, joinCoor, leftTop,
+
   px,
-  joinCoor,
-  toggleTouchAction,
-  resizeElement,
-  dragElement,
-  repositionIfNeeded,
-  resizeObsAvailable,
+
+
+
+
+  repositionIfNeeded, resizeElement,
+
+
+  resizeObsAvailable, toggleTouchAction
 } from '@src/utility/dom';
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
-  LitElement,
+
+
+  html, LitElement,
   property,
-  html,
+
   query,
-  TemplateResult,
-  eventOptions,
+  TemplateResult
 } from 'lit-element';
-import { render, nothing } from 'lit-html';
 import { reposition } from 'nanopop';
-import { mapToObj, clamp, anyPass } from 'remeda';
+import { anyPass, clamp, mapToObj } from 'remeda';
 import { ResizeOption, SlWindowEventName } from './window-options';
 import styles from './window.scss';
-import { observer } from '@material/mwc-base/observer.js';
 
 const isButton = (target: EventTarget | null): target is HTMLElement => {
   return (
@@ -121,9 +128,6 @@ export class SlWindow extends LitElement {
   }
 
   @property({ type: Boolean, reflect: true })
-  @observer(function (this: SlWindow, val: boolean) {
-    this.emit(SlWindowEventName.FocusChange);
-  })
   focused = false;
 
   @property({ type: Boolean, reflect: true })
@@ -132,9 +136,6 @@ export class SlWindow extends LitElement {
   @property({ type: Boolean }) noremove?: boolean;
 
   @property({ type: String })
-  @observer(function (this: SlWindow, name: string) {
-    this.emit(SlWindowEventName.NameChanged);
-  })
   name = 'New Window';
 
   @property({ type: String }) img?: string;
