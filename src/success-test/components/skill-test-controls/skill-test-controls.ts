@@ -73,7 +73,7 @@ export class SkillTestControls extends LitElement {
   @query('sl-window')
   private win?: SlWindow;
 
-  private subs = new Set<Subscription | Subscription["unsubscribe"]>();
+  private subs = new Set<Subscription | Subscription['unsubscribe']>();
 
   @internalProperty() private test?: {
     character?: Character;
@@ -82,29 +82,29 @@ export class SkillTestControls extends LitElement {
   };
 
   update(changedProps: PropertyValues) {
-    if (changedProps.has("entities")) {
-      this.unsub()
-   this.subs.add(
-     this.entities.actor.subscribe((actor) => {
-       const state = actor && this.getState(actor);
-       if (!state) this.win?.close();
-       else {
-         this.test = {
-           ...state,
-           action: new CoolStore(createAction({ type: ActionType.Quick })),
-         };
+    if (changedProps.has('entities')) {
+      this.unsub();
+      this.subs.add(
+        this.entities.actor.subscribe((actor) => {
+          const state = actor && this.getState(actor);
+          if (!state) this.win?.close();
+          else {
+            this.test = {
+              ...state,
+              action: new CoolStore(createAction({ type: ActionType.Quick })),
+            };
 
-         this.subs.add(
-           this.test.action
-             .getChanges()
-             .subscribe((state) => console.log(state)),
-         );
-       }
-     }),
-   );
+            this.subs.add(
+              this.test.action
+                .getChanges()
+                .subscribe((state) => console.log(state)),
+            );
+          }
+        }),
+      );
     }
- 
-    super.update(changedProps)
+
+    super.update(changedProps);
   }
 
   disconnectedCallback() {
@@ -114,11 +114,11 @@ export class SkillTestControls extends LitElement {
   }
 
   private unsub() {
-        this.subs.forEach((unsub) => {
-          if ('unsubscribe' in unsub) unsub.unsubscribe();
-          else unsub();
-        });
-        this.subs.clear();
+    this.subs.forEach((unsub) => {
+      if ('unsubscribe' in unsub) unsub.unsubscribe();
+      else unsub();
+    });
+    this.subs.clear();
   }
 
   setState(init: Init) {

@@ -35,7 +35,7 @@ export class STActionForm extends LitElement {
 
   @internalProperty() private action!: Action;
 
-  private unsub?: Subscription;;
+  private unsub?: Subscription;
 
   update(changedProps: PropertyValues) {
     if (changedProps.has('actionStore')) {
