@@ -43,7 +43,6 @@
     "nanopop": "^2.1.0",
     "remeda": "0.0.27",
     "rxjs": "^6.6.3",
-    "solid-js": "^0.23.10",
     "web-animations-js": "^2.3.2",
     "weightless": "0.0.37"
   },
@@ -66,7 +65,6 @@
     "@types/socket.io": "^2.1.12",
     "@web/test-runner": "^0.12.2",
     "archiver": "^5.2.0",
-    "babel-preset-solid": "^0.23.8",
     "pixi.js": "^5.3.7",
     "prettier": "^2.2.1",
     "rollup": "^2.36.1",

@@ -1,37 +1,38 @@
-type UntypedTags = Exclude<
-  keyof HTMLElementTagNameMap,
-  keyof JSX.IntrinsicElements
->;
-type CustomTags = {
-  [tag in UntypedTags]: tag extends `${infer A}-${infer B}` ? tag : never;
-}[UntypedTags];
+// type UntypedTags = Exclude<
+//   keyof HTMLElementTagNameMap,
+//   keyof JSX.IntrinsicElements
+// >;
+// type CustomTags = {
+//   [tag in UntypedTags]: tag extends `${infer A}-${infer B}` ? tag : never;
+// }[UntypedTags];
 
-type RequiredProps<key extends CustomTags> = key extends 'sl-window'
-  ? { name: string }
-  : {};
+// type RequiredProps<key extends CustomTags> = key extends 'sl-window'
+//   ? { name: string }
+//   : {};
 
-import { JSX as SolidJSX } from 'solid-js';
+// type WithDirs<T> = T & {
+//   [key in T as `prop:${key}`]: T[key]
+// }
 
-declare module 'solid-js' {
-  namespace JSX {
-    type CustomElement<Element> = SolidJSX.HTMLAttributes<Element> &
-      Partial<
-        Pick<
-          Element,
-          Exclude<keyof Element, keyof HTMLElement>
-        >
-      >;
+// import { JSX as SolidJSX } from 'solid-js';
 
-    type Customs = {
-      [key in CustomTags]: CustomElement<HTMLElementTagNameMap[key]> &
-        RequiredProps<key>;
-    };
+// declare module 'solid-js' {
+//   namespace JSX {
+//     type CustomElement<Element> = SolidJSX.HTMLAttributes<Element> &
+//       WithDirs<
+//         Partial<Pick<Element, Exclude<keyof Element, keyof HTMLElement>>>
+//       >;
 
-    interface ImgHTMLAttributes<HTMLImageElement>
-      extends SolidJSX.HTMLAttributes<T> {
-      loading?: 'lazy';
-    }
+//     type Customs = {
+//       [key in CustomTags]: CustomElement<HTMLElementTagNameMap[key]> &
+//         RequiredProps<key>;
+//     };
 
-    interface IntrinsicElements extends Customs {}
-  }
-}
+//     interface ImgHTMLAttributes<HTMLImageElement>
+//       extends SolidJSX.HTMLAttributes<T> {
+//       loading?: 'lazy';
+//     }
+
+//     interface IntrinsicElements extends Customs {}
+//   }
+// }

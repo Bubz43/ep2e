@@ -1,7 +1,14 @@
 {
   "include": ["src", "types"],
   "compilerOptions": {
-        "plugins": [{ "name": "typescript-plugin-css-modules" }],
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules",
+        "options": {
+          "customMatcher": "\\.module.pcss",
+        }
+      }
+    ],
     "module": "esnext",
     "target": "esnext",
     "moduleResolution": "node",
@@ -10,7 +17,7 @@
     "baseUrl": "./",
     /* paths - If you configure Snowpack import aliases, add them here. */
     "paths": {
-      "@src/*": ["src/*"],
+      "@src/*": ["src/*"]
     },
     /* noEmit - Snowpack builds (emits) files, not tsc. */
     "noEmit": true,
@@ -25,13 +32,13 @@
     "resolveJsonModule": true,
     "strictNullChecks": true,
     "noImplicitAny": true,
-		"noImplicitReturns": true,
-		"noImplicitThis": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
     "alwaysStrict": true,
     "isolatedModules": true,
     // "useDefineForClassFields": true,
     "allowSyntheticDefaultImports": true,
     "importsNotUsedAsValues": "error",
-    "noPropertyAccessFromIndexSignature": true,
+    "noPropertyAccessFromIndexSignature": true
   }
 }
