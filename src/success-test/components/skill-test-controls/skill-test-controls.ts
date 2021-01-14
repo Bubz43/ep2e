@@ -3,11 +3,9 @@ import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
-import { Action, ActionType, createAction } from '@src/features/actions';
 import type { Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
-import { CoolStore } from 'cool-store';
 import {
   customElement,
   html,
@@ -20,6 +18,8 @@ import type { Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';
 import './action-form';
 import styles from './skill-test-controls.scss';
+import { SkillTest } from '@src/success-test/skill-test';
+import './footer';
 
 type Init = {
   skill: Skill;
@@ -75,29 +75,21 @@ export class SkillTestControls extends LitElement {
 
   private subs = new Set<Subscription | Subscription['unsubscribe']>();
 
-  @internalProperty() private test?: {
-    character?: Character;
-    ego: Ego;
-    action: CoolStore<Action>;
-  };
+  @internalProperty() private test?: SkillTest;
 
   update(changedProps: PropertyValues) {
     if (changedProps.has('entities')) {
       this.unsub();
       this.subs.add(
         this.entities.actor.subscribe((actor) => {
-          const state = actor && this.getState(actor);
-          if (!state) this.win?.close();
+          const info = actor && this.getState(actor);
+          if (!info) this.win?.close();
           else {
-            this.test = {
-              ...state,
-              action: new CoolStore(createAction({ type: ActionType.Quick })),
-            };
-
             this.subs.add(
-              this.test.action
-                .getChanges()
-                .subscribe((state) => console.log(state)),
+              new SkillTest({
+                ...info,
+                skill: this.skill,
+              }).subscribe((test) => (this.test = test)),
             );
           }
         }),
@@ -143,7 +135,7 @@ export class SkillTestControls extends LitElement {
 
   private renderTest(test: NonNullable<SkillTestControls['test']>) {
     const { skill, entities } = this;
-    const { character, ego } = test;
+    const { character, ego, action } = test;
     return html`
       ${character
         ? html`
@@ -177,9 +169,11 @@ export class SkillTestControls extends LitElement {
           <success-test-section-label
             >${localize('action')}</success-test-section-label
           >
-          <st-action-form .actionStore=${test.action}></st-action-form>
+          <st-action-form .action=${action}></st-action-form>
         </section>
       </div>
+
+      <st-footer target=${0} .settings=${test.settings}></st-footer>
     `;
   }
 }

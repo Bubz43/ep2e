@@ -1,3 +1,7 @@
+import { enableMapSet, enablePatches } from 'immer';
+enableMapSet();
+enablePatches()
+
 // Material Components
 import '@material/mwc-button';
 import '@material/mwc-checkbox';

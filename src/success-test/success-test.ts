@@ -1,5 +1,6 @@
 import type { MessageVisibility } from '@src/chat/create-message';
 import type { Pool, PreTestPoolAction } from '@src/features/pool';
+import { localize } from '@src/foundry/localization';
 import { capitalize } from '@src/foundry/misc-helpers';
 import { notEmpty } from '@src/utility/helpers';
 import { clamp, createPipe, pipe, range, reverse } from 'remeda';
@@ -45,7 +46,25 @@ export type SuccessTestModifier = {
   value: number;
   temporary?: boolean;
   icon?: string;
+  id: number;
 };
+
+export type SuccessTestSettings = {
+  visibility: MessageVisibility;
+  autoRoll: boolean;
+}
+
+let lastId = 1;
+export const createSuccessTestModifier = ({
+  name = localize('modifier'),
+  value = 0,
+  ...rest
+}: Partial<Omit<SuccessTestModifier, 'id'>> = {}): SuccessTestModifier => ({
+  name,
+  value,
+  ...rest,
+  id: ++lastId,
+});
 
 export class Percentile extends DiceTerm {
   faces = 10;

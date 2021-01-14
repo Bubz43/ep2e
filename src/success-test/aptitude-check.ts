@@ -36,6 +36,7 @@ import { html } from 'lit-html';
 import { compact, equals, map } from 'remeda';
 import { traverseActiveElements } from 'weightless';
 import {
+  createSuccessTestModifier,
   PreTestPool,
   rollSuccessTest,
   SuccessTestModifier,
@@ -183,7 +184,7 @@ export class AptitudeCheck {
 
   get messageData(): SuccessTestMessage {
     const { ignoreMods, clampedTarget } = this;
-    const parts: SuccessTestModifier[] = [
+    const parts: Pick<SuccessTestModifier, "name" | "value">[] = [
       {
         name: `${localize(this.state.aptitude)} x${this.state.multiplier}`,
         value: this.aptitudeTotal,
@@ -236,7 +237,7 @@ export class AptitudeCheck {
 
   @LazyGetter()
   private get modifierFromAction(): SuccessTestModifier {
-    return { name: '', value: 0 };
+    return createSuccessTestModifier({ name: '', value: 0 });
   }
 
   subscribe(cb: (test: this) => void) {

@@ -1,14 +1,6 @@
 {
   "include": ["src", "types"],
   "compilerOptions": {
-    "plugins": [
-      {
-        "name": "typescript-plugin-css-modules",
-        "options": {
-          "customMatcher": "\\.module.pcss",
-        }
-      }
-    ],
     "module": "esnext",
     "target": "esnext",
     "moduleResolution": "node",

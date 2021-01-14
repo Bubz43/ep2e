@@ -1,23 +1,21 @@
 import {
   renderSelectField,
-  renderTimeField,
-  renderSlider,
+
+  renderSlider, renderTimeField
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { enumValues } from '@src/data-enums';
 import { Action, ActionSubtype, ActionType } from '@src/features/actions';
 import { localize } from '@src/foundry/localization';
-import type { CoolStore } from 'cool-store';
+import type { WithUpdate } from '@src/utility/updating';
 import {
   customElement,
-  LitElement,
-  property,
-  html,
-  internalProperty,
-  PropertyValues,
+
+
+  html, LitElement,
+  property
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
-import type { Subscription } from 'rxjs';
 import styles from './action-form.scss';
 
 @customElement('st-action-form')
@@ -31,39 +29,19 @@ export class STActionForm extends LitElement {
   }
 
   @property({ attribute: false })
-  actionStore!: CoolStore<Action>;
-
-  @internalProperty() private action!: Action;
-
-  private unsub?: Subscription;
-
-  update(changedProps: PropertyValues) {
-    if (changedProps.has('actionStore')) {
-      this.unsub?.unsubscribe();
-      this.unsub = this.actionStore
-        .getChanges()
-        .subscribe((state) => (this.action = state));
-    }
-    super.update(changedProps);
-  }
-
-  disconnectedCallback() {
-    this.unsub?.unsubscribe();
-    super.disconnectedCallback();
-  }
+  action!: WithUpdate<Action>;
+  
 
   render() {
     const { action } = this;
     const isTask = action.type === ActionType.Task;
-    console.log('render');
     return html`
       ${renderAutoForm({
         classes: `action-form ${action.type}`,
         props: action,
         noDebounce: true,
         storeOnInput: true,
-        update: (changed) =>
-          this.actionStore.set((state) => void Object.assign(state, changed)),
+        update: action.update,
         fields: ({ type, subtype, timeframe, timeMod }) => [
           renderSelectField(type, enumValues(ActionType)),
           renderSelectField(subtype, enumValues(ActionSubtype)),

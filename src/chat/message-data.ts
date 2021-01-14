@@ -115,7 +115,7 @@ type SuccessTestState = {
 };
 
 export type SuccessTestMessage = {
-  parts: SuccessTestModifier[];
+  parts: { name: string, value: number }[];
   states: SuccessTestState[];
   defaulting?: boolean;
   linkedPool?: Exclude<PoolType, PoolType.Flex | PoolType.Threat>;

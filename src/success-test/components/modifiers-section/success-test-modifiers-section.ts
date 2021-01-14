@@ -9,7 +9,7 @@ import {
   SuccessTestEffect,
 } from '@src/features/effects';
 import { localize } from '@src/foundry/localization';
-import type { SuccessTestModifier } from '@src/success-test/success-test';
+import { createSuccessTestModifier, SuccessTestModifier } from '@src/success-test/success-test';
 import { withSign } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
@@ -58,7 +58,9 @@ export class SuccessTestModifiersSection extends LitElement {
                 temporary: true,
               },
               update: (changed, orig) =>
-                this.modifierStore.toggleModifier({ ...orig, ...changed }),
+                this.modifierStore.toggleModifier(
+                  createSuccessTestModifier({ ...orig, ...changed }),
+                ),
               fields: ({ name, value }) => [
                 renderTextField(name, { required: true }),
                 renderNumberField(value, {
