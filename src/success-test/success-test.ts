@@ -1,5 +1,5 @@
 import type { MessageVisibility } from '@src/chat/create-message';
-import type { Pool, PreTestPoolAction } from '@src/features/pool';
+import type { Pool, PreTestPoolAction, ReadonlyPool } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import { capitalize } from '@src/foundry/misc-helpers';
 import { notEmpty } from '@src/utility/helpers';
@@ -34,7 +34,7 @@ export const isSuccessfullTestResult = createPipe(
   (rank) => rank >= ResultTier.Success,
 );
 
-export type PreTestPool = readonly [Pool, PreTestPoolAction] | null;
+export type PreTestPool = [ReadonlyPool, PreTestPoolAction] | null;
 
 export type SuccessTestRollState = {
   visibility: MessageVisibility;
@@ -53,6 +53,12 @@ export type SuccessTestSettings = {
   visibility: MessageVisibility;
   autoRoll: boolean;
 }
+
+export type SuccessTestPools = {
+  available: ReadonlyPool[];
+  active: [ReadonlyPool, PreTestPoolAction] | null;
+  toggleActive: (pair: [ReadonlyPool, PreTestPoolAction] | null) => void;
+};
 
 let lastId = 1;
 export const createSuccessTestModifier = ({

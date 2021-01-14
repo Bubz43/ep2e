@@ -147,7 +147,7 @@ export class AptitudeCheckControls extends LitElement {
 
                 <success-test-pool-controls
                   .poolState=${{
-                    pools,
+                    available: pools,
                     active: activePool,
                     toggleActive: this.test.toggleActivePool,
                   }}
@@ -160,12 +160,11 @@ export class AptitudeCheckControls extends LitElement {
       <success-test-modifiers-section
         class="modifiers"
         ?ignored=${ignoreMods}
-        total=${this.test.totalModifiers}
         .modifierStore=${{
           effects: this.test.modifierEffects,
           toggleEffect: this.test.toggleActiveEffect,
-          modifiers: this.test.modifiers,
-          toggleModifier: this.test.toggleModifier,
+          simple: this.test.modifiers,
+          toggleSimple: this.test.toggleModifier,
         }}
       ></success-test-modifiers-section>
 

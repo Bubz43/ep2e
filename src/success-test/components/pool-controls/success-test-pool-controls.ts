@@ -1,7 +1,7 @@
 import { enumValues } from '@src/data-enums';
 import { Pool, PreTestPoolAction } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
-import type { PreTestPool } from '@src/success-test/success-test';
+import type { PreTestPool, SuccessTestPools } from '@src/success-test/success-test';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { equals } from 'remeda';
@@ -17,14 +17,10 @@ export class SuccessTestPoolControls extends LitElement {
     return [styles];
   }
 
-  @property({ attribute: false }) poolState!: {
-    pools: Pool[];
-    active: PreTestPool;
-    toggleActive: (pair: PreTestPool) => void;
-  };
+  @property({ attribute: false }) poolState!: SuccessTestPools;
 
   render() {
-    const { pools, active, toggleActive } = this.poolState;
+    const { available: pools, active, toggleActive } = this.poolState;
     return html`
       <div class="pool-actions">
         <header>
@@ -45,7 +41,7 @@ export class SuccessTestPoolControls extends LitElement {
                   ></span>
                 </div>
                 ${enumValues(PreTestPoolAction).map((action) => {
-                  const pair = [pool, action] as const;
+                  const pair: PreTestPool = [pool, action];
                   const isActive = equals(pair, active);
                   return html`
                     <mwc-button

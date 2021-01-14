@@ -8,6 +8,7 @@ import {
   SourcedEffect,
   SuccessTestEffect,
 } from '@src/features/effects';
+import { idProp } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
 import { createSuccessTestModifier, SuccessTestModifier } from '@src/success-test/success-test';
 import { withSign } from '@src/utility/helpers';
@@ -33,9 +34,9 @@ export class SuccessTestModifiersSection extends LitElement {
 
   @property({ attribute: false }) modifierStore!: {
     effects: Map<SourcedEffect<SuccessTestEffect>, boolean>;
-    toggleEffect: (effect: SuccessTestEffect) => void;
-    modifiers: Set<SuccessTestModifier>;
-    toggleModifier: (modifier: SuccessTestModifier) => void;
+    toggleEffect: (effect: SourcedEffect<SuccessTestEffect>) => void;
+    simple: Map<number, SuccessTestModifier>;
+    toggleSimple: (modifier: SuccessTestModifier) => void;
   };
 
   render() {
@@ -58,7 +59,7 @@ export class SuccessTestModifiersSection extends LitElement {
                 temporary: true,
               },
               update: (changed, orig) =>
-                this.modifierStore.toggleModifier(
+                this.modifierStore.toggleSimple(
                   createSuccessTestModifier({ ...orig, ...changed }),
                 ),
               fields: ({ name, value }) => [
@@ -108,14 +109,13 @@ export class SuccessTestModifiersSection extends LitElement {
           `;
         })}
         ${repeat(
-          this.modifierStore.modifiers,
-          identity,
+          this.modifierStore.simple.values(),
+          idProp,
           (modifier) => html`
             <wl-list-item
               ?clickable=${!!modifier.temporary}
               @click=${() =>
-                modifier.temporary &&
-                this.modifierStore.toggleModifier(modifier)}
+                modifier.temporary && this.modifierStore.toggleSimple(modifier)}
             >
               ${modifier.temporary
                 ? html` <mwc-icon slot="before">close</mwc-icon> `

@@ -20,6 +20,7 @@ import './action-form';
 import styles from './skill-test-controls.scss';
 import { SkillTest } from '@src/success-test/skill-test';
 import './footer';
+import { notEmpty } from '@src/utility/helpers';
 
 type Init = {
   skill: Skill;
@@ -120,7 +121,6 @@ export class SkillTestControls extends LitElement {
   }
 
   render() {
-    console.log("test render")
     return html`
       <sl-window
         name="${localize('successTest')} - ${localize('skillTest')}"
@@ -135,8 +135,13 @@ export class SkillTestControls extends LitElement {
   }
 
   private renderTest(test: NonNullable<SkillTestControls['test']>) {
-    const { skill, entities } = this;
-    const { character, ego, action } = test;
+    const { entities } = this;
+    const { character, ego, action, pools, total } = test;
+    const {
+      skill,
+      applySpecialization,
+      toggleSpecialization,
+    } = test.skillState;
     return html`
       ${character
         ? html`
@@ -165,6 +170,25 @@ export class SkillTestControls extends LitElement {
           <success-test-section-label
             >${localize('skill')}</success-test-section-label
           >
+          <ul>
+            <wl-list-item>
+              <span>${skill.name}</span>
+              <span>${localize(skill.category)}</span>
+              <span slot="after">${skill.total}</span>
+            </wl-list-item>
+            ${skill.specialization
+              ? html`
+                  <wl-list-item clickable @click=${toggleSpecialization}>
+                    <mwc-checkbox
+                      slot="before"
+                      ?checked=${applySpecialization}
+                    ></mwc-checkbox>
+                    <span>${skill.specialization}</span>
+                    <span slot="after"> + 10 </span>
+                  </wl-list-item>
+                `
+              : ''}
+          </ul>
         </section>
         <section class="actions">
           <success-test-section-label
@@ -172,9 +196,32 @@ export class SkillTestControls extends LitElement {
           >
           <st-action-form .action=${action}></st-action-form>
         </section>
+        ${notEmpty(pools.available)
+          ? html`
+              <section class="pools">
+                <success-test-section-label
+                  >${localize('pools')}</success-test-section-label
+                >
+                <success-test-pool-controls
+                  .poolState=${pools}
+                ></success-test-pool-controls>
+              </section>
+            `
+          : ''}
       </div>
 
-      <st-footer target=${0} .settings=${test.settings}></st-footer>
+      <success-test-modifiers-section
+        class="modifiers"
+        ?ignored=${test.ignoreModifiers}
+        total=${test.modifierTotal}
+        .modifierStore=${test.modifiers}
+      ></success-test-modifiers-section>
+
+      <st-footer
+        class="footer"
+        target=${total}
+        .settings=${test.settings}
+      ></st-footer>
     `;
   }
 }
