@@ -1,6 +1,6 @@
 import { AptitudeType, PoolEffectUsability, PoolType } from '@src/data-enums';
 import { localize } from '@src/foundry/localization';
-import { createSuccessTestModifier, SuccessTestModifier } from '@src/success-test/success-test';
+import { createSuccessTestModifier, SimpleSuccessTestModifier } from '@src/success-test/success-test';
 import { localImage } from '@src/utility/images';
 import { LazyGetter } from 'lazy-get-decorator';
 import { clamp } from 'remeda';

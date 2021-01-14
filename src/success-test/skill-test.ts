@@ -7,24 +7,28 @@ import {
   Action,
   ActionType,
   createAction,
-  updateAction,
+  updateAction
 } from '@src/features/actions';
-import type { SourcedEffect, SuccessTestEffect } from '@src/features/effects';
+import {
+  matchesSkill,
+  SourcedEffect,
+  SuccessTestEffect
+} from '@src/features/effects';
 import { Pool, PreTestPoolAction } from '@src/features/pool';
 import type { Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import type { WithUpdate } from '@src/utility/updating';
-import { immerable, produce, produceWithPatches } from 'immer';
+import { immerable, produceWithPatches } from 'immer';
 import type { Draft } from 'immer/dist/internal';
-import { LazyGetter } from 'lazy-get-decorator';
 import { compact, equals, merge } from 'remeda';
 import { BehaviorSubject } from 'rxjs';
 import {
   createSuccessTestModifier,
   PreTestPool,
-  SuccessTestModifier,
+  SimpleSuccessTestModifier,
+  SuccessTestModifiers,
   SuccessTestPools,
-  SuccessTestSettings,
+  SuccessTestSettings
 } from './success-test';
 
 export type SkillTestInit = {
@@ -35,49 +39,37 @@ export type SkillTestInit = {
   action?: Action;
 };
 
-export class SkillTest {
+class SuccessTest {
   readonly [immerable] = true;
 
   private readonly state = new BehaviorSubject(this);
   readonly subscribe = this.state.subscribe.bind(this.state);
+
+  protected update(recipe: Draft<this> | ((recipe: Draft<this>) => void)) {
+    const [nextState, patches, inversePatches] = produceWithPatches(
+      this.state.value,
+      typeof recipe === 'function' ? recipe : () => recipe,
+    );
+    console.log(patches);
+    this.state.next(nextState);
+  }
+}
+
+export class SkillTest extends SuccessTest {
+
   readonly ego;
   readonly character;
   readonly token;
 
-  readonly action: WithUpdate<Action> & {
-    modifier: SuccessTestModifier;
-    color?: number;
-  };
-
+  readonly pools: SuccessTestPools;
+  readonly modifiers: SuccessTestModifiers;
+  readonly action: WithUpdate<Action> & { modifier: SimpleSuccessTestModifier };
   readonly settings: WithUpdate<SuccessTestSettings> = {
     visibility: rollModeToVisibility(game.settings.get('core', 'rollMode')),
     autoRoll: true,
     update: (changed) => {
       this.update((recipe) => {
         recipe.settings = merge(recipe.settings, changed);
-      });
-    },
-  };
-
-  readonly pools: SuccessTestPools = {
-    available: [],
-    active: null,
-    toggleActive: (pair) => {
-      this.update((draft) => this.togglePool(draft, pair));
-    },
-  };
-
-  readonly modifiers = {
-    effects: new Map<SourcedEffect<SuccessTestEffect>, boolean>(),
-    toggleEffect: (effect: SourcedEffect<SuccessTestEffect>) => {
-      this.update(({ modifiers: { effects } }) => {
-        effects.set(effect, !effects.get(effect));
-      });
-    },
-    simple: new Map<number, SuccessTestModifier>(),
-    toggleSimple: (modifier: SuccessTestModifier) => {
-      this.update(({ modifiers: { simple } }) => {
-        simple.delete(modifier.id) || simple.set(modifier.id, modifier);
       });
     },
   };
@@ -89,7 +81,28 @@ export class SkillTest {
     toggleSpecialization: () => void;
   };
 
+  get ignoreModifiers() {
+    return this.pools.active?.[1] === PreTestPoolAction.IgnoreMods;
+  }
+
+  get modifierTotal() {
+    return [...this.modifiers.effects].reduce(
+      (accum, [effect, active]) => accum + (active ? effect.modifier : 0),
+      [...this.modifiers.simple.values()].reduce(
+        (accum, { value }) => accum + value,
+        0,
+      ),
+    );
+  }
+
+  get total() {
+    const { skill, applySpecialization } = this.skillState;
+    const base = skill.total + (applySpecialization ? 10 : 0);
+    return base + (this.ignoreModifiers ? 0 : this.modifierTotal);
+  }
+
   constructor({ ego, skill, character, token, action }: SkillTestInit) {
+    super();
     this.ego = ego;
     this.character = character;
     this.token = token;
@@ -130,21 +143,57 @@ export class SkillTest {
           const { skillState, pools } = draft;
           skillState.skill = newSkill;
           skillState.applySpecialization = false;
-          if (this.character) {
-            const poolMap = this.character.pools;
-            pools.available = compact(
-              this.ego.useThreat
-                ? [poolMap.get(PoolType.Threat)]
-                : [
-                    poolMap.get(Pool.linkedToAptitude(newSkill.linkedAptitude)),
-                    poolMap.get(PoolType.Flex),
-                  ],
-            );
-          } else pools.available = [];
+          pools.available = this.getPools(newSkill);
           this.togglePool(draft, null);
         });
       },
     };
+
+    this.pools = {
+      available: this.getPools(this.skillState.skill),
+      active: null,
+      toggleActive: (pair) => {
+        this.update((draft) => this.togglePool(draft, pair));
+      },
+    };
+
+    this.modifiers = {
+      effects: this.getModifierEffects(this.skillState.skill, this.action),
+      toggleEffect: (effect: SourcedEffect<SuccessTestEffect>) => {
+        this.update(({ modifiers: { effects } }) => {
+          effects.set(effect, !effects.get(effect));
+        });
+      },
+      simple: new Map<number, SimpleSuccessTestModifier>(),
+      toggleSimple: (modifier: SimpleSuccessTestModifier) => {
+        this.update(({ modifiers: { simple } }) => {
+          simple.delete(modifier.id) || simple.set(modifier.id, modifier);
+        });
+      },
+    };
+  }
+
+  private getModifierEffects(skill: Skill, action: Action) {
+    return new Map(
+      (
+        this.character?.appliedEffects.getMatchingSuccessTestEffects(
+          matchesSkill(skill)(action),
+          false,
+        ) || []
+      ).map((effect) => [effect, false]),
+    );
+  }
+
+  private getPools(skill: Skill) {
+    const poolMap = this.character?.pools;
+    return compact(
+      this.ego.useThreat
+        ? [poolMap?.get(PoolType.Threat)]
+        : [
+            poolMap?.get(Pool.linkedToAptitude(skill.linkedAptitude)),
+            poolMap?.get(PoolType.Flex),
+          ],
+    );
   }
 
   private togglePool(
@@ -159,35 +208,5 @@ export class SkillTest {
       const { testModifier } = pools.active[0];
       modifiers.simple.set(testModifier.id, testModifier);
     }
-  }
-
-  get ignoreModifiers() {
-    return this.pools.active?.[1] === PreTestPoolAction.IgnoreMods;
-  }
-
-  @LazyGetter()
-  get modifierTotal() {
-    return [...this.modifiers.effects].reduce(
-      (accum, [effect, active]) => accum + (active ? effect.modifier : 0),
-      [...this.modifiers.simple.values()].reduce(
-        (accum, { value }) => accum + value,
-        0,
-      ),
-    );
-  }
-
-  get total() {
-    const { skill, applySpecialization } = this.skillState;
-    const base = skill.total + (applySpecialization ? 10 : 0);
-    return base + (this.ignoreModifiers ? 0 : this.modifierTotal);
-  }
-
-  private update(recipe: Draft<this> | ((recipe: Draft<this>) => void)) {
-    const [nextState, patches, inversePatches] = produceWithPatches(
-      this.state.value,
-      typeof recipe === 'function' ? recipe : () => recipe,
-    );
-    console.log(patches);
-    this.state.next(nextState);
   }
 }

@@ -1,4 +1,5 @@
 import type { MessageVisibility } from '@src/chat/create-message';
+import type { SourcedEffect, SuccessTestEffect } from '@src/features/effects';
 import type { Pool, PreTestPoolAction, ReadonlyPool } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import { capitalize } from '@src/foundry/misc-helpers';
@@ -41,7 +42,7 @@ export type SuccessTestRollState = {
   autoRoll: boolean;
 };
 
-export type SuccessTestModifier = {
+export type SimpleSuccessTestModifier = {
   name: string;
   value: number;
   temporary?: boolean;
@@ -60,12 +61,19 @@ export type SuccessTestPools = {
   toggleActive: (pair: [ReadonlyPool, PreTestPoolAction] | null) => void;
 };
 
+export type SuccessTestModifiers = {
+  effects: Map<SourcedEffect<SuccessTestEffect>, boolean>;
+  toggleEffect: (effect: SourcedEffect<SuccessTestEffect>) => void;
+  simple: Map<number, SimpleSuccessTestModifier>;
+  toggleSimple: (modifier: SimpleSuccessTestModifier) => void;
+};
+
 let lastId = 1;
 export const createSuccessTestModifier = ({
   name = localize('modifier'),
   value = 0,
   ...rest
-}: Partial<Omit<SuccessTestModifier, 'id'>> = {}): SuccessTestModifier => ({
+}: Partial<Omit<SimpleSuccessTestModifier, 'id'>> = {}): SimpleSuccessTestModifier => ({
   name,
   value,
   ...rest,

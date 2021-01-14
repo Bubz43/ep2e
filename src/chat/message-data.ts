@@ -12,7 +12,7 @@ import type { HealthModification, HealthType } from '@src/health/health';
 import type { RollMultiplier } from '@src/health/health-changes';
 import type { StressType } from '@src/health/mental-health';
 import type {
-  SuccessTestModifier,
+  SimpleSuccessTestModifier,
   SuccessTestResult,
 } from '@src/success-test/success-test';
 import type { RequireAtLeastOne } from 'type-fest';

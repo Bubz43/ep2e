@@ -39,7 +39,7 @@ import {
   createSuccessTestModifier,
   PreTestPool,
   rollSuccessTest,
-  SuccessTestModifier,
+  SimpleSuccessTestModifier,
   successTestTargetClamp,
 } from './success-test';
 
@@ -76,7 +76,7 @@ export class AptitudeCheck {
 
   readonly activeEffects = new WeakSet<SuccessTestEffect>();
   activePool: PreTestPool = null;
-  modifiers = new Set<SuccessTestModifier>();
+  modifiers = new Set<SimpleSuccessTestModifier>();
 
   constructor({ ego, aptitude, character, token, action }: AptitudeCheckInit) {
     this.ego = ego;
@@ -99,7 +99,7 @@ export class AptitudeCheck {
     );
   }
 
-  toggleModifier = (modifier: SuccessTestModifier) => {
+  toggleModifier = (modifier: SimpleSuccessTestModifier) => {
     this.modifiers.delete(modifier) || this.modifiers.add(modifier);
     this.notify();
   };
@@ -184,7 +184,7 @@ export class AptitudeCheck {
 
   get messageData(): SuccessTestMessage {
     const { ignoreMods, clampedTarget } = this;
-    const parts: Pick<SuccessTestModifier, "name" | "value">[] = [
+    const parts: Pick<SimpleSuccessTestModifier, "name" | "value">[] = [
       {
         name: `${localize(this.state.aptitude)} x${this.state.multiplier}`,
         value: this.aptitudeTotal,
@@ -236,7 +236,7 @@ export class AptitudeCheck {
   };
 
   @LazyGetter()
-  private get modifierFromAction(): SuccessTestModifier {
+  private get modifierFromAction(): SimpleSuccessTestModifier {
     return createSuccessTestModifier({ name: '', value: 0 });
   }
 

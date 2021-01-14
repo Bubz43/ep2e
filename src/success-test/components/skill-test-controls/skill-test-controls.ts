@@ -21,6 +21,8 @@ import styles from './skill-test-controls.scss';
 import { SkillTest } from '@src/success-test/skill-test';
 import './footer';
 import { notEmpty } from '@src/utility/helpers';
+import { openMenu } from '@src/open-menu';
+import { Pool, poolIcon } from '@src/features/pool';
 
 type Init = {
   skill: Skill;
@@ -120,6 +122,18 @@ export class SkillTestControls extends LitElement {
     this.getState = init.getState;
   }
 
+  private openSkillSelect() {
+    if (!this.test?.ego) return;
+    openMenu({
+      header: { heading: `${localize("select")} ${localize("skill")}`},
+      content: this.test.ego.skills.map(skill => ({
+        label: skill.fullName,
+        callback: () => this.test?.skillState.replaceSkill(skill),
+        icon: html`<img src=${poolIcon(Pool.linkedToAptitude(skill.linkedAptitude))} />`
+      }))
+    })
+  }
+
   render() {
     return html`
       <sl-window
@@ -170,10 +184,10 @@ export class SkillTestControls extends LitElement {
           <success-test-section-label
             >${localize('skill')}</success-test-section-label
           >
-          <ul>
-            <wl-list-item>
+          <ul class="skill-state">
+            <wl-list-item clickable @click=${this.openSkillSelect}>
               <span>${skill.name}</span>
-              <span>${localize(skill.category)}</span>
+              <small>${localize(skill.category)}</small>
               <span slot="after">${skill.total}</span>
             </wl-list-item>
             ${skill.specialization

@@ -15,7 +15,7 @@ import {
 } from '@src/features/actions';
 import produce, { immerable } from 'immer';
 import { Observable } from 'rxjs';
-import { createSuccessTestModifier, SuccessTestModifier } from './success-test';
+import { createSuccessTestModifier, SimpleSuccessTestModifier } from './success-test';
 import { CoolStore } from 'cool-store';
 import { merge } from 'remeda';
 import { localize } from '@src/foundry/localization';
@@ -41,9 +41,9 @@ type CheckState = {
 
   action: Action & {
     update: (changed: Partial<Action>) => void;
-    modifier: SuccessTestModifier;
+    modifier: SimpleSuccessTestModifier;
   };
-  modifiers: Set<SuccessTestModifier>;
+  modifiers: Set<SimpleSuccessTestModifier>;
 };
 
 export class AptCheck {
