@@ -120,6 +120,7 @@ export class SkillTestControls extends LitElement {
   }
 
   render() {
+    console.log("test render")
     return html`
       <sl-window
         name="${localize('successTest')} - ${localize('skillTest')}"

@@ -144,6 +144,7 @@ export class Form extends LitElement {
     this.emitStore();
   }
 
+  @debounce(1)
   private emitStore() {
     this.dispatchEvent(new FormValueStoredEvent(this));
   }

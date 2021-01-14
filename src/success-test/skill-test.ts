@@ -39,7 +39,7 @@ export class SkillTest {
   readonly character;
   readonly token;
 
-  readonly action: WithUpdate<Action> & { modifier: SuccessTestModifier };
+  readonly action: WithUpdate<Action> & { modifier: SuccessTestModifier, color?: number };
   readonly modifiers = new Map<number, SuccessTestModifier>();
   readonly settings: WithUpdate<SuccessTestSettings> = {
     visibility: rollModeToVisibility(game.settings.get('core', 'rollMode')),
@@ -91,3 +91,4 @@ export class SkillTest {
     );
   }
 }
+
