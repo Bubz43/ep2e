@@ -10,10 +10,10 @@
   "styles": [
     "./build/dist/global.scss.css"
   ],
-  "compatibleCoreVersion": "0.7.8",
+  "compatibleCoreVersion": "0.7.9",
   "gridDistance": 1,
   "gridUnits": "m",
-  "minimumCoreVersion": "0.7.8",
+  "minimumCoreVersion": "0.7.9",
   "socket": true,
   "manifest": "https://github.com/Bubz43/ep2e/releases/latest/download/system.json",
   "download": "https://github.com/Bubz43/ep2e/releases/latest/download/latest.zip",
@@ -31,6 +31,13 @@
       "system": "ep2e",
       "label": "Traits",
       "path": "./packs/traits.db",
+      "entity": "Item"
+    },
+      {
+      "name": "substances",
+      "system": "ep2e",
+      "label": "Substances",
+      "path": "./packs/substances.db",
       "entity": "Item"
     },
     {

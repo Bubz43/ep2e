@@ -15,7 +15,7 @@ import { withSign } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
-import { first, identity } from 'remeda';
+import { first, identity, sortBy } from 'remeda';
 import styles from './success-test-modifiers-section.scss';
 
 @customElement('success-test-modifiers-section')
@@ -77,37 +77,43 @@ export class SuccessTestModifiersSection extends LitElement {
         </sl-popover>
       </sl-header>
       <sl-animated-list transformOrigin="top">
-        ${repeat(this.modifierStore.effects, first(), ([effect, active]) => {
-          const useWhen =
-            effect.requirement && `${localize('when')} ${effect.requirement}`;
-          return html`
-            <wl-list-item
-              class=${classMap({ tall: !!useWhen })}
-              ?clickable=${!!useWhen}
-              @click=${() => {
-                useWhen && this.modifierStore.toggleEffect(effect);
-              }}
-            >
-              <span
-                slot="before"
-                class=${classMap({
-                  tall: !!useWhen,
-                  active: !useWhen || active,
-                  negative: effect.modifier < 0,
-                })}
-              ></span>
-              <span class="source" title=${effect[Source]}
-                >${effect[Source]}</span
+        ${repeat(
+          sortBy([...this.modifierStore.effects], ([e]) => !e.requirement),
+          first(),
+          ([effect, active]) => {
+            const useWhen =
+              effect.requirement && `${localize('when')} ${effect.requirement}`;
+            return html`
+              <wl-list-item
+                class=${classMap({ tall: !!useWhen })}
+                ?clickable=${!!useWhen}
+                @click=${() => {
+                  useWhen && this.modifierStore.toggleEffect(effect);
+                }}
               >
-              <span slot="after">${withSign(effect.modifier)}</span>
-              ${useWhen
-                ? html`
-                    <span class="requirement" title=${useWhen}>${useWhen}</span>
-                  `
-                : ''}
-            </wl-list-item>
-          `;
-        })}
+                <span
+                  slot="before"
+                  class=${classMap({
+                    tall: !!useWhen,
+                    active: !useWhen || active,
+                    negative: effect.modifier < 0,
+                  })}
+                ></span>
+                <span class="source" title=${effect[Source]}
+                  >${effect[Source]}</span
+                >
+                <span slot="after">${withSign(effect.modifier)}</span>
+                ${useWhen
+                  ? html`
+                      <span class="requirement" title=${useWhen}
+                        >${useWhen}</span
+                      >
+                    `
+                  : ''}
+              </wl-list-item>
+            `;
+          },
+        )}
         ${repeat(
           this.modifierStore.simple.values(),
           idProp,

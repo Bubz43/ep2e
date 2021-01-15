@@ -48,7 +48,7 @@ export abstract class SuccessTestBase {
 
     if (nextState.settings.ready) {
       this.state.complete();
-      this.createMessage();
+      this.createMessage.call(nextState)
     } else this.state.next(nextState);
   }
 
@@ -124,23 +124,22 @@ export abstract class SuccessTestBase {
       ...(action ?? createAction({ type: ActionType.Automatic })),
       modifier: createSuccessTestModifier(),
       update: (changed) => {
-        this.update((draft) => {
-          draft.action = merge(
-            draft.action,
-            updateAction(draft.action, changed),
-          );
-
-          const { timeMod, modifier } = draft.action;
-          if (timeMod) {
-            modifier.value = timeMod < 0 ? timeMod * 20 : timeMod * 10;
-            modifier.name = `${localize(
-              timeMod < 0 ? 'rushing' : 'takingTime',
-            )} x${Math.abs(timeMod)}`;
-            draft.modifiers.simple.set(modifier.id, modifier);
-          } else draft.modifiers.simple.delete(modifier.id);
-        });
+        this.update((draft) => this.updateAction(draft, changed));
       },
     };
+  }
+
+  protected updateAction(draft: Draft<this>, changed: Partial<Action>) {
+    draft.action = merge(draft.action, updateAction(draft.action, changed));
+
+    const { timeMod, modifier } = draft.action;
+    if (timeMod) {
+      modifier.value = timeMod < 0 ? timeMod * 20 : timeMod * 10;
+      modifier.name = `${localize(
+        timeMod < 0 ? 'rushing' : 'takingTime',
+      )} x${Math.abs(timeMod)}`;
+      draft.modifiers.simple.set(modifier.id, modifier);
+    } else draft.modifiers.simple.delete(modifier.id);
   }
 
   protected togglePool(

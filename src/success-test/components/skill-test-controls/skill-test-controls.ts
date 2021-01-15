@@ -18,9 +18,12 @@ import type { Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';
 import './action-form';
 import styles from './skill-test-controls.scss';
-import { SkillTest } from '@src/success-test/skill-test';
+import {
+  skillLinkedAptitudeMultipliers,
+  SkillTest,
+} from '@src/success-test/skill-test';
 import './footer';
-import { notEmpty } from '@src/utility/helpers';
+import { notEmpty, withSign } from '@src/utility/helpers';
 import { openMenu } from '@src/open-menu';
 import { Pool, poolIcon } from '@src/features/pool';
 
@@ -47,16 +50,17 @@ export class SkillTestControls extends LitElement {
 
   static openWindow(init: Init) {
     let win = SkillTestControls.openWindows.get(init.entities.actor);
+
     if (!win) {
       win = new SkillTestControls();
       overlay.append(win);
       SkillTestControls.openWindows.set(init.entities.actor, win);
     }
-    win.setState(init);
     const source = traverseActiveElements();
     if (source instanceof HTMLElement) {
       requestAnimationFrame(() => win!.win?.positionAdjacentToElement(source));
     }
+    win.setState(init);
   }
 
   @internalProperty() private skill!: Skill;
@@ -94,7 +98,7 @@ export class SkillTestControls extends LitElement {
                 skill: this.skill,
               }).subscribe({
                 next: (test) => (this.test = test),
-                complete: () => this.win?.close()
+                complete: () => this.win?.close(),
               }),
             );
           }
@@ -128,14 +132,16 @@ export class SkillTestControls extends LitElement {
   private openSkillSelect() {
     if (!this.test?.ego) return;
     openMenu({
-      header: { heading: `${localize("select")} ${localize("skill")}`},
-      content: this.test.ego.skills.map(skill => ({
+      header: { heading: `${localize('select')} ${localize('skill')}` },
+      content: this.test.ego.skills.map((skill) => ({
         label: skill.fullName,
         callback: () => this.test?.skillState.replaceSkill(skill),
-        icon: html`<img src=${poolIcon(Pool.linkedToAptitude(skill.linkedAptitude))} />`,
-        activated: skill === this.test?.skillState.skill
-      }))
-    })
+        icon: html`<img
+          src=${poolIcon(Pool.linkedToAptitude(skill.linkedAptitude))}
+        />`,
+        activated: skill === this.test?.skillState.skill,
+      })),
+    });
   }
 
   render() {
@@ -158,7 +164,11 @@ export class SkillTestControls extends LitElement {
     const {
       skill,
       applySpecialization,
+      aptitudeMultiplier,
+      halveBase,
+      toggleHalveBase,
       toggleSpecialization,
+      cycleAptitudeMultiplier,
     } = test.skillState;
     return html`
       ${character
@@ -184,15 +194,55 @@ export class SkillTestControls extends LitElement {
         : ''}
 
       <div class="sections">
-        <section>
+        <section class="skill-section">
+          <button
+            title=${localize('halve')}
+            class=${halveBase ? 'active' : ''}
+            @click=${toggleHalveBase}
+            >➗</button
+          >
           <success-test-section-label
             >${localize('skill')}</success-test-section-label
           >
           <ul class="skill-state">
             <wl-list-item clickable @click=${this.openSkillSelect}>
-              <span>${skill.name}</span>
-              <small>${localize(skill.category)}</small>
-              <span slot="after">${skill.total}</span>
+              <span>
+                <span>${skill.name} ${halveBase ? '÷2' : ''}</span>
+                <span class="category">${localize(skill.category)}</span></span
+              >
+
+              <span slot="after"
+                >${Math.round(skill.points * (halveBase ? 0.5 : 1)) ||
+                html`<span class="defaulting"
+                  >[${localize('defaulting')}]</span
+                >`}</span
+              >
+            </wl-list-item>
+
+            <wl-list-item clickable @click=${cycleAptitudeMultiplier}>
+              <span
+                >${localize('FULL', skill.linkedAptitude)}
+                ${halveBase ? '÷2' : ''}
+                (${Math.round(skill.aptitudePoints * (halveBase ? 0.5 : 1))})
+                <span class="multipliers">
+                  ${skillLinkedAptitudeMultipliers.map(
+                    (mp) =>
+                      html`<span
+                        class=${mp === aptitudeMultiplier ? 'active' : ''}
+                        >x${mp}</span
+                      >`,
+                  )}
+                </span></span
+              >
+              <span slot="after"
+                >${withSign(
+                  Math.round(
+                    skill.aptitudePoints *
+                      aptitudeMultiplier *
+                      (halveBase ? 0.5 : 1),
+                  ),
+                )}</span
+              >
             </wl-list-item>
             ${skill.specialization
               ? html`
@@ -202,7 +252,7 @@ export class SkillTestControls extends LitElement {
                       ?checked=${applySpecialization}
                     ></mwc-checkbox>
                     <span>${skill.specialization}</span>
-                    <span slot="after"> + 10 </span>
+                    <span slot="after"> +10 </span>
                   </wl-list-item>
                 `
               : ''}

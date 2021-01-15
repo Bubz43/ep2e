@@ -30,7 +30,7 @@ sl-animated-list {
 }
 
 wl-list-item {
-  padding: 0 1rem;
+  padding: 0.1rem 1rem;
   &.tall {
     padding: 0.25rem 1rem;
   }
@@ -55,6 +55,7 @@ wl-list-item {
 
 .requirement {
   color: var(--color-text-lighter);
+  font-size: 13px;
 }
 
 [slot='before'] {

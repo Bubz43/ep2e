@@ -26,6 +26,8 @@ export type SkillTestInit = {
   action?: Action;
 };
 
+export const skillLinkedAptitudeMultipliers = [0, 1, 2] as const;
+
 export class SkillTest extends SuccessTestBase {
   readonly ego;
   readonly character;
@@ -33,13 +35,27 @@ export class SkillTest extends SuccessTestBase {
   readonly skillState: {
     skill: Skill;
     applySpecialization: boolean;
+    aptitudeMultiplier: number;
+    halveBase: boolean;
+    complementarySkill?: Skill | null;
+    setComplementarySkill: (skill: Skill) => void;
+    toggleHalveBase: () => void;
+    cycleAptitudeMultiplier: () => void;
     replaceSkill: (newSkill: Skill) => void;
     toggleSpecialization: () => void;
   };
 
   get basePoints() {
-    const { skill, applySpecialization } = this.skillState;
-    return skill.total + (applySpecialization ? 10 : 0);
+    const {
+      skill,
+      applySpecialization,
+      aptitudeMultiplier,
+      halveBase,
+    } = this.skillState;
+    const base = skill.points + skill.aptitudePoints * aptitudeMultiplier;
+    return (
+      Math.round(base * (halveBase ? 0.5 : 1)) + (applySpecialization ? 10 : 0)
+    );
   }
 
   constructor({ ego, skill, character, token, action }: SkillTestInit) {
@@ -47,7 +63,7 @@ export class SkillTest extends SuccessTestBase {
       action:
         action ??
         createAction({
-          type: ActionType.Quick, // TODO better default
+          type: ActionType.Automatic, // TODO better default
           subtype: defaultCheckActionSubtype(skill.linkedAptitude),
         }),
     });
@@ -58,6 +74,28 @@ export class SkillTest extends SuccessTestBase {
     this.skillState = {
       skill,
       applySpecialization: false,
+      halveBase: false,
+      aptitudeMultiplier: skill.aptMultiplier,
+      setComplementarySkill: (skill) => {
+        this.update(
+          ({ skillState }) => void (skillState.complementarySkill = skill),
+        );
+      },
+      toggleHalveBase: () => {
+        this.update(({ skillState }) => {
+          skillState.halveBase = !skillState.halveBase;
+        });
+      },
+      cycleAptitudeMultiplier: () => {
+        this.update(({ skillState }) => {
+          const { aptitudeMultiplier } = skillState;
+          const index = skillLinkedAptitudeMultipliers.findIndex(
+            (i) => i === aptitudeMultiplier,
+          );
+          skillState.aptitudeMultiplier =
+            skillLinkedAptitudeMultipliers[index + 1] ?? 0;
+        });
+      },
       toggleSpecialization: () => {
         this.update(({ skillState }) => {
           skillState.applySpecialization = !skillState.applySpecialization;
@@ -68,8 +106,17 @@ export class SkillTest extends SuccessTestBase {
           const { skillState, pools, modifiers } = draft;
           skillState.skill = newSkill;
           skillState.applySpecialization = false;
-          pools.available = this.getPools(newSkill);
+          skillState.aptitudeMultiplier = newSkill.aptMultiplier;
+          (skillState.halveBase = false),
+            (pools.available = this.getPools(newSkill));
           this.togglePool(draft, null);
+          this.updateAction(
+            draft,
+            createAction({
+              type: draft.action.type,
+              subtype: defaultCheckActionSubtype(newSkill.linkedAptitude),
+            }),
+          );
           modifiers.effects = this.getModifierEffects(newSkill, this.action);
         });
       },
@@ -118,11 +165,24 @@ export class SkillTest extends SuccessTestBase {
       pools,
       action,
     } = this;
-    const { skill, applySpecialization } = skillState; // TODO Aptitude stuff
+    const {
+      skill,
+      applySpecialization,
+      aptitudeMultiplier,
+      halveBase,
+    } = skillState; // TODO Aptitude stuff
     const data: SuccessTestMessage = {
       parts: compact([
-        { name: skillState.skill.name, value: skillState.skill.points },
-        { name: localize(skill.linkedAptitude), value: skill.aptitudePoints },
+        {
+          name: `${skillState.skill.name} ${halveBase ? '÷2' : ''}`,
+          value: skillState.skill.points,
+        },
+        {
+          name: `${localize(skill.linkedAptitude)} ${
+            halveBase ? `(÷2)` : ''
+          } x${aptitudeMultiplier}`,
+          value: skill.aptitudePoints * aptitudeMultiplier,
+        },
         applySpecialization && { name: skill.specialization, value: 10 },
         ...(ignoreModifiers ? [] : this.modifiersAsParts),
       ]),
