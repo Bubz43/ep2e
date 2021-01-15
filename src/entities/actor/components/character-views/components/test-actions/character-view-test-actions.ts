@@ -208,8 +208,9 @@ export class CharacterViewTestActions extends LitElement {
           title=${rep.network}
           class="rep-acronym"
           @click=${() => this.startFavorTest(rep, Favor.Trivial)}
-          >${rep.acronym}</button
         >
+          ${rep.acronym}
+        </button>
         <span class="rep-score">${rep.score}</span>
         <div class="favors">
           ${[...maxFavors].map(([favor, max]) => {

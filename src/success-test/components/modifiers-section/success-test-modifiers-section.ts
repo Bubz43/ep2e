@@ -10,7 +10,10 @@ import {
 } from '@src/features/effects';
 import { idProp } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
-import { createSuccessTestModifier, SimpleSuccessTestModifier } from '@src/success-test/success-test';
+import {
+  createSuccessTestModifier,
+  SimpleSuccessTestModifier,
+} from '@src/success-test/success-test';
 import { withSign } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';

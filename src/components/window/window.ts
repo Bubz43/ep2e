@@ -339,7 +339,7 @@ export class SlWindow extends LitElement {
 
   private resetSize() {
     if (this.hasChangedSize) {
-            assignStyles(this.contentContainer, { height: '', width: '' });
+      assignStyles(this.contentContainer, { height: '', width: '' });
     }
 
     repositionIfNeeded(this);
@@ -507,21 +507,23 @@ export class SlWindow extends LitElement {
         this.hasChangedSize && {
           label: `${localize('reset')} ${localize('size')}`,
           callback: () => this.resetSize(),
-          icon: html`<mwc-icon>aspect_ratio</mwc-icon>`
+          icon: html`<mwc-icon>aspect_ratio</mwc-icon>`,
         },
         {
-          label: localize(this.minimized ? "restore" : "minimize"),
+          label: localize(this.minimized ? 'restore' : 'minimize'),
           callback: () => this.toggleMinimize(),
-          icon: html`<mwc-icon>${this.minimized ? "open_in_full" : "minimize"}</mwc-icon>`
+          icon: html`<mwc-icon
+            >${this.minimized ? 'open_in_full' : 'minimize'}</mwc-icon
+          >`,
         },
-        "divider",
+        'divider',
         {
           label: localize('close'),
           callback: () => this.close(),
-          icon: html`<mwc-icon>close</mwc-icon>`
+          icon: html`<mwc-icon>close</mwc-icon>`,
         },
       ]),
-      position: ev
+      position: ev,
     });
   }
 
@@ -556,7 +558,6 @@ export class SlWindow extends LitElement {
         @dblclick=${this.toggleMinimize}
         @mousedown=${this.startDrag}
         @contextmenu=${this.openMenu}
-        
       >
         <div class="heading">
           ${this.img ? html`<img height="24px" src=${this.img} />` : ''}

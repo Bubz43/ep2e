@@ -81,8 +81,6 @@ export const maxFavors: ReadonlyMap<ConsumableFavor, number> = new Map([
   [Favor.Major, 1],
 ]);
 
-
-
 export const favorValues = (favor: Favor) => {
   switch (favor) {
     case Favor.Trivial:

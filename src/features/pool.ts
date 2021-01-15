@@ -1,6 +1,9 @@
 import { AptitudeType, PoolEffectUsability, PoolType } from '@src/data-enums';
 import { localize } from '@src/foundry/localization';
-import { createSuccessTestModifier, SimpleSuccessTestModifier } from '@src/success-test/success-test';
+import {
+  createSuccessTestModifier,
+  SimpleSuccessTestModifier,
+} from '@src/success-test/success-test';
 import { localImage } from '@src/utility/images';
 import { LazyGetter } from 'lazy-get-decorator';
 import { clamp } from 'remeda';
@@ -74,7 +77,7 @@ export class Pool {
   @LazyGetter()
   get testModifier() {
     return createSuccessTestModifier({
-      name: localize(this.type),
+      name: `${localize(this.type)} ${localize('bonus')}`,
       value: 20,
       img: this.icon,
     });

@@ -56,8 +56,10 @@ export class ReputationFavor extends SuccessTestBase {
   }
 
   get totalBurnedRepScore() {
-    const { burnBonus, burnForAdditionalFavor, type } = this.favorState
-    return burnBonus + (burnForAdditionalFavor ? favorValues(type).burnCost : 0)
+    const { burnBonus, burnForAdditionalFavor, type } = this.favorState;
+    return (
+      burnBonus + (burnForAdditionalFavor ? favorValues(type).burnCost : 0)
+    );
   }
 
   constructor({

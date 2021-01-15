@@ -8,14 +8,14 @@ import {
   complementarySkillBonus,
   FieldSkillType,
   isFieldSkill,
-  Skill
+  Skill,
 } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import {
   skillLinkedAptitudeMultipliers,
-  SkillTest
+  SkillTest,
 } from '@src/success-test/skill-test';
 import { notEmpty, withSign } from '@src/utility/helpers';
 import {
@@ -24,7 +24,7 @@ import {
   internalProperty,
   LitElement,
   PropertyValues,
-  query
+  query,
 } from 'lit-element';
 import { compact } from 'remeda';
 import type { Subscription } from 'rxjs';
@@ -76,7 +76,7 @@ export class SkillTestControls extends LitElement {
   ) => {
     ego: Ego;
     character?: Character;
-    skill: Skill
+    skill: Skill;
     // TODO Item source
   } | null;
 
@@ -296,7 +296,12 @@ export class SkillTestControls extends LitElement {
                       slot="before"
                       ?checked=${applySpecialization}
                     ></mwc-checkbox>
-                    <span> <span>${skill.specialization}</span> <span class="category">${localize("specialization")}</span></span>
+                    <span>
+                      <span>${skill.specialization}</span>
+                      <span class="category"
+                        >${localize('specialization')}</span
+                      ></span
+                    >
                     <span slot="after">${withSign(10)}</span>
                   </wl-list-item>
                 `
@@ -304,7 +309,12 @@ export class SkillTestControls extends LitElement {
             ${complementarySkill
               ? html`
                   <wl-list-item>
-                    <span class="truncate"><span>${complementarySkill.name}</span> <span class="category">${localize("complementary")}</span></span>
+                    <span class="truncate"
+                      ><span>${complementarySkill.name}</span>
+                      <span class="category"
+                        >${localize('complementary')}</span
+                      ></span
+                    >
                     <span slot="after"
                       >${withSign(
                         complementarySkillBonus(complementarySkill),
@@ -319,7 +329,9 @@ export class SkillTestControls extends LitElement {
           <success-test-section-label
             >${localize('action')}</success-test-section-label
           >
-          <success-test-action-form .action=${action}></success-test-action-form>
+          <success-test-action-form
+            .action=${action}
+          ></success-test-action-form>
         </section>
         ${notEmpty(pools.available)
           ? html`

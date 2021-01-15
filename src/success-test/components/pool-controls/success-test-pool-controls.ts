@@ -1,7 +1,10 @@
 import { enumValues } from '@src/data-enums';
 import { Pool, PreTestPoolAction } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
-import type { PreTestPool, SuccessTestPools } from '@src/success-test/success-test';
+import type {
+  PreTestPool,
+  SuccessTestPools,
+} from '@src/success-test/success-test';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { equals } from 'remeda';

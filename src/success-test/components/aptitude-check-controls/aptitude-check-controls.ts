@@ -1,8 +1,7 @@
 import {
   renderNumberField,
   renderSelectField,
-
-  renderTextField
+  renderTextField,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
@@ -20,9 +19,8 @@ import {
   html,
   internalProperty,
   LitElement,
-
   PropertyValues,
-  query
+  query,
 } from 'lit-element';
 import type { Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';

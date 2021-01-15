@@ -255,9 +255,8 @@ export class Ego {
     ) as Partial<Record<'active' | 'know', Skill[]>>;
   }
 
-
   get complementarySkills() {
-    return this.groupedSkills.know?.filter(skill => skill.points >= 40) || []
+    return this.groupedSkills.know?.filter((skill) => skill.points >= 40) || [];
   }
 
   get reps() {

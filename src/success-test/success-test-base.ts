@@ -48,7 +48,7 @@ export abstract class SuccessTestBase {
 
     if (nextState.settings.ready) {
       this.state.complete();
-      this.createMessage.call(nextState)
+      nextState.createMessage();
     } else this.state.next(nextState);
   }
 

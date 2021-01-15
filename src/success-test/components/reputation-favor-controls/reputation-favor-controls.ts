@@ -229,10 +229,9 @@ export class ReputationFavorControls extends LitElement {
                   ? html`
                       <small
                         >${localize('burning')}
-                        <b>${favorValues(type).burnCost}</b> ${localize("rep")} ${localize(
-                          'score',
-                        )}
-                        ${localize('to')} ${localize('use')}</small
+                        <b>${favorValues(type).burnCost}</b> ${localize('rep')}
+                        ${localize('score')} ${localize('to')}
+                        ${localize('use')}</small
                       >
                     `
                   : ''}
@@ -257,12 +256,15 @@ export class ReputationFavorControls extends LitElement {
                 ),
               ],
             })}
-
-            ${totalBurnedRepScore ? html`
-            <div class="total-burn">
-            ${localize("permanently")} ${localize("burning")} <b>${totalBurnedRepScore}</b> ${localize("rep")} ${localize("score")}
-            </div>
-            ` : ""}
+            ${totalBurnedRepScore
+              ? html`
+                  <div class="total-burn">
+                    ${localize('permanently')} ${localize('burning')}
+                    <b>${totalBurnedRepScore}</b> ${localize('rep')}
+                    ${localize('score')}
+                  </div>
+                `
+              : ''}
           </div>
         </section>
 

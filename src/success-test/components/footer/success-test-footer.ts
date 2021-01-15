@@ -70,7 +70,6 @@ export class SuccessTestFooter extends LitElement {
       >
     `;
   }
-
 }
 
 declare global {

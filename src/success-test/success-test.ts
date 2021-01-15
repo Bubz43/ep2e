@@ -55,8 +55,8 @@ export type SuccessTestSettings = {
   visibility: MessageVisibility;
   autoRoll: boolean;
   ready: boolean;
-  setReady: () => void
-}
+  setReady: () => void;
+};
 
 export type SuccessTestPools = {
   available: ReadonlyPool[];
@@ -76,7 +76,9 @@ export const createSuccessTestModifier = ({
   name = localize('modifier'),
   value = 0,
   ...rest
-}: Partial<Omit<SimpleSuccessTestModifier, 'id'>> = {}): SimpleSuccessTestModifier => ({
+}: Partial<
+  Omit<SimpleSuccessTestModifier, 'id'>
+> = {}): SimpleSuccessTestModifier => ({
   name,
   value,
   ...rest,
