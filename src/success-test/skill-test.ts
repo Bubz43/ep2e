@@ -4,7 +4,12 @@ import { PoolType } from '@src/data-enums';
 import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
-import type { Action } from '@src/features/actions';
+import {
+  Action,
+  ActionType,
+  createAction,
+  defaultCheckActionSubtype,
+} from '@src/features/actions';
 import { matchesSkill } from '@src/features/effects';
 import { Pool } from '@src/features/pool';
 import type { Skill } from '@src/features/skills';
@@ -38,7 +43,14 @@ export class SkillTest extends SuccessTestBase {
   }
 
   constructor({ ego, skill, character, token, action }: SkillTestInit) {
-    super({ action });
+    super({
+      action:
+        action ??
+        createAction({
+          type: ActionType.Quick, // TODO better default
+          subtype: defaultCheckActionSubtype(skill.linkedAptitude),
+        }),
+    });
     this.ego = ego;
     this.character = character;
     this.token = token;

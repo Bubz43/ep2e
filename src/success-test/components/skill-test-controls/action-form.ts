@@ -30,12 +30,10 @@ export class STActionForm extends LitElement {
 
   @property({ attribute: false })
   action!: WithUpdate<Action>;
-  
 
   render() {
     const { action } = this;
     const isTask = action.type === ActionType.Task;
-    console.log("render action form")
     return html`
       ${renderAutoForm({
         classes: `action-form ${action.type}`,

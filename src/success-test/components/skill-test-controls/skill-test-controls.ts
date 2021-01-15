@@ -132,7 +132,8 @@ export class SkillTestControls extends LitElement {
       content: this.test.ego.skills.map(skill => ({
         label: skill.fullName,
         callback: () => this.test?.skillState.replaceSkill(skill),
-        icon: html`<img src=${poolIcon(Pool.linkedToAptitude(skill.linkedAptitude))} />`
+        icon: html`<img src=${poolIcon(Pool.linkedToAptitude(skill.linkedAptitude))} />`,
+        activated: skill === this.test?.skillState.skill
       }))
     })
   }
