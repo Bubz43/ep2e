@@ -5,12 +5,16 @@ import {
   createAction,
   updateAction,
 } from '@src/features/actions';
-import type { SourcedEffect, SuccessTestEffect } from '@src/features/effects';
+import {
+  Source,
+  SourcedEffect,
+  SuccessTestEffect,
+} from '@src/features/effects';
 import { PreTestPoolAction } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import type { WithUpdate } from '@src/utility/updating';
 import { immerable, Draft, produceWithPatches } from 'immer';
-import { equals, merge } from 'remeda';
+import { equals, merge, pick } from 'remeda';
 import { BehaviorSubject } from 'rxjs';
 import {
   createSuccessTestModifier,
@@ -19,6 +23,7 @@ import {
   SuccessTestModifiers,
   SuccessTestPools,
   SuccessTestSettings,
+  successTestTargetClamp,
 } from './success-test';
 
 export type SuccessTestInit = {
@@ -26,6 +31,8 @@ export type SuccessTestInit = {
 };
 
 export abstract class SuccessTestBase {
+  abstract get basePoints(): number;
+  protected abstract createMessage(): void | Promise<void>;
   readonly [immerable] = true;
 
   private readonly state = new BehaviorSubject(this);
@@ -36,18 +43,25 @@ export abstract class SuccessTestBase {
       this.state.value,
       typeof recipe === 'function' ? recipe : () => recipe,
     );
+
     console.log(patches);
-    this.state.next(nextState);
+
+    if (nextState.settings.ready) {
+      this.state.complete();
+      this.createMessage();
+    } else this.state.next(nextState);
   }
 
   readonly settings: WithUpdate<SuccessTestSettings> = {
     visibility: rollModeToVisibility(game.settings.get('core', 'rollMode')),
     autoRoll: true,
+    ready: false,
     update: (changed) => {
-      this.update((recipe) => {
-        recipe.settings = merge(recipe.settings, changed);
-      });
+      this.update(
+        (draft) => void (draft.settings = merge(draft.settings, changed)),
+      );
     },
+    setReady: () => this.update(({ settings }) => void (settings.ready = true)),
   };
 
   readonly pools: SuccessTestPools = {
@@ -73,14 +87,26 @@ export abstract class SuccessTestBase {
     },
   };
 
-  abstract get basePoints(): number;
-
-  get total() {
+  get target() {
     return this.basePoints + (this.ignoreModifiers ? 0 : this.modifierTotal);
+  }
+
+  get clampedTarget() {
+    return successTestTargetClamp(this.target);
   }
 
   get ignoreModifiers() {
     return this.pools.active?.[1] === PreTestPoolAction.IgnoreMods;
+  }
+
+  get modifiersAsParts() {
+    const { effects, simple } = this.modifiers;
+    return [
+      ...[...effects].flatMap(([effect, active]) =>
+        active ? { name: effect[Source], value: effect.modifier } : [],
+      ),
+      ...[...simple.values()].map(pick(['name', 'value'])),
+    ];
   }
 
   get modifierTotal() {
@@ -105,7 +131,6 @@ export abstract class SuccessTestBase {
           );
 
           const { timeMod, modifier } = draft.action;
-
           if (timeMod) {
             modifier.value = timeMod < 0 ? timeMod * 20 : timeMod * 10;
             modifier.name = `${localize(

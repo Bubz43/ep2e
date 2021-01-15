@@ -24,7 +24,7 @@ module.exports = {
   },
   buildOptions: {
     clean: true,
-    sourcemap: true,
+    // sourcemap: true,
     watch: true,
   },
   alias: {

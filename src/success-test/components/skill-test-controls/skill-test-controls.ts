@@ -92,7 +92,10 @@ export class SkillTestControls extends LitElement {
               new SkillTest({
                 ...info,
                 skill: this.skill,
-              }).subscribe((test) => (this.test = test)),
+              }).subscribe({
+                next: (test) => (this.test = test),
+                complete: () => this.win?.close()
+              }),
             );
           }
         }),
@@ -150,7 +153,7 @@ export class SkillTestControls extends LitElement {
 
   private renderTest(test: NonNullable<SkillTestControls['test']>) {
     const { entities } = this;
-    const { character, ego, action, pools, total } = test;
+    const { character, ego, action, pools, target } = test;
     const {
       skill,
       applySpecialization,
@@ -233,7 +236,7 @@ export class SkillTestControls extends LitElement {
 
       <st-footer
         class="footer"
-        target=${total}
+        target=${target}
         .settings=${test.settings}
       ></st-footer>
     `;

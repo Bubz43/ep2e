@@ -1,11 +1,14 @@
-import { MessageVisibility } from "@src/chat/create-message";
-import { enumValues } from "@src/data-enums";
-import { localize } from "@src/foundry/localization";
-import { openMenu } from "@src/open-menu";
-import { SuccessTestSettings, successTestTargetClamp } from "@src/success-test/success-test";
-import type { WithUpdate } from "@src/utility/updating";
-import { customElement, LitElement, property, html } from "lit-element";
-import styles from "./footer.scss";
+import { MessageVisibility } from '@src/chat/create-message';
+import { enumValues } from '@src/data-enums';
+import { localize } from '@src/foundry/localization';
+import { openMenu } from '@src/open-menu';
+import {
+  SuccessTestSettings,
+  successTestTargetClamp,
+} from '@src/success-test/success-test';
+import type { WithUpdate } from '@src/utility/updating';
+import { customElement, LitElement, property, html } from 'lit-element';
+import styles from './footer.scss';
 
 @customElement('st-footer')
 export class SkillTestFooter extends LitElement {
@@ -20,12 +23,6 @@ export class SkillTestFooter extends LitElement {
   @property({ attribute: false }) settings!: WithUpdate<SuccessTestSettings>;
 
   @property({ type: Number }) target = 0;
-
-  private emitCompleted() {
-    this.dispatchEvent(
-      new CustomEvent('test-completed', { bubbles: true, composed: true }),
-    );
-  }
 
   render() {
     const { target, settings } = this;
@@ -56,7 +53,9 @@ export class SkillTestFooter extends LitElement {
           <mwc-icon>keyboard_arrow_down</mwc-icon>
         </button>
 
-        <button @click=${() => settings.update({ autoRoll: !settings.autoRoll })}>
+        <button
+          @click=${() => settings.update({ autoRoll: !settings.autoRoll })}
+        >
           <mwc-icon class="checkbox"
             >${settings.autoRoll
               ? 'check_box'
@@ -65,7 +64,7 @@ export class SkillTestFooter extends LitElement {
           Auto Roll
         </button>
       </div>
-      <mwc-button @click=${this.emitCompleted} raised
+      <mwc-button @click=${settings.setReady} raised
         >${localize('start')} ${localize('test')}</mwc-button
       >
     `;
@@ -73,7 +72,7 @@ export class SkillTestFooter extends LitElement {
 }
 
 declare global {
-    interface HTMLElementTagNameMap {
-        "st-footer": SkillTestFooter;
-    }
+  interface HTMLElementTagNameMap {
+    'st-footer': SkillTestFooter;
+  }
 }

@@ -53,6 +53,8 @@ export type SimpleSuccessTestModifier = {
 export type SuccessTestSettings = {
   visibility: MessageVisibility;
   autoRoll: boolean;
+  ready: boolean;
+  setReady: () => void
 }
 
 export type SuccessTestPools = {

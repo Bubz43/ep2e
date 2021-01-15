@@ -35,6 +35,7 @@ export class STActionForm extends LitElement {
   render() {
     const { action } = this;
     const isTask = action.type === ActionType.Task;
+    console.log("render action form")
     return html`
       ${renderAutoForm({
         classes: `action-form ${action.type}`,
