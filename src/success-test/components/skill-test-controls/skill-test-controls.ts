@@ -3,38 +3,35 @@ import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
+import { Pool, poolIcon } from '@src/features/pool';
 import {
   complementarySkillBonus,
   FieldSkillType,
   isFieldSkill,
-  Skill,
+  Skill
 } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
+import { openMenu } from '@src/open-menu';
+import {
+  skillLinkedAptitudeMultipliers,
+  SkillTest
+} from '@src/success-test/skill-test';
+import { notEmpty, withSign } from '@src/utility/helpers';
 import {
   customElement,
   html,
   internalProperty,
   LitElement,
   PropertyValues,
-  query,
+  query
 } from 'lit-element';
+import { compact } from 'remeda';
 import type { Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';
-import './action-form';
 import styles from './skill-test-controls.scss';
-import {
-  skillLinkedAptitudeMultipliers,
-  SkillTest,
-} from '@src/success-test/skill-test';
-import './footer';
-import { notEmpty, withSign } from '@src/utility/helpers';
-import { openMenu } from '@src/open-menu';
-import { Pool, poolIcon } from '@src/features/pool';
-import { compact } from 'remeda';
 
 type Init = {
-  skill: Skill;
   entities: SkillTestControls['entities'];
   getState: SkillTestControls['getState'];
 };
@@ -69,8 +66,6 @@ export class SkillTestControls extends LitElement {
     win.setState(init);
   }
 
-  @internalProperty() private skill!: Skill;
-
   @internalProperty() private entities!: {
     actor: ActorEP;
     token?: MaybeToken;
@@ -81,6 +76,8 @@ export class SkillTestControls extends LitElement {
   ) => {
     ego: Ego;
     character?: Character;
+    skill: Skill
+    // TODO Item source
   } | null;
 
   @query('sl-window')
@@ -101,7 +98,6 @@ export class SkillTestControls extends LitElement {
             this.subs.add(
               new SkillTest({
                 ...info,
-                skill: this.skill,
               }).subscribe({
                 next: (test) => (this.test = test),
                 complete: () => this.win?.close(),
@@ -130,7 +126,6 @@ export class SkillTestControls extends LitElement {
   }
 
   setState(init: Init) {
-    this.skill = init.skill;
     this.entities = init.entities;
     this.getState = init.getState;
   }
@@ -324,7 +319,7 @@ export class SkillTestControls extends LitElement {
           <success-test-section-label
             >${localize('action')}</success-test-section-label
           >
-          <st-action-form .action=${action}></st-action-form>
+          <success-test-action-form .action=${action}></success-test-action-form>
         </section>
         ${notEmpty(pools.available)
           ? html`
@@ -347,11 +342,11 @@ export class SkillTestControls extends LitElement {
         .modifierStore=${test.modifiers}
       ></success-test-modifiers-section>
 
-      <st-footer
+      <success-test-footer
         class="footer"
         target=${target}
         .settings=${test.settings}
-      ></st-footer>
+      ></success-test-footer>
     `;
   }
 }

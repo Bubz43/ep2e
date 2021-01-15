@@ -7,7 +7,7 @@ import { ActorType } from '@src/entities/entity-types';
 import { maxFavors } from '@src/features/reputations';
 import { Skill, skillFilterCheck } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
-import { AptitudeCheck } from '@src/success-test/aptitude-check';
+import { AptitudeCheckControls } from '@src/success-test/components/aptitude-check-controls/aptitude-check-controls';
 import { SkillTestControls } from '@src/success-test/components/skill-test-controls/skill-test-controls';
 import { notEmpty, safeMerge } from '@src/utility/helpers';
 import {
@@ -17,7 +17,7 @@ import {
   LitElement,
   property,
   PropertyValues,
-  queryAll,
+  queryAll
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { live } from 'lit-html/directives/live';
@@ -74,18 +74,28 @@ export class CharacterViewTestActions extends LitElement {
   }
 
   private startAptitudeTest(aptitude: AptitudeType) {
-    AptitudeCheck.openWindow(aptitude, this.character.actor);
+    AptitudeCheckControls.openWindow({
+      entities: { actor: this.character.actor,},
+      getState: (actor) => {
+         if (actor.proxy.type !== ActorType.Character) return null;
+         return {
+           ego: actor.proxy.ego,
+           character: actor.proxy,
+           aptitude
+         };
+      }
+    })
   }
 
   private startSkillTest(skill: Skill) {
     SkillTestControls.openWindow({
-      skill,
-      entities: { actor: this.character.actor },
+      entities: { actor: this.character.actor  },
       getState: (actor) => {
         if (actor.proxy.type !== ActorType.Character) return null;
         return {
           ego: actor.proxy.ego,
           character: actor.proxy,
+          skill: actor.proxy.ego.skills.find(s => s.name === skill.name) || skill
         };
       },
     });

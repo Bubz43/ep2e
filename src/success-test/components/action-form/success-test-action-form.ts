@@ -7,6 +7,7 @@ import { renderAutoForm } from '@src/components/form/forms';
 import { enumValues } from '@src/data-enums';
 import { Action, ActionSubtype, ActionType } from '@src/features/actions';
 import { localize } from '@src/foundry/localization';
+import type { WithUpdate } from '@src/utility/updating';
 import type { CoolStore } from 'cool-store';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
@@ -22,22 +23,19 @@ export class SuccessTestActionForm extends LitElement {
     return [styles];
   }
 
-  @property({ type: Object }) actionState!: {
-    action: Action;
-    setAction: (change: Partial<Action>) => void;
-  };
+  @property({ attribute: false })
+  action!: WithUpdate<Action>;
 
   render() {
-    const { action, setAction } = this.actionState;
+    const { action } = this;
     const isTask = action.type === ActionType.Task;
-
     return html`
       ${renderAutoForm({
         classes: `action-form ${action.type}`,
         props: action,
         noDebounce: true,
         storeOnInput: true,
-        update: setAction,
+        update: action.update,
         fields: ({ type, subtype, timeframe, timeMod }) => [
           renderSelectField(type, enumValues(ActionType)),
           renderSelectField(subtype, enumValues(ActionSubtype)),

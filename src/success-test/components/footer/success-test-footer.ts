@@ -4,8 +4,10 @@ import { localize } from '@src/foundry/localization';
 import { openMenu } from '@src/open-menu';
 import {
   SuccessTestRollState,
+  SuccessTestSettings,
   successTestTargetClamp,
 } from '@src/success-test/success-test';
+import type { WithUpdate } from '@src/utility/updating';
 import { customElement, LitElement, property, html } from 'lit-element';
 import styles from './success-test-footer.scss';
 
@@ -19,20 +21,12 @@ export class SuccessTestFooter extends LitElement {
     return [styles];
   }
 
+  @property({ attribute: false }) settings!: WithUpdate<SuccessTestSettings>;
+
   @property({ type: Number }) target = 0;
 
-  @property({ type: Object }) rollState!: SuccessTestRollState & {
-    update: (changed: Partial<SuccessTestRollState>) => void;
-  };
-
-  private emitCompleted() {
-    this.dispatchEvent(
-      new CustomEvent('test-completed', { bubbles: true, composed: true }),
-    );
-  }
-
   render() {
-    const { target, rollState: state } = this;
+    const { target, settings } = this;
     const clamped = successTestTargetClamp(target);
 
     return html`
@@ -50,30 +44,33 @@ export class SuccessTestFooter extends LitElement {
               content: enumValues(MessageVisibility).map((option) => ({
                 label: localize(option),
                 callback: () => {
-                  this.rollState.update({ visibility: option });
+                  this.settings.update({ visibility: option });
                 },
-                activated: option === state.visibility,
+                activated: option === settings.visibility,
               })),
             })}
         >
-          <span class="visibility">${localize(state.visibility)}</span>
+          <span class="visibility">${localize(settings.visibility)}</span>
           <mwc-icon>keyboard_arrow_down</mwc-icon>
         </button>
 
-        <button @click=${() => state.update({ autoRoll: !state.autoRoll })}>
+        <button
+          @click=${() => settings.update({ autoRoll: !settings.autoRoll })}
+        >
           <mwc-icon class="checkbox"
-            >${state.autoRoll
+            >${settings.autoRoll
               ? 'check_box'
               : 'check_box_outline_blank'}</mwc-icon
           >
           Auto Roll
         </button>
       </div>
-      <mwc-button @click=${this.emitCompleted} raised
+      <mwc-button @click=${settings.setReady} raised
         >${localize('start')} ${localize('test')}</mwc-button
       >
     `;
   }
+
 }
 
 declare global {

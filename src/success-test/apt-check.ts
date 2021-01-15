@@ -18,7 +18,7 @@ import { compact, map, merge } from 'remeda';
 import { rollSuccessTest } from './success-test';
 import { SuccessTestBase } from './success-test-base';
 
-export type AptCheckInit = {
+export type AptitudeCheckInit = {
   ego: Ego;
   character?: Character;
   token?: MaybeToken;
@@ -26,7 +26,7 @@ export type AptCheckInit = {
   action?: Action;
 };
 
-export class AptCheck extends SuccessTestBase {
+export class AptitudeCheck extends SuccessTestBase {
   readonly ego;
   readonly character;
   readonly token;
@@ -41,7 +41,7 @@ export class AptCheck extends SuccessTestBase {
     );
   }
 
-  constructor({ ego, character, token, aptitude, action }: AptCheckInit) {
+  constructor({ ego, character, token, aptitude, action }: AptitudeCheckInit) {
     super({
       action:
         action ??

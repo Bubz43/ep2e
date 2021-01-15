@@ -1,34 +1,37 @@
-import { MessageVisibility } from '@src/chat/create-message';
 import {
-  renderLabeledCheckbox,
   renderNumberField,
   renderSelectField,
-  renderSlider,
-  renderTextField,
-  renderTimeField,
+
+  renderTextField
 } from '@src/components/field/fields';
-import { renderAutoForm, renderSubmitForm } from '@src/components/form/forms';
+import { renderAutoForm } from '@src/components/form/forms';
+import type { SlWindow } from '@src/components/window/window';
 import { AptitudeType, enumValues } from '@src/data-enums';
+import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
+import type { Ego } from '@src/entities/actor/ego';
+import type { Character } from '@src/entities/actor/proxies/character';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
-import { ActionSubtype, ActionType } from '@src/features/actions';
-import { Source } from '@src/features/effects';
-import { PreTestPoolAction } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
-import { openMenu } from '@src/open-menu';
-import type { AptitudeCheck } from '@src/success-test/aptitude-check';
-import { successTestTargetClamp } from '@src/success-test/success-test';
-import { notEmpty, withSign } from '@src/utility/helpers';
+import { overlay } from '@src/init';
+import { AptitudeCheck } from '@src/success-test/apt-check';
+import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
+  internalProperty,
   LitElement,
-  property,
+
   PropertyValues,
+  query
 } from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map';
-import { repeat } from 'lit-html/directives/repeat';
-import { equals, identity } from 'remeda';
+import type { Subscription } from 'rxjs';
+import { traverseActiveElements } from 'weightless';
 import styles from './aptitude-check-controls.scss';
+
+type Init = {
+  entities: AptitudeCheckControls['entities'];
+  getState: AptitudeCheckControls['getState'];
+};
 
 @customElement('aptitude-check-controls')
 export class AptitudeCheckControls extends LitElement {
@@ -40,38 +43,108 @@ export class AptitudeCheckControls extends LitElement {
     return [styles];
   }
 
-  @property({ attribute: false }) test!: AptitudeCheck;
+  private static readonly openWindows = new WeakMap<
+    ActorEP,
+    AptitudeCheckControls
+  >();
 
-  private testUnsub: (() => void) | null = null;
+  static openWindow(init: Init) {
+    let win = AptitudeCheckControls.openWindows.get(init.entities.actor);
+
+    if (!win) {
+      win = new AptitudeCheckControls();
+      overlay.append(win);
+      AptitudeCheckControls.openWindows.set(init.entities.actor, win);
+    }
+    const source = traverseActiveElements();
+    if (source instanceof HTMLElement) {
+      requestAnimationFrame(() => win!.win?.positionAdjacentToElement(source));
+    }
+    win.setState(init);
+  }
+
+  @internalProperty() private entities!: {
+    actor: ActorEP;
+    token?: MaybeToken;
+  };
+
+  @internalProperty() private getState!: (
+    actor: ActorEP,
+  ) => {
+    ego: Ego;
+    character?: Character;
+    aptitude: AptitudeType;
+    // TODO Item source
+  } | null;
+
+  @query('sl-window')
+  private win?: SlWindow;
+
+  private subs = new Set<Subscription | Subscription['unsubscribe']>();
+
+  @internalProperty() private test?: AptitudeCheck;
+
+  update(changedProps: PropertyValues) {
+    if (changedProps.has('entities')) {
+      this.unsub();
+      this.subs.add(
+        this.entities.actor.subscribe((actor) => {
+          const info = actor && this.getState(actor);
+          if (!info) this.win?.close();
+          else {
+            this.subs.add(
+              new AptitudeCheck({
+                ...info,
+              }).subscribe({
+                next: (test) => (this.test = test),
+                complete: () => this.win?.close(),
+              }),
+            );
+          }
+        }),
+      );
+    }
+
+    super.update(changedProps);
+  }
 
   disconnectedCallback() {
     this.unsub();
+    AptitudeCheckControls.openWindows.delete(this.entities.actor);
     super.disconnectedCallback();
   }
 
-  updated(changedProps: PropertyValues) {
-    if (changedProps.has('test')) {
-      this.unsub();
-      this.testUnsub = this.test.subscribe(() => this.requestUpdate());
-    }
-    super.updated(changedProps);
+  private unsub() {
+    this.subs.forEach((unsub) => {
+      if ('unsubscribe' in unsub) unsub.unsubscribe();
+      else unsub();
+    });
+    this.subs.clear();
   }
 
-  private unsub() {
-    this.testUnsub?.();
-    this.testUnsub = null;
+  setState(init: Init) {
+    this.entities = init.entities;
+    this.getState = init.getState;
   }
 
   render() {
-    const {
-      state,
-      pools,
-      activePool,
-      ignoreMods,
-      character,
-      token,
-      target,
-    } = this.test;
+    console.log(this.constructor);
+    return html`
+      <sl-window
+        name="${localize('successTest')} - ${localize('skillTest')}"
+        @sl-window-closed=${this.remove}
+        noremove
+      >
+        ${this.test
+          ? html`<div class="controls">${this.renderTest(this.test)}</div>`
+          : ''}
+      </sl-window>
+    `;
+  }
+
+  renderTest(test: NonNullable<AptitudeCheckControls['test']>) {
+    const { character, ego, action, pools, target, aptitude } = test;
+    const { token } = this.entities;
 
     return html`
       ${character
@@ -100,23 +173,21 @@ export class AptitudeCheckControls extends LitElement {
           >
           ${renderAutoForm({
             classes: 'aptitude-info',
-            props: state,
+            props: aptitude,
             storeOnInput: true,
             noDebounce: true,
-            update: this.test.updateState,
-            fields: ({ aptitude, multiplier }) => [
-              renderSelectField(aptitude, enumValues(AptitudeType), {
+            update: aptitude.update,
+            fields: ({ type, multiplier }) => [
+              renderSelectField(type, enumValues(AptitudeType), {
                 altLabel: (type) => localize('FULL', type),
-                helpText: `${localize('points')}: ${
-                  this.test.ego.aptitudes[aptitude.value]
-                }`,
+                helpText: `${localize('points')}: ${ego.aptitudes[type.value]}`,
                 helpPersistent: true,
               }),
               renderNumberField(multiplier, { min: 1.5, max: 3, step: 1.5 }),
               renderTextField(
                 {
                   label: localize('total'),
-                  value: String(this.test.aptitudeTotal),
+                  value: String(test.basePoints),
                   prop: '',
                 },
                 { readonly: true },
@@ -131,14 +202,11 @@ export class AptitudeCheckControls extends LitElement {
           >
 
           <success-test-action-form
-            .actionState=${{
-              action: this.test.action,
-              setAction: this.test.updateAction,
-            }}
+            .action=${action}
           ></success-test-action-form>
         </section>
 
-        ${notEmpty(pools)
+        ${notEmpty(pools.available)
           ? html`
               <section class="pools">
                 <success-test-section-label
@@ -146,11 +214,7 @@ export class AptitudeCheckControls extends LitElement {
                 >
 
                 <success-test-pool-controls
-                  .poolState=${{
-                    available: pools,
-                    active: activePool,
-                    toggleActive: this.test.toggleActivePool,
-                  }}
+                  .poolState=${pools}
                 ></success-test-pool-controls>
               </section>
             `
@@ -159,23 +223,15 @@ export class AptitudeCheckControls extends LitElement {
 
       <success-test-modifiers-section
         class="modifiers"
-        ?ignored=${ignoreMods}
-        .modifierStore=${{
-          effects: this.test.modifierEffects,
-          toggleEffect: this.test.toggleActiveEffect,
-          simple: this.test.modifiers,
-          toggleSimple: this.test.toggleModifier,
-        }}
+        ?ignored=${test.ignoreModifiers}
+        total=${test.modifierTotal}
+        .modifierStore=${test.modifiers}
       ></success-test-modifiers-section>
 
       <success-test-footer
         class="footer"
         target=${target}
-        .rollState=${{
-          visibility: state.visibility,
-          autoRoll: state.autoRoll,
-          update: this.test.updateState,
-        }}
+        .settings=${test.settings}
       ></success-test-footer>
     `;
   }
