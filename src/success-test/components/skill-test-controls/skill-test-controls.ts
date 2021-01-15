@@ -3,7 +3,12 @@ import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
-import type { Skill } from '@src/features/skills';
+import {
+  complementarySkillBonus,
+  FieldSkillType,
+  isFieldSkill,
+  Skill,
+} from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
 import {
@@ -26,6 +31,7 @@ import './footer';
 import { notEmpty, withSign } from '@src/utility/helpers';
 import { openMenu } from '@src/open-menu';
 import { Pool, poolIcon } from '@src/features/pool';
+import { compact } from 'remeda';
 
 type Init = {
   skill: Skill;
@@ -144,6 +150,33 @@ export class SkillTestControls extends LitElement {
     });
   }
 
+  private openComplementarySkillSelect() {
+    const { complementarySkills } = this.test?.ego ?? {};
+    openMenu({
+      header: {
+        heading: `${localize('select')} ${localize('complementary')} ${localize(
+          'skill',
+        )}`,
+      },
+      content: compact([
+        [
+          {
+            label: localize('clear'),
+            callback: () => this.test?.skillState.setComplementarySkill(null),
+          },
+        ],
+        complementarySkills?.map((skill) => ({
+          label: skill.fullName,
+          callback: () => this.test?.skillState.setComplementarySkill(skill),
+          icon: html`<img
+            src=${poolIcon(Pool.linkedToAptitude(skill.linkedAptitude))}
+          />`,
+          activated: skill === this.test?.skillState.complementarySkill,
+        })),
+      ]).flat(),
+    });
+  }
+
   render() {
     return html`
       <sl-window
@@ -166,6 +199,7 @@ export class SkillTestControls extends LitElement {
       applySpecialization,
       aptitudeMultiplier,
       halveBase,
+      complementarySkill,
       toggleHalveBase,
       toggleSpecialization,
       cycleAptitudeMultiplier,
@@ -195,12 +229,28 @@ export class SkillTestControls extends LitElement {
 
       <div class="sections">
         <section class="skill-section">
-          <button
-            title=${localize('halve')}
-            class=${halveBase ? 'active' : ''}
-            @click=${toggleHalveBase}
-            >➗</button
-          >
+          <div class="options">
+            ${(isFieldSkill(skill) &&
+              skill.fieldSkill === FieldSkillType.Know) ||
+            !ego.complementarySkills.length
+              ? ''
+              : html`
+                  <button
+                    title=${localize('complementary')}
+                    @click=${this.openComplementarySkillSelect}
+                  >
+                    <mwc-icon>support</mwc-icon>
+                  </button>
+                `}
+            <button
+              title=${localize('halve')}
+              class=${halveBase ? 'active' : ''}
+              @click=${toggleHalveBase}
+            >
+              <!-- ➗ -->
+              ÷2
+            </button>
+          </div>
           <success-test-section-label
             >${localize('skill')}</success-test-section-label
           >
@@ -251,8 +301,20 @@ export class SkillTestControls extends LitElement {
                       slot="before"
                       ?checked=${applySpecialization}
                     ></mwc-checkbox>
-                    <span>${skill.specialization}</span>
-                    <span slot="after"> +10 </span>
+                    <span> <span>${skill.specialization}</span> <span class="category">${localize("specialization")}</span></span>
+                    <span slot="after">${withSign(10)}</span>
+                  </wl-list-item>
+                `
+              : ''}
+            ${complementarySkill
+              ? html`
+                  <wl-list-item>
+                    <span class="truncate"><span>${complementarySkill.name}</span> <span class="category">${localize("complementary")}</span></span>
+                    <span slot="after"
+                      >${withSign(
+                        complementarySkillBonus(complementarySkill),
+                      )}</span
+                    >
                   </wl-list-item>
                 `
               : ''}

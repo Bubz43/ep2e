@@ -12,7 +12,7 @@ import {
 } from '@src/features/actions';
 import { matchesSkill } from '@src/features/effects';
 import { Pool } from '@src/features/pool';
-import type { Skill } from '@src/features/skills';
+import { complementarySkillBonus, Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { compact, map } from 'remeda';
 import { rollSuccessTest } from './success-test';
@@ -38,7 +38,7 @@ export class SkillTest extends SuccessTestBase {
     aptitudeMultiplier: number;
     halveBase: boolean;
     complementarySkill?: Skill | null;
-    setComplementarySkill: (skill: Skill) => void;
+    setComplementarySkill: (skill: Skill | null) => void;
     toggleHalveBase: () => void;
     cycleAptitudeMultiplier: () => void;
     replaceSkill: (newSkill: Skill) => void;
@@ -51,10 +51,13 @@ export class SkillTest extends SuccessTestBase {
       applySpecialization,
       aptitudeMultiplier,
       halveBase,
+      complementarySkill,
     } = this.skillState;
     const base = skill.points + skill.aptitudePoints * aptitudeMultiplier;
     return (
-      Math.round(base * (halveBase ? 0.5 : 1)) + (applySpecialization ? 10 : 0)
+      Math.round(base * (halveBase ? 0.5 : 1)) +
+      (applySpecialization ? 10 : 0) +
+      (complementarySkill ? complementarySkillBonus(complementarySkill) : 0)
     );
   }
 
@@ -107,8 +110,9 @@ export class SkillTest extends SuccessTestBase {
           skillState.skill = newSkill;
           skillState.applySpecialization = false;
           skillState.aptitudeMultiplier = newSkill.aptMultiplier;
-          (skillState.halveBase = false),
-            (pools.available = this.getPools(newSkill));
+          skillState.halveBase = false;
+          skillState.complementarySkill = null;
+          pools.available = this.getPools(newSkill);
           this.togglePool(draft, null);
           this.updateAction(
             draft,
@@ -136,7 +140,7 @@ export class SkillTest extends SuccessTestBase {
           matchesSkill(skill)(action),
           false,
         ) || []
-      ).map((effect) => [effect, false]),
+      ).map((effect) => [effect, !effect.requirement]),
     );
   }
 
@@ -170,6 +174,7 @@ export class SkillTest extends SuccessTestBase {
       applySpecialization,
       aptitudeMultiplier,
       halveBase,
+      complementarySkill,
     } = skillState; // TODO Aptitude stuff
     const data: SuccessTestMessage = {
       parts: compact([
@@ -183,7 +188,14 @@ export class SkillTest extends SuccessTestBase {
           } x${aptitudeMultiplier}`,
           value: skill.aptitudePoints * aptitudeMultiplier,
         },
-        applySpecialization && { name: skill.specialization, value: 10 },
+        applySpecialization && {
+          name: `[${localize('specialization')}] ${skill.specialization}`,
+          value: 10,
+        },
+        complementarySkill && {
+          name: `[${localize('complementary')}] ${complementarySkill.name}`,
+          value: complementarySkillBonus(complementarySkill),
+        },
         ...(ignoreModifiers ? [] : this.modifiersAsParts),
       ]),
       states: [

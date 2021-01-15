@@ -1372,6 +1372,7 @@
     "not": "Not",
     "cannot": "Cannot",
     "change": "Change",
+    "complementary": "Complementary",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

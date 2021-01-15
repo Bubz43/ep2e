@@ -60,7 +60,7 @@ import {
 import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { createPipe, last, map, merge, pipe, uniq } from 'remeda';
+import { createPipe, last, map, merge, pipe, uniq, uniqBy } from 'remeda';
 import type { Attacker } from '../item-interfaces';
 import { Copyable, Purchasable, Stackable } from '../item-mixins';
 import { renderItemForm } from '../item-views';
@@ -198,10 +198,12 @@ export class Substance
   }
 
   get fullType() {
-    return uniq([
-      this.category,
-      ...map([this.classification, this.substanceType], localize),
-    ]).join(' ');
+    const { category } = this;
+    const info = map([this.classification, this.substanceType], localize);
+    const subCategory = info.join('').toLocaleLowerCase();
+    return subCategory === this.category.toLocaleLowerCase()
+      ? category
+      : uniqBy([category, ...info], (t) => t.toLocaleLowerCase()).join(' ');
   }
 
   get partialType() {

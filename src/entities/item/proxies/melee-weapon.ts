@@ -12,7 +12,7 @@ import { EP } from '@src/foundry/system';
 import { HealthType } from '@src/health/health';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { createPipe } from 'remeda';
+import { compact, createPipe } from 'remeda';
 import type { Attacker } from '../item-interfaces';
 import { Copyable, Equippable, Gear, Purchasable } from '../item-mixins';
 import { Explosive } from './explosive';
@@ -46,6 +46,19 @@ export class MeleeWeapon
 
   get acceptsPayload() {
     return this.epData.acceptsPayload;
+  }
+
+  get isImprovised() {
+    return this.epData.improvised;
+  }
+
+  get fullType() {
+    const { wareType, isImprovised } = this;
+    return compact([
+      isImprovised && localize('improved'),
+      wareType && localize(wareType),
+      localize(this.type),
+    ]).join(' ');
   }
 
   @LazyGetter()

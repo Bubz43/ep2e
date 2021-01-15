@@ -52,6 +52,13 @@ export enum KnowSkillCategory {
   ProfessionalTraining = 'professionalTraining',
 }
 
+export const complementarySkillBonus = ({ points}: Skill) => {
+  if (points >= 80) return 30
+  if (points >= 60) return 20
+  if (points >= 40) return 10
+  return 0;
+}
+
 type Info = Readonly<{
   category: ActiveSkillCategory;
   linkedAptitude: AptitudeType;

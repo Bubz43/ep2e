@@ -1397,7 +1397,7 @@ type LangEntries =
   | 'flipFlopRoll'
   | 'not'
   | 'cannot'
-  | 'original';
+  | 'original' | "complementary";
 type FullNames =
   | 'cog'
   | 'int'

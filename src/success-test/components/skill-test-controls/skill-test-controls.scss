@@ -67,24 +67,33 @@
 .skill-section {
   position: relative;
 
+  .options {
+    position: absolute;
+    top: -1rem;
+    right: -0.25rem;
+    z-index: 2;
+    display: grid;
+    grid-auto-flow: column;
+    gap: 0.5ch;
+    align-items: center;
+  }
   button {
     display: inline-flex;
     place-content: center;
-    position: absolute;
+    align-items: center;
     border-radius: 100%;
     height: 1.5rem;
     width: 1.5rem;
     background: var(--color-bg);
-    z-index: 2;
     border: 1px solid var(--color-border);
-    transition: box-shadow 200ms, opacity 200ms, transform 10ms;
-    top: -0.75rem;
-    right: -0.25rem;
+    transition: box-shadow 100ms, opacity 100ms, transform 10ms;
+    color: var(--color-text);
     opacity: 0.75;
     cursor: pointer;
     outline: none;
+    --mdc-icon-size: 1.5rem;
     &:active {
-      transform: scale(0.9);
+      transform: scale(0.95);
     }
     &:hover {
       opacity: 0.9;
@@ -92,14 +101,13 @@
     &.active {
       box-shadow: 0 0 5px 1px var(--color-primary-alt);
 
-      opacity: 1;;
+      opacity: 1;
     }
-  
   }
 }
 
 .skill-state {
-  --list-item-padding: 0.25rem 1rem;
+  --list-item-padding: 0.1rem 1rem;
   padding: 0.25rem 0;
 
   .category {
@@ -113,6 +121,14 @@
     height: 2rem;
     margin: -1rem 0 0 -1rem;
     pointer-events: none;
+  }
+  .truncate {
+    display: inline-block;
+    @include truncate(240px);
+  }
+
+  [slot='after'] {
+    margin-left: 1ch;
   }
 
   .multipliers {
