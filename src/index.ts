@@ -160,6 +160,7 @@ import { SuccessTestModifiersSection } from './success-test/components/modifiers
 import { SuccessTestSectionLabel } from './success-test/components/section-label/success-test-section-label';
 import { SuccessTestFooter } from './success-test/components/footer/success-test-footer';
 import { SkillTestControls } from './success-test/components/skill-test-controls/skill-test-controls';
+import { ReputationFavorControls } from './success-test/components/reputation-favor-controls/reputation-favor-controls';
 
 // Generic Components
 Field;
@@ -324,3 +325,4 @@ SuccessTestModifiersSection;
 SuccessTestSectionLabel;
 SuccessTestFooter;
 SkillTestControls;
+ReputationFavorControls;

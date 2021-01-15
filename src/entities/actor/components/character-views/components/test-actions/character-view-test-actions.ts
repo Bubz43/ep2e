@@ -4,10 +4,11 @@ import { AptitudeType, enumValues } from '@src/data-enums';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
-import { maxFavors } from '@src/features/reputations';
+import { Favor, maxFavors, RepWithIdentifier } from '@src/features/reputations';
 import { Skill, skillFilterCheck } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { AptitudeCheckControls } from '@src/success-test/components/aptitude-check-controls/aptitude-check-controls';
+import { ReputationFavorControls } from '@src/success-test/components/reputation-favor-controls/reputation-favor-controls';
 import { SkillTestControls } from '@src/success-test/components/skill-test-controls/skill-test-controls';
 import { notEmpty, safeMerge } from '@src/utility/helpers';
 import {
@@ -17,11 +18,11 @@ import {
   LitElement,
   property,
   PropertyValues,
-  queryAll
+  queryAll,
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { live } from 'lit-html/directives/live';
-import { first, range, reject } from 'remeda';
+import { equals, first, range, reject } from 'remeda';
 import styles from './character-view-test-actions.scss';
 
 @customElement('character-view-test-actions')
@@ -75,27 +76,46 @@ export class CharacterViewTestActions extends LitElement {
 
   private startAptitudeTest(aptitude: AptitudeType) {
     AptitudeCheckControls.openWindow({
-      entities: { actor: this.character.actor,},
-      getState: (actor) => {
-         if (actor.proxy.type !== ActorType.Character) return null;
-         return {
-           ego: actor.proxy.ego,
-           character: actor.proxy,
-           aptitude
-         };
-      }
-    })
-  }
-
-  private startSkillTest(skill: Skill) {
-    SkillTestControls.openWindow({
-      entities: { actor: this.character.actor  },
+      entities: { actor: this.character.actor },
       getState: (actor) => {
         if (actor.proxy.type !== ActorType.Character) return null;
         return {
           ego: actor.proxy.ego,
           character: actor.proxy,
-          skill: actor.proxy.ego.skills.find(s => s.name === skill.name) || skill
+          aptitude,
+        };
+      },
+    });
+  }
+
+  private startSkillTest(skill: Skill) {
+    SkillTestControls.openWindow({
+      entities: { actor: this.character.actor },
+      getState: (actor) => {
+        if (actor.proxy.type !== ActorType.Character) return null;
+        return {
+          ego: actor.proxy.ego,
+          character: actor.proxy,
+          skill:
+            actor.proxy.ego.skills.find((s) => s.name === skill.name) || skill,
+        };
+      },
+    });
+  }
+
+  private startFavorTest(reputation: RepWithIdentifier, favor: Favor) {
+    ReputationFavorControls.openWindow({
+      entities: { actor: this.character.actor },
+      getState: (actor) => {
+        if (actor.proxy.type !== ActorType.Character) return null;
+        return {
+          ego: actor.proxy.ego,
+          character: actor.proxy,
+          reputation:
+            actor.proxy.ego.trackedReps.find((rep) =>
+              equals(rep.identifier, reputation.identifier),
+            ) ?? reputation,
+          favor,
         };
       },
     });
@@ -184,13 +204,21 @@ export class CharacterViewTestActions extends LitElement {
   private renderRep = (rep: Ego['trackedReps'][number]) => {
     return html`
       <li class="rep-item">
-        <span title=${rep.network} class="rep-acronym">${rep.acronym}</span>
+        <span
+          title=${rep.network}
+          class="rep-acronym"
+          @click=${() => this.startFavorTest(rep, Favor.Trivial)}
+          >${rep.acronym}</span
+        >
         <span class="rep-score">${rep.score}</span>
         <div class="favors">
           ${[...maxFavors].map(([favor, max]) => {
             const usedAmount = rep[favor];
             return html`
-              <span title=${localize(favor)}>
+              <span
+                title=${localize(favor)}
+                @click=${() => this.startFavorTest(rep, favor)}
+              >
                 ${range(1, max + 1).map(
                   (favorNumber) => html`
                     <mwc-icon

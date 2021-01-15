@@ -1,6 +1,13 @@
+import { PoolType } from '@src/data-enums';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
-import { ActionSubtype, ActionType, createAction } from '@src/features/actions';
+import {
+  Action,
+  ActionSubtype,
+  ActionType,
+  createAction,
+} from '@src/features/actions';
+import { matchesRep } from '@src/features/effects';
 import {
   Favor,
   RepNetwork,
@@ -10,7 +17,7 @@ import {
 } from '@src/features/reputations';
 import { localize } from '@src/foundry/localization';
 import type { WithUpdate } from '@src/utility/updating';
-import { merge } from 'remeda';
+import { compact, merge } from 'remeda';
 import { createSuccessTestModifier } from './success-test';
 import { SuccessTestBase } from './success-test-base';
 
@@ -67,7 +74,9 @@ export class ReputationFavor extends SuccessTestBase {
       type: favor,
       keepingQuiet: 0,
       burnBonus: 0,
-      burnForAdditionalFavor: false,
+      burnForAdditionalFavor:
+        favor !== Favor.Trivial &&
+        reputation[favor] >= (maxFavors.get(favor) ?? 1),
       update: (change) => {
         this.update((draft) => {
           draft.favorState = merge(draft.favorState, change);
@@ -108,6 +117,32 @@ export class ReputationFavor extends SuccessTestBase {
         });
       },
     };
+
+    this.pools.available = this.getPools();
+    this.modifiers.effects = this.getModifierEffects(
+      this.favorState.reputation,
+      this.action,
+    );
+  }
+
+  private getModifierEffects(rep: RepWithIdentifier, action: Action) {
+    return new Map(
+      (
+        this.character?.appliedEffects.getMatchingSuccessTestEffects(
+          matchesRep(rep)(action),
+          false,
+        ) || []
+      ).map((effect) => [effect, !effect.requirement]),
+    );
+  }
+
+  private getPools() {
+    const poolMap = this.character.pools;
+    return compact(
+      this.ego.useThreat
+        ? [poolMap.get(PoolType.Threat)]
+        : [poolMap.get(PoolType.Moxie), poolMap.get(PoolType.Flex)],
+    );
   }
 
   protected async createMessage() {
