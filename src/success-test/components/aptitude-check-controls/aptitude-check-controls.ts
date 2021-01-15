@@ -13,7 +13,7 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
-import { AptitudeCheck } from '@src/success-test/apt-check';
+import { AptitudeCheck } from '@src/success-test/aptitude-check';
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
@@ -131,7 +131,7 @@ export class AptitudeCheckControls extends LitElement {
     console.log(this.constructor);
     return html`
       <sl-window
-        name="${localize('successTest')} - ${localize('skillTest')}"
+        name="${localize('successTest')} - ${localize('aptitudeCheck')}"
         @sl-window-closed=${this.remove}
         noremove
       >

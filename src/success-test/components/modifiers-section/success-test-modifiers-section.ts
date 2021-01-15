@@ -76,7 +76,7 @@ export class SuccessTestModifiersSection extends LitElement {
           <mwc-icon-button slot="base" icon="add"></mwc-icon-button>
         </sl-popover>
       </sl-header>
-      <sl-animated-list transformOrigin="top">
+      <sl-animated-list>
         ${repeat(
           sortBy([...this.modifierStore.effects], ([e]) => !e.requirement),
           first(),

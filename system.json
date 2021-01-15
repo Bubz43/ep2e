@@ -47,6 +47,13 @@
       "path": "./packs/armor.db",
       "entity": "Item"
     },
+     {
+      "name": "melee-weapons",
+      "system": "ep2e",
+      "label": "Melee Weapons",
+      "path": "./packs/melee-weapons.db",
+      "entity": "Item"
+    },
     {
       "name": "disorders",
       "system": "ep2e",
