@@ -41,7 +41,6 @@
   );
 }
 
-
 .entity {
   grid-area: entity;
   margin-bottom: 0.25rem;
@@ -66,10 +65,33 @@
   }
 }
 
-
 .favor-section {
-    --list-item-padding: 0.1rem 1rem;
-    sl-form {
-        grid-template-columns: 1fr 1fr;
-    }
+  --list-item-padding: 0.1rem 1rem;
+  sl-form {
+    grid-template-columns: 1fr 1fr;
+    padding: 0.25rem 0.5rem 0;
+    border-top: 2px groove var(--color-border);
+  }
+  small {
+    font-weight: lighter;
+  }
+}
+
+  b {
+    color: orangered;
+  }
+
+.total-burn {
+  border-top: 2px groove var(--color-border);
+  text-align: center;
+  padding: 0.25rem 0;
+
+}
+
+.favor-info {
+  padding: 0.25rem 0;
+}
+
+.acronym {
+  color: var(--color-text-lighter);
 }

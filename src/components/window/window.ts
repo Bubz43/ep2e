@@ -1,3 +1,5 @@
+import { localize } from '@src/foundry/localization';
+import { openMenu } from '@src/open-menu';
 import { debounce } from '@src/utility/decorators';
 import {
   assignStyles,
@@ -14,6 +16,7 @@ import {
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
+  eventOptions,
   html,
   LitElement,
   property,
@@ -21,7 +24,7 @@ import {
   TemplateResult,
 } from 'lit-element';
 import { reposition } from 'nanopop';
-import { anyPass, clamp, mapToObj } from 'remeda';
+import { anyPass, clamp, compact, mapToObj } from 'remeda';
 import { ResizeOption, SlWindowEventName } from './window-options';
 import styles from './window.scss';
 
@@ -329,11 +332,16 @@ export class SlWindow extends LitElement {
     };
   }
 
-  private resetSize(ev: Event) {
+  private get hasChangedSize() {
     const { height, width } = this.contentContainer.style;
-    if (height || width) {
-      assignStyles(this.contentContainer, { height: '', width: '' });
+    return !!(height || width);
+  }
+
+  private resetSize() {
+    if (this.hasChangedSize) {
+            assignStyles(this.contentContainer, { height: '', width: '' });
     }
+
     repositionIfNeeded(this);
   }
 
@@ -490,6 +498,33 @@ export class SlWindow extends LitElement {
     }
   }
 
+  @eventOptions({ capture: true })
+  private openMenu(ev: MouseEvent) {
+    ev.preventDefault();
+    openMenu({
+      header: { heading: this.name },
+      content: compact([
+        this.hasChangedSize && {
+          label: `${localize('reset')} ${localize('size')}`,
+          callback: () => this.resetSize(),
+          icon: html`<mwc-icon>aspect_ratio</mwc-icon>`
+        },
+        {
+          label: localize(this.minimized ? "restore" : "minimize"),
+          callback: () => this.toggleMinimize(),
+          icon: html`<mwc-icon>${this.minimized ? "open_in_full" : "minimize"}</mwc-icon>`
+        },
+        "divider",
+        {
+          label: localize('close'),
+          callback: () => this.close(),
+          icon: html`<mwc-icon>close</mwc-icon>`
+        },
+      ]),
+      position: ev
+    });
+  }
+
   render() {
     /*
     const heading = html`<div class="heading">
@@ -519,7 +554,9 @@ export class SlWindow extends LitElement {
       <header
         id="header"
         @dblclick=${this.toggleMinimize}
-        @pointerdown=${this.startDrag}
+        @mousedown=${this.startDrag}
+        @contextmenu=${this.openMenu}
+        
       >
         <div class="heading">
           ${this.img ? html`<img height="24px" src=${this.img} />` : ''}

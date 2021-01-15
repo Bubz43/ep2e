@@ -128,7 +128,6 @@ export class AptitudeCheckControls extends LitElement {
   }
 
   render() {
-    console.log(this.constructor);
     return html`
       <sl-window
         name="${localize('successTest')} - ${localize('aptitudeCheck')}"

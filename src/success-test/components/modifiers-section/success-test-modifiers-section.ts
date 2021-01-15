@@ -125,8 +125,10 @@ export class SuccessTestModifiersSection extends LitElement {
             >
               ${modifier.temporary
                 ? html` <mwc-icon slot="before">close</mwc-icon> `
+                : modifier.img
+                ? html`<img src=${modifier.img} slot="before" />`
                 : modifier.icon
-                ? html`<img src=${modifier.icon} slot="before" />`
+                ? html`<mwc-icon slot="before">${modifier.icon}</mwc-icon>`
                 : html` <span slot="before"></span> `}
               <span class="source">${modifier.name}</span>
               <span slot="after">${withSign(modifier.value)}</span>

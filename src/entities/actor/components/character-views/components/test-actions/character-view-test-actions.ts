@@ -204,18 +204,18 @@ export class CharacterViewTestActions extends LitElement {
   private renderRep = (rep: Ego['trackedReps'][number]) => {
     return html`
       <li class="rep-item">
-        <span
+        <button
           title=${rep.network}
           class="rep-acronym"
           @click=${() => this.startFavorTest(rep, Favor.Trivial)}
-          >${rep.acronym}</span
+          >${rep.acronym}</button
         >
         <span class="rep-score">${rep.score}</span>
         <div class="favors">
           ${[...maxFavors].map(([favor, max]) => {
             const usedAmount = rep[favor];
             return html`
-              <span
+              <button
                 title=${localize(favor)}
                 @click=${() => this.startFavorTest(rep, favor)}
               >
@@ -228,7 +228,7 @@ export class CharacterViewTestActions extends LitElement {
                     >
                   `,
                 )}
-              </span>
+              </button>
             `;
           })}
         </div>

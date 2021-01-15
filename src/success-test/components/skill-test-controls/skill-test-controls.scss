@@ -69,8 +69,8 @@
 
   .options {
     position: absolute;
-    top: -1rem;
-    right: -0.25rem;
+    top: -1.25rem;
+    right: 0.25rem;
     z-index: 2;
     display: grid;
     grid-auto-flow: column;
@@ -99,7 +99,8 @@
       opacity: 0.9;
     }
     &.active {
-      box-shadow: 0 0 5px 1px var(--color-primary-alt);
+      color: var(--color-primary-alt);
+      box-shadow: 0 0 5px 1px currentColor;
 
       opacity: 1;
     }

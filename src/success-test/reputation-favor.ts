@@ -44,7 +44,8 @@ export class ReputationFavor extends SuccessTestBase {
   });
 
   readonly burnBonusModifier = createSuccessTestModifier({
-    name: localize('burnedRep'),
+    name: `${localize('burn')} ${localize('bonus')}`,
+    icon: 'whatshot',
   });
 
   get basePoints() {
@@ -52,6 +53,11 @@ export class ReputationFavor extends SuccessTestBase {
       this.favorState.reputation.score +
       favorValues(this.favorState.type).modifier
     );
+  }
+
+  get totalBurnedRepScore() {
+    const { burnBonus, burnForAdditionalFavor, type } = this.favorState
+    return burnBonus + (burnForAdditionalFavor ? favorValues(type).burnCost : 0)
   }
 
   constructor({

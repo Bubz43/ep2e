@@ -46,6 +46,7 @@ export type SimpleSuccessTestModifier = {
   name: string;
   value: number;
   temporary?: boolean;
+  img?: string;
   icon?: string;
   id: number;
 };

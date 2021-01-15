@@ -76,7 +76,7 @@ export class Pool {
     return createSuccessTestModifier({
       name: localize(this.type),
       value: 20,
-      icon: this.icon,
+      img: this.icon,
     });
   }
 

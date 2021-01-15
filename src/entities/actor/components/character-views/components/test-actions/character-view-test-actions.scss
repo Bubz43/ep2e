@@ -143,6 +143,8 @@ mwc-tab-bar {
     outline: none;
   }
 
+  @include textButton();
+
   .rep-acronym {
     grid-area: name;
     text-transform: lowercase;
@@ -178,7 +180,7 @@ mwc-tab-bar {
     mwc-icon {
       transition: color 100ms;
     }
-    span {
+    button {
       display: flex;
       &:hover {
         mwc-icon {

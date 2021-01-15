@@ -183,7 +183,7 @@ export class ReputationFavorControls extends LitElement {
 
   private renderTest(test: NonNullable<ReputationFavorControls['test']>) {
     const { entities } = this;
-    const { character, ego, action, pools, target } = test;
+    const { character, ego, action, pools, target, totalBurnedRepScore } = test;
     const {
       reputation,
       type,
@@ -217,12 +217,25 @@ export class ReputationFavorControls extends LitElement {
           <div>
             <ul class="favor-info">
               <wl-list-item clickable @click=${this.openReputationSelect}>
-                <span>${reputation.network}</span>
+                <span
+                  >${reputation.network}
+                  <span class="acronym">${reputation.acronym}</span></span
+                >
                 <span slot="after">${reputation.score}</span>
               </wl-list-item>
               <wl-list-item clickable @click=${this.openFavorSelect}>
-                <span>${localize(type)}</span>
-
+                <span>${localize(type)} ${localize('favor')}</span>
+                ${burnForAdditionalFavor
+                  ? html`
+                      <small
+                        >${localize('burning')}
+                        <b>${favorValues(type).burnCost}</b> ${localize("rep")} ${localize(
+                          'score',
+                        )}
+                        ${localize('to')} ${localize('use')}</small
+                      >
+                    `
+                  : ''}
                 <span slot="after"
                   >${withSign(favorValues(type).modifier)}</span
                 >
@@ -234,10 +247,22 @@ export class ReputationFavorControls extends LitElement {
               props: { keepingQuiet, burnBonus },
               update: test.favorState.update,
               fields: ({ keepingQuiet, burnBonus }) => [
-                renderNumberField(keepingQuiet, { min: 0 }),
-                renderNumberField(burnBonus, { min: 0, max: 15 }),
+                renderNumberField(keepingQuiet, { max: 0 }),
+                renderNumberField(
+                  {
+                    ...burnBonus,
+                    label: `${localize('burn')} ${localize('bonus')}`,
+                  },
+                  { min: 0, max: 15 },
+                ),
               ],
             })}
+
+            ${totalBurnedRepScore ? html`
+            <div class="total-burn">
+            ${localize("permanently")} ${localize("burning")} <b>${totalBurnedRepScore}</b> ${localize("rep")} ${localize("score")}
+            </div>
+            ` : ""}
           </div>
         </section>
 
