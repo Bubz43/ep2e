@@ -1,8 +1,6 @@
-import {
-  MessageVisibility,
-  rollModeToVisibility,
-} from '@src/chat/create-message';
-import { AptitudeType } from '@src/data-enums';
+import { createMessage } from '@src/chat/create-message';
+import type { SuccessTestMessage } from '@src/chat/message-data';
+import { AptitudeType, PoolType } from '@src/data-enums';
 import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
@@ -11,86 +9,156 @@ import {
   ActionType,
   createAction,
   defaultCheckActionSubtype,
-  updateAction,
 } from '@src/features/actions';
-import produce, { immerable } from 'immer';
-import { Observable } from 'rxjs';
-import { createSuccessTestModifier, SimpleSuccessTestModifier } from './success-test';
-import { CoolStore } from 'cool-store';
-import { merge } from 'remeda';
+import { matchesAptitude } from '@src/features/effects';
+import { Pool } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
+import type { WithUpdate } from '@src/utility/updating';
+import { compact, map, merge } from 'remeda';
+import { rollSuccessTest } from './success-test';
+import { SuccessTestBase } from './success-test-base';
 
-export type AptitudeCheckInit = {
+export type AptCheckInit = {
   ego: Ego;
-  aptitude?: AptitudeType;
   character?: Character;
   token?: MaybeToken;
+  aptitude: AptitudeType;
   action?: Action;
 };
 
-type CheckState = {
-  aptitude: {
-    type: AptitudeType;
-    multiplier: number;
-  };
-
-  settings: {
-    visibility: MessageVisibility;
-    autoRoll: boolean;
-  };
-
-  action: Action & {
-    update: (changed: Partial<Action>) => void;
-    modifier: SimpleSuccessTestModifier;
-  };
-  modifiers: Set<SimpleSuccessTestModifier>;
-};
-
-export class AptCheck {
-  [immerable] = true;
-
+export class AptCheck extends SuccessTestBase {
   readonly ego;
   readonly character;
   readonly token;
+  readonly aptitude: WithUpdate<{
+    type: AptitudeType;
+    multiplier: number;
+  }>;
 
-  state: CoolStore<CheckState>;
+  get basePoints() {
+    return Math.round(
+      this.ego.aptitudes[this.aptitude.type] * this.aptitude.multiplier,
+    );
+  }
 
-  constructor({
-    ego,
-    aptitude = AptitudeType.Willpower,
-    character,
-    token,
-    action,
-  }: AptitudeCheckInit) {
+  constructor({ ego, character, token, aptitude, action }: AptCheckInit) {
+    super({
+      action:
+        action ??
+        createAction({
+          type: ActionType.Automatic,
+          subtype: defaultCheckActionSubtype(aptitude),
+        }),
+    });
     this.ego = ego;
     this.character = character;
     this.token = token;
-    this.state = new CoolStore({
-      aptitude: {
-        type: aptitude,
-        multiplier: 3,
+    this.aptitude = {
+      type: aptitude,
+      multiplier: 3,
+      update: (change) => {
+        this.update((draft) => {
+          draft.aptitude = merge(draft.aptitude, change);
+          if (!change.type) return;
+          draft.pools.available = this.getPools(change.type);
+          this.togglePool(draft, null);
+          this.updateAction(
+            draft,
+            createAction({
+              type: draft.action.type,
+              subtype: defaultCheckActionSubtype(change.type),
+            }),
+          );
+          draft.modifiers.effects = this.getModifierEffects(
+            change.type,
+            draft.action,
+          );
+        });
       },
-      settings: {
-        visibility: rollModeToVisibility(game.settings.get('core', 'rollMode')),
-        autoRoll: true,
-      },
-      action: {
-        ...(action ??
-          createAction({
-            type: ActionType.Automatic,
-            subtype: defaultCheckActionSubtype(aptitude),
-          })),
-        modifier: createSuccessTestModifier({ name: localize("action"), value: 0}),
-        update: (changed: Partial<Action>) => {
-          this.state.set((recipe) => {
-            recipe.action = merge(
-              recipe.action,
-              updateAction(recipe.action, changed),
-            );
-          });
+    };
+
+    this.pools.available = this.getPools(this.aptitude.type);
+    this.modifiers.effects = this.getModifierEffects(
+      this.aptitude.type,
+      this.action,
+    );
+  }
+
+  private getPools(aptitude: AptitudeType) {
+    const poolMap = this.character?.pools;
+    return compact(
+      this.ego.useThreat
+        ? [poolMap?.get(PoolType.Threat)]
+        : [
+            poolMap?.get(Pool.linkedToAptitude(aptitude)),
+            poolMap?.get(PoolType.Flex),
+          ],
+    );
+  }
+
+  private getModifierEffects(aptitude: AptitudeType, action: Action) {
+    return new Map(
+      (
+        this.character?.appliedEffects.getMatchingSuccessTestEffects(
+          matchesAptitude(aptitude)(action),
+          false,
+        ) || []
+      ).map((effect) => [effect, !effect.requirement]),
+    );
+  }
+
+  protected async createMessage() {
+    const {
+      ignoreModifiers,
+      clampedTarget,
+      aptitude,
+      settings,
+      pools,
+      action,
+    } = this;
+
+    const data: SuccessTestMessage = {
+      parts: compact([
+        {
+          name: `${localize(aptitude.type)} x${aptitude.multiplier}`,
+          value: this.basePoints,
         },
+        ...(ignoreModifiers ? [] : this.modifiersAsParts),
+      ]),
+      states: [
+        {
+          target: clampedTarget,
+          ...(settings.autoRoll
+            ? rollSuccessTest({ target: clampedTarget })
+            : {}),
+          action: pools.active
+            ? [pools.active[0].type, pools.active[1]]
+            : 'initial',
+        },
+      ],
+      ignoredModifiers: ignoreModifiers ? this.modifierTotal : undefined,
+      linkedPool: Pool.linkedToAptitude(aptitude.type),
+    };
+
+    await createMessage({
+      data: {
+        header: {
+          heading: `${localize('FULL', aptitude.type)} ${localize('check')}`,
+          subheadings: compact([
+            map([action.type, action.subtype, 'action'], localize).join(' '),
+          ]),
+        },
+        successTest: data,
       },
-      modifiers: new Set(),
-    }) as CoolStore<CheckState>;
+      entity: this.token ?? this.character, // TODO account for item sources,
+      visibility: settings.visibility,
+    });
+
+    if (pools.active) {
+      this.character?.spendPool({
+        pool: pools.active[0].type,
+        points: 1,
+      });
+    }
   }
 }

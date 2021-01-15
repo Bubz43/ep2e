@@ -121,7 +121,7 @@ export class SkillTest extends SuccessTestBase {
               subtype: defaultCheckActionSubtype(newSkill.linkedAptitude),
             }),
           );
-          modifiers.effects = this.getModifierEffects(newSkill, this.action);
+          modifiers.effects = this.getModifierEffects(newSkill, draft.action);
         });
       },
     };
