@@ -176,10 +176,10 @@ export class SkillTest extends SuccessTestBase {
       aptitudeMultiplier,
       halveBase,
       complementarySkill,
-    } = skillState; 
+    } = skillState;
 
     const name = `${skill.name} ${localize('test')}`;
-    
+
     const data: SuccessTestMessageData = {
       parts: compact([
         {

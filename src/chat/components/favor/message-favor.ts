@@ -69,27 +69,27 @@ export class MessageFavor extends MessageElement {
             ></span
           >
           ${this.favor.burnedRep
-        ? html`<mwc-icon slot="meta">whatshot</mwc-icon>`
-        : ''}
+            ? html`<mwc-icon slot="meta">whatshot</mwc-icon>`
+            : ''}
         </mwc-list-item>
         ${this.favor.burnedRep
-        ? ''
-        : html` <mwc-check-list-item
-            ?selected=${!!this.favor.markedAsUsed}
-            ?disabled=${this.disabled}
-            @click=${this.toggleMarkAsUsed}
-            >${localize('MarkFavorAsUsed')}</mwc-check-list-item
-          >`}
+          ? ''
+          : html` <mwc-check-list-item
+              ?selected=${!!this.favor.markedAsUsed}
+              ?disabled=${this.disabled}
+              @click=${this.toggleMarkAsUsed}
+              >${localize('MarkFavorAsUsed')}</mwc-check-list-item
+            >`}
         ${this.favor.keepingQuiet
-        ? html`
-            <mwc-list-item
-              >${localize('oppose')} ${localize("with")} ${this.favor.keepingQuiet} ${localize("modifier")}</mwc-list-item
-            >
-          `
-        : ''}
+          ? html`
+              <mwc-list-item
+                >${localize('oppose')} ${localize('with')}
+                ${this.favor.keepingQuiet}
+                ${localize('modifier')}</mwc-list-item
+              >
+            `
+          : ''}
       </mwc-list>
-
- 
     `;
   }
 }

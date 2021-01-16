@@ -71,7 +71,7 @@ export class HealthEditor extends LitElement {
       `,
       adjacentEl,
       forceFocus: true,
-      position: "left-end"
+      position: 'left-end',
     });
   }
 

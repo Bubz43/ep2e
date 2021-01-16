@@ -5,7 +5,12 @@ import {
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { enumValues } from '@src/data-enums';
-import { Action, ActionSubtype, actionTimeframeModifier, ActionType } from '@src/features/actions';
+import {
+  Action,
+  ActionSubtype,
+  actionTimeframeModifier,
+  ActionType,
+} from '@src/features/actions';
 import { localize } from '@src/foundry/localization';
 import type { WithUpdate } from '@src/utility/updating';
 import type { CoolStore } from 'cool-store';
@@ -51,7 +56,7 @@ export class SuccessTestActionForm extends LitElement {
                     label: `${localize('initial')} ${localize('timeframe')}`,
                   })}
                   <div class="multiplier">
-                  x${actionTimeframeModifier(action).modifier + 1}
+                    x${actionTimeframeModifier(action).modifier + 1}
                   </div>
                 </div>`
               : ''}

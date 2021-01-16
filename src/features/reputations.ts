@@ -29,9 +29,15 @@ export type RepData = {
 
 export type EgoRepData = RepData & { track: boolean };
 
-export type FakeIdRepIdentifier = { fakeEgoId: string; repId: string, type: "fake" };
+export type FakeIdRepIdentifier = {
+  fakeEgoId: string;
+  repId: string;
+  type: 'fake';
+};
 
-export type RepIdentifier = { networkId: RepNetwork, type: "ego" } | FakeIdRepIdentifier;
+export type RepIdentifier =
+  | { networkId: RepNetwork; type: 'ego' }
+  | FakeIdRepIdentifier;
 
 export type RepBase = {
   acronym: string;

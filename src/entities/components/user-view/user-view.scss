@@ -16,21 +16,20 @@
 }
 
 button {
-    all: unset;
-    pointer-events: all;
-    height: 2rem;
-    &:hover {
-        cursor: pointer;
-        img {
-                filter: drop-shadow(1px 2px 3px var(--color-primary));
-
-        }
+  all: unset;
+  pointer-events: all;
+  height: 2rem;
+  &:hover {
+    cursor: pointer;
+    img {
+      filter: drop-shadow(1px 2px 3px var(--color-primary));
     }
+  }
 }
 
 img {
-    filter: drop-shadow(1px 2px 3px rgba(0, 0, 0, 0.698));
-    display: inline-block;
+  filter: drop-shadow(1px 2px 3px rgba(0, 0, 0, 0.698));
+  display: inline-block;
 }
 
 .name {

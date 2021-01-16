@@ -40,7 +40,7 @@ export class ChatMessageEP extends ChatMessage {
   get successTestResult() {
     return last(this.epFlags?.successTest?.states || [])?.result;
   }
-  
+
   _onUpdate(...args: any[]) {
     //@ts-ignore
     super._onUpdate(...args);

@@ -2,31 +2,28 @@
 @use "scss/mixins" as *;
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 :host {
-    display: block;
-    padding: 0.25rem 0;
+  display: block;
+  padding: 0.25rem 0;
 }
 
 .acronym {
-    text-transform: uppercase
+  text-transform: uppercase;
 }
 
 .type {
-    color: var(--color-text-lighter);
+  color: var(--color-text-lighter);
 }
 
 [slot='meta'] {
-    color: var(--color-negative);
-
+  color: var(--color-negative);
 }
 
-
-
 mwc-list {
-    > * {
-        height: 1.6rem;
-    }
+  > * {
+    height: 1.6rem;
+  }
 }

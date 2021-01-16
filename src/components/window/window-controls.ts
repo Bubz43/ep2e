@@ -94,7 +94,15 @@ export type WindowOpenOptions = Partial<{
 }>;
 
 export const openWindow = (
-  { key, content, name, forceFocus, adjacentEl, img, position }: WindowOpenSettings,
+  {
+    key,
+    content,
+    name,
+    forceFocus,
+    adjacentEl,
+    img,
+    position,
+  }: WindowOpenSettings,
   { resizable = ResizeOption.None, renderOnly = false }: WindowOpenOptions = {},
 ) => {
   let win = windows.get(key);
@@ -107,7 +115,7 @@ export const openWindow = (
   win.name = name;
   win.img = img;
   win.resizable = resizable;
-  if (position) win.relativePosition = position
+  if (position) win.relativePosition = position;
   render(content, win);
 
   const wasConnected = win?.isConnected;

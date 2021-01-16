@@ -46,32 +46,32 @@ export class UserView extends LitElement {
   }
 
   render() {
-        const { avatar, name, isGM, character } = this.user;
-        const { color } = this.user.data;
-        const showAvatar = avatar !== CONST.DEFAULT_TOKEN;
-      return html`
-        ${showAvatar
-          ? html`
-              <button>
-                <img
-                  src=${avatar}
-                  height="32px"
-                  class="avatar"
-                  @click=${this.popoutImage}
-                />
-              </button>
-            `
-          : ''}
-        <span class="name">${name} ${isGM ? '[GM]' : ''}</span>
+    const { avatar, name, isGM, character } = this.user;
+    const { color } = this.user.data;
+    const showAvatar = avatar !== CONST.DEFAULT_TOKEN;
+    return html`
+      ${showAvatar
+        ? html`
+            <button>
+              <img
+                src=${avatar}
+                height="32px"
+                class="avatar"
+                @click=${this.popoutImage}
+              />
+            </button>
+          `
+        : ''}
+      <span class="name">${name} ${isGM ? '[GM]' : ''}</span>
 
-        <div class="icons">
-          <mwc-icon-button
-            style="color: ${color}"
-            icon="account_circle"
-            @click=${this.openPlayerConfig}
-          ></mwc-icon-button>
-        </div>
-      `;
+      <div class="icons">
+        <mwc-icon-button
+          style="color: ${color}"
+          icon="account_circle"
+          @click=${this.openPlayerConfig}
+        ></mwc-icon-button>
+      </div>
+    `;
   }
 }
 

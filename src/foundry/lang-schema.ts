@@ -1399,7 +1399,8 @@ type LangEntries =
   | 'cannot'
   | 'original'
   | 'complementary'
-  | 'minimize' | "MarkFavorAsUsed"
+  | 'minimize'
+  | 'MarkFavorAsUsed';
 type FullNames =
   | 'cog'
   | 'int'

@@ -41,7 +41,7 @@ export class MessageContent extends LitElement {
       areaEffect,
       meleeAttack,
       successTest,
-      favor
+      favor,
     } = this.data;
     if (!this.message.isContentVisible) return '';
     return html`
@@ -58,10 +58,7 @@ export class MessageContent extends LitElement {
             .successTest=${successTest}
           ></message-success-test>`
         : ''}
-   
-        ${favor ? html`
-        <message-favor .favor=${favor}></message-favor>
-        ` : ""}
+      ${favor ? html` <message-favor .favor=${favor}></message-favor> ` : ''}
       ${meleeAttack
         ? html`
             <message-melee-attack

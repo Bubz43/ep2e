@@ -7,7 +7,6 @@ import { ActorType } from '@src/entities/entity-types';
 import { PostTestPoolAction } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import { capitalize } from '@src/foundry/misc-helpers';
-import { tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
 import {
   flipFlopRoll,
@@ -15,18 +14,16 @@ import {
   improveSuccessTestResult,
   SuccessTestResult,
 } from '@src/success-test/success-test';
-import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
-  LitElement,
-  property,
+  eventOptions,
   html,
   internalProperty,
-  eventOptions,
+  property,
 } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
-import { compact, identity, last, pick } from 'remeda';
+import { compact, identity, last } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-success-test.scss';
 
