@@ -49,8 +49,8 @@ export class EditorWrapper extends LitElement {
   }
 
   disconnectedCallback() {
-    super.disconnectedCallback();
     if (this.editor) this.editorSave(this.editor);
+    super.disconnectedCallback();
   }
 
   updated(changedProps: PropertyValues) {
@@ -99,13 +99,14 @@ export class EditorWrapper extends LitElement {
   }
 
   private save(content: string) {
-    if (content !== this.content && this.isConnected) {
+    if (content !== this.content) {
       this.updateContent(content);
     }
     this.requestUpdate();
   }
 
   private updateContent(content: string) {
+    if (this.disabled) return;
     this.contentArea?.animate({ opacity: [0, 1] }, EditorWrapper.animOptions);
     this.updateActions.commit(content);
   }
