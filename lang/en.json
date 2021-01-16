@@ -1454,7 +1454,7 @@
       "low": "LQ",
       "veryHigh": "VHQ",
       "veryLow": "VLQ",
-      "burstFire": "BA",
+      "burstFire": "BF",
       "fullAuto": "FA",
       "semiAuto": "SA",
       "singleShot": "SS",

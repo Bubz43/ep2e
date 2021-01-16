@@ -1,4 +1,5 @@
 import type { MessageVisibility } from '@src/chat/create-message';
+import type { SuperiorResultEffect } from '@src/data-enums';
 import type { SourcedEffect, SuccessTestEffect } from '@src/features/effects';
 import type { Pool, PreTestPoolAction, ReadonlyPool } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
@@ -50,6 +51,13 @@ export const grantedSuperiorResultEffects = (result: SuccessTestResult) => {
     ? 1
     : 0;
 };
+
+export const superiorEffectCounts = (effects: SuperiorResultEffect[] = []) => {
+    return effects.reduce(
+      (accum, effect) => accum.set(effect, (accum.get(effect) || 0) + 1),
+      new Map<SuperiorResultEffect, number>(),
+    );
+}
 
 export type SuccessTestRollState = {
   visibility: MessageVisibility;

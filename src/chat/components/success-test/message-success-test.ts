@@ -1,8 +1,9 @@
+import type { Checkbox } from '@material/mwc-checkbox';
 import type { SuccessTestMessageData } from '@src/chat/message-data';
 import { renderNumberInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { Placement } from '@src/components/popover/popover-options';
-import { PoolType } from '@src/data-enums';
+import { enumValues, PoolType, SuperiorResultEffect } from '@src/data-enums';
 import { ActorType } from '@src/entities/entity-types';
 import { PostTestPoolAction } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
@@ -14,6 +15,7 @@ import {
   grantedSuperiorResultEffects,
   improveSuccessTestResult,
   SuccessTestResult,
+  superiorEffectCounts,
 } from '@src/success-test/success-test';
 import {
   customElement,
@@ -24,7 +26,17 @@ import {
 } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
-import { compact, identity, last } from 'remeda';
+import {
+  compact,
+  difference,
+  equals,
+  identity,
+  intersection,
+  last,
+  map,
+  pipe,
+  range,
+} from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-success-test.scss';
 
@@ -41,6 +53,8 @@ export class MessageSuccessTest extends MessageElement {
   }
 
   @property({ attribute: false }) successTest!: SuccessTestMessageData;
+
+  @internalProperty() private superiorEffects?: SuperiorResultEffect[];
 
   @internalProperty() private setRoll?: number | null;
 
@@ -266,11 +280,6 @@ export class MessageSuccessTest extends MessageElement {
             ${this.spannedResult(localize(this.preview?.result ?? result))}
           </sl-animated-list>
         </sl-group>
-        ${grantedSuperiorEffects ? html`
-        <sl-group label="${localize("superior")} ${localize("result")} ${localize("effects")}">
-        
-        </sl-group>
-        ` : ""}
       </div>
       ${states?.length > 1 || Array.isArray(states[0]?.action)
         ? html`
@@ -308,7 +317,105 @@ export class MessageSuccessTest extends MessageElement {
                 ></sl-popover>`}
           </div>`
         : ''}
+      ${grantedSuperiorEffects
+        ? html`
+            <sl-popover
+              class="superior-effects"
+              placement=${Placement.Left}
+              .renderOnDemand=${() =>
+                this.renderSuperiorResultEffectSelector(grantedSuperiorEffects)}
+            >
+              <sl-group
+                slot="base"
+                label="${localize('superior')} ${localize('effects')}"
+              >
+                <span
+                  >${[...superiorEffectCounts(superiorResultEffects)]
+                    .map(
+                      ([effect, amount]) =>
+                        `${localize(effect)}${amount > 1 ? ' x2' : ''}`,
+                    )
+                    .join(', ')}</span
+                >
+                ${superiorResultEffects?.length !== grantedSuperiorEffects
+                  ? html`
+                      <span class="available-effects"
+                        >${grantedSuperiorEffects -
+                        (superiorResultEffects || []).length}
+                        ${localize('available')}</span
+                      >
+                    `
+                  : ''}
+              </sl-group>
+            </sl-popover>
+          `
+        : ''}
       ${isCharacter && result && task && editable ? this.renderTask(task) : ''}
+    `;
+  }
+
+
+
+  private renderSuperiorResultEffectSelector(granted: number) {
+    const { task, superiorResultEffects = [] } = this.successTest;
+    const effectMap = superiorEffectCounts(
+      this.superiorEffects || superiorResultEffects,
+    );
+    const complete = !equals(superiorResultEffects, this.superiorEffects || []);
+    return html`
+      <sl-popover-section
+        heading="${localize('superior')} ${localize('effects')}"
+      >
+        <ul class="superior-list">
+          ${pipe(
+            enumValues(SuperiorResultEffect),
+            difference(compact([!task && SuperiorResultEffect.Time])),
+            map(
+              (effect) => html`
+                <wl-list-item>
+                  <span>${localize(effect)}</span>
+                  <span slot="after"
+                    >${range(0, granted).map((grant) => {
+                      const active = (effectMap.get(effect) || 0) >= grant + 1;
+                      return html`<mwc-checkbox
+                        @click=${() => {
+                          console.log(grant)
+                          if (grant === 1) {
+                            this.superiorEffects = active
+                              ? [effect]
+                              : [effect, effect];
+                          } else {
+                            this.superiorEffects = active
+                              ? []
+                              : (this.superiorEffects ?? superiorResultEffects)
+                                  .concat(effect)
+                                  .slice(-granted);
+                          }
+                        }}
+                        ?checked=${active}
+                      >
+                      </mwc-checkbox>`;
+                    })}</span
+                  >
+                </wl-list-item>
+              `,
+            ),
+          )}
+        </ul>
+        <submit-button
+          ?complete=${complete}
+          label=${localize('save')}
+          @submit-attempt=${() => {
+            if (complete) {
+   this.getUpdater('successTest').commit({
+     superiorResultEffects: this.superiorEffects,
+   });
+   this.superiorEffects = undefined;
+            }
+         
+          }}
+        ></submit-button>
+      </sl-popover-section>
     `;
   }
 
