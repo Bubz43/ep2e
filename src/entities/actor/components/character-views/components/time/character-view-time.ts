@@ -299,7 +299,8 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
         ${completed
           ? html`<span class="ready">[${localize('complete')}]</span>`
           : ''}
-       ${task.failed ? `[${localize("failure")}]` : ""} ${task.name} (${localize(task.actionSubtype)})
+        ${task.failed ? `[${localize('failure')}]` : ''} ${task.name}
+        (${localize(task.actionSubtype)})
         ${!completed
           ? html`<span class="remaining"
               >${prettyMilliseconds(remaining)}

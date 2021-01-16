@@ -52,7 +52,7 @@ export const createActiveTask = createFeature<
 }));
 
 export const taskState = (
-  { timeTaken, timeframe, actionSubtype, modifiers = [], }: ActiveTaskAction,
+  { timeTaken, timeframe, actionSubtype, modifiers = [] }: ActiveTaskAction,
   effects: AppliedEffects['taskTimeframeEffects'],
 ) => {
   const finalTimeframe = pipe(

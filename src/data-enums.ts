@@ -531,10 +531,10 @@ export enum FullDefenseType {
 }
 
 export enum SuperiorResultEffect {
-  Quality = "quality",
-  Quantity = "quantity",
-  Details = "detail",
-  Time = "time",
-  Covertness = "covertness",
-  Damage = "damage"
+  Quality = 'quality',
+  Quantity = 'quantity',
+  Details = 'detail',
+  Time = 'time',
+  Covertness = 'covertness',
+  Damage = 'damage',
 }

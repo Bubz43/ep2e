@@ -461,7 +461,10 @@ export const durationEffectMultiplier = (modifier: number) => {
   return nonNegative(1 + modifier / 100);
 };
 
-export const extractDurationEffectMultipliers = (effects: DurationEffect[], ...additionalCummulative: number[]) => {
+export const extractDurationEffectMultipliers = (
+  effects: DurationEffect[],
+  ...additionalCummulative: number[]
+) => {
   const multipliers: number[] = [];
   const cummulative = [...additionalCummulative];
 

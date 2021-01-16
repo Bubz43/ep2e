@@ -53,11 +53,11 @@ export const grantedSuperiorResultEffects = (result: SuccessTestResult) => {
 };
 
 export const superiorEffectCounts = (effects: SuperiorResultEffect[] = []) => {
-    return effects.reduce(
-      (accum, effect) => accum.set(effect, (accum.get(effect) || 0) + 1),
-      new Map<SuperiorResultEffect, number>(),
-    );
-}
+  return effects.reduce(
+    (accum, effect) => accum.set(effect, (accum.get(effect) || 0) + 1),
+    new Map<SuperiorResultEffect, number>(),
+  );
+};
 
 export type SuccessTestRollState = {
   visibility: MessageVisibility;

@@ -14,7 +14,7 @@
   grid-template-areas:
     'groups history'
     'groups pools'
-    "effects effects"
+    'effects effects'
     'task task';
 }
 
@@ -28,17 +28,16 @@
     color: var(--color-primary-alt);
   }
   .superior-list {
-  --list-item-padding: 0 1rem;
-  mwc-checkbox {
-    width: 2rem;
+    --list-item-padding: 0 1rem;
+    mwc-checkbox {
+      width: 2rem;
+    }
   }
-}
 
   submit-button {
     width: 100%;
   }
 }
-
 
 .task {
   grid-area: task;
