@@ -3,7 +3,7 @@ import type { AppliedEffects } from '@src/entities/applied-effects';
 import { localize } from '@src/foundry/localization';
 import { clamp, compact, flatten, pipe, reduce } from 'remeda';
 import { notEmpty, safeMerge } from '../utility/helpers';
-import type { DurationEffect } from './effects';
+import { DurationEffect, extractDurationEffectMultipliers } from './effects';
 import { createFeature } from './feature-helpers';
 import { toMilliseconds } from './modify-milliseconds';
 import { currentWorldTimeMS } from './time';
@@ -52,21 +52,26 @@ export const createActiveTask = createFeature<
 }));
 
 export const taskState = (
-  { timeTaken, timeframe, actionSubtype, modifiers }: ActiveTaskAction,
+  { timeTaken, timeframe, actionSubtype, modifiers = [] }: ActiveTaskAction,
   effects: AppliedEffects['taskTimeframeEffects'],
 ) => {
   const finalTimeframe = pipe(
-    [effects.get(''), effects.get(actionSubtype), modifiers],
+    [effects.get(''), effects.get(actionSubtype)],
     compact,
     flatten(),
-    reduce((accum, { modifier }) => accum * modifier || 1, timeframe),
+    (effects) =>
+      extractDurationEffectMultipliers(
+        effects,
+        ...modifiers.map((m) => m.modifier),
+      ),
+    reduce((accum, multiplier) => accum * multiplier || 1, timeframe),
   );
   return {
     completed: timeTaken >= finalTimeframe,
     progress: timeTaken / finalTimeframe,
     indefinite: finalTimeframe < 0,
     remaining: finalTimeframe - timeTaken,
-    finalTimeframe
+    finalTimeframe,
   };
 };
 

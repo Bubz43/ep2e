@@ -1,10 +1,13 @@
 import type { Checkbox } from '@material/mwc-checkbox';
+import type { Dialog } from '@material/mwc-dialog';
 import type { SuccessTestMessageData } from '@src/chat/message-data';
 import { renderNumberInput } from '@src/components/field/fields';
-import { renderAutoForm } from '@src/components/form/forms';
+import { renderAutoForm, renderSubmitForm } from '@src/components/form/forms';
 import { Placement } from '@src/components/popover/popover-options';
 import { enumValues, PoolType, SuperiorResultEffect } from '@src/data-enums';
 import { ActorType } from '@src/entities/entity-types';
+import { createActiveTask } from '@src/features/actions';
+import { addFeature } from '@src/features/feature-helpers';
 import { PostTestPoolAction } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import { capitalize } from '@src/foundry/misc-helpers';
@@ -14,6 +17,7 @@ import {
   getSuccessTestResult,
   grantedSuperiorResultEffects,
   improveSuccessTestResult,
+  isSuccessfullTestResult,
   SuccessTestResult,
   superiorEffectCounts,
 } from '@src/success-test/success-test';
@@ -34,6 +38,8 @@ import {
   intersection,
   last,
   map,
+  omit,
+  pick,
   pipe,
   range,
 } from 'remeda';
@@ -212,6 +218,44 @@ export class MessageSuccessTest extends MessageElement {
     );
   }
 
+  private async startTask() {
+    const { task, superiorResultEffects } = this.successTest;
+    const result = this.currentState?.result;
+    const { actor } = this.message;
+    if (!task || !result || actor?.proxy.type !== ActorType.Character) return;
+    const timeEffects = superiorEffectCounts(superiorResultEffects).get(
+      SuperiorResultEffect.Time,
+    );
+    let taskId = '';
+    const failed = !isSuccessfullTestResult(result);
+
+    await actor.proxy.updater.path('data', 'tasks').commit((tasks) => {
+      const withTask = addFeature(
+        tasks,
+        createActiveTask({
+          ...omit(task, ['startedTaskId']),
+          failed,
+          modifiers: (task.modifiers ?? []).concat(
+            timeEffects
+              ? {
+                  source: `${localize('superior')} ${localize('time')} ${
+                    timeEffects > 1 ? 'x2' : ''
+                  }`,
+                  modifier: timeEffects * 25 * (failed ? -1 : 1),
+                }
+              : [],
+          ),
+        }),
+      );
+      taskId = last(withTask)?.id || '';
+      return withTask;
+    });
+
+    this.getUpdater('successTest').commit({
+      task: { ...task, startedTaskId: taskId },
+    });
+  }
+
   render() {
     const {
       defaulting,
@@ -350,11 +394,20 @@ export class MessageSuccessTest extends MessageElement {
             </sl-popover>
           `
         : ''}
-      ${isCharacter && result && task && editable ? this.renderTask(task) : ''}
+      ${isCharacter && result && task && editable
+        ? html` <mwc-button
+            @click=${this.startTask}
+            class="task"
+            unelevated
+            dense
+            ?disabled=${!!task.startedTaskId}
+            >${task.startedTaskId
+              ? `${localize('task')} ${localize('started')}`
+              : `${localize('start')} ${localize('task')}`}</mwc-button
+          >`
+        : ''}
     `;
   }
-
-
 
   private renderSuperiorResultEffectSelector(granted: number) {
     const { task, superiorResultEffects = [] } = this.successTest;
@@ -379,7 +432,7 @@ export class MessageSuccessTest extends MessageElement {
                       const active = (effectMap.get(effect) || 0) >= grant + 1;
                       return html`<mwc-checkbox
                         @click=${() => {
-                          console.log(grant)
+                          console.log(grant);
                           if (grant === 1) {
                             this.superiorEffects = active
                               ? [effect]
@@ -407,29 +460,14 @@ export class MessageSuccessTest extends MessageElement {
           label=${localize('save')}
           @submit-attempt=${() => {
             if (complete) {
-   this.getUpdater('successTest').commit({
-     superiorResultEffects: this.superiorEffects,
-   });
-   this.superiorEffects = undefined;
+              this.getUpdater('successTest').commit({
+                superiorResultEffects: this.superiorEffects,
+              });
+              this.superiorEffects = undefined;
             }
-         
           }}
         ></submit-button>
       </sl-popover-section>
-    `;
-  }
-
-  private renderTask(task: NonNullable<SuccessTestMessageData['task']>) {
-    return html`
-      <mwc-button
-        class="task"
-        unelevated
-        dense
-        ?disabled=${!!task.startedTaskId}
-        >${task.startedTaskId
-          ? `${localize('task')} ${localize('started')}`
-          : `${localize('start')} ${localize('task')}`}</mwc-button
-      >
     `;
   }
 

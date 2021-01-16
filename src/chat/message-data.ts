@@ -129,8 +129,7 @@ export type SuccessTestMessageData = {
   superiorResultEffects?: SuperiorResultEffect[];
 
   // TODO  criticalResultEffect?: CriticalResultEffect
-  task?: Pick<ActiveTaskAction, 'name' | 'timeframe' | 'actionSubtype'> & {
-    modifier: number;
+  task?: Pick<ActiveTaskAction, 'name' | 'timeframe' | 'actionSubtype' | "modifiers"> & {
     startedTaskId?: string | null;
   };
 };

@@ -220,7 +220,9 @@ export class SkillTest extends SuccessTestBase {
             name,
             timeframe: action.timeframe,
             actionSubtype: action.subtype,
-            modifier: actionTimeframeModifier(action).modifier,
+            modifiers: [actionTimeframeModifier(action)].flatMap((p) =>
+              p.modifier ? { ...p, modifier: p.modifier * 100 } : [],
+            ),
           }
         : undefined,
     };
