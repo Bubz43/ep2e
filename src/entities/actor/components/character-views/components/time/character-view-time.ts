@@ -9,7 +9,11 @@ import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { UpdateStore } from '@src/entities/update-store';
-import { ActionSubtype, createActiveTask } from '@src/features/actions';
+import {
+  ActionSubtype,
+  createActiveTask,
+  taskState,
+} from '@src/features/actions';
 import {
   addUpdateRemoveFeature,
   idProp,
@@ -295,7 +299,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
         ${completed
           ? html`<span class="ready">[${localize('complete')}]</span>`
           : ''}
-        ${task.name} (${localize(task.actionSubtype)})
+       ${task.failed ? `[${localize("failure")}]` : ""} ${task.name} (${localize(task.actionSubtype)})
         ${!completed
           ? html`<span class="remaining"
               >${prettyMilliseconds(remaining)}

@@ -241,7 +241,7 @@ export class MessageSuccessTest extends MessageElement {
                   source: `${localize('superior')} ${localize('time')} ${
                     timeEffects > 1 ? 'x2' : ''
                   }`,
-                  modifier: timeEffects * 25 * (failed ? -1 : 1),
+                  modifier: timeEffects * 25 * (failed ? 1 : -1),
                 }
               : [],
           ),

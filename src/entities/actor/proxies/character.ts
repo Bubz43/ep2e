@@ -320,7 +320,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   get tasks() {
     return this.epData.tasks.map((task) => ({
       ...task,
-      state: taskState(task, this.appliedEffects.taskTimeframeEffects),
+      state: taskState(task.failed ? {...task, timeframe: task.timeframe * 0.25} : task, this.appliedEffects.taskTimeframeEffects),
     }));
   }
 
