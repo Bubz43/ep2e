@@ -7,5 +7,26 @@
 
 :host {
     display: block;
-    
+    padding: 0.25rem 0;
+}
+
+.acronym {
+    text-transform: uppercase
+}
+
+.type {
+    color: var(--color-text-lighter);
+}
+
+[slot='meta'] {
+    color: var(--color-negative);
+
+}
+
+
+
+mwc-list {
+    > * {
+        height: 1.6rem;
+    }
 }

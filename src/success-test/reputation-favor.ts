@@ -233,6 +233,8 @@ export class ReputationFavor extends SuccessTestBase {
           type,
           repIdentifier: reputation.identifier,
           keepingQuiet,
+          repAcronym: reputation.acronym,
+          burnedRep: burnForAdditionalFavor
         },
       },
       entity: this.character, // TODO account for item sources,

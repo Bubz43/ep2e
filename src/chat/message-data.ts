@@ -131,9 +131,11 @@ export type SuccessTestMessageData = {
 
 export type FavorMessageData = {
   type: Favor;
+  repAcronym: string;
   repIdentifier: RepIdentifier;
   keepingQuiet?: number;
   markedAsUsed?: boolean;
+  burnedRep?: boolean;
 };
 
 export type MessageData = Partial<{

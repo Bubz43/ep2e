@@ -292,7 +292,7 @@ export class MessageSuccessTest extends MessageElement {
         : ''}
       ${isCharacter && result && task && editable
         ? html`
-            <mwc-button unelevated dense
+            <mwc-button class="task" unelevated dense
               >${localize('start')} ${localize('task')}</mwc-button
             >
           `
