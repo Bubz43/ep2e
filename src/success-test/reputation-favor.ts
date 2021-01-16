@@ -6,10 +6,12 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import {
   Action,
   ActionSubtype,
+  actionTimeframeModifier,
   ActionType,
   createAction,
 } from '@src/features/actions';
 import { matchesRep } from '@src/features/effects';
+import { updateFeature } from '@src/features/feature-helpers';
 import {
   Favor,
   RepNetwork,
@@ -19,6 +21,7 @@ import {
 } from '@src/features/reputations';
 import { localize } from '@src/foundry/localization';
 import type { WithUpdate } from '@src/utility/updating';
+import produce from 'immer';
 import { compact, map, merge } from 'remeda';
 import { createSuccessTestModifier, rollSuccessTest } from './success-test';
 import { SuccessTestBase } from './success-test-base';
@@ -163,6 +166,7 @@ export class ReputationFavor extends SuccessTestBase {
       settings,
       pools,
       action,
+      totalBurnedRepScore,
     } = this;
 
     const {
@@ -172,6 +176,8 @@ export class ReputationFavor extends SuccessTestBase {
       keepingQuiet,
       burnForAdditionalFavor,
     } = favorState;
+
+    const name = `${reputation.network} ${localize(type)} ${localize('favor')}`;
 
     const data: SuccessTestMessageData = {
       parts: compact([
@@ -198,14 +204,20 @@ export class ReputationFavor extends SuccessTestBase {
       ],
       ignoredModifiers: ignoreModifiers ? this.modifierTotal : undefined,
       linkedPool: PoolType.Moxie,
+      task: action.timeframe
+        ? {
+            name,
+            timeframe: action.timeframe,
+            actionSubtype: action.subtype,
+            modifier: actionTimeframeModifier(action).modifier,
+          }
+        : undefined,
     };
 
     await createMessage({
       data: {
         header: {
-          heading: `${reputation.network} ${localize(type)} ${localize(
-            'favor',
-          )}`,
+          heading: name,
           subheadings: [
             `${action.type} ${
               action.timeMod && action.type !== ActionType.Task
@@ -217,13 +229,36 @@ export class ReputationFavor extends SuccessTestBase {
           ].join(' '),
         },
         successTest: data,
+        favor: {
+          type,
+          repIdentifier: reputation.identifier,
+          keepingQuiet,
+        },
       },
       entity: this.character, // TODO account for item sources,
       visibility: settings.visibility,
     });
 
-    if (pools.active) {
-      this.character?.spendPool({ pool: pools.active[0].type, points: 1 });
-    }
+    this.character.updater.batchCommits(() => {
+      if (pools.active) {
+        this.character?.spendPool({ pool: pools.active[0].type, points: 1 });
+      }
+      if (totalBurnedRepScore) {
+        const newScore = reputation.score - totalBurnedRepScore;
+        if (reputation.identifier.type === 'ego') {
+          this.ego.updater
+            .path('data', 'reps', reputation.identifier.networkId)
+            .commit({ score: newScore });
+        } else {
+          const { fakeEgoId, repId } = reputation.identifier;
+          this.character?.equippedGroups.fakeIDs
+            .find((f) => f.id === fakeEgoId)
+            ?.updater.path('data', 'reputations')
+            .commit((reps) =>
+              updateFeature(reps, { id: repId, score: newScore }),
+            );
+        }
+      }
+    });
   }
 }

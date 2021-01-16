@@ -5,6 +5,8 @@ import {
   repRefreshTimerActive,
   RepUse,
   repModification,
+  RepIdentifier,
+  RepWithIdentifier,
 } from '@src/features/reputations';
 import {
   LiveTimeState,
@@ -77,10 +79,10 @@ export class PhysicalService extends mix(Base).with(Purchasable, Service) {
   }
 
   @LazyGetter()
-  get repsWithIndefiers() {
+  get repsWithIndefiers(): (RepWithIdentifier & { id: string })[] {
     return this.reputations.map((rep) => ({
       ...rep,
-      identifier: { repId: rep.id, fakeEgoId: this.id },
+      identifier: { repId: rep.id, fakeEgoId: this.id, type: "fake" },
     }));
   }
 

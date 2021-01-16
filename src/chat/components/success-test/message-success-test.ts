@@ -194,7 +194,7 @@ export class MessageSuccessTest extends MessageElement {
   }
 
   render() {
-    const { defaulting, linkedPool, states } = this.successTest;
+    const { defaulting, linkedPool, states, task } = this.successTest;
     const { actor, editable } = this.message;
     const isCharacter = actor?.type === ActorType.Character;
     const { roll, target = this.partTotal, result } = this.currentState ?? {};
@@ -289,6 +289,13 @@ export class MessageSuccessTest extends MessageElement {
                   ><mwc-icon-button slot="base" icon="upgrade"></mwc-icon-button
                 ></sl-popover>`}
           </div>`
+        : ''}
+      ${isCharacter && result && task && editable
+        ? html`
+            <mwc-button unelevated dense
+              >${localize('start')} ${localize('task')}</mwc-button
+            >
+          `
         : ''}
     `;
   }

@@ -37,6 +37,10 @@ export class ChatMessageEP extends ChatMessage {
     return this.data.flags[EP.Name];
   }
 
+  get successTestResult() {
+    return last(this.epFlags?.successTest?.states || [])?.result;
+  }
+  
   _onUpdate(...args: any[]) {
     //@ts-ignore
     super._onUpdate(...args);

@@ -22,8 +22,15 @@
   }
 }
 
-time-field {
-  place-self: center;
+
+.timeframe-info {
+  display: flex;
+  .multiplier {
+        flex: 1;
+    display: grid;
+    place-items: center;
+    font-size: large;
+  }
 }
 
 .time-mod {

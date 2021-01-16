@@ -469,7 +469,7 @@ export class Ego {
         acronym: localize(network),
         network: localize('FULL', network),
         ...this.epData.reps[network],
-        identifier: { networkId: network },
+        identifier: { networkId: network, type: "ego" },
       };
       this.repMap.set(network, rep);
     }

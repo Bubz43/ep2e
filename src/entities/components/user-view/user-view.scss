@@ -12,8 +12,25 @@
   width: max-content;
   background: alphav(var(--color-bg), 0.5);
   padding: 0.25rem 0.3rem;
-  border-radius: 0 0.5rem;
-//   box-shadow: 0 0 3px black;
+  border-radius: 0 0.75rem;
+}
+
+button {
+    all: unset;
+    pointer-events: all;
+    height: 2rem;
+    &:hover {
+        cursor: pointer;
+        img {
+                filter: drop-shadow(1px 2px 3px var(--color-primary));
+
+        }
+    }
+}
+
+img {
+    filter: drop-shadow(1px 2px 3px rgba(0, 0, 0, 0.698));
+    display: inline-block;
 }
 
 .name {

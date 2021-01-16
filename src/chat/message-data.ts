@@ -122,20 +122,18 @@ export type SuccessTestMessageData = {
   defaulting?: boolean;
   linkedPool?: Exclude<PoolType, PoolType.Flex | PoolType.Threat>;
   ignoredModifiers?: number;
+  task?: Pick<ActiveTaskAction, 'name' | 'timeframe' | 'actionSubtype'> & {
+    modifier: number;
+    startedTaskId?: string | null;
+  };
 };
 
-export type TaskMessageData = Pick<
-  ActiveTaskAction,
-  'name' | 'timeframe' | 'actionSubtype'
-> & {
-  timeframeModifier?: number;
-  startedTaskId?: string | null;
-  favor?: {
-    type: Favor;
-    repIdentifier: RepIdentifier;
-    keepingQuiet?: number;
-    markedAsUsed?: boolean;
-  }
+
+export type FavorMessageData = {
+  type: Favor;
+  repIdentifier: RepIdentifier;
+  keepingQuiet?: number;
+  markedAsUsed?: boolean;
 };
 
 export type MessageData = Partial<{
@@ -151,5 +149,5 @@ export type MessageData = Partial<{
   substanceUse: SubstanceUseData;
   fromMessageId: string;
   successTest: SuccessTestMessageData;
-  task: TaskMessageData;
+  favor: FavorMessageData;
 }>;

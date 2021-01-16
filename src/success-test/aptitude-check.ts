@@ -6,6 +6,7 @@ import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
 import {
   Action,
+  actionTimeframeModifier,
   ActionType,
   createAction,
   defaultCheckActionSubtype,
@@ -117,6 +118,8 @@ export class AptitudeCheck extends SuccessTestBase {
       action,
     } = this;
 
+    const name = `${localize('FULL', aptitude.type)} ${localize('check')}`;
+
     const data: SuccessTestMessageData = {
       parts: compact([
         {
@@ -138,12 +141,20 @@ export class AptitudeCheck extends SuccessTestBase {
       ],
       ignoredModifiers: ignoreModifiers ? this.modifierTotal : undefined,
       linkedPool: Pool.linkedToAptitude(aptitude.type),
+      task: action.timeframe
+        ? {
+            name,
+            timeframe: action.timeframe,
+            actionSubtype: action.subtype,
+            modifier: actionTimeframeModifier(action).modifier,
+          }
+        : undefined,
     };
 
     await createMessage({
       data: {
         header: {
-          heading: `${localize('FULL', aptitude.type)} ${localize('check')}`,
+          heading: name,
           subheadings: [
             `${action.type} ${
               action.timeMod && action.type !== ActionType.Task
