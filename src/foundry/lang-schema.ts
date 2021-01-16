@@ -1400,7 +1400,7 @@ type LangEntries =
   | 'original'
   | 'complementary'
   | 'minimize'
-  | 'MarkFavorAsUsed';
+  | 'MarkFavorAsUsed' | "covertness" | "detail" | "superior"
 type FullNames =
   | 'cog'
   | 'int'

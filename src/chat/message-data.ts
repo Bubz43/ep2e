@@ -1,6 +1,10 @@
 import type { AreaEffect } from '@src/combat/area-effect';
 import type { BasicAreaEffectData } from '@src/combat/attack-formatting';
-import type { AttackTrait, PoolType } from '@src/data-enums';
+import type {
+  AttackTrait,
+  PoolType,
+  SuperiorResultEffect,
+} from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
 import type { SubstanceUseMethod } from '@src/entities/item/proxies/substance';
 import type { ItemEntity } from '@src/entities/models';
@@ -122,6 +126,9 @@ export type SuccessTestMessageData = {
   defaulting?: boolean;
   linkedPool?: Exclude<PoolType, PoolType.Flex | PoolType.Threat>;
   ignoredModifiers?: number;
+  superiorResultEffects?: SuperiorResultEffect[];
+
+  // TODO  criticalResultEffect?: CriticalResultEffect
   task?: Pick<ActiveTaskAction, 'name' | 'timeframe' | 'actionSubtype'> & {
     modifier: number;
     startedTaskId?: string | null;

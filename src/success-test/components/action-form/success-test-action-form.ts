@@ -51,10 +51,7 @@ export class SuccessTestActionForm extends LitElement {
           >
             ${isTask
               ? html`<div class="timeframe-info">
-                  ${renderTimeField({
-                    ...timeframe,
-                    label: `${localize('initial')} ${localize('timeframe')}`,
-                  })}
+                  ${renderTimeField(timeframe)}
                   <div class="multiplier">
                     x${actionTimeframeModifier(action).modifier + 1}
                   </div>

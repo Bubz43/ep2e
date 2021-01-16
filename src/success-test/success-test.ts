@@ -37,6 +37,20 @@ export const isSuccessfullTestResult = createPipe(
 
 export type PreTestPool = [ReadonlyPool, PreTestPoolAction] | null;
 
+export const grantedSuperiorResultEffects = (result: SuccessTestResult) => {
+  return [
+    SuccessTestResult.SuperiorFailureX2,
+    SuccessTestResult.SuperiorSuccessX2,
+  ].includes(result)
+    ? 2
+    : [
+        SuccessTestResult.SuperiorSuccess,
+        SuccessTestResult.SuperiorFailure,
+      ].includes(result)
+    ? 1
+    : 0;
+};
+
 export type SuccessTestRollState = {
   visibility: MessageVisibility;
   autoRoll: boolean;

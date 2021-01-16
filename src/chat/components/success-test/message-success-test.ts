@@ -11,6 +11,7 @@ import { RenderDialogEvent } from '@src/open-dialog';
 import {
   flipFlopRoll,
   getSuccessTestResult,
+  grantedSuperiorResultEffects,
   improveSuccessTestResult,
   SuccessTestResult,
 } from '@src/success-test/success-test';
@@ -89,8 +90,15 @@ export class MessageSuccessTest extends MessageElement {
       result,
       action: 'edit',
     });
+    const grantedSuperiorEffects = grantedSuperiorResultEffects(result);
 
-    this.getUpdater('successTest').commit({ states: steps });
+    this.getUpdater('successTest').commit({
+      states: steps,
+      superiorResultEffects: this.successTest.superiorResultEffects?.slice(
+        0,
+        grantedSuperiorEffects,
+      ),
+    });
   }
 
   private startEditing() {
@@ -191,7 +199,13 @@ export class MessageSuccessTest extends MessageElement {
   }
 
   render() {
-    const { defaulting, linkedPool, states, task } = this.successTest;
+    const {
+      defaulting,
+      linkedPool,
+      states,
+      task,
+      superiorResultEffects,
+    } = this.successTest;
     const { actor, editable } = this.message;
     const isCharacter = actor?.type === ActorType.Character;
     const { roll, target = this.partTotal, result } = this.currentState ?? {};
@@ -223,6 +237,8 @@ export class MessageSuccessTest extends MessageElement {
       `;
     }
 
+    const grantedSuperiorEffects = grantedSuperiorResultEffects(result);
+
     return html`
       <div class="groups">
         <sl-group label=${localize('roll')} class="roll"
@@ -250,6 +266,11 @@ export class MessageSuccessTest extends MessageElement {
             ${this.spannedResult(localize(this.preview?.result ?? result))}
           </sl-animated-list>
         </sl-group>
+        ${grantedSuperiorEffects ? html`
+        <sl-group label="${localize("superior")} ${localize("result")} ${localize("effects")}">
+        
+        </sl-group>
+        ` : ""}
       </div>
       ${states?.length > 1 || Array.isArray(states[0]?.action)
         ? html`
@@ -287,13 +308,21 @@ export class MessageSuccessTest extends MessageElement {
                 ></sl-popover>`}
           </div>`
         : ''}
-      ${isCharacter && result && task && editable
-        ? html`
-            <mwc-button class="task" unelevated dense
-              >${localize('start')} ${localize('task')}</mwc-button
-            >
-          `
-        : ''}
+      ${isCharacter && result && task && editable ? this.renderTask(task) : ''}
+    `;
+  }
+
+  private renderTask(task: NonNullable<SuccessTestMessageData['task']>) {
+    return html`
+      <mwc-button
+        class="task"
+        unelevated
+        dense
+        ?disabled=${!!task.startedTaskId}
+        >${task.startedTaskId
+          ? `${localize('task')} ${localize('started')}`
+          : `${localize('start')} ${localize('task')}`}</mwc-button
+      >
     `;
   }
 
@@ -361,12 +390,19 @@ export class MessageSuccessTest extends MessageElement {
                     @click=${() => {
                       const preview = this.previewPoolAction(action);
                       if (preview) {
+                        const grantedSuperiorEffects = grantedSuperiorResultEffects(
+                          preview.result,
+                        );
                         this.getUpdater('successTest').commit({
                           states: this.successTest.states.concat({
                             ...preview,
                             target: this.currentState?.target ?? this.partTotal,
                             action: [pool.type, action],
                           }),
+                          superiorResultEffects: this.successTest.superiorResultEffects?.slice(
+                            0,
+                            grantedSuperiorEffects,
+                          ),
                         });
                       }
                     }}

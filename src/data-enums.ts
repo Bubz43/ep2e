@@ -529,3 +529,12 @@ export enum FullDefenseType {
   Physical = 'physical',
   Mental = 'mental',
 }
+
+export enum SuperiorResultEffect {
+  Quality = "quality",
+  Quantity = "quantity",
+  Details = "detail",
+  Time = "time",
+  Covertness = "covertness",
+  Damage = "damage"
+}
