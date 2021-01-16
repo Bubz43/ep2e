@@ -50,10 +50,7 @@ export class UserView extends LitElement {
         const { color } = this.user.data;
         const showAvatar = avatar !== CONST.DEFAULT_TOKEN;
       return html`
-        <div
-          class="main"
-          style="--border-color: ${color}"
-        >
+      
           ${showAvatar
             ? html`
                 <img
@@ -73,7 +70,6 @@ export class UserView extends LitElement {
               @click=${this.openPlayerConfig}
             ></mwc-icon-button>
           </div>
-        </div>
       `;
   }
 }

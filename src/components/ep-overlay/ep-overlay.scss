@@ -13,7 +13,7 @@
     'scene time app-controls'
     'nav time chat'
     'controls .. chat'
-    '.. .. chat';
+    'user .. chat';
 
   grid-template-columns: 1fr auto auto;
 
@@ -40,6 +40,12 @@
   ::slotted(mwc-dialog:not([open])) {
     pointer-events: none;
   }
+}
+
+user-view {
+  grid-area: user;
+    margin: auto 0 1.75rem -1.1rem;
+
 }
 
 mwc-dialog {
