@@ -1,4 +1,4 @@
-import type { SuccessTestMessage } from '@src/chat/message-data';
+import type { SuccessTestMessageData } from '@src/chat/message-data';
 import { renderNumberInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { Placement } from '@src/components/popover/popover-options';
@@ -42,7 +42,7 @@ export class MessageSuccessTest extends MessageElement {
     return [styles];
   }
 
-  @property({ attribute: false }) successTest!: SuccessTestMessage;
+  @property({ attribute: false }) successTest!: SuccessTestMessageData;
 
   @internalProperty() private setRoll?: number | null;
 

@@ -1,6 +1,7 @@
 import { overlay } from '@src/init';
 import { debounceFn } from '@src/utility/decorators';
 import { TemplateResult, render } from 'lit-html';
+import type { NanoPopPosition } from 'nanopop';
 import { traverseActiveElements } from 'weightless';
 import { SlWindow } from './window';
 import { ResizeOption, SlWindowEventName } from './window-options';
@@ -84,6 +85,7 @@ export type WindowOpenSettings = {
   img?: string;
   forceFocus?: boolean;
   adjacentEl?: Element | null | false;
+  position?: NanoPopPosition;
 };
 
 export type WindowOpenOptions = Partial<{
@@ -92,7 +94,7 @@ export type WindowOpenOptions = Partial<{
 }>;
 
 export const openWindow = (
-  { key, content, name, forceFocus, adjacentEl, img }: WindowOpenSettings,
+  { key, content, name, forceFocus, adjacentEl, img, position }: WindowOpenSettings,
   { resizable = ResizeOption.None, renderOnly = false }: WindowOpenOptions = {},
 ) => {
   let win = windows.get(key);
@@ -105,6 +107,7 @@ export const openWindow = (
   win.name = name;
   win.img = img;
   win.resizable = resizable;
+  if (position) win.relativePosition = position
   render(content, win);
 
   const wasConnected = win?.isConnected;

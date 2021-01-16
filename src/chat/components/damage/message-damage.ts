@@ -43,9 +43,9 @@ export class MessageDamage extends LitElement {
 
   @internalProperty() private viewFormulas = false;
 
-  @internalProperty() usedRollParts?: ReadonlySet<number>;
+  @internalProperty() private usedRollParts?: ReadonlySet<number>;
 
-  @internalProperty() multiplier: RollMultiplier = 1;
+  @internalProperty() private multiplier: RollMultiplier = 1;
 
   update(changedProps: PropertyValues) {
     if (changedProps.has('damage')) {

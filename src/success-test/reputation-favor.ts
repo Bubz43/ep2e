@@ -1,3 +1,5 @@
+import { createMessage } from '@src/chat/create-message';
+import type { SuccessTestMessageData } from '@src/chat/message-data';
 import { PoolType } from '@src/data-enums';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
@@ -17,8 +19,8 @@ import {
 } from '@src/features/reputations';
 import { localize } from '@src/foundry/localization';
 import type { WithUpdate } from '@src/utility/updating';
-import { compact, merge } from 'remeda';
-import { createSuccessTestModifier } from './success-test';
+import { compact, map, merge } from 'remeda';
+import { createSuccessTestModifier, rollSuccessTest } from './success-test';
 import { SuccessTestBase } from './success-test-base';
 
 export type ReputationFavorInit = {
@@ -154,6 +156,74 @@ export class ReputationFavor extends SuccessTestBase {
   }
 
   protected async createMessage() {
-    // TODO
+    const {
+      ignoreModifiers,
+      clampedTarget,
+      favorState,
+      settings,
+      pools,
+      action,
+    } = this;
+
+    const {
+      type,
+      reputation,
+      burnBonus,
+      keepingQuiet,
+      burnForAdditionalFavor,
+    } = favorState;
+
+    const data: SuccessTestMessageData = {
+      parts: compact([
+        {
+          name: reputation.network,
+          value: reputation.score,
+        },
+        {
+          name: localize(type),
+          value: favorValues(type).modifier,
+        },
+        ...(ignoreModifiers ? [] : this.modifiersAsParts),
+      ]),
+      states: [
+        {
+          target: clampedTarget,
+          ...(settings.autoRoll
+            ? rollSuccessTest({ target: clampedTarget })
+            : {}),
+          action: pools.active
+            ? [pools.active[0].type, pools.active[1]]
+            : 'initial',
+        },
+      ],
+      ignoredModifiers: ignoreModifiers ? this.modifierTotal : undefined,
+      linkedPool: PoolType.Moxie,
+    };
+
+    await createMessage({
+      data: {
+        header: {
+          heading: `${reputation.network} ${localize(type)} ${localize(
+            'favor',
+          )}`,
+          subheadings: [
+            `${action.type} ${
+              action.timeMod && action.type !== ActionType.Task
+                ? `(${localize('as')} ${localize('task')})`
+                : ''
+            }`,
+            localize(action.subtype),
+            localize('action'),
+          ].join(' '),
+        },
+        successTest: data,
+      },
+      entity: this.character, // TODO account for item sources,
+      visibility: settings.visibility,
+    });
+
+    if (pools.active) {
+      this.character?.spendPool({ pool: pools.active[0].type, points: 1 });
+    }
   }
 }

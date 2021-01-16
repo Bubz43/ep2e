@@ -161,6 +161,7 @@ import { SuccessTestSectionLabel } from './success-test/components/section-label
 import { SuccessTestFooter } from './success-test/components/footer/success-test-footer';
 import { SkillTestControls } from './success-test/components/skill-test-controls/skill-test-controls';
 import { ReputationFavorControls } from './success-test/components/reputation-favor-controls/reputation-favor-controls';
+import { MessageTaskAction } from './chat/components/task-action/message-task-action';
 
 // Generic Components
 Field;
@@ -316,6 +317,7 @@ MessageAttackTraits;
 MessageAreaEffect;
 MessageMeleeAttack;
 MessageSuccessTest;
+MessageTaskAction;
 
 // SuccessTest
 AptitudeCheckControls;

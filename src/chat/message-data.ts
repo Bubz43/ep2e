@@ -4,8 +4,10 @@ import type { AttackTrait, PoolType } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
 import type { SubstanceUseMethod } from '@src/entities/item/proxies/substance';
 import type { ItemEntity } from '@src/entities/models';
+import type { ActiveTaskAction } from '@src/features/actions';
 import type { ArmorType } from '@src/features/active-armor';
 import type { PostTestPoolAction, PreTestPoolAction } from '@src/features/pool';
+import type { Favor, RepIdentifier } from '@src/features/reputations';
 import type { PlacedTemplateIDs } from '@src/foundry/canvas';
 import type { RolledFormula } from '@src/foundry/rolls';
 import type { HealthModification, HealthType } from '@src/health/health';
@@ -114,12 +116,26 @@ type SuccessTestState = {
     | 'initial';
 };
 
-export type SuccessTestMessage = {
+export type SuccessTestMessageData = {
   parts: { name: string; value: number }[];
   states: SuccessTestState[];
   defaulting?: boolean;
   linkedPool?: Exclude<PoolType, PoolType.Flex | PoolType.Threat>;
   ignoredModifiers?: number;
+};
+
+export type TaskMessageData = Pick<
+  ActiveTaskAction,
+  'name' | 'timeframe' | 'actionSubtype'
+> & {
+  timeframeModifier?: number;
+  startedTaskId?: string | null;
+  favor?: {
+    type: Favor;
+    repIdentifier: RepIdentifier;
+    keepingQuiet?: number;
+    markedAsUsed?: boolean;
+  }
 };
 
 export type MessageData = Partial<{
@@ -134,5 +150,6 @@ export type MessageData = Partial<{
   heal: MessageHealData;
   substanceUse: SubstanceUseData;
   fromMessageId: string;
-  successTest: SuccessTestMessage;
+  successTest: SuccessTestMessageData;
+  task: TaskMessageData;
 }>;

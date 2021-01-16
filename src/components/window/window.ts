@@ -23,7 +23,7 @@ import {
   query,
   TemplateResult,
 } from 'lit-element';
-import { reposition } from 'nanopop';
+import { NanoPopPosition, reposition } from 'nanopop';
 import { anyPass, clamp, compact, mapToObj } from 'remeda';
 import { ResizeOption, SlWindowEventName } from './window-options';
 import styles from './window.scss';
@@ -134,6 +134,8 @@ export class SlWindow extends LitElement {
   @property({ type: String }) img?: string;
 
   @property({ type: String }) resizable = ResizeOption.None;
+
+  @property({ type: String }) relativePosition: NanoPopPosition = "bottom"
 
   @query('header') private header!: HTMLElement;
 
@@ -274,7 +276,7 @@ export class SlWindow extends LitElement {
         });
       };
       requestAnimationFrame(() => {
-        const position = reposition(toEl, this, { position: 'bottom' });
+        const position = reposition(toEl, this, { position: this.relativePosition });
         // const { wentRight } = positionRelatively({
         //   toEl,
         //   element: this,

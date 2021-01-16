@@ -1,5 +1,5 @@
 import { createMessage } from '@src/chat/create-message';
-import type { SuccessTestMessage } from '@src/chat/message-data';
+import type { SuccessTestMessageData } from '@src/chat/message-data';
 import { PoolType } from '@src/data-enums';
 import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Ego } from '@src/entities/actor/ego';
@@ -176,7 +176,7 @@ export class SkillTest extends SuccessTestBase {
       halveBase,
       complementarySkill,
     } = skillState; // TODO Aptitude stuff
-    const data: SuccessTestMessage = {
+    const data: SuccessTestMessageData = {
       parts: compact([
         {
           name: `${skillState.skill.name} ${halveBase ? '÷2' : ''}`,
@@ -217,10 +217,15 @@ export class SkillTest extends SuccessTestBase {
       data: {
         header: {
           heading: `${skill.name} ${localize('test')}`,
-          subheadings: compact([
-            applySpecialization && skill.specialization,
-            map([action.type, action.subtype, 'action'], localize).join(' '),
-          ]),
+          subheadings: [
+            `${action.type} ${
+              action.timeMod && action.type !== ActionType.Task
+                ? `(${localize('as')} ${localize('task')})`
+                : ''
+            }`,
+            localize(action.subtype),
+            localize('action'),
+          ].join(' '),
         },
         successTest: data,
       },
