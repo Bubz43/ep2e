@@ -1373,6 +1373,9 @@
     "cannot": "Cannot",
     "change": "Change",
     "complementary": "Complementary",
+    "MarkFavorAsUsed": "Mark favor as used",
+    "minimize": "Minimize",
+    "original": "Original",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

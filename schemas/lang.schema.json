@@ -259,6 +259,9 @@
               ],
               "type": "object"
             },
+            "MarkFavorAsUsed": {
+              "type": "string"
+            },
             "PassiveEffectsWhenActivated": {
               "type": "string"
             },
@@ -1182,6 +1185,9 @@
               "type": "string"
             },
             "common": {
+              "type": "string"
+            },
+            "complementary": {
               "type": "string"
             },
             "complete": {
@@ -2655,6 +2661,9 @@
               "type": "string"
             },
             "minimissile": {
+              "type": "string"
+            },
+            "minimize": {
               "type": "string"
             },
             "minimum": {
@@ -4562,6 +4571,7 @@
             "DESCRIPTIONS",
             "FORMATABLE",
             "FULL",
+            "MarkFavorAsUsed",
             "PassiveEffectsWhenActivated",
             "SHORT",
             "Watts-MacLeod",
@@ -4810,6 +4820,7 @@
             "commander",
             "commit",
             "common",
+            "complementary",
             "complete",
             "completed",
             "complex",
@@ -5301,6 +5312,7 @@
             "mini",
             "minigrenade",
             "minimissile",
+            "minimize",
             "minimum",
             "minimumStress",
             "minor",
