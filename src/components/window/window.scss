@@ -62,6 +62,7 @@
       overflow: visible;
       span {
         margin: 0 0 0 0.5rem;
+        text-align: left;
       }
       img {
         height: 36px;
@@ -152,7 +153,9 @@ slot[name='footer'] {
   font-size: larger;
   text-shadow: 0px 0px 10px black;
   flex: 1;
-  display: flex;
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  grid-template-rows: 2rem;
   align-items: center;
 
   > * {
@@ -162,9 +165,15 @@ slot[name='footer'] {
     display: inline-block;
     filter: drop-shadow(1px 2px 3px black);
     margin-left: 0.25ch;
+    & + span {
+      grid-column: 2;
+    }
   }
   span {
     margin: 0 auto;
+    min-width: 100%;;
+    text-align: center;
+    grid-column: span 2;
   }
 }
 

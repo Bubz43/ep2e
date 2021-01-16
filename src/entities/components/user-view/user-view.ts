@@ -51,26 +51,28 @@ export class UserView extends LitElement {
         const showAvatar = avatar !== CONST.DEFAULT_TOKEN;
       return html`
         <div
-          class="main ${classMap({ 'show-avatar': showAvatar })}"
+          class="main"
           style="--border-color: ${color}"
         >
           ${showAvatar
             ? html`
-                <img src=${avatar} class="avatar" @click=${this.popoutImage} />
+                <img
+                  src=${avatar}
+                  height="32px"
+                  class="avatar"
+                  @click=${this.popoutImage}
+                />
               `
             : ''}
+          <span class="name">${name} ${isGM ? '[GM]' : ''}</span>
+
           <div class="icons">
             <mwc-icon-button
-              icon="folder"
-              @click=${this.viewMacros}
-            ></mwc-icon-button>
-
-            <mwc-icon-button
+            style="color: ${color}"
               icon="account_circle"
               @click=${this.openPlayerConfig}
             ></mwc-icon-button>
           </div>
-          <span class="name">${name} ${isGM ? '[GM]' : ''}</span>
         </div>
       `;
   }

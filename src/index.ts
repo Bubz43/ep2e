@@ -162,6 +162,7 @@ import { SuccessTestFooter } from './success-test/components/footer/success-test
 import { SkillTestControls } from './success-test/components/skill-test-controls/skill-test-controls';
 import { ReputationFavorControls } from './success-test/components/reputation-favor-controls/reputation-favor-controls';
 import { MessageTaskAction } from './chat/components/task-action/message-task-action';
+import { UserView } from './entities/components/user-view/user-view';
 
 // Generic Components
 Field;
@@ -190,6 +191,7 @@ SlWindow;
 
 // Entity
 CompendiumList;
+UserView;
 
 // Actor
 ActorCreator;

@@ -135,7 +135,7 @@ export class SlWindow extends LitElement {
 
   @property({ type: String }) resizable = ResizeOption.None;
 
-  @property({ type: String }) relativePosition: NanoPopPosition = "bottom"
+  @property({ type: String }) relativePosition: NanoPopPosition = 'bottom';
 
   @query('header') private header!: HTMLElement;
 
@@ -276,7 +276,9 @@ export class SlWindow extends LitElement {
         });
       };
       requestAnimationFrame(() => {
-        const position = reposition(toEl, this, { position: this.relativePosition });
+        const position = reposition(toEl, this, {
+          position: this.relativePosition,
+        });
         // const { wentRight } = positionRelatively({
         //   toEl,
         //   element: this,
@@ -506,11 +508,12 @@ export class SlWindow extends LitElement {
     openMenu({
       header: { heading: this.name },
       content: compact([
-        this.hasChangedSize && {
-          label: `${localize('reset')} ${localize('size')}`,
-          callback: () => this.resetSize(),
-          icon: html`<mwc-icon>aspect_ratio</mwc-icon>`,
-        },
+        this.hasChangedSize &&
+          !this.minimized && {
+            label: `${localize('reset')} ${localize('size')}`,
+            callback: () => this.resetSize(),
+            icon: html`<mwc-icon>aspect_ratio</mwc-icon>`,
+          },
         {
           label: localize(this.minimized ? 'restore' : 'minimize'),
           callback: () => this.toggleMinimize(),

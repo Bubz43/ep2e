@@ -6,6 +6,12 @@
 }
 
 :host {
-    display: block;
-    
+    display: flex;
+    min-height: 2rem;
+    align-items: center;
 }
+
+.name {
+    flex: 1;
+}
+
