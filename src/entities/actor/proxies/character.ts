@@ -355,7 +355,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
           temporaryServices.push(item);
           if (item.isExpired) expiredServices.push(item);
         }
-        if (item.isFakeEgoId) fakeIDs.push(item);
+        if (item.isFakeEgoId && item.reputations.length) fakeIDs.push(item);
       } else if (item.type === ItemType.Software) {
         if (item.isService) {
           services.push(item);

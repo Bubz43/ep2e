@@ -3,6 +3,7 @@ import type { SuccessTestMessageData } from '@src/chat/message-data';
 import { PoolType } from '@src/data-enums';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
+import type { PhysicalService } from '@src/entities/item/proxies/physical-service';
 import {
   Action,
   ActionSubtype,
@@ -42,6 +43,7 @@ export class ReputationFavor extends SuccessTestBase {
     reputation: RepWithIdentifier;
     keepingQuiet: number;
     burnBonus: number;
+    fakeID?: PhysicalService | null;
   }> & { burnForAdditionalFavor: boolean };
 
   readonly keepingQuietModifier = createSuccessTestModifier({

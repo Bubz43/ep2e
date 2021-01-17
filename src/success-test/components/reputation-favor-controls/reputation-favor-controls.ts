@@ -10,7 +10,7 @@ import {
   Favor,
   favorValues,
   maxFavors,
-  RepWithIdentifier
+  RepWithIdentifier,
 } from '@src/features/reputations';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
@@ -19,16 +19,13 @@ import { ReputationFavor } from '@src/success-test/reputation-favor';
 import { notEmpty, withSign } from '@src/utility/helpers';
 import {
   customElement,
-
-
   html,
-  internalProperty, LitElement,
-
-
-
-
-  PropertyValues, query
+  internalProperty,
+  LitElement,
+  PropertyValues,
+  query,
 } from 'lit-element';
+import { compact } from 'remeda';
 import type { Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';
 import styles from './reputation-favor-controls.scss';
@@ -133,10 +130,37 @@ export class ReputationFavorControls extends LitElement {
     this.getState = init.getState;
   }
 
+  private openSourceSelect() {
+    const { ego, character, favorState } = this.test ?? {};
+    openMenu({
+      header: { heading: `${localize('reputation')} ${localize('source')}` },
+      content: compact([
+        ego?.trackReputations && {
+          label: ego.name,
+          callback: () => {
+            this.test?.favorState.update({ fakeID: null, reputation: ego.trackedReps?.[0] });
+          },
+          activated: !favorState?.fakeID,
+        },
+        character?.equippedGroups.fakeIDs.map((fake) => ({
+          label: fake.name,
+          activated: fake === favorState?.fakeID,
+          callback: () => {
+            this.test?.favorState.update({ fakeID: fake, reputation: fake.repsWithIndefiers[0] });
+          },
+        })),
+      ]).flat(),
+    });
+  }
+
   private openReputationSelect() {
+    const reps: RepWithIdentifier[] =
+      this.test?.favorState.fakeID?.repsWithIndefiers ||
+      this.test?.ego.trackedReps ||
+      [];
     openMenu({
       header: { heading: `${localize('select')} ${localize('network')}` },
-      content: (this.test?.ego.trackedReps ?? []).map((reputation) => ({
+      content: reps.map((reputation) => ({
         label: reputation.network,
         callback: () => this.test?.favorState.update({ reputation }),
         activated: reputation === this.test?.favorState.reputation,
@@ -192,6 +216,7 @@ export class ReputationFavorControls extends LitElement {
       keepingQuiet,
       burnBonus,
       burnForAdditionalFavor,
+      fakeID,
     } = test.favorState;
     // TODO show total burning
     return html`
@@ -218,6 +243,18 @@ export class ReputationFavorControls extends LitElement {
 
           <div>
             <ul class="favor-info">
+              ${notEmpty(character.equippedGroups.fakeIDs)
+                ? html`
+                    <wl-list-item clickable @click=${this.openSourceSelect}>
+                      <span
+                        >${localize('source')}:
+                        ${fakeID
+                          ? `${fakeID.name} [${localize('fakeId')}]`
+                          : ego.name}</span
+                      >
+                    </wl-list-item>
+                  `
+                : ''}
               <wl-list-item clickable @click=${this.openReputationSelect}>
                 <span
                   >${reputation.network}
