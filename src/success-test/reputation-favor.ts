@@ -225,15 +225,19 @@ export class ReputationFavor extends SuccessTestBase {
       data: {
         header: {
           heading: name,
-          subheadings: [
-            `${action.type} ${
-              action.timeMod && action.type !== ActionType.Task
-                ? `(${localize('as')} ${localize('task')})`
-                : ''
-            }`,
-            localize(action.subtype),
-            localize('action'),
-          ].join(' '),
+          subheadings: compact([
+            [
+              `${action.type} ${
+                action.timeMod && action.type !== ActionType.Task
+                  ? `(${localize('as')} ${localize('task')})`
+                  : ''
+              }`,
+              localize(action.subtype),
+              localize('action'),
+            ].join(' '),
+            fakeID &&
+              `${localize('using')} ${localize('fakeId')}: ${fakeID.name} `,
+          ]),
         },
         successTest: data,
         favor: {

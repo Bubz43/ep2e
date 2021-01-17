@@ -135,13 +135,14 @@ export class CharacterViewTestActions extends LitElement {
   }
 
   render() {
-    const { active, know } = this.ego.groupedSkills;
+    const { groupedSkills, trackReputations } = this.ego;
+    const { active, know } = groupedSkills;
     const { fakeIDs } = this.character.equippedGroups;
     const fakeIDreps = this.activeFakeId
       ? fakeIDs.find((i) => i.id === this.activeFakeId)?.repsWithIdentifiers
       : null;
     const repSources = compact([
-      this.ego.trackReputations && {
+      trackReputations && {
         reps: this.ego.trackedReps,
         label: this.ego.name,
         active: !fakeIDreps,
@@ -153,7 +154,9 @@ export class CharacterViewTestActions extends LitElement {
       ...fakeIDs.map((fake) => ({
         reps: fake.repsWithIdentifiers,
         label: fake.name,
-        active: fakeIDreps === fake.repsWithIdentifiers,
+        active:
+          fakeIDreps === fake.repsWithIdentifiers ||
+          (!trackReputations && !fakeIDreps && fake === fakeIDs[0]),
         fake: true,
         set: () => {
           this.activeFakeId = fake.id;
@@ -177,6 +180,9 @@ export class CharacterViewTestActions extends LitElement {
                             <mwc-button
                               icon=${source.fake ? 'person_outline' : 'person'}
                               dense
+                              title=${localize(
+                                source.fake ? 'fakeEgoId' : 'ego',
+                              )}
                               ?outlined=${!source.active}
                               ?unelevated=${source.active}
                               @click=${source.set}

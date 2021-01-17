@@ -121,7 +121,13 @@ mwc-tab-bar {
 }
 
 .rep-sources {
-  padding: 0.25rem;
+  --mdc-theme-primary: var(--color-border);
+  display: flex;
+  flex-flow: row wrap;
+  > * {
+    flex: 1;
+    margin: 0.25rem 0.25rem 0;
+  }
 }
 
 .rep-list {

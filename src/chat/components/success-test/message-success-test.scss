@@ -29,8 +29,10 @@
   }
   .superior-list {
     --list-item-padding: 0 1rem;
+        display: grid;
+    grid-auto-rows: 2rem;
     mwc-checkbox {
-      width: 2rem;
+      width: 2.5rem;
     }
   }
 

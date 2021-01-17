@@ -3614,6 +3614,9 @@
             "service": {
               "type": "string"
             },
+            "serviceDuration": {
+              "type": "string"
+            },
             "serviceType": {
               "type": "string"
             },
@@ -3951,6 +3954,9 @@
               "type": "string"
             },
             "summary": {
+              "type": "string"
+            },
+            "superior": {
               "type": "string"
             },
             "superiorFailure": {
@@ -5629,6 +5635,7 @@
             "semiAuto",
             "server",
             "service",
+            "serviceDuration",
             "serviceType",
             "services",
             "set",
@@ -5742,6 +5749,7 @@
             "success",
             "successTest",
             "summary",
+            "superior",
             "superiorFailure",
             "superiorFailureX2",
             "superiorSuccess",

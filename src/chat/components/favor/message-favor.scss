@@ -8,21 +8,20 @@
 :host {
   display: block;
   padding: 0.25rem 0;
+  --mdc-list-item-graphic-margin: 0.5rem;
 }
 
 .acronym {
   text-transform: uppercase;
 }
 
-.type {
+.type,
+[slot='graphic'] {
   color: var(--color-text-lighter);
 }
 
 [slot='meta'] {
-  color: var(--color-text);
-  &.burn {
   color: var(--color-negative);
-  }
 }
 
 mwc-list {

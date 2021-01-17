@@ -54,6 +54,10 @@ export class PhysicalService extends mix(Base).with(Purchasable, Service) {
     return this.epData.state.equipped;
   }
 
+  get fullType() {
+    return this.serviceType === PhysicalServiceType.FakeId ? `${localize(this.serviceType)} - ${localize(this.type)}` : localize(this.type);
+  }
+
   findRep(id: string) {
     return this.reputations.find(matchID(id));
   }
