@@ -1,32 +1,27 @@
 import {
   formatArmorUsed,
-  formatLabeledFormulas
+  formatLabeledFormulas,
 } from '@src/combat/attack-formatting';
 import type { ExplosiveAttack } from '@src/combat/attacks';
 import {
-  renderFormulaField, renderLabeledCheckbox,
+  renderFormulaField,
+  renderLabeledCheckbox,
   renderNumberField,
-
-
-
-
-  renderNumberInput, renderSelectField,
-
-
-
+  renderNumberInput,
+  renderSelectField,
   renderTextareaField,
   renderTextField,
-  renderTimeField
+  renderTimeField,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
 import {
   closeWindow,
-  openWindow
+  openWindow,
 } from '@src/components/window/window-controls';
 import {
   ResizeOption,
-  SlWindowEventName
+  SlWindowEventName,
 } from '@src/components/window/window-options';
 import {
   AreaEffectType,
@@ -35,7 +30,7 @@ import {
   ExplosiveSize,
   ExplosiveType,
   SubstanceApplicationMethod,
-  WeaponAttackType
+  WeaponAttackType,
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { ItemType } from '@src/entities/entity-types';
@@ -47,7 +42,7 @@ import { prettyMilliseconds } from '@src/features/time';
 import {
   DropType,
   handleDrop,
-  itemDropToItemProxy
+  itemDropToItemProxy,
 } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import { notEmpty } from '@src/utility/helpers';

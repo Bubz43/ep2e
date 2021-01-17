@@ -2,12 +2,12 @@ import {
   emptyTextDash,
   renderFormulaField,
   renderLabeledCheckbox,
-  renderSelectField
+  renderSelectField,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import {
   closeWindow,
-  openWindow
+  openWindow,
 } from '@src/components/window/window-controls';
 import { enumValues } from '@src/data-enums';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
@@ -16,14 +16,11 @@ import { localize } from '@src/foundry/localization';
 import { SuccessTestResult } from '@src/success-test/success-test';
 import {
   customElement,
-
-
   html,
-  internalProperty, LitElement,
+  internalProperty,
+  LitElement,
   property,
-
-
-  PropertyValues
+  PropertyValues,
 } from 'lit-element';
 import { map } from 'remeda';
 import { traverseActiveElements } from 'weightless';

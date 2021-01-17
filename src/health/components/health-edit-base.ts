@@ -8,13 +8,13 @@ import {
   internalProperty,
   LitElement,
   property,
-  PropertyValues
+  PropertyValues,
 } from 'lit-element';
 import { pick, set } from 'remeda';
 import {
   createHealthModification,
   formatDamageType,
-  HealthModificationMode
+  HealthModificationMode,
 } from '../health';
 import type { Damage, RollMultiplier } from '../health-changes';
 import type { ActorHealth } from '../health-mixin';

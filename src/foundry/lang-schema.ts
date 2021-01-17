@@ -1403,7 +1403,8 @@ type LangEntries =
   | 'MarkFavorAsUsed'
   | 'covertness'
   | 'detail'
-  | 'superior' | "serviceDuration";
+  | 'superior'
+  | 'serviceDuration';
 type FullNames =
   | 'cog'
   | 'int'

@@ -7,7 +7,7 @@ import {
   LitElement,
   property,
   PropertyValues,
-  query
+  query,
 } from 'lit-element';
 import { stopEvent } from 'weightless/util/event';
 import type { FieldElement } from '../field/fields';

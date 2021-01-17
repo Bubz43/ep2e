@@ -5,14 +5,14 @@ import {
   renderRadioFields,
   renderSelectField,
   renderTextField,
-  renderTimeField
+  renderTimeField,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
 import { openWindow } from '@src/components/window/window-controls';
 import {
   ResizeOption,
-  SlWindowEventName
+  SlWindowEventName,
 } from '@src/components/window/window-options';
 import {
   Activation,
@@ -20,7 +20,7 @@ import {
   DeviceType,
   enumValues,
   FabType,
-  PhysicalWare
+  PhysicalWare,
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { ItemType } from '@src/entities/entity-types';
@@ -34,7 +34,7 @@ import { CommonInterval } from '@src/features/time';
 import {
   DropType,
   handleDrop,
-  itemDropToItemProxy
+  itemDropToItemProxy,
 } from '@src/foundry/drag-and-drop';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
@@ -45,7 +45,7 @@ import {
   html,
   internalProperty,
   property,
-  PropertyValues
+  PropertyValues,
 } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { difference, mapToObj } from 'remeda';

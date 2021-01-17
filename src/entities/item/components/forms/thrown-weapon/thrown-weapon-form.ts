@@ -1,5 +1,6 @@
 import {
-  formatArmorUsed, formatLabeledFormulas
+  formatArmorUsed,
+  formatLabeledFormulas,
 } from '@src/combat/attack-formatting';
 import type { ThrownWeaponAttack } from '@src/combat/attacks';
 import {
@@ -8,14 +9,14 @@ import {
   renderNumberField,
   renderRadioFields,
   renderTextareaField,
-  renderTextInput
+  renderTextInput,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
 import { openWindow } from '@src/components/window/window-controls';
 import {
   ResizeOption,
-  SlWindowEventName
+  SlWindowEventName,
 } from '@src/components/window/window-options';
 import { AttackTrait, enumValues, WeaponSkillOption } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
@@ -24,9 +25,9 @@ import { renderItemForm } from '@src/entities/item/item-views';
 import type { ThrownWeapon } from '@src/entities/item/proxies/thrown-weapon';
 import { SkillType } from '@src/features/skills';
 import {
-  DropType, handleDrop,
-
-  itemDropToItemProxy
+  DropType,
+  handleDrop,
+  itemDropToItemProxy,
 } from '@src/foundry/drag-and-drop';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
@@ -37,13 +38,13 @@ import {
   html,
   internalProperty,
   property,
-  PropertyValues
+  PropertyValues,
 } from 'lit-element';
 import { map, mapToObj } from 'remeda';
 import {
   complexityForm,
   renderComplexityFields,
-  renderGearTraitCheckboxes
+  renderGearTraitCheckboxes,
 } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './thrown-weapon-form.scss';

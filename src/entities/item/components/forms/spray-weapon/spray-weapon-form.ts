@@ -1,29 +1,29 @@
 import {
-  formatArmorUsed, formatLabeledFormulas
+  formatArmorUsed,
+  formatLabeledFormulas,
 } from '@src/combat/attack-formatting';
 import type { DropZone } from '@src/components/dropzone/dropzone';
 import {
-  emptyTextDash, renderFormulaField, renderLabeledCheckbox, renderNumberField,
-
-  renderNumberInput, renderSelectField,
-
-
-
-
-  renderTextareaField
+  emptyTextDash,
+  renderFormulaField,
+  renderLabeledCheckbox,
+  renderNumberField,
+  renderNumberInput,
+  renderSelectField,
+  renderTextareaField,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
 import { openWindow } from '@src/components/window/window-controls';
 import {
   ResizeOption,
-  SlWindowEventName
+  SlWindowEventName,
 } from '@src/components/window/window-options';
 import {
   AttackTrait,
   enumValues,
   PhysicalWare,
-  SprayPayload
+  SprayPayload,
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { ItemType } from '@src/entities/entity-types';
@@ -35,7 +35,7 @@ import { pairList } from '@src/features/check-list';
 import {
   DropType,
   handleDrop,
-  itemDropToItemProxy
+  itemDropToItemProxy,
 } from '@src/foundry/drag-and-drop';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
@@ -50,7 +50,7 @@ import {
   renderComplexityFields,
   renderFiringModeCheckboxes,
   renderGearTraitCheckboxes,
-  renderRangedAccessoriesEdit
+  renderRangedAccessoriesEdit,
 } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './spray-weapon-form.scss';

@@ -1,5 +1,6 @@
 import {
-  formatArmorUsed, formatLabeledFormulas
+  formatArmorUsed,
+  formatLabeledFormulas,
 } from '@src/combat/attack-formatting';
 import type { SoftwareAttack } from '@src/combat/attacks';
 import {
@@ -9,18 +10,18 @@ import {
   renderRadioFields,
   renderSelectField,
   renderTextareaField,
-  renderTextField
+  renderTextField,
 } from '@src/components/field/fields';
 import {
   renderAutoForm,
   renderSubmitForm,
-  renderUpdaterForm
+  renderUpdaterForm,
 } from '@src/components/form/forms';
 import {
   AttackTrait,
   enumValues,
   SoftwareType,
-  WeaponAttackType
+  WeaponAttackType,
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import type { Software } from '@src/entities/item/proxies/software';
@@ -28,7 +29,7 @@ import { ActionType } from '@src/features/actions';
 import {
   CheckResultState,
   formatAptitudeCheckInfo,
-  formatCheckResultInfo
+  formatCheckResultInfo,
 } from '@src/features/aptitude-check-result-info';
 import { pairList } from '@src/features/check-list';
 import type { AptitudeCheckInfoUpdateEvent } from '@src/features/components/aptitude-check-info-editor/aptitude-check-info-update-event';
@@ -45,7 +46,7 @@ import {
   html,
   internalProperty,
   property,
-  PropertyValues
+  PropertyValues,
 } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';

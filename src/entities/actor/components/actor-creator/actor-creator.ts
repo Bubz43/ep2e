@@ -1,8 +1,7 @@
 import {
   renderLabeledCheckbox,
-
   renderSelectField,
-  renderTextField
+  renderTextField,
 } from '@src/components/field/fields';
 import type { Form } from '@src/components/form/form';
 import { renderAutoForm } from '@src/components/form/forms';
@@ -21,19 +20,13 @@ import { EP } from '@src/foundry/system';
 import { clickIfEnter, notEmpty, safeMerge } from '@src/utility/helpers';
 import {
   customElement,
-
-
-
-
-
-  eventOptions, html,
-  internalProperty, LitElement,
+  eventOptions,
+  html,
+  internalProperty,
+  LitElement,
   property,
-
-
-
-
-  PropertyValues, query
+  PropertyValues,
+  query,
 } from 'lit-element';
 import { createPipe, flatMapToObj } from 'remeda';
 import { ActorEP } from '../../actor';

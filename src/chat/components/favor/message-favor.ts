@@ -57,23 +57,27 @@ export class MessageFavor extends MessageElement {
   render() {
     return html`
       <mwc-list>
-        <mwc-list-item noninteractive graphic=${ifDefined(this.favor.fakeIdName ? "icon": undefined)} ?hasMeta=${this.favor.burnedRep}>
-        ${this.favor.fakeIdName ? html`<mwc-icon slot="graphic">person_outline</mwc-icon>` :""}
-        
+        <mwc-list-item
+          noninteractive
+          graphic=${ifDefined(this.favor.fakeIdName ? 'icon' : undefined)}
+          ?hasMeta=${this.favor.burnedRep}
+        >
+          ${this.favor.fakeIdName
+            ? html`<mwc-icon slot="graphic">person_outline</mwc-icon>`
+            : ''}
+
           <span>
             <span class="acronym">${this.favor.repAcronym}</span>
             <span class="type"
               >${localize(this.favor.type)} ${localize('favor')}</span
             ></span
           >
-       
+
           ${this.favor.burnedRep
             ? html`<mwc-icon class="burn" slot="meta">whatshot</mwc-icon>`
             : ''}
         </mwc-list-item>
-        ${this.favor.fakeIdName ? html`
-
-        ` : ""}
+        ${this.favor.fakeIdName ? html`` : ''}
         ${this.favor.burnedRep || this.favor.type === Favor.Trivial
           ? ''
           : html` <mwc-check-list-item

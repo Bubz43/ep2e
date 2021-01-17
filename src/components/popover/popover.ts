@@ -3,15 +3,12 @@ import { debounce } from '@src/utility/decorators';
 import { assignStyles, px, resizeObsAvailable } from '@src/utility/dom';
 import {
   customElement,
-
-
   html,
-  internalProperty, LitElement,
+  internalProperty,
+  LitElement,
   property,
-
-
   PropertyValues,
-  query
+  query,
 } from 'lit-element';
 import { render } from 'lit-html';
 import { classMap } from 'lit-html/directives/class-map';

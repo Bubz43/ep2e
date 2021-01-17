@@ -3,7 +3,7 @@ import {
   renderNumberField,
   renderSelectField,
   renderTextareaField,
-  renderTextField
+  renderTextField,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import { enumValues, TraitSource, TraitType } from '@src/data-enums';
@@ -16,7 +16,7 @@ import {
   addUpdateRemoveFeature,
   idProp,
   StringID,
-  updateFeature
+  updateFeature,
 } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
 import { openMenu } from '@src/open-menu';
@@ -25,7 +25,7 @@ import {
   html,
   internalProperty,
   property,
-  PropertyValues
+  PropertyValues,
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';

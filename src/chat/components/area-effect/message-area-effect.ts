@@ -5,18 +5,12 @@ import {
   createTemporaryMeasuredTemplate,
   deletePlacedTemplate,
   editPlacedTemplate,
-
   MeasuredTemplateData,
   placeMeasuredTemplate,
-  readyCanvas
+  readyCanvas,
 } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
-import {
-  customElement,
-
-
-  html, property
-} from 'lit-element';
+import { customElement, html, property } from 'lit-element';
 import type { SetOptional } from 'type-fest';
 import { MessageElement } from '../message-element';
 import styles from './message-area-effect.scss';

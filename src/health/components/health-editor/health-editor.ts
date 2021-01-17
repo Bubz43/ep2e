@@ -3,13 +3,13 @@ import {
   renderLabeledCheckbox,
   renderNumberField,
   renderRadioFields,
-  renderTextField
+  renderTextField,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderSubmitForm } from '@src/components/form/forms';
 import { Placement } from '@src/components/popover/popover-options';
 import {
   closeWindow,
-  openWindow
+  openWindow,
 } from '@src/components/window/window-controls';
 import { enumValues } from '@src/data-enums';
 import type { ActorEP } from '@src/entities/actor/actor';
@@ -20,7 +20,7 @@ import { BiologicalHealth } from '@src/health/biological-health';
 import {
   createHealthModification,
   HealthModificationMode,
-  HealthType
+  HealthType,
 } from '@src/health/health';
 import type { Damage, Heal } from '@src/health/health-changes';
 import type { ActorHealth } from '@src/health/health-mixin';
@@ -32,7 +32,7 @@ import {
   internalProperty,
   LitElement,
   property,
-  PropertyValues
+  PropertyValues,
 } from 'lit-element';
 import { clamp, compact, identity, mapToObj } from 'remeda';
 import styles from './health-editor.scss';

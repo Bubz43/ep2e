@@ -9,7 +9,7 @@ import {
   DropType,
   handleDrop,
   itemDropToItemProxy,
-  setDragDrop
+  setDragDrop,
 } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import { performIntegerSort } from '@src/foundry/misc-helpers';
@@ -22,7 +22,7 @@ import {
   internalProperty,
   LitElement,
   property,
-  PropertyValues
+  PropertyValues,
 } from 'lit-element';
 import { nothing } from 'lit-html';
 import { classMap } from 'lit-html/directives/class-map';

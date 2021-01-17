@@ -8,14 +8,14 @@ import {
   complementarySkillBonus,
   FieldSkillType,
   isFieldSkill,
-  Skill
+  Skill,
 } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import {
   skillLinkedAptitudeMultipliers,
-  SkillTest
+  SkillTest,
 } from '@src/success-test/skill-test';
 import { notEmpty, withSign } from '@src/utility/helpers';
 import {
@@ -24,7 +24,7 @@ import {
   internalProperty,
   LitElement,
   PropertyValues,
-  query
+  query,
 } from 'lit-element';
 import { compact } from 'remeda';
 import type { Subscription } from 'rxjs';

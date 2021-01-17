@@ -7,7 +7,7 @@ import {
   createLiveTimeState,
   currentWorldTimeMS,
   LiveTimeState,
-  prettyMilliseconds
+  prettyMilliseconds,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { openMenu } from '@src/open-menu';
@@ -17,7 +17,7 @@ import {
   internalProperty,
   LitElement,
   property,
-  PropertyValues
+  PropertyValues,
 } from 'lit-element';
 import styles from './time-state-item.scss';
 

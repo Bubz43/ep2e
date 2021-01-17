@@ -5,18 +5,18 @@ import {
   renderNumberInput,
   renderRadioFields,
   renderSelectField,
-  renderTimeField
+  renderTimeField,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import {
   closeWindow,
-  openWindow
+  openWindow,
 } from '@src/components/window/window-controls';
 import {
   AreaEffectType,
   Demolition,
   enumValues,
-  ExplosiveTrigger
+  ExplosiveTrigger,
 } from '@src/data-enums';
 import { ActorType } from '@src/entities/entity-types';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
@@ -25,7 +25,7 @@ import {
   createExplosiveTriggerSetting,
   DemolitionSetting,
   ExplosiveSettings,
-  ExplosiveTriggerSettings
+  ExplosiveTriggerSettings,
 } from '@src/entities/weapon-settings';
 import { CommonInterval, currentWorldTimeMS } from '@src/features/time';
 import {
@@ -37,14 +37,14 @@ import {
   MeasuredTemplateData,
   placeMeasuredTemplate,
   readyCanvas,
-  updatePlacedTemplate
+  updatePlacedTemplate,
 } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
 import { averageRoll } from '@src/foundry/rolls';
 import {
   isSuccessfullTestResult,
-  SuccessTestResult
+  SuccessTestResult,
 } from '@src/success-test/success-test';
 import {
   customElement,
@@ -52,7 +52,7 @@ import {
   internalProperty,
   LitElement,
   property,
-  PropertyValues
+  PropertyValues,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { difference, identity } from 'remeda';

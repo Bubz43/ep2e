@@ -75,7 +75,7 @@ export class ReputationFavor extends SuccessTestBase {
     character,
     reputation,
     favor = Favor.Trivial,
-    fakeID
+    fakeID,
   }: ReputationFavorInit) {
     super({
       action: createAction({

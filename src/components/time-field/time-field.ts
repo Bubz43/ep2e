@@ -1,23 +1,21 @@
 import {
-  parseMilliseconds, toMilliseconds
+  parseMilliseconds,
+  toMilliseconds,
 } from '@src/features/modify-milliseconds';
 import {
   CommonInterval,
-  prettyMilliseconds, TimeInterval,
-
-
-  timeIntervals
+  prettyMilliseconds,
+  TimeInterval,
+  timeIntervals,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { debounce } from '@src/utility/decorators';
 import {
   customElement,
-
-
-  html, LitElement,
+  html,
+  LitElement,
   property,
-
-  PropertyValues
+  PropertyValues,
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { clamp, pipe, range } from 'remeda';

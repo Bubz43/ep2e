@@ -55,7 +55,9 @@ export class PhysicalService extends mix(Base).with(Purchasable, Service) {
   }
 
   get fullType() {
-    return this.serviceType === PhysicalServiceType.FakeId ? `${localize(this.serviceType)} - ${localize(this.type)}` : localize(this.type);
+    return this.serviceType === PhysicalServiceType.FakeId
+      ? `${localize(this.serviceType)} - ${localize(this.type)}`
+      : localize(this.type);
   }
 
   findRep(id: string) {

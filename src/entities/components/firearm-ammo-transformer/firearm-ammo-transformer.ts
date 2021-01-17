@@ -4,11 +4,10 @@ import { localize } from '@src/foundry/localization';
 import type { PropertyValues } from 'lit-element';
 import {
   customElement,
-
-
   html,
-  internalProperty, LitElement,
-  property
+  internalProperty,
+  LitElement,
+  property,
 } from 'lit-element';
 import { equals } from 'remeda';
 import styles from './firearm-ammo-transformer.scss';
