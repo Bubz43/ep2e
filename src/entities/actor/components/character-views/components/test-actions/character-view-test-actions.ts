@@ -22,7 +22,7 @@ import {
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { live } from 'lit-html/directives/live';
-import { equals, first, range, reject } from 'remeda';
+import { compact, equals, first, range, reject } from 'remeda';
 import styles from './character-view-test-actions.scss';
 
 @customElement('character-view-test-actions')
@@ -38,6 +38,8 @@ export class CharacterViewTestActions extends LitElement {
   @property({ attribute: false }) character!: Character;
 
   @property({ attribute: false }) ego!: Ego;
+
+  @internalProperty() private activeFakeId?: string;
 
   @internalProperty()
   private skillControls = {
@@ -123,18 +125,51 @@ export class CharacterViewTestActions extends LitElement {
 
   render() {
     const { active, know } = this.ego.groupedSkills;
-
+    const { fakeIDs } = this.character.equippedGroups;
+    const fakeIDreps =
+      this.activeFakeId && fakeIDs.find((i) => i.id === this.activeFakeId)?.repsWithIndefiers;
+    const repSources = compact([
+      this.ego.trackReputations && {
+        reps: this.ego.trackedReps,
+        label: this.ego.name,
+        set: () => {
+          this.activeFakeId = '';
+        },
+      },
+      ...fakeIDs.map((fake) => ({
+        reps: fake.repsWithIndefiers,
+        label: fake.name,
+        set: () => {
+          this.activeFakeId = fake.id;
+        },
+      })),
+    ]);
     return html`
       <div class="stats">
         <ul class="aptitudes-list">
           ${enumValues(AptitudeType).map(this.renderAptitude)}
         </ul>
 
-        ${this.ego.trackReputations
+        ${notEmpty(repSources)
           ? html`
-              <ul class="rep-list">
-                ${this.ego.trackedReps.map(this.renderRep)}
-              </ul>
+              <div class="reps">
+                ${notEmpty(fakeIDs)
+                  ? html`
+                      <div class="rep-sources">
+                        ${repSources.map(
+                          (source) => html`
+                            <mwc-button dense outlined @click=${source.set}
+                              >${source.label}</mwc-button
+                            >
+                          `,
+                        )}
+                      </div>
+                    `
+                  : ''}
+                <ul class="rep-list">
+                  ${this.ego.trackedReps.map(this.renderRep)}
+                </ul>
+              </div>
             `
           : ''}
 

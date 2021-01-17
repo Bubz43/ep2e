@@ -15,7 +15,7 @@ import { localize } from '@src/foundry/localization';
 import { HealthType } from '@src/health/health';
 import { nonNegative } from '@src/utility/helpers';
 import mix from 'mix-with/lib';
-import { clamp, difference } from 'remeda';
+import { clamp, compact, difference, map, pipe } from 'remeda';
 import type { Attacker } from '../item-interfaces';
 import {
   Copyable,
@@ -60,6 +60,14 @@ export class BeamWeapon
 
   get battery() {
     return this.epData.battery;
+  }
+
+  get fullType() {
+    return pipe(
+      [this.wareType, this.type] as const,
+      compact,
+      map(localize),
+    ).join(' ');
   }
 
   get rechargedBattery() {
