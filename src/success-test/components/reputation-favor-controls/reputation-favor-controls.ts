@@ -6,6 +6,7 @@ import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
+import type { PhysicalService } from '@src/entities/item/proxies/physical-service';
 import {
   Favor,
   favorValues,
@@ -15,7 +16,10 @@ import {
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
 import { openMenu } from '@src/open-menu';
-import { ReputationFavor } from '@src/success-test/reputation-favor';
+import {
+  ReputationFavor,
+  ReputationFavorInit,
+} from '@src/success-test/reputation-favor';
 import { notEmpty, withSign } from '@src/utility/helpers';
 import {
   customElement,
@@ -72,13 +76,7 @@ export class ReputationFavorControls extends LitElement {
 
   @internalProperty() private getState!: (
     actor: ActorEP,
-  ) => {
-    ego: Ego;
-    character: Character;
-    reputation: RepWithIdentifier;
-    favor: Favor;
-    // TODO Item source
-  } | null;
+  ) => ReputationFavorInit | null;
 
   @query('sl-window')
   private win?: SlWindow;
@@ -138,7 +136,10 @@ export class ReputationFavorControls extends LitElement {
         ego?.trackReputations && {
           label: ego.name,
           callback: () => {
-            this.test?.favorState.update({ fakeID: null, reputation: ego.trackedReps?.[0] });
+            this.test?.favorState.update({
+              fakeID: null,
+              reputation: ego.trackedReps?.[0],
+            });
           },
           activated: !favorState?.fakeID,
         },
@@ -146,7 +147,10 @@ export class ReputationFavorControls extends LitElement {
           label: fake.name,
           activated: fake === favorState?.fakeID,
           callback: () => {
-            this.test?.favorState.update({ fakeID: fake, reputation: fake.repsWithIndefiers[0] });
+            this.test?.favorState.update({
+              fakeID: fake,
+              reputation: fake.repsWithIndefiers[0],
+            });
           },
         })),
       ]).flat(),

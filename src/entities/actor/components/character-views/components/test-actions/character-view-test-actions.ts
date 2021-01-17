@@ -110,14 +110,25 @@ export class CharacterViewTestActions extends LitElement {
       entities: { actor: this.character.actor },
       getState: (actor) => {
         if (actor.proxy.type !== ActorType.Character) return null;
+        const fakeIdentifiers =
+          reputation.identifier.type === 'fake' ? reputation.identifier : null;
+        const fakeID = fakeIdentifiers
+          ? actor.proxy.equippedGroups.fakeIDs.find(
+              (i) => i.id === fakeIdentifiers.fakeEgoId,
+            )
+          : undefined;
         return {
           ego: actor.proxy.ego,
           character: actor.proxy,
-          reputation:
-            actor.proxy.ego.trackedReps.find((rep) =>
-              equals(rep.identifier, reputation.identifier),
-            ) ?? reputation,
+          reputation: fakeID
+            ? fakeID.repsWithIndefiers.find(
+                (r) => r.id === fakeIdentifiers?.repId,
+              ) ?? reputation
+            : actor.proxy.ego.trackedReps.find((rep) =>
+                equals(rep.identifier, reputation.identifier),
+              ) ?? reputation,
           favor,
+          fakeID,
         };
       },
     });

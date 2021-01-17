@@ -32,6 +32,7 @@ export type ReputationFavorInit = {
   character: Character;
   reputation: RepWithIdentifier;
   favor?: Favor;
+  fakeID?: PhysicalService;
 };
 
 export class ReputationFavor extends SuccessTestBase {
@@ -74,6 +75,7 @@ export class ReputationFavor extends SuccessTestBase {
     character,
     reputation,
     favor = Favor.Trivial,
+    fakeID
   }: ReputationFavorInit) {
     super({
       action: createAction({
@@ -89,6 +91,7 @@ export class ReputationFavor extends SuccessTestBase {
       type: favor,
       keepingQuiet: 0,
       burnBonus: 0,
+      fakeID,
       burnForAdditionalFavor:
         favor !== Favor.Trivial &&
         reputation[favor] >= (maxFavors.get(favor) ?? 1),
