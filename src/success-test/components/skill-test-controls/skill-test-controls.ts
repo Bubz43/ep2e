@@ -1,14 +1,11 @@
 import type { SlWindow } from '@src/components/window/window';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
-import type { Ego } from '@src/entities/actor/ego';
-import type { Character } from '@src/entities/actor/proxies/character';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
 import { Pool, poolIcon } from '@src/features/pool';
 import {
   complementarySkillBonus,
   FieldSkillType,
-  isFieldSkill,
-  Skill,
+  isFieldSkill
 } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
@@ -16,6 +13,7 @@ import { openMenu } from '@src/open-menu';
 import {
   skillLinkedAptitudeMultipliers,
   SkillTest,
+  SkillTestInit
 } from '@src/success-test/skill-test';
 import { notEmpty, withSign } from '@src/utility/helpers';
 import {
@@ -23,8 +21,8 @@ import {
   html,
   internalProperty,
   LitElement,
-  PropertyValues,
-  query,
+
+  query
 } from 'lit-element';
 import { compact } from 'remeda';
 import type { Subscription } from 'rxjs';
@@ -32,8 +30,11 @@ import { traverseActiveElements } from 'weightless';
 import styles from './skill-test-controls.scss';
 
 type Init = {
-  entities: SkillTestControls['entities'];
-  getState: SkillTestControls['getState'];
+  entities: {
+    actor: ActorEP;
+    token?: MaybeToken;
+  };
+  getState: (actor: ActorEP) => SkillTestInit;
 };
 
 @customElement('skill-test-controls')
@@ -66,19 +67,6 @@ export class SkillTestControls extends LitElement {
     win.setState(init);
   }
 
-  @internalProperty() private entities!: {
-    actor: ActorEP;
-    token?: MaybeToken;
-  };
-
-  @internalProperty() private getState!: (
-    actor: ActorEP,
-  ) => {
-    ego: Ego;
-    character?: Character;
-    skill: Skill;
-    // TODO Item source
-  } | null;
 
   @query('sl-window')
   private win?: SlWindow;
@@ -87,37 +75,8 @@ export class SkillTestControls extends LitElement {
 
   @internalProperty() private test?: SkillTest;
 
-  update(
-    changedProps: PropertyValues<
-      this & { entities: { actor: ActorEP; token?: MaybeToken } }
-    >,
-  ) {
-    if (changedProps.has('entities')) {
-      this.unsub();
-      this.subs.add(
-        this.entities.actor.subscribe((actor) => {
-          const info = actor && this.getState(actor);
-          if (!info) this.win?.close();
-          else {
-            this.subs.add(
-              new SkillTest({
-                ...info,
-              }).subscribe({
-                next: (test) => (this.test = test),
-                complete: () => this.win?.close(),
-              }),
-            );
-          }
-        }),
-      );
-    }
-
-    super.update(changedProps);
-  }
-
   disconnectedCallback() {
     this.unsub();
-    SkillTestControls.openWindows.delete(this.entities.actor);
     super.disconnectedCallback();
   }
 
@@ -130,8 +89,24 @@ export class SkillTestControls extends LitElement {
   }
 
   setState(init: Init) {
-    this.entities = init.entities;
-    this.getState = init.getState;
+    this.unsub();
+    this.subs.add(() =>
+      SkillTestControls.openWindows.delete(init.entities.actor),
+    );
+    this.subs.add(
+      init.entities.actor.subscribe((actor) => {
+        const info = actor && init.getState(actor);
+        if (!info) this.win?.close();
+        else {
+          this.subs.add(
+            new SkillTest(info).subscribe({
+              next: (test) => (this.test = test),
+              complete: () => this.win?.close(),
+            }),
+          );
+        }
+      }),
+    );
   }
 
   private openSkillSelect() {

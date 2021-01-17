@@ -6,7 +6,16 @@ export type MeleeAttackTestInit = SkillTestInit & {
 }
 
 export class MeleeAttackTest extends SkillTest {
+
+    readonly melee: {
+        weapon?: MeleeWeapon
+    }
+
     constructor({meleeWeapon, ...init }: MeleeAttackTestInit) {
         super(init);
+
+        this.melee = {
+            weapon: meleeWeapon
+        }
     }
 }
