@@ -18,7 +18,7 @@ import {
   LitElement,
   property,
   PropertyValues,
-  queryAll
+  queryAll,
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { live } from 'lit-html/directives/live';
@@ -145,6 +145,7 @@ export class CharacterViewTestActions extends LitElement {
         reps: this.ego.trackedReps,
         label: this.ego.name,
         active: !fakeIDreps,
+        fake: false,
         set: () => {
           this.activeFakeId = '';
         },
@@ -153,6 +154,7 @@ export class CharacterViewTestActions extends LitElement {
         reps: fake.repsWithIdentifiers,
         label: fake.name,
         active: fakeIDreps === fake.repsWithIdentifiers,
+        fake: true,
         set: () => {
           this.activeFakeId = fake.id;
         },
@@ -172,7 +174,12 @@ export class CharacterViewTestActions extends LitElement {
                       <div class="rep-sources">
                         ${repSources.map(
                           (source) => html`
-                            <mwc-button dense ?outlined=${!source.active} ?unelevated=${source.active} @click=${source.set}
+                            <mwc-button
+                              icon=${source.fake ? 'person_outline' : 'person'}
+                              dense
+                              ?outlined=${!source.active}
+                              ?unelevated=${source.active}
+                              @click=${source.set}
                               >${source.label}</mwc-button
                             >
                           `,

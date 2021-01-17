@@ -177,7 +177,7 @@ export class ReputationFavor extends SuccessTestBase {
     const {
       type,
       reputation,
-      burnBonus,
+      fakeID,
       keepingQuiet,
       burnForAdditionalFavor,
     } = favorState;
@@ -242,6 +242,7 @@ export class ReputationFavor extends SuccessTestBase {
           keepingQuiet,
           repAcronym: reputation.acronym,
           burnedRep: burnForAdditionalFavor,
+          fakeIdName: fakeID?.name,
         },
       },
       entity: this.character, // TODO account for item sources,

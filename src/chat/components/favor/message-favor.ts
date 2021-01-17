@@ -54,11 +54,6 @@ export class MessageFavor extends MessageElement {
   }
 
   render() {
-    const { successTestResult } = this.message;
-    const noUse =
-      successTestResult &&
-      !isSuccessfullTestResult(successTestResult) &&
-      successTestResult !== SuccessTestResult.CriticalFailure;
     return html`
       <mwc-list>
         <mwc-list-item noninteractive ?hasMeta=${this.favor.burnedRep}>
@@ -68,10 +63,16 @@ export class MessageFavor extends MessageElement {
               >${localize(this.favor.type)} ${localize('favor')}</span
             ></span
           >
+          ${this.favor.fakeIdName ? html`
+          <mwc-icon slot="meta">person_outline</mwc-icon>
+          ` : ""}
           ${this.favor.burnedRep
-            ? html`<mwc-icon slot="meta">whatshot</mwc-icon>`
+            ? html`<mwc-icon class="burn" slot="meta">whatshot</mwc-icon>`
             : ''}
         </mwc-list-item>
+        ${this.favor.fakeIdName ? html`
+
+        ` : ""}
         ${this.favor.burnedRep
           ? ''
           : html` <mwc-check-list-item

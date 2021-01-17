@@ -141,6 +141,7 @@ export type FavorMessageData = {
   type: Favor;
   repAcronym: string;
   repIdentifier: RepIdentifier;
+  fakeIdName?: string;
   keepingQuiet?: number;
   markedAsUsed?: boolean;
   burnedRep?: boolean;

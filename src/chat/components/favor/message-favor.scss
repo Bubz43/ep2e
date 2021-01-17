@@ -19,7 +19,10 @@
 }
 
 [slot='meta'] {
+  color: var(--color-text);
+  &.burn {
   color: var(--color-negative);
+  }
 }
 
 mwc-list {
