@@ -3,22 +3,19 @@ import { renderAutoForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
 import { enumValues } from '@src/data-enums';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
-import type { Ego } from '@src/entities/actor/ego';
-import type { Character } from '@src/entities/actor/proxies/character';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
-import type { PhysicalService } from '@src/entities/item/proxies/physical-service';
 import {
   Favor,
   favorValues,
   maxFavors,
-  RepWithIdentifier,
+  RepWithIdentifier
 } from '@src/features/reputations';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import {
   ReputationFavor,
-  ReputationFavorInit,
+  ReputationFavorInit
 } from '@src/success-test/reputation-favor';
 import { notEmpty, withSign } from '@src/utility/helpers';
 import {
@@ -27,7 +24,7 @@ import {
   internalProperty,
   LitElement,
   PropertyValues,
-  query,
+  query
 } from 'lit-element';
 import { compact } from 'remeda';
 import type { Subscription } from 'rxjs';
@@ -85,7 +82,7 @@ export class ReputationFavorControls extends LitElement {
 
   @internalProperty() private test?: ReputationFavor;
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (changedProps.has('entities')) {
       this.unsub();
       this.subs.add(

@@ -5,28 +5,28 @@ import {
   renderNumberInput,
   renderRadioFields,
   renderSelectField,
-  renderTimeField,
+  renderTimeField
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import {
   closeWindow,
-  openWindow,
+  openWindow
 } from '@src/components/window/window-controls';
 import {
   AreaEffectType,
   Demolition,
   enumValues,
-  ExplosiveTrigger,
+  ExplosiveTrigger
 } from '@src/data-enums';
 import { ActorType } from '@src/entities/entity-types';
+import type { Explosive } from '@src/entities/item/proxies/explosive';
 import {
   createDemolitionSetting,
   createExplosiveTriggerSetting,
   DemolitionSetting,
   ExplosiveSettings,
-  ExplosiveTriggerSettings,
+  ExplosiveTriggerSettings
 } from '@src/entities/weapon-settings';
-import type { Explosive } from '@src/entities/item/proxies/explosive';
 import { CommonInterval, currentWorldTimeMS } from '@src/features/time';
 import {
   controlledToken,
@@ -37,26 +37,25 @@ import {
   MeasuredTemplateData,
   placeMeasuredTemplate,
   readyCanvas,
-  updatePlacedTemplate,
+  updatePlacedTemplate
 } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
 import { averageRoll } from '@src/foundry/rolls';
 import {
   isSuccessfullTestResult,
-  SuccessTestResult,
+  SuccessTestResult
 } from '@src/success-test/success-test';
-import { nonNegative } from '@src/utility/helpers';
 import {
   customElement,
   html,
   internalProperty,
   LitElement,
   property,
-  PropertyValues,
+  PropertyValues
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { clamp, difference, identity } from 'remeda';
+import { difference, identity } from 'remeda';
 import type { SetOptional } from 'type-fest';
 import { traverseActiveElements } from 'weightless';
 import styles from './explosive-settings-form.scss';
@@ -115,7 +114,7 @@ export class ExplosiveSettingsForm extends LitElement {
     super.disconnectedCallback();
   }
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (
       changedProps.get('explosive') !== undefined ||
       changedProps.has('initialSettings')

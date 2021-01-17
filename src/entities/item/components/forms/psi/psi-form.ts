@@ -92,7 +92,7 @@ export class PsiForm extends ItemFormBase {
     super.disconnectedCallback();
   }
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     for (const [roll] of this.traitSheetKeys) {
       this.openItemSheet(roll);
     }

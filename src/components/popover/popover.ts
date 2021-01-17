@@ -1,19 +1,22 @@
 import { IconButtonToggle } from '@material/mwc-icon-button-toggle';
 import { debounce } from '@src/utility/decorators';
-import { resizeObsAvailable, assignStyles, px } from '@src/utility/dom';
+import { assignStyles, px, resizeObsAvailable } from '@src/utility/dom';
 import {
   customElement,
-  LitElement,
-  property,
+
+
   html,
-  internalProperty,
+  internalProperty, LitElement,
+  property,
+
+
   PropertyValues,
-  query,
+  query
 } from 'lit-element';
 import { render } from 'lit-html';
 import { classMap } from 'lit-html/directives/class-map';
 import mix from 'mix-with/lib';
-import { equals, first, clamp } from 'remeda';
+import { clamp, equals, first } from 'remeda';
 import { queryParentRoots } from 'weightless';
 import { addListener } from 'weightless/util/event';
 import { ListenerSubscription } from '../mixins/listeners';
@@ -138,7 +141,7 @@ export class Popover extends mix(LitElement).with(ListenerSubscription) {
     if (this.open) this.open = false;
   }
 
-  shouldUpdate(changedProps: PropertyValues) {
+  shouldUpdate(changedProps: PropertyValues<this>) {
     this.ignoreGlobalClick = false;
     if (changedProps.get('renderOnDemand') !== undefined) {
       if (this.open && this.tempContainer && this.renderOnDemand) {
@@ -153,7 +156,7 @@ export class Popover extends mix(LitElement).with(ListenerSubscription) {
     return super.shouldUpdate(changedProps);
   }
 
-  updated(changedProps: PropertyValues) {
+  updated(changedProps: PropertyValues<this>) {
     if (changedProps.get('open') !== undefined) {
       requestAnimationFrame(() => (this.open ? this.show() : this.close()));
     }

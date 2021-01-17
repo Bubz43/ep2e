@@ -36,7 +36,7 @@ export class EffectEditor extends LitElement {
 
   @property({ type: Object }) effect!: Effect | StringID<Effect>;
 
-  @internalProperty() internalEffect!: Required<Effect>;
+  @internalProperty() private internalEffect!: Required<Effect>;
 
   @query('sl-form')
   form!: Form;
@@ -44,7 +44,7 @@ export class EffectEditor extends LitElement {
   @query('submit-button')
   submitButton!: SubmitButton;
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (changedProps.has('effect')) {
       this.internalEffect = createEffect[this.effect.type](
         duplicate(this.effect) as any,

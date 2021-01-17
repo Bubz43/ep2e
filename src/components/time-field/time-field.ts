@@ -1,24 +1,26 @@
 import {
-  TimeInterval,
-  CommonInterval,
-  prettyMilliseconds,
-  timeIntervals,
-} from '@src/features/time';
-import {
-  toMilliseconds,
-  parseMilliseconds,
+  parseMilliseconds, toMilliseconds
 } from '@src/features/modify-milliseconds';
+import {
+  CommonInterval,
+  prettyMilliseconds, TimeInterval,
+
+
+  timeIntervals
+} from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { debounce } from '@src/utility/decorators';
 import {
   customElement,
-  LitElement,
+
+
+  html, LitElement,
   property,
-  html,
-  PropertyValues,
+
+  PropertyValues
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
-import { pipe, clamp, range } from 'remeda';
+import { clamp, pipe, range } from 'remeda';
 import { renderNumberInput } from '../field/fields';
 import { renderAutoForm } from '../form/forms';
 import styles from './time-field.scss';
@@ -61,7 +63,7 @@ export class TimeField extends LitElement {
     });
   }
 
-  updated(changedProps: PropertyValues) {
+  updated(changedProps: PropertyValues<this>) {
     if (changedProps.has('value')) {
       this.updateSlottedInputs();
     }

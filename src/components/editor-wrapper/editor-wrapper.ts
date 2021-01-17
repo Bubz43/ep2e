@@ -53,7 +53,7 @@ export class EditorWrapper extends LitElement {
     super.disconnectedCallback();
   }
 
-  updated(changedProps: PropertyValues) {
+  updated(changedProps: PropertyValues<this>) {
     if (changedProps.has('disabled') && this.disabled) this.cleanupEditor();
   }
 

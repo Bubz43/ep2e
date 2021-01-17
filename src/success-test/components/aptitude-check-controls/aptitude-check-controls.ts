@@ -1,7 +1,7 @@
 import {
   renderNumberField,
   renderSelectField,
-  renderTextField,
+  renderTextField
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
@@ -20,7 +20,7 @@ import {
   internalProperty,
   LitElement,
   PropertyValues,
-  query,
+  query
 } from 'lit-element';
 import type { Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';
@@ -82,7 +82,7 @@ export class AptitudeCheckControls extends LitElement {
 
   @internalProperty() private test?: AptitudeCheck;
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (changedProps.has('entities')) {
       this.unsub();
       this.subs.add(

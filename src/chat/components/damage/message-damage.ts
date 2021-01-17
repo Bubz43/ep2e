@@ -1,8 +1,6 @@
 import type { DamageMessageData } from '@src/chat/message-data';
 import { formatArmorUsed } from '@src/combat/attack-formatting';
 import type { UsedRollPartsEvent } from '@src/combat/components/rolled-formulas-list/used-roll-parts-event';
-import { renderNumberInput, renderSlider } from '@src/components/field/fields';
-import { renderAutoForm } from '@src/components/form/forms';
 import { pickOrDefaultActor } from '@src/entities/find-entities';
 import { localize } from '@src/foundry/localization';
 import { cleanFormula } from '@src/foundry/rolls';
@@ -10,14 +8,13 @@ import { HealthEditor } from '@src/health/components/health-editor/health-editor
 import {
   formatDamageType,
   formatFormulaWithMultiplier,
-  HealthType,
+  HealthType
 } from '@src/health/health';
 import {
   createMeshDamage,
   createPhysicalDamage,
   createStressDamage,
-  RollMultiplier,
-  rollMultipliers,
+  RollMultiplier
 } from '@src/health/health-changes';
 import { notEmpty } from '@src/utility/helpers';
 import {
@@ -26,7 +23,7 @@ import {
   internalProperty,
   LitElement,
   property,
-  PropertyValues,
+  PropertyValues
 } from 'lit-element';
 import { omit } from 'remeda';
 import styles from './message-damage.scss';
@@ -47,7 +44,7 @@ export class MessageDamage extends LitElement {
 
   @internalProperty() private multiplier: RollMultiplier = 1;
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (changedProps.has('damage')) {
       this.multiplier = this.damage.multiplier ?? 1;
     }

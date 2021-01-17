@@ -1,6 +1,6 @@
 import {
   formatArmorUsed,
-  formatLabeledFormulas,
+  formatLabeledFormulas
 } from '@src/combat/attack-formatting';
 import type { MeleeWeaponAttack } from '@src/combat/attacks';
 import {
@@ -11,24 +11,23 @@ import {
   renderSelectField,
   renderTextareaField,
   renderTextField,
-  renderTextInput,
+  renderTextInput
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
 import {
-  closeWindow,
-  openWindow,
+  openWindow
 } from '@src/components/window/window-controls';
 import {
   ResizeOption,
-  SlWindowEventName,
+  SlWindowEventName
 } from '@src/components/window/window-options';
 import {
   AttackTrait,
   enumValues,
   PhysicalWare,
   WeaponAttackType,
-  WeaponSkillOption,
+  WeaponSkillOption
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { ItemType } from '@src/entities/entity-types';
@@ -39,11 +38,10 @@ import { SkillType } from '@src/features/skills';
 import {
   DropType,
   handleDrop,
-  itemDropToItemProxy,
+  itemDropToItemProxy
 } from '@src/foundry/drag-and-drop';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
-import { cleanFormula } from '@src/foundry/rolls';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
 import {
@@ -51,13 +49,13 @@ import {
   html,
   internalProperty,
   property,
-  PropertyValues,
+  PropertyValues
 } from 'lit-element';
-import { createPipe, map, mapToObj, objOf } from 'remeda';
+import { createPipe, map, objOf } from 'remeda';
 import {
   complexityForm,
   renderComplexityFields,
-  renderGearTraitCheckboxes,
+  renderGearTraitCheckboxes
 } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './melee-weapon-form.scss';
@@ -72,7 +70,7 @@ export class MeleeWeaponForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: MeleeWeapon;
 
-  @internalProperty() skillOption = WeaponSkillOption.None;
+  @internalProperty() private skillOption = WeaponSkillOption.None;
 
   private coatingSheet?: SlWindow | null;
 
@@ -95,7 +93,7 @@ export class MeleeWeaponForm extends ItemFormBase {
     super.disconnectedCallback();
   }
 
-  updated(changedProps: PropertyValues) {
+  updated(changedProps: PropertyValues<this>) {
     if (this.coatingSheet) this.openCoatingSheet();
     if (this.payloadSheet) this.openPayloadSheet();
     super.updated(changedProps);

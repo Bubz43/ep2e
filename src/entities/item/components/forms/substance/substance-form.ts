@@ -95,7 +95,7 @@ export class SubstanceForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: Substance;
 
-  @internalProperty() effectGroup: Group = 'base';
+  @internalProperty() private effectGroup: Group = 'base';
 
   private baseSheetKeys = new Map<string, {}>();
 
@@ -109,7 +109,7 @@ export class SubstanceForm extends ItemFormBase {
     () => this.item.updater.path('data', 'severity', 'effects').commit,
   );
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (!this.item.hasSeverity) {
       this.effectGroup = 'base';
       this.severitySheetKeys.forEach(closeWindow);

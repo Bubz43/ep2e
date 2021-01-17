@@ -1,31 +1,29 @@
 import {
-  formatLabeledFormulas,
-  formatArmorUsed,
-  formatAreaEffect,
+  formatArmorUsed, formatLabeledFormulas
 } from '@src/combat/attack-formatting';
 import type { DropZone } from '@src/components/dropzone/dropzone';
 import {
-  renderSelectField,
-  renderNumberField,
-  renderLabeledCheckbox,
-  renderNumberInput,
-  renderFormulaField,
-  renderTextareaField,
-  emptyTextDash,
+  emptyTextDash, renderFormulaField, renderLabeledCheckbox, renderNumberField,
+
+  renderNumberInput, renderSelectField,
+
+
+
+
+  renderTextareaField
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
 import { openWindow } from '@src/components/window/window-controls';
 import {
   ResizeOption,
-  SlWindowEventName,
+  SlWindowEventName
 } from '@src/components/window/window-options';
 import {
   AttackTrait,
   enumValues,
   PhysicalWare,
-  SprayPayload,
-  WeaponAttackType,
+  SprayPayload
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { ItemType } from '@src/entities/entity-types';
@@ -37,22 +35,22 @@ import { pairList } from '@src/features/check-list';
 import {
   DropType,
   handleDrop,
-  itemDropToItemProxy,
+  itemDropToItemProxy
 } from '@src/foundry/drag-and-drop';
-import { notify, NotificationType } from '@src/foundry/foundry-apps';
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property, PropertyValues } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { createPipe, identity, map, objOf, type } from 'remeda';
+import { createPipe, identity, map, objOf } from 'remeda';
 import {
   accessoriesListStyles,
   complexityForm,
   renderComplexityFields,
   renderFiringModeCheckboxes,
   renderGearTraitCheckboxes,
-  renderRangedAccessoriesEdit,
+  renderRangedAccessoriesEdit
 } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './spray-weapon-form.scss';
@@ -76,7 +74,7 @@ export class SprayWeaponForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: SprayWeapon;
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (this.payloadSheet) this.openPayloadSheet();
 
     super.update(changedProps);

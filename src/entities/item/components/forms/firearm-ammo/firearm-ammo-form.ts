@@ -5,20 +5,20 @@ import {
   renderSelectField,
   renderSlider,
   renderTextareaField,
-  renderTextField,
+  renderTextField
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
 import { openWindow } from '@src/components/window/window-controls';
 import {
   ResizeOption,
-  SlWindowEventName,
+  SlWindowEventName
 } from '@src/components/window/window-options';
 import {
   AttackTrait,
   enumValues,
   FirearmAmmoModifierType,
-  KineticWeaponClass,
+  KineticWeaponClass
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { ItemType } from '@src/entities/entity-types';
@@ -29,12 +29,12 @@ import {
   addFeature,
   addUpdateRemoveFeature,
   idProp,
-  matchID,
+  matchID
 } from '@src/features/feature-helpers';
 import {
   DropType,
   handleDrop,
-  itemDropToItemProxy,
+  itemDropToItemProxy
 } from '@src/foundry/drag-and-drop';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
@@ -44,7 +44,7 @@ import {
   html,
   internalProperty,
   property,
-  PropertyValues,
+  PropertyValues
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { map, mapToObj, pipe, range, take } from 'remeda';
@@ -73,7 +73,7 @@ export class FirearmAmmoForm extends ItemFormBase {
     () => this.item.updater.path('data', 'modes').commit,
   );
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     const { modes } = this.item;
     const mode = modes.find(matchID(this.editingModeId));
     if (!mode) this.editingModeId = this.item.defaultMode.id;

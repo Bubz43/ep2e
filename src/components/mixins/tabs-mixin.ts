@@ -1,7 +1,7 @@
 import type { TabBar } from '@material/mwc-tab-bar';
 import { LangEntry, localize } from '@src/foundry/localization';
 import { LitElement, PropertyValues, query } from 'lit-element';
-import { TemplateResult, html } from 'lit-html';
+import { html, TemplateResult } from 'lit-html';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { first } from 'remeda';
 import type { Class } from 'type-fest';
@@ -26,7 +26,7 @@ export const TabsMixin = <T extends LangEntry>(tabs: readonly T[]) => (
       return Array.from(this.tabBar?.querySelectorAll('mwc-tab') ?? []);
     }
 
-    updated(changedProps: PropertyValues) {
+    updated(changedProps: PropertyValues<this>) {
       const { tabBar } = this;
       if (tabBar) {
         requestAnimationFrame(() => {

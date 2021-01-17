@@ -1,20 +1,20 @@
 import { enumValues } from '@src/data-enums';
 import { ActiveArmor, ArmorType } from '@src/features/active-armor';
 import { localize } from '@src/foundry/localization';
-import { rollFormula, rollLimit } from '@src/foundry/rolls';
-import { nonNegative, notEmpty, withSign } from '@src/utility/helpers';
+import { rollLimit } from '@src/foundry/rolls';
+import { notEmpty, withSign } from '@src/utility/helpers';
 import {
   html,
   internalProperty,
   LitElement,
   property,
-  PropertyValues,
+  PropertyValues
 } from 'lit-element';
 import { pick, set } from 'remeda';
 import {
   createHealthModification,
   formatDamageType,
-  HealthModificationMode,
+  HealthModificationMode
 } from '../health';
 import type { Damage, RollMultiplier } from '../health-changes';
 import type { ActorHealth } from '../health-mixin';
@@ -45,7 +45,7 @@ export abstract class HealthEditBase<
     wounds: number;
   }>;
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (changedProps.has('damage')) {
       this.editableDamage = this.createEditable();
       this.overrides = {};

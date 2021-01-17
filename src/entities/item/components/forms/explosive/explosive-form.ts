@@ -1,27 +1,32 @@
 import {
   formatArmorUsed,
-  formatLabeledFormulas,
+  formatLabeledFormulas
 } from '@src/combat/attack-formatting';
 import type { ExplosiveAttack } from '@src/combat/attacks';
 import {
-  renderSelectField,
-  renderLabeledCheckbox,
+  renderFormulaField, renderLabeledCheckbox,
   renderNumberField,
-  renderFormulaField,
+
+
+
+
+  renderNumberInput, renderSelectField,
+
+
+
   renderTextareaField,
   renderTextField,
-  renderTimeField,
-  renderNumberInput,
+  renderTimeField
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
 import {
   closeWindow,
-  openWindow,
+  openWindow
 } from '@src/components/window/window-controls';
 import {
   ResizeOption,
-  SlWindowEventName,
+  SlWindowEventName
 } from '@src/components/window/window-options';
 import {
   AreaEffectType,
@@ -30,7 +35,7 @@ import {
   ExplosiveSize,
   ExplosiveType,
   SubstanceApplicationMethod,
-  WeaponAttackType,
+  WeaponAttackType
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { ItemType } from '@src/entities/entity-types';
@@ -42,13 +47,12 @@ import { prettyMilliseconds } from '@src/features/time';
 import {
   DropType,
   handleDrop,
-  itemDropToItemProxy,
+  itemDropToItemProxy
 } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
-import { cleanFormula } from '@src/foundry/rolls';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property, PropertyValues } from 'lit-element';
-import { createPipe, map, mapToObj, objOf } from 'remeda';
+import { createPipe, map, objOf } from 'remeda';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './explosive-form.scss';
@@ -68,7 +72,7 @@ export class ExplosiveForm extends ItemFormBase {
 
   private substanceSheetKey = {};
 
-  updated(changedProps: PropertyValues) {
+  updated(changedProps: PropertyValues<this>) {
     if (this.substanceSheet) this.openSubstanceSheet();
     super.updated(changedProps);
   }

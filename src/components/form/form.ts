@@ -7,7 +7,7 @@ import {
   LitElement,
   property,
   PropertyValues,
-  query,
+  query
 } from 'lit-element';
 import { stopEvent } from 'weightless/util/event';
 import type { FieldElement } from '../field/fields';
@@ -44,7 +44,7 @@ export class Form extends LitElement {
 
   private store: Record<string, FieldValue> = {};
 
-  updated(changedProps: PropertyValues) {
+  updated(changedProps: PropertyValues<this>) {
     changedProps.get('disabled') !== undefined &&
       requestAnimationFrame(() => this.toggleElementDisabled());
 

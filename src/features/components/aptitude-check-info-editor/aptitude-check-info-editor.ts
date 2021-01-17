@@ -53,7 +53,7 @@ export class AptitudeCheckInfoEditor extends LitElement {
       return true;
     },
   })
-  readonly aptitudeCheckInfo!: AptitudeCheckInfo;
+  aptitudeCheckInfo!: AptitudeCheckInfo;
 
   @internalProperty() private resultType = CheckResultState.CheckFailure;
 

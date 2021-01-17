@@ -1,28 +1,22 @@
 import type { MessageAreaEffectData } from '@src/chat/message-data';
 import { getCenteredDistance } from '@src/combat/area-effect';
-import { AreaEffectType, Demolition } from '@src/data-enums';
+import { AreaEffectType } from '@src/data-enums';
 import {
-  controlledToken,
   createTemporaryMeasuredTemplate,
   deletePlacedTemplate,
   editPlacedTemplate,
-  getVisibleTokensWithinHighlightedTemplate,
+
   MeasuredTemplateData,
   placeMeasuredTemplate,
-  readyCanvas,
+  readyCanvas
 } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
-import { nonNegative } from '@src/utility/helpers';
 import {
   customElement,
-  LitElement,
-  property,
-  html,
-  internalProperty,
-  PropertyValues,
+
+
+  html, property
 } from 'lit-element';
-import { repeat } from 'lit-html/directives/repeat';
-import { clamp, identity } from 'remeda';
 import type { SetOptional } from 'type-fest';
 import { MessageElement } from '../message-element';
 import styles from './message-area-effect.scss';

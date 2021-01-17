@@ -2,12 +2,12 @@ import {
   emptyTextDash,
   renderFormulaField,
   renderLabeledCheckbox,
-  renderSelectField,
+  renderSelectField
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import {
   closeWindow,
-  openWindow,
+  openWindow
 } from '@src/components/window/window-controls';
 import { enumValues } from '@src/data-enums';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
@@ -16,11 +16,14 @@ import { localize } from '@src/foundry/localization';
 import { SuccessTestResult } from '@src/success-test/success-test';
 import {
   customElement,
-  LitElement,
-  property,
+
+
   html,
-  internalProperty,
-  PropertyValues,
+  internalProperty, LitElement,
+  property,
+
+
+  PropertyValues
 } from 'lit-element';
 import { map } from 'remeda';
 import { traverseActiveElements } from 'weightless';
@@ -75,7 +78,7 @@ export class MeleeSettingsForm extends LitElement {
 
   @internalProperty() private settings: MeleeWeaponSettings = {};
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (
       changedProps.get('meleeWeapon') !== undefined ||
       changedProps.has('initialSettings')

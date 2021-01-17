@@ -118,7 +118,7 @@ export class EgoFormSkills extends LitElement {
 
   private skillSort = skillSort(this.skillControls.sort);
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (changedProps.has('ego')) this.setupSkills();
     super.update(changedProps);
   }

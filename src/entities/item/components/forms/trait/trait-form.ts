@@ -3,7 +3,7 @@ import {
   renderNumberField,
   renderSelectField,
   renderTextareaField,
-  renderTextField,
+  renderTextField
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import { enumValues, TraitSource, TraitType } from '@src/data-enums';
@@ -16,7 +16,7 @@ import {
   addUpdateRemoveFeature,
   idProp,
   StringID,
-  updateFeature,
+  updateFeature
 } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
 import { openMenu } from '@src/open-menu';
@@ -25,11 +25,11 @@ import {
   html,
   internalProperty,
   property,
-  PropertyValues,
+  PropertyValues
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
-import { range, take, first } from 'remeda';
+import { first, range, take } from 'remeda';
 import { ItemFormBase } from '../item-form-base';
 import { TraitFormLevel } from './trait-form-level';
 import styles from './trait-form.scss';
@@ -49,13 +49,13 @@ export class TraitForm extends ItemFormBase {
 
   @internalProperty() private levels = range(1, 5);
 
-  @internalProperty() addEffectLevel = 0;
+  @internalProperty() private addEffectLevel = 0;
 
   private readonly levelOps = addUpdateRemoveFeature(
     () => this.item.updater.path('data', 'levels').commit,
   );
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (changedProps.has('item')) {
       this.levelCount = this.item.levels.length;
       this.addEffectLevel = Math.min(this.levelCount, this.addEffectLevel);

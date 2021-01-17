@@ -18,7 +18,7 @@ import {
   LitElement,
   property,
   PropertyValues,
-  queryAll,
+  queryAll
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { live } from 'lit-html/directives/live';
@@ -52,7 +52,7 @@ export class CharacterViewTestActions extends LitElement {
 
   private skillFilterCheck!: ReturnType<typeof skillFilterCheck>;
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     this.skillFilterCheck = skillFilterCheck(this.skillControls.filter);
     super.update(changedProps);
   }

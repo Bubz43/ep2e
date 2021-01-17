@@ -1,6 +1,5 @@
 import {
-  formatLabeledFormulas,
-  formatArmorUsed,
+  formatArmorUsed, formatLabeledFormulas
 } from '@src/combat/attack-formatting';
 import type { ThrownWeaponAttack } from '@src/combat/attacks';
 import {
@@ -9,27 +8,27 @@ import {
   renderNumberField,
   renderRadioFields,
   renderTextareaField,
-  renderTextInput,
+  renderTextInput
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
 import { openWindow } from '@src/components/window/window-controls';
 import {
   ResizeOption,
-  SlWindowEventName,
+  SlWindowEventName
 } from '@src/components/window/window-options';
-import { enumValues, AttackTrait, WeaponSkillOption } from '@src/data-enums';
+import { AttackTrait, enumValues, WeaponSkillOption } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { ItemType } from '@src/entities/entity-types';
 import { renderItemForm } from '@src/entities/item/item-views';
 import type { ThrownWeapon } from '@src/entities/item/proxies/thrown-weapon';
 import { SkillType } from '@src/features/skills';
 import {
-  handleDrop,
-  DropType,
-  itemDropToItemProxy,
+  DropType, handleDrop,
+
+  itemDropToItemProxy
 } from '@src/foundry/drag-and-drop';
-import { notify, NotificationType } from '@src/foundry/foundry-apps';
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
@@ -38,13 +37,13 @@ import {
   html,
   internalProperty,
   property,
-  PropertyValues,
+  PropertyValues
 } from 'lit-element';
 import { map, mapToObj } from 'remeda';
 import {
   complexityForm,
   renderComplexityFields,
-  renderGearTraitCheckboxes,
+  renderGearTraitCheckboxes
 } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './thrown-weapon-form.scss';
@@ -59,7 +58,7 @@ export class ThrownWeaponForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: ThrownWeapon;
 
-  @internalProperty() skillOption = WeaponSkillOption.None;
+  @internalProperty() private skillOption = WeaponSkillOption.None;
 
   private coatingSheet?: SlWindow | null;
 
@@ -77,7 +76,7 @@ export class ThrownWeaponForm extends ItemFormBase {
     super.disconnectedCallback();
   }
 
-  updated(changedProps: PropertyValues) {
+  updated(changedProps: PropertyValues<this>) {
     if (this.coatingSheet) this.openCoatingSheet();
     super.updated(changedProps);
   }

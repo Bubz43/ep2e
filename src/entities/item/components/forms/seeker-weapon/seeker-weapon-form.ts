@@ -60,7 +60,7 @@ export class SeekerWeaponForm extends ItemFormBase {
 
   private readonly missilesSheetKey = {};
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (this.missilesSheet) this.openMissilesSheet();
     super.update(changedProps);
   }

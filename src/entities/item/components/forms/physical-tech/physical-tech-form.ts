@@ -5,14 +5,14 @@ import {
   renderRadioFields,
   renderSelectField,
   renderTextField,
-  renderTimeField,
+  renderTimeField
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
 import { openWindow } from '@src/components/window/window-controls';
 import {
   ResizeOption,
-  SlWindowEventName,
+  SlWindowEventName
 } from '@src/components/window/window-options';
 import {
   Activation,
@@ -20,16 +20,23 @@ import {
   DeviceType,
   enumValues,
   FabType,
-  PhysicalWare,
+  PhysicalWare
 } from '@src/data-enums';
-import { renderEgoForm } from '@src/entities/components/render-ego-form';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
+import { ItemType } from '@src/entities/entity-types';
+import { renderItemForm } from '@src/entities/item/item-views';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import { ActionType } from '@src/features/actions';
 import type { EffectCreatedEvent } from '@src/features/components/effect-creator/effect-created-event';
 import { EffectType } from '@src/features/effects';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import { CommonInterval } from '@src/features/time';
+import {
+  DropType,
+  handleDrop,
+  itemDropToItemProxy
+} from '@src/foundry/drag-and-drop';
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
@@ -38,21 +45,13 @@ import {
   html,
   internalProperty,
   property,
-  PropertyValues,
+  PropertyValues
 } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { difference, mapToObj } from 'remeda';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './physical-tech-form.scss';
-import { renderItemForm } from '@src/entities/item/item-views';
-import {
-  DropType,
-  handleDrop,
-  itemDropToItemProxy,
-} from '@src/foundry/drag-and-drop';
-import { ItemType } from '@src/entities/entity-types';
-import { NotificationType, notify } from '@src/foundry/foundry-apps';
 
 const opsGroups = ['passiveEffects', 'activatedEffects'] as const;
 
@@ -66,7 +65,7 @@ export class PhysicalTechForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: PhysicalTech;
 
-  @internalProperty() effectGroup: 'passive' | 'activated' = 'passive';
+  @internalProperty() private effectGroup: 'passive' | 'activated' = 'passive';
 
   private glandSheet?: SlWindow | null;
 
@@ -87,7 +86,7 @@ export class PhysicalTechForm extends ItemFormBase {
     super.disconnectedCallback();
   }
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (!this.item.hasActivation) this.effectGroup = 'passive';
     if (this.blueprintSheet) this.openBlueprintSheet();
     if (this.glandSheet) this.openGlandSheet();

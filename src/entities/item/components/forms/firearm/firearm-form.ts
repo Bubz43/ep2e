@@ -1,39 +1,34 @@
 import {
-  formatLabeledFormulas,
-  formatArmorUsed,
+  formatArmorUsed, formatLabeledFormulas
 } from '@src/combat/attack-formatting';
 import {
-  renderFormulaField,
-  renderLabeledCheckbox,
   renderNumberField,
   renderSelectField,
-  renderTextareaField,
-  renderTextInput,
+
+  renderTextInput
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
 import { openWindow } from '@src/components/window/window-controls';
 import {
   ResizeOption,
-  SlWindowEventName,
+  SlWindowEventName
 } from '@src/components/window/window-options';
 import {
   enumValues,
   KineticWeaponClass,
-  RangedWeaponAccessory,
+  RangedWeaponAccessory
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { ItemType } from '@src/entities/entity-types';
 import { renderItemForm } from '@src/entities/item/item-views';
 import { Firearm } from '@src/entities/item/proxies/firearm';
 import type { FirearmAmmo } from '@src/entities/item/proxies/firearm-ammo';
-import { pairList } from '@src/features/check-list';
-import { idProp, matchID } from '@src/features/feature-helpers';
-import { FiringMode } from '@src/features/firing-modes';
+import { idProp } from '@src/features/feature-helpers';
 import {
   DropType,
   handleDrop,
-  itemDropToItemProxy,
+  itemDropToItemProxy
 } from '@src/foundry/drag-and-drop';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
@@ -41,14 +36,14 @@ import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property, PropertyValues } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { createPipe, identity, mapToObj, objOf } from 'remeda';
+import { identity, mapToObj } from 'remeda';
 import {
   accessoriesListStyles,
   complexityForm,
   renderComplexityFields,
   renderKineticAttackEdit,
   renderKineticWeaponSidebar,
-  renderRangedAccessoriesEdit,
+  renderRangedAccessoriesEdit
 } from '../common-gear-fields';
 import { renderFirearmAmmoDetails } from '../firearm-ammo-details';
 import { ItemFormBase } from '../item-form-base';
@@ -88,7 +83,7 @@ export class FirearmForm extends ItemFormBase {
     }
   });
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (this.ammoSheet) this.openAmmoSheet();
 
     super.update(changedProps);

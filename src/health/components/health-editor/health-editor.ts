@@ -1,44 +1,41 @@
-import type { Damage, Heal } from '@src/health/health-changes';
+import { createMessage, MessageVisibility } from '@src/chat/create-message';
 import {
   renderLabeledCheckbox,
   renderNumberField,
   renderRadioFields,
-  renderTextField,
+  renderTextField
 } from '@src/components/field/fields';
 import { renderAutoForm, renderSubmitForm } from '@src/components/form/forms';
 import { Placement } from '@src/components/popover/popover-options';
 import {
   closeWindow,
-  openWindow,
+  openWindow
 } from '@src/components/window/window-controls';
 import { enumValues } from '@src/data-enums';
 import type { ActorEP } from '@src/entities/actor/actor';
+import { isSleeve } from '@src/entities/actor/sleeves';
 import { ActorType } from '@src/entities/entity-types';
 import { localize } from '@src/foundry/localization';
+import { BiologicalHealth } from '@src/health/biological-health';
 import {
   createHealthModification,
   HealthModificationMode,
-  HealthType,
+  HealthType
 } from '@src/health/health';
+import type { Damage, Heal } from '@src/health/health-changes';
 import type { ActorHealth } from '@src/health/health-mixin';
+import { HealthModificationEvent } from '@src/health/health-modification-event';
+import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
   internalProperty,
   LitElement,
   property,
-  PropertyValues,
+  PropertyValues
 } from 'lit-element';
-import { clamp, compact, fromPairs, identity, mapToObj } from 'remeda';
+import { clamp, compact, identity, mapToObj } from 'remeda';
 import styles from './health-editor.scss';
-import { MentalHealth } from '@src/health/mental-health';
-import { HealthModificationEvent } from '@src/health/health-modification-event';
-import { notEmpty } from '@src/utility/helpers';
-import { addFeature } from '@src/features/feature-helpers';
-import { isSleeve } from '@src/entities/actor/sleeves';
-import { createMessage, MessageVisibility } from '@src/chat/create-message';
-import { BiologicalHealth } from '@src/health/biological-health';
-import { SyntheticHealth } from '@src/health/synthetic-health';
 
 @customElement('health-editor')
 export class HealthEditor extends LitElement {
@@ -87,7 +84,7 @@ export class HealthEditor extends LitElement {
   })
   health?: ActorHealth | null;
 
-  @internalProperty() private healthType = HealthType.Physical;
+  @internalProperty() protected healthType = HealthType.Physical;
 
   @internalProperty() private mode: 'heal' | 'damage' = 'heal';
 
@@ -103,7 +100,7 @@ export class HealthEditor extends LitElement {
     super.disconnectedCallback();
   }
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (changedProps.has('actor')) {
       this.cleanupSub();
       this.actor.subscriptions.subscribe(this, {
@@ -122,7 +119,7 @@ export class HealthEditor extends LitElement {
     super.update(changedProps);
   }
 
-  updated(changedProps: PropertyValues) {
+  updated(changedProps: PropertyValues<this>) {
     if (changedProps.has('healthType') || changedProps.has('health')) {
       requestAnimationFrame(() => {
         this.renderRoot

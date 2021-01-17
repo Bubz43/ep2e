@@ -1,8 +1,8 @@
 import {
   renderLabeledCheckbox,
-  renderRadioFields,
+
   renderSelectField,
-  renderTextField,
+  renderTextField
 } from '@src/components/field/fields';
 import type { Form } from '@src/components/form/form';
 import { renderAutoForm } from '@src/components/form/forms';
@@ -14,24 +14,28 @@ import { ActorType, sleeveTypes } from '@src/entities/entity-types';
 import { createDefaultItem } from '@src/entities/item/default-items';
 import type { SleeveType } from '@src/entities/models';
 import { addFeature } from '@src/features/feature-helpers';
-import { FieldSkillType, createFieldSkillData } from '@src/features/skills';
-import { MutateEvent, mutateEntityHook } from '@src/foundry/hook-setups';
+import { createFieldSkillData, FieldSkillType } from '@src/features/skills';
+import { mutateEntityHook, MutateEvent } from '@src/foundry/hook-setups';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import { clickIfEnter, notEmpty, safeMerge } from '@src/utility/helpers';
-import { LazyGetter } from 'lazy-get-decorator';
 import {
   customElement,
-  LitElement,
+
+
+
+
+
+  eventOptions, html,
+  internalProperty, LitElement,
   property,
-  html,
-  internalProperty,
-  query,
-  eventOptions,
-  PropertyValues,
+
+
+
+
+  PropertyValues, query
 } from 'lit-element';
 import { createPipe, flatMapToObj } from 'remeda';
-import { stopEvent } from 'weightless';
 import { ActorEP } from '../../actor';
 import { createDigimorph } from '../../default-actors';
 import { ownedSleeves, Sleeve } from '../../sleeves';
@@ -104,7 +108,7 @@ export class ActorCreator extends LitElement {
     super.disconnectedCallback();
   }
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (changedProps.has('folder')) {
       this.sleeveData.folder = this.folder || '';
       this.characterData.folder = this.folder || '';
@@ -112,7 +116,7 @@ export class ActorCreator extends LitElement {
     super.update(changedProps);
   }
 
-  updated(changedProps: PropertyValues) {
+  updated(changedProps: PropertyValues<this>) {
     if (changedProps.has('folder')) this.focusFirstInput();
     super.updated(changedProps);
   }
