@@ -79,7 +79,7 @@ export class PhysicalService extends mix(Base).with(Purchasable, Service) {
   }
 
   @LazyGetter()
-  get repsWithIndefiers(): (RepWithIdentifier & { id: string })[] {
+  get repsWithIdentifiers(): (RepWithIdentifier & { id: string })[] {
     return this.reputations.map((rep) => ({
       ...rep,
       identifier: { repId: rep.id, fakeEgoId: this.id, type: 'fake' },

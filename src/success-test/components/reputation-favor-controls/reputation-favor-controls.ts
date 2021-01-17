@@ -149,7 +149,7 @@ export class ReputationFavorControls extends LitElement {
           callback: () => {
             this.test?.favorState.update({
               fakeID: fake,
-              reputation: fake.repsWithIndefiers[0],
+              reputation: fake.repsWithIdentifiers[0],
             });
           },
         })),
@@ -159,7 +159,7 @@ export class ReputationFavorControls extends LitElement {
 
   private openReputationSelect() {
     const reps: RepWithIdentifier[] =
-      this.test?.favorState.fakeID?.repsWithIndefiers ||
+      this.test?.favorState.fakeID?.repsWithIdentifiers ||
       this.test?.ego.trackedReps ||
       [];
     openMenu({

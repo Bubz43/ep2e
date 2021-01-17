@@ -121,7 +121,7 @@ export class CharacterViewTestActions extends LitElement {
           ego: actor.proxy.ego,
           character: actor.proxy,
           reputation: fakeID
-            ? fakeID.repsWithIndefiers.find(
+            ? fakeID.repsWithIdentifiers.find(
                 (r) => r.id === fakeIdentifiers?.repId,
               ) ?? reputation
             : actor.proxy.ego.trackedReps.find((rep) =>
@@ -138,19 +138,21 @@ export class CharacterViewTestActions extends LitElement {
     const { active, know } = this.ego.groupedSkills;
     const { fakeIDs } = this.character.equippedGroups;
     const fakeIDreps = this.activeFakeId
-      ? fakeIDs.find((i) => i.id === this.activeFakeId)?.repsWithIndefiers
+      ? fakeIDs.find((i) => i.id === this.activeFakeId)?.repsWithIdentifiers
       : null;
     const repSources = compact([
       this.ego.trackReputations && {
         reps: this.ego.trackedReps,
         label: this.ego.name,
+        active: !fakeIDreps,
         set: () => {
           this.activeFakeId = '';
         },
       },
       ...fakeIDs.map((fake) => ({
-        reps: fake.repsWithIndefiers,
+        reps: fake.repsWithIdentifiers,
         label: fake.name,
+        active: fakeIDreps === fake.repsWithIdentifiers,
         set: () => {
           this.activeFakeId = fake.id;
         },
@@ -170,7 +172,7 @@ export class CharacterViewTestActions extends LitElement {
                       <div class="rep-sources">
                         ${repSources.map(
                           (source) => html`
-                            <mwc-button dense outlined @click=${source.set}
+                            <mwc-button dense ?outlined=${!source.active} ?unelevated=${source.active} @click=${source.set}
                               >${source.label}</mwc-button
                             >
                           `,

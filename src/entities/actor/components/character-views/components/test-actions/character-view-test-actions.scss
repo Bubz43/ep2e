@@ -120,15 +120,19 @@ mwc-tab-bar {
   }
 }
 
+.rep-sources {
+  padding: 0.25rem;
+}
+
 .rep-list {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
+
 }
 
 .rep-item {
   display: inline-grid;
-  // width: 130px;
   grid-template-areas:
     'name name score'
     'favors favors favors';
