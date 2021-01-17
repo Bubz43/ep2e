@@ -10,7 +10,7 @@ import {
   Favor,
   favorValues,
   maxFavors,
-  RepWithIdentifier,
+  RepWithIdentifier
 } from '@src/features/reputations';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
@@ -19,14 +19,16 @@ import { ReputationFavor } from '@src/success-test/reputation-favor';
 import { notEmpty, withSign } from '@src/utility/helpers';
 import {
   customElement,
-  LitElement,
-  property,
+
+
   html,
-  internalProperty,
-  query,
-  PropertyValues,
+  internalProperty, LitElement,
+
+
+
+
+  PropertyValues, query
 } from 'lit-element';
-import type { NonNull } from 'remeda/dist/commonjs/_types';
 import type { Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';
 import styles from './reputation-favor-controls.scss';

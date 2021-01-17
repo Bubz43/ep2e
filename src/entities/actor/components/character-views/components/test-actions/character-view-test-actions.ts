@@ -126,8 +126,9 @@ export class CharacterViewTestActions extends LitElement {
   render() {
     const { active, know } = this.ego.groupedSkills;
     const { fakeIDs } = this.character.equippedGroups;
-    const fakeIDreps =
-      this.activeFakeId && fakeIDs.find((i) => i.id === this.activeFakeId)?.repsWithIndefiers;
+    const fakeIDreps = this.activeFakeId
+      ? fakeIDs.find((i) => i.id === this.activeFakeId)?.repsWithIndefiers
+      : null;
     const repSources = compact([
       this.ego.trackReputations && {
         reps: this.ego.trackedReps,
@@ -167,7 +168,7 @@ export class CharacterViewTestActions extends LitElement {
                     `
                   : ''}
                 <ul class="rep-list">
-                  ${this.ego.trackedReps.map(this.renderRep)}
+                  ${(fakeIDreps ?? repSources[0]?.reps!).map(this.renderRep)}
                 </ul>
               </div>
             `
@@ -236,7 +237,7 @@ export class CharacterViewTestActions extends LitElement {
     </wl-list-item>`;
   };
 
-  private renderRep = (rep: Ego['trackedReps'][number]) => {
+  private renderRep = (rep: RepWithIdentifier) => {
     return html`
       <li class="rep-item">
         <button
