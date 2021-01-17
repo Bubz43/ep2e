@@ -259,6 +259,9 @@
               ],
               "type": "object"
             },
+            "MarkFavorAsUsed": {
+              "type": "string"
+            },
             "PassiveEffectsWhenActivated": {
               "type": "string"
             },
@@ -1058,6 +1061,9 @@
             "cancel": {
               "type": "string"
             },
+            "cannot": {
+              "type": "string"
+            },
             "capacity": {
               "type": "string"
             },
@@ -1179,6 +1185,9 @@
               "type": "string"
             },
             "common": {
+              "type": "string"
+            },
+            "complementary": {
               "type": "string"
             },
             "complete": {
@@ -1829,6 +1838,9 @@
             "flex": {
               "type": "string"
             },
+            "flipFlopRoll": {
+              "type": "string"
+            },
             "flipRoll": {
               "type": "string"
             },
@@ -2166,6 +2178,9 @@
               "type": "string"
             },
             "implantedWare": {
+              "type": "string"
+            },
+            "improveResult": {
               "type": "string"
             },
             "improved": {
@@ -2648,6 +2663,9 @@
             "minimissile": {
               "type": "string"
             },
+            "minimize": {
+              "type": "string"
+            },
             "minimum": {
               "type": "string"
             },
@@ -2861,6 +2879,9 @@
             "normal": {
               "type": "string"
             },
+            "not": {
+              "type": "string"
+            },
             "notFound": {
               "type": "string"
             },
@@ -2940,6 +2961,9 @@
               "type": "string"
             },
             "organic": {
+              "type": "string"
+            },
+            "original": {
               "type": "string"
             },
             "originalRange": {
@@ -3590,6 +3614,9 @@
             "service": {
               "type": "string"
             },
+            "serviceDuration": {
+              "type": "string"
+            },
             "serviceType": {
               "type": "string"
             },
@@ -3927,6 +3954,9 @@
               "type": "string"
             },
             "summary": {
+              "type": "string"
+            },
+            "superior": {
               "type": "string"
             },
             "superiorFailure": {
@@ -4547,6 +4577,7 @@
             "DESCRIPTIONS",
             "FORMATABLE",
             "FULL",
+            "MarkFavorAsUsed",
             "PassiveEffectsWhenActivated",
             "SHORT",
             "Watts-MacLeod",
@@ -4753,6 +4784,7 @@
             "canDefault",
             "canOnlyGlandSubstances",
             "cancel",
+            "cannot",
             "capacity",
             "career",
             "carried",
@@ -4794,6 +4826,7 @@
             "commander",
             "commit",
             "common",
+            "complementary",
             "complete",
             "completed",
             "complex",
@@ -5010,6 +5043,7 @@
             "fixed",
             "flashSuppressor",
             "flex",
+            "flipFlopRoll",
             "flipRoll",
             "folder",
             "for",
@@ -5123,6 +5157,7 @@
             "impairmentModifier",
             "implanted",
             "implantedWare",
+            "improveResult",
             "improved",
             "improvised",
             "in",
@@ -5283,6 +5318,7 @@
             "mini",
             "minigrenade",
             "minimissile",
+            "minimize",
             "minimum",
             "minimumStress",
             "minor",
@@ -5354,6 +5390,7 @@
             "nonAddictive",
             "none",
             "normal",
+            "not",
             "notFound",
             "notes",
             "now",
@@ -5381,6 +5418,7 @@
             "oral",
             "orange",
             "organic",
+            "original",
             "originalRange",
             "outdated",
             "over",
@@ -5597,6 +5635,7 @@
             "semiAuto",
             "server",
             "service",
+            "serviceDuration",
             "serviceType",
             "services",
             "set",
@@ -5710,6 +5749,7 @@
             "success",
             "successTest",
             "summary",
+            "superior",
             "superiorFailure",
             "superiorFailureX2",
             "superiorSuccess",

@@ -25,7 +25,6 @@ import {
   PropertyValues,
 } from 'lit-element';
 import { nothing } from 'lit-html';
-import { cache } from 'lit-html/directives/cache';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
 import { reject } from 'remeda';
@@ -81,7 +80,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
     super.disconnectedCallback();
   }
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (changedProps.has('character')) {
       this.resetDraggedItems();
       if (this.allowSort && this.character.disabled) this.allowSort = false;
@@ -89,7 +88,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
     super.update(changedProps);
   }
 
-  updated(changedProps: PropertyValues) {
+  updated(changedProps: PropertyValues<this>) {
     if (!this.hasExpanded && !this.collapsed) this.hasExpanded = true;
     super.updated(changedProps);
   }

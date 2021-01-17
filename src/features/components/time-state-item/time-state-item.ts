@@ -49,14 +49,14 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
 
   @internalProperty() private updatedState = false;
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (this.editing && changedProps.get('timeState') !== undefined) {
       this.prog = this.timeState.progress;
     }
     super.update(changedProps);
   }
 
-  updated(changedProps: PropertyValues) {
+  updated(changedProps: PropertyValues<this>) {
     if (this.updatedState && changedProps.has('timeState')) {
       this.updatedState = false;
     }

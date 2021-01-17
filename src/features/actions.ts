@@ -1,9 +1,9 @@
 import { AptitudeType } from '@src/data-enums';
 import type { AppliedEffects } from '@src/entities/applied-effects';
 import { localize } from '@src/foundry/localization';
-import { clamp, compact } from 'remeda';
+import { clamp, compact, flatten, pipe, reduce } from 'remeda';
 import { notEmpty, safeMerge } from '../utility/helpers';
-import type { DurationEffect } from './effects';
+import { DurationEffect, extractDurationEffectMultipliers } from './effects';
 import { createFeature } from './feature-helpers';
 import { toMilliseconds } from './modify-milliseconds';
 import { currentWorldTimeMS } from './time';
@@ -37,6 +37,7 @@ export type ActiveTaskAction = {
   actionSubtype: ActionSubtype;
   failed: boolean;
   startTime: number;
+  modifiers?: { source: string; modifier: number }[];
 };
 
 export const createActiveTask = createFeature<
@@ -47,27 +48,30 @@ export const createActiveTask = createFeature<
   paused: false,
   failed: false,
   timeTaken: 0,
+  modifiers: [],
 }));
 
 export const taskState = (
-  { timeTaken, timeframe, actionSubtype }: ActiveTaskAction,
+  { timeTaken, timeframe, actionSubtype, modifiers = [] }: ActiveTaskAction,
   effects: AppliedEffects['taskTimeframeEffects'],
 ) => {
-  const multipliers = compact([
-    effects.get(''),
-    effects.get(actionSubtype),
-  ]).flat();
-  const finalTimeframe = notEmpty(multipliers)
-    ? multipliers.reduce(
-        (accum, { modifier }) => accum * modifier || 1,
-        timeframe,
-      )
-    : timeframe;
+  const finalTimeframe = pipe(
+    [effects.get(''), effects.get(actionSubtype)],
+    compact,
+    flatten(),
+    (effects) =>
+      extractDurationEffectMultipliers(
+        effects,
+        ...modifiers.map((m) => m.modifier),
+      ),
+    reduce((accum, multiplier) => accum * multiplier || 1, timeframe),
+  );
   return {
     completed: timeTaken >= finalTimeframe,
     progress: timeTaken / finalTimeframe,
     indefinite: finalTimeframe < 0,
     remaining: finalTimeframe - timeTaken,
+    finalTimeframe,
   };
 };
 

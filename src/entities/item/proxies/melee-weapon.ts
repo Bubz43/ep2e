@@ -12,7 +12,7 @@ import { EP } from '@src/foundry/system';
 import { HealthType } from '@src/health/health';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { createPipe } from 'remeda';
+import { compact, createPipe } from 'remeda';
 import type { Attacker } from '../item-interfaces';
 import { Copyable, Equippable, Gear, Purchasable } from '../item-mixins';
 import { Explosive } from './explosive';
@@ -21,7 +21,7 @@ import { Substance } from './substance';
 
 class MeleeWeaponBase extends ItemProxyBase<ItemType.MeleeWeapon> {
   get updateState() {
-    return this.updater.prop('data', 'state');
+    return this.updater.path('data', 'state');
   }
 }
 
@@ -46,6 +46,19 @@ export class MeleeWeapon
 
   get acceptsPayload() {
     return this.epData.acceptsPayload;
+  }
+
+  get isImprovised() {
+    return this.epData.improvised;
+  }
+
+  get fullType() {
+    const { wareType, isImprovised } = this;
+    return compact([
+      isImprovised && localize('improved'),
+      wareType && localize(wareType),
+      localize(this.type),
+    ]).join(' ');
   }
 
   @LazyGetter()
@@ -146,10 +159,10 @@ export class MeleeWeapon
   }
 
   private get updatePayload() {
-    return this.updater.prop('flags', EP.Name, 'payload').commit;
+    return this.updater.path('flags', EP.Name, 'payload').commit;
   }
 
   private get updateCoating() {
-    return this.updater.prop('flags', EP.Name, 'coating').commit;
+    return this.updater.path('flags', EP.Name, 'coating').commit;
   }
 }

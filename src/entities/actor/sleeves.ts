@@ -1,6 +1,7 @@
+import { localize } from '@src/foundry/localization';
 import { packEntityIs, packIsVisible } from '@src/foundry/misc-helpers';
 import { notEmpty } from '@src/utility/helpers';
-import { filter, flatMap, pipe } from 'remeda';
+import { compact, filter, flatMap, pipe } from 'remeda';
 import { ItemType, sleeveTypes } from '../entity-types';
 import type { ItemProxy } from '../item/item';
 import { ActorEP } from './actor';
@@ -71,4 +72,13 @@ export const ownedSleeves = () => {
     filter((a) => a.owner),
     getSleeves,
   );
+};
+
+export const formattedSleeveInfo = (sleeve: Sleeve) => {
+  return compact([
+    'size' in sleeve && localize(sleeve.size),
+    sleeve.subtype || localize(sleeve.type),
+    'isSwarm' in sleeve && sleeve.isSwarm && localize('swarm'),
+    'sex' in sleeve && sleeve.sex,
+  ]);
 };

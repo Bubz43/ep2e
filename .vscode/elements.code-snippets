@@ -1,0 +1,106 @@
+{
+  "Inline HTML Template": {
+    "scope": "typescript",
+    "prefix": "html-",
+    "body": ["html`", "\t$1", "`"]
+  },
+  "LitElement Render": {
+    "scope": "typescript",
+    "prefix": "rend",
+    "body": ["render() {", "\treturn html`", "\t\t$1", "\t`;", "}"]
+  },
+  "Custom Element": {
+    "scope": "typescript",
+    "prefix": "element",
+    "body": [
+      "import { customElement, LitElement, property, html } from \"lit-element\";",
+      "import styles from \"./${TM_FILENAME_BASE}.scss\";",
+      "",
+      "@customElement(\"$1\")",
+      "export class $2 extends LitElement {",
+      "\tstatic get is() {",
+      "\t\treturn \"$1\" as const;",
+      "\t}",
+      "",
+      "\tstatic get styles() {",
+      "\t\t return [styles];",
+      "\t}",
+      "",
+      "\t$0",
+      "}",
+      "",
+      "declare global {",
+      "\tinterface HTMLElementTagNameMap {",
+      "\t\t\"$1\": $2;",
+      "\t}",
+      "}",
+      ""
+    ]
+  },
+  "Custom Element connectedCallback":{
+    "scope": "typescript",
+    "prefix": "cC",
+    "body": [
+      "connectedCallback() {",
+      "\t$1",
+      "\tsuper.connectedCallback();",
+      "}",
+      ""
+    ]
+  },
+   "Custom Element disconnectedCallback":{
+    "scope": "typescript",
+    "prefix": "dC",
+    "body": [
+      "disconnectedCallback() {",
+      "\t$1",
+      "\tsuper.disconnectedCallback();",
+      "}",
+      ""
+    ]
+  },
+  "Custom Element CSS Base": {
+    "scope": "scss",
+    "prefix": "host",
+    "body": [
+      "@use \"scss/functions\" as *;",
+      "@use \"scss/mixins\" as *;",
+      "",
+      "* {",
+      "\tbox-sizing: border-box;",
+      "}",
+      "",
+      ":host {",
+      "\tdisplay: block;",
+      "\t$0",
+      "}"
+    ]
+  },
+  "Testing Template": {
+    "scope": "typescript",
+    "prefix": "tst",
+    "body": ["describe($1, () => {", "\tconst { expect } = chai;", "\t$0", "})"]
+  },
+  "Extend Event": {
+    "scope": "typescript",
+    "prefix": "exe",
+    "body": [
+      "export class $1Event extends Event {",
+      "\t static get is() {",
+      "\t\treturn \"$2\" as const;",
+      "\t}",
+      "",
+      "\t constructor($0) {",
+      "\t\t super($1Event.is, { bubbles: true, composed: true });",
+      "\t\t",
+      "\t}",
+      "}",
+      "",
+      "declare global {",
+      "\tinterface HTMLElementEventMap {",
+      "\t\t\"$2\": $1Event;",
+      "\t}",
+      "}"
+    ]
+  }
+}

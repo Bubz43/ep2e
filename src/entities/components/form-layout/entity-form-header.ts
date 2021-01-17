@@ -1,11 +1,13 @@
 import { renderTextInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
+import type { EntityPath } from '@src/entities/path';
 import type { UpdateActions, UpdateStore } from '@src/entities/update-store';
 import { closeImagePicker, openImagePicker } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import type { FieldPropsRenderer } from '@src/utility/field-values';
+import { notEmpty } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import styles from './entity-form-header.scss';
 
@@ -35,6 +37,8 @@ export class EntityFormHeader extends LitElement {
   @property({ type: Boolean }) noDefaultImg = false;
 
   @property({ type: Boolean }) disabled = false;
+
+  @property({ attribute: false }) entityPath?: EntityPath;
 
   async connectedCallback() {
     super.connectedCallback();
@@ -91,6 +95,20 @@ export class EntityFormHeader extends LitElement {
       <div class="type">
         ${this.type} ${this.disabled ? html`<mwc-icon>lock</mwc-icon>` : ''}
       </div>
+      ${notEmpty(this.entityPath)
+        ? html`
+            <div class="path">
+              ${this.entityPath.map(
+                (part, index, list) => html`
+                  <span>${part.name}</span>
+                  ${index < list.length - 1
+                    ? html`<mwc-icon>chevron_right</mwc-icon>`
+                    : ''}
+                `,
+              )}
+            </div>
+          `
+        : ''}
     `;
   }
 

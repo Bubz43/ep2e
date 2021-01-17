@@ -51,13 +51,15 @@ export class EntityFormLayout extends LitElement {
     if (resizeObsAvailable) {
       const host = this.getHost();
       if (host) {
-        this.resizeObs = new ResizeObserver(([entry]) => {
-          entry &&
-            requestAnimationFrame(() => {
-              const { offsetHeight } = entry.target as HTMLElement;
-              this.hideScroll = offsetHeight < this.offsetHeight;
-            });
-        });
+        this.resizeObs = new ResizeObserver(
+          ([entry]: ResizeObserverEntry[]) => {
+            entry &&
+              requestAnimationFrame(() => {
+                const { offsetHeight } = entry.target as HTMLElement;
+                this.hideScroll = offsetHeight < this.offsetHeight;
+              });
+          },
+        );
         this.resizeObs.observe(host);
       }
     }

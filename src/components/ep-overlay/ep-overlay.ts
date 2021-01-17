@@ -1,8 +1,8 @@
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
+import { readyCanvas } from '@src/foundry/canvas';
 import { positionApp } from '@src/foundry/foundry-apps';
 import { applicationHook } from '@src/foundry/hook-setups';
-import { readyCanvas } from '@src/foundry/canvas';
 import { tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
 import { debounceFn } from '@src/utility/decorators';
@@ -18,7 +18,6 @@ import {
 } from 'lit-element';
 import { render, TemplateResult } from 'lit-html';
 import { cache } from 'lit-html/directives/cache';
-import { guard } from 'lit-html/directives/guard';
 import { first } from 'remeda';
 import { traverseActiveElements } from 'weightless';
 import type { EventList } from '../event-list/event-list';
@@ -49,7 +48,7 @@ export class EPOverlay extends LitElement {
 
   static styles = [styles];
 
-  @property({ reflect: true }) protected ready = false;
+  @property({ type: Boolean, reflect: true }) ready = false;
 
   @property({ attribute: false }) mainCharacter: MainCharacter | null = null;
 
@@ -156,7 +155,7 @@ export class EPOverlay extends LitElement {
     this.requestUpdate();
   }, 1);
 
-  private stealElements() {
+  stealElements() {
     for (const id of ['chat', 'navigation', 'controls']) {
       const el = document.getElementById(id);
       if (el) {
@@ -429,7 +428,7 @@ export class EPOverlay extends LitElement {
       </wl-list-item>
     </ul>
 
-    <!-- <user-view></user-view> -->
+    <user-view></user-view>
     <event-list></event-list>
     <slot name="dialog"></slot>
     <slot name="tooltip"></slot>

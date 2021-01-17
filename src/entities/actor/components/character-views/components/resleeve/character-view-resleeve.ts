@@ -121,7 +121,7 @@ export class CharacterViewResleeve extends LitElement {
       } else await sleeve.createActor();
       if (sleeve.type !== this.selectedSleeve.type) {
         await this.character.updater
-          .prop('flags', EP.Name, sleeve.type)
+          .path('flags', EP.Name, sleeve.type)
           .commit(null);
       }
     }
@@ -175,7 +175,7 @@ export class CharacterViewResleeve extends LitElement {
     }
 
     await this.character.updater
-      .prop('flags', EP.Name, this.selectedSleeve.type)
+      .path('flags', EP.Name, this.selectedSleeve.type)
       .commit(data);
 
     this.cleanup();

@@ -30,7 +30,7 @@ export class Form extends LitElement {
 
   static styles = [styles];
 
-  @property({ type: Object }) validProperties!: Record<string, FieldValue>;
+  @property({ type: Object }) validProperties!: Record<string, unknown>;
 
   @property({ type: Boolean }) storeOnInput = false;
 
@@ -44,7 +44,7 @@ export class Form extends LitElement {
 
   private store: Record<string, FieldValue> = {};
 
-  updated(changedProps: PropertyValues) {
+  updated(changedProps: PropertyValues<this>) {
     changedProps.get('disabled') !== undefined &&
       requestAnimationFrame(() => this.toggleElementDisabled());
 
@@ -144,6 +144,7 @@ export class Form extends LitElement {
     this.emitStore();
   }
 
+  @debounce(1)
   private emitStore() {
     this.dispatchEvent(new FormValueStoredEvent(this));
   }

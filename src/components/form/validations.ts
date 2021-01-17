@@ -19,7 +19,7 @@ const validateNumberInput = (input: HTMLInputElement) => {
     if (decimals) value = Number(value.toFixed(decimals.length));
     else value -= value % Number(input.step);
   } else value = Math.round(value);
-  input.value = String(value);
+  if (input.value !== '') input.value = String(value);
   return value;
 };
 

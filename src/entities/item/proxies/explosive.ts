@@ -37,10 +37,10 @@ import { Substance } from './substance';
 
 class Base extends ItemProxyBase<ItemType.Explosive> {
   get updateState() {
-    return this.updater.prop('data', 'state');
+    return this.updater.path('data', 'state');
   }
   get updateQuantity() {
-    return this.updater.prop('data');
+    return this.updater.path('data');
   }
 }
 
@@ -206,7 +206,7 @@ export class Explosive
   }
 
   private get updateSubstance() {
-    return this.updater.prop('flags', EP.Name, 'substance').commit;
+    return this.updater.path('flags', EP.Name, 'substance').commit;
   }
 
   private static readonly commonGetters: ReadonlyArray<keyof Explosive> = [

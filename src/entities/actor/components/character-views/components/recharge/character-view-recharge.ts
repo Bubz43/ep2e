@@ -76,7 +76,7 @@ export class CharacterViewRecharge extends mix(LitElement).with(UseWorldTime) {
                 >${this.character.pools.totalSpent}</span
               >
             </legend>
-            ${renderUpdaterForm(updater.prop('data', 'spentPools'), {
+            ${renderUpdaterForm(updater.path('data', 'spentPools'), {
               disabled,
               fields: (spent) =>
                 [...pools].map(([pool, { max }]) =>
@@ -99,7 +99,7 @@ export class CharacterViewRecharge extends mix(LitElement).with(UseWorldTime) {
           disabled: this.character.disabled,
           props: { taken, refreshIn: timer.remaining },
           update: ({ taken, refreshIn }) => {
-            this.character.updater.prop('data', type).commit({
+            this.character.updater.path('data', type).commit({
               taken,
               refreshStartTime:
                 typeof refreshIn === 'number'
@@ -139,7 +139,7 @@ export class CharacterViewRecharge extends mix(LitElement).with(UseWorldTime) {
       update: async (changed, original) => {
         const { timeframe, formula } = { ...original, ...changed };
         const regainedPoints = rollFormula(formula)?.total || 0;
-        await this.character.updater.prop('data', 'temporary').commit(
+        await this.character.updater.path('data', 'temporary').commit(
           addFeature(
             createTemporaryFeature.activeRecharge({
               rechargeType: recharge.type,

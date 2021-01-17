@@ -24,13 +24,13 @@ export class SleightForm extends ItemFormBase {
         <entity-form-header
           noDefaultImg
           slot="header"
-          .updateActions=${updater.prop('')}
+          .updateActions=${updater.path('')}
           type=${localize(type)}
           ?disabled=${disabled}
         >
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.prop('data'), {
+        ${renderUpdaterForm(updater.path('data'), {
           disabled,
           slot: 'sidebar',
           fields: () => [],
@@ -41,7 +41,7 @@ export class SleightForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.prop('data', 'description')}
+          .updateActions=${updater.path('data', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>

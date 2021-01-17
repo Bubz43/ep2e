@@ -1,19 +1,31 @@
 import type { AreaEffect } from '@src/combat/area-effect';
 import type { BasicAreaEffectData } from '@src/combat/attack-formatting';
-import type { AttackType } from '@src/combat/attacks';
-import type { AreaEffectType, AttackTrait } from '@src/data-enums';
+import type {
+  AttackTrait,
+  PoolType,
+  SuperiorResultEffect,
+} from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
-import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import type { SubstanceUseMethod } from '@src/entities/item/proxies/substance';
 import type { ItemEntity } from '@src/entities/models';
+import type { ActiveTaskAction } from '@src/features/actions';
 import type { ArmorType } from '@src/features/active-armor';
+import type { PostTestPoolAction, PreTestPoolAction } from '@src/features/pool';
+import type { Favor, RepIdentifier } from '@src/features/reputations';
 import type { PlacedTemplateIDs } from '@src/foundry/canvas';
 import type { RolledFormula } from '@src/foundry/rolls';
 import type { HealthModification, HealthType } from '@src/health/health';
 import type { RollMultiplier } from '@src/health/health-changes';
 import type { StressType } from '@src/health/mental-health';
+import type {
+  SimpleSuccessTestModifier,
+  SuccessTestResult,
+} from '@src/success-test/success-test';
 import type { RequireAtLeastOne } from 'type-fest';
-import type { ExplosiveSettings, MeleeWeaponSettings } from '../entities/weapon-settings';
+import type {
+  ExplosiveSettings,
+  MeleeWeaponSettings,
+} from '../entities/weapon-settings';
 
 export type StressTestMessageData = {
   rolledFormulas: RolledFormula[];
@@ -77,7 +89,7 @@ export type MeleeWeaponMessageData = MeleeWeaponSettings & {
   appliedCoating?: boolean;
   appliedPayload?: boolean;
   // TODO maybe additional info for tracking coating state etc
-}
+};
 
 export type AttackTraitData = {
   traits: AttackTrait[];
@@ -98,6 +110,43 @@ export type MessageAreaEffectData = AreaEffect & {
   templateIDs?: PlacedTemplateIDs | null;
 };
 
+type SuccessTestState = {
+  roll?: number | null;
+  target: number;
+  result?: SuccessTestResult | null;
+  action:
+    | 'edit'
+    | [pool: PoolType, action: PreTestPoolAction | PostTestPoolAction]
+    | 'initial';
+};
+
+export type SuccessTestMessageData = {
+  parts: { name: string; value: number }[];
+  states: SuccessTestState[];
+  defaulting?: boolean;
+  linkedPool?: Exclude<PoolType, PoolType.Flex | PoolType.Threat>;
+  ignoredModifiers?: number;
+  superiorResultEffects?: SuperiorResultEffect[];
+
+  // TODO  criticalResultEffect?: CriticalResultEffect
+  task?: Pick<
+    ActiveTaskAction,
+    'name' | 'timeframe' | 'actionSubtype' | 'modifiers'
+  > & {
+    startedTaskId?: string | null;
+  };
+};
+
+export type FavorMessageData = {
+  type: Favor;
+  repAcronym: string;
+  repIdentifier: RepIdentifier;
+  fakeIdName?: string;
+  keepingQuiet?: number;
+  markedAsUsed?: boolean;
+  burnedRep?: boolean;
+};
+
 export type MessageData = Partial<{
   header: MessageHeaderData;
   areaEffect: MessageAreaEffectData;
@@ -110,4 +159,6 @@ export type MessageData = Partial<{
   heal: MessageHealData;
   substanceUse: SubstanceUseData;
   fromMessageId: string;
+  successTest: SuccessTestMessageData;
+  favor: FavorMessageData;
 }>;

@@ -8,7 +8,7 @@
 :host {
   display: block;
   transition: outline 50ms;
-  z-index: 1;
+  // z-index: 1;
 }
 
 :host([ready]),

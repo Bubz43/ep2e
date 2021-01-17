@@ -69,9 +69,9 @@ const surprise = commandWrapper(
     const initMod = surprise === SurpriseState.Alerted ? 3 : 0;
     if (hasRolled) {
       CombatantHelpers.updater(combatant)
-        .prop('initiative')
+        .path('initiative')
         .store(String(rollInitiative(combatant, initiativeFormula) - initMod))
-        .prop('flags', EP.Name, 'surprise')
+        .path('flags', EP.Name, 'surprise')
         .commit(surprise);
     } else {
       await game.combat?.rollInitiative([combatant._id], {
@@ -80,7 +80,7 @@ const surprise = commandWrapper(
         } - ${initMod}` as unknown) as null,
       });
       CombatantHelpers.updater(combatant)
-        .prop('flags', EP.Name, 'surprise')
+        .path('flags', EP.Name, 'surprise')
         .commit(surprise);
     }
   },
@@ -102,7 +102,7 @@ const movement = commandWrapper(
     );
 
     CombatantHelpers.updater(combatant)
-      .prop('flags', EP.Name, 'tokenMovement')
+      .path('flags', EP.Name, 'tokenMovement')
       .commit(
         loggedMovement
           ? updateFeature(tokenMovement, {
@@ -130,7 +130,7 @@ const alterActions = commandWrapper(
     const { onRound } = settings.alterActions;
     const { takenActions = [] } = CombatantHelpers.flags(combatant);
     const turnActions = takenActions.find(({ round }) => round === onRound);
-    const actionUpdate = CombatantHelpers.updater(combatant).prop(
+    const actionUpdate = CombatantHelpers.updater(combatant).path(
       'flags',
       EP.Name,
       'takenActions',
@@ -165,9 +165,9 @@ const initiative = commandWrapper(
   CommandName.TakeIniative,
   ({ combatant, settings }) => {
     const updater = CombatantHelpers.updater(combatant)
-      .prop('flags', EP.Name, 'tookInitiative')
+      .path('flags', EP.Name, 'tookInitiative')
       .store(true)
-      .prop('initiative')
+      .path('initiative')
       .store((initiative) =>
         String(
           (initiative == null
@@ -177,7 +177,7 @@ const initiative = commandWrapper(
         ),
       );
     settings.meshOrMentalOnly
-      ? updater.prop('flags', EP.Name, 'mentalOrMeshOnly').commit(true)
+      ? updater.path('flags', EP.Name, 'mentalOrMeshOnly').commit(true)
       : updater.commit();
   },
 );
@@ -191,12 +191,12 @@ const toggleTurnDelay = commandWrapper(
     const updater = CombatantHelpers.updater(combatant);
 
     if (!delay) {
-      await updater.prop('flags', EP.Name, 'delay').commit(true);
+      await updater.path('flags', EP.Name, 'delay').commit(true);
       await game.combat.nextTurn();
       return;
     }
 
-    updater.prop('flags', EP.Name, 'delay').store(false);
+    updater.path('flags', EP.Name, 'delay').store(false);
     const { turn, turns } = game.combat;
     const currentCombatant = CombatantHelpers.current();
     if (
@@ -211,7 +211,7 @@ const toggleTurnDelay = commandWrapper(
         parseFloat(currentCombatant?.initiative ?? initiative ?? '0') + 0.01,
       );
       if (newInitiative === turns[turn - 1]?.initiative) {
-        updater.prop('initiative').store(newInitiative);
+        updater.path('initiative').store(newInitiative);
         pipe(
           turns,
           takeWhile((c) => c !== currentCombatant),
@@ -232,7 +232,7 @@ const toggleTurnDelay = commandWrapper(
               filter(([c, init]) => parseFloat(c.initiative!) * 100 !== init),
               map(([turnCombatant, init]) =>
                 CombatantHelpers.updater(turnCombatant)
-                  .prop('initiative')
+                  .path('initiative')
                   .store((init / 100).toFixed(2)),
               ),
               (updaters) => UpdateStore.prepUpdateMany([...updaters, updater]),
@@ -240,7 +240,7 @@ const toggleTurnDelay = commandWrapper(
             );
           },
         );
-      } else await updater.prop('initiative').commit(newInitiative);
+      } else await updater.path('initiative').commit(newInitiative);
     }
 
     if (turn !== 0 && turns.findIndex((c) => c._id === combatant._id) < turn) {

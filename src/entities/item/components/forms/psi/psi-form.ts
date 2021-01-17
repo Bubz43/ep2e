@@ -92,7 +92,7 @@ export class PsiForm extends ItemFormBase {
     super.disconnectedCallback();
   }
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     for (const [roll] of this.traitSheetKeys) {
       this.openItemSheet(roll);
     }
@@ -257,7 +257,7 @@ export class PsiForm extends ItemFormBase {
             <sl-header heading="${localize('psi')} ${localize('trait')}">
               ${hasVariableInfection
                 ? ''
-                : renderUpdaterForm(updater.prop('data'), {
+                : renderUpdaterForm(updater.path('data'), {
                     disabled,
                     slot: 'action',
                     fields: ({ requireBioSubstrate }) =>
@@ -266,7 +266,7 @@ export class PsiForm extends ItemFormBase {
             </sl-header>
             <div class="detail-forms">
               ${this.strainOptions}
-              ${renderUpdaterForm(updater.prop('data'), {
+              ${renderUpdaterForm(updater.path('data'), {
                 disabled,
                 fields: ({ strain }) =>
                   renderTextField(strain, { listId: 'strains' }),
@@ -274,14 +274,14 @@ export class PsiForm extends ItemFormBase {
               ${renderAutoForm({
                 props: { name },
                 update: ({ name }) => {
-                  this.item.updater.prop('name').commit(name || this.item.name);
+                  this.item.updater.path('name').commit(name || this.item.name);
                   this.requestUpdate();
                 },
                 disabled,
                 fields: ({ name }) =>
                   renderTextField({ ...name, label: localize('substrain') }),
               })}
-              ${renderUpdaterForm(updater.prop('data'), {
+              ${renderUpdaterForm(updater.path('data'), {
                 disabled,
                 fields: ({ level }) =>
                   renderNumberField(level, {
@@ -374,7 +374,7 @@ export class PsiForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.prop('data', 'description')}
+          .updateActions=${updater.path('data', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>

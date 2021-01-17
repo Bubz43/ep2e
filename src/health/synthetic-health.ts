@@ -78,7 +78,7 @@ class SyntheticHealthBase implements CommonHealth {
       biological: true,
       effects: this.init.recoveryEffects,
       conditions: this.init.recoveryConditions,
-      updateStartTime: this.init.updater.prop('').commit,
+      updateStartTime: this.init.updater.path('').commit,
     });
   }
 
@@ -104,21 +104,21 @@ class SyntheticHealthBase implements CommonHealth {
 
   applyModification(modification: HealthModification) {
     return this.init.updater
-      .prop('')
+      .path('')
       .commit((data) => applyHealthModification(data, modification));
   }
 
   resetLog() {
-    return this.init.updater.prop('log').commit([]);
+    return this.init.updater.path('log').commit([]);
   }
 }
 
 export class SyntheticHealth extends HealthMixin(SyntheticHealthBase) {
   private resetRegenStartTimes() {
     this.init.updater
-      .prop('aidedHealTickStartTime')
+      .path('aidedHealTickStartTime')
       .store(currentWorldTimeMS())
-      .prop('ownHealTickStartTime')
+      .path('ownHealTickStartTime')
       .store(currentWorldTimeMS());
   }
 
@@ -154,17 +154,17 @@ export class SyntheticHealth extends HealthMixin(SyntheticHealthBase) {
       }
     }
     return this.init.updater
-      .prop('')
+      .path('')
       .commit((data) => applyHealthModification(data, modification));
   }
 
   logHeal(slot: HealingSlot) {
     return this.init.updater
-      .prop(`${slot}HealTickStartTime` as const)
+      .path(`${slot}HealTickStartTime` as const)
       .commit(currentWorldTimeMS());
   }
 
   addDamageOverTime(dot: DamageOverTime) {
-    return this.init.updater.prop('dots').commit(addFeature(dot));
+    return this.init.updater.path('dots').commit(addFeature(dot));
   }
 }

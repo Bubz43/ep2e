@@ -1,0 +1,31 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  padding: 0.25rem 0;
+  --mdc-list-item-graphic-margin: 0.5rem;
+}
+
+.acronym {
+  text-transform: uppercase;
+}
+
+.type,
+[slot='graphic'] {
+  color: var(--color-text-lighter);
+}
+
+[slot='meta'] {
+  color: var(--color-negative);
+}
+
+mwc-list {
+  > * {
+    height: 1.6rem;
+  }
+}

@@ -16,7 +16,7 @@
   grid-template-columns: repeat(6, 1fr);
 }
 .aptitudes-list,
-.rep-list,
+.reps,
 .skills-list {
   & + * {
     border-top: 1px groove var(--color-border);
@@ -120,6 +120,16 @@ mwc-tab-bar {
   }
 }
 
+.rep-sources {
+  --mdc-theme-primary: var(--color-border);
+  display: flex;
+  flex-flow: row wrap;
+  > * {
+    flex: 1;
+    margin: 0.25rem 0.25rem 0;
+  }
+}
+
 .rep-list {
   display: flex;
   flex-flow: row wrap;
@@ -128,7 +138,6 @@ mwc-tab-bar {
 
 .rep-item {
   display: inline-grid;
-  // width: 130px;
   grid-template-areas:
     'name name score'
     'favors favors favors';
@@ -142,6 +151,8 @@ mwc-tab-bar {
   &:focus {
     outline: none;
   }
+
+  @include textButton();
 
   .rep-acronym {
     grid-area: name;
@@ -178,7 +189,7 @@ mwc-tab-bar {
     mwc-icon {
       transition: color 100ms;
     }
-    span {
+    button {
       display: flex;
       &:hover {
         mwc-icon {

@@ -3,6 +3,7 @@ import {
   closeWindow,
 } from '@src/components/window/window-controls';
 import { SlWindowEventName } from '@src/components/window/window-options';
+import type { EntityPath } from '@src/entities/path';
 import { EP } from '@src/foundry/system';
 import type { ActorType } from '../../entity-types';
 import type { ItemEP, ItemProxy } from '../../item/item';
@@ -17,6 +18,7 @@ export type ActorProxyInit<T extends ActorType> = {
   itemOperations: ItemOperations;
   actor: ActorEP;
   openForm?: () => unknown;
+  path?: EntityPath;
 };
 
 export abstract class ActorProxyBase<T extends ActorType> {
@@ -26,6 +28,7 @@ export abstract class ActorProxyBase<T extends ActorType> {
   readonly itemOperations;
   readonly actor;
   readonly openForm;
+  readonly path;
 
   abstract get subtype(): string;
 
@@ -36,6 +39,7 @@ export abstract class ActorProxyBase<T extends ActorType> {
     itemOperations,
     actor,
     openForm,
+    path,
   }: ActorProxyInit<T>) {
     this.data = data;
     this.updater = updater;
@@ -43,6 +47,7 @@ export abstract class ActorProxyBase<T extends ActorType> {
     this.itemOperations = itemOperations;
     this.actor = actor;
     this.openForm = openForm;
+    this.path = path;
   }
 
   get itemTrash() {

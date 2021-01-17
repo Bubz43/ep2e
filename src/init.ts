@@ -119,7 +119,6 @@ Hooks.once('init', () => {
 Hooks.on('renderChatMessage', onChatMessageRender);
 
 Hooks.once('ready', async () => {
-  requestAnimationFrame(() => document.body.classList.add('ready'));
   setupSystemSocket();
 
   const { current } = gameSettings.systemMigrationVersion;
@@ -148,6 +147,9 @@ Hooks.once('ready', async () => {
     tooltip = document.createElement('sl-tooltip');
     tooltip.slot = 'tooltip';
     overlay.append(tooltip);
+    document.body.classList.add('ready');
+    ui.chat.render(true);
+    // overlay.stealElements()
   }, 150);
 
   mutateEntityHook({

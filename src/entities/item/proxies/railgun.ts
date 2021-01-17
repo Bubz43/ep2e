@@ -41,7 +41,7 @@ class Base extends ItemProxyBase<ItemType.Railgun> {
     ]);
   }
   get updateState() {
-    return this.updater.prop('data', 'state');
+    return this.updater.path('data', 'state');
   }
 }
 export class Railgun
@@ -167,7 +167,7 @@ export class Railgun
         description: this.description,
         ...this.cost,
       };
-      this.updater.prop('').store(shapeData);
+      this.updater.path('').store(shapeData);
 
       const myData = {
         ...this.getDataCopy(false),
@@ -178,7 +178,7 @@ export class Railgun
         shapeChanging: true,
         shapeName: this.shapeName,
       };
-      this.updater.prop('flags', EP.Name, 'shapes').commit((items) => {
+      this.updater.path('flags', EP.Name, 'shapes').commit((items) => {
         const changed = [...(items || [])];
         const _id = uniqueStringID(changed.map((i) => i._id));
         const { shapes, ...flags } = myData.flags.ep2e || {};
@@ -202,7 +202,7 @@ export class Railgun
       description: this.description,
       ...this.cost,
     };
-    return this.updater.prop('flags', EP.Name, 'shapes').commit((items) => {
+    return this.updater.path('flags', EP.Name, 'shapes').commit((items) => {
       const changed = [...(items || [])];
       const _id = uniqueStringID(changed.map((i) => i._id));
       changed.push({ ...weaponData, _id, flags: { [EP.Name]: flags } });
@@ -212,7 +212,7 @@ export class Railgun
   }
 
   removeShape(id: string) {
-    return this.updater.prop('flags', EP.Name, 'shapes').commit((items) => {
+    return this.updater.path('flags', EP.Name, 'shapes').commit((items) => {
       const changed = [...(items || [])];
       const index = changed.findIndex((s) => s._id === id);
       if (index !== -1) changed.splice(index, 1);

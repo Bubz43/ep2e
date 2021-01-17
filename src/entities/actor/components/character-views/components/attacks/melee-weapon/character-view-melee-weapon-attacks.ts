@@ -23,7 +23,7 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
 
   @property({ attribute: false }) weapon!: MeleeWeapon;
 
-  private async createMessage(attackType: AttackType) {    
+  private async createMessage(attackType: AttackType) {
     const { token, character } = requestCharacter(this);
 
     createMessage({
@@ -46,7 +46,10 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
           : ''}
         ${payload
           ? html`<sl-group label=${localize('payload')}
-              >${payload.name} ${payload.canContainSubstance && payload.substance ? `(${payload.substance.name})` : ""}</sl-group
+              >${payload.name}
+              ${payload.canContainSubstance && payload.substance
+                ? `(${payload.substance.name})`
+                : ''}</sl-group
             >`
           : ''}
       </div>
@@ -74,10 +77,11 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
     if (!this.weapon.hasSecondaryAttack && !info) return '';
     return html`
       <wl-list-item clickable @click=${() => this.createMessage(type)}>
-        <div>${this.weapon.hasSecondaryAttack
-          ? html` <span class="label">${attack.label}</span> `
-          : ''}
-        <span> ${info.endsWith('.') ? info : `${info}.`}</span></div>
+        <div>
+          ${this.weapon.hasSecondaryAttack
+            ? html` <span class="label">${attack.label}</span> `
+            : ''} <span> ${info.endsWith('.') ? info : `${info}.`}</span>
+        </div>
       </wl-list-item>
     `;
   }

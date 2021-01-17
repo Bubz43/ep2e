@@ -1,4 +1,3 @@
-import { createMessage } from '@src/chat/create-message';
 import type {
   DamageMessageData,
   MeleeWeaponMessageData,
@@ -6,14 +5,13 @@ import type {
 import { SubstanceApplicationMethod } from '@src/data-enums';
 import { ExplosiveSettingsForm } from '@src/entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
 import { MeleeSettingsForm } from '@src/entities/actor/components/character-views/components/attacks/melee-settings/melee-settings-form';
-import { ActorType, ItemType } from '@src/entities/entity-types';
+import { ItemType } from '@src/entities/entity-types';
 import { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
-import { HealthType } from '@src/health/health';
 import { SuccessTestResult } from '@src/success-test/success-test';
 import { notEmpty } from '@src/utility/helpers';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, html, property } from 'lit-element';
 import { compact, concat, map, pick, pipe } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-melee-attack.scss';

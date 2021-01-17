@@ -4,10 +4,10 @@ import { localize } from '@src/foundry/localization';
 import type { PropertyValues } from 'lit-element';
 import {
   customElement,
-  LitElement,
-  property,
   html,
   internalProperty,
+  LitElement,
+  property,
 } from 'lit-element';
 import { equals } from 'remeda';
 import styles from './firearm-ammo-transformer.scss';
@@ -28,11 +28,11 @@ export class FirearmAmmoTransformer extends LitElement {
 
   @internalProperty() private modeStates: number[] = [];
 
-  @internalProperty() dragIndex: number | null = null;
+  @internalProperty() private dragIndex: number | null = null;
 
   private dragState: number[] = [];
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (changedProps.has('firearm')) {
       this.copyState();
     }
@@ -46,7 +46,7 @@ export class FirearmAmmoTransformer extends LitElement {
   private updateFirearmForms() {
     if (!equals(this.modeStates, this.firearm.ammoData.modeSettings)) {
       this.firearm.updater
-        .prop('data', 'ammo', 'modeSettings')
+        .path('data', 'ammo', 'modeSettings')
         .commit(this.modeStates);
     }
   }

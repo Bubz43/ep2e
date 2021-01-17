@@ -1,0 +1,45 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: flex;
+  min-height: 2rem;
+  align-items: center;
+  width: max-content;
+  background: alphav(var(--color-bg), 0.5);
+  padding: 0.25rem 0.3rem;
+  border-radius: 0 0.75rem;
+}
+
+button {
+  all: unset;
+  pointer-events: all;
+  height: 2rem;
+  &:hover {
+    cursor: pointer;
+    img {
+      filter: drop-shadow(1px 2px 3px var(--color-primary));
+    }
+  }
+}
+
+img {
+  filter: drop-shadow(1px 2px 3px rgba(0, 0, 0, 0.698));
+  display: inline-block;
+}
+
+.name {
+  flex: 1;
+  margin: 0 0.5ch;
+}
+
+mwc-icon-button {
+  --mdc-icon-button-size: 1.5rem;
+  --mdc-icon-size: 1rem;
+  height: var(--mdc-icon-button-size);
+  pointer-events: all;
+}

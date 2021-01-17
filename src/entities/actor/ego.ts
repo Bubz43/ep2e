@@ -151,10 +151,10 @@ export class Ego {
   private readonly repMap = new Map<
     RepNetwork,
     RepWithIdentifier & { track: boolean }
-    >();
-  
+  >();
+
   get img() {
-    return this.data.img
+    return this.data.img;
   }
 
   get epData() {
@@ -167,7 +167,8 @@ export class Ego {
 
   get baseInitiative() {
     const { ref, int } = this.aptitudes;
-    return parseFloat(((ref + int) / 5).toFixed(1));
+    const base = (ref + int) / 5;
+    return Math.round(base * 100) / 100;
   }
 
   get motivations() {
@@ -213,7 +214,7 @@ export class Ego {
       data: this.epData.mentalHealth,
       statMods: this.activeEffects?.getHealthStatMods(HealthType.Mental),
       willpower: this.aptitudes.wil,
-      updater: this.updater.prop('data', 'mentalHealth').nestedStore(),
+      updater: this.updater.path('data', 'mentalHealth').nestedStore(),
       source: this.name,
     });
   }
@@ -252,6 +253,10 @@ export class Ego {
         ? 'know'
         : 'active',
     ) as Partial<Record<'active' | 'know', Skill[]>>;
+  }
+
+  get complementarySkills() {
+    return this.groupedSkills.know?.filter((skill) => skill.points >= 40) || [];
   }
 
   get reps() {
@@ -464,7 +469,7 @@ export class Ego {
         acronym: localize(network),
         network: localize('FULL', network),
         ...this.epData.reps[network],
-        identifier: { networkId: network },
+        identifier: { networkId: network, type: 'ego' },
       };
       this.repMap.set(network, rep);
     }
@@ -484,7 +489,7 @@ export class Ego {
             duration: CommonInterval.Week,
             id: rep.network,
             startTime: rep.refreshStartTime,
-            updateStartTime: this.updater.prop(
+            updateStartTime: this.updater.path(
               'data',
               'reps',
               (rep.identifier as { networkId: RepNetwork }).networkId,
@@ -505,7 +510,7 @@ export class Ego {
     if (this.repRefreshTimers.some(refreshAvailable)) {
       for (const network of enumValues(RepNetwork)) {
         this.updater
-          .prop('data', 'reps', network)
+          .path('data', 'reps', network)
           .store((rep) =>
             getElapsedTime(rep.refreshStartTime) >= CommonInterval.Week
               ? { ...rep, refreshStartTime: 0, minor: 0, moderate: 0 }

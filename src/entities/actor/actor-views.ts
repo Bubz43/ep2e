@@ -17,7 +17,7 @@ export const openSleeveForm = (sleeve: Sleeve) => {
   const updater = ((sleeve.updater as unknown) as UpdateStore<{
     data: { reference: string };
   }>)
-    .prop('data')
+    .path('data')
     .nestedStore();
 
   return openOrRenderWindow({

@@ -1,8 +1,8 @@
 import { enumValues } from '@src/data-enums';
 import { ActiveArmor, ArmorType } from '@src/features/active-armor';
 import { localize } from '@src/foundry/localization';
-import { rollFormula, rollLimit } from '@src/foundry/rolls';
-import { nonNegative, notEmpty, withSign } from '@src/utility/helpers';
+import { rollLimit } from '@src/foundry/rolls';
+import { notEmpty, withSign } from '@src/utility/helpers';
 import {
   html,
   internalProperty,
@@ -11,8 +11,12 @@ import {
   PropertyValues,
 } from 'lit-element';
 import { pick, set } from 'remeda';
-import { createHealthModification, HealthModificationMode } from '../health';
-import type { Damage } from '../health-changes';
+import {
+  createHealthModification,
+  formatDamageType,
+  HealthModificationMode,
+} from '../health';
+import type { Damage, RollMultiplier } from '../health-changes';
 import type { ActorHealth } from '../health-mixin';
 import { HealthModificationEvent } from '../health-modification-event';
 import styles from './health-edit-base.scss';
@@ -41,12 +45,16 @@ export abstract class HealthEditBase<
     wounds: number;
   }>;
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (changedProps.has('damage')) {
       this.editableDamage = this.createEditable();
       this.overrides = {};
     }
     super.update(changedProps);
+  }
+
+  protected setMultiplier(ev: CustomEvent<RollMultiplier>) {
+    this.editableDamage = { ...this.editableDamage, multiplier: ev.detail };
   }
 
   protected createModification() {
@@ -182,10 +190,12 @@ export abstract class HealthEditBase<
       </wl-list-item>
 
       <div class="change">
-        <sl-group label=${localize('stress')}>${withSign(damage)}</sl-group>
+        <sl-group label=${this.health.main.damage.label}
+          >${withSign(damage)}</sl-group
+        >
         ${this.health.wound
           ? html`
-              <sl-group label=${localize('traumas')}
+              <sl-group label=${this.health.wound.wounds.label}
                 >${withSign(wounds)}</sl-group
               >
             `
@@ -196,6 +206,25 @@ export abstract class HealthEditBase<
         ?complete=${!!this.editableDamage.damageValue}
         @submit-attempt=${this.emitChange}
       ></submit-button>
+    `;
+  }
+
+  protected renderMultiplier() {
+    return html`
+      <div class="multiplier">
+        <multiplier-select
+          multiplier=${this.editableDamage.multiplier}
+          @roll-multiplier=${this.setMultiplier}
+        ></multiplier-select>
+
+        ${this.editableDamage.multiplier !== 1
+          ? html`
+              <span
+                >${formatDamageType(this.health.type)} ${this.damageValue}</span
+              >
+            `
+          : ''}
+      </div>
     `;
   }
 }

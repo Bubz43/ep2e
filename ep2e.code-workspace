@@ -28,6 +28,9 @@
         "url": "/schemas/lang.schema.json"
       }
     ],
+    "lit-plugin.globalAttributes": [
+      "divider"
+    ],
   
   }
 }

@@ -75,7 +75,7 @@ export class ItemCreator extends LitElement {
     super.disconnectedCallback();
   }
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (changedProps.has('allowedTypes')) {
       this.setInitialType();
     }
@@ -85,7 +85,7 @@ export class ItemCreator extends LitElement {
     super.update(changedProps);
   }
 
-  updated(changedProps: PropertyValues) {
+  updated(changedProps: PropertyValues<this>) {
     if (changedProps.has('folder')) {
       this.focusFirstInput();
     }

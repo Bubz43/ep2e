@@ -23,12 +23,12 @@ mutateEntityHook({
   callback: (message) => createdChatMessages.add(message),
 });
 
-// mutateEntityHook({
-//   entity: ChatMessage,
-//   hook: 'on',
-//   event: MutateEvent.Update,
-//   callback: (message) =>  updatedChatMessages.add(message),
-// });
+mutateEntityHook({
+  entity: ChatMessage,
+  hook: 'on',
+  event: MutateEvent.Update,
+  callback: (message) => updatedChatMessages.add(message),
+});
 
 const iconTemplate = html`<i
   class="far fa-eye-slash"
@@ -58,7 +58,7 @@ export const onChatMessageRender = (message: ChatMessageEP, [el]: JQuery) => {
   render(
     html`
       <div class="image-wrapper">
-        <img src=${img || CONST.DEFAULT_TOKEN} loading="lazy" />
+        <img src=${img || CONST.DEFAULT_TOKEN} loading="lazy" width="32px" />
       </div>
     `,
     fragment,

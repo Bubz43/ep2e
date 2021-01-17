@@ -1,0 +1,69 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+@include styled-scrollbars();
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: contents;
+}
+
+.controls {
+  display: grid;
+  grid-template-areas:
+    'entity modifiers'
+    'sections modifiers'
+    'sections footer';
+  grid-template-rows: min-content 1fr auto;
+  column-gap: 0.25rem;
+  min-height: 300px;
+  min-width: 350px;
+  padding: 0.5rem 1rem;
+
+  .sections {
+    grid-area: sections;
+  }
+  .modifiers {
+    grid-area: modifiers;
+  }
+  .footer {
+    grid-area: footer;
+  }
+  background: linear-gradient(
+    to bottom,
+    alphav(var(--color-bg), 0.8),
+    alphav(var(--color-bg-alt), 0.8)
+  );
+}
+
+.entity {
+  grid-area: entity;
+  margin-bottom: 0.25rem;
+}
+
+.sections {
+  display: grid;
+  grid-auto-rows: min-content;
+  gap: 0.25rem;
+  width: 350px;
+  > * {
+    display: flex;
+    border: 1px solid var(--color-border);
+    > *:not(success-test-section-label) {
+      align-self: center;
+      flex: 1;
+    }
+  }
+  success-test-section-label {
+    border-right: 1px solid var(--color-border);
+    background: rgba(black, 0.25);
+  }
+}
+
+.aptitude-info {
+  grid-template-columns: auto auto 1fr;
+  flex: 1;
+}

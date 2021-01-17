@@ -1,0 +1,145 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+@include styled-scrollbars();
+@include resetUnorderedList();
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: contents;
+}
+
+.controls {
+  display: grid;
+  grid-template-areas:
+    'entity modifiers'
+    'sections modifiers'
+    'sections footer';
+  grid-template-rows: min-content 1fr auto;
+  column-gap: 0.25rem;
+  min-height: 300px;
+  min-width: 350px;
+  padding: 0.5rem 1rem;
+
+  .sections {
+    grid-area: sections;
+  }
+  .modifiers {
+    grid-area: modifiers;
+  }
+  .footer {
+    grid-area: footer;
+  }
+  background: linear-gradient(
+    to bottom,
+    alphav(var(--color-bg), 0.8),
+    alphav(var(--color-bg-alt), 0.8)
+  );
+}
+
+.entity {
+  grid-area: entity;
+  margin-bottom: 0.25rem;
+}
+
+.sections {
+  display: grid;
+  grid-auto-rows: min-content;
+  gap: 0.25rem;
+  width: 350px;
+  > * {
+    display: flex;
+    border: 1px solid var(--color-border);
+    > *:not(success-test-section-label) {
+      align-self: center;
+      flex: 1;
+    }
+  }
+  success-test-section-label {
+    border-right: 1px solid var(--color-border);
+    background: rgba(black, 0.25);
+  }
+}
+
+.skill-section {
+  position: relative;
+
+  .options {
+    position: absolute;
+    top: -1.25rem;
+    right: 0.25rem;
+    z-index: 2;
+    display: grid;
+    grid-auto-flow: column;
+    gap: 0.5ch;
+    align-items: center;
+  }
+  button {
+    display: inline-flex;
+    place-content: center;
+    align-items: center;
+    border-radius: 100%;
+    height: 1.5rem;
+    width: 1.5rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    transition: box-shadow 100ms, opacity 100ms, transform 10ms;
+    color: var(--color-text);
+    opacity: 0.75;
+    cursor: pointer;
+    outline: none;
+    --mdc-icon-size: 1.5rem;
+    &:active {
+      transform: scale(0.95);
+    }
+    &:hover {
+      opacity: 0.9;
+    }
+    &.active {
+      color: var(--color-primary-alt);
+      box-shadow: 0 0 5px 1px currentColor;
+
+      opacity: 1;
+    }
+  }
+}
+
+.skill-state {
+  --list-item-padding: 0.1rem 1rem;
+  padding: 0.25rem 0;
+
+  .category {
+    color: var(--color-text-lighter);
+    white-space: nowrap;
+  }
+  .defaulting {
+    color: var(--color-text-lighter);
+  }
+  mwc-checkbox {
+    height: 2rem;
+    margin: -1rem 0 0 -1rem;
+    pointer-events: none;
+  }
+  .truncate {
+    display: inline-block;
+    @include truncate(240px);
+  }
+
+  [slot='after'] {
+    margin-left: 1ch;
+  }
+
+  .multipliers {
+    span {
+      color: var(--color-text-lighter);
+      margin: 0 0.5ch;
+      transition: color 200ms;
+      &.active {
+        color: satv(var(--color-secondary), 1.4);
+      }
+    }
+  }
+}

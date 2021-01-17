@@ -1,0 +1,62 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+}
+
+.pool-actions {
+  @include resetUnorderedList();
+  flex: 1;
+  header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem 0;
+
+    .label {
+      color: var(--color-text-lighter);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: small;
+    }
+  }
+
+  mwc-button {
+    --mdc-theme-primary: var(--color-secondary);
+    img {
+      filter: drop-shadow(2px 4px 6px black);
+    }
+    &[disabled] {
+      img {
+        opacity: 0.5;
+      }
+    }
+  }
+
+  ul {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.25rem 0;
+  }
+
+  wl-list-item {
+    padding: 0 1rem;
+    [slot='before'] {
+      margin-right: 0.25rem;
+    }
+    [slot='after'] {
+      margin-left: 0.25rem;
+    }
+  }
+
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+  }
+}

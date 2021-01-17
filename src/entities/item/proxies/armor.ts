@@ -8,7 +8,7 @@ import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
 class Base extends ItemProxyBase<ItemType.Armor> {
   get updateState() {
-    return this.updater.prop('data', 'state');
+    return this.updater.path('data', 'state');
   }
 }
 export class Armor

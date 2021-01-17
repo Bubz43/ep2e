@@ -1,8 +1,6 @@
 import type { DamageMessageData } from '@src/chat/message-data';
 import { formatArmorUsed } from '@src/combat/attack-formatting';
 import type { UsedRollPartsEvent } from '@src/combat/components/rolled-formulas-list/used-roll-parts-event';
-import { renderNumberInput, renderSlider } from '@src/components/field/fields';
-import { renderAutoForm } from '@src/components/form/forms';
 import { pickOrDefaultActor } from '@src/entities/find-entities';
 import { localize } from '@src/foundry/localization';
 import { cleanFormula } from '@src/foundry/rolls';
@@ -17,7 +15,6 @@ import {
   createPhysicalDamage,
   createStressDamage,
   RollMultiplier,
-  rollMultipliers,
 } from '@src/health/health-changes';
 import { notEmpty } from '@src/utility/helpers';
 import {
@@ -43,15 +40,19 @@ export class MessageDamage extends LitElement {
 
   @internalProperty() private viewFormulas = false;
 
-  @internalProperty() usedRollParts?: ReadonlySet<number>;
+  @internalProperty() private usedRollParts?: ReadonlySet<number>;
 
-  @internalProperty() multiplier: RollMultiplier = 1;
+  @internalProperty() private multiplier: RollMultiplier = 1;
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (changedProps.has('damage')) {
       this.multiplier = this.damage.multiplier ?? 1;
     }
     super.update(changedProps);
+  }
+
+  private setMultiplier(ev: CustomEvent<RollMultiplier>) {
+    this.multiplier = ev.detail;
   }
 
   toggleFormulas() {
@@ -144,19 +145,10 @@ export class MessageDamage extends LitElement {
       ${this.viewFormulas
         ? html`
             <div class="additional">
-              <sl-group label=${localize('multiplier')} class="multiplier">
-                ${rollMultipliers.map(
-                  (multiplier) =>
-                    html`<button @click=${() => this.multiplier = multiplier}
-                      class="${multiplier === this.multiplier
-                        ? 'active'
-                        : ''}"
-                    >
-                      ${multiplier}
-                    </button>`,
-                )}
-              </sl-group>
-
+              <multiplier-select
+                multiplier=${this.multiplier}
+                @roll-multiplier=${this.setMultiplier}
+              ></multiplier-select>
 
               <rolled-formulas-list
                 .rolledFormulas=${this.damage.rolledFormulas}

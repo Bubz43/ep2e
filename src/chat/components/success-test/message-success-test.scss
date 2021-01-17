@@ -1,0 +1,179 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+@include resetUnorderedList();
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: grid;
+  padding: 0.25rem 0.5rem 0.25rem 0.75rem;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'groups history'
+    'groups pools'
+    'effects effects'
+    'task task';
+}
+
+.superior-effects {
+  grid-area: effects;
+  sl-group {
+    cursor: pointer;
+  }
+  .available-effects {
+    @include truncate(100%);
+    color: var(--color-primary-alt);
+  }
+  .superior-list {
+    --list-item-padding: 0 1rem;
+    display: grid;
+    grid-auto-rows: 2rem;
+    mwc-checkbox {
+      width: 2.5rem;
+    }
+  }
+
+  submit-button {
+    width: 100%;
+  }
+}
+
+.task {
+  grid-area: task;
+  margin-top: 0.25rem;
+}
+
+.groups {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 0.5ch;
+  grid-area: groups;
+  > :last-child {
+    grid-column: span 2;
+  }
+}
+
+sl-group {
+  width: max-content;
+  max-width: 100%;
+}
+
+.history {
+  grid-area: history;
+  height: 1rem;
+  align-self: center;
+  justify-self: end;
+  padding-right: 0.25rem;
+  color: var(--color-text-lighter);
+}
+
+.pool-actions {
+  display: flex;
+  place-self: center;
+  grid-area: pools;
+
+  mwc-icon-button {
+    --mdc-icon-button-size: 1.75rem;
+    --mdc-icon-size: 1.5rem;
+  }
+}
+
+mwc-icon-button {
+  --mdc-icon-button-size: 1.25rem;
+  --mdc-icon-size: 1rem;
+  height: var(--mdc-icon-button-size);
+}
+
+.roll {
+  sl-animated-list {
+    display: inline-block;
+    position: relative;
+  }
+  span {
+    display: inline-block;
+  }
+
+  .edit-toggle {
+    visibility: hidden;
+  }
+  &:hover,
+  &:focus-within {
+    .edit-toggle {
+      visibility: visible;
+    }
+  }
+}
+
+.result-chars {
+  display: inline-block;
+  position: relative;
+  span {
+    display: inline-block;
+    min-width: 0.5ch;
+  }
+}
+
+.edit {
+  display: flex;
+  align-items: center;
+  @include inputReset();
+  input {
+    width: 3ch;
+    text-align: center;
+    padding: 0;
+    margin-right: 0.5ch;
+    height: 23.33px;
+  }
+  .roll-edit {
+    input {
+      color: transparent !important;
+    }
+    & ~ * {
+      visibility: hidden;
+    }
+    &:focus-within,
+    &.filled {
+      input {
+        color: var(--color-text) !important;
+      }
+      & ~ * {
+        visibility: visible;
+      }
+    }
+  }
+}
+
+.pool-selector {
+  max-width: 225px;
+  --mdc-list-item-graphic-margin: 0.5rem;
+  &::part(content) {
+    padding: 0;
+  }
+  mwc-list-item:not([twoline]) {
+    height: 2.75rem;
+  }
+}
+
+.used-parts {
+  padding: 0.25rem 0;
+  min-width: 150px;
+  > *:not(.divider) {
+    padding: 0.25rem 1rem;
+  }
+
+  .divider {
+    margin: 0.25rem;
+    border-top: 1px solid var(--color-border);
+  }
+}
+
+.part-toggle {
+  all: unset;
+  &:hover {
+    text-shadow: var(--text-highlight);
+    cursor: pointer;
+  }
+}

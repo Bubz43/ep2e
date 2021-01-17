@@ -4,14 +4,14 @@ import {
 } from '@src/combat/attack-formatting';
 import type { ExplosiveAttack } from '@src/combat/attacks';
 import {
-  renderSelectField,
+  renderFormulaField,
   renderLabeledCheckbox,
   renderNumberField,
-  renderFormulaField,
+  renderNumberInput,
+  renderSelectField,
   renderTextareaField,
   renderTextField,
   renderTimeField,
-  renderNumberInput,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
@@ -45,10 +45,9 @@ import {
   itemDropToItemProxy,
 } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
-import { cleanFormula } from '@src/foundry/rolls';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property, PropertyValues } from 'lit-element';
-import { createPipe, map, mapToObj, objOf } from 'remeda';
+import { createPipe, map, objOf } from 'remeda';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './explosive-form.scss';
@@ -68,7 +67,7 @@ export class ExplosiveForm extends ItemFormBase {
 
   private substanceSheetKey = {};
 
-  updated(changedProps: PropertyValues) {
+  updated(changedProps: PropertyValues<this>) {
     if (this.substanceSheet) this.openSubstanceSheet();
     super.updated(changedProps);
   }
@@ -129,14 +128,14 @@ export class ExplosiveForm extends ItemFormBase {
       substance,
     } = this.item;
     const { disabled } = this;
-    const { commit, originalValue } = updater.prop('data');
+    const { commit, originalValue } = updater.path('data');
 
     return html`
       <entity-form-layout>
         <entity-form-header
           noDefaultImg
           slot="header"
-          .updateActions=${updater.prop('')}
+          .updateActions=${updater.path('')}
           type=${localize(type)}
           ?disabled=${disabled}
         >
@@ -206,12 +205,12 @@ export class ExplosiveForm extends ItemFormBase {
           <section>
             <sl-header heading=${localize('details')}></sl-header>
             <div class="detail-forms">
-              ${renderUpdaterForm(updater.prop('data'), {
+              ${renderUpdaterForm(updater.path('data'), {
                 classes: complexityForm.cssClass,
                 disabled,
                 fields: renderComplexityFields,
               })}
-              ${renderUpdaterForm(updater.prop('data'), {
+              ${renderUpdaterForm(updater.path('data'), {
                 disabled,
                 classes: 'quantity-form',
                 fields: ({ quantity, unitsPerComplexity }) => [
@@ -235,7 +234,7 @@ export class ExplosiveForm extends ItemFormBase {
                     heading=${localize('substance')}
                     ?hideBorder=${!substance}
                   >
-                    ${renderUpdaterForm(updater.prop('data'), {
+                    ${renderUpdaterForm(updater.path('data'), {
                       disabled,
                       classes: 'doses-form',
                       slot: 'action',
@@ -272,7 +271,7 @@ export class ExplosiveForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.prop('data', 'description')}
+          .updateActions=${updater.path('data', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -341,7 +340,7 @@ export class ExplosiveForm extends ItemFormBase {
   }
 
   private renderAttackEdit(type: WeaponAttackType) {
-    const updater = this.item.updater.prop('data', type);
+    const updater = this.item.updater.path('data', type);
     const { disabled } = this;
     const modeLabel = localize(
       type === WeaponAttackType.Primary ? 'primaryMode' : 'secondaryMode',

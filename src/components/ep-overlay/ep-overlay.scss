@@ -1,6 +1,8 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+@include styled-scrollbars();
+
 * {
   box-sizing: border-box;
 }
@@ -11,7 +13,7 @@
     'scene time app-controls'
     'nav time chat'
     'controls .. chat'
-    '.. .. chat';
+    'user .. chat';
 
   grid-template-columns: 1fr auto auto;
 
@@ -38,6 +40,11 @@
   ::slotted(mwc-dialog:not([open])) {
     pointer-events: none;
   }
+}
+
+user-view {
+  grid-area: user;
+  margin: auto 0 1.75rem -1.1rem;
 }
 
 mwc-dialog {
@@ -94,6 +101,15 @@ world-time-controls {
   .controls-wrapper {
     opacity: 1;
   }
+}
+
+.solid-root {
+  display: block;
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  z-index: 40;
+  overflow: hidden;
 }
 
 slot[name='foundry-apps'],

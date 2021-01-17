@@ -1,10 +1,8 @@
 const scssPlugin = require('@snowpack/plugin-sass');
 
-
 function stripFileExtension(filename) {
   return filename.split('.').slice(0, -1).join('.');
 }
-
 
 module.exports = function sassPlugin(_, { native, compilerOptions = {} } = {}) {
   const plugin = scssPlugin(_, { native, compilerOptions });
@@ -12,7 +10,7 @@ module.exports = function sassPlugin(_, { native, compilerOptions = {} } = {}) {
     ...plugin,
     name: 'snowpack-tagged-scss',
     resolve: {
-      input: ['.scss', '.sass'],
+      input: ['.scss', 'sass'],
       output: ['.css.js', '.css'],
     },
     async load({ filePath, isDev }) {
@@ -23,17 +21,23 @@ module.exports = function sassPlugin(_, { native, compilerOptions = {} } = {}) {
         [],
       );
       const stdout = await plugin.load({ filePath, isDev });
-      if (stripFileExtension(filePath).endsWith('global')) {
+    
+      if (
+        stripFileExtension(filePath).endsWith('global') ||
+        filePath.includes('.module')
+      ) {
         return { '.css': stdout };
       }
-      return {
-        '.css.js': `import {css} from '${afterSrc.join(
-          '/',
-        )}/web_modules/lit-element.js';
+
+   
+        return {
+          '.css.js': `import {css} from '${afterSrc.join(
+            '/',
+          )}/_snowpack/pkg/lit-element.js';
   
-                            const style = css\`${stdout}\`; 
-                            export default style`,
-      };
+        const style = css\`${stdout}\`; 
+        export default style`,
+        };
     },
   };
 };

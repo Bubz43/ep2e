@@ -44,7 +44,7 @@ class Base extends ItemProxyBase<ItemType.Firearm> {
     ]);
   }
   get updateState() {
-    return this.updater.prop('data', 'state');
+    return this.updater.path('data', 'state');
   }
 }
 export class Firearm
@@ -67,11 +67,11 @@ export class Firearm
   updateAmmoCount(newValue: number) {
     const { max, value } = this.ammoState;
     this.updater
-      .prop('data', 'ammo', 'value')
+      .path('data', 'ammo', 'value')
       .store(clamp(newValue, { min: 0, max: max + 1 }));
     return this.specialAmmo?.hasMultipleModes
       ? this.updater
-          .prop('data', 'ammo', 'modeSettings')
+          .path('data', 'ammo', 'modeSettings')
           .commit(
             newValue < value
               ? take(newValue)
@@ -192,11 +192,11 @@ export class Firearm
     const gained = this.gainedFromAmmo(ammo);
     if (ammo.hasMultipleModes) {
       this.updater
-        .prop('data', 'ammo', 'modeSettings')
+        .path('data', 'ammo', 'modeSettings')
         .store(Array(gained).fill(0));
     }
     this.updater
-      .prop('data', 'ammo')
+      .path('data', 'ammo')
       .store({ selectedModeIndex: 0, value: gained });
     return this.updateAmmo([ammo.getDataCopy(true)]);
   }
@@ -217,7 +217,7 @@ export class Firearm
   }
 
   private get updateAmmo() {
-    return this.updater.prop('flags', EP.Name, 'specialAmmo').commit;
+    return this.updater.path('flags', EP.Name, 'specialAmmo').commit;
   }
 
   @LazyGetter()
@@ -267,7 +267,7 @@ export class Firearm
           specialAmmo: shape.epFlags?.specialAmmo || null,
         },
       };
-      this.updater.prop('').store(shapeData);
+      this.updater.path('').store(shapeData);
 
       const myData = {
         ...this.getDataCopy(false),
@@ -278,7 +278,7 @@ export class Firearm
         shapeChanging: true,
         shapeName: this.shapeName,
       };
-      this.updater.prop('flags', EP.Name, 'shapes').commit((items) => {
+      this.updater.path('flags', EP.Name, 'shapes').commit((items) => {
         const changed = [...(items || [])];
         const _id = uniqueStringID(changed.map((i) => i._id));
         const { shapes, ...flags } = myData.flags.ep2e || {};
@@ -303,7 +303,7 @@ export class Firearm
       ...this.cost,
     };
 
-    return this.updater.prop('flags', EP.Name, 'shapes').commit((items) => {
+    return this.updater.path('flags', EP.Name, 'shapes').commit((items) => {
       const changed = [...(items || [])];
       const _id = uniqueStringID(changed.map((i) => i._id));
       changed.push({ ...weaponData, _id, flags: { [EP.Name]: flags } });
@@ -313,7 +313,7 @@ export class Firearm
   }
 
   removeShape(id: string) {
-    return this.updater.prop('flags', EP.Name, 'shapes').commit((items) => {
+    return this.updater.path('flags', EP.Name, 'shapes').commit((items) => {
       const changed = [...(items || [])];
       const index = changed.findIndex((s) => s._id === id);
       if (index !== -1) changed.splice(index, 1);

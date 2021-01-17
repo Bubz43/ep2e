@@ -25,7 +25,7 @@ class Base extends ItemProxyBase<ItemType.SeekerWeapon> {
     return enumValues(RangedWeaponTrait).filter((trait) => this.epData[trait]);
   }
   get updateState() {
-    return this.updater.prop('data', 'state');
+    return this.updater.path('data', 'state');
   }
 }
 
@@ -102,7 +102,7 @@ export class SeekerWeapon extends mix(Base).with(
           embedded: this.name,
           loaded: true,
           updater: this.updater
-            .prop('flags', EP.Name, 'missiles')
+            .path('flags', EP.Name, 'missiles')
             .nestedStore(),
           deleteSelf: () => this.removeMissiles(),
         })
@@ -118,6 +118,6 @@ export class SeekerWeapon extends mix(Base).with(
   }
 
   private get updatePayload() {
-    return this.updater.prop('flags', EP.Name, 'missiles').commit;
+    return this.updater.path('flags', EP.Name, 'missiles').commit;
   }
 }

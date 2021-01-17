@@ -1,3 +1,7 @@
+import { enableMapSet, enablePatches } from 'immer';
+enableMapSet();
+enablePatches();
+
 // Material Components
 import '@material/mwc-button';
 import '@material/mwc-checkbox';
@@ -137,7 +141,7 @@ import { MessageSubstanceUse } from './chat/components/substance/message-substan
 import { PhysicalTechCard } from './entities/actor/components/character-views/components/cards/physical-tech/physical-tech-card';
 import { CharacterViewActiveSubstance } from './entities/actor/components/character-views/components/active-substance/character-view-active-substance';
 import { CharacterViewPsi } from './entities/actor/components/character-views/components/psi/character-view-psi';
-import { CharacterViewTestActions } from './entities/actor/components/character-views/components/test-actions/character-view-stats';
+import { CharacterViewTestActions } from './entities/actor/components/character-views/components/test-actions/character-view-test-actions';
 import { CharacterViewExplosiveAttacks } from './entities/actor/components/character-views/components/attacks/explosive/character-view-explosive-attacks';
 import { MessageExplosive } from './chat/components/explosive/message-explosive';
 import { ExplosiveSettingsForm } from './entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
@@ -147,11 +151,25 @@ import { CharacterViewMeleeWeaponAttacks } from './entities/actor/components/cha
 import { WeaponCard } from './entities/actor/components/character-views/components/cards/weapon/weapon-card';
 import { MessageMeleeAttack } from './chat/components/melee-attack/message-melee-attack';
 import { CharacterViewAttacksSection } from './entities/actor/components/character-views/components/attacks/section/character-view-attacks-section';
+import { MultiplierSelect } from './combat/components/multiplier-select/multiplier-select';
+import { AptitudeCheckControls } from './success-test/components/aptitude-check-controls/aptitude-check-controls';
+import { MessageSuccessTest } from './chat/components/success-test/message-success-test';
+import { SuccessTestActionForm } from './success-test/components/action-form/success-test-action-form';
+import { SuccessTestPoolControls } from './success-test/components/pool-controls/success-test-pool-controls';
+import { SuccessTestModifiersSection } from './success-test/components/modifiers-section/success-test-modifiers-section';
+import { SuccessTestSectionLabel } from './success-test/components/section-label/success-test-section-label';
+import { SuccessTestFooter } from './success-test/components/footer/success-test-footer';
+import { SkillTestControls } from './success-test/components/skill-test-controls/skill-test-controls';
+import { ReputationFavorControls } from './success-test/components/reputation-favor-controls/reputation-favor-controls';
+import { UserView } from './entities/components/user-view/user-view';
+import { MessageFavor } from './chat/components/favor/message-favor';
 
 // Generic Components
 Field;
 Form;
 AnimatedList;
+MultiplierSelect;
+
 // DateField;
 DeleteButton;
 Details;
@@ -173,6 +191,7 @@ SlWindow;
 
 // Entity
 CompendiumList;
+UserView;
 
 // Actor
 ActorCreator;
@@ -298,4 +317,16 @@ MessageSubstanceUse;
 MessageExplosive;
 MessageAttackTraits;
 MessageAreaEffect;
-MessageMeleeAttack
+MessageMeleeAttack;
+MessageSuccessTest;
+MessageFavor;
+
+// SuccessTest
+AptitudeCheckControls;
+SuccessTestActionForm;
+SuccessTestPoolControls;
+SuccessTestModifiersSection;
+SuccessTestSectionLabel;
+SuccessTestFooter;
+SkillTestControls;
+ReputationFavorControls;

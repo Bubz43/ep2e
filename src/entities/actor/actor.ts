@@ -25,6 +25,7 @@ import { Biological } from './proxies/biological';
 import { Character } from './proxies/character';
 import { Infomorph } from './proxies/infomorph';
 import { Synthetic } from './proxies/synthetic';
+import type { EntityPath } from '../path';
 
 type ItemUpdate = SetRequired<DeepPartial<ItemEntity>, '_id'>;
 
@@ -40,6 +41,8 @@ export type ActorProxy = ReturnType<ActorEP['createProxy']>;
 
 export type MaybeToken = Token | null | undefined;
 
+export type ActorSub = (data: ActorEP | null) => void;
+
 export class ActorEP extends Actor {
   readonly #subscribers = new EntitySubscription<this>();
   itemTrash: ItemEP['data'][] = [];
@@ -49,8 +52,17 @@ export class ActorEP extends Actor {
   // #identifiers?: ActorIdentifiers;
   #itemOperations?: ItemOperations;
 
+  #path?: EntityPath;
+
   private declare invalidated: boolean;
   private declare hasPrepared: boolean;
+  private readonly subs = new Set<ActorSub>();
+
+  subscribe(sub: ActorSub) {
+    this.subs.add(sub);
+    sub(this);
+    return () => void this.subs.delete(sub);
+  }
 
   get identifiers(): ActorIdentifiers {
     return {
@@ -69,6 +81,24 @@ export class ActorEP extends Actor {
         setData: (changedData) => this.update(changedData, {}),
       });
     return this.#updater;
+  }
+
+  get path() {
+    if (!this.#path) {
+      if (this.isToken && this.token) {
+        if (!this.token.scene) this.#path = [];
+        else {
+          this.#path = [this.token.scene, this.token];
+        }
+      } else if (game.actors.has(this.id)) {
+        this.#path = compact([
+          { name: localize('actors') },
+          this.folder && { name: this.folder.name },
+          this,
+        ]);
+      } else this.#path = [];
+    }
+    return this.#path;
   }
 
   get editable() {
@@ -232,6 +262,7 @@ export class ActorEP extends Actor {
       itemOperations: this.itemOperations,
       actor: this,
       openForm: this.openForm,
+      path: this.path,
     } as const;
   }
 
@@ -245,6 +276,8 @@ export class ActorEP extends Actor {
     if (this.hasPrepared)
       emitEPSocket({ actorChanged: this.identifiers }, true);
     else this.hasPrepared = true;
+
+    this.subs?.forEach((sub) => sub(this));
   }
 
   render(force: boolean, context: Record<string, unknown>) {
@@ -256,6 +289,8 @@ export class ActorEP extends Actor {
     super._onDelete(options, userId);
     this.items?.forEach((item) => item.sheet?.close());
     this.#subscribers.unsubscribeAll();
+    this.subs.forEach((sub) => sub(null));
+    this.subs.clear();
   }
 
   get conditions() {

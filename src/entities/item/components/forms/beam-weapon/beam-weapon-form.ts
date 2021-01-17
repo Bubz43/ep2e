@@ -72,13 +72,13 @@ export class BeamWeaponForm extends mix(Base).with(UseWorldTime) {
         <entity-form-header
           noDefaultImg
           slot="header"
-          .updateActions=${updater.prop('')}
+          .updateActions=${updater.path('')}
           type=${localize(type)}
           ?disabled=${disabled}
         >
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.prop('data'), {
+        ${renderUpdaterForm(updater.path('data'), {
           disabled,
           slot: 'sidebar',
           fields: ({ wareType, range, hasSecondaryAttack, ...traits }) => [
@@ -107,7 +107,7 @@ export class BeamWeaponForm extends mix(Base).with(UseWorldTime) {
         })}
 
         <div slot="details">
-          ${renderUpdaterForm(updater.prop('data'), {
+          ${renderUpdaterForm(updater.path('data'), {
             disabled,
             classes: complexityForm.cssClass,
             fields: renderComplexityFields,
@@ -125,7 +125,7 @@ export class BeamWeaponForm extends mix(Base).with(UseWorldTime) {
                 const max = changed.max ?? orig.max;
                 const charge = changed.charge ?? orig.charge;
                 const diff = max - charge;
-                this.item.updater.prop('data', 'battery').commit({
+                this.item.updater.path('data', 'battery').commit({
                   ...changed,
                   recharge:
                     (diff / max) * CommonInterval.Hour * 4 +
@@ -167,7 +167,7 @@ export class BeamWeaponForm extends mix(Base).with(UseWorldTime) {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.prop('data', 'description')}
+          .updateActions=${updater.path('data', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -241,7 +241,7 @@ export class BeamWeaponForm extends mix(Base).with(UseWorldTime) {
   }
 
   private renderAttackEdit(type: WeaponAttackType) {
-    const updater = this.item.updater.prop('data', type);
+    const updater = this.item.updater.path('data', type);
     const { hasSecondaryAttack } = this.item;
     const [pairedTraits, changeTraits] = pairList(
       updater.originalValue().attackTraits,
@@ -301,7 +301,7 @@ export class BeamWeaponForm extends mix(Base).with(UseWorldTime) {
     return renderRangedAccessoriesEdit(
       this.item.accessories,
       BeamWeapon.possibleAccessories,
-      this.item.updater.prop('data', 'accessories').commit,
+      this.item.updater.path('data', 'accessories').commit,
     );
   }
 }

@@ -1,0 +1,17 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  text-transform: uppercase;
+  writing-mode: vertical-lr;
+  text-orientation: upright;
+  letter-spacing: -0.25rem;
+  padding: 0.25rem 0.35rem 0.5rem;
+  font-size: small;
+  width: min-content;
+  text-align: center;
+}

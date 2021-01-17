@@ -1,6 +1,5 @@
 import {
   renderLabeledCheckbox,
-  renderRadioFields,
   renderSelectField,
   renderTextField,
 } from '@src/components/field/fields';
@@ -14,24 +13,22 @@ import { ActorType, sleeveTypes } from '@src/entities/entity-types';
 import { createDefaultItem } from '@src/entities/item/default-items';
 import type { SleeveType } from '@src/entities/models';
 import { addFeature } from '@src/features/feature-helpers';
-import { FieldSkillType, createFieldSkillData } from '@src/features/skills';
-import { MutateEvent, mutateEntityHook } from '@src/foundry/hook-setups';
+import { createFieldSkillData, FieldSkillType } from '@src/features/skills';
+import { mutateEntityHook, MutateEvent } from '@src/foundry/hook-setups';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import { clickIfEnter, notEmpty, safeMerge } from '@src/utility/helpers';
-import { LazyGetter } from 'lazy-get-decorator';
 import {
   customElement,
-  LitElement,
-  property,
+  eventOptions,
   html,
   internalProperty,
-  query,
-  eventOptions,
+  LitElement,
+  property,
   PropertyValues,
+  query,
 } from 'lit-element';
 import { createPipe, flatMapToObj } from 'remeda';
-import { stopEvent } from 'weightless';
 import { ActorEP } from '../../actor';
 import { createDigimorph } from '../../default-actors';
 import { ownedSleeves, Sleeve } from '../../sleeves';
@@ -104,7 +101,7 @@ export class ActorCreator extends LitElement {
     super.disconnectedCallback();
   }
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (changedProps.has('folder')) {
       this.sleeveData.folder = this.folder || '';
       this.characterData.folder = this.folder || '';
@@ -112,7 +109,7 @@ export class ActorCreator extends LitElement {
     super.update(changedProps);
   }
 
-  updated(changedProps: PropertyValues) {
+  updated(changedProps: PropertyValues<this>) {
     if (changedProps.has('folder')) this.focusFirstInput();
     super.updated(changedProps);
   }
@@ -213,7 +210,7 @@ export class ActorCreator extends LitElement {
         if (this.characterData.template === CharacterTemplate.Muse) {
           const specialization = '';
           updater
-            .prop('data', 'settings')
+            .path('data', 'settings')
             .store({
               canDefault: false,
               trackPoints: false,
@@ -222,7 +219,7 @@ export class ActorCreator extends LitElement {
               threatDetails: false,
               useThreat: false,
             })
-            .prop('data', 'skills')
+            .path('data', 'skills')
             .store({
               infosec: { points: 20, specialization },
               interface: { points: 50, specialization },
@@ -230,7 +227,7 @@ export class ActorCreator extends LitElement {
               program: { points: 20, specialization },
               research: { points: 20, specialization },
             })
-            .prop('data', 'fieldSkills', FieldSkillType.Hardware)
+            .path('data', 'fieldSkills', FieldSkillType.Hardware)
             .store(
               addFeature(
                 createFieldSkillData({
@@ -239,7 +236,7 @@ export class ActorCreator extends LitElement {
                 }),
               ),
             )
-            .prop('data', 'fieldSkills', FieldSkillType.Know)
+            .path('data', 'fieldSkills', FieldSkillType.Know)
             .store(
               createPipe(
                 addFeature(
@@ -269,7 +266,7 @@ export class ActorCreator extends LitElement {
               ),
             );
         } else if (this.characterData.template === CharacterTemplate.Threat) {
-          updater.prop('data', 'settings').store({
+          updater.path('data', 'settings').store({
             trackPoints: false,
             characterDetails: false,
             threatDetails: true,
@@ -277,7 +274,7 @@ export class ActorCreator extends LitElement {
           });
         }
         await updater
-          .prop('flags', EP.Name, sleeveData.type)
+          .path('flags', EP.Name, sleeveData.type)
           .commit(sleeveData);
       }
       this.characterData.name = '';

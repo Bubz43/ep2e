@@ -1,13 +1,10 @@
 import {
-  formatLabeledFormulas,
   formatArmorUsed,
+  formatLabeledFormulas,
 } from '@src/combat/attack-formatting';
 import {
-  renderFormulaField,
-  renderLabeledCheckbox,
   renderNumberField,
   renderSelectField,
-  renderTextareaField,
   renderTextInput,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
@@ -27,9 +24,7 @@ import { ItemType } from '@src/entities/entity-types';
 import { renderItemForm } from '@src/entities/item/item-views';
 import { Firearm } from '@src/entities/item/proxies/firearm';
 import type { FirearmAmmo } from '@src/entities/item/proxies/firearm-ammo';
-import { pairList } from '@src/features/check-list';
-import { idProp, matchID } from '@src/features/feature-helpers';
-import { FiringMode } from '@src/features/firing-modes';
+import { idProp } from '@src/features/feature-helpers';
 import {
   DropType,
   handleDrop,
@@ -41,7 +36,7 @@ import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property, PropertyValues } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { createPipe, identity, mapToObj, objOf } from 'remeda';
+import { identity, mapToObj } from 'remeda';
 import {
   accessoriesListStyles,
   complexityForm,
@@ -88,7 +83,7 @@ export class FirearmForm extends ItemFormBase {
     }
   });
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (this.ammoSheet) this.openAmmoSheet();
 
     super.update(changedProps);
@@ -181,13 +176,13 @@ export class FirearmForm extends ItemFormBase {
         <entity-form-header
           noDefaultImg
           slot="header"
-          .updateActions=${updater.prop('')}
+          .updateActions=${updater.path('')}
           type=${localize(type)}
           ?disabled=${disabled}
         >
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.prop('data'), {
+        ${renderUpdaterForm(updater.path('data'), {
           disabled,
           slot: 'sidebar',
           fields: this.renderSidebarFields,
@@ -207,7 +202,7 @@ export class FirearmForm extends ItemFormBase {
                       classes: 'shape-name-form',
                       update: ({ shapeName }) => {
                         this.item.updater
-                          .prop('data', 'shapeName')
+                          .path('data', 'shapeName')
                           .commit(shapeName || this.item.shapeName);
                         this.requestUpdate();
                       },
@@ -245,7 +240,7 @@ export class FirearmForm extends ItemFormBase {
                 </sl-dropzone>
               `
             : ''}
-          ${renderUpdaterForm(updater.prop('data'), {
+          ${renderUpdaterForm(updater.path('data'), {
             disabled,
             classes: complexityForm.cssClass,
             fields: renderComplexityFields,
@@ -280,12 +275,12 @@ export class FirearmForm extends ItemFormBase {
                 `
               : ''}
             ${renderAutoForm({
-              props: updater.prop('data', 'ammo').originalValue(),
+              props: updater.path('data', 'ammo').originalValue(),
               disabled,
               classes: 'ammo-form',
               update: ({ value, ...data }) => {
                 if (value !== undefined) this.item.updateAmmoCount(value);
-                else this.item.updater.prop('data', 'ammo').commit(data);
+                else this.item.updater.path('data', 'ammo').commit(data);
               },
               fields: ({ value, max, ammoClass }) => [
                 renderSelectField(
@@ -364,7 +359,7 @@ export class FirearmForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.prop('data', 'description')}
+          .updateActions=${updater.path('data', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -396,7 +391,7 @@ export class FirearmForm extends ItemFormBase {
           props: { mode: String(specialAmmoModeIndex) },
           update: ({ mode }) =>
             this.item.updater
-              .prop('data', 'ammo', 'selectedModeIndex')
+              .path('data', 'ammo', 'selectedModeIndex')
               .commit(Number(mode) || 0),
           fields: ({ mode }) =>
             renderSelectField(mode, Object.keys(ammoModes), {
@@ -478,7 +473,7 @@ export class FirearmForm extends ItemFormBase {
 
   private renderAttackEdit() {
     return renderKineticAttackEdit(
-      this.item.updater.prop('data', 'primaryAttack'),
+      this.item.updater.path('data', 'primaryAttack'),
     );
   }
 
@@ -486,7 +481,7 @@ export class FirearmForm extends ItemFormBase {
     return renderRangedAccessoriesEdit(
       this.item.accessories,
       enumValues(RangedWeaponAccessory),
-      this.item.updater.prop('data', 'accessories').commit,
+      this.item.updater.path('data', 'accessories').commit,
     );
   }
 }

@@ -7,8 +7,25 @@ import type { MessageData } from './message-data';
 export enum MessageVisibility {
   Public = 'public',
   WhisperGM = 'whisperGM',
+  Self = 'self',
   Blind = 'blind',
 }
+
+export const rollModeToVisibility = (rollMode: string) => {
+  switch (rollMode) {
+    case CONST.DICE_ROLL_MODES.BLIND:
+      return MessageVisibility.Blind;
+
+    case CONST.DICE_ROLL_MODES.PRIVATE:
+      return MessageVisibility.WhisperGM;
+
+    case CONST.DICE_ROLL_MODES.SELF:
+      return MessageVisibility.Self;
+
+    default:
+      return MessageVisibility.Public;
+  }
+};
 
 export type MessageInit = Partial<{
   data: MessageData;
@@ -45,7 +62,7 @@ export const createMessage = async ({
   const chatMessageData: Partial<ChatMessageEP['data']> = {
     content,
     flavor,
-    roll,
+    roll: roll ? JSON.stringify(roll) : null,
     flags: { [EP.Name]: data, core: { canPopout: true } },
     speaker:
       entity === null
@@ -59,8 +76,10 @@ export const createMessage = async ({
     type: roll ? CONST.CHAT_MESSAGE_TYPES.ROLL : undefined,
     blind: visibility === MessageVisibility.Blind,
     whisper:
-      visibility !== MessageVisibility.Public &&
-      ChatMessage.getWhisperRecipients('GM'),
+      visibility === MessageVisibility.Self
+        ? [game.user.id]
+        : visibility !== MessageVisibility.Public &&
+          ChatMessage.getWhisperRecipients('GM'),
   };
   return ChatMessage.create(chatMessageData, {});
 };

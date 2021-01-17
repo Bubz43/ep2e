@@ -26,6 +26,8 @@ export class PoolItem extends mix(LitElement).with(LazyRipple) {
 
   @property({ type: Boolean }) disabled = false;
 
+  @property({ type: Boolean, reflect: true }) wide = false;
+
   render() {
     const { pool, disabled } = this;
     const nonUsable = disabled || pool.disabled;

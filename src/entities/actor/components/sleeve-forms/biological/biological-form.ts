@@ -45,7 +45,7 @@ export class BiologicalForm extends SleeveFormBase {
   @property({ attribute: false }) sleeve!: Biological;
 
   private movementOperations = addUpdateRemoveFeature(
-    () => this.sleeve.updater.prop('data', 'movementRates').commit,
+    () => this.sleeve.updater.path('data', 'movementRates').commit,
   );
 
   private handleItemDrop = handleDrop(async ({ data }) => {
@@ -78,14 +78,14 @@ export class BiologicalForm extends SleeveFormBase {
       <entity-form-layout>
         <entity-form-header
           slot="header"
-          .updateActions=${updater.prop('')}
+          .updateActions=${updater.path('')}
           type=${localize(type)}
           ?disabled=${disabled}
         >
           ${sleeved ? html` <li slot="tag">${localize('sleeved')}</li> ` : ''}
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.prop('data'), {
+        ${renderUpdaterForm(updater.path('data'), {
           disabled,
           slot: 'sidebar',
           fields: ({
@@ -127,7 +127,7 @@ export class BiologicalForm extends SleeveFormBase {
 
         <div slot="details">
           <sleeve-form-acquisition
-            .updateActions=${updater.prop('data', 'acquisition')}
+            .updateActions=${updater.path('data', 'acquisition')}
             ?disabled=${disabled}
           ></sleeve-form-acquisition>
           <sleeve-form-pools
@@ -257,7 +257,7 @@ export class BiologicalForm extends SleeveFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.prop('data', 'description')}
+          .updateActions=${updater.path('data', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -318,14 +318,14 @@ export class BiologicalForm extends SleeveFormBase {
     const { physicalHealth, updater } = this.sleeve;
     return html`
       <h3>${localize('physicalHealth')}</h3>
-      ${renderUpdaterForm(updater.prop('data', 'physicalHealth'), {
+      ${renderUpdaterForm(updater.path('data', 'physicalHealth'), {
         fields: ({ baseDurability }) =>
           renderNumberField(baseDurability, { min: 1 }),
       })}
       <health-state-form .health=${physicalHealth}></health-state-form>
       <health-regen-settings-form
         .health=${physicalHealth}
-        .regenUpdater=${updater.prop('data', 'physicalHealth').nestedStore()}
+        .regenUpdater=${updater.path('data', 'physicalHealth').nestedStore()}
       ></health-regen-settings-form>
     `;
   }
@@ -336,14 +336,14 @@ export class BiologicalForm extends SleeveFormBase {
     const { updater, meshHealth } = nonDefaultBrain;
     return html`
       <h3>${localize('meshHealth')}</h3>
-      ${renderUpdaterForm(updater.prop('data', 'meshHealth'), {
+      ${renderUpdaterForm(updater.path('data', 'meshHealth'), {
         fields: ({ baseDurability }) =>
           renderNumberField(baseDurability, { min: 1 }),
       })}
       <health-state-form .health=${meshHealth}></health-state-form>
       <health-regen-settings-form
         .health=${meshHealth}
-        .regenUpdater=${updater.prop('data', 'meshHealth').nestedStore()}
+        .regenUpdater=${updater.path('data', 'meshHealth').nestedStore()}
       ></health-regen-settings-form>
     `;
   }
@@ -356,7 +356,7 @@ export class BiologicalForm extends SleeveFormBase {
       const { updater, firewallHealth } = nonDefaultBrain;
       return html`
         <h3>${nonDefaultBrain.name} ${localize('firewallHealth')}</h3>
-        ${renderUpdaterForm(updater.prop('data', 'firewallHealth'), {
+        ${renderUpdaterForm(updater.path('data', 'firewallHealth'), {
           fields: ({ baseDurability }) =>
             renderNumberField(baseDurability, { min: 1 }),
         })}
@@ -369,7 +369,7 @@ export class BiologicalForm extends SleeveFormBase {
   private renderPoolEdit() {
     return html`
       <h3>${localize('pools')}</h3>
-      ${renderPoolEditForm(this.sleeve.updater.prop('data', 'pools'))}
+      ${renderPoolEditForm(this.sleeve.updater.path('data', 'pools'))}
     `;
   }
 }

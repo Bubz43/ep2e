@@ -49,8 +49,9 @@ export class AnimatedList extends LitElement {
     await this.updateComplete;
     // TODO: Media query for reduced motion which will skip ready
     if (resizeObsAvailable) {
-      this.resizeObs = new ResizeObserver((entries) =>
-        this.elResizeCallback(entries),
+      this.resizeObs = new ResizeObserver(
+        (entries: readonly ResizeObserverEntry[]) =>
+          this.elResizeCallback(entries),
       );
       this.resizeObs.observe(this, { box: 'border-box' });
     }

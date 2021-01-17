@@ -7,7 +7,6 @@ declare module '*.scss' {
   export default style;
 }
 
-
 /* CSS MODULES */
 declare module '*.module.css' {
   const classes: { [key: string]: string };

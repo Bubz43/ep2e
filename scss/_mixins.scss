@@ -130,7 +130,7 @@
   button {
     all: unset;
     display: inline-flex;
-    &:not([disabled]):hover {
+    &:hover {
       cursor: pointer;
       color: functions.satv(var(--color-secondary), 1.2);
     }

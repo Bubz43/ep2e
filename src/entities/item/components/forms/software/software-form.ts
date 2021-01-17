@@ -1,10 +1,9 @@
 import {
-  formatLabeledFormulas,
   formatArmorUsed,
+  formatLabeledFormulas,
 } from '@src/combat/attack-formatting';
 import type { SoftwareAttack } from '@src/combat/attacks';
 import {
-  emptyTextDash,
   renderFormulaField,
   renderLabeledCheckbox,
   renderNumberField,
@@ -19,7 +18,6 @@ import {
   renderUpdaterForm,
 } from '@src/components/form/forms';
 import {
-  AptitudeType,
   AttackTrait,
   enumValues,
   SoftwareType,
@@ -52,7 +50,7 @@ import {
 } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
-import { compact, createPipe, difference, map, mapToObj, objOf } from 'remeda';
+import { createPipe, difference, map, mapToObj, objOf } from 'remeda';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './software-form.scss';
@@ -69,18 +67,18 @@ export class SoftwareForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: Software;
 
-  @internalProperty() effectGroup: 'passive' | 'activated' = 'passive';
+  @internalProperty() private effectGroup: 'passive' | 'activated' = 'passive';
 
   private readonly effectsOps = mapToObj(opsGroups, (group) => [
     group === 'effects' ? 'passive' : 'activated',
-    addUpdateRemoveFeature(() => this.item.updater.prop('data', group).commit),
+    addUpdateRemoveFeature(() => this.item.updater.path('data', group).commit),
   ]);
 
   private readonly skillOps = addUpdateRemoveFeature(
-    () => this.item.updater.prop('data', 'skills').commit,
+    () => this.item.updater.path('data', 'skills').commit,
   );
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (!this.item.hasActivation) this.effectGroup = 'passive';
     super.update(changedProps);
   }
@@ -104,13 +102,13 @@ export class SoftwareForm extends ItemFormBase {
         <entity-form-header
           noDefaultImg
           slot="header"
-          .updateActions=${updater.prop('')}
+          .updateActions=${updater.path('')}
           type=${localize(type)}
           ?disabled=${disabled}
         >
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.prop('data'), {
+        ${renderUpdaterForm(updater.path('data'), {
           disabled,
           slot: 'sidebar',
           fields: ({ softwareType, category, activation, meshAttacks }) => [
@@ -133,7 +131,7 @@ export class SoftwareForm extends ItemFormBase {
         })}
 
         <div slot="details">
-          ${renderUpdaterForm(updater.prop('data'), {
+          ${renderUpdaterForm(updater.path('data'), {
             disabled,
             classes: complexityForm.cssClass,
             fields: renderComplexityFields,
@@ -252,7 +250,7 @@ export class SoftwareForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.prop('data', 'description')}
+          .updateActions=${updater.path('data', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -305,7 +303,7 @@ export class SoftwareForm extends ItemFormBase {
     const { meshHealth, updater } = this.item;
     return html`
       <h3>${localize('meshHealth')}</h3>
-      ${renderUpdaterForm(updater.prop('data', 'meshHealth'), {
+      ${renderUpdaterForm(updater.path('data', 'meshHealth'), {
         fields: ({ baseDurability }) =>
           renderNumberField(baseDurability, { min: 1 }),
       })}
@@ -415,7 +413,7 @@ export class SoftwareForm extends ItemFormBase {
   }
 
   private renderAttackEdit(type: WeaponAttackType) {
-    const updater = this.item.updater.prop('data', type);
+    const updater = this.item.updater.path('data', type);
     const hasSecondaryAttack = !!this.item.attacks.secondary;
 
     const [pairedTraits, change] = pairList(
@@ -466,7 +464,7 @@ export class SoftwareForm extends ItemFormBase {
   }
 
   private renderAttackCheckEdit(type: WeaponAttackType) {
-    const updater = this.item.updater.prop('data', type, 'aptitudeCheckInfo');
+    const updater = this.item.updater.path('data', type, 'aptitudeCheckInfo');
     const hasSecondaryAttack = !!this.item.attacks.secondary;
 
     return html`

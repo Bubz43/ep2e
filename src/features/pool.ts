@@ -1,6 +1,11 @@
-import { PoolType, PoolEffectUsability, AptitudeType } from '@src/data-enums';
-import { EP } from '@src/foundry/system';
+import { AptitudeType, PoolEffectUsability, PoolType } from '@src/data-enums';
+import { localize } from '@src/foundry/localization';
+import {
+  createSuccessTestModifier,
+  SimpleSuccessTestModifier,
+} from '@src/success-test/success-test';
 import { localImage } from '@src/utility/images';
+import { LazyGetter } from 'lazy-get-decorator';
 import { clamp } from 'remeda';
 import type { PoolEffect, SourcedEffect } from './effects';
 
@@ -11,8 +16,8 @@ type PoolInit = {
 };
 
 export enum PostTestPoolAction {
-  Improve,
-  FlipFlop,
+  Improve = 'improveResult',
+  FlipFlop = 'flipFlopRoll',
 }
 
 export enum PreTestPoolAction {
@@ -35,9 +40,9 @@ export class Pool {
   readonly value: number;
   readonly spent: number;
 
-  #bonus = 0;
-  #usableTwice = false;
-  #disabled = false;
+  private _bonus = 0;
+  private _usableTwice = false;
+  private _disabled = false;
 
   constructor({ type, initialValue = 0, spent = 0 }: PoolInit) {
     this.type = type;
@@ -46,15 +51,15 @@ export class Pool {
   }
 
   get bonus() {
-    return this.#bonus;
+    return this._bonus;
   }
 
   get usableTwice() {
-    return this.#usableTwice;
+    return this._usableTwice;
   }
 
   get disabled() {
-    return this.#disabled;
+    return this._disabled;
   }
 
   get max() {
@@ -69,6 +74,15 @@ export class Pool {
     return poolIcon(this.type);
   }
 
+  @LazyGetter()
+  get testModifier() {
+    return createSuccessTestModifier({
+      name: `${localize(this.type)} ${localize('bonus')}`,
+      value: 20,
+      img: this.icon,
+    });
+  }
+
   addEffect({ modifier, usabilityModification }: PoolEffect) {
     const disable = usabilityModification === PoolEffectUsability.Disable;
     return this.addBonus(disable ? 0 : modifier)
@@ -79,17 +93,17 @@ export class Pool {
   }
 
   private addBonus(val: number) {
-    this.#bonus = clamp(this.#bonus + val, { min: 0, max: 5 });
+    this._bonus = clamp(this.bonus + val, { min: 0, max: 5 });
     return this;
   }
 
   private flipUsableTwice(twice: boolean) {
-    this.#usableTwice = this.#usableTwice || twice;
+    this._usableTwice = this._usableTwice || twice;
     return this;
   }
 
   private flipDisabled(disabled: boolean) {
-    this.#disabled = this.#disabled || disabled;
+    this._disabled = this._disabled || disabled;
     return this;
   }
 

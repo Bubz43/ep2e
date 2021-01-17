@@ -16,7 +16,7 @@ export class Header extends LitElement {
 
   @property({ type: String }) heading = '';
 
-  @property({ type: Number }) itemCount?: number;
+  @property() itemCount?: number | string;
 
   @property({ type: Boolean, reflect: true }) hideBorder = false;
 

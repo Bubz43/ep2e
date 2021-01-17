@@ -1,17 +1,16 @@
 import {
-  formatLabeledFormulas,
   formatArmorUsed,
-  formatAreaEffect,
+  formatLabeledFormulas,
 } from '@src/combat/attack-formatting';
 import type { DropZone } from '@src/components/dropzone/dropzone';
 import {
-  renderSelectField,
-  renderNumberField,
-  renderLabeledCheckbox,
-  renderNumberInput,
-  renderFormulaField,
-  renderTextareaField,
   emptyTextDash,
+  renderFormulaField,
+  renderLabeledCheckbox,
+  renderNumberField,
+  renderNumberInput,
+  renderSelectField,
+  renderTextareaField,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
@@ -25,7 +24,6 @@ import {
   enumValues,
   PhysicalWare,
   SprayPayload,
-  WeaponAttackType,
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { ItemType } from '@src/entities/entity-types';
@@ -39,13 +37,13 @@ import {
   handleDrop,
   itemDropToItemProxy,
 } from '@src/foundry/drag-and-drop';
-import { notify, NotificationType } from '@src/foundry/foundry-apps';
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property, PropertyValues } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { createPipe, identity, map, objOf, type } from 'remeda';
+import { createPipe, identity, map, objOf } from 'remeda';
 import {
   accessoriesListStyles,
   complexityForm,
@@ -76,7 +74,7 @@ export class SprayWeaponForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: SprayWeapon;
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (this.payloadSheet) this.openPayloadSheet();
 
     super.update(changedProps);
@@ -151,13 +149,13 @@ export class SprayWeaponForm extends ItemFormBase {
         <entity-form-header
           noDefaultImg
           slot="header"
-          .updateActions=${updater.prop('')}
+          .updateActions=${updater.path('')}
           type=${localize(type)}
           ?disabled=${disabled}
         >
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.prop('data'), {
+        ${renderUpdaterForm(updater.path('data'), {
           disabled,
           slot: 'sidebar',
           fields: ({ wareType, range, fixed, long, payloadUse, ...traits }) => [
@@ -188,7 +186,7 @@ export class SprayWeaponForm extends ItemFormBase {
         })}
 
         <div slot="details">
-          ${renderUpdaterForm(updater.prop('data'), {
+          ${renderUpdaterForm(updater.path('data'), {
             disabled,
             classes: complexityForm.cssClass,
             fields: renderComplexityFields,
@@ -198,7 +196,7 @@ export class SprayWeaponForm extends ItemFormBase {
           <sl-dropzone ?disabled=${!firePayload} @drop=${this.addDrop}>
             <sl-header heading=${localize('ammo')}
               >${firePayload
-                ? renderUpdaterForm(updater.prop('data'), {
+                ? renderUpdaterForm(updater.path('data'), {
                     disabled,
                     classes: 'doses-form',
                     slot: 'action',
@@ -225,7 +223,7 @@ export class SprayWeaponForm extends ItemFormBase {
               },
               update: ({ value, max }) => {
                 if (max !== undefined)
-                  this.item.updater.prop('data', 'ammo', 'max').commit(max);
+                  this.item.updater.path('data', 'ammo', 'max').commit(max);
                 else if (value !== undefined) this.item.updateAmmoValue(value);
               },
               disabled,
@@ -259,7 +257,7 @@ export class SprayWeaponForm extends ItemFormBase {
                       >info</mwc-icon
                     >
                     ${payload
-                      ? renderUpdaterForm(payload.updater.prop('data'), {
+                      ? renderUpdaterForm(payload.updater.path('data'), {
                           disabled,
                           classes: 'payload-quantity-form',
                           slot: 'action',
@@ -301,7 +299,7 @@ export class SprayWeaponForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.prop('data', 'description')}
+          .updateActions=${updater.path('data', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -383,7 +381,7 @@ export class SprayWeaponForm extends ItemFormBase {
   }
 
   private renderAttackEdit() {
-    const updater = this.item.updater.prop('data', 'primaryAttack');
+    const updater = this.item.updater.path('data', 'primaryAttack');
     const [pairedTraits, changeTraits] = pairList(
       updater.originalValue().attackTraits,
       enumValues(AttackTrait),
@@ -427,7 +425,7 @@ export class SprayWeaponForm extends ItemFormBase {
     return renderRangedAccessoriesEdit(
       this.item.accessories,
       SprayWeapon.possibleAccessories,
-      this.item.updater.prop('data', 'accessories').commit,
+      this.item.updater.path('data', 'accessories').commit,
     );
   }
 }

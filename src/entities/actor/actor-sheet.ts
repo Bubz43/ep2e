@@ -122,6 +122,7 @@ export class ActorEPSheet implements EntitySheet {
                 tokenName ? `- ${localize('token')}: ${tokenName}` : ''
               }`
             : actorName,
+        img: this._token?.data.img || this.actor.img,
         forceFocus: force,
         adjacentEl: !this.rendered && this.getAdjacentEl(),
       },
@@ -131,6 +132,7 @@ export class ActorEPSheet implements EntitySheet {
       win.addEventListener(SlWindowEventName.Closed, () => this.close(), {
         once: true,
       });
+      // TODO listen to token change
     }
     this.window = win;
   }

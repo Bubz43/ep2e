@@ -22,14 +22,21 @@ import {
   FabType,
   PhysicalWare,
 } from '@src/data-enums';
-import { renderEgoForm } from '@src/entities/components/render-ego-form';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
+import { ItemType } from '@src/entities/entity-types';
+import { renderItemForm } from '@src/entities/item/item-views';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import { ActionType } from '@src/features/actions';
 import type { EffectCreatedEvent } from '@src/features/components/effect-creator/effect-created-event';
 import { EffectType } from '@src/features/effects';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import { CommonInterval } from '@src/features/time';
+import {
+  DropType,
+  handleDrop,
+  itemDropToItemProxy,
+} from '@src/foundry/drag-and-drop';
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
@@ -45,14 +52,6 @@ import { difference, mapToObj } from 'remeda';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './physical-tech-form.scss';
-import { renderItemForm } from '@src/entities/item/item-views';
-import {
-  DropType,
-  handleDrop,
-  itemDropToItemProxy,
-} from '@src/foundry/drag-and-drop';
-import { ItemType } from '@src/entities/entity-types';
-import { NotificationType, notify } from '@src/foundry/foundry-apps';
 
 const opsGroups = ['passiveEffects', 'activatedEffects'] as const;
 
@@ -66,7 +65,7 @@ export class PhysicalTechForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: PhysicalTech;
 
-  @internalProperty() effectGroup: 'passive' | 'activated' = 'passive';
+  @internalProperty() private effectGroup: 'passive' | 'activated' = 'passive';
 
   private glandSheet?: SlWindow | null;
 
@@ -78,7 +77,7 @@ export class PhysicalTechForm extends ItemFormBase {
 
   private readonly effectsOps = mapToObj(opsGroups, (group) => [
     group,
-    addUpdateRemoveFeature(() => this.item.updater.prop('data', group).commit),
+    addUpdateRemoveFeature(() => this.item.updater.path('data', group).commit),
   ]);
 
   disconnectedCallback() {
@@ -87,7 +86,7 @@ export class PhysicalTechForm extends ItemFormBase {
     super.disconnectedCallback();
   }
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (!this.item.hasActivation) this.effectGroup = 'passive';
     if (this.blueprintSheet) this.openBlueprintSheet();
     if (this.glandSheet) this.openGlandSheet();
@@ -197,7 +196,7 @@ export class PhysicalTechForm extends ItemFormBase {
         <entity-form-header
           noDefaultImg
           slot="header"
-          .updateActions=${updater.prop('')}
+          .updateActions=${updater.path('')}
           type=${localize(type)}
           ?disabled=${disabled}
         >
@@ -206,7 +205,7 @@ export class PhysicalTechForm extends ItemFormBase {
             : ''}
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.prop('data'), {
+        ${renderUpdaterForm(updater.path('data'), {
           disabled,
           slot: 'sidebar',
           fields: ({
@@ -255,7 +254,7 @@ export class PhysicalTechForm extends ItemFormBase {
         })}
 
         <div slot="details">
-          ${renderUpdaterForm(updater.prop('data'), {
+          ${renderUpdaterForm(updater.path('data'), {
             disabled,
             classes: complexityForm.cssClass,
             fields: renderComplexityFields,
@@ -328,7 +327,7 @@ export class PhysicalTechForm extends ItemFormBase {
               ></mwc-icon-button
             ></sl-header>
             ${hasUseActivation
-              ? renderUpdaterForm(updater.prop('data'), {
+              ? renderUpdaterForm(updater.path('data'), {
                   disabled,
                   classes: 'activation-form',
                   fields: ({ usedEffectsDuration, resistEffectsCheck }) => [
@@ -364,7 +363,7 @@ export class PhysicalTechForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.prop('data', 'description')}
+          .updateActions=${updater.path('data', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -380,7 +379,7 @@ export class PhysicalTechForm extends ItemFormBase {
             heading="${localize('gland')} ${localize('substance')}"
           ></sl-header>
 
-          ${renderUpdaterForm(updater.prop('data'), {
+          ${renderUpdaterForm(updater.path('data'), {
             disabled: this.disabled,
             classes: 'fab-duration-form',
             fields: ({ fabPrintDuration }) =>
@@ -426,7 +425,7 @@ export class PhysicalTechForm extends ItemFormBase {
         >
         </sl-header>
         ${itemBlueprint
-          ? renderUpdaterForm(updater.prop('data'), {
+          ? renderUpdaterForm(updater.path('data'), {
               disabled: this.disabled,
               classes: 'fab-duration-form',
               fields: ({ fabPrintDuration }) =>
@@ -513,14 +512,14 @@ export class PhysicalTechForm extends ItemFormBase {
     const { meshHealth, updater } = this.item;
     return html`
       <h3>${localize('meshHealth')}</h3>
-      ${renderUpdaterForm(updater.prop('data', 'meshHealth'), {
+      ${renderUpdaterForm(updater.path('data', 'meshHealth'), {
         fields: ({ baseDurability }) =>
           renderNumberField(baseDurability, { min: 1 }),
       })}
       <health-state-form .health=${meshHealth}></health-state-form>
       <health-regen-settings-form
         .health=${meshHealth}
-        .regenUpdater=${updater.prop('data', 'meshHealth').nestedStore()}
+        .regenUpdater=${updater.path('data', 'meshHealth').nestedStore()}
       ></health-regen-settings-form>
     `;
   }
@@ -529,7 +528,7 @@ export class PhysicalTechForm extends ItemFormBase {
     const { firewallHealth, updater } = this.item;
     return html`
       <h3>${localize('firewallHealth')}</h3>
-      ${renderUpdaterForm(updater.prop('data', 'firewallHealth'), {
+      ${renderUpdaterForm(updater.path('data', 'firewallHealth'), {
         fields: ({ baseDurability }) =>
           renderNumberField(baseDurability, { min: 1 }),
       })}

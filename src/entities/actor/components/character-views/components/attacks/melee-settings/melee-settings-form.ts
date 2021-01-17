@@ -16,10 +16,10 @@ import { localize } from '@src/foundry/localization';
 import { SuccessTestResult } from '@src/success-test/success-test';
 import {
   customElement,
-  LitElement,
-  property,
   html,
   internalProperty,
+  LitElement,
+  property,
   PropertyValues,
 } from 'lit-element';
 import { map } from 'remeda';
@@ -75,7 +75,7 @@ export class MeleeSettingsForm extends LitElement {
 
   @internalProperty() private settings: MeleeWeaponSettings = {};
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     if (
       changedProps.get('meleeWeapon') !== undefined ||
       changedProps.has('initialSettings')

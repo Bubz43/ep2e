@@ -4,16 +4,12 @@
   "title": "Eclipse Phase 2e",
   "description": "Eclipse Phase 2e Game System.",
   "author": "Bubz",
-  "esmodules": [
-    "./build/dist/index.js"
-  ],
-  "styles": [
-    "./build/dist/global.css"
-  ],
-  "compatibleCoreVersion": "0.7.8",
+  "esmodules": ["./build/dist/index.js"],
+  "styles": ["./build/dist/global.scss.css"],
+  "compatibleCoreVersion": "0.7.9",
   "gridDistance": 1,
   "gridUnits": "m",
-  "minimumCoreVersion": "0.7.8",
+  "minimumCoreVersion": "0.7.9",
   "socket": true,
   "manifest": "https://github.com/Bubz43/ep2e/releases/latest/download/system.json",
   "download": "https://github.com/Bubz43/ep2e/releases/latest/download/latest.zip",
@@ -34,10 +30,66 @@
       "entity": "Item"
     },
     {
+      "name": "substances",
+      "system": "ep2e",
+      "label": "Substances",
+      "path": "./packs/substances.db",
+      "entity": "Item"
+    },
+      {
+      "name": "railguns",
+      "system": "ep2e",
+      "label": "Railguns",
+      "path": "./packs/railguns.db",
+      "entity": "Item"
+    },
+    {
+      "name": "firearms",
+      "system": "ep2e",
+      "label": "Firearms",
+      "path": "./packs/firearms.db",
+      "entity": "Item"
+    },
+    {
+      "name": "firearm-ammo",
+      "system": "ep2e",
+      "label": "Firearm Ammo",
+      "path": "./packs/firearm-ammo.db",
+      "entity": "Item"
+    },
+    {
       "name": "armor",
       "system": "ep2e",
       "label": "Armor",
       "path": "./packs/armor.db",
+      "entity": "Item"
+    },
+    {
+      "name": "melee-weapons",
+      "system": "ep2e",
+      "label": "Melee Weapons",
+      "path": "./packs/melee-weapons.db",
+      "entity": "Item"
+    },
+    {
+      "name": "spray-weapons",
+      "system": "ep2e",
+      "label": "Spray Weapons",
+      "path": "./packs/spray-weapons.db",
+      "entity": "Item"
+    },
+    {
+      "name": "seeker-weapons",
+      "system": "ep2e",
+      "label": "Seeker Weapons",
+      "path": "./packs/seeker-weapons.db",
+      "entity": "Item"
+    },
+    {
+      "name": "beam-weapons",
+      "system": "ep2e",
+      "label": "Beam Weapons",
+      "path": "./packs/beam-weapons.db",
       "entity": "Item"
     },
     {

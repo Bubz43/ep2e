@@ -70,10 +70,10 @@ export class FirearmAmmoForm extends ItemFormBase {
   private readonly payloadSheetKey = {};
 
   private readonly modeOps = addUpdateRemoveFeature(
-    () => this.item.updater.prop('data', 'modes').commit,
+    () => this.item.updater.path('data', 'modes').commit,
   );
 
-  update(changedProps: PropertyValues) {
+  update(changedProps: PropertyValues<this>) {
     const { modes } = this.item;
     const mode = modes.find(matchID(this.editingModeId));
     if (!mode) this.editingModeId = this.item.defaultMode.id;
@@ -156,7 +156,7 @@ export class FirearmAmmoForm extends ItemFormBase {
                     }),
               modes,
             ),
-      updater.prop('data', 'modes').commit,
+      updater.path('data', 'modes').commit,
     );
   }
 
@@ -175,7 +175,7 @@ export class FirearmAmmoForm extends ItemFormBase {
         <entity-form-header
           noDefaultImg
           slot="header"
-          .updateActions=${updater.prop('')}
+          .updateActions=${updater.path('')}
           type=${localize(type)}
           ?disabled=${disabled}
         >
@@ -207,7 +207,7 @@ export class FirearmAmmoForm extends ItemFormBase {
               })}
             </sl-header>
             <div class="detail-forms">
-              ${renderUpdaterForm(updater.prop('data'), {
+              ${renderUpdaterForm(updater.path('data'), {
                 disabled,
                 classes: 'settings-form',
                 fields: ({ ammoClass, carryPayload }) => [
@@ -217,12 +217,12 @@ export class FirearmAmmoForm extends ItemFormBase {
                   renderLabeledCheckbox(carryPayload),
                 ],
               })}
-              ${renderUpdaterForm(updater.prop('data'), {
+              ${renderUpdaterForm(updater.path('data'), {
                 classes: complexityForm.cssClass,
                 disabled,
                 fields: renderComplexityFields,
               })}
-              ${renderUpdaterForm(updater.prop('data'), {
+              ${renderUpdaterForm(updater.path('data'), {
                 disabled,
                 classes: 'quantity-form',
                 fields: ({ quantity, roundsPerComplexity }) => [
@@ -280,7 +280,7 @@ export class FirearmAmmoForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.prop('data', 'description')}
+          .updateActions=${updater.path('data', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>

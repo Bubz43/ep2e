@@ -127,7 +127,7 @@ mwc-tab-bar {
   padding: 0 0.25rem 0.25rem;
   margin-right: 0.25rem;
   margin-bottom: 0.5rem;
-  min-height: calc(100% - 0.47rem);
+  min-height: calc(100% - 0.5rem);
 
   sl-header,
   character-view-item-group::part(header),
@@ -281,4 +281,3 @@ mwc-tab-bar {
 enriched-html {
   padding: 0 0.25rem;
 }
-

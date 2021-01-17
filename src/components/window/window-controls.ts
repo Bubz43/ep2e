@@ -1,8 +1,80 @@
+import { overlay } from '@src/init';
 import { debounceFn } from '@src/utility/decorators';
 import { TemplateResult, render } from 'lit-html';
+import type { NanoPopPosition } from 'nanopop';
 import { traverseActiveElements } from 'weightless';
 import { SlWindow } from './window';
 import { ResizeOption, SlWindowEventName } from './window-options';
+
+type WindowProps<T> = Pick<SlWindow, 'name' | 'img' | 'resizable'> & {
+  renderTemplate: (props: T) => TemplateResult;
+  renderProps: T;
+  cleanup: () => void;
+  relativeElement?: Element | null;
+};
+
+export class WindowController<T> {
+  readonly win = new SlWindow();
+  private cleanup;
+  private readonly renderTemplate;
+  constructor(initialProps: WindowProps<T>) {
+    this.cleanup = initialProps.cleanup;
+    this.renderTemplate = initialProps.renderTemplate;
+    this.update(initialProps);
+    this.win.addEventListener(SlWindowEventName.Closed, () => this.cleanup());
+    overlay.append(this.win);
+  }
+
+  update(props: Partial<Omit<WindowProps<T>, 'renderTemplate'>>) {
+    if (props.name) this.win.name = props.name;
+    if ('img' in props) this.win.img = props.img;
+    if (props.resizable) this.win.resizable = props.resizable;
+    if (props.cleanup) this.cleanup = props.cleanup;
+    if (props.renderProps)
+      render(this.renderTemplate(props.renderProps), this.win);
+    if (props.relativeElement instanceof HTMLElement)
+      this.win.positionAdjacentToElement(props.relativeElement);
+  }
+}
+
+export const attachWindow = <T>(initialProps: WindowProps<T>) => {
+  return new WindowController(initialProps);
+};
+
+type WinState<S, D> = {
+  unsub?: () => void;
+  called: boolean;
+  controller?: WindowController<D>;
+  open?: (subData: S | null) => void;
+  readonly relative: Element | null;
+  cleanup: () => void;
+};
+
+// export const attachWindowFactory = <Key extends object, D, S = WinState<Key, D>>(setupOpen: (state: S) => (obj: S | null) => void) => {
+//   const factory = new WeakMap<Key, S>();
+//   const get = (key: Key) => {
+//     const state = factory.get(key);
+//     if (state) {
+//       state.called = true;
+//       state.open?.(key)
+//     } else {
+//       const state: S = {
+//         called: true,
+//         cleanup() {
+//           factory.delete(key);
+//           this.unsub?.();
+//           delete this.controller;
+//         },
+//         get relative() {
+//           return this.called ? traverseActiveElements() : null;
+//         },
+//       }
+
+//       state.open = setupOpen(state)
+
+//     }
+//   }
+// }
 
 const windows = new WeakMap<object, SlWindow>();
 
@@ -10,23 +82,28 @@ export type WindowOpenSettings = {
   key: object;
   content: TemplateResult;
   name: SlWindow['name'];
+  img?: string;
   forceFocus?: boolean;
   adjacentEl?: Element | null | false;
+  position?: NanoPopPosition;
 };
 
 export type WindowOpenOptions = Partial<{
   resizable: SlWindow['resizable'];
-  clearContentOnClose: boolean;
   renderOnly: boolean;
 }>;
 
 export const openWindow = (
-  { key, content, name, forceFocus, adjacentEl }: WindowOpenSettings,
   {
-    resizable = ResizeOption.None,
-    clearContentOnClose = false,
-    renderOnly = false,
-  }: WindowOpenOptions = {},
+    key,
+    content,
+    name,
+    forceFocus,
+    adjacentEl,
+    img,
+    position,
+  }: WindowOpenSettings,
+  { resizable = ResizeOption.None, renderOnly = false }: WindowOpenOptions = {},
 ) => {
   let win = windows.get(key);
   const windowExisted = !!win;
@@ -36,8 +113,9 @@ export const openWindow = (
   }
 
   win.name = name;
+  win.img = img;
   win.resizable = resizable;
-  win.clearContentOnClose = clearContentOnClose;
+  if (position) win.relativePosition = position;
   render(content, win);
 
   const wasConnected = win?.isConnected;

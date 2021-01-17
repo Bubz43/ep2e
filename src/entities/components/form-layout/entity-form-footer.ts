@@ -25,7 +25,7 @@ export class EntityFormFooter extends LitElement {
 
   render() {
     return html`
-      ${renderUpdaterForm(this.updater.prop(''), {
+      ${renderUpdaterForm(this.updater.path(''), {
         disabled: !this.updater.editable,
         fields: ({ reference }) => html`
           <label>${reference.label}: ${renderTextInput(reference)}</label>

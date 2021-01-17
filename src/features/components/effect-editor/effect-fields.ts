@@ -174,7 +174,7 @@ const duration: WithAllProps<DurationEffect> = ({
         <span>${formatDurationPercentage(modifier.value)}</span>
         ${renderSlider(modifier, {
           min: -100,
-          max: 200,
+          max: 300,
           step: 25,
           markers: true,
         })}

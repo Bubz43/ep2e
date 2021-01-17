@@ -98,42 +98,7 @@ export class MentalHealthStressEditor extends HealthEditBase<
             ),
           ],
         })}
-        ${renderAutoForm({
-          props: { multiplier: String(this.editableDamage.multiplier) },
-          update: ({ multiplier }) =>
-            (this.editableDamage = {
-              ...this.editableDamage,
-              multiplier: (Number(multiplier) || 1) as RollMultiplier,
-            }),
-          fields: ({ multiplier }) => html`
-            <div class="multiplier">
-              <span>${localize('multiplier')}</span>
-              <div class="radios">
-                ${[0.5, 1, 2]
-                  .map(String)
-                  .map(
-                    (mp) => html`
-                      <mwc-formfield label=${mp}>
-                        <mwc-radio
-                          name=${multiplier.prop}
-                          value=${mp}
-                          ?checked=${mp === multiplier.value}
-                        ></mwc-radio
-                      ></mwc-formfield>
-                    `,
-                  )}
-              </div>
-              ${this.editableDamage.multiplier !== 1
-                ? html`
-                    <span
-                      >${formatDamageType(this.health.type)}
-                      ${this.damageValue}</span
-                    >
-                  `
-                : ''}
-            </div>
-          `,
-        })}
+        ${this.renderMultiplier()}
         ${this.armor
           ? html` <div class="armor-toggles">
               <mwc-button

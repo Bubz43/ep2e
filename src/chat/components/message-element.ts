@@ -24,6 +24,6 @@ export class MessageElement extends LitElement {
   getUpdater<T extends keyof MessageData>(
     key: T,
   ): UpdateActions<MessageData[T]> {
-    return this.message.updater.prop('flags', EP.Name, key);
+    return this.message.updater.path('flags', EP.Name, key);
   }
 }

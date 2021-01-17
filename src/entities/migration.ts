@@ -34,7 +34,7 @@ const migrateActor = (actor: ActorEP) => {
           type: sleeveData.type,
         });
         actor.updater
-          .prop('flags', EP.Name, sleeveData.type)
+          .path('flags', EP.Name, sleeveData.type)
           .store(mergeObject(updatedData, sleeveData, { inplace: false }));
       }
     }
@@ -44,7 +44,7 @@ const migrateActor = (actor: ActorEP) => {
         type: epFlags.psi.type,
       });
       actor.updater
-        .prop('flags', EP.Name, epFlags.psi.type)
+        .path('flags', EP.Name, epFlags.psi.type)
         .store(mergeObject(psi, epFlags.psi, { inplace: false }));
     }
   }

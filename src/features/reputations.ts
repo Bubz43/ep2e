@@ -29,9 +29,15 @@ export type RepData = {
 
 export type EgoRepData = RepData & { track: boolean };
 
-export type FakeIdRepIdentifier = { fakeEgoId: string; repId: string };
+export type FakeIdRepIdentifier = {
+  fakeEgoId: string;
+  repId: string;
+  type: 'fake';
+};
 
-export type RepIdentifier = { networkId: RepNetwork } | FakeIdRepIdentifier;
+export type RepIdentifier =
+  | { networkId: RepNetwork; type: 'ego' }
+  | FakeIdRepIdentifier;
 
 export type RepBase = {
   acronym: string;
@@ -81,7 +87,7 @@ export const maxFavors: ReadonlyMap<ConsumableFavor, number> = new Map([
   [Favor.Major, 1],
 ]);
 
-export const favorFavues = (favor: Favor) => {
+export const favorValues = (favor: Favor) => {
   switch (favor) {
     case Favor.Trivial:
       return {

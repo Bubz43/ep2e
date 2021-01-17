@@ -43,7 +43,7 @@ export class ArmorForm extends ItemFormBase {
   @property({ attribute: false }) item!: Armor;
 
   private readonly effectsOps = addUpdateRemoveFeature(
-    () => this.item.updater.prop('data', 'effects').commit,
+    () => this.item.updater.path('data', 'effects').commit,
   );
 
   private addCreatedEffect(ev: EffectCreatedEvent) {
@@ -62,13 +62,13 @@ export class ArmorForm extends ItemFormBase {
         <entity-form-header
           noDefaultImg
           slot="header"
-          .updateActions=${updater.prop('')}
+          .updateActions=${updater.path('')}
           type=${localize(type)}
           ?disabled=${disabled}
         >
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.prop('data'), {
+        ${renderUpdaterForm(updater.path('data'), {
           disabled,
           slot: 'sidebar',
           fields: ({
@@ -102,13 +102,13 @@ export class ArmorForm extends ItemFormBase {
           slot: 'sidebar',
           update: createPipe(
             changeTraits,
-            updater.prop('data', 'attackTraits').commit,
+            updater.path('data', 'attackTraits').commit,
           ),
           fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
         })}
 
         <div slot="details">
-          ${renderUpdaterForm(updater.prop('data'), {
+          ${renderUpdaterForm(updater.path('data'), {
             disabled,
             classes: complexityForm.cssClass,
             fields: renderComplexityFields,
@@ -119,7 +119,7 @@ export class ArmorForm extends ItemFormBase {
               <sl-header
                 heading="${localize('armor')} ${localize('values')}"
               ></sl-header>
-              ${renderUpdaterForm(updater.prop('data', 'armorValues'), {
+              ${renderUpdaterForm(updater.path('data', 'armorValues'), {
                 disabled,
                 classes: `armor-values-form ${hasActiveState ? '' : 'solo'}`,
                 fields: renderArmorValuesFields,
@@ -132,7 +132,7 @@ export class ArmorForm extends ItemFormBase {
                     <sl-header
                       heading="${localize('when')} ${localize('activated')}"
                     ></sl-header>
-                    ${renderUpdaterForm(updater.prop('data', 'activeArmor'), {
+                    ${renderUpdaterForm(updater.path('data', 'activeArmor'), {
                       disabled,
                       classes: 'armor-values-form',
                       fields: renderArmorValuesFields,
@@ -168,7 +168,7 @@ export class ArmorForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.prop('data', 'description')}
+          .updateActions=${updater.path('data', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>

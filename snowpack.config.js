@@ -1,7 +1,6 @@
 /** @type {import("snowpack").SnowpackUserConfig } */
 module.exports = {
   mount: {
-    public: { url: '/', static: true },
     src: { url: '/dist' },
   },
   plugins: [
@@ -9,12 +8,8 @@ module.exports = {
     '@snowpack/plugin-dotenv',
     '@snowpack/plugin-typescript',
     './snowpack-tagged-scss.js',
-
   ],
-  install: [
-    /* ... */
-  ],
-  installOptions: {
+  packageOptions: {
     rollup: {
       plugins: [
         require('rollup-plugin-livereload')({
@@ -22,20 +17,17 @@ module.exports = {
         }),
       ],
     },
-    /* ... */
   },
   devOptions: {
+    // TODO come back to this later
     // hmr: true,
   },
   buildOptions: {
     clean: true,
-    /* ... */
-  },
-  proxy: {
-    /* ... */
+    // sourcemap: true,
+    watch: true,
   },
   alias: {
     '@src': './src',
   },
-
 };

@@ -1,6 +1,6 @@
 import {
-  formatLabeledFormulas,
   formatArmorUsed,
+  formatLabeledFormulas,
 } from '@src/combat/attack-formatting';
 import type { ThrownWeaponAttack } from '@src/combat/attacks';
 import {
@@ -18,18 +18,18 @@ import {
   ResizeOption,
   SlWindowEventName,
 } from '@src/components/window/window-options';
-import { enumValues, AttackTrait, WeaponSkillOption } from '@src/data-enums';
+import { AttackTrait, enumValues, WeaponSkillOption } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { ItemType } from '@src/entities/entity-types';
 import { renderItemForm } from '@src/entities/item/item-views';
 import type { ThrownWeapon } from '@src/entities/item/proxies/thrown-weapon';
 import { SkillType } from '@src/features/skills';
 import {
-  handleDrop,
   DropType,
+  handleDrop,
   itemDropToItemProxy,
 } from '@src/foundry/drag-and-drop';
-import { notify, NotificationType } from '@src/foundry/foundry-apps';
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
@@ -59,7 +59,7 @@ export class ThrownWeaponForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: ThrownWeapon;
 
-  @internalProperty() skillOption = WeaponSkillOption.None;
+  @internalProperty() private skillOption = WeaponSkillOption.None;
 
   private coatingSheet?: SlWindow | null;
 
@@ -77,7 +77,7 @@ export class ThrownWeaponForm extends ItemFormBase {
     super.disconnectedCallback();
   }
 
-  updated(changedProps: PropertyValues) {
+  updated(changedProps: PropertyValues<this>) {
     if (this.coatingSheet) this.openCoatingSheet();
     super.updated(changedProps);
   }
@@ -141,13 +141,13 @@ export class ThrownWeaponForm extends ItemFormBase {
         <entity-form-header
           noDefaultImg
           slot="header"
-          .updateActions=${updater.prop('')}
+          .updateActions=${updater.path('')}
           type=${localize(type)}
           ?disabled=${disabled}
         >
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.prop('data'), {
+        ${renderUpdaterForm(updater.path('data'), {
           disabled,
           slot: 'sidebar',
           fields: renderGearTraitCheckboxes,
@@ -167,7 +167,7 @@ export class ThrownWeaponForm extends ItemFormBase {
                 update: ({ skillOption, exotic }) => {
                   if (exotic !== undefined) {
                     this.item.updater
-                      .prop('data', 'exoticSkill')
+                      .path('data', 'exoticSkill')
                       .commit(exotic);
                   } else if (skillOption) {
                     this.skillOption = skillOption;
@@ -176,7 +176,7 @@ export class ThrownWeaponForm extends ItemFormBase {
                       !this.item.exoticSkillName
                     ) {
                       this.item.updater
-                        .prop('data', 'exoticSkill')
+                        .path('data', 'exoticSkill')
                         .commit(this.item.name);
                     }
                   }
@@ -201,12 +201,12 @@ export class ThrownWeaponForm extends ItemFormBase {
                   })}
                 `,
               })}
-              ${renderUpdaterForm(updater.prop('data'), {
+              ${renderUpdaterForm(updater.path('data'), {
                 classes: complexityForm.cssClass,
                 disabled,
                 fields: renderComplexityFields,
               })}
-              ${renderUpdaterForm(updater.prop('data'), {
+              ${renderUpdaterForm(updater.path('data'), {
                 disabled,
                 classes: 'quantity-form',
                 fields: ({ quantity, quantityPerCost }) => [
@@ -252,7 +252,7 @@ export class ThrownWeaponForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.prop('data', 'description')}
+          .updateActions=${updater.path('data', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -300,7 +300,7 @@ export class ThrownWeaponForm extends ItemFormBase {
   }
 
   private renderAttackEdit() {
-    const updater = this.item.updater.prop('data', 'primaryAttack');
+    const updater = this.item.updater.path('data', 'primaryAttack');
     const { disabled } = this;
     const { attackTraits } = updater.originalValue();
     const attackTraitsObj = mapToObj(enumValues(AttackTrait), (trait) => [

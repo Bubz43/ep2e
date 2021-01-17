@@ -165,16 +165,16 @@ export class UpdateStore<T extends UpdateStoreData> {
     );
   }
 
-  prop(k1: ''): UpdateStoreActions<T, this>;
+  path(k1: ''): UpdateStoreActions<T, this>;
 
-  prop<K1 extends keyof T>(k1: K1): UpdateStoreActions<T[K1], this>;
+  path<K1 extends keyof T>(k1: K1): UpdateStoreActions<T[K1], this>;
 
-  prop<K1 extends keyof T, K2 extends keyof T[K1]>(
+  path<K1 extends keyof T, K2 extends keyof T[K1]>(
     k1: K1,
     k2: K2,
   ): UpdateStoreActions<T[K1][K2], this>;
 
-  prop<
+  path<
     K1 extends keyof NonNullable<T>,
     K2 extends keyof NonNullable<NonNullable<T>[K1]>,
     K3 extends keyof NonNullable<NonNullable<NonNullable<T>[K1]>[K2]>
@@ -187,7 +187,7 @@ export class UpdateStore<T extends UpdateStoreData> {
     this
   >;
 
-  prop<
+  path<
     K1 extends keyof NonNullable<T>,
     K2 extends keyof NonNullable<NonNullable<T>[K1]>,
     K3 extends keyof NonNullable<NonNullable<NonNullable<T>[K1]>[K2]>,
@@ -204,7 +204,7 @@ export class UpdateStore<T extends UpdateStoreData> {
     this
   >;
 
-  prop<
+  path<
     K1 extends keyof NonNullable<T>,
     K2 extends keyof NonNullable<NonNullable<T>[K1]>,
     K3 extends keyof NonNullable<NonNullable<NonNullable<T>[K1]>[K2]>,
@@ -227,7 +227,7 @@ export class UpdateStore<T extends UpdateStoreData> {
     this
   >;
 
-  prop<
+  path<
     K1 extends keyof NonNullable<T>,
     K2 extends keyof NonNullable<NonNullable<T>[K1]>,
     K3 extends keyof NonNullable<NonNullable<NonNullable<T>[K1]>[K2]>,
@@ -254,7 +254,7 @@ export class UpdateStore<T extends UpdateStoreData> {
     this
   >;
 
-  prop(...keys: string[]) {
+  path(...keys: string[]) {
     const path = keys.join('.');
 
     const savedActions = this.actionCache.get(path);

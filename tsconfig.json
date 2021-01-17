@@ -5,10 +5,11 @@
     "target": "esnext",
     "moduleResolution": "node",
     "jsx": "preserve",
+    "jsxImportSource": "solid-js",
     "baseUrl": "./",
     /* paths - If you configure Snowpack import aliases, add them here. */
     "paths": {
-      "@src/*": ["src/*"],
+      "@src/*": ["src/*"]
     },
     /* noEmit - Snowpack builds (emits) files, not tsc. */
     "noEmit": true,
@@ -23,9 +24,10 @@
     "resolveJsonModule": true,
     "strictNullChecks": true,
     "noImplicitAny": true,
-		"noImplicitReturns": true,
-		"noImplicitThis": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
     "alwaysStrict": true,
+    "isolatedModules": true,
     // "useDefineForClassFields": true,
     "allowSyntheticDefaultImports": true,
     "importsNotUsedAsValues": "error",

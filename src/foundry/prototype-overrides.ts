@@ -239,10 +239,12 @@ TokenHUD.prototype._getStatusEffectChoices = function () {
   });
 };
 
-// const { _render } = ChatLog.prototype;
-// ChatLog.prototype._render = async function (...args) {
-//   setTimeout(() => _render.call(this, ...args), 1500);
-// };
+const { _render } = ChatLog.prototype;
+ChatLog.prototype._render = async function (...args) {
+  if (document.body.classList.contains('ready')) {
+    _render.call(this, ...args);
+  }
+};
 
 Object.defineProperties(Token.prototype, {
   w: {
@@ -417,8 +419,8 @@ PlayerList.prototype.activateListeners = function (jqueryEl: JQuery) {
 
 SceneNavigation.prototype.activateListeners = function (jqueryEl: JQuery) {
   const scenes = jqueryEl.find('.scene');
-  scenes.click(this._onClickScene.bind(this));
-  jqueryEl.find('#nav-toggle').click(this._onToggleNav.bind(this));
+  scenes.on('click', this._onClickScene.bind(this));
+  jqueryEl.find('#nav-toggle').on('click', this._onToggleNav.bind(this));
 
   jqueryEl[0]?.addEventListener('contextmenu', navMenuListener);
 };

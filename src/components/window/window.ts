@@ -1,32 +1,32 @@
-import { throttle, debounce } from '@src/utility/decorators';
+import { localize } from '@src/foundry/localization';
+import { openMenu } from '@src/open-menu';
+import { debounce } from '@src/utility/decorators';
 import {
   assignStyles,
-  leftTop,
   dimensions,
-  px,
-  joinCoor,
-  toggleTouchAction,
-  resizeElement,
   dragElement,
+  joinCoor,
+  leftTop,
+  px,
   repositionIfNeeded,
+  resizeElement,
   resizeObsAvailable,
+  toggleTouchAction,
 } from '@src/utility/dom';
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
+  eventOptions,
+  html,
   LitElement,
   property,
-  html,
   query,
   TemplateResult,
-  eventOptions,
 } from 'lit-element';
-import { render, nothing } from 'lit-html';
-import { reposition } from 'nanopop';
-import { mapToObj, clamp, anyPass } from 'remeda';
+import { NanoPopPosition, reposition } from 'nanopop';
+import { anyPass, clamp, compact, mapToObj } from 'remeda';
 import { ResizeOption, SlWindowEventName } from './window-options';
 import styles from './window.scss';
-import { observer } from '@material/mwc-base/observer.js';
 
 const isButton = (target: EventTarget | null): target is HTMLElement => {
   return (
@@ -121,27 +121,21 @@ export class SlWindow extends LitElement {
   }
 
   @property({ type: Boolean, reflect: true })
-  @observer(function (this: SlWindow, val: boolean) {
-    this.emit(SlWindowEventName.FocusChange);
-  })
   focused = false;
 
   @property({ type: Boolean, reflect: true })
-  @observer(function (this: SlWindow, old: boolean) {
-    this.emit(SlWindowEventName.MinimizeToggled);
-    this.animateMinimize();
-  })
   minimized = false;
 
+  @property({ type: Boolean }) noremove?: boolean;
+
   @property({ type: String })
-  @observer(function (this: SlWindow, name: string) {
-    this.emit(SlWindowEventName.NameChanged);
-  })
   name = 'New Window';
 
-  @property({ type: Boolean }) clearContentOnClose = false;
+  @property({ type: String }) img?: string;
 
   @property({ type: String }) resizable = ResizeOption.None;
+
+  @property({ type: String }) relativePosition: NanoPopPosition = 'bottom';
 
   @query('header') private header!: HTMLElement;
 
@@ -231,17 +225,35 @@ export class SlWindow extends LitElement {
         { duration: 200 },
       ).onfinish = () => {
         this.style.pointerEvents = '';
-        this.remove();
+
         resolve();
         this.closing = false;
         this.emit(SlWindowEventName.Closed);
-        if (this.clearContentOnClose) render(nothing, this);
+        if (!this.noremove) this.remove();
       };
     });
   }
 
   toggleMinimize() {
+    const { offsetWidth, contentContainer } = this;
     this.minimized = !this.minimized;
+    requestAnimationFrame(() => {
+      this.animate(
+        {
+          width: [px(offsetWidth), px(this.offsetWidth)],
+        },
+        { duration: 150 },
+      );
+      if (!this.minimized) {
+        contentContainer.style.overflowX = 'hidden';
+        contentContainer.animate(
+          {
+            opacity: [0, 0, 0.75, 1],
+          },
+          { duration: 350, easing: 'ease-out' },
+        ).onfinish = () => (contentContainer.style.overflowX = '');
+      }
+    });
   }
 
   gainFocus() {
@@ -264,7 +276,9 @@ export class SlWindow extends LitElement {
         });
       };
       requestAnimationFrame(() => {
-        const position = reposition(toEl, this, { position: 'left' });
+        const position = reposition(toEl, this, {
+          position: this.relativePosition,
+        });
         // const { wentRight } = positionRelatively({
         //   toEl,
         //   element: this,
@@ -322,42 +336,16 @@ export class SlWindow extends LitElement {
     };
   }
 
-  private static minimizeAnimationOptions = {
-    duration: 250,
-    easing: 'ease-in-out',
-  };
-
-  @throttle(200, true)
-  private animateMinimize() {
-    const { contentContainer } = this;
-
-    const { minimizeAnimationOptions } = SlWindow;
-    if (this.minimized) {
-      contentContainer.style.display = 'none';
-    } else {
-      if (contentContainer.style.display !== 'none') return;
-      contentContainer.style.display = '';
-      this.gainFocus();
-      contentContainer.animate(
-        { opacity: [0.25, 1] },
-        minimizeAnimationOptions,
-      ).onfinish = () => this.confirmPosition();
-    }
+  private get hasChangedSize() {
+    const { height, width } = this.contentContainer.style;
+    return !!(height || width);
   }
 
-  private resetSize(ev: Event) {
-    if (ev.composedPath().some(isButton)) return;
+  private resetSize() {
+    if (this.hasChangedSize) {
+      assignStyles(this.contentContainer, { height: '', width: '' });
+    }
 
-    if (this.minimized) {
-      this.minimized = false;
-      return;
-    }
-    if (this.resizable !== ResizeOption.None) {
-      const { height, width } = this.contentContainer.style;
-      if (height || width) {
-        assignStyles(this.contentContainer, { height: '', width: '' });
-      }
-    }
     repositionIfNeeded(this);
   }
 
@@ -514,33 +502,76 @@ export class SlWindow extends LitElement {
     }
   }
 
+  @eventOptions({ capture: true })
+  private openMenu(ev: MouseEvent) {
+    ev.preventDefault();
+    openMenu({
+      header: { heading: this.name },
+      content: compact([
+        this.hasChangedSize &&
+          !this.minimized && {
+            label: `${localize('reset')} ${localize('size')}`,
+            callback: () => this.resetSize(),
+            icon: html`<mwc-icon>aspect_ratio</mwc-icon>`,
+          },
+        {
+          label: localize(this.minimized ? 'restore' : 'minimize'),
+          callback: () => this.toggleMinimize(),
+          icon: html`<mwc-icon
+            >${this.minimized ? 'open_in_full' : 'minimize'}</mwc-icon
+          >`,
+        },
+        'divider',
+        {
+          label: localize('close'),
+          callback: () => this.close(),
+          icon: html`<mwc-icon>close</mwc-icon>`,
+        },
+      ]),
+      position: ev,
+    });
+  }
+
   render() {
-    return html`
-      <header
-        id="header"
-        @dblclick=${this.resetSize}
-        @pointerdown=${this.startDrag}
-      >
-        ${this.minimized
-          ? html`<div class="heading">${this.name}</div>`
+    /*
+    const heading = html`<div class="heading">
+      ${this.img ? html`<img height="24px" src=${this.img} />` : ''}
+      <span>${this.name}</span>
+    </div>`;
+   ${this.minimized
+          ? heading
           : html` <slot
               name="header"
               @slotchange=${this.toggleHeaderVisibility}
               @pointerdown=${this.gainFocus}
             >
-              <div class="heading">${this.name}</div>
+              ${heading}
             </slot>`}
-        <slot name="header-button"> </slot>
 
-        <div class="controls">
-          <wl-list-item
+               <!-- <wl-list-item
             class="minimize-button"
             role="button"
             clickable
             @click=${this.toggleMinimize}
           >
             <mwc-icon>${this.minimized ? 'open_in_full' : 'remove'}</mwc-icon>
-          </wl-list-item>
+          </wl-list-item> -->
+    */
+    return html`
+      <header
+        id="header"
+        @dblclick=${this.toggleMinimize}
+        @mousedown=${this.startDrag}
+        @contextmenu=${this.openMenu}
+      >
+        <div class="heading">
+          ${this.img ? html`<img height="24px" src=${this.img} />` : ''}
+          <span>${this.name}</span>
+        </div>
+
+        <slot name="header-button"> </slot>
+
+        <div class="controls">
           <wl-list-item
             class="close-button"
             role="button"
@@ -566,6 +597,8 @@ export class SlWindow extends LitElement {
                 class="resize-handle ${option}-resize"
                 data-resize=${option}
                 @pointerdown=${this.resize}
+                @dblclick=${this.resetSize}
+                @contextmenu=${this.resetSize}
                 ?hidden=${hidden}
               ></div>
               ${option === ResizeOption.Both
@@ -575,6 +608,8 @@ export class SlWindow extends LitElement {
                       class="resize-handle ${option}-resize alt"
                       data-resize=${option}
                       @pointerdown=${this.resize}
+                      @dblclick=${this.resetSize}
+                      @contextmenu=${this.resetSize}
                       ?hidden=${hidden}
                     ></div>
                   `}
