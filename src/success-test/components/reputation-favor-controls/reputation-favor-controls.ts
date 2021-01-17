@@ -82,7 +82,11 @@ export class ReputationFavorControls extends LitElement {
 
   @internalProperty() private test?: ReputationFavor;
 
-  update(changedProps: PropertyValues<this>) {
+  update(
+    changedProps: PropertyValues<
+      this & { entities: { actor: ActorEP; token?: MaybeToken } }
+    >,
+  ) {
     if (changedProps.has('entities')) {
       this.unsub();
       this.subs.add(

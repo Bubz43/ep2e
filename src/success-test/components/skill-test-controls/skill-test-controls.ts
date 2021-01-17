@@ -87,7 +87,11 @@ export class SkillTestControls extends LitElement {
 
   @internalProperty() private test?: SkillTest;
 
-  update(changedProps: PropertyValues<this>) {
+  update(
+    changedProps: PropertyValues<
+      this & { entities: { actor: ActorEP; token?: MaybeToken } }
+    >,
+  ) {
     if (changedProps.has('entities')) {
       this.unsub();
       this.subs.add(

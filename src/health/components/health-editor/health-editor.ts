@@ -119,7 +119,7 @@ export class HealthEditor extends LitElement {
     super.update(changedProps);
   }
 
-  updated(changedProps: PropertyValues<this>) {
+  updated(changedProps: PropertyValues<this & { healthType: HealthType }>) {
     if (changedProps.has('healthType') || changedProps.has('health')) {
       requestAnimationFrame(() => {
         this.renderRoot
