@@ -27,24 +27,26 @@ export type SkillTestInit = {
   action?: Action;
 };
 
+export type SkillState = {
+  skill: Skill;
+  applySpecialization: boolean;
+  aptitudeMultiplier: number;
+  halveBase: boolean;
+  complementarySkill?: Skill | null | undefined;
+  setComplementarySkill: (skill: Skill | null) => void;
+  toggleHalveBase: () => void;
+  cycleAptitudeMultiplier: () => void;
+  replaceSkill: (newSkill: Skill) => void;
+  toggleSpecialization: () => void;
+};
+
 export const skillLinkedAptitudeMultipliers = [0, 1, 2] as const;
 
 export class SkillTest extends SuccessTestBase {
   readonly ego;
   readonly character;
   readonly token;
-  readonly skillState: {
-    skill: Skill;
-    applySpecialization: boolean;
-    aptitudeMultiplier: number;
-    halveBase: boolean;
-    complementarySkill?: Skill | null;
-    setComplementarySkill: (skill: Skill | null) => void;
-    toggleHalveBase: () => void;
-    cycleAptitudeMultiplier: () => void;
-    replaceSkill: (newSkill: Skill) => void;
-    toggleSpecialization: () => void;
-  };
+  readonly skillState: SkillState;
 
   get basePoints() {
     const {

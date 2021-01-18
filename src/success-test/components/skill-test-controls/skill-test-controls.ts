@@ -5,7 +5,7 @@ import { Pool, poolIcon } from '@src/features/pool';
 import {
   complementarySkillBonus,
   FieldSkillType,
-  isFieldSkill
+  isFieldSkill,
 } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
@@ -13,7 +13,7 @@ import { openMenu } from '@src/open-menu';
 import {
   skillLinkedAptitudeMultipliers,
   SkillTest,
-  SkillTestInit
+  SkillTestInit,
 } from '@src/success-test/skill-test';
 import { notEmpty, withSign } from '@src/utility/helpers';
 import {
@@ -21,8 +21,7 @@ import {
   html,
   internalProperty,
   LitElement,
-
-  query
+  query,
 } from 'lit-element';
 import { compact } from 'remeda';
 import type { Subscription } from 'rxjs';
@@ -34,7 +33,7 @@ type Init = {
     actor: ActorEP;
     token?: MaybeToken;
   };
-  getState: (actor: ActorEP) => SkillTestInit;
+  getState: (actor: ActorEP) => SkillTestInit | null;
 };
 
 @customElement('skill-test-controls')
@@ -53,20 +52,21 @@ export class SkillTestControls extends LitElement {
   >();
 
   static openWindow(init: Init) {
-    let win = SkillTestControls.openWindows.get(init.entities.actor);
+    let instance = SkillTestControls.openWindows.get(init.entities.actor);
 
-    if (!win) {
-      win = new SkillTestControls();
-      overlay.append(win);
-      SkillTestControls.openWindows.set(init.entities.actor, win);
+    if (!instance) {
+      instance = new SkillTestControls();
+      overlay.append(instance);
+      SkillTestControls.openWindows.set(init.entities.actor, instance);
     }
     const source = traverseActiveElements();
     if (source instanceof HTMLElement) {
-      requestAnimationFrame(() => win!.win?.positionAdjacentToElement(source));
+      requestAnimationFrame(() =>
+        instance?.win?.positionAdjacentToElement(source),
+      );
     }
-    win.setState(init);
+    instance.setState(init);
   }
-
 
   @query('sl-window')
   private win?: SlWindow;
@@ -166,18 +166,7 @@ export class SkillTestControls extends LitElement {
   }
 
   private renderTest(test: NonNullable<SkillTestControls['test']>) {
-    const { entities } = this;
-    const { character, ego, action, pools, target } = test;
-    const {
-      skill,
-      applySpecialization,
-      aptitudeMultiplier,
-      halveBase,
-      complementarySkill,
-      toggleHalveBase,
-      toggleSpecialization,
-      cycleAptitudeMultiplier,
-    } = test.skillState;
+    const { character, ego, token, action, pools, target, skillState } = test;
     return html`
       ${character
         ? html`
@@ -187,11 +176,8 @@ export class SkillTestControls extends LitElement {
               graphic="medium"
               ?twoline=${!!character.sleeve}
             >
-              <img
-                slot="graphic"
-                src=${entities.token?.data.img ?? character.img}
-              />
-              <span>${entities.token?.data.name ?? character.name} </span>
+              <img slot="graphic" src=${token?.data.img ?? character.img} />
+              <span>${token?.data.name ?? character.name} </span>
               ${character.sleeve
                 ? html`<span slot="secondary"
                     >${formattedSleeveInfo(character.sleeve).join(' - ')}</span
@@ -203,106 +189,13 @@ export class SkillTestControls extends LitElement {
 
       <div class="sections">
         <section class="skill-section">
-          <div class="options">
-            ${(isFieldSkill(skill) &&
-              skill.fieldSkill === FieldSkillType.Know) ||
-            !ego.complementarySkills.length
-              ? ''
-              : html`
-                  <button
-                    title=${localize('complementary')}
-                    @click=${this.openComplementarySkillSelect}
-                  >
-                    <mwc-icon>support</mwc-icon>
-                  </button>
-                `}
-            <button
-              title=${localize('halve')}
-              class=${halveBase ? 'active' : ''}
-              @click=${toggleHalveBase}
-            >
-              <!-- ➗ -->
-              ÷2
-            </button>
-          </div>
           <success-test-section-label
             >${localize('skill')}</success-test-section-label
           >
-          <ul class="skill-state">
-            <wl-list-item clickable @click=${this.openSkillSelect}>
-              <span>
-                <span>${skill.name} ${halveBase ? '÷2' : ''}</span>
-                <span class="category">${localize(skill.category)}</span></span
-              >
-
-              <span slot="after"
-                >${Math.round(skill.points * (halveBase ? 0.5 : 1)) ||
-                html`<span class="defaulting"
-                  >[${localize('defaulting')}]</span
-                >`}</span
-              >
-            </wl-list-item>
-
-            <wl-list-item clickable @click=${cycleAptitudeMultiplier}>
-              <span
-                >${localize('FULL', skill.linkedAptitude)}
-                ${halveBase ? '÷2' : ''}
-                (${Math.round(skill.aptitudePoints * (halveBase ? 0.5 : 1))})
-                <span class="multipliers">
-                  ${skillLinkedAptitudeMultipliers.map(
-                    (mp) =>
-                      html`<span
-                        class=${mp === aptitudeMultiplier ? 'active' : ''}
-                        >x${mp}</span
-                      >`,
-                  )}
-                </span></span
-              >
-              <span slot="after"
-                >${withSign(
-                  Math.round(
-                    skill.aptitudePoints *
-                      aptitudeMultiplier *
-                      (halveBase ? 0.5 : 1),
-                  ),
-                )}</span
-              >
-            </wl-list-item>
-            ${skill.specialization
-              ? html`
-                  <wl-list-item clickable @click=${toggleSpecialization}>
-                    <mwc-checkbox
-                      slot="before"
-                      ?checked=${applySpecialization}
-                    ></mwc-checkbox>
-                    <span>
-                      <span>${skill.specialization}</span>
-                      <span class="category"
-                        >${localize('specialization')}</span
-                      ></span
-                    >
-                    <span slot="after">${withSign(10)}</span>
-                  </wl-list-item>
-                `
-              : ''}
-            ${complementarySkill
-              ? html`
-                  <wl-list-item>
-                    <span class="truncate"
-                      ><span>${complementarySkill.name}</span>
-                      <span class="category"
-                        >${localize('complementary')}</span
-                      ></span
-                    >
-                    <span slot="after"
-                      >${withSign(
-                        complementarySkillBonus(complementarySkill),
-                      )}</span
-                    >
-                  </wl-list-item>
-                `
-              : ''}
-          </ul>
+          <success-test-skill-section
+            .skillState=${skillState}
+            .ego=${ego}
+          ></success-test-skill-section>
         </section>
         <section class="actions">
           <success-test-section-label

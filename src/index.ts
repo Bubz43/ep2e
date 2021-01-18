@@ -164,6 +164,7 @@ import { ReputationFavorControls } from './success-test/components/reputation-fa
 import { UserView } from './entities/components/user-view/user-view';
 import { MessageFavor } from './chat/components/favor/message-favor';
 import { MeleeAttackControls } from './success-test/components/melee-attack-controls/melee-attack-controls';
+import { SuccessTestSkillSection } from './success-test/components/skill-section/success-test-skill-section';
 
 // Generic Components
 Field;
@@ -332,3 +333,4 @@ SuccessTestFooter;
 SkillTestControls;
 ReputationFavorControls;
 MeleeAttackControls;
+SuccessTestSkillSection;

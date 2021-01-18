@@ -2,13 +2,13 @@ import type { MeleeWeapon } from "@src/entities/item/proxies/melee-weapon";
 import { SkillTest, SkillTestInit } from "./skill-test";
 
 export type MeleeAttackTestInit = SkillTestInit & {
-    meleeWeapon?: MeleeWeapon;
+    meleeWeapon: MeleeWeapon;
 }
 
 export class MeleeAttackTest extends SkillTest {
 
     readonly melee: {
-        weapon?: MeleeWeapon
+        weapon: MeleeWeapon
     }
 
     constructor({meleeWeapon, ...init }: MeleeAttackTestInit) {
