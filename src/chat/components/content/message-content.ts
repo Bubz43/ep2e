@@ -63,6 +63,7 @@ export class MessageContent extends LitElement {
         ? html`
             <message-melee-attack
               .meleeAttack=${meleeAttack}
+              .successTest=${successTest}
             ></message-melee-attack>
           `
         : ''}

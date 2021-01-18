@@ -37,16 +37,6 @@ export class ChatMessageEP extends ChatMessage {
     return this.data.flags[EP.Name];
   }
 
-  get successTestInfo() {
-    const test = this.epFlags?.successTest;
-    const result = last(test?.states || [])?.result;
-    
-    return result && test ? {
-      result,
-      superiorEffects: test.superiorResultEffects
-    } : null
-  }
-
   _onUpdate(...args: any[]) {
     //@ts-ignore
     super._onUpdate(...args);

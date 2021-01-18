@@ -1,6 +1,7 @@
 import type {
   DamageMessageData,
   MeleeWeaponMessageData,
+  SuccessTestMessageData,
 } from '@src/chat/message-data';
 import {
   SubstanceApplicationMethod,
@@ -15,7 +16,7 @@ import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { SuccessTestResult } from '@src/success-test/success-test';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property } from 'lit-element';
-import { compact, concat, map, pick, pipe } from 'remeda';
+import { compact, concat, last, map, pick, pipe } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-melee-attack.scss';
 
@@ -31,6 +32,8 @@ export class MessageMeleeAttack extends MessageElement {
 
   @property({ type: Object }) meleeAttack!: MeleeWeaponMessageData;
 
+  @property({ type: Object }) successTest?: SuccessTestMessageData;
+
   get weapon() {
     return new MeleeWeapon({
       data: this.meleeAttack.weapon,
@@ -38,9 +41,21 @@ export class MessageMeleeAttack extends MessageElement {
     });
   }
 
+  get successTestInfo() {
+    const test = this?.successTest;
+    const result = last(test?.states || [])?.result;
+
+    return result && test
+      ? {
+          result,
+          superiorEffects: test.superiorResultEffects,
+        }
+      : null;
+  }
+
   private editSettings() {
     const { weapon, testResult, ...settings } = this.meleeAttack;
-    const { successTestInfo } = this.message;
+    const { successTestInfo } = this;
     MeleeSettingsForm.openWindow({
       initialSettings: {
         ...settings,
@@ -115,8 +130,7 @@ export class MessageMeleeAttack extends MessageElement {
       name,
       hasSecondaryAttack,
     } = this.weapon;
-
-    const { successTestInfo } = this.message;
+    const { disabled, successTestInfo } = this;
 
     const {
       attackType = 'primary',
@@ -129,8 +143,6 @@ export class MessageMeleeAttack extends MessageElement {
       appliedPayload,
       testResult = successTestInfo?.result,
     } = this.meleeAttack;
-
-    const { disabled } = this;
 
     const attack = attacks[attackType] || attacks.primary;
 
