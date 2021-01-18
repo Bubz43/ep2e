@@ -1,10 +1,13 @@
 import { createMessage } from '@src/chat/create-message';
 import { formatArmorUsed } from '@src/combat/attack-formatting';
 import type { AttackType, MeleeWeaponAttack } from '@src/combat/attacks';
+import { ActorType } from '@src/entities/entity-types';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
+import { FieldSkillType, SkillType } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
+import { MeleeAttackControls } from '@src/success-test/components/melee-attack-controls/melee-attack-controls';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { compact, map } from 'remeda';
@@ -32,6 +35,39 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
         meleeAttack: { weapon: this.weapon.getDataCopy(), attackType },
       },
       entity: token || character,
+    });
+  }
+
+  private startAttackTest(attackType: AttackType) {
+    const { token, character } = requestCharacter(this);
+    if (!character) return; // TODO maybe throw error
+    const { weapon: meleeWeapon } = this;
+    MeleeAttackControls.openWindow({
+      entities: { token, actor: character.actor },
+      getState: (actor) => {
+        if (actor.proxy.type === ActorType.Character) {
+          const { ego, weapons } = actor.proxy;
+          const weapon = weapons.melee.find((w) => w.id === meleeWeapon.id);
+          if (weapon) {
+            return {
+              ego,
+              character: actor.proxy,
+              token,
+              skill:
+                (weapon.exoticSkillName &&
+                  ego.findFieldSkill({
+                    fieldSkill: FieldSkillType.Exotic,
+                    field: weapon.exoticSkillName,
+                  })) ||
+                ego.getCommonSkill(SkillType.Melee),
+              meleeWeapon: weapon,
+              primaryAttack:
+                attackType === 'primary'
+            };
+          }
+        }
+        return null;
+      },
     });
   }
 
@@ -76,7 +112,11 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
     ]).join('. ');
     if (!this.weapon.hasSecondaryAttack && !info) return '';
     return html`
-      <wl-list-item clickable @click=${() => this.createMessage(type)}>
+      <wl-list-item
+        clickable
+        @click=${() => this.startAttackTest(type)}
+        @contextmenu=${() => this.createMessage(type)}
+      >
         <div>
           ${this.weapon.hasSecondaryAttack
             ? html` <span class="label">${attack.label}</span> `

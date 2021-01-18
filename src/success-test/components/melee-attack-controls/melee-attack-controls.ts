@@ -1,12 +1,6 @@
 import type { SlWindow } from '@src/components/window/window';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
-import { poolIcon, Pool } from '@src/features/pool';
-import {
-  isFieldSkill,
-  FieldSkillType,
-  complementarySkillBonus,
-} from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
 import { openMenu } from '@src/open-menu';
@@ -14,17 +8,14 @@ import {
   MeleeAttackTest,
   MeleeAttackTestInit,
 } from '@src/success-test/melee-attack-test';
-import { skillLinkedAptitudeMultipliers } from '@src/success-test/skill-test';
-import { withSign, notEmpty } from '@src/utility/helpers';
+import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
-  LitElement,
-  property,
   html,
   internalProperty,
+  LitElement,
   query,
 } from 'lit-element';
-import { compact } from 'remeda';
 import type { Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';
 import styles from './melee-attack-controls.scss';
@@ -53,20 +44,10 @@ export class MeleeAttackControls extends LitElement {
   >();
 
   static openWindow(init: Init) {
-    let instance = MeleeAttackControls.openWindows.get(init.entities.actor);
-
-    if (!instance) {
-      instance = new MeleeAttackControls();
-      overlay.append(instance);
-      MeleeAttackControls.openWindows.set(init.entities.actor, instance);
-    }
-    const source = traverseActiveElements();
-    if (source instanceof HTMLElement) {
-      requestAnimationFrame(() =>
-        instance?.win?.positionAdjacentToElement(source),
-      );
-    }
-    instance.setState(init);
+    (
+      MeleeAttackControls.openWindows.get(init.entities.actor) ||
+      new MeleeAttackControls()
+    ).setState(init);
   }
 
   @query('sl-window')
@@ -108,54 +89,30 @@ export class MeleeAttackControls extends LitElement {
         }
       }),
     );
+    if (!this.isConnected) overlay.append(this);
+    MeleeAttackControls.openWindows.set(init.entities.actor, this);
+    const source = traverseActiveElements();
+    if (source instanceof HTMLElement) {
+      requestAnimationFrame(() => this.win?.positionAdjacentToElement(source));
+    }
   }
 
-  private openSkillSelect() {
-    if (!this.test?.ego) return;
+  private selectWeapon() {
+    if (!this.test) return;
     openMenu({
-      header: { heading: `${localize('select')} ${localize('skill')}` },
-      content: this.test.ego.skills.map((skill) => ({
-        label: skill.fullName,
-        callback: () => this.test?.skillState.replaceSkill(skill),
-        icon: html`<img
-          src=${poolIcon(Pool.linkedToAptitude(skill.linkedAptitude))}
-        />`,
-        activated: skill === this.test?.skillState.skill,
+      header: { heading: `${localize('select')} ${localize('meleeWeapon')}` },
+      content: this.test.character.weapons.melee.map((weapon) => ({
+        label: weapon.name,
+        activated: weapon === this.test?.melee.weapon,
+        callback: () => this.test?.melee.update({ weapon }),
       })),
-    });
-  }
-
-  private openComplementarySkillSelect() {
-    const { complementarySkills } = this.test?.ego ?? {};
-    openMenu({
-      header: {
-        heading: `${localize('select')} ${localize('complementary')} ${localize(
-          'skill',
-        )}`,
-      },
-      content: compact([
-        [
-          {
-            label: localize('clear'),
-            callback: () => this.test?.skillState.setComplementarySkill(null),
-          },
-        ],
-        complementarySkills?.map((skill) => ({
-          label: skill.fullName,
-          callback: () => this.test?.skillState.setComplementarySkill(skill),
-          icon: html`<img
-            src=${poolIcon(Pool.linkedToAptitude(skill.linkedAptitude))}
-          />`,
-          activated: skill === this.test?.skillState.complementarySkill,
-        })),
-      ]).flat(),
     });
   }
 
   render() {
     return html`
       <sl-window
-        name="${localize('successTest')} - ${localize('skillTest')}"
+        name="${localize('meleeAttack')} ${localize('test')}"
         @sl-window-closed=${this.remove}
         noremove
       >
@@ -178,6 +135,8 @@ export class MeleeAttackControls extends LitElement {
       skillState,
     } = test;
 
+    const { weapon, primaryAttack } = melee;
+    const { attacks } = weapon;
     return html`
       ${character
         ? html`
@@ -204,7 +163,26 @@ export class MeleeAttackControls extends LitElement {
             >${localize('attack')}</success-test-section-label
           >
           <ul class="attack-info">
-            <wl-list-item clickable> ${melee.weapon.name} </wl-list-item>
+            <wl-list-item clickable @click=${this.selectWeapon}>
+              ${weapon.name}
+            </wl-list-item>
+            ${attacks.secondary
+              ? html`
+                  <wl-list-item
+                  class="attack-setting"
+                    clickable
+                    @click=${() =>
+                      melee.update({ primaryAttack: !primaryAttack })}
+                  >
+                    <span slot="before" class=${primaryAttack ? 'active' : ''}
+                      >${attacks.primary.label}</span
+                    >
+                    <span slot="after" class=${!primaryAttack ? 'active' : ''}
+                      >${attacks.secondary.label}</span
+                    >
+                  </wl-list-item>
+                `
+              : ''}
           </ul>
         </section>
 

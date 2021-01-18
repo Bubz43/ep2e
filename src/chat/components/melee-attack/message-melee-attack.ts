@@ -36,12 +36,13 @@ export class MessageMeleeAttack extends MessageElement {
   }
 
   private editSettings() {
+    const { weapon, testResult, useSuccessTest, ...settings } = this.meleeAttack
     MeleeSettingsForm.openWindow({
-      initialSettings: this.meleeAttack,
+      initialSettings: {...settings, testResult: this.message.successTestResult || undefined},
       meleeWeapon: this.weapon,
       requireSubmit: true,
       adjacentEl: this,
-      editTestResult: true,
+      editTestResult: !useSuccessTest,
       update: ({ detail }) => this.getUpdater('meleeAttack').commit(detail),
     });
   }
@@ -117,7 +118,7 @@ export class MessageMeleeAttack extends MessageElement {
       extraWeapon,
       appliedCoating,
       appliedPayload,
-      testResult,
+      testResult = this.message.successTestResult,
     } = this.meleeAttack;
 
     const { disabled } = this;

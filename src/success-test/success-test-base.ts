@@ -155,4 +155,8 @@ export abstract class SuccessTestBase {
       modifiers.simple.set(testModifier.id, testModifier);
     }
   }
+
+  protected recipe<T>(cb: (draft: Draft<this>, ...args: T[]) => void) {
+    return (...args: T[]) => this.update((draft) => void cb(draft, ...args));
+  }
 }

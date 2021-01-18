@@ -55,7 +55,7 @@ export class MeleeWeapon
   get fullType() {
     const { wareType, isImprovised } = this;
     return compact([
-      isImprovised && localize('improved'),
+      isImprovised && localize('improvised'),
       wareType && localize(wareType),
       localize(this.type),
     ]).join(' ');

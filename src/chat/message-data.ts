@@ -85,6 +85,7 @@ export type ExplosiveMessageData = ExplosiveSettings & {
 };
 
 export type MeleeWeaponMessageData = MeleeWeaponSettings & {
+  useSuccessTest?: boolean;
   weapon: ItemEntity<ItemType.MeleeWeapon>;
   appliedCoating?: boolean;
   appliedPayload?: boolean;

@@ -223,7 +223,6 @@ export class ReputationFavorControls extends LitElement {
       burnForAdditionalFavor,
       fakeID,
     } = test.favorState;
-    // TODO show total burning
     return html`
       <mwc-list-item
         class="entity"

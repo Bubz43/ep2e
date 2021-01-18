@@ -50,6 +50,7 @@ export class MeleeSettingsForm extends LitElement {
       key: MeleeSettingsForm,
       name: `${props.meleeWeapon.name} ${localize('settings')}`,
       adjacentEl: adjacentEl instanceof HTMLElement ? adjacentEl : null,
+      position: "left-end",
       content: html`
         <melee-settings-form
           .meleeWeapon=${props.meleeWeapon}
@@ -143,13 +144,11 @@ export class MeleeSettingsForm extends LitElement {
           charging,
           extraWeapon,
         }) => [
-          this.editTestResult
-            ? renderSelectField(
+           renderSelectField(
                 testResult,
                 enumValues(SuccessTestResult),
-                emptyTextDash,
-              )
-            : '',
+                {...emptyTextDash, disabled: !this.editTestResult},
+              ),
           this.meleeWeapon.augmentUnarmed ? renderFormulaField(unarmedDV) : '',
           map(
             [touchOnly, aggressive, charging, extraWeapon],

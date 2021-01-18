@@ -52,20 +52,10 @@ export class SkillTestControls extends LitElement {
   >();
 
   static openWindow(init: Init) {
-    let instance = SkillTestControls.openWindows.get(init.entities.actor);
-
-    if (!instance) {
-      instance = new SkillTestControls();
-      overlay.append(instance);
-      SkillTestControls.openWindows.set(init.entities.actor, instance);
-    }
-    const source = traverseActiveElements();
-    if (source instanceof HTMLElement) {
-      requestAnimationFrame(() =>
-        instance?.win?.positionAdjacentToElement(source),
-      );
-    }
-    instance.setState(init);
+    (
+      SkillTestControls.openWindows.get(init.entities.actor) ||
+      new SkillTestControls()
+    ).setState(init);
   }
 
   @query('sl-window')
@@ -107,54 +97,18 @@ export class SkillTestControls extends LitElement {
         }
       }),
     );
-  }
-
-  private openSkillSelect() {
-    if (!this.test?.ego) return;
-    openMenu({
-      header: { heading: `${localize('select')} ${localize('skill')}` },
-      content: this.test.ego.skills.map((skill) => ({
-        label: skill.fullName,
-        callback: () => this.test?.skillState.replaceSkill(skill),
-        icon: html`<img
-          src=${poolIcon(Pool.linkedToAptitude(skill.linkedAptitude))}
-        />`,
-        activated: skill === this.test?.skillState.skill,
-      })),
-    });
-  }
-
-  private openComplementarySkillSelect() {
-    const { complementarySkills } = this.test?.ego ?? {};
-    openMenu({
-      header: {
-        heading: `${localize('select')} ${localize('complementary')} ${localize(
-          'skill',
-        )}`,
-      },
-      content: compact([
-        [
-          {
-            label: localize('clear'),
-            callback: () => this.test?.skillState.setComplementarySkill(null),
-          },
-        ],
-        complementarySkills?.map((skill) => ({
-          label: skill.fullName,
-          callback: () => this.test?.skillState.setComplementarySkill(skill),
-          icon: html`<img
-            src=${poolIcon(Pool.linkedToAptitude(skill.linkedAptitude))}
-          />`,
-          activated: skill === this.test?.skillState.complementarySkill,
-        })),
-      ]).flat(),
-    });
+    if (!this.isConnected) overlay.append(this);
+    SkillTestControls.openWindows.set(init.entities.actor, this);
+    const source = traverseActiveElements();
+    if (source instanceof HTMLElement) {
+      requestAnimationFrame(() => this.win?.positionAdjacentToElement(source));
+    }
   }
 
   render() {
     return html`
       <sl-window
-        name="${localize('successTest')} - ${localize('skillTest')}"
+        name=${localize('skillTest')}
         @sl-window-closed=${this.remove}
         noremove
       >

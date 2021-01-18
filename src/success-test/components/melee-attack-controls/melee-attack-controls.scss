@@ -63,3 +63,11 @@
     background: rgba(black, 0.25);
   }
 }
+
+
+.attack-setting {
+  color: var(--color-text-lighter);
+  .active {
+    color: var(--color-secondary)
+  }
+}

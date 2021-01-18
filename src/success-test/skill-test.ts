@@ -136,7 +136,7 @@ export class SkillTest extends SuccessTestBase {
     );
   }
 
-  private getModifierEffects(skill: Skill, action: Action) {
+  protected getModifierEffects(skill: Skill, action: Action) {
     return new Map(
       (
         this.character?.appliedEffects.getMatchingSuccessTestEffects(
@@ -147,11 +147,11 @@ export class SkillTest extends SuccessTestBase {
     );
   }
 
-  private getLinkedPool(skill: Skill) {
+  protected getLinkedPool(skill: Skill) {
     return Pool.linkedToAptitude(skill.linkedAptitude);
   }
 
-  private getPools(skill: Skill) {
+  protected getPools(skill: Skill) {
     const poolMap = this.character?.pools;
     return compact(
       this.ego.useThreat
@@ -217,6 +217,7 @@ export class SkillTest extends SuccessTestBase {
       ],
       ignoredModifiers: ignoreModifiers ? this.modifierTotal : undefined,
       linkedPool: this.getLinkedPool(skill),
+      defaulting: skill.points === 0,
       task: action.timeframe
         ? {
             name,
