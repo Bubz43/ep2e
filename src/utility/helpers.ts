@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { range } from 'remeda';
 import type { JsonObject, JsonValue, UnionToIntersection } from 'type-fest';
 import type { OmitByValue } from 'utility-types';
 
@@ -83,3 +84,7 @@ export const searchRegExp = (search: string) =>
 export const nonNegative = (val: number) => (val < 0 ? 0 : val);
 
 export const withSign = (val: number) => `${val < 0 ? '' : '+'}${val}`;
+
+export const arrayOf = <T>({ value, length }: { value: T; length: number; }) => {
+  return range(0, length).map(() => value)
+}

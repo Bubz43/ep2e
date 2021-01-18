@@ -85,7 +85,6 @@ export type ExplosiveMessageData = ExplosiveSettings & {
 };
 
 export type MeleeWeaponMessageData = MeleeWeaponSettings & {
-  useSuccessTest?: boolean;
   weapon: ItemEntity<ItemType.MeleeWeapon>;
   appliedCoating?: boolean;
   appliedPayload?: boolean;
@@ -128,7 +127,7 @@ export type SuccessTestMessageData = {
   linkedPool?: Exclude<PoolType, PoolType.Flex | PoolType.Threat>;
   ignoredModifiers?: number;
   superiorResultEffects?: SuperiorResultEffect[];
-
+  defaultSuperiorEffect?: SuperiorResultEffect;
   // TODO  criticalResultEffect?: CriticalResultEffect
   task?: Pick<
     ActiveTaskAction,

@@ -38,11 +38,15 @@ export const isSuccessfullTestResult = createPipe(
 
 export type PreTestPool = [ReadonlyPool, PreTestPoolAction] | null;
 
-export const grantedSuperiorResultEffects = (result: SuccessTestResult) => {
-  return [
-    SuccessTestResult.SuperiorFailureX2,
-    SuccessTestResult.SuperiorSuccessX2,
-  ].includes(result)
+export const grantedSuperiorResultEffects = (
+  result: SuccessTestResult | null | undefined,
+) => {
+  return !result
+    ? 0
+    : [
+        SuccessTestResult.SuperiorFailureX2,
+        SuccessTestResult.SuperiorSuccessX2,
+      ].includes(result)
     ? 2
     : [
         SuccessTestResult.SuperiorSuccess,

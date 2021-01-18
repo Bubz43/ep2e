@@ -1,6 +1,6 @@
 import { createMessage } from '@src/chat/create-message';
 import type { SuccessTestMessageData } from '@src/chat/message-data';
-import { AptitudeType, PoolType } from '@src/data-enums';
+import { AptitudeType, PoolType, SuperiorResultEffect } from '@src/data-enums';
 import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
@@ -14,9 +14,10 @@ import {
 import { matchesAptitude } from '@src/features/effects';
 import { Pool } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
+import { arrayOf } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
-import { compact, map, merge } from 'remeda';
-import { rollSuccessTest } from './success-test';
+import { compact, last, map, merge } from 'remeda';
+import { grantedSuperiorResultEffects, rollSuccessTest } from './success-test';
 import { SuccessTestBase } from './success-test-base';
 
 export type AptitudeCheckInit = {
@@ -152,6 +153,14 @@ export class AptitudeCheck extends SuccessTestBase {
           }
         : undefined,
     };
+
+      if (data.task) {
+        (data.defaultSuperiorEffect = SuperiorResultEffect.Time),
+          (data.superiorResultEffects = arrayOf({
+            value: SuperiorResultEffect.Time,
+            length: grantedSuperiorResultEffects(last(data.states)?.result),
+          }));
+      }
 
     await createMessage({
       data: {

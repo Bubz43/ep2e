@@ -1,6 +1,6 @@
 import { createMessage } from '@src/chat/create-message';
 import type { SuccessTestMessageData } from '@src/chat/message-data';
-import { PoolType } from '@src/data-enums';
+import { PoolType, SuperiorResultEffect } from '@src/data-enums';
 import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
@@ -15,8 +15,13 @@ import { matchesSkill } from '@src/features/effects';
 import { Pool } from '@src/features/pool';
 import { complementarySkillBonus, Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
-import { compact, map } from 'remeda';
-import { rollSuccessTest } from './success-test';
+import { arrayOf } from '@src/utility/helpers';
+import { compact, last, map } from 'remeda';
+import {
+  grantedSuperiorResultEffects,
+  rollSuccessTest,
+  SuccessTestResult,
+} from './success-test';
 import { SuccessTestBase } from './success-test-base';
 
 export type SkillTestInit = {
@@ -163,7 +168,11 @@ export class SkillTest extends SuccessTestBase {
     );
   }
 
-  protected async createMessage() {
+  get name() {
+    return `${this.skillState.skill.name} ${localize('test')}`;
+  }
+
+  protected get testMessageData(): SuccessTestMessageData {
     const {
       ignoreModifiers,
       clampedTarget,
@@ -179,8 +188,6 @@ export class SkillTest extends SuccessTestBase {
       halveBase,
       complementarySkill,
     } = skillState;
-
-    const name = `${skill.name} ${localize('test')}`;
 
     const data: SuccessTestMessageData = {
       parts: compact([
@@ -220,7 +227,7 @@ export class SkillTest extends SuccessTestBase {
       defaulting: skill.points === 0,
       task: action.timeframe
         ? {
-            name,
+            name: this.name,
             timeframe: action.timeframe,
             actionSubtype: action.subtype,
             modifiers: [actionTimeframeModifier(action)].flatMap((p) =>
@@ -229,11 +236,23 @@ export class SkillTest extends SuccessTestBase {
           }
         : undefined,
     };
+    if (data.task) {
+      (data.defaultSuperiorEffect = SuperiorResultEffect.Time),
+        (data.superiorResultEffects = arrayOf({
+          value: SuperiorResultEffect.Time,
+          length: grantedSuperiorResultEffects(last(data.states)?.result),
+        }));
+    }
+    return data;
+  }
+
+  protected async createMessage() {
+    const { settings, pools, action } = this;
 
     await createMessage({
       data: {
         header: {
-          heading: name,
+          heading: this.name,
           subheadings: [
             `${action.type} ${
               action.timeMod && action.type !== ActionType.Task
@@ -244,7 +263,7 @@ export class SkillTest extends SuccessTestBase {
             localize('action'),
           ].join(' '),
         },
-        successTest: data,
+        successTest: this.testMessageData,
       },
       entity: this.token ?? this.character, // TODO account for item sources,
       visibility: settings.visibility,

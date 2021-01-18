@@ -21,6 +21,7 @@ import {
   SuccessTestResult,
   superiorEffectCounts,
 } from '@src/success-test/success-test';
+import { arrayOf } from '@src/utility/helpers';
 import {
   customElement,
   eventOptions,
@@ -96,6 +97,17 @@ export class MessageSuccessTest extends MessageElement {
     );
   }
 
+  private getSuperiorEffects(result: SuccessTestResult) {
+    const grantedSuperiorEffects = grantedSuperiorResultEffects(result);
+    const { superiorResultEffects, defaultSuperiorEffect } = this.successTest;
+    return defaultSuperiorEffect
+      ? arrayOf({
+          value: defaultSuperiorEffect,
+          length: grantedSuperiorEffects,
+        })
+      : superiorResultEffects?.slice(0, grantedSuperiorEffects);
+  }
+
   private updateRoll() {
     const roll = this.setRoll ?? 50;
     const target = this.currentState?.target ?? this.partTotal;
@@ -110,14 +122,10 @@ export class MessageSuccessTest extends MessageElement {
       result,
       action: 'edit',
     });
-    const grantedSuperiorEffects = grantedSuperiorResultEffects(result);
 
     this.getUpdater('successTest').commit({
       states: steps,
-      superiorResultEffects: this.successTest.superiorResultEffects?.slice(
-        0,
-        grantedSuperiorEffects,
-      ),
+      superiorResultEffects: this.getSuperiorEffects(result),
     });
   }
 
@@ -535,18 +543,14 @@ export class MessageSuccessTest extends MessageElement {
                     @click=${() => {
                       const preview = this.previewPoolAction(action);
                       if (preview) {
-                        const grantedSuperiorEffects = grantedSuperiorResultEffects(
-                          preview.result,
-                        );
                         this.getUpdater('successTest').commit({
                           states: this.successTest.states.concat({
                             ...preview,
                             target: this.currentState?.target ?? this.partTotal,
                             action: [pool.type, action],
                           }),
-                          superiorResultEffects: this.successTest.superiorResultEffects?.slice(
-                            0,
-                            grantedSuperiorEffects,
+                          superiorResultEffects: this.getSuperiorEffects(
+                            preview.result,
                           ),
                         });
                       }

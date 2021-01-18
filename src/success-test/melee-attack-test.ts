@@ -1,18 +1,19 @@
 import { createMessage } from '@src/chat/create-message';
 import type { SuccessTestMessageData } from '@src/chat/message-data';
 import type { AttackType } from '@src/combat/attacks';
-import type { WeaponAttackType } from '@src/data-enums';
+import { SuperiorResultEffect, WeaponAttackType } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import type { MeleeWeaponSettings } from '@src/entities/weapon-settings';
 import { actionTimeframeModifier, ActionType } from '@src/features/actions';
 import { complementarySkillBonus } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
+import { arrayOf } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
-import { compact, createPipe, merge, pick } from 'remeda';
+import { compact, createPipe, last, merge, pick } from 'remeda';
 import type { SetRequired } from 'type-fest';
 import { SkillTest, SkillTestInit } from './skill-test';
-import { rollSuccessTest } from './success-test';
+import { grantedSuperiorResultEffects, rollSuccessTest } from './success-test';
 
 export type MeleeAttackTestInit = SetRequired<SkillTestInit, 'character'> & {
   meleeWeapon: MeleeWeapon;
@@ -43,80 +44,14 @@ export class MeleeAttackTest extends SkillTest {
   }
 
   protected async createMessage() {
-    const {
-      ignoreModifiers,
-      clampedTarget,
-      skillState,
-      settings,
-      pools,
-      action,
-      melee,
-    } = this;
-    const {
-      skill,
-      applySpecialization,
-      aptitudeMultiplier,
-      halveBase,
-      complementarySkill,
-    } = skillState;
+    const { settings, pools, action, melee, testMessageData } = this;
 
     const { weapon, primaryAttack, ...meleeSettings } = melee;
-
-    const name = `${skill.name} ${localize('test')}`;
-
-    const data: SuccessTestMessageData = {
-      parts: compact([
-        {
-          name: `${skillState.skill.name} ${halveBase ? '÷2' : ''}`,
-          value: skillState.skill.points,
-        },
-        {
-          name: `${localize(skill.linkedAptitude)} ${
-            halveBase ? `(÷2)` : ''
-          } x${aptitudeMultiplier}`,
-          value: skill.aptitudePoints * aptitudeMultiplier,
-        },
-        applySpecialization && {
-          name: `[${localize('specialization')}] ${skill.specialization}`,
-          value: 10,
-        },
-        complementarySkill && {
-          name: `[${localize('complementary')}] ${complementarySkill.name}`,
-          value: complementarySkillBonus(complementarySkill),
-        },
-        ...(ignoreModifiers ? [] : this.modifiersAsParts),
-      ]),
-      states: [
-        {
-          target: clampedTarget,
-          ...(settings.autoRoll
-            ? rollSuccessTest({ target: clampedTarget })
-            : {}),
-          action: pools.active
-            ? [pools.active[0].type, pools.active[1]]
-            : 'initial',
-        },
-      ],
-      ignoredModifiers: ignoreModifiers ? this.modifierTotal : undefined,
-      linkedPool: this.getLinkedPool(skill),
-      defaulting: skill.points === 0,
-
-      task: action.timeframe
-        ? {
-            name,
-            timeframe: action.timeframe,
-            actionSubtype: action.subtype,
-            modifiers: [actionTimeframeModifier(action)].flatMap((p) =>
-              p.modifier ? { ...p, modifier: p.modifier * 100 } : [],
-            ),
-          }
-        : undefined,
-    };
 
     await createMessage({
       data: {
         header: {
-          heading: name,
+          heading: this.name,
           subheadings: [
             `${action.type} ${
               action.timeMod && action.type !== ActionType.Task
@@ -127,11 +62,17 @@ export class MeleeAttackTest extends SkillTest {
             localize('action'),
           ].join(' '),
         },
-        successTest: data,
+        successTest: {
+          ...testMessageData,
+          superiorResultEffects: arrayOf({
+            value: SuperiorResultEffect.Damage,
+            length: grantedSuperiorResultEffects(last(testMessageData.states)?.result),
+          }),
+          defaultSuperiorEffect: SuperiorResultEffect.Damage,
+        },
         meleeAttack: {
           weapon: weapon.getDataCopy(),
           attackType: primaryAttack ? 'primary' : 'secondary',
-          useSuccessTest: true,
           ...pick(meleeSettings, [
             'aggressive',
             'charging',

@@ -1,6 +1,6 @@
 import { createMessage } from '@src/chat/create-message';
 import type { SuccessTestMessageData } from '@src/chat/message-data';
-import { PoolType } from '@src/data-enums';
+import { PoolType, SuperiorResultEffect } from '@src/data-enums';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
 import type { PhysicalService } from '@src/entities/item/proxies/physical-service';
@@ -21,10 +21,11 @@ import {
   maxFavors,
 } from '@src/features/reputations';
 import { localize } from '@src/foundry/localization';
+import { arrayOf } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
 import produce from 'immer';
-import { compact, map, merge } from 'remeda';
-import { createSuccessTestModifier, rollSuccessTest } from './success-test';
+import { compact, last, map, merge } from 'remeda';
+import { createSuccessTestModifier, grantedSuperiorResultEffects, rollSuccessTest } from './success-test';
 import { SuccessTestBase } from './success-test-base';
 
 export type ReputationFavorInit = {
@@ -220,6 +221,14 @@ export class ReputationFavor extends SuccessTestBase {
           }
         : undefined,
     };
+
+     if (data.task) {
+       (data.defaultSuperiorEffect = SuperiorResultEffect.Time),
+         (data.superiorResultEffects = arrayOf({
+           value: SuperiorResultEffect.Time,
+           length: grantedSuperiorResultEffects(last(data.states)?.result),
+         }));
+     }
 
     await createMessage({
       data: {

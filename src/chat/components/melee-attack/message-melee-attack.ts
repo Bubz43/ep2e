@@ -2,7 +2,10 @@ import type {
   DamageMessageData,
   MeleeWeaponMessageData,
 } from '@src/chat/message-data';
-import { SubstanceApplicationMethod } from '@src/data-enums';
+import {
+  SubstanceApplicationMethod,
+  SuperiorResultEffect,
+} from '@src/data-enums';
 import { ExplosiveSettingsForm } from '@src/entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
 import { MeleeSettingsForm } from '@src/entities/actor/components/character-views/components/attacks/melee-settings/melee-settings-form';
 import { ItemType } from '@src/entities/entity-types';
@@ -36,13 +39,17 @@ export class MessageMeleeAttack extends MessageElement {
   }
 
   private editSettings() {
-    const { weapon, testResult, useSuccessTest, ...settings } = this.meleeAttack
+    const { weapon, testResult, ...settings } = this.meleeAttack;
+    const { successTestInfo } = this.message;
     MeleeSettingsForm.openWindow({
-      initialSettings: {...settings, testResult: this.message.successTestResult || undefined},
+      initialSettings: {
+        ...settings,
+        testResult: successTestInfo?.result || testResult || undefined,
+      },
       meleeWeapon: this.weapon,
       requireSubmit: true,
       adjacentEl: this,
-      editTestResult: !useSuccessTest,
+      editTestResult: !!successTestInfo,
       update: ({ detail }) => this.getUpdater('meleeAttack').commit(detail),
     });
   }
@@ -109,6 +116,8 @@ export class MessageMeleeAttack extends MessageElement {
       hasSecondaryAttack,
     } = this.weapon;
 
+    const { successTestInfo } = this.message;
+
     const {
       attackType = 'primary',
       unarmedDV,
@@ -118,7 +127,7 @@ export class MessageMeleeAttack extends MessageElement {
       extraWeapon,
       appliedCoating,
       appliedPayload,
-      testResult = this.message.successTestResult,
+      testResult = successTestInfo?.result,
     } = this.meleeAttack;
 
     const { disabled } = this;
@@ -141,14 +150,22 @@ export class MessageMeleeAttack extends MessageElement {
             attack.rollFormulas,
             concat(
               compact([
-                testResult === SuccessTestResult.SuperiorSuccess && {
-                  label: localize(testResult),
-                  formula: '+1d6',
-                },
-                testResult === SuccessTestResult.SuperiorSuccessX2 && {
-                  label: localize(testResult),
-                  formula: '+2d6',
-                },
+                testResult === SuccessTestResult.SuperiorSuccess &&
+                  (!successTestInfo ||
+                    (successTestInfo.superiorEffects?.filter(
+                      (e) => e === SuperiorResultEffect.Damage,
+                    ).length || 0) >= 1) && {
+                    label: localize(testResult),
+                    formula: '+1d6',
+                  },
+                testResult === SuccessTestResult.SuperiorSuccessX2 &&
+                  (!successTestInfo ||
+                    (successTestInfo.superiorEffects?.filter(
+                      (e) => e === SuperiorResultEffect.Damage,
+                    ).length || 0) >= 2) && {
+                    label: localize(testResult),
+                    formula: '+2d6',
+                  },
                 augmentUnarmed && {
                   label: localize('unarmedDV'),
                   formula: unarmedDV || '0',
