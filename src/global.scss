@@ -7,7 +7,6 @@
 @use "scss/fields";
 @use "scss/form-buttons";
 @use "scss/app-windows";
-@use "scss/controls";
 @use "scss/players";
 
 @include styled-scrollbars;
@@ -639,4 +638,129 @@ sl-tooltip {
       }
     }
   }
+}
+
+#controls {
+  position: relative;
+  flex-flow: column;
+  padding: 0;
+  margin: 0;
+  top: 75px;
+  left: -1rem;
+  pointer-events: none;
+  align-items: flex-start;
+  z-index: 20;
+  border-radius: 0;
+
+  li {
+    pointer-events: initial;
+  }
+
+  .scene-control,
+  .control-tool {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    width: unset;
+    height: unset;
+    border-radius: 0px;
+    line-height: unset;
+    margin: 0;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    box-sizing: border-box;
+    color: var(--color-text-lighter);
+    &.active,
+    &:hover {
+      border: none;
+      box-shadow: none;
+    }
+    i {
+      text-shadow: 1px 1px 2px var(--color-bg);
+    }
+  }
+
+  .scene-control {
+    width: 2.5rem;
+    padding: 0.25rem 0;
+    font-size: 1.45rem;
+    background: alphav(var(--color-bg-alt), 0.75);
+    position: relative;
+    border-left: 1px solid transparent !important;
+    &.active {
+    border-left: 1px solid var(--color-text) !important;
+    }
+
+    &:first-child {
+      border-top-right-radius: 0.25rem;
+      &.active {
+        .control-tools {
+          transform: translateY(-0.75rem);
+        }
+      }
+    }
+    &:last-child {
+      border-bottom-right-radius: 0.25rem;
+      &.active {
+        .control-tools {
+          transform: translateY(-1.25rem);
+        }
+      }
+    }
+
+    &.active {
+      .control-tools {
+        top: 50%;
+        transform: translateY(-50%);
+        display: grid;
+      }
+    }
+
+    .control-tools {
+      border-radius: 0 0.5rem 0.5rem 0;
+      left: 2.39rem;
+      padding: 0.25rem;
+      column-count: 4;
+      pointer-events: none;
+      gap: 0.1rem;
+      grid-template-columns: repeat(auto-fill, 2.25rem);
+      width: 10rem;
+      background: alphav(var(--color-bg), 0.5);
+    }
+
+    .control-tool {
+      display: grid;
+      place-items: center;
+      width: 2.25rem;
+      height: 2.25rem;
+      margin: 0;
+      font-size: 1.25rem;
+      border-left: 1px solid transparent !important;
+      border-radius: 3px ;
+      &:not(.toggle).active {
+        outline: 3px double var(--color-grey);
+        outline-offset: -4px;
+      }
+      &.toggle {
+        box-shadow: none;
+        border: none;
+        background: alphav(var(--color-primary), 0.5);
+        outline-offset: -1px;
+        outline: 1px solid var(--color-primary-alt);
+        &.active {
+          // background: alphav(var(--color-secondary), 0.75);
+          i {
+            transform: scale(1.5);
+          }
+        }
+      }
+
+      &[data-tool='clear'] {
+        background-color: alphav(var(--color-negative), 0.8);
+         outline-offset: -1px;
+        outline: 1px solid var(--color-negative);
+      }
+    }
+  }
+
 }
