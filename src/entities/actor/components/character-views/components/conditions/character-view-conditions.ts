@@ -73,7 +73,7 @@ export class CharacterViewConditions extends UseWorldTime(LitElement) {
                     <ul>
                       ${list.map(
                         (timeState) => html`
-                          <wl-list-item>
+                          <wl-list-item class="condition-source">
                             <span slot="before">${timeState.label}</span>
                             <span
                               >${timeState.completed

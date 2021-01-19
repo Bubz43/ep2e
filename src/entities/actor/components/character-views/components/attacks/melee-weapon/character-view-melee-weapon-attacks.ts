@@ -1,16 +1,17 @@
 import { createMessage } from '@src/chat/create-message';
+import type { DamageMessageData } from '@src/chat/message-data';
 import { formatArmorUsed } from '@src/combat/attack-formatting';
 import type { AttackType, MeleeWeaponAttack } from '@src/combat/attacks';
 import { ActorType } from '@src/entities/entity-types';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import { FieldSkillType, SkillType } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
-import { joinLabeledFormulas } from '@src/foundry/rolls';
+import { joinLabeledFormulas, rollLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
 import { MeleeAttackControls } from '@src/success-test/components/melee-attack-controls/melee-attack-controls';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
-import { compact, map } from 'remeda';
+import { compact, map, pick, pipe } from 'remeda';
 import { requestCharacter } from '../../../character-request-event';
 import styles from './character-view-melee-weapon-attacks.scss';
 
@@ -28,11 +29,39 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
 
   private async createMessage(attackType: AttackType) {
     const { token, character } = requestCharacter(this);
+    const { attacks, name, hasSecondaryAttack, augmentUnarmed } = this.weapon;
+    const unarmed =
+      character?.sleeve && character.sleeve.type !== ActorType.Infomorph
+        ? character.sleeve.unarmedDV
+        : null;
+    const attack = attacks[attackType] || attacks.primary;
 
+    const damage: DamageMessageData = {
+      ...pick(attack, [
+        'armorPiercing',
+        'armorUsed',
+        'damageType',
+        'notes',
+        'reduceAVbyDV',
+      ]),
+      source: `${name} ${hasSecondaryAttack ? `[${attack.label}]` : ''}`,
+      rolledFormulas: pipe(
+        [
+          augmentUnarmed && {
+            label: localize('unarmedDV'),
+            formula: unarmed || '0',
+          },
+          ...attack.rollFormulas,
+        ],
+        compact,
+        rollLabeledFormulas,
+      ),
+    };
     createMessage({
       data: {
         header: this.weapon.messageHeader,
         meleeAttack: { weapon: this.weapon.getDataCopy(), attackType },
+        damage,
       },
       entity: token || character,
     });
@@ -61,8 +90,7 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
                   })) ||
                 ego.getCommonSkill(SkillType.Melee),
               meleeWeapon: weapon,
-              primaryAttack:
-                attackType === 'primary'
+              primaryAttack: attackType === 'primary',
             };
           }
         }

@@ -57,17 +57,12 @@ export class MessageMeleeAttack extends MessageElement {
   }
 
   private editSettings() {
-    const { weapon, testResult, ...settings } = this.meleeAttack;
-    const { successTestInfo } = this;
+    const { weapon, ...settings } = this.meleeAttack;
     MeleeSettingsForm.openWindow({
-      initialSettings: {
-        ...settings,
-        testResult: successTestInfo?.result || testResult || undefined,
-      },
+      initialSettings: settings,
       meleeWeapon: this.weapon,
       requireSubmit: true,
       adjacentEl: this,
-      editTestResult: !successTestInfo,
       update: ({ detail }) => this.getUpdater('meleeAttack').commit(detail),
     });
   }
@@ -124,29 +119,19 @@ export class MessageMeleeAttack extends MessageElement {
     });
   }
 
-  render() {
-    const {
-      attacks,
-      coating,
-      payload,
-      augmentUnarmed,
-      name,
-      hasSecondaryAttack,
-    } = this.weapon;
-    const { disabled, successTestInfo } = this;
+  private createDamageMessage() {
+    const { message, successTestInfo } = this;
+    if (!successTestInfo) return;
 
+    const { attacks, augmentUnarmed, name, hasSecondaryAttack } = this.weapon;
+    const { result: testResult } = successTestInfo;
     const {
       attackType = 'primary',
       unarmedDV,
-      touchOnly,
       aggressive,
       charging,
       extraWeapon,
-      appliedCoating,
-      appliedPayload,
-      testResult = successTestInfo?.result,
     } = this.meleeAttack;
-
     const attack = attacks[attackType] || attacks.primary;
 
     const superiorDamage =
@@ -154,51 +139,66 @@ export class MessageMeleeAttack extends MessageElement {
         (e) => e === SuperiorResultEffect.Damage,
       ) || [];
 
-    const damage: DamageMessageData | null = touchOnly
-      ? null
-      : {
-          ...pick(attack, [
-            'armorPiercing',
-            'armorUsed',
-            'damageType',
-            'notes',
-            'reduceAVbyDV',
-          ]),
-          source: `${name} ${hasSecondaryAttack ? `[${attack.label}]` : ''}`,
-          multiplier: testResult === SuccessTestResult.CriticalSuccess ? 2 : 1,
-          rolledFormulas: pipe(
-            attack.rollFormulas,
-            concat(
-              compact([
-                // TODO apply these better
-                testResult === SuccessTestResult.SuperiorSuccess &&
-                  (!successTestInfo || superiorDamage.length >= 1) && {
-                    label: localize(testResult),
-                    formula: '+1d6',
-                  },
-                testResult === SuccessTestResult.SuperiorSuccessX2 &&
-                  (!successTestInfo || superiorDamage.length >= 1) && {
-                    label: localize(testResult),
-                    formula: successTestInfo ? `+${superiorDamage.length}d6`:  '+2d6',
-                  },
-                augmentUnarmed && {
-                  label: localize('unarmedDV'),
-                  formula: unarmedDV || '0',
-                },
-                aggressive && {
-                  label: localize('aggressive'),
-                  formula: '+1d10',
-                },
-                charging && { label: localize('charging'), formula: '+1d6' },
-                extraWeapon && {
-                  label: localize('extraWeapon'),
+    message.createSimilar({
+      damage: {
+        ...pick(attack, [
+          'armorPiercing',
+          'armorUsed',
+          'damageType',
+          'notes',
+          'reduceAVbyDV',
+        ]),
+        source: `${name} ${hasSecondaryAttack ? `[${attack.label}]` : ''}`,
+        multiplier: testResult === SuccessTestResult.CriticalSuccess ? 2 : 1,
+        rolledFormulas: pipe(
+          attack.rollFormulas,
+          concat(
+            compact([
+              testResult === SuccessTestResult.SuperiorSuccess &&
+                superiorDamage.length >= 1 && {
+                  label: localize(testResult),
                   formula: '+1d6',
                 },
-              ]),
-            ),
-            rollLabeledFormulas,
+              testResult === SuccessTestResult.SuperiorSuccessX2 &&
+                superiorDamage.length >= 1 && {
+                  label: localize(testResult),
+                  formula: successTestInfo
+                    ? `+${superiorDamage.length}d6`
+                    : '+2d6',
+                },
+              augmentUnarmed && {
+                label: localize('unarmedDV'),
+                formula: unarmedDV || '0',
+              },
+              aggressive && {
+                label: localize('aggressive'),
+                formula: '+1d10',
+              },
+              charging && { label: localize('charging'), formula: '+1d6' },
+              extraWeapon && {
+                label: localize('extraWeapon'),
+                formula: '+1d6',
+              },
+            ]),
           ),
-        };
+          rollLabeledFormulas,
+        ),
+      },
+    });
+  }
+
+  render() {
+    const { attacks, coating, payload, hasSecondaryAttack } = this.weapon;
+    const { disabled } = this;
+
+    const {
+      attackType = 'primary',
+      touchOnly,
+      appliedCoating,
+      appliedPayload,
+    } = this.meleeAttack;
+
+    const attack = attacks[attackType] || attacks.primary;
 
     const options = ([
       'touchOnly',
@@ -207,12 +207,10 @@ export class MessageMeleeAttack extends MessageElement {
       'extraWeapon',
     ] as const).filter((key) => this.meleeAttack[key]);
 
-    const showTestResult = !this.successTest || !!testResult;
-    // TODO edit settings
     return html`
       <div class="settings">
         ${hasSecondaryAttack ? attack.label : ''}
-        ${disabled
+        ${disabled || !this.successTest
           ? ''
           : html`
               <mwc-icon-button
@@ -222,22 +220,21 @@ export class MessageMeleeAttack extends MessageElement {
               ></mwc-icon-button>
             `}
       </div>
-      ${notEmpty(options) || showTestResult
-        ? html`
-            <p class="options">
-              ${map(
-                compact([!this.successTest && testResult, ...options]),
-                localize,
-              ).join('  •  ')}
-            </p>
-          `
-        : ''}
 
-        ${touchOnly && !disabled ? "" : html`
-        <mwc-button outlined dense class="roll-damage">${localize("roll")} ${localize("damage")}</mwc-button>
-        `}
-  
-  
+      ${notEmpty(options)
+        ? html` <p class="options">${map(options, localize).join('  •  ')}</p> `
+        : ''}
+      ${(touchOnly && !disabled) || !this.successTest
+        ? ''
+        : html`
+            <mwc-button
+              outlined
+              dense
+              class="roll-damage"
+              @click=${this.createDamageMessage}
+              >${localize('roll')} ${localize('damage')}</mwc-button
+            >
+          `}
       ${notEmpty(attack.attackTraits)
         ? html`
             <message-attack-traits

@@ -4,7 +4,12 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import type { MeleeWeaponSettings } from '@src/entities/weapon-settings';
-import { Action, ActionType } from '@src/features/actions';
+import {
+  Action,
+  ActionSubtype,
+  ActionType,
+  createAction,
+} from '@src/features/actions';
 import { matchesSkill, Source } from '@src/features/effects';
 import type { Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
@@ -32,7 +37,15 @@ export class MeleeAttackTest extends SkillTest {
   readonly character: Character;
 
   constructor({ meleeWeapon, primaryAttack, ...init }: MeleeAttackTestInit) {
-    super(init);
+    super({
+      ...init,
+      action:
+        init.action ??
+        createAction({
+          type: ActionType.Complex,
+          subtype: ActionSubtype.Physical,
+        }),
+    });
     this.character = init.character;
     this.melee = {
       weapon: meleeWeapon,
@@ -60,13 +73,13 @@ export class MeleeAttackTest extends SkillTest {
     };
 
     if (this.melee.attackTarget) {
-        for (const [effect, active] of this.getAttackTargetEffects(
-          this.melee.attackTarget as Token,
-          this.skillState.skill,
-          this.action,
-        ) || []) {
-          this.modifiers.effects.set(effect, active);
-        }
+      for (const [effect, active] of this.getAttackTargetEffects(
+        this.melee.attackTarget as Token,
+        this.skillState.skill,
+        this.action,
+      ) || []) {
+        this.modifiers.effects.set(effect, active);
+      }
     }
   }
 
@@ -79,10 +92,12 @@ export class MeleeAttackTest extends SkillTest {
     return new Map(
       target.actor.proxy.appliedEffects
         .getMatchingSuccessTestEffects(matchesSkill(skill)(action), true)
-        .map((effect) => [{...effect, [Source]: `{${target.name}} ${effect[Source]}`}, !effect.requirement]),
+        .map((effect) => [
+          { ...effect, [Source]: `{${target.name}} ${effect[Source]}` },
+          !effect.requirement,
+        ]),
     );
   }
-
 
   protected async createMessage() {
     const { settings, pools, action, melee, testMessageData } = this;

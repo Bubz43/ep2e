@@ -39,7 +39,7 @@ export class MeleeSettingsForm extends LitElement {
   static openWindow(
     props: Pick<
       MeleeSettingsForm,
-      'meleeWeapon' | 'requireSubmit' | 'initialSettings' | 'editTestResult'
+      'meleeWeapon' | 'requireSubmit' | 'initialSettings'
     > & {
       update: (newSettings: CustomEvent<MeleeWeaponSettings>) => void;
       adjacentEl?: HTMLElement;
@@ -50,13 +50,12 @@ export class MeleeSettingsForm extends LitElement {
       key: MeleeSettingsForm,
       name: `${props.meleeWeapon.name} ${localize('settings')}`,
       adjacentEl: adjacentEl instanceof HTMLElement ? adjacentEl : null,
-      position: "left-end",
+      position: 'left-end',
       content: html`
         <melee-settings-form
           .meleeWeapon=${props.meleeWeapon}
           ?requireSubmit=${props.requireSubmit}
           .initialSettings=${props.initialSettings}
-          ?editTestResult=${props.editTestResult}
           @melee-settings=${(ev: CustomEvent<MeleeWeaponSettings>) => {
             props.update(ev);
             closeWindow(MeleeSettingsForm);
@@ -71,8 +70,6 @@ export class MeleeSettingsForm extends LitElement {
   @property({ type: Boolean }) requireSubmit = false;
 
   @property({ type: Object }) initialSettings?: Partial<MeleeWeaponSettings>;
-
-  @property({ type: Boolean }) editTestResult = false;
 
   @internalProperty() private settings: MeleeWeaponSettings = {};
 
@@ -119,7 +116,6 @@ export class MeleeSettingsForm extends LitElement {
       aggressive = false,
       charging = false,
       extraWeapon = false,
-      testResult = SuccessTestResult.Success,
     } = this.settings;
     return {
       unarmedDV,
@@ -127,7 +123,6 @@ export class MeleeSettingsForm extends LitElement {
       aggressive,
       charging,
       extraWeapon,
-      testResult,
     };
   }
 
@@ -137,18 +132,12 @@ export class MeleeSettingsForm extends LitElement {
         props: this.formProps,
         update: this.updateSettings,
         fields: ({
-          testResult,
           unarmedDV,
           touchOnly,
           aggressive,
           charging,
           extraWeapon,
         }) => [
-           renderSelectField(
-                testResult,
-                enumValues(SuccessTestResult),
-                {...emptyTextDash, disabled: !this.editTestResult},
-              ),
           this.meleeWeapon.augmentUnarmed ? renderFormulaField(unarmedDV) : '',
           map(
             [touchOnly, aggressive, charging, extraWeapon],

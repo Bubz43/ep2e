@@ -213,6 +213,7 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
               },
             ]),
             cumulativeDotID: this.substance.id,
+            source: this.substance.appliedName,
           },
         },
         entity: this.character,

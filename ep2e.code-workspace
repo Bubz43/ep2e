@@ -29,7 +29,9 @@
       }
     ],
     "lit-plugin.globalAttributes": [
-      "divider"
+      "divider",
+      "dialogaction",
+      "padded"
     ],
   
   }

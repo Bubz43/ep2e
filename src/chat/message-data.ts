@@ -120,6 +120,8 @@ type SuccessTestState = {
     | 'initial';
 };
 
+export type MessageTargets = { tokenId: string, sceneId: string }[];
+
 export type SuccessTestMessageData = {
   parts: { name: string; value: number }[];
   states: SuccessTestState[];
@@ -149,6 +151,7 @@ export type FavorMessageData = {
 
 export type MessageData = Partial<{
   header: MessageHeaderData;
+  targets: MessageTargets;
   areaEffect: MessageAreaEffectData;
   stress: StressTestMessageData;
   damage: DamageMessageData;
