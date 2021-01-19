@@ -440,7 +440,6 @@ export class MessageSuccessTest extends MessageElement {
                       const active = (effectMap.get(effect) || 0) >= grant + 1;
                       return html`<mwc-checkbox
                         @click=${() => {
-                          console.log(grant);
                           if (grant === 1) {
                             this.superiorEffects = active
                               ? [effect]
@@ -540,9 +539,10 @@ export class MessageSuccessTest extends MessageElement {
                     ?twoline=${!!usedPool}
                     ?disabled=${!pool.available ||
                     !!(usedPool && !pool.usableTwice)}
-                    @click=${() => {
+                    @click=${async () => {
                       const preview = this.previewPoolAction(action);
                       if (preview) {
+                        await character.spendPool({pool: pool.type, points: 1});
                         this.getUpdater('successTest').commit({
                           states: this.successTest.states.concat({
                             ...preview,

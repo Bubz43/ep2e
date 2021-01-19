@@ -64,7 +64,7 @@ export class MessageMeleeAttack extends MessageElement {
       meleeWeapon: this.weapon,
       requireSubmit: true,
       adjacentEl: this,
-      editTestResult: !!successTestInfo,
+      editTestResult: !successTestInfo,
       update: ({ detail }) => this.getUpdater('meleeAttack').commit(detail),
     });
   }
@@ -162,6 +162,7 @@ export class MessageMeleeAttack extends MessageElement {
             attack.rollFormulas,
             concat(
               compact([
+                // TODO apply these better
                 testResult === SuccessTestResult.SuperiorSuccess &&
                   (!successTestInfo ||
                     (successTestInfo.superiorEffects?.filter(
@@ -204,6 +205,7 @@ export class MessageMeleeAttack extends MessageElement {
       'extraWeapon',
     ] as const).filter((key) => this.meleeAttack[key]);
 
+    const showTestResult = !this.successTest || !!testResult
     // TODO edit settings
     return html`
       <div class="settings">
@@ -218,10 +220,10 @@ export class MessageMeleeAttack extends MessageElement {
               ></mwc-icon-button>
             `}
       </div>
-      ${notEmpty(options) || testResult
+      ${notEmpty(options) || showTestResult
         ? html`
             <p class="options">
-              ${map(compact([testResult, ...options]), localize).join('  •  ')}
+              ${map(compact([!this.successTest && testResult, ...options]), localize).join('  •  ')}
             </p>
           `
         : ''}

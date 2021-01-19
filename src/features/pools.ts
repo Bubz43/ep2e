@@ -25,7 +25,7 @@ const linkedAptitudes: Record<PoolType, ReadonlyArray<AptitudeType>> = {
   [PoolType.Flex]: [],
   [PoolType.Insight]: [AptitudeType.Cognition, AptitudeType.Intuition],
   [PoolType.Moxie]: [AptitudeType.Savvy, AptitudeType.Willpower],
-  [PoolType.Vigor]: [AptitudeType.Reflexes, AptitudeType.Savvy],
+  [PoolType.Vigor]: [AptitudeType.Reflexes, AptitudeType.Somatics],
   [PoolType.Threat]: enumValues(AptitudeType),
 };
 

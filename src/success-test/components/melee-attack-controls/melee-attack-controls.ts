@@ -1,6 +1,7 @@
 import type { SlWindow } from '@src/components/window/window';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
+import { readyCanvas } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
 import { openMenu } from '@src/open-menu';
@@ -16,6 +17,8 @@ import {
   LitElement,
   query,
 } from 'lit-element';
+import { repeat } from 'lit-html/directives/repeat';
+import { identity } from 'remeda';
 import type { Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';
 import styles from './melee-attack-controls.scss';
@@ -57,10 +60,26 @@ export class MeleeAttackControls extends LitElement {
 
   @internalProperty() private test?: MeleeAttackTest;
 
+  connectedCallback() {
+    Hooks.on('targetToken', this.setTarget);
+    super.connectedCallback();
+  }
+
   disconnectedCallback() {
     this.unsub();
+    Hooks.off('targetToken', this.setTarget);
     super.disconnectedCallback();
   }
+
+  private setTarget = () => {
+    const attackTarget = this.test?.melee.attackTarget;
+    const { targets } = game.user;
+    if (attackTarget && !targets.has(attackTarget))
+      this.test?.melee.update({ attackTarget: null });
+    else if (targets.size)
+      this.test?.melee.update({ attackTarget: [...targets][0] });
+    this.requestUpdate();
+  };
 
   private unsub() {
     this.subs.forEach((unsub) => {
@@ -109,6 +128,27 @@ export class MeleeAttackControls extends LitElement {
     });
   }
 
+  private startTargetting() {
+    const canvas = readyCanvas();
+    if (!canvas) return;
+    const { activeLayer, stage } = canvas;
+    const { view } = canvas.app;
+    const { activeTool } = ui.controls;
+    const cleanup = () => {
+      activeLayer.activate();
+      ui.controls.initialize({ tool: activeTool, layer: null, control: null });
+      view.removeEventListener('click', cleanup);
+      view.removeEventListener('contextmenu', cleanup);
+      overlay.faded = false;
+    };
+
+    view.addEventListener('click', cleanup);
+    view.addEventListener('contextmenu', cleanup);
+    canvas.tokens.activate()
+    ui.controls.initialize({ tool: "target", layer: null, control: null });
+    overlay.faded = true;
+  }
+
   render() {
     return html`
       <sl-window
@@ -135,7 +175,7 @@ export class MeleeAttackControls extends LitElement {
       skillState,
     } = test;
 
-    const { weapon, primaryAttack } = melee;
+    const { weapon, primaryAttack, attackTarget } = melee;
     const { attacks } = weapon;
     return html`
       ${character
@@ -163,13 +203,35 @@ export class MeleeAttackControls extends LitElement {
             >${localize('attack')}</success-test-section-label
           >
           <ul class="attack-info">
+            <wl-list-item class="targetting">
+              <mwc-icon-button
+                slot="before"
+                icon="filter_tilt_shift"
+                @click=${this.startTargetting}
+              ></mwc-icon-button>
+              <span>${localize('target')}: ${attackTarget?.name ?? ' - '}</span>
+              <sl-animated-list class="targets">
+                ${repeat(
+                  game.user.targets,
+                  identity,
+                  (token) => html`
+                    <mwc-icon-button
+                      class=${token === attackTarget ? "active" : ""}
+                      @click=${() => melee.update({ attackTarget: token })}
+                      ><img src=${token.data.img}
+                    /></mwc-icon-button>
+                  `,
+                )}
+              </sl-animated-list>
+            </wl-list-item>
+
             <wl-list-item clickable @click=${this.selectWeapon}>
               ${weapon.name}
             </wl-list-item>
             ${attacks.secondary
               ? html`
                   <wl-list-item
-                  class="attack-setting"
+                    class="attack-setting"
                     clickable
                     @click=${() =>
                       melee.update({ primaryAttack: !primaryAttack })}

@@ -71,3 +71,22 @@
     color: var(--color-secondary)
   }
 }
+
+.targetting {
+  padding: 0;
+  [slot='before'] {
+    margin: 0;
+  }
+  .targets {
+    display: flex;
+    flex-flow:  row wrap;
+    mwc-icon-button {
+      --mdc-icon-button-size: 1.5rem;
+      margin: 0.25rem;
+      opacity: 0.5;
+      &.active {
+        opacity: 1;
+      }
+    }
+  }
+}
