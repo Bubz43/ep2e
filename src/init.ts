@@ -29,6 +29,8 @@ import {
 import { localize } from './foundry/localization';
 import { addEPSocketHandler, setupSystemSocket } from './foundry/socket';
 import { EP } from './foundry/system';
+import { openMenu } from './open-menu';
+import { notEmpty } from './utility/helpers';
 
 (function () {
   const frag = new DocumentFragment();
@@ -126,6 +128,50 @@ Hooks.once('ready', async () => {
     await migrateWorld();
     gameSettings.systemMigrationVersion.update(game.system.data.version);
   }
+
+  document.getElementById('board')?.addEventListener('auxclick', (ev) => {
+    if (ev.button === 1) {
+      const control = ui.controls.control as {
+        name: string;
+        title: string;
+        layer: string;
+        activeTool: string;
+        tools: {
+          name: string;
+          icon: string;
+          title: string;
+          toggle?: boolean;
+          button?: boolean;
+          active?: boolean;
+          onClick?: (args?: unknown) => void;
+        }[];
+      } | null;
+      if (control && notEmpty(control.tools)) {
+        openMenu({
+          header: { heading: game.i18n.localize(control.title) },
+          content: control.tools.map((tool) => ({
+            label: game.i18n.localize(tool.title),
+            icon: html`<i class=${tool.icon}></i>`,
+            activated: (ui.controls.activeTool === tool.name) || !!tool.active,
+            callback: () => {
+              if (tool.toggle) {
+                tool.active = !tool.active;
+                if (tool.onClick instanceof Function) tool.onClick(tool.active);
+              } else if (tool.button) {
+                if (tool.onClick instanceof Function) tool.onClick();
+              } else {
+                control.activeTool = tool.name;
+                if (tool.onClick instanceof Function) tool.onClick();
+              }
+
+              ui.controls.render();
+            },
+          })),
+          position: ev,
+        });
+      }
+    }
+  });
 
   addEPSocketHandler(
     'itemChange',

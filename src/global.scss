@@ -722,9 +722,9 @@ sl-tooltip {
       padding: 0.25rem;
       column-count: 4;
       pointer-events: none;
-      gap: 0.1rem;
+      gap: 0.25rem;
       grid-template-columns: repeat(auto-fill, 2.25rem);
-      width: 10rem;
+      width: 7.75rem;
       background: alphav(var(--color-bg), 0.5);
     }
 
@@ -744,21 +744,25 @@ sl-tooltip {
       &.toggle {
         box-shadow: none;
         border: none;
-        background: alphav(var(--color-primary), 0.5);
-        outline-offset: -1px;
-        outline: 1px solid var(--color-primary-alt);
+        background: transparent;
+        color: var(--color-primary);
+        border-radius: 100%;
+        
         &.active {
-          // background: alphav(var(--color-secondary), 0.75);
+          border: 1px solid currentColor;
+          border-left: 1px solid currentColor !important;
+
+          color:var(--color-primary-alt);
           i {
-            transform: scale(1.5);
+            transform: scale(1.25);
           }
         }
       }
 
       &[data-tool='clear'] {
         background-color: alphav(var(--color-negative), 0.8);
-         outline-offset: -1px;
-        outline: 1px solid var(--color-negative);
+        border-radius: 7px;
+       
       }
     }
   }
