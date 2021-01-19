@@ -324,8 +324,9 @@ export class PsiForm extends ItemFormBase {
                         const el = ev.currentTarget as HTMLElement;
                         el.parentElement?.classList.remove('dragged');
                       }}
-                      >${roll}</span
+                      >${roll}${roll === 6 ? "+" : ""}</span
                     >
+                    
 
                     <span class="name"
                       >${name}${isDamage
