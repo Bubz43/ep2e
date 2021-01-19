@@ -43,6 +43,7 @@ import {
   pick,
   pipe,
   range,
+  reject,
 } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-success-test.scss';
@@ -446,7 +447,10 @@ export class MessageSuccessTest extends MessageElement {
                               : [effect, effect];
                           } else {
                             this.superiorEffects = active
-                              ? []
+                              ? difference(
+                                  this.superiorEffects ?? superiorResultEffects,
+                                  [effect],
+                                )
                               : (this.superiorEffects ?? superiorResultEffects)
                                   .concat(effect)
                                   .slice(-granted);
@@ -542,7 +546,10 @@ export class MessageSuccessTest extends MessageElement {
                     @click=${async () => {
                       const preview = this.previewPoolAction(action);
                       if (preview) {
-                        await character.spendPool({pool: pool.type, points: 1});
+                        await character.spendPool({
+                          pool: pool.type,
+                          points: 1,
+                        });
                         this.getUpdater('successTest').commit({
                           states: this.successTest.states.concat({
                             ...preview,

@@ -1,7 +1,8 @@
 import { renderLabeledCheckbox } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import type { Character } from '@src/entities/actor/proxies/character';
-import { Sleeve, ownedSleeves, isSleeve } from '@src/entities/actor/sleeves';
+import { Sleeve, ownedSleeves, isSleeve, formattedSleeveInfo } from '@src/entities/actor/sleeves';
+import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisition';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
@@ -182,14 +183,50 @@ export class CharacterViewResleeve extends LitElement {
   }
 
   private openSelectionList() {
-    openMenu({
-      content: ownedSleeves().map((sleeve) => ({
-        label: `${sleeve.name} (${localize(sleeve.type)})`,
-        activated: this.selectedSleeve === sleeve,
-        callback: () => (this.selectedSleeve = sleeve),
-        icon: html`<img src=${sleeve.img} />`,
-      })),
-    });
+    this.dispatchEvent(
+      new RenderDialogEvent(html`
+        <mwc-dialog>
+          <mwc-list>
+            ${ownedSleeves().map(
+              (sleeve) => html`
+                <mwc-list-item
+                  ?activated=${this.selectedSleeve === sleeve}
+                  twoline
+                  graphic="medium"
+                  @click=${(ev: Event & { currentTarget: HTMLElement}) => {
+                    this.selectedSleeve = sleeve;
+                    ev.currentTarget.closest("mwc-dialog")?.close()
+
+                  }}
+                >
+                  <img slot="graphic" src=${sleeve.img} />
+                  <span
+                    >${sleeve.name}
+                    ${sleeve.acquisition.resource
+                      ? `[${morphAcquisitionDetails(sleeve.acquisition)
+                          .map((d) => `${d.label}: ${d.value}`)
+                          .join(', ')}]`
+                      : ''}
+                  </span>
+                  <span slot="secondary"
+                    >${formattedSleeveInfo(sleeve).join(' - ')}</span
+                  >
+                </mwc-list-item>
+              `,
+            )}
+          </mwc-list>
+    
+        </mwc-dialog>
+      `),
+    );
+    // openMenu({
+    //   content: ownedSleeves().map((sleeve) => ({
+    //     label: `${sleeve.name} (${localize(sleeve.type)})`,
+    //     activated: this.selectedSleeve === sleeve,
+    //     callback: () => (this.selectedSleeve = sleeve),
+    //     icon: html`<img src=${sleeve.img} />`,
+    //   })),
+    // });
   }
 
   render() {

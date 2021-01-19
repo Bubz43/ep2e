@@ -5,7 +5,7 @@ import { ActorType } from '@src/entities/entity-types';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import type { MeleeWeaponSettings } from '@src/entities/weapon-settings';
 import { Action, ActionType } from '@src/features/actions';
-import { matchesSkill } from '@src/features/effects';
+import { matchesSkill, Source } from '@src/features/effects';
 import type { Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { arrayOf } from '@src/utility/helpers';
@@ -79,7 +79,7 @@ export class MeleeAttackTest extends SkillTest {
     return new Map(
       target.actor.proxy.appliedEffects
         .getMatchingSuccessTestEffects(matchesSkill(skill)(action), true)
-        .map((effect) => [effect, !effect.requirement]),
+        .map((effect) => [{...effect, [Source]: `{${target.name}} ${effect[Source]}`}, !effect.requirement]),
     );
   }
 

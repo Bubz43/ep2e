@@ -13,7 +13,10 @@ import { ItemType } from '@src/entities/entity-types';
 import { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
-import { SuccessTestResult } from '@src/success-test/success-test';
+import {
+  isSuccessfullTestResult,
+  SuccessTestResult,
+} from '@src/success-test/success-test';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property } from 'lit-element';
 import { compact, concat, last, map, pick, pipe } from 'remeda';
@@ -146,6 +149,11 @@ export class MessageMeleeAttack extends MessageElement {
 
     const attack = attacks[attackType] || attacks.primary;
 
+    const superiorDamage =
+      successTestInfo?.superiorEffects?.filter(
+        (e) => e === SuperiorResultEffect.Damage,
+      ) || [];
+
     const damage: DamageMessageData | null = touchOnly
       ? null
       : {
@@ -164,20 +172,14 @@ export class MessageMeleeAttack extends MessageElement {
               compact([
                 // TODO apply these better
                 testResult === SuccessTestResult.SuperiorSuccess &&
-                  (!successTestInfo ||
-                    (successTestInfo.superiorEffects?.filter(
-                      (e) => e === SuperiorResultEffect.Damage,
-                    ).length || 0) >= 1) && {
+                  (!successTestInfo || superiorDamage.length >= 1) && {
                     label: localize(testResult),
                     formula: '+1d6',
                   },
                 testResult === SuccessTestResult.SuperiorSuccessX2 &&
-                  (!successTestInfo ||
-                    (successTestInfo.superiorEffects?.filter(
-                      (e) => e === SuperiorResultEffect.Damage,
-                    ).length || 0) >= 2) && {
+                  (!successTestInfo || superiorDamage.length >= 1) && {
                     label: localize(testResult),
-                    formula: '+2d6',
+                    formula: successTestInfo ? `+${superiorDamage.length}d6`:  '+2d6',
                   },
                 augmentUnarmed && {
                   label: localize('unarmedDV'),
@@ -205,7 +207,7 @@ export class MessageMeleeAttack extends MessageElement {
       'extraWeapon',
     ] as const).filter((key) => this.meleeAttack[key]);
 
-    const showTestResult = !this.successTest || !!testResult
+    const showTestResult = !this.successTest || !!testResult;
     // TODO edit settings
     return html`
       <div class="settings">
@@ -223,10 +225,14 @@ export class MessageMeleeAttack extends MessageElement {
       ${notEmpty(options) || showTestResult
         ? html`
             <p class="options">
-              ${map(compact([!this.successTest && testResult, ...options]), localize).join('  •  ')}
+              ${map(
+                compact([!this.successTest && testResult, ...options]),
+                localize,
+              ).join('  •  ')}
             </p>
           `
         : ''}
+  
       ${damage
         ? html` <message-damage .damage=${damage}></message-damage> `
         : ''}

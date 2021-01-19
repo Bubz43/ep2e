@@ -5,7 +5,7 @@ import type { Pool, PreTestPoolAction, ReadonlyPool } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import { capitalize } from '@src/foundry/misc-helpers';
 import { notEmpty } from '@src/utility/helpers';
-import { clamp, createPipe, pipe, range, reverse } from 'remeda';
+import { clamp, createPipe, groupBy, identity, pipe, range, reverse } from 'remeda';
 
 export enum SuccessTestResult {
   CriticalFailure = 'criticalFailure',
