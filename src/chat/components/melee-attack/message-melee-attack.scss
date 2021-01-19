@@ -31,3 +31,9 @@
   padding: 0.25rem 0.5rem;
   font-size: small;
 }
+
+.roll-damage {
+  width: calc(100% - 0.5rem);
+  margin: 0.25rem;
+  --mdc-theme-primary: var(--color-negative);
+}

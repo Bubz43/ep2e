@@ -232,10 +232,12 @@ export class MessageMeleeAttack extends MessageElement {
             </p>
           `
         : ''}
+
+        ${touchOnly && !disabled ? "" : html`
+        <mwc-button dense unelevated class="roll-damage">${localize("roll")} ${localize("damage")}</mwc-button>
+        `}
   
-      ${damage
-        ? html` <message-damage .damage=${damage}></message-damage> `
-        : ''}
+  
       ${notEmpty(attack.attackTraits)
         ? html`
             <message-attack-traits
@@ -243,13 +245,13 @@ export class MessageMeleeAttack extends MessageElement {
             ></message-attack-traits>
           `
         : ''}
-      ${coating || payload
+      ${!disabled && (coating || payload)
         ? html`<div class="additional">
             ${coating
               ? html`
                   <mwc-button
                     dense
-                    ?disabled=${disabled || !!appliedCoating}
+                    ?disabled=${!!appliedCoating}
                     @click=${this.createCoatingMessage}
                     >${appliedCoating
                       ? `${localize('applied')} ${localize('coating')}`
@@ -261,7 +263,7 @@ export class MessageMeleeAttack extends MessageElement {
               ? html`
                   <mwc-button
                     dense
-                    ?disabled=${disabled || !!appliedPayload}
+                    ?disabled=${!!appliedPayload}
                     @click=${this.createPayloadMessage}
                     >${localize(appliedPayload ? 'applied' : 'trigger')}
                     ${localize('payload')}</mwc-button

@@ -185,7 +185,7 @@ export class CharacterViewResleeve extends LitElement {
   private openSelectionList() {
     this.dispatchEvent(
       new RenderDialogEvent(html`
-        <mwc-dialog>
+        <mwc-dialog hideActions>
           <mwc-list>
             ${ownedSleeves().map(
               (sleeve) => html`
