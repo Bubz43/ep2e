@@ -703,7 +703,7 @@ sl-tooltip {
       border-bottom-right-radius: 0.25rem;
       &.active {
         .control-tools {
-          transform: translateY(-1.25rem);
+          transform: translateY(-1.75rem);
         }
       }
     }
@@ -760,8 +760,15 @@ sl-tooltip {
       }
 
       &[data-tool='clear'] {
-        background-color: alphav(var(--color-negative), 0.8);
-        border-radius: 7px;
+        i {
+          text-shadow: 1px 0 5px var(--color-negative);
+        }
+        &:hover {
+          i {
+            text-shadow:  1px 2px 7px var(--color-negative);
+          }
+        }
+       
        
       }
     }

@@ -539,15 +539,14 @@ export class PhysicalTechForm extends ItemFormBase {
   private renderEffectCreator() {
     return html`
       <h3>${localize('add')} ${localize('effect')}</h3>
-      ${this.item.hasActivation
-        ? renderAutoForm({
-            props: { group: this.effectGroup },
-            classes: 'effect-group-form',
-            update: ({ group }) => group && (this.effectGroup = group),
-            fields: ({ group }) =>
-              renderRadioFields(group, ['passive', 'activated']),
-          })
-        : ''}
+      ${renderAutoForm({
+        props: { group: this.effectGroup },
+        classes: 'effect-group-form',
+        disabled: !this.item.hasActivation,
+        update: ({ group }) => group && (this.effectGroup = group),
+        fields: ({ group }) =>
+          renderRadioFields(group, ['passive', 'activated']),
+      })}
 
       <effect-creator
         .effectTypes=${enumValues(EffectType)}
