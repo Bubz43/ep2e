@@ -54,14 +54,14 @@ export class EnrichedHTML extends LitElement {
   @property({ type: String }) content = '';
 
   connectedCallback() {
-    this.addEventListener('click', findMatch);
+    this.addEventListener('click', findMatch, { capture: true});
     this.addEventListener('mousedown', findMatch);
     this.addEventListener('mouseover', findMatch);
     super.connectedCallback();
   }
 
   disconnectedCallback() {
-    this.removeEventListener('click', findMatch);
+    this.removeEventListener('click', findMatch, { capture: true});
     this.removeEventListener('mousedown', findMatch);
     this.removeEventListener('mouseover', findMatch);
 

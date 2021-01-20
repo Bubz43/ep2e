@@ -1,3 +1,4 @@
+import { createMessage } from '@src/chat/create-message';
 import {
   openOrRenderWindow,
   openWindow,
@@ -190,6 +191,23 @@ export const itemMenuOptions = (item: ItemProxy): MWCMenuOption[] => {
     'toggleEquipped' in item && {
       label: localize(item.equipped ? 'unequip' : 'equip'),
       callback: item.toggleEquipped.bind(item),
+    },
+    {
+      label: localize("message"),
+      icon: html`<mwc-icon>message</mwc-icon>`    ,
+      callback: () => {
+        createMessage({
+          data: {
+            header: {
+              heading: item.fullName,
+              subheadings: item.fullType,
+              description: item.description,
+              img: item.nonDefaultImg,
+            }
+          },
+          entity: item.actor,
+        })
+      }  
     },
     item.openForm &&
       (item.type !== ItemType.Substance ||

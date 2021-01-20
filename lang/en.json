@@ -1378,6 +1378,7 @@
     "original": "Original",
     "serviceDuration": "Service Duration",
     "superior": "Superior",
+    "message": "Message",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
