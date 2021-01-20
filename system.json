@@ -191,6 +191,48 @@
       "entity": "Item"
     },
     {
+      "name": "combat-augmentations",
+      "system": "ep2e",
+      "label": "Combat Augmentations",
+      "path": "./packs/combat-augmentations.db",
+      "entity": "Item"
+    },
+    {
+      "name": "mental-augmentations",
+      "system": "ep2e",
+      "label": "Mental Augmentations",
+      "path": "./packs/mental-augmentations.db",
+      "entity": "Item"
+    },
+    {
+      "name": "physical-augmentations",
+      "system": "ep2e",
+      "label": "Physical Augmentations",
+      "path": "./packs/physical-augmentations.db",
+      "entity": "Item"
+    },
+    {
+      "name": "sensory-augmentations",
+      "system": "ep2e",
+      "label": "Sensory Augmentations",
+      "path": "./packs/sensory-augmentations.db",
+      "entity": "Item"
+    },
+    {
+      "name": "social-augmentations",
+      "system": "ep2e",
+      "label": "Social Augmentations",
+      "path": "./packs/social-augmentations.db",
+      "entity": "Item"
+    },
+    {
+      "name": "standard-augmentations",
+      "system": "ep2e",
+      "label": "Standard Augmentations",
+      "path": "./packs/standard-augmentations.db",
+      "entity": "Item"
+    },
+    {
       "name": "disorders",
       "system": "ep2e",
       "label": "Disorders",

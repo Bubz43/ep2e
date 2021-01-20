@@ -682,7 +682,7 @@ sl-tooltip {
 
   .scene-control {
     width: 2.5rem;
-    padding: 0.25rem 0;
+    padding: 0.5rem 0;
     font-size: 1.45rem;
     background: alphav(var(--color-bg-alt), 0.75);
     position: relative;
@@ -692,7 +692,7 @@ sl-tooltip {
     }
 
     &:first-child {
-      border-top-right-radius: 0.25rem;
+      border-top-right-radius: 0.5rem;
       &.active {
         .control-tools {
           transform: translateY(-0.75rem);
@@ -700,7 +700,7 @@ sl-tooltip {
       }
     }
     &:last-child {
-      border-bottom-right-radius: 0.25rem;
+      border-bottom-right-radius: 0.5rem;
       &.active {
         .control-tools {
           transform: translateY(-1.75rem);
