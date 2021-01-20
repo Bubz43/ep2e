@@ -1379,6 +1379,7 @@
     "serviceDuration": "Service Duration",
     "superior": "Superior",
     "message": "Message",
+    "woundAmount": "Wound Amount",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

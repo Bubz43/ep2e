@@ -68,7 +68,7 @@ export const sleevePacks = async () => {
 
 export const ownedSleeves = () => {
   return pipe(
-    game.actors.entries,
+    [...game.actors.values()],
     filter((a) => a.owner),
     getSleeves,
   );

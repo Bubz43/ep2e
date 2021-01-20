@@ -1404,7 +1404,7 @@ type LangEntries =
   | 'covertness'
   | 'detail'
   | 'superior'
-  | 'serviceDuration' | "message";
+  | 'serviceDuration' | "message" | "woundAmount";
 type FullNames =
   | 'cog'
   | 'int'

@@ -2618,6 +2618,9 @@
             "meshware": {
               "type": "string"
             },
+            "message": {
+              "type": "string"
+            },
             "meter": {
               "type": "string"
             },
@@ -4541,6 +4544,9 @@
             "wound": {
               "type": "string"
             },
+            "woundAmount": {
+              "type": "string"
+            },
             "woundModifier": {
               "type": "string"
             },
@@ -5303,6 +5309,7 @@
             "meshHealth",
             "meshService",
             "meshware",
+            "message",
             "meter",
             "meters",
             "micro",
@@ -5944,6 +5951,7 @@
             "withinRange",
             "worth",
             "wound",
+            "woundAmount",
             "woundModifier",
             "woundRepair",
             "woundThreshold",

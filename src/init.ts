@@ -95,7 +95,7 @@ Hooks.once('init', () => {
     callback: (app, [el]) => {
       if (!el) return;
       el.querySelector(`[data-user-id="${game.user.id}"]`)?.remove();
-      if (game.users.entries.some((user) => !user.active)) {
+      if ([...game.users.values()].some((user) => !user.active)) {
         const frag = new DocumentFragment();
         render(
           html`
