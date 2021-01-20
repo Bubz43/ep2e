@@ -203,6 +203,7 @@ export const itemMenuOptions = (item: ItemProxy): MWCMenuOption[] => {
               subheadings: item.fullType,
               description: item.description,
               img: item.nonDefaultImg,
+              hidden: item.type === ItemType.Substance && item.appliedAndHidden,
             }
           },
           entity: item.actor,

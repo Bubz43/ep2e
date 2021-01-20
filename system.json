@@ -92,6 +92,104 @@
       "path": "./packs/beam-weapons.db",
       "entity": "Item"
     },
+      {
+      "name": "communications-gear",
+      "system": "ep2e",
+      "label": "Communications Gear",
+      "path": "./packs/communications-gear.db",
+      "entity": "Item"
+    },
+         {
+      "name": "espionage-gear",
+      "system": "ep2e",
+      "label": "Espionage Gear",
+      "path": "./packs/espionage-gear.db",
+      "entity": "Item"
+    },
+        {
+      "name": "nanotech-gear",
+      "system": "ep2e",
+      "label": "Nanotech Gear",
+      "path": "./packs/nanotech-gear.db",
+      "entity": "Item"
+    },
+        {
+      "name": "neutrino-comms-gear",
+      "system": "ep2e",
+      "label": "Neutrino Comms Gear",
+      "path": "./packs/neutrino-comms-gear.db",
+      "entity": "Item"
+    },
+       {
+      "name": "qe-comms-gear",
+      "system": "ep2e",
+      "label": "QE Comms Gear",
+      "path": "./packs/qe-comms-gear.db",
+      "entity": "Item"
+    },
+       {
+      "name": "quantum-farcasters",
+      "system": "ep2e",
+      "label": "Quantum Farcasters",
+      "path": "./packs/quantum-farcasters.db",
+      "entity": "Item"
+    },
+         {
+      "name": "everyday-tech",
+      "system": "ep2e",
+      "label": "Everyday Tech",
+      "path": "./packs/everyday-tech.db",
+      "entity": "Item"
+    },
+         {
+      "name": "exploration-tools",
+      "system": "ep2e",
+      "label": "Exploration Tools",
+      "path": "./packs/exploration-tools.db",
+      "entity": "Item"
+    },
+       {
+      "name": "salvage-tools",
+      "system": "ep2e",
+      "label": "Salvage Tools",
+      "path": "./packs/salvage-tools.db",
+      "entity": "Item"
+    },
+       {
+      "name": "science-tools",
+      "system": "ep2e",
+      "label": "Science Tools",
+      "path": "./packs/science-tools.db",
+      "entity": "Item"
+    },
+        {
+      "name": "survival-tools",
+      "system": "ep2e",
+      "label": "Survival Tools",
+      "path": "./packs/survival-tools.db",
+      "entity": "Item"
+    },
+      {
+      "name": "specialized-fabbers",
+      "system": "ep2e",
+      "label": "Specialized Fabbers",
+      "path": "./packs/specialized-fabbers.db",
+      "entity": "Item"
+    },
+         {
+      "name": "mesh-hardware",
+      "system": "ep2e",
+      "label": "Mesh Hardware",
+      "path": "./packs/mesh-hardware.db",
+      "entity": "Item"
+    },
+     {
+      "name": "nanofabricators",
+      "system": "ep2e",
+      "label": "Nanofabricators",
+      "path": "./packs/nanofabricators.db",
+      "entity": "Item"
+    },
     {
       "name": "disorders",
       "system": "ep2e",
