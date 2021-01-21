@@ -1380,6 +1380,8 @@
     "superior": "Superior",
     "message": "Message",
     "woundAmount": "Wound Amount",
+    "entity": "Entity",
+    "load": "Load",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

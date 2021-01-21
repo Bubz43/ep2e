@@ -11,8 +11,9 @@
 :host {
   display: grid;
   grid-template-columns: 150px 1fr;
-  min-height: 400px;
   width: 500px;
+  border: 1px solid var(--color-border);
+  --mdc-button-disabled-fill-color: var(--color-border);
 }
 
 mwc-circular-progress {
@@ -25,6 +26,20 @@ wl-list-item {
   & + .fallback {
     display: none;
   }
+
+  img {
+    width: 30px;
+    margin-right: 0.75rem;
+  }
+}
+
+.entity-label {
+  padding: 0 0.5rem;
+  margin: 0.25rem 0;
+}
+
+mwc-formfield {
+  height: 2rem;
 }
 
 .type {
@@ -40,8 +55,8 @@ wl-list-item {
 .sources {
   display: flex;
   flex-flow: column;
-  border: 1px solid var(--color-border);
   background: var(--color-bg-alt);
+  border-right: 1px solid var(--color-border);
 }
 
 .load {
@@ -53,12 +68,12 @@ wl-list-item {
 .results {
   background: var(--color-bg);
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto 400px;
 
   .list {
     overflow-y: auto;
     overflow-x: hidden;
-    height: 400px;
+    height: 100%;
   }
 }
 

@@ -1406,7 +1406,7 @@ type LangEntries =
   | 'superior'
   | 'serviceDuration'
   | 'message'
-  | 'woundAmount' | "load"
+  | 'woundAmount' | "load" | "entity";
 type FullNames =
   | 'cog'
   | 'int'

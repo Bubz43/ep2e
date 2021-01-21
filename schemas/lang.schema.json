@@ -1655,6 +1655,9 @@
             "entangling": {
               "type": "string"
             },
+            "entity": {
+              "type": "string"
+            },
             "environment": {
               "type": "string"
             },
@@ -2484,6 +2487,9 @@
               "type": "string"
             },
             "linkedAptitude": {
+              "type": "string"
+            },
+            "load": {
               "type": "string"
             },
             "loaded": {
@@ -4988,6 +4994,7 @@
             "enforcer",
             "enhancedBehavior",
             "entangling",
+            "entity",
             "environment",
             "epsilon",
             "equip",
@@ -5265,6 +5272,7 @@
             "lineOfSight",
             "linked",
             "linkedAptitude",
+            "load",
             "loaded",
             "localFirewall",
             "locateFiredWeapon",
