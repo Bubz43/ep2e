@@ -58,7 +58,7 @@ export class CompendiumSearch extends LitElement {
       }
     }
 
-    this.results = items;
+    this.results = items.sort((a, b) => a.name.localeCompare(b.name));
     this.loading = false;
   }
 
@@ -133,7 +133,7 @@ export class CompendiumSearch extends LitElement {
             html`<label
               ><mwc-icon>search</mwc-icon>${renderTextInput(filter, {
                 search: true,
-                placeholder: localize('search'),
+                placeholder: localize('filter'),
               })}</label
             >`,
         })}
