@@ -22,6 +22,34 @@
     }
   ],
   "packs": [
+       {
+      "name": "uplift-biomorphs",
+      "system": "ep2e",
+      "label": "Uplift Biomorphs",
+      "path": "./packs/uplift-biomorphs.db",
+      "entity": "Actor"
+    },
+        {
+      "name": "biomorphs",
+      "system": "ep2e",
+      "label": "Biomorphs",
+      "path": "./packs/biomorphs.db",
+      "entity": "Actor"
+    },
+        {
+      "name": "pod-biomorphs",
+      "system": "ep2e",
+      "label": "Pod Biomorphs",
+      "path": "./packs/pod-biomorphs.db",
+      "entity": "Actor"
+    },
+        {
+      "name": "synthmorphs",
+      "system": "ep2e",
+      "label": "Synthmorphs",
+      "path": "./packs/synthmorphs.db",
+      "entity": "Actor"
+    },
     {
       "name": "traits",
       "system": "ep2e",
