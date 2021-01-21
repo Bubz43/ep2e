@@ -2,31 +2,52 @@
 @use "scss/mixins" as *;
 
 @include styled-scrollbars;
+@include resetUnorderedList();
 
 * {
   box-sizing: border-box;
 }
 
 :host {
-  display: flex;
-  padding: 1rem;
-  height: 400px;
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  min-height: 400px;
+  width: 500px;
 }
 
-mwc-list-item {
+mwc-circular-progress {
+  --mdc-theme-primary: var(--color-primary-alt);
+}
+
+wl-list-item {
+  padding: 0.25rem 1rem;
+  width: 100%;
   & + .fallback {
     display: none;
   }
 }
 
+.type {
+  color: var(--color-text-lighter);
+}
+
 .fallback {
   padding: 0.5rem;
   text-align: center;
+  list-style: none;
 }
 
 .sources {
+  display: flex;
+  flex-flow: column;
   border: 1px solid var(--color-border);
   background: var(--color-bg-alt);
+}
+
+.load {
+  margin-top: auto;
+  width: 100%;
+  padding: 0.5rem;
 }
 
 .results {
@@ -34,8 +55,37 @@ mwc-list-item {
   display: grid;
   grid-template-rows: auto 1fr;
 
-  mwc-list {
+  .list {
     overflow-y: auto;
     overflow-x: hidden;
+    height: 400px;
+  }
+}
+
+label {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem 0.75rem;
+  color: var(--color-text);
+  background: var(--color-bg);
+  height: 55px;
+  border-bottom: 1px solid var(--color-border);
+  &:focus-within {
+    color: var(--color-secondary);
+  }
+  input {
+    background: transparent;
+    font-family: var(--font-1);
+    border: none;
+    flex: 1;
+    padding: 0.25rem 1rem;
+    font-size: 1rem;
+    color: var(--color-text);
+    &::placeholder {
+      text-transform: capitalize;
+    }
+    &:focus {
+      outline: none;
+    }
   }
 }

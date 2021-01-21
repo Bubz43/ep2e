@@ -196,7 +196,8 @@ SlWindow;
 CompendiumList;
 UserView;
 CompendiumSearch;
-
+import { LitVirtualizer } from "lit-virtualizer";
+LitVirtualizer;;
 // Actor
 ActorCreator;
 ItemTrash;

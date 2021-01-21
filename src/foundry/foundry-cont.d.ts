@@ -247,7 +247,8 @@ declare global {
     readonly metadata: Readonly<{
       label: string;
       name: string;
-      entity: EntityName;
+      // entity: EntityName;
+      entity: string;
       package: string;
       absPath: string;
       path: string;
