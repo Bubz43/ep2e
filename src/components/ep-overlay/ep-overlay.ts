@@ -113,7 +113,7 @@ export class EPOverlay extends LitElement {
       this.stealElements();
       ui.chat.scrollBottom();
       this.ready = true;
-    }, 200);
+    }, 400);
 
     // window.addEventListener("resize", () => this.confirmPositions());
     // requestAnimationFrame(() => this.confirmPositions());

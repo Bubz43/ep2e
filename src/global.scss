@@ -674,6 +674,7 @@ sl-tooltip {
     &:hover {
       border: none;
       box-shadow: none;
+
     }
     i {
       text-shadow: 1px 1px 2px var(--color-bg);
@@ -684,11 +685,11 @@ sl-tooltip {
     width: 2.5rem;
     padding: 0.5rem 0;
     font-size: 1.45rem;
-    background: alphav(var(--color-bg-alt), 0.75);
+    background: alphav(var(--color-bg-alt), 0.8);
     position: relative;
     border-left: 1px solid transparent !important;
     &.active {
-    border-left: 1px solid var(--color-text) !important;
+      border-left: 1px solid var(--color-text) !important;
     }
 
     &:first-child {
@@ -724,8 +725,12 @@ sl-tooltip {
       pointer-events: none;
       gap: 0.25rem;
       grid-template-columns: repeat(auto-fill, 2.25rem);
-      width: 7.75rem;
-      background: alphav(var(--color-bg), 0.5);
+      width: 7.9rem;
+      background: alphav(var(--color-bg-alt), 0.9);
+      border: 1px solid var(--color-border);
+      border-left: none;
+      z-index: -1;
+      box-shadow: 1px 0 2px var(--color-bg) inset;
     }
 
     .control-tool {
@@ -736,7 +741,7 @@ sl-tooltip {
       margin: 0;
       font-size: 1.25rem;
       border-left: 1px solid transparent !important;
-      border-radius: 3px ;
+      border-radius: 3px;
       &:not(.toggle).active {
         outline: 3px double var(--color-grey);
         outline-offset: -4px;
@@ -745,16 +750,17 @@ sl-tooltip {
         box-shadow: none;
         border: none;
         background: transparent;
-        color: var(--color-primary);
+        color: var(--color-grey);
         border-radius: 100%;
-        
-        &.active {
-          border: 1px solid currentColor;
-          border-left: 1px solid currentColor !important;
+        border: 2px inset var(--color-grey);
+        border-left: 2px inset var(--color-grey) !important;
 
-          color:var(--color-primary-alt);
+        &.active {
+          border: 2px outset var(--color-primary-alt);
+          border-left: 2px outset var(--color-primary-alt) !important;
+          color: var(--color-primary-alt);
           i {
-            transform: scale(1.25);
+            transform: scale(1.15);
           }
         }
       }
@@ -765,13 +771,10 @@ sl-tooltip {
         }
         &:hover {
           i {
-            text-shadow:  1px 2px 7px var(--color-negative);
+            text-shadow: 1px 2px 7px var(--color-negative);
           }
         }
-       
-       
       }
     }
   }
-
 }

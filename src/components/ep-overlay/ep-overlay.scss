@@ -10,8 +10,8 @@
 :host {
   display: grid;
   grid-template-areas:
-    'scene time app-controls'
-    'nav time chat'
+    'nav time app-controls'
+    'scene time chat'
     'controls .. chat'
     'user .. chat';
 
@@ -67,6 +67,7 @@ world-time-controls {
 
 .nav-wrapper {
   grid-area: nav;
+  padding-top: 0.5rem;
 }
 .controls-wrapper {
   grid-area: controls;
