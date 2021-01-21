@@ -32,16 +32,11 @@
 character-view-header {
   grid-area: header;
   z-index: 1;
-  background: linear-gradient(
-    235deg,
-    alphav(var(--color-bg-alt), 0.6),
-    transparent
-  );
 
   background: linear-gradient(
     45deg,
-    alphav(var(--color-bg), 0.9),
-    alphav(var(--color-bg-alt), 0.9)
+    alphav(var(--color-bg), 0.8),
+    alphav(var(--color-bg-alt), 0.8)
   );
 }
 

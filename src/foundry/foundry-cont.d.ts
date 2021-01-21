@@ -246,6 +246,12 @@ declare global {
     readonly private: boolean;
     readonly metadata: Readonly<{
       label: string;
+      name: string;
+      entity: EntityName;
+      package: string;
+      absPath: string;
+      path: string;
+      system: string;
     }>;
   }
 

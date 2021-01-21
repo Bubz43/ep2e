@@ -318,6 +318,7 @@ Object.defineProperty(JournalSheet, 'defaultOptions', {
   },
 });
 
+Compendium.prototype._replaceHTML = noop;
 Compendium.prototype._renderInner = async function () {
   const existing = this.element?.[0]?.querySelector('compendium-list');
   const content = await this.getContent();
@@ -335,8 +336,6 @@ Compendium.prototype._renderInner = async function () {
   );
   return $(frag);
 };
-
-Compendium.prototype._replaceHTML = noop;
 
 SidebarDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
   jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
@@ -546,10 +545,10 @@ function directorySearch(
     }
 
     // Match folder tree
-    const includeFolders = (fids: Set<string>) => {
+    const includeFolders = (folderIDs: Set<string>) => {
       const parentIds = new Set(
         this.folders.flatMap(({ data, _id }) =>
-          fids.has(_id) && data.parent ? data.parent : [],
+          folderIDs.has(_id) && data.parent ? data.parent : [],
         ),
       );
       if (parentIds.size) {

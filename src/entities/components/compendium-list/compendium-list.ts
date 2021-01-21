@@ -16,7 +16,6 @@ import {
 } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
-import { compact } from 'remeda';
 import styles from './compendium-list.scss';
 
 @customElement('compendium-list')

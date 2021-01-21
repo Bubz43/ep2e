@@ -222,14 +222,6 @@ export class CharacterViewResleeve extends LitElement {
         </mwc-dialog>
       `),
     );
-    // openMenu({
-    //   content: ownedSleeves().map((sleeve) => ({
-    //     label: `${sleeve.name} (${localize(sleeve.type)})`,
-    //     activated: this.selectedSleeve === sleeve,
-    //     callback: () => (this.selectedSleeve = sleeve),
-    //     icon: html`<img src=${sleeve.img} />`,
-    //   })),
-    // });
   }
 
   render() {

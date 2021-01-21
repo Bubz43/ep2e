@@ -1,10 +1,41 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+@include styled-scrollbars;
+
 * {
   box-sizing: border-box;
 }
 
 :host {
-  display: block;
+  display: flex;
+  padding: 1rem;
+  height: 400px;
+}
+
+mwc-list-item {
+  & + .fallback {
+    display: none;
+  }
+}
+
+.fallback {
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.sources {
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-alt);
+}
+
+.results {
+  background: var(--color-bg);
+  display: grid;
+  grid-template-rows: auto 1fr;
+
+  mwc-list {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
 }

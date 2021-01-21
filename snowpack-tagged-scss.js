@@ -14,6 +14,8 @@ module.exports = function sassPlugin(_, { native, compilerOptions = {} } = {}) {
       output: ['.css.js', '.css'],
     },
     async load({ filePath, isDev }) {
+      if (filePath.includes(".module")) return;
+
       const index = filePath.indexOf('src');
       const afterSrc = [...filePath.slice(index)].reduce(
         (accum, char) =>
@@ -23,10 +25,9 @@ module.exports = function sassPlugin(_, { native, compilerOptions = {} } = {}) {
       const stdout = await plugin.load({ filePath, isDev });
     
       if (
-        stripFileExtension(filePath).endsWith('global') ||
-        filePath.includes('.module')
+        stripFileExtension(filePath).endsWith('global')
       ) {
-        return { '.css': stdout };
+    return { '.css': stdout };
       }
 
    

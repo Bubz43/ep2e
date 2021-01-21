@@ -7,10 +7,12 @@ import { combatantSocketHandler } from './combat/combatant-commands';
 import { EPOverlay } from './components/ep-overlay/ep-overlay';
 import type { ToolTip } from './components/tooltip/tooltip';
 import { SlWindow } from './components/window/window';
+import { openWindow } from './components/window/window-controls';
 import { enumValues } from './data-enums';
 import { ActorEP } from './entities/actor/actor';
 import { ActorEPSheet } from './entities/actor/actor-sheet';
 import { ChatMessageEP } from './entities/chat-message';
+import { CompendiumSearch } from './entities/components/compendium-search/compendium-search';
 import { findActor } from './entities/find-entities';
 import { ItemEP } from './entities/item/item';
 import { ItemEPSheet } from './entities/item/item-sheet';
@@ -219,6 +221,27 @@ Hooks.once('ready', async () => {
     event: 'render',
     callback: () => requestAnimationFrame(() => ui.combat.render()),
   });
+
+  applicationHook({
+    app: CompendiumDirectory,
+    hook: "on",
+    event: "render",
+    callback: (dir, [el]) => {
+      const button = document.createElement("mwc-button");
+      button.label = localize("search");
+      button.onclick = () => {
+        openWindow({
+          key: CompendiumSearch,
+          name: localize('search'),
+          content: html`
+          <compendium-search></compendium-search>
+          `
+        })
+      }
+      button.style.width = "100%";
+      el?.querySelector(".directory-footer")?.append(button)
+    }
+  })
 
   // applicationHook({
   //   app: HeadsUpDisplay,
