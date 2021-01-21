@@ -224,24 +224,22 @@ Hooks.once('ready', async () => {
 
   applicationHook({
     app: CompendiumDirectory,
-    hook: "on",
-    event: "render",
+    hook: 'on',
+    event: 'render',
     callback: (dir, [el]) => {
-      const button = document.createElement("mwc-button");
-      button.label = localize("search");
+      const button = document.createElement('mwc-button');
+      button.label = localize('search');
       button.onclick = () => {
         openWindow({
           key: CompendiumSearch,
           name: localize('search'),
-          content: html`
-          <compendium-search></compendium-search>
-          `
-        })
-      }
-      button.style.width = "100%";
-      el?.querySelector(".directory-footer")?.append(button)
-    }
-  })
+          content: html` <compendium-search></compendium-search> `,
+        });
+      };
+      button.style.width = '100%';
+      el?.querySelector('.directory-footer')?.append(button);
+    },
+  });
 
   // applicationHook({
   //   app: HeadsUpDisplay,

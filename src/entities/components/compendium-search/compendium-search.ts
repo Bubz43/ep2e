@@ -64,14 +64,13 @@ export class CompendiumSearch extends LitElement {
 
   private setDragData(ev: DragEvent) {
     if (ev.target instanceof HTMLElement) {
-    const { id, collection } = ev.target.dataset;
-    setDragDrop(ev, {
-      type: this.entityRenderer as any,
-      pack: collection as string,
-      id: id as string,
-    });
+      const { id, collection } = ev.target.dataset;
+      setDragDrop(ev, {
+        type: this.entityRenderer as any,
+        pack: collection as string,
+        id: id as string,
+      });
     }
-
   }
 
   render() {
@@ -140,11 +139,10 @@ export class CompendiumSearch extends LitElement {
         ${filtered.length === 0
           ? html` <p class="fallback">${localize('noResults')}.</p> `
           : html` <lit-virtualizer
-          @dragstart=${this.setDragData}
+              @dragstart=${this.setDragData}
               class="list"
               .items=${filtered}
               .renderItem=${this.entityRenderer === 'Item'
-              
                 ? this.renderItem
                 : this.renderActor}
             ></lit-virtualizer>`}
@@ -155,7 +153,7 @@ export class CompendiumSearch extends LitElement {
   private renderItem = (item: ItemEP) => {
     return html`
       <wl-list-item
-      draggable="true"
+        draggable="true"
         data-collection=${ifDefined(item.compendium?.collection)}
         data-id=${item.id}
         clickable
@@ -172,7 +170,7 @@ export class CompendiumSearch extends LitElement {
     const sleeve = proxy.type === ActorType.Character ? proxy.sleeve : proxy;
     return html`
       <wl-list-item
-      draggable="true"
+        draggable="true"
         data-collection=${ifDefined(actor.compendium?.collection)}
         data-id=${actor.id}
         clickable
