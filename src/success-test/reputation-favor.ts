@@ -25,7 +25,11 @@ import { arrayOf } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
 import produce from 'immer';
 import { compact, last, map, merge } from 'remeda';
-import { createSuccessTestModifier, grantedSuperiorResultEffects, rollSuccessTest } from './success-test';
+import {
+  createSuccessTestModifier,
+  grantedSuperiorResultEffects,
+  rollSuccessTest,
+} from './success-test';
 import { SuccessTestBase } from './success-test-base';
 
 export type ReputationFavorInit = {
@@ -222,13 +226,13 @@ export class ReputationFavor extends SuccessTestBase {
         : undefined,
     };
 
-     if (data.task) {
-       (data.defaultSuperiorEffect = SuperiorResultEffect.Time),
-         (data.superiorResultEffects = arrayOf({
-           value: SuperiorResultEffect.Time,
-           length: grantedSuperiorResultEffects(last(data.states)?.result),
-         }));
-     }
+    if (data.task) {
+      (data.defaultSuperiorEffect = SuperiorResultEffect.Time),
+        (data.superiorResultEffects = arrayOf({
+          value: SuperiorResultEffect.Time,
+          length: grantedSuperiorResultEffects(last(data.states)?.result),
+        }));
+    }
 
     await createMessage({
       data: {

@@ -29,7 +29,9 @@ export const gmIsConnected = () => {
 };
 
 const primaryGmIsConnected = () => {
-  return [...game.users.values()].some((user) => user.active && isPrimaryGM(user));
+  return [...game.users.values()].some(
+    (user) => user.active && isPrimaryGM(user),
+  );
 };
 
 export const canViewActor = (actor: ActorEP) => {

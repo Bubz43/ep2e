@@ -42,7 +42,7 @@ export class MessageContent extends LitElement {
       meleeAttack,
       successTest,
       favor,
-      targets
+      targets,
     } = this.data;
     if (!this.message.isContentVisible) return '';
     return html`

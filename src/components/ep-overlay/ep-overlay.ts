@@ -199,9 +199,6 @@ export class EPOverlay extends LitElement {
         });
       });
 
-
- 
-
     const chatControls = document.getElementById('chat-controls');
     if (chatControls) {
       // const quickTestPopover = new DocumentFragment();

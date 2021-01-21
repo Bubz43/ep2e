@@ -1,11 +1,11 @@
 import {
   createDefaultPsiInfluences,
-  PsiInfluenceType
+  PsiInfluenceType,
 } from '@src/features/psi-influence';
 import {
   deepMerge,
   toTuple,
-  updateManyActors
+  updateManyActors,
 } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import produce from 'immer';
@@ -16,7 +16,7 @@ import {
   createActorEntity,
   createItemEntity,
   ItemDatas,
-  ItemEntity
+  ItemEntity,
 } from './models';
 
 // ! Make sure not to access proxies in migrations, instead use main entity

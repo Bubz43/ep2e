@@ -1,13 +1,15 @@
 import type { Ego } from '@src/entities/actor/ego';
 import { Pool, poolIcon } from '@src/features/pool';
 import {
-  complementarySkillBonus, FieldSkillType, isFieldSkill
+  complementarySkillBonus,
+  FieldSkillType,
+  isFieldSkill,
 } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { openMenu } from '@src/open-menu';
 import {
   skillLinkedAptitudeMultipliers,
-  SkillState
+  SkillState,
 } from '@src/success-test/skill-test';
 import { withSign } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
@@ -26,7 +28,7 @@ export class SuccessTestSkillSection extends LitElement {
 
   @property({ attribute: false }) ego!: Ego;
 
-  @property({ attribute: false }) skillState!: SkillState
+  @property({ attribute: false }) skillState!: SkillState;
 
   private openSkillSelect() {
     openMenu({

@@ -85,6 +85,6 @@ export const nonNegative = (val: number) => (val < 0 ? 0 : val);
 
 export const withSign = (val: number) => `${val < 0 ? '' : '+'}${val}`;
 
-export const arrayOf = <T>({ value, length }: { value: T; length: number; }) => {
-  return range(0, length).map(() => value)
-}
+export const arrayOf = <T>({ value, length }: { value: T; length: number }) => {
+  return range(0, length).map(() => value);
+};

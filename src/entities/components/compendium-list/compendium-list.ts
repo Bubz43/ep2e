@@ -33,7 +33,7 @@ export class CompendiumList extends LitElement {
     img?: string;
   })[];
 
-  @internalProperty() search = '';
+  @internalProperty() private search = '';
 
   private openedEntities = new Map<string, Entity>();
 

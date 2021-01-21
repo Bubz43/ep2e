@@ -151,7 +151,7 @@ Hooks.once('ready', async () => {
           content: control.tools.map((tool) => ({
             label: game.i18n.localize(tool.title),
             icon: html`<i class=${tool.icon}></i>`,
-            activated: (ui.controls.activeTool === tool.name) || !!tool.active,
+            activated: ui.controls.activeTool === tool.name || !!tool.active,
             callback: () => {
               if (tool.toggle) {
                 tool.active = !tool.active;
@@ -324,4 +324,3 @@ for (const app of [ActorDirectory, ItemDirectory]) {
       }),
   });
 }
-

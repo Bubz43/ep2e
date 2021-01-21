@@ -193,8 +193,8 @@ export const itemMenuOptions = (item: ItemProxy): MWCMenuOption[] => {
       callback: item.toggleEquipped.bind(item),
     },
     {
-      label: localize("message"),
-      icon: html`<mwc-icon>message</mwc-icon>`    ,
+      label: localize('message'),
+      icon: html`<mwc-icon>message</mwc-icon>`,
       callback: () => {
         createMessage({
           data: {
@@ -204,11 +204,11 @@ export const itemMenuOptions = (item: ItemProxy): MWCMenuOption[] => {
               description: item.description,
               img: item.nonDefaultImg,
               hidden: item.type === ItemType.Substance && item.appliedAndHidden,
-            }
+            },
           },
           entity: item.actor,
-        })
-      }  
+        });
+      },
     },
     item.openForm &&
       (item.type !== ItemType.Substance ||

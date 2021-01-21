@@ -1,7 +1,12 @@
 import { renderLabeledCheckbox } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import type { Character } from '@src/entities/actor/proxies/character';
-import { Sleeve, ownedSleeves, isSleeve, formattedSleeveInfo } from '@src/entities/actor/sleeves';
+import {
+  Sleeve,
+  ownedSleeves,
+  isSleeve,
+  formattedSleeveInfo,
+} from '@src/entities/actor/sleeves';
 import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisition';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
@@ -193,10 +198,9 @@ export class CharacterViewResleeve extends LitElement {
                   ?activated=${this.selectedSleeve === sleeve}
                   twoline
                   graphic="medium"
-                  @click=${(ev: Event & { currentTarget: HTMLElement}) => {
+                  @click=${(ev: Event & { currentTarget: HTMLElement }) => {
                     this.selectedSleeve = sleeve;
-                    ev.currentTarget.closest("mwc-dialog")?.close()
-
+                    ev.currentTarget.closest('mwc-dialog')?.close();
                   }}
                 >
                   <img slot="graphic" src=${sleeve.img} />
@@ -215,7 +219,6 @@ export class CharacterViewResleeve extends LitElement {
               `,
             )}
           </mwc-list>
-    
         </mwc-dialog>
       `),
     );

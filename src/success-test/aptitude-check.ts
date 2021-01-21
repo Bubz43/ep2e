@@ -154,13 +154,13 @@ export class AptitudeCheck extends SuccessTestBase {
         : undefined,
     };
 
-      if (data.task) {
-        (data.defaultSuperiorEffect = SuperiorResultEffect.Time),
-          (data.superiorResultEffects = arrayOf({
-            value: SuperiorResultEffect.Time,
-            length: grantedSuperiorResultEffects(last(data.states)?.result),
-          }));
-      }
+    if (data.task) {
+      (data.defaultSuperiorEffect = SuperiorResultEffect.Time),
+        (data.superiorResultEffects = arrayOf({
+          value: SuperiorResultEffect.Time,
+          length: grantedSuperiorResultEffects(last(data.states)?.result),
+        }));
+    }
 
     await createMessage({
       data: {

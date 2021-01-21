@@ -64,11 +64,10 @@
   }
 }
 
-
 .attack-setting {
   color: var(--color-text-lighter);
   .active {
-    color: var(--color-secondary)
+    color: var(--color-secondary);
   }
 }
 
@@ -79,7 +78,7 @@
   }
   .targets {
     display: flex;
-    flex-flow:  row wrap;
+    flex-flow: row wrap;
     mwc-icon-button {
       --mdc-icon-button-size: 1.5rem;
       margin: 0.25rem;

@@ -144,8 +144,8 @@ export class MeleeAttackControls extends LitElement {
 
     view.addEventListener('click', cleanup);
     view.addEventListener('contextmenu', cleanup);
-    canvas.tokens.activate()
-    ui.controls.initialize({ tool: "target", layer: null, control: null });
+    canvas.tokens.activate();
+    ui.controls.initialize({ tool: 'target', layer: null, control: null });
     overlay.faded = true;
   }
 
@@ -216,7 +216,7 @@ export class MeleeAttackControls extends LitElement {
                   identity,
                   (token) => html`
                     <mwc-icon-button
-                      class=${token === attackTarget ? "active" : ""}
+                      class=${token === attackTarget ? 'active' : ''}
                       @click=${() => melee.update({ attackTarget: token })}
                       ><img src=${token.data.img}
                     /></mwc-icon-button>
