@@ -1,5 +1,5 @@
 import type { AttackType } from '@src/combat/attacks';
-import { Demolition, ExplosiveTrigger } from '@src/data-enums';
+import { CalledShot, Demolition, ExplosiveTrigger } from '@src/data-enums';
 import { CommonInterval, currentWorldTimeMS } from '@src/features/time';
 import type { PlacedTemplateIDs } from '@src/foundry/canvas';
 import { SuccessTestResult } from '@src/success-test/success-test';
@@ -145,4 +145,5 @@ export type MeleeWeaponSettings = {
   aggressive?: AggressiveOption | null;
   charging?: boolean;
   extraWeapon?: boolean;
+  calledShot?: CalledShot | null;
 };

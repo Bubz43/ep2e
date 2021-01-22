@@ -60,14 +60,6 @@ export class MessageContent extends LitElement {
           ></message-success-test>`
         : ''}
       ${favor ? html` <message-favor .favor=${favor}></message-favor> ` : ''}
-      ${meleeAttack
-        ? html`
-            <message-melee-attack
-              .meleeAttack=${meleeAttack}
-              .successTest=${successTest}
-            ></message-melee-attack>
-          `
-        : ''}
       ${explosiveUse
         ? html`
             <message-explosive
@@ -77,6 +69,14 @@ export class MessageContent extends LitElement {
         : ''}
       ${heal ? html` <message-heal .heal=${heal}></message-heal> ` : ''}
       ${damage ? html`<message-damage .damage=${damage}></message-damage>` : ''}
+      ${meleeAttack
+        ? html`
+            <message-melee-attack
+              .meleeAttack=${meleeAttack}
+              .successTest=${successTest}
+            ></message-melee-attack>
+          `
+        : ''}
       ${stress
         ? html` <message-stress-test .stress=${stress}></message-stress-test> `
         : ''}

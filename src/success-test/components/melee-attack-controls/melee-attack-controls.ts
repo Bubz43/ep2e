@@ -1,4 +1,5 @@
 import type { SlWindow } from '@src/components/window/window';
+import { CalledShot, enumValues } from '@src/data-enums';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
 import { AggressiveOption } from '@src/entities/weapon-settings';
@@ -129,6 +130,24 @@ export class MeleeAttackControls extends LitElement {
     });
   }
 
+  private selectCalledShot() {
+    if (!this.test) return;
+    openMenu({
+      header: { heading: localize('calledShot') },
+      content: [
+        {
+          label: localize("clear"),
+          callback: () => this.test?.melee.update({ calledShot: null }),
+        },
+        ...enumValues(CalledShot).map((shot) => ({
+          label: localize(shot),
+          activated: shot === this.test?.melee.calledShot,
+          callback: () => this.test?.melee.update({ calledShot: shot }),
+        })),
+      ],
+    });
+  }
+
   private startTargetting() {
     const canvas = readyCanvas();
     if (!canvas) return;
@@ -186,6 +205,7 @@ export class MeleeAttackControls extends LitElement {
       charging,
       extraWeapon,
       touchOnly,
+      calledShot
     } = melee;
     const { attacks } = weapon;
     return html`
@@ -209,37 +229,6 @@ export class MeleeAttackControls extends LitElement {
         : ''}
 
       <div class="sections">
-        <!-- <section class="attack">
-          <success-test-section-label
-            >${localize('attack')}</success-test-section-label
-          >
-          <ul class="attack-info">
-            <wl-list-item class="targetting">
-              <mwc-icon-button
-                slot="before"
-                icon="filter_tilt_shift"
-                @click=${this.startTargetting}
-              ></mwc-icon-button>
-              <span>${localize('target')}: ${attackTarget?.name ?? ' - '}</span>
-              <sl-animated-list class="targets">
-                ${repeat(
-          game.user.targets,
-          identity,
-          (token) => html`
-            <mwc-icon-button
-              class=${token === attackTarget ? 'active' : ''}
-              @click=${() => melee.update({ attackTarget: token })}
-              ><img src=${token.data.img}
-            /></mwc-icon-button>
-          `,
-        )}
-              </sl-animated-list>
-            </wl-list-item>
-
-        
-          </ul>
-        </section> -->
-
         <section class="skill-section">
           <success-test-section-label
             >${localize('skill')}</success-test-section-label
@@ -250,84 +239,28 @@ export class MeleeAttackControls extends LitElement {
           ></success-test-skill-section>
         </section>
 
-        <section class="melee">
-          <success-test-section-label
-            >${localize('melee')}</success-test-section-label
+        <section class="targetting">
+          <success-test-section-label @click=${this.startTargetting}
+            ><mwc-icon>filter_tilt_shift</mwc-icon></success-test-section-label
           >
-          <ul class="melee-info">
-                <wl-list-item clickable @click=${this.selectWeapon}>
-              ${weapon.name}
-            </wl-list-item>
-            ${attacks.secondary
-          ? html`
-              <wl-list-item
-                class="attack-setting"
-                clickable
-                @click=${() => melee.update({ primaryAttack: !primaryAttack })}
-              >
-               ${attack.label}
-              </wl-list-item>
-            ` : ""}
-            <li divider></li>
-            <wl-list-item class="aggressive">
-              <span>${localize('aggressive')} </span>
-              <span slot="after">
-                <button
-                  @click=${() =>
-                    melee.update({
-                      aggressive:
-                        aggressive === AggressiveOption.Modifier
-                          ? null
-                          : AggressiveOption.Modifier,
-                    })}
-                  class=${aggressive === AggressiveOption.Modifier
-                    ? 'active'
-                    : ''}
-                >
-                  +10
-                </button>
-                /
-                <button
-                  @click=${() =>
-                    melee.update({
-                      aggressive:
-                        aggressive === AggressiveOption.Damage
-                          ? null
-                          : AggressiveOption.Damage,
-                    })}
-                  class=${aggressive === AggressiveOption.Damage
-                    ? 'active'
-                    : ''}
-                >
-                  +1d10 DV
-                </button></span
-              >
-            </wl-list-item>
-            <mwc-check-list-item
-              ?selected=${!!charging}
-              @click=${() => melee.update({ charging: !charging })}
-            >
-              <span>${localize('charging')}</span>
-            </mwc-check-list-item>
-            <mwc-check-list-item
-              ?selected=${!!extraWeapon}
-              @click=${() => melee.update({ extraWeapon: !extraWeapon })}
-            >
-              <span>${localize('extraWeapon')}</span>
-            </mwc-check-list-item>
-            <mwc-check-list-item
-              ?selected=${!!touchOnly}
-              @click=${() => melee.update({ touchOnly: !touchOnly })}
-            >
-              <span>${localize('touchOnly')}</span>
-            </mwc-check-list-item>
-            <li divider></li>
-           
-            <wl-list-item>
-              <span>${localize("SHORT", "damageValue")}: ${damageValue}</span>
-            </wl-list-item>
 
-          </ul>
+          <wl-list-item>
+ 
+            <span>${localize('target')}: ${attackTarget?.name ?? ' - '}</span>
+            <sl-animated-list class="targets">
+              ${repeat(
+                game.user.targets,
+                identity,
+                (token) => html`
+                  <mwc-icon-button
+                    class=${token === attackTarget ? 'active' : ''}
+                    @click=${() => melee.update({ attackTarget: token })}
+                    ><img src=${token.data.img}
+                  /></mwc-icon-button>
+                `,
+              )}
+            </sl-animated-list>
+          </wl-list-item>
         </section>
 
         <section class="actions">
@@ -359,6 +292,81 @@ export class MeleeAttackControls extends LitElement {
         total=${test.modifierTotal}
         .modifierStore=${test.modifiers}
       ></success-test-modifiers-section>
+
+      <ul class="melee-info">
+        <wl-list-item clickable @click=${this.selectWeapon}>
+          ${weapon.name}
+        </wl-list-item>
+        ${attacks.secondary
+          ? html`
+              <wl-list-item
+                class="attack-setting"
+                clickable
+                @click=${() => melee.update({ primaryAttack: !primaryAttack })}
+              >
+                ${attack.label}
+              </wl-list-item>
+            `
+          : ''}
+        <li divider></li>
+        <wl-list-item clickable @click=${this.selectCalledShot}>
+          <span>${localize("calledShot")}</span>
+          ${calledShot ? html`<span slot="after">${localize(calledShot)}</span>` : ""}
+        </wl-list-item>
+        <wl-list-item class="aggressive">
+          <span>${localize('aggressive')} </span>
+          <span slot="after">
+            <button
+              @click=${() =>
+                melee.update({
+                  aggressive:
+                    aggressive === AggressiveOption.Modifier
+                      ? null
+                      : AggressiveOption.Modifier,
+                })}
+              class=${aggressive === AggressiveOption.Modifier ? 'active' : ''}
+            >
+              +10
+            </button>
+            /
+            <button
+              @click=${() =>
+                melee.update({
+                  aggressive:
+                    aggressive === AggressiveOption.Damage
+                      ? null
+                      : AggressiveOption.Damage,
+                })}
+              class=${aggressive === AggressiveOption.Damage ? 'active' : ''}
+            >
+              +1d10 DV
+            </button></span
+          >
+        </wl-list-item>
+        <mwc-check-list-item
+          ?selected=${!!charging}
+          @click=${() => melee.update({ charging: !charging })}
+        >
+          <span>${localize('charging')}</span>
+        </mwc-check-list-item>
+        <mwc-check-list-item
+          ?selected=${!!extraWeapon}
+          @click=${() => melee.update({ extraWeapon: !extraWeapon })}
+        >
+          <span>${localize('extraWeapon')}</span>
+        </mwc-check-list-item>
+        <mwc-check-list-item
+          ?selected=${!!touchOnly}
+          @click=${() => melee.update({ touchOnly: !touchOnly })}
+        >
+          <span>${localize('touchOnly')}</span>
+        </mwc-check-list-item>
+        <li divider></li>
+
+        <wl-list-item>
+          <span>${localize('SHORT', 'damageValue')}: ${damageValue}</span>
+        </wl-list-item>
+      </ul>
 
       <success-test-footer
         class="footer"

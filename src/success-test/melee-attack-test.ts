@@ -48,6 +48,11 @@ export class MeleeAttackTest extends SkillTest {
     value: 10,
   });
 
+  readonly calledShotModifier = createSuccessTestModifier({
+    name: localize("calledShot"),
+    value: -10
+  })
+
   readonly touchOnlyModifier = createSuccessTestModifier({
     name: localize('touchOnly'),
     value: 20,
@@ -98,6 +103,10 @@ export class MeleeAttackTest extends SkillTest {
         if (draft.melee.touchOnly) {
           simple.set(this.touchOnlyModifier.id, this.touchOnlyModifier);
         } else simple.delete(this.touchOnlyModifier.id);
+
+        if (draft.melee.calledShot) {
+          simple.set(this.calledShotModifier.id, this.calledShotModifier);
+        } else simple.delete(this.calledShotModifier.id);
       }),
     };
 

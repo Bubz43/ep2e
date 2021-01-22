@@ -1,29 +1,20 @@
 import type { SlWindow } from '@src/components/window/window';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
-import { Pool, poolIcon } from '@src/features/pool';
-import {
-  complementarySkillBonus,
-  FieldSkillType,
-  isFieldSkill,
-} from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
-import { openMenu } from '@src/open-menu';
 import {
-  skillLinkedAptitudeMultipliers,
   SkillTest,
-  SkillTestInit,
+  SkillTestInit
 } from '@src/success-test/skill-test';
-import { notEmpty, withSign } from '@src/utility/helpers';
+import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
   internalProperty,
   LitElement,
-  query,
+  query
 } from 'lit-element';
-import { compact } from 'remeda';
 import type { Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';
 import styles from './skill-test-controls.scss';
