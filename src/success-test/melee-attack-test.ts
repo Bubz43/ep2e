@@ -16,9 +16,10 @@ import {
 import { matchesSkill, Source } from '@src/features/effects';
 import type { Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
+import { joinLabeledFormulas } from '@src/foundry/rolls';
 import { arrayOf } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
-import { last, merge, pick } from 'remeda';
+import { compact, concat, last, merge, pick, pipe } from 'remeda';
 import type { SetRequired } from 'type-fest';
 import { SkillTest, SkillTestInit } from './skill-test';
 import {
@@ -48,9 +49,9 @@ export class MeleeAttackTest extends SkillTest {
   });
 
   readonly touchOnlyModifier = createSuccessTestModifier({
-    name: localize("touchOnly"),
-    value: 20
-  })
+    name: localize('touchOnly'),
+    value: 20,
+  });
 
   constructor({ meleeWeapon, primaryAttack, ...init }: MeleeAttackTestInit) {
     super({
@@ -87,15 +88,12 @@ export class MeleeAttackTest extends SkillTest {
         }
         const { simple } = draft.modifiers;
         if (draft.melee.aggressive === AggressiveOption.Modifier) {
-          simple.set(
-            this.aggressiveModifier.id,
-            this.aggressiveModifier,
-          );
+          simple.set(this.aggressiveModifier.id, this.aggressiveModifier);
         } else simple.delete(this.aggressiveModifier.id);
 
         if (draft.melee.touchOnly) {
-          simple.set(this.touchOnlyModifier.id, this.touchOnlyModifier)
-        } else simple.delete(this.touchOnlyModifier.id)
+          simple.set(this.touchOnlyModifier.id, this.touchOnlyModifier);
+        } else simple.delete(this.touchOnlyModifier.id);
       }),
     };
 
@@ -108,6 +106,48 @@ export class MeleeAttackTest extends SkillTest {
         this.modifiers.effects.set(effect, active);
       }
     }
+  }
+
+  get attack() {
+    const { weapon, primaryAttack } = this.melee;
+    return primaryAttack
+      ? weapon.attacks.primary
+      : weapon.attacks.secondary || weapon.attacks.primary;
+  }
+
+  get damageValue() {
+    const { attack } = this;
+    const { augmentUnarmed } = this.melee.weapon;
+    const {
+      touchOnly,
+      unarmedDV,
+      aggressive,
+      charging,
+      extraWeapon,
+    } = this.melee;
+    // TODO size modifiers and unarmed
+    return touchOnly
+      ? '-'
+      : pipe(
+          [
+            augmentUnarmed && {
+              label: localize('unarmedDV'),
+              formula: unarmedDV || '0',
+            },
+            aggressive === AggressiveOption.Damage && {
+              label: localize('aggressive'),
+              formula: '+1d10',
+            },
+            charging && { label: localize('charging'), formula: '+1d6' },
+            extraWeapon && {
+              label: localize('extraWeapon'),
+              formula: '+1d6',
+            },
+          ],
+          compact,
+          concat(attack.rollFormulas),
+          joinLabeledFormulas,
+        );
   }
 
   protected getAttackTargetEffects(

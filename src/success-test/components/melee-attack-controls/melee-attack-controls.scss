@@ -68,9 +68,18 @@
 .melee-info {
   @include textButton();
   button {
+    color: var(--color-text-lighter);
     &.active {
       color: var(--color-secondary);
     }
+  }
+  mwc-check-list-item,
+  wl-list-item {
+    height: 2rem;
+  }
+
+  [divider] {
+    border-color: var(--color-border);
   }
 }
 
