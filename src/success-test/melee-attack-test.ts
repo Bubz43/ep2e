@@ -67,10 +67,14 @@ export class MeleeAttackTest extends SkillTest {
     this.melee = {
       weapon: meleeWeapon,
       primaryAttack,
+      touchOnly: meleeWeapon.isTouchOnly,
       attackTarget: [...game.user.targets][0], // TODO get closest to token
       update: this.recipe((draft, changed) => {
         draft.melee = merge(draft.melee, changed);
-        if (changed.weapon) draft.melee.primaryAttack = true;
+        if (changed.weapon) {
+          draft.melee.primaryAttack = true;
+          draft.melee.touchOnly = draft.melee.weapon.isTouchOnly
+        }
         if (changed.attackTarget) {
           draft.modifiers.effects = this.getModifierEffects(
             draft.skillState.skill,
@@ -105,6 +109,9 @@ export class MeleeAttackTest extends SkillTest {
       ) || []) {
         this.modifiers.effects.set(effect, active);
       }
+    }
+    if (this.melee.touchOnly) {
+      this.modifiers.simple.set(this.touchOnlyModifier.id, this.touchOnlyModifier);
     }
   }
 

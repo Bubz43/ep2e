@@ -174,7 +174,8 @@ export class MeleeAttackControls extends LitElement {
       target,
       melee,
       skillState,
-      damageValue
+      damageValue,
+      attack
     } = test;
 
     const {
@@ -235,25 +236,7 @@ export class MeleeAttackControls extends LitElement {
               </sl-animated-list>
             </wl-list-item>
 
-            <wl-list-item clickable @click=${this.selectWeapon}>
-              ${weapon.name}
-            </wl-list-item>
-            ${attacks.secondary
-          ? html`
-              <wl-list-item
-                class="attack-setting"
-                clickable
-                @click=${() => melee.update({ primaryAttack: !primaryAttack })}
-              >
-                <span slot="before" class=${primaryAttack ? 'active' : ''}
-                  >${attacks.primary.label}</span
-                >
-                <span slot="after" class=${!primaryAttack ? 'active' : ''}
-                  >${attacks.secondary.label}</span
-                >
-              </wl-list-item>
-            `
-          : ''}
+        
           </ul>
         </section> -->
 
@@ -271,8 +254,22 @@ export class MeleeAttackControls extends LitElement {
           <success-test-section-label
             >${localize('melee')}</success-test-section-label
           >
-          <mwc-list class="melee-info">
-            <wl-list-item>
+          <ul class="melee-info">
+                <wl-list-item clickable @click=${this.selectWeapon}>
+              ${weapon.name}
+            </wl-list-item>
+            ${attacks.secondary
+          ? html`
+              <wl-list-item
+                class="attack-setting"
+                clickable
+                @click=${() => melee.update({ primaryAttack: !primaryAttack })}
+              >
+               ${attack.label}
+              </wl-list-item>
+            ` : ""}
+            <li divider></li>
+            <wl-list-item class="aggressive">
               <span>${localize('aggressive')} </span>
               <span slot="after">
                 <button
@@ -325,10 +322,12 @@ export class MeleeAttackControls extends LitElement {
               <span>${localize('touchOnly')}</span>
             </mwc-check-list-item>
             <li divider></li>
-            <mwc-list-item noninteractive>
+           
+            <wl-list-item>
               <span>${localize("SHORT", "damageValue")}: ${damageValue}</span>
-            </mwc-list-item>
-          </mwc-list>
+            </wl-list-item>
+
+          </ul>
         </section>
 
         <section class="actions">

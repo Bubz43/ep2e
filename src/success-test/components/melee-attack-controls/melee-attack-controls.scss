@@ -74,22 +74,18 @@
     }
   }
   mwc-check-list-item,
-  wl-list-item {
+  .aggressive,
+  [clickable] {
     height: 2rem;
   }
 
   [divider] {
-    border-color: var(--color-border);
+    border-top: 1px solid var(--color-border);
   }
 }
 
 
-.attack-setting {
-  color: var(--color-text-lighter);
-  .active {
-    color: var(--color-secondary);
-  }
-}
+
 
 .targetting {
   padding: 0;

@@ -52,6 +52,10 @@ export class MeleeWeapon
     return this.epData.improvised;
   }
 
+  get isTouchOnly() {
+    return this.epData.touchOnly;
+  }
+
   get fullType() {
     const { wareType, isImprovised } = this;
     return compact([
