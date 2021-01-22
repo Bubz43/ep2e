@@ -1,6 +1,7 @@
 import type { SlWindow } from '@src/components/window/window';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
+import { AggressiveOption } from '@src/entities/weapon-settings';
 import { readyCanvas } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
@@ -175,7 +176,15 @@ export class MeleeAttackControls extends LitElement {
       skillState,
     } = test;
 
-    const { weapon, primaryAttack, attackTarget } = melee;
+    const {
+      weapon,
+      primaryAttack,
+      attackTarget,
+      aggressive,
+      charging,
+      extraWeapon,
+      touchOnly,
+    } = melee;
     const { attacks } = weapon;
     return html`
       ${character
@@ -212,16 +221,16 @@ export class MeleeAttackControls extends LitElement {
               <span>${localize('target')}: ${attackTarget?.name ?? ' - '}</span>
               <sl-animated-list class="targets">
                 ${repeat(
-                  game.user.targets,
-                  identity,
-                  (token) => html`
-                    <mwc-icon-button
-                      class=${token === attackTarget ? 'active' : ''}
-                      @click=${() => melee.update({ attackTarget: token })}
-                      ><img src=${token.data.img}
-                    /></mwc-icon-button>
-                  `,
-                )}
+          game.user.targets,
+          identity,
+          (token) => html`
+            <mwc-icon-button
+              class=${token === attackTarget ? 'active' : ''}
+              @click=${() => melee.update({ attackTarget: token })}
+              ><img src=${token.data.img}
+            /></mwc-icon-button>
+          `,
+        )}
               </sl-animated-list>
             </wl-list-item>
 
@@ -229,22 +238,21 @@ export class MeleeAttackControls extends LitElement {
               ${weapon.name}
             </wl-list-item>
             ${attacks.secondary
-              ? html`
-                  <wl-list-item
-                    class="attack-setting"
-                    clickable
-                    @click=${() =>
-                      melee.update({ primaryAttack: !primaryAttack })}
-                  >
-                    <span slot="before" class=${primaryAttack ? 'active' : ''}
-                      >${attacks.primary.label}</span
-                    >
-                    <span slot="after" class=${!primaryAttack ? 'active' : ''}
-                      >${attacks.secondary.label}</span
-                    >
-                  </wl-list-item>
-                `
-              : ''}
+          ? html`
+              <wl-list-item
+                class="attack-setting"
+                clickable
+                @click=${() => melee.update({ primaryAttack: !primaryAttack })}
+              >
+                <span slot="before" class=${primaryAttack ? 'active' : ''}
+                  >${attacks.primary.label}</span
+                >
+                <span slot="after" class=${!primaryAttack ? 'active' : ''}
+                  >${attacks.secondary.label}</span
+                >
+              </wl-list-item>
+            `
+          : ''}
           </ul>
         </section> -->
 
@@ -256,6 +264,50 @@ export class MeleeAttackControls extends LitElement {
             .ego=${ego}
             .skillState=${skillState}
           ></success-test-skill-section>
+          <div class="melee-info">
+            <wl-list-item>
+              <span
+                >${localize('aggressive')}
+                <button
+                  @click=${() =>
+                    melee.update({ aggressive: AggressiveOption.Modifier })}
+                  class=${aggressive === AggressiveOption.Modifier
+                    ? 'active'
+                    : ''}
+                >
+                  +10
+                </button>
+                /
+                <button
+                  @click=${() =>
+                    melee.update({ aggressive: AggressiveOption.Damage })}
+                  class=${aggressive === AggressiveOption.Damage
+                    ? 'active'
+                    : ''}
+                >
+                  +1d10 DV
+                </button>
+              </span>
+            </wl-list-item>
+            <mwc-check-list-item
+              ?selected=${!!charging}
+              @click=${() => melee.update({ charging: !charging })}
+            >
+              <span>${localize('charging')}</span>
+            </mwc-check-list-item>
+            <mwc-check-list-item
+              ?selected=${!!extraWeapon}
+              @click=${() => melee.update({ extraWeapon: !extraWeapon })}
+            >
+              <span>${localize('extraWeapon')}</span>
+            </mwc-check-list-item>
+            <mwc-check-list-item
+              ?selected=${!!touchOnly}
+              @click=${() => melee.update({ touchOnly: !touchOnly })}
+            >
+              <span>${localize('touchOnly')}</span>
+            </mwc-check-list-item>
+          </div>
         </section>
         <section class="actions">
           <success-test-section-label
@@ -265,6 +317,13 @@ export class MeleeAttackControls extends LitElement {
             .action=${action}
           ></success-test-action-form>
         </section>
+
+        <section class="melee">
+          <success-test-section-label
+            >${localize('melee')}</success-test-section-label
+          >
+        </section>
+
         ${notEmpty(pools.available)
           ? html`
               <section class="pools">

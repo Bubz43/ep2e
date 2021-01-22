@@ -133,11 +133,16 @@ export const createDemolitionSetting = (
   }
 };
 
+export enum AggressiveOption {
+  Modifier = "modifier",
+  Damage = "dv"
+}
+
 export type MeleeWeaponSettings = {
   attackType?: AttackType;
   unarmedDV?: string;
   touchOnly?: boolean;
-  aggressive?: boolean;
+  aggressive?: AggressiveOption | null;
   charging?: boolean;
   extraWeapon?: boolean;
 };

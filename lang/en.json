@@ -1382,6 +1382,8 @@
     "woundAmount": "Wound Amount",
     "entity": "Entity",
     "load": "Load",
+    "complexAim": "Complex Aim",
+    "fullDefense": "Full Defense",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

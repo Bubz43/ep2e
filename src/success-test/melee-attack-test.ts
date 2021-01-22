@@ -3,7 +3,10 @@ import { SuperiorResultEffect } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
-import type { MeleeWeaponSettings } from '@src/entities/weapon-settings';
+import {
+  AggressiveOption,
+  MeleeWeaponSettings,
+} from '@src/entities/weapon-settings';
 import {
   Action,
   ActionSubtype,
@@ -18,7 +21,10 @@ import type { WithUpdate } from '@src/utility/updating';
 import { last, merge, pick } from 'remeda';
 import type { SetRequired } from 'type-fest';
 import { SkillTest, SkillTestInit } from './skill-test';
-import { grantedSuperiorResultEffects } from './success-test';
+import {
+  createSuccessTestModifier,
+  grantedSuperiorResultEffects,
+} from './success-test';
 
 export type MeleeAttackTestInit = SetRequired<SkillTestInit, 'character'> & {
   meleeWeapon: MeleeWeapon;
@@ -35,6 +41,16 @@ export class MeleeAttackTest extends SkillTest {
   >;
 
   readonly character: Character;
+
+  readonly aggressiveModifier = createSuccessTestModifier({
+    name: localize('aggressive'),
+    value: 10,
+  });
+
+  readonly touchOnlyModifier = createSuccessTestModifier({
+    name: localize("touchOnly"),
+    value: 20
+  })
 
   constructor({ meleeWeapon, primaryAttack, ...init }: MeleeAttackTestInit) {
     super({
@@ -69,6 +85,17 @@ export class MeleeAttackTest extends SkillTest {
             }
           }
         }
+        const { simple } = draft.modifiers;
+        if (draft.melee.aggressive === AggressiveOption.Modifier) {
+          simple.set(
+            this.aggressiveModifier.id,
+            this.aggressiveModifier,
+          );
+        } else simple.delete(this.aggressiveModifier.id);
+
+        if (draft.melee.touchOnly) {
+          simple.set(this.touchOnlyModifier.id, this.touchOnlyModifier)
+        } else simple.delete(this.touchOnlyModifier.id)
       }),
     };
 

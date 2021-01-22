@@ -1408,7 +1408,7 @@ type LangEntries =
   | 'message'
   | 'woundAmount'
   | 'load'
-  | 'entity';
+  | 'entity' | "complexAim" | "fullDefense"
 type FullNames =
   | 'cog'
   | 'int'

@@ -1199,6 +1199,9 @@
             "complex": {
               "type": "string"
             },
+            "complexAim": {
+              "type": "string"
+            },
             "complexity": {
               "type": "string"
             },
@@ -1902,6 +1905,9 @@
               "type": "string"
             },
             "fullAuto": {
+              "type": "string"
+            },
+            "fullDefense": {
               "type": "string"
             },
             "fullMove": {
@@ -4842,6 +4848,7 @@
             "complete",
             "completed",
             "complex",
+            "complexAim",
             "complexity",
             "components",
             "computer",
@@ -5077,6 +5084,7 @@
             "from",
             "full",
             "fullAuto",
+            "fullDefense",
             "fullMove",
             "gRep",
             "gain",

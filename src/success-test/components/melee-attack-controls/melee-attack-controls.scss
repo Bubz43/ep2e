@@ -64,6 +64,17 @@
   }
 }
 
+
+.melee-info {
+  @include textButton();
+  button {
+    &.active {
+      color: var(--color-secondary);
+    }
+  }
+}
+
+
 .attack-setting {
   color: var(--color-text-lighter);
   .active {

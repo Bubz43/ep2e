@@ -113,14 +113,12 @@ export class MeleeSettingsForm extends LitElement {
     const {
       unarmedDV = '',
       touchOnly = false,
-      aggressive = false,
       charging = false,
       extraWeapon = false,
     } = this.settings;
     return {
       unarmedDV,
       touchOnly,
-      aggressive,
       charging,
       extraWeapon,
     };
@@ -134,13 +132,12 @@ export class MeleeSettingsForm extends LitElement {
         fields: ({
           unarmedDV,
           touchOnly,
-          aggressive,
           charging,
           extraWeapon,
         }) => [
           this.meleeWeapon.augmentUnarmed ? renderFormulaField(unarmedDV) : '',
           map(
-            [touchOnly, aggressive, charging, extraWeapon],
+            [touchOnly, charging, extraWeapon],
             renderLabeledCheckbox,
           ),
         ],

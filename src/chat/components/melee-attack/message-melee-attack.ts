@@ -11,6 +11,7 @@ import { ExplosiveSettingsForm } from '@src/entities/actor/components/character-
 import { MeleeSettingsForm } from '@src/entities/actor/components/character-views/components/attacks/melee-settings/melee-settings-form';
 import { ItemType } from '@src/entities/entity-types';
 import { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
+import { AggressiveOption } from '@src/entities/weapon-settings';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
 import {
@@ -170,7 +171,7 @@ export class MessageMeleeAttack extends MessageElement {
                 label: localize('unarmedDV'),
                 formula: unarmedDV || '0',
               },
-              aggressive && {
+              aggressive === AggressiveOption.Damage && {
                 label: localize('aggressive'),
                 formula: '+1d10',
               },

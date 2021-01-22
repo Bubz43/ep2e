@@ -1,8 +1,8 @@
-import { renderLabeledCheckbox } from '@src/components/field/fields';
-import { renderAutoForm } from '@src/components/form/forms';
-import { enumValues } from '@src/data-enums';
+import { emptyTextDash, renderLabeledCheckbox, renderSelectField } from '@src/components/field/fields';
+import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
+import { enumValues, FullDefenseType } from '@src/data-enums';
 import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisition';
-import { ItemType } from '@src/entities/entity-types';
+import { ActorType, ItemType } from '@src/entities/entity-types';
 import {
   Substance,
   SubstanceUseMethod,
@@ -267,11 +267,11 @@ export class CharacterView extends CharacterViewBase {
     const {
       awaitingOnsetSubstances,
       activeSubstances,
-      psi,
       conditions,
       pools,
       disabled,
       temporaryConditionSources,
+      sleeve
     } = this.character;
     return html`
       <section class="status">
@@ -310,6 +310,21 @@ export class CharacterView extends CharacterViewBase {
               )}
             </div>
           </div>
+
+          ${sleeve && sleeve.type !== ActorType.Infomorph ? html`
+          <div class="combat-state">
+          ${renderUpdaterForm(this.character.updater.path("data", "combatState"), {
+            disabled: disabled,
+            fields: ({ aggressive, complexAim, fullDefense}) => [
+              html`
+              <div class="combat-toggles">${[renderLabeledCheckbox(aggressive),
+              renderLabeledCheckbox(complexAim)]}</div>
+              `,
+              renderSelectField(fullDefense, enumValues(FullDefenseType), emptyTextDash)
+            ]
+          })}
+          </div>
+          ` : ""}
 
           <sl-dropzone
             class="applied-substances"
