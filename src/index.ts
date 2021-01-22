@@ -1,6 +1,5 @@
-import { enableMapSet, enablePatches } from 'immer';
+import { enableMapSet } from 'immer';
 enableMapSet();
-enablePatches();
 
 // Material Components
 import '@material/mwc-button';

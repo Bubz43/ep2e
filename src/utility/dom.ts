@@ -185,7 +185,7 @@ const initialSize = (
 
 type PointerInit = {
   element: HTMLElement;
-  ev: PointerEvent;
+  ev: MouseEvent;
   onEnd?: () => unknown;
 };
 

@@ -5,15 +5,11 @@ import {
   createAction,
   updateAction,
 } from '@src/features/actions';
-import {
-  Source,
-  SourcedEffect,
-  SuccessTestEffect,
-} from '@src/features/effects';
+import { Source } from '@src/features/effects';
 import { PreTestPoolAction } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import type { WithUpdate } from '@src/utility/updating';
-import { immerable, Draft, produceWithPatches } from 'immer';
+import { Draft, immerable, produce } from 'immer';
 import { equals, merge, pick } from 'remeda';
 import { BehaviorSubject } from 'rxjs';
 import {
@@ -39,12 +35,10 @@ export abstract class SuccessTestBase {
   readonly subscribe = this.state.subscribe.bind(this.state);
 
   protected update(recipe: Draft<this> | ((recipe: Draft<this>) => void)) {
-    const [nextState, patches, inversePatches] = produceWithPatches(
+    const nextState = produce(
       this.state.value,
       typeof recipe === 'function' ? recipe : () => recipe,
     );
-
-    console.log(patches);
 
     if (nextState.settings.ready) {
       this.state.complete();
@@ -118,9 +112,9 @@ export abstract class SuccessTestBase {
     this.action = {
       ...(action ?? createAction({ type: ActionType.Automatic })),
       modifier: createSuccessTestModifier(),
-      update: (changed) => {
-        this.update((draft) => this.updateAction(draft, changed));
-      },
+      update: this.recipe(
+        (draft, changed) => void this.updateAction(draft, changed),
+      ),
     };
   }
 

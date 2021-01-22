@@ -198,7 +198,7 @@ export class MeleeAttackControls extends LitElement {
         : ''}
 
       <div class="sections">
-        <section class="attack">
+        <!-- <section class="attack">
           <success-test-section-label
             >${localize('attack')}</success-test-section-label
           >
@@ -246,7 +246,7 @@ export class MeleeAttackControls extends LitElement {
                 `
               : ''}
           </ul>
-        </section>
+        </section> -->
 
         <section class="skill-section">
           <success-test-section-label

@@ -345,11 +345,13 @@ export class SlWindow extends LitElement {
     if (this.hasChangedSize) {
       assignStyles(this.contentContainer, { height: '', width: '' });
     }
-
-    repositionIfNeeded(this);
   }
 
-  private resize(ev: PointerEvent) {
+  private repositionWithinWindow(ev: MouseEvent) {
+    if (ev.button === 1) repositionIfNeeded(this);
+  }
+
+  private resize(ev: MouseEvent) {
     const { currentTarget } = ev;
     if (currentTarget instanceof HTMLElement) {
       const resize = currentTarget.getAttribute('data-resize') as ResizeOption;
@@ -459,8 +461,10 @@ export class SlWindow extends LitElement {
     };
   }
 
-  private startDrag(ev: PointerEvent) {
+  private startDrag(ev: MouseEvent) {
+    
     if (
+      ev.button === 2 ||
       ev.defaultPrevented ||
       ev
         .composedPath()
@@ -563,6 +567,7 @@ export class SlWindow extends LitElement {
         @dblclick=${this.toggleMinimize}
         @mousedown=${this.startDrag}
         @contextmenu=${this.openMenu}
+        @auxclick=${this.repositionWithinWindow}
       >
         <div class="heading">
           ${this.img ? html`<img height="24px" src=${this.img} />` : ''}
@@ -597,8 +602,6 @@ export class SlWindow extends LitElement {
                 class="resize-handle ${option}-resize"
                 data-resize=${option}
                 @pointerdown=${this.resize}
-                @dblclick=${this.resetSize}
-                @contextmenu=${this.resetSize}
                 ?hidden=${hidden}
               ></div>
               ${option === ResizeOption.Both
@@ -608,8 +611,6 @@ export class SlWindow extends LitElement {
                       class="resize-handle ${option}-resize alt"
                       data-resize=${option}
                       @pointerdown=${this.resize}
-                      @dblclick=${this.resetSize}
-                      @contextmenu=${this.resetSize}
                       ?hidden=${hidden}
                     ></div>
                   `}
