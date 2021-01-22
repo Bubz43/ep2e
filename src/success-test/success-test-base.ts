@@ -56,35 +56,30 @@ export abstract class SuccessTestBase {
     visibility: rollModeToVisibility(game.settings.get('core', 'rollMode')),
     autoRoll: true,
     ready: false,
-    update: (changed) => {
-      this.update(
-        (draft) => void (draft.settings = merge(draft.settings, changed)),
-      );
-    },
+    update: this.recipe(
+      (draft, changed) =>
+        void (draft.settings = merge(draft.settings, changed)),
+    ),
     setReady: () => this.update(({ settings }) => void (settings.ready = true)),
   };
 
   readonly pools: SuccessTestPools = {
     available: [],
     active: null,
-    toggleActive: (pair) => {
-      this.update((draft) => this.togglePool(draft, pair));
-    },
+    toggleActive: this.recipe((draft, pair) => this.togglePool(draft, pair)),
   };
   readonly action: WithUpdate<Action> & { modifier: SimpleSuccessTestModifier };
   readonly modifiers: SuccessTestModifiers = {
     effects: new Map(),
-    toggleEffect: (effect: SourcedEffect<SuccessTestEffect>) => {
-      this.update(({ modifiers: { effects } }) => {
-        effects.set(effect, !effects.get(effect));
-      });
-    },
-    simple: new Map<number, SimpleSuccessTestModifier>(),
-    toggleSimple: (modifier: SimpleSuccessTestModifier) => {
-      this.update(({ modifiers: { simple } }) => {
-        simple.delete(modifier.id) || simple.set(modifier.id, modifier);
-      });
-    },
+    toggleEffect: this.recipe(
+      ({ modifiers: { effects } }, effect) =>
+        void effects.set(effect, !effects.get(effect)),
+    ),
+    simple: new Map(),
+    toggleSimple: this.recipe(
+      ({ modifiers: { simple } }, modifier) =>
+        void simple.delete(modifier.id) || simple.set(modifier.id, modifier),
+    ),
   };
 
   get target() {

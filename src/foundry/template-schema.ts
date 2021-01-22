@@ -210,6 +210,7 @@ type CharacterData = EgoData & {
   accumulatedTimeStart: number;
   // log: StringID<CharacterLogEntry>[];
   combatState: {
+    aggressive: boolean;
     complexAim: boolean;
     fullDefense: '' | FullDefenseType;
   };

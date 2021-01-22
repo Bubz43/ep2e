@@ -136,7 +136,9 @@ export class CompendiumSearch extends LitElement {
               })}</label
             >`,
         })}
-        ${filtered.length === 0
+        ${this.loading
+          ? ''
+          : filtered.length === 0
           ? html` <p class="fallback">${localize('noResults')}.</p> `
           : html` <lit-virtualizer
               @dragstart=${this.setDragData}

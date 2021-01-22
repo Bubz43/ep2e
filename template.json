@@ -393,7 +393,8 @@
       },
       "combatState": {
         "complexAim": false,
-        "fullDefense": ""
+        "fullDefense": "",
+        "aggressive": false
       },
       "mentalHealth": {
         "alienation": 0,

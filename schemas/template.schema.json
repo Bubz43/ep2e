@@ -788,6 +788,9 @@
                 "combatState": {
                   "additionalProperties": false,
                   "properties": {
+                    "aggressive": {
+                      "type": "boolean"
+                    },
                     "complexAim": {
                       "type": "boolean"
                     },
@@ -804,6 +807,7 @@
                     }
                   },
                   "required": [
+                    "aggressive",
                     "complexAim",
                     "fullDefense"
                   ],
@@ -1390,6 +1394,25 @@
                       },
                       "id": {
                         "type": "string"
+                      },
+                      "modifiers": {
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "modifier": {
+                              "type": "number"
+                            },
+                            "source": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "source",
+                            "modifier"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array"
                       },
                       "name": {
                         "type": "string"
@@ -9456,7 +9479,8 @@
       "enum": [
         0.5,
         1,
-        2
+        2,
+        3
       ],
       "type": "number"
     },
