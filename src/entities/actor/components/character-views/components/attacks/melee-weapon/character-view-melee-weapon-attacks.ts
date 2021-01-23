@@ -136,7 +136,7 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
         ].join(' '),
       notEmpty(attack.attackTraits) &&
         map(attack.attackTraits, localize).join(', '),
-        this.weapon.isTouchOnly && localize("touchOnly"),
+      this.weapon.isTouchOnly && localize('touchOnly'),
       attack.notes,
     ]).join('. ');
     if (!this.weapon.hasSecondaryAttack && !info) return '';

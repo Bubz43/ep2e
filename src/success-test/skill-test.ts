@@ -54,7 +54,6 @@ export class SkillTest extends SuccessTestBase {
   readonly token;
   readonly skillState: SkillState;
 
-
   get basePoints() {
     const {
       skill,

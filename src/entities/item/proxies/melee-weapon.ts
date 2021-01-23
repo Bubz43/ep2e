@@ -57,7 +57,7 @@ export class MeleeWeapon
   }
 
   get isTwoHanded() {
-    return this.epData.twoHanded
+    return this.epData.twoHanded;
   }
 
   get fullType() {

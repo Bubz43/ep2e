@@ -1408,7 +1408,10 @@ type LangEntries =
   | 'message'
   | 'woundAmount'
   | 'load'
-  | 'entity' | "complexAim" | "fullDefense" | "oneHand"
+  | 'entity'
+  | 'complexAim'
+  | 'fullDefense'
+  | 'oneHand';
 type FullNames =
   | 'cog'
   | 'int'

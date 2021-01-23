@@ -136,8 +136,8 @@ export const createDemolitionSetting = (
 };
 
 export enum AggressiveOption {
-  Modifier = "modifier",
-  Damage = "dv"
+  Modifier = 'modifier',
+  Damage = 'dv',
 }
 
 export type MeleeWeaponSettings = {
@@ -155,7 +155,7 @@ export const formulasFromMeleeSettings = ({
   aggressive,
   charging,
   extraWeapon,
-}: Pick<MeleeWeaponSettings, "aggressive" | "charging" | "extraWeapon">) => {
+}: Pick<MeleeWeaponSettings, 'aggressive' | 'charging' | 'extraWeapon'>) => {
   return compact([
     aggressive === AggressiveOption.Damage && {
       label: localize('aggressive'),

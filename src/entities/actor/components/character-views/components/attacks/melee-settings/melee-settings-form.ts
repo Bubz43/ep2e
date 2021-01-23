@@ -129,17 +129,9 @@ export class MeleeSettingsForm extends LitElement {
       ${renderAutoForm({
         props: this.formProps,
         update: this.updateSettings,
-        fields: ({
-          unarmedDV,
-          touchOnly,
-          charging,
-          extraWeapon,
-        }) => [
+        fields: ({ unarmedDV, touchOnly, charging, extraWeapon }) => [
           this.meleeWeapon.augmentUnarmed ? renderFormulaField(unarmedDV) : '',
-          map(
-            [touchOnly, charging, extraWeapon],
-            renderLabeledCheckbox,
-          ),
+          map([touchOnly, charging, extraWeapon], renderLabeledCheckbox),
         ],
       })}
       ${this.requireSubmit

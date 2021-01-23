@@ -144,31 +144,29 @@ export class MessageMeleeAttack extends MessageElement {
       ) || [];
 
     const multiplier = testResult === SuccessTestResult.CriticalSuccess ? 2 : 1;
-        const rolled = pipe(
-          [
-            testResult === SuccessTestResult.SuperiorSuccess &&
-              superiorDamage.length >= 1 && {
-                label: localize(testResult),
-                formula: '+1d6',
-              },
-            testResult === SuccessTestResult.SuperiorSuccessX2 &&
-              superiorDamage.length >= 1 && {
-                label: localize(testResult),
-                formula: successTestInfo
-                  ? `+${superiorDamage.length}d6`
-                  : '+2d6',
-              },
-            augmentUnarmed && {
-              label: localize('unarmedDV'),
-              formula: unarmedDV || '0',
-            },
-            ...formulasFromMeleeSettings(this.meleeAttack),
-            ...(damageModifiers ?? []),
-          ],
-          compact,
-          concat(attack.rollFormulas),
-          rollLabeledFormulas,
-        );
+    const rolled = pipe(
+      [
+        testResult === SuccessTestResult.SuperiorSuccess &&
+          superiorDamage.length >= 1 && {
+            label: localize(testResult),
+            formula: '+1d6',
+          },
+        testResult === SuccessTestResult.SuperiorSuccessX2 &&
+          superiorDamage.length >= 1 && {
+            label: localize(testResult),
+            formula: successTestInfo ? `+${superiorDamage.length}d6` : '+2d6',
+          },
+        augmentUnarmed && {
+          label: localize('unarmedDV'),
+          formula: unarmedDV || '0',
+        },
+        ...formulasFromMeleeSettings(this.meleeAttack),
+        ...(damageModifiers ?? []),
+      ],
+      compact,
+      concat(attack.rollFormulas),
+      rollLabeledFormulas,
+    );
     message.createSimilar({
       damage: {
         ...pick(attack, [
@@ -181,7 +179,7 @@ export class MessageMeleeAttack extends MessageElement {
         source: `${name} ${hasSecondaryAttack ? `[${attack.label}]` : ''}`,
         multiplier:
           morphSize === Size.Small ? (multiplier === 2 ? 1 : 0.5) : multiplier,
-        rolledFormulas:rolled
+        rolledFormulas: rolled,
       },
     });
   }

@@ -3,17 +3,14 @@ import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
-import {
-  SkillTest,
-  SkillTestInit
-} from '@src/success-test/skill-test';
+import { SkillTest, SkillTestInit } from '@src/success-test/skill-test';
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
   internalProperty,
   LitElement,
-  query
+  query,
 } from 'lit-element';
 import type { Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';

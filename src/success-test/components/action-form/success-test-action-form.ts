@@ -32,7 +32,7 @@ export class SuccessTestActionForm extends LitElement {
   @property({ attribute: false })
   action!: SuccessTestBase['action'];
 
-  @property({ type: String }) fullMoveLabel = localize("fullMove")
+  @property({ type: String }) fullMoveLabel = localize('fullMove');
 
   render() {
     const { action } = this;
@@ -50,7 +50,8 @@ export class SuccessTestActionForm extends LitElement {
           subtype.value === ActionSubtype.Physical
             ? html`
                 <mwc-check-list-item
-                  @click=${() => this.action.update({ fullMove: !fullMove.value })}
+                  @click=${() =>
+                    this.action.update({ fullMove: !fullMove.value })}
                   ?selected=${fullMove.value}
                 >
                   ${this.fullMoveLabel}

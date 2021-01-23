@@ -2,20 +2,18 @@ import type { PoolType } from '@src/data-enums';
 import {
   createEffect,
   DurationEffect,
-
   DurationEffectTarget,
   Effect,
   EffectType,
   extractDurationEffectMultipliers,
   HealthEffect,
-
   MovementEffectMode,
   MovementEffectsInfo,
   PoolEffect,
   Source,
   SourcedEffect,
   SuccessTestEffect,
-  UniqueEffectType
+  UniqueEffectType,
 } from '@src/features/effects';
 import type { Movement, MovementRate } from '@src/features/movement';
 import { SkillType } from '@src/features/skills';
@@ -23,7 +21,8 @@ import { createTag } from '@src/features/tags';
 import { localize } from '@src/foundry/localization';
 import type {
   HealthStat,
-  HealthStatMods, HealthType
+  HealthStatMods,
+  HealthType,
 } from '@src/health/health';
 import { LazyGetter } from 'lazy-get-decorator';
 import { allPass, concat, filter, groupBy, pipe } from 'remeda';

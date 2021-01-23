@@ -258,7 +258,6 @@ export class SlWindow extends LitElement {
 
   gainFocus() {
     if (!this.resizeObs) this.confirmPosition();
-    // this.minimized = false;
     SlWindow.grantFocus(this);
     return this;
   }

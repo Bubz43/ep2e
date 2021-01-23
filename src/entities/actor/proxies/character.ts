@@ -138,7 +138,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     }
 
     if (this.sleeve && this.sleeve?.type !== ActorType.Infomorph) {
-      this._appliedEffects.add(getEffectsFromSize(this.sleeve.size))
+      this._appliedEffects.add(getEffectsFromSize(this.sleeve.size));
     }
 
     this.armor = new ActiveArmor(

@@ -80,8 +80,10 @@ export class MeleeAttackTest extends SkillTest {
     });
     this.character = init.character;
 
-    this.fullMoveModifier.name = `${localize("fullMove")} (${localize("charging")})`;
-    this.fullMoveModifier.value = -10
+    this.fullMoveModifier.name = `${localize('fullMove')} (${localize(
+      'charging',
+    )})`;
+    this.fullMoveModifier.value = -10;
 
     this.melee = {
       weapon: meleeWeapon,
@@ -135,7 +137,6 @@ export class MeleeAttackTest extends SkillTest {
       }),
     };
 
-
     if (this.melee.attackTarget) {
       for (const [effect, active] of this.getAttackTargetEffects(
         this.melee.attackTarget as Token,
@@ -154,9 +155,9 @@ export class MeleeAttackTest extends SkillTest {
   }
 
   get morphSize() {
-     const { sleeve } = this.character;
-     if (!sleeve || sleeve.type === ActorType.Infomorph) return null;
-     return sleeve.size
+    const { sleeve } = this.character;
+    if (!sleeve || sleeve.type === ActorType.Infomorph) return null;
+    return sleeve.size;
   }
 
   get largeMorph() {
@@ -187,14 +188,15 @@ export class MeleeAttackTest extends SkillTest {
           label: localize('unarmedDV'),
           formula: this.melee.unarmedDV || '0',
         },
-        ...formulasFromMeleeSettings(set(this.melee, "charging", this.action.fullMove)),
+        ...formulasFromMeleeSettings(
+          set(this.melee, 'charging', this.action.fullMove),
+        ),
         ...this.damageModifierEffects,
       ],
       compact,
       concat(this.attack.rollFormulas),
     );
   }
-
 
   protected getAttackTargetEffects(
     target: Token,
@@ -213,7 +215,15 @@ export class MeleeAttackTest extends SkillTest {
   }
 
   protected async createMessage() {
-    const { settings, pools, action, melee, testMessageData, morphSize, damageModifierEffects } = this;
+    const {
+      settings,
+      pools,
+      action,
+      melee,
+      testMessageData,
+      morphSize,
+      damageModifierEffects,
+    } = this;
 
     const { weapon, primaryAttack, charging, ...meleeSettings } = melee;
 
@@ -251,10 +261,10 @@ export class MeleeAttackTest extends SkillTest {
             'touchOnly',
             'unarmedDV',
             'oneHanded',
-            'calledShot'
+            'calledShot',
           ]),
           morphSize,
-          damageModifiers: damageModifierEffects
+          damageModifiers: damageModifierEffects,
         },
       },
 
