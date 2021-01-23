@@ -1384,6 +1384,7 @@
     "load": "Load",
     "complexAim": "Complex Aim",
     "fullDefense": "Full Defense",
+    "oneHand": "One Hand",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

@@ -14,8 +14,10 @@ import {
   createAction,
 } from '@src/features/actions';
 import { EffectType, matchesSkill, Source } from '@src/features/effects';
+import { Size } from '@src/features/size';
 import type { Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
+import { capitalize } from '@src/foundry/misc-helpers';
 import { joinLabeledFormulas } from '@src/foundry/rolls';
 import { arrayOf } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
@@ -59,7 +61,9 @@ export class MeleeAttackTest extends SkillTest {
   });
 
   readonly twoHandedModifier = createSuccessTestModifier({
-    name: `${localize('wieldedWith')} ${localize('oneHand')}`,
+    name: capitalize(
+      `${localize('wieldedWith')} ${localize('oneHand')}`.toLocaleLowerCase(),
+    ),
     value: -20,
   });
 
@@ -116,7 +120,11 @@ export class MeleeAttackTest extends SkillTest {
           simple.set(this.calledShotModifier.id, this.calledShotModifier);
         } else simple.delete(this.calledShotModifier.id);
 
-        if (draft.melee.weapon.isTwoHanded && draft.melee.oneHanded) {
+        if (
+          draft.melee.weapon.isTwoHanded &&
+          draft.melee.oneHanded &&
+          !this.largeMorph
+        ) {
           simple.set(this.twoHandedModifier.id, this.twoHandedModifier);
         } else simple.delete(this.twoHandedModifier.id);
       }),
@@ -139,6 +147,12 @@ export class MeleeAttackTest extends SkillTest {
     }
   }
 
+  get largeMorph() {
+    const { sleeve } = this.character;
+    if (!sleeve || sleeve.type === ActorType.Infomorph) return false;
+    return sleeve.size === Size.Large || sleeve.size === Size.VeryLarge;
+  }
+
   get attack() {
     const { weapon, primaryAttack } = this.melee;
     return primaryAttack
@@ -146,45 +160,37 @@ export class MeleeAttackTest extends SkillTest {
       : weapon.attacks.secondary || weapon.attacks.primary;
   }
 
-  get damageValue() {
+  get damageFormulas() {
     const { attack, character } = this;
     const { augmentUnarmed } = this.melee.weapon;
-    const {
-      touchOnly,
-      unarmedDV,
-      aggressive,
-      charging,
-      extraWeapon,
-    } = this.melee;
-      return touchOnly
-      ? '-'
-      : pipe(
-          [
-            augmentUnarmed && {
-              label: localize('unarmedDV'),
-              formula: unarmedDV || '0',
-            },
-            aggressive === AggressiveOption.Damage && {
-              label: localize('aggressive'),
-              formula: '+1d10',
-            },
-            charging && { label: localize('charging'), formula: '+1d6' },
-            extraWeapon && {
-              label: localize('extraWeapon'),
-              formula: '+1d6',
-            },
-            ...character.appliedEffects
-              .getGroup(EffectType.Melee)
-              .map((effect) => ({
-                label: effect[Source],
-                formula: effect.dvModifier,
-              })),
-          ],
-          compact,
-          concat(attack.rollFormulas),
-          joinLabeledFormulas,
-        );
+    const { unarmedDV, aggressive, charging, extraWeapon } = this.melee;
+    return pipe(
+      [
+        augmentUnarmed && {
+          label: localize('unarmedDV'),
+          formula: unarmedDV || '0',
+        },
+        aggressive === AggressiveOption.Damage && {
+          label: localize('aggressive'),
+          formula: '+1d10',
+        },
+        charging && { label: localize('charging'), formula: '+1d6' },
+        extraWeapon && {
+          label: localize('extraWeapon'),
+          formula: '+1d6',
+        },
+        ...character.appliedEffects
+          .getGroup(EffectType.Melee)
+          .map((effect) => ({
+            label: effect[Source],
+            formula: effect.dvModifier,
+          })),
+      ],
+      compact,
+      concat(attack.rollFormulas),
+    );
   }
+
 
   protected getAttackTargetEffects(
     target: Token,

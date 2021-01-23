@@ -5,7 +5,8 @@ import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
 import { AggressiveOption } from '@src/entities/weapon-settings';
 import { readyCanvas } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
-import { overlay } from '@src/init';
+import { joinLabeledFormulas } from '@src/foundry/rolls';
+import { overlay, tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import {
   MeleeAttackTest,
@@ -193,7 +194,7 @@ export class MeleeAttackControls extends LitElement {
       target,
       melee,
       skillState,
-      damageValue,
+      damageFormulas,
       attack,
     } = test;
 
@@ -375,8 +376,30 @@ export class MeleeAttackControls extends LitElement {
         </mwc-check-list-item>
         <li divider></li>
 
-        <wl-list-item>
-          <span>${localize('SHORT', 'damageValue')}: ${damageValue}</span>
+        <wl-list-item
+          @mouseover=${(ev: Event & { currentTarget: HTMLElement }) => {
+            tooltip.attach({
+              el: ev.currentTarget,
+              content: html`
+                <dl>
+                  ${touchOnly ? html`
+                  <dt>${localize("touchOnly")}</dt>
+                  <dd>${localize("noDamage")}</dd>
+                  ` : damageFormulas.map(
+                    ({ label, formula }) => html`
+                      <dt>${label}</dt>
+                      <dd>${formula}</dd>
+                    `,
+                  )}
+                </dl>
+              `,
+            });
+          }}
+        >
+          <span class="damage-value"
+            >${localize('SHORT', 'damageValue')}:
+            ${touchOnly ? '-' : joinLabeledFormulas(damageFormulas)}</span
+          >
         </wl-list-item>
       </ul>
 
