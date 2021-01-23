@@ -13,7 +13,7 @@ import {
   ActionType,
   createAction,
 } from '@src/features/actions';
-import { matchesSkill, Source } from '@src/features/effects';
+import { EffectType, matchesSkill, Source } from '@src/features/effects';
 import type { Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas } from '@src/foundry/rolls';
@@ -147,7 +147,7 @@ export class MeleeAttackTest extends SkillTest {
   }
 
   get damageValue() {
-    const { attack } = this;
+    const { attack, character } = this;
     const { augmentUnarmed } = this.melee.weapon;
     const {
       touchOnly,
@@ -156,8 +156,7 @@ export class MeleeAttackTest extends SkillTest {
       charging,
       extraWeapon,
     } = this.melee;
-    // TODO size modifiers and unarmed
-    return touchOnly
+      return touchOnly
       ? '-'
       : pipe(
           [
@@ -174,6 +173,12 @@ export class MeleeAttackTest extends SkillTest {
               label: localize('extraWeapon'),
               formula: '+1d6',
             },
+            ...character.appliedEffects
+              .getGroup(EffectType.Melee)
+              .map((effect) => ({
+                label: effect[Source],
+                formula: effect.dvModifier,
+              })),
           ],
           compact,
           concat(attack.rollFormulas),

@@ -2,34 +2,31 @@ import type { PoolType } from '@src/data-enums';
 import {
   createEffect,
   DurationEffect,
-  durationEffectMultiplier,
+
   DurationEffectTarget,
   Effect,
   EffectType,
   extractDurationEffectMultipliers,
   HealthEffect,
-  MovementEffect,
+
   MovementEffectMode,
   MovementEffectsInfo,
   PoolEffect,
   Source,
   SourcedEffect,
   SuccessTestEffect,
-  UniqueEffectType,
+  UniqueEffectType
 } from '@src/features/effects';
 import type { Movement, MovementRate } from '@src/features/movement';
 import { SkillType } from '@src/features/skills';
 import { createTag } from '@src/features/tags';
 import { localize } from '@src/foundry/localization';
 import type {
-  HealthType,
   HealthStat,
-  HealthStatMods,
+  HealthStatMods, HealthType
 } from '@src/health/health';
-import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
-import { pipe, concat, filter, allPass, clamp, groupBy, compact } from 'remeda';
-import type { ActiveSubstanceState } from './models';
+import { allPass, concat, filter, groupBy, pipe } from 'remeda';
 
 export type AddEffects = {
   source: string;
