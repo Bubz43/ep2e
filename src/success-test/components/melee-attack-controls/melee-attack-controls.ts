@@ -136,7 +136,7 @@ export class MeleeAttackControls extends LitElement {
       header: { heading: localize('calledShot') },
       content: [
         {
-          label: localize("clear"),
+          label: localize('clear'),
           callback: () => this.test?.melee.update({ calledShot: null }),
         },
         ...enumValues(CalledShot).map((shot) => ({
@@ -194,7 +194,7 @@ export class MeleeAttackControls extends LitElement {
       melee,
       skillState,
       damageValue,
-      attack
+      attack,
     } = test;
 
     const {
@@ -205,9 +205,10 @@ export class MeleeAttackControls extends LitElement {
       charging,
       extraWeapon,
       touchOnly,
-      calledShot
+      calledShot,
+      oneHanded,
     } = melee;
-    const { attacks } = weapon;
+    const { attacks, isTwoHanded } = weapon;
     return html`
       ${character
         ? html`
@@ -245,7 +246,6 @@ export class MeleeAttackControls extends LitElement {
           >
 
           <wl-list-item>
- 
             <span>${localize('target')}: ${attackTarget?.name ?? ' - '}</span>
             <sl-animated-list class="targets">
               ${repeat(
@@ -308,10 +308,22 @@ export class MeleeAttackControls extends LitElement {
               </wl-list-item>
             `
           : ''}
+        ${isTwoHanded
+          ? html`
+              <mwc-check-list-item
+                ?selected=${!oneHanded}
+                @click=${() => melee.update({ oneHanded: !oneHanded })}
+              >
+                <span>${localize('twoHanded')}</span>
+              </mwc-check-list-item>
+            `
+          : ''}
         <li divider></li>
         <wl-list-item clickable @click=${this.selectCalledShot}>
-          <span>${localize("calledShot")}</span>
-          ${calledShot ? html`<span slot="after">${localize(calledShot)}</span>` : ""}
+          <span>${localize('calledShot')}</span>
+          ${calledShot
+            ? html`<span slot="after">${localize(calledShot)}</span>`
+            : ''}
         </wl-list-item>
         <wl-list-item class="aggressive">
           <span>${localize('aggressive')} </span>

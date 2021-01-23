@@ -56,6 +56,10 @@ export class MeleeWeapon
     return this.epData.touchOnly;
   }
 
+  get isTwoHanded() {
+    return this.epData.twoHanded
+  }
+
   get fullType() {
     const { wareType, isImprovised } = this;
     return compact([

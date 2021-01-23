@@ -146,4 +146,5 @@ export type MeleeWeaponSettings = {
   charging?: boolean;
   extraWeapon?: boolean;
   calledShot?: CalledShot | null;
+  oneHanded?: boolean;
 };

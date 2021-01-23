@@ -49,13 +49,18 @@ export class MeleeAttackTest extends SkillTest {
   });
 
   readonly calledShotModifier = createSuccessTestModifier({
-    name: localize("calledShot"),
-    value: -10
-  })
+    name: localize('calledShot'),
+    value: -10,
+  });
 
   readonly touchOnlyModifier = createSuccessTestModifier({
     name: localize('touchOnly'),
     value: 20,
+  });
+
+  readonly twoHandedModifier = createSuccessTestModifier({
+    name: `${localize('wieldedWith')} ${localize('oneHand')}`,
+    value: -20,
   });
 
   constructor({ meleeWeapon, primaryAttack, ...init }: MeleeAttackTestInit) {
@@ -78,7 +83,8 @@ export class MeleeAttackTest extends SkillTest {
         draft.melee = merge(draft.melee, changed);
         if (changed.weapon) {
           draft.melee.primaryAttack = true;
-          draft.melee.touchOnly = draft.melee.weapon.isTouchOnly
+          draft.melee.touchOnly = draft.melee.weapon.isTouchOnly;
+          draft.melee.oneHanded = false;
         }
         if (changed.attackTarget) {
           draft.modifiers.effects = this.getModifierEffects(
@@ -95,7 +101,9 @@ export class MeleeAttackTest extends SkillTest {
             }
           }
         }
+
         const { simple } = draft.modifiers;
+
         if (draft.melee.aggressive === AggressiveOption.Modifier) {
           simple.set(this.aggressiveModifier.id, this.aggressiveModifier);
         } else simple.delete(this.aggressiveModifier.id);
@@ -107,6 +115,10 @@ export class MeleeAttackTest extends SkillTest {
         if (draft.melee.calledShot) {
           simple.set(this.calledShotModifier.id, this.calledShotModifier);
         } else simple.delete(this.calledShotModifier.id);
+
+        if (draft.melee.weapon.isTwoHanded && draft.melee.oneHanded) {
+          simple.set(this.twoHandedModifier.id, this.twoHandedModifier);
+        } else simple.delete(this.twoHandedModifier.id);
       }),
     };
 
@@ -120,7 +132,10 @@ export class MeleeAttackTest extends SkillTest {
       }
     }
     if (this.melee.touchOnly) {
-      this.modifiers.simple.set(this.touchOnlyModifier.id, this.touchOnlyModifier);
+      this.modifiers.simple.set(
+        this.touchOnlyModifier.id,
+        this.touchOnlyModifier,
+      );
     }
   }
 
