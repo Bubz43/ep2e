@@ -2,7 +2,9 @@ import type { AttackType } from '@src/combat/attacks';
 import { CalledShot, Demolition, ExplosiveTrigger } from '@src/data-enums';
 import { CommonInterval, currentWorldTimeMS } from '@src/features/time';
 import type { PlacedTemplateIDs } from '@src/foundry/canvas';
+import { localize } from '@src/foundry/localization';
 import { SuccessTestResult } from '@src/success-test/success-test';
+import { compact } from 'remeda';
 import type { ActorType } from './entity-types';
 
 export type ExplosiveSettings = {
@@ -148,3 +150,17 @@ export type MeleeWeaponSettings = {
   calledShot?: CalledShot | null;
   oneHanded?: boolean;
 };
+
+export const formulasFromMeleeSettings = ({ aggressive, charging, extraWeapon }: MeleeWeaponSettings) => {
+  return compact([
+    aggressive === AggressiveOption.Damage && {
+      label: localize('aggressive'),
+      formula: '+1d10',
+    },
+    charging && { label: localize('charging'), formula: '+1d6' },
+    extraWeapon && {
+      label: localize('extraWeapon'),
+      formula: '+1d6',
+    },
+  ]);
+}

@@ -12,8 +12,9 @@ import type { ActiveTaskAction } from '@src/features/actions';
 import type { ArmorType } from '@src/features/active-armor';
 import type { PostTestPoolAction, PreTestPoolAction } from '@src/features/pool';
 import type { Favor, RepIdentifier } from '@src/features/reputations';
+import type { Size } from '@src/features/size';
 import type { PlacedTemplateIDs } from '@src/foundry/canvas';
-import type { RolledFormula } from '@src/foundry/rolls';
+import type { LabeledFormula, RolledFormula } from '@src/foundry/rolls';
 import type { HealthModification, HealthType } from '@src/health/health';
 import type { RollMultiplier } from '@src/health/health-changes';
 import type { StressType } from '@src/health/mental-health';
@@ -88,6 +89,8 @@ export type MeleeWeaponMessageData = MeleeWeaponSettings & {
   weapon: ItemEntity<ItemType.MeleeWeapon>;
   appliedCoating?: boolean;
   appliedPayload?: boolean;
+  morphSize?: Size | null;
+  damageModifiers?: LabeledFormula[];
   // TODO maybe additional info for tracking coating state etc
 };
 

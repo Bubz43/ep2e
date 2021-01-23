@@ -11,7 +11,11 @@ import { ExplosiveSettingsForm } from '@src/entities/actor/components/character-
 import { MeleeSettingsForm } from '@src/entities/actor/components/character-views/components/attacks/melee-settings/melee-settings-form';
 import { ItemType } from '@src/entities/entity-types';
 import { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
-import { AggressiveOption } from '@src/entities/weapon-settings';
+import {
+  AggressiveOption,
+  formulasFromMeleeSettings,
+} from '@src/entities/weapon-settings';
+import { Size } from '@src/features/size';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
 import {
@@ -129,9 +133,8 @@ export class MessageMeleeAttack extends MessageElement {
     const {
       attackType = 'primary',
       unarmedDV,
-      aggressive,
-      charging,
-      extraWeapon,
+      damageModifiers,
+      morphSize,
     } = this.meleeAttack;
     const attack = attacks[attackType] || attacks.primary;
 
@@ -140,6 +143,32 @@ export class MessageMeleeAttack extends MessageElement {
         (e) => e === SuperiorResultEffect.Damage,
       ) || [];
 
+    const multiplier = testResult === SuccessTestResult.CriticalSuccess ? 2 : 1;
+        const rolled = pipe(
+          [
+            testResult === SuccessTestResult.SuperiorSuccess &&
+              superiorDamage.length >= 1 && {
+                label: localize(testResult),
+                formula: '+1d6',
+              },
+            testResult === SuccessTestResult.SuperiorSuccessX2 &&
+              superiorDamage.length >= 1 && {
+                label: localize(testResult),
+                formula: successTestInfo
+                  ? `+${superiorDamage.length}d6`
+                  : '+2d6',
+              },
+            augmentUnarmed && {
+              label: localize('unarmedDV'),
+              formula: unarmedDV || '0',
+            },
+            ...formulasFromMeleeSettings(this.meleeAttack),
+            ...(damageModifiers ?? []),
+          ],
+          compact,
+          concat(attack.rollFormulas),
+          rollLabeledFormulas,
+        );
     message.createSimilar({
       damage: {
         ...pick(attack, [
@@ -150,40 +179,9 @@ export class MessageMeleeAttack extends MessageElement {
           'reduceAVbyDV',
         ]),
         source: `${name} ${hasSecondaryAttack ? `[${attack.label}]` : ''}`,
-        multiplier: testResult === SuccessTestResult.CriticalSuccess ? 2 : 1,
-        rolledFormulas: pipe(
-          attack.rollFormulas,
-          concat(
-            compact([
-              testResult === SuccessTestResult.SuperiorSuccess &&
-                superiorDamage.length >= 1 && {
-                  label: localize(testResult),
-                  formula: '+1d6',
-                },
-              testResult === SuccessTestResult.SuperiorSuccessX2 &&
-                superiorDamage.length >= 1 && {
-                  label: localize(testResult),
-                  formula: successTestInfo
-                    ? `+${superiorDamage.length}d6`
-                    : '+2d6',
-                },
-              augmentUnarmed && {
-                label: localize('unarmedDV'),
-                formula: unarmedDV || '0',
-              },
-              aggressive === AggressiveOption.Damage && {
-                label: localize('aggressive'),
-                formula: '+1d10',
-              },
-              charging && { label: localize('charging'), formula: '+1d6' },
-              extraWeapon && {
-                label: localize('extraWeapon'),
-                formula: '+1d6',
-              },
-            ]),
-          ),
-          rollLabeledFormulas,
-        ),
+        multiplier:
+          morphSize === Size.Small ? (multiplier === 2 ? 1 : 0.5) : multiplier,
+        rolledFormulas:rolled
       },
     });
   }

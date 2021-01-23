@@ -118,13 +118,13 @@ export class Synthetic extends mix(SyntheticBase).with(
 
   @LazyGetter()
   get availableBrains() {
-    const things = new Map<string, PhysicalTech>();
+    const brains = new Map<string, PhysicalTech>();
     for (const proxy of this.items.values()) {
       if (proxy.type === ItemType.PhysicalTech && proxy.isBrain) {
-        things.set(proxy.id, proxy);
+        brains.set(proxy.id, proxy);
       }
     }
-    return things;
+    return brains;
   }
 
   @LazyGetter()

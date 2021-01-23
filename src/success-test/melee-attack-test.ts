@@ -5,6 +5,7 @@ import { ActorType } from '@src/entities/entity-types';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import {
   AggressiveOption,
+  formulasFromMeleeSettings,
   MeleeWeaponSettings,
 } from '@src/entities/weapon-settings';
 import {
@@ -147,10 +148,15 @@ export class MeleeAttackTest extends SkillTest {
     }
   }
 
+  get morphSize() {
+     const { sleeve } = this.character;
+     if (!sleeve || sleeve.type === ActorType.Infomorph) return null;
+     return sleeve.size
+  }
+
   get largeMorph() {
-    const { sleeve } = this.character;
-    if (!sleeve || sleeve.type === ActorType.Infomorph) return false;
-    return sleeve.size === Size.Large || sleeve.size === Size.VeryLarge;
+    const { morphSize } = this;
+    return morphSize === Size.Large || morphSize === Size.VeryLarge;
   }
 
   get attack() {
@@ -160,34 +166,27 @@ export class MeleeAttackTest extends SkillTest {
       : weapon.attacks.secondary || weapon.attacks.primary;
   }
 
+  get damageModifierEffects() {
+    return this.character.appliedEffects
+      .getGroup(EffectType.Melee)
+      .map((effect) => ({
+        label: effect[Source],
+        formula: effect.dvModifier,
+      }));
+  }
+
   get damageFormulas() {
-    const { attack, character } = this;
-    const { augmentUnarmed } = this.melee.weapon;
-    const { unarmedDV, aggressive, charging, extraWeapon } = this.melee;
     return pipe(
       [
-        augmentUnarmed && {
+        this.melee.weapon.augmentUnarmed && {
           label: localize('unarmedDV'),
-          formula: unarmedDV || '0',
+          formula: this.melee.unarmedDV || '0',
         },
-        aggressive === AggressiveOption.Damage && {
-          label: localize('aggressive'),
-          formula: '+1d10',
-        },
-        charging && { label: localize('charging'), formula: '+1d6' },
-        extraWeapon && {
-          label: localize('extraWeapon'),
-          formula: '+1d6',
-        },
-        ...character.appliedEffects
-          .getGroup(EffectType.Melee)
-          .map((effect) => ({
-            label: effect[Source],
-            formula: effect.dvModifier,
-          })),
+        ...formulasFromMeleeSettings(this.melee),
+        ...this.damageModifierEffects,
       ],
       compact,
-      concat(attack.rollFormulas),
+      concat(this.attack.rollFormulas),
     );
   }
 
@@ -209,7 +208,7 @@ export class MeleeAttackTest extends SkillTest {
   }
 
   protected async createMessage() {
-    const { settings, pools, action, melee, testMessageData } = this;
+    const { settings, pools, action, melee, testMessageData, morphSize, damageModifierEffects } = this;
 
     const { weapon, primaryAttack, ...meleeSettings } = melee;
 
@@ -246,7 +245,11 @@ export class MeleeAttackTest extends SkillTest {
             'extraWeapon',
             'touchOnly',
             'unarmedDV',
+            'oneHanded',
+            'calledShot'
           ]),
+          morphSize,
+          damageModifiers: damageModifierEffects
         },
       },
 

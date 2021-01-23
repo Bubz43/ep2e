@@ -3,6 +3,7 @@ import { CalledShot, enumValues } from '@src/data-enums';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
 import { AggressiveOption } from '@src/entities/weapon-settings';
+import { Size } from '@src/features/size';
 import { readyCanvas } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas } from '@src/foundry/rolls';
@@ -196,6 +197,7 @@ export class MeleeAttackControls extends LitElement {
       skillState,
       damageFormulas,
       attack,
+      morphSize,
     } = test;
 
     const {
@@ -210,6 +212,8 @@ export class MeleeAttackControls extends LitElement {
       oneHanded,
     } = melee;
     const { attacks, isTwoHanded } = weapon;
+
+    const joinedFormula = joinLabeledFormulas(damageFormulas);
     return html`
       ${character
         ? html`
@@ -382,15 +386,28 @@ export class MeleeAttackControls extends LitElement {
               el: ev.currentTarget,
               content: html`
                 <dl>
-                  ${touchOnly ? html`
-                  <dt>${localize("touchOnly")}</dt>
-                  <dd>${localize("noDamage")}</dd>
-                  ` : damageFormulas.map(
-                    ({ label, formula }) => html`
-                      <dt>${label}</dt>
-                      <dd>${formula}</dd>
-                    `,
-                  )}
+                  ${touchOnly
+                    ? html`
+                        <dt>${localize('touchOnly')}</dt>
+                        <dd>${localize('noDamage')}</dd>
+                      `
+                    : html`
+                        ${damageFormulas.map(
+                          ({ label, formula }) => html`
+                            <dt>${label}</dt>
+                            <dd>${formula}</dd>
+                          `,
+                        )}
+                        ${morphSize === Size.Small
+                          ? html`
+                              <dt>${localize('small')} ${localize('size')}</dt>
+                              <dd>
+                                ${localize('half')} ${localize('damage')}
+                                ${localize('in')} ${localize('melee')}
+                              </dd>
+                            `
+                          : ''}
+                      `}
                 </dl>
               `,
             });
@@ -398,7 +415,15 @@ export class MeleeAttackControls extends LitElement {
         >
           <span class="damage-value"
             >${localize('SHORT', 'damageValue')}:
-            ${touchOnly ? '-' : joinLabeledFormulas(damageFormulas)}</span
+            ${touchOnly
+              ? '-'
+              : morphSize === Size.VerySmall
+              ? `[${localize(morphSize)} ${localize('size')}] ${localize(
+                  'max',
+                )} ${localize('of')} 1`
+              : morphSize === Size.Small
+              ? `(${joinedFormula}) ÷2`
+              : joinedFormula}</span
           >
         </wl-list-item>
       </ul>
