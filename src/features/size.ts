@@ -1,5 +1,7 @@
 import { AptitudeType } from '@src/data-enums';
+import type { AddEffects } from '@src/entities/applied-effects';
 import { localize } from '@src/foundry/localization';
+import { compact } from 'remeda';
 import { SuccessTestEffect, createEffect } from './effects';
 import { createTag } from './tags';
 
@@ -11,10 +13,6 @@ export enum Size {
   VeryLarge = 'veryLarge',
 }
 
-const strengthEffects = new Map<Size, SuccessTestEffect>();
-
-const targettedEffects = new Map<Size, SuccessTestEffect>();
-
 export const sizeModifiers: Record<Exclude<Size, Size.Medium>, number> = {
   [Size.VerySmall]: -30,
   [Size.Small]: -10,
@@ -22,31 +20,52 @@ export const sizeModifiers: Record<Exclude<Size, Size.Medium>, number> = {
   [Size.VeryLarge]: 30,
 };
 
-export const sizeTargettedEffect = (size: Size) => {
+const sizeDVBonus = {
+  [Size.Large]: '+1d10',
+  [Size.VeryLarge]: '+2d10',
+} as const;
+
+const sizeTargettedEffect = (size: Size) => {
   if (size === Size.Medium) return null;
-  let effect = targettedEffects.get(size);
-  if (!effect) {
-    effect = createEffect.successTest({
-      modifier: sizeModifiers[size],
-      requirement: localize('attackingOrSpotting'),
-      toOpponent: true,
-      tags: [createTag.action({})],
-    });
-    targettedEffects.set(size, effect);
-  }
-  return effect;
+  return createEffect.successTest({
+    modifier: sizeModifiers[size],
+    requirement: localize('attackingOrSpotting'),
+    toOpponent: true,
+    tags: [createTag.action({})],
+  });
 };
 
-export const strengthSizeEffect = (size: Size) => {
+const strengthSizeEffect = (size: Size) => {
   if (size === Size.Medium) return null;
-  let effect = strengthEffects.get(size);
-  if (!effect) {
-    effect = createEffect.successTest({
-      modifier: sizeModifiers[size],
-      requirement: localize('strengthBased'),
-      tags: [createTag.aptitudeCheck({ aptitude: AptitudeType.Somatics })],
-    });
-    strengthEffects.set(size, effect);
+  return createEffect.successTest({
+    modifier: sizeModifiers[size],
+    requirement: localize('strengthBased'),
+    tags: [createTag.aptitudeCheck({ aptitude: AptitudeType.Somatics })],
+  });
+};
+
+const meleeDamageEffect = (size: Size) => {
+  if (size !== Size.Large && size !== Size.VeryLarge) return null;
+  return createEffect.melee({ dvModifier: sizeDVBonus[size] });
+};
+
+const sizeEffects = new Map<Size, AddEffects | null>();
+
+export const getEffectsFromSize = (size: Size) => {
+  let group = sizeEffects.get(size);
+  if (!group) {
+    if (size === Size.Medium) group = null;
+    else {
+      group = {
+        source: `${localize(size)} ${localize('size')}`,
+        effects: compact([
+          sizeTargettedEffect(size),
+          strengthSizeEffect(size),
+          meleeDamageEffect(size),
+        ]),
+      };
+    }
+    sizeEffects.set(size, group);
   }
-  return effect;
+  return group;
 };

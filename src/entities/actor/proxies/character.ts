@@ -39,6 +39,7 @@ import { matchID, updateFeature } from '@src/features/feature-helpers';
 import type { MovementRate } from '@src/features/movement';
 import { Pool, Pools } from '@src/features/pool';
 import { Recharge } from '@src/features/recharge';
+import { getEffectsFromSize } from '@src/features/size';
 import {
   TemporaryFeatureEnd,
   TemporaryFeatureType,
@@ -134,6 +135,10 @@ export class Character extends ActorProxyBase<ActorType.Character> {
           effects: Synthetic.painFilterEffects,
         });
       }
+    }
+
+    if (this.sleeve && this.sleeve?.type !== ActorType.Infomorph) {
+      this._appliedEffects.add(getEffectsFromSize(this.sleeve.size))
     }
 
     this.armor = new ActiveArmor(
