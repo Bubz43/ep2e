@@ -274,6 +274,7 @@ export class MeleeAttackControls extends LitElement {
           >
           <success-test-action-form
             .action=${action}
+            fullMoveLabel=${test.fullMoveModifier.name}
           ></success-test-action-form>
         </section>
 
@@ -360,12 +361,6 @@ export class MeleeAttackControls extends LitElement {
             </button></span
           >
         </wl-list-item>
-        <mwc-check-list-item
-          ?selected=${!!charging}
-          @click=${() => melee.update({ charging: !charging })}
-        >
-          <span>${localize('charging')}</span>
-        </mwc-check-list-item>
         <mwc-check-list-item
           ?selected=${!!extraWeapon}
           @click=${() => melee.update({ extraWeapon: !extraWeapon })}

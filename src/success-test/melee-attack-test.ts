@@ -22,7 +22,7 @@ import { capitalize } from '@src/foundry/misc-helpers';
 import { joinLabeledFormulas } from '@src/foundry/rolls';
 import { arrayOf } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
-import { compact, concat, last, merge, pick, pipe } from 'remeda';
+import { compact, concat, last, merge, pick, pipe, set } from 'remeda';
 import type { SetRequired } from 'type-fest';
 import { SkillTest, SkillTestInit } from './skill-test';
 import {
@@ -79,6 +79,10 @@ export class MeleeAttackTest extends SkillTest {
         }),
     });
     this.character = init.character;
+
+    this.fullMoveModifier.name = `${localize("fullMove")} (${localize("charging")})`;
+    this.fullMoveModifier.value = -10
+
     this.melee = {
       weapon: meleeWeapon,
       primaryAttack,
@@ -131,6 +135,7 @@ export class MeleeAttackTest extends SkillTest {
       }),
     };
 
+
     if (this.melee.attackTarget) {
       for (const [effect, active] of this.getAttackTargetEffects(
         this.melee.attackTarget as Token,
@@ -182,7 +187,7 @@ export class MeleeAttackTest extends SkillTest {
           label: localize('unarmedDV'),
           formula: this.melee.unarmedDV || '0',
         },
-        ...formulasFromMeleeSettings(this.melee),
+        ...formulasFromMeleeSettings(set(this.melee, "charging", this.action.fullMove)),
         ...this.damageModifierEffects,
       ],
       compact,
@@ -210,7 +215,7 @@ export class MeleeAttackTest extends SkillTest {
   protected async createMessage() {
     const { settings, pools, action, melee, testMessageData, morphSize, damageModifierEffects } = this;
 
-    const { weapon, primaryAttack, ...meleeSettings } = melee;
+    const { weapon, primaryAttack, charging, ...meleeSettings } = melee;
 
     await createMessage({
       data: {
@@ -239,9 +244,9 @@ export class MeleeAttackTest extends SkillTest {
         meleeAttack: {
           weapon: weapon.getDataCopy(),
           attackType: primaryAttack ? 'primary' : 'secondary',
+          charging: action.fullMove,
           ...pick(meleeSettings, [
             'aggressive',
-            'charging',
             'extraWeapon',
             'touchOnly',
             'unarmedDV',

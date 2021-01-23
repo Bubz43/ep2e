@@ -69,6 +69,13 @@
     }
   }
 }
+
+mwc-check-list-item {
+  grid-column: span 2;
+  height: 1.5rem;
+  margin-top: -0.25rem;
+}
+
 .action-edits {
   display: grid;
   grid-column: span 2;

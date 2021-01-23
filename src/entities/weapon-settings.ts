@@ -151,7 +151,11 @@ export type MeleeWeaponSettings = {
   oneHanded?: boolean;
 };
 
-export const formulasFromMeleeSettings = ({ aggressive, charging, extraWeapon }: MeleeWeaponSettings) => {
+export const formulasFromMeleeSettings = ({
+  aggressive,
+  charging,
+  extraWeapon,
+}: Pick<MeleeWeaponSettings, "aggressive" | "charging" | "extraWeapon">) => {
   return compact([
     aggressive === AggressiveOption.Damage && {
       label: localize('aggressive'),
@@ -163,4 +167,4 @@ export const formulasFromMeleeSettings = ({ aggressive, charging, extraWeapon }:
       formula: '+1d6',
     },
   ]);
-}
+};

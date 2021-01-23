@@ -1,6 +1,7 @@
 import { rollModeToVisibility } from '@src/chat/create-message';
 import {
   Action,
+  ActionSubtype,
   ActionType,
   createAction,
   updateAction,
@@ -30,6 +31,11 @@ export abstract class SuccessTestBase {
   abstract get basePoints(): number;
   protected abstract createMessage(): void | Promise<void>;
   readonly [immerable] = true;
+
+  readonly fullMoveModifier = createSuccessTestModifier({
+    name: localize('fullMove'),
+    value: -20,
+  });
 
   private readonly state = new BehaviorSubject(this);
   readonly subscribe = this.state.subscribe.bind(this.state);
@@ -62,7 +68,9 @@ export abstract class SuccessTestBase {
     active: null,
     toggleActive: this.recipe((draft, pair) => this.togglePool(draft, pair)),
   };
-  readonly action: WithUpdate<Action> & { modifier: SimpleSuccessTestModifier };
+  readonly action: WithUpdate<Action & { fullMove: boolean }> & {
+    modifier: SimpleSuccessTestModifier;
+  };
   readonly modifiers: SuccessTestModifiers = {
     effects: new Map(),
     toggleEffect: this.recipe(
@@ -111,6 +119,7 @@ export abstract class SuccessTestBase {
   constructor({ action }: SuccessTestInit = {}) {
     this.action = {
       ...(action ?? createAction({ type: ActionType.Automatic })),
+      fullMove: false,
       modifier: createSuccessTestModifier(),
       update: this.recipe(
         (draft, changed) => void this.updateAction(draft, changed),
@@ -121,7 +130,9 @@ export abstract class SuccessTestBase {
   protected updateAction(draft: Draft<this>, changed: Partial<Action>) {
     draft.action = merge(draft.action, updateAction(draft.action, changed));
 
-    const { timeMod, modifier } = draft.action;
+    draft.action.fullMove &&= draft.action.subtype === ActionSubtype.Physical;
+
+    const { timeMod, modifier, fullMove } = draft.action;
     if (timeMod) {
       modifier.value = timeMod < 0 ? timeMod * 20 : timeMod * 10;
       modifier.name = `${localize(
@@ -129,6 +140,13 @@ export abstract class SuccessTestBase {
       )} x${Math.abs(timeMod)}`;
       draft.modifiers.simple.set(modifier.id, modifier);
     } else draft.modifiers.simple.delete(modifier.id);
+
+    if (fullMove) {
+      draft.modifiers.simple.set(
+        this.fullMoveModifier.id,
+        this.fullMoveModifier,
+      );
+    } else draft.modifiers.simple.delete(this.fullMoveModifier.id);
   }
 
   protected togglePool(

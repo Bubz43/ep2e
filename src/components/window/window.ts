@@ -265,6 +265,7 @@ export class SlWindow extends LitElement {
 
   async positionAdjacentToElement(toEl: HTMLElement) {
     if (!toEl?.offsetParent) return;
+
     const noAnimation = this.isConnected;
     if (!noAnimation) this.style.opacity = '0';
     return new Promise<void>((resolve) => {
@@ -276,24 +277,14 @@ export class SlWindow extends LitElement {
         });
       };
       requestAnimationFrame(() => {
-        const position = reposition(toEl, this, {
-          position: this.relativePosition,
-        });
-        // const { wentRight } = positionRelatively({
-        //   toEl,
-        //   element: this,
-        // });
+        reposition(toEl, this, { position: this.relativePosition });
         if (noAnimation) onFinish();
-        else this.animateShadowEl(toEl, position?.[0] === 'r', onFinish);
+        else this.animateShadowEl(toEl, onFinish);
       });
     });
   }
 
-  private animateShadowEl(
-    toEl: HTMLElement,
-    wentRight: boolean,
-    onFinish: () => void,
-  ) {
+  private animateShadowEl(toEl: HTMLElement, onFinish: () => void) {
     const relativeRect = toEl.getBoundingClientRect();
     const { offsetLeft, offsetTop, offsetWidth, offsetHeight } = this;
     const div = document.createElement('div');
@@ -462,7 +453,6 @@ export class SlWindow extends LitElement {
   }
 
   private startDrag(ev: MouseEvent) {
-    
     if (
       ev.button === 2 ||
       ev.defaultPrevented ||
@@ -495,15 +485,6 @@ export class SlWindow extends LitElement {
 
   private emit(eventName: SlWindowEventName) {
     this.dispatchEvent(new CustomEvent(eventName));
-  }
-
-  private toggleHeaderVisibility(ev: Event) {
-    if (ev.currentTarget instanceof HTMLSlotElement) {
-      this.header.classList.toggle(
-        'alt',
-        notEmpty(ev.currentTarget.assignedElements({ flatten: true })),
-      );
-    }
   }
 
   @eventOptions({ capture: true })

@@ -12,6 +12,7 @@ import {
   ActionType,
 } from '@src/features/actions';
 import { localize } from '@src/foundry/localization';
+import type { SuccessTestBase } from '@src/success-test/success-test-base';
 import type { WithUpdate } from '@src/utility/updating';
 import type { CoolStore } from 'cool-store';
 import { customElement, LitElement, property, html } from 'lit-element';
@@ -29,7 +30,9 @@ export class SuccessTestActionForm extends LitElement {
   }
 
   @property({ attribute: false })
-  action!: WithUpdate<Action>;
+  action!: SuccessTestBase['action'];
+
+  @property({ type: String }) fullMoveLabel = localize("fullMove")
 
   render() {
     const { action } = this;
@@ -41,9 +44,19 @@ export class SuccessTestActionForm extends LitElement {
         noDebounce: true,
         storeOnInput: true,
         update: action.update,
-        fields: ({ type, subtype, timeframe, timeMod }) => [
+        fields: ({ type, subtype, timeframe, timeMod, fullMove }) => [
           renderSelectField(type, enumValues(ActionType)),
           renderSelectField(subtype, enumValues(ActionSubtype)),
+          subtype.value === ActionSubtype.Physical
+            ? html`
+                <mwc-check-list-item
+                  @click=${() => this.action.update({ fullMove: !fullMove.value })}
+                  ?selected=${fullMove.value}
+                >
+                  ${this.fullMoveLabel}
+                </mwc-check-list-item>
+              `
+            : '',
           html` <div
             class="action-edits ${classMap({
               'show-time': isTask || timeframe.value !== 0,

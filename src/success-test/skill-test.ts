@@ -18,6 +18,7 @@ import { localize } from '@src/foundry/localization';
 import { arrayOf } from '@src/utility/helpers';
 import { compact, last, map } from 'remeda';
 import {
+  createSuccessTestModifier,
   grantedSuperiorResultEffects,
   rollSuccessTest,
   SuccessTestResult,
@@ -52,6 +53,7 @@ export class SkillTest extends SuccessTestBase {
   readonly character;
   readonly token;
   readonly skillState: SkillState;
+
 
   get basePoints() {
     const {
