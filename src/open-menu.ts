@@ -88,8 +88,6 @@ export const openMenu = ({
   if (Array.isArray(content) && content.length === 0) return;
   const menu = document.querySelector('mwc-menu') || setupMenu();
 
-  // TODO Use traverseActiveElement if no position given
-
   if (menu.open) {
     menu.close();
     setTimeout(() => openMenu({ content, position, header }), 100);
