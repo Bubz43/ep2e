@@ -275,16 +275,23 @@ export class MeleeAttackTest extends SkillTest {
     await createMessage({
       data: {
         header: {
-          heading: this.name,
+          heading: `${weapon?.name || localize('unarmed')} ${localize(
+            'meleeAttack',
+          )}`,
           subheadings: [
-            `${action.type} ${
-              action.timeMod && action.type !== ActionType.Task
-                ? `(${localize('as')} ${localize('task')})`
-                : ''
-            }`,
-            localize(action.subtype),
-            localize('action'),
-          ].join(' '),
+            this.name,
+            [
+              `${action.type} ${
+                action.timeMod && action.type !== ActionType.Task
+                  ? `(${localize('as')} ${localize('task')})`
+                  : ''
+              }`,
+              localize(action.subtype),
+              localize('action'),
+            ].join(' '),
+          ],
+          img: weapon?.nonDefaultImg,
+          description: weapon?.description
         },
         successTest: {
           ...testMessageData,

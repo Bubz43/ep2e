@@ -41,6 +41,10 @@
   }
 }
 
+small {
+  color: var(--color-text-lighter);
+}
+
 .pool {
   flex: 1;
   display: grid;

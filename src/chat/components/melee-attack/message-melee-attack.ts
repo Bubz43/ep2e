@@ -167,6 +167,10 @@ export class MessageMeleeAttack extends MessageElement {
       rollLabeledFormulas,
     );
     message.createSimilar({
+      header: {
+        heading: name ?? localize("unarmed"),
+        subheadings: [localize("meleeAttack")]
+      },
       damage: {
         ...pick(
           attack ?? {

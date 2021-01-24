@@ -21,7 +21,7 @@
   min-height: 500px;
   height: max-content;
   grid-template-rows: repeat(2, min-content) 1fr;
-  background: alphav(var(--color-primary), 0.35);
+  background: alphav(var(--color-grey), 0.2);
 }
 
 character-view-header {
