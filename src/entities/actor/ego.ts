@@ -256,7 +256,7 @@ export class Ego {
   }
 
   get complementarySkills() {
-    return this.groupedSkills.know?.filter((skill) => skill.points >= 40) || [];
+    return this.groupedSkills.know?.filter((skill) => skill.total >= 40) || [];
   }
 
   get reps() {
