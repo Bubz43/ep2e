@@ -1,5 +1,6 @@
 import { openOrRenderWindow } from '@src/components/window/window-controls';
 import { ResizeOption } from '@src/components/window/window-options';
+import { localize } from '@src/foundry/localization';
 import { html } from 'lit-html';
 import { ActorType } from '../entity-types';
 import type { UpdateStore } from '../update-store';
@@ -29,7 +30,7 @@ export const openSleeveForm = (sleeve: Sleeve) => {
         .updater=${updater}
       ></entity-form-footer>
     `,
-    name: sleeve.name,
+    name: `${sleeve.name} - ${localize("sleeve")}`,
     resizable: ResizeOption.Vertical,
   });
 };

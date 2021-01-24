@@ -86,7 +86,7 @@ export type ExplosiveMessageData = ExplosiveSettings & {
 };
 
 export type MeleeWeaponMessageData = MeleeWeaponSettings & {
-  weapon: ItemEntity<ItemType.MeleeWeapon>;
+  weapon?: ItemEntity<ItemType.MeleeWeapon> | null;
   appliedCoating?: boolean;
   appliedPayload?: boolean;
   morphSize?: Size | null;

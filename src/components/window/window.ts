@@ -508,13 +508,13 @@ export class SlWindow extends LitElement {
     ev.preventDefault();
     openMenu({
       header: { heading: this.name },
-      content: compact([
-        this.hasChangedSize &&
-          !this.minimized && {
-            label: `${localize('reset')} ${localize('size')}`,
-            callback: () => this.resetSize(),
-            icon: html`<mwc-icon>aspect_ratio</mwc-icon>`,
-          },
+      content: [
+        {
+          label: `${localize('reset')} ${localize('size')}`,
+          callback: () => this.resetSize(),
+          icon: html`<mwc-icon>aspect_ratio</mwc-icon>`,
+          disabled: !this.hasChangedSize || this.minimized,
+        },
         {
           label: localize(this.minimized ? 'restore' : 'minimize'),
           callback: () => this.toggleMinimize(),
@@ -528,7 +528,7 @@ export class SlWindow extends LitElement {
           callback: () => this.close(),
           icon: html`<mwc-icon>close</mwc-icon>`,
         },
-      ]),
+      ],
       position: ev,
     });
   }

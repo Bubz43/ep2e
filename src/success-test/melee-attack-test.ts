@@ -33,14 +33,14 @@ import {
 } from './success-test';
 
 export type MeleeAttackTestInit = SetRequired<SkillTestInit, 'character'> & {
-  meleeWeapon: MeleeWeapon;
+  meleeWeapon?: MeleeWeapon;
   primaryAttack: boolean;
 };
 
 export class MeleeAttackTest extends SkillTest {
   readonly melee: WithUpdate<
     MeleeWeaponSettings & {
-      weapon: MeleeWeapon;
+      weapon?: MeleeWeapon | null;
       primaryAttack: boolean;
       attackTarget?: Token | null;
     }
@@ -76,7 +76,6 @@ export class MeleeAttackTest extends SkillTest {
   });
 
   readonly damageModifierEffects: LabeledFormula[];
-  
 
   constructor({ meleeWeapon, primaryAttack, ...init }: MeleeAttackTestInit) {
     super({
@@ -94,17 +93,19 @@ export class MeleeAttackTest extends SkillTest {
       'charging',
     )})`;
     this.fullMoveModifier.value = -10;
-
+    const { sleeve } = this.character;
     this.melee = {
       weapon: meleeWeapon,
       primaryAttack,
-      touchOnly: meleeWeapon.isTouchOnly,
+      unarmedDV:
+        sleeve && sleeve.type !== ActorType.Infomorph ? sleeve.unarmedDV : '0',
+      touchOnly: meleeWeapon?.isTouchOnly,
       attackTarget: [...game.user.targets][0], // TODO get closest to token
       update: this.recipe((draft, changed) => {
         draft.melee = merge(draft.melee, changed);
         if (changed.weapon) {
           draft.melee.primaryAttack = true;
-          draft.melee.touchOnly = draft.melee.weapon.isTouchOnly;
+          draft.melee.touchOnly = draft.melee.weapon?.isTouchOnly;
           draft.melee.oneHanded = false;
         }
         if (changed.attackTarget) {
@@ -138,7 +139,7 @@ export class MeleeAttackTest extends SkillTest {
         } else simple.delete(this.calledShotModifier.id);
 
         if (
-          draft.melee.weapon.isTwoHanded &&
+          draft.melee.weapon?.isTwoHanded &&
           draft.melee.oneHanded &&
           !this.largeMorph
         ) {
@@ -146,7 +147,7 @@ export class MeleeAttackTest extends SkillTest {
         } else simple.delete(this.twoHandedModifier.id);
 
         draft.reachModifier.value = nonNegative(
-          draft.melee.weapon.reachBonus +
+          (draft.melee.weapon?.reachBonus || 0) +
             this.computeReachAdvantage(draft.melee.attackTarget?.actor),
         );
 
@@ -173,7 +174,7 @@ export class MeleeAttackTest extends SkillTest {
     }
 
     this.reachModifier.value = nonNegative(
-      this.melee.weapon.reachBonus +
+      (this.melee.weapon?.reachBonus || 0) +
         this.computeReachAdvantage(this.melee.attackTarget?.actor),
     );
 
@@ -220,6 +221,7 @@ export class MeleeAttackTest extends SkillTest {
 
   get attack() {
     const { weapon, primaryAttack } = this.melee;
+    if (!weapon) return null;
     return primaryAttack
       ? weapon.attacks.primary
       : weapon.attacks.secondary || weapon.attacks.primary;
@@ -228,7 +230,7 @@ export class MeleeAttackTest extends SkillTest {
   get damageFormulas() {
     return pipe(
       [
-        this.melee.weapon.augmentUnarmed && {
+        (!this.melee.weapon || this.melee.weapon?.augmentUnarmed) && {
           label: localize('unarmedDV'),
           formula: this.melee.unarmedDV || '0',
         },
@@ -238,7 +240,7 @@ export class MeleeAttackTest extends SkillTest {
         ...this.damageModifierEffects,
       ],
       compact,
-      concat(this.attack.rollFormulas),
+      concat(this.attack?.rollFormulas || []),
     );
   }
 
@@ -295,7 +297,7 @@ export class MeleeAttackTest extends SkillTest {
           defaultSuperiorEffect: SuperiorResultEffect.Damage,
         },
         meleeAttack: {
-          weapon: weapon.getDataCopy(),
+          weapon: weapon?.getDataCopy(),
           attackType: primaryAttack ? 'primary' : 'secondary',
           charging: action.fullMove,
           ...pick(meleeSettings, [

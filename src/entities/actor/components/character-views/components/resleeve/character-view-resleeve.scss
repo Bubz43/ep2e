@@ -10,6 +10,7 @@
   grid-template-rows: min-content 1fr;
   gap: 1rem;
   height: calc(100% - 1px);
+  max-width: 394px;;
 }
 
 li[divider] {

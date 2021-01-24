@@ -20,13 +20,8 @@
   width: 800px;
   min-height: 500px;
   height: max-content;
-  background: linear-gradient(
-    45deg,
-    alphav(var(--color-grey), 0.1),
-    alphav(var(--color-grey), 0.06)
-  );
-  background: linear-gradient(45deg, rgba(black, 0.1), transparent);
   grid-template-rows: repeat(2, min-content) 1fr;
+  background: alphav(var(--color-primary), 0.35);
 }
 
 character-view-header {
@@ -35,8 +30,8 @@ character-view-header {
 
   background: linear-gradient(
     45deg,
-    alphav(var(--color-bg), 0.8),
-    alphav(var(--color-bg-alt), 0.8)
+    alphav(var(--color-bg), 0.7),
+    alphav(var(--color-bg-alt), 0.7)
   );
 }
 
@@ -47,8 +42,6 @@ mwc-tab-bar {
 }
 
 .sections > * {
-  // border: 1px solid alphav(var(--color-border), 0.5);
-  // background: alphav(var(--color-bg), 0.1);
   border: 1px groove var(--color-border);
   background: linear-gradient(
     45deg,

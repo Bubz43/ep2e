@@ -1,5 +1,4 @@
 import type {
-  DamageMessageData,
   MeleeWeaponMessageData,
   SuccessTestMessageData,
 } from '@src/chat/message-data';
@@ -8,23 +7,18 @@ import {
   SuperiorResultEffect,
 } from '@src/data-enums';
 import { ExplosiveSettingsForm } from '@src/entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
-import { MeleeSettingsForm } from '@src/entities/actor/components/character-views/components/attacks/melee-settings/melee-settings-form';
 import { ItemType } from '@src/entities/entity-types';
 import { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
-import {
-  AggressiveOption,
-  formulasFromMeleeSettings,
-} from '@src/entities/weapon-settings';
+import { formulasFromMeleeSettings } from '@src/entities/weapon-settings';
+import { ArmorType } from '@src/features/active-armor';
 import { Size } from '@src/features/size';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
-import {
-  isSuccessfullTestResult,
-  SuccessTestResult,
-} from '@src/success-test/success-test';
+import { HealthType } from '@src/health/health';
+import { SuccessTestResult } from '@src/success-test/success-test';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property } from 'lit-element';
-import { compact, concat, last, map, pick, pipe } from 'remeda';
+import { compact, concat, last, pick, pipe } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-melee-attack.scss';
 
@@ -43,10 +37,13 @@ export class MessageMeleeAttack extends MessageElement {
   @property({ type: Object }) successTest?: SuccessTestMessageData;
 
   get weapon() {
-    return new MeleeWeapon({
-      data: this.meleeAttack.weapon,
-      embedded: null,
-    });
+    return (
+      this.meleeAttack.weapon &&
+      new MeleeWeapon({
+        data: this.meleeAttack.weapon,
+        embedded: null,
+      })
+    );
   }
 
   get successTestInfo() {
@@ -61,21 +58,21 @@ export class MessageMeleeAttack extends MessageElement {
       : null;
   }
 
-  private editSettings() {
-    const { weapon, ...settings } = this.meleeAttack;
-    MeleeSettingsForm.openWindow({
-      initialSettings: settings,
-      meleeWeapon: this.weapon,
-      requireSubmit: true,
-      adjacentEl: this,
-      update: ({ detail }) => this.getUpdater('meleeAttack').commit(detail),
-    });
-  }
+  // private editSettings() {
+  //   const { weapon, ...settings } = this.meleeAttack;
+  //   MeleeSettingsForm.openWindow({
+  //     initialSettings: settings,
+  //     meleeWeapon: this.weapon,
+  //     requireSubmit: true,
+  //     adjacentEl: this,
+  //     update: ({ detail }) => this.getUpdater('meleeAttack').commit(detail),
+  //   });
+  // }
 
   private async createCoatingMessage() {
     const { weapon, message } = this;
-    const { coating } = weapon;
-    if (!coating) return;
+    const { coating } = weapon ?? {};
+    if (!coating || !weapon) return;
     const header = coating.messageHeader;
     header.subheadings = [header.subheadings || []]
       .flat()
@@ -97,7 +94,7 @@ export class MessageMeleeAttack extends MessageElement {
   }
 
   private createPayloadMessage() {
-    const { payload, name, id } = this.weapon;
+    const { payload, name, id } = this.weapon ?? {};
     const { message } = this;
     if (!payload) return;
     ExplosiveSettingsForm.openWindow({
@@ -128,7 +125,8 @@ export class MessageMeleeAttack extends MessageElement {
     const { message, successTestInfo } = this;
     if (!successTestInfo) return;
 
-    const { attacks, augmentUnarmed, name, hasSecondaryAttack } = this.weapon;
+    const { attacks, augmentUnarmed, name, hasSecondaryAttack } =
+      this.weapon ?? {};
     const { result: testResult } = successTestInfo;
     const {
       attackType = 'primary',
@@ -136,7 +134,8 @@ export class MessageMeleeAttack extends MessageElement {
       damageModifiers,
       morphSize,
     } = this.meleeAttack;
-    const attack = attacks[attackType] || attacks.primary;
+
+    const attack = attacks && (attacks[attackType] || attacks.primary);
 
     const superiorDamage =
       successTestInfo?.superiorEffects?.filter(
@@ -164,19 +163,22 @@ export class MessageMeleeAttack extends MessageElement {
         ...(damageModifiers ?? []),
       ],
       compact,
-      concat(attack.rollFormulas),
+      concat(attack?.rollFormulas ?? []),
       rollLabeledFormulas,
     );
     message.createSimilar({
       damage: {
-        ...pick(attack, [
-          'armorPiercing',
-          'armorUsed',
-          'damageType',
-          'notes',
-          'reduceAVbyDV',
-        ]),
-        source: `${name} ${hasSecondaryAttack ? `[${attack.label}]` : ''}`,
+        ...pick(
+          attack ?? {
+            armorPiercing: false,
+            armorUsed: [ArmorType.Kinetic],
+            damageType: HealthType.Physical,
+            notes: '',
+            reduceAVbyDV: false,
+          },
+          ['armorPiercing', 'armorUsed', 'damageType', 'notes', 'reduceAVbyDV'],
+        ),
+        source: `${name} ${hasSecondaryAttack ? `[${attack?.label}]` : ''}`,
         multiplier:
           morphSize === Size.Small ? (multiplier === 2 ? 1 : 0.5) : multiplier,
         rolledFormulas: rolled,
@@ -185,7 +187,7 @@ export class MessageMeleeAttack extends MessageElement {
   }
 
   render() {
-    const { attacks, coating, payload, hasSecondaryAttack } = this.weapon;
+    const { attacks, coating, payload, hasSecondaryAttack } = this.weapon ?? {};
     const { disabled } = this;
 
     const {
@@ -196,7 +198,7 @@ export class MessageMeleeAttack extends MessageElement {
       calledShot,
     } = this.meleeAttack;
 
-    const attack = attacks[attackType] || attacks.primary;
+    const attack = attacks && (attacks[attackType] || attacks.primary);
 
     const options = ([
       'touchOnly',
@@ -210,10 +212,8 @@ export class MessageMeleeAttack extends MessageElement {
       options.push(`${localize('calledShot')}: ${localize(calledShot)}`);
     }
 
-    return html`
-      <div class="settings">
-        ${hasSecondaryAttack ? attack.label : ''}
-        ${disabled || !this.successTest
+    /*
+    ${disabled || !this.successTest
           ? ''
           : html`
               <mwc-icon-button
@@ -222,6 +222,11 @@ export class MessageMeleeAttack extends MessageElement {
                 ?disabled=${disabled}
               ></mwc-icon-button>
             `}
+    */
+
+    return html`
+      <div class="settings">
+        ${hasSecondaryAttack && attack ? attack.label : ''}
       </div>
 
       ${notEmpty(options)
@@ -238,7 +243,7 @@ export class MessageMeleeAttack extends MessageElement {
               >${localize('roll')} ${localize('damage')}</mwc-button
             >
           `}
-      ${notEmpty(attack.attackTraits)
+      ${attack && notEmpty(attack.attackTraits)
         ? html`
             <message-attack-traits
               .attackTraitInfo=${{ traits: attack.attackTraits }}

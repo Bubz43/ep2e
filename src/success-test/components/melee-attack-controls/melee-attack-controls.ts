@@ -204,14 +204,13 @@ export class MeleeAttackControls extends LitElement {
       primaryAttack,
       attackTarget,
       aggressive,
-      charging,
       extraWeapon,
       touchOnly,
       calledShot,
       oneHanded,
     } = melee;
     const { morphSize } = character;
-    const { attacks, isTwoHanded } = weapon;
+    const { attacks, isTwoHanded } = weapon ?? {};
 
     const joinedFormula = joinLabeledFormulas(damageFormulas);
     return html`
@@ -301,16 +300,16 @@ export class MeleeAttackControls extends LitElement {
 
       <ul class="melee-info">
         <wl-list-item clickable @click=${this.selectWeapon}>
-          ${weapon.name}
+          ${weapon?.name || localize("unarmed")}
         </wl-list-item>
-        ${attacks.secondary
+        ${attacks?.secondary
           ? html`
               <wl-list-item
                 class="attack-setting"
                 clickable
                 @click=${() => melee.update({ primaryAttack: !primaryAttack })}
               >
-                ${attack.label}
+                ${attack?.label}
               </wl-list-item>
             `
           : ''}
