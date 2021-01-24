@@ -165,17 +165,12 @@ export class CharacterViewResleeve extends LitElement {
         added,
         map((id) => items?.get(id)?.proxy),
         compact,
-        find((proxy) => {
-          if (proxy.name === nonDefaultBrain.name) {
-            console.log(equals(proxy.data.flags, nonDefaultBrain.data.flags));
-            console.log(proxy.epData, nonDefaultBrain.epData);
-          }
-          return (
+        find(
+          (proxy) =>
             proxy.name === nonDefaultBrain.name &&
             equals(proxy.epData, nonDefaultBrain.epData) &&
-            equals(proxy.data.flags, nonDefaultBrain.data.flags)
-          );
-        }),
+            equals(proxy.data.flags, nonDefaultBrain.data.flags),
+        ),
         (brain) =>
           brain
             ? (data.data.brain = brain.id)
