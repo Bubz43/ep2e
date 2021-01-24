@@ -159,6 +159,22 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     if (egoFormWindow?.isConnected) this.ego.openForm?.();
   }
 
+  get morphReach() {
+    const { sleeve } = this;
+    return (
+      (!sleeve || sleeve.type === ActorType.Infomorph ? 0 : sleeve.reach) +
+      this.appliedEffects
+        .getGroup(EffectType.Melee)
+        .reduce((accum, { reachBonus }) => accum + (reachBonus || 0), 0)
+    );
+  }
+
+  get morphSize() {
+    const { sleeve } = this;
+    if (!sleeve || sleeve.type === ActorType.Infomorph) return null;
+    return sleeve.size;
+  }
+
   get cannotFlipFlop() {
     return this.appliedEffects
       .getGroup(EffectType.Misc)

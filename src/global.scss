@@ -54,6 +54,9 @@ mwc-menu {
   li[divider] {
     border-color: var(--color-border);
     margin: 0.25rem 0;
+    & + [divider] {
+      display: none;
+    }
   }
   --mdc-theme-text-primary-on-background: var(--color-text);
   --mdc-list-item-graphic-margin: 1rem;

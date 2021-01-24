@@ -1,5 +1,6 @@
 import { createMessage } from '@src/chat/create-message';
 import { SuperiorResultEffect } from '@src/data-enums';
+import type { ActorEP } from '@src/entities/actor/actor';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
@@ -15,13 +16,14 @@ import {
   createAction,
 } from '@src/features/actions';
 import { EffectType, matchesSkill, Source } from '@src/features/effects';
-import { Size } from '@src/features/size';
+import { Size, sizeReachAdvantage } from '@src/features/size';
 import type { Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { capitalize } from '@src/foundry/misc-helpers';
-import { joinLabeledFormulas } from '@src/foundry/rolls';
-import { arrayOf } from '@src/utility/helpers';
+import type { LabeledFormula } from '@src/foundry/rolls';
+import { arrayOf, nonNegative } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
+import type { WritableDraft } from 'immer/dist/types/types-external';
 import { compact, concat, last, merge, pick, pipe, set } from 'remeda';
 import type { SetRequired } from 'type-fest';
 import { SkillTest, SkillTestInit } from './skill-test';
@@ -67,6 +69,13 @@ export class MeleeAttackTest extends SkillTest {
     ),
     value: -20,
   });
+
+  readonly reachModifier = createSuccessTestModifier({
+    name: localize('reach'),
+    value: 0,
+  });
+
+  readonly damageModifierEffects: LabeledFormula[];
 
   constructor({ meleeWeapon, primaryAttack, ...init }: MeleeAttackTestInit) {
     super({
@@ -134,6 +143,15 @@ export class MeleeAttackTest extends SkillTest {
         ) {
           simple.set(this.twoHandedModifier.id, this.twoHandedModifier);
         } else simple.delete(this.twoHandedModifier.id);
+
+        draft.reachModifier.value = nonNegative(
+          draft.melee.weapon.reachBonus +
+            this.computeReachAdvantage(draft.melee.attackTarget?.actor),
+        );
+
+        if (draft.reachModifier.value) {
+          simple.set(draft.reachModifier.id, draft.reachModifier);
+        } else simple.delete(draft.reachModifier.id);
       }),
     };
 
@@ -152,16 +170,50 @@ export class MeleeAttackTest extends SkillTest {
         this.touchOnlyModifier,
       );
     }
+
+    this.reachModifier.value = nonNegative(
+      this.melee.weapon.reachBonus +
+        this.computeReachAdvantage(this.melee.attackTarget?.actor),
+    );
+
+    if (this.reachModifier.value) {
+      this.modifiers.simple.set(this.reachModifier.id, this.reachModifier);
+    }
+
+    this.damageModifierEffects = this.character.appliedEffects
+      .getGroup(EffectType.Melee)
+      .map((effect) => ({
+        label: effect[Source],
+        formula: effect.dvModifier,
+      }));
   }
 
-  get morphSize() {
-    const { sleeve } = this.character;
-    if (!sleeve || sleeve.type === ActorType.Infomorph) return null;
-    return sleeve.size;
+  private computeReachAdvantage(
+    actor: (ActorEP | WritableDraft<ActorEP>) | null | undefined,
+  ) {
+    if (actor) {
+      const { proxy } = actor;
+      const targetSleeve =
+        proxy.type === ActorType.Character ? proxy.sleeve : proxy;
+      const { sleeve } = this.character;
+      if (
+        targetSleeve &&
+        targetSleeve?.type !== ActorType.Infomorph &&
+        sleeve &&
+        sleeve?.type !== ActorType.Infomorph
+      ) {
+        return (
+          sizeReachAdvantage(sleeve.size, targetSleeve.size) +
+          this.character.morphReach -
+          (proxy.type === ActorType.Character ? proxy.morphReach : 0)
+        );
+      }
+    }
+    return this.character.morphReach;
   }
 
   get largeMorph() {
-    const { morphSize } = this;
+    const { morphSize } = this.character;
     return morphSize === Size.Large || morphSize === Size.VeryLarge;
   }
 
@@ -170,15 +222,6 @@ export class MeleeAttackTest extends SkillTest {
     return primaryAttack
       ? weapon.attacks.primary
       : weapon.attacks.secondary || weapon.attacks.primary;
-  }
-
-  get damageModifierEffects() {
-    return this.character.appliedEffects
-      .getGroup(EffectType.Melee)
-      .map((effect) => ({
-        label: effect[Source],
-        formula: effect.dvModifier,
-      }));
   }
 
   get damageFormulas() {
@@ -221,7 +264,6 @@ export class MeleeAttackTest extends SkillTest {
       action,
       melee,
       testMessageData,
-      morphSize,
       damageModifierEffects,
     } = this;
 
@@ -263,7 +305,7 @@ export class MeleeAttackTest extends SkillTest {
             'oneHanded',
             'calledShot',
           ]),
-          morphSize,
+          morphSize: this.character.morphSize,
           damageModifiers: damageModifierEffects,
         },
       },

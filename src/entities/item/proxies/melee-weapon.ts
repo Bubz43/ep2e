@@ -60,6 +60,10 @@ export class MeleeWeapon
     return this.epData.twoHanded;
   }
 
+  get reachBonus() {
+    return this.epData.reachBonus
+  }
+
   get fullType() {
     const { wareType, isImprovised } = this;
     return compact([

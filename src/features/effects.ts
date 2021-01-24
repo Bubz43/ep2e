@@ -95,6 +95,7 @@ export type HealthEffect = {
 export type MeleeEffect = {
   type: EffectType.Melee;
   dvModifier: string;
+  reachBonus?: number;
 };
 
 export type RangedEffect = {
@@ -184,6 +185,10 @@ export type Effect =
   | SkillEffect
   | MovementEffect;
 
+  export type Effects = {
+    [key in EffectType]: Extract<Effect, { type: key }>
+  }
+
 export const Source = Symbol();
 
 export type SourcedEffect<T extends {}> = T & { [Source]: string };
@@ -240,6 +245,7 @@ const misc = createFeature<MiscEffect>(() => ({
 const melee = createFeature<MeleeEffect>(() => ({
   type: EffectType.Melee,
   dvModifier: '',
+  reachBonus: 0,
 }));
 
 const ranged = createFeature<RangedEffect>(() => ({
@@ -405,13 +411,20 @@ const format = (effect: Effect): (string | number)[] => {
         effect.cummulative ? `(${localize('cumulative')})` : '',
       ];
 
-    case EffectType.Melee:
-      return [
-        effect.dvModifier,
-        localize('SHORT', 'damageValue'),
-        localize('to'),
-        localize('meleeDamageRolls'),
-      ];
+    case EffectType.Melee: {
+      const dv =
+        effect.dvModifier &&
+        [
+          effect.dvModifier,
+          localize('SHORT', 'damageValue'),
+          localize('to'),
+          localize('meleeDamageRolls'),
+        ].join(' ');
+      const reach =
+        effect.reachBonus &&
+        `${withSign(effect.reachBonus)} ${localize('reach')}`;
+      return [compact([dv, reach]).join(' - ')];
+    }
 
     case EffectType.Ranged:
       return [

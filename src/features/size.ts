@@ -1,7 +1,7 @@
 import { AptitudeType } from '@src/data-enums';
 import type { AddEffects } from '@src/entities/applied-effects';
 import { localize } from '@src/foundry/localization';
-import { compact } from 'remeda';
+import { clamp, compact } from 'remeda';
 import { SuccessTestEffect, createEffect } from './effects';
 import { createTag } from './tags';
 
@@ -12,6 +12,18 @@ export enum Size {
   Large = 'large',
   VeryLarge = 'veryLarge',
 }
+
+const sizeRatings = {
+  [Size.VerySmall]: 1,
+  [Size.Small]: 2,
+  [Size.Medium]: 3,
+  [Size.Large]: 4,
+  [Size.VeryLarge]: 5,
+};
+
+export const sizeReachAdvantage = (a: Size, b: Size) => {
+  return clamp((sizeRatings[a] - sizeRatings[b]) * 10, { min: 0, max: 30 });
+};
 
 export const sizeModifiers: Record<Exclude<Size, Size.Medium>, number> = {
   [Size.VerySmall]: -30,

@@ -4,6 +4,7 @@ import {
   DurationEffect,
   DurationEffectTarget,
   Effect,
+  Effects,
   EffectType,
   extractDurationEffectMultipliers,
   HealthEffect,
@@ -122,7 +123,7 @@ export class AppliedEffects {
 
   getGroup<T extends EffectType>(type: T) {
     return (this.groups.get(type) || ([] as unknown)) as ReadonlyArray<
-      Readonly<SourcedEffect<ReturnType<typeof createEffect[T]>>>
+      Readonly<SourcedEffect<Effects[T]>>
     >;
   }
 
