@@ -52,10 +52,10 @@ export enum KnowSkillCategory {
   ProfessionalTraining = 'professionalTraining',
 }
 
-export const complementarySkillBonus = ({ points }: Skill) => {
-  if (points >= 80) return 30;
-  if (points >= 60) return 20;
-  if (points >= 40) return 10;
+export const complementarySkillBonus = ({ total }: Skill) => {
+  if (total >= 80) return 30;
+  if (total >= 60) return 20;
+  if (total >= 40) return 10;
   return 0;
 };
 

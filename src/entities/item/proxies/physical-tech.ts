@@ -435,14 +435,17 @@ export class PhysicalTech
 
   getDataCopy(reset = false) {
     const copy = super.getDataCopy(reset);
-    copy.data.state = {
-      fabStartTime: currentWorldTimeMS(),
-      equipped: false,
-      disabled: false,
-      activated: false,
-      embeddedEgos: [],
-      onboardAliDeleted: false,
-    };
+    if (reset) {
+      copy.data.state = {
+        fabStartTime: currentWorldTimeMS(),
+        equipped: false,
+        disabled: false,
+        activated: false,
+        embeddedEgos: [],
+        onboardAliDeleted: false,
+      };
+    }
+
     return copy;
   }
 }
