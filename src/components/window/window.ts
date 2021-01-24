@@ -451,24 +451,42 @@ export class SlWindow extends LitElement {
     };
   }
 
-  private startDrag(ev: MouseEvent) {
+
+  private startDrag = (ev: MouseEvent) => {
     if (
-      ev.button === 2 ||
       ev.defaultPrevented ||
       ev
         .composedPath()
         .some(anyPass([isButton, (e) => e instanceof HTMLInputElement]))
     )
       return;
+
+    const { x, y } = ev;
     this.gainFocus();
 
-    dragElement({
-      element: this,
-      ev,
-      onEnd: toggleTouchAction(this),
-      bounds: this.bounds,
-    });
-  }
+    const distanceChecker = (ev: MouseEvent) => {
+      if (Math.abs(ev.x - x) > 2 || Math.abs(ev.y - y) > 2) {
+        cleanup();
+        const undoTouch = toggleTouchAction(this);
+        this.style.opacity = '0.8';
+        dragElement({
+          element: this,
+          ev,
+          onEnd: () => {
+            undoTouch();
+            this.style.opacity = '1';
+          },
+          bounds: this.bounds,
+        });
+      }
+    };
+
+    const cleanup = () => {
+      document.body.removeEventListener("mousemove", distanceChecker);
+    }
+    document.body.addEventListener('mousemove', distanceChecker);
+    document.body.addEventListener('mouseup', cleanup, { once: true });
+  };
 
   @debounce(400)
   private confirmPosition() {
