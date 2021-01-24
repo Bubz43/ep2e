@@ -1,6 +1,7 @@
 import { LazyRipple } from '@src/components/mixins/lazy-ripple';
 import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Character } from '@src/entities/actor/proxies/character';
+import { ActorType } from '@src/entities/entity-types';
 import { idProp } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
 import { clickIfEnter } from '@src/utility/helpers';
@@ -33,6 +34,7 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
   }
 
   render() {
+    const { sleeve } = this.character;
     return html`
       <sl-header
         part="header"
@@ -56,6 +58,13 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
         </mwc-icon>
       </sl-header>
       <sl-animated-list class="attacks" ?hidden=${this.collapsed}>
+        ${sleeve && sleeve.type !== ActorType.Infomorph
+          ? html`
+              <wl-list-item
+                >${localize('unarmedDV')} ${sleeve.unarmedDV}</wl-list-item
+              >
+            `
+          : ''}
         ${repeat(
           this.character.weapons.melee,
           idProp,
