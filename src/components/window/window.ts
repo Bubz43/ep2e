@@ -338,7 +338,7 @@ export class SlWindow extends LitElement {
   }
 
   private repositionWithinWindow(ev: MouseEvent) {
-    if (ev.button === 1) repositionIfNeeded(this);
+    if (ev.button === 1) repositionIfNeeded(this, document.body);
   }
 
   private resize(ev: MouseEvent) {
