@@ -76,6 +76,7 @@ export class MeleeAttackTest extends SkillTest {
   });
 
   readonly damageModifierEffects: LabeledFormula[];
+  
 
   constructor({ meleeWeapon, primaryAttack, ...init }: MeleeAttackTestInit) {
     super({

@@ -2936,6 +2936,12 @@
             "onboardALI": {
               "type": "string"
             },
+            "oneHand": {
+              "type": "string"
+            },
+            "oneHanded": {
+              "type": "string"
+            },
             "ongoing": {
               "type": "string"
             },
@@ -5427,6 +5433,8 @@
             "on",
             "onTest",
             "onboardALI",
+            "oneHand",
+            "oneHanded",
             "ongoing",
             "online",
             "onset",

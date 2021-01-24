@@ -193,6 +193,7 @@ export class MessageMeleeAttack extends MessageElement {
       touchOnly,
       appliedCoating,
       appliedPayload,
+      calledShot,
     } = this.meleeAttack;
 
     const attack = attacks[attackType] || attacks.primary;
@@ -202,7 +203,12 @@ export class MessageMeleeAttack extends MessageElement {
       'aggressive',
       'charging',
       'extraWeapon',
-    ] as const).filter((key) => this.meleeAttack[key]);
+      'oneHanded',
+    ] as const).flatMap((key) => (this.meleeAttack[key] ? localize(key) : []));
+
+    if (calledShot) {
+      options.push(`${localize('calledShot')}: ${localize(calledShot)}`);
+    }
 
     return html`
       <div class="settings">
@@ -219,7 +225,7 @@ export class MessageMeleeAttack extends MessageElement {
       </div>
 
       ${notEmpty(options)
-        ? html` <p class="options">${map(options, localize).join('  •  ')}</p> `
+        ? html` <p class="options">${options.join('  •  ')}</p> `
         : ''}
       ${(touchOnly && !disabled) || !this.successTest
         ? ''

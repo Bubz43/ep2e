@@ -197,7 +197,6 @@ export class MeleeAttackControls extends LitElement {
       skillState,
       damageFormulas,
       attack,
-      morphSize,
     } = test;
 
     const {
@@ -211,6 +210,7 @@ export class MeleeAttackControls extends LitElement {
       calledShot,
       oneHanded,
     } = melee;
+    const { morphSize } = character;
     const { attacks, isTwoHanded } = weapon;
 
     const joinedFormula = joinLabeledFormulas(damageFormulas);
