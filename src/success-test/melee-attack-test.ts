@@ -34,7 +34,7 @@ import {
 
 export type MeleeAttackTestInit = SetRequired<SkillTestInit, 'character'> & {
   meleeWeapon?: MeleeWeapon;
-  primaryAttack: boolean;
+  primaryAttack?: boolean;
 };
 
 export class MeleeAttackTest extends SkillTest {
@@ -96,7 +96,7 @@ export class MeleeAttackTest extends SkillTest {
     const { sleeve } = this.character;
     this.melee = {
       weapon: meleeWeapon,
-      primaryAttack,
+      primaryAttack: primaryAttack || true,
       unarmedDV:
         sleeve && sleeve.type !== ActorType.Infomorph ? sleeve.unarmedDV : '0',
       touchOnly: meleeWeapon?.isTouchOnly,

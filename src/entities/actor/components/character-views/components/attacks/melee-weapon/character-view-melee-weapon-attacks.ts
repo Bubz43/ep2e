@@ -77,22 +77,20 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
         if (actor.proxy.type === ActorType.Character) {
           const { ego, weapons } = actor.proxy;
           const weapon = weapons.melee.find((w) => w.id === meleeWeapon.id);
-          if (weapon) {
-            return {
-              ego,
-              character: actor.proxy,
-              token,
-              skill:
-                (weapon.exoticSkillName &&
-                  ego.findFieldSkill({
-                    fieldSkill: FieldSkillType.Exotic,
-                    field: weapon.exoticSkillName,
-                  })) ||
-                ego.getCommonSkill(SkillType.Melee),
-              meleeWeapon: weapon,
-              primaryAttack: attackType === 'primary',
-            };
-          }
+          return {
+            ego,
+            character: actor.proxy,
+            token,
+            skill:
+              (weapon?.exoticSkillName &&
+                ego.findFieldSkill({
+                  fieldSkill: FieldSkillType.Exotic,
+                  field: weapon.exoticSkillName,
+                })) ||
+              ego.getCommonSkill(SkillType.Melee),
+            meleeWeapon: weapon,
+            primaryAttack: attackType === 'primary',
+          };
         }
         return null;
       },

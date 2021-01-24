@@ -3,7 +3,9 @@ import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
 import { idProp } from '@src/features/feature-helpers';
+import { FieldSkillType, SkillType } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
+import { MeleeAttackControls } from '@src/success-test/components/melee-attack-controls/melee-attack-controls';
 import { clickIfEnter } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
@@ -33,6 +35,24 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
     this.collapsed = !this.collapsed;
   }
 
+  private startUnarmedAttack() {
+    MeleeAttackControls.openWindow({
+      entities: { token: this.token, actor: this.character.actor },
+      getState: (actor) => {
+        if (actor.proxy.type === ActorType.Character) {
+          const { ego } = actor.proxy;
+          return {
+            ego,
+            character: actor.proxy,
+            token: this.token,
+            skill: ego.getCommonSkill(SkillType.Melee),
+          };
+        }
+        return null;
+      },
+    });
+  }
+
   render() {
     const { sleeve } = this.character;
     return html`
@@ -60,7 +80,7 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
       <sl-animated-list class="attacks" ?hidden=${this.collapsed}>
         ${sleeve && sleeve.type !== ActorType.Infomorph
           ? html`
-              <wl-list-item
+              <wl-list-item clickable @click=${this.startUnarmedAttack}
                 >${localize('unarmedDV')} ${sleeve.unarmedDV}</wl-list-item
               >
             `

@@ -124,11 +124,18 @@ export class MeleeAttackControls extends LitElement {
     if (!this.test) return;
     openMenu({
       header: { heading: `${localize('select')} ${localize('meleeWeapon')}` },
-      content: this.test.character.weapons.melee.map((weapon) => ({
-        label: weapon.name,
-        activated: weapon === this.test?.melee.weapon,
-        callback: () => this.test?.melee.update({ weapon }),
-      })),
+      content: [
+        {
+          label: localize("unarmed"),
+          activated: !this.test.melee.weapon,
+          callback: () => this.test?.melee.update({ weapon: null })
+        },
+        ...this.test.character.weapons.melee.map((weapon) => ({
+          label: weapon.name,
+          activated: weapon === this.test?.melee.weapon,
+          callback: () => this.test?.melee.update({ weapon }),
+        })),
+      ],
     });
   }
 
