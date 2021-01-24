@@ -451,7 +451,6 @@ export class SlWindow extends LitElement {
     };
   }
 
-
   private startDrag = (ev: MouseEvent) => {
     if (
       ev.defaultPrevented ||
@@ -482,8 +481,8 @@ export class SlWindow extends LitElement {
     };
 
     const cleanup = () => {
-      document.body.removeEventListener("mousemove", distanceChecker);
-    }
+      document.body.removeEventListener('mousemove', distanceChecker);
+    };
     document.body.addEventListener('mousemove', distanceChecker);
     document.body.addEventListener('mouseup', cleanup, { once: true });
   };

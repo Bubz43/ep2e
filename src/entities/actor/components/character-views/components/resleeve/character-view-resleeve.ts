@@ -142,10 +142,9 @@ export class CharacterViewResleeve extends LitElement {
     const data = this.selectedSleeve.dataCopy();
     data.items = [];
 
-        const nonDefaultBrain =
-          'nonDefaultBrain' in this.selectedSleeve &&
-          this.selectedSleeve.nonDefaultBrain;
-
+    const nonDefaultBrain =
+      'nonDefaultBrain' in this.selectedSleeve &&
+      this.selectedSleeve.nonDefaultBrain;
 
     const added = await this.character.itemOperations.add(
       ...[...items.values()].map((item) => {
@@ -159,28 +158,24 @@ export class CharacterViewResleeve extends LitElement {
       }),
     );
 
-
     if (data.type !== ActorType.Infomorph && nonDefaultBrain) {
       const { items } = this.character.actor;
-  
+
       pipe(
         added,
         map((id) => items?.get(id)?.proxy),
         compact,
-        find(
-          (proxy) =>
-            {
-              if (proxy.name === nonDefaultBrain.name) {
-                console.log(
-                  equals(proxy.data.flags, nonDefaultBrain.data.flags),
-                );
-                console.log(proxy.epData, nonDefaultBrain.epData)
-              }
-              return proxy.name === nonDefaultBrain.name &&
-                equals(proxy.epData, nonDefaultBrain.epData) &&
-                equals(proxy.data.flags, nonDefaultBrain.data.flags);
-            },
-        ),
+        find((proxy) => {
+          if (proxy.name === nonDefaultBrain.name) {
+            console.log(equals(proxy.data.flags, nonDefaultBrain.data.flags));
+            console.log(proxy.epData, nonDefaultBrain.epData);
+          }
+          return (
+            proxy.name === nonDefaultBrain.name &&
+            equals(proxy.epData, nonDefaultBrain.epData) &&
+            equals(proxy.data.flags, nonDefaultBrain.data.flags)
+          );
+        }),
         (brain) =>
           brain
             ? (data.data.brain = brain.id)
