@@ -183,11 +183,7 @@ export class MeleeAttackTest extends SkillTest {
     }
 
     this.damageModifierEffects = this.character.appliedEffects
-      .getGroup(EffectType.Melee)
-      .map((effect) => ({
-        label: effect[Source],
-        formula: effect.dvModifier,
-      }));
+      .meleeDamageBonuses
   }
 
   private computeReachAdvantage(

@@ -57,6 +57,7 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
             label: localize('unarmedDV'),
             formula: unarmed || '0',
           },
+          ...(character?.appliedEffects.meleeDamageBonuses || []),
           ...attack.rollFormulas,
         ],
         compact,
@@ -98,8 +99,8 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
                     fieldSkill: FieldSkillType.Exotic,
                     points: 0,
                     linkedAptitude: AptitudeType.Somatics,
-                    specialization: "",
-                    category: ActiveSkillCategory.Combat
+                    specialization: '',
+                    category: ActiveSkillCategory.Combat,
                   },
                   ego.aptitudes,
                 )

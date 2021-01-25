@@ -1,10 +1,14 @@
+import { createMessage } from '@src/chat/create-message';
 import { LazyRipple } from '@src/components/mixins/lazy-ripple';
 import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
+import { ArmorType } from '@src/features/active-armor';
 import { idProp } from '@src/features/feature-helpers';
 import { FieldSkillType, SkillType } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
+import { rollLabeledFormulas } from '@src/foundry/rolls';
+import { HealthType } from '@src/health/health';
 import { MeleeAttackControls } from '@src/success-test/components/melee-attack-controls/melee-attack-controls';
 import { clickIfEnter } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
@@ -33,6 +37,27 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
 
   private toggleCollapse() {
     this.collapsed = !this.collapsed;
+  }
+
+  private rollUnarmedDamage() {
+    const { sleeve } = this.character;
+    const damage =
+      !sleeve || sleeve.type === ActorType.Infomorph ? '0' : sleeve.unarmedDV;
+    createMessage({
+      data: {
+        header: { heading: localize('unarmed') },
+        damage: {
+          source: localize('unarmed'),
+          armorUsed: [ArmorType.Kinetic],
+          damageType: HealthType.Physical,
+          rolledFormulas: rollLabeledFormulas([
+            ...this.character.appliedEffects.meleeDamageBonuses,
+            { label: localize('unarmed'), formula: damage },
+          ]),
+        },
+      },
+      entity: this.token ?? this.character,
+    });
   }
 
   private startUnarmedAttack() {
@@ -77,7 +102,11 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
           keyboard_arrow_down
         </mwc-icon>
       </sl-header>
-      <sl-animated-list class="attacks" ?hidden=${this.collapsed}>
+      <sl-animated-list
+        class="attacks"
+        ?hidden=${this.collapsed}
+        @contextmenu=${this.rollUnarmedDamage}
+      >
         ${sleeve && sleeve.type !== ActorType.Infomorph
           ? html`
               <wl-list-item clickable @click=${this.startUnarmedAttack}

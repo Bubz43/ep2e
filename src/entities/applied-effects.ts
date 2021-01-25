@@ -146,6 +146,14 @@ export class AppliedEffects {
   }
 
   @LazyGetter()
+  get meleeDamageBonuses() {
+    return this.getGroup(EffectType.Melee).map((effect) => ({
+      label: effect[Source],
+      formula: effect.dvModifier,
+    }));
+  }
+
+  @LazyGetter()
   get durationEffects() {
     return groupBy(
       this.getGroup(EffectType.Duration),
