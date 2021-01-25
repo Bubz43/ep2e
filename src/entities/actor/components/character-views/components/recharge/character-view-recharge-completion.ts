@@ -13,6 +13,7 @@ import {
   property,
   html,
   internalProperty,
+  PropertyValues,
 } from 'lit-element';
 import mix from 'mix-with/lib';
 import styles from './character-view-recharge-completion.scss';
@@ -48,6 +49,11 @@ export class CharacterViewRechargeCompletion extends mix(LitElement).with(
   connectedCallback() {
     this.setupState();
     super.connectedCallback();
+  }
+
+  update(changedProps: PropertyValues<this>) {
+    if (changedProps.has("character")) this.setupState();
+    super.update(changedProps)
   }
 
   get updatedSpentPools() {
@@ -238,7 +244,6 @@ export class CharacterViewRechargeCompletion extends mix(LitElement).with(
         ${this.overrideDuration === true
           ? html`
               <mwc-button
-                outline
                 class="revert-override"
                 label=${localize('cancel')}
                 @click=${this.toggleOverride}
@@ -250,7 +255,7 @@ export class CharacterViewRechargeCompletion extends mix(LitElement).with(
               <sl-popover minimal center>
                 <mwc-button
                   class="complete-recharge missing"
-                  extended
+                  
                   outlined
                   icon="new_releases"
                   label="${localize('points')} ${localize('unspent')}"
