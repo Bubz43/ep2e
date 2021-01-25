@@ -55,19 +55,6 @@ ego-form-skills {
   padding: 0.5rem 0 0;
 }
 
-.ego-points-simple {
-  display: flex;
-  justify-content: flex-end;
-  list-style: none;
-  font-size: 1.25rem;
-  > * {
-    margin-right: 0.75ch;
-  }
-  .value {
-    display: inline-block;
-    min-width: 2ch;
-  }
-}
 
 .motivations-list {
   position: relative;

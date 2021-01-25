@@ -283,17 +283,7 @@ export class EgoForm extends mix(LitElement).with(
                 <sl-header
                   heading="${localize('resource')} ${localize('points')}"
                 >
-                  <sl-animated-list class="ego-points-simple" slot="action">
-                    ${repeat(
-                      this.ego.points,
-                      ({ label }) => label,
-                      ({ label, value }) => html`
-                        <sl-group role="listitem" label=${label}
-                          ><span class="value">${value}</span></sl-group
-                        >
-                      `,
-                    )}
-                  </sl-animated-list>
+               
                 </sl-header>
                 ${disabled
                   ? ''
@@ -308,7 +298,7 @@ export class EgoForm extends mix(LitElement).with(
                                   ...points[point],
                                   label: Ego.formatPoint(point),
                                 },
-                                { min: -99, max: 99 },
+                                point === CharacterPoint.Credits ? undefined : { min: -99, max: 99 },
                               )
                             : '',
                         ),
