@@ -1,3 +1,5 @@
+import { renderNumberInput } from '@src/components/field/fields';
+import { renderAutoForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
 import { CalledShot, enumValues } from '@src/data-enums';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
@@ -211,7 +213,7 @@ export class MeleeAttackControls extends LitElement {
       primaryAttack,
       attackTarget,
       aggressive,
-      extraWeapon,
+      extraWeapons,
       touchOnly,
       calledShot,
       oneHanded,
@@ -367,12 +369,20 @@ export class MeleeAttackControls extends LitElement {
             </button></span
           >
         </wl-list-item>
-        <mwc-check-list-item
-          ?selected=${!!extraWeapon}
-          @click=${() => melee.update({ extraWeapon: !extraWeapon })}
-        >
-          <span>${localize('extraWeapon')}</span>
-        </mwc-check-list-item>
+        <wl-list-item class="extra-weapons" @click=${(ev: Event & { currentTarget: HTMLElement}) => {
+          ev.currentTarget.querySelector("input")?.focus()
+        }}>
+        <span>${localize("extraWeapons")}</span>
+        ${renderAutoForm({
+          noDebounce: true,
+          storeOnInput: true,
+          slot: "after",
+          props: { extraWeapons: extraWeapons || 0},
+          update: melee.update,
+          fields: ({ extraWeapons }) => renderNumberInput(extraWeapons, { min: 0, max: 3})
+        })}
+        </wl-list-item>
+      
         <mwc-check-list-item
           ?selected=${!!touchOnly}
           @click=${() => melee.update({ touchOnly: !touchOnly })}

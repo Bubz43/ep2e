@@ -146,7 +146,7 @@ export type MeleeWeaponSettings = {
   touchOnly?: boolean;
   aggressive?: AggressiveOption | null;
   charging?: boolean;
-  extraWeapon?: boolean;
+  extraWeapons?: number;
   calledShot?: CalledShot | null;
   oneHanded?: boolean;
 };
@@ -154,17 +154,17 @@ export type MeleeWeaponSettings = {
 export const formulasFromMeleeSettings = ({
   aggressive,
   charging,
-  extraWeapon,
-}: Pick<MeleeWeaponSettings, 'aggressive' | 'charging' | 'extraWeapon'>) => {
+  extraWeapons,
+}: Pick<MeleeWeaponSettings, 'aggressive' | 'charging' | 'extraWeapons'>) => {
   return compact([
     aggressive === AggressiveOption.Damage && {
       label: localize('aggressive'),
       formula: '+1d10',
     },
     charging && { label: localize('charging'), formula: '+1d6' },
-    extraWeapon && {
-      label: localize('extraWeapon'),
-      formula: '+1d6',
+    extraWeapons && {
+      label: `${localize('extraWeapons')} (${extraWeapons})`,
+      formula: `+${extraWeapons}d6`,
     },
   ]);
 };

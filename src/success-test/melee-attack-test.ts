@@ -309,7 +309,7 @@ export class MeleeAttackTest extends SkillTest {
           charging: action.fullMove,
           ...pick(meleeSettings, [
             'aggressive',
-            'extraWeapon',
+            'extraWeapons',
             'touchOnly',
             'unarmedDV',
             'oneHanded',

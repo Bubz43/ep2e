@@ -1386,6 +1386,7 @@
     "fullDefense": "Full Defense",
     "oneHand": "One Hand",
     "oneHanded": "One Handed",
+    "extraWeapons": "Extra Weapons",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

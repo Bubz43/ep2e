@@ -58,16 +58,7 @@ export class MessageMeleeAttack extends MessageElement {
       : null;
   }
 
-  // private editSettings() {
-  //   const { weapon, ...settings } = this.meleeAttack;
-  //   MeleeSettingsForm.openWindow({
-  //     initialSettings: settings,
-  //     meleeWeapon: this.weapon,
-  //     requireSubmit: true,
-  //     adjacentEl: this,
-  //     update: ({ detail }) => this.getUpdater('meleeAttack').commit(detail),
-  //   });
-  // }
+
 
   private async createCoatingMessage() {
     const { weapon, message } = this;
@@ -208,7 +199,7 @@ export class MessageMeleeAttack extends MessageElement {
       'touchOnly',
       'aggressive',
       'charging',
-      'extraWeapon',
+      'extraWeapons',
       'oneHanded',
     ] as const).flatMap((key) => (this.meleeAttack[key] ? localize(key) : []));
 
@@ -216,17 +207,6 @@ export class MessageMeleeAttack extends MessageElement {
       options.push(`${localize('calledShot')}: ${localize(calledShot)}`);
     }
 
-    /*
-    ${disabled || !this.successTest
-          ? ''
-          : html`
-              <mwc-icon-button
-                icon="settings"
-                @click=${this.editSettings}
-                ?disabled=${disabled}
-              ></mwc-icon-button>
-            `}
-    */
 
     return html`
       <div class="settings">

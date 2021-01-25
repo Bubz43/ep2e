@@ -1411,7 +1411,7 @@ type LangEntries =
   | 'entity'
   | 'complexAim'
   | 'fullDefense'
-  | 'oneHand' | "oneHanded"
+  | 'oneHand' | "oneHanded" | "extraWeapons"
 type FullNames =
   | 'cog'
   | 'int'
