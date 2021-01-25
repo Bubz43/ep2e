@@ -2,9 +2,15 @@ import { createMessage } from '@src/chat/create-message';
 import type { DamageMessageData } from '@src/chat/message-data';
 import { formatArmorUsed } from '@src/combat/attack-formatting';
 import type { AttackType, MeleeWeaponAttack } from '@src/combat/attacks';
+import { AptitudeType } from '@src/data-enums';
 import { ActorType } from '@src/entities/entity-types';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
-import { FieldSkillType, SkillType } from '@src/features/skills';
+import {
+  ActiveSkillCategory,
+  FieldSkillType,
+  setupFullFieldSkill,
+  SkillType,
+} from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas, rollLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
@@ -81,13 +87,23 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
             ego,
             character: actor.proxy,
             token,
-            skill:
-              (weapon?.exoticSkillName &&
-                ego.findFieldSkill({
+            skill: weapon?.exoticSkillName
+              ? ego.findFieldSkill({
                   fieldSkill: FieldSkillType.Exotic,
                   field: weapon.exoticSkillName,
-                })) ||
-              ego.getCommonSkill(SkillType.Melee),
+                }) ||
+                setupFullFieldSkill(
+                  {
+                    field: weapon.exoticSkillName,
+                    fieldSkill: FieldSkillType.Exotic,
+                    points: 0,
+                    linkedAptitude: AptitudeType.Somatics,
+                    specialization: "",
+                    category: ActiveSkillCategory.Combat
+                  },
+                  ego.aptitudes,
+                )
+              : ego.getCommonSkill(SkillType.Melee),
             meleeWeapon: weapon,
             primaryAttack: attackType === 'primary',
           };

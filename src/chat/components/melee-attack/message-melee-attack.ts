@@ -146,7 +146,7 @@ export class MessageMeleeAttack extends MessageElement {
             label: localize(testResult),
             formula: successTestInfo ? `+${superiorDamage.length}d6` : '+2d6',
           },
-        augmentUnarmed && {
+        (augmentUnarmed || augmentUnarmed == null) && {
           label: localize('unarmedDV'),
           formula: unarmedDV || '0',
         },
@@ -173,7 +173,7 @@ export class MessageMeleeAttack extends MessageElement {
           },
           ['armorPiercing', 'armorUsed', 'damageType', 'notes', 'reduceAVbyDV'],
         ),
-        source: `${name} ${hasSecondaryAttack ? `[${attack?.label}]` : ''}`,
+        source: `${name || localize("unarmed")} ${hasSecondaryAttack ? `[${attack?.label}]` : ''}`,
         multiplier:
           morphSize === Size.Small ? (multiplier === 2 ? 1 : 0.5) : multiplier,
         rolledFormulas: rolled,

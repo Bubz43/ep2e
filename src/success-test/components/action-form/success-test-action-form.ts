@@ -2,6 +2,7 @@ import {
   renderSelectField,
   renderTimeField,
   renderSlider,
+  renderLabeledCheckbox,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { enumValues } from '@src/data-enums';
@@ -48,15 +49,7 @@ export class SuccessTestActionForm extends LitElement {
           renderSelectField(type, enumValues(ActionType)),
           renderSelectField(subtype, enumValues(ActionSubtype)),
           subtype.value === ActionSubtype.Physical
-            ? html`
-                <mwc-check-list-item
-                  @click=${() =>
-                    this.action.update({ fullMove: !fullMove.value })}
-                  ?selected=${fullMove.value}
-                >
-                  ${this.fullMoveLabel}
-                </mwc-check-list-item>
-              `
+            ? renderLabeledCheckbox({...fullMove, label: this.fullMoveLabel})
             : '',
           html` <div
             class="action-edits ${classMap({

@@ -45,9 +45,6 @@
   header {
     padding: 0.25rem 0.75rem;
     background: alphav(var(--color-bg), 0.9);
-    & + * {
-          // border-left: 2px solid var(--color-grey);
-    }
   }
   .type {
     color: var(--color-text-lighter);
