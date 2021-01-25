@@ -25,6 +25,12 @@ export class SuccessTestFooter extends LitElement {
 
   @property({ type: Number }) target = 0;
 
+  firstUpdated() {
+    requestAnimationFrame(() => {
+      this.renderRoot.querySelector<HTMLElement>("#start")?.focus()
+    })
+  }
+
   render() {
     const { target, settings } = this;
     const clamped = successTestTargetClamp(target);
@@ -65,7 +71,7 @@ export class SuccessTestFooter extends LitElement {
           Auto Roll
         </button>
       </div>
-      <mwc-button @click=${settings.setReady} raised
+      <mwc-button @click=${settings.setReady} raised id="start"
         >${localize('start')} ${localize('test')}</mwc-button
       >
     `;

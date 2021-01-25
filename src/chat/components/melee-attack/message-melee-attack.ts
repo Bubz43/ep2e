@@ -7,14 +7,17 @@ import {
   SuperiorResultEffect,
 } from '@src/data-enums';
 import { ExplosiveSettingsForm } from '@src/entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
-import { ItemType } from '@src/entities/entity-types';
+import { ActorType, ItemType } from '@src/entities/entity-types';
+import { pickOrDefaultCharacter } from '@src/entities/find-entities';
 import { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import { formulasFromMeleeSettings } from '@src/entities/weapon-settings';
 import { ArmorType } from '@src/features/active-armor';
 import { Size } from '@src/features/size';
+import { SkillType } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { HealthType } from '@src/health/health';
+import { SkillTestControls } from '@src/success-test/components/skill-test-controls/skill-test-controls';
 import { SuccessTestResult } from '@src/success-test/success-test';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property } from 'lit-element';
@@ -58,7 +61,27 @@ export class MessageMeleeAttack extends MessageElement {
       : null;
   }
 
-
+  startDefense(skillType: SkillType) {
+    pickOrDefaultCharacter((character) => {
+      SkillTestControls.openWindow({
+        entities: { actor: character.actor },
+        relativeEl: this,
+        getState: (actor) => {
+          if (actor.proxy.type !== ActorType.Character) return null;
+          return {
+            ego: actor.proxy.ego,
+            character: actor.proxy,
+            skill: actor.proxy.ego.getCommonSkill(skillType),
+            opposing: {
+              testName: `${this.weapon?.name || localize('unarmed')} ${localize(
+                'meleeAttack',
+              )}`,
+            },
+          };
+        },
+      });
+    });
+  }
 
   private async createCoatingMessage() {
     const { weapon, message } = this;
@@ -159,8 +182,8 @@ export class MessageMeleeAttack extends MessageElement {
     );
     message.createSimilar({
       header: {
-        heading: name ?? localize("unarmed"),
-        subheadings: [localize("meleeAttack")]
+        heading: name ?? localize('unarmed'),
+        subheadings: [localize('meleeAttack')],
       },
       damage: {
         ...pick(
@@ -173,7 +196,9 @@ export class MessageMeleeAttack extends MessageElement {
           },
           ['armorPiercing', 'armorUsed', 'damageType', 'notes', 'reduceAVbyDV'],
         ),
-        source: `${name || localize("unarmed")} ${hasSecondaryAttack ? `[${attack?.label}]` : ''}`,
+        source: `${name || localize('unarmed')} ${
+          hasSecondaryAttack ? `[${attack?.label}]` : ''
+        }`,
         multiplier:
           morphSize === Size.Small ? (multiplier === 2 ? 1 : 0.5) : multiplier,
         rolledFormulas: rolled,
@@ -207,8 +232,9 @@ export class MessageMeleeAttack extends MessageElement {
       options.push(`${localize('calledShot')}: ${localize(calledShot)}`);
     }
 
-
     return html`
+      ${this.successTest ? this.renderOppose() : ''}
+
       <div class="settings">
         ${hasSecondaryAttack && attack ? attack.label : ''}
       </div>
@@ -216,9 +242,8 @@ export class MessageMeleeAttack extends MessageElement {
       ${notEmpty(options)
         ? html` <p class="options">${options.join('  •  ')}</p> `
         : ''}
-      ${(touchOnly && !disabled) || !this.successTest
-        ? ''
-        : html`
+      ${!disabled && !touchOnly && this.successTest
+        ?html`
             <mwc-button
               outlined
               dense
@@ -226,7 +251,7 @@ export class MessageMeleeAttack extends MessageElement {
               @click=${this.createDamageMessage}
               >${localize('roll')} ${localize('damage')}</mwc-button
             >
-          `}
+          `: ""}
       ${attack && notEmpty(attack.attackTraits)
         ? html`
             <message-attack-traits
@@ -263,6 +288,20 @@ export class MessageMeleeAttack extends MessageElement {
               : ''}
           </div>`
         : ''}
+    `;
+  }
+
+  private renderOppose() {
+    return html`
+      <sl-group label=${localize('defendWith')} class="defense">
+        ${[SkillType.Melee, SkillType.Fray].map(
+          (skillType) => html`
+            <wl-list-item clickable @click=${() => this.startDefense(skillType)}
+              >${localize(skillType)}
+            </wl-list-item>
+          `,
+        )}
+      </sl-group>
     `;
   }
 }

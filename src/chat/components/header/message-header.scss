@@ -17,12 +17,12 @@
   .headings {
     padding: 0.15rem 0;
   }
-  h3 {
-    font-size: 1rem;
-  }
-  .details {
-    font-size: 0.65rem;
-  }
+  // h3 {
+  //   font-size: 1rem;
+  // }
+  // .details {
+  //   font-size: 0.65rem;
+  // }
 }
 
 header {
@@ -58,6 +58,7 @@ h3 {
   align-self: end;
   font-size: large;
   place-self: center;
+  font-size: 1rem;
   @include truncate(100%);
 }
 

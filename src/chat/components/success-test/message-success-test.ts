@@ -343,7 +343,7 @@ export class MessageSuccessTest extends MessageElement {
             ></mwc-icon-button>
           `
         : ''}
-      ${isCharacter && linkedPool && usedPoolActions?.length !== 2
+      ${isCharacter && linkedPool && editable && usedPoolActions?.length !== 2
         ? html` <div class="pool-actions">
             ${roll === flipFlopRoll(roll)
               ? ''
@@ -375,6 +375,7 @@ export class MessageSuccessTest extends MessageElement {
             <sl-popover
               class="superior-effects"
               placement=${Placement.Left}
+              ?disabled=${!editable}
               .renderOnDemand=${() =>
                 this.renderSuperiorResultEffectSelector(grantedSuperiorEffects)}
             >

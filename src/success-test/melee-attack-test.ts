@@ -182,8 +182,7 @@ export class MeleeAttackTest extends SkillTest {
       this.modifiers.simple.set(this.reachModifier.id, this.reachModifier);
     }
 
-    this.damageModifierEffects = this.character.appliedEffects
-      .meleeDamageBonuses
+    this.damageModifierEffects = this.character.appliedEffects.meleeDamageBonuses;
   }
 
   private computeReachAdvantage(
@@ -266,7 +265,13 @@ export class MeleeAttackTest extends SkillTest {
       damageModifierEffects,
     } = this;
 
-    const { weapon, primaryAttack, charging, ...meleeSettings } = melee;
+    const {
+      weapon,
+      primaryAttack,
+      charging,
+      attackTarget,
+      ...meleeSettings
+    } = melee;
 
     await createMessage({
       data: {
@@ -287,7 +292,7 @@ export class MeleeAttackTest extends SkillTest {
             ].join(' '),
           ],
           img: weapon?.nonDefaultImg,
-          description: weapon?.description
+          description: weapon?.description,
         },
         successTest: {
           ...testMessageData,
@@ -299,6 +304,12 @@ export class MeleeAttackTest extends SkillTest {
           }),
           defaultSuperiorEffect: SuperiorResultEffect.Damage,
         },
+        targets: compact([
+          attackTarget?.scene && {
+            tokenId: attackTarget.id,
+            sceneId: attackTarget.scene.id,
+          },
+        ]),
         meleeAttack: {
           weapon: weapon?.getDataCopy(),
           attackType: primaryAttack ? 'primary' : 'secondary',

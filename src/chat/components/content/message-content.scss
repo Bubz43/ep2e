@@ -18,3 +18,16 @@ message-header {
   border-bottom-color: var(--color-border);
   // grid-column: span 3;
 }
+
+.targets {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  > * {
+    margin: 0.25rem 0.5ch 0 0;
+  }
+  padding: 0 0.75rem 0.25rem;
+  span {
+    margin-right: 1ch;
+  }
+}

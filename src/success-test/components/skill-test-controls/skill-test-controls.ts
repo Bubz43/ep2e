@@ -22,6 +22,7 @@ type Init = {
     token?: MaybeToken;
   };
   getState: (actor: ActorEP) => SkillTestInit | null;
+  relativeEl?: HTMLElement;
 };
 
 @customElement('skill-test-controls')
@@ -87,8 +88,8 @@ export class SkillTestControls extends LitElement {
     );
     if (!this.isConnected) overlay.append(this);
     SkillTestControls.openWindows.set(init.entities.actor, this);
-    const source = traverseActiveElements();
-    if (source instanceof HTMLElement) {
+    const source = init.relativeEl || traverseActiveElements();
+    if (source instanceof HTMLElement && source.isConnected) {
       requestAnimationFrame(() => this.win?.positionAdjacentToElement(source));
     }
   }

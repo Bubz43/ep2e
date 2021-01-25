@@ -1,6 +1,10 @@
 import { ChatMessageRequestEvent } from '@src/chat/chat-message-request-event';
 import type { MessageData } from '@src/chat/message-data';
 import type { ChatMessageEP } from '@src/entities/chat-message';
+import { findToken } from '@src/entities/find-entities';
+import { localize } from '@src/foundry/localization';
+import { notEmpty } from '@src/utility/helpers';
+import { localImage } from '@src/utility/images';
 import { customElement, LitElement, property, html } from 'lit-element';
 import styles from './message-content.scss';
 
@@ -58,6 +62,24 @@ export class MessageContent extends LitElement {
         ? html`<message-success-test
             .successTest=${successTest}
           ></message-success-test>`
+        : ''}
+      ${notEmpty(targets)
+        ? html`
+            <div class="targets">
+            <span>${localize("targets")}:</span>
+              ${targets.map((target) => {
+                const token = findToken(target);
+                return token
+                  ? html`<img
+                      height="24px"
+                      loading="lazy"
+                      src=${token.data.img}
+                      title=${token.data.name}
+                    />`
+                  : '';
+              })}
+            </div>
+          `
         : ''}
       ${favor ? html` <message-favor .favor=${favor}></message-favor> ` : ''}
       ${explosiveUse

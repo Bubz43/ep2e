@@ -31,6 +31,7 @@ export type SkillTestInit = {
   character?: Character;
   token?: MaybeToken;
   action?: Action;
+  opposing?: { testName: string, messageId?: string }
 };
 
 export type SkillState = {
@@ -53,6 +54,7 @@ export class SkillTest extends SuccessTestBase {
   readonly character;
   readonly token;
   readonly skillState: SkillState;
+  readonly opposing;
 
   get basePoints() {
     const {
@@ -70,7 +72,7 @@ export class SkillTest extends SuccessTestBase {
     );
   }
 
-  constructor({ ego, skill, character, token, action }: SkillTestInit) {
+  constructor({ ego, skill, character, token, action, opposing }: SkillTestInit) {
     super({
       action:
         action ??
@@ -82,6 +84,7 @@ export class SkillTest extends SuccessTestBase {
     this.ego = ego;
     this.character = character;
     this.token = token;
+    this.opposing = opposing;
 
     this.skillState = {
       skill,
@@ -248,23 +251,27 @@ export class SkillTest extends SuccessTestBase {
   }
 
   protected async createMessage() {
-    const { settings, pools, action } = this;
+    const { settings, pools, action, name, opposing } = this;
 
     await createMessage({
       data: {
         header: {
-          heading: this.name,
-          subheadings: [
-            `${action.type} ${
-              action.timeMod && action.type !== ActionType.Task
-                ? `(${localize('as')} ${localize('task')})`
-                : ''
-            }`,
-            localize(action.subtype),
-            localize('action'),
-          ].join(' '),
+          heading: opposing ? `${localize("opposing")}: ${opposing.testName}` :  name,
+          subheadings: compact([
+            opposing && name,
+            [
+              `${action.type} ${
+                action.timeMod && action.type !== ActionType.Task
+                  ? `(${localize('as')} ${localize('task')})`
+                  : ''
+              }`,
+              localize(action.subtype),
+              localize('action'),
+            ].join(' '),
+          ]),
         },
         successTest: this.testMessageData,
+        fromMessageId: opposing?.messageId
       },
       entity: this.token ?? this.character, // TODO account for item sources,
       visibility: settings.visibility,

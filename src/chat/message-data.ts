@@ -152,6 +152,8 @@ export type FavorMessageData = {
   burnedRep?: boolean;
 };
 
+
+
 export type MessageData = Partial<{
   header: MessageHeaderData;
   targets: MessageTargets;
