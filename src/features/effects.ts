@@ -22,7 +22,7 @@ import {
   Skill,
   SkillType,
 } from './skills';
-import { formatEffectTags, Tag, TagType } from './tags';
+import { formatEffectTags, SpecialTest, Tag, TagType } from './tags';
 import { CommonInterval, prettyMilliseconds } from './time';
 
 export enum UniqueEffectType {
@@ -77,6 +77,7 @@ export type SuccessTestEffect = {
   modifier: number;
   requirement: string;
   toOpponent: boolean;
+  activeByDefault?: boolean;
 };
 
 export type MiscEffect = {
@@ -185,9 +186,9 @@ export type Effect =
   | SkillEffect
   | MovementEffect;
 
-  export type Effects = {
-    [key in EffectType]: Extract<Effect, { type: key }>
-  }
+export type Effects = {
+  [key in EffectType]: Extract<Effect, { type: key }>;
+};
 
 export const Source = Symbol();
 
@@ -259,6 +260,7 @@ const successTest = createFeature<SuccessTestEffect>(() => ({
   modifier: 0,
   toOpponent: false,
   requirement: '',
+  activeByDefault: false,
 }));
 
 const health = createFeature<HealthEffect>(() => ({
@@ -540,14 +542,13 @@ export const matchAllEffects = (action: Action) => () => true;
 
 export const matchesAptitude = (
   aptitude: AptitudeType,
-  // getSpecial: () => SpecialTest | '' | undefined,
+  special?: SpecialTest,
 ) => (action: Action) => {
-  // const special = getSpecial();
   return anyEffectTagPasses(
     matchesAction(action),
     (tag) => tag.type === TagType.AptitudeChecks && tag.aptitude === aptitude,
-    // (tag) =>
-    //   (special && tag.type === TagType.Special) && tag.test === special,
+    (tag) =>
+      !!(special && tag.type === TagType.Special) && tag.test === special,
   );
 };
 

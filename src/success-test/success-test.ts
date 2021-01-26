@@ -178,7 +178,13 @@ const isCriticalRoll = (roll: number) => {
   return a === b;
 };
 
+
+
 export const successTestTargetClamp = clamp({ min: 0, max: 99 });
+
+export const successTestEffectMap = <T extends SuccessTestEffect>(effects: T[]) => {
+  return new Map(effects.map(effect => [effect, effect.activeByDefault || !effect.requirement]))
+}
 
 export const getSuccessTestResult = ({
   roll,

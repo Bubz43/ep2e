@@ -63,7 +63,7 @@ export class MessageContent extends LitElement {
         ? html`<message-success-test
               .successTest=${successTest}
             ></message-success-test>
-            ${specialTest
+            ${specialTest && this.message.editable
               ? html`
                   <message-special-test
                     .specialTest=${specialTest}

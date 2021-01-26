@@ -21,6 +21,7 @@ import {
   createSuccessTestModifier,
   grantedSuperiorResultEffects,
   rollSuccessTest,
+  successTestEffectMap,
   SuccessTestResult,
 } from './success-test';
 import { SuccessTestBase } from './success-test-base';
@@ -146,13 +147,11 @@ export class SkillTest extends SuccessTestBase {
   }
 
   protected getModifierEffects(skill: Skill, action: Action) {
-    return new Map(
-      (
-        this.character?.appliedEffects.getMatchingSuccessTestEffects(
-          matchesSkill(skill)(action),
-          false,
-        ) || []
-      ).map((effect) => [effect, !effect.requirement]),
+    return successTestEffectMap(
+      this.character?.appliedEffects.getMatchingSuccessTestEffects(
+        matchesSkill(skill)(action),
+        false,
+      ) || [],
     );
   }
 

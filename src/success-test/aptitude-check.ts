@@ -1,5 +1,5 @@
 import { createMessage } from '@src/chat/create-message';
-import type { SuccessTestMessageData } from '@src/chat/message-data';
+import type { SpecialTestData, SuccessTestMessageData } from '@src/chat/message-data';
 import { AptitudeType, PoolType, SuperiorResultEffect } from '@src/data-enums';
 import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Ego } from '@src/entities/actor/ego';
@@ -24,6 +24,7 @@ import {
   createSuccessTestModifier,
   grantedSuperiorResultEffects,
   rollSuccessTest,
+  successTestEffectMap,
   SuccessTestResult,
 } from './success-test';
 import { SuccessTestBase } from './success-test-base';
@@ -34,11 +35,7 @@ export type AptitudeCheckInit = {
   token?: MaybeToken;
   aptitude: AptitudeType;
   action?: Action;
-  special?: {
-    type: SpecialTest;
-    originalResult?: SuccessTestResult;
-    messageRef?: string;
-  };
+  special?: SpecialTestData & { messageRef?: string }
 };
 
 export class AptitudeCheck extends SuccessTestBase {
@@ -130,14 +127,13 @@ export class AptitudeCheck extends SuccessTestBase {
   }
 
   private getModifierEffects(aptitude: AptitudeType, action: Action) {
-    return new Map(
-      (
-        this.character?.appliedEffects.getMatchingSuccessTestEffects(
-          matchesAptitude(aptitude)(action),
-          false,
-        ) || []
-      ).map((effect) => [effect, !effect.requirement]),
+    return successTestEffectMap(
+      this.character?.appliedEffects.getMatchingSuccessTestEffects(
+        matchesAptitude(aptitude)(action),
+        false,
+      ) || [],
     );
+
   }
 
   protected async createMessage() {
@@ -197,18 +193,21 @@ export class AptitudeCheck extends SuccessTestBase {
       data: {
         header: {
           heading: name,
-          subheadings: [
-            `${action.type} ${
-              action.timeMod && action.type !== ActionType.Task
-                ? `(${localize('as')} ${localize('task')})`
-                : ''
-            }`,
-            localize(action.subtype),
-            localize('action'),
-          ].join(' '),
+          subheadings: compact([
+            this.special && `${localize("versus")} ${localize(this.special.type)}`,
+            [
+              `${action.type} ${
+                action.timeMod && action.type !== ActionType.Task
+                  ? `(${localize('as')} ${localize('task')})`
+                  : ''
+              }`,
+              localize(action.subtype),
+              localize('action'),
+            ].join(' '),
+          ]),
         },
         successTest: data,
-        specialTest: this.special
+        specialTest: this.special,
       },
       entity: this.token ?? this.character, // TODO account for item sources,
       visibility: settings.visibility,

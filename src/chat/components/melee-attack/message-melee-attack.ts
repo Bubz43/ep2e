@@ -207,7 +207,7 @@ export class MessageMeleeAttack extends MessageElement {
   }
 
   render() {
-    const { attacks, coating, payload, hasSecondaryAttack } = this.weapon ?? {};
+    const { attacks, coating, payload, hasSecondaryAttack, name } = this.weapon ?? {};
     const { disabled } = this;
 
     const {
@@ -255,7 +255,7 @@ export class MessageMeleeAttack extends MessageElement {
       ${attack && notEmpty(attack.attackTraits)
         ? html`
             <message-attack-traits
-              .attackTraitInfo=${{ traits: attack.attackTraits }}
+              .attackTraitInfo=${{ traits: attack.attackTraits, source: name ?? localize("unarmed") }}
             ></message-attack-traits>
           `
         : ''}

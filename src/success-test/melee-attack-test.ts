@@ -30,6 +30,7 @@ import { SkillTest, SkillTestInit } from './skill-test';
 import {
   createSuccessTestModifier,
   grantedSuperiorResultEffects,
+  successTestEffectMap,
 } from './success-test';
 
 export type MeleeAttackTestInit = SetRequired<SkillTestInit, 'character'> & {
@@ -245,14 +246,15 @@ export class MeleeAttackTest extends SkillTest {
     action: Action,
   ) {
     if (target.actor?.proxy.type !== ActorType.Character) return null;
-    return new Map(
+    return successTestEffectMap(
       target.actor.proxy.appliedEffects
         .getMatchingSuccessTestEffects(matchesSkill(skill)(action), true)
-        .map((effect) => [
-          { ...effect, [Source]: `{${target.name}} ${effect[Source]}` },
-          !effect.requirement,
-        ]),
+        .map((effect) => ({
+          ...effect,
+          [Source]: `{${target.name}} ${effect[Source]}`,
+        }))
     );
+ 
   }
 
   protected async createMessage() {

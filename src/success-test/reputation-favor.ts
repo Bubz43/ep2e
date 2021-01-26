@@ -29,6 +29,7 @@ import {
   createSuccessTestModifier,
   grantedSuperiorResultEffects,
   rollSuccessTest,
+  successTestEffectMap,
 } from './success-test';
 import { SuccessTestBase } from './success-test-base';
 
@@ -149,13 +150,11 @@ export class ReputationFavor extends SuccessTestBase {
   }
 
   private getModifierEffects(rep: RepWithIdentifier, action: Action) {
-    return new Map(
-      (
-        this.character?.appliedEffects.getMatchingSuccessTestEffects(
-          matchesRep(rep)(action),
-          false,
-        ) || []
-      ).map((effect) => [effect, !effect.requirement]),
+    return successTestEffectMap(
+      this.character?.appliedEffects.getMatchingSuccessTestEffects(
+        matchesRep(rep)(action),
+        false,
+      ) || [],
     );
   }
 

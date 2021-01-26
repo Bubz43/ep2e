@@ -1,15 +1,11 @@
 import type { MultiSelectedEvent } from '@material/mwc-list/mwc-list-foundation';
 import type { Character } from '@src/entities/actor/proxies/character';
 import type { Substance } from '@src/entities/item/proxies/substance';
-import { Source, formatEffect } from '@src/features/effects';
+import { formatEffect, Source } from '@src/features/effects';
 import { localize } from '@src/foundry/localization';
-import {
-  formatDamageType,
-  formatFormulaWithMultiplier,
-} from '@src/health/health';
 import { notEmpty } from '@src/utility/helpers';
 import { html } from 'lit-html';
-import { compact, map, pipe, prop } from 'remeda';
+import { compact, map, pipe } from 'remeda';
 
 export const substanceActivationDialog = (
   character: Character,

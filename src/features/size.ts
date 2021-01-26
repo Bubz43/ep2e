@@ -42,6 +42,7 @@ const sizeTargettedEffect = (size: Size) => {
   return createEffect.successTest({
     modifier: sizeModifiers[size],
     requirement: localize('attackingOrSpotting'),
+    activeByDefault: true,
     toOpponent: true,
     tags: [createTag.action({})],
   });
@@ -53,6 +54,7 @@ const strengthSizeEffect = (size: Size) => {
     modifier: sizeModifiers[size],
     requirement: localize('strengthBased'),
     tags: [createTag.aptitudeCheck({ aptitude: AptitudeType.Somatics })],
+    activeByDefault: true,
   });
 };
 

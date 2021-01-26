@@ -40,7 +40,7 @@ export class MessageAttackTraits extends mix(MessageElement).with(
                  ego: actor.proxy.ego,
                  character: actor.proxy,
                  aptitude: AptitudeType.Somatics,
-                 special: { type: SpecialTest.Shock, messageRef: this.message.id }
+                 special: { type: SpecialTest.Shock, source: this.attackTraitInfo.source, messageRef: this.message.id }
                };
              },
            });

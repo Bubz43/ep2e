@@ -63,10 +63,16 @@
   }
 }
 
-.check-info {
 
-}
 
 .aptitude-info {
   grid-template-columns: auto auto 1fr;
+}
+
+.special {
+  text-align: center;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-text-lighter);
 }

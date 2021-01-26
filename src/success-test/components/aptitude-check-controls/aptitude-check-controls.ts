@@ -167,7 +167,7 @@ export class AptitudeCheckControls extends LitElement {
           <success-test-section-label
             >${localize('check')}</success-test-section-label
           >
-          <div class="check-info">
+          <div>
             ${renderAutoForm({
               classes: 'aptitude-info',
               props: aptitude,
@@ -195,7 +195,7 @@ export class AptitudeCheckControls extends LitElement {
             })}
             ${special
               ? html`
-                  <div>${localize('versus')} ${localize(special.type)}</div>
+                  <p class="special">${localize('versus')} ${localize(special.type)}</p>
                 `
               : ''}
           </div>

@@ -100,6 +100,7 @@ export type AttackTraitData = {
   duration?: number;
   notes?: string;
   startTime?: number;
+  source: string;
 };
 
 export type MessageHeaderData = {
@@ -155,6 +156,7 @@ export type FavorMessageData = {
 
 export type SpecialTestData = {
   type: SpecialTest;
+  source: string;
   originalResult?: SuccessTestResult
 }
 
