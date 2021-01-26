@@ -12,7 +12,7 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
-import { AptitudeCheck } from '@src/success-test/aptitude-check';
+import { AptitudeCheck, AptitudeCheckInit } from '@src/success-test/aptitude-check';
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
@@ -68,12 +68,7 @@ export class AptitudeCheckControls extends LitElement {
 
   @internalProperty() private getState!: (
     actor: ActorEP,
-  ) => {
-    ego: Ego;
-    character?: Character;
-    aptitude: AptitudeType;
-    // TODO Item source
-  } | null;
+  ) => AptitudeCheckInit | null;
 
   @query('sl-window')
   private win?: SlWindow;
@@ -144,7 +139,7 @@ export class AptitudeCheckControls extends LitElement {
   }
 
   renderTest(test: NonNullable<AptitudeCheckControls['test']>) {
-    const { character, ego, action, pools, target, aptitude } = test;
+    const { character, ego, action, pools, target, aptitude, special } = test;
     const { token } = this.entities;
 
     return html`
@@ -172,29 +167,38 @@ export class AptitudeCheckControls extends LitElement {
           <success-test-section-label
             >${localize('check')}</success-test-section-label
           >
-          ${renderAutoForm({
-            classes: 'aptitude-info',
-            props: aptitude,
-            storeOnInput: true,
-            noDebounce: true,
-            update: aptitude.update,
-            fields: ({ type, multiplier }) => [
-              renderSelectField(type, enumValues(AptitudeType), {
-                altLabel: (type) => localize('FULL', type),
-                helpText: `${localize('points')}: ${ego.aptitudes[type.value]}`,
-                helpPersistent: true,
-              }),
-              renderNumberField(multiplier, { min: 1.5, max: 3, step: 1.5 }),
-              renderTextField(
-                {
-                  label: localize('total'),
-                  value: String(test.basePoints),
-                  prop: '',
-                },
-                { readonly: true },
-              ),
-            ],
-          })}
+          <div class="check-info">
+            ${renderAutoForm({
+              classes: 'aptitude-info',
+              props: aptitude,
+              storeOnInput: true,
+              noDebounce: true,
+              update: aptitude.update,
+              fields: ({ type, multiplier }) => [
+                renderSelectField(type, enumValues(AptitudeType), {
+                  altLabel: (type) => localize('FULL', type),
+                  helpText: `${localize('points')}: ${
+                    ego.aptitudes[type.value]
+                  }`,
+                  helpPersistent: true,
+                }),
+                renderNumberField(multiplier, { min: 1.5, max: 3, step: 1.5 }),
+                renderTextField(
+                  {
+                    label: localize('total'),
+                    value: String(test.basePoints),
+                    prop: '',
+                  },
+                  { readonly: true },
+                ),
+              ],
+            })}
+            ${special
+              ? html`
+                  <div>${localize('versus')} ${localize(special.type)}</div>
+                `
+              : ''}
+          </div>
         </section>
 
         <section class="actions">

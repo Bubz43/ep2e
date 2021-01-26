@@ -13,6 +13,7 @@ import type { ArmorType } from '@src/features/active-armor';
 import type { PostTestPoolAction, PreTestPoolAction } from '@src/features/pool';
 import type { Favor, RepIdentifier } from '@src/features/reputations';
 import type { Size } from '@src/features/size';
+import type { SpecialTest } from '@src/features/tags';
 import type { PlacedTemplateIDs } from '@src/foundry/canvas';
 import type { LabeledFormula, RolledFormula } from '@src/foundry/rolls';
 import type { HealthModification, HealthType } from '@src/health/health';
@@ -152,7 +153,10 @@ export type FavorMessageData = {
   burnedRep?: boolean;
 };
 
-
+export type SpecialTestData = {
+  type: SpecialTest;
+  originalResult?: SuccessTestResult
+}
 
 export type MessageData = Partial<{
   header: MessageHeaderData;
@@ -168,5 +172,6 @@ export type MessageData = Partial<{
   substanceUse: SubstanceUseData;
   fromMessageId: string;
   successTest: SuccessTestMessageData;
+  specialTest: SpecialTestData;
   favor: FavorMessageData;
 }>;

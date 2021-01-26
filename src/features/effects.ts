@@ -22,7 +22,7 @@ import {
   Skill,
   SkillType,
 } from './skills';
-import { formatEffectTags, SpecialTest, Tag, TagType } from './tags';
+import { formatEffectTags, Tag, TagType } from './tags';
 import { CommonInterval, prettyMilliseconds } from './time';
 
 export enum UniqueEffectType {

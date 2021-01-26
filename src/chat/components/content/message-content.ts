@@ -47,6 +47,7 @@ export class MessageContent extends LitElement {
       successTest,
       favor,
       targets,
+      specialTest,
     } = this.data;
     if (!this.message.isContentVisible) return '';
     return html`
@@ -60,13 +61,21 @@ export class MessageContent extends LitElement {
         : ''}
       ${successTest
         ? html`<message-success-test
-            .successTest=${successTest}
-          ></message-success-test>`
+              .successTest=${successTest}
+            ></message-success-test>
+            ${specialTest
+              ? html`
+                  <message-special-test
+                    .specialTest=${specialTest}
+                    .successTest=${successTest}
+                  ></message-special-test>
+                `
+              : ''} `
         : ''}
       ${notEmpty(targets)
         ? html`
             <div class="targets">
-            <span>${localize("targets")}:</span>
+              <span>${localize('targets')}:</span>
               ${targets.map((target) => {
                 const token = findToken(target);
                 return token

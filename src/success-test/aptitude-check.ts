@@ -11,13 +11,21 @@ import {
   createAction,
   defaultCheckActionSubtype,
 } from '@src/features/actions';
+import { ArmorType } from '@src/features/active-armor';
 import { matchesAptitude } from '@src/features/effects';
 import { Pool } from '@src/features/pool';
+import { Size, sizeModifiers } from '@src/features/size';
+import { SpecialTest } from '@src/features/tags';
 import { localize } from '@src/foundry/localization';
 import { arrayOf } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
 import { compact, last, map, merge } from 'remeda';
-import { grantedSuperiorResultEffects, rollSuccessTest } from './success-test';
+import {
+  createSuccessTestModifier,
+  grantedSuperiorResultEffects,
+  rollSuccessTest,
+  SuccessTestResult,
+} from './success-test';
 import { SuccessTestBase } from './success-test-base';
 
 export type AptitudeCheckInit = {
@@ -26,6 +34,11 @@ export type AptitudeCheckInit = {
   token?: MaybeToken;
   aptitude: AptitudeType;
   action?: Action;
+  special?: {
+    type: SpecialTest;
+    originalResult?: SuccessTestResult;
+    messageRef?: string;
+  };
 };
 
 export class AptitudeCheck extends SuccessTestBase {
@@ -36,6 +49,7 @@ export class AptitudeCheck extends SuccessTestBase {
     type: AptitudeType;
     multiplier: number;
   }>;
+  readonly special;
 
   get basePoints() {
     return Math.round(
@@ -43,7 +57,14 @@ export class AptitudeCheck extends SuccessTestBase {
     );
   }
 
-  constructor({ ego, character, token, aptitude, action }: AptitudeCheckInit) {
+  constructor({
+    ego,
+    character,
+    token,
+    aptitude,
+    action,
+    special,
+  }: AptitudeCheckInit) {
     super({
       action:
         action ??
@@ -79,11 +100,21 @@ export class AptitudeCheck extends SuccessTestBase {
       },
     };
 
+    this.special = special;
+
     this.pools.available = this.getPools(this.aptitude.type);
     this.modifiers.effects = this.getModifierEffects(
       this.aptitude.type,
       this.action,
     );
+
+    if (this.special?.type === SpecialTest.Shock) {
+      const energyArmor = this.character?.armor.getClamped(ArmorType.Energy);
+      const armorModifier = energyArmor && createSuccessTestModifier({ name: localize("energyArmor"), value: energyArmor });
+      if (armorModifier) this.modifiers.simple.set(armorModifier.id, armorModifier);
+      // const size = this.character?.morphSize;
+      // const sizeMod = size && size !== Size.Medium && createSuccessTestModifier({ name: localize()})
+    }
   }
 
   private getPools(aptitude: AptitudeType) {
@@ -177,6 +208,7 @@ export class AptitudeCheck extends SuccessTestBase {
           ].join(' '),
         },
         successTest: data,
+        specialTest: this.special
       },
       entity: this.token ?? this.character, // TODO account for item sources,
       visibility: settings.visibility,

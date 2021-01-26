@@ -1,31 +1,9 @@
 import { enableMapSet } from 'immer';
 enableMapSet();
-
-// Material Components
-import '@material/mwc-button';
-import '@material/mwc-checkbox';
-import '@material/mwc-circular-progress';
-import '@material/mwc-dialog';
-import '@material/mwc-formfield';
-import '@material/mwc-icon';
-import '@material/mwc-icon-button';
-import '@material/mwc-icon-button-toggle';
-import '@material/mwc-linear-progress';
-import '@material/mwc-list';
-import '@material/mwc-list/mwc-check-list-item';
-import '@material/mwc-list/mwc-list-item';
-import '@material/mwc-list/mwc-radio-list-item';
-import '@material/mwc-menu';
-import '@material/mwc-radio';
-import '@material/mwc-slider';
-import '@material/mwc-snackbar';
-import '@material/mwc-switch';
-import '@material/mwc-tab-bar';
-// import '@tinymce/tinymce-webcomponent'; // TODO Test this out further
 import 'web-animations-js';
-// Weightless Components
-import 'weightless/label';
-import 'weightless/list-item';
+import './init';
+import './foundry/prototype-overrides';
+
 import { MessageDamage } from './chat/components/damage/message-damage';
 import { MessageHeal } from './chat/components/heal/message-heal';
 import { MessageHealthChange } from './chat/components/health-change/message-health-change';
@@ -126,7 +104,6 @@ import { FormMotivationItem } from './features/components/form-motivation-item/f
 import { PoolItem } from './features/components/pool-item/pool-item';
 import { TagEditor } from './features/components/tag-editor/tag-editor';
 import { WorldTimeControls } from './features/components/world-time-controls/world-time-controls';
-import './foundry/prototype-overrides';
 import { HealthEditor } from './health/components/health-editor/health-editor';
 import { HealthItem } from './health/components/health-item/health-item';
 import { HealthLog } from './health/components/health-log/health-log';
@@ -135,7 +112,6 @@ import { HealthStateForm } from './health/components/health-state-form/health-st
 import { MentalHealthStressEditor } from './health/components/mental-health-stress-editor/mental-health-stress-editor';
 import { MeshHealthDamageEditor } from './health/components/mesh-health-damage-editor/mesh-health-damage-editor';
 import { PhysicalHealthDamageEditor } from './health/components/physical-health-damage-editor/physical-health-damage-editor';
-import './init';
 import { MessageSubstanceUse } from './chat/components/substance/message-substance-use';
 import { PhysicalTechCard } from './entities/actor/components/character-views/components/cards/physical-tech/physical-tech-card';
 import { CharacterViewActiveSubstance } from './entities/actor/components/character-views/components/active-substance/character-view-active-substance';
@@ -166,11 +142,38 @@ import { MeleeAttackControls } from './success-test/components/melee-attack-cont
 import { SuccessTestSkillSection } from './success-test/components/skill-section/success-test-skill-section';
 import { CompendiumSearch } from './entities/components/compendium-search/compendium-search';
 
+// Material Components
+import '@material/mwc-button';
+import '@material/mwc-checkbox';
+import '@material/mwc-circular-progress';
+import '@material/mwc-dialog';
+import '@material/mwc-formfield';
+import '@material/mwc-icon';
+import '@material/mwc-icon-button';
+import '@material/mwc-icon-button-toggle';
+import '@material/mwc-linear-progress';
+import '@material/mwc-list';
+import '@material/mwc-list/mwc-check-list-item';
+import '@material/mwc-list/mwc-list-item';
+import '@material/mwc-list/mwc-radio-list-item';
+import '@material/mwc-menu';
+import '@material/mwc-radio';
+import '@material/mwc-slider';
+import '@material/mwc-snackbar';
+import '@material/mwc-switch';
+import '@material/mwc-tab-bar';
+
+// import '@tinymce/tinymce-webcomponent'; // TODO Test this out further
+// Weightless Components
+import 'weightless/label';
+import 'weightless/list-item';
+
 // Generic Components
 Field;
 Form;
 AnimatedList;
 MultiplierSelect;
+LitVirtualizer;
 
 // DateField;
 DeleteButton;
@@ -196,7 +199,8 @@ CompendiumList;
 UserView;
 CompendiumSearch;
 import { LitVirtualizer } from 'lit-virtualizer';
-LitVirtualizer;
+import { MessageSpecialTest } from './chat/components/special-test/message-special-test';
+
 // Actor
 ActorCreator;
 ItemTrash;
@@ -227,6 +231,7 @@ CharacterViewExplosiveAttacks;
 CharacterViewMeleeWeaponAttacks;
 ExplosiveSettingsForm;
 CharacterViewAttacksSection;
+
 //Item Cards
 ItemCard;
 ConsumableCard;
@@ -324,6 +329,7 @@ MessageAreaEffect;
 MessageMeleeAttack;
 MessageSuccessTest;
 MessageFavor;
+MessageSpecialTest;
 
 // SuccessTest
 AptitudeCheckControls;

@@ -1,8 +1,12 @@
 import type { AttackTraitData } from '@src/chat/message-data';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
-import type { AttackTrait } from '@src/data-enums';
+import { AptitudeType, AttackTrait } from '@src/data-enums';
+import { ActorType } from '@src/entities/entity-types';
+import { pickOrDefaultCharacter } from '@src/entities/find-entities';
+import { SpecialTest } from '@src/features/tags';
 import { createLiveTimeState, prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
+import { AptitudeCheckControls } from '@src/success-test/components/aptitude-check-controls/aptitude-check-controls';
 import { customElement, LitElement, property, html } from 'lit-element';
 import mix from 'mix-with/lib';
 import { MessageElement } from '../message-element';
@@ -24,7 +28,29 @@ export class MessageAttackTraits extends mix(MessageElement).with(
 
   @property({ type: Object }) attackTraitInfo!: AttackTraitData;
 
-  private applyTrait(trait: AttackTrait) {}
+  private applyTrait(trait: AttackTrait) {
+    pickOrDefaultCharacter(character => {
+      switch (trait) {
+        case AttackTrait.Shock:
+           AptitudeCheckControls.openWindow({
+             entities: { actor: character.actor },
+             getState: (actor) => {
+               if (actor.proxy.type !== ActorType.Character) return null;
+               return {
+                 ego: actor.proxy.ego,
+                 character: actor.proxy,
+                 aptitude: AptitudeType.Somatics,
+                 special: { type: SpecialTest.Shock, messageRef: this.message.id }
+               };
+             },
+           });
+          break;
+      
+        default:
+          break;
+      }
+    })
+  }
 
   private get timeState() {
     const { duration, startTime } = this.attackTraitInfo;

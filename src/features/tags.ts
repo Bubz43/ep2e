@@ -32,6 +32,11 @@ export enum SpecialTest {
   ResistInfection = 'resistInfection',
   Pain = 'pain',
   Shock = 'shock',
+  Blinding = "blinding",
+  Entangling = "entangling",
+  Knockdown = "knockdown",
+  Stun = "stun"
+
 }
 
 export type UniversalTag = {
