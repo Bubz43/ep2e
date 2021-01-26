@@ -238,11 +238,11 @@ export class MessageSpecialTest extends MessageElement {
           </wl-list-item>
         `;
 
-      case SpecialTest.Pain:
+      case SpecialTest.PainResistance:
         return html`
           <wl-list-item>
             ${isSuccess
-              ? `${localize('resisted')} ${localize('fleeing')}`
+              ? `${localize('resisted')} ${localize('pain')}`
               : `${localize('takeNextFullActionToFlee')}`}
           </wl-list-item>
         `;

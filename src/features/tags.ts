@@ -30,7 +30,6 @@ export enum SpecialTest {
   ResistSubstance = 'resistSubstanceOrDisease',
   PainResistance = 'painResistance',
   ResistInfection = 'resistInfection',
-  Pain = 'pain',
   Shock = 'shock',
   Blinding = 'blinding',
   Entangling = 'entangling',
@@ -87,9 +86,9 @@ export type Tag =
   | RepTag
   | SpecialTag;
 
-const allActions = createFeature<UniversalTag>(() => ({
-  type: TagType.AllActions,
-}));
+// const allActions = createFeature<UniversalTag>(() => ({
+//   type: TagType.AllActions,
+// }));
 const action = createFeature<ActionTag>(() => ({
   type: TagType.Action,
   action: '',
@@ -133,7 +132,7 @@ const special = createFeature<SpecialTag>(() => ({
 }));
 
 export const createTag = {
-  allActions,
+  allActions: action,
   action,
   aptitudeCheck,
   linkedAptitude,

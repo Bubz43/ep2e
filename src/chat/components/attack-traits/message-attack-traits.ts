@@ -50,7 +50,100 @@ export class MessageAttackTraits extends mix(MessageElement).with(
           });
           break;
 
-        default:
+        case AttackTrait.Blinding:
+          AptitudeCheckControls.openWindow({
+            entities: { actor: character.actor },
+            getState: (actor) => {
+              if (actor.proxy.type !== ActorType.Character) return null;
+              return {
+                ego: actor.proxy.ego,
+                character: actor.proxy,
+                aptitude: AptitudeType.Reflexes,
+                special: {
+                  type: SpecialTest.Blinding,
+                  source: this.attackTraitInfo.source,
+                  messageRef: this.message.id,
+                },
+              };
+            },
+          });
+          break;
+
+        case AttackTrait.Entangling:
+          AptitudeCheckControls.openWindow({
+            entities: { actor: character.actor },
+            getState: (actor) => {
+              if (actor.proxy.type !== ActorType.Character) return null;
+              return {
+                ego: actor.proxy.ego,
+                character: actor.proxy,
+                aptitude: AptitudeType.Reflexes,
+                special: {
+                  type: SpecialTest.Entangling,
+                  source: this.attackTraitInfo.source,
+                  messageRef: this.message.id,
+                  originalResult: this.attackTraitInfo.testResult,
+                },
+              };
+            },
+          });
+          break;
+
+        case AttackTrait.Pain:
+          AptitudeCheckControls.openWindow({
+            entities: { actor: character.actor },
+            getState: (actor) => {
+              if (actor.proxy.type !== ActorType.Character) return null;
+              return {
+                ego: actor.proxy.ego,
+                character: actor.proxy,
+                aptitude: AptitudeType.Willpower,
+                special: {
+                  type: SpecialTest.PainResistance,
+                  source: this.attackTraitInfo.source,
+                  messageRef: this.message.id,
+                },
+              };
+            },
+          });
+          break;
+
+        case AttackTrait.Shock:
+          AptitudeCheckControls.openWindow({
+            entities: { actor: character.actor },
+            getState: (actor) => {
+              if (actor.proxy.type !== ActorType.Character) return null;
+              return {
+                ego: actor.proxy.ego,
+                character: actor.proxy,
+                aptitude: AptitudeType.Somatics,
+                special: {
+                  type: SpecialTest.Shock,
+                  source: this.attackTraitInfo.source,
+                  messageRef: this.message.id,
+                },
+              };
+            },
+          });
+          break;
+
+        case AttackTrait.Stun:
+          AptitudeCheckControls.openWindow({
+            entities: { actor: character.actor },
+            getState: (actor) => {
+              if (actor.proxy.type !== ActorType.Character) return null;
+              return {
+                ego: actor.proxy.ego,
+                character: actor.proxy,
+                aptitude: AptitudeType.Somatics,
+                special: {
+                  type: SpecialTest.Stun,
+                  source: this.attackTraitInfo.source,
+                  messageRef: this.message.id,
+                },
+              };
+            },
+          });
           break;
       }
     });

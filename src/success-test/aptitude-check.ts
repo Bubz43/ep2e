@@ -15,18 +15,22 @@ import {
   defaultCheckActionSubtype,
 } from '@src/features/actions';
 import { ArmorType } from '@src/features/active-armor';
-import { matchesAptitude } from '@src/features/effects';
+import { createEffect, matchesAptitude } from '@src/features/effects';
+import { addFeature } from '@src/features/feature-helpers';
 import { Pool } from '@src/features/pool';
 import { Size, sizeModifiers } from '@src/features/size';
-import { SpecialTest } from '@src/features/tags';
+import { createTag, SpecialTest } from '@src/features/tags';
+import { createTemporaryFeature } from '@src/features/temporary';
+import { CommonInterval } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { arrayOf } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
-import { compact, last, map, merge } from 'remeda';
+import { clamp, compact, last, map, merge } from 'remeda';
 import {
   createSuccessTestModifier,
   grantedSuperiorResultEffects,
   rollSuccessTest,
+  SimpleSuccessTestModifier,
   successTestEffectMap,
   SuccessTestResult,
 } from './success-test';
@@ -116,11 +120,76 @@ export class AptitudeCheck extends SuccessTestBase {
           name: localize('energyArmor'),
           value: energyArmor,
         });
-      if (armorModifier)
+      armorModifier &&
         this.modifiers.simple.set(armorModifier.id, armorModifier);
-      // const size = this.character?.morphSize;
-      // const sizeMod = size && size !== Size.Medium && createSuccessTestModifier({ name: localize()})
+    } else if (this.special?.type === SpecialTest.Entangling) {
+      const resultModifier = grantedSuperiorResultEffects(
+        this.special.originalResult,
+      );
+      const modifier =
+        resultModifier &&
+        createSuccessTestModifier({
+          name: `${this.special.source} ${localize(
+            this.special.originalResult!,
+          )}`,
+          value: resultModifier * -10,
+        });
+      modifier && this.modifiers.simple.set(modifier.id, modifier);
+    } else if (this.special?.type === SpecialTest.Stun) {
+      const kineticArmor = this.character?.armor.getClamped(ArmorType.Kinetic);
+      const armorModifier =
+        kineticArmor &&
+        createSuccessTestModifier({
+          name: localize('kineticArmor'),
+          value: kineticArmor,
+        });
+      armorModifier &&
+        this.modifiers.simple.set(armorModifier.id, armorModifier);
+
+      const morphSize = this.character?.morphSize;
+      let morphSizeModifier: SimpleSuccessTestModifier | null = null;
+      if (morphSize === Size.Large || morphSize === Size.VeryLarge) {
+        morphSizeModifier = createSuccessTestModifier({
+          name: `${localize('large')} ${localize('target')}`,
+          value: 30,
+        });
+      } else if (morphSize === Size.Small || morphSize === Size.VerySmall) {
+        morphSizeModifier = createSuccessTestModifier({
+          name: `${localize('small')} ${localize('target')}`,
+          value: -30,
+        });
+      }
+      if (morphSizeModifier) {
+        this.modifiers.simple.set(morphSizeModifier.id, morphSizeModifier);
+      }
+    } else if (this.special?.type === SpecialTest.PainResistance) {
+      const { painResistance } = this;
+      const modifier =
+        painResistance && clamp(-20 + painResistance * 10, { min: 0 });
+      if (modifier) {
+        const painModifier = createSuccessTestModifier({
+          name: localize('pain'),
+          value: modifier,
+        });
+        this.modifiers.simple.set(painModifier.id, painModifier);
+      }
+      if (painResistance) {
+        const resistBonus = createSuccessTestModifier({
+          name: localize('painResistance'),
+          value: 30,
+        });
+        this.modifiers.simple.set(resistBonus.id, resistBonus);
+      }
     }
+  }
+
+  private get painResistance() {
+    const sleeve = this.character?.sleeve;
+    return (
+      sleeve &&
+      'physicalHealth' in sleeve &&
+      sleeve.physicalHealth.wound?.woundsIgnored.value
+    );
   }
 
   private getPools(aptitude: AptitudeType) {
@@ -222,11 +291,31 @@ export class AptitudeCheck extends SuccessTestBase {
       visibility: settings.visibility,
     });
 
-    if (pools.active) {
-      this.character?.spendPool({
-        pool: pools.active[0].type,
-        points: 1,
-      });
-    }
+    this.character?.updater.batchCommits(() => {
+      if (pools.active) {
+        this.character?.spendPool({
+          pool: pools.active[0].type,
+          points: 1,
+        });
+      }
+      if (this.special?.type === SpecialTest.PainResistance) {
+        const { painResistance } = this;
+        const pain = createTemporaryFeature.effects({
+          name: localize('pain'),
+          effects: [],
+          duration: CommonInterval.Turn * 2,
+        });
+        pain.effects = addFeature(
+          pain.effects,
+          createEffect.successTest({
+            tags: [createTag.allActions({})],
+            modifier: painResistance ? -10 : -20,
+          }),
+        );
+        this.character?.updater
+          .path('data', 'temporary')
+          .commit(addFeature(pain));
+      }
+    });
   }
 }

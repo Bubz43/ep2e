@@ -101,6 +101,7 @@ export type AttackTraitData = {
   notes?: string;
   startTime?: number;
   source: string;
+  testResult?: SuccessTestResult;
 };
 
 export type MessageHeaderData = {
