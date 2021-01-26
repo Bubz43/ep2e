@@ -1,5 +1,8 @@
 import { createMessage } from '@src/chat/create-message';
-import type { SpecialTestData, SuccessTestMessageData } from '@src/chat/message-data';
+import type {
+  SpecialTestData,
+  SuccessTestMessageData,
+} from '@src/chat/message-data';
 import { AptitudeType, PoolType, SuperiorResultEffect } from '@src/data-enums';
 import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Ego } from '@src/entities/actor/ego';
@@ -35,7 +38,7 @@ export type AptitudeCheckInit = {
   token?: MaybeToken;
   aptitude: AptitudeType;
   action?: Action;
-  special?: SpecialTestData & { messageRef?: string }
+  special?: SpecialTestData & { messageRef?: string };
 };
 
 export class AptitudeCheck extends SuccessTestBase {
@@ -107,8 +110,14 @@ export class AptitudeCheck extends SuccessTestBase {
 
     if (this.special?.type === SpecialTest.Shock) {
       const energyArmor = this.character?.armor.getClamped(ArmorType.Energy);
-      const armorModifier = energyArmor && createSuccessTestModifier({ name: localize("energyArmor"), value: energyArmor });
-      if (armorModifier) this.modifiers.simple.set(armorModifier.id, armorModifier);
+      const armorModifier =
+        energyArmor &&
+        createSuccessTestModifier({
+          name: localize('energyArmor'),
+          value: energyArmor,
+        });
+      if (armorModifier)
+        this.modifiers.simple.set(armorModifier.id, armorModifier);
       // const size = this.character?.morphSize;
       // const sizeMod = size && size !== Size.Medium && createSuccessTestModifier({ name: localize()})
     }
@@ -133,7 +142,6 @@ export class AptitudeCheck extends SuccessTestBase {
         false,
       ) || [],
     );
-
   }
 
   protected async createMessage() {
@@ -194,7 +202,8 @@ export class AptitudeCheck extends SuccessTestBase {
         header: {
           heading: name,
           subheadings: compact([
-            this.special && `${localize("versus")} ${localize(this.special.type)}`,
+            this.special &&
+              `${localize('versus')} ${localize(this.special.type)}`,
             [
               `${action.type} ${
                 action.timeMod && action.type !== ActionType.Task

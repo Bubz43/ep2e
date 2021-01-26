@@ -128,9 +128,9 @@ export class MeleeAttackControls extends LitElement {
       header: { heading: `${localize('select')} ${localize('meleeWeapon')}` },
       content: [
         {
-          label: localize("unarmed"),
+          label: localize('unarmed'),
           activated: !this.test.melee.weapon,
-          callback: () => this.test?.melee.update({ weapon: null })
+          callback: () => this.test?.melee.update({ weapon: null }),
         },
         ...this.test.character.weapons.melee.map((weapon) => ({
           label: weapon.name,
@@ -309,7 +309,7 @@ export class MeleeAttackControls extends LitElement {
 
       <ul class="melee-info">
         <wl-list-item clickable @click=${this.selectWeapon}>
-          ${weapon?.name || localize("unarmed")}
+          ${weapon?.name || localize('unarmed')}
         </wl-list-item>
         ${attacks?.secondary
           ? html`
@@ -369,20 +369,24 @@ export class MeleeAttackControls extends LitElement {
             </button></span
           >
         </wl-list-item>
-        <wl-list-item class="extra-weapons" @click=${(ev: Event & { currentTarget: HTMLElement}) => {
-          ev.currentTarget.querySelector("input")?.focus()
-        }}>
-        <span>${localize("extraWeapons")}</span>
-        ${renderAutoForm({
-          noDebounce: true,
-          storeOnInput: true,
-          slot: "after",
-          props: { extraWeapons: extraWeapons || 0},
-          update: melee.update,
-          fields: ({ extraWeapons }) => renderNumberInput(extraWeapons, { min: 0, max: 3})
-        })}
+        <wl-list-item
+          class="extra-weapons"
+          @click=${(ev: Event & { currentTarget: HTMLElement }) => {
+            ev.currentTarget.querySelector('input')?.focus();
+          }}
+        >
+          <span>${localize('extraWeapons')}</span>
+          ${renderAutoForm({
+            noDebounce: true,
+            storeOnInput: true,
+            slot: 'after',
+            props: { extraWeapons: extraWeapons || 0 },
+            update: melee.update,
+            fields: ({ extraWeapons }) =>
+              renderNumberInput(extraWeapons, { min: 0, max: 3 }),
+          })}
         </wl-list-item>
-      
+
         <mwc-check-list-item
           ?selected=${!!touchOnly}
           @click=${() => melee.update({ touchOnly: !touchOnly })}

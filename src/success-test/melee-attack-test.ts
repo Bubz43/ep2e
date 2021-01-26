@@ -252,9 +252,8 @@ export class MeleeAttackTest extends SkillTest {
         .map((effect) => ({
           ...effect,
           [Source]: `{${target.name}} ${effect[Source]}`,
-        }))
+        })),
     );
- 
   }
 
   protected async createMessage() {

@@ -207,7 +207,8 @@ export class MessageMeleeAttack extends MessageElement {
   }
 
   render() {
-    const { attacks, coating, payload, hasSecondaryAttack, name } = this.weapon ?? {};
+    const { attacks, coating, payload, hasSecondaryAttack, name } =
+      this.weapon ?? {};
     const { disabled } = this;
 
     const {
@@ -243,7 +244,7 @@ export class MessageMeleeAttack extends MessageElement {
         ? html` <p class="options">${options.join('  •  ')}</p> `
         : ''}
       ${!disabled && !touchOnly && this.successTest
-        ?html`
+        ? html`
             <mwc-button
               outlined
               dense
@@ -251,11 +252,15 @@ export class MessageMeleeAttack extends MessageElement {
               @click=${this.createDamageMessage}
               >${localize('roll')} ${localize('damage')}</mwc-button
             >
-          `: ""}
+          `
+        : ''}
       ${attack && notEmpty(attack.attackTraits)
         ? html`
             <message-attack-traits
-              .attackTraitInfo=${{ traits: attack.attackTraits, source: name ?? localize("unarmed") }}
+              .attackTraitInfo=${{
+                traits: attack.attackTraits,
+                source: name ?? localize('unarmed'),
+              }}
             ></message-attack-traits>
           `
         : ''}

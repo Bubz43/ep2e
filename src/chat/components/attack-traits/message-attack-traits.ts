@@ -29,27 +29,31 @@ export class MessageAttackTraits extends mix(MessageElement).with(
   @property({ type: Object }) attackTraitInfo!: AttackTraitData;
 
   private applyTrait(trait: AttackTrait) {
-    pickOrDefaultCharacter(character => {
+    pickOrDefaultCharacter((character) => {
       switch (trait) {
         case AttackTrait.Shock:
-           AptitudeCheckControls.openWindow({
-             entities: { actor: character.actor },
-             getState: (actor) => {
-               if (actor.proxy.type !== ActorType.Character) return null;
-               return {
-                 ego: actor.proxy.ego,
-                 character: actor.proxy,
-                 aptitude: AptitudeType.Somatics,
-                 special: { type: SpecialTest.Shock, source: this.attackTraitInfo.source, messageRef: this.message.id }
-               };
-             },
-           });
+          AptitudeCheckControls.openWindow({
+            entities: { actor: character.actor },
+            getState: (actor) => {
+              if (actor.proxy.type !== ActorType.Character) return null;
+              return {
+                ego: actor.proxy.ego,
+                character: actor.proxy,
+                aptitude: AptitudeType.Somatics,
+                special: {
+                  type: SpecialTest.Shock,
+                  source: this.attackTraitInfo.source,
+                  messageRef: this.message.id,
+                },
+              };
+            },
+          });
           break;
-      
+
         default:
           break;
       }
-    })
+    });
   }
 
   private get timeState() {

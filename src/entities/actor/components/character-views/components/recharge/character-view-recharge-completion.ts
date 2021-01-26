@@ -52,8 +52,8 @@ export class CharacterViewRechargeCompletion extends mix(LitElement).with(
   }
 
   update(changedProps: PropertyValues<this>) {
-    if (changedProps.has("character")) this.setupState();
-    super.update(changedProps)
+    if (changedProps.has('character')) this.setupState();
+    super.update(changedProps);
   }
 
   get updatedSpentPools() {
@@ -255,7 +255,6 @@ export class CharacterViewRechargeCompletion extends mix(LitElement).with(
               <sl-popover minimal center>
                 <mwc-button
                   class="complete-recharge missing"
-                  
                   outlined
                   icon="new_releases"
                   label="${localize('points')} ${localize('unspent')}"

@@ -49,7 +49,7 @@ export class SuccessTestActionForm extends LitElement {
           renderSelectField(type, enumValues(ActionType)),
           renderSelectField(subtype, enumValues(ActionSubtype)),
           subtype.value === ActionSubtype.Physical
-            ? renderLabeledCheckbox({...fullMove, label: this.fullMoveLabel})
+            ? renderLabeledCheckbox({ ...fullMove, label: this.fullMoveLabel })
             : '',
           html` <div
             class="action-edits ${classMap({

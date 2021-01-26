@@ -23,7 +23,6 @@
   backdrop-filter: blur(5px) contrast(85%);
   transition: opacity 25ms ease-in-out;
 
-
   ::slotted([slot='footer']) {
     display: flex;
     align-items: center;

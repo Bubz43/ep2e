@@ -30,7 +30,7 @@ export const openSleeveForm = (sleeve: Sleeve) => {
         .updater=${updater}
       ></entity-form-footer>
     `,
-    name: `${sleeve.name} - ${localize("sleeve")}`,
+    name: `${sleeve.name} - ${localize('sleeve')}`,
     resizable: ResizeOption.Vertical,
   });
 };

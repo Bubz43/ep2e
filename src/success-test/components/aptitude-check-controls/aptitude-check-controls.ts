@@ -12,7 +12,10 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
-import { AptitudeCheck, AptitudeCheckInit } from '@src/success-test/aptitude-check';
+import {
+  AptitudeCheck,
+  AptitudeCheckInit,
+} from '@src/success-test/aptitude-check';
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
@@ -195,7 +198,9 @@ export class AptitudeCheckControls extends LitElement {
             })}
             ${special
               ? html`
-                  <p class="special">${localize('versus')} ${localize(special.type)}</p>
+                  <p class="special">
+                    ${localize('versus')} ${localize(special.type)}
+                  </p>
                 `
               : ''}
           </div>

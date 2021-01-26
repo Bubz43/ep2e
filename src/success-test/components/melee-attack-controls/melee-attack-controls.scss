@@ -71,11 +71,11 @@
   border: 1px solid var(--color-border);
   @include textButton();
   @include inputReset();
-input {
-  width: 2ch;
-  height: 2ch;
+  input {
+    width: 2ch;
+    height: 2ch;
     margin-right: 0.7rem;
-}
+  }
   button {
     color: var(--color-text-lighter);
     &.active {

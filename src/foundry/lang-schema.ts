@@ -1411,7 +1411,15 @@ type LangEntries =
   | 'entity'
   | 'complexAim'
   | 'fullDefense'
-  | 'oneHand' | "oneHanded" | "extraWeapons" | "defendWith" | "blindness" | "entangled" | "breakFree" | "takeNextFullActionToFlee" | "fleeing"
+  | 'oneHand'
+  | 'oneHanded'
+  | 'extraWeapons'
+  | 'defendWith'
+  | 'blindness'
+  | 'entangled'
+  | 'breakFree'
+  | 'takeNextFullActionToFlee'
+  | 'fleeing';
 type FullNames =
   | 'cog'
   | 'int'

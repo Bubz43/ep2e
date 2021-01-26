@@ -272,7 +272,7 @@ export class Explosive
           duration,
           notes,
           startTime: duration ? currentWorldTimeMS() : undefined,
-          source: this.name
+          source: this.name,
         }
       : undefined;
 

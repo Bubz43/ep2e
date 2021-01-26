@@ -32,7 +32,7 @@ export type SkillTestInit = {
   character?: Character;
   token?: MaybeToken;
   action?: Action;
-  opposing?: { testName: string, messageId?: string }
+  opposing?: { testName: string; messageId?: string };
 };
 
 export type SkillState = {
@@ -73,7 +73,14 @@ export class SkillTest extends SuccessTestBase {
     );
   }
 
-  constructor({ ego, skill, character, token, action, opposing }: SkillTestInit) {
+  constructor({
+    ego,
+    skill,
+    character,
+    token,
+    action,
+    opposing,
+  }: SkillTestInit) {
     super({
       action:
         action ??
@@ -255,7 +262,9 @@ export class SkillTest extends SuccessTestBase {
     await createMessage({
       data: {
         header: {
-          heading: opposing ? `${localize("opposing")}: ${opposing.testName}` :  name,
+          heading: opposing
+            ? `${localize('opposing')}: ${opposing.testName}`
+            : name,
           subheadings: compact([
             opposing && name,
             [
@@ -270,7 +279,7 @@ export class SkillTest extends SuccessTestBase {
           ]),
         },
         successTest: this.testMessageData,
-        fromMessageId: opposing?.messageId
+        fromMessageId: opposing?.messageId,
       },
       entity: this.token ?? this.character, // TODO account for item sources,
       visibility: settings.visibility,

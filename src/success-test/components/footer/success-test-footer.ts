@@ -27,8 +27,8 @@ export class SuccessTestFooter extends LitElement {
 
   firstUpdated() {
     requestAnimationFrame(() => {
-      this.renderRoot.querySelector<HTMLElement>("#start")?.focus()
-    })
+      this.renderRoot.querySelector<HTMLElement>('#start')?.focus();
+    });
   }
 
   render() {

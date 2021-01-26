@@ -157,8 +157,8 @@ export type FavorMessageData = {
 export type SpecialTestData = {
   type: SpecialTest;
   source: string;
-  originalResult?: SuccessTestResult
-}
+  originalResult?: SuccessTestResult;
+};
 
 export type MessageData = Partial<{
   header: MessageHeaderData;

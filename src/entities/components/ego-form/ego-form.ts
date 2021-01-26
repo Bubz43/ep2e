@@ -283,7 +283,6 @@ export class EgoForm extends mix(LitElement).with(
                 <sl-header
                   heading="${localize('resource')} ${localize('points')}"
                 >
-               
                 </sl-header>
                 ${disabled
                   ? ''
@@ -298,7 +297,9 @@ export class EgoForm extends mix(LitElement).with(
                                   ...points[point],
                                   label: Ego.formatPoint(point),
                                 },
-                                point === CharacterPoint.Credits ? undefined : { min: -99, max: 99 },
+                                point === CharacterPoint.Credits
+                                  ? undefined
+                                  : { min: -99, max: 99 },
                               )
                             : '',
                         ),

@@ -61,7 +61,7 @@ export class MeleeWeapon
   }
 
   get reachBonus() {
-    return this.epData.reachBonus
+    return this.epData.reachBonus;
   }
 
   get fullType() {

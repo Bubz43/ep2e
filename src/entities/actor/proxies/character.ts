@@ -688,7 +688,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
           key: this.updater,
           content: renderEgoForm(this.ego),
           resizable: ResizeOption.Vertical,
-          name: `${this.name} - ${localize("ego")}`,
+          name: `${this.name} - ${localize('ego')}`,
         });
       },
       psi:
