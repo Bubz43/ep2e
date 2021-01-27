@@ -115,18 +115,12 @@ export class Explosive
       label,
       damageFormula,
       armorUsed,
-      attackTraits,
-      armorPiercing,
-      attackTraitNotes,
       ...data
     }: ExplosiveAttackData,
     defaultLabel: string,
   ): ExplosiveAttack {
     const { areaEffect, areaEffectRadius } = this;
     return {
-      attackTraits,
-      attackTraitNotes,
-      armorPiercing,
       armorUsed: compact([armorUsed]),
       rollFormulas: damageFormula
         ? [createBaseAttackFormula(damageFormula)]
@@ -137,7 +131,7 @@ export class Explosive
       areaEffectRadius,
       damageType: HealthType.Physical,
       substance: this.canContainSubstance ? this.substance : null,
-      ...(notEmpty(attackTraits) ? data : { duration: 0, notes: '' }),
+      ...data
     };
   }
 
@@ -155,6 +149,10 @@ export class Explosive
 
   get areaEffectRadius() {
     return this.epData.areaEffectRadius;
+  }
+
+  get areaEffectNotes() {
+    return this.epData.areaEffectNotes
   }
 
   get explosiveType() {
@@ -299,6 +297,8 @@ export class Explosive
             dvReduction: centeredReduction || -2,
             templateIDs,
             duration,
+            startTime: duration ? currentWorldTimeMS() : undefined,
+            notes: this.areaEffectNotes,
             angle:
               demolition?.type === Demolition.ShapeCentered
                 ? demolition.angle
@@ -310,6 +310,8 @@ export class Explosive
             radius: uniformBlastRadius || this.areaEffectRadius || 1,
             templateIDs,
             duration,
+            notes: this.areaEffectNotes,
+            startTime: duration ? currentWorldTimeMS() : undefined,
           }
         : undefined;
 

@@ -160,6 +160,7 @@ export class ExplosiveForm extends ItemFormBase {
             hasSecondaryMode,
             areaEffect: areaEffectType,
             areaEffectRadius: radius,
+            areaEffectNotes,
           }) => [
             renderSelectField(explosiveType, enumValues(ExplosiveType), {
               disabled: loaded,
@@ -194,10 +195,13 @@ export class ExplosiveForm extends ItemFormBase {
               { emptyText: localize('none') },
             ),
             areaEffectType.value === AreaEffectType.Uniform
-              ? renderNumberField(
-                  { ...radius, label: `${localize('radius')} (m.)` },
-                  { min: 2 },
-                )
+              ? [
+                  renderNumberField(
+                    { ...radius, label: `${localize('radius')} (m.)` },
+                    { min: 2 },
+                  ),
+                  renderTextareaField(areaEffectNotes)
+                ]
               : '',
           ],
         })}

@@ -1,6 +1,12 @@
 import type { MessageAreaEffectData } from '@src/chat/message-data';
 import { getCenteredDistance } from '@src/combat/area-effect';
+import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { AreaEffectType } from '@src/data-enums';
+import {
+  createLiveTimeState,
+  getElapsedTime,
+  prettyMilliseconds,
+} from '@src/features/time';
 import {
   createTemporaryMeasuredTemplate,
   deletePlacedTemplate,
@@ -11,12 +17,14 @@ import {
 } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
 import { customElement, html, property } from 'lit-element';
+import mix from 'mix-with/lib';
+import { noop } from 'remeda';
 import type { SetOptional } from 'type-fest';
 import { MessageElement } from '../message-element';
 import styles from './message-area-effect.scss';
 
 @customElement('message-area-effect')
-export class MessageAreaEffect extends MessageElement {
+export class MessageAreaEffect extends mix(MessageElement).with(UseWorldTime) {
   static get is() {
     return 'message-area-effect' as const;
   }
@@ -128,7 +136,17 @@ export class MessageAreaEffect extends MessageElement {
   render() {
     // TODO Template
     const { areaEffect, nonInteractive } = this;
-
+    const { duration, startTime } = areaEffect;
+    const timeState =
+      duration && startTime != null
+        ? createLiveTimeState({
+            id: '',
+            duration,
+            startTime,
+            updateStartTime: noop,
+            label: localize('lasts'),
+          })
+        : null;
     return html`
       ${nonInteractive
         ? ''
@@ -168,6 +186,14 @@ export class MessageAreaEffect extends MessageElement {
               ${localize('shaped')} ${localize('to')} ${areaEffect.angle}°
               ${localize('angle').toLocaleLowerCase()}
             </p>
+          `
+        : ''}
+      ${timeState
+        ? html`
+            <span class="remaining-time">
+              ${prettyMilliseconds(timeState.remaining)}
+              ${localize('remaining')}</span
+            >
           `
         : ''}
     `;

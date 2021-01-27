@@ -7,7 +7,7 @@ import { SpecialTest } from '@src/features/tags';
 import { createLiveTimeState, prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { AptitudeCheckControls } from '@src/success-test/components/aptitude-check-controls/aptitude-check-controls';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, property, html } from 'lit-element';
 import mix from 'mix-with/lib';
 import { MessageElement } from '../message-element';
 import styles from './message-attack-traits.scss';

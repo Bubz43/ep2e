@@ -604,6 +604,7 @@
         "Stackable"
       ],
       "areaEffect": "",
+      "areaEffectNotes": "",
       "explosiveType": "grenade",
       "useSubstance":"",
       "areaEffectRadius": 10,
