@@ -65,6 +65,24 @@
                 "PermanentlyCorrupted": {
                   "type": "string"
                 },
+                "SuperiorResultCovertness": {
+                  "type": "string"
+                },
+                "SuperiorResultDamage": {
+                  "type": "string"
+                },
+                "SuperiorResultDetail": {
+                  "type": "string"
+                },
+                "SuperiorResultQuality": {
+                  "type": "string"
+                },
+                "SuperiorResultQuantity": {
+                  "type": "string"
+                },
+                "SuperiorResultTime": {
+                  "type": "string"
+                },
                 "TheBodyDies": {
                   "type": "string"
                 },
@@ -139,7 +157,13 @@
                 "TheBodyDies",
                 "DestroyedBeyondRepair",
                 "PermanentEgoMeltdown",
-                "PermanentlyCorrupted"
+                "PermanentlyCorrupted",
+                "SuperiorResultQuality",
+                "SuperiorResultQuantity",
+                "SuperiorResultDetail",
+                "SuperiorResultTime",
+                "SuperiorResultCovertness",
+                "SuperiorResultDamage"
               ],
               "type": "object"
             },

@@ -11,6 +11,7 @@ import { addFeature } from '@src/features/feature-helpers';
 import { PostTestPoolAction } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import { capitalize } from '@src/foundry/misc-helpers';
+import { tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
 import {
   flipFlopRoll,
@@ -435,7 +436,7 @@ export class MessageSuccessTest extends MessageElement {
             difference(compact([!task && SuperiorResultEffect.Time])),
             map(
               (effect) => html`
-                <wl-list-item>
+                <wl-list-item data-tooltip=${localize("DESCRIPTIONS", `SuperiorResult${capitalize(effect)}`)} @mouseover=${tooltip.fromData}>
                   <span>${localize(effect)}</span>
                   <span slot="after"
                     >${range(0, granted).map((grant) => {

@@ -1519,7 +1519,7 @@ export type DescriptionEntry =
   | 'TheBodyDies'
   | 'DestroyedBeyondRepair'
   | 'PermanentEgoMeltdown'
-  | 'PermanentlyCorrupted';
+  | 'PermanentlyCorrupted' | "SuperiorResultQuality" | "SuperiorResultQuantity" | "SuperiorResultDetail" | "SuperiorResultTime" | "SuperiorResultCovertness" | "SuperiorResultDamage"
 
 // TODO Look into using data keys as pattern to validate json string
 export type Formatable = {

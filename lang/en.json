@@ -1401,7 +1401,7 @@
     "attackTraitNotes": "Attack Trait Notes",
     "areaEffectNotes": "Area Effect Notes",
     "dissipated": "Dissipated",
-        "dissipates": "Dissipates",
+    "dissipates": "Dissipates",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
@@ -1433,7 +1433,13 @@
       "DestroyedBeyondRepair": "Destroyed beyond repair...",
       "PermanentEgoMeltdown": "Permanent ego meltdown...",
       "PermanentlyCorrupted": "Permanently corrupted...",
-      "TheBodyDies": "The body dies..."
+      "TheBodyDies": "The body dies...",
+      "SuperiorResultCovertness": "The action is less (success) or more (failure) obvious or draws less or more attention (+/− 10 as appropriate).",
+      "SuperiorResultDamage": "Successes inflict more (+1d6) damage (failures miss).",
+      "SuperiorResultDetail": "You acquire information that is much more in-depth or nuanced (success) or false (failure).",
+      "SuperiorResultQuality": "The work is more exact (success) or more sloppy (failure). This may affect subsequent tests by +/− 10.",
+      "SuperiorResultQuantity": "The test consumes fewer (success) or more (failure) materials or produces fewer or more results",
+      "SuperiorResultTime": "The action takes a shorter (success) or longer (failure) amount of time, by +/− 25%."
     },
     "FULL": {
       "cog": "Cognition",
