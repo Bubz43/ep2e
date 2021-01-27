@@ -86,7 +86,6 @@ export class ConsumableCard extends ItemCardBase {
               };
             },
           });
-      notify(NotificationType.Info, `TODO WIL Check`);
     }
   }
 

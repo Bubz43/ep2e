@@ -77,7 +77,6 @@ export type SuccessTestEffect = {
   modifier: number;
   requirement: string;
   toOpponent: boolean;
-  activeByDefault?: boolean;
 };
 
 export type MiscEffect = {
@@ -260,7 +259,6 @@ const successTest = createFeature<SuccessTestEffect>(() => ({
   modifier: 0,
   toOpponent: false,
   requirement: '',
-  activeByDefault: false,
 }));
 
 const health = createFeature<HealthEffect>(() => ({

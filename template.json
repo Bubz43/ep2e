@@ -618,6 +618,7 @@
         "armorPiercing": false,
         "damageFormula": "",
         "duration": 0,
+        "attackTraitNotes": "",
         "label": "",
         "notes": ""
       },
@@ -627,6 +628,7 @@
         "armorPiercing": false,
         "damageFormula": "",
         "duration": 0,
+        "attackTraitNotes": "",
         "label": "",
         "notes": ""
       }

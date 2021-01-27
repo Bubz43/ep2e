@@ -186,7 +186,7 @@ export const successTestEffectMap = <T extends SuccessTestEffect>(
   return new Map(
     effects.map((effect) => [
       effect,
-      effect.activeByDefault || !effect.requirement,
+      !effect.requirement,
     ]),
   );
 };

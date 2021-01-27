@@ -99,6 +99,7 @@ export type ExplosiveAttackData = {
   attackTraits: AttackTrait[];
   duration: number;
   notes: string;
+  attackTraitNotes: string;
 };
 
 export type ExplosiveAttack = FullAttack<ExplosiveAttackData> & {

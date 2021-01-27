@@ -39,7 +39,7 @@ export enum SpecialTest {
   BleedingOut = "bleedingOut",
   Disorientation = "disorientation",
   AcuteStress = "acuteStress",
-  Addiction = "addiction";
+  Addiction = "addiction",
 }
 
 export type UniversalTag = {

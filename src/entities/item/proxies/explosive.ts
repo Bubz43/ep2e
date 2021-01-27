@@ -117,6 +117,7 @@ export class Explosive
       armorUsed,
       attackTraits,
       armorPiercing,
+      attackTraitNotes,
       ...data
     }: ExplosiveAttackData,
     defaultLabel: string,
@@ -124,6 +125,7 @@ export class Explosive
     const { areaEffect, areaEffectRadius } = this;
     return {
       attackTraits,
+      attackTraitNotes,
       armorPiercing,
       armorUsed: compact([armorUsed]),
       rollFormulas: damageFormula
@@ -251,6 +253,7 @@ export class Explosive
       attackTraits,
       duration,
       notes,
+      attackTraitNotes
     } = this.attacks[attackType] || this.attacks.primary;
 
     // TODO apply demolition effects
@@ -263,6 +266,7 @@ export class Explosive
           reduceAVbyDV,
           rolledFormulas: rollLabeledFormulas(rollFormulas),
           source: this.name,
+          notes
         }
       : undefined;
 
@@ -270,7 +274,7 @@ export class Explosive
       ? {
           traits: attackTraits,
           duration,
-          notes,
+          notes: attackTraitNotes,
           startTime: duration ? currentWorldTimeMS() : undefined,
           source: this.name,
         }
@@ -294,6 +298,7 @@ export class Explosive
             type: this.areaEffect,
             dvReduction: centeredReduction || -2,
             templateIDs,
+            duration,
             angle:
               demolition?.type === Demolition.ShapeCentered
                 ? demolition.angle
@@ -304,6 +309,7 @@ export class Explosive
             type: this.areaEffect,
             radius: uniformBlastRadius || this.areaEffectRadius || 1,
             templateIDs,
+            duration,
           }
         : undefined;
 

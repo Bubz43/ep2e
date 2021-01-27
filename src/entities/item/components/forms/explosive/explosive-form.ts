@@ -4,6 +4,7 @@ import {
 } from '@src/combat/attack-formatting';
 import type { ExplosiveAttack } from '@src/combat/attacks';
 import {
+  emptyTextDash,
   renderFormulaField,
   renderLabeledCheckbox,
   renderNumberField,
@@ -353,15 +354,26 @@ export class ExplosiveForm extends ItemFormBase {
       <h3>${modeLabel}</h3>
       ${renderUpdaterForm(updater, {
         disabled,
-        fields: ({ damageFormula, armorPiercing, label, armorUsed }) => [
+        fields: ({
+          damageFormula,
+          armorPiercing,
+          label,
+          armorUsed,
+          notes,
+          duration,
+        }) => [
           this.item.hasSecondaryMode
             ? renderTextField(label, { placeholder: modeLabel })
             : '',
           renderFormulaField(damageFormula),
-          renderSelectField(armorUsed, [ArmorType.Energy, ArmorType.Kinetic], {
-            emptyText: '-',
-          }),
+          renderSelectField(
+            armorUsed,
+            [ArmorType.Energy, ArmorType.Kinetic],
+            emptyTextDash,
+          ),
           armorUsed.value ? renderLabeledCheckbox(armorPiercing) : '',
+          renderTimeField(duration, { whenZero: localize('instant') }),
+          renderTextField(notes),
         ],
       })}
       <p class="label">${localize('attackTraits')}</p>
@@ -370,15 +382,10 @@ export class ExplosiveForm extends ItemFormBase {
         update: createPipe(change, objOf('attackTraits'), updater.commit),
         fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
       })}
-      ${notEmpty(updater.originalValue().attackTraits)
-        ? renderUpdaterForm(updater, {
-            disabled,
-            fields: ({ duration, notes }) => [
-              renderTimeField(duration, { whenZero: localize('instant') }),
-              renderTextareaField(notes),
-            ],
-          })
-        : ''}
+      ${renderUpdaterForm(updater, {
+        disabled,
+        fields: ({ attackTraitNotes }) => renderTextField(attackTraitNotes),
+      })}
     `;
   }
 }

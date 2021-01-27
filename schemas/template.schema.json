@@ -2345,6 +2345,9 @@
                           "id": {
                             "type": "string"
                           },
+                          "reachBonus": {
+                            "type": "number"
+                          },
                           "type": {
                             "const": "melee",
                             "type": "string"
@@ -3484,6 +3487,9 @@
                           "id": {
                             "type": "string"
                           },
+                          "reachBonus": {
+                            "type": "number"
+                          },
                           "type": {
                             "const": "melee",
                             "type": "string"
@@ -3973,6 +3979,9 @@
                           },
                           "id": {
                             "type": "string"
+                          },
+                          "reachBonus": {
+                            "type": "number"
                           },
                           "type": {
                             "const": "melee",
@@ -4882,6 +4891,9 @@
                           "id": {
                             "type": "string"
                           },
+                          "reachBonus": {
+                            "type": "number"
+                          },
                           "type": {
                             "const": "melee",
                             "type": "string"
@@ -5321,6 +5333,9 @@
                           "id": {
                             "type": "string"
                           },
+                          "reachBonus": {
+                            "type": "number"
+                          },
                           "type": {
                             "const": "melee",
                             "type": "string"
@@ -5759,6 +5774,9 @@
                           },
                           "id": {
                             "type": "string"
+                          },
+                          "reachBonus": {
+                            "type": "number"
                           },
                           "type": {
                             "const": "melee",
@@ -6298,6 +6316,9 @@
                           "id": {
                             "type": "string"
                           },
+                          "reachBonus": {
+                            "type": "number"
+                          },
                           "type": {
                             "const": "melee",
                             "type": "string"
@@ -6748,6 +6769,9 @@
                           },
                           "id": {
                             "type": "string"
+                          },
+                          "reachBonus": {
+                            "type": "number"
                           },
                           "type": {
                             "const": "melee",
@@ -7451,6 +7475,9 @@
                               "id": {
                                 "type": "string"
                               },
+                              "reachBonus": {
+                                "type": "number"
+                              },
                               "type": {
                                 "const": "melee",
                                 "type": "string"
@@ -7941,6 +7968,9 @@
                               },
                               "id": {
                                 "type": "string"
+                              },
+                              "reachBonus": {
+                                "type": "number"
                               },
                               "type": {
                                 "const": "melee",
@@ -8624,6 +8654,9 @@
                                 "id": {
                                   "type": "string"
                                 },
+                                "reachBonus": {
+                                  "type": "number"
+                                },
                                 "type": {
                                   "const": "melee",
                                   "type": "string"
@@ -8879,6 +8912,9 @@
         "armorUsed": {
           "type": "string"
         },
+        "attackTraitNotes": {
+          "type": "string"
+        },
         "attackTraits": {
           "items": {
             "$ref": "#/definitions/AttackTrait"
@@ -8905,7 +8941,8 @@
         "armorPiercing",
         "attackTraits",
         "duration",
-        "notes"
+        "notes",
+        "attackTraitNotes"
       ],
       "type": "object"
     },
@@ -9728,8 +9765,16 @@
         "resistSubstanceOrDisease",
         "painResistance",
         "resistInfection",
-        "pain",
-        "shock"
+        "shock",
+        "blinding",
+        "entangling",
+        "knockdown",
+        "stun",
+        "unconsciousness",
+        "bleedingOut",
+        "disorientation",
+        "acuteStress",
+        "addiction"
       ],
       "type": "string"
     },
@@ -10158,6 +10203,9 @@
             },
             "id": {
               "type": "string"
+            },
+            "reachBonus": {
+              "type": "number"
             },
             "type": {
               "const": "melee",

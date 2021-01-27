@@ -114,6 +114,7 @@ export type MessageHeaderData = {
 
 export type MessageAreaEffectData = AreaEffect & {
   templateIDs?: PlacedTemplateIDs | null;
+  duration?: number;
 };
 
 type SuccessTestState = {

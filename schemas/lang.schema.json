@@ -857,6 +857,9 @@
             "attackMode": {
               "type": "string"
             },
+            "attackTraitNotes": {
+              "type": "string"
+            },
             "attackTraits": {
               "type": "string"
             },
@@ -4776,6 +4779,7 @@
             "atmosphere",
             "attack",
             "attackMode",
+            "attackTraitNotes",
             "attackTraits",
             "attackingOrSpotting",
             "attacks",

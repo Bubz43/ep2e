@@ -1418,7 +1418,13 @@ type LangEntries =
   | 'blindness'
   | 'entangled'
   | 'breakFree'
-  | 'takeNextFullActionToFlee' | "bleedingOut" | "regainWits" | 'suffer' | "acuteStressResponse" | "successful" | "addicted";
+  | 'takeNextFullActionToFlee'
+  | 'bleedingOut'
+  | 'regainWits'
+  | 'suffer'
+  | 'acuteStressResponse'
+  | 'successful'
+  | 'addicted' | "attackTraitNotes";
 type FullNames =
   | 'cog'
   | 'int'
