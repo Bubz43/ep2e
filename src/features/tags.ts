@@ -35,11 +35,11 @@ export enum SpecialTest {
   Entangling = 'entangling',
   Knockdown = 'knockdown',
   Stun = 'stun',
-  Unconsciousness = "unconsciousness",
-  BleedingOut = "bleedingOut",
-  Disorientation = "disorientation",
-  AcuteStress = "acuteStress",
-  Addiction = "addiction",
+  Unconsciousness = 'unconsciousness',
+  BleedingOut = 'bleedingOut',
+  Disorientation = 'disorientation',
+  AcuteStress = 'acuteStress',
+  Addiction = 'addiction',
 }
 
 export type UniversalTag = {

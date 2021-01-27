@@ -92,23 +92,22 @@ export class CharacterViewResleeve extends LitElement {
   }
 
   private startIntegrationTest() {
-      AptitudeCheckControls.openWindow({
-        entities: { actor: this.character.actor },
-        getState: (actor) => {
-          if (actor.proxy.type !== ActorType.Character) return null;
-          return {
-            ego: actor.proxy.ego,
-            character: actor.proxy,
-            aptitude: AptitudeType.Somatics,
-            special: {
-              type: SpecialTest.Integration,
-              source: localize("resleeve")
-            },
-          };
-        },
-      });
+    AptitudeCheckControls.openWindow({
+      entities: { actor: this.character.actor },
+      getState: (actor) => {
+        if (actor.proxy.type !== ActorType.Character) return null;
+        return {
+          ego: actor.proxy.ego,
+          character: actor.proxy,
+          aptitude: AptitudeType.Somatics,
+          special: {
+            type: SpecialTest.Integration,
+            source: localize('resleeve'),
+          },
+        };
+      },
+    });
   }
-
 
   private startStressTest() {
     // TODO
@@ -259,8 +258,12 @@ export class CharacterViewResleeve extends LitElement {
         >
 
         <div class="tests">
-        <mwc-button dense unelevated @click=${this.startIntegrationTest}>${localize("integrationTest")}</mwc-button>
-        <mwc-button dense unelevated @click=${this.startStressTest} >${localize("resleevingStress")} ${localize("test")}</mwc-button>
+          <mwc-button dense unelevated @click=${this.startIntegrationTest}
+            >${localize('integrationTest')}</mwc-button
+          >
+          <mwc-button dense unelevated @click=${this.startStressTest}
+            >${localize('resleevingStress')} ${localize('test')}</mwc-button
+          >
         </div>
 
         ${this.character.sleeve

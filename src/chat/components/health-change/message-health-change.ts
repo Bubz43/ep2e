@@ -57,25 +57,25 @@ export class MessageHealthChange extends MessageElement {
   }
 
   private startAcuteStressCheck() {
-     const { actor } = this.message;
-     if (actor?.proxy.type === ActorType.Character) {
-       AptitudeCheckControls.openWindow({
-         entities: { actor },
-         getState: (actor) => {
-           if (actor.proxy.type !== ActorType.Character) return null;
-           return {
-             ego: actor.proxy.ego,
-             character: actor.proxy,
-             aptitude: AptitudeType.Willpower,
-             special: {
-               type: SpecialTest.AcuteStress,
-               source: this.healthChange.source,
-               messageRef: this.message.id,
-             },
-           };
-         },
-       });
-     }
+    const { actor } = this.message;
+    if (actor?.proxy.type === ActorType.Character) {
+      AptitudeCheckControls.openWindow({
+        entities: { actor },
+        getState: (actor) => {
+          if (actor.proxy.type !== ActorType.Character) return null;
+          return {
+            ego: actor.proxy.ego,
+            character: actor.proxy,
+            aptitude: AptitudeType.Willpower,
+            special: {
+              type: SpecialTest.AcuteStress,
+              source: this.healthChange.source,
+              messageRef: this.message.id,
+            },
+          };
+        },
+      });
+    }
   }
 
   private startKnockdownCheck() {
@@ -101,49 +101,49 @@ export class MessageHealthChange extends MessageElement {
   }
 
   private async startUnconsciousnessCheck() {
-     const { actor } = this.message;
-     if (actor?.proxy.type === ActorType.Character) {
-       await actor.proxy.addConditions([ConditionType.Prone])
-       AptitudeCheckControls.openWindow({
-         entities: { actor },
-         getState: (actor) => {
-           if (actor.proxy.type !== ActorType.Character) return null;
-           return {
-             ego: actor.proxy.ego,
-             character: actor.proxy,
-             aptitude: AptitudeType.Somatics,
-             special: {
-               type: SpecialTest.Unconsciousness,
-               source: this.healthChange.source,
-               messageRef: this.message.id,
-             },
-           };
-         },
-       });
-     }
+    const { actor } = this.message;
+    if (actor?.proxy.type === ActorType.Character) {
+      await actor.proxy.addConditions([ConditionType.Prone]);
+      AptitudeCheckControls.openWindow({
+        entities: { actor },
+        getState: (actor) => {
+          if (actor.proxy.type !== ActorType.Character) return null;
+          return {
+            ego: actor.proxy.ego,
+            character: actor.proxy,
+            aptitude: AptitudeType.Somatics,
+            special: {
+              type: SpecialTest.Unconsciousness,
+              source: this.healthChange.source,
+              messageRef: this.message.id,
+            },
+          };
+        },
+      });
+    }
     // TODO
   }
 
   private startBleedingOutCheck() {
-     const { actor } = this.message;
-     if (actor?.proxy.type === ActorType.Character) {
-       AptitudeCheckControls.openWindow({
-         entities: { actor },
-         getState: (actor) => {
-           if (actor.proxy.type !== ActorType.Character) return null;
-           return {
-             ego: actor.proxy.ego,
-             character: actor.proxy,
-             aptitude: AptitudeType.Somatics,
-             special: {
-               type: SpecialTest.BleedingOut,
-               source: this.healthChange.source,
-               messageRef: this.message.id,
-             },
-           };
-         },
-       });
-     }
+    const { actor } = this.message;
+    if (actor?.proxy.type === ActorType.Character) {
+      AptitudeCheckControls.openWindow({
+        entities: { actor },
+        getState: (actor) => {
+          if (actor.proxy.type !== ActorType.Character) return null;
+          return {
+            ego: actor.proxy.ego,
+            character: actor.proxy,
+            aptitude: AptitudeType.Somatics,
+            special: {
+              type: SpecialTest.BleedingOut,
+              source: this.healthChange.source,
+              messageRef: this.message.id,
+            },
+          };
+        },
+      });
+    }
   }
 
   private formatChange() {
@@ -257,7 +257,7 @@ export class MessageHealthChange extends MessageElement {
           >
             ${checkIcon()}
             <span>
-            <!-- TODO say that prone will be applied too -->
+              <!-- TODO say that prone will be applied too -->
               ${localize('som')} ${localize('check')}
               ${localize('SHORT', 'versus')}
               ${localize(wounds === 1 ? 'knockdown' : 'unconsciousness')}</span

@@ -376,12 +376,12 @@ export class MessageSpecialTest extends MessageElement {
 
       case SpecialTest.Addiction:
         return html`
-          <wl-list-item
-         
-          >
+          <wl-list-item>
             ${isSuccess
               ? `${localize('resisted')} ${localize('addiction')}`
-              : `${localize('addicted')} ${localize('to')} ${this.specialTest.source}`}
+              : `${localize('addicted')} ${localize('to')} ${
+                  this.specialTest.source
+                }`}
           </wl-list-item>
         `;
 

@@ -68,7 +68,7 @@ export class AptitudeCheck extends SuccessTestBase {
     aptitude,
     action,
     special,
-    modifiers
+    modifiers,
   }: AptitudeCheckInit) {
     super({
       action:

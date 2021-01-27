@@ -65,27 +65,33 @@ export class ConsumableCard extends ItemCardBase {
   }
 
   private addictionTest() {
-          const { character } = requestCharacter(this);
+    const { character } = requestCharacter(this);
 
-          if (!character) return;
+    if (!character) return;
     if (this.item.type === ItemType.Substance) {
       const { addiction, addictionMod } = this.item.epData;
-          AptitudeCheckControls.openWindow({
-            entities: { actor: character.actor },
-            getState: (actor) => {
-              if (actor.proxy.type !== ActorType.Character) return null;
-              return {
-                ego: actor.proxy.ego,
-                character: actor.proxy,
-                aptitude: AptitudeType.Willpower,
-                modifiers: compact([addiction && createSuccessTestModifier({ name: localize("addiction"), value: addictionMod})]),
-                special: {
-                  type: SpecialTest.Addiction,
-                  source: this.item.name,
-                },
-              };
+      AptitudeCheckControls.openWindow({
+        entities: { actor: character.actor },
+        getState: (actor) => {
+          if (actor.proxy.type !== ActorType.Character) return null;
+          return {
+            ego: actor.proxy.ego,
+            character: actor.proxy,
+            aptitude: AptitudeType.Willpower,
+            modifiers: compact([
+              addiction &&
+                createSuccessTestModifier({
+                  name: localize('addiction'),
+                  value: addictionMod,
+                }),
+            ]),
+            special: {
+              type: SpecialTest.Addiction,
+              source: this.item.name,
             },
-          });
+          };
+        },
+      });
     }
   }
 

@@ -183,12 +183,7 @@ export const successTestTargetClamp = clamp({ min: 0, max: 99 });
 export const successTestEffectMap = <T extends SuccessTestEffect>(
   effects: T[],
 ) => {
-  return new Map(
-    effects.map((effect) => [
-      effect,
-      !effect.requirement,
-    ]),
-  );
+  return new Map(effects.map((effect) => [effect, !effect.requirement]));
 };
 
 export const getSuccessTestResult = ({

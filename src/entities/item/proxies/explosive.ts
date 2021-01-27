@@ -111,12 +111,7 @@ export class Explosive
   }
 
   setupAttack(
-    {
-      label,
-      damageFormula,
-      armorUsed,
-      ...data
-    }: ExplosiveAttackData,
+    { label, damageFormula, armorUsed, ...data }: ExplosiveAttackData,
     defaultLabel: string,
   ): ExplosiveAttack {
     const { areaEffect, areaEffectRadius } = this;
@@ -131,7 +126,7 @@ export class Explosive
       areaEffectRadius,
       damageType: HealthType.Physical,
       substance: this.canContainSubstance ? this.substance : null,
-      ...data
+      ...data,
     };
   }
 
@@ -150,7 +145,6 @@ export class Explosive
   get areaEffectRadius() {
     return this.epData.areaEffectRadius;
   }
-
 
   get explosiveType() {
     return this.epData.explosiveType;
@@ -248,7 +242,7 @@ export class Explosive
       attackTraits,
       duration,
       notes,
-      attackTraitNotes
+      attackTraitNotes,
     } = this.attacks[attackType] || this.attacks.primary;
 
     // TODO apply demolition effects
@@ -261,7 +255,7 @@ export class Explosive
           reduceAVbyDV,
           rolledFormulas: rollLabeledFormulas(rollFormulas),
           source: this.name,
-          notes
+          notes,
         }
       : undefined;
 

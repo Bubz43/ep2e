@@ -107,7 +107,7 @@ class BiologicalHealthBase implements CommonHealth {
   }
 
   startBleedingOut() {
-    return this.init.updater.path("bleedingOut").commit(true)
+    return this.init.updater.path('bleedingOut').commit(true);
   }
 
   applyModification(modification: HealthModification) {

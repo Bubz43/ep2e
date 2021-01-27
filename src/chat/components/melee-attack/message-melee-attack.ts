@@ -260,7 +260,7 @@ export class MessageMeleeAttack extends MessageElement {
               .attackTraitInfo=${{
                 traits: attack.attackTraits,
                 source: name ?? localize('unarmed'),
-                testResult: this.successTestInfo?.result
+                testResult: this.successTestInfo?.result,
               }}
             ></message-attack-traits>
           `
