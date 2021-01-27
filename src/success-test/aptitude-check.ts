@@ -1,7 +1,7 @@
 import { createMessage } from '@src/chat/create-message';
 import type {
   SpecialTestData,
-  SuccessTestMessageData
+  SuccessTestMessageData,
 } from '@src/chat/message-data';
 import { AptitudeType, PoolType, SuperiorResultEffect } from '@src/data-enums';
 import type { MaybeToken } from '@src/entities/actor/actor';
@@ -12,7 +12,7 @@ import {
   actionTimeframeModifier,
   ActionType,
   createAction,
-  defaultCheckActionSubtype
+  defaultCheckActionSubtype,
 } from '@src/features/actions';
 import { ArmorType } from '@src/features/active-armor';
 import { createEffect, matchesAptitude } from '@src/features/effects';
@@ -31,7 +31,7 @@ import {
   grantedSuperiorResultEffects,
   rollSuccessTest,
   SimpleSuccessTestModifier,
-  successTestEffectMap
+  successTestEffectMap,
 } from './success-test';
 import { SuccessTestBase } from './success-test-base';
 
@@ -42,6 +42,7 @@ export type AptitudeCheckInit = {
   aptitude: AptitudeType;
   action?: Action;
   special?: SpecialTestData & { messageRef?: string };
+  modifiers?: SimpleSuccessTestModifier[];
 };
 
 export class AptitudeCheck extends SuccessTestBase {
@@ -67,6 +68,7 @@ export class AptitudeCheck extends SuccessTestBase {
     aptitude,
     action,
     special,
+    modifiers
   }: AptitudeCheckInit) {
     super({
       action:
@@ -110,6 +112,10 @@ export class AptitudeCheck extends SuccessTestBase {
       this.aptitude.type,
       this.action,
     );
+
+    for (const modifier of modifiers || []) {
+      this.modifiers.simple.set(modifier.id, modifier);
+    }
 
     if (this.special?.type === SpecialTest.Shock) {
       const energyArmor = this.character?.armor.getClamped(ArmorType.Energy);
@@ -193,6 +199,21 @@ export class AptitudeCheck extends SuccessTestBase {
 
   private getPools(aptitude: AptitudeType) {
     const poolMap = this.character?.pools;
+    if (this.special?.type === SpecialTest.Integration) {
+      const pool = poolMap?.get(
+        this.ego.useThreat ? PoolType.Threat : PoolType.Flex,
+      );
+      return compact([
+        pool &&
+          new Pool({
+            type: pool.type,
+            initialValue: this.ego.useThreat
+              ? this.ego.epData.threat
+              : this.ego.epData.flex,
+            spent: pool.spent,
+          }),
+      ]);
+    }
     return compact(
       this.ego.useThreat
         ? [poolMap?.get(PoolType.Threat)]
@@ -206,7 +227,7 @@ export class AptitudeCheck extends SuccessTestBase {
   private getModifierEffects(aptitude: AptitudeType, action: Action) {
     return successTestEffectMap(
       this.character?.appliedEffects.getMatchingSuccessTestEffects(
-        matchesAptitude(aptitude)(action),
+        matchesAptitude(aptitude, this.special?.type)(action),
         false,
       ) || [],
     );

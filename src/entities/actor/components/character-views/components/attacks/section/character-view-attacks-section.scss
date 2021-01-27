@@ -38,6 +38,7 @@
 .attacks {
   position: relative;
   li {
+    list-style: none;
     &:hover {
       outline: 1px solid var(--color-grey);
     }
@@ -45,6 +46,7 @@
   header {
     padding: 0.25rem 0.75rem;
     background: alphav(var(--color-bg), 0.9);
+
   }
   .type {
     color: var(--color-text-lighter);

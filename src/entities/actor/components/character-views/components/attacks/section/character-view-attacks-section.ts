@@ -102,14 +102,13 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
           keyboard_arrow_down
         </mwc-icon>
       </sl-header>
-      <sl-animated-list
-        class="attacks"
-        ?hidden=${this.collapsed}
-        @contextmenu=${this.rollUnarmedDamage}
-      >
+      <sl-animated-list class="attacks" ?hidden=${this.collapsed}>
         ${sleeve && sleeve.type !== ActorType.Infomorph
           ? html`
-              <wl-list-item clickable @click=${this.startUnarmedAttack}
+              <wl-list-item
+                clickable
+                @click=${this.startUnarmedAttack}
+                @contextmenu=${this.rollUnarmedDamage}
                 >${localize('unarmedDV')} ${sleeve.unarmedDV}</wl-list-item
               >
             `

@@ -4,16 +4,22 @@ import {
   renderNumberInput,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
-import { ItemType } from '@src/entities/entity-types';
+import { AptitudeType } from '@src/data-enums';
+import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { ConsumableItem } from '@src/entities/item/item';
 import { Substance } from '@src/entities/item/proxies/substance';
+import { SpecialTest } from '@src/features/tags';
 import { prettyMilliseconds } from '@src/features/time';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
+import { AptitudeCheckControls } from '@src/success-test/components/aptitude-check-controls/aptitude-check-controls';
+import { createSuccessTestModifier } from '@src/success-test/success-test';
 import { localImage } from '@src/utility/images';
 import { customElement, html, property } from 'lit-element';
+import { compact } from 'remeda';
+import { requestCharacter } from '../../../character-request-event';
 import { ItemCardBase } from '../item-card-base';
 import styles from './consumable-card.scss';
 
@@ -59,7 +65,27 @@ export class ConsumableCard extends ItemCardBase {
   }
 
   private addictionTest() {
+          const { character } = requestCharacter(this);
+
+          if (!character) return;
     if (this.item.type === ItemType.Substance) {
+      const { addiction, addictionMod } = this.item.epData;
+          AptitudeCheckControls.openWindow({
+            entities: { actor: character.actor },
+            getState: (actor) => {
+              if (actor.proxy.type !== ActorType.Character) return null;
+              return {
+                ego: actor.proxy.ego,
+                character: actor.proxy,
+                aptitude: AptitudeType.Willpower,
+                modifiers: compact([addiction && createSuccessTestModifier({ name: localize("addiction"), value: addictionMod})]),
+                special: {
+                  type: SpecialTest.Addiction,
+                  source: this.item.name,
+                },
+              };
+            },
+          });
       notify(NotificationType.Info, `TODO WIL Check`);
     }
   }

@@ -1,5 +1,6 @@
 import { renderLabeledCheckbox } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
+import { AptitudeType } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import {
   Sleeve,
@@ -12,6 +13,7 @@ import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import { idProp } from '@src/features/feature-helpers';
+import { SpecialTest } from '@src/features/tags';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
@@ -20,6 +22,7 @@ import { EP } from '@src/foundry/system';
 import { tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
 import { openMenu } from '@src/open-menu';
+import { AptitudeCheckControls } from '@src/success-test/components/aptitude-check-controls/aptitude-check-controls';
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
@@ -86,6 +89,29 @@ export class CharacterViewResleeve extends LitElement {
     this.resleeveOptions = mapValues(this.resleeveOptions, () => false);
     this.socketListener?.();
     this.socketListener = null;
+  }
+
+  private startIntegrationTest() {
+      AptitudeCheckControls.openWindow({
+        entities: { actor: this.character.actor },
+        getState: (actor) => {
+          if (actor.proxy.type !== ActorType.Character) return null;
+          return {
+            ego: actor.proxy.ego,
+            character: actor.proxy,
+            aptitude: AptitudeType.Somatics,
+            special: {
+              type: SpecialTest.Integration,
+              source: localize("resleeve")
+            },
+          };
+        },
+      });
+  }
+
+
+  private startStressTest() {
+    // TODO
   }
 
   private toggleKeptItem(id: string) {
@@ -231,6 +257,12 @@ export class CharacterViewResleeve extends LitElement {
         <character-view-drawer-heading
           >${localize('resleeve')}</character-view-drawer-heading
         >
+
+        <div class="tests">
+        <mwc-button dense unelevated @click=${this.startIntegrationTest}>${localize("integrationTest")}</mwc-button>
+        <mwc-button dense unelevated @click=${this.startStressTest} >${localize("resleevingStress")} ${localize("test")}</mwc-button>
+        </div>
+
         ${this.character.sleeve
           ? this.renderCurrent(this.character.sleeve)
           : ''}

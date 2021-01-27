@@ -4,9 +4,10 @@ import type {
 } from '@src/chat/message-data';
 import { ActorType } from '@src/entities/entity-types';
 import { ConditionType } from '@src/features/conditions';
+import { createEffect } from '@src/features/effects';
 import { addFeature } from '@src/features/feature-helpers';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
-import { SpecialTest } from '@src/features/tags';
+import { createTag, SpecialTest } from '@src/features/tags';
 import {
   createTemporaryFeature,
   TemporaryCondition,
@@ -18,8 +19,8 @@ import {
   isSuccessfullTestResult,
   SuccessTestResult,
 } from '@src/success-test/success-test';
-import { customElement, LitElement, property, html } from 'lit-element';
-import { compact, last, pick, prop } from 'remeda';
+import { customElement, html, property } from 'lit-element';
+import { compact, last, prop } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-special-test.scss';
 
@@ -188,6 +189,33 @@ export class MessageSpecialTest extends MessageElement {
     // TODO Roll 1d6 and have selection
   }
 
+  private applyIntegrationEffects() {
+    const { actor } = this.message;
+    const { testResult } = this;
+    if (actor?.proxy.type === ActorType.Character) {
+      const { proxy: character } = actor;
+      const poorIntegration = createTemporaryFeature.effects({
+        name: `${localize('integration')} ${localize('test')} ${localize(
+          'failure',
+        )}`,
+        effects: [],
+        duration: toMilliseconds({
+          days: 1 + grantedSuperiorResultEffects(testResult),
+        }),
+      });
+      poorIntegration.effects = addFeature(
+        poorIntegration.effects,
+        createEffect.successTest({
+          modifier: -10,
+          tags: [createTag.allActions({})],
+        }),
+      );
+      character.updater
+        .path('data', 'temporary')
+        .commit(addFeature(poorIntegration));
+    }
+  }
+
   private get testResult() {
     return last(this.successTest.states)?.result;
   }
@@ -324,8 +352,36 @@ export class MessageSpecialTest extends MessageElement {
             ?disabled=${isSuccess}
           >
             ${isSuccess
-              ? `${localize('resisted')} ${localize('acuteStress')}, ${localize("suffer")} ${localize("disorientation")}`
+              ? `${localize('resisted')} ${localize('acuteStress')}, ${localize(
+                  'suffer',
+                )} ${localize('disorientation')}`
               : `${localize('apply')} ${localize('acuteStressResponse')}`}
+          </wl-list-item>
+        `;
+
+      case SpecialTest.Integration:
+        return html`
+          <wl-list-item
+            clickable
+            @click=${this.applyIntegrationEffects}
+            ?disabled=${isSuccess}
+          >
+            ${isSuccess
+              ? `${localize('successful')} ${localize('integration')}`
+              : `${localize('apply')} ${localize('poor')} ${localize(
+                  'integration',
+                )} ${localize('effects')}`}
+          </wl-list-item>
+        `;
+
+      case SpecialTest.Addiction:
+        return html`
+          <wl-list-item
+         
+          >
+            ${isSuccess
+              ? `${localize('resisted')} ${localize('addiction')}`
+              : `${localize('addicted')} ${localize('to')} ${this.specialTest.source}`}
           </wl-list-item>
         `;
 
