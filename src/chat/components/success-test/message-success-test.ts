@@ -436,7 +436,13 @@ export class MessageSuccessTest extends MessageElement {
             difference(compact([!task && SuperiorResultEffect.Time])),
             map(
               (effect) => html`
-                <wl-list-item data-tooltip=${localize("DESCRIPTIONS", `SuperiorResult${capitalize(effect)}`)} @mouseover=${tooltip.fromData}>
+                <wl-list-item
+                  data-tooltip=${localize(
+                    'DESCRIPTIONS',
+                    `SuperiorResult${capitalize(effect)}`,
+                  )}
+                  @mouseover=${tooltip.fromData}
+                >
                   <span>${localize(effect)}</span>
                   <span slot="after"
                     >${range(0, granted).map((grant) => {

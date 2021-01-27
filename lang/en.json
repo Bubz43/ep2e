@@ -1438,7 +1438,7 @@
       "SuperiorResultDamage": "Successes inflict more (+1d6) damage (failures miss).",
       "SuperiorResultDetail": "You acquire information that is much more in-depth or nuanced (success) or false (failure).",
       "SuperiorResultQuality": "The work is more exact (success) or more sloppy (failure). This may affect subsequent tests by +/− 10.",
-      "SuperiorResultQuantity": "The test consumes fewer (success) or more (failure) materials or produces fewer or more results",
+      "SuperiorResultQuantity": "The test consumes fewer (success) or more (failure) materials or produces fewer or more results.",
       "SuperiorResultTime": "The action takes a shorter (success) or longer (failure) amount of time, by +/− 25%."
     },
     "FULL": {
