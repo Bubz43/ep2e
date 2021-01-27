@@ -2683,9 +2683,6 @@
                     }
                   ]
                 },
-                "areaEffectNotes": {
-                  "type": "string"
-                },
                 "areaEffectRadius": {
                   "type": "number"
                 },
@@ -2750,7 +2747,6 @@
               },
               "required": [
                 "areaEffect",
-                "areaEffectNotes",
                 "areaEffectRadius",
                 "dosesPerUnit",
                 "explosiveType",

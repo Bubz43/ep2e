@@ -1399,6 +1399,9 @@
     "successful": "Successful",
     "suffer": "Suffer",
     "attackTraitNotes": "Attack Trait Notes",
+    "areaEffectNotes": "Area Effect Notes",
+    "dissipated": "Dissipated",
+        "dissipates": "Dissipates",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

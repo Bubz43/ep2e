@@ -134,7 +134,6 @@ export class MessageAreaEffect extends mix(MessageElement).with(UseWorldTime) {
   }
 
   render() {
-    // TODO Template
     const { areaEffect, nonInteractive } = this;
     const { duration, startTime } = areaEffect;
     const timeState =
@@ -147,6 +146,7 @@ export class MessageAreaEffect extends mix(MessageElement).with(UseWorldTime) {
             label: localize('lasts'),
           })
         : null;
+
     return html`
       ${nonInteractive
         ? ''
@@ -190,10 +190,14 @@ export class MessageAreaEffect extends mix(MessageElement).with(UseWorldTime) {
         : ''}
       ${timeState
         ? html`
-            <span class="remaining-time">
-              ${prettyMilliseconds(timeState.remaining)}
-              ${localize('remaining')}</span
-            >
+            <p class="remaining-time">
+              ${timeState.completed
+                ? localize('dissipated')
+                : html`${localize('dissipates')} ${localize('in')}
+                    <span class="time">
+                      ${prettyMilliseconds(timeState.remaining)}</span
+                    >`}
+            </p>
           `
         : ''}
     `;

@@ -1424,7 +1424,11 @@ type LangEntries =
   | 'suffer'
   | 'acuteStressResponse'
   | 'successful'
-  | 'addicted' | "attackTraitNotes";
+  | 'addicted'
+  | 'attackTraitNotes'
+  | 'areaEffectNotes'
+  | 'dissipated'
+  | 'dissipates';
 type FullNames =
   | 'cog'
   | 'int'

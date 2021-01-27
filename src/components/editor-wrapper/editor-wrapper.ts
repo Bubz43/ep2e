@@ -100,7 +100,11 @@ export class EditorWrapper extends LitElement {
 
   private save(content: string) {
     if (content !== this.content) {
-      this.updateContent(content);
+      try {
+        this.updateContent(content);
+      } catch (error) {
+        console.log(error);
+      }
     }
     this.requestUpdate();
   }

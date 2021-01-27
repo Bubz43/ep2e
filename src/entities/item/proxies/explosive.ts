@@ -151,9 +151,6 @@ export class Explosive
     return this.epData.areaEffectRadius;
   }
 
-  get areaEffectNotes() {
-    return this.epData.areaEffectNotes
-  }
 
   get explosiveType() {
     return this.epData.explosiveType;
@@ -298,7 +295,6 @@ export class Explosive
             templateIDs,
             duration,
             startTime: duration ? currentWorldTimeMS() : undefined,
-            notes: this.areaEffectNotes,
             angle:
               demolition?.type === Demolition.ShapeCentered
                 ? demolition.angle
@@ -310,7 +306,6 @@ export class Explosive
             radius: uniformBlastRadius || this.areaEffectRadius || 1,
             templateIDs,
             duration,
-            notes: this.areaEffectNotes,
             startTime: duration ? currentWorldTimeMS() : undefined,
           }
         : undefined;

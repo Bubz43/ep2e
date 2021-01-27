@@ -54,3 +54,12 @@ p {
   }
 }
 
+
+
+.remaining-time {
+  text-align: center;
+  
+  .time {
+    color: var(--color-text-lighter);
+  }
+}

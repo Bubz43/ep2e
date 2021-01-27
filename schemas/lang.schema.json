@@ -779,6 +779,9 @@
             "areaEffect": {
               "type": "string"
             },
+            "areaEffectNotes": {
+              "type": "string"
+            },
             "areaEffectRadius": {
               "type": "string"
             },
@@ -1527,6 +1530,12 @@
               "type": "string"
             },
             "disorientation": {
+              "type": "string"
+            },
+            "dissipated": {
+              "type": "string"
+            },
+            "dissipates": {
               "type": "string"
             },
             "distance": {
@@ -4753,6 +4762,7 @@
             "aptitudes",
             "arc",
             "areaEffect",
+            "areaEffectNotes",
             "areaEffectRadius",
             "areaEffectType",
             "argonaut",
@@ -5003,6 +5013,8 @@
             "disguise",
             "disorder",
             "disorientation",
+            "dissipated",
+            "dissipates",
             "distance",
             "distracted",
             "distribute",
