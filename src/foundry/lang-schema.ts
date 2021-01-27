@@ -1418,7 +1418,7 @@ type LangEntries =
   | 'blindness'
   | 'entangled'
   | 'breakFree'
-  | 'takeNextFullActionToFlee';
+  | 'takeNextFullActionToFlee' | "bleedingOut" | "regainWits" | 'suffer' | "acuteStressResponse";
 type FullNames =
   | 'cog'
   | 'int'

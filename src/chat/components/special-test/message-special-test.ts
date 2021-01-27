@@ -55,7 +55,6 @@ export class MessageSpecialTest extends MessageElement {
         );
       } else {
         tempConditions.push(
-      
           createTemporaryFeature.condition({
             name: this.specialTest.source,
             duration:
@@ -117,8 +116,7 @@ export class MessageSpecialTest extends MessageElement {
     // TODO apply negative modifier to break out
     const { originalResult } = this.specialTest;
     if (actor?.proxy.type === ActorType.Character) {
-       actor.proxy.addConditions([ConditionType.Grappled]);
-
+      actor.proxy.addConditions([ConditionType.Grappled]);
     }
   }
 
@@ -168,6 +166,26 @@ export class MessageSpecialTest extends MessageElement {
           );
       });
     }
+  }
+
+  private applyUnconsciousness() {
+    const { actor } = this.message;
+    if (actor?.proxy.type === ActorType.Character) {
+      actor.proxy.addConditions([ConditionType.Unconscious]);
+    }
+  }
+
+  private startBleedingOut() {
+    const { actor } = this.message;
+    if (actor?.proxy.type === ActorType.Character) {
+      const { sleeve } = actor.proxy;
+      if (sleeve?.type === ActorType.Biological)
+        sleeve.physicalHealth.startBleedingOut();
+    }
+  }
+
+  private applyAcuteStressResponse() {
+    // TODO Roll 1d6 and have selection
   }
 
   private get testResult() {
@@ -256,6 +274,58 @@ export class MessageSpecialTest extends MessageElement {
             ${isSuccess
               ? `${localize('resisted')} ${localize('stun')}`
               : `${localize('apply')} ${localize('stun')}`}
+          </wl-list-item>
+        `;
+
+      case SpecialTest.Unconsciousness:
+        return html`
+          <wl-list-item
+            clickable
+            @click=${this.applyUnconsciousness}
+            ?disabled=${isSuccess}
+          >
+            ${isSuccess
+              ? `${localize('resisted')} ${localize('unconsciousness')}`
+              : `${localize('apply')} ${localize('unconsciousness')}`}
+          </wl-list-item>
+        `;
+
+      case SpecialTest.BleedingOut:
+        return html`
+          <wl-list-item
+            clickable
+            @click=${this.startBleedingOut}
+            ?disabled=${isSuccess}
+          >
+            ${isSuccess
+              ? `${localize('resisted')} ${localize('bleedingOut')}`
+              : `${localize('start')} ${localize('bleedingOut')}`}
+          </wl-list-item>
+        `;
+
+      case SpecialTest.Disorientation:
+        return html`
+          <wl-list-item>
+            ${isSuccess
+              ? `${localize('resisted')} ${localize('disorientation')}`
+              : `${localize('disorientation')} - ${localize(
+                  'complex',
+                )} ${localize('action')} ${localize('to')} ${localize(
+                  'regainWits',
+                )}`}
+          </wl-list-item>
+        `;
+
+      case SpecialTest.BleedingOut:
+        return html`
+          <wl-list-item
+            clickable
+            @click=${this.applyAcuteStressResponse}
+            ?disabled=${isSuccess}
+          >
+            ${isSuccess
+              ? `${localize('resisted')} ${localize('acuteStress')}, ${localize("suffer")} ${localize("disorientation")}`
+              : `${localize('apply')} ${localize('acuteStressResponse')}`}
           </wl-list-item>
         `;
 

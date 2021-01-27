@@ -106,6 +106,10 @@ class BiologicalHealthBase implements CommonHealth {
     return localImage('icons/health/ragged-wound.svg');
   }
 
+  startBleedingOut() {
+    return this.init.updater.path("bleedingOut").commit(true)
+  }
+
   applyModification(modification: HealthModification) {
     return this.init.updater
       .path('')
