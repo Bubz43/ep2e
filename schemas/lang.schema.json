@@ -545,7 +545,13 @@
             "acuteStress": {
               "type": "string"
             },
+            "acuteStressResponse": {
+              "type": "string"
+            },
             "add": {
+              "type": "string"
+            },
+            "addicted": {
               "type": "string"
             },
             "addiction": {
@@ -972,6 +978,9 @@
               "type": "string"
             },
             "bioware": {
+              "type": "string"
+            },
+            "bleedingOut": {
               "type": "string"
             },
             "blind": {
@@ -3410,6 +3419,9 @@
             "regainAllPools": {
               "type": "string"
             },
+            "regainWits": {
+              "type": "string"
+            },
             "regainedPoints": {
               "type": "string"
             },
@@ -3987,6 +3999,12 @@
               "type": "string"
             },
             "successTest": {
+              "type": "string"
+            },
+            "successful": {
+              "type": "string"
+            },
+            "suffer": {
               "type": "string"
             },
             "summary": {
@@ -4654,7 +4672,9 @@
             "actorLink",
             "actors",
             "acuteStress",
+            "acuteStressResponse",
             "add",
+            "addicted",
             "addiction",
             "addictionMod",
             "additional",
@@ -4797,6 +4817,7 @@
             "biomorph",
             "biotech",
             "bioware",
+            "bleedingOut",
             "blind",
             "blindRoll",
             "blinded",
@@ -5609,6 +5630,7 @@
             "refreshIn",
             "refreshTimer",
             "regainAllPools",
+            "regainWits",
             "regainedPoints",
             "regional",
             "reload",
@@ -5802,6 +5824,8 @@
             "subtype",
             "success",
             "successTest",
+            "successful",
+            "suffer",
             "summary",
             "superior",
             "superiorFailure",
