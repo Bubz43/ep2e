@@ -19,7 +19,7 @@ import {
   SuccessTestResult,
 } from '@src/success-test/success-test';
 import { customElement, LitElement, property, html } from 'lit-element';
-import { last, pick, prop } from 'remeda';
+import { compact, last, pick, prop } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-special-test.scss';
 
@@ -55,11 +55,7 @@ export class MessageSpecialTest extends MessageElement {
         );
       } else {
         tempConditions.push(
-          createTemporaryFeature.condition({
-            name: this.specialTest.source,
-            duration: CommonInterval.Turn * 2,
-            condition: ConditionType.Prone,
-          }),
+      
           createTemporaryFeature.condition({
             name: this.specialTest.source,
             duration:
@@ -75,7 +71,12 @@ export class MessageSpecialTest extends MessageElement {
         );
       }
       character.updater.batchCommits(() => {
-        character.addConditions(tempConditions.map(prop('condition')));
+        character.addConditions(
+          compact([
+            ...tempConditions.map(prop('condition')),
+            !isSuccess && ConditionType.Prone,
+          ]),
+        );
         character.updater
           .path('data', 'temporary')
           .commit((temps) =>
@@ -116,18 +117,8 @@ export class MessageSpecialTest extends MessageElement {
     // TODO apply negative modifier to break out
     const { originalResult } = this.specialTest;
     if (actor?.proxy.type === ActorType.Character) {
-      const { proxy: character } = actor;
-      const entangled = createTemporaryFeature.condition({
-        name: this.specialTest.source,
-        condition: ConditionType.Grappled,
-        duration: -1,
-      });
-      character.updater.batchCommits(() => {
-        character.addConditions([ConditionType.Grappled]);
-        character.updater
-          .path('data', 'temporary')
-          .commit(addFeature(entangled));
-      });
+       actor.proxy.addConditions([ConditionType.Grappled]);
+
     }
   }
 
@@ -252,6 +243,19 @@ export class MessageSpecialTest extends MessageElement {
           <wl-list-item clickable @click=${this.applyShock}>
             ${localize('apply')} ${localize(isSuccess ? 'some' : 'all')}
             ${localize(type)} ${localize('effects')}
+          </wl-list-item>
+        `;
+
+      case SpecialTest.Stun:
+        return html`
+          <wl-list-item
+            clickable
+            @click=${this.applyStun}
+            ?disabled=${isSuccess}
+          >
+            ${isSuccess
+              ? `${localize('resisted')} ${localize('stun')}`
+              : `${localize('apply')} ${localize('stun')}`}
           </wl-list-item>
         `;
 

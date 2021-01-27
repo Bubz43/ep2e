@@ -1,7 +1,7 @@
 import { createMessage } from '@src/chat/create-message';
 import type {
   SpecialTestData,
-  SuccessTestMessageData,
+  SuccessTestMessageData
 } from '@src/chat/message-data';
 import { AptitudeType, PoolType, SuperiorResultEffect } from '@src/data-enums';
 import type { MaybeToken } from '@src/entities/actor/actor';
@@ -12,27 +12,26 @@ import {
   actionTimeframeModifier,
   ActionType,
   createAction,
-  defaultCheckActionSubtype,
+  defaultCheckActionSubtype
 } from '@src/features/actions';
 import { ArmorType } from '@src/features/active-armor';
 import { createEffect, matchesAptitude } from '@src/features/effects';
 import { addFeature } from '@src/features/feature-helpers';
 import { Pool } from '@src/features/pool';
-import { Size, sizeModifiers } from '@src/features/size';
+import { Size } from '@src/features/size';
 import { createTag, SpecialTest } from '@src/features/tags';
 import { createTemporaryFeature } from '@src/features/temporary';
 import { CommonInterval } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { arrayOf } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
-import { clamp, compact, last, map, merge } from 'remeda';
+import { clamp, compact, last, merge } from 'remeda';
 import {
   createSuccessTestModifier,
   grantedSuperiorResultEffects,
   rollSuccessTest,
   SimpleSuccessTestModifier,
-  successTestEffectMap,
-  SuccessTestResult,
+  successTestEffectMap
 } from './success-test';
 import { SuccessTestBase } from './success-test-base';
 

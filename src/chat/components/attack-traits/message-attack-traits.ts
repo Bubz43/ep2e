@@ -89,6 +89,25 @@ export class MessageAttackTraits extends mix(MessageElement).with(
           });
           break;
 
+        case AttackTrait.Knockdown:
+          AptitudeCheckControls.openWindow({
+            entities: { actor: character.actor },
+            getState: (actor) => {
+              if (actor.proxy.type !== ActorType.Character) return null;
+              return {
+                ego: actor.proxy.ego,
+                character: actor.proxy,
+                aptitude: AptitudeType.Somatics,
+                special: {
+                  type: SpecialTest.Knockdown,
+                  source: this.attackTraitInfo.source,
+                  messageRef: this.message.id,
+                },
+              };
+            },
+          });
+          break;
+
         case AttackTrait.Pain:
           AptitudeCheckControls.openWindow({
             entities: { actor: character.actor },
@@ -100,25 +119,6 @@ export class MessageAttackTraits extends mix(MessageElement).with(
                 aptitude: AptitudeType.Willpower,
                 special: {
                   type: SpecialTest.PainResistance,
-                  source: this.attackTraitInfo.source,
-                  messageRef: this.message.id,
-                },
-              };
-            },
-          });
-          break;
-
-        case AttackTrait.Shock:
-          AptitudeCheckControls.openWindow({
-            entities: { actor: character.actor },
-            getState: (actor) => {
-              if (actor.proxy.type !== ActorType.Character) return null;
-              return {
-                ego: actor.proxy.ego,
-                character: actor.proxy,
-                aptitude: AptitudeType.Somatics,
-                special: {
-                  type: SpecialTest.Shock,
                   source: this.attackTraitInfo.source,
                   messageRef: this.message.id,
                 },

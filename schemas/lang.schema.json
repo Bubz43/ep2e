@@ -986,6 +986,9 @@
             "blinding": {
               "type": "string"
             },
+            "blindness": {
+              "type": "string"
+            },
             "blueprint": {
               "type": "string"
             },
@@ -1011,6 +1014,9 @@
               "type": "string"
             },
             "brain": {
+              "type": "string"
+            },
+            "breakFree": {
               "type": "string"
             },
             "breakTool": {
@@ -1406,6 +1412,9 @@
             "defaulting": {
               "type": "string"
             },
+            "defendWith": {
+              "type": "string"
+            },
             "defending": {
               "type": "string"
             },
@@ -1655,6 +1664,9 @@
             "enhancedBehavior": {
               "type": "string"
             },
+            "entangled": {
+              "type": "string"
+            },
             "entangling": {
               "type": "string"
             },
@@ -1731,6 +1743,9 @@
               "type": "string"
             },
             "extraWeapon": {
+              "type": "string"
+            },
+            "extraWeapons": {
               "type": "string"
             },
             "extropian": {
@@ -4052,6 +4067,9 @@
             "takeExtraAction": {
               "type": "string"
             },
+            "takeNextFullActionToFlee": {
+              "type": "string"
+            },
             "takeSV": {
               "type": "string"
             },
@@ -4783,6 +4801,7 @@
             "blindRoll",
             "blinded",
             "blinding",
+            "blindness",
             "blueprint",
             "blueprints",
             "boat",
@@ -4792,6 +4811,7 @@
             "bow",
             "braced",
             "brain",
+            "breakFree",
             "breakTool",
             "brinker",
             "browse",
@@ -4923,6 +4943,7 @@
             "deduct",
             "default",
             "defaulting",
+            "defendWith",
             "defending",
             "defineEnvironment",
             "defineRelationship",
@@ -5006,6 +5027,7 @@
             "energyArmor",
             "enforcer",
             "enhancedBehavior",
+            "entangled",
             "entangling",
             "entity",
             "environment",
@@ -5032,6 +5054,7 @@
             "extraAction",
             "extraTarget",
             "extraWeapon",
+            "extraWeapons",
             "extropian",
             "fRep",
             "fab",
@@ -5805,6 +5828,7 @@
             "take",
             "takeDV",
             "takeExtraAction",
+            "takeNextFullActionToFlee",
             "takeSV",
             "takeTheInitiative",
             "takeTime",
