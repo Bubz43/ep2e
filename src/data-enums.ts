@@ -358,8 +358,8 @@ export enum DrugCategory {
 }
 
 export enum ExplosiveSize {
-  Mini = 'mini',
   Micro = 'micro',
+  Mini = 'mini',
   Standard = 'standard',
 }
 
