@@ -1,3 +1,7 @@
+import {
+  TrackedCombatEntity,
+  updateCombatState,
+} from '@src/combat/combat-tracker';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { Placement } from '@src/components/popover/popover-options';
 import { RechargeType } from '@src/data-enums';
@@ -88,7 +92,28 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
       </sl-popover>
       <h2>${name}</h2>
       <div class="additional">
-        <sl-group class="initiative" label=${localize('initiative')}
+        <sl-group
+          class="initiative"
+          label=${localize('initiative')}
+          @click=${() =>
+            updateCombatState({
+              type: 'addParticipants',
+              payload: [
+                {
+                  name,
+                  entityIdentifiers: this.token?.scene
+                    ? {
+                        type: TrackedCombatEntity.Token,
+                        tokenId: this.token.id,
+                        sceneId: this.token.scene.id,
+                      }
+                    : {
+                        type: TrackedCombatEntity.Actor,
+                        actorId: this.character.actor.id,
+                      },
+                },
+              ],
+            })}
           >${this.character.initiative}</sl-group
         >
         ${this.character.ego.hasStressRoll
@@ -158,7 +183,6 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
         @trash-changed=${this.updateFromChange}
         placement=${Placement.Right}
         .renderOnDemand=${this.renderItemTrash}
-        unpadded
       >
         <mwc-icon-button
           icon="restore_from_trash"

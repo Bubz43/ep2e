@@ -1,3 +1,4 @@
+import type { CombatUpdateAction } from '@src/combat/combat-tracker';
 import type { CombatantSocket } from '@src/combat/combatant-commands';
 import type { ItemOperations } from '@src/entities/actor/actor';
 import type { ChatMessageEP } from '@src/entities/chat-message';
@@ -19,6 +20,7 @@ export type SystemSocketData = {
   actorChanged: ActorIdentifiers;
   messageData: DeepPartial<ChatMessageEP['data']> & { _id: string };
   worldTimeChange: [date: number, change: string];
+  mutateCombat: { action: CombatUpdateAction }
 };
 
 type SystemSocketEvent = keyof SystemSocketData;

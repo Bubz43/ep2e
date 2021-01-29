@@ -23,7 +23,7 @@ export class SceneView extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.toggleHooks('on');
-    this.environmentUnsub = gameSettings.environment.listener(
+    this.environmentUnsub = gameSettings.environment.subscribe(
       this.updateFromHook,
     );
   }

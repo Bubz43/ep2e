@@ -79,7 +79,7 @@ export const subscribeToEnvironmentChange = (callback: () => void) => {
         sub();
       }
     };
-    gameSettings.environment.listener(callSubscriptions);
+    gameSettings.environment.subscribe(callSubscriptions);
     for (const event of [MutateEvent.Update, MutateEvent.Delete]) {
       mutateEntityHook({
         entity: Scene,

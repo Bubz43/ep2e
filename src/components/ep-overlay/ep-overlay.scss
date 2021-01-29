@@ -10,8 +10,8 @@
 :host {
   display: grid;
   grid-template-areas:
-    'nav time app-controls'
-    'scene time chat'
+    'nav singles app-controls'
+    'scene singles chat'
     'controls .. chat'
     'user .. chat';
 
@@ -59,10 +59,13 @@ scene-view {
   grid-area: scene;
 }
 
-world-time-controls {
-  grid-area: time;
+.singles {
+  grid-area: singles;
   align-self: baseline;
   margin: 0.5rem;
+  [clickable] {
+    pointer-events: all;
+  }
 }
 
 .nav-wrapper {

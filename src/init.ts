@@ -3,6 +3,7 @@ import { compact, first } from 'remeda';
 import type { RawEditorSettings } from 'tinymce';
 import { onChatMessageRender } from './chat/message-hooks';
 import { onCombatTrackerRender, onCombatUpdate } from './combat/combat-hooks';
+import { combatSocketHandler } from './combat/combat-tracker';
 import { combatantSocketHandler } from './combat/combatant-commands';
 import { EPOverlay } from './components/ep-overlay/ep-overlay';
 import type { ToolTip } from './components/tooltip/tooltip';
@@ -89,6 +90,8 @@ Hooks.once('init', () => {
       label: `${EP.LocalizationNamespace}.${condition}`,
     })),
   ]);
+
+  addEPSocketHandler("mutateCombat", combatSocketHandler)
 
   applicationHook({
     app: PlayerList,

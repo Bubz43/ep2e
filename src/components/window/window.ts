@@ -571,9 +571,9 @@ export class SlWindow extends LitElement {
           <span>${this.name}</span>
         </div>
 
-        <slot name="header-button"> </slot>
-
         <div class="controls">
+          <slot name="header-button"> </slot>
+
           <wl-list-item
             class="close-button"
             role="button"

@@ -1,8 +1,10 @@
+import { CombatView } from '@src/combat/components/combat-view/combat-view';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
 import { readyCanvas } from '@src/foundry/canvas';
 import { positionApp } from '@src/foundry/foundry-apps';
 import { applicationHook } from '@src/foundry/hook-setups';
+import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
 import { debounceFn } from '@src/utility/decorators';
@@ -198,97 +200,6 @@ export class EPOverlay extends LitElement {
           },
         });
       });
-
-    const chatControls = document.getElementById('chat-controls');
-    if (chatControls) {
-      // const quickTestPopover = new DocumentFragment();
-      // render(
-      //   html`
-      //     <sl-popover
-      //       class="quick-test-popover"
-      //       placement=${Placement.Left}
-      //       .renderOnDemand=${(popover: Popover) =>
-      //         renderSubmitForm({
-      //           submitEmpty: true,
-      //           submitButtonText: localize("start"),
-      //           props: { name: "Quick Test", type: "Custom", target: 50 },
-      //           update: (changed, original) => {
-      //             // TODO: Show as character/roll as a character
-      //             // Add pools from character
-      //             popover.open = false;
-      //             const { name, type, target } = safeMerge(original, changed);
-      //             const test = new SuccessTest({
-      //               name,
-      //               type,
-      //               baseParts: [
-      //                 new TestPart({
-      //                   name,
-      //                   value: target,
-      //                 }),
-      //               ],
-      //             });
-      //             openSuccessTestControls({
-      //               test,
-      //               onReady: async (test, { visibility, noRoll }) => {
-      //                 const {
-      //                   type,
-      //                   name,
-      //                   action,
-      //                   partHalved,
-      //                   activeTimeframeEffects,
-      //                 } = test;
-      //                 await createMessage(
-      //                   {
-      //                     header: {
-      //                       heading: name + (partHalved ? " ÷2" : ""),
-      //                       subheading: type,
-      //                     },
-      //                     action,
-      //                     timeframe: createMessageTimeframeData({
-      //                       action,
-      //                       activeTimeframeEffects,
-      //                       source: `${name} ${localize("test")}`,
-      //                     }),
-      //                     successTestOutcome: {
-      //                       ...test.extractOutcome(noRoll),
-      //                       type: SuccessTestOutcomeType.Standard,
-      //                     },
-      //                   },
-      //                   { visibility }
-      //                 );
-      //               },
-      //               adjacentEl: document.querySelector(
-      //                 "#chat-form"
-      //               ) as HTMLElement,
-      //             });
-      //           },
-      //           fields: ({ name, type, target }) => [
-      //             renderTextField(name, { required: true }),
-      //             renderTextField(type, { required: true }),
-      //             renderNumberField(target, { min: 0, max: 99 }),
-      //           ],
-      //         })}
-      //     >
-      //       <button
-      //         slot="base"
-      //         class="quick-test-button"
-      //         title="${localize("quick")} ${localize("successTest")}"
-      //       >
-      //         ${localize("successTest")
-      //           .toLocaleUpperCase()
-      //           .split(" ")
-      //           .map((word) => word[0])
-      //           .join("")}
-      //       </button>
-      //     </sl-popover>
-      //   `,
-      //   quickTestPopover
-      // );
-      // chatControls.insertBefore(
-      //   quickTestPopover,
-      //   chatControls.firstElementChild
-      // );
-    }
   }
 
   private get foundryViewControls() {
@@ -384,7 +295,10 @@ export class EPOverlay extends LitElement {
             `
           : '',
       )}
-      <world-time-controls></world-time-controls>
+      <div class="singles">
+        <world-time-controls></world-time-controls>
+        <wl-list-item clickable @click=${(CombatView.openWindow)}>${localize("combat")}</wl-list-item>
+      </div>
       ${this.staticElements} ${this.dialogTemplate || ''}
     `;
   }

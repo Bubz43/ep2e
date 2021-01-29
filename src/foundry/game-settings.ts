@@ -48,10 +48,11 @@ const registerSystemSetting = <T extends NonFunction>(
         typeof updated === 'function' ? updated(current()) : updated;
       return game.settings.set(EP.Name, key, setVal) as Promise<T>;
     },
-    listener: (
+    subscribe: (
       callback: (updatedSetting: T) => unknown,
       options?: AddEventListenerOptions,
     ) => {
+      callback(current());
       return addListener(
         window,
         eventKey,
@@ -109,6 +110,12 @@ export const registerEPSettings = once(() => {
   const combatState = registerSystemSetting<CombatData>("combatState", {
     scope: "world",
     config: false,
+    default: {
+      participants: {},
+      rounds: [],
+      round: 0,
+      turn: 0
+    }
   })
 
 

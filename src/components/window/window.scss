@@ -53,6 +53,9 @@
   slot[name='footer'] {
     display: none;
   }
+  .controls {
+    position: static;
+  }
   #header {
     background: alphav(var(--color-grey), 0.2);
     overflow: visible;
@@ -69,6 +72,7 @@
         margin-left: -0.75rem;
         filter: drop-shadow(2px 4px 6px black);
         transition: height 100ms 50ms ease-out;
+        position: static;
       }
     }
     ::slotted([slot='header']) {
@@ -129,14 +133,6 @@ slot[name='footer'] {
     .heading {
       display: none;
     }
-    slot[name='header-button'] {
-      display: flex;
-      position: absolute;
-      top: 0;
-      right: 80px;
-      z-index: 2;
-      background: alphav(var(--color-bg), 0.2);
-    }
     .controls {
       margin-left: none;
       position: absolute;
@@ -165,6 +161,10 @@ slot[name='footer'] {
     display: inline-block;
     filter: drop-shadow(1px 2px 3px black);
     margin-left: 0.25ch;
+    position: absolute;
+    top: 0.25rem;
+    left: 0.25rem;
+    
     & + span {
       grid-column: 2;
     }
@@ -184,6 +184,9 @@ slot[name='footer'] {
   margin-left: 0.5rem;
   display: flex;
   height: 31px;
+  position: absolute;
+  top: 0;
+  right: 0;
   transition: background 75ms ease-in-out;
   --list-item-bg-hover: #{alphav(var(--color-bg), 0.5)};
   --list-item-transition: all 75ms ease-in-out;
