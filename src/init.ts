@@ -72,9 +72,10 @@ Hooks.once('init', () => {
   CONFIG.Scene.entityClass = SceneEP;
   CONFIG.ChatMessage.entityClass = ChatMessageEP;
   CONFIG.ChatMessage.batchSize = 20;
+  
   CONFIG.User.entityClass = UserEP;
-
   CONFIG.Item.entityClass = ItemEP;
+
   Items.unregisterSheet('core', ItemSheet);
   Items.registerSheet(EP.Name, ItemEPSheet, { makeDefault: true });
   CONFIG.TinyMCE.content_css.push(`${EP.Path}/darkMCE.css`);

@@ -1,3 +1,4 @@
+import type { CombatData } from '@src/combat/combat-tracker';
 import { createEnvironment } from '@src/features/environment';
 import { once } from 'remeda';
 import { addListener } from 'weightless/util/event';
@@ -105,10 +106,17 @@ export const registerEPSettings = once(() => {
     },
   );
 
+  const combatState = registerSystemSetting<CombatData>("combatState", {
+    scope: "world",
+    config: false,
+  })
+
+
   return {
     systemMigrationVersion,
     environment,
     credits,
     glitchOnMeshWounds,
+    combatState
   } as const;
 });

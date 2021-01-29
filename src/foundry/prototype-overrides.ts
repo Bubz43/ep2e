@@ -337,6 +337,28 @@ Compendium.prototype._renderInner = async function () {
   return $(frag);
 };
 
+CombatTracker.prototype._contextMenu = function (jqueryEl: JQuery) {
+  jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
+    const item = findMatchingElement(ev, '.directory-item');
+    if (!item) return;
+    const targetEl = $(item);
+    const entryOptions = this._getEntryContextOptions();
+    Hooks.call(
+      `get${this.constructor.name}EntryContext`,
+      this.element,
+      entryOptions,
+    );
+    const convertedOptions = convertMenuOptions(entryOptions, targetEl);
+    const heading = item.textContent?.trim();
+    openMenu({
+      content: convertedOptions,
+      position: ev,
+      header: heading ? { heading } : undefined,
+    });
+  });
+};
+
+
 SidebarDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
   jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
     const entityLi = findMatchingElement(ev, '.entity, .folder .folder-header');
@@ -377,26 +399,6 @@ SidebarDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
   });
 };
 
-CombatTracker.prototype._contextMenu = function (jqueryEl: JQuery) {
-  jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
-    const item = findMatchingElement(ev, '.directory-item');
-    if (!item) return;
-    const targetEl = $(item);
-    const entryOptions = this._getEntryContextOptions();
-    Hooks.call(
-      `get${this.constructor.name}EntryContext`,
-      this.element,
-      entryOptions,
-    );
-    const convertedOptions = convertMenuOptions(entryOptions, targetEl);
-    const heading = item.textContent?.trim();
-    openMenu({
-      content: convertedOptions,
-      position: ev,
-      header: heading ? { heading } : undefined,
-    });
-  });
-};
 
 PlayerList.prototype.activateListeners = function (jqueryEl: JQuery) {
   jqueryEl[0]?.addEventListener('contextmenu', (ev) => {

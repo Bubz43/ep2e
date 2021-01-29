@@ -19,6 +19,7 @@ export type Combatant = {
   players: User[];
   token?: TokenData;
   tokenId: string;
+  img: string;
   _id: string;
   flags: {
     [EP.Name]?: Partial<{

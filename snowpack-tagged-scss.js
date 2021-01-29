@@ -10,11 +10,10 @@ module.exports = function sassPlugin(_, { native, compilerOptions = {} } = {}) {
     ...plugin,
     name: 'snowpack-tagged-scss',
     resolve: {
-      input: ['.scss', 'sass'],
+      input: ['.scss', '.sass'],
       output: ['.css.js', '.css'],
     },
     async load({ filePath, isDev }) {
-      if (filePath.includes(".module")) return;
 
       const index = filePath.indexOf('src');
       const afterSrc = [...filePath.slice(index)].reduce(

@@ -141,6 +141,9 @@ import { MessageFavor } from './chat/components/favor/message-favor';
 import { MeleeAttackControls } from './success-test/components/melee-attack-controls/melee-attack-controls';
 import { SuccessTestSkillSection } from './success-test/components/skill-section/success-test-skill-section';
 import { CompendiumSearch } from './entities/components/compendium-search/compendium-search';
+import { LitVirtualizer } from 'lit-virtualizer';
+import { MessageSpecialTest } from './chat/components/special-test/message-special-test';
+import { CombatView } from './combat/components/combat-view/combat-view';
 
 // Material Components
 import '@material/mwc-button';
@@ -198,8 +201,6 @@ SlWindow;
 CompendiumList;
 UserView;
 CompendiumSearch;
-import { LitVirtualizer } from 'lit-virtualizer';
-import { MessageSpecialTest } from './chat/components/special-test/message-special-test';
 
 // Actor
 ActorCreator;
@@ -314,6 +315,7 @@ EnvironmentForms;
 
 // Combat
 RolledFormulasList;
+CombatView;
 
 // Chat
 MessageHeader;
