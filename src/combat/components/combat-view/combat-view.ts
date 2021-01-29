@@ -1,6 +1,11 @@
 import {
   CombatData,
   CombatParticipant,
+  CombatRoundPhases,
+  LimitedAction,
+  participantsByInitiative,
+  RoundPhase,
+  setupParticipants,
   TrackedCombatEntity,
   updateCombatState,
 } from '@src/combat/combat-tracker';
@@ -14,6 +19,8 @@ import { repeat } from 'lit-html/directives/repeat';
 import { equals, first } from 'remeda';
 import styles from './combat-view.scss';
 import '../participant-item/participant-item';
+import { notEmpty } from '@src/utility/helpers';
+import { idProp } from '@src/features/feature-helpers';
 
 @customElement('combat-view')
 export class CombatView extends LitElement {
@@ -29,7 +36,17 @@ export class CombatView extends LitElement {
 
   @internalProperty() private combatState: CombatData | null = null;
 
-  private participants = new Map<string, CombatParticipant>();
+  // private participants = new Map<string, CombatParticipant>();
+
+  // private tookInitiative = new Map<CombatParticipant, LimitedAction>();
+
+  // private extraActions: {
+  //   participant: CombatParticipant;
+  //   limitedAction: LimitedAction;
+  //   id: string;
+  // }[] = [];
+
+  private phases?: CombatRoundPhases;
 
   static openWindow() {
     openWindow(
@@ -43,42 +60,55 @@ export class CombatView extends LitElement {
   }
 
   connectedCallback() {
-    this.unsub = gameSettings.combatState.subscribe((state) => {
-      const changedPar = !equals(
-        this.combatState?.participants,
-        state.participants,
-      );
-      if (changedPar) {
-        this.participants = new Map(
-          Object.entries(state.participants).map(([id, data]) => {
-            const { entityIdentifiers, ...part } = data;
-
-            const token =
-              entityIdentifiers?.type === TrackedCombatEntity.Token
-                ? findToken(entityIdentifiers)
-                : null;
-
-            const participant: CombatParticipant = {
-              ...part,
-              id,
-              token,
-              actor:
-                token?.actor ??
-                (entityIdentifiers?.type === TrackedCombatEntity.Actor
-                  ? findActor(entityIdentifiers)
-                  : null),
-            };
-            return [id, participant] as const;
-          }).sort(([_, a], [__, b]) => {
-            if (a.initiative == null || b.initiative == null) {
-              return a.name.localeCompare(b.name)
-            }
-            return Number(a.initiative) - Number(b.initiative);
-          }) ,
-        );
+    this.unsub = gameSettings.combatState.subscribe((newState) => {
+      const { combatState } = this;
+      if (
+        !this.phases ||
+        !equals(combatState?.participants, newState.participants)
+      ) {
+        this.phases = setupParticipants(newState.participants, newState.round);
       }
+      // const currentRound = combatState?.rounds[combatState.round];
+      // const newRound = newState?.rounds[newState.round];
+      // const roundChanged = combatState?.round !== newState.round;
+      // if (
+      //   changedParticipants ||
+      //   roundChanged ||
+      //   !equals(currentRound?.tookInitiative, newRound?.tookInitiative)
+      // ) {
+      //   this.tookInitiative = new Map(
+      //     (newRound?.tookInitiative || [])
+      //       .flatMap(({ participantId, limitedAction: type }) => {
+      //         const participant = this.participants.get(participantId);
+      //         if (!participant) return [];
+      //         return [[participant, type]] as const;
+      //       })
+      //       .sort(([a], [b]) => participantsByInitiative(a, b)),
+      //   );
+      // }
+      // if (
+      //   changedParticipants ||
+      //   roundChanged ||
+      //   !equals(currentRound?.extraActions, newRound?.extraActions)
+      // ) {
+      //   this.extraActions = (newRound?.extraActions || [])
+      //     .flatMap(({ participantId, limitedAction, id }) => {
+      //       const participant = this.participants.get(participantId);
+      //       if (!participant) return [];
+      //       return [
+      //         {
+      //           participant,
+      //           limitedAction: limitedAction,
+      //           id,
+      //         },
+      //       ] as const;
+      //     })
+      //     .sort((a, b) =>
+      //       participantsByInitiative(a.participant, b.participant),
+      //     );
+      // }
 
-      this.combatState = state;
+      this.combatState = newState;
     });
     super.connectedCallback();
   }
@@ -91,16 +121,69 @@ export class CombatView extends LitElement {
   }
 
   render() {
+    const round = this.combatState?.round || 0;
+    const {
+      [RoundPhase.TookInitiative]: tookInitiative,
+      [RoundPhase.Normal]: normal,
+      [RoundPhase.ExtraActions]: extraActions,
+    } = this.phases ?? {};
     return html`
-      <sl-animated-list>
-        ${repeat(
-          this.participants,
-          first(),
-          ([_, participant]) => html`
-            <participant-item .participant=${participant}></participant-item>
-          `,
-        )}
-      </sl-animated-list>
+      ${notEmpty(tookInitiative)
+        ? html`
+            <sl-animated-list class="took-initiative">
+              <li class="label">
+                ${localize('took')} ${localize('initiative')}
+              </li>
+              ${repeat(
+                tookInitiative,
+                ([p]) => p.id,
+                ([participant, limitedAction]) =>
+                  html`
+                    <participant-item
+                      .participant=${participant}
+                      limitedAction=${limitedAction}
+                      round=${round}
+                    ></participant-item>
+                  `,
+              )}
+            </sl-animated-list>
+          `
+        : ''}
+      ${notEmpty(normal)
+        ? html`
+            <sl-animated-list class="normal-order">
+              ${repeat(
+                normal,
+                idProp,
+                (participant) =>
+                  html`
+                    <participant-item
+                      .participant=${participant}
+                      round=${round}
+                    ></participant-item>
+                  `,
+              )}
+            </sl-animated-list>
+          `
+        : ''}
+      ${notEmpty(extraActions)
+        ? html`
+            <sl-animated-list class="extra-actions">
+              <li class="label">${localize('extra')} ${localize('actions')}</li>
+              ${repeat(
+                extraActions,
+                ([p, _, actionIndex]) => p.id + actionIndex,
+                ([participant, limitedAction]) => html`
+                  <participant-item
+                    .participant=${participant}
+                    limitedAction=${limitedAction}
+                    round=${round}
+                  ></participant-item>
+                `,
+              )}
+            </sl-animated-list>
+          `
+        : ''}
     `;
   }
 }

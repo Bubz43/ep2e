@@ -1,13 +1,17 @@
-import { createMessage } from '@src/chat/create-message';
+import { createMessage, MessageVisibility } from '@src/chat/create-message';
 import {
+  CombatActionType,
   CombatParticipant,
+  LimitedAction,
   updateCombatState,
 } from '@src/combat/combat-tracker';
 import { ActorType } from '@src/entities/entity-types';
 import { localize } from '@src/foundry/localization';
 import { rollFormula } from '@src/foundry/rolls';
 import { openMenu } from '@src/open-menu';
+import produce from 'immer';
 import { customElement, LitElement, property, html } from 'lit-element';
+import { compact } from 'remeda';
 import styles from './participant-item.scss';
 
 @customElement('participant-item')
@@ -22,26 +26,85 @@ export class ParticipantItem extends LitElement {
 
   @property({ attribute: false }) participant!: CombatParticipant;
 
+  @property({ type: String }) limitedAction?: LimitedAction;
+
+  @property({ type: Boolean }) active = false;
+
+  @property({ type: Number }) round = 0;
+
   private openMenu() {
     if (!this.editable) return;
+    const modifiedRoundActions = this.participant.modifiedTurn?.[this.round];
     openMenu({
       header: { heading: this.participant.name },
-      content: [
+      content: compact([
+        ...(this.participant.actor?.proxy.type === ActorType.Character
+          ? [ // TODO Use pools to modify action
+              {
+                label: localize('takeTheInitiative'),
+                disabled: !!modifiedRoundActions?.tookInitiative,
+                callback: () =>
+                  updateCombatState({
+                    type: CombatActionType.UpdateParticipants,
+                    payload: [
+                      {
+                        id: this.participant.id,
+                        modifiedTurn: produce(
+                          this.participant.modifiedTurn ?? {},
+                          (draft) => {
+                            draft[this.round] = {
+                              ...(draft[this.round] || {}),
+                              tookInitiative: LimitedAction.Mental,
+                            };
+                          },
+                        ),
+                      },
+                    ],
+                  }),
+              },
+              {
+                label: localize('takeExtraAction'),
+                disabled:
+                  (!!modifiedRoundActions?.tookInitiative?.length || 0) >= 2,
+                callback: () => {
+                  updateCombatState({
+                    type: CombatActionType.UpdateParticipants,
+                    payload: [
+                      {
+                        id: this.participant.id,
+                        modifiedTurn: produce(
+                          this.participant.modifiedTurn ?? {},
+                          (draft) => {
+                            draft[this.round] = {
+                              ...(draft[this.round] || {}),
+                              extraActions: compact([
+                                ...(draft[this.round]?.extraActions || []),
+                              ]).concat(LimitedAction.Physical),
+                            };
+                          },
+                        ),
+                      },
+                    ],
+                  });
+                },
+              },
+            ]
+          : []),
+        {
+          label: `${localize(
+            this.participant.initiative == null ? 'roll' : 'reRoll',
+          )} ${localize('initiative')}`,
+          callback: () => this.rollInitiative(),
+        },
         {
           label: localize('delete'),
           callback: () =>
             updateCombatState({
-              type: 'removeParticipants',
+              type: CombatActionType.RemoveParticipants,
               payload: [this.participant.id],
             }),
         },
-        {
-          label: `${localize(
-            this.participant.initiative == null ? 'roll' : 'reRoll',
-          )} ${localize("initiative")}`,
-          callback: () => this.rollInitiative()
-        },
-      ],
+      ]),
     });
   }
 
@@ -59,13 +122,17 @@ export class ParticipantItem extends LitElement {
     if (roll) {
       createMessage({
         roll,
-        flavor: `${this.participant.name} - ${localize("initiative")}`,
+        flavor: localize('initiative'),
         entity: this.participant.token ?? this.participant.actor,
+        alias: this.participant.name,
+        visibility: this.participant.hidden
+          ? MessageVisibility.WhisperGM
+          : MessageVisibility.Public,
       });
     }
 
     updateCombatState({
-      type: 'updateParticipants',
+      type: CombatActionType.UpdateParticipants,
       payload: [
         { id: this.participant.id, initiative: String(roll?.total || 0) },
       ],

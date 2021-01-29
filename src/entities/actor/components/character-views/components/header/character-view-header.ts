@@ -1,4 +1,5 @@
 import {
+  CombatActionType,
   TrackedCombatEntity,
   updateCombatState,
 } from '@src/combat/combat-tracker';
@@ -97,10 +98,11 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
           label=${localize('initiative')}
           @click=${() =>
             updateCombatState({
-              type: 'addParticipants',
+              type: CombatActionType.AddParticipants,
               payload: [
                 {
                   name,
+                  hidden: this.token?.data.hidden,
                   entityIdentifiers: this.token?.scene
                     ? {
                         type: TrackedCombatEntity.Token,
