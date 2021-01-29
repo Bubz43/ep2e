@@ -6,6 +6,7 @@ import {
   participantsByInitiative,
   RoundPhase,
   setupParticipants,
+  setupPhases,
   TrackedCombatEntity,
   updateCombatState,
 } from '@src/combat/combat-tracker';
@@ -46,6 +47,8 @@ export class CombatView extends LitElement {
   //   id: string;
   // }[] = [];
 
+  private participants: CombatParticipant[] = [];
+
   private phases?: CombatRoundPhases;
 
   static openWindow() {
@@ -62,11 +65,22 @@ export class CombatView extends LitElement {
   connectedCallback() {
     this.unsub = gameSettings.combatState.subscribe((newState) => {
       const { combatState } = this;
+      const changedParticipants = !equals(
+        combatState?.participants,
+        newState.participants,
+      );
+      if (changedParticipants) {
+        this.participants = setupParticipants(newState.participants);
+      }
       if (
+        changedParticipants ||
         !this.phases ||
-        !equals(combatState?.participants, newState.participants)
+        !equals(combatState?.round, newState.round)
       ) {
-        this.phases = setupParticipants(newState.participants, newState.round);
+        this.phases = setupPhases(
+          this.participants,
+          newState.round?.index || 0,
+        );
       }
       // const currentRound = combatState?.rounds[combatState.round];
       // const newRound = newState?.rounds[newState.round];
@@ -121,7 +135,7 @@ export class CombatView extends LitElement {
   }
 
   render() {
-    const round = this.combatState?.round || 0;
+    const round = this.combatState?.round?.index || 0;
     const {
       [RoundPhase.TookInitiative]: tookInitiative,
       [RoundPhase.Normal]: normal,

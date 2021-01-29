@@ -28,13 +28,6 @@ type TrackedIdentitfiers =
     }
   | { type: TrackedCombatEntity.Token; tokenId: string; sceneId: string };
 
-type ModifiedTurn = { participantId: string; limitedAction: LimitedAction };
-
-type CombatRoundData = {
-  tookInitiative?: ModifiedTurn[];
-  extraActions?: StringID<ModifiedTurn>[];
-};
-
 export enum LimitedAction {
   Mental,
   Physical,
@@ -70,9 +63,32 @@ export type CombatRoundPhases = {
   [RoundPhase.ExtraActions]: [CombatParticipant, LimitedAction, number][];
 };
 
-export const setupParticipants = (
-  participants: CombatData['participants'],
-  round: number,
+export const setupParticipants = (participants: CombatData["participants"]) => {
+  return  Object.entries(participants).map(([id, data]) => {
+      const { entityIdentifiers, ...part } = data;
+      const token =
+        entityIdentifiers?.type === TrackedCombatEntity.Token
+          ? findToken(entityIdentifiers)
+          : null;
+
+      const participant: CombatParticipant = {
+        ...part,
+        id,
+        token,
+        actor:
+          token?.actor ??
+          (entityIdentifiers?.type === TrackedCombatEntity.Actor
+            ? findActor(entityIdentifiers)
+            : null),
+      };
+      return participant
+      // return [id, participant] as const;
+    })
+};
+
+export const setupPhases = (
+  participants: CombatParticipant[],
+  roundIndex: number,
 ) => {
   const phases: CombatRoundPhases = {
     [RoundPhase.TookInitiative]: [],
@@ -80,25 +96,10 @@ export const setupParticipants = (
     [RoundPhase.ExtraActions]: [],
   };
 
-  for (const [id, data] of Object.entries(participants)) {
-    const { entityIdentifiers, ...part } = data;
-    const token =
-      entityIdentifiers?.type === TrackedCombatEntity.Token
-        ? findToken(entityIdentifiers)
-        : null;
+  for (const participant of participants) {
+    
 
-    const participant: CombatParticipant = {
-      ...part,
-      id,
-      token,
-      actor:
-        token?.actor ??
-        (entityIdentifiers?.type === TrackedCombatEntity.Actor
-          ? findActor(entityIdentifiers)
-          : null),
-    };
-
-    const modified = data.modifiedTurn?.[round];
+    const modified = participant.modifiedTurn?.[roundIndex];
     if (modified?.tookInitiative)
       phases[RoundPhase.TookInitiative].push([
         participant,
@@ -109,8 +110,6 @@ export const setupParticipants = (
     (modified?.extraActions ?? []).forEach((action, index) => {
       phases[RoundPhase.ExtraActions].push([participant, action, index]);
     });
-    for (const extraAction of modified?.extraActions ?? []) {
-    }
   }
 
   phases[RoundPhase.ExtraActions].sort(([a, la], [b, lb]) =>
@@ -120,29 +119,6 @@ export const setupParticipants = (
   phases[RoundPhase.Normal].sort(participantsByInitiative);
 
   return phases;
-  // return new Map(
-  //   Object.entries(participants)
-  //     .map(([id, data]) => {
-  //       const { entityIdentifiers, ...part } = data;
-  //       const token =
-  //         entityIdentifiers?.type === TrackedCombatEntity.Token
-  //           ? findToken(entityIdentifiers)
-  //           : null;
-
-  //       const participant: CombatParticipant = {
-  //         ...part,
-  //         id,
-  //         token,
-  //         actor:
-  //           token?.actor ??
-  //           (entityIdentifiers?.type === TrackedCombatEntity.Actor
-  //             ? findActor(entityIdentifiers)
-  //             : null),
-  //       };
-  //       return [id, participant] as const;
-  //     })
-  //     .sort(([_, a], [__, b]) => participantsByInitiative(a, b)),
-  // );
 };
 
 const participantsByInitiativeOrAction = (
@@ -170,9 +146,11 @@ export type CombatParticipant = Omit<
 
 export type CombatData = {
   participants: Record<string, CombatParticipantData>;
-  round: number;
-  phase: RoundPhase;
-  phaseTurn: [];
+  round?: {
+    phase: RoundPhase;
+    phaseTurn: [];
+    index: number;
+  };
 };
 
 export enum CombatActionType {

@@ -26,7 +26,7 @@ export class ParticipantItem extends LitElement {
 
   @property({ attribute: false }) participant!: CombatParticipant;
 
-  @property({ type: String }) limitedAction?: LimitedAction;
+  @property({ type: Number }) limitedAction?: LimitedAction;
 
   @property({ type: Boolean }) active = false;
 
@@ -65,7 +65,7 @@ export class ParticipantItem extends LitElement {
               {
                 label: localize('takeExtraAction'),
                 disabled:
-                  (!!modifiedRoundActions?.tookInitiative?.length || 0) >= 2,
+                  (!!modifiedRoundActions?.extraActions?.length || 0) >= 2,
                 callback: () => {
                   updateCombatState({
                     type: CombatActionType.UpdateParticipants,

@@ -112,8 +112,6 @@ export const registerEPSettings = once(() => {
     config: false,
     default: {
       participants: {},
-      rounds: [],
-      round: 0,
     }
   })
 
