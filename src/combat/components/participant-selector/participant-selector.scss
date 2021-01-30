@@ -7,5 +7,20 @@
 
 :host {
     display: block;
-    
+    padding: 0.25rem;
+}
+
+mwc-tab-bar {
+    --mdc-theme-primary: var(--color-grey);
+}
+
+mwc-list {
+    height: 400px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+submit-button {
+    padding: 0.25rem;
+    width: 100%;
 }

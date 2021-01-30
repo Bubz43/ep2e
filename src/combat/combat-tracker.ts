@@ -1,20 +1,22 @@
+import { createMessage, MessageVisibility } from '@src/chat/create-message';
 import type { ActorEP } from '@src/entities/actor/actor';
-import { findToken, findActor } from '@src/entities/find-entities';
+import { ActorType } from '@src/entities/entity-types';
+import { findActor, findToken } from '@src/entities/find-entities';
 import {
-  addFeature,
-  StringID,
-  uniqueStringID,
+  uniqueStringID
 } from '@src/features/feature-helpers';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
+import { localize } from '@src/foundry/localization';
 import {
   gmIsConnected,
   isGamemaster,
-  userCan,
+  userCan
 } from '@src/foundry/misc-helpers';
+import { rollFormula } from '@src/foundry/rolls';
 import { emitEPSocket, SystemSocketData } from '@src/foundry/socket';
 import { gameSettings } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
-import produce, { Draft } from 'immer';
+import produce from 'immer';
 import type { WritableDraft } from 'immer/dist/internal';
 
 export enum TrackedCombatEntity {
@@ -35,7 +37,6 @@ export enum LimitedAction {
 }
 
 export enum RoundPhase {
-  TookInitiative = 1,
   Normal,
   ExtraActions,
 }
@@ -60,16 +61,35 @@ type CombatParticipantData = {
 };
 
 export type CombatRoundPhases = {
-  [RoundPhase.TookInitiative]: {
-    participant: CombatParticipant;
-    limitedAction: LimitedAction;
-  }[];
-  [RoundPhase.Normal]: { participant: CombatParticipant }[];
+  [RoundPhase.Normal]: { participant: CombatParticipant, tookInitiative?: LimitedAction | null }[];
   [RoundPhase.ExtraActions]: {
     participant: CombatParticipant;
     limitedActions: [LimitedAction] | [LimitedAction, LimitedAction];
   }[];
+  someTookInitiative: boolean;
 };
+
+export const rollParticipantInitiative = async (participant: CombatParticipant) => {
+   const bonus =
+     participant.actor?.proxy.type === ActorType.Character
+       ? participant.actor.proxy.initiative
+       : 0;
+   const roll = rollFormula(`1d6 + ${bonus}`);
+
+   if (roll) {
+     await createMessage({
+       roll,
+       flavor: localize('initiative'),
+       entity: participant.token ?? participant.actor,
+       alias: participant.name,
+       visibility: participant.hidden
+         ? MessageVisibility.WhisperGM
+         : MessageVisibility.Public,
+     });
+   }
+
+   return { id: participant.id, initiative: String(roll?.total || 0) };
+}
 
 export const setupParticipants = (participants: CombatData['participants']) => {
   return Object.entries(participants).map(([id, data]) => {
@@ -98,9 +118,9 @@ export const setupPhases = (
   roundIndex: number,
 ) => {
   const phases: CombatRoundPhases = {
-    [RoundPhase.TookInitiative]: [],
     [RoundPhase.Normal]: [],
     [RoundPhase.ExtraActions]: [],
+    someTookInitiative: false
   };
 
   for (const participant of participants) {
@@ -109,12 +129,8 @@ export const setupPhases = (
 
       console.log(tookInitiative, extraActions);
 
-    if (tookInitiative) {
-      phases[RoundPhase.TookInitiative].push({
-        participant,
-        limitedAction: tookInitiative,
-      });
-    } else phases[RoundPhase.Normal].push({ participant });
+      phases[RoundPhase.Normal].push({ participant, tookInitiative })
+    phases.someTookInitiative ||= !!tookInitiative
 
     if (notEmpty(extraActions)) {
       phases[RoundPhase.ExtraActions].push({
@@ -125,22 +141,28 @@ export const setupPhases = (
   }
 
   phases[RoundPhase.ExtraActions].sort(participantsByInitiative);
-  phases[RoundPhase.TookInitiative].sort(participantsByInitiative);
   phases[RoundPhase.Normal].sort(participantsByInitiative);
 
   return phases;
 };
 
 export const participantsByInitiative = (
-  { participant: a }: { participant: CombatParticipant },
-  { participant: b }: { participant: CombatParticipant },
+  {
+    participant: a,
+    tookInitiative: initA,
+  }: { participant: CombatParticipant; tookInitiative?: LimitedAction | null },
+  {
+    participant: b,
+    tookInitiative: initB,
+  }: { participant: CombatParticipant; tookInitiative?: LimitedAction | null },
 ) => {
+  if (initA && !initB) return -1;
+  if (initB && !initA) return 1;
   if (a.initiative != null && b.initiative == null) return -1;
   if (b.initiative != null && a.initiative == null) return 1;
   return a.initiative === b.initiative
     ? a.name.localeCompare(b.name)
     : Number(b.initiative) - Number(a.initiative);
-    
 };
 
 export type CombatParticipant = Omit<
@@ -214,7 +236,7 @@ const updateReducer = produce(
 
         case CombatActionType.Reset: {
           draft.round = 0;
-          draft.phase = RoundPhase.TookInitiative,
+          draft.phase = RoundPhase.Normal,
           draft.turn = [0];
           draft.participants = {};
           break;

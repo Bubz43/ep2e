@@ -3,6 +3,7 @@ import {
   CombatActionType,
   CombatParticipant,
   LimitedAction,
+  rollParticipantInitiative,
   updateCombatState,
 } from '@src/combat/combat-tracker';
 import { ActorType } from '@src/entities/entity-types';
@@ -26,7 +27,7 @@ export class ParticipantItem extends LitElement {
 
   @property({ attribute: false }) participant!: CombatParticipant;
 
-  @property({ type: Number }) limitedAction?: LimitedAction;
+  @property({ type: Number }) limitedAction?: LimitedAction | null;
 
   @property({ type: Boolean, reflect: true }) active = false;
 
@@ -117,30 +118,10 @@ export class ParticipantItem extends LitElement {
     });
   }
 
-  private rollInitiative() {
-    const bonus =
-      this.participant.actor?.proxy.type === ActorType.Character
-        ? this.participant.actor.proxy.initiative
-        : 0;
-    const roll = rollFormula(`1d6 + ${bonus}`);
-
-    if (roll) {
-      createMessage({
-        roll,
-        flavor: localize('initiative'),
-        entity: this.participant.token ?? this.participant.actor,
-        alias: this.participant.name,
-        visibility: this.participant.hidden
-          ? MessageVisibility.WhisperGM
-          : MessageVisibility.Public,
-      });
-    }
-
+  private async rollInitiative() {
     updateCombatState({
       type: CombatActionType.UpdateParticipants,
-      payload: [
-        { id: this.participant.id, initiative: String(roll?.total || 0) },
-      ],
+      payload: [await rollParticipantInitiative(this.participant)],
     });
   }
 

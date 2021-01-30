@@ -7,7 +7,8 @@ import { TabsMixin } from '@src/components/mixins/tabs-mixin';
 import { readyCanvas } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
 import { notEmpty } from '@src/utility/helpers';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, LitElement, property, html, PropertyValues } from 'lit-element';
+import { live } from 'lit-html/directives/live';
 import mix from 'mix-with/lib';
 import styles from './participant-selector.scss';
 
@@ -25,9 +26,21 @@ export class ParticipantSelector extends mix(LitElement).with(
 
   private toAdd = new Set<Actor | Token>();
 
+  disconnectedCallback() {
+      this.toAdd.clear();
+      super.disconnectedCallback();
+  }
+
+
+  protected changeTab() {
+      this.toAdd.clear();
+      super.changeTab()
+  }
+
   private toggleToAdd(entity: Actor | Token) {
     this.toAdd.delete(entity) || this.toAdd.add(entity);
-    this.requestUpdate();
+    const submitButton = this.renderRoot.querySelector("submit-button");
+    if (submitButton) submitButton.complete = notEmpty(this.toAdd)
   }
 
   private addToCombat() {
@@ -38,6 +51,7 @@ export class ParticipantSelector extends mix(LitElement).with(
           entity instanceof Token
             ? {
                 name: entity.name,
+                hidden: entity.data.hidden,
                 entityIdentifiers: entity.scene && {
                   type: TrackedCombatEntity.Token,
                   sceneId: entity.scene.id,
@@ -53,6 +67,8 @@ export class ParticipantSelector extends mix(LitElement).with(
               },
         ),
       });
+      this.toAdd.clear();
+      this.requestUpdate()
     }
   }
 
@@ -75,15 +91,15 @@ export class ParticipantSelector extends mix(LitElement).with(
 
   private renderActors() {
     return html`
-      <mwc-list>
+      <mwc-list multi>
         ${[...game.actors.values()].map((actor) => {
           if (!actor.owner) return '';
           return html`
             <mwc-check-list-item
               graphic="medium"
               twoline
-              ?selected=${this.toAdd.has(actor)}
               @click=${() => this.toggleToAdd(actor)}
+              ?selected=${live(this.toAdd.has(actor))}
             >
               <img slot="graphic" src=${actor.img} />
               <span>${actor.name}</span>
@@ -97,16 +113,17 @@ export class ParticipantSelector extends mix(LitElement).with(
   }
 
   private renderTokens() {
+
     return html`
-      <mwc-list>
+      <mwc-list multi>
         ${readyCanvas()?.tokens?.placeables.map((token) => {
           if (!token.owner) return '';
           return html`
             <mwc-check-list-item
               graphic="medium"
               ?twoline=${!!token.actor}
-              ?selected=${this.toAdd.has(token)}
               @click=${() => this.toggleToAdd(token)}
+              ?selected=${live(this.toAdd.has(token))}
             >
               <img slot="graphic" src=${token.data.img} />
               <span>${token.data.name}</span>
@@ -126,7 +143,7 @@ export class ParticipantSelector extends mix(LitElement).with(
   private renderSubmitButton() {
     return html`<submit-button
       label=${localize('add')}
-      ?complete=${notEmpty(this.toAdd)}
+      ?complete=${live(notEmpty(this.toAdd))}
       @click=${this.addToCombat}
     ></submit-button>`;
   }

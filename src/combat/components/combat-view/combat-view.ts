@@ -3,6 +3,7 @@ import {
   CombatData,
   CombatParticipant,
   CombatRoundPhases,
+  rollParticipantInitiative,
   RoundPhase,
   setupParticipants,
   setupPhases,
@@ -14,6 +15,7 @@ import { localize } from '@src/foundry/localization';
 import { gameSettings } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, internalProperty, LitElement } from 'lit-element';
+import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
 import { equals } from 'remeda';
 import '../participant-item/participant-item';
@@ -116,14 +118,8 @@ export class CombatView extends LitElement {
             if (!this.roundState) {
               const normalLength = this.phases?.[RoundPhase.Normal].length;
               this.roundState = {
-                phase: normalLength
-                  ? RoundPhase.Normal
-                  : RoundPhase.ExtraActions,
-                turn: [
-                  normalLength
-                    ? normalLength - 1
-                    : this.phases![RoundPhase.TookInitiative].length - 1,
-                ],
+                phase: RoundPhase.Normal,
+                turn: [normalLength || 0],
               };
             }
           } else if (phase === RoundPhase.Normal) {
@@ -141,34 +137,8 @@ export class CombatView extends LitElement {
             if (!this.roundState) {
               const extraLength = this.phases?.[RoundPhase.ExtraActions].length;
               this.roundState = {
-                phase: extraLength
-                  ? RoundPhase.ExtraActions
-                  : RoundPhase.TookInitiative,
-                turn: [
-                  extraLength
-                    ? 0
-                    : this.phases![RoundPhase.TookInitiative].length - 1,
-                ],
-              };
-            }
-          } else if (phase === RoundPhase.TookInitiative) {
-            for (const change of [0, 1, -1]) {
-              const newIndex = turnIndex + change;
-              const active = this.phases?.[phase][newIndex];
-              if (active) {
-                this.roundState = {
-                  phase,
-                  turn: [newIndex],
-                };
-                break;
-              }
-            }
-            if (!this.roundState) {
-              this.roundState = {
-                phase: this.phases?.[RoundPhase.Normal].length
-                  ? RoundPhase.Normal
-                  : RoundPhase.ExtraActions,
-                turn: [0],
+                phase: RoundPhase.ExtraActions,
+                turn: [extraLength || 0],
               };
             }
           }
@@ -189,8 +159,7 @@ export class CombatView extends LitElement {
   }
 
   private advanceTurn() {
-    const { phase = RoundPhase.TookInitiative, turn = [] } =
-      this.roundState ?? {};
+    const { phase = RoundPhase.Normal, turn = [] } = this.roundState ?? {};
     const [turnIndex = 0, extraIndex = 0] = turn;
     if (phase === RoundPhase.ExtraActions && extraIndex !== 1) {
       const current = this.phases?.[phase][turnIndex];
@@ -218,11 +187,9 @@ export class CombatView extends LitElement {
       });
       return;
     }
-    for (const nextPhase of [
-      RoundPhase.TookInitiative,
-      RoundPhase.Normal,
-      RoundPhase.ExtraActions,
-    ].filter((n) => n > phase)) {
+    for (const nextPhase of [RoundPhase.Normal, RoundPhase.ExtraActions].filter(
+      (n) => n > phase,
+    )) {
       const next = this.phases?.[nextPhase][0];
       if (next) {
         updateCombatState({
@@ -244,7 +211,7 @@ export class CombatView extends LitElement {
       type: CombatActionType.UpdateRound,
       payload: {
         round: (this.combatState?.round || 0) + 1,
-        phase: RoundPhase.TookInitiative,
+        phase: RoundPhase.Normal,
         turn: [0],
       },
     });
@@ -254,11 +221,7 @@ export class CombatView extends LitElement {
     let turn = 0;
     let phase = RoundPhase.ExtraActions;
     const phases = setupPhases(this.participants, this.combatState!.round - 1);
-    for (const newPhase of [
-      RoundPhase.ExtraActions,
-      RoundPhase.Normal,
-      RoundPhase.TookInitiative,
-    ]) {
+    for (const newPhase of [RoundPhase.ExtraActions, RoundPhase.Normal]) {
       const turns = phases[newPhase];
       if (turns.length) {
         turn = turns.length - 1;
@@ -309,7 +272,6 @@ export class CombatView extends LitElement {
     for (const previousPhase of [
       RoundPhase.ExtraActions,
       RoundPhase.Normal,
-      RoundPhase.TookInitiative,
     ].filter((n) => n < phase)) {
       const previous = this.phases?.[previousPhase];
       if (previous?.length) {
@@ -333,12 +295,27 @@ export class CombatView extends LitElement {
     });
   }
 
+  private async rollAllInitiatives() {
+    const payload: { id: string; initiative: string }[] = [];
+    for (const participant of this.participants) {
+      if (participant.initiative == null) {
+        payload.push(await rollParticipantInitiative(participant));
+      }
+    }
+    if (notEmpty(payload)) {
+      updateCombatState({
+        type: CombatActionType.UpdateParticipants,
+        payload,
+      });
+    }
+  }
+
   render() {
     const { round = 0 } = this.combatState ?? {};
     const {
-      [RoundPhase.TookInitiative]: tookInitiative,
       [RoundPhase.Normal]: normal,
       [RoundPhase.ExtraActions]: extraActions,
+      someTookInitiative,
     } = this.phases ?? {};
     const { phase, turn = [] } = this.roundState ?? {};
     const [turnIndex = 0, extraIndex = 0] = turn;
@@ -353,6 +330,17 @@ export class CombatView extends LitElement {
       );
     return html`
       <header>
+        ${isGM
+          ? html`
+              <mwc-icon-button
+                @click=${this.rollAllInitiatives}
+                ?disabled=${this.participants.every(
+                  (p) => p.initiative != null,
+                )}
+                icon="casino"
+              ></mwc-icon-button>
+            `
+          : ''}
         ${round ? html` <h2>${localize('round')} ${round}</h2> ` : ''}
         <sl-popover
           .renderOnDemand=${() =>
@@ -362,41 +350,25 @@ export class CombatView extends LitElement {
         </sl-popover>
       </header>
       <div class="phases">
-        ${notEmpty(tookInitiative)
-          ? html`
-              <sl-animated-list class="took-initiative">
-                <li class="label">
-                  ${localize('took')} ${localize('initiative')}
-                </li>
-                ${repeat(
-                  tookInitiative,
-                  ({ participant }) => participant.id,
-                  ({ participant, limitedAction }) =>
-                    html`
-                      <participant-item
-                        .participant=${participant}
-                        limitedAction=${limitedAction}
-                        round=${round}
-                        ?active=${phase === RoundPhase.TookInitiative &&
-                        participant === activeParticipant}
-                        turn=${turnIndex}
-                      ></participant-item>
-                    `,
-                )}
-              </sl-animated-list>
-            `
-          : ''}
+ 
         ${notEmpty(normal)
           ? html`
               <sl-animated-list class="normal-order">
+                ${someTookInitiative
+                  ? html`<li class="label">
+                      ${localize('took')} ${localize('initiative')}
+                    </li>`
+                  : ''}
                 ${repeat(
                   normal,
                   ({ participant }) => participant.id,
-                  ({ participant }) =>
+                  ({ participant, tookInitiative }) =>
                     html`
                       <participant-item
+                      class=${tookInitiative ? "took-initiative" : ""}
                         .participant=${participant}
                         round=${round}
+                        .limitedAction=${tookInitiative}
                         ?active=${phase === RoundPhase.Normal &&
                         activeParticipant === participant}
                         turn=${turnIndex}
@@ -438,12 +410,12 @@ export class CombatView extends LitElement {
               <mwc-icon-button
                 @click=${this.previousRound}
                 icon="arrow_backward"
-                ?disabled=${!round}
+                ?disabled=${round <= 1}
               ></mwc-icon-button>
               <mwc-icon-button
                 @click=${this.previousTurn}
                 icon="chevron_left"
-                ?disabled=${!round}
+                ?disabled=${round <= 1 && turnIndex === 0}
               ></mwc-icon-button>
               <mwc-button
                 dense
@@ -468,7 +440,7 @@ export class CombatView extends LitElement {
               <mwc-icon-button
                 @click=${this.previousTurn}
                 icon="chevron_left"
-                ?disabled=${!editableActive}
+                ?disabled=${!editableActive || turnIndex === 0}
               ></mwc-icon-button>
               <mwc-button
                 dense
