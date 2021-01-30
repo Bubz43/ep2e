@@ -13,6 +13,7 @@ import {
 } from '@src/foundry/misc-helpers';
 import { emitEPSocket, SystemSocketData } from '@src/foundry/socket';
 import { gameSettings } from '@src/init';
+import { notEmpty } from '@src/utility/helpers';
 import produce, { Draft } from 'immer';
 import type { WritableDraft } from 'immer/dist/internal';
 
@@ -50,7 +51,7 @@ type CombatParticipantData = {
     number,
     | {
         tookInitiative?: LimitedAction | null;
-        extraActions?: LimitedAction[] | null;
+        extraActions?: [LimitedAction] | [LimitedAction, LimitedAction] | null;
       }
     | undefined
     | null
@@ -58,32 +59,37 @@ type CombatParticipantData = {
 };
 
 export type CombatRoundPhases = {
-  [RoundPhase.TookInitiative]: [CombatParticipant, LimitedAction][];
-  [RoundPhase.Normal]: CombatParticipant[];
-  [RoundPhase.ExtraActions]: [CombatParticipant, LimitedAction, number][];
+  [RoundPhase.TookInitiative]: {
+    participant: CombatParticipant;
+    limitedAction: LimitedAction;
+  }[];
+  [RoundPhase.Normal]: { participant: CombatParticipant }[];
+  [RoundPhase.ExtraActions]: {
+    participant: CombatParticipant;
+    limitedActions: [LimitedAction] | [LimitedAction, LimitedAction];
+  }[];
 };
 
-export const setupParticipants = (participants: CombatData["participants"]) => {
-  return  Object.entries(participants).map(([id, data]) => {
-      const { entityIdentifiers, ...part } = data;
-      const token =
-        entityIdentifiers?.type === TrackedCombatEntity.Token
-          ? findToken(entityIdentifiers)
-          : null;
+export const setupParticipants = (participants: CombatData['participants']) => {
+  return Object.entries(participants).map(([id, data]) => {
+    const { entityIdentifiers, ...part } = data;
+    const token =
+      entityIdentifiers?.type === TrackedCombatEntity.Token
+        ? findToken(entityIdentifiers)
+        : null;
 
-      const participant: CombatParticipant = {
-        ...part,
-        id,
-        token,
-        actor:
-          token?.actor ??
-          (entityIdentifiers?.type === TrackedCombatEntity.Actor
-            ? findActor(entityIdentifiers)
-            : null),
-      };
-      return participant
-      // return [id, participant] as const;
-    })
+    const participant: CombatParticipant = {
+      ...part,
+      id,
+      token,
+      actor:
+        token?.actor ??
+        (entityIdentifiers?.type === TrackedCombatEntity.Actor
+          ? findActor(entityIdentifiers)
+          : null),
+    };
+    return participant;
+  });
 };
 
 export const setupPhases = (
@@ -97,44 +103,38 @@ export const setupPhases = (
   };
 
   for (const participant of participants) {
-    
+    const { tookInitiative, extraActions } =
+      participant.modifiedTurn?.[roundIndex] ?? {};
 
-    const modified = participant.modifiedTurn?.[roundIndex];
-    if (modified?.tookInitiative)
-      phases[RoundPhase.TookInitiative].push([
+    if (tookInitiative) {
+      phases[RoundPhase.TookInitiative].push({
         participant,
-        modified.tookInitiative,
-      ]);
-    else phases[RoundPhase.Normal].push(participant);
+        limitedAction: tookInitiative,
+      });
+    } else phases[RoundPhase.Normal].push({ participant });
 
-    (modified?.extraActions ?? []).forEach((action, index) => {
-      phases[RoundPhase.ExtraActions].push([participant, action, index]);
-    });
+    if (notEmpty(extraActions)) {
+      phases[RoundPhase.ExtraActions].push({
+        participant,
+        limitedActions: extraActions,
+      });
+    }
   }
 
-  phases[RoundPhase.ExtraActions].sort(([a, la], [b, lb]) =>
-    participantsByInitiativeOrAction([a, la], [b, lb]),
-  );
-  phases[RoundPhase.TookInitiative].sort(participantsByInitiativeOrAction);
+  phases[RoundPhase.ExtraActions].sort(participantsByInitiative);
+  phases[RoundPhase.TookInitiative].sort(participantsByInitiative);
   phases[RoundPhase.Normal].sort(participantsByInitiative);
 
   return phases;
 };
 
-const participantsByInitiativeOrAction = (
-  [a, la]: [CombatParticipant, LimitedAction],
-  [b, lb]: [CombatParticipant, LimitedAction],
-) => {
-  return a.initiative == null || b.initiative == null
-    ? a.name.localeCompare(b.name)
-    : Number(a.initiative) - Number(b.initiative) || la - lb;
-};
-
 export const participantsByInitiative = (
-  a: CombatParticipant,
-  b: CombatParticipant,
+  { participant: a }: { participant: CombatParticipant },
+  { participant: b }: { participant: CombatParticipant },
 ) => {
-  return a.initiative == null || b.initiative == null
+  if (a.initiative != null && b.initiative == null) return -1;
+  if (b.initiative != null && a.initiative == null) return 1;
+  return a.initiative === b.initiative
     ? a.name.localeCompare(b.name)
     : Number(a.initiative) - Number(b.initiative);
 };
@@ -146,11 +146,10 @@ export type CombatParticipant = Omit<
 
 export type CombatData = {
   participants: Record<string, CombatParticipantData>;
-  round?: {
-    phase: RoundPhase;
-    phaseTurn: [];
-    index: number;
-  };
+  round: number;
+  phase: RoundPhase;
+  turn: [number] | [number, number];
+  started: boolean;
 };
 
 export enum CombatActionType {

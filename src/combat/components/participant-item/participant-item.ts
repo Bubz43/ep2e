@@ -39,7 +39,8 @@ export class ParticipantItem extends LitElement {
       header: { heading: this.participant.name },
       content: compact([
         ...(this.participant.actor?.proxy.type === ActorType.Character
-          ? [ // TODO Use pools to modify action
+          ? [
+              // TODO Use pools to modify action
               {
                 label: localize('takeTheInitiative'),
                 disabled: !!modifiedRoundActions?.tookInitiative,
@@ -75,11 +76,13 @@ export class ParticipantItem extends LitElement {
                         modifiedTurn: produce(
                           this.participant.modifiedTurn ?? {},
                           (draft) => {
+                            const actions = draft[this.round]?.extraActions;
                             draft[this.round] = {
                               ...(draft[this.round] || {}),
-                              extraActions: compact([
-                                ...(draft[this.round]?.extraActions || []),
-                              ]).concat(LimitedAction.Physical),
+                              extraActions:
+                                actions?.length === 1
+                                  ? [...actions, LimitedAction.Physical]
+                                  : [LimitedAction.Physical],
                             };
                           },
                         ),
