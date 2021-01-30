@@ -3,15 +3,11 @@ import { renderAutoForm } from '@src/components/form/forms';
 import { AptitudeType } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import {
-  Sleeve,
-  ownedSleeves,
-  isSleeve,
-  formattedSleeveInfo,
+  formattedSleeveInfo, isSleeve, ownedSleeves, Sleeve
 } from '@src/entities/actor/sleeves';
 import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisition';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
-import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import { idProp } from '@src/features/feature-helpers';
 import { SpecialTest } from '@src/features/tags';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
@@ -21,17 +17,16 @@ import { addEPSocketHandler } from '@src/foundry/socket';
 import { EP } from '@src/foundry/system';
 import { tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
-import { openMenu } from '@src/open-menu';
 import { AptitudeCheckControls } from '@src/success-test/components/aptitude-check-controls/aptitude-check-controls';
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
-  LitElement,
-  property,
+
+
   html,
-  internalProperty,
+  internalProperty, LitElement,
+  property
 } from 'lit-element';
-import { render } from 'lit-html';
 import { repeat } from 'lit-html/directives/repeat';
 import {
   compact,
@@ -41,7 +36,7 @@ import {
   mapValues,
   pipe,
   reject,
-  sortBy,
+  sortBy
 } from 'remeda';
 import styles from './character-view-resleeve.scss';
 

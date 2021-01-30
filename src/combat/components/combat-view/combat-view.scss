@@ -10,8 +10,13 @@
     flex-flow: column;
     width: 350px;
     height: 400px;
+    min-height: 400px;
     --mdc-icon-button-size: 2rem;
-    position: relative;
+}
+
+header {
+    display: flex;
+    justify-content: space-around;;
 }
 
 footer {
@@ -48,5 +53,10 @@ header {
         font-weight: normal;
         font-size: larger;
         text-align: center;
+        margin: 0;
     }
+}
+
+.phases {
+    position: relative;
 }

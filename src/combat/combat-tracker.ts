@@ -47,6 +47,7 @@ type CombatParticipantData = {
   entityIdentifiers?: TrackedIdentitfiers | null;
   hidden?: boolean;
   defeated?: boolean;
+  userId?: string;
   modifiedTurn?: Record<
     number,
     | {

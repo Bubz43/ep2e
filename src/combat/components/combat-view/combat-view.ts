@@ -3,26 +3,22 @@ import {
   CombatData,
   CombatParticipant,
   CombatRoundPhases,
-  LimitedAction,
-  participantsByInitiative,
   RoundPhase,
   setupParticipants,
   setupPhases,
-  TrackedCombatEntity,
   updateCombatState,
 } from '@src/combat/combat-tracker';
 import { openWindow } from '@src/components/window/window-controls';
 import { ResizeOption } from '@src/components/window/window-options';
-import { findActor, findToken } from '@src/entities/find-entities';
 import { localize } from '@src/foundry/localization';
 import { gameSettings } from '@src/init';
+import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, internalProperty, LitElement } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { difference, equals, first } from 'remeda';
-import styles from './combat-view.scss';
+import { equals } from 'remeda';
 import '../participant-item/participant-item';
-import { notEmpty } from '@src/utility/helpers';
-import { idProp } from '@src/features/feature-helpers';
+import '../participant-selector/participant-selector';
+import styles from './combat-view.scss';
 
 @customElement('combat-view')
 export class CombatView extends LitElement {
@@ -226,7 +222,7 @@ export class CombatView extends LitElement {
       RoundPhase.TookInitiative,
       RoundPhase.Normal,
       RoundPhase.ExtraActions,
-    ].filter(n => n > phase)) {
+    ].filter((n) => n > phase)) {
       const next = this.phases?.[nextPhase][0];
       if (next) {
         updateCombatState({
@@ -257,84 +253,84 @@ export class CombatView extends LitElement {
   private previousRound() {
     let turn = 0;
     let phase = RoundPhase.ExtraActions;
-    const phases = setupPhases(this.participants, this.combatState!.round - 1)
+    const phases = setupPhases(this.participants, this.combatState!.round - 1);
     for (const newPhase of [
       RoundPhase.ExtraActions,
       RoundPhase.Normal,
       RoundPhase.TookInitiative,
     ]) {
-      const turns = phases[newPhase]
+      const turns = phases[newPhase];
       if (turns.length) {
-        turn = turns.length - 1
+        turn = turns.length - 1;
         phase = newPhase;
         break;
       }
     }
-      updateCombatState({
-        type: CombatActionType.UpdateRound,
-        payload: {
-          round: (this.combatState?.round || 1) - 1,
-          phase,
-          turn: [turn, 1],
-        },
-      });
-  }
-
-  private previousTurn() {
-  const { phase = RoundPhase.ExtraActions, turn = [] } =
-    this.roundState ?? {};
-  const [turnIndex = 0, extraIndex = 0] = turn;
-  if (phase === RoundPhase.ExtraActions && extraIndex === 1) {
-    const current = this.phases?.[phase][turnIndex];
-    if (current?.limitedActions.length === 2) {
-      updateCombatState({
-        type: CombatActionType.UpdateRound,
-        payload: {
-          round: this.combatState?.round || 0,
-          phase,
-          turn: [turnIndex, 0],
-        },
-      });
-      return;
-    }
-  }
-  const previous = this.phases?.[phase][turnIndex - 1];
-  if (previous) {
     updateCombatState({
       type: CombatActionType.UpdateRound,
       payload: {
-        round: this.combatState?.round || 0,
+        round: (this.combatState?.round || 1) - 1,
         phase,
-        turn: [turnIndex - 1, 1],
+        turn: [turn, 1],
       },
     });
-    return;
   }
-  for (const previousPhase of [
-    RoundPhase.ExtraActions,
-    RoundPhase.Normal,
-    RoundPhase.TookInitiative,
-  ].filter((n) => n < phase)) {
-    const previous = this.phases?.[previousPhase];
-    if (previous?.length) {
+
+  private previousTurn() {
+    const { phase = RoundPhase.ExtraActions, turn = [] } =
+      this.roundState ?? {};
+    const [turnIndex = 0, extraIndex = 0] = turn;
+    if (phase === RoundPhase.ExtraActions && extraIndex === 1) {
+      const current = this.phases?.[phase][turnIndex];
+      if (current?.limitedActions.length === 2) {
+        updateCombatState({
+          type: CombatActionType.UpdateRound,
+          payload: {
+            round: this.combatState?.round || 0,
+            phase,
+            turn: [turnIndex, 0],
+          },
+        });
+        return;
+      }
+    }
+    const previous = this.phases?.[phase][turnIndex - 1];
+    if (previous) {
       updateCombatState({
         type: CombatActionType.UpdateRound,
         payload: {
           round: this.combatState?.round || 0,
-          phase: previousPhase,
-          turn: [previous.length - 1],
+          phase,
+          turn: [turnIndex - 1, 1],
         },
       });
       return;
     }
-  }
-  this.previousRound();
+    for (const previousPhase of [
+      RoundPhase.ExtraActions,
+      RoundPhase.Normal,
+      RoundPhase.TookInitiative,
+    ].filter((n) => n < phase)) {
+      const previous = this.phases?.[previousPhase];
+      if (previous?.length) {
+        updateCombatState({
+          type: CombatActionType.UpdateRound,
+          payload: {
+            round: this.combatState?.round || 0,
+            phase: previousPhase,
+            turn: [previous.length - 1],
+          },
+        });
+        return;
+      }
+    }
+    this.previousRound();
   }
 
   private reset() {
     updateCombatState({
-      type: CombatActionType.Reset
-    })
+      type: CombatActionType.Reset,
+    });
   }
 
   render() {
@@ -346,110 +342,153 @@ export class CombatView extends LitElement {
     } = this.phases ?? {};
     const { phase, turn = [] } = this.roundState ?? {};
     const [turnIndex = 0, extraIndex = 0] = turn;
-    const { isGM } = game.user;
+    const { isGM, id } = game.user;
+    const activeParticipant =
+      round && phase && this.phases?.[phase][turnIndex]?.participant;
+    const editableActive =
+      activeParticipant &&
+      !!(
+        isGM ||
+        (activeParticipant.actor?.owner ?? activeParticipant.userId === id)
+      );
     return html`
       <header>
         ${round ? html` <h2>${localize('round')} ${round}</h2> ` : ''}
-      </header>
-      ${notEmpty(tookInitiative)
-        ? html`
-            <sl-animated-list class="took-initiative">
-              <li class="label">
-                ${localize('took')} ${localize('initiative')}
-              </li>
-              ${repeat(
-                tookInitiative,
-                ({ participant }) => participant.id,
-                ({ participant, limitedAction }, index) =>
-                  html`
-                    <participant-item
-                      .participant=${participant}
-                      limitedAction=${limitedAction}
-                      round=${round}
-                      ?active=${!!round &&
-                      phase === RoundPhase.TookInitiative &&
-                      index === turnIndex}
-                      turn=${turnIndex}
-                    ></participant-item>
-                  `,
-              )}
-            </sl-animated-list>
-          `
-        : ''}
-      ${notEmpty(normal)
-        ? html`
-            <sl-animated-list class="normal-order">
-              ${repeat(
-                normal,
-                ({ participant }) => participant.id,
-                ({ participant }, index) =>
-                  html`
-                    <participant-item
-                      .participant=${participant}
-                      round=${round}
-                      ?active=${!!round &&
-                      phase === RoundPhase.Normal &&
-                      index === turnIndex}
-                      turn=${turnIndex}
-                    ></participant-item>
-                  `,
-              )}
-            </sl-animated-list>
-          `
-        : ''}
-      ${notEmpty(extraActions)
-        ? html`
-            <sl-animated-list class="extra-actions">
-              <li class="label">${localize('extra')} ${localize('actions')}</li>
-              ${repeat(
-                extraActions,
-                ({ participant }) => participant.id,
-                ({ participant, limitedActions }, index) =>
-                  limitedActions.map(
-                    (limitedAction, actionIndex) => html`<participant-item
-                      .participant=${participant}
-                      limitedAction=${limitedAction}
-                      round=${round}
-                      ?active=${!!round &&
-                      phase === RoundPhase.ExtraActions &&
-                      index === turnIndex &&
-                      actionIndex === extraIndex}
-                      turn=${turnIndex}
-                    ></participant-item>`,
-                  ),
-              )}
-            </sl-animated-list>
-          `
-        : ''}
-
-      <footer>
-        <mwc-icon-button
-          @click=${this.previousRound}
-          icon="arrow_backward"
-          ?disabled=${!isGM || !round}
-        ></mwc-icon-button>
-        <mwc-icon-button
-          @click=${this.previousTurn}
-          icon="chevron_left"
-          ?disabled=${!isGM || !round}
-        ></mwc-icon-button>
-        <mwc-button @click=${round ? this.reset : this.advanceRound}
-          >${localize(round ? 'end' : 'start')}
-          ${localize('combat')}</mwc-button
+        <sl-popover
+          .renderOnDemand=${() =>
+            html`<participant-selector></participant-selector>`}
         >
-        <mwc-icon-button
-          @click=${this.advanceTurn}
-          icon="chevron_right"
-          ?disabled=${!isGM || !round}
-        ></mwc-icon-button>
-        <mwc-icon-button
-          @click=${this.advanceRound}
-          icon="arrow_forward"
-          ?disabled=${!isGM || !round}
-        ></mwc-icon-button>
+          <mwc-icon-button slot="base" icon="add"></mwc-icon-button>
+        </sl-popover>
+      </header>
+      <div class="phases">
+        ${notEmpty(tookInitiative)
+          ? html`
+              <sl-animated-list class="took-initiative">
+                <li class="label">
+                  ${localize('took')} ${localize('initiative')}
+                </li>
+                ${repeat(
+                  tookInitiative,
+                  ({ participant }) => participant.id,
+                  ({ participant, limitedAction }) =>
+                    html`
+                      <participant-item
+                        .participant=${participant}
+                        limitedAction=${limitedAction}
+                        round=${round}
+                        ?active=${phase === RoundPhase.TookInitiative &&
+                        participant === activeParticipant}
+                        turn=${turnIndex}
+                      ></participant-item>
+                    `,
+                )}
+              </sl-animated-list>
+            `
+          : ''}
+        ${notEmpty(normal)
+          ? html`
+              <sl-animated-list class="normal-order">
+                ${repeat(
+                  normal,
+                  ({ participant }) => participant.id,
+                  ({ participant }) =>
+                    html`
+                      <participant-item
+                        .participant=${participant}
+                        round=${round}
+                        ?active=${phase === RoundPhase.Normal &&
+                        activeParticipant === participant}
+                        turn=${turnIndex}
+                      ></participant-item>
+                    `,
+                )}
+              </sl-animated-list>
+            `
+          : ''}
+        ${notEmpty(extraActions)
+          ? html`
+              <sl-animated-list class="extra-actions">
+                <li class="label">
+                  ${localize('extra')} ${localize('actions')}
+                </li>
+                ${repeat(
+                  extraActions,
+                  ({ participant }) => participant.id,
+                  ({ participant, limitedActions }, index) =>
+                    limitedActions.map(
+                      (limitedAction, actionIndex) => html`<participant-item
+                        .participant=${participant}
+                        limitedAction=${limitedAction}
+                        round=${round}
+                        ?active=${phase === RoundPhase.ExtraActions &&
+                        participant === activeParticipant &&
+                        actionIndex === extraIndex}
+                        turn=${turnIndex}
+                      ></participant-item>`,
+                    ),
+                )}
+              </sl-animated-list>
+            `
+          : ''}
+      </div>
+      <footer>
+        ${isGM
+          ? html`
+              <mwc-icon-button
+                @click=${this.previousRound}
+                icon="arrow_backward"
+                ?disabled=${!round}
+              ></mwc-icon-button>
+              <mwc-icon-button
+                @click=${this.previousTurn}
+                icon="chevron_left"
+                ?disabled=${!round}
+              ></mwc-icon-button>
+              <mwc-button
+                dense
+                @click=${round ? this.reset : this.advanceRound}
+                ?disabled=${!round && this.participants.length === 0}
+                >${localize(round ? 'end' : 'start')}
+                ${localize('combat')}</mwc-button
+              >
+              <mwc-icon-button
+                @click=${this.advanceTurn}
+                icon="chevron_right"
+                ?disabled=${!round}
+              ></mwc-icon-button>
+              <mwc-icon-button
+                @click=${this.advanceRound}
+                icon="arrow_forward"
+                ?disabled=${!round}
+              ></mwc-icon-button>
+            `
+          : round
+          ? html`
+              <mwc-icon-button
+                @click=${this.previousTurn}
+                icon="chevron_left"
+                ?disabled=${!editableActive}
+              ></mwc-icon-button>
+              <mwc-button
+                dense
+                @click=${this.advanceTurn}
+                ?disabled=${!editableActive}
+              >
+                ${localize('end')} ${localize('turn')}</mwc-button
+              >
+              <mwc-icon-button
+                @click=${this.advanceTurn}
+                icon="chevron_right"
+                ?disabled=${!editableActive}
+              ></mwc-icon-button>
+            `
+          : ''}
       </footer>
     `;
   }
+
+  private renderSelector() {}
 }
 
 declare global {

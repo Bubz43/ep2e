@@ -32,8 +32,11 @@ export class ParticipantItem extends LitElement {
 
   @property({ type: Number }) round = 0;
 
-  @property({ type: Number}) turn = 0;
+  @property({ type: Number }) turn = 0;
 
+  private get editable() {
+    return game.user.isGM || (this.participant.actor?.owner ?? this.participant.userId === game.user.id);
+  }
 
   private openMenu() {
     if (!this.editable) return;
@@ -41,7 +44,8 @@ export class ParticipantItem extends LitElement {
     openMenu({
       header: { heading: this.participant.name },
       content: compact([
-        ...(this.participant.actor?.proxy.type === ActorType.Character && this.round
+        ...(this.participant.actor?.proxy.type === ActorType.Character &&
+        this.round
           ? [
               // TODO Use pools to modify action
               {
@@ -68,8 +72,7 @@ export class ParticipantItem extends LitElement {
               },
               {
                 label: localize('takeExtraAction'),
-                disabled:
-                  (!!modifiedRoundActions?.extraActions?.length || 0) >= 2,
+                disabled: modifiedRoundActions?.extraActions?.length === 2,
                 callback: () => {
                   updateCombatState({
                     type: CombatActionType.UpdateParticipants,
@@ -114,10 +117,6 @@ export class ParticipantItem extends LitElement {
     });
   }
 
-  private get editable() {
-    return game.user.isGM || this.participant.actor?.owner;
-  }
-
   private rollInitiative() {
     const bonus =
       this.participant.actor?.proxy.type === ActorType.Character
@@ -151,7 +150,10 @@ export class ParticipantItem extends LitElement {
     const { token, actor } = participant;
     return html`
       <wl-list-item @contextmenu=${this.openMenu}>
-      <mwc-icon-button slot="before"><img src=${token?.data.img || actor?.data.img || CONST.DEFAULT_TOKEN} /></mwc-icon-button>
+        <mwc-icon-button slot="before"
+          ><img
+            src=${token?.data.img || actor?.data.img || CONST.DEFAULT_TOKEN}
+        /></mwc-icon-button>
         <span>${participant.name}</span>
         ${participant.initiative
           ? html` <span slot="after">${participant.initiative}</span> `
