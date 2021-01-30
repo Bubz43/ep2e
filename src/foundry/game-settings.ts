@@ -113,7 +113,7 @@ export const registerEPSettings = once(() => {
     default: {
       participants: {},
       round: 0,
-      phase: RoundPhase.TookInitiative,
+      phase: RoundPhase.Normal,
       turn: [0],
     }
   })

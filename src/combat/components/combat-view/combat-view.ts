@@ -14,7 +14,13 @@ import { ResizeOption } from '@src/components/window/window-options';
 import { localize } from '@src/foundry/localization';
 import { gameSettings } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
-import { customElement, html, internalProperty, LitElement } from 'lit-element';
+import {
+  customElement,
+  html,
+  internalProperty,
+  LitElement,
+  PropertyValues,
+} from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
 import { equals } from 'remeda';
@@ -156,6 +162,15 @@ export class CombatView extends LitElement {
     this.unsub?.();
     this.unsub = null;
     super.disconnectedCallback();
+  }
+
+  updated(changedProps: PropertyValues<this>) {
+    requestAnimationFrame(() => {
+      this.renderRoot
+        .querySelector('participant-item[active]')
+        ?.scrollIntoView({ block: 'end', behavior: 'smooth' });
+    });
+    super.updated(changedProps);
   }
 
   private advanceTurn() {
@@ -328,6 +343,11 @@ export class CombatView extends LitElement {
         isGM ||
         (activeParticipant.actor?.owner ?? activeParticipant.userId === id)
       );
+    const noPrevTurn =
+      round <= 1 &&
+      (phase === RoundPhase.ExtraActions
+        ? !normal?.length && !(turnIndex + extraIndex)
+        : turnIndex === 0);
     return html`
       <header>
         ${isGM
@@ -350,7 +370,6 @@ export class CombatView extends LitElement {
         </sl-popover>
       </header>
       <div class="phases">
- 
         ${notEmpty(normal)
           ? html`
               <sl-animated-list class="normal-order">
@@ -365,7 +384,7 @@ export class CombatView extends LitElement {
                   ({ participant, tookInitiative }) =>
                     html`
                       <participant-item
-                      class=${tookInitiative ? "took-initiative" : ""}
+                        class=${tookInitiative ? 'took-initiative' : ''}
                         .participant=${participant}
                         round=${round}
                         .limitedAction=${tookInitiative}
@@ -415,7 +434,7 @@ export class CombatView extends LitElement {
               <mwc-icon-button
                 @click=${this.previousTurn}
                 icon="chevron_left"
-                ?disabled=${round <= 1 && turnIndex === 0}
+                ?disabled=${noPrevTurn}
               ></mwc-icon-button>
               <mwc-button
                 dense
@@ -440,7 +459,7 @@ export class CombatView extends LitElement {
               <mwc-icon-button
                 @click=${this.previousTurn}
                 icon="chevron_left"
-                ?disabled=${!editableActive || turnIndex === 0}
+                ?disabled=${!editableActive || noPrevTurn}
               ></mwc-icon-button>
               <mwc-button
                 dense

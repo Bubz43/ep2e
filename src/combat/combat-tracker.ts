@@ -37,7 +37,7 @@ export enum LimitedAction {
 }
 
 export enum RoundPhase {
-  Normal,
+  Normal = 1,
   ExtraActions,
 }
 
