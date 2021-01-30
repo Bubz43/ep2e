@@ -2,10 +2,31 @@
 @use "scss/mixins" as *;
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 :host {
-    display: block;
-    
+  display: block;
+}
+
+:host([active]) {
+  wl-list-item {
+    background: alphav(var(--color-secondary), 0.25);
+  }
+}
+
+wl-list-item {
+  height: 40px;
+  padding: 0 0.5rem;
+
+  mwc-icon-button[slot='before'] {
+    --mdc-icon-size: 38px;
+    --mdc-icon-button-size: 40px;
+    margin-right: 0.75rem;
+  }
+
+  span[slot='after'] {
+    min-width: 2rem;
+    text-align: center;
+  }
 }

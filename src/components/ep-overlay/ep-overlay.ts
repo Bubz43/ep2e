@@ -1,3 +1,7 @@
+import {
+  CombatActionType,
+  updateCombatState,
+} from '@src/combat/combat-tracker';
 import { CombatView } from '@src/combat/components/combat-view/combat-view';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
@@ -297,7 +301,15 @@ export class EPOverlay extends LitElement {
       )}
       <div class="singles">
         <world-time-controls></world-time-controls>
-        <wl-list-item clickable @click=${(CombatView.openWindow)}>${localize("combat")}</wl-list-item>
+        <wl-list-item clickable @click=${CombatView.openWindow}
+          >${localize('combat')}</wl-list-item
+        >
+        <mwc-button
+          style="pointer-events: all"
+          unelevated
+          @click=${() => updateCombatState({ type: CombatActionType.Reset })}
+          >Reset</mwc-button
+        >
       </div>
       ${this.staticElements} ${this.dialogTemplate || ''}
     `;

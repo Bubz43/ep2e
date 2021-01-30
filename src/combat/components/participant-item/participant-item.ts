@@ -28,9 +28,12 @@ export class ParticipantItem extends LitElement {
 
   @property({ type: Number }) limitedAction?: LimitedAction;
 
-  @property({ type: Boolean }) active = false;
+  @property({ type: Boolean, reflect: true }) active = false;
 
   @property({ type: Number }) round = 0;
+
+  @property({ type: Number}) turn = 0;
+
 
   private openMenu() {
     if (!this.editable) return;
@@ -38,12 +41,12 @@ export class ParticipantItem extends LitElement {
     openMenu({
       header: { heading: this.participant.name },
       content: compact([
-        ...(this.participant.actor?.proxy.type === ActorType.Character
+        ...(this.participant.actor?.proxy.type === ActorType.Character && this.round
           ? [
               // TODO Use pools to modify action
               {
                 label: localize('takeTheInitiative'),
-                disabled: !!modifiedRoundActions?.tookInitiative,
+                disabled: !!modifiedRoundActions?.tookInitiative || !!this.turn,
                 callback: () =>
                   updateCombatState({
                     type: CombatActionType.UpdateParticipants,
@@ -145,8 +148,10 @@ export class ParticipantItem extends LitElement {
   render() {
     const { participant } = this;
     const { editable } = this;
+    const { token, actor } = participant;
     return html`
       <wl-list-item @contextmenu=${this.openMenu}>
+      <mwc-icon-button slot="before"><img src=${token?.data.img || actor?.data.img || CONST.DEFAULT_TOKEN} /></mwc-icon-button>
         <span>${participant.name}</span>
         ${participant.initiative
           ? html` <span slot="after">${participant.initiative}</span> `

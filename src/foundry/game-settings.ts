@@ -115,7 +115,6 @@ export const registerEPSettings = once(() => {
       round: 0,
       phase: RoundPhase.TookInitiative,
       turn: [0],
-      started: false
     }
   })
 

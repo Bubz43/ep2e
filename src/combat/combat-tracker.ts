@@ -30,12 +30,12 @@ type TrackedIdentitfiers =
   | { type: TrackedCombatEntity.Token; tokenId: string; sceneId: string };
 
 export enum LimitedAction {
-  Mental,
+  Mental = 1,
   Physical,
 }
 
 export enum RoundPhase {
-  TookInitiative,
+  TookInitiative = 1,
   Normal,
   ExtraActions,
 }
@@ -106,6 +106,8 @@ export const setupPhases = (
     const { tookInitiative, extraActions } =
       participant.modifiedTurn?.[roundIndex] ?? {};
 
+      console.log(tookInitiative, extraActions);
+
     if (tookInitiative) {
       phases[RoundPhase.TookInitiative].push({
         participant,
@@ -136,7 +138,8 @@ export const participantsByInitiative = (
   if (b.initiative != null && a.initiative == null) return 1;
   return a.initiative === b.initiative
     ? a.name.localeCompare(b.name)
-    : Number(a.initiative) - Number(b.initiative);
+    : Number(b.initiative) - Number(a.initiative);
+    
 };
 
 export type CombatParticipant = Omit<
@@ -149,14 +152,14 @@ export type CombatData = {
   round: number;
   phase: RoundPhase;
   turn: [number] | [number, 0 | 1];
-  started: boolean;
 };
 
 export enum CombatActionType {
   AddParticipants,
   UpdateParticipants,
   RemoveParticipants,
-  UpdateRound
+  UpdateRound,
+  Reset,
 }
 
 export type CombatUpdateAction =
@@ -171,10 +174,14 @@ export type CombatUpdateAction =
   | {
       type: CombatActionType.RemoveParticipants;
       payload: string[];
-    } | {
-      type: CombatActionType.UpdateRound,
-      payload: Pick<CombatData, "phase" | "round" | "turn">
     }
+  | {
+      type: CombatActionType.UpdateRound;
+      payload: Pick<CombatData, 'phase' | 'round' | 'turn'>;
+    }
+  | {
+      type: CombatActionType.Reset;
+    } 
 
 const updateReducer = produce(
   (draft: WritableDraft<CombatData>, action: CombatUpdateAction) => {
@@ -199,6 +206,18 @@ const updateReducer = produce(
           if (participant) Object.assign(participant, change);
         });
         break;
+
+        case CombatActionType.UpdateRound:
+          Object.assign(draft, action.payload)
+          break;
+
+        case CombatActionType.Reset: {
+          draft.round = 0;
+          draft.phase = RoundPhase.TookInitiative,
+          draft.turn = [0];
+          draft.participants = {};
+          break;
+        }
     }
   },
 );

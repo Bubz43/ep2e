@@ -25,6 +25,7 @@ import { localize } from './localization';
 import { convertMenuOptions } from './misc-helpers';
 import { readyCanvas } from './canvas';
 import { activeTokenStatusEffects } from './token-helpers';
+import type { Combatant } from '@src/combat/combatant';
 
 Entity.prototype.matchRegexp = function (regex: RegExp) {
   return regex.test(this.name);
@@ -96,10 +97,10 @@ PlayerConfig.prototype.getData = function () {
 //   }
 // };
 
-// Combat.prototype._getInitiativeFormula = ({ actor }: Combatant) =>
-//   actor?.agent.type === ActorType.Character
-//     ? `1d6 + ${actor.agent.initiative}`
-//     : "0";
+Combat.prototype._getInitiativeFormula = ({ actor }: Combatant) =>
+  actor?.proxy.type === ActorType.Character
+    ? `1d6 + ${actor.proxy.initiative}`
+    : "0";
 
 const { _onPreventDragstart } = Game.prototype;
 Game.prototype._onPreventDragstart = function (ev: DragEvent) {

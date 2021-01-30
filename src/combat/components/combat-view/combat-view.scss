@@ -6,7 +6,47 @@
 }
 
 :host {
-    display: block;
+    display: flex;
+    flex-flow: column;
     width: 350px;
-    min-height: 400px;
+    height: 400px;
+    --mdc-icon-button-size: 2rem;
+    position: relative;
+}
+
+footer {
+    display: flex;
+    align-items: center;
+    margin-top: auto;
+    padding: 0.25rem 1rem;
+    position: sticky;
+    bottom: 0;
+    background: var(--color-bg);
+
+    justify-content: space-between;
+    --mdc-theme-primary: var(--color-grey);
+}
+
+.label {
+    list-style: none;
+    padding: 0.25rem 0.5rem;
+    text-transform: uppercase;
+    color: var(--color-text-lighter);
+    letter-spacing: 1px;
+}
+
+.took-initiative {
+    background: alphav(var(--color-grey), 0.1);
+    border-bottom: 1px solid var(--color-border);
+}
+
+sl-animated-list {
+    padding: 0.25rem 0;
+}
+header {
+    h2 {
+        font-weight: normal;
+        font-size: larger;
+        text-align: center;
+    }
 }
