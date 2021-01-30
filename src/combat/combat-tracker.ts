@@ -148,7 +148,7 @@ export type CombatData = {
   participants: Record<string, CombatParticipantData>;
   round: number;
   phase: RoundPhase;
-  turn: [number] | [number, number];
+  turn: [number] | [number, 0 | 1];
   started: boolean;
 };
 
@@ -156,8 +156,7 @@ export enum CombatActionType {
   AddParticipants,
   UpdateParticipants,
   RemoveParticipants,
-  TakeInitiative,
-  ExtraAction,
+  UpdateRound
 }
 
 export type CombatUpdateAction =
@@ -172,7 +171,10 @@ export type CombatUpdateAction =
   | {
       type: CombatActionType.RemoveParticipants;
       payload: string[];
-    };
+    } | {
+      type: CombatActionType.UpdateRound,
+      payload: Pick<CombatData, "phase" | "round" | "turn">
+    }
 
 const updateReducer = produce(
   (draft: WritableDraft<CombatData>, action: CombatUpdateAction) => {

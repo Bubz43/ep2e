@@ -1,4 +1,5 @@
 import {
+  CombatActionType,
   CombatData,
   CombatParticipant,
   CombatRoundPhases,
@@ -37,16 +38,6 @@ export class CombatView extends LitElement {
 
   @internalProperty() private combatState: CombatData | null = null;
 
-  // private participants = new Map<string, CombatParticipant>();
-
-  // private tookInitiative = new Map<CombatParticipant, LimitedAction>();
-
-  // private extraActions: {
-  //   participant: CombatParticipant;
-  //   limitedAction: LimitedAction;
-  //   id: string;
-  // }[] = [];
-
   private participants: CombatParticipant[] = [];
 
   private phases?: CombatRoundPhases | null;
@@ -72,7 +63,9 @@ export class CombatView extends LitElement {
         newState.participants,
       );
       if (changedParticipants) {
+        console.time('setupParticipants');
         this.participants = setupParticipants(newState.participants);
+        console.timeEnd('setupParticipants');
       }
 
       if (newState.started === false) this.phases = null;
@@ -83,7 +76,9 @@ export class CombatView extends LitElement {
           combatState?.round !== newState.round;
 
         if (changedPhases) {
+          console.time('setupPhases');
           this.phases = setupPhases(this.participants, newState.round);
+          console.timeEnd('setupPhases');
         }
 
         if (
@@ -93,7 +88,7 @@ export class CombatView extends LitElement {
         ) {
           const { phase, turn } = newState;
           const [turnIndex, extraActionIndex = 0] = turn;
-
+          console.time('setupRoundState');
           do {
             if (phase === RoundPhase.ExtraActions) {
               const phaseData = this.phases?.[phase] ?? [];
@@ -109,7 +104,10 @@ export class CombatView extends LitElement {
                   if (sibling) {
                     this.roundState = {
                       phase,
-                      turn: [newIndex, sibling.limitedActions.length - 1],
+                      turn: [
+                        newIndex,
+                        (sibling.limitedActions.length - 1) as 1 | 0,
+                      ],
                     };
                     break;
                   }
@@ -177,6 +175,7 @@ export class CombatView extends LitElement {
               }
             }
           } while (!this.roundState);
+          console.timeEnd('setupRoundState');
         }
       }
 
@@ -190,6 +189,50 @@ export class CombatView extends LitElement {
     this.unsub?.();
     this.unsub = null;
     super.disconnectedCallback();
+  }
+
+  private advanceTurn() {
+    const { phase = RoundPhase.TookInitiative, turn = [] } =
+      this.roundState ?? {};
+    const [turnIndex = 0, extraIndex = 0] = turn;
+    if (phase === RoundPhase.ExtraActions && extraIndex !== 1) {
+      const current = this.phases?.[phase][turnIndex];
+      if (current?.limitedActions.length === 2) {
+        updateCombatState({
+          type: CombatActionType.UpdateRound,
+          payload: {
+            round: this.combatState?.round || 0,
+            phase,
+            turn: [turnIndex, 1],
+          },
+        });
+        return;
+      }
+    }
+    const next = this.phases?.[phase][turnIndex + 1];
+    if (next) {
+      updateCombatState({
+        type: CombatActionType.UpdateRound,
+        payload: {
+          round: this.combatState?.round || 0,
+          phase,
+          turn: [turnIndex + 1],
+        },
+      });
+      return;
+    }
+    this.advanceRound();
+  }
+
+  private advanceRound() {
+    updateCombatState({
+      type: CombatActionType.UpdateRound,
+      payload: {
+        round: (this.combatState?.round || 0) + 1,
+        phase: RoundPhase.TookInitiative,
+        turn: [0],
+      },
+    });
   }
 
   render() {
