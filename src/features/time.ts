@@ -1,9 +1,10 @@
 import type { ActorEP } from '@src/entities/actor/actor';
 import { ActorType } from '@src/entities/entity-types';
 import { updateManyActors } from '@src/foundry/misc-helpers';
+import { emitEPSocket } from '@src/foundry/socket';
 import { nonNegative } from '@src/utility/helpers';
 import { clamp } from 'remeda';
-import { localize, LangEntry } from '../foundry/localization';
+import { localize, LangEntry, format } from '../foundry/localization';
 import { createFeature } from './feature-helpers';
 import { parseMilliseconds, toMilliseconds } from './modify-milliseconds';
 
@@ -152,6 +153,20 @@ export const currentWorldTimeMS = () => {
 
 export const advanceWorldTime = async (milliseconds: number) => {
   game.time.advance(Math.round(milliseconds / 1000));
+     emitEPSocket(
+       {
+         worldTimeChange: [
+           Date.now(),
+           format('ModifiedTime', {
+             direction: localize(
+               milliseconds >= 0 ? 'advanced' : 'rewound',
+             ).toLocaleLowerCase(),
+             amount: prettyMilliseconds(Math.abs(milliseconds), { compact: false }),
+           }),
+         ],
+       },
+       true,
+     );
 };
 
 export const getElapsedTime = (worldTimestampMS: number) => {

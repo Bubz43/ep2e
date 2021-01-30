@@ -80,3 +80,7 @@ header {
   overflow-y: scroll;
   overflow-x: hidden;
 }
+
+.extra-actions {
+    @include animate-css(fadeIn, 250ms);
+}

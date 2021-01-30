@@ -2,15 +2,14 @@ import { createMessage, MessageVisibility } from '@src/chat/create-message';
 import type { ActorEP } from '@src/entities/actor/actor';
 import { ActorType } from '@src/entities/entity-types';
 import { findActor, findToken } from '@src/entities/find-entities';
-import {
-  uniqueStringID
-} from '@src/features/feature-helpers';
+import { uniqueStringID } from '@src/features/feature-helpers';
+import { advanceWorldTime, CommonInterval } from '@src/features/time';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
 import {
   gmIsConnected,
   isGamemaster,
-  userCan
+  userCan,
 } from '@src/foundry/misc-helpers';
 import { rollFormula } from '@src/foundry/rolls';
 import { emitEPSocket, SystemSocketData } from '@src/foundry/socket';
@@ -61,7 +60,10 @@ type CombatParticipantData = {
 };
 
 export type CombatRoundPhases = {
-  [RoundPhase.Normal]: { participant: CombatParticipant, tookInitiative?: LimitedAction | null }[];
+  [RoundPhase.Normal]: {
+    participant: CombatParticipant;
+    tookInitiative?: LimitedAction | null;
+  }[];
   [RoundPhase.ExtraActions]: {
     participant: CombatParticipant;
     limitedActions: [LimitedAction] | [LimitedAction, LimitedAction];
@@ -69,44 +71,45 @@ export type CombatRoundPhases = {
   someTookInitiative: boolean;
 };
 
-export const rollParticipantInitiative = async (participant: CombatParticipant) => {
-   const bonus =
-     participant.actor?.proxy.type === ActorType.Character
-       ? participant.actor.proxy.initiative
-       : 0;
-   const roll = rollFormula(`1d6 + ${bonus}`);
+export const rollParticipantInitiative = async (
+  participant: CombatParticipant,
+) => {
+  const bonus =
+    participant.actor?.proxy.type === ActorType.Character
+      ? participant.actor.proxy.initiative
+      : 0;
+  const roll = rollFormula(`1d6 + ${bonus}`);
 
-   if (roll) {
-     await createMessage({
-       roll,
-       flavor: localize('initiative'),
-       entity: participant.token ?? participant.actor,
-       alias: participant.name,
-       visibility: participant.hidden
-         ? MessageVisibility.WhisperGM
-         : MessageVisibility.Public,
-     });
-   }
+  if (roll) {
+    await createMessage({
+      roll,
+      flavor: localize('initiative'),
+      entity: participant.token ?? participant.actor,
+      alias: participant.name,
+      visibility: participant.hidden
+        ? MessageVisibility.WhisperGM
+        : MessageVisibility.Public,
+    });
+  }
 
-   return { id: participant.id, initiative: String(roll?.total || 0) };
-}
+  return { id: participant.id, initiative: String(roll?.total || 0) };
+};
 
 export const setupParticipants = (participants: CombatData['participants']) => {
   return Object.entries(participants).map(([id, data]) => {
-    const { entityIdentifiers, ...part } = data;
     const token =
-      entityIdentifiers?.type === TrackedCombatEntity.Token
-        ? findToken(entityIdentifiers)
+      data.entityIdentifiers?.type === TrackedCombatEntity.Token
+        ? findToken(data.entityIdentifiers)
         : null;
 
     const participant: CombatParticipant = {
-      ...part,
+      ...data,
       id,
       token,
       actor:
         token?.actor ??
-        (entityIdentifiers?.type === TrackedCombatEntity.Actor
-          ? findActor(entityIdentifiers)
+        (data.entityIdentifiers?.type === TrackedCombatEntity.Actor
+          ? findActor(data.entityIdentifiers)
           : null),
     };
     return participant;
@@ -120,17 +123,17 @@ export const setupPhases = (
   const phases: CombatRoundPhases = {
     [RoundPhase.Normal]: [],
     [RoundPhase.ExtraActions]: [],
-    someTookInitiative: false
+    someTookInitiative: false,
   };
 
   for (const participant of participants) {
     const { tookInitiative, extraActions } =
       participant.modifiedTurn?.[roundIndex] ?? {};
 
-      console.log(tookInitiative, extraActions);
+    console.log(tookInitiative, extraActions);
 
-      phases[RoundPhase.Normal].push({ participant, tookInitiative })
-    phases.someTookInitiative ||= !!tookInitiative
+    phases[RoundPhase.Normal].push({ participant, tookInitiative });
+    phases.someTookInitiative ||= !!tookInitiative;
 
     if (notEmpty(extraActions)) {
       phases[RoundPhase.ExtraActions].push({
@@ -165,10 +168,10 @@ export const participantsByInitiative = (
     : Number(b.initiative) - Number(a.initiative);
 };
 
-export type CombatParticipant = Omit<
-  CombatParticipantData,
-  'entityIdentifiers'
-> & { token?: Token | null; actor?: ActorEP | null } & { id: string };
+export type CombatParticipant = CombatParticipantData & {
+  token?: Token | null;
+  actor?: ActorEP | null;
+} & { id: string };
 
 export type CombatData = {
   participants: Record<string, CombatParticipantData>;
@@ -204,7 +207,7 @@ export type CombatUpdateAction =
     }
   | {
       type: CombatActionType.Reset;
-    } 
+    };
 
 const updateReducer = produce(
   (draft: WritableDraft<CombatData>, action: CombatUpdateAction) => {
@@ -230,26 +233,35 @@ const updateReducer = produce(
         });
         break;
 
-        case CombatActionType.UpdateRound:
-          Object.assign(draft, action.payload)
-          break;
+      case CombatActionType.UpdateRound:
+        Object.assign(draft, action.payload);
+        break;
 
-        case CombatActionType.Reset: {
-          draft.round = 0;
-          draft.phase = RoundPhase.Normal,
-          draft.turn = [0];
-          draft.participants = {};
-          break;
-        }
+      case CombatActionType.Reset: {
+        draft.round = 0;
+        (draft.phase = RoundPhase.Normal), (draft.turn = [0]);
+        draft.participants = {};
+        break;
+      }
     }
   },
 );
 
+const updateCombat = (action: CombatUpdateAction) => {
+  gameSettings.combatState.update((state) => {
+    const newState = updateReducer(state, action);
+    if (action.type === CombatActionType.UpdateRound) {
+      if (newState.round > state.round) advanceWorldTime(CommonInterval.Turn)
+      else if (newState.round < state.round) advanceWorldTime(-CommonInterval.Turn)
+    }
+    return newState
+  });
+};
+
 // TODO ignore gamemaster and instead just check for SETTINGS_MODIFY priv
 export const updateCombatState = (action: CombatUpdateAction) => {
-  if (userCan('SETTINGS_MODIFY')) {
-    gameSettings.combatState.update((state) => updateReducer(state, action));
-  } else if (gmIsConnected()) {
+  if (userCan('SETTINGS_MODIFY')) updateCombat(action);
+  else if (gmIsConnected()) {
     emitEPSocket({ mutateCombat: { action } });
   } else {
     notify(NotificationType.Info, 'Cannot update combat if GM not present.');
@@ -259,6 +271,5 @@ export const updateCombatState = (action: CombatUpdateAction) => {
 export const combatSocketHandler = ({
   action,
 }: SystemSocketData['mutateCombat']) => {
-  isGamemaster() &&
-    gameSettings.combatState.update((state) => updateReducer(state, action));
+  isGamemaster() && updateCombat(action);
 };

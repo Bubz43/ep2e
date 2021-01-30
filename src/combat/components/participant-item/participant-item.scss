@@ -15,18 +15,37 @@
   }
 }
 
+:host([hidden]) {
+  display: none;
+}
+
 wl-list-item {
-  height: 40px;
+  height: 44px;
   padding: 0 0.5rem;
 
   mwc-icon-button[slot='before'] {
-    --mdc-icon-size: 38px;
-    --mdc-icon-button-size: 40px;
+    --mdc-icon-size: 40px;
+    --mdc-icon-button-size: 44px;
     margin-right: 0.75rem;
   }
 
   span[slot='after'] {
     min-width: 2rem;
     text-align: center;
+  }
+
+  @include textButton();
+
+  .name {
+    width: max-content
+  }
+}
+
+.status {
+  display: flex;
+  flex-flow: row wrap;
+  > * {
+    margin-right: 0.5ch;
+    @include animate-css(fadeIn, 250ms);
   }
 }

@@ -48,6 +48,8 @@ export class CombatView extends LitElement {
 
   private roundState?: Pick<CombatData, 'phase' | 'turn'> | null;
 
+  private intObs: IntersectionObserver | null = null;
+
   static openWindow() {
     openWindow(
       {
@@ -59,7 +61,7 @@ export class CombatView extends LitElement {
     );
   }
 
-  connectedCallback() {
+  async connectedCallback() {
     this.unsub = gameSettings.combatState.subscribe((newState) => {
       const { combatState } = this;
       const changedParticipants = !equals(
@@ -155,20 +157,31 @@ export class CombatView extends LitElement {
       this.combatState = newState;
     });
     super.connectedCallback();
+    this.intObs = new IntersectionObserver(
+      (entries, observer) => {
+        for (const entry of entries) {
+          if (entry.intersectionRatio < 0.95) {
+            entry.target.scrollIntoView({ behavior: 'smooth' });
+          }
+          observer.unobserve(entry.target);
+        }
+      },
+      { root: this },
+    );
   }
 
   disconnectedCallback() {
     this.combatState = null;
     this.unsub?.();
     this.unsub = null;
+    this.intObs?.disconnect();
     super.disconnectedCallback();
   }
 
   updated(changedProps: PropertyValues<this>) {
     requestAnimationFrame(() => {
-      this.renderRoot
-        .querySelector('participant-item[active]')
-        ?.scrollIntoView({ block: 'end', behavior: 'smooth' });
+      const active = this.renderRoot.querySelector('participant-item[active]');
+      if (active) this.intObs?.observe(active);
     });
     super.updated(changedProps);
   }
@@ -391,6 +404,7 @@ export class CombatView extends LitElement {
                         ?active=${phase === RoundPhase.Normal &&
                         activeParticipant === participant}
                         turn=${turnIndex}
+                        ?hidden=${!isGM && !!participant.hidden}
                       ></participant-item>
                     `,
                 )}
@@ -406,7 +420,7 @@ export class CombatView extends LitElement {
                 ${repeat(
                   extraActions,
                   ({ participant }) => participant.id,
-                  ({ participant, limitedActions }, index) =>
+                  ({ participant, limitedActions }) =>
                     limitedActions.map(
                       (limitedAction, actionIndex) => html`<participant-item
                         .participant=${participant}
@@ -416,6 +430,7 @@ export class CombatView extends LitElement {
                         participant === activeParticipant &&
                         actionIndex === extraIndex}
                         turn=${turnIndex}
+                        ?hidden=${!isGM && !!participant.hidden}
                       ></participant-item>`,
                     ),
                 )}
@@ -478,8 +493,6 @@ export class CombatView extends LitElement {
       </footer>
     `;
   }
-
-  private renderSelector() {}
 }
 
 declare global {

@@ -4,15 +4,18 @@ import {
   CombatParticipant,
   LimitedAction,
   rollParticipantInitiative,
+  TrackedCombatEntity,
   updateCombatState,
 } from '@src/combat/combat-tracker';
 import { ActorType } from '@src/entities/entity-types';
+import { conditionIcons } from '@src/features/conditions';
+import { readyCanvas } from '@src/foundry/canvas';
+import { MutateEvent, mutatePlaceableHook } from '@src/foundry/hook-setups';
 import { localize } from '@src/foundry/localization';
-import { rollFormula } from '@src/foundry/rolls';
 import { openMenu } from '@src/open-menu';
 import produce from 'immer';
-import { customElement, LitElement, property, html } from 'lit-element';
-import { compact } from 'remeda';
+import { customElement, LitElement, property, html, PropertyValues } from 'lit-element';
+import { compact, equals } from 'remeda';
 import styles from './participant-item.scss';
 
 @customElement('participant-item')
@@ -35,8 +38,29 @@ export class ParticipantItem extends LitElement {
 
   @property({ type: Number }) turn = 0;
 
+  private tokenLinked = false;
+  
+  updated(changedProps: PropertyValues<this>) {
+    const previous = changedProps.get("participant") as CombatParticipant | undefined;
+    if (!equals(previous?.entityIdentifiers, this.participant.entityIdentifiers)) {
+      const { entityIdentifiers } = this.participant;
+      if (entityIdentifiers?.type === TrackedCombatEntity.Token) {
+        // mutatePlaceableHook({
+        //   entity: Token,
+        //   hook: "on",
+        //   event: MutateEvent.Update
+        // })
+      }
+    }
+    super.updated(changedProps)
+  }
+
   private get editable() {
-    return game.user.isGM || (this.participant.actor?.owner ?? this.participant.userId === game.user.id);
+    return (
+      game.user.isGM ||
+      (this.participant.actor?.owner ??
+        this.participant.userId === game.user.id)
+    );
   }
 
   private openMenu() {
@@ -125,17 +149,51 @@ export class ParticipantItem extends LitElement {
     });
   }
 
+  private iconClick() {
+    const token =
+      this.participant.token ??
+      this.participant.actor?.getActiveTokens(true)[0];
+    if (token) {
+      token.control({ releaseOthers: true });
+      readyCanvas()?.animatePan({ x: token.x, y: token.y } as any);
+    }
+  }
+
+  private openActorSheet() {
+    this.participant.actor?.sheet.render(true);
+  }
+
   render() {
     const { participant } = this;
     const { editable } = this;
     const { token, actor } = participant;
     return html`
       <wl-list-item @contextmenu=${this.openMenu}>
-        <mwc-icon-button slot="before"
+        <mwc-icon-button
+          slot="before"
+          ?disabled=${!editable || !token}
+          @click=${this.iconClick}
           ><img
             src=${token?.data.img || actor?.data.img || CONST.DEFAULT_TOKEN}
         /></mwc-icon-button>
-        <span>${participant.name}</span>
+        <button
+          class="name"
+          ?disabled=${!editable || !actor}
+          @click=${this.openActorSheet}
+        >
+          ${participant.name}
+        </button>
+        <span class="status">
+          ${actor?.conditions.map(
+            (condition) => html`
+              <img
+                src=${conditionIcons[condition]}
+                title=${localize(condition)}
+                height="14px"
+              />
+            `,
+          )}
+        </span>
         ${participant.initiative
           ? html` <span slot="after">${participant.initiative}</span> `
           : editable

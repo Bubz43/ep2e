@@ -17,7 +17,7 @@ export class WorldTimeControls extends LitElement {
 
   static styles = [styles];
 
-  @internalProperty() timeChange = 0;
+  @internalProperty() private timeChange = 0;
 
   @internalProperty() private changes: [number, string][] = [];
 
@@ -29,21 +29,6 @@ export class WorldTimeControls extends LitElement {
 
   private modifyTime(forwards: boolean) {
     this.timeChange && advanceWorldTime(this.timeChange * (forwards ? 1 : -1));
-    emitEPSocket(
-      {
-        worldTimeChange: [
-          Date.now(),
-          format('ModifiedTime', {
-            direction: localize(
-              forwards ? 'advanced' : 'rewound',
-            ).toLocaleLowerCase(),
-            amount: prettyMilliseconds(this.timeChange, { compact: false }),
-          }),
-        ],
-      },
-      true,
-    );
-
     this.timeChange = 0;
   }
 
