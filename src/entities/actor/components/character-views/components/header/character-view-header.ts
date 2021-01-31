@@ -1,3 +1,4 @@
+import { createMessage, MessageVisibility } from '@src/chat/create-message';
 import {
   CombatActionType,
   TrackedCombatEntity,
@@ -10,6 +11,7 @@ import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { closeImagePicker, openImagePicker } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
+import { rollFormula } from '@src/foundry/rolls';
 import { tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
@@ -82,8 +84,46 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
     this.character.ego.rollStress();
   }
 
+  private async addToCombat() {
+    const roll =
+       rollFormula(`1d6 + ${this.character.initiative}`)
+    const name = this.token?.name ?? this.character.name;
+    const hidden = this.token?.data.hidden;
+    if (roll) {
+    await createMessage({
+      roll,
+      flavor: localize('initiative'),
+      entity: this.token ?? this.character.actor,
+      alias: name,
+      visibility: hidden
+        ? MessageVisibility.WhisperGM
+        : MessageVisibility.Public,
+    });
+  }
+
+    updateCombatState({
+      type: CombatActionType.AddParticipants,
+      payload: [
+        {
+          name,
+          hidden,
+          initiative: roll?.total,
+          entityIdentifiers: this.token?.scene
+            ? {
+                type: TrackedCombatEntity.Token,
+                tokenId: this.token.id,
+                sceneId: this.token.scene.id,
+              }
+            : {
+                type: TrackedCombatEntity.Actor,
+                actorId: this.character.actor.id,
+              },
+        },
+      ],
+    });
+  }
+
   render() {
-    const name = this.token?.data.name || this.character.name;
     // TODO show list of active tokens on scene with active one being token this is passed
     return html`
       <sl-popover class="image-wrapper" .renderOnDemand=${this.imgSelect}>
@@ -91,31 +131,12 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
           <img src=${this.img} />
         </button>
       </sl-popover>
-      <h2>${name}</h2>
+      <h2>${this.character.name}</h2>
       <div class="additional">
         <sl-group
           class="initiative"
           label=${localize('initiative')}
-          @click=${() =>
-            updateCombatState({
-              type: CombatActionType.AddParticipants,
-              payload: [
-                {
-                  name,
-                  hidden: this.token?.data.hidden,
-                  entityIdentifiers: this.token?.scene
-                    ? {
-                        type: TrackedCombatEntity.Token,
-                        tokenId: this.token.id,
-                        sceneId: this.token.scene.id,
-                      }
-                    : {
-                        type: TrackedCombatEntity.Actor,
-                        actorId: this.character.actor.id,
-                      },
-                },
-              ],
-            })}
+          @click=${this.addToCombat}
           >${this.character.initiative}</sl-group
         >
         ${this.character.ego.hasStressRoll
