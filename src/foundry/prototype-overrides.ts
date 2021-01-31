@@ -26,6 +26,8 @@ import { convertMenuOptions } from './misc-helpers';
 import { readyCanvas } from './canvas';
 import { activeTokenStatusEffects } from './token-helpers';
 import type { Combatant } from '@src/combat/combatant';
+import { gameSettings } from '@src/init';
+import { participantsAsToken, TrackedCombatEntity, updateCombatState } from '@src/combat/combat-tracker';
 
 Entity.prototype.matchRegexp = function (regex: RegExp) {
   return regex.test(this.name);
@@ -100,7 +102,7 @@ PlayerConfig.prototype.getData = function () {
 Combat.prototype._getInitiativeFormula = ({ actor }: Combatant) =>
   actor?.proxy.type === ActorType.Character
     ? `1d6 + ${actor.proxy.initiative}`
-    : "0";
+    : '0';
 
 const { _onPreventDragstart } = Game.prototype;
 Game.prototype._onPreventDragstart = function (ev: DragEvent) {
@@ -167,6 +169,7 @@ Token.prototype.drawEffects = async function () {
     this.effects.addChild(icon);
   }
 };
+
 Token.prototype.toggleEffect = async function (
   effect: string | typeof CONFIG['statusEffects'][number] | null,
   options: { overlay?: boolean; active?: boolean } = {},
@@ -208,6 +211,25 @@ Token.prototype._onUpdateBarAttributes = function (updateData) {
   }
 };
 
+// const { getData: getTokenData } = TokenHUD.prototype;
+
+// TokenHUD.prototype.getData = function (options: unknown) {
+//   const data = getTokenData.call(this, options);
+//   data.canToggleCombat = gamemasterIsConnected();
+//   data.combatClass =
+//     this.object && participantsAsToken(this.object) ? 'active' : '';
+//   return data;
+// };
+
+// TokenHUD.prototype._onToggleCombat = async function (
+//   ev: Event & { currentTarget: HTMLElement },
+// ) {
+//   ev.preventDefault();
+//   if (!this.object) return;
+//   const active = participantsAsToken(this.object);
+
+// };
+
 TokenHUD.prototype._getStatusEffectChoices = function () {
   const token = this.object!;
   const effects = activeTokenStatusEffects(token);
@@ -247,20 +269,20 @@ ChatLog.prototype._render = async function (...args) {
   }
 };
 
-Object.defineProperties(Token.prototype, {
-  w: {
-    enumerable: true,
-    get() {
-      return this.data.width * (readyCanvas()?.grid?.w ?? 100);
-    },
-  },
-  h: {
-    enumerable: true,
-    get() {
-      return this.data.height * (readyCanvas()?.grid?.h ?? 100);
-    },
-  },
-});
+// Object.defineProperties(Token.prototype, {
+//   w: {
+//     enumerable: true,
+//     get(this: Token) {
+//       return this.data.width * (readyCanvas()?.grid?.w ?? 100);
+//     },
+//   },
+//   h: {
+//     enumerable: true,
+//     get(this: Token) {
+//       return this.data.height * (readyCanvas()?.grid?.h ?? 100);
+//     },
+//   },
+// });
 
 // TODO: Delay this to check for migration first
 // const barCache = new WeakMap<PIXI.Graphics, number>();
@@ -359,7 +381,6 @@ CombatTracker.prototype._contextMenu = function (jqueryEl: JQuery) {
   });
 };
 
-
 SidebarDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
   jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
     const entityLi = findMatchingElement(ev, '.entity, .folder .folder-header');
@@ -399,7 +420,6 @@ SidebarDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
     }
   });
 };
-
 
 PlayerList.prototype.activateListeners = function (jqueryEl: JQuery) {
   jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
@@ -624,3 +644,6 @@ ActorDirectory.prototype._onCreateEntity = async function (ev: Event) {
     });
   }
 };
+function gamemasterIsConnected(): any {
+  throw new Error('Function not implemented.');
+}

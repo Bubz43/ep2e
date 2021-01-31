@@ -4,8 +4,9 @@ import {
   LimitedAction,
   rollParticipantInitiative,
   TrackedCombatEntity,
-  updateCombatState,
+  updateCombatState
 } from '@src/combat/combat-tracker';
+import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { ActorType } from '@src/entities/entity-types';
 import { findActor } from '@src/entities/find-entities';
@@ -13,12 +14,6 @@ import { subscribeToToken } from '@src/entities/token-subscription';
 import { conditionIcons } from '@src/features/conditions';
 import { readyCanvas } from '@src/foundry/canvas';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
-import type { TokenData } from '@src/foundry/foundry-cont';
-import {
-  mutateEntityHook,
-  MutateEvent,
-  mutatePlaceableHook,
-} from '@src/foundry/hook-setups';
 import { localize } from '@src/foundry/localization';
 import { openMenu } from '@src/open-menu';
 import produce from 'immer';
@@ -28,14 +23,15 @@ import {
   internalProperty,
   LitElement,
   property,
-  PropertyValues,
+  PropertyValues
 } from 'lit-element';
+import mix from 'mix-with/lib';
 import { compact, equals } from 'remeda';
 import type { Subscription } from 'rxjs';
 import styles from './participant-item.scss';
 
 @customElement('participant-item')
-export class ParticipantItem extends LitElement {
+export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
   static get is() {
     return 'participant-item' as const;
   }
@@ -57,7 +53,6 @@ export class ParticipantItem extends LitElement {
   @internalProperty() private token?: MaybeToken;
 
   @internalProperty() private actor?: ActorEP | null;
-
 
   private tokenSubscription?: Subscription | null;
 
@@ -85,7 +80,7 @@ export class ParticipantItem extends LitElement {
           next: (token) => {
             this.token = token;
             this.requestUpdate();
-            console.log("tokenActor", token.actor);
+            console.log('tokenActor', token.actor);
             if (token.actor !== this.actor) {
               this.actorUnsub?.();
               this.actorUnsub = token.actor?.subscribe(this.actorSub);

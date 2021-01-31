@@ -111,7 +111,7 @@ export const registerEPSettings = once(() => {
     scope: "world",
     config: false,
     default: {
-      participants: {},
+      participants: [],
       round: 0,
       phase: RoundPhase.Normal,
       turn: [0],

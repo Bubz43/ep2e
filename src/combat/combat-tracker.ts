@@ -2,7 +2,12 @@ import { createMessage, MessageVisibility } from '@src/chat/create-message';
 import type { ActorEP } from '@src/entities/actor/actor';
 import { ActorType } from '@src/entities/entity-types';
 import { findActor, findToken } from '@src/entities/find-entities';
-import { uniqueStringID } from '@src/features/feature-helpers';
+import {
+  addFeature,
+  StringID,
+  uniqueStringID,
+  updateFeature,
+} from '@src/features/feature-helpers';
 import { advanceWorldTime, CommonInterval } from '@src/features/time';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
@@ -17,10 +22,12 @@ import { gameSettings } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
 import produce from 'immer';
 import type { WritableDraft } from 'immer/dist/internal';
+import { reject } from 'remeda';
 
 export enum TrackedCombatEntity {
   Actor,
   Token,
+  Time,
 }
 
 type TrackedIdentitfiers =
@@ -28,7 +35,12 @@ type TrackedIdentitfiers =
       type: TrackedCombatEntity.Actor;
       actorId: string;
     }
-  | { type: TrackedCombatEntity.Token; tokenId: string; sceneId: string };
+  | { type: TrackedCombatEntity.Token; tokenId: string; sceneId: string }
+  | {
+      type: TrackedCombatEntity.Time;
+      startTime: number;
+      duration: number;
+    };
 
 export enum LimitedAction {
   Mental = 1,
@@ -74,11 +86,9 @@ export type CombatRoundPhases = {
 export const rollParticipantInitiative = async (
   participant: CombatParticipant,
 ) => {
-  const { token, actor } = getParticipantEntities(participant)
+  const { token, actor } = getParticipantEntities(participant);
   const bonus =
-    actor?.proxy.type === ActorType.Character
-      ? actor.proxy.initiative
-      : 0;
+    actor?.proxy.type === ActorType.Character ? actor.proxy.initiative : 0;
   const roll = rollFormula(`1d6 + ${bonus}`);
 
   if (roll) {
@@ -111,18 +121,12 @@ export const getParticipantEntities = (data: CombatParticipantData) => {
   };
 };
 
-const setupParticipant = (data: CombatParticipantData, id: string) => {
-  const participant: CombatParticipant = {
-    ...data,
-    id,
-    ...getParticipantEntities(data),
-  };
-  return participant;
-};
-
-export const setupParticipants = (participants: CombatData['participants']) => {
-  return Object.entries(participants).map(([id, data]) =>
-    setupParticipant(data, id),
+export const participantsAsToken = (token: Token) => {
+  return Object.values(gameSettings.combatState.current.participants).filter(
+    ({ entityIdentifiers }) =>
+      entityIdentifiers?.type === TrackedCombatEntity.Token &&
+      entityIdentifiers.tokenId === token.id &&
+      entityIdentifiers.sceneId === token.scene?.id,
   );
 };
 
@@ -139,8 +143,6 @@ export const setupPhases = (
   for (const participant of participants) {
     const { tookInitiative, extraActions } =
       participant.modifiedTurn?.[roundIndex] ?? {};
-
-    console.log(tookInitiative, extraActions);
 
     phases[RoundPhase.Normal].push({ participant, tookInitiative });
     phases.someTookInitiative ||= !!tookInitiative;
@@ -181,7 +183,7 @@ export const participantsByInitiative = (
 export type CombatParticipant = CombatParticipantData & { id: string };
 
 export type CombatData = {
-  participants: Record<string, CombatParticipantData>;
+  participants: StringID<CombatParticipantData>[];
   round: number;
   phase: RoundPhase;
   turn: [number] | [number, 0 | 1];
@@ -220,24 +222,26 @@ const updateReducer = produce(
   (draft: WritableDraft<CombatData>, action: CombatUpdateAction) => {
     switch (action.type) {
       case CombatActionType.AddParticipants: {
-        const currentIDs = Object.keys(draft.participants);
-        for (const participant of action.payload) {
-          const id = uniqueStringID(currentIDs);
-          currentIDs.push(id);
-          draft.participants[id] = participant;
-        }
+        draft.participants = action.payload.reduce(
+          (accum, part) => addFeature(accum, part),
+          draft.participants,
+        );
+
         break;
       }
 
       case CombatActionType.RemoveParticipants:
-        action.payload.forEach((id) => void delete draft.participants[id]);
+        draft.participants = reject(draft.participants, ({ id }) =>
+          action.payload.includes(id),
+        );
         break;
 
       case CombatActionType.UpdateParticipants:
-        action.payload.forEach(({ id, ...change }) => {
-          const participant = draft.participants[id];
-          if (participant) Object.assign(participant, change);
-        });
+        draft.participants = action.payload.reduce(
+          (accum, change) => updateFeature(accum, change),
+          draft.participants,
+        );
+
         break;
 
       case CombatActionType.UpdateRound:
@@ -246,8 +250,9 @@ const updateReducer = produce(
 
       case CombatActionType.Reset: {
         draft.round = 0;
-        (draft.phase = RoundPhase.Normal), (draft.turn = [0]);
-        draft.participants = {};
+        draft.phase = RoundPhase.Normal;
+        draft.turn = [0];
+        draft.participants = [];
         break;
       }
     }

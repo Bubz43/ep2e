@@ -3,12 +3,11 @@ import {
   CombatData,
   CombatParticipant,
   CombatRoundPhases,
-  getParticipantEntities,
+
   rollParticipantInitiative,
   RoundPhase,
-  setupParticipants,
   setupPhases,
-  updateCombatState,
+  updateCombatState
 } from '@src/combat/combat-tracker';
 import { openWindow } from '@src/components/window/window-controls';
 import { ResizeOption } from '@src/components/window/window-options';
@@ -20,9 +19,8 @@ import {
   html,
   internalProperty,
   LitElement,
-  PropertyValues,
+  PropertyValues
 } from 'lit-element';
-import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
 import { equals } from 'remeda';
 import '../participant-item/participant-item';
@@ -73,11 +71,9 @@ export class CombatView extends LitElement {
         combatState?.participants,
         newState.participants,
       );
-      
+
       if (changedParticipants) {
-        console.time('setupParticipants');
-        this.participants = setupParticipants(newState.participants);
-        console.timeEnd('setupParticipants');
+        this.participants = newState.participants;
       }
 
       if (newState.round !== combatState?.round) {
