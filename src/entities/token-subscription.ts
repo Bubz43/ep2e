@@ -20,7 +20,7 @@ const fromKey = <T extends string>(str: T) => {
   return str.split('-') as Split<T, '-'>;
 };
 
-Hooks.on('readyCanvas', () => {
+Hooks.on('canvasReady', () => {
   const scene = readyCanvas()?.scene;
   scene?.data.tokens.forEach((tokenData) => sceneUpdate(scene, tokenData));
 });
@@ -84,7 +84,7 @@ export const subscribeToToken = (
     if (token) {
       subject = new BehaviorSubject(token);
       tokenSubjects.set(key, subject);
-    }
+    } else observer.complete?.()
   }
   return subject?.subscribe(observer) ?? null;
 };

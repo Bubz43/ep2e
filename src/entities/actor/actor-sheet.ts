@@ -20,38 +20,62 @@ import type { DeepPartial } from 'utility-types';
 import { ActorType } from '../entity-types';
 import type { ActorEP } from './actor';
 import { renderCharacterView, renderSleeveForm } from './actor-views';
+import type { Subscription } from 'rxjs';
+import { subscribeToToken } from '../token-subscription';
 
-type Unsub = (() => void) | null;
+export const actorSheets = new WeakMap<ActorEP, ActorEPSheet>();
 
 export class ActorEPSheet implements EntitySheet {
   private _token?: Token | null;
   declare token: unknown | null;
-  private unsub: Unsub;
+  private actorUnsub?: (() => void) | null;
 
   private window: SlWindow | null = null;
 
+  private tokenSubscription?: Subscription | null;
+
   constructor(private actor: ActorEP) {
-    this.unsub = actor.subscriptions.subscribe(this, {
-      onEntityUpdate: () => this.render(false),
-      onSubEnd: () => this.close(),
-    });
-    Hooks.on('canvasReady', this.checkToken);
+    actorSheets.set(actor, this);
+    if (actor.isToken && actor.token?.scene) {
+      this.tokenSubscription = subscribeToToken(
+        { tokenId: actor.token.id, sceneId: actor.token.scene.id },
+        {
+          next: (token) => {
+            // console.log(token);
+            this._token = token;
+            if (token.actor) {
+              const actorChange = this.actor !== token.actor;
+              if (actorChange) {
+                actorSheets.delete(this.actor);
+                actorSheets.set(token.actor, this);
+              }
+              this.actor = token.actor;
+              this.render(actorChange, { token });
+            } else this.close();
+          },
+          complete: () => this.close(),
+        },
+      );
+    } else {
+      this.actorUnsub = actor.subscribe((act) => {
+        if (!act) this.close();
+        else this.render(false);
+      });
+    }
   }
 
   private get windowKey() {
-    return this.actor.isToken && this.actor.token
-      ? this.actor.token
-      : this.actor;
+    return this;
   }
 
-  private checkToken = () => {
-    if (this._token && this.actor.isToken) {
-      if (this._token.scene?.id !== readyCanvas()?.scene.id) {
-        this.actor.subscriptions.unsubscribeAll();
-        this.close();
-      }
-    }
-  };
+  // private checkToken = () => {
+  //   if (this._token && this.actor.isToken) {
+  //     if (this._token.scene?.id !== readyCanvas()?.scene.id) {
+  //       this.actor.subscriptions.unsubscribeAll();
+  //       this.close();
+  //     }
+  //   }
+  // };
 
   get rendered() {
     return !!this.window?.isConnected;
@@ -140,7 +164,7 @@ export class ActorEPSheet implements EntitySheet {
   getAdjacentEl() {
     const { actor } = this;
     const token = this._token || this.actor.token;
-    if (token?.isVisible) {
+    if (token?.scene?.isView && token?.isVisible) {
       const hud = document.getElementById('hud');
       if (hud) {
         const { w, h, x, y, data } = token;
@@ -174,10 +198,10 @@ export class ActorEPSheet implements EntitySheet {
     if (!force && !this.rendered) return this;
 
     if (force) {
-      this._token =
-        token ||
-        (this.actor.token &&
-          readyCanvas()?.tokens.get(this.actor.token.data._id));
+      this._token = token
+        // token ||
+        // (this.actor.token &&
+        //   readyCanvas()?.tokens.get(this.actor.token.data._id));
     }
 
     this.openWindow(force);
@@ -191,11 +215,13 @@ export class ActorEPSheet implements EntitySheet {
   }
 
   async close() {
-    this.unsub?.();
-    this.unsub = null;
+    this.actorUnsub?.();
+    this.actorUnsub = null;
     this.token = null;
+    this.tokenSubscription?.unsubscribe();
+    actorSheets.delete(this.actor);
     closeWindow(this.windowKey);
-    Hooks.off('canvasReady', this.checkToken);
+    // Hooks.off('canvasReady', this.checkToken);
     this.window = null;
     return this;
   }

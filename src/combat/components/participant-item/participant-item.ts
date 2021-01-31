@@ -9,7 +9,7 @@ import {
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { ActorType } from '@src/entities/entity-types';
 import { findActor } from '@src/entities/find-entities';
-import { subscribeToToken } from '@src/entities/subscriptions';
+import { subscribeToToken } from '@src/entities/token-subscription';
 import { conditionIcons } from '@src/features/conditions';
 import { readyCanvas } from '@src/foundry/canvas';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
@@ -58,22 +58,25 @@ export class ParticipantItem extends LitElement {
 
   @internalProperty() private actor?: ActorEP | null;
 
-  private tokenLinked = false;
 
   private tokenSubscription?: Subscription | null;
 
   private actorUnsub?: (() => void) | null;
 
   disconnectedCallback() {
+    this.unsubFromAll();
     super.disconnectedCallback();
   }
 
   update(changedProps: PropertyValues<this>) {
-    const previous = changedProps.get('participant') as
-      | CombatParticipant
-      | undefined;
+    console.log(changedProps);
     if (
-      !equals(previous?.entityIdentifiers, this.participant.entityIdentifiers)
+      changedProps.has('participant') &&
+      !equals(
+        (changedProps.get('participant') as CombatParticipant | undefined)
+          ?.entityIdentifiers,
+        this.participant.entityIdentifiers,
+      )
     ) {
       this.unsubFromAll();
       const { entityIdentifiers } = this.participant;
@@ -81,6 +84,8 @@ export class ParticipantItem extends LitElement {
         this.tokenSubscription = subscribeToToken(entityIdentifiers, {
           next: (token) => {
             this.token = token;
+            this.requestUpdate();
+            console.log("tokenActor", token.actor);
             if (token.actor !== this.actor) {
               this.actorUnsub?.();
               this.actorUnsub = token.actor?.subscribe(this.actorSub);
@@ -108,14 +113,14 @@ export class ParticipantItem extends LitElement {
 
   private actorSub = (actor: ActorEP | null) => {
     this.actor = actor;
+    this.requestUpdate();
     if (!this.actor) this.actorUnsub?.();
   };
 
   get editable() {
     return (
       game.user.isGM ||
-      (this.actor?.owner ??
-        this.participant.userId === game.user.id)
+      (this.actor?.owner ?? this.participant.userId === game.user.id)
     );
   }
 
@@ -125,8 +130,7 @@ export class ParticipantItem extends LitElement {
     openMenu({
       header: { heading: this.participant.name },
       content: compact([
-        ...(this.actor?.proxy.type === ActorType.Character &&
-        this.round
+        ...(this.actor?.proxy.type === ActorType.Character && this.round
           ? [
               // TODO Use pools to modify action
               {
@@ -206,14 +210,12 @@ export class ParticipantItem extends LitElement {
   }
 
   private iconClick() {
-    const token =
-      this.token ??
-      this.actor?.getActiveTokens(true)[0];
+    const token = this.token ?? this.actor?.getActiveTokens(true)[0];
     if (token?.scene?.isView) {
       token.control({ releaseOthers: true });
       readyCanvas()?.animatePan({ x: token.x, y: token.y } as any);
     } else if (token) {
-      notify(NotificationType.Info, "Token not on viewed scene")
+      notify(NotificationType.Info, 'Token not on viewed scene');
     }
   }
 

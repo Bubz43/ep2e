@@ -684,14 +684,14 @@ sl-tooltip {
   }
 
   .scene-control {
-    width: 2.5rem;
+    width: 3rem;
     padding: 0.5rem 0;
     font-size: 1.45rem;
     background: alphav(var(--color-bg-alt), 0.8);
     position: relative;
-    border-left: 1px solid transparent !important;
+    border-left: 2px solid transparent !important;
     &.active {
-      border-left: 1px solid var(--color-text) !important;
+      border-left: 2px solid var(--color-text) !important;
     }
 
     &:first-child {
@@ -721,7 +721,7 @@ sl-tooltip {
 
     .control-tools {
       border-radius: 0 0.5rem 0.5rem 0;
-      left: 2.39rem;
+      left: 2.89rem;
       padding: 0.25rem;
       column-count: 4;
       pointer-events: none;

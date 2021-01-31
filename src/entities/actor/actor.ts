@@ -19,14 +19,14 @@ import type {
 } from '../models';
 import { UpdateStore } from '../update-store';
 import { EntitySubscription } from '../update-subcriptions';
-import { ActorEPSheet } from './actor-sheet';
+import { ActorEPSheet, actorSheets } from './actor-sheet';
 import type { ActorProxyInit } from './proxies/actor-proxy-base';
 import { Biological } from './proxies/biological';
 import { Character } from './proxies/character';
 import { Infomorph } from './proxies/infomorph';
 import { Synthetic } from './proxies/synthetic';
 import type { EntityPath } from '../path';
-import { subscribeToToken } from '../subscriptions';
+import { subscribeToToken } from '../token-subscription';
 
 type ItemUpdate = SetRequired<DeepPartial<ItemEntity>, '_id'>;
 
@@ -319,13 +319,15 @@ export class ActorEP extends Actor {
   }
 
   get sheet() {
-    for (const [subscriber] of this.subscriptions.subs) {
-      if (subscriber instanceof ActorEPSheet) {
-        return subscriber;
-      }
-    }
+    return actorSheets.get(this) || new ActorEPSheet(this);
+  }
 
-    return new ActorEPSheet(this);
+  static createTokenActor(baseActor: ActorEP, token: Token) {
+    const actor = super.createTokenActor(baseActor, token)
+    if (!token.scene?.isView) {
+      delete this.collection.tokens[token.id]
+    }
+    return actor;
   }
 
   getOwnedItem(id: string | null) {
