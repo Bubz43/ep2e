@@ -43,7 +43,7 @@ type TrackedIdentitfiers =
       duration: number;
   };
     
-export const combatPools = [PoolType.Insight, PoolType.Vigor, PoolType.Threat]
+export const combatPools = [PoolType.Insight, PoolType.Vigor, PoolType.Threat] as const
 
 export type CombatPool = (typeof combatPools)[number]
 
@@ -79,7 +79,7 @@ export type CombatRoundPhases = {
   }[];
   [RoundPhase.ExtraActions]: {
     participant: CombatParticipant;
-    limitedActions: [CombatPool] | [CombatPool, CombatPool];
+    limitedActions: CombatPool
   }[];
   someTookInitiative: boolean;
 };
@@ -150,12 +150,13 @@ export const setupPhases = (
     phases[RoundPhase.Normal].push({ participant, tookInitiative });
     phases.someTookInitiative ||= !!tookInitiative;
 
-    if (notEmpty(extraActions)) {
-      phases[RoundPhase.ExtraActions].push({
-        participant,
-        limitedActions: extraActions,
-      });
+    for (const extra of extraActions || []) {
+          phases[RoundPhase.ExtraActions].push({
+            participant,
+            limitedActions: extra,
+          });
     }
+  
   }
 
   phases[RoundPhase.ExtraActions].sort(participantsByInitiative);
@@ -189,7 +190,7 @@ export type CombatData = {
   participants: StringID<CombatParticipantData>[];
   round: number;
   phase: RoundPhase;
-  turn: [number] | [number, 0 | 1];
+  phaseTurn: number;
 };
 
 export enum CombatActionType {
@@ -215,7 +216,7 @@ export type CombatUpdateAction =
     }
   | {
       type: CombatActionType.UpdateRound;
-      payload: Pick<CombatData, 'phase' | 'round' | 'turn'>;
+      payload: Pick<CombatData, 'phase' | 'round' | 'phaseTurn'>;
     }
   | {
       type: CombatActionType.Reset;
@@ -254,7 +255,7 @@ const updateReducer = produce(
       case CombatActionType.Reset: {
         draft.round = 0;
         draft.phase = RoundPhase.Normal;
-        draft.turn = [0];
+        draft.phaseTurn = 0
         draft.participants = [];
         break;
       }

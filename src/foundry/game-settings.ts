@@ -114,7 +114,7 @@ export const registerEPSettings = once(() => {
       participants: [],
       round: 0,
       phase: RoundPhase.Normal,
-      turn: [0],
+      phaseTurn: 0,
     }
   })
 

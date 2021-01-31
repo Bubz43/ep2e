@@ -1,6 +1,7 @@
 import {
   CombatActionType,
   CombatParticipant,
+  CombatPool,
   combatPools,
   rollParticipantInitiative,
   TrackedCombatEntity,
@@ -22,7 +23,7 @@ import {
 import { readyCanvas } from '@src/foundry/canvas';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
-import { MenuOption, openMenu } from '@src/open-menu';
+import { MenuOption, MWCMenuOption, openMenu } from '@src/open-menu';
 import produce from 'immer';
 import {
   customElement,
@@ -40,6 +41,7 @@ import '../participant-editor/participant-editor';
 import { RenderDialogEvent } from '@src/open-dialog';
 import type { Dialog } from '@material/mwc-dialog';
 import { poolIcon } from '@src/features/pool';
+import { notEmpty } from '@src/utility/helpers';
 
 @customElement('participant-item')
 export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
@@ -58,6 +60,10 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
   @property({ type: Number }) round = 0;
 
   @property({ type: Number }) turn = 0;
+
+  @property({ type: String }) tookInitiativePool?: CombatPool | null;
+
+  @property({ type: String }) extraActionPool?: CombatPool | null;
 
   @internalProperty() private token?: MaybeToken;
 
@@ -172,11 +178,11 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
     const { character } = this;
     const pools = character?.pools;
 
-    const content: MenuOption[] = [];
+    const content: MWCMenuOption[] = [];
     const takeInitiativeOptions: MenuOption[] = [];
     const extraActionOptions: MenuOption[] = [];
 
-    if (tookInitiative) {
+    if (tookInitiative && this.turn === 0 && !this.extraActionPool) {
       takeInitiativeOptions.push({
         label: `[${localize('undo')}] ${localize(
           'takeTheInitiative',
@@ -202,36 +208,8 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       });
     }
 
-    if (extraActions) {
-      extraActionOptions.push(
-        ...extraActions.map((poolType, index) => ({
-          label: `[${localize('undo')}] ${localize('extraAction')} ${
-            index + 1
-          } - ${localize(poolType)}`,
-          icon: html`<img src=${poolIcon(poolType)} />`,
-          callback: async () => {
-            await character?.modifySpentPools({
-              pool: poolType,
-              points: -1,
-            });
-            const newOptions = [...extraActions].splice(index, 1);
-            this.updateParticipant({
-              modifiedTurn: produce(
-                this.participant.modifiedTurn ?? {},
-                (draft) => {
-                  draft[this.round] = {
-                    ...(draft[this.round] ?? {}),
-                    extraActions: newOptions[0] ? [newOptions[0]] : null,
-                  };
-                },
-              ),
-            });
-          },
-        })),
-      );
-    }
 
-    if (pools) {
+    if (pools && this.round) {
       for (const poolType of combatPools) {
         const pool = pools.get(poolType);
         if (!pool) continue;
@@ -253,7 +231,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
                   (draft) => {
                     draft[this.round] = {
                       ...(draft[this.round] ?? {}),
-                      tookInitiative: pool.type,
+                      tookInitiative: poolType,
                     };
                   },
                 ),
@@ -281,8 +259,8 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
                     draft[this.round] = {
                       ...(draft[this.round] ?? {}),
                       extraActions: extraActions?.[0]
-                        ? [extraActions[0], pool.type]
-                        : [pool.type],
+                        ? [extraActions[0], poolType]
+                        : [poolType],
                     };
                   },
                 ),
@@ -293,10 +271,46 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       }
     }
 
+        if (extraActions) {
+          extraActionOptions.push(
+            ...extraActions.map((poolType, index) => ({
+              label: `[${localize('undo')}] ${localize('extraAction')} ${
+                index + 1
+              } - ${localize(poolType)}`,
+              icon: html`<img src=${poolIcon(poolType)} />`,
+              callback: async () => {
+                await character?.modifySpentPools({
+                  pool: poolType,
+                  points: -1,
+                });
+                const newActions = [...extraActions];
+                newActions.splice(0, 1);
+                console.log(extraActions, newActions, index);
+                this.updateParticipant({
+                  modifiedTurn: produce(
+                    this.participant.modifiedTurn ?? {},
+                    (draft) => {
+                      draft[this.round] = {
+                        ...(draft[this.round] ?? {}),
+                        extraActions: newActions[0] ? [newActions[0]] : null,
+                      };
+                    },
+                  ),
+                });
+              },
+            })),
+          );
+        }
+
+    for (const options of [takeInitiativeOptions, extraActionOptions]) {
+      content.push(...options, "divider")
+    }
+
     openMenu({
       position: ev,
       header: { heading: this.participant.name },
       content: compact([
+        ...content,
         character && {
           label: `${localize(
             this.participant.initiative == null ? 'roll' : 'reRoll',
@@ -365,9 +379,12 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
     );
   }
 
+  private get usedPool() {
+    return this.extraActionPool || this.tookInitiativePool
+  }
+
   render() {
-    const { participant } = this;
-    const { editable, token, actor, timeState } = this;
+    const { participant, usedPool, editable, token, actor, timeState } = this;
     return html`
       <wl-list-item @contextmenu=${this.openMenu}>
         <mwc-icon-button
@@ -389,25 +406,29 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
         >
           ${participant.name}
         </button>
-        <span class="conditions">
-          ${actor?.conditions.map(
-            (condition) => html`
-              <img
-                src=${conditionIcons[condition]}
-                title=${localize(condition)}
-                height="14px"
-              />
-            `,
-          )}
+        <span class="status">
+          ${usedPool ? html`[${localize(usedPool)}]` : ""}
+          <span class="conditions">
+            ${actor?.conditions.map(
+              (condition) => html`
+                <img
+                  src=${conditionIcons[condition]}
+                  title=${localize(condition)}
+                  height="14px"
+                />
+              `,
+            )}
+          </span>
+          ${timeState
+            ? html`
+                <span class="time">
+                  ${prettyMilliseconds(timeState.remaining)}
+                  ${localize('remaining')}
+                </span>
+              `
+            : ''}
         </span>
-        ${timeState
-          ? html`
-              <span class="time">
-                ${prettyMilliseconds(timeState.remaining)}
-                ${localize('remaining')}
-              </span>
-            `
-          : ''}
+
         <div class="actions" slot="after">
           ${participant.initiative != null
             ? html`

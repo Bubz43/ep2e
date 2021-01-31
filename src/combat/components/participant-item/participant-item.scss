@@ -60,7 +60,7 @@ wl-list-item {
 }
 
 .conditions {
-  display: flex;
+  display: inline-flex;
   flex-flow: row wrap;
   > * {
     margin-right: 0.5ch;
@@ -68,9 +68,13 @@ wl-list-item {
   }
 }
 
-.time {
+.status {
+  // display: flex;
+  // flex-flow: row wrap;
+  // align-items: center;
   font-size: 14px;
 }
+
 
 .menu {
   opacity: 0;
