@@ -20,7 +20,7 @@
 }
 
 wl-list-item {
-  height: 44px;
+  // height: 44px;
   padding: 0 0.5rem;
 
   mwc-icon-button[slot='before'] {
@@ -28,20 +28,29 @@ wl-list-item {
     --mdc-icon-button-size: 44px;
     margin-right: 0.75rem;
   }
-
-  span[slot='after'] {
-    min-width: 2rem;
-    text-align: center;
-  }
-
   @include textButton();
 
+
+  button[slot='after'] {
+    min-width: 2rem;
+    text-align: center;
+    display: inline-block;
+  }
+
+
+  button {
+    &[disabled] {
+      color: var(--color-text-lighter);
+
+    }
+  }
   .name {
-    width: max-content
+    width: max-content;
+ 
   }
 }
 
-.status {
+.conditions {
   display: flex;
   flex-flow: row wrap;
   > * {

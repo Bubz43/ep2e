@@ -1402,6 +1402,7 @@
     "areaEffectNotes": "Area Effect Notes",
     "dissipated": "Dissipated",
     "dissipates": "Dissipates",
+    "reRoll": "Reroll",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

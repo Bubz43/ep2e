@@ -55,7 +55,7 @@ export enum RoundPhase {
 type CombatParticipantData = {
   name: string;
   img?: string;
-  initiative?: string;
+  initiative?: number;
   entityIdentifiers?: TrackedIdentitfiers | null;
   hidden?: boolean;
   defeated?: boolean;
@@ -87,9 +87,10 @@ export const rollParticipantInitiative = async (
   participant: CombatParticipant,
 ) => {
   const { token, actor } = getParticipantEntities(participant);
-  const bonus =
-    actor?.proxy.type === ActorType.Character ? actor.proxy.initiative : 0;
-  const roll = rollFormula(`1d6 + ${bonus}`);
+
+  const roll = rollFormula(
+    actor?.proxy.type === ActorType.Character ? `1d6 + ${actor.proxy.initiative}` : "0",
+  );
 
   if (roll) {
     await createMessage({
@@ -103,7 +104,7 @@ export const rollParticipantInitiative = async (
     });
   }
 
-  return { id: participant.id, initiative: String(roll?.total || 0) };
+  return { id: participant.id, initiative:roll?.total || 0 };
 };
 
 export const getParticipantEntities = (data: CombatParticipantData) => {

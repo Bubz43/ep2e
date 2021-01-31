@@ -1,0 +1,25 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+}
+
+button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text);
+  min-width: 40px;
+  pointer-events: initial;
+  &:hover {
+    box-shadow: 0 0 2px var(--color-secondary);
+  }
+  > * {
+    pointer-events: none;
+  }
+}

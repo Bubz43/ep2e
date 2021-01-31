@@ -4,14 +4,17 @@ import {
   LimitedAction,
   rollParticipantInitiative,
   TrackedCombatEntity,
-  updateCombatState
+  updateCombatState,
 } from '@src/combat/combat-tracker';
+import { renderNumberInput } from '@src/components/field/fields';
+import { renderAutoForm, renderSubmitForm } from '@src/components/form/forms';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { ActorType } from '@src/entities/entity-types';
 import { findActor } from '@src/entities/find-entities';
 import { subscribeToToken } from '@src/entities/token-subscription';
 import { conditionIcons } from '@src/features/conditions';
+import { createLiveTimeState, LiveTimeState, prettyMilliseconds } from '@src/features/time';
 import { readyCanvas } from '@src/foundry/canvas';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
@@ -23,12 +26,15 @@ import {
   internalProperty,
   LitElement,
   property,
-  PropertyValues
+  PropertyValues,
 } from 'lit-element';
 import mix from 'mix-with/lib';
 import { compact, equals } from 'remeda';
 import type { Subscription } from 'rxjs';
 import styles from './participant-item.scss';
+import "../participant-editor/participant-editor";
+import { RenderDialogEvent } from '@src/open-dialog';
+import type { Dialog } from '@material/mwc-dialog';
 
 @customElement('participant-item')
 export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
@@ -54,6 +60,8 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
 
   @internalProperty() private actor?: ActorEP | null;
 
+  @internalProperty() private timeState?: LiveTimeState | null;
+
   private tokenSubscription?: Subscription | null;
 
   private actorUnsub?: (() => void) | null;
@@ -64,7 +72,6 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
   }
 
   update(changedProps: PropertyValues<this>) {
-    console.log(changedProps);
     if (
       changedProps.has('participant') &&
       !equals(
@@ -74,13 +81,13 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       )
     ) {
       this.unsubFromAll();
+      this.timeState = null;
       const { entityIdentifiers } = this.participant;
       if (entityIdentifiers?.type === TrackedCombatEntity.Token) {
         this.tokenSubscription = subscribeToToken(entityIdentifiers, {
           next: (token) => {
             this.token = token;
             this.requestUpdate();
-            console.log('tokenActor', token.actor);
             if (token.actor !== this.actor) {
               this.actorUnsub?.();
               this.actorUnsub = token.actor?.subscribe(this.actorSub);
@@ -96,6 +103,29 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
         this.actorUnsub = findActor(entityIdentifiers)?.subscribe(
           this.actorSub,
         );
+      } else if (entityIdentifiers?.type === TrackedCombatEntity.Time) {
+        const { startTime, duration } = entityIdentifiers;
+        this.timeState = createLiveTimeState({
+          label: this.participant.name,
+          id: this.participant.id,
+          startTime,
+          duration,
+          updateStartTime: (newStartTime) => {
+            updateCombatState({
+              type: CombatActionType.UpdateParticipants,
+              payload: [
+                {
+                  id: this.participant.id,
+                  entityIdentifiers: {
+                    type: TrackedCombatEntity.Time,
+                    startTime: newStartTime,
+                    duration,
+                  },
+                },
+              ],
+            });
+          },
+        });
       }
     }
     super.update(changedProps);
@@ -119,10 +149,11 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
     );
   }
 
-  private openMenu() {
+  private openMenu(ev: MouseEvent) {
     if (!this.editable) return;
     const modifiedRoundActions = this.participant.modifiedTurn?.[this.round];
     openMenu({
+      position: ev,
       header: { heading: this.participant.name },
       content: compact([
         ...(this.actor?.proxy.type === ActorType.Character && this.round
@@ -130,7 +161,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
               // TODO Use pools to modify action
               {
                 label: localize('takeTheInitiative'),
-                disabled: !!modifiedRoundActions?.tookInitiative || !!this.turn,
+                disabled: !!modifiedRoundActions?.tookInitiative || !!this.turn || !!this.limitedAction,
                 callback: () =>
                   updateCombatState({
                     type: CombatActionType.UpdateParticipants,
@@ -179,7 +210,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
               },
             ]
           : []),
-        {
+        this.actor?.proxy.type === ActorType.Character &&{
           label: `${localize(
             this.participant.initiative == null ? 'roll' : 'reRoll',
           )} ${localize('initiative')}`,
@@ -218,9 +249,32 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
     this.actor?.sheet.render(true);
   }
 
+  private openEditDialog() {
+    this.dispatchEvent(
+      new RenderDialogEvent(html`
+        <mwc-dialog @participant-changed=${(ev: CustomEvent<Partial<CombatParticipant>> & { currentTarget: Dialog}) => {
+        ev.currentTarget.close()
+          updateCombatState({
+            type: CombatActionType.UpdateParticipants,
+            payload: [
+              {
+                ...ev.detail,
+                id: this.participant.id,
+              },
+            ],
+          });
+        }}
+          ><participant-editor
+            .participant=${this.participant}
+          ></participant-editor
+        ></mwc-dialog>
+      `),
+    );
+  }
+
   render() {
     const { participant } = this;
-    const { editable, token, actor } = this;
+    const { editable, token, actor, timeState } = this;
     return html`
       <wl-list-item @contextmenu=${this.openMenu}>
         <mwc-icon-button
@@ -237,7 +291,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
         >
           ${participant.name}
         </button>
-        <span class="status">
+        <span class="conditions">
           ${actor?.conditions.map(
             (condition) => html`
               <img
@@ -248,18 +302,34 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
             `,
           )}
         </span>
-        ${participant.initiative
-          ? html` <span slot="after">${participant.initiative}</span> `
-          : editable
+        ${timeState
           ? html`
-              <mwc-icon-button slot="after" @click=${this.rollInitiative}
+              <span class="time">
+                ${prettyMilliseconds(timeState.remaining)}
+                ${localize('remaining')}
+                <!-- <time-state-item .timeState=${timeState} ?disabled=${!editable}></time-state-item> -->
+              </span>
+            `
+          : ''}
+        ${participant.initiative
+          ? html`
+           
+               <button slot="after" ?disabled=${!editable} @click=${this.openEditDialog}>
+                  ${participant.initiative}
+                </button>
+            `
+          : html`
+              <mwc-icon-button
+                slot="after"
+                @click=${this.rollInitiative}
+                ?disabled=${!editable}
                 ><img src="icons/svg/d20.svg"
               /></mwc-icon-button>
-            `
-          : html` <span slot="after"> - </span> `}
+            `}
       </wl-list-item>
     `;
   }
+
 }
 
 declare global {

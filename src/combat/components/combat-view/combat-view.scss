@@ -44,22 +44,12 @@ padding: 0.25rem 0.5rem 0;
 }
 
 .took-initiative {
-  position: relative;
   & + :not(.took-initiative) {
     margin-top: 0.25rem;
     border-top: 1px solid var(--color-border);
     padding-top: 0.25rem;
   }
-//   &::before {
-//     content: '';
-//     background: alphav(var(--color-grey), 0.1);
-//     position: absolute;
-//     top: 0;
-//     left: 0;
-//     right: 0;
-//     bottom: 0;
-//     z-index: -1;
-//   }
+
 }
 
 sl-animated-list {
@@ -83,4 +73,5 @@ header {
 
 .extra-actions {
     @include animate-css(fadeIn, 250ms);
+    animation-fill-mode: none !important;;
 }

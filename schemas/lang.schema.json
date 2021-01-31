@@ -3368,6 +3368,9 @@
             "reIntegrate": {
               "type": "string"
             },
+            "reRoll": {
+              "type": "string"
+            },
             "reach": {
               "type": "string"
             },
@@ -5641,6 +5644,7 @@
             "rangedAttack",
             "rare",
             "reIntegrate",
+            "reRoll",
             "reach",
             "reachBonus",
             "ready",
