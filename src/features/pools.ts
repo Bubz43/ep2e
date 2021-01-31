@@ -90,7 +90,7 @@ const messageOnly = ({
       pool,
       character,
     });
-    character.spendPool({ pool: pool.type, points: 1 });
+    character.modifySpentPools({ pool: pool.type, points: 1 });
   },
 });
 
@@ -123,7 +123,7 @@ const ignore = ({
           ),
         ),
       );
-      character.spendPool({ pool: pool.type, points: 1 });
+      character.modifySpentPools({ pool: pool.type, points: 1 });
     },
   };
 };
@@ -165,7 +165,7 @@ const moxie: PoolOptionGetter = ({ character, pool }) => {
                 character.updater
                   .path('data', 'reps', network, type)
                   .store(used - 1);
-                character.spendPool({ pool: pool.type, points });
+                character.modifySpentPools({ pool: pool.type, points });
               },
             }
           : [];
@@ -215,7 +215,7 @@ export const poolActionOptions = (character: Character, poolType: PoolType) => {
               }),
             ),
           );
-          character.spendPool({ pool: poolType, points: point });
+          character.modifySpentPools({ pool: poolType, points: point });
         },
       })),
   );

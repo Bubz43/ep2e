@@ -267,7 +267,7 @@ export class ReputationFavor extends SuccessTestBase {
 
     this.character.updater.batchCommits(() => {
       if (pools.active) {
-        this.character?.spendPool({ pool: pools.active[0].type, points: 1 });
+        this.character?.modifySpentPools({ pool: pools.active[0].type, points: 1 });
       }
       if (totalBurnedRepScore) {
         const newScore = reputation.score - totalBurnedRepScore;

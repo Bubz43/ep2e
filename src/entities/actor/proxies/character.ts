@@ -251,12 +251,12 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     return movements;
   }
 
-  async spendPool(...pools: { pool: PoolType; points: number }[]) {
+  async modifySpentPools(...pools: { pool: PoolType; points: number }[]) {
     const { updater } = this.poolHolder;
     for (const { pool, points } of pools) {
       this.poolHolder.updater
         .path('data', 'spentPools', pool)
-        .store((spent) => spent + points);
+        .store((spent) => nonNegative(spent + points));
     }
     await updater.commit();
   }

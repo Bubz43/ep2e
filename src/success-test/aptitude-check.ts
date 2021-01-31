@@ -313,7 +313,7 @@ export class AptitudeCheck extends SuccessTestBase {
 
     this.character?.updater.batchCommits(() => {
       if (pools.active) {
-        this.character?.spendPool({
+        this.character?.modifySpentPools({
           pool: pools.active[0].type,
           points: 1,
         });

@@ -554,7 +554,7 @@ export class MessageSuccessTest extends MessageElement {
                     @click=${async () => {
                       const preview = this.previewPoolAction(action);
                       if (preview) {
-                        await character.spendPool({
+                        await character.modifySpentPools({
                           pool: pool.type,
                           points: 1,
                         });

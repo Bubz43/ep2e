@@ -1,4 +1,5 @@
 import { createMessage, MessageVisibility } from '@src/chat/create-message';
+import { PoolType } from '@src/data-enums';
 import type { ActorEP } from '@src/entities/actor/actor';
 import { ActorType } from '@src/entities/entity-types';
 import { findActor, findToken } from '@src/entities/find-entities';
@@ -40,12 +41,12 @@ type TrackedIdentitfiers =
       type: TrackedCombatEntity.Time;
       startTime: number;
       duration: number;
-    };
+  };
+    
+export const combatPools = [PoolType.Insight, PoolType.Vigor, PoolType.Threat]
 
-export enum LimitedAction {
-  Mental = 1,
-  Physical,
-}
+export type CombatPool = (typeof combatPools)[number]
+
 
 export enum RoundPhase {
   Normal = 1,
@@ -63,8 +64,8 @@ type CombatParticipantData = {
   modifiedTurn?: Record<
     number,
     | {
-        tookInitiative?: LimitedAction | null;
-        extraActions?: [LimitedAction] | [LimitedAction, LimitedAction] | null;
+        tookInitiative?: CombatPool | null;
+        extraActions?: [CombatPool] | [CombatPool, CombatPool] | null;
       }
     | undefined
     | null
@@ -74,11 +75,11 @@ type CombatParticipantData = {
 export type CombatRoundPhases = {
   [RoundPhase.Normal]: {
     participant: CombatParticipant;
-    tookInitiative?: LimitedAction | null;
+    tookInitiative?: CombatPool | null;
   }[];
   [RoundPhase.ExtraActions]: {
     participant: CombatParticipant;
-    limitedActions: [LimitedAction] | [LimitedAction, LimitedAction];
+    limitedActions: [CombatPool] | [CombatPool, CombatPool];
   }[];
   someTookInitiative: boolean;
 };
@@ -123,12 +124,12 @@ export const getParticipantEntities = (data: CombatParticipantData) => {
   };
 };
 
-export const participantsAsToken = (token: Token) => {
-  return Object.values(gameSettings.combatState.current.participants).filter(
+export const participantsAsToken = ({ id, scene }: Token) => {
+  return gameSettings.combatState.current.participants.filter(
     ({ entityIdentifiers }) =>
       entityIdentifiers?.type === TrackedCombatEntity.Token &&
-      entityIdentifiers.tokenId === token.id &&
-      entityIdentifiers.sceneId === token.scene?.id,
+      entityIdentifiers.tokenId === id &&
+      entityIdentifiers.sceneId === scene?.id,
   );
 };
 
@@ -167,11 +168,11 @@ export const participantsByInitiative = (
   {
     participant: a,
     tookInitiative: initA,
-  }: { participant: CombatParticipant; tookInitiative?: LimitedAction | null },
+  }: { participant: CombatParticipant; tookInitiative?: CombatPool | null },
   {
     participant: b,
     tookInitiative: initB,
-  }: { participant: CombatParticipant; tookInitiative?: LimitedAction | null },
+  }: { participant: CombatParticipant; tookInitiative?: CombatPool | null },
 ) => {
   if (initA && !initB) return -1;
   if (initB && !initA) return 1;

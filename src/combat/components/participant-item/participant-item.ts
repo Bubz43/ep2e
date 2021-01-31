@@ -1,7 +1,7 @@
 import {
   CombatActionType,
   CombatParticipant,
-  LimitedAction,
+  combatPools,
   rollParticipantInitiative,
   TrackedCombatEntity,
   updateCombatState,
@@ -22,7 +22,7 @@ import {
 import { readyCanvas } from '@src/foundry/canvas';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
-import { openMenu } from '@src/open-menu';
+import { MenuOption, openMenu } from '@src/open-menu';
 import produce from 'immer';
 import {
   customElement,
@@ -39,6 +39,7 @@ import styles from './participant-item.scss';
 import '../participant-editor/participant-editor';
 import { RenderDialogEvent } from '@src/open-dialog';
 import type { Dialog } from '@material/mwc-dialog';
+import { poolIcon } from '@src/features/pool';
 
 @customElement('participant-item')
 export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
@@ -51,8 +52,6 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
   }
 
   @property({ attribute: false }) participant!: CombatParticipant;
-
-  @property({ type: Number }) limitedAction?: LimitedAction | null;
 
   @property({ type: Boolean, reflect: true }) active = false;
 
@@ -153,71 +152,152 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
     );
   }
 
+  private updateParticipant(change: Partial<CombatParticipant>) {
+    updateCombatState({
+      type: CombatActionType.UpdateParticipants,
+      payload: [{ ...change, id: this.participant.id }],
+    });
+  }
+
+  private get character() {
+    return this.actor?.proxy.type === ActorType.Character
+      ? this.actor.proxy
+      : null;
+  }
+
   private openMenu(ev: MouseEvent) {
     if (!this.editable) return;
-    const modifiedRoundActions = this.participant.modifiedTurn?.[this.round];
+    const { tookInitiative, extraActions } =
+      this.participant.modifiedTurn?.[this.round] ?? {};
+    const { character } = this;
+    const pools = character?.pools;
+
+    const content: MenuOption[] = [];
+    const takeInitiativeOptions: MenuOption[] = [];
+    const extraActionOptions: MenuOption[] = [];
+
+    if (tookInitiative) {
+      takeInitiativeOptions.push({
+        label: `[${localize('undo')}] ${localize(
+          'takeTheInitiative',
+        )} - ${localize(tookInitiative)}`,
+        icon: html`<img src=${poolIcon(tookInitiative)} />`,
+        callback: async () => {
+          await character?.modifySpentPools({
+            pool: tookInitiative,
+            points: -1,
+          });
+          this.updateParticipant({
+            modifiedTurn: produce(
+              this.participant.modifiedTurn ?? {},
+              (draft) => {
+                draft[this.round] = {
+                  ...(draft[this.round] ?? {}),
+                  tookInitiative: null,
+                };
+              },
+            ),
+          });
+        },
+      });
+    }
+
+    if (extraActions) {
+      extraActionOptions.push(
+        ...extraActions.map((poolType, index) => ({
+          label: `[${localize('undo')}] ${localize('extraAction')} ${
+            index + 1
+          } - ${localize(poolType)}`,
+          icon: html`<img src=${poolIcon(poolType)} />`,
+          callback: async () => {
+            await character?.modifySpentPools({
+              pool: poolType,
+              points: -1,
+            });
+            const newOptions = [...extraActions].splice(index, 1);
+            this.updateParticipant({
+              modifiedTurn: produce(
+                this.participant.modifiedTurn ?? {},
+                (draft) => {
+                  draft[this.round] = {
+                    ...(draft[this.round] ?? {}),
+                    extraActions: newOptions[0] ? [newOptions[0]] : null,
+                  };
+                },
+              ),
+            });
+          },
+        })),
+      );
+    }
+
+    if (pools) {
+      for (const poolType of combatPools) {
+        const pool = pools.get(poolType);
+        if (!pool) continue;
+        if (!tookInitiative) {
+          takeInitiativeOptions.push({
+            label: `${localize('takeTheInitiative')} - ${localize(
+              pool.type,
+            )} (${pool.available} / ${pool.max})`,
+            icon: html`<img src=${pool.icon} />`,
+            disabled: !pool.available || this.turn > 0,
+            callback: async () => {
+              await character?.modifySpentPools({
+                pool: pool.type,
+                points: 1,
+              });
+              this.updateParticipant({
+                modifiedTurn: produce(
+                  this.participant.modifiedTurn ?? {},
+                  (draft) => {
+                    draft[this.round] = {
+                      ...(draft[this.round] ?? {}),
+                      tookInitiative: pool.type,
+                    };
+                  },
+                ),
+              });
+            },
+          });
+        }
+
+        if (!extraActions || extraActions.length === 1) {
+          extraActionOptions.push({
+            label: `${localize('extraAction')} - ${localize(pool.type)} (${
+              pool.available
+            }/${pool.max})`,
+            icon: html`<img src=${pool.icon} />`,
+            disabled: !pool.available,
+            callback: async () => {
+                await character?.modifySpentPools({
+                  pool: pool.type,
+                  points: 1,
+                });
+              this.updateParticipant({
+                modifiedTurn: produce(
+                  this.participant.modifiedTurn ?? {},
+                  (draft) => {
+                    draft[this.round] = {
+                      ...(draft[this.round] ?? {}),
+                      extraActions: extraActions?.[0]
+                        ? [extraActions[0], pool.type]
+                        : [pool.type],
+                    };
+                  },
+                ),
+              });
+            }
+          });
+        }
+      }
+    }
+
     openMenu({
       position: ev,
       header: { heading: this.participant.name },
       content: compact([
-        ...(this.actor?.proxy.type === ActorType.Character && this.round
-          ? [
-              // TODO Use pools to modify action
-              {
-                label: localize('takeTheInitiative'),
-                disabled:
-                  !!modifiedRoundActions?.tookInitiative ||
-                  !!this.turn ||
-                  !!this.limitedAction,
-                callback: () =>
-                  updateCombatState({
-                    type: CombatActionType.UpdateParticipants,
-                    payload: [
-                      {
-                        id: this.participant.id,
-                        modifiedTurn: produce(
-                          this.participant.modifiedTurn ?? {},
-                          (draft) => {
-                            draft[this.round] = {
-                              ...(draft[this.round] || {}),
-                              tookInitiative: LimitedAction.Mental,
-                            };
-                          },
-                        ),
-                      },
-                    ],
-                  }),
-              },
-              {
-                label: localize('takeExtraAction'),
-                disabled: modifiedRoundActions?.extraActions?.length === 2,
-                callback: () => {
-                  updateCombatState({
-                    type: CombatActionType.UpdateParticipants,
-                    payload: [
-                      {
-                        id: this.participant.id,
-                        modifiedTurn: produce(
-                          this.participant.modifiedTurn ?? {},
-                          (draft) => {
-                            const actions = draft[this.round]?.extraActions;
-                            draft[this.round] = {
-                              ...(draft[this.round] || {}),
-                              extraActions:
-                                actions?.length === 1
-                                  ? [...actions, LimitedAction.Physical]
-                                  : [LimitedAction.Physical],
-                            };
-                          },
-                        ),
-                      },
-                    ],
-                  });
-                },
-              },
-            ]
-          : []),
-        this.actor?.proxy.type === ActorType.Character && {
+        character && {
           label: `${localize(
             this.participant.initiative == null ? 'roll' : 'reRoll',
           )} ${localize('initiative')}`,
@@ -331,10 +411,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
         <div class="actions" slot="after">
           ${participant.initiative != null
             ? html`
-                <button
-                  ?disabled=${!editable}
-                  @click=${this.openEditDialog}
-                >
+                <button ?disabled=${!editable} @click=${this.openEditDialog}>
                   ${participant.initiative}
                 </button>
               `
@@ -345,7 +422,11 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
                   ><img src="icons/svg/d20.svg"
                 /></mwc-icon-button>
               `}
-              <mwc-icon-button class="menu" icon="more_vert" @click=${this.openMenu}></mwc-icon-button>
+          <mwc-icon-button
+            class="menu"
+            icon="more_vert"
+            @click=${this.openMenu}
+          ></mwc-icon-button>
         </div>
       </wl-list-item>
     `;
