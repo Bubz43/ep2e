@@ -3,6 +3,7 @@ import {
   CombatData,
   CombatParticipant,
   CombatRoundPhases,
+  getParticipantEntities,
   rollParticipantInitiative,
   RoundPhase,
   setupParticipants,
@@ -25,6 +26,7 @@ import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
 import { equals } from 'remeda';
 import '../participant-item/participant-item';
+import type { ParticipantItem } from '../participant-item/participant-item';
 import '../participant-selector/participant-selector';
 import styles from './combat-view.scss';
 
@@ -41,6 +43,8 @@ export class CombatView extends LitElement {
   private unsub: (() => void) | null = null;
 
   @internalProperty() private combatState: CombatData | null = null;
+
+  @internalProperty() private playerTurnControls = false;
 
   private participants: CombatParticipant[] = [];
 
@@ -64,10 +68,12 @@ export class CombatView extends LitElement {
   async connectedCallback() {
     this.unsub = gameSettings.combatState.subscribe((newState) => {
       const { combatState } = this;
+
       const changedParticipants = !equals(
         combatState?.participants,
         newState.participants,
       );
+      
       if (changedParticipants) {
         console.time('setupParticipants');
         this.participants = setupParticipants(newState.participants);
@@ -180,8 +186,11 @@ export class CombatView extends LitElement {
 
   updated(changedProps: PropertyValues<this>) {
     requestAnimationFrame(() => {
-      const active = this.renderRoot.querySelector('participant-item[active]');
+      const active = this.renderRoot.querySelector<ParticipantItem>(
+        'participant-item[active]',
+      );
       if (active) this.intObs?.observe(active);
+      this.playerTurnControls = !game.user.isGM && !!active?.editable;
     });
     super.updated(changedProps);
   }
@@ -318,9 +327,8 @@ export class CombatView extends LitElement {
   }
 
   private reset() {
-    updateCombatState({
-      type: CombatActionType.Reset,
-    });
+    // TODO dialog
+    updateCombatState({ type: CombatActionType.Reset });
   }
 
   private async rollAllInitiatives() {
@@ -347,15 +355,8 @@ export class CombatView extends LitElement {
     } = this.phases ?? {};
     const { phase, turn = [] } = this.roundState ?? {};
     const [turnIndex = 0, extraIndex = 0] = turn;
-    const { isGM, id } = game.user;
-    const activeParticipant =
-      round && phase && this.phases?.[phase][turnIndex]?.participant;
-    const editableActive =
-      activeParticipant &&
-      !!(
-        isGM ||
-        (activeParticipant.actor?.owner ?? activeParticipant.userId === id)
-      );
+    const { isGM } = game.user;
+
     const noPrevTurn =
       round <= 1 &&
       (phase === RoundPhase.ExtraActions
@@ -394,7 +395,7 @@ export class CombatView extends LitElement {
                 ${repeat(
                   normal,
                   ({ participant }) => participant.id,
-                  ({ participant, tookInitiative }) =>
+                  ({ participant, tookInitiative }, index) =>
                     html`
                       <participant-item
                         class=${tookInitiative ? 'took-initiative' : ''}
@@ -402,7 +403,7 @@ export class CombatView extends LitElement {
                         round=${round}
                         .limitedAction=${tookInitiative}
                         ?active=${phase === RoundPhase.Normal &&
-                        activeParticipant === participant}
+                        turnIndex === index}
                         turn=${turnIndex}
                         ?hidden=${!isGM && !!participant.hidden}
                       ></participant-item>
@@ -420,14 +421,14 @@ export class CombatView extends LitElement {
                 ${repeat(
                   extraActions,
                   ({ participant }) => participant.id,
-                  ({ participant, limitedActions }) =>
+                  ({ participant, limitedActions }, index) =>
                     limitedActions.map(
                       (limitedAction, actionIndex) => html`<participant-item
                         .participant=${participant}
                         limitedAction=${limitedAction}
                         round=${round}
                         ?active=${phase === RoundPhase.ExtraActions &&
-                        participant === activeParticipant &&
+                        turnIndex === index &&
                         actionIndex === extraIndex}
                         turn=${turnIndex}
                         ?hidden=${!isGM && !!participant.hidden}
@@ -474,19 +475,19 @@ export class CombatView extends LitElement {
               <mwc-icon-button
                 @click=${this.previousTurn}
                 icon="chevron_left"
-                ?disabled=${!editableActive || noPrevTurn}
+                ?disabled=${!this.playerTurnControls || noPrevTurn}
               ></mwc-icon-button>
               <mwc-button
                 dense
                 @click=${this.advanceTurn}
-                ?disabled=${!editableActive}
+                ?disabled=${!this.playerTurnControls}
               >
                 ${localize('end')} ${localize('turn')}</mwc-button
               >
               <mwc-icon-button
                 @click=${this.advanceTurn}
                 icon="chevron_right"
-                ?disabled=${!editableActive}
+                ?disabled=${!this.playerTurnControls}
               ></mwc-icon-button>
             `
           : ''}

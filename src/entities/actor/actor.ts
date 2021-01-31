@@ -26,6 +26,7 @@ import { Character } from './proxies/character';
 import { Infomorph } from './proxies/infomorph';
 import { Synthetic } from './proxies/synthetic';
 import type { EntityPath } from '../path';
+import { subscribeToToken } from '../subscriptions';
 
 type ItemUpdate = SetRequired<DeepPartial<ItemEntity>, '_id'>;
 
@@ -59,6 +60,19 @@ export class ActorEP extends Actor {
   private readonly subs = new Set<ActorSub>();
 
   subscribe(sub: ActorSub) {
+    if (this.token?.scene && this.isToken) {
+      const tokenSub = subscribeToToken(
+        {
+          tokenId: this.token.id,
+          sceneId: this.token.scene.id,
+        },
+        {
+          next: (token) => sub(token.actor || null),
+          complete: () => sub(null),
+        },
+      );
+      return () => tokenSub?.unsubscribe();
+    }
     this.subs.add(sub);
     sub(this);
     return () => void this.subs.delete(sub);

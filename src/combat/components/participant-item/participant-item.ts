@@ -1,4 +1,3 @@
-import { createMessage, MessageVisibility } from '@src/chat/create-message';
 import {
   CombatActionType,
   CombatParticipant,
@@ -7,15 +6,32 @@ import {
   TrackedCombatEntity,
   updateCombatState,
 } from '@src/combat/combat-tracker';
+import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { ActorType } from '@src/entities/entity-types';
+import { findActor } from '@src/entities/find-entities';
+import { subscribeToToken } from '@src/entities/subscriptions';
 import { conditionIcons } from '@src/features/conditions';
 import { readyCanvas } from '@src/foundry/canvas';
-import { MutateEvent, mutatePlaceableHook } from '@src/foundry/hook-setups';
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
+import type { TokenData } from '@src/foundry/foundry-cont';
+import {
+  mutateEntityHook,
+  MutateEvent,
+  mutatePlaceableHook,
+} from '@src/foundry/hook-setups';
 import { localize } from '@src/foundry/localization';
 import { openMenu } from '@src/open-menu';
 import produce from 'immer';
-import { customElement, LitElement, property, html, PropertyValues } from 'lit-element';
+import {
+  customElement,
+  html,
+  internalProperty,
+  LitElement,
+  property,
+  PropertyValues,
+} from 'lit-element';
 import { compact, equals } from 'remeda';
+import type { Subscription } from 'rxjs';
 import styles from './participant-item.scss';
 
 @customElement('participant-item')
@@ -38,27 +54,67 @@ export class ParticipantItem extends LitElement {
 
   @property({ type: Number }) turn = 0;
 
+  @internalProperty() private token?: MaybeToken;
+
+  @internalProperty() private actor?: ActorEP | null;
+
   private tokenLinked = false;
-  
-  updated(changedProps: PropertyValues<this>) {
-    const previous = changedProps.get("participant") as CombatParticipant | undefined;
-    if (!equals(previous?.entityIdentifiers, this.participant.entityIdentifiers)) {
-      const { entityIdentifiers } = this.participant;
-      if (entityIdentifiers?.type === TrackedCombatEntity.Token) {
-        // mutatePlaceableHook({
-        //   entity: Token,
-        //   hook: "on",
-        //   event: MutateEvent.Update
-        // })
-      }
-    }
-    super.updated(changedProps)
+
+  private tokenSubscription?: Subscription | null;
+
+  private actorUnsub?: (() => void) | null;
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
   }
 
-  private get editable() {
+  update(changedProps: PropertyValues<this>) {
+    const previous = changedProps.get('participant') as
+      | CombatParticipant
+      | undefined;
+    if (
+      !equals(previous?.entityIdentifiers, this.participant.entityIdentifiers)
+    ) {
+      this.unsubFromAll();
+      const { entityIdentifiers } = this.participant;
+      if (entityIdentifiers?.type === TrackedCombatEntity.Token) {
+        this.tokenSubscription = subscribeToToken(entityIdentifiers, {
+          next: (token) => {
+            this.token = token;
+            if (token.actor !== this.actor) {
+              this.actorUnsub?.();
+              this.actorUnsub = token.actor?.subscribe(this.actorSub);
+            }
+          },
+          complete: () => {
+            this.token = null;
+            this.tokenSubscription?.unsubscribe();
+          },
+        });
+      } else if (entityIdentifiers?.type === TrackedCombatEntity.Actor) {
+        this.actorUnsub?.();
+        this.actorUnsub = findActor(entityIdentifiers)?.subscribe(
+          this.actorSub,
+        );
+      }
+    }
+    super.update(changedProps);
+  }
+
+  private unsubFromAll() {
+    this.tokenSubscription?.unsubscribe();
+    this.actorUnsub?.();
+  }
+
+  private actorSub = (actor: ActorEP | null) => {
+    this.actor = actor;
+    if (!this.actor) this.actorUnsub?.();
+  };
+
+  get editable() {
     return (
       game.user.isGM ||
-      (this.participant.actor?.owner ??
+      (this.actor?.owner ??
         this.participant.userId === game.user.id)
     );
   }
@@ -69,7 +125,7 @@ export class ParticipantItem extends LitElement {
     openMenu({
       header: { heading: this.participant.name },
       content: compact([
-        ...(this.participant.actor?.proxy.type === ActorType.Character &&
+        ...(this.actor?.proxy.type === ActorType.Character &&
         this.round
           ? [
               // TODO Use pools to modify action
@@ -151,27 +207,28 @@ export class ParticipantItem extends LitElement {
 
   private iconClick() {
     const token =
-      this.participant.token ??
-      this.participant.actor?.getActiveTokens(true)[0];
-    if (token) {
+      this.token ??
+      this.actor?.getActiveTokens(true)[0];
+    if (token?.scene?.isView) {
       token.control({ releaseOthers: true });
       readyCanvas()?.animatePan({ x: token.x, y: token.y } as any);
+    } else if (token) {
+      notify(NotificationType.Info, "Token not on viewed scene")
     }
   }
 
   private openActorSheet() {
-    this.participant.actor?.sheet.render(true);
+    this.actor?.sheet.render(true);
   }
 
   render() {
     const { participant } = this;
-    const { editable } = this;
-    const { token, actor } = participant;
+    const { editable, token, actor } = this;
     return html`
       <wl-list-item @contextmenu=${this.openMenu}>
         <mwc-icon-button
           slot="before"
-          ?disabled=${!editable || !token}
+          ?disabled=${!editable || !!(token && !token.scene?.isView)}
           @click=${this.iconClick}
           ><img
             src=${token?.data.img || actor?.data.img || CONST.DEFAULT_TOKEN}

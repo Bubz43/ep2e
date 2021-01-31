@@ -17,15 +17,9 @@ export type ActorIdentifiers = {
   uuid?: string | null;
 };
 
-const tempTokens = new WeakMap<TokenData, Token>();
 
-const getTempToken = (tokenData: TokenData, scene: SceneEP) => {
-  let token = tempTokens.get(tokenData);
-  if (!token) {
-    token = new Token(tokenData, scene);
-    tempTokens.set(tokenData, token);
-  }
-  return token;
+export const createTempToken = (tokenData: TokenData, scene: SceneEP) => {
+  return new Token(tokenData, scene);
 };
 
 export const findActor = (ids: ActorIdentifiers) => {
@@ -50,7 +44,7 @@ export const findToken = ({ actorId, tokenId, sceneId }: ActorIdentifiers) => {
   const scene = sceneId && game.scenes.get(sceneId);
   if (scene) {
     const tokenData = scene.data.tokens.find((t) => t._id === tokenId);
-    if (tokenData) return getTempToken(tokenData, scene);
+    if (tokenData) return createTempToken(tokenData, scene);
   }
   return;
 };

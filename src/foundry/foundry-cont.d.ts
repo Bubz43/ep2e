@@ -177,6 +177,7 @@ type GameCollections = {
   messages: Col<ChatMessageEP>;
   scenes: Col<SceneEP> & {
     preload(sceneId: string, push?: boolean): Promise<unknown>;
+    active?: SceneEP | null;
   };
   items: Col<ItemEP>;
   journal: Col<JournalEntry>;

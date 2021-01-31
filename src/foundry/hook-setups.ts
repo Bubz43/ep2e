@@ -1,5 +1,6 @@
 import type { EntityType } from './foundry-cont';
 import type { Class } from 'type-fest';
+import type { SceneEP } from '@src/entities/scene';
 
 type HookType = keyof Pick<
   typeof Hooks,
@@ -53,7 +54,7 @@ export const mutatePlaceableHook = <
   hook: HookType;
   event: MutateEvent;
   callback: (
-    scene: Scene,
+    scene: SceneEP,
     entData: T extends { data: unknown } ? T['data'] : unknown,
     change: unknown,
   ) => void;

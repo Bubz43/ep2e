@@ -74,9 +74,10 @@ export type CombatRoundPhases = {
 export const rollParticipantInitiative = async (
   participant: CombatParticipant,
 ) => {
+  const { token, actor } = getParticipantEntities(participant)
   const bonus =
-    participant.actor?.proxy.type === ActorType.Character
-      ? participant.actor.proxy.initiative
+    actor?.proxy.type === ActorType.Character
+      ? actor.proxy.initiative
       : 0;
   const roll = rollFormula(`1d6 + ${bonus}`);
 
@@ -84,7 +85,7 @@ export const rollParticipantInitiative = async (
     await createMessage({
       roll,
       flavor: localize('initiative'),
-      entity: participant.token ?? participant.actor,
+      entity: token ?? actor,
       alias: participant.name,
       visibility: participant.hidden
         ? MessageVisibility.WhisperGM
@@ -95,25 +96,34 @@ export const rollParticipantInitiative = async (
   return { id: participant.id, initiative: String(roll?.total || 0) };
 };
 
-export const setupParticipants = (participants: CombatData['participants']) => {
-  return Object.entries(participants).map(([id, data]) => {
-    const token =
-      data.entityIdentifiers?.type === TrackedCombatEntity.Token
-        ? findToken(data.entityIdentifiers)
-        : null;
+export const getParticipantEntities = (data: CombatParticipantData) => {
+  const token =
+    data.entityIdentifiers?.type === TrackedCombatEntity.Token
+      ? findToken(data.entityIdentifiers)
+      : null;
+  return {
+    token,
+    actor:
+      token?.actor ??
+      (data.entityIdentifiers?.type === TrackedCombatEntity.Actor
+        ? findActor(data.entityIdentifiers)
+        : null),
+  };
+};
 
-    const participant: CombatParticipant = {
-      ...data,
-      id,
-      token,
-      actor:
-        token?.actor ??
-        (data.entityIdentifiers?.type === TrackedCombatEntity.Actor
-          ? findActor(data.entityIdentifiers)
-          : null),
-    };
-    return participant;
-  });
+const setupParticipant = (data: CombatParticipantData, id: string) => {
+  const participant: CombatParticipant = {
+    ...data,
+    id,
+    ...getParticipantEntities(data),
+  };
+  return participant;
+};
+
+export const setupParticipants = (participants: CombatData['participants']) => {
+  return Object.entries(participants).map(([id, data]) =>
+    setupParticipant(data, id),
+  );
 };
 
 export const setupPhases = (
@@ -168,10 +178,7 @@ export const participantsByInitiative = (
     : Number(b.initiative) - Number(a.initiative);
 };
 
-export type CombatParticipant = CombatParticipantData & {
-  token?: Token | null;
-  actor?: ActorEP | null;
-} & { id: string };
+export type CombatParticipant = CombatParticipantData & { id: string };
 
 export type CombatData = {
   participants: Record<string, CombatParticipantData>;
@@ -251,10 +258,11 @@ const updateCombat = (action: CombatUpdateAction) => {
   gameSettings.combatState.update((state) => {
     const newState = updateReducer(state, action);
     if (action.type === CombatActionType.UpdateRound) {
-      if (newState.round > state.round) advanceWorldTime(CommonInterval.Turn)
-      else if (newState.round < state.round) advanceWorldTime(-CommonInterval.Turn)
+      if (newState.round > state.round) advanceWorldTime(CommonInterval.Turn);
+      else if (newState.round < state.round)
+        advanceWorldTime(-CommonInterval.Turn);
     }
-    return newState
+    return newState;
   });
 };
 
