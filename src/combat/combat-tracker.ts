@@ -66,6 +66,7 @@ type CombatParticipantData = {
   hidden?: boolean;
   defeated?: boolean;
   userId?: string;
+  delaying?: boolean;
   modifiedTurn?: Record<
     number,
     | {

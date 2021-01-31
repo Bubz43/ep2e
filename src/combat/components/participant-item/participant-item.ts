@@ -179,8 +179,27 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
     const pools = character?.pools;
 
     const content: MWCMenuOption[] = [];
+    const delayOptions: MenuOption[] = [];
     const takeInitiativeOptions: MenuOption[] = [];
     const extraActionOptions: MenuOption[] = [];
+
+    if (this.participant.delaying) {
+      delayOptions.push({
+        label: localize('interrupt'),
+        icon: html`<mwc-icon>priority_high</mwc-icon>`,
+        callback: () => {
+          // TODO
+        }
+      }, {
+        label: `[${localize("undo")}] ${localize("interrupt")}`,
+        callback: () => this.updateParticipant({ delaying: false })
+      });
+    } else if (character) {
+      delayOptions.push({
+        label: localize("delayTurn"),
+        callback: () => this.updateParticipant({ delaying: true })
+      })
+    }
 
     if (tookInitiative && this.turn === 0 && !this.extraActionPool) {
       takeInitiativeOptions.push({
@@ -208,7 +227,9 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       });
     }
 
-    if (pools && this.round) {
+
+
+    if (pools && this.round && !this.participant.delaying) {
       for (const poolType of combatPools) {
         const pool = pools.get(poolType);
         if (!pool) continue;
@@ -303,7 +324,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       );
     }
 
-    for (const options of [takeInitiativeOptions, extraActionOptions]) {
+    for (const options of [delayOptions, takeInitiativeOptions, extraActionOptions]) {
       content.push(...options, 'divider');
     }
 
@@ -433,8 +454,8 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
         <div class="actions" slot="after">
           ${participant.initiative != null
             ? html`
-                <button ?disabled=${!editable} @click=${this.openEditDialog}>
-                  ${participant.initiative}
+                <button ?disabled=${!editable} @click=${this.openEditDialog} title=${participant.initiative}>
+                  ${participant.delaying ? `${localize("delay")}` : participant.initiative}
                 </button>
               `
             : html`

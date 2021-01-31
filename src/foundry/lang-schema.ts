@@ -1428,7 +1428,9 @@ type LangEntries =
   | 'attackTraitNotes'
   | 'areaEffectNotes'
   | 'dissipated'
-  | 'dissipates' | "reRoll";
+  | 'dissipates'
+  | 'reRoll'
+  | 'interrupt';
 type FullNames =
   | 'cog'
   | 'int'
