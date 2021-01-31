@@ -292,10 +292,15 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       <wl-list-item @contextmenu=${this.openMenu}>
         <mwc-icon-button
           slot="before"
-          ?disabled=${!editable || (!token && !actor) || !!(token && !token.scene?.isView)}
+          ?disabled=${!editable ||
+          (!token && !actor) ||
+          !!(token && !token.scene?.isView)}
           @click=${this.iconClick}
           ><img
-            src=${participant.img || token?.data.img || actor?.data.img || CONST.DEFAULT_TOKEN}
+            src=${participant.img ||
+            token?.data.img ||
+            actor?.data.img ||
+            CONST.DEFAULT_TOKEN}
         /></mwc-icon-button>
         <button
           class="name"
@@ -320,28 +325,28 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
               <span class="time">
                 ${prettyMilliseconds(timeState.remaining)}
                 ${localize('remaining')}
-                <!-- <time-state-item .timeState=${timeState} ?disabled=${!editable}></time-state-item> -->
               </span>
             `
           : ''}
-        ${participant.initiative != null
-          ? html`
-              <button
-                slot="after"
-                ?disabled=${!editable}
-                @click=${this.openEditDialog}
-              >
-                ${participant.initiative}
-              </button>
-            `
-          : html`
-              <mwc-icon-button
-                slot="after"
-                @click=${this.rollInitiative}
-                ?disabled=${!editable}
-                ><img src="icons/svg/d20.svg"
-              /></mwc-icon-button>
-            `}
+        <div class="actions" slot="after">
+          ${participant.initiative != null
+            ? html`
+                <button
+                  ?disabled=${!editable}
+                  @click=${this.openEditDialog}
+                >
+                  ${participant.initiative}
+                </button>
+              `
+            : html`
+                <mwc-icon-button
+                  @click=${this.rollInitiative}
+                  ?disabled=${!editable}
+                  ><img src="icons/svg/d20.svg"
+                /></mwc-icon-button>
+              `}
+              <mwc-icon-button class="menu" icon="more_vert" @click=${this.openMenu}></mwc-icon-button>
+        </div>
       </wl-list-item>
     `;
   }
