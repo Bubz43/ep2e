@@ -85,12 +85,13 @@ export type CombatRoundPhases = {
 
 export const rollParticipantInitiative = async (
   participant: CombatParticipant,
-) => {
+): Promise<{ id: string; initiative: number }> => {
   const { token, actor } = getParticipantEntities(participant);
 
-  const roll = rollFormula(
-    actor?.proxy.type === ActorType.Character ? `1d6 + ${actor.proxy.initiative}` : "0",
-  );
+  const roll =
+    actor?.proxy.type === ActorType.Character
+      ? rollFormula(`1d6 + ${actor.proxy.initiative}`)
+      : null;
 
   if (roll) {
     await createMessage({
@@ -104,7 +105,7 @@ export const rollParticipantInitiative = async (
     });
   }
 
-  return { id: participant.id, initiative:roll?.total || 0 };
+  return { id: participant.id, initiative: roll?.total || 0 };
 };
 
 export const getParticipantEntities = (data: CombatParticipantData) => {

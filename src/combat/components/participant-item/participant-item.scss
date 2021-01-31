@@ -7,6 +7,7 @@
 
 :host {
   display: block;
+  will-change: transform;
 }
 
 :host([active]) {
@@ -57,4 +58,8 @@ wl-list-item {
     margin-right: 0.5ch;
     @include animate-css(fadeIn, 250ms);
   }
+}
+
+.time {
+  font-size: 14px;
 }

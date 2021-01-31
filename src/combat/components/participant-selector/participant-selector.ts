@@ -51,8 +51,9 @@ export class ParticipantSelector extends mix(LitElement).with(
 
   private toggleToAdd(entity: Actor | Token) {
     this.toAdd.delete(entity) || this.toAdd.add(entity);
-    const submitButton = this.renderRoot.querySelector('submit-button');
-    if (submitButton) submitButton.complete = notEmpty(this.toAdd);
+    requestAnimationFrame(() => this.requestUpdate());
+    // const submitButton = this.renderRoot.querySelector('submit-button');
+    // if (submitButton) submitButton.complete = notEmpty(this.toAdd);
   }
 
   private addToCombat() {
@@ -188,10 +189,15 @@ export class ParticipantSelector extends mix(LitElement).with(
           renderTextField(img, {
             after: html`
               <button
-                @click=${({ currentTarget }: Event) => {
+                @click=${({ currentTarget }: Event & { currentTarget: HTMLElement }) => {
                   openImagePicker(this, img.value, (path) => {
                     closeImagePicker(this);
-                    currentTarget?.dispatchEvent(
+                    const input = currentTarget?.closest("sl-field")?.querySelector("input")
+                    if (input) {
+                      input.value = path;
+                      input.click()
+                    }
+                    currentTarget.dispatchEvent(
                       new SlCustomStoreEvent({
                         key: img.prop,
                         value: path,

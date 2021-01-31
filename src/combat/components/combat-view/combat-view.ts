@@ -328,7 +328,7 @@ export class CombatView extends LitElement {
   }
 
   private async rollAllInitiatives() {
-    const payload: { id: string; initiative: string }[] = [];
+    const payload: { id: string; initiative: number }[] = [];
     for (const participant of this.participants) {
       if (participant.initiative == null) {
         payload.push(await rollParticipantInitiative(participant));
@@ -382,7 +382,7 @@ export class CombatView extends LitElement {
       <div class="phases">
         ${notEmpty(normal)
           ? html`
-              <sl-animated-list class="normal-order">
+              <sl-animated-list class="normal-order" transformOrigin="top">
                 ${someTookInitiative
                   ? html`<li class="label">
                       ${localize('took')} ${localize('initiative')}
@@ -410,7 +410,7 @@ export class CombatView extends LitElement {
           : ''}
         ${notEmpty(extraActions)
           ? html`
-              <sl-animated-list class="extra-actions">
+              <sl-animated-list class="extra-actions" transformOrigin="top">
                 <li class="label">
                   ${localize('extra')} ${localize('actions')}
                 </li>

@@ -38,34 +38,13 @@ export class ParticipantEditor extends LitElement {
   };
 
   render() {
-    const { name, img = '', initiative } = this.participant;
+    const { name, initiative } = this.participant;
     return html`
       ${renderSubmitForm({
-        props: { name, img, initiative: initiative || 0 },
+        props: { name, initiative: initiative || 0 },
         update: this.emitUpdate,
-        fields: ({ name, img, initiative }) => [
+        fields: ({ name, initiative }) => [
           renderTextField(name, { required: true }),
-          renderTextField(img, {
-            after: html`
-              <button
-                @click=${({ currentTarget }: Event) => {
-                  openImagePicker(this, img.value, (path) => {
-                    closeImagePicker(this);
-                    currentTarget?.dispatchEvent(
-                      new SlCustomStoreEvent({
-                        key: img.prop,
-                        value: path,
-                      }),
-                    );
-                  });
-                }}
-              >
-                ${img.value
-                  ? html` <img src=${img.value} height="25px" /> `
-                  : html`<mwc-icon>image_search</mwc-icon>`}
-              </button>
-            `,
-          }),
           renderNumberField(initiative, { step: 0.01 }),
         ],
       })}

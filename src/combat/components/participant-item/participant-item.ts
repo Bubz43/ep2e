@@ -14,7 +14,11 @@ import { ActorType } from '@src/entities/entity-types';
 import { findActor } from '@src/entities/find-entities';
 import { subscribeToToken } from '@src/entities/token-subscription';
 import { conditionIcons } from '@src/features/conditions';
-import { createLiveTimeState, LiveTimeState, prettyMilliseconds } from '@src/features/time';
+import {
+  createLiveTimeState,
+  LiveTimeState,
+  prettyMilliseconds,
+} from '@src/features/time';
 import { readyCanvas } from '@src/foundry/canvas';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
@@ -32,7 +36,7 @@ import mix from 'mix-with/lib';
 import { compact, equals } from 'remeda';
 import type { Subscription } from 'rxjs';
 import styles from './participant-item.scss';
-import "../participant-editor/participant-editor";
+import '../participant-editor/participant-editor';
 import { RenderDialogEvent } from '@src/open-dialog';
 import type { Dialog } from '@material/mwc-dialog';
 
@@ -161,7 +165,10 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
               // TODO Use pools to modify action
               {
                 label: localize('takeTheInitiative'),
-                disabled: !!modifiedRoundActions?.tookInitiative || !!this.turn || !!this.limitedAction,
+                disabled:
+                  !!modifiedRoundActions?.tookInitiative ||
+                  !!this.turn ||
+                  !!this.limitedAction,
                 callback: () =>
                   updateCombatState({
                     type: CombatActionType.UpdateParticipants,
@@ -210,7 +217,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
               },
             ]
           : []),
-        this.actor?.proxy.type === ActorType.Character &&{
+        this.actor?.proxy.type === ActorType.Character && {
           label: `${localize(
             this.participant.initiative == null ? 'roll' : 'reRoll',
           )} ${localize('initiative')}`,
@@ -252,18 +259,24 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
   private openEditDialog() {
     this.dispatchEvent(
       new RenderDialogEvent(html`
-        <mwc-dialog @participant-changed=${(ev: CustomEvent<Partial<CombatParticipant>> & { currentTarget: Dialog}) => {
-        ev.currentTarget.close()
-          updateCombatState({
-            type: CombatActionType.UpdateParticipants,
-            payload: [
-              {
-                ...ev.detail,
-                id: this.participant.id,
-              },
-            ],
-          });
-        }}
+        <mwc-dialog
+          hideActions
+          @participant-changed=${(
+            ev: CustomEvent<Partial<CombatParticipant>> & {
+              currentTarget: Dialog;
+            },
+          ) => {
+            ev.currentTarget.close();
+            updateCombatState({
+              type: CombatActionType.UpdateParticipants,
+              payload: [
+                {
+                  ...ev.detail,
+                  id: this.participant.id,
+                },
+              ],
+            });
+          }}
           ><participant-editor
             .participant=${this.participant}
           ></participant-editor
@@ -279,10 +292,10 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       <wl-list-item @contextmenu=${this.openMenu}>
         <mwc-icon-button
           slot="before"
-          ?disabled=${!editable || !!(token && !token.scene?.isView)}
+          ?disabled=${!editable || (!token && !actor) || !!(token && !token.scene?.isView)}
           @click=${this.iconClick}
           ><img
-            src=${token?.data.img || actor?.data.img || CONST.DEFAULT_TOKEN}
+            src=${participant.img || token?.data.img || actor?.data.img || CONST.DEFAULT_TOKEN}
         /></mwc-icon-button>
         <button
           class="name"
@@ -311,12 +324,15 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
               </span>
             `
           : ''}
-        ${participant.initiative
+        ${participant.initiative != null
           ? html`
-           
-               <button slot="after" ?disabled=${!editable} @click=${this.openEditDialog}>
-                  ${participant.initiative}
-                </button>
+              <button
+                slot="after"
+                ?disabled=${!editable}
+                @click=${this.openEditDialog}
+              >
+                ${participant.initiative}
+              </button>
             `
           : html`
               <mwc-icon-button
@@ -329,7 +345,6 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       </wl-list-item>
     `;
   }
-
 }
 
 declare global {
