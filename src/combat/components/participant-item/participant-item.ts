@@ -188,10 +188,10 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
         label: localize('interrupt'),
         icon: html`<mwc-icon>priority_high</mwc-icon>`,
         callback: () => {
-          // TODO
+          this.dispatchEvent(new CustomEvent("interrupt-turn", { detail: this.participant, bubbles: true, composed: true }))
         }
       }, {
-        label: `[${localize("undo")}] ${localize("interrupt")}`,
+        label: `[${localize("undo")}] ${localize("delayTurn")}`,
         callback: () => this.updateParticipant({ delaying: false })
       });
     } else if (character) {

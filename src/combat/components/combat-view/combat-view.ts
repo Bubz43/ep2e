@@ -21,7 +21,7 @@ import {
   PropertyValues,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { equals } from 'remeda';
+import { equals, findIndex } from 'remeda';
 import '../participant-item/participant-item';
 import type { ParticipantItem } from '../participant-item/participant-item';
 import '../participant-selector/participant-selector';
@@ -98,43 +98,69 @@ export class CombatView extends LitElement {
       ) {
         const { phase, phaseTurn: turn = 0 } = newState;
         console.time('setupRoundState');
+
+        const isActiveParticipant = ({
+          participant,
+        }: {
+          participant: CombatParticipant;
+        }) => {
+          return (
+            !participant.delaying &&
+            (newState.skipDefeated ? !participant.defeated : true)
+          );
+        };
+
         if (phase === RoundPhase.Normal) {
-          for (const change of [0, 1, -1]) {
-            const newIndex = turn + change;
-            const active = this.phases?.[phase][newIndex];
-            if (active) {
-              this.roundState = {
-                phase,
-                phaseTurn: newIndex,
-              };
-              break;
-            }
-          }
-          if (!this.roundState) {
-            const extraLength = this.phases?.[RoundPhase.ExtraActions].length;
+          const phaseList = this.phases?.[phase] ?? [];
+          const possible = phaseList.slice(turn).findIndex(isActiveParticipant);
+          if (possible >= 0) {
             this.roundState = {
-              phase: RoundPhase.ExtraActions,
-              phaseTurn: extraLength || 0,
+              phase,
+              phaseTurn: possible,
             };
+          } else {
+            const extraPossible = (
+              this.phases?.[RoundPhase.ExtraActions] ?? []
+            ).findIndex(isActiveParticipant);
+            if (extraPossible >= 0) {
+              this.roundState = {
+                phase: RoundPhase.ExtraActions,
+                phaseTurn: extraPossible,
+              };
+            } else {
+              const start = phaseList.slice(0, turn);
+              const lastTry = start.reverse().findIndex(isActiveParticipant);
+              this.roundState = {
+                phase: RoundPhase.Normal,
+                phaseTurn: lastTry >= 0 ? start.length - lastTry : 0,
+              };
+            }
           }
         } else if (phase === RoundPhase.ExtraActions) {
-          for (const change of [0, 1, -1]) {
-            const newIndex = turn + change;
-            const active = this.phases?.[phase][newIndex];
-            if (active) {
+          const phaseList = this.phases?.[phase] ?? [];
+          const possible = phaseList.slice(turn).findIndex(isActiveParticipant);
+          if (possible >= 0) {
+            this.roundState = {
+              phase,
+              phaseTurn: possible,
+            };
+          } else {
+            const start = phaseList.slice(0, turn);
+            const previous = start.reverse().findIndex(isActiveParticipant);
+            if (previous >= 0) {
               this.roundState = {
                 phase,
-                phaseTurn: newIndex,
+                phaseTurn: previous,
               };
-              break;
+            } else {
+              const normalPossible = (
+                this.phases?.[RoundPhase.Normal] ?? []
+              ).findIndex(isActiveParticipant);
+              this.roundState = {
+                phase: RoundPhase.Normal,
+                phaseTurn: normalPossible >= 0 ? normalPossible : 0,
+              };
             }
-          }
-          if (!this.roundState) {
-            const normalLength = this.phases?.[RoundPhase.Normal].length;
-            this.roundState = {
-              phase: RoundPhase.Normal,
-              phaseTurn: normalLength || 0,
-            };
           }
         }
         console.timeEnd('setupRoundState');
@@ -369,7 +395,7 @@ export class CombatView extends LitElement {
                 </li>
                 ${repeat(
                   extraActions,
-                  ({ participant, extra }) => participant.id+extra.id,
+                  ({ participant, extra }) => participant.id + extra.id,
                   ({ participant, extra }, index) => html`
                     <participant-item
                       .participant=${participant}

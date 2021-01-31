@@ -90,6 +90,8 @@ export type CombatRoundPhases = {
   someTookInitiative: boolean;
 };
 
+
+
 export const rollParticipantInitiative = async (
   participant: CombatParticipant,
 ): Promise<{ id: string; initiative: number }> => {
@@ -197,6 +199,8 @@ export type CombatData = {
   round: number;
   phase: RoundPhase;
   phaseTurn: number;
+  skipDefeated?: boolean;
+  linkToWorldTime?: boolean;
 };
 
 export enum CombatActionType {
