@@ -208,7 +208,6 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       });
     }
 
-
     if (pools && this.round) {
       for (const poolType of combatPools) {
         const pool = pools.get(poolType);
@@ -248,10 +247,10 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
             icon: html`<img src=${pool.icon} />`,
             disabled: !pool.available,
             callback: async () => {
-                await character?.modifySpentPools({
-                  pool: pool.type,
-                  points: 1,
-                });
+              await character?.modifySpentPools({
+                pool: pool.type,
+                points: 1,
+              });
               this.updateParticipant({
                 modifiedTurn: produce(
                   this.participant.modifiedTurn ?? {},
@@ -259,51 +258,53 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
                     draft[this.round] = {
                       ...(draft[this.round] ?? {}),
                       extraActions: extraActions?.[0]
-                        ? [extraActions[0], poolType]
-                        : [poolType],
+                        ? [
+                            extraActions[0],
+                            { pool: poolType, id: !extraActions[0].id },
+                          ]
+                        : [{ pool: poolType, id: true }],
                     };
                   },
                 ),
               });
-            }
+            },
           });
         }
       }
     }
 
-        if (extraActions) {
-          extraActionOptions.push(
-            ...extraActions.map((poolType, index) => ({
-              label: `[${localize('undo')}] ${localize('extraAction')} ${
-                index + 1
-              } - ${localize(poolType)}`,
-              icon: html`<img src=${poolIcon(poolType)} />`,
-              callback: async () => {
-                await character?.modifySpentPools({
-                  pool: poolType,
-                  points: -1,
-                });
-                const newActions = [...extraActions];
-                newActions.splice(0, 1);
-                console.log(extraActions, newActions, index);
-                this.updateParticipant({
-                  modifiedTurn: produce(
-                    this.participant.modifiedTurn ?? {},
-                    (draft) => {
-                      draft[this.round] = {
-                        ...(draft[this.round] ?? {}),
-                        extraActions: newActions[0] ? [newActions[0]] : null,
-                      };
-                    },
-                  ),
-                });
-              },
-            })),
-          );
-        }
+    if (extraActions) {
+      extraActionOptions.push(
+        ...extraActions.map(({ pool: poolType }, index) => ({
+          label: `[${localize('undo')}] ${localize('extraAction')} ${
+            index + 1
+          } - ${localize(poolType)}`,
+          icon: html`<img src=${poolIcon(poolType)} />`,
+          callback: async () => {
+            await character?.modifySpentPools({
+              pool: poolType,
+              points: -1,
+            });
+            const newActions = [...extraActions];
+            newActions.splice(0, 1);
+            this.updateParticipant({
+              modifiedTurn: produce(
+                this.participant.modifiedTurn ?? {},
+                (draft) => {
+                  draft[this.round] = {
+                    ...(draft[this.round] ?? {}),
+                    extraActions: newActions[0] ? [newActions[0]] : null,
+                  };
+                },
+              ),
+            });
+          },
+        })),
+      );
+    }
 
     for (const options of [takeInitiativeOptions, extraActionOptions]) {
-      content.push(...options, "divider")
+      content.push(...options, 'divider');
     }
 
     openMenu({
@@ -380,7 +381,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
   }
 
   private get usedPool() {
-    return this.extraActionPool || this.tookInitiativePool
+    return this.extraActionPool || this.tookInitiativePool;
   }
 
   render() {
@@ -407,7 +408,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
           ${participant.name}
         </button>
         <span class="status">
-          ${usedPool ? html`[${localize(usedPool)}]` : ""}
+          ${usedPool ? html`[${localize(usedPool)}]` : ''}
           <span class="conditions">
             ${actor?.conditions.map(
               (condition) => html`

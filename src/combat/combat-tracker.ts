@@ -53,6 +53,11 @@ export enum RoundPhase {
   ExtraActions,
 }
 
+type Extra = {
+  pool: CombatPool,
+  id: boolean;
+}
+
 type CombatParticipantData = {
   name: string;
   img?: string;
@@ -65,7 +70,7 @@ type CombatParticipantData = {
     number,
     | {
         tookInitiative?: CombatPool | null;
-        extraActions?: [CombatPool] | [CombatPool, CombatPool] | null;
+        extraActions?: [Extra] | [Extra, Extra] | null;
       }
     | undefined
     | null
@@ -79,7 +84,7 @@ export type CombatRoundPhases = {
   }[];
   [RoundPhase.ExtraActions]: {
     participant: CombatParticipant;
-    limitedActions: CombatPool
+    extra: Extra;
   }[];
   someTookInitiative: boolean;
 };
@@ -153,7 +158,7 @@ export const setupPhases = (
     for (const extra of extraActions || []) {
           phases[RoundPhase.ExtraActions].push({
             participant,
-            limitedActions: extra,
+            extra: extra,
           });
     }
   
