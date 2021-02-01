@@ -21,7 +21,6 @@ import { gameSettings } from '@src/init';
 import produce from 'immer';
 import type { WritableDraft } from 'immer/dist/internal';
 import { reject } from 'remeda';
-import type { SetRequired } from 'type-fest';
 
 export enum TrackedCombatEntity {
   Actor,
@@ -62,7 +61,7 @@ export enum Surprise {
 type CombatParticipantData = {
   name: string;
   img?: string;
-  initiative?: number;
+  initiative?: number | null;
   entityIdentifiers?: TrackedIdentitfiers | null;
   hidden?: boolean;
   defeated?: boolean;
@@ -83,12 +82,7 @@ type CombatParticipantData = {
 export const rollParticipantInitiative = async (
   participant: CombatParticipant,
   surprised?: Surprise,
-): Promise<
-  SetRequired<
-    Pick<CombatParticipant, 'id' | 'initiative' | 'surprised'>,
-    'id' | 'initiative'
-  >
-> => {
+): Promise<{ id: string; initiative: number; surprised?: Surprise }> => {
   const { token, actor } = getParticipantEntities(participant);
 
   const roll =
@@ -353,7 +347,8 @@ const updateReducer = produce(
         );
         const part = sorted[activeIndex];
         if (!part) return;
-        const newInitiative = (part.initiative || 0) + 0.01;
+        const newInitiative =
+          (Math.round((part.initiative || 0) * 100) + 1) / 100;
         let decreaseTurn = false;
         let currentInitiative = newInitiative;
         for (const participant of sorted.slice(0, activeIndex).reverse()) {
@@ -363,7 +358,8 @@ const updateReducer = produce(
             participant.initiative === currentInitiative ||
             participant.initiative === part.initiative
           ) {
-            participant.initiative = currentInitiative += 0.01;
+            currentInitiative = (Math.round(currentInitiative * 100) + 1) / 100;
+            participant.initiative = currentInitiative;
           }
         }
 
@@ -374,7 +370,10 @@ const updateReducer = produce(
           interrupter.delaying = false;
           interrupter.initiative = newInitiative;
         }
-        if (decreaseTurn) {
+        if (
+          decreaseTurn &&
+          sorted[activeIndex - 1]?.id !== action.payload.interrupterId
+        ) {
           draft.turn -= 1;
         }
 

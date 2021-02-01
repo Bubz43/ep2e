@@ -254,6 +254,11 @@ TokenHUD.prototype._getStatusEffectChoices = function () {
   });
 };
 
+// TODO
+// TokenLayer.prototype.toggleCombat = async function(state = true, combat = null, { token = null}: { token?: Token } = {}) {
+
+// }
+
 const { _render } = ChatLog.prototype;
 ChatLog.prototype._render = async function (...args) {
   if (document.body.classList.contains('ready')) {

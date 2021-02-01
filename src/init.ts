@@ -1,10 +1,8 @@
-import { render, html } from 'lit-html';
+import { html, render } from 'lit-html';
 import { compact, first } from 'remeda';
 import type { RawEditorSettings } from 'tinymce';
 import { onChatMessageRender } from './chat/message-hooks';
-import { onCombatTrackerRender, onCombatUpdate } from './combat/combat-hooks';
 import { combatSocketHandler } from './combat/combat-tracker';
-import { combatantSocketHandler } from './combat/combatant-commands';
 import { EPOverlay } from './components/ep-overlay/ep-overlay';
 import type { ToolTip } from './components/tooltip/tooltip';
 import { SlWindow } from './components/window/window';
@@ -20,7 +18,7 @@ import { ItemEPSheet } from './entities/item/item-sheet';
 import { migrateWorld } from './entities/migration';
 import { SceneEP } from './entities/scene';
 import { UserEP } from './entities/user';
-import { ConditionType, conditionIcons } from './features/conditions';
+import { conditionIcons, ConditionType } from './features/conditions';
 import { positionApp } from './foundry/foundry-apps';
 import { registerEPSettings } from './foundry/game-settings';
 import {
@@ -73,7 +71,7 @@ Hooks.once('init', () => {
   CONFIG.Scene.entityClass = SceneEP;
   CONFIG.ChatMessage.entityClass = ChatMessageEP;
   CONFIG.ChatMessage.batchSize = 20;
-  
+
   CONFIG.User.entityClass = UserEP;
   CONFIG.Item.entityClass = ItemEP;
 
@@ -91,7 +89,7 @@ Hooks.once('init', () => {
     })),
   ]);
 
-  addEPSocketHandler("mutateCombat", combatSocketHandler)
+  addEPSocketHandler('mutateCombat', combatSocketHandler);
 
   applicationHook({
     app: PlayerList,
@@ -203,28 +201,28 @@ Hooks.once('ready', async () => {
     // overlay.stealElements()
   }, 150);
 
-  mutateEntityHook({
-    entity: Combat,
-    hook: 'on',
-    event: MutateEvent.Update,
-    callback: onCombatUpdate,
-  });
+  // mutateEntityHook({
+  //   entity: Combat,
+  //   hook: 'on',
+  //   event: MutateEvent.Update,
+  //   callback: onCombatUpdate,
+  // });
 
-  addEPSocketHandler('combatant', combatantSocketHandler);
+  // addEPSocketHandler('combatant', combatantSocketHandler);
 
-  applicationHook({
-    app: CombatTracker,
-    hook: 'on',
-    event: 'render',
-    callback: onCombatTrackerRender,
-  });
+  // applicationHook({
+  //   app: CombatTracker,
+  //   hook: 'on',
+  //   event: 'render',
+  //   callback: onCombatTrackerRender,
+  // });
 
-  applicationHook({
-    app: PlayerList,
-    hook: 'on',
-    event: 'render',
-    callback: () => requestAnimationFrame(() => ui.combat.render()),
-  });
+  // applicationHook({
+  //   app: PlayerList,
+  //   hook: 'on',
+  //   event: 'render',
+  //   callback: () => requestAnimationFrame(() => ui.combat.render()),
+  // });
 
   applicationHook({
     app: CompendiumDirectory,

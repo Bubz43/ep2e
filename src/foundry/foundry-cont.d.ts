@@ -1,41 +1,33 @@
-import type {
-  ValueOf,
-  Mutable,
-  JsonObject,
-  Class,
-  ConditionalExcept,
-  ConditionalPick,
-} from 'type-fest';
-import type {
-  DeepPartial,
-  DeepReadonly,
-  PickByValue,
-  ValuesType,
-} from 'utility-types';
-import type * as PIXI from 'pixi.js';
-import type { Socket } from 'socket.io';
 import type { Combatant } from '@src/combat/combatant';
 import type { ActorEP } from '@src/entities/actor/actor';
 import type { ChatMessageEP } from '@src/entities/chat-message';
 import type { ItemEP } from '@src/entities/item/item';
-import type { SceneEP } from '@src/entities/scene';
-import type { UserEP } from '@src/entities/user';
-import type {
-  Environment,
-  EnvironmentOverrides,
-} from '@src/features/environment';
-import type { EP, SystemSchema } from './system';
 import type {
   ActorDatas,
   ActorModels,
   ItemDatas,
   ItemModels,
 } from '@src/entities/models';
-import type { EntityTemplates } from './template-schema';
+import type { SceneEP } from '@src/entities/scene';
+import type { UserEP } from '@src/entities/user';
+import type {
+  Environment,
+  EnvironmentOverrides,
+} from '@src/features/environment';
 import type { UserHotbarEntry } from '@src/features/hotbar-entry';
-import type { MessageData } from '@src/chat/create-message';
-import type { TinyMCE, RawEditorSettings } from 'tinymce';
+import type * as PIXI from 'pixi.js';
+import type { Socket } from 'socket.io';
+import type { TinyMCE } from 'tinymce';
+import type { Class, ConditionalPick, Mutable, ValueOf } from 'type-fest';
+import type {
+  DeepPartial,
+  DeepReadonly,
+  PickByValue,
+  ValuesType,
+} from 'utility-types';
 import type { MeasuredTemplateData } from './canvas';
+import type { EP, SystemSchema } from './system';
+import type { EntityTemplates } from './template-schema';
 // * Comment out canvas, game, ui from foundry.d.ts
 // * Add in context param to Entity.prototype._onUpdate
 // * Add generic type to collection
@@ -227,6 +219,7 @@ declare global {
     bars: Record<'bar1' | 'bar2', PIXI.Graphics>;
     effects: PIXI.Container;
     update(tokenData: DeepPartial<TokenData>, options: unknown): Promise<Token>;
+    _controlled: boolean;
   }
 
   interface Combat {

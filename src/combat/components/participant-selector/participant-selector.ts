@@ -3,24 +3,24 @@ import {
   TrackedCombatEntity,
   updateCombatState,
 } from '@src/combat/combat-tracker';
-import { renderTextField, renderTimeField } from '@src/components/field/fields';
+import {
+  renderLabeledCheckbox,
+  renderTextField,
+  renderTimeField,
+} from '@src/components/field/fields';
 import {
   renderSubmitForm,
   SlCustomStoreEvent,
 } from '@src/components/form/forms';
 import { TabsMixin } from '@src/components/mixins/tabs-mixin';
+import type { ActorEP } from '@src/entities/actor/actor';
+import { ActorType } from '@src/entities/entity-types';
 import { currentWorldTimeMS } from '@src/features/time';
 import { readyCanvas } from '@src/foundry/canvas';
-import { openImagePicker, closeImagePicker } from '@src/foundry/foundry-apps';
+import { closeImagePicker, openImagePicker } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
 import { notEmpty } from '@src/utility/helpers';
-import {
-  customElement,
-  LitElement,
-  property,
-  html,
-  PropertyValues,
-} from 'lit-element';
+import { customElement, html, LitElement } from 'lit-element';
 import { live } from 'lit-html/directives/live';
 import mix from 'mix-with/lib';
 import styles from './participant-selector.scss';
@@ -37,7 +37,7 @@ export class ParticipantSelector extends mix(LitElement).with(
     return [styles];
   }
 
-  private toAdd = new Set<Actor | Token>();
+  private toAdd = new Set<ActorEP | Token>();
 
   disconnectedCallback() {
     this.toAdd.clear();
@@ -49,7 +49,7 @@ export class ParticipantSelector extends mix(LitElement).with(
     super.changeTab();
   }
 
-  private toggleToAdd(entity: Actor | Token) {
+  private toggleToAdd(entity: ActorEP | Token) {
     this.toAdd.delete(entity) || this.toAdd.add(entity);
     requestAnimationFrame(() => this.requestUpdate());
     // const submitButton = this.renderRoot.querySelector('submit-button');
@@ -65,6 +65,8 @@ export class ParticipantSelector extends mix(LitElement).with(
             ? {
                 name: entity.name,
                 hidden: entity.data.hidden,
+                initiative:
+                  entity.actor?.type !== ActorType.Character ? 0 : null,
                 entityIdentifiers: entity.scene && {
                   type: TrackedCombatEntity.Token,
                   sceneId: entity.scene.id,
@@ -73,6 +75,7 @@ export class ParticipantSelector extends mix(LitElement).with(
               }
             : {
                 name: entity.name,
+                initiative: entity.type !== ActorType.Character ? 0 : null,
                 entityIdentifiers: {
                   type: TrackedCombatEntity.Actor,
                   actorId: entity.id,
@@ -163,9 +166,9 @@ export class ParticipantSelector extends mix(LitElement).with(
   private renderCustom() {
     return html`
       ${renderSubmitForm({
-        classes: "custom-form",
-        props: { name: '', img: '', duration: 0 },
-        update: ({ name = '???', img, duration }) => {
+        classes: 'custom-form',
+        props: { name: '', img: '', duration: 0, hidden: false },
+        update: ({ name = '???', img, duration, hidden }) => {
           updateCombatState({
             type: CombatActionType.AddParticipants,
             payload: [
@@ -173,6 +176,8 @@ export class ParticipantSelector extends mix(LitElement).with(
                 userId: game.user.id,
                 name,
                 img,
+                initiative: 0,
+                hidden,
                 entityIdentifiers: duration
                   ? {
                       type: TrackedCombatEntity.Time,
@@ -184,18 +189,22 @@ export class ParticipantSelector extends mix(LitElement).with(
             ],
           });
         },
-        fields: ({ name, img, duration }) => [
+        fields: ({ name, img, duration, hidden }) => [
           renderTextField(name, { required: true }),
           renderTextField(img, {
             after: html`
               <button
-                @click=${({ currentTarget }: Event & { currentTarget: HTMLElement }) => {
+                @click=${({
+                  currentTarget,
+                }: Event & { currentTarget: HTMLElement }) => {
                   openImagePicker(this, img.value, (path) => {
                     closeImagePicker(this);
-                    const input = currentTarget?.closest("sl-field")?.querySelector("input")
+                    const input = currentTarget
+                      ?.closest('sl-field')
+                      ?.querySelector('input');
                     if (input) {
                       input.value = path;
-                      input.click()
+                      input.click();
                     }
                     currentTarget.dispatchEvent(
                       new SlCustomStoreEvent({
@@ -212,6 +221,7 @@ export class ParticipantSelector extends mix(LitElement).with(
               </button>
             `,
           }),
+          renderLabeledCheckbox(hidden),
           renderTimeField(duration),
         ],
       })}

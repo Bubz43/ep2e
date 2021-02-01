@@ -2,15 +2,13 @@ import { SurpriseState } from '@src/data-enums';
 import { UpdateStore } from '@src/entities/update-store';
 import type { Action } from '@src/features/actions';
 import {
-  updateFeature,
   addFeature,
   removeFeature,
+  updateFeature,
 } from '@src/features/feature-helpers';
-import { isGamemaster } from '@src/foundry/misc-helpers';
 import { rollFormula } from '@src/foundry/rolls';
-import { emitEPSocket, SystemSocketData } from '@src/foundry/socket';
 import { EP } from '@src/foundry/system';
-import { pick, pipe, takeWhile, reject, map, filter } from 'remeda';
+import { filter, map, pick, pipe, reject, takeWhile } from 'remeda';
 import { Combatant, CombatantHelpers } from './combatant';
 
 enum CommandName {
@@ -57,8 +55,8 @@ const commandWrapper = (
   handler: (args: Required<CommandArguments>) => void,
 ): CommandHandler => ({ settings = {}, combatant }) => {
   // TODO: See if I should add combat ID as well
-  if (game.user.isGM) handler({ settings, combatant });
-  else emitEPSocket({ combatant: { _id: combatant._id, command, settings } });
+  // if (game.user.isGM) handler({ settings, combatant });
+  // else emitEPSocket({ combatant: { _id: combatant._id, command, settings } });
 };
 
 const surprise = commandWrapper(
@@ -302,13 +300,13 @@ export const combatantCommands: Record<CommandName, CommandHandler> = {
   [CommandName.ApplySurprise]: surprise,
 } as const;
 
-export const combatantSocketHandler = ({
-  _id,
-  command,
-  settings: options = {},
-}: SystemSocketData['combatant']) => {
-  if (isGamemaster()) {
-    const combatant = CombatantHelpers.get(_id);
-    combatant && combatantCommands[command]({ combatant, settings: options });
-  }
-};
+// export const combatantSocketHandler = ({
+//   _id,
+//   command,
+//   settings: options = {},
+// }: SystemSocketData['combatant']) => {
+//   if (isGamemaster()) {
+//     const combatant = CombatantHelpers.get(_id);
+//     combatant && combatantCommands[command]({ combatant, settings: options });
+//   }
+// };

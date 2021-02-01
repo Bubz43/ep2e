@@ -1,5 +1,4 @@
 import type { CombatUpdateAction } from '@src/combat/combat-tracker';
-import type { CombatantSocket } from '@src/combat/combatant-commands';
 import type { ItemOperations } from '@src/entities/actor/actor';
 import type { ChatMessageEP } from '@src/entities/chat-message';
 import type { ActorIdentifiers } from '@src/entities/find-entities';
@@ -13,14 +12,13 @@ type ItemChange = {
 };
 
 export type SystemSocketData = {
-  combatant: CombatantSocket;
   itemChange:
     | ({ actorId: string } & ItemChange)
     | ({ tokenId: string; sceneId: string } & ItemChange);
   actorChanged: ActorIdentifiers;
   messageData: DeepPartial<ChatMessageEP['data']> & { _id: string };
   worldTimeChange: [date: number, change: string];
-  mutateCombat: { action: CombatUpdateAction }
+  mutateCombat: { action: CombatUpdateAction };
 };
 
 type SystemSocketEvent = keyof SystemSocketData;

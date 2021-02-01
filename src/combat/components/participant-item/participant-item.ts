@@ -35,6 +35,7 @@ import {
   property,
   PropertyValues,
 } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
 import mix from 'mix-with/lib';
 import { compact, equals } from 'remeda';
 import type { Subscription } from 'rxjs';
@@ -76,6 +77,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
   private actorUnsub?: (() => void) | null;
 
   disconnectedCallback() {
+    // TODO highlight self on hoverToken
     this.unsubFromAll();
     super.disconnectedCallback();
   }
@@ -218,6 +220,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       delayOptions.push({
         label: localize('delayTurn'),
         callback: () => this.toggleDelay(),
+        icon: html`<mwc-icon>pause</mwc-icon>`,
         disabled: !this.active,
       });
     }
@@ -435,13 +438,38 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
     });
   }
 
+  private get activeToken() {
+    return this.token ?? this.actor?.getActiveTokens(true)[0];
+  }
+
   private iconClick() {
-    const token = this.token ?? this.actor?.getActiveTokens(true)[0];
-    if (token?.scene?.isView) {
-      token.control({ releaseOthers: true });
-      readyCanvas()?.animatePan({ x: token.x, y: token.y } as any);
-    } else if (token) {
+    const { activeToken } = this;
+    if (activeToken?.scene?.isView) {
+      activeToken.control({ releaseOthers: true });
+      readyCanvas()?.animatePan({ x: activeToken.x, y: activeToken.y } as any);
+    } else if (activeToken) {
       notify(NotificationType.Info, 'Token not on viewed scene');
+    }
+  }
+
+  private hoveredToken?: Token | null;
+
+  private hoverToken(ev: Event) {
+    const { activeToken } = this;
+    if (
+      activeToken?.scene?.isView &&
+      activeToken?.isVisible &&
+      !activeToken._controlled
+    ) {
+      this.hoveredToken = activeToken;
+      activeToken?._onHoverIn(ev, {});
+    }
+  }
+
+  private unhoverToken(ev: Event) {
+    if (this.hoveredToken) {
+      this.hoveredToken._onHoverOut(ev);
+      this.hoveredToken = null;
     }
   }
 
@@ -482,11 +510,28 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
     return this.extraActionPool || this.tookInitiativePool;
   }
 
+  private toggleHidden() {
+    this.updateParticipant({ hidden: !this.participant.hidden });
+  }
+
+  private toggleDefeated() {
+    // TODO token defeated overlay
+    this.updateParticipant({ defeated: !this.participant.defeated });
+  }
+
   render() {
     const { participant, usedPool, editable, token, actor, timeState } = this;
     const canDelay = !this.participant.delaying && this.active;
     return html`
-      <wl-list-item @contextmenu=${this.openMenu}>
+      <wl-list-item
+        @contextmenu=${this.openMenu}
+        class=${classMap({
+          defeated: !!participant.defeated,
+          hidden: !!participant.hidden,
+        })}
+        @mouseover=${this.hoverToken}
+        @mouseout=${this.unhoverToken}
+      >
         <mwc-icon-button
           slot="before"
           ?disabled=${!editable ||
@@ -494,6 +539,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
           !!(token && !token.scene?.isView)}
           @click=${this.iconClick}
           ><img
+            class="icon"
             src=${participant.img ||
             token?.data.img ||
             actor?.data.img ||
@@ -511,6 +557,23 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
         </button>
         <span class="status">
           ${usedPool ? html`[${localize(usedPool)}]` : ''}
+          ${game.user.isGM
+            ? html`
+                <mwc-icon-button-toggle
+                  class="mini-button"
+                  @click=${this.toggleHidden}
+                  ?on=${!participant.hidden}
+                  onIcon="visibility_off"
+                  offIcon="visibility"
+                ></mwc-icon-button-toggle>
+                <mwc-icon-button
+                  class="mini-button"
+                  @click=${this.toggleDefeated}
+                >
+                  <img src="icons/svg/skull.svg" />
+                </mwc-icon-button>
+              `
+            : ''}
           <span class="conditions">
             ${actor?.conditions.map(
               (condition) => html`
