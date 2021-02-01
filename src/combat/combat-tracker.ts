@@ -51,11 +51,6 @@ export const combatPools = [
 
 export type CombatPool = typeof combatPools[number];
 
-export enum RoundPhase {
-  Normal = 1,
-  ExtraActions,
-}
-
 type Extra = {
   pool: CombatPool;
   id: boolean;
@@ -79,18 +74,6 @@ type CombatParticipantData = {
     | undefined
     | null
   >;
-};
-
-export type CombatRoundPhases = {
-  [RoundPhase.Normal]: {
-    participant: CombatParticipant;
-    tookInitiative?: CombatPool | null;
-  }[];
-  [RoundPhase.ExtraActions]: {
-    participant: CombatParticipant;
-    extra: Extra;
-  }[];
-  someTookInitiative: boolean;
 };
 
 export const rollParticipantInitiative = async (
@@ -224,37 +207,6 @@ export const findViableParticipantTurn = ({
   }
 
   return -1;
-};
-
-export const setupPhases = (
-  participants: CombatParticipant[],
-  roundIndex: number,
-) => {
-  const phases: CombatRoundPhases = {
-    [RoundPhase.Normal]: [],
-    [RoundPhase.ExtraActions]: [],
-    someTookInitiative: false,
-  };
-
-  for (const participant of participants) {
-    const { tookInitiative, extraActions } =
-      participant.modifiedTurn?.[roundIndex] ?? {};
-
-    phases[RoundPhase.Normal].push({ participant, tookInitiative });
-    phases.someTookInitiative ||= !!tookInitiative;
-
-    for (const extra of extraActions || []) {
-      phases[RoundPhase.ExtraActions].push({
-        participant,
-        extra: extra,
-      });
-    }
-  }
-
-  phases[RoundPhase.ExtraActions].sort(participantsByInitiative);
-  phases[RoundPhase.Normal].sort(participantsByInitiative);
-
-  return phases;
 };
 
 export const participantsByInitiative = (

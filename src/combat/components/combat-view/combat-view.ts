@@ -3,12 +3,9 @@ import {
   CombatData,
   CombatParticipant,
   CombatRound,
-  CombatRoundPhases,
   findViableParticipantTurn,
   rollParticipantInitiative,
-  RoundPhase,
   setupCombatRound,
-  setupPhases,
   updateCombatState,
 } from '@src/combat/combat-tracker';
 import { openWindow } from '@src/components/window/window-controls';
@@ -25,7 +22,7 @@ import {
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
-import { equals, findIndex, range } from 'remeda';
+import { equals } from 'remeda';
 import '../participant-item/participant-item';
 import type { ParticipantItem } from '../participant-item/participant-item';
 import '../participant-selector/participant-selector';
@@ -143,74 +140,71 @@ export class CombatView extends LitElement {
   }
 
   private advanceTurn() {
-    const { phase = RoundPhase.Normal, phaseTurn: turn = 0 } =
-      this.roundState ?? {};
+    const goingBackwards = false;
+    const turn = findViableParticipantTurn({
+      participants: this.combatRound?.participants ?? [],
+      skipDefeated: this.combatState?.skipDefeated ?? false,
+      goingBackwards,
+      exhaustive: false,
+      startingTurn: (this.activeTurn ?? 0) + 1,
+    });
 
-    const next = this.phases?.[phase][turn + 1];
-    if (next) {
+    if (turn >= 0) {
       updateCombatState({
         type: CombatActionType.UpdateRound,
         payload: {
-          round: this.combatState?.round || 0,
-          phase,
-          turn: turn + 1,
-          goingBackwards: false,
+          goingBackwards,
+          round: this.combatState?.round ?? 0,
+          turn,
         },
       });
-      return;
-    }
-    for (const nextPhase of [RoundPhase.Normal, RoundPhase.ExtraActions].filter(
-      (n) => n > phase,
-    )) {
-      const next = this.phases?.[nextPhase][0];
-      if (next) {
-        updateCombatState({
-          type: CombatActionType.UpdateRound,
-          payload: {
-            round: this.combatState?.round || 0,
-            phase: nextPhase,
-            turn: 0,
-            goingBackwards: false,
-          },
-        });
-        return;
-      }
-    }
-    this.advanceRound();
+    } else this.advanceRound();
   }
 
   private advanceRound() {
+    const round = (this.combatState?.round || 0) + 1;
+    const combatRound = setupCombatRound(this.participants, round);
+    const goingBackwards = false;
+
+    const turn = findViableParticipantTurn({
+      participants: combatRound.participants,
+      skipDefeated: this.combatState?.skipDefeated ?? false,
+      goingBackwards,
+      exhaustive: true,
+      startingTurn: 0,
+    });
+
     updateCombatState({
       type: CombatActionType.UpdateRound,
-      payload: {
-        round: (this.combatState?.round || 0) + 1,
-        phase: RoundPhase.Normal,
-        turn: 0,
-        goingBackwards: false,
-      },
+      payload: { round, turn, goingBackwards },
     });
   }
 
   private previousRound() {
-    let turn = 0;
-    let phase = RoundPhase.ExtraActions;
+    const round = (this.combatState?.round || 1) - 1;
+    const combatRound = setupCombatRound(this.participants, round);
+    const goingBackwards = true;
+
+    const turn = findViableParticipantTurn({
+      participants: combatRound.participants,
+      skipDefeated: this.combatState?.skipDefeated ?? false,
+      goingBackwards,
+      exhaustive: true,
+      startingTurn: combatRound.participants.length - 1,
+    });
 
     updateCombatState({
       type: CombatActionType.UpdateRound,
-      payload: {
-        round: (this.combatState?.round || 1) - 1,
-        phase,
-        turn: turn,
-        goingBackwards: true,
-      },
+      payload: { round, turn, goingBackwards },
     });
   }
 
   private previousTurn() {
+    const goingBackwards = true;
     const turn = findViableParticipantTurn({
       participants: this.combatRound?.participants ?? [],
       skipDefeated: this.combatState?.skipDefeated ?? false,
-      goingBackwards: true,
+      goingBackwards,
       exhaustive: false,
       startingTurn: this.activeTurn ?? 0,
     });
@@ -219,7 +213,7 @@ export class CombatView extends LitElement {
       updateCombatState({
         type: CombatActionType.UpdateRound,
         payload: {
-          goingBackwards: true,
+          goingBackwards,
           round: this.combatState?.round ?? 0,
           turn,
         },
@@ -284,23 +278,21 @@ export class CombatView extends LitElement {
         ${repeat(
           participants,
           ({ participant, extra }) => participant.id + extra?.id,
-          ({ participant, tookInitiative, extra }, index) => {
-            return html`
-              <participant-item
-                class=${classMap({
-                  'took-initiative': !!tookInitiative,
-                  extra: !!extra,
-                })}
-                .participant=${participant}
-                round=${round}
-                ?active=${activeTurn === index}
-                turn=${activeTurn}
-                .tookInitiativePool=${tookInitiative}
-                .extraActionPool=${extra?.pool}
-                ?hidden=${!isGM && !!participant.hidden}
-              ></participant-item>
-            `;
-          },
+          ({ participant, tookInitiative, extra }, index) => html`
+            <participant-item
+              class=${classMap({
+                'took-initiative': !!tookInitiative,
+                extra: !!extra,
+              })}
+              .participant=${participant}
+              round=${round}
+              ?active=${activeTurn === index}
+              turn=${activeTurn}
+              .tookInitiativePool=${tookInitiative}
+              .extraActionPool=${extra?.pool}
+              ?hidden=${!isGM && !!participant.hidden}
+            ></participant-item>
+          `,
         )}
       </sl-animated-list>
 
