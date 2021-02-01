@@ -1,3 +1,4 @@
+import type { Dialog } from '@material/mwc-dialog';
 import {
   CombatActionType,
   CombatParticipant,
@@ -7,14 +8,13 @@ import {
   TrackedCombatEntity,
   updateCombatState,
 } from '@src/combat/combat-tracker';
-import { renderNumberInput } from '@src/components/field/fields';
-import { renderAutoForm, renderSubmitForm } from '@src/components/form/forms';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { ActorType } from '@src/entities/entity-types';
 import { findActor } from '@src/entities/find-entities';
 import { subscribeToToken } from '@src/entities/token-subscription';
 import { conditionIcons } from '@src/features/conditions';
+import { poolIcon } from '@src/features/pool';
 import {
   createLiveTimeState,
   LiveTimeState,
@@ -23,6 +23,7 @@ import {
 import { readyCanvas } from '@src/foundry/canvas';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
+import { RenderDialogEvent } from '@src/open-dialog';
 import { MenuOption, MWCMenuOption, openMenu } from '@src/open-menu';
 import produce from 'immer';
 import {
@@ -36,12 +37,8 @@ import {
 import mix from 'mix-with/lib';
 import { compact, equals } from 'remeda';
 import type { Subscription } from 'rxjs';
-import styles from './participant-item.scss';
 import '../participant-editor/participant-editor';
-import { RenderDialogEvent } from '@src/open-dialog';
-import type { Dialog } from '@material/mwc-dialog';
-import { poolIcon } from '@src/features/pool';
-import { notEmpty } from '@src/utility/helpers';
+import styles from './participant-item.scss';
 
 @customElement('participant-item')
 export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
@@ -184,21 +181,31 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
     const extraActionOptions: MenuOption[] = [];
 
     if (this.participant.delaying) {
+      if (this.round !== -1) {
+        delayOptions.push({
+          label: localize('interrupt'),
+          icon: html`<mwc-icon>priority_high</mwc-icon>`,
+          callback: () => {
+            this.dispatchEvent(
+              new CustomEvent('interrupt-turn', {
+                detail: this.participant,
+                bubbles: true,
+                composed: true,
+              }),
+            );
+          },
+        });
+      }
       delayOptions.push({
-        label: localize('interrupt'),
-        icon: html`<mwc-icon>priority_high</mwc-icon>`,
-        callback: () => {
-          this.dispatchEvent(new CustomEvent("interrupt-turn", { detail: this.participant, bubbles: true, composed: true }))
-        }
-      }, {
-        label: `[${localize("undo")}] ${localize("delayTurn")}`,
-        callback: () => this.updateParticipant({ delaying: false })
+        label: `[${localize('undo')}] ${localize('delayTurn')}`,
+        callback: () => this.updateParticipant({ delaying: false }),
       });
-    } else if (character) {
+    } else {
       delayOptions.push({
-        label: localize("delayTurn"),
-        callback: () => this.updateParticipant({ delaying: true })
-      })
+        label: localize('delayTurn'),
+        callback: () => this.updateParticipant({ delaying: true }),
+        disabled: !this.active,
+      });
     }
 
     if (tookInitiative && this.turn === 0 && !this.extraActionPool) {
@@ -226,8 +233,6 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
         },
       });
     }
-
-
 
     if (pools && this.round && !this.participant.delaying) {
       for (const poolType of combatPools) {
@@ -324,7 +329,11 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       );
     }
 
-    for (const options of [delayOptions, takeInitiativeOptions, extraActionOptions]) {
+    for (const options of [
+      delayOptions,
+      takeInitiativeOptions,
+      extraActionOptions,
+    ]) {
       content.push(...options, 'divider');
     }
 
@@ -454,8 +463,14 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
         <div class="actions" slot="after">
           ${participant.initiative != null
             ? html`
-                <button ?disabled=${!editable} @click=${this.openEditDialog} title=${participant.initiative}>
-                  ${participant.delaying ? `${localize("delay")}` : participant.initiative}
+                <button
+                  ?disabled=${!editable}
+                  @click=${this.openEditDialog}
+                  title=${participant.initiative}
+                >
+                  ${participant.delaying
+                    ? `${localize('delay')}`
+                    : participant.initiative}
                 </button>
               `
             : html`

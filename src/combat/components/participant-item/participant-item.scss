@@ -69,16 +69,11 @@ wl-list-item {
 }
 
 .status {
-  // display: flex;
-  // flex-flow: row wrap;
-  // align-items: center;
   font-size: 14px;
 }
 
-
 .menu {
   opacity: 0;
-  transition: opacity 100ms;
-      --mdc-icon-button-size: 1.5rem;
-
+  transition: opacity 50ms;
+  --mdc-icon-button-size: 1.5rem;
 }

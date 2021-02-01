@@ -12,7 +12,7 @@ import { openWindow } from '@src/components/window/window-controls';
 import { ResizeOption } from '@src/components/window/window-options';
 import { localize } from '@src/foundry/localization';
 import { gameSettings } from '@src/init';
-import { notEmpty } from '@src/utility/helpers';
+import { nonNegative, notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
@@ -90,14 +90,10 @@ export class CombatView extends LitElement {
         combatState.goingBackwards !== newState.goingBackwards ||
         combatState.skipDefeated !== newState.skipDefeated
       ) {
-        const {
-          turn: turn = 0,
-          goingBackwards,
-          skipDefeated = false,
-        } = newState;
+        const { turn, goingBackwards, skipDefeated = false } = newState;
         this.activeTurn = findViableParticipantTurn({
           participants: this.combatRound?.participants ?? [],
-          startingTurn: turn,
+          startingTurn: nonNegative(turn),
           goingBackwards,
           skipDefeated,
           exhaustive: true,
@@ -180,7 +176,7 @@ export class CombatView extends LitElement {
     });
   }
 
-  private previousRound() {
+  private rewindRound() {
     const round = (this.combatState?.round || 1) - 1;
     const combatRound = setupCombatRound(this.participants, round);
     const goingBackwards = true;
@@ -199,14 +195,14 @@ export class CombatView extends LitElement {
     });
   }
 
-  private previousTurn() {
+  private rewindTurn() {
     const goingBackwards = true;
     const turn = findViableParticipantTurn({
       participants: this.combatRound?.participants ?? [],
       skipDefeated: this.combatState?.skipDefeated ?? false,
       goingBackwards,
       exhaustive: false,
-      startingTurn: this.activeTurn ?? 0,
+      startingTurn: (this.activeTurn ?? 0) - 1,
     });
 
     if (turn >= 0) {
@@ -218,7 +214,7 @@ export class CombatView extends LitElement {
           turn,
         },
       });
-    } else this.previousRound();
+    } else this.rewindRound();
   }
 
   private reset() {
@@ -241,13 +237,23 @@ export class CombatView extends LitElement {
     }
   }
 
+  private applyInterrupt(ev: CustomEvent<CombatParticipant>) {
+    const active = this.combatRound?.participants[this.activeTurn ?? -1];
+    if (!active || active.participant === ev.detail) return;
+
+    updateCombatState({
+      type: CombatActionType.ApplyInterrupt,
+      payload: { targetId: active.participant.id, interrupterId: ev.detail.id },
+    });
+  }
+
   render() {
     const { round = 0 } = this.combatState ?? {};
     const { isGM } = game.user;
     const { combatRound, activeTurn = -1 } = this;
-    const { participants = [], someTookInitiative, extraActions } =
-      combatRound ?? {};
-    const noPrevTurn = round <= 1 && activeTurn <= 0;
+    const { participants = [], someTookInitiative } = combatRound ?? {};
+    const noPrevTurn = activeTurn < 0 || (round <= 1 && activeTurn <= 0);
+
     return html`
       <header>
         ${isGM
@@ -269,7 +275,11 @@ export class CombatView extends LitElement {
           <mwc-icon-button slot="base" icon="add"></mwc-icon-button>
         </sl-popover>
       </header>
-      <sl-animated-list class="combat-round" transformOrigin="top">
+      <sl-animated-list
+        class="combat-round"
+        transformOrigin="top"
+        @interrupt-turn=${this.applyInterrupt}
+      >
         ${someTookInitiative
           ? html`<li class="label">
               ${localize('took')} ${localize('initiative')}
@@ -300,12 +310,12 @@ export class CombatView extends LitElement {
         ${isGM
           ? html`
               <mwc-icon-button
-                @click=${this.previousRound}
+                @click=${this.rewindRound}
                 icon="arrow_backward"
                 ?disabled=${round <= 1}
               ></mwc-icon-button>
               <mwc-icon-button
-                @click=${this.previousTurn}
+                @click=${this.rewindTurn}
                 icon="chevron_left"
                 ?disabled=${noPrevTurn}
               ></mwc-icon-button>
@@ -319,7 +329,7 @@ export class CombatView extends LitElement {
               <mwc-icon-button
                 @click=${this.advanceTurn}
                 icon="chevron_right"
-                ?disabled=${!round}
+                ?disabled=${!round || activeTurn === -1}
               ></mwc-icon-button>
               <mwc-icon-button
                 @click=${this.advanceRound}
@@ -330,7 +340,7 @@ export class CombatView extends LitElement {
           : round
           ? html`
               <mwc-icon-button
-                @click=${this.previousTurn}
+                @click=${this.rewindTurn}
                 icon="chevron_left"
                 ?disabled=${!this.playerTurnControls || noPrevTurn}
               ></mwc-icon-button>

@@ -1,4 +1,4 @@
-import { CombatData, RoundPhase } from '@src/combat/combat-tracker';
+import type { CombatData } from '@src/combat/combat-tracker';
 import { createEnvironment } from '@src/features/environment';
 import { once } from 'remeda';
 import { addListener } from 'weightless/util/event';
@@ -113,7 +113,6 @@ export const registerEPSettings = once(() => {
     default: {
       participants: [],
       round: 0,
-      phase: RoundPhase.Normal,
       turn: 0,
       goingBackwards: false,
     },

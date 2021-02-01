@@ -1,12 +1,10 @@
 import { createMessage, MessageVisibility } from '@src/chat/create-message';
 import { PoolType } from '@src/data-enums';
-import type { ActorEP } from '@src/entities/actor/actor';
 import { ActorType } from '@src/entities/entity-types';
 import { findActor, findToken } from '@src/entities/find-entities';
 import {
   addFeature,
   StringID,
-  uniqueStringID,
   updateFeature,
 } from '@src/features/feature-helpers';
 import { advanceWorldTime, CommonInterval } from '@src/features/time';
@@ -20,7 +18,6 @@ import {
 import { rollFormula } from '@src/foundry/rolls';
 import { emitEPSocket, SystemSocketData } from '@src/foundry/socket';
 import { gameSettings } from '@src/init';
-import { notEmpty } from '@src/utility/helpers';
 import produce from 'immer';
 import type { WritableDraft } from 'immer/dist/internal';
 import { reject } from 'remeda';
@@ -134,7 +131,6 @@ type RoundParticipant = {
 export type CombatRound = {
   participants: RoundParticipant[];
   someTookInitiative: boolean;
-  extraActions: boolean;
 };
 
 export const setupCombatRound = (
@@ -144,7 +140,6 @@ export const setupCombatRound = (
   const round: CombatRound = {
     participants: [],
     someTookInitiative: false,
-    extraActions: false,
   };
 
   for (const participant of participants) {
@@ -153,16 +148,23 @@ export const setupCombatRound = (
     round.participants.push({ participant, tookInitiative });
     round.someTookInitiative ||= !!tookInitiative;
 
-    if (notEmpty(extraActions)) {
-      round.extraActions ||= true;
-      for (const extra of extraActions) {
-        round.participants.push({ participant, extra });
-      }
+    for (const extra of extraActions ?? []) {
+      round.participants.push({ participant, extra });
     }
   }
 
   round.participants.sort(participantsByInitiative);
   return round;
+};
+
+const findReverse = (
+  participants: CombatRound['participants'],
+  startingTurn: number,
+  isViable: (info: CombatRound['participants'][number]) => boolean,
+) => {
+  const roundStart = participants.slice(0, startingTurn + 1).reverse();
+  const viable = roundStart.find(isViable);
+  return viable ? roundStart.reverse().lastIndexOf(viable) : -1;
 };
 
 export const findViableParticipantTurn = ({
@@ -178,31 +180,29 @@ export const findViableParticipantTurn = ({
   goingBackwards: boolean;
   exhaustive: boolean;
 }) => {
-  const isViableParticipant = ({
+  const viableParticipant = ({
     participant,
   }: {
     participant: CombatParticipant;
   }) => !participant.delaying && (skipDefeated ? !participant.defeated : true);
 
   if (goingBackwards) {
-    const roundStart = participants.slice(0, startingTurn + 1).reverse();
-    const viable = roundStart.findIndex(isViableParticipant);
-    if (viable >= 0) return roundStart.length - viable;
+    const viable = findReverse(participants, startingTurn, viableParticipant);
+    if (viable >= 0) return viable;
     if (exhaustive) {
       const anyViable = participants
         .slice(startingTurn)
-        .findIndex(isViableParticipant);
+        .findIndex(viableParticipant);
       if (anyViable >= 0) return startingTurn + anyViable;
     }
   } else {
     const firstViable = participants
       .slice(startingTurn)
-      .findIndex(isViableParticipant);
+      .findIndex(viableParticipant);
     if (firstViable >= 0) return startingTurn + firstViable;
     if (exhaustive) {
-      const roundStart = participants.slice(0, startingTurn + 1).reverse();
-      const viable = roundStart.findIndex(isViableParticipant);
-      if (viable >= 0) return roundStart.length - viable;
+      const viable = findReverse(participants, startingTurn, viableParticipant);
+      if (viable >= 0) return viable;
     }
   }
 
@@ -247,6 +247,7 @@ export enum CombatActionType {
   RemoveParticipants,
   UpdateRound,
   Reset,
+  ApplyInterrupt,
 }
 
 export type CombatUpdateAction =
@@ -265,6 +266,10 @@ export type CombatUpdateAction =
   | {
       type: CombatActionType.UpdateRound;
       payload: Pick<CombatData, 'round' | 'turn' | 'goingBackwards'>;
+    }
+  | {
+      type: CombatActionType.ApplyInterrupt;
+      payload: { targetId: string; interrupterId: string };
     }
   | {
       type: CombatActionType.Reset;
@@ -295,6 +300,41 @@ const updateReducer = produce(
         );
 
         return;
+
+      case CombatActionType.ApplyInterrupt: {
+        const sorted = draft.participants.sort((a, b) =>
+          participantsByInitiative({ participant: a }, { participant: b }),
+        );
+        const activeIndex = sorted.findIndex(
+          (p) => p.id === action.payload.targetId,
+        );
+        const part = sorted[activeIndex];
+        if (!part) return;
+        const newInitiative = (part.initiative || 0) + 0.01;
+        let decreaseTurn = false;
+        let currentInitiative = newInitiative;
+        // TODO account for parts before target having same initiative
+        for (const participant of sorted.slice(0, activeIndex).reverse()) {
+          if (participant.id === action.payload.interrupterId) {
+            decreaseTurn = true;
+          } else if (participant.initiative === currentInitiative) {
+            participant.initiative = currentInitiative += 0.01;
+          }
+        }
+
+        const interrupter = sorted.find(
+          (p) => p.id === action.payload.interrupterId,
+        );
+        if (interrupter) {
+          interrupter.delaying = false;
+          interrupter.initiative = newInitiative;
+        }
+        if (decreaseTurn) {
+          draft.turn -= 1;
+        }
+
+        return;
+      }
 
       case CombatActionType.UpdateRound:
         Object.assign(draft, action.payload);
