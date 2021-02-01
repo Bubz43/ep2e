@@ -107,23 +107,23 @@ export const registerEPSettings = once(() => {
     },
   );
 
-  const combatState = registerSystemSetting<CombatData>("combatState", {
-    scope: "world",
+  const combatState = registerSystemSetting<CombatData>('combatState', {
+    scope: 'world',
     config: false,
     default: {
       participants: [],
       round: 0,
       phase: RoundPhase.Normal,
-      phaseTurn: 0,
-    }
-  })
-
+      turn: 0,
+      goingBackwards: false,
+    },
+  });
 
   return {
     systemMigrationVersion,
     environment,
     credits,
     glitchOnMeshWounds,
-    combatState
+    combatState,
   } as const;
 });

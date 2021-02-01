@@ -2,9 +2,12 @@ import {
   CombatActionType,
   CombatData,
   CombatParticipant,
+  CombatRound,
   CombatRoundPhases,
+  findViableParticipantTurn,
   rollParticipantInitiative,
   RoundPhase,
+  setupCombatRound,
   setupPhases,
   updateCombatState,
 } from '@src/combat/combat-tracker';
@@ -20,8 +23,9 @@ import {
   LitElement,
   PropertyValues,
 } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
-import { equals, findIndex } from 'remeda';
+import { equals, findIndex, range } from 'remeda';
 import '../participant-item/participant-item';
 import type { ParticipantItem } from '../participant-item/participant-item';
 import '../participant-selector/participant-selector';
@@ -45,9 +49,9 @@ export class CombatView extends LitElement {
 
   private participants: CombatParticipant[] = [];
 
-  private phases?: CombatRoundPhases | null;
+  private combatRound?: CombatRound | null;
 
-  private roundState?: Pick<CombatData, 'phase' | 'phaseTurn'> | null;
+  private activeTurn?: number;
 
   private intObs: IntersectionObserver | null = null;
 
@@ -71,99 +75,36 @@ export class CombatView extends LitElement {
         newState.participants,
       );
 
-      if (changedParticipants) {
-        this.participants = newState.participants;
-      }
+      this.participants = newState.participants;
 
       if (newState.round !== combatState?.round) {
-        this.phases = null;
-        this.roundState = null;
+        this.combatRound = null;
       }
 
-      const changedPhases =
-        changedParticipants ||
-        !this.phases ||
-        combatState?.round !== newState.round;
+      const changedRound = changedParticipants || !this.combatRound;
 
-      if (changedPhases) {
-        console.time('setupPhases');
-        this.phases = setupPhases(this.participants, newState.round);
-        console.timeEnd('setupPhases');
+      if (changedRound) {
+        this.combatRound = setupCombatRound(this.participants, newState.round);
       }
 
       if (
-        changedPhases ||
-        combatState?.phase !== newState.phase ||
-        !equals(combatState.phaseTurn, newState.phaseTurn)
+        changedRound ||
+        combatState?.turn !== newState.turn ||
+        combatState.goingBackwards !== newState.goingBackwards ||
+        combatState.skipDefeated !== newState.skipDefeated
       ) {
-        const { phase, phaseTurn: turn = 0 } = newState;
-        console.time('setupRoundState');
-
-        const isActiveParticipant = ({
-          participant,
-        }: {
-          participant: CombatParticipant;
-        }) => {
-          return (
-            !participant.delaying &&
-            (newState.skipDefeated ? !participant.defeated : true)
-          );
-        };
-
-        if (phase === RoundPhase.Normal) {
-          const phaseList = this.phases?.[phase] ?? [];
-          const possible = phaseList.slice(turn).findIndex(isActiveParticipant);
-          if (possible >= 0) {
-            this.roundState = {
-              phase,
-              phaseTurn: possible,
-            };
-          } else {
-            const extraPossible = (
-              this.phases?.[RoundPhase.ExtraActions] ?? []
-            ).findIndex(isActiveParticipant);
-            if (extraPossible >= 0) {
-              this.roundState = {
-                phase: RoundPhase.ExtraActions,
-                phaseTurn: extraPossible,
-              };
-            } else {
-              const start = phaseList.slice(0, turn);
-              const lastTry = start.reverse().findIndex(isActiveParticipant);
-              this.roundState = {
-                phase: RoundPhase.Normal,
-                phaseTurn: lastTry >= 0 ? start.length - lastTry : 0,
-              };
-            }
-          }
-        } else if (phase === RoundPhase.ExtraActions) {
-          const phaseList = this.phases?.[phase] ?? [];
-          const possible = phaseList.slice(turn).findIndex(isActiveParticipant);
-          if (possible >= 0) {
-            this.roundState = {
-              phase,
-              phaseTurn: possible,
-            };
-          } else {
-            const start = phaseList.slice(0, turn);
-            const previous = start.reverse().findIndex(isActiveParticipant);
-            if (previous >= 0) {
-              this.roundState = {
-                phase,
-                phaseTurn: previous,
-              };
-            } else {
-              const normalPossible = (
-                this.phases?.[RoundPhase.Normal] ?? []
-              ).findIndex(isActiveParticipant);
-              this.roundState = {
-                phase: RoundPhase.Normal,
-                phaseTurn: normalPossible >= 0 ? normalPossible : 0,
-              };
-            }
-          }
-        }
-        console.timeEnd('setupRoundState');
+        const {
+          turn: turn = 0,
+          goingBackwards,
+          skipDefeated = false,
+        } = newState;
+        this.activeTurn = findViableParticipantTurn({
+          participants: this.combatRound?.participants ?? [],
+          startingTurn: turn,
+          goingBackwards,
+          skipDefeated,
+          exhaustive: true,
+        });
       }
 
       this.combatState = newState;
@@ -212,7 +153,8 @@ export class CombatView extends LitElement {
         payload: {
           round: this.combatState?.round || 0,
           phase,
-          phaseTurn: turn + 1,
+          turn: turn + 1,
+          goingBackwards: false,
         },
       });
       return;
@@ -227,7 +169,8 @@ export class CombatView extends LitElement {
           payload: {
             round: this.combatState?.round || 0,
             phase: nextPhase,
-            phaseTurn: 0,
+            turn: 0,
+            goingBackwards: false,
           },
         });
         return;
@@ -242,7 +185,8 @@ export class CombatView extends LitElement {
       payload: {
         round: (this.combatState?.round || 0) + 1,
         phase: RoundPhase.Normal,
-        phaseTurn: 0,
+        turn: 0,
+        goingBackwards: false,
       },
     });
   }
@@ -250,59 +194,37 @@ export class CombatView extends LitElement {
   private previousRound() {
     let turn = 0;
     let phase = RoundPhase.ExtraActions;
-    const phases = setupPhases(this.participants, this.combatState!.round - 1);
-    for (const newPhase of [RoundPhase.ExtraActions, RoundPhase.Normal]) {
-      const turns = phases[newPhase];
-      if (turns.length) {
-        turn = turns.length - 1;
-        phase = newPhase;
-        break;
-      }
-    }
+
     updateCombatState({
       type: CombatActionType.UpdateRound,
       payload: {
         round: (this.combatState?.round || 1) - 1,
         phase,
-        phaseTurn: turn,
+        turn: turn,
+        goingBackwards: true,
       },
     });
   }
 
   private previousTurn() {
-    const { phase = RoundPhase.ExtraActions, phaseTurn: turn = 0 } =
-      this.roundState ?? {};
+    const turn = findViableParticipantTurn({
+      participants: this.combatRound?.participants ?? [],
+      skipDefeated: this.combatState?.skipDefeated ?? false,
+      goingBackwards: true,
+      exhaustive: false,
+      startingTurn: this.activeTurn ?? 0,
+    });
 
-    const previous = this.phases?.[phase][turn - 1];
-    if (previous) {
+    if (turn >= 0) {
       updateCombatState({
         type: CombatActionType.UpdateRound,
         payload: {
-          round: this.combatState?.round || 0,
-          phase,
-          phaseTurn: turn - 1,
+          goingBackwards: true,
+          round: this.combatState?.round ?? 0,
+          turn,
         },
       });
-      return;
-    }
-    for (const previousPhase of [
-      RoundPhase.ExtraActions,
-      RoundPhase.Normal,
-    ].filter((n) => n < phase)) {
-      const previous = this.phases?.[previousPhase];
-      if (previous?.length) {
-        updateCombatState({
-          type: CombatActionType.UpdateRound,
-          payload: {
-            round: this.combatState?.round || 0,
-            phase: previousPhase,
-            phaseTurn: previous.length - 1,
-          },
-        });
-        return;
-      }
-    }
-    this.previousRound();
+    } else this.previousRound();
   }
 
   private reset() {
@@ -327,17 +249,11 @@ export class CombatView extends LitElement {
 
   render() {
     const { round = 0 } = this.combatState ?? {};
-    const {
-      [RoundPhase.Normal]: normal,
-      [RoundPhase.ExtraActions]: extraActions,
-      someTookInitiative,
-    } = this.phases ?? {};
-    const { phase, phaseTurn: turn = 0 } = this.roundState ?? {};
     const { isGM } = game.user;
-
-    const noPrevTurn =
-      round <= 1 &&
-      (phase === RoundPhase.ExtraActions ? !normal?.length : turn === 0);
+    const { combatRound, activeTurn = -1 } = this;
+    const { participants = [], someTookInitiative, extraActions } =
+      combatRound ?? {};
+    const noPrevTurn = round <= 1 && activeTurn <= 0;
     return html`
       <header>
         ${isGM
@@ -359,59 +275,35 @@ export class CombatView extends LitElement {
           <mwc-icon-button slot="base" icon="add"></mwc-icon-button>
         </sl-popover>
       </header>
-      <div class="phases">
-        ${notEmpty(normal)
-          ? html`
-              <sl-animated-list class="normal-order" transformOrigin="top">
-                ${someTookInitiative
-                  ? html`<li class="label">
-                      ${localize('took')} ${localize('initiative')}
-                    </li>`
-                  : ''}
-                ${repeat(
-                  normal,
-                  ({ participant }) => participant.id,
-                  ({ participant, tookInitiative }, index) =>
-                    html`
-                      <participant-item
-                        class=${tookInitiative ? 'took-initiative' : ''}
-                        .participant=${participant}
-                        round=${round}
-                        ?active=${phase === RoundPhase.Normal && turn === index}
-                        turn=${turn}
-                        .tookInitiativePool=${tookInitiative}
-                        ?hidden=${!isGM && !!participant.hidden}
-                      ></participant-item>
-                    `,
-                )}
-              </sl-animated-list>
-            `
+      <sl-animated-list class="combat-round" transformOrigin="top">
+        ${someTookInitiative
+          ? html`<li class="label">
+              ${localize('took')} ${localize('initiative')}
+            </li>`
           : ''}
-        ${notEmpty(extraActions)
-          ? html`
-              <sl-animated-list class="extra-actions" transformOrigin="top">
-                <li class="label">
-                  ${localize('extra')} ${localize('actions')}
-                </li>
-                ${repeat(
-                  extraActions,
-                  ({ participant, extra }) => participant.id + extra.id,
-                  ({ participant, extra }, index) => html`
-                    <participant-item
-                      .participant=${participant}
-                      round=${round}
-                      ?active=${phase === RoundPhase.ExtraActions &&
-                      turn === index}
-                      turn=${turn}
-                      .extraActionPool=${extra.pool}
-                      ?hidden=${!isGM && !!participant.hidden}
-                    ></participant-item>
-                  `,
-                )}
-              </sl-animated-list>
-            `
-          : ''}
-      </div>
+        ${repeat(
+          participants,
+          ({ participant, extra }) => participant.id + extra?.id,
+          ({ participant, tookInitiative, extra }, index) => {
+            return html`
+              <participant-item
+                class=${classMap({
+                  'took-initiative': !!tookInitiative,
+                  extra: !!extra,
+                })}
+                .participant=${participant}
+                round=${round}
+                ?active=${activeTurn === index}
+                turn=${activeTurn}
+                .tookInitiativePool=${tookInitiative}
+                .extraActionPool=${extra?.pool}
+                ?hidden=${!isGM && !!participant.hidden}
+              ></participant-item>
+            `;
+          },
+        )}
+      </sl-animated-list>
+
       <footer>
         ${isGM
           ? html`

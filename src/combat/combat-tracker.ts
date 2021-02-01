@@ -41,12 +41,15 @@ type TrackedIdentitfiers =
       type: TrackedCombatEntity.Time;
       startTime: number;
       duration: number;
-  };
-    
-export const combatPools = [PoolType.Insight, PoolType.Vigor, PoolType.Threat] as const
+    };
 
-export type CombatPool = (typeof combatPools)[number]
+export const combatPools = [
+  PoolType.Insight,
+  PoolType.Vigor,
+  PoolType.Threat,
+] as const;
 
+export type CombatPool = typeof combatPools[number];
 
 export enum RoundPhase {
   Normal = 1,
@@ -54,9 +57,9 @@ export enum RoundPhase {
 }
 
 type Extra = {
-  pool: CombatPool,
+  pool: CombatPool;
   id: boolean;
-}
+};
 
 type CombatParticipantData = {
   name: string;
@@ -89,8 +92,6 @@ export type CombatRoundPhases = {
   }[];
   someTookInitiative: boolean;
 };
-
-
 
 export const rollParticipantInitiative = async (
   participant: CombatParticipant,
@@ -141,6 +142,90 @@ export const participantsAsToken = ({ id, scene }: Token) => {
   );
 };
 
+type RoundParticipant = {
+  participant: CombatParticipant;
+  tookInitiative?: CombatPool | null;
+  extra?: Extra | null;
+};
+
+export type CombatRound = {
+  participants: RoundParticipant[];
+  someTookInitiative: boolean;
+  extraActions: boolean;
+};
+
+export const setupCombatRound = (
+  participants: CombatParticipant[],
+  roundIndex: number,
+) => {
+  const round: CombatRound = {
+    participants: [],
+    someTookInitiative: false,
+    extraActions: false,
+  };
+
+  for (const participant of participants) {
+    const { tookInitiative, extraActions } =
+      participant.modifiedTurn?.[roundIndex] ?? {};
+    round.participants.push({ participant, tookInitiative });
+    round.someTookInitiative ||= !!tookInitiative;
+
+    if (notEmpty(extraActions)) {
+      round.extraActions ||= true;
+      for (const extra of extraActions) {
+        round.participants.push({ participant, extra });
+      }
+    }
+  }
+
+  round.participants.sort(participantsByInitiative);
+  return round;
+};
+
+export const findViableParticipantTurn = ({
+  participants,
+  startingTurn,
+  skipDefeated,
+  goingBackwards,
+  exhaustive,
+}: {
+  participants: CombatRound['participants'];
+  startingTurn: number;
+  skipDefeated: boolean;
+  goingBackwards: boolean;
+  exhaustive: boolean;
+}) => {
+  const isViableParticipant = ({
+    participant,
+  }: {
+    participant: CombatParticipant;
+  }) => !participant.delaying && (skipDefeated ? !participant.defeated : true);
+
+  if (goingBackwards) {
+    const roundStart = participants.slice(0, startingTurn + 1).reverse();
+    const viable = roundStart.findIndex(isViableParticipant);
+    if (viable >= 0) return roundStart.length - viable;
+    if (exhaustive) {
+      const anyViable = participants
+        .slice(startingTurn)
+        .findIndex(isViableParticipant);
+      if (anyViable >= 0) return startingTurn + anyViable;
+    }
+  } else {
+    const firstViable = participants
+      .slice(startingTurn)
+      .findIndex(isViableParticipant);
+    if (firstViable >= 0) return startingTurn + firstViable;
+    if (exhaustive) {
+      const roundStart = participants.slice(0, startingTurn + 1).reverse();
+      const viable = roundStart.findIndex(isViableParticipant);
+      if (viable >= 0) return roundStart.length - viable;
+    }
+  }
+
+  return -1;
+};
+
 export const setupPhases = (
   participants: CombatParticipant[],
   roundIndex: number,
@@ -159,12 +244,11 @@ export const setupPhases = (
     phases.someTookInitiative ||= !!tookInitiative;
 
     for (const extra of extraActions || []) {
-          phases[RoundPhase.ExtraActions].push({
-            participant,
-            extra: extra,
-          });
+      phases[RoundPhase.ExtraActions].push({
+        participant,
+        extra: extra,
+      });
     }
-  
   }
 
   phases[RoundPhase.ExtraActions].sort(participantsByInitiative);
@@ -174,19 +258,21 @@ export const setupPhases = (
 };
 
 export const participantsByInitiative = (
-  {
-    participant: a,
-    tookInitiative: initA,
-  }: { participant: CombatParticipant; tookInitiative?: CombatPool | null },
-  {
-    participant: b,
-    tookInitiative: initB,
-  }: { participant: CombatParticipant; tookInitiative?: CombatPool | null },
+  { participant: a, tookInitiative: tookA, extra: extraA }: RoundParticipant,
+  { participant: b, tookInitiative: tookB, extra: extraB }: RoundParticipant,
 ) => {
-  if (initA && !initB) return -1;
-  if (initB && !initA) return 1;
+  // Took initiative are all first
+  if (tookA && !tookB) return -1;
+  if (tookB && !tookA) return 1;
+
+  // Extra actions are all last
+  if (extraA && !extraB) return 1;
+  if (extraB && !extraA) return -1;
+
+  // Unset initiative are last in normal flow
   if (a.initiative != null && b.initiative == null) return -1;
   if (b.initiative != null && a.initiative == null) return 1;
+
   return a.initiative === b.initiative
     ? a.name.localeCompare(b.name)
     : Number(b.initiative) - Number(a.initiative);
@@ -197,8 +283,8 @@ export type CombatParticipant = CombatParticipantData & { id: string };
 export type CombatData = {
   participants: StringID<CombatParticipantData>[];
   round: number;
-  phase: RoundPhase;
-  phaseTurn: number;
+  turn: number;
+  goingBackwards: boolean;
   skipDefeated?: boolean;
   linkToWorldTime?: boolean;
 };
@@ -226,7 +312,7 @@ export type CombatUpdateAction =
     }
   | {
       type: CombatActionType.UpdateRound;
-      payload: Pick<CombatData, 'phase' | 'round' | 'phaseTurn'>;
+      payload: Pick<CombatData, 'round' | 'turn' | 'goingBackwards'>;
     }
   | {
       type: CombatActionType.Reset;
@@ -241,14 +327,14 @@ const updateReducer = produce(
           draft.participants,
         );
 
-        break;
+        return;
       }
 
       case CombatActionType.RemoveParticipants:
         draft.participants = reject(draft.participants, ({ id }) =>
           action.payload.includes(id),
         );
-        break;
+        return;
 
       case CombatActionType.UpdateParticipants:
         draft.participants = action.payload.reduce(
@@ -256,18 +342,19 @@ const updateReducer = produce(
           draft.participants,
         );
 
-        break;
+        return;
 
       case CombatActionType.UpdateRound:
         Object.assign(draft, action.payload);
-        break;
+        return;
 
       case CombatActionType.Reset: {
-        draft.round = 0;
-        draft.phase = RoundPhase.Normal;
-        draft.phaseTurn = 0
-        draft.participants = [];
-        break;
+        return {
+          round: 0,
+          turn: 0,
+          participants: [],
+          goingBackwards: false,
+        };
       }
     }
   },

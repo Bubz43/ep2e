@@ -17,8 +17,15 @@
 }
 
 header {
+  padding: 0.25rem 0;
   display: flex;
   justify-content: space-around;
+  h2 {
+    font-weight: normal;
+    font-size: larger;
+    text-align: center;
+    margin: 0;
+  }
 }
 
 footer {
@@ -36,11 +43,10 @@ footer {
 
 .label {
   list-style: none;
-padding: 0.25rem 0.5rem 0;
+  padding: 0.25rem 0.5rem 0;
   text-transform: uppercase;
   color: var(--color-text-lighter);
   letter-spacing: 1px;
-
 }
 
 .took-initiative {
@@ -49,29 +55,25 @@ padding: 0.25rem 0.5rem 0;
     border-top: 1px solid var(--color-border);
     padding-top: 0.25rem;
   }
-
 }
 
-sl-animated-list {
-  padding: 0.25rem 0;
-}
-header {
-  h2 {
-    font-weight: normal;
-    font-size: larger;
-    text-align: center;
-    margin: 0;
+:not(.extra) {
+  & + .extra {
+    &::before {
+      content: 'Extra Actions';
+      padding: 0.25rem 0.5rem 0;
+      text-transform: uppercase;
+      color: var(--color-text-lighter);
+      letter-spacing: 1px;
+      display: block;
+    }
   }
 }
 
-.phases {
+.combat-round {
+  padding: 0.25rem 0;
   position: relative;
   height: 400px;
   overflow-y: scroll;
   overflow-x: hidden;
-}
-
-.extra-actions {
-    @include animate-css(fadeIn, 250ms);
-    animation-fill-mode: none !important;;
 }
