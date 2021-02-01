@@ -30,7 +30,7 @@ import { isKnownDrop, onlySetDragSource } from './drag-and-drop';
 import { navMenuListener } from './foundry-apps';
 import type { TokenData } from './foundry-cont';
 import { localize } from './localization';
-import { convertMenuOptions } from './misc-helpers';
+import { convertMenuOptions, gmIsConnected } from './misc-helpers';
 import { activeTokenStatusEffects } from './token-helpers';
 
 Entity.prototype.matchRegexp = function (regex: RegExp) {
@@ -183,7 +183,7 @@ const { getData: getTokenData } = TokenHUD.prototype;
 
 TokenHUD.prototype.getData = function (options: unknown) {
   const data = getTokenData.call(this, options);
-  data.canToggleCombat = gamemasterIsConnected();
+  data.canToggleCombat = gmIsConnected();
   data.combatClass =
     this.object && tokenIsInCombat(this.object) ? 'active' : '';
   return data;
@@ -219,6 +219,7 @@ TokenHUD.prototype._onToggleCombat = async function (
       ],
     });
   }
+  ev.currentTarget.classList.toggle('active', !active);
 };
 
 TokenHUD.prototype._getStatusEffectChoices = function () {
@@ -635,6 +636,3 @@ ActorDirectory.prototype._onCreateEntity = async function (ev: Event) {
     });
   }
 };
-function gamemasterIsConnected(): any {
-  throw new Error('Function not implemented.');
-}

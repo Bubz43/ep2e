@@ -21,6 +21,7 @@ import { gameSettings } from '@src/init';
 import produce from 'immer';
 import type { WritableDraft } from 'immer/dist/internal';
 import { reject } from 'remeda';
+import type { SetRequired } from 'type-fest';
 
 export enum TrackedCombatEntity {
   Actor,
@@ -53,6 +54,11 @@ type Extra = {
   id: boolean;
 };
 
+export enum Surprise {
+  Surprised = 'surprised',
+  Alerted = 'alerted',
+}
+
 type CombatParticipantData = {
   name: string;
   img?: string;
@@ -62,6 +68,7 @@ type CombatParticipantData = {
   defeated?: boolean;
   userId?: string;
   delaying?: boolean;
+  surprised?: null | Surprise;
   modifiedTurn?: Record<
     number,
     | {
@@ -75,12 +82,18 @@ type CombatParticipantData = {
 
 export const rollParticipantInitiative = async (
   participant: CombatParticipant,
-): Promise<{ id: string; initiative: number }> => {
+  surprised?: Surprise,
+): Promise<
+  SetRequired<
+    Pick<CombatParticipant, 'id' | 'initiative' | 'surprised'>,
+    'id' | 'initiative'
+  >
+> => {
   const { token, actor } = getParticipantEntities(participant);
 
   const roll =
     actor?.proxy.type === ActorType.Character
-      ? rollFormula(`1d6 + ${actor.proxy.initiative}`)
+      ? rollFormula(`1d6 + ${actor.proxy.initiative} ${surprised ? `-3` : ''}`)
       : null;
 
   if (roll) {
@@ -95,7 +108,7 @@ export const rollParticipantInitiative = async (
     });
   }
 
-  return { id: participant.id, initiative: roll?.total || 0 };
+  return { id: participant.id, initiative: roll?.total || 0, surprised };
 };
 
 export const getParticipantEntities = (data: CombatParticipantData) => {
@@ -126,11 +139,13 @@ type RoundParticipant = {
   participant: CombatParticipant;
   tookInitiative?: CombatPool | null;
   extra?: Extra | null;
+  surprise?: Surprise | null;
 };
 
 export type CombatRound = {
   participants: RoundParticipant[];
   someTookInitiative: boolean;
+  surprise: boolean;
 };
 
 export const setupCombatRound = (
@@ -140,6 +155,7 @@ export const setupCombatRound = (
   const round: CombatRound = {
     participants: [],
     someTookInitiative: false,
+    surprise: false,
   };
 
   for (const participant of participants) {
@@ -150,6 +166,10 @@ export const setupCombatRound = (
 
     for (const extra of extraActions ?? []) {
       round.participants.push({ participant, extra });
+    }
+
+    if (roundIndex <= 1) {
+      round.surprise ||= !!participant.surprised;
     }
   }
 
@@ -172,11 +192,13 @@ export const findViableParticipantTurn = ({
   startingTurn,
   skipDefeated,
   goingBackwards,
+  skipSurprised,
   exhaustive,
 }: {
   participants: CombatRound['participants'];
   startingTurn: number;
   skipDefeated: boolean;
+  skipSurprised: boolean;
   goingBackwards: boolean;
   exhaustive: boolean;
 }) => {
@@ -184,7 +206,10 @@ export const findViableParticipantTurn = ({
     participant,
   }: {
     participant: CombatParticipant;
-  }) => !participant.delaying && (skipDefeated ? !participant.defeated : true);
+  }) =>
+    !participant.delaying &&
+    (skipDefeated ? !participant.defeated : true) &&
+    (skipSurprised ? participant.surprised !== Surprise.Surprised : true);
 
   if (goingBackwards) {
     const viable = findReverse(participants, startingTurn, viableParticipant);
@@ -246,6 +271,7 @@ export enum CombatActionType {
   UpdateParticipants,
   RemoveParticipants,
   UpdateRound,
+  DelayParticipant,
   Reset,
   ApplyInterrupt,
   RemoveParticipantsByToken,
@@ -277,6 +303,10 @@ export type CombatUpdateAction =
       payload: { sceneId: string; tokenId: string };
     }
   | {
+      type: CombatActionType.DelayParticipant;
+      payload: { participantId: string; advanceRound: boolean };
+    }
+  | {
       type: CombatActionType.Reset;
     };
 
@@ -303,8 +333,16 @@ const updateReducer = produce(
           (accum, change) => updateFeature(accum, change),
           draft.participants,
         );
-
         return;
+
+      case CombatActionType.DelayParticipant: {
+        const part = draft.participants.find(
+          (p) => p.id === action.payload.participantId,
+        );
+        if (part) part.delaying = true;
+        if (action.payload.advanceRound) draft.round++;
+        return;
+      }
 
       case CombatActionType.ApplyInterrupt: {
         const sorted = draft.participants.sort((a, b) =>
@@ -318,11 +356,13 @@ const updateReducer = produce(
         const newInitiative = (part.initiative || 0) + 0.01;
         let decreaseTurn = false;
         let currentInitiative = newInitiative;
-        // TODO account for parts before target having same initiative
         for (const participant of sorted.slice(0, activeIndex).reverse()) {
           if (participant.id === action.payload.interrupterId) {
             decreaseTurn = true;
-          } else if (participant.initiative === currentInitiative) {
+          } else if (
+            participant.initiative === currentInitiative ||
+            participant.initiative === part.initiative
+          ) {
             participant.initiative = currentInitiative += 0.01;
           }
         }

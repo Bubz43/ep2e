@@ -5,6 +5,7 @@ import {
   CombatPool,
   combatPools,
   rollParticipantInitiative,
+  Surprise,
   TrackedCombatEntity,
   updateCombatState,
 } from '@src/combat/combat-tracker';
@@ -61,6 +62,8 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
   @property({ type: String }) tookInitiativePool?: CombatPool | null;
 
   @property({ type: String }) extraActionPool?: CombatPool | null;
+
+  @property({ type: Boolean }) surprise = false;
 
   @internalProperty() private token?: MaybeToken;
 
@@ -168,6 +171,25 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       : null;
   }
 
+  private toggleDelay() {
+    if (this.participant.delaying) {
+      this.dispatchEvent(
+        new CustomEvent('interrupt-turn', {
+          detail: this.participant,
+          bubbles: true,
+          composed: true,
+        }),
+      );
+    } else
+      this.dispatchEvent(
+        new CustomEvent('delay', {
+          detail: this.participant,
+          bubbles: true,
+          composed: true,
+        }),
+      );
+  }
+
   private openMenu(ev: MouseEvent) {
     if (!this.editable) return;
     const { tookInitiative, extraActions } =
@@ -184,16 +206,8 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       if (this.round !== -1) {
         delayOptions.push({
           label: localize('interrupt'),
-          icon: html`<mwc-icon>priority_high</mwc-icon>`,
-          callback: () => {
-            this.dispatchEvent(
-              new CustomEvent('interrupt-turn', {
-                detail: this.participant,
-                bubbles: true,
-                composed: true,
-              }),
-            );
-          },
+          icon: html`<mwc-icon>play_arrow</mwc-icon>`,
+          callback: () => this.toggleDelay(),
         });
       }
       delayOptions.push({
@@ -203,7 +217,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
     } else {
       delayOptions.push({
         label: localize('delayTurn'),
-        callback: () => this.updateParticipant({ delaying: true }),
+        callback: () => this.toggleDelay(),
         disabled: !this.active,
       });
     }
@@ -234,7 +248,12 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       });
     }
 
-    if (pools && this.round && !this.participant.delaying) {
+    if (
+      pools &&
+      this.round &&
+      !this.participant.delaying &&
+      (!this.surprise || !this.participant.surprised)
+    ) {
       for (const poolType of combatPools) {
         const pool = pools.get(poolType);
         if (!pool) continue;
@@ -347,9 +366,16 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
             this.participant.initiative == null ? 'roll' : 'reRoll',
           )} ${localize('initiative')}`,
           callback: () => this.rollInitiative(),
+          icon: html`<mwc-icon>casino</mwc-icon>`,
         },
         {
-          label: localize('delete'),
+          label: localize('edit'),
+          callback: () => this.openEditDialog(),
+          icon: html`<mwc-icon>edit</mwc-icon>`,
+        },
+        {
+          label: localize('remove'),
+          icon: html`<mwc-icon>remove</mwc-icon>`,
           callback: () =>
             updateCombatState({
               type: CombatActionType.RemoveParticipants,
@@ -361,9 +387,51 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
   }
 
   private async rollInitiative() {
-    updateCombatState({
-      type: CombatActionType.UpdateParticipants,
-      payload: [await rollParticipantInitiative(this.participant)],
+    this.updateParticipant(await rollParticipantInitiative(this.participant));
+  }
+
+  private openInitiativeMenu() {
+    const bonus = this.character?.initiative;
+    const baseLabel = bonus ? `1d6 + ${bonus}` : '1d6';
+    openMenu({
+      header: {
+        heading: `${this.participant.name} - ${localize('roll')} ${localize(
+          'initiative',
+        )}`,
+      },
+      content: [
+        {
+          label: baseLabel,
+          callback: () => this.rollInitiative(),
+          icon: html`<mwc-icon>casino</mwc-icon>`,
+        },
+        {
+          label: `${localize(
+            Surprise.Surprised,
+          )} (${baseLabel}) - 3, 🚫 ${localize('act')}/${localize('defend')}`,
+          callback: async () =>
+            this.updateParticipant(
+              await rollParticipantInitiative(
+                this.participant,
+                Surprise.Surprised,
+              ),
+            ),
+          icon: html`<mwc-icon>snooze</mwc-icon>`,
+        },
+        {
+          label: `${localize(Surprise.Alerted)} (${baseLabel}) - 3, ${localize(
+            'act',
+          )}/${localize('defend')} ${localize('normally')}`,
+          callback: async () =>
+            this.updateParticipant(
+              await rollParticipantInitiative(
+                this.participant,
+                Surprise.Alerted,
+              ),
+            ),
+          icon: html`<mwc-icon>priority_high</mwc-icon>`,
+        },
+      ],
     });
   }
 
@@ -416,6 +484,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
 
   render() {
     const { participant, usedPool, editable, token, actor, timeState } = this;
+    const canDelay = !this.participant.delaying && this.active;
     return html`
       <wl-list-item @contextmenu=${this.openMenu}>
         <mwc-icon-button
@@ -435,6 +504,9 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
           ?disabled=${!editable || !actor}
           @click=${this.openActorSheet}
         >
+          ${this.surprise && participant.surprised
+            ? `[${localize(participant.surprised)}]`
+            : ''}
           ${participant.name}
         </button>
         <span class="status">
@@ -464,18 +536,31 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
           ${participant.initiative != null
             ? html`
                 <button
-                  ?disabled=${!editable}
-                  @click=${this.openEditDialog}
-                  title=${participant.initiative}
+                  ?disabled=${!editable || !canDelay}
+                  @click=${this.toggleDelay}
+                  class=${!this.participant.delaying && this.active
+                    ? 'can-delay'
+                    : ''}
                 >
-                  ${participant.delaying
-                    ? `${localize('delay')}`
-                    : participant.initiative}
+                  <span class="container">
+                    ${participant.delaying
+                      ? html`<mwc-icon title=${localize('interrupt')}
+                          >play_arrow</mwc-icon
+                        >`
+                      : html`<span class="initiative"
+                            >${participant.initiative}</span
+                          >
+                          ${this.active
+                            ? html`<mwc-icon class="pause">pause</mwc-icon>`
+                            : ''} `}
+                  </span>
                 </button>
               `
             : html`
                 <mwc-icon-button
-                  @click=${this.rollInitiative}
+                  @click=${this.round <= 1
+                    ? this.openInitiativeMenu
+                    : this.rollInitiative}
                   ?disabled=${!editable}
                   ><img src="icons/svg/d20.svg"
                 /></mwc-icon-button>

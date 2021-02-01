@@ -2408,6 +2408,9 @@
             "interference": {
               "type": "string"
             },
+            "interrupt": {
+              "type": "string"
+            },
             "interval": {
               "type": "string"
             },
@@ -5324,6 +5327,7 @@
             "interests",
             "interface",
             "interference",
+            "interrupt",
             "interval",
             "into",
             "introduceItem",

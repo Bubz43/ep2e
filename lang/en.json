@@ -1403,6 +1403,8 @@
     "dissipated": "Dissipated",
     "dissipates": "Dissipates",
     "reRoll": "Reroll",
+    "interrupt": "Interrupt",
+    "defend": "Defend",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

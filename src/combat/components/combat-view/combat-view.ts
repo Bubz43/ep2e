@@ -97,6 +97,7 @@ export class CombatView extends LitElement {
           goingBackwards,
           skipDefeated,
           exhaustive: true,
+          skipSurprised: !!this.combatRound?.surprise,
         });
       }
 
@@ -143,6 +144,7 @@ export class CombatView extends LitElement {
       goingBackwards,
       exhaustive: false,
       startingTurn: (this.activeTurn ?? 0) + 1,
+      skipSurprised: !!this.combatRound?.surprise,
     });
 
     if (turn >= 0) {
@@ -168,6 +170,7 @@ export class CombatView extends LitElement {
       goingBackwards,
       exhaustive: true,
       startingTurn: 0,
+      skipSurprised: false,
     });
 
     updateCombatState({
@@ -187,6 +190,7 @@ export class CombatView extends LitElement {
       goingBackwards,
       exhaustive: true,
       startingTurn: combatRound.participants.length - 1,
+      skipSurprised: false,
     });
 
     updateCombatState({
@@ -203,6 +207,7 @@ export class CombatView extends LitElement {
       goingBackwards,
       exhaustive: false,
       startingTurn: (this.activeTurn ?? 0) - 1,
+      skipSurprised: !!this.combatRound?.surprise,
     });
 
     if (turn >= 0) {
@@ -247,11 +252,27 @@ export class CombatView extends LitElement {
     });
   }
 
+  private delayParticipant(ev: CustomEvent<CombatParticipant>) {
+    const nextTurn = findViableParticipantTurn({
+      participants: this.combatRound?.participants ?? [],
+      skipDefeated: this.combatState?.skipDefeated ?? false,
+      goingBackwards: false,
+      exhaustive: false,
+      startingTurn: (this.activeTurn ?? 0) + 1,
+      skipSurprised: !!this.combatRound?.surprise,
+    });
+    updateCombatState({
+      type: CombatActionType.DelayParticipant,
+      payload: { participantId: ev.detail.id, advanceRound: nextTurn === -1 },
+    });
+  }
+
   render() {
     const { round = 0 } = this.combatState ?? {};
     const { isGM } = game.user;
     const { combatRound, activeTurn = -1 } = this;
-    const { participants = [], someTookInitiative } = combatRound ?? {};
+    const { participants = [], someTookInitiative, surprise = false } =
+      combatRound ?? {};
     const noPrevTurn = activeTurn < 0 || (round <= 1 && activeTurn <= 0);
 
     return html`
@@ -267,7 +288,14 @@ export class CombatView extends LitElement {
               ></mwc-icon-button>
             `
           : ''}
-        ${round ? html` <h2>${localize('round')} ${round}</h2> ` : ''}
+        ${round
+          ? html`
+              <h2>
+                ${surprise ? localize('surprise') : ''} ${localize('round')}
+                ${surprise ? '' : round}
+              </h2>
+            `
+          : ''}
         <sl-popover
           .renderOnDemand=${() =>
             html`<participant-selector></participant-selector>`}
@@ -279,6 +307,7 @@ export class CombatView extends LitElement {
         class="combat-round"
         transformOrigin="top"
         @interrupt-turn=${this.applyInterrupt}
+        @delay=${this.delayParticipant}
       >
         ${someTookInitiative
           ? html`<li class="label">
@@ -301,6 +330,7 @@ export class CombatView extends LitElement {
               .tookInitiativePool=${tookInitiative}
               .extraActionPool=${extra?.pool}
               ?hidden=${!isGM && !!participant.hidden}
+              ?surprise=${surprise}
             ></participant-item>
           `,
         )}

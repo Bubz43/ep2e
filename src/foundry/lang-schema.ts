@@ -1430,7 +1430,9 @@ type LangEntries =
   | 'dissipated'
   | 'dissipates'
   | 'reRoll'
-  | 'interrupt';
+  | 'interrupt'
+  | 'defend'
+  | 'normally';
 type FullNames =
   | 'cog'
   | 'int'

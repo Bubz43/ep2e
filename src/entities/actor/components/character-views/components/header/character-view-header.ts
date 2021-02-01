@@ -13,7 +13,6 @@ import { closeImagePicker, openImagePicker } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
 import { rollFormula } from '@src/foundry/rolls';
 import { tooltip } from '@src/init';
-import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
 import {
@@ -85,21 +84,21 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
   }
 
   private async addToCombat() {
-    const roll =
-       rollFormula(`1d6 + ${this.character.initiative}`)
+    // TODO have initiative menu to account for surprise
+    const roll = rollFormula(`1d6 + ${this.character.initiative}`);
     const name = this.token?.name ?? this.character.name;
     const hidden = this.token?.data.hidden;
     if (roll) {
-    await createMessage({
-      roll,
-      flavor: localize('initiative'),
-      entity: this.token ?? this.character.actor,
-      alias: name,
-      visibility: hidden
-        ? MessageVisibility.WhisperGM
-        : MessageVisibility.Public,
-    });
-  }
+      await createMessage({
+        roll,
+        flavor: localize('initiative'),
+        entity: this.token ?? this.character.actor,
+        alias: name,
+        visibility: hidden
+          ? MessageVisibility.WhisperGM
+          : MessageVisibility.Public,
+      });
+    }
 
     updateCombatState({
       type: CombatActionType.AddParticipants,
