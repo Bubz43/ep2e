@@ -113,8 +113,8 @@ export const getParticipantEntities = (data: CombatParticipantData) => {
   };
 };
 
-export const participantsAsToken = ({ id, scene }: Token) => {
-  return gameSettings.combatState.current.participants.filter(
+export const tokenIsInCombat = ({ id, scene }: Token) => {
+  return gameSettings.combatState.current.participants.some(
     ({ entityIdentifiers }) =>
       entityIdentifiers?.type === TrackedCombatEntity.Token &&
       entityIdentifiers.tokenId === id &&
@@ -248,6 +248,7 @@ export enum CombatActionType {
   UpdateRound,
   Reset,
   ApplyInterrupt,
+  RemoveParticipantsByToken,
 }
 
 export type CombatUpdateAction =
@@ -270,6 +271,10 @@ export type CombatUpdateAction =
   | {
       type: CombatActionType.ApplyInterrupt;
       payload: { targetId: string; interrupterId: string };
+    }
+  | {
+      type: CombatActionType.RemoveParticipantsByToken;
+      payload: { sceneId: string; tokenId: string };
     }
   | {
       type: CombatActionType.Reset;
@@ -334,6 +339,18 @@ const updateReducer = produce(
         }
 
         return;
+      }
+
+      case CombatActionType.RemoveParticipantsByToken: {
+        draft.participants = reject(
+          draft.participants,
+          ({ entityIdentifiers }) =>
+            !!(
+              entityIdentifiers?.type === TrackedCombatEntity.Token &&
+              entityIdentifiers.sceneId === action.payload.sceneId &&
+              entityIdentifiers.tokenId === action.payload.tokenId
+            ),
+        );
       }
 
       case CombatActionType.UpdateRound:

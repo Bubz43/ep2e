@@ -1,4 +1,11 @@
 import {
+  CombatActionType,
+  tokenIsInCombat,
+  TrackedCombatEntity,
+  updateCombatState,
+} from '@src/combat/combat-tracker';
+import type { Combatant } from '@src/combat/combatant';
+import {
   closeWindow,
   openWindow,
 } from '@src/components/window/window-controls';
@@ -18,16 +25,13 @@ import { html, render } from 'lit-html';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { compact, first, mapToObj, noop, pipe } from 'remeda';
 import { stopEvent } from 'weightless';
+import { readyCanvas } from './canvas';
 import { isKnownDrop, onlySetDragSource } from './drag-and-drop';
 import { navMenuListener } from './foundry-apps';
 import type { TokenData } from './foundry-cont';
 import { localize } from './localization';
 import { convertMenuOptions } from './misc-helpers';
-import { readyCanvas } from './canvas';
 import { activeTokenStatusEffects } from './token-helpers';
-import type { Combatant } from '@src/combat/combatant';
-import { gameSettings } from '@src/init';
-import { participantsAsToken, TrackedCombatEntity, updateCombatState } from '@src/combat/combat-tracker';
 
 Entity.prototype.matchRegexp = function (regex: RegExp) {
   return regex.test(this.name);
@@ -62,42 +66,6 @@ PlayerConfig.prototype.getData = function () {
     ),
   };
 };
-
-// ActorDirectory.prototype._onCreateEntity = async function (ev: Event) {
-//   stopEvent(ev);
-
-//   if (ev.currentTarget instanceof HTMLElement) {
-//     openWindow({
-//       key: ActorCreator,
-//       content: html` <actor-creator
-//         folder=${ifDefined(ev.currentTarget.dataset.folder)}
-//       ></actor-creator>`,
-//       name: "Actor Creator",
-//       adjacentEl: ev.currentTarget,
-//     });
-//   }
-// };
-
-// const itemCreate = ({ itemInit }: ItemDataEvent) => {
-//   ItemEP.create(itemInit.data, itemInit.options);
-//   closeWindow(ItemCreator);
-// };
-
-// ItemDirectory.prototype._onCreateEntity = async function (ev: Event) {
-//   stopEvent(ev);
-
-//   if (ev.currentTarget instanceof HTMLElement) {
-//     openWindow({
-//       key: ItemCreator,
-//       content: html` <item-creator
-//         @item-data=${itemCreate}
-//         folder=${ifDefined(ev.currentTarget.dataset.folder)}
-//       ></item-creator>`,
-//       name: "Item Creator",
-//       adjacentEl: ev.currentTarget,
-//     });
-//   }
-// };
 
 Combat.prototype._getInitiativeFormula = ({ actor }: Combatant) =>
   actor?.proxy.type === ActorType.Character
@@ -211,24 +179,47 @@ Token.prototype._onUpdateBarAttributes = function (updateData) {
   }
 };
 
-// const { getData: getTokenData } = TokenHUD.prototype;
+const { getData: getTokenData } = TokenHUD.prototype;
 
-// TokenHUD.prototype.getData = function (options: unknown) {
-//   const data = getTokenData.call(this, options);
-//   data.canToggleCombat = gamemasterIsConnected();
-//   data.combatClass =
-//     this.object && participantsAsToken(this.object) ? 'active' : '';
-//   return data;
-// };
+TokenHUD.prototype.getData = function (options: unknown) {
+  const data = getTokenData.call(this, options);
+  data.canToggleCombat = gamemasterIsConnected();
+  data.combatClass =
+    this.object && tokenIsInCombat(this.object) ? 'active' : '';
+  return data;
+};
 
-// TokenHUD.prototype._onToggleCombat = async function (
-//   ev: Event & { currentTarget: HTMLElement },
-// ) {
-//   ev.preventDefault();
-//   if (!this.object) return;
-//   const active = participantsAsToken(this.object);
-
-// };
+TokenHUD.prototype._onToggleCombat = async function (
+  ev: Event & { currentTarget: HTMLElement },
+) {
+  ev.preventDefault();
+  if (!this.object?.scene) return;
+  const active = tokenIsInCombat(this.object);
+  const identifiers = {
+    sceneId: this.object.scene.id,
+    tokenId: this.object.id,
+  };
+  if (active) {
+    updateCombatState({
+      type: CombatActionType.RemoveParticipantsByToken,
+      payload: identifiers,
+    });
+  } else {
+    updateCombatState({
+      type: CombatActionType.AddParticipants,
+      payload: [
+        {
+          name: this.object.name,
+          hidden: this.object.data.hidden,
+          entityIdentifiers: {
+            type: TrackedCombatEntity.Token,
+            ...identifiers,
+          },
+        },
+      ],
+    });
+  }
+};
 
 TokenHUD.prototype._getStatusEffectChoices = function () {
   const token = this.object!;
