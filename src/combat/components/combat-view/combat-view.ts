@@ -244,12 +244,20 @@ export class CombatView extends LitElement {
 
   private applyInterrupt(ev: CustomEvent<CombatParticipant>) {
     const active = this.combatRound?.participants[this.activeTurn ?? -1];
-    if (!active || active.participant === ev.detail) return;
-
-    updateCombatState({
-      type: CombatActionType.ApplyInterrupt,
-      payload: { targetId: active.participant.id, interrupterId: ev.detail.id },
-    });
+    if (!active || active.participant === ev.detail) {
+      updateCombatState({
+        type: CombatActionType.UpdateParticipants,
+        payload: [{ id: ev.detail.id, delaying: false }],
+      });
+    } else {
+      updateCombatState({
+        type: CombatActionType.ApplyInterrupt,
+        payload: {
+          targetId: active.participant.id,
+          interrupterId: ev.detail.id,
+        },
+      });
+    }
   }
 
   private delayParticipant(ev: CustomEvent<CombatParticipant>) {
@@ -261,6 +269,7 @@ export class CombatView extends LitElement {
       startingTurn: (this.activeTurn ?? 0) + 1,
       skipSurprised: !!this.combatRound?.surprise,
     });
+    console.log(nextTurn);
     updateCombatState({
       type: CombatActionType.DelayParticipant,
       payload: { participantId: ev.detail.id, advanceRound: nextTurn === -1 },

@@ -536,11 +536,10 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
           ${participant.initiative != null
             ? html`
                 <button
-                  ?disabled=${!editable || !canDelay}
+                  ?disabled=${!editable ||
+                  (participant.delaying ? false : !canDelay)}
                   @click=${this.toggleDelay}
-                  class=${!this.participant.delaying && this.active
-                    ? 'can-delay'
-                    : ''}
+                  class=${canDelay ? 'can-delay' : ''}
                 >
                   <span class="container">
                     ${participant.delaying
