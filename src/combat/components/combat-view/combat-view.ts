@@ -314,7 +314,6 @@ export class CombatView extends LitElement {
       </header>
       <sl-animated-list
         class="combat-round"
-        transformOrigin="top"
         @interrupt-turn=${this.applyInterrupt}
         @delay=${this.delayParticipant}
       >

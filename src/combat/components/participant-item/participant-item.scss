@@ -21,7 +21,6 @@
 }
 
 wl-list-item {
-  // height: 44px;
   padding: 0 0 0 0.25rem;
 
   mwc-icon-button[slot='before'] {
@@ -30,6 +29,11 @@ wl-list-item {
     margin-right: 0.25rem;
   }
   @include textButton();
+
+  .surprise-label {
+    color: var(--color-text-lighter);
+    margin-right: 0.5ch;
+  }
 
   &:hover,
   &:focus-within {

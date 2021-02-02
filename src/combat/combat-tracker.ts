@@ -339,6 +339,7 @@ const updateReducer = produce(
       }
 
       case CombatActionType.ApplyInterrupt: {
+        // TODO need to setup round state and figure shit out from there to account for taking initiative and/or extra actions
         const sorted = draft.participants.sort((a, b) =>
           participantsByInitiative({ participant: a }, { participant: b }),
         );

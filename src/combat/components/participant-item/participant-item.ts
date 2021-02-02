@@ -10,6 +10,7 @@ import {
   updateCombatState,
 } from '@src/combat/combat-tracker';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
+import { PoolType } from '@src/data-enums';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { ActorType } from '@src/entities/entity-types';
 import { findActor } from '@src/entities/find-entities';
@@ -255,7 +256,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       pools &&
       this.round &&
       !this.participant.delaying &&
-      (!this.surprise || !this.participant.surprised)
+      (this.surprise ? this.participant.surprised !== Surprise.Surprised : true)
     ) {
       for (const poolType of combatPools) {
         const pool = pools.get(poolType);
@@ -293,7 +294,8 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
               pool.available
             }/${pool.max})`,
             icon: html`<img src=${pool.icon} />`,
-            disabled: !pool.available,
+            disabled:
+              !pool.available || (this.surprise && poolType === PoolType.Vigor),
             callback: async () => {
               await character?.modifySpentPools({
                 pool: pool.type,
@@ -551,7 +553,9 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
           @click=${this.openActorSheet}
         >
           ${this.surprise && participant.surprised
-            ? `[${localize(participant.surprised)}]`
+            ? html`<span class="surprise-label"
+                >[${localize(participant.surprised)}]</span
+              >`
             : ''}
           ${participant.name}
         </button>
