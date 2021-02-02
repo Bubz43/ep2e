@@ -334,7 +334,10 @@ const updateReducer = produce(
           (p) => p.id === action.payload.participantId,
         );
         if (part) part.delaying = true;
-        if (action.payload.advanceRound) draft.round++;
+        if (action.payload.advanceRound) {
+          draft.round++;
+          draft.turn = 0;
+        }
         return;
       }
 

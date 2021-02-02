@@ -522,7 +522,15 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
   }
 
   render() {
-    const { participant, usedPool, editable, token, actor, timeState } = this;
+    const {
+      participant,
+      usedPool,
+      editable,
+      token,
+      actor,
+      timeState,
+      character,
+    } = this;
     const canDelay = !this.participant.delaying && this.active;
     return html`
       <wl-list-item
@@ -546,7 +554,14 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
             token?.data.img ||
             actor?.data.img ||
             CONST.DEFAULT_TOKEN}
-        /></mwc-icon-button>
+          />
+          ${editable && character
+            ? html`<notification-coin
+                value=${character.activeDurations}
+                ?actionRequired=${character.requiresAttention}
+              ></notification-coin>`
+            : ''}
+        </mwc-icon-button>
         <button
           class="name"
           ?disabled=${!editable || !actor}
@@ -560,35 +575,35 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
           ${participant.name}
         </button>
         <span class="status">
-          ${usedPool ? html`[${localize(usedPool)}]` : ''}
+          ${usedPool
+            ? html`<span class="used-pool">[${localize(usedPool)}]</span>`
+            : ''}
           ${game.user.isGM
             ? html`
-                <mwc-icon-button-toggle
-                  class="mini-button"
-                  @click=${this.toggleHidden}
-                  ?on=${!participant.hidden}
-                  onIcon="visibility_off"
-                  offIcon="visibility"
-                ></mwc-icon-button-toggle>
                 <mwc-icon-button
-                  class="mini-button"
+                  class="mini-button ${participant.hidden ? 'active' : ''}"
+                  @click=${this.toggleHidden}
+                  icon=${participant.hidden ? 'visibility' : 'visibility_off'}
+                ></mwc-icon-button>
+                <mwc-icon-button
+                  class="mini-button defeat ${participant.defeated
+                    ? 'active'
+                    : ''}"
                   @click=${this.toggleDefeated}
                 >
                   <img src="icons/svg/skull.svg" />
                 </mwc-icon-button>
               `
             : ''}
-          <span class="conditions">
-            ${actor?.conditions.map(
-              (condition) => html`
-                <img
-                  src=${conditionIcons[condition]}
-                  title=${localize(condition)}
-                  height="14px"
-                />
-              `,
-            )}
-          </span>
+          ${actor?.conditions.map(
+            (condition) => html`
+              <img
+                src=${conditionIcons[condition]}
+                title=${localize(condition)}
+                height="14px"
+              />
+            `,
+          )}
           ${timeState
             ? html`
                 <span class="time">
