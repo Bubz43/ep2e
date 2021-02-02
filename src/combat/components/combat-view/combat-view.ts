@@ -5,6 +5,7 @@ import {
   CombatRound,
   findViableParticipantTurn,
   rollParticipantInitiative,
+  RoundPhase,
   setupCombatRound,
   updateCombatState,
 } from '@src/combat/combat-tracker';
@@ -283,7 +284,12 @@ export class CombatView extends LitElement {
     const { participants = [], someTookInitiative, surprise = false } =
       combatRound ?? {};
     const noPrevTurn = activeTurn < 0 || (round <= 1 && activeTurn <= 0);
-
+    const active = participants[activeTurn];
+    const phase = active?.tookInitiative
+      ? RoundPhase.TookInitiative
+      : active?.extra
+      ? RoundPhase.ExtraAction
+      : RoundPhase.Normal;
     return html`
       <header>
         ${isGM
@@ -336,6 +342,7 @@ export class CombatView extends LitElement {
               ?active=${activeTurn === index}
               turn=${activeTurn}
               .tookInitiativePool=${tookInitiative}
+              .phase=${phase}
               .extraActionPool=${extra?.pool}
               ?hidden=${!isGM && !!participant.hidden}
               ?surprise=${surprise}

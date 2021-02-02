@@ -5,6 +5,7 @@ import {
   CombatPool,
   combatPools,
   rollParticipantInitiative,
+  RoundPhase,
   Surprise,
   TrackedCombatEntity,
   updateCombatState,
@@ -66,6 +67,8 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
   @property({ type: String }) extraActionPool?: CombatPool | null;
 
   @property({ type: Boolean }) surprise = false;
+
+  @property({ type: Number }) phase!: RoundPhase;
 
   @internalProperty() private token?: MaybeToken;
 
@@ -193,10 +196,22 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       );
   }
 
+  private get turnModifiers() {
+    return this.participant.modifiedTurn?.[this.round] ?? {};
+  }
+
+  private get canInterrupt() {
+    return !!(
+      this.participant.delaying &&
+      this.turn !== -1 &&
+      (this.phase !== RoundPhase.TookInitiative ||
+        this.turnModifiers.tookInitiative)
+    );
+  }
+
   private openMenu(ev: MouseEvent) {
     if (!this.editable) return;
-    const { tookInitiative, extraActions } =
-      this.participant.modifiedTurn?.[this.round] ?? {};
+    const { tookInitiative, extraActions } = this.turnModifiers;
     const { character } = this;
     const pools = character?.pools;
 
@@ -206,7 +221,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
     const extraActionOptions: MenuOption[] = [];
 
     if (this.participant.delaying) {
-      if (this.round !== -1) {
+      if (this.canInterrupt) {
         delayOptions.push({
           label: localize('interrupt'),
           icon: html`<mwc-icon>play_arrow</mwc-icon>`,
@@ -226,7 +241,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       });
     }
 
-    if (tookInitiative && this.turn === 0 && !this.extraActionPool) {
+    if (tookInitiative && this.turn <= 0 && !this.extraActionPool) {
       takeInitiativeOptions.push({
         label: `[${localize('undo')}] ${localize(
           'takeTheInitiative',
@@ -255,7 +270,6 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
     if (
       pools &&
       this.round &&
-      !this.participant.delaying &&
       (this.surprise ? this.participant.surprised !== Surprise.Surprised : true)
     ) {
       for (const poolType of combatPools) {
@@ -288,7 +302,10 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
           });
         }
 
-        if (!extraActions || extraActions.length === 1) {
+        if (
+          !this.participant.delaying &&
+          (!extraActions || extraActions.length === 1)
+        ) {
           extraActionOptions.push({
             label: `${localize('extraAction')} - ${localize(pool.type)} (${
               pool.available
@@ -530,6 +547,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       actor,
       timeState,
       character,
+      canInterrupt,
     } = this;
     const canDelay = !this.participant.delaying && this.active;
     return html`
@@ -619,7 +637,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
             ? html`
                 <button
                   ?disabled=${!editable ||
-                  (participant.delaying ? false : !canDelay)}
+                  (participant.delaying ? !canInterrupt : !canDelay)}
                   @click=${this.toggleDelay}
                   class=${canDelay ? 'can-delay' : ''}
                 >

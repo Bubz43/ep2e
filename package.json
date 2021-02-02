@@ -35,7 +35,6 @@
     "@material/mwc-tab-bar": "^0.20.0",
     "@material/mwc-textarea": "^0.20.0",
     "@tinymce/tinymce-webcomponent": "^1.1.0",
-    "cool-store": "^4.0.1",
     "immer": "^8.0.1",
     "lazy-get-decorator": "^2.2.0",
     "lit-element": "^2.4.0",

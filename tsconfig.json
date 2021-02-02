@@ -1,7 +1,6 @@
 {
   "include": ["src", "types"],
   "compilerOptions": {
-        "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "module": "esnext",
     "target": "esnext",
     "moduleResolution": "node",

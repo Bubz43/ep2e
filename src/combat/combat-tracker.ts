@@ -79,6 +79,12 @@ type CombatParticipantData = {
   >;
 };
 
+export enum RoundPhase {
+  TookInitiative = 1,
+  Normal,
+  ExtraAction,
+}
+
 export const rollParticipantInitiative = async (
   participant: CombatParticipant,
   surprised?: Surprise,
