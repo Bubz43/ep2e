@@ -8,6 +8,7 @@ import {
   RoundPhase,
   Surprise,
   TrackedCombatEntity,
+  TurnModifiers,
   updateCombatState,
 } from '@src/combat/combat-tracker';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
@@ -209,6 +210,15 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
     );
   }
 
+  private modifyTurn(change: Partial<TurnModifiers>) {
+    return produce(this.participant.modifiedTurn ?? {}, (draft) => {
+      draft[this.round] = {
+        ...(draft[this.round] ?? {}),
+        ...change,
+      };
+    });
+  }
+
   private openMenu(ev: MouseEvent) {
     if (!this.editable) return;
     const { tookInitiative, extraActions } = this.turnModifiers;
@@ -230,7 +240,11 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       }
       delayOptions.push({
         label: `[${localize('undo')}] ${localize('delayTurn')}`,
-        callback: () => this.updateParticipant({ delaying: false }),
+        callback: () =>
+          this.updateParticipant({
+            delaying: false,
+            modifiedTurn: this.modifyTurn({ interruptExtra: false }),
+          }),
       });
     } else {
       delayOptions.push({
@@ -253,15 +267,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
             points: -1,
           });
           this.updateParticipant({
-            modifiedTurn: produce(
-              this.participant.modifiedTurn ?? {},
-              (draft) => {
-                draft[this.round] = {
-                  ...(draft[this.round] ?? {}),
-                  tookInitiative: null,
-                };
-              },
-            ),
+            modifiedTurn: this.modifyTurn({ tookInitiative: null }),
           });
         },
       });
@@ -288,15 +294,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
                 points: 1,
               });
               this.updateParticipant({
-                modifiedTurn: produce(
-                  this.participant.modifiedTurn ?? {},
-                  (draft) => {
-                    draft[this.round] = {
-                      ...(draft[this.round] ?? {}),
-                      tookInitiative: poolType,
-                    };
-                  },
-                ),
+                modifiedTurn: this.modifyTurn({ tookInitiative: poolType }),
               });
             },
           });
@@ -319,20 +317,14 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
                 points: 1,
               });
               this.updateParticipant({
-                modifiedTurn: produce(
-                  this.participant.modifiedTurn ?? {},
-                  (draft) => {
-                    draft[this.round] = {
-                      ...(draft[this.round] ?? {}),
-                      extraActions: extraActions?.[0]
-                        ? [
-                            extraActions[0],
-                            { pool: poolType, id: !extraActions[0].id },
-                          ]
-                        : [{ pool: poolType, id: true }],
-                    };
-                  },
-                ),
+                modifiedTurn: this.modifyTurn({
+                  extraActions: extraActions?.[0]
+                    ? [
+                        extraActions[0],
+                        { pool: poolType, id: !extraActions[0].id },
+                      ]
+                    : [{ pool: poolType, id: true }],
+                }),
               });
             },
           });
@@ -355,15 +347,9 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
             const newActions = [...extraActions];
             newActions.splice(0, 1);
             this.updateParticipant({
-              modifiedTurn: produce(
-                this.participant.modifiedTurn ?? {},
-                (draft) => {
-                  draft[this.round] = {
-                    ...(draft[this.round] ?? {}),
-                    extraActions: newActions[0] ? [newActions[0]] : null,
-                  };
-                },
-              ),
+              modifiedTurn: this.modifyTurn({
+                extraActions: newActions[0] ? [newActions[0]] : null,
+              }),
             });
           },
         })),

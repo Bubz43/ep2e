@@ -58,6 +58,12 @@ export enum Surprise {
   Alerted = 'alerted',
 }
 
+export type TurnModifiers = {
+  tookInitiative?: CombatPool | null;
+  extraActions?: [Extra] | [Extra, Extra] | null;
+  interruptExtra?: boolean;
+};
+
 type CombatParticipantData = {
   name: string;
   img?: string;
@@ -68,15 +74,7 @@ type CombatParticipantData = {
   userId?: string;
   delaying?: boolean;
   surprised?: null | Surprise;
-  modifiedTurn?: Record<
-    number,
-    | {
-        tookInitiative?: CombatPool | null;
-        extraActions?: [Extra] | [Extra, Extra] | null;
-      }
-    | undefined
-    | null
-  >;
+  modifiedTurn?: Record<number, TurnModifiers | undefined | null>;
 };
 
 export enum RoundPhase {
@@ -139,6 +137,7 @@ type RoundParticipant = {
   participant: CombatParticipant;
   tookInitiative?: CombatPool | null;
   extra?: Extra | null;
+  interruptExtra?: boolean;
   surprise?: Surprise | null;
 };
 
@@ -159,9 +158,9 @@ export const setupCombatRound = (
   };
 
   for (const participant of participants) {
-    const { tookInitiative, extraActions } =
+    const { tookInitiative, extraActions, interruptExtra } =
       participant.modifiedTurn?.[roundIndex] ?? {};
-    round.participants.push({ participant, tookInitiative });
+    round.participants.push({ participant, tookInitiative, interruptExtra });
     round.someTookInitiative ||= !!tookInitiative;
 
     for (const extra of extraActions ?? []) {
@@ -235,16 +234,34 @@ export const findViableParticipantTurn = ({
 };
 
 export const participantsByInitiative = (
-  { participant: a, tookInitiative: tookA, extra: extraA }: RoundParticipant,
-  { participant: b, tookInitiative: tookB, extra: extraB }: RoundParticipant,
+  {
+    participant: a,
+    tookInitiative: tookA,
+    extra: extraA,
+    interruptExtra: interruptExtraA,
+  }: RoundParticipant,
+  {
+    participant: b,
+    tookInitiative: tookB,
+    extra: extraB,
+    interruptExtra: interruptExtraB,
+  }: RoundParticipant,
 ) => {
+  // No longer first if interrupted extra
+  const stayTookA = tookA && !interruptExtraA;
+  const stayTookB = tookB && !interruptExtraB;
+
   // Took initiative are all first
-  if (tookA && !tookB) return -1;
-  if (tookB && !tookA) return 1;
+  if (stayTookA && !stayTookB) return -1;
+  if (stayTookB && !stayTookA) return 1;
+
+  // With extras if interrupted extra
+  const inExtraA = extraA || interruptExtraA;
+  const inExtraB = extraB || interruptExtraB;
 
   // Extra actions are all last
-  if (extraA && !extraB) return 1;
-  if (extraB && !extraA) return -1;
+  if (inExtraA && !inExtraB) return 1;
+  if (inExtraB && !inExtraA) return -1;
 
   // Unset initiative are last in normal flow
   if (a.initiative != null && b.initiative == null) return -1;
@@ -296,7 +313,11 @@ export type CombatUpdateAction =
     }
   | {
       type: CombatActionType.ApplyInterrupt;
-      payload: { targetId: string; interrupterId: string };
+      payload: {
+        targetId: string;
+        interrupterId: string;
+        interruptExtra: boolean;
+      };
     }
   | {
       type: CombatActionType.RemoveParticipantsByToken;
@@ -379,6 +400,17 @@ const updateReducer = produce(
         if (interrupter) {
           interrupter.delaying = false;
           interrupter.initiative = newInitiative;
+          if (action.payload.interruptExtra) {
+            const { modifiedTurn = {} } = interrupter;
+            const modifiedRound = modifiedTurn[draft.round] ?? {};
+            interrupter.modifiedTurn = {
+              ...modifiedTurn,
+              [draft.round]: {
+                ...modifiedRound,
+                interruptExtra: true,
+              },
+            };
+          }
         }
         if (
           decreaseTurn &&

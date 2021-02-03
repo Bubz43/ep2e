@@ -244,8 +244,8 @@ export class CombatView extends LitElement {
   }
 
   private applyInterrupt(ev: CustomEvent<CombatParticipant>) {
-    const active = this.combatRound?.participants[this.activeTurn ?? -1];
-    if (!active || active.participant === ev.detail) {
+    const { activeParticipant } = this;
+    if (!activeParticipant || activeParticipant.participant === ev.detail) {
       updateCombatState({
         type: CombatActionType.UpdateParticipants,
         payload: [{ id: ev.detail.id, delaying: false }],
@@ -254,8 +254,9 @@ export class CombatView extends LitElement {
       updateCombatState({
         type: CombatActionType.ApplyInterrupt,
         payload: {
-          targetId: active.participant.id,
+          targetId: activeParticipant.participant.id,
           interrupterId: ev.detail.id,
+          interruptExtra: !!activeParticipant.extra,
         },
       });
     }
@@ -277,19 +278,23 @@ export class CombatView extends LitElement {
     });
   }
 
+  private get activeParticipant() {
+    return this.combatRound?.participants[this.activeTurn || -1];
+  }
+
   render() {
     const { round = 0 } = this.combatState ?? {};
     const { isGM } = game.user;
-    const { combatRound, activeTurn = -1 } = this;
+    const { combatRound, activeTurn = -1, activeParticipant } = this;
     const { participants = [], someTookInitiative, surprise = false } =
       combatRound ?? {};
     const noPrevTurn = activeTurn < 0 || (round <= 1 && activeTurn <= 0);
-    const active = participants[activeTurn];
-    const phase = active?.tookInitiative
+    const phase = activeParticipant?.tookInitiative
       ? RoundPhase.TookInitiative
-      : active?.extra
+      : activeParticipant?.extra
       ? RoundPhase.ExtraAction
       : RoundPhase.Normal;
+
     return html`
       <header>
         ${isGM
@@ -305,7 +310,7 @@ export class CombatView extends LitElement {
           : ''}
         ${round
           ? html`
-              <h2>
+              <h2 class="round">
                 ${surprise ? localize('surprise') : ''} ${localize('round')}
                 ${surprise ? '' : round}
               </h2>

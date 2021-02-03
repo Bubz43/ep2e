@@ -1,22 +1,19 @@
 import {
-  renderSelectField,
-  renderTimeField,
-  renderSlider,
   renderLabeledCheckbox,
+  renderSelectField,
+  renderSlider,
+  renderTimeField,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { enumValues } from '@src/data-enums';
 import {
-  Action,
   ActionSubtype,
   actionTimeframeModifier,
   ActionType,
 } from '@src/features/actions';
 import { localize } from '@src/foundry/localization';
 import type { SuccessTestBase } from '@src/success-test/success-test-base';
-import type { WithUpdate } from '@src/utility/updating';
-import type { CoolStore } from 'cool-store';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, html, LitElement, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import styles from './success-test-action-form.scss';
 
