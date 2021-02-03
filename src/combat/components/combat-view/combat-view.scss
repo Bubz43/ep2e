@@ -60,7 +60,7 @@ footer {
 :not(.extra) {
   & + .extra {
     &::before {
-      content: 'Extra Actions';
+      content: attr(data-extra-label);
       padding: 0.25rem 0.5rem 0;
       text-transform: uppercase;
       color: var(--color-text-lighter);
@@ -76,4 +76,5 @@ footer {
   height: 400px;
   overflow-y: scroll;
   overflow-x: hidden;
+  flex: 1;
 }

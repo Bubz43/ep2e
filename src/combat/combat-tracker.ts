@@ -18,6 +18,7 @@ import {
 import { rollFormula } from '@src/foundry/rolls';
 import { emitEPSocket, SystemSocketData } from '@src/foundry/socket';
 import { gameSettings } from '@src/init';
+import { notEmpty } from '@src/utility/helpers';
 import produce from 'immer';
 import type { WritableDraft } from 'immer/dist/internal';
 import { reject } from 'remeda';
@@ -48,10 +49,7 @@ export const combatPools = [
 
 export type CombatPool = typeof combatPools[number];
 
-type Extra = {
-  pool: CombatPool;
-  id: boolean;
-};
+type Extra = CombatPool;
 
 export enum Surprise {
   Surprised = 'surprised',
@@ -136,7 +134,7 @@ export const tokenIsInCombat = ({ id, scene }: Token) => {
 type RoundParticipant = {
   participant: CombatParticipant;
   tookInitiative?: CombatPool | null;
-  extra?: Extra | null;
+  extras?: TurnModifiers['extraActions'];
   interruptExtra?: boolean;
   surprise?: Surprise | null;
 };
@@ -160,19 +158,31 @@ export const setupCombatRound = (
   for (const participant of participants) {
     const { tookInitiative, extraActions, interruptExtra } =
       participant.modifiedTurn?.[roundIndex] ?? {};
-    round.participants.push({ participant, tookInitiative, interruptExtra });
-    round.someTookInitiative ||= !!tookInitiative;
 
-    for (const extra of extraActions ?? []) {
-      round.participants.push({ participant, extra });
+    const normalParticipant: RoundParticipant = {
+      participant,
+      tookInitiative: interruptExtra ? null : tookInitiative,
+      interruptExtra,
+    };
+    round.participants.push(normalParticipant);
+    round.someTookInitiative ||= !!normalParticipant.tookInitiative;
+
+    if (notEmpty(extraActions)) {
+      round.participants.push({ participant, extras: extraActions });
     }
+
+    // for (const extra of extraActions ?? []) {
+    //   round.participants.push({ participant, extra });
+    // }
 
     if (roundIndex <= 1) {
       round.surprise ||= !!participant.surprised;
     }
   }
 
+  console.time('sort');
   round.participants.sort(participantsByInitiative);
+  console.timeEnd('sort');
   return round;
 };
 
@@ -237,23 +247,19 @@ export const participantsByInitiative = (
   {
     participant: a,
     tookInitiative: tookA,
-    extra: extraA,
+    extras: extraA,
     interruptExtra: interruptExtraA,
   }: RoundParticipant,
   {
     participant: b,
     tookInitiative: tookB,
-    extra: extraB,
+    extras: extraB,
     interruptExtra: interruptExtraB,
   }: RoundParticipant,
 ) => {
-  // No longer first if interrupted extra
-  const stayTookA = tookA && !interruptExtraA;
-  const stayTookB = tookB && !interruptExtraB;
-
   // Took initiative are all first
-  if (stayTookA && !stayTookB) return -1;
-  if (stayTookB && !stayTookA) return 1;
+  if (tookA && !tookB) return -1;
+  if (tookB && !tookA) return 1;
 
   // With extras if interrupted extra
   const inExtraA = extraA || interruptExtraA;
@@ -380,11 +386,11 @@ const updateReducer = produce(
         if (!part) return;
         const newInitiative =
           (Math.round((part.initiative || 0) * 100) + 1) / 100;
-        let decreaseTurn = false;
+        let wasBefore = false;
         let currentInitiative = newInitiative;
         for (const participant of sorted.slice(0, activeIndex).reverse()) {
           if (participant.id === action.payload.interrupterId) {
-            decreaseTurn = true;
+            wasBefore = true;
           } else if (
             participant.initiative === currentInitiative ||
             participant.initiative === part.initiative
@@ -410,13 +416,29 @@ const updateReducer = produce(
                 interruptExtra: true,
               },
             };
+            // TODO - Might have to do this for situations in which extras of extra interrupters are interrupted
+            // const { modifiedTurn: partMod = {} } = part;
+            // const partRoundMod = partMod[draft.round] ?? {};
+            // part.modifiedTurn = {
+            //   ...partMod,
+            //   [draft.round]: {
+            //     ...partRoundMod,
+            //     interruptExtra: false,
+            //   },
+            // };
           }
         }
         if (
-          decreaseTurn &&
-          sorted[activeIndex - 1]?.id !== action.payload.interrupterId
+          action.payload.interruptExtra ||
+          (wasBefore &&
+            sorted[activeIndex - 1]?.id !== action.payload.interrupterId)
         ) {
-          draft.turn -= 1;
+          draft.turn -=
+            1 +
+            (action.payload.interruptExtra
+              ? interrupter?.modifiedTurn?.[draft.round]?.extraActions
+                  ?.length ?? 0
+              : 0);
         }
 
         return;

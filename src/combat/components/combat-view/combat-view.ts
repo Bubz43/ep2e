@@ -256,7 +256,7 @@ export class CombatView extends LitElement {
         payload: {
           targetId: activeParticipant.participant.id,
           interrupterId: ev.detail.id,
-          interruptExtra: !!activeParticipant.extra,
+          interruptExtra: !!activeParticipant.extras,
         },
       });
     }
@@ -291,7 +291,7 @@ export class CombatView extends LitElement {
     const noPrevTurn = activeTurn < 0 || (round <= 1 && activeTurn <= 0);
     const phase = activeParticipant?.tookInitiative
       ? RoundPhase.TookInitiative
-      : activeParticipant?.extra
+      : activeParticipant?.extras || activeParticipant?.interruptExtra
       ? RoundPhase.ExtraAction
       : RoundPhase.Normal;
 
@@ -335,12 +335,15 @@ export class CombatView extends LitElement {
           : ''}
         ${repeat(
           participants,
-          ({ participant, extra }) => participant.id + extra?.id,
-          ({ participant, tookInitiative, extra }, index) => html`
+          ({ participant, extras }) => (participant.id + extras ? 'extra' : ''),
+          (
+            { participant, tookInitiative, extras, interruptExtra = false },
+            index,
+          ) => html`
             <participant-item
               class=${classMap({
                 'took-initiative': !!tookInitiative,
-                extra: !!extra,
+                extra: !!extras,
               })}
               .participant=${participant}
               round=${round}
@@ -348,9 +351,11 @@ export class CombatView extends LitElement {
               turn=${activeTurn}
               .tookInitiativePool=${tookInitiative}
               .phase=${phase}
-              .extraActionPool=${extra?.pool}
+              .extras=${extras}
               ?hidden=${!isGM && !!participant.hidden}
               ?surprise=${surprise}
+              ?interruptExtra=${interruptExtra}
+              data-extra-label="${localize('extra')} ${localize('actions')}"
             ></participant-item>
           `,
         )}

@@ -29,6 +29,7 @@ import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
 import { RenderDialogEvent } from '@src/open-dialog';
 import { MenuOption, MWCMenuOption, openMenu } from '@src/open-menu';
+import { notEmpty } from '@src/utility/helpers';
 import produce from 'immer';
 import {
   customElement,
@@ -40,7 +41,7 @@ import {
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import mix from 'mix-with/lib';
-import { compact, equals } from 'remeda';
+import { compact, equals, map } from 'remeda';
 import type { Subscription } from 'rxjs';
 import '../participant-editor/participant-editor';
 import styles from './participant-item.scss';
@@ -65,11 +66,13 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
 
   @property({ type: String }) tookInitiativePool?: CombatPool | null;
 
-  @property({ type: String }) extraActionPool?: CombatPool | null;
+  @property({ type: Array }) extras?: CombatPool[] | null;
 
   @property({ type: Boolean }) surprise = false;
 
   @property({ type: Number }) phase!: RoundPhase;
+
+  @property({ type: Boolean }) interruptExtra = false;
 
   @internalProperty() private token?: MaybeToken;
 
@@ -251,11 +254,11 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
         label: localize('delayTurn'),
         callback: () => this.toggleDelay(),
         icon: html`<mwc-icon>pause</mwc-icon>`,
-        disabled: !this.active,
+        disabled: !this.canDelay,
       });
     }
 
-    if (tookInitiative && this.turn <= 0 && !this.extraActionPool) {
+    if (tookInitiative && this.turn <= 0 && !this.extras) {
       takeInitiativeOptions.push({
         label: `[${localize('undo')}] ${localize(
           'takeTheInitiative',
@@ -319,11 +322,8 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
               this.updateParticipant({
                 modifiedTurn: this.modifyTurn({
                   extraActions: extraActions?.[0]
-                    ? [
-                        extraActions[0],
-                        { pool: poolType, id: !extraActions[0].id },
-                      ]
-                    : [{ pool: poolType, id: true }],
+                    ? [extraActions[0], poolType]
+                    : [poolType],
                 }),
               });
             },
@@ -334,7 +334,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
 
     if (extraActions) {
       extraActionOptions.push(
-        ...extraActions.map(({ pool: poolType }, index) => ({
+        ...extraActions.map((poolType, index) => ({
           label: `[${localize('undo')}] ${localize('extraAction')} ${
             index + 1
           } - ${localize(poolType)}`,
@@ -511,8 +511,8 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
     );
   }
 
-  private get usedPool() {
-    return this.extraActionPool || this.tookInitiativePool;
+  private get usedPools() {
+    return compact([this.extras, this.tookInitiativePool]).flat();
   }
 
   private toggleHidden() {
@@ -524,18 +524,27 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
     this.updateParticipant({ defeated: !this.participant.defeated });
   }
 
+  private get canDelay() {
+    return (
+      !this.participant.delaying &&
+      this.active &&
+      this.phase !== RoundPhase.ExtraAction
+    );
+  }
+
   render() {
     const {
       participant,
-      usedPool,
+      usedPools,
       editable,
       token,
       actor,
       timeState,
       character,
       canInterrupt,
+      canDelay,
     } = this;
-    const canDelay = !this.participant.delaying && this.active;
+
     return html`
       <wl-list-item
         @contextmenu=${this.openMenu}
@@ -579,8 +588,14 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
           ${participant.name}
         </button>
         <span class="status">
-          ${usedPool
-            ? html`<span class="used-pool">[${localize(usedPool)}]</span>`
+          ${notEmpty(usedPools)
+            ? html`<span class="used-pool"
+                >[${map(usedPools, localize).join(', ')}]</span
+              >`
+            : this.interruptExtra
+            ? html`<span class="extra-interrupt"
+                >[${localize('interrupt')}]</span
+              >`
             : ''}
           ${game.user.isGM
             ? html`
@@ -635,7 +650,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
                       : html`<span class="initiative"
                             >${participant.initiative}</span
                           >
-                          ${this.active
+                          ${canDelay
                             ? html`<mwc-icon class="pause">pause</mwc-icon>`
                             : ''} `}
                   </span>
