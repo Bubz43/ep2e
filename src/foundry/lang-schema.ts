@@ -1433,7 +1433,8 @@ type LangEntries =
   | 'interrupt'
   | 'defend'
   | 'normally'
-  | 'interrupts';
+  | 'interrupts'
+  | 'delays';
 type FullNames =
   | 'cog'
   | 'int'

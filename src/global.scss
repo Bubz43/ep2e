@@ -695,7 +695,7 @@ sl-tooltip {
     }
 
     &:first-child {
-      border-top-right-radius: 0.5rem;
+      // border-top-right-radius: 0.5rem;
       &.active {
         .control-tools {
           transform: translateY(-0.75rem);
@@ -703,7 +703,7 @@ sl-tooltip {
       }
     }
     &:last-child {
-      border-bottom-right-radius: 0.5rem;
+      // border-bottom-right-radius: 0.5rem;
       &.active {
         .control-tools {
           transform: translateY(-1.75rem);

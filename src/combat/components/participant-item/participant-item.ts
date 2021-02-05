@@ -80,6 +80,8 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
 
   @internalProperty() private timeState?: LiveTimeState | null;
 
+  @internalProperty() private highlighted = false;
+
   private tokenSubscription?: Subscription | null;
 
   private actorUnsub?: (() => void) | null;
@@ -100,6 +102,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       )
     ) {
       this.unsubFromAll();
+      Hooks.on('hoverToken', this.highligtToggle);
       this.timeState = null;
       const { entityIdentifiers } = this.participant;
       if (entityIdentifiers?.type === TrackedCombatEntity.Token) {
@@ -150,7 +153,14 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
     super.update(changedProps);
   }
 
+  private highligtToggle = (token: Token, highlight: boolean) => {
+    if (token.uuid === this.token?.uuid) {
+      this.highlighted = highlight;
+    }
+  };
+
   private unsubFromAll() {
+    Hooks.off('hoverToken', this.highligtToggle);
     this.tokenSubscription?.unsubscribe();
     this.actorUnsub?.();
   }
@@ -520,8 +530,19 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
   }
 
   private toggleDefeated() {
-    // TODO token defeated overlay
-    this.updateParticipant({ defeated: !this.participant.defeated });
+    const defeated = !this.participant.defeated;
+    this.updateParticipant({ defeated });
+    const { activeToken } = this;
+    if (!activeToken) return;
+    const status = CONFIG.statusEffects.find(
+      (e) => e.id === CONFIG.Combat.defeatedStatusId,
+    );
+    const effect =
+      activeToken.actor && status ? status : CONFIG.controlIcons.defeated;
+    activeToken.toggleEffect(effect, {
+      overlay: true,
+      active: defeated,
+    });
   }
 
   private get canDelay() {
@@ -543,6 +564,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       character,
       canInterrupt,
       canDelay,
+      highlighted,
     } = this;
 
     return html`
@@ -551,9 +573,10 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
         class=${classMap({
           defeated: !!participant.defeated,
           hidden: !!participant.hidden,
+          highlighted,
         })}
-        @mouseover=${this.hoverToken}
-        @mouseout=${this.unhoverToken}
+        @mouseenter=${this.hoverToken}
+        @mouseleave=${this.unhoverToken}
       >
         <mwc-icon-button
           slot="before"

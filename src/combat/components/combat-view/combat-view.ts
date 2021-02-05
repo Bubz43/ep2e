@@ -325,6 +325,7 @@ export class CombatView extends LitElement {
             `
           : ''}
         <sl-popover
+          center
           .renderOnDemand=${() =>
             html`<participant-selector></participant-selector>`}
         >
@@ -339,12 +340,13 @@ export class CombatView extends LitElement {
                 clickable
                 slot="base"
                 role="button"
-                ><span>
-                  <span>${logEntry.text}</span>
-                  <time-since
-                    timestamp=${logEntry.timestamp}
-                  ></time-since> </span
-              ></wl-list-item>
+              >
+                <span>${logEntry.text}</span>
+                <time-since
+                  slot="after"
+                  timestamp=${logEntry.timestamp}
+                ></time-since>
+              </wl-list-item>
             </sl-popover>
           `
         : ''}
@@ -447,10 +449,10 @@ export class CombatView extends LitElement {
     return html`
       <ol class="log-entries">
         ${this.log.map(
-          (entry) => html`<li>
-            <time-since timestamp=${entry.timestamp}></time-since>
+          (entry) => html`<wl-list-item>
             <span>${entry.text}</span>
-          </li>`,
+            <time-since slot="after" timestamp=${entry.timestamp}></time-since>
+          </wl-list-item>`,
         )}
       </ol>
     `;

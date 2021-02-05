@@ -48,6 +48,11 @@ wl-list-item {
     }
   }
 
+  &.highlighted {
+    outline: 2px groove var(--color-grey);
+    outline-offset: -2px;
+  }
+
   .icon {
     transition: opacity 100ms ease-in-out;
   }
@@ -117,7 +122,7 @@ wl-list-item {
   flex-flow: row wrap;
   font-size: 14px;
   > * {
-    margin: 0 0.5ch 0.25rem 0;
+    margin: 0.1rem 0.5ch 0.1rem 0;
     @include animate-css(fadeIn, 250ms);
   }
 }
@@ -126,6 +131,9 @@ wl-list-item {
   --mdc-icon-button-size: 1rem;
   --mdc-icon-size: 1rem;
   height: 1rem;
+  &:hover {
+    filter: drop-shadow(2px 4px 6px var(--color-secondary));
+  }
 }
 
 notification-coin {

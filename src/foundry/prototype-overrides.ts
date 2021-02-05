@@ -109,7 +109,6 @@ Token.prototype.drawEffects = async function () {
   const effects = activeTokenStatusEffects(this);
 
   if (notEmpty(effects)) {
-    const promises: Promise<unknown>[] = [];
     const width =
       Math.round(
         (canvas as ReturnType<typeof readyCanvas>)!.dimensions.size / 2 / 5,
@@ -120,17 +119,18 @@ Token.prototype.drawEffects = async function () {
       .beginFill(0x000000, 0.4)
       .lineStyle(1.0, 0x000000);
 
-    for (const [index, source] of effects.entries()) {
-      promises.push(this._drawEffect(source, index, background, width, null));
-    }
-    await Promise.all(promises);
+    await Promise.all(
+      effects.map((source, index) =>
+        this._drawEffect(source, index, background, width, null),
+      ),
+    );
   }
 
   // Draw overlay effect
   if (this.data.overlayEffect) {
-    const tex = await loadTexture(this.data.overlayEffect);
-    const icon = new PIXI.Sprite(tex as any),
-      size = Math.min(this.w * 0.6, this.h * 0.6);
+    const texture = await loadTexture(this.data.overlayEffect);
+    const icon = new PIXI.Sprite(texture as any);
+    const size = Math.min(this.w * 0.6, this.h * 0.6);
     icon.width = icon.height = size;
     icon.position.set((this.w - size) / 2, (this.h - size) / 2);
     icon.alpha = 0.8;
@@ -147,7 +147,7 @@ Token.prototype.toggleEffect = async function (
       ? effect
       : effect?.icon ?? CONFIG.controlIcons.defeated;
   if (options.overlay)
-    await this._toggleOverlayEffect(texture, { active: null });
+    await this._toggleOverlayEffect(texture, { active: options.active });
   else {
     const condition = iconToCondition.get(texture);
     if (!condition || !this.actor) {
@@ -196,30 +196,6 @@ TokenHUD.prototype._onToggleCombat = async function (
   if (!this.object?.scene) return;
   const active = tokenIsInCombat(this.object);
   this.object.layer.toggleCombat(!active, null, { token: this.object });
-  // const identifiers = {
-  //   sceneId: this.object.scene.id,
-  //   tokenId: this.object.id,
-  // };
-  // if (active) {
-  //   updateCombatState({
-  //     type: CombatActionType.RemoveParticipantsByToken,
-  //     payload: [identifiers],
-  //   });
-  // } else {
-  //   updateCombatState({
-  //     type: CombatActionType.AddParticipants,
-  //     payload: [
-  //       {
-  //         name: this.object.name,
-  //         hidden: this.object.data.hidden,
-  //         entityIdentifiers: {
-  //           type: TrackedCombatEntity.Token,
-  //           ...identifiers,
-  //         },
-  //       },
-  //     ],
-  //   });
-  // }
   ev.currentTarget.classList.toggle('active', !active);
 };
 

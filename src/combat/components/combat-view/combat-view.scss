@@ -20,6 +20,7 @@ header {
   padding: 0.25rem 0;
   display: flex;
   justify-content: space-around;
+  border-bottom: 1px solid var(--color-border);
   h2 {
     font-weight: normal;
     font-size: larger;
@@ -36,7 +37,7 @@ footer {
   position: sticky;
   bottom: 0;
   background: var(--color-bg);
-
+  border-top: 1px solid var(--color-border);
   justify-content: space-between;
   --mdc-theme-primary: var(--color-grey);
 }
@@ -81,8 +82,12 @@ footer {
 
 .log-entries {
   list-style: none;
-  width: 300px;
-  padding: 0.25rem 1rem;
+  width: 350px;
+  padding: 0.5rem 0;
+  margin: 0;
+  wl-list-item {
+    padding: 0.25rem 1rem;
+  }
 }
 
 time-since {

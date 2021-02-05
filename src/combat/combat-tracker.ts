@@ -374,10 +374,14 @@ const updateReducer = produce(
           (p) => p.id === action.payload.participantId,
         );
         if (part) part.delaying = true;
+
         if (action.payload.advanceRound) {
           draft.round++;
           draft.turn = 0;
         }
+        addLogEntry(draft, {
+          text: `${part?.name} - ${localize('delays')} ${localize('turn')}`,
+        });
         return;
       }
 
@@ -450,8 +454,7 @@ const updateReducer = produce(
 
         draft.turn -= turnDecrease;
 
-        const log = draft.roundLogs[draft.round] ?? [];
-        draft.roundLogs[draft.round] = log.concat({
+        addLogEntry(draft, {
           text: `${interrupter?.name} ${localize('interrupts')} ${
             target.name
           } ${
@@ -459,7 +462,6 @@ const updateReducer = produce(
               ? `[${localize('extra')} ${localize('actions')}]`
               : ''
           }`,
-          timestamp: Date.now(),
         });
 
         return;
@@ -497,6 +499,17 @@ const updateReducer = produce(
     }
   },
 );
+
+const addLogEntry = (
+  draft: WritableDraft<CombatData>,
+  entry: Omit<RoundLogEntry, 'timestamp'>,
+) => {
+  const log = draft.roundLogs[draft.round] ?? [];
+  draft.roundLogs[draft.round] = log.concat({
+    ...entry,
+    timestamp: Date.now(),
+  });
+};
 
 const updateCombat = (action: CombatUpdateAction) => {
   gameSettings.combatState.update((state) => {
