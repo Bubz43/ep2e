@@ -1432,7 +1432,8 @@ type LangEntries =
   | 'reRoll'
   | 'interrupt'
   | 'defend'
-  | 'normally';
+  | 'normally'
+  | 'interrupts';
 type FullNames =
   | 'cog'
   | 'int'

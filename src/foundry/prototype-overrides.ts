@@ -195,30 +195,31 @@ TokenHUD.prototype._onToggleCombat = async function (
   ev.preventDefault();
   if (!this.object?.scene) return;
   const active = tokenIsInCombat(this.object);
-  const identifiers = {
-    sceneId: this.object.scene.id,
-    tokenId: this.object.id,
-  };
-  if (active) {
-    updateCombatState({
-      type: CombatActionType.RemoveParticipantsByToken,
-      payload: identifiers,
-    });
-  } else {
-    updateCombatState({
-      type: CombatActionType.AddParticipants,
-      payload: [
-        {
-          name: this.object.name,
-          hidden: this.object.data.hidden,
-          entityIdentifiers: {
-            type: TrackedCombatEntity.Token,
-            ...identifiers,
-          },
-        },
-      ],
-    });
-  }
+  this.object.layer.toggleCombat(!active, null, { token: this.object });
+  // const identifiers = {
+  //   sceneId: this.object.scene.id,
+  //   tokenId: this.object.id,
+  // };
+  // if (active) {
+  //   updateCombatState({
+  //     type: CombatActionType.RemoveParticipantsByToken,
+  //     payload: [identifiers],
+  //   });
+  // } else {
+  //   updateCombatState({
+  //     type: CombatActionType.AddParticipants,
+  //     payload: [
+  //       {
+  //         name: this.object.name,
+  //         hidden: this.object.data.hidden,
+  //         entityIdentifiers: {
+  //           type: TrackedCombatEntity.Token,
+  //           ...identifiers,
+  //         },
+  //       },
+  //     ],
+  //   });
+  // }
   ev.currentTarget.classList.toggle('active', !active);
 };
 
@@ -254,10 +255,51 @@ TokenHUD.prototype._getStatusEffectChoices = function () {
   });
 };
 
-// TODO
-// TokenLayer.prototype.toggleCombat = async function(state = true, combat = null, { token = null}: { token?: Token } = {}) {
+TokenLayer.prototype.toggleCombat = async function (
+  addToCombat = true,
+  combat = null,
+  { token = null }: { token?: Token | null } = {},
+) {
+  const tokens = new Set(
+    (readyCanvas()?.tokens.controlled ?? [])
+      .concat(token ?? [])
+      .filter((token) => {
+        const inCombat = tokenIsInCombat(token);
+        return inCombat !== addToCombat;
+      }),
+  );
 
-// }
+  if (addToCombat) {
+    updateCombatState({
+      type: CombatActionType.AddParticipants,
+      payload: [...tokens].flatMap((token) => {
+        const { scene } = token;
+        if (!scene) return [];
+        return {
+          name: token.name,
+          hidden: token.data.hidden,
+          entityIdentifiers: {
+            type: TrackedCombatEntity.Token,
+            tokenId: token.id,
+            sceneId: scene.id,
+          },
+        };
+      }),
+    });
+  } else {
+    updateCombatState({
+      type: CombatActionType.RemoveParticipantsByToken,
+      payload: [...tokens].flatMap((token) => {
+        const { scene } = token;
+        if (!scene) return [];
+        return {
+          tokenId: token.id,
+          sceneId: scene.id,
+        };
+      }),
+    });
+  }
+};
 
 const { _render } = ChatLog.prototype;
 ChatLog.prototype._render = async function (...args) {

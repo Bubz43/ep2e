@@ -1,8 +1,6 @@
-import type { Checkbox } from '@material/mwc-checkbox';
-import type { Dialog } from '@material/mwc-dialog';
 import type { SuccessTestMessageData } from '@src/chat/message-data';
 import { renderNumberInput } from '@src/components/field/fields';
-import { renderAutoForm, renderSubmitForm } from '@src/components/form/forms';
+import { renderAutoForm } from '@src/components/form/forms';
 import { Placement } from '@src/components/popover/popover-options';
 import { enumValues, PoolType, SuperiorResultEffect } from '@src/data-enums';
 import { ActorType } from '@src/entities/entity-types';
@@ -37,14 +35,11 @@ import {
   difference,
   equals,
   identity,
-  intersection,
   last,
   map,
   omit,
-  pick,
   pipe,
   range,
-  reject,
 } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-success-test.scss';
@@ -439,7 +434,7 @@ export class MessageSuccessTest extends MessageElement {
                 <wl-list-item
                   data-tooltip=${localize(
                     'DESCRIPTIONS',
-                    `SuperiorResult${capitalize(effect)}`,
+                    `SuperiorResult${capitalize(effect)}` as const,
                   )}
                   @mouseover=${tooltip.fromData}
                 >

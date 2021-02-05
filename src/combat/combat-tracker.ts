@@ -29,33 +29,6 @@ export enum TrackedCombatEntity {
   Time,
 }
 
-type TrackedIdentitfiers =
-  | {
-      type: TrackedCombatEntity.Actor;
-      actorId: string;
-    }
-  | { type: TrackedCombatEntity.Token; tokenId: string; sceneId: string }
-  | {
-      type: TrackedCombatEntity.Time;
-      startTime: number;
-      duration: number;
-    };
-
-export const combatPools = [
-  PoolType.Insight,
-  PoolType.Vigor,
-  PoolType.Threat,
-] as const;
-
-export type CombatPool = typeof combatPools[number];
-
-type Extra = CombatPool;
-
-export enum Surprise {
-  Surprised = 'surprised',
-  Alerted = 'alerted',
-}
-
 export type TurnModifiers = {
   tookInitiative?: CombatPool | null;
   extraActions?: [Extra] | [Extra, Extra] | null;
@@ -75,11 +48,69 @@ type CombatParticipantData = {
   modifiedTurn?: Record<number, TurnModifiers | undefined | null>;
 };
 
+type TrackedIdentitfiers =
+  | {
+      type: TrackedCombatEntity.Actor;
+      actorId: string;
+    }
+  | { type: TrackedCombatEntity.Token; tokenId: string; sceneId: string }
+  | {
+      type: TrackedCombatEntity.Time;
+      startTime: number;
+      duration: number;
+    };
+
+export type CombatParticipant = CombatParticipantData & { id: string };
+
+type RoundLogEntry = {
+  text: string;
+  timestamp: number;
+};
+
+export type CombatData = {
+  participants: StringID<CombatParticipantData>[];
+  round: number;
+  turn: number;
+  goingBackwards: boolean;
+  skipDefeated?: boolean;
+  linkToWorldTime?: boolean;
+  roundLogs: Record<number, RoundLogEntry[]>;
+};
+
+export const combatPools = [
+  PoolType.Insight,
+  PoolType.Vigor,
+  PoolType.Threat,
+] as const;
+
+export type CombatPool = typeof combatPools[number];
+
+type Extra = CombatPool;
+
+export enum Surprise {
+  Surprised = 'surprised',
+  Alerted = 'alerted',
+}
+
 export enum RoundPhase {
   TookInitiative = 1,
   Normal,
   ExtraAction,
 }
+
+type RoundParticipant = {
+  participant: CombatParticipant;
+  tookInitiative?: CombatPool | null;
+  extras?: TurnModifiers['extraActions'];
+  interruptExtra?: boolean;
+  surprise?: Surprise | null;
+};
+
+export type CombatRound = {
+  participants: RoundParticipant[];
+  someTookInitiative: boolean;
+  surprise: boolean;
+};
 
 export const rollParticipantInitiative = async (
   participant: CombatParticipant,
@@ -129,20 +160,6 @@ export const tokenIsInCombat = ({ id, scene }: Token) => {
       entityIdentifiers.tokenId === id &&
       entityIdentifiers.sceneId === scene?.id,
   );
-};
-
-type RoundParticipant = {
-  participant: CombatParticipant;
-  tookInitiative?: CombatPool | null;
-  extras?: TurnModifiers['extraActions'];
-  interruptExtra?: boolean;
-  surprise?: Surprise | null;
-};
-
-export type CombatRound = {
-  participants: RoundParticipant[];
-  someTookInitiative: boolean;
-  surprise: boolean;
 };
 
 export const setupCombatRound = (
@@ -278,17 +295,6 @@ export const participantsByInitiative = (
     : Number(b.initiative) - Number(a.initiative);
 };
 
-export type CombatParticipant = CombatParticipantData & { id: string };
-
-export type CombatData = {
-  participants: StringID<CombatParticipantData>[];
-  round: number;
-  turn: number;
-  goingBackwards: boolean;
-  skipDefeated?: boolean;
-  linkToWorldTime?: boolean;
-};
-
 export enum CombatActionType {
   AddParticipants,
   UpdateParticipants,
@@ -323,11 +329,12 @@ export type CombatUpdateAction =
         targetId: string;
         interrupterId: string;
         interruptExtra: boolean;
+        interruptExtraInterrupter: boolean;
       };
     }
   | {
       type: CombatActionType.RemoveParticipantsByToken;
-      payload: { sceneId: string; tokenId: string };
+      payload: { sceneId: string; tokenId: string }[];
     }
   | {
       type: CombatActionType.DelayParticipant;
@@ -382,10 +389,11 @@ const updateReducer = produce(
         const activeIndex = sorted.findIndex(
           (p) => p.id === action.payload.targetId,
         );
-        const part = sorted[activeIndex];
-        if (!part) return;
+        const target = sorted[activeIndex];
+        if (!target) return;
+        const targetMods = target.modifiedTurn?.[draft.round];
         const newInitiative =
-          (Math.round((part.initiative || 0) * 100) + 1) / 100;
+          (Math.round((target.initiative || 0) * 100) + 1) / 100;
         let wasBefore = false;
         let currentInitiative = newInitiative;
         for (const participant of sorted.slice(0, activeIndex).reverse()) {
@@ -393,7 +401,7 @@ const updateReducer = produce(
             wasBefore = true;
           } else if (
             participant.initiative === currentInitiative ||
-            participant.initiative === part.initiative
+            participant.initiative === target.initiative
           ) {
             currentInitiative = (Math.round(currentInitiative * 100) + 1) / 100;
             participant.initiative = currentInitiative;
@@ -403,10 +411,17 @@ const updateReducer = produce(
         const interrupter = sorted.find(
           (p) => p.id === action.payload.interrupterId,
         );
+        const interrupterModifiers = interrupter?.modifiedTurn?.[draft.round];
+        const interrupterHasExtras =
+          interrupterModifiers?.extraActions ||
+          interrupterModifiers?.interruptExtra;
         if (interrupter) {
           interrupter.delaying = false;
           interrupter.initiative = newInitiative;
-          if (action.payload.interruptExtra) {
+          if (
+            action.payload.interruptExtra ||
+            action.payload.interruptExtraInterrupter
+          ) {
             const { modifiedTurn = {} } = interrupter;
             const modifiedRound = modifiedTurn[draft.round] ?? {};
             interrupter.modifiedTurn = {
@@ -416,44 +431,54 @@ const updateReducer = produce(
                 interruptExtra: true,
               },
             };
-            // TODO - Might have to do this for situations in which extras of extra interrupters are interrupted
-            // const { modifiedTurn: partMod = {} } = part;
-            // const partRoundMod = partMod[draft.round] ?? {};
-            // part.modifiedTurn = {
-            //   ...partMod,
-            //   [draft.round]: {
-            //     ...partRoundMod,
-            //     interruptExtra: false,
-            //   },
-            // };
           }
         }
-        if (
-          action.payload.interruptExtra ||
-          (wasBefore &&
-            sorted[activeIndex - 1]?.id !== action.payload.interrupterId)
+
+        let turnDecrease = 0;
+
+        if (action.payload.interruptExtra) {
+          turnDecrease += interrupterHasExtras ? 2 : 1;
+          if (targetMods?.interruptExtra) turnDecrease += 1;
+        } else if (action.payload.interruptExtraInterrupter) {
+          turnDecrease += interrupterHasExtras ? 2 : 1;
+        } else if (
+          wasBefore &&
+          sorted[activeIndex - 1]?.id !== action.payload.interrupterId
         ) {
-          draft.turn -=
-            1 +
-            (action.payload.interruptExtra
-              ? interrupter?.modifiedTurn?.[draft.round]?.extraActions
-                  ?.length ?? 0
-              : 0);
+          turnDecrease += 1;
         }
+
+        draft.turn -= turnDecrease;
+
+        const log = draft.roundLogs[draft.round] ?? [];
+        draft.roundLogs[draft.round] = log.concat({
+          text: `${interrupter?.name} ${localize('interrupts')} ${
+            target.name
+          } ${
+            action.payload.interruptExtra
+              ? `[${localize('extra')} ${localize('actions')}]`
+              : ''
+          }`,
+          timestamp: Date.now(),
+        });
 
         return;
       }
 
       case CombatActionType.RemoveParticipantsByToken: {
+        const toString = (ids: { tokenId: string; sceneId: string }) => {
+          return `${ids.sceneId}-${ids.tokenId}`;
+        };
+        const toRemove = action.payload.map(toString);
         draft.participants = reject(
           draft.participants,
           ({ entityIdentifiers }) =>
             !!(
               entityIdentifiers?.type === TrackedCombatEntity.Token &&
-              entityIdentifiers.sceneId === action.payload.sceneId &&
-              entityIdentifiers.tokenId === action.payload.tokenId
+              toRemove.includes(toString(entityIdentifiers))
             ),
         );
+        return;
       }
 
       case CombatActionType.UpdateRound:
@@ -466,6 +491,7 @@ const updateReducer = produce(
           turn: 0,
           participants: [],
           goingBackwards: false,
+          roundLogs: {},
         };
       }
     }

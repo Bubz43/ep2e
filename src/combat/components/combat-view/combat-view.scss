@@ -78,3 +78,13 @@ footer {
   overflow-x: hidden;
   flex: 1;
 }
+
+.log-entries {
+  list-style: none;
+  width: 300px;
+  padding: 0.25rem 1rem;
+}
+
+time-since {
+  color: var(--color-text-lighter);
+}

@@ -23,7 +23,7 @@ import {
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
-import { equals } from 'remeda';
+import { equals, last } from 'remeda';
 import '../participant-item/participant-item';
 import type { ParticipantItem } from '../participant-item/participant-item';
 import '../participant-selector/participant-selector';
@@ -257,6 +257,7 @@ export class CombatView extends LitElement {
           targetId: activeParticipant.participant.id,
           interrupterId: ev.detail.id,
           interruptExtra: !!activeParticipant.extras,
+          interruptExtraInterrupter: !!activeParticipant.interruptExtra,
         },
       });
     }
@@ -282,6 +283,11 @@ export class CombatView extends LitElement {
     return this.combatRound?.participants[this.activeTurn || -1];
   }
 
+  private get log() {
+    const { roundLogs = {}, round = -1 } = this.combatState ?? {};
+    return roundLogs[round] ?? [];
+  }
+
   render() {
     const { round = 0 } = this.combatState ?? {};
     const { isGM } = game.user;
@@ -294,6 +300,8 @@ export class CombatView extends LitElement {
       : activeParticipant?.extras || activeParticipant?.interruptExtra
       ? RoundPhase.ExtraAction
       : RoundPhase.Normal;
+
+    const logEntry = last(this.log);
 
     return html`
       <header>
@@ -323,6 +331,24 @@ export class CombatView extends LitElement {
           <mwc-icon-button slot="base" icon="add"></mwc-icon-button>
         </sl-popover>
       </header>
+      ${logEntry
+        ? html`
+            <sl-popover .renderOnDemand=${this.renderLog}>
+              <wl-list-item
+                class="last-log-entry"
+                clickable
+                slot="base"
+                role="button"
+                ><span>
+                  <span>${logEntry.text}</span>
+                  <time-since
+                    timestamp=${logEntry.timestamp}
+                  ></time-since> </span
+              ></wl-list-item>
+            </sl-popover>
+          `
+        : ''}
+
       <sl-animated-list
         class="combat-round"
         @interrupt-turn=${this.applyInterrupt}
@@ -335,7 +361,7 @@ export class CombatView extends LitElement {
           : ''}
         ${repeat(
           participants,
-          ({ participant, extras }) => (participant.id + extras ? 'extra' : ''),
+          ({ participant, extras }) => participant.id + (extras ? 'extra' : ''),
           (
             { participant, tookInitiative, extras, interruptExtra = false },
             index,
@@ -343,7 +369,7 @@ export class CombatView extends LitElement {
             <participant-item
               class=${classMap({
                 'took-initiative': !!tookInitiative,
-                extra: !!extras,
+                extra: !!(extras || interruptExtra),
               })}
               .participant=${participant}
               round=${round}
@@ -416,6 +442,19 @@ export class CombatView extends LitElement {
       </footer>
     `;
   }
+
+  private renderLog = () => {
+    return html`
+      <ol class="log-entries">
+        ${this.log.map(
+          (entry) => html`<li>
+            <time-since timestamp=${entry.timestamp}></time-since>
+            <span>${entry.text}</span>
+          </li>`,
+        )}
+      </ol>
+    `;
+  };
 }
 
 declare global {

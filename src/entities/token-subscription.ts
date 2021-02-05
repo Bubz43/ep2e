@@ -13,7 +13,7 @@ import { SceneEP } from './scene';
 const tokenSubjects = new Map<`${string}-${string}`, BehaviorSubject<Token>>();
 
 const toKey = (ids: { tokenId: string; sceneId: string }) => {
-  return `${ids.tokenId}-${ids.sceneId}`;
+  return `${ids.tokenId}-${ids.sceneId}` as const;
 };
 
 const fromKey = <T extends string>(str: T) => {
@@ -72,7 +72,6 @@ mutateEntityHook({
   },
 });
 
-
 export const subscribeToToken = (
   ids: { tokenId: string; sceneId: string },
   observer: PartialObserver<Token>,
@@ -84,8 +83,7 @@ export const subscribeToToken = (
     if (token) {
       subject = new BehaviorSubject(token);
       tokenSubjects.set(key, subject);
-    } else observer.complete?.()
+    } else observer.complete?.();
   }
   return subject?.subscribe(observer) ?? null;
 };
-

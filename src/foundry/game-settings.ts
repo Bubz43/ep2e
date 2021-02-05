@@ -115,6 +115,7 @@ export const registerEPSettings = once(() => {
       round: 0,
       turn: 0,
       goingBackwards: false,
+      roundLogs: {},
     },
   });
 
