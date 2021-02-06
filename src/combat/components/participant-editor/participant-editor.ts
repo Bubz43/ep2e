@@ -1,18 +1,10 @@
-import type {
-  CombatActionType,
-  CombatParticipant,
-  updateCombatState,
-} from '@src/combat/combat-tracker';
+import type { CombatParticipant } from '@src/combat/combat-tracker';
 import {
   renderNumberField,
   renderTextField,
 } from '@src/components/field/fields';
-import {
-  renderSubmitForm,
-  SlCustomStoreEvent,
-} from '@src/components/form/forms';
-import { openImagePicker, closeImagePicker } from '@src/foundry/foundry-apps';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { renderSubmitForm } from '@src/components/form/forms';
+import { customElement, html, LitElement, property } from 'lit-element';
 import styles from './participant-editor.scss';
 
 @customElement('participant-editor')

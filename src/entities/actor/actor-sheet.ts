@@ -198,10 +198,10 @@ export class ActorEPSheet implements EntitySheet {
     if (!force && !this.rendered) return this;
 
     if (force) {
-      this._token = token
-        // token ||
-        // (this.actor.token &&
-        //   readyCanvas()?.tokens.get(this.actor.token.data._id));
+      this._token = token;
+      // token ||
+      // (this.actor.token &&
+      //   readyCanvas()?.tokens.get(this.actor.token.data._id));
     }
 
     this.openWindow(force);

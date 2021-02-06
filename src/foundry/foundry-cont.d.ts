@@ -165,7 +165,7 @@ type Col<T extends Entity> = Omit<Collection<T>, 'get'> & {
 };
 
 type GameCollections = {
-  users: Col<UserEP>;
+  users: Col<UserEP> & { players: UserEP[] };
   messages: Col<ChatMessageEP>;
   scenes: Col<SceneEP> & {
     preload(sceneId: string, push?: boolean): Promise<unknown>;

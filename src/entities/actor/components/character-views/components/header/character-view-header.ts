@@ -1,6 +1,7 @@
-import { createMessage, MessageVisibility } from '@src/chat/create-message';
 import {
   CombatActionType,
+  rollInitiative,
+  Surprise,
   TrackedCombatEntity,
   updateCombatState,
 } from '@src/combat/combat-tracker';
@@ -11,8 +12,8 @@ import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { closeImagePicker, openImagePicker } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
-import { rollFormula } from '@src/foundry/rolls';
 import { tooltip } from '@src/init';
+import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
 import {
@@ -83,30 +84,17 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
     this.character.ego.rollStress();
   }
 
-  private async addToCombat() {
-    // TODO have initiative menu to account for surprise
-    const roll = rollFormula(`1d6 + ${this.character.initiative}`);
+  private addToCombat(initiative?: number, surprised?: Surprise) {
     const name = this.token?.name ?? this.character.name;
     const hidden = this.token?.data.hidden;
-    if (roll) {
-      await createMessage({
-        roll,
-        flavor: localize('initiative'),
-        entity: this.token ?? this.character.actor,
-        alias: name,
-        visibility: hidden
-          ? MessageVisibility.WhisperGM
-          : MessageVisibility.Public,
-      });
-    }
-
     updateCombatState({
       type: CombatActionType.AddParticipants,
       payload: [
         {
           name,
           hidden,
-          initiative: roll?.total,
+          initiative,
+          surprised,
           entityIdentifiers: this.token?.scene
             ? {
                 type: TrackedCombatEntity.Token,
@@ -117,6 +105,53 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
                 type: TrackedCombatEntity.Actor,
                 actorId: this.character.actor.id,
               },
+        },
+      ],
+    });
+  }
+
+  private openInitiativeMenu() {
+    const bonus = this.character?.initiative;
+    const baseLabel = bonus ? `1d6 + ${bonus}` : '1d6';
+    const name = this.token?.name ?? this.character.name;
+    const hidden = this.token?.data.hidden;
+    const roll = async (surprise?: Surprise) => {
+      const result = await rollInitiative(
+        { token: this.token, actor: this.character.actor },
+        {
+          surprised: surprise,
+          name,
+          hidden,
+        },
+      );
+      this.addToCombat(result.initiative, surprise);
+    };
+    openMenu({
+      content: [
+        {
+          label: `${localize('add')} ${localize('to')} ${localize('combat')}`,
+          callback: () => this.addToCombat(),
+          icon: html`<mwc-icon>add</mwc-icon>`,
+        },
+        'divider',
+        {
+          label: baseLabel,
+          callback: () => roll(),
+          icon: html`<mwc-icon>casino</mwc-icon>`,
+        },
+        {
+          label: `${localize(
+            Surprise.Surprised,
+          )} (${baseLabel}) - 3, 🚫 ${localize('act')}/${localize('defend')}`,
+          callback: () => roll(Surprise.Surprised),
+          icon: html`<mwc-icon>snooze</mwc-icon>`,
+        },
+        {
+          label: `${localize(Surprise.Alerted)} (${baseLabel}) - 3, ${localize(
+            'act',
+          )}/${localize('defend')} ${localize('normally')}`,
+          callback: () => roll(Surprise.Alerted),
+          icon: html`<mwc-icon>priority_high</mwc-icon>`,
         },
       ],
     });
@@ -133,12 +168,10 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
       </sl-popover>
       <h2>${this.character.name}</h2>
       <div class="additional">
-        <sl-group
-          class="initiative"
-          label=${localize('initiative')}
-          @click=${this.addToCombat}
-          >${this.character.initiative}</sl-group
-        >
+        <mwc-button dense class="initiative" @click=${this.openInitiativeMenu}>
+          ${localize('initiative')}: ${this.character.initiative}
+        </mwc-button>
+
         ${this.character.ego.hasStressRoll
           ? html`
               <mwc-button

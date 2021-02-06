@@ -17,7 +17,6 @@ export type ActorIdentifiers = {
   uuid?: string | null;
 };
 
-
 export const createTempToken = (tokenData: TokenData, scene: SceneEP) => {
   return new Token(tokenData, scene);
 };

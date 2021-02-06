@@ -153,20 +153,22 @@ export const currentWorldTimeMS = () => {
 
 export const advanceWorldTime = async (milliseconds: number) => {
   game.time.advance(Math.round(milliseconds / 1000));
-     emitEPSocket(
-       {
-         worldTimeChange: [
-           Date.now(),
-           format('ModifiedTime', {
-             direction: localize(
-               milliseconds >= 0 ? 'advanced' : 'rewound',
-             ).toLocaleLowerCase(),
-             amount: prettyMilliseconds(Math.abs(milliseconds), { compact: false }),
-           }),
-         ],
-       },
-       true,
-     );
+  emitEPSocket(
+    {
+      worldTimeChange: [
+        Date.now(),
+        format('ModifiedTime', {
+          direction: localize(
+            milliseconds >= 0 ? 'advanced' : 'rewound',
+          ).toLocaleLowerCase(),
+          amount: prettyMilliseconds(Math.abs(milliseconds), {
+            compact: false,
+          }),
+        }),
+      ],
+    },
+    true,
+  );
 };
 
 export const getElapsedTime = (worldTimestampMS: number) => {

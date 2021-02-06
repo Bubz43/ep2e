@@ -1434,7 +1434,12 @@ type LangEntries =
   | 'defend'
   | 'normally'
   | 'interrupts'
-  | 'delays';
+  | 'delays'
+  | 'multiple'
+  | 'initiatives'
+  | 'npcs'
+  | 'tracker'
+  | 'skipDefeated';
 type FullNames =
   | 'cog'
   | 'int'
@@ -1531,7 +1536,8 @@ export type DescriptionEntry =
   | 'SuperiorResultDetail'
   | 'SuperiorResultTime'
   | 'SuperiorResultCovertness'
-  | 'SuperiorResultDamage';
+  | 'SuperiorResultDamage'
+  | 'EndCombat';
 
 // TODO Look into using data keys as pattern to validate json string
 export type Formatable = {

@@ -3,7 +3,10 @@ import { renderAutoForm } from '@src/components/form/forms';
 import { AptitudeType } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import {
-  formattedSleeveInfo, isSleeve, ownedSleeves, Sleeve
+  formattedSleeveInfo,
+  isSleeve,
+  ownedSleeves,
+  Sleeve,
 } from '@src/entities/actor/sleeves';
 import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisition';
 import { ActorType, ItemType } from '@src/entities/entity-types';
@@ -21,11 +24,10 @@ import { AptitudeCheckControls } from '@src/success-test/components/aptitude-che
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
-
-
   html,
-  internalProperty, LitElement,
-  property
+  internalProperty,
+  LitElement,
+  property,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import {
@@ -36,7 +38,7 @@ import {
   mapValues,
   pipe,
   reject,
-  sortBy
+  sortBy,
 } from 'remeda';
 import styles from './character-view-resleeve.scss';
 

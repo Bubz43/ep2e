@@ -323,9 +323,9 @@ export class ActorEP extends Actor {
   }
 
   static createTokenActor(baseActor: ActorEP, token: Token) {
-    const actor = super.createTokenActor(baseActor, token)
+    const actor = super.createTokenActor(baseActor, token);
     if (!token.scene?.isView) {
-      delete this.collection.tokens[token.id]
+      delete this.collection.tokens[token.id];
     }
     return actor;
   }

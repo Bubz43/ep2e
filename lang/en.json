@@ -1405,6 +1405,14 @@
     "reRoll": "Reroll",
     "interrupt": "Interrupt",
     "defend": "Defend",
+    "delays": "Delays",
+    "initiatives": "Initiatives",
+    "interrupts": "Interrupts",
+    "multiple": "Multiple",
+    "normally": "Normally",
+    "npcs": "NPCs",
+    "skipDefeated": "Skip Defeated",
+    "tracker": "Tracker",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
@@ -1442,7 +1450,8 @@
       "SuperiorResultDetail": "You acquire information that is much more in-depth or nuanced (success) or false (failure).",
       "SuperiorResultQuality": "The work is more exact (success) or more sloppy (failure). This may affect subsequent tests by +/− 10.",
       "SuperiorResultQuantity": "The test consumes fewer (success) or more (failure) materials or produces fewer or more results.",
-      "SuperiorResultTime": "The action takes a shorter (success) or longer (failure) amount of time, by +/− 25%."
+      "SuperiorResultTime": "The action takes a shorter (success) or longer (failure) amount of time, by +/− 25%.",
+      "EndCombat": "End combat and empty turn tracker?"
     },
     "FULL": {
       "cog": "Cognition",

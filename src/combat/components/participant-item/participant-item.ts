@@ -625,7 +625,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
                 <mwc-icon-button
                   class="mini-button ${participant.hidden ? 'active' : ''}"
                   @click=${this.toggleHidden}
-                  icon=${participant.hidden ? 'visibility' : 'visibility_off'}
+                  icon="visibility_off"
                 ></mwc-icon-button>
                 <mwc-icon-button
                   class="mini-button defeat ${participant.defeated

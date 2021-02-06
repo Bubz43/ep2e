@@ -32,6 +32,9 @@
                 "Encumbered": {
                   "type": "string"
                 },
+                "EndCombat": {
+                  "type": "string"
+                },
                 "NonElectronicSubstanceOnly": {
                   "type": "string"
                 },
@@ -163,7 +166,8 @@
                 "SuperiorResultDetail",
                 "SuperiorResultTime",
                 "SuperiorResultCovertness",
-                "SuperiorResultDamage"
+                "SuperiorResultDamage",
+                "EndCombat"
               ],
               "type": "object"
             },
@@ -1451,6 +1455,9 @@
             "defaulting": {
               "type": "string"
             },
+            "defend": {
+              "type": "string"
+            },
             "defendWith": {
               "type": "string"
             },
@@ -1476,6 +1483,9 @@
               "type": "string"
             },
             "delayTurn": {
+              "type": "string"
+            },
+            "delays": {
               "type": "string"
             },
             "delete": {
@@ -2363,6 +2373,9 @@
             "initiative": {
               "type": "string"
             },
+            "initiatives": {
+              "type": "string"
+            },
             "injection": {
               "type": "string"
             },
@@ -2409,6 +2422,9 @@
               "type": "string"
             },
             "interrupt": {
+              "type": "string"
+            },
+            "interrupts": {
               "type": "string"
             },
             "interval": {
@@ -2846,6 +2862,9 @@
             "multiUse": {
               "type": "string"
             },
+            "multiple": {
+              "type": "string"
+            },
             "multiplier": {
               "type": "string"
             },
@@ -2957,6 +2976,9 @@
             "normal": {
               "type": "string"
             },
+            "normally": {
+              "type": "string"
+            },
             "not": {
               "type": "string"
             },
@@ -2970,6 +2992,9 @@
               "type": "string"
             },
             "npc": {
+              "type": "string"
+            },
+            "npcs": {
               "type": "string"
             },
             "numbers": {
@@ -3812,6 +3837,9 @@
             "skills": {
               "type": "string"
             },
+            "skipDefeated": {
+              "type": "string"
+            },
             "skrik": {
               "type": "string"
             },
@@ -4329,6 +4357,9 @@
               "type": "string"
             },
             "tracked": {
+              "type": "string"
+            },
+            "tracker": {
               "type": "string"
             },
             "trait": {
@@ -5008,6 +5039,7 @@
             "deduct",
             "default",
             "defaulting",
+            "defend",
             "defendWith",
             "defending",
             "defineEnvironment",
@@ -5017,6 +5049,7 @@
             "degrees",
             "delay",
             "delayTurn",
+            "delays",
             "delete",
             "deleted",
             "demolition",
@@ -5312,6 +5345,7 @@
             "inherentArmor",
             "initial",
             "initiative",
+            "initiatives",
             "injection",
             "innate",
             "innateArmor",
@@ -5328,6 +5362,7 @@
             "interface",
             "interference",
             "interrupt",
+            "interrupts",
             "interval",
             "into",
             "introduceItem",
@@ -5473,6 +5508,7 @@
             "moxie",
             "mp",
             "multiUse",
+            "multiple",
             "multiplier",
             "muse",
             "n/a",
@@ -5510,11 +5546,13 @@
             "nonAddictive",
             "none",
             "normal",
+            "normally",
             "not",
             "notFound",
             "notes",
             "now",
             "npc",
+            "npcs",
             "numbers",
             "obedient",
             "objective",
@@ -5795,6 +5833,7 @@
             "skillTests",
             "skillType",
             "skills",
+            "skipDefeated",
             "skrik",
             "slacker",
             "slaved",
@@ -5968,6 +6007,7 @@
             "trackReputations",
             "trackResourcePoints",
             "tracked",
+            "tracker",
             "trait",
             "traitType",
             "traits",

@@ -112,15 +112,19 @@ export type CombatRound = {
   surprise: boolean;
 };
 
-export const rollParticipantInitiative = async (
-  participant: CombatParticipant,
-  surprised?: Surprise,
-): Promise<{ id: string; initiative: number; surprised?: Surprise }> => {
-  const { token, actor } = getParticipantEntities(participant);
-
+export const rollInitiative = async (
+  { token, actor }: ReturnType<typeof getParticipantEntities>,
+  options: Partial<{
+    surprised: Surprise;
+    name: string;
+    hidden: boolean;
+  }>,
+) => {
   const roll =
     actor?.proxy.type === ActorType.Character
-      ? rollFormula(`1d6 + ${actor.proxy.initiative} ${surprised ? `-3` : ''}`)
+      ? rollFormula(
+          `1d6 + ${actor.proxy.initiative} ${options.surprised ? `-3` : ''}`,
+        )
       : null;
 
   if (roll) {
@@ -128,15 +132,26 @@ export const rollParticipantInitiative = async (
       roll,
       flavor: localize('initiative'),
       entity: token ?? actor,
-      alias: participant.name,
-      visibility: participant.hidden
+      alias: options.name,
+      visibility: options.hidden
         ? MessageVisibility.WhisperGM
         : MessageVisibility.Public,
     });
   }
-
-  return { id: participant.id, initiative: roll?.total || 0, surprised };
+  return { initiative: Number(roll?.total || 0), surprised: options.surprised };
 };
+
+export const rollParticipantInitiative = async (
+  participant: CombatParticipant,
+  surprised?: Surprise,
+): Promise<{ id: string; initiative: number; surprised?: Surprise }> => ({
+  id: participant.id,
+  ...(await rollInitiative(getParticipantEntities(participant), {
+    surprised,
+    name: participant.name,
+    hidden: participant.hidden,
+  })),
+});
 
 export const getParticipantEntities = (data: CombatParticipantData) => {
   const token =
@@ -304,6 +319,7 @@ export enum CombatActionType {
   Reset,
   ApplyInterrupt,
   RemoveParticipantsByToken,
+  UpdateSettings,
 }
 
 export type CombatUpdateAction =
@@ -339,6 +355,10 @@ export type CombatUpdateAction =
   | {
       type: CombatActionType.DelayParticipant;
       payload: { participantId: string; advanceRound: boolean };
+    }
+  | {
+      type: CombatActionType.UpdateSettings;
+      payload: Partial<Pick<CombatData, 'skipDefeated' | 'linkToWorldTime'>>;
     }
   | {
       type: CombatActionType.Reset;
@@ -484,6 +504,10 @@ const updateReducer = produce(
       }
 
       case CombatActionType.UpdateRound:
+        Object.assign(draft, action.payload);
+        return;
+
+      case CombatActionType.UpdateSettings:
         Object.assign(draft, action.payload);
         return;
 

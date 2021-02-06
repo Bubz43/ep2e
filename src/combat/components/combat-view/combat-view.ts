@@ -4,15 +4,20 @@ import {
   CombatParticipant,
   CombatRound,
   findViableParticipantTurn,
+  getParticipantEntities,
   rollParticipantInitiative,
   RoundPhase,
   setupCombatRound,
   updateCombatState,
 } from '@src/combat/combat-tracker';
+import { renderLabeledCheckbox } from '@src/components/field/fields';
+import { renderSubmitForm } from '@src/components/form/forms';
 import { openWindow } from '@src/components/window/window-controls';
 import { ResizeOption } from '@src/components/window/window-options';
 import { localize } from '@src/foundry/localization';
 import { gameSettings } from '@src/init';
+import { RenderDialogEvent } from '@src/open-dialog';
+import { openMenu } from '@src/open-menu';
 import { nonNegative, notEmpty } from '@src/utility/helpers';
 import {
   customElement,
@@ -224,8 +229,65 @@ export class CombatView extends LitElement {
   }
 
   private reset() {
-    // TODO dialog
-    updateCombatState({ type: CombatActionType.Reset });
+    this.dispatchEvent(
+      new RenderDialogEvent(html`
+        <mwc-dialog heading="${localize('end')} ${localize('combat')}">
+          <p>${localize('DESCRIPTIONS', 'EndCombat')}</p>
+          <mwc-button slot="secondaryAction" dialogAction="cancel"
+            >${localize('cancel')}</mwc-button
+          >
+          <mwc-button
+            slot="primaryAction"
+            dialogAction="confirm"
+            unelevated
+            @click=${() => updateCombatState({ type: CombatActionType.Reset })}
+            >${localize('confirm')}</mwc-button
+          >
+        </mwc-dialog>
+      `),
+    );
+  }
+
+  private openRollInitiativeMenu() {
+    openMenu({
+      header: {
+        heading: `${localize('roll')} ${localize('multiple')} ${localize(
+          'initiatives',
+        )}`,
+      },
+      content: [
+        {
+          label: localize('all'),
+          callback: () => this.rollAllInitiatives(),
+        },
+        'divider',
+        {
+          label: localize('npcs'),
+          callback: () => this.rollNPCInitiatives(),
+        },
+      ],
+    });
+  }
+
+  private async rollNPCInitiatives() {
+    const { players } = game.users;
+    console.log(players);
+    const participants = this.participants.filter((participant) => {
+      const { actor } = getParticipantEntities(participant);
+      return !actor || !players.some((user) => actor.hasPerm(user, 'OWNER'));
+    });
+    const payload: { id: string; initiative: number }[] = [];
+    for (const participant of participants) {
+      if (participant.initiative == null) {
+        payload.push(await rollParticipantInitiative(participant));
+      }
+    }
+    if (notEmpty(payload)) {
+      updateCombatState({
+        type: CombatActionType.UpdateParticipants,
+        payload,
+      });
+    }
   }
 
   private async rollAllInitiatives() {
@@ -308,7 +370,7 @@ export class CombatView extends LitElement {
         ${isGM
           ? html`
               <mwc-icon-button
-                @click=${this.rollAllInitiatives}
+                @click=${this.openRollInitiativeMenu}
                 ?disabled=${this.participants.every(
                   (p) => p.initiative != null,
                 )}
@@ -324,13 +386,17 @@ export class CombatView extends LitElement {
               </h2>
             `
           : ''}
-        <sl-popover
-          center
-          .renderOnDemand=${() =>
-            html`<participant-selector></participant-selector>`}
-        >
+        <sl-popover center .renderOnDemand=${this.renderParticipantSelector}>
           <mwc-icon-button slot="base" icon="add"></mwc-icon-button>
         </sl-popover>
+
+        ${isGM
+          ? html`
+              <sl-popover center .renderOnDemand=${this.renderSettingsForm}>
+                <mwc-icon-button icon="settings" slot="base"></mwc-icon-button>
+              </sl-popover>
+            `
+          : ''}
       </header>
       ${logEntry
         ? html`
@@ -444,6 +510,25 @@ export class CombatView extends LitElement {
       </footer>
     `;
   }
+
+  private renderParticipantSelector = () =>
+    html`<participant-selector></participant-selector>`;
+
+  private renderSettingsForm = () => html`
+    <sl-popover-section heading=${localize('settings')}
+      >${renderSubmitForm({
+        props: {
+          skipDefeated: this.combatState?.skipDefeated ?? false,
+        },
+        update: (changed) =>
+          updateCombatState({
+            type: CombatActionType.UpdateSettings,
+            payload: changed,
+          }),
+        fields: ({ skipDefeated }) => [renderLabeledCheckbox(skipDefeated)],
+      })}</sl-popover-section
+    >
+  `;
 
   private renderLog = () => {
     return html`

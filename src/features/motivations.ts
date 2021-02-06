@@ -30,7 +30,6 @@ export const createMotivationalGoal = createFeature<MotivationalGoal>(() => ({
 export const motivationSort = (a: Motivation, b: Motivation) =>
   a.stance.length - b.stance.length || a.cause.length - b.cause.length;
 
-
 // })
 // TODO: Apply stress relief
 // ? Goals array, or maybe say common seperated
