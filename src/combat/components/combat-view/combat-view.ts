@@ -54,7 +54,7 @@ export class CombatView extends LitElement {
   private intObs: IntersectionObserver | null = null;
 
   static openWindow() {
-    openWindow(
+    return openWindow(
       {
         key: CombatView,
         name: localize('combat'),

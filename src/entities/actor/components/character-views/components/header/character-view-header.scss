@@ -13,11 +13,12 @@
   box-shadow: 0 3px 3px -3px rgba(0, 0, 0, 0.75);
 
   column-gap: 1rem;
-  grid: 0.75rem auto auto 0.75rem min-content / min-content 1fr auto;
+  grid: 0.75rem auto auto min-content 0.75rem min-content / min-content 1fr auto;
   grid-template-areas:
     'img .. ..'
     'img name more'
     'img actions trash'
+    'img tokens tokens'
     'img .. ..'
     'path path path';
 
@@ -39,6 +40,21 @@
     display: flex;
     align-items: center;
     font-size: small;
+  }
+}
+
+.tokens {
+  grid-area: tokens;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-flow: row wrap;
+  > * {
+    padding: 0 0.5rem 0 0;
+    margin: 0.1rem 0.1rem 0.1rem 0;
+    img {
+      margin-right: 0.5ch;
+    }
   }
 }
 

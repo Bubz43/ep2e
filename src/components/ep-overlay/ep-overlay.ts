@@ -1,14 +1,9 @@
-import {
-  CombatActionType,
-  updateCombatState,
-} from '@src/combat/combat-tracker';
 import { CombatView } from '@src/combat/components/combat-view/combat-view';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
 import { readyCanvas } from '@src/foundry/canvas';
 import { positionApp } from '@src/foundry/foundry-apps';
 import { applicationHook } from '@src/foundry/hook-setups';
-import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
 import { debounceFn } from '@src/utility/decorators';
@@ -27,6 +22,8 @@ import { cache } from 'lit-html/directives/cache';
 import { first } from 'remeda';
 import { traverseActiveElements } from 'weightless';
 import type { EventList } from '../event-list/event-list';
+import { closeWindow } from '../window/window-controls';
+import { SlWindowEventName } from '../window/window-options';
 import styles from './ep-overlay.scss';
 
 const relevantHooks = [
@@ -213,6 +210,7 @@ export class EPOverlay extends LitElement {
   private toggleActiveFoundryApps = () => {
     for (const el of this.foundryViewControls) {
       const { view } = el.dataset;
+      if (view === 'combat') continue;
       const app = ui[view as keyof typeof ui];
       el.classList.toggle(
         'active',
@@ -243,9 +241,21 @@ export class EPOverlay extends LitElement {
           @mouseenter=${tooltip.fromData}
           @focus=${tooltip.fromData}
           data-view=${tabName}
-          @click=${(ev: Event) => {
-            const { _popout } = tabApp;
+          @click=${(ev: Event & { currentTarget: HTMLElement }) => {
             const { currentTarget } = ev;
+            if (tabName === 'combat') {
+              const { win, wasConnected } = CombatView.openWindow();
+              if (!wasConnected) {
+                win.addEventListener(
+                  SlWindowEventName.Closed,
+                  () => currentTarget.classList.remove('active'),
+                  { once: true },
+                );
+              }
+              currentTarget.classList.add('active');
+              return;
+            }
+            const { _popout } = tabApp;
             if (_popout && notEmpty(_popout.element)) {
               const [element] = _popout.element;
               if (element?.classList.contains('minimized')) _popout.maximize();
@@ -260,7 +270,11 @@ export class EPOverlay extends LitElement {
               });
             }
           }}
-          @contextmenu=${() => tabApp._popout?.close({})}
+          @contextmenu=${() => {
+            if (tabName === 'combat') {
+              closeWindow(CombatView);
+            } else tabApp._popout?.close({});
+          }}
           >${icon}</wl-list-item
         >
       `;
@@ -301,15 +315,6 @@ export class EPOverlay extends LitElement {
       )}
       <div class="singles">
         <world-time-controls></world-time-controls>
-        <wl-list-item clickable @click=${CombatView.openWindow}
-          >${localize('combat')}</wl-list-item
-        >
-        <mwc-button
-          style="pointer-events: all"
-          unelevated
-          @click=${() => updateCombatState({ type: CombatActionType.Reset })}
-          >Reset</mwc-button
-        >
       </div>
       ${this.staticElements} ${this.dialogTemplate || ''}
     `;

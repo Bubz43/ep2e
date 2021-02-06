@@ -84,7 +84,7 @@ export class ParticipantSelector extends mix(LitElement).with(
         ),
       });
       this.toAdd.clear();
-      this.requestUpdate();
+      requestAnimationFrame(() => this.requestUpdate());
     }
   }
 

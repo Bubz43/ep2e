@@ -124,6 +124,7 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
 
   render() {
     // TODO show list of active tokens on scene with active one being token this is passed
+    const tokens = this.character.actor.getActiveTokens();
     return html`
       <sl-popover class="image-wrapper" .renderOnDemand=${this.imgSelect}>
         <button slot="base" ?disabled=${this.character.disabled}>
@@ -215,6 +216,21 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
         >
         </mwc-icon-button>
       </sl-popover>
+
+      ${notEmpty(tokens)
+        ? html`
+            <ul class="tokens">
+              ${tokens.map(
+                (token) => html`
+                  <wl-list-item>
+                    <img slot="before" src=${token.data.img} height="24px" />
+                    ${token.name}
+                  </wl-list-item>
+                `,
+              )}
+            </ul>
+          `
+        : ''}
     `;
   }
 
