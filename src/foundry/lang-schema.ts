@@ -1439,7 +1439,8 @@ type LangEntries =
   | 'initiatives'
   | 'npcs'
   | 'tracker'
-  | 'skipDefeated';
+  | 'skipDefeated'
+  | 'preperation';
 type FullNames =
   | 'cog'
   | 'int'

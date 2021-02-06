@@ -1413,6 +1413,7 @@
     "npcs": "NPCs",
     "skipDefeated": "Skip Defeated",
     "tracker": "Tracker",
+    "preperation": "Preperation",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

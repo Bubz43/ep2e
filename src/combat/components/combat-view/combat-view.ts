@@ -378,14 +378,14 @@ export class CombatView extends LitElement {
               ></mwc-icon-button>
             `
           : ''}
-        ${round
-          ? html`
-              <h2 class="round">
-                ${surprise ? localize('surprise') : ''} ${localize('round')}
-                ${surprise ? '' : round}
-              </h2>
-            `
-          : ''}
+
+        <h2 class="round">
+          ${round
+            ? ` ${surprise ? localize('surprise') : ''}
+                    ${localize('round')} ${surprise ? '' : round}`
+            : localize('preperation')}
+        </h2>
+
         <sl-popover center .renderOnDemand=${this.renderParticipantSelector}>
           <mwc-icon-button slot="base" icon="add"></mwc-icon-button>
         </sl-popover>
