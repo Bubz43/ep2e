@@ -9,7 +9,7 @@ import {
 } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import produce from 'immer';
-import { compact, concat, map, pipe } from 'remeda';
+import { concat, map, pipe } from 'remeda';
 import type { ActorEP } from './actor/actor';
 import { ActorType, ItemType, sleeveTypes } from './entity-types';
 import {
@@ -66,7 +66,7 @@ const migrateActor = (actor: ActorEP) => {
     const epFlags = actor.data.flags[EP.Name] || {};
     for (const sleeveType of sleeveTypes) {
       const sleeveData = epFlags[sleeveType];
-      if (sleeveData) {
+      if (sleeveData?.type) {
         const updatedData = createActorEntity({
           name: sleeveData.name,
           type: sleeveData.type,
@@ -74,7 +74,7 @@ const migrateActor = (actor: ActorEP) => {
         actor.updater
           .path('flags', EP.Name, sleeveData.type)
           .store(mergeObject(updatedData, sleeveData, { inplace: false }));
-      }
+      } else actor.updater.path('flags', EP.Name, sleeveType).store(null);
     }
     if (epFlags.psi) {
       pipe(

@@ -1,5 +1,5 @@
 import { EgoType } from '@src/data-enums';
-import type { DurationEffect, Effect, MiscEffect } from '@src/features/effects';
+import type { DurationEffect, MiscEffect } from '@src/features/effects';
 import {
   StringID,
   stringID,
