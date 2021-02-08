@@ -7,32 +7,19 @@
   "settings": {
     "typescript.tsdk": "node_modules/typescript/lib",
     "json.schemas": [
-
-    
       {
-        "fileMatch": [
-          "template.json"
-        ],
+        "fileMatch": ["template.json"],
         "url": "/schemas/template.schema.json"
       },
       {
-        "fileMatch": [
-          "system.json"
-        ],
+        "fileMatch": ["system.json"],
         "url": "/schemas/system.schema.json"
       },
-      { 
-        "fileMatch": [
-          "/lang/*.json"
-        ],
+      {
+        "fileMatch": ["/lang/*.json"],
         "url": "/schemas/lang.schema.json"
       }
     ],
-    "lit-plugin.globalAttributes": [
-      "divider",
-      "dialogaction",
-      "padded"
-    ],
-  
+    "lit-plugin.globalAttributes": ["divider", "dialogaction", "padded"]
   }
 }

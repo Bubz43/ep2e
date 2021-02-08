@@ -8948,8 +8948,8 @@
     },
     "ExplosiveSize": {
       "enum": [
-        "mini",
         "micro",
+        "mini",
         "standard"
       ],
       "type": "string"
