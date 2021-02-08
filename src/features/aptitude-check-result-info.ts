@@ -1,17 +1,17 @@
 import { AptitudeType, AttackTrait } from '@src/data-enums';
 import { localize } from '@src/foundry/localization';
+import { withSign } from '@src/utility/helpers';
 import { compact } from 'remeda';
 import { ArmorType } from './active-armor';
-import { CommonInterval, prettyMilliseconds, TimeInterval } from './time';
 import { ConditionType } from './conditions';
-import { withSign } from '@src/utility/helpers';
+import { CommonInterval, prettyMilliseconds, TimeInterval } from './time';
 
 export type CheckResultInfo = {
   condition?: ConditionType | '';
   impairment?: number;
   stress?: string;
   notes?: string;
-
+  fallDown?: boolean;
   staticDuration?: number;
   variableDuration?: string;
   variableInterval?: Exclude<TimeInterval, 'seconds'> | 'turns';
@@ -30,6 +30,7 @@ export const checkResultInfoWithDefaults = (
     additionalDurationPerSuperior = 0,
     stress = '',
     notes = '',
+    fallDown = false,
   } = info;
 
   const isStatic = !!staticDuration || !variableDuration;
@@ -39,6 +40,7 @@ export const checkResultInfoWithDefaults = (
     impairment,
     stress,
     notes,
+    fallDown,
     additionalDurationPerSuperior,
     staticDuration: isStatic ? staticDuration || CommonInterval.Turn : 0,
     variableDuration: isStatic ? '' : '1d6',
@@ -82,6 +84,7 @@ export const formatCheckResultInfo = (entry: CheckResultInfo) => {
     impairment,
     stress,
     notes,
+    fallDown,
     additionalDurationPerSuperior,
   } = checkResultInfoWithDefaults(entry);
 
@@ -97,9 +100,9 @@ export const formatCheckResultInfo = (entry: CheckResultInfo) => {
     ? prettyMilliseconds(staticDuration, { compact: false })
     : `${variableDuration} ${localize(variableInterval).toLocaleLowerCase()}`;
 
-  return `${effect || '??'} ${localize(
-    'for',
-  ).toLocaleLowerCase()} ${duration} ${
+  return `${fallDown ? `${localize('fallDown')}.` : ''} ${
+    effect || '??'
+  } ${localize('for').toLocaleLowerCase()} ${duration} ${
     additionalDurationPerSuperior
       ? `(${`+${prettyMilliseconds(additionalDurationPerSuperior)} ${localize(
           'per',

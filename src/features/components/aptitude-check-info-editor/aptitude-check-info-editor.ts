@@ -1,6 +1,7 @@
 import {
   emptyTextDash,
   renderFormulaField,
+  renderLabeledCheckbox,
   renderNumberField,
   renderSelectField,
   renderTextField,
@@ -27,7 +28,7 @@ import {
   LitElement,
   property,
 } from 'lit-element';
-import { concat, objOf, omit, pipe } from 'remeda';
+import { concat, difference, objOf, omit, pipe } from 'remeda';
 import styles from './aptitude-check-info-editor.scss';
 import { AptitudeCheckInfoUpdateEvent } from './aptitude-check-info-update-event';
 
@@ -176,18 +177,20 @@ export class AptitudeCheckInfoEditor extends LitElement {
       ${renderAutoForm({
         props: this.resultInfo,
         update: this.updateResultInfo,
-        fields: ({ condition, stress, impairment, notes }) =>
+        fields: ({ condition, stress, impairment, fallDown, notes }) =>
           html`
+            ${renderLabeledCheckbox(fallDown)}
             <div class="common-settings">
               ${[
                 renderSelectField(
                   condition,
-                  enumValues(ConditionType),
+                  difference(enumValues(ConditionType), [ConditionType.Prone]),
                   emptyTextDash,
                 ),
                 renderNumberField(impairment, { max: 0, step: 10, min: -90 }),
               ]}
             </div>
+
             ${renderFormulaField(stress)} ${renderTextField(notes)}
           `,
       })}
@@ -235,10 +238,12 @@ export class AptitudeCheckInfoEditor extends LitElement {
                     ...variableDuration,
                     label: localize('duration'),
                   })}
-                  ${renderSelectField(
-                    { ...variableInterval, label: localize('interval') },
-                    ['days', 'hours', 'minutes', 'turns'],
-                  )}
+                  ${renderSelectField({ ...variableInterval, label: '' }, [
+                    'days',
+                    'hours',
+                    'minutes',
+                    'turns',
+                  ])}
                 </div>
               `,
           this.resultType === CheckResultState.CheckFailure
