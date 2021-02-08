@@ -1414,6 +1414,7 @@
     "skipDefeated": "Skip Defeated",
     "tracker": "Tracker",
     "preperation": "Preperation",
+    "fallDown": "Fall down",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

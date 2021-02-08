@@ -1440,7 +1440,8 @@ type LangEntries =
   | 'npcs'
   | 'tracker'
   | 'skipDefeated'
-  | 'preperation';
+  | 'preperation'
+  | 'fallDown';
 type FullNames =
   | 'cog'
   | 'int'

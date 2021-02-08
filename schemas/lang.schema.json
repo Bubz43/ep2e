@@ -1848,6 +1848,9 @@
             "fakeId": {
               "type": "string"
             },
+            "fallDown": {
+              "type": "string"
+            },
             "fast": {
               "type": "string"
             },
@@ -5173,6 +5176,7 @@
             "fakeEgoIDs",
             "fakeEgoId",
             "fakeId",
+            "fallDown",
             "fast",
             "favor",
             "favorites",
