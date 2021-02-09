@@ -31,6 +31,7 @@ import { MessageContent } from './chat/components/content/message-content';
 import { MessageDamage } from './chat/components/damage/message-damage';
 import { MessageExplosive } from './chat/components/explosive/message-explosive';
 import { MessageFavor } from './chat/components/favor/message-favor';
+import { MessageHack } from './chat/components/hack/message-hack';
 import { MessageHeader } from './chat/components/header/message-header';
 import { MessageHeal } from './chat/components/heal/message-heal';
 import { MessageHealthChange } from './chat/components/health-change/message-health-change';
@@ -74,6 +75,7 @@ import { ExplosiveSettingsForm } from './entities/actor/components/character-vie
 import { CharacterViewExplosiveAttacks } from './entities/actor/components/character-views/components/attacks/explosive/character-view-explosive-attacks';
 import { CharacterViewMeleeWeaponAttacks } from './entities/actor/components/character-views/components/attacks/melee-weapon/character-view-melee-weapon-attacks';
 import { CharacterViewAttacksSection } from './entities/actor/components/character-views/components/attacks/section/character-view-attacks-section';
+import { CharacterViewSoftwareAttacks } from './entities/actor/components/character-views/components/attacks/software/character-view-software-attacks';
 import { ConsumableCard } from './entities/actor/components/character-views/components/cards/consumable/consumable-card';
 import { ItemCard } from './entities/actor/components/character-views/components/cards/generic/item-card';
 import { PhysicalTechCard } from './entities/actor/components/character-views/components/cards/physical-tech/physical-tech-card';
@@ -160,6 +162,7 @@ import './init';
 import { SuccessTestActionForm } from './success-test/components/action-form/success-test-action-form';
 import { AptitudeCheckControls } from './success-test/components/aptitude-check-controls/aptitude-check-controls';
 import { SuccessTestFooter } from './success-test/components/footer/success-test-footer';
+import { HackingTestControls } from './success-test/components/hacking-test-controls/hacking-test-controls';
 import { MeleeAttackControls } from './success-test/components/melee-attack-controls/melee-attack-controls';
 import { SuccessTestModifiersSection } from './success-test/components/modifiers-section/success-test-modifiers-section';
 import { SuccessTestPoolControls } from './success-test/components/pool-controls/success-test-pool-controls';
@@ -229,6 +232,7 @@ CharacterViewExplosiveAttacks;
 CharacterViewMeleeWeaponAttacks;
 ExplosiveSettingsForm;
 CharacterViewAttacksSection;
+CharacterViewSoftwareAttacks;
 
 //Item Cards
 ItemCard;
@@ -329,6 +333,7 @@ MessageMeleeAttack;
 MessageSuccessTest;
 MessageFavor;
 MessageSpecialTest;
+MessageHack;
 
 // SuccessTest
 AptitudeCheckControls;
@@ -340,4 +345,5 @@ SuccessTestFooter;
 SkillTestControls;
 ReputationFavorControls;
 MeleeAttackControls;
+HackingTestControls;
 SuccessTestSkillSection;

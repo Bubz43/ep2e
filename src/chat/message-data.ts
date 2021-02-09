@@ -1,5 +1,6 @@
 import type { AreaEffect } from '@src/combat/area-effect';
 import type { BasicAreaEffectData } from '@src/combat/attack-formatting';
+import type { AttackType } from '@src/combat/attacks';
 import type {
   AttackTrait,
   PoolType,
@@ -19,10 +20,7 @@ import type { LabeledFormula, RolledFormula } from '@src/foundry/rolls';
 import type { HealthModification, HealthType } from '@src/health/health';
 import type { RollMultiplier } from '@src/health/health-changes';
 import type { StressType } from '@src/health/mental-health';
-import type {
-  SimpleSuccessTestModifier,
-  SuccessTestResult,
-} from '@src/success-test/success-test';
+import type { SuccessTestResult } from '@src/success-test/success-test';
 import type { RequireAtLeastOne } from 'type-fest';
 import type {
   ExplosiveSettings,
@@ -93,6 +91,11 @@ export type MeleeWeaponMessageData = MeleeWeaponSettings & {
   morphSize?: Size | null;
   damageModifiers?: LabeledFormula[];
   // TODO maybe additional info for tracking coating state etc
+};
+
+export type HackMessageData = {
+  software?: ItemEntity<ItemType.Software> | null;
+  attackType?: AttackType;
 };
 
 export type AttackTraitData = {
@@ -180,4 +183,5 @@ export type MessageData = Partial<{
   successTest: SuccessTestMessageData;
   specialTest: SpecialTestData;
   favor: FavorMessageData;
+  hack: HackMessageData;
 }>;

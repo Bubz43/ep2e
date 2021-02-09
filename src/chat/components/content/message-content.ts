@@ -4,8 +4,7 @@ import type { ChatMessageEP } from '@src/entities/chat-message';
 import { findToken } from '@src/entities/find-entities';
 import { localize } from '@src/foundry/localization';
 import { notEmpty } from '@src/utility/helpers';
-import { localImage } from '@src/utility/images';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, html, LitElement, property } from 'lit-element';
 import styles from './message-content.scss';
 
 @customElement('message-content')
@@ -48,6 +47,7 @@ export class MessageContent extends LitElement {
       favor,
       targets,
       specialTest,
+      hack,
     } = this.data;
     if (!this.message.isContentVisible) return '';
     return html`
@@ -100,6 +100,12 @@ export class MessageContent extends LitElement {
         : ''}
       ${heal ? html` <message-heal .heal=${heal}></message-heal> ` : ''}
       ${damage ? html`<message-damage .damage=${damage}></message-damage>` : ''}
+      ${hack
+        ? html`<message-hack
+            .hack=${hack}
+            .successTest=${successTest}
+          ></message-hack>`
+        : ''}
       ${meleeAttack
         ? html`
             <message-melee-attack

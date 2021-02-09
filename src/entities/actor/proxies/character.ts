@@ -1,4 +1,3 @@
-import { createMessage } from '@src/chat/create-message';
 import {
   getWindow,
   openOrRenderWindow,
@@ -17,12 +16,15 @@ import type {
   ItemProxy,
 } from '@src/entities/item/item';
 import { openPsiFormWindow } from '@src/entities/item/item-views';
+import type { Explosive } from '@src/entities/item/proxies/explosive';
+import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import type { PhysicalService } from '@src/entities/item/proxies/physical-service';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import { Psi } from '@src/entities/item/proxies/psi';
 import type { Sleight } from '@src/entities/item/proxies/sleight';
 import type { Software } from '@src/entities/item/proxies/software';
 import type { Substance } from '@src/entities/item/proxies/substance';
+import type { ThrownWeapon } from '@src/entities/item/proxies/thrown-weapon';
 import type { Trait } from '@src/entities/item/proxies/trait';
 import type { ActorEntity, SleeveType } from '@src/entities/models';
 import type { UpdateStore } from '@src/entities/update-store';
@@ -30,12 +32,11 @@ import { taskState } from '@src/features/actions';
 import { ActiveArmor } from '@src/features/active-armor';
 import { ConditionType, getConditionEffects } from '@src/features/conditions';
 import {
-  DurationEffectTarget,
   EffectType,
   totalModifiers,
   UniqueEffectType,
 } from '@src/features/effects';
-import { matchID, updateFeature } from '@src/features/feature-helpers';
+import { updateFeature } from '@src/features/feature-helpers';
 import type { MovementRate } from '@src/features/movement';
 import { Pool, Pools } from '@src/features/pool';
 import { Recharge } from '@src/features/recharge';
@@ -49,12 +50,10 @@ import {
   createLiveTimeState,
   currentWorldTimeMS,
   getElapsedTime,
-  refreshAvailable,
   LiveTimeState,
+  refreshAvailable,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
-import { deepMerge } from '@src/foundry/misc-helpers';
-import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { EP } from '@src/foundry/system';
 import { HealthEditor } from '@src/health/components/health-editor/health-editor';
 import type { ActorHealth } from '@src/health/health-mixin';
@@ -62,12 +61,10 @@ import { nonNegative, notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import {
   compact,
-  createPipe,
   difference,
   first,
   flatMap,
   mapToObj,
-  merge,
   pipe,
   reject,
   uniq,
@@ -183,13 +180,44 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
   @LazyGetter()
   get weapons() {
+    const melee: MeleeWeapon[] = [];
+    const software: Software[] = [];
+    const thrown: ThrownWeapon[] = [];
+    const explosives: Explosive[] = [];
+
+    for (const consumable of this.consumables) {
+      switch (consumable.type) {
+        case ItemType.Explosive:
+          explosives.push(consumable);
+          break;
+
+        case ItemType.ThrownWeapon:
+          thrown.push(consumable);
+
+        default:
+          break;
+      }
+    }
+
+    for (const equipped of this.equipped) {
+      switch (equipped.type) {
+        case ItemType.MeleeWeapon:
+          melee.push(equipped);
+          break;
+
+        case ItemType.Software:
+          equipped.hasMeshAttacks && software.push(equipped);
+          break;
+
+        default:
+          break;
+      }
+    }
     return {
-      explosives: this.consumables.flatMap((c) =>
-        c.type === ItemType.Explosive ? c : [],
-      ),
-      melee: this.equipped.flatMap((e) =>
-        e.type === ItemType.MeleeWeapon ? e : [],
-      ),
+      explosives,
+      thrown,
+      melee,
+      software,
     };
   }
 

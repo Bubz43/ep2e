@@ -5,13 +5,13 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import { idProp } from '@src/features/feature-helpers';
-import { FieldSkillType, SkillType } from '@src/features/skills';
+import { SkillType } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { HealthType } from '@src/health/health';
 import { MeleeAttackControls } from '@src/success-test/components/melee-attack-controls/melee-attack-controls';
 import { clickIfEnter } from '@src/utility/helpers';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, html, LitElement, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
 import styles from './character-view-attacks-section.scss';
@@ -79,7 +79,8 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
   }
 
   render() {
-    const { sleeve } = this.character;
+    const { sleeve, weapons } = this.character;
+    const { melee, thrown, software, explosives } = weapons;
     return html`
       <sl-header
         part="header"
@@ -114,7 +115,15 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
             `
           : ''}
         ${repeat(
-          this.character.weapons.melee,
+          software,
+          idProp,
+          (weapon) =>
+            html`<character-view-software-attacks
+              .software=${weapon}
+            ></character-view-software-attacks>`,
+        )}
+        ${repeat(
+          melee,
           idProp,
           (weapon) => html`
             <li>
@@ -128,7 +137,7 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
           `,
         )}
         ${repeat(
-          this.character.weapons.explosives,
+          explosives,
           idProp,
           (explosive) => html`
             <li>
