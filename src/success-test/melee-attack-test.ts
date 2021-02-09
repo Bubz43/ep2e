@@ -15,7 +15,7 @@ import {
   ActionType,
   createAction,
 } from '@src/features/actions';
-import { EffectType, matchesSkill, Source } from '@src/features/effects';
+import { matchesSkill, Source } from '@src/features/effects';
 import { Size, sizeReachAdvantage } from '@src/features/size';
 import type { Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
@@ -160,7 +160,7 @@ export class MeleeAttackTest extends SkillTest {
 
     if (this.melee.attackTarget) {
       for (const [effect, active] of this.getAttackTargetEffects(
-        this.melee.attackTarget as Token,
+        this.melee.attackTarget,
         this.skillState.skill,
         this.action,
       ) || []) {
