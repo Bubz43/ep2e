@@ -145,12 +145,15 @@ export class CharacterViewSoftwareAttacks extends mix(LitElement).with(
               </div>
             `
           : ''}
-        <mwc-icon-button
-          slot="after"
-          icon=${this.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_left'}
-          class="toggle"
-          @click=${this.toggleExpanded}
-        ></mwc-icon-button>
+        <div class="actions">
+          <mwc-icon-button
+            icon=${this.expanded
+              ? 'keyboard_arrow_down'
+              : 'keyboard_arrow_left'}
+            @click=${this.toggleExpanded}
+          ></mwc-icon-button>
+          <mwc-icon-button icon="more_vert"></mwc-icon-button>
+        </div>
         ${this.renderRipple(!this.software.editable)}
         ${this.expanded
           ? html`<enriched-html
