@@ -12,7 +12,7 @@
 .card {
   display: grid;
   grid-template-areas:
-    'name toggle'
+    'name actions'
     'attacks attacks'
     'description description';
   grid-template-columns: 1fr;
@@ -35,14 +35,15 @@
 }
 
 .attacks {
-  // display: flex;
+  display: flex;
   --mdc-theme-primary: var(--color-grey);
   grid-area: attacks;
 }
 
-.toggle {
+.actions {
   --mdc-icon-button-size: 1.5rem;
-  grid-area: toggle;
+  grid-area: actions;
+  color: var(--color-text-lighter);
 }
 
 .description {
