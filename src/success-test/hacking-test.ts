@@ -145,7 +145,10 @@ export class HackingTest extends SkillTest {
             sceneId: attackTarget.scene.id,
           },
         ]),
-        // hack
+        hack: {
+          software: software?.getDataCopy(),
+          attackType: primaryAttack ? 'primary' : 'secondary',
+        },
       },
 
       entity: this.token ?? this.character,

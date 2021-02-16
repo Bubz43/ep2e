@@ -6,7 +6,7 @@ import {
   mutatePlaceableHook,
 } from '@src/foundry/hook-setups';
 import { BehaviorSubject, PartialObserver } from 'rxjs';
-import type { Split } from 'type-fest/camel-case';
+import type { Split } from 'type-fest/utilities';
 import { createTempToken, findToken } from './find-entities';
 import { SceneEP } from './scene';
 

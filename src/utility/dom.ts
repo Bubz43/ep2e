@@ -1,4 +1,4 @@
-import { mapToObj, pipe, map, clamp, prop, createPipe, filter } from 'remeda';
+import { clamp, createPipe, filter, map, mapToObj, pipe, prop } from 'remeda';
 import type { LiteralUnion } from 'type-fest';
 import type { NonFunctionKeys } from 'utility-types';
 import { nonNegative } from './helpers';
@@ -303,4 +303,15 @@ export const findMatchingElement = (ev: Event, selector: string) => {
     console.log(error);
   }
   return item;
+};
+
+export const isButton = (target: EventTarget | null): target is HTMLElement => {
+  return (
+    target instanceof HTMLElement &&
+    !!(
+      target.localName.includes('button') ||
+      target.getAttribute('role') === 'button' ||
+      target.localName === 'a'
+    )
+  );
 };

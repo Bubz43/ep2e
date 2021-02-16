@@ -5,6 +5,7 @@ import {
   assignStyles,
   dimensions,
   dragElement,
+  isButton,
   joinCoor,
   leftTop,
   px,
@@ -13,7 +14,6 @@ import {
   resizeObsAvailable,
   toggleTouchAction,
 } from '@src/utility/dom';
-import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   eventOptions,
@@ -24,20 +24,9 @@ import {
   TemplateResult,
 } from 'lit-element';
 import { NanoPopPosition, reposition } from 'nanopop';
-import { anyPass, clamp, compact, mapToObj } from 'remeda';
+import { anyPass, clamp, mapToObj } from 'remeda';
 import { ResizeOption, SlWindowEventName } from './window-options';
 import styles from './window.scss';
-
-const isButton = (target: EventTarget | null): target is HTMLElement => {
-  return (
-    target instanceof HTMLElement &&
-    !!(
-      target.localName.includes('button') ||
-      target.getAttribute('role') === 'button' ||
-      target.localName === 'a'
-    )
-  );
-};
 
 const shadowAnimationOptions = {
   duration: 250,
