@@ -1,10 +1,9 @@
-import type { EntitySheet, TokenData } from '@src/foundry/foundry-cont';
+import type { TokenData } from '@src/foundry/foundry-cont';
 import { localize } from '@src/foundry/localization';
 import { canViewActor } from '@src/foundry/misc-helpers';
-import { readyCanvas } from '@src/foundry/canvas';
-import { SystemSocketData, emitEPSocket } from '@src/foundry/socket';
+import { emitEPSocket, SystemSocketData } from '@src/foundry/socket';
 import { EP } from '@src/foundry/system';
-import { pipe, map, compact, flatMap, forEach, reject } from 'remeda';
+import { compact, flatMap, forEach, map, pipe } from 'remeda';
 import type { SetRequired } from 'type-fest';
 import type { DeepPartial } from 'utility-types';
 import { ActorType, ItemType, sleeveTypes } from '../entity-types';
@@ -15,8 +14,9 @@ import type {
   ActorEntity,
   ActorModels,
   ItemEntity,
-  NonEditableProps,
 } from '../models';
+import type { EntityPath } from '../path';
+import { subscribeToToken } from '../token-subscription';
 import { UpdateStore } from '../update-store';
 import { EntitySubscription } from '../update-subcriptions';
 import { ActorEPSheet, actorSheets } from './actor-sheet';
@@ -25,8 +25,6 @@ import { Biological } from './proxies/biological';
 import { Character } from './proxies/character';
 import { Infomorph } from './proxies/infomorph';
 import { Synthetic } from './proxies/synthetic';
-import type { EntityPath } from '../path';
-import { subscribeToToken } from '../token-subscription';
 
 type ItemUpdate = SetRequired<DeepPartial<ItemEntity>, '_id'>;
 
@@ -189,7 +187,7 @@ export class ActorEP extends Actor {
                   item.proxy.appliedState
                 )
               ) {
-                this.itemTrash.push(item.dataCopy());
+                this.itemTrash.push(item.dataCopy() as ItemEP['data']);
               }
 
               item?._onDelete({}, game.user.id);

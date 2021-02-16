@@ -6,14 +6,48 @@
 }
 
 :host {
-  display: flex;
-  flex-flow: row wrap;
-  align-items: center;
-  .name {
-    flex: 1;
-  }
+  display: block;
+}
+
+.card {
+  display: grid;
+  grid-template-areas:
+    'name toggle'
+    'attacks attacks'
+    'description description';
+  grid-template-columns: 1fr;
+  padding: 0.25rem 0.5rem;
+  margin: 0.25rem 0.5rem;
+  box-shadow: 0 1px 0.2rem black;
+  position: relative;
+  cursor: pointer;
+  background: alphav(var(--color-text), 0.04);
+}
+
+.name {
+  font-size: large;
+  grid-area: name;
+  margin-left: 0.5rem;
 }
 
 .type {
   color: var(--color-text-lighter);
+}
+
+.attacks {
+  // display: flex;
+  --mdc-theme-primary: var(--color-grey);
+  grid-area: attacks;
+}
+
+.toggle {
+  --mdc-icon-button-size: 1.5rem;
+  grid-area: toggle;
+}
+
+.description {
+  grid-area: description;
+  border-top: 2px groove var(--color-border);
+  padding: 0.5rem;
+  padding-bottom: 0;
 }
