@@ -146,7 +146,10 @@ export class CharacterViewResleeve extends LitElement {
           );
           return;
         }
-      } else await sleeve.createActor();
+      } else {
+        await sleeve.createActor(`${this.character.name}'s ${sleeve.name}`);
+      }
+
       if (sleeve.type !== this.selectedSleeve.type) {
         await this.character.updater
           .path('flags', EP.Name, sleeve.type)

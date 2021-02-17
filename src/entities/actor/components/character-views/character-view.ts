@@ -11,11 +11,8 @@ import {
   Substance,
   SubstanceUseMethod,
 } from '@src/entities/item/proxies/substance';
-import { PoolItem } from '@src/features/components/pool-item/pool-item';
 import { conditionIcons, ConditionType } from '@src/features/conditions';
 import { idProp, matchID } from '@src/features/feature-helpers';
-import type { ReadonlyPool } from '@src/features/pool';
-import { poolActionOptions } from '@src/features/pools';
 import { prettyMilliseconds } from '@src/features/time';
 import {
   DropType,
@@ -32,7 +29,7 @@ import { nothing, TemplateResult } from 'lit-html';
 import { cache } from 'lit-html/directives/cache';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
-import { compact, identity } from 'remeda';
+import { compact, difference, identity } from 'remeda';
 import { traverseActiveElements } from 'weightless';
 import { CharacterDrawerRenderer } from './character-drawer-render-event';
 import { CharacterViewBase, ItemGroup } from './character-view-base';
@@ -44,6 +41,10 @@ type Detail = {
   value: string | number;
 };
 
+const tabs = ['actions', 'inventory', 'traits', 'details'] as const;
+
+type CharacterTab = typeof tabs[number];
+
 @customElement('character-view')
 export class CharacterView extends CharacterViewBase {
   static get is() {
@@ -54,7 +55,7 @@ export class CharacterView extends CharacterViewBase {
 
   @internalProperty() private dialogTemplate: TemplateResult | null = null;
 
-  @internalProperty() private viewDetails = false;
+  @internalProperty() private currentTab: CharacterTab = 'actions';
 
   firstUpdated() {
     this.addEventListener(RenderDialogEvent.is, async (ev) => {
@@ -96,7 +97,7 @@ export class CharacterView extends CharacterViewBase {
   }
 
   private setTab(ev: CustomEvent<{ index: number }>) {
-    this.viewDetails = ev.detail.index === 1;
+    this.currentTab = tabs[ev.detail.index] ?? 'actions';
   }
 
   private toggleNetworkSettings() {
@@ -109,17 +110,6 @@ export class CharacterView extends CharacterViewBase {
 
   private viewResleeve() {
     this.toggleDrawerRenderer(CharacterDrawerRenderer.Resleeve);
-  }
-
-  private openPoolMenu(ev: MouseEvent) {
-    if (ev.currentTarget instanceof PoolItem) {
-      const { type } = ev.currentTarget.pool;
-      openMenu({
-        header: { heading: localize(type) },
-        content: poolActionOptions(this.character, type),
-        position: ev,
-      });
-    }
   }
 
   private applyDroppedSubstance = handleDrop(async ({ ev, data }) => {
@@ -196,13 +186,9 @@ export class CharacterView extends CharacterViewBase {
   render() {
     const { masterDevice } = this.character.equippedGroups;
     const {
-      awaitingOnsetSubstances,
-      activeSubstances,
       psi,
-      conditions,
-      pools,
+
       disabled,
-      temporaryConditionSources,
     } = this.character;
 
     return html`
@@ -243,29 +229,47 @@ export class CharacterView extends CharacterViewBase {
                 ></mwc-button>
               </div>
             `}
-
-        <!-- <character-view-test-actions
-          .character=${this.character}
-          .ego=${this.character.ego}
-        ></character-view-test-actions> -->
-
-        ${this.renderStatus()}
+        <!-- ${this.renderStatus()} -->
       </div>
       ${this.renderDrawer()}
 
       <mwc-tab-bar @MDCTabBar:activated=${this.setTab}>
-        <mwc-tab minWidth label=${localize('overview')}></mwc-tab>
-        <mwc-tab minWidth label=${localize('details')}></mwc-tab>
+        ${tabs.map((tab) => html` <mwc-tab label=${localize(tab)}></mwc-tab> `)}
       </mwc-tab-bar>
 
-      <div class="sections">
-        ${cache(
-          this.viewDetails ? this.renderDetails() : this.renderOverview(),
-        )}
-      </div>
+      <div class="sections">${cache(this.renderTabbedContent())}</div>
 
       ${this.dialogTemplate || ''}
     `;
+  }
+
+  private renderTabbedContent() {
+    switch (this.currentTab) {
+      case 'actions':
+        return html`<character-view-test-actions
+            .character=${this.character}
+            .ego=${this.character.ego}
+          ></character-view-test-actions>
+          <character-view-attacks-section
+            .character=${this.character}
+            .token=${this.token}
+          ></character-view-attacks-section> `;
+
+      case 'inventory':
+        return html`
+          ${repeat(
+            difference(enumValues(ItemGroup), [ItemGroup.Traits]),
+            identity,
+            this.renderItemGroup,
+          )}
+        `;
+
+      case 'traits':
+        return this.renderItemGroup(ItemGroup.Traits);
+
+      case 'details':
+        return this.renderDetails();
+    }
   }
 
   private renderStatus() {
@@ -281,7 +285,7 @@ export class CharacterView extends CharacterViewBase {
     return html` <section class="status">
       <!-- <sl-header heading=${localize('status')}></sl-header> -->
       <div class="status-items">
-        <div class="conditions">
+        <!-- <div class="conditions">
           <mwc-button
             class="conditions-toggle"
             @click=${this.viewConditions}
@@ -290,30 +294,30 @@ export class CharacterView extends CharacterViewBase {
           >
           <div class="conditions-list">
             ${enumValues(ConditionType).map(
-              (condition) => html`
-                <button
-                  ?disabled=${disabled}
-                  data-condition=${condition}
-                  @click=${this.toggleCondition}
-                  data-tooltip=${localize(condition)}
-                  @mouseover=${tooltip.fromData}
-                >
-                  <img
-                    src=${conditionIcons[condition]}
-                    class=${conditions.includes(condition) ? 'active' : ''}
-                    height="22px"
-                  />
-                  ${temporaryConditionSources.has(condition)
-                    ? html`<notification-coin
-                        value=${temporaryConditionSources.get(condition)
-                          ?.length || 1}
-                      ></notification-coin>`
-                    : ''}
-                </button>
-              `,
-            )}
+          (condition) => html`
+            <button
+              ?disabled=${disabled}
+              data-condition=${condition}
+              @click=${this.toggleCondition}
+              data-tooltip=${localize(condition)}
+              @mouseover=${tooltip.fromData}
+            >
+              <img
+                src=${conditionIcons[condition]}
+                class=${conditions.includes(condition) ? 'active' : ''}
+                height="22px"
+              />
+              ${temporaryConditionSources.has(condition)
+                ? html`<notification-coin
+                    value=${temporaryConditionSources.get(condition)?.length ||
+                    1}
+                  ></notification-coin>`
+                : ''}
+            </button>
+          `,
+        )}
           </div>
-        </div>
+        </div> -->
         <!-- 
           ${sleeve && sleeve.type !== ActorType.Infomorph
           ? html`
@@ -418,54 +422,8 @@ export class CharacterView extends CharacterViewBase {
                   : ''}
               `}
         </sl-dropzone>
-
-        ${notEmpty(pools)
-          ? html`
-              <ul class="pools">
-                ${[...pools.values()].map(this.renderPool)}
-              </ul>
-            `
-          : ''}
       </div>
     </section>`;
-  }
-
-  private renderOverview() {
-    const { masterDevice } = this.character.equippedGroups;
-
-    return html`
-      <!-- <section>
-    <sl-header heading=${localize('network')}>
-      <mwc-icon-button
-        slot="action"
-        icon="settings"
-        @click=${this.toggleNetworkSettings}
-      ></mwc-icon-button>
-    </sl-header>
-    <div class="network">
-      <sl-group label=${localize('masterDevice')}
-        >${masterDevice?.fullName ?? '-'}</sl-group
-      >
-    </div>
-    ${masterDevice
-        ? html`
-            <health-item clickable .health=${masterDevice.meshHealth}>
-              <span slot="source">${localize('meshHealth')} </span>
-            </health-item>
-            <health-item
-              clickable
-              .health=${masterDevice.firewallHealth}
-            ></health-item>
-          `
-        : ''}
-  </section> -->
-      <character-view-attacks-section
-        .character=${this.character}
-        .token=${this.token}
-      ></character-view-attacks-section>
-
-      ${repeat(enumValues(ItemGroup), identity, this.renderItemGroup)}
-    `;
   }
 
   private renderDetails() {
@@ -542,6 +500,7 @@ export class CharacterView extends CharacterViewBase {
       <character-view-item-group
         .character=${this.character}
         group=${group}
+        ?noCollapse=${group === ItemGroup.Traits}
         ?collapsed=${group === ItemGroup.Stashed}
       ></character-view-item-group>
     `;
@@ -566,15 +525,6 @@ export class CharacterView extends CharacterViewBase {
       </focus-trap>
     `;
   }
-
-  private renderPool = (pool: ReadonlyPool) => html`
-    <pool-item
-      @click=${this.openPoolMenu}
-      .pool=${pool}
-      ?disabled=${this.character.disabled}
-      ?wide=${this.character.pools.size <= 2}
-    ></pool-item>
-  `;
 }
 
 declare global {

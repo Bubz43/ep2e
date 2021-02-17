@@ -1,12 +1,12 @@
 import {
-  openWindow,
   closeWindow,
+  openWindow,
 } from '@src/components/window/window-controls';
 import { SlWindowEventName } from '@src/components/window/window-options';
 import type { EntityPath } from '@src/entities/path';
 import { EP } from '@src/foundry/system';
 import type { ActorType } from '../../entity-types';
-import type { ItemEP, ItemProxy } from '../../item/item';
+import type { ItemProxy } from '../../item/item';
 import type { ActorEntity } from '../../models';
 import type { UpdateStore } from '../../update-store';
 import { ActorEP, ItemOperations } from '../actor';
@@ -94,10 +94,11 @@ export abstract class ActorProxyBase<T extends ActorType> {
     return duplicate(this.data);
   }
 
-  createActor() {
-    // TODO: Replace temporary features
+  createActor(name?: string) {
+    const data = this.dataCopy();
     return ActorEP.create({
-      ...this.dataCopy(),
+      ...data,
+      name: name || data.name,
       items: [...this.items.values()].map((proxy) => proxy.getDataCopy(false)),
     });
   }

@@ -11,41 +11,10 @@
   display: block;
 }
 
-.aptitudes-list {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-}
-.aptitudes-list,
 .reps,
 .skills-list {
   & + * {
     border-top: 1px groove var(--color-border);
-  }
-}
-
-.aptitude {
-  &-item {
-    padding: 0.5rem 0.5rem 0.25rem;
-  }
-  &-name {
-    text-align: center;
-    font-family: var(--font-2);
-    color: var(--color-text-lighter);
-  }
-  &-points {
-    font-size: large;
-    margin-right: 0.5ch;
-    min-width: 2ch;
-    text-align: center;
-  }
-  &-check {
-    border-bottom: 1px solid var(--color-text-lighter);
-    height: min-content;
-    min-width: 2ch;
-    text-align: center;
-  }
-  &-values {
-    display: flex;
   }
 }
 
@@ -56,12 +25,20 @@ mwc-tab-bar {
 
 .skill-controls {
   @include inputReset();
+  grid-template-columns: 1fr 2fr 1fr;
+  align-items: center;
+  span {
+    font-size: large;
+    padding: 0 0.5rem;
+  }
   input {
     text-align: center;
     width: 100%;
     border: none;
     padding: 0.25rem 0.5rem;
     font-family: var(--font-3);
+    border-left: 1px groove var(--color-border);
+    border-right: 1px groove var(--color-border);
     background: rgba(black, 0.1);
     &:focus {
       background: rgba(black, 0.2);
@@ -73,11 +50,11 @@ mwc-tab-bar {
 }
 
 .skills-list {
-  column-count: 2;
+  column-count: 3;
   column-gap: 0;
   $border: 1px groove var(--color-border);
   column-rule: $border;
-  padding: 0.25rem 0 0;
+  padding: 0 0 0.25rem;
   overflow: hidden;
   font-size: 14px;
 
@@ -91,12 +68,12 @@ mwc-tab-bar {
   }
 
   .filter {
-    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
   }
 
   .divider,
   .filter {
-    border-top: $border;
+    border-bottom: $border;
     column-span: all;
     list-style: none;
   }
@@ -106,7 +83,8 @@ mwc-tab-bar {
   padding: 0 0.5rem;
   transition: opacity 200ms, transform 200ms;
   .skill-name {
-    @include truncate(150px);
+    @include truncate(130px);
+    min-width: calc(100%);
     display: inline-block;
   }
   .skill-total {
@@ -120,10 +98,20 @@ mwc-tab-bar {
   }
 }
 
+.reps {
+  .label {
+    font-size: large;
+    padding: 0 0.5rem;
+    line-height: 2rem;
+  }
+}
+
 .rep-sources {
   --mdc-theme-primary: var(--color-border);
   display: flex;
   flex-flow: row wrap;
+  float: right;
+  white-space: nowrap;
   > * {
     flex: 1;
     margin: 0.25rem 0.25rem 0;
@@ -134,6 +122,8 @@ mwc-tab-bar {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
+  clear: both;
+  border-top: 1px groove var(--color-border);
 }
 
 .rep-item {
@@ -164,10 +154,6 @@ mwc-tab-bar {
   .rep-score {
     grid-area: score;
     justify-self: baseline;
-  }
-
-  .favors {
-    grid-area: favors;
   }
 
   .rep-info {

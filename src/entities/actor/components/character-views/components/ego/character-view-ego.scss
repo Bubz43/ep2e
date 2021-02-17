@@ -1,6 +1,8 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+@include resetUnorderedList();
+
 * {
   box-sizing: border-box;
 }
@@ -77,5 +79,40 @@ header {
     position: static;
     margin-left: 0.5ch;
     --coin-bg: #{alphav(var(--color-grey), 0.2)};
+  }
+}
+
+.aptitudes-list {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.aptitude {
+  &-item {
+    padding: 0.5rem 0.5rem 0.25rem;
+  }
+  &-name {
+    text-align: center;
+    font-size: large;
+    line-height: 1.125rem;
+    text-transform: uppercase;
+    color: var(--color-text-lighter);
+    letter-spacing: 1px;
+  }
+  &-points {
+    font-size: large;
+    margin-right: 0.5ch;
+    min-width: 2ch;
+    text-align: center;
+  }
+  &-check {
+    border-bottom: 1px solid var(--color-text-lighter);
+    height: min-content;
+    min-width: 2ch;
+    text-align: center;
+  }
+  &-values {
+    display: flex;
+    justify-content: center;
   }
 }

@@ -1,8 +1,5 @@
 import { createMessage } from '@src/chat/create-message';
-import {
-  openOrRenderWindow,
-  openWindow,
-} from '@src/components/window/window-controls';
+import { openOrRenderWindow } from '@src/components/window/window-controls';
 import { ResizeOption } from '@src/components/window/window-options';
 import { localize } from '@src/foundry/localization';
 import type { MWCMenuOption } from '@src/open-menu';

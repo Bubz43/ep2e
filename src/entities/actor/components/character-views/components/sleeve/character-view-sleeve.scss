@@ -10,6 +10,7 @@
 :host {
   display: grid;
   grid-auto-rows: min-content;
+  z-index: 0;
 }
 
 header {
@@ -153,4 +154,39 @@ header {
       padding-top: 0.25rem;
     }
   }
+}
+
+.conditions {
+  display: flex;
+  align-items: center;
+  --mdc-theme-primary: var(--color-grey);
+  padding: 0.25rem;
+  .conditions-list {
+    display: flex;
+    justify-content: space-evenly;
+    flex: 1;
+  }
+  @include textButton();
+  button {
+    position: relative;
+  }
+  notification-coin {
+    right: -2px;
+    top: -75%;
+    --coin-bg: var(--color-border);
+  }
+  img {
+    opacity: 0.25;
+    transition: opacity 300ms;
+    display: block;
+    pointer-events: none;
+    &.active {
+      opacity: 1;
+    }
+  }
+}
+
+.pools {
+  display: flex;
+  justify-content: space-evenly;
 }
