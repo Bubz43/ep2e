@@ -2,7 +2,7 @@ import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { idProp } from '@src/features/feature-helpers';
 import { MotivationStance } from '@src/features/motivations';
-import { LangEntry, localize } from '@src/foundry/localization';
+import { localize } from '@src/foundry/localization';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
@@ -39,6 +39,16 @@ export class CharacterViewEgo extends LitElement {
     const { filteredMotivations, settings } = this.ego;
     return html`
       <header>
+        <button class="name" @click=${this.ego.openForm}>
+          ${this.ego.name}
+        </button>
+        <span class="info">
+          ${compact([
+            `${this.ego.egoType} ${localize('ego')}`,
+            this.ego.forkStatus &&
+              `${localize(this.ego.forkStatus)} ${localize('fork')}`,
+          ]).join(' • ')}
+        </span>
         ${settings.trackPoints
           ? html`
               <sl-animated-list class="resource-points">
@@ -52,17 +62,6 @@ export class CharacterViewEgo extends LitElement {
               </sl-animated-list>
             `
           : ''}
-
-        <button class="name" @click=${this.ego.openForm}>
-          ${this.ego.name}
-        </button>
-        <span class="info">
-          ${compact([
-            `${this.ego.egoType} ${localize('ego')}`,
-            this.ego.forkStatus &&
-              `${localize(this.ego.forkStatus)} ${localize('fork')}`,
-          ]).join(' • ')}
-        </span>
       </header>
 
       ${this.ego.trackMentalHealth

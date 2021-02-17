@@ -5,24 +5,20 @@ import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import {
   createTemporaryMeasuredTemplate,
-  getNormalizedTokenSize,
-  getTemplateGridHighlightLayer,
   placeMeasuredTemplate,
+  readyCanvas
 } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
-import { readyCanvas } from '@src/foundry/canvas';
-import { overlay } from '@src/init';
-import { debounceFn, throttleFn } from '@src/utility/decorators';
 import { clickIfEnter, notEmpty } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
-import { compact, identity, pick, sortBy, zip } from 'remeda';
+import { identity, sortBy } from 'remeda';
 import {
   CharacterDrawerRenderer,
-  CharacterDrawerRenderEvent,
+  CharacterDrawerRenderEvent
 } from '../../character-drawer-render-event';
 import styles from './character-view-sleeve.scss';
 
@@ -98,7 +94,7 @@ export class CharacterViewSleeve extends LitElement {
               tabindex="0"
               role="button"
             >
-              <img src=${localImage('icons/armor/shield.svg')} width="40px" />
+          
 
               <sl-animated-list class="values">
                 ${repeat(enumValues(ArmorType), identity, (type) => {
@@ -106,7 +102,11 @@ export class CharacterViewSleeve extends LitElement {
                   const reduced = armor.reducedArmors.has(type);
                   return value || reduced
                     ? html`<span class="rating ${classMap({ reduced })}"
-                        >${localize(type)}
+                        ><img
+                          src=${localImage('icons/armor/shield.svg')}
+                          width="16"
+                        />
+                        <span class="label"> ${localize(type)}</span>
                         <span class="value">${value}</span></span
                       >`
                     : '';

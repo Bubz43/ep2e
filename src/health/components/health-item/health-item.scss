@@ -29,7 +29,7 @@
     '.. type damage'
     'bars bars bars';
   position: relative;
-  padding: var(--health-item-padding, 0.5rem);
+  padding: var(--health-item-padding, 0.25rem 0.5rem);
 
   outline: none;
   &.dead {
