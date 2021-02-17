@@ -1,47 +1,47 @@
 import { createMessage } from '@src/chat/create-message';
 import {
+  CharacterDetail,
   CharacterPoint,
   enumValues,
-  CharacterDetail,
   MinStressOption,
 } from '@src/data-enums';
 import type { StringID } from '@src/features/feature-helpers';
 import {
   RepNetwork,
-  RepWithIdentifier,
   repRefreshTimerActive,
+  RepWithIdentifier,
 } from '@src/features/reputations';
 import {
-  SkillType,
-  FullSkill,
-  FullFieldSkill,
-  Skill,
-  isFieldSkill,
-  FieldSkillType,
-  setupFullSkill,
   FieldSkillData,
-  fieldSkillName,
-  setupFullFieldSkill,
   FieldSkillIdentifier,
+  fieldSkillName,
+  FieldSkillType,
+  FullFieldSkill,
+  FullSkill,
+  isFieldSkill,
+  setupFullFieldSkill,
+  setupFullSkill,
+  Skill,
+  SkillType,
 } from '@src/features/skills';
 import {
   CommonInterval,
   createLiveTimeState,
   getElapsedTime,
-  refreshAvailable,
   LiveTimeState,
+  refreshAvailable,
 } from '@src/features/time';
-import { notify, NotificationType } from '@src/foundry/foundry-apps';
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
-import type { EgoData, CommonDetails } from '@src/foundry/template-schema';
+import type { CommonDetails, EgoData } from '@src/foundry/template-schema';
 import { HealthType } from '@src/health/health';
 import { MentalHealth, StressType } from '@src/health/mental-health';
 import { LazyGetter } from 'lazy-get-decorator';
-import { groupBy, compact, map } from 'remeda';
+import { compact, groupBy, map } from 'remeda';
 import type { ReadonlyAppliedEffects } from '../applied-effects';
 import { ItemType } from '../entity-types';
-import type { ItemEP, ItemProxy } from '../item/item';
+import type { ItemProxy } from '../item/item';
 import type { Psi } from '../item/proxies/psi';
 import type { Sleight } from '../item/proxies/sleight';
 import type { Trait } from '../item/proxies/trait';
@@ -320,7 +320,7 @@ export class Ego {
       }
     }
     if (groups.length === 1 && groups[0]) {
-      groups[0].label = `${localize('rez')} ${localize('points')}`;
+      groups[0].label = localize('rez');
     }
     return groups;
   }

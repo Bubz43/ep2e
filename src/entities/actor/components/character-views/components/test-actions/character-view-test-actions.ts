@@ -1,13 +1,11 @@
 import { renderTextInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
-import { AptitudeType, enumValues } from '@src/data-enums';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
 import { Favor, maxFavors, RepWithIdentifier } from '@src/features/reputations';
 import { Skill, skillFilterCheck } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
-import { AptitudeCheckControls } from '@src/success-test/components/aptitude-check-controls/aptitude-check-controls';
 import { ReputationFavorControls } from '@src/success-test/components/reputation-favor-controls/reputation-favor-controls';
 import { SkillTestControls } from '@src/success-test/components/skill-test-controls/skill-test-controls';
 import { notEmpty, safeMerge } from '@src/utility/helpers';
@@ -74,20 +72,6 @@ export class CharacterViewTestActions extends LitElement {
 
   get disabled() {
     return this.character.disabled;
-  }
-
-  private startAptitudeTest(aptitude: AptitudeType) {
-    AptitudeCheckControls.openWindow({
-      entities: { actor: this.character.actor },
-      getState: (actor) => {
-        if (actor.proxy.type !== ActorType.Character) return null;
-        return {
-          ego: actor.proxy.ego,
-          character: actor.proxy,
-          aptitude,
-        };
-      },
-    });
   }
 
   private startSkillTest(skill: Skill) {
@@ -165,13 +149,10 @@ export class CharacterViewTestActions extends LitElement {
     ]);
     return html`
       <div class="stats">
-        <ul class="aptitudes-list">
-          ${enumValues(AptitudeType).map(this.renderAptitude)}
-        </ul>
-
         ${notEmpty(repSources)
           ? html`
               <div class="reps">
+                <span class="label">${localize('reputations')}</span>
                 ${notEmpty(fakeIDs)
                   ? html`
                       <div class="rep-sources">
@@ -201,13 +182,6 @@ export class CharacterViewTestActions extends LitElement {
           : ''}
 
         <ul class="skills-list">
-          ${active?.map(this.renderSkill)}
-          ${notEmpty(know)
-            ? html`
-                <li class="divider" role="separator"></li>
-                ${know.map(this.renderSkill)}
-              `
-            : ''}
           <li class="filter">
             ${renderAutoForm({
               classes: 'skill-controls',
@@ -216,6 +190,7 @@ export class CharacterViewTestActions extends LitElement {
               props: this.skillControls,
               update: this.updateSkillControls,
               fields: ({ filter }) => html`
+                <span>${localize('skills')}</span>
                 <div
                   class="skill-filter"
                   @keypress=${this.findFirstUnfilteredSkill}
@@ -228,26 +203,17 @@ export class CharacterViewTestActions extends LitElement {
               `,
             })}
           </li>
+          ${active?.map(this.renderSkill)}
+          ${notEmpty(know)
+            ? html`
+                <li class="divider" role="separator"></li>
+                ${know.map(this.renderSkill)}
+              `
+            : ''}
         </ul>
       </div>
     `;
   }
-
-  private renderAptitude = (type: AptitudeType) => {
-    const points = this.ego.aptitudes[type];
-    return html` <wl-list-item
-      clickable
-      ?disabled=${this.disabled}
-      class="aptitude-item"
-      @click=${() => this.startAptitudeTest(type)}
-    >
-      <span class="aptitude-name">${localize(type)}</span>
-      <div class="aptitude-values">
-        <span class="aptitude-points">${points}</span>
-        <span class="aptitude-check">${points * 3}</span>
-      </div>
-    </wl-list-item>`;
-  };
 
   private renderSkill = (skill: Skill) => {
     const filtered = this.skillFilterCheck(skill);

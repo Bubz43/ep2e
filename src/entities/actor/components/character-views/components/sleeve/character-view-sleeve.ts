@@ -3,13 +3,19 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import { formattedSleeveInfo, Sleeve } from '@src/entities/actor/sleeves';
 import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
+import { PoolItem } from '@src/features/components/pool-item/pool-item';
+import { conditionIcons, ConditionType } from '@src/features/conditions';
+import type { ReadonlyPool } from '@src/features/pool';
+import { poolActionOptions } from '@src/features/pools';
 import {
   createTemporaryMeasuredTemplate,
   placeMeasuredTemplate,
-  readyCanvas
+  readyCanvas,
 } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
+import { tooltip } from '@src/init';
+import { openMenu } from '@src/open-menu';
 import { clickIfEnter, notEmpty } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
 import { customElement, html, LitElement, property } from 'lit-element';
@@ -18,7 +24,7 @@ import { repeat } from 'lit-html/directives/repeat';
 import { identity, sortBy } from 'remeda';
 import {
   CharacterDrawerRenderer,
-  CharacterDrawerRenderEvent
+  CharacterDrawerRenderEvent,
 } from '../../character-drawer-render-event';
 import styles from './character-view-sleeve.scss';
 
@@ -35,6 +41,10 @@ export class CharacterViewSleeve extends LitElement {
   @property({ attribute: false }) sleeve!: Sleeve;
 
   @property({ attribute: false }) token?: Token | null;
+
+  private viewConditions() {
+    this.requestDrawer(CharacterDrawerRenderer.Conditions);
+  }
 
   private viewArmor() {
     this.requestDrawer(CharacterDrawerRenderer.Armor);
@@ -69,11 +79,37 @@ export class CharacterViewSleeve extends LitElement {
     );
   }
 
+  private toggleCondition(ev: Event) {
+    if (ev.currentTarget instanceof HTMLElement) {
+      const { condition } = ev.currentTarget.dataset;
+      condition && this.character.toggleCondition(condition as ConditionType);
+    }
+  }
+
+  private openPoolMenu(ev: MouseEvent) {
+    if (ev.currentTarget instanceof PoolItem) {
+      const { type } = ev.currentTarget.pool;
+      openMenu({
+        header: { heading: localize(type) },
+        content: poolActionOptions(this.character, type),
+        position: ev,
+      });
+    }
+  }
+
   render() {
     const { sleeve } = this;
     const physicalHealth = 'physicalHealth' in sleeve && sleeve.physicalHealth;
     const meshHealth = 'activeMeshHealth' in sleeve && sleeve.activeMeshHealth;
-    const { armor, movementRates, movementModifiers } = this.character;
+    const {
+      armor,
+      movementRates,
+      movementModifiers,
+      conditions,
+      pools,
+      disabled,
+      temporaryConditionSources,
+    } = this.character;
     const canPlace = userCan('TEMPLATE_CREATE');
     return html`
       <header>
@@ -86,16 +122,12 @@ export class CharacterViewSleeve extends LitElement {
       ${notEmpty(armor)
         ? html`
             <div
-              class="armor  ${classMap({
-                'multi-row': armor.size > (armor.concealable ? 2 : 3),
-              })}"
+              class="armor"
               @click=${this.viewArmor}
               @keydown=${clickIfEnter}
               tabindex="0"
               role="button"
             >
-          
-
               <sl-animated-list class="values">
                 ${repeat(enumValues(ArmorType), identity, (type) => {
                   const value = armor.getClamped(type);
@@ -156,6 +188,48 @@ export class CharacterViewSleeve extends LitElement {
           : ''}
       </div>
 
+      <div class="conditions">
+        <mwc-button
+          class="conditions-toggle"
+          @click=${this.viewConditions}
+          dense
+          >${localize('conditions')}</mwc-button
+        >
+        <div class="conditions-list">
+          ${enumValues(ConditionType).map(
+            (condition) => html`
+              <button
+                ?disabled=${disabled}
+                data-condition=${condition}
+                @click=${this.toggleCondition}
+                data-tooltip=${localize(condition)}
+                @mouseover=${tooltip.fromData}
+              >
+                <img
+                  src=${conditionIcons[condition]}
+                  class=${conditions.includes(condition) ? 'active' : ''}
+                  height="22px"
+                />
+                ${temporaryConditionSources.has(condition)
+                  ? html`<notification-coin
+                      value=${temporaryConditionSources.get(condition)
+                        ?.length || 1}
+                    ></notification-coin>`
+                  : ''}
+              </button>
+            `,
+          )}
+        </div>
+      </div>
+
+      ${notEmpty(pools)
+        ? html`
+            <ul class="pools">
+              ${[...pools.values()].map(this.renderPool)}
+            </ul>
+          `
+        : ''}
+
       <div class="movement">
         ${(['encumbered', 'overburdened'] as const).map((mod) => {
           const val = movementModifiers[mod];
@@ -190,6 +264,15 @@ export class CharacterViewSleeve extends LitElement {
       </div>
     `;
   }
+
+  private renderPool = (pool: ReadonlyPool) => html`
+    <pool-item
+      @click=${this.openPoolMenu}
+      .pool=${pool}
+      ?disabled=${this.character.disabled}
+      ?wide=${this.character.pools.size <= 2}
+    ></pool-item>
+  `;
 }
 
 declare global {
