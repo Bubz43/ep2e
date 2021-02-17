@@ -51,6 +51,13 @@
       "entity": "Actor"
     },
     {
+      "name": "infomorphs",
+      "system": "ep2e",
+      "label": "Infomorphs",
+      "path": "./packs/infomorphs.db",
+      "entity": "Actor"
+    },
+    {
       "name": "traits",
       "system": "ep2e",
       "label": "Traits",
