@@ -244,10 +244,12 @@ export class CharacterView extends CharacterViewBase {
               </div>
             `}
 
-        <character-view-test-actions
+        <!-- <character-view-test-actions
           .character=${this.character}
           .ego=${this.character.ego}
-        ></character-view-test-actions>
+        ></character-view-test-actions> -->
+
+        ${this.renderStatus()}
       </div>
       ${this.renderDrawer()}
 
@@ -266,8 +268,7 @@ export class CharacterView extends CharacterViewBase {
     `;
   }
 
-  private renderOverview() {
-    const { masterDevice } = this.character.equippedGroups;
+  private renderStatus() {
     const {
       awaitingOnsetSubstances,
       activeSubstances,
@@ -277,157 +278,162 @@ export class CharacterView extends CharacterViewBase {
       temporaryConditionSources,
       sleeve,
     } = this.character;
-    return html`
-      <section class="status">
-        <sl-header heading=${localize('status')}></sl-header>
-        <div class="status-items">
-          <div class="conditions">
-            <mwc-button
-              class="conditions-toggle"
-              @click=${this.viewConditions}
-              dense
-              >${localize('conditions')}</mwc-button
-            >
-            <div class="conditions-list">
-              ${enumValues(ConditionType).map(
-                (condition) => html`
-                  <button
-                    ?disabled=${disabled}
-                    data-condition=${condition}
-                    @click=${this.toggleCondition}
-                    data-tooltip=${localize(condition)}
-                    @mouseover=${tooltip.fromData}
-                  >
-                    <img
-                      src=${conditionIcons[condition]}
-                      class=${conditions.includes(condition) ? 'active' : ''}
-                      height="22px"
-                    />
-                    ${temporaryConditionSources.has(condition)
-                      ? html`<notification-coin
-                          value=${temporaryConditionSources.get(condition)
-                            ?.length || 1}
-                        ></notification-coin>`
-                      : ''}
-                  </button>
-                `,
-              )}
-            </div>
-          </div>
-          <!-- 
-          ${sleeve && sleeve.type !== ActorType.Infomorph
-            ? html`
-                <div class="combat-state">
-                  ${renderUpdaterForm(
-                    this.character.updater.path('data', 'combatState'),
-                    {
-                      disabled: disabled,
-                      fields: ({ aggressive, complexAim, fullDefense }) => [
-                        html`
-                          <div class="combat-toggles">
-                            ${[
-                              renderLabeledCheckbox(aggressive),
-                              renderLabeledCheckbox(complexAim),
-                            ]}
-                          </div>
-                        `,
-                        renderSelectField(
-                          fullDefense,
-                          enumValues(FullDefenseType),
-                          emptyTextDash,
-                        ),
-                      ],
-                    },
-                  )}
-                </div>
-              `
-            : ''} -->
-
-          <sl-dropzone
-            class="applied-substances"
-            ?disabled=${disabled}
-            @drop=${this.applyDroppedSubstance}
+    return html` <section class="status">
+      <!-- <sl-header heading=${localize('status')}></sl-header> -->
+      <div class="status-items">
+        <div class="conditions">
+          <mwc-button
+            class="conditions-toggle"
+            @click=${this.viewConditions}
+            dense
+            >${localize('conditions')}</mwc-button
           >
-            ${activeSubstances.length + awaitingOnsetSubstances.length === 0
-              ? html`
-                  <p class="no-substances-message">
-                    ${localize('no')} ${localize('applied')}
-                    ${localize('substances')}.
-                  </p>
-                `
-              : html`
-                  ${notEmpty(activeSubstances)
-                    ? html`
-                        <sl-details
-                          open
-                          summary="${localize('active')} ${localize(
-                            'substances',
-                          )} (${activeSubstances.length})"
-                        >
-                          <sl-animated-list class="active-substances">
-                            ${repeat(
-                              activeSubstances,
-                              idProp,
-                              (substance) => html`
-                                <character-view-active-substance
-                                  .substance=${substance}
-                                  .character=${this.character}
-                                ></character-view-active-substance>
-                              `,
-                            )}
-                          </sl-animated-list>
-                        </sl-details>
-                      `
+          <div class="conditions-list">
+            ${enumValues(ConditionType).map(
+              (condition) => html`
+                <button
+                  ?disabled=${disabled}
+                  data-condition=${condition}
+                  @click=${this.toggleCondition}
+                  data-tooltip=${localize(condition)}
+                  @mouseover=${tooltip.fromData}
+                >
+                  <img
+                    src=${conditionIcons[condition]}
+                    class=${conditions.includes(condition) ? 'active' : ''}
+                    height="22px"
+                  />
+                  ${temporaryConditionSources.has(condition)
+                    ? html`<notification-coin
+                        value=${temporaryConditionSources.get(condition)
+                          ?.length || 1}
+                      ></notification-coin>`
                     : ''}
-                  ${notEmpty(awaitingOnsetSubstances)
-                    ? html`
-                        <sl-details
-                          open
-                          summary="${localize(
-                            'substancesAwaitingOnset',
-                          )} (${awaitingOnsetSubstances.length})"
-                        >
-                          <sl-animated-list>
-                            ${repeat(
-                              awaitingOnsetSubstances,
-                              idProp,
-                              (substance) => html`
-                                <time-state-item
-                                  ?disabled=${disabled}
-                                  .timeState=${substance.awaitingOnsetTimeState}
-                                  completion="ready"
-                                  .item=${substance}
-                                >
-                                  <mwc-icon-button
-                                    slot="action"
-                                    icon="play_arrow"
-                                    data-tooltip=${localize('start')}
-                                    @mouseover=${tooltip.fromData}
-                                    @click=${() => {
-                                      this.openSubstanceActivationDialog(
-                                        substance.id,
-                                      );
-                                    }}
-                                  ></mwc-icon-button>
-                                </time-state-item>
-                              `,
-                            )}
-                          </sl-animated-list></sl-details
-                        >
-                      `
-                    : ''}
-                `}
-          </sl-dropzone>
-
-          ${notEmpty(pools)
-            ? html`
-                <ul class="pools">
-                  ${[...pools.values()].map(this.renderPool)}
-                </ul>
-              `
-            : ''}
+                </button>
+              `,
+            )}
+          </div>
         </div>
-      </section>
+        <!-- 
+          ${sleeve && sleeve.type !== ActorType.Infomorph
+          ? html`
+              <div class="combat-state">
+                ${renderUpdaterForm(
+                  this.character.updater.path('data', 'combatState'),
+                  {
+                    disabled: disabled,
+                    fields: ({ aggressive, complexAim, fullDefense }) => [
+                      html`
+                        <div class="combat-toggles">
+                          ${[
+                            renderLabeledCheckbox(aggressive),
+                            renderLabeledCheckbox(complexAim),
+                          ]}
+                        </div>
+                      `,
+                      renderSelectField(
+                        fullDefense,
+                        enumValues(FullDefenseType),
+                        emptyTextDash,
+                      ),
+                    ],
+                  },
+                )}
+              </div>
+            `
+          : ''} -->
+
+        <sl-dropzone
+          class="applied-substances"
+          ?disabled=${disabled}
+          @drop=${this.applyDroppedSubstance}
+        >
+          ${activeSubstances.length + awaitingOnsetSubstances.length === 0
+            ? html`
+                <p class="no-substances-message">
+                  ${localize('no')} ${localize('applied')}
+                  ${localize('substances')}.
+                </p>
+              `
+            : html`
+                ${notEmpty(activeSubstances)
+                  ? html`
+                      <sl-details
+                        open
+                        summary="${localize('active')} ${localize(
+                          'substances',
+                        )} (${activeSubstances.length})"
+                      >
+                        <sl-animated-list class="active-substances">
+                          ${repeat(
+                            activeSubstances,
+                            idProp,
+                            (substance) => html`
+                              <character-view-active-substance
+                                .substance=${substance}
+                                .character=${this.character}
+                              ></character-view-active-substance>
+                            `,
+                          )}
+                        </sl-animated-list>
+                      </sl-details>
+                    `
+                  : ''}
+                ${notEmpty(awaitingOnsetSubstances)
+                  ? html`
+                      <sl-details
+                        open
+                        summary="${localize(
+                          'substancesAwaitingOnset',
+                        )} (${awaitingOnsetSubstances.length})"
+                      >
+                        <sl-animated-list>
+                          ${repeat(
+                            awaitingOnsetSubstances,
+                            idProp,
+                            (substance) => html`
+                              <time-state-item
+                                ?disabled=${disabled}
+                                .timeState=${substance.awaitingOnsetTimeState}
+                                completion="ready"
+                                .item=${substance}
+                              >
+                                <mwc-icon-button
+                                  slot="action"
+                                  icon="play_arrow"
+                                  data-tooltip=${localize('start')}
+                                  @mouseover=${tooltip.fromData}
+                                  @click=${() => {
+                                    this.openSubstanceActivationDialog(
+                                      substance.id,
+                                    );
+                                  }}
+                                ></mwc-icon-button>
+                              </time-state-item>
+                            `,
+                          )}
+                        </sl-animated-list></sl-details
+                      >
+                    `
+                  : ''}
+              `}
+        </sl-dropzone>
+
+        ${notEmpty(pools)
+          ? html`
+              <ul class="pools">
+                ${[...pools.values()].map(this.renderPool)}
+              </ul>
+            `
+          : ''}
+      </div>
+    </section>`;
+  }
+
+  private renderOverview() {
+    const { masterDevice } = this.character.equippedGroups;
+
+    return html`
       <!-- <section>
     <sl-header heading=${localize('network')}>
       <mwc-icon-button

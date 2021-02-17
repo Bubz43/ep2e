@@ -17,7 +17,7 @@
     'side content';
   grid-template-columns: 400px 1fr;
   min-width: 100%;
-  width: 800px;
+  width: 1000px;
   min-height: 500px;
   height: max-content;
   grid-template-rows: repeat(2, min-content) 1fr;
@@ -66,7 +66,7 @@ mwc-tab-bar {
 
 .side {
   display: grid;
-  align-items: center;
+  grid-auto-rows: min-content;
   grid-area: side;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -106,7 +106,7 @@ mwc-tab-bar {
   grid-area: content;
   display: grid;
   grid-auto-rows: min-content;
-  grid-template-columns: repeat(auto-fit, minmax(375px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(50ch, 1fr));
   gap: 0.25rem;
   height: 200px;
   min-height: 100%;
