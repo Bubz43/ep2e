@@ -1,5 +1,6 @@
 import { renderTextInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
+import { AptitudeType, enumValues } from '@src/data-enums';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
@@ -40,6 +41,8 @@ export class CharacterViewTestActions extends LitElement {
 
   @internalProperty() private activeFakeId?: string;
 
+  @internalProperty() private activeEgo?: string;
+
   @internalProperty()
   private skillControls = {
     filter: '',
@@ -76,15 +79,19 @@ export class CharacterViewTestActions extends LitElement {
   }
 
   private startSkillTest(skill: Skill) {
+    const onboardAliId = this.activeEgo;
     SkillTestControls.openWindow({
       entities: { actor: this.character.actor },
       getState: (actor) => {
         if (actor.proxy.type !== ActorType.Character) return null;
+        const ali = onboardAliId
+          ? actor.proxy.equippedGroups.onboardALIs.get(onboardAliId)
+          : null;
+        const ego = ali || actor.proxy.ego;
         return {
-          ego: actor.proxy.ego,
+          ego,
           character: actor.proxy,
-          skill:
-            actor.proxy.ego.skills.find((s) => s.name === skill.name) || skill,
+          skill: ego.skills.find((s) => s.name === skill.name) || skill,
         };
       },
     });
@@ -119,7 +126,7 @@ export class CharacterViewTestActions extends LitElement {
     });
   }
 
-  private openRepSourceMenu() {
+  private get repSources() {
     const { trackReputations } = this.ego;
     const { fakeIDs } = this.character.equippedGroups;
     const fakeID = this.activeFakeId
@@ -141,7 +148,7 @@ export class CharacterViewTestActions extends LitElement {
         reps: fake.repsWithIdentifiers,
         label: fake.name,
         active:
-          fakeIDreps === fake.repsWithIdentifiers ||
+          fakeID === fake ||
           (!trackReputations && !fakeIDreps && fake === fakeIDs[0]),
         fake: true,
         set: () => {
@@ -150,9 +157,16 @@ export class CharacterViewTestActions extends LitElement {
       })),
     ]);
 
+    return {
+      sources: repSources,
+      fakeID,
+    };
+  }
+
+  private openRepSourceMenu() {
     openMenu({
       header: { heading: `${localize('reputation')} ${localize('profile')}` },
-      content: repSources.map((source) => ({
+      content: this.repSources.sources.map((source) => ({
         label: source.label,
         activated: source.active,
         callback: source.set,
@@ -163,49 +177,47 @@ export class CharacterViewTestActions extends LitElement {
     });
   }
 
-  render() {
-    const { groupedSkills, trackReputations } = this.ego;
-    const { active, know } = groupedSkills;
-    const { fakeIDs } = this.character.equippedGroups;
-    const fakeID = this.activeFakeId
-      ? fakeIDs.find((i) => i.id === this.activeFakeId)
-      : null;
-    const fakeIDreps = fakeID?.repsWithIdentifiers;
-    if (this.activeFakeId && !fakeID) this.activeFakeId = undefined;
-    const repSources = compact([
-      trackReputations && {
-        reps: this.ego.trackedReps,
-        label: this.ego.name,
-        active: !fakeIDreps,
-        fake: false,
-        set: () => {
-          this.activeFakeId = '';
+  private openEgoSelectMenu() {
+    const { currentEgo } = this;
+    openMenu({
+      header: { heading: localize('ego') },
+      content: [
+        {
+          label: this.ego.name,
+          activated: currentEgo === this.ego,
+          callback: () => (this.activeEgo = undefined),
         },
-      },
-      ...fakeIDs.map((fake) => ({
-        reps: fake.repsWithIdentifiers,
-        label: fake.name,
-        active:
-          fakeIDreps === fake.repsWithIdentifiers ||
-          (!trackReputations && !fakeIDreps && fake === fakeIDs[0]),
-        fake: true,
-        set: () => {
-          this.activeFakeId = fake.id;
-        },
-      })),
-    ]);
+        ...[...this.character.equippedGroups.onboardALIs].map(([id, ego]) => ({
+          label: ego.name,
+          activated: currentEgo === ego,
+          callback: () => (this.activeEgo = id),
+        })),
+      ],
+    });
+  }
 
+  private get currentEgo() {
+    const { onboardALIs } = this.character.equippedGroups;
+    const onboard = this.activeEgo ? onboardALIs.get(this.activeEgo) : null;
+    return onboard || this.ego;
+  }
+
+  render() {
+    const { groupedSkills, name, aptitudes } = this.currentEgo;
+    const { active, know } = groupedSkills;
+    const { sources, fakeID } = this.repSources;
+    const { softwareSkills, onboardALIs } = this.character.equippedGroups;
     // TODO: Toggle to show all reps instead of just tracked
     // TODO: Add collapse toggle
     return html`
-      ${notEmpty(repSources)
+      ${notEmpty(sources)
         ? html`
             <div class="reps">
               <span class="label">
                 <mwc-icon-button
                   ?disabled=${this.ego.disabled}
                   @click=${this.openRepSourceMenu}
-                  icon=${fakeIDreps ? 'person_outline' : 'person'}
+                  icon=${fakeID ? 'person_outline' : 'person'}
                 ></mwc-icon-button>
                 ${fakeID?.name ?? this.ego.name}'s
                 ${localize('reputations')}</span
@@ -222,39 +234,103 @@ export class CharacterViewTestActions extends LitElement {
                       >`,
                   )}
                 </li>
-                ${(fakeIDreps ?? repSources[0]?.reps!).map(this.renderRep)}
+                ${(fakeID?.repsWithIdentifiers ?? sources[0]?.reps!).map(
+                  this.renderRep,
+                )}
+              </ul>
+            </div>
+          `
+        : ''}
+      ${notEmpty(softwareSkills)
+        ? html`
+            <div class="software-section">
+              <sl-header
+                heading="${localize('software')} ${localize('skills')}"
+              ></sl-header>
+              <ul class="software">
+                ${softwareSkills.map(
+                  (software) => html`
+                    <li>
+                      ${software.name}
+                      <ul class="software-skills">
+                        ${software.skills.map(
+                          ({ name, specialization, total }) => html`
+                            <li>
+                              <span class="software-skill-name"
+                                >${name}
+                                ${specialization
+                                  ? `(${specialization})`
+                                  : ''}</span
+                              >
+                              <span class="software-skill-total">${total}</span>
+                            </li>
+                          `,
+                        )}
+                      </ul>
+                    </li>
+                  `,
+                )}
               </ul>
             </div>
           `
         : ''}
 
-      <!-- <ul class="skills-list">
-        <li class="filter">
-          ${renderAutoForm({
-        classes: 'skill-controls',
-        storeOnInput: true,
-        noDebounce: true,
-        props: this.skillControls,
-        update: this.updateSkillControls,
-        fields: ({ filter }) => html`
-          <span>${localize('skills')}</span>
-          <div class="skill-filter" @keypress=${this.findFirstUnfilteredSkill}>
-            ${renderTextInput(filter, {
-              search: true,
-              placeholder: localize('filter'),
+      <section class="ego">
+        <sl-header
+          @click=${this.openEgoSelectMenu}
+          heading="${localize('ego')}: ${name} - ${localize(
+            'aptitudes',
+          )} & ${localize('skills')}"
+        ></sl-header>
+        <ul class="aptitudes">
+          ${enumValues(AptitudeType).map(
+            (aptitude) => html`
+              <wl-list-item
+                class="aptitude"
+                clickable
+                ?disabled=${this.character.disabled}
+              >
+                <span slot="before">${localize('aptitude')}</span>
+                <span class="points">${aptitudes[aptitude]}</span>
+                <span class="check"
+                  ><mwc-icon>check</mwc-icon> ${aptitudes[aptitude] * 3}</span
+                >
+              </wl-list-item>
+            `,
+          )}
+        </ul>
+
+        <ul class="skills-list">
+          <li class="filter">
+            ${renderAutoForm({
+              classes: 'skill-controls',
+              storeOnInput: true,
+              noDebounce: true,
+              props: this.skillControls,
+              update: this.updateSkillControls,
+              fields: ({ filter }) => html`
+                <span>${localize('skills')}</span>
+                <div
+                  class="skill-filter"
+                  @keypress=${this.findFirstUnfilteredSkill}
+                >
+                  ${renderTextInput(filter, {
+                    search: true,
+                    placeholder: localize('filter'),
+                  })}
+                </div>
+              `,
             })}
-          </div>
-        `,
-      })}
-        </li>
-        ${active?.map(this.renderSkill)}
-        ${notEmpty(know)
-        ? html`
-            <li class="divider" role="separator"></li>
-            ${know.map(this.renderSkill)}
-          `
-        : ''}
-      </ul> -->
+          </li>
+          ${active?.map(this.renderSkill)}
+          ${notEmpty(know)
+            ? html`
+                <li class="divider" role="separator"></li>
+                ${know.map(this.renderSkill)}
+              `
+            : ''}
+        </ul>
+      </section>
     `;
   }
 

@@ -168,3 +168,21 @@
     color: var(--color-text-lighter);
   }
 }
+
+.aptitudes {
+  display: flex;
+  justify-content: space-evenly;
+  [slot='before'] {
+    margin-right: 0.5ch;
+  }
+  .points {
+    font-size: larger;
+  }
+  .check {
+    display: flex;
+    align-items: center;
+    mwc-icon {
+      margin-right: 0.5ch;
+    }
+  }
+}

@@ -394,6 +394,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     const expiredServices: typeof services = [];
     const activeFabbers: PhysicalTech[] = [];
     const devices = new Map<PhysicalTech, boolean>();
+    const onboardALIs = new Map<string, Ego>();
+    const softwareSkills: Software[] = [];
     let masterDevice: PhysicalTech | null = null;
     const { masterDeviceId, unslavedDevices } = this.networkSettings;
     // TODO Weapons && active use
@@ -413,11 +415,14 @@ export class Character extends ActorProxyBase<ActorType.Character> {
             if (item.isExpired) expiredServices.push(item);
           }
         }
+        if (notEmpty(item.skills)) softwareSkills.push(item);
       } else if (item.type === ItemType.PhysicalTech) {
         if (item.isActiveFabber) activeFabbers.push(item);
         if (item.deviceType) {
           if (item.id === masterDeviceId) masterDevice = item;
           else devices.set(item, !unslavedDevices.includes(item.id));
+
+          if (item.hasOnboardALI) onboardALIs.set(item.id, item.onboardALI);
         }
       }
     }
@@ -429,6 +434,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       activeFabbers,
       devices,
       masterDevice,
+      softwareSkills,
+      onboardALIs,
     };
   }
 
