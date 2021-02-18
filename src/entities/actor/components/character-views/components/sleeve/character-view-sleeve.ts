@@ -144,8 +144,12 @@ export class CharacterViewSleeve extends LitElement {
                     : '';
                 })}
 
-                <span class="rating info"
-                  >${localize('layers')}
+                <span class="rating info">
+                  <img
+                    src=${localImage('icons/armor/layered-armor.svg')}
+                    width="16"
+                  />
+                  <span class="label">${localize('layers')}</span>
                   <span class="value">${armor.layers}</span></span
                 >
                 ${armor.concealable
