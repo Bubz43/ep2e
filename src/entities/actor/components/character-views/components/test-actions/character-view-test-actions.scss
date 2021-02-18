@@ -8,19 +8,7 @@
 }
 
 :host {
-  display: block;
-}
-
-.reps,
-.skills-list {
-  & + * {
-    border-top: 1px groove var(--color-border);
-  }
-}
-
-mwc-tab-bar {
-  --mdc-theme-primary: var(--color-grey);
-  margin: 0.25rem 0;
+  display: contents;
 }
 
 .skill-controls {
@@ -99,10 +87,23 @@ mwc-tab-bar {
 }
 
 .reps {
+  background: var(--color-bg);
+  background: linear-gradient(
+    45deg,
+    alphav(var(--color-bg), 0.75),
+    alphav(var(--color-bg-alt), 0.75)
+  );
+
+  padding: 0.25rem 0;
   .label {
-    font-size: large;
+    display: inline-flex;
+    align-items: center;
+    --mdc-icon-button-size: 2rem;
+    mwc-icon-button {
+      margin-right: 0.5ch;
+    }
+    font-size: larger;
     padding: 0 0.5rem;
-    line-height: 2rem;
   }
 }
 
@@ -119,69 +120,38 @@ mwc-tab-bar {
 }
 
 .rep-list {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-around;
+  display: grid;
   clear: both;
   border-top: 1px groove var(--color-border);
 }
 
+.rep-header,
 .rep-item {
-  display: inline-grid;
-  grid-template-areas:
-    'name name score'
-    'favors favors favors';
-  grid-auto-rows: min-content;
+  display: grid;
+  grid-template-columns: 3fr 1fr 6ch 4ch 4ch;
+  gap: 1rem;
+  padding: 0 0.5rem;
   place-items: center;
-  gap: 2px;
-  position: relative;
-  font-size: 1.1rem;
-  padding: 0.25rem;
-  z-index: 0;
-  &:focus {
-    outline: none;
+  > :first-child {
+    place-self: start;
   }
+}
 
+.rep-header {
+  color: var(--color-text-lighter);
+  text-transform: uppercase;
+  padding: 0.125rem 0.5rem;
+  margin-bottom: 0.125rem;
+  border-bottom: 1px groove var(--color-border);
+  > * {
+    font-size: small;
+  }
+}
+
+.rep-item {
   @include textButton();
-
-  .rep-acronym {
-    grid-area: name;
-    text-transform: lowercase;
-    transform: translateY(-1px);
-    z-index: 1;
-  }
-
-  .rep-score {
-    grid-area: score;
-    justify-self: baseline;
-  }
-
-  .rep-info {
-    display: flex;
-    justify-content: space-between;
-    white-space: nowrap;
-    width: 60px;
-  }
-  .favors {
-    grid-area: favors;
-    --mdc-icon-size: 1.1rem;
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-rows: 1.1rem;
-    margin-top: -0.25rem;
-    gap: 0.25rem;
-    color: alphav(var(--color-text), 0.7);
-    z-index: 1;
-    mwc-icon {
-      transition: color 100ms;
-    }
-    button {
-      display: flex;
-      &:hover {
-        mwc-icon {
-          color: var(--color-grey);
-        }
-      }
-    }
+  --mdc-icon-size: 1.25rem;
+  &:hover {
+    background: alphav(var(--color-text), 0.04);
   }
 }

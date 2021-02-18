@@ -6,6 +6,7 @@ import { ActorType } from '@src/entities/entity-types';
 import { Favor, maxFavors, RepWithIdentifier } from '@src/features/reputations';
 import { Skill, skillFilterCheck } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
+import { openMenu } from '@src/open-menu';
 import { ReputationFavorControls } from '@src/success-test/components/reputation-favor-controls/reputation-favor-controls';
 import { SkillTestControls } from '@src/success-test/components/skill-test-controls/skill-test-controls';
 import { notEmpty, safeMerge } from '@src/utility/helpers';
@@ -118,13 +119,59 @@ export class CharacterViewTestActions extends LitElement {
     });
   }
 
+  private openRepSourceMenu() {
+    const { trackReputations } = this.ego;
+    const { fakeIDs } = this.character.equippedGroups;
+    const fakeID = this.activeFakeId
+      ? fakeIDs.find((i) => i.id === this.activeFakeId)
+      : null;
+    const fakeIDreps = fakeID?.repsWithIdentifiers;
+
+    const repSources = compact([
+      trackReputations && {
+        reps: this.ego.trackedReps,
+        label: this.ego.name,
+        active: !fakeIDreps,
+        fake: false,
+        set: () => {
+          this.activeFakeId = '';
+        },
+      },
+      ...fakeIDs.map((fake) => ({
+        reps: fake.repsWithIdentifiers,
+        label: fake.name,
+        active:
+          fakeIDreps === fake.repsWithIdentifiers ||
+          (!trackReputations && !fakeIDreps && fake === fakeIDs[0]),
+        fake: true,
+        set: () => {
+          this.activeFakeId = fake.id;
+        },
+      })),
+    ]);
+
+    openMenu({
+      header: { heading: `${localize('reputation')} ${localize('profile')}` },
+      content: repSources.map((source) => ({
+        label: source.label,
+        activated: source.active,
+        callback: source.set,
+        icon: html`<mwc-icon
+          >${source.fake ? 'person_outline' : 'person'}</mwc-icon
+        >`,
+      })),
+    });
+  }
+
   render() {
     const { groupedSkills, trackReputations } = this.ego;
     const { active, know } = groupedSkills;
     const { fakeIDs } = this.character.equippedGroups;
-    const fakeIDreps = this.activeFakeId
-      ? fakeIDs.find((i) => i.id === this.activeFakeId)?.repsWithIdentifiers
+    const fakeID = this.activeFakeId
+      ? fakeIDs.find((i) => i.id === this.activeFakeId)
       : null;
+    const fakeIDreps = fakeID?.repsWithIdentifiers;
+
     const repSources = compact([
       trackReputations && {
         reps: this.ego.trackedReps,
@@ -148,70 +195,63 @@ export class CharacterViewTestActions extends LitElement {
       })),
     ]);
     return html`
-      <div class="stats">
-        ${notEmpty(repSources)
-          ? html`
-              <div class="reps">
-                <span class="label">${localize('reputations')}</span>
-                ${notEmpty(fakeIDs)
-                  ? html`
-                      <div class="rep-sources">
-                        ${repSources.map(
-                          (source) => html`
-                            <mwc-button
-                              icon=${source.fake ? 'person_outline' : 'person'}
-                              dense
-                              title=${localize(
-                                source.fake ? 'fakeEgoId' : 'ego',
-                              )}
-                              ?outlined=${!source.active}
-                              ?unelevated=${source.active}
-                              @click=${source.set}
-                              >${source.label}</mwc-button
-                            >
-                          `,
-                        )}
-                      </div>
-                    `
-                  : ''}
-                <ul class="rep-list">
-                  ${(fakeIDreps ?? repSources[0]?.reps!).map(this.renderRep)}
-                </ul>
-              </div>
-            `
-          : ''}
+      ${notEmpty(repSources)
+        ? html`
+            <div class="reps">
+              <span class="label">
+                <mwc-icon-button
+                  ?disabled=${this.ego.disabled}
+                  @click=${this.openRepSourceMenu}
+                  icon=${fakeIDreps ? 'person_outline' : 'person'}
+                ></mwc-icon-button>
+                ${fakeID?.name ?? this.ego.name}'s
+                ${localize('reputations')}</span
+              >
 
-        <ul class="skills-list">
-          <li class="filter">
-            ${renderAutoForm({
-              classes: 'skill-controls',
-              storeOnInput: true,
-              noDebounce: true,
-              props: this.skillControls,
-              update: this.updateSkillControls,
-              fields: ({ filter }) => html`
-                <span>${localize('skills')}</span>
-                <div
-                  class="skill-filter"
-                  @keypress=${this.findFirstUnfilteredSkill}
-                >
-                  ${renderTextInput(filter, {
-                    search: true,
-                    placeholder: localize('filter'),
-                  })}
-                </div>
-              `,
+              <ul class="rep-list">
+                <li class="rep-header">
+                  <span>${localize('network')}</span>
+                  <span>${localize('score')}</span>
+                  ${[...maxFavors.keys()].map(
+                    (key) =>
+                      html`<span title="${localize(key)} ${localize('favors')}"
+                        >${localize(key).slice(0, 3)}</span
+                      >`,
+                  )}
+                </li>
+                ${(fakeIDreps ?? repSources[0]?.reps!).map(this.renderRep)}
+              </ul>
+            </div>
+          `
+        : ''}
+
+      <!-- <ul class="skills-list">
+        <li class="filter">
+          ${renderAutoForm({
+        classes: 'skill-controls',
+        storeOnInput: true,
+        noDebounce: true,
+        props: this.skillControls,
+        update: this.updateSkillControls,
+        fields: ({ filter }) => html`
+          <span>${localize('skills')}</span>
+          <div class="skill-filter" @keypress=${this.findFirstUnfilteredSkill}>
+            ${renderTextInput(filter, {
+              search: true,
+              placeholder: localize('filter'),
             })}
-          </li>
-          ${active?.map(this.renderSkill)}
-          ${notEmpty(know)
-            ? html`
-                <li class="divider" role="separator"></li>
-                ${know.map(this.renderSkill)}
-              `
-            : ''}
-        </ul>
-      </div>
+          </div>
+        `,
+      })}
+        </li>
+        ${active?.map(this.renderSkill)}
+        ${notEmpty(know)
+        ? html`
+            <li class="divider" role="separator"></li>
+            ${know.map(this.renderSkill)}
+          `
+        : ''}
+      </ul> -->
     `;
   }
 
@@ -237,30 +277,31 @@ export class CharacterViewTestActions extends LitElement {
           class="rep-acronym"
           @click=${() => this.startFavorTest(rep, Favor.Trivial)}
         >
-          ${rep.acronym}
+          ${rep.network}
         </button>
         <span class="rep-score">${rep.score}</span>
-        <div class="favors">
-          ${[...maxFavors].map(([favor, max]) => {
-            const usedAmount = rep[favor];
-            return html`
-              <button
-                title=${localize(favor)}
-                @click=${() => this.startFavorTest(rep, favor)}
-              >
-                ${range(1, max + 1).map(
-                  (favorNumber) => html`
-                    <mwc-icon
-                      >${usedAmount >= favorNumber
-                        ? 'check_box'
-                        : 'check_box_outline_blank'}</mwc-icon
-                    >
-                  `,
-                )}
-              </button>
-            `;
-          })}
-        </div>
+        <!-- <div class="favors"> -->
+        ${[...maxFavors].map(([favor, max]) => {
+          const usedAmount = rep[favor];
+          return html`
+            <button
+              title=${localize(favor)}
+              @click=${() => this.startFavorTest(rep, favor)}
+              class="rep-favor"
+            >
+              ${range(1, max + 1).map(
+                (favorNumber) => html`
+                  <mwc-icon
+                    >${usedAmount >= favorNumber
+                      ? 'check_box'
+                      : 'check_box_outline_blank'}</mwc-icon
+                  >
+                `,
+              )}
+            </button>
+          `;
+        })}
+        <!-- </div> -->
       </li>
     `;
   };
