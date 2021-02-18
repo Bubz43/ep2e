@@ -130,7 +130,7 @@
   display: grid;
   grid-template-columns: 3fr 1fr 6ch 4ch 4ch;
   gap: 1rem;
-  padding: 0 0.5rem;
+  padding: 0 0.5rem 0 0.75rem;
   place-items: center;
   > :first-child {
     place-self: start;
@@ -140,7 +140,7 @@
 .rep-header {
   color: var(--color-text-lighter);
   text-transform: uppercase;
-  padding: 0.125rem 0.5rem;
+  padding: 0.125rem 0.5rem 0.125rem 0.75rem;
   margin-bottom: 0.125rem;
   border-bottom: 1px groove var(--color-border);
   > * {
@@ -153,5 +153,18 @@
   --mdc-icon-size: 1.25rem;
   &:hover {
     background: alphav(var(--color-text), 0.04);
+  }
+
+  .trivial-start {
+    width: 100%;
+  }
+
+  .rep-name {
+    @include truncate(100px);
+    min-width: 100%;
+  }
+
+  .rep-acronym {
+    color: var(--color-text-lighter);
   }
 }

@@ -171,7 +171,7 @@ export class CharacterViewTestActions extends LitElement {
       ? fakeIDs.find((i) => i.id === this.activeFakeId)
       : null;
     const fakeIDreps = fakeID?.repsWithIdentifiers;
-
+    if (this.activeFakeId && !fakeID) this.activeFakeId = undefined;
     const repSources = compact([
       trackReputations && {
         reps: this.ego.trackedReps,
@@ -194,6 +194,9 @@ export class CharacterViewTestActions extends LitElement {
         },
       })),
     ]);
+
+    // TODO: Toggle to show all reps instead of just tracked
+    // TODO: Add collapse toggle
     return html`
       ${notEmpty(repSources)
         ? html`
@@ -273,11 +276,14 @@ export class CharacterViewTestActions extends LitElement {
     return html`
       <li class="rep-item">
         <button
-          title=${rep.network}
-          class="rep-acronym"
+          title="${rep.network} (${rep.acronym})"
+          class="trivial-start"
           @click=${() => this.startFavorTest(rep, Favor.Trivial)}
         >
-          ${rep.network}
+          <span class="rep-name">
+            ${rep.network}
+            <span class="rep-acronym">${rep.acronym}</span></span
+          >
         </button>
         <span class="rep-score">${rep.score}</span>
         <!-- <div class="favors"> -->
