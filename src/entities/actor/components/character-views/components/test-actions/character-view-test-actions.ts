@@ -188,7 +188,7 @@ export class CharacterViewTestActions extends LitElement {
           callback: () => (this.activeEgo = undefined),
         },
         ...[...this.character.equippedGroups.onboardALIs].map(([id, ego]) => ({
-          label: ego.name,
+          label: `${this.character.items.get(id)?.name} - ${ego.name}`,
           activated: currentEgo === ego,
           callback: () => (this.activeEgo = id),
         })),
@@ -203,7 +203,8 @@ export class CharacterViewTestActions extends LitElement {
   }
 
   render() {
-    const { groupedSkills, name, aptitudes } = this.currentEgo;
+    const { currentEgo } = this;
+    const { groupedSkills, name, aptitudes } = currentEgo;
     const { active, know } = groupedSkills;
     const { sources, fakeID } = this.repSources;
     const { softwareSkills, onboardALIs } = this.character.equippedGroups;
@@ -278,9 +279,11 @@ export class CharacterViewTestActions extends LitElement {
       <section class="ego">
         <sl-header
           @click=${this.openEgoSelectMenu}
-          heading="${localize('ego')}: ${name} - ${localize(
-            'aptitudes',
-          )} & ${localize('skills')}"
+          heading="${localize('ego')}: ${currentEgo === this.ego
+            ? name
+            : `${this.character.items.get(this.activeEgo!)?.name} - ${
+                currentEgo.name
+              }`} - ${localize('aptitudes')} & ${localize('skills')}"
         ></sl-header>
         <ul class="aptitudes">
           ${enumValues(AptitudeType).map(
@@ -290,7 +293,7 @@ export class CharacterViewTestActions extends LitElement {
                 clickable
                 ?disabled=${this.character.disabled}
               >
-                <span slot="before">${localize('aptitude')}</span>
+                <span slot="before">${localize(aptitude)}</span>
                 <span class="points">${aptitudes[aptitude]}</span>
                 <span class="check"
                   ><mwc-icon>check</mwc-icon> ${aptitudes[aptitude] * 3}</span
