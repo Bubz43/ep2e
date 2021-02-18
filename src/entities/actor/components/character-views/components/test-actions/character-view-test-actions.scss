@@ -174,15 +174,20 @@
   justify-content: space-evenly;
   [slot='before'] {
     margin-right: 0.5ch;
+    text-transform: uppercase;
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    letter-spacing: -0.25rem;
+    width: min-content;
+    text-align: center;
   }
   .points {
     font-size: larger;
+    text-align: center;
   }
   .check {
     display: flex;
     align-items: center;
-    mwc-icon {
-      margin-right: 0.5ch;
-    }
+    --mdc-icon-size: 1rem;
   }
 }
