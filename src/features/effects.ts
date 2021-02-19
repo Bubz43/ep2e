@@ -7,7 +7,7 @@ import {
 } from '@src/data-enums';
 import { localize } from '@src/foundry/localization';
 import { healthLabels, HealthStat, HealthType } from '@src/health/health';
-import { HealOverTimeTarget, formatAutoHealing } from '@src/health/recovery';
+import { formatAutoHealing, HealOverTimeTarget } from '@src/health/recovery';
 import { nonNegative, notEmpty, withSign } from '@src/utility/helpers';
 import { anyPass, clamp, compact, createPipe, map, purry } from 'remeda';
 import type { Action, ActionSubtype } from './actions';
@@ -92,6 +92,7 @@ export type HealthEffect = {
   modifier: number;
 };
 
+// TODO: Collision bonus
 export type MeleeEffect = {
   type: EffectType.Melee;
   dvModifier: string;

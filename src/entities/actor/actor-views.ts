@@ -15,33 +15,40 @@ export const renderCharacterView = (proxy: Character, token: MaybeToken) => {
 };
 
 export const openSleeveForm = (sleeve: Sleeve) => {
-  const updater = ((sleeve.updater as unknown) as UpdateStore<{
-    data: { reference: string };
-  }>)
-    .path('data')
-    .nestedStore();
-
   return openOrRenderWindow({
     key: sleeve.updater,
-    content: html`
-      ${renderSleeveForm(sleeve)}
-      <entity-form-footer
-        slot="footer"
-        .updater=${updater}
-      ></entity-form-footer>
-    `,
+    content: renderSleeveForm(sleeve),
     name: `${sleeve.name} - ${localize('sleeve')}`,
     resizable: ResizeOption.Vertical,
   });
 };
 
 export const renderSleeveForm = (proxy: Sleeve) => {
+  const updater = ((proxy.updater as unknown) as UpdateStore<{
+    data: { reference: string };
+  }>)
+    .path('data')
+    .nestedStore();
   switch (proxy.type) {
     case ActorType.Infomorph:
-      return html`<infomorph-form .sleeve=${proxy}></infomorph-form> `;
+      return html`<infomorph-form .sleeve=${proxy}></infomorph-form>
+        <entity-form-footer
+          slot="footer"
+          .updater=${updater}
+        ></entity-form-footer> `;
     case ActorType.Biological:
-      return html`<biological-form .sleeve=${proxy}></biological-form> `;
+      return html`<biological-form .sleeve=${proxy}></biological-form>
+        <entity-form-footer
+          slot="footer"
+          .updater=${updater}
+        ></entity-form-footer> `;
     case ActorType.Synthetic:
-      return html` <synthetic-form .sleeve=${proxy}></synthetic-form> `;
+      return html`
+        <synthetic-form .sleeve=${proxy}></synthetic-form>
+        <entity-form-footer
+          slot="footer"
+          .updater=${updater}
+        ></entity-form-footer>
+      `;
   }
 };
