@@ -84,14 +84,16 @@ export class CharacterViewTestActions extends LitElement {
       entities: { actor: this.character.actor },
       getState: (actor) => {
         if (actor.proxy.type !== ActorType.Character) return null;
-        const ali = onboardAliId
+        const tech = onboardAliId
           ? actor.proxy.equippedGroups.onboardALIs.get(onboardAliId)
           : null;
-        const ego = ali || actor.proxy.ego;
+        if (onboardAliId && !tech) return null;
+        const ego = tech?.onboardALI || actor.proxy.ego;
         return {
           ego,
           character: actor.proxy,
           skill: ego.skills.find((s) => s.name === skill.name) || skill,
+          techSource: tech,
         };
       },
     });
@@ -187,9 +189,9 @@ export class CharacterViewTestActions extends LitElement {
           activated: currentEgo === this.ego,
           callback: () => (this.activeEgo = undefined),
         },
-        ...[...this.character.equippedGroups.onboardALIs].map(([id, ego]) => ({
-          label: `${this.character.items.get(id)?.name} - ${ego.name}`,
-          activated: currentEgo === ego,
+        ...[...this.character.equippedGroups.onboardALIs].map(([id, tech]) => ({
+          label: `${tech.name} - ${tech.onboardALI.name}`,
+          activated: this.activeEgo === id,
           callback: () => (this.activeEgo = id),
         })),
       ],
@@ -199,7 +201,7 @@ export class CharacterViewTestActions extends LitElement {
   private get currentEgo() {
     const { onboardALIs } = this.character.equippedGroups;
     const onboard = this.activeEgo ? onboardALIs.get(this.activeEgo) : null;
-    return onboard || this.ego;
+    return onboard?.onboardALI || this.ego;
   }
 
   render() {
@@ -277,14 +279,19 @@ export class CharacterViewTestActions extends LitElement {
         : ''}
 
       <section class="ego">
-        <sl-header
-          @click=${this.openEgoSelectMenu}
-          heading="${localize('ego')}: ${currentEgo === this.ego
+        <header>
+          <mwc-icon-button
+            ?disabled=${this.ego.disabled}
+            @click=${this.openEgoSelectMenu}
+            icon=${fakeID ? 'person_outline' : 'person'}
+          ></mwc-icon-button>
+          ${currentEgo === this.ego
             ? name
             : `${this.character.items.get(this.activeEgo!)?.name} - ${
                 currentEgo.name
-              }`} - ${localize('aptitudes')} & ${localize('skills')}"
-        ></sl-header>
+              }`}
+          - ${localize('aptitudes')} & ${localize('skills')}
+        </header>
         <ul class="aptitudes">
           ${enumValues(AptitudeType).map(
             (aptitude) => html`
