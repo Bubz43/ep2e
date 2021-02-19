@@ -12,6 +12,7 @@ import {
   LitElement,
   query,
 } from 'lit-element';
+import { ifDefined } from 'lit-html/directives/if-defined';
 import type { Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';
 import styles from './skill-test-controls.scss';
@@ -109,26 +110,52 @@ export class SkillTestControls extends LitElement {
   }
 
   private renderTest(test: NonNullable<SkillTestControls['test']>) {
-    const { character, ego, token, action, pools, target, skillState } = test;
+    const {
+      character,
+      ego,
+      token,
+      action,
+      pools,
+      target,
+      skillState,
+      techSource,
+    } = test;
     return html`
-      ${character
-        ? html`
-            <mwc-list-item
-              class="entity"
-              @click=${() => character.actor.sheet.render(true)}
-              graphic="medium"
-              ?twoline=${!!character.sleeve}
-            >
-              <img slot="graphic" src=${token?.data.img ?? character.img} />
-              <span>${token?.data.name ?? character.name} </span>
-              ${character.sleeve
-                ? html`<span slot="secondary"
-                    >${formattedSleeveInfo(character.sleeve).join(' - ')}</span
-                  >`
-                : ''}
-            </mwc-list-item>
-          `
-        : ''}
+      <div class="entities">
+        ${character
+          ? html`
+              <mwc-list-item
+                @click=${() => character.actor.sheet.render(true)}
+                graphic="medium"
+                ?twoline=${!!character.sleeve}
+              >
+                <img slot="graphic" src=${token?.data.img ?? character.img} />
+                <span>${token?.data.name ?? character.name} </span>
+                ${character.sleeve
+                  ? html`<span slot="secondary"
+                      >${formattedSleeveInfo(character.sleeve).join(
+                        ' - ',
+                      )}</span
+                    >`
+                  : ''}
+              </mwc-list-item>
+            `
+          : ''}
+        ${techSource
+          ? html`
+              <mwc-list-item
+                graphic=${ifDefined(
+                  techSource.nonDefaultImg ? 'icon' : undefined,
+                )}
+              >
+                ${techSource.nonDefaultImg
+                  ? html`<img src=${techSource.nonDefaultImg} slot="graphic" />`
+                  : ''}
+                <span>${techSource.name} - ${localize('onboardALI')}</span>
+              </mwc-list-item>
+            `
+          : ''}
+      </div>
 
       <div class="sections">
         <section class="skill-section">

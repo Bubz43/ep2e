@@ -4,6 +4,7 @@ import { PoolType, SuperiorResultEffect } from '@src/data-enums';
 import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
+import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import {
   Action,
   actionTimeframeModifier,
@@ -16,18 +17,17 @@ import { Pool } from '@src/features/pool';
 import { complementarySkillBonus, Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { arrayOf } from '@src/utility/helpers';
-import { compact, last, map } from 'remeda';
+import { compact, last } from 'remeda';
 import {
-  createSuccessTestModifier,
   grantedSuperiorResultEffects,
   rollSuccessTest,
   successTestEffectMap,
-  SuccessTestResult,
 } from './success-test';
 import { SuccessTestBase } from './success-test-base';
 
 export type SkillTestInit = {
   ego: Ego;
+  techSource?: PhysicalTech | null;
   skill: Skill;
   character?: Character;
   token?: MaybeToken;
@@ -56,6 +56,7 @@ export class SkillTest extends SuccessTestBase {
   readonly token;
   readonly skillState: SkillState;
   readonly opposing;
+  readonly techSource?: PhysicalTech | null;
 
   get basePoints() {
     const {
@@ -80,6 +81,7 @@ export class SkillTest extends SuccessTestBase {
     token,
     action,
     opposing,
+    techSource,
   }: SkillTestInit) {
     super({
       action:
@@ -93,6 +95,7 @@ export class SkillTest extends SuccessTestBase {
     this.character = character;
     this.token = token;
     this.opposing = opposing;
+    this.techSource = techSource;
 
     this.skillState = {
       skill,
@@ -154,6 +157,7 @@ export class SkillTest extends SuccessTestBase {
   }
 
   protected getModifierEffects(skill: Skill, action: Action) {
+    if (this.techSource) return new Map();
     return successTestEffectMap(
       this.character?.appliedEffects.getMatchingSuccessTestEffects(
         matchesSkill(skill)(action),
@@ -167,6 +171,7 @@ export class SkillTest extends SuccessTestBase {
   }
 
   protected getPools(skill: Skill) {
+    if (this.techSource) return [];
     const poolMap = this.character?.pools;
     return compact(
       this.ego.useThreat
@@ -233,7 +238,7 @@ export class SkillTest extends SuccessTestBase {
         },
       ],
       ignoredModifiers: ignoreModifiers ? this.modifierTotal : undefined,
-      linkedPool: this.getLinkedPool(skill),
+      linkedPool: this.techSource ? undefined : this.getLinkedPool(skill),
       defaulting: skill.points === 0,
       task: action.timeframe
         ? {
@@ -257,7 +262,7 @@ export class SkillTest extends SuccessTestBase {
   }
 
   protected async createMessage() {
-    const { settings, pools, action, name, opposing } = this;
+    const { settings, pools, action, name, opposing, techSource } = this;
 
     await createMessage({
       data: {
@@ -267,6 +272,7 @@ export class SkillTest extends SuccessTestBase {
             : name,
           subheadings: compact([
             opposing && name,
+            techSource?.name,
             [
               `${action.type} ${
                 action.timeMod && action.type !== ActionType.Task

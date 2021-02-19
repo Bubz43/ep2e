@@ -3,7 +3,7 @@ import {
   openOrRenderWindow,
 } from '@src/components/window/window-controls';
 import { ResizeOption } from '@src/components/window/window-options';
-import { enumValues, PoolType, RechargeType } from '@src/data-enums';
+import { enumValues, PoolType, RechargeType, ShellType } from '@src/data-enums';
 import {
   AppliedEffects,
   ReadonlyAppliedEffects,
@@ -246,7 +246,11 @@ export class Character extends ActorProxyBase<ActorType.Character> {
           encumbered: this.armor.isEncumbered(
             this.sleeve.physicalHealth.main.durability.value,
           ),
-          overburdened: this.armor.isOverburdened,
+          overburdened:
+            this.sleeve.type === ActorType.Synthetic &&
+            this.sleeve.epData.shellType === ShellType.Vehicle
+              ? false
+              : this.armor.isOverburdened,
         };
   }
 
@@ -394,7 +398,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     const expiredServices: typeof services = [];
     const activeFabbers: PhysicalTech[] = [];
     const devices = new Map<PhysicalTech, boolean>();
-    const onboardALIs = new Map<string, Ego>();
+    const onboardALIs = new Map<string, PhysicalTech>();
     const softwareSkills: Software[] = [];
     let masterDevice: PhysicalTech | null = null;
     const { masterDeviceId, unslavedDevices } = this.networkSettings;
@@ -422,7 +426,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
           if (item.id === masterDeviceId) masterDevice = item;
           else devices.set(item, !unslavedDevices.includes(item.id));
 
-          if (item.hasOnboardALI) onboardALIs.set(item.id, item.onboardALI);
+          if (item.hasOnboardALI) onboardALIs.set(item.id, item);
         }
       }
     }

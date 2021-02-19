@@ -7,6 +7,7 @@ import { AptitudeType, PoolType, SuperiorResultEffect } from '@src/data-enums';
 import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
+import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import {
   Action,
   actionTimeframeModifier,
@@ -43,6 +44,7 @@ export type AptitudeCheckInit = {
   action?: Action;
   special?: SpecialTestData & { messageRef?: string };
   modifiers?: SimpleSuccessTestModifier[];
+  techSource?: PhysicalTech | null;
 };
 
 export class AptitudeCheck extends SuccessTestBase {
@@ -54,6 +56,7 @@ export class AptitudeCheck extends SuccessTestBase {
     multiplier: number;
   }>;
   readonly special;
+  techSource?: PhysicalTech | null;
 
   get basePoints() {
     return Math.round(
@@ -198,6 +201,7 @@ export class AptitudeCheck extends SuccessTestBase {
   }
 
   private getPools(aptitude: AptitudeType) {
+    if (this.techSource) return [];
     const poolMap = this.character?.pools;
     if (this.special?.type === SpecialTest.Integration) {
       const pool = poolMap?.get(
@@ -225,6 +229,7 @@ export class AptitudeCheck extends SuccessTestBase {
   }
 
   private getModifierEffects(aptitude: AptitudeType, action: Action) {
+    if (this.techSource) return new Map();
     return successTestEffectMap(
       this.character?.appliedEffects.getMatchingSuccessTestEffects(
         matchesAptitude(aptitude, this.special?.type)(action),
