@@ -3,7 +3,7 @@ import {
   openOrRenderWindow,
 } from '@src/components/window/window-controls';
 import { ResizeOption } from '@src/components/window/window-options';
-import { enumValues, PoolType, RechargeType, ShellType } from '@src/data-enums';
+import { enumValues, PoolType, RechargeType } from '@src/data-enums';
 import {
   AppliedEffects,
   ReadonlyAppliedEffects,
@@ -246,11 +246,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
           encumbered: this.armor.isEncumbered(
             this.sleeve.physicalHealth.main.durability.value,
           ),
-          overburdened:
-            this.sleeve.type === ActorType.Synthetic &&
-            this.sleeve.epData.shellType === ShellType.Vehicle
-              ? false
-              : this.armor.isOverburdened,
+          overburdened: this.armor.isOverburdened,
         };
   }
 
