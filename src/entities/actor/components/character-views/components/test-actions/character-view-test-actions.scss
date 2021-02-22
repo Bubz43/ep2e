@@ -8,7 +8,59 @@
 }
 
 :host {
-  display: contents;
+  display: grid;
+  gap: 0.25rem;
+}
+
+sl-header {
+  padding: 0.25rem 0.75rem;
+  border-bottom: none;
+}
+
+.aptitudes-list,
+.skills-list {
+  column-rule: 1px groove var(--color-border);
+  column-gap: 0;
+  > * {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  // display: grid;
+  // grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.aptitudes-list {
+  // column-count: 3;
+  column-width: 200px;
+}
+
+.aptitude-item {
+  padding: 0.125rem 0.5rem;
+
+  .acronym {
+    color: var(--color-text-lighter);
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+    letter-spacing: 1px;
+  }
+  mwc-icon {
+    --mdc-icon-size: 1rem;
+    margin: 0 0.25ch;
+  }
+}
+
+.aptitude-name {
+  margin-right: 0.5ch;
+}
+
+.aptitude-points {
+  text-align: right;
+}
+
+.aptitude-check {
+  margin-left: 1ch;
+  display: flex;
+  align-items: center;
 }
 
 .skill-controls {
@@ -38,18 +90,11 @@
 }
 
 .skills-list {
-  column-count: 3;
-  column-gap: 0;
   $border: 1px groove var(--color-border);
-  column-rule: $border;
   padding: 0 0 0.25rem;
   overflow: hidden;
   font-size: 14px;
-
-  > * {
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
+  column-width: 200px;
 
   .divider {
     margin: 0.25rem 0;
@@ -57,6 +102,7 @@
 
   .filter {
     margin-bottom: 0.25rem;
+    border-top: $border;
   }
 
   .divider,
@@ -86,26 +132,26 @@
   }
 }
 
-.reps {
-  background: var(--color-bg);
-  background: linear-gradient(
-    45deg,
-    alphav(var(--color-bg), 0.75),
-    alphav(var(--color-bg-alt), 0.75)
-  );
+// .reps {
+//   // background: var(--color-bg);
+//   // background: linear-gradient(
+//   //   45deg,
+//   //   alphav(var(--color-bg), 0.75),
+//   //   alphav(var(--color-bg-alt), 0.75)
+//   // );
 
-  padding: 0.25rem 0;
-  .label {
-    display: inline-flex;
-    align-items: center;
-    --mdc-icon-button-size: 2rem;
-    mwc-icon-button {
-      margin-right: 0.5ch;
-    }
-    font-size: larger;
-    padding: 0 0.5rem;
-  }
-}
+//   padding: 0.25rem 0;
+//   .label {
+//     display: inline-flex;
+//     align-items: center;
+//     --mdc-icon-button-size: 2rem;
+//     mwc-icon-button {
+//       margin-right: 0.5ch;
+//     }
+//     font-size: larger;
+//     padding: 0 0.5rem;
+//   }
+// }
 
 .rep-sources {
   --mdc-theme-primary: var(--color-border);
@@ -166,28 +212,7 @@
 
   .rep-acronym {
     color: var(--color-text-lighter);
-  }
-}
-
-.aptitudes {
-  display: flex;
-  justify-content: space-evenly;
-  [slot='before'] {
-    margin-right: 0.5ch;
-    text-transform: uppercase;
-    writing-mode: vertical-lr;
-    text-orientation: upright;
-    letter-spacing: -0.25rem;
-    width: min-content;
-    text-align: center;
-  }
-  .points {
-    font-size: larger;
-    text-align: center;
-  }
-  .check {
-    display: flex;
-    align-items: center;
-    --mdc-icon-size: 1rem;
+    float: right;
+    font-family: var(--font-mono);
   }
 }

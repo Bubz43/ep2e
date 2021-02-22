@@ -95,7 +95,7 @@ export class MeleeAttackControls extends LitElement {
     this.subs.clear();
   }
 
-  setState(init: Init) {
+  async setState(init: Init) {
     this.unsub();
     this.subs.add(() =>
       MeleeAttackControls.openWindows.delete(init.entities.actor),
@@ -117,8 +117,9 @@ export class MeleeAttackControls extends LitElement {
     if (!this.isConnected) overlay.append(this);
     MeleeAttackControls.openWindows.set(init.entities.actor, this);
     const source = traverseActiveElements();
-    if (source instanceof HTMLElement) {
-      requestAnimationFrame(() => this.win?.positionAdjacentToElement(source));
+    if (source instanceof HTMLElement && source.isConnected) {
+      await this.win?.updateComplete;
+      this.win?.positionAdjacentToElement(source);
     }
   }
 

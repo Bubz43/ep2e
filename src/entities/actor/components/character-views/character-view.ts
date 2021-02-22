@@ -246,14 +246,16 @@ export class CharacterView extends CharacterViewBase {
   private renderTabbedContent() {
     switch (this.currentTab) {
       case 'actions':
-        return html`<character-view-test-actions
+        return html`
+          <character-view-test-actions
             .character=${this.character}
             .ego=${this.character.ego}
           ></character-view-test-actions>
-          <character-view-attacks-section
+          <!-- <character-view-attacks-section
             .character=${this.character}
             .token=${this.token}
-          ></character-view-attacks-section> `;
+          ></character-view-attacks-section> -->
+        `;
 
       case 'inventory':
         return html`

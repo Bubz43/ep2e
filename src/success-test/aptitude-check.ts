@@ -72,6 +72,7 @@ export class AptitudeCheck extends SuccessTestBase {
     action,
     special,
     modifiers,
+    techSource,
   }: AptitudeCheckInit) {
     super({
       action:
@@ -84,6 +85,7 @@ export class AptitudeCheck extends SuccessTestBase {
     this.ego = ego;
     this.character = character;
     this.token = token;
+    this.techSource = techSource;
     this.aptitude = {
       type: aptitude,
       multiplier: 3,

@@ -68,7 +68,7 @@ export class SkillTestControls extends LitElement {
     this.subs.clear();
   }
 
-  setState(init: Init) {
+  async setState(init: Init) {
     this.unsub();
     this.subs.add(() =>
       SkillTestControls.openWindows.delete(init.entities.actor),
@@ -91,7 +91,8 @@ export class SkillTestControls extends LitElement {
     SkillTestControls.openWindows.set(init.entities.actor, this);
     const source = init.relativeEl || traverseActiveElements();
     if (source instanceof HTMLElement && source.isConnected) {
-      requestAnimationFrame(() => this.win?.positionAdjacentToElement(source));
+      await this.win?.updateComplete;
+      this.win?.positionAdjacentToElement(source);
     }
   }
 

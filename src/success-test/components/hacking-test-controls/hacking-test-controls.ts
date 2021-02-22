@@ -85,7 +85,7 @@ export class HackingTestControls extends LitElement {
     this.subs.clear();
   }
 
-  setState(init: Init) {
+  async setState(init: Init) {
     this.unsub();
     this.subs.add(() =>
       HackingTestControls.openWindows.delete(init.entities.actor),
@@ -107,8 +107,9 @@ export class HackingTestControls extends LitElement {
     if (!this.isConnected) overlay.append(this);
     HackingTestControls.openWindows.set(init.entities.actor, this);
     const source = traverseActiveElements();
-    if (source instanceof HTMLElement) {
-      requestAnimationFrame(() => this.win?.positionAdjacentToElement(source));
+    if (source instanceof HTMLElement && source.isConnected) {
+      await this.win?.updateComplete;
+      this.win?.positionAdjacentToElement(source);
     }
   }
 

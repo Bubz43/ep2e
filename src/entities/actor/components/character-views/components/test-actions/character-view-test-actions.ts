@@ -8,6 +8,7 @@ import { Favor, maxFavors, RepWithIdentifier } from '@src/features/reputations';
 import { Skill, skillFilterCheck } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { openMenu } from '@src/open-menu';
+import { AptitudeCheckControls } from '@src/success-test/components/aptitude-check-controls/aptitude-check-controls';
 import { ReputationFavorControls } from '@src/success-test/components/reputation-favor-controls/reputation-favor-controls';
 import { SkillTestControls } from '@src/success-test/components/skill-test-controls/skill-test-controls';
 import { notEmpty, safeMerge } from '@src/utility/helpers';
@@ -54,9 +55,21 @@ export class CharacterViewTestActions extends LitElement {
 
   private skillFilterCheck!: ReturnType<typeof skillFilterCheck>;
 
+  private collapsedSections = {
+    reputation: false,
+    skills: false,
+  };
+
   update(changedProps: PropertyValues<this>) {
     this.skillFilterCheck = skillFilterCheck(this.skillControls.filter);
     super.update(changedProps);
+  }
+
+  private toggleSection(
+    section: keyof CharacterViewTestActions['collapsedSections'],
+  ) {
+    this.collapsedSections[section] = !this.collapsedSections[section];
+    this.requestUpdate();
   }
 
   private updateSkillControls = (
@@ -76,6 +89,29 @@ export class CharacterViewTestActions extends LitElement {
 
   get disabled() {
     return this.character.disabled;
+  }
+
+  private startAptitudeTest(aptitude: AptitudeType) {
+    const onboardAliId = this.activeEgo;
+
+    AptitudeCheckControls.openWindow({
+      entities: { actor: this.character.actor },
+      getState: (actor) => {
+        if (actor.proxy.type !== ActorType.Character) return null;
+        const tech = onboardAliId
+          ? actor.proxy.equippedGroups.onboardALIs.get(onboardAliId)
+          : null;
+        if (onboardAliId && !tech) return null;
+        const ego = tech?.onboardALI || actor.proxy.ego;
+
+        return {
+          ego,
+          character: actor.proxy,
+          aptitude,
+          techSource: tech,
+        };
+      },
+    });
   }
 
   private startSkillTest(skill: Skill) {
@@ -205,45 +241,70 @@ export class CharacterViewTestActions extends LitElement {
   }
 
   render() {
-    const { currentEgo } = this;
+    const { currentEgo, collapsedSections } = this;
     const { groupedSkills, name, aptitudes } = currentEgo;
     const { active, know } = groupedSkills;
     const { sources, fakeID } = this.repSources;
     const { softwareSkills, onboardALIs } = this.character.equippedGroups;
     // TODO: Toggle to show all reps instead of just tracked
     // TODO: Add collapse toggle
+    const reps = fakeID?.repsWithIdentifiers ?? sources[0]?.reps!;
     return html`
-      ${notEmpty(sources)
-        ? html`
-            <div class="reps">
-              <span class="label">
-                <mwc-icon-button
-                  ?disabled=${this.ego.disabled}
-                  @click=${this.openRepSourceMenu}
-                  icon=${fakeID ? 'person_outline' : 'person'}
-                ></mwc-icon-button>
-                ${fakeID?.name ?? this.ego.name}'s
-                ${localize('reputations')}</span
-              >
+      <section class="ego">
+        <sl-header
+          heading="${currentEgo === this.ego
+            ? name
+            : `${this.character.items.get(this.activeEgo!)?.name} - ${
+                currentEgo.name
+              }`}      - ${localize('aptitudes')} & ${localize('skills')}"
+        >
+          <mwc-icon-button
+            slot="action"
+            ?disabled=${this.ego.disabled}
+            @click=${this.openEgoSelectMenu}
+            icon=${fakeID ? 'person_outline' : 'person'}
+          ></mwc-icon-button>
+          ${this.renderSectionToggle('skills')}
+        </sl-header>
 
-              <ul class="rep-list">
-                <li class="rep-header">
-                  <span>${localize('network')}</span>
-                  <span>${localize('score')}</span>
-                  ${[...maxFavors.keys()].map(
-                    (key) =>
-                      html`<span title="${localize(key)} ${localize('favors')}"
-                        >${localize(key).slice(0, 3)}</span
-                      >`,
-                  )}
-                </li>
-                ${(fakeID?.repsWithIdentifiers ?? sources[0]?.reps!).map(
-                  this.renderRep,
-                )}
+        ${collapsedSections['skills']
+          ? ''
+          : html`<ul class="aptitudes-list">
+                ${enumValues(AptitudeType).map(this.renderAptitude)}
               </ul>
-            </div>
-          `
-        : ''}
+
+              <ul class="skills-list">
+                <li class="filter">
+                  ${renderAutoForm({
+                    classes: 'skill-controls',
+                    storeOnInput: true,
+                    noDebounce: true,
+                    props: this.skillControls,
+                    update: this.updateSkillControls,
+                    fields: ({ filter }) => html`
+                      <span>${localize('skills')}</span>
+                      <div
+                        class="skill-filter"
+                        @keypress=${this.findFirstUnfilteredSkill}
+                      >
+                        ${renderTextInput(filter, {
+                          search: true,
+                          placeholder: localize('filter'),
+                        })}
+                      </div>
+                    `,
+                  })}
+                </li>
+                ${active?.map(this.renderSkill)}
+                ${notEmpty(know)
+                  ? html`
+                      <li class="divider" role="separator"></li>
+                      ${know.map(this.renderSkill)}
+                    `
+                  : ''}
+              </ul>`}
+      </section>
+
       ${notEmpty(softwareSkills)
         ? html`
             <div class="software-section">
@@ -277,72 +338,78 @@ export class CharacterViewTestActions extends LitElement {
             </div>
           `
         : ''}
-
-      <section class="ego">
-        <header>
-          <mwc-icon-button
-            ?disabled=${this.ego.disabled}
-            @click=${this.openEgoSelectMenu}
-            icon=${fakeID ? 'person_outline' : 'person'}
-          ></mwc-icon-button>
-          ${currentEgo === this.ego
-            ? name
-            : `${this.character.items.get(this.activeEgo!)?.name} - ${
-                currentEgo.name
-              }`}
-          - ${localize('aptitudes')} & ${localize('skills')}
-        </header>
-        <ul class="aptitudes">
-          ${enumValues(AptitudeType).map(
-            (aptitude) => html`
-              <wl-list-item
-                class="aptitude"
-                clickable
-                ?disabled=${this.character.disabled}
+      ${notEmpty(sources)
+        ? html`
+            <section class="reps">
+              <sl-header
+                heading="${fakeID?.name ?? this.ego.name}'s ${localize(
+                  'reputations',
+                )}"
               >
-                <span slot="before">${localize(aptitude)}</span>
-                <span class="points">${aptitudes[aptitude]}</span>
-                <span class="check"
-                  ><mwc-icon>check</mwc-icon> ${aptitudes[aptitude] * 3}</span
-                >
-              </wl-list-item>
-            `,
-          )}
-        </ul>
+                <mwc-icon-button
+                  slot="action"
+                  ?disabled=${this.ego.disabled}
+                  @click=${this.openRepSourceMenu}
+                  icon=${fakeID ? 'person_outline' : 'person'}
+                ></mwc-icon-button>
+                ${this.renderSectionToggle('reputation')}
+              </sl-header>
 
-        <ul class="skills-list">
-          <li class="filter">
-            ${renderAutoForm({
-              classes: 'skill-controls',
-              storeOnInput: true,
-              noDebounce: true,
-              props: this.skillControls,
-              update: this.updateSkillControls,
-              fields: ({ filter }) => html`
-                <span>${localize('skills')}</span>
-                <div
-                  class="skill-filter"
-                  @keypress=${this.findFirstUnfilteredSkill}
-                >
-                  ${renderTextInput(filter, {
-                    search: true,
-                    placeholder: localize('filter'),
-                  })}
-                </div>
-              `,
-            })}
-          </li>
-          ${active?.map(this.renderSkill)}
-          ${notEmpty(know)
-            ? html`
-                <li class="divider" role="separator"></li>
-                ${know.map(this.renderSkill)}
-              `
-            : ''}
-        </ul>
-      </section>
+              ${collapsedSections['reputation']
+                ? ''
+                : html`
+                    <ul class="rep-list">
+                      <li class="rep-header">
+                        <span>${localize('network')}</span>
+                        <span>${localize('score')}</span>
+                        ${[...maxFavors.keys()].map(
+                          (key) =>
+                            html`<span
+                              title="${localize(key)} ${localize('favors')}"
+                              >${localize(key).slice(0, 3)}</span
+                            >`,
+                        )}
+                      </li>
+                      ${reps.map(this.renderRep)}
+                    </ul>
+                  `}
+            </section>
+          `
+        : ''}
     `;
   }
+
+  private renderSectionToggle(
+    section: keyof CharacterViewTestActions['collapsedSections'],
+  ) {
+    return html` <mwc-icon-button
+      slot="action"
+      @click=${() => this.toggleSection(section)}
+      icon=${this.collapsedSections[section]
+        ? 'keyboard_arrow_left'
+        : 'keyboard_arrow_down'}
+    >
+    </mwc-icon-button>`;
+  }
+
+  private renderAptitude = (type: AptitudeType) => {
+    const points = this.currentEgo.aptitudes[type];
+    return html` <wl-list-item
+      clickable
+      ?disabled=${this.character.disabled}
+      class="aptitude-item"
+      @click=${() => this.startAptitudeTest(type)}
+    >
+      <span class="aptitude-name" slot="before">
+        ${localize('FULL', type)}</span
+      >
+      <span class="aptitude-points">${points}</span>
+      <span class="aptitude-check" slot="after">
+        <span class="acronym">${localize(type)}</span>
+        <mwc-icon>check</mwc-icon> ${points * 3}</span
+      >
+    </wl-list-item>`;
+  };
 
   private renderSkill = (skill: Skill) => {
     const filtered = this.skillFilterCheck(skill);

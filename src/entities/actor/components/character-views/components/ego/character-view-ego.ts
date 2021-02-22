@@ -1,11 +1,8 @@
-import { AptitudeType, enumValues } from '@src/data-enums';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
-import { ActorType } from '@src/entities/entity-types';
 import { idProp } from '@src/features/feature-helpers';
 import { MotivationStance } from '@src/features/motivations';
 import { localize } from '@src/foundry/localization';
-import { AptitudeCheckControls } from '@src/success-test/components/aptitude-check-controls/aptitude-check-controls';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
@@ -38,20 +35,6 @@ export class CharacterViewEgo extends LitElement {
     this.character.openHealthEditor(this.ego.mentalHealth);
   }
 
-  private startAptitudeTest(aptitude: AptitudeType) {
-    AptitudeCheckControls.openWindow({
-      entities: { actor: this.character.actor },
-      getState: (actor) => {
-        if (actor.proxy.type !== ActorType.Character) return null;
-        return {
-          ego: actor.proxy.ego,
-          character: actor.proxy,
-          aptitude,
-        };
-      },
-    });
-  }
-
   render() {
     const { filteredMotivations, settings } = this.ego;
     return html`
@@ -80,10 +63,6 @@ export class CharacterViewEgo extends LitElement {
             `
           : ''}
       </header>
-
-      <ul class="aptitudes-list">
-        ${enumValues(AptitudeType).map(this.renderAptitude)}
-      </ul>
 
       ${this.ego.trackMentalHealth
         ? html`
@@ -135,22 +114,6 @@ export class CharacterViewEgo extends LitElement {
           : ''}
       </li>
     `;
-  };
-
-  private renderAptitude = (type: AptitudeType) => {
-    const points = this.ego.aptitudes[type];
-    return html` <wl-list-item
-      clickable
-      ?disabled=${this.character.disabled}
-      class="aptitude-item"
-      @click=${() => this.startAptitudeTest(type)}
-    >
-      <span class="aptitude-name">${localize(type)}</span>
-      <div class="aptitude-values">
-        <span class="aptitude-points">${points}</span>
-        <span class="aptitude-check">${points * 3}</span>
-      </div>
-    </wl-list-item>`;
   };
 }
 
