@@ -20,7 +20,7 @@ sl-header {
 .aptitudes-list,
 .skills-list {
   column-rule: 1px groove var(--color-border);
-  column-gap: 0;
+  // column-gap: 0;
   > * {
     break-inside: avoid;
     page-break-inside: avoid;
@@ -30,8 +30,8 @@ sl-header {
 }
 
 .aptitudes-list {
-  // column-count: 3;
-  column-width: 200px;
+  column-count: 3;
+  // column-width: 200px;
 }
 
 .aptitude-item {
@@ -45,7 +45,7 @@ sl-header {
   }
   mwc-icon {
     --mdc-icon-size: 1rem;
-    margin: 0 0.25ch;
+    margin: 0 0.25ch 0 0;
   }
 }
 
@@ -69,7 +69,8 @@ sl-header {
   align-items: center;
   span {
     font-size: large;
-    padding: 0 0.5rem;
+    font-weight: bold;
+    padding: 0 1rem;
   }
   input {
     text-align: center;
@@ -132,26 +133,9 @@ sl-header {
   }
 }
 
-// .reps {
-//   // background: var(--color-bg);
-//   // background: linear-gradient(
-//   //   45deg,
-//   //   alphav(var(--color-bg), 0.75),
-//   //   alphav(var(--color-bg-alt), 0.75)
-//   // );
-
-//   padding: 0.25rem 0;
-//   .label {
-//     display: inline-flex;
-//     align-items: center;
-//     --mdc-icon-button-size: 2rem;
-//     mwc-icon-button {
-//       margin-right: 0.5ch;
-//     }
-//     font-size: larger;
-//     padding: 0 0.5rem;
-//   }
-// }
+.reps {
+  border-top: 1px solid var(--color-border);
+}
 
 .rep-sources {
   --mdc-theme-primary: var(--color-border);

@@ -245,7 +245,11 @@ export class CharacterViewTestActions extends LitElement {
     const { groupedSkills, name, aptitudes } = currentEgo;
     const { active, know } = groupedSkills;
     const { sources, fakeID } = this.repSources;
-    const { softwareSkills, onboardALIs } = this.character.equippedGroups;
+    const {
+      softwareSkills,
+      fakeIDs,
+      onboardALIs,
+    } = this.character.equippedGroups;
     // TODO: Toggle to show all reps instead of just tracked
     // TODO: Add collapse toggle
     const reps = fakeID?.repsWithIdentifiers ?? sources[0]?.reps!;
@@ -256,14 +260,18 @@ export class CharacterViewTestActions extends LitElement {
             ? name
             : `${this.character.items.get(this.activeEgo!)?.name} - ${
                 currentEgo.name
-              }`}      - ${localize('aptitudes')} & ${localize('skills')}"
+              }`}"
         >
-          <mwc-icon-button
-            slot="action"
-            ?disabled=${this.ego.disabled}
-            @click=${this.openEgoSelectMenu}
-            icon=${fakeID ? 'person_outline' : 'person'}
-          ></mwc-icon-button>
+          ${notEmpty(onboardALIs)
+            ? html`
+                <mwc-icon-button
+                  slot="action"
+                  ?disabled=${this.ego.disabled}
+                  @click=${this.openEgoSelectMenu}
+                  icon=${fakeID ? 'person_outline' : 'person'}
+                ></mwc-icon-button>
+              `
+            : ''}
           ${this.renderSectionToggle('skills')}
         </sl-header>
 
@@ -341,17 +349,17 @@ export class CharacterViewTestActions extends LitElement {
       ${notEmpty(sources)
         ? html`
             <section class="reps">
-              <sl-header
-                heading="${fakeID?.name ?? this.ego.name}'s ${localize(
-                  'reputations',
-                )}"
-              >
-                <mwc-icon-button
-                  slot="action"
-                  ?disabled=${this.ego.disabled}
-                  @click=${this.openRepSourceMenu}
-                  icon=${fakeID ? 'person_outline' : 'person'}
-                ></mwc-icon-button>
+              <sl-header heading=${localize('reputations')}>
+                ${notEmpty(fakeIDs)
+                  ? html` <span slot="info"
+                        >${fakeID?.name ?? this.ego.name}</span
+                      >
+                      <mwc-icon-button
+                        slot="action"
+                        @click=${this.openRepSourceMenu}
+                        icon=${fakeID ? 'person_outline' : 'person'}
+                      ></mwc-icon-button>`
+                  : ''}
                 ${this.renderSectionToggle('reputation')}
               </sl-header>
 
@@ -405,7 +413,7 @@ export class CharacterViewTestActions extends LitElement {
       >
       <span class="aptitude-points">${points}</span>
       <span class="aptitude-check" slot="after">
-        <span class="acronym">${localize(type)}</span>
+        <!-- <span class="acronym">${localize(type)}</span> -->
         <mwc-icon>check</mwc-icon> ${points * 3}</span
       >
     </wl-list-item>`;
@@ -417,7 +425,7 @@ export class CharacterViewTestActions extends LitElement {
       clickable
       class="skill-item ${classMap({ filtered })}"
       ?disabled=${this.disabled}
-      .tabindex=${live(filtered ? -1 : 0)}
+      .tabIndex=${live(filtered ? -1 : 0)}
       @click=${() => this.startSkillTest(skill)}
     >
       <span class="skill-name">${skill.fullName}</span>
