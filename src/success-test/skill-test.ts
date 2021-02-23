@@ -270,6 +270,7 @@ export class SkillTest extends SuccessTestBase {
           heading: opposing
             ? `${localize('opposing')}: ${opposing.testName}`
             : name,
+          // TODO: Maybe add specializations to subheadings
           subheadings: compact([
             opposing && name,
             techSource?.name,
@@ -287,7 +288,7 @@ export class SkillTest extends SuccessTestBase {
         successTest: this.testMessageData,
         fromMessageId: opposing?.messageId,
       },
-      entity: this.token ?? this.character, // TODO account for item sources,
+      entity: this.token ?? this.character,
       visibility: settings.visibility,
     });
 

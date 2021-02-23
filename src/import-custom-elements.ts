@@ -167,6 +167,7 @@ import { ReputationFavorControls } from './success-test/components/reputation-fa
 import { SuccessTestSectionLabel } from './success-test/components/section-label/success-test-section-label';
 import { SuccessTestSkillSection } from './success-test/components/skill-section/success-test-skill-section';
 import { SkillTestControls } from './success-test/components/skill-test-controls/skill-test-controls';
+import { SoftwareSkillTestControls } from './success-test/components/software-skill-test-controls/software-skill-test-controls';
 
 // Generic Components
 Field;
@@ -343,3 +344,4 @@ ReputationFavorControls;
 MeleeAttackControls;
 HackingTestControls;
 SuccessTestSkillSection;
+SoftwareSkillTestControls;

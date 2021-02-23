@@ -1,6 +1,7 @@
 import { createMessage } from '@src/chat/create-message';
 import type { SuccessTestMessageData } from '@src/chat/message-data';
 import { SuperiorResultEffect } from '@src/data-enums';
+import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Character } from '@src/entities/actor/proxies/character';
 import type { Software } from '@src/entities/item/proxies/software';
 import { actionTimeframeModifier, ActionType } from '@src/features/actions';
@@ -10,10 +11,11 @@ import { compact, last } from 'remeda';
 import { grantedSuperiorResultEffects, rollSuccessTest } from './success-test';
 import { SuccessTestBase } from './success-test-base';
 
-export interface SoftwarkSkillTestInit {
+export interface SoftwareSkillTestInit {
   software: Software;
   character: Character;
   skill: Software['skills'][number];
+  token?: MaybeToken;
 }
 
 export class SoftwareSkillTest extends SuccessTestBase {
@@ -26,17 +28,20 @@ export class SoftwareSkillTest extends SuccessTestBase {
 
   readonly software: Software;
   readonly character: Character;
+  readonly token;
 
   readonly skillState: {
-    skill: SoftwarkSkillTestInit['skill'];
+    skill: SoftwareSkillTestInit['skill'];
     applySpecialization: boolean;
     toggleSpecialization: () => void;
   };
 
-  constructor({ software, character, skill }: SoftwarkSkillTestInit) {
+  constructor({ software, character, skill, token }: SoftwareSkillTestInit) {
     super();
     this.software = software;
     this.character = character;
+    this.token = token;
+
     this.skillState = {
       skill,
       applySpecialization: false,
@@ -109,12 +114,13 @@ export class SoftwareSkillTest extends SuccessTestBase {
   }
 
   protected createMessage() {
-    const { software, skillState, character, settings, action } = this;
+    const { software, character, settings, action } = this;
 
     createMessage({
       data: {
         header: {
           heading: this.name,
+          // TODO: Maybe add specializations to subheadings
           subheadings: compact([
             software.name,
             [
