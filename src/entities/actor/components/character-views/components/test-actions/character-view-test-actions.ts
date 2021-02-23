@@ -58,6 +58,7 @@ export class CharacterViewTestActions extends LitElement {
   private collapsedSections = {
     reputation: false,
     skills: false,
+    software: false,
   };
 
   update(changedProps: PropertyValues<this>) {
@@ -315,35 +316,47 @@ export class CharacterViewTestActions extends LitElement {
 
       ${notEmpty(softwareSkills)
         ? html`
-            <div class="software-section">
+            <section>
               <sl-header
                 heading="${localize('software')} ${localize('skills')}"
-              ></sl-header>
-              <ul class="software">
-                ${softwareSkills.map(
-                  (software) => html`
-                    <li>
-                      ${software.name}
-                      <ul class="software-skills">
-                        ${software.skills.map(
-                          ({ name, specialization, total }) => html`
-                            <li>
-                              <span class="software-skill-name"
-                                >${name}
-                                ${specialization
-                                  ? `(${specialization})`
-                                  : ''}</span
-                              >
-                              <span class="software-skill-total">${total}</span>
-                            </li>
-                          `,
-                        )}
-                      </ul>
-                    </li>
-                  `,
-                )}
-              </ul>
-            </div>
+              >
+                ${this.renderSectionToggle('software')}
+              </sl-header>
+              ${this.collapsedSections.software
+                ? ''
+                : html`
+                    <ul class="software-list">
+                      ${softwareSkills.map(
+                        (software) => html`
+                          <li class="software">
+                            <span class="software-name">${software.name}</span>
+                            <ul class="skills-list">
+                              ${software.skills.map(
+                                ({ name, specialization, total }) => html`
+                                  <Wl-list-item
+                                    clickable
+                                    class="skill-item"
+                                    ?disabled=${this.disabled}
+                                  >
+                                    <span class="skill-name"
+                                      >${name}
+                                      ${specialization
+                                        ? `(${specialization})`
+                                        : ''}</span
+                                    >
+                                    <span class="skill-total" slot="after"
+                                      >${total}</span
+                                    >
+                                  </Wl-list-item>
+                                `,
+                              )}
+                            </ul>
+                          </li>
+                        `,
+                      )}
+                    </ul>
+                  `}
+            </section>
           `
         : ''}
       ${notEmpty(sources)
@@ -413,7 +426,6 @@ export class CharacterViewTestActions extends LitElement {
       >
       <span class="aptitude-points">${points}</span>
       <span class="aptitude-check" slot="after">
-        <!-- <span class="acronym">${localize(type)}</span> -->
         <mwc-icon>check</mwc-icon> ${points * 3}</span
       >
     </wl-list-item>`;

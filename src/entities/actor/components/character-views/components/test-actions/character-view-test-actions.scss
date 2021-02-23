@@ -20,18 +20,14 @@ sl-header {
 .aptitudes-list,
 .skills-list {
   column-rule: 1px groove var(--color-border);
-  // column-gap: 0;
   > * {
     break-inside: avoid;
     page-break-inside: avoid;
   }
-  // display: grid;
-  // grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
 .aptitudes-list {
   column-count: 3;
-  // column-width: 200px;
 }
 
 .aptitude-item {
