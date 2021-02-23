@@ -37,6 +37,11 @@
 
 .attacks {
   position: relative;
+  > * {
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--color-border);
+    }
+  }
   li {
     list-style: none;
     &:hover {

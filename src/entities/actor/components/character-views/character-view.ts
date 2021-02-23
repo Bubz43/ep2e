@@ -251,10 +251,10 @@ export class CharacterView extends CharacterViewBase {
             .character=${this.character}
             .ego=${this.character.ego}
           ></character-view-test-actions>
-          <!-- <character-view-attacks-section
+          <character-view-attacks-section
             .character=${this.character}
             .token=${this.token}
-          ></character-view-attacks-section> -->
+          ></character-view-attacks-section>
         `;
 
       case 'inventory':

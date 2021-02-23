@@ -2,7 +2,7 @@
 @use "scss/mixins" as *;
 
 @include resetUnorderedList();
-
+@include styled-scrollbars;
 * {
   box-sizing: border-box;
 }

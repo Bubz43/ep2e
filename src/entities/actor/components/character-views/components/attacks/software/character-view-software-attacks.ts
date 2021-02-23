@@ -3,10 +3,12 @@ import type { DamageMessageData } from '@src/chat/message-data';
 import type { AttackType } from '@src/combat/attacks';
 import { LazyRipple } from '@src/components/mixins/lazy-ripple';
 import { ActorType } from '@src/entities/entity-types';
+import { itemMenuOptions } from '@src/entities/item/item-views';
 import type { Software } from '@src/entities/item/proxies/software';
 import { SkillType } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
+import { openMenu } from '@src/open-menu';
 import { HackingTestControls } from '@src/success-test/components/hacking-test-controls/hacking-test-controls';
 import { isButton } from '@src/utility/dom';
 import {
@@ -109,6 +111,14 @@ export class CharacterViewSoftwareAttacks extends mix(LitElement).with(
     super.handleRippleMouseDown(ev);
   }
 
+  protected openMenu(ev: MouseEvent) {
+    openMenu({
+      header: { heading: this.software.fullName },
+      content: itemMenuOptions(this.software),
+      position: ev.currentTarget === this ? ev : undefined,
+    });
+  }
+
   render() {
     const { primary, secondary } = this.software.attacks;
 
@@ -152,7 +162,10 @@ export class CharacterViewSoftwareAttacks extends mix(LitElement).with(
               : 'keyboard_arrow_left'}
             @click=${this.toggleExpanded}
           ></mwc-icon-button>
-          <mwc-icon-button icon="more_vert"></mwc-icon-button>
+          <mwc-icon-button
+            icon="more_vert"
+            @click=${this.openMenu}
+          ></mwc-icon-button>
         </div>
         ${this.renderRipple(!this.software.editable)}
         ${this.expanded

@@ -78,10 +78,11 @@ export abstract class SuccessTestBase {
         void effects.set(effect, !effects.get(effect)),
     ),
     simple: new Map(),
-    toggleSimple: this.recipe(
-      ({ modifiers: { simple } }, modifier) =>
-        void simple.delete(modifier.id) || simple.set(modifier.id, modifier),
-    ),
+    toggleSimple: this.recipe(({ modifiers: { simple } }, modifier) => {
+      console.log('toggle simple', simple.has(modifier.id));
+      if (simple.has(modifier.id)) simple.delete(modifier.id);
+      else simple.set(modifier.id, modifier);
+    }),
   };
 
   get target() {

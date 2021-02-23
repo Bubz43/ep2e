@@ -17,11 +17,9 @@
     'description description';
   grid-template-columns: 1fr;
   padding: 0.25rem 0.5rem;
-  margin: 0.25rem 0.5rem;
-  box-shadow: 0 1px 0.2rem black;
+  // box-shadow: 0 1px 0.2rem black;
   position: relative;
   cursor: pointer;
-  background: alphav(var(--color-text), 0.04);
 }
 
 .name {

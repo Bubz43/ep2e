@@ -343,7 +343,7 @@ export class CharacterViewTestActions extends LitElement {
 
       ${notEmpty(softwareSkills)
         ? html`
-            <section>
+            <section class="software-section">
               <sl-header
                 heading="${localize('software')} ${localize('skills')}"
               >

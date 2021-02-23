@@ -13,7 +13,7 @@
 }
 
 sl-header {
-  padding: 0.25rem 0.75rem;
+  padding: 0.125rem 0.75rem;
   border-bottom: none;
 }
 
@@ -195,4 +195,13 @@ sl-header {
     float: right;
     font-family: var(--font-mono);
   }
+}
+
+.software-section {
+  border-top: 2px groove var(--color-border);
+}
+
+.software-name {
+  font-weight: bold;
+  margin-left: 1rem;
 }
