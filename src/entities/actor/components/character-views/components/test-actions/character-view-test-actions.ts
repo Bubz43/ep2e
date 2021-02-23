@@ -4,6 +4,7 @@ import { AptitudeType, enumValues } from '@src/data-enums';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
+import type { Software } from '@src/entities/item/proxies/software';
 import { Favor, maxFavors, RepWithIdentifier } from '@src/features/reputations';
 import { Skill, skillFilterCheck } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
@@ -11,6 +12,7 @@ import { openMenu } from '@src/open-menu';
 import { AptitudeCheckControls } from '@src/success-test/components/aptitude-check-controls/aptitude-check-controls';
 import { ReputationFavorControls } from '@src/success-test/components/reputation-favor-controls/reputation-favor-controls';
 import { SkillTestControls } from '@src/success-test/components/skill-test-controls/skill-test-controls';
+import { SoftwareSkillTestControls } from '@src/success-test/components/software-skill-test-controls/software-skill-test-controls';
 import { notEmpty, safeMerge } from '@src/utility/helpers';
 import {
   customElement,
@@ -131,6 +133,31 @@ export class CharacterViewTestActions extends LitElement {
           character: actor.proxy,
           skill: ego.skills.find((s) => s.name === skill.name) || skill,
           techSource: tech,
+        };
+      },
+    });
+  }
+
+  private startSoftwareSkillTest(
+    skill: Software['skills'][number],
+    software: Software,
+  ) {
+    const { id } = software;
+    SoftwareSkillTestControls.openWindow({
+      entities: { actor: this.character.actor },
+      getState: (actor) => {
+        if (actor.proxy.type !== ActorType.Character) return null;
+        const softwareSource = actor.proxy.equippedGroups.softwareSkills.find(
+          (s) => s.id === id,
+        );
+        const softwareSkill = softwareSource?.skills.find(
+          (s) => s.id === skill.id,
+        );
+        if (!softwareSkill || !softwareSource) return null;
+        return {
+          software: softwareSource,
+          skill: softwareSkill,
+          character: actor.proxy,
         };
       },
     });
@@ -331,12 +358,18 @@ export class CharacterViewTestActions extends LitElement {
                           <li class="software">
                             <span class="software-name">${software.name}</span>
                             <ul class="skills-list">
-                              ${software.skills.map(
-                                ({ name, specialization, total }) => html`
+                              ${software.skills.map((skill) => {
+                                const { name, specialization, total } = skill;
+                                return html`
                                   <Wl-list-item
                                     clickable
                                     class="skill-item"
                                     ?disabled=${this.disabled}
+                                    @click=${() =>
+                                      this.startSoftwareSkillTest(
+                                        skill,
+                                        software,
+                                      )}
                                   >
                                     <span class="skill-name"
                                       >${name}
@@ -348,8 +381,8 @@ export class CharacterViewTestActions extends LitElement {
                                       >${total}</span
                                     >
                                   </Wl-list-item>
-                                `,
-                              )}
+                                `;
+                              })}
                             </ul>
                           </li>
                         `,
