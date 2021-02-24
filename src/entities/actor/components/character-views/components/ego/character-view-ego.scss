@@ -10,6 +10,14 @@
 :host {
   display: grid;
   grid-auto-rows: min-content;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+health-item {
+  flex: 1;
 }
 
 header {

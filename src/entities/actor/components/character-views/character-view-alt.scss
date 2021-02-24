@@ -1,0 +1,39 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: grid;
+  grid-template-areas:
+    'ego ego'
+    'sleeve sleeve'
+    'panels tabs';
+
+  grid-template-rows: min-content min-content minmax(400px, 1fr);
+}
+
+.ego-card {
+  grid-area: ego;
+}
+
+.sleeve-card {
+  grid-area: sleeve;
+}
+
+.panels {
+  grid-area: panels;
+}
+
+.tabbed-section {
+  grid-area: tabs;
+  display: grid;
+  grid-template-rows: min-content 1fr;
+}
+
+.tab-content {
+  overflow-y: auto;
+  overflow-x: hidden;
+}

@@ -231,6 +231,12 @@ export class CharacterView extends CharacterViewBase {
             `}
         <!-- ${this.renderStatus()} -->
       </div>
+
+      <mwc-list class="side-panels">
+        ${['search', 'time', 'resleeve', 'network', 'recharge', 'effects'].map(
+          (label) => html`<mwc-list-item>${label}</mwc-list-item>`,
+        )}
+      </mwc-list>
       ${this.renderDrawer()}
 
       <mwc-tab-bar @MDCTabBar:activated=${this.setTab}>

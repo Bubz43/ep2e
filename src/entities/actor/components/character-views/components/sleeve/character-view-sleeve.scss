@@ -11,6 +11,14 @@
   display: grid;
   grid-auto-rows: min-content;
   z-index: 0;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.healths {
+  flex: 1;
 }
 
 header {

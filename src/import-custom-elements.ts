@@ -68,6 +68,7 @@ import { ValueStatus } from './components/value-status/value-status';
 import { SlWindow } from './components/window/window';
 import { ActorCreator } from './entities/actor/components/actor-creator/actor-creator';
 import { CharacterView } from './entities/actor/components/character-views/character-view';
+import { CharacterViewAlt } from './entities/actor/components/character-views/character-view-alt';
 import { CharacterViewActiveSubstance } from './entities/actor/components/character-views/components/active-substance/character-view-active-substance';
 import { CharacterViewArmor } from './entities/actor/components/character-views/components/armor/character-view-armor';
 import { ExplosiveSettingsForm } from './entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
@@ -205,6 +206,7 @@ ItemTrash;
 
 // Character
 CharacterView;
+CharacterViewAlt;
 CharacterViewHeader;
 CharacterViewEgo;
 CharacterViewSleeve;
