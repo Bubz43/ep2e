@@ -1,8 +1,15 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+@include styled-scrollbars;
+
 * {
   box-sizing: border-box;
+}
+
+h1,
+h2 {
+  margin: 0;
 }
 
 :host {
@@ -10,30 +17,192 @@
   grid-template-areas:
     'ego ego'
     'sleeve sleeve'
-    'panels tabs';
+    'actions tabs'
+    'footer footer';
 
-  grid-template-rows: min-content min-content minmax(400px, 1fr);
+  grid-template-rows: min-content min-content minmax(400px, 1fr) min-content;
+  grid-template-columns: minmax(400px, 1fr) minmax(500px, 1.25fr);
+  overflow-x: auto;
+  min-width: max-content;
 }
 
-.ego-card {
+footer {
+  grid-area: footer;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  background: alphav(var(--color-primary), 0.1);
+  border-top: 1px solid var(--color-border);
+
+  .restore-popover {
+    margin-left: auto;
+  }
+
+  .effects-toggle {
+    --mdc-theme-primary: #{lightv(var(--color-grey), 1.2)};
+  }
+
+  mwc-icon-button {
+    --mdc-icon-button-size: 28px;
+    --mdc-icon-size: 22px;
+    color: lightv(var(--color-grey), 1.2);
+  }
+
+  .recharges {
+    all: unset;
+    align-self: stretch;
+    display: inline-flex;
+    align-items: center;
+    padding-right: 1ch;
+    color: lightv(var(--color-grey), 1.2);
+    cursor: pointer;
+    border-radius: 4px;
+
+    &[disabled] {
+      pointer-events: none;
+    }
+    &:hover {
+      background: alphav(var(--color-text), 0.05);
+    }
+    &:focus {
+      background: alphav(var(--color-text), 0.09);
+    }
+
+    > * {
+      pointer-events: none;
+    }
+  }
+
+  .recharge {
+    --mdc-icon-size: 22px;
+    display: flex;
+    align-items: center;
+    margin-left: 1ch;
+    .recharge-type {
+      margin-right: 0.5ch;
+    }
+    > mwc-icon {
+      color: var(--color-grey);
+    }
+
+    &.active {
+      color: var(--color-secondary);
+      mwc-icon {
+        color: var(--color-secondary);
+      }
+      &.ready {
+        @include animate-css(bounce, 2s, infinite);
+        text-shadow: 0 0 4px black;
+      }
+    }
+  }
+
+  .restore-button {
+    transition: box-shadow 1s ease-in-out;
+    border-radius: 100%;
+    &:not([disabled]) {
+      box-shadow: 0 0 0.5rem var(--color-secondary);
+    }
+  }
+}
+
+.ego {
   grid-area: ego;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
 }
 
-.sleeve-card {
+.info {
+  color: var(--color-text-lighter);
+  margin: 0 0.5ch;
+}
+
+.sleeve {
   grid-area: sleeve;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+
+.actions {
+  grid-area: actions;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  height: 400px;
+  min-height: 100%;
+  width: 400px;
+  min-width: 100%;
 }
 
 .panels {
   grid-area: panels;
+  border-right: 1px solid var(--color-border);
+  > * {
+    height: 2rem;
+  }
 }
 
 .tabbed-section {
   grid-area: tabs;
   display: grid;
   grid-template-rows: min-content 1fr;
+  width: 500px;
+  min-width: 100%;
+  mwc-tab-bar {
+    --mdc-theme-primary: var(--color-grey);
+    padding: 0 0.25rem;
+  }
 }
 
 .tab-content {
-  overflow-y: auto;
+  overflow-y: scroll;
   overflow-x: hidden;
+  border-top: 1px solid var(--color-border);
+  height: 300px;
+  min-height: 100%;
+
+  padding: 0.25rem;
+}
+
+.conditions {
+  display: flex;
+  align-items: center;
+  --mdc-theme-primary: var(--color-grey);
+  padding: 0.25rem;
+  .conditions-list {
+    display: grid;
+    grid-auto-flow: column;
+    gap: 0.25rem;
+    flex: 1;
+  }
+  @include textButton();
+  button {
+    position: relative;
+  }
+  notification-coin {
+    right: -2px;
+    top: -75%;
+    --coin-bg: var(--color-border);
+  }
+  img {
+    opacity: 0.25;
+    transition: opacity 300ms;
+    display: block;
+    pointer-events: none;
+    &.active {
+      opacity: 1;
+    }
+  }
+}
+
+.total-effects {
+  min-width: 3ch;
 }

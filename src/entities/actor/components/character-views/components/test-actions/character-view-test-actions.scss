@@ -9,6 +9,7 @@
 
 :host {
   display: grid;
+  grid-auto-rows: min-content;
   gap: 0.25rem;
 }
 
@@ -20,6 +21,8 @@ sl-header {
 .aptitudes-list,
 .skills-list {
   column-rule: 1px groove var(--color-border);
+  gap: 0.25rem;
+
   > * {
     break-inside: avoid;
     page-break-inside: avoid;
@@ -27,7 +30,7 @@ sl-header {
 }
 
 .aptitudes-list {
-  column-count: 3;
+  column-count: 2;
 }
 
 .aptitude-item {
@@ -51,6 +54,7 @@ sl-header {
 
 .aptitude-points {
   text-align: right;
+  color: var(--color-text-lighter);
 }
 
 .aptitude-check {
@@ -91,8 +95,7 @@ sl-header {
   padding: 0 0 0.25rem;
   overflow: hidden;
   font-size: 14px;
-  column-width: 200px;
-
+  column-width: 190px;
   .divider {
     margin: 0.25rem 0;
   }
@@ -191,14 +194,14 @@ sl-header {
   }
 
   .rep-acronym {
-    color: var(--color-text-lighter);
-    float: right;
+    // color: var(--color-text-lighter);
+    // float: right;
     font-family: var(--font-mono);
   }
 }
 
 .software-section {
-  border-top: 2px groove var(--color-border);
+  border-top: 1px solid var(--color-border);
 }
 
 .software-name {

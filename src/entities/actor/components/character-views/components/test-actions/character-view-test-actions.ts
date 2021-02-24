@@ -487,7 +487,7 @@ export class CharacterViewTestActions extends LitElement {
           @click=${() => this.startFavorTest(rep, Favor.Trivial)}
         >
           <span class="rep-name">
-            ${rep.network}
+            <!-- ${rep.network} -->
             <span class="rep-acronym">${rep.acronym}</span></span
           >
         </button>
