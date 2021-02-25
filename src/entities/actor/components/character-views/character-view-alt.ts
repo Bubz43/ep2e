@@ -1,28 +1,36 @@
 import { Placement } from '@src/components/popover/popover-options';
 import { enumValues, RechargeType } from '@src/data-enums';
 import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisition';
+import { ActorType } from '@src/entities/entity-types';
+import { ArmorType } from '@src/features/active-armor';
 import { conditionIcons, ConditionType } from '@src/features/conditions';
+import { idProp } from '@src/features/feature-helpers';
+import { MotivationStance } from '@src/features/motivations';
+import type { ReadonlyPool } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
+import { userCan } from '@src/foundry/misc-helpers';
 import { tooltip } from '@src/init';
-import { notEmpty } from '@src/utility/helpers';
+import { clickIfEnter, notEmpty } from '@src/utility/helpers';
+import { localImage } from '@src/utility/images';
 import {
   customElement,
   html,
   internalProperty,
-  LitElement,
   property,
   TemplateResult,
 } from 'lit-element';
+import { nothing } from 'lit-html';
 import { cache } from 'lit-html/directives/cache';
 import { classMap } from 'lit-html/directives/class-map';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
-import { compact, difference, identity, range } from 'remeda';
+import { compact, difference, identity, prop, range, sortBy } from 'remeda';
+import type { Ego } from '../../ego';
 import type { Character } from '../../proxies/character';
 import { formattedSleeveInfo, Sleeve } from '../../sleeves';
 import { CharacterDrawerRenderer } from './character-drawer-render-event';
 import styles from './character-view-alt.scss';
-import { ItemGroup } from './character-view-base';
+import { CharacterViewBase, ItemGroup } from './character-view-base';
 
 type Detail = {
   label: string;
@@ -31,7 +39,7 @@ type Detail = {
 const tabs = ['actions', 'inventory', 'traits', 'details'] as const;
 
 @customElement('character-view-alt')
-export class CharacterViewAlt extends LitElement {
+export class CharacterViewAlt extends CharacterViewBase {
   static get is() {
     return 'character-view-alt' as const;
   }
@@ -48,11 +56,19 @@ export class CharacterViewAlt extends LitElement {
     this.currentTab = tabs[ev.detail.index] ?? 'actions';
   }
 
+  private setDrawerRenderer(ev: Event) {
+    const { renderer } = (ev.currentTarget as HTMLElement).dataset;
+    this.toggleDrawerRenderer(renderer as CharacterDrawerRenderer);
+  }
+
   render() {
     const { character } = this;
     const { ego, disabled, sleeve } = character;
     const { filteredMotivations, settings } = ego;
-
+    const physicalHealth =
+      sleeve && 'physicalHealth' in sleeve && sleeve.physicalHealth;
+    const meshHealth =
+      sleeve && 'activeMeshHealth' in sleeve && sleeve.activeMeshHealth;
     return html`
       <div class="ego">
         <button ?disabled=${disabled}>
@@ -65,6 +81,56 @@ export class CharacterViewAlt extends LitElement {
             ego.forkStatus && `${localize(ego.forkStatus)} ${localize('fork')}`,
           ]).join(' • ')}
         </span>
+
+        ${settings.trackPoints
+          ? html`
+              <sl-animated-list class="resource-points">
+                ${repeat(
+                  ego.points,
+                  prop('point'),
+                  ({ label, value }) => html`
+                    <li>${label} <span class="value">${value}</span></li>
+                  `,
+                )}
+              </sl-animated-list>
+            `
+          : ''}
+        ${notEmpty(filteredMotivations)
+          ? html`
+              <sl-animated-list class="motivations-list"
+                >${repeat(
+                  filteredMotivations,
+                  idProp,
+                  this.renderMotivation,
+                )}</sl-animated-list
+              >
+            `
+          : ''}
+      </div>
+
+      <div class="healths">
+        ${settings.trackMentalHealth
+          ? html` <health-item
+              clickable
+              class="mental-health-view"
+              .health=${ego.mentalHealth}
+              ><span slot="source">${localize('mental')}</span></health-item
+            >`
+          : ''}
+        ${physicalHealth
+          ? html`
+              <health-item clickable .health=${physicalHealth}> </health-item>
+            `
+          : ''}
+        ${meshHealth && sleeve
+          ? html` <health-item clickable .health=${meshHealth}>
+              ${sleeve.type !== ActorType.Infomorph && sleeve.nonDefaultBrain
+                ? html`
+                    <span slot="source">${sleeve.nonDefaultBrain.name}</span>
+                  `
+                : ''}
+            </health-item>`
+          : ''}
       </div>
 
       <div class="sleeve">
@@ -75,19 +141,7 @@ export class CharacterViewAlt extends LitElement {
         .character=${this.character}
         .ego=${this.character.ego}
       ></character-view-test-actions>
-      <!-- <mwc-list class="panels">
-        ${[
-        'search',
-        'time',
-        'resleeve',
-        'network',
-        'recharge',
-        'effects',
-        'conditions',
-      ].map(
-        (label) => html`<mwc-list-item>${label.capitalize()}</mwc-list-item>`,
-      )}
-      </mwc-list> -->
+
       <div class="tabbed-section">
         <mwc-tab-bar @MDCTabBar:activated=${this.setTab}>
           ${tabs.map(
@@ -96,27 +150,36 @@ export class CharacterViewAlt extends LitElement {
         </mwc-tab-bar>
         <div class="tab-content">${cache(this.renderTabbedContent())}</div>
       </div>
-      ${this.renderFooter()}
+      ${this.renderDrawer()} ${this.renderFooter()}
     `;
   }
 
-  private toggleCondition(ev: Event) {
-    if (ev.currentTarget instanceof HTMLElement) {
-      const { condition } = ev.currentTarget.dataset;
-      condition && this.character.toggleCondition(condition as ConditionType);
-    }
-  }
+  private renderMotivation = (motivation: Ego['motivations'][number]) => {
+    // TODO heal stress
+    // TODO Show goals
+    return html`
+      <li class="motivation">
+        <button>
+          <mwc-icon class=${motivation.stance}
+            >${motivation.stance === MotivationStance.Support
+              ? 'add'
+              : 'remove'}</mwc-icon
+          >
+          ${motivation.cause}
+        </button>
+        ${motivation.goals.length
+          ? html`
+              <notification-coin
+                value=${motivation.goals.length}
+              ></notification-coin>
+            `
+          : ''}
+      </li>
+    `;
+  };
 
   private renderFooter() {
-    const {
-      armor,
-      movementRates,
-      movementModifiers,
-      conditions,
-      pools,
-      disabled,
-      temporaryConditionSources,
-    } = this.character;
+    const { conditions, disabled, temporaryConditionSources } = this.character;
     return html` <footer>
       ${this.renderActionIconButton({
         icon: 'search',
@@ -137,6 +200,11 @@ export class CharacterViewAlt extends LitElement {
           : undefined,
       })}
       ${this.renderActionIconButton({
+        tooltipText: localize('substances'),
+        renderer: CharacterDrawerRenderer.Substances,
+        content: html`<img src=${localImage('icons/actions/medicines.svg')} />`,
+      })}
+      ${this.renderActionIconButton({
         icon: 'groups',
         tooltipText: localize('resleeve'),
         renderer: CharacterDrawerRenderer.Resleeve,
@@ -154,6 +222,7 @@ export class CharacterViewAlt extends LitElement {
         class="effects-toggle"
         dense
         data-renderer=${CharacterDrawerRenderer.Effects}
+        @click=${this.setDrawerRenderer}
       >
         ${localize('effects')}:
         <span class="total-effects"
@@ -162,7 +231,11 @@ export class CharacterViewAlt extends LitElement {
       </mwc-button>
 
       <div class="conditions">
-        <mwc-button class="conditions-toggle" dense
+        <mwc-button
+          class="conditions-toggle"
+          dense
+          @click=${this.setDrawerRenderer}
+          data-renderer=${CharacterDrawerRenderer.Conditions}
           >${localize('conditions')}</mwc-button
         >
         <div class="conditions-list">
@@ -221,6 +294,7 @@ export class CharacterViewAlt extends LitElement {
       ?disabled=${this.character.disabled}
       data-renderer=${CharacterDrawerRenderer.Recharge}
       data-tooltip=${localize('recharge')}
+      @click=${this.setDrawerRenderer}
       @mouseover=${tooltip.fromData}
       @focus=${tooltip.fromData}
     >
@@ -256,7 +330,7 @@ export class CharacterViewAlt extends LitElement {
     renderer,
     content,
   }: {
-    icon: string | undefined;
+    icon?: string | undefined;
     tooltipText: string;
     renderer: CharacterDrawerRenderer;
     content?: TemplateResult;
@@ -265,6 +339,7 @@ export class CharacterViewAlt extends LitElement {
       ?disabled=${this.character.disabled}
       data-tooltip=${tooltipText}
       icon=${ifDefined(icon)}
+      @click=${this.setDrawerRenderer}
       @mouseenter=${tooltip.fromData}
       @focus=${tooltip.fromData}
       data-renderer=${renderer}
@@ -303,11 +378,107 @@ export class CharacterViewAlt extends LitElement {
   }
 
   private renderSleeve(sleeve: Sleeve) {
+    const { armor, movementRates, movementModifiers, pools } = this.character;
+    const canPlace = userCan('TEMPLATE_CREATE');
     return html`
       <h3 @click=${sleeve.openForm}>${sleeve.name}</h3>
       <span class="info"> ${formattedSleeveInfo(sleeve).join(' • ')}</span>
+      ${notEmpty(armor)
+        ? html`
+            <div
+              class="armor"
+              @click=${this.setDrawerRenderer}
+              data-renderer=${CharacterDrawerRenderer.Armor}
+              @keydown=${clickIfEnter}
+              tabindex="0"
+              role="button"
+            >
+              <sl-animated-list class="values">
+                ${repeat(enumValues(ArmorType), identity, (type) => {
+                  const value = armor.getClamped(type);
+                  const reduced = armor.reducedArmors.has(type);
+                  return value || reduced
+                    ? html`<span class="rating ${classMap({ reduced })}"
+                        ><img
+                          src=${localImage('icons/armor/shield.svg')}
+                          width="16"
+                        />
+                        <span class="label"> ${localize(type)}</span>
+                        <span class="value">${value}</span></span
+                      >`
+                    : '';
+                })}
+
+                <span class="rating info">
+                  <img
+                    src=${localImage('icons/armor/layered-armor.svg')}
+                    width="16"
+                  />
+                  <span class="label">${localize('layers')}</span>
+                  <span class="value">${armor.layers}</span></span
+                >
+                ${armor.concealable
+                  ? html`
+                      <span class="rating info"
+                        >${localize('concealable')}</span
+                      >
+                    `
+                  : ''}
+              </sl-animated-list>
+            </div>
+          `
+        : ''}
+      ${notEmpty(pools)
+        ? html`
+            <ul class="pools">
+              ${[...pools.values()].map(this.renderPool)}
+            </ul>
+          `
+        : ''}
+
+      <div class="movement">
+        ${(['encumbered', 'overburdened'] as const).map((mod) => {
+          const val = movementModifiers[mod];
+          return val ? html`<span class="mod">${localize(mod)}</span>` : '';
+        })}
+        ${notEmpty(movementRates)
+          ? html`
+              ${sortBy(movementRates, ({ type }) => localize(type).length).map(
+                ({ type, base, full }) => html`
+                  <span class="movement-rate"
+                    >${localize(type)}
+                    <span class="rate"
+                      ><button
+                        ?disabled=${!canPlace || !base}
+                        @click=${() => this.placeMovementPreviewTemplate(base)}
+                      >
+                        ${base}
+                      </button>
+                      /
+                      <button
+                        ?disabled=${!canPlace || !full}
+                        @click=${() => this.placeMovementPreviewTemplate(full)}
+                      >
+                        ${full}
+                      </button></span
+                    ></span
+                  >
+                `,
+              )}
+            `
+          : ''}
+      </div>
     `;
   }
+
+  private renderPool = (pool: ReadonlyPool) => html`
+    <pool-item
+      @click=${this.openPoolMenu}
+      .pool=${pool}
+      ?disabled=${this.character.disabled}
+      ?wide=${this.character.pools.size <= 2}
+    ></pool-item>
+  `;
 
   private renderSleeveSelect() {
     return html``;
@@ -392,6 +563,26 @@ export class CharacterViewAlt extends LitElement {
       ></character-view-item-group>
     `;
   };
+
+  protected renderDrawer() {
+    const { drawerIsOpen } = this;
+    return html`
+      <focus-trap class="drawer ${classMap({ open: drawerIsOpen })}">
+        ${drawerIsOpen
+          ? html`
+              ${this.renderDrawerContent()}
+              <wl-list-item
+                role="button"
+                class="close-drawer"
+                clickable
+                @click=${this.closeDrawer}
+                ><mwc-icon>close</mwc-icon></wl-list-item
+              >
+            `
+          : nothing}
+      </focus-trap>
+    `;
+  }
 }
 
 declare global {

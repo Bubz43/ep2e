@@ -3,26 +3,15 @@ import {
   renderLabeledCheckbox,
   renderSelectField,
 } from '@src/components/field/fields';
-import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
+import { renderUpdaterForm } from '@src/components/form/forms';
 import { enumValues, FullDefenseType } from '@src/data-enums';
 import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisition';
-import { ActorType, ItemType } from '@src/entities/entity-types';
-import {
-  Substance,
-  SubstanceUseMethod,
-} from '@src/entities/item/proxies/substance';
+import { ActorType } from '@src/entities/entity-types';
 import { conditionIcons, ConditionType } from '@src/features/conditions';
-import { idProp, matchID } from '@src/features/feature-helpers';
-import { prettyMilliseconds } from '@src/features/time';
-import {
-  DropType,
-  handleDrop,
-  itemDropToItemProxy,
-} from '@src/foundry/drag-and-drop';
+import { idProp } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
-import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, internalProperty } from 'lit-element';
 import { nothing, TemplateResult } from 'lit-html';
@@ -34,7 +23,6 @@ import { traverseActiveElements } from 'weightless';
 import { CharacterDrawerRenderer } from './character-drawer-render-event';
 import { CharacterViewBase, ItemGroup } from './character-view-base';
 import styles from './character-view.scss';
-import { substanceActivationDialog } from './components/substance-activation-dialog';
 
 type Detail = {
   label: string;
@@ -110,77 +98,6 @@ export class CharacterView extends CharacterViewBase {
 
   private viewResleeve() {
     this.toggleDrawerRenderer(CharacterDrawerRenderer.Resleeve);
-  }
-
-  private applyDroppedSubstance = handleDrop(async ({ ev, data }) => {
-    if (data?.type === DropType.Item && !this.character.disabled) {
-      const item = await itemDropToItemProxy(data);
-      if (item?.type !== ItemType.Substance || !item.quantity) return;
-      let isHidden = false;
-
-      const addSubstance = async (method: SubstanceUseMethod) => {
-        const [id] = await this.character.itemOperations.add(
-          item.createAwaitingOnset({ method }),
-        );
-        if (item.actor && item.editable) await item.use();
-
-        await this.updateComplete;
-        setTimeout(() => {
-          if (Substance.onsetTime(method) === 0 && id) {
-            this.openSubstanceActivationDialog(id);
-          }
-        }, 1);
-      };
-      if (
-        item.applicationMethods.length === 1 &&
-        this.character.hasItemProxy(item)
-      ) {
-        addSubstance(item.applicationMethods[0]!);
-      } else {
-        openMenu({
-          header: { heading: `${localize('apply')} ${item.name}` },
-          content: [
-            renderAutoForm({
-              props: { hidden: isHidden },
-              update: ({ hidden = false }) => (isHidden = hidden),
-              fields: ({ hidden }) => renderLabeledCheckbox(hidden),
-            }),
-            'divider',
-            ...item.applicationMethods.map((method) => ({
-              label: `${localize(method)} - ${localize(
-                'onset',
-              )}: ${prettyMilliseconds(Substance.onsetTime(method))}`,
-              callback: () => addSubstance(method),
-            })),
-          ],
-          position: ev,
-        });
-      }
-    }
-  });
-
-  private openSubstanceActivationDialog(id: string) {
-    const substance = this.character.awaitingOnsetSubstances.find(matchID(id));
-    console.log(substance);
-    if (!substance) return;
-    if (
-      notEmpty(
-        Object.values(this.character.appliedEffects.substanceModifiers).flat(),
-      )
-    ) {
-      this.dispatchEvent(
-        new RenderDialogEvent(
-          substanceActivationDialog(this.character, substance),
-        ),
-      );
-    } else substance.makeActive([]);
-  }
-
-  private toggleCondition(ev: Event) {
-    if (ev.currentTarget instanceof HTMLElement) {
-      const { condition } = ev.currentTarget.dataset;
-      condition && this.character.toggleCondition(condition as ConditionType);
-    }
   }
 
   render() {

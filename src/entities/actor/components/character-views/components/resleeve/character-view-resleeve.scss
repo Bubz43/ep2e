@@ -11,6 +11,7 @@
   gap: 1rem;
   height: calc(100% - 1px);
   max-width: 394px;
+  min-width: 100%;
 }
 
 li[divider] {
@@ -48,4 +49,5 @@ li[divider] {
 .current-sleeve,
 .selected-sleeve {
   max-width: 400px;
+  min-width: 100%;
 }

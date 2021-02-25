@@ -10,6 +10,7 @@ export enum CharacterDrawerRenderer {
   SleeveMeshHealth = 'SleeveMeshHealth',
   SleevePhysicalHealth = 'SleevePhysicalHealth',
   Conditions = 'Conditions',
+  Substances = 'Substances',
 }
 
 export class CharacterDrawerRenderEvent extends Event {
