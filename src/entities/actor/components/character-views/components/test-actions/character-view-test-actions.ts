@@ -216,7 +216,7 @@ export class CharacterViewTestActions extends LitElement {
     };
   }
 
-  private openRepSourceMenu() {
+  private openRepSourceMenu(ev: MouseEvent) {
     openMenu({
       header: { heading: `${localize('reputation')} ${localize('profile')}` },
       content: this.repSources.sources.map((source) => ({
@@ -227,10 +227,11 @@ export class CharacterViewTestActions extends LitElement {
           >${source.fake ? 'person_outline' : 'person'}</mwc-icon
         >`,
       })),
+      position: ev,
     });
   }
 
-  private openEgoSelectMenu() {
+  private openEgoSelectMenu(ev: MouseEvent) {
     const { currentEgo } = this;
     openMenu({
       header: { heading: localize('ego') },
@@ -246,6 +247,7 @@ export class CharacterViewTestActions extends LitElement {
           callback: () => (this.activeEgo = id),
         })),
       ],
+      position: ev,
     });
   }
 
@@ -256,7 +258,7 @@ export class CharacterViewTestActions extends LitElement {
   }
 
   render() {
-    const { currentEgo } = this;
+    const { currentEgo, activeEgo } = this;
     const { groupedSkills, name, aptitudes } = currentEgo;
     const { active, know } = groupedSkills;
     const { sources, fakeID } = this.repSources;
@@ -272,15 +274,24 @@ export class CharacterViewTestActions extends LitElement {
     return html`
       ${showSource
         ? html`
-            <div class="source">
-              ${currentEgo.name}
-              <mwc-icon-button
-                slot="action"
-                ?disabled=${this.ego.disabled}
-                @click=${this.openEgoSelectMenu}
-                icon=${fakeID ? 'person_outline' : 'person'}
-              ></mwc-icon-button>
-            </div>
+            <wl-list-item
+              role="button"
+              @click=${this.openEgoSelectMenu}
+              clickable
+              class="source"
+            >
+              <span slot="before">${localize('source')}:</span>
+              <span>
+                ${activeEgo ? onboardALIs.get(activeEgo)?.name : ''}
+                ${currentEgo.name}</span
+              >
+
+              <mwc-icon slot="after" ?disabled=${this.ego.disabled}
+                >${currentEgo !== this.ego
+                  ? 'person_outline'
+                  : 'person'}</mwc-icon
+              >
+            </wl-list-item>
           `
         : ''}
       <sl-details summary=${localize('aptitudes')} open>
@@ -323,7 +334,10 @@ export class CharacterViewTestActions extends LitElement {
 
       ${notEmpty(softwareSkills)
         ? html`
-            <sl-details summary="${localize('software')} ${localize('skills')}">
+            <sl-details
+              class="software-skills"
+              summary="${localize('software')} ${localize('skills')}"
+            >
               <ul class="software-list">
                 ${softwareSkills.map(
                   (software) => html`
@@ -362,16 +376,23 @@ export class CharacterViewTestActions extends LitElement {
         : ''}
       ${notEmpty(sources)
         ? html`
-            <sl-details summary=${localize('reputations')}>
+            <sl-details
+              class="reputations"
+              summary=${localize('reputations')}
+              open
+            >
               ${notEmpty(fakeIDs)
-                ? html` <div class="rep-source">
-                    <span>${fakeID?.name ?? this.ego.name}</span>
-                    <mwc-icon-button
-                      slot="action"
-                      @click=${this.openRepSourceMenu}
-                      icon=${fakeID ? 'person_outline' : 'person'}
-                    ></mwc-icon-button>
-                  </div>`
+                ? html` <wl-list-item
+                    clickable
+                    @click=${this.openRepSourceMenu}
+                    class="source"
+                  >
+                    <span slot="before">${localize('profile')}:</span>
+                    <span> ${fakeID?.name ?? this.ego.name}</span>
+                    <mwc-icon slot="after"
+                      >${fakeID ? 'person_outline' : 'person'}</mwc-icon
+                    >
+                  </wl-list-item>`
                 : ''}
               <ul class="rep-list">
                 <li class="rep-header">

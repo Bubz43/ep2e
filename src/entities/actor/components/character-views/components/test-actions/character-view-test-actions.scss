@@ -10,19 +10,24 @@
 :host {
   display: grid;
   grid-auto-rows: min-content;
-  // gap: 0.25rem;
 }
 
 .aptitudes-list,
 .skills-list {
   column-rule: 1px groove var(--color-border);
   gap: 0.25rem;
-  // padding: 0.25rem;
 
   > * {
     break-inside: avoid;
     page-break-inside: avoid;
   }
+}
+
+.source {
+  padding: 0.125rem 1rem;
+  --list-item-bg: var(--color-bg);
+  border: 1px solid var(--color-border);
+  margin: 0.125rem;
 }
 
 sl-details {
@@ -129,20 +134,8 @@ sl-details {
   }
 }
 
-.reps {
+.reputations {
   border-top: 1px solid var(--color-border);
-}
-
-.rep-sources {
-  --mdc-theme-primary: var(--color-border);
-  display: flex;
-  flex-flow: row wrap;
-  float: right;
-  white-space: nowrap;
-  > * {
-    flex: 1;
-    margin: 0.25rem 0.25rem 0;
-  }
 }
 
 .rep-list {
@@ -151,7 +144,6 @@ sl-details {
   border-top: 1px groove var(--color-border);
   padding: 0.25rem 0;
 }
-
 .rep-header,
 .rep-item {
   display: grid;
@@ -198,7 +190,7 @@ sl-details {
   }
 }
 
-.software-section {
+.software-skills {
   border-top: 1px solid var(--color-border);
 }
 
