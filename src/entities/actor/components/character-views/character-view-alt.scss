@@ -17,10 +17,11 @@ h3 {
   display: grid;
   grid-template-areas:
     'header header'
+    'sleeve sleeve'
     'actions tabs'
     'footer footer';
 
-  grid-template-rows: min-content minmax(400px, 1fr) min-content;
+  grid-template-rows: min-content min-content minmax(400px, 1fr) min-content;
   // grid-template-columns: auto max-content min-content auto;
   overflow-x: auto;
   min-width: max-content;
@@ -44,7 +45,6 @@ h3 {
 header {
   grid-area: header;
   display: flex;
-  border-bottom: 1px solid var(--color-grey);
   // box-shadow: 0 4px black;
   background: linear-gradient(
     to bottom,
@@ -53,7 +53,8 @@ header {
   );
   .entities {
     align-self: center;
-    padding: 0.125rem 0.5rem;
+    // padding: 0.125rem 0.5rem;
+    padding: 0.5rem 0 0;
     flex: 1;
   }
   .shared {
@@ -62,7 +63,7 @@ header {
 }
 
 .shared {
-  // border-left: 1px solid var(--color-border);
+  border-left: 1px solid var(--color-border);
   display: grid;
   grid-template-areas:
     'armor armor'
@@ -78,12 +79,13 @@ header {
   justify-content: space-around;
   grid-area: pools;
   width: max-content;
+  border-left: 1px solid var(--color-border);
 }
 .pool {
   display: grid;
   grid-template-columns: 30px 1fr 6ch;
   gap: 0.25rem;
-  padding: 0.125rem 0.5rem 0.125rem 0.75rem;
+  padding: 0.125rem 0.25rem;
   font-size: large;
 
   &[disabled] {
@@ -120,7 +122,7 @@ header {
   cursor: pointer;
   width: 300px;
   min-width: 100%;
-  // border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
   grid-area: armor;
 
   &:hover {
@@ -188,7 +190,7 @@ header {
 }
 
 .avatar {
-  padding: 0.5rem 0.5rem 0 0;
+  padding: 0 0.5rem 0.5rem;
   // padding-left: 0;
   float: left;
   img {
@@ -209,7 +211,10 @@ header {
 }
 
 .ego {
-  padding-top: 0.75rem;
+  // padding-top: 0.75rem;
+  .info {
+    clear: right;
+  }
   .resource-points {
     display: inline-flex;
     padding: 0.25rem;
@@ -232,15 +237,14 @@ header {
     display: flex;
     flex-flow: row wrap;
     position: relative;
-    left: -0.25rem;
+    clear: both;
+    padding: 0 0.5rem;
   }
 
   .motivation {
     display: flex;
     align-items: center;
     padding-right: 0.5rem;
-    margin-right: 0.25rem;
-    border-radius: 3px;
     position: relative;
     @include textButton();
     mwc-icon {
@@ -256,6 +260,21 @@ header {
       --coin-bg: #{alphav(var(--color-grey), 0.2)};
     }
   }
+}
+
+character-view-psi {
+  clear: both;
+  margin: 0.25rem 0 0 0.25rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.sleeve {
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-grey);
+  grid-area: sleeve;
+  width: 400px;
+  min-width: 100%;
 }
 
 .info {
@@ -382,10 +401,7 @@ header {
 }
 
 .movement {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
-  gap: 0.25rem;
-  width: 100%;
+  float: right;
   @include textButton();
 
   .mod,
@@ -431,7 +447,6 @@ footer {
   mwc-icon-button {
     --mdc-icon-button-size: 28px;
     --mdc-icon-size: 22px;
-    // color: lightv(var(--color-grey), 1.2);
   }
 
   .recharges {

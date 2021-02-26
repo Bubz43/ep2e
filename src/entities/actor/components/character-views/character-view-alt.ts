@@ -63,7 +63,7 @@ export class CharacterViewAlt extends CharacterViewBase {
 
   render() {
     const { character } = this;
-    const { ego, disabled, sleeve, pools, armor } = character;
+    const { ego, disabled, sleeve, pools, armor, psi } = character;
     const { filteredMotivations, settings } = ego;
     const physicalHealth =
       sleeve && 'physicalHealth' in sleeve && sleeve.physicalHealth;
@@ -79,14 +79,6 @@ export class CharacterViewAlt extends CharacterViewBase {
             <button class="ego-name">
               <span @click=${ego.openForm}>${character.name}</span>
             </button>
-            <span class="info">
-              ${compact([
-                `${ego.egoType} ${localize('ego')}`,
-                ego.forkStatus &&
-                  `${localize(ego.forkStatus)} ${localize('fork')}`,
-              ]).join(' • ')}
-            </span>
-
             ${settings.trackPoints
               ? html`
                   <sl-animated-list class="resource-points">
@@ -100,6 +92,14 @@ export class CharacterViewAlt extends CharacterViewBase {
                   </sl-animated-list>
                 `
               : ''}
+            <div class="info">
+              ${compact([
+                `${ego.egoType} ${localize('ego')}`,
+                ego.forkStatus &&
+                  `${localize(ego.forkStatus)} ${localize('fork')}`,
+              ]).join(' • ')}
+            </div>
+
             ${notEmpty(filteredMotivations)
               ? html`
                   <sl-animated-list class="motivations-list"
@@ -112,9 +112,12 @@ export class CharacterViewAlt extends CharacterViewBase {
                 `
               : ''}
           </div>
-          <div class="sleeve">
-            ${sleeve ? this.renderSleeve(sleeve) : this.renderSleeveSelect()}
-          </div>
+          ${psi
+            ? html`<character-view-psi
+                .character=${character}
+                .psi=${psi}
+              ></character-view-psi>`
+            : ''}
         </div>
 
         <div class="shared">
@@ -219,6 +222,9 @@ export class CharacterViewAlt extends CharacterViewBase {
           </div>
         </div>
       </header>
+      <div class="sleeve">
+        ${sleeve ? this.renderSleeve(sleeve) : this.renderSleeveSelect()}
+      </div>
       <character-view-test-actions
         class="actions"
         .character=${this.character}
@@ -468,14 +474,6 @@ export class CharacterViewAlt extends CharacterViewBase {
         ${sleeve.name}
       </button>
       <span class="info"> ${formattedSleeveInfo(sleeve).join(' • ')}</span>
-
-      <!-- ${notEmpty(pools)
-        ? html`
-            <ul class="pools">
-              ${[...pools.values()].map(this.renderPool)}
-            </ul>
-          `
-        : ''} -->
 
       <div class="movement">
         ${(['encumbered', 'overburdened'] as const).map((mod) => {
