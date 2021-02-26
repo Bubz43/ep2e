@@ -34,6 +34,7 @@ import styles from './reputation-favor-controls.scss';
 type Init = {
   entities: ReputationFavorControls['entities'];
   getState: ReputationFavorControls['getState'];
+  relativeEl?: HTMLElement;
 };
 
 @customElement('reputation-favor-controls')
@@ -59,10 +60,7 @@ export class ReputationFavorControls extends LitElement {
       overlay.append(win);
       ReputationFavorControls.openWindows.set(init.entities.actor, win);
     }
-    const source = traverseActiveElements();
-    if (source instanceof HTMLElement) {
-      requestAnimationFrame(() => win!.win?.positionAdjacentToElement(source));
-    }
+
     win.setState(init);
   }
 
@@ -124,9 +122,14 @@ export class ReputationFavorControls extends LitElement {
     this.subs.clear();
   }
 
-  setState(init: Init) {
+  async setState(init: Init) {
     this.entities = init.entities;
     this.getState = init.getState;
+    const source = init.relativeEl || traverseActiveElements();
+    if (source instanceof HTMLElement && source.isConnected) {
+      await this.win?.updateComplete;
+      this.win?.positionAdjacentToElement(source);
+    }
   }
 
   private openSourceSelect() {

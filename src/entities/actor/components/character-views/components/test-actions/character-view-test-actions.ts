@@ -454,9 +454,7 @@ export class CharacterViewTestActions extends LitElement {
       class="aptitude-item"
       @click=${() => this.startAptitudeTest(type)}
     >
-      <span class="aptitude-name" slot="before">
-        ${localize('FULL', type)}</span
-      >
+      <span class="aptitude-name" slot="before"> ${localize(type)}</span>
       <span class="aptitude-points">${points}</span>
       <span class="aptitude-check" slot="after">
         <mwc-icon>check</mwc-icon> ${points * 3}</span

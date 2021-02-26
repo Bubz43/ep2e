@@ -6,7 +6,7 @@
 }
 
 :host {
-  display: inline-flex;
+  display: flex;
 }
 
 :host([disabled]) {
@@ -16,16 +16,32 @@
 
 :host([wide]) {
   // flex: 1;
-  justify-content: center;
+  // justify-content: center;
+  display: grid;
   .pool {
     flex: 0;
-    display: flex;
+    display: grid;
+    grid-template-columns: 64px auto auto;
+    grid-template-areas: unset;
+    gap: 0.5rem;
+    place-items: unset;
+    align-items: center;
     width: unset;
-    justify-content: space-around;
-
+    padding: 0;
+    height: 56px;
+    img {
+      place-self: center;
+    }
+    > * {
+      grid-area: unset;
+    }
     .points {
       display: inline-block;
       text-align: center;
+    }
+    .pool-name {
+      width: unset;
+      text-align: unset;
     }
     .pool-value {
       width: unset;
@@ -76,7 +92,7 @@ small {
     cursor: pointer;
     outline: none;
     img {
-      transform: scale(1.25);
+      transform: scale(1.2);
     }
   }
 

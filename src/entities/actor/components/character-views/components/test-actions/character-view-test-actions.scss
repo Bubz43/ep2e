@@ -22,6 +22,7 @@ sl-header {
 .skills-list {
   column-rule: 1px groove var(--color-border);
   gap: 0.25rem;
+  padding: 0 0.25rem;
 
   > * {
     break-inside: avoid;
@@ -30,7 +31,8 @@ sl-header {
 }
 
 .aptitudes-list {
-  column-count: 2;
+  column-count: 3;
+  font-family: var(--font-mono);
 }
 
 .aptitude-item {
@@ -92,7 +94,6 @@ sl-header {
 
 .skills-list {
   $border: 1px groove var(--color-border);
-  padding: 0 0 0.25rem;
   overflow: hidden;
   font-size: 14px;
   column-width: 190px;

@@ -63,79 +63,162 @@ export class CharacterViewAlt extends CharacterViewBase {
 
   render() {
     const { character } = this;
-    const { ego, disabled, sleeve } = character;
+    const { ego, disabled, sleeve, pools, armor } = character;
     const { filteredMotivations, settings } = ego;
     const physicalHealth =
       sleeve && 'physicalHealth' in sleeve && sleeve.physicalHealth;
     const meshHealth =
       sleeve && 'activeMeshHealth' in sleeve && sleeve.activeMeshHealth;
     return html`
-      <div class="ego">
-        <button ?disabled=${disabled}>
-          <img src=${character.img} height="62px" />
-        </button>
-        <h2 @click=${ego.openForm}>${character.name}</h2>
-        <span class="info">
-          ${compact([
-            `${ego.egoType} ${localize('ego')}`,
-            ego.forkStatus && `${localize(ego.forkStatus)} ${localize('fork')}`,
-          ]).join(' • ')}
-        </span>
+      <header>
+        <div class="entities">
+          <div class="avatar">
+            <img src=${character.img} width="60px" />
+          </div>
+          <div class="ego">
+            <button class="ego-name">
+              <span @click=${ego.openForm}>${character.name}</span>
+            </button>
+            <span class="info">
+              ${compact([
+                `${ego.egoType} ${localize('ego')}`,
+                ego.forkStatus &&
+                  `${localize(ego.forkStatus)} ${localize('fork')}`,
+              ]).join(' • ')}
+            </span>
 
-        ${settings.trackPoints
-          ? html`
-              <sl-animated-list class="resource-points">
-                ${repeat(
-                  ego.points,
-                  prop('point'),
-                  ({ label, value }) => html`
-                    <li>${label} <span class="value">${value}</span></li>
-                  `,
-                )}
-              </sl-animated-list>
-            `
-          : ''}
-        ${notEmpty(filteredMotivations)
-          ? html`
-              <sl-animated-list class="motivations-list"
-                >${repeat(
-                  filteredMotivations,
-                  idProp,
-                  this.renderMotivation,
-                )}</sl-animated-list
-              >
-            `
-          : ''}
-      </div>
+            ${settings.trackPoints
+              ? html`
+                  <sl-animated-list class="resource-points">
+                    ${repeat(
+                      ego.points,
+                      prop('point'),
+                      ({ label, value }) => html`
+                        <li>${label} <span class="value">${value}</span></li>
+                      `,
+                    )}
+                  </sl-animated-list>
+                `
+              : ''}
+            ${notEmpty(filteredMotivations)
+              ? html`
+                  <sl-animated-list class="motivations-list"
+                    >${repeat(
+                      filteredMotivations,
+                      idProp,
+                      this.renderMotivation,
+                    )}</sl-animated-list
+                  >
+                `
+              : ''}
+          </div>
+          <div class="sleeve">
+            ${sleeve ? this.renderSleeve(sleeve) : this.renderSleeveSelect()}
+          </div>
+        </div>
 
-      <div class="healths">
-        ${settings.trackMentalHealth
-          ? html` <health-item
-              clickable
-              class="mental-health-view"
-              .health=${ego.mentalHealth}
-              ><span slot="source">${localize('mental')}</span></health-item
-            >`
-          : ''}
-        ${physicalHealth
-          ? html`
-              <health-item clickable .health=${physicalHealth}> </health-item>
-            `
-          : ''}
-        ${meshHealth && sleeve
-          ? html` <health-item clickable .health=${meshHealth}>
-              ${sleeve.type !== ActorType.Infomorph && sleeve.nonDefaultBrain
-                ? html`
-                    <span slot="source">${sleeve.nonDefaultBrain.name}</span>
-                  `
-                : ''}
-            </health-item>`
-          : ''}
-      </div>
+        <div class="shared">
+          ${notEmpty(armor)
+            ? html`
+                <div
+                  class="armor"
+                  @click=${this.setDrawerRenderer}
+                  data-renderer=${CharacterDrawerRenderer.Armor}
+                  @keydown=${clickIfEnter}
+                  tabindex="0"
+                  role="button"
+                >
+                  <sl-animated-list class="values">
+                    ${repeat(enumValues(ArmorType), identity, (type) => {
+                      const value = armor.getClamped(type);
+                      const reduced = armor.reducedArmors.has(type);
+                      return value || reduced
+                        ? html`<span class="rating ${classMap({ reduced })}"
+                            ><img
+                              src=${localImage('icons/armor/shield.svg')}
+                              width="16"
+                            />
+                            <span class="label"> ${localize(type)}</span>
+                            <span class="value">${value}</span></span
+                          >`
+                        : '';
+                    })}
 
-      <div class="sleeve">
-        ${sleeve ? this.renderSleeve(sleeve) : this.renderSleeveSelect()}
-      </div>
+                    <span class="rating info">
+                      <img
+                        src=${localImage('icons/armor/layered-armor.svg')}
+                        width="16"
+                      />
+                      <span class="label">${localize('layers')}</span>
+                      <span class="value">${armor.layers}</span></span
+                    >
+                    ${armor.concealable
+                      ? html`
+                          <span class="rating info"
+                            >${localize('concealable')}</span
+                          >
+                        `
+                      : ''}
+                  </sl-animated-list>
+                </div>
+              `
+            : ''}
+          ${notEmpty(pools)
+            ? html`
+                <ul class="pools">
+                  ${[...pools.values()].map(
+                    pools.size <= 1
+                      ? this.renderPool
+                      : (pool) => html` <li
+                          class="pool"
+                          tabindex=${disabled ? '-1' : 0}
+                          role="button"
+                          data-pool=${pool.type}
+                          @click=${this.openPoolMenu}
+                          ?disabled=${disabled}
+                        >
+                          <img height="22px" src=${pool.icon} />
+                          <span> ${localize(pool.type)} </span>
+                          <value-status
+                            value=${pool.available}
+                            max=${pool.max}
+                          ></value-status>
+                        </li>`,
+                  )}
+                </ul>
+              `
+            : ''}
+
+          <div class="healths">
+            ${settings.trackMentalHealth
+              ? html` <health-item
+                  clickable
+                  class="mental-health-view"
+                  .health=${ego.mentalHealth}
+                  ><span slot="source">${localize('mental')}</span></health-item
+                >`
+              : ''}
+            ${physicalHealth
+              ? html`
+                  <health-item clickable .health=${physicalHealth}>
+                  </health-item>
+                `
+              : ''}
+            ${meshHealth && sleeve
+              ? html` <health-item clickable .health=${meshHealth}>
+                  ${sleeve.type !== ActorType.Infomorph &&
+                  sleeve.nonDefaultBrain
+                    ? html`
+                        <span slot="source"
+                          >${sleeve.nonDefaultBrain.name}</span
+                        >
+                      `
+                    : ''}
+                </health-item>`
+              : ''}
+          </div>
+        </div>
+      </header>
       <character-view-test-actions
         class="actions"
         .character=${this.character}
@@ -159,14 +242,14 @@ export class CharacterViewAlt extends CharacterViewBase {
     // TODO Show goals
     return html`
       <li class="motivation">
-        <button>
-          <mwc-icon class=${motivation.stance}
-            >${motivation.stance === MotivationStance.Support
-              ? 'add'
-              : 'remove'}</mwc-icon
-          >
-          ${motivation.cause}
-        </button>
+        <!-- <button> -->
+        <mwc-icon class=${motivation.stance}
+          >${motivation.stance === MotivationStance.Support
+            ? 'add'
+            : 'remove'}</mwc-icon
+        >
+        ${motivation.cause}
+        <!-- </button> -->
         ${motivation.goals.length
           ? html`
               <notification-coin
@@ -381,60 +464,18 @@ export class CharacterViewAlt extends CharacterViewBase {
     const { armor, movementRates, movementModifiers, pools } = this.character;
     const canPlace = userCan('TEMPLATE_CREATE');
     return html`
-      <h3 @click=${sleeve.openForm}>${sleeve.name}</h3>
+      <button class="sleeve-name" @click=${sleeve.openForm}>
+        ${sleeve.name}
+      </button>
       <span class="info"> ${formattedSleeveInfo(sleeve).join(' • ')}</span>
-      ${notEmpty(armor)
-        ? html`
-            <div
-              class="armor"
-              @click=${this.setDrawerRenderer}
-              data-renderer=${CharacterDrawerRenderer.Armor}
-              @keydown=${clickIfEnter}
-              tabindex="0"
-              role="button"
-            >
-              <sl-animated-list class="values">
-                ${repeat(enumValues(ArmorType), identity, (type) => {
-                  const value = armor.getClamped(type);
-                  const reduced = armor.reducedArmors.has(type);
-                  return value || reduced
-                    ? html`<span class="rating ${classMap({ reduced })}"
-                        ><img
-                          src=${localImage('icons/armor/shield.svg')}
-                          width="16"
-                        />
-                        <span class="label"> ${localize(type)}</span>
-                        <span class="value">${value}</span></span
-                      >`
-                    : '';
-                })}
 
-                <span class="rating info">
-                  <img
-                    src=${localImage('icons/armor/layered-armor.svg')}
-                    width="16"
-                  />
-                  <span class="label">${localize('layers')}</span>
-                  <span class="value">${armor.layers}</span></span
-                >
-                ${armor.concealable
-                  ? html`
-                      <span class="rating info"
-                        >${localize('concealable')}</span
-                      >
-                    `
-                  : ''}
-              </sl-animated-list>
-            </div>
-          `
-        : ''}
-      ${notEmpty(pools)
+      <!-- ${notEmpty(pools)
         ? html`
             <ul class="pools">
               ${[...pools.values()].map(this.renderPool)}
             </ul>
           `
-        : ''}
+        : ''} -->
 
       <div class="movement">
         ${(['encumbered', 'overburdened'] as const).map((mod) => {
@@ -477,6 +518,7 @@ export class CharacterViewAlt extends CharacterViewBase {
       .pool=${pool}
       ?disabled=${this.character.disabled}
       ?wide=${this.character.pools.size <= 2}
+      data-pool=${pool.type}
     ></pool-item>
   `;
 

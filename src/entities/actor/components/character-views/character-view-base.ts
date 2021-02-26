@@ -1,11 +1,11 @@
 import { renderLabeledCheckbox } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
+import type { PoolType } from '@src/data-enums';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import {
   Substance,
   SubstanceUseMethod,
 } from '@src/entities/item/proxies/substance';
-import { PoolItem } from '@src/features/components/pool-item/pool-item';
 import type { ConditionType } from '@src/features/conditions';
 import { idProp, matchID } from '@src/features/feature-helpers';
 import { poolActionOptions } from '@src/features/pools';
@@ -211,12 +211,12 @@ export abstract class CharacterViewBase extends LitElement {
     );
   }
 
-  protected openPoolMenu(ev: MouseEvent) {
-    if (ev.currentTarget instanceof PoolItem) {
-      const { type } = ev.currentTarget.pool;
+  protected openPoolMenu(ev: MouseEvent & { currentTarget: HTMLElement }) {
+    const { pool } = ev.currentTarget.dataset;
+    if (pool) {
       openMenu({
-        header: { heading: localize(type) },
-        content: poolActionOptions(this.character, type),
+        header: { heading: localize(pool as PoolType) },
+        content: poolActionOptions(this.character, pool as PoolType),
         position: ev,
       });
     }
