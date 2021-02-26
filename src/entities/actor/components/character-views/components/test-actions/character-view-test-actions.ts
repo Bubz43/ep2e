@@ -57,22 +57,9 @@ export class CharacterViewTestActions extends LitElement {
 
   private skillFilterCheck!: ReturnType<typeof skillFilterCheck>;
 
-  private collapsedSections = {
-    reputation: false,
-    skills: false,
-    software: false,
-  };
-
   update(changedProps: PropertyValues<this>) {
     this.skillFilterCheck = skillFilterCheck(this.skillControls.filter);
     super.update(changedProps);
-  }
-
-  private toggleSection(
-    section: keyof CharacterViewTestActions['collapsedSections'],
-  ) {
-    this.collapsedSections[section] = !this.collapsedSections[section];
-    this.requestUpdate();
   }
 
   private updateSkillControls = (
@@ -269,7 +256,7 @@ export class CharacterViewTestActions extends LitElement {
   }
 
   render() {
-    const { currentEgo, collapsedSections } = this;
+    const { currentEgo } = this;
     const { groupedSkills, name, aptitudes } = currentEgo;
     const { active, know } = groupedSkills;
     const { sources, fakeID } = this.repSources;
@@ -281,169 +268,128 @@ export class CharacterViewTestActions extends LitElement {
     // TODO: Toggle to show all reps instead of just tracked
     // TODO: Add collapse toggle
     const reps = fakeID?.repsWithIdentifiers ?? sources[0]?.reps!;
+    const showSource = !!onboardALIs.size;
     return html`
-      <section class="ego">
-        <sl-header
-          heading="${currentEgo === this.ego
-            ? name
-            : `${this.character.items.get(this.activeEgo!)?.name} - ${
-                currentEgo.name
-              }`}"
-        >
-          ${notEmpty(onboardALIs)
+      ${showSource
+        ? html`
+            <div class="source">
+              ${currentEgo.name}
+              <mwc-icon-button
+                slot="action"
+                ?disabled=${this.ego.disabled}
+                @click=${this.openEgoSelectMenu}
+                icon=${fakeID ? 'person_outline' : 'person'}
+              ></mwc-icon-button>
+            </div>
+          `
+        : ''}
+      <sl-details summary=${localize('aptitudes')} open>
+        <ul class="aptitudes-list">
+          ${enumValues(AptitudeType).map(this.renderAptitude)}
+        </ul>
+      </sl-details>
+
+      <sl-details summary=${localize('skills')} open>
+        <ul class="skills-list">
+          <li class="filter">
+            ${renderAutoForm({
+              classes: 'skill-controls',
+              storeOnInput: true,
+              noDebounce: true,
+              props: this.skillControls,
+              update: this.updateSkillControls,
+              fields: ({ filter }) => html`
+                <div
+                  class="skill-filter"
+                  @keypress=${this.findFirstUnfilteredSkill}
+                >
+                  ${renderTextInput(filter, {
+                    search: true,
+                    placeholder: localize('filter'),
+                  })}
+                </div>
+              `,
+            })}
+          </li>
+          ${active?.map(this.renderSkill)}
+          ${notEmpty(know)
             ? html`
-                <mwc-icon-button
-                  slot="action"
-                  ?disabled=${this.ego.disabled}
-                  @click=${this.openEgoSelectMenu}
-                  icon=${fakeID ? 'person_outline' : 'person'}
-                ></mwc-icon-button>
+                <li class="divider" role="separator"></li>
+                ${know.map(this.renderSkill)}
               `
             : ''}
-          ${this.renderSectionToggle('skills')}
-        </sl-header>
-
-        ${collapsedSections['skills']
-          ? ''
-          : html`<ul class="aptitudes-list">
-                ${enumValues(AptitudeType).map(this.renderAptitude)}
-              </ul>
-
-              <ul class="skills-list">
-                <li class="filter">
-                  ${renderAutoForm({
-                    classes: 'skill-controls',
-                    storeOnInput: true,
-                    noDebounce: true,
-                    props: this.skillControls,
-                    update: this.updateSkillControls,
-                    fields: ({ filter }) => html`
-                      <span>${localize('skills')}</span>
-                      <div
-                        class="skill-filter"
-                        @keypress=${this.findFirstUnfilteredSkill}
-                      >
-                        ${renderTextInput(filter, {
-                          search: true,
-                          placeholder: localize('filter'),
-                        })}
-                      </div>
-                    `,
-                  })}
-                </li>
-                ${active?.map(this.renderSkill)}
-                ${notEmpty(know)
-                  ? html`
-                      <li class="divider" role="separator"></li>
-                      ${know.map(this.renderSkill)}
-                    `
-                  : ''}
-              </ul>`}
-      </section>
+        </ul>
+      </sl-details>
 
       ${notEmpty(softwareSkills)
         ? html`
-            <section class="software-section">
-              <sl-header
-                heading="${localize('software')} ${localize('skills')}"
-              >
-                ${this.renderSectionToggle('software')}
-              </sl-header>
-              ${this.collapsedSections.software
-                ? ''
-                : html`
-                    <ul class="software-list">
-                      ${softwareSkills.map(
-                        (software) => html`
-                          <li class="software">
-                            <span class="software-name">${software.name}</span>
-                            <ul class="skills-list">
-                              ${software.skills.map((skill) => {
-                                const { name, specialization, total } = skill;
-                                return html`
-                                  <Wl-list-item
-                                    clickable
-                                    class="skill-item"
-                                    ?disabled=${this.disabled}
-                                    @click=${() =>
-                                      this.startSoftwareSkillTest(
-                                        skill,
-                                        software,
-                                      )}
-                                  >
-                                    <span class="skill-name"
-                                      >${name}
-                                      ${specialization
-                                        ? `(${specialization})`
-                                        : ''}</span
-                                    >
-                                    <span class="skill-total" slot="after"
-                                      >${total}</span
-                                    >
-                                  </Wl-list-item>
-                                `;
-                              })}
-                            </ul>
-                          </li>
-                        `,
-                      )}
-                    </ul>
-                  `}
-            </section>
+            <sl-details summary="${localize('software')} ${localize('skills')}">
+              <ul class="software-list">
+                ${softwareSkills.map(
+                  (software) => html`
+                    <li class="software">
+                      <span class="software-name">${software.name}</span>
+                      <ul class="skills-list">
+                        ${software.skills.map((skill) => {
+                          const { name, specialization, total } = skill;
+                          return html`
+                            <Wl-list-item
+                              clickable
+                              class="skill-item"
+                              ?disabled=${this.disabled}
+                              @click=${() =>
+                                this.startSoftwareSkillTest(skill, software)}
+                            >
+                              <span class="skill-name"
+                                >${name}
+                                ${specialization
+                                  ? `(${specialization})`
+                                  : ''}</span
+                              >
+                              <span class="skill-total" slot="after"
+                                >${total}</span
+                              >
+                            </Wl-list-item>
+                          `;
+                        })}
+                      </ul>
+                    </li>
+                  `,
+                )}
+              </ul>
+            </sl-details>
           `
         : ''}
       ${notEmpty(sources)
         ? html`
-            <section class="reps">
-              <sl-header heading=${localize('reputations')}>
-                ${notEmpty(fakeIDs)
-                  ? html` <span slot="info"
-                        >${fakeID?.name ?? this.ego.name}</span
-                      >
-                      <mwc-icon-button
-                        slot="action"
-                        @click=${this.openRepSourceMenu}
-                        icon=${fakeID ? 'person_outline' : 'person'}
-                      ></mwc-icon-button>`
-                  : ''}
-                ${this.renderSectionToggle('reputation')}
-              </sl-header>
-
-              ${collapsedSections['reputation']
-                ? ''
-                : html`
-                    <ul class="rep-list">
-                      <li class="rep-header">
-                        <span>${localize('network')}</span>
-                        <span>${localize('score')}</span>
-                        ${[...maxFavors.keys()].map(
-                          (key) =>
-                            html`<span
-                              title="${localize(key)} ${localize('favors')}"
-                              >${localize(key).slice(0, 3)}</span
-                            >`,
-                        )}
-                      </li>
-                      ${reps.map(this.renderRep)}
-                    </ul>
-                  `}
-            </section>
+            <sl-details summary=${localize('reputations')}>
+              ${notEmpty(fakeIDs)
+                ? html` <div class="rep-source">
+                    <span>${fakeID?.name ?? this.ego.name}</span>
+                    <mwc-icon-button
+                      slot="action"
+                      @click=${this.openRepSourceMenu}
+                      icon=${fakeID ? 'person_outline' : 'person'}
+                    ></mwc-icon-button>
+                  </div>`
+                : ''}
+              <ul class="rep-list">
+                <li class="rep-header">
+                  <span>${localize('network')}</span>
+                  <span>${localize('score')}</span>
+                  ${[...maxFavors.keys()].map(
+                    (key) =>
+                      html`<span title="${localize(key)} ${localize('favors')}"
+                        >${localize(key).slice(0, 3)}</span
+                      >`,
+                  )}
+                </li>
+                ${reps.map(this.renderRep)}
+              </ul>
+            </sl-details>
           `
         : ''}
     `;
-  }
-
-  private renderSectionToggle(
-    section: keyof CharacterViewTestActions['collapsedSections'],
-  ) {
-    return html` <mwc-icon-button
-      slot="action"
-      @click=${() => this.toggleSection(section)}
-      icon=${this.collapsedSections[section]
-        ? 'keyboard_arrow_left'
-        : 'keyboard_arrow_down'}
-    >
-    </mwc-icon-button>`;
   }
 
   private renderAptitude = (type: AptitudeType) => {

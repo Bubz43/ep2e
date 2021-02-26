@@ -181,7 +181,7 @@ header {
         }
       }
       &.info {
-        background: alphav(var(--color-border), 0.45);
+        background: alphav(var(--color-grey), 0.25);
         border: 1px solid alphav(var(--color-border), 0.75);
         padding: 0 0.5rem;
       }
@@ -190,7 +190,7 @@ header {
 }
 
 .avatar {
-  padding: 0 0.5rem 0.5rem;
+  padding: 0 0.5rem;
   // padding-left: 0;
   float: left;
   img {
@@ -238,7 +238,7 @@ header {
     flex-flow: row wrap;
     position: relative;
     clear: both;
-    padding: 0 0.5rem;
+    padding: 0.125rem 0.5rem;
   }
 
   .motivation {
@@ -442,6 +442,7 @@ character-view-psi {
     padding: 0 0.5rem;
     border-radius: 3px;
     flex: 1;
+    margin: 0.125rem 0;
   }
   .mod {
     background: alphav(var(--color-negative), 0.2);

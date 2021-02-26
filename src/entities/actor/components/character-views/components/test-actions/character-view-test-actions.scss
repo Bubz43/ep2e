@@ -13,20 +13,24 @@
   // gap: 0.25rem;
 }
 
-sl-header {
-  padding: 0.125rem 0.75rem;
-  border-bottom-color: var(--color-border);
-}
-
 .aptitudes-list,
 .skills-list {
   column-rule: 1px groove var(--color-border);
   gap: 0.25rem;
-  padding: 0.25rem;
+  // padding: 0.25rem;
 
   > * {
     break-inside: avoid;
     page-break-inside: avoid;
+  }
+}
+
+sl-details {
+  &::part(content) {
+    padding: 0.25rem;
+  }
+  &[open]::part(toggle) {
+    background: transparent;
   }
 }
 
@@ -41,7 +45,6 @@ sl-header {
   .acronym {
     color: var(--color-text-lighter);
     text-transform: uppercase;
-    font-family: var(--font-mono);
     letter-spacing: 1px;
   }
   mwc-icon {
@@ -67,24 +70,17 @@ sl-header {
 
 .skill-controls {
   @include inputReset();
-  grid-template-columns: 1fr 2fr 1fr;
-  align-items: center;
-  span {
-    font-size: large;
-    font-weight: bold;
-    padding: 0 1rem;
-  }
+
   input {
     text-align: center;
     width: 100%;
-    border: none;
+    // border: none;
     padding: 0.25rem 0.5rem;
     font-family: var(--font-3);
-    border-left: 1px groove var(--color-border);
-    border-right: 1px groove var(--color-border);
     background: rgba(black, 0.1);
     &:focus {
       background: rgba(black, 0.2);
+      outline: 1px solid var(--color-secondary);
     }
     &::-webkit-search-cancel-button {
       display: none;
@@ -99,16 +95,16 @@ sl-header {
   column-width: 190px;
   .divider {
     margin: 0.25rem 0;
+    border-bottom: $border;
   }
 
   .filter {
     margin-bottom: 0.25rem;
-    border-top: $border;
+    // border-top: $border;
   }
 
   .divider,
   .filter {
-    border-bottom: $border;
     column-span: all;
     list-style: none;
   }
