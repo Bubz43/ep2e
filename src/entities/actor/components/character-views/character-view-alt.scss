@@ -17,7 +17,7 @@ h3 {
   display: grid;
   grid-template-areas:
     'header header'
-    'sleeve sleeve'
+    'blah blah'
     'actions tabs'
     'footer footer';
 
@@ -52,7 +52,7 @@ header {
     rgba(0, 0, 0, 0)
   );
   .entities {
-    align-self: center;
+    // align-self: center;
     // padding: 0.125rem 0.5rem;
     padding: 0.5rem 0 0;
     flex: 1;
@@ -268,17 +268,46 @@ character-view-psi {
   border-top: 1px solid var(--color-border);
 }
 
-.sleeve {
-  padding: 0.5rem 0.75rem;
+.blah {
+  display: grid;
+  grid-template-columns: 1fr max-content max-content;
+  align-items: center;
+  grid-area: blah;
   border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-grey);
-  grid-area: sleeve;
+  margin: 0 0.25rem;
+  padding: 0.5rem;
+
+  .sleeve {
+    flex: 1;
+  }
+  .initiative {
+    margin-left: 0.25rem;
+    border-left: 1px solid var(--color-border);
+    padding-left: 0.25rem;
+    --mdc-theme-primary: var(--color-grey);
+  }
+  .stress-roll {
+    margin-left: 0.25rem;
+    border-left: 1px solid var(--color-border);
+    padding-left: 0.25rem;
+    --mdc-theme-primary: #{lightv(var(--color-negative), 1.2)};
+  }
+}
+
+.sleeve {
+  // border-bottom: 1px solid var(--color-grey);
+  // grid-area: sleeve;
   width: 400px;
   min-width: 100%;
 }
 
 .info {
   color: var(--color-text-lighter);
+}
+
+.actions,
+.tabbed-section {
+  border-top: 1px solid var(--color-grey);
 }
 
 .actions {
@@ -403,6 +432,7 @@ character-view-psi {
 .movement {
   float: right;
   @include textButton();
+  padding: 0 0.25rem;
 
   .mod,
   .movement-rate {

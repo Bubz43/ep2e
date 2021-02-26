@@ -1,3 +1,10 @@
+import {
+  CombatActionType,
+  rollInitiative,
+  Surprise,
+  TrackedCombatEntity,
+  updateCombatState,
+} from '@src/combat/combat-tracker';
 import { Placement } from '@src/components/popover/popover-options';
 import { enumValues, RechargeType } from '@src/data-enums';
 import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisition';
@@ -10,6 +17,7 @@ import type { ReadonlyPool } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
 import { tooltip } from '@src/init';
+import { openMenu } from '@src/open-menu';
 import { clickIfEnter, notEmpty } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
 import {
@@ -59,6 +67,83 @@ export class CharacterViewAlt extends CharacterViewBase {
   private setDrawerRenderer(ev: Event) {
     const { renderer } = (ev.currentTarget as HTMLElement).dataset;
     this.toggleDrawerRenderer(renderer as CharacterDrawerRenderer);
+  }
+
+  private addToCombat(initiative?: number, surprised?: Surprise) {
+    const name = this.token?.name ?? this.character.name;
+    const hidden = this.token?.data.hidden;
+    updateCombatState({
+      type: CombatActionType.AddParticipants,
+      payload: [
+        {
+          name,
+          hidden,
+          initiative,
+          surprised,
+          entityIdentifiers: this.token?.scene
+            ? {
+                type: TrackedCombatEntity.Token,
+                tokenId: this.token.id,
+                sceneId: this.token.scene.id,
+              }
+            : {
+                type: TrackedCombatEntity.Actor,
+                actorId: this.character.actor.id,
+              },
+        },
+      ],
+    });
+  }
+
+  private openInitiativeMenu() {
+    const bonus = this.character?.initiative;
+    const baseLabel = bonus ? `1d6 + ${bonus}` : '1d6';
+    const name = this.token?.name ?? this.character.name;
+    const hidden = this.token?.data.hidden;
+    const roll = async (surprise?: Surprise) => {
+      const result = await rollInitiative(
+        { token: this.token, actor: this.character.actor },
+        {
+          surprised: surprise,
+          name,
+          hidden,
+        },
+      );
+      this.addToCombat(result.initiative, surprise);
+    };
+    openMenu({
+      content: [
+        {
+          label: `${localize('add')} ${localize('to')} ${localize('combat')}`,
+          callback: () => this.addToCombat(),
+          icon: html`<mwc-icon>add</mwc-icon>`,
+        },
+        // 'divider',
+        {
+          label: `${localize('add')} & ${localize('roll')} ${baseLabel}`,
+          callback: () => roll(),
+          icon: html`<mwc-icon>casino</mwc-icon>`,
+        },
+        {
+          label: `${localize(
+            Surprise.Surprised,
+          )} (${baseLabel}) - 3, 🚫 ${localize('act')}/${localize('defend')}`,
+          callback: () => roll(Surprise.Surprised),
+          icon: html`<mwc-icon>snooze</mwc-icon>`,
+        },
+        {
+          label: `${localize(Surprise.Alerted)} (${baseLabel}) - 3, ${localize(
+            'act',
+          )}/${localize('defend')} ${localize('normally')}`,
+          callback: () => roll(Surprise.Alerted),
+          icon: html`<mwc-icon>priority_high</mwc-icon>`,
+        },
+      ],
+    });
+  }
+
+  private rollStress() {
+    this.character.ego.rollStress();
   }
 
   render() {
@@ -222,8 +307,26 @@ export class CharacterViewAlt extends CharacterViewBase {
           </div>
         </div>
       </header>
-      <div class="sleeve">
-        ${sleeve ? this.renderSleeve(sleeve) : this.renderSleeveSelect()}
+      <div class="blah">
+        <div class="sleeve">
+          ${sleeve ? this.renderSleeve(sleeve) : this.renderSleeveSelect()}
+        </div>
+        <mwc-button dense class="initiative" @click=${this.openInitiativeMenu}>
+          ${localize('initiative')}: ${this.character.initiative}
+        </mwc-button>
+
+        ${this.character.ego.hasStressRoll
+          ? html`
+              <mwc-button
+                class="stress-roll"
+                dense
+                slot="action"
+                label="${localize('SHORT', 'stressValue')}: ${this.character.ego
+                  .stressValueInfo.value}"
+                @click=${this.rollStress}
+              ></mwc-button>
+            `
+          : ''}
       </div>
       <character-view-test-actions
         class="actions"
