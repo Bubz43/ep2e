@@ -169,8 +169,8 @@ table {
   }
 }
 
-#combat-controls {
-  background: lightv(var(--color-bg), 1.2);
+#combat-popout {
+  width: 354px !important;
 }
 
 #permissions-config {
@@ -260,12 +260,10 @@ table {
 
 #navigation {
   position: relative;
-  // width: calc(100% - 350px);
   width: 100%;
   pointer-events: none;
   flex: 1;
   min-height: 42px;
-  // z-index: 30;
   #nav-toggle {
     pointer-events: initial;
   }
@@ -490,6 +488,13 @@ sl-tooltip {
   width: 325px;
   overflow: visible;
   height: 100vh;
+
+  combat-view {
+    &:not(.active) {
+      display: none;
+    }
+  }
+
   > * {
     pointer-events: initial;
   }
@@ -539,6 +544,7 @@ sl-tooltip {
     }
   }
   &.collapsed {
+    box-shadow: 0 0 4px black inset;
     #sidebar-tabs {
       > .item {
         border-bottom: none;

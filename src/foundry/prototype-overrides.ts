@@ -361,6 +361,28 @@ export const overridePrototypes = () => {
     },
   });
 
+  const { _replaceHTML } = CombatTracker.prototype;
+  CombatTracker.prototype._replaceHTML = function (
+    ...args: Parameters<typeof _replaceHTML>
+  ) {
+    if (!this.popOut) {
+      _replaceHTML.apply(this, args);
+    }
+  };
+  CombatTracker.prototype._renderInner = async function () {
+    const existing = this.element?.[0]?.querySelector('combat-view');
+    if (existing) {
+      return $(existing);
+    }
+    const frag = new DocumentFragment();
+    render(
+      html`<combat-view class="sidebar-tab" data-tab="combat"></combat-view>`,
+      frag,
+    );
+    console.log(frag);
+    return $(frag);
+  };
+
   Compendium.prototype._replaceHTML = noop;
   Compendium.prototype._renderInner = async function () {
     const existing = this.element?.[0]?.querySelector('compendium-list');
