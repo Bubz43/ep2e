@@ -95,6 +95,7 @@ import { CharacterViewRechargeCompletion } from './entities/actor/components/cha
 import { CharacterViewResleeve } from './entities/actor/components/character-views/components/resleeve/character-view-resleeve';
 import { CharacterViewSearch } from './entities/actor/components/character-views/components/search/character-view-search';
 import { CharacterViewSleeve } from './entities/actor/components/character-views/components/sleeve/character-view-sleeve';
+import { CharacterViewSubstances } from './entities/actor/components/character-views/components/substances/character-view-substances';
 import { CharacterViewTestActions } from './entities/actor/components/character-views/components/test-actions/character-view-test-actions';
 import { CharacterViewTime } from './entities/actor/components/character-views/components/time/character-view-time';
 import { ItemTrash } from './entities/actor/components/item-trash/item-trash';
@@ -224,7 +225,6 @@ CharacterViewPhysicalHealth;
 CharacterViewMeshHealth;
 CharacterViewMentalHealth;
 CharacterViewConditions;
-CharacterViewActiveSubstance;
 CharacterViewTestActions;
 CharacterViewPsi;
 CharacterViewExplosiveAttacks;
@@ -232,6 +232,8 @@ CharacterViewMeleeWeaponAttacks;
 ExplosiveSettingsForm;
 CharacterViewAttacksSection;
 CharacterViewSoftwareAttacks;
+CharacterViewSubstances;
+CharacterViewActiveSubstance;
 
 //Item Cards
 ItemCard;

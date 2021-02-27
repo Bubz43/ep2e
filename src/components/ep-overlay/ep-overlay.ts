@@ -3,7 +3,6 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
 import { readyCanvas } from '@src/foundry/canvas';
 import { positionApp } from '@src/foundry/foundry-apps';
-import { applicationHook } from '@src/foundry/hook-setups';
 import { tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
 import { debounceFn } from '@src/utility/decorators';
@@ -102,17 +101,17 @@ export class EPOverlay extends LitElement {
         }
       });
     });
-    for (const event of ['render', 'close'] as const) {
-      applicationHook({
-        app: SidebarTab,
-        hook: 'on',
-        event,
-        callback: this.toggleActiveFoundryApps,
-      });
-    }
+    // for (const event of ['render', 'close'] as const) {
+    //   applicationHook({
+    //     app: SidebarTab,
+    //     hook: 'on',
+    //     event,
+    //     callback: this.toggleActiveFoundryApps,
+    //   });
+    // }
 
     setTimeout(() => {
-      this.setFoundryPopouts();
+      // this.setFoundryPopouts();
       this.stealElements();
       ui.chat.scrollBottom();
       this.ready = true;
@@ -159,7 +158,13 @@ export class EPOverlay extends LitElement {
   }, 1);
 
   stealElements() {
-    for (const id of ['chat', 'navigation', 'controls']) {
+    const ids = [
+      // 'chat',
+      'sidebar',
+      'navigation',
+      'controls',
+    ];
+    for (const id of ids) {
       const el = document.getElementById(id);
       if (el) {
         const wrapper = document.createElement('div');
@@ -339,16 +344,23 @@ export class EPOverlay extends LitElement {
     <div class="controls-wrapper">
       <slot name="controls"></slot>
     </div>
-
     <div
+      class="sidebar-wrapper"
+      @mouseenter=${this.toggleChatPointers}
+      @mouseleave=${this.toggleChatPointers}
+    >
+      <slot name="sidebar"></slot>
+    </div>
+
+    <!-- <div
       class="chat-wrapper"
       @mouseenter=${this.toggleChatPointers}
       @mouseleave=${this.toggleChatPointers}
     >
       <slot name="chat"></slot>
-    </div>
+    </div> -->
 
-    <ul class="foundry-app-controls">
+    <!-- <ul class="foundry-app-controls">
       <slot name="app-controls"></slot>
       <wl-list-item
         clickable
@@ -357,9 +369,9 @@ export class EPOverlay extends LitElement {
       >
         <img src="icons/fvtt.png" height="30px" />
       </wl-list-item>
-    </ul>
+    </ul> -->
 
-    <user-view></user-view>
+    <!-- <user-view></user-view> -->
     <event-list></event-list>
     <slot name="dialog"></slot>
     <slot name="tooltip"></slot>

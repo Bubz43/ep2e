@@ -199,7 +199,7 @@ export class CharacterViewTestActions extends LitElement {
       },
       ...fakeIDs.map((fake) => ({
         reps: fake.repsWithIdentifiers,
-        label: fake.name,
+        label: `[${localize('fakeId')}] ${fake.name}`,
         active:
           fakeID === fake ||
           (!trackReputations && !fakeIDreps && fake === fakeIDs[0]),
@@ -388,7 +388,11 @@ export class CharacterViewTestActions extends LitElement {
                     class="source"
                   >
                     <span slot="before">${localize('profile')}:</span>
-                    <span> ${fakeID?.name ?? this.ego.name}</span>
+                    <span
+                      >${fakeID
+                        ? `[${localize('fakeId')}] ${fakeID.name}`
+                        : this.ego.name}</span
+                    >
                     <mwc-icon slot="after"
                       >${fakeID ? 'person_outline' : 'person'}</mwc-icon
                     >

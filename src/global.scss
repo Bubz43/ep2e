@@ -7,7 +7,7 @@
 @use "scss/fields";
 @use "scss/form-buttons";
 @use "scss/app-windows";
-@use "scss/players";
+// @use "scss/players";
 
 @include styled-scrollbars;
 @include widgetless-number-inputs;
@@ -42,6 +42,7 @@ li[divider] {
   border-color: alphav(var(--color-border), 0.5);
   margin: 0.25rem 0;
 }
+
 [slot='graphic'] {
   color: currentColor;
 }
@@ -320,7 +321,6 @@ table {
         }
       }
       &.view {
-        // display: none;
         cursor: initial;
         background: linear-gradient(
           to right,
@@ -338,10 +338,6 @@ table {
     pointer-events: initial;
     min-width: max-content;
   }
-}
-
-#sidebar {
-  display: none;
 }
 
 #scenes {
@@ -446,11 +442,138 @@ sl-tooltip {
   }
 }
 
-.sidebar-tab {
-  &#combat {
-    display: flex;
+#sidebar {
+  position: static;
+  border: none;
+  box-shadow: none;
+  pointer-events: none;
+  background: transparent;
+  border-radius: 0;
+  width: 325px;
+  overflow: visible;
+  height: 100vh;
+  > * {
+    pointer-events: initial;
   }
+  #sidebar-tabs {
+    background: alphav(var(--color-bg), 0.5);
+    margin-bottom: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
+    border: none;
+    box-shadow: none;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
 
+    > .item {
+      border-radius: 0;
+      border: none;
+      padding: 0.125rem;
+      border-bottom: 2px solid transparent;
+      color: alphav(var(--color-text), 0.9);
+      transition: border-bottom-color 200ms ease-in-out, color 150ms ease-in-out,
+        text-shadow 150ms ease-in-out;
+      &:hover {
+        text-shadow: 0 0 4px var(--color-primary-alt);
+        color: alphav(var(--color-text), 0.95);
+      }
+      &.active {
+        box-shadow: none;
+        border-bottom: 2px solid var(--color-secondary);
+        text-shadow: 0 0 4px var(--color-secondary);
+        color: var(--color-text);
+      }
+    }
+    .collapse {
+      align-self: center;
+      border-left: 1px solid var(--color-border);
+      margin-left: 0.25ch;
+      padding: 0;
+      background: alphav(var(--color-border), 0.5);
+      height: 100%;
+      display: inline-grid;
+      place-items: center;
+      &:hover {
+        text-shadow: none;
+
+        background: var(--color-border);
+      }
+    }
+  }
+  &.collapsed {
+    #sidebar-tabs {
+      > .item {
+        border-bottom: none;
+
+        &.active {
+          border-bottom: none;
+
+          border-right: 2px solid var(--color-secondary);
+          border-radius: 0px;
+        }
+      }
+      .collapse {
+        margin-left: 0;
+        border-left: none;
+        border-top: 1px solid var(--color-border);
+        padding: 0.25rem;
+      }
+    }
+  }
+  .sidebar-tab {
+    background: alphav(var(--color-bg), 0.8);
+    &:not(#chat) {
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-top: 1px solid var(--color-border);
+    }
+  }
+  #chat {
+    background: transparent;
+    pointer-events: none;
+    padding-top: 0.25rem;
+    * {
+      &:not(mwc-icon):not(i) {
+        font-family: var(--font-1);
+      }
+    }
+  }
+  #chat-form,
+  #chat-controls {
+    pointer-events: initial;
+    ::selection {
+      background: var(--color-secondary);
+    }
+  }
+  #chat-message {
+    background: alphav(var(--color-bg), 0.85);
+    color: var(--color-text);
+    font-size: 1rem;
+    border-radius: 0;
+    box-shadow: none;
+    &:focus {
+      background: var(--color-bg);
+    }
+  }
+  #chat-controls {
+    align-items: center;
+    padding: 0 0 0.125rem;
+    i {
+      line-height: unset;
+      font-size: 1rem;
+    }
+    .roll-type-select {
+      height: unset;
+      background: alphav(var(--color-bg-alt), 0.85);
+      border-radius: 0;
+      padding: 0.125rem 0.5rem;
+      -webkit-appearance: initial;
+      cursor: pointer;
+    }
+  }
+}
+
+.sidebar-tab {
   > header {
     grid-area: header;
   }
@@ -695,7 +818,6 @@ sl-tooltip {
     }
 
     &:first-child {
-      // border-top-right-radius: 0.5rem;
       &.active {
         .control-tools {
           transform: translateY(-0.75rem);
@@ -703,7 +825,6 @@ sl-tooltip {
       }
     }
     &:last-child {
-      // border-bottom-right-radius: 0.5rem;
       &.active {
         .control-tools {
           transform: translateY(-1.75rem);

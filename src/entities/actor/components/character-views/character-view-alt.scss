@@ -31,6 +31,8 @@ h3 {
 :host([compact]) {
   display: flex;
   flex-flow: column;
+  max-height: 650px;
+  min-height: 100%;
   .actions {
     min-height: unset;
     height: unset;
@@ -307,7 +309,7 @@ character-view-psi {
 
 .actions,
 .tabbed-section {
-  border-top: 1px solid var(--color-grey);
+  border-top: 1px solid var(--color-border);
 }
 
 .actions {
@@ -378,7 +380,8 @@ character-view-psi {
 }
 
 .drawer {
-  grid-area: actions;
+  grid-area: 1 / 1 / -2 / 2;
+
   display: none;
   grid-template-areas: 'content';
   grid-template-rows: 1fr;
@@ -471,7 +474,6 @@ footer {
   min-width: 100%;
 
   .effects-toggle {
-    // --mdc-theme-primary: #{lightv(var(--color-grey), 1.2)};
     --mdc-theme-primary: var(--color-text);
   }
 
@@ -488,7 +490,6 @@ footer {
     padding-right: 1ch;
     height: 28px;
     align-self: center;
-    // color: lightv(var(--color-grey), 1.2);
     cursor: pointer;
     border-radius: 4px;
 

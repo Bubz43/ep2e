@@ -26,8 +26,12 @@
 .source {
   padding: 0.125rem 1rem;
   --list-item-bg: var(--color-bg);
-  border: 1px solid var(--color-border);
+  border-left: 4px double var(--color-primary);
   margin: 0.125rem;
+  box-shadow: 0 0 4px rgba(black, 0.1);
+  span[slot='before'] {
+    margin-right: 1ch;
+  }
 }
 
 sl-details {
@@ -79,7 +83,6 @@ sl-details {
   input {
     text-align: center;
     width: 100%;
-    // border: none;
     padding: 0.25rem 0.5rem;
     font-family: var(--font-3);
     background: rgba(black, 0.1);
@@ -170,6 +173,8 @@ sl-details {
 .rep-item {
   @include textButton();
   --mdc-icon-size: 1.25rem;
+  font-family: var(--font-mono);
+
   &:hover {
     background: alphav(var(--color-text), 0.04);
   }
@@ -181,12 +186,6 @@ sl-details {
   .rep-name {
     @include truncate(100px);
     min-width: 100%;
-  }
-
-  .rep-acronym {
-    // color: var(--color-text-lighter);
-    // float: right;
-    font-family: var(--font-mono);
   }
 }
 

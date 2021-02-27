@@ -7,10 +7,7 @@ import { renderUpdaterForm } from '@src/components/form/forms';
 import { enumValues, FullDefenseType } from '@src/data-enums';
 import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisition';
 import { ActorType } from '@src/entities/entity-types';
-import { conditionIcons, ConditionType } from '@src/features/conditions';
-import { idProp } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
-import { tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, internalProperty } from 'lit-element';
@@ -208,41 +205,7 @@ export class CharacterView extends CharacterViewBase {
       sleeve,
     } = this.character;
     return html` <section class="status">
-      <!-- <sl-header heading=${localize('status')}></sl-header> -->
       <div class="status-items">
-        <!-- <div class="conditions">
-          <mwc-button
-            class="conditions-toggle"
-            @click=${this.viewConditions}
-            dense
-            >${localize('conditions')}</mwc-button
-          >
-          <div class="conditions-list">
-            ${enumValues(ConditionType).map(
-          (condition) => html`
-            <button
-              ?disabled=${disabled}
-              data-condition=${condition}
-              @click=${this.toggleCondition}
-              data-tooltip=${localize(condition)}
-              @mouseover=${tooltip.fromData}
-            >
-              <img
-                src=${conditionIcons[condition]}
-                class=${conditions.includes(condition) ? 'active' : ''}
-                height="22px"
-              />
-              ${temporaryConditionSources.has(condition)
-                ? html`<notification-coin
-                    value=${temporaryConditionSources.get(condition)?.length ||
-                    1}
-                  ></notification-coin>`
-                : ''}
-            </button>
-          `,
-        )}
-          </div>
-        </div> -->
         <!-- 
           ${sleeve && sleeve.type !== ActorType.Infomorph
           ? html`
@@ -271,82 +234,6 @@ export class CharacterView extends CharacterViewBase {
               </div>
             `
           : ''} -->
-
-        <sl-dropzone
-          class="applied-substances"
-          ?disabled=${disabled}
-          @drop=${this.applyDroppedSubstance}
-        >
-          ${activeSubstances.length + awaitingOnsetSubstances.length === 0
-            ? html`
-                <p class="no-substances-message">
-                  ${localize('no')} ${localize('applied')}
-                  ${localize('substances')}.
-                </p>
-              `
-            : html`
-                ${notEmpty(activeSubstances)
-                  ? html`
-                      <sl-details
-                        open
-                        summary="${localize('active')} ${localize(
-                          'substances',
-                        )} (${activeSubstances.length})"
-                      >
-                        <sl-animated-list class="active-substances">
-                          ${repeat(
-                            activeSubstances,
-                            idProp,
-                            (substance) => html`
-                              <character-view-active-substance
-                                .substance=${substance}
-                                .character=${this.character}
-                              ></character-view-active-substance>
-                            `,
-                          )}
-                        </sl-animated-list>
-                      </sl-details>
-                    `
-                  : ''}
-                ${notEmpty(awaitingOnsetSubstances)
-                  ? html`
-                      <sl-details
-                        open
-                        summary="${localize(
-                          'substancesAwaitingOnset',
-                        )} (${awaitingOnsetSubstances.length})"
-                      >
-                        <sl-animated-list>
-                          ${repeat(
-                            awaitingOnsetSubstances,
-                            idProp,
-                            (substance) => html`
-                              <time-state-item
-                                ?disabled=${disabled}
-                                .timeState=${substance.awaitingOnsetTimeState}
-                                completion="ready"
-                                .item=${substance}
-                              >
-                                <mwc-icon-button
-                                  slot="action"
-                                  icon="play_arrow"
-                                  data-tooltip=${localize('start')}
-                                  @mouseover=${tooltip.fromData}
-                                  @click=${() => {
-                                    this.openSubstanceActivationDialog(
-                                      substance.id,
-                                    );
-                                  }}
-                                ></mwc-icon-button>
-                              </time-state-item>
-                            `,
-                          )}
-                        </sl-animated-list></sl-details
-                      >
-                    `
-                  : ''}
-              `}
-        </sl-dropzone>
       </div>
     </section>`;
   }
