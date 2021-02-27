@@ -445,6 +445,8 @@ export const overridePrototypes = () => {
   };
 
   PlayerList.prototype.activateListeners = function (jqueryEl: JQuery) {
+    jqueryEl.find('h3').click(this._onToggleOfflinePlayers.bind(this));
+
     jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
       const item = findMatchingElement(ev, '.player');
       if (!item) return;
