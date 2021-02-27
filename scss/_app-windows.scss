@@ -79,8 +79,8 @@
   background: alphav(var(--color-bg), 0.8);
   border-radius: 0px;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.712), 0 0 5px black,
-    0 0 1px rgba(255, 255, 255, 0.822) inset;
-
+    0 0 1px alphav(var(--color-grey), 0.3) inset;
+  border: none !important;
   > header {
     background: alphav(var(--color-grey), 0.3);
   }

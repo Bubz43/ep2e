@@ -281,6 +281,8 @@ export class CharacterViewAlt extends CharacterViewBase {
             ${settings.trackMentalHealth
               ? html` <health-item
                   clickable
+                  data-renderer=${CharacterDrawerRenderer.MentalHealth}
+                  @click=${this.setDrawerRenderer}
                   class="mental-health-view"
                   .health=${ego.mentalHealth}
                   ><span slot="source">${localize('mental')}</span></health-item
@@ -288,12 +290,22 @@ export class CharacterViewAlt extends CharacterViewBase {
               : ''}
             ${physicalHealth
               ? html`
-                  <health-item clickable .health=${physicalHealth}>
+                  <health-item
+                    clickable
+                    data-renderer=${CharacterDrawerRenderer.SleevePhysicalHealth}
+                    @click=${this.setDrawerRenderer}
+                    .health=${physicalHealth}
+                  >
                   </health-item>
                 `
               : ''}
             ${meshHealth && sleeve
-              ? html` <health-item clickable .health=${meshHealth}>
+              ? html` <health-item
+                  clickable
+                  data-renderer=${CharacterDrawerRenderer.SleeveMeshHealth}
+                  @click=${this.setDrawerRenderer}
+                  .health=${meshHealth}
+                >
                   ${sleeve.type !== ActorType.Infomorph &&
                   sleeve.nonDefaultBrain
                     ? html`
@@ -337,13 +349,23 @@ export class CharacterViewAlt extends CharacterViewBase {
       <div class="tabbed-section">
         <mwc-tab-bar @MDCTabBar:activated=${this.setTab}>
           ${tabs.map(
-            (tab) => html` <mwc-tab label=${localize(tab)}></mwc-tab> `,
+            (tab) =>
+              html`
+                <mwc-tab
+                  @dragenter=${this.activateTab}
+                  label=${localize(tab)}
+                ></mwc-tab>
+              `,
           )}
         </mwc-tab-bar>
         <div class="tab-content">${cache(this.renderTabbedContent())}</div>
       </div>
       ${this.renderDrawer()} ${this.renderFooter()}
     `;
+  }
+
+  activateTab(ev: DragEvent & { currentTarget: HTMLElement }) {
+    if (ev.currentTarget === ev.target) ev.currentTarget.click();
   }
 
   private renderMotivation = (motivation: Ego['motivations'][number]) => {
@@ -555,14 +577,19 @@ export class CharacterViewAlt extends CharacterViewBase {
       case 'inventory':
         return html`
           ${repeat(
-            difference(enumValues(ItemGroup), [ItemGroup.Traits]),
+            difference(enumValues(ItemGroup), [
+              ItemGroup.EgoTraits,
+              ItemGroup.MorphTraits,
+            ]),
             identity,
             this.renderItemGroup,
           )}
         `;
 
       case 'traits':
-        return this.renderItemGroup(ItemGroup.Traits);
+        return [ItemGroup.EgoTraits, ItemGroup.MorphTraits].map(
+          this.renderItemGroup,
+        );
 
       case 'details':
         return this.renderDetails();
@@ -701,7 +728,6 @@ export class CharacterViewAlt extends CharacterViewBase {
       <character-view-item-group
         .character=${this.character}
         group=${group}
-        ?noCollapse=${group === ItemGroup.Traits}
         ?collapsed=${group === ItemGroup.Stashed}
       ></character-view-item-group>
     `;

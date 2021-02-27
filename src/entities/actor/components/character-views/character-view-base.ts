@@ -24,7 +24,8 @@ import { CharacterRequestEvent } from './character-request-event';
 export enum ItemGroup {
   Consumables = 'consumables',
   Sleights = 'sleights',
-  Traits = 'traits',
+  EgoTraits = 'egoTraits',
+  MorphTraits = 'morphTraits',
   Equipped = 'equipped',
   Stashed = 'stashed',
 }

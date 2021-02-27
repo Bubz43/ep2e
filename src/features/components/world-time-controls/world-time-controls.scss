@@ -16,9 +16,8 @@
   align-items: center;
   --mdc-icon-button-size: 2rem;
   padding: 0.25rem;
-  margin: 0.25rem;
-  background: alphav(var(--color-bg), 0.15);
-  border-radius: 100px;
+  background: alphav(var(--color-bg), 0.55);
+  // border-radius: 100px;
   box-shadow: 0 0 2px black;
   transition: background 75ms;
   pointer-events: all;

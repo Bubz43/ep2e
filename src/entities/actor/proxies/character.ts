@@ -92,7 +92,9 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   readonly armor;
 
   readonly sleights: Sleight[] = [];
-  readonly traits: Trait[] = [];
+  readonly egoTraits: Trait[] = [];
+  readonly morphTraits: Trait[] = [];
+  // readonly traits: Trait[] = [];
   readonly equipped: EquippableItem[] = [];
   readonly consumables: ConsumableItem[] = [];
   readonly awaitingOnsetSubstances: Substance[] = [];
@@ -799,7 +801,9 @@ export class Character extends ActorProxyBase<ActorType.Character> {
           this._appliedEffects.add(effects);
           for (const substanceItem of items) {
             if (substanceItem.type === ItemType.Trait) {
-              this.traits.push(substanceItem);
+              this[
+                substanceItem.isMorphTrait ? 'morphTraits' : 'egoTraits'
+              ].push(substanceItem);
               this._appliedEffects.add(substanceItem.currentEffects);
             } else {
               this.sleights.push(substanceItem);
@@ -822,7 +826,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       } else if (item.type === ItemType.Trait) {
         const collection = item.isMorphTrait ? sleeveItems : egoItems;
         collection.set(item.id, item);
-        this.traits.push(item);
+        this[item.isMorphTrait ? 'morphTraits' : 'egoTraits'].push(item);
         this._appliedEffects.add(item.currentEffects);
       } else if (item.type === ItemType.Sleight) {
         this.sleights.push(item);

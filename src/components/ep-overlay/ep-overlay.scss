@@ -12,12 +12,12 @@
   grid-template-areas:
     'nav singles sidebar'
     'scene singles sidebar'
-    'controls .. sidebar'
-    'user .. sidebar';
+    'controls singles sidebar'
+    'user singles sidebar';
 
   grid-template-columns: 1fr auto auto;
 
-  grid-template-rows: repeat(3, min-content) 1fr;
+  grid-template-rows: repeat(2, min-content) 1fr auto;
 
   // grid-auto-rows: min-content;
 
@@ -62,7 +62,7 @@ scene-view {
 .singles {
   grid-area: singles;
   align-self: baseline;
-  margin: 0.5rem;
+  margin: 0 0.5rem;
   [clickable] {
     pointer-events: all;
   }
@@ -80,7 +80,7 @@ scene-view {
 }
 .controls-wrapper {
   grid-area: controls;
-  margin-top: 1rem;
+  align-self: center;
 }
 
 .foundry-app-controls {

@@ -256,7 +256,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
       <sl-dropzone @drop=${this.addItem} ?disabled=${this.character.disabled}>
         <sl-header
           heading=${localize(this.group)}
-          ?hideBorder=${!hasItems}
+          hideBorder
           itemCount=${items.length}
           @click=${this.toggleCollapse}
           @focus="${this.handleRippleFocus}"

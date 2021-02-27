@@ -520,7 +520,6 @@ sl-tooltip {
     .collapse {
       align-self: center;
       border-left: 1px solid var(--color-border);
-      // margin-left: 0.25ch;
       width: 1.5rem;
       justify-self: end;
       padding: 0;
@@ -568,13 +567,14 @@ sl-tooltip {
   #chat {
     background: transparent;
     pointer-events: none;
-    // padding: 0.125rem 0;
+    padding: 0.125rem 0;
     * {
       &:not(mwc-icon):not(i) {
         font-family: var(--font-1);
       }
     }
     #chat-log {
+      height: calc(100% - 136px);
       padding: 0.25rem 0.125rem;
       order: 1;
     }
@@ -823,7 +823,7 @@ sl-tooltip {
   flex-flow: column;
   padding: 0;
   margin: 0;
-  top: 75px;
+  // top: 75px;
   // left: -1rem;
   pointer-events: none;
   align-items: flex-start;
@@ -862,7 +862,12 @@ sl-tooltip {
     width: 2.5rem;
     padding: 0.5rem 0;
     font-size: 1.45rem;
-    background: alphav(var(--color-bg-alt), 0.8);
+    background: linear-gradient(
+      to right,
+      alphav(var(--color-bg), 0.8),
+      alphav(var(--color-bg-alt), 0.75)
+    );
+
     position: relative;
     box-shadow: 0 0 1px black;
     &:hover {
@@ -890,22 +895,28 @@ sl-tooltip {
       gap: 0.125rem;
       grid-template-columns: repeat(auto-fill, 2.25rem);
       place-items: center;
-      width: 8rem;
-      background: alphav(var(--color-bg-alt), 0.9);
+      width: 7.65rem;
+      background: linear-gradient(
+        45deg,
+        alphav(var(--color-bg), 0.8),
+        alphav(var(--color-bg-alt), 0.85)
+      );
       border: 1px solid var(--color-border);
       z-index: -1;
-      box-shadow: 1px 0 2px var(--color-bg) inset;
-      box-shadow: 0 0 3px black;
+      // box-shadow: 0 0 1px black, 0 0 1px var(--color-border) inset;
+      // box-shadow: 0 0 0 1px alphav(var(--color-grey), 0.4) inset;
       &::before {
         content: '';
         position: absolute;
         top: 50%;
         left: -0.5rem;
-        width: 0.5rem;
+        width: calc(0.5rem - 1px);
         height: 2.25rem;
-        background: alphav(var(--color-bg-alt), 0.9);
+        background: alphav(var(--color-bg-alt), 0.95);
         transform: translateY(-50%);
-        z-index: 10;
+        z-index: -1;
+        outline: 1px solid var(--color-bg);
+        outline-offset: -1px;
       }
     }
 

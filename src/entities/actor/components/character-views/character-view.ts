@@ -14,8 +14,7 @@ import { customElement, html, internalProperty } from 'lit-element';
 import { nothing, TemplateResult } from 'lit-html';
 import { cache } from 'lit-html/directives/cache';
 import { classMap } from 'lit-html/directives/class-map';
-import { repeat } from 'lit-html/directives/repeat';
-import { compact, difference, identity } from 'remeda';
+import { compact } from 'remeda';
 import { traverseActiveElements } from 'weightless';
 import { CharacterDrawerRenderer } from './character-drawer-render-event';
 import { CharacterViewBase, ItemGroup } from './character-view-base';
@@ -178,16 +177,11 @@ export class CharacterView extends CharacterViewBase {
         `;
 
       case 'inventory':
-        return html`
-          ${repeat(
-            difference(enumValues(ItemGroup), [ItemGroup.Traits]),
-            identity,
-            this.renderItemGroup,
-          )}
-        `;
+        return html` <!-- --> `;
 
       case 'traits':
-        return this.renderItemGroup(ItemGroup.Traits);
+        // return this.renderItemGroup(ItemGroup.Traits);
+        return '';
 
       case 'details':
         return this.renderDetails();
@@ -312,7 +306,7 @@ export class CharacterView extends CharacterViewBase {
       <character-view-item-group
         .character=${this.character}
         group=${group}
-        ?noCollapse=${group === ItemGroup.Traits}
+        ?noCollapse=${group === ItemGroup.EgoTraits}
         ?collapsed=${group === ItemGroup.Stashed}
       ></character-view-item-group>
     `;
