@@ -21,7 +21,7 @@
 
   // grid-auto-rows: min-content;
 
-  padding-left: 1rem;
+  // padding-left: 1rem;
 
   position: fixed;
   left: 0;
@@ -70,7 +70,13 @@ scene-view {
 
 .nav-wrapper {
   grid-area: nav;
-  padding-top: 0.5rem;
+  display: flex;
+  mwc-icon-button-toggle {
+    pointer-events: all;
+    &[on] + slot {
+      display: none;
+    }
+  }
 }
 .controls-wrapper {
   grid-area: controls;

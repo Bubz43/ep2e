@@ -379,7 +379,6 @@ export const overridePrototypes = () => {
       html`<combat-view class="sidebar-tab" data-tab="combat"></combat-view>`,
       frag,
     );
-    console.log(frag);
     return $(frag);
   };
 
@@ -469,7 +468,7 @@ export const overridePrototypes = () => {
   PlayerList.prototype.activateListeners = function (jqueryEl: JQuery) {
     jqueryEl.find('h3').click(this._onToggleOfflinePlayers.bind(this));
 
-    jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
+    const listener = (ev: MouseEvent) => {
       const item = findMatchingElement(ev, '.player');
       if (!item) return;
       const targetEl = $(item);
@@ -483,7 +482,10 @@ export const overridePrototypes = () => {
         position: ev,
         header: heading ? { heading } : undefined,
       });
-    });
+    };
+
+    jqueryEl[0]?.addEventListener('contextmenu', listener);
+    jqueryEl[0]?.addEventListener('click', listener);
   };
 
   SceneNavigation.prototype.activateListeners = function (jqueryEl: JQuery) {

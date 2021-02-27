@@ -339,6 +339,11 @@ export class EPOverlay extends LitElement {
     ></slot>
     <scene-view></scene-view>
     <div class="nav-wrapper">
+      <mwc-icon-button-toggle
+        onIcon="expand_more"
+        offIcon="expand_less"
+      ></mwc-icon-button-toggle>
+
       <slot name="navigation"></slot>
     </div>
     <div class="controls-wrapper">
