@@ -10,6 +10,7 @@ import { joinLabeledFormulas, rollLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
 import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
+import produce from 'immer';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { compact, map, pick, pipe } from 'remeda';
 import { requestCharacter } from '../../../character-request-event';
@@ -80,19 +81,47 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
   }
 
   private openCoatingSelectMenu(ev: MouseEvent) {
+    const { character } = requestCharacter(this);
+    const coatings =
+      character?.consumables.flatMap((c) =>
+        c.type === ItemType.Substance && !(c.isBlueprint || c.isElectronic)
+          ? c
+          : [],
+      ) ?? [];
+    const { coating } = this.weapon;
     openMenu({
       header: { heading: `${this.weapon.name} ${localize('coating')}` },
-      content:
-        requestCharacter(this).character?.consumables.flatMap((c) => {
-          if (c.type !== ItemType.Substance || c.isElectronic || c.isBlueprint)
-            return [];
-          return {
-            label: c.fullName,
-            callback: () => this.weapon.setCoating(c),
-            activated: this.weapon.coating?.isSameAs(c),
-            disabled: !c.quantity,
-          };
-        }) ?? [],
+      content: [
+        ...(coating
+          ? compact([
+              {
+                label: `${localize('remove')} ${coating.name}`,
+                callback: async () => {
+                  const same = coatings.find((c) => c.isSameAs(coating));
+                  if (same) await same.setQuantity((current) => current + 1);
+                  else
+                    await character?.itemOperations.add(
+                      produce(
+                        coating.getDataCopy(),
+                        ({ data }) => void (data.quantity = 1),
+                      ),
+                    );
+                  await this.weapon.removeCoating();
+                },
+              },
+              coatings.length && 'divider',
+            ])
+          : []),
+        ...coatings.map((c) => ({
+          label: c.fullName,
+          callback: async () => {
+            await this.weapon.setCoating(c);
+            c.setQuantity((current) => current - 1);
+          },
+          activated: this.weapon.coating?.isSameAs(c),
+          disabled: !c.quantity,
+        })),
+      ],
       position: ev,
     });
   }
