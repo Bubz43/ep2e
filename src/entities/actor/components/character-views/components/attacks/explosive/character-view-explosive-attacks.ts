@@ -6,11 +6,11 @@ import {
 import type { ExplosiveAttack } from '@src/combat/attacks';
 import type { SlWindow } from '@src/components/window/window';
 import { ExplosiveTrigger, ExplosiveType } from '@src/data-enums';
+import type { Explosive } from '@src/entities/item/proxies/explosive';
 import {
   createExplosiveTriggerSetting,
   ExplosiveSettings,
 } from '@src/entities/weapon-settings';
-import type { Explosive } from '@src/entities/item/proxies/explosive';
 import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas } from '@src/foundry/rolls';
@@ -37,7 +37,9 @@ export class CharacterViewExplosiveAttacks extends LitElement {
   private settingsWindow?: SlWindow | null = null;
 
   updated() {
-    const popout = this.settingsWindow?.querySelector(ExplosiveSettingsForm.is);
+    const popout = this.settingsWindow?.querySelector<ExplosiveSettingsForm>(
+      ExplosiveSettingsForm.is,
+    );
     if (popout) popout.explosive = this.explosive;
   }
 

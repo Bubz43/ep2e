@@ -44,7 +44,7 @@ type Detail = {
   label: string;
   value: string | number;
 };
-const tabs = ['actions', 'inventory', 'traits', 'details'] as const;
+const tabs = ['combat', 'inventory', 'traits', 'details'] as const;
 
 @customElement('character-view-alt')
 export class CharacterViewAlt extends CharacterViewBase {
@@ -58,10 +58,10 @@ export class CharacterViewAlt extends CharacterViewBase {
 
   @property({ attribute: false }) character!: Character;
 
-  @internalProperty() private currentTab: typeof tabs[number] = 'actions';
+  @internalProperty() private currentTab: typeof tabs[number] = 'combat';
 
   private setTab(ev: CustomEvent<{ index: number }>) {
-    this.currentTab = tabs[ev.detail.index] ?? 'actions';
+    this.currentTab = tabs[ev.detail.index] ?? 'combat';
   }
 
   private setDrawerRenderer(ev: Event) {
@@ -242,7 +242,7 @@ export class CharacterViewAlt extends CharacterViewBase {
                     >
                     ${armor.concealable
                       ? html`
-                          <span class="rating info"
+                          <span class="rating info concealable"
                             >${localize('concealable')}</span
                           >
                         `
@@ -567,7 +567,7 @@ export class CharacterViewAlt extends CharacterViewBase {
 
   private renderTabbedContent() {
     switch (this.currentTab) {
-      case 'actions':
+      case 'combat':
         return html`
           <character-view-attacks-section
             .character=${this.character}

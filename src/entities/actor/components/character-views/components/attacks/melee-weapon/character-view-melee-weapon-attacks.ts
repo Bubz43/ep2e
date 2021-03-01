@@ -1,22 +1,15 @@
 import { createMessage } from '@src/chat/create-message';
 import type { DamageMessageData } from '@src/chat/message-data';
 import { formatArmorUsed } from '@src/combat/attack-formatting';
+import { startMeleeAttack } from '@src/combat/attack-init';
 import type { AttackType, MeleeWeaponAttack } from '@src/combat/attacks';
-import { AptitudeType } from '@src/data-enums';
 import { ActorType } from '@src/entities/entity-types';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
-import {
-  ActiveSkillCategory,
-  FieldSkillType,
-  setupFullFieldSkill,
-  SkillType,
-} from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas, rollLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
-import { MeleeAttackControls } from '@src/success-test/components/melee-attack-controls/melee-attack-controls';
 import { notEmpty } from '@src/utility/helpers';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, html, LitElement, property } from 'lit-element';
 import { compact, map, pick, pipe } from 'remeda';
 import { requestCharacter } from '../../../character-request-event';
 import styles from './character-view-melee-weapon-attacks.scss';
@@ -77,40 +70,11 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
   private startAttackTest(attackType: AttackType) {
     const { token, character } = requestCharacter(this);
     if (!character) return; // TODO maybe throw error
-    const { weapon: meleeWeapon } = this;
-    MeleeAttackControls.openWindow({
-      entities: { token, actor: character.actor },
-      getState: (actor) => {
-        if (actor.proxy.type === ActorType.Character) {
-          const { ego, weapons } = actor.proxy;
-          const weapon = weapons.melee.find((w) => w.id === meleeWeapon.id);
-          return {
-            ego,
-            character: actor.proxy,
-            token,
-            skill: weapon?.exoticSkillName
-              ? ego.findFieldSkill({
-                  fieldSkill: FieldSkillType.Exotic,
-                  field: weapon.exoticSkillName,
-                }) ||
-                setupFullFieldSkill(
-                  {
-                    field: weapon.exoticSkillName,
-                    fieldSkill: FieldSkillType.Exotic,
-                    points: 0,
-                    linkedAptitude: AptitudeType.Somatics,
-                    specialization: '',
-                    category: ActiveSkillCategory.Combat,
-                  },
-                  ego.aptitudes,
-                )
-              : ego.getCommonSkill(SkillType.Melee),
-            meleeWeapon: weapon,
-            primaryAttack: attackType === 'primary',
-          };
-        }
-        return null;
-      },
+    startMeleeAttack({
+      actor: character.actor,
+      token,
+      attackType,
+      weaponId: this.weapon.id,
     });
   }
 

@@ -333,7 +333,7 @@ export class Popover extends mix(LitElement).with(ListenerSubscription) {
     if (this.focusSelector) {
       try {
         for (const slotted of this.contentSlot.assignedElements()) {
-          const el = slotted.querySelector(this.focusSelector);
+          const el = slotted.querySelector<HTMLElement>(this.focusSelector);
           if (el instanceof HTMLElement) {
             el.focus();
             break;

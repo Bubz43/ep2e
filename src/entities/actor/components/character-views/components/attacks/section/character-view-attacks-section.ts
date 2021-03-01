@@ -2,7 +2,10 @@ import { createMessage } from '@src/chat/create-message';
 import { LazyRipple } from '@src/components/mixins/lazy-ripple';
 import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Character } from '@src/entities/actor/proxies/character';
+import type { Infomorph } from '@src/entities/actor/proxies/infomorph';
+import type { Sleeve } from '@src/entities/actor/sleeves';
 import { ActorType } from '@src/entities/entity-types';
+import { renderItemCard } from '@src/entities/item/item-views';
 import { ArmorType } from '@src/features/active-armor';
 import { idProp } from '@src/features/feature-helpers';
 import { SkillType } from '@src/features/skills';
@@ -10,9 +13,7 @@ import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { HealthType } from '@src/health/health';
 import { MeleeAttackControls } from '@src/success-test/components/melee-attack-controls/melee-attack-controls';
-import { clickIfEnter } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
 import styles from './character-view-attacks-section.scss';
 
@@ -32,12 +33,6 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
   @property({ attribute: false }) character!: Character;
 
   @property({ attribute: false }) token?: MaybeToken;
-
-  @property({ type: Boolean, reflect: true }) collapsed = false;
-
-  private toggleCollapse() {
-    this.collapsed = !this.collapsed;
-  }
 
   private rollUnarmedDamage() {
     const { sleeve } = this.character;
@@ -82,38 +77,11 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
     const { sleeve, weapons } = this.character;
     const { melee, thrown, software, explosives } = weapons;
     return html`
-      <sl-header
-        part="header"
-        hideBorder
-        heading=${localize('attacks')}
-        @click=${this.toggleCollapse}
-        @focus="${this.handleRippleFocus}"
-        @blur="${this.handleRippleBlur}"
-        @mousedown="${this.handleRippleMouseDown}"
-        @mouseenter="${this.handleRippleMouseEnter}"
-        @mouseleave="${this.handleRippleMouseLeave}"
-        @keydown=${clickIfEnter}
-        tabindex="0"
-      >
-        <span slot="action">${this.renderRipple()}</span>
-        <mwc-icon
-          slot="action"
-          class="toggle-icon ${classMap({ collapsed: this.collapsed })}"
-        >
-          keyboard_arrow_down
-        </mwc-icon>
-      </sl-header>
-      <sl-animated-list class="attacks" ?hidden=${this.collapsed}>
-        ${sleeve && sleeve.type !== ActorType.Infomorph
-          ? html`
-              <wl-list-item
-                clickable
-                @click=${this.startUnarmedAttack}
-                @contextmenu=${this.rollUnarmedDamage}
-                >${localize('unarmedDV')} ${sleeve.unarmedDV}</wl-list-item
-              >
-            `
-          : ''}
+      ${sleeve && sleeve.type !== ActorType.Infomorph
+        ? this.renderPhysicalSleeveInfo(sleeve)
+        : ''}
+
+      <sl-animated-list class="attacks">
         ${repeat(
           software,
           idProp,
@@ -122,19 +90,12 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
               .software=${weapon}
             ></character-view-software-attacks>`,
         )}
-        ${repeat(
-          melee,
-          idProp,
-          (weapon) => html`
-            <li>
-              <header>
-                ${weapon.name} <span class="type">${weapon.fullType}</span>
-              </header>
-              <character-view-melee-weapon-attacks
-                .weapon=${weapon}
-              ></character-view-melee-weapon-attacks>
-            </li>
-          `,
+        ${repeat(melee, idProp, (weapon) =>
+          renderItemCard(weapon, {
+            unexpandedContent: html`<character-view-melee-weapon-attacks
+              .weapon=${weapon}
+            ></character-view-melee-weapon-attacks>`,
+          }),
         )}
         ${repeat(
           explosives,
@@ -152,6 +113,26 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
           `,
         )}
       </sl-animated-list>
+    `;
+  }
+
+  private renderPhysicalSleeveInfo(sleeve: Exclude<Sleeve, Infomorph>) {
+    return html`
+      <div class="physical-info">
+        <wl-list-item
+          clickable
+          @click=${this.startUnarmedAttack}
+          @contextmenu=${this.rollUnarmedDamage}
+          >${localize('unarmedDV')}:
+          <span slot="after">${sleeve.unarmedDV}</span></wl-list-item
+        >
+        <wl-list-item
+          >${localize('throwingRange')}:
+          <span slot="after"
+            >${this.character.ego.aptitudes.som}</span
+          ></wl-list-item
+        >
+      </div>
     `;
   }
 }

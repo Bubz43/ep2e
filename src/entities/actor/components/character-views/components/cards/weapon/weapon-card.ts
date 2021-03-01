@@ -1,7 +1,9 @@
+import { startMeleeAttack } from '@src/combat/attack-init';
+import type { AttackType } from '@src/combat/attacks';
 import { ItemType } from '@src/entities/entity-types';
-import type { RangedWeapon } from '@src/entities/item/item';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, html, property } from 'lit-element';
+import { requestCharacter } from '../../../character-request-event';
 import { ItemCardBase } from '../item-card-base';
 import styles from './weapon-card.scss';
 
@@ -15,18 +17,45 @@ export class WeaponCard extends ItemCardBase {
     return [...super.styles, styles];
   }
 
-  @property({ attribute: false }) item!: MeleeWeapon | RangedWeapon;
+  @property({ attribute: false }) item!: MeleeWeapon;
 
   private toggleEquipped() {
     this.item.toggleEquipped();
   }
 
+  private startAttackTest(attackType: AttackType) {
+    const { token, character } = requestCharacter(this);
+    if (!character) return; // TODO maybe throw error
+    startMeleeAttack({
+      actor: character.actor,
+      token,
+      attackType,
+      weaponId: this.item.id,
+    });
+  }
+
   renderHeaderButtons() {
     const { item } = this;
+    const { attacks } = item;
     return html`
       ${item.equipped
         ? ''
-        : html`
+        : // html` <button class="coating"></button>
+          //     ${(['primary', 'secondary'] as const).map((attackType) => {
+          //       const attack = attacks[attackType];
+          //       if (!attack) return '';
+          //       const label =
+          //         attack.label || `${localize(attackType)} ${localize('attack')}`;
+          //       return html`
+          //         <mwc-icon-button
+          //           @click=${() => this.startAttackTest(attackType)}
+          //           ?disabled=${!item.editable}
+          //           title=${label}
+          //           >${label[0]}</mwc-icon-button
+          //         >
+          //       `;
+          //     })}`
+          html`
             <mwc-icon-button
               @click=${this.toggleEquipped}
               icon=${item.equipped ? 'archive' : 'unarchive'}

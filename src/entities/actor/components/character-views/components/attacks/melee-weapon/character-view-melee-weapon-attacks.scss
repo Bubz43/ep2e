@@ -9,6 +9,14 @@
 
 :host {
   display: grid;
+  padding: 0.125rem 0.25rem;
+  margin: 0.25rem 0.75rem;
+  border-left: 2px solid alphav(var(--color-negative), 0.5);
+  background: linear-gradient(
+    to right,
+    alphav(var(--color-negative), 0.15),
+    rgba(0, 0, 0, 0)
+  );
 }
 
 .actions {
@@ -33,7 +41,7 @@ ul {
 }
 
 wl-list-item {
-  padding: 0.25rem 0.5rem 0.25rem 1.5rem;
+  padding: 0.125rem 0.5rem;
   font-size: 0.9rem;
   color: var(--color-text-lighter);
   * {

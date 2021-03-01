@@ -212,7 +212,7 @@ export class CharacterViewTestActions extends LitElement {
 
     return {
       sources: repSources,
-      fakeID,
+      fakeID: fakeID || (trackReputations ? null : fakeIDs[0]),
     };
   }
 
@@ -294,13 +294,13 @@ export class CharacterViewTestActions extends LitElement {
             </wl-list-item>
           `
         : ''}
-      <sl-details summary=${localize('aptitudes')} open>
+      <sl-details summary=${localize('aptitudes')} open class="aptitudes">
         <ul class="aptitudes-list">
           ${enumValues(AptitudeType).map(this.renderAptitude)}
         </ul>
       </sl-details>
 
-      <sl-details summary=${localize('skills')} open>
+      <sl-details summary=${localize('skills')} open class="skills">
         <ul class="skills-list">
           <li class="filter">
             ${renderAutoForm({

@@ -20,7 +20,7 @@ export class Details extends mix(LitElement).with(LazyRipple) {
 
   @property({ type: String }) summary = '';
 
-  toggleOpen() {
+  async toggleOpen() {
     if (this.disabled) return;
     this.open = !this.open;
   }

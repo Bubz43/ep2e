@@ -17,7 +17,7 @@ body {
   background-color: #000000;
   font-size: 1rem;
   opacity: 0;
-  transition: opacity 600ms ease-out 400ms;
+  transition: opacity 600ms ease-out 750ms;
   background-image: none;
   &.ready {
     opacity: 1;

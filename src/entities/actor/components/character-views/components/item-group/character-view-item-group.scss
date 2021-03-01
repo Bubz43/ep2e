@@ -36,7 +36,8 @@ sl-dropzone {
 
 sl-header {
   &::part(heading) {
-    font-weight: normal;
+    // font-weight: normal;
+    font-size: large;
   }
 }
 

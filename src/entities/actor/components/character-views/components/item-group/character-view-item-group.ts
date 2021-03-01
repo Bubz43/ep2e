@@ -248,6 +248,18 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
     }
   });
 
+  private get heading() {
+    switch (this.group) {
+      case ItemGroup.EgoTraits:
+        return `${this.character.name}`;
+      case ItemGroup.MorphTraits:
+        return `${this.character.sleeve?.name ?? localize('morph')}`;
+
+      default:
+        return localize(this.group);
+    }
+  }
+
   render() {
     const items = this.character[this.group];
     const hasItems = notEmpty(items);
@@ -255,7 +267,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
     return html`
       <sl-dropzone @drop=${this.addItem} ?disabled=${this.character.disabled}>
         <sl-header
-          heading=${localize(this.group)}
+          heading=${this.heading}
           hideBorder
           itemCount=${items.length}
           @click=${this.toggleCollapse}
