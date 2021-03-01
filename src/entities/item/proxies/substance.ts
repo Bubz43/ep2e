@@ -37,12 +37,7 @@ import {
   multiplyEffectModifier,
   UniqueEffectType,
 } from '@src/features/effects';
-import {
-  addFeature,
-  StringID,
-  stringID,
-  uniqueStringID,
-} from '@src/features/feature-helpers';
+import { stringID, uniqueStringID } from '@src/features/feature-helpers';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
 import {
   createLiveTimeState,
@@ -60,7 +55,17 @@ import {
 import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { createPipe, last, map, merge, pipe, uniq, uniqBy } from 'remeda';
+import {
+  createPipe,
+  equals,
+  last,
+  map,
+  merge,
+  omit,
+  pipe,
+  uniq,
+  uniqBy,
+} from 'remeda';
 import type { Attacker } from '../item-interfaces';
 import { Copyable, Purchasable, Stackable } from '../item-mixins';
 import { renderItemForm } from '../item-views';
@@ -749,5 +754,26 @@ export class Substance
         );
       },
     };
+  }
+
+  private static readonly commonGetters: ReadonlyArray<keyof Substance> = [
+    'name',
+    'quality',
+    'description',
+    'cost',
+    'isBlueprint',
+  ];
+
+  isSameAs(substance: Substance) {
+    return (
+      Substance.commonGetters.every((prop) =>
+        equals(this[prop], substance[prop]),
+      ) &&
+      equals(
+        omit(this.epData, ['blueprint', 'quantity', 'state']),
+        omit(substance.epData, ['blueprint', 'quantity', 'state']),
+      ) &&
+      equals(this.epFlags, substance.epFlags)
+    );
   }
 }

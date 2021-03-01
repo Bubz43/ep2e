@@ -3,11 +3,12 @@ import type { DamageMessageData } from '@src/chat/message-data';
 import { formatArmorUsed } from '@src/combat/attack-formatting';
 import { startMeleeAttack } from '@src/combat/attack-init';
 import type { AttackType, MeleeWeaponAttack } from '@src/combat/attacks';
-import { ActorType } from '@src/entities/entity-types';
+import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas, rollLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
+import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { compact, map, pick, pipe } from 'remeda';
@@ -78,22 +79,53 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
     });
   }
 
+  private openCoatingSelectMenu(ev: MouseEvent) {
+    openMenu({
+      header: { heading: `${this.weapon.name} ${localize('coating')}` },
+      content:
+        requestCharacter(this).character?.consumables.flatMap((c) => {
+          if (c.type !== ItemType.Substance || c.isElectronic || c.isBlueprint)
+            return [];
+          return {
+            label: c.fullName,
+            callback: () => this.weapon.setCoating(c),
+            activated: this.weapon.coating?.isSameAs(c),
+            disabled: !c.quantity,
+          };
+        }) ?? [],
+      position: ev,
+    });
+  }
+
   render() {
-    const { attacks, coating, payload } = this.weapon;
+    const { attacks, coating, payload, editable, acceptsPayload } = this.weapon;
+    // TODO only clickable if there is available coatings
     return html`
       <div class="shared">
-        ${coating
-          ? html`<sl-group label=${localize('coating')}
-              >${coating.name}</sl-group
-            >`
-          : ''}
-        ${payload
-          ? html`<sl-group label=${localize('payload')}
-              >${payload.name}
-              ${payload.canContainSubstance && payload.substance
-                ? `(${payload.substance.name})`
-                : ''}</sl-group
-            >`
+        <wl-list-item
+          clickable
+          ?disabled=${!editable}
+          @click=${this.openCoatingSelectMenu}
+        >
+          <span>${localize('coating')}:</span>
+          <span slot="after">${coating?.name ?? localize('none')}</span>
+        </wl-list-item>
+        ${acceptsPayload
+          ? html`
+              <wl-list-item clickable ?disabled=${!editable}>
+                <span>${localize('payload')}:</span>
+                <span slot="after"
+                  >${payload
+                    ? `${payload.name}
+                      ${
+                        payload.canContainSubstance && payload.substance
+                          ? `(${payload.substance.name})`
+                          : ''
+                      }`
+                    : localize('none')}</span
+                >
+              </wl-list-item>
+            `
           : ''}
       </div>
       <ul class="attacks">

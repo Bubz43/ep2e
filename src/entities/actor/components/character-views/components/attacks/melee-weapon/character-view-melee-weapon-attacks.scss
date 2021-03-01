@@ -10,11 +10,11 @@
 :host {
   display: grid;
   padding: 0.125rem 0.25rem;
-  margin: 0.25rem 0.75rem;
+  margin: 0.25rem 1rem;
   border-left: 2px solid alphav(var(--color-negative), 0.5);
   background: linear-gradient(
     to right,
-    alphav(var(--color-negative), 0.15),
+    alphav(var(--color-negative), 0.2),
     rgba(0, 0, 0, 0)
   );
 }
@@ -29,30 +29,37 @@
 .shared {
   display: flex;
   flex-flow: row wrap;
-  padding: 0 0.5rem;
-  > * {
-    margin-top: 0.25rem;
+  wl-list-item {
+    padding: 0.125rem 0.5rem;
+    margin: 0.125rem;
+    margin-left: 0;
+    --list-item-bg: #{alphav(var(--color-grey), 0.1)};
+    --list-item-bg-hover: #{alphav(var(--color-grey), 0.2)};
+    [slot='after'] {
+      margin-left: 1ch;
+      color: var(--color-text-lighter);
+    }
   }
 }
 
 ul {
   display: grid;
   list-style: inside;
-}
 
-wl-list-item {
-  padding: 0.125rem 0.5rem;
-  font-size: 0.9rem;
-  color: var(--color-text-lighter);
-  * {
-    color: var(--color-text);
-  }
-  .label {
-    font-size: 1rem;
-    letter-spacing: 1px;
-    color: var(--color-text);
-    & ~ * {
-      color: var(--color-text-lighter);
+  wl-list-item {
+    padding: 0.125rem 0.5rem;
+    font-size: 0.9rem;
+    color: var(--color-text-lighter);
+    * {
+      color: var(--color-text);
+    }
+    .label {
+      font-size: 1rem;
+      letter-spacing: 1px;
+      color: var(--color-text);
+      & ~ * {
+        color: var(--color-text-lighter);
+      }
     }
   }
 }

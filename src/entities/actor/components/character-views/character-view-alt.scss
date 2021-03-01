@@ -207,7 +207,6 @@ header {
 .sleeve-name {
   all: unset;
   font-weight: bold;
-  font-size: larger;
   &:hover {
     text-decoration: underline;
 
@@ -215,7 +214,17 @@ header {
   }
 }
 
+.sleeve-name {
+  font-size: larger;
+}
+
+.ego-name {
+  font-size: x-large;
+}
+
 .ego {
+  width: 400px;
+  min-width: 100%;
   // padding-top: 0.75rem;
   .info {
     clear: right;
@@ -406,6 +415,7 @@ character-view-psi {
 
   &.open {
     @include animate-css(slideInLeft, 400ms);
+    box-shadow: 1px 0 5px black;
   }
 
   &.closing {
@@ -475,7 +485,7 @@ footer {
   padding: 0.125rem 0.5rem;
   width: 500px;
   min-width: 100%;
-
+  z-index: 1;
   .effects-toggle {
     --mdc-theme-primary: var(--color-text);
   }
