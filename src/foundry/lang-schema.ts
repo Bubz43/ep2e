@@ -1441,7 +1441,8 @@ type LangEntries =
   | 'tracker'
   | 'skipDefeated'
   | 'preperation'
-  | 'fallDown';
+  | 'fallDown'
+  | 'uncoated';
 type FullNames =
   | 'cog'
   | 'int'

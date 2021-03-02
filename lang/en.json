@@ -1415,6 +1415,7 @@
     "tracker": "Tracker",
     "preperation": "Preperation",
     "fallDown": "Fall down",
+    "uncoated": "Uncoated",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

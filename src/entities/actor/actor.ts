@@ -165,13 +165,15 @@ export class ActorEP extends Actor {
           return addedIDs;
         },
         update: async (...itemDatas) => {
+          await this.updateOwnedItem(itemDatas);
+
           const itemIds: string[] = [];
           for (const { _id } of itemDatas) {
             this.items?.get(_id)?.invalidate();
             itemIds.push(_id);
           }
           this.emitItemSocket({ itemIds, type: 'update' });
-          await this.updateOwnedItem(itemDatas);
+
           this.invalidated = true;
           return itemIds;
         },

@@ -23,6 +23,10 @@
       margin-left: 1ch;
     }
   }
+  > .attack {
+    --list-item-bg: #{alphav(var(--color-negative), 0.2)};
+    --list-item-bg-hover: #{alphav(var(--color-negative), 0.3)};
+  }
 }
 
 .attacks {

@@ -263,6 +263,9 @@ export class MeleeWeaponForm extends ItemFormBase {
                     this.item.updater
                       .path('data', 'exoticSkill')
                       .commit(exotic);
+                  } else if (skillOption === WeaponSkillOption.None) {
+                    this.skillOption = skillOption;
+                    this.item.updater.path('data', 'exoticSkill').commit('');
                   } else if (skillOption) {
                     this.skillOption = skillOption;
                     if (

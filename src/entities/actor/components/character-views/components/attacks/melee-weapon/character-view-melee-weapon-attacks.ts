@@ -9,7 +9,7 @@ import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas, rollLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
 import { openMenu } from '@src/open-menu';
-import { notEmpty } from '@src/utility/helpers';
+import { notEmpty, withSign } from '@src/utility/helpers';
 import produce from 'immer';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { compact, map, pick, pipe } from 'remeda';
@@ -127,42 +127,72 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
   }
 
   render() {
-    const { attacks, coating, payload, editable, acceptsPayload } = this.weapon;
+    const {
+      attacks,
+      coating,
+      payload,
+      editable,
+      acceptsPayload,
+      gearTraits,
+      isTouchOnly,
+      reachBonus,
+      exoticSkillName,
+    } = this.weapon;
     // TODO only clickable if there is available coatings
     return html`
-      <div class="shared">
-        <wl-list-item
-          clickable
-          ?disabled=${!editable}
-          @click=${this.openCoatingSelectMenu}
-        >
-          <span>${localize('coating')}:</span>
-          <span slot="after">${coating?.name ?? localize('none')}</span>
-        </wl-list-item>
-        ${acceptsPayload
-          ? html`
-              <wl-list-item clickable ?disabled=${!editable}>
-                <span>${localize('payload')}:</span>
-                <span slot="after"
-                  >${payload
-                    ? `${payload.name}
+      ${this.renderAttack(attacks.primary, 'primary')}
+      ${attacks.secondary
+        ? this.renderAttack(attacks.secondary, 'secondary')
+        : ''}
+      ${coating
+        ? html` <wl-list-item
+            clickable
+            ?disabled=${!editable}
+            class="usable"
+            @click=${this.openCoatingSelectMenu}
+          >
+            <span>${localize('coating')}:</span>
+            <span slot="after">${coating.name}</span></wl-list-item
+          >`
+        : ''}
+      ${acceptsPayload
+        ? html`
+            <wl-list-item class="usable" clickable ?disabled=${!editable}>
+              <span>${localize('payload')}:</span>
+              <span slot="after"
+                >${payload
+                  ? `${payload.name}
                       ${
                         payload.canContainSubstance && payload.substance
                           ? `(${payload.substance.name})`
                           : ''
                       }`
-                    : localize('none')}</span
-                >
-              </wl-list-item>
-            `
-          : ''}
-      </div>
-      <ul class="attacks">
-        ${this.renderAttack(attacks.primary, 'primary')}
-        ${attacks.secondary
-          ? this.renderAttack(attacks.secondary, 'secondary')
-          : ''}
-      </ul>
+                  : localize('none')}</span
+              >
+            </wl-list-item>
+          `
+        : ''}
+      ${exoticSkillName
+        ? html`<wl-list-item class="info"
+            >${localize('exotic')}:
+            <span slot="after">${exoticSkillName}</span></wl-list-item
+          >`
+        : ''}
+      ${reachBonus
+        ? html`<wl-list-item class="info"
+            >${localize('reach')}:
+            <span slot="after">${withSign(reachBonus)}</span></wl-list-item
+          >`
+        : ''}
+      ${isTouchOnly
+        ? html`<wl-list-item class="info"
+            >${localize('touchOnly')}</wl-list-item
+          >`
+        : ''}
+      ${gearTraits.map(
+        (trait) =>
+          html`<wl-list-item class="info">${localize(trait)}</wl-list-item>`,
+      )}
     `;
   }
 
@@ -176,20 +206,20 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
         ].join(' '),
       notEmpty(attack.attackTraits) &&
         map(attack.attackTraits, localize).join(', '),
-      this.weapon.isTouchOnly && localize('touchOnly'),
       attack.notes,
     ]).join('. ');
     if (!this.weapon.hasSecondaryAttack && !info) return '';
     return html`
       <wl-list-item
         clickable
+        class="attack"
         @click=${() => this.startAttackTest(type)}
         @contextmenu=${() => this.createMessage(type)}
       >
         <div>
           ${this.weapon.hasSecondaryAttack
             ? html` <span class="label">${attack.label}</span> `
-            : ''} <span> ${info.endsWith('.') ? info : `${info}.`}</span>
+            : ''} <span> ${info}</span>
         </div>
       </wl-list-item>
     `;

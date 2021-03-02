@@ -121,6 +121,7 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
       <div class="physical-info">
         <wl-list-item
           clickable
+          class="attack"
           @click=${this.startUnarmedAttack}
           @contextmenu=${this.rollUnarmedDamage}
           >${localize('unarmedDV')}:

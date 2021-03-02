@@ -400,6 +400,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     const softwareSkills: Software[] = [];
     let masterDevice: PhysicalTech | null = null;
     const { masterDeviceId, unslavedDevices } = this.networkSettings;
+
     // TODO Weapons && active use
     for (const item of this.equipped) {
       if (item.type === ItemType.PhysicalService) {
