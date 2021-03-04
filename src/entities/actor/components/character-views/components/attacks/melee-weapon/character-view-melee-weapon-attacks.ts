@@ -3,17 +3,17 @@ import type { DamageMessageData } from '@src/chat/message-data';
 import { formatArmorUsed } from '@src/combat/attack-formatting';
 import { startMeleeAttack } from '@src/combat/attack-init';
 import type { AttackType, MeleeWeaponAttack } from '@src/combat/attacks';
-import { ActorType, ItemType } from '@src/entities/entity-types';
+import { ActorType } from '@src/entities/entity-types';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas, rollLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
-import { openMenu } from '@src/open-menu';
 import { notEmpty, withSign } from '@src/utility/helpers';
-import produce from 'immer';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { compact, map, pick, pipe } from 'remeda';
+import { stopEvent } from 'weightless';
 import { requestCharacter } from '../../../character-request-event';
+import { openMeleeCoatingMenu } from '../coating-menu';
 import styles from './character-view-melee-weapon-attacks.scss';
 
 @customElement('character-view-melee-weapon-attacks')
@@ -82,48 +82,7 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
 
   private openCoatingSelectMenu(ev: MouseEvent) {
     const { character } = requestCharacter(this);
-    const coatings =
-      character?.consumables.flatMap((c) =>
-        c.type === ItemType.Substance && !(c.isBlueprint || c.isElectronic)
-          ? c
-          : [],
-      ) ?? [];
-    const { coating } = this.weapon;
-    openMenu({
-      header: { heading: `${this.weapon.name} ${localize('coating')}` },
-      content: [
-        ...(coating
-          ? compact([
-              {
-                label: `${localize('remove')} ${coating.name}`,
-                callback: async () => {
-                  const same = coatings.find((c) => c.isSameAs(coating));
-                  if (same) await same.setQuantity((current) => current + 1);
-                  else
-                    await character?.itemOperations.add(
-                      produce(
-                        coating.getDataCopy(),
-                        ({ data }) => void (data.quantity = 1),
-                      ),
-                    );
-                  await this.weapon.removeCoating();
-                },
-              },
-              coatings.length && 'divider',
-            ])
-          : []),
-        ...coatings.map((c) => ({
-          label: c.fullName,
-          callback: async () => {
-            await this.weapon.setCoating(c);
-            c.setQuantity((current) => current - 1);
-          },
-          activated: this.weapon.coating?.isSameAs(c),
-          disabled: !c.quantity,
-        })),
-      ],
-      position: ev,
-    });
+    character && openMeleeCoatingMenu(ev, character, this.weapon);
   }
 
   render() {
@@ -214,7 +173,10 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
         clickable
         class="attack"
         @click=${() => this.startAttackTest(type)}
-        @contextmenu=${() => this.createMessage(type)}
+        @contextmenu=${(ev: Event) => {
+          stopEvent(ev);
+          this.createMessage(type);
+        }}
       >
         <div>
           ${this.weapon.hasSecondaryAttack

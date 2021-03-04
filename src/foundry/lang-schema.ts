@@ -1442,7 +1442,8 @@ type LangEntries =
   | 'skipDefeated'
   | 'preperation'
   | 'fallDown'
-  | 'uncoated';
+  | 'uncoated'
+  | 'discard';
 type FullNames =
   | 'cog'
   | 'int'
