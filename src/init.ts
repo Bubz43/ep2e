@@ -190,7 +190,7 @@ Hooks.once('ready', async () => {
     overlay = new EPOverlay();
     SlWindow.container = overlay;
     document.body.append(overlay);
-    document.getElementById('hotbar')?.remove();
+    // document.getElementById('hotbar')?.remove();
 
     tooltip = document.createElement('sl-tooltip');
     tooltip.slot = 'tooltip';

@@ -48,9 +48,9 @@ wl-list-item {
   .label {
     font-size: 1rem;
     letter-spacing: 1px;
-    color: var(--color-text);
+    color: var(--color-text-lighter);
     & ~ * {
-      color: var(--color-text-lighter);
+      // color: var(--color-text-lighter);
     }
   }
 }

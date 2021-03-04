@@ -965,3 +965,59 @@ sl-tooltip {
     }
   }
 }
+
+#hotbar {
+  left: 205px;
+  bottom: 0;
+
+  #hotbar-directory-controls,
+  #hotbar-page-controls {
+    border-radius: 0.25rem;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-color: var(--color-border);
+    box-shadow: none;
+    background: linear-gradient(
+      to left,
+      alphav(var(--color-bg), 0.85),
+      alphav(var(--color-bg-alt), 0.85)
+    );
+  }
+  #macro-list {
+    border-radius: 0;
+    border-color: transparent;
+    background: linear-gradient(
+      to left,
+      alphav(var(--color-bg), 0.7),
+      alphav(var(--color-bg-alt), 0.7)
+    );
+    .macro {
+      border-radius: 0;
+      border-color: var(--color-border);
+      border-bottom: none;
+      box-shadow: none;
+      background: transparent;
+
+      &:hover {
+        .macro-key {
+          background: var(--color-primary);
+        }
+      }
+      .macro-key {
+        top: -1px;
+        right: 0.125rem;
+        background: var(--color-border);
+        padding: 0;
+        line-height: 1.25rem;
+        font-family: var(--font-mono);
+        width: 1.6ch;
+        text-align: center;
+        border-top: 1px solid var(--color-border);
+        box-shadow: -1px 1px 2px rgba(black, 0.2);
+      }
+    }
+  }
+  [data-action='page-up'] {
+    margin-top: -0.175rem;
+  }
+}
