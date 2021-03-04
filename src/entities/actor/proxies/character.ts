@@ -14,6 +14,7 @@ import type {
   ConsumableItem,
   EquippableItem,
   ItemProxy,
+  RangedWeapon,
 } from '@src/entities/item/item';
 import { openPsiFormWindow } from '@src/entities/item/item-views';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
@@ -186,6 +187,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     const software: Software[] = [];
     const thrown: ThrownWeapon[] = [];
     const explosives: Explosive[] = [];
+    const ranged: RangedWeapon[] = [];
 
     for (const consumable of this.consumables) {
       switch (consumable.type) {
@@ -211,6 +213,13 @@ export class Character extends ActorProxyBase<ActorType.Character> {
           equipped.hasMeshAttacks && software.push(equipped);
           break;
 
+        case ItemType.BeamWeapon:
+        case ItemType.Firearm:
+        case ItemType.Railgun:
+        case ItemType.SeekerWeapon:
+        case ItemType.SprayWeapon:
+          ranged.push(equipped);
+
         default:
           break;
       }
@@ -220,6 +229,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       thrown,
       melee,
       software,
+      ranged,
     };
   }
 

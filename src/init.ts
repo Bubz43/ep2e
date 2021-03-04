@@ -223,22 +223,38 @@ Hooks.once('ready', async () => {
   //   callback: () => requestAnimationFrame(() => ui.combat.render()),
   // });
 
+  const compendiumSearchButton = () => {
+    const frag = new DocumentFragment();
+    render(
+      html`
+        <mwc-button
+          style="width: 100%"
+          label=${localize('search')}
+          icon="search"
+          @click=${() => {
+            openWindow({
+              key: CompendiumSearch,
+              name: localize('search'),
+              content: html` <compendium-search></compendium-search> `,
+            });
+          }}
+        ></mwc-button>
+      `,
+      frag,
+    );
+    return frag;
+  };
+
+  document
+    .querySelector('#compendium .directory-footer')
+    ?.append(compendiumSearchButton());
+
   applicationHook({
     app: CompendiumDirectory,
     hook: 'on',
     event: 'render',
     callback: (dir, [el]) => {
-      const button = document.createElement('mwc-button');
-      button.label = localize('search');
-      button.onclick = () => {
-        openWindow({
-          key: CompendiumSearch,
-          name: localize('search'),
-          content: html` <compendium-search></compendium-search> `,
-        });
-      };
-      button.style.width = '100%';
-      el?.querySelector('.directory-footer')?.append(button);
+      el?.querySelector('.directory-footer')?.append(compendiumSearchButton());
     },
   });
 

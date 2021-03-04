@@ -1,11 +1,11 @@
 import { startMeleeAttack } from '@src/combat/attack-init';
 import type { AttackType } from '@src/combat/attacks';
-import { ItemType } from '@src/entities/entity-types';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import { customElement, html, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { requestCharacter } from '../../../character-request-event';
 import { openMeleeCoatingMenu } from '../../attacks/coating-menu';
+import { renderItemAttacks } from '../../attacks/render-item-attacks';
 import { ItemCardBase } from '../item-card-base';
 import styles from './weapon-card.scss';
 
@@ -66,15 +66,7 @@ export class WeaponCard extends ItemCardBase {
   }
 
   renderExpandedContent() {
-    return html`
-      ${this.item.type === ItemType.MeleeWeapon
-        ? html`
-            <character-view-melee-weapon-attacks
-              .weapon=${this.item}
-            ></character-view-melee-weapon-attacks>
-          `
-        : ''}
-    `;
+    return html` ${renderItemAttacks(this.item)} `;
   }
 }
 

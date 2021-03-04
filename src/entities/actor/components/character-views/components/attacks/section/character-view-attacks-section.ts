@@ -5,6 +5,7 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import type { Infomorph } from '@src/entities/actor/proxies/infomorph';
 import type { Sleeve } from '@src/entities/actor/sleeves';
 import { ActorType } from '@src/entities/entity-types';
+import type { ItemProxy } from '@src/entities/item/item';
 import { renderItemCard } from '@src/entities/item/item-views';
 import { ArmorType } from '@src/features/active-armor';
 import { idProp } from '@src/features/feature-helpers';
@@ -15,7 +16,20 @@ import { HealthType } from '@src/health/health';
 import { MeleeAttackControls } from '@src/success-test/components/melee-attack-controls/melee-attack-controls';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
+import { identity } from 'remeda';
+import type { FixedLengthArray } from 'type-fest';
+import { renderItemAttacks } from '../render-item-attacks';
 import styles from './character-view-attacks-section.scss';
+
+type WeaponGroup = keyof Character['weapons'];
+
+const groups: FixedLengthArray<WeaponGroup, 5> = [
+  'explosives',
+  'melee',
+  'software',
+  'thrown',
+  'ranged',
+];
 
 /**
  * @csspart header
@@ -33,6 +47,19 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
   @property({ attribute: false }) character!: Character;
 
   @property({ attribute: false }) token?: MaybeToken;
+
+  private activeGroups: Record<WeaponGroup, boolean> = {
+    explosives: true,
+    melee: true,
+    software: true,
+    thrown: true,
+    ranged: true,
+  };
+
+  private toggleActive(group: WeaponGroup) {
+    this.activeGroups[group] = !this.activeGroups[group];
+    this.requestUpdate();
+  }
 
   private rollUnarmedDamage() {
     const { sleeve } = this.character;
@@ -75,33 +102,39 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
 
   render() {
     const { sleeve, weapons } = this.character;
-    const { melee, thrown, software, explosives } = weapons;
     return html`
+      <div class="group-toggles">
+        ${groups.map((key) => {
+          const group = weapons[key];
+          if (group.length === 0) return '';
+          const active = this.activeGroups[key];
+          return html`
+            <mwc-button
+              dense
+              ?outlined=${!active}
+              ?unelevated=${active}
+              @click=${() => this.toggleActive(key)}
+              label=${localize(key)}
+            ></mwc-button>
+          `;
+        })}
+      </div>
       ${sleeve && sleeve.type !== ActorType.Infomorph
         ? this.renderPhysicalSleeveInfo(sleeve)
         : ''}
 
-      <sl-animated-list class="attacks">
-        ${repeat(software, idProp, (weapon) =>
-          renderItemCard(weapon, {
-            unexpandedContent: html`<character-view-software-attacks
-              .software=${weapon}
-            ></character-view-software-attacks>`,
-          }),
-        )}
-        ${repeat(melee, idProp, (weapon) =>
-          renderItemCard(weapon, {
-            unexpandedContent: html`<character-view-melee-weapon-attacks
-              .weapon=${weapon}
-            ></character-view-melee-weapon-attacks>`,
-          }),
-        )}
-        ${repeat(explosives, idProp, (explosive) =>
-          renderItemCard(explosive, {
-            unexpandedContent: html` <character-view-explosive-attacks
-              .explosive=${explosive}
-            ></character-view-explosive-attacks>`,
-          }),
+      <sl-animated-list class="attacks" transformOrigin="top">
+        ${repeat(
+          groups.filter((g) => weapons[g].length && this.activeGroups[g]),
+          identity,
+          (key) => {
+            const group = weapons[key] as ItemProxy[];
+            return repeat(group, idProp, (weapon) =>
+              renderItemCard(weapon, {
+                unexpandedContent: renderItemAttacks(weapon),
+              }),
+            );
+          },
         )}
       </sl-animated-list>
     `;

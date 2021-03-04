@@ -1443,7 +1443,9 @@ type LangEntries =
   | 'preperation'
   | 'fallDown'
   | 'uncoated'
-  | 'discard';
+  | 'discard'
+  | 'explosives'
+  | 'thrown';
 type FullNames =
   | 'cog'
   | 'int'

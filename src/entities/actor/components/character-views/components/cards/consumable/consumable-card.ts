@@ -1,6 +1,5 @@
 import {
   renderLabeledCheckbox,
-  renderNumberField,
   renderNumberInput,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
@@ -10,7 +9,6 @@ import type { ConsumableItem } from '@src/entities/item/item';
 import { Substance } from '@src/entities/item/proxies/substance';
 import { SpecialTest } from '@src/features/tags';
 import { prettyMilliseconds } from '@src/features/time';
-import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
@@ -20,6 +18,7 @@ import { localImage } from '@src/utility/images';
 import { customElement, html, property } from 'lit-element';
 import { compact } from 'remeda';
 import { requestCharacter } from '../../../character-request-event';
+import { renderItemAttacks } from '../../attacks/render-item-attacks';
 import { ItemCardBase } from '../item-card-base';
 import styles from './consumable-card.scss';
 
@@ -170,13 +169,7 @@ export class ConsumableCard extends ItemCardBase {
             `,
           })
         : ''}
-      ${item.type === ItemType.Explosive
-        ? html`
-            <character-view-explosive-attacks
-              .explosive=${item}
-            ></character-view-explosive-attacks>
-          `
-        : ''}
+      ${renderItemAttacks(this.item)}
     `;
   }
 }

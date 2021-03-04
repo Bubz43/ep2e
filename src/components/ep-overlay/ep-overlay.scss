@@ -57,6 +57,7 @@ mwc-dialog {
 
 scene-view {
   grid-area: scene;
+  padding-left: 0.5rem;
 }
 
 .singles {
@@ -80,7 +81,8 @@ scene-view {
 }
 .controls-wrapper {
   grid-area: controls;
-  align-self: center;
+  padding: 2rem 0;
+  // align-self: center;
 }
 
 .foundry-app-controls {

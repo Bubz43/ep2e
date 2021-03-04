@@ -4,6 +4,7 @@ import { format, localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { customElement, html, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
+import { renderItemAttacks } from '../../attacks/render-item-attacks';
 import { ItemCardBase } from '../item-card-base';
 
 @customElement('item-card')
@@ -44,7 +45,7 @@ export class ItemCard extends ItemCardBase {
   }
 
   renderExpandedContent() {
-    return html``;
+    return html` ${renderItemAttacks(this.item)} `;
   }
 }
 
