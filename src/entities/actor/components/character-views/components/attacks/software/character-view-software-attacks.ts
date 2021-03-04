@@ -1,33 +1,23 @@
 import { createMessage } from '@src/chat/create-message';
 import type { DamageMessageData } from '@src/chat/message-data';
+import { formatArmorUsed } from '@src/combat/attack-formatting';
 import type { AttackType } from '@src/combat/attacks';
-import { LazyRipple } from '@src/components/mixins/lazy-ripple';
 import { ActorType } from '@src/entities/entity-types';
-import { itemMenuOptions } from '@src/entities/item/item-views';
 import type { Software } from '@src/entities/item/proxies/software';
 import { SkillType } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
-import { rollLabeledFormulas } from '@src/foundry/rolls';
-import { openMenu } from '@src/open-menu';
+import { joinLabeledFormulas, rollLabeledFormulas } from '@src/foundry/rolls';
+import { formatDamageType } from '@src/health/health';
 import { HackingTestControls } from '@src/success-test/components/hacking-test-controls/hacking-test-controls';
-import { isButton } from '@src/utility/dom';
-import {
-  customElement,
-  html,
-  internalProperty,
-  LitElement,
-  property,
-  query,
-} from 'lit-element';
-import mix from 'mix-with/lib';
-import { compact, pick, pipe } from 'remeda';
+import { notEmpty } from '@src/utility/helpers';
+import { customElement, html, LitElement, property } from 'lit-element';
+import { compact, map, pick, pipe } from 'remeda';
+import { stopEvent } from 'weightless';
 import { requestCharacter } from '../../../character-request-event';
 import styles from './character-view-software-attacks.scss';
 
 @customElement('character-view-software-attacks')
-export class CharacterViewSoftwareAttacks extends mix(LitElement).with(
-  LazyRipple,
-) {
+export class CharacterViewSoftwareAttacks extends LitElement {
   static get is() {
     return 'character-view-software-attacks' as const;
   }
@@ -37,14 +27,6 @@ export class CharacterViewSoftwareAttacks extends mix(LitElement).with(
   }
 
   @property({ attribute: false }) software!: Software;
-
-  @internalProperty() expanded = false;
-
-  @query('.card') private card!: HTMLElement;
-
-  private toggleExpanded() {
-    this.expanded = !this.expanded;
-  }
 
   private async createMessage(attackType: AttackType) {
     const { token, character } = requestCharacter(this);
@@ -100,81 +82,53 @@ export class CharacterViewSoftwareAttacks extends mix(LitElement).with(
       },
     });
   }
-  private startDefaultAttack(ev: Event) {
-    const first = ev?.composedPath().find(isButton);
-    if (first === this.card) this.startAttackTest('primary');
-  }
-
-  protected handleRippleMouseDown(ev?: Event) {
-    const first = ev?.composedPath().find(isButton);
-    if (first !== this.card) return;
-    super.handleRippleMouseDown(ev);
-  }
-
-  protected openMenu(ev: MouseEvent) {
-    openMenu({
-      header: { heading: this.software.fullName },
-      content: itemMenuOptions(this.software),
-      position: ev.currentTarget === this ? ev : undefined,
-    });
-  }
 
   render() {
-    const { primary, secondary } = this.software.attacks;
+    const { secondary } = this.software.attacks;
 
     return html`
-      <div
-        class="card"
-        @click=${this.startDefaultAttack}
-        @focus="${this.handleRippleFocus}"
-        @blur="${this.handleRippleBlur}"
-        @mousedown="${this.handleRippleMouseDown}"
-        @mouseenter="${this.handleRippleMouseEnter}"
-        @mouseleave="${this.handleRippleMouseLeave}"
-        role="button"
+      ${this.renderAttack('primary')}
+      ${secondary ? this.renderAttack('secondary') : ''}
+    `;
+  }
+
+  private renderAttack(type: AttackType) {
+    const attack = this.software.attacks[type];
+    if (!attack) return '';
+
+    const info = compact([
+      attack.aptitudeCheckInfo.check &&
+        `${localize(attack.aptitudeCheckInfo.check)} ${localize(
+          'check',
+        )} ${localize('SHORT', 'versus')} ${localize('effects')}`,
+      notEmpty(attack.rollFormulas) &&
+        [
+          formatDamageType(attack.damageType),
+          joinLabeledFormulas(attack.rollFormulas),
+          formatArmorUsed(attack),
+        ].join(' '),
+      notEmpty(attack.attackTraits) &&
+        map(attack.attackTraits, localize).join(', '),
+      attack.notes,
+    ]).join('. ');
+
+    if (!this.software.attacks.secondary && !info.length) return '';
+    return html`
+      <colored-tag
+        type="attack"
+        clickable
+        ?disabled=${!this.software.editable}
+        @click=${() => this.startAttackTest(type)}
+        @contextmenu=${(ev: Event) => {
+          stopEvent(ev);
+          this.createMessage(type);
+        }}
       >
-        <span class="name"
-          >${this.software.name}
-          <span class="type">${this.software.fullType}</span></span
-        >
-        ${secondary
-          ? html`
-              <div class="attacks">
-                <mwc-button
-                  dense
-                  @click=${() => this.startAttackTest('primary')}
-                  @contextmenu=${() => this.createMessage('primary')}
-                  >${secondary ? primary.label : localize('attack')}</mwc-button
-                >
-                <mwc-button
-                  @click=${() => this.startAttackTest('secondary')}
-                  @contextmenu=${() => this.createMessage('secondary')}
-                  dense
-                  >${secondary.label}</mwc-button
-                >
-              </div>
-            `
+        <span> ${info}</span>
+        ${this.software.attacks.secondary
+          ? html` <span slot="after">${attack.label}</span> `
           : ''}
-        <div class="actions">
-          <mwc-icon-button
-            icon=${this.expanded
-              ? 'keyboard_arrow_down'
-              : 'keyboard_arrow_left'}
-            @click=${this.toggleExpanded}
-          ></mwc-icon-button>
-          <mwc-icon-button
-            icon="more_vert"
-            @click=${this.openMenu}
-          ></mwc-icon-button>
-        </div>
-        ${this.renderRipple(!this.software.editable)}
-        ${this.expanded
-          ? html`<enriched-html
-              class="description"
-              content=${this.software.description}
-            ></enriched-html>`
-          : ''}
-      </div>
+      </colored-tag>
     `;
   }
 }

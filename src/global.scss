@@ -969,6 +969,7 @@ sl-tooltip {
 #hotbar {
   left: 205px;
   bottom: 0;
+  z-index: 30;
 
   #hotbar-directory-controls,
   #hotbar-page-controls {
@@ -994,6 +995,7 @@ sl-tooltip {
     .macro {
       border-radius: 0;
       border-color: var(--color-border);
+
       border-bottom: none;
       box-shadow: none;
       background: transparent;

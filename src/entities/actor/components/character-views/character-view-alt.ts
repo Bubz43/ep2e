@@ -44,7 +44,7 @@ type Detail = {
   label: string;
   value: string | number;
 };
-const tabs = ['combat', 'inventory', 'traits', 'details'] as const;
+const tabs = ['inventory', 'combat', 'traits', 'details'] as const;
 
 @customElement('character-view-alt')
 export class CharacterViewAlt extends CharacterViewBase {
@@ -347,7 +347,7 @@ export class CharacterViewAlt extends CharacterViewBase {
       ></character-view-test-actions>
 
       <div class="tabbed-section">
-        <mwc-tab-bar @MDCTabBar:activated=${this.setTab}>
+        <mwc-tab-bar @MDCTabBar:activated=${this.setTab} activeIndex="1">
           ${tabs.map(
             (tab) =>
               html`

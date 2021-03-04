@@ -43,6 +43,7 @@ import { CombatView } from './combat/components/combat-view/combat-view';
 import { MultiplierSelect } from './combat/components/multiplier-select/multiplier-select';
 import { RolledFormulasList } from './combat/components/rolled-formulas-list/rolled-formulas-list';
 import { AnimatedList } from './components/animated-list/animated-list';
+import { ColoredTag } from './components/colored-tag/colored-tag';
 import { DeleteButton } from './components/delete-button/delete-button';
 import { Details } from './components/details/details';
 import { DropZone } from './components/dropzone/dropzone';
@@ -195,6 +196,7 @@ ToolTip;
 ValueStatus;
 SlWindow;
 TimeSince;
+ColoredTag;
 
 // Entity
 CompendiumList;

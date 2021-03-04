@@ -82,13 +82,12 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
         : ''}
 
       <sl-animated-list class="attacks">
-        ${repeat(
-          software,
-          idProp,
-          (weapon) =>
-            html`<character-view-software-attacks
+        ${repeat(software, idProp, (weapon) =>
+          renderItemCard(weapon, {
+            unexpandedContent: html`<character-view-software-attacks
               .software=${weapon}
             ></character-view-software-attacks>`,
+          }),
         )}
         ${repeat(melee, idProp, (weapon) =>
           renderItemCard(weapon, {
@@ -97,20 +96,12 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
             ></character-view-melee-weapon-attacks>`,
           }),
         )}
-        ${repeat(
-          explosives,
-          idProp,
-          (explosive) => html`
-            <li>
-              <header>
-                ${explosive.fullName}
-                <span class="type">${explosive.fullType}</span>
-              </header>
-              <character-view-explosive-attacks
-                .explosive=${explosive}
-              ></character-view-explosive-attacks>
-            </li>
-          `,
+        ${repeat(explosives, idProp, (explosive) =>
+          renderItemCard(explosive, {
+            unexpandedContent: html` <character-view-explosive-attacks
+              .explosive=${explosive}
+            ></character-view-explosive-attacks>`,
+          }),
         )}
       </sl-animated-list>
     `;
@@ -119,19 +110,19 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
   private renderPhysicalSleeveInfo(sleeve: Exclude<Sleeve, Infomorph>) {
     return html`
       <div class="physical-info">
-        <wl-list-item
+        <colored-tag
           clickable
-          class="attack"
+          type="attack"
           @click=${this.startUnarmedAttack}
           @contextmenu=${this.rollUnarmedDamage}
-          >${localize('unarmedDV')}:
-          <span slot="after">${sleeve.unarmedDV}</span></wl-list-item
+          >${localize('unarmedDV')}
+          <span slot="after">${sleeve.unarmedDV}</span></colored-tag
         >
-        <wl-list-item
-          >${localize('throwingRange')}:
+        <colored-tag type="info"
+          >${localize('throwingRange')}
           <span slot="after"
             >${this.character.ego.aptitudes.som}</span
-          ></wl-list-item
+          ></colored-tag
         >
       </div>
     `;

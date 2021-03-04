@@ -104,20 +104,21 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
         ? this.renderAttack(attacks.secondary, 'secondary')
         : ''}
       ${coating
-        ? html` <wl-list-item
-            clickable
-            ?disabled=${!editable}
-            class="usable"
-            @click=${this.openCoatingSelectMenu}
-          >
-            <span>${localize('coating')}:</span>
-            <span slot="after">${coating.name}</span></wl-list-item
-          >`
+        ? html`
+            <colored-tag
+              clickable
+              ?disabled=${!editable}
+              type="usable"
+              @click=${this.openCoatingSelectMenu}
+              ><span>${localize('coating')}</span>
+              <span slot="after">${coating.name}</span></colored-tag
+            >
+          `
         : ''}
       ${acceptsPayload
         ? html`
-            <wl-list-item class="usable" clickable ?disabled=${!editable}>
-              <span>${localize('payload')}:</span>
+            <colored-tag type="usable" clickable ?disabled=${!editable}>
+              <span>${localize('payload')}</span>
               <span slot="after"
                 >${payload
                   ? `${payload.name}
@@ -128,29 +129,27 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
                       }`
                   : localize('none')}</span
               >
-            </wl-list-item>
+            </colored-tag>
           `
         : ''}
       ${exoticSkillName
-        ? html`<wl-list-item class="info"
+        ? html`<colored-tag type="info"
             >${localize('exotic')}:
-            <span slot="after">${exoticSkillName}</span></wl-list-item
+            <span slot="after">${exoticSkillName}</span></colored-tag
           >`
         : ''}
       ${reachBonus
-        ? html`<wl-list-item class="info"
+        ? html`<colored-tag type="info"
             >${localize('reach')}:
-            <span slot="after">${withSign(reachBonus)}</span></wl-list-item
+            <span slot="after">${withSign(reachBonus)}</span></colored-tag
           >`
         : ''}
       ${isTouchOnly
-        ? html`<wl-list-item class="info"
-            >${localize('touchOnly')}</wl-list-item
-          >`
+        ? html`<colored-tag type="info">${localize('touchOnly')}</colored-tag>`
         : ''}
       ${gearTraits.map(
         (trait) =>
-          html`<wl-list-item class="info">${localize(trait)}</wl-list-item>`,
+          html`<colored-tag type="info">${localize(trait)}</colored-tag>`,
       )}
     `;
   }
@@ -167,23 +166,23 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
         map(attack.attackTraits, localize).join(', '),
       attack.notes,
     ]).join('. ');
-    if (!this.weapon.hasSecondaryAttack && !info) return '';
+    if (!this.weapon.hasSecondaryAttack && !info.length) return '';
     return html`
-      <wl-list-item
+      <colored-tag
+        type="attack"
         clickable
-        class="attack"
+        ?disabled=${!this.weapon.editable}
         @click=${() => this.startAttackTest(type)}
         @contextmenu=${(ev: Event) => {
           stopEvent(ev);
           this.createMessage(type);
         }}
       >
-        <div>
-          ${this.weapon.hasSecondaryAttack
-            ? html` <span class="label">${attack.label}</span> `
-            : ''} <span> ${info}</span>
-        </div>
-      </wl-list-item>
+        <span> ${info}</span>
+        ${this.weapon.hasSecondaryAttack
+          ? html` <span slot="after">${attack.label}</span> `
+          : ''}
+      </colored-tag>
     `;
   }
 }

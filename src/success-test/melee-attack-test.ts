@@ -97,7 +97,7 @@ export class MeleeAttackTest extends SkillTest {
     const { sleeve } = this.character;
     this.melee = {
       weapon: meleeWeapon,
-      primaryAttack: primaryAttack || true,
+      primaryAttack: primaryAttack ?? true,
       unarmedDV:
         sleeve && sleeve.type !== ActorType.Infomorph ? sleeve.unarmedDV : '0',
       touchOnly: meleeWeapon?.isTouchOnly,

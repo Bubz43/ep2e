@@ -14,7 +14,7 @@ export const startMeleeAttack = ({
   actor,
   weaponId,
   token,
-  attackType = 'primary',
+  attackType,
 }: {
   actor: ActorEP;
   weaponId?: string;
@@ -49,7 +49,7 @@ export const startMeleeAttack = ({
             )
           : ego.getCommonSkill(SkillType.Melee),
         meleeWeapon: weapon,
-        primaryAttack: attackType === 'primary',
+        primaryAttack: attackType !== 'secondary',
       };
     },
   });

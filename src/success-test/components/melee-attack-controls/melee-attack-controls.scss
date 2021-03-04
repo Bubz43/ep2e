@@ -69,6 +69,7 @@
   grid-area: melee;
   margin-top: 0.25rem;
   border: 1px solid var(--color-border);
+  padding: 0.125rem 0;
   @include textButton();
   @include inputReset();
   input {
@@ -91,6 +92,7 @@
 
   [divider] {
     border-top: 1px solid var(--color-border);
+    margin: 0.125rem 0;
   }
 }
 

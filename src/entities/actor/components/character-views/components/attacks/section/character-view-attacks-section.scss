@@ -14,18 +14,7 @@
   border-bottom: 1px solid var(--color-border);
   margin: 0 0.25rem;
   > * {
-    display: inline-flex;
-    padding: 0.125rem 0.5rem;
-    --list-item-bg: #{alphav(var(--color-grey), 0.2)};
-    --list-item-bg-hover: #{alphav(var(--color-grey), 0.3)};
-    [slot='after'] {
-      color: var(--color-text-lighter);
-      margin-left: 1ch;
-    }
-  }
-  > .attack {
-    --list-item-bg: #{alphav(var(--color-negative), 0.2)};
-    --list-item-bg-hover: #{alphav(var(--color-negative), 0.3)};
+    // margin: 0.125rem 0.125rem 0 0;
   }
 }
 

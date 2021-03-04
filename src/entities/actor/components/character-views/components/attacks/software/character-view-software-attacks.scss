@@ -6,47 +6,18 @@
 }
 
 :host {
-  display: block;
-}
-
-.card {
-  display: grid;
-  grid-template-areas:
-    'name actions'
-    'attacks attacks'
-    'description description';
-  grid-template-columns: 1fr;
-  padding: 0.25rem 0.5rem;
-  // box-shadow: 0 1px 0.2rem black;
-  position: relative;
-  cursor: pointer;
-}
-
-.name {
-  font-size: large;
-  grid-area: name;
-  margin-left: 0.5rem;
-}
-
-.type {
-  color: var(--color-text-lighter);
-}
-
-.attacks {
   display: flex;
-  --mdc-theme-primary: var(--color-grey);
-  grid-area: attacks;
+  flex-flow: row wrap;
+  // padding: 0.125rem 0.25rem;
+  margin: 0.25rem 0.5rem;
+  // border-left: 2px solid alphav(var(--color-negative), 0.5);
+  // background: linear-gradient(
+  //   to right,
+  //   alphav(var(--color-negative), 0.2),
+  //   rgba(0, 0, 0, 0)
+  // );
 }
 
-.actions {
-  --mdc-icon-button-size: 1.5rem;
-  grid-area: actions;
-  color: var(--color-text-lighter);
-}
-
-.description {
-  grid-area: description;
-  border-top: 2px groove var(--color-border);
-  padding: 0.5rem;
-  padding-bottom: 0;
+colored-tag {
+  margin: 0.125rem 0.125rem 0 0;
 }

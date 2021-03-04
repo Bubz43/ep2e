@@ -1,8 +1,6 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
-@include resetUnorderedList();
-
 * {
   box-sizing: border-box;
 }
@@ -10,53 +8,9 @@
 :host {
   display: flex;
   flex-flow: row wrap;
-  // padding: 0.125rem 0.25rem;
   margin: 0.25rem 0.5rem;
-  // border-left: 2px solid alphav(var(--color-negative), 0.5);
-  // background: linear-gradient(
-  //   to right,
-  //   alphav(var(--color-negative), 0.2),
-  //   rgba(0, 0, 0, 0)
-  // );
 }
 
-wl-list-item {
-  padding: 0.125rem 0.5rem;
+colored-tag {
   margin: 0.125rem 0.125rem 0 0;
-  border: 1px solid;
-  // flex-grow: 1;
-  // width: max-content;
-  // min-width: 100%;
-  [slot='after'] {
-    margin-left: 1ch;
-    color: var(--color-text-lighter);
-  }
-}
-
-.usable {
-  padding: 0.125rem 0.5rem;
-  --list-item-bg: #{alphav(var(--color-secondary), 0.1)};
-  --list-item-bg-hover: #{alphav(var(--color-secondary), 0.2)};
-  border-color: alphav(var(--color-secondary), 0.2);
-}
-
-.attack {
-  --list-item-bg: #{alphav(var(--color-negative), 0.2)};
-  --list-item-bg-hover: #{alphav(var(--color-negative), 0.3)};
-  border-color: alphav(var(--color-negative), 0.35);
-
-  .label {
-    font-size: 1rem;
-    letter-spacing: 1px;
-    color: var(--color-text-lighter);
-    & ~ * {
-      // color: var(--color-text-lighter);
-    }
-  }
-}
-
-.info {
-  --list-item-bg: #{alphav(var(--color-grey), 0.1)};
-  --list-item-bg-hover: #{alphav(var(--color-grey), 0.2)};
-  border-color: alphav(var(--color-grey), 0.2);
 }
