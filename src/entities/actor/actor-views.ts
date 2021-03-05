@@ -10,7 +10,10 @@ import type { Sleeve } from './sleeves';
 
 export const renderCharacterView = (proxy: Character, token: MaybeToken) => {
   return html`
-    <character-view-alt .character=${proxy}></character-view-alt>
+    <character-view-alt
+      .character=${proxy}
+      .token=${token}
+    ></character-view-alt>
     <!-- <character-view .character=${proxy} .token=${token}></character-view> -->
   `;
 };

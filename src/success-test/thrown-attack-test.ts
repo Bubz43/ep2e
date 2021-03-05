@@ -71,10 +71,12 @@ export class ThrownAttackTest extends SkillTest {
 
     this.throwing = {
       attackTarget,
-      range: !gravity ? Infinity : this.character.ego.aptitudes.som / gravity,
+      range: !gravity
+        ? Infinity
+        : Math.round(this.character.ego.aptitudes.som / gravity),
       targetDistance:
         attackTarget && this.token
-          ? distanceBetweenTokens(this.token, attackTarget)
+          ? Math.ceil(distanceBetweenTokens(this.token, attackTarget))
           : 10,
       primaryAttack,
       weapon,
@@ -98,6 +100,18 @@ export class ThrownAttackTest extends SkillTest {
               draft.modifiers.effects.set(effect, active);
             }
           }
+        }
+
+        if (changed.attackTarget !== undefined) {
+          draft.throwing.targetDistance =
+            draft.throwing.attackTarget && this.token
+              ? Math.ceil(
+                  distanceBetweenTokens(
+                    this.token,
+                    draft.throwing.attackTarget as Token,
+                  ),
+                )
+              : 10;
         }
 
         const { simple } = draft.modifiers;

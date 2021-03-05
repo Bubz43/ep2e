@@ -571,6 +571,7 @@ export class CharacterViewAlt extends CharacterViewBase {
         return html`
           <character-view-attacks-section
             .character=${this.character}
+            .token=${this.token}
           ></character-view-attacks-section>
         `;
 

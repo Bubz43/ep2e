@@ -63,14 +63,18 @@ export const startThrownAttack = ({
   weaponId,
   token,
   attackType,
+  adjacentElement,
 }: {
   actor: ActorEP;
   weaponId?: string;
   token?: MaybeToken;
   attackType?: AttackType;
+  adjacentElement?: HTMLElement;
 }) => {
+  console.log(adjacentElement);
   ThrownAttackControls.openWindow({
     entities: { token, actor },
+    adjacentElement,
     getState: (actor) => {
       if (actor.proxy.type !== ActorType.Character) return null;
       const { ego } = actor.proxy;
@@ -83,6 +87,7 @@ export const startThrownAttack = ({
         token,
         weapon,
         primaryAttack: attackType !== 'secondary',
+
         skill:
           weapon.type === ItemType.ThrownWeapon && weapon.exoticSkillName
             ? ego.findFieldSkill({

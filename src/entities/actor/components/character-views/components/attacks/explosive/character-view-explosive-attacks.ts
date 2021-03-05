@@ -72,6 +72,7 @@ export class CharacterViewExplosiveAttacks extends LitElement {
     const { character, token } = requestCharacter(this);
     const attack = this.explosive.attacks[attackType];
     if (!character || !attack) return;
+    const adjacentElement = ev.currentTarget as HTMLElement;
     openMenu({
       position: ev,
       header: {
@@ -90,6 +91,7 @@ export class CharacterViewExplosiveAttacks extends LitElement {
               token,
               weaponId: this.explosive.id,
               attackType,
+              adjacentElement,
             }),
         },
       ]),

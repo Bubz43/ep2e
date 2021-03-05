@@ -1,4 +1,5 @@
 import { createMessage } from '@src/chat/create-message';
+import { startThrownAttack } from '@src/combat/attack-init';
 import { LazyRipple } from '@src/components/mixins/lazy-ripple';
 import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Character } from '@src/entities/actor/proxies/character';
@@ -13,6 +14,7 @@ import { SkillType } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { HealthType } from '@src/health/health';
+import { openMenu } from '@src/open-menu';
 import { MeleeAttackControls } from '@src/success-test/components/melee-attack-controls/melee-attack-controls';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
@@ -101,6 +103,28 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
     });
   }
 
+  private selectThrowingWeapon(ev: MouseEvent) {
+    const { explosives, thrown } = this.character.weapons;
+    const throwable = [...thrown, ...explosives.filter((e) => e.isGrenade)];
+    const adjacentElement = ev.currentTarget as HTMLElement;
+    openMenu({
+      header: { heading: localize('throw') },
+      position: ev,
+      content: throwable.map((weapon) => ({
+        label: weapon.fullName,
+        sublabel: weapon.fullType,
+        disabled: !weapon.quantity,
+        callback: () =>
+          startThrownAttack({
+            token: this.token,
+            actor: this.character.actor,
+            weaponId: weapon.id,
+            adjacentElement,
+          }),
+      })),
+    });
+  }
+
   render() {
     const { sleeve, weapons } = this.character;
     return html`
@@ -152,10 +176,15 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
           type="attack"
           @click=${this.startUnarmedAttack}
           @contextmenu=${this.rollUnarmedDamage}
+          ?disabled=${this.character.disabled}
           >${localize('unarmedDV')}
           <span slot="after">${sleeve.unarmedDV}</span></colored-tag
         >
-        <colored-tag type="info"
+        <colored-tag
+          type="info"
+          clickable
+          ?disabled=${this.character.disabled}
+          @click=${this.selectThrowingWeapon}
           >${localize('throwingRange')}
           <span slot="after"
             >${this.character.ego.aptitudes.som}</span

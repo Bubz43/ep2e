@@ -31,6 +31,7 @@ type Init = {
     token?: MaybeToken;
   };
   getState: (actor: ActorEP) => ThrownAttackTestInit | null;
+  adjacentElement?: HTMLElement;
 };
 
 @customElement('thrown-attack-controls')
@@ -92,6 +93,7 @@ export class ThrownAttackControls extends LitElement {
   }
 
   async setState(init: Init) {
+    console.log(init.adjacentElement);
     this.unsub();
     this.subs.add(() =>
       ThrownAttackControls.openWindows.delete(init.entities.actor),
@@ -112,7 +114,7 @@ export class ThrownAttackControls extends LitElement {
     );
     if (!this.isConnected) overlay.append(this);
     ThrownAttackControls.openWindows.set(init.entities.actor, this);
-    const source = traverseActiveElements();
+    const source = init.adjacentElement || traverseActiveElements();
     if (source instanceof HTMLElement && source.isConnected) {
       await this.win?.updateComplete;
       this.win?.positionAdjacentToElement(source);
@@ -125,11 +127,13 @@ export class ThrownAttackControls extends LitElement {
     const throwable = [...thrown, ...explosives.filter((e) => e.isGrenade)];
 
     openMenu({
-      header: { heading: `${localize('select')} ${localize('meleeWeapon')}` },
+      header: { heading: localize('throw') },
       content: throwable.map((weapon) => ({
-        label: weapon.name,
+        label: weapon.fullName,
+        sublabel: weapon.fullType,
         activated: weapon === this.test?.throwing.weapon,
         callback: () => this.test?.throwing.update({ weapon }),
+        disabled: !weapon.quantity,
       })),
     });
   }
