@@ -4,7 +4,7 @@ import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import { customElement, html, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { requestCharacter } from '../../../character-request-event';
-import { openMeleeCoatingMenu } from '../../attacks/coating-menu';
+import { openMeleeCoatingMenu } from '../../attacks/melee-weapon-menus';
 import { renderItemAttacks } from '../../attacks/render-item-attacks';
 import { ItemCardBase } from '../item-card-base';
 import styles from './weapon-card.scss';

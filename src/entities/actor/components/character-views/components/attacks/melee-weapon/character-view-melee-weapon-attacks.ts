@@ -13,7 +13,10 @@ import { customElement, html, LitElement, property } from 'lit-element';
 import { compact, map, pick, pipe } from 'remeda';
 import { stopEvent } from 'weightless';
 import { requestCharacter } from '../../../character-request-event';
-import { openMeleeCoatingMenu } from '../coating-menu';
+import {
+  openMeleeCoatingMenu,
+  openMeleePayloadMenu,
+} from '../melee-weapon-menus';
 import styles from './character-view-melee-weapon-attacks.scss';
 
 @customElement('character-view-melee-weapon-attacks')
@@ -85,6 +88,11 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
     character && openMeleeCoatingMenu(ev, character, this.weapon);
   }
 
+  private openPayloadSelectMenu(ev: MouseEvent) {
+    const { character } = requestCharacter(this);
+    character && openMeleePayloadMenu(ev, character, this.weapon);
+  }
+
   render() {
     const {
       attacks,
@@ -117,7 +125,12 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
         : ''}
       ${acceptsPayload
         ? html`
-            <colored-tag type="usable" clickable ?disabled=${!editable}>
+            <colored-tag
+              type="usable"
+              clickable
+              ?disabled=${!editable}
+              @click=${this.openPayloadSelectMenu}
+            >
               <span>${localize('payload')}</span>
               <span slot="after"
                 >${payload

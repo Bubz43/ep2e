@@ -7,19 +7,19 @@ import {
 } from '@src/components/field/fields';
 import { renderAutoForm, SlCustomStoreEvent } from '@src/components/form/forms';
 import {
-  subscribeToEnvironmentChange,
-  createEnvironmentOverrides,
   createEnvironment,
+  createEnvironmentOverrides,
   Environment,
+  subscribeToEnvironmentChange,
 } from '@src/features/environment';
-import { openImagePicker, closeImagePicker } from '@src/foundry/foundry-apps';
-import { localize } from '@src/foundry/localization';
 import { readyCanvas } from '@src/foundry/canvas';
+import { closeImagePicker, openImagePicker } from '@src/foundry/foundry-apps';
+import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import { gameSettings } from '@src/init';
 import type { FieldPropsRenderer } from '@src/utility/field-values';
-import { customElement, LitElement, property, html } from 'lit-element';
-import { createPipe, merge, map } from 'remeda';
+import { customElement, html, LitElement } from 'lit-element';
+import { createPipe, map, merge } from 'remeda';
 import styles from './environment-forms.scss';
 
 const renderEnvironmentFields: FieldPropsRenderer<Environment> = ({
@@ -30,7 +30,7 @@ const renderEnvironmentFields: FieldPropsRenderer<Environment> = ({
   notes,
 }) => [
   renderTextField(name, { maxLength: 20 }),
-  renderNumberField(gravity, { min: 0.1, max: 4, step: 0.001 }),
+  renderNumberField(gravity, { min: 0, max: 4, step: 0.001 }),
   renderLabeledCheckbox(vacuum),
   renderTextField(img, {
     after: html`

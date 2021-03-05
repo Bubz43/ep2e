@@ -18,6 +18,7 @@ import { customElement, html, LitElement, property } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { identity } from 'remeda';
 import type { FixedLengthArray } from 'type-fest';
+import { traverseActiveElements } from 'weightless';
 import { renderItemAttacks } from '../render-item-attacks';
 import styles from './character-view-attacks-section.scss';
 
@@ -113,7 +114,10 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
               dense
               ?outlined=${!active}
               ?unelevated=${active}
-              @click=${() => this.toggleActive(key)}
+              @click=${() => {
+                console.log(traverseActiveElements());
+                return this.toggleActive(key);
+              }}
               label=${localize(key)}
             ></mwc-button>
           `;

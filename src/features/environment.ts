@@ -1,8 +1,29 @@
 import type { SceneEP } from '@src/entities/scene';
-import { MutateEvent, mutateEntityHook } from '@src/foundry/hook-setups';
 import { readyCanvas } from '@src/foundry/canvas';
+import { mutateEntityHook, MutateEvent } from '@src/foundry/hook-setups';
 import { gameSettings } from '@src/init';
 import { createFeature } from './feature-helpers';
+
+// export interface EnvironmentInfo {
+//   name: string;
+//   gravity: number; // g
+//   img: string;
+//   type: string;
+//   primaryStary: string;
+//   diameter: number; // km
+//   atmosphericPressure: number; //atm
+//   atmosphericComposition: { percent: number; label: string }[];
+//   surfaceTemperature: { min: number; mean: number; max: number }; // C
+//   dayLength: number;
+//   orbitalPeriod: number;
+//   orbitalDistance: {
+//     perihelion: number;
+//     aphelion: number;
+//   }; // AU;
+//   satellites: string[];
+//   oceanCoverage: number;
+//   gateAccess: string;
+// }
 
 export type Environment = {
   name: string;

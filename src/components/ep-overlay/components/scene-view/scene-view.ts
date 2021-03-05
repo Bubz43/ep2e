@@ -1,3 +1,4 @@
+import { openWindow } from '@src/components/window/window-controls';
 import { getCurrentEnvironment } from '@src/features/environment';
 import {
   mutateEntityHook,
@@ -6,8 +7,8 @@ import {
 } from '@src/foundry/hook-setups';
 import { localize } from '@src/foundry/localization';
 import { gameSettings } from '@src/init';
-import { RenderDialogEvent } from '@src/open-dialog';
 import { customElement, html, LitElement } from 'lit-element';
+import { EnvironmentForms } from '../environment-forms/environment-forms';
 import styles from './scene-view.scss';
 
 @customElement('scene-view')
@@ -56,13 +57,18 @@ export class SceneView extends LitElement {
 
   private openFormsDialog() {
     if (!game.user.isGM) return;
-    this.dispatchEvent(
-      new RenderDialogEvent(html`
-        <mwc-dialog hideActions open style="--mdc-dialog-min-width: 600px">
-          <environment-forms></environment-forms>
-        </mwc-dialog>
-      `),
-    );
+    openWindow({
+      key: EnvironmentForms,
+      content: html` <environment-forms></environment-forms>`,
+      name: localize('environment'),
+    });
+    // this.dispatchEvent(
+    //   new RenderDialogEvent(html`
+    //     <mwc-dialog hideActions open style="--mdc-dialog-min-width: 600px">
+    //       <environment-forms></environment-forms>
+    //     </mwc-dialog>
+    //   `),
+    // );
   }
 
   render() {
@@ -70,11 +76,11 @@ export class SceneView extends LitElement {
     const { name, img, gravity, vacuum, notes } = getCurrentEnvironment();
 
     return html`
-      <link
+      <!-- <link
         rel="stylesheet"
         href="fonts/fontawesome/css/all.min.css"
         media="all"
-      />
+      /> -->
 
       ${isGM
         ? html`

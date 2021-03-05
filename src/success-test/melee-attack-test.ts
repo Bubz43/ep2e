@@ -1,7 +1,6 @@
 import { createMessage } from '@src/chat/create-message';
 import { SuperiorResultEffect } from '@src/data-enums';
 import type { ActorEP } from '@src/entities/actor/actor';
-import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import {
@@ -47,7 +46,7 @@ export class MeleeAttackTest extends SkillTest {
     }
   >;
 
-  readonly character: Character;
+  readonly character;
 
   readonly aggressiveModifier = createSuccessTestModifier({
     name: localize('aggressive'),

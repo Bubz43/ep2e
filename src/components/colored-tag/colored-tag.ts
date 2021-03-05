@@ -27,6 +27,7 @@ export class ColoredTag extends LitElement {
         class=${this.type}
         ?clickable=${this.clickable}
         ?disabled=${this.disabled}
+        role="button"
       >
         <slot></slot>
         <slot slot="after" name="after"></slot>
