@@ -171,6 +171,7 @@ import { SuccessTestSectionLabel } from './success-test/components/section-label
 import { SuccessTestSkillSection } from './success-test/components/skill-section/success-test-skill-section';
 import { SkillTestControls } from './success-test/components/skill-test-controls/skill-test-controls';
 import { SoftwareSkillTestControls } from './success-test/components/software-skill-test-controls/software-skill-test-controls';
+import { ThrownAttackControls } from './success-test/components/thrown-attack-controls/thrown-attack-controls';
 
 // Generic Components
 Field;
@@ -348,6 +349,7 @@ SuccessTestFooter;
 SkillTestControls;
 ReputationFavorControls;
 MeleeAttackControls;
+ThrownAttackControls;
 HackingTestControls;
 SuccessTestSkillSection;
 SoftwareSkillTestControls;

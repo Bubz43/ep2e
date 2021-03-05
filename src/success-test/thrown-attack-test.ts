@@ -39,7 +39,7 @@ export class ThrownAttackTest extends SkillTest {
     attackTarget?: Token | null;
     targetDistance: number;
     range: number;
-    calledShot?: CalledShot;
+    calledShot?: CalledShot | null;
   }>;
 
   readonly calledShotModifier = createSuccessTestModifier({
@@ -81,7 +81,8 @@ export class ThrownAttackTest extends SkillTest {
       update: this.recipe((draft, changed) => {
         draft.throwing = merge(draft.throwing, changed);
         if (changed.weapon) {
-          draft.throwing.primaryAttack = false;
+          draft.throwing.primaryAttack = true;
+          draft.throwing.calledShot = null;
         }
         if (changed.attackTarget) {
           draft.modifiers.effects = this.getModifierEffects(
