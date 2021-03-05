@@ -1,3 +1,5 @@
+import { renderNumberField } from '@src/components/field/fields';
+import { renderAutoForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
 import { CalledShot, enumValues } from '@src/data-enums';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
@@ -197,13 +199,15 @@ export class ThrownAttackControls extends LitElement {
       skillState,
       //  damageFormulas,
       attack,
+      canCallShot,
     } = test;
 
     const {
       weapon,
       primaryAttack,
       attackTarget,
-
+      targetDistance,
+      range,
       calledShot,
     } = throwing;
     const { morphSize } = character;
@@ -294,7 +298,45 @@ export class ThrownAttackControls extends LitElement {
         .modifierStore=${test.modifiers}
       ></success-test-modifiers-section>
 
-      <ul class="throwing-info"></ul>
+      <ul class="throwing-info">
+        <wl-list-item clickable @click=${this.selectWeapon}>
+          ${weapon.name}
+        </wl-list-item>
+        ${attacks?.secondary
+          ? html`
+              <wl-list-item
+                class="attack-setting"
+                clickable
+                @click=${() =>
+                  throwing.update({ primaryAttack: !primaryAttack })}
+              >
+                ${attack?.label}
+              </wl-list-item>
+            `
+          : ''}
+
+        <li divider></li>
+        <li>
+          ${renderAutoForm({
+            props: { targetDistance, range },
+            update: throwing.update,
+            fields: ({ targetDistance, range }) => [
+              renderNumberField(targetDistance, { min: 0 }),
+              renderNumberField(range, { min: 1 }),
+            ],
+          })}
+        </li>
+        ${canCallShot
+          ? html`
+              <wl-list-item clickable @click=${this.selectCalledShot}>
+                <span>${localize('calledShot')}</span>
+                ${calledShot
+                  ? html`<span slot="after">${localize(calledShot)}</span>`
+                  : ''}
+              </wl-list-item>
+            `
+          : ''}
+      </ul>
 
       <success-test-footer
         class="footer"

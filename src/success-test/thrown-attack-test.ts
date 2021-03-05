@@ -1,5 +1,5 @@
 import { CalledShot, RangeRating } from '@src/data-enums';
-import { ActorType } from '@src/entities/entity-types';
+import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
 import type { ThrownWeapon } from '@src/entities/item/proxies/thrown-weapon';
 import {
@@ -140,6 +140,11 @@ export class ThrownAttackTest extends SkillTest {
     return primaryAttack
       ? weapon.attacks.primary
       : weapon.attacks.secondary || weapon.attacks.primary;
+  }
+
+  get canCallShot() {
+    const { weapon } = this.throwing;
+    return weapon.type === ItemType.ThrownWeapon || !weapon.areaEffect;
   }
 
   protected getAttackTargetEffects(

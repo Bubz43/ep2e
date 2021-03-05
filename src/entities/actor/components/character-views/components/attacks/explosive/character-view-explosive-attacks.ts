@@ -3,10 +3,11 @@ import {
   formatAreaEffect,
   formatArmorUsed,
 } from '@src/combat/attack-formatting';
+import { startThrownAttack } from '@src/combat/attack-init';
 import type { AttackType } from '@src/combat/attacks';
 import type { SlWindow } from '@src/components/window/window';
 import { ExplosiveTrigger } from '@src/data-enums';
-import type { Explosive } from '@src/entities/item/proxies/explosive';
+import { Explosive } from '@src/entities/item/proxies/explosive';
 import {
   createExplosiveTriggerSetting,
   ExplosiveSettings,
@@ -83,7 +84,13 @@ export class CharacterViewExplosiveAttacks extends LitElement {
         },
         this.explosive.isGrenade && {
           label: localize('throw'),
-          callback: () => {},
+          callback: () =>
+            startThrownAttack({
+              actor: character.actor,
+              token,
+              weaponId: this.explosive.id,
+              attackType,
+            }),
         },
       ]),
     });
