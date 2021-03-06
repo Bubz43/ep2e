@@ -4,6 +4,8 @@ import type { SlWindow } from '@src/components/window/window';
 import { CalledShot, enumValues } from '@src/data-enums';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
+import { ItemType } from '@src/entities/entity-types';
+import type { ExplosiveSettings } from '@src/entities/weapon-settings';
 import { readyCanvas } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
@@ -213,6 +215,7 @@ export class ThrownAttackControls extends LitElement {
       targetDistance,
       range,
       calledShot,
+      explosiveSettings,
     } = throwing;
     const { morphSize } = character;
     const { attacks } = weapon ?? {};
@@ -306,7 +309,16 @@ export class ThrownAttackControls extends LitElement {
         <wl-list-item clickable @click=${this.selectWeapon}>
           ${weapon.name}
         </wl-list-item>
-        ${attacks?.secondary
+        ${weapon.type === ItemType.Explosive && explosiveSettings
+          ? html`
+              <explosive-settings-form
+                .explosive=${weapon}
+                .initialSettings=${explosiveSettings}
+                @explosive-settings=${(ev: CustomEvent<ExplosiveSettings>) =>
+                  throwing.update({ explosiveSettings: ev.detail })}
+              ></explosive-settings-form>
+            `
+          : attacks?.secondary
           ? html`
               <wl-list-item
                 class="attack-setting"

@@ -1,7 +1,17 @@
-import { CalledShot, RangeRating } from '@src/data-enums';
+import { createMessage } from '@src/chat/create-message';
+import {
+  CalledShot,
+  ExplosiveTrigger,
+  RangeRating,
+  SuperiorResultEffect,
+} from '@src/data-enums';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
 import type { ThrownWeapon } from '@src/entities/item/proxies/thrown-weapon';
+import {
+  createExplosiveTriggerSetting,
+  ExplosiveSettings,
+} from '@src/entities/weapon-settings';
 import {
   Action,
   ActionSubtype,
@@ -13,13 +23,15 @@ import { getCurrentEnvironment } from '@src/features/environment';
 import type { Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { distanceBetweenTokens } from '@src/foundry/token-helpers';
+import { arrayOf } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
-import { merge } from 'remeda';
+import { compact, last, merge } from 'remeda';
 import type { SetRequired } from 'type-fest';
 import { getRangeModifier } from './range-modifiers';
 import { SkillTest, SkillTestInit } from './skill-test';
 import {
   createSuccessTestModifier,
+  grantedSuperiorResultEffects,
   successTestEffectMap,
 } from './success-test';
 
@@ -31,8 +43,6 @@ export type ThrownAttackTestInit = SetRequired<SkillTestInit, 'character'> & {
 export class ThrownAttackTest extends SkillTest {
   readonly character;
 
-  // readonly explosiveSettings?: WithUpdate<ExplosiveSettings>;
-
   readonly throwing: WithUpdate<{
     weapon: ThrownAttackTestInit['weapon'];
     primaryAttack: boolean;
@@ -40,6 +50,7 @@ export class ThrownAttackTest extends SkillTest {
     targetDistance: number;
     range: number;
     calledShot?: CalledShot | null;
+    explosiveSettings?: ExplosiveSettings | null;
   }>;
 
   readonly calledShotModifier = createSuccessTestModifier({
@@ -80,11 +91,25 @@ export class ThrownAttackTest extends SkillTest {
           : 10,
       primaryAttack,
       weapon,
+      explosiveSettings:
+        weapon.type === ItemType.Explosive
+          ? {
+              trigger: createExplosiveTriggerSetting(ExplosiveTrigger.Impact),
+            }
+          : null,
       update: this.recipe((draft, changed) => {
         draft.throwing = merge(draft.throwing, changed);
         if (changed.weapon) {
           draft.throwing.primaryAttack = true;
           draft.throwing.calledShot = null;
+          draft.throwing.explosiveSettings =
+            draft.throwing.weapon.type === ItemType.Explosive
+              ? {
+                  trigger: createExplosiveTriggerSetting(
+                    ExplosiveTrigger.Impact,
+                  ),
+                }
+              : null;
         }
         if (changed.attackTarget) {
           draft.modifiers.effects = this.getModifierEffects(
@@ -175,5 +200,66 @@ export class ThrownAttackTest extends SkillTest {
           [Source]: `{${target.name}} ${effect[Source]}`,
         })),
     );
+  }
+
+  protected async createMessage() {
+    const { settings, pools, action, throwing, testMessageData } = this;
+
+    const {
+      weapon,
+      primaryAttack,
+      attackTarget,
+      explosiveSettings,
+      calledShot,
+    } = throwing;
+
+    await createMessage({
+      data: {
+        header: {
+          heading: `${weapon.name} ${localize('thrownAttack')}`,
+          subheadings: [
+            this.name,
+            [
+              `${action.type} ${
+                action.timeMod && action.type !== ActionType.Task
+                  ? `(${localize('as')} ${localize('task')})`
+                  : ''
+              }`,
+              localize(action.subtype),
+              localize('action'),
+            ].join(' '),
+          ],
+          img: weapon?.nonDefaultImg,
+          description: weapon?.description,
+        },
+        successTest: {
+          ...testMessageData,
+          superiorResultEffects: arrayOf({
+            value: SuperiorResultEffect.Damage,
+            length: grantedSuperiorResultEffects(
+              last(testMessageData.states)?.result,
+            ),
+          }),
+          defaultSuperiorEffect: SuperiorResultEffect.Damage,
+        },
+        targets: compact([
+          attackTarget?.scene && {
+            tokenId: attackTarget.id,
+            sceneId: attackTarget.scene.id,
+          },
+        ]),
+      },
+
+      entity: this.token ?? this.character, // TODO account for item sources,
+      visibility: settings.visibility,
+    });
+
+    if (pools.active) {
+      await this.character?.modifySpentPools({
+        pool: pools.active[0].type,
+        points: 1,
+      });
+    }
+    await weapon.consumeUnit();
   }
 }
