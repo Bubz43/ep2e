@@ -13,8 +13,8 @@ import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { compact, map, pick, pipe } from 'remeda';
 import { stopEvent } from 'weightless';
-import { requestCharacter } from '../../../character-request-event';
-import styles from './character-view-software-attacks.scss';
+import { requestCharacter } from '../../character-request-event';
+import styles from './attack-info-styles.scss';
 
 @customElement('character-view-software-attacks')
 export class CharacterViewSoftwareAttacks extends LitElement {

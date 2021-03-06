@@ -20,9 +20,9 @@ import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { compact, map } from 'remeda';
-import { requestCharacter } from '../../../character-request-event';
-import { ExplosiveSettingsForm } from '../explosive-settings/explosive-settings-form';
-import styles from './character-view-explosive-attacks.scss';
+import { requestCharacter } from '../../character-request-event';
+import styles from './attack-info-styles.scss';
+import { ExplosiveSettingsForm } from './explosive-settings/explosive-settings-form';
 
 @customElement('character-view-explosive-attacks')
 export class CharacterViewExplosiveAttacks extends LitElement {

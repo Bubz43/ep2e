@@ -72,11 +72,11 @@ import { CharacterView } from './entities/actor/components/character-views/chara
 import { CharacterViewAlt } from './entities/actor/components/character-views/character-view-alt';
 import { CharacterViewActiveSubstance } from './entities/actor/components/character-views/components/active-substance/character-view-active-substance';
 import { CharacterViewArmor } from './entities/actor/components/character-views/components/armor/character-view-armor';
+import { CharacterViewExplosiveAttacks } from './entities/actor/components/character-views/components/attacks/character-view-explosive-attacks';
+import { CharacterViewMeleeWeaponAttacks } from './entities/actor/components/character-views/components/attacks/character-view-melee-weapon-attacks';
+import { CharacterViewSoftwareAttacks } from './entities/actor/components/character-views/components/attacks/character-view-software-attacks';
 import { ExplosiveSettingsForm } from './entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
-import { CharacterViewExplosiveAttacks } from './entities/actor/components/character-views/components/attacks/explosive/character-view-explosive-attacks';
-import { CharacterViewMeleeWeaponAttacks } from './entities/actor/components/character-views/components/attacks/melee-weapon/character-view-melee-weapon-attacks';
 import { CharacterViewAttacksSection } from './entities/actor/components/character-views/components/attacks/section/character-view-attacks-section';
-import { CharacterViewSoftwareAttacks } from './entities/actor/components/character-views/components/attacks/software/character-view-software-attacks';
 import { ConsumableCard } from './entities/actor/components/character-views/components/cards/consumable/consumable-card';
 import { ItemCard } from './entities/actor/components/character-views/components/cards/generic/item-card';
 import { PhysicalTechCard } from './entities/actor/components/character-views/components/cards/physical-tech/physical-tech-card';

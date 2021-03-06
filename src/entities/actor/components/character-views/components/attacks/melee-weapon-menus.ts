@@ -1,6 +1,7 @@
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ItemType } from '@src/entities/entity-types';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
+import type { ThrownWeapon } from '@src/entities/item/proxies/thrown-weapon';
 import { localize } from '@src/foundry/localization';
 import { MWCMenuOption, openMenu } from '@src/open-menu';
 import produce from 'immer';
@@ -69,10 +70,10 @@ export const openMeleePayloadMenu = (
   });
 };
 
-export const openMeleeCoatingMenu = (
+export const openCoatingMenu = (
   ev: MouseEvent,
   character: Character,
-  weapon: MeleeWeapon,
+  weapon: MeleeWeapon | ThrownWeapon,
 ) => {
   const { coating } = weapon;
   const coatings =

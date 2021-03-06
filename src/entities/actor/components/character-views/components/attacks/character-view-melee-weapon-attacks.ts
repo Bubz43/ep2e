@@ -12,12 +12,9 @@ import { notEmpty, withSign } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { compact, map, pick, pipe } from 'remeda';
 import { stopEvent } from 'weightless';
-import { requestCharacter } from '../../../character-request-event';
-import {
-  openMeleeCoatingMenu,
-  openMeleePayloadMenu,
-} from '../melee-weapon-menus';
-import styles from './character-view-melee-weapon-attacks.scss';
+import { requestCharacter } from '../../character-request-event';
+import styles from './attack-info-styles.scss';
+import { openCoatingMenu, openMeleePayloadMenu } from './melee-weapon-menus';
 
 @customElement('character-view-melee-weapon-attacks')
 export class CharacterViewMeleeWeaponAttacks extends LitElement {
@@ -85,7 +82,7 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
 
   private openCoatingSelectMenu(ev: MouseEvent) {
     const { character } = requestCharacter(this);
-    character && openMeleeCoatingMenu(ev, character, this.weapon);
+    character && openCoatingMenu(ev, character, this.weapon);
   }
 
   private openPayloadSelectMenu(ev: MouseEvent) {

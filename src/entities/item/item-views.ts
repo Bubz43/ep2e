@@ -7,8 +7,7 @@ import { html, nothing, TemplateResult } from 'lit-html';
 import { compact, noop } from 'remeda';
 import type { ItemCard } from '../actor/components/character-views/components/cards/generic/item-card';
 import { ItemType } from '../entity-types';
-import type { ItemProxy, RangedWeapon } from './item';
-import type { MeleeWeapon } from './proxies/melee-weapon';
+import type { ItemProxy } from './item';
 import type { Psi } from './proxies/psi';
 
 export const renderItemForm = (proxy: ItemProxy) => {
@@ -224,10 +223,6 @@ export const itemMenuOptions = (item: ItemProxy): MWCMenuOption[] => {
   ]);
 };
 
-const isWeapon = (item: ItemProxy): item is MeleeWeapon | RangedWeapon => {
-  return item.type.includes('Weapon');
-};
-
 export const renderItemCard = (
   item: ItemProxy,
   {
@@ -261,19 +256,19 @@ export const renderItemCard = (
       >
     `;
   }
-  if (isWeapon(item)) {
-    return html`
-      <weapon-card
-        .item=${item}
-        ?expanded=${expanded}
-        ?noAnimate=${noAnimate}
-        ?animateInitial=${animateInitial}
-        ?allowDrag=${allowDrag}
-        @dragstart=${handleDragStart}
-        >${unexpanded}</weapon-card
-      >
-    `;
-  }
+  // if (item.type === ItemType.MeleeWeapon) {
+  //   return html`
+  //     <weapon-card
+  //       .item=${item}
+  //       ?expanded=${expanded}
+  //       ?noAnimate=${noAnimate}
+  //       ?animateInitial=${animateInitial}
+  //       ?allowDrag=${allowDrag}
+  //       @dragstart=${handleDragStart}
+  //       >${unexpanded}</weapon-card
+  //     >
+  //   `;
+  // }
   if ('stashed' in item)
     return html`
       <consumable-card

@@ -16,8 +16,10 @@ import { AptitudeCheckControls } from '@src/success-test/components/aptitude-che
 import { createSuccessTestModifier } from '@src/success-test/success-test';
 import { localImage } from '@src/utility/images';
 import { customElement, html, property } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
 import { compact } from 'remeda';
 import { requestCharacter } from '../../../character-request-event';
+import { openCoatingMenu } from '../../attacks/melee-weapon-menus';
 import { renderItemAttacks } from '../../attacks/render-item-attacks';
 import { ItemCardBase } from '../item-card-base';
 import styles from './consumable-card.scss';
@@ -106,6 +108,13 @@ export class ConsumableCard extends ItemCardBase {
     return this.item.toggleStashed();
   }
 
+  private openCoatingSelectMenu(ev: MouseEvent) {
+    const { character } = requestCharacter(this);
+    character &&
+      'coating' in this.item &&
+      openCoatingMenu(ev, character, this.item);
+  }
+
   renderHeaderButtons() {
     const { item } = this;
     const { editable } = item;
@@ -139,6 +148,13 @@ export class ConsumableCard extends ItemCardBase {
             ><img src=${localImage('icons/actions/pill-drop.svg')} />
           </mwc-icon-button>
         `
+      : item.type === ItemType.ThrownWeapon
+      ? html` <mwc-icon-button
+          class="toggle ${classMap({ activated: !!item.coating })}"
+          icon="colorize"
+          @click=${this.openCoatingSelectMenu}
+          ?disabled=${!item.editable}
+        ></mwc-icon-button>`
       : ''}`;
   }
 

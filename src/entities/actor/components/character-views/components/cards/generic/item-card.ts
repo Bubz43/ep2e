@@ -4,6 +4,8 @@ import { format, localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { customElement, html, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
+import { requestCharacter } from '../../../character-request-event';
+import { openCoatingMenu } from '../../attacks/melee-weapon-menus';
 import { renderItemAttacks } from '../../attacks/render-item-attacks';
 import { ItemCardBase } from '../item-card-base';
 
@@ -14,6 +16,13 @@ export class ItemCard extends ItemCardBase {
   }
 
   @property({ attribute: false }) item!: ItemProxy;
+
+  private openCoatingSelectMenu(ev: MouseEvent) {
+    const { character } = requestCharacter(this);
+    character &&
+      'coating' in this.item &&
+      openCoatingMenu(ev, character, this.item);
+  }
 
   renderHeaderButtons() {
     const { item } = this;
@@ -32,6 +41,14 @@ export class ItemCard extends ItemCardBase {
             ?disabled=${!editable}
           ></mwc-icon-button>
         `
+      : ''}
+    ${item.type === ItemType.MeleeWeapon && item.equipped
+      ? html` <mwc-icon-button
+          class="toggle ${classMap({ activated: !!item.coating })}"
+          icon="colorize"
+          @click=${this.openCoatingSelectMenu}
+          ?disabled=${!item.editable}
+        ></mwc-icon-button>`
       : ''}
     ${'toggleEquipped' in item && !item.equipped
       ? html`
