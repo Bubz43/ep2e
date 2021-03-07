@@ -1446,7 +1446,8 @@ type LangEntries =
   | 'discard'
   | 'explosives'
   | 'thrown'
-  | 'payloads';
+  | 'payloads'
+  | 'compact';
 type FullNames =
   | 'cog'
   | 'int'

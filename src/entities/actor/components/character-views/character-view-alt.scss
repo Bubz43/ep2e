@@ -17,30 +17,53 @@ h3 {
   display: grid;
   grid-template-areas:
     'header header'
-    'blah blah'
+    'extra extra'
     'actions tabs'
     'footer footer';
 
   grid-template-rows: min-content min-content minmax(400px, 1fr) min-content;
-  // grid-template-columns: auto max-content min-content auto;
   overflow-x: auto;
   min-width: max-content;
   background: alphav(var(--color-bg), 0.6);
 }
 
 :host([compact]) {
-  display: flex;
-  flex-flow: column;
-  max-height: 650px;
-  min-height: 100%;
-  .actions {
-    min-height: unset;
-    height: unset;
+  header {
+    display: block;
   }
+  .shared {
+    border-left: none;
+    clear: both;
+  }
+  .extra,
+  .shared {
+    margin: 0;
+  }
+
   .tabbed-section {
-    width: unset;
-    min-width: unset;
-    flex: 1;
+    grid-area: 3 / 1 / 4 / -1;
+  }
+
+  .tab-content {
+    padding: 0.125rem 0;
+  }
+
+  .actions {
+    grid-area: unset;
+    overflow-y: unset;
+    height: unset;
+    border-top: none;
+  }
+  footer {
+    padding: 0.375rem 0.25rem 0;
+    .icon-buttons {
+      margin-left: 0.5ch;
+    }
+  }
+
+  .buttons {
+    display: grid;
+    gap: 0.5ch;
   }
 }
 
@@ -195,8 +218,7 @@ header {
 }
 
 .avatar {
-  padding: 0 0.5rem;
-  // padding-left: 0;
+  padding: 0 0.5rem 0.5rem;
   float: left;
   img {
     display: block;
@@ -220,6 +242,8 @@ header {
 
 .ego-name {
   font-size: x-large;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .ego {
@@ -252,7 +276,7 @@ header {
     flex-flow: row wrap;
     position: relative;
     clear: both;
-    padding: 0.25rem 0.5rem;
+    padding: 0 0.5rem 0.25rem;
   }
 
   .motivation {
@@ -282,28 +306,28 @@ character-view-psi {
   border-top: 1px solid var(--color-border);
 }
 
-.blah {
+.extra {
   display: grid;
   grid-template-columns: 1fr max-content max-content;
   align-items: center;
-  grid-area: blah;
+  grid-area: extra;
   border-top: 1px solid var(--color-border);
   margin: 0 0.25rem;
-  padding: 0.5rem;
+  padding: 0.5rem 0 0.5rem 0.5rem;
 
   .sleeve {
     flex: 1;
   }
-  .initiative {
-    margin-left: 0.25rem;
+
+  .buttons {
     border-left: 1px solid var(--color-border);
-    padding-left: 0.25rem;
+    --mdc-shape-small: 0px;
+  }
+
+  .initiative {
     --mdc-theme-primary: var(--color-grey);
   }
   .stress-roll {
-    margin-left: 0.25rem;
-    border-left: 1px solid var(--color-border);
-    padding-left: 0.25rem;
     --mdc-theme-primary: #{lightv(var(--color-negative), 1.2)};
   }
 }
@@ -343,6 +367,8 @@ character-view-psi {
   mwc-tab-bar {
     --mdc-theme-primary: var(--color-grey);
     padding: 0 0.25rem;
+    width: 400px;
+    min-width: 100%;
   }
 }
 

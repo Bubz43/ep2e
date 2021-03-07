@@ -25,6 +25,7 @@ import {
   html,
   internalProperty,
   property,
+  PropertyValues,
   TemplateResult,
 } from 'lit-element';
 import { nothing } from 'lit-html';
@@ -44,7 +45,9 @@ type Detail = {
   label: string;
   value: string | number;
 };
-const tabs = ['inventory', 'combat', 'traits', 'details'] as const;
+const tabs = ['tests', 'gear', 'combat', 'traits', 'details'] as const;
+
+type CharacterTab = typeof tabs[number];
 
 @customElement('character-view-alt')
 export class CharacterViewAlt extends CharacterViewBase {
@@ -58,10 +61,27 @@ export class CharacterViewAlt extends CharacterViewBase {
 
   @property({ attribute: false }) character!: Character;
 
-  @internalProperty() private currentTab: typeof tabs[number] = 'combat';
+  @property({ type: Boolean, reflect: true }) compact = false;
+
+  @internalProperty() private currentTab: CharacterTab = 'combat';
+
+  update(changedProps: PropertyValues<this>) {
+    if (
+      changedProps.has('compact') &&
+      this.currentTab === 'tests' &&
+      !this.compact
+    ) {
+      this.currentTab = 'gear';
+    }
+    super.update(changedProps);
+  }
+
+  private get currentTabs() {
+    return this.compact ? tabs : tabs.slice(1);
+  }
 
   private setTab(ev: CustomEvent<{ index: number }>) {
-    this.currentTab = tabs[ev.detail.index] ?? 'combat';
+    this.currentTab = this.currentTabs[ev.detail.index] ?? 'combat';
   }
 
   private setDrawerRenderer(ev: Event) {
@@ -147,13 +167,14 @@ export class CharacterViewAlt extends CharacterViewBase {
   }
 
   render() {
-    const { character } = this;
+    const { character, currentTabs } = this;
     const { ego, disabled, sleeve, pools, armor, psi } = character;
     const { filteredMotivations, settings } = ego;
     const physicalHealth =
       sleeve && 'physicalHealth' in sleeve && sleeve.physicalHealth;
     const meshHealth =
       sleeve && 'activeMeshHealth' in sleeve && sleeve.activeMeshHealth;
+
     return html`
       <header>
         <div class="entities">
@@ -319,37 +340,50 @@ export class CharacterViewAlt extends CharacterViewBase {
           </div>
         </div>
       </header>
-      <div class="blah">
+      <div class="extra">
         <div class="sleeve">
           ${sleeve ? this.renderSleeve(sleeve) : this.renderSleeveSelect()}
         </div>
-        <mwc-button dense class="initiative" @click=${this.openInitiativeMenu}>
-          ${localize('initiative')}: ${this.character.initiative}
-        </mwc-button>
 
-        ${this.character.ego.hasStressRoll
-          ? html`
-              <mwc-button
-                class="stress-roll"
-                dense
-                slot="action"
-                label="${localize('SHORT', 'stressValue')}: ${this.character.ego
-                  .stressValueInfo.value}"
-                @click=${this.rollStress}
-              ></mwc-button>
-            `
-          : ''}
+        <div class="buttons">
+          <mwc-button
+            dense
+            class="initiative"
+            @click=${this.openInitiativeMenu}
+          >
+            ${localize('initiative')}: ${this.character.initiative}
+          </mwc-button>
+
+          ${this.character.ego.hasStressRoll
+            ? html`
+                <mwc-button
+                  class="stress-roll"
+                  dense
+                  slot="action"
+                  label="${localize('SHORT', 'stressValue')}: ${this.character
+                    .ego.stressValueInfo.value}"
+                  @click=${this.rollStress}
+                ></mwc-button>
+              `
+            : ''}
+        </div>
       </div>
-      <character-view-test-actions
-        class="actions"
-        .character=${this.character}
-        .ego=${this.character.ego}
-      ></character-view-test-actions>
+
+      ${this.compact
+        ? ''
+        : html`<character-view-test-actions
+            class="actions"
+            .character=${this.character}
+            .ego=${this.character.ego}
+          ></character-view-test-actions>`}
 
       <div class="tabbed-section">
-        <mwc-tab-bar @MDCTabBar:activated=${this.setTab} activeIndex="1">
-          ${tabs.map(
-            (tab) =>
+        <mwc-tab-bar
+          @MDCTabBar:activated=${this.setTab}
+          activeIndex=${currentTabs.findIndex((t) => t === this.currentTab)}
+        >
+          ${currentTabs.map(
+            (tab: CharacterTab) =>
               html`
                 <mwc-tab
                   @dragenter=${this.activateTab}
@@ -395,39 +429,43 @@ export class CharacterViewAlt extends CharacterViewBase {
   private renderFooter() {
     const { conditions, disabled, temporaryConditionSources } = this.character;
     return html` <footer>
-      ${this.renderActionIconButton({
-        icon: 'search',
-        tooltipText: localize('search'),
-        renderer: CharacterDrawerRenderer.Search,
-      })}
-      ${this.renderActionIconButton({
-        icon: 'access_time',
-        tooltipText: localize('time'),
-        renderer: CharacterDrawerRenderer.Time,
-        content: this.character.activeDurations
-          ? html`
-              <notification-coin
-                value=${this.character.activeDurations}
-                ?actionRequired=${this.character.requiresAttention}
-              ></notification-coin>
-            `
-          : undefined,
-      })}
-      ${this.renderActionIconButton({
-        tooltipText: localize('substances'),
-        renderer: CharacterDrawerRenderer.Substances,
-        content: html`<img src=${localImage('icons/actions/medicines.svg')} />`,
-      })}
-      ${this.renderActionIconButton({
-        icon: 'groups',
-        tooltipText: localize('resleeve'),
-        renderer: CharacterDrawerRenderer.Resleeve,
-      })}
-      ${this.renderActionIconButton({
-        icon: 'wifi',
-        tooltipText: `${localize('network')} ${localize('settings')}`,
-        renderer: CharacterDrawerRenderer.NetworkSettings,
-      })}
+      <div class="icon-buttons">
+        ${this.renderActionIconButton({
+          icon: 'search',
+          tooltipText: localize('search'),
+          renderer: CharacterDrawerRenderer.Search,
+        })}
+        ${this.renderActionIconButton({
+          icon: 'access_time',
+          tooltipText: localize('time'),
+          renderer: CharacterDrawerRenderer.Time,
+          content: this.character.activeDurations
+            ? html`
+                <notification-coin
+                  value=${this.character.activeDurations}
+                  ?actionRequired=${this.character.requiresAttention}
+                ></notification-coin>
+              `
+            : undefined,
+        })}
+        ${this.renderActionIconButton({
+          tooltipText: localize('substances'),
+          renderer: CharacterDrawerRenderer.Substances,
+          content: html`<img
+            src=${localImage('icons/actions/medicines.svg')}
+          />`,
+        })}
+        ${this.renderActionIconButton({
+          icon: 'groups',
+          tooltipText: localize('resleeve'),
+          renderer: CharacterDrawerRenderer.Resleeve,
+        })}
+        ${this.renderActionIconButton({
+          icon: 'wifi',
+          tooltipText: `${localize('network')} ${localize('settings')}`,
+          renderer: CharacterDrawerRenderer.NetworkSettings,
+        })}
+      </div>
       ${this.character.poolHolder === this.character
         ? this.renderRecharges()
         : ''}
@@ -575,7 +613,7 @@ export class CharacterViewAlt extends CharacterViewBase {
           ></character-view-attacks-section>
         `;
 
-      case 'inventory':
+      case 'gear':
         return html`
           ${repeat(
             difference(enumValues(ItemGroup), [
@@ -594,6 +632,13 @@ export class CharacterViewAlt extends CharacterViewBase {
 
       case 'details':
         return this.renderDetails();
+
+      case 'tests':
+        return html`<character-view-test-actions
+          class="actions"
+          .character=${this.character}
+          .ego=${this.character.ego}
+        ></character-view-test-actions>`;
     }
   }
 

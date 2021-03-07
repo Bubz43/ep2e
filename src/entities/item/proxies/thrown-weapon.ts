@@ -41,6 +41,10 @@ export class ThrownWeapon
     };
   }
 
+  get fullName() {
+    return `${this.name} (${this.quantity})`;
+  }
+
   setupAttack({
     damageFormula,
     ...data

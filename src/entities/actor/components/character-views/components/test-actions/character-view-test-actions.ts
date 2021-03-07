@@ -294,13 +294,18 @@ export class CharacterViewTestActions extends LitElement {
             </wl-list-item>
           `
         : ''}
-      <sl-details summary=${localize('aptitudes')} open class="aptitudes">
+      <sl-details
+        endArrow
+        summary=${localize('aptitudes')}
+        open
+        class="aptitudes"
+      >
         <ul class="aptitudes-list">
           ${enumValues(AptitudeType).map(this.renderAptitude)}
         </ul>
       </sl-details>
 
-      <sl-details summary=${localize('skills')} open class="skills">
+      <sl-details endArrow summary=${localize('skills')} open class="skills">
         <ul class="skills-list">
           <li class="filter">
             ${renderAutoForm({
@@ -335,6 +340,7 @@ export class CharacterViewTestActions extends LitElement {
       ${notEmpty(softwareSkills)
         ? html`
             <sl-details
+              endArrow
               class="software-skills"
               summary="${localize('software')} ${localize('skills')}"
             >
@@ -377,6 +383,7 @@ export class CharacterViewTestActions extends LitElement {
       ${notEmpty(sources)
         ? html`
             <sl-details
+              endArrow
               class="reputations"
               summary=${localize('reputations')}
               open

@@ -104,7 +104,11 @@ export class SlWindow extends LitElement {
         slot="header-button"
         @click=${onClick}
       >
-        <div>${content}</div>
+        <div
+          style="display: grid; grid-auto-flow: column; align-items: center; gap: 0.5ch; --mdc-icon-size: 1.25rem;"
+        >
+          ${content}
+        </div>
       </wl-list-item>
     `;
   }
