@@ -163,10 +163,6 @@ header {
 
   .values {
     grid-area: values;
-    // margin-left: -1.25rem;
-    // display: grid;
-    // grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-    column-gap: 0.5ch;
     display: flex;
     flex-flow: row wrap;
     flex: 1;
@@ -175,13 +171,9 @@ header {
       page-break-inside: avoid;
       flex: 1;
       margin: 0.25rem;
-      // width: 100%;
-      // display: inline-block;
-      // text-align: center;
       display: inline-flex;
       justify-content: space-between;
       white-space: nowrap;
-      // margin: 0.15rem 0 0;
       padding: 0 0.5rem 0 0.25rem;
       border-radius: 3px;
       background: alphav(var(--color-grey), 0.4);
