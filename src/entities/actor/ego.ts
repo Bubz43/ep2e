@@ -88,7 +88,7 @@ export class Ego {
     itemOperations: ItemOperations;
     allowSleights: boolean;
     psi?: Psi | null;
-    addPsi?: (psiData: ItemEntity<ItemType.Psi>) => void;
+    addPsi?: (psiData: ItemEntity<ItemType.Psi>) => Promise<unknown>;
     openForm?: () => void;
   }) {
     this.data = data;

@@ -9,13 +9,11 @@ import { Placement } from '@src/components/popover/popover-options';
 import { enumValues, RechargeType } from '@src/data-enums';
 import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisition';
 import { ActorType } from '@src/entities/entity-types';
-import type { ItemEP } from '@src/entities/item/item';
 import { ArmorType } from '@src/features/active-armor';
 import { conditionIcons, ConditionType } from '@src/features/conditions';
 import { idProp } from '@src/features/feature-helpers';
 import { MotivationStance } from '@src/features/motivations';
 import type { ReadonlyPool } from '@src/features/pool';
-import { DropType, handleDrop, isKnownDrop } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
 import { tooltip } from '@src/init';
@@ -178,21 +176,7 @@ export class CharacterViewAlt extends CharacterViewBase {
       sleeve && 'activeMeshHealth' in sleeve && sleeve.activeMeshHealth;
 
     return html`
-      <header
-        @drop=${(ev: DragEvent) => {
-          const things = handleDrop(({ drop }) => {
-            if (
-              isKnownDrop(drop) &&
-              drop.type === DropType.Folder &&
-              drop.entity === 'Item'
-            ) {
-              const folder = game.folders.get(drop.id);
-              const items = folder && (folder?.entities as ItemEP[]);
-            }
-          });
-          things(ev);
-        }}
-      >
+      <header>
         <div class="entities">
           <div class="avatar">
             <img src=${character.img} width="60px" />
