@@ -65,6 +65,13 @@
       "entity": "Item"
     },
     {
+      "name": "physical-services",
+      "system": "ep2e",
+      "label": "Physical Services",
+      "path": "./packs/physical-services.db",
+      "entity": "Item"
+    },
+    {
       "name": "substances",
       "system": "ep2e",
       "label": "Substances",

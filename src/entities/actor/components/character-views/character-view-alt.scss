@@ -3,6 +3,13 @@
 
 @include styled-scrollbars;
 @include resetUnorderedList;
+
+::-webkit-scrollbar-track {
+  box-shadow: 0 0 0;
+  border-left: 1px solid var(--color-border);
+  border-right: 1px solid var(--color-border);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -163,6 +170,7 @@ header {
 
   .values {
     grid-area: values;
+
     display: flex;
     flex-flow: row wrap;
     flex: 1;
@@ -171,9 +179,13 @@ header {
       page-break-inside: avoid;
       flex: 1;
       margin: 0.25rem;
+      // width: 100%;
+      // display: inline-block;
+      // text-align: center;
       display: inline-flex;
       justify-content: space-between;
       white-space: nowrap;
+      // margin: 0.15rem 0 0;
       padding: 0 0.5rem 0 0.25rem;
       border-radius: 3px;
       background: alphav(var(--color-grey), 0.4);
@@ -314,6 +326,7 @@ character-view-psi {
   .buttons {
     border-left: 1px solid var(--color-border);
     --mdc-shape-small: 0px;
+    height: 100%;
   }
 
   .initiative {
