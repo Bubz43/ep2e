@@ -11,29 +11,26 @@
 
 .physical-info {
   padding: 0.125rem 0.5rem 0.25rem;
-  border-bottom: 1px solid var(--color-border);
 }
 
 .attacks {
   display: grid;
   position: relative;
-  // padding: 0.125rem 0;
+  padding: 0.125rem 0;
   gap: 0.125rem;
   > * {
+    margin: 0.25rem;
+    box-shadow: -1px 0px 5px 1px black;
     &:not([expanded]) {
-      border-top: 2px groove var(--color-border);
+      background: alphav(var(--color-text), 0.03);
+      border-top: 2px solid var(--color-border);
       padding: 0.25rem 0;
-    }
-    &:first-child {
-      border-top: none;
     }
   }
 }
 
 .group-toggles {
   padding: 0.125rem 0.25rem;
-  border-bottom: 1px solid var(--color-border);
-  margin-bottom: 0.125rem;
   > * {
     margin-bottom: 0.25rem;
   }

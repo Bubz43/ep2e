@@ -20,7 +20,6 @@ import { customElement, html, LitElement, property } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { identity } from 'remeda';
 import type { FixedLengthArray } from 'type-fest';
-import { traverseActiveElements } from 'weightless';
 import { renderItemAttacks } from '../render-item-attacks';
 import styles from './character-view-attacks-section.scss';
 
@@ -138,10 +137,7 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
               dense
               ?outlined=${!active}
               ?unelevated=${active}
-              @click=${() => {
-                console.log(traverseActiveElements());
-                return this.toggleActive(key);
-              }}
+              @click=${() => this.toggleActive(key)}
               label=${localize(key)}
             ></mwc-button>
           `;
@@ -181,7 +177,7 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
           <span slot="after">${sleeve.unarmedDV}</span></colored-tag
         >
         <colored-tag
-          type="info"
+          type="attack"
           clickable
           ?disabled=${this.character.disabled}
           @click=${this.selectThrowingWeapon}

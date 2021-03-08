@@ -42,7 +42,9 @@ sl-details {
     padding: 0.125rem 0.5rem;
   }
   &[open]::part(toggle) {
-    background: transparent;
+    // background: transparent;
+    background: linear-gradient(45deg, var(--color-bg-alt), transparent);
+    box-shadow: 0 1px 2px black;
   }
 }
 
@@ -147,8 +149,9 @@ sl-details {
   }
 }
 
-.reputations {
-  border-top: 1px solid var(--color-border);
+.reputations,
+.software-skills {
+  border-top: 2px solid var(--color-border);
 }
 
 .rep-list {
@@ -197,10 +200,6 @@ sl-details {
     @include truncate(100px);
     min-width: 100%;
   }
-}
-
-.software-skills {
-  border-top: 1px solid var(--color-border);
 }
 
 .software-name {
