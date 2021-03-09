@@ -20,12 +20,15 @@ import {
 } from '@src/features/actions';
 import { matchesSkill, Source } from '@src/features/effects';
 import { getCurrentEnvironment } from '@src/features/environment';
+import { Size } from '@src/features/size';
 import type { Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
+import { capitalize } from '@src/foundry/misc-helpers';
+import type { LabeledFormula } from '@src/foundry/rolls';
 import { distanceBetweenTokens } from '@src/foundry/token-helpers';
 import { arrayOf } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
-import { compact, last, merge } from 'remeda';
+import { compact, concat, last, merge, pipe } from 'remeda';
 import type { SetRequired } from 'type-fest';
 import { getRangeModifier } from './range-modifiers';
 import { SkillTest, SkillTestInit } from './skill-test';
@@ -51,11 +54,19 @@ export class ThrownAttackTest extends SkillTest {
     range: number;
     calledShot?: CalledShot | null;
     explosiveSettings?: ExplosiveSettings | null;
+    oneHanded?: boolean;
   }>;
 
   readonly calledShotModifier = createSuccessTestModifier({
     name: localize('calledShot'),
     value: -10,
+  });
+
+  readonly twoHandedModifier = createSuccessTestModifier({
+    name: capitalize(
+      `${localize('wieldedWith')} ${localize('oneHand')}`.toLocaleLowerCase(),
+    ),
+    value: -20,
   });
 
   readonly rangeModifier = createSuccessTestModifier({
@@ -102,6 +113,7 @@ export class ThrownAttackTest extends SkillTest {
         if (changed.weapon) {
           draft.throwing.primaryAttack = true;
           draft.throwing.calledShot = null;
+          draft.throwing.oneHanded = false;
           draft.throwing.explosiveSettings =
             draft.throwing.weapon.type === ItemType.Explosive
               ? {
@@ -111,6 +123,7 @@ export class ThrownAttackTest extends SkillTest {
                 }
               : null;
         }
+
         if (changed.attackTarget) {
           draft.modifiers.effects = this.getModifierEffects(
             draft.skillState.skill,
@@ -140,6 +153,15 @@ export class ThrownAttackTest extends SkillTest {
         }
 
         const { simple } = draft.modifiers;
+
+        if (
+          draft.throwing.weapon.type === ItemType.ThrownWeapon &&
+          draft.throwing.weapon?.isTwoHanded &&
+          draft.throwing.oneHanded &&
+          !this.largeMorph
+        ) {
+          simple.set(this.twoHandedModifier.id, this.twoHandedModifier);
+        } else simple.delete(this.twoHandedModifier.id);
 
         if (draft.throwing.calledShot) {
           simple.set(this.calledShotModifier.id, this.calledShotModifier);
@@ -174,11 +196,35 @@ export class ThrownAttackTest extends SkillTest {
     this.modifiers.simple.set(this.rangeModifier.id, this.rangeModifier);
   }
 
+  get largeMorph() {
+    const { morphSize } = this.character;
+    return morphSize === Size.Large || morphSize === Size.VeryLarge;
+  }
+
   get attack() {
     const { weapon, primaryAttack } = this.throwing;
     return primaryAttack
       ? weapon.attacks.primary
       : weapon.attacks.secondary || weapon.attacks.primary;
+  }
+
+  get rangeDamageModifier(): LabeledFormula | null {
+    return this.throwing.weapon.type === ItemType.ThrownWeapon &&
+      this.rangeModifier.value < -10 &&
+      !getCurrentEnvironment().vacuum
+      ? {
+          label: localize('beyondRange'),
+          formula: '-1d10',
+        }
+      : null;
+  }
+
+  get damageFormulas() {
+    return pipe(
+      [this.rangeDamageModifier],
+      compact,
+      concat(this.attack.rollFormulas || []),
+    );
   }
 
   get canCallShot() {
@@ -203,7 +249,14 @@ export class ThrownAttackTest extends SkillTest {
   }
 
   protected async createMessage() {
-    const { settings, pools, action, throwing, testMessageData } = this;
+    const {
+      settings,
+      pools,
+      action,
+      throwing,
+      testMessageData,
+      rangeDamageModifier,
+    } = this;
 
     const {
       weapon,
@@ -247,6 +300,9 @@ export class ThrownAttackTest extends SkillTest {
             ? {
                 weapon: weapon.getDataCopy(),
                 calledShot,
+                damageModifiers: rangeDamageModifier
+                  ? [rangeDamageModifier]
+                  : undefined,
               }
             : undefined,
         targets: compact([

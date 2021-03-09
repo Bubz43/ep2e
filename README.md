@@ -5,3 +5,4 @@
 - Gear Pack actor type
 - Trap actor type
 - Hive actor/item type
+- Fragile gear trait

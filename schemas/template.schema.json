@@ -514,6 +514,9 @@
             }
           ]
         },
+        "fallDown": {
+          "type": "boolean"
+        },
         "impairment": {
           "type": "number"
         },
@@ -744,6 +747,33 @@
                 },
                 "aptitudes": {
                   "$ref": "#/definitions/Aptitudes"
+                },
+                "assets": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "img": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "uuid": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "img",
+                      "name",
+                      "uuid"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
                 },
                 "characterDetails": {
                   "additionalProperties": false,
@@ -1248,6 +1278,9 @@
                     "characterDetails": {
                       "type": "boolean"
                     },
+                    "ignoreOverburdened": {
+                      "type": "boolean"
+                    },
                     "threatDetails": {
                       "type": "boolean"
                     },
@@ -1271,7 +1304,8 @@
                     "trackReputations",
                     "characterDetails",
                     "threatDetails",
-                    "useThreat"
+                    "useThreat",
+                    "ignoreOverburdened"
                   ],
                   "type": "object"
                 },
@@ -1445,12 +1479,10 @@
                   "type": "array"
                 },
                 "templates": {
-                  "items": [
-                    {
-                      "const": "Common",
-                      "type": "string"
-                    }
-                  ],
+                  "items": {
+                    "const": "Common",
+                    "type": "string"
+                  },
                   "maxItems": 1,
                   "minItems": 1,
                   "type": "array"
@@ -1649,6 +1681,7 @@
               "required": [
                 "accumulatedTimeStart",
                 "aptitudes",
+                "assets",
                 "characterDetails",
                 "combatState",
                 "egoType",
@@ -4258,12 +4291,10 @@
                   "type": "string"
                 },
                 "templates": {
-                  "items": [
-                    {
-                      "const": "Common",
-                      "type": "string"
-                    }
-                  ],
+                  "items": {
+                    "const": "Common",
+                    "type": "string"
+                  },
                   "maxItems": 1,
                   "minItems": 1,
                   "type": "array"
@@ -5963,12 +5994,10 @@
                   "type": "object"
                 },
                 "templates": {
-                  "items": [
-                    {
-                      "const": "Common",
-                      "type": "string"
-                    }
-                  ],
+                  "items": {
+                    "const": "Common",
+                    "type": "string"
+                  },
                   "maxItems": 1,
                   "minItems": 1,
                   "type": "array"
@@ -8815,12 +8844,10 @@
                   "type": "string"
                 },
                 "templates": {
-                  "items": [
-                    {
-                      "const": "Common",
-                      "type": "string"
-                    }
-                  ],
+                  "items": {
+                    "const": "Common",
+                    "type": "string"
+                  },
                   "maxItems": 1,
                   "minItems": 1,
                   "type": "array"

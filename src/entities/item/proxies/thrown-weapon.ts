@@ -34,6 +34,10 @@ export class ThrownWeapon
     return this.epData.exoticSkill;
   }
 
+  get isTwoHanded() {
+    return this.epData.twoHanded;
+  }
+
   get attacks() {
     return {
       primary: this.setupAttack(this.epData.primaryAttack),

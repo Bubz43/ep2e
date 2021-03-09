@@ -1,11 +1,6 @@
 {
   "Actor": {
-    "types": [
-      "biological",
-      "character",
-      "synthetic",
-      "infomorph"
-    ],
+    "types": ["biological", "character", "synthetic", "infomorph"],
     "templates": {
       "Acquisition": {
         "acquisition": {
@@ -173,9 +168,7 @@
       }
     },
     "character": {
-      "templates": [
-        "Common"
-      ],
+      "templates": ["Common"],
       "fakeId": "",
       "aptitudes": {
         "cog": 10,
@@ -204,6 +197,7 @@
         "systemDefenders": [],
         "unslavedDevices": []
       },
+      "assets": [],
       "settings": {
         "canDefault": true,
         "trackMentalHealth": true,
@@ -211,7 +205,8 @@
         "characterDetails": true,
         "threatDetails": false,
         "trackPoints": true,
-        "trackReputations": true
+        "trackReputations": true,
+        "ignoreOverburdened": false
       },
       "shortRecharge": {
         "refreshStartTime": 0,
@@ -465,9 +460,7 @@
       }
     },
     "psi": {
-      "templates": [
-        "Common"
-      ],
+      "templates": ["Common"],
       "level": 1,
       "requireBioSubstrate": false,
       "strain": "Watts-MacLeod",
@@ -480,9 +473,7 @@
       }
     },
     "trait": {
-      "templates": [
-        "Common"
-      ],
+      "templates": ["Common"],
       "restrictions": "",
       "triggers": "",
       "source": "ego",
@@ -501,9 +492,7 @@
       "traitType": "positive"
     },
     "sleight": {
-      "templates": [
-        "Common"
-      ],
+      "templates": ["Common"],
       "duration": "actionTurns",
       "infectionMod": 1,
       "sleightType": "gamma",
@@ -542,21 +531,11 @@
       }
     },
     "substance": {
-      "templates": [
-        "Common",
-        "Cost",
-        "Copyable",
-        "Stackable"
-      ],
+      "templates": ["Common", "Cost", "Copyable", "Stackable"],
       "addiction": "",
       "addictionMod": 0,
       "hasSeverity": false,
-      "application": [
-        "dermal",
-        "inhalation",
-        "injection",
-        "oral"
-      ],
+      "application": ["dermal", "inhalation", "injection", "oral"],
       "base": {
         "damage": {
           "damageFormula": "",
@@ -597,15 +576,10 @@
       }
     },
     "explosive": {
-      "templates": [
-        "Common",
-        "Cost",
-        "Copyable",
-        "Stackable"
-      ],
+      "templates": ["Common", "Cost", "Copyable", "Stackable"],
       "areaEffect": "",
       "explosiveType": "grenade",
-      "useSubstance":"",
+      "useSubstance": "",
       "areaEffectRadius": 10,
       "size": "micro",
       "sticky": true,
@@ -634,12 +608,7 @@
       }
     },
     "armor": {
-      "templates": [
-        "Common",
-        "Cost",
-        "Copyable",
-        "GearState"
-      ],
+      "templates": ["Common", "Cost", "Copyable", "GearState"],
       "activeArmor": {
         "energy": 0,
         "kinetic": 0,
@@ -666,10 +635,7 @@
     },
     "software": {
       "softwareType": "app",
-      "templates": [
-        "Common",
-        "Cost"
-      ],
+      "templates": ["Common", "Cost"],
       "activatedEffects": [],
       "effects": [],
       "category": "",
@@ -736,19 +702,10 @@
         "serviceStartTime": 0,
         "equipped": false
       },
-      "templates": [
-        "Common",
-        "Cost"
-      ]
+      "templates": ["Common", "Cost"]
     },
     "physicalTech": {
-      "templates": [
-        "Common",
-        "Cost",
-        "GearTraits",
-        "Copyable",
-        "GearState"
-      ],
+      "templates": ["Common", "Cost", "GearTraits", "Copyable", "GearState"],
       "activatedEffects": [],
       "deviceType": "",
       "category": "",
@@ -796,13 +753,7 @@
       "wareType": ""
     },
     "meleeWeapon": {
-      "templates": [
-        "Common",
-        "Cost",
-        "GearTraits",
-        "Copyable",
-        "GearState"
-      ],
+      "templates": ["Common", "Cost", "GearTraits", "Copyable", "GearState"],
       "primaryAttack": {
         "armorPiercing": false,
         "attackTraits": [],
@@ -827,10 +778,7 @@
       "exoticSkill": ""
     },
     "sprayWeapon": {
-      "accessories": [
-        "safetySystem",
-        "smartlink"
-      ],
+      "accessories": ["safetySystem", "smartlink"],
       "ammo": {
         "max": 15,
         "value": 15
@@ -845,9 +793,7 @@
         "armorUsed": "",
         "attackTraits": [],
         "damageFormula": "",
-        "firingModes": [
-          "semiAuto"
-        ],
+        "firingModes": ["semiAuto"],
         "superiorSuccessDot": "",
         "notes": ""
       },
@@ -855,20 +801,11 @@
         "braced": false,
         "interface": false
       },
-      "templates": [
-        "Common",
-        "Cost",
-        "GearTraits",
-        "Copyable",
-        "GearState"
-      ],
+      "templates": ["Common", "Cost", "GearTraits", "Copyable", "GearState"],
       "wareType": ""
     },
     "beamWeapon": {
-      "accessories": [
-        "smartlink",
-        "safetySystem"
-      ],
+      "accessories": ["smartlink", "safetySystem"],
       "battery": {
         "charge": 10,
         "max": 10,
@@ -878,9 +815,7 @@
         "armorPiercing": false,
         "attackTraits": [],
         "damageFormula": "",
-        "firingModes": [
-          "semiAuto"
-        ],
+        "firingModes": ["semiAuto"],
         "label": "",
         "notes": "",
         "areaEffect": "",
@@ -892,9 +827,7 @@
         "armorPiercing": false,
         "attackTraits": [],
         "damageFormula": "",
-        "firingModes": [
-          "semiAuto"
-        ],
+        "firingModes": ["semiAuto"],
         "label": "",
         "notes": "",
         "areaEffect": "",
@@ -908,13 +841,7 @@
       "long": false,
       "noClose": false,
       "noPointBlank": false,
-      "templates": [
-        "Common",
-        "Cost",
-        "GearTraits",
-        "Copyable",
-        "GearState"
-      ],
+      "templates": ["Common", "Cost", "GearTraits", "Copyable", "GearState"],
       "wareType": ""
     },
     "firearm": {
@@ -922,10 +849,7 @@
       "long": false,
       "shapeChanging": false,
       "shapeName": "",
-      "accessories": [
-        "smartlink",
-        "safetySystem"
-      ],
+      "accessories": ["smartlink", "safetySystem"],
       "ammo": {
         "ammoClass": "heavyPistol",
         "max": 9,
@@ -935,10 +859,7 @@
       },
       "primaryAttack": {
         "damageFormula": "1d10",
-        "firingModes": [
-          "semiAuto",
-          "burstFire"
-        ],
+        "firingModes": ["semiAuto", "burstFire"],
         "notes": ""
       },
       "range": 25,
@@ -946,22 +867,11 @@
         "braced": false,
         "interface": false
       },
-      "templates": [
-        "Common",
-        "Cost",
-        "GearTraits",
-        "Copyable",
-        "GearState"
-      ],
+      "templates": ["Common", "Cost", "GearTraits", "Copyable", "GearState"],
       "wareType": ""
     },
     "firearmAmmo": {
-      "templates": [
-        "Common",
-        "Cost",
-        "Copyable",
-        "Stackable"
-      ],
+      "templates": ["Common", "Cost", "Copyable", "Stackable"],
       "ammoClass": "heavyPistol",
       "quantity": 100,
       "carryPayload": false,
@@ -984,10 +894,7 @@
       "long": false,
       "shapeChanging": false,
       "shapeName": "",
-      "accessories": [
-        "safetySystem",
-        "smartlink"
-      ],
+      "accessories": ["safetySystem", "smartlink"],
       "ammo": {
         "ammoClass": "holdoutPistol",
         "max": 9,
@@ -1000,9 +907,7 @@
       },
       "primaryAttack": {
         "damageFormula": "1d10",
-        "firingModes": [
-          "semiAuto"
-        ],
+        "firingModes": ["semiAuto"],
         "notes": ""
       },
       "range": 37,
@@ -1010,20 +915,11 @@
         "braced": false,
         "interface": false
       },
-      "templates": [
-        "Common",
-        "Cost",
-        "GearTraits",
-        "Copyable",
-        "GearState"
-      ],
+      "templates": ["Common", "Cost", "GearTraits", "Copyable", "GearState"],
       "wareType": ""
     },
     "seekerWeapon": {
-      "accessories": [
-        "smartlink",
-        "safetySystem"
-      ],
+      "accessories": ["smartlink", "safetySystem"],
       "fixed": false,
       "hasAlternativeAmmo": false,
       "long": false,
@@ -1034,13 +930,7 @@
         "interface": false,
         "homing": false
       },
-      "templates": [
-        "Common",
-        "Cost",
-        "GearTraits",
-        "Copyable",
-        "GearState"
-      ],
+      "templates": ["Common", "Cost", "GearTraits", "Copyable", "GearState"],
       "wareType": "",
       "firingMode": "semiAuto",
       "primaryAmmo": {
@@ -1055,13 +945,7 @@
       }
     },
     "thrownWeapon": {
-      "templates": [
-        "Common",
-        "Cost",
-        "GearTraits",
-        "Copyable",
-        "Stackable"
-      ],
+      "templates": ["Common", "Cost", "GearTraits", "Copyable", "Stackable"],
       "exoticSkill": "",
       "quantityPerCost": 5,
       "primaryAttack": {

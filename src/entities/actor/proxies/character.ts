@@ -95,7 +95,6 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   readonly sleights: Sleight[] = [];
   readonly egoTraits: Trait[] = [];
   readonly morphTraits: Trait[] = [];
-  // readonly traits: Trait[] = [];
   readonly equipped: EquippableItem[] = [];
   readonly consumables: ConsumableItem[] = [];
   readonly awaitingOnsetSubstances: Substance[] = [];
@@ -145,6 +144,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       this._appliedEffects.getGroup(EffectType.Armor),
       this.ego.aptitudes.som,
       this.sleeve?.epData.damagedArmor,
+      this.ego.settings.ignoreOverburdened,
     );
     this._appliedEffects.add(this.armor.currentEffects);
 

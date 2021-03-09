@@ -8,6 +8,7 @@ import { ItemType } from '@src/entities/entity-types';
 import type { ExplosiveSettings } from '@src/entities/weapon-settings';
 import { readyCanvas } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
+import { joinLabeledFormulas } from '@src/foundry/rolls';
 import { overlay } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import {
@@ -203,7 +204,7 @@ export class ThrownAttackControls extends LitElement {
       target,
       throwing,
       skillState,
-      //  damageFormulas,
+      damageFormulas,
       attack,
       canCallShot,
     } = test;
@@ -216,11 +217,12 @@ export class ThrownAttackControls extends LitElement {
       range,
       calledShot,
       explosiveSettings,
+      oneHanded,
     } = throwing;
     const { morphSize } = character;
     const { attacks } = weapon ?? {};
 
-    // const joinedFormula = joinLabeledFormulas(damageFormulas);
+    const joinedFormula = joinLabeledFormulas(damageFormulas);
 
     return html`
       ${character
@@ -330,6 +332,16 @@ export class ThrownAttackControls extends LitElement {
               </wl-list-item>
             `
           : ''}
+        ${weapon.type === ItemType.ThrownWeapon && weapon.isTwoHanded
+          ? html`
+              <mwc-check-list-item
+                ?selected=${!oneHanded}
+                @click=${() => throwing.update({ oneHanded: !oneHanded })}
+              >
+                <span>${localize('twoHanded')}</span>
+              </mwc-check-list-item>
+            `
+          : ''}
 
         <li divider></li>
         <li>
@@ -350,6 +362,15 @@ export class ThrownAttackControls extends LitElement {
                   ? html`<span slot="after">${localize(calledShot)}</span>`
                   : ''}
               </wl-list-item>
+            `
+          : ''}
+        ${weapon.type === ItemType.ThrownWeapon
+          ? html`
+              <li>
+                <span class="damage-value"
+                  >${localize('SHORT', 'damageValue')}: ${joinedFormula}</span
+                >
+              </li>
             `
           : ''}
       </ul>

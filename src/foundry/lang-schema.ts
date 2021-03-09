@@ -1447,7 +1447,8 @@ type LangEntries =
   | 'explosives'
   | 'thrown'
   | 'payloads'
-  | 'compact';
+  | 'compact'
+  | 'ignoreOverburdened';
 type FullNames =
   | 'cog'
   | 'int'
