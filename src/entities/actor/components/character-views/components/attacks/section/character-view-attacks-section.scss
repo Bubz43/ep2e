@@ -10,19 +10,25 @@
 }
 
 .physical-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.25rem;
   padding: 0.125rem 0.5rem 0.25rem;
 }
 
 .attacks {
-  display: grid;
+  column-width: 350px;
   position: relative;
-  padding: 0.125rem 0;
-  gap: 0.125rem;
+  gap: 0;
   > * {
-    margin: 0.25rem;
-    box-shadow: -1px 0px 5px 1px black;
+    align-self: start;
+    margin: 0 0.25rem 0.25rem;
+    box-shadow: -1px 0px 6px 1px black;
+    break-inside: avoid;
+    page-break-inside: avoid;
+
     &:not([expanded]) {
-      background: alphav(var(--color-text), 0.03);
+      background: alphav(var(--color-text), 0.04);
       border-top: 2px solid var(--color-border);
       padding: 0.25rem 0;
     }
@@ -30,8 +36,17 @@
 }
 
 .group-toggles {
-  padding: 0.125rem 0.25rem;
+  display: flex;
+  flex-flow: row wrap;
+  --mdc-shape-small: 0px;
+  --mdc-theme-primary: #{alphav(var(--color-primary), 0.75)};
+  padding: 0.125rem 0.5rem;
+
   > * {
     margin-bottom: 0.25rem;
+    flex-grow: 1;
+    &[unelevated] + [unelevated] {
+      border-left: 1px solid transparent;
+    }
   }
 }

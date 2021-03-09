@@ -1416,6 +1416,12 @@
     "preperation": "Preperation",
     "fallDown": "Fall down",
     "uncoated": "Uncoated",
+    "compact": "Compact",
+    "discard": "Discard",
+    "explosives": "Explosives",
+    "ignoreOverburdened": "Ignore Overburdened",
+    "payloads": "Payloads",
+    "thrown": "Thrown",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

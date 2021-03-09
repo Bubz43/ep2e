@@ -1448,7 +1448,8 @@ type LangEntries =
   | 'thrown'
   | 'payloads'
   | 'compact'
-  | 'ignoreOverburdened';
+  | 'ignoreOverburdened'
+  | 'grenades';
 type FullNames =
   | 'cog'
   | 'int'

@@ -18,6 +18,7 @@ import type {
 } from '@src/entities/item/item';
 import { openPsiFormWindow } from '@src/entities/item/item-views';
 import type { Explosive } from '@src/entities/item/proxies/explosive';
+import type { FirearmAmmo } from '@src/entities/item/proxies/firearm-ammo';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import type { PhysicalService } from '@src/entities/item/proxies/physical-service';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
@@ -185,20 +186,29 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   get weapons() {
     const melee: MeleeWeapon[] = [];
     const software: Software[] = [];
-    const thrown: ThrownWeapon[] = [];
+    const thrown: (ThrownWeapon | Explosive)[] = [];
     const explosives: Explosive[] = [];
     const ranged: RangedWeapon[] = [];
+    const ammo: (Explosive | FirearmAmmo | Substance)[] = [];
 
     for (const consumable of this.consumables) {
       switch (consumable.type) {
         case ItemType.Explosive:
           explosives.push(consumable);
+          if (consumable.isGrenade) thrown.push(consumable);
+          else if (consumable.isMissile) ammo.push(consumable);
+          break;
+
+        case ItemType.FirearmAmmo:
+          ammo.push(consumable);
+          break;
+
+        case ItemType.Substance:
+          if (!consumable.isElectronic) ammo.push(consumable);
           break;
 
         case ItemType.ThrownWeapon:
           thrown.push(consumable);
-
-        default:
           break;
       }
     }
@@ -230,6 +240,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       melee,
       software,
       ranged,
+      ammo,
     };
   }
 

@@ -19,19 +19,12 @@ import { MeleeAttackControls } from '@src/success-test/components/melee-attack-c
 import { customElement, html, LitElement, property } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { identity } from 'remeda';
-import type { FixedLengthArray } from 'type-fest';
 import { renderItemAttacks } from '../render-item-attacks';
 import styles from './character-view-attacks-section.scss';
 
-type WeaponGroup = keyof Character['weapons'];
+const groups = ['melee', 'software', 'thrown', 'ranged'] as const;
 
-const groups: FixedLengthArray<WeaponGroup, 5> = [
-  'explosives',
-  'melee',
-  'software',
-  'thrown',
-  'ranged',
-];
+type WeaponGroup = typeof groups[number];
 
 /**
  * @csspart header
@@ -51,10 +44,9 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
   @property({ attribute: false }) token?: MaybeToken;
 
   private activeGroups: Record<WeaponGroup, boolean> = {
-    explosives: true,
     melee: true,
-    software: true,
     thrown: true,
+    software: true,
     ranged: true,
   };
 
@@ -103,13 +95,11 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
   }
 
   private selectThrowingWeapon(ev: MouseEvent) {
-    const { explosives, thrown } = this.character.weapons;
-    const throwable = [...thrown, ...explosives.filter((e) => e.isGrenade)];
     const adjacentElement = ev.currentTarget as HTMLElement;
     openMenu({
       header: { heading: localize('throw') },
       position: ev,
-      content: throwable.map((weapon) => ({
+      content: this.character.weapons.thrown.map((weapon) => ({
         label: weapon.fullName,
         sublabel: weapon.fullType,
         disabled: !weapon.quantity,

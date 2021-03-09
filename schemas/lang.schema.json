@@ -1236,6 +1236,9 @@
             "common": {
               "type": "string"
             },
+            "compact": {
+              "type": "string"
+            },
             "complementary": {
               "type": "string"
             },
@@ -1557,6 +1560,9 @@
             "disarmDifficulty": {
               "type": "string"
             },
+            "discard": {
+              "type": "string"
+            },
             "disguise": {
               "type": "string"
             },
@@ -1780,6 +1786,9 @@
               "type": "string"
             },
             "explosiveType": {
+              "type": "string"
+            },
+            "explosives": {
               "type": "string"
             },
             "exsurgent": {
@@ -2203,6 +2212,9 @@
               "type": "string"
             },
             "ignoreMods": {
+              "type": "string"
+            },
+            "ignoreOverburdened": {
               "type": "string"
             },
             "ignoreTrauma": {
@@ -3136,6 +3148,9 @@
               "type": "string"
             },
             "payloadUse": {
+              "type": "string"
+            },
+            "payloads": {
               "type": "string"
             },
             "pc": {
@@ -4263,6 +4278,9 @@
             "throwingRange": {
               "type": "string"
             },
+            "thrown": {
+              "type": "string"
+            },
             "thrownAttack": {
               "type": "string"
             },
@@ -4438,6 +4456,9 @@
               "type": "string"
             },
             "unarmedMelee": {
+              "type": "string"
+            },
+            "uncoated": {
               "type": "string"
             },
             "unconscious": {
@@ -4972,6 +4993,7 @@
             "commander",
             "commit",
             "common",
+            "compact",
             "complementary",
             "complete",
             "completed",
@@ -5079,6 +5101,7 @@
             "disable",
             "disarm",
             "disarmDifficulty",
+            "discard",
             "disguise",
             "disorder",
             "disorientation",
@@ -5154,6 +5177,7 @@
             "explorer",
             "explosive",
             "explosiveType",
+            "explosives",
             "exsurgent",
             "extendedMagazine",
             "extra",
@@ -5295,6 +5319,7 @@
             "id",
             "idealUserSize",
             "ignoreMods",
+            "ignoreOverburdened",
             "ignoreTrauma",
             "ignoreWound",
             "ignored",
@@ -5606,6 +5631,7 @@
             "paused",
             "payload",
             "payloadUse",
+            "payloads",
             "pc",
             "per",
             "perTurn",
@@ -5981,6 +6007,7 @@
             "throw",
             "throwingKnives",
             "throwingRange",
+            "thrown",
             "thrownAttack",
             "thrownWeapon",
             "thrustVector",
@@ -6040,6 +6067,7 @@
             "unarmed",
             "unarmedDV",
             "unarmedMelee",
+            "uncoated",
             "unconscious",
             "unconsciousness",
             "undamaged",

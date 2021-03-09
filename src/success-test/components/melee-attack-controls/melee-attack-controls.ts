@@ -336,9 +336,7 @@ export class MeleeAttackControls extends LitElement {
         <li divider></li>
         <wl-list-item clickable @click=${this.selectCalledShot}>
           <span>${localize('calledShot')}</span>
-          ${calledShot
-            ? html`<span slot="after">${localize(calledShot)}</span>`
-            : ''}
+          <span slot="after">${calledShot ? localize(calledShot) : '-'}</span>
         </wl-list-item>
         <wl-list-item class="aggressive">
           <span>${localize('aggressive')} </span>

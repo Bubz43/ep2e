@@ -183,7 +183,7 @@ export class ThrownAttackControls extends LitElement {
   render() {
     return html`
       <sl-window
-        name="${localize('meleeAttack')} ${localize('test')}"
+        name="${localize('thrownAttack')} ${localize('test')}"
         @sl-window-closed=${this.remove}
         noremove
       >
@@ -254,29 +254,6 @@ export class ThrownAttackControls extends LitElement {
           ></success-test-skill-section>
         </section>
 
-        <section class="targetting">
-          <success-test-section-label @click=${this.startTargetting}
-            ><mwc-icon>filter_tilt_shift</mwc-icon></success-test-section-label
-          >
-
-          <wl-list-item>
-            <span>${localize('target')}: ${attackTarget?.name ?? ' - '}</span>
-            <sl-animated-list class="targets">
-              ${repeat(
-                game.user.targets,
-                identity,
-                (token) => html`
-                  <mwc-icon-button
-                    class=${token === attackTarget ? 'active' : ''}
-                    @click=${() => throwing.update({ attackTarget: token })}
-                    ><img src=${token.data.img}
-                  /></mwc-icon-button>
-                `,
-              )}
-            </sl-animated-list>
-          </wl-list-item>
-        </section>
-
         <section class="actions">
           <success-test-section-label
             >${localize('action')}</success-test-section-label
@@ -299,6 +276,29 @@ export class ThrownAttackControls extends LitElement {
               </section>
             `
           : ''}
+
+        <section class="targetting">
+          <success-test-section-label @click=${this.startTargetting}
+            ><mwc-icon>filter_tilt_shift</mwc-icon></success-test-section-label
+          >
+
+          <wl-list-item>
+            <span>${localize('target')}: ${attackTarget?.name ?? ' - '}</span>
+            <sl-animated-list class="targets">
+              ${repeat(
+                game.user.targets,
+                identity,
+                (token) => html`
+                  <mwc-icon-button
+                    class=${token === attackTarget ? 'active' : ''}
+                    @click=${() => throwing.update({ attackTarget: token })}
+                    ><img src=${token.data.img}
+                  /></mwc-icon-button>
+                `,
+              )}
+            </sl-animated-list>
+          </wl-list-item>
+        </section>
       </div>
       <success-test-modifiers-section
         class="modifiers"
@@ -358,19 +358,19 @@ export class ThrownAttackControls extends LitElement {
           ? html`
               <wl-list-item clickable @click=${this.selectCalledShot}>
                 <span>${localize('calledShot')}</span>
-                ${calledShot
-                  ? html`<span slot="after">${localize(calledShot)}</span>`
-                  : ''}
+                <span slot="after"
+                  >${calledShot ? localize(calledShot) : '-'}</span
+                >
               </wl-list-item>
             `
           : ''}
         ${weapon.type === ItemType.ThrownWeapon
           ? html`
-              <li>
+              <wl-list-item>
                 <span class="damage-value"
                   >${localize('SHORT', 'damageValue')}: ${joinedFormula}</span
                 >
-              </li>
+              </wl-list-item>
             `
           : ''}
       </ul>
