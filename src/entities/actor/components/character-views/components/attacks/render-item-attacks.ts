@@ -9,6 +9,11 @@ export const renderItemAttacks = (weapon: ItemProxy) => {
         .weapon=${weapon}
       ></character-view-melee-weapon-attacks>`;
 
+    case ItemType.ThrownWeapon:
+      return html`<character-view-thrown-weapon-attacks
+        .weapon=${weapon}
+      ></character-view-thrown-weapon-attacks>`;
+
     case ItemType.Explosive:
       return html` <character-view-explosive-attacks
         .explosive=${weapon}

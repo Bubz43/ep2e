@@ -3,6 +3,7 @@ import type { BasicAreaEffectData } from '@src/combat/attack-formatting';
 import type { AttackType } from '@src/combat/attacks';
 import type {
   AttackTrait,
+  CalledShot,
   PoolType,
   SuperiorResultEffect,
 } from '@src/data-enums';
@@ -90,7 +91,13 @@ export type MeleeWeaponMessageData = MeleeWeaponSettings & {
   appliedPayload?: boolean;
   morphSize?: Size | null;
   damageModifiers?: LabeledFormula[];
-  // TODO maybe additional info for tracking coating state etc
+};
+
+export type ThrownWeaponMessageData = {
+  weapon: ItemEntity<ItemType.ThrownWeapon>;
+  appliedCoating?: boolean;
+  damageModifiers?: LabeledFormula[];
+  calledShot?: CalledShot | null;
 };
 
 export type HackMessageData = {
@@ -177,6 +184,7 @@ export type MessageData = Partial<{
   healthChange: HealthChangeMessageData;
   explosiveUse: ExplosiveMessageData;
   meleeAttack: MeleeWeaponMessageData;
+  thrownAttack: ThrownWeaponMessageData;
   heal: MessageHealData;
   substanceUse: SubstanceUseData;
   fromMessageId: string;

@@ -47,6 +47,7 @@ export class MessageContent extends LitElement {
       favor,
       targets,
       specialTest,
+      thrownAttack,
       hack,
     } = this.data;
     if (!this.message.isContentVisible) return '';
@@ -113,6 +114,12 @@ export class MessageContent extends LitElement {
               .successTest=${successTest}
             ></message-melee-attack>
           `
+        : ''}
+      ${thrownAttack
+        ? html`<message-thrown-attack
+            .thrownAttack=${thrownAttack}
+            .successTest=${successTest}
+          ></message-thrown-attack>`
         : ''}
       ${stress
         ? html` <message-stress-test .stress=${stress}></message-stress-test> `

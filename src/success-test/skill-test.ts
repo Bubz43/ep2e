@@ -33,6 +33,7 @@ export type SkillTestInit = {
   token?: MaybeToken;
   action?: Action;
   opposing?: { testName: string; messageId?: string };
+  halve?: boolean;
 };
 
 export type SkillState = {
@@ -82,6 +83,7 @@ export class SkillTest extends SuccessTestBase {
     action,
     opposing,
     techSource,
+    halve,
   }: SkillTestInit) {
     super({
       action:
@@ -100,7 +102,7 @@ export class SkillTest extends SuccessTestBase {
     this.skillState = {
       skill,
       applySpecialization: false,
-      halveBase: false,
+      halveBase: !!halve,
       aptitudeMultiplier: skill.aptMultiplier,
       setComplementarySkill: (skill) => {
         this.update(
