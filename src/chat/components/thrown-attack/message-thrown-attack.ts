@@ -6,7 +6,7 @@ import {
   SubstanceApplicationMethod,
   SuperiorResultEffect,
 } from '@src/data-enums';
-import { ActorType, ItemType } from '@src/entities/entity-types';
+import { ActorType } from '@src/entities/entity-types';
 import { pickOrDefaultCharacter } from '@src/entities/find-entities';
 import { ThrownWeapon } from '@src/entities/item/proxies/thrown-weapon';
 import { ArmorType } from '@src/features/active-armor';
@@ -93,11 +93,8 @@ export class MessageThrownAttack extends MessageElement {
           : SubstanceApplicationMethod.Dermal,
       }, // TODO injected
     });
-    const item = message.actor?.items?.get(weapon.id);
-    if (item?.proxy.type === ItemType.ThrownWeapon) {
-      await item.proxy.removeCoating();
-    }
-    this.getUpdater('meleeAttack').commit({ appliedCoating: true });
+
+    this.getUpdater('thrownAttack').commit({ appliedCoating: true });
   }
 
   private createDamageMessage() {
@@ -137,8 +134,8 @@ export class MessageThrownAttack extends MessageElement {
     );
     message.createSimilar({
       header: {
-        heading: name ?? localize('unarmed'),
-        subheadings: [localize('meleeAttack')],
+        heading: name,
+        subheadings: [localize('thrownWeapon')],
       },
       damage: {
         ...pick(

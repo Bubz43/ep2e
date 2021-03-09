@@ -242,6 +242,13 @@ export class ThrownAttackTest extends SkillTest {
           }),
           defaultSuperiorEffect: SuperiorResultEffect.Damage,
         },
+        thrownAttack:
+          weapon.type === ItemType.ThrownWeapon
+            ? {
+                weapon: weapon.getDataCopy(),
+                calledShot,
+              }
+            : undefined,
         targets: compact([
           attackTarget?.scene && {
             tokenId: attackTarget.id,

@@ -12,7 +12,7 @@ import { customElement, html, LitElement, property } from 'lit-element';
 import { compact, map, pick, pipe } from 'remeda';
 import { stopEvent } from 'weightless';
 import { requestCharacter } from '../../character-request-event';
-import styles from './character-view-thrown-weapon-attacks.scss';
+import styles from './attack-info-styles.scss';
 import { openCoatingMenu } from './melee-weapon-menus';
 
 @customElement('character-view-thrown-weapon-attacks')
