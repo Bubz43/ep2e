@@ -293,8 +293,18 @@ export class ThrownAttackTest extends SkillTest {
               last(testMessageData.states)?.result,
             ),
           }),
-          defaultSuperiorEffect: SuperiorResultEffect.Damage,
+          defaultSuperiorEffect:
+            weapon.type === ItemType.ThrownWeapon
+              ? SuperiorResultEffect.Damage
+              : undefined,
         },
+        explosiveUse:
+          weapon.type === ItemType.Explosive && explosiveSettings
+            ? {
+                ...explosiveSettings,
+                explosive: weapon.getDataCopy(),
+              }
+            : undefined,
         thrownAttack:
           weapon.type === ItemType.ThrownWeapon
             ? {

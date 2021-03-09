@@ -20,6 +20,10 @@
         "url": "/schemas/lang.schema.json"
       }
     ],
-    "lit-plugin.globalAttributes": ["divider", "dialogaction", "padded"]
+    "lit-plugin.globalAttributes": [
+      "divider",
+      "dialogaction",
+      "padded"
+    ]
   }
 }

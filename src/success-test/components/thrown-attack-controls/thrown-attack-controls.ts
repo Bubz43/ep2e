@@ -1,11 +1,26 @@
-import { renderNumberField } from '@src/components/field/fields';
+import {
+  renderNumberField,
+  renderNumberInput,
+  renderSelectField,
+  renderTimeField,
+} from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
-import { CalledShot, enumValues } from '@src/data-enums';
+import {
+  AreaEffectType,
+  CalledShot,
+  enumValues,
+  ExplosiveTrigger,
+} from '@src/data-enums';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
-import { ItemType } from '@src/entities/entity-types';
-import type { ExplosiveSettings } from '@src/entities/weapon-settings';
+import { ActorType, ItemType } from '@src/entities/entity-types';
+import type { Explosive } from '@src/entities/item/proxies/explosive';
+import {
+  createExplosiveTriggerSetting,
+  ExplosiveSettings,
+} from '@src/entities/weapon-settings';
+import { CommonInterval } from '@src/features/time';
 import { readyCanvas } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas } from '@src/foundry/rolls';
@@ -126,12 +141,10 @@ export class ThrownAttackControls extends LitElement {
 
   private selectWeapon() {
     if (!this.test) return;
-    const { explosives, thrown } = this.test.character.weapons;
-    const throwable = [...thrown, ...explosives.filter((e) => e.isGrenade)];
 
     openMenu({
       header: { heading: localize('throw') },
-      content: throwable.map((weapon) => ({
+      content: this.test.character.weapons.thrown.map((weapon) => ({
         label: weapon.fullName,
         sublabel: weapon.fullType,
         activated: weapon === this.test?.throwing.weapon,
@@ -311,16 +324,7 @@ export class ThrownAttackControls extends LitElement {
         <wl-list-item clickable @click=${this.selectWeapon}>
           ${weapon.name}
         </wl-list-item>
-        ${weapon.type === ItemType.Explosive && explosiveSettings
-          ? html`
-              <explosive-settings-form
-                .explosive=${weapon}
-                .initialSettings=${explosiveSettings}
-                @explosive-settings=${(ev: CustomEvent<ExplosiveSettings>) =>
-                  throwing.update({ explosiveSettings: ev.detail })}
-              ></explosive-settings-form>
-            `
-          : attacks?.secondary
+        ${attacks?.secondary
           ? html`
               <wl-list-item
                 class="attack-setting"
@@ -330,6 +334,18 @@ export class ThrownAttackControls extends LitElement {
               >
                 ${attack?.label}
               </wl-list-item>
+            `
+          : ''}
+        ${weapon.type === ItemType.Explosive && explosiveSettings
+          ? html`
+              ${weapon.areaEffect
+                ? this.renderAreaEffectEdit(
+                    weapon,
+                    explosiveSettings,
+                    weapon.areaEffect,
+                  )
+                : ''}
+              ${this.renderTriggerSettings(explosiveSettings)}
             `
           : ''}
         ${weapon.type === ItemType.ThrownWeapon && weapon.isTwoHanded
@@ -343,14 +359,16 @@ export class ThrownAttackControls extends LitElement {
             `
           : ''}
 
-        <li divider></li>
         <li>
           ${renderAutoForm({
             props: { targetDistance, range },
             update: throwing.update,
             fields: ({ targetDistance, range }) => [
               renderNumberField(targetDistance, { min: 0 }),
-              renderNumberField(range, { min: 1 }),
+              renderNumberField(
+                { ...range, label: `${localize('throwingRange')}` },
+                { min: 1 },
+              ),
             ],
           })}
         </li>
@@ -381,6 +399,145 @@ export class ThrownAttackControls extends LitElement {
         .settings=${test.settings}
       ></success-test-footer>
     `;
+  }
+
+  private renderAreaEffectEdit(
+    explosive: Explosive,
+    settings: ExplosiveSettings,
+    areaEffect: AreaEffectType,
+  ) {
+    return html`<li class="area-effect">
+      <span
+        >${localize(areaEffect)} ${localize('areaEffect')}
+        ${areaEffect === AreaEffectType.Centered
+          ? renderAutoForm({
+              storeOnInput: true,
+
+              props: {
+                centeredReduction: settings.centeredReduction || -2,
+              },
+              update: (changed) => {
+                this.test?.throwing.update({
+                  explosiveSettings: { ...settings, ...changed },
+                });
+              },
+              fields: ({ centeredReduction }) =>
+                html`${renderNumberInput(centeredReduction, {
+                  max: -2,
+                  min: -20,
+                })}
+                DV/m`,
+            })
+          : renderAutoForm({
+              storeOnInput: true,
+              props: {
+                uniformBlastRadius:
+                  settings.uniformBlastRadius || explosive.areaEffectRadius,
+              },
+              update: (changed) => {
+                this.test?.throwing.update({
+                  explosiveSettings: { ...settings, ...changed },
+                });
+              },
+              fields: ({ uniformBlastRadius }) =>
+                html`${renderNumberInput(uniformBlastRadius, {
+                  min: 1,
+                  max: explosive.areaEffectRadius,
+                })}
+                ${localize('meter')} ${localize('radius')}`,
+            })}
+      </span>
+      <p>
+        ${localize('quick')} ${localize('action')} ${localize('to')}
+        ${localize('adjust')}
+      </p>
+    </li>`;
+  }
+
+  private renderTriggerSettings(settings: ExplosiveSettings) {
+    return html` <li class="trigger">
+      ${renderAutoForm({
+        props: settings.trigger,
+        update: ({ type }) => {
+          type &&
+            this.test?.throwing.update({
+              explosiveSettings: {
+                ...settings,
+                trigger: createExplosiveTriggerSetting(type),
+              },
+            });
+        },
+        fields: ({ type }) =>
+          renderSelectField(
+            { ...type, label: localize('trigger') },
+            enumValues(ExplosiveTrigger),
+          ),
+      })}
+      ${this.renderTriggerForm(settings)}
+    </li>`;
+  }
+
+  private renderTriggerForm(settings: ExplosiveSettings) {
+    const { trigger } = settings;
+    switch (trigger.type) {
+      case ExplosiveTrigger.Impact:
+      case ExplosiveTrigger.Signal:
+        return '';
+
+      case ExplosiveTrigger.Airburst:
+        return renderAutoForm({
+          props: trigger,
+          update: (changed) => {
+            this.test?.throwing.update({
+              explosiveSettings: {
+                ...settings,
+                trigger: { ...trigger, ...changed },
+              },
+            });
+          },
+          fields: ({ distance }) => renderNumberField(distance, { min: 1 }), // TODO max?
+        });
+
+      case ExplosiveTrigger.Proximity:
+        return renderAutoForm({
+          props: trigger,
+          classes: 'proximity-form',
+          update: (changed) => {
+            this.test?.throwing.update({
+              explosiveSettings: {
+                ...settings,
+                trigger: { ...trigger, ...changed },
+              },
+            });
+          },
+          fields: ({ radius, targets }) => [
+            renderNumberField(
+              { ...radius, label: `${radius.label} (${localize('meters')})` },
+              { min: 0.1, max: 3 },
+            ),
+            renderSelectField(
+              targets,
+              [ActorType.Biological, ActorType.Synthetic],
+              { emptyText: localize('any') },
+            ),
+          ],
+        });
+
+      case ExplosiveTrigger.Timer:
+        return renderAutoForm({
+          props: trigger,
+          update: (changed) => {
+            this.test?.throwing.update({
+              explosiveSettings: {
+                ...settings,
+                trigger: { ...trigger, ...changed },
+              },
+            });
+          },
+          fields: ({ detonationPeriod }) =>
+            renderTimeField(detonationPeriod, { min: CommonInterval.Turn }),
+        });
+    }
   }
 }
 
