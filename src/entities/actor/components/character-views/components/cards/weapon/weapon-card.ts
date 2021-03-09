@@ -1,5 +1,3 @@
-import { startMeleeAttack } from '@src/combat/attack-init';
-import type { AttackType } from '@src/combat/attacks';
 import { ItemType } from '@src/entities/entity-types';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import type { ThrownWeapon } from '@src/entities/item/proxies/thrown-weapon';
@@ -29,17 +27,6 @@ export class WeaponCard extends ItemCardBase {
       : this.item.toggleEquipped();
   }
 
-  private startAttackTest(attackType: AttackType) {
-    const { token, character } = requestCharacter(this);
-    if (!character) return; // TODO maybe throw error
-    startMeleeAttack({
-      actor: character.actor,
-      token,
-      attackType,
-      weaponId: this.item.id,
-    });
-  }
-
   private openCoatingSelectMenu(ev: MouseEvent) {
     const { character } = requestCharacter(this);
 
@@ -62,7 +49,8 @@ export class WeaponCard extends ItemCardBase {
               class="toggle ${classMap({ activated: !!item.coating })}"
               icon="colorize"
               @click=${this.openCoatingSelectMenu}
-              ?disabled=${!item.editable}
+              ?disabled=${!item.editable ||
+              (this.item.type === ItemType.ThrownWeapon && !this.item.quantity)}
             ></mwc-icon-button>
           `
         : html`

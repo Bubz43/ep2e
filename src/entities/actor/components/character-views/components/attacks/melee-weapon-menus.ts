@@ -94,13 +94,15 @@ export const openCoatingMenu = (
       {
         label: `${localize('remove')} ${coating.name} (${localize('keep')})`,
         callback: async () => {
+          const amount =
+            weapon.type === ItemType.ThrownWeapon ? weapon.quantity : 1;
           const same = coatings.find((c) => c.isSameAs(coating));
-          if (same) await same.setQuantity((current) => current + 1);
+          if (same) await same.setQuantity((current) => current + amount);
           else
             await character?.itemOperations.add(
               produce(
                 coating.getDataCopy(),
-                ({ data }) => void (data.quantity = 1),
+                ({ data }) => void (data.quantity = amount),
               ),
             );
           await weapon.removeCoating();
@@ -113,8 +115,28 @@ export const openCoatingMenu = (
         label: c.fullName,
         sublabel: c.fullType,
         callback: async () => {
-          await weapon.setCoating(c);
-          c.setQuantity((current) => current - 1);
+          if (
+            weapon.type === ItemType.ThrownWeapon &&
+            weapon.quantity > c.quantity
+          ) {
+            await character.itemOperations.add(
+              produce(weapon.getDataCopy(), (draft) => {
+                draft.data.quantity = weapon.quantity - c.quantity;
+              }),
+            );
+            await weapon.updater.batchCommits(() => {
+              weapon.setCoating(c);
+              weapon.setQuantity(c.quantity);
+            });
+            c.setQuantity(0);
+          } else {
+            await weapon.setCoating(c);
+            c.setQuantity(
+              (current) =>
+                current -
+                (weapon.type === ItemType.ThrownWeapon ? weapon.quantity : 1),
+            );
+          }
         },
         disabled: !c.quantity,
       })),
