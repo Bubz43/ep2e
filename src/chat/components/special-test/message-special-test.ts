@@ -5,15 +5,18 @@ import type {
 import { ActorType } from '@src/entities/entity-types';
 import { ConditionType } from '@src/features/conditions';
 import { createEffect } from '@src/features/effects';
-import { addFeature } from '@src/features/feature-helpers';
+import { addFeature, stringID } from '@src/features/feature-helpers';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
 import { createTag, SpecialTest } from '@src/features/tags';
 import {
   createTemporaryFeature,
   TemporaryCondition,
+  TemporaryFeature,
 } from '@src/features/temporary';
 import { CommonInterval } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
+import { rollFormula, rollLabeledFormulas } from '@src/foundry/rolls';
+import { HealthType } from '@src/health/health';
 import {
   grantedSuperiorResultEffects,
   isSuccessfullTestResult,
@@ -217,20 +220,109 @@ export class MessageSpecialTest extends MessageElement {
     }
   }
 
-  private applyCustomEffects() {
+  private async applyCustomEffects() {
     const result = last(this.successTest.states)?.result;
     const checkInfo =
-      this.specialTest.type === SpecialTest.Custom &&
-      this.specialTest.checkInfo;
+      this.specialTest.type === 'custom' && this.specialTest.checkInfo;
     const { actor } = this.message;
     if (!result || !checkInfo || actor?.proxy.type !== ActorType.Character)
       return;
-    const effects = isSuccessfullTestResult(result)
+    const { proxy } = actor;
+    const isSuccess = isSuccessfullTestResult(result);
+    const effects = isSuccess
       ? checkInfo.checkSuccess
       : result === SuccessTestResult.CriticalFailure &&
         notEmpty(checkInfo.criticalCheckFailure)
       ? checkInfo.criticalCheckFailure
       : checkInfo.checkFailure;
+
+    const temporary: TemporaryFeature[] = [];
+    const conditionsToAdd = new Set<ConditionType>();
+    for (const effect of effects) {
+      const {
+        condition,
+        impairment,
+        staticDuration,
+        variableDuration,
+        variableInterval,
+        additionalDurationPerSuperior,
+        stress,
+        notes,
+        fallDown,
+      } = effect;
+      const isStatic = !!staticDuration || !variableDuration;
+      let duration = isStatic
+        ? staticDuration || CommonInterval.Turn
+        : toMilliseconds({
+            [variableInterval || 'turns']: rollFormula(
+              variableDuration || '1d6',
+            ),
+          });
+      if (additionalDurationPerSuperior && !isSuccess) {
+        const multiples = grantedSuperiorResultEffects(result);
+        duration += multiples * additionalDurationPerSuperior;
+      }
+      if (fallDown) conditionsToAdd.add(ConditionType.Prone);
+      if (condition) {
+        conditionsToAdd.add(condition);
+        temporary.push(
+          createTemporaryFeature.condition({
+            condition,
+            duration,
+            name: this.specialTest.source,
+          }),
+        );
+      }
+      if (notes) {
+        temporary.push(
+          createTemporaryFeature.effects({
+            effects: [
+              { ...createEffect.misc({ description: notes }), id: stringID() },
+            ],
+            duration,
+            name: this.specialTest.source,
+          }),
+        );
+      }
+      if (impairment) {
+        temporary.push(
+          createTemporaryFeature.effects({
+            effects: [
+              {
+                ...createEffect.successTest({
+                  modifier: impairment,
+                  tags: [createTag.allActions({})],
+                }),
+                id: stringID(),
+              },
+            ],
+            duration,
+            name: this.specialTest.source,
+          }),
+        );
+      }
+      if (stress) {
+        await this.message.createSimilar({
+          damage: {
+            source: this.specialTest.source,
+            rolledFormulas: rollLabeledFormulas([
+              { label: localize('stress'), formula: stress },
+            ]),
+            damageType: HealthType.Mental,
+          },
+        });
+      }
+    }
+
+    proxy.updater.batchCommits(() => {
+      notEmpty(conditionsToAdd) && proxy.addConditions([...conditionsToAdd]);
+      notEmpty(temporary) &&
+        proxy.updater
+          .path('data', 'temporary')
+          .commit((temps) =>
+            temporary.reduce((accum, temp) => addFeature(accum, temp), temps),
+          );
+    });
   }
 
   private get testResult() {
@@ -245,7 +337,7 @@ export class MessageSpecialTest extends MessageElement {
     const isSuccess = isSuccessfullTestResult(result);
     const superiorCount = grantedSuperiorResultEffects(result);
     switch (this.specialTest.type) {
-      case SpecialTest.Custom: {
+      case 'custom': {
         const { checkSuccess } = this.specialTest.checkInfo;
         if (isSuccess) {
           const hasEffects = notEmpty(checkSuccess);

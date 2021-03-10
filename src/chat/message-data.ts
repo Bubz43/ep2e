@@ -171,12 +171,12 @@ export type FavorMessageData = {
 
 export type SpecialTestData =
   | {
-      type: Exclude<SpecialTest, SpecialTest.Custom>;
+      type: SpecialTest;
       source: string;
       originalResult?: SuccessTestResult;
     }
   | {
-      type: SpecialTest.Custom;
+      type: 'custom';
       checkInfo: AptitudeCheckInfo;
       source: string;
       originalResult?: SuccessTestResult;

@@ -123,7 +123,7 @@ export class AptitudeCheck extends SuccessTestBase {
     }
 
     switch (this.special?.type) {
-      case SpecialTest.Custom: {
+      case 'custom': {
         const { armorAsModifier, checkModifier } = this.special.checkInfo;
         compact([
           armorAsModifier &&
@@ -268,7 +268,10 @@ export class AptitudeCheck extends SuccessTestBase {
     if (this.techSource) return new Map();
     return successTestEffectMap(
       this.character?.appliedEffects.getMatchingSuccessTestEffects(
-        matchesAptitude(aptitude, this.special?.type)(action),
+        matchesAptitude(
+          aptitude,
+          this.special?.type === 'custom' ? undefined : this.special?.type,
+        )(action),
         false,
       ) || [],
     );

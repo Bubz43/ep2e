@@ -7,7 +7,6 @@ import { ActorType } from '@src/entities/entity-types';
 import { pickOrDefaultCharacter } from '@src/entities/find-entities';
 import { Software } from '@src/entities/item/proxies/software';
 import { SkillType } from '@src/features/skills';
-import { SpecialTest } from '@src/features/tags';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { AptitudeCheckControls } from '@src/success-test/components/aptitude-check-controls/aptitude-check-controls';
@@ -141,7 +140,7 @@ export class MessageHack extends MessageElement {
             character: actor.proxy,
             aptitude: AptitudeType.Somatics,
             special: {
-              type: SpecialTest.Custom,
+              type: 'custom',
               checkInfo: aptitudeCheckInfo,
               source: name,
               messageRef: this.message.id,
