@@ -23,7 +23,7 @@ import {
 } from './success-test';
 
 type SoftwareAttack = {
-  software?: Software | null;
+  software: Software;
   primaryAttack: boolean;
 };
 
@@ -81,7 +81,6 @@ export class HackingTest extends SkillTest {
 
   get attack() {
     const { software, primaryAttack } = this.hack;
-    if (!software) return null;
     return primaryAttack
       ? software.attacks.primary
       : software.attacks.secondary || software.attacks.primary;
@@ -104,14 +103,14 @@ export class HackingTest extends SkillTest {
   }
 
   protected async createMessage() {
-    const { settings, pools, action, hack, testMessageData } = this;
+    const { settings, pools, action, hack, testMessageData, attack } = this;
 
     const { software, primaryAttack, attackTarget } = hack;
 
     await createMessage({
       data: {
         header: {
-          heading: `${software?.name || ''} ${localize('hacking')} ${localize(
+          heading: `${software.name} ${localize('hacking')} ${localize(
             'test',
           )}`,
           subheadings: [
@@ -126,8 +125,8 @@ export class HackingTest extends SkillTest {
               localize('action'),
             ].join(' '),
           ],
-          img: software?.nonDefaultImg,
-          description: software?.description,
+          img: software.nonDefaultImg,
+          description: software.description,
         },
         successTest: {
           ...testMessageData,
@@ -137,7 +136,9 @@ export class HackingTest extends SkillTest {
               last(testMessageData.states)?.result,
             ),
           }),
-          defaultSuperiorEffect: SuperiorResultEffect.Damage,
+          defaultSuperiorEffect: attack?.rollFormulas.length
+            ? SuperiorResultEffect.Damage
+            : undefined,
         },
         targets: compact([
           attackTarget?.scene && {
@@ -146,7 +147,7 @@ export class HackingTest extends SkillTest {
           },
         ]),
         hack: {
-          software: software?.getDataCopy(),
+          software: software.getDataCopy(),
           attackType: primaryAttack ? 'primary' : 'secondary',
         },
       },

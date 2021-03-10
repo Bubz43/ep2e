@@ -101,7 +101,7 @@ export type ThrownWeaponMessageData = {
 };
 
 export type HackMessageData = {
-  software?: ItemEntity<ItemType.Software> | null;
+  software: ItemEntity<ItemType.Software>;
   attackType?: AttackType;
 };
 
