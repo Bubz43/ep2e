@@ -12,6 +12,7 @@ import type { SubstanceUseMethod } from '@src/entities/item/proxies/substance';
 import type { ItemEntity } from '@src/entities/models';
 import type { ActiveTaskAction } from '@src/features/actions';
 import type { ArmorType } from '@src/features/active-armor';
+import type { AptitudeCheckInfo } from '@src/features/aptitude-check-result-info';
 import type { PostTestPoolAction, PreTestPoolAction } from '@src/features/pool';
 import type { Favor, RepIdentifier } from '@src/features/reputations';
 import type { Size } from '@src/features/size';
@@ -168,11 +169,18 @@ export type FavorMessageData = {
   burnedRep?: boolean;
 };
 
-export type SpecialTestData = {
-  type: SpecialTest;
-  source: string;
-  originalResult?: SuccessTestResult;
-};
+export type SpecialTestData =
+  | {
+      type: Exclude<SpecialTest, SpecialTest.Custom>;
+      source: string;
+      originalResult?: SuccessTestResult;
+    }
+  | {
+      type: SpecialTest.Custom;
+      checkInfo: AptitudeCheckInfo;
+      source: string;
+      originalResult?: SuccessTestResult;
+    };
 
 export type MessageData = Partial<{
   header: MessageHeaderData;

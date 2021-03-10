@@ -55,7 +55,7 @@ export class AptitudeCheck extends SuccessTestBase {
     type: AptitudeType;
     multiplier: number;
   }>;
-  readonly special;
+  readonly special?: SpecialTestData & { messageRef?: string };
   techSource?: PhysicalTech | null;
 
   get basePoints() {
@@ -122,73 +122,107 @@ export class AptitudeCheck extends SuccessTestBase {
       this.modifiers.simple.set(modifier.id, modifier);
     }
 
-    if (this.special?.type === SpecialTest.Shock) {
-      const energyArmor = this.character?.armor.getClamped(ArmorType.Energy);
-      const armorModifier =
-        energyArmor &&
-        createSuccessTestModifier({
-          name: localize('energyArmor'),
-          value: energyArmor,
+    switch (this.special?.type) {
+      case SpecialTest.Custom: {
+        const { armorAsModifier, checkModifier } = this.special.checkInfo;
+        compact([
+          armorAsModifier &&
+            createSuccessTestModifier({
+              name: `${localize(armorAsModifier)} ${localize('armor')}`,
+              value: this.character?.armor.getClamped(armorAsModifier),
+            }),
+          checkModifier &&
+            createSuccessTestModifier({
+              name: localize('modifier'),
+              value: checkModifier,
+            }),
+        ]).forEach((modifier) => {
+          if (modifier) this.modifiers.simple.set(modifier.id, modifier);
         });
-      armorModifier &&
-        this.modifiers.simple.set(armorModifier.id, armorModifier);
-    } else if (this.special?.type === SpecialTest.Entangling) {
-      const resultModifier = grantedSuperiorResultEffects(
-        this.special.originalResult,
-      );
-      const modifier =
-        resultModifier &&
-        createSuccessTestModifier({
-          name: `${this.special.source} ${localize(
-            this.special.originalResult!,
-          )}`,
-          value: resultModifier * -10,
-        });
-      modifier && this.modifiers.simple.set(modifier.id, modifier);
-    } else if (this.special?.type === SpecialTest.Stun) {
-      const kineticArmor = this.character?.armor.getClamped(ArmorType.Kinetic);
-      const armorModifier =
-        kineticArmor &&
-        createSuccessTestModifier({
-          name: localize('kineticArmor'),
-          value: kineticArmor,
-        });
-      armorModifier &&
-        this.modifiers.simple.set(armorModifier.id, armorModifier);
 
-      const morphSize = this.character?.morphSize;
-      let morphSizeModifier: SimpleSuccessTestModifier | null = null;
-      if (morphSize === Size.Large || morphSize === Size.VeryLarge) {
-        morphSizeModifier = createSuccessTestModifier({
-          name: `${localize('large')} ${localize('target')}`,
-          value: 30,
-        });
-      } else if (morphSize === Size.Small || morphSize === Size.VerySmall) {
-        morphSizeModifier = createSuccessTestModifier({
-          name: `${localize('small')} ${localize('target')}`,
-          value: -30,
-        });
+        break;
       }
-      if (morphSizeModifier) {
-        this.modifiers.simple.set(morphSizeModifier.id, morphSizeModifier);
+
+      case SpecialTest.Shock: {
+        const energyArmor = this.character?.armor.getClamped(ArmorType.Energy);
+        const armorModifier =
+          energyArmor &&
+          createSuccessTestModifier({
+            name: localize('energyArmor'),
+            value: energyArmor,
+          });
+        armorModifier &&
+          this.modifiers.simple.set(armorModifier.id, armorModifier);
+        break;
       }
-    } else if (this.special?.type === SpecialTest.PainResistance) {
-      const { painResistance } = this;
-      const modifier =
-        painResistance && clamp(-20 + painResistance * 10, { min: 0 });
-      if (modifier) {
-        const painModifier = createSuccessTestModifier({
-          name: localize('pain'),
-          value: modifier,
-        });
-        this.modifiers.simple.set(painModifier.id, painModifier);
+
+      case SpecialTest.Entangling: {
+        const resultModifier = grantedSuperiorResultEffects(
+          this.special.originalResult,
+        );
+        const modifier =
+          resultModifier &&
+          createSuccessTestModifier({
+            name: `${this.special.source} ${localize(
+              this.special.originalResult!,
+            )}`,
+            value: resultModifier * -10,
+          });
+        modifier && this.modifiers.simple.set(modifier.id, modifier);
+        break;
       }
-      if (painResistance) {
-        const resistBonus = createSuccessTestModifier({
-          name: localize('painResistance'),
-          value: 30,
-        });
-        this.modifiers.simple.set(resistBonus.id, resistBonus);
+
+      case SpecialTest.Stun: {
+        const kineticArmor = this.character?.armor.getClamped(
+          ArmorType.Kinetic,
+        );
+        const armorModifier =
+          kineticArmor &&
+          createSuccessTestModifier({
+            name: localize('kineticArmor'),
+            value: kineticArmor,
+          });
+        armorModifier &&
+          this.modifiers.simple.set(armorModifier.id, armorModifier);
+
+        const morphSize = this.character?.morphSize;
+        let morphSizeModifier: SimpleSuccessTestModifier | null = null;
+        if (morphSize === Size.Large || morphSize === Size.VeryLarge) {
+          morphSizeModifier = createSuccessTestModifier({
+            name: `${localize('large')} ${localize('target')}`,
+            value: 30,
+          });
+        } else if (morphSize === Size.Small || morphSize === Size.VerySmall) {
+          morphSizeModifier = createSuccessTestModifier({
+            name: `${localize('small')} ${localize('target')}`,
+            value: -30,
+          });
+        }
+        if (morphSizeModifier) {
+          this.modifiers.simple.set(morphSizeModifier.id, morphSizeModifier);
+        }
+        break;
+      }
+
+      case SpecialTest.PainResistance: {
+        const { painResistance } = this;
+        const modifier =
+          painResistance && clamp(-20 + painResistance * 10, { min: 0 });
+        if (modifier) {
+          const painModifier = createSuccessTestModifier({
+            name: localize('pain'),
+            value: modifier,
+          });
+          this.modifiers.simple.set(painModifier.id, painModifier);
+        }
+        if (painResistance) {
+          const resistBonus = createSuccessTestModifier({
+            name: localize('painResistance'),
+            value: 30,
+          });
+          this.modifiers.simple.set(resistBonus.id, resistBonus);
+        }
+        break;
       }
     }
   }

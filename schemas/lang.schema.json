@@ -2058,6 +2058,9 @@
             "grenade": {
               "type": "string"
             },
+            "grenades": {
+              "type": "string"
+            },
             "ground": {
               "type": "string"
             },
@@ -2710,6 +2713,9 @@
               "type": "string"
             },
             "mesh": {
+              "type": "string"
+            },
+            "meshAttack": {
               "type": "string"
             },
             "meshAttacks": {
@@ -5267,6 +5273,7 @@
             "grappled",
             "gravity",
             "grenade",
+            "grenades",
             "ground",
             "groundcraft",
             "group",
@@ -5485,6 +5492,7 @@
             "mentalHealth",
             "mercurial",
             "mesh",
+            "meshAttack",
             "meshAttacks",
             "meshHealth",
             "meshService",

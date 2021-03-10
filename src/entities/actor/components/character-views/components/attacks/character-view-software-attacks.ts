@@ -35,17 +35,23 @@ export class CharacterViewSoftwareAttacks extends LitElement {
 
     const attack = attacks[attackType] || attacks.primary;
 
-    const damage: DamageMessageData = {
-      ...pick(attack, [
-        'armorPiercing',
-        'armorUsed',
-        'damageType',
-        'notes',
-        'reduceAVbyDV',
-      ]),
-      source: `${name} ${hasSecondaryAttack ? `[${attack.label}]` : ''}`,
-      rolledFormulas: pipe(attack.rollFormulas, compact, rollLabeledFormulas),
-    };
+    const damage: DamageMessageData | undefined = notEmpty(attack.rollFormulas)
+      ? {
+          ...pick(attack, [
+            'armorPiercing',
+            'armorUsed',
+            'damageType',
+            'notes',
+            'reduceAVbyDV',
+          ]),
+          source: `${name} ${hasSecondaryAttack ? `[${attack.label}]` : ''}`,
+          rolledFormulas: pipe(
+            attack.rollFormulas,
+            compact,
+            rollLabeledFormulas,
+          ),
+        }
+      : undefined;
     createMessage({
       data: {
         header: this.software.messageHeader,

@@ -183,7 +183,7 @@ export class MessageThrownAttack extends MessageElement {
             <message-attack-traits
               .attackTraitInfo=${{
                 traits: attack.attackTraits,
-                source: name ?? localize('unarmed'),
+                source: name,
                 testResult: this.successTestInfo?.result,
               }}
             ></message-attack-traits>

@@ -1422,6 +1422,7 @@
     "ignoreOverburdened": "Ignore Overburdened",
     "payloads": "Payloads",
     "thrown": "Thrown",
+    "meshAttack": "Mesh Attack",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

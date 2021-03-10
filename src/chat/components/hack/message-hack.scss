@@ -8,3 +8,42 @@
 :host {
   display: block;
 }
+
+.settings {
+  // padding: 0.25rem 0.5rem 0;
+  text-align: center;
+  --mdc-icon-button-size: 1.5rem;
+  --mdc-icon-size: 1.25rem;
+}
+
+.additional {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-top: 2px groove alphav(var(--color-border), 0.5);
+}
+
+.options {
+  color: var(--color-text-lighter);
+  font-family: var(--font-2);
+  text-align: center;
+  margin: 0;
+  padding: 0.25rem 0.5rem;
+  font-size: small;
+}
+
+.roll-damage,
+.check {
+  width: calc(100% - 1rem);
+  margin: 0.25rem 0.5rem;
+  --mdc-theme-primary: var(--color-negative);
+}
+
+.defense {
+  padding: 0 0.75rem;
+  wl-list-item {
+    display: inline-flex;
+    padding: 0.25rem;
+    color: var(--color-primary-alt);
+  }
+}
