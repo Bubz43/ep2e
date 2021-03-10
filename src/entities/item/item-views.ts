@@ -183,10 +183,12 @@ export const itemMenuOptions = (item: ItemProxy): MWCMenuOption[] => {
       (item.type !== ItemType.Substance || !item.appliedState) && {
         label: localize(item.stashed ? 'carry' : 'stash'),
         callback: item.toggleStashed.bind(item),
+        disabled: !item.editable,
       },
     'toggleEquipped' in item && {
       label: localize(item.equipped ? 'unequip' : 'equip'),
       callback: item.toggleEquipped.bind(item),
+      disabled: !item.editable,
     },
     {
       label: localize('message'),
