@@ -418,9 +418,9 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
               </div>
             `
           : applySeverity === false
-          ? html`<span
+          ? html`<colored-tag type="info"
               >${localize('resisted')} ${localize('severe')}
-              ${localize('effects')}</span
+              ${localize('effects')}</colored-tag
             >`
           : ''
         : ''}

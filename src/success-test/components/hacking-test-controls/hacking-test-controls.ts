@@ -156,7 +156,7 @@ export class HackingTestControls extends LitElement {
   render() {
     return html`
       <sl-window
-        name="${localize('meleeAttack')} ${localize('test')}"
+        name="${localize('hacking')} ${localize('test')}"
         @sl-window-closed=${this.remove}
         noremove
       >
@@ -213,29 +213,6 @@ export class HackingTestControls extends LitElement {
           ></success-test-skill-section>
         </section>
 
-        <section class="targetting">
-          <success-test-section-label @click=${this.startTargetting}
-            ><mwc-icon>filter_tilt_shift</mwc-icon></success-test-section-label
-          >
-
-          <wl-list-item>
-            <span>${localize('target')}: ${attackTarget?.name ?? ' - '}</span>
-            <sl-animated-list class="targets">
-              ${repeat(
-                game.user.targets,
-                identity,
-                (token) => html`
-                  <mwc-icon-button
-                    class=${token === attackTarget ? 'active' : ''}
-                    @click=${() => hack.update({ attackTarget: token })}
-                    ><img src=${token.data.img}
-                  /></mwc-icon-button>
-                `,
-              )}
-            </sl-animated-list>
-          </wl-list-item>
-        </section>
-
         <section class="actions">
           <success-test-section-label
             >${localize('action')}</success-test-section-label
@@ -258,6 +235,29 @@ export class HackingTestControls extends LitElement {
               </section>
             `
           : ''}
+
+        <section class="targetting">
+          <success-test-section-label @click=${this.startTargetting}
+            ><mwc-icon>filter_tilt_shift</mwc-icon></success-test-section-label
+          >
+
+          <wl-list-item>
+            <span>${localize('target')}: ${attackTarget?.name ?? ' - '}</span>
+            <sl-animated-list class="targets">
+              ${repeat(
+                game.user.targets,
+                identity,
+                (token) => html`
+                  <mwc-icon-button
+                    class=${token === attackTarget ? 'active' : ''}
+                    @click=${() => hack.update({ attackTarget: token })}
+                    ><img src=${token.data.img}
+                  /></mwc-icon-button>
+                `,
+              )}
+            </sl-animated-list>
+          </wl-list-item>
+        </section>
       </div>
 
       <success-test-modifiers-section

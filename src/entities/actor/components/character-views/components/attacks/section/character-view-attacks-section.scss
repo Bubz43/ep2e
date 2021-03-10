@@ -39,7 +39,7 @@
   display: flex;
   flex-flow: row wrap;
   --mdc-shape-small: 0px;
-  --mdc-theme-primary: #{alphav(var(--color-primary), 0.75)};
+  --mdc-theme-primary: #{alphav(var(--color-negative), 0.8)};
   padding: 0.125rem 0.5rem;
 
   > * {
