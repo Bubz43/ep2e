@@ -1449,7 +1449,8 @@ type LangEntries =
   | 'payloads'
   | 'compact'
   | 'ignoreOverburdened'
-  | 'grenades';
+  | 'grenades'
+  | 'meshAttack';
 type FullNames =
   | 'cog'
   | 'int'

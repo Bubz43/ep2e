@@ -9,11 +9,9 @@ import {
 import { ActorType } from '@src/entities/entity-types';
 import { pickOrDefaultCharacter } from '@src/entities/find-entities';
 import { ThrownWeapon } from '@src/entities/item/proxies/thrown-weapon';
-import { ArmorType } from '@src/features/active-armor';
 import { SkillType } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
-import { HealthType } from '@src/health/health';
 import { SkillTestControls } from '@src/success-test/components/skill-test-controls/skill-test-controls';
 import { SuccessTestResult } from '@src/success-test/success-test';
 import { notEmpty } from '@src/utility/helpers';
@@ -138,16 +136,13 @@ export class MessageThrownAttack extends MessageElement {
         subheadings: [localize('thrownWeapon')],
       },
       damage: {
-        ...pick(
-          attack ?? {
-            armorPiercing: false,
-            armorUsed: [ArmorType.Kinetic],
-            damageType: HealthType.Physical,
-            notes: '',
-            reduceAVbyDV: false,
-          },
-          ['armorPiercing', 'armorUsed', 'damageType', 'notes', 'reduceAVbyDV'],
-        ),
+        ...pick(attack, [
+          'armorPiercing',
+          'armorUsed',
+          'damageType',
+          'notes',
+          'reduceAVbyDV',
+        ]),
         source: name,
         multiplier,
         rolledFormulas: rolled,
