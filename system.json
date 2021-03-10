@@ -58,6 +58,13 @@
       "entity": "Actor"
     },
     {
+      "name": "robots",
+      "system": "ep2e",
+      "label": "Robots",
+      "path": "./packs/robots.db",
+      "entity": "Actor"
+    },
+    {
       "name": "traits",
       "system": "ep2e",
       "label": "Traits",
