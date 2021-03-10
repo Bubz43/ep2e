@@ -3132,6 +3132,9 @@
             "paramedic": {
               "type": "string"
             },
+            "partially": {
+              "type": "string"
+            },
             "passengers": {
               "type": "string"
             },
@@ -5631,6 +5634,7 @@
             "painFilter",
             "painResistance",
             "paramedic",
+            "partially",
             "passengers",
             "passive",
             "passiveAndActivated",
