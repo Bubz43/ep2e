@@ -69,6 +69,7 @@ export class CharacterViewSoftwareAttacks extends LitElement {
         if (actor.proxy.type === ActorType.Character) {
           const { ego, weapons } = actor.proxy;
           const weapon = weapons.software.find((w) => w.id === software.id);
+          if (!weapon) return null;
           return {
             ego,
             character: actor.proxy,

@@ -117,18 +117,11 @@ export class HackingTestControls extends LitElement {
     if (!this.test) return;
     openMenu({
       header: { heading: `${localize('select')} ${localize('software')}` },
-      content: [
-        {
-          label: localize('none'),
-          activated: !this.test.hack.software,
-          callback: () => this.test?.hack.update({ software: null }),
-        },
-        ...this.test.character.weapons.software.map((software) => ({
-          label: software.name,
-          activated: software === this.test?.hack.software,
-          callback: () => this.test?.hack.update({ software }),
-        })),
-      ],
+      content: this.test.character.weapons.software.map((software) => ({
+        label: software.name,
+        activated: software === this.test?.hack.software,
+        callback: () => this.test?.hack.update({ software }),
+      })),
     });
   }
 
