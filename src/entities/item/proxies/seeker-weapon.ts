@@ -46,6 +46,10 @@ export class SeekerWeapon extends mix(Base).with(
     super(init);
   }
 
+  get firingMode() {
+    return this.epData.firingMode;
+  }
+
   get allowAlternativeAmmo() {
     return this.epData.hasAlternativeAmmo;
   }

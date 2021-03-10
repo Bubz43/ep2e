@@ -3,6 +3,7 @@ import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import { Explosive } from '@src/entities/item/proxies/explosive';
 import { ThrownWeapon } from '@src/entities/item/proxies/thrown-weapon';
+import type { FiringMode } from '@src/features/firing-modes';
 import {
   ActiveSkillCategory,
   FieldSkillType,
@@ -10,6 +11,7 @@ import {
   SkillType,
 } from '@src/features/skills';
 import { MeleeAttackControls } from '@src/success-test/components/melee-attack-controls/melee-attack-controls';
+import { RangedAttackControls } from '@src/success-test/components/ranged-attack-controls/ranged-attack-controls';
 import { ThrownAttackControls } from '@src/success-test/components/thrown-attack-controls/thrown-attack-controls';
 import type { AttackType } from './attacks';
 
@@ -66,12 +68,11 @@ export const startThrownAttack = ({
   adjacentElement,
 }: {
   actor: ActorEP;
-  weaponId?: string;
+  weaponId: string;
   token?: MaybeToken;
   attackType?: AttackType;
   adjacentElement?: HTMLElement;
 }) => {
-  console.log(adjacentElement);
   ThrownAttackControls.openWindow({
     entities: { token, actor },
     adjacentElement,
@@ -106,6 +107,42 @@ export const startThrownAttack = ({
                 ego.aptitudes,
               )
             : ego.getCommonSkill(SkillType.Athletics),
+      };
+    },
+  });
+};
+
+export const startRangedAttack = ({
+  actor,
+  weaponId,
+  token,
+  attackType,
+  adjacentElement,
+  firingMode,
+}: {
+  actor: ActorEP;
+  weaponId: string;
+  token?: MaybeToken;
+  attackType?: AttackType;
+  adjacentElement?: HTMLElement;
+  firingMode: FiringMode;
+}) => {
+  RangedAttackControls.openWindow({
+    entities: { token, actor },
+    adjacentElement,
+    getState: (actor) => {
+      if (actor.proxy.type !== ActorType.Character) return null;
+      const { ego } = actor.proxy;
+      const weapon = actor.proxy.weapons.ranged.find((i) => i.id === weaponId);
+      if (!weapon) return null;
+      return {
+        ego,
+        character: actor.proxy,
+        token,
+        weapon,
+        primaryAttack: attackType !== 'secondary',
+        firingMode,
+        skill: ego.getCommonSkill(SkillType.Guns),
       };
     },
   });

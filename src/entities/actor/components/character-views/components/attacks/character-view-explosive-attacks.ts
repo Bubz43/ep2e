@@ -36,6 +36,8 @@ export class CharacterViewExplosiveAttacks extends LitElement {
 
   @property({ attribute: false }) explosive!: Explosive;
 
+  @property({ attribute: false }) onAttack?: (attackType: AttackType) => void;
+
   private settingsWindow?: SlWindow | null = null;
 
   updated() {
@@ -135,7 +137,8 @@ export class CharacterViewExplosiveAttacks extends LitElement {
         type="attack"
         clickable
         ?disabled=${!this.explosive.editable}
-        @click=${(ev: MouseEvent) => this.openUseMenu(ev, attackType)}
+        @click=${(ev: MouseEvent) =>
+          this.onAttack?.(attackType) || this.openUseMenu(ev, attackType)}
       >
         <span>${info}</span>
         ${this.explosive.hasSecondaryMode
@@ -153,14 +156,6 @@ export class CharacterViewExplosiveAttacks extends LitElement {
       update: this.createMessage.bind(this),
       adjacentEl: this,
       initialSettings,
-    }).win;
-  }
-
-  private openExplosiveSettingsDialog() {
-    this.settingsWindow = ExplosiveSettingsForm.openWindow({
-      explosive: this.explosive,
-      requireSubmit: true,
-      update: this.createMessage.bind(this),
     }).win;
   }
 }

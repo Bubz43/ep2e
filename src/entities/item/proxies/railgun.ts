@@ -11,11 +11,7 @@ import {
 import type { ItemType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import { uniqueStringID } from '@src/features/feature-helpers';
-import {
-  currentWorldTimeMS,
-  CommonInterval,
-  prettyMilliseconds,
-} from '@src/features/time';
+import { CommonInterval, currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import { HealthType } from '@src/health/health';

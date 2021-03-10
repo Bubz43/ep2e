@@ -1,3 +1,5 @@
+import { startRangedAttack } from '@src/combat/attack-init';
+import type { AttackType } from '@src/combat/attacks';
 import type { SeekerWeapon } from '@src/entities/item/proxies/seeker-weapon';
 import { localize } from '@src/foundry/localization';
 import { customElement, html, LitElement, property } from 'lit-element';
@@ -22,6 +24,21 @@ export class CharacterViewSeekerAttacks extends LitElement {
     character && openSeekerAmmoMenu(ev, character, this.weapon);
   }
 
+  private fire = (attackType: AttackType) => {
+    const attack = this.weapon.missiles?.attacks[attackType];
+    const { character, token } = requestCharacter(this);
+
+    if (!attack || !character) return;
+    startRangedAttack({
+      actor: character.actor,
+      firingMode: this.weapon.firingMode,
+      token,
+      weaponId: this.weapon.id,
+      adjacentElement: this,
+      attackType,
+    });
+  };
+
   render() {
     const { missiles, editable, gearTraits } = this.weapon;
     return html`
@@ -34,6 +51,12 @@ export class CharacterViewSeekerAttacks extends LitElement {
         <span slot="after">${missiles?.fullName || '-'}</span>
       </colored-tag>
 
+      ${missiles
+        ? html`<character-view-explosive-attacks
+            .explosive=${missiles}
+            .onAttack=${this.fire}
+          ></character-view-explosive-attacks>`
+        : ''}
       ${gearTraits.map(
         (trait) =>
           html`<colored-tag type="info">${localize(trait)}</colored-tag>`,
