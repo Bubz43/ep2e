@@ -276,23 +276,24 @@ export class CharacterViewAlt extends CharacterViewBase {
             ? html`
                 <ul class="pools">
                   ${[...pools.values()].map(
-                    pools.size <= 1
-                      ? this.renderPool
-                      : (pool) => html` <li
-                          class="pool"
-                          tabindex=${disabled ? '-1' : 0}
-                          role="button"
-                          data-pool=${pool.type}
-                          @click=${this.openPoolMenu}
-                          ?disabled=${disabled}
-                        >
-                          <img height="22px" src=${pool.icon} />
-                          <span> ${localize(pool.type)} </span>
-                          <value-status
-                            value=${pool.available}
-                            max=${pool.max}
-                          ></value-status>
-                        </li>`,
+                    // pools.size <= 1
+                    //   ? this.renderPool
+                    //   :
+                    (pool) => html` <li
+                      class="pool"
+                      tabindex=${disabled ? '-1' : 0}
+                      role="button"
+                      data-pool=${pool.type}
+                      @click=${this.openPoolMenu}
+                      ?disabled=${disabled}
+                    >
+                      <img height="22px" src=${pool.icon} />
+                      <span> ${localize(pool.type)} </span>
+                      <value-status
+                        value=${pool.available}
+                        max=${pool.max}
+                      ></value-status>
+                    </li>`,
                   )}
                 </ul>
               `
