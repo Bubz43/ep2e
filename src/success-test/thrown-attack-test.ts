@@ -30,7 +30,7 @@ import { arrayOf } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
 import { compact, concat, last, merge, pipe } from 'remeda';
 import type { SetRequired } from 'type-fest';
-import { getRangeModifier } from './range-modifiers';
+import { applyGravityToWeaponRange, getRangeModifier } from './range-modifiers';
 import { SkillTest, SkillTestInit } from './skill-test';
 import {
   createSuccessTestModifier,
@@ -93,9 +93,10 @@ export class ThrownAttackTest extends SkillTest {
 
     this.throwing = {
       attackTarget,
-      range: !gravity
-        ? Infinity
-        : Math.round(this.character.ego.aptitudes.som / gravity),
+      range: applyGravityToWeaponRange(
+        this.character.ego.aptitudes.som,
+        gravity,
+      ),
       targetDistance:
         attackTarget && this.token
           ? Math.ceil(distanceBetweenTokens(this.token, attackTarget))

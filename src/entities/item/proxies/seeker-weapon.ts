@@ -50,6 +50,10 @@ export class SeekerWeapon extends mix(Base).with(
     return this.missiles?.consumeUnit();
   }
 
+  get range() {
+    return this.activeAmmoSettings.range;
+  }
+
   get canFire() {
     return !!this.availableShots;
   }

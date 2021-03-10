@@ -72,6 +72,10 @@ export class Railgun
     return !!this.availableShots;
   }
 
+  get range() {
+    return this.epData.range;
+  }
+
   fire(shots: number) {
     return this.updater
       .path('data', 'ammo', 'value')

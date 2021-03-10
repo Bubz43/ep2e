@@ -29,7 +29,7 @@ import { arrayOf, notEmpty } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
 import { compact, last, merge } from 'remeda';
 import type { SetRequired } from 'type-fest';
-import { getRangeModifier } from './range-modifiers';
+import { getRangeModifier, getWeaponRange } from './range-modifiers';
 import { SkillTest, SkillTestInit } from './skill-test';
 import {
   createSuccessTestModifier,
@@ -101,7 +101,7 @@ export class RangedAttackTest extends SkillTest {
 
     this.firing = {
       attackTarget,
-      range: 0, // TODO,
+      range: getWeaponRange(weapon),
       targetDistance:
         attackTarget && this.token
           ? Math.ceil(distanceBetweenTokens(this.token, attackTarget))
@@ -122,6 +122,9 @@ export class RangedAttackTest extends SkillTest {
           draft.firing.calledShot = null;
           draft.firing.oneHanded = false;
           draft.firing.suppressiveFire = false;
+          draft.firing.range = getWeaponRange(
+            draft.firing.weapon as RangedWeapon,
+          );
           draft.firing.firingMode =
             draft.firing.weapon.type === ItemType.SeekerWeapon
               ? draft.firing.weapon.firingMode
@@ -273,7 +276,7 @@ export class RangedAttackTest extends SkillTest {
     await createMessage({
       data: {
         header: {
-          heading: `${weapon.name} ${localize('thrownAttack')}`,
+          heading: `${weapon.name} ${localize('rangedAttack')}`,
           subheadings: [
             this.name,
             [
