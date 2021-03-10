@@ -19,8 +19,9 @@ import {
   isSuccessfullTestResult,
   SuccessTestResult,
 } from '@src/success-test/success-test';
+import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property } from 'lit-element';
-import { compact, last, prop } from 'remeda';
+import { compact, last, noop, prop } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-special-test.scss';
 
@@ -216,24 +217,63 @@ export class MessageSpecialTest extends MessageElement {
     }
   }
 
+  private applyCustomEffects() {
+    const result = last(this.successTest.states)?.result;
+    const checkInfo =
+      this.specialTest.type === SpecialTest.Custom &&
+      this.specialTest.checkInfo;
+    const { actor } = this.message;
+    if (!result || !checkInfo || actor?.proxy.type !== ActorType.Character)
+      return;
+    const effects = isSuccessfullTestResult(result)
+      ? checkInfo.checkSuccess
+      : result === SuccessTestResult.CriticalFailure &&
+        notEmpty(checkInfo.criticalCheckFailure)
+      ? checkInfo.criticalCheckFailure
+      : checkInfo.checkFailure;
+  }
+
   private get testResult() {
     return last(this.successTest.states)?.result;
   }
 
   render() {
+    const { disabled } = this;
     const result = last(this.successTest.states)?.result;
     if (!result) return html``;
 
     const isSuccess = isSuccessfullTestResult(result);
     const superiorCount = grantedSuperiorResultEffects(result);
-    const { type } = this.specialTest;
-    switch (type) {
+    switch (this.specialTest.type) {
+      case SpecialTest.Custom: {
+        const { checkSuccess } = this.specialTest.checkInfo;
+        if (isSuccess) {
+          const hasEffects = notEmpty(checkSuccess);
+          return html`
+            <wl-list-item
+              ?disabled=${disabled}
+              ?clickable=${hasEffects}
+              @click=${hasEffects ? this.applyCustomEffects : noop}
+            >
+              ${hasEffects ? localize('partially') : ''} ${localize('resisted')}
+              ${localize('custom')} ${localize('effects')}
+            </wl-list-item>
+          `;
+        }
+        return html`
+          <wl-list-item clickable @click=${this.applyCustomEffects}
+            >${localize('apply')} ${localize('custom')}
+            ${localize('effects')}</wl-list-item
+          >
+        `;
+      }
+
       case SpecialTest.Blinding:
         return html`
           <wl-list-item
             clickable
             @click=${this.applyBlinding}
-            ?disabled=${isSuccess}
+            ?disabled=${disabled || isSuccess}
           >
             ${isSuccess
               ? `${localize('resisted')} ${localize('blinding')}`
@@ -246,7 +286,7 @@ export class MessageSpecialTest extends MessageElement {
           <wl-list-item
             clickable
             @click=${this.applyEntangling}
-            ?disabled=${isSuccess}
+            ?disabled=${disabled || isSuccess}
           >
             ${isSuccess
               ? `${localize('resisted')} ${localize('entangling')}`
@@ -267,7 +307,7 @@ export class MessageSpecialTest extends MessageElement {
           <wl-list-item
             clickable
             @click=${this.applyKnockdown}
-            ?disabled=${isSuccess}
+            ?disabled=${disabled || isSuccess}
           >
             ${isSuccess
               ? `${localize('resisted')} ${localize('knockdown')}`
@@ -288,7 +328,7 @@ export class MessageSpecialTest extends MessageElement {
         return html`
           <wl-list-item clickable @click=${this.applyShock}>
             ${localize('apply')} ${localize(isSuccess ? 'some' : 'all')}
-            ${localize(type)} ${localize('effects')}
+            ${localize(SpecialTest.Shock)} ${localize('effects')}
           </wl-list-item>
         `;
 
@@ -297,7 +337,7 @@ export class MessageSpecialTest extends MessageElement {
           <wl-list-item
             clickable
             @click=${this.applyStun}
-            ?disabled=${isSuccess}
+            ?disabled=${disabled || isSuccess}
           >
             ${isSuccess
               ? `${localize('resisted')} ${localize('stun')}`
@@ -310,7 +350,7 @@ export class MessageSpecialTest extends MessageElement {
           <wl-list-item
             clickable
             @click=${this.applyUnconsciousness}
-            ?disabled=${isSuccess}
+            ?disabled=${disabled || isSuccess}
           >
             ${isSuccess
               ? `${localize('resisted')} ${localize('unconsciousness')}`
@@ -323,7 +363,7 @@ export class MessageSpecialTest extends MessageElement {
           <wl-list-item
             clickable
             @click=${this.startBleedingOut}
-            ?disabled=${isSuccess}
+            ?disabled=${disabled || isSuccess}
           >
             ${isSuccess
               ? `${localize('resisted')} ${localize('bleedingOut')}`
@@ -349,7 +389,7 @@ export class MessageSpecialTest extends MessageElement {
           <wl-list-item
             clickable
             @click=${this.applyAcuteStressResponse}
-            ?disabled=${isSuccess}
+            ?disabled=${disabled || isSuccess}
           >
             ${isSuccess
               ? `${localize('resisted')} ${localize('acuteStress')}, ${localize(
@@ -364,7 +404,7 @@ export class MessageSpecialTest extends MessageElement {
           <wl-list-item
             clickable
             @click=${this.applyIntegrationEffects}
-            ?disabled=${isSuccess}
+            ?disabled=${disabled || isSuccess}
           >
             ${isSuccess
               ? `${localize('successful')} ${localize('integration')}`
@@ -386,7 +426,7 @@ export class MessageSpecialTest extends MessageElement {
         `;
 
       default:
-        return html`<p>${localize(type)}</p>`;
+        return html`<p>${localize(this.specialTest.type)}</p>`;
     }
   }
 }
