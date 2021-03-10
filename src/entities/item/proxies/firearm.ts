@@ -63,6 +63,10 @@ export class Firearm
     return `${this.name} ${this.shapeChanging ? `(${this.shapeName})` : ''}`;
   }
 
+  fire(shots: number) {
+    return this.updateAmmoCount(this.availableShots - shots);
+  }
+
   updateAmmoCount(newValue: number) {
     const { max, value } = this.ammoState;
     this.updater

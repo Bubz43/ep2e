@@ -60,6 +60,10 @@ export class SprayWeapon
     return !!this.availableShots;
   }
 
+  fire(shots: number) {
+    return this.spendAmmo(shots);
+  }
+
   get payloadUse() {
     return this.epData.payloadUse;
   }

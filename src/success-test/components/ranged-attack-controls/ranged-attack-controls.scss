@@ -100,6 +100,12 @@
   .firing-modes {
     display: flex;
   }
+
+  .blast-radius-form {
+    input {
+      min-width: 5ch;
+    }
+  }
 }
 
 .targetting {

@@ -1,4 +1,10 @@
-import { CalledShot, ExplosiveTrigger, RangeRating } from '@src/data-enums';
+import { createMessage } from '@src/chat/create-message';
+import {
+  CalledShot,
+  ExplosiveTrigger,
+  RangeRating,
+  SuperiorResultEffect,
+} from '@src/data-enums';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { RangedWeapon } from '@src/entities/item/item';
 import {
@@ -13,18 +19,21 @@ import {
 } from '@src/features/actions';
 import { matchesSkill, Source } from '@src/features/effects';
 import { getCurrentEnvironment } from '@src/features/environment';
-import type { FiringMode } from '@src/features/firing-modes';
+import { FiringMode, firingModeCost } from '@src/features/firing-modes';
 import type { Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { capitalize } from '@src/foundry/misc-helpers';
+import type { LabeledFormula } from '@src/foundry/rolls';
 import { distanceBetweenTokens } from '@src/foundry/token-helpers';
+import { arrayOf, notEmpty } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
-import { merge } from 'remeda';
+import { compact, last, merge } from 'remeda';
 import type { SetRequired } from 'type-fest';
 import { getRangeModifier } from './range-modifiers';
 import { SkillTest, SkillTestInit } from './skill-test';
 import {
   createSuccessTestModifier,
+  grantedSuperiorResultEffects,
   successTestEffectMap,
 } from './success-test';
 
@@ -226,5 +235,107 @@ export class RangedAttackTest extends SkillTest {
     return primaryAttack
       ? weapon.attacks?.primary
       : weapon.attacks?.secondary || weapon.attacks?.primary;
+  }
+
+  get rangeDamageModifier(): LabeledFormula | null {
+    return null;
+    // return this.firing.weapon.type === ItemType.ThrownWeapon &&
+    //   this.rangeModifier.value < -10 &&
+    //   !getCurrentEnvironment().vacuum
+    //   ? {
+    //       label: localize('beyondRange'),
+    //       formula: '-1d10',
+    //     }
+    //   : null;
+  }
+
+  protected async createMessage() {
+    const {
+      settings,
+      pools,
+      action,
+      firing,
+      attack,
+      testMessageData,
+      rangeDamageModifier,
+    } = this;
+
+    const {
+      weapon,
+      primaryAttack,
+      attackTarget,
+      explosiveSettings,
+      calledShot,
+      firingMode,
+      suppressiveFire,
+    } = firing;
+
+    await createMessage({
+      data: {
+        header: {
+          heading: `${weapon.name} ${localize('thrownAttack')}`,
+          subheadings: [
+            this.name,
+            [
+              `${action.type} ${
+                action.timeMod && action.type !== ActionType.Task
+                  ? `(${localize('as')} ${localize('task')})`
+                  : ''
+              }`,
+              localize(action.subtype),
+              localize('action'),
+            ].join(' '),
+          ],
+          img: weapon?.nonDefaultImg,
+          description: weapon?.description,
+        },
+        successTest: {
+          ...testMessageData,
+          superiorResultEffects: arrayOf({
+            value: SuperiorResultEffect.Damage,
+            length: grantedSuperiorResultEffects(
+              last(testMessageData.states)?.result,
+            ),
+          }),
+          defaultSuperiorEffect:
+            weapon.type !== ItemType.SeekerWeapon &&
+            notEmpty(attack?.rollFormulas)
+              ? SuperiorResultEffect.Damage
+              : undefined,
+        },
+        explosiveUse:
+          weapon.type === ItemType.SeekerWeapon &&
+          weapon.missiles &&
+          explosiveSettings
+            ? {
+                ...explosiveSettings,
+                attackType: primaryAttack ? 'primary' : 'secondary',
+                explosive: weapon.missiles.getDataCopy(),
+              }
+            : undefined,
+
+        targets: compact([
+          attackTarget?.scene && {
+            tokenId: attackTarget.id,
+            sceneId: attackTarget.scene.id,
+          },
+        ]),
+      },
+
+      entity: this.token ?? this.character, // TODO account for item sources,
+      visibility: settings.visibility,
+    });
+
+    if (pools.active) {
+      await this.character?.modifySpentPools({
+        pool: pools.active[0].type,
+        points: 1,
+      });
+    }
+    await weapon.fire(
+      suppressiveFire
+        ? firingModeCost.suppressiveFire
+        : firingModeCost[firingMode],
+    );
   }
 }

@@ -453,6 +453,7 @@ export class RangedAttackControls extends LitElement {
             })
           : renderAutoForm({
               storeOnInput: true,
+              classes: 'blast-radius-form',
               props: {
                 uniformBlastRadius:
                   settings.uniformBlastRadius || explosive.areaEffectRadius,

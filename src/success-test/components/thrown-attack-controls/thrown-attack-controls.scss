@@ -96,6 +96,12 @@
   sl-form {
     padding: 0 0.25rem;
   }
+
+  .blast-radius-form {
+    input {
+      min-width: 5ch;
+    }
+  }
 }
 
 .targetting {

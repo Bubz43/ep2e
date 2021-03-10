@@ -13,6 +13,7 @@ import { ArmorType } from '@src/features/active-armor';
 import { CommonInterval, currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { HealthType } from '@src/health/health';
+import { nonNegative } from '@src/utility/helpers';
 import mix from 'mix-with/lib';
 import { clamp, compact, difference, map, pipe } from 'remeda';
 import type { Attacker } from '../item-interfaces';
@@ -51,6 +52,12 @@ export class BeamWeapon
 
   get canFire() {
     return !!this.battery;
+  }
+
+  fire(shots: number) {
+    return this.updater
+      .path('data', 'battery', 'charge')
+      .commit((current) => nonNegative(current - shots));
   }
 
   get availableShots() {

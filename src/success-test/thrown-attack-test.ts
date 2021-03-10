@@ -302,6 +302,7 @@ export class ThrownAttackTest extends SkillTest {
           weapon.type === ItemType.Explosive && explosiveSettings
             ? {
                 ...explosiveSettings,
+                attackType: primaryAttack ? 'primary' : 'secondary',
                 explosive: weapon.getDataCopy(),
               }
             : undefined,

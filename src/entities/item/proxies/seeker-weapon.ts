@@ -46,6 +46,10 @@ export class SeekerWeapon extends mix(Base).with(
     super(init);
   }
 
+  fire() {
+    return this.missiles?.consumeUnit();
+  }
+
   get canFire() {
     return !!this.availableShots;
   }
