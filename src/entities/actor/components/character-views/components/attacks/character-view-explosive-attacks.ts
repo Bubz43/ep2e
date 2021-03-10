@@ -136,9 +136,11 @@ export class CharacterViewExplosiveAttacks extends LitElement {
       <colored-tag
         type="attack"
         clickable
-        ?disabled=${!this.explosive.editable}
+        ?disabled=${!this.explosive.editable || !this.explosive.quantity}
         @click=${(ev: MouseEvent) =>
-          this.onAttack?.(attackType) || this.openUseMenu(ev, attackType)}
+          this.onAttack
+            ? this.onAttack(attackType)
+            : this.openUseMenu(ev, attackType)}
       >
         <span>${info}</span>
         ${this.explosive.hasSecondaryMode

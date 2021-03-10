@@ -56,6 +56,10 @@ export class SprayWeapon
     super(init);
   }
 
+  get canFire() {
+    return !!this.availableShots;
+  }
+
   get payloadUse() {
     return this.epData.payloadUse;
   }

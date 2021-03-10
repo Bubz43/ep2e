@@ -67,6 +67,14 @@ export class Railgun
     return `${this.name} ${this.shapeChanging ? `(${this.shapeName})` : ''}`;
   }
 
+  get canFire() {
+    return !!this.availableShots;
+  }
+
+  get availableShots() {
+    return Math.min(this.epData.ammo.value, this.battery.charge);
+  }
+
   @LazyGetter()
   get ammoState() {
     return {

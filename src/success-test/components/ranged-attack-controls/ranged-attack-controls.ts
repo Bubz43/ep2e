@@ -1,7 +1,29 @@
+import {
+  renderLabeledCheckbox,
+  renderNumberField,
+  renderNumberInput,
+  renderRadio,
+  renderSelectField,
+  renderTimeField,
+} from '@src/components/field/fields';
+import { renderAutoForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
-import { CalledShot, enumValues } from '@src/data-enums';
+import {
+  AreaEffectType,
+  CalledShot,
+  enumValues,
+  ExplosiveTrigger,
+} from '@src/data-enums';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
+import { ActorType, ItemType } from '@src/entities/entity-types';
+import type { Explosive } from '@src/entities/item/proxies/explosive';
+import {
+  createExplosiveTriggerSetting,
+  ExplosiveSettings,
+} from '@src/entities/weapon-settings';
+import { FiringMode, firingModeCost } from '@src/features/firing-modes';
+import { CommonInterval } from '@src/features/time';
 import { readyCanvas } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
@@ -129,7 +151,7 @@ export class RangedAttackControls extends LitElement {
         sublabel: weapon.fullType,
         activated: weapon === this.test?.firing.weapon,
         callback: () => this.test?.firing.update({ weapon }),
-        // disabled: !weapon.ammo,
+        disabled: !weapon.canFire,
       })),
     });
   }
@@ -198,8 +220,8 @@ export class RangedAttackControls extends LitElement {
       firing,
       skillState,
       // damageFormulas,
-      // attack,
-      // canCallShot,
+      attack,
+      canCallShot,
     } = test;
 
     const {
@@ -213,7 +235,7 @@ export class RangedAttackControls extends LitElement {
       oneHanded,
     } = firing;
     const { morphSize } = character;
-    // const { attacks } = weapon ?? {};
+    const { attacks } = weapon ?? {};
 
     // const joinedFormula = joinLabeledFormulas(damageFormulas);
 
@@ -300,12 +322,245 @@ export class RangedAttackControls extends LitElement {
         .modifierStore=${test.modifiers}
       ></success-test-modifiers-section>
 
+      <ul class="firing-info">
+        <wl-list-item clickable @click=${this.selectWeapon}>
+          ${weapon.name}
+        </wl-list-item>
+        ${attacks?.secondary
+          ? html`
+              <wl-list-item
+                class="attack-setting"
+                clickable
+                @click=${() => firing.update({ primaryAttack: !primaryAttack })}
+              >
+                ${attack?.label}
+              </wl-list-item>
+            `
+          : ''}
+        ${this.renderFiringModeSelect(test)}
+        ${weapon.type === ItemType.SeekerWeapon &&
+        weapon.missiles &&
+        explosiveSettings // TODO Spray Weapon
+          ? html`
+              ${weapon.missiles.areaEffect
+                ? this.renderAreaEffectEdit(
+                    weapon.missiles,
+                    explosiveSettings,
+                    weapon.missiles.areaEffect,
+                  )
+                : ''}
+              ${this.renderTriggerSettings(explosiveSettings)}
+            `
+          : ''}
+        ${weapon.isTwoHanded
+          ? html`
+              <mwc-check-list-item
+                ?selected=${!oneHanded}
+                @click=${() => firing.update({ oneHanded: !oneHanded })}
+              >
+                <span>${localize('twoHanded')}</span>
+              </mwc-check-list-item>
+            `
+          : ''}
+        ${canCallShot
+          ? html`
+              <wl-list-item clickable @click=${this.selectCalledShot}>
+                <span>${localize('calledShot')}</span>
+                <span slot="after"
+                  >${calledShot ? localize(calledShot) : '-'}</span
+                >
+              </wl-list-item>
+            `
+          : ''}
+      </ul>
+
       <success-test-footer
         class="footer"
         target=${target}
         .settings=${test.settings}
       ></success-test-footer>
     `;
+  }
+
+  private renderFiringModeSelect(
+    test: NonNullable<RangedAttackControls['test']>,
+  ) {
+    const { weapon, firingMode, suppressiveFire = false } = test.firing;
+    const { attack } = test;
+    if (weapon.type === ItemType.SeekerWeapon) {
+      return html`<mwc-formfield label=${localize(weapon.firingMode)}
+        >${renderRadio({
+          checked: true,
+          name: weapon.firingMode,
+          value: weapon.firingMode,
+          disabled: false,
+        })}</mwc-formfield
+      >`;
+    }
+    if (!attack || !('firingModes' in attack)) return '';
+    return renderAutoForm({
+      props: { firingMode, suppressiveFire },
+      update: test.firing.update,
+      fields: ({ firingMode, suppressiveFire }) => [
+        html`<div class="firing-modes">
+          ${attack.firingModes.map(
+            (mode) =>
+              html`<mwc-formfield label=${localize('SHORT', mode)}
+                >${renderRadio({
+                  checked: mode === firingMode.value,
+                  name: firingMode.prop,
+                  value: mode,
+                  disabled: firingModeCost[mode] > weapon.availableShots,
+                })}</mwc-formfield
+              >`,
+          )}
+        </div>`,
+        firingMode.value === FiringMode.FullAuto
+          ? renderLabeledCheckbox(suppressiveFire, {
+              disabled: weapon.availableShots < firingModeCost.suppressiveFire,
+            })
+          : '',
+      ],
+    });
+  }
+
+  private renderAreaEffectEdit(
+    explosive: Explosive,
+    settings: ExplosiveSettings,
+    areaEffect: AreaEffectType,
+  ) {
+    return html`<li class="area-effect">
+      <span
+        >${localize(areaEffect)} ${localize('areaEffect')}
+        ${areaEffect === AreaEffectType.Centered
+          ? renderAutoForm({
+              storeOnInput: true,
+
+              props: {
+                centeredReduction: settings.centeredReduction || -2,
+              },
+              update: (changed) => {
+                this.test?.firing.update({
+                  explosiveSettings: { ...settings, ...changed },
+                });
+              },
+              fields: ({ centeredReduction }) =>
+                html`${renderNumberInput(centeredReduction, {
+                  max: -2,
+                  min: -20,
+                })}
+                DV/m`,
+            })
+          : renderAutoForm({
+              storeOnInput: true,
+              props: {
+                uniformBlastRadius:
+                  settings.uniformBlastRadius || explosive.areaEffectRadius,
+              },
+              update: (changed) => {
+                this.test?.firing.update({
+                  explosiveSettings: { ...settings, ...changed },
+                });
+              },
+              fields: ({ uniformBlastRadius }) =>
+                html`${renderNumberInput(uniformBlastRadius, {
+                  min: 1,
+                  max: explosive.areaEffectRadius,
+                })}
+                ${localize('meter')} ${localize('radius')}`,
+            })}
+      </span>
+      <p>
+        ${localize('quick')} ${localize('action')} ${localize('to')}
+        ${localize('adjust')}
+      </p>
+    </li>`;
+  }
+
+  private renderTriggerSettings(settings: ExplosiveSettings) {
+    return html` <li class="trigger">
+      ${renderAutoForm({
+        props: settings.trigger,
+        update: ({ type }) => {
+          type &&
+            this.test?.firing.update({
+              explosiveSettings: {
+                ...settings,
+                trigger: createExplosiveTriggerSetting(type),
+              },
+            });
+        },
+        fields: ({ type }) =>
+          renderSelectField(
+            { ...type, label: localize('trigger') },
+            enumValues(ExplosiveTrigger),
+          ),
+      })}
+      ${this.renderTriggerForm(settings)}
+    </li>`;
+  }
+
+  private renderTriggerForm(settings: ExplosiveSettings) {
+    const { trigger } = settings;
+    switch (trigger.type) {
+      case ExplosiveTrigger.Impact:
+      case ExplosiveTrigger.Signal:
+        return '';
+
+      case ExplosiveTrigger.Airburst:
+        return renderAutoForm({
+          props: trigger,
+          update: (changed) => {
+            this.test?.firing.update({
+              explosiveSettings: {
+                ...settings,
+                trigger: { ...trigger, ...changed },
+              },
+            });
+          },
+          fields: ({ distance }) => renderNumberField(distance, { min: 1 }), // TODO max?
+        });
+
+      case ExplosiveTrigger.Proximity:
+        return renderAutoForm({
+          props: trigger,
+          classes: 'proximity-form',
+          update: (changed) => {
+            this.test?.firing.update({
+              explosiveSettings: {
+                ...settings,
+                trigger: { ...trigger, ...changed },
+              },
+            });
+          },
+          fields: ({ radius, targets }) => [
+            renderNumberField(
+              { ...radius, label: `${radius.label} (${localize('meters')})` },
+              { min: 0.1, max: 3 },
+            ),
+            renderSelectField(
+              targets,
+              [ActorType.Biological, ActorType.Synthetic],
+              { emptyText: localize('any') },
+            ),
+          ],
+        });
+
+      case ExplosiveTrigger.Timer:
+        return renderAutoForm({
+          props: trigger,
+          update: (changed) => {
+            this.test?.firing.update({
+              explosiveSettings: {
+                ...settings,
+                trigger: { ...trigger, ...changed },
+              },
+            });
+          },
+          fields: ({ detonationPeriod }) =>
+            renderTimeField(detonationPeriod, { min: CommonInterval.Turn }),
+        });
+    }
   }
 }
 

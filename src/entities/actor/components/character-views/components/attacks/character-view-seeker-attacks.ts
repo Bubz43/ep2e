@@ -47,8 +47,15 @@ export class CharacterViewSeekerAttacks extends LitElement {
         ?disabled=${!editable}
         @click=${this.openMissileSelect}
       >
-        <span>${localize('missiles')}</span>
-        <span slot="after">${missiles?.fullName || '-'}</span>
+        ${missiles
+          ? html`
+              <span>${missiles.fullName}</span>
+              <span slot="after">${missiles.fullType}</span>
+            `
+          : html`
+              <span>${localize('missiles')}</span>
+              <span slot="after">${'-'}</span>
+            `}
       </colored-tag>
 
       ${missiles

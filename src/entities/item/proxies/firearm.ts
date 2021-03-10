@@ -20,7 +20,6 @@ import {
   concat,
   createPipe,
   identity,
-  pipe,
   take,
   takeWhile,
 } from 'remeda';
@@ -80,6 +79,10 @@ export class Firearm
               : identity,
           )
       : this.updater.commit();
+  }
+
+  get canFire() {
+    return !!this.availableShots;
   }
 
   get range() {

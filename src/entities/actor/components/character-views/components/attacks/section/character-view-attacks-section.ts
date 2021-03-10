@@ -155,6 +155,7 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
   }
 
   private renderPhysicalSleeveInfo(sleeve: Exclude<Sleeve, Infomorph>) {
+    // TODO factor in gravity for throwing range
     return html`
       <div class="physical-info">
         <colored-tag

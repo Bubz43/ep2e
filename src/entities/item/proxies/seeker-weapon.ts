@@ -46,6 +46,10 @@ export class SeekerWeapon extends mix(Base).with(
     super(init);
   }
 
+  get canFire() {
+    return !!this.availableShots;
+  }
+
   get firingMode() {
     return this.epData.firingMode;
   }
@@ -85,6 +89,10 @@ export class SeekerWeapon extends mix(Base).with(
       this.primaryAmmo.missileSize,
       this.allowAlternativeAmmo && this.alternativeAmmo.missileSize,
     ]);
+  }
+
+  get attacks() {
+    return this.missiles?.attacks;
   }
 
   get currentCapacity() {

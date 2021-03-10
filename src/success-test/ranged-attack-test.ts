@@ -213,4 +213,18 @@ export class RangedAttackTest extends SkillTest {
         })),
     );
   }
+
+  get canCallShot() {
+    const { weapon } = this.firing;
+    return weapon.type === ItemType.SeekerWeapon
+      ? !weapon.missiles?.areaEffect
+      : weapon.type !== ItemType.SprayWeapon;
+  }
+
+  get attack() {
+    const { weapon, primaryAttack } = this.firing;
+    return primaryAttack
+      ? weapon.attacks?.primary
+      : weapon.attacks?.secondary || weapon.attacks?.primary;
+  }
 }

@@ -37,8 +37,8 @@ export const openSeekerAmmoMenu = (
           );
         } else {
           await character?.itemOperations.add(currentMissiles.getDataCopy());
-          await weapon.removeMissiles();
         }
+        await weapon.removeMissiles();
       },
     });
   } else {

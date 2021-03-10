@@ -610,6 +610,7 @@ type SoftwareData = {
   skills: StringID<{ name: string; specialization: string; total: number }>[];
   activation: '' | Exclude<ActionType, ActionType.Task>;
   meshAttacks: 0 | 1 | 2;
+  //TODO: applySkillsToCharacter: boolean - let these skills be used inplace of ego skills e.g., Skillsofts
   state: {
     equipped: boolean;
     activated: boolean;
