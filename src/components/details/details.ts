@@ -1,5 +1,5 @@
 import { clickIfEnter } from '@src/utility/helpers';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, html, LitElement, property } from 'lit-element';
 import mix from 'mix-with/lib';
 import { LazyRipple } from '../mixins/lazy-ripple';
 import styles from './details.scss';
@@ -20,7 +20,7 @@ export class Details extends mix(LitElement).with(LazyRipple) {
 
   @property({ type: String }) summary = '';
 
-  toggleOpen() {
+  async toggleOpen() {
     if (this.disabled) return;
     this.open = !this.open;
   }
@@ -29,6 +29,7 @@ export class Details extends mix(LitElement).with(LazyRipple) {
     return html`
       <div
         class="toggle"
+        part="toggle"
         @click=${this.toggleOpen}
         @focus="${this.handleRippleFocus}"
         @blur="${this.handleRippleBlur}"
@@ -48,7 +49,9 @@ export class Details extends mix(LitElement).with(LazyRipple) {
         ${this.renderRipple(this.disabled)}
       </div>
 
-      <div class="content" ?hidden=${!this.open}><slot></slot></div>
+      <div class="content" part="content" ?hidden=${!this.open}>
+        <slot></slot>
+      </div>
     `;
   }
 }

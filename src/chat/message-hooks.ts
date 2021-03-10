@@ -1,14 +1,14 @@
 import type { ChatMessageEP } from '@src/entities/chat-message';
 import {
   ActorIdentifiers,
-  findToken,
   findActor,
+  findToken,
 } from '@src/entities/find-entities';
 import { mutateEntityHook, MutateEvent } from '@src/foundry/hook-setups';
 import { isGamemaster } from '@src/foundry/misc-helpers';
 import { addEPSocketHandler } from '@src/foundry/socket';
 import { EP } from '@src/foundry/system';
-import { html, render, nothing } from 'lit-html';
+import { html, nothing, render } from 'lit-html';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { mapKeys } from 'remeda';
 import { messageContentPlaceholder } from './create-message';
@@ -115,7 +115,6 @@ export const onChatMessageRender = (message: ChatMessageEP, [el]: JQuery) => {
     );
     el.classList.add('updated');
   } else if (createdChatMessages.has(message)) {
-    console.log(message);
     el.addEventListener('animationend', () => el.classList.remove('new'), {
       once: true,
     });

@@ -40,6 +40,7 @@ export class ActiveArmor
     public readonly sources: ReadonlyArray<SourcedEffect<ArmorEffect>>,
     som: number | null,
     public readonly damagedArmor?: ArmorDamage[] | null,
+    ignoreOverburdened?: boolean,
   ) {
     super();
     const armorTypes = enumValues(ArmorType);
@@ -82,7 +83,7 @@ export class ActiveArmor
       this.currentEffects.push(this._layerPenalty);
     }
 
-    if (som && highestPhysicalArmor > som) {
+    if (!ignoreOverburdened && som && highestPhysicalArmor > som) {
       this._overburdened = {
         source: localize('overburdened'),
         effects: [

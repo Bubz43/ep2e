@@ -3,24 +3,26 @@ import {
   formatAreaEffect,
   formatArmorUsed,
 } from '@src/combat/attack-formatting';
-import type { ExplosiveAttack } from '@src/combat/attacks';
+import { startThrownAttack } from '@src/combat/attack-init';
+import type { AttackType } from '@src/combat/attacks';
 import type { SlWindow } from '@src/components/window/window';
-import { ExplosiveTrigger, ExplosiveType } from '@src/data-enums';
+import { ExplosiveTrigger } from '@src/data-enums';
+import { Explosive } from '@src/entities/item/proxies/explosive';
 import {
   createExplosiveTriggerSetting,
   ExplosiveSettings,
 } from '@src/entities/weapon-settings';
-import type { Explosive } from '@src/entities/item/proxies/explosive';
 import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
+import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { compact, map } from 'remeda';
-import { requestCharacter } from '../../../character-request-event';
-import { ExplosiveSettingsForm } from '../explosive-settings/explosive-settings-form';
-import styles from './character-view-explosive-attacks.scss';
+import { requestCharacter } from '../../character-request-event';
+import styles from './attack-info-styles.scss';
+import { ExplosiveSettingsForm } from './explosive-settings/explosive-settings-form';
 
 @customElement('character-view-explosive-attacks')
 export class CharacterViewExplosiveAttacks extends LitElement {
@@ -37,7 +39,9 @@ export class CharacterViewExplosiveAttacks extends LitElement {
   private settingsWindow?: SlWindow | null = null;
 
   updated() {
-    const popout = this.settingsWindow?.querySelector(ExplosiveSettingsForm.is);
+    const popout = this.settingsWindow?.querySelector<ExplosiveSettingsForm>(
+      ExplosiveSettingsForm.is,
+    );
     if (popout) popout.explosive = this.explosive;
   }
 
@@ -64,46 +68,54 @@ export class CharacterViewExplosiveAttacks extends LitElement {
     this.explosive.consumeUnit();
   }
 
+  private openUseMenu(ev: MouseEvent, attackType: AttackType) {
+    const { character, token } = requestCharacter(this);
+    const attack = this.explosive.attacks[attackType];
+    if (!character || !attack) return;
+    const adjacentElement = ev.currentTarget as HTMLElement;
+    openMenu({
+      position: ev,
+      header: {
+        heading: `${localize('use')} ${this.explosive.name} ${attack.label}`,
+      },
+      content: compact([
+        {
+          label: localize('place'),
+          callback: () => this.openExplosivePlacingWindow(attackType),
+        },
+        this.explosive.isGrenade && {
+          label: localize('throw'),
+          callback: () =>
+            startThrownAttack({
+              actor: character.actor,
+              token,
+              weaponId: this.explosive.id,
+              attackType,
+              adjacentElement,
+            }),
+        },
+      ]),
+    });
+  }
+
   render() {
-    const { attacks, editable, sticky } = this.explosive;
+    const { attacks, sticky } = this.explosive;
     return html`
-      <div class="shared">
-        ${sticky ? html`<div>${localize('sticky')}</div>` : ''}
-        <div class="area-effect">
-          ${localize('areaEffect')}
-          <span class="area-values"> ${formatAreaEffect(this.explosive)} </span>
-        </div>
-      </div>
-      <ul class="attacks">
-        ${this.renderAttack(attacks.primary)}
-        ${attacks.secondary ? this.renderAttack(attacks.secondary) : ''}
-      </ul>
-
-      <div class="actions">
-        ${this.explosive.explosiveType === ExplosiveType.Grenade
-          ? html`
-              <mwc-button
-                dense
-                ?disabled=${!editable}
-                @click=${this.openExplosiveSettingsDialog}
-              >
-                <span>${localize('throw')}</span>
-              </mwc-button>
-            `
-          : ''}
-
-        <mwc-button
-          dense
-          ?disabled=${!editable}
-          @click=${this.openExplosivePlacingWindow}
-        >
-          <span>${localize('place')}</span>
-        </mwc-button>
-      </div>
+      ${this.renderAttack('primary')}
+      ${attacks.secondary ? this.renderAttack('secondary') : ''}
+      ${sticky
+        ? html`<colored-tag type="info">${localize('sticky')}</colored-tag>`
+        : ''}
+      <colored-tag class="area-effect">
+        ${localize('areaEffect')}
+        <span slot="after"> ${formatAreaEffect(this.explosive)} </span>
+      </colored-tag>
     `;
   }
 
-  private renderAttack(attack: ExplosiveAttack) {
+  private renderAttack(attackType: AttackType) {
+    const attack = this.explosive.attacks[attackType];
+    if (!attack) return '';
     const info = compact([
       notEmpty(attack.rollFormulas) &&
         [
@@ -117,23 +129,29 @@ export class CharacterViewExplosiveAttacks extends LitElement {
         `${localize('lasts')} ${prettyMilliseconds(attack.duration)}`,
       attack.notes,
     ]).join('. ');
-    if (!this.explosive.hasSecondaryMode && !info) return '';
+    if (!this.explosive.hasSecondaryMode && !info.length) return '';
     return html`
-      <li>
+      <colored-tag
+        type="attack"
+        clickable
+        ?disabled=${!this.explosive.editable}
+        @click=${(ev: MouseEvent) => this.openUseMenu(ev, attackType)}
+      >
+        <span>${info}</span>
         ${this.explosive.hasSecondaryMode
-          ? html` <span class="label">${attack.label}</span> `
+          ? html` <span slot="after">${attack.label}</span> `
           : ''}
-        <span> ${info.endsWith('.') ? info : `${info}.`}</span>
-      </li>
+      </colored-tag>
     `;
   }
 
-  private openExplosivePlacingWindow() {
-    const initialSettings = { placing: true };
+  private openExplosivePlacingWindow(attackType: AttackType) {
+    const initialSettings = { placing: true, attackType };
     this.settingsWindow = ExplosiveSettingsForm.openWindow({
       explosive: this.explosive,
       requireSubmit: true,
       update: this.createMessage.bind(this),
+      adjacentEl: this,
       initialSettings,
     }).win;
   }

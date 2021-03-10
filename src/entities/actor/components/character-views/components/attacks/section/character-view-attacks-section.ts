@@ -1,20 +1,30 @@
 import { createMessage } from '@src/chat/create-message';
+import { startThrownAttack } from '@src/combat/attack-init';
 import { LazyRipple } from '@src/components/mixins/lazy-ripple';
 import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Character } from '@src/entities/actor/proxies/character';
+import type { Infomorph } from '@src/entities/actor/proxies/infomorph';
+import type { Sleeve } from '@src/entities/actor/sleeves';
 import { ActorType } from '@src/entities/entity-types';
+import type { ItemProxy } from '@src/entities/item/item';
+import { renderItemCard } from '@src/entities/item/item-views';
 import { ArmorType } from '@src/features/active-armor';
 import { idProp } from '@src/features/feature-helpers';
-import { FieldSkillType, SkillType } from '@src/features/skills';
+import { SkillType } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { HealthType } from '@src/health/health';
+import { openMenu } from '@src/open-menu';
 import { MeleeAttackControls } from '@src/success-test/components/melee-attack-controls/melee-attack-controls';
-import { clickIfEnter } from '@src/utility/helpers';
-import { customElement, LitElement, property, html } from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map';
+import { customElement, html, LitElement, property } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
+import { identity } from 'remeda';
+import { renderItemAttacks } from '../render-item-attacks';
 import styles from './character-view-attacks-section.scss';
+
+const groups = ['melee', 'software', 'thrown', 'ranged'] as const;
+
+type WeaponGroup = typeof groups[number];
 
 /**
  * @csspart header
@@ -33,10 +43,16 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
 
   @property({ attribute: false }) token?: MaybeToken;
 
-  @property({ type: Boolean, reflect: true }) collapsed = false;
+  private activeGroups: Record<WeaponGroup, boolean> = {
+    melee: true,
+    thrown: true,
+    software: true,
+    ranged: true,
+  };
 
-  private toggleCollapse() {
-    this.collapsed = !this.collapsed;
+  private toggleActive(group: WeaponGroup) {
+    this.activeGroups[group] = !this.activeGroups[group];
+    this.requestUpdate();
   }
 
   private rollUnarmedDamage() {
@@ -78,71 +94,89 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
     });
   }
 
+  private selectThrowingWeapon(ev: MouseEvent) {
+    const adjacentElement = ev.currentTarget as HTMLElement;
+    openMenu({
+      header: { heading: localize('throw') },
+      position: ev,
+      content: this.character.weapons.thrown.map((weapon) => ({
+        label: weapon.fullName,
+        sublabel: weapon.fullType,
+        disabled: !weapon.quantity,
+        callback: () =>
+          startThrownAttack({
+            token: this.token,
+            actor: this.character.actor,
+            weaponId: weapon.id,
+            adjacentElement,
+          }),
+      })),
+    });
+  }
+
   render() {
-    const { sleeve } = this.character;
+    const { sleeve, weapons } = this.character;
     return html`
-      <sl-header
-        part="header"
-        hideBorder
-        heading=${localize('attacks')}
-        @click=${this.toggleCollapse}
-        @focus="${this.handleRippleFocus}"
-        @blur="${this.handleRippleBlur}"
-        @mousedown="${this.handleRippleMouseDown}"
-        @mouseenter="${this.handleRippleMouseEnter}"
-        @mouseleave="${this.handleRippleMouseLeave}"
-        @keydown=${clickIfEnter}
-        tabindex="0"
-      >
-        <span slot="action">${this.renderRipple()}</span>
-        <mwc-icon
-          slot="action"
-          class="toggle-icon ${classMap({ collapsed: this.collapsed })}"
-        >
-          keyboard_arrow_down
-        </mwc-icon>
-      </sl-header>
-      <sl-animated-list class="attacks" ?hidden=${this.collapsed}>
-        ${sleeve && sleeve.type !== ActorType.Infomorph
-          ? html`
-              <wl-list-item
-                clickable
-                @click=${this.startUnarmedAttack}
-                @contextmenu=${this.rollUnarmedDamage}
-                >${localize('unarmedDV')} ${sleeve.unarmedDV}</wl-list-item
-              >
-            `
-          : ''}
+      <div class="group-toggles">
+        ${groups.map((key) => {
+          const group = weapons[key];
+          if (group.length === 0) return '';
+          const active = this.activeGroups[key];
+          return html`
+            <mwc-button
+              dense
+              ?outlined=${!active}
+              ?unelevated=${active}
+              @click=${() => this.toggleActive(key)}
+              label=${localize(key)}
+            ></mwc-button>
+          `;
+        })}
+      </div>
+      ${sleeve && sleeve.type !== ActorType.Infomorph
+        ? this.renderPhysicalSleeveInfo(sleeve)
+        : ''}
+
+      <sl-animated-list class="attacks" transformOrigin="top">
         ${repeat(
-          this.character.weapons.melee,
-          idProp,
-          (weapon) => html`
-            <li>
-              <header>
-                ${weapon.name} <span class="type">${weapon.fullType}</span>
-              </header>
-              <character-view-melee-weapon-attacks
-                .weapon=${weapon}
-              ></character-view-melee-weapon-attacks>
-            </li>
-          `,
-        )}
-        ${repeat(
-          this.character.weapons.explosives,
-          idProp,
-          (explosive) => html`
-            <li>
-              <header>
-                ${explosive.fullName}
-                <span class="type">${explosive.fullType}</span>
-              </header>
-              <character-view-explosive-attacks
-                .explosive=${explosive}
-              ></character-view-explosive-attacks>
-            </li>
-          `,
+          groups.filter((g) => weapons[g].length && this.activeGroups[g]),
+          identity,
+          (key) => {
+            const group = weapons[key] as ItemProxy[];
+            return repeat(group, idProp, (weapon) =>
+              renderItemCard(weapon, {
+                unexpandedContent: renderItemAttacks(weapon),
+              }),
+            );
+          },
         )}
       </sl-animated-list>
+    `;
+  }
+
+  private renderPhysicalSleeveInfo(sleeve: Exclude<Sleeve, Infomorph>) {
+    return html`
+      <div class="physical-info">
+        <colored-tag
+          clickable
+          type="attack"
+          @click=${this.startUnarmedAttack}
+          @contextmenu=${this.rollUnarmedDamage}
+          ?disabled=${this.character.disabled}
+          >${localize('unarmedDV')}
+          <span slot="after">${sleeve.unarmedDV}</span></colored-tag
+        >
+        <colored-tag
+          type="attack"
+          clickable
+          ?disabled=${this.character.disabled}
+          @click=${this.selectThrowingWeapon}
+          >${localize('throwingRange')}
+          <span slot="after"
+            >${this.character.ego.aptitudes.som}</span
+          ></colored-tag
+        >
+      </div>
     `;
   }
 }

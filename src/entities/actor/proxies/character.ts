@@ -1,4 +1,3 @@
-import { createMessage } from '@src/chat/create-message';
 import {
   getWindow,
   openOrRenderWindow,
@@ -15,14 +14,19 @@ import type {
   ConsumableItem,
   EquippableItem,
   ItemProxy,
+  RangedWeapon,
 } from '@src/entities/item/item';
 import { openPsiFormWindow } from '@src/entities/item/item-views';
+import type { Explosive } from '@src/entities/item/proxies/explosive';
+import type { FirearmAmmo } from '@src/entities/item/proxies/firearm-ammo';
+import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import type { PhysicalService } from '@src/entities/item/proxies/physical-service';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import { Psi } from '@src/entities/item/proxies/psi';
 import type { Sleight } from '@src/entities/item/proxies/sleight';
 import type { Software } from '@src/entities/item/proxies/software';
 import type { Substance } from '@src/entities/item/proxies/substance';
+import type { ThrownWeapon } from '@src/entities/item/proxies/thrown-weapon';
 import type { Trait } from '@src/entities/item/proxies/trait';
 import type { ActorEntity, SleeveType } from '@src/entities/models';
 import type { UpdateStore } from '@src/entities/update-store';
@@ -30,12 +34,11 @@ import { taskState } from '@src/features/actions';
 import { ActiveArmor } from '@src/features/active-armor';
 import { ConditionType, getConditionEffects } from '@src/features/conditions';
 import {
-  DurationEffectTarget,
   EffectType,
   totalModifiers,
   UniqueEffectType,
 } from '@src/features/effects';
-import { matchID, updateFeature } from '@src/features/feature-helpers';
+import { updateFeature } from '@src/features/feature-helpers';
 import type { MovementRate } from '@src/features/movement';
 import { Pool, Pools } from '@src/features/pool';
 import { Recharge } from '@src/features/recharge';
@@ -49,12 +52,10 @@ import {
   createLiveTimeState,
   currentWorldTimeMS,
   getElapsedTime,
-  refreshAvailable,
   LiveTimeState,
+  refreshAvailable,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
-import { deepMerge } from '@src/foundry/misc-helpers';
-import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { EP } from '@src/foundry/system';
 import { HealthEditor } from '@src/health/components/health-editor/health-editor';
 import type { ActorHealth } from '@src/health/health-mixin';
@@ -62,12 +63,10 @@ import { nonNegative, notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import {
   compact,
-  createPipe,
   difference,
   first,
   flatMap,
   mapToObj,
-  merge,
   pipe,
   reject,
   uniq,
@@ -95,7 +94,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   readonly armor;
 
   readonly sleights: Sleight[] = [];
-  readonly traits: Trait[] = [];
+  readonly egoTraits: Trait[] = [];
+  readonly morphTraits: Trait[] = [];
   readonly equipped: EquippableItem[] = [];
   readonly consumables: ConsumableItem[] = [];
   readonly awaitingOnsetSubstances: Substance[] = [];
@@ -145,6 +145,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       this._appliedEffects.getGroup(EffectType.Armor),
       this.ego.aptitudes.som,
       this.sleeve?.epData.damagedArmor,
+      this.ego.settings.ignoreOverburdened,
     );
     this._appliedEffects.add(this.armor.currentEffects);
 
@@ -183,13 +184,63 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
   @LazyGetter()
   get weapons() {
+    const melee: MeleeWeapon[] = [];
+    const software: Software[] = [];
+    const thrown: (ThrownWeapon | Explosive)[] = [];
+    const explosives: Explosive[] = [];
+    const ranged: RangedWeapon[] = [];
+    const ammo: (Explosive | FirearmAmmo | Substance)[] = [];
+
+    for (const consumable of this.consumables) {
+      switch (consumable.type) {
+        case ItemType.Explosive:
+          explosives.push(consumable);
+          if (consumable.isGrenade) thrown.push(consumable);
+          else if (consumable.isMissile) ammo.push(consumable);
+          break;
+
+        case ItemType.FirearmAmmo:
+          ammo.push(consumable);
+          break;
+
+        case ItemType.Substance:
+          if (!consumable.isElectronic) ammo.push(consumable);
+          break;
+
+        case ItemType.ThrownWeapon:
+          thrown.push(consumable);
+          break;
+      }
+    }
+
+    for (const equipped of this.equipped) {
+      switch (equipped.type) {
+        case ItemType.MeleeWeapon:
+          melee.push(equipped);
+          break;
+
+        case ItemType.Software:
+          equipped.hasMeshAttacks && software.push(equipped);
+          break;
+
+        case ItemType.BeamWeapon:
+        case ItemType.Firearm:
+        case ItemType.Railgun:
+        case ItemType.SeekerWeapon:
+        case ItemType.SprayWeapon:
+          ranged.push(equipped);
+
+        default:
+          break;
+      }
+    }
     return {
-      explosives: this.consumables.flatMap((c) =>
-        c.type === ItemType.Explosive ? c : [],
-      ),
-      melee: this.equipped.flatMap((e) =>
-        e.type === ItemType.MeleeWeapon ? e : [],
-      ),
+      explosives,
+      thrown,
+      melee,
+      software,
+      ranged,
+      ammo,
     };
   }
 
@@ -366,8 +417,11 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     const expiredServices: typeof services = [];
     const activeFabbers: PhysicalTech[] = [];
     const devices = new Map<PhysicalTech, boolean>();
+    const onboardALIs = new Map<string, PhysicalTech>();
+    const softwareSkills: Software[] = [];
     let masterDevice: PhysicalTech | null = null;
     const { masterDeviceId, unslavedDevices } = this.networkSettings;
+
     // TODO Weapons && active use
     for (const item of this.equipped) {
       if (item.type === ItemType.PhysicalService) {
@@ -385,11 +439,14 @@ export class Character extends ActorProxyBase<ActorType.Character> {
             if (item.isExpired) expiredServices.push(item);
           }
         }
+        if (notEmpty(item.skills)) softwareSkills.push(item);
       } else if (item.type === ItemType.PhysicalTech) {
         if (item.isActiveFabber) activeFabbers.push(item);
         if (item.deviceType) {
           if (item.id === masterDeviceId) masterDevice = item;
           else devices.set(item, !unslavedDevices.includes(item.id));
+
+          if (item.hasOnboardALI) onboardALIs.set(item.id, item);
         }
       }
     }
@@ -401,6 +458,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       activeFabbers,
       devices,
       masterDevice,
+      softwareSkills,
+      onboardALIs,
     };
   }
 
@@ -764,7 +823,9 @@ export class Character extends ActorProxyBase<ActorType.Character> {
           this._appliedEffects.add(effects);
           for (const substanceItem of items) {
             if (substanceItem.type === ItemType.Trait) {
-              this.traits.push(substanceItem);
+              this[
+                substanceItem.isMorphTrait ? 'morphTraits' : 'egoTraits'
+              ].push(substanceItem);
               this._appliedEffects.add(substanceItem.currentEffects);
             } else {
               this.sleights.push(substanceItem);
@@ -787,7 +848,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       } else if (item.type === ItemType.Trait) {
         const collection = item.isMorphTrait ? sleeveItems : egoItems;
         collection.set(item.id, item);
-        this.traits.push(item);
+        this[item.isMorphTrait ? 'morphTraits' : 'egoTraits'].push(item);
         this._appliedEffects.add(item.currentEffects);
       } else if (item.type === ItemType.Sleight) {
         this.sleights.push(item);

@@ -2,17 +2,18 @@
 
 .app {
   font-size: 14px;
+
   &:not(.chat-popout) {
     *:not(i):not(mwc-icon) {
       font-family: var(--font-3);
     }
   }
- 
+
   &.scene-sheet {
     max-width: 600px;
     max-height: calc(100vh - 200px);
     min-height: 400px;
-    button[type="submit"] {
+    button[type='submit'] {
       position: sticky;
       bottom: 0;
     }
@@ -56,7 +57,7 @@
       color: var(--color-text-lighter);
     }
 
-    textarea[name="command"] {
+    textarea[name='command'] {
       color: var(--color-text);
     }
   }
@@ -78,10 +79,14 @@
   background: alphav(var(--color-bg), 0.8);
   border-radius: 0px;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.712), 0 0 5px black,
-    0 0 1px rgba(255, 255, 255, 0.822) inset;
+    0 0 1px alphav(var(--color-grey), 0.3) inset;
+  border: none !important;
+  > header {
+    background: alphav(var(--color-grey), 0.3);
+  }
 
   &.token-sheet {
-    div[data-tab="resources"] {
+    div[data-tab='resources'] {
       .form-group {
         display: none;
         &:first-of-type {

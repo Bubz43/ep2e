@@ -8,63 +8,98 @@
 }
 
 :host {
-  display: block;
+  display: grid;
+  grid-auto-rows: min-content;
+}
+
+.aptitudes-list,
+.skills-list {
+  column-rule: 1px groove var(--color-border);
+  gap: 0.25rem;
+
+  > * {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+.source {
+  padding: 0.125rem 1rem;
+  --list-item-bg: var(--color-bg);
+  border-left: 4px double var(--color-primary);
+  margin: 0.125rem;
+  box-shadow: 0 0 4px rgba(black, 0.1);
+  span[slot='before'] {
+    margin-right: 1ch;
+  }
+}
+
+sl-details {
+  &::part(content) {
+    padding: 0.25rem;
+  }
+  &::part(toggle) {
+    padding: 0.125rem 0.5rem;
+  }
+  &[open]::part(toggle) {
+    background: linear-gradient(45deg, var(--color-bg-alt), transparent);
+    box-shadow: 0 1px 2px black;
+  }
+}
+
+.skills {
+  border-top: 1px solid var(--color-border);
+  &::part(content) {
+    padding-top: 0;
+  }
 }
 
 .aptitudes-list {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-}
-.aptitudes-list,
-.reps,
-.skills-list {
-  & + * {
-    border-top: 1px groove var(--color-border);
-  }
+  column-count: 3;
+  font-family: var(--font-mono);
 }
 
-.aptitude {
-  &-item {
-    padding: 0.5rem 0.5rem 0.25rem;
-  }
-  &-name {
-    text-align: center;
-    font-family: var(--font-2);
+.aptitude-item {
+  padding: 0.125rem 0.5rem;
+
+  .acronym {
     color: var(--color-text-lighter);
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
-  &-points {
-    font-size: large;
-    margin-right: 0.5ch;
-    min-width: 2ch;
-    text-align: center;
-  }
-  &-check {
-    border-bottom: 1px solid var(--color-text-lighter);
-    height: min-content;
-    min-width: 2ch;
-    text-align: center;
-  }
-  &-values {
-    display: flex;
+  mwc-icon {
+    --mdc-icon-size: 1rem;
+    margin: 0 0.25ch 0 0;
   }
 }
 
-mwc-tab-bar {
-  --mdc-theme-primary: var(--color-grey);
-  margin: 0.25rem 0;
+.aptitude-name {
+  margin-right: 0.5ch;
+}
+
+.aptitude-points {
+  text-align: right;
+  color: var(--color-text-lighter);
+}
+
+.aptitude-check {
+  margin-left: 1ch;
+  display: flex;
+  align-items: center;
 }
 
 .skill-controls {
   @include inputReset();
+
   input {
     text-align: center;
     width: 100%;
-    border: none;
-    padding: 0.25rem 0.5rem;
+    padding: 0.125rem;
     font-family: var(--font-3);
     background: rgba(black, 0.1);
     &:focus {
       background: rgba(black, 0.2);
+      outline: 1px solid var(--color-secondary);
     }
     &::-webkit-search-cancel-button {
       display: none;
@@ -73,30 +108,21 @@ mwc-tab-bar {
 }
 
 .skills-list {
-  column-count: 2;
-  column-gap: 0;
   $border: 1px groove var(--color-border);
-  column-rule: $border;
-  padding: 0.25rem 0 0;
   overflow: hidden;
   font-size: 14px;
-
-  > * {
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
-
+  column-width: 190px;
   .divider {
     margin: 0.25rem 0;
+    border-bottom: $border;
   }
 
   .filter {
-    margin-top: 0.25rem;
+    margin: 0.25rem;
   }
 
   .divider,
   .filter {
-    border-top: $border;
     column-span: all;
     list-style: none;
   }
@@ -106,7 +132,8 @@ mwc-tab-bar {
   padding: 0 0.5rem;
   transition: opacity 200ms, transform 200ms;
   .skill-name {
-    @include truncate(150px);
+    @include truncate(130px);
+    min-width: calc(100%);
     display: inline-block;
   }
   .skill-total {
@@ -120,82 +147,60 @@ mwc-tab-bar {
   }
 }
 
-.rep-sources {
-  --mdc-theme-primary: var(--color-border);
-  display: flex;
-  flex-flow: row wrap;
-  > * {
-    flex: 1;
-    margin: 0.25rem 0.25rem 0;
-  }
+.reputations,
+.software-skills {
+  border-top: 2px solid var(--color-border);
 }
 
 .rep-list {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-around;
+  display: grid;
+  clear: both;
+  border-top: 1px groove var(--color-border);
+  padding: 0.25rem 0;
+}
+.rep-header,
+.rep-item {
+  display: grid;
+  grid-template-columns: 3fr 1fr 6ch 4ch 4ch;
+  gap: 1rem;
+  padding: 0 0.5rem 0 0.75rem;
+  place-items: center;
+  > :first-child {
+    place-self: start;
+  }
+}
+
+.rep-header {
+  color: var(--color-text-lighter);
+  text-transform: uppercase;
+  padding: 0.125rem 0.5rem 0.125rem 0.75rem;
+  margin-bottom: 0.125rem;
+  border-bottom: 1px groove var(--color-border);
+  > * {
+    font-size: small;
+  }
 }
 
 .rep-item {
-  display: inline-grid;
-  grid-template-areas:
-    'name name score'
-    'favors favors favors';
-  grid-auto-rows: min-content;
-  place-items: center;
-  gap: 2px;
-  position: relative;
-  font-size: 1.1rem;
-  padding: 0.25rem;
-  z-index: 0;
-  &:focus {
-    outline: none;
-  }
-
   @include textButton();
+  --mdc-icon-size: 1.25rem;
+  font-family: var(--font-mono);
 
-  .rep-acronym {
-    grid-area: name;
-    text-transform: lowercase;
-    transform: translateY(-1px);
-    z-index: 1;
-  }
-
-  .rep-score {
-    grid-area: score;
-    justify-self: baseline;
+  &:hover {
+    background: alphav(var(--color-text), 0.04);
   }
 
-  .favors {
-    grid-area: favors;
+  .trivial-start {
+    width: 100%;
   }
 
-  .rep-info {
-    display: flex;
-    justify-content: space-between;
-    white-space: nowrap;
-    width: 60px;
+  .rep-name {
+    @include truncate(100px);
+    min-width: 100%;
   }
-  .favors {
-    grid-area: favors;
-    --mdc-icon-size: 1.1rem;
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-rows: 1.1rem;
-    margin-top: -0.25rem;
-    gap: 0.25rem;
-    color: alphav(var(--color-text), 0.7);
-    z-index: 1;
-    mwc-icon {
-      transition: color 100ms;
-    }
-    button {
-      display: flex;
-      &:hover {
-        mwc-icon {
-          color: var(--color-grey);
-        }
-      }
-    }
-  }
+}
+
+.software-name {
+  font-weight: bold;
+  margin-left: 1rem;
 }

@@ -7,8 +7,6 @@ import { renderAutoForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
 import { AptitudeType, enumValues } from '@src/data-enums';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
-import type { Ego } from '@src/entities/actor/ego';
-import type { Character } from '@src/entities/actor/proxies/character';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
 import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
@@ -25,6 +23,7 @@ import {
   PropertyValues,
   query,
 } from 'lit-element';
+import { ifDefined } from 'lit-html/directives/if-defined';
 import type { Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';
 import styles from './aptitude-check-controls.scss';
@@ -49,7 +48,7 @@ export class AptitudeCheckControls extends LitElement {
     AptitudeCheckControls
   >();
 
-  static openWindow(init: Init) {
+  static async openWindow(init: Init) {
     let win = AptitudeCheckControls.openWindows.get(init.entities.actor);
 
     if (!win) {
@@ -57,10 +56,13 @@ export class AptitudeCheckControls extends LitElement {
       overlay.append(win);
       AptitudeCheckControls.openWindows.set(init.entities.actor, win);
     }
+
     const source = traverseActiveElements();
     if (source instanceof HTMLElement) {
-      requestAnimationFrame(() => win!.win?.positionAdjacentToElement(source));
+      await win.win?.updateComplete;
+      win!.win?.positionAdjacentToElement(source);
     }
+
     win.setState(init);
   }
 
@@ -142,28 +144,55 @@ export class AptitudeCheckControls extends LitElement {
   }
 
   renderTest(test: NonNullable<AptitudeCheckControls['test']>) {
-    const { character, ego, action, pools, target, aptitude, special } = test;
+    const {
+      character,
+      ego,
+      action,
+      pools,
+      target,
+      aptitude,
+      special,
+      techSource,
+    } = test;
     const { token } = this.entities;
 
     return html`
-      ${character
-        ? html`
-            <mwc-list-item
-              class="entity"
-              @click=${() => character.actor.sheet.render(true)}
-              graphic="medium"
-              ?twoline=${!!character.sleeve}
-            >
-              <img slot="graphic" src=${token?.data.img ?? character.img} />
-              <span>${token?.data.name ?? character.name} </span>
-              ${character.sleeve
-                ? html`<span slot="secondary"
-                    >${formattedSleeveInfo(character.sleeve).join(' - ')}</span
-                  >`
-                : ''}
-            </mwc-list-item>
-          `
-        : ''}
+      <div class="entities">
+        ${character
+          ? html`
+              <mwc-list-item
+                class="entity"
+                @click=${() => character.actor.sheet.render(true)}
+                graphic="medium"
+                ?twoline=${!!character.sleeve}
+              >
+                <img slot="graphic" src=${token?.data.img ?? character.img} />
+                <span>${token?.data.name ?? character.name} </span>
+                ${character.sleeve
+                  ? html`<span slot="secondary"
+                      >${formattedSleeveInfo(character.sleeve).join(
+                        ' - ',
+                      )}</span
+                    >`
+                  : ''}
+              </mwc-list-item>
+            `
+          : ''}
+        ${techSource
+          ? html`
+              <mwc-list-item
+                graphic=${ifDefined(
+                  techSource.nonDefaultImg ? 'icon' : undefined,
+                )}
+              >
+                ${techSource.nonDefaultImg
+                  ? html`<img src=${techSource.nonDefaultImg} slot="graphic" />`
+                  : ''}
+                <span>${techSource.name} - ${localize('onboardALI')}</span>
+              </mwc-list-item>
+            `
+          : ''}
+      </div>
 
       <div class="sections">
         <section>

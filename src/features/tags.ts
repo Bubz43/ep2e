@@ -1,15 +1,15 @@
 import { AptitudeType } from '@src/data-enums';
 import { localize } from '@src/foundry/localization';
-import { uniq, createPipe, map } from 'remeda';
-import type { ActionType, ActionSubtype } from './actions';
+import { createPipe, map, uniq } from 'remeda';
+import type { ActionSubtype, ActionType } from './actions';
 import { createFeature } from './feature-helpers';
 import { RepNetwork } from './reputations';
 import {
-  SkillType,
-  FieldSkillType,
   ActiveSkillCategory,
-  KnowSkillCategory,
   fieldSkillName,
+  FieldSkillType,
+  KnowSkillCategory,
+  SkillType,
 } from './skills';
 
 export enum TagType {

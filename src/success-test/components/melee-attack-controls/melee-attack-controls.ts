@@ -95,7 +95,7 @@ export class MeleeAttackControls extends LitElement {
     this.subs.clear();
   }
 
-  setState(init: Init) {
+  async setState(init: Init) {
     this.unsub();
     this.subs.add(() =>
       MeleeAttackControls.openWindows.delete(init.entities.actor),
@@ -117,8 +117,9 @@ export class MeleeAttackControls extends LitElement {
     if (!this.isConnected) overlay.append(this);
     MeleeAttackControls.openWindows.set(init.entities.actor, this);
     const source = traverseActiveElements();
-    if (source instanceof HTMLElement) {
-      requestAnimationFrame(() => this.win?.positionAdjacentToElement(source));
+    if (source instanceof HTMLElement && source.isConnected) {
+      await this.win?.updateComplete;
+      this.win?.positionAdjacentToElement(source);
     }
   }
 
@@ -253,29 +254,6 @@ export class MeleeAttackControls extends LitElement {
           ></success-test-skill-section>
         </section>
 
-        <section class="targetting">
-          <success-test-section-label @click=${this.startTargetting}
-            ><mwc-icon>filter_tilt_shift</mwc-icon></success-test-section-label
-          >
-
-          <wl-list-item>
-            <span>${localize('target')}: ${attackTarget?.name ?? ' - '}</span>
-            <sl-animated-list class="targets">
-              ${repeat(
-                game.user.targets,
-                identity,
-                (token) => html`
-                  <mwc-icon-button
-                    class=${token === attackTarget ? 'active' : ''}
-                    @click=${() => melee.update({ attackTarget: token })}
-                    ><img src=${token.data.img}
-                  /></mwc-icon-button>
-                `,
-              )}
-            </sl-animated-list>
-          </wl-list-item>
-        </section>
-
         <section class="actions">
           <success-test-section-label
             >${localize('action')}</success-test-section-label
@@ -298,6 +276,29 @@ export class MeleeAttackControls extends LitElement {
               </section>
             `
           : ''}
+
+        <section class="targetting">
+          <success-test-section-label @click=${this.startTargetting}
+            ><mwc-icon>filter_tilt_shift</mwc-icon></success-test-section-label
+          >
+
+          <wl-list-item>
+            <span>${localize('target')}: ${attackTarget?.name ?? ' - '}</span>
+            <sl-animated-list class="targets">
+              ${repeat(
+                game.user.targets,
+                identity,
+                (token) => html`
+                  <mwc-icon-button
+                    class=${token === attackTarget ? 'active' : ''}
+                    @click=${() => melee.update({ attackTarget: token })}
+                    ><img src=${token.data.img}
+                  /></mwc-icon-button>
+                `,
+              )}
+            </sl-animated-list>
+          </wl-list-item>
+        </section>
       </div>
 
       <success-test-modifiers-section
@@ -335,9 +336,7 @@ export class MeleeAttackControls extends LitElement {
         <li divider></li>
         <wl-list-item clickable @click=${this.selectCalledShot}>
           <span>${localize('calledShot')}</span>
-          ${calledShot
-            ? html`<span slot="after">${localize(calledShot)}</span>`
-            : ''}
+          <span slot="after">${calledShot ? localize(calledShot) : '-'}</span>
         </wl-list-item>
         <wl-list-item class="aggressive">
           <span>${localize('aggressive')} </span>

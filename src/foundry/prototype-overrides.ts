@@ -33,629 +33,665 @@ import { localize } from './localization';
 import { convertMenuOptions, gmIsConnected } from './misc-helpers';
 import { activeTokenStatusEffects } from './token-helpers';
 
-Entity.prototype.matchRegexp = function (regex: RegExp) {
-  return regex.test(this.name);
-};
-
-const { _injectHTML } = Application.prototype;
-Application.prototype._injectHTML = function (html: JQuery, options: unknown) {
-  if (this instanceof MainMenu) {
-    _injectHTML.call(this, html, options);
-    return;
-  }
-  const [el] = html;
-  if (el) {
-    el.slot = 'foundry-apps';
-    document.querySelector('ep-overlay')?.append(el);
-    this._element = html;
-    html.hide().fadeIn(200);
-  }
-};
-
-const { getData } = PlayerConfig.prototype;
-PlayerConfig.prototype.getData = function () {
-  const original = getData.call(this) as {
-    user: User;
-    actors: ActorEP[];
-    options: unknown;
+export const overridePrototypes = () => {
+  Entity.prototype.matchRegexp = function (regex: RegExp) {
+    return regex.test(this.name);
   };
-  return {
-    ...original,
-    actors: original.actors.filter(
-      (actor) => actor.proxy.type === ActorType.Character,
-    ),
+
+  const { _injectHTML } = Application.prototype;
+  Application.prototype._injectHTML = function (
+    html: JQuery,
+    options: unknown,
+  ) {
+    if (this instanceof MainMenu) {
+      _injectHTML.call(this, html, options);
+      return;
+    }
+    const [el] = html;
+    if (el) {
+      el.slot = 'foundry-apps';
+      document.querySelector('ep-overlay')?.append(el);
+      this._element = html;
+      html.hide().fadeIn(200);
+    }
   };
-};
 
-Combat.prototype._getInitiativeFormula = ({ actor }: Combatant) =>
-  actor?.proxy.type === ActorType.Character
-    ? `1d6 + ${actor.proxy.initiative}`
-    : '0';
-
-const { _onPreventDragstart } = Game.prototype;
-Game.prototype._onPreventDragstart = function (ev: DragEvent) {
-  return pipe(ev.composedPath(), first(), (target) => {
-    return target instanceof Element &&
-      target.getAttribute('draggable') === 'true'
-      ? undefined
-      : _onPreventDragstart.call(this, ev);
-  });
-};
-
-const {
-  drawEffects,
-  toggleEffect,
-  _onUpdateBarAttributes,
-  _onUpdate,
-} = Token.prototype;
-
-Token.prototype._onUpdate = function (
-  data: Partial<TokenData>,
-  options: unknown,
-  userId: string,
-) {
-  _onUpdate.call(this, data, options, userId);
-  if ((data.overlayEffect || data.effects) && this.hasActiveHUD) {
-    readyCanvas()?.tokens.hud.refreshStatusIcons();
-  }
-  this.actor?.render(false, {});
-};
-
-Token.prototype.drawEffects = async function () {
-  if (!this.actor) return drawEffects.call(this);
-
-  this.effects.removeChildren().forEach((c) => c.destroy());
-
-  const effects = activeTokenStatusEffects(this);
-
-  if (notEmpty(effects)) {
-    const width =
-      Math.round(
-        (canvas as ReturnType<typeof readyCanvas>)!.dimensions.size / 2 / 5,
-      ) * 2;
-
-    const background = this.effects
-      .addChild(new PIXI.Graphics())
-      .beginFill(0x000000, 0.4)
-      .lineStyle(1.0, 0x000000);
-
-    await Promise.all(
-      effects.map((source, index) =>
-        this._drawEffect(source, index, background, width, null),
+  const { getData } = PlayerConfig.prototype;
+  PlayerConfig.prototype.getData = function () {
+    const original = getData.call(this) as {
+      user: User;
+      actors: ActorEP[];
+      options: unknown;
+    };
+    return {
+      ...original,
+      actors: original.actors.filter(
+        (actor) => actor.proxy.type === ActorType.Character,
       ),
-    );
-  }
+    };
+  };
 
-  // Draw overlay effect
-  if (this.data.overlayEffect) {
-    const texture = await loadTexture(this.data.overlayEffect);
-    const icon = new PIXI.Sprite(texture as any);
-    const size = Math.min(this.w * 0.6, this.h * 0.6);
-    icon.width = icon.height = size;
-    icon.position.set((this.w - size) / 2, (this.h - size) / 2);
-    icon.alpha = 0.8;
-    this.effects.addChild(icon);
-  }
-};
+  Combat.prototype._getInitiativeFormula = ({ actor }: Combatant) =>
+    actor?.proxy.type === ActorType.Character
+      ? `1d6 + ${actor.proxy.initiative}`
+      : '0';
 
-Token.prototype.toggleEffect = async function (
-  effect: string | typeof CONFIG['statusEffects'][number] | null,
-  options: { overlay?: boolean; active?: boolean } = {},
-) {
-  const texture =
-    typeof effect === 'string'
-      ? effect
-      : effect?.icon ?? CONFIG.controlIcons.defeated;
-  if (options.overlay)
-    await this._toggleOverlayEffect(texture, { active: options.active });
-  else {
-    const condition = iconToCondition.get(texture);
-    if (!condition || !this.actor) {
-      const effects = new Set(this.data.effects);
-      effects.has(texture) ? effects.delete(texture) : effects.add(texture);
-      await this.update({ effects: [...effects] }, { diff: false });
-    } else {
-      const newConditions = new Set(this.actor.conditions);
-      const active = !newConditions.delete(condition);
-      await this.actor.proxy.updateConditions(
-        active ? [...newConditions, condition] : [...newConditions],
+  const { _onPreventDragstart } = Game.prototype;
+  Game.prototype._onPreventDragstart = function (ev: DragEvent) {
+    return pipe(ev.composedPath(), first(), (target) => {
+      return target instanceof Element &&
+        target.getAttribute('draggable') === 'true'
+        ? undefined
+        : _onPreventDragstart.call(this, ev);
+    });
+  };
+
+  const {
+    drawEffects,
+    toggleEffect,
+    _onUpdateBarAttributes,
+    _onUpdate,
+  } = Token.prototype;
+
+  Token.prototype._onUpdate = function (
+    data: Partial<TokenData>,
+    options: unknown,
+    userId: string,
+  ) {
+    _onUpdate.call(this, data, options, userId);
+    if ((data.overlayEffect || data.effects) && this.hasActiveHUD) {
+      readyCanvas()?.tokens.hud.refreshStatusIcons();
+    }
+    this.actor?.render(false, {});
+  };
+
+  Token.prototype.drawEffects = async function () {
+    if (!this.actor) return drawEffects.call(this);
+
+    this.effects.removeChildren().forEach((c) => c.destroy());
+
+    const effects = activeTokenStatusEffects(this);
+
+    if (notEmpty(effects)) {
+      const width =
+        Math.round(
+          (canvas as ReturnType<typeof readyCanvas>)!.dimensions.size / 2 / 5,
+        ) * 2;
+
+      const background = this.effects
+        .addChild(new PIXI.Graphics())
+        .beginFill(0x000000, 0.4)
+        .lineStyle(1.0, 0x000000);
+
+      await Promise.all(
+        effects.map((source, index) =>
+          this._drawEffect(source, index, background, width, null),
+        ),
       );
     }
-  }
 
-  if (this.hasActiveHUD) readyCanvas()?.tokens.hud.refreshStatusIcons();
-  return this;
-};
-
-const conditionRegex = new RegExp('conditions', 'i');
-const hasConditions = (path: string) => conditionRegex.test(path);
-Token.prototype._onUpdateBarAttributes = function (updateData) {
-  _onUpdateBarAttributes.call(this, updateData);
-  if (Object.keys(flattenObject(updateData)).some(hasConditions)) {
-    this.drawEffects();
-    if (game.combat?.getCombatantByToken(this.data._id)) {
-      game.combats.render(true);
+    // Draw overlay effect
+    if (this.data.overlayEffect) {
+      const texture = await loadTexture(this.data.overlayEffect);
+      const icon = new PIXI.Sprite(texture as any);
+      const size = Math.min(this.w * 0.6, this.h * 0.6);
+      icon.width = icon.height = size;
+      icon.position.set((this.w - size) / 2, (this.h - size) / 2);
+      icon.alpha = 0.8;
+      this.effects.addChild(icon);
     }
-  }
-};
+  };
 
-const { getData: getTokenData } = TokenHUD.prototype;
+  Token.prototype.toggleEffect = async function (
+    effect: string | typeof CONFIG['statusEffects'][number] | null,
+    options: { overlay?: boolean; active?: boolean } = {},
+  ) {
+    const texture =
+      typeof effect === 'string'
+        ? effect
+        : effect?.icon ?? CONFIG.controlIcons.defeated;
+    if (options.overlay)
+      await this._toggleOverlayEffect(texture, { active: options.active });
+    else {
+      const condition = iconToCondition.get(texture);
+      if (!condition || !this.actor) {
+        const effects = new Set(this.data.effects);
+        effects.has(texture) ? effects.delete(texture) : effects.add(texture);
+        await this.update({ effects: [...effects] }, { diff: false });
+      } else {
+        const newConditions = new Set(this.actor.conditions);
+        const active = !newConditions.delete(condition);
+        await this.actor.proxy.updateConditions(
+          active ? [...newConditions, condition] : [...newConditions],
+        );
+      }
+    }
 
-TokenHUD.prototype.getData = function (options: unknown) {
-  const data = getTokenData.call(this, options);
-  data.canToggleCombat = gmIsConnected();
-  data.combatClass =
-    this.object && tokenIsInCombat(this.object) ? 'active' : '';
-  return data;
-};
+    if (this.hasActiveHUD) readyCanvas()?.tokens.hud.refreshStatusIcons();
+    return this;
+  };
 
-TokenHUD.prototype._onToggleCombat = async function (
-  ev: Event & { currentTarget: HTMLElement },
-) {
-  ev.preventDefault();
-  if (!this.object?.scene) return;
-  const active = tokenIsInCombat(this.object);
-  this.object.layer.toggleCombat(!active, null, { token: this.object });
-  ev.currentTarget.classList.toggle('active', !active);
-};
+  const conditionRegex = new RegExp('conditions', 'i');
+  const hasConditions = (path: string) => conditionRegex.test(path);
+  Token.prototype._onUpdateBarAttributes = function (updateData) {
+    _onUpdateBarAttributes.call(this, updateData);
+    if (Object.keys(flattenObject(updateData)).some(hasConditions)) {
+      this.drawEffects();
+      if (game.combat?.getCombatantByToken(this.data._id)) {
+        game.combats.render(true);
+      }
+    }
+  };
 
-TokenHUD.prototype._getStatusEffectChoices = function () {
-  const token = this.object!;
-  const effects = activeTokenStatusEffects(token);
-  const statuses = new Map(
-    [...(token.actor?.effects.values() ?? [])].flatMap((effect) => {
-      const id = effect.getFlag('core', 'statusId');
-      return typeof id === 'string' && id.length
-        ? [[id, { id, overlay: !!effect.getFlag('core', 'overlay') }]]
-        : [];
-    }),
-  );
+  const { getData: getTokenData } = TokenHUD.prototype;
 
-  return mapToObj(CONFIG.statusEffects, ({ icon: src, id, label }) => {
-    const status = statuses.get(id);
-    const isActive = !!status?.id || effects.includes(src);
-    const isOverlay = !!status?.overlay || token.data.overlayEffect === src;
-    return [
-      src,
-      {
-        id,
-        src,
-        title: game.i18n.localize(label) as string,
-        isActive,
-        isOverlay,
-        cssClass: compact([isActive && 'active', isOverlay && 'overlay']).join(
-          ' ',
-        ),
-      },
-    ];
-  });
-};
+  TokenHUD.prototype.getData = function (options: unknown) {
+    const data = getTokenData.call(this, options);
+    data.canToggleCombat = gmIsConnected();
+    data.combatClass =
+      this.object && tokenIsInCombat(this.object) ? 'active' : '';
+    return data;
+  };
 
-TokenLayer.prototype.toggleCombat = async function (
-  addToCombat = true,
-  combat = null,
-  { token = null }: { token?: Token | null } = {},
-) {
-  const tokens = new Set(
-    (readyCanvas()?.tokens.controlled ?? [])
-      .concat(token ?? [])
-      .filter((token) => {
-        const inCombat = tokenIsInCombat(token);
-        return inCombat !== addToCombat;
+  TokenHUD.prototype._onToggleCombat = async function (
+    ev: Event & { currentTarget: HTMLElement },
+  ) {
+    ev.preventDefault();
+    if (!this.object?.scene) return;
+    const active = tokenIsInCombat(this.object);
+    this.object.layer.toggleCombat(!active, null, { token: this.object });
+    ev.currentTarget.classList.toggle('active', !active);
+  };
+
+  TokenHUD.prototype._getStatusEffectChoices = function () {
+    const token = this.object!;
+    const effects = activeTokenStatusEffects(token);
+    const statuses = new Map(
+      [...(token.actor?.effects.values() ?? [])].flatMap((effect) => {
+        const id = effect.getFlag('core', 'statusId');
+        return typeof id === 'string' && id.length
+          ? [[id, { id, overlay: !!effect.getFlag('core', 'overlay') }]]
+          : [];
       }),
-  );
+    );
 
-  if (addToCombat) {
-    updateCombatState({
-      type: CombatActionType.AddParticipants,
-      payload: [...tokens].flatMap((token) => {
-        const { scene } = token;
-        if (!scene) return [];
-        return {
-          name: token.name,
-          hidden: token.data.hidden,
-          entityIdentifiers: {
-            type: TrackedCombatEntity.Token,
+    return mapToObj(CONFIG.statusEffects, ({ icon: src, id, label }) => {
+      const status = statuses.get(id);
+      const isActive = !!status?.id || effects.includes(src);
+      const isOverlay = !!status?.overlay || token.data.overlayEffect === src;
+      return [
+        src,
+        {
+          id,
+          src,
+          title: game.i18n.localize(label) as string,
+          isActive,
+          isOverlay,
+          cssClass: compact([
+            isActive && 'active',
+            isOverlay && 'overlay',
+          ]).join(' '),
+        },
+      ];
+    });
+  };
+
+  TokenLayer.prototype.toggleCombat = async function (
+    addToCombat = true,
+    combat = null,
+    { token = null }: { token?: Token | null } = {},
+  ) {
+    const tokens = new Set(
+      (readyCanvas()?.tokens.controlled ?? [])
+        .concat(token ?? [])
+        .filter((token) => {
+          const inCombat = tokenIsInCombat(token);
+          return inCombat !== addToCombat;
+        }),
+    );
+
+    if (addToCombat) {
+      updateCombatState({
+        type: CombatActionType.AddParticipants,
+        payload: [...tokens].flatMap((token) => {
+          const { scene } = token;
+          if (!scene) return [];
+          return {
+            name: token.name,
+            hidden: token.data.hidden,
+            entityIdentifiers: {
+              type: TrackedCombatEntity.Token,
+              tokenId: token.id,
+              sceneId: scene.id,
+            },
+          };
+        }),
+      });
+    } else {
+      updateCombatState({
+        type: CombatActionType.RemoveParticipantsByToken,
+        payload: [...tokens].flatMap((token) => {
+          const { scene } = token;
+          if (!scene) return [];
+          return {
             tokenId: token.id,
             sceneId: scene.id,
-          },
-        };
-      }),
-    });
-  } else {
-    updateCombatState({
-      type: CombatActionType.RemoveParticipantsByToken,
-      payload: [...tokens].flatMap((token) => {
-        const { scene } = token;
-        if (!scene) return [];
-        return {
-          tokenId: token.id,
-          sceneId: scene.id,
-        };
-      }),
-    });
-  }
-};
+          };
+        }),
+      });
+    }
+  };
 
-const { _render } = ChatLog.prototype;
-ChatLog.prototype._render = async function (...args) {
-  if (document.body.classList.contains('ready')) {
-    _render.call(this, ...args);
-  }
-};
+  const { _render } = ChatLog.prototype;
+  ChatLog.prototype._render = async function (...args) {
+    if (document.body.classList.contains('ready')) {
+      _render.call(this, ...args);
+    }
+  };
 
-// Object.defineProperties(Token.prototype, {
-//   w: {
-//     enumerable: true,
-//     get(this: Token) {
-//       return this.data.width * (readyCanvas()?.grid?.w ?? 100);
-//     },
-//   },
-//   h: {
-//     enumerable: true,
-//     get(this: Token) {
-//       return this.data.height * (readyCanvas()?.grid?.h ?? 100);
-//     },
-//   },
-// });
+  // Object.defineProperties(Token.prototype, {
+  //   w: {
+  //     enumerable: true,
+  //     get(this: Token) {
+  //       return this.data.width * (readyCanvas()?.grid?.w ?? 100);
+  //     },
+  //   },
+  //   h: {
+  //     enumerable: true,
+  //     get(this: Token) {
+  //       return this.data.height * (readyCanvas()?.grid?.h ?? 100);
+  //     },
+  //   },
+  // });
 
-// TODO: Delay this to check for migration first
-// const barCache = new WeakMap<PIXI.Graphics, number>();
-// const bars = ["bar1", "bar2"] as const;
-// Token.prototype.drawBars = function () {
-//   const { actor } = this;
-//   const canvas = activeCanvas();
-//   if (
-//     !actor ||
-//     !this.bars ||
-//     !canvas ||
-//     this.data.displayBars === TOKEN_DISPLAY_MODES.NONE
-//   ) {
-//     return;
-//   }
+  // TODO: Delay this to check for migration first
+  // const barCache = new WeakMap<PIXI.Graphics, number>();
+  // const bars = ["bar1", "bar2"] as const;
+  // Token.prototype.drawBars = function () {
+  //   const { actor } = this;
+  //   const canvas = activeCanvas();
+  //   if (
+  //     !actor ||
+  //     !this.bars ||
+  //     !canvas ||
+  //     this.data.displayBars === TOKEN_DISPLAY_MODES.NONE
+  //   ) {
+  //     return;
+  //   }
 
-//   for (const barName of bars) {
-//     const health =
-//       barName === "bar1"
-//         ? actor.agent.primaryHealth
-//         : actor.agent.type === ActorType.Character &&
-//           actor.agent.ego.mentalHealth;
-//     const bar = this.bars[barName];
-//     bar.visible = !!health;
+  //   for (const barName of bars) {
+  //     const health =
+  //       barName === "bar1"
+  //         ? actor.agent.primaryHealth
+  //         : actor.agent.type === ActorType.Character &&
+  //           actor.agent.ego.mentalHealth;
+  //     const bar = this.bars[barName];
+  //     bar.visible = !!health;
 
-//     if (!health) {
-//       barCache.delete(bar);
-//       continue;
-//     }
+  //     if (!health) {
+  //       barCache.delete(bar);
+  //       continue;
+  //     }
 
-//     const { durability: percent } = damagePercents(health.main);
-//     if (barCache.get(bar) === percent) continue;
-//     const height =
-//       Math.max(canvas.dimensions.size / 12, 8) *
-//       (this.data.height >= 2 ? 1.6 : 1);
-//     const color =
-//       barName === "bar2" ? [percent, 0, percent * 0.35] : [percent, 0, 0];
-//     bar
-//       .clear()
-//       .beginFill(0x000000, 0.5)
-//       .lineStyle(2, 0x000000, 0.9)
-//       .drawRoundedRect(0, 0, this.w, height, 3)
-//       .beginFill(PIXI.utils.rgb2hex(color), 0.8)
-//       .lineStyle(1, 0x000000, 0.8)
-//       .drawRoundedRect(1, 1, percent * (this.w - 2), height - 2, 2);
-//     barCache.set(bar, percent);
-//     bar.position.set(0, barName === "bar1" ? this.h - height : 0);
-//   }
-// };
+  //     const { durability: percent } = damagePercents(health.main);
+  //     if (barCache.get(bar) === percent) continue;
+  //     const height =
+  //       Math.max(canvas.dimensions.size / 12, 8) *
+  //       (this.data.height >= 2 ? 1.6 : 1);
+  //     const color =
+  //       barName === "bar2" ? [percent, 0, percent * 0.35] : [percent, 0, 0];
+  //     bar
+  //       .clear()
+  //       .beginFill(0x000000, 0.5)
+  //       .lineStyle(2, 0x000000, 0.9)
+  //       .drawRoundedRect(0, 0, this.w, height, 3)
+  //       .beginFill(PIXI.utils.rgb2hex(color), 0.8)
+  //       .lineStyle(1, 0x000000, 0.8)
+  //       .drawRoundedRect(1, 1, percent * (this.w - 2), height - 2, 2);
+  //     barCache.set(bar, percent);
+  //     bar.position.set(0, barName === "bar1" ? this.h - height : 0);
+  //   }
+  // };
 
-const { defaultOptions } = JournalSheet;
-Object.defineProperty(JournalSheet, 'defaultOptions', {
-  enumerable: true,
-  get() {
-    return { ...(defaultOptions as {}), width: 620 };
-  },
-});
-
-Compendium.prototype._replaceHTML = noop;
-Compendium.prototype._renderInner = async function () {
-  const existing = this.element?.[0]?.querySelector('compendium-list');
-  const content = await this.getContent();
-  if (existing) {
-    existing.content = content;
-    return $(existing);
-  }
-  const frag = new DocumentFragment();
-  render(
-    html`<compendium-list
-      .content=${content}
-      .compendium=${this}
-    ></compendium-list>`,
-    frag,
-  );
-  return $(frag);
-};
-
-CombatTracker.prototype._contextMenu = function (jqueryEl: JQuery) {
-  jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
-    const item = findMatchingElement(ev, '.directory-item');
-    if (!item) return;
-    const targetEl = $(item);
-    const entryOptions = this._getEntryContextOptions();
-    Hooks.call(
-      `get${this.constructor.name}EntryContext`,
-      this.element,
-      entryOptions,
-    );
-    const convertedOptions = convertMenuOptions(entryOptions, targetEl);
-    const heading = item.textContent?.trim();
-    openMenu({
-      content: convertedOptions,
-      position: ev,
-      header: heading ? { heading } : undefined,
-    });
+  const { defaultOptions } = JournalSheet;
+  Object.defineProperty(JournalSheet, 'defaultOptions', {
+    enumerable: true,
+    get() {
+      return { ...(defaultOptions as {}), width: 620 };
+    },
   });
-};
 
-SidebarDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
-  jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
-    const entityLi = findMatchingElement(ev, '.entity, .folder .folder-header');
-    if (!entityLi) return;
-    const jqueryLi = $(entityLi);
+  const { _replaceHTML } = CombatTracker.prototype;
+  CombatTracker.prototype._replaceHTML = function (
+    ...args: Parameters<typeof _replaceHTML>
+  ) {
+    if (!this.popOut) {
+      _replaceHTML.apply(this, args);
+    }
+  };
+  CombatTracker.prototype._renderInner = async function () {
+    const existing = this.element?.[0]?.querySelector('combat-view');
+    if (existing) {
+      return $(existing);
+    }
+    const frag = new DocumentFragment();
+    render(
+      html`<combat-view class="sidebar-tab" data-tab="combat"></combat-view>`,
+      frag,
+    );
+    return $(frag);
+  };
 
-    if (entityLi.matches('.entity')) {
+  Compendium.prototype._replaceHTML = noop;
+  Compendium.prototype._renderInner = async function () {
+    const existing = this.element?.[0]?.querySelector('compendium-list');
+    const content = await this.getContent();
+    if (existing) {
+      existing.content = content;
+      return $(existing);
+    }
+    const frag = new DocumentFragment();
+    render(
+      html`<compendium-list
+        .content=${content}
+        .compendium=${this}
+      ></compendium-list>`,
+      frag,
+    );
+    return $(frag);
+  };
+
+  CombatTracker.prototype._contextMenu = function (jqueryEl: JQuery) {
+    jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
+      const item = findMatchingElement(ev, '.directory-item');
+      if (!item) return;
+      const targetEl = $(item);
       const entryOptions = this._getEntryContextOptions();
       Hooks.call(
         `get${this.constructor.name}EntryContext`,
-        jqueryEl,
+        this.element,
         entryOptions,
       );
-      const convertedOptions = convertMenuOptions(entryOptions, jqueryLi);
-      const heading = entityLi.querySelector('.entity-name')?.textContent;
+      const convertedOptions = convertMenuOptions(entryOptions, targetEl);
+      const heading = item.textContent?.trim();
       openMenu({
         content: convertedOptions,
         position: ev,
         header: heading ? { heading } : undefined,
       });
-    } else if (entityLi.matches('.folder .folder-header')) {
-      const folderOptions = this._getFolderContextOptions();
-      Hooks.call(
-        `get${this.constructor.name}FolderContext`,
-        jqueryEl,
-        folderOptions,
+    });
+  };
+
+  SidebarDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
+    jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
+      const entityLi = findMatchingElement(
+        ev,
+        '.entity, .folder .folder-header',
       );
+      if (!entityLi) return;
+      const jqueryLi = $(entityLi);
 
-      const convertedOptions = convertMenuOptions(folderOptions, jqueryLi);
+      if (entityLi.matches('.entity')) {
+        const entryOptions = this._getEntryContextOptions();
+        Hooks.call(
+          `get${this.constructor.name}EntryContext`,
+          jqueryEl,
+          entryOptions,
+        );
+        const convertedOptions = convertMenuOptions(entryOptions, jqueryLi);
+        const heading = entityLi.querySelector('.entity-name')?.textContent;
+        openMenu({
+          content: convertedOptions,
+          position: ev,
+          header: heading ? { heading } : undefined,
+        });
+      } else if (entityLi.matches('.folder .folder-header')) {
+        const folderOptions = this._getFolderContextOptions();
+        Hooks.call(
+          `get${this.constructor.name}FolderContext`,
+          jqueryEl,
+          folderOptions,
+        );
 
-      const heading = entityLi.textContent?.trim();
+        const convertedOptions = convertMenuOptions(folderOptions, jqueryLi);
+
+        const heading = entityLi.textContent?.trim();
+        openMenu({
+          content: convertedOptions,
+          position: ev,
+          header: heading ? { heading } : undefined,
+        });
+      }
+    });
+  };
+
+  PlayerList.prototype.activateListeners = function (jqueryEl: JQuery) {
+    jqueryEl.find('h3').click(this._onToggleOfflinePlayers.bind(this));
+
+    const listener = (ev: MouseEvent) => {
+      const item = findMatchingElement(ev, '.player');
+      if (!item) return;
+      const targetEl = $(item);
+
+      const contextOptions = this._getUserContextOptions();
+      Hooks.call(`getUserContextOptions`, this.element, contextOptions);
+      const convertedOptions = convertMenuOptions(contextOptions, targetEl);
+      const heading = item.textContent?.trim();
       openMenu({
         content: convertedOptions,
         position: ev,
         header: heading ? { heading } : undefined,
       });
-    }
-  });
-};
-
-PlayerList.prototype.activateListeners = function (jqueryEl: JQuery) {
-  jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
-    const item = findMatchingElement(ev, '.player');
-    if (!item) return;
-    const targetEl = $(item);
-
-    const contextOptions = this._getUserContextOptions();
-    Hooks.call(`getUserContextOptions`, this.element, contextOptions);
-    const convertedOptions = convertMenuOptions(contextOptions, targetEl);
-    const heading = item.textContent?.trim();
-    openMenu({
-      content: convertedOptions,
-      position: ev,
-      header: heading ? { heading } : undefined,
-    });
-  });
-};
-
-SceneNavigation.prototype.activateListeners = function (jqueryEl: JQuery) {
-  const scenes = jqueryEl.find('.scene');
-  scenes.on('click', this._onClickScene.bind(this));
-  jqueryEl.find('#nav-toggle').on('click', this._onToggleNav.bind(this));
-
-  jqueryEl[0]?.addEventListener('contextmenu', navMenuListener);
-};
-
-CompendiumDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
-  jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
-    const item = findMatchingElement(ev, '.compendium-pack');
-    if (!item) return;
-    const entryOptions = this._getEntryContextOptions();
-    Hooks.call(
-      `get${this.constructor.name}EntryContext`,
-      this.element,
-      entryOptions,
-    );
-    const targetEl = $(item);
-    const convertedOptions = convertMenuOptions(entryOptions, targetEl);
-    const heading = item.querySelector('h4')?.textContent;
-    openMenu({
-      content: convertedOptions,
-      position: ev,
-      header: heading ? { heading } : undefined,
-    });
-  });
-};
-
-ChatLog.prototype._contextMenu = function (jqueryEl: JQuery) {
-  jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
-    const item = findMatchingElement(ev, '.message');
-    if (!item) return;
-    // TODO Alter/Replace Chat popout
-    const entryOptions = this._getEntryContextOptions();
-    Hooks.call(
-      `get${this.constructor.name}EntryContext`,
-      this.element,
-      entryOptions,
-    );
-    const targetEl = $(item);
-    const convertedOptions = convertMenuOptions(entryOptions, targetEl);
-    openMenu({ content: convertedOptions, position: ev });
-  });
-};
-
-ChatMessage._getSpeakerFromUser = function ({
-  scene,
-  user,
-  alias,
-}: {
-  scene: SceneEP | null;
-  user: UserEP;
-  alias?: string;
-}) {
-  return {
-    scene: scene?.id ?? readyCanvas()?.scene?.id,
-    actor: null,
-    token: null,
-    alias: alias || user.name,
-  };
-};
-
-ChatMessage._getSpeakerFromActor = function ({
-  scene,
-  actor,
-  alias,
-}: {
-  scene: SceneEP | null;
-  actor: ActorEP;
-  alias?: string;
-}) {
-  return {
-    scene: scene?.id ?? readyCanvas()?.scene?.id,
-    actor: actor.id,
-    token: null,
-    alias: alias || actor.name,
-  };
-};
-
-const { close } = ChatPopout.prototype;
-ChatPopout.prototype.close = async function () {
-  delete this.message.apps[this.appId];
-  close.call(this, []);
-};
-
-tinymce.FocusManager.isEditorUIElement = function (elm: Element) {
-  const className = elm.className?.toString() ?? '';
-  return className.indexOf('tox-') !== -1 || className.indexOf('mce-') !== -1;
-};
-
-const { _handleDragStart } = DragDrop.prototype;
-DragDrop.prototype._handleDragStart = function (ev: DragEvent) {
-  _handleDragStart.call(this, ev);
-  let data: unknown = null;
-  try {
-    const stringified = ev.dataTransfer?.getData('text/plain');
-    data = typeof stringified === 'string' && JSON.parse(stringified);
-  } catch (error) {
-    console.log(error);
-  }
-  if (isKnownDrop(data)) {
-    onlySetDragSource(ev, data);
-  }
-};
-
-function directorySearch(
-  this: ActorDirectory | ItemDirectory,
-  _: Event,
-  query: string,
-  html: HTMLElement,
-) {
-  const isSearch = !!query;
-  const entityIds = new Set<string>();
-  const folderIds = new Set<string>();
-
-  // Match entities and folders
-  if (isSearch) {
-    const rgx = searchRegExp(query);
-
-    // Match entity names
-    for (const entity of this.entities) {
-      if (entity.matchRegexp(rgx)) {
-        entityIds.add(entity.id);
-        if (entity.data.folder) folderIds.add(entity.data.folder);
-      }
-    }
-
-    // Match folder tree
-    const includeFolders = (folderIDs: Set<string>) => {
-      const parentIds = new Set(
-        this.folders.flatMap(({ data, _id }) =>
-          folderIDs.has(_id) && data.parent ? data.parent : [],
-        ),
-      );
-      if (parentIds.size) {
-        parentIds.forEach((p) => folderIds.add(p));
-        includeFolders(parentIds);
-      }
     };
-    includeFolders(folderIds);
-  }
 
-  // Toggle each directory item
-  for (const el of html.querySelectorAll<HTMLElement>('.directory-item')) {
-    const { entityId, folderId } = el.dataset;
+    jqueryEl[0]?.addEventListener('contextmenu', listener);
+    jqueryEl[0]?.addEventListener('click', listener);
+  };
 
-    // Entities
-    if (el.classList.contains('entity') && entityId) {
-      el.style.display = !isSearch || entityIds.has(entityId) ? '' : 'none';
-    }
+  SceneNavigation.prototype.activateListeners = function (jqueryEl: JQuery) {
+    const scenes = jqueryEl.find('.scene');
+    scenes.on('click', this._onClickScene.bind(this));
+    jqueryEl.find('#nav-toggle').on('click', this._onToggleNav.bind(this));
 
-    // Folders
-    if (el.classList.contains('folder') && folderId) {
-      const match = isSearch && folderIds.has(folderId);
-      el.style.display = !isSearch || match ? '' : 'none';
-      if (isSearch && match) el.classList.remove('collapsed');
-      else el.classList.toggle('collapsed', !game.folders._expanded[folderId]);
-    }
-  }
-}
+    jqueryEl[0]?.addEventListener('contextmenu', navMenuListener);
+  };
 
-ItemDirectory.prototype._onSearchFilter = directorySearch;
-ActorDirectory.prototype._onSearchFilter = directorySearch;
-
-const itemCreate = ({ itemInit }: ItemDataEvent) => {
-  ItemEP.create(itemInit.data, itemInit.options);
-};
-
-const closeCreator = () => closeWindow(ItemCreator);
-
-ItemDirectory.prototype._onCreateEntity = async function (ev: Event) {
-  stopEvent(ev);
-
-  if (ev.currentTarget instanceof HTMLElement) {
-    openWindow({
-      key: ItemCreator,
-      content: html` <item-creator
-        showFolders
-        @close-creator=${closeCreator}
-        @item-data=${itemCreate}
-        folder=${ifDefined(ev.currentTarget.dataset['folder'])}
-      ></item-creator>`,
-      name: `${localize('item')} ${localize('creator')}`,
-      adjacentEl: ev.currentTarget,
+  CompendiumDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
+    jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
+      const item = findMatchingElement(ev, '.compendium-pack');
+      if (!item) return;
+      const entryOptions = this._getEntryContextOptions();
+      Hooks.call(
+        `get${this.constructor.name}EntryContext`,
+        this.element,
+        entryOptions,
+      );
+      const targetEl = $(item);
+      const convertedOptions = convertMenuOptions(entryOptions, targetEl);
+      const heading = item.querySelector('h4')?.textContent;
+      openMenu({
+        content: convertedOptions,
+        position: ev,
+        header: heading ? { heading } : undefined,
+      });
     });
+  };
+
+  ChatLog.prototype._contextMenu = function (jqueryEl: JQuery) {
+    jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
+      const item = findMatchingElement(ev, '.message');
+      if (!item) return;
+      // TODO Alter/Replace Chat popout
+      const entryOptions = this._getEntryContextOptions();
+      Hooks.call(
+        `get${this.constructor.name}EntryContext`,
+        this.element,
+        entryOptions,
+      );
+      const targetEl = $(item);
+      const convertedOptions = convertMenuOptions(entryOptions, targetEl);
+      openMenu({ content: convertedOptions, position: ev });
+    });
+  };
+
+  ChatMessage._getSpeakerFromUser = function ({
+    scene,
+    user,
+    alias,
+  }: {
+    scene: SceneEP | null;
+    user: UserEP;
+    alias?: string;
+  }) {
+    return {
+      scene: scene?.id ?? readyCanvas()?.scene?.id,
+      actor: null,
+      token: null,
+      alias: alias || user.name,
+    };
+  };
+
+  ChatMessage._getSpeakerFromActor = function ({
+    scene,
+    actor,
+    alias,
+  }: {
+    scene: SceneEP | null;
+    actor: ActorEP;
+    alias?: string;
+  }) {
+    return {
+      scene: scene?.id ?? readyCanvas()?.scene?.id,
+      actor: actor.id,
+      token: null,
+      alias: alias || actor.name,
+    };
+  };
+
+  const { close } = ChatPopout.prototype;
+  ChatPopout.prototype.close = async function () {
+    delete this.message.apps[this.appId];
+    close.call(this, []);
+  };
+
+  tinymce.FocusManager.isEditorUIElement = function (elm: Element) {
+    const className = elm.className?.toString() ?? '';
+    return className.indexOf('tox-') !== -1 || className.indexOf('mce-') !== -1;
+  };
+
+  const { _handleDragStart } = DragDrop.prototype;
+  DragDrop.prototype._handleDragStart = function (ev: DragEvent) {
+    _handleDragStart.call(this, ev);
+    let data: unknown = null;
+    try {
+      const stringified = ev.dataTransfer?.getData('text/plain');
+      data = typeof stringified === 'string' && JSON.parse(stringified);
+    } catch (error) {
+      console.log(error);
+    }
+    if (isKnownDrop(data)) {
+      onlySetDragSource(ev, data);
+    }
+  };
+
+  function directorySearch(
+    this: ActorDirectory | ItemDirectory,
+    _: Event,
+    query: string,
+    html: HTMLElement,
+  ) {
+    const isSearch = !!query;
+    const entityIds = new Set<string>();
+    const folderIds = new Set<string>();
+
+    // Match entities and folders
+    if (isSearch) {
+      const rgx = searchRegExp(query);
+
+      // Match entity names
+      for (const entity of this.entities) {
+        if (entity.matchRegexp(rgx)) {
+          entityIds.add(entity.id);
+          if (entity.data.folder) folderIds.add(entity.data.folder);
+        }
+      }
+
+      // Match folder tree
+      const includeFolders = (folderIDs: Set<string>) => {
+        const parentIds = new Set(
+          this.folders.flatMap(({ data, _id }) =>
+            folderIDs.has(_id) && data.parent ? data.parent : [],
+          ),
+        );
+        if (parentIds.size) {
+          parentIds.forEach((p) => folderIds.add(p));
+          includeFolders(parentIds);
+        }
+      };
+      includeFolders(folderIds);
+    }
+
+    // Toggle each directory item
+    for (const el of html.querySelectorAll<HTMLElement>('.directory-item')) {
+      const { entityId, folderId } = el.dataset;
+
+      // Entities
+      if (el.classList.contains('entity') && entityId) {
+        el.style.display = !isSearch || entityIds.has(entityId) ? '' : 'none';
+      }
+
+      // Folders
+      if (el.classList.contains('folder') && folderId) {
+        const match = isSearch && folderIds.has(folderId);
+        el.style.display = !isSearch || match ? '' : 'none';
+        if (isSearch && match) el.classList.remove('collapsed');
+        else
+          el.classList.toggle('collapsed', !game.folders._expanded[folderId]);
+      }
+    }
   }
-};
 
-ActorDirectory.prototype._onCreateEntity = async function (ev: Event) {
-  stopEvent(ev);
+  ItemDirectory.prototype._onSearchFilter = directorySearch;
+  ActorDirectory.prototype._onSearchFilter = directorySearch;
 
-  if (ev.currentTarget instanceof HTMLElement) {
-    openWindow({
-      key: ActorCreator,
-      content: html`
-        <actor-creator
+  const itemCreate = ({ itemInit }: ItemDataEvent) => {
+    ItemEP.create(itemInit.data, itemInit.options);
+  };
+
+  const closeCreator = () => closeWindow(ItemCreator);
+
+  ItemDirectory.prototype._onCreateEntity = async function (ev: Event) {
+    stopEvent(ev);
+
+    if (ev.currentTarget instanceof HTMLElement) {
+      openWindow({
+        key: ItemCreator,
+        content: html` <item-creator
+          showFolders
+          @close-creator=${closeCreator}
+          @item-data=${itemCreate}
           folder=${ifDefined(ev.currentTarget.dataset['folder'])}
-        ></actor-creator>
-      `,
-      name: `${localize('actor')} ${localize('creator')}`,
-      adjacentEl: ev.currentTarget,
-    });
-  }
+        ></item-creator>`,
+        name: `${localize('item')} ${localize('creator')}`,
+        adjacentEl: ev.currentTarget,
+      });
+    }
+  };
+
+  ActorDirectory.prototype._onCreateEntity = async function (ev: Event) {
+    stopEvent(ev);
+
+    if (ev.currentTarget instanceof HTMLElement) {
+      openWindow({
+        key: ActorCreator,
+        content: html`
+          <actor-creator
+            folder=${ifDefined(ev.currentTarget.dataset['folder'])}
+          ></actor-creator>
+        `,
+        name: `${localize('actor')} ${localize('creator')}`,
+        adjacentEl: ev.currentTarget,
+      });
+    }
+  };
 };

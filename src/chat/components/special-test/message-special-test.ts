@@ -5,22 +5,26 @@ import type {
 import { ActorType } from '@src/entities/entity-types';
 import { ConditionType } from '@src/features/conditions';
 import { createEffect } from '@src/features/effects';
-import { addFeature } from '@src/features/feature-helpers';
+import { addFeature, stringID } from '@src/features/feature-helpers';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
 import { createTag, SpecialTest } from '@src/features/tags';
 import {
   createTemporaryFeature,
   TemporaryCondition,
+  TemporaryFeature,
 } from '@src/features/temporary';
 import { CommonInterval } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
+import { rollFormula, rollLabeledFormulas } from '@src/foundry/rolls';
+import { HealthType } from '@src/health/health';
 import {
   grantedSuperiorResultEffects,
   isSuccessfullTestResult,
   SuccessTestResult,
 } from '@src/success-test/success-test';
+import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property } from 'lit-element';
-import { compact, last, prop } from 'remeda';
+import { compact, last, noop, prop } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-special-test.scss';
 
@@ -216,24 +220,164 @@ export class MessageSpecialTest extends MessageElement {
     }
   }
 
+  private async applyCustomEffects() {
+    const result = last(this.successTest.states)?.result;
+    const checkInfo =
+      this.specialTest.type === 'custom' && this.specialTest.checkInfo;
+    const { actor } = this.message;
+    if (!result || !checkInfo || actor?.proxy.type !== ActorType.Character)
+      return;
+    const { proxy } = actor;
+    const isSuccess = isSuccessfullTestResult(result);
+    const effects = isSuccess
+      ? checkInfo.checkSuccess
+      : result === SuccessTestResult.CriticalFailure &&
+        notEmpty(checkInfo.criticalCheckFailure)
+      ? checkInfo.criticalCheckFailure
+      : checkInfo.checkFailure;
+
+    const temporary: TemporaryFeature[] = [];
+    const conditionsToAdd = new Set<ConditionType>();
+    for (const effect of effects) {
+      const {
+        condition,
+        impairment,
+        staticDuration,
+        variableDuration,
+        variableInterval,
+        additionalDurationPerSuperior,
+        stress,
+        notes,
+        fallDown,
+      } = effect;
+      const isStatic = !!staticDuration || !variableDuration;
+      console.log(
+        rollFormula(variableDuration || '1d6')?.total || 1,
+        variableInterval,
+      );
+      let duration = CommonInterval.Turn;
+      if (isStatic) duration += staticDuration || CommonInterval.Turn;
+      else {
+        const roll = rollFormula(variableDuration || '1d6');
+        if (roll) await roll.toMessage();
+        const total = roll?.total || 1;
+        if (variableInterval === 'turns')
+          duration += CommonInterval.Turn * total;
+        else
+          duration += toMilliseconds({
+            [variableInterval || 'minutes']: total,
+          });
+      }
+
+      if (additionalDurationPerSuperior && !isSuccess) {
+        const multiples = grantedSuperiorResultEffects(result);
+        duration += multiples * additionalDurationPerSuperior;
+      }
+
+      if (fallDown) conditionsToAdd.add(ConditionType.Prone);
+      if (condition) {
+        conditionsToAdd.add(condition);
+        temporary.push(
+          createTemporaryFeature.condition({
+            condition,
+            duration,
+            name: `${this.specialTest.source} [${localize(condition)}]`,
+          }),
+        );
+      }
+      if (notes) {
+        temporary.push(
+          createTemporaryFeature.effects({
+            effects: [
+              { ...createEffect.misc({ description: notes }), id: stringID() },
+            ],
+            duration,
+            name: this.specialTest.source,
+          }),
+        );
+      }
+      if (impairment) {
+        temporary.push(
+          createTemporaryFeature.effects({
+            effects: [
+              {
+                ...createEffect.successTest({
+                  modifier: impairment,
+                  tags: [createTag.allActions({})],
+                }),
+                id: stringID(),
+              },
+            ],
+            duration,
+            name: `${this.specialTest.source} [${localize('impairment')}]`,
+          }),
+        );
+      }
+      if (stress) {
+        await this.message.createSimilar({
+          damage: {
+            source: this.specialTest.source,
+            rolledFormulas: rollLabeledFormulas([
+              { label: localize('stress'), formula: stress },
+            ]),
+            damageType: HealthType.Mental,
+          },
+        });
+      }
+    }
+
+    proxy.updater.batchCommits(() => {
+      notEmpty(conditionsToAdd) && proxy.addConditions([...conditionsToAdd]);
+      notEmpty(temporary) &&
+        proxy.updater
+          .path('data', 'temporary')
+          .commit((temps) =>
+            temporary.reduce((accum, temp) => addFeature(accum, temp), temps),
+          );
+    });
+  }
+
   private get testResult() {
     return last(this.successTest.states)?.result;
   }
 
   render() {
+    const { disabled } = this;
     const result = last(this.successTest.states)?.result;
     if (!result) return html``;
 
     const isSuccess = isSuccessfullTestResult(result);
     const superiorCount = grantedSuperiorResultEffects(result);
-    const { type } = this.specialTest;
-    switch (type) {
+    switch (this.specialTest.type) {
+      case 'custom': {
+        const { checkSuccess } = this.specialTest.checkInfo;
+        if (isSuccess) {
+          const hasEffects = notEmpty(checkSuccess);
+          return html`
+            <wl-list-item
+              ?disabled=${disabled}
+              ?clickable=${hasEffects}
+              @click=${hasEffects ? this.applyCustomEffects : noop}
+            >
+              ${hasEffects ? localize('partially') : ''} ${localize('resisted')}
+              ${localize('custom')} ${localize('effects')}
+            </wl-list-item>
+          `;
+        }
+        return html`
+          <wl-list-item clickable @click=${this.applyCustomEffects}
+            >${localize('apply')} ${localize('custom')}
+            ${localize('effects')}</wl-list-item
+          >
+        `;
+      }
+
       case SpecialTest.Blinding:
         return html`
           <wl-list-item
             clickable
             @click=${this.applyBlinding}
-            ?disabled=${isSuccess}
+            ?disabled=${disabled || isSuccess}
           >
             ${isSuccess
               ? `${localize('resisted')} ${localize('blinding')}`
@@ -246,7 +390,7 @@ export class MessageSpecialTest extends MessageElement {
           <wl-list-item
             clickable
             @click=${this.applyEntangling}
-            ?disabled=${isSuccess}
+            ?disabled=${disabled || isSuccess}
           >
             ${isSuccess
               ? `${localize('resisted')} ${localize('entangling')}`
@@ -267,7 +411,7 @@ export class MessageSpecialTest extends MessageElement {
           <wl-list-item
             clickable
             @click=${this.applyKnockdown}
-            ?disabled=${isSuccess}
+            ?disabled=${disabled || isSuccess}
           >
             ${isSuccess
               ? `${localize('resisted')} ${localize('knockdown')}`
@@ -288,7 +432,7 @@ export class MessageSpecialTest extends MessageElement {
         return html`
           <wl-list-item clickable @click=${this.applyShock}>
             ${localize('apply')} ${localize(isSuccess ? 'some' : 'all')}
-            ${localize(type)} ${localize('effects')}
+            ${localize(SpecialTest.Shock)} ${localize('effects')}
           </wl-list-item>
         `;
 
@@ -297,7 +441,7 @@ export class MessageSpecialTest extends MessageElement {
           <wl-list-item
             clickable
             @click=${this.applyStun}
-            ?disabled=${isSuccess}
+            ?disabled=${disabled || isSuccess}
           >
             ${isSuccess
               ? `${localize('resisted')} ${localize('stun')}`
@@ -310,7 +454,7 @@ export class MessageSpecialTest extends MessageElement {
           <wl-list-item
             clickable
             @click=${this.applyUnconsciousness}
-            ?disabled=${isSuccess}
+            ?disabled=${disabled || isSuccess}
           >
             ${isSuccess
               ? `${localize('resisted')} ${localize('unconsciousness')}`
@@ -323,7 +467,7 @@ export class MessageSpecialTest extends MessageElement {
           <wl-list-item
             clickable
             @click=${this.startBleedingOut}
-            ?disabled=${isSuccess}
+            ?disabled=${disabled || isSuccess}
           >
             ${isSuccess
               ? `${localize('resisted')} ${localize('bleedingOut')}`
@@ -349,7 +493,7 @@ export class MessageSpecialTest extends MessageElement {
           <wl-list-item
             clickable
             @click=${this.applyAcuteStressResponse}
-            ?disabled=${isSuccess}
+            ?disabled=${disabled || isSuccess}
           >
             ${isSuccess
               ? `${localize('resisted')} ${localize('acuteStress')}, ${localize(
@@ -364,7 +508,7 @@ export class MessageSpecialTest extends MessageElement {
           <wl-list-item
             clickable
             @click=${this.applyIntegrationEffects}
-            ?disabled=${isSuccess}
+            ?disabled=${disabled || isSuccess}
           >
             ${isSuccess
               ? `${localize('successful')} ${localize('integration')}`
@@ -386,7 +530,7 @@ export class MessageSpecialTest extends MessageElement {
         `;
 
       default:
-        return html`<p>${localize(type)}</p>`;
+        return html`<p>${localize(this.specialTest.type)}</p>`;
     }
   }
 }

@@ -1,9 +1,9 @@
-import { AptitudeType, AttackTrait } from '@src/data-enums';
+import { AptitudeType } from '@src/data-enums';
 import { localize } from '@src/foundry/localization';
 import { withSign } from '@src/utility/helpers';
 import { compact } from 'remeda';
-import { ArmorType } from './active-armor';
-import { ConditionType } from './conditions';
+import type { ArmorType } from './active-armor';
+import type { ConditionType } from './conditions';
 import { CommonInterval, prettyMilliseconds, TimeInterval } from './time';
 
 export type CheckResultInfo = {
@@ -109,127 +109,4 @@ export const formatCheckResultInfo = (entry: CheckResultInfo) => {
         ).toLocaleLowerCase()} ${localize('superiorFailure')}`})`
       : ''
   }`;
-};
-const checkInfoFromAttackTrait = (trait: AttackTrait): AptitudeCheckInfo => {
-  switch (trait) {
-    case AttackTrait.Blinding:
-      return {
-        check: AptitudeType.Reflexes,
-        checkModifier: 0,
-        armorAsModifier: '',
-        checkSuccess: [],
-        checkFailure: [
-          {
-            condition: ConditionType.Blinded,
-            staticDuration: CommonInterval.Turn,
-            additionalDurationPerSuperior: CommonInterval.Turn,
-          },
-        ],
-        criticalCheckFailure: [
-          {
-            condition: ConditionType.Blinded,
-            staticDuration: CommonInterval.Indefinite,
-          },
-        ],
-      };
-
-    case AttackTrait.Entangling:
-      return {
-        check: AptitudeType.Reflexes,
-        checkModifier: 0,
-        armorAsModifier: '',
-        checkSuccess: [],
-        checkFailure: [
-          {
-            condition: ConditionType.Grappled,
-            staticDuration: CommonInterval.Instant,
-          },
-        ],
-        criticalCheckFailure: [],
-      };
-
-    case AttackTrait.Knockdown:
-      return {
-        check: AptitudeType.Somatics,
-        checkModifier: 0,
-        armorAsModifier: '',
-        checkSuccess: [],
-        checkFailure: [
-          {
-            condition: ConditionType.Prone,
-            staticDuration: CommonInterval.Instant,
-          },
-        ],
-        criticalCheckFailure: [],
-      };
-
-    case AttackTrait.Pain:
-      return {
-        check: AptitudeType.Willpower,
-        checkModifier: 0,
-        armorAsModifier: '',
-        checkFailure: [
-          {
-            staticDuration: CommonInterval.Turn,
-            impairment: -20,
-          },
-        ],
-        checkSuccess: [],
-        criticalCheckFailure: [],
-      };
-
-    case AttackTrait.Shock:
-      return {
-        check: AptitudeType.Somatics,
-        checkModifier: 0,
-        armorAsModifier: ArmorType.Energy,
-        checkSuccess: [
-          {
-            condition: ConditionType.Stunned,
-            staticDuration: CommonInterval.Turn * 3,
-          },
-        ],
-        checkFailure: [
-          {
-            condition: ConditionType.Incapacitated,
-            staticDuration: CommonInterval.Turn,
-            additionalDurationPerSuperior: CommonInterval.Turn * 2,
-          },
-          {
-            condition: ConditionType.Prone,
-            staticDuration: CommonInterval.Instant,
-          },
-          {
-            condition: ConditionType.Stunned,
-            staticDuration: CommonInterval.Minute * 3,
-          },
-        ],
-        criticalCheckFailure: [],
-      };
-
-    case AttackTrait.Stun:
-      return {
-        check: AptitudeType.Somatics,
-        checkModifier: 0,
-        armorAsModifier: ArmorType.Kinetic,
-        checkSuccess: [],
-        checkFailure: [
-          {
-            condition: ConditionType.Stunned,
-            staticDuration: CommonInterval.Turn,
-            additionalDurationPerSuperior: CommonInterval.Turn,
-          },
-        ],
-        criticalCheckFailure: [
-          {
-            condition: ConditionType.Incapacitated,
-            staticDuration: CommonInterval.Turn,
-          },
-          {
-            condition: ConditionType.Stunned,
-            staticDuration: CommonInterval.Minute,
-          },
-        ],
-      };
-  }
 };

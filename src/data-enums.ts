@@ -287,6 +287,7 @@ export enum EgoSetting {
   CharacterDetails = 'characterDetails',
   ThreatDetails = 'threatDetails',
   UseThreat = 'useThreat',
+  IgnoreOverburdened = 'ignoreOverburdened',
 }
 
 export enum ShellType {

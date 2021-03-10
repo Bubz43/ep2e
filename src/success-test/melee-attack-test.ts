@@ -1,7 +1,6 @@
 import { createMessage } from '@src/chat/create-message';
 import { SuperiorResultEffect } from '@src/data-enums';
 import type { ActorEP } from '@src/entities/actor/actor';
-import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import {
@@ -15,7 +14,7 @@ import {
   ActionType,
   createAction,
 } from '@src/features/actions';
-import { EffectType, matchesSkill, Source } from '@src/features/effects';
+import { matchesSkill, Source } from '@src/features/effects';
 import { Size, sizeReachAdvantage } from '@src/features/size';
 import type { Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
@@ -47,7 +46,7 @@ export class MeleeAttackTest extends SkillTest {
     }
   >;
 
-  readonly character: Character;
+  readonly character;
 
   readonly aggressiveModifier = createSuccessTestModifier({
     name: localize('aggressive'),
@@ -97,7 +96,7 @@ export class MeleeAttackTest extends SkillTest {
     const { sleeve } = this.character;
     this.melee = {
       weapon: meleeWeapon,
-      primaryAttack: primaryAttack || true,
+      primaryAttack: primaryAttack ?? true,
       unarmedDV:
         sleeve && sleeve.type !== ActorType.Infomorph ? sleeve.unarmedDV : '0',
       touchOnly: meleeWeapon?.isTouchOnly,
@@ -160,7 +159,7 @@ export class MeleeAttackTest extends SkillTest {
 
     if (this.melee.attackTarget) {
       for (const [effect, active] of this.getAttackTargetEffects(
-        this.melee.attackTarget as Token,
+        this.melee.attackTarget,
         this.skillState.skill,
         this.action,
       ) || []) {

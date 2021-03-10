@@ -1,10 +1,21 @@
-import { renderLabeledCheckbox } from '@src/components/field/fields';
-import { renderAutoForm } from '@src/components/form/forms';
-import { ActorType } from '@src/entities/entity-types';
-import { matchID } from '@src/features/feature-helpers';
+import type { List } from '@material/mwc-list';
+import type { PoolType } from '@src/data-enums';
+import { ActorType, ItemType } from '@src/entities/entity-types';
+import type { ItemEP, ItemProxy } from '@src/entities/item/item';
+import type { Psi } from '@src/entities/item/proxies/psi';
+import type { ConditionType } from '@src/features/conditions';
+import { poolActionOptions } from '@src/features/pools';
+import {
+  createTemporaryMeasuredTemplate,
+  placeMeasuredTemplate,
+  readyCanvas,
+} from '@src/foundry/canvas';
+import { DropType, handleDrop, isKnownDrop } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import { RenderDialogEvent } from '@src/open-dialog';
+import { openMenu } from '@src/open-menu';
 import { debounce } from '@src/utility/decorators';
+import { notEmpty } from '@src/utility/helpers';
 import { internalProperty, LitElement, property, query } from 'lit-element';
 import { html, TemplateResult } from 'lit-html';
 import { traverseActiveElements } from 'weightless';
@@ -19,7 +30,8 @@ import { CharacterRequestEvent } from './character-request-event';
 export enum ItemGroup {
   Consumables = 'consumables',
   Sleights = 'sleights',
-  Traits = 'traits',
+  EgoTraits = 'egoTraits',
+  MorphTraits = 'morphTraits',
   Equipped = 'equipped',
   Stashed = 'stashed',
 }
@@ -60,6 +72,7 @@ export abstract class CharacterViewBase extends LitElement {
       ev.token = this.token;
       ev.stopPropagation();
     });
+    this.addEventListener('drop', this.handleFolderDrop);
   }
 
   protected toggleDrawerRenderer(renderer: CharacterDrawerRenderer) {
@@ -99,6 +112,109 @@ export abstract class CharacterViewBase extends LitElement {
   get drawerIsOpen() {
     return !!this.drawerContentRenderer;
   }
+
+  protected toggleCondition(ev: Event) {
+    if (ev.currentTarget instanceof HTMLElement) {
+      const { condition } = ev.currentTarget.dataset;
+      condition && this.character.toggleCondition(condition as ConditionType);
+    }
+  }
+
+  protected async placeMovementPreviewTemplate(range: number) {
+    const token = this.token || this.character.actor.getActiveTokens(true)[0];
+    const center =
+      token && token?.scene === readyCanvas()?.scene
+        ? token.center
+        : { x: 0, y: 0 };
+
+    placeMeasuredTemplate(
+      createTemporaryMeasuredTemplate({
+        ...center,
+        t: 'circle',
+        distance: range,
+      }),
+      !!token,
+    );
+  }
+
+  protected openPoolMenu(ev: MouseEvent & { currentTarget: HTMLElement }) {
+    const { pool } = ev.currentTarget.dataset;
+    if (pool) {
+      openMenu({
+        header: { heading: localize(pool as PoolType) },
+        content: poolActionOptions(this.character, pool as PoolType),
+        position: ev,
+      });
+    }
+  }
+
+  private handleFolderDrop = handleDrop(({ drop }) => {
+    if (this.character.disabled) return;
+    if (
+      isKnownDrop(drop) &&
+      drop.type === DropType.Folder &&
+      drop.entity === 'Item'
+    ) {
+      const folder = game.folders.get(drop.id);
+      const items = folder && (folder?.entities as ItemEP[]);
+      if (folder && notEmpty(items)) {
+        this.dispatchEvent(
+          new RenderDialogEvent(html`
+            <mwc-dialog heading=${folder.name}>
+              <mwc-list multi>
+                ${items.map(({ proxy }) => {
+                  const selected =
+                    proxy.type !== ItemType.Psi || !this.character.psi;
+                  return html`
+                    <mwc-check-list-item
+                      ?selected=${selected}
+                      ?disabled=${!selected}
+                      twoline
+                    >
+                      <span>${proxy.fullName}</span>
+                      <span slot="secondary">${proxy.fullType}</span>
+                    </mwc-check-list-item>
+                  `;
+                })}
+              </mwc-list>
+              <mwc-button
+                unelevated
+                slot="primaryAction"
+                dialogaction="confirm"
+                @click=${async (ev: Event & { currentTarget: HTMLElement }) => {
+                  const list = ev.currentTarget.previousElementSibling as List;
+                  const { index } = list;
+                  if (index instanceof Set) {
+                    const { psi, others } = [...index].reduce(
+                      (accum, i) => {
+                        const proxy = items[i]?.proxy;
+                        if (proxy?.type === ItemType.Psi) accum.psi = proxy;
+                        else if (proxy) accum.others.push(proxy);
+                        return accum;
+                      },
+                      {
+                        psi: null as Psi | null,
+                        others: [] as Exclude<ItemProxy, Psi>[],
+                      },
+                    );
+                    if (psi)
+                      await this.character.ego.addPsi?.(psi.getDataCopy());
+                    this.character.itemOperations.add(
+                      ...others.map((p) => p.getDataCopy()),
+                    );
+                  }
+                }}
+                >${localize('add')}</mwc-button
+              >
+              <mwc-button slot="secondaryAction" dialogaction="cancel"
+                >${localize('cancel')}</mwc-button
+              >
+            </mwc-dialog>
+          `),
+        );
+      }
+    }
+  });
 
   renderResleeve() {
     return html`
@@ -184,5 +300,11 @@ export abstract class CharacterViewBase extends LitElement {
     return html`<character-view-conditions
       .character=${this.character}
     ></character-view-conditions>`;
+  }
+
+  renderSubstances() {
+    return html`<character-view-substances
+      .character=${this.character}
+    ></character-view-substances>`;
   }
 }

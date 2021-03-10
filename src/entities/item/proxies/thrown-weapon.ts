@@ -11,7 +11,7 @@ import { HealthType } from '@src/health/health';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import type { Attacker } from '../item-interfaces';
-import { Copyable, Purchasable, Stackable } from '../item-mixins';
+import { Copyable, Gear, Purchasable, Stackable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 import { Substance } from './substance';
 
@@ -24,7 +24,7 @@ class Base extends ItemProxyBase<ItemType.ThrownWeapon> {
   }
 }
 export class ThrownWeapon
-  extends mix(Base).with(Purchasable, Stackable, Copyable)
+  extends mix(Base).with(Purchasable, Stackable, Copyable, Gear)
   implements Attacker<ThrownWeaponAttackData, ThrownWeaponAttack> {
   constructor(init: ItemProxyInit<ItemType.ThrownWeapon>) {
     super(init);
@@ -34,11 +34,19 @@ export class ThrownWeapon
     return this.epData.exoticSkill;
   }
 
+  get isTwoHanded() {
+    return this.epData.twoHanded;
+  }
+
   get attacks() {
     return {
       primary: this.setupAttack(this.epData.primaryAttack),
       secondary: null,
     };
+  }
+
+  get fullName() {
+    return `${this.name} (${this.quantity})`;
   }
 
   setupAttack({
@@ -88,6 +96,6 @@ export class ThrownWeapon
   }
 
   removeCoating() {
-    this.updater.path('flags', EP.Name, 'coating').commit(null);
+    return this.updater.path('flags', EP.Name, 'coating').commit(null);
   }
 }

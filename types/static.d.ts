@@ -1,8 +1,5 @@
-/* Use this file to declare any custom file extensions for importing */
-/* Use this folder to also add/extend a package d.ts file, if needed. */
-
 declare module '*.scss' {
-  import { CSSResult } from "lit-element";
+  import { CSSResult } from 'lit-element';
   const style: CSSResult;
   export default style;
 }
@@ -59,4 +56,3 @@ declare module '*.png' {
   const ref: string;
   export default ref;
 }
-

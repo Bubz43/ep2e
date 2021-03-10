@@ -14,7 +14,7 @@
 .controls {
   display: grid;
   grid-template-areas:
-    'entity modifiers'
+    'entities modifiers'
     'sections modifiers'
     'sections footer';
   grid-template-rows: min-content 1fr auto;
@@ -39,8 +39,8 @@
   );
 }
 
-.entity {
-  grid-area: entity;
+.entities {
+  grid-area: entities;
   margin-bottom: 0.25rem;
 }
 

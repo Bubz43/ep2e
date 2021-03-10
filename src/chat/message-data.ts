@@ -1,7 +1,9 @@
 import type { AreaEffect } from '@src/combat/area-effect';
 import type { BasicAreaEffectData } from '@src/combat/attack-formatting';
+import type { AttackType } from '@src/combat/attacks';
 import type {
   AttackTrait,
+  CalledShot,
   PoolType,
   SuperiorResultEffect,
 } from '@src/data-enums';
@@ -10,6 +12,7 @@ import type { SubstanceUseMethod } from '@src/entities/item/proxies/substance';
 import type { ItemEntity } from '@src/entities/models';
 import type { ActiveTaskAction } from '@src/features/actions';
 import type { ArmorType } from '@src/features/active-armor';
+import type { AptitudeCheckInfo } from '@src/features/aptitude-check-result-info';
 import type { PostTestPoolAction, PreTestPoolAction } from '@src/features/pool';
 import type { Favor, RepIdentifier } from '@src/features/reputations';
 import type { Size } from '@src/features/size';
@@ -19,10 +22,7 @@ import type { LabeledFormula, RolledFormula } from '@src/foundry/rolls';
 import type { HealthModification, HealthType } from '@src/health/health';
 import type { RollMultiplier } from '@src/health/health-changes';
 import type { StressType } from '@src/health/mental-health';
-import type {
-  SimpleSuccessTestModifier,
-  SuccessTestResult,
-} from '@src/success-test/success-test';
+import type { SuccessTestResult } from '@src/success-test/success-test';
 import type { RequireAtLeastOne } from 'type-fest';
 import type {
   ExplosiveSettings,
@@ -92,7 +92,18 @@ export type MeleeWeaponMessageData = MeleeWeaponSettings & {
   appliedPayload?: boolean;
   morphSize?: Size | null;
   damageModifiers?: LabeledFormula[];
-  // TODO maybe additional info for tracking coating state etc
+};
+
+export type ThrownWeaponMessageData = {
+  weapon: ItemEntity<ItemType.ThrownWeapon>;
+  appliedCoating?: boolean;
+  damageModifiers?: LabeledFormula[];
+  calledShot?: CalledShot | null;
+};
+
+export type HackMessageData = {
+  software: ItemEntity<ItemType.Software>;
+  attackType?: AttackType;
 };
 
 export type AttackTraitData = {
@@ -158,11 +169,18 @@ export type FavorMessageData = {
   burnedRep?: boolean;
 };
 
-export type SpecialTestData = {
-  type: SpecialTest;
-  source: string;
-  originalResult?: SuccessTestResult;
-};
+export type SpecialTestData =
+  | {
+      type: SpecialTest;
+      source: string;
+      originalResult?: SuccessTestResult;
+    }
+  | {
+      type: 'custom';
+      checkInfo: AptitudeCheckInfo;
+      source: string;
+      originalResult?: SuccessTestResult;
+    };
 
 export type MessageData = Partial<{
   header: MessageHeaderData;
@@ -174,10 +192,12 @@ export type MessageData = Partial<{
   healthChange: HealthChangeMessageData;
   explosiveUse: ExplosiveMessageData;
   meleeAttack: MeleeWeaponMessageData;
+  thrownAttack: ThrownWeaponMessageData;
   heal: MessageHealData;
   substanceUse: SubstanceUseData;
   fromMessageId: string;
   successTest: SuccessTestMessageData;
   specialTest: SpecialTestData;
   favor: FavorMessageData;
+  hack: HackMessageData;
 }>;

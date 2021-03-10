@@ -173,6 +173,7 @@ export abstract class DefaultEgos {
       threatDetails: false,
       useThreat: false,
       characterDetails: false,
+      ignoreOverburdened: false,
     };
     const trait = createDefaultItem.realWorldNaivete();
     const otherTraitId = uniqueStringID([trait._id]);

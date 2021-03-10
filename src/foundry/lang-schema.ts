@@ -1441,7 +1441,17 @@ type LangEntries =
   | 'tracker'
   | 'skipDefeated'
   | 'preperation'
-  | 'fallDown';
+  | 'fallDown'
+  | 'uncoated'
+  | 'discard'
+  | 'explosives'
+  | 'thrown'
+  | 'payloads'
+  | 'compact'
+  | 'ignoreOverburdened'
+  | 'grenades'
+  | 'meshAttack'
+  | 'partially';
 type FullNames =
   | 'cog'
   | 'int'

@@ -4,12 +4,15 @@ import { AptitudeType, enumValues } from '@src/data-enums';
 import type { Ego } from '@src/entities/actor/ego';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
+import type { Software } from '@src/entities/item/proxies/software';
 import { Favor, maxFavors, RepWithIdentifier } from '@src/features/reputations';
 import { Skill, skillFilterCheck } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
+import { openMenu } from '@src/open-menu';
 import { AptitudeCheckControls } from '@src/success-test/components/aptitude-check-controls/aptitude-check-controls';
 import { ReputationFavorControls } from '@src/success-test/components/reputation-favor-controls/reputation-favor-controls';
 import { SkillTestControls } from '@src/success-test/components/skill-test-controls/skill-test-controls';
+import { SoftwareSkillTestControls } from '@src/success-test/components/software-skill-test-controls/software-skill-test-controls';
 import { notEmpty, safeMerge } from '@src/utility/helpers';
 import {
   customElement,
@@ -40,6 +43,8 @@ export class CharacterViewTestActions extends LitElement {
   @property({ attribute: false }) ego!: Ego;
 
   @internalProperty() private activeFakeId?: string;
+
+  @internalProperty() private activeEgo?: string;
 
   @internalProperty()
   private skillControls = {
@@ -77,29 +82,69 @@ export class CharacterViewTestActions extends LitElement {
   }
 
   private startAptitudeTest(aptitude: AptitudeType) {
+    const onboardAliId = this.activeEgo;
+
     AptitudeCheckControls.openWindow({
       entities: { actor: this.character.actor },
       getState: (actor) => {
         if (actor.proxy.type !== ActorType.Character) return null;
+        const tech = onboardAliId
+          ? actor.proxy.equippedGroups.onboardALIs.get(onboardAliId)
+          : null;
+        if (onboardAliId && !tech) return null;
+        const ego = tech?.onboardALI || actor.proxy.ego;
+
         return {
-          ego: actor.proxy.ego,
+          ego,
           character: actor.proxy,
           aptitude,
+          techSource: tech,
         };
       },
     });
   }
 
   private startSkillTest(skill: Skill) {
+    const onboardAliId = this.activeEgo;
     SkillTestControls.openWindow({
       entities: { actor: this.character.actor },
       getState: (actor) => {
         if (actor.proxy.type !== ActorType.Character) return null;
+        const tech = onboardAliId
+          ? actor.proxy.equippedGroups.onboardALIs.get(onboardAliId)
+          : null;
+        if (onboardAliId && !tech) return null;
+        const ego = tech?.onboardALI || actor.proxy.ego;
         return {
-          ego: actor.proxy.ego,
+          ego,
           character: actor.proxy,
-          skill:
-            actor.proxy.ego.skills.find((s) => s.name === skill.name) || skill,
+          skill: ego.skills.find((s) => s.name === skill.name) || skill,
+          techSource: tech,
+        };
+      },
+    });
+  }
+
+  private startSoftwareSkillTest(
+    skill: Software['skills'][number],
+    software: Software,
+  ) {
+    const { id } = software;
+    SoftwareSkillTestControls.openWindow({
+      entities: { actor: this.character.actor },
+      getState: (actor) => {
+        if (actor.proxy.type !== ActorType.Character) return null;
+        const softwareSource = actor.proxy.equippedGroups.softwareSkills.find(
+          (s) => s.id === id,
+        );
+        const softwareSkill = softwareSource?.skills.find(
+          (s) => s.id === skill.id,
+        );
+        if (!softwareSkill || !softwareSource) return null;
+        return {
+          software: softwareSource,
+          skill: softwareSkill,
+          character: actor.proxy,
         };
       },
     });
@@ -134,13 +179,14 @@ export class CharacterViewTestActions extends LitElement {
     });
   }
 
-  render() {
-    const { groupedSkills, trackReputations } = this.ego;
-    const { active, know } = groupedSkills;
+  private get repSources() {
+    const { trackReputations } = this.ego;
     const { fakeIDs } = this.character.equippedGroups;
-    const fakeIDreps = this.activeFakeId
-      ? fakeIDs.find((i) => i.id === this.activeFakeId)?.repsWithIdentifiers
+    const fakeID = this.activeFakeId
+      ? fakeIDs.find((i) => i.id === this.activeFakeId)
       : null;
+    const fakeIDreps = fakeID?.repsWithIdentifiers;
+
     const repSources = compact([
       trackReputations && {
         reps: this.ego.trackedReps,
@@ -153,9 +199,9 @@ export class CharacterViewTestActions extends LitElement {
       },
       ...fakeIDs.map((fake) => ({
         reps: fake.repsWithIdentifiers,
-        label: fake.name,
+        label: `[${localize('fakeId')}] ${fake.name}`,
         active:
-          fakeIDreps === fake.repsWithIdentifiers ||
+          fakeID === fake ||
           (!trackReputations && !fakeIDreps && fake === fakeIDs[0]),
         fake: true,
         set: () => {
@@ -163,51 +209,104 @@ export class CharacterViewTestActions extends LitElement {
         },
       })),
     ]);
+
+    return {
+      sources: repSources,
+      fakeID: fakeID || (trackReputations ? null : fakeIDs[0]),
+    };
+  }
+
+  private openRepSourceMenu(ev: MouseEvent) {
+    openMenu({
+      header: { heading: `${localize('reputation')} ${localize('profile')}` },
+      content: this.repSources.sources.map((source) => ({
+        label: source.label,
+        activated: source.active,
+        callback: source.set,
+        icon: html`<mwc-icon
+          >${source.fake ? 'person_outline' : 'person'}</mwc-icon
+        >`,
+      })),
+      position: ev,
+    });
+  }
+
+  private openEgoSelectMenu(ev: MouseEvent) {
+    const { currentEgo } = this;
+    openMenu({
+      header: { heading: localize('ego') },
+      content: [
+        {
+          label: this.ego.name,
+          activated: currentEgo === this.ego,
+          callback: () => (this.activeEgo = undefined),
+        },
+        ...[...this.character.equippedGroups.onboardALIs].map(([id, tech]) => ({
+          label: `${tech.name} - ${tech.onboardALI.name}`,
+          activated: this.activeEgo === id,
+          callback: () => (this.activeEgo = id),
+        })),
+      ],
+      position: ev,
+    });
+  }
+
+  private get currentEgo() {
+    const { onboardALIs } = this.character.equippedGroups;
+    const onboard = this.activeEgo ? onboardALIs.get(this.activeEgo) : null;
+    return onboard?.onboardALI || this.ego;
+  }
+
+  render() {
+    const { currentEgo, activeEgo } = this;
+    const { groupedSkills, name, aptitudes } = currentEgo;
+    const { active, know } = groupedSkills;
+    const { sources, fakeID } = this.repSources;
+    const {
+      softwareSkills,
+      fakeIDs,
+      onboardALIs,
+    } = this.character.equippedGroups;
+    // TODO: Toggle to show all reps instead of just tracked
+    // TODO: Add collapse toggle
+    const reps = fakeID?.repsWithIdentifiers ?? sources[0]?.reps!;
+    const showSource = !!onboardALIs.size;
     return html`
-      <div class="stats">
+      ${showSource
+        ? html`
+            <wl-list-item
+              role="button"
+              @click=${this.openEgoSelectMenu}
+              clickable
+              class="source"
+            >
+              <span slot="before">${localize('source')}:</span>
+              <span>
+                ${activeEgo ? onboardALIs.get(activeEgo)?.name : ''}
+                ${currentEgo.name}</span
+              >
+
+              <mwc-icon slot="after" ?disabled=${this.ego.disabled}
+                >${currentEgo !== this.ego
+                  ? 'person_outline'
+                  : 'person'}</mwc-icon
+              >
+            </wl-list-item>
+          `
+        : ''}
+      <sl-details
+        endArrow
+        summary=${localize('aptitudes')}
+        open
+        class="aptitudes"
+      >
         <ul class="aptitudes-list">
           ${enumValues(AptitudeType).map(this.renderAptitude)}
         </ul>
+      </sl-details>
 
-        ${notEmpty(repSources)
-          ? html`
-              <div class="reps">
-                ${notEmpty(fakeIDs)
-                  ? html`
-                      <div class="rep-sources">
-                        ${repSources.map(
-                          (source) => html`
-                            <mwc-button
-                              icon=${source.fake ? 'person_outline' : 'person'}
-                              dense
-                              title=${localize(
-                                source.fake ? 'fakeEgoId' : 'ego',
-                              )}
-                              ?outlined=${!source.active}
-                              ?unelevated=${source.active}
-                              @click=${source.set}
-                              >${source.label}</mwc-button
-                            >
-                          `,
-                        )}
-                      </div>
-                    `
-                  : ''}
-                <ul class="rep-list">
-                  ${(fakeIDreps ?? repSources[0]?.reps!).map(this.renderRep)}
-                </ul>
-              </div>
-            `
-          : ''}
-
+      <sl-details endArrow summary=${localize('skills')} open class="skills">
         <ul class="skills-list">
-          ${active?.map(this.renderSkill)}
-          ${notEmpty(know)
-            ? html`
-                <li class="divider" role="separator"></li>
-                ${know.map(this.renderSkill)}
-              `
-            : ''}
           <li class="filter">
             ${renderAutoForm({
               classes: 'skill-controls',
@@ -228,24 +327,116 @@ export class CharacterViewTestActions extends LitElement {
               `,
             })}
           </li>
+          ${active?.map(this.renderSkill)}
+          ${notEmpty(know)
+            ? html`
+                <li class="divider" role="separator"></li>
+                ${know.map(this.renderSkill)}
+              `
+            : ''}
         </ul>
-      </div>
+      </sl-details>
+
+      ${notEmpty(softwareSkills)
+        ? html`
+            <sl-details
+              endArrow
+              class="software-skills"
+              summary="${localize('software')} ${localize('skills')}"
+            >
+              <ul class="software-list">
+                ${softwareSkills.map(
+                  (software) => html`
+                    <li class="software">
+                      <span class="software-name">${software.name}</span>
+                      <ul class="skills-list">
+                        ${software.skills.map((skill) => {
+                          const { name, specialization, total } = skill;
+                          return html`
+                            <Wl-list-item
+                              clickable
+                              class="skill-item"
+                              ?disabled=${this.disabled}
+                              @click=${() =>
+                                this.startSoftwareSkillTest(skill, software)}
+                            >
+                              <span class="skill-name"
+                                >${name}
+                                ${specialization
+                                  ? `(${specialization})`
+                                  : ''}</span
+                              >
+                              <span class="skill-total" slot="after"
+                                >${total}</span
+                              >
+                            </Wl-list-item>
+                          `;
+                        })}
+                      </ul>
+                    </li>
+                  `,
+                )}
+              </ul>
+            </sl-details>
+          `
+        : ''}
+      ${notEmpty(sources)
+        ? html`
+            <sl-details
+              endArrow
+              class="reputations"
+              summary=${localize('reputations')}
+              open
+            >
+              ${notEmpty(fakeIDs)
+                ? html` <wl-list-item
+                    clickable
+                    @click=${this.openRepSourceMenu}
+                    class="source"
+                  >
+                    <span slot="before">${localize('profile')}:</span>
+                    <span
+                      >${fakeID
+                        ? `[${localize('fakeId')}] ${fakeID.name}`
+                        : this.ego.name}</span
+                    >
+                    <mwc-icon slot="after"
+                      >${fakeID ? 'person_outline' : 'person'}</mwc-icon
+                    >
+                  </wl-list-item>`
+                : ''}
+              <ul class="rep-list">
+                <li class="rep-header">
+                  <span>${localize('network')}</span>
+                  <span>${localize('score')}</span>
+                  ${[...maxFavors.keys()].map(
+                    (key) =>
+                      html`<span title="${localize(key)} ${localize('favors')}"
+                        >${localize(key).slice(0, 3)}</span
+                      >`,
+                  )}
+                </li>
+                ${reps.map(this.renderRep)}
+              </ul>
+            </sl-details>
+          `
+        : ''}
     `;
   }
 
   private renderAptitude = (type: AptitudeType) => {
-    const points = this.ego.aptitudes[type];
+    const points = this.currentEgo.aptitudes[type];
     return html` <wl-list-item
       clickable
-      ?disabled=${this.disabled}
+      ?disabled=${this.character.disabled}
       class="aptitude-item"
       @click=${() => this.startAptitudeTest(type)}
     >
-      <span class="aptitude-name">${localize(type)}</span>
-      <div class="aptitude-values">
-        <span class="aptitude-points">${points}</span>
-        <span class="aptitude-check">${points * 3}</span>
-      </div>
+      <span class="aptitude-name" slot="before"> ${localize(type)}</span>
+      <span class="aptitude-points">${points}</span>
+      <span class="aptitude-check" slot="after">
+        <mwc-icon>check</mwc-icon> ${points * 3}</span
+      >
     </wl-list-item>`;
   };
 
@@ -255,7 +446,7 @@ export class CharacterViewTestActions extends LitElement {
       clickable
       class="skill-item ${classMap({ filtered })}"
       ?disabled=${this.disabled}
-      .tabindex=${live(filtered ? -1 : 0)}
+      .tabIndex=${live(filtered ? -1 : 0)}
       @click=${() => this.startSkillTest(skill)}
     >
       <span class="skill-name">${skill.fullName}</span>
@@ -267,34 +458,38 @@ export class CharacterViewTestActions extends LitElement {
     return html`
       <li class="rep-item">
         <button
-          title=${rep.network}
-          class="rep-acronym"
+          title="${rep.network} (${rep.acronym})"
+          class="trivial-start"
           @click=${() => this.startFavorTest(rep, Favor.Trivial)}
         >
-          ${rep.acronym}
+          <span class="rep-name">
+            <!-- ${rep.network} -->
+            <span class="rep-acronym">${rep.acronym}</span></span
+          >
         </button>
         <span class="rep-score">${rep.score}</span>
-        <div class="favors">
-          ${[...maxFavors].map(([favor, max]) => {
-            const usedAmount = rep[favor];
-            return html`
-              <button
-                title=${localize(favor)}
-                @click=${() => this.startFavorTest(rep, favor)}
-              >
-                ${range(1, max + 1).map(
-                  (favorNumber) => html`
-                    <mwc-icon
-                      >${usedAmount >= favorNumber
-                        ? 'check_box'
-                        : 'check_box_outline_blank'}</mwc-icon
-                    >
-                  `,
-                )}
-              </button>
-            `;
-          })}
-        </div>
+        <!-- <div class="favors"> -->
+        ${[...maxFavors].map(([favor, max]) => {
+          const usedAmount = rep[favor];
+          return html`
+            <button
+              title=${localize(favor)}
+              @click=${() => this.startFavorTest(rep, favor)}
+              class="rep-favor"
+            >
+              ${range(1, max + 1).map(
+                (favorNumber) => html`
+                  <mwc-icon
+                    >${usedAmount >= favorNumber
+                      ? 'check_box'
+                      : 'check_box_outline_blank'}</mwc-icon
+                  >
+                `,
+              )}
+            </button>
+          `;
+        })}
+        <!-- </div> -->
       </li>
     `;
   };

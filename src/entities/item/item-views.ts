@@ -1,17 +1,13 @@
 import { createMessage } from '@src/chat/create-message';
-import {
-  openOrRenderWindow,
-  openWindow,
-} from '@src/components/window/window-controls';
+import { openOrRenderWindow } from '@src/components/window/window-controls';
 import { ResizeOption } from '@src/components/window/window-options';
 import { localize } from '@src/foundry/localization';
 import type { MWCMenuOption } from '@src/open-menu';
-import { html } from 'lit-html';
+import { html, nothing, TemplateResult } from 'lit-html';
 import { compact, noop } from 'remeda';
 import type { ItemCard } from '../actor/components/character-views/components/cards/generic/item-card';
 import { ItemType } from '../entity-types';
-import type { ItemProxy, RangedWeapon } from './item';
-import type { MeleeWeapon } from './proxies/melee-weapon';
+import type { ItemProxy } from './item';
 import type { Psi } from './proxies/psi';
 
 export const renderItemForm = (proxy: ItemProxy) => {
@@ -227,10 +223,6 @@ export const itemMenuOptions = (item: ItemProxy): MWCMenuOption[] => {
   ]);
 };
 
-const isWeapon = (item: ItemProxy): item is MeleeWeapon | RangedWeapon => {
-  return item.type.includes('Weapon');
-};
-
 export const renderItemCard = (
   item: ItemProxy,
   {
@@ -239,11 +231,18 @@ export const renderItemCard = (
     animateInitial = false,
     allowDrag = false,
     handleDragStart = noop,
+    unexpandedContent,
   }: Pick<
     Partial<ItemCard>,
     'expanded' | 'noAnimate' | 'animateInitial' | 'allowDrag'
-  > & { handleDragStart?: (ev: DragEvent) => void },
+  > & {
+    handleDragStart?: (ev: DragEvent) => void;
+    unexpandedContent?: TemplateResult;
+  },
 ) => {
+  const unexpanded = unexpandedContent
+    ? html`<div slot="unexpanded">${unexpandedContent}</div>`
+    : nothing;
   if (item.type === ItemType.PhysicalTech) {
     return html`
       <physical-tech-card
@@ -253,21 +252,23 @@ export const renderItemCard = (
         ?animateInitial=${animateInitial}
         ?allowDrag=${allowDrag}
         @dragstart=${handleDragStart}
-      ></physical-tech-card>
+        >${unexpanded}</physical-tech-card
+      >
     `;
   }
-  if (isWeapon(item)) {
-    return html`
-      <weapon-card
-        .item=${item}
-        ?expanded=${expanded}
-        ?noAnimate=${noAnimate}
-        ?animateInitial=${animateInitial}
-        ?allowDrag=${allowDrag}
-        @dragstart=${handleDragStart}
-      ></weapon-card>
-    `;
-  }
+  // if (item.type === ItemType.MeleeWeapon) {
+  //   return html`
+  //     <weapon-card
+  //       .item=${item}
+  //       ?expanded=${expanded}
+  //       ?noAnimate=${noAnimate}
+  //       ?animateInitial=${animateInitial}
+  //       ?allowDrag=${allowDrag}
+  //       @dragstart=${handleDragStart}
+  //       >${unexpanded}</weapon-card
+  //     >
+  //   `;
+  // }
   if ('stashed' in item)
     return html`
       <consumable-card
@@ -279,7 +280,8 @@ export const renderItemCard = (
           ? false
           : allowDrag}
         @dragstart=${handleDragStart}
-      ></consumable-card>
+        >${unexpanded}</consumable-card
+      >
     `;
   return html`
     <item-card
@@ -289,6 +291,7 @@ export const renderItemCard = (
       ?animateInitial=${animateInitial}
       ?allowDrag=${'temporary' in item && item.temporary ? false : allowDrag}
       @dragstart=${handleDragStart}
-    ></item-card>
+      >${unexpanded}</item-card
+    >
   `;
 };

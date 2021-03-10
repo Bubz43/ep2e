@@ -8,6 +8,7 @@
 
   ::-webkit-scrollbar-track {
     box-shadow: 0 0 1px #999 inset;
+    box-shadow: 0 0 0;
     border-radius: 0px;
   }
 
@@ -17,7 +18,7 @@
     background: #782e22;
     border: 1px solid #ff6400;
     background: #b0c4de99;
-    border: 1px solid #77889980;
+    border: 1px solid alphav(var(--color-grey), 0.5);
   }
 
   * {
@@ -29,14 +30,8 @@
   }
 }
 
-@mixin boldHeading() {
-    margin-left: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.25rem;
-}
-
 @mixin inputReset() {
-  input[type="number"] {
+  input[type='number'] {
     -moz-appearance: textfield !important;
 
     &::-webkit-inner-spin-button,
@@ -118,7 +113,7 @@
     white-space: nowrap;
     text-transform: uppercase;
     letter-spacing: 0.075em;
-    font-size:14.4px;
+    font-size: 14.4px;
     padding-right: 4px;
     margin: 0;
     opacity: 0.8;
@@ -168,11 +163,11 @@
   margin: 0;
   font-weight: normal;
   // opacity: 0.8;
-  color: hsl(0, 0%, 80%)
+  color: hsl(0, 0%, 80%);
 }
 
 @mixin divider($width: 80%, $vertMargin: 0.5rem) {
-  content: "";
+  content: '';
   display: block;
   width: $width;
   margin: $vertMargin auto;
@@ -187,7 +182,7 @@
 }
 
 @mixin widgetless-number-inputs {
-  input[type="number"] {
+  input[type='number'] {
     -moz-appearance: textfield !important;
 
     &::-webkit-inner-spin-button,
@@ -222,12 +217,12 @@
 /// @example scss - A triangle on the bottom edge of the parent, 220px from the left, pointing out, with a width of 60px and using a :before
 ///  @include triangle('bottom', 220px, 'out', 60px, 'before');
 ///
-@mixin triangle($pos, $offset, $direction, $width, $type: "after") {
+@mixin triangle($pos, $offset, $direction, $width, $type: 'after') {
   position: relative;
 
   &:#{$type} {
     position: absolute;
-    content: "";
+    content: '';
     z-index: 9999;
 
     // Reset position and offsets
@@ -240,70 +235,70 @@
 
     // Triangle: down
     @if (
-      (($pos== "top") and ($direction== "in")) or
-        ($pos== "bottom") and
-        ($direction== "out")
+      (($pos== 'top') and ($direction== 'in')) or
+        ($pos== 'bottom') and
+        ($direction== 'out')
     ) {
       border-top: $width solid currentColor;
       border-right: $width solid transparent;
       border-bottom: none;
       border-left: $width solid transparent;
 
-      $vOffset: if($direction== "in", 0, -$width);
+      $vOffset: if($direction== 'in', 0, -$width);
     }
 
     // Triangle: up
     @if (
-      (($pos== "top") and ($direction== "out")) or
-        ($pos== "bottom") and
-        ($direction== "in")
+      (($pos== 'top') and ($direction== 'out')) or
+        ($pos== 'bottom') and
+        ($direction== 'in')
     ) {
       border-top: none;
       border-right: $width solid transparent;
       border-bottom: $width solid currentColor;
       border-left: $width solid transparent;
 
-      $vOffset: if($direction== "in", 0, -$width);
+      $vOffset: if($direction== 'in', 0, -$width);
     }
 
     // Triangle: right
     @if (
-      (($pos== "left") and ($direction== "in")) or
-        ($pos== "right") and
-        ($direction== "out")
+      (($pos== 'left') and ($direction== 'in')) or
+        ($pos== 'right') and
+        ($direction== 'out')
     ) {
       border-top: $width solid transparent;
       border-right: none;
       border-bottom: $width solid transparent;
       border-left: $width solid currentColor;
 
-      $hOffset: if($direction== "in", 0, -$width);
+      $hOffset: if($direction== 'in', 0, -$width);
     }
 
     // Triangle: left
     @if (
-      (($pos== "left") and ($direction== "out")) or
-        ($pos== "right") and
-        ($direction== "in")
+      (($pos== 'left') and ($direction== 'out')) or
+        ($pos== 'right') and
+        ($direction== 'in')
     ) {
       border-top: $width solid transparent;
       border-right: $width solid currentColor;
       border-bottom: $width solid transparent;
       border-left: none;
-      $hOffset: if($direction== "in", 0, -$width);
+      $hOffset: if($direction== 'in', 0, -$width);
     }
 
-    @if ($pos== "top") {
+    @if ($pos== 'top') {
       top: $vOffset;
-      left: if($offset== "center", calc(50% - #{$width}), $offset);
-    } @else if ($pos== "bottom") {
+      left: if($offset== 'center', calc(50% - #{$width}), $offset);
+    } @else if ($pos== 'bottom') {
       bottom: $vOffset;
-      left: if($offset== "center", calc(50% - #{$width}), $offset);
-    } @else if ($pos== "left") {
-      top: if($offset== "center", calc(50% - #{$width}), $offset);
+      left: if($offset== 'center', calc(50% - #{$width}), $offset);
+    } @else if ($pos== 'left') {
+      top: if($offset== 'center', calc(50% - #{$width}), $offset);
       left: $hOffset;
-    } @else if ($pos== "right") {
-      top: if($offset== "center", calc(50% - #{$width}), $offset);
+    } @else if ($pos== 'right') {
+      top: if($offset== 'center', calc(50% - #{$width}), $offset);
       right: $hOffset;
     }
   }
@@ -413,7 +408,7 @@
 // -----------------------------------------------------------------------
 @mixin animate-css($type, $duration: null, $repeat: null) {
   //     Animation name prefix
-  $prefix: "";
+  $prefix: '';
 
   //     Type
   animation-name: unquote($prefix + $type);

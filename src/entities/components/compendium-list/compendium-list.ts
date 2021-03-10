@@ -6,13 +6,13 @@ import type { EntitySheet } from '@src/foundry/foundry-cont';
 import { localize } from '@src/foundry/localization';
 import { importFromCompendium } from '@src/foundry/misc-helpers';
 import { openMenu } from '@src/open-menu';
-import { searchRegExp, clickIfEnter } from '@src/utility/helpers';
+import { clickIfEnter, searchRegExp } from '@src/utility/helpers';
 import {
   customElement,
-  LitElement,
-  property,
   html,
   internalProperty,
+  LitElement,
+  property,
 } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
@@ -35,6 +35,10 @@ export class CompendiumList extends LitElement {
   @internalProperty() private search = '';
 
   private openedEntities = new Map<string, Entity>();
+
+  adoptedCallback() {
+    console.log('adopted', CompendiumList.styles);
+  }
 
   disconnectedCallback() {
     this.openedEntities.clear();

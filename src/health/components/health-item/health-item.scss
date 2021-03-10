@@ -29,7 +29,7 @@
     '.. type damage'
     'bars bars bars';
   position: relative;
-  padding: var(--health-item-padding, 0.5rem);
+  padding: var(--health-item-padding, 0.25rem 0.5rem);
 
   outline: none;
   &.dead {
@@ -68,7 +68,7 @@
   grid-area: damage;
   justify-self: end;
   display: flex;
-  margin-right: 0.25rem;
+  margin: 0 0.25rem;
   .regen-available {
     align-self: center;
     margin-right: 0.5ch;
@@ -107,13 +107,13 @@
   }
 
   & + .wounds {
-    margin-left: 1.5rem;
+    margin-left: 0.5rem;
   }
 }
 
 .wounds {
   display: flex;
-  min-width: 60px;
+  min-width: 105px;
   align-items: center;
   align-self: flex-end;
   justify-content: flex-end;

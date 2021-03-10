@@ -71,8 +71,8 @@
         height: 36px;
         margin-left: -0.75rem;
         filter: drop-shadow(2px 4px 6px black);
-        transition: height 100ms 50ms ease-out;
-        position: static;
+        width: unset;
+        transition: height 100ms 50ms ease-out, width 100ms 50ms ease-out;
       }
     }
     ::slotted([slot='header']) {
@@ -135,9 +135,6 @@ slot[name='footer'] {
     }
     .controls {
       margin-left: none;
-      position: absolute;
-      top: 0;
-      right: 0;
       background: alphav(var(--color-bg), 0.2);
       z-index: 2;
     }
@@ -157,23 +154,18 @@ slot[name='footer'] {
   > * {
     @include truncate(400px);
   }
+
   img {
     display: inline-block;
-    filter: drop-shadow(1px 2px 3px black);
-    margin-left: 0.25ch;
-    position: absolute;
-    top: 0.25rem;
-    left: 0.25rem;
-
+    width: 0;
     & + span {
       grid-column: 2;
     }
   }
   span {
-    margin: 0 auto;
     min-width: 100%;
-    text-align: center;
     grid-column: span 2;
+    margin-left: 0.5ch;
   }
 }
 
@@ -184,9 +176,7 @@ slot[name='footer'] {
   margin-left: 0.5rem;
   display: flex;
   height: 31px;
-  position: absolute;
-  top: 0;
-  right: 0;
+
   transition: background 75ms ease-in-out;
   --list-item-bg-hover: #{alphav(var(--color-bg), 0.5)};
   --list-item-transition: all 75ms ease-in-out;

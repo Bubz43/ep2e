@@ -1,6 +1,8 @@
 @use "scss/functions" as *;
 @use "scss/mixins" as *;
 
+@include resetUnorderedList();
+
 * {
   box-sizing: border-box;
 }
@@ -8,17 +10,23 @@
 :host {
   display: grid;
   grid-auto-rows: min-content;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+health-item {
+  flex: 1;
 }
 
 header {
-  position: relative;
-  padding: 0.25rem 0.75rem;
-  text-shadow: 0 0 4px black;
+  padding: 0.25rem 0.75rem 0;
 
   .name {
     all: unset;
     font-size: larger;
-    display: block;
+    display: inline-block;
     margin-right: 0.25ch;
 
     &:hover,
@@ -28,14 +36,9 @@ header {
     }
   }
   .info {
-    display: block;
     color: var(--color-text-lighter);
     font-family: var(--font-2);
     font-size: small;
-  }
-
-  &:last-child {
-    margin-bottom: 0.5rem;
   }
 }
 

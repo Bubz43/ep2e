@@ -8,20 +8,19 @@ import {
   SlWindowEventName,
 } from '@src/components/window/window-options';
 import type { EntitySheet } from '@src/foundry/foundry-cont';
-import { MutateEvent, mutatePlaceableHook } from '@src/foundry/hook-setups';
 import { localize } from '@src/foundry/localization';
 import { importFromCompendium, userCan } from '@src/foundry/misc-helpers';
-import { readyCanvas } from '@src/foundry/canvas';
+import { openMenu } from '@src/open-menu';
 import { debounce } from '@src/utility/decorators';
 import { assignStyles } from '@src/utility/dom';
 import { html } from 'lit-html';
 import { compact } from 'remeda';
+import type { Subscription } from 'rxjs';
 import type { DeepPartial } from 'utility-types';
 import { ActorType } from '../entity-types';
+import { subscribeToToken } from '../token-subscription';
 import type { ActorEP } from './actor';
 import { renderCharacterView, renderSleeveForm } from './actor-views';
-import type { Subscription } from 'rxjs';
-import { subscribeToToken } from '../token-subscription';
 
 export const actorSheets = new WeakMap<ActorEP, ActorEPSheet>();
 
@@ -33,6 +32,8 @@ export class ActorEPSheet implements EntitySheet {
   private window: SlWindow | null = null;
 
   private tokenSubscription?: Subscription | null;
+
+  private compactCharacter = false;
 
   constructor(private actor: ActorEP) {
     actorSheets.set(actor, this);
@@ -88,7 +89,7 @@ export class ActorEPSheet implements EntitySheet {
   get content() {
     const { proxy: agent } = this.actor;
     return agent.type === ActorType.Character
-      ? renderCharacterView(agent, this._token)
+      ? renderCharacterView(agent, this._token, this.compactCharacter)
       : renderSleeveForm(agent);
   }
 
@@ -97,7 +98,7 @@ export class ActorEPSheet implements EntitySheet {
   }
 
   private get windowHeaderButtons() {
-    const { compendium, id } = this.actor;
+    const { compendium, id, proxy } = this.actor;
     return compact([
       SlWindow.headerButton({
         onClick: this.configureToken,
@@ -114,8 +115,29 @@ export class ActorEPSheet implements EntitySheet {
           content: html`<i class="fas fa-download"></i>`,
           disabled: !userCan('ACTOR_CREATE'),
         }),
+      proxy.type === ActorType.Character &&
+        SlWindow.headerButton({
+          onClick: this.openSettingsMenu,
+          content: html`<mwc-icon>settings</mwc-icon>`,
+        }),
     ]);
   }
+
+  private openSettingsMenu = () => {
+    openMenu({
+      header: { heading: localize('settings') },
+      content: [
+        html`<mwc-check-list-item
+          ?selected=${this.compactCharacter}
+          @click=${() => {
+            this.compactCharacter = !this.compactCharacter;
+            this.openWindow(false);
+          }}
+          >${localize('compact')}</mwc-check-list-item
+        >`,
+      ],
+    });
+  };
 
   private get actorToken() {
     return this._token || this.actor.token;

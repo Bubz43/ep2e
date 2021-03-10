@@ -13,15 +13,23 @@
   display: grid;
   grid-template-areas:
     'header header'
+    'blocks blocks'
     'side tab-bar'
     'side content';
   grid-template-columns: 400px 1fr;
   min-width: 100%;
-  width: 800px;
-  min-height: 500px;
+  width: 950px;
+  min-height: 300px;
   height: max-content;
-  grid-template-rows: repeat(2, min-content) 1fr;
+  grid-template-rows: repeat(3, min-content) 1fr;
   background: alphav(var(--color-grey), 0.2);
+}
+
+.side-panels {
+  grid-area: side;
+  > * {
+    height: 2rem;
+  }
 }
 
 character-view-header {
@@ -38,7 +46,7 @@ character-view-header {
 mwc-tab-bar {
   grid-area: tab-bar;
   --mdc-theme-primary: var(--color-grey);
-  margin-bottom: 0.25rem;
+  padding: 0 0.25rem 0.25rem;
 }
 
 .sections > * {
@@ -66,31 +74,27 @@ mwc-tab-bar {
 
 .side {
   display: grid;
-  align-items: center;
-  grid-area: side;
+  grid-auto-rows: min-content;
+  grid-area: blocks;
+
   overflow-y: scroll;
   overflow-x: hidden;
-  max-height: calc(100vh - 150px);
-  min-height: 100%;
-  padding: 0.5rem 0.25rem;
-  gap: 0.5rem;
-  margin-left: 0.25rem;
+  // max-height: calc(100vh - 150px);
+  // min-height: 100%;
+  // padding: 0.5rem 0.25rem;
+  // gap: 0.5rem;
+  // margin-left: 0.25rem;
 
   > * {
-    height: max-content;
+    // height: max-content;
+    // flex: 1;
     border: 1px groove var(--color-border);
-
+    width: 100%;
     background: linear-gradient(
       45deg,
       alphav(var(--color-bg), 0.8),
       alphav(var(--color-bg-alt), 0.8)
     );
-
-    &:not(character-view-test-actions) {
-      border-left-width: 0.25rem;
-      border-left-style: solid;
-      box-shadow: -2px 0 5px rgba(black, 0.75);
-    }
   }
 
   .sleeve-select {
@@ -106,15 +110,14 @@ mwc-tab-bar {
   grid-area: content;
   display: grid;
   grid-auto-rows: min-content;
-  grid-template-columns: repeat(auto-fit, minmax(375px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(50ch, 1fr));
   gap: 0.25rem;
-  height: 200px;
+  height: 400px;
   min-height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
   padding: 0 0.25rem 0.25rem;
   margin-right: 0.25rem;
-  margin-bottom: 0.5rem;
   min-height: calc(100% - 0.5rem);
 
   sl-header,
@@ -144,6 +147,7 @@ mwc-tab-bar {
   display: none;
   grid-template-areas: 'content';
   grid-template-rows: 1fr;
+  width: 400px;
   > * {
     grid-area: content;
   }
@@ -188,42 +192,6 @@ mwc-tab-bar {
   }
 }
 
-.status-items {
-  > *:not(:last-child) {
-    border-bottom: 1px solid alphav(var(--color-border), 0.5);
-  }
-}
-
-.conditions {
-  display: flex;
-  align-items: center;
-  --mdc-theme-primary: var(--color-grey);
-  padding: 0.25rem;
-  .conditions-list {
-    display: flex;
-    justify-content: space-evenly;
-    flex: 1;
-  }
-  @include textButton();
-  button {
-    position: relative;
-  }
-  notification-coin {
-    right: -2px;
-    top: -75%;
-    --coin-bg: var(--color-border);
-  }
-  img {
-    opacity: 0.25;
-    transition: opacity 300ms;
-    display: block;
-    pointer-events: none;
-    &.active {
-      opacity: 1;
-    }
-  }
-}
-
 .no-substances-message {
   padding: 0.3rem 0.75rem;
   margin: 0;
@@ -234,11 +202,6 @@ mwc-tab-bar {
   time-state-item {
     padding-top: 0;
   }
-}
-
-.pools {
-  display: flex;
-  justify-content: space-evenly;
 }
 
 .active-substances {
@@ -268,8 +231,4 @@ mwc-tab-bar {
 
 enriched-html {
   padding: 0 0.25rem;
-}
-
-.combat-toggles {
-  display: flex;
 }

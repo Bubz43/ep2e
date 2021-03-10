@@ -1,15 +1,11 @@
-import {
-  renderNumberField,
-  renderNumberInput,
-} from '@src/components/field/fields';
+import { renderNumberInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
-import { Origin } from '@src/components/popover/popover-options';
-import { PsiPush, enumValues } from '@src/data-enums';
+import { enumValues, PsiPush } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import type { Psi } from '@src/entities/item/proxies/psi';
 import { localize } from '@src/foundry/localization';
 import { openMenu } from '@src/open-menu';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, html, LitElement, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import styles from './character-view-psi.scss';
 
@@ -65,14 +61,14 @@ export class CharacterViewPsi extends LitElement {
   private renderInfectionInfo() {
     return html`
       ${this.renderInfectionTracker()}
-      <div class="actions">
+      <!-- <div class="actions">
         <mwc-button dense
           >${localize('infection')} ${localize('test')}</mwc-button
         >
         <mwc-button dense
           >${localize('roll')} ${localize('influences')}</mwc-button
         >
-      </div>
+      </div> -->
     `;
   }
 

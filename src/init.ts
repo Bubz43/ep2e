@@ -2,7 +2,6 @@ import { html, render } from 'lit-html';
 import { compact, first } from 'remeda';
 import type { RawEditorSettings } from 'tinymce';
 import { onChatMessageRender } from './chat/message-hooks';
-import { combatSocketHandler } from './combat/combat-tracker';
 import { EPOverlay } from './components/ep-overlay/ep-overlay';
 import type { ToolTip } from './components/tooltip/tooltip';
 import { SlWindow } from './components/window/window';
@@ -40,6 +39,8 @@ import { notEmpty } from './utility/helpers';
         'https://fonts.googleapis.com/css?family=Material+Icons&display=block',
         'https://fonts.googleapis.com/css?family=Roboto:300,400,500',
         'https://fonts.googleapis.com/css?family=Rubik:300,400,700&display=swap',
+        // 'https://fonts.googleapis.com/css?family=Inter:300,400,700&display=swap',
+
         'https://fonts.googleapis.com/css?family=Jost:300,400,700&display=swap',
         'https://fonts.googleapis.com/css?family=Spartan:300,400,700&display=swap',
         'https://fonts.googleapis.com/css?family=Fira+Code&display=swap',
@@ -89,36 +90,36 @@ Hooks.once('init', () => {
     })),
   ]);
 
-  addEPSocketHandler('mutateCombat', combatSocketHandler);
+  // addEPSocketHandler('mutateCombat', combatSocketHandler);
 
-  applicationHook({
-    app: PlayerList,
-    hook: 'on',
-    event: 'render',
-    callback: (app, [el]) => {
-      if (!el) return;
-      el.querySelector(`[data-user-id="${game.user.id}"]`)?.remove();
-      if ([...game.users.values()].some((user) => !user.active)) {
-        const frag = new DocumentFragment();
-        render(
-          html`
-            <wl-list-item
-              clickable
-              role="button"
-              class="offline-toggle"
-              @click=${app._onToggleOfflinePlayers.bind(app)}
-            >
-              <mwc-icon
-                >${app._showOffline ? 'offline_pin' : 'offline_bolt'}</mwc-icon
-              >
-            </wl-list-item>
-          `,
-          frag,
-        );
-        el.prepend(frag);
-      }
-    },
-  });
+  // applicationHook({
+  //   app: PlayerList,
+  //   hook: 'on',
+  //   event: 'render',
+  //   callback: (app, [el]) => {
+  //     if (!el) return;
+  //     el.querySelector(`[data-user-id="${game.user.id}"]`)?.remove();
+  //     if ([...game.users.values()].some((user) => !user.active)) {
+  //       const frag = new DocumentFragment();
+  //       render(
+  //         html`
+  //           <wl-list-item
+  //             clickable
+  //             role="button"
+  //             class="offline-toggle"
+  //             @click=${app._onToggleOfflinePlayers.bind(app)}
+  //           >
+  //             <mwc-icon
+  //               >${app._showOffline ? 'offline_pin' : 'offline_bolt'}</mwc-icon
+  //             >
+  //           </wl-list-item>
+  //         `,
+  //         frag,
+  //       );
+  //       el.prepend(frag);
+  //     }
+  //   },
+  // });
 });
 
 Hooks.on('renderChatMessage', onChatMessageRender);
@@ -191,7 +192,7 @@ Hooks.once('ready', async () => {
     overlay = new EPOverlay();
     SlWindow.container = overlay;
     document.body.append(overlay);
-    document.getElementById('hotbar')?.remove();
+    // document.getElementById('hotbar')?.remove();
 
     tooltip = document.createElement('sl-tooltip');
     tooltip.slot = 'tooltip';
@@ -224,22 +225,38 @@ Hooks.once('ready', async () => {
   //   callback: () => requestAnimationFrame(() => ui.combat.render()),
   // });
 
+  const compendiumSearchButton = () => {
+    const frag = new DocumentFragment();
+    render(
+      html`
+        <mwc-button
+          style="width: 100%"
+          label=${localize('search')}
+          icon="search"
+          @click=${() => {
+            openWindow({
+              key: CompendiumSearch,
+              name: localize('search'),
+              content: html` <compendium-search></compendium-search> `,
+            });
+          }}
+        ></mwc-button>
+      `,
+      frag,
+    );
+    return frag;
+  };
+
+  document
+    .querySelector('#compendium .directory-footer')
+    ?.append(compendiumSearchButton());
+
   applicationHook({
     app: CompendiumDirectory,
     hook: 'on',
     event: 'render',
     callback: (dir, [el]) => {
-      const button = document.createElement('mwc-button');
-      button.label = localize('search');
-      button.onclick = () => {
-        openWindow({
-          key: CompendiumSearch,
-          name: localize('search'),
-          content: html` <compendium-search></compendium-search> `,
-        });
-      };
-      button.style.width = '100%';
-      el?.querySelector('.directory-footer')?.append(button);
+      el?.querySelector('.directory-footer')?.append(compendiumSearchButton());
     },
   });
 

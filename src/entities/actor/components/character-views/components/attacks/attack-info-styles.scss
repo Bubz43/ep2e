@@ -1,0 +1,14 @@
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: flex;
+  flex-flow: row wrap;
+  margin: 0.25rem 0.5rem;
+}
+
+colored-tag {
+  margin: 0.125rem 0.125rem 0 0;
+  flex-grow: 1;
+}

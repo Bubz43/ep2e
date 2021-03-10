@@ -1,5 +1,5 @@
 {
-  "version": 0.67531,
+  "version": 0.6754,
   "name": "ep2e",
   "title": "Eclipse Phase 2e",
   "description": "Eclipse Phase 2e Game System.",
@@ -51,10 +51,24 @@
       "entity": "Actor"
     },
     {
+      "name": "infomorphs",
+      "system": "ep2e",
+      "label": "Infomorphs",
+      "path": "./packs/infomorphs.db",
+      "entity": "Actor"
+    },
+    {
       "name": "traits",
       "system": "ep2e",
       "label": "Traits",
       "path": "./packs/traits.db",
+      "entity": "Item"
+    },
+    {
+      "name": "physical-services",
+      "system": "ep2e",
+      "label": "Physical Services",
+      "path": "./packs/physical-services.db",
       "entity": "Item"
     },
     {
@@ -272,6 +286,48 @@
       "system": "ep2e",
       "label": "Disorders",
       "path": "./packs/disorders.db",
+      "entity": "Item"
+    },
+    {
+      "name": "apps",
+      "system": "ep2e",
+      "label": "Apps",
+      "path": "./packs/apps.db",
+      "entity": "Item"
+    },
+    {
+      "name": "meshware",
+      "system": "ep2e",
+      "label": "Meshware",
+      "path": "./packs/meshware.db",
+      "entity": "Item"
+    },
+    {
+      "name": "software",
+      "system": "ep2e",
+      "label": "Software",
+      "path": "./packs/software.db",
+      "entity": "Item"
+    },
+    {
+      "name": "mesh-services",
+      "system": "ep2e",
+      "label": "Mesh Services",
+      "path": "./packs/mesh-services.db",
+      "entity": "Item"
+    },
+    {
+      "name": "tacnet",
+      "system": "ep2e",
+      "label": "TacNet",
+      "path": "./packs/tacnet.db",
+      "entity": "Item"
+    },
+    {
+      "name": "scorchers",
+      "system": "ep2e",
+      "label": "Scorchers",
+      "path": "./packs/scorchers.db",
       "entity": "Item"
     },
     {

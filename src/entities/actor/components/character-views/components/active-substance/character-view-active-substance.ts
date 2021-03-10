@@ -2,6 +2,7 @@ import type { MultiSelectedEvent } from '@material/mwc-list/mwc-list-foundation'
 import { createMessage } from '@src/chat/create-message';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import type { Character } from '@src/entities/actor/proxies/character';
+import { ActorType } from '@src/entities/entity-types';
 import { itemMenuOptions } from '@src/entities/item/item-views';
 import type { Substance } from '@src/entities/item/proxies/substance';
 import { formatEffect } from '@src/features/effects';
@@ -11,6 +12,8 @@ import { formatDamageType, HealthType } from '@src/health/health';
 import { tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
 import { openMenu } from '@src/open-menu';
+import { AptitudeCheckControls } from '@src/success-test/components/aptitude-check-controls/aptitude-check-controls';
+import { createSuccessTestModifier } from '@src/success-test/success-test';
 import { notEmpty, withSign } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
@@ -105,6 +108,31 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
 
   private openMenu(ev: MouseEvent) {
     return openMenu({ content: itemMenuOptions(this.substance), position: ev });
+  }
+
+  private startSeverityCheck(
+    severity: Pick<Substance['severity'], 'check' | 'checkMod'>,
+  ) {
+    AptitudeCheckControls.openWindow({
+      entities: { actor: this.character.actor },
+      getState: (actor) => {
+        if (actor.proxy.type !== ActorType.Character) return null;
+
+        return {
+          ego: actor.proxy.ego,
+          character: actor.proxy,
+          aptitude: severity.check,
+          modifiers: severity.checkMod
+            ? [
+                createSuccessTestModifier({
+                  name: `${localize('severity')}`,
+                  value: severity.checkMod,
+                }),
+              ]
+            : undefined,
+        };
+      },
+    });
   }
 
   private async endBaseEffects() {
@@ -362,6 +390,7 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
                   icon="check_circle"
                   unelevated
                   trailingIcon
+                  @click=${() => this.startSeverityCheck(severity)}
                 >
                   ${localize(severity.check)}
                   ${severity.checkMod ? withSign(severity.checkMod) : ''}
@@ -389,9 +418,9 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
               </div>
             `
           : applySeverity === false
-          ? html`<span
+          ? html`<colored-tag type="info"
               >${localize('resisted')} ${localize('severe')}
-              ${localize('effects')}</span
+              ${localize('effects')}</colored-tag
             >`
           : ''
         : ''}

@@ -6,18 +6,18 @@ import type { ItemEntity } from '@src/entities/models';
 import { Effect, EffectType } from '@src/features/effects';
 import type { StringID } from '@src/features/feature-helpers';
 import {
-  HotbarEntryData,
   HotbarCell,
+  HotbarEntryData,
   HotbarEntryType,
 } from '@src/features/hotbar-entry';
 import {
   PsiInfluenceData,
   PsiInfluenceType,
 } from '@src/features/psi-influence';
-import { assignStyles } from '@src/utility/dom';
 import { isJsonObject } from '@src/utility/helpers';
 import { createPipe } from 'remeda';
 import type { JsonObject } from 'type-fest';
+import type { EntityName } from './foundry-cont';
 
 const source: {
   element: HTMLElement | null | undefined;
@@ -115,6 +115,7 @@ export enum DropType {
   JournalEntry = 'JournalEntry',
   RollTable = 'RollTable',
   Playlist = 'Playlist',
+  Folder = 'Folder',
 }
 
 type MacroDrop = KnownDrop<{ id: string; type: DropType.Macro }>;
@@ -171,6 +172,12 @@ type PsiInfluenceDrop = KnownDrop<{
   influence: PsiInfluenceData;
 }>;
 
+type FolderDrop = KnownDrop<{
+  type: DropType.Folder;
+  id: string;
+  entity: EntityName;
+}>;
+
 type Drops = {
   [DropType.Macro]: MacroDrop;
   [DropType.HotbarEntryData]: HotbarEntryDataDrop;
@@ -184,6 +191,7 @@ type Drops = {
   [DropType.Playlist]: PlayListDrop;
   [DropType.Scene]: SceneDrop;
   [DropType.RollTable]: RollTableDrop;
+  [DropType.Folder]: FolderDrop;
 };
 
 const isMacro = dropChecker(DropType.Macro, ({ id }) => typeof id === 'string');
@@ -256,6 +264,10 @@ const isSceneDrop = dropChecker(DropType.Scene, simpleDropCheck);
 const isPlaylistDrop = dropChecker(DropType.Playlist, simpleDropCheck);
 const isRollTableDrop = dropChecker(DropType.RollTable, simpleDropCheck);
 const isJournalEntryDrop = dropChecker(DropType.JournalEntry, simpleDropCheck);
+const isFolderDrop = dropChecker(
+  DropType.Folder,
+  ({ id, entity }) => !!(id && typeof entity === 'string'),
+);
 
 const droppedChecks: Record<DropType, (dropped: unknown) => boolean> = {
   [DropType.Macro]: isMacro,
@@ -270,6 +282,7 @@ const droppedChecks: Record<DropType, (dropped: unknown) => boolean> = {
   [DropType.Playlist]: isPlaylistDrop,
   [DropType.RollTable]: isRollTableDrop,
   [DropType.JournalEntry]: isJournalEntryDrop,
+  [DropType.Folder]: isFolderDrop,
 };
 
 export const isKnownDrop = (droppedData: unknown): droppedData is Drop => {

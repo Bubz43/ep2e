@@ -203,18 +203,12 @@ export const setupCombatRound = (
       round.participants.push({ participant, extras: extraActions });
     }
 
-    // for (const extra of extraActions ?? []) {
-    //   round.participants.push({ participant, extra });
-    // }
-
     if (roundIndex <= 1) {
       round.surprise ||= !!participant.surprised;
     }
   }
 
-  console.time('sort');
   round.participants.sort(participantsByInitiative);
-  console.timeEnd('sort');
   return round;
 };
 

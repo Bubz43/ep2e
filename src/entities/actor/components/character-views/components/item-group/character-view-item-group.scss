@@ -28,14 +28,23 @@ sl-dropzone {
   grid-auto-rows: min-content;
   position: relative;
   padding: 0.25rem 0;
+  border-top: 1px solid var(--color-border);
   &[hidden] {
     display: none;
+  }
+}
+
+sl-header {
+  &::part(heading) {
+    // font-weight: normal;
+    font-size: large;
   }
 }
 
 [part='header'] {
   position: relative;
   outline: none;
+
   &[tabindex='0'] {
     cursor: pointer;
   }

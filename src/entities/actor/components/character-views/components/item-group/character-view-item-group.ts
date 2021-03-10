@@ -61,6 +61,8 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
 
   @property({ type: Boolean, reflect: true }) collapsed = false;
 
+  @property({ type: Boolean }) noCollapse = false;
+
   @internalProperty() private dragTargetItem: ItemProxy | null = null;
 
   @internalProperty() private sortAfter = false;
@@ -94,6 +96,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
   }
 
   private toggleCollapse() {
+    if (this.noCollapse) return;
     this.collapsed = !this.collapsed;
   }
 
@@ -245,14 +248,27 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
     }
   });
 
+  private get heading() {
+    switch (this.group) {
+      case ItemGroup.EgoTraits:
+        return `${this.character.name}`;
+      case ItemGroup.MorphTraits:
+        return `${this.character.sleeve?.name ?? localize('morph')}`;
+
+      default:
+        return localize(this.group);
+    }
+  }
+
   render() {
     const items = this.character[this.group];
     const hasItems = notEmpty(items);
+    const noCollapse = !hasItems || this.noCollapse;
     return html`
       <sl-dropzone @drop=${this.addItem} ?disabled=${this.character.disabled}>
         <sl-header
-          heading=${localize(this.group)}
-          ?hideBorder=${!hasItems}
+          heading=${this.heading}
+          hideBorder
           itemCount=${items.length}
           @click=${this.toggleCollapse}
           @focus="${this.handleRippleFocus}"
@@ -261,11 +277,11 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
           @mouseenter="${this.handleRippleMouseEnter}"
           @mouseleave="${this.handleRippleMouseLeave}"
           @keydown=${clickIfEnter}
-          tabindex=${hasItems ? 0 : -1}
+          tabindex=${noCollapse ? -1 : 0}
           part="header"
         >
           ${this.renderInfo()}
-          <span slot="action">${this.renderRipple(!hasItems)}</span>
+          <span slot="action">${this.renderRipple(noCollapse)}</span>
           ${hasItems
             ? html`
                 ${this.collapsed || this.character.disabled
@@ -280,7 +296,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
                         @mouseover=${tooltip.fromData}
                       ></mwc-icon-button>
                     `}
-                ${this.renderToggleIcon()}
+                ${this.noCollapse ? '' : this.renderToggleIcon()}
               `
             : ''}
         </sl-header>

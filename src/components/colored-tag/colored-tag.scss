@@ -1,0 +1,44 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: inline-block;
+
+  ::slotted(*) {
+    pointer-events: none;
+  }
+
+  ::slotted([slot='after']) {
+    align-self: start;
+    margin-left: 1ch;
+    color: var(--color-text-lighter);
+  }
+}
+
+wl-list-item {
+  padding: 0.125rem 0.5rem;
+  border: 1px solid;
+}
+
+.info {
+  --list-item-bg: #{alphav(var(--color-grey), 0.1)};
+  --list-item-bg-hover: #{alphav(var(--color-grey), 0.2)};
+  border-color: alphav(var(--color-grey), 0.2);
+}
+
+.usable {
+  padding: 0.125rem 0.5rem;
+  --list-item-bg: #{alphav(var(--color-secondary), 0.1)};
+  --list-item-bg-hover: #{alphav(var(--color-secondary), 0.2)};
+  border-color: alphav(var(--color-secondary), 0.2);
+}
+
+.attack {
+  --list-item-bg: #{alphav(var(--color-negative), 0.2)};
+  --list-item-bg-hover: #{alphav(var(--color-negative), 0.3)};
+  border-color: alphav(var(--color-negative), 0.35);
+}

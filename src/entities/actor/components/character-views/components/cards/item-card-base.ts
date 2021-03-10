@@ -9,6 +9,9 @@ import styles from './item-card-base-styles.scss';
 
 const rippleStates = ['Hover', 'Press', 'Focus'] as const;
 
+/**
+ * @slot unexpanded
+ */
 export abstract class ItemCardBase extends LazyRipple(LitElement) {
   declare abstract item: ItemProxy;
 
@@ -127,7 +130,11 @@ export abstract class ItemCardBase extends LazyRipple(LitElement) {
               `<p>${localize('no')} ${localize('description')}</p>`}
             ></enriched-html>
           `
-        : ''}
+        : this.renderUnexpandedContent()}
     `;
+  }
+
+  protected renderUnexpandedContent() {
+    return html`<slot name="unexpanded"></slot>`;
   }
 }
