@@ -251,17 +251,29 @@ export class MessageSpecialTest extends MessageElement {
         fallDown,
       } = effect;
       const isStatic = !!staticDuration || !variableDuration;
-      let duration = isStatic
-        ? staticDuration || CommonInterval.Turn
-        : toMilliseconds({
-            [variableInterval || 'turns']: rollFormula(
-              variableDuration || '1d6',
-            ),
+      console.log(
+        rollFormula(variableDuration || '1d6')?.total || 1,
+        variableInterval,
+      );
+      let duration = CommonInterval.Turn;
+      if (isStatic) duration += staticDuration || CommonInterval.Turn;
+      else {
+        const roll = rollFormula(variableDuration || '1d6');
+        if (roll) await roll.toMessage();
+        const total = roll?.total || 1;
+        if (variableInterval === 'turns')
+          duration += CommonInterval.Turn * total;
+        else
+          duration += toMilliseconds({
+            [variableInterval || 'minutes']: total,
           });
+      }
+
       if (additionalDurationPerSuperior && !isSuccess) {
         const multiples = grantedSuperiorResultEffects(result);
         duration += multiples * additionalDurationPerSuperior;
       }
+
       if (fallDown) conditionsToAdd.add(ConditionType.Prone);
       if (condition) {
         conditionsToAdd.add(condition);
@@ -269,7 +281,7 @@ export class MessageSpecialTest extends MessageElement {
           createTemporaryFeature.condition({
             condition,
             duration,
-            name: this.specialTest.source,
+            name: `${this.specialTest.source} [${localize(condition)}]`,
           }),
         );
       }
@@ -297,7 +309,7 @@ export class MessageSpecialTest extends MessageElement {
               },
             ],
             duration,
-            name: this.specialTest.source,
+            name: `${this.specialTest.source} [${localize('impairment')}]`,
           }),
         );
       }
