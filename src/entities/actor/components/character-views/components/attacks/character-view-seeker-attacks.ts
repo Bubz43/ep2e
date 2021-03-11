@@ -66,6 +66,8 @@ export class CharacterViewSeekerAttacks extends LitElement {
       firingMode,
       activeAmmoSettings,
       acceptableMissileSizes,
+      weaponTraits,
+      accessories,
     } = this.weapon;
     // TODO: Range Tooltip
     return html`
@@ -74,7 +76,7 @@ export class CharacterViewSeekerAttacks extends LitElement {
         <span slot="after">${getWeaponRange(this.weapon)}</span></colored-tag
       >
       <colored-tag type="info">${localize(firingMode)}</colored-tag>
-      ${gearTraits.map(
+      ${[...gearTraits, ...weaponTraits, ...accessories].map(
         (trait) =>
           html`<colored-tag type="info">${localize(trait)}</colored-tag>`,
       )}

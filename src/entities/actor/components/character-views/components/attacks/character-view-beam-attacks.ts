@@ -81,13 +81,20 @@ export class CharacterViewBeamAttacks extends LitElement {
   }
 
   render() {
-    const { battery, editable, gearTraits, hasSecondaryAttack } = this.weapon;
+    const {
+      battery,
+      editable,
+      gearTraits,
+      hasSecondaryAttack,
+      weaponTraits,
+      accessories,
+    } = this.weapon;
     return html`
       <colored-tag type="info"
         >${localize('range')}
         <span slot="after">${getWeaponRange(this.weapon)}</span>
       </colored-tag>
-      ${gearTraits.map(
+      ${[...gearTraits, ...weaponTraits, ...accessories].map(
         (trait) =>
           html`<colored-tag type="info">${localize(trait)}</colored-tag>`,
       )}

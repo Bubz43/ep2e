@@ -32,18 +32,18 @@ wl-list-item {
 .info {
   --list-item-bg: #{alphav(var(--color-grey), 0.15)};
   --list-item-bg-hover: #{alphav(var(--color-grey), 0.25)};
-  border-color: alphav(var(--color-grey), 0.25);
+  border-color: alphav(var(--color-grey), 0.35);
 }
 
 .usable {
   padding: 0.125rem 0.5rem;
   --list-item-bg: #{alphav(var(--color-secondary), 0.15)};
   --list-item-bg-hover: #{alphav(var(--color-secondary), 0.25)};
-  border-color: alphav(var(--color-secondary), 0.25);
+  border-color: alphav(var(--color-secondary), 0.3);
 }
 
 .attack {
   --list-item-bg: #{alphav(var(--color-negative), 0.25)};
   --list-item-bg-hover: #{alphav(var(--color-negative), 0.35)};
-  border-color: alphav(var(--color-negative), 0.4);
+  border-color: alphav(var(--color-negative), 0.5);
 }
