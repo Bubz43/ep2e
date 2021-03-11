@@ -51,7 +51,7 @@ export class BeamWeapon
   }
 
   get canFire() {
-    return !!this.battery;
+    return !!this.availableShots;
   }
 
   fire(shots: number) {
@@ -61,7 +61,7 @@ export class BeamWeapon
   }
 
   get availableShots() {
-    return this.battery;
+    return this.battery.charge;
   }
 
   get range() {

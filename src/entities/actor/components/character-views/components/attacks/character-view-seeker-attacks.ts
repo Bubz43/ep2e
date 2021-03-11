@@ -71,6 +71,7 @@ export class CharacterViewSeekerAttacks extends LitElement {
       <colored-tag
         clickable
         ?disabled=${!editable}
+        type="usable"
         @click=${this.openMissileSelect}
       >
         ${missiles
