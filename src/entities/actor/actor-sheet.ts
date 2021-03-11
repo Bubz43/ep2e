@@ -10,6 +10,7 @@ import {
 import type { EntitySheet } from '@src/foundry/foundry-cont';
 import { localize } from '@src/foundry/localization';
 import { importFromCompendium, userCan } from '@src/foundry/misc-helpers';
+import { EP } from '@src/foundry/system';
 import { openMenu } from '@src/open-menu';
 import { debounce } from '@src/utility/decorators';
 import { assignStyles } from '@src/utility/dom';
@@ -32,8 +33,6 @@ export class ActorEPSheet implements EntitySheet {
   private window: SlWindow | null = null;
 
   private tokenSubscription?: Subscription | null;
-
-  private compactCharacter = false;
 
   constructor(private actor: ActorEP) {
     actorSheets.set(actor, this);
@@ -89,7 +88,7 @@ export class ActorEPSheet implements EntitySheet {
   get content() {
     const { proxy: agent } = this.actor;
     return agent.type === ActorType.Character
-      ? renderCharacterView(agent, this._token, this.compactCharacter)
+      ? renderCharacterView(agent, this._token)
       : renderSleeveForm(agent);
   }
 
@@ -119,20 +118,24 @@ export class ActorEPSheet implements EntitySheet {
         SlWindow.headerButton({
           onClick: this.openSettingsMenu,
           content: html`<mwc-icon>settings</mwc-icon>`,
+          disabled: !this.actor.editable,
         }),
     ]);
   }
 
   private openSettingsMenu = () => {
+    const { proxy } = this.actor;
+    if (proxy.type !== ActorType.Character) return;
+    const compact = !!proxy.epFlags?.compactSheet;
     openMenu({
       header: { heading: localize('settings') },
       content: [
         html`<mwc-check-list-item
-          ?selected=${this.compactCharacter}
-          @click=${() => {
-            this.compactCharacter = !this.compactCharacter;
-            this.openWindow(false);
-          }}
+          ?selected=${compact}
+          @click=${() =>
+            proxy.updater
+              .path('flags', EP.Name, 'compactSheet')
+              .commit(!compact)}
           >${localize('compact')}</mwc-check-list-item
         >`,
       ],

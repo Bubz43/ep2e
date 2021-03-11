@@ -1,5 +1,5 @@
 {
-  "version": 0.6754,
+  "version": 0.67541,
   "name": "ep2e",
   "title": "Eclipse Phase 2e",
   "description": "Eclipse Phase 2e Game System.",
@@ -55,6 +55,13 @@
       "system": "ep2e",
       "label": "Infomorphs",
       "path": "./packs/infomorphs.db",
+      "entity": "Actor"
+    },
+    {
+      "name": "robots",
+      "system": "ep2e",
+      "label": "Robots",
+      "path": "./packs/robots.db",
       "entity": "Actor"
     },
     {

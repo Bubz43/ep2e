@@ -75,6 +75,7 @@ import { CharacterViewActiveSubstance } from './entities/actor/components/charac
 import { CharacterViewArmor } from './entities/actor/components/character-views/components/armor/character-view-armor';
 import { CharacterViewExplosiveAttacks } from './entities/actor/components/character-views/components/attacks/character-view-explosive-attacks';
 import { CharacterViewMeleeWeaponAttacks } from './entities/actor/components/character-views/components/attacks/character-view-melee-weapon-attacks';
+import { CharacterViewSeekerAttacks } from './entities/actor/components/character-views/components/attacks/character-view-seeker-attacks';
 import { CharacterViewSoftwareAttacks } from './entities/actor/components/character-views/components/attacks/character-view-software-attacks';
 import { CharacterViewThrownWeaponAttacks } from './entities/actor/components/character-views/components/attacks/character-view-thrown-weapon-attacks';
 import { ExplosiveSettingsForm } from './entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
@@ -168,6 +169,7 @@ import { HackingTestControls } from './success-test/components/hacking-test-cont
 import { MeleeAttackControls } from './success-test/components/melee-attack-controls/melee-attack-controls';
 import { SuccessTestModifiersSection } from './success-test/components/modifiers-section/success-test-modifiers-section';
 import { SuccessTestPoolControls } from './success-test/components/pool-controls/success-test-pool-controls';
+import { RangedAttackControls } from './success-test/components/ranged-attack-controls/ranged-attack-controls';
 import { ReputationFavorControls } from './success-test/components/reputation-favor-controls/reputation-favor-controls';
 import { SuccessTestSectionLabel } from './success-test/components/section-label/success-test-section-label';
 import { SuccessTestSkillSection } from './success-test/components/skill-section/success-test-skill-section';
@@ -234,6 +236,7 @@ CharacterViewTestActions;
 CharacterViewPsi;
 CharacterViewExplosiveAttacks;
 CharacterViewMeleeWeaponAttacks;
+CharacterViewSeekerAttacks;
 CharacterViewThrownWeaponAttacks;
 ExplosiveSettingsForm;
 CharacterViewAttacksSection;
@@ -357,3 +360,4 @@ ThrownAttackControls;
 HackingTestControls;
 SuccessTestSkillSection;
 SoftwareSkillTestControls;
+RangedAttackControls;

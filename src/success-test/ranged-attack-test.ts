@@ -6,8 +6,7 @@ import {
   SuperiorResultEffect,
 } from '@src/data-enums';
 import { ActorType, ItemType } from '@src/entities/entity-types';
-import type { Explosive } from '@src/entities/item/proxies/explosive';
-import type { ThrownWeapon } from '@src/entities/item/proxies/thrown-weapon';
+import type { RangedWeapon } from '@src/entities/item/item';
 import {
   createExplosiveTriggerSetting,
   ExplosiveSettings,
@@ -19,18 +18,17 @@ import {
   createAction,
 } from '@src/features/actions';
 import { matchesSkill, Source } from '@src/features/effects';
-import { getCurrentEnvironment } from '@src/features/environment';
-import { Size } from '@src/features/size';
+import { FiringMode, firingModeCost } from '@src/features/firing-modes';
 import type { Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { capitalize } from '@src/foundry/misc-helpers';
 import type { LabeledFormula } from '@src/foundry/rolls';
 import { distanceBetweenTokens } from '@src/foundry/token-helpers';
-import { arrayOf } from '@src/utility/helpers';
+import { arrayOf, notEmpty } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
-import { compact, concat, last, merge, pipe } from 'remeda';
+import { compact, last, merge } from 'remeda';
 import type { SetRequired } from 'type-fest';
-import { applyGravityToWeaponRange, getRangeModifier } from './range-modifiers';
+import { getRangeModifier, getWeaponRange } from './range-modifiers';
 import { SkillTest, SkillTestInit } from './skill-test';
 import {
   createSuccessTestModifier,
@@ -38,21 +36,24 @@ import {
   successTestEffectMap,
 } from './success-test';
 
-export type ThrownAttackTestInit = SetRequired<SkillTestInit, 'character'> & {
-  weapon: ThrownWeapon | Explosive;
+export type RangedAttackTestInit = SetRequired<SkillTestInit, 'character'> & {
+  weapon: RangedWeapon;
   primaryAttack: boolean;
+  firingMode: FiringMode;
 };
 
-export class ThrownAttackTest extends SkillTest {
+export class RangedAttackTest extends SkillTest {
   readonly character;
 
-  readonly throwing: WithUpdate<{
-    weapon: ThrownAttackTestInit['weapon'];
+  readonly firing: WithUpdate<{
+    weapon: RangedAttackTestInit['weapon'];
     primaryAttack: boolean;
     attackTarget?: Token | null;
     targetDistance: number;
     range: number;
     calledShot?: CalledShot | null;
+    firingMode: FiringMode;
+    suppressiveFire?: boolean;
     explosiveSettings?: ExplosiveSettings | null;
     oneHanded?: boolean;
   }>;
@@ -73,8 +74,14 @@ export class ThrownAttackTest extends SkillTest {
     name: RangeRating.Range,
     value: 0,
   });
+  largeMorph: any;
 
-  constructor({ weapon, primaryAttack, ...init }: ThrownAttackTestInit) {
+  constructor({
+    weapon,
+    primaryAttack,
+    firingMode,
+    ...init
+  }: RangedAttackTestInit) {
     super({
       ...init,
       action:
@@ -87,36 +94,40 @@ export class ThrownAttackTest extends SkillTest {
 
     this.character = init.character;
 
-    const { gravity } = getCurrentEnvironment();
-
     const attackTarget = [...game.user.targets][0];
 
-    this.throwing = {
+    this.firing = {
       attackTarget,
-      range: applyGravityToWeaponRange(
-        this.character.ego.aptitudes.som,
-        gravity,
-      ),
+      range: getWeaponRange(weapon),
       targetDistance:
         attackTarget && this.token
           ? Math.ceil(distanceBetweenTokens(this.token, attackTarget))
           : 10,
       primaryAttack,
       weapon,
+      firingMode: firingMode,
       explosiveSettings:
-        weapon.type === ItemType.Explosive
+        weapon.type === ItemType.SeekerWeapon
           ? {
               trigger: createExplosiveTriggerSetting(ExplosiveTrigger.Impact),
             }
           : null,
       update: this.recipe((draft, changed) => {
-        draft.throwing = merge(draft.throwing, changed);
+        draft.firing = merge(draft.firing, changed);
         if (changed.weapon) {
-          draft.throwing.primaryAttack = true;
-          draft.throwing.calledShot = null;
-          draft.throwing.oneHanded = false;
-          draft.throwing.explosiveSettings =
-            draft.throwing.weapon.type === ItemType.Explosive
+          draft.firing.primaryAttack = true;
+          draft.firing.calledShot = null;
+          draft.firing.oneHanded = false;
+          draft.firing.suppressiveFire = false;
+          draft.firing.range = getWeaponRange(
+            draft.firing.weapon as RangedWeapon,
+          );
+          draft.firing.firingMode =
+            draft.firing.weapon.type === ItemType.SeekerWeapon
+              ? draft.firing.weapon.firingMode
+              : draft.firing.weapon.attacks.primary.firingModes[0]!;
+          draft.firing.explosiveSettings =
+            draft.firing.weapon.type === ItemType.SeekerWeapon
               ? {
                   trigger: createExplosiveTriggerSetting(
                     ExplosiveTrigger.Impact,
@@ -130,9 +141,9 @@ export class ThrownAttackTest extends SkillTest {
             draft.skillState.skill,
             draft.action,
           );
-          if (draft.throwing.attackTarget) {
+          if (draft.firing.attackTarget) {
             for (const [effect, active] of this.getAttackTargetEffects(
-              draft.throwing.attackTarget as Token,
+              draft.firing.attackTarget as Token,
               draft.skillState.skill,
               draft.action,
             ) || []) {
@@ -142,12 +153,12 @@ export class ThrownAttackTest extends SkillTest {
         }
 
         if (changed.attackTarget !== undefined) {
-          draft.throwing.targetDistance =
-            draft.throwing.attackTarget && this.token
+          draft.firing.targetDistance =
+            draft.firing.attackTarget && this.token
               ? Math.ceil(
                   distanceBetweenTokens(
                     this.token,
-                    draft.throwing.attackTarget as Token,
+                    draft.firing.attackTarget as Token,
                   ),
                 )
               : 10;
@@ -156,21 +167,20 @@ export class ThrownAttackTest extends SkillTest {
         const { simple } = draft.modifiers;
 
         if (
-          draft.throwing.weapon.type === ItemType.ThrownWeapon &&
-          draft.throwing.weapon?.isTwoHanded &&
-          draft.throwing.oneHanded &&
+          draft.firing.weapon?.isTwoHanded &&
+          draft.firing.oneHanded &&
           !this.largeMorph
         ) {
           simple.set(this.twoHandedModifier.id, this.twoHandedModifier);
         } else simple.delete(this.twoHandedModifier.id);
 
-        if (draft.throwing.calledShot) {
+        if (draft.firing.calledShot) {
           simple.set(this.calledShotModifier.id, this.calledShotModifier);
         } else simple.delete(this.calledShotModifier.id);
 
         const { rating, modifier } = getRangeModifier(
-          draft.throwing.range,
-          draft.throwing.targetDistance,
+          draft.firing.range,
+          draft.firing.targetDistance,
         );
         draft.rangeModifier.name = localize(rating);
         draft.rangeModifier.value = modifier;
@@ -178,9 +188,9 @@ export class ThrownAttackTest extends SkillTest {
       }),
     };
 
-    if (this.throwing.attackTarget) {
+    if (this.firing.attackTarget) {
       for (const [effect, active] of this.getAttackTargetEffects(
-        this.throwing.attackTarget,
+        this.firing.attackTarget,
         this.skillState.skill,
         this.action,
       ) || []) {
@@ -189,48 +199,12 @@ export class ThrownAttackTest extends SkillTest {
     }
 
     const { rating, modifier } = getRangeModifier(
-      this.throwing.range,
-      this.throwing.targetDistance,
+      this.firing.range,
+      this.firing.targetDistance,
     );
     this.rangeModifier.name = localize(rating);
     this.rangeModifier.value = modifier;
     this.modifiers.simple.set(this.rangeModifier.id, this.rangeModifier);
-  }
-
-  get largeMorph() {
-    const { morphSize } = this.character;
-    return morphSize === Size.Large || morphSize === Size.VeryLarge;
-  }
-
-  get attack() {
-    const { weapon, primaryAttack } = this.throwing;
-    return primaryAttack
-      ? weapon.attacks.primary
-      : weapon.attacks.secondary || weapon.attacks.primary;
-  }
-
-  get rangeDamageModifier(): LabeledFormula | null {
-    return this.throwing.weapon.type === ItemType.ThrownWeapon &&
-      this.rangeModifier.value < -10 &&
-      !getCurrentEnvironment().vacuum
-      ? {
-          label: localize('beyondRange'),
-          formula: '-1d10',
-        }
-      : null;
-  }
-
-  get damageFormulas() {
-    return pipe(
-      [this.rangeDamageModifier],
-      compact,
-      concat(this.attack.rollFormulas || []),
-    );
-  }
-
-  get canCallShot() {
-    const { weapon } = this.throwing;
-    return weapon.type === ItemType.ThrownWeapon || !weapon.areaEffect;
   }
 
   protected getAttackTargetEffects(
@@ -249,12 +223,39 @@ export class ThrownAttackTest extends SkillTest {
     );
   }
 
+  get canCallShot() {
+    const { weapon } = this.firing;
+    return weapon.type === ItemType.SeekerWeapon
+      ? !weapon.missiles?.areaEffect
+      : weapon.type !== ItemType.SprayWeapon;
+  }
+
+  get attack() {
+    const { weapon, primaryAttack } = this.firing;
+    return primaryAttack
+      ? weapon.attacks?.primary
+      : weapon.attacks?.secondary || weapon.attacks?.primary;
+  }
+
+  get rangeDamageModifier(): LabeledFormula | null {
+    return null;
+    // return this.firing.weapon.type === ItemType.ThrownWeapon &&
+    //   this.rangeModifier.value < -10 &&
+    //   !getCurrentEnvironment().vacuum
+    //   ? {
+    //       label: localize('beyondRange'),
+    //       formula: '-1d10',
+    //     }
+    //   : null;
+  }
+
   protected async createMessage() {
     const {
       settings,
       pools,
       action,
-      throwing,
+      firing,
+      attack,
       testMessageData,
       rangeDamageModifier,
     } = this;
@@ -265,12 +266,14 @@ export class ThrownAttackTest extends SkillTest {
       attackTarget,
       explosiveSettings,
       calledShot,
-    } = throwing;
+      firingMode,
+      suppressiveFire,
+    } = firing;
 
     await createMessage({
       data: {
         header: {
-          heading: `${weapon.name} ${localize('thrownAttack')}`,
+          heading: `${weapon.name} ${localize('rangedAttack')}`,
           subheadings: [
             this.name,
             [
@@ -295,28 +298,22 @@ export class ThrownAttackTest extends SkillTest {
             ),
           }),
           defaultSuperiorEffect:
-            weapon.type === ItemType.ThrownWeapon
+            weapon.type !== ItemType.SeekerWeapon &&
+            notEmpty(attack?.rollFormulas)
               ? SuperiorResultEffect.Damage
               : undefined,
         },
         explosiveUse:
-          weapon.type === ItemType.Explosive && explosiveSettings
+          weapon.type === ItemType.SeekerWeapon &&
+          weapon.missiles &&
+          explosiveSettings
             ? {
                 ...explosiveSettings,
                 attackType: primaryAttack ? 'primary' : 'secondary',
-                explosive: weapon.getDataCopy(),
+                explosive: weapon.missiles.getDataCopy(),
               }
             : undefined,
-        thrownAttack:
-          weapon.type === ItemType.ThrownWeapon
-            ? {
-                weapon: weapon.getDataCopy(),
-                calledShot,
-                damageModifiers: rangeDamageModifier
-                  ? [rangeDamageModifier]
-                  : undefined,
-              }
-            : undefined,
+
         targets: compact([
           attackTarget?.scene && {
             tokenId: attackTarget.id,
@@ -335,6 +332,10 @@ export class ThrownAttackTest extends SkillTest {
         points: 1,
       });
     }
-    await weapon.consumeUnit();
+    await weapon.fire(
+      suppressiveFire
+        ? firingModeCost.suppressiveFire
+        : firingModeCost[firingMode],
+    );
   }
 }

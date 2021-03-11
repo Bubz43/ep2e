@@ -50,6 +50,20 @@ export class BeamWeapon
     super(init);
   }
 
+  get canFire() {
+    return !!this.battery;
+  }
+
+  fire(shots: number) {
+    return this.updater
+      .path('data', 'battery', 'charge')
+      .commit((current) => nonNegative(current - shots));
+  }
+
+  get availableShots() {
+    return this.battery;
+  }
+
   get range() {
     return this.epData.range;
   }

@@ -1,15 +1,13 @@
 import {
   enumValues,
-  GearTrait,
   RangedWeaponAccessory,
   RangedWeaponTrait,
 } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
-import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { compact, concat, difference, map } from 'remeda';
+import { compact, difference } from 'remeda';
 import {
   Copyable,
   Equippable,
@@ -46,6 +44,22 @@ export class SeekerWeapon extends mix(Base).with(
   );
   constructor(init: ItemProxyInit<ItemType.SeekerWeapon>) {
     super(init);
+  }
+
+  fire() {
+    return this.missiles?.consumeUnit();
+  }
+
+  get range() {
+    return this.activeAmmoSettings.range;
+  }
+
+  get canFire() {
+    return !!this.availableShots;
+  }
+
+  get firingMode() {
+    return this.epData.firingMode;
   }
 
   get allowAlternativeAmmo() {
@@ -85,6 +99,10 @@ export class SeekerWeapon extends mix(Base).with(
     ]);
   }
 
+  get attacks() {
+    return this.missiles?.attacks;
+  }
+
   get currentCapacity() {
     const { capacityChanged, extended } = this.magazineModifiers;
     const { missileCapacity } = this.activeAmmoSettings;
@@ -109,8 +127,10 @@ export class SeekerWeapon extends mix(Base).with(
       : null;
   }
 
-  setMissiles(missiles: Explosive) {
-    return this.updatePayload(missiles.getDataCopy(true));
+  setMissiles(missiles: Explosive | Explosive['data']) {
+    return this.updatePayload(
+      missiles instanceof Explosive ? missiles.getDataCopy(true) : missiles,
+    );
   }
 
   removeMissiles() {

@@ -8,18 +8,13 @@ import type { MaybeToken } from './actor';
 import type { Character } from './proxies/character';
 import type { Sleeve } from './sleeves';
 
-export const renderCharacterView = (
-  proxy: Character,
-  token: MaybeToken,
-  compact = false,
-) => {
+export const renderCharacterView = (proxy: Character, token: MaybeToken) => {
   return html`
     <character-view-alt
       .character=${proxy}
       .token=${token}
-      ?compact=${compact}
+      ?compact=${!!proxy.epFlags?.compactSheet}
     ></character-view-alt>
-    <!-- <character-view .character=${proxy} .token=${token}></character-view> -->
   `;
 };
 

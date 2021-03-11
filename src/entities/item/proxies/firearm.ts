@@ -20,7 +20,6 @@ import {
   concat,
   createPipe,
   identity,
-  pipe,
   take,
   takeWhile,
 } from 'remeda';
@@ -64,6 +63,10 @@ export class Firearm
     return `${this.name} ${this.shapeChanging ? `(${this.shapeName})` : ''}`;
   }
 
+  fire(shots: number) {
+    return this.updateAmmoCount(this.availableShots - shots);
+  }
+
   updateAmmoCount(newValue: number) {
     const { max, value } = this.ammoState;
     this.updater
@@ -80,6 +83,10 @@ export class Firearm
               : identity,
           )
       : this.updater.commit();
+  }
+
+  get canFire() {
+    return !!this.availableShots;
   }
 
   get range() {

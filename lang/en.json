@@ -1423,6 +1423,8 @@
     "payloads": "Payloads",
     "thrown": "Thrown",
     "meshAttack": "Mesh Attack",
+    "grenades": "Grenades",
+    "partially": "Partially",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

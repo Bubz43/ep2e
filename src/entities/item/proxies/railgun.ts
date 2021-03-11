@@ -11,14 +11,11 @@ import {
 import type { ItemType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import { uniqueStringID } from '@src/features/feature-helpers';
-import {
-  currentWorldTimeMS,
-  CommonInterval,
-  prettyMilliseconds,
-} from '@src/features/time';
+import { CommonInterval, currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import { HealthType } from '@src/health/health';
+import { nonNegative } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { clamp, compact, difference } from 'remeda';
@@ -69,6 +66,27 @@ export class Railgun
 
   get fullName() {
     return `${this.name} ${this.shapeChanging ? `(${this.shapeName})` : ''}`;
+  }
+
+  get canFire() {
+    return !!this.availableShots;
+  }
+
+  get range() {
+    return this.epData.range;
+  }
+
+  fire(shots: number) {
+    return this.updater
+      .path('data', 'ammo', 'value')
+      .store((current) => nonNegative(current - shots))
+      .path('data', 'battery', 'charge')
+      .store((current) => nonNegative(current - shots))
+      .commit();
+  }
+
+  get availableShots() {
+    return Math.min(this.epData.ammo.value, this.battery.charge);
   }
 
   @LazyGetter()

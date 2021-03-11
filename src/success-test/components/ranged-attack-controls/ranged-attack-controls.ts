@@ -1,6 +1,8 @@
 import {
+  renderLabeledCheckbox,
   renderNumberField,
   renderNumberInput,
+  renderRadio,
   renderSelectField,
   renderTimeField,
 } from '@src/components/field/fields';
@@ -20,16 +22,16 @@ import {
   createExplosiveTriggerSetting,
   ExplosiveSettings,
 } from '@src/entities/weapon-settings';
+import { FiringMode, firingModeCost } from '@src/features/firing-modes';
 import { CommonInterval } from '@src/features/time';
 import { readyCanvas } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
-import { joinLabeledFormulas } from '@src/foundry/rolls';
 import { overlay } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import {
-  ThrownAttackTest,
-  ThrownAttackTestInit,
-} from '@src/success-test/thrown-attack-test';
+  RangedAttackTest,
+  RangedAttackTestInit,
+} from '@src/success-test/ranged-attack-test';
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
@@ -41,21 +43,21 @@ import {
 import { repeat } from 'lit-html/directives/repeat';
 import { identity, Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';
-import styles from './thrown-attack-controls.scss';
+import styles from './ranged-attack-controls.scss';
 
 type Init = {
   entities: {
     actor: ActorEP;
     token?: MaybeToken;
   };
-  getState: (actor: ActorEP) => ThrownAttackTestInit | null;
+  getState: (actor: ActorEP) => RangedAttackTestInit | null;
   adjacentElement?: HTMLElement;
 };
 
-@customElement('thrown-attack-controls')
-export class ThrownAttackControls extends LitElement {
+@customElement('ranged-attack-controls')
+export class RangedAttackControls extends LitElement {
   static get is() {
-    return 'thrown-attack-controls' as const;
+    return 'ranged-attack-controls' as const;
   }
 
   static get styles() {
@@ -64,13 +66,13 @@ export class ThrownAttackControls extends LitElement {
 
   private static readonly openWindows = new WeakMap<
     ActorEP,
-    ThrownAttackControls
+    RangedAttackControls
   >();
 
   static openWindow(init: Init) {
     (
-      ThrownAttackControls.openWindows.get(init.entities.actor) ||
-      new ThrownAttackControls()
+      RangedAttackControls.openWindows.get(init.entities.actor) ||
+      new RangedAttackControls()
     ).setState(init);
   }
 
@@ -79,7 +81,7 @@ export class ThrownAttackControls extends LitElement {
 
   private subs = new Set<Subscription | Subscription['unsubscribe']>();
 
-  @internalProperty() private test?: ThrownAttackTest;
+  @internalProperty() private test?: RangedAttackTest;
 
   connectedCallback() {
     Hooks.on('targetToken', this.setTarget);
@@ -93,12 +95,12 @@ export class ThrownAttackControls extends LitElement {
   }
 
   private setTarget = () => {
-    const attackTarget = this.test?.throwing.attackTarget;
+    const attackTarget = this.test?.firing.attackTarget;
     const { targets } = game.user;
     if (attackTarget && !targets.has(attackTarget))
-      this.test?.throwing.update({ attackTarget: null });
+      this.test?.firing.update({ attackTarget: null });
     else if (targets.size)
-      this.test?.throwing.update({ attackTarget: [...targets][0] });
+      this.test?.firing.update({ attackTarget: [...targets][0] });
     this.requestUpdate();
   };
 
@@ -114,7 +116,7 @@ export class ThrownAttackControls extends LitElement {
     console.log(init.adjacentElement);
     this.unsub();
     this.subs.add(() =>
-      ThrownAttackControls.openWindows.delete(init.entities.actor),
+      RangedAttackControls.openWindows.delete(init.entities.actor),
     );
     this.subs.add(
       init.entities.actor.subscribe((actor) => {
@@ -122,7 +124,7 @@ export class ThrownAttackControls extends LitElement {
         if (!info) this.win?.close();
         else {
           this.subs.add(
-            new ThrownAttackTest(info).subscribe({
+            new RangedAttackTest(info).subscribe({
               next: (test) => (this.test = test),
               complete: () => this.win?.close(),
             }),
@@ -131,7 +133,7 @@ export class ThrownAttackControls extends LitElement {
       }),
     );
     if (!this.isConnected) overlay.append(this);
-    ThrownAttackControls.openWindows.set(init.entities.actor, this);
+    RangedAttackControls.openWindows.set(init.entities.actor, this);
     const source = init.adjacentElement || traverseActiveElements();
     if (source instanceof HTMLElement && source.isConnected) {
       await this.win?.updateComplete;
@@ -144,12 +146,12 @@ export class ThrownAttackControls extends LitElement {
 
     openMenu({
       header: { heading: localize('throw') },
-      content: this.test.character.weapons.thrown.map((weapon) => ({
+      content: this.test.character.weapons.ranged.map((weapon) => ({
         label: weapon.fullName,
         sublabel: weapon.fullType,
-        activated: weapon === this.test?.throwing.weapon,
-        callback: () => this.test?.throwing.update({ weapon }),
-        disabled: !weapon.quantity,
+        activated: weapon === this.test?.firing.weapon,
+        callback: () => this.test?.firing.update({ weapon }),
+        disabled: !weapon.canFire,
       })),
     });
   }
@@ -161,12 +163,12 @@ export class ThrownAttackControls extends LitElement {
       content: [
         {
           label: localize('clear'),
-          callback: () => this.test?.throwing.update({ calledShot: null }),
+          callback: () => this.test?.firing.update({ calledShot: null }),
         },
         ...enumValues(CalledShot).map((shot) => ({
           label: localize(shot),
-          activated: shot === this.test?.throwing.calledShot,
-          callback: () => this.test?.throwing.update({ calledShot: shot }),
+          activated: shot === this.test?.firing.calledShot,
+          callback: () => this.test?.firing.update({ calledShot: shot }),
         })),
       ],
     });
@@ -196,7 +198,7 @@ export class ThrownAttackControls extends LitElement {
   render() {
     return html`
       <sl-window
-        name="${localize('thrownAttack')} ${localize('test')}"
+        name="${localize('rangedAttack')} ${localize('test')}"
         @sl-window-closed=${this.remove}
         noremove
       >
@@ -207,7 +209,7 @@ export class ThrownAttackControls extends LitElement {
     `;
   }
 
-  private renderTest(test: NonNullable<ThrownAttackControls['test']>) {
+  private renderTest(test: NonNullable<RangedAttackControls['test']>) {
     const {
       character,
       ego,
@@ -215,9 +217,9 @@ export class ThrownAttackControls extends LitElement {
       action,
       pools,
       target,
-      throwing,
+      firing,
       skillState,
-      damageFormulas,
+      // damageFormulas,
       attack,
       canCallShot,
     } = test;
@@ -231,11 +233,11 @@ export class ThrownAttackControls extends LitElement {
       calledShot,
       explosiveSettings,
       oneHanded,
-    } = throwing;
+    } = firing;
     const { morphSize } = character;
     const { attacks } = weapon ?? {};
 
-    const joinedFormula = joinLabeledFormulas(damageFormulas);
+    // const joinedFormula = joinLabeledFormulas(damageFormulas);
 
     return html`
       ${character
@@ -304,7 +306,7 @@ export class ThrownAttackControls extends LitElement {
                 (token) => html`
                   <mwc-icon-button
                     class=${token === attackTarget ? 'active' : ''}
-                    @click=${() => throwing.update({ attackTarget: token })}
+                    @click=${() => firing.update({ attackTarget: token })}
                     ><img src=${token.data.img}
                   /></mwc-icon-button>
                 `,
@@ -320,7 +322,7 @@ export class ThrownAttackControls extends LitElement {
         .modifierStore=${test.modifiers}
       ></success-test-modifiers-section>
 
-      <ul class="throwing-info">
+      <ul class="firing-info">
         <wl-list-item clickable @click=${this.selectWeapon}>
           ${weapon.name}
         </wl-list-item>
@@ -329,48 +331,48 @@ export class ThrownAttackControls extends LitElement {
               <wl-list-item
                 class="attack-setting"
                 clickable
-                @click=${() =>
-                  throwing.update({ primaryAttack: !primaryAttack })}
+                @click=${() => firing.update({ primaryAttack: !primaryAttack })}
               >
                 ${attack?.label}
               </wl-list-item>
             `
           : ''}
-        ${weapon.type === ItemType.Explosive && explosiveSettings
+        ${this.renderFiringModeSelect(test)}
+        ${weapon.type === ItemType.SeekerWeapon &&
+        weapon.missiles &&
+        explosiveSettings // TODO Spray Weapon
           ? html`
-              ${weapon.areaEffect
+              ${weapon.missiles.areaEffect
                 ? this.renderAreaEffectEdit(
-                    weapon,
+                    weapon.missiles,
                     explosiveSettings,
-                    weapon.areaEffect,
+                    weapon.missiles.areaEffect,
                   )
                 : ''}
               ${this.renderTriggerSettings(explosiveSettings)}
             `
           : ''}
-        ${weapon.type === ItemType.ThrownWeapon && weapon.isTwoHanded
+        ${weapon.isTwoHanded
           ? html`
               <mwc-check-list-item
                 ?selected=${!oneHanded}
-                @click=${() => throwing.update({ oneHanded: !oneHanded })}
+                @click=${() => firing.update({ oneHanded: !oneHanded })}
               >
                 <span>${localize('twoHanded')}</span>
               </mwc-check-list-item>
             `
           : ''}
-
         <li>
           ${renderAutoForm({
             props: { targetDistance, range },
-            update: throwing.update,
+            update: firing.update,
             fields: ({ targetDistance, range }) => [
               renderNumberField(targetDistance, { min: 0 }),
               renderNumberField(
-                { ...range, label: `${localize('throwingRange')}` },
+                { ...range, label: `${localize('weaponRange')}` },
                 {
                   min: 1,
                   helpPersistent: range.value === Infinity,
-
                   helpText:
                     range.value === Infinity
                       ? range.value.toString()
@@ -390,15 +392,6 @@ export class ThrownAttackControls extends LitElement {
               </wl-list-item>
             `
           : ''}
-        ${weapon.type === ItemType.ThrownWeapon
-          ? html`
-              <wl-list-item>
-                <span class="damage-value"
-                  >${localize('SHORT', 'damageValue')}: ${joinedFormula}</span
-                >
-              </wl-list-item>
-            `
-          : ''}
       </ul>
 
       <success-test-footer
@@ -407,6 +400,48 @@ export class ThrownAttackControls extends LitElement {
         .settings=${test.settings}
       ></success-test-footer>
     `;
+  }
+
+  private renderFiringModeSelect(
+    test: NonNullable<RangedAttackControls['test']>,
+  ) {
+    const { weapon, firingMode, suppressiveFire = false } = test.firing;
+    const { attack } = test;
+    if (weapon.type === ItemType.SeekerWeapon) {
+      return html`<mwc-formfield label=${localize(weapon.firingMode)}
+        >${renderRadio({
+          checked: true,
+          name: weapon.firingMode,
+          value: weapon.firingMode,
+          disabled: false,
+        })}</mwc-formfield
+      >`;
+    }
+    if (!attack || !('firingModes' in attack)) return '';
+    return renderAutoForm({
+      props: { firingMode, suppressiveFire },
+      update: test.firing.update,
+      fields: ({ firingMode, suppressiveFire }) => [
+        html`<div class="firing-modes">
+          ${attack.firingModes.map(
+            (mode) =>
+              html`<mwc-formfield label=${localize('SHORT', mode)}
+                >${renderRadio({
+                  checked: mode === firingMode.value,
+                  name: firingMode.prop,
+                  value: mode,
+                  disabled: firingModeCost[mode] > weapon.availableShots,
+                })}</mwc-formfield
+              >`,
+          )}
+        </div>`,
+        firingMode.value === FiringMode.FullAuto
+          ? renderLabeledCheckbox(suppressiveFire, {
+              disabled: weapon.availableShots < firingModeCost.suppressiveFire,
+            })
+          : '',
+      ],
+    });
   }
 
   private renderAreaEffectEdit(
@@ -425,7 +460,7 @@ export class ThrownAttackControls extends LitElement {
                 centeredReduction: settings.centeredReduction || -2,
               },
               update: (changed) => {
-                this.test?.throwing.update({
+                this.test?.firing.update({
                   explosiveSettings: { ...settings, ...changed },
                 });
               },
@@ -444,7 +479,7 @@ export class ThrownAttackControls extends LitElement {
                   settings.uniformBlastRadius || explosive.areaEffectRadius,
               },
               update: (changed) => {
-                this.test?.throwing.update({
+                this.test?.firing.update({
                   explosiveSettings: { ...settings, ...changed },
                 });
               },
@@ -469,7 +504,7 @@ export class ThrownAttackControls extends LitElement {
         props: settings.trigger,
         update: ({ type }) => {
           type &&
-            this.test?.throwing.update({
+            this.test?.firing.update({
               explosiveSettings: {
                 ...settings,
                 trigger: createExplosiveTriggerSetting(type),
@@ -497,7 +532,7 @@ export class ThrownAttackControls extends LitElement {
         return renderAutoForm({
           props: trigger,
           update: (changed) => {
-            this.test?.throwing.update({
+            this.test?.firing.update({
               explosiveSettings: {
                 ...settings,
                 trigger: { ...trigger, ...changed },
@@ -512,7 +547,7 @@ export class ThrownAttackControls extends LitElement {
           props: trigger,
           classes: 'proximity-form',
           update: (changed) => {
-            this.test?.throwing.update({
+            this.test?.firing.update({
               explosiveSettings: {
                 ...settings,
                 trigger: { ...trigger, ...changed },
@@ -536,7 +571,7 @@ export class ThrownAttackControls extends LitElement {
         return renderAutoForm({
           props: trigger,
           update: (changed) => {
-            this.test?.throwing.update({
+            this.test?.firing.update({
               explosiveSettings: {
                 ...settings,
                 trigger: { ...trigger, ...changed },
@@ -552,6 +587,6 @@ export class ThrownAttackControls extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'thrown-attack-controls': ThrownAttackControls;
+    'ranged-attack-controls': RangedAttackControls;
   }
 }

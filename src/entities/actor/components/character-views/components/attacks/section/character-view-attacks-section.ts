@@ -9,6 +9,10 @@ import { ActorType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
 import { renderItemCard } from '@src/entities/item/item-views';
 import { ArmorType } from '@src/features/active-armor';
+import {
+  getCurrentEnvironment,
+  subscribeToEnvironmentChange,
+} from '@src/features/environment';
 import { idProp } from '@src/features/feature-helpers';
 import { SkillType } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
@@ -16,6 +20,7 @@ import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { HealthType } from '@src/health/health';
 import { openMenu } from '@src/open-menu';
 import { MeleeAttackControls } from '@src/success-test/components/melee-attack-controls/melee-attack-controls';
+import { applyGravityToWeaponRange } from '@src/success-test/range-modifiers';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { identity } from 'remeda';
@@ -49,6 +54,21 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
     software: true,
     ranged: true,
   };
+
+  private environmentUnsub: (() => void) | null = null;
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.environmentUnsub = subscribeToEnvironmentChange(() =>
+      this.requestUpdate(),
+    );
+  }
+
+  disconnectedCallback() {
+    this.environmentUnsub?.();
+    this.environmentUnsub = null;
+    super.disconnectedCallback();
+  }
 
   private toggleActive(group: WeaponGroup) {
     this.activeGroups[group] = !this.activeGroups[group];
@@ -173,7 +193,10 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
           @click=${this.selectThrowingWeapon}
           >${localize('throwingRange')}
           <span slot="after"
-            >${this.character.ego.aptitudes.som}</span
+            >${applyGravityToWeaponRange(
+              this.character.ego.aptitudes.som,
+              getCurrentEnvironment().gravity,
+            )}</span
           ></colored-tag
         >
       </div>

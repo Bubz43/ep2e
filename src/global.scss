@@ -875,11 +875,16 @@ sl-tooltip {
     }
     &.active {
       color: alphav(var(--color-text), 0.95);
-
       border-left: 2px solid currentColor !important;
-    }
+      box-shadow: 0 0 4px black;
+      background: linear-gradient(
+        to right,
+        alphav(var(--color-bg), 0.85),
+        alphav(var(--color-bg-alt), 0.8)
+      );
 
-    &.active {
+      z-index: 1;
+
       .control-tools {
         top: 50%;
         transform: translate(-0.25rem, -50%);
