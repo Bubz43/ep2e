@@ -367,7 +367,15 @@ export class ThrownAttackControls extends LitElement {
               renderNumberField(targetDistance, { min: 0 }),
               renderNumberField(
                 { ...range, label: `${localize('throwingRange')}` },
-                { min: 1 },
+                {
+                  min: 1,
+                  helpPersistent: range.value === Infinity,
+
+                  helpText:
+                    range.value === Infinity
+                      ? range.value.toString()
+                      : undefined,
+                },
               ),
             ],
           })}

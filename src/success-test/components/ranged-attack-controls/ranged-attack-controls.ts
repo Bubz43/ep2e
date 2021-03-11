@@ -362,6 +362,26 @@ export class RangedAttackControls extends LitElement {
               </mwc-check-list-item>
             `
           : ''}
+        <li>
+          ${renderAutoForm({
+            props: { targetDistance, range },
+            update: firing.update,
+            fields: ({ targetDistance, range }) => [
+              renderNumberField(targetDistance, { min: 0 }),
+              renderNumberField(
+                { ...range, label: `${localize('weaponRange')}` },
+                {
+                  min: 1,
+                  helpPersistent: range.value === Infinity,
+                  helpText:
+                    range.value === Infinity
+                      ? range.value.toString()
+                      : undefined,
+                },
+              ),
+            ],
+          })}
+        </li>
         ${canCallShot
           ? html`
               <wl-list-item clickable @click=${this.selectCalledShot}>

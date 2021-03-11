@@ -8,18 +8,16 @@ import type { MaybeToken } from './actor';
 import type { Character } from './proxies/character';
 import type { Sleeve } from './sleeves';
 
-export const renderCharacterView = (
-  proxy: Character,
-  token: MaybeToken,
-  compact = false,
-) => {
+export const renderCharacterView = (proxy: Character, token: MaybeToken) => {
+  const def = proxy.epFlags?.sheetStyle?.['default'] || 'full';
+  const user = proxy.epFlags?.sheetStyle?.[game.user.id];
+
   return html`
     <character-view-alt
       .character=${proxy}
       .token=${token}
-      ?compact=${compact}
+      ?compact=${(user || def) === 'compact'}
     ></character-view-alt>
-    <!-- <character-view .character=${proxy} .token=${token}></character-view> -->
   `;
 };
 

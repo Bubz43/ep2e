@@ -4,6 +4,7 @@ import type { SeekerWeapon } from '@src/entities/item/proxies/seeker-weapon';
 import { localize } from '@src/foundry/localization';
 import { MWCMenuOption, openMenu } from '@src/open-menu';
 import produce from 'immer';
+import { html } from 'lit-html';
 import { clamp, map, noop } from 'remeda';
 
 export const openSeekerAmmoMenu = (
@@ -28,27 +29,31 @@ export const openSeekerAmmoMenu = (
 
   const content: MWCMenuOption[] = [];
   if (currentMissiles) {
-    const same = missiles.find((m) => m.isSameAs(currentMissiles));
+    const matching = missiles.filter((m) => m.isSameAs(currentMissiles));
     if (currentMissiles.quantity < currentCapacity) {
-      content.push({
-        label: localize('reload'),
-        callback: async () => {
-          // TODO handle multiple same missiles with different quantities
-          if (same) {
-            const change = clamp(
-              same.quantity - (currentMissiles.quantity || 0),
-              { min: 0, max: currentCapacity },
-            );
-            await same.setQuantity((current) => current - change);
-            currentMissiles.setQuantity((current) => current + change);
-          }
-        },
-        disabled: !same?.quantity,
-      });
+      for (const match of matching) {
+        content.push({
+          label: localize('reload'),
+          sublabel: match.fullName,
+          icon: html`<mwc-icon>refresh</mwc-icon>`,
+          callback: async () => {
+            if (match) {
+              const change = clamp(currentCapacity - currentMissiles.quantity, {
+                min: 0,
+                max: match.quantity,
+              });
+              await match.setQuantity((current) => current - change);
+              currentMissiles.setQuantity((current) => current + change);
+            }
+          },
+          disabled: !match.quantity,
+        });
+      }
     }
     content.push({
       label: `${localize('unload')} ${currentMissiles.name}`,
       callback: async () => {
+        const [same] = matching;
         if (same) {
           await same.setQuantity(
             (current) => current + currentMissiles.quantity,

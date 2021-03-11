@@ -82,7 +82,6 @@ export class RangedAttackTest extends SkillTest {
     firingMode,
     ...init
   }: RangedAttackTestInit) {
-    // TODO modify action type based on firingMode
     super({
       ...init,
       action:
