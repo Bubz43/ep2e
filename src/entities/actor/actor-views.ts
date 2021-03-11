@@ -9,14 +9,11 @@ import type { Character } from './proxies/character';
 import type { Sleeve } from './sleeves';
 
 export const renderCharacterView = (proxy: Character, token: MaybeToken) => {
-  const def = proxy.epFlags?.sheetStyle?.['default'] || 'full';
-  const user = proxy.epFlags?.sheetStyle?.[game.user.id];
-
   return html`
     <character-view-alt
       .character=${proxy}
       .token=${token}
-      ?compact=${(user || def) === 'compact'}
+      ?compact=${!!proxy.epFlags?.compactSheet}
     ></character-view-alt>
   `;
 };

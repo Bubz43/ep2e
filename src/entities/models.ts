@@ -57,7 +57,7 @@ type ActorFlags<T extends ActorType> = T extends ActorType.Character
   ? {
       vehicle: ActorEntity<ActorType.Synthetic> | null;
       [ItemType.Psi]: ItemEntity<ItemType.Psi> | null;
-      sheetStyle: Partial<Record<'default' | string, 'full' | 'compact'>>;
+      compactSheet: boolean;
     } & { [key in SleeveType]: ActorEntity<key> | null }
   : never;
 

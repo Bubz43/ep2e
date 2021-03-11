@@ -126,28 +126,19 @@ export class ActorEPSheet implements EntitySheet {
   private openSettingsMenu = () => {
     const { proxy } = this.actor;
     if (proxy.type !== ActorType.Character) return;
-    const def = proxy.epFlags?.sheetStyle?.['default'] || 'full';
-    const user = proxy.epFlags?.sheetStyle?.[game.user.id];
+    const compact = !!proxy.epFlags?.compactSheet;
     openMenu({
       header: { heading: localize('settings') },
-      content: html`<mwc-check-list-item
-          ?selected=${def === 'compact'}
-          @click=${() => {
+      content: [
+        html`<mwc-check-list-item
+          ?selected=${compact}
+          @click=${() =>
             proxy.updater
-              .path('flags', EP.Name, 'sheetStyle')
-              .commit({ default: def === 'compact' ? 'full' : 'compact' });
-          }}
-          >[${localize('default')}] ${localize('compact')}</mwc-check-list-item
-        >
-        <mwc-check-list-item
-          ?selected=${user === 'compact'}
-          @click=${() => {
-            proxy.updater.path('flags', EP.Name, 'sheetStyle').commit({
-              [game.user.id]: user === 'compact' ? 'full' : 'compact',
-            });
-          }}
-          >[${game.user.name}] ${localize('compact')}</mwc-check-list-item
-        > `,
+              .path('flags', EP.Name, 'compactSheet')
+              .commit(!compact)}
+          >${localize('compact')}</mwc-check-list-item
+        >`,
+      ],
     });
   };
 
