@@ -1,11 +1,9 @@
 import type { MessageData } from '@src/chat/message-data';
-import { setDragDrop, DropType } from '@src/foundry/drag-and-drop';
+import { DropType, setDragDrop } from '@src/foundry/drag-and-drop';
 import { gmIsConnected } from '@src/foundry/misc-helpers';
-import type { RollData } from '@src/foundry/rolls';
 import { emitEPSocket } from '@src/foundry/socket';
 import { EP } from '@src/foundry/system';
 import { notEmpty } from '@src/utility/helpers';
-import { last } from 'remeda';
 import { findActor, findToken } from './find-entities';
 import { UpdateStore } from './update-store';
 
@@ -104,10 +102,6 @@ export class ChatMessageEP extends ChatMessage {
     return ChatMessage.create(chatMessageData, {}) as Promise<
       ChatMessageEP['data']
     >;
-  }
-
-  get isLatest() {
-    return last(game.messages._source)?._id === this.id;
   }
 
   setRollDrag(ev: DragEvent) {

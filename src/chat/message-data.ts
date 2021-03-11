@@ -8,11 +8,13 @@ import type {
   SuperiorResultEffect,
 } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
+import type { RangedWeapon } from '@src/entities/item/item';
 import type { SubstanceUseMethod } from '@src/entities/item/proxies/substance';
 import type { ItemEntity } from '@src/entities/models';
 import type { ActiveTaskAction } from '@src/features/actions';
 import type { ArmorType } from '@src/features/active-armor';
 import type { AptitudeCheckInfo } from '@src/features/aptitude-check-result-info';
+import type { FiringModeGroup } from '@src/features/firing-modes';
 import type { PostTestPoolAction, PreTestPoolAction } from '@src/features/pool';
 import type { Favor, RepIdentifier } from '@src/features/reputations';
 import type { Size } from '@src/features/size';
@@ -182,6 +184,13 @@ export type SpecialTestData =
       originalResult?: SuccessTestResult;
     };
 
+export type RangedAttackMessageData = {
+  weapon: RangedWeapon['data'];
+  firingModeGroup: FiringModeGroup;
+  damageModifiers?: LabeledFormula[];
+  calledShot?: CalledShot | null;
+};
+
 export type MessageData = Partial<{
   header: MessageHeaderData;
   targets: MessageTargets;
@@ -193,6 +202,7 @@ export type MessageData = Partial<{
   explosiveUse: ExplosiveMessageData;
   meleeAttack: MeleeWeaponMessageData;
   thrownAttack: ThrownWeaponMessageData;
+  rangedAttack: RangedAttackMessageData;
   heal: MessageHealData;
   substanceUse: SubstanceUseData;
   fromMessageId: string;

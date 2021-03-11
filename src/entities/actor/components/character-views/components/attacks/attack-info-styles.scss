@@ -10,5 +10,8 @@
 
 colored-tag {
   margin: 0.125rem 0.125rem 0 0;
-  flex-grow: 1;
+  &[type='attack'],
+  &[type='usable'] {
+    flex-grow: 1;
+  }
 }

@@ -65,6 +65,13 @@
       "entity": "Actor"
     },
     {
+      "name": "vehicles",
+      "system": "ep2e",
+      "label": "Vehicles",
+      "path": "./packs/vehicles.db",
+      "entity": "Actor"
+    },
+    {
       "name": "creatures",
       "system": "ep2e",
       "label": "Creatures",

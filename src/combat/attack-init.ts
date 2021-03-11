@@ -3,7 +3,7 @@ import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import { Explosive } from '@src/entities/item/proxies/explosive';
 import { ThrownWeapon } from '@src/entities/item/proxies/thrown-weapon';
-import type { FiringMode } from '@src/features/firing-modes';
+import type { FiringModeGroup } from '@src/features/firing-modes';
 import {
   ActiveSkillCategory,
   FieldSkillType,
@@ -118,14 +118,14 @@ export const startRangedAttack = ({
   token,
   attackType,
   adjacentElement,
-  firingMode,
+  firingModeGroup,
 }: {
   actor: ActorEP;
   weaponId: string;
   token?: MaybeToken;
   attackType?: AttackType;
   adjacentElement?: HTMLElement;
-  firingMode: FiringMode;
+  firingModeGroup: FiringModeGroup;
 }) => {
   RangedAttackControls.openWindow({
     entities: { token, actor },
@@ -141,7 +141,7 @@ export const startRangedAttack = ({
         token,
         weapon,
         primaryAttack: attackType !== 'secondary',
-        firingMode,
+        firingModeGroup,
         skill: ego.getCommonSkill(SkillType.Guns),
       };
     },

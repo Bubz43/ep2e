@@ -157,7 +157,7 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
         ? this.renderPhysicalSleeveInfo(sleeve)
         : ''}
 
-      <sl-animated-list class="attacks" transformOrigin="top">
+      <sl-animated-list class="attacks">
         ${repeat(
           groups.filter((g) => weapons[g].length && this.activeGroups[g]),
           identity,

@@ -1,5 +1,4 @@
 import {
-  renderLabeledCheckbox,
   renderNumberField,
   renderNumberInput,
   renderRadio,
@@ -22,7 +21,13 @@ import {
   createExplosiveTriggerSetting,
   ExplosiveSettings,
 } from '@src/entities/weapon-settings';
-import { FiringMode, firingModeCost } from '@src/features/firing-modes';
+import {
+  createFiringModeGroup,
+  FiringMode,
+  firingModeCost,
+  MultiAmmoOption,
+  multiAmmoValues,
+} from '@src/features/firing-modes';
 import { CommonInterval } from '@src/features/time';
 import { readyCanvas } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
@@ -405,7 +410,7 @@ export class RangedAttackControls extends LitElement {
   private renderFiringModeSelect(
     test: NonNullable<RangedAttackControls['test']>,
   ) {
-    const { weapon, firingMode, suppressiveFire = false } = test.firing;
+    const { weapon, firingModeGroup } = test.firing;
     const { attack } = test;
     if (weapon.type === ItemType.SeekerWeapon) {
       return html`<mwc-formfield label=${localize(weapon.firingMode)}
@@ -418,30 +423,94 @@ export class RangedAttackControls extends LitElement {
       >`;
     }
     if (!attack || !('firingModes' in attack)) return '';
-    return renderAutoForm({
-      props: { firingMode, suppressiveFire },
-      update: test.firing.update,
-      fields: ({ firingMode, suppressiveFire }) => [
-        html`<div class="firing-modes">
-          ${attack.firingModes.map(
-            (mode) =>
-              html`<mwc-formfield label=${localize('SHORT', mode)}
-                >${renderRadio({
-                  checked: mode === firingMode.value,
-                  name: firingMode.prop,
-                  value: mode,
-                  disabled: firingModeCost[mode] > weapon.availableShots,
-                })}</mwc-formfield
-              >`,
-          )}
-        </div>`,
-        firingMode.value === FiringMode.FullAuto
-          ? renderLabeledCheckbox(suppressiveFire, {
-              disabled: weapon.availableShots < firingModeCost.suppressiveFire,
-            })
-          : '',
-      ],
-    });
+
+    return html`
+      ${renderAutoForm({
+        props: { firingMode: firingModeGroup[0] },
+        update: ({ firingMode }) =>
+          firingMode &&
+          test.firing.update({
+            firingModeGroup: createFiringModeGroup(firingMode),
+          }),
+        fields: ({ firingMode }) => [
+          html`<div class="firing-modes">
+            ${attack.firingModes.map(
+              (mode) =>
+                html`<mwc-formfield label=${localize('SHORT', mode)}
+                  >${renderRadio({
+                    checked: mode === firingMode.value,
+                    name: firingMode.prop,
+                    value: mode,
+                    disabled: firingModeCost[mode] > weapon.availableShots,
+                  })}</mwc-formfield
+                >`,
+            )}
+          </div>`,
+        ],
+      })}
+      ${firingModeGroup[0] === FiringMode.BurstFire
+        ? html`
+            <mwc-list class="ammo-modes">
+              ${enumValues(MultiAmmoOption).map((mode) => {
+                const value = multiAmmoValues[firingModeGroup[0]][mode];
+                return html`
+                  <mwc-radio-list-item
+                    left
+                    ?selected=${mode === firingModeGroup[1]}
+                    @click=${() =>
+                      test.firing.update({
+                        firingModeGroup: [firingModeGroup[0], mode],
+                      })}
+                  >
+                    ${mode === MultiAmmoOption.AdjacentTargets
+                      ? `${value} ${localize(mode)}`
+                      : mode === MultiAmmoOption.ConcentratedDamage
+                      ? value
+                      : `+${value} ${localize('toHit')}`}
+                  </mwc-radio-list-item>
+                `;
+              })}
+            </mwc-list>
+          `
+        : firingModeGroup[0] === FiringMode.FullAuto
+        ? html`
+            <mwc-list class="ammo-modes">
+              ${enumValues(MultiAmmoOption).map((mode) => {
+                const value = multiAmmoValues[firingModeGroup[0]][mode];
+
+                return html`
+                  <mwc-radio-list-item
+                    left
+                    ?selected=${mode === firingModeGroup[1]}
+                    @click=${() =>
+                      test.firing.update({
+                        firingModeGroup: [firingModeGroup[0], mode],
+                      })}
+                  >
+                    ${mode === MultiAmmoOption.AdjacentTargets
+                      ? `${value} ${localize(mode)}`
+                      : mode === MultiAmmoOption.ConcentratedDamage
+                      ? value
+                      : `+${value} ${localize('toHit')}`}
+                  </mwc-radio-list-item>
+                `;
+              })}
+              <mwc-radio-list-item
+                left
+                ?disabled=${weapon.availableShots <
+                firingModeCost.suppressiveFire}
+                ?selected=${firingModeGroup[1] === 'suppressiveFire'}
+                @click=${() =>
+                  test.firing.update({
+                    firingModeGroup: [firingModeGroup[0], 'suppressiveFire'],
+                  })}
+              >
+                ${localize('suppressiveFire')}
+              </mwc-radio-list-item>
+            </mwc-list>
+          `
+        : ''}
+    `;
   }
 
   private renderAreaEffectEdit(

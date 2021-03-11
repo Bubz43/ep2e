@@ -18,7 +18,11 @@ import {
   createAction,
 } from '@src/features/actions';
 import { matchesSkill, Source } from '@src/features/effects';
-import { FiringMode, firingModeCost } from '@src/features/firing-modes';
+import {
+  createFiringModeGroup,
+  FiringModeGroup,
+  getFiringModeGroupShots,
+} from '@src/features/firing-modes';
 import type { Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { capitalize } from '@src/foundry/misc-helpers';
@@ -39,7 +43,7 @@ import {
 export type RangedAttackTestInit = SetRequired<SkillTestInit, 'character'> & {
   weapon: RangedWeapon;
   primaryAttack: boolean;
-  firingMode: FiringMode;
+  firingModeGroup: FiringModeGroup;
 };
 
 export class RangedAttackTest extends SkillTest {
@@ -52,8 +56,7 @@ export class RangedAttackTest extends SkillTest {
     targetDistance: number;
     range: number;
     calledShot?: CalledShot | null;
-    firingMode: FiringMode;
-    suppressiveFire?: boolean;
+    firingModeGroup: FiringModeGroup;
     explosiveSettings?: ExplosiveSettings | null;
     oneHanded?: boolean;
   }>;
@@ -79,7 +82,7 @@ export class RangedAttackTest extends SkillTest {
   constructor({
     weapon,
     primaryAttack,
-    firingMode,
+    firingModeGroup,
     ...init
   }: RangedAttackTestInit) {
     super({
@@ -105,7 +108,7 @@ export class RangedAttackTest extends SkillTest {
           : 10,
       primaryAttack,
       weapon,
-      firingMode: firingMode,
+      firingModeGroup: firingModeGroup,
       explosiveSettings:
         weapon.type === ItemType.SeekerWeapon
           ? {
@@ -118,14 +121,14 @@ export class RangedAttackTest extends SkillTest {
           draft.firing.primaryAttack = true;
           draft.firing.calledShot = null;
           draft.firing.oneHanded = false;
-          draft.firing.suppressiveFire = false;
           draft.firing.range = getWeaponRange(
             draft.firing.weapon as RangedWeapon,
           );
-          draft.firing.firingMode =
+          draft.firing.firingModeGroup = createFiringModeGroup(
             draft.firing.weapon.type === ItemType.SeekerWeapon
               ? draft.firing.weapon.firingMode
-              : draft.firing.weapon.attacks.primary.firingModes[0]!;
+              : draft.firing.weapon.attacks.primary.firingModes[0]!,
+          );
           draft.firing.explosiveSettings =
             draft.firing.weapon.type === ItemType.SeekerWeapon
               ? {
@@ -134,6 +137,12 @@ export class RangedAttackTest extends SkillTest {
                   ),
                 }
               : null;
+        } else if (changed.primaryAttack) {
+          draft.firing.firingModeGroup = createFiringModeGroup(
+            draft.firing.weapon.type === ItemType.SeekerWeapon
+              ? draft.firing.weapon.firingMode
+              : draft.firing.weapon.attacks.primary.firingModes[0]!,
+          );
         }
 
         if (changed.attackTarget) {
@@ -266,8 +275,7 @@ export class RangedAttackTest extends SkillTest {
       attackTarget,
       explosiveSettings,
       calledShot,
-      firingMode,
-      suppressiveFire,
+      firingModeGroup,
     } = firing;
 
     await createMessage({
@@ -303,6 +311,12 @@ export class RangedAttackTest extends SkillTest {
               ? SuperiorResultEffect.Damage
               : undefined,
         },
+        rangedAttack: {
+          weapon: weapon.getDataCopy(),
+          calledShot,
+          firingModeGroup,
+          // damage modifiers
+        },
         explosiveUse:
           weapon.type === ItemType.SeekerWeapon &&
           weapon.missiles &&
@@ -310,6 +324,7 @@ export class RangedAttackTest extends SkillTest {
             ? {
                 ...explosiveSettings,
                 attackType: primaryAttack ? 'primary' : 'secondary',
+
                 explosive: weapon.missiles.getDataCopy(),
               }
             : undefined,
@@ -332,10 +347,6 @@ export class RangedAttackTest extends SkillTest {
         points: 1,
       });
     }
-    await weapon.fire(
-      suppressiveFire
-        ? firingModeCost.suppressiveFire
-        : firingModeCost[firingMode],
-    );
+    await weapon.fire(getFiringModeGroupShots(firingModeGroup));
   }
 }

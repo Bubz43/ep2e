@@ -2,10 +2,16 @@ import { formatArmorUsed } from '@src/combat/attack-formatting';
 import { startRangedAttack } from '@src/combat/attack-init';
 import type { AttackType } from '@src/combat/attacks';
 import type { BeamWeapon } from '@src/entities/item/proxies/beam-weapon';
-import { FiringMode, firingModeCost } from '@src/features/firing-modes';
+import { subscribeToEnvironmentChange } from '@src/features/environment';
+import {
+  createFiringModeGroup,
+  FiringMode,
+  firingModeCost,
+} from '@src/features/firing-modes';
 import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
+import { getWeaponRange } from '@src/success-test/range-modifiers';
 import { notEmpty } from '@src/utility/helpers';
 import { css, customElement, html, LitElement, property } from 'lit-element';
 import { compact, map } from 'remeda';
@@ -24,6 +30,7 @@ export class CharacterViewBeamAttacks extends LitElement {
       css`
         .firing-mode {
           flex-grow: 0;
+          min-width: 4ch;
         }
         .attack-info {
           flex: 1;
@@ -35,12 +42,28 @@ export class CharacterViewBeamAttacks extends LitElement {
           width: 100%;
           display: flex;
           flex-flow: row wrap;
+          padding: 0.25rem 0.5rem 0;
         }
       `,
     ];
   }
 
   @property({ attribute: false }) weapon!: BeamWeapon;
+
+  private environmentUnsub: (() => void) | null = null;
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.environmentUnsub = subscribeToEnvironmentChange(() =>
+      this.requestUpdate(),
+    );
+  }
+
+  disconnectedCallback() {
+    this.environmentUnsub?.();
+    this.environmentUnsub = null;
+    super.disconnectedCallback();
+  }
 
   private fire(attackType: AttackType, firingMode: FiringMode) {
     const attack = this.weapon.attacks[attackType];
@@ -49,7 +72,7 @@ export class CharacterViewBeamAttacks extends LitElement {
     if (!attack || !character) return;
     startRangedAttack({
       actor: character.actor,
-      firingMode,
+      firingModeGroup: createFiringModeGroup(firingMode),
       token,
       weaponId: this.weapon.id,
       adjacentElement: this,
@@ -60,6 +83,14 @@ export class CharacterViewBeamAttacks extends LitElement {
   render() {
     const { battery, editable, gearTraits, hasSecondaryAttack } = this.weapon;
     return html`
+      <colored-tag type="info"
+        >${localize('range')}
+        <span slot="after">${getWeaponRange(this.weapon)}</span>
+      </colored-tag>
+      ${gearTraits.map(
+        (trait) =>
+          html`<colored-tag type="info">${localize(trait)}</colored-tag>`,
+      )}
       <colored-tag type="usable" clickable ?disabled=${!editable}>
         <span>${localize('battery')}</span>
         <value-status
@@ -70,10 +101,6 @@ export class CharacterViewBeamAttacks extends LitElement {
       </colored-tag>
       ${this.renderAttack('primary')}
       ${hasSecondaryAttack ? this.renderAttack('secondary') : ''}
-      ${gearTraits.map(
-        (trait) =>
-          html`<colored-tag type="info">${localize(trait)}</colored-tag>`,
-      )}
     `;
   }
 
@@ -109,7 +136,7 @@ export class CharacterViewBeamAttacks extends LitElement {
                 type="attack"
                 ?disabled=${!editable || firingModeCost[mode] > availableShots}
                 clickable
-                title=${localize('mode')}
+                title=${localize(mode)}
                 @click=${() => this.fire(attackType, mode)}
               >
                 ${localize('SHORT', mode)}

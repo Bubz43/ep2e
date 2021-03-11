@@ -48,6 +48,7 @@ export class MessageContent extends LitElement {
       targets,
       specialTest,
       thrownAttack,
+      rangedAttack,
       hack,
     } = this.data;
     if (!this.message.isContentVisible) return '';
@@ -120,6 +121,12 @@ export class MessageContent extends LitElement {
             .thrownAttack=${thrownAttack}
             .successTest=${successTest}
           ></message-thrown-attack>`
+        : ''}
+      ${rangedAttack
+        ? html`<message-ranged-attack
+            .rangedAttack=${rangedAttack}
+            .successTest=${successTest}
+          ></message-ranged-attack>`
         : ''}
       ${stress
         ? html` <message-stress-test .stress=${stress}></message-stress-test> `

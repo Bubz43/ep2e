@@ -2,6 +2,7 @@ import { startRangedAttack } from '@src/combat/attack-init';
 import type { AttackType } from '@src/combat/attacks';
 import type { SeekerWeapon } from '@src/entities/item/proxies/seeker-weapon';
 import { subscribeToEnvironmentChange } from '@src/features/environment';
+import { createFiringModeGroup } from '@src/features/firing-modes';
 import { localize } from '@src/foundry/localization';
 import { getWeaponRange } from '@src/success-test/range-modifiers';
 import { customElement, html, LitElement, property } from 'lit-element';
@@ -49,7 +50,7 @@ export class CharacterViewSeekerAttacks extends LitElement {
     if (!attack || !character) return;
     startRangedAttack({
       actor: character.actor,
-      firingMode: this.weapon.firingMode,
+      firingModeGroup: createFiringModeGroup(this.weapon.firingMode),
       token,
       weaponId: this.weapon.id,
       adjacentElement: this,
@@ -68,6 +69,15 @@ export class CharacterViewSeekerAttacks extends LitElement {
     } = this.weapon;
     // TODO: Range Tooltip
     return html`
+      <colored-tag type="info"
+        >${localize('range')}
+        <span slot="after">${getWeaponRange(this.weapon)}</span></colored-tag
+      >
+      <colored-tag type="info">${localize(firingMode)}</colored-tag>
+      ${gearTraits.map(
+        (trait) =>
+          html`<colored-tag type="info">${localize(trait)}</colored-tag>`,
+      )}
       <colored-tag
         clickable
         ?disabled=${!editable}
@@ -77,7 +87,7 @@ export class CharacterViewSeekerAttacks extends LitElement {
         ${missiles
           ? html`
               <span
-                >${missiles.fullName},
+                >${missiles.fullName.trimEnd()},
                 <sl-group label=${localize('capacity')}
                   >${activeAmmoSettings.missileCapacity}</sl-group
                 ></span
@@ -99,15 +109,6 @@ export class CharacterViewSeekerAttacks extends LitElement {
             .onAttack=${this.fire}
           ></character-view-explosive-attacks>`
         : ''}
-      <colored-tag type="info"
-        >${localize('range')}
-        <span slot="after">${getWeaponRange(this.weapon)}</span></colored-tag
-      >
-      <colored-tag type="info">${localize(firingMode)}</colored-tag>
-      ${gearTraits.map(
-        (trait) =>
-          html`<colored-tag type="info">${localize(trait)}</colored-tag>`,
-      )}
     `;
   }
 }
