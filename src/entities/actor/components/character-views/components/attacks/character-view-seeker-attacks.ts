@@ -1,7 +1,9 @@
 import { startRangedAttack } from '@src/combat/attack-init';
 import type { AttackType } from '@src/combat/attacks';
 import type { SeekerWeapon } from '@src/entities/item/proxies/seeker-weapon';
+import { subscribeToEnvironmentChange } from '@src/features/environment';
 import { localize } from '@src/foundry/localization';
+import { getWeaponRange } from '@src/success-test/range-modifiers';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { map } from 'remeda';
 import { requestCharacter } from '../../character-request-event';
@@ -19,6 +21,21 @@ export class CharacterViewSeekerAttacks extends LitElement {
   }
 
   @property({ attribute: false }) weapon!: SeekerWeapon;
+
+  private environmentUnsub: (() => void) | null = null;
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.environmentUnsub = subscribeToEnvironmentChange(() =>
+      this.requestUpdate(),
+    );
+  }
+
+  disconnectedCallback() {
+    this.environmentUnsub?.();
+    this.environmentUnsub = null;
+    super.disconnectedCallback();
+  }
 
   private openMissileSelect(ev: MouseEvent) {
     const { character } = requestCharacter(this);
@@ -81,6 +98,10 @@ export class CharacterViewSeekerAttacks extends LitElement {
             .onAttack=${this.fire}
           ></character-view-explosive-attacks>`
         : ''}
+      <colored-tag type="info"
+        >${localize('range')}
+        <span slot="after">${getWeaponRange(this.weapon)}</span></colored-tag
+      >
       <colored-tag type="info">${localize(firingMode)}</colored-tag>
       ${gearTraits.map(
         (trait) =>
