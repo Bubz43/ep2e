@@ -29,6 +29,11 @@ export const renderItemAttacks = (weapon: ItemProxy) => {
         .weapon=${weapon}
       ></character-view-seeker-attacks>`;
 
+    case ItemType.BeamWeapon:
+      return html`<character-view-beam-attacks
+        .weapon=${weapon}
+      ></character-view-beam-attacks>`;
+
     default:
       return undefined;
   }

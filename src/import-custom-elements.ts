@@ -73,6 +73,7 @@ import { CharacterView } from './entities/actor/components/character-views/chara
 import { CharacterViewAlt } from './entities/actor/components/character-views/character-view-alt';
 import { CharacterViewActiveSubstance } from './entities/actor/components/character-views/components/active-substance/character-view-active-substance';
 import { CharacterViewArmor } from './entities/actor/components/character-views/components/armor/character-view-armor';
+import { CharacterViewBeamAttacks } from './entities/actor/components/character-views/components/attacks/character-view-beam-attacks';
 import { CharacterViewExplosiveAttacks } from './entities/actor/components/character-views/components/attacks/character-view-explosive-attacks';
 import { CharacterViewMeleeWeaponAttacks } from './entities/actor/components/character-views/components/attacks/character-view-melee-weapon-attacks';
 import { CharacterViewSeekerAttacks } from './entities/actor/components/character-views/components/attacks/character-view-seeker-attacks';
@@ -237,6 +238,7 @@ CharacterViewPsi;
 CharacterViewExplosiveAttacks;
 CharacterViewMeleeWeaponAttacks;
 CharacterViewSeekerAttacks;
+CharacterViewBeamAttacks;
 CharacterViewThrownWeaponAttacks;
 ExplosiveSettingsForm;
 CharacterViewAttacksSection;
