@@ -66,7 +66,7 @@ export class CharacterViewSeekerAttacks extends LitElement {
       activeAmmoSettings,
       acceptableMissileSizes,
     } = this.weapon;
-    // TODO: Reload, range
+    // TODO: Range Tooltip
     return html`
       <colored-tag
         clickable
