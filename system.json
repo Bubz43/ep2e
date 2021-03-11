@@ -72,6 +72,13 @@
       "entity": "Actor"
     },
     {
+      "name": "robot-vehicle-shells",
+      "system": "ep2e",
+      "label": "Robot/Vehicle Shells",
+      "path": "./packs/robot-vehicle-shells.db",
+      "entity": "Actor"
+    },
+    {
       "name": "creatures",
       "system": "ep2e",
       "label": "Creatures",
