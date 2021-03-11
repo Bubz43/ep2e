@@ -18,7 +18,6 @@ import {
   createAction,
 } from '@src/features/actions';
 import { matchesSkill, Source } from '@src/features/effects';
-import { getCurrentEnvironment } from '@src/features/environment';
 import { FiringMode, firingModeCost } from '@src/features/firing-modes';
 import type { Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
@@ -83,6 +82,7 @@ export class RangedAttackTest extends SkillTest {
     firingMode,
     ...init
   }: RangedAttackTestInit) {
+    // TODO modify action type based on firingMode
     super({
       ...init,
       action:
@@ -94,8 +94,6 @@ export class RangedAttackTest extends SkillTest {
     });
 
     this.character = init.character;
-
-    const { gravity } = getCurrentEnvironment();
 
     const attackTarget = [...game.user.targets][0];
 

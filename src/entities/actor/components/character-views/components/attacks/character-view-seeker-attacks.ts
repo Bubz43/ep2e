@@ -3,6 +3,7 @@ import type { AttackType } from '@src/combat/attacks';
 import type { SeekerWeapon } from '@src/entities/item/proxies/seeker-weapon';
 import { localize } from '@src/foundry/localization';
 import { customElement, html, LitElement, property } from 'lit-element';
+import { map } from 'remeda';
 import { requestCharacter } from '../../character-request-event';
 import { openSeekerAmmoMenu } from './ammo-menus';
 import styles from './attack-info-styles.scss';
@@ -40,7 +41,15 @@ export class CharacterViewSeekerAttacks extends LitElement {
   };
 
   render() {
-    const { missiles, editable, gearTraits } = this.weapon;
+    const {
+      missiles,
+      editable,
+      gearTraits,
+      firingMode,
+      activeAmmoSettings,
+      acceptableMissileSizes,
+    } = this.weapon;
+    // TODO: Reload, range
     return html`
       <colored-tag
         clickable
@@ -49,12 +58,20 @@ export class CharacterViewSeekerAttacks extends LitElement {
       >
         ${missiles
           ? html`
-              <span>${missiles.fullName}</span>
+              <span
+                >${missiles.fullName},
+                <sl-group label=${localize('capacity')}
+                  >${activeAmmoSettings.missileCapacity}</sl-group
+                ></span
+              >
               <span slot="after">${missiles.fullType}</span>
             `
           : html`
-              <span>${localize('missiles')}</span>
-              <span slot="after">${'-'}</span>
+              <span>${localize('load')}</span>
+              <span slot="after"
+                >${map(acceptableMissileSizes, localize).join('/')}
+                ${localize('missiles')}</span
+              >
             `}
       </colored-tag>
 
@@ -64,6 +81,7 @@ export class CharacterViewSeekerAttacks extends LitElement {
             .onAttack=${this.fire}
           ></character-view-explosive-attacks>`
         : ''}
+      <colored-tag type="info">${localize(firingMode)}</colored-tag>
       ${gearTraits.map(
         (trait) =>
           html`<colored-tag type="info">${localize(trait)}</colored-tag>`,

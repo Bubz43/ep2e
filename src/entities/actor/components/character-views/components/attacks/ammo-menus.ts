@@ -18,6 +18,7 @@ export const openSeekerAmmoMenu = (
     allowAlternativeAmmo,
     alternativeAmmo,
     primaryAmmo,
+    currentCapacity,
   } = weapon;
   const missiles = ammo.flatMap((a) =>
     a.type !== ItemType.Explosive || !acceptableMissileSizes.includes(a.size)
@@ -27,10 +28,27 @@ export const openSeekerAmmoMenu = (
 
   const content: MWCMenuOption[] = [];
   if (currentMissiles) {
+    const same = missiles.find((m) => m.isSameAs(currentMissiles));
+    if (currentMissiles.quantity < currentCapacity) {
+      content.push({
+        label: localize('reload'),
+        callback: async () => {
+          // TODO handle multiple same missiles with different quantities
+          if (same) {
+            const change = clamp(
+              same.quantity - (currentMissiles.quantity || 0),
+              { min: 0, max: currentCapacity },
+            );
+            await same.setQuantity((current) => current - change);
+            currentMissiles.setQuantity((current) => current + change);
+          }
+        },
+        disabled: !same?.quantity,
+      });
+    }
     content.push({
       label: `${localize('unload')} ${currentMissiles.name}`,
       callback: async () => {
-        const same = missiles.find((m) => m.isSameAs(currentMissiles));
         if (same) {
           await same.setQuantity(
             (current) => current + currentMissiles.quantity,
