@@ -25,6 +25,12 @@ export class CharacterViewBeamAttacks extends LitElement {
         .firing-mode {
           flex-grow: 0;
         }
+        .attack-info {
+          flex: 1;
+        }
+        .firing-modes {
+          display: flex;
+        }
         .attack {
           width: 100%;
           display: flex;
@@ -54,8 +60,6 @@ export class CharacterViewBeamAttacks extends LitElement {
   render() {
     const { battery, editable, gearTraits, hasSecondaryAttack } = this.weapon;
     return html`
-      ${this.renderAttack('primary')}
-      ${hasSecondaryAttack ? this.renderAttack('secondary') : ''}
       <colored-tag type="usable" clickable ?disabled=${!editable}>
         <span>${localize('battery')}</span>
         <value-status
@@ -64,6 +68,8 @@ export class CharacterViewBeamAttacks extends LitElement {
           max=${battery.max}
         ></value-status>
       </colored-tag>
+      ${this.renderAttack('primary')}
+      ${hasSecondaryAttack ? this.renderAttack('secondary') : ''}
       ${gearTraits.map(
         (trait) =>
           html`<colored-tag type="info">${localize(trait)}</colored-tag>`,
@@ -86,23 +92,31 @@ export class CharacterViewBeamAttacks extends LitElement {
         map(attack.attackTraits, localize).join(', '),
       attack.notes,
     ]).join('. ');
+
     return html`
       <div class="attack">
-        ${attack.firingModes.map(
-          (mode) => html`
-            <colored-tag
-              class="firing-mode"
-              type="attack"
-              ?disabled=${!editable || firingModeCost[mode] > availableShots}
-              clickable
-              title=${localize('mode')}
-              @click=${() => this.fire(attackType, mode)}
-            >
-              ${localize('SHORT', mode)}
-            </colored-tag>
-            <colored-tag type="info">${info}</colored-tag>
-          `,
-        )}
+        <colored-tag type="info" class="attack-info"
+          >${info}
+          ${this.weapon.hasSecondaryAttack
+            ? html` <span slot="after">${attack.label}</span> `
+            : ''}
+        </colored-tag>
+        <div class="firing-modes">
+          ${attack.firingModes.map(
+            (mode) => html`
+              <colored-tag
+                class="firing-mode"
+                type="attack"
+                ?disabled=${!editable || firingModeCost[mode] > availableShots}
+                clickable
+                title=${localize('mode')}
+                @click=${() => this.fire(attackType, mode)}
+              >
+                ${localize('SHORT', mode)}
+              </colored-tag>
+            `,
+          )}
+        </div>
       </div>
     `;
   }

@@ -22,23 +22,24 @@
 wl-list-item {
   padding: 0.125rem 0.5rem;
   border: 1px solid;
+  height: 100%;
 }
 
 .info {
-  --list-item-bg: #{alphav(var(--color-grey), 0.1)};
-  --list-item-bg-hover: #{alphav(var(--color-grey), 0.2)};
-  border-color: alphav(var(--color-grey), 0.2);
+  --list-item-bg: #{alphav(var(--color-grey), 0.15)};
+  --list-item-bg-hover: #{alphav(var(--color-grey), 0.25)};
+  border-color: alphav(var(--color-grey), 0.25);
 }
 
 .usable {
   padding: 0.125rem 0.5rem;
-  --list-item-bg: #{alphav(var(--color-secondary), 0.1)};
-  --list-item-bg-hover: #{alphav(var(--color-secondary), 0.2)};
-  border-color: alphav(var(--color-secondary), 0.2);
+  --list-item-bg: #{alphav(var(--color-secondary), 0.15)};
+  --list-item-bg-hover: #{alphav(var(--color-secondary), 0.25)};
+  border-color: alphav(var(--color-secondary), 0.25);
 }
 
 .attack {
-  --list-item-bg: #{alphav(var(--color-negative), 0.2)};
-  --list-item-bg-hover: #{alphav(var(--color-negative), 0.3)};
-  border-color: alphav(var(--color-negative), 0.35);
+  --list-item-bg: #{alphav(var(--color-negative), 0.25)};
+  --list-item-bg-hover: #{alphav(var(--color-negative), 0.35)};
+  border-color: alphav(var(--color-negative), 0.4);
 }
