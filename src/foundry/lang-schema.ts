@@ -1440,7 +1440,7 @@ type LangEntries =
   | 'npcs'
   | 'tracker'
   | 'skipDefeated'
-  | 'preperation'
+  | 'preparation'
   | 'fallDown'
   | 'uncoated'
   | 'discard'

@@ -3282,7 +3282,7 @@
             "prehensileLimbs": {
               "type": "string"
             },
-            "preperation": {
+            "preparation": {
               "type": "string"
             },
             "primary": {
@@ -5684,7 +5684,7 @@
             "positive",
             "prehensile",
             "prehensileLimbs",
-            "preperation",
+            "preparation",
             "primary",
             "primaryAmmo",
             "primaryAttack",
