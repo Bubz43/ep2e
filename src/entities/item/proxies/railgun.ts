@@ -94,6 +94,17 @@ export class Railgun
     return this.totalCharge === this.battery.max;
   }
 
+  get fullyLoaded() {
+    const { max, value } = this.ammoState;
+    return value === max + 1;
+  }
+
+  reload() {
+    return this.updater
+      .path('data', 'ammo', 'value')
+      .commit((current) => this.ammoState.max + (current ? 1 : 0));
+  }
+
   fire(shots: number) {
     return this.updater
       .path('data', 'ammo', 'value')

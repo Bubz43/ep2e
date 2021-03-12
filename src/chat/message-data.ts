@@ -187,6 +187,7 @@ export type SpecialTestData =
 export type RangedAttackMessageData = {
   weapon: RangedWeapon['data'];
   firingModeGroup: FiringModeGroup;
+  primaryAttack: boolean;
   damageModifiers?: LabeledFormula[];
   calledShot?: CalledShot | null;
 };

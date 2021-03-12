@@ -420,6 +420,7 @@ export class RangedAttackTest extends SkillTest {
           calledShot,
           firingModeGroup,
           damageModifiers,
+          primaryAttack,
         },
         explosiveUse:
           weapon.type === ItemType.SeekerWeapon &&

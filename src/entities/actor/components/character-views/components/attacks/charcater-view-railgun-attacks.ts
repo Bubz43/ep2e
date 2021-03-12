@@ -112,7 +112,18 @@ export class CharacterViewRailgunAttacks extends LitElement {
   }
 
   private reloadAmmo(ev: MouseEvent) {
-    //   openMenu({})
+    openMenu({
+      content: [
+        {
+          label: localize('reload'),
+          icon: html`<mwc-icon>refresh</mwc-icon>`,
+          disabled: this.weapon.fullyLoaded,
+          callback: () => {
+            this.weapon.reload();
+          },
+        },
+      ],
+    });
   }
 
   private toggleBraced() {

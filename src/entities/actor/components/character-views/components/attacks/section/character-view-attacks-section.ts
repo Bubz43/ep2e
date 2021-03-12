@@ -189,7 +189,8 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
         <colored-tag
           type="attack"
           clickable
-          ?disabled=${this.character.disabled}
+          ?disabled=${this.character.disabled ||
+          this.character.weapons.thrown.length === 0}
           @click=${this.selectThrowingWeapon}
           >${localize('throwingRange')}
           <span slot="after"
