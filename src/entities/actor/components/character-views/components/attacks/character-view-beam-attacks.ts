@@ -11,6 +11,7 @@ import {
 import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
+import { openMenu } from '@src/open-menu';
 import { getWeaponRange } from '@src/success-test/range-modifiers';
 import { notEmpty } from '@src/utility/helpers';
 import { css, customElement, html, LitElement, property } from 'lit-element';
@@ -80,6 +81,23 @@ export class CharacterViewBeamAttacks extends LitElement {
     });
   }
 
+  private replaceBattery(ev: MouseEvent) {
+    openMenu({
+      header: { heading: `${this.weapon.name} ${localize('battery')}` },
+      content: [
+        {
+          label: localize('reload'),
+          sublabel: `${localize('swap')} ${localize('battery')} (${localize(
+            'complex',
+          )} ${localize('action')}) `,
+          callback: () => this.weapon.swapBattery(),
+          disabled: this.weapon.totalCharge === this.weapon.battery.max,
+        },
+      ],
+      position: ev,
+    });
+  }
+
   render() {
     const {
       battery,
@@ -88,6 +106,7 @@ export class CharacterViewBeamAttacks extends LitElement {
       hasSecondaryAttack,
       weaponTraits,
       accessories,
+      totalCharge,
     } = this.weapon;
     return html`
       <colored-tag type="info"
@@ -98,11 +117,16 @@ export class CharacterViewBeamAttacks extends LitElement {
         (trait) =>
           html`<colored-tag type="info">${localize(trait)}</colored-tag>`,
       )}
-      <colored-tag type="usable" clickable ?disabled=${!editable}>
+      <colored-tag
+        type="usable"
+        clickable
+        ?disabled=${!editable}
+        @click=${this.replaceBattery}
+      >
         <span>${localize('battery')}</span>
         <value-status
           slot="after"
-          value=${battery.charge}
+          value=${totalCharge}
           max=${battery.max}
         ></value-status>
       </colored-tag>

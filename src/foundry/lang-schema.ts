@@ -1451,7 +1451,8 @@ type LangEntries =
   | 'ignoreOverburdened'
   | 'grenades'
   | 'meshAttack'
-  | 'partially';
+  | 'partially'
+  | 'swap';
 type FullNames =
   | 'cog'
   | 'int'

@@ -55,13 +55,27 @@ export class BeamWeapon
   }
 
   fire(shots: number) {
-    return this.updater
-      .path('data', 'battery', 'charge')
-      .commit((current) => nonNegative(current - shots));
+    return this.updateCharge({
+      charge: nonNegative(this.availableShots - shots),
+    });
+  }
+
+  swapBattery() {
+    return this.updateCharge({ charge: this.battery.max });
+  }
+
+  updateCharge(changed: Partial<Omit<BeamWeapon['battery'], 'recharge'>>) {
+    const max = changed.max ?? this.battery.max;
+    const charge = changed.charge ?? this.battery.charge;
+    const diff = max - charge;
+    return this.updater.path('data', 'battery').commit({
+      ...changed,
+      recharge: (diff / max) * CommonInterval.Hour * 4 + currentWorldTimeMS(),
+    });
   }
 
   get availableShots() {
-    return this.battery.charge;
+    return this.totalCharge;
   }
 
   get range() {

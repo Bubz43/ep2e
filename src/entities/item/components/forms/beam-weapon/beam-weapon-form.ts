@@ -1,18 +1,17 @@
 import {
-  formatLabeledFormulas,
-  formatArmorUsed,
   formatAreaEffect,
+  formatArmorUsed,
+  formatLabeledFormulas,
 } from '@src/combat/attack-formatting';
 import type { BeamWeaponAttack } from '@src/combat/attacks';
 import {
-  renderSelectField,
-  renderNumberField,
-  renderLabeledCheckbox,
-  renderTimeField,
-  renderFormulaField,
-  renderTextField,
-  renderTextareaField,
   emptyTextDash,
+  renderFormulaField,
+  renderLabeledCheckbox,
+  renderNumberField,
+  renderSelectField,
+  renderTextareaField,
+  renderTextField,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
@@ -26,9 +25,6 @@ import {
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { BeamWeapon } from '@src/entities/item/proxies/beam-weapon';
 import { pairList } from '@src/features/check-list';
-import { FiringMode } from '@src/features/firing-modes';
-import { toMilliseconds } from '@src/features/modify-milliseconds';
-import { CommonInterval, currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property } from 'lit-element';
@@ -121,17 +117,7 @@ export class BeamWeaponForm extends mix(Base).with(UseWorldTime) {
             <sl-header heading=${localize('battery')}></sl-header>
             ${renderAutoForm({
               props: this.item.battery,
-              update: (changed, orig) => {
-                const max = changed.max ?? orig.max;
-                const charge = changed.charge ?? orig.charge;
-                const diff = max - charge;
-                this.item.updater.path('data', 'battery').commit({
-                  ...changed,
-                  recharge:
-                    (diff / max) * CommonInterval.Hour * 4 +
-                    currentWorldTimeMS(),
-                });
-              },
+              update: (changed) => this.item.updateCharge(changed),
               disabled,
               classes: 'battery-form',
               fields: ({ charge, max }) => [
