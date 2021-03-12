@@ -50,6 +50,16 @@ export class CharacterViewBeamAttacks extends mix(LitElement).with(
           flex-flow: row wrap;
           padding: 0.25rem 0.5rem 0;
         }
+        .battery {
+          display: inline-flex;
+          align-items: center;
+        }
+        .recharge {
+          display: inline-flex;
+          align-items: center;
+          color: var(--color-text-lighter);
+          margin-left: 0.5ch;
+        }
       `,
     ];
   }
@@ -129,11 +139,18 @@ export class CharacterViewBeamAttacks extends mix(LitElement).with(
         ?disabled=${!editable}
         @click=${this.replaceBattery}
       >
-        <span
-          >${localize('battery')}
+        <span class="battery">
+          <mwc-icon
+            >${fullyCharged
+              ? 'battery_full'
+              : 'battery_charging_full'}</mwc-icon
+          >
+          ${localize('battery')}
           ${fullyCharged
             ? ''
-            : prettyMilliseconds(this.weapon.timeTillFullyCharged)}
+            : html`<span class="recharge">
+                ${prettyMilliseconds(this.weapon.timeTillFullyCharged)}</span
+              >`}
         </span>
         <value-status
           slot="after"

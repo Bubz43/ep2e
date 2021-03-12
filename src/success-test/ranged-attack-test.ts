@@ -22,7 +22,10 @@ import {
   createFiringModeGroup,
   FiringModeGroup,
   getFiringModeGroupShots,
+  MultiAmmoOption,
+  multiAmmoValues,
 } from '@src/features/firing-modes';
+import { Size } from '@src/features/size';
 import type { Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { capitalize } from '@src/foundry/misc-helpers';
@@ -77,7 +80,11 @@ export class RangedAttackTest extends SkillTest {
     name: RangeRating.Range,
     value: 0,
   });
-  largeMorph: any;
+
+  readonly toHitModifier = createSuccessTestModifier({
+    name: `${localize('concentratedToHit')}`,
+    value: 10,
+  });
 
   constructor({
     weapon,
@@ -176,6 +183,14 @@ export class RangedAttackTest extends SkillTest {
         const { simple } = draft.modifiers;
 
         if (
+          draft.firing.firingModeGroup[1] === MultiAmmoOption.ConcentratedToHit
+        ) {
+          draft.toHitModifier.value =
+            multiAmmoValues[draft.firing.firingModeGroup[0]].concentratedToHit;
+          simple.set(draft.toHitModifier.id, draft.toHitModifier);
+        } else simple.delete(draft.toHitModifier.id);
+
+        if (
           draft.firing.weapon?.isTwoHanded &&
           draft.firing.oneHanded &&
           !this.largeMorph
@@ -230,6 +245,11 @@ export class RangedAttackTest extends SkillTest {
           [Source]: `{${target.name}} ${effect[Source]}`,
         })),
     );
+  }
+
+  get largeMorph() {
+    const { morphSize } = this.character;
+    return morphSize === Size.Large || morphSize === Size.VeryLarge;
   }
 
   get canCallShot() {

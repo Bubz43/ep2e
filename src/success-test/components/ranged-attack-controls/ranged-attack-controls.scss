@@ -17,7 +17,7 @@
   grid-template-areas:
     'entity firing modifiers'
     'sections firing modifiers'
-    'sections firing footer';
+    'sections footer footer';
   grid-template-rows: min-content 1fr auto;
   column-gap: 0.25rem;
   min-height: 300px;

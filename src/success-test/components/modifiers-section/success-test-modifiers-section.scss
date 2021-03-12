@@ -12,7 +12,8 @@
   overflow-x: hidden;
   height: 200px;
   min-height: 100%;
-  width: 350px;
+  width: 25ch;
+  min-width: 100%;
   transition: opacity 200ms ease-in-out;
 }
 
@@ -49,7 +50,7 @@ wl-list-item {
 .source,
 .requirement {
   display: inline-block;
-  @include truncate(200px);
+  @include truncate(100px);
   min-width: 100%;
 }
 

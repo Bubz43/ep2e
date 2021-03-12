@@ -86,7 +86,7 @@ export class Railgun
   }
 
   get availableShots() {
-    return Math.min(this.epData.ammo.value, this.battery.charge);
+    return Math.min(this.epData.ammo.value, this.totalCharge);
   }
 
   @LazyGetter()
@@ -101,20 +101,27 @@ export class Railgun
     return this.epData.battery;
   }
 
-  get rechargedBattery() {
+  get timeTillFullyCharged() {
+    return this.battery.recharge - currentWorldTimeMS();
+  }
+
+  private get regainedCharge() {
     const { max, charge } = this.battery;
-    const diff = this.battery.recharge - currentWorldTimeMS();
-    const chargeDiff = max - charge;
-    const maxGain = clamp(
-      Math.floor((diff / (CommonInterval.Hour * 4)) * max),
-      { max: chargeDiff },
+    if (charge === max) return 0;
+
+    const { timeTillFullyCharged } = this;
+    const spentCharge = max - charge;
+    if (timeTillFullyCharged <= 0) return spentCharge;
+
+    const gainRate = (CommonInterval.Hour * 4) / max;
+    return Math.floor(
+      (spentCharge * gainRate - timeTillFullyCharged) / gainRate,
     );
-    return diff <= 0 ? max - charge : Math.abs(maxGain - chargeDiff);
   }
 
   get totalCharge() {
     const { max, charge } = this.battery;
-    return clamp(charge + this.rechargedBattery, { min: charge, max });
+    return clamp(charge + this.regainedCharge, { min: charge, max });
   }
 
   @LazyGetter()
