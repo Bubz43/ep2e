@@ -9,11 +9,26 @@
   display: block;
 }
 
+.group-toggles {
+  display: flex;
+  flex-flow: row wrap;
+  --mdc-shape-small: 0px;
+  --mdc-theme-primary: #{alphav(var(--color-negative), 0.8)};
+  padding: 0 0.25rem;
+  > * {
+    margin-bottom: 0.25rem;
+    flex-grow: 1;
+    &[unelevated] + [unelevated] {
+      border-left: 1px solid transparent;
+    }
+  }
+}
+
 .physical-info {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.25rem;
-  padding: 0.125rem 0.5rem 0.25rem;
+  padding: 0.125rem 0.5rem 0.5rem;
 }
 
 .attacks {
@@ -28,25 +43,15 @@
     page-break-inside: avoid;
 
     &:not([expanded]) {
-      background: alphav(var(--color-text), 0.04);
+      background: alphav(var(--color-grey), 0.06);
       border-top: 2px solid var(--color-border);
       padding: 0.25rem 0;
     }
-  }
-}
-
-.group-toggles {
-  display: flex;
-  flex-flow: row wrap;
-  --mdc-shape-small: 0px;
-  --mdc-theme-primary: #{alphav(var(--color-negative), 0.8)};
-  padding: 0.125rem 0.5rem;
-
-  > * {
-    margin-bottom: 0.25rem;
-    flex-grow: 1;
-    &[unelevated] + [unelevated] {
-      border-left: 1px solid transparent;
+    &[expanded] {
+      margin: 0.5rem 0.375rem;
+      background: lightv(var(--color-bg-alt), 1.1);
+      border: 2px solid alphav(var(--color-grey), 0.5);
+      border-radius: 0.25rem;
     }
   }
 }

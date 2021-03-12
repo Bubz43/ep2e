@@ -1440,7 +1440,7 @@ type LangEntries =
   | 'npcs'
   | 'tracker'
   | 'skipDefeated'
-  | 'preperation'
+  | 'preparation'
   | 'fallDown'
   | 'uncoated'
   | 'discard'
@@ -1451,7 +1451,9 @@ type LangEntries =
   | 'ignoreOverburdened'
   | 'grenades'
   | 'meshAttack'
-  | 'partially';
+  | 'partially'
+  | 'swap'
+  | 'carrying';
 type FullNames =
   | 'cog'
   | 'int'

@@ -15,10 +15,9 @@
 .controls {
   display: grid;
   grid-template-areas:
-    'entity modifiers'
-    'sections modifiers'
-    'sections firing'
-    'sections footer';
+    'entity firing modifiers'
+    'sections firing modifiers'
+    'sections footer footer';
   grid-template-rows: min-content 1fr auto;
   column-gap: 0.25rem;
   min-height: 300px;
@@ -70,6 +69,7 @@
   margin-top: 0.25rem;
   border: 1px solid var(--color-border);
   padding: 0.125rem 0;
+  min-width: 20ch;
   @include textButton();
   @include inputReset();
   input {
@@ -99,11 +99,23 @@
 
   .firing-modes {
     display: flex;
+    justify-content: space-evenly;
   }
 
   .blast-radius-form {
     input {
       min-width: 5ch;
+    }
+  }
+
+  .ammo-modes {
+    border: 1px solid var(--color-border);
+    border-left: none;
+    border-right: none;
+    padding: 0.25rem 0;
+    margin-bottom: 0.25rem;
+    > mwc-radio-list-item {
+      height: 2rem;
     }
   }
 }

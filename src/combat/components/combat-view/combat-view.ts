@@ -383,7 +383,7 @@ export class CombatView extends LitElement {
           ${round
             ? ` ${surprise ? localize('surprise') : ''}
                     ${localize('round')} ${surprise ? '' : round}`
-            : localize('preperation')}
+            : localize('preparation')}
         </h2>
 
         <sl-popover center .renderOnDemand=${this.renderParticipantSelector}>

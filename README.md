@@ -6,3 +6,4 @@
 - Trap actor type
 - Hive actor/item type
 - Fragile gear trait
+- Social Attacks

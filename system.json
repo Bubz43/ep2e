@@ -1,5 +1,5 @@
 {
-  "version": 0.67541,
+  "version": 0.67542,
   "name": "ep2e",
   "title": "Eclipse Phase 2e",
   "description": "Eclipse Phase 2e Game System.",
@@ -62,6 +62,27 @@
       "system": "ep2e",
       "label": "Robots",
       "path": "./packs/robots.db",
+      "entity": "Actor"
+    },
+    {
+      "name": "vehicles",
+      "system": "ep2e",
+      "label": "Vehicles",
+      "path": "./packs/vehicles.db",
+      "entity": "Actor"
+    },
+    {
+      "name": "robot-vehicle-shells",
+      "system": "ep2e",
+      "label": "Robot/Vehicle Shells",
+      "path": "./packs/robot-vehicle-shells.db",
+      "entity": "Actor"
+    },
+    {
+      "name": "creatures",
+      "system": "ep2e",
+      "label": "Creatures",
+      "path": "./packs/creatures.db",
       "entity": "Actor"
     },
     {

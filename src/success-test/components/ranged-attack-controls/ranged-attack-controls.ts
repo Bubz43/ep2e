@@ -1,5 +1,4 @@
 import {
-  renderLabeledCheckbox,
   renderNumberField,
   renderNumberInput,
   renderRadio,
@@ -22,7 +21,13 @@ import {
   createExplosiveTriggerSetting,
   ExplosiveSettings,
 } from '@src/entities/weapon-settings';
-import { FiringMode, firingModeCost } from '@src/features/firing-modes';
+import {
+  createFiringModeGroup,
+  FiringMode,
+  firingModeCost,
+  MultiAmmoOption,
+  multiAmmoValues,
+} from '@src/features/firing-modes';
 import { CommonInterval } from '@src/features/time';
 import { readyCanvas } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
@@ -41,6 +46,7 @@ import {
   query,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
+import { take } from 'remeda';
 import { identity, Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';
 import styles from './ranged-attack-controls.scss';
@@ -95,12 +101,14 @@ export class RangedAttackControls extends LitElement {
   }
 
   private setTarget = () => {
-    const attackTarget = this.test?.firing.attackTarget;
+    const attackTarget = this.test?.firing.attackTargets;
     const { targets } = game.user;
-    if (attackTarget && !targets.has(attackTarget))
-      this.test?.firing.update({ attackTarget: null });
-    else if (targets.size)
-      this.test?.firing.update({ attackTarget: [...targets][0] });
+    this.test?.firing.update({
+      attackTargets: new Set(
+        take([...targets], this.test?.firing.maxTargets || 1),
+      ),
+    });
+
     this.requestUpdate();
   };
 
@@ -222,20 +230,24 @@ export class RangedAttackControls extends LitElement {
       // damageFormulas,
       attack,
       canCallShot,
+      twoHanded,
     } = test;
 
     const {
       weapon,
       primaryAttack,
-      attackTarget,
+      attackTargets,
       targetDistance,
       range,
       calledShot,
       explosiveSettings,
       oneHanded,
+      maxTargets,
+      carrying,
     } = firing;
-    const { morphSize } = character;
-    const { attacks } = weapon ?? {};
+    const { attacks, isFixed, noClose, noPointBlank } = weapon ?? {};
+
+    // TODO noClose/NoPointBlank
 
     // const joinedFormula = joinLabeledFormulas(damageFormulas);
 
@@ -298,19 +310,34 @@ export class RangedAttackControls extends LitElement {
           >
 
           <wl-list-item>
-            <span>${localize('target')}: ${attackTarget?.name ?? ' - '}</span>
+            <span
+              >${localize('attack')}
+              ${maxTargets === 1
+                ? localize('target')
+                : `${localize('targets')} (${maxTargets})`}:
+              ${notEmpty(attackTargets)
+                ? [...attackTargets]
+                    .map((attackTarget) => attackTarget.name)
+                    .join(', ')
+                : '-'}</span
+            >
             <sl-animated-list class="targets">
-              ${repeat(
-                game.user.targets,
-                identity,
-                (token) => html`
+              ${repeat(game.user.targets, identity, (token) => {
+                const active = attackTargets.has(token);
+                return html`
                   <mwc-icon-button
-                    class=${token === attackTarget ? 'active' : ''}
-                    @click=${() => firing.update({ attackTarget: token })}
+                    class=${active ? 'active' : ''}
+                    ?disabled=${!active && attackTargets.size === maxTargets}
+                    @click=${() => {
+                      const newTargets = new Set([...attackTargets]);
+                      if (active) newTargets.delete(token);
+                      else newTargets.add(token);
+                      firing.update({ attackTargets: newTargets });
+                    }}
                     ><img src=${token.data.img}
                   /></mwc-icon-button>
-                `,
-              )}
+                `;
+              })}
             </sl-animated-list>
           </wl-list-item>
         </section>
@@ -352,13 +379,23 @@ export class RangedAttackControls extends LitElement {
               ${this.renderTriggerSettings(explosiveSettings)}
             `
           : ''}
-        ${weapon.isTwoHanded
+        ${twoHanded
           ? html`
               <mwc-check-list-item
                 ?selected=${!oneHanded}
                 @click=${() => firing.update({ oneHanded: !oneHanded })}
               >
                 <span>${localize('twoHanded')}</span>
+              </mwc-check-list-item>
+            `
+          : ''}
+        ${isFixed
+          ? html`
+              <mwc-check-list-item
+                ?selected=${!!carrying}
+                @click=${() => firing.update({ carrying: !carrying })}
+              >
+                <span>${localize('carrying')}</span>
               </mwc-check-list-item>
             `
           : ''}
@@ -405,7 +442,7 @@ export class RangedAttackControls extends LitElement {
   private renderFiringModeSelect(
     test: NonNullable<RangedAttackControls['test']>,
   ) {
-    const { weapon, firingMode, suppressiveFire = false } = test.firing;
+    const { weapon, firingModeGroup } = test.firing;
     const { attack } = test;
     if (weapon.type === ItemType.SeekerWeapon) {
       return html`<mwc-formfield label=${localize(weapon.firingMode)}
@@ -418,30 +455,96 @@ export class RangedAttackControls extends LitElement {
       >`;
     }
     if (!attack || !('firingModes' in attack)) return '';
-    return renderAutoForm({
-      props: { firingMode, suppressiveFire },
-      update: test.firing.update,
-      fields: ({ firingMode, suppressiveFire }) => [
-        html`<div class="firing-modes">
-          ${attack.firingModes.map(
-            (mode) =>
-              html`<mwc-formfield label=${localize('SHORT', mode)}
-                >${renderRadio({
-                  checked: mode === firingMode.value,
-                  name: firingMode.prop,
-                  value: mode,
-                  disabled: firingModeCost[mode] > weapon.availableShots,
-                })}</mwc-formfield
-              >`,
-          )}
-        </div>`,
-        firingMode.value === FiringMode.FullAuto
-          ? renderLabeledCheckbox(suppressiveFire, {
-              disabled: weapon.availableShots < firingModeCost.suppressiveFire,
-            })
-          : '',
-      ],
-    });
+
+    return html`
+      ${renderAutoForm({
+        props: { firingMode: firingModeGroup[0] },
+        update: ({ firingMode }) =>
+          firingMode &&
+          test.firing.update({
+            firingModeGroup: createFiringModeGroup(firingMode),
+          }),
+        fields: ({ firingMode }) => [
+          html`<div class="firing-modes">
+            ${attack.firingModes.map(
+              (mode) =>
+                html`<mwc-formfield label=${localize('SHORT', mode)}
+                  >${renderRadio({
+                    checked: mode === firingMode.value,
+                    name: firingMode.prop,
+                    value: mode,
+                    disabled: firingModeCost[mode] > weapon.availableShots,
+                  })}</mwc-formfield
+                >`,
+            )}
+          </div>`,
+        ],
+      })}
+      ${firingModeGroup[0] === FiringMode.BurstFire
+        ? html`
+            <mwc-list class="ammo-modes">
+              ${enumValues(MultiAmmoOption).map((mode) => {
+                const value = multiAmmoValues[firingModeGroup[0]][mode];
+                return html`
+                  <mwc-radio-list-item
+                    left
+                    ?selected=${mode === firingModeGroup[1]}
+                    @click=${() =>
+                      test.firing.update({
+                        firingModeGroup: [firingModeGroup[0], mode],
+                      })}
+                    ?disabled=${mode === MultiAmmoOption.ConcentratedDamage &&
+                    attack.rollFormulas.length === 0}
+                  >
+                    ${mode === MultiAmmoOption.AdjacentTargets
+                      ? `${value} ${localize(mode)}`
+                      : mode === MultiAmmoOption.ConcentratedDamage
+                      ? value
+                      : `+${value} ${localize('toHit')}`}
+                  </mwc-radio-list-item>
+                `;
+              })}
+            </mwc-list>
+          `
+        : firingModeGroup[0] === FiringMode.FullAuto
+        ? html`
+            <mwc-list class="ammo-modes">
+              ${enumValues(MultiAmmoOption).map((mode) => {
+                const value = multiAmmoValues[firingModeGroup[0]][mode];
+
+                return html`
+                  <mwc-radio-list-item
+                    left
+                    ?selected=${mode === firingModeGroup[1]}
+                    @click=${() =>
+                      test.firing.update({
+                        firingModeGroup: [firingModeGroup[0], mode],
+                      })}
+                  >
+                    ${mode === MultiAmmoOption.AdjacentTargets
+                      ? `${value} ${localize(mode)}`
+                      : mode === MultiAmmoOption.ConcentratedDamage
+                      ? value
+                      : `+${value} ${localize('toHit')}`}
+                  </mwc-radio-list-item>
+                `;
+              })}
+              <mwc-radio-list-item
+                left
+                ?disabled=${weapon.availableShots <
+                firingModeCost.suppressiveFire}
+                ?selected=${firingModeGroup[1] === 'suppressiveFire'}
+                @click=${() =>
+                  test.firing.update({
+                    firingModeGroup: [firingModeGroup[0], 'suppressiveFire'],
+                  })}
+              >
+                ${localize('suppressiveFire')}
+              </mwc-radio-list-item>
+            </mwc-list>
+          `
+        : ''}
+    `;
   }
 
   private renderAreaEffectEdit(

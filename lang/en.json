@@ -1413,7 +1413,7 @@
     "npcs": "NPCs",
     "skipDefeated": "Skip Defeated",
     "tracker": "Tracker",
-    "preperation": "Preperation",
+    "preparation": "Preparation",
     "fallDown": "Fall down",
     "uncoated": "Uncoated",
     "compact": "Compact",
@@ -1425,6 +1425,8 @@
     "meshAttack": "Mesh Attack",
     "grenades": "Grenades",
     "partially": "Partially",
+    "carrying": "Carrying",
+    "swap": "Swap",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
