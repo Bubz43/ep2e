@@ -151,7 +151,7 @@ export class MessageRangedAttack extends MessageElement {
     const options: string[] = [];
     options.push(
       `${localize('firingMode')}: ${localize(firingModeGroup[0])} ${
-        firingModeGroup[1] ? `(${localize(firingModeGroup[1])})` : ''
+        firingModeGroup[1] ? `[${localize(firingModeGroup[1])}]` : ''
       }`,
     );
     if (calledShot)

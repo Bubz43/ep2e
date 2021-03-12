@@ -382,15 +382,13 @@ export class RangedAttackTest extends SkillTest {
       firingModeGroup,
     } = firing;
 
-    // const missiles = weapon.type === ItemType.SeekerWeapon && weapon.missiles;
-
     await createMessage({
       data: {
         header: {
-          heading: `${weapon.name} ${localize('rangedAttack')}`,
+          heading: `${weapon.fullName} ${localize('rangedAttack')}`,
           subheadings: compact([
+            weapon.fullType,
             this.name,
-            // missiles && `${missiles.name} - ${missiles.formattedSize}`,
             [
               `${action.type} ${
                 action.timeMod && action.type !== ActionType.Task
