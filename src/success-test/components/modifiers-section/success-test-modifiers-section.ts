@@ -1,6 +1,6 @@
 import {
-  renderTextField,
   renderNumberField,
+  renderTextField,
 } from '@src/components/field/fields';
 import { renderSubmitForm } from '@src/components/form/forms';
 import {
@@ -15,10 +15,10 @@ import {
   SimpleSuccessTestModifier,
 } from '@src/success-test/success-test';
 import { withSign } from '@src/utility/helpers';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, html, LitElement, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
-import { first, identity, sortBy } from 'remeda';
+import { first, sortBy } from 'remeda';
 import styles from './success-test-modifiers-section.scss';
 
 @customElement('success-test-modifiers-section')
@@ -133,7 +133,9 @@ export class SuccessTestModifiersSection extends LitElement {
                 : modifier.icon
                 ? html`<mwc-icon slot="before">${modifier.icon}</mwc-icon>`
                 : html` <span slot="before"></span> `}
-              <span class="source">${modifier.name}</span>
+              <span class="source" title=${modifier.name}
+                >${modifier.name}</span
+              >
               <span slot="after">${withSign(modifier.value)}</span>
             </wl-list-item>
           `,

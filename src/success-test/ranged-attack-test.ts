@@ -64,7 +64,6 @@ export class RangedAttackTest extends SkillTest {
     firingModeGroup: FiringModeGroup;
     explosiveSettings?: ExplosiveSettings | null;
     oneHanded?: boolean;
-    carrying?: boolean;
   }>;
 
   readonly calledShotModifier = createSuccessTestModifier({
@@ -151,7 +150,6 @@ export class RangedAttackTest extends SkillTest {
           draft.firing.primaryAttack = true;
           draft.firing.calledShot = null;
           draft.firing.oneHanded = false;
-          draft.firing.carrying = false;
           draft.firing.range = getWeaponRange(
             draft.firing.weapon as RangedWeapon,
           );
@@ -218,15 +216,11 @@ export class RangedAttackTest extends SkillTest {
           simple.set(draft.toHitModifier.id, draft.toHitModifier);
         } else simple.delete(draft.toHitModifier.id);
 
-        if (draft.firing.weapon.isFixed && draft.firing.carrying) {
-          simple.set(this.carryingFixedModifier.id, this.carryingFixedModifier);
-        } else simple.delete(this.carryingFixedModifier.id);
-
-        const twoHanded =
-          draft.firing.weapon.isTwoHanded ||
-          (draft.firing.weapon.isFixed && !!draft.firing.carrying);
-
-        if (twoHanded && draft.firing.oneHanded && !this.largeMorph) {
+        if (
+          draft.firing.weapon.isTwoHanded &&
+          draft.firing.oneHanded &&
+          !this.largeMorph
+        ) {
           simple.set(this.twoHandedModifier.id, this.twoHandedModifier);
         } else simple.delete(this.twoHandedModifier.id);
 
@@ -261,6 +255,13 @@ export class RangedAttackTest extends SkillTest {
       this.modifiers.simple.set(this.toHitModifier.id, this.toHitModifier);
     }
 
+    if (weapon.isFixed && !weapon.braced) {
+      this.modifiers.simple.set(
+        this.carryingFixedModifier.id,
+        this.carryingFixedModifier,
+      );
+    }
+
     const { rating, modifier } = getRangeModifier(
       this.firing.range,
       this.firing.targetDistance,
@@ -269,11 +270,6 @@ export class RangedAttackTest extends SkillTest {
     this.rangeModifier.name = localize(rating);
     this.rangeModifier.value = modifier;
     this.modifiers.simple.set(this.rangeModifier.id, this.rangeModifier);
-  }
-
-  get twoHanded() {
-    const { weapon, carrying } = this.firing;
-    return weapon.isTwoHanded || (weapon.isFixed && !!carrying);
   }
 
   protected getAttackTargetEffects(
@@ -348,6 +344,20 @@ export class RangedAttackTest extends SkillTest {
 
   get damageModifiers(): LabeledFormula[] {
     const formulas: LabeledFormula[] = [];
+    if (this.attack?.rollFormulas.length === 0) return formulas;
+    const { rangeDamageModifier } = this;
+    if (rangeDamageModifier) formulas.push(rangeDamageModifier);
+    const { firingModeGroup } = this.firing;
+    console.log(firingModeGroup);
+    if (firingModeGroup[1] === MultiAmmoOption.ConcentratedDamage) {
+      formulas.push({
+        label: `${localize(firingModeGroup[0])} ${localize(
+          'concentratedDamage',
+        )}`,
+        formula: multiAmmoValues[firingModeGroup[0]][firingModeGroup[1]],
+      });
+    }
+    console.log(formulas);
 
     return formulas;
   }
@@ -360,7 +370,7 @@ export class RangedAttackTest extends SkillTest {
       firing,
       attack,
       testMessageData,
-      rangeDamageModifier,
+      damageModifiers,
     } = this;
 
     const {
@@ -409,7 +419,7 @@ export class RangedAttackTest extends SkillTest {
           weapon: weapon.getDataCopy(),
           calledShot,
           firingModeGroup,
-          // damage modifiers
+          damageModifiers,
         },
         explosiveUse:
           weapon.type === ItemType.SeekerWeapon &&

@@ -13,7 +13,7 @@ import { joinLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
 import { openMenu } from '@src/open-menu';
 import { getWeaponRange } from '@src/success-test/range-modifiers';
-import { notEmpty } from '@src/utility/helpers';
+import { notEmpty, toggle } from '@src/utility/helpers';
 import { css, customElement, html, LitElement, property } from 'lit-element';
 import { compact } from 'remeda';
 import { requestCharacter } from '../../character-request-event';
@@ -115,6 +115,10 @@ export class CharacterViewRailgunAttacks extends LitElement {
     //   openMenu({})
   }
 
+  private toggleBraced() {
+    this.weapon.updater.path('data', 'state', 'braced').commit(toggle);
+  }
+
   render() {
     const {
       battery,
@@ -131,6 +135,19 @@ export class CharacterViewRailgunAttacks extends LitElement {
         >${localize('range')}
         <span slot="after">${getWeaponRange(this.weapon)}</span>
       </colored-tag>
+
+      ${this.weapon.isFixed
+        ? html`
+            <colored-tag
+              type="usable"
+              @click=${this.toggleBraced}
+              ?disabled=${!editable}
+              >${localize(
+                this.weapon.braced ? 'braced' : 'carried',
+              )}</colored-tag
+            >
+          `
+        : ''}
 
       <colored-tag
         type="usable"
