@@ -245,8 +245,9 @@ export class RangedAttackControls extends LitElement {
       maxTargets,
       carrying,
     } = firing;
-    const { morphSize } = character;
-    const { attacks, isFixed } = weapon ?? {};
+    const { attacks, isFixed, noClose, noPointBlank } = weapon ?? {};
+
+    // TODO noClose/NoPointBlank
 
     // const joinedFormula = joinLabeledFormulas(damageFormulas);
 
@@ -492,6 +493,8 @@ export class RangedAttackControls extends LitElement {
                       test.firing.update({
                         firingModeGroup: [firingModeGroup[0], mode],
                       })}
+                    ?disabled=${mode === MultiAmmoOption.ConcentratedDamage &&
+                    attack.rollFormulas.length === 0}
                   >
                     ${mode === MultiAmmoOption.AdjacentTargets
                       ? `${value} ${localize(mode)}`

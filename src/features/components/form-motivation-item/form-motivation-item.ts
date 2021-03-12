@@ -1,9 +1,4 @@
-import {
-  renderCheckbox,
-  renderLabeledCheckbox,
-  renderTextField,
-  renderTextInput,
-} from '@src/components/field/fields';
+import { renderCheckbox, renderTextInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import {
   addUpdateRemoveFeature,
@@ -21,12 +16,11 @@ import { debounce } from '@src/utility/decorators';
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
-  LitElement,
-  property,
   html,
   internalProperty,
+  LitElement,
+  property,
 } from 'lit-element';
-import { render } from 'lit-html';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
 import styles from './form-motivation-item.scss';
@@ -101,6 +95,7 @@ export class FormMotivationItem extends LitElement {
       ${renderAutoForm({
         props: motivation,
         update: this.emitUpdate,
+        noDebounce: true,
         classes: 'cause-form',
         disabled,
         fields: ({ cause }) =>

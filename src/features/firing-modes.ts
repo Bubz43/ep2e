@@ -51,7 +51,7 @@ export const createFiringModeGroup = (
 
     case FiringMode.BurstFire:
     case FiringMode.FullAuto:
-      return [firingMode, MultiAmmoOption.ConcentratedDamage];
+      return [firingMode, MultiAmmoOption.ConcentratedToHit];
   }
 };
 

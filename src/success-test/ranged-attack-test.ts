@@ -18,6 +18,7 @@ import {
   createAction,
 } from '@src/features/actions';
 import { matchesSkill, Source } from '@src/features/effects';
+import { getCurrentEnvironment } from '@src/features/environment';
 import {
   createFiringModeGroup,
   FiringModeGroup,
@@ -94,6 +95,8 @@ export class RangedAttackTest extends SkillTest {
     name: `${localize('concentratedToHit')}`,
     value: 10,
   });
+
+  rangeRating: RangeRating;
 
   constructor({
     weapon,
@@ -235,6 +238,7 @@ export class RangedAttackTest extends SkillTest {
           draft.firing.range,
           draft.firing.targetDistance,
         );
+        draft.rangeRating = rating;
         draft.rangeModifier.name = localize(rating);
         draft.rangeModifier.value = modifier;
         simple.set(draft.rangeModifier.id, draft.rangeModifier);
@@ -261,6 +265,7 @@ export class RangedAttackTest extends SkillTest {
       this.firing.range,
       this.firing.targetDistance,
     );
+    this.rangeRating = rating;
     this.rangeModifier.name = localize(rating);
     this.rangeModifier.value = modifier;
     this.modifiers.simple.set(this.rangeModifier.id, this.rangeModifier);
@@ -307,15 +312,44 @@ export class RangedAttackTest extends SkillTest {
   }
 
   get rangeDamageModifier(): LabeledFormula | null {
+    const { weapon } = this.firing;
+    if (weapon.type === ItemType.SprayWeapon) {
+      switch (this.rangeRating) {
+        case RangeRating.PointBlank:
+        case RangeRating.Close:
+          return {
+            label: localize(this.rangeRating),
+            formula: '+1d10',
+          };
+        case RangeRating.Range:
+          return null;
+        case RangeRating.BeyondRange:
+          return getCurrentEnvironment().vacuum
+            ? null
+            : {
+                label: localize(this.rangeRating),
+                formula: '-1d10',
+              };
+      }
+    }
+
+    if (
+      (weapon.type === ItemType.Railgun || weapon.type === ItemType.Firearm) &&
+      this.rangeRating === RangeRating.BeyondRange &&
+      !getCurrentEnvironment().vacuum
+    ) {
+      return {
+        label: localize(this.rangeRating),
+        formula: '-1d10',
+      };
+    }
     return null;
-    // return this.firing.weapon.type === ItemType.ThrownWeapon &&
-    //   this.rangeModifier.value < -10 &&
-    //   !getCurrentEnvironment().vacuum
-    //   ? {
-    //       label: localize('beyondRange'),
-    //       formula: '-1d10',
-    //     }
-    //   : null;
+  }
+
+  get damageModifiers(): LabeledFormula[] {
+    const formulas: LabeledFormula[] = [];
+
+    return formulas;
   }
 
   protected async createMessage() {

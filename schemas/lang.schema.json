@@ -1128,6 +1128,9 @@
             "carryPayload": {
               "type": "string"
             },
+            "carrying": {
+              "type": "string"
+            },
             "category": {
               "type": "string"
             },
@@ -4149,6 +4152,9 @@
             "sustained": {
               "type": "string"
             },
+            "swap": {
+              "type": "string"
+            },
             "swarm": {
               "type": "string"
             },
@@ -4966,6 +4972,7 @@
             "carried",
             "carry",
             "carryPayload",
+            "carrying",
             "category",
             "cause",
             "centered",
@@ -5973,6 +5980,7 @@
             "survival",
             "survivalist",
             "sustained",
+            "swap",
             "swarm",
             "swimmer",
             "synthetic",

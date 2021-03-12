@@ -1,6 +1,4 @@
-import { createMessage } from '@src/chat/create-message';
 import {
-  renderCheckbox,
   renderLabeledCheckbox,
   renderNumberField,
   renderSelectField,
@@ -21,7 +19,6 @@ import {
   EgoType,
   enumValues,
   Fork,
-  MinStressOption,
   ThreatLevel,
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
@@ -36,16 +33,14 @@ import { createMotivation, Motivation } from '@src/features/motivations';
 import type { RepNetwork } from '@src/features/reputations';
 import type { Aptitudes } from '@src/features/skills';
 import {
-  handleDrop,
   DropType,
+  handleDrop,
   itemDropToItemProxy,
 } from '@src/foundry/drag-and-drop';
-import { notify, NotificationType } from '@src/foundry/foundry-apps';
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
-import { rollLabeledFormulas } from '@src/foundry/rolls';
-import { hardeningTypes, StressType } from '@src/health/mental-health';
+import { hardeningTypes } from '@src/health/mental-health';
 import { gameSettings, tooltip } from '@src/init';
-import { debounce } from '@src/utility/decorators';
 import type { FieldProps, FieldPropsRenderer } from '@src/utility/field-values';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
