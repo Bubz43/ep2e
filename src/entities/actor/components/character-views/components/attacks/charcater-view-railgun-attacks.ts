@@ -1,8 +1,6 @@
 import { formatArmorUsed } from '@src/combat/attack-formatting';
 import { startRangedAttack } from '@src/combat/attack-init';
-import type { AttackType } from '@src/combat/attacks';
-import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
-import type { BeamWeapon } from '@src/entities/item/proxies/beam-weapon';
+import type { Railgun } from '@src/entities/item/proxies/railgun';
 import { subscribeToEnvironmentChange } from '@src/features/environment';
 import {
   createFiringModeGroup,
@@ -17,17 +15,14 @@ import { openMenu } from '@src/open-menu';
 import { getWeaponRange } from '@src/success-test/range-modifiers';
 import { notEmpty, toggle } from '@src/utility/helpers';
 import { css, customElement, html, LitElement, property } from 'lit-element';
-import mix from 'mix-with/lib';
-import { compact, map } from 'remeda';
+import { compact } from 'remeda';
 import { requestCharacter } from '../../character-request-event';
 import styles from './attack-info-styles.scss';
 
-@customElement('character-view-beam-attacks')
-export class CharacterViewBeamAttacks extends mix(LitElement).with(
-  UseWorldTime,
-) {
+@customElement('character-view-railgun-attacks')
+export class CharacterViewRailgunAttacks extends LitElement {
   static get is() {
-    return 'character-view-beam-attacks' as const;
+    return 'character-view-railgun-attacks' as const;
   }
 
   static get styles() {
@@ -67,7 +62,7 @@ export class CharacterViewBeamAttacks extends mix(LitElement).with(
     ];
   }
 
-  @property({ attribute: false }) weapon!: BeamWeapon;
+  @property({ attribute: false }) weapon!: Railgun;
 
   private environmentUnsub: (() => void) | null = null;
 
@@ -84,8 +79,8 @@ export class CharacterViewBeamAttacks extends mix(LitElement).with(
     super.disconnectedCallback();
   }
 
-  private fire(attackType: AttackType, firingMode: FiringMode) {
-    const attack = this.weapon.attacks[attackType];
+  private fire(firingMode: FiringMode) {
+    const attack = this.weapon.attacks.primary;
     const { character, token } = requestCharacter(this);
 
     if (!attack || !character) return;
@@ -95,7 +90,7 @@ export class CharacterViewBeamAttacks extends mix(LitElement).with(
       token,
       weaponId: this.weapon.id,
       adjacentElement: this,
-      attackType,
+      attackType: 'primary',
     });
   }
 
@@ -116,6 +111,21 @@ export class CharacterViewBeamAttacks extends mix(LitElement).with(
     });
   }
 
+  private reloadAmmo(ev: MouseEvent) {
+    openMenu({
+      content: [
+        {
+          label: localize('reload'),
+          icon: html`<mwc-icon>refresh</mwc-icon>`,
+          disabled: this.weapon.fullyLoaded,
+          callback: () => {
+            this.weapon.reload();
+          },
+        },
+      ],
+    });
+  }
+
   private toggleBraced() {
     this.weapon.updater.path('data', 'state', 'braced').commit(toggle);
   }
@@ -125,11 +135,11 @@ export class CharacterViewBeamAttacks extends mix(LitElement).with(
       battery,
       editable,
       gearTraits,
-      hasSecondaryAttack,
       weaponTraits,
       accessories,
       totalCharge,
       fullyCharged,
+      ammoState,
     } = this.weapon;
     return html`
       <colored-tag type="info"
@@ -142,7 +152,6 @@ export class CharacterViewBeamAttacks extends mix(LitElement).with(
             <colored-tag
               type="usable"
               @click=${this.toggleBraced}
-              clickable
               ?disabled=${!editable}
               >${localize(
                 this.weapon.braced ? 'braced' : 'carried',
@@ -151,6 +160,19 @@ export class CharacterViewBeamAttacks extends mix(LitElement).with(
           `
         : ''}
 
+      <colored-tag
+        type="usable"
+        clickable
+        ?disabled=${!editable}
+        @click=${this.reloadAmmo}
+      >
+        <span>${localize('ammo')}</span>
+        <value-status
+          slot="after"
+          value=${ammoState.value}
+          max=${ammoState.max}
+        ></value-status>
+      </colored-tag>
       <colored-tag
         type="usable"
         clickable
@@ -176,8 +198,7 @@ export class CharacterViewBeamAttacks extends mix(LitElement).with(
           max=${battery.max}
         ></value-status>
       </colored-tag>
-      ${this.renderAttack('primary')}
-      ${hasSecondaryAttack ? this.renderAttack('secondary') : ''}
+      ${this.renderAttack()}
       ${[...gearTraits, ...weaponTraits, ...accessories].map(
         (trait) =>
           html`<colored-tag type="info">${localize(trait)}</colored-tag>`,
@@ -185,8 +206,8 @@ export class CharacterViewBeamAttacks extends mix(LitElement).with(
     `;
   }
 
-  private renderAttack(attackType: AttackType) {
-    const attack = this.weapon.attacks[attackType];
+  private renderAttack() {
+    const attack = this.weapon.attacks.primary;
     if (!attack) return '';
     const { availableShots, editable } = this.weapon;
     const info = compact([
@@ -196,8 +217,6 @@ export class CharacterViewBeamAttacks extends mix(LitElement).with(
           joinLabeledFormulas(attack.rollFormulas),
           formatArmorUsed(attack),
         ].join(' '),
-      notEmpty(attack.attackTraits) &&
-        map(attack.attackTraits, localize).join(', '),
       attack.notes,
     ]).join('. ');
 
@@ -212,19 +231,14 @@ export class CharacterViewBeamAttacks extends mix(LitElement).with(
                 ?disabled=${!editable || firingModeCost[mode] > availableShots}
                 clickable
                 title=${localize(mode)}
-                @click=${() => this.fire(attackType, mode)}
+                @click=${() => this.fire(mode)}
               >
                 ${localize('SHORT', mode)}
               </colored-tag>
             `,
           )}
         </div>
-        <colored-tag type="info" class="attack-info"
-          >${info}
-          ${this.weapon.hasSecondaryAttack
-            ? html` <span slot="after">${attack.label}</span> `
-            : ''}
-        </colored-tag>
+        <colored-tag type="info" class="attack-info">${info} </colored-tag>
       </div>
     `;
   }
@@ -232,6 +246,6 @@ export class CharacterViewBeamAttacks extends mix(LitElement).with(
 
 declare global {
   interface HTMLElementTagNameMap {
-    'character-view-beam-attacks': CharacterViewBeamAttacks;
+    'character-view-railgun-attacks': CharacterViewRailgunAttacks;
   }
 }

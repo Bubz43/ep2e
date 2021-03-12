@@ -283,8 +283,8 @@ export class ThrownAttackTest extends SkillTest {
               localize('action'),
             ].join(' '),
           ],
-          img: weapon?.nonDefaultImg,
-          description: weapon?.description,
+          img: weapon.nonDefaultImg,
+          description: weapon.description,
         },
         successTest: {
           ...testMessageData,

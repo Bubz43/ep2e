@@ -274,6 +274,8 @@ export class Firearm
           specialAmmo: shape.epFlags?.specialAmmo || null,
         },
       };
+      shapeData.data.state.equipped = this.equipped;
+
       this.updater.path('').store(shapeData);
 
       const myData = {

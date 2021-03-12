@@ -5,6 +5,7 @@ import { subscribeToEnvironmentChange } from '@src/features/environment';
 import { createFiringModeGroup } from '@src/features/firing-modes';
 import { localize } from '@src/foundry/localization';
 import { getWeaponRange } from '@src/success-test/range-modifiers';
+import { toggle } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { map } from 'remeda';
 import { requestCharacter } from '../../character-request-event';
@@ -58,6 +59,10 @@ export class CharacterViewSeekerAttacks extends LitElement {
     });
   };
 
+  private toggleBraced() {
+    this.weapon.updater.path('data', 'state', 'braced').commit(toggle);
+  }
+
   render() {
     const {
       missiles,
@@ -76,10 +81,20 @@ export class CharacterViewSeekerAttacks extends LitElement {
         <span slot="after">${getWeaponRange(this.weapon)}</span></colored-tag
       >
       <colored-tag type="info">${localize(firingMode)}</colored-tag>
-      ${[...gearTraits, ...weaponTraits, ...accessories].map(
-        (trait) =>
-          html`<colored-tag type="info">${localize(trait)}</colored-tag>`,
-      )}
+
+      ${this.weapon.isFixed
+        ? html`
+            <colored-tag
+              type="usable"
+              @click=${this.toggleBraced}
+              ?disabled=${!editable}
+              >${localize(
+                this.weapon.braced ? 'braced' : 'carried',
+              )}</colored-tag
+            >
+          `
+        : ''}
+
       <colored-tag
         clickable
         ?disabled=${!editable}
@@ -111,6 +126,10 @@ export class CharacterViewSeekerAttacks extends LitElement {
             .onAttack=${this.fire}
           ></character-view-explosive-attacks>`
         : ''}
+      ${[...gearTraits, ...weaponTraits, ...accessories].map(
+        (trait) =>
+          html`<colored-tag type="info">${localize(trait)}</colored-tag>`,
+      )}
     `;
   }
 }

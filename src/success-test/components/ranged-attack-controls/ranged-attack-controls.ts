@@ -31,6 +31,7 @@ import {
 import { CommonInterval } from '@src/features/time';
 import { readyCanvas } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
+import { joinLabeledFormulas } from '@src/foundry/rolls';
 import { overlay } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import {
@@ -227,10 +228,9 @@ export class RangedAttackControls extends LitElement {
       target,
       firing,
       skillState,
-      // damageFormulas,
+      damageModifiers,
       attack,
       canCallShot,
-      twoHanded,
     } = test;
 
     const {
@@ -243,13 +243,14 @@ export class RangedAttackControls extends LitElement {
       explosiveSettings,
       oneHanded,
       maxTargets,
-      carrying,
     } = firing;
-    const { attacks, isFixed, noClose, noPointBlank } = weapon ?? {};
+    const { attacks, isTwoHanded, noClose, noPointBlank } = weapon ?? {};
 
     // TODO noClose/NoPointBlank
 
-    // const joinedFormula = joinLabeledFormulas(damageFormulas);
+    const joinedFormula = attack?.rollFormulas.length
+      ? joinLabeledFormulas([...attack?.rollFormulas, ...damageModifiers])
+      : null;
 
     return html`
       ${character
@@ -379,7 +380,7 @@ export class RangedAttackControls extends LitElement {
               ${this.renderTriggerSettings(explosiveSettings)}
             `
           : ''}
-        ${twoHanded
+        ${isTwoHanded
           ? html`
               <mwc-check-list-item
                 ?selected=${!oneHanded}
@@ -389,16 +390,7 @@ export class RangedAttackControls extends LitElement {
               </mwc-check-list-item>
             `
           : ''}
-        ${isFixed
-          ? html`
-              <mwc-check-list-item
-                ?selected=${!!carrying}
-                @click=${() => firing.update({ carrying: !carrying })}
-              >
-                <span>${localize('carrying')}</span>
-              </mwc-check-list-item>
-            `
-          : ''}
+
         <li>
           ${renderAutoForm({
             props: { targetDistance, range },
@@ -429,6 +421,9 @@ export class RangedAttackControls extends LitElement {
               </wl-list-item>
             `
           : ''}
+        <wl-list-item class="damage-value">
+          ${joinedFormula || localize('noDamage')}
+        </wl-list-item>
       </ul>
 
       <success-test-footer

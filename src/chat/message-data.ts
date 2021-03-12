@@ -86,6 +86,7 @@ export type UsedExplosiveState = [
 export type ExplosiveMessageData = ExplosiveSettings & {
   explosive: ItemEntity<ItemType.Explosive>;
   state?: null | UsedExplosiveState;
+  showHeader?: boolean;
 };
 
 export type MeleeWeaponMessageData = MeleeWeaponSettings & {
@@ -187,6 +188,7 @@ export type SpecialTestData =
 export type RangedAttackMessageData = {
   weapon: RangedWeapon['data'];
   firingModeGroup: FiringModeGroup;
+  primaryAttack: boolean;
   damageModifiers?: LabeledFormula[];
   calledShot?: CalledShot | null;
 };
