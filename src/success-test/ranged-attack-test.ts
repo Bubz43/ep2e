@@ -382,12 +382,15 @@ export class RangedAttackTest extends SkillTest {
       firingModeGroup,
     } = firing;
 
+    // const missiles = weapon.type === ItemType.SeekerWeapon && weapon.missiles;
+
     await createMessage({
       data: {
         header: {
           heading: `${weapon.name} ${localize('rangedAttack')}`,
-          subheadings: [
+          subheadings: compact([
             this.name,
+            // missiles && `${missiles.name} - ${missiles.formattedSize}`,
             [
               `${action.type} ${
                 action.timeMod && action.type !== ActionType.Task
@@ -397,9 +400,9 @@ export class RangedAttackTest extends SkillTest {
               localize(action.subtype),
               localize('action'),
             ].join(' '),
-          ],
-          img: weapon?.nonDefaultImg,
-          description: weapon?.description,
+          ]),
+          img: weapon.nonDefaultImg,
+          description: weapon.description,
         },
         successTest: {
           ...testMessageData,
@@ -429,8 +432,8 @@ export class RangedAttackTest extends SkillTest {
             ? {
                 ...explosiveSettings,
                 attackType: primaryAttack ? 'primary' : 'secondary',
-
                 explosive: weapon.missiles.getDataCopy(),
+                showHeader: true,
               }
             : undefined,
 

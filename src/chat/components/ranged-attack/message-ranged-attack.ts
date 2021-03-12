@@ -145,7 +145,7 @@ export class MessageRangedAttack extends MessageElement {
   }
 
   render() {
-    const { attacks, name } = this.weapon;
+    const { attacks, name, type } = this.weapon;
     const { firingModeGroup, calledShot, primaryAttack } = this.rangedAttack;
     const { disabled } = this;
     const options: string[] = [];
@@ -160,7 +160,10 @@ export class MessageRangedAttack extends MessageElement {
     return html`
       ${this.successTest ? this.renderOppose() : ''}
       <p class="options">${options.join(', ')}</p>
-      ${!disabled && this.successTest && notEmpty(attack?.rollFormulas)
+      ${!disabled &&
+      this.successTest &&
+      type !== ItemType.SeekerWeapon &&
+      notEmpty(attack?.rollFormulas)
         ? html`
             <mwc-button
               outlined

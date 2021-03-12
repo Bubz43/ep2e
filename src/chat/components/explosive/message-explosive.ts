@@ -1,7 +1,4 @@
-import type {
-  ExplosiveMessageData,
-  UsedExplosiveState,
-} from '@src/chat/message-data';
+import type { ExplosiveMessageData } from '@src/chat/message-data';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { ExplosiveTrigger } from '@src/data-enums';
 import { ExplosiveSettingsForm } from '@src/entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
@@ -106,10 +103,18 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
   }
 
   render() {
-    const { state, trigger, demolition } = this.explosiveUse;
+    const { state, trigger, demolition, showHeader } = this.explosiveUse;
     const { explosive, disabled } = this;
     // TODO detonation options
     return html`
+      ${showHeader
+        ? html`
+            <message-header
+              ?nested=${!!this.message.epFlags?.header}
+              .data=${{ ...explosive.messageHeader }}
+            ></message-header>
+          `
+        : ''}
       ${!disabled
         ? html`
             <div class="settings">

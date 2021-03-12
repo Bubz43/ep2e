@@ -86,6 +86,7 @@ export type UsedExplosiveState = [
 export type ExplosiveMessageData = ExplosiveSettings & {
   explosive: ItemEntity<ItemType.Explosive>;
   state?: null | UsedExplosiveState;
+  showHeader?: boolean;
 };
 
 export type MeleeWeaponMessageData = MeleeWeaponSettings & {
