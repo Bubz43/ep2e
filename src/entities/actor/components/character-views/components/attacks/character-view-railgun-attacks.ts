@@ -111,7 +111,7 @@ export class CharacterViewRailgunAttacks extends LitElement {
     });
   }
 
-  private reloadAmmo(ev: MouseEvent) {
+  private reloadAmmo() {
     openMenu({
       content: [
         {
