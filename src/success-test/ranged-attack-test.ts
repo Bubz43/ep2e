@@ -33,7 +33,7 @@ import type { LabeledFormula } from '@src/foundry/rolls';
 import { distanceBetweenTokens } from '@src/foundry/token-helpers';
 import { arrayOf, notEmpty } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
-import { compact, last, merge } from 'remeda';
+import { compact, last, merge, take } from 'remeda';
 import type { SetRequired } from 'type-fest';
 import { getRangeModifier, getWeaponRange } from './range-modifiers';
 import { SkillTest, SkillTestInit } from './skill-test';
@@ -55,7 +55,8 @@ export class RangedAttackTest extends SkillTest {
   readonly firing: WithUpdate<{
     weapon: RangedAttackTestInit['weapon'];
     primaryAttack: boolean;
-    attackTarget?: Token | null;
+    attackTargets: Set<Token>;
+    maxTargets: number;
     targetDistance: number;
     range: number;
     calledShot?: CalledShot | null;
@@ -104,18 +105,29 @@ export class RangedAttackTest extends SkillTest {
 
     this.character = init.character;
 
-    const attackTarget = [...game.user.targets][0];
+    const maxTargets =
+      firingModeGroup[1] === MultiAmmoOption.AdjacentTargets
+        ? multiAmmoValues[firingModeGroup[0]].adjacentTargets
+        : 1;
 
+    const attackTargets = new Set(take([...game.user.targets], maxTargets));
+    const { token } = this;
     this.firing = {
-      attackTarget,
+      attackTargets: attackTargets,
       range: getWeaponRange(weapon),
       targetDistance:
-        attackTarget && this.token
-          ? Math.ceil(distanceBetweenTokens(this.token, attackTarget))
+        token && notEmpty(attackTargets)
+          ? Math.max(
+              ...[...attackTargets].map((target) =>
+                Math.ceil(distanceBetweenTokens(token, target)),
+              ),
+            )
           : 10,
+
       primaryAttack,
       weapon,
       firingModeGroup: firingModeGroup,
+      maxTargets: 1,
       explosiveSettings:
         weapon.type === ItemType.SeekerWeapon
           ? {
@@ -152,29 +164,25 @@ export class RangedAttackTest extends SkillTest {
           );
         }
 
-        if (changed.attackTarget) {
+        if (changed.attackTargets) {
           draft.modifiers.effects = this.getModifierEffects(
             draft.skillState.skill,
             draft.action,
           );
-          if (draft.firing.attackTarget) {
+          for (const attackTarget of draft.firing.attackTargets) {
             for (const [effect, active] of this.getAttackTargetEffects(
-              draft.firing.attackTarget as Token,
+              attackTarget as Token,
               draft.skillState.skill,
               draft.action,
             ) || []) {
               draft.modifiers.effects.set(effect, active);
             }
           }
-        }
-
-        if (changed.attackTarget !== undefined) {
           draft.firing.targetDistance =
-            draft.firing.attackTarget && this.token
-              ? Math.ceil(
-                  distanceBetweenTokens(
-                    this.token,
-                    draft.firing.attackTarget as Token,
+            token && notEmpty(draft.firing.attackTargets)
+              ? Math.max(
+                  ...[...draft.firing.attackTargets].map((target) =>
+                    Math.ceil(distanceBetweenTokens(token, target as Token)),
                   ),
                 )
               : 10;
@@ -212,14 +220,20 @@ export class RangedAttackTest extends SkillTest {
       }),
     };
 
-    if (this.firing.attackTarget) {
+    for (const attackTarget of this.firing.attackTargets) {
       for (const [effect, active] of this.getAttackTargetEffects(
-        this.firing.attackTarget,
+        attackTarget,
         this.skillState.skill,
         this.action,
       ) || []) {
         this.modifiers.effects.set(effect, active);
       }
+    }
+
+    if (this.firing.firingModeGroup[1] === MultiAmmoOption.ConcentratedToHit) {
+      this.toHitModifier.value =
+        multiAmmoValues[this.firing.firingModeGroup[0]].concentratedToHit;
+      this.modifiers.simple.set(this.toHitModifier.id, this.toHitModifier);
     }
 
     const { rating, modifier } = getRangeModifier(
@@ -292,7 +306,7 @@ export class RangedAttackTest extends SkillTest {
     const {
       weapon,
       primaryAttack,
-      attackTarget,
+      attackTargets,
       explosiveSettings,
       calledShot,
       firingModeGroup,
@@ -349,12 +363,15 @@ export class RangedAttackTest extends SkillTest {
               }
             : undefined,
 
-        targets: compact([
-          attackTarget?.scene && {
-            tokenId: attackTarget.id,
-            sceneId: attackTarget.scene.id,
-          },
-        ]),
+        targets: compact(
+          [...attackTargets].map(
+            (attackTarget) =>
+              attackTarget.scene && {
+                tokenId: attackTarget.id,
+                sceneId: attackTarget.scene.id,
+              },
+          ),
+        ),
       },
 
       entity: this.token ?? this.character, // TODO account for item sources,

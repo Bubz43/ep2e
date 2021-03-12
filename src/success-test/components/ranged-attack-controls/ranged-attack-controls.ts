@@ -46,6 +46,7 @@ import {
   query,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
+import { take } from 'remeda';
 import { identity, Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';
 import styles from './ranged-attack-controls.scss';
@@ -100,12 +101,14 @@ export class RangedAttackControls extends LitElement {
   }
 
   private setTarget = () => {
-    const attackTarget = this.test?.firing.attackTarget;
+    const attackTarget = this.test?.firing.attackTargets;
     const { targets } = game.user;
-    if (attackTarget && !targets.has(attackTarget))
-      this.test?.firing.update({ attackTarget: null });
-    else if (targets.size)
-      this.test?.firing.update({ attackTarget: [...targets][0] });
+    this.test?.firing.update({
+      attackTargets: new Set(
+        take([...targets], this.test?.firing.maxTargets || 1),
+      ),
+    });
+
     this.requestUpdate();
   };
 
@@ -232,7 +235,7 @@ export class RangedAttackControls extends LitElement {
     const {
       weapon,
       primaryAttack,
-      attackTarget,
+      attackTargets,
       targetDistance,
       range,
       calledShot,
@@ -303,19 +306,30 @@ export class RangedAttackControls extends LitElement {
           >
 
           <wl-list-item>
-            <span>${localize('target')}: ${attackTarget?.name ?? ' - '}</span>
+            <span
+              >${localize('targets')}:
+              ${notEmpty(attackTargets)
+                ? [...attackTargets]
+                    .map((attackTarget) => attackTarget.name)
+                    .join(', ')
+                : '-'}</span
+            >
             <sl-animated-list class="targets">
-              ${repeat(
-                game.user.targets,
-                identity,
-                (token) => html`
+              ${repeat(game.user.targets, identity, (token) => {
+                const active = attackTargets.has(token);
+                return html`
                   <mwc-icon-button
-                    class=${token === attackTarget ? 'active' : ''}
-                    @click=${() => firing.update({ attackTarget: token })}
+                    class=${active ? 'active' : ''}
+                    @click=${() => {
+                      const newTargets = new Set([...attackTargets]);
+                      if (active) newTargets.delete(token);
+                      else newTargets.add(token);
+                      firing.update({ attackTargets: newTargets });
+                    }}
                     ><img src=${token.data.img}
                   /></mwc-icon-button>
-                `,
-              )}
+                `;
+              })}
             </sl-animated-list>
           </wl-list-item>
         </section>
