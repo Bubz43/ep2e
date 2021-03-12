@@ -48,7 +48,10 @@ export class CharacterViewBeamAttacks extends mix(LitElement).with(
           width: 100%;
           display: flex;
           flex-flow: row wrap;
-          padding: 0.25rem 0.5rem 0;
+          padding: 0.25rem 0.5rem;
+        }
+        .attack + .attack {
+          padding-top: 0;
         }
         .battery {
           display: inline-flex;
@@ -129,10 +132,7 @@ export class CharacterViewBeamAttacks extends mix(LitElement).with(
         >${localize('range')}
         <span slot="after">${getWeaponRange(this.weapon)}</span>
       </colored-tag>
-      ${[...gearTraits, ...weaponTraits, ...accessories].map(
-        (trait) =>
-          html`<colored-tag type="info">${localize(trait)}</colored-tag>`,
-      )}
+
       <colored-tag
         type="usable"
         clickable
@@ -160,6 +160,10 @@ export class CharacterViewBeamAttacks extends mix(LitElement).with(
       </colored-tag>
       ${this.renderAttack('primary')}
       ${hasSecondaryAttack ? this.renderAttack('secondary') : ''}
+      ${[...gearTraits, ...weaponTraits, ...accessories].map(
+        (trait) =>
+          html`<colored-tag type="info">${localize(trait)}</colored-tag>`,
+      )}
     `;
   }
 
@@ -181,12 +185,6 @@ export class CharacterViewBeamAttacks extends mix(LitElement).with(
 
     return html`
       <div class="attack">
-        <colored-tag type="info" class="attack-info"
-          >${info}
-          ${this.weapon.hasSecondaryAttack
-            ? html` <span slot="after">${attack.label}</span> `
-            : ''}
-        </colored-tag>
         <div class="firing-modes">
           ${attack.firingModes.map(
             (mode) => html`
@@ -203,6 +201,12 @@ export class CharacterViewBeamAttacks extends mix(LitElement).with(
             `,
           )}
         </div>
+        <colored-tag type="info" class="attack-info"
+          >${info}
+          ${this.weapon.hasSecondaryAttack
+            ? html` <span slot="after">${attack.label}</span> `
+            : ''}
+        </colored-tag>
       </div>
     `;
   }

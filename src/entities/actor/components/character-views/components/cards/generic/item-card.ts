@@ -2,6 +2,7 @@ import { ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
 import { format, localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
+import { openMenu } from '@src/open-menu';
 import { customElement, html, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { requestCharacter } from '../../../character-request-event';
@@ -22,6 +23,19 @@ export class ItemCard extends ItemCardBase {
     character &&
       'coating' in this.item &&
       openCoatingMenu(ev, character, this.item);
+  }
+
+  private openShapeMenu(ev: MouseEvent) {
+    const { item } = this;
+    if (!('shapeChanging' in item)) return;
+    openMenu({
+      header: { heading: `${item.name} - ${localize('shape')}` },
+      position: ev,
+      content: [...item.shapes].map(([id, shape]) => ({
+        label: shape.shapeName,
+        callback: () => item.swapShape(id),
+      })),
+    });
   }
 
   renderHeaderButtons() {
@@ -49,6 +63,15 @@ export class ItemCard extends ItemCardBase {
           @click=${this.openCoatingSelectMenu}
           ?disabled=${!item.editable}
         ></mwc-icon-button>`
+      : ''}
+    ${'shapeChanging' in item && item.shapeChanging
+      ? html`
+          <mwc-icon-button
+            icon="transform"
+            @click=${this.openShapeMenu}
+            ?disabled=${!editable}
+          ></mwc-icon-button>
+        `
       : ''}
     ${'toggleEquipped' in item && !item.equipped
       ? html`

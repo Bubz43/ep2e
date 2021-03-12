@@ -17,12 +17,6 @@
   .headings {
     padding: 0.15rem 0;
   }
-  // h3 {
-  //   font-size: 1rem;
-  // }
-  // .details {
-  //   font-size: 0.65rem;
-  // }
 }
 
 header {
@@ -80,7 +74,6 @@ img {
   transform: translateY(-50%);
   z-index: 1;
   opacity: 0.85;
-  // border-radius: 100%;
 }
 
 h4 {
@@ -95,8 +88,12 @@ h4 {
   border-top: 2px groove alphav(var(--color-border), 0.5);
   padding: 0.5rem 1rem;
 
+  height: 2.5em;
+  overflow: hidden;
+
   &.expanded {
     white-space: unset;
+    height: unset;
   }
   &.hidden {
     text-align: center;

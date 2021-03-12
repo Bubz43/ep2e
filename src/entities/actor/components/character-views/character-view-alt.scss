@@ -380,6 +380,8 @@ character-view-psi {
     width: 400px;
     min-width: 100%;
     background: linear-gradient(to top, var(--color-bg-alt), transparent);
+    box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.664);
+    z-index: 1;
   }
 }
 
@@ -436,6 +438,7 @@ character-view-psi {
   grid-template-rows: 1fr;
   width: 400px;
   min-width: 100%;
+  z-index: 1;
   > * {
     grid-area: content;
   }
@@ -592,7 +595,9 @@ footer {
 }
 
 .details {
-  column-count: 2;
+  display: grid;
+  column-gap: 0.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   border-bottom: 2px groove var(--color-border);
   padding: 0 0.25rem 0.25rem;
 }

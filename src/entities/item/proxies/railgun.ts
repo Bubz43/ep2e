@@ -210,6 +210,7 @@ export class Railgun
         description: this.description,
         ...this.cost,
       };
+      shapeData.data.state.equipped = this.equipped;
       this.updater.path('').store(shapeData);
 
       const myData = {

@@ -76,10 +76,7 @@ export class CharacterViewSeekerAttacks extends LitElement {
         <span slot="after">${getWeaponRange(this.weapon)}</span></colored-tag
       >
       <colored-tag type="info">${localize(firingMode)}</colored-tag>
-      ${[...gearTraits, ...weaponTraits, ...accessories].map(
-        (trait) =>
-          html`<colored-tag type="info">${localize(trait)}</colored-tag>`,
-      )}
+
       <colored-tag
         clickable
         ?disabled=${!editable}
@@ -111,6 +108,10 @@ export class CharacterViewSeekerAttacks extends LitElement {
             .onAttack=${this.fire}
           ></character-view-explosive-attacks>`
         : ''}
+      ${[...gearTraits, ...weaponTraits, ...accessories].map(
+        (trait) =>
+          html`<colored-tag type="info">${localize(trait)}</colored-tag>`,
+      )}
     `;
   }
 }

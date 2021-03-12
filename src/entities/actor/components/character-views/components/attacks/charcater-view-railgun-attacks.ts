@@ -43,7 +43,10 @@ export class CharacterViewRailgunAttacks extends LitElement {
           width: 100%;
           display: flex;
           flex-flow: row wrap;
-          padding: 0.25rem 0.5rem 0;
+          padding: 0.25rem 0.5rem;
+        }
+        .attack + .attack {
+          padding-top: 0;
         }
         .battery {
           display: inline-flex;
@@ -112,10 +115,6 @@ export class CharacterViewRailgunAttacks extends LitElement {
     //   openMenu({})
   }
 
-  private shapeMenu(ev: MouseEvent) {
-    //   openMenu({})
-  }
-
   render() {
     const {
       battery,
@@ -127,29 +126,12 @@ export class CharacterViewRailgunAttacks extends LitElement {
       fullyCharged,
       ammoState,
     } = this.weapon;
-    const shapes = this.weapon.shapeChanging ? this.weapon.shapes : null;
     return html`
-      ${notEmpty(shapes)
-        ? html`
-            <colored-tag
-              type="usable"
-              clickable
-              ?disabled=${!editable}
-              @click=${this.shapeMenu}
-            >
-              <span>${localize('shape')}</span>
-              <span slot="after">${this.weapon.shapeName}</span>
-            </colored-tag>
-          `
-        : ''}
       <colored-tag type="info"
         >${localize('range')}
         <span slot="after">${getWeaponRange(this.weapon)}</span>
       </colored-tag>
-      ${[...gearTraits, ...weaponTraits, ...accessories].map(
-        (trait) =>
-          html`<colored-tag type="info">${localize(trait)}</colored-tag>`,
-      )}
+
       <colored-tag
         type="usable"
         clickable
@@ -189,6 +171,10 @@ export class CharacterViewRailgunAttacks extends LitElement {
         ></value-status>
       </colored-tag>
       ${this.renderAttack()}
+      ${[...gearTraits, ...weaponTraits, ...accessories].map(
+        (trait) =>
+          html`<colored-tag type="info">${localize(trait)}</colored-tag>`,
+      )}
     `;
   }
 
@@ -208,7 +194,6 @@ export class CharacterViewRailgunAttacks extends LitElement {
 
     return html`
       <div class="attack">
-        <colored-tag type="info" class="attack-info">${info} </colored-tag>
         <div class="firing-modes">
           ${attack.firingModes.map(
             (mode) => html`
@@ -225,6 +210,7 @@ export class CharacterViewRailgunAttacks extends LitElement {
             `,
           )}
         </div>
+        <colored-tag type="info" class="attack-info">${info} </colored-tag>
       </div>
     `;
   }
