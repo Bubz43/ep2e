@@ -76,6 +76,24 @@ export class Railgun
     return this.epData.range;
   }
 
+  swapBattery() {
+    return this.updateCharge({ charge: this.battery.max });
+  }
+
+  updateCharge(changed: Partial<Omit<Railgun['battery'], 'recharge'>>) {
+    const max = changed.max ?? this.battery.max;
+    const charge = changed.charge ?? this.battery.charge;
+    const diff = max - charge;
+    return this.updater.path('data', 'battery').commit({
+      ...changed,
+      recharge: (diff / max) * CommonInterval.Hour * 4 + currentWorldTimeMS(),
+    });
+  }
+
+  get fullyCharged() {
+    return this.totalCharge === this.battery.max;
+  }
+
   fire(shots: number) {
     return this.updater
       .path('data', 'ammo', 'value')

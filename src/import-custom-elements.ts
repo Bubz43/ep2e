@@ -80,6 +80,7 @@ import { CharacterViewMeleeWeaponAttacks } from './entities/actor/components/cha
 import { CharacterViewSeekerAttacks } from './entities/actor/components/character-views/components/attacks/character-view-seeker-attacks';
 import { CharacterViewSoftwareAttacks } from './entities/actor/components/character-views/components/attacks/character-view-software-attacks';
 import { CharacterViewThrownWeaponAttacks } from './entities/actor/components/character-views/components/attacks/character-view-thrown-weapon-attacks';
+import { CharacterViewRailgunAttacks } from './entities/actor/components/character-views/components/attacks/charcater-view-railgun-attacks';
 import { ExplosiveSettingsForm } from './entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
 import { CharacterViewAttacksSection } from './entities/actor/components/character-views/components/attacks/section/character-view-attacks-section';
 import { ConsumableCard } from './entities/actor/components/character-views/components/cards/consumable/consumable-card';
@@ -240,6 +241,7 @@ CharacterViewExplosiveAttacks;
 CharacterViewMeleeWeaponAttacks;
 CharacterViewSeekerAttacks;
 CharacterViewBeamAttacks;
+CharacterViewRailgunAttacks;
 CharacterViewThrownWeaponAttacks;
 ExplosiveSettingsForm;
 CharacterViewAttacksSection;

@@ -1,36 +1,18 @@
 import {
-  formatLabeledFormulas,
   formatArmorUsed,
+  formatLabeledFormulas,
 } from '@src/combat/attack-formatting';
 import {
   renderNumberField,
   renderSelectField,
-  renderLabeledCheckbox,
-  renderTimeField,
-  renderFormulaField,
-  renderTextareaField,
   renderTextInput,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
-import {
-  enumValues,
-  KineticWeaponClass,
-  PhysicalWare,
-  RangedWeaponAccessory,
-} from '@src/data-enums';
+import { enumValues, KineticWeaponClass } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
-import { ItemType } from '@src/entities/entity-types';
 import { Railgun } from '@src/entities/item/proxies/railgun';
-import { pairList } from '@src/features/check-list';
 import { idProp } from '@src/features/feature-helpers';
-import { FiringMode } from '@src/features/firing-modes';
-import { toMilliseconds } from '@src/features/modify-milliseconds';
-import {
-  CommonInterval,
-  currentWorldTimeMS,
-  prettyMilliseconds,
-} from '@src/features/time';
 import {
   DropType,
   handleDrop,
@@ -42,12 +24,11 @@ import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import mix from 'mix-with/lib';
-import { createPipe, identity, map, mapToObj, objOf } from 'remeda';
+import { identity } from 'remeda';
 import {
   accessoriesListStyles,
   complexityForm,
   renderComplexityFields,
-  renderGearTraitCheckboxes,
   renderKineticAttackEdit,
   renderKineticWeaponSidebar,
   renderRangedAccessoriesEdit,
@@ -219,17 +200,7 @@ export class RailgunForm extends mix(Base).with(UseWorldTime) {
             <sl-header heading=${localize('battery')}></sl-header>
             ${renderAutoForm({
               props: this.item.battery,
-              update: (changed, orig) => {
-                const max = changed.max ?? orig.max;
-                const charge = changed.charge ?? orig.charge;
-                const diff = max - charge;
-                this.item.updater.path('data', 'battery').commit({
-                  ...changed,
-                  recharge:
-                    (diff / max) * CommonInterval.Hour * 4 +
-                    currentWorldTimeMS(),
-                });
-              },
+              update: (changed) => this.item.updateCharge(changed),
               disabled,
               classes: 'battery-form',
               fields: ({ charge, max }) => [
