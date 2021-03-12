@@ -90,6 +90,10 @@ export class BeamWeapon
     return this.epData.battery;
   }
 
+  get fullyCharged() {
+    return this.totalCharge === this.battery.max;
+  }
+
   get fullType() {
     return pipe(
       [this.wareType, this.type] as const,
@@ -98,20 +102,27 @@ export class BeamWeapon
     ).join(' ');
   }
 
-  get rechargedBattery() {
+  get timeTillFullyCharged() {
+    return this.battery.recharge - currentWorldTimeMS();
+  }
+
+  private get regainedCharge() {
     const { max, charge } = this.battery;
-    const diff = this.battery.recharge - currentWorldTimeMS();
-    const chargeDiff = max - charge;
-    const maxGain = clamp(
-      Math.floor((diff / (CommonInterval.Hour * 4)) * max),
-      { max: chargeDiff },
+    if (charge === max) return 0;
+
+    const { timeTillFullyCharged } = this;
+    const spentCharge = max - charge;
+    if (timeTillFullyCharged <= 0) return spentCharge;
+
+    const gainRate = (CommonInterval.Hour * 4) / max;
+    return Math.floor(
+      (spentCharge * gainRate - timeTillFullyCharged) / gainRate,
     );
-    return diff <= 0 ? max - charge : Math.abs(maxGain - chargeDiff);
   }
 
   get totalCharge() {
     const { max, charge } = this.battery;
-    return clamp(charge + this.rechargedBattery, { min: charge, max });
+    return clamp(charge + this.regainedCharge, { min: charge, max });
   }
 
   get attacks() {

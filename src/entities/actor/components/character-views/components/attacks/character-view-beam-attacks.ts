@@ -1,6 +1,7 @@
 import { formatArmorUsed } from '@src/combat/attack-formatting';
 import { startRangedAttack } from '@src/combat/attack-init';
 import type { AttackType } from '@src/combat/attacks';
+import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import type { BeamWeapon } from '@src/entities/item/proxies/beam-weapon';
 import { subscribeToEnvironmentChange } from '@src/features/environment';
 import {
@@ -8,6 +9,7 @@ import {
   FiringMode,
   firingModeCost,
 } from '@src/features/firing-modes';
+import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
@@ -15,12 +17,15 @@ import { openMenu } from '@src/open-menu';
 import { getWeaponRange } from '@src/success-test/range-modifiers';
 import { notEmpty } from '@src/utility/helpers';
 import { css, customElement, html, LitElement, property } from 'lit-element';
+import mix from 'mix-with/lib';
 import { compact, map } from 'remeda';
 import { requestCharacter } from '../../character-request-event';
 import styles from './attack-info-styles.scss';
 
 @customElement('character-view-beam-attacks')
-export class CharacterViewBeamAttacks extends LitElement {
+export class CharacterViewBeamAttacks extends mix(LitElement).with(
+  UseWorldTime,
+) {
   static get is() {
     return 'character-view-beam-attacks' as const;
   }
@@ -91,7 +96,7 @@ export class CharacterViewBeamAttacks extends LitElement {
             'complex',
           )} ${localize('action')}) `,
           callback: () => this.weapon.swapBattery(),
-          disabled: this.weapon.totalCharge === this.weapon.battery.max,
+          disabled: this.weapon.fullyCharged,
         },
       ],
       position: ev,
@@ -107,6 +112,7 @@ export class CharacterViewBeamAttacks extends LitElement {
       weaponTraits,
       accessories,
       totalCharge,
+      fullyCharged,
     } = this.weapon;
     return html`
       <colored-tag type="info"
@@ -123,7 +129,12 @@ export class CharacterViewBeamAttacks extends LitElement {
         ?disabled=${!editable}
         @click=${this.replaceBattery}
       >
-        <span>${localize('battery')}</span>
+        <span
+          >${localize('battery')}
+          ${fullyCharged
+            ? ''
+            : prettyMilliseconds(this.weapon.timeTillFullyCharged)}
+        </span>
         <value-status
           slot="after"
           value=${totalCharge}
