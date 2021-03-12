@@ -590,3 +590,21 @@ footer {
     }
   }
 }
+
+.details {
+  column-count: 2;
+  border-bottom: 2px groove var(--color-border);
+  padding: 0 0.25rem 0.25rem;
+}
+
+.detail {
+  display: inline-block;
+  padding: 0.15rem;
+  .value {
+    color: var(--color-text-lighter);
+  }
+}
+
+enriched-html {
+  padding: 0 0.25rem;
+}
