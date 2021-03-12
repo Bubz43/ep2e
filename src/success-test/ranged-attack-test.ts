@@ -63,6 +63,7 @@ export class RangedAttackTest extends SkillTest {
     firingModeGroup: FiringModeGroup;
     explosiveSettings?: ExplosiveSettings | null;
     oneHanded?: boolean;
+    carrying?: boolean;
   }>;
 
   readonly calledShotModifier = createSuccessTestModifier({
@@ -74,6 +75,13 @@ export class RangedAttackTest extends SkillTest {
     name: capitalize(
       `${localize('wieldedWith')} ${localize('oneHand')}`.toLocaleLowerCase(),
     ),
+    value: -20,
+  });
+
+  // TODO Long modifier in melee
+
+  readonly carryingFixedModifier = createSuccessTestModifier({
+    name: `${localize('carrying')} ${localize('fixed')}`,
     value: -20,
   });
 
@@ -127,7 +135,7 @@ export class RangedAttackTest extends SkillTest {
       primaryAttack,
       weapon,
       firingModeGroup: firingModeGroup,
-      maxTargets: 1,
+      maxTargets,
       explosiveSettings:
         weapon.type === ItemType.SeekerWeapon
           ? {
@@ -140,6 +148,7 @@ export class RangedAttackTest extends SkillTest {
           draft.firing.primaryAttack = true;
           draft.firing.calledShot = null;
           draft.firing.oneHanded = false;
+          draft.firing.carrying = false;
           draft.firing.range = getWeaponRange(
             draft.firing.weapon as RangedWeapon,
           );
@@ -164,32 +173,40 @@ export class RangedAttackTest extends SkillTest {
           );
         }
 
-        if (changed.attackTargets) {
-          draft.modifiers.effects = this.getModifierEffects(
+        if (
+          draft.firing.firingModeGroup[1] === MultiAmmoOption.AdjacentTargets
+        ) {
+          draft.firing.maxTargets =
+            multiAmmoValues[draft.firing.firingModeGroup[0]].adjacentTargets;
+        } else draft.firing.maxTargets = 1;
+
+        draft.firing.attackTargets = new Set(
+          take([...draft.firing.attackTargets], draft.firing.maxTargets),
+        );
+
+        draft.modifiers.effects = this.getModifierEffects(
+          draft.skillState.skill,
+          draft.action,
+        );
+        for (const attackTarget of draft.firing.attackTargets) {
+          for (const [effect, active] of this.getAttackTargetEffects(
+            attackTarget as Token,
             draft.skillState.skill,
             draft.action,
-          );
-          for (const attackTarget of draft.firing.attackTargets) {
-            for (const [effect, active] of this.getAttackTargetEffects(
-              attackTarget as Token,
-              draft.skillState.skill,
-              draft.action,
-            ) || []) {
-              draft.modifiers.effects.set(effect, active);
-            }
+          ) || []) {
+            draft.modifiers.effects.set(effect, active);
           }
-          draft.firing.targetDistance =
-            token && notEmpty(draft.firing.attackTargets)
-              ? Math.max(
-                  ...[...draft.firing.attackTargets].map((target) =>
-                    Math.ceil(distanceBetweenTokens(token, target as Token)),
-                  ),
-                )
-              : 10;
         }
+        draft.firing.targetDistance =
+          token && notEmpty(draft.firing.attackTargets)
+            ? Math.max(
+                ...[...draft.firing.attackTargets].map((target) =>
+                  Math.ceil(distanceBetweenTokens(token, target as Token)),
+                ),
+              )
+            : 10;
 
         const { simple } = draft.modifiers;
-
         if (
           draft.firing.firingModeGroup[1] === MultiAmmoOption.ConcentratedToHit
         ) {
@@ -198,11 +215,15 @@ export class RangedAttackTest extends SkillTest {
           simple.set(draft.toHitModifier.id, draft.toHitModifier);
         } else simple.delete(draft.toHitModifier.id);
 
-        if (
-          draft.firing.weapon?.isTwoHanded &&
-          draft.firing.oneHanded &&
-          !this.largeMorph
-        ) {
+        if (draft.firing.weapon.isFixed && draft.firing.carrying) {
+          simple.set(this.carryingFixedModifier.id, this.carryingFixedModifier);
+        } else simple.delete(this.carryingFixedModifier.id);
+
+        const twoHanded =
+          draft.firing.weapon.isTwoHanded ||
+          (draft.firing.weapon.isFixed && !!draft.firing.carrying);
+
+        if (twoHanded && draft.firing.oneHanded && !this.largeMorph) {
           simple.set(this.twoHandedModifier.id, this.twoHandedModifier);
         } else simple.delete(this.twoHandedModifier.id);
 
@@ -243,6 +264,11 @@ export class RangedAttackTest extends SkillTest {
     this.rangeModifier.name = localize(rating);
     this.rangeModifier.value = modifier;
     this.modifiers.simple.set(this.rangeModifier.id, this.rangeModifier);
+  }
+
+  get twoHanded() {
+    const { weapon, carrying } = this.firing;
+    return weapon.isTwoHanded || (weapon.isFixed && !!carrying);
   }
 
   protected getAttackTargetEffects(

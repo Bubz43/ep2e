@@ -1452,7 +1452,8 @@ type LangEntries =
   | 'grenades'
   | 'meshAttack'
   | 'partially'
-  | 'swap';
+  | 'swap'
+  | 'carrying';
 type FullNames =
   | 'cog'
   | 'int'

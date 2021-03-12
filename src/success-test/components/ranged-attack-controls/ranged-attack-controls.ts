@@ -230,6 +230,7 @@ export class RangedAttackControls extends LitElement {
       // damageFormulas,
       attack,
       canCallShot,
+      twoHanded,
     } = test;
 
     const {
@@ -241,9 +242,11 @@ export class RangedAttackControls extends LitElement {
       calledShot,
       explosiveSettings,
       oneHanded,
+      maxTargets,
+      carrying,
     } = firing;
     const { morphSize } = character;
-    const { attacks } = weapon ?? {};
+    const { attacks, isFixed } = weapon ?? {};
 
     // const joinedFormula = joinLabeledFormulas(damageFormulas);
 
@@ -307,7 +310,10 @@ export class RangedAttackControls extends LitElement {
 
           <wl-list-item>
             <span
-              >${localize('targets')}:
+              >${localize('attack')}
+              ${maxTargets === 1
+                ? localize('target')
+                : `${localize('targets')} (${maxTargets})`}:
               ${notEmpty(attackTargets)
                 ? [...attackTargets]
                     .map((attackTarget) => attackTarget.name)
@@ -320,6 +326,7 @@ export class RangedAttackControls extends LitElement {
                 return html`
                   <mwc-icon-button
                     class=${active ? 'active' : ''}
+                    ?disabled=${!active && attackTargets.size === maxTargets}
                     @click=${() => {
                       const newTargets = new Set([...attackTargets]);
                       if (active) newTargets.delete(token);
@@ -371,13 +378,23 @@ export class RangedAttackControls extends LitElement {
               ${this.renderTriggerSettings(explosiveSettings)}
             `
           : ''}
-        ${weapon.isTwoHanded
+        ${twoHanded
           ? html`
               <mwc-check-list-item
                 ?selected=${!oneHanded}
                 @click=${() => firing.update({ oneHanded: !oneHanded })}
               >
                 <span>${localize('twoHanded')}</span>
+              </mwc-check-list-item>
+            `
+          : ''}
+        ${isFixed
+          ? html`
+              <mwc-check-list-item
+                ?selected=${!!carrying}
+                @click=${() => firing.update({ carrying: !carrying })}
+              >
+                <span>${localize('carrying')}</span>
               </mwc-check-list-item>
             `
           : ''}
