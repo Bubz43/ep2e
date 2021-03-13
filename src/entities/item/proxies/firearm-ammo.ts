@@ -33,6 +33,12 @@ export class FirearmAmmo extends mix(Base).with(
     this.loaded = loaded;
   }
 
+  get fullName() {
+    return `${this.name} (${this.quantity}) ${
+      this.canCarryPayload ? `[${this.payload?.name || localize('empty')}]` : ''
+    }`;
+  }
+
   get fullType() {
     return `${localize(this.type)} (${localize(this.ammoClass)})`;
   }

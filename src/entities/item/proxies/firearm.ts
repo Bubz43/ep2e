@@ -67,6 +67,10 @@ export class Firearm
     return this.updateAmmoCount(this.availableShots - shots);
   }
 
+  reloadStandardAmmo() {
+    this.updateAmmoCount(this.ammoCapacity - (this.ammoValue ? 0 : 1));
+  }
+
   updateAmmoCount(newValue: number) {
     const { max, value } = this.ammoState;
     this.updater

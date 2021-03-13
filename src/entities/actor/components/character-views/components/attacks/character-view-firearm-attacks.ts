@@ -9,12 +9,12 @@ import {
 import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
-import { openMenu } from '@src/open-menu';
 import { getWeaponRange } from '@src/success-test/range-modifiers';
 import { notEmpty, toggle } from '@src/utility/helpers';
 import { css, customElement, html, LitElement, property } from 'lit-element';
 import { compact } from 'remeda';
 import { requestCharacter } from '../../character-request-event';
+import { openFirearmAmmoMenu } from './ammo-menus';
 import styles from './attack-info-styles.scss';
 
 @customElement('character-view-firearm-attacks')
@@ -67,20 +67,9 @@ export class CharacterViewFirearmAttacks extends LitElement {
     });
   }
 
-  private reloadAmmo() {
-    openMenu({
-      content: [
-        // TODO Ammo Options
-        // {
-        //   label: localize('reload'),
-        //   icon: html`<mwc-icon>refresh</mwc-icon>`,
-        //   disabled: this.weapon.fullyLoaded,
-        //   callback: () => {
-        //     this.weapon.reload();
-        //   },
-        // },
-      ],
-    });
+  private openAmmoMenu(ev: MouseEvent) {
+    const { character } = requestCharacter(this);
+    character && openFirearmAmmoMenu(ev, character, this.weapon);
   }
 
   private toggleBraced() {
@@ -93,7 +82,7 @@ export class CharacterViewFirearmAttacks extends LitElement {
       gearTraits,
       weaponTraits,
       accessories,
-
+      specialAmmo,
       ammoState,
     } = this.weapon;
     // TODO Special Ammo
@@ -109,6 +98,7 @@ export class CharacterViewFirearmAttacks extends LitElement {
               type="usable"
               @click=${this.toggleBraced}
               ?disabled=${!editable}
+              clickable
               >${localize(
                 this.weapon.braced ? 'braced' : 'carried',
               )}</colored-tag
@@ -120,9 +110,12 @@ export class CharacterViewFirearmAttacks extends LitElement {
         type="usable"
         clickable
         ?disabled=${!editable}
-        @click=${this.reloadAmmo}
+        @click=${this.openAmmoMenu}
       >
-        <span>${localize('ammo')}</span>
+        <span
+          >${specialAmmo?.name || localize('standard')}
+          ${localize('ammo')}</span
+        >
         <value-status
           slot="after"
           value=${ammoState.value}

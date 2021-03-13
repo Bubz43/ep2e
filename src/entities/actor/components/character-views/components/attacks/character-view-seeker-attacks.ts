@@ -89,6 +89,7 @@ export class CharacterViewSeekerAttacks extends LitElement {
               type="usable"
               @click=${this.toggleBraced}
               ?disabled=${!editable}
+              clickable
               >${localize(
                 this.weapon.braced ? 'braced' : 'carried',
               )}</colored-tag
