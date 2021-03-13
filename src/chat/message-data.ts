@@ -191,6 +191,7 @@ export type RangedAttackMessageData = {
   primaryAttack: boolean;
   damageModifiers?: LabeledFormula[];
   calledShot?: CalledShot | null;
+  appliedPayload?: boolean;
 };
 
 export type MessageData = Partial<{

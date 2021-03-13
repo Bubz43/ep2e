@@ -1,8 +1,14 @@
 import type {
+  DamageMessageData,
   RangedAttackMessageData,
   SuccessTestMessageData,
 } from '@src/chat/message-data';
-import { RangedWeaponAccessory, SuperiorResultEffect } from '@src/data-enums';
+import {
+  FirearmAmmoModifierType,
+  RangedWeaponAccessory,
+  SubstanceApplicationMethod,
+  SuperiorResultEffect,
+} from '@src/data-enums';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import { pickOrDefaultCharacter } from '@src/entities/find-entities';
 import { BeamWeapon } from '@src/entities/item/proxies/beam-weapon';
@@ -12,7 +18,7 @@ import { SeekerWeapon } from '@src/entities/item/proxies/seeker-weapon';
 import { SprayWeapon } from '@src/entities/item/proxies/spray-weapon';
 import { SkillType } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
-import { rollLabeledFormulas } from '@src/foundry/rolls';
+import { joinLabeledFormulas, rollLabeledFormulas } from '@src/foundry/rolls';
 import { SkillTestControls } from '@src/success-test/components/skill-test-controls/skill-test-controls';
 import {
   createSuccessTestModifier,
@@ -139,54 +145,114 @@ export class MessageRangedAttack extends MessageElement {
 
     const attack = primaryAttack ? attacks?.primary : attacks?.secondary;
     if (!attack) return;
+    let attackFormulas = [...(attack?.rollFormulas ?? [])];
+    const [specialAmmo, mode] =
+      'specialAmmo' in attack ? attack.specialAmmo ?? [] : [];
+
+    const { damageModifierType, damageFormula: ammoFormula } = mode ?? {};
+
+    if (specialAmmo && mode) {
+      const ammoName = `${specialAmmo.name} ${
+        specialAmmo.hasMultipleModes ? `(${mode.name})` : ''
+      }`;
+      if (damageModifierType === FirearmAmmoModifierType.Formula) {
+        attackFormulas.push({
+          label: ammoName,
+          formula: ammoFormula || '+0',
+        });
+      } else if (damageModifierType === FirearmAmmoModifierType.Halve) {
+        attackFormulas = [
+          {
+            label: ammoName,
+            formula: `(${joinLabeledFormulas(attackFormulas)}) / 2`,
+          },
+        ];
+      } else attackFormulas = [];
+    }
+
     const superiorDamage =
       successTestInfo?.superiorEffects?.filter(
         (e) => e === SuperiorResultEffect.Damage,
       ) || [];
 
-    const multiplier = testResult === SuccessTestResult.CriticalSuccess ? 2 : 1;
-    const rolled = pipe(
-      [
-        testResult === SuccessTestResult.SuperiorSuccess &&
-          superiorDamage.length >= 1 && {
-            label: localize(testResult),
-            formula: '+1d6',
-          },
-        testResult === SuccessTestResult.SuperiorSuccessX2 &&
-          superiorDamage.length >= 1 && {
-            label: localize(testResult),
-            formula: successTestInfo ? `+${superiorDamage.length}d6` : '+2d6',
-          },
+    const damage: DamageMessageData | undefined = notEmpty(attackFormulas)
+      ? {
+          ...pick(attack, [
+            'armorPiercing',
+            'armorUsed',
+            'damageType',
+            'notes',
+            'reduceAVbyDV',
+          ]),
+          source: name,
+          multiplier: testResult === SuccessTestResult.CriticalSuccess ? 2 : 1,
+          rolledFormulas: pipe(
+            [
+              testResult === SuccessTestResult.SuperiorSuccess &&
+                superiorDamage.length >= 1 && {
+                  label: localize(testResult),
+                  formula: '+1d6',
+                },
+              testResult === SuccessTestResult.SuperiorSuccessX2 &&
+                superiorDamage.length >= 1 && {
+                  label: localize(testResult),
+                  formula: successTestInfo
+                    ? `+${superiorDamage.length}d6`
+                    : '+2d6',
+                },
 
-        ...(damageModifiers ?? []),
-      ],
-      compact,
-      concat(attack?.rollFormulas ?? []),
-      rollLabeledFormulas,
-    );
+              ...(damageModifiers ?? []),
+            ],
+            compact,
+            concat(attackFormulas),
+            rollLabeledFormulas,
+          ),
+        }
+      : undefined;
+
+    if (mode && damage) damage.armorPiercing = mode.armorPiercing;
+
     message.createSimilar({
       header: {
         heading: name,
         subheadings: [localize('rangedAttack')],
       },
-      damage: {
-        ...pick(attack, [
-          'armorPiercing',
-          'armorUsed',
-          'damageType',
-          'notes',
-          'reduceAVbyDV',
-        ]),
-        source: name,
-        multiplier,
-        rolledFormulas: rolled,
-      },
+      damage,
     });
+  }
+
+  private async createFirearmAmmoPayloadMessage() {
+    const { weapon, message } = this;
+    const payload =
+      weapon.type === ItemType.Firearm
+        ? weapon.attacks.primary.specialAmmo?.[0].payload
+        : null;
+    if (!payload || !weapon) return;
+    const header = payload.messageHeader;
+    header.subheadings = [header.subheadings || []]
+      .flat()
+      .concat(`${weapon.name} [${localize('coating')}]`);
+    await message.createSimilar({
+      header,
+      substanceUse: {
+        substance: payload.getDataCopy(),
+        useMethod: payload.isChemical
+          ? 'use'
+          : SubstanceApplicationMethod.Dermal,
+      }, // TODO injected
+    });
+
+    this.getUpdater('rangedAttack').commit({ appliedPayload: true });
   }
 
   render() {
     const { attacks, name, type } = this.weapon;
-    const { firingModeGroup, calledShot, primaryAttack } = this.rangedAttack;
+    const {
+      firingModeGroup,
+      calledShot,
+      primaryAttack,
+      appliedPayload,
+    } = this.rangedAttack;
     const { disabled } = this;
     const options: string[] = [];
     options.push(
@@ -197,7 +263,16 @@ export class MessageRangedAttack extends MessageElement {
     if (calledShot)
       options.push(`${localize('calledShot')}: ${localize(calledShot)}`);
     const attack = primaryAttack ? attacks?.primary : attacks?.secondary;
+    const attackTraits = attack
+      ? 'attackTraits' in attack
+        ? attack.attackTraits
+        : attack.specialAmmo?.[1].attackTraits
+      : null;
 
+    const [specialAmmo, mode] =
+      attack && 'specialAmmo' in attack ? attack.specialAmmo ?? [] : [];
+
+    // TODO Special Ammo Payload
     // TODO Locate
     return html`
       ${this.successTest ? this.renderOppose() : ''}
@@ -205,7 +280,8 @@ export class MessageRangedAttack extends MessageElement {
       ${!disabled &&
       this.successTest &&
       type !== ItemType.SeekerWeapon &&
-      notEmpty(attack?.rollFormulas)
+      notEmpty(attack?.rollFormulas) &&
+      mode?.damageModifierType !== FirearmAmmoModifierType.NoDamage
         ? html`
             <mwc-button
               outlined
@@ -216,15 +292,27 @@ export class MessageRangedAttack extends MessageElement {
             >
           `
         : ''}
-      ${attack && 'attackTraits' in attack && notEmpty(attack.attackTraits)
+      ${notEmpty(attackTraits)
         ? html`
             <message-attack-traits
               .attackTraitInfo=${{
-                traits: attack.attackTraits,
+                traits: attackTraits,
                 source: name,
                 testResult: this.successTestInfo?.result,
               }}
             ></message-attack-traits>
+          `
+        : ''}
+      ${!disabled && specialAmmo?.payload
+        ? html`
+            <mwc-button
+              dense
+              outlined
+              ?disabled=${!!appliedPayload}
+              @click=${this.createFirearmAmmoPayloadMessage}
+              >${localize(appliedPayload ? 'applied' : 'apply')}
+              ${localize('payload')}</mwc-button
+            >
           `
         : ''}
     `;
