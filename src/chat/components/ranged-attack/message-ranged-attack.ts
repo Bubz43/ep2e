@@ -98,7 +98,7 @@ export class MessageRangedAttack extends MessageElement {
     });
   }
 
-  locateFirearmFiring(source: 'flash' | 'sound') {
+  locateWeapon(source: 'flash' | 'sound') {
     const { weapon } = this;
     pickOrDefaultCharacter((character) => {
       SkillTestControls.openWindow({
@@ -272,10 +272,18 @@ export class MessageRangedAttack extends MessageElement {
     const [specialAmmo, mode] =
       attack && 'specialAmmo' in attack ? attack.specialAmmo ?? [] : [];
 
-    // TODO Special Ammo Payload
     // TODO Locate
     return html`
       ${this.successTest ? this.renderOppose() : ''}
+      <sl-group label=${localize('locateWeapon')} class="defense">
+        ${(['flash', 'sound'] as const).map(
+          (sense) => html`
+            <wl-list-item clickable @click=${() => this.locateWeapon(sense)}
+              >${localize(sense)}
+            </wl-list-item>
+          `,
+        )}
+      </sl-group>
       <p class="options">${options.join(', ')}</p>
       ${!disabled &&
       this.successTest &&
@@ -290,6 +298,14 @@ export class MessageRangedAttack extends MessageElement {
               @click=${this.createDamageMessage}
               >${localize('roll')} ${localize('damage')}</mwc-button
             >
+          `
+        : ''}
+      ${specialAmmo && mode
+        ? html`
+            <message-header
+              nested
+              .data=${specialAmmo.messageHeader}
+            ></message-header>
           `
         : ''}
       ${notEmpty(attackTraits)
@@ -315,6 +331,7 @@ export class MessageRangedAttack extends MessageElement {
             >
           `
         : ''}
+      ${mode?.notes ? html`<p class="ammo-notes">${mode.notes}</p>` : ''}
     `;
   }
 

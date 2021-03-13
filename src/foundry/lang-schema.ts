@@ -1454,7 +1454,10 @@ type LangEntries =
   | 'partially'
   | 'swap'
   | 'carrying'
-  | 'lacksSmartlinkOrLaserSight';
+  | 'lacksSmartlinkOrLaserSight'
+  | 'flash'
+  | 'sound'
+  | 'locateWeapon';
 type FullNames =
   | 'cog'
   | 'int'
