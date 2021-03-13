@@ -15,6 +15,8 @@ import { repeat } from 'lit-html/directives/repeat';
 import mix from 'mix-with/lib';
 import styles from './world-time-controls.scss';
 
+const formatTime = (value: number) => `${value < 10 ? 0 : ''}${value}`;
+
 @customElement('world-time-controls')
 export class WorldTimeControls extends mix(LitElement).with(UseWorldTime) {
   static get is() {
@@ -50,13 +52,15 @@ export class WorldTimeControls extends mix(LitElement).with(UseWorldTime) {
     const disabled = this.timeChange === 0;
     const currentDate = getCurrentDate(defaultStandardCalendar());
     // console.log(prettyMilliseconds(currentWorldTimeMS()));
-    const { hours, minutes } = parseMilliseconds(currentDate.time);
+    const { hours, minutes, seconds } = parseMilliseconds(currentDate.time);
     return html`
       <div class="date">
         <span class="time"
-          ><span title=${localize('hours')}>${hours}</span>:<span
+          ><span title=${localize('hours')}>${formatTime(hours)}</span>:<span
             title=${localize('minutes')}
-            >${minutes < 10 ? 0 : ''}${minutes}</span
+            >${formatTime(minutes)}</span
+          >:<span title=${localize('seconds')}
+            >${formatTime(seconds)}</span
           ></span
         >
 
