@@ -353,14 +353,16 @@ for (const app of [ActorDirectory, ItemDirectory]) {
           game[app === ActorDirectory ? 'actors' : 'items'].get(entityId);
         if (!entity) return;
 
-        listItem.title = entity.name;
+        const nameElement = listItem.querySelector('h4.entity-name')!;
+
         if (isItem(entity)) {
-          listItem.querySelector<HTMLElement>('.entity-name > a')!.textContent =
-            entity.proxy.fullName;
-          listItem.dataset['type'] = entity.proxy.fullType;
+          nameElement.querySelector('a')!.textContent = entity.proxy.fullName;
+          nameElement.dataset['type'] = entity.proxy.fullType;
         } else {
-          listItem.dataset['type'] = localize(entity.type);
+          nameElement.dataset['type'] = localize(entity.type);
         }
+        listItem.title = `${entity.name}
+        ${nameElement.dataset['type']}`;
       }),
   });
 }

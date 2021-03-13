@@ -364,10 +364,6 @@ sl-tooltip {
 #actors,
 #items {
   .entity {
-    display: grid;
-    grid-template-areas:
-      'img name'
-      'img type';
     line-height: 16px;
     padding: 0.25rem 0.5rem;
     border: none;
@@ -375,11 +371,23 @@ sl-tooltip {
       grid-area: img;
     }
     > h4 {
+      display: grid;
       grid-area: name;
       margin: 0;
       padding: 0;
-      align-self: end;
       pointer-events: none;
+      align-self: center;
+      a,
+      &::after {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      &::after {
+        content: attr(data-type);
+        font-size: 12px;
+        opacity: 0.8;
+      }
     }
     &:hover {
       box-shadow: 0 0 4px var(--color-grey);
@@ -388,16 +396,7 @@ sl-tooltip {
       background-color: var(--color-bg-alt);
       outline: none;
     }
-    &::after {
-      content: attr(data-type);
-      grid-area: type;
-      font-size: 12px;
-      opacity: 0.8;
-      align-self: start;
-    }
-    &[style='display: flex;'] {
-      display: grid !important;
-    }
+
     &.item {
       img {
         &[src='icons/svg/mystery-man.svg'],
@@ -458,6 +457,9 @@ sl-tooltip {
         background: alphav(var(--color-text), 0.05);
       }
     }
+  }
+  .inactive + .player-name {
+    color: var(--color-text-lighter);
   }
 }
 

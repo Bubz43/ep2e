@@ -1,11 +1,48 @@
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ItemType } from '@src/entities/entity-types';
+import type { Firearm } from '@src/entities/item/proxies/firearm';
 import type { SeekerWeapon } from '@src/entities/item/proxies/seeker-weapon';
 import { localize } from '@src/foundry/localization';
 import { MWCMenuOption, openMenu } from '@src/open-menu';
 import produce from 'immer';
 import { html } from 'lit-html';
 import { clamp, map, noop } from 'remeda';
+
+export const openFirearmAmmoMenu = (
+  ev: MouseEvent,
+  character: Character,
+  weapon: Firearm,
+) => {
+  const { ammo } = character.weapons;
+  const matchingAmmo = ammo.flatMap((a) => {
+    if (a.type === ItemType.FirearmAmmo && a.ammoClass === weapon.ammoClass)
+      return a;
+    return [];
+  });
+
+  const { specialAmmo } = weapon;
+
+  const content: MWCMenuOption[] = [];
+  if (specialAmmo) {
+    const matching = matchingAmmo.filter((m) => m.isSameAs(specialAmmo));
+  } else {
+    if (content.length === 0) {
+      content.push({
+        label: `${localize('no')} ${localize('available')} ${localize(
+          weapon.ammoClass,
+        )} ${localize('ammo')}`,
+        callback: noop,
+        disabled: true,
+      });
+    }
+  }
+
+  openMenu({
+    position: ev,
+    header: { heading: `${weapon.name} ${localize('ammo')}` },
+    content,
+  });
+};
 
 export const openSeekerAmmoMenu = (
   ev: MouseEvent,
