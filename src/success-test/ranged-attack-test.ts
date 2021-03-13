@@ -236,14 +236,17 @@ export class RangedAttackTest extends SkillTest {
             draft.modifiers.effects.set(effect, active);
           }
         }
-        draft.firing.targetDistance =
-          token && notEmpty(draft.firing.attackTargets)
-            ? Math.max(
-                ...[...draft.firing.attackTargets].map((target) =>
-                  Math.ceil(distanceBetweenTokens(token, target as Token)),
-                ),
-              )
-            : 10;
+        if (
+          changed.attackTargets &&
+          notEmpty(draft.firing.attackTargets) &&
+          token
+        ) {
+          draft.firing.targetDistance = Math.max(
+            ...[...draft.firing.attackTargets].map((target) =>
+              Math.ceil(distanceBetweenTokens(token, target as Token)),
+            ),
+          );
+        }
 
         const { simple } = draft.modifiers;
         if (
@@ -337,14 +340,14 @@ export class RangedAttackTest extends SkillTest {
         ? this.firing.seekerMode === 'accushot'
         : 'isSteady' in weapon && weapon.isSteady;
 
+    console.log(steady);
+
     this.rangeModifier.name = `${localize(rating)} ${
       steady ? `(${localize('steady')})` : ''
     }`;
     this.rangeModifier.value = clamp(modifier, {
       min: steady ? 0 : undefined,
     });
-    this.rangeModifier.name = localize(rating);
-    this.rangeModifier.value = modifier;
     this.modifiers.simple.set(this.rangeModifier.id, this.rangeModifier);
   }
 
@@ -430,7 +433,6 @@ export class RangedAttackTest extends SkillTest {
     const { rangeDamageModifier } = this;
     if (rangeDamageModifier) formulas.push(rangeDamageModifier);
     const { firingModeGroup } = this.firing;
-    console.log(firingModeGroup);
     if (firingModeGroup[1] === MultiAmmoOption.ConcentratedDamage) {
       formulas.push({
         label: `${localize(firingModeGroup[0])} ${localize(
@@ -439,8 +441,6 @@ export class RangedAttackTest extends SkillTest {
         formula: multiAmmoValues[firingModeGroup[0]][firingModeGroup[1]],
       });
     }
-    console.log(formulas);
-
     return formulas;
   }
 
