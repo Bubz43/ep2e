@@ -154,7 +154,7 @@ export class RangedAttackControls extends LitElement {
     if (!this.test) return;
 
     openMenu({
-      header: { heading: localize('throw') },
+      header: { heading: localize('ranged') },
       content: this.test.character.weapons.ranged.map((weapon) => ({
         label: weapon.fullName,
         sublabel: weapon.fullType,

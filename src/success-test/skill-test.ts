@@ -21,6 +21,7 @@ import { compact, last } from 'remeda';
 import {
   grantedSuperiorResultEffects,
   rollSuccessTest,
+  SimpleSuccessTestModifier,
   successTestEffectMap,
 } from './success-test';
 import { SuccessTestBase } from './success-test-base';
@@ -34,6 +35,7 @@ export type SkillTestInit = {
   action?: Action;
   opposing?: { testName: string; messageId?: string };
   halve?: boolean;
+  modifiers?: SimpleSuccessTestModifier[];
 };
 
 export type SkillState = {
@@ -84,6 +86,7 @@ export class SkillTest extends SuccessTestBase {
     opposing,
     techSource,
     halve,
+    modifiers,
   }: SkillTestInit) {
     super({
       action:
@@ -98,6 +101,10 @@ export class SkillTest extends SuccessTestBase {
     this.token = token;
     this.opposing = opposing;
     this.techSource = techSource;
+
+    for (const modifier of modifiers || []) {
+      this.modifiers.simple.set(modifier.id, modifier);
+    }
 
     this.skillState = {
       skill,

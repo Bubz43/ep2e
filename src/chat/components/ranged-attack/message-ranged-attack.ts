@@ -2,7 +2,7 @@ import type {
   RangedAttackMessageData,
   SuccessTestMessageData,
 } from '@src/chat/message-data';
-import { SuperiorResultEffect } from '@src/data-enums';
+import { RangedWeaponAccessory, SuperiorResultEffect } from '@src/data-enums';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import { pickOrDefaultCharacter } from '@src/entities/find-entities';
 import { BeamWeapon } from '@src/entities/item/proxies/beam-weapon';
@@ -14,7 +14,10 @@ import { SkillType } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { SkillTestControls } from '@src/success-test/components/skill-test-controls/skill-test-controls';
-import { SuccessTestResult } from '@src/success-test/success-test';
+import {
+  createSuccessTestModifier,
+  SuccessTestResult,
+} from '@src/success-test/success-test';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property } from 'lit-element';
 import { compact, concat, last, pick, pipe } from 'remeda';
@@ -82,6 +85,43 @@ export class MessageRangedAttack extends MessageElement {
             halve: true,
             opposing: {
               testName: `${this.weapon.name} ${localize('rangedAttack')}`,
+            },
+          };
+        },
+      });
+    });
+  }
+
+  locateFirearmFiring(source: 'flash' | 'sound') {
+    const { weapon } = this;
+    pickOrDefaultCharacter((character) => {
+      SkillTestControls.openWindow({
+        entities: { actor: character.actor },
+        relativeEl: this,
+        getState: (actor) => {
+          if (actor.proxy.type !== ActorType.Character) return null;
+          return {
+            ego: actor.proxy.ego,
+            character: actor.proxy,
+            skill: actor.proxy.ego.getCommonSkill(SkillType.Perceive),
+            modifiers: compact([
+              source === 'flash' &&
+                weapon.accessories.includes(
+                  RangedWeaponAccessory.FlashSuppressor,
+                ) &&
+                createSuccessTestModifier({
+                  name: localize(RangedWeaponAccessory.FlashSuppressor),
+                  value: -30,
+                }),
+              source === 'sound' &&
+                weapon.accessories.includes(RangedWeaponAccessory.Silencer) &&
+                createSuccessTestModifier({
+                  name: localize(RangedWeaponAccessory.Silencer),
+                  value: -30,
+                }),
+            ]),
+            opposing: {
+              testName: localize('locateFiredWeapon'),
             },
           };
         },
@@ -157,6 +197,8 @@ export class MessageRangedAttack extends MessageElement {
     if (calledShot)
       options.push(`${localize('calledShot')}: ${localize(calledShot)}`);
     const attack = primaryAttack ? attacks?.primary : attacks?.secondary;
+
+    // TODO Locate
     return html`
       ${this.successTest ? this.renderOppose() : ''}
       <p class="options">${options.join(', ')}</p>

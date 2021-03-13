@@ -1,6 +1,10 @@
 import { formatArmorUsed } from '@src/combat/attack-formatting';
 import { startRangedAttack } from '@src/combat/attack-init';
+import { renderSelectField } from '@src/components/field/fields';
+import { renderAutoForm } from '@src/components/form/forms';
+import { renderFirearmAmmoDetails } from '@src/entities/item/components/forms/firearm-ammo-details';
 import type { Firearm } from '@src/entities/item/proxies/firearm';
+import type { FirearmAmmo } from '@src/entities/item/proxies/firearm-ammo';
 import {
   createFiringModeGroup,
   FiringMode,
@@ -9,10 +13,11 @@ import {
 import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
+import { openMenu } from '@src/open-menu';
 import { getWeaponRange } from '@src/success-test/range-modifiers';
 import { notEmpty, toggle } from '@src/utility/helpers';
 import { css, customElement, html, LitElement, property } from 'lit-element';
-import { compact } from 'remeda';
+import { compact, mapToObj } from 'remeda';
 import { requestCharacter } from '../../character-request-event';
 import { openFirearmAmmoMenu } from './ammo-menus';
 import styles from './attack-info-styles.scss';
@@ -36,6 +41,9 @@ export class CharacterViewFirearmAttacks extends LitElement {
         }
         .firing-modes {
           display: flex;
+          /* display: grid;
+          grid-auto-flow: column;
+          grid-template-rows: repeat(auto-fit, minmax(2ch, 1fr)); */
         }
         .attack {
           width: 100%;
@@ -45,6 +53,20 @@ export class CharacterViewFirearmAttacks extends LitElement {
         }
         .attack + .attack {
           padding-top: 0;
+        }
+        .ammo-modes {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          grid-template-columns: auto 1fr auto;
+          --mdc-icon-button-size: 2rem;
+        }
+        .ammo-modes > sl-form {
+          display: contents;
+        }
+        sl-field {
+          /* margin-top: -0.75rem; */
+          /* height: 3rem; */
         }
       `,
     ];
@@ -76,6 +98,19 @@ export class CharacterViewFirearmAttacks extends LitElement {
     this.weapon.updater.path('data', 'state', 'braced').commit(toggle);
   }
 
+  private openAmmoTransformer() {
+    const { specialAmmo } = this.weapon;
+    if (!specialAmmo?.hasMultipleModes) return;
+    openMenu({
+      content: html`<div style="padding: 1rem 2rem">
+        <firearm-ammo-transformer
+          .firearm=${this.weapon}
+          .ammo=${specialAmmo}
+        ></firearm-ammo-transformer>
+      </div>`,
+    });
+  }
+
   render() {
     const {
       editable,
@@ -84,6 +119,7 @@ export class CharacterViewFirearmAttacks extends LitElement {
       accessories,
       specialAmmo,
       ammoState,
+      ammoData,
     } = this.weapon;
     // TODO Special Ammo
     return html`
@@ -118,16 +154,52 @@ export class CharacterViewFirearmAttacks extends LitElement {
         >
         <value-status
           slot="after"
-          value=${ammoState.value}
+          value=${ammoData.value}
           max=${ammoState.max}
         ></value-status>
       </colored-tag>
 
+      ${specialAmmo?.hasMultipleModes
+        ? this.renderAmmoProgramming(specialAmmo)
+        : ''}
       ${this.renderAttack()}
       ${[...gearTraits, ...weaponTraits, ...accessories].map(
         (trait) =>
           html`<colored-tag type="info">${localize(trait)}</colored-tag>`,
       )}
+    `;
+  }
+
+  private renderAmmoProgramming(ammo: FirearmAmmo) {
+    const { specialAmmoModeIndex, availableShots } = this.weapon;
+    const ammoModes = mapToObj.indexed(ammo.modes, ({ name }, index) => [
+      String(index),
+      name,
+    ]);
+
+    return html`
+      <div class="ammo-modes">
+        <mwc-icon-button
+          icon="transform"
+          class="transform-button"
+          @click=${this.openAmmoTransformer}
+          ?disabled=${!this.weapon.editable}
+        ></mwc-icon-button>
+        ${renderAutoForm({
+          props: { mode: String(specialAmmoModeIndex) },
+          update: ({ mode }) =>
+            this.weapon.updater
+              .path('data', 'ammo', 'selectedModeIndex')
+              .commit(Number(mode) || 0),
+          fields: ({ mode }) =>
+            renderSelectField({ ...mode, label: '' }, Object.keys(ammoModes), {
+              altLabel: (modeId) => ammoModes[modeId] || modeId,
+            }),
+        })}
+        <sl-group label=${localize('availableShots')}
+          ><span class="available-shots">${availableShots}</span></sl-group
+        >
+      </div>
     `;
   }
 
@@ -144,8 +216,15 @@ export class CharacterViewFirearmAttacks extends LitElement {
         ].join(' '),
       attack.notes,
     ]).join('. ');
+    const [specialAmmo, mode] = attack.specialAmmo ?? [];
 
     return html`
+      ${specialAmmo?.payload
+        ? html`<colored-tag type="info"
+            ><span>${localize('ammo')} ${localize('payload')}</span
+            ><span slot="after">${specialAmmo.payload.name}</span></colored-tag
+          >`
+        : ''}
       <div class="attack">
         <div class="firing-modes">
           ${attack.firingModes.map(
@@ -163,7 +242,9 @@ export class CharacterViewFirearmAttacks extends LitElement {
             `,
           )}
         </div>
-        <colored-tag type="info" class="attack-info">${info} </colored-tag>
+        <colored-tag type="info" class="attack-info"
+          >${info} ${mode ? renderFirearmAmmoDetails(mode) : ''}
+        </colored-tag>
       </div>
     `;
   }

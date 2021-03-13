@@ -20,7 +20,6 @@ import {
   concat,
   createPipe,
   identity,
-  take,
   takeWhile,
 } from 'remeda';
 import type { Attacker } from '../item-interfaces';
@@ -64,7 +63,7 @@ export class Firearm
   }
 
   fire(shots: number) {
-    return this.updateAmmoCount(this.availableShots - shots);
+    return this.updateAmmoCount(this.ammoData.value - shots);
   }
 
   reloadStandardAmmo() {
@@ -72,7 +71,8 @@ export class Firearm
   }
 
   updateAmmoCount(newValue: number) {
-    const { max, value } = this.ammoState;
+    const { max } = this.ammoState;
+    const { value } = this.ammoData;
     this.updater
       .path('data', 'ammo', 'value')
       .store(clamp(newValue, { min: 0, max: max + 1 }));
@@ -81,7 +81,7 @@ export class Firearm
           .path('data', 'ammo', 'modeSettings')
           .commit(
             newValue < value
-              ? take(newValue)
+              ? (modes) => modes.slice(-newValue)
               : newValue > value
               ? concat(Array(newValue - value).fill(this.specialAmmoModeIndex))
               : identity,
@@ -151,6 +151,10 @@ export class Firearm
       ammoClass,
       hasChamber: true,
     };
+  }
+
+  get isSteady() {
+    return !!this.attacks.primary.specialAmmo?.[1].steady;
   }
 
   @LazyGetter()

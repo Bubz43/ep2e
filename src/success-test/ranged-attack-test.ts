@@ -2,6 +2,7 @@ import { createMessage } from '@src/chat/create-message';
 import {
   CalledShot,
   ExplosiveTrigger,
+  RangedWeaponAccessory,
   RangeRating,
   SuperiorResultEffect,
 } from '@src/data-enums';
@@ -34,7 +35,7 @@ import type { LabeledFormula } from '@src/foundry/rolls';
 import { distanceBetweenTokens } from '@src/foundry/token-helpers';
 import { arrayOf, notEmpty } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
-import { compact, last, merge, take } from 'remeda';
+import { clamp, compact, intersection, last, merge, take } from 'remeda';
 import type { SetRequired } from 'type-fest';
 import { getRangeModifier, getWeaponRange } from './range-modifiers';
 import { SkillTest, SkillTestInit } from './skill-test';
@@ -64,6 +65,7 @@ export class RangedAttackTest extends SkillTest {
     firingModeGroup: FiringModeGroup;
     explosiveSettings?: ExplosiveSettings | null;
     oneHanded?: boolean;
+    seekerMode: 'accushot' | 'homing';
   }>;
 
   readonly calledShotModifier = createSuccessTestModifier({
@@ -93,6 +95,11 @@ export class RangedAttackTest extends SkillTest {
   readonly toHitModifier = createSuccessTestModifier({
     name: `${localize('concentratedToHit')}`,
     value: 10,
+  });
+
+  readonly lackSmartOrLaserModifier = createSuccessTestModifier({
+    name: localize('lacksSmartlinkOrLaserSight'),
+    value: -10,
   });
 
   rangeRating: RangeRating;
@@ -125,6 +132,7 @@ export class RangedAttackTest extends SkillTest {
     this.firing = {
       attackTargets: attackTargets,
       range: getWeaponRange(weapon),
+      seekerMode: 'accushot',
       targetDistance:
         token && notEmpty(attackTargets)
           ? Math.max(
@@ -146,31 +154,61 @@ export class RangedAttackTest extends SkillTest {
           : null,
       update: this.recipe((draft, changed) => {
         draft.firing = merge(draft.firing, changed);
+        const { weapon } = draft.firing;
         if (changed.weapon) {
           draft.firing.primaryAttack = true;
           draft.firing.calledShot = null;
           draft.firing.oneHanded = false;
-          draft.firing.range = getWeaponRange(
-            draft.firing.weapon as RangedWeapon,
-          );
+          draft.firing.range = getWeaponRange(weapon as RangedWeapon);
+          draft.firing.seekerMode = 'accushot';
           draft.firing.firingModeGroup = createFiringModeGroup(
-            draft.firing.weapon.type === ItemType.SeekerWeapon
-              ? draft.firing.weapon.firingMode
-              : draft.firing.weapon.attacks.primary.firingModes[0]!,
+            weapon.type === ItemType.SeekerWeapon
+              ? weapon.firingMode
+              : weapon.attacks.primary.firingModes[0]!,
           );
           draft.firing.explosiveSettings =
-            draft.firing.weapon.type === ItemType.SeekerWeapon
+            weapon.type === ItemType.SeekerWeapon
               ? {
                   trigger: createExplosiveTriggerSetting(
                     ExplosiveTrigger.Impact,
                   ),
                 }
               : null;
+
+          if (
+            !intersection(weapon.accessories, [
+              RangedWeaponAccessory.LaserSight,
+              RangedWeaponAccessory.Smartlink,
+            ]).length
+          ) {
+            draft.modifiers.simple.set(
+              this.lackSmartOrLaserModifier.id,
+              this.lackSmartOrLaserModifier,
+            );
+          } else {
+            draft.modifiers.simple.delete(this.lackSmartOrLaserModifier.id);
+          }
+
+          if (weapon.accessories.includes(RangedWeaponAccessory.Gyromount)) {
+            draft.fullMoveModifier.value = 0;
+            draft.fullMoveModifier.name = `${localize('fullMove')} (${localize(
+              RangedWeaponAccessory.Gyromount,
+            )})`;
+          } else {
+            draft.fullMoveModifier.value = -20;
+            draft.fullMoveModifier.name = localize('fullMove');
+          }
+          if (draft.modifiers.simple.has(draft.fullMoveModifier.id)) {
+            draft.modifiers.simple.set(
+              draft.fullMoveModifier.id,
+              draft.fullMoveModifier,
+            );
+          }
         } else if (changed.primaryAttack) {
           draft.firing.firingModeGroup = createFiringModeGroup(
-            draft.firing.weapon.type === ItemType.SeekerWeapon
-              ? draft.firing.weapon.firingMode
-              : draft.firing.weapon.attacks.primary.firingModes[0]!,
+            weapon.type === ItemType.SeekerWeapon
+              ? weapon.firingMode
+              : weapon.attacks.primary.firingModes[0]!,
           );
         }
 
@@ -216,11 +254,7 @@ export class RangedAttackTest extends SkillTest {
           simple.set(draft.toHitModifier.id, draft.toHitModifier);
         } else simple.delete(draft.toHitModifier.id);
 
-        if (
-          draft.firing.weapon.isTwoHanded &&
-          draft.firing.oneHanded &&
-          !this.largeMorph
-        ) {
+        if (weapon.isTwoHanded && draft.firing.oneHanded && !this.largeMorph) {
           simple.set(this.twoHandedModifier.id, this.twoHandedModifier);
         } else simple.delete(this.twoHandedModifier.id);
 
@@ -232,9 +266,19 @@ export class RangedAttackTest extends SkillTest {
           draft.firing.range,
           draft.firing.targetDistance,
         );
+
+        const steady =
+          weapon.type === ItemType.SeekerWeapon
+            ? draft.firing.seekerMode === 'accushot'
+            : 'isSteady' in weapon && weapon.isSteady;
+
         draft.rangeRating = rating;
-        draft.rangeModifier.name = localize(rating);
-        draft.rangeModifier.value = modifier;
+        draft.rangeModifier.name = `${localize(rating)} ${
+          steady ? `(${localize('steady')})` : ''
+        }`;
+        draft.rangeModifier.value = clamp(modifier, {
+          min: steady ? 0 : undefined,
+        });
         simple.set(draft.rangeModifier.id, draft.rangeModifier);
       }),
     };
@@ -262,11 +306,43 @@ export class RangedAttackTest extends SkillTest {
       );
     }
 
+    if (
+      !intersection(weapon.accessories, [
+        RangedWeaponAccessory.LaserSight,
+        RangedWeaponAccessory.Smartlink,
+      ]).length
+    ) {
+      this.modifiers.simple.set(
+        this.lackSmartOrLaserModifier.id,
+        this.lackSmartOrLaserModifier,
+      );
+    }
+
+    if (
+      this.firing.weapon.accessories.includes(RangedWeaponAccessory.Gyromount)
+    ) {
+      this.fullMoveModifier.value = 0;
+      this.fullMoveModifier.name = `${localize('fullMove')} (${localize(
+        RangedWeaponAccessory.Gyromount,
+      )})`;
+    }
+
     const { rating, modifier } = getRangeModifier(
       this.firing.range,
       this.firing.targetDistance,
     );
     this.rangeRating = rating;
+    const steady =
+      weapon.type === ItemType.SeekerWeapon
+        ? this.firing.seekerMode === 'accushot'
+        : 'isSteady' in weapon && weapon.isSteady;
+
+    this.rangeModifier.name = `${localize(rating)} ${
+      steady ? `(${localize('steady')})` : ''
+    }`;
+    this.rangeModifier.value = clamp(modifier, {
+      min: steady ? 0 : undefined,
+    });
     this.rangeModifier.name = localize(rating);
     this.rangeModifier.value = modifier;
     this.modifiers.simple.set(this.rangeModifier.id, this.rangeModifier);
@@ -285,6 +361,12 @@ export class RangedAttackTest extends SkillTest {
           ...effect,
           [Source]: `{${target.name}} ${effect[Source]}`,
         })),
+    );
+  }
+
+  get ignoreMovementModifiers() {
+    return this.firing.weapon.accessories.includes(
+      RangedWeaponAccessory.Gyromount,
     );
   }
 
