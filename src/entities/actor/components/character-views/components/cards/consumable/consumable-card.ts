@@ -115,9 +115,14 @@ export class ConsumableCard extends ItemCardBase {
       openCoatingMenu(ev, character, this.item);
   }
 
+  private openExplosizeSubstanceMenu(ev: MouseEvent) {}
+
+  private openFirearmAmmoPayloadMenu(ev: MouseEvent) {}
+
   renderHeaderButtons() {
     const { item } = this;
     const { editable } = item;
+
     return html` ${item.stashed
       ? html`
           <mwc-icon-button
@@ -155,6 +160,28 @@ export class ConsumableCard extends ItemCardBase {
           @click=${this.openCoatingSelectMenu}
           ?disabled=${!item.editable}
         ></mwc-icon-button>`
+      : item.type === ItemType.Explosive && item.canContainSubstance
+      ? html`
+          <mwc-icon-button
+            class="toggle ${classMap({ activated: !!item.substance })}"
+            icon=${item.substance
+              ? 'radio_button_checked'
+              : 'radio_button_unchecked'}
+            @click=${this.openExplosizeSubstanceMenu}
+            ?disabled=${!item.editable}
+          ></mwc-icon-button>
+        `
+      : item.type === ItemType.FirearmAmmo && item.canCarryPayload
+      ? html`
+          <mwc-icon-button
+            class="toggle ${classMap({ activated: !!item.payload })}"
+            icon=${item.payload
+              ? 'radio_button_checked'
+              : 'radio_button_unchecked'}
+            @click=${this.openFirearmAmmoPayloadMenu}
+            ?disabled=${!item.editable}
+          ></mwc-icon-button>
+        `
       : ''}`;
   }
 
