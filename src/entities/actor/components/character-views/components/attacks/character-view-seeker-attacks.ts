@@ -73,6 +73,7 @@ export class CharacterViewSeekerAttacks extends LitElement {
       acceptableMissileSizes,
       weaponTraits,
       accessories,
+      currentCapacity,
     } = this.weapon;
     // TODO: Range Tooltip
     return html`
@@ -106,7 +107,7 @@ export class CharacterViewSeekerAttacks extends LitElement {
               <span
                 >${missiles.fullName.trimEnd()},
                 <sl-group label=${localize('capacity')}
-                  >${activeAmmoSettings.missileCapacity}</sl-group
+                  >${currentCapacity}</sl-group
                 ></span
               >
               <span slot="after">${missiles.fullType}</span>
