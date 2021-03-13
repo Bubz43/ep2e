@@ -1,10 +1,13 @@
-import { createMessage } from '@src/chat/create-message';
 import { renderTimeField } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
+import {
+  defaultStandardCalendar,
+  getCurrentDate,
+} from '@src/features/calendar';
 import { advanceWorldTime, prettyMilliseconds } from '@src/features/time';
-import { format, localize } from '@src/foundry/localization';
+import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
-import { addEPSocketHandler, emitEPSocket } from '@src/foundry/socket';
+import { addEPSocketHandler } from '@src/foundry/socket';
 import { customElement, html, internalProperty, LitElement } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import styles from './world-time-controls.scss';
@@ -42,7 +45,13 @@ export class WorldTimeControls extends LitElement {
 
   render() {
     const disabled = this.timeChange === 0;
+    const currentDate = getCurrentDate(defaultStandardCalendar());
     return html`
+      <div class="date">
+        <span>${localize('day')} ${currentDate.day}</span>
+        <span>${prettyMilliseconds(currentDate.time, { turns: false })}</span>
+        <span>${currentDate.year} ${currentDate.era}</span>
+      </div>
       ${game.user.isGM && userCan('SETTINGS_MODIFY')
         ? html`<div class="controls">
             <mwc-icon-button

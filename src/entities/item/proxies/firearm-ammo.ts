@@ -116,6 +116,7 @@ export class FirearmAmmo extends mix(Base).with(
     'isBlueprint',
     'ammoClass',
     'modes',
+    'canCarryPayload',
   ];
 
   isSameAs(ammo: FirearmAmmo) {
