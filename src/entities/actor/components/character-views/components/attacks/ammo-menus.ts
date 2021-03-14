@@ -357,6 +357,12 @@ export const openCoatingMenu = (
   });
 };
 
+export const openFirearmAmmoPayloadMenu = (
+  ev: MouseEvent,
+  character: Character,
+  ammo: FirearmAmmo,
+) => {};
+
 export const openExplosiveSubstanceMenu = (
   ev: MouseEvent,
   character: Character,

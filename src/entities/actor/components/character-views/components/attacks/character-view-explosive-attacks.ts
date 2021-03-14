@@ -101,8 +101,18 @@ export class CharacterViewExplosiveAttacks extends LitElement {
   }
 
   render() {
-    const { attacks, sticky } = this.explosive;
+    const { attacks, sticky, canContainSubstance } = this.explosive;
     return html`
+      ${canContainSubstance && this.explosive.substance
+        ? html`
+            <colored-tag type="info"
+              >${this.explosive.substance.name}
+              (${this.explosive.dosesPerSubstance}
+              ${localize('doses')}/${localize('unit')})
+              <span slot="after">${this.explosive.substance.fullType}</span>
+            </colored-tag>
+          `
+        : ''}
       ${this.renderAttack('primary')}
       ${attacks.secondary ? this.renderAttack('secondary') : ''}
       ${sticky
