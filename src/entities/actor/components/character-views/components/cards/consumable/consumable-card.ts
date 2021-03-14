@@ -22,6 +22,7 @@ import { requestCharacter } from '../../../character-request-event';
 import {
   openCoatingMenu,
   openExplosiveSubstanceMenu,
+  openFirearmAmmoPayloadMenu,
 } from '../../attacks/ammo-menus';
 import { renderItemAttacks } from '../../attacks/render-item-attacks';
 import { ItemCardBase } from '../item-card-base';
@@ -125,7 +126,12 @@ export class ConsumableCard extends ItemCardBase {
       openExplosiveSubstanceMenu(ev, character, this.item);
   }
 
-  private openFirearmAmmoPayloadMenu(ev: MouseEvent) {}
+  private openFirearmAmmoPayloadMenu(ev: MouseEvent) {
+    const { character } = requestCharacter(this);
+    character &&
+      this.item.type === ItemType.FirearmAmmo &&
+      openFirearmAmmoPayloadMenu(ev, character, this.item);
+  }
 
   renderHeaderButtons() {
     const { item } = this;
