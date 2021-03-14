@@ -361,7 +361,78 @@ export const openFirearmAmmoPayloadMenu = (
   ev: MouseEvent,
   character: Character,
   ammo: FirearmAmmo,
-) => {};
+) => {
+  const { payload } = ammo;
+  const substances =
+    character.consumables.flatMap((c) =>
+      c.type === ItemType.Substance && !(c.isBlueprint || c.isElectronic)
+        ? c
+        : [],
+    ) ?? [];
+
+  const content: MWCMenuOption[] = [];
+
+  if (payload) {
+    content.push({
+      label: `${localize('unload')} ${payload.name}`,
+      callback: async () => {
+        const { quantity: ammoQuantity } = ammo;
+        const same = substances.find((s) => s.isSameAs(payload));
+        if (same) await same.setQuantity((current) => current + ammoQuantity);
+        else
+          await character?.itemOperations.add(
+            produce(
+              payload.getDataCopy(),
+              ({ data }) => void (data.quantity = ammoQuantity),
+            ),
+          );
+        await ammo.removePayload();
+      },
+    });
+  } else {
+    content.push(
+      ...substances.map((s) => ({
+        label: s.fullName,
+        sublabel: s.fullType,
+        disabled: !s.quantity,
+        callback: async () => {
+          const amount = s.quantity;
+          if (ammo.quantity > amount) {
+            await character.itemOperations.add(
+              produce(ammo.getDataCopy(), (draft) => {
+                draft.data.quantity = ammo.quantity - amount;
+              }),
+            );
+            await ammo.updater.batchCommits(() => {
+              ammo.setPayload(s);
+              ammo.setQuantity(amount);
+            });
+            s.setQuantity(0);
+          } else {
+            await ammo.setPayload(s);
+            s.setQuantity((current) => current - ammo.quantity);
+          }
+        },
+      })),
+    );
+    if (content.length === 0) {
+      content.push({
+        label: `${localize('no')} ${localize('available')} ${localize(
+          'substances',
+        )}`,
+        callback: noop,
+        disabled: true,
+      });
+    }
+  }
+  openMenu({
+    position: ev,
+    header: {
+      heading: `${ammo.name} ${localize('payload')}`,
+    },
+    content,
+  });
+};
 
 export const openExplosiveSubstanceMenu = (
   ev: MouseEvent,
