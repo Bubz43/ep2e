@@ -32,7 +32,8 @@
   font-size: small;
 }
 
-.roll-damage {
+.roll-damage,
+.payload {
   width: calc(100% - 1rem);
   margin: 0.25rem 0.5rem;
   --mdc-theme-primary: var(--color-negative);

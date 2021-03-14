@@ -324,6 +324,7 @@ export class MessageRangedAttack extends MessageElement {
             <mwc-button
               dense
               outlined
+              class="payload"
               ?disabled=${!!appliedPayload}
               @click=${this.createFirearmAmmoPayloadMessage}
               >${localize(appliedPayload ? 'applied' : 'apply')}
