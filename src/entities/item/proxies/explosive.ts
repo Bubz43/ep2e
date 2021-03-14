@@ -158,6 +158,10 @@ export class Explosive
     return this.epData.sticky;
   }
 
+  get dosesPerSubstance() {
+    return this.epData.dosesPerUnit;
+  }
+
   get fullType() {
     return this.explosiveType === ExplosiveType.Generic
       ? localize(this.type)
@@ -212,6 +216,7 @@ export class Explosive
     'areaEffectRadius',
     'canContainSubstance',
     'explosiveType',
+    'dosesPerSubstance',
   ];
 
   isSameAs(explosive: Explosive) {

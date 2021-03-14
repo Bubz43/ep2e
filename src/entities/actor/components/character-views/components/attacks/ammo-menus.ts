@@ -410,7 +410,9 @@ export const openExplosiveSubstanceMenu = (
             s.setQuantity(s.quantity % dosesPerUnit);
           } else {
             await weapon.setSubstance(s);
-            s.setQuantity((current) => current - amount);
+            s.setQuantity(
+              (current) => current - dosesPerUnit * weapon.quantity,
+            );
           }
         },
       })),
