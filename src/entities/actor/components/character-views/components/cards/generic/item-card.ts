@@ -87,7 +87,7 @@ export class ItemCard extends ItemCardBase {
           <mwc-switch
             ?checked=${!!item.triggered}
             ?disabled=${!editable}
-            title=${localize('triggered')}
+            title=${localize(item.triggered ? 'triggered' : 'trigger')}
             @change=${() => item.toggleTriggered()}
           ></mwc-switch>
         `
