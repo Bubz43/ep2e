@@ -1,16 +1,24 @@
-import { createMessage } from '@src/chat/create-message';
 import { renderTimeField } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
-import { advanceWorldTime, prettyMilliseconds } from '@src/features/time';
-import { format, localize } from '@src/foundry/localization';
+import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
+import {
+  defaultStandardCalendar,
+  getCurrentDateTime,
+} from '@src/features/calendar';
+import { parseMilliseconds } from '@src/features/modify-milliseconds';
+import { advanceWorldTime } from '@src/features/time';
+import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
-import { addEPSocketHandler, emitEPSocket } from '@src/foundry/socket';
+import { addEPSocketHandler } from '@src/foundry/socket';
 import { customElement, html, internalProperty, LitElement } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
+import mix from 'mix-with/lib';
 import styles from './world-time-controls.scss';
 
+const formatTime = (value: number) => `${value < 10 ? 0 : ''}${value}`;
+
 @customElement('world-time-controls')
-export class WorldTimeControls extends LitElement {
+export class WorldTimeControls extends mix(LitElement).with(UseWorldTime) {
   static get is() {
     return 'world-time-controls' as const;
   }
@@ -42,7 +50,24 @@ export class WorldTimeControls extends LitElement {
 
   render() {
     const disabled = this.timeChange === 0;
+    const currentDate = getCurrentDateTime(defaultStandardCalendar());
+    // console.log(prettyMilliseconds(currentWorldTimeMS()));
+    const { hours, minutes, seconds } = parseMilliseconds(currentDate.time);
     return html`
+      <div class="date-time">
+        <span class="time"
+          ><span title=${localize('hours')}>${formatTime(hours)}</span>:<span
+            title=${localize('minutes')}
+            >${formatTime(minutes)}</span
+          >:<span title=${localize('seconds')}
+            >${formatTime(seconds)}</span
+          ></span
+        >
+        <span class="date">
+          ${currentDate.month} ${currentDate.day}, ${currentDate.era}
+          ${currentDate.year}
+        </span>
+      </div>
       ${game.user.isGM && userCan('SETTINGS_MODIFY')
         ? html`<div class="controls">
             <mwc-icon-button

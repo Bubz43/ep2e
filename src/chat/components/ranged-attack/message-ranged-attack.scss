@@ -32,7 +32,8 @@
   font-size: small;
 }
 
-.roll-damage {
+.roll-damage,
+.payload {
   width: calc(100% - 1rem);
   margin: 0.25rem 0.5rem;
   --mdc-theme-primary: var(--color-negative);
@@ -45,4 +46,14 @@
     padding: 0.25rem;
     color: var(--color-primary-alt);
   }
+}
+
+.ammo-notes {
+  padding: 0.25rem 1rem;
+  margin: 0;
+  font-size: small;
+}
+
+message-header {
+  border-top: 2px groove var(--color-border);
 }

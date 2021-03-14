@@ -48,7 +48,7 @@ sl-details {
 }
 
 .skills {
-  border-top: 1px solid var(--color-border);
+  border-top: 2px groove var(--color-border);
   &::part(content) {
     padding-top: 0;
   }
@@ -149,7 +149,7 @@ sl-details {
 
 .reputations,
 .software-skills {
-  border-top: 2px solid var(--color-border);
+  border-top: 1px solid var(--color-border);
 }
 
 .rep-list {

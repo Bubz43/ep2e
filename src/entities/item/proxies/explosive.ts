@@ -1,9 +1,9 @@
 import type {
-  DamageMessageData,
   AttackTraitData,
-  SubstanceUseData,
+  DamageMessageData,
   MessageAreaEffectData,
   MessageData,
+  SubstanceUseData,
 } from '@src/chat/message-data';
 import {
   createBaseAttackFormula,
@@ -18,8 +18,8 @@ import {
   SubstanceType,
 } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
-import type { ExplosiveSettings } from '@src/entities/weapon-settings';
 import { UpdateStore } from '@src/entities/update-store';
+import type { ExplosiveSettings } from '@src/entities/weapon-settings';
 import { currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { deepMerge, toTuple } from '@src/foundry/misc-helpers';
@@ -158,6 +158,10 @@ export class Explosive
     return this.epData.sticky;
   }
 
+  get dosesPerSubstance() {
+    return this.epData.dosesPerUnit;
+  }
+
   get fullType() {
     return this.explosiveType === ExplosiveType.Generic
       ? localize(this.type)
@@ -208,6 +212,11 @@ export class Explosive
     'isBlueprint',
     'size',
     'sticky',
+    'areaEffect',
+    'areaEffectRadius',
+    'canContainSubstance',
+    'explosiveType',
+    'dosesPerSubstance',
   ];
 
   isSameAs(explosive: Explosive) {

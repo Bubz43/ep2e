@@ -19,7 +19,7 @@ import { formatDamageType } from '@src/health/health';
 import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
-import { compact, map } from 'remeda';
+import { compact, map, noop } from 'remeda';
 import { requestCharacter } from '../../character-request-event';
 import styles from './attack-info-styles.scss';
 import { ExplosiveSettingsForm } from './explosive-settings/explosive-settings-form';
@@ -100,9 +100,35 @@ export class CharacterViewExplosiveAttacks extends LitElement {
     });
   }
 
+  private startAttack(ev: MouseEvent, attackType: AttackType) {
+    this.onAttack
+      ? this.onAttack(attackType)
+      : this.openUseMenu(ev, attackType);
+  }
+
   render() {
-    const { attacks, sticky } = this.explosive;
+    const { attacks, sticky, canContainSubstance } = this.explosive;
+    const hasAttacks = [attacks.primary, attacks.secondary].some(
+      (attack) =>
+        notEmpty(attack?.rollFormulas) || notEmpty(attack?.attackTraits),
+    );
     return html`
+      ${canContainSubstance && this.explosive.substance
+        ? html`
+            <colored-tag
+              type=${hasAttacks ? 'info' : 'attack'}
+              ?clickable=${!hasAttacks}
+              ?disabled=${!this.explosive.editable}
+              @click=${hasAttacks
+                ? noop
+                : (ev: MouseEvent) => this.startAttack(ev, 'primary')}
+              >${this.explosive.substance.name}
+              (${this.explosive.dosesPerSubstance}
+              ${localize('doses')}/${localize('unit')})
+              <span slot="after">${this.explosive.substance.fullType}</span>
+            </colored-tag>
+          `
+        : ''}
       ${this.renderAttack('primary')}
       ${attacks.secondary ? this.renderAttack('secondary') : ''}
       ${sticky
@@ -137,10 +163,7 @@ export class CharacterViewExplosiveAttacks extends LitElement {
         type="attack"
         clickable
         ?disabled=${!this.explosive.editable || !this.explosive.quantity}
-        @click=${(ev: MouseEvent) =>
-          this.onAttack
-            ? this.onAttack(attackType)
-            : this.openUseMenu(ev, attackType)}
+        @click=${(ev: MouseEvent) => this.startAttack(ev, attackType)}
       >
         <span>${info}</span>
         ${this.explosive.hasSecondaryMode

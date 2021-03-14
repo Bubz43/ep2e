@@ -106,12 +106,10 @@ export class Railgun
   }
 
   fire(shots: number) {
-    return this.updater
+    this.updater
       .path('data', 'ammo', 'value')
-      .store((current) => nonNegative(current - shots))
-      .path('data', 'battery', 'charge')
-      .store((current) => nonNegative(current - shots))
-      .commit();
+      .store((current) => nonNegative(current - shots));
+    return this.updateCharge({ charge: this.totalCharge - shots });
   }
 
   get availableShots() {

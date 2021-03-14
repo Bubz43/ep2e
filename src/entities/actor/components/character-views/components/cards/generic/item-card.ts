@@ -6,7 +6,7 @@ import { openMenu } from '@src/open-menu';
 import { customElement, html, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { requestCharacter } from '../../../character-request-event';
-import { openCoatingMenu } from '../../attacks/melee-weapon-menus';
+import { openCoatingMenu } from '../../attacks/ammo-menus';
 import { renderItemAttacks } from '../../attacks/render-item-attacks';
 import { ItemCardBase } from '../item-card-base';
 
@@ -80,6 +80,16 @@ export class ItemCard extends ItemCardBase {
             icon=${item.equipped ? 'archive' : 'unarchive'}
             ?disabled=${!editable}
           ></mwc-icon-button>
+        `
+      : ''}
+    ${item.type === ItemType.Trait && item.hasTriggers
+      ? html`
+          <mwc-switch
+            ?checked=${!!item.triggered}
+            ?disabled=${!editable}
+            title=${localize(item.triggered ? 'triggered' : 'trigger')}
+            @change=${() => item.toggleTriggered()}
+          ></mwc-switch>
         `
       : ''}`;
   }

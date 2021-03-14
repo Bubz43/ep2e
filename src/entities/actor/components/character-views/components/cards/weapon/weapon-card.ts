@@ -4,7 +4,7 @@ import type { ThrownWeapon } from '@src/entities/item/proxies/thrown-weapon';
 import { customElement, html, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { requestCharacter } from '../../../character-request-event';
-import { openCoatingMenu } from '../../attacks/melee-weapon-menus';
+import { openCoatingMenu } from '../../attacks/ammo-menus';
 import { renderItemAttacks } from '../../attacks/render-item-attacks';
 import { ItemCardBase } from '../item-card-base';
 import styles from './weapon-card.scss';

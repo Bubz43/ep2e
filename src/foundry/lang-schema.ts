@@ -1453,7 +1453,12 @@ type LangEntries =
   | 'meshAttack'
   | 'partially'
   | 'swap'
-  | 'carrying';
+  | 'carrying'
+  | 'lacksSmartlinkOrLaserSight'
+  | 'flash'
+  | 'sound'
+  | 'locateWeapon'
+  | 'unit';
 type FullNames =
   | 'cog'
   | 'int'

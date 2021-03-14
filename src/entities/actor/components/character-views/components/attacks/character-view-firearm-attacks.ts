@@ -1,13 +1,15 @@
 import { formatArmorUsed } from '@src/combat/attack-formatting';
 import { startRangedAttack } from '@src/combat/attack-init';
-import type { Railgun } from '@src/entities/item/proxies/railgun';
-import { subscribeToEnvironmentChange } from '@src/features/environment';
+import { renderSelectField } from '@src/components/field/fields';
+import { renderAutoForm } from '@src/components/form/forms';
+import { renderFirearmAmmoDetails } from '@src/entities/item/components/forms/firearm-ammo-details';
+import type { Firearm } from '@src/entities/item/proxies/firearm';
+import type { FirearmAmmo } from '@src/entities/item/proxies/firearm-ammo';
 import {
   createFiringModeGroup,
   FiringMode,
   firingModeCost,
 } from '@src/features/firing-modes';
-import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
@@ -15,14 +17,15 @@ import { openMenu } from '@src/open-menu';
 import { getWeaponRange } from '@src/success-test/range-modifiers';
 import { notEmpty, toggle } from '@src/utility/helpers';
 import { css, customElement, html, LitElement, property } from 'lit-element';
-import { compact } from 'remeda';
+import { compact, mapToObj } from 'remeda';
 import { requestCharacter } from '../../character-request-event';
+import { openFirearmAmmoMenu } from './ammo-menus';
 import styles from './attack-info-styles.scss';
 
-@customElement('character-view-railgun-attacks')
-export class CharacterViewRailgunAttacks extends LitElement {
+@customElement('character-view-firearm-attacks')
+export class CharacterViewFirearmAttacks extends LitElement {
   static get is() {
-    return 'character-view-railgun-attacks' as const;
+    return 'character-view-firearm-attacks' as const;
   }
 
   static get styles() {
@@ -38,6 +41,9 @@ export class CharacterViewRailgunAttacks extends LitElement {
         }
         .firing-modes {
           display: flex;
+          /* display: grid;
+          grid-auto-flow: column;
+          grid-template-rows: repeat(auto-fit, minmax(2ch, 1fr)); */
         }
         .attack {
           width: 100%;
@@ -48,36 +54,25 @@ export class CharacterViewRailgunAttacks extends LitElement {
         .attack + .attack {
           padding-top: 0;
         }
-        .battery {
-          display: inline-flex;
+        .ammo-modes {
+          width: 100%;
+          display: flex;
           align-items: center;
+          grid-template-columns: auto 1fr auto;
+          --mdc-icon-button-size: 2rem;
         }
-        .recharge {
-          display: inline-flex;
-          align-items: center;
-          color: var(--color-text-lighter);
-          margin-left: 0.5ch;
+        .ammo-modes > sl-form {
+          display: contents;
+        }
+        sl-field {
+          /* margin-top: -0.75rem; */
+          /* height: 3rem; */
         }
       `,
     ];
   }
 
-  @property({ attribute: false }) weapon!: Railgun;
-
-  private environmentUnsub: (() => void) | null = null;
-
-  connectedCallback() {
-    super.connectedCallback();
-    this.environmentUnsub = subscribeToEnvironmentChange(() =>
-      this.requestUpdate(),
-    );
-  }
-
-  disconnectedCallback() {
-    this.environmentUnsub?.();
-    this.environmentUnsub = null;
-    super.disconnectedCallback();
-  }
+  @property({ attribute: false }) weapon!: Firearm;
 
   private fire(firingMode: FiringMode) {
     const attack = this.weapon.attacks.primary;
@@ -94,53 +89,39 @@ export class CharacterViewRailgunAttacks extends LitElement {
     });
   }
 
-  private replaceBattery(ev: MouseEvent) {
-    openMenu({
-      header: { heading: `${this.weapon.name} ${localize('battery')}` },
-      content: [
-        {
-          label: localize('reload'),
-          sublabel: `${localize('swap')} ${localize('battery')} (${localize(
-            'complex',
-          )} ${localize('action')}) `,
-          callback: () => this.weapon.swapBattery(),
-          disabled: this.weapon.fullyCharged,
-        },
-      ],
-      position: ev,
-    });
-  }
-
-  private reloadAmmo(ev: MouseEvent) {
-    openMenu({
-      content: [
-        {
-          label: localize('reload'),
-          icon: html`<mwc-icon>refresh</mwc-icon>`,
-          disabled: this.weapon.fullyLoaded,
-          callback: () => {
-            this.weapon.reload();
-          },
-        },
-      ],
-    });
+  private openAmmoMenu(ev: MouseEvent) {
+    const { character } = requestCharacter(this);
+    character && openFirearmAmmoMenu(ev, character, this.weapon);
   }
 
   private toggleBraced() {
     this.weapon.updater.path('data', 'state', 'braced').commit(toggle);
   }
 
+  private openAmmoTransformer() {
+    const { specialAmmo } = this.weapon;
+    if (!specialAmmo?.hasMultipleModes) return;
+    openMenu({
+      content: html`<div style="padding: 1rem 2rem">
+        <firearm-ammo-transformer
+          .firearm=${this.weapon}
+          .ammo=${specialAmmo}
+        ></firearm-ammo-transformer>
+      </div>`,
+    });
+  }
+
   render() {
     const {
-      battery,
       editable,
       gearTraits,
       weaponTraits,
       accessories,
-      totalCharge,
-      fullyCharged,
+      specialAmmo,
       ammoState,
+      ammoData,
     } = this.weapon;
+    // TODO Special Ammo
     return html`
       <colored-tag type="info"
         >${localize('range')}
@@ -153,6 +134,7 @@ export class CharacterViewRailgunAttacks extends LitElement {
               type="usable"
               @click=${this.toggleBraced}
               ?disabled=${!editable}
+              clickable
               >${localize(
                 this.weapon.braced ? 'braced' : 'carried',
               )}</colored-tag
@@ -164,45 +146,60 @@ export class CharacterViewRailgunAttacks extends LitElement {
         type="usable"
         clickable
         ?disabled=${!editable}
-        @click=${this.reloadAmmo}
+        @click=${this.openAmmoMenu}
       >
-        <span>${localize('ammo')}</span>
+        <span
+          >${specialAmmo?.name || localize('standard')}
+          ${localize('ammo')}</span
+        >
         <value-status
           slot="after"
-          value=${ammoState.value}
+          value=${ammoData.value}
           max=${ammoState.max}
         ></value-status>
       </colored-tag>
-      <colored-tag
-        type="usable"
-        clickable
-        ?disabled=${!editable}
-        @click=${this.replaceBattery}
-      >
-        <span class="battery">
-          <mwc-icon
-            >${fullyCharged
-              ? 'battery_full'
-              : 'battery_charging_full'}</mwc-icon
-          >
-          ${localize('battery')}
-          ${fullyCharged
-            ? ''
-            : html`<span class="recharge">
-                ${prettyMilliseconds(this.weapon.timeTillFullyCharged)}</span
-              >`}
-        </span>
-        <value-status
-          slot="after"
-          value=${totalCharge}
-          max=${battery.max}
-        ></value-status>
-      </colored-tag>
+
+      ${specialAmmo?.hasMultipleModes
+        ? this.renderAmmoProgramming(specialAmmo)
+        : ''}
       ${this.renderAttack()}
       ${[...gearTraits, ...weaponTraits, ...accessories].map(
         (trait) =>
           html`<colored-tag type="info">${localize(trait)}</colored-tag>`,
       )}
+    `;
+  }
+
+  private renderAmmoProgramming(ammo: FirearmAmmo) {
+    const { specialAmmoModeIndex, availableShots } = this.weapon;
+    const ammoModes = mapToObj.indexed(ammo.modes, ({ name }, index) => [
+      String(index),
+      name,
+    ]);
+
+    return html`
+      <div class="ammo-modes">
+        <mwc-icon-button
+          icon="transform"
+          class="transform-button"
+          @click=${this.openAmmoTransformer}
+          ?disabled=${!this.weapon.editable}
+        ></mwc-icon-button>
+        ${renderAutoForm({
+          props: { mode: String(specialAmmoModeIndex) },
+          update: ({ mode }) =>
+            this.weapon.updater
+              .path('data', 'ammo', 'selectedModeIndex')
+              .commit(Number(mode) || 0),
+          fields: ({ mode }) =>
+            renderSelectField({ ...mode, label: '' }, Object.keys(ammoModes), {
+              altLabel: (modeId) => ammoModes[modeId] || modeId,
+            }),
+        })}
+        <sl-group label=${localize('availableShots')}
+          ><span class="available-shots">${availableShots}</span></sl-group
+        >
+      </div>
     `;
   }
 
@@ -219,8 +216,15 @@ export class CharacterViewRailgunAttacks extends LitElement {
         ].join(' '),
       attack.notes,
     ]).join('. ');
+    const [specialAmmo, mode] = attack.specialAmmo ?? [];
 
     return html`
+      ${specialAmmo?.payload
+        ? html`<colored-tag type="info"
+            ><span>${localize('ammo')} ${localize('payload')}</span
+            ><span slot="after">${specialAmmo.payload.name}</span></colored-tag
+          >`
+        : ''}
       <div class="attack">
         <div class="firing-modes">
           ${attack.firingModes.map(
@@ -238,7 +242,9 @@ export class CharacterViewRailgunAttacks extends LitElement {
             `,
           )}
         </div>
-        <colored-tag type="info" class="attack-info">${info} </colored-tag>
+        <colored-tag type="info" class="attack-info"
+          >${info} ${mode ? renderFirearmAmmoDetails(mode) : ''}
+        </colored-tag>
       </div>
     `;
   }
@@ -246,6 +252,6 @@ export class CharacterViewRailgunAttacks extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'character-view-railgun-attacks': CharacterViewRailgunAttacks;
+    'character-view-firearm-attacks': CharacterViewFirearmAttacks;
   }
 }

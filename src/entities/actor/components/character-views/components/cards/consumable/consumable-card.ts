@@ -19,7 +19,11 @@ import { customElement, html, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { compact } from 'remeda';
 import { requestCharacter } from '../../../character-request-event';
-import { openCoatingMenu } from '../../attacks/melee-weapon-menus';
+import {
+  openCoatingMenu,
+  openExplosiveSubstanceMenu,
+  openFirearmAmmoPayloadMenu,
+} from '../../attacks/ammo-menus';
 import { renderItemAttacks } from '../../attacks/render-item-attacks';
 import { ItemCardBase } from '../item-card-base';
 import styles from './consumable-card.scss';
@@ -115,9 +119,24 @@ export class ConsumableCard extends ItemCardBase {
       openCoatingMenu(ev, character, this.item);
   }
 
+  private openExplosizeSubstanceMenu(ev: MouseEvent) {
+    const { character } = requestCharacter(this);
+    character &&
+      this.item.type === ItemType.Explosive &&
+      openExplosiveSubstanceMenu(ev, character, this.item);
+  }
+
+  private openFirearmAmmoPayloadMenu(ev: MouseEvent) {
+    const { character } = requestCharacter(this);
+    character &&
+      this.item.type === ItemType.FirearmAmmo &&
+      openFirearmAmmoPayloadMenu(ev, character, this.item);
+  }
+
   renderHeaderButtons() {
     const { item } = this;
     const { editable } = item;
+
     return html` ${item.stashed
       ? html`
           <mwc-icon-button
@@ -155,6 +174,28 @@ export class ConsumableCard extends ItemCardBase {
           @click=${this.openCoatingSelectMenu}
           ?disabled=${!item.editable}
         ></mwc-icon-button>`
+      : item.type === ItemType.Explosive && item.canContainSubstance
+      ? html`
+          <mwc-icon-button
+            class="toggle ${classMap({ activated: !!item.substance })}"
+            icon=${item.substance
+              ? 'radio_button_checked'
+              : 'radio_button_unchecked'}
+            @click=${this.openExplosizeSubstanceMenu}
+            ?disabled=${!item.editable}
+          ></mwc-icon-button>
+        `
+      : item.type === ItemType.FirearmAmmo && item.canCarryPayload
+      ? html`
+          <mwc-icon-button
+            class="toggle ${classMap({ activated: !!item.payload })}"
+            icon=${item.payload
+              ? 'radio_button_checked'
+              : 'radio_button_unchecked'}
+            @click=${this.openFirearmAmmoPayloadMenu}
+            ?disabled=${!item.editable}
+          ></mwc-icon-button>
+        `
       : ''}`;
   }
 

@@ -5,7 +5,7 @@ import { deepMerge, toTuple } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { createPipe } from 'remeda';
+import { createPipe, equals, omit } from 'remeda';
 import { Copyable, Purchasable, Stackable } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 import { Substance } from './substance';
@@ -31,6 +31,12 @@ export class FirearmAmmo extends mix(Base).with(
   }: ItemProxyInit<ItemType.FirearmAmmo> & { loaded: boolean }) {
     super(init);
     this.loaded = loaded;
+  }
+
+  get fullName() {
+    return `${this.name} (${this.quantity}) ${
+      this.canCarryPayload ? `[${this.payload?.name || localize('empty')}]` : ''
+    }`;
   }
 
   get fullType() {
@@ -100,5 +106,29 @@ export class FirearmAmmo extends mix(Base).with(
 
   private get updatePayload() {
     return this.updater.path('flags', EP.Name, 'payload').commit;
+  }
+
+  private static readonly commonGetters: ReadonlyArray<keyof FirearmAmmo> = [
+    'name',
+    'quality',
+    'description',
+    'cost',
+    'isBlueprint',
+    'ammoClass',
+    'modes',
+    'canCarryPayload',
+  ];
+
+  isSameAs(ammo: FirearmAmmo) {
+    return (
+      FirearmAmmo.commonGetters.every((prop) =>
+        equals(this[prop], ammo[prop]),
+      ) &&
+      equals(
+        omit(this.epData, ['blueprint', 'quantity', 'state']),
+        omit(ammo.epData, ['blueprint', 'quantity', 'state']),
+      ) &&
+      equals(this.epFlags, ammo.epFlags)
+    );
   }
 }

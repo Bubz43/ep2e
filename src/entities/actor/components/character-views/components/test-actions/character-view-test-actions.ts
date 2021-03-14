@@ -269,6 +269,7 @@ export class CharacterViewTestActions extends LitElement {
     } = this.character.equippedGroups;
     // TODO: Toggle to show all reps instead of just tracked
     // TODO: Add collapse toggle
+    // TODO: Info that device ALI doesn't use different skills for anything besides here
     const reps = fakeID?.repsWithIdentifiers ?? sources[0]?.reps!;
     const showSource = !!onboardALIs.size;
     return html`

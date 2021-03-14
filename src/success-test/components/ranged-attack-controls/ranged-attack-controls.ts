@@ -2,6 +2,7 @@ import {
   renderNumberField,
   renderNumberInput,
   renderRadio,
+  renderRadioFields,
   renderSelectField,
   renderTimeField,
 } from '@src/components/field/fields';
@@ -12,6 +13,7 @@ import {
   CalledShot,
   enumValues,
   ExplosiveTrigger,
+  FirearmAmmoModifierType,
 } from '@src/data-enums';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
@@ -154,7 +156,7 @@ export class RangedAttackControls extends LitElement {
     if (!this.test) return;
 
     openMenu({
-      header: { heading: localize('throw') },
+      header: { heading: localize('ranged') },
       content: this.test.character.weapons.ranged.map((weapon) => ({
         label: weapon.fullName,
         sublabel: weapon.fullType,
@@ -243,14 +245,46 @@ export class RangedAttackControls extends LitElement {
       explosiveSettings,
       oneHanded,
       maxTargets,
+      seekerMode,
     } = firing;
     const { attacks, isTwoHanded, noClose, noPointBlank } = weapon ?? {};
 
     // TODO noClose/NoPointBlank
 
-    const joinedFormula = attack?.rollFormulas.length
-      ? joinLabeledFormulas([...attack?.rollFormulas, ...damageModifiers])
-      : null;
+    const [specialAmmo, mode] =
+      attack && 'specialAmmo' in attack ? attack.specialAmmo ?? [] : [];
+
+    const { damageModifierType, damageFormula: ammoFormula } = mode ?? {};
+
+    const attackFormulas = [...(attack?.rollFormulas || [])];
+    if (
+      damageModifierType === FirearmAmmoModifierType.Formula &&
+      specialAmmo &&
+      mode
+    ) {
+      attackFormulas.push({
+        label: `${specialAmmo.name} ${
+          specialAmmo.hasMultipleModes ? `(${mode.name})` : ''
+        }`,
+        formula: ammoFormula || '+0',
+      });
+    }
+    const formula =
+      damageModifierType === FirearmAmmoModifierType.Halve
+        ? `(${joinLabeledFormulas(attackFormulas)}) / 2`
+        : joinLabeledFormulas(attackFormulas);
+
+    const joinedFormula =
+      attack?.rollFormulas.length &&
+      damageModifierType !== FirearmAmmoModifierType.NoDamage
+        ? joinLabeledFormulas([
+            {
+              label: localize('attack'),
+              formula,
+            },
+            ...damageModifiers,
+          ])
+        : null;
 
     return html`
       ${character
@@ -370,6 +404,12 @@ export class RangedAttackControls extends LitElement {
         weapon.missiles &&
         explosiveSettings // TODO Spray Weapon
           ? html`
+              ${renderAutoForm({
+                props: { seekerMode },
+                update: firing.update,
+                fields: ({ seekerMode }) =>
+                  renderRadioFields(seekerMode, ['accushot', 'homing']),
+              })}
               ${weapon.missiles.areaEffect
                 ? this.renderAreaEffectEdit(
                     weapon.missiles,

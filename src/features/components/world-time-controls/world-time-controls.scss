@@ -7,7 +7,6 @@
 
 :host {
   display: block;
-  position: relative;
   width: 325px;
 }
 
@@ -16,13 +15,30 @@
   align-items: center;
   --mdc-icon-button-size: 2rem;
   padding: 0.25rem;
-  background: alphav(var(--color-bg), 0.55);
   // border-radius: 100px;
-  box-shadow: 0 0 2px black;
+  // box-shadow: 0 0 2px black;
+  position: relative;
   transition: background 75ms;
   pointer-events: all;
+  overflow: hidden;
+  border-bottom-left-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
   sl-form {
     height: 12px;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to top,
+      alphav(var(--color-bg), 0.75),
+      alphav(var(--color-bg-alt), 0.75)
+    );
   }
 
   > * {
@@ -38,13 +54,10 @@
   &:focus-within {
     background: alphav(var(--color-bg-alt), 0.95);
   }
-  & + .changes {
-    top: 50px;
-  }
 }
 
 .changes {
-  position: absolute;
+  // position: absolute;
   padding: 0 1rem 0 0;
   max-height: 4rem;
   display: flex;
@@ -54,6 +67,8 @@
   align-items: flex-end;
   overflow: hidden;
   text-shadow: 0 0 4px black;
+  position: relative;
+  top: 0.25rem;
 
   > * {
     animation-fill-mode: none !important;
@@ -67,4 +82,28 @@
       opacity: 1;
     }
   }
+}
+
+.date-time {
+  display: grid;
+  grid-template-columns: 14ch 1fr;
+  padding: 0.25rem 1rem;
+  text-align: center;
+  background: linear-gradient(
+    to bottom,
+    alphav(var(--color-bg), 0.75),
+    alphav(var(--color-bg-alt), 0.75)
+  );
+
+  & + .controls {
+    border-top: 2px groove var(--color-border);
+  }
+}
+
+.time {
+  border-right: 3px solid alphav(var(--color-grey), 0.5);
+  // padding-right: 1ch;
+  margin-right: 0.5ch;
+  pointer-events: initial;
+  font-family: var(--font-mono);
 }
