@@ -248,7 +248,7 @@ export class RangedAttackControls extends LitElement {
       seekerMode,
     } = firing;
     const { attacks, isTwoHanded, noClose, noPointBlank } = weapon ?? {};
-
+    console.log(targetDistance);
     // TODO noClose/NoPointBlank
 
     const [specialAmmo, mode] =
@@ -436,11 +436,12 @@ export class RangedAttackControls extends LitElement {
             props: { targetDistance, range },
             update: firing.update,
             fields: ({ targetDistance, range }) => [
-              renderNumberField(targetDistance, { min: 0 }),
+              renderNumberField(targetDistance, { min: 0, step: 0.1 }),
               renderNumberField(
                 { ...range, label: `${localize('weaponRange')}` },
                 {
                   min: 1,
+                  step: 0.1,
                   helpPersistent: range.value === Infinity,
                   helpText:
                     range.value === Infinity

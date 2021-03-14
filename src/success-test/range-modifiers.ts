@@ -29,7 +29,7 @@ export const getRangeModifier = (range: number, targetDistance: number) => {
 };
 
 export const applyGravityToWeaponRange = (range: number, gravity: number) => {
-  return !gravity ? Infinity : Math.round(range / gravity);
+  return !gravity ? Infinity : Math.round((range / gravity) * 10) / 10;
 };
 
 export const getWeaponRange = (weapon: RangedWeapon): number => {

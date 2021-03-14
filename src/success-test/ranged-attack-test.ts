@@ -137,7 +137,7 @@ export class RangedAttackTest extends SkillTest {
         token && notEmpty(attackTargets)
           ? Math.max(
               ...[...attackTargets].map((target) =>
-                Math.ceil(distanceBetweenTokens(token, target)),
+                distanceBetweenTokens(token, target),
               ),
             )
           : 10,
@@ -243,7 +243,7 @@ export class RangedAttackTest extends SkillTest {
         ) {
           draft.firing.targetDistance = Math.max(
             ...[...draft.firing.attackTargets].map((target) =>
-              Math.ceil(distanceBetweenTokens(token, target as Token)),
+              distanceBetweenTokens(token, target as Token),
             ),
           );
         }

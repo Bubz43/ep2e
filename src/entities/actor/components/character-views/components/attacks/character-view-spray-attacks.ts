@@ -1,6 +1,6 @@
 import type { SprayWeapon } from '@src/entities/item/proxies/spray-weapon';
 import { customElement, LitElement, property } from 'lit-element';
-import styles from './character-view-spray-attacks.scss';
+import styles from './attack-info-styles.scss';
 
 @customElement('character-view-spray-attacks')
 export class CharacterViewSprayAttacks extends LitElement {
