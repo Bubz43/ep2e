@@ -81,6 +81,16 @@ export class ItemCard extends ItemCardBase {
             ?disabled=${!editable}
           ></mwc-icon-button>
         `
+      : ''}
+    ${item.type === ItemType.Trait && item.hasTriggers
+      ? html`
+          <mwc-switch
+            ?checked=${!!item.triggered}
+            ?disabled=${!editable}
+            title=${localize('triggered')}
+            @change=${() => item.toggleTriggered()}
+          ></mwc-switch>
+        `
       : ''}`;
   }
 
