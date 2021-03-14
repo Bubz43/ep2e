@@ -19,7 +19,10 @@ import { customElement, html, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { compact } from 'remeda';
 import { requestCharacter } from '../../../character-request-event';
-import { openCoatingMenu } from '../../attacks/melee-weapon-menus';
+import {
+  openCoatingMenu,
+  openExplosiveSubstanceMenu,
+} from '../../attacks/ammo-menus';
 import { renderItemAttacks } from '../../attacks/render-item-attacks';
 import { ItemCardBase } from '../item-card-base';
 import styles from './consumable-card.scss';
@@ -115,7 +118,12 @@ export class ConsumableCard extends ItemCardBase {
       openCoatingMenu(ev, character, this.item);
   }
 
-  private openExplosizeSubstanceMenu(ev: MouseEvent) {}
+  private openExplosizeSubstanceMenu(ev: MouseEvent) {
+    const { character } = requestCharacter(this);
+    character &&
+      this.item.type === ItemType.Explosive &&
+      openExplosiveSubstanceMenu(ev, character, this.item);
+  }
 
   private openFirearmAmmoPayloadMenu(ev: MouseEvent) {}
 

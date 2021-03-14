@@ -3,7 +3,7 @@ import { renderAutoForm } from '@src/components/form/forms';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import {
   defaultStandardCalendar,
-  getCurrentDate,
+  getCurrentDateTime,
 } from '@src/features/calendar';
 import { parseMilliseconds } from '@src/features/modify-milliseconds';
 import { advanceWorldTime } from '@src/features/time';
@@ -50,11 +50,11 @@ export class WorldTimeControls extends mix(LitElement).with(UseWorldTime) {
 
   render() {
     const disabled = this.timeChange === 0;
-    const currentDate = getCurrentDate(defaultStandardCalendar());
+    const currentDate = getCurrentDateTime(defaultStandardCalendar());
     // console.log(prettyMilliseconds(currentWorldTimeMS()));
     const { hours, minutes, seconds } = parseMilliseconds(currentDate.time);
     return html`
-      <div class="date">
+      <div class="date-time">
         <span class="time"
           ><span title=${localize('hours')}>${formatTime(hours)}</span>:<span
             title=${localize('minutes')}
@@ -63,9 +63,10 @@ export class WorldTimeControls extends mix(LitElement).with(UseWorldTime) {
             >${formatTime(seconds)}</span
           ></span
         >
-
-        <span>${localize('day')} ${currentDate.day},</span>
-        <span>${currentDate.year} ${currentDate.era}</span>
+        <span class="date">
+          ${currentDate.month} ${currentDate.day}, ${currentDate.era}
+          ${currentDate.year}
+        </span>
       </div>
       ${game.user.isGM && userCan('SETTINGS_MODIFY')
         ? html`<div class="controls">

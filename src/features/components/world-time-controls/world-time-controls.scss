@@ -84,8 +84,10 @@
   }
 }
 
-.date {
-  padding: 0.25rem 0.5rem;
+.date-time {
+  display: grid;
+  grid-template-columns: 14ch 1fr;
+  padding: 0.25rem 1rem;
   text-align: center;
   background: linear-gradient(
     to bottom,
@@ -99,8 +101,9 @@
 }
 
 .time {
-  border-right: 3px solid alphav(var(--color-grey), 0.375);
-  padding-right: 0.5ch;
+  border-right: 3px solid alphav(var(--color-grey), 0.5);
+  // padding-right: 1ch;
+  margin-right: 0.5ch;
   pointer-events: initial;
   font-family: var(--font-mono);
 }

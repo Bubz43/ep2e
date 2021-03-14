@@ -1457,7 +1457,8 @@ type LangEntries =
   | 'lacksSmartlinkOrLaserSight'
   | 'flash'
   | 'sound'
-  | 'locateWeapon';
+  | 'locateWeapon'
+  | 'unit';
 type FullNames =
   | 'cog'
   | 'int'

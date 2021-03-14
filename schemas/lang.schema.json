@@ -4521,6 +4521,9 @@
             "unique": {
               "type": "string"
             },
+            "unit": {
+              "type": "string"
+            },
             "unitsPerComplexity": {
               "type": "string"
             },
@@ -6115,6 +6118,7 @@
             "unignored",
             "uninstall",
             "unique",
+            "unit",
             "unitsPerComplexity",
             "unknown",
             "unload",

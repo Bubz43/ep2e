@@ -13,8 +13,8 @@ import { customElement, html, LitElement, property } from 'lit-element';
 import { compact, map, pick, pipe } from 'remeda';
 import { stopEvent } from 'weightless';
 import { requestCharacter } from '../../character-request-event';
+import { openCoatingMenu, openMeleePayloadMenu } from './ammo-menus';
 import styles from './attack-info-styles.scss';
-import { openCoatingMenu, openMeleePayloadMenu } from './melee-weapon-menus';
 
 @customElement('character-view-melee-weapon-attacks')
 export class CharacterViewMeleeWeaponAttacks extends LitElement {
