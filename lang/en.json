@@ -1427,6 +1427,11 @@
     "partially": "Partially",
     "carrying": "Carrying",
     "swap": "Swap",
+    "flash": "Flash",
+    "lacksSmartlinkOrLaserSight": "Lacks Smartlink or Laser Sight",
+    "locateWeapon": "Locate Weapon",
+    "sound": "Sound",
+    "unit": "Unit",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
