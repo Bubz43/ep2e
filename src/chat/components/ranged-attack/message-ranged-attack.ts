@@ -6,6 +6,7 @@ import type {
 import {
   FirearmAmmoModifierType,
   RangedWeaponAccessory,
+  SprayPayload,
   SubstanceApplicationMethod,
   SuperiorResultEffect,
 } from '@src/data-enums';
@@ -239,21 +240,44 @@ export class MessageRangedAttack extends MessageElement {
         useMethod: payload.isChemical
           ? 'use'
           : SubstanceApplicationMethod.Dermal,
-      }, // TODO injected
+      },
+    });
+
+    this.getUpdater('rangedAttack').commit({ appliedPayload: true });
+  }
+
+  private async createSprayWeaponPayloadMessage() {
+    const { weapon, message } = this;
+    const payload =
+      weapon.type === ItemType.SprayWeapon ? weapon.payload : null;
+    if (!payload || weapon.type !== ItemType.SprayWeapon) return;
+    const header = payload.messageHeader;
+    header.subheadings = [header.subheadings || []]
+      .flat()
+      .concat(`${weapon.name} [${localize('payload')}]`);
+    await message.createSimilar({
+      header,
+      substanceUse: {
+        substance: payload.getDataCopy(),
+        useMethod: payload.isChemical
+          ? 'use'
+          : SubstanceApplicationMethod.Dermal,
+        doses: weapon.dosesPerShot,
+      },
     });
 
     this.getUpdater('rangedAttack').commit({ appliedPayload: true });
   }
 
   render() {
-    const { attacks, name, type } = this.weapon;
+    const { weapon, disabled } = this;
+    const { attacks, name, type } = weapon;
     const {
       firingModeGroup,
       calledShot,
       primaryAttack,
       appliedPayload,
     } = this.rangedAttack;
-    const { disabled } = this;
     const options: string[] = [];
     options.push(
       `${localize('firingMode')}: ${localize(firingModeGroup[0])} ${
@@ -329,6 +353,21 @@ export class MessageRangedAttack extends MessageElement {
               @click=${this.createFirearmAmmoPayloadMessage}
               >${localize(appliedPayload ? 'applied' : 'apply')}
               ${localize('payload')}</mwc-button
+            >
+          `
+        : ''}
+      ${!disabled &&
+      weapon.type === ItemType.SprayWeapon &&
+      weapon.payloadUse === SprayPayload.FirePayload &&
+      weapon.payload
+        ? html`
+            <mwc-button
+              dense
+              outlined
+              class="payload"
+              ?disabled=${!!appliedPayload}
+              @click=${this.createSprayWeaponPayloadMessage}
+              >${localize('apply')} ${localize('payload')}</mwc-button
             >
           `
         : ''}

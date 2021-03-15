@@ -128,8 +128,8 @@ export class CharacterViewSprayAttacks extends LitElement {
       >
         <span
           >${this.weapon.firePayload && this.weapon.payload
-            ? this.weapon.payload.name
-            : '-'}
+            ? this.weapon.payload.fullName
+            : ''}
           ${localize('ammo')}</span
         >
         <value-status
