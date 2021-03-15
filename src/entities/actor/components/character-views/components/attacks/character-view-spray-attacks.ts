@@ -16,7 +16,7 @@ import { notEmpty, toggle } from '@src/utility/helpers';
 import { css, customElement, html, LitElement, property } from 'lit-element';
 import { compact, map } from 'remeda';
 import { requestCharacter } from '../../character-request-event';
-import { openSprayWeaponFiredPayloadMenu } from './ammo-menus';
+import { openSprayWeaponPayloadMenu } from './ammo-menus';
 import styles from './attack-info-styles.scss';
 
 @customElement('character-view-spray-attacks')
@@ -87,7 +87,7 @@ export class CharacterViewSprayAttacks extends LitElement {
         ],
       });
     } else if (this.weapon.payloadUse === SprayPayload.FirePayload) {
-      character && openSprayWeaponFiredPayloadMenu(ev, character, this.weapon);
+      character && openSprayWeaponPayloadMenu(ev, character, this.weapon);
     }
   }
 

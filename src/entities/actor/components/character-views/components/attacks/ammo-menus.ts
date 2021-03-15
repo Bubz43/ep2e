@@ -435,12 +435,13 @@ export const openFirearmAmmoPayloadMenu = (
   });
 };
 
-export const openSprayWeaponFiredPayloadMenu = (
+export const openSprayWeaponPayloadMenu = (
   ev: MouseEvent,
   character: Character,
   weapon: SprayWeapon,
 ) => {
-  const { payload: substance, dosesPerShot } = weapon;
+  const { payload: substance, firePayload } = weapon;
+  const dosesPerShot = weapon.firePayload ? weapon.dosesPerShot : 1;
   const substances =
     character.consumables.flatMap((c) =>
       c.type === ItemType.Substance && !(c.isBlueprint || c.isElectronic)
@@ -471,7 +472,7 @@ export const openSprayWeaponFiredPayloadMenu = (
       ...substances.map((s) => ({
         label: s.fullName,
         sublabel: s.fullType,
-        disabled: s.quantity < dosesPerShot,
+        disabled: firePayload ? s.quantity < dosesPerShot : !s.quantity,
         callback: async () => {
           const amount = Math.min(s.quantity, weapon.ammoState.max);
           const payload = produce(s.getDataCopy(), (draft) => {
@@ -485,7 +486,7 @@ export const openSprayWeaponFiredPayloadMenu = (
     if (content.length === 0) {
       content.push({
         label: `${localize('no')} ${localize('available')} ${localize(
-          'payloads',
+          'substances',
         )}`,
         callback: noop,
         disabled: true,
@@ -496,9 +497,11 @@ export const openSprayWeaponFiredPayloadMenu = (
   openMenu({
     position: ev,
     header: {
-      heading: `${weapon.name} ${localize(
-        'payload',
-      )} ${dosesPerShot} / ${localize('unit')}`,
+      heading: weapon.firePayload
+        ? `${weapon.name} ${localize('payload')} ${dosesPerShot} / ${localize(
+            'unit',
+          )}`
+        : `${weapon.name} ${localize('ammoCoating')}`,
     },
     content,
   });
