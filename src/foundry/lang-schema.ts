@@ -1458,7 +1458,8 @@ type LangEntries =
   | 'flash'
   | 'sound'
   | 'locateWeapon'
-  | 'unit';
+  | 'unit'
+  | 'ammoCoating';
 type FullNames =
   | 'cog'
   | 'int'

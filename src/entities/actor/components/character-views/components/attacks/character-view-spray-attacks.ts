@@ -16,7 +16,7 @@ import { notEmpty, toggle } from '@src/utility/helpers';
 import { css, customElement, html, LitElement, property } from 'lit-element';
 import { compact, map } from 'remeda';
 import { requestCharacter } from '../../character-request-event';
-import { openSprayWeaponFiredPayloadMenu } from './ammo-menus';
+import { openSprayWeaponPayloadMenu } from './ammo-menus';
 import styles from './attack-info-styles.scss';
 
 @customElement('character-view-spray-attacks')
@@ -75,7 +75,9 @@ export class CharacterViewSprayAttacks extends LitElement {
 
   private openAmmoMenu(ev: MouseEvent) {
     const { character } = requestCharacter(this);
-    if (!this.weapon.payloadUse) {
+    if (this.weapon.payloadUse === SprayPayload.FirePayload) {
+      character && openSprayWeaponPayloadMenu(ev, character, this.weapon);
+    } else {
       openMenu({
         position: ev,
         content: [
@@ -86,8 +88,6 @@ export class CharacterViewSprayAttacks extends LitElement {
           },
         ],
       });
-    } else if (this.weapon.payloadUse === SprayPayload.FirePayload) {
-      character && openSprayWeaponFiredPayloadMenu(ev, character, this.weapon);
     }
   }
 
@@ -98,6 +98,7 @@ export class CharacterViewSprayAttacks extends LitElement {
       weaponTraits,
       accessories,
       ammoState,
+      payloadUse,
     } = this.weapon;
     // TODO Special Ammo
     return html`
@@ -119,6 +120,14 @@ export class CharacterViewSprayAttacks extends LitElement {
             >
           `
         : ''}
+      ${payloadUse === SprayPayload.CoatAmmunition && this.weapon.payload
+        ? html`
+            <colored-tag type="info">
+              ${localize('ammoCoating')}
+              <span slot="after">${this.weapon.payload.fullName}</span>
+            </colored-tag>
+          `
+        : ''}
 
       <colored-tag
         type="usable"
@@ -127,11 +136,11 @@ export class CharacterViewSprayAttacks extends LitElement {
         @click=${this.openAmmoMenu}
       >
         <span
-          >${this.weapon.firePayload && this.weapon.payload
-            ? this.weapon.payload.fullName
-            : ''}
-          ${localize('ammo')}</span
-        >
+          >${this.weapon.firePayload
+            ? this.weapon.payload?.fullName ||
+              `${localize('no')} ${localize('payload')}`
+            : localize('ammo')}
+        </span>
         <value-status
           slot="after"
           value=${ammoState.value}

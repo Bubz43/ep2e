@@ -435,45 +435,68 @@ export const openFirearmAmmoPayloadMenu = (
   });
 };
 
-export const openSprayWeaponFiredPayloadMenu = (
+export const openSprayWeaponPayloadMenu = (
   ev: MouseEvent,
   character: Character,
   weapon: SprayWeapon,
 ) => {
-  const { payload: substance, dosesPerShot } = weapon;
+  const { payload, firePayload } = weapon;
+  const dosesPerShot = weapon.firePayload ? weapon.dosesPerShot : 1;
   const substances =
     character.consumables.flatMap((c) =>
       c.type === ItemType.Substance && !(c.isBlueprint || c.isElectronic)
         ? c
         : [],
     ) ?? [];
+  const max = weapon.ammoState.max * dosesPerShot;
   const content: MWCMenuOption[] = [];
-  if (substance) {
+  if (payload) {
+    const matching = substances.filter((s) => s.isSameAs(payload));
+    if (matching.length) {
+      for (const substance of substances) {
+        content.push({
+          label: `${localize('reload')} ${substance.fullName}`,
+          disabled: payload.quantity >= max || !substance.quantity,
+          callback: async () => {
+            const change = Math.min(substance.quantity, max - payload.quantity);
+            await substance.setQuantity((current) => current - change);
+            await payload.setQuantity((current) => current + change);
+          },
+        });
+      }
+    } else {
+      content.push({
+        label: `${localize('reload')} ${payload.name}`,
+        sublabel: `${localize('no')} ${localize('match')}`,
+        disabled: true,
+        callback: noop,
+      });
+    }
+
     content.push({
-      label: `${localize('unload')} ${substance.name}`,
+      label: `${localize('unload')} ${payload.name}`,
       callback: async () => {
-        const amount = substance.quantity;
-        const same = substances.find((s) => s.isSameAs(substance));
+        const amount = payload.quantity;
+        const [same] = matching;
         if (same) await same.setQuantity((current) => current + amount);
         else
           await character?.itemOperations.add(
             produce(
-              substance.getDataCopy(),
+              payload.getDataCopy(),
               ({ data }) => void (data.quantity = amount),
             ),
           );
         await weapon.removePayload();
       },
     });
-  }
-  {
+  } else {
     content.push(
       ...substances.map((s) => ({
         label: s.fullName,
         sublabel: s.fullType,
-        disabled: s.quantity < dosesPerShot,
+        disabled: firePayload ? s.quantity < dosesPerShot : !s.quantity,
         callback: async () => {
-          const amount = Math.min(s.quantity, weapon.ammoState.max);
+          const amount = Math.min(s.quantity, max);
           const payload = produce(s.getDataCopy(), (draft) => {
             draft.data.quantity = amount;
           });
@@ -485,7 +508,7 @@ export const openSprayWeaponFiredPayloadMenu = (
     if (content.length === 0) {
       content.push({
         label: `${localize('no')} ${localize('available')} ${localize(
-          'payloads',
+          'substances',
         )}`,
         callback: noop,
         disabled: true,
@@ -496,9 +519,11 @@ export const openSprayWeaponFiredPayloadMenu = (
   openMenu({
     position: ev,
     header: {
-      heading: `${weapon.name} ${localize(
-        'payload',
-      )} ${dosesPerShot} / ${localize('unit')}`,
+      heading: weapon.firePayload
+        ? `${weapon.name} ${localize('payload')} ${dosesPerShot} / ${localize(
+            'unit',
+          )}`
+        : `${weapon.name} ${localize('ammoCoating')}`,
     },
     content,
   });

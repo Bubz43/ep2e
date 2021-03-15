@@ -14,6 +14,7 @@ import {
   enumValues,
   ExplosiveTrigger,
   FirearmAmmoModifierType,
+  SprayPayload,
 } from '@src/data-enums';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
@@ -27,6 +28,7 @@ import {
   createFiringModeGroup,
   FiringMode,
   firingModeCost,
+  getFiringModeGroupShots,
   MultiAmmoOption,
   multiAmmoValues,
 } from '@src/features/firing-modes';
@@ -246,9 +248,9 @@ export class RangedAttackControls extends LitElement {
       oneHanded,
       maxTargets,
       seekerMode,
+      firingModeGroup,
     } = firing;
     const { attacks, isTwoHanded, noClose, noPointBlank } = weapon ?? {};
-    console.log(targetDistance);
     // TODO noClose/NoPointBlank
 
     const [specialAmmo, mode] =
@@ -465,6 +467,17 @@ export class RangedAttackControls extends LitElement {
         <wl-list-item class="damage-value">
           ${joinedFormula || localize('noDamage')}
         </wl-list-item>
+        ${weapon.type === ItemType.SprayWeapon &&
+        weapon.payloadUse === SprayPayload.CoatAmmunition &&
+        weapon.payload &&
+        !weapon.shouldApplyCoating(getFiringModeGroupShots(firingModeGroup))
+          ? html`
+              <wl-list-item
+                >${localize('ammoCoating')} ${localize('not')}
+                ${localize('applied')}</wl-list-item
+              >
+            `
+          : ''}
       </ul>
 
       <success-test-footer
