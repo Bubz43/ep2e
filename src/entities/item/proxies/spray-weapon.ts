@@ -96,6 +96,12 @@ export class SprayWeapon
       : { ...common, value: Math.min(value, max) };
   }
 
+  reloadStandardAmmo() {
+    return this.updater
+      .path('data', 'ammo', 'value')
+      .commit(this.ammoState.max);
+  }
+
   updateAmmoValue(newValue: number) {
     return this.payloadUse === SprayPayload.FirePayload
       ? this.payload?.updater.path('data', 'quantity').commit(newValue)
@@ -167,8 +173,10 @@ export class SprayWeapon
     return this.epData.range;
   }
 
-  setPayload(payload: Substance) {
-    return this.updatePayload(payload.getDataCopy(true));
+  setPayload(payload: Substance | Substance['data']) {
+    return this.updatePayload(
+      payload instanceof Substance ? payload.getDataCopy(true) : payload,
+    );
   }
 
   removePayload() {

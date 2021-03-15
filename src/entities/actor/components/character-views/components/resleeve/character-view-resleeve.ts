@@ -13,6 +13,11 @@ import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
 import { idProp } from '@src/features/feature-helpers';
 import { SpecialTest } from '@src/features/tags';
+import {
+  actorDroptoActorProxy,
+  DropType,
+  handleDrop,
+} from '@src/foundry/drag-and-drop';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
@@ -28,6 +33,7 @@ import {
   internalProperty,
   LitElement,
   property,
+  PropertyValues,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import {
@@ -78,6 +84,20 @@ export class CharacterViewResleeve extends LitElement {
   disconnectedCallback() {
     this.cleanup();
     super.connectedCallback();
+  }
+
+  firstUpdated(changedProps: PropertyValues<this>) {
+    super.firstUpdated(changedProps);
+    this.addEventListener(
+      'drop',
+      handleDrop(async ({ drop, data }) => {
+        const actorProxy =
+          data?.type === DropType.Actor && (await actorDroptoActorProxy(data));
+        if (actorProxy && isSleeve(actorProxy)) {
+          this.selectedSleeve = actorProxy;
+        }
+      }),
+    );
   }
 
   private cleanup() {

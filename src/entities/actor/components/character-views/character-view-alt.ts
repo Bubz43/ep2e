@@ -33,7 +33,15 @@ import { cache } from 'lit-html/directives/cache';
 import { classMap } from 'lit-html/directives/class-map';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
-import { compact, difference, identity, prop, range, sortBy } from 'remeda';
+import {
+  compact,
+  difference,
+  identity,
+  noop,
+  prop,
+  range,
+  sortBy,
+} from 'remeda';
 import type { Ego } from '../../ego';
 import type { Character } from '../../proxies/character';
 import { formattedSleeveInfo, Sleeve } from '../../sleeves';
@@ -387,7 +395,9 @@ export class CharacterViewAlt extends CharacterViewBase {
             (tab: CharacterTab) =>
               html`
                 <mwc-tab
-                  @dragenter=${this.activateTab}
+                  @dragenter=${tab === 'gear' || tab === 'traits'
+                    ? this.activateTab
+                    : noop}
                   label=${localize(tab)}
                 ></mwc-tab>
               `,

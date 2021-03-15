@@ -5,6 +5,7 @@ import type { Firearm } from '@src/entities/item/proxies/firearm';
 import { FirearmAmmo } from '@src/entities/item/proxies/firearm-ammo';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import type { SeekerWeapon } from '@src/entities/item/proxies/seeker-weapon';
+import type { SprayWeapon } from '@src/entities/item/proxies/spray-weapon';
 import type { ThrownWeapon } from '@src/entities/item/proxies/thrown-weapon';
 import { localize } from '@src/foundry/localization';
 import { MWCMenuOption, openMenu } from '@src/open-menu';
@@ -429,6 +430,75 @@ export const openFirearmAmmoPayloadMenu = (
     position: ev,
     header: {
       heading: `${ammo.name} ${localize('payload')}`,
+    },
+    content,
+  });
+};
+
+export const openSprayWeaponFiredPayloadMenu = (
+  ev: MouseEvent,
+  character: Character,
+  weapon: SprayWeapon,
+) => {
+  const { payload: substance, dosesPerShot } = weapon;
+  const substances =
+    character.consumables.flatMap((c) =>
+      c.type === ItemType.Substance && !(c.isBlueprint || c.isElectronic)
+        ? c
+        : [],
+    ) ?? [];
+  const content: MWCMenuOption[] = [];
+  if (substance) {
+    content.push({
+      label: `${localize('unload')} ${substance.name}`,
+      callback: async () => {
+        const amount = substance.quantity;
+        const same = substances.find((s) => s.isSameAs(substance));
+        if (same) await same.setQuantity((current) => current + amount);
+        else
+          await character?.itemOperations.add(
+            produce(
+              substance.getDataCopy(),
+              ({ data }) => void (data.quantity = amount),
+            ),
+          );
+        await weapon.removePayload();
+      },
+    });
+  }
+  {
+    content.push(
+      ...substances.map((s) => ({
+        label: s.fullName,
+        sublabel: s.fullType,
+        disabled: s.quantity < dosesPerShot,
+        callback: async () => {
+          const amount = Math.min(s.quantity, weapon.ammoState.max);
+          const payload = produce(s.getDataCopy(), (draft) => {
+            draft.data.quantity = amount;
+          });
+          await weapon.setPayload(payload);
+          s.setQuantity((current) => current - amount);
+        },
+      })),
+    );
+    if (content.length === 0) {
+      content.push({
+        label: `${localize('no')} ${localize('available')} ${localize(
+          'payloads',
+        )}`,
+        callback: noop,
+        disabled: true,
+      });
+    }
+  }
+
+  openMenu({
+    position: ev,
+    header: {
+      heading: `${weapon.name} ${localize(
+        'payload',
+      )} ${dosesPerShot} / ${localize('unit')}`,
     },
     content,
   });

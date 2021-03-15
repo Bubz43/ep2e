@@ -1,5 +1,5 @@
 import { conditionIcons } from '@src/features/conditions';
-import { first, pipe, concat, uniq } from 'remeda';
+import { concat, first, pipe, uniq } from 'remeda';
 import { readyCanvas } from './canvas';
 
 export const panToToken = (token: Token) => {
