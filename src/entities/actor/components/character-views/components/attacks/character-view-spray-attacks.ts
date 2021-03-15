@@ -136,11 +136,11 @@ export class CharacterViewSprayAttacks extends LitElement {
         @click=${this.openAmmoMenu}
       >
         <span
-          >${this.weapon.firePayload && this.weapon.payload
-            ? this.weapon.payload.fullName
-            : ''}
-          ${localize('ammo')}</span
-        >
+          >${this.weapon.firePayload
+            ? this.weapon.payload?.fullName ||
+              `${localize('no')} ${localize('payload')}`
+            : localize('ammo')}
+        </span>
         <value-status
           slot="after"
           value=${ammoState.value}

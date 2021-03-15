@@ -448,6 +448,7 @@ export const openSprayWeaponPayloadMenu = (
         ? c
         : [],
     ) ?? [];
+  const max = weapon.ammoState.max * dosesPerShot;
   const content: MWCMenuOption[] = [];
   if (payload) {
     const matching = substances.filter((s) => s.isSameAs(payload));
@@ -455,13 +456,9 @@ export const openSprayWeaponPayloadMenu = (
       for (const substance of substances) {
         content.push({
           label: `${localize('reload')} ${substance.fullName}`,
-          disabled:
-            payload.quantity >= weapon.ammoState.max || !substance.quantity,
+          disabled: payload.quantity >= max || !substance.quantity,
           callback: async () => {
-            const change = Math.min(
-              substance.quantity,
-              weapon.ammoState.max - payload.quantity,
-            );
+            const change = Math.min(substance.quantity, max - payload.quantity);
             await substance.setQuantity((current) => current - change);
             await payload.setQuantity((current) => current + change);
           },
@@ -492,18 +489,14 @@ export const openSprayWeaponPayloadMenu = (
         await weapon.removePayload();
       },
     });
-  }
-  {
+  } else {
     content.push(
       ...substances.map((s) => ({
         label: s.fullName,
         sublabel: s.fullType,
         disabled: firePayload ? s.quantity < dosesPerShot : !s.quantity,
         callback: async () => {
-          const amount = Math.min(
-            s.quantity,
-            weapon.ammoState.max * dosesPerShot,
-          );
+          const amount = Math.min(s.quantity, max);
           const payload = produce(s.getDataCopy(), (draft) => {
             draft.data.quantity = amount;
           });
