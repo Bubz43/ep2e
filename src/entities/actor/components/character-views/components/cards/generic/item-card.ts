@@ -1,3 +1,4 @@
+import { SprayPayload } from '@src/data-enums';
 import { ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
 import { format, localize } from '@src/foundry/localization';
@@ -6,7 +7,10 @@ import { openMenu } from '@src/open-menu';
 import { customElement, html, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { requestCharacter } from '../../../character-request-event';
-import { openCoatingMenu } from '../../attacks/ammo-menus';
+import {
+  openCoatingMenu,
+  openSprayWeaponPayloadMenu,
+} from '../../attacks/ammo-menus';
 import { renderItemAttacks } from '../../attacks/render-item-attacks';
 import { ItemCardBase } from '../item-card-base';
 
@@ -38,6 +42,14 @@ export class ItemCard extends ItemCardBase {
     });
   }
 
+  private openSprayCoatingMenu(ev: MouseEvent) {
+    const { character } = requestCharacter(this);
+    character &&
+      this.item.type === ItemType.SprayWeapon &&
+      this.item.payloadUse === SprayPayload.CoatAmmunition &&
+      openSprayWeaponPayloadMenu(ev, character, this.item);
+  }
+
   renderHeaderButtons() {
     const { item } = this;
     const { editable } = item;
@@ -61,6 +73,15 @@ export class ItemCard extends ItemCardBase {
           class="toggle ${classMap({ activated: !!item.coating })}"
           icon="colorize"
           @click=${this.openCoatingSelectMenu}
+          ?disabled=${!item.editable}
+        ></mwc-icon-button>`
+      : ''}
+    ${item.type === ItemType.SprayWeapon &&
+    item.payloadUse === SprayPayload.CoatAmmunition
+      ? html` <mwc-icon-button
+          class="toggle ${classMap({ activated: !!item.payload })}"
+          icon="colorize"
+          @click=${this.openSprayCoatingMenu}
           ?disabled=${!item.editable}
         ></mwc-icon-button>`
       : ''}
