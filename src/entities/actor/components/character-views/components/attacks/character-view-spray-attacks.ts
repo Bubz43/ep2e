@@ -98,6 +98,7 @@ export class CharacterViewSprayAttacks extends LitElement {
       weaponTraits,
       accessories,
       ammoState,
+      payloadUse,
     } = this.weapon;
     // TODO Special Ammo
     return html`
@@ -117,6 +118,14 @@ export class CharacterViewSprayAttacks extends LitElement {
                 this.weapon.braced ? 'braced' : 'carried',
               )}</colored-tag
             >
+          `
+        : ''}
+      ${payloadUse === SprayPayload.CoatAmmunition && this.weapon.payload
+        ? html`
+            <colored-tag type="info">
+              ${localize('ammoCoating')}
+              <span slot="after">${this.weapon.payload.fullName}</span>
+            </colored-tag>
           `
         : ''}
 
