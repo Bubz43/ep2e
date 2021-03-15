@@ -41,9 +41,6 @@ export class CharacterViewFirearmAttacks extends LitElement {
         }
         .firing-modes {
           display: flex;
-          /* display: grid;
-          grid-auto-flow: column;
-          grid-template-rows: repeat(auto-fit, minmax(2ch, 1fr)); */
         }
         .attack {
           width: 100%;
@@ -63,10 +60,6 @@ export class CharacterViewFirearmAttacks extends LitElement {
         }
         .ammo-modes > sl-form {
           display: contents;
-        }
-        sl-field {
-          /* margin-top: -0.75rem; */
-          /* height: 3rem; */
         }
       `,
     ];
