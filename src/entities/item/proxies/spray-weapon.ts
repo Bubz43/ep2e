@@ -114,7 +114,12 @@ export class SprayWeapon
 
   spendAmmo(amount: number) {
     const { payloadUse, payload } = this;
-    if (payloadUse && payload) {
+    if (
+      payloadUse &&
+      payload &&
+      (payloadUse !== SprayPayload.CoatAmmunition ||
+        this.shouldApplyCoating(amount))
+    ) {
       payload.updater
         .path('data', 'quantity')
         .store((quantity) =>
