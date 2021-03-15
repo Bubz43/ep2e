@@ -251,7 +251,6 @@ export class RangedAttackControls extends LitElement {
       firingModeGroup,
     } = firing;
     const { attacks, isTwoHanded, noClose, noPointBlank } = weapon ?? {};
-    console.log(targetDistance);
     // TODO noClose/NoPointBlank
 
     const [specialAmmo, mode] =

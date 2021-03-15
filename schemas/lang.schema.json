@@ -714,6 +714,9 @@
             "ammoClass": {
               "type": "string"
             },
+            "ammoCoating": {
+              "type": "string"
+            },
             "ammoUsed": {
               "type": "string"
             },
@@ -4849,6 +4852,7 @@
             "alwaysApplies",
             "ammo",
             "ammoClass",
+            "ammoCoating",
             "ammoUsed",
             "ammunition",
             "amount",
