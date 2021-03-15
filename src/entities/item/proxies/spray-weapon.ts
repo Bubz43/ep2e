@@ -97,7 +97,7 @@ export class SprayWeapon
   }
 
   shouldApplyCoating(firedShots: number) {
-    return firedShots <= this.availableShots;
+    return firedShots <= this.coatedShots;
   }
 
   reloadStandardAmmo() {

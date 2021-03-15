@@ -471,7 +471,7 @@ export class RangedAttackControls extends LitElement {
         ${weapon.type === ItemType.SprayWeapon &&
         weapon.payloadUse === SprayPayload.CoatAmmunition &&
         weapon.payload &&
-        weapon.shouldApplyCoating(getFiringModeGroupShots(firingModeGroup))
+        !weapon.shouldApplyCoating(getFiringModeGroupShots(firingModeGroup))
           ? html`
               <wl-list-item
                 >${localize('ammoCoating')} ${localize('not')}
