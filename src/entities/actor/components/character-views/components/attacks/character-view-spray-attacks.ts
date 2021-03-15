@@ -75,7 +75,9 @@ export class CharacterViewSprayAttacks extends LitElement {
 
   private openAmmoMenu(ev: MouseEvent) {
     const { character } = requestCharacter(this);
-    if (!this.weapon.payloadUse) {
+    if (this.weapon.payloadUse === SprayPayload.FirePayload) {
+      character && openSprayWeaponPayloadMenu(ev, character, this.weapon);
+    } else {
       openMenu({
         position: ev,
         content: [
@@ -86,8 +88,6 @@ export class CharacterViewSprayAttacks extends LitElement {
           },
         ],
       });
-    } else if (this.weapon.payloadUse === SprayPayload.FirePayload) {
-      character && openSprayWeaponPayloadMenu(ev, character, this.weapon);
     }
   }
 
