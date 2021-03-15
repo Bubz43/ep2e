@@ -96,6 +96,10 @@ export class SprayWeapon
       : { ...common, value: Math.min(value, max) };
   }
 
+  shouldApplyCoating(firedShots: number) {
+    return firedShots <= this.availableShots;
+  }
+
   reloadStandardAmmo() {
     return this.updater
       .path('data', 'ammo', 'value')

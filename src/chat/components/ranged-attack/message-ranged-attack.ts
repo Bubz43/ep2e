@@ -17,6 +17,7 @@ import { Firearm } from '@src/entities/item/proxies/firearm';
 import { Railgun } from '@src/entities/item/proxies/railgun';
 import { SeekerWeapon } from '@src/entities/item/proxies/seeker-weapon';
 import { SprayWeapon } from '@src/entities/item/proxies/spray-weapon';
+import { getFiringModeGroupShots } from '@src/features/firing-modes';
 import { SkillType } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas, rollLabeledFormulas } from '@src/foundry/rolls';
@@ -262,7 +263,10 @@ export class MessageRangedAttack extends MessageElement {
         useMethod: payload.isChemical
           ? 'use'
           : SubstanceApplicationMethod.Dermal,
-        doses: weapon.dosesPerShot,
+        doses:
+          weapon.payloadUse === SprayPayload.CoatAmmunition
+            ? 1
+            : weapon.dosesPerShot,
       },
     });
 
@@ -358,8 +362,10 @@ export class MessageRangedAttack extends MessageElement {
         : ''}
       ${!disabled &&
       weapon.type === ItemType.SprayWeapon &&
-      weapon.payloadUse === SprayPayload.FirePayload &&
-      weapon.payload
+      weapon.payloadUse &&
+      weapon.payload &&
+      (weapon.payloadUse === SprayPayload.FirePayload ||
+        weapon.shouldApplyCoating(getFiringModeGroupShots(firingModeGroup)))
         ? html`
             <mwc-button
               dense
@@ -367,7 +373,12 @@ export class MessageRangedAttack extends MessageElement {
               class="payload"
               ?disabled=${!!appliedPayload}
               @click=${this.createSprayWeaponPayloadMessage}
-              >${localize('apply')} ${localize('payload')}</mwc-button
+              >${localize('apply')}
+              ${localize(
+                weapon.payloadUse === SprayPayload.FirePayload
+                  ? 'payload'
+                  : 'ammoCoating',
+              )}</mwc-button
             >
           `
         : ''}
