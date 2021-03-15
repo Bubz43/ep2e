@@ -304,15 +304,6 @@ export const setDragDrop = (ev: DragEvent, drop: Drop) => {
   ev.dataTransfer?.setData('text/plain', JSON.stringify(drop));
 };
 
-export const actorDroptoActorAgent = async (drop: ActorDrop) => {
-  if (drop.pack) {
-    const pack = game.packs.get(drop.pack);
-    const actor = await pack?.getEntity(drop.id);
-    if (actor instanceof ActorEP) return actor.proxy;
-  }
-  return game.actors.get(drop.id)?.proxy;
-};
-
 export const itemDropToItemProxy = async (drop: ItemDrop) => {
   if ('pack' in drop) {
     const pack = game.packs.get(drop.pack);
@@ -331,6 +322,17 @@ export const itemDropToItemProxy = async (drop: ItemDrop) => {
       actor?.items?.get(drop.data?._id)?.proxy ||
       new ItemEP(drop.data, {}).proxy
     );
+  }
+  return null;
+};
+
+export const actorDroptoActorProxy = async (drop: ActorDrop) => {
+  if ('pack' in drop) {
+    const pack = game.packs.get(drop.pack);
+    const actor = await pack?.getEntity(drop.id);
+    if (actor instanceof ActorEP) return actor.proxy;
+  } else if ('id' in drop) {
+    return game.actors.get(drop.id)?.proxy;
   }
   return null;
 };
