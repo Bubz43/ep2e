@@ -500,7 +500,10 @@ export const openSprayWeaponPayloadMenu = (
         sublabel: s.fullType,
         disabled: firePayload ? s.quantity < dosesPerShot : !s.quantity,
         callback: async () => {
-          const amount = Math.min(s.quantity, weapon.ammoState.max);
+          const amount = Math.min(
+            s.quantity,
+            weapon.ammoState.max * dosesPerShot,
+          );
           const payload = produce(s.getDataCopy(), (draft) => {
             draft.data.quantity = amount;
           });
