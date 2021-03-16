@@ -21,6 +21,7 @@ import {
 import { matchesSkill, Source } from '@src/features/effects';
 import { getCurrentEnvironment } from '@src/features/environment';
 import {
+  canAim,
   createFiringModeGroup,
   FiringModeGroup,
   getFiringModeGroupShots,
@@ -66,6 +67,7 @@ export class RangedAttackTest extends SkillTest {
     explosiveSettings?: ExplosiveSettings | null;
     oneHanded?: boolean;
     seekerMode: 'accushot' | 'homing';
+    quickAim: boolean;
   }>;
 
   readonly calledShotModifier = createSuccessTestModifier({
@@ -102,6 +104,11 @@ export class RangedAttackTest extends SkillTest {
     value: -10,
   });
 
+  readonly quickAimModifier = createSuccessTestModifier({
+    name: `${localize('quick')} ${localize('aim')}`,
+    value: 10,
+  });
+
   rangeRating: RangeRating;
 
   constructor({
@@ -133,6 +140,7 @@ export class RangedAttackTest extends SkillTest {
       attackTargets: attackTargets,
       range: getWeaponRange(weapon),
       seekerMode: 'accushot',
+      quickAim: false,
       targetDistance:
         token && notEmpty(attackTargets)
           ? Math.max(
@@ -212,6 +220,10 @@ export class RangedAttackTest extends SkillTest {
           );
         }
 
+        if (!canAim(draft.firing.firingModeGroup)) {
+          draft.firing.quickAim = false;
+        }
+
         if (
           draft.firing.firingModeGroup[1] === MultiAmmoOption.AdjacentTargets
         ) {
@@ -264,6 +276,10 @@ export class RangedAttackTest extends SkillTest {
         if (draft.firing.calledShot) {
           simple.set(this.calledShotModifier.id, this.calledShotModifier);
         } else simple.delete(this.calledShotModifier.id);
+
+        if (draft.firing.quickAim) {
+          simple.set(this.quickAimModifier.id, this.quickAimModifier);
+        } else simple.delete(this.quickAimModifier.id);
 
         const { rating, modifier } = getRangeModifier(
           draft.firing.range,

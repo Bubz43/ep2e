@@ -64,3 +64,10 @@ export const getFiringModeGroupShots = (group: FiringModeGroup) => {
     return firingModeCost.suppressiveFire;
   return firingModeCost[group[0]];
 };
+
+export const canAim = ([firingMode]: FiringModeGroup) => {
+  return (
+    firingMode === FiringMode.SingleShot ||
+    firingMode === FiringMode.SemiAutomatic
+  );
+};
