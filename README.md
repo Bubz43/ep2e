@@ -11,3 +11,4 @@
 - Psi
 - Sleights
 - "Abilities"
+- Combat State
