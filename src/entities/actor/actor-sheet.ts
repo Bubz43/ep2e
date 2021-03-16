@@ -15,7 +15,7 @@ import { openMenu } from '@src/open-menu';
 import { debounce } from '@src/utility/decorators';
 import { assignStyles } from '@src/utility/dom';
 import { html } from 'lit-html';
-import { compact } from 'remeda';
+import { compact, noop } from 'remeda';
 import type { Subscription } from 'rxjs';
 import type { DeepPartial } from 'utility-types';
 import { ActorType } from '../entity-types';
@@ -100,7 +100,19 @@ export class ActorEPSheet implements EntitySheet {
     const { compendium, id, proxy } = this.actor;
     const linked =
       this._token?.data.actorLink ?? this.actor.data.token.actorLink;
+    // TODO close sheet if going from actor linked to not
     return compact([
+      SlWindow.headerButton({
+        // onClick: () => {
+        //   this._token
+        //     ? this._token.update({ actorLink: !linked }, {})
+        //     : this.actor.updater.path('token', 'actorLink').commit(!linked);
+        // },
+        onClick: noop,
+        // disabled: !(this.actor.owner && userCan('TOKEN_CONFIGURE')),
+        disabled: true,
+        content: html`<mwc-icon>${linked ? 'link' : 'link_off'}</mwc-icon>`,
+      }),
       SlWindow.headerButton({
         onClick: this.configureToken,
         disabled: !(this.actor.owner && userCan('TOKEN_CONFIGURE')),
@@ -110,13 +122,7 @@ export class ActorEPSheet implements EntitySheet {
             : 'Prototype Token'}
         `,
       }),
-      SlWindow.headerButton({
-        onClick: () => {
-          // TODO toggle link
-        },
-        disabled: !(this.actor.owner && userCan('TOKEN_CONFIGURE')),
-        content: html`<mwc-icon>${linked ? 'link' : 'link_off'}</mwc-icon>`,
-      }),
+
       compendium &&
         SlWindow.headerButton({
           onClick: () => importFromCompendium(compendium, id),

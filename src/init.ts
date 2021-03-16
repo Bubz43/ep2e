@@ -2,6 +2,7 @@ import { html, render } from 'lit-html';
 import { compact, first } from 'remeda';
 import type { RawEditorSettings } from 'tinymce';
 import { onChatMessageRender } from './chat/message-hooks';
+import { combatSocketHandler } from './combat/combat-tracker';
 import { EPOverlay } from './components/ep-overlay/ep-overlay';
 import type { ToolTip } from './components/tooltip/tooltip';
 import { SlWindow } from './components/window/window';
@@ -90,36 +91,7 @@ Hooks.once('init', () => {
     })),
   ]);
 
-  // addEPSocketHandler('mutateCombat', combatSocketHandler);
-
-  // applicationHook({
-  //   app: PlayerList,
-  //   hook: 'on',
-  //   event: 'render',
-  //   callback: (app, [el]) => {
-  //     if (!el) return;
-  //     el.querySelector(`[data-user-id="${game.user.id}"]`)?.remove();
-  //     if ([...game.users.values()].some((user) => !user.active)) {
-  //       const frag = new DocumentFragment();
-  //       render(
-  //         html`
-  //           <wl-list-item
-  //             clickable
-  //             role="button"
-  //             class="offline-toggle"
-  //             @click=${app._onToggleOfflinePlayers.bind(app)}
-  //           >
-  //             <mwc-icon
-  //               >${app._showOffline ? 'offline_pin' : 'offline_bolt'}</mwc-icon
-  //             >
-  //           </wl-list-item>
-  //         `,
-  //         frag,
-  //       );
-  //       el.prepend(frag);
-  //     }
-  //   },
-  // });
+  addEPSocketHandler('mutateCombat', combatSocketHandler);
 });
 
 Hooks.on('renderChatMessage', onChatMessageRender);

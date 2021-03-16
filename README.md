@@ -7,3 +7,4 @@
 - Hive actor/item type
 - Fragile gear trait
 - Social Attacks
+- Jamming
