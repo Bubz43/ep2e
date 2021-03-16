@@ -5,6 +5,7 @@ import { renderAutoForm } from '@src/components/form/forms';
 import { renderFirearmAmmoDetails } from '@src/entities/item/components/forms/firearm-ammo-details';
 import type { Firearm } from '@src/entities/item/proxies/firearm';
 import type { FirearmAmmo } from '@src/entities/item/proxies/firearm-ammo';
+import { subscribeToEnvironmentChange } from '@src/features/environment';
 import {
   createFiringModeGroup,
   FiringMode,
@@ -66,6 +67,21 @@ export class CharacterViewFirearmAttacks extends LitElement {
   }
 
   @property({ attribute: false }) weapon!: Firearm;
+
+  private environmentUnsub: (() => void) | null = null;
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.environmentUnsub = subscribeToEnvironmentChange(() =>
+      this.requestUpdate(),
+    );
+  }
+
+  disconnectedCallback() {
+    this.environmentUnsub?.();
+    this.environmentUnsub = null;
+    super.disconnectedCallback();
+  }
 
   private fire(firingMode: FiringMode) {
     const attack = this.weapon.attacks.primary;

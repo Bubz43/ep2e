@@ -2,6 +2,7 @@ import { formatArmorUsed } from '@src/combat/attack-formatting';
 import { startRangedAttack } from '@src/combat/attack-init';
 import { SprayPayload } from '@src/data-enums';
 import type { SprayWeapon } from '@src/entities/item/proxies/spray-weapon';
+import { subscribeToEnvironmentChange } from '@src/features/environment';
 import {
   createFiringModeGroup,
   FiringMode,
@@ -53,6 +54,21 @@ export class CharacterViewSprayAttacks extends LitElement {
   }
 
   @property({ attribute: false }) weapon!: SprayWeapon;
+
+  private environmentUnsub: (() => void) | null = null;
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.environmentUnsub = subscribeToEnvironmentChange(() =>
+      this.requestUpdate(),
+    );
+  }
+
+  disconnectedCallback() {
+    this.environmentUnsub?.();
+    this.environmentUnsub = null;
+    super.disconnectedCallback();
+  }
 
   private fire(firingMode: FiringMode) {
     const attack = this.weapon.attacks.primary;

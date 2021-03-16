@@ -429,7 +429,8 @@ export class RangedAttackControls extends LitElement {
               <mwc-check-list-item
                 ?selected=${quickAim}
                 @click=${() => firing.update({ quickAim: !quickAim })}
-                >${localize('quick')} ${localize('aim')}</mwc-check-list-item
+                >${localize('quick')} ${localize('aim')} (${localize('quick')}
+                ${localize('action')})</mwc-check-list-item
               >
             `
           : ''}
