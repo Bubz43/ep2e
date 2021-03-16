@@ -98,6 +98,8 @@ export class ActorEPSheet implements EntitySheet {
 
   private get windowHeaderButtons() {
     const { compendium, id, proxy } = this.actor;
+    const linked =
+      this._token?.data.actorLink ?? this.actor.data.token.actorLink;
     return compact([
       SlWindow.headerButton({
         onClick: this.configureToken,
@@ -107,6 +109,13 @@ export class ActorEPSheet implements EntitySheet {
             ? 'Token'
             : 'Prototype Token'}
         `,
+      }),
+      SlWindow.headerButton({
+        onClick: () => {
+          // TODO toggle link
+        },
+        disabled: !(this.actor.owner && userCan('TOKEN_CONFIGURE')),
+        content: html`<mwc-icon>${linked ? 'link' : 'link_off'}</mwc-icon>`,
       }),
       compendium &&
         SlWindow.headerButton({
