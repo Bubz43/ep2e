@@ -18,9 +18,10 @@ import {
   ActionType,
   createAction,
 } from '@src/features/actions';
-import { matchesSkill, Source } from '@src/features/effects';
+import { EffectType, matchesSkill, Source } from '@src/features/effects';
 import { getCurrentEnvironment } from '@src/features/environment';
 import {
+  canAim,
   createFiringModeGroup,
   FiringModeGroup,
   getFiringModeGroupShots,
@@ -66,6 +67,7 @@ export class RangedAttackTest extends SkillTest {
     explosiveSettings?: ExplosiveSettings | null;
     oneHanded?: boolean;
     seekerMode: 'accushot' | 'homing';
+    quickAim: boolean;
   }>;
 
   readonly calledShotModifier = createSuccessTestModifier({
@@ -102,6 +104,11 @@ export class RangedAttackTest extends SkillTest {
     value: -10,
   });
 
+  readonly quickAimModifier = createSuccessTestModifier({
+    name: `${localize('quick')} ${localize('aim')}`,
+    value: 10,
+  });
+
   rangeRating: RangeRating;
 
   constructor({
@@ -133,6 +140,7 @@ export class RangedAttackTest extends SkillTest {
       attackTargets: attackTargets,
       range: getWeaponRange(weapon),
       seekerMode: 'accushot',
+      quickAim: false,
       targetDistance:
         token && notEmpty(attackTargets)
           ? Math.max(
@@ -212,6 +220,10 @@ export class RangedAttackTest extends SkillTest {
           );
         }
 
+        if (!canAim(draft.firing.firingModeGroup)) {
+          draft.firing.quickAim = false;
+        }
+
         if (
           draft.firing.firingModeGroup[1] === MultiAmmoOption.AdjacentTargets
         ) {
@@ -265,6 +277,10 @@ export class RangedAttackTest extends SkillTest {
           simple.set(this.calledShotModifier.id, this.calledShotModifier);
         } else simple.delete(this.calledShotModifier.id);
 
+        if (draft.firing.quickAim) {
+          simple.set(this.quickAimModifier.id, this.quickAimModifier);
+        } else simple.delete(this.quickAimModifier.id);
+
         const { rating, modifier } = getRangeModifier(
           draft.firing.range,
           draft.firing.targetDistance,
@@ -279,9 +295,12 @@ export class RangedAttackTest extends SkillTest {
         draft.rangeModifier.name = `${localize(rating)} ${
           steady ? `(${localize('steady')})` : ''
         }`;
-        draft.rangeModifier.value = clamp(modifier, {
-          min: steady ? 0 : undefined,
-        });
+        draft.rangeModifier.value = clamp(
+          modifier < 0 ? modifier * this.rangeModifiersMultiplier : modifier,
+          {
+            min: steady ? 0 : undefined,
+          },
+        );
         simple.set(draft.rangeModifier.id, draft.rangeModifier);
       }),
     };
@@ -340,15 +359,25 @@ export class RangedAttackTest extends SkillTest {
         ? this.firing.seekerMode === 'accushot'
         : 'isSteady' in weapon && weapon.isSteady;
 
-    console.log(steady);
-
     this.rangeModifier.name = `${localize(rating)} ${
       steady ? `(${localize('steady')})` : ''
     }`;
-    this.rangeModifier.value = clamp(modifier, {
-      min: steady ? 0 : undefined,
-    });
+    this.rangeModifier.value = clamp(
+      modifier < 0 ? modifier * this.rangeModifiersMultiplier : modifier,
+      {
+        min: steady ? 0 : undefined,
+      },
+    );
     this.modifiers.simple.set(this.rangeModifier.id, this.rangeModifier);
+  }
+
+  get rangeModifiersMultiplier() {
+    return this.character.appliedEffects
+      .getGroup(EffectType.Ranged)
+      .reduce(
+        (accum, effect) => accum * effect.negativeRangeModifiersMultiplier,
+        1,
+      );
   }
 
   protected getAttackTargetEffects(

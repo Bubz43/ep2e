@@ -543,8 +543,9 @@ const updateCombat = (action: CombatUpdateAction) => {
 
 // TODO ignore gamemaster and instead just check for SETTINGS_MODIFY priv
 export const updateCombatState = (action: CombatUpdateAction) => {
-  if (userCan('SETTINGS_MODIFY')) updateCombat(action);
-  else if (gmIsConnected()) {
+  if (userCan('SETTINGS_MODIFY')) {
+    updateCombat(action);
+  } else if (gmIsConnected()) {
     emitEPSocket({ mutateCombat: { action } });
   } else {
     notify(NotificationType.Info, 'Cannot update combat if GM not present.');
@@ -554,5 +555,6 @@ export const updateCombatState = (action: CombatUpdateAction) => {
 export const combatSocketHandler = ({
   action,
 }: SystemSocketData['mutateCombat']) => {
+  console.log('gm', action);
   isGamemaster() && updateCombat(action);
 };

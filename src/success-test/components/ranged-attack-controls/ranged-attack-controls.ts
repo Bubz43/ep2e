@@ -25,6 +25,7 @@ import {
   ExplosiveSettings,
 } from '@src/entities/weapon-settings';
 import {
+  canAim,
   createFiringModeGroup,
   FiringMode,
   firingModeCost,
@@ -249,6 +250,7 @@ export class RangedAttackControls extends LitElement {
       maxTargets,
       seekerMode,
       firingModeGroup,
+      quickAim,
     } = firing;
     const { attacks, isTwoHanded, noClose, noPointBlank } = weapon ?? {};
     // TODO noClose/NoPointBlank
@@ -420,6 +422,16 @@ export class RangedAttackControls extends LitElement {
                   )
                 : ''}
               ${this.renderTriggerSettings(explosiveSettings)}
+            `
+          : ''}
+        ${canAim(firingModeGroup)
+          ? html`
+              <mwc-check-list-item
+                ?selected=${quickAim}
+                @click=${() => firing.update({ quickAim: !quickAim })}
+                >${localize('quick')} ${localize('aim')} (${localize('quick')}
+                ${localize('action')})</mwc-check-list-item
+              >
             `
           : ''}
         ${isTwoHanded
