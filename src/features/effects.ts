@@ -429,7 +429,7 @@ const format = (effect: Effect): (string | number)[] => {
 
     case EffectType.Ranged:
       return [
-        ...map(['negative', 'range', 'modifiers'], localize),
+        ...map(['range', 'negative', 'modifiers'], localize),
         'x',
         String(effect.negativeRangeModifiersMultiplier),
       ];

@@ -18,7 +18,7 @@ import {
   ActionType,
   createAction,
 } from '@src/features/actions';
-import { matchesSkill, Source } from '@src/features/effects';
+import { EffectType, matchesSkill, Source } from '@src/features/effects';
 import { getCurrentEnvironment } from '@src/features/environment';
 import {
   canAim,
@@ -295,9 +295,12 @@ export class RangedAttackTest extends SkillTest {
         draft.rangeModifier.name = `${localize(rating)} ${
           steady ? `(${localize('steady')})` : ''
         }`;
-        draft.rangeModifier.value = clamp(modifier, {
-          min: steady ? 0 : undefined,
-        });
+        draft.rangeModifier.value = clamp(
+          modifier < 0 ? modifier * this.rangeModifiersMultiplier : modifier,
+          {
+            min: steady ? 0 : undefined,
+          },
+        );
         simple.set(draft.rangeModifier.id, draft.rangeModifier);
       }),
     };
@@ -356,15 +359,25 @@ export class RangedAttackTest extends SkillTest {
         ? this.firing.seekerMode === 'accushot'
         : 'isSteady' in weapon && weapon.isSteady;
 
-    console.log(steady);
-
     this.rangeModifier.name = `${localize(rating)} ${
       steady ? `(${localize('steady')})` : ''
     }`;
-    this.rangeModifier.value = clamp(modifier, {
-      min: steady ? 0 : undefined,
-    });
+    this.rangeModifier.value = clamp(
+      modifier < 0 ? modifier * this.rangeModifiersMultiplier : modifier,
+      {
+        min: steady ? 0 : undefined,
+      },
+    );
     this.modifiers.simple.set(this.rangeModifier.id, this.rangeModifier);
+  }
+
+  get rangeModifiersMultiplier() {
+    return this.character.appliedEffects
+      .getGroup(EffectType.Ranged)
+      .reduce(
+        (accum, effect) => accum * effect.negativeRangeModifiersMultiplier,
+        1,
+      );
   }
 
   protected getAttackTargetEffects(

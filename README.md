@@ -8,3 +8,6 @@
 - Fragile gear trait
 - Social Attacks
 - Jamming
+- Psi
+- Sleights
+- "Abilities"
