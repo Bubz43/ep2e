@@ -4,8 +4,11 @@ function stripFileExtension(filename) {
   return filename.split('.').slice(0, -1).join('.');
 }
 
-module.exports = function sassPlugin(_, { native, compilerOptions = {} } = {}) {
-  const basePlugin = scssPlugin(_, { native, compilerOptions });
+module.exports = function sassPlugin(
+  snowpackConfig,
+  { native, compilerOptions = {} } = {},
+) {
+  const basePlugin = scssPlugin(snowpackConfig, { native, compilerOptions });
 
   /** @type {import("snowpack").SnowpackPlugin } */
   const plugin = {

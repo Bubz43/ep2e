@@ -64,14 +64,23 @@ header {
 
 .infection-progress {
   grid-area: bar;
-  // --mdc-theme-primary: rgb(93, 29, 112, 0.8);
+  height: 4px;
+  transform: translateY(-1.5rem);
+  --mdc-theme-secondary: var(--color-primary);
+  flex: 1;
+}
+
+.progress {
+  grid-area: bar;
+  display: flex;
 }
 
 .progress-overlay {
   grid-area: bar;
-  background: rgba(0, 0, 0, 0.403);
-  height: 4px;
+  background: alphav(var(--color-primary), 0.7);
   z-index: 1;
+  position: relative;
+  height: 2px;
 }
 
 .free-push {

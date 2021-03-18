@@ -287,6 +287,14 @@ type ItemFlags<T extends ItemType> = T extends ItemType.Psi
   ? { coating: [ItemEntity<ItemType.Substance>] | null }
   : T extends ItemType.SeekerWeapon
   ? { missiles: ItemEntity<ItemType.Explosive> | null }
+  : T extends ItemType.Sleight
+  ? {
+      applyTrait: [ItemEntity<ItemType.Trait>] | null;
+      modifyTrait: {
+        traitId: string;
+        levelModification: 1 | 2;
+      } | null;
+    }
   : never;
 
 export type DrugAppliedItem =

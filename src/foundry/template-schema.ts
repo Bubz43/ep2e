@@ -365,7 +365,9 @@ type SleightData = {
   action: ActionType;
   effectsOnTarget: StringID<Effect>[];
   effectsOnSelf: StringID<Effect>[];
-  effects: StringID<Effect>[];
+  // effects: StringID<Effect>[];
+  // TODO: Maybe describe what happens when push
+  // TODO: Grant check to do x
   scaleEffectsOnSuperior: boolean;
   special: '' | SleightSpecial;
   mentalArmor: {

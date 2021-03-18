@@ -1,3 +1,4 @@
+import type { Slider } from '@material/mwc-slider';
 import { renderNumberInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import { enumValues, PsiPush } from '@src/data-enums';
@@ -22,6 +23,12 @@ export class CharacterViewPsi extends LitElement {
   @property({ attribute: false }) character!: Character;
 
   @property({ attribute: false }) psi!: Psi;
+
+  firstUpdated() {
+    requestAnimationFrame(() =>
+      this.renderRoot.querySelector('mwc-slider')?.layout(),
+    );
+  }
 
   private openFreePushMenu() {
     const { freePush } = this.psi;
@@ -95,14 +102,30 @@ export class CharacterViewPsi extends LitElement {
           }),
       })}
 
-      <mwc-linear-progress
+      <div class="progress">
+        <div
+          class="progress-overlay"
+          style="width: calc(${baseInfectionRating}% + 1px)"
+        ></div>
+        <mwc-slider
+          class="infection-progress"
+          value=${infectionRating}
+          min=${20}
+          max=${99}
+          ?disabled=${!editable}
+          step="1"
+          pin
+          @change=${(ev: Event & { currentTarget: Slider }) => {
+            this.psi.updateInfectionRating(ev.currentTarget.value);
+          }}
+        >
+        </mwc-slider>
+      </div>
+
+      <!-- <mwc-linear-progress
         class="infection-progress"
         progress=${infectionRating / 99}
-      ></mwc-linear-progress>
-      <div
-        class="progress-overlay"
-        style="width: calc(${baseInfectionRating}% + 1px)"
-      ></div>
+      ></mwc-linear-progress> -->
 
       <div
         class=${classMap({
