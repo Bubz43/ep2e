@@ -12,7 +12,10 @@
 
 header {
   padding: 0.25rem 0.75rem 0;
-
+  position: relative;
+  &:hover {
+    z-index: 1;
+  }
   .name {
     all: unset;
     font-size: larger;
@@ -44,21 +47,22 @@ header {
 
 .infection {
   grid-area: 1 / 1 / -1 / -1;
-  @include inputReset();
-  width: max-content;
-  margin-top: -0.25rem;
-  z-index: 2;
-  input {
-    font-size: 26px;
-    text-align: center;
-    border-radius: 100%;
-    width: 2.75ch;
-    height: 2.75ch;
-    border: none;
-
-    &:focus {
-      color: var(--color-secondary);
-    }
+  all: unset;
+  width: 3ch;
+  text-align: center;
+  display: block;
+  font-size: x-large;
+  margin-top: -0.5rem;
+  &:hover {
+    cursor: pointer;
+    color: satv(var(--color-secondary), 1.2);
+  }
+  &:focus {
+    text-shadow: var(--text-highlight);
+  }
+  &[disabled] {
+    color: var(--color-text-disabled);
+    pointer-events: none;
   }
 }
 
@@ -116,6 +120,7 @@ header {
 
 .increased-chi {
   grid-area: chi;
+  pointer-events: none;
 }
 
 .free-push {

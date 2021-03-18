@@ -24,11 +24,11 @@ export class CharacterViewPsi extends LitElement {
 
   @property({ attribute: false }) psi!: Psi;
 
-  firstUpdated() {
-    requestAnimationFrame(() =>
-      this.renderRoot.querySelector('mwc-slider')?.layout(),
-    );
-  }
+  // firstUpdated() {
+  //   setTimeout(() => {
+  //     this.renderRoot.querySelector('mwc-slider')?.layout();
+  //   }, 100);
+  // }
 
   private openFreePushMenu() {
     const { freePush } = this.psi;
@@ -89,7 +89,7 @@ export class CharacterViewPsi extends LitElement {
     } = this.psi;
 
     return html` <section class="infection-tracker">
-      ${renderAutoForm({
+      <!-- ${renderAutoForm({
         classes: 'infection',
         disabled: !editable,
         props: { infectionRating },
@@ -100,7 +100,9 @@ export class CharacterViewPsi extends LitElement {
             min: baseInfectionRating,
             max: 99,
           }),
-      })}
+      })} -->
+
+      <button class="infection">${infectionRating}</button>
 
       <div class="progress">
         <div
@@ -117,6 +119,9 @@ export class CharacterViewPsi extends LitElement {
           pin
           @change=${(ev: Event & { currentTarget: Slider }) => {
             this.psi.updateInfectionRating(ev.currentTarget.value);
+          }}
+          @mouseover=${(ev: Event & { currentTarget: Slider }) => {
+            ev.currentTarget.layout();
           }}
         >
         </mwc-slider>
