@@ -229,7 +229,10 @@ export class Trait
 
   checkIfLevelActive(index: number) {
     return (
-      this.hasMultipleLevels && !!this.embedded && index === this.levelIndex
+      !this.isPsiInfluence &&
+      this.hasMultipleLevels &&
+      !!this.embedded &&
+      index === this.levelIndex
     );
   }
 }

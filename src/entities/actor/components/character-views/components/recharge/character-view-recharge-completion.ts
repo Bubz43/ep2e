@@ -5,14 +5,14 @@ import { PoolType, RechargeType } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { removeFeature, StringID } from '@src/features/feature-helpers';
 import type { ActiveRecharge } from '@src/features/temporary';
-import { getElapsedTime, prettyMilliseconds } from '@src/features/time';
+import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import {
   customElement,
-  LitElement,
-  property,
   html,
   internalProperty,
+  LitElement,
+  property,
   PropertyValues,
 } from 'lit-element';
 import mix from 'mix-with/lib';
@@ -147,7 +147,12 @@ export class CharacterViewRechargeCompletion extends mix(LitElement).with(
 
   render() {
     const { state, activeRecharge, overrideDuration, regained } = this;
-    const { disabled, timeTillRechargeComplete } = this.character;
+    const {
+      disabled,
+      timeTillRechargeComplete,
+      psi,
+      temporaryFeatures,
+    } = this.character;
 
     if (timeTillRechargeComplete && !overrideDuration) {
       return html`

@@ -3,6 +3,7 @@ import { localize } from '@src/foundry/localization';
 import type { ConditionType } from './conditions';
 import type { Effect } from './effects';
 import { createFeature, StringID } from './feature-helpers';
+import type { DamageInfluence, PsiInfluenceData } from './psi-influence';
 import { CommonInterval, currentWorldTimeMS } from './time';
 
 export enum TemporaryFeatureEnd {
@@ -15,7 +16,7 @@ export enum TemporaryFeatureType {
   ActiveRecharge = 'activeRecharge',
   Effects = 'effects',
   Condition = 'condition',
-  // TODO psi influence
+  PsiInfluence = 'psiInfluence',
 }
 
 type Base<T extends { type: TemporaryFeatureType }> = T & {
@@ -42,10 +43,17 @@ export type TemporaryCondition = Base<{
   condition: ConditionType;
 }>;
 
+export type TemporaryPsiInfluence = Base<{
+  type: TemporaryFeatureType.PsiInfluence;
+  influence: Exclude<PsiInfluenceData, DamageInfluence>;
+  fromOwnPsi: boolean;
+}>;
+
 export type TemporaryFeature =
   | ActiveRecharge
   | TemporaryEffects
-  | TemporaryCondition;
+  | TemporaryCondition
+  | TemporaryPsiInfluence;
 
 const activeRecharge = createFeature<
   ActiveRecharge,
@@ -74,8 +82,18 @@ const condition = createFeature<TemporaryCondition, 'name' | 'condition'>(
   }),
 );
 
+const psiInfluence = createFeature<
+  TemporaryPsiInfluence,
+  'influence' | 'duration' | 'name' | 'fromOwnPsi'
+>(() => ({
+  type: TemporaryFeatureType.PsiInfluence,
+  endOn: '',
+  startTime: currentWorldTimeMS(),
+}));
+
 export const createTemporaryFeature = {
   activeRecharge,
   effects,
   condition,
+  psiInfluence,
 } as const;

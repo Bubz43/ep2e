@@ -1,11 +1,11 @@
 import type { DropZone } from '@src/components/dropzone/dropzone';
 import {
-  renderNumberField,
-  renderLabeledCheckbox,
-  renderTextField,
   renderFormulaField,
+  renderLabeledCheckbox,
+  renderNumberField,
   renderRadioFields,
   renderTextareaField,
+  renderTextField,
 } from '@src/components/field/fields';
 import {
   renderAutoForm,
@@ -28,7 +28,6 @@ import type { Psi } from '@src/entities/item/proxies/psi';
 import {
   addFeature,
   idProp,
-  matchID,
   removeFeature,
   StringID,
   updateFeature,
@@ -58,8 +57,7 @@ import { safeMerge } from '@src/utility/helpers';
 import { customElement, html, property, PropertyValues } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
-import { createPipe, pipe, sortBy } from 'remeda';
-import { stopEvent } from 'weightless';
+import { createPipe, sortBy } from 'remeda';
 import { ItemFormBase } from '../item-form-base';
 import styles from './psi-form.scss';
 
@@ -209,33 +207,17 @@ export class PsiForm extends ItemFormBase {
     } else if (data?.type === DropType.Item) {
       const proxy = await itemDropToItemProxy(data);
       if (proxy?.type === ItemType.Trait) {
-        if (proxy.hasMultipleLevels) {
-          proxy.selectLevelAndAdd((data) => {
-            this.item.influenceCommiter(
-              createPipe(
-                removeFeature(targetInfluence.id),
-                addFeature(
-                  createPsiInfluence.trait({
-                    roll: targetInfluence.roll,
-                    trait: data,
-                  }),
-                ),
-              ),
-            );
-          });
-        } else {
-          this.item.influenceCommiter(
-            createPipe(
-              removeFeature(targetInfluence.id),
-              addFeature(
-                createPsiInfluence.trait({
-                  roll: targetInfluence.roll,
-                  trait: proxy.getDataCopy(),
-                }),
-              ),
+        this.item.influenceCommiter(
+          createPipe(
+            removeFeature(targetInfluence.id),
+            addFeature(
+              createPsiInfluence.trait({
+                roll: targetInfluence.roll,
+                trait: proxy.getDataCopy(),
+              }),
             ),
-          );
-        }
+          ),
+        );
       }
     }
   });

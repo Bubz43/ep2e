@@ -6,7 +6,14 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import type { Psi } from '@src/entities/item/proxies/psi';
 import { localize } from '@src/foundry/localization';
 import { openMenu } from '@src/open-menu';
-import { customElement, html, LitElement, property } from 'lit-element';
+import {
+  customElement,
+  html,
+  LitElement,
+  property,
+  PropertyValues,
+  query,
+} from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import styles from './character-view-psi.scss';
 
@@ -24,11 +31,47 @@ export class CharacterViewPsi extends LitElement {
 
   @property({ attribute: false }) psi!: Psi;
 
+  @query('mwc-slider') private slider?: Slider;
+
   // firstUpdated() {
   //   setTimeout(() => {
   //     this.renderRoot.querySelector('mwc-slider')?.layout();
   //   }, 100);
   // }
+
+  private resizeObs: ResizeObserver | null = null;
+
+  connectedCallback() {
+    this.resizeObs = new ResizeObserver(() => this.layoutSlider());
+    this.resizeObs.observe(this);
+    super.connectedCallback();
+  }
+
+  disconnectedCallback() {
+    this.resizeObs?.disconnect();
+    this.resizeObs = null;
+    super.disconnectedCallback();
+  }
+
+  updated(changedProps: PropertyValues<this>) {
+    super.updated(changedProps);
+    requestAnimationFrame(() => this.layoutSlider());
+  }
+
+  private layoutSlider() {
+    this.slider?.layout();
+  }
+
+  openPsiMenu() {
+    openMenu({
+      content: [
+        {
+          label: localize('infectionTest'),
+          callback: () => {},
+        },
+      ],
+    });
+  }
 
   private openFreePushMenu() {
     const { freePush } = this.psi;
@@ -55,6 +98,11 @@ export class CharacterViewPsi extends LitElement {
         <button class="name" @click=${this.psi.openForm}>
           ${this.psi.name}
         </button>
+        <mwc-icon-button
+          @click=${this.openPsiMenu}
+          icon="more_vert"
+        ></mwc-icon-button>
+
         <span class="info"
           >${this.psi.strain} ${localize('substrain')} ${localize('level')}
           ${this.psi.level}</span
@@ -66,6 +114,7 @@ export class CharacterViewPsi extends LitElement {
   }
 
   private renderInfectionInfo() {
+    const { activePsiInfluences } = this.psi;
     return html`
       ${this.renderInfectionTracker()}
       <!-- <div class="actions">
@@ -112,7 +161,7 @@ export class CharacterViewPsi extends LitElement {
         <mwc-slider
           class="infection-progress"
           value=${infectionRating}
-          min=${20}
+          min=${baseInfectionRating}
           max=${99}
           ?disabled=${!editable}
           step="1"
@@ -120,9 +169,7 @@ export class CharacterViewPsi extends LitElement {
           @change=${(ev: Event & { currentTarget: Slider }) => {
             this.psi.updateInfectionRating(ev.currentTarget.value);
           }}
-          @mouseover=${(ev: Event & { currentTarget: Slider }) => {
-            ev.currentTarget.layout();
-          }}
+          @mouseover=${this.layoutSlider}
         >
         </mwc-slider>
       </div>
@@ -136,6 +183,7 @@ export class CharacterViewPsi extends LitElement {
         class=${classMap({
           'increased-chi': true,
           active: hasChiIncreasedEffect,
+          solo: level < 2,
         })}
         title="${localize(PsiPush.IncreasedEffect)} ${localize('psiChi')}"
       >

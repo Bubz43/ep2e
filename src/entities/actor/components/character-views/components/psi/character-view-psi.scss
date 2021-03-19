@@ -8,10 +8,12 @@
 :host {
   display: grid;
   grid-auto-rows: min-content;
+  max-width: 200px;
+  min-width: 100%;
 }
 
 header {
-  padding: 0.25rem 0.75rem 0;
+  padding: 0.25rem 0 0 0.75rem;
   position: relative;
   &:hover {
     z-index: 1;
@@ -30,8 +32,12 @@ header {
   }
   .info {
     color: var(--color-text-lighter);
-    font-family: var(--font-2);
-    font-size: small;
+    @include truncate(100%);
+  }
+  mwc-icon-button {
+    color: var(--color-text-lighter);
+    --mdc-icon-button-size: 2rem;
+    float: right;
   }
 }
 
@@ -100,6 +106,7 @@ header {
   transition: opacity 300ms ease-in-out;
   width: fit-content;
   transform: translate(-1px, -0.75rem);
+
   &::before {
     content: '|';
     display: block;
@@ -121,6 +128,9 @@ header {
 .increased-chi {
   grid-area: chi;
   pointer-events: none;
+  &.solo {
+    left: -25.5%;
+  }
 }
 
 .free-push {

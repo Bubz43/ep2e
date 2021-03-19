@@ -608,15 +608,32 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         .path('data', 'spentPools', poolType)
         .store(newSpentPools.get(poolType) || 0);
     }
-    // TODO Psi
-    this.updater
-      .path('data', recharge)
-      .store(({ taken, refreshStartTime }) => ({
-        taken: taken + 1,
-        refreshStartTime: taken === 0 ? currentWorldTimeMS() : refreshStartTime,
-      }))
-      .path('data', 'temporary')
-      .commit(reject((temp) => temp.endOn === TemporaryFeatureEnd.Recharge));
+
+    this.updater.batchCommits(() => {
+      if (
+        this.psi
+        // &&
+        // !this.temporaryFeatures.some(
+        //   (temp) => temp.type === TemporaryFeatureType.PsiInfluence,
+        // )
+      ) {
+        this.psi.updateInfectionRating(
+          recharge === RechargeType.Short
+            ? this.psi.infectionRating - 10
+            : this.psi.baseInfectionRating,
+        );
+      }
+      // TODO Psi
+      this.updater
+        .path('data', recharge)
+        .store(({ taken, refreshStartTime }) => ({
+          taken: taken + 1,
+          refreshStartTime:
+            taken === 0 ? currentWorldTimeMS() : refreshStartTime,
+        }))
+        .path('data', 'temporary')
+        .commit(reject((temp) => temp.endOn === TemporaryFeatureEnd.Recharge));
+    });
   }
 
   refreshRecharges() {

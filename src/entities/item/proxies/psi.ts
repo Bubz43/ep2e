@@ -72,6 +72,15 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
     // );
   }
 
+  get activePsiInfluences() {
+    // TODO timestate and usable trait/motivation/unique
+    return (
+      this.influencesData?.flatMap((influence) =>
+        'active' in influence && influence.active ? influence : [],
+      ) ?? []
+    );
+  }
+
   get strain() {
     return this.epData.strain;
   }

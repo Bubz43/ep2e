@@ -1,15 +1,14 @@
 import { ItemType } from '@src/entities/entity-types';
 import type { Trait } from '@src/entities/item/proxies/trait';
-import { ItemEntity, createItemEntity } from '@src/entities/models';
+import { createItemEntity, ItemEntity } from '@src/entities/models';
 import { localize } from '@src/foundry/localization';
 import { rollFormula } from '@src/foundry/rolls';
-import { html } from 'lit-html';
 import { range } from 'remeda';
 import type { Effect } from './effects';
-import { StringID, createFeature, addFeature } from './feature-helpers';
-import { Motivation, createMotivation, MotivationStance } from './motivations';
-import { EPTimeInterval, CommonInterval } from './time';
+import { addFeature, createFeature, StringID } from './feature-helpers';
 import { toMilliseconds } from './modify-milliseconds';
+import { createMotivation, Motivation, MotivationStance } from './motivations';
+import { CommonInterval, EPTimeInterval } from './time';
 
 export enum PsiInfluenceType {
   Damage = 'physicalDamage',
@@ -25,9 +24,15 @@ type Influence<T extends { type: PsiInfluenceType }> = T & {
   roll: InfluenceRoll;
 };
 
+export type ActiveInfluenceState = {
+  duration: number;
+  startTime: number;
+};
+
 export type MotivationInfluence = Influence<{
   type: PsiInfluenceType.Motivation;
   motivation: Motivation;
+  active?: ActiveInfluenceState | null;
 }>;
 
 export type DamageInfluence = Influence<{
@@ -45,11 +50,13 @@ export type UniqueInfluence = Influence<{
     interval: EPTimeInterval;
     items: StringID<Effect>[];
   };
+  active?: ActiveInfluenceState | null;
 }>;
 
 export type TraitInfluenceData = Influence<{
   type: PsiInfluenceType.Trait;
   trait: ItemEntity<ItemType.Trait>;
+  active?: ActiveInfluenceState | null;
 }>;
 
 export type TraitInfluence = Omit<TraitInfluenceData, 'trait'> & {
@@ -74,7 +81,10 @@ const influenceBase = <T extends PsiInfluenceType>(type: T) => ({
 });
 
 const motivation = createFeature<MotivationInfluence, 'roll' | 'motivation'>(
-  () => influenceBase(PsiInfluenceType.Motivation),
+  () => ({
+    ...influenceBase(PsiInfluenceType.Motivation),
+    active: null,
+  }),
 );
 
 const damage = createFeature<DamageInfluence, 'roll' | 'formula'>(() =>
@@ -84,11 +94,15 @@ const damage = createFeature<DamageInfluence, 'roll' | 'formula'>(() =>
 const unique = createFeature<
   UniqueInfluence,
   'roll' | 'name' | 'effects' | 'duration'
->(() => influenceBase(PsiInfluenceType.Unique));
+>(() => ({
+  ...influenceBase(PsiInfluenceType.Unique),
+  active: null,
+}));
 
-const trait = createFeature<TraitInfluenceData, 'roll' | 'trait'>(() =>
-  influenceBase(PsiInfluenceType.Trait),
-);
+const trait = createFeature<TraitInfluenceData, 'roll' | 'trait'>(() => ({
+  ...influenceBase(PsiInfluenceType.Trait),
+  active: null,
+}));
 
 export const createPsiInfluence = { motivation, damage, unique, trait };
 
