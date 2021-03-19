@@ -17,7 +17,9 @@ export enum PsiInfluenceType {
   Unique = 'unique',
 }
 
-export type InfluenceRoll = 1 | 2 | 3 | 4 | 5 | 6;
+export const influenceRolls = [1, 2, 3, 4, 5, 6] as const;
+
+export type InfluenceRoll = typeof influenceRolls[number];
 
 type Influence<T extends { type: PsiInfluenceType }> = T & {
   description: string;

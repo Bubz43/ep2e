@@ -26,7 +26,7 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
       InfluenceRoll,
       StringID<PsiInfluence>
     >(data, (influence) => {
-      const active = 'active' in influence && influence.active;
+      const active = this.embedded && 'active' in influence && influence.active;
       const timeState = active
         ? createLiveTimeState({
             ...active,

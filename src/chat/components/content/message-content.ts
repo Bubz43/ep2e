@@ -50,6 +50,7 @@ export class MessageContent extends LitElement {
       thrownAttack,
       rangedAttack,
       hack,
+      influenceRoll,
     } = this.data;
     if (!this.message.isContentVisible) return '';
     return html`
@@ -93,6 +94,13 @@ export class MessageContent extends LitElement {
           `
         : ''}
       ${favor ? html` <message-favor .favor=${favor}></message-favor> ` : ''}
+      ${influenceRoll
+        ? html`
+            <message-influence-roll
+              .influenceRoll=${influenceRoll}
+            ></message-influence-roll>
+          `
+        : ''}
       ${meleeAttack
         ? html`
             <message-melee-attack

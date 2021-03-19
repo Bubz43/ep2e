@@ -34,6 +34,7 @@ import { MessageHack } from './chat/components/hack/message-hack';
 import { MessageHeader } from './chat/components/header/message-header';
 import { MessageHeal } from './chat/components/heal/message-heal';
 import { MessageHealthChange } from './chat/components/health-change/message-health-change';
+import { MessageInfluenceRoll } from './chat/components/influence-roll/message-influence-roll';
 import { MessageMeleeAttack } from './chat/components/melee-attack/message-melee-attack';
 import { MessageRangedAttack } from './chat/components/ranged-attack/message-ranged-attack';
 import { MessageSpecialTest } from './chat/components/special-test/message-special-test';
@@ -355,6 +356,7 @@ MessageSuccessTest;
 MessageFavor;
 MessageSpecialTest;
 MessageHack;
+MessageInfluenceRoll;
 
 // SuccessTest
 AptitudeCheckControls;

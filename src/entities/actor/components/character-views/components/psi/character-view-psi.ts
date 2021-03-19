@@ -1,11 +1,14 @@
 import type { Slider } from '@material/mwc-slider';
-import { renderNumberInput } from '@src/components/field/fields';
-import { renderAutoForm } from '@src/components/form/forms';
+import { createMessage, MessageVisibility } from '@src/chat/create-message';
 import { enumValues, PsiPush } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import type { Psi } from '@src/entities/item/proxies/psi';
+import { influenceInfo, influenceRolls } from '@src/features/psi-influence';
 import { localize } from '@src/foundry/localization';
+import { rollFormula } from '@src/foundry/rolls';
+import { tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
+import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
@@ -15,6 +18,8 @@ import {
   query,
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
+import { repeat } from 'lit-html/directives/repeat';
+import { mapToObj } from 'remeda';
 import styles from './character-view-psi.scss';
 
 @customElement('character-view-psi')
@@ -69,6 +74,34 @@ export class CharacterViewPsi extends LitElement {
           label: localize('infectionTest'),
           callback: () => {},
         },
+        {
+          label: `${localize('roll')} ${localize('influences')}`,
+          callback: () => {
+            const roll = rollFormula('1d6');
+            if (roll) {
+              createMessage({
+                entity: this.character,
+                visibility: MessageVisibility.WhisperGM,
+                data: {
+                  header: this.psi.messageHeader,
+                  influenceRoll: {
+                    rollData: roll.toJSON(),
+                    influences: mapToObj(influenceRolls, (roll) => {
+                      const influence = this.psi.fullInfluences[roll];
+                      return [
+                        roll,
+                        {
+                          id: influence.id,
+                          name: influenceInfo(influence).name,
+                        },
+                      ];
+                    }),
+                  },
+                },
+              });
+            }
+          },
+        },
       ],
     });
   }
@@ -117,6 +150,26 @@ export class CharacterViewPsi extends LitElement {
     const { activePsiInfluences } = this.psi;
     return html`
       ${this.renderInfectionTracker()}
+      ${notEmpty(activePsiInfluences)
+        ? html`
+            <div class="active-influences">
+              ${repeat(
+                activePsiInfluences,
+                ([{ id }]) => id,
+                ([influence, timeState]) => {
+                  const { name, description } = influenceInfo(influence);
+                  return html`
+                    <colored-tag
+                      data-tooltip=${description}
+                      @mouseover=${tooltip.fromData}
+                      >${name}</colored-tag
+                    >
+                  `;
+                },
+              )}
+            </div>
+          `
+        : ''}
       <!-- <div class="actions">
         <mwc-button dense
           >${localize('infection')} ${localize('test')}</mwc-button
@@ -138,19 +191,6 @@ export class CharacterViewPsi extends LitElement {
     } = this.psi;
 
     return html` <section class="infection-tracker">
-      <!-- ${renderAutoForm({
-        classes: 'infection',
-        disabled: !editable,
-        props: { infectionRating },
-        update: ({ infectionRating }) =>
-          infectionRating && this.psi.updateInfectionRating(infectionRating),
-        fields: ({ infectionRating }) =>
-          renderNumberInput(infectionRating, {
-            min: baseInfectionRating,
-            max: 99,
-          }),
-      })} -->
-
       <button class="infection">${infectionRating}</button>
 
       <div class="progress">

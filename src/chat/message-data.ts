@@ -16,11 +16,16 @@ import type { ArmorType } from '@src/features/active-armor';
 import type { AptitudeCheckInfo } from '@src/features/aptitude-check-result-info';
 import type { FiringModeGroup } from '@src/features/firing-modes';
 import type { PostTestPoolAction, PreTestPoolAction } from '@src/features/pool';
+import type { InfluenceRoll } from '@src/features/psi-influence';
 import type { Favor, RepIdentifier } from '@src/features/reputations';
 import type { Size } from '@src/features/size';
 import type { SpecialTest } from '@src/features/tags';
 import type { PlacedTemplateIDs } from '@src/foundry/canvas';
-import type { LabeledFormula, RolledFormula } from '@src/foundry/rolls';
+import type {
+  LabeledFormula,
+  RollData,
+  RolledFormula,
+} from '@src/foundry/rolls';
 import type { HealthModification, HealthType } from '@src/health/health';
 import type { RollMultiplier } from '@src/health/health-changes';
 import type { StressType } from '@src/health/mental-health';
@@ -194,6 +199,11 @@ export type RangedAttackMessageData = {
   appliedPayload?: boolean;
 };
 
+export type InfluenceRollData = {
+  influences: Record<InfluenceRoll, { id: string; name: string }>;
+  rollData: RollData;
+};
+
 export type MessageData = Partial<{
   header: MessageHeaderData;
   targets: MessageTargets;
@@ -213,4 +223,5 @@ export type MessageData = Partial<{
   specialTest: SpecialTestData;
   favor: FavorMessageData;
   hack: HackMessageData;
+  influenceRoll: InfluenceRollData;
 }>;
