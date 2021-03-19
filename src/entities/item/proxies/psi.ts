@@ -7,9 +7,7 @@ import {
   PsiInfluence,
   PsiInfluenceData,
   PsiInfluenceType,
-  TraitInfluenceData,
 } from '@src/features/psi-influence';
-import { localize } from '@src/foundry/localization';
 import { deepMerge } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
@@ -35,6 +33,7 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
               data: influence.trait,
               embedded: this.name,
               lockSource: true,
+              isPsiInfluence: true,
               updater: new UpdateStore({
                 getData: () => influence.trait,
                 isEditable: () => this.editable,

@@ -1,4 +1,4 @@
-import { TraitSource, TraitType, CharacterPoint } from '@src/data-enums';
+import { CharacterPoint, TraitSource, TraitType } from '@src/data-enums';
 import type { ObtainableEffects } from '@src/entities/applied-effects';
 import { localize } from '@src/foundry/localization';
 import { lastEventPosition } from '@src/init';
@@ -14,17 +14,21 @@ export class Trait
   implements ObtainableEffects {
   readonly lockSource;
   readonly temporary;
+  readonly isPsiInfluence;
   constructor({
     lockSource,
     temporary,
+    isPsiInfluence,
     ...init
   }: ItemProxyInit<ItemType.Trait> & {
     lockSource: boolean;
     temporary?: string;
+    isPsiInfluence?: boolean;
   }) {
     super(init);
     this.lockSource = lockSource;
     this.temporary = temporary;
+    this.isPsiInfluence = isPsiInfluence;
   }
 
   updateSort(newSort: number) {
@@ -174,10 +178,20 @@ export class Trait
   }
 
   get fullName() {
-    const { levelIndex, subtype, triggered, embedded, levels } = this;
+    const {
+      levelIndex,
+      subtype,
+      triggered,
+      embedded,
+      levels,
+      isPsiInfluence,
+    } = this;
     const parts = compact([
       subtype,
-      levels.length > 1 && embedded && `${localize('level')} ${levelIndex + 1}`,
+      levels.length > 1 &&
+        !isPsiInfluence &&
+        embedded &&
+        `${localize('level')} ${levelIndex + 1}`,
     ]);
 
     return [
