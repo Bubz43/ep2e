@@ -8,3 +8,10 @@
 :host {
   display: block;
 }
+
+mwc-list-item {
+  height: 2rem;
+  &[selected] {
+    background: alphav(var(--color-primary), 0.5);
+  }
+}

@@ -1,6 +1,14 @@
 import type { InfluenceRollData } from '@src/chat/message-data';
 import { ActorType } from '@src/entities/entity-types';
-import { influenceRolls } from '@src/features/psi-influence';
+import {
+  InfluenceRoll,
+  influenceRolls,
+  PsiInfluenceType,
+} from '@src/features/psi-influence';
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
+import { localize } from '@src/foundry/localization';
+import { rollLabeledFormulas } from '@src/foundry/rolls';
+import { HealthType } from '@src/health/health';
 import { customElement, html, property } from 'lit-element';
 import { MessageElement } from '../message-element';
 import styles from './message-influence-roll.scss';
@@ -20,7 +28,30 @@ export class MessageInfluenceRoll extends MessageElement {
   private applyInfluence() {
     const { actor } = this.message;
     if (actor?.proxy.type === ActorType.Character) {
-      // TODO
+      const { psi } = actor.proxy;
+      const influence =
+        psi?.fullInfluences[this.influenceRoll.rollData.total as InfluenceRoll];
+      if (!influence || !psi) {
+        notify(
+          NotificationType.Info,
+          `${localize('influence')} ${localize('missing')}`,
+        );
+        return;
+      }
+      if (influence.type === PsiInfluenceType.Damage) {
+        const rolledFormulas = rollLabeledFormulas([
+          { label: localize('influence'), formula: influence.formula },
+        ]);
+        this.message.createSimilar({
+          damage: {
+            rolledFormulas,
+            damageType: HealthType.Physical,
+            source: `${psi.name} - ${localize(influence.type)} ${localize(
+              'influence',
+            )}`,
+          },
+        });
+      }
     }
   }
 
@@ -36,7 +67,7 @@ export class MessageInfluenceRoll extends MessageElement {
               ?selected=${selected}
               ?noninteractive=${!selected}
               @click=${this.applyInfluence}
-              >${influences[roll].name}</mwc-list-item
+              >[${roll}] ${influences[roll].name}</mwc-list-item
             >
           `;
         })}

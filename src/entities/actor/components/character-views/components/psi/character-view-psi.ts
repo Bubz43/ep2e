@@ -83,7 +83,10 @@ export class CharacterViewPsi extends LitElement {
                 entity: this.character,
                 visibility: MessageVisibility.WhisperGM,
                 data: {
-                  header: this.psi.messageHeader,
+                  header: {
+                    heading: this.psi.name,
+                    subheadings: [`${localize('influence')}`],
+                  },
                   influenceRoll: {
                     rollData: roll.toJSON(),
                     influences: mapToObj(influenceRolls, (roll) => {
