@@ -8,6 +8,8 @@ import {
   PsiInfluenceData,
   PsiInfluenceType,
 } from '@src/features/psi-influence';
+import { createLiveTimeState } from '@src/features/time';
+import { localize } from '@src/foundry/localization';
 import { deepMerge } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
@@ -24,60 +26,62 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
       InfluenceRoll,
       StringID<PsiInfluence>
     >(data, (influence) => {
-      if (influence.type === PsiInfluenceType.Trait) {
-        return [
-          influence.roll,
-          {
-            ...influence,
-            trait: new Trait({
-              data: influence.trait,
-              embedded: this.name,
-              lockSource: true,
-              isPsiInfluence: true,
-              updater: new UpdateStore({
-                getData: () => influence.trait,
-                isEditable: () => this.editable,
-                setData: (changed) => {
-                  this.influenceCommiter((influences) =>
-                    updateFeature(influences, {
-                      id: influence.id,
-                      trait: deepMerge(influence.trait, changed),
-                    }),
-                  );
-                },
-              }),
-            }),
-          },
-        ];
-      }
-      return [influence.roll, influence];
-    });
-    // return new Map<InfluenceRoll, PsiInfluence>(
-    //   (this.epFlags?.influences || []).map((influence) => {
-    //     if (influence.type === PsiInfluenceType.Trait) {
-    //       return [
-    //         influence.roll,
-    //         {
-    //           ...influence,
-    //           trait: new Trait({
-    //             data: influence.trait,
-    //             embedded: this.name,
-    //             lockSource: true,
-    //           }),
-    //         },
-    //       ] as const;
-    //     }
-    //     return [influence.roll, influence] as const;
-    //   }),
-    // );
-  }
+      const active = 'active' in influence && influence.active;
+      const timeState = active
+        ? createLiveTimeState({
+            ...active,
+            id: influence.id,
+            label: localize(influence.type),
+            updateStartTime: (newStartTime) => {
+              this.influenceCommiter((influences) =>
+                updateFeature(influences, {
+                  id: influence.id,
+                  active: {
+                    ...active,
+                    startTime: newStartTime,
+                  },
+                }),
+              );
+            },
+          })
+        : undefined;
 
+      const pair: [InfluenceRoll, StringID<PsiInfluence>] = [
+        influence.roll,
+        influence.type === PsiInfluenceType.Trait
+          ? {
+              ...influence,
+              timeState,
+              trait: new Trait({
+                data: influence.trait,
+                embedded: this.name,
+                lockSource: true,
+                isPsiInfluence: true,
+                updater: new UpdateStore({
+                  getData: () => influence.trait,
+                  isEditable: () => this.editable,
+                  setData: (changed) => {
+                    this.influenceCommiter((influences) =>
+                      updateFeature(influences, {
+                        id: influence.id,
+                        trait: deepMerge(influence.trait, changed),
+                      }),
+                    );
+                  },
+                }),
+              }),
+            }
+          : { ...influence, timeState },
+      ];
+      return pair;
+    });
+  }
+  @LazyGetter()
   get activePsiInfluences() {
-    // TODO timestate and usable trait/motivation/unique
-    return (
-      this.influencesData?.flatMap((influence) =>
-        'active' in influence && influence.active ? influence : [],
-      ) ?? []
+    return new Map(
+      Object.values(this.fullInfluences).flatMap((influence) =>
+        influence.timeState ? [[influence, influence.timeState]] : [],
+      ),
     );
   }
 

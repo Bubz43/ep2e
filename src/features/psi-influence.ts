@@ -8,7 +8,7 @@ import type { Effect } from './effects';
 import { addFeature, createFeature, StringID } from './feature-helpers';
 import { toMilliseconds } from './modify-milliseconds';
 import { createMotivation, Motivation, MotivationStance } from './motivations';
-import { CommonInterval, EPTimeInterval } from './time';
+import { CommonInterval, EPTimeInterval, LiveTimeState } from './time';
 
 export enum PsiInfluenceType {
   Damage = 'physicalDamage',
@@ -69,9 +69,12 @@ export type PsiInfluenceData =
   | UniqueInfluence
   | TraitInfluenceData;
 
-export type PsiInfluence =
+export type PsiInfluence = (
   | Exclude<PsiInfluenceData, TraitInfluenceData>
-  | TraitInfluence;
+  | TraitInfluence
+) & {
+  timeState?: LiveTimeState;
+};
 
 export type TemporaryInfluence = Exclude<PsiInfluenceData, DamageInfluence>;
 
