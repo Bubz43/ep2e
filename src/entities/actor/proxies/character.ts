@@ -41,6 +41,7 @@ import {
 import { updateFeature } from '@src/features/feature-helpers';
 import type { MovementRate } from '@src/features/movement';
 import { Pool, Pools } from '@src/features/pool';
+import { PsiInfluenceType } from '@src/features/psi-influence';
 import { Recharge } from '@src/features/recharge';
 import { getEffectsFromSize } from '@src/features/size';
 import {
@@ -832,6 +833,15 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     sleeveItems: Map<string, ItemProxy>,
     egoItems: Map<string, ItemProxy>,
   ) {
+    if (this.ego.psi) {
+      for (const [activeInfluence] of this.ego.psi.activePsiInfluences) {
+        if (activeInfluence.type === PsiInfluenceType.Trait) {
+          const { trait } = activeInfluence;
+          this[trait.isMorphTrait ? 'morphTraits' : 'egoTraits'].push(trait);
+          this._appliedEffects.add(trait.currentEffects);
+        }
+      }
+    }
     for (const item of this.items.values()) {
       if (item.type === ItemType.Substance && item.appliedState) {
         if (item.appliedState === 'active') {

@@ -4,7 +4,6 @@ import { localize } from '@src/foundry/localization';
 import { lastEventPosition } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import { notEmpty, toggle } from '@src/utility/helpers';
-import { LazyGetter } from 'lazy-get-decorator';
 import { clamp, compact } from 'remeda';
 import type { ItemType } from '../../entity-types';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
@@ -15,27 +14,27 @@ export class Trait
   readonly lockSource;
   readonly temporary;
   readonly isPsiInfluence;
+  readonly customLevelIndex;
   constructor({
     lockSource,
     temporary,
     isPsiInfluence,
+    customLevelIndex: customLevel,
     ...init
   }: ItemProxyInit<ItemType.Trait> & {
     lockSource: boolean;
     temporary?: string;
     isPsiInfluence?: boolean;
+    customLevelIndex?: 0 | 1 | 2;
   }) {
     super(init);
     this.lockSource = lockSource;
     this.temporary = temporary;
     this.isPsiInfluence = isPsiInfluence;
+    this.customLevelIndex = customLevel;
   }
 
-  updateSort(newSort: number) {
-    return this.updater.path('sort').commit(newSort);
-  }
-
-  @LazyGetter()
+  // @LazyGetter()
   get currentEffects() {
     const { levelInfo, triggered, hasTriggers } = this;
     if (hasTriggers && !triggered) return null;
@@ -43,25 +42,6 @@ export class Trait
       source: this.fullName,
       effects: levelInfo.effects,
     };
-  }
-
-  getTextInfo() {
-    const {
-      traitType,
-      currentSource,
-      triggers,
-      // activeEffects,
-      triggered,
-    } = this;
-    const triggerList = triggers ? `${localize('triggers')}: ${triggers}` : '';
-
-    return [
-      triggered ? '' : triggerList,
-      // ...map(activeEffects?.effects || [], formatEffect),
-      localize(traitType),
-      localize(currentSource),
-      triggered ? triggerList : '',
-    ];
   }
 
   selectLevelAndAdd(addTrait: (data: Trait['data']) => unknown) {
@@ -128,7 +108,7 @@ export class Trait
   }
 
   get levelIndex() {
-    return clamp(this.state.level, this.levelRange);
+    return clamp(this.customLevelIndex ?? this.state.level, this.levelRange);
   }
 
   get defaultLevel() {
@@ -189,7 +169,7 @@ export class Trait
     const parts = compact([
       subtype,
       levels.length > 1 &&
-        !isPsiInfluence &&
+        (!isPsiInfluence || this.customLevelIndex !== undefined) &&
         embedded &&
         `${localize('level')} ${levelIndex + 1}`,
     ]);

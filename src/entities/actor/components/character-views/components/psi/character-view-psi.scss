@@ -41,6 +41,34 @@ header {
   }
 }
 
+.active-influences {
+  display: flex;
+  flex-flow: row wrap;
+  > * {
+    margin: 0 0 0.25rem 0.25rem;
+  }
+
+  .motivation {
+    display: flex;
+    align-items: center;
+    padding-right: 0.5rem;
+    position: relative;
+    @include textButton();
+    mwc-icon {
+      color: var(--color-negative);
+      &.support {
+        color: var(--color-secondary);
+        filter: hue-rotate(-30deg);
+      }
+    }
+    notification-coin {
+      position: static;
+      margin-left: 0.5ch;
+      --coin-bg: #{alphav(var(--color-grey), 0.2)};
+    }
+  }
+}
+
 .infection-tracker {
   display: grid;
   grid-template-areas:
@@ -111,6 +139,7 @@ header {
     content: '|';
     display: block;
     filter: brightness(130%);
+    pointer-events: none;
   }
 
   &.active {
@@ -137,15 +166,20 @@ header {
   pointer-events: none;
   width: fit-content;
   @include truncate(120px);
-
+  @include textButton();
   &.active {
-    pointer-events: initial;
-    cursor: pointer;
+    button {
+      pointer-events: initial;
+      cursor: pointer;
+    }
 
     &:hover,
     &:focus {
       text-shadow: var(--text-highlight);
     }
+  }
+  button[disabled] {
+    color: var(--color-text);
   }
 
   &.selection {

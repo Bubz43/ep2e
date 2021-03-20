@@ -128,7 +128,7 @@ export class SlWindow extends LitElement {
 
   @property({ type: String }) resizable = ResizeOption.None;
 
-  @property({ type: String }) relativePosition: NanoPopPosition = 'bottom';
+  @property({ type: String }) relativePosition: NanoPopPosition = 'left';
 
   @query('header') private header!: HTMLElement;
 

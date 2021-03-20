@@ -8,7 +8,7 @@ import {
   PsiInfluenceData,
   PsiInfluenceType,
 } from '@src/features/psi-influence';
-import { createLiveTimeState } from '@src/features/time';
+import { createLiveTimeState, currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { deepMerge } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
@@ -57,6 +57,11 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
                 embedded: this.name,
                 lockSource: true,
                 isPsiInfluence: true,
+                temporary: localize('psiInfluence'),
+                customLevelIndex:
+                  this.embedded && influence.active
+                    ? this.traitInfluenceLevelIndex
+                    : undefined,
                 updater: new UpdateStore({
                   getData: () => influence.trait,
                   isEditable: () => this.editable,
@@ -83,6 +88,23 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
         influence.timeState ? [[influence, influence.timeState]] : [],
       ),
     );
+  }
+
+  activateInfluence(roll: InfluenceRoll, duration: number) {
+    const { id } = this.fullInfluences[roll];
+    return this.influenceCommiter((influences) =>
+      updateFeature(influences, {
+        id,
+        active: { duration, startTime: currentWorldTimeMS() },
+      }),
+    );
+  }
+
+  get traitInfluenceLevelIndex() {
+    const { infectionRating } = this;
+    if (infectionRating < 33) return 0;
+    if (infectionRating < 66) return 1;
+    return 2;
   }
 
   get strain() {

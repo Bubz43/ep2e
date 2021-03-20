@@ -1,5 +1,6 @@
 import type { InfluenceRollData } from '@src/chat/message-data';
 import { ActorType } from '@src/entities/entity-types';
+import { toMilliseconds } from '@src/features/modify-milliseconds';
 import {
   InfluenceRoll,
   influenceRolls,
@@ -7,7 +8,7 @@ import {
 } from '@src/features/psi-influence';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
-import { rollLabeledFormulas } from '@src/foundry/rolls';
+import { rollFormula, rollLabeledFormulas } from '@src/foundry/rolls';
 import { HealthType } from '@src/health/health';
 import { customElement, html, property } from 'lit-element';
 import { MessageElement } from '../message-element';
@@ -25,12 +26,12 @@ export class MessageInfluenceRoll extends MessageElement {
 
   @property({ type: Object }) influenceRoll!: InfluenceRollData;
 
-  private applyInfluence() {
+  private async applyInfluence() {
     const { actor } = this.message;
     if (actor?.proxy.type === ActorType.Character) {
       const { psi } = actor.proxy;
-      const influence =
-        psi?.fullInfluences[this.influenceRoll.rollData.total as InfluenceRoll];
+      const influenceRoll = this.influenceRoll.rollData.total as InfluenceRoll;
+      const influence = psi?.fullInfluences[influenceRoll];
       if (!influence || !psi) {
         notify(
           NotificationType.Info,
@@ -38,19 +39,57 @@ export class MessageInfluenceRoll extends MessageElement {
         );
         return;
       }
-      if (influence.type === PsiInfluenceType.Damage) {
-        const rolledFormulas = rollLabeledFormulas([
-          { label: localize('influence'), formula: influence.formula },
-        ]);
-        this.message.createSimilar({
-          damage: {
-            rolledFormulas,
-            damageType: HealthType.Physical,
-            source: `${psi.name} - ${localize(influence.type)} ${localize(
-              'influence',
-            )}`,
-          },
-        });
+
+      switch (influence.type) {
+        case PsiInfluenceType.Damage: {
+          const rolledFormulas = rollLabeledFormulas([
+            { label: localize('influence'), formula: influence.formula },
+          ]);
+          this.message.createSimilar({
+            damage: {
+              rolledFormulas,
+              damageType: HealthType.Physical,
+              source: `${psi.name} - ${localize(influence.type)} ${localize(
+                'influence',
+              )}`,
+            },
+          });
+          break;
+        }
+
+        case PsiInfluenceType.Motivation: {
+          const roll = rollFormula(`1d6`);
+
+          await psi.activateInfluence(
+            influenceRoll,
+            toMilliseconds({ hours: roll?.total || 1 }),
+          );
+          roll?.toMessage({
+            flavor: localize('hours'),
+            speaker: this.message.data.speaker,
+          });
+
+          break;
+        }
+
+        case PsiInfluenceType.Trait: {
+          const roll = rollFormula(`1d6 #${localize('minutes')}`);
+
+          await psi.activateInfluence(
+            influenceRoll,
+            toMilliseconds({ minutes: roll?.total || 1 }),
+          );
+          roll?.toMessage({
+            flavor: localize('minutes'),
+            speaker: this.message.data.speaker,
+          });
+
+          break;
+        }
+
+        case PsiInfluenceType.Unique: {
+          break;
+        }
       }
     }
   }

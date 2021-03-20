@@ -3,7 +3,12 @@ import { createMessage, MessageVisibility } from '@src/chat/create-message';
 import { enumValues, PsiPush } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import type { Psi } from '@src/entities/item/proxies/psi';
-import { influenceInfo, influenceRolls } from '@src/features/psi-influence';
+import { MotivationStance } from '@src/features/motivations';
+import {
+  influenceInfo,
+  influenceRolls,
+  PsiInfluenceType,
+} from '@src/features/psi-influence';
 import { localize } from '@src/foundry/localization';
 import { rollFormula } from '@src/foundry/rolls';
 import { tooltip } from '@src/init';
@@ -19,7 +24,7 @@ import {
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
-import { mapToObj } from 'remeda';
+import { mapToObj, sortBy } from 'remeda';
 import styles from './character-view-psi.scss';
 
 @customElement('character-view-psi')
@@ -157,9 +162,53 @@ export class CharacterViewPsi extends LitElement {
         ? html`
             <div class="active-influences">
               ${repeat(
-                activePsiInfluences,
+                sortBy([...activePsiInfluences], ([{ type }]) => type),
                 ([{ id }]) => id,
                 ([influence, timeState]) => {
+                  if (influence.type === PsiInfluenceType.Motivation) {
+                    const { motivation, description } = influence;
+                    return html`
+                      <li
+                        class="motivation"
+                        data-tooltip=${description}
+                        @mouseover=${tooltip.fromData}
+                      >
+                        <mwc-icon class=${motivation.stance}
+                          >${motivation.stance === MotivationStance.Support
+                            ? 'add'
+                            : 'remove'}</mwc-icon
+                        >
+                        ${motivation.cause}
+                        ${motivation.goals.length
+                          ? html`
+                              <notification-coin
+                                value=${motivation.goals.length}
+                              ></notification-coin>
+                            `
+                          : ''}
+                      </li>
+                    `;
+                  }
+
+                  if (influence.type === PsiInfluenceType.Trait) {
+                    const { name, description } = influenceInfo(influence);
+                    return html`
+                      <colored-tag
+                        @mouseover=${(
+                          ev: MouseEvent & { currentTarget: HTMLElement },
+                        ) => {
+                          tooltip.attach({
+                            el: ev.currentTarget,
+                            content: html`<enriched-html
+                              .content=${description}
+                            ></enriched-html>`,
+                            position: 'bottom-middle',
+                          });
+                        }}
+                        >${name}</colored-tag
+                      >
+                    `;
+                  }
                   const { name, description } = influenceInfo(influence);
                   return html`
                     <colored-tag
@@ -243,18 +292,18 @@ export class CharacterViewPsi extends LitElement {
       selection: hasFreePushEffect && !activeFreePush,
     };
     return html`
-      <button
-        @click=${this.openFreePushMenu}
+      <div
         class="free-push ${classMap(freePushClasses)}"
         title=${localize('freePush')}
-        ?disabled=${!hasFreePushEffect}
       >
-        ${localize(
-          freePushClasses.active
-            ? activeFreePush || 'selectFreePush'
-            : 'freePush',
-        )}
-      </button>
+        <button @click=${this.openFreePushMenu} ?disabled=${!hasFreePushEffect}>
+          ${localize(
+            freePushClasses.active
+              ? activeFreePush || 'selectFreePush'
+              : 'freePush',
+          )}
+        </button>
+      </div>
     `;
   }
 }
