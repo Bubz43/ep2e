@@ -3,6 +3,7 @@ import { UpdateStore } from '@src/entities/update-store';
 import { StringID, updateFeature } from '@src/features/feature-helpers';
 import {
   createDefaultPsiInfluences,
+  influenceInfo,
   InfluenceRoll,
   PsiInfluence,
   PsiInfluenceData,
@@ -31,7 +32,7 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
         ? createLiveTimeState({
             ...active,
             id: influence.id,
-            label: localize(influence.type),
+            label: influenceInfo(influence).name,
             updateStartTime: (newStartTime) => {
               this.influenceCommiter((influences) =>
                 updateFeature(influences, {
@@ -96,6 +97,16 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
       updateFeature(influences, {
         id,
         active: { duration, startTime: currentWorldTimeMS() },
+      }),
+    );
+  }
+
+  deactivateInfluence(roll: InfluenceRoll) {
+    const { id } = this.fullInfluences[roll];
+    return this.influenceCommiter((influences) =>
+      updateFeature(influences, {
+        id,
+        active: null,
       }),
     );
   }

@@ -510,6 +510,7 @@ export class CharacterViewAlt extends CharacterViewBase {
                 @click=${this.toggleCondition}
                 data-tooltip=${localize(condition)}
                 @mouseover=${tooltip.fromData}
+                @focus=${tooltip.fromData}
               >
                 <img
                   src=${conditionIcons[condition]}

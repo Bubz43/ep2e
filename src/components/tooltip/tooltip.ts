@@ -57,7 +57,6 @@ export class ToolTip extends LitElement {
     if (this.listenerUnsub) this.detach(false);
     this.updateContent(content);
     this.visible = true;
-    console.log(position);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         reposition(el, this, { position, margin: 4 });

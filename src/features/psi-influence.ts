@@ -167,7 +167,7 @@ export const createDefaultPsiInfluences = () => {
 
 export const influenceSort = ({ roll }: { roll: InfluenceRoll }) => roll;
 
-export const influenceInfo = (influence: PsiInfluence) => {
+export const influenceInfo = (influence: PsiInfluence | PsiInfluenceData) => {
   switch (influence.type) {
     case PsiInfluenceType.Damage:
       return {
@@ -186,10 +186,18 @@ export const influenceInfo = (influence: PsiInfluence) => {
     }
 
     case PsiInfluenceType.Trait: {
-      return {
-        name: influence.trait.fullName,
-        description: influence.trait.description,
-      };
+      const { trait } = influence;
+      return 'fullName' in trait
+        ? {
+            name: trait.fullName,
+            description: trait.description,
+          }
+        : {
+            name: `${trait.name} ${
+              trait.data.subtype ? `(${trait.data.subtype})` : ''
+            }`,
+            description: trait.data.description,
+          };
     }
 
     case PsiInfluenceType.Unique:

@@ -473,7 +473,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   get activeDurations() {
     // TODO batteries
     return (
-      this.timers.length +
+      this.refreshTimers.length +
       reject(
         this.equippedGroups.services,
         (service) => service.isIndefiniteService,
@@ -486,16 +486,17 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         0,
       ) +
       this.awaitingOnsetSubstances.length +
-      this.activeSubstances.length
+      this.activeSubstances.length +
+      (this.psi?.activePsiInfluences.size ?? 0)
     );
   }
 
-  get requiresAttention() {
+  get requiresAttention(): boolean {
     // TODO batteries
     return (
       (!!this.activeDurations &&
         (notEmpty(this.equippedGroups.expiredServices) ||
-          this.timers.some(refreshAvailable) ||
+          this.refreshTimers.some(refreshAvailable) ||
           this.tasks.some((task) => task.state.completed))) ||
       this.temporaryFeatures.some(({ timeState }) => timeState.completed) ||
       this.equippedGroups.activeFabbers.some(
@@ -511,12 +512,15 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       ) ||
       this.activeSubstances.some(
         ({ appliedInfo }) => appliedInfo.requiresAttention,
+      ) ||
+      [...(this.psi?.activePsiInfluences.values() || [])].some(
+        (timeState) => timeState.completed,
       )
     );
   }
 
   @LazyGetter()
-  get timers() {
+  get refreshTimers(): LiveTimeState[] {
     return [
       ...this.rechargeRefreshTimers,
       ...this.ego.repRefreshTimers,

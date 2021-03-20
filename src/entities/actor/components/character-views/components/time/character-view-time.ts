@@ -9,11 +9,7 @@ import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { UpdateStore } from '@src/entities/update-store';
-import {
-  ActionSubtype,
-  createActiveTask,
-  taskState,
-} from '@src/features/actions';
+import { ActionSubtype, createActiveTask } from '@src/features/actions';
 import {
   addUpdateRemoveFeature,
   idProp,
@@ -118,12 +114,42 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
       ${[
         this.renderTaskActions(),
         this.renderAppliedSubstances(),
+        this.renderPsiInfluences(),
         this.renderFabricators(),
         this.renderRegens(),
         this.renderTemporaryFeatures(),
         this.renderTemporaryServices(),
         this.renderRefreshTimers(),
       ]}
+    `;
+  }
+
+  private renderPsiInfluences() {
+    const { activePsiInfluences } = this.character.psi ?? {};
+    if (!activePsiInfluences?.size) return '';
+
+    return html`
+      <section>
+        <sl-header heading=${localize('psiInfluences')}></sl-header>
+        <sl-animated-list class="active-influence">
+          ${repeat(
+            activePsiInfluences,
+            ([{ id }]) => id,
+            ([{ roll }, timeState]) => html`
+              <time-state-item
+                ?disabled=${this.character.disabled}
+                .timeState=${timeState}
+                completion="expired"
+              >
+                <delete-button
+                  slot="action"
+                  @delete=${() => this.character.psi?.deactivateInfluence(roll)}
+                ></delete-button
+              ></time-state-item>
+            `,
+          )}
+        </sl-animated-list>
+      </section>
     `;
   }
 
@@ -489,7 +515,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
   }
 
   private renderRefreshTimers() {
-    const { timers, disabled } = this.character;
+    const { refreshTimers: timers, disabled } = this.character;
 
     return html`
       <section>
