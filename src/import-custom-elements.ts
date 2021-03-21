@@ -172,6 +172,7 @@ import { SuccessTestActionForm } from './success-test/components/action-form/suc
 import { AptitudeCheckControls } from './success-test/components/aptitude-check-controls/aptitude-check-controls';
 import { SuccessTestFooter } from './success-test/components/footer/success-test-footer';
 import { HackingTestControls } from './success-test/components/hacking-test-controls/hacking-test-controls';
+import { InfectionTestControls } from './success-test/components/infection-test-controls/infection-test-controls';
 import { MeleeAttackControls } from './success-test/components/melee-attack-controls/melee-attack-controls';
 import { SuccessTestModifiersSection } from './success-test/components/modifiers-section/success-test-modifiers-section';
 import { SuccessTestPoolControls } from './success-test/components/pool-controls/success-test-pool-controls';
@@ -373,3 +374,4 @@ HackingTestControls;
 SuccessTestSkillSection;
 SoftwareSkillTestControls;
 RangedAttackControls;
+InfectionTestControls;

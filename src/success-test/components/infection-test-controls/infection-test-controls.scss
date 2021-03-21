@@ -1,0 +1,41 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+@include styled-scrollbars();
+
+@include resetUnorderedList();
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: contents;
+}
+
+.controls {
+  display: grid;
+  grid-template-areas:
+    'entities modifiers'
+    'entities footer';
+  grid-template-rows: 1fr min-content;
+  column-gap: 0.25rem;
+  min-height: 300px;
+  min-width: 350px;
+  padding: 0.5rem 1rem;
+
+  .entities {
+    grid-area: entities;
+  }
+  .modifiers {
+    grid-area: modifiers;
+  }
+  .footer {
+    grid-area: footer;
+  }
+  background: linear-gradient(
+    to bottom,
+    alphav(var(--color-bg), 0.8),
+    alphav(var(--color-bg-alt), 0.8)
+  );
+}
