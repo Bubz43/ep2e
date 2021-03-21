@@ -204,7 +204,7 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
   }
 
   private renderInfectionInfo() {
-    const { activePsiInfluences } = this.psi;
+    const { activePsiInfluences, receded } = this.psi;
     return html`
       ${this.renderInfectionTracker()}
       ${notEmpty(activePsiInfluences)
@@ -320,6 +320,8 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
               )}
             </div>
           `
+        : receded
+        ? html` <p>${localize('immuneToInfluencesUntilRecharge')}</p> `
         : ''}
     `;
   }

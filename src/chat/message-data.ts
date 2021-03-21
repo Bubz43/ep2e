@@ -156,6 +156,7 @@ export interface SuccessTestMessageData {
   defaulting?: boolean;
   linkedPool?: Exclude<PoolType, PoolType.Flex | PoolType.Threat>;
   ignoredModifiers?: number;
+  disableSuperiorEffects?: boolean;
   superiorResultEffects?: SuperiorResultEffect[];
   defaultSuperiorEffect?: SuperiorResultEffect;
   // TODO  criticalResultEffect?: CriticalResultEffect

@@ -49,6 +49,7 @@ export class InfectionTest extends SuccessTestBase {
         },
         infectionTest: {},
         successTest: {
+          disableSuperiorEffects: true,
           parts: [
             {
               name: localize('infectionRating'),

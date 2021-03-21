@@ -91,6 +91,18 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
     );
   }
 
+  recedeInfection() {
+    this.updater.batchCommits(() => {
+      this.updater.path('data', 'state', 'receded').store(true);
+      if (this.activePsiInfluences.size) {
+        this.influenceCommiter((influences) =>
+          influences.map((influence) => ({ ...influence, active: null })),
+        );
+      }
+      this.updater.commit();
+    });
+  }
+
   activateInfluence(
     roll: InfluenceRoll,
     duration: number,

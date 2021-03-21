@@ -9,6 +9,7 @@ import { rollFormula } from '@src/foundry/rolls';
 import {
   grantedSuperiorResultEffects,
   isSuccessfullTestResult,
+  SuccessTestResult,
 } from '@src/success-test/success-test';
 import { customElement, html, property } from 'lit-element';
 import { last, mapToObj } from 'remeda';
@@ -41,13 +42,17 @@ export class MessageInfectionTest extends MessageElement {
       : null;
   }
 
+  get psi() {
+    const { actor } = this.message;
+    return actor?.proxy.type === ActorType.Character ? actor.proxy.psi : null;
+  }
+
   private rollInfluences() {
     const { result } = this.successTestInfo ?? {};
     const increases = grantedSuperiorResultEffects(result);
 
     const roll = rollFormula(`1d6 ${increases ? `+${increases}` : ''}`);
-    const { actor } = this.message;
-    const psi = actor?.proxy.type === ActorType.Character && actor.proxy.psi;
+    const { psi } = this;
     if (!roll || !psi) return;
     this.message.createSimilar({
       influenceRoll: {
@@ -64,6 +69,10 @@ export class MessageInfectionTest extends MessageElement {
         }),
       },
     });
+  }
+
+  private recedeInfection() {
+    this.psi?.recedeInfection();
   }
 
   render() {
@@ -83,6 +92,13 @@ export class MessageInfectionTest extends MessageElement {
               ?disabled=${disabled}
               >${localize('roll')}
               ${localize('infectionInfluences')}</mwc-button
+            >
+          `
+        : result === SuccessTestResult.CriticalFailure
+        ? html`
+            <mwc-button ?disabled=${disabled} @click=${this.recedeInfection}
+              >${localize('apply')} ${localize('influence')}
+              ${localize('immunity')}</mwc-button
             >
           `
         : ''}

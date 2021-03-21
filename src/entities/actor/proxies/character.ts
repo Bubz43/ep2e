@@ -615,6 +615,9 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     }
 
     this.updater.batchCommits(() => {
+      if (this.psi?.receded) {
+        this.psi.updater.path('data', 'state', 'receded').store(false);
+      }
       if (this.psi && this.psi.activePsiInfluences.size === 0) {
         this.psi.updateInfectionRating(
           recharge === RechargeType.Short

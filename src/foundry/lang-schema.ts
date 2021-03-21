@@ -1463,7 +1463,8 @@ type LangEntries =
   | 'refreshed'
   | 'extended'
   | 'extend'
-  | 'avoided';
+  | 'avoided'
+  | 'immuneToInfluencesUntilRecharge';
 type FullNames =
   | 'cog'
   | 'int'
