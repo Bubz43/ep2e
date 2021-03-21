@@ -52,6 +52,7 @@ header {
     display: flex;
     align-items: center;
     position: relative;
+    margin-left: -0.5rem;
     mwc-icon {
       color: var(--color-negative);
       &.support {
@@ -70,6 +71,7 @@ header {
   grid-template-columns: 1fr 1fr 1fr;
   padding: 0 0.5rem;
   z-index: 0;
+  height: 2.25rem;
 }
 
 .infection {
@@ -181,22 +183,15 @@ header {
 }
 
 .badge {
-  position: absolute;
-  top: 0;
-  right: 0;
-  font-size: x-small;
+  font-size: smaller;
   background: alphav(var(--color-primary), 0.75);
   border-radius: 0.5rem;
-  transform: translate(25%, -40%);
+  transform: translateY(4px);
+
   padding: 0 0.5rem;
   color: var(--color-text);
   line-height: 1rem;
-  // z-index: -1;
-}
-
-colored-tag {
-  .badge {
-    position: static;
-    transform: translateY(4px);
+  &.expired {
+    background: alphav(var(--color-negative), 0.75);
   }
 }

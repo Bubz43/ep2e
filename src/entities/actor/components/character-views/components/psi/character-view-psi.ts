@@ -9,6 +9,7 @@ import type { Psi } from '@src/entities/item/proxies/psi';
 import { MotivationStance } from '@src/features/motivations';
 import {
   influenceInfo,
+  InfluenceRoll,
   influenceRolls,
   PsiInfluenceType,
 } from '@src/features/psi-influence';
@@ -119,6 +120,26 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
     });
   }
 
+  private openActiveInfluenceMenu(
+    ev: MouseEvent & { currentTarget: HTMLElement },
+  ) {
+    const { roll } = ev.currentTarget.dataset;
+    const influenceRoll = Number(roll) as InfluenceRoll;
+    const { name } = influenceInfo(this.psi.fullInfluences[influenceRoll]);
+    openMenu({
+      position: ev,
+      header: { heading: name },
+      content: [
+        {
+          label: `${localize('end')} ${localize('influence')}`,
+          callback: () => {
+            this.psi.deactivateInfluence(influenceRoll);
+          },
+        },
+      ],
+    });
+  }
+
   private openFreePushMenu() {
     const { freePush } = this.psi;
     openMenu({
@@ -173,15 +194,24 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                   const remaining = prettyMilliseconds(timeState.remaining, {
                     compact: true,
                     approx: true,
+                    whenZero: localize('expired'),
                   });
                   const badge = html`
-                    <span class="badge" slot="after">${remaining}</span>
+                    <span
+                      class="badge ${timeState.completed ? 'expired' : ''}"
+                      slot="after"
+                      >${remaining}</span
+                    >
                   `;
 
                   if (influence.type === PsiInfluenceType.Motivation) {
                     const { motivation, description } = influence;
                     return html`
                       <colored-tag
+                        data-roll=${influence.roll}
+                        @click=${this.openActiveInfluenceMenu}
+                        clickable
+                        ?disabled=${this.character.disabled}
                         @mouseover=${(
                           ev: MouseEvent & { currentTarget: HTMLElement },
                         ) => {
@@ -192,8 +222,11 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                               >
                                 ${prettyMilliseconds(timeState.remaining, {
                                   compact: false,
+                                  whenZero: localize('expired'),
                                 })}
-                                ${localize('remaining')}
+                                ${timeState.completed
+                                  ? ''
+                                  : localize('remaining').toLocaleLowerCase()}
                               </p>
                               <p>${description}</p>`,
                             position: 'bottom-middle',
@@ -217,6 +250,10 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                     const { name, description } = influenceInfo(influence);
                     return html`
                       <colored-tag
+                        data-roll=${influence.roll}
+                        @click=${this.openActiveInfluenceMenu}
+                        clickable
+                        ?disabled=${this.character.disabled}
                         @mouseover=${(
                           ev: MouseEvent & { currentTarget: HTMLElement },
                         ) => {
@@ -227,8 +264,11 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                               >
                                 ${prettyMilliseconds(timeState.remaining, {
                                   compact: false,
+                                  whenZero: localize('expired'),
                                 })}
-                                ${localize('remaining')}
+                                ${timeState.completed
+                                  ? ''
+                                  : localize('remaining').toLocaleLowerCase()}
                               </p>
                               <enriched-html
                                 style="padding: 0 0.5rem"
@@ -244,8 +284,12 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                   const { name, description } = influenceInfo(influence);
                   return html`
                     <colored-tag
+                      data-roll=${influence.roll}
                       data-tooltip=${description}
                       @mouseover=${tooltip.fromData}
+                      @click=${this.openActiveInfluenceMenu}
+                      clickable
+                      ?disabled=${this.character.disabled}
                       >${name} ${badge}
                     </colored-tag>
                   `;

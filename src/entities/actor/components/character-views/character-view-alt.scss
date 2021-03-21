@@ -79,6 +79,7 @@ h3 {
   }
   character-view-psi {
     margin-left: 0;
+    border-bottom: 1px solid var(--color-border);
   }
 }
 
@@ -240,7 +241,6 @@ header {
 .ego-name,
 .sleeve-name {
   all: unset;
-  font-weight: bold;
   &:hover {
     text-decoration: underline;
 
@@ -256,12 +256,12 @@ header {
   font-size: x-large;
   text-transform: uppercase;
   letter-spacing: 1px;
+  font-weight: bold;
 }
 
 .ego {
   width: 400px;
   min-width: 100%;
-  // padding-top: 0.75rem;
   .info {
     clear: right;
   }
