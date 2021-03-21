@@ -180,7 +180,7 @@ export const influenceInfo = (influence: PsiInfluence | PsiInfluenceData) => {
       return {
         name: `${localize('motivation')}: ${
           motivation.stance === MotivationStance.Oppose ? '-' : '+'
-        } ${motivation.cause}`,
+        }${motivation.cause}`,
         description,
       };
     }
