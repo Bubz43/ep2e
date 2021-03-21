@@ -47,6 +47,7 @@ export class InfectionTest extends SuccessTestBase {
         header: {
           heading: `${localize('infectionTest')}`,
         },
+        infectionTest: {},
         successTest: {
           parts: [
             {

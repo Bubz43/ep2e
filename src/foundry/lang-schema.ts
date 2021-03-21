@@ -1462,7 +1462,8 @@ type LangEntries =
   | 'ammoCoating'
   | 'refreshed'
   | 'extended'
-  | 'extend';
+  | 'extend'
+  | 'avoided';
 type FullNames =
   | 'cog'
   | 'int'

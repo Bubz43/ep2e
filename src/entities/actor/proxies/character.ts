@@ -615,20 +615,13 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     }
 
     this.updater.batchCommits(() => {
-      if (
-        this.psi
-        // &&
-        // !this.temporaryFeatures.some(
-        //   (temp) => temp.type === TemporaryFeatureType.PsiInfluence,
-        // )
-      ) {
+      if (this.psi && this.psi.activePsiInfluences.size === 0) {
         this.psi.updateInfectionRating(
           recharge === RechargeType.Short
             ? this.psi.infectionRating - 10
             : this.psi.baseInfectionRating,
         );
       }
-      // TODO Psi
       this.updater
         .path('data', recharge)
         .store(({ taken, refreshStartTime }) => ({

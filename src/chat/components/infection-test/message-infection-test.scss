@@ -1,0 +1,15 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+}
+
+mwc-button {
+  width: 100%;
+  --mdc-theme-primary: var(--color-primary-alt);
+}

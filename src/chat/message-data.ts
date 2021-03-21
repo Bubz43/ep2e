@@ -150,7 +150,7 @@ type SuccessTestState = {
 
 export type MessageTargets = { tokenId: string; sceneId: string }[];
 
-export type SuccessTestMessageData = {
+export interface SuccessTestMessageData {
   parts: { name: string; value: number }[];
   states: SuccessTestState[];
   defaulting?: boolean;
@@ -165,7 +165,7 @@ export type SuccessTestMessageData = {
   > & {
     startedTaskId?: string | null;
   };
-};
+}
 
 export type FavorMessageData = {
   type: Favor;
@@ -205,6 +205,10 @@ export type InfluenceRollData = {
   applied?: 'refreshed' | 'extended' | 'applied';
 };
 
+export type InfectionTestData = {
+  testSkipped?: boolean;
+};
+
 export type MessageData = Partial<{
   header: MessageHeaderData;
   targets: MessageTargets;
@@ -224,5 +228,6 @@ export type MessageData = Partial<{
   specialTest: SpecialTestData;
   favor: FavorMessageData;
   hack: HackMessageData;
+  infectionTest: InfectionTestData;
   influenceRoll: InfluenceRollData;
 }>;

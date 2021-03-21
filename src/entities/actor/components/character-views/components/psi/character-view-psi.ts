@@ -109,10 +109,12 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
         {
           label: `${localize('roll')} ${localize('influences')}`,
           callback: () => {
+            const { token } = requestCharacter(this);
+
             const roll = rollFormula('1d6');
             if (roll) {
               createMessage({
-                entity: this.character,
+                entity: token || this.character,
                 visibility: MessageVisibility.WhisperGM,
                 data: {
                   header: {
