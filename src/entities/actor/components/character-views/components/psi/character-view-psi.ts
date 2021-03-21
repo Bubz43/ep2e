@@ -5,6 +5,7 @@ import { renderAutoForm } from '@src/components/form/forms';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { enumValues, PsiPush } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
+import { ActorType } from '@src/entities/entity-types';
 import type { Psi } from '@src/entities/item/proxies/psi';
 import { MotivationStance } from '@src/features/motivations';
 import {
@@ -18,6 +19,7 @@ import { localize } from '@src/foundry/localization';
 import { rollFormula } from '@src/foundry/rolls';
 import { tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
+import { InfectionTestControls } from '@src/success-test/components/infection-test-controls/infection-test-controls';
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
@@ -31,6 +33,7 @@ import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
 import mix from 'mix-with/lib';
 import { mapToObj, sortBy } from 'remeda';
+import { requestCharacter } from '../../character-request-event';
 import styles from './character-view-psi.scss';
 
 @customElement('character-view-psi')
@@ -83,7 +86,25 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
       content: [
         {
           label: localize('infectionTest'),
-          callback: () => {},
+          callback: () => {
+            const { token } = requestCharacter(this);
+            InfectionTestControls.openWindow({
+              entities: { actor: this.character.actor, token },
+              relativeEl: this,
+              getState: (actor) => {
+                if (
+                  actor.proxy.type === ActorType.Character &&
+                  actor.proxy.psi
+                ) {
+                  return {
+                    character: actor.proxy,
+                    psi: actor.proxy.psi,
+                  };
+                }
+                return null;
+              },
+            });
+          },
         },
         {
           label: `${localize('roll')} ${localize('influences')}`,

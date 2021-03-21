@@ -2,6 +2,7 @@ import type { SlWindow } from '@src/components/window/window';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
 import { localize } from '@src/foundry/localization';
+import { overlay } from '@src/init';
 import {
   InfectionTest,
   InfectionTestInit,
@@ -38,6 +39,18 @@ export class InfectionTestControls extends LitElement {
     ActorEP,
     InfectionTestControls
   >();
+
+  static openWindow(init: Init) {
+    let win = InfectionTestControls.openWindows.get(init.entities.actor);
+
+    if (!win) {
+      win = new InfectionTestControls();
+      overlay.append(win);
+      InfectionTestControls.openWindows.set(init.entities.actor, win);
+    }
+
+    win.setState(init);
+  }
 
   @internalProperty() private entities!: {
     actor: ActorEP;
