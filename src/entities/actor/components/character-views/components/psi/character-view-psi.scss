@@ -75,50 +75,39 @@ header {
     'bar bar bar'
     '.. chi free';
   grid-template-columns: 1fr 1fr 1fr;
-  padding: 0.5rem 0.5rem 0;
+  padding: 0 0.5rem;
   z-index: 0;
 }
 
 .infection {
   grid-area: 1 / 1 / -1 / -1;
-  all: unset;
-  width: 3ch;
-  text-align: center;
-  display: block;
-  font-size: x-large;
-  margin-top: -0.5rem;
-  &:hover {
-    cursor: pointer;
-    color: satv(var(--color-secondary), 1.2);
-  }
-  &:focus {
-    text-shadow: var(--text-highlight);
-  }
-  &[disabled] {
-    color: var(--color-text-disabled);
-    pointer-events: none;
+  @include inputReset();
+  width: max-content;
+  margin-top: -0.25rem;
+  z-index: 2;
+  input {
+    font-size: 26px;
+    text-align: center;
+    border-radius: 100%;
+    width: 2.75ch;
+    height: 2.75ch;
+    border: none;
+
+    &:focus {
+      color: var(--color-secondary);
+    }
   }
 }
-
 .infection-progress {
   grid-area: bar;
-  height: 4px;
-  transform: translateY(-1.5rem);
-  --mdc-theme-secondary: var(--color-primary);
-  flex: 1;
-}
-
-.progress {
-  grid-area: bar;
-  display: flex;
 }
 
 .progress-overlay {
   grid-area: bar;
-  background: alphav(var(--color-primary), 0.7);
+  background: rgba(black, 0.25);
   z-index: 1;
   position: relative;
-  height: 2px;
+  height: 4px;
 }
 
 .free-push {
@@ -157,9 +146,6 @@ header {
 .increased-chi {
   grid-area: chi;
   pointer-events: none;
-  &.solo {
-    left: -25.5%;
-  }
 }
 
 .free-push {
@@ -201,9 +187,21 @@ header {
   }
 }
 
-.actions {
-  padding: 0 0.5rem 0.5rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5ch;
+.badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: smaller;
+  background: alphav(var(--color-primary), 0.5);
+  border-radius: 0.5rem;
+  transform: translate(25%, -40%);
+  padding: 0 0.5rem;
+  color: var(--color-text);
+}
+
+colored-tag {
+  .badge {
+    position: static;
+    transform: translateY(1px);
+  }
 }

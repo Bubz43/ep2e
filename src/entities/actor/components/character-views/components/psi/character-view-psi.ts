@@ -1,5 +1,8 @@
 import type { Slider } from '@material/mwc-slider';
 import { createMessage, MessageVisibility } from '@src/chat/create-message';
+import { renderNumberInput } from '@src/components/field/fields';
+import { renderAutoForm } from '@src/components/form/forms';
+import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { enumValues, PsiPush } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import type { Psi } from '@src/entities/item/proxies/psi';
@@ -9,6 +12,7 @@ import {
   influenceRolls,
   PsiInfluenceType,
 } from '@src/features/psi-influence';
+import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { rollFormula } from '@src/foundry/rolls';
 import { tooltip } from '@src/init';
@@ -24,11 +28,12 @@ import {
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
+import mix from 'mix-with/lib';
 import { mapToObj, sortBy } from 'remeda';
 import styles from './character-view-psi.scss';
 
 @customElement('character-view-psi')
-export class CharacterViewPsi extends LitElement {
+export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
   static get is() {
     return 'character-view-psi' as const;
   }
@@ -165,6 +170,14 @@ export class CharacterViewPsi extends LitElement {
                 sortBy([...activePsiInfluences], ([{ type }]) => type),
                 ([{ id }]) => id,
                 ([influence, timeState]) => {
+                  const remaining = prettyMilliseconds(timeState.remaining, {
+                    compact: true,
+                    approx: true,
+                  });
+                  const badge = html`
+                    <span class="badge" slot="after">${remaining}</span>
+                  `;
+
                   if (influence.type === PsiInfluenceType.Motivation) {
                     const { motivation, description } = influence;
                     return html`
@@ -186,6 +199,7 @@ export class CharacterViewPsi extends LitElement {
                               ></notification-coin>
                             `
                           : ''}
+                        ${badge}
                       </li>
                     `;
                   }
@@ -205,8 +219,8 @@ export class CharacterViewPsi extends LitElement {
                             position: 'bottom-middle',
                           });
                         }}
-                        >${name}</colored-tag
-                      >
+                        >${name} ${badge}
+                      </colored-tag>
                     `;
                   }
                   const { name, description } = influenceInfo(influence);
@@ -214,22 +228,14 @@ export class CharacterViewPsi extends LitElement {
                     <colored-tag
                       data-tooltip=${description}
                       @mouseover=${tooltip.fromData}
-                      >${name}</colored-tag
-                    >
+                      >${name} ${badge}
+                    </colored-tag>
                   `;
                 },
               )}
             </div>
           `
         : ''}
-      <!-- <div class="actions">
-        <mwc-button dense
-          >${localize('infection')} ${localize('test')}</mwc-button
-        >
-        <mwc-button dense
-          >${localize('roll')} ${localize('influences')}</mwc-button
-        >
-      </div> -->
     `;
   }
 
@@ -243,39 +249,32 @@ export class CharacterViewPsi extends LitElement {
     } = this.psi;
 
     return html` <section class="infection-tracker">
-      <button class="infection">${infectionRating}</button>
+      ${renderAutoForm({
+        classes: 'infection',
+        disabled: !editable,
+        props: { infectionRating },
+        update: ({ infectionRating }) =>
+          infectionRating && this.psi.updateInfectionRating(infectionRating),
+        fields: ({ infectionRating }) =>
+          renderNumberInput(infectionRating, {
+            min: baseInfectionRating,
+            max: 99,
+          }),
+      })}
 
-      <div class="progress">
-        <div
-          class="progress-overlay"
-          style="width: calc(${baseInfectionRating}% + 1px)"
-        ></div>
-        <mwc-slider
-          class="infection-progress"
-          value=${infectionRating}
-          min=${baseInfectionRating}
-          max=${99}
-          ?disabled=${!editable}
-          step="1"
-          pin
-          @change=${(ev: Event & { currentTarget: Slider }) => {
-            this.psi.updateInfectionRating(ev.currentTarget.value);
-          }}
-          @mouseover=${this.layoutSlider}
-        >
-        </mwc-slider>
-      </div>
-
-      <!-- <mwc-linear-progress
+      <mwc-linear-progress
         class="infection-progress"
         progress=${infectionRating / 99}
-      ></mwc-linear-progress> -->
+      ></mwc-linear-progress>
+      <div
+        class="progress-overlay"
+        style="width: calc(${baseInfectionRating}% + 1px)"
+      ></div>
 
       <div
         class=${classMap({
           'increased-chi': true,
           active: hasChiIncreasedEffect,
-          solo: level < 2,
         })}
         title="${localize(PsiPush.IncreasedEffect)} ${localize('psiChi')}"
       >
