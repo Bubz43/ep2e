@@ -202,6 +202,7 @@ export type RangedAttackMessageData = {
 export type InfluenceRollData = {
   influences: Record<InfluenceRoll, { id: string; name: string }>;
   rollData: RollData;
+  applied?: 'refreshed' | 'extended' | 'applied';
 };
 
 export type MessageData = Partial<{

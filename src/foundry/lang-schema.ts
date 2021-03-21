@@ -1459,7 +1459,10 @@ type LangEntries =
   | 'sound'
   | 'locateWeapon'
   | 'unit'
-  | 'ammoCoating';
+  | 'ammoCoating'
+  | 'refreshed'
+  | 'extended'
+  | 'extend';
 type FullNames =
   | 'cog'
   | 'int'

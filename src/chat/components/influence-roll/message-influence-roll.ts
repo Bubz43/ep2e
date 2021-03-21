@@ -26,11 +26,37 @@ export class MessageInfluenceRoll extends MessageElement {
 
   @property({ type: Object }) influenceRoll!: InfluenceRollData;
 
-  private async applyInfluence() {
+  get roll() {
+    return this.influenceRoll.rollData.total as InfluenceRoll;
+  }
+
+  private reroll() {
+    const roll = rollFormula(this.influenceRoll.rollData.formula);
+    if (roll) {
+      this.getUpdater('influenceRoll').commit({ rollData: roll.toJSON() });
+    }
+  }
+
+  private get influenceAlreadyActive() {
     const { actor } = this.message;
     if (actor?.proxy.type === ActorType.Character) {
       const { psi } = actor.proxy;
-      const influenceRoll = this.influenceRoll.rollData.total as InfluenceRoll;
+      return !!psi?.fullInfluences[this.roll].timeState;
+    }
+    return false;
+  }
+
+  private async applyInfluence(extendDuration: boolean) {
+    const { actor } = this.message;
+    const { influenceAlreadyActive } = this;
+    const applied = influenceAlreadyActive
+      ? extendDuration
+        ? 'extended'
+        : 'refreshed'
+      : 'applied';
+    if (actor?.proxy.type === ActorType.Character) {
+      const { psi } = actor.proxy;
+      const { roll: influenceRoll } = this;
       const influence = psi?.fullInfluences[influenceRoll];
       if (!influence || !psi) {
         notify(
@@ -54,6 +80,7 @@ export class MessageInfluenceRoll extends MessageElement {
               )}`,
             },
           });
+          this.getUpdater('influenceRoll').commit({ applied });
           break;
         }
 
@@ -63,11 +90,13 @@ export class MessageInfluenceRoll extends MessageElement {
           await psi.activateInfluence(
             influenceRoll,
             toMilliseconds({ hours: roll?.total || 1 }),
+            extendDuration,
           );
           roll?.toMessage({
             flavor: localize('hours'),
             speaker: this.message.data.speaker,
           });
+          this.getUpdater('influenceRoll').commit({ applied });
 
           break;
         }
@@ -78,16 +107,20 @@ export class MessageInfluenceRoll extends MessageElement {
           await psi.activateInfluence(
             influenceRoll,
             toMilliseconds({ minutes: roll?.total || 1 }),
+            extendDuration,
           );
           roll?.toMessage({
             flavor: localize('minutes'),
             speaker: this.message.data.speaker,
           });
+          this.getUpdater('influenceRoll').commit({ applied });
 
           break;
         }
 
         case PsiInfluenceType.Unique: {
+          this.getUpdater('influenceRoll').commit({ applied });
+
           break;
         }
       }
@@ -95,22 +128,57 @@ export class MessageInfluenceRoll extends MessageElement {
   }
 
   render() {
-    const { total } = this.influenceRoll.rollData;
-    const { influences } = this.influenceRoll;
+    const { total, formula } = this.influenceRoll.rollData;
+    const { influences, applied } = this.influenceRoll;
+    const { disabled } = this;
     return html`
+      <div class="roll">
+        <span>${formula}</span>
+        <span>${total}</span>
+      </div>
       <mwc-list>
-        ${influenceRolls.map((roll) => {
-          const selected = roll === total;
-          return html`
+        ${influenceRolls.map(
+          (roll) => html`
             <mwc-list-item
-              ?selected=${selected}
-              ?noninteractive=${!selected}
-              @click=${this.applyInfluence}
-              >[${roll}] ${influences[roll].name}</mwc-list-item
+              class=${roll === total ? 'active' : ''}
+              noninteractive
+              >[${roll}${roll === 6 ? '+' : ''}]
+              ${influences[roll].name}</mwc-list-item
             >
-          `;
-        })}
+          `,
+        )}
       </mwc-list>
+      ${this.influenceAlreadyActive && !applied
+        ? html`
+            <p>${localize('influence')} ${localize('active')}</p>
+            <div class="active-options">
+              <mwc-button ?disabled=${disabled} dense @click=${this.reroll}
+                >${localize('reRoll')}</mwc-button
+              >
+              <mwc-button
+                ?disabled=${disabled}
+                dense
+                @click=${() => this.applyInfluence(true)}
+                >${localize('extend')} ${localize('duration')}</mwc-button
+              >
+              <mwc-button
+                ?disabled=${disabled}
+                dense
+                @click=${() => this.applyInfluence(false)}
+                >${localize('refresh')} ${localize('duration')}</mwc-button
+              >
+            </div>
+          `
+        : html`
+            <div class="active-options">
+              <mwc-button
+                @click=${() => this.applyInfluence(false)}
+                ?disabled=${disabled || !!applied}
+                >${localize(applied ? applied : 'apply')}
+                ${localize('influence')}</mwc-button
+              >
+            </div>
+          `}
     `;
   }
 }

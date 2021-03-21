@@ -91,12 +91,25 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
     );
   }
 
-  activateInfluence(roll: InfluenceRoll, duration: number) {
-    const { id } = this.fullInfluences[roll];
+  activateInfluence(
+    roll: InfluenceRoll,
+    duration: number,
+    extendDuration: boolean,
+  ) {
+    const { id, timeState } = this.fullInfluences[roll];
+    const newDuration =
+      timeState && extendDuration ? timeState.duration + duration : duration;
+    // TODO: Should I clamp the new duration to at least the old one if not extending
     return this.influenceCommiter((influences) =>
       updateFeature(influences, {
         id,
-        active: { duration, startTime: currentWorldTimeMS() },
+        active: {
+          duration: newDuration,
+          startTime:
+            extendDuration && timeState
+              ? timeState.startTime
+              : currentWorldTimeMS(),
+        },
       }),
     );
   }
