@@ -181,26 +181,35 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                   if (influence.type === PsiInfluenceType.Motivation) {
                     const { motivation, description } = influence;
                     return html`
-                      <li
-                        class="motivation"
-                        data-tooltip=${description}
-                        @mouseover=${tooltip.fromData}
+                      <colored-tag
+                        @mouseover=${(
+                          ev: MouseEvent & { currentTarget: HTMLElement },
+                        ) => {
+                          tooltip.attach({
+                            el: ev.currentTarget,
+                            content: html` <p
+                                style="color: var(--color-primary-alt)"
+                              >
+                                ${prettyMilliseconds(timeState.remaining, {
+                                  compact: false,
+                                })}
+                                ${localize('remaining')}
+                              </p>
+                              <p>${description}</p>`,
+                            position: 'bottom-middle',
+                          });
+                        }}
                       >
-                        <mwc-icon class=${motivation.stance}
-                          >${motivation.stance === MotivationStance.Support
-                            ? 'add'
-                            : 'remove'}</mwc-icon
-                        >
-                        ${motivation.cause}
-                        ${motivation.goals.length
-                          ? html`
-                              <notification-coin
-                                value=${motivation.goals.length}
-                              ></notification-coin>
-                            `
-                          : ''}
+                        <span class="motivation"
+                          ><mwc-icon class=${motivation.stance}
+                            >${motivation.stance === MotivationStance.Support
+                              ? 'add'
+                              : 'remove'}</mwc-icon
+                          >
+                          ${motivation.cause}
+                        </span>
                         ${badge}
-                      </li>
+                      </colored-tag>
                     `;
                   }
 
@@ -213,9 +222,18 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                         ) => {
                           tooltip.attach({
                             el: ev.currentTarget,
-                            content: html`<enriched-html
-                              .content=${description}
-                            ></enriched-html>`,
+                            content: html` <p
+                                style="color: var(--color-primary-alt)"
+                              >
+                                ${prettyMilliseconds(timeState.remaining, {
+                                  compact: false,
+                                })}
+                                ${localize('remaining')}
+                              </p>
+                              <enriched-html
+                                style="padding: 0 0.5rem"
+                                .content=${description}
+                              ></enriched-html>`,
                             position: 'bottom-middle',
                           });
                         }}

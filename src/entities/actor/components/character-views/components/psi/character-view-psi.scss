@@ -51,20 +51,13 @@ header {
   .motivation {
     display: flex;
     align-items: center;
-    padding-right: 0.5rem;
     position: relative;
-    @include textButton();
     mwc-icon {
       color: var(--color-negative);
       &.support {
         color: var(--color-secondary);
         filter: hue-rotate(-30deg);
       }
-    }
-    notification-coin {
-      position: static;
-      margin-left: 0.5ch;
-      --coin-bg: #{alphav(var(--color-grey), 0.2)};
     }
   }
 }
@@ -191,17 +184,19 @@ header {
   position: absolute;
   top: 0;
   right: 0;
-  font-size: smaller;
-  background: alphav(var(--color-primary), 0.5);
+  font-size: x-small;
+  background: alphav(var(--color-primary), 0.75);
   border-radius: 0.5rem;
   transform: translate(25%, -40%);
   padding: 0 0.5rem;
   color: var(--color-text);
+  line-height: 1rem;
+  // z-index: -1;
 }
 
 colored-tag {
   .badge {
     position: static;
-    transform: translateY(1px);
+    transform: translateY(4px);
   }
 }
