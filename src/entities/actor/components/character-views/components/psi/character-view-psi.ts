@@ -207,6 +207,21 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
     `;
   }
 
+  private async activateCheckoutTime() {
+    const { token } = requestCharacter(this);
+    await createMessage({
+      entity: token || this.character,
+      visibility: MessageVisibility.WhisperGM,
+      data: {
+        header: {
+          heading: localize('checkoutTime'),
+          subheadings: this.psi.name,
+        },
+      },
+    });
+    this.psi.setCriticalSuccessState('checkoutTime', false);
+  }
+
   private renderInfectionInfo() {
     const {
       activePsiInfluences,
@@ -214,27 +229,32 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
       checkoutTime,
       interference,
     } = this.psi;
+    // TODO add checkoutTime/interference descriptions
     return html`
       ${this.renderInfectionTracker()}
-      ${checkoutTime || interference
-        ? html`
-            <div class="critical-states" clickable>
-              <colored-tag type="attack">
-                ${localize('checkoutTime')}
-              </colored-tag>
-              <colored-tag
-                type="attack"
-                clickable
-                @click=${this.startInterferenceTest}
-              >
-                ${localize('interference')}
-              </colored-tag>
-            </div>
-          `
-        : ''}
-      ${notEmpty(activePsiInfluences)
+      ${notEmpty(activePsiInfluences) || checkoutTime || interference
         ? html`
             <div class="active-influences">
+              ${checkoutTime
+                ? html` <colored-tag
+                    type="usable"
+                    clickable
+                    ?disabled=${this.character.disabled}
+                    @click=${this.activateCheckoutTime}
+                  >
+                    ${localize('checkoutTime')}
+                  </colored-tag>`
+                : ''}
+              ${interference
+                ? html` <colored-tag
+                    type="usable"
+                    clickable
+                    @click=${this.startInterferenceTest}
+                    ?disabled=${this.character.disabled}
+                  >
+                    ${localize('interference')}
+                  </colored-tag>`
+                : ''}
               ${repeat(
                 sortBy([...activePsiInfluences], ([{ type }]) => type),
                 ([{ id }]) => id,

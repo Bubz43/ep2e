@@ -79,6 +79,7 @@ export class MessageInfectionTest extends MessageElement {
     if (this.infectionTest.testSkipped) {
       return html`<p>${localize('infectionTest')} ${localize('avoided')}</p>`;
     }
+    if (this.infectionTest.interference) return '';
     //   const { moxieUse } = this.infectionTest;
     const { result } = this.successTestInfo ?? {};
     if (!result) return '';
@@ -96,6 +97,7 @@ export class MessageInfectionTest extends MessageElement {
             ${result === SuccessTestResult.CriticalSuccess
               ? html`
                   <div class="critical-effects">
+                    <p>${localize('pickOne')} (GM)</p>
                     <mwc-button
                       @click=${() =>
                         this.psi?.setCriticalSuccessState('checkoutTime', true)}

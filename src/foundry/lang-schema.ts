@@ -1464,7 +1464,8 @@ type LangEntries =
   | 'extended'
   | 'extend'
   | 'avoided'
-  | 'immuneToInfluencesUntilRecharge';
+  | 'immuneToInfluencesUntilRecharge'
+  | 'pickOne';
 type FullNames =
   | 'cog'
   | 'int'

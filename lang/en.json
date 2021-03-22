@@ -1438,6 +1438,7 @@
     "extended": "Extended",
     "immuneToInfluencesUntilRecharge": "Immune to influences until recharge",
     "refreshed": "Refreshed",
+    "pickOne": "Pick One",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
