@@ -203,6 +203,13 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
     return this.epData.level;
   }
 
+  setCriticalSuccessState(
+    state: 'checkoutTime' | 'interference',
+    active: boolean,
+  ) {
+    return this.updater.path('data', 'state', state).commit(active);
+  }
+
   updateFreePush(push: Psi['freePush']) {
     return this.updater.path('data', 'state', 'freePush').commit(push);
   }

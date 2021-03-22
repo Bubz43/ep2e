@@ -208,6 +208,7 @@ export type InfluenceRollData = {
 
 export type InfectionTestData = {
   testSkipped?: boolean;
+  interference?: boolean;
 };
 
 export type MessageData = Partial<{

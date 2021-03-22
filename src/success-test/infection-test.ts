@@ -10,18 +10,20 @@ export type InfectionTestInit = {
   psi: Psi;
   character: Character;
   modifier?: { sleight: string; value: number };
+  interference?: boolean;
 };
 
 export class InfectionTest extends SuccessTestBase {
   readonly psi;
   readonly character;
   readonly sleightModifier?: InfectionTestInit['modifier'];
+  readonly interference;
 
   get basePoints() {
     return this.psi.infectionRating;
   }
 
-  constructor({ psi, modifier, character }: InfectionTestInit) {
+  constructor({ psi, modifier, character, interference }: InfectionTestInit) {
     super({
       action: createAction({
         type: ActionType.Automatic,
@@ -31,12 +33,20 @@ export class InfectionTest extends SuccessTestBase {
     this.psi = psi;
     this.character = character;
     this.sleightModifier = modifier;
+    this.interference = interference;
     if (modifier) {
       const sleightModifier = createSuccessTestModifier({
         name: modifier.sleight,
         value: modifier.value,
       });
       this.modifiers.simple.set(sleightModifier.id, sleightModifier);
+    }
+    if (interference) {
+      const interferenceModifier = createSuccessTestModifier({
+        name: localize('interference'),
+        value: 30,
+      });
+      this.modifiers.simple.set(interferenceModifier.id, interferenceModifier);
     }
   }
 
@@ -47,7 +57,9 @@ export class InfectionTest extends SuccessTestBase {
         header: {
           heading: `${localize('infectionTest')}`,
         },
-        infectionTest: {},
+        infectionTest: {
+          interference: this.interference,
+        },
         successTest: {
           disableSuperiorEffects: true,
           parts: [
@@ -73,6 +85,8 @@ export class InfectionTest extends SuccessTestBase {
       this.psi.updateInfectionRating(
         this.psi.infectionRating + this.sleightModifier.value,
       );
+    } else if (this.interference) {
+      this.psi.setCriticalSuccessState('interference', false);
     }
   }
 }

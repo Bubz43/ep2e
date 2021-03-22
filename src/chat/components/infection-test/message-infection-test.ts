@@ -93,6 +93,24 @@ export class MessageInfectionTest extends MessageElement {
               >${localize('roll')}
               ${localize('infectionInfluences')}</mwc-button
             >
+            ${result === SuccessTestResult.CriticalSuccess
+              ? html`
+                  <div class="critical-effects">
+                    <mwc-button
+                      @click=${() =>
+                        this.psi?.setCriticalSuccessState('checkoutTime', true)}
+                      ?disabled=${!game.user.isGM}
+                      >${localize('checkoutTime')}</mwc-button
+                    >
+                    <mwc-button
+                      @click=${() =>
+                        this.psi?.setCriticalSuccessState('interference', true)}
+                      ?disabled=${!game.user.isGM}
+                      >${localize('interference')}</mwc-button
+                    >
+                  </div>
+                `
+              : ''}
           `
         : result === SuccessTestResult.CriticalFailure
         ? html`

@@ -81,30 +81,34 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
     this.slider?.layout();
   }
 
+  private startInfectionTest(interference: boolean) {
+    const { token } = requestCharacter(this);
+    InfectionTestControls.openWindow({
+      entities: { actor: this.character.actor, token },
+      relativeEl: this,
+      getState: (actor) => {
+        if (actor.proxy.type === ActorType.Character && actor.proxy.psi) {
+          return {
+            character: actor.proxy,
+            psi: actor.proxy.psi,
+            interference,
+          };
+        }
+        return null;
+      },
+    });
+  }
+
+  private startInterferenceTest() {
+    this.startInfectionTest(true);
+  }
+
   openPsiMenu() {
     openMenu({
       content: [
         {
           label: localize('infectionTest'),
-          callback: () => {
-            const { token } = requestCharacter(this);
-            InfectionTestControls.openWindow({
-              entities: { actor: this.character.actor, token },
-              relativeEl: this,
-              getState: (actor) => {
-                if (
-                  actor.proxy.type === ActorType.Character &&
-                  actor.proxy.psi
-                ) {
-                  return {
-                    character: actor.proxy,
-                    psi: actor.proxy.psi,
-                  };
-                }
-                return null;
-              },
-            });
-          },
+          callback: () => this.startInfectionTest(false),
         },
         {
           label: `${localize('roll')} ${localize('influences')}`,
@@ -204,9 +208,30 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
   }
 
   private renderInfectionInfo() {
-    const { activePsiInfluences, receded } = this.psi;
+    const {
+      activePsiInfluences,
+      receded,
+      checkoutTime,
+      interference,
+    } = this.psi;
     return html`
       ${this.renderInfectionTracker()}
+      ${checkoutTime || interference
+        ? html`
+            <div class="critical-states" clickable>
+              <colored-tag type="attack">
+                ${localize('checkoutTime')}
+              </colored-tag>
+              <colored-tag
+                type="attack"
+                clickable
+                @click=${this.startInterferenceTest}
+              >
+                ${localize('interference')}
+              </colored-tag>
+            </div>
+          `
+        : ''}
       ${notEmpty(activePsiInfluences)
         ? html`
             <div class="active-influences">
