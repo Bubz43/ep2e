@@ -1,51 +1,55 @@
 import {
-  renderNumberField,
-  renderTextField,
-  renderLabeledCheckbox,
-  renderSelectField,
-  renderTimeField,
-  renderTextareaField,
   renderFormulaField,
+  renderLabeledCheckbox,
+  renderNumberField,
   renderRadioFields,
+  renderSelectField,
   renderSlider,
+  renderTextareaField,
+  renderTextField,
+  renderTimeField,
 } from '@src/components/field/fields';
 import {
-  enumValues,
-  PoolType,
-  PoolEffectUsability,
-  RechargeType,
   AptitudeType,
+  enumValues,
+  PoolEffectUsability,
+  PoolType,
+  RechargeType,
 } from '@src/data-enums';
 import { ActionSubtype } from '@src/features/actions';
 import { ArmorType } from '@src/features/active-armor';
 import {
-  SuccessTestEffect,
-  PoolEffect,
-  RechargeEffect,
-  RechargeStat,
-  InitiativeEffect,
-  MiscEffect,
-  MeleeEffect,
-  RangedEffect,
   ArmorEffect,
-  HealthEffect,
-  HealthRecoveryEffect,
   DurationEffect,
   DurationEffectTarget,
-  formatDurationPercentage,
-  SkillEffect,
-  isFieldSkillEffect,
   Effect,
+  formatDurationPercentage,
+  HealthEffect,
+  HealthRecoveryEffect,
+  InitiativeEffect,
+  isFieldSkillEffect,
+  MeleeEffect,
+  MiscEffect,
   MovementEffect,
   MovementEffectMode,
+  PoolEffect,
+  RangedEffect,
+  RechargeEffect,
+  RechargeStat,
+  SkillEffect,
+  SuccessTestEffect,
   UniqueEffectType,
 } from '@src/features/effects';
-import { Movement } from '@src/features/movement';
-import { SkillType, FieldSkillType } from '@src/features/skills';
+import { getMovementSkill, Movement } from '@src/features/movement';
+import {
+  CommonPilotField,
+  FieldSkillType,
+  SkillType,
+} from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
-import { HealthType, HealthStat, healthLabels } from '@src/health/health';
+import { healthLabels, HealthStat, HealthType } from '@src/health/health';
 import { HealOverTimeTarget } from '@src/health/recovery';
-import type { FieldPropsRenderer, FieldProps } from '@src/utility/field-values';
+import type { FieldProps, FieldPropsRenderer } from '@src/utility/field-values';
 import { html } from 'lit-html';
 
 type WithAllProps<T> = FieldPropsRenderer<Required<T>>;
@@ -212,11 +216,19 @@ const movement: WithAllProps<MovementEffect> = ({
   base,
   full,
   mode,
+  skill,
 }) => [
   renderRadioFields(mode, enumValues(MovementEffectMode)),
   renderSelectField(movementType, enumValues(Movement)),
   renderNumberField(base),
   renderNumberField(full),
+  mode.value === MovementEffectMode.Grant
+    ? renderSelectField(
+        { ...skill, label: `${localize('override')} ${localize('default')} ` },
+        [...enumValues(SkillType), ...enumValues(CommonPilotField)],
+        { emptyText: getMovementSkill(movementType.value) },
+      )
+    : '',
 ];
 
 const effectFieldFunctions = {

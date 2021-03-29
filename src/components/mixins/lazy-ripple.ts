@@ -1,16 +1,13 @@
+import type { Ripple } from '@material/mwc-ripple';
+import { RippleHandlers } from '@material/mwc-ripple/ripple-handlers';
 import {
+  eventOptions,
+  internalProperty,
   LitElement,
   queryAsync,
-  internalProperty,
-  eventOptions,
 } from 'lit-element';
 import { html } from 'lit-html';
 import type { Class } from 'type-fest';
-import type { Ripple } from 'weightless/ripple/ripple';
-import {
-  RippleHandlers,
-  RippleAPI,
-} from '@material/mwc-ripple/ripple-handlers';
 
 export const LazyRipple = (Base: Class<LitElement>) => {
   class LazyLoadRipple extends Base {
@@ -21,7 +18,8 @@ export const LazyRipple = (Base: Class<LitElement>) => {
     protected rippleHandlers = new RippleHandlers(() => {
       this.shouldRenderRipple = true;
       // TODO Check if this is needed again later
-      return (this.ripple as unknown) as Promise<RippleAPI>;
+      // return (this.ripple as unknown) as Promise<RippleAPI>;
+      return this.ripple;
     });
 
     protected renderRipple(disabled = false) {

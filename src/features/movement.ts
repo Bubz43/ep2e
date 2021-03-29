@@ -1,7 +1,7 @@
 import { localize } from '@src/foundry/localization';
-import { map, identity } from 'remeda';
+import { identity, map } from 'remeda';
 import { createFeature } from './feature-helpers';
-import { FieldSkillType, SkillType, CommonPilotField } from './skills';
+import { CommonPilotField, FieldSkillType, SkillType } from './skills';
 
 export enum Movement {
   Boat = 'boat',
@@ -63,6 +63,7 @@ export type MovementRate = {
   type: Movement;
   base: number;
   full: number;
+  // TODO: Skill
   // range: MovementRange;
 };
 
