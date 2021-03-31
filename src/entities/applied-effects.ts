@@ -1,4 +1,4 @@
-import type { PoolType } from '@src/data-enums';
+import { enumValues, PoolType } from '@src/data-enums';
 import {
   createEffect,
   DurationEffect,
@@ -16,7 +16,11 @@ import {
   SuccessTestEffect,
   UniqueEffectType,
 } from '@src/features/effects';
-import type { Movement, MovementRate } from '@src/features/movement';
+import {
+  getMovementSkill,
+  Movement,
+  MovementRate,
+} from '@src/features/movement';
 import { SkillType } from '@src/features/skills';
 import { createTag } from '@src/features/tags';
 import { localize } from '@src/foundry/localization';
@@ -88,14 +92,21 @@ export class AppliedEffects {
   }
 
   get movementEffects() {
-    const granted: SourcedEffect<MovementRate>[] = [];
+    const granted: SourcedEffect<MovementRate & { skill: string }>[] = [];
     const modify = new Map<Movement, MovementEffectsInfo>();
     for (const effect of this.getGroup(EffectType.Movement)) {
       if (effect.mode === MovementEffectMode.Grant) {
+        const { skill } = effect;
+        const skillName =
+          skill &&
+          (enumValues(SkillType).includes(skill as SkillType)
+            ? localize(skill)
+            : `${localize('pilot')}: ${localize(skill)}`);
         granted.push({
           type: effect.movementType,
           base: effect.base,
           full: effect.full,
+          skill: skillName || getMovementSkill(effect.movementType),
           [Source]: effect[Source],
         });
       } else {

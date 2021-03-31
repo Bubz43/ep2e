@@ -41,6 +41,7 @@ import {
 import { updateFeature } from '@src/features/feature-helpers';
 import type { MovementRate } from '@src/features/movement';
 import { Pool, Pools } from '@src/features/pool';
+import { PsiInfluenceType } from '@src/features/psi-influence';
 import { Recharge } from '@src/features/recharge';
 import { getEffectsFromSize } from '@src/features/size';
 import {
@@ -274,9 +275,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   }
 
   @LazyGetter()
-  get movementRates(): MovementRate[] {
+  get movementRates(): (MovementRate & { skill: string })[] {
     if (!this.sleeve || this.sleeve.type === ActorType.Infomorph) return [];
-    // TODO add prop that shows if movement has been changed to display in view
     const { movementRates } = this.sleeve;
     const { movementEffects } = this._appliedEffects;
     const movements = [...movementRates, ...movementEffects.granted];
@@ -295,6 +295,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
               type: movement.type,
               base: change(movement.base, mods.baseModification),
               full: change(movement.full, mods.fullModification),
+              skill: movement.skill,
             }
           : movement;
       });
@@ -472,7 +473,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   get activeDurations() {
     // TODO batteries
     return (
-      this.timers.length +
+      this.refreshTimers.length +
       reject(
         this.equippedGroups.services,
         (service) => service.isIndefiniteService,
@@ -485,16 +486,17 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         0,
       ) +
       this.awaitingOnsetSubstances.length +
-      this.activeSubstances.length
+      this.activeSubstances.length +
+      (this.psi?.activePsiInfluences.size ?? 0)
     );
   }
 
-  get requiresAttention() {
+  get requiresAttention(): boolean {
     // TODO batteries
     return (
       (!!this.activeDurations &&
         (notEmpty(this.equippedGroups.expiredServices) ||
-          this.timers.some(refreshAvailable) ||
+          this.refreshTimers.some(refreshAvailable) ||
           this.tasks.some((task) => task.state.completed))) ||
       this.temporaryFeatures.some(({ timeState }) => timeState.completed) ||
       this.equippedGroups.activeFabbers.some(
@@ -510,12 +512,15 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       ) ||
       this.activeSubstances.some(
         ({ appliedInfo }) => appliedInfo.requiresAttention,
+      ) ||
+      [...(this.psi?.activePsiInfluences.values() || [])].some(
+        (timeState) => timeState.completed,
       )
     );
   }
 
   @LazyGetter()
-  get timers() {
+  get refreshTimers(): LiveTimeState[] {
     return [
       ...this.rechargeRefreshTimers,
       ...this.ego.repRefreshTimers,
@@ -608,15 +613,28 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         .path('data', 'spentPools', poolType)
         .store(newSpentPools.get(poolType) || 0);
     }
-    // TODO Psi
-    this.updater
-      .path('data', recharge)
-      .store(({ taken, refreshStartTime }) => ({
-        taken: taken + 1,
-        refreshStartTime: taken === 0 ? currentWorldTimeMS() : refreshStartTime,
-      }))
-      .path('data', 'temporary')
-      .commit(reject((temp) => temp.endOn === TemporaryFeatureEnd.Recharge));
+
+    this.updater.batchCommits(() => {
+      if (this.psi?.receded) {
+        this.psi.updater.path('data', 'state', 'receded').store(false);
+      }
+      if (this.psi && this.psi.activePsiInfluences.size === 0) {
+        this.psi.updateInfectionRating(
+          recharge === RechargeType.Short
+            ? this.psi.infectionRating - 10
+            : this.psi.baseInfectionRating,
+        );
+      }
+      this.updater
+        .path('data', recharge)
+        .store(({ taken, refreshStartTime }) => ({
+          taken: taken + 1,
+          refreshStartTime:
+            taken === 0 ? currentWorldTimeMS() : refreshStartTime,
+        }))
+        .path('data', 'temporary')
+        .commit(reject((temp) => temp.endOn === TemporaryFeatureEnd.Recharge));
+    });
   }
 
   refreshRecharges() {
@@ -815,6 +833,15 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     sleeveItems: Map<string, ItemProxy>,
     egoItems: Map<string, ItemProxy>,
   ) {
+    if (this.ego.psi) {
+      for (const [activeInfluence] of this.ego.psi.activePsiInfluences) {
+        if (activeInfluence.type === PsiInfluenceType.Trait) {
+          const { trait } = activeInfluence;
+          this[trait.isMorphTrait ? 'morphTraits' : 'egoTraits'].push(trait);
+          this._appliedEffects.add(trait.currentEffects);
+        }
+      }
+    }
     for (const item of this.items.values()) {
       if (item.type === ItemType.Substance && item.appliedState) {
         if (item.appliedState === 'active') {

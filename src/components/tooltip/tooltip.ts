@@ -1,9 +1,8 @@
-import { debounce } from '@src/utility/decorators';
 import {
   customElement,
+  html,
   LitElement,
   property,
-  html,
   TemplateResult,
 } from 'lit-element';
 import { render } from 'lit-html';
@@ -58,7 +57,11 @@ export class ToolTip extends LitElement {
     if (this.listenerUnsub) this.detach(false);
     this.updateContent(content);
     this.visible = true;
-    requestAnimationFrame(() => reposition(el, this, { position, margin: 4 }));
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        reposition(el, this, { position, margin: 4 });
+      });
+    });
     this.listenerUnsub = addListener(el, leaveEvents, () => this.detach(true));
   }
 

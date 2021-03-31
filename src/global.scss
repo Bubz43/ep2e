@@ -84,6 +84,10 @@ mwc-menu {
   }
 }
 
+.notification-pip {
+  top: 2px;
+}
+
 mwc-snackbar {
   z-index: 99999;
   position: absolute;
@@ -771,6 +775,11 @@ sl-tooltip {
     background: var(--color-bg);
     .message-header {
       background: var(--color-bg);
+      background: linear-gradient(
+        to bottom right,
+        var(--color-bg) 20%,
+        lightv(var(--color-primary-alt), 0.7)
+      );
     }
   }
 }

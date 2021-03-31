@@ -510,6 +510,7 @@ export class CharacterViewAlt extends CharacterViewBase {
                 @click=${this.toggleCondition}
                 data-tooltip=${localize(condition)}
                 @mouseover=${tooltip.fromData}
+                @focus=${tooltip.fromData}
               >
                 <img
                   src=${conditionIcons[condition]}
@@ -670,8 +671,10 @@ export class CharacterViewAlt extends CharacterViewBase {
         ${notEmpty(movementRates)
           ? html`
               ${sortBy(movementRates, ({ type }) => localize(type).length).map(
-                ({ type, base, full }) => html`
-                  <span class="movement-rate"
+                ({ type, base, full, skill }) => html`
+                  <span
+                    class="movement-rate"
+                    title=${`${localize('use')} ${skill}`}
                     >${localize(type)}
                     <span class="rate"
                       ><button

@@ -68,7 +68,7 @@ export class MessageRangedAttack extends MessageElement {
   }
 
   get successTestInfo() {
-    const test = this?.successTest;
+    const test = this.successTest;
     const result = last(test?.states || [])?.result;
 
     return result && test

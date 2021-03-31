@@ -939,6 +939,9 @@
             "avoid": {
               "type": "string"
             },
+            "avoided": {
+              "type": "string"
+            },
             "awaiting": {
               "type": "string"
             },
@@ -1800,6 +1803,12 @@
             "exsurgent": {
               "type": "string"
             },
+            "extend": {
+              "type": "string"
+            },
+            "extended": {
+              "type": "string"
+            },
             "extendedMagazine": {
               "type": "string"
             },
@@ -2257,6 +2266,9 @@
               "type": "string"
             },
             "immobilized": {
+              "type": "string"
+            },
+            "immuneToInfluencesUntilRecharge": {
               "type": "string"
             },
             "immunity": {
@@ -3526,6 +3538,9 @@
               "type": "string"
             },
             "refreshTimer": {
+              "type": "string"
+            },
+            "refreshed": {
               "type": "string"
             },
             "regainAllPools": {
@@ -4927,6 +4942,7 @@
             "availableShots",
             "average",
             "avoid",
+            "avoided",
             "awaiting",
             "back",
             "background",
@@ -5214,6 +5230,8 @@
             "explosiveType",
             "explosives",
             "exsurgent",
+            "extend",
+            "extended",
             "extendedMagazine",
             "extra",
             "extraAction",
@@ -5367,6 +5385,7 @@
             "img",
             "immediate",
             "immobilized",
+            "immuneToInfluencesUntilRecharge",
             "immunity",
             "impact",
             "impaired",
@@ -5790,6 +5809,7 @@
             "refresh",
             "refreshIn",
             "refreshTimer",
+            "refreshed",
             "regainAllPools",
             "regainWits",
             "regainedPoints",

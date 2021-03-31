@@ -366,7 +366,7 @@ export class MessageSuccessTest extends MessageElement {
                 ></sl-popover>`}
           </div>`
         : ''}
-      ${grantedSuperiorEffects
+      ${grantedSuperiorEffects && !this.successTest.disableSuperiorEffects
         ? html`
             <sl-popover
               class="superior-effects"

@@ -16,6 +16,7 @@ import { createFeature } from './feature-helpers';
 import { Movement, MovementRate } from './movement';
 import type { RepBase } from './reputations';
 import {
+  CommonPilotField,
   fieldSkillName,
   FieldSkillType,
   isFieldSkill,
@@ -163,6 +164,7 @@ export type MovementEffect = Omit<MovementRate, 'type'> & {
   type: EffectType.Movement;
   movementType: Movement;
   mode: MovementEffectMode;
+  skill?: SkillType | CommonPilotField | '';
 };
 
 export type MovementEffectsInfo = {
@@ -295,6 +297,7 @@ const movement = createFeature<MovementEffect>(
     full: 0,
     movementType: Movement.Walker,
     mode: MovementEffectMode.Modify,
+    skill: '',
   }),
   (effect) => {
     if (effect.mode === MovementEffectMode.Grant) {
@@ -455,11 +458,18 @@ const format = (effect: Effect): (string | number)[] => {
       return [
         localize(effect.mode),
         localize(effect.movementType),
-        effect.mode === MovementEffectMode.Grant
-          ? `${localize('by')}  (${withSign(effect.base)} / ${withSign(
-              effect.full,
-            )})`
+        effect.mode === MovementEffectMode.Modify
+          ? `${localize('by').toLocaleLowerCase()}  (${withSign(
+              effect.base,
+            )} / ${withSign(effect.full)})`
           : `(${effect.base} / ${effect.full})`,
+        effect.skill && effect.mode === MovementEffectMode.Grant
+          ? `${localize(`use`)} ${
+              enumValues(SkillType).includes(effect.skill as SkillType)
+                ? localize(effect.skill)
+                : `${localize('pilot')}: ${localize(effect.skill)}`
+            }`
+          : ``,
       ];
     }
   }

@@ -1433,6 +1433,12 @@
     "sound": "Sound",
     "unit": "Unit",
     "ammoCoating": "Ammo Coating",
+    "avoided": "Avoided",
+    "extend": "Extend",
+    "extended": "Extended",
+    "immuneToInfluencesUntilRecharge": "Immune to influences until recharge",
+    "refreshed": "Refreshed",
+    "pickOne": "Pick One",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

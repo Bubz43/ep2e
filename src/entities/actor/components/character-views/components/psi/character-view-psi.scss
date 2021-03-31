@@ -8,11 +8,16 @@
 :host {
   display: grid;
   grid-auto-rows: min-content;
+  max-width: 200px;
+  min-width: 100%;
 }
 
 header {
-  padding: 0.25rem 0.75rem 0;
-
+  padding: 0.25rem 0 0 0.75rem;
+  position: relative;
+  &:hover {
+    z-index: 1;
+  }
   .name {
     all: unset;
     font-size: larger;
@@ -27,8 +32,34 @@ header {
   }
   .info {
     color: var(--color-text-lighter);
-    font-family: var(--font-2);
-    font-size: small;
+    @include truncate(100%);
+  }
+  mwc-icon-button {
+    color: var(--color-text-lighter);
+    --mdc-icon-button-size: 2rem;
+    float: right;
+  }
+}
+
+.active-influences {
+  display: flex;
+  flex-flow: row wrap;
+  > * {
+    margin: 0 0 0.25rem 0.25rem;
+  }
+
+  .motivation {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-left: -0.5rem;
+    mwc-icon {
+      color: var(--color-negative);
+      &.support {
+        color: var(--color-secondary);
+        filter: hue-rotate(-30deg);
+      }
+    }
   }
 }
 
@@ -38,8 +69,9 @@ header {
     'bar bar bar'
     '.. chi free';
   grid-template-columns: 1fr 1fr 1fr;
-  padding: 0.5rem 0.5rem 0;
+  padding: 0 0.5rem;
   z-index: 0;
+  height: 2.25rem;
 }
 
 .infection {
@@ -61,17 +93,16 @@ header {
     }
   }
 }
-
 .infection-progress {
   grid-area: bar;
-  // --mdc-theme-primary: rgb(93, 29, 112, 0.8);
 }
 
 .progress-overlay {
   grid-area: bar;
-  background: rgba(0, 0, 0, 0.403);
-  height: 4px;
+  background: rgba(black, 0.25);
   z-index: 1;
+  position: relative;
+  height: 4px;
 }
 
 .free-push {
@@ -87,10 +118,12 @@ header {
   transition: opacity 300ms ease-in-out;
   width: fit-content;
   transform: translate(-1px, -0.75rem);
+
   &::before {
     content: '|';
     display: block;
     filter: brightness(130%);
+    pointer-events: none;
   }
 
   &.active {
@@ -107,21 +140,27 @@ header {
 
 .increased-chi {
   grid-area: chi;
+  pointer-events: none;
 }
 
 .free-push {
   pointer-events: none;
   width: fit-content;
   @include truncate(120px);
-
+  @include textButton();
   &.active {
-    pointer-events: initial;
-    cursor: pointer;
+    button {
+      pointer-events: initial;
+      cursor: pointer;
+    }
 
     &:hover,
     &:focus {
       text-shadow: var(--text-highlight);
     }
+  }
+  button[disabled] {
+    color: var(--color-text);
   }
 
   &.selection {
@@ -143,9 +182,25 @@ header {
   }
 }
 
-.actions {
-  padding: 0 0.5rem 0.5rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5ch;
+.badge {
+  font-size: smaller;
+  background: alphav(var(--color-primary), 0.75);
+  border-radius: 0.5rem;
+  transform: translateY(4px);
+
+  padding: 0 0.5rem;
+  color: var(--color-text);
+  line-height: 1rem;
+  &.expired {
+    background: alphav(var(--color-negative), 0.75);
+  }
+}
+
+p {
+  margin: 0;
+  padding: 0.125rem 0.5rem;
+}
+
+.critical-states {
+  padding: 0.25rem;
 }

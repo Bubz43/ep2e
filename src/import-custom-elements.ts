@@ -34,6 +34,8 @@ import { MessageHack } from './chat/components/hack/message-hack';
 import { MessageHeader } from './chat/components/header/message-header';
 import { MessageHeal } from './chat/components/heal/message-heal';
 import { MessageHealthChange } from './chat/components/health-change/message-health-change';
+import { MessageInfectionTest } from './chat/components/infection-test/message-infection-test';
+import { MessageInfluenceRoll } from './chat/components/influence-roll/message-influence-roll';
 import { MessageMeleeAttack } from './chat/components/melee-attack/message-melee-attack';
 import { MessageRangedAttack } from './chat/components/ranged-attack/message-ranged-attack';
 import { MessageSpecialTest } from './chat/components/special-test/message-special-test';
@@ -171,6 +173,7 @@ import { SuccessTestActionForm } from './success-test/components/action-form/suc
 import { AptitudeCheckControls } from './success-test/components/aptitude-check-controls/aptitude-check-controls';
 import { SuccessTestFooter } from './success-test/components/footer/success-test-footer';
 import { HackingTestControls } from './success-test/components/hacking-test-controls/hacking-test-controls';
+import { InfectionTestControls } from './success-test/components/infection-test-controls/infection-test-controls';
 import { MeleeAttackControls } from './success-test/components/melee-attack-controls/melee-attack-controls';
 import { SuccessTestModifiersSection } from './success-test/components/modifiers-section/success-test-modifiers-section';
 import { SuccessTestPoolControls } from './success-test/components/pool-controls/success-test-pool-controls';
@@ -355,6 +358,8 @@ MessageSuccessTest;
 MessageFavor;
 MessageSpecialTest;
 MessageHack;
+MessageInfectionTest;
+MessageInfluenceRoll;
 
 // SuccessTest
 AptitudeCheckControls;
@@ -371,3 +376,4 @@ HackingTestControls;
 SuccessTestSkillSection;
 SoftwareSkillTestControls;
 RangedAttackControls;
+InfectionTestControls;

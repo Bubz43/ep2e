@@ -50,6 +50,8 @@ export class MessageContent extends LitElement {
       thrownAttack,
       rangedAttack,
       hack,
+      infectionTest,
+      influenceRoll,
     } = this.data;
     if (!this.message.isContentVisible) return '';
     return html`
@@ -65,6 +67,7 @@ export class MessageContent extends LitElement {
         ? html`<message-success-test
               .successTest=${successTest}
             ></message-success-test>
+
             ${specialTest && this.message.editable
               ? html`
                   <message-special-test
@@ -93,6 +96,19 @@ export class MessageContent extends LitElement {
           `
         : ''}
       ${favor ? html` <message-favor .favor=${favor}></message-favor> ` : ''}
+      ${infectionTest
+        ? html` <message-infection-test
+            .successTest=${successTest}
+            .infectionTest=${infectionTest}
+          ></message-infection-test>`
+        : ''}
+      ${influenceRoll
+        ? html`
+            <message-influence-roll
+              .influenceRoll=${influenceRoll}
+            ></message-influence-roll>
+          `
+        : ''}
       ${meleeAttack
         ? html`
             <message-melee-attack

@@ -3,12 +3,13 @@ import { UpdateStore } from '@src/entities/update-store';
 import { StringID, updateFeature } from '@src/features/feature-helpers';
 import {
   createDefaultPsiInfluences,
+  influenceInfo,
   InfluenceRoll,
   PsiInfluence,
   PsiInfluenceData,
   PsiInfluenceType,
-  TraitInfluenceData,
 } from '@src/features/psi-influence';
+import { createLiveTimeState, currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { deepMerge } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
@@ -26,51 +27,120 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
       InfluenceRoll,
       StringID<PsiInfluence>
     >(data, (influence) => {
-      if (influence.type === PsiInfluenceType.Trait) {
-        return [
-          influence.roll,
-          {
-            ...influence,
-            trait: new Trait({
-              data: influence.trait,
-              embedded: this.name,
-              lockSource: true,
-              updater: new UpdateStore({
-                getData: () => influence.trait,
-                isEditable: () => this.editable,
-                setData: (changed) => {
-                  this.influenceCommiter((influences) =>
-                    updateFeature(influences, {
-                      id: influence.id,
-                      trait: deepMerge(influence.trait, changed),
-                    }),
-                  );
-                },
+      const active = this.embedded && 'active' in influence && influence.active;
+      const timeState = active
+        ? createLiveTimeState({
+            ...active,
+            id: influence.id,
+            label: influenceInfo(influence).name,
+            updateStartTime: (newStartTime) => {
+              this.influenceCommiter((influences) =>
+                updateFeature(influences, {
+                  id: influence.id,
+                  active: {
+                    ...active,
+                    startTime: newStartTime,
+                  },
+                }),
+              );
+            },
+          })
+        : undefined;
+
+      const pair: [InfluenceRoll, StringID<PsiInfluence>] = [
+        influence.roll,
+        influence.type === PsiInfluenceType.Trait
+          ? {
+              ...influence,
+              timeState,
+              trait: new Trait({
+                data: influence.trait,
+                embedded: this.name,
+                lockSource: true,
+                isPsiInfluence: true,
+                temporary: localize('psiInfluence'),
+                customLevelIndex:
+                  this.embedded && influence.active
+                    ? this.traitInfluenceLevelIndex
+                    : undefined,
+                updater: new UpdateStore({
+                  getData: () => influence.trait,
+                  isEditable: () => this.editable,
+                  setData: (changed) => {
+                    this.influenceCommiter((influences) =>
+                      updateFeature(influences, {
+                        id: influence.id,
+                        trait: deepMerge(influence.trait, changed),
+                      }),
+                    );
+                  },
+                }),
               }),
-            }),
-          },
-        ];
-      }
-      return [influence.roll, influence];
+            }
+          : { ...influence, timeState },
+      ];
+      return pair;
     });
-    // return new Map<InfluenceRoll, PsiInfluence>(
-    //   (this.epFlags?.influences || []).map((influence) => {
-    //     if (influence.type === PsiInfluenceType.Trait) {
-    //       return [
-    //         influence.roll,
-    //         {
-    //           ...influence,
-    //           trait: new Trait({
-    //             data: influence.trait,
-    //             embedded: this.name,
-    //             lockSource: true,
-    //           }),
-    //         },
-    //       ] as const;
-    //     }
-    //     return [influence.roll, influence] as const;
-    //   }),
-    // );
+  }
+  @LazyGetter()
+  get activePsiInfluences() {
+    return new Map(
+      Object.values(this.fullInfluences).flatMap((influence) =>
+        influence.timeState ? [[influence, influence.timeState]] : [],
+      ),
+    );
+  }
+
+  recedeInfection() {
+    this.updater.batchCommits(() => {
+      this.updater.path('data', 'state', 'receded').store(true);
+      if (this.activePsiInfluences.size) {
+        this.influenceCommiter((influences) =>
+          influences.map((influence) => ({ ...influence, active: null })),
+        );
+      }
+      this.updater.commit();
+    });
+  }
+
+  activateInfluence(
+    roll: InfluenceRoll,
+    duration: number,
+    extendDuration: boolean,
+  ) {
+    const { id, timeState } = this.fullInfluences[roll];
+    const newDuration =
+      timeState && extendDuration ? timeState.duration + duration : duration;
+    // TODO: Should I clamp the new duration to at least the old one if not extending
+    return this.influenceCommiter((influences) =>
+      updateFeature(influences, {
+        id,
+        active: {
+          duration: newDuration,
+          startTime:
+            extendDuration && timeState
+              ? timeState.startTime
+              : currentWorldTimeMS(),
+        },
+      }),
+    );
+  }
+
+  deactivateInfluence(roll: InfluenceRoll) {
+    const { id } = this.fullInfluences[roll];
+    return this.influenceCommiter((influences) =>
+      updateFeature(influences, {
+        id,
+        active: null,
+      }),
+    );
+  }
+
+  get traitInfluenceLevelIndex() {
+    const { infectionRating } = this;
+    if (infectionRating < 33) return 0;
+    if (infectionRating < 66) return 1;
+    return 2;
   }
 
   get strain() {
@@ -131,6 +201,13 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
 
   get level() {
     return this.epData.level;
+  }
+
+  setCriticalSuccessState(
+    state: 'checkoutTime' | 'interference',
+    active: boolean,
+  ) {
+    return this.updater.path('data', 'state', state).commit(active);
   }
 
   updateFreePush(push: Psi['freePush']) {

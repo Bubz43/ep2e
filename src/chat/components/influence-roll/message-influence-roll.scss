@@ -1,0 +1,38 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+}
+
+mwc-list-item {
+  height: 2rem;
+  &.active {
+    background: alphav(var(--color-primary), 0.5);
+  }
+}
+
+.active-options {
+  display: grid;
+  flex-flow: row wrap;
+  padding: 0.25rem;
+}
+
+p {
+  padding: 0.25rem;
+  margin: 0;
+}
+
+mwc-button {
+  --mdc-theme-primary: var(--color-primary-alt);
+}
+
+.roll {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.125rem 1rem;
+}

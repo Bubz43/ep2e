@@ -154,6 +154,7 @@ export class TraitForm extends ItemFormBase {
       restrictions,
       triggers,
       embedded,
+      isPsiInfluence,
     } = this.item;
     const { disabled } = this;
     return html`
@@ -181,7 +182,7 @@ export class TraitForm extends ItemFormBase {
                             renderLabeledSwitch(triggered, { alignEnd: true }),
                         })
                       : ''}
-                    ${embedded && hasMultipleLevels
+                    ${embedded && hasMultipleLevels && !isPsiInfluence
                       ? html`
                           <mwc-icon-button
                             class="level-selector"

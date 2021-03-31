@@ -1,15 +1,14 @@
 import { ItemType } from '@src/entities/entity-types';
 import type { Trait } from '@src/entities/item/proxies/trait';
-import { ItemEntity, createItemEntity } from '@src/entities/models';
+import { createItemEntity, ItemEntity } from '@src/entities/models';
 import { localize } from '@src/foundry/localization';
 import { rollFormula } from '@src/foundry/rolls';
-import { html } from 'lit-html';
 import { range } from 'remeda';
 import type { Effect } from './effects';
-import { StringID, createFeature, addFeature } from './feature-helpers';
-import { Motivation, createMotivation, MotivationStance } from './motivations';
-import { EPTimeInterval, CommonInterval } from './time';
+import { addFeature, createFeature, StringID } from './feature-helpers';
 import { toMilliseconds } from './modify-milliseconds';
+import { createMotivation, Motivation, MotivationStance } from './motivations';
+import { CommonInterval, EPTimeInterval, LiveTimeState } from './time';
 
 export enum PsiInfluenceType {
   Damage = 'physicalDamage',
@@ -18,16 +17,24 @@ export enum PsiInfluenceType {
   Unique = 'unique',
 }
 
-export type InfluenceRoll = 1 | 2 | 3 | 4 | 5 | 6;
+export const influenceRolls = [1, 2, 3, 4, 5, 6] as const;
+
+export type InfluenceRoll = typeof influenceRolls[number];
 
 type Influence<T extends { type: PsiInfluenceType }> = T & {
   description: string;
   roll: InfluenceRoll;
 };
 
+export type ActiveInfluenceState = {
+  duration: number;
+  startTime: number;
+};
+
 export type MotivationInfluence = Influence<{
   type: PsiInfluenceType.Motivation;
   motivation: Motivation;
+  active?: ActiveInfluenceState | null;
 }>;
 
 export type DamageInfluence = Influence<{
@@ -45,11 +52,13 @@ export type UniqueInfluence = Influence<{
     interval: EPTimeInterval;
     items: StringID<Effect>[];
   };
+  active?: ActiveInfluenceState | null;
 }>;
 
 export type TraitInfluenceData = Influence<{
   type: PsiInfluenceType.Trait;
   trait: ItemEntity<ItemType.Trait>;
+  active?: ActiveInfluenceState | null;
 }>;
 
 export type TraitInfluence = Omit<TraitInfluenceData, 'trait'> & {
@@ -62,9 +71,12 @@ export type PsiInfluenceData =
   | UniqueInfluence
   | TraitInfluenceData;
 
-export type PsiInfluence =
+export type PsiInfluence = (
   | Exclude<PsiInfluenceData, TraitInfluenceData>
-  | TraitInfluence;
+  | TraitInfluence
+) & {
+  timeState?: LiveTimeState;
+};
 
 export type TemporaryInfluence = Exclude<PsiInfluenceData, DamageInfluence>;
 
@@ -74,7 +86,10 @@ const influenceBase = <T extends PsiInfluenceType>(type: T) => ({
 });
 
 const motivation = createFeature<MotivationInfluence, 'roll' | 'motivation'>(
-  () => influenceBase(PsiInfluenceType.Motivation),
+  () => ({
+    ...influenceBase(PsiInfluenceType.Motivation),
+    active: null,
+  }),
 );
 
 const damage = createFeature<DamageInfluence, 'roll' | 'formula'>(() =>
@@ -84,11 +99,15 @@ const damage = createFeature<DamageInfluence, 'roll' | 'formula'>(() =>
 const unique = createFeature<
   UniqueInfluence,
   'roll' | 'name' | 'effects' | 'duration'
->(() => influenceBase(PsiInfluenceType.Unique));
+>(() => ({
+  ...influenceBase(PsiInfluenceType.Unique),
+  active: null,
+}));
 
-const trait = createFeature<TraitInfluenceData, 'roll' | 'trait'>(() =>
-  influenceBase(PsiInfluenceType.Trait),
-);
+const trait = createFeature<TraitInfluenceData, 'roll' | 'trait'>(() => ({
+  ...influenceBase(PsiInfluenceType.Trait),
+  active: null,
+}));
 
 export const createPsiInfluence = { motivation, damage, unique, trait };
 
@@ -148,7 +167,7 @@ export const createDefaultPsiInfluences = () => {
 
 export const influenceSort = ({ roll }: { roll: InfluenceRoll }) => roll;
 
-export const influenceInfo = (influence: PsiInfluence) => {
+export const influenceInfo = (influence: PsiInfluence | PsiInfluenceData) => {
   switch (influence.type) {
     case PsiInfluenceType.Damage:
       return {
@@ -161,16 +180,24 @@ export const influenceInfo = (influence: PsiInfluence) => {
       return {
         name: `${localize('motivation')}: ${
           motivation.stance === MotivationStance.Oppose ? '-' : '+'
-        } ${motivation.cause}`,
+        }${motivation.cause}`,
         description,
       };
     }
 
     case PsiInfluenceType.Trait: {
-      return {
-        name: influence.trait.fullName,
-        description: influence.trait.description,
-      };
+      const { trait } = influence;
+      return 'fullName' in trait
+        ? {
+            name: trait.fullName,
+            description: trait.description,
+          }
+        : {
+            name: `${trait.name} ${
+              trait.data.subtype ? `(${trait.data.subtype})` : ''
+            }`,
+            description: trait.data.description,
+          };
     }
 
     case PsiInfluenceType.Unique:
