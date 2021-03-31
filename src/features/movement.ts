@@ -41,7 +41,7 @@ export const getMovementSkill = (movement: Movement) => {
   const piloted = pilotMovementTypes.get(movement);
   return piloted
     ? `${localize(FieldSkillType.Pilot)}: ${localize(piloted)}`
-    : map([SkillType.Athletics, SkillType.FreeFall], localize).join('|');
+    : map([SkillType.Athletics, SkillType.FreeFall], localize).join(' | ');
 };
 
 export const pilotMovementTypes: ReadonlyMap<

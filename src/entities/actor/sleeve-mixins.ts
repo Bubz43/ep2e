@@ -7,7 +7,7 @@ import {
   removeFeature,
   StringID,
 } from '@src/features/feature-helpers';
-import type { MovementRate } from '@src/features/movement';
+import { getMovementSkill, MovementRate } from '@src/features/movement';
 import type { Size } from '@src/features/size';
 import type {
   AcquisitionData,
@@ -103,7 +103,10 @@ export const PhysicalSleeve = (
     }
 
     get movementRates() {
-      return this.epData.movementRates;
+      return this.epData.movementRates.map((move) => ({
+        ...move,
+        skill: getMovementSkill(move.type),
+      }));
     }
   };
 };

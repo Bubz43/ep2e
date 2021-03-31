@@ -40,7 +40,7 @@ import {
   SuccessTestEffect,
   UniqueEffectType,
 } from '@src/features/effects';
-import { getMovementSkill, Movement } from '@src/features/movement';
+import { Movement } from '@src/features/movement';
 import {
   CommonPilotField,
   FieldSkillType,
@@ -224,9 +224,20 @@ const movement: WithAllProps<MovementEffect> = ({
   renderNumberField(full),
   mode.value === MovementEffectMode.Grant
     ? renderSelectField(
-        { ...skill, label: `${localize('override')} ${localize('default')} ` },
+        {
+          ...skill,
+          label: `${localize('override')} ${localize('default')} ${localize(
+            'skill',
+          )}`,
+        },
         [...enumValues(SkillType), ...enumValues(CommonPilotField)],
-        { emptyText: getMovementSkill(movementType.value) },
+        {
+          emptyText: '-',
+          altLabel: (type) =>
+            enumValues(CommonPilotField).includes(type as CommonPilotField)
+              ? `${localize('pilot')}: ${localize(type)}`
+              : localize(type),
+        },
       )
     : '',
 ];

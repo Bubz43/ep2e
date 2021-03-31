@@ -275,9 +275,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   }
 
   @LazyGetter()
-  get movementRates(): MovementRate[] {
+  get movementRates(): (MovementRate & { skill: string })[] {
     if (!this.sleeve || this.sleeve.type === ActorType.Infomorph) return [];
-    // TODO add prop that shows if movement has been changed to display in view
     const { movementRates } = this.sleeve;
     const { movementEffects } = this._appliedEffects;
     const movements = [...movementRates, ...movementEffects.granted];
@@ -296,6 +295,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
               type: movement.type,
               base: change(movement.base, mods.baseModification),
               full: change(movement.full, mods.fullModification),
+              skill: movement.skill,
             }
           : movement;
       });

@@ -458,12 +458,12 @@ const format = (effect: Effect): (string | number)[] => {
       return [
         localize(effect.mode),
         localize(effect.movementType),
-        effect.mode === MovementEffectMode.Grant
-          ? `${localize('by')}  (${withSign(effect.base)} / ${withSign(
-              effect.full,
-            )})`
+        effect.mode === MovementEffectMode.Modify
+          ? `${localize('by').toLocaleLowerCase()}  (${withSign(
+              effect.base,
+            )} / ${withSign(effect.full)})`
           : `(${effect.base} / ${effect.full})`,
-        effect.skill
+        effect.skill && effect.mode === MovementEffectMode.Grant
           ? `${localize(`use`)} ${
               enumValues(SkillType).includes(effect.skill as SkillType)
                 ? localize(effect.skill)

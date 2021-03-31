@@ -73,7 +73,7 @@
     "rollup-plugin-license": "^2.2.0",
     "rollup-plugin-livereload": "^2.0.0",
     "sass": "^1.32.8",
-    "snowpack": "^3.0.13",
+    "snowpack": "3.0.13",
     "tinymce": "^5.7.0",
     "ts-json-schema-generator": "^0.88.0",
     "type-fest": "^0.21.2",
