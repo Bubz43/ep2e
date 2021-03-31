@@ -1,6 +1,9 @@
+import { renderSelectField } from '@src/components/field/fields';
 import { renderUpdaterForm } from '@src/components/form/forms';
+import { enumValues, SleightDuration, SleightType } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import type { Sleight } from '@src/entities/item/proxies/sleight';
+import { ActionType } from '@src/features/actions';
 import { localize } from '@src/foundry/localization';
 import { customElement, html, property } from 'lit-element';
 import { ItemFormBase } from '../item-form-base';
@@ -33,7 +36,15 @@ export class SleightForm extends ItemFormBase {
         ${renderUpdaterForm(updater.path('data'), {
           disabled,
           slot: 'sidebar',
-          fields: () => [],
+          fields: ({ sleightType, duration, action }) => [
+            renderSelectField(sleightType, enumValues(SleightType)),
+            sleightType.value === SleightType.Chi
+              ? ''
+              : [
+                  renderSelectField(duration, enumValues(SleightDuration)),
+                  renderSelectField(action, enumValues(ActionType)),
+                ],
+          ],
         })}
 
         <div slot="details"></div>
