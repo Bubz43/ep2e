@@ -75,7 +75,7 @@ import {
 import { traverseActiveElements } from 'weightless';
 import { openSleeveForm } from '../actor-views';
 import { Ego, FullEgoData } from '../ego';
-import { isSleeveItem, Sleeve } from '../sleeves';
+import { formattedSleeveInfo, isSleeveItem, Sleeve } from '../sleeves';
 import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 import { Biological } from './biological';
 import { Infomorph } from './infomorph';
@@ -882,5 +882,13 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         egoItems.set(item.id, item);
       }
     }
+  }
+
+  matchRegexp(regex: RegExp) {
+    return compact([
+      this.name,
+      localize(this.type),
+      this.sleeve && formattedSleeveInfo(this.sleeve).join(' '),
+    ]).some((text) => regex.test(text));
   }
 }

@@ -1,6 +1,5 @@
 import {
   renderLabeledCheckbox,
-  renderRadio,
   renderTextInput,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
@@ -40,12 +39,22 @@ export class CompendiumSearch extends LitElement {
 
   private entityRenderer = 'Item';
 
+  connectedCallback() {
+    this.loading = false;
+    super.connectedCallback();
+  }
+
+  disconnectedCallback() {
+    this.loading = true;
+    super.disconnectedCallback();
+  }
+
   private async loadEntities() {
     this.loading = true;
     this.results = [];
     this.entityRenderer = this.entity;
 
-    const items: Entity[] = [];
+    const entries: Entity[] = [];
     const { isGM } = game.user;
     const { world, system } = this.sources;
 
@@ -54,11 +63,11 @@ export class CompendiumSearch extends LitElement {
       const { entity, package: source } = pack.metadata;
       if (entity === this.entity && (source === 'world' ? world : system)) {
         const entities = await pack.getContent();
-        items.push(...entities);
+        entries.push(...entities);
       }
     }
 
-    this.results = items.sort((a, b) => a.name.localeCompare(b.name));
+    this.results = entries.sort((a, b) => a.name.localeCompare(b.name));
     this.loading = false;
   }
 
@@ -70,6 +79,21 @@ export class CompendiumSearch extends LitElement {
         pack: collection as string,
         id: id as string,
       });
+    }
+  }
+
+  private async loadOnEnter({ key, target }: KeyboardEvent) {
+    if (key === 'Enter' && !this.results.length) {
+      if (target instanceof HTMLInputElement) {
+        console.log(target.value);
+        this.filter = target.value;
+        await this.updateComplete;
+      }
+      // requestAnimationFrame(() => {
+
+      await this.loadEntities();
+
+      // });
     }
   }
 
@@ -126,10 +150,11 @@ export class CompendiumSearch extends LitElement {
       <section class="results">
         ${renderAutoForm({
           storeOnInput: true,
+          noDebounce: true,
           props: { filter: this.filter },
           update: ({ filter = '' }) => (this.filter = filter),
           fields: ({ filter }) =>
-            html`<label
+            html`<label @keydown=${this.loadOnEnter}
               ><mwc-icon>search</mwc-icon>${renderTextInput(filter, {
                 search: true,
                 placeholder: localize('filter'),

@@ -25,6 +25,7 @@ import { Biological } from './proxies/biological';
 import { Character } from './proxies/character';
 import { Infomorph } from './proxies/infomorph';
 import { Synthetic } from './proxies/synthetic';
+import { formattedSleeveInfo } from './sleeves';
 
 type ItemUpdate = SetRequired<DeepPartial<ItemEntity>, '_id'>;
 
@@ -375,6 +376,8 @@ export class ActorEP extends Actor {
   }
 
   matchRegexp(regex: RegExp) {
-    return [this.name, localize(this.type)].some((text) => regex.test(text));
+    return this.proxy.type === ActorType.Character
+      ? this.proxy.matchRegexp(regex)
+      : formattedSleeveInfo(this.proxy).some((info) => regex.test(info));
   }
 }

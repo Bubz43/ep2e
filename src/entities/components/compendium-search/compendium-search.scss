@@ -16,6 +16,10 @@
   --mdc-button-disabled-fill-color: var(--color-border);
 }
 
+sl-header {
+  border-bottom-color: var(--color-border);
+}
+
 mwc-circular-progress {
   --mdc-theme-primary: var(--color-primary-alt);
 }
