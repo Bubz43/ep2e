@@ -85,15 +85,11 @@ export class CompendiumSearch extends LitElement {
   private async loadOnEnter({ key, target }: KeyboardEvent) {
     if (key === 'Enter' && !this.results.length) {
       if (target instanceof HTMLInputElement) {
-        console.log(target.value);
         this.filter = target.value;
         await this.updateComplete;
       }
-      // requestAnimationFrame(() => {
 
       await this.loadEntities();
-
-      // });
     }
   }
 

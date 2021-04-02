@@ -35,17 +35,17 @@ h3 {
 }
 
 :host([compact]) {
-  header {
-    display: block;
-  }
-  .shared {
-    border-left: none;
-    clear: both;
-  }
-  .extra,
-  .shared {
-    margin: 0;
-  }
+  // header {
+  //   display: block;
+  // }
+  // .shared {
+  //   border-left: none;
+  //   clear: both;
+  // }
+  // .extra,
+  // .shared {
+  //   margin: 0;
+  // }
 
   .tabbed-section {
     grid-area: 3 / 1 / 4 / -1;
@@ -73,54 +73,173 @@ h3 {
     }
   }
 
+  .pools {
+    display: flex;
+    flex-flow: row;
+    padding-bottom: 0.25rem;
+    width: 100%;
+    > * {
+      flex-grow: 1;
+      // background: alphav(var(--color-grey), 0.25);
+    }
+  }
+
   .buttons {
     display: grid;
     gap: 0.5ch;
   }
-  character-view-psi {
-    margin-left: 0;
-    border-bottom: 1px solid var(--color-border);
+
+  .resource-points {
+    display: contents;
+    text-align: center;
   }
+  // character-view-psi {
+  //   margin-left: 0;
+  //   border-bottom: 1px solid var(--color-border);
+  // }
 }
 
-header {
+.header {
   grid-area: header;
-  display: flex;
-  // box-shadow: 0 4px black;
-  background: linear-gradient(
-    to bottom,
-    alphav(var(--color-primary), 0.1),
-    rgba(0, 0, 0, 0)
-  );
-  .entities {
-    // align-self: center;
-    // padding: 0.125rem 0.5rem;
-    padding: 0.5rem 0 0;
-    flex: 1;
+
+  .main-healths {
+    display: flex;
+    flex-flow: row wrap;
+    width: 300px;
+    min-width: 100%;
+
+    --health-item-padding: 0.5rem;
+    > * {
+      flex-grow: 1;
+    }
   }
-  .shared {
-    flex: 1;
+
+  .combo-extras {
+    margin-left: auto;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    --mdc-shape-small: 0px;
+    height: 100%;
+    .resource-points {
+      padding: 0;
+    }
+  }
+
+  .initiative {
+    --mdc-theme-primary: var(--color-grey);
+  }
+  .stress-roll {
+    --mdc-theme-primary: #{lightv(var(--color-negative), 1.2)};
+  }
+
+  .pools {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: min-content;
+    margin-left: auto;
+  }
+
+  .extras {
+    display: flex;
+    justify-content: space-between;
+    width: 400px;
+    min-width: 100%;
+    > * {
+      flex-grow: 1;
+    }
+    .movement {
+      display: flex;
+      flex-flow: row wrap;
+      > * {
+        margin: 0.125rem;
+      }
+    }
+  }
+
+  .armor {
+    min-width: unset;
+    width: max-content;
+    border-bottom: 0;
+  }
+
+  character-view-psi {
+    margin: 0;
   }
 }
 
-.shared {
-  border-left: 1px solid var(--color-border);
-  display: grid;
-  grid-template-areas:
-    'armor armor'
-    'healths pools';
-  grid-template-columns: minmax(300px, 1fr) min-content;
-  grid-template-rows: min-content auto;
-  margin: 0.5rem;
+.main-entities {
+  display: flex;
+  align-items: center;
+
+  .avatar {
+    padding-top: 0.5rem;
+  }
+
+  .entities {
+    margin-left: 0.25rem;
+  }
+
+  .entity-name {
+    font-size: large;
+  }
 }
+
+.resource-points {
+  display: inline-flex;
+  padding: 0.25rem;
+  position: relative;
+  float: right;
+  > * {
+    padding: 0 0.5rem;
+    background: alphav(var(--color-grey), 0.1);
+    margin-left: 0.25rem;
+    border-radius: 3px;
+    list-style: none;
+    border: 1px solid alphav(var(--color-grey), 0.15);
+  }
+  .value {
+    color: var(--color-text-lighter);
+  }
+}
+
+.motivations-list {
+  display: flex;
+  flex-flow: row wrap;
+  position: relative;
+  clear: both;
+  padding: 0 0.5rem 0.25rem;
+}
+
+.motivation {
+  display: flex;
+  align-items: center;
+  padding-right: 0.5rem;
+  position: relative;
+  @include textButton();
+  mwc-icon {
+    color: var(--color-negative);
+    &.support {
+      color: var(--color-secondary);
+      filter: hue-rotate(-30deg);
+    }
+  }
+  notification-coin {
+    position: static;
+    margin-left: 0.5ch;
+    --coin-bg: #{alphav(var(--color-grey), 0.2)};
+  }
+}
+
 .pools {
-  // padding: 0.125rem 0;
   display: flex;
   flex-flow: column;
   justify-content: space-around;
   grid-area: pools;
   width: max-content;
-  border-left: 1px solid var(--color-border);
 }
 .pool {
   display: grid;
@@ -145,14 +264,6 @@ header {
   img {
     place-self: center;
   }
-}
-
-.healths {
-  // border-left: 1px solid var(--color-border);
-  display: grid;
-  align-items: center;
-  // padding: 0.25rem 0;
-  grid-area: healths;
 }
 
 .armor {
@@ -238,8 +349,7 @@ header {
   }
 }
 
-.ego-name,
-.sleeve-name {
+.entity-name {
   all: unset;
   &:hover {
     text-decoration: underline;
@@ -248,108 +358,8 @@ header {
   }
 }
 
-.sleeve-name {
-  font-size: larger;
-}
-
-.ego-name {
-  font-size: x-large;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight: bold;
-}
-
-.ego {
-  width: 400px;
-  min-width: 100%;
-  .info {
-    clear: right;
-  }
-  .resource-points {
-    display: inline-flex;
-    padding: 0.25rem;
-    position: relative;
-    float: right;
-    > * {
-      padding: 0 0.5rem;
-      background: alphav(var(--color-grey), 0.1);
-      margin-left: 0.25rem;
-      border-radius: 3px;
-      list-style: none;
-      border: 1px solid alphav(var(--color-grey), 0.15);
-    }
-    .value {
-      color: var(--color-text-lighter);
-    }
-  }
-
-  .motivations-list {
-    display: flex;
-    flex-flow: row wrap;
-    position: relative;
-    clear: both;
-    padding: 0 0.5rem 0.25rem;
-  }
-
-  .motivation {
-    display: flex;
-    align-items: center;
-    padding-right: 0.5rem;
-    position: relative;
-    @include textButton();
-    mwc-icon {
-      color: var(--color-negative);
-      &.support {
-        color: var(--color-secondary);
-        filter: hue-rotate(-30deg);
-      }
-    }
-    notification-coin {
-      position: static;
-      margin-left: 0.5ch;
-      --coin-bg: #{alphav(var(--color-grey), 0.2)};
-    }
-  }
-}
-
 character-view-psi {
-  clear: both;
-  margin: 0.25rem 0 0 0.25rem;
   border-top: 1px solid var(--color-border);
-}
-
-.extra {
-  display: grid;
-  grid-template-columns: 1fr max-content max-content;
-  align-items: center;
-  grid-area: extra;
-  border-top: 1px solid var(--color-border);
-  margin: 0 0.25rem;
-  padding: 0.5rem 0 0.5rem 0.5rem;
-
-  .sleeve {
-    flex: 1;
-  }
-
-  .buttons {
-    border-left: 1px solid var(--color-border);
-    --mdc-shape-small: 0px;
-    height: 100%;
-  }
-
-  .initiative {
-    --mdc-theme-primary: var(--color-grey);
-  }
-  .stress-roll {
-    --mdc-theme-primary: #{lightv(var(--color-negative), 1.2)};
-  }
-}
-
-.sleeve {
-  // border-bottom: 1px solid var(--color-grey);
-  // grid-area: sleeve;
-  width: 400px;
-  min-width: 100%;
 }
 
 .info {
