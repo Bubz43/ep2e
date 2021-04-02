@@ -1,16 +1,17 @@
 import { createMessage } from '@src/chat/create-message';
-import type { DamageMessageData } from '@src/chat/message-data';
 import { formatArmorUsed } from '@src/combat/attack-formatting';
 import { startMeleeAttack } from '@src/combat/attack-init';
 import type { AttackType, MeleeWeaponAttack } from '@src/combat/attacks';
+import { meleeDamage } from '@src/combat/melee-damage';
 import { ActorType } from '@src/entities/entity-types';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
 import { localize } from '@src/foundry/localization';
-import { joinLabeledFormulas, rollLabeledFormulas } from '@src/foundry/rolls';
+import { joinLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
+import { SuccessTestResult } from '@src/success-test/success-test';
 import { notEmpty, withSign } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
-import { compact, map, pick, pipe } from 'remeda';
+import { compact, map } from 'remeda';
 import { stopEvent } from 'weightless';
 import { requestCharacter } from '../../character-request-event';
 import { openCoatingMenu, openMeleePayloadMenu } from './ammo-menus';
@@ -31,34 +32,29 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
   private async createMessage(attackType: AttackType) {
     const { token, character } = requestCharacter(this);
     const { attacks, name, hasSecondaryAttack, augmentUnarmed } = this.weapon;
-    const unarmed =
+    const unarmedDV =
       character?.sleeve && character.sleeve.type !== ActorType.Infomorph
         ? character.sleeve.unarmedDV
         : null;
     const attack = attacks[attackType] || attacks.primary;
 
-    const damage: DamageMessageData = {
-      ...pick(attack, [
-        'armorPiercing',
-        'armorUsed',
-        'damageType',
-        'notes',
-        'reduceAVbyDV',
-      ]),
+    const damage = meleeDamage({
+      attack,
+      successTestInfo: {
+        result: SuccessTestResult.Success,
+        superiorEffects: undefined,
+      },
+      augmentUnarmed,
+      unarmedDV,
+      damageModifiers: character?.appliedEffects.meleeDamageBonuses,
+      morphSize:
+        character?.sleeve && 'size' in character.sleeve
+          ? character.sleeve.size
+          : null,
       source: `${name} ${hasSecondaryAttack ? `[${attack.label}]` : ''}`,
-      rolledFormulas: pipe(
-        [
-          augmentUnarmed && {
-            label: localize('unarmedDV'),
-            formula: unarmed || '0',
-          },
-          ...(character?.appliedEffects.meleeDamageBonuses || []),
-          ...attack.rollFormulas,
-        ],
-        compact,
-        rollLabeledFormulas,
-      ),
-    };
+      settings: { attackType },
+    });
+
     createMessage({
       data: {
         header: this.weapon.messageHeader,
