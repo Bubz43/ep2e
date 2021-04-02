@@ -101,7 +101,11 @@ h3 {
 
 .header {
   grid-area: header;
-
+  background: linear-gradient(
+    to bottom,
+    alphav(var(--color-primary), 0.1),
+    rgba(0, 0, 0, 0)
+  );
   .main-healths {
     display: flex;
     flex-flow: row wrap;
