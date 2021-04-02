@@ -45,10 +45,15 @@ sl-details {
     background: linear-gradient(45deg, var(--color-bg-alt), transparent);
     box-shadow: 0 1px 2px black;
   }
+  &.aptitudes {
+    &::part(content) {
+      padding-bottom: 0;
+    }
+  }
 }
 
 .skills {
-  border-top: 2px groove var(--color-border);
+  border-top: 1px solid var(--color-border);
   &::part(content) {
     padding-top: 0;
   }
@@ -61,6 +66,8 @@ sl-details {
 
 .aptitude-item {
   padding: 0.125rem 0.5rem;
+  margin-bottom: 0.25rem;
+  --list-item-bg: #{alphav(var(--color-bg-alt), 0.9)};
 
   .acronym {
     color: var(--color-text-lighter);

@@ -21,7 +21,7 @@ import { SkillTestControls } from '@src/success-test/components/skill-test-contr
 import { SuccessTestResult } from '@src/success-test/success-test';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property } from 'lit-element';
-import { compact, concat, last, pick, pipe } from 'remeda';
+import { compact, concat, identity, last, map, pick, pipe, set } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-melee-attack.scss';
 
@@ -178,6 +178,7 @@ export class MessageMeleeAttack extends MessageElement {
       ],
       compact,
       concat(attack?.rollFormulas ?? []),
+      morphSize === Size.VerySmall ? map(set('formula', '1')) : identity,
       rollLabeledFormulas,
     );
     message.createSimilar({

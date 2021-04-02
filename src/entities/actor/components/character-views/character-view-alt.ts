@@ -216,6 +216,17 @@ export class CharacterViewAlt extends CharacterViewBase {
     `;
   }
 
+  private renderInitiativeButton() {
+    return html`<mwc-button
+      dense
+      class="initiative"
+      @click=${this.openInitiativeMenu}
+      ?disabled=${this.character.disabled}
+    >
+      ${localize('initiative')}: ${this.character.initiative}
+    </mwc-button>`;
+  }
+
   private renderHeader() {
     const {
       ego,
@@ -253,6 +264,7 @@ export class CharacterViewAlt extends CharacterViewBase {
                   `${localize(ego.forkStatus)} ${localize('fork')}`,
               ]).join(' • ')}
             </span>
+            ${this.compact ? this.renderInitiativeButton() : ''}
           </div>
 
           <div class="sleeve-entity">
@@ -296,15 +308,9 @@ export class CharacterViewAlt extends CharacterViewBase {
                   ></mwc-button>
                 `
               : ''}
-            <mwc-button
-              dense
-              class="initiative"
-              @click=${this.openInitiativeMenu}
-            >
-              ${localize('initiative')}: ${this.character.initiative}
-            </mwc-button>
+            ${this.compact ? '' : this.renderInitiativeButton()}
           </div>
-          ${notEmpty(pools) && !this.compact
+          ${notEmpty(pools)
             ? html`
                 <ul class="pools">
                   ${[...pools.values()].map(
@@ -316,11 +322,15 @@ export class CharacterViewAlt extends CharacterViewBase {
                       tabindex=${disabled ? '-1' : 0}
                       role="button"
                       data-pool=${pool.type}
+                      data-tooltip=${localize(pool.type)}
+                      @mouseover=${tooltip.fromData}
+                      @focus=${tooltip.fromData}
                       @click=${this.openPoolMenu}
                       ?disabled=${disabled}
                     >
                       <img height="22px" src=${pool.icon} />
-                      <span> ${localize(pool.type)} </span>
+                      <span></span>
+                      <!-- <span> ${localize(pool.type)} </span> -->
                       <value-status
                         value=${pool.available}
                         max=${pool.max}
@@ -332,33 +342,6 @@ export class CharacterViewAlt extends CharacterViewBase {
             : ''}
         </div>
       </div>
-
-      ${notEmpty(pools) && this.compact
-        ? html`
-            <ul class="pools">
-              ${[...pools.values()].map(
-                // pools.size <= 1
-                //   ? this.renderPool
-                //   :
-                (pool) => html` <li
-                  class="pool"
-                  tabindex=${disabled ? '-1' : 0}
-                  role="button"
-                  data-pool=${pool.type}
-                  @click=${this.openPoolMenu}
-                  ?disabled=${disabled}
-                >
-                  <img height="22px" src=${pool.icon} />
-                  <span> ${localize(pool.type)} </span>
-                  <value-status
-                    value=${pool.available}
-                    max=${pool.max}
-                  ></value-status>
-                </li>`,
-              )}
-            </ul>
-          `
-        : ''}
 
       <div class="extras">
         ${notEmpty(filteredMotivations)
@@ -372,6 +355,54 @@ export class CharacterViewAlt extends CharacterViewBase {
               >
             `
           : ''}
+      </div>
+      <div class="armor-movement">
+        ${notEmpty(armor)
+          ? html`
+              <div
+                class="armor"
+                @click=${this.setDrawerRenderer}
+                data-renderer=${CharacterDrawerRenderer.Armor}
+                @keydown=${clickIfEnter}
+                tabindex="0"
+                role="button"
+              >
+                <sl-animated-list class="values">
+                  ${repeat(enumValues(ArmorType), identity, (type) => {
+                    const value = armor.getClamped(type);
+                    const reduced = armor.reducedArmors.has(type);
+                    return value || reduced
+                      ? html`<span class="rating ${classMap({ reduced })}"
+                          ><img
+                            src=${localImage('icons/armor/shield.svg')}
+                            width="16"
+                          />
+                          <span class="label"> ${localize(type)}</span>
+                          <span class="value">${value}</span></span
+                        >`
+                      : '';
+                  })}
+
+                  <span class="rating info">
+                    <img
+                      src=${localImage('icons/armor/layered-armor.svg')}
+                      width="16"
+                    />
+                    <span class="label">${localize('layers')}</span>
+                    <span class="value">${armor.layers}</span></span
+                  >
+                  ${armor.concealable
+                    ? html`
+                        <span class="rating info concealable"
+                          >${localize('concealable')}</span
+                        >
+                      `
+                    : ''}
+                </sl-animated-list>
+              </div>
+            `
+          : ''}
+
         <div class="movement">
           ${(['encumbered', 'overburdened'] as const).map((mod) => {
             const val = movementModifiers[mod];
@@ -412,51 +443,6 @@ export class CharacterViewAlt extends CharacterViewBase {
             : ''}
         </div>
       </div>
-      ${notEmpty(armor)
-        ? html`
-            <div
-              class="armor"
-              @click=${this.setDrawerRenderer}
-              data-renderer=${CharacterDrawerRenderer.Armor}
-              @keydown=${clickIfEnter}
-              tabindex="0"
-              role="button"
-            >
-              <sl-animated-list class="values">
-                ${repeat(enumValues(ArmorType), identity, (type) => {
-                  const value = armor.getClamped(type);
-                  const reduced = armor.reducedArmors.has(type);
-                  return value || reduced
-                    ? html`<span class="rating ${classMap({ reduced })}"
-                        ><img
-                          src=${localImage('icons/armor/shield.svg')}
-                          width="16"
-                        />
-                        <span class="label"> ${localize(type)}</span>
-                        <span class="value">${value}</span></span
-                      >`
-                    : '';
-                })}
-
-                <span class="rating info">
-                  <img
-                    src=${localImage('icons/armor/layered-armor.svg')}
-                    width="16"
-                  />
-                  <span class="label">${localize('layers')}</span>
-                  <span class="value">${armor.layers}</span></span
-                >
-                ${armor.concealable
-                  ? html`
-                      <span class="rating info concealable"
-                        >${localize('concealable')}</span
-                      >
-                    `
-                  : ''}
-              </sl-animated-list>
-            </div>
-          `
-        : ''}
       <div class="main-healths">
         ${settings.trackMentalHealth
           ? html` <health-item
