@@ -44,6 +44,7 @@ import { MessageSubstanceUse } from './chat/components/substance/message-substan
 import { MessageSuccessTest } from './chat/components/success-test/message-success-test';
 import { MessageThrownAttack } from './chat/components/thrown-attack/message-thrown-attack';
 import { CombatView } from './combat/components/combat-view/combat-view';
+import { CustomRollApp } from './combat/components/custom-roll-app/custom-roll-app';
 import { MultiplierSelect } from './combat/components/multiplier-select/multiplier-select';
 import { RolledFormulasList } from './combat/components/rolled-formulas-list/rolled-formulas-list';
 import { AnimatedList } from './components/animated-list/animated-list';
@@ -339,6 +340,7 @@ EnvironmentForms;
 // Combat
 RolledFormulasList;
 CombatView;
+CustomRollApp;
 
 // Chat
 MessageHeader;

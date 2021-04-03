@@ -3,6 +3,7 @@ import { compact, first } from 'remeda';
 import type { RawEditorSettings } from 'tinymce';
 import { onChatMessageRender } from './chat/message-hooks';
 import { combatSocketHandler } from './combat/combat-tracker';
+import { CustomRollApp } from './combat/components/custom-roll-app/custom-roll-app';
 import { EPOverlay } from './components/ep-overlay/ep-overlay';
 import type { ToolTip } from './components/tooltip/tooltip';
 import { SlWindow } from './components/window/window';
@@ -196,6 +197,31 @@ Hooks.once('ready', async () => {
   //   event: 'render',
   //   callback: () => requestAnimationFrame(() => ui.combat.render()),
   // });
+
+  applicationHook({
+    app: ChatLog,
+    hook: 'on',
+    event: 'render',
+    callback: (_, [element]) => {
+      const frag = new DocumentFragment();
+      render(
+        html`
+          <mwc-icon-button
+            @click=${() =>
+              openWindow({
+                key: CustomRollApp,
+                content: html`<custom-roll-app></custom-roll-app>`,
+                name: `${localize('custom')} ${localize('roll')}`,
+              })}
+          >
+            <img src="icons/svg/combat.svg" />
+          </mwc-icon-button>
+        `,
+        frag,
+      );
+      element?.querySelector('div#chat-controls')?.prepend(frag);
+    },
+  });
 
   const compendiumSearchButton = () => {
     const frag = new DocumentFragment();

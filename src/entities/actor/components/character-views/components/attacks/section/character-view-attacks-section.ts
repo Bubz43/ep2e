@@ -78,6 +78,7 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
     const { sleeve } = this.character;
     const damage =
       !sleeve || sleeve.type === ActorType.Infomorph ? '0' : sleeve.unarmedDV;
+    console.log(damage);
     createMessage({
       data: {
         header: { heading: localize('unarmed') },
@@ -87,7 +88,7 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
             result: SuccessTestResult.Success,
             superiorEffects: undefined,
           },
-          augmentUnarmed: false,
+          augmentUnarmed: true,
           unarmedDV: damage,
           damageModifiers: this.character?.appliedEffects.meleeDamageBonuses,
           morphSize: sleeve && 'size' in sleeve ? sleeve.size : null,

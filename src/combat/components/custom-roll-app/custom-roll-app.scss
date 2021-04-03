@@ -1,0 +1,17 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: flex;
+  flex-flow: column;
+  padding: 0.5rem 1rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
