@@ -1,6 +1,6 @@
 import { ButtonBase } from '@material/mwc-button/mwc-button-base';
 import { style as buttonStyles } from '@material/mwc-button/styles-css';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, property } from 'lit-element';
 import { stopEvent } from 'weightless';
 import styles from './submit-button.scss';
 
@@ -23,11 +23,14 @@ export class SubmitButton extends ButtonBase {
 
   @property({ type: Boolean, reflect: true }) complete = false;
 
-  @property({ type: Boolean, reflect: true }) raised = true;
-
   @property({ type: String }) icon = 'save_alt';
 
   @property({ type: String }) label = '';
+
+  connectedCallback() {
+    if (!this.outlined) this.raised = true;
+    super.connectedCallback();
+  }
 
   firstUpdated() {
     this.addEventListener('click', (ev) => this.animateSubmit(ev));

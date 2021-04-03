@@ -15,3 +15,13 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.armor-types {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.macro {
+  justify-self: flex-start;
+  margin-right: 1rem;
+}

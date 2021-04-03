@@ -207,14 +207,17 @@ Hooks.once('ready', async () => {
       render(
         html`
           <mwc-icon-button
-            @click=${() =>
+            data-tooltip=${`${localize('custom')} ${localize('roll')}`}
+            style="flex: 0; margin-right: 0.5rem; --mdc-icon-button-size: 1.5rem"
+            @click=${(ev: Event & { currentTarget: HTMLElement }) =>
               openWindow({
                 key: CustomRollApp,
                 content: html`<custom-roll-app></custom-roll-app>`,
                 name: `${localize('custom')} ${localize('roll')}`,
+                adjacentEl: ev.currentTarget,
               })}
           >
-            <img src="icons/svg/combat.svg" />
+            <img class="noborder" src="icons/svg/combat.svg" />
           </mwc-icon-button>
         `,
         frag,

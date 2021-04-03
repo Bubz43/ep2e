@@ -9,7 +9,10 @@ const rollCustomAttack = (
 ) => {
   const rolledFormulas = rollLabeledFormulas(damage.formulas);
   createMessage({
-    data: { damage: { ...damage, rolledFormulas } },
+    data: {
+      header: { heading: damage.source },
+      damage: { ...damage, rolledFormulas },
+    },
     visibility: rollModeToVisibility(game.settings.get('core', 'rollMode')),
   });
 };
