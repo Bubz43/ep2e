@@ -30,6 +30,15 @@ const preRolled = {
   min: new Map<string, number>(),
 };
 
+export const validateFormula = (formula: unknown): formula is string => {
+  try {
+    Roll.validate(formula);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
 export const rollLimit = (formula: string, limit: 'max' | 'min') => {
   const rolled = preRolled[limit];
   const existing = rolled.get(formula);
