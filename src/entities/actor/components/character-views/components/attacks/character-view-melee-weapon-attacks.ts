@@ -55,9 +55,18 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
       settings: { attackType },
     });
 
+    const hedaer = this.weapon.messageHeader;
+
     createMessage({
       data: {
-        header: this.weapon.messageHeader,
+        header: {
+          ...hedaer,
+          subheadings: (hedaer.subheadings || [])?.concat(
+            character?.sleeve && 'size' in character.sleeve
+              ? `${localize(character.sleeve.size)} ${localize('size')}`
+              : '',
+          ),
+        },
         meleeAttack: { weapon: this.weapon.getDataCopy(), attackType },
         damage,
       },
