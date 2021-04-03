@@ -208,6 +208,7 @@ Hooks.once('ready', async () => {
         html`
           <mwc-icon-button
             data-tooltip=${`${localize('custom')} ${localize('roll')}`}
+            @mouseover=${tooltip.fromData}
             style="flex: 0; margin-right: 0.5rem; --mdc-icon-button-size: 1.5rem"
             @click=${(ev: Event & { currentTarget: HTMLElement }) =>
               openWindow({

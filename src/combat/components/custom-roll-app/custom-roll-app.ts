@@ -87,6 +87,7 @@ export class CustomRollApp extends LitElement {
     return html`
       ${renderAutoForm({
         props: this.attackData,
+        noDebounce: true,
         update: (changes) => {
           this.attackData = { ...this.attackData, ...changes };
           if (!this.usesArmor) {
