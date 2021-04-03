@@ -4,24 +4,24 @@ import type { DamageMessageData } from './chat/message-data';
 import { ArmorType } from './features/active-armor';
 import { NotificationType, notify } from './foundry/foundry-apps';
 import {
+  isValidFormula,
   LabeledFormula,
   rollLabeledFormulas,
-  validateFormula,
 } from './foundry/rolls';
 import { HealthType } from './health/health';
 import { vEnum } from './utility/v-enum';
 
 // ! Make sure to validate all passed in data
 
-type CustomAttackData = Pick<
+export type CustomAttackData = Pick<
   DamageMessageData,
   'source' | 'damageType' | 'armorUsed' | 'armorPiercing' | 'reduceAVbyDV'
 > & {
   formulas: LabeledFormula[];
 };
 
-const damageSchema: v.Type<CustomAttackData> = v.object({
-  source: v.string(),
+const attack: v.Type<CustomAttackData> = v.object({
+  source: v.string().assert((v) => !!v.length, 'cannot be empty'),
   damageType: vEnum(HealthType),
   armorUsed: v.array(vEnum(ArmorType)),
   armorPiercing: v.boolean().optional(),
@@ -29,28 +29,42 @@ const damageSchema: v.Type<CustomAttackData> = v.object({
   formulas: v.array(
     v.object({
       label: v.string(),
-      formula: v.string().assert(validateFormula),
+      formula: v.string().assert(isValidFormula),
     }),
   ),
 });
 
-const rollCustomAttack = (damage: CustomAttackData) => {
+const rollCustomAttack = (data: unknown) => {
   try {
-    damageSchema.parse(damage);
+    // Destructure to omit any additional keys
+    const {
+      source,
+      damageType,
+      armorUsed,
+      armorPiercing,
+      reduceAVbyDV,
+      formulas,
+    } = attack.parse(data);
+    const rolledFormulas = rollLabeledFormulas(formulas);
+    createMessage({
+      data: {
+        header: { heading: source },
+        damage: {
+          damageType,
+          source,
+          armorUsed,
+          armorPiercing,
+          reduceAVbyDV,
+          rolledFormulas,
+        },
+      },
+      visibility: rollModeToVisibility(game.settings.get('core', 'rollMode')),
+    });
   } catch (error) {
-    notify(NotificationType.Error, 'Invalid custom attack');
+    notify(NotificationType.Error, `Invalid custom attack: ${error.message}`);
     console.log(error);
     return;
   }
-
-  const rolledFormulas = rollLabeledFormulas(damage.formulas);
-  createMessage({
-    data: {
-      header: { heading: damage.source },
-      damage: { ...damage, rolledFormulas },
-    },
-    visibility: rollModeToVisibility(game.settings.get('core', 'rollMode')),
-  });
 };
 
 window.ep2e = {

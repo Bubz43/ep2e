@@ -24,6 +24,15 @@ body {
   }
 }
 
+#context-menu {
+  li {
+    &.context-item {
+      padding: 0 0.75rem;
+      white-space: nowrap;
+    }
+  }
+}
+
 .drag-image {
   position: absolute;
   left: -1000px;

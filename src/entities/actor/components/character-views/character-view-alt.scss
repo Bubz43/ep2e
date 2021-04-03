@@ -447,7 +447,7 @@ character-view-psi {
   mwc-tab-bar {
     --mdc-theme-primary: var(--color-grey);
     padding: 0 0.25rem;
-    width: 400px;
+    width: max-content;
     min-width: 100%;
     background: linear-gradient(to top, var(--color-bg-alt), transparent);
     box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.664);

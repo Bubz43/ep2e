@@ -1,7 +1,7 @@
 import { literal, union } from '@badrap/valita';
 import { enumValues } from '@src/data-enums';
-import type { LangEntry } from '@src/foundry/localization';
+import { createPipe, map } from 'remeda';
 
-export const vEnum = <T extends Record<string, LangEntry>>(en: T) => {
-  return union(...enumValues(en).map(literal));
-};
+export const vEnum = createPipe(enumValues, map(literal), (parts) =>
+  union(...parts),
+);

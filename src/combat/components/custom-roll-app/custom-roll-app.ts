@@ -8,6 +8,7 @@ import { renderAutoForm } from '@src/components/form/forms';
 import { enumValues } from '@src/data-enums';
 import { ArmorType } from '@src/features/active-armor';
 import { localize } from '@src/foundry/localization';
+import type { CustomAttackData } from '@src/global';
 import { HealthType } from '@src/health/health';
 import { customElement, html, internalProperty, LitElement } from 'lit-element';
 import { mapToObj } from 'remeda';
@@ -39,7 +40,7 @@ export class CustomRollApp extends LitElement {
     window.ep2e.rollCustomAttack(this.toAttackInit());
   }
 
-  private toAttackInit() {
+  private toAttackInit(): CustomAttackData {
     const {
       source,
       formula,
