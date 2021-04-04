@@ -13,7 +13,6 @@ import { ArmorType } from '@src/features/active-armor';
 import { conditionIcons, ConditionType } from '@src/features/conditions';
 import { idProp } from '@src/features/feature-helpers';
 import { MotivationStance } from '@src/features/motivations';
-import type { ReadonlyPool } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
 import { tooltip } from '@src/init';
@@ -44,7 +43,7 @@ import {
 } from 'remeda';
 import type { Ego } from '../../ego';
 import type { Character } from '../../proxies/character';
-import { formattedSleeveInfo, Sleeve } from '../../sleeves';
+import { formattedSleeveInfo } from '../../sleeves';
 import { CharacterDrawerRenderer } from './character-drawer-render-event';
 import styles from './character-view-alt.scss';
 import { CharacterViewBase, ItemGroup } from './character-view-base';
@@ -53,7 +52,14 @@ type Detail = {
   label: string;
   value: string | number;
 };
-const tabs = ['tests', 'gear', 'combat', 'traits', 'details'] as const;
+const tabs = [
+  'tests',
+  'gear',
+  'combat',
+  'traits',
+  'sleights',
+  'details',
+] as const;
 
 type CharacterTab = typeof tabs[number];
 
@@ -85,7 +91,13 @@ export class CharacterViewAlt extends CharacterViewBase {
   }
 
   private get currentTabs() {
-    return this.compact ? tabs : tabs.slice(1);
+    return difference(
+      tabs,
+      compact([
+        !this.compact && 'tests',
+        !this.character.psi && !this.character.hasSleights && 'sleights',
+      ]),
+    );
   }
 
   private setTab(ev: CustomEvent<{ index: number }>) {
@@ -146,7 +158,6 @@ export class CharacterViewAlt extends CharacterViewBase {
           callback: () => this.addToCombat(),
           icon: html`<mwc-icon>add</mwc-icon>`,
         },
-        // 'divider',
         {
           label: `${localize('add')} & ${localize('roll')} ${baseLabel}`,
           callback: () => roll(),
@@ -176,15 +187,16 @@ export class CharacterViewAlt extends CharacterViewBase {
 
   render() {
     const { character, currentTabs } = this;
-    const { ego, disabled, sleeve, pools, armor, psi } = character;
-    const { filteredMotivations, settings } = ego;
-    const physicalHealth =
-      sleeve && 'physicalHealth' in sleeve && sleeve.physicalHealth;
-    const meshHealth =
-      sleeve && 'activeMeshHealth' in sleeve && sleeve.activeMeshHealth;
+    const { ego, sleeve, psi } = character;
 
     return html`
       ${this.renderHeader()}
+      ${psi
+        ? html`<character-view-psi
+            .character=${this.character}
+            .psi=${psi}
+          ></character-view-psi>`
+        : ''}
       ${this.compact
         ? ''
         : html`<character-view-test-actions
@@ -202,9 +214,9 @@ export class CharacterViewAlt extends CharacterViewBase {
             (tab: CharacterTab) =>
               html`
                 <mwc-tab
-                  @dragenter=${tab === 'gear' || tab === 'traits'
-                    ? this.activateTab
-                    : noop}
+                  @dragenter=${tab === 'combat' || tab === 'details'
+                    ? noop
+                    : this.activateTab}
                   label=${localize(tab)}
                 ></mwc-tab>
               `,
@@ -235,7 +247,6 @@ export class CharacterViewAlt extends CharacterViewBase {
       disabled,
       armor,
       img,
-      psi,
       movementRates,
       movementModifiers,
     } = this.character;
@@ -480,12 +491,6 @@ export class CharacterViewAlt extends CharacterViewBase {
             </health-item>`
           : ''}
       </div>
-      ${psi
-        ? html`<character-view-psi
-            .character=${this.character}
-            .psi=${psi}
-          ></character-view-psi>`
-        : ''}
     </div>`;
   }
 
@@ -695,6 +700,14 @@ export class CharacterViewAlt extends CharacterViewBase {
     return html` <item-trash .proxy=${this.character}></item-trash> `;
   };
 
+  private static traits = [ItemGroup.EgoTraits, ItemGroup.MorphTraits];
+
+  private static gear = [
+    ItemGroup.Consumables,
+    ItemGroup.Equipped,
+    ItemGroup.Stashed,
+  ];
+
   private renderTabbedContent() {
     switch (this.currentTab) {
       case 'combat':
@@ -706,19 +719,13 @@ export class CharacterViewAlt extends CharacterViewBase {
         `;
 
       case 'gear':
-        return html`
-          ${repeat(
-            difference(enumValues(ItemGroup), [
-              ItemGroup.EgoTraits,
-              ItemGroup.MorphTraits,
-            ]),
-            identity,
-            this.renderItemGroup,
-          )}
-        `;
+        return CharacterViewAlt.gear.map(this.renderItemGroup);
 
       case 'traits':
-        return [ItemGroup.EgoTraits, ItemGroup.MorphTraits].map(
+        return CharacterViewAlt.traits.map(this.renderItemGroup);
+
+      case 'sleights':
+        return [ItemGroup.PassiveSleights, ItemGroup.ActiveSleights].map(
           this.renderItemGroup,
         );
 
@@ -733,62 +740,6 @@ export class CharacterViewAlt extends CharacterViewBase {
         ></character-view-test-actions>`;
     }
   }
-
-  private renderSleeve(sleeve: Sleeve) {
-    const { armor, movementRates, movementModifiers, pools } = this.character;
-    const canPlace = userCan('TEMPLATE_CREATE');
-    return html`
-      <button class="sleeve-name" @click=${sleeve.openForm}>
-        ${sleeve.name}
-      </button>
-      <span class="info"> ${formattedSleeveInfo(sleeve).join(' • ')}</span>
-
-      <div class="movement">
-        ${(['encumbered', 'overburdened'] as const).map((mod) => {
-          const val = movementModifiers[mod];
-          return val ? html`<span class="mod">${localize(mod)}</span>` : '';
-        })}
-        ${notEmpty(movementRates)
-          ? html`
-              ${sortBy(movementRates, ({ type }) => localize(type).length).map(
-                ({ type, base, full, skill }) => html`
-                  <span
-                    class="movement-rate"
-                    title=${`${localize('use')} ${skill}`}
-                    >${localize(type)}
-                    <span class="rate"
-                      ><button
-                        ?disabled=${!canPlace || !base}
-                        @click=${() => this.placeMovementPreviewTemplate(base)}
-                      >
-                        ${base}
-                      </button>
-                      /
-                      <button
-                        ?disabled=${!canPlace || !full}
-                        @click=${() => this.placeMovementPreviewTemplate(full)}
-                      >
-                        ${full}
-                      </button></span
-                    ></span
-                  >
-                `,
-              )}
-            `
-          : ''}
-      </div>
-    `;
-  }
-
-  private renderPool = (pool: ReadonlyPool) => html`
-    <pool-item
-      @click=${this.openPoolMenu}
-      .pool=${pool}
-      ?disabled=${this.character.disabled}
-      ?wide=${this.character.pools.size <= 2}
-      data-pool=${pool.type}
-    ></pool-item>
-  `;
 
   private renderSleeveSelect() {
     return html``;
@@ -858,12 +809,6 @@ export class CharacterViewAlt extends CharacterViewBase {
   >`;
 
   private renderItemGroup = (group: ItemGroup) => {
-    if (
-      group === ItemGroup.Sleights &&
-      !this.character.psi &&
-      !this.character.sleights.length
-    )
-      return '';
     return html`
       <character-view-item-group
         .character=${this.character}

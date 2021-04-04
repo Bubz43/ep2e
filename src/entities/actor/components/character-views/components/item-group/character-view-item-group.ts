@@ -251,10 +251,19 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
   private get heading() {
     switch (this.group) {
       case ItemGroup.EgoTraits:
-        return `${this.character.name}`;
+        return `${this.character.name} ${localize('egoTraits')}`;
       case ItemGroup.MorphTraits:
-        return `${this.character.sleeve?.name ?? localize('morph')}`;
+        return `${this.character.sleeve?.name ?? ''} ${localize(
+          'morphTraits',
+        )}`;
 
+      case ItemGroup.PassiveSleights:
+        return `${localize('psi')}-${localize('chi')}`;
+
+      case ItemGroup.ActiveSleights:
+        return `${localize('psi')}-${localize(`gamma`)}${
+          this.character.psi?.level === 3 ? `/${localize('psiEpsilon')}` : ``
+        }`;
       default:
         return localize(this.group);
     }

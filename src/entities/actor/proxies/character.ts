@@ -94,7 +94,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
   readonly armor;
 
-  readonly sleights: Sleight[] = [];
+  readonly passiveSleights: Sleight[] = [];
+  readonly activatedSleights: Sleight[] = [];
   readonly egoTraits: Trait[] = [];
   readonly morphTraits: Trait[] = [];
   readonly equipped: EquippableItem[] = [];
@@ -181,6 +182,10 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     return this.appliedEffects
       .getGroup(EffectType.Misc)
       .some(({ unique }) => unique === UniqueEffectType.NoFlipFlop);
+  }
+
+  get hasSleights() {
+    return !!(this.passiveSleights.length || this.activatedSleights.length);
   }
 
   @LazyGetter()
@@ -855,8 +860,10 @@ export class Character extends ActorProxyBase<ActorType.Character> {
               ].push(substanceItem);
               this._appliedEffects.add(substanceItem.currentEffects);
             } else {
-              this.sleights.push(substanceItem);
-              // TODO add sleight effects if passive
+              if (substanceItem.isChi) {
+                // TODO add sleight effects
+                this.passiveSleights.push(substanceItem);
+              } else this.activatedSleights.push(substanceItem);
             }
           }
         } else this.awaitingOnsetSubstances.push(item);
@@ -878,7 +885,10 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         this[item.isMorphTrait ? 'morphTraits' : 'egoTraits'].push(item);
         this._appliedEffects.add(item.currentEffects);
       } else if (item.type === ItemType.Sleight) {
-        this.sleights.push(item);
+        if (item.isChi) {
+          // TODO add sleight effects
+          this.passiveSleights.push(item);
+        } else this.activatedSleights.push(item);
         egoItems.set(item.id, item);
       }
     }

@@ -24,29 +24,23 @@ h3 {
   display: grid;
   grid-template-areas:
     'header header'
-    'extra extra'
+    'extra tabs'
     'actions tabs'
     'footer footer';
 
-  grid-template-rows: min-content min-content minmax(400px, 1fr) min-content;
+  // grid-template-rows: min-content min-content minmax(400px, 1fr) min-content;
+  grid-template-rows: min-content min-content 1fr min-content;
+
   overflow-x: auto;
   min-width: max-content;
   background: alphav(var(--color-bg), 0.6);
 }
 
 :host([compact]) {
-  // header {
-  //   display: block;
-  // }
-  // .shared {
-  //   border-left: none;
-  //   clear: both;
-  // }
-  // .extra,
-  // .shared {
-  //   margin: 0;
-  // }
-
+  character-view-psi {
+    grid-area: 2 / 1 / 3 / -1;
+    border-right: none;
+  }
   .tabbed-section {
     grid-area: 3 / 1 / 4 / -1;
   }
@@ -72,17 +66,6 @@ h3 {
       }
     }
   }
-
-  // .pools {
-  //   display: flex;
-  //   flex-flow: row;
-  //   padding-bottom: 0.25rem;
-  //   width: 100%;
-  //   > * {
-  //     flex-grow: 1;
-  //     // background: alphav(var(--color-grey), 0.25);
-  //   }
-  // }
 
   .main-entities {
     display: grid;
@@ -141,11 +124,12 @@ h3 {
     gap: 0.25rem;
     width: 300px;
     min-width: 100%;
+    margin-top: 0.25rem;
 
     --health-item-padding: 0.5rem;
     > * {
       flex-grow: 1;
-      background: alphav(var(--color-bg-alt), 0.9);
+      background: alphav(var(--color-bg-alt), 0.95);
       margin: 0 0.125rem;
     }
   }
@@ -211,10 +195,12 @@ h3 {
     width: max-content;
     border-bottom: 0;
   }
+}
 
-  character-view-psi {
-    margin: 0;
-  }
+character-view-psi {
+  grid-area: extra;
+  margin: 0;
+  border-right: 1px solid var(--color-border);
 }
 
 .main-entities {
@@ -432,7 +418,7 @@ character-view-psi {
   grid-area: actions;
   overflow-x: hidden;
   overflow-y: scroll;
-  height: 400px;
+  height: 200px;
   min-height: 100%;
   width: 400px;
   min-width: 100%;
@@ -442,8 +428,10 @@ character-view-psi {
   grid-area: tabs;
   display: grid;
   grid-template-rows: min-content 1fr;
-  width: 500px;
+  width: max-content;
   min-width: 100%;
+  height: 400px;
+  min-height: 100%;
   mwc-tab-bar {
     --mdc-theme-primary: var(--color-grey);
     padding: 0 0.25rem;
@@ -452,6 +440,7 @@ character-view-psi {
     background: linear-gradient(to top, var(--color-bg-alt), transparent);
     box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.664);
     z-index: 1;
+    --mdc-tab-horizontal-padding: 0.5rem;
   }
 }
 
@@ -461,8 +450,13 @@ character-view-psi {
   border-top: 1px solid var(--color-border);
   height: 300px;
   min-height: 100%;
+  width: 500px;
+  min-width: 100%;
+  padding: 0.25rem 0;
+}
 
-  padding: 0.25rem;
+character-view-item-group[group='sleights'] {
+  height: 100%;
 }
 
 .conditions {
