@@ -6,6 +6,7 @@ import type { MWCMenuOption } from '@src/open-menu';
 import { html, nothing, TemplateResult } from 'lit-html';
 import { compact, noop } from 'remeda';
 import type { ItemCard } from '../actor/components/character-views/components/cards/generic/item-card';
+import type { Character } from '../actor/proxies/character';
 import { ItemType } from '../entity-types';
 import type { ItemProxy } from './item';
 import type { Psi } from './proxies/psi';
@@ -234,12 +235,14 @@ export const renderItemCard = (
     allowDrag = false,
     handleDragStart = noop,
     unexpandedContent,
+    character,
   }: Pick<
     Partial<ItemCard>,
     'expanded' | 'noAnimate' | 'animateInitial' | 'allowDrag'
   > & {
     handleDragStart?: (ev: DragEvent) => void;
     unexpandedContent?: TemplateResult;
+    character: Character;
   },
 ) => {
   const unexpanded = unexpandedContent
@@ -247,6 +250,7 @@ export const renderItemCard = (
     : nothing;
   if (item.type === ItemType.Sleight) {
     return html`<sleight-card
+      .character=${character}
       .item=${item}
       ?expanded=${expanded}
       ?noAnimate=${noAnimate}
@@ -259,6 +263,7 @@ export const renderItemCard = (
   if (item.type === ItemType.PhysicalTech) {
     return html`
       <physical-tech-card
+        .character=${character}
         .item=${item}
         ?expanded=${expanded}
         ?noAnimate=${noAnimate}
@@ -273,6 +278,7 @@ export const renderItemCard = (
   //   return html`
   //     <weapon-card
   //       .item=${item}
+  //.character=${character}
   //       ?expanded=${expanded}
   //       ?noAnimate=${noAnimate}
   //       ?animateInitial=${animateInitial}
@@ -286,6 +292,7 @@ export const renderItemCard = (
     return html`
       <consumable-card
         .item=${item}
+        .character=${character}
         ?expanded=${expanded}
         ?noAnimate=${noAnimate}
         ?animateInitial=${animateInitial}
@@ -300,6 +307,7 @@ export const renderItemCard = (
   return html`
     <item-card
       .item=${item}
+      .character=${character}
       ?expanded=${expanded}
       ?noAnimate=${noAnimate}
       ?animateInitial=${animateInitial}

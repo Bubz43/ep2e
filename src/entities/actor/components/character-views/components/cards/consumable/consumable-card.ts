@@ -18,7 +18,6 @@ import { localImage } from '@src/utility/images';
 import { customElement, html, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { compact } from 'remeda';
-import { requestCharacter } from '../../../character-request-event';
 import {
   openCoatingMenu,
   openExplosiveSubstanceMenu,
@@ -70,9 +69,8 @@ export class ConsumableCard extends ItemCardBase {
   }
 
   private addictionTest() {
-    const { character } = requestCharacter(this);
+    const { character } = this;
 
-    if (!character) return;
     if (this.item.type === ItemType.Substance) {
       const { addiction, addictionMod } = this.item.epData;
       AptitudeCheckControls.openWindow({
@@ -113,23 +111,19 @@ export class ConsumableCard extends ItemCardBase {
   }
 
   private openCoatingSelectMenu(ev: MouseEvent) {
-    const { character } = requestCharacter(this);
-    character &&
-      'coating' in this.item &&
-      openCoatingMenu(ev, character, this.item);
+    const { character } = this;
+    'coating' in this.item && openCoatingMenu(ev, character, this.item);
   }
 
   private openExplosizeSubstanceMenu(ev: MouseEvent) {
-    const { character } = requestCharacter(this);
-    character &&
-      this.item.type === ItemType.Explosive &&
+    const { character } = this;
+    this.item.type === ItemType.Explosive &&
       openExplosiveSubstanceMenu(ev, character, this.item);
   }
 
   private openFirearmAmmoPayloadMenu(ev: MouseEvent) {
-    const { character } = requestCharacter(this);
-    character &&
-      this.item.type === ItemType.FirearmAmmo &&
+    const { character } = this;
+    this.item.type === ItemType.FirearmAmmo &&
       openFirearmAmmoPayloadMenu(ev, character, this.item);
   }
 

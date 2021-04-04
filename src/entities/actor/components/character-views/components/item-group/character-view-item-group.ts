@@ -355,6 +355,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
             animateInitial: this.hasExpanded,
             allowDrag: true,
             handleDragStart: this.dragItemCard,
+            character: this.character,
           }),
         )}
       </sl-animated-list>

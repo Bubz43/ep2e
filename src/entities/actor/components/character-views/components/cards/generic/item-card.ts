@@ -6,7 +6,6 @@ import { tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import { customElement, html, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
-import { requestCharacter } from '../../../character-request-event';
 import {
   openCoatingMenu,
   openSprayWeaponPayloadMenu,
@@ -23,10 +22,8 @@ export class ItemCard extends ItemCardBase {
   @property({ attribute: false }) item!: ItemProxy;
 
   private openCoatingSelectMenu(ev: MouseEvent) {
-    const { character } = requestCharacter(this);
-    character &&
-      'coating' in this.item &&
-      openCoatingMenu(ev, character, this.item);
+    const { character } = this;
+    'coating' in this.item && openCoatingMenu(ev, character, this.item);
   }
 
   private openShapeMenu(ev: MouseEvent) {
@@ -43,9 +40,8 @@ export class ItemCard extends ItemCardBase {
   }
 
   private openSprayCoatingMenu(ev: MouseEvent) {
-    const { character } = requestCharacter(this);
-    character &&
-      this.item.type === ItemType.SprayWeapon &&
+    const { character } = this;
+    this.item.type === ItemType.SprayWeapon &&
       this.item.payloadUse === SprayPayload.CoatAmmunition &&
       openSprayWeaponPayloadMenu(ev, character, this.item);
   }

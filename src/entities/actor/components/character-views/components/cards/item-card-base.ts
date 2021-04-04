@@ -1,4 +1,5 @@
 import { LazyRipple } from '@src/components/mixins/lazy-ripple';
+import type { Character } from '@src/entities/actor/proxies/character';
 import type { ItemProxy } from '@src/entities/item/item';
 import { itemMenuOptions } from '@src/entities/item/item-views';
 import { localize } from '@src/foundry/localization';
@@ -22,6 +23,8 @@ export abstract class ItemCardBase extends LazyRipple(LitElement) {
   static get styles() {
     return [styles];
   }
+
+  @property({ attribute: false }) character!: Character;
 
   @property({ type: Boolean, reflect: true }) expanded = false;
 

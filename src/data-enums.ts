@@ -171,12 +171,6 @@ export enum SleightTarget {
   PsiUser = 'psiUser',
 }
 
-export enum SleightSpecial {
-  Attack = 'attack',
-  Heal = 'heal',
-  MentalArmor = 'mentalArmor',
-}
-
 export enum SurpriseState {
   None = 'none',
   Alerted = 'alerted',

@@ -170,6 +170,7 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
             return repeat(group, idProp, (weapon) =>
               renderItemCard(weapon, {
                 unexpandedContent: renderItemAttacks(weapon),
+                character: this.character,
               }),
             );
           },

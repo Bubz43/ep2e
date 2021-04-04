@@ -11,7 +11,6 @@ import type { EffectCreatedEvent } from '@src/features/components/effect-creator
 import { EffectType } from '@src/features/effects';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
-import { capitalize } from '@src/foundry/misc-helpers';
 import {
   customElement,
   html,
@@ -23,7 +22,7 @@ import { mapToObj } from 'remeda';
 import { ItemFormBase } from '../item-form-base';
 import styles from './sleight-form.scss';
 
-const opsGroups = ['effectsOnSelf', 'effectsOnTarget'] as const;
+const opsGroups = ['toSelf', 'toTarget'] as const;
 
 @customElement('sleight-form')
 export class SleightForm extends ItemFormBase {
@@ -35,23 +34,22 @@ export class SleightForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: Sleight;
 
-  @internalProperty() private effectGroup: 'onSelf' | 'onTarget' = 'onSelf';
+  @internalProperty() private effectGroup: typeof opsGroups[number] = 'toSelf';
 
   private readonly effectsOps = mapToObj(opsGroups, (group) => [
     group,
-    addUpdateRemoveFeature(() => this.item.updater.path('data', group).commit),
+    addUpdateRemoveFeature(
+      () => this.item.updater.path('data', group, 'effects').commit,
+    ),
   ]);
 
   update(changedProps: PropertyValues<this>) {
-    if (this.item.isChi) this.effectGroup = 'onSelf';
+    if (this.item.isChi) this.effectGroup = 'toSelf';
     super.update(changedProps);
   }
 
   private addCreatedEffect(ev: EffectCreatedEvent) {
-    this.effectsOps[`effects${capitalize(this.effectGroup)}` as const].add(
-      {},
-      ev.effect,
-    );
+    this.effectsOps[this.effectGroup].add({}, ev.effect);
   }
 
   render() {
@@ -87,7 +85,7 @@ export class SleightForm extends ItemFormBase {
             <sl-header
               heading=${isChi
                 ? `${localize('passive')} ${localize('effects')}`
-                : `${localize('effects')} ${localize('on')} ${localize(
+                : `${localize('effects')} ${localize('to')} ${localize(
                     'self',
                   )}`}
             >
@@ -101,7 +99,7 @@ export class SleightForm extends ItemFormBase {
 
             <item-form-effects-list
               .effects=${effectsOnSelf}
-              .operations=${this.effectsOps.effectsOnSelf}
+              .operations=${this.effectsOps.toSelf}
               ?disabled=${disabled}
             ></item-form-effects-list>
           </section>
@@ -120,13 +118,14 @@ export class SleightForm extends ItemFormBase {
   private renderEffectCreator() {
     return html`
       <h3>${localize('add')} ${localize('effect')}</h3>
-      ${renderAutoForm({
-        props: { group: this.effectGroup },
-        classes: 'effect-group-form',
-        disabled: !this.item.isChi,
-        update: ({ group }) => group && (this.effectGroup = group),
-        fields: ({ group }) => renderRadioFields(group, ['onSelf', 'onTarget']),
-      })}
+      ${this.item.isChi
+        ? ''
+        : renderAutoForm({
+            props: { group: this.effectGroup },
+            classes: 'effect-group-form',
+            update: ({ group }) => group && (this.effectGroup = group),
+            fields: ({ group }) => renderRadioFields(group, opsGroups),
+          })}
 
       <effect-creator
         .effectTypes=${enumValues(EffectType)}

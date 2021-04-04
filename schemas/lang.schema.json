@@ -3077,6 +3077,12 @@
             "on": {
               "type": "string"
             },
+            "onSelf": {
+              "type": "string"
+            },
+            "onTarget": {
+              "type": "string"
+            },
             "onTest": {
               "type": "string"
             },
@@ -5672,6 +5678,8 @@
             "off",
             "offline",
             "on",
+            "onSelf",
+            "onTarget",
             "onTest",
             "onboardALI",
             "oneHand",

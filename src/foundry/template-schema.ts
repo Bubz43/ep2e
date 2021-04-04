@@ -42,7 +42,6 @@ import type {
   RechargeType,
   ShellType,
   SleightDuration,
-  SleightSpecial,
   SleightType,
   SoftwareType,
   SprayPayload,
@@ -353,6 +352,21 @@ type TraitData = {
   };
 };
 
+type SleightEffects = {
+  effects: StringID<Effect>[];
+  scaleEffectsOnSuperior: boolean;
+  mentalArmor: {
+    apply: boolean;
+    formula: string;
+    divisor: number;
+  };
+  attack: SleightAttackData;
+  heal: {
+    amount: string;
+    health: HealthType;
+  };
+};
+
 type SleightData = {
   templates: UseItemTemplate<['Common']>;
   sleightType: SleightType;
@@ -363,21 +377,9 @@ type SleightData = {
    */
   infectionMod: number;
   action: ActionType;
-  effectsOnTarget: StringID<Effect>[];
-  effectsOnSelf: StringID<Effect>[];
-  // effects: StringID<Effect>[];
-  // TODO: Maybe describe what happens when push
-  scaleEffectsOnSuperior: boolean;
-  special: '' | SleightSpecial;
-  mentalArmor: {
-    formula: string;
-    divisor: number;
-  };
-  attack: SleightAttackData;
-  heal: {
-    amount: string;
-    health: HealthType;
-  };
+  toTarget: SleightEffects;
+  toSelf: SleightEffects;
+
   status: {
     sustained: boolean;
     pushDuration: number;

@@ -1,4 +1,4 @@
-import { SleightSpecial, SleightType } from '@src/data-enums';
+import { SleightType } from '@src/data-enums';
 import type { AddEffects } from '@src/entities/applied-effects';
 import type { ItemType } from '@src/entities/entity-types';
 import { createEffect, multiplyEffectModifier } from '@src/features/effects';
@@ -35,12 +35,20 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
     return this.sleightType === SleightType.Chi;
   }
 
+  get toSelf() {
+    return this.epData.toSelf;
+  }
+
+  get toTarget() {
+    return this.epData.toTarget;
+  }
+
   get effectsOnSelf() {
-    return this.epData.effectsOnSelf;
+    return this.epData.toSelf.effects;
   }
 
   get effectsOnTarget() {
-    return this.epData.effectsOnTarget;
+    return this.epData.toTarget.effects;
   }
 
   get status() {
@@ -63,36 +71,37 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
     });
   }
 
-  getPassiveMentalArmor(willpower: number) {
-    return Math.round(willpower / this.epData.mentalArmor.divisor || 1);
-  }
-
-  get appliesArmor() {
-    return this.epData.special === SleightSpecial.MentalArmor;
+  getPassiveMentalArmor(willpower: number, divisor: number) {
+    return Math.round(willpower / divisor || 1);
   }
 
   getPassiveEffects(willpower: number, enhanced: boolean): AddEffects {
     const { effectsOnSelf } = this;
     const pushed = enhanced || this.isPushed;
-    const effects = this.appliesArmor
+    const effects = this.toSelf.mentalArmor.apply
       ? [
           ...effectsOnSelf,
           createEffect.armor({
-            mental: this.getPassiveMentalArmor(willpower),
+            mental: this.getPassiveMentalArmor(
+              willpower,
+              this.toSelf.mentalArmor.divisor,
+            ),
             concealable: true,
             layerable: true,
           }),
         ]
       : effectsOnSelf;
     return {
-      source: `${this.name} ${pushed ? localize('pushed') : ''}`,
+      source: `${this.name} ${
+        pushed ? `(${localize(enhanced ? 'enhanced' : 'pushed')})` : ''
+      }`,
       effects: pushed
         ? effects.map((effect) => multiplyEffectModifier(effect, 2))
         : effects,
     };
   }
 
-  getDataCopy(reset: boolean) {
+  getDataCopy(reset?: boolean) {
     const copy = super.getDataCopy(reset);
     copy.data.status = {
       sustained: false,
