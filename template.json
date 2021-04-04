@@ -497,34 +497,65 @@
       "infectionMod": 1,
       "sleightType": "gamma",
       "action": "complex",
-      "effectsOnSelf": [],
-      "effectsOnTarget": [],
-      "scaleEffectsOnSuperior": false,
-      "attack": {
-        "aptitudeCheckInfo": {
-          "armorAsModifier": "",
-          "check": "",
-          "checkModifier": 0,
-          "checkFailure": [],
-          "checkSuccess": [],
-          "criticalCheckFailure": []
+      "toTarget": {
+        "effects": [],
+        "scaleEffectsOnSuperior": false,
+        "attack": {
+          "aptitudeCheckInfo": {
+            "armorAsModifier": "",
+            "check": "",
+            "checkModifier": 0,
+            "checkFailure": [],
+            "checkSuccess": [],
+            "criticalCheckFailure": []
+          },
+          "attackTraits": [],
+          "damageFormula": "",
+          "damageType": "mental",
+          "mentalArmor": false,
+          "notes": "",
+          "perTurn": false
         },
-        "attackTraits": [],
-        "damageFormula": "",
-        "damageType": "mental",
-        "mentalArmor": false,
-        "notes": "",
-        "perTurn": false
+        "heal": {
+          "amount": "1d6",
+          "health": "mental"
+        },
+        "mentalArmor": {
+          "apply": false,
+          "divisor": 3,
+          "formula": "1d6"
+        }
       },
-      "heal": {
-        "amount": "1d6",
-        "health": "mental"
+      "toSelf": {
+        "effects": [],
+        "scaleEffectsOnSuperior": false,
+        "attack": {
+          "aptitudeCheckInfo": {
+            "armorAsModifier": "",
+            "check": "",
+            "checkModifier": 0,
+            "checkFailure": [],
+            "checkSuccess": [],
+            "criticalCheckFailure": []
+          },
+          "attackTraits": [],
+          "damageFormula": "",
+          "damageType": "mental",
+          "mentalArmor": false,
+          "notes": "",
+          "perTurn": false
+        },
+        "heal": {
+          "amount": "1d6",
+          "health": "mental"
+        },
+        "mentalArmor": {
+          "apply": false,
+          "divisor": 3,
+          "formula": "1d6"
+        }
       },
-      "mentalArmor": {
-        "divisor": 3,
-        "formula": "1d6"
-      },
-      "special": "",
+
       "status": {
         "sustained": false,
         "pushDuration": 0,

@@ -1,4 +1,7 @@
 import {
+  renderFormulaField,
+  renderLabeledCheckbox,
+  renderNumberInput,
   renderRadioFields,
   renderSelectField,
 } from '@src/components/field/fields';
@@ -53,7 +56,15 @@ export class SleightForm extends ItemFormBase {
   }
 
   render() {
-    const { updater, type, isChi, effectsOnSelf, effectsOnTarget } = this.item;
+    const {
+      updater,
+      type,
+      isChi,
+      effectsOnSelf,
+      effectsOnTarget,
+      toSelf,
+      toTarget,
+    } = this.item;
     const { disabled } = this;
     return html`
       <entity-form-layout>
@@ -96,6 +107,25 @@ export class SleightForm extends ItemFormBase {
                 ?disabled=${disabled}
               ></mwc-icon-button
             ></sl-header>
+
+            ${renderUpdaterForm(updater.path('data', 'toSelf', 'mentalArmor'), {
+              classes: 'mental-armor-form',
+              fields: ({ apply, divisor, formula }) => [
+                renderLabeledCheckbox({
+                  ...apply,
+                  label: `${localize('apply')} ${localize('mentalArmor')}`,
+                }),
+                apply.value
+                  ? isChi
+                    ? html`<mwc-formfield label="@${localize('wil')} / "
+                        >${renderNumberInput(divisor, {
+                          min: 1,
+                        })}</mwc-formfield
+                      >`
+                    : renderFormulaField(formula)
+                  : '',
+              ],
+            })}
 
             <item-form-effects-list
               .effects=${effectsOnSelf}
