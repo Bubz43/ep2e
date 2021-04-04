@@ -245,6 +245,17 @@ export const renderItemCard = (
   const unexpanded = unexpandedContent
     ? html`<div slot="unexpanded">${unexpandedContent}</div>`
     : nothing;
+  if (item.type === ItemType.Sleight) {
+    return html`<sleight-card
+      .item=${item}
+      ?expanded=${expanded}
+      ?noAnimate=${noAnimate}
+      ?animateInitial=${animateInitial}
+      ?allowDrag=${allowDrag}
+      @dragstart=${handleDragStart}
+      >${unexpanded}</sleight-card
+    >`;
+  }
   if (item.type === ItemType.PhysicalTech) {
     return html`
       <physical-tech-card
@@ -285,6 +296,7 @@ export const renderItemCard = (
         >${unexpanded}</consumable-card
       >
     `;
+
   return html`
     <item-card
       .item=${item}

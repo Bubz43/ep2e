@@ -91,6 +91,7 @@ import { CharacterViewAttacksSection } from './entities/actor/components/charact
 import { ConsumableCard } from './entities/actor/components/character-views/components/cards/consumable/consumable-card';
 import { ItemCard } from './entities/actor/components/character-views/components/cards/generic/item-card';
 import { PhysicalTechCard } from './entities/actor/components/character-views/components/cards/physical-tech/physical-tech-card';
+import { SleightCard } from './entities/actor/components/character-views/components/cards/sleight/sleight-card';
 import { WeaponCard } from './entities/actor/components/character-views/components/cards/weapon/weapon-card';
 import { CharacterViewConditions } from './entities/actor/components/character-views/components/conditions/character-view-conditions';
 import { CharacterViewDrawerHeading } from './entities/actor/components/character-views/components/drawer-heading/character-view-drawer-heading';
@@ -262,6 +263,7 @@ ItemCard;
 ConsumableCard;
 PhysicalTechCard;
 WeaponCard;
+SleightCard;
 
 // Ego
 EgoForm;

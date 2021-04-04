@@ -389,6 +389,7 @@ export class Ego {
         } else this.itemOperations.add(proxy.getDataCopy(true));
       }
     } else if (proxy.type === ItemType.Sleight && this.allowSleights) {
+      // TODO only allow sleights that match psi level
       this.itemOperations.add(proxy.getDataCopy(true));
     } else if (proxy.type === ItemType.Psi && this.allowSleights) {
       if (this.psi)
