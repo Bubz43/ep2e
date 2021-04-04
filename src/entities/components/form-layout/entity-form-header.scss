@@ -10,12 +10,11 @@
   padding: 0.75rem 1.6rem 0.5rem;
   color: var(--color-text);
   grid-template-areas:
-    'avatar form form'
-    'avatar tags type'
-    'path path path';
+    'avatar form form form'
+    'avatar tags type settings'
+    'path path path path';
   // gap: 0 0.5rem;
-  grid-template-columns: min-content 1fr;
-  // box-shadow: 0 5px 5px -5px black;
+  grid-template-columns: min-content 1fr auto auto;
   align-items: center;
 
   row-gap: 0.2rem;
@@ -27,7 +26,16 @@
     letter-spacing: 0.5px;
     border-radius: 2px;
     @include animate-css(fadeIn, 200ms);
+    @include truncate(250px);
+    margin: 0.125rem;
   }
+}
+
+slot[name='settings'] {
+  grid-area: settings;
+  display: block;
+  --mdc-icon-button-size: 1.75rem;
+  --mdc-icon-size: 1.5rem;
 }
 
 .path {
@@ -60,12 +68,10 @@
   grid-area: tags;
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-auto-flow: column;
-  gap: 0.5rem;
+  display: flex;
+  flex-flow: row wrap;
   align-items: center;
   list-style: none;
-  grid-auto-columns: min-content;
   font-size: 13px;
   font-weight: lighter;
   align-self: end;

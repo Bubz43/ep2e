@@ -193,7 +193,8 @@ export class MeleeWeaponForm extends ItemFormBase {
       coating,
       payload,
       exoticSkillName,
-      path,
+      permanentCoating,
+      damageIrrespectiveOfSize,
     } = this.item;
     const { disabled } = this;
     return html`
@@ -205,6 +206,36 @@ export class MeleeWeaponForm extends ItemFormBase {
           type=${localize(type)}
           ?disabled=${disabled}
         >
+          ${damageIrrespectiveOfSize
+            ? html`<li
+                slot="tag"
+                @mouseover=${tooltip.fromData}
+                data-tooltip=${localize(
+                  'DESCRIPTIONS',
+                  'IgnoreSizeMeleeDamageModifiers',
+                )}
+              >
+                ${localize('damageIrrespectiveOfSize')}
+              </li>`
+            : ''}
+          ${permanentCoating
+            ? html`<li
+                slot="tag"
+                @mouseover=${tooltip.fromData}
+                data-tooltip=${localize(
+                  'DESCRIPTIONS',
+                  'PermanentMeleeCoatings',
+                )}
+              >
+                ${localize('permanentCoating')}
+              </li>`
+            : ''}
+          <mwc-icon-button
+            slot="settings"
+            icon="settings"
+            ?disabled=${disabled}
+            @click=${this.setDrawerFromEvent(this.renderOverridesForm)}
+          ></mwc-icon-button>
         </entity-form-header>
 
         ${renderUpdaterForm(updater.path('data'), {
@@ -385,6 +416,23 @@ export class MeleeWeaponForm extends ItemFormBase {
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
+    `;
+  }
+
+  private renderOverridesForm() {
+    return html`
+      <h3>${localize('overrides')}</h3>
+      ${renderUpdaterForm(this.item.updater.path('data', 'overrides'), {
+        fields: ({ permanentCoating, damageIrrespectiveOfSize }) => [
+          renderLabeledCheckbox(permanentCoating),
+          html`<p>${localize('DESCRIPTIONS', 'PermanentMeleeCoatings')}</p>`,
+
+          renderLabeledCheckbox(damageIrrespectiveOfSize),
+          html`<p>
+            ${localize('DESCRIPTIONS', 'IgnoreSizeMeleeDamageModifiers')}
+          </p>`,
+        ],
+      })}
     `;
   }
 

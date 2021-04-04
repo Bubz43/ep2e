@@ -485,6 +485,10 @@ type MeleeWeaponData = {
   exoticSkill: string;
   hasSecondaryAttack: boolean;
   acceptsPayload: boolean;
+  overrides: {
+    damageIrrespectiveOfSize: boolean;
+    permanentCoating: boolean;
+  };
 };
 
 type ThrownWeaponData = {

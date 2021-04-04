@@ -149,6 +149,7 @@ export type MeleeWeaponSettings = {
   extraWeapons?: number;
   calledShot?: CalledShot | null;
   oneHanded?: boolean;
+  damageIrrespectiveOfSize?: boolean;
 };
 
 export const formulasFromMeleeSettings = ({

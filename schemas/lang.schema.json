@@ -35,6 +35,9 @@
                 "EndCombat": {
                   "type": "string"
                 },
+                "IgnoreSizeMeleeDamageModifiers": {
+                  "type": "string"
+                },
                 "NonElectronicSubstanceOnly": {
                   "type": "string"
                 },
@@ -63,6 +66,9 @@
                   "type": "string"
                 },
                 "PermanentEgoMeltdown": {
+                  "type": "string"
+                },
+                "PermanentMeleeCoatings": {
                   "type": "string"
                 },
                 "PermanentlyCorrupted": {
@@ -167,7 +173,9 @@
                 "SuperiorResultTime",
                 "SuperiorResultCovertness",
                 "SuperiorResultDamage",
-                "EndCombat"
+                "EndCombat",
+                "IgnoreSizeMeleeDamageModifiers",
+                "PermanentMeleeCoatings"
               ],
               "type": "object"
             },
@@ -1417,6 +1425,9 @@
               "type": "string"
             },
             "damageFormula": {
+              "type": "string"
+            },
+            "damageIrrespectiveOfSize": {
               "type": "string"
             },
             "damageOverTime": {
@@ -3138,6 +3149,9 @@
             "override": {
               "type": "string"
             },
+            "overrides": {
+              "type": "string"
+            },
             "overview": {
               "type": "string"
             },
@@ -3201,6 +3215,9 @@
             "perceive": {
               "type": "string"
             },
+            "permanentCoating": {
+              "type": "string"
+            },
             "permanently": {
               "type": "string"
             },
@@ -3241,6 +3258,9 @@
               "type": "string"
             },
             "physicalTech": {
+              "type": "string"
+            },
+            "pickOne": {
               "type": "string"
             },
             "picker": {
@@ -5102,6 +5122,7 @@
             "damageAgainstStructures",
             "damageApplier",
             "damageFormula",
+            "damageIrrespectiveOfSize",
             "damageOverTime",
             "damageRepair",
             "damageType",
@@ -5675,6 +5696,7 @@
             "over",
             "overburdened",
             "override",
+            "overrides",
             "overview",
             "own",
             "ownHealing",
@@ -5696,6 +5718,7 @@
             "per",
             "perTurn",
             "perceive",
+            "permanentCoating",
             "permanently",
             "personal",
             "personalArmorUsed",
@@ -5710,6 +5733,7 @@
             "physicalService",
             "physicalServices",
             "physicalTech",
+            "pickOne",
             "picker",
             "pierce",
             "pilot",

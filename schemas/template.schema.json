@@ -571,6 +571,15 @@
       ],
       "type": "object"
     },
+    "CommonPilotField": {
+      "enum": [
+        "air",
+        "ground",
+        "nautical",
+        "space"
+      ],
+      "type": "string"
+    },
     "Complexity": {
       "enum": [
         "minor",
@@ -2480,6 +2489,20 @@
                           "movementType": {
                             "$ref": "#/definitions/Movement"
                           },
+                          "skill": {
+                            "anyOf": [
+                              {
+                                "$ref": "#/definitions/SkillType"
+                              },
+                              {
+                                "$ref": "#/definitions/CommonPilotField"
+                              },
+                              {
+                                "const": "",
+                                "type": "string"
+                              }
+                            ]
+                          },
                           "type": {
                             "const": "movement",
                             "type": "string"
@@ -3037,6 +3060,22 @@
                 "improvised": {
                   "type": "boolean"
                 },
+                "overrides": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "damageIrrespectiveOfSize": {
+                      "type": "boolean"
+                    },
+                    "permanentCoating": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "damageIrrespectiveOfSize",
+                    "permanentCoating"
+                  ],
+                  "type": "object"
+                },
                 "primaryAttack": {
                   "$ref": "#/definitions/MeleeWeaponAttackData"
                 },
@@ -3094,6 +3133,7 @@
                 "exoticSkill",
                 "hasSecondaryAttack",
                 "improvised",
+                "overrides",
                 "primaryAttack",
                 "reachBonus",
                 "secondaryAttack",
@@ -3622,6 +3662,20 @@
                           "movementType": {
                             "$ref": "#/definitions/Movement"
                           },
+                          "skill": {
+                            "anyOf": [
+                              {
+                                "$ref": "#/definitions/SkillType"
+                              },
+                              {
+                                "$ref": "#/definitions/CommonPilotField"
+                              },
+                              {
+                                "const": "",
+                                "type": "string"
+                              }
+                            ]
+                          },
                           "type": {
                             "const": "movement",
                             "type": "string"
@@ -4115,6 +4169,20 @@
                           "movementType": {
                             "$ref": "#/definitions/Movement"
                           },
+                          "skill": {
+                            "anyOf": [
+                              {
+                                "$ref": "#/definitions/SkillType"
+                              },
+                              {
+                                "$ref": "#/definitions/CommonPilotField"
+                              },
+                              {
+                                "const": "",
+                                "type": "string"
+                              }
+                            ]
+                          },
                           "type": {
                             "const": "movement",
                             "type": "string"
@@ -4601,448 +4669,6 @@
                 "duration": {
                   "$ref": "#/definitions/SleightDuration"
                 },
-                "effects": {
-                  "items": {
-                    "anyOf": [
-                      {
-                        "additionalProperties": false,
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "modifier": {
-                            "type": "number"
-                          },
-                          "type": {
-                            "const": "initiative",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "modifier",
-                          "type"
-                        ],
-                        "type": "object"
-                      },
-                      {
-                        "additionalProperties": false,
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "modifier": {
-                            "type": "number"
-                          },
-                          "pool": {
-                            "enum": [
-                              "insight",
-                              "moxie",
-                              "vigor",
-                              "flex"
-                            ],
-                            "type": "string"
-                          },
-                          "type": {
-                            "const": "pool",
-                            "type": "string"
-                          },
-                          "usabilityModification": {
-                            "anyOf": [
-                              {
-                                "const": "",
-                                "type": "string"
-                              },
-                              {
-                                "$ref": "#/definitions/PoolEffectUsability"
-                              }
-                            ]
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "modifier",
-                          "pool",
-                          "type",
-                          "usabilityModification"
-                        ],
-                        "type": "object"
-                      },
-                      {
-                        "additionalProperties": false,
-                        "properties": {
-                          "description": {
-                            "type": "string"
-                          },
-                          "id": {
-                            "type": "string"
-                          },
-                          "type": {
-                            "const": "misc",
-                            "type": "string"
-                          },
-                          "unique": {
-                            "anyOf": [
-                              {
-                                "const": "",
-                                "type": "string"
-                              },
-                              {
-                                "$ref": "#/definitions/UniqueEffectType"
-                              }
-                            ]
-                          }
-                        },
-                        "required": [
-                          "description",
-                          "id",
-                          "type",
-                          "unique"
-                        ],
-                        "type": "object"
-                      },
-                      {
-                        "additionalProperties": false,
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "modifier": {
-                            "type": "number"
-                          },
-                          "requirement": {
-                            "type": "string"
-                          },
-                          "tags": {
-                            "items": {
-                              "$ref": "#/definitions/Tag"
-                            },
-                            "type": "array"
-                          },
-                          "toOpponent": {
-                            "type": "boolean"
-                          },
-                          "type": {
-                            "const": "successTest",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "modifier",
-                          "requirement",
-                          "tags",
-                          "toOpponent",
-                          "type"
-                        ],
-                        "type": "object"
-                      },
-                      {
-                        "additionalProperties": false,
-                        "properties": {
-                          "health": {
-                            "$ref": "#/definitions/HealthType"
-                          },
-                          "id": {
-                            "type": "string"
-                          },
-                          "modifier": {
-                            "type": "number"
-                          },
-                          "stat": {
-                            "$ref": "#/definitions/HealthStat"
-                          },
-                          "type": {
-                            "const": "health",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "health",
-                          "id",
-                          "modifier",
-                          "stat",
-                          "type"
-                        ],
-                        "type": "object"
-                      },
-                      {
-                        "additionalProperties": false,
-                        "properties": {
-                          "concealable": {
-                            "type": "boolean"
-                          },
-                          "energy": {
-                            "type": "number"
-                          },
-                          "id": {
-                            "type": "string"
-                          },
-                          "kinetic": {
-                            "type": "number"
-                          },
-                          "layerable": {
-                            "type": "boolean"
-                          },
-                          "mental": {
-                            "type": "number"
-                          },
-                          "mesh": {
-                            "type": "number"
-                          },
-                          "type": {
-                            "const": "armor",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "concealable",
-                          "energy",
-                          "id",
-                          "kinetic",
-                          "layerable",
-                          "mental",
-                          "mesh",
-                          "type"
-                        ],
-                        "type": "object"
-                      },
-                      {
-                        "additionalProperties": false,
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "modifier": {
-                            "type": "number"
-                          },
-                          "recharge": {
-                            "$ref": "#/definitions/RechargeType"
-                          },
-                          "stat": {
-                            "$ref": "#/definitions/RechargeStat"
-                          },
-                          "type": {
-                            "const": "recharge",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "modifier",
-                          "recharge",
-                          "stat",
-                          "type"
-                        ],
-                        "type": "object"
-                      },
-                      {
-                        "additionalProperties": false,
-                        "properties": {
-                          "cummulative": {
-                            "type": "boolean"
-                          },
-                          "id": {
-                            "type": "string"
-                          },
-                          "modifier": {
-                            "type": "number"
-                          },
-                          "subtype": {
-                            "$ref": "#/definitions/DurationEffectTarget"
-                          },
-                          "taskType": {
-                            "anyOf": [
-                              {
-                                "$ref": "#/definitions/ActionSubtype"
-                              },
-                              {
-                                "const": "",
-                                "type": "string"
-                              }
-                            ]
-                          },
-                          "type": {
-                            "const": "duration",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "modifier",
-                          "subtype",
-                          "taskType",
-                          "type"
-                        ],
-                        "type": "object"
-                      },
-                      {
-                        "additionalProperties": false,
-                        "properties": {
-                          "damageAmount": {
-                            "type": "string"
-                          },
-                          "id": {
-                            "type": "string"
-                          },
-                          "interval": {
-                            "type": "number"
-                          },
-                          "stat": {
-                            "$ref": "#/definitions/HealOverTimeTarget"
-                          },
-                          "technologicallyAided": {
-                            "type": "boolean"
-                          },
-                          "type": {
-                            "const": "healthRecovery",
-                            "type": "string"
-                          },
-                          "woundAmount": {
-                            "type": "number"
-                          }
-                        },
-                        "required": [
-                          "damageAmount",
-                          "id",
-                          "interval",
-                          "stat",
-                          "technologicallyAided",
-                          "type",
-                          "woundAmount"
-                        ],
-                        "type": "object"
-                      },
-                      {
-                        "additionalProperties": false,
-                        "properties": {
-                          "dvModifier": {
-                            "type": "string"
-                          },
-                          "id": {
-                            "type": "string"
-                          },
-                          "reachBonus": {
-                            "type": "number"
-                          },
-                          "type": {
-                            "const": "melee",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "dvModifier",
-                          "id",
-                          "type"
-                        ],
-                        "type": "object"
-                      },
-                      {
-                        "additionalProperties": false,
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "negativeRangeModifiersMultiplier": {
-                            "type": "number"
-                          },
-                          "type": {
-                            "const": "ranged",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "negativeRangeModifiersMultiplier",
-                          "type"
-                        ],
-                        "type": "object"
-                      },
-                      {
-                        "additionalProperties": false,
-                        "properties": {
-                          "aptitudeMultiplier": {
-                            "type": "number"
-                          },
-                          "field": {
-                            "type": "string"
-                          },
-                          "id": {
-                            "type": "string"
-                          },
-                          "linkedAptitude": {
-                            "$ref": "#/definitions/AptitudeType"
-                          },
-                          "skillType": {
-                            "anyOf": [
-                              {
-                                "$ref": "#/definitions/SkillType"
-                              },
-                              {
-                                "$ref": "#/definitions/FieldSkillType"
-                              }
-                            ]
-                          },
-                          "specialization": {
-                            "type": "string"
-                          },
-                          "total": {
-                            "type": "number"
-                          },
-                          "type": {
-                            "const": "skill",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "aptitudeMultiplier",
-                          "field",
-                          "id",
-                          "linkedAptitude",
-                          "skillType",
-                          "specialization",
-                          "total",
-                          "type"
-                        ],
-                        "type": "object"
-                      },
-                      {
-                        "additionalProperties": false,
-                        "properties": {
-                          "base": {
-                            "type": "number"
-                          },
-                          "full": {
-                            "type": "number"
-                          },
-                          "id": {
-                            "type": "string"
-                          },
-                          "mode": {
-                            "$ref": "#/definitions/MovementEffectMode"
-                          },
-                          "movementType": {
-                            "$ref": "#/definitions/Movement"
-                          },
-                          "type": {
-                            "const": "movement",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "base",
-                          "full",
-                          "id",
-                          "mode",
-                          "movementType",
-                          "type"
-                        ],
-                        "type": "object"
-                      }
-                    ]
-                  },
-                  "type": "array"
-                },
                 "effectsOnSelf": {
                   "items": {
                     "anyOf": [
@@ -5465,6 +5091,20 @@
                           },
                           "movementType": {
                             "$ref": "#/definitions/Movement"
+                          },
+                          "skill": {
+                            "anyOf": [
+                              {
+                                "$ref": "#/definitions/SkillType"
+                              },
+                              {
+                                "$ref": "#/definitions/CommonPilotField"
+                              },
+                              {
+                                "const": "",
+                                "type": "string"
+                              }
+                            ]
                           },
                           "type": {
                             "const": "movement",
@@ -5908,6 +5548,20 @@
                           "movementType": {
                             "$ref": "#/definitions/Movement"
                           },
+                          "skill": {
+                            "anyOf": [
+                              {
+                                "$ref": "#/definitions/SkillType"
+                              },
+                              {
+                                "$ref": "#/definitions/CommonPilotField"
+                              },
+                              {
+                                "const": "",
+                                "type": "string"
+                              }
+                            ]
+                          },
                           "type": {
                             "const": "movement",
                             "type": "string"
@@ -6007,7 +5661,6 @@
                 "action",
                 "attack",
                 "duration",
-                "effects",
                 "effectsOnSelf",
                 "effectsOnTarget",
                 "heal",
@@ -6446,6 +6099,20 @@
                           },
                           "movementType": {
                             "$ref": "#/definitions/Movement"
+                          },
+                          "skill": {
+                            "anyOf": [
+                              {
+                                "$ref": "#/definitions/SkillType"
+                              },
+                              {
+                                "$ref": "#/definitions/CommonPilotField"
+                              },
+                              {
+                                "const": "",
+                                "type": "string"
+                              }
+                            ]
                           },
                           "type": {
                             "const": "movement",
@@ -6900,6 +6567,20 @@
                           },
                           "movementType": {
                             "$ref": "#/definitions/Movement"
+                          },
+                          "skill": {
+                            "anyOf": [
+                              {
+                                "$ref": "#/definitions/SkillType"
+                              },
+                              {
+                                "$ref": "#/definitions/CommonPilotField"
+                              },
+                              {
+                                "const": "",
+                                "type": "string"
+                              }
+                            ]
                           },
                           "type": {
                             "const": "movement",
@@ -7606,6 +7287,20 @@
                               "movementType": {
                                 "$ref": "#/definitions/Movement"
                               },
+                              "skill": {
+                                "anyOf": [
+                                  {
+                                    "$ref": "#/definitions/SkillType"
+                                  },
+                                  {
+                                    "$ref": "#/definitions/CommonPilotField"
+                                  },
+                                  {
+                                    "const": "",
+                                    "type": "string"
+                                  }
+                                ]
+                              },
                               "type": {
                                 "const": "movement",
                                 "type": "string"
@@ -8099,6 +7794,20 @@
                               },
                               "movementType": {
                                 "$ref": "#/definitions/Movement"
+                              },
+                              "skill": {
+                                "anyOf": [
+                                  {
+                                    "$ref": "#/definitions/SkillType"
+                                  },
+                                  {
+                                    "$ref": "#/definitions/CommonPilotField"
+                                  },
+                                  {
+                                    "const": "",
+                                    "type": "string"
+                                  }
+                                ]
                               },
                               "type": {
                                 "const": "movement",
@@ -8784,6 +8493,20 @@
                                 },
                                 "movementType": {
                                   "$ref": "#/definitions/Movement"
+                                },
+                                "skill": {
+                                  "anyOf": [
+                                    {
+                                      "$ref": "#/definitions/SkillType"
+                                    },
+                                    {
+                                      "$ref": "#/definitions/CommonPilotField"
+                                    },
+                                    {
+                                      "const": "",
+                                      "type": "string"
+                                    }
+                                  ]
                                 },
                                 "type": {
                                   "const": "movement",
@@ -10332,6 +10055,20 @@
             },
             "movementType": {
               "$ref": "#/definitions/Movement"
+            },
+            "skill": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/SkillType"
+                },
+                {
+                  "$ref": "#/definitions/CommonPilotField"
+                },
+                {
+                  "const": "",
+                  "type": "string"
+                }
+              ]
             },
             "type": {
               "const": "movement",

@@ -8,6 +8,7 @@ import { ExplosiveSettingsForm } from '@src/entities/actor/components/character-
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import { pickOrDefaultCharacter } from '@src/entities/find-entities';
 import { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
+import { Size } from '@src/features/size';
 import { SkillType } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { SkillTestControls } from '@src/success-test/components/skill-test-controls/skill-test-controls';
@@ -93,7 +94,10 @@ export class MessageMeleeAttack extends MessageElement {
       }, // TODO injected
     });
     const item = message.actor?.items?.get(weapon.id);
-    if (item?.proxy.type === ItemType.MeleeWeapon) {
+    if (
+      item?.proxy.type === ItemType.MeleeWeapon &&
+      !item.proxy.permanentCoating
+    ) {
       await item.proxy.removeCoating();
     }
     this.getUpdater('meleeAttack').commit({ appliedCoating: true });
@@ -160,7 +164,9 @@ export class MessageMeleeAttack extends MessageElement {
         heading: name ?? localize('unarmed'),
         subheadings: compact([
           localize('meleeAttack'),
-          morphSize && `${localize(morphSize)} ${localize('size')}`,
+          morphSize &&
+            morphSize !== Size.Medium &&
+            ` ${localize('user')}: ${localize(morphSize)}`,
         ]),
       },
       damage,

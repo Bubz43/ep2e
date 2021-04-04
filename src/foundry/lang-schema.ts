@@ -1465,7 +1465,10 @@ type LangEntries =
   | 'extend'
   | 'avoided'
   | 'immuneToInfluencesUntilRecharge'
-  | 'pickOne';
+  | 'pickOne'
+  | 'damageIrrespectiveOfSize'
+  | 'permanentCoating'
+  | 'overrides';
 type FullNames =
   | 'cog'
   | 'int'
@@ -1563,7 +1566,9 @@ export type DescriptionEntry =
   | 'SuperiorResultTime'
   | 'SuperiorResultCovertness'
   | 'SuperiorResultDamage'
-  | 'EndCombat';
+  | 'EndCombat'
+  | 'IgnoreSizeMeleeDamageModifiers'
+  | 'PermanentMeleeCoatings';
 
 // TODO Look into using data keys as pattern to validate json string
 export type Formatable = {

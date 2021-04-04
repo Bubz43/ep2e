@@ -5,6 +5,7 @@ import type { AttackType, MeleeWeaponAttack } from '@src/combat/attacks';
 import { meleeDamage } from '@src/combat/melee-damage';
 import { ActorType } from '@src/entities/entity-types';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
+import { Size } from '@src/features/size';
 import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas } from '@src/foundry/rolls';
 import { formatDamageType } from '@src/health/health';
@@ -31,7 +32,13 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
 
   private async createMessage(attackType: AttackType) {
     const { token, character } = requestCharacter(this);
-    const { attacks, name, hasSecondaryAttack, augmentUnarmed } = this.weapon;
+    const {
+      attacks,
+      name,
+      hasSecondaryAttack,
+      augmentUnarmed,
+      damageIrrespectiveOfSize,
+    } = this.weapon;
     const unarmedDV =
       character?.sleeve && character.sleeve.type !== ActorType.Infomorph
         ? character.sleeve.unarmedDV
@@ -52,20 +59,25 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
           ? character.sleeve.size
           : null,
       source: `${name} ${hasSecondaryAttack ? `[${attack.label}]` : ''}`,
-      settings: { attackType },
+      settings: { attackType, damageIrrespectiveOfSize },
     });
 
-    const hedaer = this.weapon.messageHeader;
+    const header = this.weapon.messageHeader;
 
     createMessage({
       data: {
         header: {
-          ...hedaer,
-          subheadings: (hedaer.subheadings || [])?.concat(
-            character?.sleeve && 'size' in character.sleeve
-              ? `${localize(character.sleeve.size)} ${localize('size')}`
+          ...header,
+          subheadings: compact([
+            header.subheadings,
+            character?.sleeve &&
+            'size' in character.sleeve &&
+            character.sleeve.size !== Size.Medium
+              ? `${localize(character.sleeve.size)} ${localize(
+                  'size',
+                )} ${localize('user')}`
               : '',
-          ),
+          ]).flat(),
         },
         meleeAttack: { weapon: this.weapon.getDataCopy(), attackType },
         damage,

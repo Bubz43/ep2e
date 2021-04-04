@@ -20,10 +20,10 @@ export type CustomAttackData = Pick<
   formulas: LabeledFormula[];
 };
 
-const attack: v.Type<CustomAttackData> = v.object({
+const attack = v.object({
   source: v.string().assert((v) => !!v.length, 'cannot be empty'),
   damageType: vEnum(HealthType),
-  armorUsed: v.array(vEnum(ArmorType)),
+  armorUsed: v.array(vEnum(ArmorType)).optional(),
   armorPiercing: v.boolean().optional(),
   reduceAVbyDV: v.boolean().optional(),
   formulas: v.array(

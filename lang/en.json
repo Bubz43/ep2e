@@ -1439,6 +1439,9 @@
     "immuneToInfluencesUntilRecharge": "Immune to influences until recharge",
     "refreshed": "Refreshed",
     "pickOne": "Pick One",
+    "damageIrrespectiveOfSize": "DV Irrespective of Size",
+    "overrides": "Overrides",
+    "permanentCoating": "Permanent Coating",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
@@ -1477,7 +1480,9 @@
       "SuperiorResultQuality": "The work is more exact (success) or more sloppy (failure). This may affect subsequent tests by +/− 10.",
       "SuperiorResultQuantity": "The test consumes fewer (success) or more (failure) materials or produces fewer or more results.",
       "SuperiorResultTime": "The action takes a shorter (success) or longer (failure) amount of time, by +/− 25%.",
-      "EndCombat": "End combat and empty turn tracker?"
+      "EndCombat": "End combat and empty turn tracker?",
+      "IgnoreSizeMeleeDamageModifiers": "Weapon will do damage as listed, without applying size modifiers, e.g., half damage with small size",
+      "PermanentMeleeCoatings": "Once applied coatings will not prompt for removal on use and will have to be manually removed."
     },
     "FULL": {
       "cog": "Cognition",

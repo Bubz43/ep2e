@@ -65,7 +65,9 @@ export const meleeDamage = ({
     ],
     compact,
     concat(attack?.rollFormulas ?? []),
-    morphSize === Size.VerySmall ? map(set('formula', '1')) : identity,
+    morphSize === Size.VerySmall && !settings.damageIrrespectiveOfSize
+      ? map(set('formula', '1'))
+      : identity,
     rollLabeledFormulas,
   );
 
@@ -82,7 +84,11 @@ export const meleeDamage = ({
     ),
     source,
     multiplier:
-      morphSize === Size.Small ? (multiplier === 2 ? 1 : 0.5) : multiplier,
+      morphSize === Size.Small && !settings.damageIrrespectiveOfSize
+        ? multiplier === 2
+          ? 1
+          : 0.5
+        : multiplier,
     rolledFormulas: rolled,
   };
 };
