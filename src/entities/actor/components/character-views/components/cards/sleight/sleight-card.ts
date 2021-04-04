@@ -1,5 +1,5 @@
 import type { Sleight } from '@src/entities/item/proxies/sleight';
-import { customElement, property, TemplateResult } from 'lit-element';
+import { customElement, html, property, TemplateResult } from 'lit-element';
 import { ItemCardBase } from '../item-card-base';
 import styles from './sleight-card.scss';
 
@@ -16,10 +16,10 @@ export class SleightCard extends ItemCardBase {
   @property({ attribute: false }) item!: Sleight;
 
   renderHeaderButtons(): TemplateResult {
-    throw new Error('Method not implemented.');
+    return html``;
   }
   renderExpandedContent(): TemplateResult {
-    throw new Error('Method not implemented.');
+    return html``;
   }
 }
 

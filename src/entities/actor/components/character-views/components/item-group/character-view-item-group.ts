@@ -262,7 +262,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
 
       case ItemGroup.ActiveSleights:
         return `${localize('psi')}-${localize(`gamma`)}${
-          this.character.psi?.level === 3 ? `/${localize('psiEpsilon')}` : ``
+          this.character.psi?.level === 3 ? `/${localize('epsilon')}` : ``
         }`;
       default:
         return localize(this.group);

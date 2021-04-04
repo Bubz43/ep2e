@@ -66,8 +66,8 @@
 
 .damage-info {
   grid-area: damage;
-  justify-self: end;
   display: flex;
+  justify-content: space-between;
   margin: 0 0.25rem;
   .regen-available {
     align-self: center;
@@ -107,13 +107,12 @@
   }
 
   & + .wounds {
-    margin-left: 0.5rem;
+    margin-left: 1rem;
   }
 }
 
 .wounds {
   display: flex;
-  min-width: 105px;
   align-items: center;
   align-self: flex-end;
   justify-content: flex-end;

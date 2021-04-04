@@ -1,5 +1,6 @@
 import { SleightType } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
+import { localize } from '@src/foundry/localization';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
 export class Sleight extends ItemProxyBase<ItemType.Sleight> {
@@ -22,5 +23,11 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
 
   get isChi() {
     return this.sleightType === SleightType.Chi;
+  }
+
+  get fullType() {
+    return `${localize('psi')}-${localize(this.sleightType)} ${localize(
+      this.type,
+    )}`;
   }
 }
