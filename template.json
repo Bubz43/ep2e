@@ -525,8 +525,11 @@
         "formula": "1d6"
       },
       "special": "",
-      "state": {
-        "sustained": false
+      "status": {
+        "sustained": false,
+        "pushDuration": 0,
+        "pushed": false,
+        "pushStartTime": 0
       }
     },
     "substance": {

@@ -367,7 +367,6 @@ type SleightData = {
   effectsOnSelf: StringID<Effect>[];
   // effects: StringID<Effect>[];
   // TODO: Maybe describe what happens when push
-  // TODO: Grant check to do x
   scaleEffectsOnSuperior: boolean;
   special: '' | SleightSpecial;
   mentalArmor: {
@@ -379,8 +378,11 @@ type SleightData = {
     amount: string;
     health: HealthType;
   };
-  state: {
+  status: {
     sustained: boolean;
+    pushDuration: number;
+    pushStartTime: number;
+    pushed: boolean;
   };
 };
 

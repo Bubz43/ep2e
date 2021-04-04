@@ -863,6 +863,12 @@ export class Character extends ActorProxyBase<ActorType.Character> {
               if (substanceItem.isChi) {
                 // TODO add sleight effects
                 this.passiveSleights.push(substanceItem);
+                this._appliedEffects.add(
+                  substanceItem.getPassiveEffects(
+                    this.ego.aptitudes.wil,
+                    !!this.ego.psi?.hasChiIncreasedEffect,
+                  ),
+                );
               } else this.activatedSleights.push(substanceItem);
             }
           }
@@ -886,7 +892,12 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         this._appliedEffects.add(item.currentEffects);
       } else if (item.type === ItemType.Sleight) {
         if (item.isChi) {
-          // TODO add sleight effects
+          this._appliedEffects.add(
+            item.getPassiveEffects(
+              this.ego.aptitudes.wil,
+              !!this.ego.psi?.hasChiIncreasedEffect,
+            ),
+          );
           this.passiveSleights.push(item);
         } else this.activatedSleights.push(item);
         egoItems.set(item.id, item);

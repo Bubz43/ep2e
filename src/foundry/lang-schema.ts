@@ -1468,7 +1468,9 @@ type LangEntries =
   | 'pickOne'
   | 'damageIrrespectiveOfSize'
   | 'permanentCoating'
-  | 'overrides';
+  | 'overrides'
+  | 'onSelf'
+  | 'onTarget';
 type FullNames =
   | 'cog'
   | 'int'

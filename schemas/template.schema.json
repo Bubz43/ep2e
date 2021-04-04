@@ -5635,15 +5635,27 @@
                     }
                   ]
                 },
-                "state": {
+                "status": {
                   "additionalProperties": false,
                   "properties": {
+                    "pushDuration": {
+                      "type": "number"
+                    },
+                    "pushStartTime": {
+                      "type": "number"
+                    },
+                    "pushed": {
+                      "type": "boolean"
+                    },
                     "sustained": {
                       "type": "boolean"
                     }
                   },
                   "required": [
-                    "sustained"
+                    "sustained",
+                    "pushDuration",
+                    "pushStartTime",
+                    "pushed"
                   ],
                   "type": "object"
                 },
@@ -5669,7 +5681,7 @@
                 "scaleEffectsOnSuperior",
                 "sleightType",
                 "special",
-                "state",
+                "status",
                 "templates"
               ],
               "type": "object"
