@@ -1,5 +1,15 @@
+import { createMessage, MessageVisibility } from '@src/chat/create-message';
+import { PoolType } from '@src/data-enums';
+import { ActorType } from '@src/entities/entity-types';
 import type { Sleight } from '@src/entities/item/proxies/sleight';
+import { prettyMilliseconds } from '@src/features/time';
+import { localize } from '@src/foundry/localization';
+import { rollLabeledFormulas } from '@src/foundry/rolls';
+import { HealthType } from '@src/health/health';
+import { openMenu } from '@src/open-menu';
+import { InfectionTestControls } from '@src/success-test/components/infection-test-controls/infection-test-controls';
 import { customElement, html, property, TemplateResult } from 'lit-element';
+import { requestCharacter } from '../../../character-request-event';
 import { ItemCardBase } from '../item-card-base';
 import styles from './sleight-card.scss';
 
@@ -15,7 +25,123 @@ export class SleightCard extends ItemCardBase {
 
   @property({ attribute: false }) item!: Sleight;
 
+  connectedCallback() {
+    Hooks.on('updateWorldTime', this._updateFromWorldTime);
+    super.connectedCallback();
+  }
+
+  disconnectedCallback() {
+    Hooks.off('updateWorldTime', this._updateFromWorldTime);
+    super.disconnectedCallback();
+  }
+
+  private _updateFromWorldTime = () => this.requestUpdate();
+
+  get isEnhanced() {
+    return this.item.isChi && !!this.character.psi?.hasChiIncreasedEffect;
+  }
+
+  get willpower() {
+    return this.character.ego.aptitudes.wil;
+  }
+
+  private startInfectionTest() {
+    const { token } = requestCharacter(this);
+    InfectionTestControls.openWindow({
+      entities: { actor: this.character.actor, token },
+      relativeEl: this,
+      getState: (actor) => {
+        if (actor.proxy.type === ActorType.Character && actor.proxy.psi) {
+          return {
+            character: actor.proxy,
+            psi: actor.proxy.psi,
+            modifier: { sleight: this.item.name, value: 5 },
+          };
+        }
+        return null;
+      },
+    });
+  }
+
+  private async pushChiSleight() {
+    // TODO skip parts
+    const source = `${this.item.name} ${localize('push')} ${localize(
+      'damage',
+    )}`;
+    await createMessage({
+      data: {
+        header: {
+          heading: source,
+        },
+        damage: {
+          source,
+          damageType: HealthType.Physical,
+          rolledFormulas: rollLabeledFormulas([
+            {
+              label: ` ${localize('push')} ${localize('damage')}`,
+              formula: '1d6',
+            },
+          ]),
+        },
+      },
+      entity: this.character,
+      visibility: MessageVisibility.WhisperGM,
+    });
+    await this.item.push(this.willpower);
+    this.startInfectionTest();
+  }
+
+  private openPushMenu() {
+    const pool = this.character.ego.useThreat
+      ? PoolType.Threat
+      : PoolType.Moxie;
+    const availableMoxie = this.character.pools.get(pool)?.available || 0;
+    openMenu({
+      header: { heading: `${localize('push')} ${this.item.name}` },
+      content: [
+        {
+          label: localize('push'),
+          callback: () => this.pushChiSleight(),
+        },
+      ],
+    });
+  }
+
+  private openEndPushMenu() {
+    openMenu({
+      content: [
+        {
+          label: `${localize('end')} ${localize('push')}`,
+          callback: () => this.item.endPush(),
+        },
+      ],
+    });
+  }
+
   renderHeaderButtons(): TemplateResult {
+    if (this.item.isChi) {
+      return this.isEnhanced
+        ? html`<colored-tag type="info"> ${localize('enhanced')}</colored-tag>`
+        : this.item.isPushed
+        ? html`<colored-tag
+            type="usable"
+            @click=${this.openEndPushMenu}
+            ?disabled=${this.character.disabled}
+            clickable
+            >${localize(this.item.pushTimer.remaining ? 'pushed' : 'push')}
+            ${prettyMilliseconds(this.item.pushTimer.remaining, {
+              approx: true,
+              whenZero: localize('expired'),
+            })}
+          </colored-tag>`
+        : html`<mwc-button
+            @click=${this.openPushMenu}
+            ?disabled=${this.character.disabled}
+            dense
+            class="push-button"
+            >${localize('push')}</mwc-button
+          >`;
+    }
     return html``;
   }
   renderExpandedContent(): TemplateResult {

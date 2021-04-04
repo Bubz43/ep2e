@@ -8,3 +8,12 @@
 :host {
   display: block;
 }
+
+.mental-armor-form {
+  display: flex;
+
+  @include inputReset();
+  input[type='number'] {
+    width: 3ch;
+  }
+}

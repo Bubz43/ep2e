@@ -8,3 +8,7 @@
 :host {
   display: block;
 }
+
+.push-button {
+  --mdc-theme-primary: var(--color-primary-alt);
+}

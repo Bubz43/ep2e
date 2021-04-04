@@ -187,8 +187,7 @@ export class CharacterViewAlt extends CharacterViewBase {
 
   render() {
     const { character, currentTabs } = this;
-    const { ego, sleeve, psi } = character;
-
+    const { psi } = character;
     return html`
       ${this.renderHeader()}
       ${psi
@@ -562,6 +561,7 @@ export class CharacterViewAlt extends CharacterViewBase {
           renderer: CharacterDrawerRenderer.NetworkSettings,
         })}
       </div>
+
       ${this.character.poolHolder === this.character
         ? this.renderRecharges()
         : ''}
@@ -702,6 +702,11 @@ export class CharacterViewAlt extends CharacterViewBase {
 
   private static traits = [ItemGroup.EgoTraits, ItemGroup.MorphTraits];
 
+  private static sleights = [
+    ItemGroup.PassiveSleights,
+    ItemGroup.ActiveSleights,
+  ];
+
   private static gear = [
     ItemGroup.Consumables,
     ItemGroup.Equipped,
@@ -719,15 +724,25 @@ export class CharacterViewAlt extends CharacterViewBase {
         `;
 
       case 'gear':
-        return CharacterViewAlt.gear.map(this.renderItemGroup);
+        return html`${repeat(
+          CharacterViewAlt.gear,
+          identity,
+          this.renderItemGroup,
+        )}`;
 
       case 'traits':
-        return CharacterViewAlt.traits.map(this.renderItemGroup);
+        return html`${repeat(
+          CharacterViewAlt.traits,
+          identity,
+          this.renderItemGroup,
+        )}`;
 
       case 'sleights':
-        return [ItemGroup.PassiveSleights, ItemGroup.ActiveSleights].map(
+        return html`${repeat(
+          CharacterViewAlt.sleights,
+          identity,
           this.renderItemGroup,
-        );
+        )}`;
 
       case 'details':
         return this.renderDetails();

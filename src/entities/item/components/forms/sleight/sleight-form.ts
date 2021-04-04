@@ -117,7 +117,9 @@ export class SleightForm extends ItemFormBase {
                 }),
                 apply.value
                   ? isChi
-                    ? html`<mwc-formfield label="@${localize('wil')} / "
+                    ? html`<mwc-formfield
+                        alignEnd
+                        label="@${localize('wil')} / "
                         >${renderNumberInput(divisor, {
                           min: 1,
                         })}</mwc-formfield

@@ -2,7 +2,8 @@ import { SleightType } from '@src/data-enums';
 import type { AddEffects } from '@src/entities/applied-effects';
 import type { ItemType } from '@src/entities/entity-types';
 import { createEffect, multiplyEffectModifier } from '@src/features/effects';
-import { createLiveTimeState } from '@src/features/time';
+import { toMilliseconds } from '@src/features/modify-milliseconds';
+import { createLiveTimeState, currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { LazyGetter } from 'lazy-get-decorator';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
@@ -57,6 +58,18 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
 
   get isPushed() {
     return this.isChi && this.status.pushed;
+  }
+
+  push(willpower: number) {
+    return this.updater.path('data', 'status').commit({
+      pushDuration: toMilliseconds({ minutes: Math.round(willpower / 5) }),
+      pushStartTime: currentWorldTimeMS(),
+      pushed: true,
+    });
+  }
+
+  endPush() {
+    return this.updater.path('data', 'status', 'pushed').commit(false);
   }
 
   @LazyGetter()
