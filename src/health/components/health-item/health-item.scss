@@ -26,8 +26,7 @@
   display: grid;
   grid-template-columns: min-content;
   grid-template-areas:
-    '.. type regen'
-    '.. damage damage'
+    'info info info'
     'bars bars bars';
   position: relative;
   padding: var(--health-item-padding, 0.25rem 0.5rem);
@@ -52,17 +51,29 @@
   font: 1.1rem;
 }
 
+.info {
+  grid-area: info;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  .damage-info {
+    margin-left: auto;
+  }
+}
+
 .health-icon {
-  height: 40px;
+  height: 30px;
   grid-area: 1 / 1 / -1 / 2;
-  filter: drop-shadow(0 0 2px black) opacity(0.9);
+  filter: drop-shadow(0 0 2px black) opacity(0.45);
   margin-right: 0.25rem;
 }
 
 .health-type {
   grid-area: type;
-  margin-left: 0.25rem;
   @include truncate(100%);
+  flex: 1;
+  z-index: 1;
+  text-shadow: 0 0 4px black;
 }
 
 .damage-info {
@@ -74,7 +85,7 @@
 
 .regen-available {
   grid-area: regen;
-  margin-left: auto;
+  margin: 0 0.25rem;
   filter: opacity(0.5);
   &.ready {
     @include animate-css(pulse, 1s, Infinite);
@@ -128,7 +139,7 @@
     }
   }
   .wound-value {
-    // font-size: 14px;
+    font-size: 14px;
     min-width: 1ch;
     text-align: center;
     color: var(--color-text-lighter);
@@ -139,7 +150,7 @@
   }
 
   .threshold-label {
-    // font-size: 15px;
+    font-size: 15px;
     font-weight: light;
   }
 }

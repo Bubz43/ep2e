@@ -12,3 +12,11 @@
 .push-button {
   --mdc-theme-primary: var(--color-primary-alt);
 }
+
+.effects {
+  display: flex;
+  flex-flow: row wrap;
+  > * {
+    margin: 0.125rem;
+  }
+}

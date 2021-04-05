@@ -2,6 +2,7 @@ import { createMessage, MessageVisibility } from '@src/chat/create-message';
 import { PoolType } from '@src/data-enums';
 import { ActorType } from '@src/entities/entity-types';
 import type { Sleight } from '@src/entities/item/proxies/sleight';
+import { formatEffect } from '@src/features/effects';
 import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
@@ -176,6 +177,19 @@ export class SleightCard extends ItemCardBase {
     return html``;
   }
   renderExpandedContent(): TemplateResult {
+    if (this.item.isChi) {
+      return html`<div class="effects">
+        ${this.item
+          .getPassiveEffects(
+            this.willpower,
+            !!this.character.psi?.hasChiIncreasedEffect,
+          )
+          .effects.map(
+            (effect) =>
+              html`<colored-tag>${formatEffect(effect)}</colored-tag>`,
+          )}
+      </div>`;
+    }
     return html``;
   }
 }

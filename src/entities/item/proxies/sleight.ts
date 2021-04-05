@@ -1,4 +1,4 @@
-import { SleightType } from '@src/data-enums';
+import { SleightDuration, SleightType } from '@src/data-enums';
 import type { AddEffects } from '@src/entities/applied-effects';
 import type { ItemType } from '@src/entities/entity-types';
 import { createEffect, multiplyEffectModifier } from '@src/features/effects';
@@ -58,6 +58,16 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
 
   get isPushed() {
     return this.isChi && this.status.pushed;
+  }
+
+  get action() {
+    return this.epData.action;
+  }
+
+  get isTemporary() {
+    return ![SleightDuration.Instant, SleightDuration.Sustained].includes(
+      this.epData.duration,
+    );
   }
 
   psiPush(willpower: number) {

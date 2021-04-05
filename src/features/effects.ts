@@ -387,7 +387,7 @@ const format = (effect: Effect): (string | number)[] => {
           .flatMap((armor) => {
             const value = effect[armor];
             return value
-              ? `${localize(armor)} ${
+              ? `${localize(armor)} ${localize('armor')} ${
                   effect.layerable ? withSign(value) : value
                 }`
               : [];

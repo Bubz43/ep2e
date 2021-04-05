@@ -1,4 +1,4 @@
-import { RangeRating } from '@src/data-enums';
+import { PsiRange, RangeRating } from '@src/data-enums';
 import { ItemType } from '@src/entities/entity-types';
 import type { RangedWeapon } from '@src/entities/item/item';
 import { getCurrentEnvironment } from '@src/features/environment';
@@ -38,4 +38,12 @@ export const getWeaponRange = (weapon: RangedWeapon): number => {
     return vacuum ? Infinity : weapon.range;
   }
   return applyGravityToWeaponRange(weapon.range, gravity);
+};
+
+export const psiRangeThresholds = (increases: 0 | 1 | 2) => {
+  const multiplier = increases + 1;
+  return {
+    [PsiRange.PointBlank]: 2 * multiplier,
+    [PsiRange.Close]: 10 * multiplier,
+  };
 };

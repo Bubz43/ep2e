@@ -171,6 +171,12 @@ export enum SleightTarget {
   PsiUser = 'psiUser',
 }
 
+export enum PsiRange {
+  Touch = 'touch',
+  PointBlank = 'pointBlank',
+  Close = 'close',
+}
+
 export enum SurpriseState {
   None = 'none',
   Alerted = 'alerted',
