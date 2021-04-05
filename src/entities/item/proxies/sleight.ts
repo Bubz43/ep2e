@@ -60,7 +60,7 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
     return this.isChi && this.status.pushed;
   }
 
-  push(willpower: number) {
+  psiPush(willpower: number) {
     return this.updater.path('data', 'status').commit({
       pushDuration: toMilliseconds({ minutes: Math.round(willpower / 5) }),
       pushStartTime: currentWorldTimeMS(),

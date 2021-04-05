@@ -275,7 +275,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
         )} - ${localize(tookInitiative)}`,
         icon: html`<img src=${poolIcon(tookInitiative)} />`,
         callback: async () => {
-          await character?.modifySpentPools({
+          await character?.addToSpentPools({
             pool: tookInitiative,
             points: -1,
           });
@@ -302,7 +302,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
             icon: html`<img src=${pool.icon} />`,
             disabled: !pool.available || this.turn > 0,
             callback: async () => {
-              await character?.modifySpentPools({
+              await character?.addToSpentPools({
                 pool: pool.type,
                 points: 1,
               });
@@ -325,7 +325,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
             disabled:
               !pool.available || (this.surprise && poolType === PoolType.Vigor),
             callback: async () => {
-              await character?.modifySpentPools({
+              await character?.addToSpentPools({
                 pool: pool.type,
                 points: 1,
               });
@@ -350,7 +350,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
           } - ${localize(poolType)}`,
           icon: html`<img src=${poolIcon(poolType)} />`,
           callback: async () => {
-            await character?.modifySpentPools({
+            await character?.addToSpentPools({
               pool: poolType,
               points: -1,
             });

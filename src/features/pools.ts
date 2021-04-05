@@ -4,7 +4,7 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import { localize } from '@src/foundry/localization';
 import { HealthStat, HealthType } from '@src/health/health';
 import type { MenuOption, MWCMenuOption } from '@src/open-menu';
-import { notEmpty, withSign } from '@src/utility/helpers';
+import { withSign } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
 import { html } from 'lit-html';
 import { compact } from 'remeda';
@@ -90,7 +90,7 @@ const messageOnly = ({
       pool,
       character,
     });
-    character.modifySpentPools({ pool: pool.type, points: 1 });
+    character.addToSpentPools({ pool: pool.type, points: 1 });
   },
 });
 
@@ -123,7 +123,7 @@ const ignore = ({
           ),
         ),
       );
-      character.modifySpentPools({ pool: pool.type, points: 1 });
+      character.addToSpentPools({ pool: pool.type, points: 1 });
     },
   };
 };
@@ -165,7 +165,7 @@ const moxie: PoolOptionGetter = ({ character, pool }) => {
                 character.updater
                   .path('data', 'reps', network, type)
                   .store(used - 1);
-                character.modifySpentPools({ pool: pool.type, points });
+                character.addToSpentPools({ pool: pool.type, points });
               },
             }
           : [];
@@ -215,7 +215,7 @@ export const poolActionOptions = (character: Character, poolType: PoolType) => {
               }),
             ),
           );
-          character.modifySpentPools({ pool: poolType, points: point });
+          character.addToSpentPools({ pool: poolType, points: point });
         },
       })),
   );

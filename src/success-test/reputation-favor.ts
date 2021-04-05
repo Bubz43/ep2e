@@ -15,16 +15,14 @@ import { matchesRep } from '@src/features/effects';
 import { updateFeature } from '@src/features/feature-helpers';
 import {
   Favor,
-  RepNetwork,
-  RepWithIdentifier,
   favorValues,
   maxFavors,
+  RepWithIdentifier,
 } from '@src/features/reputations';
 import { localize } from '@src/foundry/localization';
 import { arrayOf } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
-import produce from 'immer';
-import { compact, last, map, merge } from 'remeda';
+import { compact, last, merge } from 'remeda';
 import {
   createSuccessTestModifier,
   grantedSuperiorResultEffects,
@@ -267,7 +265,7 @@ export class ReputationFavor extends SuccessTestBase {
 
     this.character.updater.batchCommits(() => {
       if (pools.active) {
-        this.character?.modifySpentPools({
+        this.character?.addToSpentPools({
           pool: pools.active[0].type,
           points: 1,
         });

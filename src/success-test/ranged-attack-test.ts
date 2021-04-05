@@ -562,7 +562,7 @@ export class RangedAttackTest extends SkillTest {
     });
 
     if (pools.active) {
-      await this.character?.modifySpentPools({
+      await this.character?.addToSpentPools({
         pool: pools.active[0].type,
         points: 1,
       });

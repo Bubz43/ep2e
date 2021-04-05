@@ -9,6 +9,7 @@ import { HealthType } from '@src/health/health';
 import { openMenu } from '@src/open-menu';
 import { InfectionTestControls } from '@src/success-test/components/infection-test-controls/infection-test-controls';
 import { customElement, html, property, TemplateResult } from 'lit-element';
+import { compact } from 'remeda';
 import { requestCharacter } from '../../../character-request-event';
 import { ItemCardBase } from '../item-card-base';
 import styles from './sleight-card.scss';
@@ -45,7 +46,11 @@ export class SleightCard extends ItemCardBase {
     return this.character.ego.aptitudes.wil;
   }
 
-  private startInfectionTest() {
+  get poolType() {
+    return this.character.ego.useThreat ? PoolType.Threat : PoolType.Moxie;
+  }
+
+  private startChiPushInfectionTest() {
     const { token } = requestCharacter(this);
     InfectionTestControls.openWindow({
       entities: { actor: this.character.actor, token },
@@ -63,47 +68,73 @@ export class SleightCard extends ItemCardBase {
     });
   }
 
-  private async pushChiSleight() {
-    // TODO skip parts
+  private async pushChiSleight(poolUse: 0 | 1 | 2) {
     const source = `${this.item.name} ${localize('push')} ${localize(
       'damage',
     )}`;
-    await createMessage({
-      data: {
-        header: {
-          heading: source,
+    if (!poolUse) {
+      await createMessage({
+        data: {
+          header: {
+            heading: source,
+          },
+          damage: {
+            source,
+            damageType: HealthType.Physical,
+            rolledFormulas: rollLabeledFormulas([
+              {
+                label: ` ${localize('push')} ${localize('damage')}`,
+                formula: '1d6',
+              },
+            ]),
+          },
         },
-        damage: {
-          source,
-          damageType: HealthType.Physical,
-          rolledFormulas: rollLabeledFormulas([
-            {
-              label: ` ${localize('push')} ${localize('damage')}`,
-              formula: '1d6',
-            },
-          ]),
-        },
-      },
-      entity: this.character,
-      visibility: MessageVisibility.WhisperGM,
-    });
-    await this.item.push(this.willpower);
-    this.startInfectionTest();
+        entity: this.character,
+        visibility: MessageVisibility.WhisperGM,
+      });
+    }
+
+    await this.item.psiPush(this.willpower);
+    if (poolUse) {
+      await this.character.addToSpentPools({
+        pool: this.poolType,
+        points: poolUse,
+      });
+    }
+
+    if (this.character.psi?.hasVariableInfection && poolUse !== 2) {
+      this.startChiPushInfectionTest();
+    }
   }
 
   private openPushMenu() {
-    const pool = this.character.ego.useThreat
-      ? PoolType.Threat
-      : PoolType.Moxie;
-    const availableMoxie = this.character.pools.get(pool)?.available || 0;
+    const { poolType } = this;
+    const availableMoxie = this.character.pools.get(poolType)?.available || 0;
     openMenu({
       header: { heading: `${localize('push')} ${this.item.name}` },
-      content: [
+      content: compact([
         {
-          label: localize('push'),
-          callback: () => this.pushChiSleight(),
+          label: `${localize('push')}, ${localize(
+            'SHORT',
+            'damageValue',
+          )} 1d6, ${localize('infectionTest')}`,
+          callback: () => this.pushChiSleight(0),
         },
-      ],
+        {
+          label: `[1 ${localize(poolType)}] ${localize('push')}, ${localize(
+            'infectionTest',
+          )} & ${localize('negate')} ${localize('damage')}`,
+          callback: () => this.pushChiSleight(1),
+          disabled: availableMoxie < 1,
+        },
+        this.character.psi?.hasVariableInfection && {
+          label: `[2 ${localize(poolType)}] ${localize('push')} & ${localize(
+            'negate',
+          )} ${localize('damage')} & ${localize('test')}`,
+          callback: () => this.pushChiSleight(2),
+          disabled: availableMoxie < 2,
+        },
+      ]),
     });
   }
 

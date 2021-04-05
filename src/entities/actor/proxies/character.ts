@@ -308,7 +308,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     return movements;
   }
 
-  async modifySpentPools(...pools: { pool: PoolType; points: number }[]) {
+  async addToSpentPools(...pools: { pool: PoolType; points: number }[]) {
     const { updater } = this.poolHolder;
     for (const { pool, points } of pools) {
       this.poolHolder.updater

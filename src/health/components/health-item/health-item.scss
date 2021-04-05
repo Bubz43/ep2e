@@ -26,11 +26,11 @@
   display: grid;
   grid-template-columns: min-content;
   grid-template-areas:
-    '.. type damage'
+    '.. type regen'
+    '.. damage damage'
     'bars bars bars';
   position: relative;
   padding: var(--health-item-padding, 0.25rem 0.5rem);
-
   outline: none;
   &.dead {
     .health-icon {
@@ -53,9 +53,10 @@
 }
 
 .health-icon {
-  height: 30px;
+  height: 40px;
   grid-area: 1 / 1 / -1 / 2;
-  filter: drop-shadow(0 0 2px black);
+  filter: drop-shadow(0 0 2px black) opacity(0.9);
+  margin-right: 0.25rem;
 }
 
 .health-type {
@@ -67,16 +68,17 @@
 .damage-info {
   grid-area: damage;
   display: flex;
-  justify-content: space-between;
+  flex-flow: row wrap;
   margin: 0 0.25rem;
-  .regen-available {
-    align-self: center;
-    margin-right: 0.5ch;
-    filter: opacity(0.5);
-    &.ready {
-      @include animate-css(pulse, 1s, Infinite);
-      filter: drop-shadow(0 0 3px var(--color-secondary));
-    }
+}
+
+.regen-available {
+  grid-area: regen;
+  margin-left: auto;
+  filter: opacity(0.5);
+  &.ready {
+    @include animate-css(pulse, 1s, Infinite);
+    filter: drop-shadow(0 0 3px var(--color-secondary));
   }
 }
 
@@ -107,7 +109,8 @@
   }
 
   & + .wounds {
-    margin-left: 1rem;
+    margin-left: auto;
+    padding-left: 1rem;
   }
 }
 
@@ -125,7 +128,7 @@
     }
   }
   .wound-value {
-    font-size: 14px;
+    // font-size: 14px;
     min-width: 1ch;
     text-align: center;
     color: var(--color-text-lighter);
@@ -136,7 +139,7 @@
   }
 
   .threshold-label {
-    font-size: 15px;
+    // font-size: 15px;
     font-weight: light;
   }
 }
