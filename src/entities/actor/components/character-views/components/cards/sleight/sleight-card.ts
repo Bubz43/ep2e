@@ -3,12 +3,14 @@ import { PoolType } from '@src/data-enums';
 import { ActorType } from '@src/entities/entity-types';
 import type { Sleight } from '@src/entities/item/proxies/sleight';
 import { formatEffect } from '@src/features/effects';
+import { SkillType } from '@src/features/skills';
 import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { HealthType } from '@src/health/health';
 import { openMenu } from '@src/open-menu';
 import { InfectionTestControls } from '@src/success-test/components/infection-test-controls/infection-test-controls';
+import { PsiTestControls } from '@src/success-test/components/psi-test-controls/psi-test-controls';
 import { customElement, html, property, TemplateResult } from 'lit-element';
 import { compact } from 'remeda';
 import { requestCharacter } from '../../../character-request-event';
@@ -150,6 +152,25 @@ export class SleightCard extends ItemCardBase {
     });
   }
 
+  private startPsiTest() {
+    const { token } = requestCharacter(this);
+    PsiTestControls.openWindow({
+      entities: { actor: this.character.actor, token },
+      relativeEl: this,
+      getState: (actor) => {
+        if (actor.proxy.type === ActorType.Character && actor.proxy.psi) {
+          return {
+            character: actor.proxy,
+            sleight: this.item,
+            ego: actor.proxy.ego,
+            skill: actor.proxy.ego.getCommonSkill(SkillType.Psi),
+          };
+        }
+        return null;
+      },
+    });
+  }
+
   renderHeaderButtons(): TemplateResult {
     if (this.item.isChi) {
       return this.isEnhanced
@@ -174,7 +195,14 @@ export class SleightCard extends ItemCardBase {
             >${localize('push')}</mwc-button
           >`;
     }
-    return html``;
+    return html`
+      <mwc-button
+        @click=${this.startPsiTest}
+        ?disabled=${this.character.disabled}
+        dense
+        >${localize('use')}</mwc-button
+      >
+    `;
   }
   renderExpandedContent(): TemplateResult {
     if (this.item.isChi) {

@@ -179,6 +179,7 @@ import { InfectionTestControls } from './success-test/components/infection-test-
 import { MeleeAttackControls } from './success-test/components/melee-attack-controls/melee-attack-controls';
 import { SuccessTestModifiersSection } from './success-test/components/modifiers-section/success-test-modifiers-section';
 import { SuccessTestPoolControls } from './success-test/components/pool-controls/success-test-pool-controls';
+import { PsiTestControls } from './success-test/components/psi-test-controls/psi-test-controls';
 import { RangedAttackControls } from './success-test/components/ranged-attack-controls/ranged-attack-controls';
 import { ReputationFavorControls } from './success-test/components/reputation-favor-controls/reputation-favor-controls';
 import { SuccessTestSectionLabel } from './success-test/components/section-label/success-test-section-label';
@@ -380,4 +381,5 @@ HackingTestControls;
 SuccessTestSkillSection;
 SoftwareSkillTestControls;
 RangedAttackControls;
+PsiTestControls;
 InfectionTestControls;
