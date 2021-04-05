@@ -70,6 +70,10 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
     );
   }
 
+  get infectionMod() {
+    return this.epData.infectionMod;
+  }
+
   psiPush(willpower: number) {
     return this.updater.path('data', 'status').commit({
       pushDuration: toMilliseconds({ minutes: Math.round(willpower / 5) }),

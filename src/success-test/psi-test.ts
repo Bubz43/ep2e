@@ -1,11 +1,11 @@
-import { PsiPush, PsiRange } from '@src/data-enums';
+import { enumValues, PsiPush, PsiRange } from '@src/data-enums';
 import type { Sleight } from '@src/entities/item/proxies/sleight';
 import { ActionSubtype, createAction } from '@src/features/actions';
 import { localize } from '@src/foundry/localization';
 import { distanceBetweenTokens } from '@src/foundry/token-helpers';
 import { notEmpty } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
-import { compact, merge, take } from 'remeda';
+import { compact, concat, difference, merge, pipe, take, uniq } from 'remeda';
 import type { SetRequired } from 'type-fest';
 import { psiRangeThresholds } from './range-modifiers';
 import { SkillTest, SkillTestInit } from './skill-test';
@@ -25,7 +25,7 @@ export class PsiTest extends SkillTest {
     targetDistance: number;
     targetingAsync: boolean;
     maxTargets: number;
-    targettingSelf: boolean;
+    targetingSelf: boolean;
     range: PsiRange;
     touch: boolean;
   }>;
@@ -65,7 +65,7 @@ export class PsiTest extends SkillTest {
       push: '',
       maxTargets,
       attackTargets,
-      targettingSelf,
+      targetingSelf: targettingSelf,
       targetDistance,
       touch: false,
       range: PsiRange.Close,
@@ -106,7 +106,16 @@ export class PsiTest extends SkillTest {
     return this.character.psi;
   }
 
-  get pushes() {
-    return compact([this.character.psi?.freePush, this.use.push]);
+  get freePush() {
+    return this.psi?.freePush;
+  }
+
+  get availablePushes() {
+    return pipe(
+      enumValues(PsiPush),
+      difference(compact([this.character.psi?.freePush])),
+      concat([PsiPush.ExtraTarget]),
+      uniq(),
+    );
   }
 }
