@@ -34,6 +34,8 @@ const attack = v.object({
   ),
 });
 
+// TODO genFunc with strip(2)
+
 const rollCustomAttack = (data: unknown) => {
   try {
     // Destructure to omit any additional keys

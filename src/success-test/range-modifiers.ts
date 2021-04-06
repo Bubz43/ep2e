@@ -40,7 +40,7 @@ export const getWeaponRange = (weapon: RangedWeapon): number => {
   return applyGravityToWeaponRange(weapon.range, gravity);
 };
 
-export const psiRangeThresholds = (increases: 0 | 1 | 2) => {
+export const psiRangeThresholds = (increases: number) => {
   const multiplier = increases + 1;
   return {
     [PsiRange.PointBlank]: 2 * multiplier,

@@ -6,6 +6,7 @@ import {
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
+import { PoolType } from '@src/data-enums';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
 import { readyCanvas } from '@src/foundry/canvas';
@@ -217,7 +218,15 @@ export class PsiTestControls extends LitElement {
       targetingSelf,
       touch,
       push,
+      pushPools,
     } = use;
+
+    const maxPsiPushPools = Math.min(
+      2,
+      (pools.available.find((p) => p.type !== PoolType.Flex)?.available || 0) -
+        (pools.active && pools.active[0].type !== PoolType.Flex ? 1 : 0) +
+        pushPools,
+    );
     return html` <mwc-list-item
         class="entity"
         @click=${() => character.actor.sheet.render(true)}
@@ -320,7 +329,68 @@ export class PsiTestControls extends LitElement {
               </wl-list-item>
             `
           : ''}
-
+        <li>
+          ${renderAutoForm({
+            props: { push },
+            update: use.update,
+            fields: ({ push }) =>
+              renderSelectField(push, test.availablePushes, emptyTextDash),
+          })}
+        </li>
+        <li class="push-negate">
+          ${push
+            ? html`
+                <span
+                  >${localize('negate')} ${localize('push')}
+                  ${localize('effects')}
+                  (${localize(
+                    ego.useThreat ? PoolType.Threat : PoolType.Moxie,
+                  )})</span
+                >
+                ${renderAutoForm({
+                  noDebounce: true,
+                  props: {
+                    damage: pushPools >= 1,
+                    infectionTest: pushPools === 2,
+                  },
+                  update: ({ damage, infectionTest }) => {
+                    if (damage === false) use.update({ pushPools: 0 });
+                    else if (infectionTest === false)
+                      use.update({ pushPools: 1 });
+                    else if (infectionTest === true)
+                      use.update({ pushPools: 2 });
+                    else if (damage === true) use.update({ pushPools: 1 });
+                  },
+                  fields: ({ damage, infectionTest }) => html`
+                    ${renderLabeledCheckbox(
+                      {
+                        ...damage,
+                        label: `${localize('self')} ${localize('damage')} (1)`,
+                      },
+                      {
+                        disabled: maxPsiPushPools < 1,
+                        reducedTouchTarget: true,
+                      },
+                    )}
+                    ${psi?.hasVariableInfection
+                      ? html` <span class="negate-test"
+                          >${renderLabeledCheckbox(
+                            {
+                              ...infectionTest,
+                              label: `${infectionTest.label} (2)`,
+                            },
+                            {
+                              disabled: maxPsiPushPools < 2,
+                              reducedTouchTarget: true,
+                            },
+                          )}</span
+                        >`
+                      : ''}
+                  `,
+                })}
+              `
+            : ''}
+        </li>
         <li>
           ${renderAutoForm({
             props: {
@@ -328,7 +398,6 @@ export class PsiTestControls extends LitElement {
               targetingSelf,
               targetingAsync,
               touch,
-              push,
             },
             update: use.update,
             fields: ({
@@ -336,9 +405,7 @@ export class PsiTestControls extends LitElement {
               touch,
               targetingSelf,
               targetingAsync,
-              push,
             }) => [
-              renderSelectField(push, test.availablePushes, emptyTextDash),
               renderLabeledCheckbox(touch),
               renderLabeledCheckbox(targetingSelf),
               renderLabeledCheckbox(targetingAsync),
@@ -350,14 +417,14 @@ export class PsiTestControls extends LitElement {
             ],
           })}
         </li>
-        <wl-list-item>
+        <wl-list-item class="info-group">
           <sl-group label="${localize('max')} ${localize('targets')}"
             >${maxTargets}</sl-group
           >
         </wl-list-item>
         ${psi?.hasVariableInfection
           ? html`
-              <wl-list-item>
+              <wl-list-item class="info-group">
                 <sl-group label=${localize('infectionMod')}>
                   ${sleight.infectionMod * (push ? 2 : 1)}
                 </sl-group>

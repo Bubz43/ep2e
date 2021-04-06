@@ -157,7 +157,11 @@ export abstract class SuccessTestBase {
     const id = pools.active?.[0].testModifier.id;
     if (id != null) modifiers.simple.delete(id);
 
-    pools.active = equals(pools.active, pair) ? null : pair;
+    pools.active =
+      pair?.[0].type === pools.active?.[0].type &&
+      equals(pair?.[1], pools.active?.[1])
+        ? null
+        : pair;
     if (pools.active?.[1] === PreTestPoolAction.Bonus) {
       const { testModifier } = pools.active[0];
       modifiers.simple.set(testModifier.id, testModifier);

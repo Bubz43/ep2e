@@ -1471,7 +1471,8 @@ type LangEntries =
   | 'overrides'
   | 'toTarget'
   | 'toSelf'
-  | 'enhanced';
+  | 'enhanced'
+  | 'touch';
 type FullNames =
   | 'cog'
   | 'int'

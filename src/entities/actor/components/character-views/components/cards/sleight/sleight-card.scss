@@ -9,7 +9,8 @@
   display: block;
 }
 
-.push-button {
+.push-button,
+.use-button {
   --mdc-theme-primary: var(--color-primary-alt);
 }
 

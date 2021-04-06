@@ -1,12 +1,11 @@
 import { enumValues } from '@src/data-enums';
-import { Pool, PreTestPoolAction } from '@src/features/pool';
+import { PreTestPoolAction } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import type {
   PreTestPool,
   SuccessTestPools,
 } from '@src/success-test/success-test';
-import { customElement, LitElement, property, html } from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map';
+import { customElement, html, LitElement, property } from 'lit-element';
 import { equals } from 'remeda';
 import styles from './success-test-pool-controls.scss';
 
@@ -45,7 +44,9 @@ export class SuccessTestPoolControls extends LitElement {
                 </div>
                 ${enumValues(PreTestPoolAction).map((action) => {
                   const pair: PreTestPool = [pool, action];
-                  const isActive = equals(pair, active);
+                  const isActive =
+                    pair[0].type === active?.[0].type &&
+                    equals(pair[1], active?.[1]);
                   return html`
                     <mwc-button
                       slot=${action === PreTestPoolAction.IgnoreMods

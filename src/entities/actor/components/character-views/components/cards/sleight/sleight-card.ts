@@ -164,6 +164,7 @@ export class SleightCard extends ItemCardBase {
             sleight: this.item,
             ego: actor.proxy.ego,
             skill: actor.proxy.ego.getCommonSkill(SkillType.Psi),
+            token,
           };
         }
         return null;
@@ -197,6 +198,7 @@ export class SleightCard extends ItemCardBase {
     }
     return html`
       <mwc-button
+        class="use-button"
         @click=${this.startPsiTest}
         ?disabled=${this.character.disabled}
         dense

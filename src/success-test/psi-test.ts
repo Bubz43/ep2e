@@ -1,6 +1,10 @@
-import { enumValues, PsiPush, PsiRange } from '@src/data-enums';
+import { enumValues, PoolType, PsiPush, PsiRange } from '@src/data-enums';
+import { ActorType } from '@src/entities/entity-types';
 import type { Sleight } from '@src/entities/item/proxies/sleight';
-import { ActionSubtype, createAction } from '@src/features/actions';
+import { Action, ActionSubtype, createAction } from '@src/features/actions';
+import { matchesSkill, Source } from '@src/features/effects';
+import { Pool } from '@src/features/pool';
+import type { Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { distanceBetweenTokens } from '@src/foundry/token-helpers';
 import { notEmpty } from '@src/utility/helpers';
@@ -9,7 +13,10 @@ import { compact, concat, difference, merge, pipe, take, uniq } from 'remeda';
 import type { SetRequired } from 'type-fest';
 import { psiRangeThresholds } from './range-modifiers';
 import { SkillTest, SkillTestInit } from './skill-test';
-import { createSuccessTestModifier } from './success-test';
+import {
+  createSuccessTestModifier,
+  successTestEffectMap,
+} from './success-test';
 
 export type PsiTestInit = SetRequired<SkillTestInit, 'character'> & {
   sleight: Sleight;
@@ -28,10 +35,11 @@ export class PsiTest extends SkillTest {
     targetingSelf: boolean;
     range: PsiRange;
     touch: boolean;
+    pushPools: number;
   }>;
 
   readonly rangeModifier = createSuccessTestModifier({
-    name: localize(PsiRange.Close),
+    name: `${localize('range')}: ${localize(PsiRange.Close)}`,
     value: 0,
   });
 
@@ -60,6 +68,8 @@ export class PsiTest extends SkillTest {
           )
         : 10;
 
+    const extraTargets = freePush === PsiPush.IncreasedRange ? 1 : 0;
+
     this.use = {
       sleight,
       push: '',
@@ -70,7 +80,9 @@ export class PsiTest extends SkillTest {
       touch: false,
       range: PsiRange.Close,
       targetingAsync: false,
+      pushPools: 0,
       update: this.recipe((draft, changed) => {
+        const currentPoolUse = draft.use.pushPools;
         draft.use = merge(draft.use, changed);
         const { use } = draft;
         if (changed.sleight) {
@@ -82,14 +94,110 @@ export class PsiTest extends SkillTest {
             use.push = '';
           }
         }
+
+        if (!use.push) use.pushPools = 0;
+
+        if (use.pushPools !== currentPoolUse) {
+          draft.pools.available = this.getPools(this.skillState.skill).map(
+            (pool) =>
+              pool.type === PoolType.Flex
+                ? pool
+                : new Pool({
+                    type: pool.type,
+                    spent: pool.spent + draft.use.pushPools,
+                    initialValue: pool.max,
+                  }),
+          );
+        }
+
+        for (const attackTarget of draft.use.attackTargets) {
+          for (const [effect, active] of this.getAttackTargetEffects(
+            attackTarget as Token,
+            draft.skillState.skill,
+            draft.action,
+          ) || []) {
+            draft.modifiers.effects.set(effect, active);
+          }
+        }
+
+        if (changed.attackTargets && notEmpty(use.attackTargets) && token) {
+          use.targetDistance = Math.max(
+            ...[...use.attackTargets].map((target) =>
+              distanceBetweenTokens(token, target as Token),
+            ),
+          );
+        }
+
+        draft.modifiers.effects = this.getModifierEffects(
+          draft.skillState.skill,
+          draft.action,
+        );
+
+        use.maxTargets =
+          extraTargets + (use.push === PsiPush.ExtraTarget ? 1 : 0);
+
+        if (use.targetingSelf) {
+          draft.modifiers.simple.delete(this.rangeModifier.id);
+        } else if (use.touch) {
+          draft.rangeModifier.name = `${localize('range')}: ${localize(
+            PsiRange.Touch,
+          )}`;
+          draft.rangeModifier.value = 20;
+
+          draft.modifiers.simple.set(
+            draft.rangeModifier.id,
+            draft.rangeModifier,
+          );
+        } else {
+          const thresholds = psiRangeThresholds(
+            (use.targetingAsync ? 1 : 0) +
+              ((use.push || freePush) === PsiPush.IncreasedRange ? 1 : 0),
+          );
+          if (draft.use.targetDistance <= thresholds.pointBlank) {
+            draft.rangeModifier.name = `${localize('range')}: ${localize(
+              PsiRange.PointBlank,
+            )}`;
+            draft.rangeModifier.value = 10;
+          } else if (use.targetDistance <= thresholds.close) {
+            draft.rangeModifier.name = `${localize('range')}: ${localize(
+              PsiRange.Close,
+            )}`;
+            draft.rangeModifier.value = 0;
+          } else if (draft.use.targetDistance > thresholds.close) {
+            const instances = Math.ceil(
+              (draft.use.targetDistance - thresholds.close) / 2,
+            );
+            draft.rangeModifier.name = `${localize(
+              'beyondRange',
+            )} x${instances}`;
+            draft.rangeModifier.value = instances * -10;
+          }
+
+          draft.modifiers.simple.set(
+            draft.rangeModifier.id,
+            draft.rangeModifier,
+          );
+        }
       }),
     };
+
+    for (const attackTarget of this.use.attackTargets) {
+      for (const [effect, active] of this.getAttackTargetEffects(
+        attackTarget,
+        this.skillState.skill,
+        this.action,
+      ) || []) {
+        this.modifiers.effects.set(effect, active);
+      }
+    }
 
     const thresholds = psiRangeThresholds(
       freePush === PsiPush.IncreasedRange ? 1 : 0,
     );
     if (this.use.targetDistance <= thresholds.pointBlank) {
-      this.rangeModifier.name = localize(PsiRange.PointBlank);
+      this.rangeModifier.name = `${localize('range')}: ${localize(
+        PsiRange.PointBlank,
+      )}`;
       this.rangeModifier.value = 10;
     } else if (this.use.targetDistance > thresholds.close) {
       const instances = Math.ceil(
@@ -100,7 +208,28 @@ export class PsiTest extends SkillTest {
     }
 
     this.modifiers.simple.set(this.rangeModifier.id, this.rangeModifier);
+
+    // this.getPools(this.skillState.skill).map(pool => new Pool({
+    //   type: pool.type,
+    //   spent: pool.spent + 1
+    // }))
   }
+
+  // protected getPools() {
+  //   const pools = super.getPools(this.skillState.skill);
+  //   if (!this.use) return pools;
+  //   return this.use.pushPools
+  //     ? pools.map((pool) =>
+  //         pool.type === PoolType.Flex
+  //           ? pool
+  //           : new Pool({
+  //               type: pool.type,
+  //               spent: pool.spent + this.use.pushPools,
+  //               initialValue: pool.max,
+  //             }),
+  //       )
+  //     : pools;
+  // }
 
   get psi() {
     return this.character.psi;
@@ -116,6 +245,22 @@ export class PsiTest extends SkillTest {
       difference(compact([this.character.psi?.freePush])),
       concat([PsiPush.ExtraTarget]),
       uniq(),
+    );
+  }
+
+  protected getAttackTargetEffects(
+    target: Token,
+    skill: Skill,
+    action: Action,
+  ) {
+    if (target.actor?.proxy.type !== ActorType.Character) return null;
+    return successTestEffectMap(
+      target.actor.proxy.appliedEffects
+        .getMatchingSuccessTestEffects(matchesSkill(skill)(action), true)
+        .map((effect) => ({
+          ...effect,
+          [Source]: `{${target.name}} ${effect[Source]}`,
+        })),
     );
   }
 }
