@@ -98,16 +98,17 @@
   }
 }
 
-.push-negate {
-  text-align: center;
-}
-
-.negate-test {
-  margin-left: 1rem;
+.negation-form {
+  width: 200px;
+  min-width: 100%;
 }
 
 .info-group {
-  height: 1.25rem;
+  height: 1.75rem;
+}
+
+.free-push-label {
+  color: var(--color-text-lighter);
 }
 
 .targetting {

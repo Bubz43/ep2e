@@ -378,6 +378,8 @@ export class ActorEP extends Actor {
   matchRegexp(regex: RegExp) {
     return this.proxy.type === ActorType.Character
       ? this.proxy.matchRegexp(regex)
-      : formattedSleeveInfo(this.proxy).some((info) => regex.test(info));
+      : [this.proxy.name, ...formattedSleeveInfo(this.proxy)].some((info) =>
+          regex.test(info),
+        );
   }
 }

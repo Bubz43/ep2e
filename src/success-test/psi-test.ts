@@ -34,7 +34,7 @@ export class PsiTest extends SkillTest {
     maxTargets: number;
     targetingSelf: boolean;
     range: PsiRange;
-    touch: boolean;
+    touchingTarget: boolean;
     pushPools: number;
   }>;
 
@@ -54,7 +54,7 @@ export class PsiTest extends SkillTest {
         }),
     });
     this.character = init.character;
-    const freePush = this.psi?.freePush;
+    const freePush = this.psi?.activeFreePush;
     const maxTargets = freePush === PsiPush.ExtraTarget ? 2 : 1;
     const attackTargets = new Set(take([...game.user.targets], maxTargets));
     const { token } = this;
@@ -68,8 +68,6 @@ export class PsiTest extends SkillTest {
           )
         : 10;
 
-    const extraTargets = freePush === PsiPush.IncreasedRange ? 1 : 0;
-
     this.use = {
       sleight,
       push: '',
@@ -77,7 +75,7 @@ export class PsiTest extends SkillTest {
       attackTargets,
       targetingSelf: targettingSelf,
       targetDistance,
-      touch: false,
+      touchingTarget: false,
       range: PsiRange.Close,
       targetingAsync: false,
       pushPools: 0,
@@ -93,6 +91,10 @@ export class PsiTest extends SkillTest {
           ) {
             use.push = '';
           }
+        }
+
+        if (use.targetingSelf) {
+          use.touchingTarget = false;
         }
 
         if (!use.push) use.pushPools = 0;
@@ -134,11 +136,11 @@ export class PsiTest extends SkillTest {
         );
 
         use.maxTargets =
-          extraTargets + (use.push === PsiPush.ExtraTarget ? 1 : 0);
+          maxTargets + (use.push === PsiPush.ExtraTarget ? 1 : 0);
 
         if (use.targetingSelf) {
           draft.modifiers.simple.delete(this.rangeModifier.id);
-        } else if (use.touch) {
+        } else if (use.touchingTarget) {
           draft.rangeModifier.name = `${localize('range')}: ${localize(
             PsiRange.Touch,
           )}`;
@@ -236,13 +238,13 @@ export class PsiTest extends SkillTest {
   }
 
   get freePush() {
-    return this.psi?.freePush;
+    return this.psi?.activeFreePush;
   }
 
   get availablePushes() {
     return pipe(
       enumValues(PsiPush),
-      difference(compact([this.character.psi?.freePush])),
+      difference(compact([this.character.psi?.activeFreePush])),
       concat([PsiPush.ExtraTarget]),
       uniq(),
     );

@@ -24,7 +24,7 @@ import {
   query,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { identity, take } from 'remeda';
+import { compact, identity, take } from 'remeda';
 import type { Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';
 import styles from './psi-test-controls.scss';
@@ -216,7 +216,7 @@ export class PsiTestControls extends LitElement {
       maxTargets,
       targetingAsync,
       targetingSelf,
-      touch,
+      touchingTarget,
       push,
       pushPools,
     } = use;
@@ -323,9 +323,8 @@ export class PsiTestControls extends LitElement {
         ${freePush
           ? html`
               <wl-list-item>
-                <sl-group label=${localize('freePush')}
-                  >${localize(freePush)}</sl-group
-                >
+                <span class="free-push-label">${localize('freePush')}</span>
+                <span>${localize(freePush)}</span>
               </wl-list-item>
             `
           : ''}
@@ -336,83 +335,95 @@ export class PsiTestControls extends LitElement {
             fields: ({ push }) =>
               renderSelectField(push, test.availablePushes, emptyTextDash),
           })}
-        </li>
-        <li class="push-negate">
           ${push
-            ? html`
-                <span
-                  >${localize('negate')} ${localize('push')}
+            ? renderAutoForm({
+                classes: 'negation-form',
+                props: {
+                  negation:
+                    pushPools === 1 ? 'damage' : pushPools === 2 ? 'all' : '',
+                },
+                update: ({ negation }) => {
+                  if (!negation) use.update({ pushPools: 0 });
+                  else if (negation === 'all') use.update({ pushPools: 2 });
+                  else if (negation === 'damage') use.update({ pushPools: 1 });
+                },
+                fields: ({ negation }) =>
+                  renderSelectField(
+                    {
+                      ...negation,
+                      label: `${localize('negate')} ${localize('push')}
                   ${localize('effects')}
                   (${localize(
                     ego.useThreat ? PoolType.Threat : PoolType.Moxie,
-                  )})</span
-                >
-                ${renderAutoForm({
-                  noDebounce: true,
-                  props: {
-                    damage: pushPools >= 1,
-                    infectionTest: pushPools === 2,
-                  },
-                  update: ({ damage, infectionTest }) => {
-                    if (damage === false) use.update({ pushPools: 0 });
-                    else if (infectionTest === false)
-                      use.update({ pushPools: 1 });
-                    else if (infectionTest === true)
-                      use.update({ pushPools: 2 });
-                    else if (damage === true) use.update({ pushPools: 1 });
-                  },
-                  fields: ({ damage, infectionTest }) => html`
-                    ${renderLabeledCheckbox(
-                      {
-                        ...damage,
-                        label: `${localize('self')} ${localize('damage')} (1)`,
-                      },
-                      {
-                        disabled: maxPsiPushPools < 1,
-                        reducedTouchTarget: true,
-                      },
-                    )}
-                    ${psi?.hasVariableInfection
-                      ? html` <span class="negate-test"
-                          >${renderLabeledCheckbox(
-                            {
-                              ...infectionTest,
-                              label: `${infectionTest.label} (2)`,
-                            },
-                            {
-                              disabled: maxPsiPushPools < 2,
-                              reducedTouchTarget: true,
-                            },
-                          )}</span
-                        >`
-                      : ''}
-                  `,
-                })}
-              `
+                  )})`,
+                    },
+                    ['damage', 'all'],
+                    {
+                      emptyText: '-',
+                      disableOptions: compact([
+                        maxPsiPushPools < 1 && 'damage',
+                        maxPsiPushPools < 2 && 'all',
+                      ]),
+                      altLabel: (option) =>
+                        option === 'damage'
+                          ? `${localize('self')} ${localize('damage')} (1)`
+                          : `${localize('self')} ${localize(
+                              'damage',
+                            )} & ${localize('infectionTest')} (2)`,
+                    },
+                  ),
+              })
             : ''}
         </li>
+
         <li>
           ${renderAutoForm({
             props: {
               targetDistance,
               targetingSelf,
               targetingAsync,
-              touch,
+              touchingTarget,
             },
             update: use.update,
             fields: ({
               targetDistance,
-              touch,
+              touchingTarget,
               targetingSelf,
               targetingAsync,
             }) => [
-              renderLabeledCheckbox(touch),
               renderLabeledCheckbox(targetingSelf),
-              renderLabeledCheckbox(targetingAsync),
+              renderLabeledCheckbox(
+                maxTargets > 1
+                  ? {
+                      ...touchingTarget,
+                      label: `${localize('touchingAllTargets')}`,
+                    }
+                  : touchingTarget,
+                {
+                  disabled: targetingSelf.value,
+                  indeterminate: targetingSelf.value,
+                },
+              ),
+              renderLabeledCheckbox(
+                maxTargets > 1
+                  ? {
+                      ...targetingAsync,
+                      label: `${localize('allTargetsAsync')}`,
+                    }
+                  : targetingAsync,
+                {
+                  disabled:
+                    (targetingSelf.value && maxTargets === 1) ||
+                    touchingTarget.value,
+                  indeterminate:
+                    (targetingSelf.value && maxTargets === 1) ||
+                    touchingTarget.value,
+                },
+              ),
               renderNumberField(targetDistance, {
                 min: 0,
                 step: 0.1,
-                disabled: touch.value,
+                disabled: touchingTarget.value,
               }),
             ],
           })}

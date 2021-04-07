@@ -1472,7 +1472,12 @@ type LangEntries =
   | 'toTarget'
   | 'toSelf'
   | 'enhanced'
-  | 'touch';
+  | 'touch'
+  | 'targetingSelf'
+  | 'targetingAsync'
+  | 'allTargetsAsync'
+  | 'touchingAllTargets'
+  | 'touchingTarget';
 type FullNames =
   | 'cog'
   | 'int'

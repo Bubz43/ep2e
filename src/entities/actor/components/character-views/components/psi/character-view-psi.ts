@@ -168,19 +168,19 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
   }
 
   private openFreePushMenu() {
-    const { freePush } = this.psi;
+    const { activeFreePush } = this.psi;
     openMenu({
       header: { heading: localize('freePush') },
       content: [
         {
           label: `${localize('no')} ${localize('freePush')}`,
           callback: () => this.psi.updateFreePush(''),
-          activated: !freePush,
+          activated: !activeFreePush,
         },
         ...enumValues(PsiPush).map((push) => ({
           label: localize(push),
           callback: () => this.psi.updateFreePush(push),
-          activated: freePush === push,
+          activated: activeFreePush === push,
         })),
       ],
     });

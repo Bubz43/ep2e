@@ -1742,6 +1742,9 @@
             "enforcer": {
               "type": "string"
             },
+            "enhanced": {
+              "type": "string"
+            },
             "enhancedBehavior": {
               "type": "string"
             },
@@ -3077,12 +3080,6 @@
             "on": {
               "type": "string"
             },
-            "onSelf": {
-              "type": "string"
-            },
-            "onTarget": {
-              "type": "string"
-            },
             "onTest": {
               "type": "string"
             },
@@ -4409,6 +4406,12 @@
             "toOpponent": {
               "type": "string"
             },
+            "toSelf": {
+              "type": "string"
+            },
+            "toTarget": {
+              "type": "string"
+            },
             "toggle": {
               "type": "string"
             },
@@ -4425,6 +4428,9 @@
               "type": "string"
             },
             "total": {
+              "type": "string"
+            },
+            "touch": {
               "type": "string"
             },
             "touchOnly": {
@@ -5233,6 +5239,7 @@
             "energy",
             "energyArmor",
             "enforcer",
+            "enhanced",
             "enhancedBehavior",
             "entangled",
             "entangling",
@@ -5678,8 +5685,6 @@
             "off",
             "offline",
             "on",
-            "onSelf",
-            "onTarget",
             "onTest",
             "onboardALI",
             "oneHand",
@@ -6122,12 +6127,15 @@
             "to",
             "toHit",
             "toOpponent",
+            "toSelf",
+            "toTarget",
             "toggle",
             "toggled",
             "token",
             "took",
             "topOfTheLine",
             "total",
+            "touch",
             "touchOnly",
             "toxin",
             "track",

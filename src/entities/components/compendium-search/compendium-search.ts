@@ -101,7 +101,9 @@ export class CompendiumSearch extends LitElement {
         <sl-header heading=${localize('sources')}></sl-header>
         ${renderAutoForm({
           props: this.sources,
-          update: (changed) => (this.sources = { ...this.sources, ...changed }),
+          update: (changed) => {
+            this.sources = { ...this.sources, ...changed };
+          },
           fields: ({ world, system }) => [
             renderLabeledCheckbox(world),
             renderLabeledCheckbox(system),
