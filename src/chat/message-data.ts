@@ -5,6 +5,7 @@ import type {
   AttackTrait,
   CalledShot,
   PoolType,
+  PsiPush,
   SuperiorResultEffect,
 } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
@@ -211,6 +212,12 @@ export type InfectionTestData = {
   interference?: boolean;
 };
 
+export type PsiTestData = {
+  sleight: ItemEntity<ItemType.Sleight>;
+  push: PsiPush | '';
+  pushNegation: '' | 'damage' | 'all';
+};
+
 export type MessageData = Partial<{
   header: MessageHeaderData;
   targets: MessageTargets;
@@ -232,4 +239,5 @@ export type MessageData = Partial<{
   hack: HackMessageData;
   infectionTest: InfectionTestData;
   influenceRoll: InfluenceRollData;
+  psiTest: PsiTestData;
 }>;

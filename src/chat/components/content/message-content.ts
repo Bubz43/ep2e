@@ -52,6 +52,7 @@ export class MessageContent extends LitElement {
       hack,
       infectionTest,
       influenceRoll,
+      psiTest,
     } = this.data;
     if (!this.message.isContentVisible) return '';
     return html`
@@ -68,6 +69,14 @@ export class MessageContent extends LitElement {
               .successTest=${successTest}
             ></message-success-test>
 
+            ${psiTest && this.message.editable
+              ? html`
+                  <message-psi-test
+                    .successTest=${successTest}
+                    .psiTest=${psiTest}
+                  ></message-psi-test>
+                `
+              : ''}
             ${specialTest && this.message.editable
               ? html`
                   <message-special-test

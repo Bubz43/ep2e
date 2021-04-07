@@ -1,7 +1,13 @@
+import { createMessage } from '@src/chat/create-message';
 import { enumValues, PoolType, PsiPush, PsiRange } from '@src/data-enums';
 import { ActorType } from '@src/entities/entity-types';
 import type { Sleight } from '@src/entities/item/proxies/sleight';
-import { Action, ActionSubtype, createAction } from '@src/features/actions';
+import {
+  Action,
+  ActionSubtype,
+  ActionType,
+  createAction,
+} from '@src/features/actions';
 import { matchesSkill, Source } from '@src/features/effects';
 import { Pool } from '@src/features/pool';
 import type { Skill } from '@src/features/skills';
@@ -210,28 +216,11 @@ export class PsiTest extends SkillTest {
     }
 
     this.modifiers.simple.set(this.rangeModifier.id, this.rangeModifier);
-
-    // this.getPools(this.skillState.skill).map(pool => new Pool({
-    //   type: pool.type,
-    //   spent: pool.spent + 1
-    // }))
   }
 
-  // protected getPools() {
-  //   const pools = super.getPools(this.skillState.skill);
-  //   if (!this.use) return pools;
-  //   return this.use.pushPools
-  //     ? pools.map((pool) =>
-  //         pool.type === PoolType.Flex
-  //           ? pool
-  //           : new Pool({
-  //               type: pool.type,
-  //               spent: pool.spent + this.use.pushPools,
-  //               initialValue: pool.max,
-  //             }),
-  //       )
-  //     : pools;
-  // }
+  get mainPool() {
+    return this.ego.useThreat ? PoolType.Threat : PoolType.Moxie;
+  }
 
   get psi() {
     return this.character.psi;
@@ -264,5 +253,62 @@ export class PsiTest extends SkillTest {
           [Source]: `{${target.name}} ${effect[Source]}`,
         })),
     );
+  }
+
+  protected async createMessage() {
+    const { settings, pools, action, name, techSource } = this;
+    const { sleight, push, pushPools } = this.use;
+    await createMessage({
+      data: {
+        header: {
+          heading: name,
+          // TODO: Maybe add specializations to subheadings
+          subheadings: compact([
+            techSource?.name,
+            [
+              `${action.type} ${
+                action.timeMod && action.type !== ActionType.Task
+                  ? `(${localize('as')} ${localize('task')})`
+                  : ''
+              }`,
+              localize(action.subtype),
+              localize('action'),
+            ].join(' '),
+          ]),
+        },
+        successTest: this.testMessageData,
+        psiTest: {
+          sleight: sleight.getDataCopy(),
+          push: push,
+          pushNegation:
+            pushPools === 2 ? 'all' : pushPools === 1 ? 'damage' : '',
+        },
+      },
+      entity: this.token ?? this.character,
+      visibility: settings.visibility,
+    });
+
+    if (pushPools) {
+      const { mainPool } = this;
+      const activePoolUse = pools.active?.[0].type;
+      if (activePoolUse === mainPool) {
+        this.character.addToSpentPools({
+          pool: mainPool,
+          points: 1 + pushPools,
+        });
+      } else {
+        this.character.addToSpentPools(
+          ...compact([
+            { pool: mainPool, points: pushPools },
+            activePoolUse && { pool: activePoolUse, points: 1 },
+          ]),
+        );
+      }
+    } else if (pools.active) {
+      this.character?.addToSpentPools({
+        pool: pools.active[0].type,
+        points: 1,
+      });
+    }
   }
 }

@@ -353,9 +353,7 @@ export class PsiTestControls extends LitElement {
                       ...negation,
                       label: `${localize('negate')} ${localize('push')}
                   ${localize('effects')}
-                  (${localize(
-                    ego.useThreat ? PoolType.Threat : PoolType.Moxie,
-                  )})`,
+                  (${localize(test.mainPool)})`,
                     },
                     ['damage', 'all'],
                     {
