@@ -271,7 +271,6 @@ export class CombatView extends LitElement {
 
   private async rollNPCInitiatives() {
     const { players } = game.users;
-    console.log(players);
     const participants = this.participants.filter((participant) => {
       const { actor } = getParticipantEntities(participant);
       return !actor || !players.some((user) => actor.hasPerm(user, 'OWNER'));
