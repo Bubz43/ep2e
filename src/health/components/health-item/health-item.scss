@@ -26,11 +26,14 @@
   display: grid;
   grid-template-columns: min-content;
   grid-template-areas:
-    'info info info'
+    '.. info ..'
     'bars bars bars';
   position: relative;
   padding: var(--health-item-padding, 0.25rem 0.5rem);
   outline: none;
+  row-gap: 0.125rem;
+  font-family: var(--font-3);
+
   &.dead {
     .health-icon {
       filter: drop-shadow(1px 2px 10px var(--color-secondary)) invert(1);
@@ -56,16 +59,19 @@
   display: flex;
   flex-flow: row wrap;
   align-items: center;
+  line-height: 1rem;
+
   .damage-info {
     margin-left: auto;
   }
 }
 
 .health-icon {
-  height: 30px;
+  height: 38px;
+  z-index: 1;
   grid-area: 1 / 1 / -1 / 2;
-  filter: drop-shadow(0 0 2px black) opacity(0.45);
-  margin-right: 0.25rem;
+  filter: drop-shadow(0 0 2px black) opacity(0.9);
+  margin: 0 0.5rem;
 }
 
 .health-type {
@@ -73,20 +79,23 @@
   @include truncate(100%);
   flex: 1;
   z-index: 1;
-  text-shadow: 0 0 4px black;
+  text-transform: uppercase;
+  color: var(--color-text-lighter);
+  letter-spacing: 2px;
 }
 
 .damage-info {
-  grid-area: damage;
+  grid-area: 2 / 2 / 3 / 3;
   display: flex;
   flex-flow: row wrap;
-  margin: 0 0.25rem;
+  z-index: 1;
 }
 
 .regen-available {
-  grid-area: regen;
-  margin: 0 0.25rem;
+  grid-area: 1 / 3 / 2 / 4;
   filter: opacity(0.5);
+  z-index: 1;
+  justify-self: end;
   &.ready {
     @include animate-css(pulse, 1s, Infinite);
     filter: drop-shadow(0 0 3px var(--color-secondary));
@@ -96,9 +105,10 @@
 .damage {
   text-shadow: 2px 3px 4px black;
   white-space: nowrap;
-  position: relative;
-  bottom: -1px;
   > span {
+    &:first-of-type {
+      font-size: larger;
+    }
     &:not(:first-of-type) {
       font-size: 13px;
       font-weight: lighter;
@@ -126,10 +136,12 @@
 }
 
 .wounds {
+  grid-area: 2 / 3 / 3 / 4;
   display: flex;
-  align-items: center;
-  align-self: flex-end;
+  text-shadow: 2px 3px 4px black;
+
   justify-content: flex-end;
+  z-index: 1;
   > *:not(.wound-threshold) {
     display: flex;
     align-items: center;
