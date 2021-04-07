@@ -282,33 +282,41 @@ export class PsiTest extends SkillTest {
           push: push,
           pushNegation:
             pushPools === 2 ? 'all' : pushPools === 1 ? 'damage' : '',
+          variableInfection: !!this.psi?.hasVariableInfection,
         },
       },
       entity: this.token ?? this.character,
       visibility: settings.visibility,
     });
 
-    if (pushPools) {
-      const { mainPool } = this;
-      const activePoolUse = pools.active?.[0].type;
-      if (activePoolUse === mainPool) {
-        this.character.addToSpentPools({
-          pool: mainPool,
-          points: 1 + pushPools,
-        });
-      } else {
-        this.character.addToSpentPools(
-          ...compact([
-            { pool: mainPool, points: pushPools },
-            activePoolUse && { pool: activePoolUse, points: 1 },
-          ]),
+    this.character.updater.batchCommits(async () => {
+      if (this.psi?.hasVariableInfection) {
+        await this.psi.updateInfectionRating(
+          this.psi.infectionRating + sleight.infectionMod * (push ? 2 : 1),
         );
       }
-    } else if (pools.active) {
-      this.character?.addToSpentPools({
-        pool: pools.active[0].type,
-        points: 1,
-      });
-    }
+      if (pushPools) {
+        const { mainPool } = this;
+        const activePoolUse = pools.active?.[0].type;
+        if (activePoolUse === mainPool) {
+          this.character.addToSpentPools({
+            pool: mainPool,
+            points: 1 + pushPools,
+          });
+        } else {
+          this.character.addToSpentPools(
+            ...compact([
+              { pool: mainPool, points: pushPools },
+              activePoolUse && { pool: activePoolUse, points: 1 },
+            ]),
+          );
+        }
+      } else if (pools.active) {
+        this.character?.addToSpentPools({
+          pool: pools.active[0].type,
+          points: 1,
+        });
+      }
+    });
   }
 }

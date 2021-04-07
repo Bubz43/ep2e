@@ -216,6 +216,7 @@ export type PsiTestData = {
   sleight: ItemEntity<ItemType.Sleight>;
   push: PsiPush | '';
   pushNegation: '' | 'damage' | 'all';
+  variableInfection: boolean;
 };
 
 export type MessageData = Partial<{

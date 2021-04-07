@@ -355,7 +355,7 @@ export class PsiTestControls extends LitElement {
                   ${localize('effects')}
                   (${localize(test.mainPool)})`,
                     },
-                    ['damage', 'all'],
+                    psi?.hasVariableInfection ? ['damage', 'all'] : ['damage'],
                     {
                       emptyText: '-',
                       disableOptions: compact([

@@ -69,7 +69,7 @@ export class MessageContent extends LitElement {
               .successTest=${successTest}
             ></message-success-test>
 
-            ${psiTest && this.message.editable
+            ${psiTest
               ? html`
                   <message-psi-test
                     .successTest=${successTest}

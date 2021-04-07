@@ -98,12 +98,24 @@ export class SleightCard extends ItemCardBase {
     }
 
     await this.item.psiPush(this.willpower);
-    if (poolUse) {
-      await this.character.addToSpentPools({
-        pool: this.poolType,
-        points: poolUse,
-      });
-    }
+
+    await this.character.updater.batchCommits(async () => {
+      if (poolUse) {
+        await this.character.addToSpentPools({
+          pool: this.poolType,
+          points: poolUse,
+        });
+      }
+
+      if (this.character.psi?.hasVariableInfection) {
+        await this.character.psi.updateInfectionRating(
+          this.character.psi.infectionRating + 5,
+        );
+        if (poolUse !== 2) {
+          this.startChiPushInfectionTest();
+        }
+      }
+    });
 
     if (this.character.psi?.hasVariableInfection && poolUse !== 2) {
       this.startChiPushInfectionTest();

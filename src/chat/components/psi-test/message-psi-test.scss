@@ -8,3 +8,22 @@
 :host {
   display: block;
 }
+
+mwc-button {
+  width: calc(100% - 1rem);
+  margin: 0.25rem 0.5rem;
+  --mdc-theme-primary: var(--color-negative);
+
+  &.infection-test {
+    --mdc-theme-primary: var(--color-primary-alt);
+  }
+}
+
+.defense {
+  padding: 0 0.75rem;
+  wl-list-item {
+    display: inline-flex;
+    padding: 0.25rem;
+    color: var(--color-primary-alt);
+  }
+}
