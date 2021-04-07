@@ -218,7 +218,7 @@ export class PsiTestControls extends LitElement {
       targetingSelf,
       touchingTarget,
       push,
-      pushPools,
+      sideEffectNegation: pushPools,
     } = use;
 
     const maxPsiPushPools = Math.min(
@@ -343,9 +343,11 @@ export class PsiTestControls extends LitElement {
                     pushPools === 1 ? 'damage' : pushPools === 2 ? 'all' : '',
                 },
                 update: ({ negation }) => {
-                  if (!negation) use.update({ pushPools: 0 });
-                  else if (negation === 'all') use.update({ pushPools: 2 });
-                  else if (negation === 'damage') use.update({ pushPools: 1 });
+                  if (!negation) use.update({ sideEffectNegation: 0 });
+                  else if (negation === 'all')
+                    use.update({ sideEffectNegation: 2 });
+                  else if (negation === 'damage')
+                    use.update({ sideEffectNegation: 1 });
                 },
                 fields: ({ negation }) =>
                   renderSelectField(

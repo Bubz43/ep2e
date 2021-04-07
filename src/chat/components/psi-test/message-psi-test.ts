@@ -52,7 +52,6 @@ export class MessagePsiTest extends MessageElement {
           return {
             ego: actor.proxy.ego,
             character: actor.proxy,
-
             aptitude: AptitudeType.Willpower,
             halve: this.psiTest.push === PsiPush.IncreasedPower,
           };
@@ -62,7 +61,7 @@ export class MessagePsiTest extends MessageElement {
   }
 
   private startInfectionTest() {
-    const { actor } = this.message;
+    const { actor, token } = this.message;
     if (actor?.proxy.type !== ActorType.Character) return;
 
     InfectionTestControls.openWindow({
@@ -73,6 +72,7 @@ export class MessagePsiTest extends MessageElement {
           return {
             character: actor.proxy,
             psi: actor.proxy.psi,
+            token,
           };
         }
         return null;
@@ -116,30 +116,33 @@ export class MessagePsiTest extends MessageElement {
         : html`
             ${successTestInfo?.result === SuccessTestResult.CriticalFailure
               ? html`
-                  <mwc-button outlined @click=${this.rollCriticalFailureDamage}>
+                  <mwc-button
+                    dense
+                    outlined
+                    @click=${this.rollCriticalFailureDamage}
+                  >
                     ${localize(successTestInfo.result)} - ${localize('roll')}
                     ${localize('SHORT', 'damageValue')} 1d6
                   </mwc-button>
                 `
               : ''}
-            ${psiTest.push && !psiTest.pushNegation
+            ${psiTest.push && !psiTest.sideEffectNegation
               ? html`
-                  <mwc-button outlined @click=${this.rollPushDamage}>
+                  <mwc-button dense outlined @click=${this.rollPushDamage}>
                     ${localize('pushed')} - ${localize('roll')}
                     ${localize('SHORT', 'damageValue')} 1d6
                   </mwc-button>
                 `
               : ''}
-            ${psiTest.push &&
-            psiTest.variableInfection &&
-            psiTest.pushNegation !== 'all'
+            ${psiTest.variableInfection && psiTest.sideEffectNegation !== 'all'
               ? html`
                   <mwc-button
+                    dense
                     outlined
                     @click=${this.startInfectionTest}
                     class="infection-test"
                   >
-                    ${localize('pushed')} - ${localize('infectionTest')}
+                    ${localize('infectionTest')}
                   </mwc-button>
                 `
               : ''}

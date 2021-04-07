@@ -36,3 +36,9 @@ mwc-button {
   justify-content: space-between;
   padding: 0.125rem 1rem;
 }
+
+.already-active-label {
+  margin: 0.25rem 0.25rem 0;
+  text-transform: uppercase;
+  color: var(--color-text-lighter);
+}

@@ -12,7 +12,7 @@
 mwc-button {
   width: calc(100% - 1rem);
   margin: 0.25rem 0.5rem;
-  --mdc-theme-primary: var(--color-negative);
+  --mdc-theme-primary: #{lightv(var(--color-negative), 1.25)};
 
   &.infection-test {
     --mdc-theme-primary: var(--color-primary-alt);

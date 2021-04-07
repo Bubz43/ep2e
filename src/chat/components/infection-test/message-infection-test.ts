@@ -80,7 +80,6 @@ export class MessageInfectionTest extends MessageElement {
       return html`<p>${localize('infectionTest')} ${localize('avoided')}</p>`;
     }
     if (this.infectionTest.interference) return '';
-    //   const { moxieUse } = this.infectionTest;
     const { result } = this.successTestInfo ?? {};
     if (!result) return '';
     const { disabled } = this;

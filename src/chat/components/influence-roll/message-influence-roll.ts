@@ -11,6 +11,7 @@ import { localize } from '@src/foundry/localization';
 import { rollFormula, rollLabeledFormulas } from '@src/foundry/rolls';
 import { HealthType } from '@src/health/health';
 import { customElement, html, property } from 'lit-element';
+import { clamp } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-influence-roll.scss';
 
@@ -26,8 +27,11 @@ export class MessageInfluenceRoll extends MessageElement {
 
   @property({ type: Object }) influenceRoll!: InfluenceRollData;
 
-  get roll() {
-    return this.influenceRoll.rollData.total as InfluenceRoll;
+  get clampedRoll() {
+    return clamp(this.influenceRoll.rollData.total, {
+      min: 1,
+      max: 6,
+    }) as InfluenceRoll;
   }
 
   private reroll() {
@@ -41,7 +45,7 @@ export class MessageInfluenceRoll extends MessageElement {
     const { actor } = this.message;
     if (actor?.proxy.type === ActorType.Character) {
       const { psi } = actor.proxy;
-      return !!psi?.fullInfluences[this.roll].timeState;
+      return !!psi?.fullInfluences[this.clampedRoll].timeState;
     }
     return false;
   }
@@ -56,7 +60,7 @@ export class MessageInfluenceRoll extends MessageElement {
       : 'applied';
     if (actor?.proxy.type === ActorType.Character) {
       const { psi } = actor.proxy;
-      const { roll: influenceRoll } = this;
+      const { clampedRoll: influenceRoll } = this;
       const influence = psi?.fullInfluences[influenceRoll];
       if (!influence || !psi) {
         notify(
@@ -130,7 +134,7 @@ export class MessageInfluenceRoll extends MessageElement {
   render() {
     const { total, formula } = this.influenceRoll.rollData;
     const { influences, applied } = this.influenceRoll;
-    const { disabled } = this;
+    const { disabled, clampedRoll } = this;
     return html`
       <div class="roll">
         <span>${formula}</span>
@@ -140,7 +144,7 @@ export class MessageInfluenceRoll extends MessageElement {
         ${influenceRolls.map(
           (roll) => html`
             <mwc-list-item
-              class=${roll === total ? 'active' : ''}
+              class=${roll === clampedRoll ? 'active' : ''}
               noninteractive
               >[${roll}${roll === 6 ? '+' : ''}]
               ${influences[roll].name}</mwc-list-item
@@ -150,7 +154,9 @@ export class MessageInfluenceRoll extends MessageElement {
       </mwc-list>
       ${this.influenceAlreadyActive && !applied
         ? html`
-            <p>${localize('influence')} ${localize('active')}</p>
+            <p class="already-active-label">
+              ${localize('influence')} ${localize('active')}
+            </p>
             <div class="active-options">
               <mwc-button ?disabled=${disabled} dense @click=${this.reroll}
                 >${localize('reRoll')}</mwc-button

@@ -52,12 +52,6 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
 
   @query('mwc-slider') private slider?: Slider;
 
-  // firstUpdated() {
-  //   setTimeout(() => {
-  //     this.renderRoot.querySelector('mwc-slider')?.layout();
-  //   }, 100);
-  // }
-
   private resizeObs: ResizeObserver | null = null;
 
   connectedCallback() {
@@ -92,6 +86,7 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
             character: actor.proxy,
             psi: actor.proxy.psi,
             interference,
+            token,
           };
         }
         return null;

@@ -1,4 +1,5 @@
 import { createMessage } from '@src/chat/create-message';
+import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Character } from '@src/entities/actor/proxies/character';
 import type { Psi } from '@src/entities/item/proxies/psi';
 import { ActionSubtype, ActionType, createAction } from '@src/features/actions';
@@ -11,6 +12,7 @@ export type InfectionTestInit = {
   character: Character;
   modifier?: { sleight: string; value: number };
   interference?: boolean;
+  token?: MaybeToken;
 };
 
 export class InfectionTest extends SuccessTestBase {
@@ -18,12 +20,19 @@ export class InfectionTest extends SuccessTestBase {
   readonly character;
   readonly sleightModifier?: InfectionTestInit['modifier'];
   readonly interference;
+  readonly token: MaybeToken;
 
   get basePoints() {
     return this.psi.infectionRating;
   }
 
-  constructor({ psi, modifier, character, interference }: InfectionTestInit) {
+  constructor({
+    psi,
+    modifier,
+    character,
+    interference,
+    token,
+  }: InfectionTestInit) {
     super({
       action: createAction({
         type: ActionType.Automatic,
@@ -34,6 +43,7 @@ export class InfectionTest extends SuccessTestBase {
     this.character = character;
     this.sleightModifier = modifier;
     this.interference = interference;
+    this.token = token;
     if (modifier) {
       const sleightModifier = createSuccessTestModifier({
         name: modifier.sleight,
@@ -81,6 +91,7 @@ export class InfectionTest extends SuccessTestBase {
           ],
         },
       },
+      entity: this.token || this.character,
     });
     if (this.sleightModifier) {
       this.psi.updateInfectionRating(

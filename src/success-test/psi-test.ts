@@ -41,7 +41,7 @@ export class PsiTest extends SkillTest {
     targetingSelf: boolean;
     range: PsiRange;
     touchingTarget: boolean;
-    pushPools: number;
+    sideEffectNegation: number;
   }>;
 
   readonly rangeModifier = createSuccessTestModifier({
@@ -84,9 +84,9 @@ export class PsiTest extends SkillTest {
       touchingTarget: false,
       range: PsiRange.Close,
       targetingAsync: false,
-      pushPools: 0,
+      sideEffectNegation: 0,
       update: this.recipe((draft, changed) => {
-        const currentPoolUse = draft.use.pushPools;
+        const currentPoolUse = draft.use.sideEffectNegation;
         draft.use = merge(draft.use, changed);
         const { use } = draft;
         if (changed.sleight) {
@@ -103,16 +103,16 @@ export class PsiTest extends SkillTest {
           use.touchingTarget = false;
         }
 
-        if (!use.push) use.pushPools = 0;
+        if (!use.push) use.sideEffectNegation = 0;
 
-        if (use.pushPools !== currentPoolUse) {
+        if (use.sideEffectNegation !== currentPoolUse) {
           draft.pools.available = this.getPools(this.skillState.skill).map(
             (pool) =>
               pool.type === PoolType.Flex
                 ? pool
                 : new Pool({
                     type: pool.type,
-                    spent: pool.spent + draft.use.pushPools,
+                    spent: pool.spent + draft.use.sideEffectNegation,
                     initialValue: pool.max,
                   }),
           );
@@ -257,7 +257,7 @@ export class PsiTest extends SkillTest {
 
   protected async createMessage() {
     const { settings, pools, action, name, techSource } = this;
-    const { sleight, push, pushPools } = this.use;
+    const { sleight, push, sideEffectNegation: pushPools } = this.use;
     await createMessage({
       data: {
         header: {
@@ -280,8 +280,15 @@ export class PsiTest extends SkillTest {
         psiTest: {
           sleight: sleight.getDataCopy(),
           push: push,
-          pushNegation:
-            pushPools === 2 ? 'all' : pushPools === 1 ? 'damage' : '',
+          sideEffectNegation: push
+            ? pushPools === 2
+              ? 'all'
+              : pushPools === 1
+              ? 'damage'
+              : ''
+            : pushPools
+            ? 'all'
+            : '',
           variableInfection: !!this.psi?.hasVariableInfection,
         },
       },
