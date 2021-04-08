@@ -206,6 +206,7 @@ export class PsiTestControls extends LitElement {
       use,
       freePush,
       psi,
+      fullSideEffectNegationPoints,
     } = test;
 
     const {
@@ -335,17 +336,23 @@ export class PsiTestControls extends LitElement {
             fields: ({ push }) =>
               renderSelectField(push, test.availablePushes, emptyTextDash),
           })}
-          ${push
+          ${push || psi?.hasVariableInfection
             ? renderAutoForm({
                 classes: 'negation-form',
                 props: {
                   negation:
-                    pushPools === 1 ? 'damage' : pushPools === 2 ? 'all' : '',
+                    pushPools === fullSideEffectNegationPoints
+                      ? 'all'
+                      : pushPools === 1
+                      ? 'damage'
+                      : '',
                 },
                 update: ({ negation }) => {
                   if (!negation) use.update({ sideEffectNegation: 0 });
                   else if (negation === 'all')
-                    use.update({ sideEffectNegation: 2 });
+                    use.update({
+                      sideEffectNegation: fullSideEffectNegationPoints,
+                    });
                   else if (negation === 'damage')
                     use.update({ sideEffectNegation: 1 });
                 },
@@ -353,23 +360,29 @@ export class PsiTestControls extends LitElement {
                   renderSelectField(
                     {
                       ...negation,
-                      label: `${localize('negate')} ${localize('push')}
+                      label: `${localize('negate')} ${localize('side')}
                   ${localize('effects')}
                   (${localize(test.mainPool)})`,
                     },
-                    psi?.hasVariableInfection ? ['damage', 'all'] : ['damage'],
+                    psi?.hasVariableInfection
+                      ? compact([push && 'damage', 'all'])
+                      : ['damage'],
                     {
                       emptyText: '-',
                       disableOptions: compact([
                         maxPsiPushPools < 1 && 'damage',
-                        maxPsiPushPools < 2 && 'all',
+                        maxPsiPushPools < fullSideEffectNegationPoints && 'all',
                       ]),
                       altLabel: (option) =>
                         option === 'damage'
                           ? `${localize('self')} ${localize('damage')} (1)`
-                          : `${localize('self')} ${localize(
-                              'damage',
-                            )} & ${localize('infectionTest')} (2)`,
+                          : `${
+                              push
+                                ? `${localize('self')} ${localize('damage')} &`
+                                : ''
+                            } ${localize(
+                              'infectionTest',
+                            )} (${fullSideEffectNegationPoints})`,
                     },
                   ),
               })

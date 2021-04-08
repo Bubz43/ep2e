@@ -15,7 +15,16 @@ import { localize } from '@src/foundry/localization';
 import { distanceBetweenTokens } from '@src/foundry/token-helpers';
 import { notEmpty } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
-import { compact, concat, difference, merge, pipe, take, uniq } from 'remeda';
+import {
+  clamp,
+  compact,
+  concat,
+  difference,
+  merge,
+  pipe,
+  take,
+  uniq,
+} from 'remeda';
 import type { SetRequired } from 'type-fest';
 import { psiRangeThresholds } from './range-modifiers';
 import { SkillTest, SkillTestInit } from './skill-test';
@@ -103,7 +112,8 @@ export class PsiTest extends SkillTest {
           use.touchingTarget = false;
         }
 
-        if (!use.push) use.sideEffectNegation = 0;
+        if (!use.push)
+          use.sideEffectNegation = clamp(use.sideEffectNegation, { max: 1 });
 
         if (use.sideEffectNegation !== currentPoolUse) {
           draft.pools.available = this.getPools(this.skillState.skill).map(
@@ -216,6 +226,10 @@ export class PsiTest extends SkillTest {
     }
 
     this.modifiers.simple.set(this.rangeModifier.id, this.rangeModifier);
+  }
+
+  get fullSideEffectNegationPoints() {
+    return this.use.push ? 2 : 1;
   }
 
   get mainPool() {

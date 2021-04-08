@@ -1451,6 +1451,7 @@
     "touchingAllTargets": "Touching All Targets",
     "allTargetsAsync": "All Targets Async",
     "touchingTarget": "Touching Target",
+    "side": "Side",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
