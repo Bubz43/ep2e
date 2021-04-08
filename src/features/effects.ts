@@ -594,15 +594,19 @@ export const matchesSkill = (skill: Skill) => (action: Action) => {
   });
 };
 
-export const multiplyEffectModifier = (effect: Effect, multiplier: number) => {
-  if (effect.type === EffectType.Armor) {
-    const copy = { ...effect };
+export const multiplyEffectModifier = <T extends Effect>(
+  effect: T,
+  multiplier: number,
+): T => {
+  const e = effect as Effect;
+  if (e.type === EffectType.Armor) {
+    const copy = { ...effect } as ArmorEffect;
     for (const armor of enumValues(ArmorType)) {
       copy[armor] = Math.ceil(copy[armor] * multiplier);
     }
-    return copy;
-  } else if ('modifier' in effect && effect.modifier) {
-    return { ...effect, modifier: Math.ceil(effect.modifier * multiplier) };
+    return copy as T;
+  } else if ('modifier' in e && e.modifier) {
+    return { ...effect, modifier: Math.ceil(e.modifier * multiplier) };
   }
   return effect;
 };

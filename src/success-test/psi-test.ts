@@ -271,7 +271,7 @@ export class PsiTest extends SkillTest {
 
   protected async createMessage() {
     const { settings, pools, action, name, techSource } = this;
-    const { sleight, push, sideEffectNegation: pushPools } = this.use;
+    const { sleight, push, sideEffectNegation, attackTargets } = this.use;
     await createMessage({
       data: {
         header: {
@@ -289,22 +289,35 @@ export class PsiTest extends SkillTest {
               localize('action'),
             ].join(' '),
           ]),
+          description: sleight.description,
         },
         successTest: this.testMessageData,
         psiTest: {
           sleight: sleight.getDataCopy(),
+          freePush: this.psi?.activeFreePush,
           push: push,
           sideEffectNegation: push
-            ? pushPools === 2
+            ? sideEffectNegation === 2
               ? 'all'
-              : pushPools === 1
+              : sideEffectNegation === 1
               ? 'damage'
               : ''
-            : pushPools
+            : sideEffectNegation
             ? 'all'
             : '',
           variableInfection: !!this.psi?.hasVariableInfection,
+          willpower: this.ego.aptitudes.wil,
         },
+
+        targets: compact(
+          [...attackTargets].map(
+            (attackTarget) =>
+              attackTarget.scene && {
+                tokenId: attackTarget.id,
+                sceneId: attackTarget.scene.id,
+              },
+          ),
+        ),
       },
       entity: this.token ?? this.character,
       visibility: settings.visibility,
@@ -316,18 +329,18 @@ export class PsiTest extends SkillTest {
           this.psi.infectionRating + sleight.infectionMod * (push ? 2 : 1),
         );
       }
-      if (pushPools) {
+      if (sideEffectNegation) {
         const { mainPool } = this;
         const activePoolUse = pools.active?.[0].type;
         if (activePoolUse === mainPool) {
           this.character.addToSpentPools({
             pool: mainPool,
-            points: 1 + pushPools,
+            points: 1 + sideEffectNegation,
           });
         } else {
           this.character.addToSpentPools(
             ...compact([
-              { pool: mainPool, points: pushPools },
+              { pool: mainPool, points: sideEffectNegation },
               activePoolUse && { pool: activePoolUse, points: 1 },
             ]),
           );

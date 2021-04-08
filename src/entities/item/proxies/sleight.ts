@@ -64,6 +64,10 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
     return this.epData.action;
   }
 
+  get duration() {
+    return this.epData.duration;
+  }
+
   get isTemporary() {
     return ![SleightDuration.Instant, SleightDuration.Sustained].includes(
       this.epData.duration,
@@ -72,6 +76,24 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
 
   get infectionMod() {
     return this.epData.infectionMod;
+  }
+
+  getTotalDuration(willpower: number, increasedDuration: boolean) {
+    const { duration } = this;
+    if (
+      duration === SleightDuration.Sustained ||
+      duration === SleightDuration.Instant
+    )
+      return -1;
+    const base = (willpower / 5) * (increasedDuration ? 2 : 1);
+    switch (duration) {
+      case SleightDuration.Minutes:
+        return toMilliseconds({ minutes: base });
+      case SleightDuration.Hours:
+        return toMilliseconds({ hours: base });
+      case SleightDuration.ActionTurns:
+        return toMilliseconds({ seconds: base * 3 });
+    }
   }
 
   psiPush(willpower: number) {

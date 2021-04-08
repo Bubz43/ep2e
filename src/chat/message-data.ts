@@ -214,9 +214,12 @@ export type InfectionTestData = {
 
 export type PsiTestData = {
   sleight: ItemEntity<ItemType.Sleight>;
+  freePush: PsiPush | '' | undefined;
   push: PsiPush | '';
   sideEffectNegation: '' | 'damage' | 'all';
   variableInfection: boolean;
+  willpower: number;
+  // sustainingOn?: string[];
 };
 
 export type MessageData = Partial<{

@@ -1,3 +1,4 @@
+import { createMessage, rollModeToVisibility } from '@src/chat/create-message';
 import type {
   PsiTestData,
   SuccessTestMessageData,
@@ -5,14 +6,25 @@ import type {
 import { AptitudeType, PsiPush } from '@src/data-enums';
 import { ActorType } from '@src/entities/entity-types';
 import { pickOrDefaultCharacter } from '@src/entities/find-entities';
+import { Sleight } from '@src/entities/item/proxies/sleight';
+import { createEffect, multiplyEffectModifier } from '@src/features/effects';
+import { addFeature, uniqueStringID } from '@src/features/feature-helpers';
+import { createTemporaryFeature } from '@src/features/temporary';
 import { localize } from '@src/foundry/localization';
-import { rollLabeledFormulas } from '@src/foundry/rolls';
+import {
+  joinLabeledFormulas,
+  rollFormula,
+  rollLabeledFormulas,
+} from '@src/foundry/rolls';
 import { HealthType } from '@src/health/health';
 import { AptitudeCheckControls } from '@src/success-test/components/aptitude-check-controls/aptitude-check-controls';
 import { InfectionTestControls } from '@src/success-test/components/infection-test-controls/infection-test-controls';
-import { SuccessTestResult } from '@src/success-test/success-test';
+import {
+  grantedSuperiorResultEffects,
+  SuccessTestResult,
+} from '@src/success-test/success-test';
 import { customElement, html, property } from 'lit-element';
-import { last } from 'remeda';
+import { compact, last, range } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-psi-test.scss';
 
@@ -30,7 +42,18 @@ export class MessagePsiTest extends MessageElement {
 
   @property({ type: Object }) successTest!: SuccessTestMessageData;
 
-  get successTestInfo() {
+  private get sleight() {
+    return new Sleight({
+      data: this.psiTest.sleight,
+      embedded: null,
+    });
+  }
+
+  private get pushes() {
+    return compact([this.psiTest.freePush, this.psiTest.push]);
+  }
+
+  private get successTestInfo() {
     const test = this.successTest;
     const result = last(test.states || [])?.result;
 
@@ -42,7 +65,11 @@ export class MessagePsiTest extends MessageElement {
       : null;
   }
 
-  startDefense() {
+  private get halveResistance() {
+    return this.pushes.includes(PsiPush.IncreasedPower);
+  }
+
+  private startDefense() {
     pickOrDefaultCharacter((character) => {
       AptitudeCheckControls.openWindow({
         entities: { actor: character.actor },
@@ -53,7 +80,7 @@ export class MessagePsiTest extends MessageElement {
             ego: actor.proxy.ego,
             character: actor.proxy,
             aptitude: AptitudeType.Willpower,
-            halve: this.psiTest.push === PsiPush.IncreasedPower,
+            halve: this.halveResistance,
           };
         },
       });
@@ -100,17 +127,96 @@ export class MessagePsiTest extends MessageElement {
     });
   }
 
-  render() {
-    const { disabled, successTestInfo, psiTest } = this;
+  private applyEffectsToTarget() {
+    pickOrDefaultCharacter(async (character) => {
+      const { sleight, pushes, successTestInfo } = this;
+      const { effects, scaleEffectsOnSuperior, mentalArmor } = sleight.toTarget;
+      const totalDuration = sleight.getTotalDuration(
+        this.psiTest.willpower,
+        pushes.includes(PsiPush.IncreasedDuration),
+      );
+      const superiorSuccesses = grantedSuperiorResultEffects(
+        successTestInfo?.result,
+      );
 
+      let effectMultipliers = 1;
+      if (pushes.includes(PsiPush.IncreasedEffect)) effectMultipliers++;
+
+      if (successTestInfo?.result === SuccessTestResult.CriticalSuccess) {
+        effectMultipliers++;
+      }
+
+      if (scaleEffectsOnSuperior) {
+        effectMultipliers += superiorSuccesses;
+      }
+
+      const finalEffects = effects.map((effect) =>
+        multiplyEffectModifier(effect, effectMultipliers),
+      );
+
+      if (mentalArmor.apply) {
+        const roll = rollFormula(
+          joinLabeledFormulas(
+            compact([
+              { label: localize('base'), formula: mentalArmor.formula },
+              ...range(0, effectMultipliers - 1).map(() => ({
+                label: '',
+                formula: mentalArmor.formula,
+              })),
+            ]),
+          ),
+        );
+        if (roll) {
+          await createMessage({
+            roll,
+            flavor: localize('mentalArmor'),
+            visibility: rollModeToVisibility(
+              game.settings.get('core', 'rollMode'),
+            ),
+          });
+          finalEffects.push({
+            ...createEffect.armor({
+              mental: roll.total,
+              concealable: true,
+              layerable: true,
+            }),
+            id: uniqueStringID(finalEffects.map((e) => e.id)),
+          });
+        }
+      }
+
+      character.updater.path('data', 'temporary').commit((temps) =>
+        addFeature(
+          temps,
+          createTemporaryFeature.effects({
+            effects: finalEffects,
+            duration: totalDuration,
+            name: sleight.name,
+          }),
+        ),
+      );
+
+      // TODO Sustained
+    });
+  }
+
+  render() {
+    const { disabled, successTestInfo, psiTest, halveResistance } = this;
+    const { toSelf, toTarget } = this.sleight;
     return html`
       <sl-group label=${localize('opposeWith')} class="defense">
         <wl-list-item clickable @click=${this.startDefense}>
-          ${localize(AptitudeType.Willpower)}
-          ${psiTest.push === PsiPush.IncreasedPower ? ` ÷ 2` : ''}
+          ${localize(AptitudeType.Willpower)} ${halveResistance ? ` ÷ 2` : ''}
         </wl-list-item>
       </sl-group>
 
+      ${toTarget.effects.length
+        ? html`
+            <mwc-button class="apply-effects"
+              >${localize('applyEffects')}</mwc-button
+            >
+          `
+        : ''}
       ${disabled
         ? ''
         : html`

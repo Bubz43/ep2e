@@ -151,12 +151,11 @@ export enum PsiPush {
 }
 
 export enum SleightDuration {
-  ActionTurns = 'actionTurns',
-  Constant = 'constant',
-  Hours = 'hours',
   Instant = 'instant',
-  Minutes = 'minutes',
   Sustained = 'sustained',
+  ActionTurns = 'actionTurns',
+  Minutes = 'minutes',
+  Hours = 'hours',
 }
 
 export enum SleightType {

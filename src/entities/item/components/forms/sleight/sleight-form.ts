@@ -1,12 +1,18 @@
 import {
   renderFormulaField,
   renderLabeledCheckbox,
+  renderNumberField,
   renderNumberInput,
   renderRadioFields,
   renderSelectField,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
-import { enumValues, SleightDuration, SleightType } from '@src/data-enums';
+import {
+  AptitudeType,
+  enumValues,
+  SleightDuration,
+  SleightType,
+} from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import type { Sleight } from '@src/entities/item/proxies/sleight';
 import { ActionType } from '@src/features/actions';
@@ -80,13 +86,28 @@ export class SleightForm extends ItemFormBase {
         ${renderUpdaterForm(updater.path('data'), {
           disabled,
           slot: 'sidebar',
-          fields: ({ sleightType, duration, action }) => [
+          fields: ({ sleightType, duration, action, infectionMod }) => [
             renderSelectField(sleightType, enumValues(SleightType)),
             sleightType.value === SleightType.Chi
               ? ''
               : [
-                  renderSelectField(duration, enumValues(SleightDuration)),
                   renderSelectField(action, enumValues(ActionType)),
+                  renderSelectField(duration, enumValues(SleightDuration), {
+                    altLabel: (durationType) => {
+                      if (
+                        durationType === SleightDuration.Instant ||
+                        durationType === SleightDuration.Sustained
+                      ) {
+                        return localize(durationType);
+                      }
+                      return `${localize(
+                        AptitudeType.Willpower,
+                      )}  ÷ 5 ${localize(durationType)}`;
+                    },
+                  }),
+                  sleightType.value === SleightType.Epsilon
+                    ? ''
+                    : renderNumberField(infectionMod, { min: 0, max: 100 }),
                 ],
           ],
         })}
@@ -135,6 +156,54 @@ export class SleightForm extends ItemFormBase {
               ?disabled=${disabled}
             ></item-form-effects-list>
           </section>
+
+          ${!isChi
+            ? html` <section>
+                <sl-header heading=${localize('toTarget')}>
+                  <mwc-icon-button
+                    icon="add"
+                    slot="action"
+                    @click=${(ev: MouseEvent) => {
+                      this.effectGroup = 'toTarget';
+                      this.setDrawerFromEvent(this.renderEffectCreator)();
+                    }}
+                    ?disabled=${disabled}
+                  ></mwc-icon-button
+                ></sl-header>
+
+                ${renderUpdaterForm(
+                  updater.path('data', 'toTarget', 'mentalArmor'),
+                  {
+                    classes: 'mental-armor-form',
+                    fields: ({ apply, divisor, formula }) => [
+                      renderLabeledCheckbox({
+                        ...apply,
+                        label: `${localize('apply')} ${localize(
+                          'mentalArmor',
+                        )}`,
+                      }),
+                      apply.value
+                        ? isChi
+                          ? html`<mwc-formfield
+                              alignEnd
+                              label="@${localize('wil')} / "
+                              >${renderNumberInput(divisor, {
+                                min: 1,
+                              })}</mwc-formfield
+                            >`
+                          : renderFormulaField(formula)
+                        : '',
+                    ],
+                  },
+                )}
+
+                <item-form-effects-list
+                  .effects=${effectsOnTarget}
+                  .operations=${this.effectsOps.toTarget}
+                  ?disabled=${disabled}
+                ></item-form-effects-list>
+              </section>`
+            : ''}
         </div>
 
         <editor-wrapper
