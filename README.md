@@ -1,5 +1,8 @@
 # Eclipse Phase 2e System for Foundry VTT
 
+## WIP
+This is still work in progress, with numerous things unfinished, and a lot of general wonkiness. It has not been tested in any sort of long term game, and various fun and exciting problems might crop up if you try to use it.
+
 ## TODOs
 
 - Gear Pack actor type
