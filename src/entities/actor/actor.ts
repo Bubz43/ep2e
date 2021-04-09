@@ -227,6 +227,7 @@ export class ActorEP extends Actor {
     return {
       img: token?.data.img || this.img,
       name: token?.name || this.name,
+      uuid: this.isToken ? this.token!.uuid : this.uuid,
     };
   }
 

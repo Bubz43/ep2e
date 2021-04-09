@@ -78,6 +78,12 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
     return this.epData.infectionMod;
   }
 
+  startSustaining(
+    entities: { name: string; uuid: string; temporaryFeatureId: string }[],
+  ) {
+    return this.updater.path('data', 'status', 'sustainingOn').commit(entities);
+  }
+
   getTotalDuration(willpower: number, increasedDuration: boolean) {
     const { duration } = this;
     if (
@@ -153,7 +159,7 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
   getDataCopy(reset?: boolean) {
     const copy = super.getDataCopy(reset);
     copy.data.status = {
-      sustained: false,
+      sustainingOn: [],
       pushDuration: 0,
       pushStartTime: 0,
       pushed: false,

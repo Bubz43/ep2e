@@ -27,3 +27,23 @@ mwc-button {
     color: var(--color-primary-alt);
   }
 }
+
+.applied-to {
+  padding: 0;
+  display: inline-flex;
+  mwc-icon {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: alphav(var(--color-bg), 0.25);
+    display: none;
+    color: lightv(var(--color-negative), 1.5);
+    border-radius: 100%;
+  }
+  &[clickable]:hover {
+    mwc-icon {
+      display: block;
+      @include animate-css(fadeIn, 200ms);
+    }
+  }
+}

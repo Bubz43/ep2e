@@ -1478,7 +1478,8 @@ type LangEntries =
   | 'allTargetsAsync'
   | 'touchingAllTargets'
   | 'touchingTarget'
-  | 'side';
+  | 'side'
+  | 'sustaining';
 type FullNames =
   | 'cog'
   | 'int'

@@ -3,12 +3,12 @@ import type {
   PsiTestData,
   SuccessTestMessageData,
 } from '@src/chat/message-data';
-import { AptitudeType, PsiPush } from '@src/data-enums';
+import { AptitudeType, PsiPush, SleightDuration } from '@src/data-enums';
 import { ActorType } from '@src/entities/entity-types';
 import { pickOrDefaultCharacter } from '@src/entities/find-entities';
 import { Sleight } from '@src/entities/item/proxies/sleight';
 import { createEffect, multiplyEffectModifier } from '@src/features/effects';
-import { addFeature, uniqueStringID } from '@src/features/feature-helpers';
+import { uniqueStringID } from '@src/features/feature-helpers';
 import { createTemporaryFeature } from '@src/features/temporary';
 import { localize } from '@src/foundry/localization';
 import {
@@ -23,6 +23,7 @@ import {
   grantedSuperiorResultEffects,
   SuccessTestResult,
 } from '@src/success-test/success-test';
+import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property } from 'lit-element';
 import { compact, last, range } from 'remeda';
 import { MessageElement } from '../message-element';
@@ -185,24 +186,56 @@ export class MessagePsiTest extends MessageElement {
         }
       }
 
-      character.updater.path('data', 'temporary').commit((temps) =>
-        addFeature(
-          temps,
-          createTemporaryFeature.effects({
+      const temporaryFeatureId = uniqueStringID(
+        character.epData.temporary.map((temp) => temp.id),
+      );
+
+      await character.updater.path('data', 'temporary').commit((temps) => [
+        ...temps,
+        {
+          ...createTemporaryFeature.effects({
             effects: finalEffects,
             duration: totalDuration,
             name: sleight.name,
           }),
-        ),
-      );
+          id: temporaryFeatureId,
+        },
+      ]);
 
-      // TODO Sustained
+      this.getUpdater('psiTest').commit({
+        appliedTo: [
+          ...(this.psiTest.appliedTo || []),
+          {
+            ...character.actor.tokenOrLocalInfo,
+            temporaryFeatureId,
+          },
+        ],
+      });
     });
+  }
+
+  private startSustaining() {
+    // TODO Check to make sure every one has applied it
+    const { actor } = this.message;
+    if (actor?.proxy.type === ActorType.Character) {
+      actor.proxy.activatedSleights
+        .find((s) => s.id === this.psiTest.sleight._id)
+        ?.startSustaining(this.psiTest.appliedTo || []);
+    }
+  }
+
+  private removeAppliedTo(ev: Event) {
+    if (this.disabled || !this.psiTest.appliedTo) return;
+    const index = Number((ev.currentTarget as HTMLElement).dataset['index']);
+    const newList = [...this.psiTest.appliedTo];
+    newList.splice(index, 1);
+    this.getUpdater('psiTest').commit({ appliedTo: newList });
   }
 
   render() {
     const { disabled, successTestInfo, psiTest, halveResistance } = this;
-    const { toSelf, toTarget } = this.sleight;
+    const { toSelf, toTarget, duration } = this.sleight;
+    const { appliedTo } = psiTest;
     return html`
       <sl-group label=${localize('opposeWith')} class="defense">
         <wl-list-item clickable @click=${this.startDefense}>
@@ -217,9 +250,17 @@ export class MessagePsiTest extends MessageElement {
             >
           `
         : ''}
+      ${notEmpty(appliedTo) ? this.renderAppliedTo(appliedTo) : ''}
       ${disabled
         ? ''
         : html`
+            ${duration === SleightDuration.Sustained
+              ? html`
+                  <mwc-button @click=${this.startSustaining}
+                    >${localize('start')} ${localize('sustaining')}</mwc-button
+                  >
+                `
+              : ''}
             ${successTestInfo?.result === SuccessTestResult.CriticalFailure
               ? html`
                   <mwc-button
@@ -253,6 +294,27 @@ export class MessagePsiTest extends MessageElement {
                 `
               : ''}
           `}
+    `;
+  }
+
+  private renderAppliedTo(entities: { name: string; uuid: string }[]) {
+    const { disabled } = this;
+    return html`
+      <sl-group label="${localize('applied')} ${localize('to')}"
+        >${entities.map(
+          ({ name }, index, list) => html`
+            <wl-list-item
+              class="applied-to"
+              ?clickable=${!disabled}
+              data-index=${index}
+              @click=${this.removeAppliedTo}
+            >
+              ${name}${index < list.length - 1 ? ',' : ''}
+              ${disabled ? '' : html` <mwc-icon>clear</mwc-icon> `}
+            </wl-list-item>
+          `,
+        )}</sl-group
+      >
     `;
   }
 }

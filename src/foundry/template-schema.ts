@@ -381,7 +381,7 @@ type SleightData = {
   toSelf: SleightEffects;
 
   status: {
-    sustained: boolean;
+    sustainingOn: { name: string; uuid: string; temporaryFeatureId: string }[];
     pushDuration: number;
     pushStartTime: number;
     pushed: boolean;
