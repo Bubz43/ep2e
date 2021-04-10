@@ -689,6 +689,9 @@
             "allActions": {
               "type": "string"
             },
+            "allTargetsAsync": {
+              "type": "string"
+            },
             "allowRemoteControl": {
               "type": "string"
             },
@@ -3884,6 +3887,9 @@
             "shortRecharge": {
               "type": "string"
             },
+            "side": {
+              "type": "string"
+            },
             "signal": {
               "type": "string"
             },
@@ -4205,6 +4211,9 @@
             "sustained": {
               "type": "string"
             },
+            "sustaining": {
+              "type": "string"
+            },
             "swap": {
               "type": "string"
             },
@@ -4266,6 +4275,12 @@
               "type": "string"
             },
             "targetDistance": {
+              "type": "string"
+            },
+            "targetingAsync": {
+              "type": "string"
+            },
+            "targetingSelf": {
               "type": "string"
             },
             "targets": {
@@ -4434,6 +4449,12 @@
               "type": "string"
             },
             "touchOnly": {
+              "type": "string"
+            },
+            "touchingAllTargets": {
+              "type": "string"
+            },
+            "touchingTarget": {
               "type": "string"
             },
             "toxin": {
@@ -4888,6 +4909,7 @@
             "alienation",
             "all",
             "allActions",
+            "allTargetsAsync",
             "allowRemoteControl",
             "alpha",
             "alt",
@@ -5953,6 +5975,7 @@
             "shop",
             "short",
             "shortRecharge",
+            "side",
             "signal",
             "silencer",
             "singleShot",
@@ -6060,6 +6083,7 @@
             "survival",
             "survivalist",
             "sustained",
+            "sustaining",
             "swap",
             "swarm",
             "swimmer",
@@ -6081,6 +6105,8 @@
             "takingTime",
             "target",
             "targetDistance",
+            "targetingAsync",
+            "targetingSelf",
             "targets",
             "task",
             "taskAction",
@@ -6137,6 +6163,8 @@
             "total",
             "touch",
             "touchOnly",
+            "touchingAllTargets",
+            "touchingTarget",
             "toxin",
             "track",
             "trackMentalHealth",

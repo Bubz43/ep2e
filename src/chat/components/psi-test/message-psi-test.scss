@@ -12,10 +12,10 @@
 mwc-button {
   width: calc(100% - 1rem);
   margin: 0.25rem 0.5rem;
-  --mdc-theme-primary: #{lightv(var(--color-negative), 1.25)};
+  --mdc-theme-primary: var(--color-primary-alt);
 
-  &.infection-test {
-    --mdc-theme-primary: var(--color-primary-alt);
+  &.damage {
+    --mdc-theme-primary: #{lightv(var(--color-negative), 1.25)};
   }
 }
 
@@ -28,9 +28,12 @@ mwc-button {
   }
 }
 
+.affected-entities {
+  padding: 0.125rem 0.5rem;
+}
+
 .applied-to {
-  padding: 0;
-  display: inline-flex;
+  margin-bottom: 0.125rem;
   mwc-icon {
     position: absolute;
     left: 50%;

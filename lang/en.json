@@ -800,7 +800,7 @@
     "shock": "Shock",
     "stun": "Stun",
     "psiTest": "Psi Test",
-    "scaleEffectsOnSuperior": "Scale on Superior Success",
+    "scaleEffectsOnSuperior": "Scale Effects on Superior Successes",
     "finalize": "Finalize",
     "any": "Any",
     "application": "Application",
@@ -1452,6 +1452,7 @@
     "allTargetsAsync": "All Targets Async",
     "touchingTarget": "Touching Target",
     "side": "Side",
+    "sustaining": "Sustaining",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

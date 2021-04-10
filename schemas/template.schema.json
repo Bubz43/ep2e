@@ -4686,12 +4686,32 @@
                     "pushed": {
                       "type": "boolean"
                     },
-                    "sustained": {
-                      "type": "boolean"
+                    "sustainingOn": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "temporaryFeatureId": {
+                            "type": "string"
+                          },
+                          "uuid": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "uuid",
+                          "temporaryFeatureId"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
                     }
                   },
                   "required": [
-                    "sustained",
+                    "sustainingOn",
                     "pushDuration",
                     "pushStartTime",
                     "pushed"
@@ -9477,12 +9497,11 @@
     },
     "SleightDuration": {
       "enum": [
-        "actionTurns",
-        "constant",
-        "hours",
         "instant",
+        "sustained",
+        "actionTurns",
         "minutes",
-        "sustained"
+        "hours"
       ],
       "type": "string"
     },

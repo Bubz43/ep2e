@@ -3,6 +3,7 @@ import type { AddEffects } from '@src/entities/applied-effects';
 import type { ItemType } from '@src/entities/entity-types';
 import { createEffect, multiplyEffectModifier } from '@src/features/effects';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
+import { createTag } from '@src/features/tags';
 import { createLiveTimeState, currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { LazyGetter } from 'lazy-get-decorator';
@@ -16,6 +17,12 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
   }: ItemProxyInit<ItemType.Sleight> & { temporary?: string }) {
     super(init);
     this.temporary = temporary;
+  }
+
+  get fullName() {
+    return `${this.name} ${
+      this.isSustaining ? `(${localize('sustaining')})` : ''
+    }`;
   }
 
   get fullType() {
@@ -78,10 +85,32 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
     return this.epData.infectionMod;
   }
 
+  get isSustaining() {
+    return !this.isChi && this.status.sustainingOn.length;
+  }
+
+  get sustainingModifier(): AddEffects {
+    return {
+      effects: [
+        createEffect.successTest({
+          modifier: -10,
+          tags: [createTag.allActions({})],
+        }),
+      ],
+      source: `${localize('sustaining')} ${this.name}`,
+    };
+  }
+
   startSustaining(
     entities: { name: string; uuid: string; temporaryFeatureId: string }[],
   ) {
     return this.updater.path('data', 'status', 'sustainingOn').commit(entities);
+  }
+
+  stopSustaining() {
+    const currentlySustainingOn = this.status.sustainingOn;
+    // TODO Create message so entities its sustained on can undo
+    return this.updater.path('data', 'status', 'sustainingOn').commit([]);
   }
 
   getTotalDuration(willpower: number, increasedDuration: boolean) {

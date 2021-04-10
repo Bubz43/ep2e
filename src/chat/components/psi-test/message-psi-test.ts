@@ -21,6 +21,7 @@ import { AptitudeCheckControls } from '@src/success-test/components/aptitude-che
 import { InfectionTestControls } from '@src/success-test/components/infection-test-controls/infection-test-controls';
 import {
   grantedSuperiorResultEffects,
+  isSuccessfullTestResult,
   SuccessTestResult,
 } from '@src/success-test/success-test';
 import { notEmpty } from '@src/utility/helpers';
@@ -143,12 +144,17 @@ export class MessagePsiTest extends MessageElement {
       let effectMultipliers = 1;
       if (pushes.includes(PsiPush.IncreasedEffect)) effectMultipliers++;
 
-      if (successTestInfo?.result === SuccessTestResult.CriticalSuccess) {
-        effectMultipliers++;
-      }
+      if (
+        successTestInfo?.result &&
+        isSuccessfullTestResult(successTestInfo.result)
+      ) {
+        if (successTestInfo?.result === SuccessTestResult.CriticalSuccess) {
+          effectMultipliers++;
+        }
 
-      if (scaleEffectsOnSuperior) {
-        effectMultipliers += superiorSuccesses;
+        if (scaleEffectsOnSuperior) {
+          effectMultipliers += superiorSuccesses;
+        }
       }
 
       const finalEffects = effects.map((effect) =>
@@ -214,14 +220,16 @@ export class MessagePsiTest extends MessageElement {
     });
   }
 
-  private startSustaining() {
+  private async startSustaining() {
     // TODO Check to make sure every one has applied it
     const { actor } = this.message;
     if (actor?.proxy.type === ActorType.Character) {
-      actor.proxy.activatedSleights
+      await actor.proxy.activatedSleights
         .find((s) => s.id === this.psiTest.sleight._id)
         ?.startSustaining(this.psiTest.appliedTo || []);
     }
+
+    this.getUpdater('psiTest').commit({ sustaining: true });
   }
 
   private removeAppliedTo(ev: Event) {
@@ -235,7 +243,7 @@ export class MessagePsiTest extends MessageElement {
   render() {
     const { disabled, successTestInfo, psiTest, halveResistance } = this;
     const { toSelf, toTarget, duration } = this.sleight;
-    const { appliedTo } = psiTest;
+    const { appliedTo, sustaining } = psiTest;
     return html`
       <sl-group label=${localize('opposeWith')} class="defense">
         <wl-list-item clickable @click=${this.startDefense}>
@@ -243,9 +251,12 @@ export class MessagePsiTest extends MessageElement {
         </wl-list-item>
       </sl-group>
 
-      ${toTarget.effects.length
+      ${toTarget.effects.length || toTarget.mentalArmor.apply
         ? html`
-            <mwc-button class="apply-effects"
+            <mwc-button
+              dense
+              class="apply-effects"
+              @click=${this.applyEffectsToTarget}
               >${localize('applyEffects')}</mwc-button
             >
           `
@@ -256,8 +267,12 @@ export class MessagePsiTest extends MessageElement {
         : html`
             ${duration === SleightDuration.Sustained
               ? html`
-                  <mwc-button @click=${this.startSustaining}
-                    >${localize('start')} ${localize('sustaining')}</mwc-button
+                  <mwc-button
+                    dense
+                    ?disabled=${!!sustaining}
+                    @click=${this.startSustaining}
+                    >${sustaining ? '' : localize('start')}
+                    ${localize('sustaining')}</mwc-button
                   >
                 `
               : ''}
@@ -266,6 +281,7 @@ export class MessagePsiTest extends MessageElement {
                   <mwc-button
                     dense
                     outlined
+                    class="damage"
                     @click=${this.rollCriticalFailureDamage}
                   >
                     ${localize(successTestInfo.result)} - ${localize('roll')}
@@ -275,7 +291,12 @@ export class MessagePsiTest extends MessageElement {
               : ''}
             ${psiTest.push && !psiTest.sideEffectNegation
               ? html`
-                  <mwc-button dense outlined @click=${this.rollPushDamage}>
+                  <mwc-button
+                    dense
+                    outlined
+                    class="damage"
+                    @click=${this.rollPushDamage}
+                  >
                     ${localize('pushed')} - ${localize('roll')}
                     ${localize('SHORT', 'damageValue')} 1d6
                   </mwc-button>
@@ -300,10 +321,13 @@ export class MessagePsiTest extends MessageElement {
   private renderAppliedTo(entities: { name: string; uuid: string }[]) {
     const { disabled } = this;
     return html`
-      <sl-group label="${localize('applied')} ${localize('to')}"
+      <sl-group
+        label="${localize('applied')} ${localize('to')}"
+        class="affected-entities"
         >${entities.map(
           ({ name }, index, list) => html`
-            <wl-list-item
+            <colored-tag
+              type="info"
               class="applied-to"
               ?clickable=${!disabled}
               data-index=${index}
@@ -311,7 +335,7 @@ export class MessagePsiTest extends MessageElement {
             >
               ${name}${index < list.length - 1 ? ',' : ''}
               ${disabled ? '' : html` <mwc-icon>clear</mwc-icon> `}
-            </wl-list-item>
+            </colored-tag>
           `,
         )}</sl-group
       >

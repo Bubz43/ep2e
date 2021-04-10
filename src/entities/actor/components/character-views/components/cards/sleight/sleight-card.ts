@@ -184,6 +184,10 @@ export class SleightCard extends ItemCardBase {
     });
   }
 
+  private stopSustaining() {
+    this.item.stopSustaining();
+  }
+
   renderHeaderButtons(): TemplateResult {
     if (this.item.isChi) {
       return this.isEnhanced
@@ -207,6 +211,15 @@ export class SleightCard extends ItemCardBase {
             class="push-button"
             >${localize('push')}</mwc-button
           >`;
+    }
+    if (this.item.isSustaining) {
+      return html`<mwc-button
+        class="use-button"
+        dense
+        @click=${this.stopSustaining}
+        ?disabled=${this.character.disabled}
+        >${localize('end')}</mwc-button
+      >`;
     }
     return html`
       <mwc-button

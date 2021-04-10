@@ -275,10 +275,10 @@ export class PsiTest extends SkillTest {
     await createMessage({
       data: {
         header: {
-          heading: name,
+          heading: sleight.name,
           // TODO: Maybe add specializations to subheadings
           subheadings: compact([
-            techSource?.name,
+            localize('psiTest'),
             [
               `${action.type} ${
                 action.timeMod && action.type !== ActionType.Task

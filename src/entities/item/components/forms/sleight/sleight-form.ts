@@ -128,7 +128,11 @@ export class SleightForm extends ItemFormBase {
                 ?disabled=${disabled}
               ></mwc-icon-button
             ></sl-header>
-
+            <item-form-effects-list
+              .effects=${effectsOnSelf}
+              .operations=${this.effectsOps.toSelf}
+              ?disabled=${disabled}
+            ></item-form-effects-list>
             ${renderUpdaterForm(updater.path('data', 'toSelf', 'mentalArmor'), {
               classes: 'mental-armor-form',
               fields: ({ apply, divisor, formula }) => [
@@ -149,12 +153,6 @@ export class SleightForm extends ItemFormBase {
                   : '',
               ],
             })}
-
-            <item-form-effects-list
-              .effects=${effectsOnSelf}
-              .operations=${this.effectsOps.toSelf}
-              ?disabled=${disabled}
-            ></item-form-effects-list>
           </section>
 
           ${!isChi
@@ -170,6 +168,12 @@ export class SleightForm extends ItemFormBase {
                     ?disabled=${disabled}
                   ></mwc-icon-button
                 ></sl-header>
+
+                <item-form-effects-list
+                  .effects=${effectsOnTarget}
+                  .operations=${this.effectsOps.toTarget}
+                  ?disabled=${disabled}
+                ></item-form-effects-list>
 
                 ${renderUpdaterForm(
                   updater.path('data', 'toTarget', 'mentalArmor'),
@@ -196,12 +200,10 @@ export class SleightForm extends ItemFormBase {
                     ],
                   },
                 )}
-
-                <item-form-effects-list
-                  .effects=${effectsOnTarget}
-                  .operations=${this.effectsOps.toTarget}
-                  ?disabled=${disabled}
-                ></item-form-effects-list>
+                ${renderUpdaterForm(updater.path('data', 'toTarget'), {
+                  fields: ({ scaleEffectsOnSuperior }) =>
+                    renderLabeledCheckbox(scaleEffectsOnSuperior),
+                })}
               </section>`
             : ''}
         </div>

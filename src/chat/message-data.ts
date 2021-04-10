@@ -219,6 +219,7 @@ export type PsiTestData = {
   sideEffectNegation: '' | 'damage' | 'all';
   variableInfection: boolean;
   willpower: number;
+  sustaining?: boolean;
   appliedTo?: {
     name: string;
     uuid: string;

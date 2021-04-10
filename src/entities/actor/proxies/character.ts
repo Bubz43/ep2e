@@ -869,7 +869,11 @@ export class Character extends ActorProxyBase<ActorType.Character> {
                     !!this.ego.psi?.hasChiIncreasedEffect,
                   ),
                 );
-              } else this.activatedSleights.push(substanceItem);
+              } else {
+                this.activatedSleights.push(substanceItem);
+                if (substanceItem.isSustaining)
+                  this._appliedEffects.add(substanceItem.sustainingModifier);
+              }
             }
           }
         } else this.awaitingOnsetSubstances.push(item);
@@ -899,7 +903,11 @@ export class Character extends ActorProxyBase<ActorType.Character> {
             ),
           );
           this.passiveSleights.push(item);
-        } else this.activatedSleights.push(item);
+        } else {
+          this.activatedSleights.push(item);
+          if (item.isSustaining)
+            this._appliedEffects.add(item.sustainingModifier);
+        }
         egoItems.set(item.id, item);
       }
     }

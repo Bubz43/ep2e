@@ -11,6 +11,7 @@
 
 .mental-armor-form {
   display: flex;
+  padding: 0.125rem 0;
 
   @include inputReset();
   input[type='number'] {
