@@ -39,6 +39,7 @@ import { MessageInfluenceRoll } from './chat/components/influence-roll/message-i
 import { MessageMeleeAttack } from './chat/components/melee-attack/message-melee-attack';
 import { MessagePsiTest } from './chat/components/psi-test/message-psi-test';
 import { MessageRangedAttack } from './chat/components/ranged-attack/message-ranged-attack';
+import { MessageSleightSustainEnd } from './chat/components/sleight-sustain-end/message-sleight-sustain-end';
 import { MessageSpecialTest } from './chat/components/special-test/message-special-test';
 import { MessageStressTest } from './chat/components/stress-test/message-stress-test';
 import { MessageSubstanceUse } from './chat/components/substance/message-substance-use';
@@ -367,6 +368,7 @@ MessageHack;
 MessageInfectionTest;
 MessageInfluenceRoll;
 MessagePsiTest;
+MessageSleightSustainEnd;
 
 // SuccessTest
 AptitudeCheckControls;

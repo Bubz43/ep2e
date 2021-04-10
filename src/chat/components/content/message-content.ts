@@ -53,6 +53,7 @@ export class MessageContent extends LitElement {
       infectionTest,
       influenceRoll,
       psiTest,
+      sleightSustainEnd,
     } = this.data;
     if (!this.message.isContentVisible) return '';
     return html`
@@ -174,6 +175,11 @@ export class MessageContent extends LitElement {
               .healthChange=${healthChange}
             ></message-health-change>
           `
+        : ''}
+      ${sleightSustainEnd
+        ? html`<message-sleight-sustain-end
+            .sleightSustainEnd=${sleightSustainEnd}
+          ></message-sleight-sustain-end>`
         : ''}
     `;
   }

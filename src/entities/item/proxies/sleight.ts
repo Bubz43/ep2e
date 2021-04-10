@@ -101,16 +101,10 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
     };
   }
 
-  startSustaining(
+  setSustainOn(
     entities: { name: string; uuid: string; temporaryFeatureId: string }[],
   ) {
     return this.updater.path('data', 'status', 'sustainingOn').commit(entities);
-  }
-
-  stopSustaining() {
-    const currentlySustainingOn = this.status.sustainingOn;
-    // TODO Create message so entities its sustained on can undo
-    return this.updater.path('data', 'status', 'sustainingOn').commit([]);
   }
 
   getTotalDuration(willpower: number, increasedDuration: boolean) {

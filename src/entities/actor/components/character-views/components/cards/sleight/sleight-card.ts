@@ -184,8 +184,22 @@ export class SleightCard extends ItemCardBase {
     });
   }
 
-  private stopSustaining() {
-    this.item.stopSustaining();
+  private async stopSustaining() {
+    const { sustainingOn } = this.item.status;
+    await createMessage({
+      data: {
+        header: {
+          heading: this.item.name,
+          subheadings: [`${localize('end')} ${localize('sustaining')}`],
+        },
+        sleightSustainEnd: {
+          appliedTo: sustainingOn,
+          removedFromIds: [],
+        },
+      },
+      entity: requestCharacter(this).token || this.character,
+    });
+    this.item.setSustainOn([]);
   }
 
   renderHeaderButtons(): TemplateResult {

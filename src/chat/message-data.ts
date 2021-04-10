@@ -212,6 +212,12 @@ export type InfectionTestData = {
   interference?: boolean;
 };
 
+export type SleightSustain = {
+  name: string;
+  uuid: string;
+  temporaryFeatureId: string;
+};
+
 export type PsiTestData = {
   sleight: ItemEntity<ItemType.Sleight>;
   freePush: PsiPush | '' | undefined;
@@ -220,13 +226,12 @@ export type PsiTestData = {
   variableInfection: boolean;
   willpower: number;
   sustaining?: boolean;
-  appliedTo?: {
-    name: string;
-    uuid: string;
-    temporaryFeatureId: string;
-  }[];
+  appliedTo?: SleightSustain[];
+};
 
-  // sustainingOn?: string[];
+export type SleightSustainEnd = {
+  appliedTo: SleightSustain[];
+  removedFromIds: string[];
 };
 
 export type MessageData = Partial<{
@@ -251,4 +256,5 @@ export type MessageData = Partial<{
   infectionTest: InfectionTestData;
   influenceRoll: InfluenceRollData;
   psiTest: PsiTestData;
+  sleightSustainEnd: SleightSustainEnd;
 }>;

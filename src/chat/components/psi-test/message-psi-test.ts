@@ -226,7 +226,7 @@ export class MessagePsiTest extends MessageElement {
     if (actor?.proxy.type === ActorType.Character) {
       await actor.proxy.activatedSleights
         .find((s) => s.id === this.psiTest.sleight._id)
-        ?.startSustaining(this.psiTest.appliedTo || []);
+        ?.setSustainOn(this.psiTest.appliedTo || []);
     }
 
     this.getUpdater('psiTest').commit({ sustaining: true });
