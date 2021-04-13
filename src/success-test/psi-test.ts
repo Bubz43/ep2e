@@ -1,5 +1,11 @@
 import { createMessage } from '@src/chat/create-message';
-import { enumValues, PoolType, PsiPush, PsiRange } from '@src/data-enums';
+import {
+  PoolType,
+  PsiPush,
+  PsiRange,
+  SleightDuration,
+  SuperiorResultEffect,
+} from '@src/data-enums';
 import { ActorType } from '@src/entities/entity-types';
 import type { Sleight } from '@src/entities/item/proxies/sleight';
 import {
@@ -15,16 +21,7 @@ import { localize } from '@src/foundry/localization';
 import { distanceBetweenTokens } from '@src/foundry/token-helpers';
 import { notEmpty } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
-import {
-  clamp,
-  compact,
-  concat,
-  difference,
-  merge,
-  pipe,
-  take,
-  uniq,
-} from 'remeda';
+import { clamp, compact, merge, take } from 'remeda';
 import type { SetRequired } from 'type-fest';
 import { psiRangeThresholds } from './range-modifiers';
 import { SkillTest, SkillTestInit } from './skill-test';
@@ -66,6 +63,8 @@ export class PsiTest extends SkillTest {
         createAction({
           type: sleight.action,
           subtype: ActionSubtype.Mental,
+          timeframe:
+            sleight.action === ActionType.Task ? sleight.epData.timeframe : 0,
         }),
     });
     this.character = init.character;
@@ -100,12 +99,7 @@ export class PsiTest extends SkillTest {
         const { use } = draft;
         if (changed.sleight) {
           this.updateAction(draft, { type: use.sleight.action });
-          if (
-            use.sleight.isTemporary &&
-            use.push === PsiPush.IncreasedDuration
-          ) {
-            use.push = '';
-          }
+          use.push = '';
         }
 
         if (use.targetingSelf) {
@@ -244,13 +238,22 @@ export class PsiTest extends SkillTest {
     return this.psi?.activeFreePush;
   }
 
-  get availablePushes() {
-    return pipe(
-      enumValues(PsiPush),
-      difference(compact([this.character.psi?.activeFreePush])),
-      concat([PsiPush.ExtraTarget]),
-      uniq(),
-    );
+  get disabledPushes() {
+    const pushes: PsiPush[] = [];
+    const { activeFreePush } = this.psi ?? {};
+    const { attack, duration } = this.use.sleight;
+    if (activeFreePush && activeFreePush !== PsiPush.ExtraTarget) {
+      pushes.push(activeFreePush);
+    }
+    if (
+      [SleightDuration.Instant, SleightDuration.Sustained].includes(duration)
+    ) {
+      pushes.push(PsiPush.IncreasedDuration);
+    }
+    if (attack.rollFormulas.length === 0 || attack.armorUsed.length === 0) {
+      pushes.push(PsiPush.IncreasedPenetration);
+    }
+    return pushes;
   }
 
   protected getAttackTargetEffects(
@@ -291,7 +294,12 @@ export class PsiTest extends SkillTest {
           ]),
           description: sleight.description,
         },
-        successTest: this.testMessageData,
+        successTest: {
+          ...this.testMessageData,
+          defaultSuperiorEffect: sleight.hasAttack
+            ? SuperiorResultEffect.Damage
+            : undefined,
+        },
         psiTest: {
           sleight: sleight.getDataCopy(),
           freePush: this.psi?.activeFreePush,

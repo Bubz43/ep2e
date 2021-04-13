@@ -1,12 +1,11 @@
 import {
-  emptyTextDash,
   renderLabeledCheckbox,
   renderNumberField,
   renderSelectField,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
-import { PoolType } from '@src/data-enums';
+import { enumValues, PoolType, PsiPush } from '@src/data-enums';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
 import { readyCanvas } from '@src/foundry/canvas';
@@ -334,7 +333,10 @@ export class PsiTestControls extends LitElement {
             props: { push },
             update: use.update,
             fields: ({ push }) =>
-              renderSelectField(push, test.availablePushes, emptyTextDash),
+              renderSelectField(push, enumValues(PsiPush), {
+                emptyText: '-',
+                disableOptions: test.disabledPushes,
+              }),
           })}
           ${push || psi?.hasVariableInfection
             ? renderAutoForm({

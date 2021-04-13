@@ -1453,6 +1453,8 @@
     "touchingTarget": "Touching Target",
     "side": "Side",
     "sustaining": "Sustaining",
+    "applyEffectsToSelf": "Apply Effects to Self",
+    "removed": "Removed",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

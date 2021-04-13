@@ -377,10 +377,23 @@ type SleightData = {
    */
   infectionMod: number;
   action: ActionType;
-  toTarget: SleightEffects;
-  toSelf: SleightEffects;
+  timeframe: number;
+  applyEffectsToSelf: boolean;
+  effects: StringID<Effect>[];
+  scaleEffectsOnSuperior: boolean;
+  mentalArmor: {
+    apply: boolean;
+    formula: string;
+    divisor: number;
+  };
+  attack: SleightAttackData;
+  heal: {
+    formula: string;
+    healthType: HealthType;
+  };
 
   status: {
+    sustaining: boolean;
     sustainingOn: { name: string; uuid: string; temporaryFeatureId: string }[];
     pushDuration: number;
     pushStartTime: number;

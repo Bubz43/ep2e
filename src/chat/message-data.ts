@@ -64,6 +64,7 @@ export type MessageHealData = RequireAtLeastOne<
     damageFormulas?: RolledFormula[];
     wounds?: number;
     healthType: HealthType;
+    multiplier?: RollMultiplier;
   },
   'damageFormulas' | 'wounds'
 >;

@@ -1,6 +1,8 @@
+import type { SleightAttack } from '@src/combat/attacks';
 import { SleightDuration, SleightType } from '@src/data-enums';
 import type { AddEffects } from '@src/entities/applied-effects';
 import type { ItemType } from '@src/entities/entity-types';
+import { ArmorType } from '@src/features/active-armor';
 import { createEffect, multiplyEffectModifier } from '@src/features/effects';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
 import { createTag } from '@src/features/tags';
@@ -43,20 +45,8 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
     return this.sleightType === SleightType.Chi;
   }
 
-  get toSelf() {
-    return this.epData.toSelf;
-  }
-
-  get toTarget() {
-    return this.epData.toTarget;
-  }
-
-  get effectsOnSelf() {
-    return this.epData.toSelf.effects;
-  }
-
-  get effectsOnTarget() {
-    return this.epData.toTarget.effects;
+  get effects() {
+    return this.epData.effects;
   }
 
   get status() {
@@ -86,7 +76,19 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
   }
 
   get isSustaining() {
-    return !this.isChi && this.status.sustainingOn.length;
+    return !this.isChi && this.status.sustaining;
+  }
+
+  get mentalArmor() {
+    return this.epData.mentalArmor;
+  }
+
+  get scaleEffectsOnSuperior() {
+    return this.epData.scaleEffectsOnSuperior;
+  }
+
+  get applyEffectsToSelf() {
+    return this.epData.applyEffectsToSelf;
   }
 
   get sustainingModifier(): AddEffects {
@@ -101,10 +103,43 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
     };
   }
 
+  get hasAttack() {
+    return !!this.epData.attack.damageFormula;
+  }
+
+  get hasHeal() {
+    return !!this.epData.heal.formula;
+  }
+
+  get attack(): SleightAttack {
+    const {
+      useMentalArmor,
+      attackTraits,
+      damageType,
+      damageFormula,
+      notes,
+    } = this.epData.attack;
+    return {
+      armorPiercing: false,
+      armorUsed: useMentalArmor ? [ArmorType.Mental] : [],
+      attackTraits: attackTraits,
+      damageType: damageType,
+      reduceAVbyDV: false,
+      label: localize('attack'),
+      rollFormulas: damageFormula
+        ? [{ label: localize('base'), formula: damageFormula }]
+        : [],
+      notes,
+    };
+  }
+
   setSustainOn(
-    entities: { name: string; uuid: string; temporaryFeatureId: string }[],
+    sustainingOn: { name: string; uuid: string; temporaryFeatureId: string }[],
+    sustaining: boolean,
   ) {
-    return this.updater.path('data', 'status', 'sustainingOn').commit(entities);
+    return this.updater
+      .path('data', 'status')
+      .commit({ sustainingOn, sustaining });
   }
 
   getTotalDuration(willpower: number, increasedDuration: boolean) {
@@ -154,34 +189,35 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
   }
 
   getPassiveEffects(willpower: number, enhanced: boolean): AddEffects {
-    const { effectsOnSelf } = this;
+    const { effects } = this;
     const pushed = enhanced || this.isPushed;
-    const effects = this.toSelf.mentalArmor.apply
+    const allEffects = this.mentalArmor.apply
       ? [
-          ...effectsOnSelf,
+          ...effects,
           createEffect.armor({
             mental: this.getPassiveMentalArmor(
               willpower,
-              this.toSelf.mentalArmor.divisor,
+              this.mentalArmor.divisor,
             ),
             concealable: true,
             layerable: true,
           }),
         ]
-      : effectsOnSelf;
+      : effects;
     return {
       source: `${this.name} ${
         pushed ? `(${localize(enhanced ? 'enhanced' : 'pushed')})` : ''
       }`,
       effects: pushed
-        ? effects.map((effect) => multiplyEffectModifier(effect, 2))
-        : effects,
+        ? allEffects.map((effect) => multiplyEffectModifier(effect, 2))
+        : allEffects,
     };
   }
 
   getDataCopy(reset?: boolean) {
     const copy = super.getDataCopy(reset);
     copy.data.status = {
+      sustaining: false,
       sustainingOn: [],
       pushDuration: 0,
       pushStartTime: 0,

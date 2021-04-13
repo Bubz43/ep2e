@@ -1479,7 +1479,9 @@ type LangEntries =
   | 'touchingAllTargets'
   | 'touchingTarget'
   | 'side'
-  | 'sustaining';
+  | 'sustaining'
+  | 'removed'
+  | 'applyEffectsToSelf';
 type FullNames =
   | 'cog'
   | 'int'

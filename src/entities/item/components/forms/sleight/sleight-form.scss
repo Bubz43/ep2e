@@ -18,3 +18,10 @@
     width: 3ch;
   }
 }
+
+.attack-details,
+.heal-details {
+  display: grid;
+  padding: 0.25rem;
+  font-size: large;
+}

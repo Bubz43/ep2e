@@ -199,7 +199,7 @@ export class SleightCard extends ItemCardBase {
       },
       entity: requestCharacter(this).token || this.character,
     });
-    this.item.setSustainOn([]);
+    this.item.setSustainOn([], false);
   }
 
   renderHeaderButtons(): TemplateResult {

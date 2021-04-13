@@ -497,66 +497,29 @@
       "infectionMod": 1,
       "sleightType": "gamma",
       "action": "complex",
-      "toTarget": {
-        "effects": [],
-        "scaleEffectsOnSuperior": false,
-        "attack": {
-          "aptitudeCheckInfo": {
-            "armorAsModifier": "",
-            "check": "",
-            "checkModifier": 0,
-            "checkFailure": [],
-            "checkSuccess": [],
-            "criticalCheckFailure": []
-          },
-          "attackTraits": [],
-          "damageFormula": "",
-          "damageType": "mental",
-          "mentalArmor": false,
-          "notes": "",
-          "perTurn": false
-        },
-        "heal": {
-          "amount": "1d6",
-          "health": "mental"
-        },
-        "mentalArmor": {
-          "apply": false,
-          "divisor": 3,
-          "formula": "1d6"
-        }
+      "timeframe": 0,
+      "applyEffectsToSelf": false,
+      "effects": [],
+      "scaleEffectsOnSuperior": false,
+      "attack": {
+        "useMentalArmor": false,
+        "attackTraits": [],
+        "damageFormula": "",
+        "damageType": "mental",
+        "notes": ""
       },
-      "toSelf": {
-        "effects": [],
-        "scaleEffectsOnSuperior": false,
-        "attack": {
-          "aptitudeCheckInfo": {
-            "armorAsModifier": "",
-            "check": "",
-            "checkModifier": 0,
-            "checkFailure": [],
-            "checkSuccess": [],
-            "criticalCheckFailure": []
-          },
-          "attackTraits": [],
-          "damageFormula": "",
-          "damageType": "mental",
-          "mentalArmor": false,
-          "notes": "",
-          "perTurn": false
-        },
-        "heal": {
-          "amount": "1d6",
-          "health": "mental"
-        },
-        "mentalArmor": {
-          "apply": false,
-          "divisor": 3,
-          "formula": "1d6"
-        }
+      "heal": {
+        "formula": "",
+        "healthType": "mental"
+      },
+      "mentalArmor": {
+        "apply": false,
+        "divisor": 3,
+        "formula": "1d6"
       },
 
       "status": {
+        "sustaining": false,
         "pushDuration": 0,
         "pushed": false,
         "pushStartTime": 0,

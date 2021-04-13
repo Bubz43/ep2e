@@ -546,9 +546,17 @@ export class CharacterViewAlt extends CharacterViewBase {
         ${this.renderActionIconButton({
           tooltipText: localize('substances'),
           renderer: CharacterDrawerRenderer.Substances,
-          content: html`<img
-            src=${localImage('icons/actions/medicines.svg')}
-          />`,
+          content: html`<img src=${localImage('icons/actions/medicines.svg')} />
+            <notification-coin
+              value=${this.character.activeSubstances.length +
+              this.character.awaitingOnsetSubstances.length}
+              ?actionRequired=${this.character.awaitingOnsetSubstances.some(
+                (s) => s.awaitingOnsetTimeState.completed,
+              ) ||
+              this.character.activeSubstances.some(
+                ({ appliedInfo }) => appliedInfo.requiresAttention,
+              )}
+            ></notification-coin>`,
         })}
         ${this.renderActionIconButton({
           icon: 'groups',

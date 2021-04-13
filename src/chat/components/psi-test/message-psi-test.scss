@@ -14,8 +14,13 @@ mwc-button {
   margin: 0.25rem 0.5rem;
   --mdc-theme-primary: var(--color-primary-alt);
 
-  &.damage {
+  &.damage,
+  &.attack {
     --mdc-theme-primary: #{lightv(var(--color-negative), 1.25)};
+  }
+
+  &.heal {
+    --mdc-theme-primary: var(--color-secondary);
   }
 }
 

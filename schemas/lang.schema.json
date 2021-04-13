@@ -794,6 +794,9 @@
             "applyEffects": {
               "type": "string"
             },
+            "applyEffectsToSelf": {
+              "type": "string"
+            },
             "applyTo": {
               "type": "string"
             },
@@ -3596,6 +3599,9 @@
             "remove": {
               "type": "string"
             },
+            "removed": {
+              "type": "string"
+            },
             "removing": {
               "type": "string"
             },
@@ -4944,6 +4950,7 @@
             "apply",
             "applyCoating",
             "applyEffects",
+            "applyEffectsToSelf",
             "applyTo",
             "applyableFor",
             "apps",
@@ -5878,6 +5885,7 @@
             "remainingDelay",
             "remainingDuration",
             "remove",
+            "removed",
             "removing",
             "removingArmor",
             "renderSheet",

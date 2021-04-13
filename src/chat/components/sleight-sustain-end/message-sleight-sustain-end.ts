@@ -51,14 +51,14 @@ export class MessageSleightSustainEnd extends MessageElement {
 
       ${this.sleightSustainEnd.removedFromIds.length
         ? html`
-            <span>${localize('applied')} ${localize('to')}</span>
+            <span>${localize('removed')} ${localize('from')}</span>
 
             <ul>
               ${this.sleightSustainEnd.removedFromIds.map((uuid) => {
-                const name = this.sleightSustainEnd.appliedTo.find(
+                const entity = this.sleightSustainEnd.appliedTo.find(
                   (a) => a.uuid === uuid,
                 );
-                return html`<colored-tag>${name}</colored-tag>`;
+                return html`<colored-tag>${entity?.name}</colored-tag>`;
               })}
             </ul>
           `
