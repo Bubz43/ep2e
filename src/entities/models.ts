@@ -265,6 +265,8 @@ type ItemFlags<T extends ItemType> = T extends ItemType.Psi
   ? {
       coating: null | [ItemEntity<ItemType.Substance>];
       payload: null | [ItemEntity<ItemType.Explosive>];
+      damageIrrespectiveOfSize: boolean;
+      permanentCoating: boolean;
     }
   : T extends ItemType.PhysicalTech
   ? {

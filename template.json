@@ -764,10 +764,6 @@
         "label": "",
         "notes": ""
       },
-      "overrides": {
-        "damageIrrespectiveOfSize": false,
-        "permanentCoating": false
-      },
       "hasSecondaryAttack": false,
       "augmentUnarmed": false,
       "acceptsPayload": false,

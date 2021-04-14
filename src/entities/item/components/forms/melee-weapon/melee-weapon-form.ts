@@ -40,6 +40,7 @@ import {
 } from '@src/foundry/drag-and-drop';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
+import { EP } from '@src/foundry/system';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
 import {
@@ -420,9 +421,12 @@ export class MeleeWeaponForm extends ItemFormBase {
   }
 
   private renderOverridesForm() {
+    const { permanentCoating, damageIrrespectiveOfSize } = this.item;
     return html`
       <h3>${localize('overrides')}</h3>
-      ${renderUpdaterForm(this.item.updater.path('data', 'overrides'), {
+      ${renderAutoForm({
+        props: { permanentCoating, damageIrrespectiveOfSize },
+        update: this.item.updater.path('flags', EP.Name).commit,
         fields: ({ permanentCoating, damageIrrespectiveOfSize }) => [
           renderLabeledCheckbox(permanentCoating),
           html`<p>${localize('DESCRIPTIONS', 'PermanentMeleeCoatings')}</p>`,

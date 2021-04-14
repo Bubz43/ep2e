@@ -3060,22 +3060,6 @@
                 "improvised": {
                   "type": "boolean"
                 },
-                "overrides": {
-                  "additionalProperties": false,
-                  "properties": {
-                    "damageIrrespectiveOfSize": {
-                      "type": "boolean"
-                    },
-                    "permanentCoating": {
-                      "type": "boolean"
-                    }
-                  },
-                  "required": [
-                    "damageIrrespectiveOfSize",
-                    "permanentCoating"
-                  ],
-                  "type": "object"
-                },
                 "primaryAttack": {
                   "$ref": "#/definitions/MeleeWeaponAttackData"
                 },
@@ -3133,7 +3117,6 @@
                 "exoticSkill",
                 "hasSecondaryAttack",
                 "improvised",
-                "overrides",
                 "primaryAttack",
                 "reachBonus",
                 "secondaryAttack",

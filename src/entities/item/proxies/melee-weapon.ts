@@ -65,11 +65,11 @@ export class MeleeWeapon
   }
 
   get permanentCoating() {
-    return this.epData.overrides.permanentCoating;
+    return !!this.epFlags?.permanentCoating;
   }
 
   get damageIrrespectiveOfSize() {
-    return this.epData.overrides.damageIrrespectiveOfSize;
+    return !!this.epFlags?.damageIrrespectiveOfSize;
   }
 
   get fullType() {
