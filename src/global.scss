@@ -12,53 +12,31 @@
 @include styled-scrollbars;
 @include widgetless-number-inputs;
 
-@font-face {
-  font-family: 'Jost';
-  font-style: normal;
-  font-weight: 300;
-  src: url('./fonts/Jost-VariableFont_wght.ttf') format('truetype');
+@for $i from 1 through 9 {
+  @font-face {
+    font-family: 'Jost';
+    font-style: normal;
+    font-weight: #{$i}00;
+    src: url('./fonts/Jost-VariableFont_wght.ttf') format('truetype');
+  }
 }
 
-@font-face {
-  font-family: 'Jost';
-  font-style: normal;
-  font-weight: 400;
-  src: url('./fonts/Jost-VariableFont_wght.ttf') format('truetype');
+@for $i from 3 through 9 {
+  @font-face {
+    font-family: 'Rubik';
+    font-style: normal;
+    font-weight: #{$i}00;
+    src: url('./fonts/Rubik-VariableFont_wght.ttf') format('truetype');
+  }
 }
 
-@font-face {
-  font-family: 'Jost';
-  font-style: normal;
-  font-weight: 700;
-  src: url('./fonts/Jost-VariableFont_wght.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Rubik';
-  font-style: normal;
-  font-weight: 300;
-  src: url('./fonts/Rubik-VariableFont_wght.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Rubik';
-  font-style: normal;
-  font-weight: 400;
-  src: url('./fonts/Rubik-VariableFont_wght.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Rubik';
-  font-style: normal;
-  font-weight: 700;
-  src: url('./fonts/Rubik-VariableFont_wght.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Fira Code';
-  font-style: normal;
-  font-weight: 400;
-  src: url('./fonts/FiraCode-VariableFont_wght.ttf') format('truetype');
+@for $i from 3 through 6 {
+  @font-face {
+    font-family: 'Fira Code';
+    font-style: normal;
+    font-weight: #{$i}00;
+    src: url('./fonts/FiraCode-VariableFont_wght.ttf') format('truetype');
+  }
 }
 
 @font-face {
