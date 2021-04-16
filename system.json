@@ -1,5 +1,5 @@
 {
-  "version": 0.67658,
+  "version": 0.676581,
   "name": "ep2e",
   "title": "Eclipse Phase 2e",
   "description": "Eclipse Phase 2e Game System.",
@@ -22,6 +22,13 @@
     }
   ],
   "packs": [
+    {
+      "name": "premade-characters",
+      "system": "ep2e",
+      "label": "Premade Characters",
+      "path": "./packs/premade-characters.db",
+      "entity": "Actor"
+    },
     {
       "name": "uplift-biomorphs",
       "system": "ep2e",
