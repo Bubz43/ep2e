@@ -33,26 +33,6 @@ import { EP } from './foundry/system';
 import { openMenu } from './open-menu';
 import { notEmpty } from './utility/helpers';
 
-(function () {
-  const frag = new DocumentFragment();
-  render(
-    html`
-      ${[
-        'https://fonts.googleapis.com/css?family=Material+Icons&display=block',
-        'https://fonts.googleapis.com/css?family=Roboto:300,400,500',
-        'https://fonts.googleapis.com/css?family=Rubik:300,400,700&display=swap',
-        // 'https://fonts.googleapis.com/css?family=DotGothic16:300,400,700&display=swap',
-
-        'https://fonts.googleapis.com/css?family=Jost:300,400,700&display=swap',
-        'https://fonts.googleapis.com/css?family=Spartan:300,400,700&display=swap',
-        'https://fonts.googleapis.com/css?family=Fira+Code&display=swap',
-      ].map((link) => html` <link rel="stylesheet" href=${link} /> `)}
-    `,
-    frag,
-  );
-  document.head.appendChild(frag);
-})();
-
 export let gameSettings: ReturnType<typeof registerEPSettings>;
 export let overlay: EPOverlay;
 export let tooltip: ToolTip;

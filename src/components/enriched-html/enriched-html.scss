@@ -15,7 +15,7 @@
   // letter-spacing: 0.5px;
   // font-weight: lighter;
   color: lightv(var(--color-text), 1.1);
-  font-family: Jost;
+  font-family: var(--font-1);
   margin: 0.5rem 0;
   font-size: 15px;
   > p:first-of-type {
