@@ -15,6 +15,7 @@ import { renderSubmitForm } from '@src/components/form/forms';
 import { openWindow } from '@src/components/window/window-controls';
 import { ResizeOption } from '@src/components/window/window-options';
 import { localize } from '@src/foundry/localization';
+import { capitalize } from '@src/foundry/misc-helpers';
 import { gameSettings } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
 import { openMenu } from '@src/open-menu';
@@ -381,7 +382,7 @@ export class CombatView extends LitElement {
         <h2 class="round">
           ${round
             ? ` ${surprise ? localize('surprise') : ''}
-                    ${localize('round')} ${surprise ? '' : round}`
+                    ${capitalize(localize('turn'))} ${surprise ? '' : round}`
             : localize('preparation')}
         </h2>
 
