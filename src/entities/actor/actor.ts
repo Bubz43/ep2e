@@ -176,6 +176,7 @@ export class ActorEP extends Actor {
           this.emitItemSocket({ itemIds, type: 'update' });
 
           this.invalidated = true;
+          this.prepareData();
           return itemIds;
         },
         remove: async (...itemIds) => {

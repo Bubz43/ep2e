@@ -1,44 +1,46 @@
 @use "functions" as *;
 
-input[type="text"],
-input[type="number"],
-input[type="search"],
-select,
-textarea {
-  color: var(--color-text);
-  background: alphav(var(--color-text), 0.05);
-  border: none;
-  padding: 2px 6px;
-  font-size: 14px;
+.app {
+  input[type='text'],
+  input[type='number'],
+  input[type='search'],
+  select,
+  textarea {
+    color: var(--color-text);
+    background: alphav(var(--color-text), 0.05);
+    border: none;
+    padding: 2px 6px;
+    font-size: 14px;
 
-  &:focus {
-    box-shadow: none;
-    outline: 1px solid var(--color-secondary);
+    &:focus {
+      box-shadow: none;
+      outline: 1px solid var(--color-secondary);
+    }
+
+    &[readonly] {
+      opacity: 0.8;
+    }
+    &:not([disabled]):hover {
+      box-shadow: 0 0 1px var(--color-secondary);
+    }
+    &[disabled] {
+      background: var(--color-disabled);
+      color: var(--color-text-disabled);
+    }
   }
 
-  &[readonly] {
-    opacity: 0.8;
+  optgroup,
+  option {
+    background: rgb(30, 30, 30);
+    color: var(--color-text);
   }
-  &:not([disabled]):hover {
-    box-shadow: 0 0 1px var(--color-secondary);
-  }
-  &[disabled] {
-    background: var(--color-disabled);
-    color: var(--color-text-disabled);
-  }
-}
-
-optgroup,
-option {
-  background: rgb(30, 30, 30);
-  color: var(--color-text);
-}
-.package {
-  .package-title,
-  .package-description {
-    color: var(--color-text) !important;
-  }
-  .package-metadata {
-    color: var(--color-primary) !important;
+  .package {
+    .package-title,
+    .package-description {
+      color: var(--color-text) !important;
+    }
+    .package-metadata {
+      color: var(--color-primary) !important;
+    }
   }
 }

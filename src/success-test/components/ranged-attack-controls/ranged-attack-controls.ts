@@ -107,7 +107,6 @@ export class RangedAttackControls extends LitElement {
   }
 
   private setTarget = () => {
-    const attackTarget = this.test?.firing.attackTargets;
     const { targets } = game.user;
     this.test?.firing.update({
       attackTargets: new Set(
@@ -127,7 +126,6 @@ export class RangedAttackControls extends LitElement {
   }
 
   async setState(init: Init) {
-    console.log(init.adjacentElement);
     this.unsub();
     this.subs.add(() =>
       RangedAttackControls.openWindows.delete(init.entities.actor),

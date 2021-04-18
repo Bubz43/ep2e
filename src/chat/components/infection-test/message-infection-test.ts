@@ -86,10 +86,7 @@ export class MessageInfectionTest extends MessageElement {
     return html`
       ${isSuccessfullTestResult(result)
         ? html`
-            <mwc-button
-              dense
-              @click=${this.rollInfluences}
-              ?disabled=${disabled}
+            <mwc-button @click=${this.rollInfluences} ?disabled=${disabled}
               >${localize('roll')}
               ${localize('infectionInfluences')}</mwc-button
             >
