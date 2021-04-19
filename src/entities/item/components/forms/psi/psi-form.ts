@@ -397,9 +397,10 @@ export class PsiForm extends ItemFormBase {
     return html`
       <h3>${localize('edit')} ${localize(influence.type)}</h3>
       <div class="motivation-forms">
-        ${renderSubmitForm({
+        ${renderAutoForm({
           props: influence.motivation,
           update: (changed, original) => {
+            if ('cause' in changed && !changed.cause) return;
             this.item.influenceCommiter((influences) =>
               updateFeature(influences, {
                 id: influence.id,
