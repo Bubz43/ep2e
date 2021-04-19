@@ -156,7 +156,7 @@ type ActorTemplates = Template<'Common', CommonDetails> &
 type UseActorTemplate<T extends (keyof ActorTemplates)[]> = T;
 type UseItemTemplate<T extends (keyof ItemTemplates)[]> = T;
 
-type StressTestData = {
+export type StressTestData = {
   sv: string;
   minStressOption: MinStressOption;
   minSV: number;

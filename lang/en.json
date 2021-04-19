@@ -1455,6 +1455,7 @@
     "sustaining": "Sustaining",
     "applyEffectsToSelf": "Apply Effects to Self",
     "removed": "Removed",
+    "ease": "Ease",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

@@ -27,6 +27,7 @@ import type {
   RollData,
   RolledFormula,
 } from '@src/foundry/rolls';
+import type { StressTestData } from '@src/foundry/template-schema';
 import type { HealthModification, HealthType } from '@src/health/health';
 import type { RollMultiplier } from '@src/health/health-changes';
 import type { StressType } from '@src/health/mental-health';
@@ -182,7 +183,7 @@ export type FavorMessageData = {
 
 export type SpecialTestData =
   | {
-      type: SpecialTest;
+      type: Exclude<SpecialTest, SpecialTest.ResleevingStress>;
       source: string;
       originalResult?: SuccessTestResult;
     }
@@ -191,6 +192,13 @@ export type SpecialTestData =
       checkInfo: AptitudeCheckInfo;
       source: string;
       originalResult?: SuccessTestResult;
+    }
+  | {
+      type: SpecialTest.ResleevingStress;
+      stressType: StressType;
+      source: string;
+      originalResult?: SuccessTestResult;
+      stress: StressTestData;
     };
 
 export type RangedAttackMessageData = {

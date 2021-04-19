@@ -1661,6 +1661,9 @@
             "dvModifier": {
               "type": "string"
             },
+            "ease": {
+              "type": "string"
+            },
             "edit": {
               "type": "string"
             },
@@ -5239,6 +5242,7 @@
             "duration",
             "durationFormula",
             "dvModifier",
+            "ease",
             "edit",
             "editTotals",
             "editor",

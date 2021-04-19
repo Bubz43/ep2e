@@ -8,3 +8,8 @@
 :host {
   display: block;
 }
+
+p {
+  color: var(--color-text-lighter);
+  margin: 0.5rem 1rem;
+}
