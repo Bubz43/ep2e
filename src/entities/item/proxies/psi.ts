@@ -111,7 +111,6 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
     const { id, timeState } = this.fullInfluences[roll];
     const newDuration =
       timeState && extendDuration ? timeState.duration + duration : duration;
-    // TODO: Should I clamp the new duration to at least the old one if not extending
     return this.influenceCommiter((influences) =>
       updateFeature(influences, {
         id,

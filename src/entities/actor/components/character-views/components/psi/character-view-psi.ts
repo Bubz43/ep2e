@@ -7,6 +7,8 @@ import { enumValues, PsiPush } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
 import type { Psi } from '@src/entities/item/proxies/psi';
+import { addFeature } from '@src/features/feature-helpers';
+import { toMilliseconds } from '@src/features/modify-milliseconds';
 import { MotivationStance } from '@src/features/motivations';
 import {
   influenceInfo,
@@ -14,7 +16,12 @@ import {
   influenceRolls,
   PsiInfluenceType,
 } from '@src/features/psi-influence';
-import { prettyMilliseconds } from '@src/features/time';
+import { createTemporaryFeature } from '@src/features/temporary';
+import {
+  CommonInterval,
+  EPTimeInterval,
+  prettyMilliseconds,
+} from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { rollFormula } from '@src/foundry/rolls';
 import { tooltip } from '@src/init';
@@ -225,6 +232,7 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
       interference,
     } = this.psi;
     // TODO add checkoutTime/interference descriptions
+    console.log(activePsiInfluences);
     return html`
       ${this.renderInfectionTracker()}
       ${notEmpty(activePsiInfluences) || checkoutTime || interference
@@ -344,7 +352,58 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                       </colored-tag>
                     `;
                   }
+                  if (influence.type === PsiInfluenceType.Unique) {
+                    const { name, description } = influenceInfo(influence);
+                    const {
+                      durationFormula,
+                      interval,
+                      items,
+                    } = influence.effects;
+                    const hasEffects = items.length;
+                    return html` <span
+                      ><colored-tag
+                        data-roll=${influence.roll}
+                        data-tooltip=${description}
+                        @mouseover=${tooltip.fromData}
+                        @click=${this.openActiveInfluenceMenu}
+                        clickable
+                        ?disabled=${this.character.disabled}
+                        >${name} ${badge}
+                      </colored-tag>
+                      ${hasEffects
+                        ? html`<colored-tag
+                            type="usable"
+                            clickable
+                            ?disabled=${this.character.disabled}
+                            @click=${() => {
+                              const roll = rollFormula(durationFormula);
+                              roll?.toMessage({ flavor: localize(interval) });
+                              const total = roll?.total || 1;
+                              const duration =
+                                interval === EPTimeInterval.ActionTurns
+                                  ? CommonInterval.Turn * total
+                                  : toMilliseconds({ [interval]: total });
+                              this.character.updater
+                                .path('data', 'temporary')
+                                .commit((temps) =>
+                                  addFeature(
+                                    temps,
+                                    createTemporaryFeature.effects({
+                                      name,
+                                      effects: items,
+                                      duration,
+                                    }),
+                                  ),
+                                );
+                            }}
+                            >${localize('applyEffects')}</colored-tag
+                          >`
+                        : ''}</span
+                    >`;
+                  }
+
                   const { name, description } = influenceInfo(influence);
+
                   return html`
                     <colored-tag
                       data-roll=${influence.roll}

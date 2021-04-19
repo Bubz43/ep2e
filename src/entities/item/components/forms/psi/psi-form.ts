@@ -6,6 +6,7 @@ import {
   renderRadioFields,
   renderTextareaField,
   renderTextField,
+  renderTimeField,
 } from '@src/components/field/fields';
 import {
   renderAutoForm,
@@ -44,6 +45,7 @@ import {
   PsiInfluenceType,
   UniqueInfluence,
 } from '@src/features/psi-influence';
+import { CommonInterval } from '@src/features/time';
 import {
   dragValue,
   DropType,
@@ -428,7 +430,25 @@ export class PsiForm extends ItemFormBase {
   }
 
   private editUnique(influence: StringID<UniqueInfluence>) {
-    return html` <h3>${localize('edit')} ${localize(influence.type)}</h3> `;
+    return html`
+      <h3>${localize('edit')} ${localize(influence.type)}</h3>
+      <div class="unique-influence-forms">
+        ${renderAutoForm({
+          props: influence,
+          update: (changed, original) => {
+            if ('name' in changed && !changed.name) return;
+            this.item.influenceCommiter((influences) =>
+              updateFeature(influences, safeMerge(original, changed)),
+            );
+          },
+          fields: ({ name, duration, description }) => [
+            renderTextField(name, { required: true }),
+            renderTimeField(duration, { min: CommonInterval.Turn }),
+            renderTextareaField(description, { resizable: true, rows: 12 }),
+          ],
+        })}
+      </div>
+    `;
   }
 
   private strainOptions = html`

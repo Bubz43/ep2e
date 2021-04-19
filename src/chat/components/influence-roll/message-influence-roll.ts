@@ -123,6 +123,11 @@ export class MessageInfluenceRoll extends MessageElement {
         }
 
         case PsiInfluenceType.Unique: {
+          await psi.activateInfluence(
+            influenceRoll,
+            influence.duration,
+            extendDuration,
+          );
           this.getUpdater('influenceRoll').commit({ applied });
 
           break;
