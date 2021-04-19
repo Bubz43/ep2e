@@ -82,6 +82,10 @@ export class MessageInfectionTest extends MessageElement {
     if (this.infectionTest.interference) return '';
     const { result } = this.successTestInfo ?? {};
     if (!result) return '';
+    if (this.psi?.receded)
+      return html`<p class="immune">
+        ${localize('immuneToInfluencesUntilRecharge')}
+      </p>`;
     const { disabled } = this;
     return html`
       ${isSuccessfullTestResult(result)

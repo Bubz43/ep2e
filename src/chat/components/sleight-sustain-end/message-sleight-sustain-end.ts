@@ -41,7 +41,7 @@ export class MessageSleightSustainEnd extends MessageElement {
 
   render() {
     return html`
-      <span>${localize('applied')} ${localize('to')}</span>
+      <p>${localize('applied')} ${localize('to')}</p>
       <ul>
         ${until(
           this.renderAppliedTo(),
@@ -51,7 +51,7 @@ export class MessageSleightSustainEnd extends MessageElement {
 
       ${this.sleightSustainEnd.removedFromIds.length
         ? html`
-            <span>${localize('removed')} ${localize('from')}</span>
+            <p>${localize('removed')} ${localize('from')}</p>
 
             <ul>
               ${this.sleightSustainEnd.removedFromIds.map((uuid) => {

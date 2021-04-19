@@ -14,6 +14,10 @@
   --mdc-theme-primary: var(--color-primary-alt);
 }
 
+.end-button {
+  --mdc-theme-primary: var(--color-secondary);
+}
+
 .effects {
   display: flex;
   flex-flow: row wrap;

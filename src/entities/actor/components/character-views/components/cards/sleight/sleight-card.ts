@@ -63,7 +63,7 @@ export class SleightCard extends ItemCardBase {
           return {
             character: actor.proxy,
             psi: actor.proxy.psi,
-            modifier: { sleight: this.item.name, value: 5 },
+            // modifier: { sleight: this.item.name, value: 5 },
           };
         }
         return null;
@@ -228,7 +228,7 @@ export class SleightCard extends ItemCardBase {
     }
     if (this.item.isSustaining) {
       return html`<mwc-button
-        class="use-button"
+        class="end-button"
         dense
         @click=${this.stopSustaining}
         ?disabled=${this.character.disabled}

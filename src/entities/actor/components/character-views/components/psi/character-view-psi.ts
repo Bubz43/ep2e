@@ -360,7 +360,8 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
               )}
             </div>
           `
-        : receded
+        : ''}
+      ${receded
         ? html` <p>${localize('immuneToInfluencesUntilRecharge')}</p> `
         : ''}
     `;
