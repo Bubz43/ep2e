@@ -7,6 +7,7 @@ import { enumValues, PsiPush } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
 import type { Psi } from '@src/entities/item/proxies/psi';
+import { formatEffect } from '@src/features/effects';
 import { addFeature } from '@src/features/feature-helpers';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
 import { MotivationStance } from '@src/features/motivations';
@@ -360,7 +361,7 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                       items,
                     } = influence.effects;
                     const hasEffects = items.length;
-                    return html` <span
+                    return html` <span class="unique ${hasEffects ? "has-effects": ""}"
                       ><colored-tag
                         data-roll=${influence.roll}
                         data-tooltip=${description}
@@ -375,6 +376,8 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                             type="usable"
                             clickable
                             ?disabled=${this.character.disabled}
+                            data-tooltip=${items.map(formatEffect).join('. ')}
+                            @mouseover=${tooltip.fromData}
                             @click=${() => {
                               const roll = rollFormula(durationFormula);
                               roll?.toMessage({ flavor: localize(interval) });

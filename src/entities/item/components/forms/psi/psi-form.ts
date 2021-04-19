@@ -4,6 +4,7 @@ import {
   renderLabeledCheckbox,
   renderNumberField,
   renderRadioFields,
+  renderSelectField,
   renderTextareaField,
   renderTextField,
   renderTimeField,
@@ -26,6 +27,8 @@ import { entityFormCommonStyles } from '@src/entities/components/form-layout/ent
 import { ItemType } from '@src/entities/entity-types';
 import { renderItemForm } from '@src/entities/item/item-views';
 import type { Psi } from '@src/entities/item/proxies/psi';
+import type { EffectCreatedEvent } from '@src/features/components/effect-creator/effect-created-event';
+import { formatEffect } from '@src/features/effects';
 import {
   addFeature,
   idProp,
@@ -45,7 +48,7 @@ import {
   PsiInfluenceType,
   UniqueInfluence,
 } from '@src/features/psi-influence';
-import { CommonInterval } from '@src/features/time';
+import { CommonInterval, EPTimeInterval } from '@src/features/time';
 import {
   dragValue,
   DropType,
@@ -55,7 +58,7 @@ import {
 } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import { openMenu } from '@src/open-menu';
-import { safeMerge } from '@src/utility/helpers';
+import { notEmpty, safeMerge } from '@src/utility/helpers';
 import { customElement, html, property, PropertyValues } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
@@ -430,6 +433,7 @@ export class PsiForm extends ItemFormBase {
   }
 
   private editUnique(influence: StringID<UniqueInfluence>) {
+    const { items, durationFormula, interval } = influence.effects;
     return html`
       <h3>${localize('edit')} ${localize(influence.type)}</h3>
       <div class="unique-influence-forms">
@@ -447,6 +451,81 @@ export class PsiForm extends ItemFormBase {
             renderTextareaField(description, { resizable: true, rows: 12 }),
           ],
         })}
+        <section>
+          <sl-header heading=${localize('effects')}>
+            <sl-popover
+              slot="action"
+              .renderOnDemand=${() =>
+                html` <sl-popover-section
+                  heading="${localize('add')} ${localize('effect')}"
+                  ><effect-creator
+                    @effect-created=${(ev: EffectCreatedEvent) =>
+                      this.item.influenceCommiter((influences) =>
+                        updateFeature(influences, {
+                          id: influence.id,
+                          effects: {
+                            ...influence.effects,
+                            items: addFeature(items, ev.effect),
+                          },
+                        }),
+                      )}
+                  ></effect-creator
+                ></sl-popover-section>`}
+            >
+              <mwc-icon-button icon="add" slot="base"></mwc-icon-button
+            ></sl-popover>
+          </sl-header>
+          ${notEmpty(items)
+            ? html`
+                <sl-animated-list>
+                  ${repeat(
+                    items,
+                    idProp,
+                    (effect) => html`<wl-list-item>
+                      ${formatEffect(effect)}
+                      <delete-button
+                        slot="after"
+                        @delete=${() =>
+                          this.item.influenceCommiter((influences) =>
+                            updateFeature(influences, {
+                              id: influence.id,
+                              effects: {
+                                ...influence.effects,
+                                items: removeFeature(items, effect.id),
+                              },
+                            }),
+                          )}
+                      ></delete-button>
+                    </wl-list-item>`,
+                  )}
+                </sl-animated-list>
+
+                ${renderAutoForm({
+                  props: { durationFormula, interval },
+                  update: (changed) => {
+                    if (
+                      'durationFormula' in changed &&
+                      !changed.durationFormula
+                    )
+                      return;
+                    this.item.influenceCommiter((influences) =>
+                      updateFeature(influences, {
+                        id: influence.id,
+                        effects: {
+                          ...influence.effects,
+                          ...changed,
+                        },
+                      }),
+                    );
+                  },
+                  fields: ({ durationFormula, interval }) => [
+                    renderFormulaField(durationFormula, { required: true }),
+                    renderSelectField(interval, enumValues(EPTimeInterval)),
+                  ],
+                })}
+              `
+            : ''}
+        </section>
       </div>
     `;
   }

@@ -204,3 +204,15 @@ p {
 .critical-states {
   padding: 0.25rem;
 }
+
+.unique {
+  display: flex;
+  &.has-effects {
+    > :first-child::part(item) {
+      border-right-style: dashed;
+    }
+    > :last-child::part(item) {
+      border-left-style: dashed;
+    }
+  }
+}
