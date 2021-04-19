@@ -623,7 +623,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       if (this.psi?.receded) {
         this.psi.updater.path('data', 'state', 'receded').store(false);
       }
-      if (this.psi && this.psi.activePsiInfluences.size === 0) {
+      if (this.psi && !this.psi.hasActiveInfluences) {
         this.psi.updateInfectionRating(
           recharge === RechargeType.Short
             ? this.psi.infectionRating - 10

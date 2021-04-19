@@ -1481,7 +1481,8 @@ type LangEntries =
   | 'side'
   | 'sustaining'
   | 'removed'
-  | 'applyEffectsToSelf';
+  | 'applyEffectsToSelf'
+  | 'ease';
 type FullNames =
   | 'cog'
   | 'int'

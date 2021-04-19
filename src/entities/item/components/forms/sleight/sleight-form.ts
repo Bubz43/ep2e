@@ -7,7 +7,6 @@ import {
   renderLabeledCheckbox,
   renderNumberField,
   renderNumberInput,
-  renderRadioFields,
   renderSelectField,
   renderTextareaField,
   renderTimeField,
@@ -29,18 +28,10 @@ import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
 import { formatDamageType, HealthType } from '@src/health/health';
 import { notEmpty } from '@src/utility/helpers';
-import {
-  customElement,
-  html,
-  internalProperty,
-  property,
-  PropertyValues,
-} from 'lit-element';
+import { customElement, html, property } from 'lit-element';
 import { map, mapToObj } from 'remeda';
 import { ItemFormBase } from '../item-form-base';
 import styles from './sleight-form.scss';
-
-const opsGroups = ['toSelf', 'toTarget'] as const;
 
 @customElement('sleight-form')
 export class SleightForm extends ItemFormBase {
@@ -52,24 +43,20 @@ export class SleightForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: Sleight;
 
-  @internalProperty() private effectGroup: typeof opsGroups[number] = 'toSelf';
-
   private readonly effectsOps = addUpdateRemoveFeature(
     () => this.item.updater.path('data', 'effects').commit,
   );
-
-  update(changedProps: PropertyValues<this>) {
-    if (this.item.isChi) this.effectGroup = 'toSelf';
-    super.update(changedProps);
-  }
 
   private addCreatedEffect(ev: EffectCreatedEvent) {
     this.effectsOps.add({}, ev.effect);
   }
 
   render() {
-    const { updater, type, isChi, effects } = this.item;
+    const { updater, type, isChi, effects, duration } = this.item;
     const { disabled } = this;
+    const hasStaticDuration =
+      duration === SleightDuration.Instant ||
+      duration === SleightDuration.Sustained;
     return html`
       <entity-form-layout>
         <entity-form-header
@@ -100,17 +87,10 @@ export class SleightForm extends ItemFormBase {
                     ? renderTimeField(timeframe, { min: 0 })
                     : '',
                   renderSelectField(duration, enumValues(SleightDuration), {
-                    altLabel: (durationType) => {
-                      if (
-                        durationType === SleightDuration.Instant ||
-                        durationType === SleightDuration.Sustained
-                      ) {
-                        return localize(durationType);
-                      }
-                      return `${localize(
-                        AptitudeType.Willpower,
-                      )}  ÷ 5 ${localize(durationType)}`;
-                    },
+                    helpPersistent: !hasStaticDuration,
+                    helpText: hasStaticDuration
+                      ? undefined
+                      : `${localize(AptitudeType.Willpower)}  ÷ 5`,
                   }),
 
                   sleightType.value === SleightType.Epsilon
@@ -178,14 +158,6 @@ export class SleightForm extends ItemFormBase {
   private renderEffectCreator() {
     return html`
       <h3>${localize('add')} ${localize('effect')}</h3>
-      ${this.item.isChi
-        ? ''
-        : renderAutoForm({
-            props: { group: this.effectGroup },
-            classes: 'effect-group-form',
-            update: ({ group }) => group && (this.effectGroup = group),
-            fields: ({ group }) => renderRadioFields(group, opsGroups),
-          })}
 
       <effect-creator
         .effectTypes=${enumValues(EffectType)}

@@ -1,9 +1,7 @@
 import {
   renderFormulaField,
   renderNumberField,
-  renderRadioFields,
   renderSelectField,
-  renderTextField,
   renderTimeField,
 } from '@src/components/field/fields';
 import {
@@ -30,6 +28,7 @@ import {
   LitElement,
   property,
 } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
 import mix from 'mix-with/lib';
 import styles from './character-view-recharge.scss';
 
@@ -79,8 +78,11 @@ export class CharacterViewRecharge extends mix(LitElement).with(UseWorldTime) {
             ${renderUpdaterForm(updater.path('data', 'spentPools'), {
               disabled,
               fields: (spent) =>
-                [...pools].map(([pool, { max }]) =>
-                  renderNumberField(spent[pool], { min: 0, max }),
+                [...pools].map(([pool, { max, spent: clampedSpent }]) =>
+                  renderNumberField(
+                    { ...spent[pool], value: clampedSpent },
+                    { min: 0, max },
+                  ),
                 ),
             })}
           </fieldset>`
@@ -132,6 +134,8 @@ export class CharacterViewRecharge extends mix(LitElement).with(UseWorldTime) {
 
   private renderRechargeForm() {
     const recharge = this.character.recharges[this.rechargeType];
+    const { psi } = this.character;
+
     return renderSubmitForm({
       submitEmpty: true,
       submitButtonText: localize('start'),
@@ -165,6 +169,40 @@ export class CharacterViewRecharge extends mix(LitElement).with(UseWorldTime) {
               label: localize('poolsRegained'),
             })
           : html`<p>${localize('regainAllPools')}</p>`,
+        psi?.hasVariableInfection
+          ? html`
+              <ul>
+                <li
+                  class="infection-easing ${classMap({
+                    disabled: psi.hasActiveInfluences,
+                  })}"
+                  title=${psi.hasActiveInfluences
+                    ? `🚫 ${localize('active')} ${localize('psiInfluence')}`
+                    : ''}
+                >
+                  ${recharge.type === RechargeType.Short
+                    ? `
+                ${localize('ease')} ${localize('infectionRating')} ${localize(
+                        'by',
+                      )} 10 (${localize('minimum')} ${psi.baseInfectionRating})
+                `
+                    : `
+                ${localize('set')} ${localize('infectionRating')} ${localize(
+                        'to',
+                      )} ${psi.baseInfectionRating}
+                `}
+                </li>
+                ${psi.receded
+                  ? html`
+                      <li>
+                        ${localize('lose')} ${localize('influence')}
+                        ${localize('effect')} ${localize('immunity')}
+                      </li>
+                    `
+                  : ''}
+              </ul>
+            `
+          : '',
       ],
     });
   }

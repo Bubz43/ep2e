@@ -136,6 +136,10 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
     );
   }
 
+  get hasActiveInfluences() {
+    return this.activePsiInfluences.size > 0;
+  }
+
   get traitInfluenceLevelIndex() {
     const { infectionRating } = this;
     if (infectionRating < 33) return 0;

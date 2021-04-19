@@ -31,10 +31,6 @@ recharge-completion {
 }
 
 .recharge-init {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  display: flex;
-  flex-flow: row wrap;
   padding: 0 1rem;
   sl-form {
     display: contents;
@@ -46,14 +42,17 @@ recharge-completion {
     }
   }
   p {
-    height: 53px;
-    display: grid;
-    place-items: center;
+    text-align: center;
     margin: 0 0.5rem;
-    flex: 1;
   }
 }
 
 .total-spent {
   color: var(--color-text-lighter);
+}
+
+.infection-easing {
+  &.disabled {
+    text-decoration: line-through;
+  }
 }

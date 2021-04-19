@@ -1,9 +1,6 @@
 import { AptitudeType, PoolEffectUsability, PoolType } from '@src/data-enums';
 import { localize } from '@src/foundry/localization';
-import {
-  createSuccessTestModifier,
-  SimpleSuccessTestModifier,
-} from '@src/success-test/success-test';
+import { createSuccessTestModifier } from '@src/success-test/success-test';
 import { localImage } from '@src/utility/images';
 import { LazyGetter } from 'lazy-get-decorator';
 import { clamp } from 'remeda';
@@ -38,16 +35,16 @@ export type ReadonlyPool = Omit<Pool, 'addEffect'>;
 export class Pool {
   readonly type: PoolType;
   readonly value: number;
-  readonly spent: number;
 
   private _bonus = 0;
   private _usableTwice = false;
   private _disabled = false;
+  private _spent;
 
   constructor({ type, initialValue = 0, spent = 0 }: PoolInit) {
     this.type = type;
     this.value = initialValue;
-    this.spent = spent;
+    this._spent = spent;
   }
 
   get bonus() {
@@ -64,6 +61,10 @@ export class Pool {
 
   get max() {
     return this.value + this.bonus;
+  }
+
+  get spent() {
+    return Math.min(this._spent, this.max);
   }
 
   get available() {
@@ -126,6 +127,7 @@ export class Pool {
 
 export class Pools extends Map<PoolType, Pool> {
   get totalSpent() {
+    console.log([...this.values()].map((p) => p.spent));
     return [...this.values()].reduce((accum, pool) => accum + pool.spent, 0);
   }
 
