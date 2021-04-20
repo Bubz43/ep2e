@@ -58,6 +58,24 @@ export class MessageContent extends LitElement {
     if (!this.message.isContentVisible) return '';
     return html`
       ${header ? html` <message-header .data=${header}></message-header> ` : ''}
+      ${notEmpty(targets)
+        ? html`
+            <div class="targets">
+              <span>${localize('targets')}:</span>
+              ${targets.map((target) => {
+                const token = findToken(target);
+                return token
+                  ? html`<img
+                      height="24px"
+                      loading="lazy"
+                      src=${token.data.img}
+                      title=${token.data.name}
+                    />`
+                  : '';
+              })}
+            </div>
+          `
+        : ''}
       ${areaEffect
         ? html`
             <message-area-effect
@@ -86,24 +104,6 @@ export class MessageContent extends LitElement {
                   ></message-special-test>
                 `
               : ''} `
-        : ''}
-      ${notEmpty(targets)
-        ? html`
-            <div class="targets">
-              <span>${localize('targets')}:</span>
-              ${targets.map((target) => {
-                const token = findToken(target);
-                return token
-                  ? html`<img
-                      height="24px"
-                      loading="lazy"
-                      src=${token.data.img}
-                      title=${token.data.name}
-                    />`
-                  : '';
-              })}
-            </div>
-          `
         : ''}
       ${favor ? html` <message-favor .favor=${favor}></message-favor> ` : ''}
       ${infectionTest

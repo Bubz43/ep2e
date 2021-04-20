@@ -84,11 +84,14 @@ export class SleightForm extends ItemFormBase {
       effectsToSelf,
       effectsToTarget,
       duration,
+      mentalArmor,
     } = this.item;
     const { disabled } = this;
     const hasStaticDuration =
       duration === SleightDuration.Instant ||
       duration === SleightDuration.Sustained;
+
+    const canHaveSelfEffects = isChi || duration === SleightDuration.Sustained;
     return html`
       <entity-form-layout>
         <entity-form-header
@@ -142,18 +145,26 @@ export class SleightForm extends ItemFormBase {
                 ?disabled=${disabled}
               ></mwc-icon-button
             ></sl-header>
-            <item-form-effects-list
-              .effects=${effectsToSelf}
-              .operations=${this.effectsOps.self}
-              label=${isChi ? '' : `${localize('to')} ${localize('self')}`}
-              ?disabled=${disabled}
-            ></item-form-effects-list>
+            ${canHaveSelfEffects
+              ? html`<item-form-effects-list
+                  .effects=${effectsToSelf}
+                  .operations=${this.effectsOps.self}
+                  label=${isChi
+                    ? ''
+                    : `${localize('to')} ${localize('self')} (${localize(
+                        'whileSustaining',
+                      )})`}
+                  ?disabled=${disabled}
+                ></item-form-effects-list>`
+              : ''}
             ${isChi
               ? ''
               : html` <item-form-effects-list
                   .effects=${effectsToTarget}
                   .operations=${this.effectsOps.target}
-                  label="${localize('to')} ${localize('target')}"
+                  label=${canHaveSelfEffects
+                    ? `${localize('to')} ${localize('target')}`
+                    : ''}
                   ?disabled=${disabled}
                 ></item-form-effects-list>`}
             ${renderUpdaterForm(updater.path('data', 'mentalArmor'), {
@@ -178,11 +189,16 @@ export class SleightForm extends ItemFormBase {
                   : '',
               ],
             })}
-            ${renderUpdaterForm(updater.path('data'), {
-              fields: ({ scaleEffectsOnSuperior }) => [
-                renderLabeledCheckbox(scaleEffectsOnSuperior),
-              ],
-            })}
+            ${isChi || (!effectsToTarget.length && !mentalArmor.apply)
+              ? ''
+              : renderUpdaterForm(updater.path('data'), {
+                  fields: ({ scaleEffectsOnSuperior }) => [
+                    renderLabeledCheckbox({
+                      ...scaleEffectsOnSuperior,
+                      label: `${localize('scaleToTargetEffectsOnSuperior')}`,
+                    }),
+                  ],
+                })}
           </section>
           ${isChi ? '' : [this.renderAttack(), this.renderHeal()]}
         </div>

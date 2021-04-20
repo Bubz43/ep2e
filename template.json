@@ -498,8 +498,8 @@
       "sleightType": "gamma",
       "action": "complex",
       "timeframe": 0,
-      "applyEffectsToSelf": false,
-      "effects": [],
+      "effectsToSelf": [],
+      "effectsToTarget": [],
       "scaleEffectsOnSuperior": false,
       "attack": {
         "useMentalArmor": false,

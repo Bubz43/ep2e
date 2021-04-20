@@ -1483,7 +1483,9 @@ type LangEntries =
   | 'removed'
   | 'applyEffectsToSelf'
   | 'ease'
-  | 'useMentalArmor';
+  | 'useMentalArmor'
+  | 'scaleToTargetEffectsOnSuperior'
+  | 'whileSustaining';
 type FullNames =
   | 'cog'
   | 'int'

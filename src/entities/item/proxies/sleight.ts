@@ -4,6 +4,7 @@ import type { AddEffects } from '@src/entities/applied-effects';
 import type { ItemType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import { createEffect, multiplyEffectModifier } from '@src/features/effects';
+import { addFeature } from '@src/features/feature-helpers';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
 import { createTag } from '@src/features/tags';
 import { createLiveTimeState, currentWorldTimeMS } from '@src/features/time';
@@ -91,18 +92,6 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
     return this.epData.scaleEffectsOnSuperior;
   }
 
-  get sustainingModifier(): AddEffects {
-    return {
-      effects: [
-        createEffect.successTest({
-          modifier: -10,
-          tags: [createTag.allActions({})],
-        }),
-      ],
-      source: `${localize('sustaining')} ${this.name}`,
-    };
-  }
-
   get hasAttack() {
     return !!this.epData.attack.damageFormula;
   }
@@ -186,6 +175,20 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
 
   getPassiveMentalArmor(willpower: number, divisor: number) {
     return Math.round(willpower / divisor || 1);
+  }
+
+  @LazyGetter()
+  get effectsFromSustaining(): AddEffects {
+    return {
+      effects: addFeature(
+        this.effectsToSelf,
+        createEffect.successTest({
+          modifier: -10,
+          tags: [createTag.allActions({})],
+        }),
+      ),
+      source: `${localize('sustaining')} ${this.name}`,
+    };
   }
 
   getPassiveEffects(willpower: number, enhanced: boolean): AddEffects {

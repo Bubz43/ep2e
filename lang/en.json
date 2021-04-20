@@ -1456,6 +1456,9 @@
     "applyEffectsToSelf": "Apply Effects to Self",
     "removed": "Removed",
     "ease": "Ease",
+    "scaleToTargetEffectsOnSuperior": "Scale effects to target on superior success",
+    "useMentalArmor": "Use Mental Armor",
+    "whileSustaining": "While Sustaining",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

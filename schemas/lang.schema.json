@@ -3764,6 +3764,9 @@
             "scaleEffectsOnSuperior": {
               "type": "string"
             },
+            "scaleToTargetEffectsOnSuperior": {
+              "type": "string"
+            },
             "scavenger": {
               "type": "string"
             },
@@ -4655,6 +4658,9 @@
             "useFirewall": {
               "type": "string"
             },
+            "useMentalArmor": {
+              "type": "string"
+            },
             "useMeshArmor": {
               "type": "string"
             },
@@ -4776,6 +4782,9 @@
               "type": "string"
             },
             "whenMade": {
+              "type": "string"
+            },
+            "whileSustaining": {
               "type": "string"
             },
             "whips": {
@@ -5943,6 +5952,7 @@
             "sav",
             "save",
             "scaleEffectsOnSuperior",
+            "scaleToTargetEffectsOnSuperior",
             "scavenger",
             "scene",
             "scientist",
@@ -6240,6 +6250,7 @@
             "use",
             "useCredits",
             "useFirewall",
+            "useMentalArmor",
             "useMeshArmor",
             "useMuse",
             "useSubstance",
@@ -6281,6 +6292,7 @@
             "wheeled",
             "when",
             "whenMade",
+            "whileSustaining",
             "whips",
             "whisper",
             "whisperGM",

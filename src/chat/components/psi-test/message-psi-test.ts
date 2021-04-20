@@ -139,25 +139,19 @@ export class MessagePsiTest extends MessageElement {
     });
   }
 
-  private applyEffectsToTarget() {
+  private applyEffects() {
     pickOrDefaultCharacter((character) =>
-      this.applyEffectsToCharacter(character, this.sleight.effectsToTarget),
+      this.applyEffectsToCharacter(character),
     );
   }
 
-  private applyEffectsToSelf() {
-    const { actor } = this.message;
-    if (actor?.proxy.type === ActorType.Character) {
-      this.applyEffectsToCharacter(actor.proxy, this.sleight.effectsToSelf);
-    }
-  }
-
-  private async applyEffectsToCharacter(
-    character: Character,
-    effects: StringID<Effect>[],
-  ) {
+  private async applyEffectsToCharacter(character: Character) {
     const { sleight, pushes, successTestInfo } = this;
-    const { scaleEffectsOnSuperior, mentalArmor } = sleight;
+    const {
+      scaleEffectsOnSuperior,
+      mentalArmor,
+      effectsToTarget: effects,
+    } = sleight;
     const totalDuration = sleight.getTotalDuration(
       this.psiTest.willpower,
       pushes.includes(PsiPush.IncreasedDuration),
@@ -360,7 +354,6 @@ export class MessagePsiTest extends MessageElement {
       hasAttack,
       attack,
       name,
-      effectsToSelf,
       effectsToTarget,
       hasHeal,
     } = this.sleight;
@@ -374,14 +367,12 @@ export class MessagePsiTest extends MessageElement {
 
       ${effectsToTarget.length || mentalArmor.apply
         ? html`
-            <mwc-button
-              dense
-              class="apply-effects"
-              @click=${this.applyEffectsToTarget}
-              >${localize('target')}: ${localize('applyEffects')}</mwc-button
+            <mwc-button dense class="apply-effects" @click=${this.applyEffects}
+              >${localize('applyEffects')}</mwc-button
             >
           `
         : ''}
+      ${notEmpty(appliedTo) ? this.renderAppliedTo(appliedTo) : ''}
 
       <message-attack-traits
         .attackTraitInfo=${{ traits: attack.attackTraits, source: name }}
@@ -390,91 +381,82 @@ export class MessagePsiTest extends MessageElement {
       ${disabled
         ? ''
         : html`
-            ${effectsToSelf.length
-              ? html`
-                  <mwc-button
-                    dense
-                    class="apply-effects"
-                    @click=${this.applyEffectsToSelf}
-                  >
-                    ${localize('applyEffectsToSelf')}</mwc-button
-                  >
-                `
-              : ''}
-            ${hasHeal
-              ? html`
-                  <mwc-button
-                    dense
-                    class="heal"
-                    outlined
-                    @click=${this.createHealMessage}
-                    >${localize('roll')} ${localize('heal')}</mwc-button
-                  >
-                `
-              : ''}
-            ${hasAttack
-              ? html`
-                  <mwc-button
-                    dense
-                    class="attack"
-                    outlined
-                    @click=${this.createDamageMessage}
-                    >${localize('roll')} ${localize('attack')}
-                    ${localize('damage')}</mwc-button
-                  >
-                `
-              : ''}
-            ${duration === SleightDuration.Sustained
-              ? html`
-                  <mwc-button
-                    dense
-                    ?disabled=${!!sustaining}
-                    @click=${this.startSustaining}
-                    >${sustaining ? '' : localize('start')}
-                    ${localize('sustaining')}</mwc-button
-                  >
-                `
-              : ''}
-            ${successTestInfo?.result === SuccessTestResult.CriticalFailure
-              ? html`
-                  <mwc-button
-                    dense
-                    outlined
-                    class="damage"
-                    @click=${this.rollCriticalFailureDamage}
-                  >
-                    ${localize(successTestInfo.result)} - ${localize('roll')}
-                    ${localize('SHORT', 'damageValue')} 1d6
-                  </mwc-button>
-                `
-              : ''}
-            ${psiTest.push && !psiTest.sideEffectNegation
-              ? html`
-                  <mwc-button
-                    dense
-                    outlined
-                    class="damage"
-                    @click=${this.rollPushDamage}
-                  >
-                    ${localize('pushed')} - ${localize('roll')}
-                    ${localize('SHORT', 'damageValue')} 1d6
-                  </mwc-button>
-                `
-              : ''}
-            ${psiTest.variableInfection && psiTest.sideEffectNegation !== 'all'
-              ? html`
-                  <mwc-button
-                    dense
-                    outlined
-                    @click=${this.startInfectionTest}
-                    class="infection-test"
-                  >
-                    ${localize('infectionTest')}
-                  </mwc-button>
-                `
-              : ''}
+            <div class="user-actions">
+              ${hasHeal
+                ? html`
+                    <mwc-button
+                      dense
+                      class="heal"
+                      outlined
+                      @click=${this.createHealMessage}
+                      >${localize('roll')} ${localize('heal')}</mwc-button
+                    >
+                  `
+                : ''}
+              ${hasAttack
+                ? html`
+                    <mwc-button
+                      dense
+                      class="attack"
+                      outlined
+                      @click=${this.createDamageMessage}
+                      >${localize('roll')} ${localize('attack')}
+                      ${localize('damage')}</mwc-button
+                    >
+                  `
+                : ''}
+              ${duration === SleightDuration.Sustained
+                ? html`
+                    <mwc-button
+                      dense
+                      ?disabled=${!!sustaining}
+                      @click=${this.startSustaining}
+                      >${sustaining ? '' : localize('start')}
+                      ${localize('sustaining')}</mwc-button
+                    >
+                  `
+                : ''}
+              ${successTestInfo?.result === SuccessTestResult.CriticalFailure
+                ? html`
+                    <mwc-button
+                      dense
+                      outlined
+                      class="damage"
+                      @click=${this.rollCriticalFailureDamage}
+                    >
+                      ${localize(successTestInfo.result)} - ${localize('roll')}
+                      ${localize('SHORT', 'damageValue')} 1d6
+                    </mwc-button>
+                  `
+                : ''}
+              ${psiTest.push && !psiTest.sideEffectNegation
+                ? html`
+                    <mwc-button
+                      dense
+                      outlined
+                      class="damage"
+                      @click=${this.rollPushDamage}
+                    >
+                      ${localize('pushed')} - ${localize('roll')}
+                      ${localize('SHORT', 'damageValue')} 1d6
+                    </mwc-button>
+                  `
+                : ''}
+              ${psiTest.variableInfection &&
+              psiTest.sideEffectNegation !== 'all'
+                ? html`
+                    <mwc-button
+                      dense
+                      outlined
+                      @click=${this.startInfectionTest}
+                      class="infection-test"
+                    >
+                      ${localize('infectionTest')}
+                    </mwc-button>
+                  `
+                : ''}
+            </div>
           `}
-      ${notEmpty(appliedTo) ? this.renderAppliedTo(appliedTo) : ''}
     `;
   }
 

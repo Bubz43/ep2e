@@ -1,7 +1,7 @@
 import { AptitudeType, enumValues } from '@src/data-enums';
 import { LangEntry, localize } from '@src/foundry/localization';
 import { compact } from 'remeda';
-import type { SetRequired } from 'type-fest';
+import type { Mutable, SetRequired } from 'type-fest';
 import { createFeature } from './feature-helpers';
 import { Pool } from './pool';
 
@@ -89,7 +89,7 @@ export type FullSkill = {
   fullName: string;
   aptitudePoints: number;
   aptBonus: number;
-} & SetRequired<Info, 'aptMultiplier'>;
+} & Mutable<SetRequired<Info, 'aptMultiplier'>>;
 
 export type FullFieldSkill = Omit<FullSkill, 'skill' | 'category'> &
   FieldSkillData & {
@@ -289,32 +289,6 @@ export const fieldSkillName = ({ fieldSkill, field }: FieldSkillIdentifier) => {
   return `${localize(fieldSkill)}: ${field}`;
 };
 
-// export const setupSkillFromEffect = (
-//   effect: SkillEffect,
-//   aptitudes: Aptitudes
-// ): FullSkill | FullFieldSkill => {
-//   const {
-//     skillType,
-//     total,
-//     aptitudeMultiplier,
-//     specialization,
-//     field,
-//     linkedAptitude: aptitude
-//   } = effect;
-//   if (isFieldSkillEffect(skillType)) {
-//     return setupFullFieldSkill(
-//       {
-//         field,
-//       },
-//       aptitudes
-//     );
-//   }
-//   const { category } = skillInfo[skillType];
-//   return {
-
-//   }
-// };
-
 export const setupFullSkill = (
   skillData: SkillData & { skill: SkillType },
   aptitudes: Aptitudes,
@@ -370,4 +344,4 @@ export const setupFullFieldSkill = (
   };
 };
 
-export type Skill = FullSkill | FullFieldSkill;
+export type Skill = (FullSkill | FullFieldSkill) & { source?: string };

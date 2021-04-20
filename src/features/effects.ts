@@ -445,7 +445,7 @@ const format = (effect: Effect): (string | number)[] => {
           })
         : localize(effect.skillType);
       return [
-        baseName + effect.specialization ? ` (${effect.specialization})` : '',
+        baseName + (effect.specialization ? ` (${effect.specialization})` : ''),
         effect.total
           ? effect.total
           : `@ ${localize(effect.linkedAptitude)} x${

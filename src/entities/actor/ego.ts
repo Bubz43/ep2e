@@ -5,6 +5,7 @@ import {
   enumValues,
   MinStressOption,
 } from '@src/data-enums';
+import { EffectType, isFieldSkillEffect, Source } from '@src/features/effects';
 import type { StringID } from '@src/features/feature-helpers';
 import {
   RepNetwork,
@@ -12,13 +13,16 @@ import {
   RepWithIdentifier,
 } from '@src/features/reputations';
 import {
+  ActiveSkillCategory,
   FieldSkillData,
   FieldSkillIdentifier,
+  fieldSkillInfo,
   fieldSkillName,
   FieldSkillType,
   FullFieldSkill,
   FullSkill,
   isFieldSkill,
+  KnowSkillCategory,
   setupFullFieldSkill,
   setupFullSkill,
   Skill,
@@ -223,10 +227,10 @@ export class Ego {
   get skills() {
     const { canDefault } = this.settings;
     const { fieldSkills } = this.epData;
-    const skills: Skill[] = [];
+    const skills = new Map<string, Skill>();
 
     const addSkill = (skill: Skill) => {
-      if (canDefault || skill.points) skills.push(skill);
+      if (canDefault || skill.points) skills.set(skill.name, skill);
     };
 
     for (const type of enumValues(SkillType)) {
@@ -242,8 +246,52 @@ export class Ego {
       }
     }
 
-    // TODO: Skills from effects and dups overwriting with higher total
-    return skills.sort((a, b) => a.name.localeCompare(b.name));
+    for (const effect of this.activeEffects?.getGroup(EffectType.Skill) || []) {
+      if (isFieldSkillEffect(effect.skillType)) {
+        const skill: Skill = setupFullFieldSkill(
+          {
+            points: effect.total,
+            specialization: effect.specialization,
+            fieldSkill: effect.skillType,
+            field: effect.field,
+            linkedAptitude: effect.linkedAptitude,
+            category:
+              fieldSkillInfo[effect.skillType].categories[0] ||
+              (effect.skillType === FieldSkillType.Know
+                ? KnowSkillCategory.Academics
+                : ActiveSkillCategory.Misc),
+          },
+          this.aptitudes,
+        );
+
+        skill.aptMultiplier = effect.total
+          ? 0
+          : (effect.aptitudeMultiplier as 0 | 1 | 2);
+        skill.source = effect[Source];
+        if (skill.total > (skills.get(skill.name)?.total || 0)) {
+          addSkill(skill);
+        }
+      } else {
+        const skill: Skill = setupFullSkill(
+          {
+            points: effect.total,
+            specialization: effect.specialization,
+            skill: effect.skillType,
+          },
+          this.aptitudes,
+        );
+        skill.aptMultiplier = effect.total
+          ? 0
+          : (effect.aptitudeMultiplier as 0 | 1 | 2);
+        skill.linkedAptitude = effect.linkedAptitude;
+        skill.source = effect[Source];
+        if (skill.total > (skills.get(skill.name)?.total || 0)) {
+          addSkill(skill);
+        }
+      }
+    }
+
+    return [...skills.values()].sort((a, b) => a.name.localeCompare(b.name));
   }
 
   @LazyGetter()

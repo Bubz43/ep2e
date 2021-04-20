@@ -872,7 +872,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
               } else {
                 this.activatedSleights.push(substanceItem);
                 if (substanceItem.isSustaining)
-                  this._appliedEffects.add(substanceItem.sustainingModifier);
+                  this._appliedEffects.add(substanceItem.effectsFromSustaining);
               }
             }
           }
@@ -906,7 +906,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         } else {
           this.activatedSleights.push(item);
           if (item.isSustaining)
-            this._appliedEffects.add(item.sustainingModifier);
+            this._appliedEffects.add(item.effectsFromSustaining);
         }
         egoItems.set(item.id, item);
       }

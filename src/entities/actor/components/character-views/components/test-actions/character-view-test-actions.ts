@@ -24,6 +24,7 @@ import {
   queryAll,
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
+import { ifDefined } from 'lit-html/directives/if-defined';
 import { live } from 'lit-html/directives/live';
 import { compact, equals, first, range, reject } from 'remeda';
 import styles from './character-view-test-actions.scss';
@@ -449,8 +450,13 @@ export class CharacterViewTestActions extends LitElement {
       ?disabled=${this.disabled}
       .tabIndex=${live(filtered ? -1 : 0)}
       @click=${() => this.startSkillTest(skill)}
+      title=${ifDefined(
+        skill.source ? `${localize('source')}: ${skill.source}` : undefined,
+      )}
     >
-      <span class="skill-name">${skill.fullName}</span>
+      <span class="skill-name"
+        >${skill.source ? '*' : ''}${skill.fullName}</span
+      >
       <span class="skill-total" slot="after">${skill.total}</span>
     </wl-list-item>`;
   };
