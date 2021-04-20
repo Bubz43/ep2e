@@ -223,6 +223,8 @@ export class Ego {
     });
   }
 
+  private _skills: Map<string, Skill> | null = null;
+
   @LazyGetter()
   get skills() {
     const { canDefault } = this.settings;
@@ -290,7 +292,7 @@ export class Ego {
         }
       }
     }
-
+    this._skills = skills;
     return [...skills.values()].sort((a, b) => a.name.localeCompare(b.name));
   }
 
@@ -460,7 +462,11 @@ export class Ego {
     return !!agent && this.items.get(agent?.id) === agent;
   }
 
-  getCommonSkill(skill: SkillType) {
+  getCommonSkill(skill: SkillType): FullSkill {
+    if (this._skills) {
+      const madeSkill = this._skills.get(localize(skill));
+      if (madeSkill) return madeSkill as FullSkill;
+    }
     let fullSkill = this.commonSkills.get(skill);
     if (!fullSkill) {
       fullSkill = setupFullSkill(
@@ -496,6 +502,10 @@ export class Ego {
   }
 
   findFieldSkill(ids: FieldSkillIdentifier) {
+    if (this._skills) {
+      const madeSkill = this._skills.get(fieldSkillName(ids));
+      if (madeSkill) return madeSkill as FullFieldSkill;
+    }
     let fullSkill = this.fieldSkills.get(fieldSkillName(ids));
     if (!fullSkill) {
       const { field, fieldSkill } = ids;

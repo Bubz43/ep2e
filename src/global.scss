@@ -927,6 +927,7 @@ sl-tooltip {
     box-shadow: 0 0 1px black;
     &:hover {
       color: alphav(var(--color-text), 0.8);
+      background: var(--color-border);
     }
     &.active {
       color: alphav(var(--color-text), 0.95);
