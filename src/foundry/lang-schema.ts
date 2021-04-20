@@ -1482,7 +1482,8 @@ type LangEntries =
   | 'sustaining'
   | 'removed'
   | 'applyEffectsToSelf'
-  | 'ease';
+  | 'ease'
+  | 'useMentalArmor';
 type FullNames =
   | 'cog'
   | 'int'

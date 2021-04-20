@@ -45,8 +45,12 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
     return this.sleightType === SleightType.Chi;
   }
 
-  get effects() {
-    return this.epData.effects;
+  get effectsToSelf() {
+    return this.epData.effectsToSelf;
+  }
+
+  get effectsToTarget() {
+    return this.epData.effectsToTarget;
   }
 
   get status() {
@@ -85,10 +89,6 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
 
   get scaleEffectsOnSuperior() {
     return this.epData.scaleEffectsOnSuperior;
-  }
-
-  get applyEffectsToSelf() {
-    return this.epData.applyEffectsToSelf;
   }
 
   get sustainingModifier(): AddEffects {
@@ -189,7 +189,7 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
   }
 
   getPassiveEffects(willpower: number, enhanced: boolean): AddEffects {
-    const { effects } = this;
+    const { effectsToSelf: effects } = this;
     const pushed = enhanced || this.isPushed;
     const allEffects = this.mentalArmor.apply
       ? [

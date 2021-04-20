@@ -7,6 +7,7 @@ import {
   renderLabeledCheckbox,
   renderNumberField,
   renderNumberInput,
+  renderRadioFields,
   renderSelectField,
   renderTextareaField,
   renderTimeField,
@@ -26,12 +27,23 @@ import type { EffectCreatedEvent } from '@src/features/components/effect-creator
 import { EffectType } from '@src/features/effects';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
+import { capitalize } from '@src/foundry/misc-helpers';
 import { formatDamageType, HealthType } from '@src/health/health';
 import { notEmpty } from '@src/utility/helpers';
-import { customElement, html, property } from 'lit-element';
+import {
+  customElement,
+  html,
+  internalProperty,
+  property,
+  PropertyValues,
+} from 'lit-element';
 import { map, mapToObj } from 'remeda';
 import { ItemFormBase } from '../item-form-base';
 import styles from './sleight-form.scss';
+
+const effectGroups = ['self', 'target'] as const;
+
+type EffectGroup = typeof effectGroups[number];
 
 @customElement('sleight-form')
 export class SleightForm extends ItemFormBase {
@@ -43,16 +55,36 @@ export class SleightForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: Sleight;
 
-  private readonly effectsOps = addUpdateRemoveFeature(
-    () => this.item.updater.path('data', 'effects').commit,
-  );
+  @internalProperty() private effectGroup: EffectGroup = 'self';
+
+  update(changedProps: PropertyValues<this>) {
+    if (this.item.isChi) this.effectGroup = 'self';
+
+    super.update(changedProps);
+  }
+
+  private readonly effectsOps = mapToObj(effectGroups, (group) => [
+    group,
+    addUpdateRemoveFeature(
+      () =>
+        this.item.updater.path('data', `effectsTo${capitalize(group)}` as const)
+          .commit,
+    ),
+  ]);
 
   private addCreatedEffect(ev: EffectCreatedEvent) {
-    this.effectsOps.add({}, ev.effect);
+    this.effectsOps[this.effectGroup].add({}, ev.effect);
   }
 
   render() {
-    const { updater, type, isChi, effects, duration } = this.item;
+    const {
+      updater,
+      type,
+      isChi,
+      effectsToSelf,
+      effectsToTarget,
+      duration,
+    } = this.item;
     const { disabled } = this;
     const hasStaticDuration =
       duration === SleightDuration.Instant ||
@@ -111,16 +143,27 @@ export class SleightForm extends ItemFormBase {
               ></mwc-icon-button
             ></sl-header>
             <item-form-effects-list
-              .effects=${effects}
-              .operations=${this.effectsOps}
+              .effects=${effectsToSelf}
+              .operations=${this.effectsOps.self}
+              label=${isChi ? '' : `${localize('to')} ${localize('self')}`}
               ?disabled=${disabled}
             ></item-form-effects-list>
+            ${isChi
+              ? ''
+              : html` <item-form-effects-list
+                  .effects=${effectsToTarget}
+                  .operations=${this.effectsOps.target}
+                  label="${localize('to')} ${localize('target')}"
+                  ?disabled=${disabled}
+                ></item-form-effects-list>`}
             ${renderUpdaterForm(updater.path('data', 'mentalArmor'), {
               classes: 'mental-armor-form',
               fields: ({ apply, divisor, formula }) => [
                 renderLabeledCheckbox({
                   ...apply,
-                  label: `${localize('apply')} ${localize('mentalArmor')}`,
+                  label: `${localize('apply')} ${localize('mentalArmor')} ${
+                    isChi ? '' : localize('toTarget')
+                  }`,
                 }),
                 apply.value
                   ? isChi
@@ -136,9 +179,8 @@ export class SleightForm extends ItemFormBase {
               ],
             })}
             ${renderUpdaterForm(updater.path('data'), {
-              fields: ({ scaleEffectsOnSuperior, applyEffectsToSelf }) => [
+              fields: ({ scaleEffectsOnSuperior }) => [
                 renderLabeledCheckbox(scaleEffectsOnSuperior),
-                renderLabeledCheckbox(applyEffectsToSelf),
               ],
             })}
           </section>
@@ -158,6 +200,16 @@ export class SleightForm extends ItemFormBase {
   private renderEffectCreator() {
     return html`
       <h3>${localize('add')} ${localize('effect')}</h3>
+
+      ${this.item.isChi
+        ? ''
+        : html`
+            ${renderAutoForm({
+              props: { group: this.effectGroup },
+              update: ({ group }) => group && (this.effectGroup = group),
+              fields: ({ group }) => renderRadioFields(group, effectGroups),
+            })}
+          `}
 
       <effect-creator
         .effectTypes=${enumValues(EffectType)}

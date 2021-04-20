@@ -378,8 +378,8 @@ type SleightData = {
   infectionMod: number;
   action: ActionType;
   timeframe: number;
-  applyEffectsToSelf: boolean;
-  effects: StringID<Effect>[];
+  effectsToSelf: StringID<Effect>[];
+  effectsToTarget: StringID<Effect>[];
   scaleEffectsOnSuperior: boolean;
   mentalArmor: {
     apply: boolean;

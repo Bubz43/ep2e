@@ -13,8 +13,12 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
 import { pickOrDefaultCharacter } from '@src/entities/find-entities';
 import { Sleight } from '@src/entities/item/proxies/sleight';
-import { createEffect, multiplyEffectModifier } from '@src/features/effects';
-import { uniqueStringID } from '@src/features/feature-helpers';
+import {
+  createEffect,
+  Effect,
+  multiplyEffectModifier,
+} from '@src/features/effects';
+import { StringID, uniqueStringID } from '@src/features/feature-helpers';
 import { createTemporaryFeature } from '@src/features/temporary';
 import { localize } from '@src/foundry/localization';
 import {
@@ -137,20 +141,23 @@ export class MessagePsiTest extends MessageElement {
 
   private applyEffectsToTarget() {
     pickOrDefaultCharacter((character) =>
-      this.applyEffectsToCharacter(character),
+      this.applyEffectsToCharacter(character, this.sleight.effectsToTarget),
     );
   }
 
   private applyEffectsToSelf() {
     const { actor } = this.message;
     if (actor?.proxy.type === ActorType.Character) {
-      this.applyEffectsToCharacter(actor.proxy);
+      this.applyEffectsToCharacter(actor.proxy, this.sleight.effectsToSelf);
     }
   }
 
-  private async applyEffectsToCharacter(character: Character) {
+  private async applyEffectsToCharacter(
+    character: Character,
+    effects: StringID<Effect>[],
+  ) {
     const { sleight, pushes, successTestInfo } = this;
-    const { effects, scaleEffectsOnSuperior, mentalArmor } = sleight;
+    const { scaleEffectsOnSuperior, mentalArmor } = sleight;
     const totalDuration = sleight.getTotalDuration(
       this.psiTest.willpower,
       pushes.includes(PsiPush.IncreasedDuration),
@@ -348,13 +355,13 @@ export class MessagePsiTest extends MessageElement {
   render() {
     const { disabled, successTestInfo, psiTest, halveResistance } = this;
     const {
-      effects,
       duration,
       mentalArmor,
       hasAttack,
       attack,
       name,
-      applyEffectsToSelf,
+      effectsToSelf,
+      effectsToTarget,
       hasHeal,
     } = this.sleight;
     const { appliedTo, sustaining } = psiTest;
@@ -365,43 +372,33 @@ export class MessagePsiTest extends MessageElement {
         </wl-list-item>
       </sl-group>
 
-      ${applyEffectsToSelf
-        ? ''
-        : html`
-            ${effects.length || mentalArmor.apply
-              ? html`
-                  <mwc-button
-                    dense
-                    class="apply-effects"
-                    @click=${this.applyEffectsToTarget}
-                    >${localize('target')}:
-                    ${localize('applyEffects')}</mwc-button
-                  >
-                `
-              : ''}
-            ${notEmpty(appliedTo) ? this.renderAppliedTo(appliedTo) : ''}
-          `}
+      ${effectsToTarget.length || mentalArmor.apply
+        ? html`
+            <mwc-button
+              dense
+              class="apply-effects"
+              @click=${this.applyEffectsToTarget}
+              >${localize('target')}: ${localize('applyEffects')}</mwc-button
+            >
+          `
+        : ''}
 
       <message-attack-traits
         .attackTraitInfo=${{ traits: attack.attackTraits, source: name }}
       ></message-attack-traits>
+
       ${disabled
         ? ''
         : html`
-            ${applyEffectsToSelf
+            ${effectsToSelf.length
               ? html`
-                  ${effects.length || mentalArmor.apply
-                    ? html`
-                        <mwc-button
-                          dense
-                          class="apply-effects"
-                          @click=${this.applyEffectsToSelf}
-                        >
-                          ${localize('applyEffectsToSelf')}</mwc-button
-                        >
-                      `
-                    : ''}
-                  ${notEmpty(appliedTo) ? this.renderAppliedTo(appliedTo) : ''}
+                  <mwc-button
+                    dense
+                    class="apply-effects"
+                    @click=${this.applyEffectsToSelf}
+                  >
+                    ${localize('applyEffectsToSelf')}</mwc-button
+                  >
                 `
               : ''}
             ${hasHeal
@@ -477,6 +474,7 @@ export class MessagePsiTest extends MessageElement {
                 `
               : ''}
           `}
+      ${notEmpty(appliedTo) ? this.renderAppliedTo(appliedTo) : ''}
     `;
   }
 
