@@ -366,6 +366,17 @@ export class CharacterViewAlt extends CharacterViewBase {
               >
             `
           : ''}
+        ${sleeve?.type === ActorType.Synthetic && sleeve.hasPainFilter
+          ? html`
+              <mwc-formfield label=${localize('painFilter')} class="pain-filter"
+                ><mwc-switch
+                ?disabled=${disabled}
+                  ?checked=${sleeve.painFilterActive}
+                  @change=${() => sleeve.togglePainFilter()}
+                ></mwc-switch
+              ></mwc-formfield>
+            `
+          : ''}
       </div>
       <div class="armor-movement">
         ${notEmpty(armor)

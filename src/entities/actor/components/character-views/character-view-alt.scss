@@ -167,6 +167,12 @@ h3 {
     > * {
       flex-grow: 1;
     }
+    .pain-filter {
+      flex-grow: 0;
+      margin-left: auto;
+      padding: 0.25rem 1rem;
+      white-space: nowrap;
+    }
   }
 
   .armor-movement {

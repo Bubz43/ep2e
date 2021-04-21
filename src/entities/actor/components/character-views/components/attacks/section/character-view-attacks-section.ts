@@ -140,6 +140,7 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
 
   render() {
     const { sleeve, weapons } = this.character;
+    // TODO Full defense, aim
     return html`
       <div class="group-toggles">
         ${groups.map((key) => {
