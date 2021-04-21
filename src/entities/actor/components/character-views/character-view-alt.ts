@@ -370,7 +370,7 @@ export class CharacterViewAlt extends CharacterViewBase {
           ? html`
               <mwc-formfield label=${localize('painFilter')} class="pain-filter"
                 ><mwc-switch
-                ?disabled=${disabled}
+                  ?disabled=${disabled}
                   ?checked=${sleeve.painFilterActive}
                   @change=${() => sleeve.togglePainFilter()}
                 ></mwc-switch
@@ -757,12 +757,19 @@ export class CharacterViewAlt extends CharacterViewBase {
           this.renderItemGroup,
         )}`;
 
-      case 'sleights':
-        return html`${repeat(
-          CharacterViewAlt.sleights,
-          identity,
-          this.renderItemGroup,
-        )}`;
+      case 'sleights': {
+        const { applyLocalSleightEffects } = this.character;
+        return html`<div
+          class="sleights ${classMap({
+            inactive: !applyLocalSleightEffects,
+          })}"
+        >
+          ${!applyLocalSleightEffects
+            ? html`<div class="inactive">${localize('inactive')}</div>`
+            : ''}
+          ${repeat(CharacterViewAlt.sleights, identity, this.renderItemGroup)}
+        </div>`;
+      }
 
       case 'details':
         return this.renderDetails();

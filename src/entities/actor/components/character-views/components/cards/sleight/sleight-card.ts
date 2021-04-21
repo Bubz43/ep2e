@@ -202,7 +202,12 @@ export class SleightCard extends ItemCardBase {
     this.item.setSustainOn([], false);
   }
 
+  get functioning() {
+    return this.character.applyLocalSleightEffects;
+  }
+
   renderHeaderButtons(): TemplateResult {
+    if (!this.functioning) return html``;
     if (this.item.isChi) {
       return this.isEnhanced
         ? html`<colored-tag type="info"> ${localize('enhanced')}</colored-tag>`

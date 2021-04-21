@@ -684,3 +684,16 @@ footer {
 enriched-html {
   padding: 0 0.25rem;
 }
+
+.sleights {
+  &.inactive character-view-item-group {
+    opacity: 0.5;
+  }
+  .inactive {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: x-large;
+    letter-spacing: 2px;
+    font-weight: bold;
+  }
+}

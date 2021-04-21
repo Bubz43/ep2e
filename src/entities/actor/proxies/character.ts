@@ -835,10 +835,15 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     };
   }
 
+  get applyLocalSleightEffects() {
+    return !this.psi || this.psi?.isFunctioning;
+  }
+
   private setupItems(
     sleeveItems: Map<string, ItemProxy>,
     egoItems: Map<string, ItemProxy>,
   ) {
+    const { applyLocalSleightEffects } = this;
     if (this.ego.psi) {
       for (const [activeInfluence] of this.ego.psi.activePsiInfluences) {
         if (activeInfluence.type === PsiInfluenceType.Trait) {
@@ -862,17 +867,17 @@ export class Character extends ActorProxyBase<ActorType.Character> {
               this._appliedEffects.add(substanceItem.currentEffects);
             } else {
               if (substanceItem.isChi) {
-                // TODO add sleight effects
                 this.passiveSleights.push(substanceItem);
-                this._appliedEffects.add(
-                  substanceItem.getPassiveEffects(
-                    this.ego.aptitudes.wil,
-                    !!this.ego.psi?.hasChiIncreasedEffect,
-                  ),
-                );
+                applyLocalSleightEffects &&
+                  this._appliedEffects.add(
+                    substanceItem.getPassiveEffects(
+                      this.ego.aptitudes.wil,
+                      !!this.ego.psi?.hasChiIncreasedEffect,
+                    ),
+                  );
               } else {
                 this.activatedSleights.push(substanceItem);
-                if (substanceItem.isSustaining)
+                if (substanceItem.isSustaining && applyLocalSleightEffects)
                   this._appliedEffects.add(substanceItem.effectsFromSustaining);
               }
             }
@@ -897,16 +902,17 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         this._appliedEffects.add(item.currentEffects);
       } else if (item.type === ItemType.Sleight) {
         if (item.isChi) {
-          this._appliedEffects.add(
-            item.getPassiveEffects(
-              this.ego.aptitudes.wil,
-              !!this.ego.psi?.hasChiIncreasedEffect,
-            ),
-          );
+          applyLocalSleightEffects &&
+            this._appliedEffects.add(
+              item.getPassiveEffects(
+                this.ego.aptitudes.wil,
+                !!this.ego.psi?.hasChiIncreasedEffect,
+              ),
+            );
           this.passiveSleights.push(item);
         } else {
           this.activatedSleights.push(item);
-          if (item.isSustaining)
+          if (item.isSustaining && applyLocalSleightEffects)
             this._appliedEffects.add(item.effectsFromSustaining);
         }
         egoItems.set(item.id, item);
