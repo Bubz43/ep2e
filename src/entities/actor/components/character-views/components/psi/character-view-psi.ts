@@ -193,7 +193,7 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
     return html`
       <header>
         <button class="name" @click=${this.psi.openForm}>
-          ${this.psi.name}
+          ${this.psi.fullName}
         </button>
         <mwc-icon-button
           @click=${this.openPsiMenu}
@@ -206,7 +206,11 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
         >
       </header>
 
-      ${this.psi.hasVariableInfection ? this.renderInfectionInfo() : ''}
+      ${this.psi.isFunctioning
+        ? this.psi.hasVariableInfection
+          ? this.renderInfectionInfo()
+          : ''
+        : ''}
     `;
   }
 
@@ -233,7 +237,7 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
       interference,
     } = this.psi;
     // TODO add checkoutTime/interference descriptions
-    console.log(activePsiInfluences);
+
     return html`
       ${this.renderInfectionTracker()}
       ${notEmpty(activePsiInfluences) || checkoutTime || interference
@@ -361,7 +365,8 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                       items,
                     } = influence.effects;
                     const hasEffects = items.length;
-                    return html` <span class="unique ${hasEffects ? "has-effects": ""}"
+                    return html` <span
+                      class="unique ${hasEffects ? 'has-effects' : ''}"
                       ><colored-tag
                         data-roll=${influence.roll}
                         data-tooltip=${description}

@@ -242,14 +242,12 @@ export class PsiForm extends ItemFormBase {
         <sl-animated-list slot="details">
           <section>
             <sl-header heading="${localize('psi')} ${localize('trait')}">
-              ${hasVariableInfection
-                ? ''
-                : renderUpdaterForm(updater.path('data'), {
-                    disabled,
-                    slot: 'action',
-                    fields: ({ requireBioSubstrate }) =>
-                      renderLabeledCheckbox(requireBioSubstrate),
-                  })}
+              ${renderUpdaterForm(updater.path('data'), {
+                disabled,
+                slot: 'action',
+                fields: ({ requireBioSubstrate }) =>
+                  renderLabeledCheckbox(requireBioSubstrate),
+              })}
             </sl-header>
             <div class="detail-forms">
               ${this.strainOptions}

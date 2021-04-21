@@ -115,8 +115,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     const { vehicle } = this.epFlags ?? {};
     this.vehicle = vehicle && this.setupVehicle(vehicle);
 
-    this.ego = this.setupEgo(egoItems);
     this.sleeve = this.setupSleeve(sleeveItems);
+    this.ego = this.setupEgo(egoItems);
 
     this.setupItems(sleeveItems, egoItems);
 
@@ -785,6 +785,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
             this.updater.path('flags', EP.Name, ItemType.Psi).commit(null),
           openForm: () => this.openPsiForm(),
           actor: this.actor,
+          sleeve: this.sleeve,
         }),
       addPsi: this.updater.path('flags', EP.Name, ItemType.Psi).commit,
     });

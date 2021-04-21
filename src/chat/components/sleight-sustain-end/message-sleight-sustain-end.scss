@@ -15,3 +15,11 @@
 p {
   margin: 0.5rem 0.5rem 0;
 }
+
+div {
+  display: flex;
+  flex-flow: row wrap;
+  & + div {
+    border-top: 1px solid var(--color-border);
+  }
+}

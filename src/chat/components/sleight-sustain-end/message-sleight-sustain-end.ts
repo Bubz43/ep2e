@@ -41,26 +41,29 @@ export class MessageSleightSustainEnd extends MessageElement {
 
   render() {
     return html`
-      <p>${localize('applied')} ${localize('to')}</p>
-      <ul>
-        ${until(
-          this.renderAppliedTo(),
-          html`<mwc-circular-progress></mwc-circular-progress>`,
-        )}
-      </ul>
-
+      <div>
+        <p>${localize('applied')} ${localize('to')}</p>
+        <ul>
+          ${until(
+            this.renderAppliedTo(),
+            html`<mwc-circular-progress></mwc-circular-progress>`,
+          )}
+        </ul>
+      </div>
       ${this.sleightSustainEnd.removedFromIds.length
         ? html`
-            <p>${localize('removed')} ${localize('from')}</p>
+            <div>
+              <p>${localize('removed')} ${localize('from')}</p>
 
-            <ul>
-              ${this.sleightSustainEnd.removedFromIds.map((uuid) => {
-                const entity = this.sleightSustainEnd.appliedTo.find(
-                  (a) => a.uuid === uuid,
-                );
-                return html`<colored-tag>${entity?.name}</colored-tag>`;
-              })}
-            </ul>
+              <ul>
+                ${this.sleightSustainEnd.removedFromIds.map((uuid) => {
+                  const entity = this.sleightSustainEnd.appliedTo.find(
+                    (a) => a.uuid === uuid,
+                  );
+                  return html`<colored-tag>${entity?.name}</colored-tag>`;
+                })}
+              </ul>
+            </div>
           `
         : ''}
     `;

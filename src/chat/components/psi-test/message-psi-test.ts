@@ -373,11 +373,13 @@ export class MessagePsiTest extends MessageElement {
           `
         : ''}
       ${notEmpty(appliedTo) ? this.renderAppliedTo(appliedTo) : ''}
-
-      <message-attack-traits
-        .attackTraitInfo=${{ traits: attack.attackTraits, source: name }}
-      ></message-attack-traits>
-
+      ${notEmpty(attack.attackTraits)
+        ? html`
+            <message-attack-traits
+              .attackTraitInfo=${{ traits: attack.attackTraits, source: name }}
+            ></message-attack-traits>
+          `
+        : ''}
       ${disabled
         ? ''
         : html`
@@ -402,17 +404,6 @@ export class MessagePsiTest extends MessageElement {
                       @click=${this.createDamageMessage}
                       >${localize('roll')} ${localize('attack')}
                       ${localize('damage')}</mwc-button
-                    >
-                  `
-                : ''}
-              ${duration === SleightDuration.Sustained
-                ? html`
-                    <mwc-button
-                      dense
-                      ?disabled=${!!sustaining}
-                      @click=${this.startSustaining}
-                      >${sustaining ? '' : localize('start')}
-                      ${localize('sustaining')}</mwc-button
                     >
                   `
                 : ''}
@@ -453,6 +444,17 @@ export class MessagePsiTest extends MessageElement {
                     >
                       ${localize('infectionTest')}
                     </mwc-button>
+                  `
+                : ''}
+              ${duration === SleightDuration.Sustained
+                ? html`
+                    <mwc-button
+                      dense
+                      ?disabled=${!!sustaining}
+                      @click=${this.startSustaining}
+                      >${sustaining ? '' : localize('start')}
+                      ${localize('sustaining')}</mwc-button
+                    >
                   `
                 : ''}
             </div>

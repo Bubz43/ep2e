@@ -41,23 +41,21 @@ export enum DurationEffectTarget {
 }
 
 export enum EffectType {
-  Initiative = 'initiative',
-  Pool = 'pool',
-  Misc = 'misc',
-  SuccessTest = 'successTest',
+  Armor = 'armor',
+  Duration = 'duration',
   Health = 'health',
   HealthRecovery = 'healthRecovery',
-  Armor = 'armor',
-  Recharge = 'recharge',
-  Duration = 'duration',
+  Initiative = 'initiative',
   Melee = 'melee',
-  Ranged = 'ranged',
-  Skill = 'skill',
+  Misc = 'misc',
   Movement = 'movement',
-  // TODO Unique Toggles (disable distracted, no flip-flop)
+  Pool = 'pool',
+  Ranged = 'ranged',
+  Recharge = 'recharge',
+  Skill = 'skill',
+  SuccessTest = 'successTest',
   // TODO Vision MISC
   // TODO Limb / add extra/convert existing to prehensile
-  // TODO Skill  with SkillType and Aptitude Multiplier and Points
 }
 
 export type InitiativeEffect = {
