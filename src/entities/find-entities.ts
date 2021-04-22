@@ -1,14 +1,14 @@
+import { readyCanvas } from '@src/foundry/canvas';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import type { TokenData } from '@src/foundry/foundry-cont';
 import { localize } from '@src/foundry/localization';
-import { readyCanvas } from '@src/foundry/canvas';
 import { openMenu } from '@src/open-menu';
 import { html } from 'lit-html';
 import { uniq } from 'remeda';
 import type { ActorEP } from './actor/actor';
+import type { Character } from './actor/proxies/character';
 import { ActorType } from './entity-types';
 import type { SceneEP } from './scene';
-import type { Character } from './actor/proxies/character';
 
 export type ActorIdentifiers = {
   actorId?: string | null;

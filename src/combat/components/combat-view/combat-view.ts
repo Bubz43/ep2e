@@ -14,6 +14,7 @@ import { renderLabeledCheckbox } from '@src/components/field/fields';
 import { renderSubmitForm } from '@src/components/form/forms';
 import { openWindow } from '@src/components/window/window-controls';
 import { ResizeOption } from '@src/components/window/window-options';
+import { readyCanvas } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
 import { capitalize } from '@src/foundry/misc-helpers';
 import { gameSettings } from '@src/init';
@@ -71,6 +72,9 @@ export class CombatView extends LitElement {
   }
 
   async connectedCallback() {
+    if (!readyCanvas() && game.scenes.size) {
+      await new Promise((resolve) => Hooks.on('canvasReady', resolve));
+    }
     this.unsub = gameSettings.combatState.subscribe((newState) => {
       const { combatState } = this;
 
