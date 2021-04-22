@@ -21,28 +21,30 @@ h3 {
 }
 
 :host {
-  display: grid;
-  grid-template-areas:
-    'header header'
-    'extra tabs'
-    'actions tabs'
-    'footer footer';
-
-  // grid-template-rows: min-content min-content minmax(400px, 1fr) min-content;
-  grid-template-rows: min-content min-content 1fr min-content;
+  display: flex;
+  flex-flow: column;
 
   overflow-x: auto;
   min-width: max-content;
   background: alphav(var(--color-bg), 0.6);
 }
 
+.content {
+  flex-grow: 1;
+  display: grid;
+  grid-template-areas:
+    'extra tabs'
+    'actions tabs';
+  grid-template-rows: min-content 1fr;
+}
+
 :host([compact]) {
   character-view-psi {
-    grid-area: 2 / 1 / 3 / -1;
+    grid-area: 1 / 1 / 2 / -1;
     border-right: none;
   }
   .tabbed-section {
-    grid-area: 3 / 1 / 4 / -1;
+    grid-area: 2 / 1 / 3 / -1;
   }
 
   .tab-content {
@@ -118,6 +120,7 @@ h3 {
     alphav(var(--color-primary), 0.1),
     rgba(0, 0, 0, 0)
   );
+  padding: 0 0.25rem;
   .main-healths {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));

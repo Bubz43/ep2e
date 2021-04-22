@@ -190,38 +190,40 @@ export class CharacterViewAlt extends CharacterViewBase {
     const { psi } = character;
     return html`
       ${this.renderHeader()}
-      ${psi
-        ? html`<character-view-psi
-            .character=${this.character}
-            .psi=${psi}
-          ></character-view-psi>`
-        : ''}
-      ${this.compact
-        ? ''
-        : html`<character-view-test-actions
-            class="actions"
-            .character=${this.character}
-            .ego=${this.character.ego}
-          ></character-view-test-actions>`}
+      <div class="content">
+        ${psi
+          ? html`<character-view-psi
+              .character=${this.character}
+              .psi=${psi}
+            ></character-view-psi>`
+          : ''}
+        ${this.compact
+          ? ''
+          : html`<character-view-test-actions
+              class="actions"
+              .character=${this.character}
+              .ego=${this.character.ego}
+            ></character-view-test-actions>`}
 
-      <div class="tabbed-section">
-        <mwc-tab-bar
-          @MDCTabBar:activated=${this.setTab}
-          activeIndex=${currentTabs.findIndex((t) => t === this.currentTab)}
-        >
-          ${currentTabs.map(
-            (tab: CharacterTab) =>
-              html`
-                <mwc-tab
-                  @dragenter=${tab === 'combat' || tab === 'details'
-                    ? noop
-                    : this.activateTab}
-                  label=${localize(tab)}
-                ></mwc-tab>
-              `,
-          )}
-        </mwc-tab-bar>
-        <div class="tab-content">${cache(this.renderTabbedContent())}</div>
+        <div class="tabbed-section">
+          <mwc-tab-bar
+            @MDCTabBar:activated=${this.setTab}
+            activeIndex=${currentTabs.findIndex((t) => t === this.currentTab)}
+          >
+            ${currentTabs.map(
+              (tab: CharacterTab) =>
+                html`
+                  <mwc-tab
+                    @dragenter=${tab === 'combat' || tab === 'details'
+                      ? noop
+                      : this.activateTab}
+                    label=${localize(tab)}
+                  ></mwc-tab>
+                `,
+            )}
+          </mwc-tab-bar>
+          <div class="tab-content">${cache(this.renderTabbedContent())}</div>
+        </div>
       </div>
       ${this.renderDrawer()} ${this.renderFooter()}
     `;
