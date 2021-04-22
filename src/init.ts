@@ -1,6 +1,7 @@
 import { html, render } from 'lit-html';
 import { compact, first } from 'remeda';
 import type { RawEditorSettings } from 'tinymce';
+import type { PartialDeep } from 'type-fest';
 import { onChatMessageRender } from './chat/message-hooks';
 import { combatSocketHandler } from './combat/combat-tracker';
 import { CustomRollApp } from './combat/components/custom-roll-app/custom-roll-app';
@@ -13,7 +14,7 @@ import { ActorEP } from './entities/actor/actor';
 import { ActorEPSheet } from './entities/actor/actor-sheet';
 import { ChatMessageEP } from './entities/chat-message';
 import { CompendiumSearch } from './entities/components/compendium-search/compendium-search';
-import { findActor } from './entities/find-entities';
+import { findActor, findToken } from './entities/find-entities';
 import { ItemEP } from './entities/item/item';
 import { ItemEPSheet } from './entities/item/item-sheet';
 import { migrateWorld } from './entities/migration';
@@ -21,11 +22,13 @@ import { SceneEP } from './entities/scene';
 import { UserEP } from './entities/user';
 import { conditionIcons, ConditionType } from './features/conditions';
 import { positionApp } from './foundry/foundry-apps';
+import type { TokenData } from './foundry/foundry-cont';
 import { registerEPSettings } from './foundry/game-settings';
 import {
   applicationHook,
   mutateEntityHook,
   MutateEvent,
+  mutatePlaceableHook,
 } from './foundry/hook-setups';
 import { localize } from './foundry/localization';
 import { addEPSocketHandler, setupSystemSocket } from './foundry/socket';
@@ -274,6 +277,47 @@ Hooks.once('ready', async () => {
     event: 'render',
     callback: (popout) => {
       requestAnimationFrame(() => popout.setPosition());
+    },
+  });
+
+  mutatePlaceableHook({
+    entity: Token,
+    hook: 'on',
+    event: MutateEvent.Update,
+    callback: (scene, tokenData, change) => {
+      const changes = change as PartialDeep<TokenData>;
+      if ('actorLink' in changes && changes.actorLink === false) {
+        const actor = game.actors.get(tokenData.actorId);
+        if (actor?.sheet.isRendered) {
+          console.log('rendered');
+          actor.sheet.close();
+          const token = findToken({
+            tokenId: tokenData._id,
+            actorId: tokenData.actorId,
+            sceneId: scene._id,
+          });
+          if (token) {
+            token.actor?.sheet.render(true, { token });
+          }
+        }
+      }
+    },
+  });
+
+  mutatePlaceableHook({
+    entity: Token,
+    hook: 'on',
+    event: MutateEvent.Delete,
+    callback: (scene, tokenData) => {
+      if (tokenData.actorLink) {
+        const actor = game.actors.get(tokenData.actorId);
+        if (
+          actor?.sheet.isRendered &&
+          actor.sheet._token?.id === tokenData._id
+        ) {
+          actor.sheet.render(true);
+        }
+      }
     },
   });
 });

@@ -188,7 +188,6 @@ export class CharacterViewAlt extends CharacterViewBase {
   render() {
     const { character, currentTabs } = this;
     const { psi } = character;
-    console.log('render view');
     return html`
       ${this.renderHeader()}
       ${psi

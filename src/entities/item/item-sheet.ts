@@ -35,7 +35,7 @@ export class ItemEPSheet implements EntitySheet {
     }
   }
 
-  get rendered() {
+  get isRendered() {
     return !!this.window?.isConnected;
   }
 
@@ -48,7 +48,7 @@ export class ItemEPSheet implements EntitySheet {
   }
 
   render(force: boolean) {
-    if (!force && !this.rendered) return this;
+    if (!force && !this.isRendered) return this;
     this.openWindow(force);
     return this;
   }
@@ -103,7 +103,7 @@ export class ItemEPSheet implements EntitySheet {
         name: this.item.proxy.fullName,
         img: this.item.proxy.nonDefaultImg,
         forceFocus: force,
-        adjacentEl: !this.rendered && this.getAdjacentEl(),
+        adjacentEl: !this.isRendered && this.getAdjacentEl(),
       },
       { resizable: ResizeOption.Vertical },
     );

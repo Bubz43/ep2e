@@ -86,10 +86,16 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
 
   private actorUnsub?: (() => void) | null;
 
+  connectedCallback() {
+    Hooks.on('canvasReady', this.setup);
+    super.connectedCallback();
+  }
+
   disconnectedCallback() {
     // TODO highlight self on hoverToken
     this.unsubFromAll();
     super.disconnectedCallback();
+    Hooks.off('canvasReady', this.setup);
   }
 
   update(changedProps: PropertyValues<this>) {
@@ -101,57 +107,59 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
         this.participant.entityIdentifiers,
       )
     ) {
-      this.unsubFromAll();
-      Hooks.on('hoverToken', this.highligtToggle);
-      this.timeState = null;
-      const { entityIdentifiers } = this.participant;
-      if (entityIdentifiers?.type === TrackedCombatEntity.Token) {
-        this.tokenSubscription = subscribeToToken(entityIdentifiers, {
-          next: (token) => {
-            this.token = token;
-            this.requestUpdate();
-            if (token.actor !== this.actor) {
-              this.actorUnsub?.();
-              this.actorUnsub = token.actor?.subscribe(this.actorSub);
-            }
-          },
-          complete: () => {
-            this.token = null;
-            this.tokenSubscription?.unsubscribe();
-          },
-        });
-      } else if (entityIdentifiers?.type === TrackedCombatEntity.Actor) {
-        this.actorUnsub?.();
-        this.actorUnsub = findActor(entityIdentifiers)?.subscribe(
-          this.actorSub,
-        );
-      } else if (entityIdentifiers?.type === TrackedCombatEntity.Time) {
-        const { startTime, duration } = entityIdentifiers;
-        this.timeState = createLiveTimeState({
-          label: this.participant.name,
-          id: this.participant.id,
-          startTime,
-          duration,
-          updateStartTime: (newStartTime) => {
-            updateCombatState({
-              type: CombatActionType.UpdateParticipants,
-              payload: [
-                {
-                  id: this.participant.id,
-                  entityIdentifiers: {
-                    type: TrackedCombatEntity.Time,
-                    startTime: newStartTime,
-                    duration,
-                  },
-                },
-              ],
-            });
-          },
-        });
-      }
+      this.setup();
     }
     super.update(changedProps);
   }
+
+  private setup = () => {
+    this.unsubFromAll();
+    Hooks.on('hoverToken', this.highligtToggle);
+    this.timeState = null;
+    const { entityIdentifiers } = this.participant;
+    if (entityIdentifiers?.type === TrackedCombatEntity.Token) {
+      this.tokenSubscription = subscribeToToken(entityIdentifiers, {
+        next: (token) => {
+          this.token = token;
+          this.requestUpdate();
+          if (token.actor !== this.actor) {
+            this.actorUnsub?.();
+            this.actorUnsub = token.actor?.subscribe(this.actorSub);
+          }
+        },
+        complete: () => {
+          this.token = null;
+          this.tokenSubscription?.unsubscribe();
+        },
+      });
+    } else if (entityIdentifiers?.type === TrackedCombatEntity.Actor) {
+      this.actorUnsub?.();
+      this.actorUnsub = findActor(entityIdentifiers)?.subscribe(this.actorSub);
+    } else if (entityIdentifiers?.type === TrackedCombatEntity.Time) {
+      const { startTime, duration } = entityIdentifiers;
+      this.timeState = createLiveTimeState({
+        label: this.participant.name,
+        id: this.participant.id,
+        startTime,
+        duration,
+        updateStartTime: (newStartTime) => {
+          updateCombatState({
+            type: CombatActionType.UpdateParticipants,
+            payload: [
+              {
+                id: this.participant.id,
+                entityIdentifiers: {
+                  type: TrackedCombatEntity.Time,
+                  startTime: newStartTime,
+                  duration,
+                },
+              },
+            ],
+          });
+        },
+      });
+    }
+  };
 
   private highligtToggle = (token: Token, highlight: boolean) => {
     if (token.uuid === this.token?.uuid) {
@@ -489,7 +497,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
   }
 
   private openActorSheet() {
-    this.actor?.sheet.render(true);
+    this.actor?.sheet.render(true, { token: this.token });
   }
 
   private openEditDialog() {
