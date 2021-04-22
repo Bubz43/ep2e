@@ -84,7 +84,6 @@ export class MessageInfluenceRoll extends MessageElement {
               )}`,
             },
           });
-          this.getUpdater('influenceRoll').commit({ applied });
           break;
         }
 
@@ -100,13 +99,12 @@ export class MessageInfluenceRoll extends MessageElement {
             flavor: localize('hours'),
             speaker: this.message.data.speaker,
           });
-          this.getUpdater('influenceRoll').commit({ applied });
 
           break;
         }
 
         case PsiInfluenceType.Trait: {
-          const roll = rollFormula(`1d6 #${localize('minutes')}`);
+          const roll = rollFormula(`1d6`);
 
           await psi.activateInfluence(
             influenceRoll,
@@ -117,7 +115,6 @@ export class MessageInfluenceRoll extends MessageElement {
             flavor: localize('minutes'),
             speaker: this.message.data.speaker,
           });
-          this.getUpdater('influenceRoll').commit({ applied });
 
           break;
         }
@@ -128,11 +125,11 @@ export class MessageInfluenceRoll extends MessageElement {
             influence.duration,
             extendDuration,
           );
-          this.getUpdater('influenceRoll').commit({ applied });
 
           break;
         }
       }
+      this.getUpdater('influenceRoll').commit({ applied });
     }
   }
 

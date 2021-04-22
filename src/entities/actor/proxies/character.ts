@@ -843,16 +843,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     sleeveItems: Map<string, ItemProxy>,
     egoItems: Map<string, ItemProxy>,
   ) {
-    const { applyLocalSleightEffects } = this;
-    if (this.ego.psi) {
-      for (const [activeInfluence] of this.ego.psi.activePsiInfluences) {
-        if (activeInfluence.type === PsiInfluenceType.Trait) {
-          const { trait } = activeInfluence;
-          this[trait.isMorphTrait ? 'morphTraits' : 'egoTraits'].push(trait);
-          this._appliedEffects.add(trait.currentEffects);
-        }
-      }
-    }
+    const sleights: Sleight[] = [];
     for (const item of this.items.values()) {
       if (item.type === ItemType.Substance && item.appliedState) {
         if (item.appliedState === 'active') {
@@ -866,20 +857,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
               ].push(substanceItem);
               this._appliedEffects.add(substanceItem.currentEffects);
             } else {
-              if (substanceItem.isChi) {
-                this.passiveSleights.push(substanceItem);
-                applyLocalSleightEffects &&
-                  this._appliedEffects.add(
-                    substanceItem.getPassiveEffects(
-                      this.ego.aptitudes.wil,
-                      !!this.ego.psi?.hasChiIncreasedEffect,
-                    ),
-                  );
-              } else {
-                this.activatedSleights.push(substanceItem);
-                if (substanceItem.isSustaining && applyLocalSleightEffects)
-                  this._appliedEffects.add(substanceItem.effectsFromSustaining);
-              }
+              sleights.push(substanceItem);
             }
           }
         } else this.awaitingOnsetSubstances.push(item);
@@ -901,21 +879,36 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         this[item.isMorphTrait ? 'morphTraits' : 'egoTraits'].push(item);
         this._appliedEffects.add(item.currentEffects);
       } else if (item.type === ItemType.Sleight) {
-        if (item.isChi) {
-          applyLocalSleightEffects &&
-            this._appliedEffects.add(
-              item.getPassiveEffects(
-                this.ego.aptitudes.wil,
-                !!this.ego.psi?.hasChiIncreasedEffect,
-              ),
-            );
-          this.passiveSleights.push(item);
-        } else {
-          this.activatedSleights.push(item);
-          if (item.isSustaining && applyLocalSleightEffects)
-            this._appliedEffects.add(item.effectsFromSustaining);
-        }
+        sleights.push(item);
         egoItems.set(item.id, item);
+      }
+    }
+
+    // This has to go after item setup to make sure sleeve has brain item
+    const { applyLocalSleightEffects } = this;
+    if (this.ego.psi) {
+      for (const [activeInfluence] of this.ego.psi.activePsiInfluences) {
+        if (activeInfluence.type === PsiInfluenceType.Trait) {
+          const { trait } = activeInfluence;
+          this[trait.isMorphTrait ? 'morphTraits' : 'egoTraits'].push(trait);
+          this._appliedEffects.add(trait.currentEffects);
+        }
+      }
+    }
+    for (const sleight of sleights) {
+      if (sleight.isChi) {
+        applyLocalSleightEffects &&
+          this._appliedEffects.add(
+            sleight.getPassiveEffects(
+              this.ego.aptitudes.wil,
+              !!this.ego.psi?.hasChiIncreasedEffect,
+            ),
+          );
+        this.passiveSleights.push(sleight);
+      } else {
+        this.activatedSleights.push(sleight);
+        if (sleight.isSustaining && applyLocalSleightEffects)
+          this._appliedEffects.add(sleight.effectsFromSustaining);
       }
     }
   }
