@@ -31,7 +31,7 @@ import {
 import { localize } from '@src/foundry/localization';
 import { rollFormula, rollLabeledFormulas } from '@src/foundry/rolls';
 import { HealthType } from '@src/health/health';
-import { tooltip } from '@src/init';
+import { overlay, tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
 import { openMenu } from '@src/open-menu';
 import { InfectionTestControls } from '@src/success-test/components/infection-test-controls/infection-test-controls';
@@ -305,6 +305,7 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                           },
                           entity: token || this.character,
                         });
+                        overlay.renderRoot.querySelector('mwc-dialog')?.close();
                       }
                     },
                     fields: ({ duration, influence }) => [
