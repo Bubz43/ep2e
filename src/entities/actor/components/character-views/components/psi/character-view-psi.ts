@@ -190,6 +190,7 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
         {
           label: localize('infectionTest'),
           callback: () => this.startInfectionTest(false),
+          disabled: !this.psi.hasVariableInfection,
         },
         {
           label: `${localize('roll')} ${localize('influences')}`,
