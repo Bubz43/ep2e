@@ -1460,6 +1460,7 @@
     "useMentalArmor": "Use Mental Armor",
     "whileSustaining": "While Sustaining",
     "share": "Share",
+    "foreign": "Foreign",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

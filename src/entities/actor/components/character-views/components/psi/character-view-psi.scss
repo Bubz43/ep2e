@@ -8,9 +8,6 @@
 :host {
   display: grid;
   grid-auto-rows: min-content;
-  max-width: 200px;
-  min-width: 100%;
-  background: linear-gradient(45deg, black, alphav(var(--color-primary), 0.1));
 }
 
 header {

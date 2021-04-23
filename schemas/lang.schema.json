@@ -1979,6 +1979,9 @@
             "for": {
               "type": "string"
             },
+            "foreign": {
+              "type": "string"
+            },
             "forensics": {
               "type": "string"
             },
@@ -3872,6 +3875,9 @@
             "shapes": {
               "type": "string"
             },
+            "share": {
+              "type": "string"
+            },
             "shared": {
               "type": "string"
             },
@@ -5357,6 +5363,7 @@
             "flipRoll",
             "folder",
             "for",
+            "foreign",
             "forensics",
             "forensicsSpecialist",
             "fork",
@@ -5988,6 +5995,7 @@
             "shapeName",
             "shaped",
             "shapes",
+            "share",
             "shared",
             "shell",
             "shellType",

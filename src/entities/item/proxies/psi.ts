@@ -2,7 +2,6 @@ import type { Sleeve } from '@src/entities/actor/sleeves';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import { UpdateStore } from '@src/entities/update-store';
 import { StringID, updateFeature } from '@src/features/feature-helpers';
-import { toMilliseconds } from '@src/features/modify-milliseconds';
 import {
   createDefaultPsiInfluences,
   influenceInfo,
@@ -16,12 +15,9 @@ import {
   currentWorldTimeMS,
   LiveTimeState,
 } from '@src/features/time';
-import { notify, NotificationType } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
 import { deepMerge } from '@src/foundry/misc-helpers';
-import { rollLabeledFormulas, rollFormula } from '@src/foundry/rolls';
 import { EP } from '@src/foundry/system';
-import { HealthType } from '@src/health/health';
 import { LazyGetter } from 'lazy-get-decorator';
 import { clamp, mapToObj } from 'remeda';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';

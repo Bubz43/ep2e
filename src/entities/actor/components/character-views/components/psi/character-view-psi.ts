@@ -1,7 +1,11 @@
 import type { Slider } from '@material/mwc-slider';
 import { createMessage, MessageVisibility } from '@src/chat/create-message';
-import { renderNumberInput } from '@src/components/field/fields';
-import { renderAutoForm } from '@src/components/form/forms';
+import {
+  renderNumberInput,
+  renderSelectField,
+  renderTimeField,
+} from '@src/components/field/fields';
+import { renderAutoForm, renderSubmitForm } from '@src/components/form/forms';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { enumValues, PsiPush } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
@@ -259,8 +263,66 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
         },
         {
           label: `${localize('share')} ${localize('influence')}`,
+          icon: html`<mwc-icon>share</mwc-icon>`,
           callback: () => {
-            // TODO: Have to set trait level when sharing
+            const influences = mapToObj(
+              sortBy(this.psi.influencesData || [], (i) => i.roll),
+              (influence) => [influence.id, influence],
+            );
+            const active = Object.values(influences).find(
+              (inf) => inf.type !== PsiInfluenceType.Damage,
+            );
+            this.dispatchEvent(
+              new RenderDialogEvent(html`
+                <mwc-dialog
+                  hideActions
+                  heading="${localize('share')} ${localize('influence')}"
+                >
+                  ${renderSubmitForm({
+                    props: {
+                      duration: CommonInterval.Turn,
+                      influence: active?.id || '',
+                    },
+                    update: (change, orig) => {
+                      const final = { ...orig, ...change };
+                      const influence = influences[final.influence];
+                      if (
+                        influence &&
+                        influence.type !== PsiInfluenceType.Damage
+                      ) {
+                        const { token } = requestCharacter(this);
+                        createMessage({
+                          data: {
+                            header: {
+                              heading: `${localize('shared')} ${localize(
+                                'psiInfluence',
+                              )}`,
+                            },
+                            sharedInfluence: {
+                              influence,
+                              duration: final.duration,
+                            },
+                          },
+                          entity: token || this.character,
+                        });
+                      }
+                    },
+                    fields: ({ duration, influence }) => [
+                      renderSelectField(influence, Object.keys(influences), {
+                        altLabel: (id) => influenceInfo(influences[id]!).name,
+                        required: true,
+                        disableOptions: Object.entries(
+                          influences,
+                        ).flatMap(([id, influence]) =>
+                          influence.type === PsiInfluenceType.Damage ? id : [],
+                        ),
+                      }),
+                      renderTimeField(duration, { min: CommonInterval.Turn }),
+                    ],
+                  })}
+                </mwc-dialog>
+              `),
+            );
           },
         },
       ],

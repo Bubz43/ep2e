@@ -11,11 +11,25 @@ import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisi
 import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import { conditionIcons, ConditionType } from '@src/features/conditions';
-import { idProp } from '@src/features/feature-helpers';
+import { formatEffect } from '@src/features/effects';
+import {
+  addFeature,
+  idProp,
+  removeFeature,
+} from '@src/features/feature-helpers';
+import { toMilliseconds } from '@src/features/modify-milliseconds';
 import { MotivationStance } from '@src/features/motivations';
-import { influenceInfo } from '@src/features/psi-influence';
+import { influenceInfo, PsiInfluenceType } from '@src/features/psi-influence';
+import { createTemporaryFeature } from '@src/features/temporary';
+import {
+  CommonInterval,
+  EPTimeInterval,
+  prettyMilliseconds,
+} from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
+import { rollFormula } from '@src/foundry/rolls';
+import { EP } from '@src/foundry/system';
 import { tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import { clickIfEnter, notEmpty } from '@src/utility/helpers';
@@ -199,14 +213,7 @@ export class CharacterViewAlt extends CharacterViewBase {
                 .psi=${psi}
               ></character-view-psi>`
             : ''}
-          ${foreignPsiInfluences.length
-            ? html`<sl-animated-list>
-                ${repeat(foreignPsiInfluences, idProp, (influence) => {
-                  const { name, description } = influenceInfo(influence);
-                  return html`<colored-tag>${name}</colored-tag>`;
-                })}
-              </sl-animated-list>`
-            : ''}
+          ${this.renderForeignInfluences()}
         </div>
 
         ${this.compact
@@ -239,6 +246,200 @@ export class CharacterViewAlt extends CharacterViewBase {
       </div>
       ${this.renderDrawer()} ${this.renderFooter()}
     `;
+  }
+
+  private openForeignInfluenceMenu(
+    ev: MouseEvent & { currentTarget: HTMLElement },
+  ) {
+    const { id } = ev.currentTarget.dataset;
+    const influence = this.character.foreignPsiInfluences.find(
+      (i) => i.id === id,
+    );
+    if (!influence || !id) return;
+    const { name } = influenceInfo(influence);
+    openMenu({
+      position: ev,
+      header: { heading: name },
+      content: [
+        {
+          label: `${localize('end')} ${localize('influence')}`,
+          callback: () => {
+            this.character.updater
+              .path('flags', EP.Name, 'foreignPsiInfluences')
+              .commit(
+                (influences) => influences && removeFeature(influences, id),
+              );
+          },
+        },
+      ],
+    });
+  }
+
+  private renderForeignInfluences() {
+    const { foreignPsiInfluences } = this.character;
+
+    return html` ${foreignPsiInfluences.length
+      ? html` <h3 class="foreign-influence-heading">
+            ${localize('foreign')} ${localize('psiInfluences')}
+          </h3>
+          <sl-animated-list class="foreign-influences">
+            ${repeat(foreignPsiInfluences, idProp, (influence) => {
+              const { timeState } = influence;
+              const remaining = prettyMilliseconds(timeState.remaining, {
+                compact: true,
+                approx: true,
+                whenZero: localize('expired'),
+              });
+              const badge = html`
+                <span
+                  class="badge ${timeState.completed ? 'expired' : ''}"
+                  slot="after"
+                  >${remaining}</span
+                >
+              `;
+
+              if (influence.type === PsiInfluenceType.Motivation) {
+                const { motivation, description } = influence;
+                return html`
+                  <colored-tag
+                    data-id=${influence.id}
+                    @click=${this.openForeignInfluenceMenu}
+                    clickable
+                    ?disabled=${this.character.disabled}
+                    @mouseover=${(
+                      ev: MouseEvent & { currentTarget: HTMLElement },
+                    ) => {
+                      tooltip.attach({
+                        el: ev.currentTarget,
+                        content: html` <p
+                            style="color: var(--color-primary-alt)"
+                          >
+                            ${prettyMilliseconds(timeState.remaining, {
+                              compact: false,
+                              whenZero: localize('expired'),
+                            })}
+                            ${timeState.completed
+                              ? ''
+                              : localize('remaining').toLocaleLowerCase()}
+                          </p>
+                          <p>${description}</p>`,
+                        position: 'bottom-middle',
+                      });
+                    }}
+                  >
+                    <span class="motivation"
+                      ><mwc-icon class=${motivation.stance}
+                        >${motivation.stance === MotivationStance.Support
+                          ? 'add'
+                          : 'remove'}</mwc-icon
+                      >
+                      ${motivation.cause}
+                    </span>
+                    ${badge}
+                  </colored-tag>
+                `;
+              }
+
+              if (influence.type === PsiInfluenceType.Trait) {
+                const { name, description } = influenceInfo(influence);
+                return html`
+                  <colored-tag
+                    data-id=${influence.id}
+                    @click=${this.openForeignInfluenceMenu}
+                    clickable
+                    ?disabled=${this.character.disabled}
+                    @mouseover=${(
+                      ev: MouseEvent & { currentTarget: HTMLElement },
+                    ) => {
+                      tooltip.attach({
+                        el: ev.currentTarget,
+                        content: html` <p
+                            style="color: var(--color-primary-alt)"
+                          >
+                            ${prettyMilliseconds(timeState.remaining, {
+                              compact: false,
+                              whenZero: localize('expired'),
+                            })}
+                            ${timeState.completed
+                              ? ''
+                              : localize('remaining').toLocaleLowerCase()}
+                          </p>
+                          <enriched-html
+                            style="padding: 0 0.5rem"
+                            .content=${description}
+                          ></enriched-html>`,
+                        position: 'bottom-middle',
+                      });
+                    }}
+                    >${name} ${badge}
+                  </colored-tag>
+                `;
+              }
+              if (influence.type === PsiInfluenceType.Unique) {
+                const { name, description } = influenceInfo(influence);
+                const { durationFormula, interval, items } = influence.effects;
+                const hasEffects = items.length;
+                return html` <span
+                  class="unique ${hasEffects ? 'has-effects' : ''}"
+                  ><colored-tag
+                    data-id=${influence.id}
+                    data-tooltip=${description}
+                    @mouseover=${tooltip.fromData}
+                    @click=${this.openForeignInfluenceMenu}
+                    clickable
+                    ?disabled=${this.character.disabled}
+                    >${name} ${badge}
+                  </colored-tag>
+                  ${hasEffects
+                    ? html`<colored-tag
+                        type="usable"
+                        clickable
+                        ?disabled=${this.character.disabled}
+                        data-tooltip=${items.map(formatEffect).join('. ')}
+                        @mouseover=${tooltip.fromData}
+                        @click=${() => {
+                          const roll = rollFormula(durationFormula);
+                          roll?.toMessage({ flavor: localize(interval) });
+                          const total = roll?.total || 1;
+                          const duration =
+                            interval === EPTimeInterval.ActionTurns
+                              ? CommonInterval.Turn * total
+                              : toMilliseconds({ [interval]: total });
+                          this.character.updater
+                            .path('data', 'temporary')
+                            .commit((temps) =>
+                              addFeature(
+                                temps,
+                                createTemporaryFeature.effects({
+                                  name,
+                                  effects: items,
+                                  duration,
+                                }),
+                              ),
+                            );
+                        }}
+                        >${localize('applyEffects')}</colored-tag
+                      >`
+                    : ''}</span
+                >`;
+              }
+
+              const { name, description } = influenceInfo(influence);
+
+              return html`
+                <colored-tag
+                  data-id=${influence.id}
+                  data-tooltip=${description}
+                  @mouseover=${tooltip.fromData}
+                  @click=${this.openForeignInfluenceMenu}
+                  clickable
+                  ?disabled=${this.character.disabled}
+                  >${name} ${badge}
+                </colored-tag>
+              `;
+            })}
+          </sl-animated-list>`
+      : ''}`;
   }
 
   private renderInitiativeButton() {

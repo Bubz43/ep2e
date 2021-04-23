@@ -122,5 +122,5 @@ export const onChatMessageRender = (message: ChatMessageEP, [el]: JQuery) => {
     requestAnimationFrame(() => createdChatMessages.delete(message));
   }
 
-  requestAnimationFrame(() => el.scrollIntoView());
+  requestAnimationFrame(() => ui.chat.scrollBottom());
 };

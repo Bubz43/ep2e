@@ -17,7 +17,13 @@ import type { ArmorType } from '@src/features/active-armor';
 import type { AptitudeCheckInfo } from '@src/features/aptitude-check-result-info';
 import type { FiringModeGroup } from '@src/features/firing-modes';
 import type { PostTestPoolAction, PreTestPoolAction } from '@src/features/pool';
-import type { InfluenceRoll } from '@src/features/psi-influence';
+import type {
+  DamageInfluence,
+  InfluenceRoll,
+  MotivationInfluence,
+  PsiInfluenceData,
+  TraitInfluenceData,
+} from '@src/features/psi-influence';
 import type { Favor, RepIdentifier } from '@src/features/reputations';
 import type { Size } from '@src/features/size';
 import type { SpecialTest } from '@src/features/tags';
@@ -243,6 +249,11 @@ export type SleightSustainEnd = {
   removedFromIds: string[];
 };
 
+export type SharedPsiInfluence = {
+  influence: Exclude<PsiInfluenceData, DamageInfluence>;
+  duration: number;
+};
+
 export type MessageData = Partial<{
   header: MessageHeaderData;
   targets: MessageTargets;
@@ -266,4 +277,5 @@ export type MessageData = Partial<{
   influenceRoll: InfluenceRollData;
   psiTest: PsiTestData;
   sleightSustainEnd: SleightSustainEnd;
+  sharedInfluence: SharedPsiInfluence;
 }>;
