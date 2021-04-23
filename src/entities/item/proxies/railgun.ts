@@ -11,7 +11,11 @@ import {
 import type { ItemType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import { uniqueStringID } from '@src/features/feature-helpers';
-import { CommonInterval, currentWorldTimeMS } from '@src/features/time';
+import {
+  CommonInterval,
+  createLiveTimeState,
+  currentWorldTimeMS,
+} from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import { HealthType } from '@src/health/health';
@@ -202,6 +206,36 @@ export class Railgun
     return this.epData.shapeName || localize(this.epData.ammo.ammoClass);
   }
 
+  @LazyGetter()
+  get transformTimer() {
+    const transformation = this.epFlags?.transformation;
+    if (!transformation) return null;
+    const { startTime, shapeId } = transformation;
+    const shape = this.shapes.get(shapeId);
+    return createLiveTimeState({
+      duration: CommonInterval.Turn * 3,
+      startTime,
+      label: `${this.shapeName} -> ${shape?.shapeName}`,
+      id: this.id,
+      updateStartTime: this.updater.path(
+        'flags',
+        EP.Name,
+        'transformation',
+        'startTime',
+      ).commit,
+    });
+  }
+
+  startShapeSwap(shapeId: string) {
+    this.updater
+      .path('flags', EP.Name, 'transformation')
+      .commit({ startTime: currentWorldTimeMS(), shapeId });
+  }
+
+  cancelTransformation() {
+    this.updater.path('flags', EP.Name, 'transformation').commit(null);
+  }
+
   async swapShape(id: string) {
     const shape = this.shapes.get(id);
     if (shape) {
@@ -219,6 +253,9 @@ export class Railgun
         description: this.description,
         ...this.cost,
       };
+      if (shapeData.flags.ep2e?.transformation) {
+        shapeData.flags.ep2e.transformation = null;
+      }
       shapeData.data.state.equipped = this.equipped;
       this.updater.path('').store(shapeData);
 
@@ -234,7 +271,7 @@ export class Railgun
       this.updater.path('flags', EP.Name, 'shapes').commit((items) => {
         const changed = [...(items || [])];
         const _id = uniqueStringID(changed.map((i) => i._id));
-        const { shapes, ...flags } = myData.flags.ep2e || {};
+        const { shapes, transformation, ...flags } = myData.flags.ep2e || {};
 
         changed.push({ ...myData, _id, flags: { [EP.Name]: flags } });
         const index = changed.findIndex((s) => s._id === shape.id);

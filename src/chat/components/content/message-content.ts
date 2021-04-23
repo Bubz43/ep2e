@@ -52,31 +52,13 @@ export class MessageContent extends LitElement {
       hack,
       infectionTest,
       influenceRoll,
+      psiTest,
+      sleightSustainEnd,
+      sharedInfluence,
     } = this.data;
     if (!this.message.isContentVisible) return '';
     return html`
       ${header ? html` <message-header .data=${header}></message-header> ` : ''}
-      ${areaEffect
-        ? html`
-            <message-area-effect
-              .areaEffect=${areaEffect}
-            ></message-area-effect>
-          `
-        : ''}
-      ${successTest
-        ? html`<message-success-test
-              .successTest=${successTest}
-            ></message-success-test>
-
-            ${specialTest && this.message.editable
-              ? html`
-                  <message-special-test
-                    .specialTest=${specialTest}
-                    .successTest=${successTest}
-                  ></message-special-test>
-                `
-              : ''} `
-        : ''}
       ${notEmpty(targets)
         ? html`
             <div class="targets">
@@ -94,6 +76,35 @@ export class MessageContent extends LitElement {
               })}
             </div>
           `
+        : ''}
+      ${areaEffect
+        ? html`
+            <message-area-effect
+              .areaEffect=${areaEffect}
+            ></message-area-effect>
+          `
+        : ''}
+      ${successTest
+        ? html`<message-success-test
+              .successTest=${successTest}
+            ></message-success-test>
+
+            ${psiTest
+              ? html`
+                  <message-psi-test
+                    .successTest=${successTest}
+                    .psiTest=${psiTest}
+                  ></message-psi-test>
+                `
+              : ''}
+            ${specialTest && this.message.editable
+              ? html`
+                  <message-special-test
+                    .specialTest=${specialTest}
+                    .successTest=${successTest}
+                  ></message-special-test>
+                `
+              : ''} `
         : ''}
       ${favor ? html` <message-favor .favor=${favor}></message-favor> ` : ''}
       ${infectionTest
@@ -165,6 +176,16 @@ export class MessageContent extends LitElement {
               .healthChange=${healthChange}
             ></message-health-change>
           `
+        : ''}
+      ${sleightSustainEnd
+        ? html`<message-sleight-sustain-end
+            .sleightSustainEnd=${sleightSustainEnd}
+          ></message-sleight-sustain-end>`
+        : ''}
+      ${sharedInfluence
+        ? html`<message-share-influence
+            .sharedInfluence=${sharedInfluence}
+          ></message-share-influence>`
         : ''}
     `;
   }

@@ -41,23 +41,21 @@ export enum DurationEffectTarget {
 }
 
 export enum EffectType {
-  Initiative = 'initiative',
-  Pool = 'pool',
-  Misc = 'misc',
-  SuccessTest = 'successTest',
+  Armor = 'armor',
+  Duration = 'duration',
   Health = 'health',
   HealthRecovery = 'healthRecovery',
-  Armor = 'armor',
-  Recharge = 'recharge',
-  Duration = 'duration',
+  Initiative = 'initiative',
   Melee = 'melee',
-  Ranged = 'ranged',
-  Skill = 'skill',
+  Misc = 'misc',
   Movement = 'movement',
-  // TODO Unique Toggles (disable distracted, no flip-flop)
+  Pool = 'pool',
+  Ranged = 'ranged',
+  Recharge = 'recharge',
+  Skill = 'skill',
+  SuccessTest = 'successTest',
   // TODO Vision MISC
   // TODO Limb / add extra/convert existing to prehensile
-  // TODO Skill  with SkillType and Aptitude Multiplier and Points
 }
 
 export type InitiativeEffect = {
@@ -387,7 +385,7 @@ const format = (effect: Effect): (string | number)[] => {
           .flatMap((armor) => {
             const value = effect[armor];
             return value
-              ? `${localize(armor)} ${
+              ? `${localize(armor)} ${localize('armor')} ${
                   effect.layerable ? withSign(value) : value
                 }`
               : [];
@@ -445,7 +443,7 @@ const format = (effect: Effect): (string | number)[] => {
           })
         : localize(effect.skillType);
       return [
-        baseName + effect.specialization ? ` (${effect.specialization})` : '',
+        baseName + (effect.specialization ? ` (${effect.specialization})` : ''),
         effect.total
           ? effect.total
           : `@ ${localize(effect.linkedAptitude)} x${
@@ -594,15 +592,19 @@ export const matchesSkill = (skill: Skill) => (action: Action) => {
   });
 };
 
-export const multiplyEffectModifier = (effect: Effect, multiplier: number) => {
-  if (effect.type === EffectType.Armor) {
-    const copy = { ...effect };
+export const multiplyEffectModifier = <T extends Effect>(
+  effect: T,
+  multiplier: number,
+): T => {
+  const e = effect as Effect;
+  if (e.type === EffectType.Armor) {
+    const copy = { ...effect } as ArmorEffect;
     for (const armor of enumValues(ArmorType)) {
       copy[armor] = Math.ceil(copy[armor] * multiplier);
     }
-    return copy;
-  } else if ('modifier' in effect && effect.modifier) {
-    return { ...effect, modifier: Math.ceil(effect.modifier * multiplier) };
+    return copy as T;
+  } else if ('modifier' in e && e.modifier) {
+    return { ...effect, modifier: Math.ceil(e.modifier * multiplier) };
   }
   return effect;
 };

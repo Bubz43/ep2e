@@ -45,6 +45,7 @@ export type AptitudeCheckInit = {
   special?: SpecialTestData & { messageRef?: string };
   modifiers?: SimpleSuccessTestModifier[];
   techSource?: PhysicalTech | null;
+  halve?: boolean;
 };
 
 export class AptitudeCheck extends SuccessTestBase {
@@ -73,6 +74,7 @@ export class AptitudeCheck extends SuccessTestBase {
     special,
     modifiers,
     techSource,
+    halve,
   }: AptitudeCheckInit) {
     super({
       action:
@@ -88,7 +90,7 @@ export class AptitudeCheck extends SuccessTestBase {
     this.techSource = techSource;
     this.aptitude = {
       type: aptitude,
-      multiplier: 3,
+      multiplier: halve ? 1.5 : 3,
       update: (change) => {
         this.update((draft) => {
           draft.aptitude = merge(draft.aptitude, change);
@@ -357,7 +359,7 @@ export class AptitudeCheck extends SuccessTestBase {
 
     this.character?.updater.batchCommits(() => {
       if (pools.active) {
-        this.character?.modifySpentPools({
+        this.character?.addToSpentPools({
           pool: pools.active[0].type,
           points: 1,
         });

@@ -38,23 +38,26 @@ export const overridePrototypes = () => {
     return regex.test(this.name);
   };
 
-  const { _injectHTML } = Application.prototype;
-  Application.prototype._injectHTML = function (
-    html: JQuery,
-    options: unknown,
-  ) {
-    if (this instanceof MainMenu) {
-      _injectHTML.call(this, html, options);
-      return;
-    }
-    const [el] = html;
-    if (el) {
-      el.slot = 'foundry-apps';
-      document.querySelector('ep-overlay')?.append(el);
-      this._element = html;
-      html.hide().fadeIn(200);
-    }
-  };
+  // const { _injectHTML } = Application.prototype;
+  // Application.prototype._injectHTML = function (
+  //   html: JQuery,
+  //   options: unknown,
+  // ) {
+  //   if (this instanceof MainMenu) {
+  //     _injectHTML.call(this, html, options);
+  //     return;
+  //   }
+  //   const [el] = html;
+
+  //   if (el) {
+  //     el.slot = 'foundry-apps';
+
+  //     document.querySelector('ep-overlay')?.append(el);
+  //     console.log(el);
+  //     this._element = html;
+  //     html.hide().fadeIn(200);
+  //   }
+  // };
 
   const { getData } = PlayerConfig.prototype;
   PlayerConfig.prototype.getData = function () {

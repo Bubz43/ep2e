@@ -462,7 +462,7 @@
     "psi": {
       "templates": ["Common"],
       "level": 1,
-      "requireBioSubstrate": false,
+      "requireBioSubstrate": true,
       "strain": "Watts-MacLeod",
       "state": {
         "freePush": "",
@@ -497,37 +497,33 @@
       "infectionMod": 1,
       "sleightType": "gamma",
       "action": "complex",
-      "effects": [],
-      "effectsOnSelf": [],
-      "effectsOnTarget": [],
+      "timeframe": 0,
+      "effectsToSelf": [],
+      "effectsToTarget": [],
       "scaleEffectsOnSuperior": false,
       "attack": {
-        "aptitudeCheckInfo": {
-          "armorAsModifier": "",
-          "check": "",
-          "checkModifier": 0,
-          "checkFailure": [],
-          "checkSuccess": [],
-          "criticalCheckFailure": []
-        },
+        "useMentalArmor": false,
         "attackTraits": [],
         "damageFormula": "",
         "damageType": "mental",
-        "mentalArmor": false,
-        "notes": "",
-        "perTurn": false
+        "notes": ""
       },
       "heal": {
-        "amount": "1d6",
-        "health": "mental"
+        "formula": "",
+        "healthType": "mental"
       },
       "mentalArmor": {
+        "apply": false,
         "divisor": 3,
         "formula": "1d6"
       },
-      "special": "",
-      "state": {
-        "sustained": false
+
+      "status": {
+        "sustaining": false,
+        "pushDuration": 0,
+        "pushed": false,
+        "pushStartTime": 0,
+        "sustainingOn": []
       }
     },
     "substance": {

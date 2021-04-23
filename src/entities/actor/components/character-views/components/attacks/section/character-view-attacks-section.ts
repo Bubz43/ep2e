@@ -1,5 +1,6 @@
 import { createMessage } from '@src/chat/create-message';
 import { startThrownAttack } from '@src/combat/attack-init';
+import { meleeDamage } from '@src/combat/melee-damage';
 import { LazyRipple } from '@src/components/mixins/lazy-ripple';
 import type { MaybeToken } from '@src/entities/actor/actor';
 import type { Character } from '@src/entities/actor/proxies/character';
@@ -8,7 +9,6 @@ import type { Sleeve } from '@src/entities/actor/sleeves';
 import { ActorType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
 import { renderItemCard } from '@src/entities/item/item-views';
-import { ArmorType } from '@src/features/active-armor';
 import {
   getCurrentEnvironment,
   subscribeToEnvironmentChange,
@@ -16,11 +16,10 @@ import {
 import { idProp } from '@src/features/feature-helpers';
 import { SkillType } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
-import { rollLabeledFormulas } from '@src/foundry/rolls';
-import { HealthType } from '@src/health/health';
 import { openMenu } from '@src/open-menu';
 import { MeleeAttackControls } from '@src/success-test/components/melee-attack-controls/melee-attack-controls';
 import { applyGravityToWeaponRange } from '@src/success-test/range-modifiers';
+import { SuccessTestResult } from '@src/success-test/success-test';
 import { customElement, html, LitElement, property } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { identity } from 'remeda';
@@ -79,18 +78,23 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
     const { sleeve } = this.character;
     const damage =
       !sleeve || sleeve.type === ActorType.Infomorph ? '0' : sleeve.unarmedDV;
+    console.log(damage);
     createMessage({
       data: {
         header: { heading: localize('unarmed') },
-        damage: {
+        damage: meleeDamage({
           source: localize('unarmed'),
-          armorUsed: [ArmorType.Kinetic],
-          damageType: HealthType.Physical,
-          rolledFormulas: rollLabeledFormulas([
-            ...this.character.appliedEffects.meleeDamageBonuses,
-            { label: localize('unarmed'), formula: damage },
-          ]),
-        },
+          successTestInfo: {
+            result: SuccessTestResult.Success,
+            superiorEffects: undefined,
+          },
+          augmentUnarmed: true,
+          unarmedDV: damage,
+          damageModifiers: this.character?.appliedEffects.meleeDamageBonuses,
+          morphSize: sleeve && 'size' in sleeve ? sleeve.size : null,
+          settings: {},
+          attack: undefined,
+        }),
       },
       entity: this.token ?? this.character,
     });
@@ -136,6 +140,7 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
 
   render() {
     const { sleeve, weapons } = this.character;
+    // TODO Full defense, aim
     return html`
       <div class="group-toggles">
         ${groups.map((key) => {
@@ -166,6 +171,7 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
             return repeat(group, idProp, (weapon) =>
               renderItemCard(weapon, {
                 unexpandedContent: renderItemAttacks(weapon),
+                character: this.character,
               }),
             );
           },

@@ -4,16 +4,16 @@ import { pickOrDefaultActor } from '@src/entities/find-entities';
 import { localize } from '@src/foundry/localization';
 import { cleanFormula } from '@src/foundry/rolls';
 import { HealthEditor } from '@src/health/components/health-editor/health-editor';
-import { HealthType } from '@src/health/health';
-import { createHeal } from '@src/health/health-changes';
+import { formatFormulaWithMultiplier, HealthType } from '@src/health/health';
+import { createHeal, RollMultiplier } from '@src/health/health-changes';
 import { notEmpty } from '@src/utility/helpers';
-import { localImage } from '@src/utility/images';
 import {
   customElement,
   html,
   internalProperty,
   LitElement,
   property,
+  PropertyValues,
 } from 'lit-element';
 import styles from './message-heal.scss';
 
@@ -30,6 +30,19 @@ export class MessageHeal extends LitElement {
   @internalProperty() private viewFormulas = false;
 
   @internalProperty() usedRollParts?: ReadonlySet<number>;
+
+  @internalProperty() private multiplier: RollMultiplier = 1;
+
+  update(changedProps: PropertyValues<this>) {
+    if (changedProps.has('heal')) {
+      this.multiplier = this.heal.multiplier ?? 1;
+    }
+    super.update(changedProps);
+  }
+
+  private setMultiplier(ev: CustomEvent<RollMultiplier>) {
+    this.multiplier = ev.detail;
+  }
 
   toggleFormulas() {
     this.viewFormulas = !this.viewFormulas;
@@ -73,6 +86,7 @@ export class MessageHeal extends LitElement {
           wounds,
           source,
           type: healthType,
+          multiplier: this.multiplier,
         }),
       }),
     );
@@ -89,13 +103,13 @@ export class MessageHeal extends LitElement {
   }
 
   render() {
-    const { damageHealTotals, heal, labels } = this;
+    const { damageHealTotals, heal, labels, multiplier } = this;
     const [damageLabel, woundLabel] = labels;
     const hasFormulas = notEmpty(this.heal.damageFormulas);
     return html`
       <mwc-button dense unelevated class="heal-values" @click=${this.applyHeal}>
-        ${damageHealTotals.damageValue || 0} ${damageLabel}, ${heal.wounds || 0}
-        ${woundLabel}
+        ${Math.ceil((damageHealTotals.damageValue || 0) * multiplier)}
+        ${damageLabel}, ${heal.wounds || 0} ${woundLabel}
       </mwc-button>
       ${hasFormulas
         ? html` <mwc-icon-button
@@ -109,19 +123,26 @@ export class MessageHeal extends LitElement {
         : ''}
       <div class="heal-info">
         ${damageHealTotals.formula || hasFormulas
-          ? ` ${localize('recover')} ${damageHealTotals.formula} ${localize(
-              this.heal.healthType,
-            )} ${damageLabel}`
+          ? ` ${localize('recover')} ${formatFormulaWithMultiplier(
+              damageHealTotals.formula,
+              multiplier,
+            )} ${localize(this.heal.healthType)} ${damageLabel}`
           : localize(`${this.heal.healthType}Health` as const)}
       </div>
 
       ${this.viewFormulas && heal.damageFormulas
         ? html`
-            <rolled-formulas-list
-              .rolledFormulas=${heal.damageFormulas}
-              @used-roll-parts=${this.setUsedRollParts}
-              .usedRollParts=${this.usedRollParts}
-            ></rolled-formulas-list>
+            <div class="additional">
+              <multiplier-select
+                multiplier=${this.multiplier}
+                @roll-multiplier=${this.setMultiplier}
+              ></multiplier-select>
+              <rolled-formulas-list
+                .rolledFormulas=${heal.damageFormulas}
+                @used-roll-parts=${this.setUsedRollParts}
+                .usedRollParts=${this.usedRollParts}
+              ></rolled-formulas-list>
+            </div>
           `
         : ''}
     `;

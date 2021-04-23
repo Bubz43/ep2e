@@ -122,6 +122,7 @@ export type LiveTimeState = {
   readonly remaining: number;
   readonly progress: number;
   readonly completed: boolean;
+  readonly isIndefinite: boolean;
 };
 
 export const createLiveTimeState = (
@@ -137,9 +138,13 @@ export const createLiveTimeState = (
   get remaining() {
     return nonNegative(this.duration - this.elapsed);
   },
-  get completed() {
-    return this.remaining === 0;
+  get isIndefinite() {
+    return this.duration < 0;
   },
+  get completed() {
+    return !this.isIndefinite && this.remaining === 0;
+  },
+
   get progress() {
     return clamp((this.elapsed / this.duration) * 100, { min: 0, max: 100 });
   },

@@ -302,7 +302,7 @@ export class SkillTest extends SuccessTestBase {
     });
 
     if (pools.active) {
-      this.character?.modifySpentPools({
+      this.character?.addToSpentPools({
         pool: pools.active[0].type,
         points: 1,
       });

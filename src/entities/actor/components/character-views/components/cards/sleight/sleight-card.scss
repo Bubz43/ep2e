@@ -1,0 +1,27 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+}
+
+.push-button,
+.use-button {
+  --mdc-theme-primary: var(--color-primary-alt);
+}
+
+.end-button {
+  --mdc-theme-primary: var(--color-secondary);
+}
+
+.effects {
+  display: flex;
+  flex-flow: row wrap;
+  > * {
+    margin: 0.125rem;
+  }
+}

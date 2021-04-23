@@ -2,6 +2,7 @@ import type {
   SpecialTestData,
   SuccessTestMessageData,
 } from '@src/chat/message-data';
+import { MinStressOption } from '@src/data-enums';
 import { ActorType } from '@src/entities/entity-types';
 import { ConditionType } from '@src/features/conditions';
 import { createEffect } from '@src/features/effects';
@@ -517,6 +518,50 @@ export class MessageSpecialTest extends MessageElement {
                 )} ${localize('effects')}`}
           </wl-list-item>
         `;
+
+      case SpecialTest.ResleevingStress: {
+        const { minStressOption, minSV, notes, sv } = this.specialTest.stress;
+        const { stressType } = this.specialTest;
+        const source = localize(SpecialTest.ResleevingStress);
+        if (isSuccess) {
+          if (minStressOption === MinStressOption.None)
+            return html`<p>${localize('resisted')} ${source}</p>`;
+          if (minStressOption === MinStressOption.Value)
+            return html`<message-stress-test
+              .stress=${{
+                rolledFormulas: [],
+                minStress: minSV,
+                stressType,
+                source,
+                notes,
+              }}
+            ></message-stress-test>`;
+        }
+        return html`
+          <wl-list-item
+            clickable
+            @click=${() => {
+              this.message.createSimilar({
+                header: { heading: source },
+                stress: {
+                  rolledFormulas: rollLabeledFormulas([
+                    {
+                      label: localize('stressValue'),
+                      formula: sv,
+                    },
+                  ]),
+                  notes,
+                  source,
+                  minStress:
+                    minStressOption === MinStressOption.Half ? 'half' : '',
+                  stressType,
+                },
+              });
+            }}
+            >${localize('roll')} ${source}</wl-list-item
+          >
+        `;
+      }
 
       case SpecialTest.Addiction:
         return html`

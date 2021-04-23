@@ -138,7 +138,10 @@ export const rollInitiative = async (
         : MessageVisibility.Public,
     });
   }
-  return { initiative: Number(roll?.total || 0), surprised: options.surprised };
+  return {
+    initiative: Math.round(Number(roll?.total || 0) * 100) / 100,
+    surprised: options.surprised,
+  };
 };
 
 export const rollParticipantInitiative = async (

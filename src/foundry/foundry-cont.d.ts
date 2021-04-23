@@ -59,7 +59,7 @@ export interface EntitySheet {
   render(force: boolean, options?: Record<string, unknown>): this;
   close(): Promise<this>;
   maximize(): this;
-  readonly rendered: boolean;
+  // readonly rendered: boolean;
   readonly _minimized: boolean;
   submit(update: Record<string, unknown>): Promise<unknown>;
   bringToTop(): void;

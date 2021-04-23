@@ -2,26 +2,19 @@ import type {
   MeleeWeaponMessageData,
   SuccessTestMessageData,
 } from '@src/chat/message-data';
-import {
-  SubstanceApplicationMethod,
-  SuperiorResultEffect,
-} from '@src/data-enums';
+import { meleeDamage } from '@src/combat/melee-damage';
+import { SubstanceApplicationMethod } from '@src/data-enums';
 import { ExplosiveSettingsForm } from '@src/entities/actor/components/character-views/components/attacks/explosive-settings/explosive-settings-form';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import { pickOrDefaultCharacter } from '@src/entities/find-entities';
 import { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
-import { formulasFromMeleeSettings } from '@src/entities/weapon-settings';
-import { ArmorType } from '@src/features/active-armor';
 import { Size } from '@src/features/size';
 import { SkillType } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
-import { rollLabeledFormulas } from '@src/foundry/rolls';
-import { HealthType } from '@src/health/health';
 import { SkillTestControls } from '@src/success-test/components/skill-test-controls/skill-test-controls';
-import { SuccessTestResult } from '@src/success-test/success-test';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, property } from 'lit-element';
-import { compact, concat, last, pick, pipe } from 'remeda';
+import { compact, last } from 'remeda';
 import { MessageElement } from '../message-element';
 import styles from './message-melee-attack.scss';
 
@@ -101,7 +94,10 @@ export class MessageMeleeAttack extends MessageElement {
       }, // TODO injected
     });
     const item = message.actor?.items?.get(weapon.id);
-    if (item?.proxy.type === ItemType.MeleeWeapon) {
+    if (
+      item?.proxy.type === ItemType.MeleeWeapon &&
+      !item.proxy.permanentCoating
+    ) {
       await item.proxy.removeCoating();
     }
     this.getUpdater('meleeAttack').commit({ appliedCoating: true });
@@ -141,7 +137,6 @@ export class MessageMeleeAttack extends MessageElement {
 
     const { attacks, augmentUnarmed, name, hasSecondaryAttack } =
       this.weapon ?? {};
-    const { result: testResult } = successTestInfo;
     const {
       attackType = 'primary',
       unarmedDV,
@@ -151,58 +146,30 @@ export class MessageMeleeAttack extends MessageElement {
 
     const attack = attacks && (attacks[attackType] || attacks.primary);
 
-    const superiorDamage =
-      successTestInfo?.superiorEffects?.filter(
-        (e) => e === SuperiorResultEffect.Damage,
-      ) || [];
+    const damage = meleeDamage({
+      attack,
+      successTestInfo,
+      augmentUnarmed,
+      unarmedDV,
+      damageModifiers,
+      settings: this.meleeAttack,
+      morphSize,
+      source: `${name || localize('unarmed')} ${
+        hasSecondaryAttack ? `[${attack?.label}]` : ''
+      }`,
+    });
 
-    const multiplier = testResult === SuccessTestResult.CriticalSuccess ? 2 : 1;
-    const rolled = pipe(
-      [
-        testResult === SuccessTestResult.SuperiorSuccess &&
-          superiorDamage.length >= 1 && {
-            label: localize(testResult),
-            formula: '+1d6',
-          },
-        testResult === SuccessTestResult.SuperiorSuccessX2 &&
-          superiorDamage.length >= 1 && {
-            label: localize(testResult),
-            formula: successTestInfo ? `+${superiorDamage.length}d6` : '+2d6',
-          },
-        (augmentUnarmed || augmentUnarmed == null) && {
-          label: localize('unarmedDV'),
-          formula: unarmedDV || '0',
-        },
-        ...formulasFromMeleeSettings(this.meleeAttack),
-        ...(damageModifiers ?? []),
-      ],
-      compact,
-      concat(attack?.rollFormulas ?? []),
-      rollLabeledFormulas,
-    );
     message.createSimilar({
       header: {
         heading: name ?? localize('unarmed'),
-        subheadings: [localize('meleeAttack')],
+        subheadings: compact([
+          localize('meleeAttack'),
+          morphSize &&
+            morphSize !== Size.Medium &&
+            ` ${localize('user')}: ${localize(morphSize)}`,
+        ]),
       },
-      damage: {
-        ...pick(
-          attack ?? {
-            armorPiercing: false,
-            armorUsed: [ArmorType.Kinetic],
-            damageType: HealthType.Physical,
-            notes: '',
-            reduceAVbyDV: false,
-          },
-          ['armorPiercing', 'armorUsed', 'damageType', 'notes', 'reduceAVbyDV'],
-        ),
-        source: `${name || localize('unarmed')} ${
-          hasSecondaryAttack ? `[${attack?.label}]` : ''
-        }`,
-        multiplier:
-          morphSize === Size.Small ? (multiplier === 2 ? 1 : 0.5) : multiplier,
-        rolledFormulas: rolled,
-      },
+      damage,
     });
   }
 

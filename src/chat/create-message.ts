@@ -81,5 +81,41 @@ export const createMessage = async ({
         : visibility !== MessageVisibility.Public &&
           ChatMessage.getWhisperRecipients('GM'),
   };
+  if ('dice3d' in game) {
+    const successTestRoll =
+      chatMessageData.flags?.ep2e?.successTest?.states[0]?.roll;
+    if (successTestRoll != null) {
+      const [tens, ones] =
+        successTestRoll < 10
+          ? `${0}${successTestRoll}`
+          : String(successTestRoll);
+      // @ts-ignore
+      await game.dice3d.show({
+        throws: [
+          {
+            dice: [
+              {
+                resultLabel: Number(`${tens}0`),
+                d100Result: successTestRoll,
+                result: Number(tens),
+                type: 'd100',
+                vectors: [],
+                options: {},
+              },
+              {
+                resultLabel: Number(ones),
+                d100Result: successTestRoll,
+                result: Number(ones),
+                type: 'd10',
+                vectors: [],
+                options: {},
+              },
+            ],
+          },
+        ],
+      });
+    }
+  }
+
   return ChatMessage.create(chatMessageData, {});
 };

@@ -1,7 +1,6 @@
 body {
   --font-1: Jost, sans-serif;
-  --font-2: Spartan, sans-serif;
-  --font-3: Rubik, sans-serif;
+  --font-2: Rubik, sans-serif;
   --font-mono: 'Fira Code', monospace;
   --text-highlight: 0 0 6px currentColor;
 
@@ -28,9 +27,7 @@ body {
   --mdc-theme-surface: var(--color-bg);
   --mdc-theme-text-secondary-on-background: var(--color-text-lighter);
 
-  --mdc-typography-button-font-family: var(--font-1);
-  --mdc-typography-subtitle1-font-family: var(--font-1);
-  --mdc-typography-body2-font-family: var(--font-1);
+  --mdc-typography-font-family: var(--font-1);
   --mdc-typography-body2-font-size: 1rem;
   --mdc-linear-progress-buffer-color: var(--color-border);
 

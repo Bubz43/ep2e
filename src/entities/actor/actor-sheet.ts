@@ -7,6 +7,7 @@ import {
   ResizeOption,
   SlWindowEventName,
 } from '@src/components/window/window-options';
+import { readyCanvas } from '@src/foundry/canvas';
 import type { EntitySheet } from '@src/foundry/foundry-cont';
 import { localize } from '@src/foundry/localization';
 import { importFromCompendium, userCan } from '@src/foundry/misc-helpers';
@@ -26,13 +27,25 @@ import { renderCharacterView, renderSleeveForm } from './actor-views';
 export const actorSheets = new WeakMap<ActorEP, ActorEPSheet>();
 
 export class ActorEPSheet implements EntitySheet {
-  private _token?: Token | null;
+  _token?: Token | null;
   declare token: unknown | null;
   private actorUnsub?: (() => void) | null;
 
   private window: SlWindow | null = null;
 
   private tokenSubscription?: Subscription | null;
+
+  private disableTokenConfig = false;
+
+  private canvasReadyCallback = () => {
+    const disableTokenConfig = !!(
+      this._token && this._token.scene !== readyCanvas()?.scene
+    );
+    if (disableTokenConfig !== this.disableTokenConfig) {
+      this.disableTokenConfig = disableTokenConfig;
+      this.isRendered && this.render(true, { token: this._token });
+    }
+  };
 
   constructor(private actor: ActorEP) {
     actorSheets.set(actor, this);
@@ -41,9 +54,11 @@ export class ActorEPSheet implements EntitySheet {
         { tokenId: actor.token.id, sceneId: actor.token.scene.id },
         {
           next: (token) => {
-            // console.log(token);
             this._token = token;
-            if (token.actor) {
+            if (token.data.actorLink) {
+              this.close();
+              token.actor?.sheet.render(true, { token });
+            } else if (token.actor) {
               const actorChange = this.actor !== token.actor;
               if (actorChange) {
                 actorSheets.delete(this.actor);
@@ -62,22 +77,14 @@ export class ActorEPSheet implements EntitySheet {
         else this.render(false);
       });
     }
+    Hooks.on('canvasReady', this.canvasReadyCallback);
   }
 
   private get windowKey() {
     return this;
   }
 
-  // private checkToken = () => {
-  //   if (this._token && this.actor.isToken) {
-  //     if (this._token.scene?.id !== readyCanvas()?.scene.id) {
-  //       this.actor.subscriptions.unsubscribeAll();
-  //       this.close();
-  //     }
-  //   }
-  // };
-
-  get rendered() {
+  get isRendered() {
     return !!this.window?.isConnected;
   }
 
@@ -100,7 +107,7 @@ export class ActorEPSheet implements EntitySheet {
     const { compendium, id, proxy } = this.actor;
     const linked =
       this._token?.data.actorLink ?? this.actor.data.token.actorLink;
-    // TODO close sheet if going from actor linked to not
+
     return compact([
       SlWindow.headerButton({
         // onClick: () => {
@@ -115,7 +122,9 @@ export class ActorEPSheet implements EntitySheet {
       }),
       SlWindow.headerButton({
         onClick: this.configureToken,
-        disabled: !(this.actor.owner && userCan('TOKEN_CONFIGURE')),
+        disabled:
+          this.disableTokenConfig ||
+          !(this.actor.owner && userCan('TOKEN_CONFIGURE')),
         content: html`
           <i class="fas fa-user-circle"></i> ${this._token
             ? 'Token'
@@ -164,6 +173,7 @@ export class ActorEPSheet implements EntitySheet {
   private configureToken = (ev: Event) => {
     if (ev.currentTarget instanceof HTMLElement) {
       const { top, left } = ev.currentTarget.getBoundingClientRect();
+      console.log(this.actorToken);
       new TokenConfig(this.actorToken || new Token(this.actor.data.token), {
         left,
         top: top + 10,
@@ -188,7 +198,7 @@ export class ActorEPSheet implements EntitySheet {
             : actorName,
         img: this._token?.data.img || this.actor.img,
         forceFocus: force,
-        adjacentEl: !this.rendered && this.getAdjacentEl(),
+        adjacentEl: !this.isRendered && this.getAdjacentEl(),
       },
       { resizable: ResizeOption.Both },
     );
@@ -196,7 +206,6 @@ export class ActorEPSheet implements EntitySheet {
       win.addEventListener(SlWindowEventName.Closed, () => this.close(), {
         once: true,
       });
-      // TODO listen to token change
     }
     this.window = win;
   }
@@ -235,13 +244,10 @@ export class ActorEPSheet implements EntitySheet {
   }
 
   render(force: boolean, { token }: { token?: Token | null } = {}) {
-    if (!force && !this.rendered) return this;
+    if (!force && !this.isRendered) return this;
 
     if (force) {
       this._token = token;
-      // token ||
-      // (this.actor.token &&
-      //   readyCanvas()?.tokens.get(this.actor.token.data._id));
     }
 
     this.openWindow(force);
@@ -249,7 +255,6 @@ export class ActorEPSheet implements EntitySheet {
   }
 
   maximize() {
-    // TODO don't pass token if opened from sidebar-list
     if (this._minimized) this.render(true, { token: this._token });
     return this;
   }
@@ -261,7 +266,7 @@ export class ActorEPSheet implements EntitySheet {
     this.tokenSubscription?.unsubscribe();
     actorSheets.delete(this.actor);
     closeWindow(this.windowKey);
-    // Hooks.off('canvasReady', this.checkToken);
+    Hooks.off('canvasReady', this.canvasReadyCallback);
     this.window = null;
     return this;
   }

@@ -8,3 +8,20 @@
 :host {
   display: block;
 }
+
+.mental-armor-form {
+  display: flex;
+  padding: 0.125rem 0;
+
+  @include inputReset();
+  input[type='number'] {
+    width: 3ch;
+  }
+}
+
+.attack-details,
+.heal-details {
+  display: grid;
+  padding: 0.25rem;
+  font-size: large;
+}

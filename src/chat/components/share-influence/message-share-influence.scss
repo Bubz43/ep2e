@@ -1,0 +1,34 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+}
+
+p {
+  margin: 0 0.5rem;
+}
+
+.name {
+  font-size: large;
+}
+
+.duration {
+  color: var(--color-text-lighter);
+}
+
+mwc-button {
+  --mdc-theme-primary: var(--color-primary-alt);
+}
+
+.levels {
+  display: flex;
+  flex-flow: row wrap;
+  > * {
+    flex: 1;
+  }
+}

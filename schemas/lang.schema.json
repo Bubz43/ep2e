@@ -35,6 +35,9 @@
                 "EndCombat": {
                   "type": "string"
                 },
+                "IgnoreSizeMeleeDamageModifiers": {
+                  "type": "string"
+                },
                 "NonElectronicSubstanceOnly": {
                   "type": "string"
                 },
@@ -63,6 +66,9 @@
                   "type": "string"
                 },
                 "PermanentEgoMeltdown": {
+                  "type": "string"
+                },
+                "PermanentMeleeCoatings": {
                   "type": "string"
                 },
                 "PermanentlyCorrupted": {
@@ -167,7 +173,9 @@
                 "SuperiorResultTime",
                 "SuperiorResultCovertness",
                 "SuperiorResultDamage",
-                "EndCombat"
+                "EndCombat",
+                "IgnoreSizeMeleeDamageModifiers",
+                "PermanentMeleeCoatings"
               ],
               "type": "object"
             },
@@ -681,6 +689,9 @@
             "allActions": {
               "type": "string"
             },
+            "allTargetsAsync": {
+              "type": "string"
+            },
             "allowRemoteControl": {
               "type": "string"
             },
@@ -781,6 +792,9 @@
               "type": "string"
             },
             "applyEffects": {
+              "type": "string"
+            },
+            "applyEffectsToSelf": {
               "type": "string"
             },
             "applyTo": {
@@ -1419,6 +1433,9 @@
             "damageFormula": {
               "type": "string"
             },
+            "damageIrrespectiveOfSize": {
+              "type": "string"
+            },
             "damageOverTime": {
               "type": "string"
             },
@@ -1644,6 +1661,9 @@
             "dvModifier": {
               "type": "string"
             },
+            "ease": {
+              "type": "string"
+            },
             "edit": {
               "type": "string"
             },
@@ -1729,6 +1749,9 @@
               "type": "string"
             },
             "enforcer": {
+              "type": "string"
+            },
+            "enhanced": {
               "type": "string"
             },
             "enhancedBehavior": {
@@ -1954,6 +1977,9 @@
               "type": "string"
             },
             "for": {
+              "type": "string"
+            },
+            "foreign": {
               "type": "string"
             },
             "forensics": {
@@ -3138,6 +3164,9 @@
             "override": {
               "type": "string"
             },
+            "overrides": {
+              "type": "string"
+            },
             "overview": {
               "type": "string"
             },
@@ -3201,6 +3230,9 @@
             "perceive": {
               "type": "string"
             },
+            "permanentCoating": {
+              "type": "string"
+            },
             "permanently": {
               "type": "string"
             },
@@ -3241,6 +3273,9 @@
               "type": "string"
             },
             "physicalTech": {
+              "type": "string"
+            },
+            "pickOne": {
               "type": "string"
             },
             "picker": {
@@ -3570,6 +3605,9 @@
             "remove": {
               "type": "string"
             },
+            "removed": {
+              "type": "string"
+            },
             "removing": {
               "type": "string"
             },
@@ -3729,6 +3767,9 @@
             "scaleEffectsOnSuperior": {
               "type": "string"
             },
+            "scaleToTargetEffectsOnSuperior": {
+              "type": "string"
+            },
             "scavenger": {
               "type": "string"
             },
@@ -3834,6 +3875,9 @@
             "shapes": {
               "type": "string"
             },
+            "share": {
+              "type": "string"
+            },
             "shared": {
               "type": "string"
             },
@@ -3859,6 +3903,9 @@
               "type": "string"
             },
             "shortRecharge": {
+              "type": "string"
+            },
+            "side": {
               "type": "string"
             },
             "signal": {
@@ -4182,6 +4229,9 @@
             "sustained": {
               "type": "string"
             },
+            "sustaining": {
+              "type": "string"
+            },
             "swap": {
               "type": "string"
             },
@@ -4243,6 +4293,12 @@
               "type": "string"
             },
             "targetDistance": {
+              "type": "string"
+            },
+            "targetingAsync": {
+              "type": "string"
+            },
+            "targetingSelf": {
               "type": "string"
             },
             "targets": {
@@ -4383,6 +4439,12 @@
             "toOpponent": {
               "type": "string"
             },
+            "toSelf": {
+              "type": "string"
+            },
+            "toTarget": {
+              "type": "string"
+            },
             "toggle": {
               "type": "string"
             },
@@ -4401,7 +4463,16 @@
             "total": {
               "type": "string"
             },
+            "touch": {
+              "type": "string"
+            },
             "touchOnly": {
+              "type": "string"
+            },
+            "touchingAllTargets": {
+              "type": "string"
+            },
+            "touchingTarget": {
               "type": "string"
             },
             "toxin": {
@@ -4593,6 +4664,9 @@
             "useFirewall": {
               "type": "string"
             },
+            "useMentalArmor": {
+              "type": "string"
+            },
             "useMeshArmor": {
               "type": "string"
             },
@@ -4714,6 +4788,9 @@
               "type": "string"
             },
             "whenMade": {
+              "type": "string"
+            },
+            "whileSustaining": {
               "type": "string"
             },
             "whips": {
@@ -4856,6 +4933,7 @@
             "alienation",
             "all",
             "allActions",
+            "allTargetsAsync",
             "allowRemoteControl",
             "alpha",
             "alt",
@@ -4890,6 +4968,7 @@
             "apply",
             "applyCoating",
             "applyEffects",
+            "applyEffectsToSelf",
             "applyTo",
             "applyableFor",
             "apps",
@@ -5102,6 +5181,7 @@
             "damageAgainstStructures",
             "damageApplier",
             "damageFormula",
+            "damageIrrespectiveOfSize",
             "damageOverTime",
             "damageRepair",
             "damageType",
@@ -5177,6 +5257,7 @@
             "duration",
             "durationFormula",
             "dvModifier",
+            "ease",
             "edit",
             "editTotals",
             "editor",
@@ -5206,6 +5287,7 @@
             "energy",
             "energyArmor",
             "enforcer",
+            "enhanced",
             "enhancedBehavior",
             "entangled",
             "entangling",
@@ -5281,6 +5363,7 @@
             "flipRoll",
             "folder",
             "for",
+            "foreign",
             "forensics",
             "forensicsSpecialist",
             "fork",
@@ -5675,6 +5758,7 @@
             "over",
             "overburdened",
             "override",
+            "overrides",
             "overview",
             "own",
             "ownHealing",
@@ -5696,6 +5780,7 @@
             "per",
             "perTurn",
             "perceive",
+            "permanentCoating",
             "permanently",
             "personal",
             "personalArmorUsed",
@@ -5710,6 +5795,7 @@
             "physicalService",
             "physicalServices",
             "physicalTech",
+            "pickOne",
             "picker",
             "pierce",
             "pilot",
@@ -5819,6 +5905,7 @@
             "remainingDelay",
             "remainingDuration",
             "remove",
+            "removed",
             "removing",
             "removingArmor",
             "renderSheet",
@@ -5872,6 +5959,7 @@
             "sav",
             "save",
             "scaleEffectsOnSuperior",
+            "scaleToTargetEffectsOnSuperior",
             "scavenger",
             "scene",
             "scientist",
@@ -5907,6 +5995,7 @@
             "shapeName",
             "shaped",
             "shapes",
+            "share",
             "shared",
             "shell",
             "shellType",
@@ -5916,6 +6005,7 @@
             "shop",
             "short",
             "shortRecharge",
+            "side",
             "signal",
             "silencer",
             "singleShot",
@@ -6023,6 +6113,7 @@
             "survival",
             "survivalist",
             "sustained",
+            "sustaining",
             "swap",
             "swarm",
             "swimmer",
@@ -6044,6 +6135,8 @@
             "takingTime",
             "target",
             "targetDistance",
+            "targetingAsync",
+            "targetingSelf",
             "targets",
             "task",
             "taskAction",
@@ -6090,13 +6183,18 @@
             "to",
             "toHit",
             "toOpponent",
+            "toSelf",
+            "toTarget",
             "toggle",
             "toggled",
             "token",
             "took",
             "topOfTheLine",
             "total",
+            "touch",
             "touchOnly",
+            "touchingAllTargets",
+            "touchingTarget",
             "toxin",
             "track",
             "trackMentalHealth",
@@ -6160,6 +6258,7 @@
             "use",
             "useCredits",
             "useFirewall",
+            "useMentalArmor",
             "useMeshArmor",
             "useMuse",
             "useSubstance",
@@ -6201,6 +6300,7 @@
             "wheeled",
             "when",
             "whenMade",
+            "whileSustaining",
             "whips",
             "whisper",
             "whisperGM",

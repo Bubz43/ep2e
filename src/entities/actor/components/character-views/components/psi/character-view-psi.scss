@@ -8,12 +8,10 @@
 :host {
   display: grid;
   grid-auto-rows: min-content;
-  max-width: 200px;
-  min-width: 100%;
 }
 
 header {
-  padding: 0.25rem 0 0 0.75rem;
+  padding: 0.25rem 0 0.125rem 0.75rem;
   position: relative;
   &:hover {
     z-index: 1;
@@ -203,4 +201,16 @@ p {
 
 .critical-states {
   padding: 0.25rem;
+}
+
+.unique {
+  display: flex;
+  &.has-effects {
+    > :first-child::part(item) {
+      border-right-style: dashed;
+    }
+    > :last-child::part(item) {
+      border-left-style: dashed;
+    }
+  }
 }

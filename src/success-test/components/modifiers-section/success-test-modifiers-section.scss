@@ -101,3 +101,10 @@ span[slot='after'] {
   font-family: var(--font-mono);
   margin-left: 0.5rem;
 }
+
+.modifier {
+  color: var(--color-text-disabled);
+  &.active {
+    color: var(--color-text);
+  }
+}

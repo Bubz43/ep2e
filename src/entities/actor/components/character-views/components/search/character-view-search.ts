@@ -89,6 +89,7 @@ export class CharacterViewSearch extends LitElement {
                     expanded: true,
                     noAnimate: true,
                     handleDragStart: this.dragItemCard,
+                    character: this.character,
                   }),
               )}
               ${notEmpty(items)

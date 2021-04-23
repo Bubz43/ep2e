@@ -12,15 +12,14 @@
 .group-toggles {
   display: flex;
   flex-flow: row wrap;
-  --mdc-shape-small: 0px;
+  --mdc-shape-small: 0.5rem;
   --mdc-theme-primary: #{alphav(var(--color-negative), 0.8)};
-  padding: 0 0.25rem;
+  --mdc-theme-primary: var(--color-grey);
+  --mdc-theme-on-primary: var(--color-bg);
+  padding: 0.125rem 0.5rem;
   > * {
-    margin-bottom: 0.25rem;
-    flex-grow: 1;
-    &[unelevated] + [unelevated] {
-      border-left: 1px solid transparent;
-    }
+    margin-bottom: 0.125rem;
+    margin-right: 0.125rem;
   }
 }
 

@@ -1,4 +1,3 @@
-import { enumValues } from '@src/data-enums';
 import type { ArmorType } from '@src/features/active-armor';
 import { createFeature } from '@src/features/feature-helpers';
 import { currentWorldTimeMS } from '@src/features/time';
@@ -44,6 +43,7 @@ export type Heal = {
   wounds: number;
   source: string;
   kind: 'heal';
+  multiplier: RollMultiplier;
 };
 
 export const createHeal = createFeature<Heal, 'type'>(() => ({
@@ -51,6 +51,7 @@ export const createHeal = createFeature<Heal, 'type'>(() => ({
   wounds: 0,
   source: '',
   kind: 'heal',
+  multiplier: 1,
 }));
 
 export type DamageOverTime = {

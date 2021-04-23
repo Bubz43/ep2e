@@ -151,12 +151,11 @@ export enum PsiPush {
 }
 
 export enum SleightDuration {
-  ActionTurns = 'actionTurns',
-  Constant = 'constant',
-  Hours = 'hours',
   Instant = 'instant',
-  Minutes = 'minutes',
   Sustained = 'sustained',
+  ActionTurns = 'actionTurns',
+  Minutes = 'minutes',
+  Hours = 'hours',
 }
 
 export enum SleightType {
@@ -171,10 +170,10 @@ export enum SleightTarget {
   PsiUser = 'psiUser',
 }
 
-export enum SleightSpecial {
-  Attack = 'attack',
-  Heal = 'heal',
-  MentalArmor = 'mentalArmor',
+export enum PsiRange {
+  Touch = 'touch',
+  PointBlank = 'pointBlank',
+  Close = 'close',
 }
 
 export enum SurpriseState {

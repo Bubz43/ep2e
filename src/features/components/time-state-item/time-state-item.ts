@@ -94,11 +94,18 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
   }
 
   render() {
-    const { label, remaining, completed, img } = this.activeTimeState;
+    const {
+      label,
+      remaining,
+      completed,
+      isIndefinite,
+      img,
+    } = this.activeTimeState;
     return html`
       ${img ? html` <img height="20px" src=${img} /> ` : ''}
-      <span class="name"
-        >${completed
+      <span class="name">
+        ${isIndefinite ? html`<span>[∞]</span>` : ''}
+        ${completed
           ? html`<span class=${this.completion}
               >[${localize(this.completion)}]</span
             >`
@@ -115,12 +122,14 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
           : ''}
       </span>
       <div class="actions">
-        <mwc-icon-button
-          icon="${this.editing ? 'save' : 'edit'}"
-          @click=${this.toggleEditing}
-          ?disabled=${this.disabled}
-        >
-        </mwc-icon-button>
+        ${isIndefinite
+          ? ''
+          : html` <mwc-icon-button
+              icon="${this.editing ? 'save' : 'edit'}"
+              @click=${this.toggleEditing}
+              ?disabled=${this.disabled}
+            >
+            </mwc-icon-button>`}
         ${this.editing
           ? html`<mwc-icon-button @click=${this.discardChanges} icon="clear">
             </mwc-icon-button>`
@@ -138,7 +147,10 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
                 : ''}
             `}
       </div>
-      ${this.editing && !this.disabled
+
+      ${isIndefinite
+        ? ''
+        : this.editing && !this.disabled
         ? this.renderProgressForm()
         : html`
             <mwc-linear-progress

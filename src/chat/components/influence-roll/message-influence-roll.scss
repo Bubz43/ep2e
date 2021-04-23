@@ -18,8 +18,7 @@ mwc-list-item {
 
 .active-options {
   display: grid;
-  flex-flow: row wrap;
-  padding: 0.25rem;
+  padding: 0.25rem 0 0;
 }
 
 p {
@@ -35,4 +34,10 @@ mwc-button {
   display: flex;
   justify-content: space-between;
   padding: 0.125rem 1rem;
+}
+
+.already-active-label {
+  margin: 0.25rem 1rem 0;
+  text-transform: uppercase;
+  color: var(--color-text-lighter);
 }

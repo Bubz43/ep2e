@@ -6,20 +6,16 @@ import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
 import type { Software } from '@src/entities/item/proxies/software';
 import type { Trait } from '@src/entities/item/proxies/trait';
+import type { ConditionType } from '@src/features/conditions';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
-import { HealthType } from '@src/health/health';
 import { MeshHealth } from '@src/health/full-mesh-health';
+import { HealthType } from '@src/health/health';
+import type { ActorHealth } from '@src/health/health-mixin';
 import { LazyGetter } from 'lazy-get-decorator';
-import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 import mix from 'mix-with/lib';
 import { SleeveInfo } from '../sleeve-mixins';
-import type { ActorHealth } from '@src/health/health-mixin';
-import { ArmorType } from '@src/features/active-armor';
-import { addFeature, removeFeature } from '@src/features/feature-helpers';
-import { identity, mapToObj } from 'remeda';
-import { enumValues } from '@src/data-enums';
-import type { ConditionType } from '@src/features/conditions';
+import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 
 class InfomorphBase extends ActorProxyBase<ActorType.Infomorph> {
   get subtype() {

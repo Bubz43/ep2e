@@ -80,17 +80,17 @@ export class MessageInfectionTest extends MessageElement {
       return html`<p>${localize('infectionTest')} ${localize('avoided')}</p>`;
     }
     if (this.infectionTest.interference) return '';
-    //   const { moxieUse } = this.infectionTest;
     const { result } = this.successTestInfo ?? {};
     if (!result) return '';
+    if (this.psi?.receded)
+      return html`<p class="immune">
+        ${localize('immuneToInfluencesUntilRecharge')}
+      </p>`;
     const { disabled } = this;
     return html`
       ${isSuccessfullTestResult(result)
         ? html`
-            <mwc-button
-              dense
-              @click=${this.rollInfluences}
-              ?disabled=${disabled}
+            <mwc-button @click=${this.rollInfluences} ?disabled=${disabled}
               >${localize('roll')}
               ${localize('infectionInfluences')}</mwc-button
             >

@@ -27,6 +27,7 @@ import { ArmorType } from '@src/features/active-armor';
 import { enumValues } from '@src/data-enums';
 import type { RecoveryConditions } from '@src/health/recovery';
 import type { ConditionType } from '@src/features/conditions';
+import { toggle } from '@src/utility/helpers';
 
 class SyntheticBase extends ActorProxyBase<ActorType.Synthetic> {
   get subtype() {
@@ -114,6 +115,10 @@ export class Synthetic extends mix(SyntheticBase).with(
 
   updateRecoveryConditions(conditions: RecoveryConditions) {
     return this.updater.path('data', 'recoveryConditions').commit(conditions);
+  }
+
+  togglePainFilter() {
+    return this.updater.path('data', 'painFilter').commit(toggle);
   }
 
   @LazyGetter()

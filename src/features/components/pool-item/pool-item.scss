@@ -116,7 +116,6 @@ small {
     text-shadow: black 2px 3px 4px;
     width: 100%;
     position: relative;
-    font-family: var(--font-2);
 
     small {
       &::before {
@@ -137,7 +136,6 @@ small {
     width: 100%;
     text-shadow: 1px 2px 3px black;
     letter-spacing: 1px;
-    font-family: var(--font-2);
     font-size: 13px;
   }
 }

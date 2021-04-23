@@ -29,7 +29,7 @@ import { ResizeOption, SlWindowEventName } from './window-options';
 import styles from './window.scss';
 
 const shadowAnimationOptions = {
-  duration: 250,
+  duration: 300,
   fill: 'forwards',
   delay: 50,
   easing: 'ease-out',

@@ -77,7 +77,7 @@ export const ownedSleeves = () => {
 export const formattedSleeveInfo = (sleeve: Sleeve) => {
   return compact([
     'size' in sleeve && localize(sleeve.size),
-    sleeve.subtype || localize(sleeve.type),
+    sleeve.subtype ? localize(sleeve.subtype as any) : localize(sleeve.type),
     'isSwarm' in sleeve && sleeve.isSwarm && localize('swarm'),
     'sex' in sleeve && sleeve.sex,
   ]);

@@ -1,4 +1,5 @@
-import type { ItemType } from '@src/entities/entity-types';
+import type { Sleeve } from '@src/entities/actor/sleeves';
+import { ActorType, ItemType } from '@src/entities/entity-types';
 import { UpdateStore } from '@src/entities/update-store';
 import { StringID, updateFeature } from '@src/features/feature-helpers';
 import {
@@ -9,16 +10,35 @@ import {
   PsiInfluenceData,
   PsiInfluenceType,
 } from '@src/features/psi-influence';
-import { createLiveTimeState, currentWorldTimeMS } from '@src/features/time';
+import {
+  createLiveTimeState,
+  currentWorldTimeMS,
+  LiveTimeState,
+} from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { deepMerge } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
 import { clamp, mapToObj } from 'remeda';
-import { ItemProxyBase } from './item-proxy-base';
+import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 import { Trait } from './trait';
 
 export class Psi extends ItemProxyBase<ItemType.Psi> {
+  readonly sleeve;
+  constructor({
+    sleeve,
+    ...init
+  }: ItemProxyInit<ItemType.Psi> & { sleeve?: Sleeve | null }) {
+    super(init);
+    this.sleeve = sleeve;
+  }
+
+  get fullName() {
+    return `${
+      this.embedded && !this.isFunctioning ? `[${localize('inactive')}]` : ''
+    } ${this.name}`;
+  }
+
   @LazyGetter()
   get fullInfluences() {
     const data = this.influencesData || createDefaultPsiInfluences();
@@ -82,8 +102,13 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
       return pair;
     });
   }
+
   @LazyGetter()
-  get activePsiInfluences() {
+  get activePsiInfluences(): ReadonlyMap<
+    StringID<PsiInfluence>,
+    LiveTimeState
+  > {
+    if (!this.isFunctioning) return new Map();
     return new Map(
       Object.values(this.fullInfluences).flatMap((influence) =>
         influence.timeState ? [[influence, influence.timeState]] : [],
@@ -103,6 +128,12 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
     });
   }
 
+  get isFunctioning() {
+    const { sleeve } = this;
+    if (!sleeve || sleeve.type === ActorType.Infomorph) return false;
+    return !this.epData.requireBioSubstrate || !sleeve.activeMeshHealth;
+  }
+
   activateInfluence(
     roll: InfluenceRoll,
     duration: number,
@@ -111,7 +142,6 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
     const { id, timeState } = this.fullInfluences[roll];
     const newDuration =
       timeState && extendDuration ? timeState.duration + duration : duration;
-    // TODO: Should I clamp the new duration to at least the old one if not extending
     return this.influenceCommiter((influences) =>
       updateFeature(influences, {
         id,
@@ -134,6 +164,10 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
         active: null,
       }),
     );
+  }
+
+  get hasActiveInfluences() {
+    return this.activePsiInfluences.size > 0;
   }
 
   get traitInfluenceLevelIndex() {

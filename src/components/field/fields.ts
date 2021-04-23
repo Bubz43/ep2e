@@ -1,15 +1,15 @@
-import { localize, LangEntry } from '../../../src/foundry/localization';
+import type { Checkbox } from '@material/mwc-checkbox';
+import type { Radio } from '@material/mwc-radio';
+import type { Switch } from '@material/mwc-switch';
+import { tooltip } from '@src/init';
 import { html, nothing, TemplateResult } from 'lit-html';
-import { live } from 'lit-html/directives/live';
 import { ifDefined } from 'lit-html/directives/if-defined';
+import { live } from 'lit-html/directives/live';
+import { noop } from 'remeda';
+import { LangEntry, localize } from '../../../src/foundry/localization';
+import type { ValuedProp } from '../../../src/utility/field-values';
 import { notEmpty } from '../../../src/utility/helpers';
 import type { Field } from './field';
-import type { ValuedProp } from '../../../src/utility/field-values';
-import type { Checkbox } from '@material/mwc-checkbox';
-import type { Switch } from '@material/mwc-switch';
-import type { Radio } from '@material/mwc-radio';
-import { tooltip } from '@src/init';
-import { noop } from 'remeda';
 
 export type FieldElement =
   | HTMLInputElement
@@ -225,6 +225,7 @@ type CheckboxOptions = Partial<{
   indeterminate: boolean;
   alignEnd: boolean;
   tooltipText: string;
+  reducedTouchTarget: boolean;
 }>;
 
 export const renderCheckbox = (
@@ -232,6 +233,7 @@ export const renderCheckbox = (
   {
     disabled = false,
     indeterminate = false,
+    reducedTouchTarget = false,
   }: Omit<CheckboxOptions, 'alignEnd'> = {},
 ) => html`
   <mwc-checkbox
@@ -241,6 +243,7 @@ export const renderCheckbox = (
     ?disabled=${disabled}
     ?indeterminate=${live(indeterminate)}
     @keydown=${clickOnEnter}
+    ?reducedTouchTarget=${reducedTouchTarget}
   ></mwc-checkbox>
 `;
 
@@ -353,23 +356,6 @@ export const renderNumberField = (
     ...fieldOptions
   }: NumberFieldOptions = {},
 ) => {
-  // const mwcTextField = html`
-  //   <mwc-textfield
-  //     type="number"
-  //     name=${prop}
-  //     .value=${live(value)}
-  //     label=${label}
-  //     ?disabled=${disabled}
-  //     min=${ifDefined(min)}
-  //     max=${ifDefined(max)}
-  //     step=${ifDefined(step)}
-  //     ?required=${required}
-  //     ?helperPersistent=${!!fieldOptions.helpPersistent}
-  //     helper=${ifDefined(fieldOptions.helpText)}
-  //   >
-  //   </mwc-textfield>
-  // `;
-  // return mwcTextField;
   return field({
     label,
     ...fieldOptions,
@@ -464,21 +450,6 @@ export const renderTextField = (
   props: ValuedProp<string>,
   options: TextFieldOptions = {},
 ) => {
-  // const mwcTextField = html`
-  //   <mwc-textfield
-  //     name=${props.prop}
-  //     .value=${live(props.value)}
-  //     label=${props.label}
-  //     ?disabled=${!!options.disabled}
-  //     placeholder=${ifDefined(options.placeholder)}
-  //     ?required=${!!options.required}
-  //     maxLength=${ifDefined(options.maxLength)}
-  //     helper=${ifDefined(options.helpText)}
-  //     type=${options.search ? "search" : "text"}
-  //   >
-  //   </mwc-textfield>
-  // `;
-  // return mwcTextField;
   return field({
     label: props.label,
     ...options,
@@ -503,22 +474,6 @@ export const renderFormulaField = (
     ...fieldOptions
   }: FormulaFieldOptions = {},
 ) => {
-  // const mwcTextField = html`
-  //   <mwc-textfield
-  //     name=${prop}
-  //     .value=${live(value)}
-  //     label=${showAverage ? `${label} [${averageRoll(value)}]` : label}
-  //     ?disabled=${disabled}
-  //     placeholder=${ifDefined(placeholder)}
-  //     ?required=${required}
-  //     helper=${ifDefined(fieldOptions.helpText)}
-  //     icon="casino"
-  //     data-valid-formula=${value}
-  //     data-validate-formula="true"
-  //   >
-  //   </mwc-textfield>
-  // `;
-  // return mwcTextField;
   return field({
     // label: showAverage && value ? `${label} [${averageRoll(value)}]` : label,
     label,
@@ -557,18 +512,6 @@ export const renderTextareaField = (
     ...fieldOptions
   }: TextareaFieldOptions = {},
 ) => {
-  //   const mwcTextField = html`
-  //    <mwc-textarea
-  //       name=${prop}
-  //       .value=${live(value)}
-  //       label=${label}
-  //       ?disabled=${disabled}
-  //       ?required=${required}
-  //       helper=${ifDefined(fieldOptions.helpText)}
-  //     >
-  //     </mwc-textarea>
-  // `;
-  // return mwcTextField;
   return field({
     label,
     ...fieldOptions,

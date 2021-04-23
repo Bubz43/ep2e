@@ -1465,7 +1465,29 @@ type LangEntries =
   | 'extend'
   | 'avoided'
   | 'immuneToInfluencesUntilRecharge'
-  | 'pickOne';
+  | 'pickOne'
+  | 'damageIrrespectiveOfSize'
+  | 'permanentCoating'
+  | 'overrides'
+  | 'toTarget'
+  | 'toSelf'
+  | 'enhanced'
+  | 'touch'
+  | 'targetingSelf'
+  | 'targetingAsync'
+  | 'allTargetsAsync'
+  | 'touchingAllTargets'
+  | 'touchingTarget'
+  | 'side'
+  | 'sustaining'
+  | 'removed'
+  | 'applyEffectsToSelf'
+  | 'ease'
+  | 'useMentalArmor'
+  | 'scaleToTargetEffectsOnSuperior'
+  | 'whileSustaining'
+  | 'share'
+  | 'foreign';
 type FullNames =
   | 'cog'
   | 'int'
@@ -1563,7 +1585,9 @@ export type DescriptionEntry =
   | 'SuperiorResultTime'
   | 'SuperiorResultCovertness'
   | 'SuperiorResultDamage'
-  | 'EndCombat';
+  | 'EndCombat'
+  | 'IgnoreSizeMeleeDamageModifiers'
+  | 'PermanentMeleeCoatings';
 
 // TODO Look into using data keys as pattern to validate json string
 export type Formatable = {

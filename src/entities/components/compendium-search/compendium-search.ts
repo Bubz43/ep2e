@@ -85,15 +85,11 @@ export class CompendiumSearch extends LitElement {
   private async loadOnEnter({ key, target }: KeyboardEvent) {
     if (key === 'Enter' && !this.results.length) {
       if (target instanceof HTMLInputElement) {
-        console.log(target.value);
         this.filter = target.value;
         await this.updateComplete;
       }
-      // requestAnimationFrame(() => {
 
       await this.loadEntities();
-
-      // });
     }
   }
 
@@ -105,7 +101,9 @@ export class CompendiumSearch extends LitElement {
         <sl-header heading=${localize('sources')}></sl-header>
         ${renderAutoForm({
           props: this.sources,
-          update: (changed) => (this.sources = { ...this.sources, ...changed }),
+          update: (changed) => {
+            this.sources = { ...this.sources, ...changed };
+          },
           fields: ({ world, system }) => [
             renderLabeledCheckbox(world),
             renderLabeledCheckbox(system),

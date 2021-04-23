@@ -296,12 +296,6 @@ export class CharacterView extends CharacterViewBase {
   >`;
 
   private renderItemGroup = (group: ItemGroup) => {
-    if (
-      group === ItemGroup.Sleights &&
-      !this.character.psi &&
-      !this.character.sleights.length
-    )
-      return '';
     return html`
       <character-view-item-group
         .character=${this.character}

@@ -1,6 +1,9 @@
-import { renderLabeledCheckbox } from '@src/components/field/fields';
+import {
+  renderLabeledCheckbox,
+  renderSelectField,
+} from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
-import { AptitudeType } from '@src/data-enums';
+import { AptitudeType, enumValues, MinStressOption } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import {
   formattedSleeveInfo,
@@ -11,6 +14,7 @@ import {
 import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisition';
 import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
+import { UpdateStore } from '@src/entities/update-store';
 import { idProp } from '@src/features/feature-helpers';
 import { SpecialTest } from '@src/features/tags';
 import {
@@ -23,6 +27,8 @@ import { format, localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
 import { addEPSocketHandler } from '@src/foundry/socket';
 import { EP } from '@src/foundry/system';
+import type { StressTestData } from '@src/foundry/template-schema';
+import { StressType } from '@src/health/mental-health';
 import { tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
 import { AptitudeCheckControls } from '@src/success-test/components/aptitude-check-controls/aptitude-check-controls';
@@ -46,6 +52,7 @@ import {
   reject,
   sortBy,
 } from 'remeda';
+import { requestCharacter } from '../../character-request-event';
 import styles from './character-view-resleeve.scss';
 
 @customElement('character-view-resleeve')
@@ -59,6 +66,18 @@ export class CharacterViewResleeve extends LitElement {
   @property({ attribute: false }) character!: Character;
 
   @internalProperty() private selectedSleeve: Sleeve | null = null;
+
+  @internalProperty() private showStressForm = false;
+
+  @internalProperty() private stressTestData: StressTestData & {
+    stressType: StressType;
+  } = {
+    stressType: StressType.Alienation,
+    sv: '1d6',
+    minSV: 1,
+    minStressOption: MinStressOption.None,
+    notes: '',
+  };
 
   private keptItems = new Set<string>();
 
@@ -117,6 +136,8 @@ export class CharacterViewResleeve extends LitElement {
           ego: actor.proxy.ego,
           character: actor.proxy,
           aptitude: AptitudeType.Somatics,
+          token: requestCharacter(this).token,
+
           special: {
             type: SpecialTest.Integration,
             source: localize('resleeve'),
@@ -127,7 +148,24 @@ export class CharacterViewResleeve extends LitElement {
   }
 
   private startStressTest() {
-    // TODO
+    AptitudeCheckControls.openWindow({
+      entities: { actor: this.character.actor },
+      getState: (actor) => {
+        if (actor.proxy.type !== ActorType.Character) return null;
+        return {
+          ego: actor.proxy.ego,
+          character: actor.proxy,
+          aptitude: AptitudeType.Willpower,
+          token: requestCharacter(this).token,
+          special: {
+            type: SpecialTest.ResleevingStress,
+            source: localize('resleeve'),
+            stressType: this.stressTestData.stressType,
+            stress: this.stressTestData,
+          },
+        };
+      },
+    });
   }
 
   private toggleKeptItem(id: string) {
@@ -270,7 +308,13 @@ export class CharacterViewResleeve extends LitElement {
     );
   }
 
+  private toggleStressTestForm() {
+    this.showStressForm = !this.showStressForm;
+  }
+
   render() {
+    const { disabled } = this.character;
+    const showStressForm = this.showStressForm && !disabled;
     return html`
       <section>
         <character-view-drawer-heading
@@ -278,12 +322,22 @@ export class CharacterViewResleeve extends LitElement {
         >
 
         <div class="tests">
-          <mwc-button dense unelevated @click=${this.startIntegrationTest}
+          <mwc-button
+            ?disabled=${disabled}
+            dense
+            unelevated
+            @click=${this.startIntegrationTest}
             >${localize('integrationTest')}</mwc-button
           >
-          <mwc-button dense unelevated @click=${this.startStressTest}
+          <mwc-button
+            dense
+            ?unelevated=${showStressForm}
+            ?outlined=${!showStressForm}
+            @click=${this.toggleStressTestForm}
+            ?disabled=${disabled}
             >${localize('resleevingStress')} ${localize('test')}</mwc-button
           >
+          ${showStressForm ? this.renderStressTestForm() : ''}
         </div>
 
         ${this.character.sleeve
@@ -326,6 +380,36 @@ export class CharacterViewResleeve extends LitElement {
           ?complete=${!!this.selectedSleeve}
           label=${localize(this.character.sleeve ? 'resleeve' : 'sleeve')}
         ></submit-button>
+      </div>
+    `;
+  }
+
+  private renderStressTestForm() {
+    return html`
+      <div class="stress-form">
+        ${renderAutoForm({
+          props: this.stressTestData,
+          update: (changed) =>
+            (this.stressTestData = { ...this.stressTestData, ...changed }),
+          fields: ({ stressType }) =>
+            renderSelectField(stressType, enumValues(StressType)),
+        })}
+        <ego-form-threat-stress
+          .updateOps=${new UpdateStore({
+            getData: () => this.stressTestData,
+            setData: (changed) =>
+              (this.stressTestData = { ...this.stressTestData, ...changed }),
+            isEditable: () => !this.character.disabled,
+          }).path('')}
+        ></ego-form-threat-stress>
+
+        <mwc-button
+          class="start-stress-test"
+          dense
+          raised
+          @click=${this.startStressTest}
+          >${localize('wil')} ${localize('check')}</mwc-button
+        >
       </div>
     `;
   }

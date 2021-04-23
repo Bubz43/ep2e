@@ -58,6 +58,7 @@ type ActorFlags<T extends ActorType> = T extends ActorType.Character
       vehicle: ActorEntity<ActorType.Synthetic> | null;
       [ItemType.Psi]: ItemEntity<ItemType.Psi> | null;
       compactSheet: boolean;
+      foreignPsiInfluences: StringID<PsiInfluenceData>[];
     } & { [key in SleeveType]: ActorEntity<key> | null }
   : never;
 
@@ -248,6 +249,11 @@ export type ActiveSubstanceState = {
   hidden: boolean;
 };
 
+type GunTransformation = null | {
+  startTime: number;
+  shapeId: string;
+};
+
 type ItemFlags<T extends ItemType> = T extends ItemType.Psi
   ? { influences: readonly StringID<PsiInfluenceData>[] }
   : T extends ItemType.Substance
@@ -265,6 +271,8 @@ type ItemFlags<T extends ItemType> = T extends ItemType.Psi
   ? {
       coating: null | [ItemEntity<ItemType.Substance>];
       payload: null | [ItemEntity<ItemType.Explosive>];
+      damageIrrespectiveOfSize: boolean;
+      permanentCoating: boolean;
     }
   : T extends ItemType.PhysicalTech
   ? {
@@ -276,9 +284,13 @@ type ItemFlags<T extends ItemType> = T extends ItemType.Psi
   ? {
       specialAmmo: [ItemEntity<ItemType.FirearmAmmo>] | null;
       shapes: ItemEntity<ItemType.Firearm>[];
+      transformation: GunTransformation;
     }
   : T extends ItemType.Railgun
-  ? { shapes: ItemEntity<ItemType.Railgun>[] }
+  ? {
+      shapes: ItemEntity<ItemType.Railgun>[];
+      transformation: GunTransformation;
+    }
   : T extends ItemType.FirearmAmmo
   ? { payload: [ItemEntity<ItemType.Substance>] | null }
   : T extends ItemType.SprayWeapon

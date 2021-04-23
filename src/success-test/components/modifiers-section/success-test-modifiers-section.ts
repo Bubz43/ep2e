@@ -88,7 +88,9 @@ export class SuccessTestModifiersSection extends LitElement {
               effect.requirement && `${localize('when')} ${effect.requirement}`;
             return html`
               <wl-list-item
-                class=${classMap({ tall: !!useWhen })}
+                class=${classMap({
+                  tall: !!useWhen,
+                })}
                 ?clickable=${!!useWhen}
                 @click=${() => {
                   useWhen && this.modifierStore.toggleEffect(effect);
@@ -105,7 +107,11 @@ export class SuccessTestModifiersSection extends LitElement {
                 <span class="source" title=${effect[Source]}
                   >${effect[Source]}</span
                 >
-                <span slot="after">${withSign(effect.modifier)}</span>
+                <span
+                  slot="after"
+                  class="modifier ${classMap({ active: !useWhen || active })}"
+                  >${withSign(effect.modifier)}</span
+                >
                 ${useWhen
                   ? html`
                       <span class="requirement" title=${useWhen}

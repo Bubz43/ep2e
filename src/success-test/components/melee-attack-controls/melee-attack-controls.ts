@@ -412,7 +412,8 @@ export class MeleeAttackControls extends LitElement {
                             <dd>${formula}</dd>
                           `,
                         )}
-                        ${morphSize === Size.Small
+                        ${morphSize === Size.Small &&
+                        !melee.damageIrrespectiveOfSize
                           ? html`
                               <dt>${localize('small')} ${localize('size')}</dt>
                               <dd>
@@ -431,11 +432,11 @@ export class MeleeAttackControls extends LitElement {
             >${localize('SHORT', 'damageValue')}:
             ${touchOnly
               ? '-'
-              : morphSize === Size.VerySmall
+              : morphSize === Size.VerySmall && !melee.damageIrrespectiveOfSize
               ? `[${localize(morphSize)} ${localize('size')}] ${localize(
                   'max',
                 )} ${localize('of')} 1`
-              : morphSize === Size.Small
+              : morphSize === Size.Small && !melee.damageIrrespectiveOfSize
               ? `(${joinedFormula}) ÷2`
               : joinedFormula}</span
           >

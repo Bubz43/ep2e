@@ -27,7 +27,7 @@ import type { Sleight } from '@src/entities/item/proxies/sleight';
 import type { Software } from '@src/entities/item/proxies/software';
 import type { Substance } from '@src/entities/item/proxies/substance';
 import type { ThrownWeapon } from '@src/entities/item/proxies/thrown-weapon';
-import type { Trait } from '@src/entities/item/proxies/trait';
+import { Trait } from '@src/entities/item/proxies/trait';
 import type { ActorEntity, SleeveType } from '@src/entities/models';
 import type { UpdateStore } from '@src/entities/update-store';
 import { taskState } from '@src/features/actions';
@@ -41,7 +41,7 @@ import {
 import { updateFeature } from '@src/features/feature-helpers';
 import type { MovementRate } from '@src/features/movement';
 import { Pool, Pools } from '@src/features/pool';
-import { PsiInfluenceType } from '@src/features/psi-influence';
+import { influenceInfo, PsiInfluenceType } from '@src/features/psi-influence';
 import { Recharge } from '@src/features/recharge';
 import { getEffectsFromSize } from '@src/features/size';
 import {
@@ -57,6 +57,7 @@ import {
   refreshAvailable,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
+import { deepMerge } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { HealthEditor } from '@src/health/components/health-editor/health-editor';
 import type { ActorHealth } from '@src/health/health-mixin';
@@ -94,7 +95,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
   readonly armor;
 
-  readonly sleights: Sleight[] = [];
+  readonly passiveSleights: Sleight[] = [];
+  readonly activatedSleights: Sleight[] = [];
   readonly egoTraits: Trait[] = [];
   readonly morphTraits: Trait[] = [];
   readonly equipped: EquippableItem[] = [];
@@ -114,8 +116,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     const { vehicle } = this.epFlags ?? {};
     this.vehicle = vehicle && this.setupVehicle(vehicle);
 
-    this.ego = this.setupEgo(egoItems);
     this.sleeve = this.setupSleeve(sleeveItems);
+    this.ego = this.setupEgo(egoItems);
 
     this.setupItems(sleeveItems, egoItems);
 
@@ -181,6 +183,10 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     return this.appliedEffects
       .getGroup(EffectType.Misc)
       .some(({ unique }) => unique === UniqueEffectType.NoFlipFlop);
+  }
+
+  get hasSleights() {
+    return !!(this.passiveSleights.length || this.activatedSleights.length);
   }
 
   @LazyGetter()
@@ -303,7 +309,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     return movements;
   }
 
-  async modifySpentPools(...pools: { pool: PoolType; points: number }[]) {
+  async addToSpentPools(...pools: { pool: PoolType; points: number }[]) {
     const { updater } = this.poolHolder;
     for (const { pool, points } of pools) {
       this.poolHolder.updater
@@ -355,6 +361,57 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
   get conditions() {
     return this.sleeve?.conditions ?? [];
+  }
+
+  @LazyGetter()
+  get foreignPsiInfluences() {
+    return (this.epFlags?.foreignPsiInfluences || []).map((influence) => {
+      const active = ('active' in influence && influence.active) || {
+        duration: -1,
+        startTime: 0,
+      };
+      const timeState = createLiveTimeState({
+        ...active,
+        id: influence.id,
+        label: influenceInfo(influence).name,
+        updateStartTime: (newStartTime) => {
+          this.updater.path('flags', EP.Name, 'foreignPsiInfluences').commit(
+            (influences) =>
+              influences &&
+              updateFeature(influences, {
+                id: influence.id,
+                active: { ...active, startTime: newStartTime },
+              }),
+          );
+        },
+      });
+
+      return influence.type === PsiInfluenceType.Trait
+        ? {
+            ...influence,
+            timeState,
+            trait: new Trait({
+              data: influence.trait,
+              embedded: this.name,
+              lockSource: true,
+              isPsiInfluence: true,
+              temporary: localize('psiInfluence'),
+              // updater: new UpdateStore({
+              //   getData: () => influence.trait,
+              //   isEditable: () => this.editable,
+              //   setData: (changed) => {
+              //     this.influenceCommiter((influences) =>
+              //       updateFeature(influences, {
+              //         id: influence.id,
+              //         trait: deepMerge(influence.trait, changed),
+              //       }),
+              //     );
+              //   },
+              // }),
+            }),
+          }
+        : { ...influence, timeState };
+    });
   }
 
   @LazyGetter()
@@ -618,7 +675,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       if (this.psi?.receded) {
         this.psi.updater.path('data', 'state', 'receded').store(false);
       }
-      if (this.psi && this.psi.activePsiInfluences.size === 0) {
+      if (this.psi && !this.psi.hasActiveInfluences) {
         this.psi.updateInfectionRating(
           recharge === RechargeType.Short
             ? this.psi.infectionRating - 10
@@ -780,6 +837,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
             this.updater.path('flags', EP.Name, ItemType.Psi).commit(null),
           openForm: () => this.openPsiForm(),
           actor: this.actor,
+          sleeve: this.sleeve,
         }),
       addPsi: this.updater.path('flags', EP.Name, ItemType.Psi).commit,
     });
@@ -829,19 +887,15 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     };
   }
 
+  get applyLocalSleightEffects() {
+    return !this.psi || this.psi?.isFunctioning;
+  }
+
   private setupItems(
     sleeveItems: Map<string, ItemProxy>,
     egoItems: Map<string, ItemProxy>,
   ) {
-    if (this.ego.psi) {
-      for (const [activeInfluence] of this.ego.psi.activePsiInfluences) {
-        if (activeInfluence.type === PsiInfluenceType.Trait) {
-          const { trait } = activeInfluence;
-          this[trait.isMorphTrait ? 'morphTraits' : 'egoTraits'].push(trait);
-          this._appliedEffects.add(trait.currentEffects);
-        }
-      }
-    }
+    const sleights: Sleight[] = [];
     for (const item of this.items.values()) {
       if (item.type === ItemType.Substance && item.appliedState) {
         if (item.appliedState === 'active') {
@@ -855,8 +909,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
               ].push(substanceItem);
               this._appliedEffects.add(substanceItem.currentEffects);
             } else {
-              this.sleights.push(substanceItem);
-              // TODO add sleight effects if passive
+              sleights.push(substanceItem);
             }
           }
         } else this.awaitingOnsetSubstances.push(item);
@@ -878,8 +931,43 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         this[item.isMorphTrait ? 'morphTraits' : 'egoTraits'].push(item);
         this._appliedEffects.add(item.currentEffects);
       } else if (item.type === ItemType.Sleight) {
-        this.sleights.push(item);
+        sleights.push(item);
         egoItems.set(item.id, item);
+      }
+    }
+
+    // This has to go after item setup to make sure sleeve has brain item
+    const { applyLocalSleightEffects } = this;
+    if (this.ego.psi?.isFunctioning) {
+      for (const [activeInfluence] of this.ego.psi.activePsiInfluences) {
+        if (activeInfluence.type === PsiInfluenceType.Trait) {
+          const { trait } = activeInfluence;
+          this[trait.isMorphTrait ? 'morphTraits' : 'egoTraits'].push(trait);
+          this._appliedEffects.add(trait.currentEffects);
+        }
+      }
+    }
+    for (const foreignInfluence of this.foreignPsiInfluences) {
+      if (foreignInfluence.type === PsiInfluenceType.Trait) {
+        const { trait } = foreignInfluence;
+        this[trait.isMorphTrait ? 'morphTraits' : 'egoTraits'].push(trait);
+        this._appliedEffects.add(trait.currentEffects);
+      }
+    }
+    for (const sleight of sleights) {
+      if (sleight.isChi) {
+        applyLocalSleightEffects &&
+          this._appliedEffects.add(
+            sleight.getPassiveEffects(
+              this.ego.aptitudes.wil,
+              !!this.ego.psi?.hasChiIncreasedEffect,
+            ),
+          );
+        this.passiveSleights.push(sleight);
+      } else {
+        this.activatedSleights.push(sleight);
+        if (sleight.isSustaining && applyLocalSleightEffects)
+          this._appliedEffects.add(sleight.effectsFromSustaining);
       }
     }
   }

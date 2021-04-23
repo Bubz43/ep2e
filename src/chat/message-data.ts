@@ -5,6 +5,7 @@ import type {
   AttackTrait,
   CalledShot,
   PoolType,
+  PsiPush,
   SuperiorResultEffect,
 } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
@@ -16,7 +17,13 @@ import type { ArmorType } from '@src/features/active-armor';
 import type { AptitudeCheckInfo } from '@src/features/aptitude-check-result-info';
 import type { FiringModeGroup } from '@src/features/firing-modes';
 import type { PostTestPoolAction, PreTestPoolAction } from '@src/features/pool';
-import type { InfluenceRoll } from '@src/features/psi-influence';
+import type {
+  DamageInfluence,
+  InfluenceRoll,
+  MotivationInfluence,
+  PsiInfluenceData,
+  TraitInfluenceData,
+} from '@src/features/psi-influence';
 import type { Favor, RepIdentifier } from '@src/features/reputations';
 import type { Size } from '@src/features/size';
 import type { SpecialTest } from '@src/features/tags';
@@ -26,6 +33,7 @@ import type {
   RollData,
   RolledFormula,
 } from '@src/foundry/rolls';
+import type { StressTestData } from '@src/foundry/template-schema';
 import type { HealthModification, HealthType } from '@src/health/health';
 import type { RollMultiplier } from '@src/health/health-changes';
 import type { StressType } from '@src/health/mental-health';
@@ -63,6 +71,7 @@ export type MessageHealData = RequireAtLeastOne<
     damageFormulas?: RolledFormula[];
     wounds?: number;
     healthType: HealthType;
+    multiplier?: RollMultiplier;
   },
   'damageFormulas' | 'wounds'
 >;
@@ -180,7 +189,7 @@ export type FavorMessageData = {
 
 export type SpecialTestData =
   | {
-      type: SpecialTest;
+      type: Exclude<SpecialTest, SpecialTest.ResleevingStress>;
       source: string;
       originalResult?: SuccessTestResult;
     }
@@ -189,6 +198,13 @@ export type SpecialTestData =
       checkInfo: AptitudeCheckInfo;
       source: string;
       originalResult?: SuccessTestResult;
+    }
+  | {
+      type: SpecialTest.ResleevingStress;
+      stressType: StressType;
+      source: string;
+      originalResult?: SuccessTestResult;
+      stress: StressTestData;
     };
 
 export type RangedAttackMessageData = {
@@ -209,6 +225,33 @@ export type InfluenceRollData = {
 export type InfectionTestData = {
   testSkipped?: boolean;
   interference?: boolean;
+};
+
+export type SleightSustain = {
+  name: string;
+  uuid: string;
+  temporaryFeatureId: string;
+};
+
+export type PsiTestData = {
+  sleight: ItemEntity<ItemType.Sleight>;
+  freePush: PsiPush | '' | undefined;
+  push: PsiPush | '';
+  sideEffectNegation: '' | 'damage' | 'all';
+  variableInfection: boolean;
+  willpower: number;
+  sustaining?: boolean;
+  appliedTo?: SleightSustain[];
+};
+
+export type SleightSustainEnd = {
+  appliedTo: SleightSustain[];
+  removedFromIds: string[];
+};
+
+export type SharedPsiInfluence = {
+  influence: Exclude<PsiInfluenceData, DamageInfluence>;
+  duration: number;
 };
 
 export type MessageData = Partial<{
@@ -232,4 +275,7 @@ export type MessageData = Partial<{
   hack: HackMessageData;
   infectionTest: InfectionTestData;
   influenceRoll: InfluenceRollData;
+  psiTest: PsiTestData;
+  sleightSustainEnd: SleightSustainEnd;
+  sharedInfluence: SharedPsiInfluence;
 }>;

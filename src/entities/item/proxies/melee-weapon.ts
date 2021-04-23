@@ -64,6 +64,14 @@ export class MeleeWeapon
     return this.epData.reachBonus;
   }
 
+  get permanentCoating() {
+    return !!this.epFlags?.permanentCoating;
+  }
+
+  get damageIrrespectiveOfSize() {
+    return !!this.epFlags?.damageIrrespectiveOfSize;
+  }
+
   get fullType() {
     const { wareType, isImprovised } = this;
     return compact([

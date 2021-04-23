@@ -1,0 +1,63 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+}
+
+mwc-button {
+  width: calc(100% - 1rem);
+  margin: 0.25rem 0.5rem;
+  --mdc-theme-primary: var(--color-primary-alt);
+
+  &.damage,
+  &.attack {
+    --mdc-theme-primary: #{lightv(var(--color-negative), 1.25)};
+  }
+
+  &.heal {
+    --mdc-theme-primary: var(--color-secondary);
+  }
+}
+
+.defense {
+  padding: 0 0.75rem;
+  wl-list-item {
+    display: inline-flex;
+    padding: 0.25rem;
+    color: var(--color-primary-alt);
+  }
+}
+
+.affected-entities {
+  padding: 0.125rem 0.5rem;
+}
+
+.applied-to {
+  margin-bottom: 0.125rem;
+  mwc-icon {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: alphav(var(--color-bg), 0.25);
+    display: none;
+    color: lightv(var(--color-negative), 1.5);
+    border-radius: 100%;
+  }
+  &[clickable]:hover {
+    mwc-icon {
+      display: block;
+      @include animate-css(fadeIn, 200ms);
+    }
+  }
+}
+
+.user-actions {
+  margin-top: 0.25rem;
+  border-top: 1px solid var(--color-border);
+  padding-top: 0.25rem;
+}

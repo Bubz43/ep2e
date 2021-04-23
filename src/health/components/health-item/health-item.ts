@@ -1,7 +1,6 @@
 import { LazyRipple } from '@src/components/mixins/lazy-ripple';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { localize } from '@src/foundry/localization';
-import { EP } from '@src/foundry/system';
 import type { Health } from '@src/health/health-mixin';
 import { localImage } from '@src/utility/images';
 import { customElement, html, LitElement, property, query } from 'lit-element';
@@ -31,8 +30,6 @@ export class HealthItem<T extends Health = Health> extends mix(LitElement).with(
 
   @property({ type: Boolean, reflect: true }) disabled = false;
 
-  @property({ type: Boolean }) mini = false;
-
   @query('.view', true) private viewElement?: HTMLElement;
 
   focus() {
@@ -50,7 +47,7 @@ export class HealthItem<T extends Health = Health> extends mix(LitElement).with(
   }
 
   render() {
-    const { health, clickable, mini } = this;
+    const { health, clickable } = this;
     const { type, main, wound, icon, damagePercents } = health;
     const { durability, deathRating, dead } = damagePercents;
     return html`
@@ -65,9 +62,43 @@ export class HealthItem<T extends Health = Health> extends mix(LitElement).with(
         @focus="${this.handleRippleFocus}"
         @blur="${this.handleRippleBlur}"
       >
-        <div class="health-type" title=${health.source}>
-          <slot name="source">${health.source}</slot>
+        <img
+          src=${icon}
+          class="health-icon"
+          title="${localize(type)} ${localize('health')}"
+        />
+
+        ${health.regenState
+          ? html`
+              <img
+                class="regen-available ${classMap({
+                  ready: health.readyRegen,
+                })}"
+                height="16px"
+                src=${localImage('icons/health/auto-repair.svg')}
+              />
+            `
+          : ''}
+
+        <div class="info">
+          <div class="health-type" title=${health.source}>
+            <slot name="source">${health.source}</slot>
+          </div>
         </div>
+
+        <section class="damage-info">
+          <div
+            class="damage ${classMap({
+              dying: durability >= 1,
+              dead,
+            })}"
+          >
+            ${compact([main.damage, main.durability, main.deathRating]).map(
+              ({ label, value }) =>
+                html` <span title=${label}>${value}</span> `,
+            )}
+          </div>
+        </section>
 
         <div class="bars ${classMap({ dead })}">
           <div
@@ -82,80 +113,30 @@ export class HealthItem<T extends Health = Health> extends mix(LitElement).with(
             : ''}
         </div>
 
-        <section class="damage-info">
-          ${health.regenState
-            ? html`
-                <img
-                  class="regen-available ${classMap({
-                    ready: health.readyRegen,
-                  })}"
-                  height="22px"
-                  src=${localImage('icons/health/auto-repair.svg')}
-                />
-              `
-            : ''}
-          ${mini
-            ? ''
-            : html`<div
-                class="damage ${classMap({
-                  dying: durability >= 1,
-                  dead,
-                })}"
-              >
-                ${compact([main.damage, main.durability, main.deathRating]).map(
-                  ({ label, value }) =>
-                    html` <span title=${label}>${value}</span> `,
-                )}
-              </div>`}
-          ${wound
-            ? html`
-                <section class="wounds">
-                  <div title=${wound.wounds.label}>
-                    <img class="wound-icon" src=${health.woundIcon} /><span
-                      class="wound-value"
-                      >${wound.wounds.value}</span
-                    >
-                  </div>
-                  ${wound.woundsIgnored.value
-                    ? html`
-                        <div title=${wound.woundsIgnored.label}>
-                          <img
-                            src=${localImage('icons/health/interdiction.svg')}
-                            class="wound-icon ignored"
-                          /><span class="wound-value"
-                            >${wound.woundsIgnored.value}</span
-                          >
-                        </div>
-                      `
-                    : ''}
-                  ${mini
-                    ? ''
-                    : html`
-                        <div
-                          class="wound-threshold"
-                          title=${wound.woundThreshold.label}
+        ${wound
+          ? html`
+              <section class="wounds">
+                <div title=${wound.wounds.label}>
+                  <img class="wound-icon" src=${health.woundIcon} /><span
+                    class="wound-value"
+                    >${wound.wounds.value}</span
+                  >
+                </div>
+                ${wound.woundsIgnored.value
+                  ? html`
+                      <div title=${wound.woundsIgnored.label}>
+                        <img
+                          src=${localImage('icons/health/interdiction.svg')}
+                          class="wound-icon ignored"
+                        /><span class="wound-value"
+                          >${wound.woundsIgnored.value}</span
                         >
-                          <span class="threshold-label"
-                            >${localize(
-                              'SHORT',
-                              wound.woundThreshold.prop,
-                            )}</span
-                          >
-                          <span class="wound-value"
-                            >${wound.woundThreshold.value}</span
-                          >
-                        </div>
-                      `}
-                </section>
-              `
-            : ''}
-        </section>
-        <img
-          src=${icon}
-          class="health-icon"
-          title="${localize(type)} ${localize('health')}"
-        />
-
+                      </div>
+                    `
+                  : ''}
+              </section>
+            `
+          : ''}
         ${this.renderRipple(this.disabled || !this.clickable)}
       </div>
     `;

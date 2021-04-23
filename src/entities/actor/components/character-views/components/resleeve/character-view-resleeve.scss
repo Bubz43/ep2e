@@ -51,3 +51,20 @@ li[divider] {
   max-width: 400px;
   min-width: 100%;
 }
+
+.tests {
+  display: flex;
+  flex-flow: row wrap;
+  > * {
+    flex-grow: 1;
+    margin: 0.25rem 0.5rem;
+  }
+}
+
+.stress-form {
+  display: grid;
+}
+.start-stress-test {
+  --mdc-theme-primary: var(--color-negative);
+  margin: 0.25rem 0;
+}

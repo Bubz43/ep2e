@@ -176,6 +176,7 @@ export class ActorEP extends Actor {
           this.emitItemSocket({ itemIds, type: 'update' });
 
           this.invalidated = true;
+          this.prepareData();
           return itemIds;
         },
         remove: async (...itemIds) => {
@@ -227,6 +228,7 @@ export class ActorEP extends Actor {
     return {
       img: token?.data.img || this.img,
       name: token?.name || this.name,
+      uuid: this.isToken ? this.token!.uuid : this.uuid,
     };
   }
 
@@ -378,6 +380,8 @@ export class ActorEP extends Actor {
   matchRegexp(regex: RegExp) {
     return this.proxy.type === ActorType.Character
       ? this.proxy.matchRegexp(regex)
-      : formattedSleeveInfo(this.proxy).some((info) => regex.test(info));
+      : [this.proxy.name, ...formattedSleeveInfo(this.proxy)].some((info) =>
+          regex.test(info),
+        );
   }
 }

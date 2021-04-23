@@ -1,20 +1,21 @@
 import { renderTextInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import type { EntityPath } from '@src/entities/path';
-import type { UpdateActions, UpdateStore } from '@src/entities/update-store';
+import type { UpdateActions } from '@src/entities/update-store';
 import { closeImagePicker, openImagePicker } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import type { FieldPropsRenderer } from '@src/utility/field-values';
 import { notEmpty } from '@src/utility/helpers';
-import { customElement, LitElement, property, html } from 'lit-element';
+import { customElement, html, LitElement, property } from 'lit-element';
 import styles from './entity-form-header.scss';
 
 type CommonInfo = { name: string; img: string };
 
 /**
  * @slot tag
+ * @slot settings
  */
 @customElement('entity-form-header')
 export class EntityFormHeader extends LitElement {
@@ -95,6 +96,7 @@ export class EntityFormHeader extends LitElement {
       <div class="type">
         ${this.type} ${this.disabled ? html`<mwc-icon>lock</mwc-icon>` : ''}
       </div>
+      <slot name="settings"></slot>
       ${notEmpty(this.entityPath)
         ? html`
             <div class="path">

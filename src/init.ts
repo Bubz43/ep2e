@@ -1,8 +1,10 @@
 import { html, render } from 'lit-html';
 import { compact, first } from 'remeda';
 import type { RawEditorSettings } from 'tinymce';
+import type { PartialDeep } from 'type-fest';
 import { onChatMessageRender } from './chat/message-hooks';
 import { combatSocketHandler } from './combat/combat-tracker';
+import { CustomRollApp } from './combat/components/custom-roll-app/custom-roll-app';
 import { EPOverlay } from './components/ep-overlay/ep-overlay';
 import type { ToolTip } from './components/tooltip/tooltip';
 import { SlWindow } from './components/window/window';
@@ -12,7 +14,7 @@ import { ActorEP } from './entities/actor/actor';
 import { ActorEPSheet } from './entities/actor/actor-sheet';
 import { ChatMessageEP } from './entities/chat-message';
 import { CompendiumSearch } from './entities/components/compendium-search/compendium-search';
-import { findActor } from './entities/find-entities';
+import { findActor, findToken } from './entities/find-entities';
 import { ItemEP } from './entities/item/item';
 import { ItemEPSheet } from './entities/item/item-sheet';
 import { migrateWorld } from './entities/migration';
@@ -20,37 +22,19 @@ import { SceneEP } from './entities/scene';
 import { UserEP } from './entities/user';
 import { conditionIcons, ConditionType } from './features/conditions';
 import { positionApp } from './foundry/foundry-apps';
+import type { TokenData } from './foundry/foundry-cont';
 import { registerEPSettings } from './foundry/game-settings';
 import {
   applicationHook,
   mutateEntityHook,
   MutateEvent,
+  mutatePlaceableHook,
 } from './foundry/hook-setups';
 import { localize } from './foundry/localization';
 import { addEPSocketHandler, setupSystemSocket } from './foundry/socket';
 import { EP } from './foundry/system';
 import { openMenu } from './open-menu';
 import { notEmpty } from './utility/helpers';
-
-(function () {
-  const frag = new DocumentFragment();
-  render(
-    html`
-      ${[
-        'https://fonts.googleapis.com/css?family=Material+Icons&display=block',
-        'https://fonts.googleapis.com/css?family=Roboto:300,400,500',
-        'https://fonts.googleapis.com/css?family=Rubik:300,400,700&display=swap',
-        // 'https://fonts.googleapis.com/css?family=DotGothic16:300,400,700&display=swap',
-
-        'https://fonts.googleapis.com/css?family=Jost:300,400,700&display=swap',
-        'https://fonts.googleapis.com/css?family=Spartan:300,400,700&display=swap',
-        'https://fonts.googleapis.com/css?family=Fira+Code&display=swap',
-      ].map((link) => html` <link rel="stylesheet" href=${link} /> `)}
-    `,
-    frag,
-  );
-  document.head.appendChild(frag);
-})();
 
 export let gameSettings: ReturnType<typeof registerEPSettings>;
 export let overlay: EPOverlay;
@@ -197,6 +181,35 @@ Hooks.once('ready', async () => {
   //   callback: () => requestAnimationFrame(() => ui.combat.render()),
   // });
 
+  applicationHook({
+    app: ChatLog,
+    hook: 'on',
+    event: 'render',
+    callback: (_, [element]) => {
+      const frag = new DocumentFragment();
+      render(
+        html`
+          <mwc-icon-button
+            data-tooltip=${`${localize('custom')} ${localize('roll')}`}
+            @mouseover=${tooltip.fromData}
+            style="flex: 0; margin-right: 0.5rem; --mdc-icon-button-size: 1.5rem"
+            @click=${(ev: Event & { currentTarget: HTMLElement }) =>
+              openWindow({
+                key: CustomRollApp,
+                content: html`<custom-roll-app></custom-roll-app>`,
+                name: `${localize('custom')} ${localize('roll')}`,
+                adjacentEl: ev.currentTarget,
+              })}
+          >
+            <img class="noborder" src="icons/svg/combat.svg" />
+          </mwc-icon-button>
+        `,
+        frag,
+      );
+      element?.querySelector('div#chat-controls')?.prepend(frag);
+    },
+  });
+
   const compendiumSearchButton = () => {
     const frag = new DocumentFragment();
     render(
@@ -264,6 +277,47 @@ Hooks.once('ready', async () => {
     event: 'render',
     callback: (popout) => {
       requestAnimationFrame(() => popout.setPosition());
+    },
+  });
+
+  mutatePlaceableHook({
+    entity: Token,
+    hook: 'on',
+    event: MutateEvent.Update,
+    callback: (scene, tokenData, change) => {
+      const changes = change as PartialDeep<TokenData>;
+      if ('actorLink' in changes && changes.actorLink === false) {
+        const actor = game.actors.get(tokenData.actorId);
+        if (actor?.sheet.isRendered) {
+          console.log('rendered');
+          actor.sheet.close();
+          const token = findToken({
+            tokenId: tokenData._id,
+            actorId: tokenData.actorId,
+            sceneId: scene._id,
+          });
+          if (token) {
+            token.actor?.sheet.render(true, { token });
+          }
+        }
+      }
+    },
+  });
+
+  mutatePlaceableHook({
+    entity: Token,
+    hook: 'on',
+    event: MutateEvent.Delete,
+    callback: (scene, tokenData) => {
+      if (tokenData.actorLink) {
+        const actor = game.actors.get(tokenData.actorId);
+        if (
+          actor?.sheet.isRendered &&
+          actor.sheet._token?.id === tokenData._id
+        ) {
+          actor.sheet.render(true);
+        }
+      }
     },
   });
 });

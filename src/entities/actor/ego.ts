@@ -5,6 +5,7 @@ import {
   enumValues,
   MinStressOption,
 } from '@src/data-enums';
+import { EffectType, isFieldSkillEffect, Source } from '@src/features/effects';
 import type { StringID } from '@src/features/feature-helpers';
 import {
   RepNetwork,
@@ -12,13 +13,16 @@ import {
   RepWithIdentifier,
 } from '@src/features/reputations';
 import {
+  ActiveSkillCategory,
   FieldSkillData,
   FieldSkillIdentifier,
+  fieldSkillInfo,
   fieldSkillName,
   FieldSkillType,
   FullFieldSkill,
   FullSkill,
   isFieldSkill,
+  KnowSkillCategory,
   setupFullFieldSkill,
   setupFullSkill,
   Skill,
@@ -219,14 +223,16 @@ export class Ego {
     });
   }
 
+  private _skills: Map<string, Skill> | null = null;
+
   @LazyGetter()
   get skills() {
     const { canDefault } = this.settings;
     const { fieldSkills } = this.epData;
-    const skills: Skill[] = [];
+    const skills = new Map<string, Skill>();
 
     const addSkill = (skill: Skill) => {
-      if (canDefault || skill.points) skills.push(skill);
+      if (canDefault || skill.points) skills.set(skill.name, skill);
     };
 
     for (const type of enumValues(SkillType)) {
@@ -242,8 +248,52 @@ export class Ego {
       }
     }
 
-    // TODO: Skills from effects and dups overwriting with higher total
-    return skills.sort((a, b) => a.name.localeCompare(b.name));
+    for (const effect of this.activeEffects?.getGroup(EffectType.Skill) || []) {
+      if (isFieldSkillEffect(effect.skillType)) {
+        const skill: Skill = setupFullFieldSkill(
+          {
+            points: effect.total,
+            specialization: effect.specialization,
+            fieldSkill: effect.skillType,
+            field: effect.field,
+            linkedAptitude: effect.linkedAptitude,
+            category:
+              fieldSkillInfo[effect.skillType].categories[0] ||
+              (effect.skillType === FieldSkillType.Know
+                ? KnowSkillCategory.Academics
+                : ActiveSkillCategory.Misc),
+          },
+          this.aptitudes,
+        );
+
+        skill.aptMultiplier = effect.total
+          ? 0
+          : (effect.aptitudeMultiplier as 0 | 1 | 2);
+        skill.source = effect[Source];
+        if (skill.total > (skills.get(skill.name)?.total || 0)) {
+          addSkill(skill);
+        }
+      } else {
+        const skill: Skill = setupFullSkill(
+          {
+            points: effect.total,
+            specialization: effect.specialization,
+            skill: effect.skillType,
+          },
+          this.aptitudes,
+        );
+        skill.aptMultiplier = effect.total
+          ? 0
+          : (effect.aptitudeMultiplier as 0 | 1 | 2);
+        skill.linkedAptitude = effect.linkedAptitude;
+        skill.source = effect[Source];
+        if (skill.total > (skills.get(skill.name)?.total || 0)) {
+          addSkill(skill);
+        }
+      }
+    }
+    this._skills = skills;
+    return [...skills.values()].sort((a, b) => a.name.localeCompare(b.name));
   }
 
   @LazyGetter()
@@ -389,6 +439,7 @@ export class Ego {
         } else this.itemOperations.add(proxy.getDataCopy(true));
       }
     } else if (proxy.type === ItemType.Sleight && this.allowSleights) {
+      // TODO only allow sleights that match psi level
       this.itemOperations.add(proxy.getDataCopy(true));
     } else if (proxy.type === ItemType.Psi && this.allowSleights) {
       if (this.psi)
@@ -411,7 +462,11 @@ export class Ego {
     return !!agent && this.items.get(agent?.id) === agent;
   }
 
-  getCommonSkill(skill: SkillType) {
+  getCommonSkill(skill: SkillType): FullSkill {
+    if (this._skills) {
+      const madeSkill = this._skills.get(localize(skill));
+      if (madeSkill) return madeSkill as FullSkill;
+    }
     let fullSkill = this.commonSkills.get(skill);
     if (!fullSkill) {
       fullSkill = setupFullSkill(
@@ -447,6 +502,10 @@ export class Ego {
   }
 
   findFieldSkill(ids: FieldSkillIdentifier) {
+    if (this._skills) {
+      const madeSkill = this._skills.get(fieldSkillName(ids));
+      if (madeSkill) return madeSkill as FullFieldSkill;
+    }
     let fullSkill = this.fieldSkills.get(fieldSkillName(ids));
     if (!fullSkill) {
       const { field, fieldSkill } = ids;

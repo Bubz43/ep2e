@@ -11,11 +11,25 @@ import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisi
 import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import { conditionIcons, ConditionType } from '@src/features/conditions';
-import { idProp } from '@src/features/feature-helpers';
+import { formatEffect } from '@src/features/effects';
+import {
+  addFeature,
+  idProp,
+  removeFeature,
+} from '@src/features/feature-helpers';
+import { toMilliseconds } from '@src/features/modify-milliseconds';
 import { MotivationStance } from '@src/features/motivations';
-import type { ReadonlyPool } from '@src/features/pool';
+import { influenceInfo, PsiInfluenceType } from '@src/features/psi-influence';
+import { createTemporaryFeature } from '@src/features/temporary';
+import {
+  CommonInterval,
+  EPTimeInterval,
+  prettyMilliseconds,
+} from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
+import { rollFormula } from '@src/foundry/rolls';
+import { EP } from '@src/foundry/system';
 import { tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import { clickIfEnter, notEmpty } from '@src/utility/helpers';
@@ -44,7 +58,7 @@ import {
 } from 'remeda';
 import type { Ego } from '../../ego';
 import type { Character } from '../../proxies/character';
-import { formattedSleeveInfo, Sleeve } from '../../sleeves';
+import { formattedSleeveInfo } from '../../sleeves';
 import { CharacterDrawerRenderer } from './character-drawer-render-event';
 import styles from './character-view-alt.scss';
 import { CharacterViewBase, ItemGroup } from './character-view-base';
@@ -53,7 +67,14 @@ type Detail = {
   label: string;
   value: string | number;
 };
-const tabs = ['tests', 'gear', 'combat', 'traits', 'details'] as const;
+const tabs = [
+  'tests',
+  'gear',
+  'combat',
+  'traits',
+  'sleights',
+  'details',
+] as const;
 
 type CharacterTab = typeof tabs[number];
 
@@ -85,7 +106,13 @@ export class CharacterViewAlt extends CharacterViewBase {
   }
 
   private get currentTabs() {
-    return this.compact ? tabs : tabs.slice(1);
+    return difference(
+      tabs,
+      compact([
+        !this.compact && 'tests',
+        !this.character.psi && !this.character.hasSleights && 'sleights',
+      ]),
+    );
   }
 
   private setTab(ev: CustomEvent<{ index: number }>) {
@@ -146,7 +173,6 @@ export class CharacterViewAlt extends CharacterViewBase {
           callback: () => this.addToCombat(),
           icon: html`<mwc-icon>add</mwc-icon>`,
         },
-        // 'divider',
         {
           label: `${localize('add')} & ${localize('roll')} ${baseLabel}`,
           callback: () => roll(),
@@ -176,23 +202,312 @@ export class CharacterViewAlt extends CharacterViewBase {
 
   render() {
     const { character, currentTabs } = this;
-    const { ego, disabled, sleeve, pools, armor, psi } = character;
+    const { psi, foreignPsiInfluences } = character;
+    return html`
+      ${this.renderHeader()}
+      <div class="content">
+        <div class="psi">
+          ${psi
+            ? html`<character-view-psi
+                .character=${this.character}
+                .psi=${psi}
+              ></character-view-psi>`
+            : ''}
+          ${this.renderForeignInfluences()}
+        </div>
+
+        ${this.compact
+          ? ''
+          : html`<character-view-test-actions
+              class="actions"
+              .character=${this.character}
+              .ego=${this.character.ego}
+            ></character-view-test-actions>`}
+
+        <div class="tabbed-section">
+          <mwc-tab-bar
+            @MDCTabBar:activated=${this.setTab}
+            activeIndex=${currentTabs.findIndex((t) => t === this.currentTab)}
+          >
+            ${currentTabs.map(
+              (tab: CharacterTab) =>
+                html`
+                  <mwc-tab
+                    @dragenter=${tab === 'combat' || tab === 'details'
+                      ? noop
+                      : this.activateTab}
+                    label=${localize(tab)}
+                  ></mwc-tab>
+                `,
+            )}
+          </mwc-tab-bar>
+          <div class="tab-content">${cache(this.renderTabbedContent())}</div>
+        </div>
+      </div>
+      ${this.renderDrawer()} ${this.renderFooter()}
+    `;
+  }
+
+  private openForeignInfluenceMenu(
+    ev: MouseEvent & { currentTarget: HTMLElement },
+  ) {
+    const { id } = ev.currentTarget.dataset;
+    const influence = this.character.foreignPsiInfluences.find(
+      (i) => i.id === id,
+    );
+    if (!influence || !id) return;
+    const { name } = influenceInfo(influence);
+    openMenu({
+      position: ev,
+      header: { heading: name },
+      content: [
+        {
+          label: `${localize('end')} ${localize('influence')}`,
+          callback: () => {
+            this.character.updater
+              .path('flags', EP.Name, 'foreignPsiInfluences')
+              .commit(
+                (influences) => influences && removeFeature(influences, id),
+              );
+          },
+        },
+      ],
+    });
+  }
+
+  private renderForeignInfluences() {
+    const { foreignPsiInfluences } = this.character;
+
+    return html` ${foreignPsiInfluences.length
+      ? html` <h3 class="foreign-influence-heading">
+            ${localize('foreign')} ${localize('psiInfluences')}
+          </h3>
+          <sl-animated-list class="foreign-influences">
+            ${repeat(foreignPsiInfluences, idProp, (influence) => {
+              const { timeState } = influence;
+              const remaining = prettyMilliseconds(timeState.remaining, {
+                compact: true,
+                approx: true,
+                whenZero: localize('expired'),
+              });
+              const badge = html`
+                <span
+                  class="badge ${timeState.completed ? 'expired' : ''}"
+                  slot="after"
+                  >${remaining}</span
+                >
+              `;
+
+              if (influence.type === PsiInfluenceType.Motivation) {
+                const { motivation, description } = influence;
+                return html`
+                  <colored-tag
+                    data-id=${influence.id}
+                    @click=${this.openForeignInfluenceMenu}
+                    clickable
+                    ?disabled=${this.character.disabled}
+                    @mouseover=${(
+                      ev: MouseEvent & { currentTarget: HTMLElement },
+                    ) => {
+                      tooltip.attach({
+                        el: ev.currentTarget,
+                        content: html` <p
+                            style="color: var(--color-primary-alt)"
+                          >
+                            ${prettyMilliseconds(timeState.remaining, {
+                              compact: false,
+                              whenZero: localize('expired'),
+                            })}
+                            ${timeState.completed
+                              ? ''
+                              : localize('remaining').toLocaleLowerCase()}
+                          </p>
+                          <p>${description}</p>`,
+                        position: 'bottom-middle',
+                      });
+                    }}
+                  >
+                    <span class="motivation"
+                      ><mwc-icon class=${motivation.stance}
+                        >${motivation.stance === MotivationStance.Support
+                          ? 'add'
+                          : 'remove'}</mwc-icon
+                      >
+                      ${motivation.cause}
+                    </span>
+                    ${badge}
+                  </colored-tag>
+                `;
+              }
+
+              if (influence.type === PsiInfluenceType.Trait) {
+                const { name, description } = influenceInfo(influence);
+                return html`
+                  <colored-tag
+                    data-id=${influence.id}
+                    @click=${this.openForeignInfluenceMenu}
+                    clickable
+                    ?disabled=${this.character.disabled}
+                    @mouseover=${(
+                      ev: MouseEvent & { currentTarget: HTMLElement },
+                    ) => {
+                      tooltip.attach({
+                        el: ev.currentTarget,
+                        content: html` <p
+                            style="color: var(--color-primary-alt)"
+                          >
+                            ${prettyMilliseconds(timeState.remaining, {
+                              compact: false,
+                              whenZero: localize('expired'),
+                            })}
+                            ${timeState.completed
+                              ? ''
+                              : localize('remaining').toLocaleLowerCase()}
+                          </p>
+                          <enriched-html
+                            style="padding: 0 0.5rem"
+                            .content=${description}
+                          ></enriched-html>`,
+                        position: 'bottom-middle',
+                      });
+                    }}
+                    >${name} ${badge}
+                  </colored-tag>
+                `;
+              }
+              if (influence.type === PsiInfluenceType.Unique) {
+                const { name, description } = influenceInfo(influence);
+                const { durationFormula, interval, items } = influence.effects;
+                const hasEffects = items.length;
+                return html` <span
+                  class="unique ${hasEffects ? 'has-effects' : ''}"
+                  ><colored-tag
+                    data-id=${influence.id}
+                    data-tooltip=${description}
+                    @mouseover=${tooltip.fromData}
+                    @click=${this.openForeignInfluenceMenu}
+                    clickable
+                    ?disabled=${this.character.disabled}
+                    >${name} ${badge}
+                  </colored-tag>
+                  ${hasEffects
+                    ? html`<colored-tag
+                        type="usable"
+                        clickable
+                        ?disabled=${this.character.disabled}
+                        data-tooltip=${items.map(formatEffect).join('. ')}
+                        @mouseover=${tooltip.fromData}
+                        @click=${() => {
+                          const roll = rollFormula(durationFormula);
+                          roll?.toMessage({ flavor: localize(interval) });
+                          const total = roll?.total || 1;
+                          const duration =
+                            interval === EPTimeInterval.ActionTurns
+                              ? CommonInterval.Turn * total
+                              : toMilliseconds({ [interval]: total });
+                          this.character.updater
+                            .path('data', 'temporary')
+                            .commit((temps) =>
+                              addFeature(
+                                temps,
+                                createTemporaryFeature.effects({
+                                  name,
+                                  effects: items,
+                                  duration,
+                                }),
+                              ),
+                            );
+                        }}
+                        >${localize('applyEffects')}</colored-tag
+                      >`
+                    : ''}</span
+                >`;
+              }
+
+              const { name, description } = influenceInfo(influence);
+
+              return html`
+                <colored-tag
+                  data-id=${influence.id}
+                  data-tooltip=${description}
+                  @mouseover=${tooltip.fromData}
+                  @click=${this.openForeignInfluenceMenu}
+                  clickable
+                  ?disabled=${this.character.disabled}
+                  >${name} ${badge}
+                </colored-tag>
+              `;
+            })}
+          </sl-animated-list>`
+      : ''}`;
+  }
+
+  private renderInitiativeButton() {
+    return html`<mwc-button
+      dense
+      class="initiative"
+      @click=${this.openInitiativeMenu}
+      ?disabled=${this.character.disabled}
+    >
+      ${localize('initiative')}: ${this.character.initiative}
+    </mwc-button>`;
+  }
+
+  private renderHeader() {
+    const {
+      ego,
+      sleeve,
+      pools,
+      disabled,
+      armor,
+      img,
+      movementRates,
+      movementModifiers,
+    } = this.character;
     const { filteredMotivations, settings } = ego;
     const physicalHealth =
       sleeve && 'physicalHealth' in sleeve && sleeve.physicalHealth;
     const meshHealth =
       sleeve && 'activeMeshHealth' in sleeve && sleeve.activeMeshHealth;
+    const canPlace = userCan('TEMPLATE_CREATE');
 
-    return html`
-      <header>
+    return html`<div class="header">
+      <div class="main-entities">
+        <div class="avatar">
+          <img src=${img} width="84px" />
+        </div>
+
         <div class="entities">
-          <div class="avatar">
-            <img src=${character.img} width="60px" />
-          </div>
-          <div class="ego">
-            <button class="ego-name">
-              <span @click=${ego.openForm}>${character.name}</span>
+          <div class="ego-entity">
+            <button class="entity-name">
+              <span @click=${ego.openForm}>${ego.name}</span>
             </button>
+            <span class="info">
+              ${compact([
+                `${ego.egoType} ${localize('ego')}`,
+                ego.forkStatus &&
+                  `${localize(ego.forkStatus)} ${localize('fork')}`,
+              ]).join(' • ')}
+            </span>
+            ${this.compact ? this.renderInitiativeButton() : ''}
+          </div>
+
+          <div class="sleeve-entity">
+            <button class="entity-name" @click=${sleeve?.openForm}>
+              ${sleeve?.name || `${localize('add')} ${localize('sleeve')}`}
+            </button>
+            ${sleeve
+              ? html`
+                  <span class="info">
+                    ${formattedSleeveInfo(sleeve).join(' • ')}</span
+                  >
+                `
+              : ''}
+          </div>
+        </div>
+
+        <div class="combo-extras">
+          <div class="buttons">
             ${settings.trackPoints
               ? html`
                   <sl-animated-list class="resource-points">
@@ -206,80 +521,20 @@ export class CharacterViewAlt extends CharacterViewBase {
                   </sl-animated-list>
                 `
               : ''}
-            <div class="info">
-              ${compact([
-                `${ego.egoType} ${localize('ego')}`,
-                ego.forkStatus &&
-                  `${localize(ego.forkStatus)} ${localize('fork')}`,
-              ]).join(' • ')}
-            </div>
-
-            ${notEmpty(filteredMotivations)
+            ${this.character.ego.hasStressRoll
               ? html`
-                  <sl-animated-list class="motivations-list"
-                    >${repeat(
-                      filteredMotivations,
-                      idProp,
-                      this.renderMotivation,
-                    )}</sl-animated-list
-                  >
+                  <mwc-button
+                    class="stress-roll"
+                    dense
+                    slot="action"
+                    label="${localize('SHORT', 'stressValue')}: ${this.character
+                      .ego.stressValueInfo.value}"
+                    @click=${this.rollStress}
+                  ></mwc-button>
                 `
               : ''}
+            ${this.compact ? '' : this.renderInitiativeButton()}
           </div>
-          ${psi
-            ? html`<character-view-psi
-                .character=${character}
-                .psi=${psi}
-              ></character-view-psi>`
-            : ''}
-        </div>
-
-        <div class="shared">
-          ${notEmpty(armor)
-            ? html`
-                <div
-                  class="armor"
-                  @click=${this.setDrawerRenderer}
-                  data-renderer=${CharacterDrawerRenderer.Armor}
-                  @keydown=${clickIfEnter}
-                  tabindex="0"
-                  role="button"
-                >
-                  <sl-animated-list class="values">
-                    ${repeat(enumValues(ArmorType), identity, (type) => {
-                      const value = armor.getClamped(type);
-                      const reduced = armor.reducedArmors.has(type);
-                      return value || reduced
-                        ? html`<span class="rating ${classMap({ reduced })}"
-                            ><img
-                              src=${localImage('icons/armor/shield.svg')}
-                              width="16"
-                            />
-                            <span class="label"> ${localize(type)}</span>
-                            <span class="value">${value}</span></span
-                          >`
-                        : '';
-                    })}
-
-                    <span class="rating info">
-                      <img
-                        src=${localImage('icons/armor/layered-armor.svg')}
-                        width="16"
-                      />
-                      <span class="label">${localize('layers')}</span>
-                      <span class="value">${armor.layers}</span></span
-                    >
-                    ${armor.concealable
-                      ? html`
-                          <span class="rating info concealable"
-                            >${localize('concealable')}</span
-                          >
-                        `
-                      : ''}
-                  </sl-animated-list>
-                </div>
-              `
-            : ''}
           ${notEmpty(pools)
             ? html`
                 <ul class="pools">
@@ -292,11 +547,15 @@ export class CharacterViewAlt extends CharacterViewBase {
                       tabindex=${disabled ? '-1' : 0}
                       role="button"
                       data-pool=${pool.type}
+                      data-tooltip=${localize(pool.type)}
+                      @mouseover=${tooltip.fromData}
+                      @focus=${tooltip.fromData}
                       @click=${this.openPoolMenu}
                       ?disabled=${disabled}
                     >
                       <img height="22px" src=${pool.icon} />
-                      <span> ${localize(pool.type)} </span>
+                      <span></span>
+                      <!-- <span> ${localize(pool.type)} </span> -->
                       <value-status
                         value=${pool.available}
                         max=${pool.max}
@@ -306,107 +565,158 @@ export class CharacterViewAlt extends CharacterViewBase {
                 </ul>
               `
             : ''}
+        </div>
+      </div>
 
-          <div class="healths">
-            ${settings.trackMentalHealth
-              ? html` <health-item
-                  clickable
-                  data-renderer=${CharacterDrawerRenderer.MentalHealth}
-                  @click=${this.setDrawerRenderer}
-                  class="mental-health-view"
-                  .health=${ego.mentalHealth}
-                  ><span slot="source">${localize('mental')}</span></health-item
-                >`
-              : ''}
-            ${physicalHealth
-              ? html`
-                  <health-item
-                    clickable
-                    data-renderer=${CharacterDrawerRenderer.SleevePhysicalHealth}
-                    @click=${this.setDrawerRenderer}
-                    .health=${physicalHealth}
+      <div class="extras">
+        ${notEmpty(filteredMotivations)
+          ? html`
+              <sl-animated-list class="motivations-list"
+                >${repeat(
+                  filteredMotivations,
+                  idProp,
+                  this.renderMotivation,
+                )}</sl-animated-list
+              >
+            `
+          : ''}
+        ${sleeve?.type === ActorType.Synthetic && sleeve.hasPainFilter
+          ? html`
+              <mwc-formfield label=${localize('painFilter')} class="pain-filter"
+                ><mwc-switch
+                  ?disabled=${disabled}
+                  ?checked=${sleeve.painFilterActive}
+                  @change=${() => sleeve.togglePainFilter()}
+                ></mwc-switch
+              ></mwc-formfield>
+            `
+          : ''}
+      </div>
+      <div class="armor-movement">
+        ${notEmpty(armor)
+          ? html`
+              <div
+                class="armor"
+                @click=${this.setDrawerRenderer}
+                data-renderer=${CharacterDrawerRenderer.Armor}
+                @keydown=${clickIfEnter}
+                tabindex="0"
+                role="button"
+              >
+                <sl-animated-list class="values">
+                  ${repeat(enumValues(ArmorType), identity, (type) => {
+                    const value = armor.getClamped(type);
+                    const reduced = armor.reducedArmors.has(type);
+                    return value || reduced
+                      ? html`<span class="rating ${classMap({ reduced })}"
+                          ><img
+                            src=${localImage('icons/armor/shield.svg')}
+                            width="16"
+                          />
+                          <span class="label"> ${localize(type)}</span>
+                          <span class="value">${value}</span></span
+                        >`
+                      : '';
+                  })}
+
+                  <span class="rating info">
+                    <img
+                      src=${localImage('icons/armor/layered-armor.svg')}
+                      width="16"
+                    />
+                    <span class="label">${localize('layers')}</span>
+                    <span class="value">${armor.layers}</span></span
                   >
-                  </health-item>
-                `
-              : ''}
-            ${meshHealth && sleeve
-              ? html` <health-item
-                  clickable
-                  data-renderer=${CharacterDrawerRenderer.SleeveMeshHealth}
-                  @click=${this.setDrawerRenderer}
-                  .health=${meshHealth}
-                >
-                  ${sleeve.type !== ActorType.Infomorph &&
-                  sleeve.nonDefaultBrain
+                  ${armor.concealable
                     ? html`
-                        <span slot="source"
-                          >${sleeve.nonDefaultBrain.name}</span
+                        <span class="rating info concealable"
+                          >${localize('concealable')}</span
                         >
                       `
                     : ''}
-                </health-item>`
-              : ''}
-          </div>
-        </div>
-      </header>
-      <div class="extra">
-        <div class="sleeve">
-          ${sleeve ? this.renderSleeve(sleeve) : this.renderSleeveSelect()}
-        </div>
+                </sl-animated-list>
+              </div>
+            `
+          : ''}
 
-        <div class="buttons">
-          <mwc-button
-            dense
-            class="initiative"
-            @click=${this.openInitiativeMenu}
-          >
-            ${localize('initiative')}: ${this.character.initiative}
-          </mwc-button>
-
-          ${this.character.ego.hasStressRoll
+        <div class="movement">
+          ${(['encumbered', 'overburdened'] as const).map((mod) => {
+            const val = movementModifiers[mod];
+            return val ? html`<span class="mod">${localize(mod)}</span>` : '';
+          })}
+          ${notEmpty(movementRates)
             ? html`
-                <mwc-button
-                  class="stress-roll"
-                  dense
-                  slot="action"
-                  label="${localize('SHORT', 'stressValue')}: ${this.character
-                    .ego.stressValueInfo.value}"
-                  @click=${this.rollStress}
-                ></mwc-button>
+                ${sortBy(
+                  movementRates,
+                  ({ type }) => localize(type).length,
+                ).map(
+                  ({ type, base, full, skill }) => html`
+                    <span
+                      class="movement-rate"
+                      title=${`${localize('use')} ${skill}`}
+                      >${localize(type)}
+                      <span class="rate"
+                        ><button
+                          ?disabled=${!canPlace || !base}
+                          @click=${() =>
+                            this.placeMovementPreviewTemplate(base)}
+                        >
+                          ${base}
+                        </button>
+                        /
+                        <button
+                          ?disabled=${!canPlace || !full}
+                          @click=${() =>
+                            this.placeMovementPreviewTemplate(full)}
+                        >
+                          ${full}
+                        </button></span
+                      ></span
+                    >
+                  `,
+                )}
               `
             : ''}
         </div>
       </div>
-
-      ${this.compact
-        ? ''
-        : html`<character-view-test-actions
-            class="actions"
-            .character=${this.character}
-            .ego=${this.character.ego}
-          ></character-view-test-actions>`}
-
-      <div class="tabbed-section">
-        <mwc-tab-bar
-          @MDCTabBar:activated=${this.setTab}
-          activeIndex=${currentTabs.findIndex((t) => t === this.currentTab)}
-        >
-          ${currentTabs.map(
-            (tab: CharacterTab) =>
-              html`
-                <mwc-tab
-                  @dragenter=${tab === 'gear' || tab === 'traits'
-                    ? this.activateTab
-                    : noop}
-                  label=${localize(tab)}
-                ></mwc-tab>
-              `,
-          )}
-        </mwc-tab-bar>
-        <div class="tab-content">${cache(this.renderTabbedContent())}</div>
+      <div class="main-healths">
+        ${settings.trackMentalHealth
+          ? html` <health-item
+              clickable
+              data-renderer=${CharacterDrawerRenderer.MentalHealth}
+              @click=${this.setDrawerRenderer}
+              class="mental-health-view"
+              .health=${ego.mentalHealth}
+              ><span slot="source">${localize('mental')}</span></health-item
+            >`
+          : ''}
+        ${physicalHealth
+          ? html`
+              <health-item
+                clickable
+                data-renderer=${CharacterDrawerRenderer.SleevePhysicalHealth}
+                @click=${this.setDrawerRenderer}
+                .health=${physicalHealth}
+              >
+              </health-item>
+            `
+          : ''}
+        ${meshHealth && sleeve
+          ? html` <health-item
+              clickable
+              data-renderer=${CharacterDrawerRenderer.SleeveMeshHealth}
+              @click=${this.setDrawerRenderer}
+              .health=${meshHealth}
+            >
+              ${sleeve.type !== ActorType.Infomorph && sleeve.nonDefaultBrain
+                ? html`
+                    <span slot="source">${sleeve.nonDefaultBrain.name}</span>
+                  `
+                : ''}
+            </health-item>`
+          : ''}
       </div>
-      ${this.renderDrawer()} ${this.renderFooter()}
-    `;
+    </div>`;
   }
 
   activateTab(ev: DragEvent & { currentTarget: HTMLElement }) {
@@ -462,9 +772,17 @@ export class CharacterViewAlt extends CharacterViewBase {
         ${this.renderActionIconButton({
           tooltipText: localize('substances'),
           renderer: CharacterDrawerRenderer.Substances,
-          content: html`<img
-            src=${localImage('icons/actions/medicines.svg')}
-          />`,
+          content: html`<img src=${localImage('icons/actions/medicines.svg')} />
+            <notification-coin
+              value=${this.character.activeSubstances.length +
+              this.character.awaitingOnsetSubstances.length}
+              ?actionRequired=${this.character.awaitingOnsetSubstances.some(
+                (s) => s.awaitingOnsetTimeState.completed,
+              ) ||
+              this.character.activeSubstances.some(
+                ({ appliedInfo }) => appliedInfo.requiresAttention,
+              )}
+            ></notification-coin>`,
         })}
         ${this.renderActionIconButton({
           icon: 'groups',
@@ -477,6 +795,7 @@ export class CharacterViewAlt extends CharacterViewBase {
           renderer: CharacterDrawerRenderer.NetworkSettings,
         })}
       </div>
+
       ${this.character.poolHolder === this.character
         ? this.renderRecharges()
         : ''}
@@ -615,6 +934,19 @@ export class CharacterViewAlt extends CharacterViewBase {
     return html` <item-trash .proxy=${this.character}></item-trash> `;
   };
 
+  private static traits = [ItemGroup.EgoTraits, ItemGroup.MorphTraits];
+
+  private static sleights = [
+    ItemGroup.PassiveSleights,
+    ItemGroup.ActiveSleights,
+  ];
+
+  private static gear = [
+    ItemGroup.Consumables,
+    ItemGroup.Equipped,
+    ItemGroup.Stashed,
+  ];
+
   private renderTabbedContent() {
     switch (this.currentTab) {
       case 'combat':
@@ -626,21 +958,32 @@ export class CharacterViewAlt extends CharacterViewBase {
         `;
 
       case 'gear':
-        return html`
-          ${repeat(
-            difference(enumValues(ItemGroup), [
-              ItemGroup.EgoTraits,
-              ItemGroup.MorphTraits,
-            ]),
-            identity,
-            this.renderItemGroup,
-          )}
-        `;
+        return html`${repeat(
+          CharacterViewAlt.gear,
+          identity,
+          this.renderItemGroup,
+        )}`;
 
       case 'traits':
-        return [ItemGroup.EgoTraits, ItemGroup.MorphTraits].map(
+        return html`${repeat(
+          CharacterViewAlt.traits,
+          identity,
           this.renderItemGroup,
-        );
+        )}`;
+
+      case 'sleights': {
+        const { applyLocalSleightEffects } = this.character;
+        return html`<div
+          class="sleights ${classMap({
+            inactive: !applyLocalSleightEffects,
+          })}"
+        >
+          ${!applyLocalSleightEffects
+            ? html`<div class="inactive">${localize('inactive')}</div>`
+            : ''}
+          ${repeat(CharacterViewAlt.sleights, identity, this.renderItemGroup)}
+        </div>`;
+      }
 
       case 'details':
         return this.renderDetails();
@@ -653,62 +996,6 @@ export class CharacterViewAlt extends CharacterViewBase {
         ></character-view-test-actions>`;
     }
   }
-
-  private renderSleeve(sleeve: Sleeve) {
-    const { armor, movementRates, movementModifiers, pools } = this.character;
-    const canPlace = userCan('TEMPLATE_CREATE');
-    return html`
-      <button class="sleeve-name" @click=${sleeve.openForm}>
-        ${sleeve.name}
-      </button>
-      <span class="info"> ${formattedSleeveInfo(sleeve).join(' • ')}</span>
-
-      <div class="movement">
-        ${(['encumbered', 'overburdened'] as const).map((mod) => {
-          const val = movementModifiers[mod];
-          return val ? html`<span class="mod">${localize(mod)}</span>` : '';
-        })}
-        ${notEmpty(movementRates)
-          ? html`
-              ${sortBy(movementRates, ({ type }) => localize(type).length).map(
-                ({ type, base, full, skill }) => html`
-                  <span
-                    class="movement-rate"
-                    title=${`${localize('use')} ${skill}`}
-                    >${localize(type)}
-                    <span class="rate"
-                      ><button
-                        ?disabled=${!canPlace || !base}
-                        @click=${() => this.placeMovementPreviewTemplate(base)}
-                      >
-                        ${base}
-                      </button>
-                      /
-                      <button
-                        ?disabled=${!canPlace || !full}
-                        @click=${() => this.placeMovementPreviewTemplate(full)}
-                      >
-                        ${full}
-                      </button></span
-                    ></span
-                  >
-                `,
-              )}
-            `
-          : ''}
-      </div>
-    `;
-  }
-
-  private renderPool = (pool: ReadonlyPool) => html`
-    <pool-item
-      @click=${this.openPoolMenu}
-      .pool=${pool}
-      ?disabled=${this.character.disabled}
-      ?wide=${this.character.pools.size <= 2}
-      data-pool=${pool.type}
-    ></pool-item>
-  `;
 
   private renderSleeveSelect() {
     return html``;
@@ -778,12 +1065,6 @@ export class CharacterViewAlt extends CharacterViewBase {
   >`;
 
   private renderItemGroup = (group: ItemGroup) => {
-    if (
-      group === ItemGroup.Sleights &&
-      !this.character.psi &&
-      !this.character.sleights.length
-    )
-      return '';
     return html`
       <character-view-item-group
         .character=${this.character}

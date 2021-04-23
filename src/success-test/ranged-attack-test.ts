@@ -85,7 +85,7 @@ export class RangedAttackTest extends SkillTest {
   // TODO Long modifier in melee
 
   readonly carryingFixedModifier = createSuccessTestModifier({
-    name: `${localize('carrying')} ${localize('fixed')}`,
+    name: `${localize('carrying')} ${localize('fixed')} ${localize('weapon')}`,
     value: -20,
   });
 
@@ -562,7 +562,7 @@ export class RangedAttackTest extends SkillTest {
     });
 
     if (pools.active) {
-      await this.character?.modifySpentPools({
+      await this.character?.addToSpentPools({
         pool: pools.active[0].type,
         points: 1,
       });

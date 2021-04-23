@@ -101,12 +101,15 @@ export class MeleeAttackTest extends SkillTest {
         sleeve && sleeve.type !== ActorType.Infomorph ? sleeve.unarmedDV : '0',
       touchOnly: meleeWeapon?.isTouchOnly,
       attackTarget: [...game.user.targets][0], // TODO get closest to token
+      damageIrrespectiveOfSize: meleeWeapon?.damageIrrespectiveOfSize,
       update: this.recipe((draft, changed) => {
         draft.melee = merge(draft.melee, changed);
         if (changed.weapon) {
           draft.melee.primaryAttack = true;
           draft.melee.touchOnly = draft.melee.weapon?.isTouchOnly;
           draft.melee.oneHanded = false;
+          draft.melee.damageIrrespectiveOfSize =
+            draft.melee.weapon?.damageIrrespectiveOfSize;
         }
         if (changed.attackTarget) {
           draft.modifiers.effects = this.getModifierEffects(
@@ -321,6 +324,7 @@ export class MeleeAttackTest extends SkillTest {
             'unarmedDV',
             'oneHanded',
             'calledShot',
+            'damageIrrespectiveOfSize',
           ]),
           morphSize: this.character.morphSize,
           damageModifiers: damageModifierEffects,
@@ -332,7 +336,7 @@ export class MeleeAttackTest extends SkillTest {
     });
 
     if (pools.active) {
-      this.character?.modifySpentPools({
+      this.character?.addToSpentPools({
         pool: pools.active[0].type,
         points: 1,
       });

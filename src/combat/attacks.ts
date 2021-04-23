@@ -61,13 +61,17 @@ export type UsedAttackArmor = {
 
 export type SleightAttackData = {
   damageFormula: string;
-  mentalArmor: boolean;
-  perTurn: boolean;
+  useMentalArmor: boolean;
+  // interval: number;
   attackTraits: AttackTrait[];
   damageType: HealthType;
-  aptitudeCheckInfo: AptitudeCheckInfo;
+  // aptitudeCheckInfo: AptitudeCheckInfo;
   notes: string;
 };
+
+export type SleightAttack = FullAttack<
+  Omit<SleightAttackData, 'useMentalArmor'>
+>;
 
 export type SoftwareAttackData = Omit<UsedAttackArmor, 'armorUsed'> & {
   label: string;

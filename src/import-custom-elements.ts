@@ -37,13 +37,17 @@ import { MessageHealthChange } from './chat/components/health-change/message-hea
 import { MessageInfectionTest } from './chat/components/infection-test/message-infection-test';
 import { MessageInfluenceRoll } from './chat/components/influence-roll/message-influence-roll';
 import { MessageMeleeAttack } from './chat/components/melee-attack/message-melee-attack';
+import { MessagePsiTest } from './chat/components/psi-test/message-psi-test';
 import { MessageRangedAttack } from './chat/components/ranged-attack/message-ranged-attack';
+import { MessageShareInfluence } from './chat/components/share-influence/message-share-influence';
+import { MessageSleightSustainEnd } from './chat/components/sleight-sustain-end/message-sleight-sustain-end';
 import { MessageSpecialTest } from './chat/components/special-test/message-special-test';
 import { MessageStressTest } from './chat/components/stress-test/message-stress-test';
 import { MessageSubstanceUse } from './chat/components/substance/message-substance-use';
 import { MessageSuccessTest } from './chat/components/success-test/message-success-test';
 import { MessageThrownAttack } from './chat/components/thrown-attack/message-thrown-attack';
 import { CombatView } from './combat/components/combat-view/combat-view';
+import { CustomRollApp } from './combat/components/custom-roll-app/custom-roll-app';
 import { MultiplierSelect } from './combat/components/multiplier-select/multiplier-select';
 import { RolledFormulasList } from './combat/components/rolled-formulas-list/rolled-formulas-list';
 import { AnimatedList } from './components/animated-list/animated-list';
@@ -90,6 +94,7 @@ import { CharacterViewAttacksSection } from './entities/actor/components/charact
 import { ConsumableCard } from './entities/actor/components/character-views/components/cards/consumable/consumable-card';
 import { ItemCard } from './entities/actor/components/character-views/components/cards/generic/item-card';
 import { PhysicalTechCard } from './entities/actor/components/character-views/components/cards/physical-tech/physical-tech-card';
+import { SleightCard } from './entities/actor/components/character-views/components/cards/sleight/sleight-card';
 import { WeaponCard } from './entities/actor/components/character-views/components/cards/weapon/weapon-card';
 import { CharacterViewConditions } from './entities/actor/components/character-views/components/conditions/character-view-conditions';
 import { CharacterViewDrawerHeading } from './entities/actor/components/character-views/components/drawer-heading/character-view-drawer-heading';
@@ -177,6 +182,7 @@ import { InfectionTestControls } from './success-test/components/infection-test-
 import { MeleeAttackControls } from './success-test/components/melee-attack-controls/melee-attack-controls';
 import { SuccessTestModifiersSection } from './success-test/components/modifiers-section/success-test-modifiers-section';
 import { SuccessTestPoolControls } from './success-test/components/pool-controls/success-test-pool-controls';
+import { PsiTestControls } from './success-test/components/psi-test-controls/psi-test-controls';
 import { RangedAttackControls } from './success-test/components/ranged-attack-controls/ranged-attack-controls';
 import { ReputationFavorControls } from './success-test/components/reputation-favor-controls/reputation-favor-controls';
 import { SuccessTestSectionLabel } from './success-test/components/section-label/success-test-section-label';
@@ -261,6 +267,7 @@ ItemCard;
 ConsumableCard;
 PhysicalTechCard;
 WeaponCard;
+SleightCard;
 
 // Ego
 EgoForm;
@@ -339,6 +346,7 @@ EnvironmentForms;
 // Combat
 RolledFormulasList;
 CombatView;
+CustomRollApp;
 
 // Chat
 MessageHeader;
@@ -360,6 +368,9 @@ MessageSpecialTest;
 MessageHack;
 MessageInfectionTest;
 MessageInfluenceRoll;
+MessagePsiTest;
+MessageSleightSustainEnd;
+MessageShareInfluence;
 
 // SuccessTest
 AptitudeCheckControls;
@@ -376,4 +387,5 @@ HackingTestControls;
 SuccessTestSkillSection;
 SoftwareSkillTestControls;
 RangedAttackControls;
+PsiTestControls;
 InfectionTestControls;

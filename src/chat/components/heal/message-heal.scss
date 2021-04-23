@@ -31,3 +31,11 @@ mwc-button[unelevated] {
 rolled-formulas-list {
   margin-top: 0.25rem;
 }
+
+.additional {
+  display: flex;
+  flex-flow: column;
+  border: 1px solid var(--color-border);
+  padding: 0.25rem;
+  box-shadow: 0 0 4px black;
+}

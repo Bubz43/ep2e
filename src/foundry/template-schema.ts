@@ -42,7 +42,6 @@ import type {
   RechargeType,
   ShellType,
   SleightDuration,
-  SleightSpecial,
   SleightType,
   SoftwareType,
   SprayPayload,
@@ -157,7 +156,7 @@ type ActorTemplates = Template<'Common', CommonDetails> &
 type UseActorTemplate<T extends (keyof ActorTemplates)[]> = T;
 type UseItemTemplate<T extends (keyof ItemTemplates)[]> = T;
 
-type StressTestData = {
+export type StressTestData = {
   sv: string;
   minStressOption: MinStressOption;
   minSV: number;
@@ -353,6 +352,21 @@ type TraitData = {
   };
 };
 
+type SleightEffects = {
+  effects: StringID<Effect>[];
+  scaleEffectsOnSuperior: boolean;
+  mentalArmor: {
+    apply: boolean;
+    formula: string;
+    divisor: number;
+  };
+  attack: SleightAttackData;
+  heal: {
+    amount: string;
+    health: HealthType;
+  };
+};
+
 type SleightData = {
   templates: UseItemTemplate<['Common']>;
   sleightType: SleightType;
@@ -363,24 +377,27 @@ type SleightData = {
    */
   infectionMod: number;
   action: ActionType;
-  effectsOnTarget: StringID<Effect>[];
-  effectsOnSelf: StringID<Effect>[];
-  // effects: StringID<Effect>[];
-  // TODO: Maybe describe what happens when push
-  // TODO: Grant check to do x
+  timeframe: number;
+  effectsToSelf: StringID<Effect>[];
+  effectsToTarget: StringID<Effect>[];
   scaleEffectsOnSuperior: boolean;
-  special: '' | SleightSpecial;
   mentalArmor: {
+    apply: boolean;
     formula: string;
     divisor: number;
   };
   attack: SleightAttackData;
   heal: {
-    amount: string;
-    health: HealthType;
+    formula: string;
+    healthType: HealthType;
   };
-  state: {
-    sustained: boolean;
+
+  status: {
+    sustaining: boolean;
+    sustainingOn: { name: string; uuid: string; temporaryFeatureId: string }[];
+    pushDuration: number;
+    pushStartTime: number;
+    pushed: boolean;
   };
 };
 

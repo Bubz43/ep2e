@@ -14,7 +14,9 @@ import { renderLabeledCheckbox } from '@src/components/field/fields';
 import { renderSubmitForm } from '@src/components/form/forms';
 import { openWindow } from '@src/components/window/window-controls';
 import { ResizeOption } from '@src/components/window/window-options';
+import { readyCanvas } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
+import { capitalize } from '@src/foundry/misc-helpers';
 import { gameSettings } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
 import { openMenu } from '@src/open-menu';
@@ -70,6 +72,9 @@ export class CombatView extends LitElement {
   }
 
   async connectedCallback() {
+    if (!readyCanvas() && game.scenes.size) {
+      await new Promise((resolve) => Hooks.on('canvasReady', resolve));
+    }
     this.unsub = gameSettings.combatState.subscribe((newState) => {
       const { combatState } = this;
 
@@ -271,7 +276,6 @@ export class CombatView extends LitElement {
 
   private async rollNPCInitiatives() {
     const { players } = game.users;
-    console.log(players);
     const participants = this.participants.filter((participant) => {
       const { actor } = getParticipantEntities(participant);
       return !actor || !players.some((user) => actor.hasPerm(user, 'OWNER'));
@@ -382,7 +386,7 @@ export class CombatView extends LitElement {
         <h2 class="round">
           ${round
             ? ` ${surprise ? localize('surprise') : ''}
-                    ${localize('round')} ${surprise ? '' : round}`
+                    ${capitalize(localize('turn'))} ${surprise ? '' : round}`
             : localize('preparation')}
         </h2>
 
