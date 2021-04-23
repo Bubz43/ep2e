@@ -59,6 +59,8 @@ export class SleightForm extends ItemFormBase {
 
   update(changedProps: PropertyValues<this>) {
     if (this.item.isChi) this.effectGroup = 'self';
+    else if (this.item.duration !== SleightDuration.Sustained)
+      this.effectGroup = 'target';
 
     super.update(changedProps);
   }
@@ -217,7 +219,7 @@ export class SleightForm extends ItemFormBase {
     return html`
       <h3>${localize('add')} ${localize('effect')}</h3>
 
-      ${this.item.isChi
+      ${this.item.isChi || this.item.duration !== SleightDuration.Sustained
         ? ''
         : html`
             ${renderAutoForm({
