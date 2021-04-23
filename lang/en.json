@@ -1459,6 +1459,7 @@
     "scaleToTargetEffectsOnSuperior": "Scale effects to target on superior success",
     "useMentalArmor": "Use Mental Armor",
     "whileSustaining": "While Sustaining",
+    "share": "Share",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

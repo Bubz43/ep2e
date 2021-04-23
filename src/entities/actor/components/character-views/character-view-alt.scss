@@ -37,13 +37,13 @@ h3 {
   grid-area: content;
   display: grid;
   grid-template-areas:
-    'extra tabs'
+    'psi tabs'
     'actions tabs';
   grid-template-rows: min-content 1fr;
 }
 
 :host([compact]) {
-  character-view-psi {
+  .psi {
     grid-area: 1 / 1 / 2 / -1;
     border-right: none;
   }
@@ -206,9 +206,8 @@ h3 {
   }
 }
 
-character-view-psi {
-  grid-area: extra;
-  margin: 0;
+.psi {
+  grid-area: psi;
   border-right: 1px solid var(--color-border);
 }
 

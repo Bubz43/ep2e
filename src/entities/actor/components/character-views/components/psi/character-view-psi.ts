@@ -257,6 +257,12 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
             );
           },
         },
+        {
+          label: `${localize('share')} ${localize('influence')}`,
+          callback: () => {
+            // TODO: Have to set trait level when sharing
+          },
+        },
       ],
     });
   }

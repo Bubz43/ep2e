@@ -27,7 +27,7 @@ import type { Sleight } from '@src/entities/item/proxies/sleight';
 import type { Software } from '@src/entities/item/proxies/software';
 import type { Substance } from '@src/entities/item/proxies/substance';
 import type { ThrownWeapon } from '@src/entities/item/proxies/thrown-weapon';
-import type { Trait } from '@src/entities/item/proxies/trait';
+import { Trait } from '@src/entities/item/proxies/trait';
 import type { ActorEntity, SleeveType } from '@src/entities/models';
 import type { UpdateStore } from '@src/entities/update-store';
 import { taskState } from '@src/features/actions';
@@ -41,7 +41,7 @@ import {
 import { updateFeature } from '@src/features/feature-helpers';
 import type { MovementRate } from '@src/features/movement';
 import { Pool, Pools } from '@src/features/pool';
-import { PsiInfluenceType } from '@src/features/psi-influence';
+import { influenceInfo, PsiInfluenceType } from '@src/features/psi-influence';
 import { Recharge } from '@src/features/recharge';
 import { getEffectsFromSize } from '@src/features/size';
 import {
@@ -57,6 +57,7 @@ import {
   refreshAvailable,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
+import { deepMerge } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { HealthEditor } from '@src/health/components/health-editor/health-editor';
 import type { ActorHealth } from '@src/health/health-mixin';
@@ -360,6 +361,57 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
   get conditions() {
     return this.sleeve?.conditions ?? [];
+  }
+
+  @LazyGetter()
+  get foreignPsiInfluences() {
+    return (this.epFlags?.foreignPsiInfluences || []).map((influence) => {
+      const active = ('active' in influence && influence.active) || {
+        duration: -1,
+        startTime: 0,
+      };
+      const timeState = createLiveTimeState({
+        ...active,
+        id: influence.id,
+        label: influenceInfo(influence).name,
+        updateStartTime: (newStartTime) => {
+          this.updater.path('flags', EP.Name, 'foreignPsiInfluences').commit(
+            (influences) =>
+              influences &&
+              updateFeature(influences, {
+                id: influence.id,
+                active: { ...active, startTime: newStartTime },
+              }),
+          );
+        },
+      });
+
+      return influence.type === PsiInfluenceType.Trait
+        ? {
+            ...influence,
+            timeState,
+            trait: new Trait({
+              data: influence.trait,
+              embedded: this.name,
+              lockSource: true,
+              isPsiInfluence: true,
+              temporary: localize('psiInfluence'),
+              // updater: new UpdateStore({
+              //   getData: () => influence.trait,
+              //   isEditable: () => this.editable,
+              //   setData: (changed) => {
+              //     this.influenceCommiter((influences) =>
+              //       updateFeature(influences, {
+              //         id: influence.id,
+              //         trait: deepMerge(influence.trait, changed),
+              //       }),
+              //     );
+              //   },
+              // }),
+            }),
+          }
+        : { ...influence, timeState };
+    });
   }
 
   @LazyGetter()
@@ -886,13 +938,20 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
     // This has to go after item setup to make sure sleeve has brain item
     const { applyLocalSleightEffects } = this;
-    if (this.ego.psi) {
+    if (this.ego.psi?.isFunctioning) {
       for (const [activeInfluence] of this.ego.psi.activePsiInfluences) {
         if (activeInfluence.type === PsiInfluenceType.Trait) {
           const { trait } = activeInfluence;
           this[trait.isMorphTrait ? 'morphTraits' : 'egoTraits'].push(trait);
           this._appliedEffects.add(trait.currentEffects);
         }
+      }
+    }
+    for (const foreignInfluence of this.foreignPsiInfluences) {
+      if (foreignInfluence.type === PsiInfluenceType.Trait) {
+        const { trait } = foreignInfluence;
+        this[trait.isMorphTrait ? 'morphTraits' : 'egoTraits'].push(trait);
+        this._appliedEffects.add(trait.currentEffects);
       }
     }
     for (const sleight of sleights) {

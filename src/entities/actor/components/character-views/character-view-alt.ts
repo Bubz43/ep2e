@@ -13,6 +13,7 @@ import { ArmorType } from '@src/features/active-armor';
 import { conditionIcons, ConditionType } from '@src/features/conditions';
 import { idProp } from '@src/features/feature-helpers';
 import { MotivationStance } from '@src/features/motivations';
+import { influenceInfo } from '@src/features/psi-influence';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
 import { tooltip } from '@src/init';
@@ -187,16 +188,27 @@ export class CharacterViewAlt extends CharacterViewBase {
 
   render() {
     const { character, currentTabs } = this;
-    const { psi } = character;
+    const { psi, foreignPsiInfluences } = character;
     return html`
       ${this.renderHeader()}
       <div class="content">
-        ${psi
-          ? html`<character-view-psi
-              .character=${this.character}
-              .psi=${psi}
-            ></character-view-psi>`
-          : ''}
+        <div class="psi">
+          ${psi
+            ? html`<character-view-psi
+                .character=${this.character}
+                .psi=${psi}
+              ></character-view-psi>`
+            : ''}
+          ${foreignPsiInfluences.length
+            ? html`<sl-animated-list>
+                ${repeat(foreignPsiInfluences, idProp, (influence) => {
+                  const { name, description } = influenceInfo(influence);
+                  return html`<colored-tag>${name}</colored-tag>`;
+                })}
+              </sl-animated-list>`
+            : ''}
+        </div>
+
         ${this.compact
           ? ''
           : html`<character-view-test-actions

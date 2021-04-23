@@ -58,6 +58,7 @@ type ActorFlags<T extends ActorType> = T extends ActorType.Character
       vehicle: ActorEntity<ActorType.Synthetic> | null;
       [ItemType.Psi]: ItemEntity<ItemType.Psi> | null;
       compactSheet: boolean;
+      foreignPsiInfluences: StringID<PsiInfluenceData>[];
     } & { [key in SleeveType]: ActorEntity<key> | null }
   : never;
 

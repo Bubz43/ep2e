@@ -1485,7 +1485,8 @@ type LangEntries =
   | 'ease'
   | 'useMentalArmor'
   | 'scaleToTargetEffectsOnSuperior'
-  | 'whileSustaining';
+  | 'whileSustaining'
+  | 'share';
 type FullNames =
   | 'cog'
   | 'int'
