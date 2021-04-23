@@ -1,5 +1,5 @@
 {
-  "version": 0.68,
+  "version": 0.681,
   "name": "ep2e",
   "title": "Eclipse Phase 2e",
   "description": "Eclipse Phase 2e Game System.",
@@ -111,6 +111,13 @@
       "system": "ep2e",
       "label": "Substances",
       "path": "./packs/substances.db",
+      "entity": "Item"
+    },
+    {
+      "name": "psi-sub-strains",
+      "system": "ep2e",
+      "label": "Psi Sub-Strains",
+      "path": "./packs/psi-sub-strains.db",
       "entity": "Item"
     },
     {
