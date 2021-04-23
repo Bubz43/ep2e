@@ -114,6 +114,27 @@
       "entity": "Item"
     },
     {
+      "name": "psi-chi-sleights",
+      "system": "ep2e",
+      "label": "Psi-Chi Sleights",
+      "path": "./packs/psi-chi-sleights.db",
+      "entity": "Item"
+    },
+    {
+      "name": "psi-gamma-sleights",
+      "system": "ep2e",
+      "label": "Psi-Gamma Sleights",
+      "path": "./packs/psi-gamma-sleights.db",
+      "entity": "Item"
+    },
+    {
+      "name": "psi-epsilon-sleights",
+      "system": "ep2e",
+      "label": "Psi-Epsilon Sleights",
+      "path": "./packs/psi-epsilon-sleights.db",
+      "entity": "Item"
+    },
+    {
       "name": "explosives",
       "system": "ep2e",
       "label": "Explosives",
