@@ -29,6 +29,7 @@ import {
   prettyMilliseconds,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
+import { capitalize } from '@src/foundry/misc-helpers';
 import { rollFormula, rollLabeledFormulas } from '@src/foundry/rolls';
 import { HealthType } from '@src/health/health';
 import { overlay, tooltip } from '@src/init';
@@ -262,7 +263,7 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
           },
         },
         {
-          label: `${localize('share')} ${localize('influence')}`,
+          label: `${capitalize(localize('share'))} ${localize('influence')}`,
           icon: html`<mwc-icon>share</mwc-icon>`,
           callback: () => {
             const influences = mapToObj(
