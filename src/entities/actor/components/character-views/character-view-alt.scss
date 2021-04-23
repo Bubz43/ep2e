@@ -21,8 +21,12 @@ h3 {
 }
 
 :host {
-  display: flex;
-  flex-flow: column;
+  display: grid;
+  grid-template-areas:
+    'header header'
+    'content content'
+    'footer footer';
+  grid-template-rows: min-content 1fr min-content;
 
   overflow-x: auto;
   min-width: max-content;
@@ -30,7 +34,7 @@ h3 {
 }
 
 .content {
-  flex-grow: 1;
+  grid-area: content;
   display: grid;
   grid-template-areas:
     'extra tabs'
