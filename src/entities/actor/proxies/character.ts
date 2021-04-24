@@ -296,14 +296,13 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         Math.ceil(nonNegative(initial + mod) / (overburdened ? 2 : 1));
       return movements.map((movement) => {
         const mods = movementEffects.modify.get(movement.type);
-        return mods
-          ? {
-              type: movement.type,
-              base: change(movement.base, mods.baseModification),
-              full: change(movement.full, mods.fullModification),
-              skill: movement.skill,
-            }
-          : movement;
+        return {
+          type: movement.type,
+          base: change(movement.base, mods?.baseModification || 0),
+          full: change(movement.full, mods?.fullModification || 0),
+          skill: movement.skill,
+        };
+     
       });
     }
     return movements;
