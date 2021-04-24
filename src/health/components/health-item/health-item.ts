@@ -115,7 +115,7 @@ export class HealthItem<T extends Health = Health> extends mix(LitElement).with(
 
         ${wound
           ? html`
-              <section class="wounds">
+              <sl-animated-list class="wounds" fadeOnly>
                 <div title=${wound.wounds.label}>
                   <img class="wound-icon" src=${health.woundIcon} /><span
                     class="wound-value"
@@ -143,7 +143,7 @@ export class HealthItem<T extends Health = Health> extends mix(LitElement).with(
                   >
                   <span class="wound-value">${wound.woundThreshold.value}</span>
                 </div>
-              </section>
+              </sl-animated-list>
             `
           : ''}
         ${this.renderRipple(this.disabled || !this.clickable)}
