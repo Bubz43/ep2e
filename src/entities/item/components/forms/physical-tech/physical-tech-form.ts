@@ -238,7 +238,7 @@ export class PhysicalTechForm extends ItemFormBase {
             html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
             renderSelectField(deviceType, enumValues(DeviceType), {
               ...emptyTextDash,
-              disabled: !!embedded,
+              // disabled: !!embedded,
             }),
             hasMeshHealth
               ? [
