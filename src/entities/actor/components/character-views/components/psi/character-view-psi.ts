@@ -280,6 +280,7 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                   heading="${localize('share')} ${localize('influence')}"
                 >
                   ${renderSubmitForm({
+                    // TODO: Submit empty?
                     props: {
                       duration: CommonInterval.Turn,
                       influence: active?.id || '',
