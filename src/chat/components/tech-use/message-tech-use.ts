@@ -99,12 +99,15 @@ export class MessageTechUse extends MessageElement {
       ${appliedTo?.length ? this.renderAppliedTo(appliedTo) : ''}
       ${!tech.singleUse || this.disabled
         ? ''
-        : actionTaken
-        ? html`
-            <p class="action-taken">${tech.name} ${localize(actionTaken)}</p>
-          `
         : html`
             <div class="item-action">
+              ${actionTaken
+                ? html`
+                    <p class="action-taken">
+                      ${tech.name} ${localize(actionTaken)}
+                    </p>
+                  `
+                : ''}
               <mwc-button @click=${this.setUsed}
                 >${localize('set')} ${localize('used')}</mwc-button
               >
