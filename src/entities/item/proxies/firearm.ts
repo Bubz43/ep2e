@@ -67,12 +67,22 @@ export class Firearm
     return `${this.name} ${this.shapeChanging ? `(${this.shapeName})` : ''}`;
   }
 
+  get fullType() {
+    return this.isSingleUse
+      ? `${localize('singleUse')} - ${super.type}`
+      : super.type;
+  }
+
   fire(shots: number) {
     return this.updateAmmoCount(this.ammoData.value - shots);
   }
 
   reloadStandardAmmo() {
     this.updateAmmoCount(this.ammoCapacity - (this.ammoValue ? 0 : 1));
+  }
+
+  setSingleUseSpent(spent: boolean) {
+    this.updater.path('data', 'state', 'used').commit(spent);
   }
 
   updateAmmoCount(newValue: number) {
@@ -318,7 +328,11 @@ export class Firearm
           transformation: null,
         },
       };
-      shapeData.data.state.equipped = this.equipped;
+      shapeData.data.state = {
+        ...this.epData.state,
+        ...shapeData.data.state,
+        equipped: this.equipped,
+      };
 
       this.updater.path('').store(shapeData);
 
@@ -326,6 +340,8 @@ export class Firearm
         ...this.getDataCopy(false),
         name: this.shapeName,
       };
+      myData.data.state = shapeData.data.state;
+
       myData.data = {
         ...myData.data,
         shapeChanging: true,

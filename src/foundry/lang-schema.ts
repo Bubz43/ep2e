@@ -1488,7 +1488,8 @@ type LangEntries =
   | 'whileSustaining'
   | 'share'
   | 'foreign'
-  | 'move';
+  | 'move'
+  | 'spent';
 type FullNames =
   | 'cog'
   | 'int'

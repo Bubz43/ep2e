@@ -17,3 +17,40 @@ sl-group {
 .resist {
   --mdc-theme-primary: var(--color-primary-alt);
 }
+
+.apply {
+  --mdc-theme-primary: var(--color-grey);
+}
+
+.item-action {
+  border-top: 1px solid var(--color-border);
+  padding-top: 0.125rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.applied-to {
+  padding: 0;
+  display: inline-flex;
+  mwc-icon {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: alphav(var(--color-bg), 0.25);
+    display: none;
+    color: lightv(var(--color-negative), 1.5);
+    border-radius: 100%;
+  }
+  &[clickable]:hover {
+    mwc-icon {
+      display: block;
+      @include animate-css(fadeIn, 200ms);
+    }
+  }
+}
+
+.action-taken {
+  margin: 0.125rem;
+  color: var(--color-text-lighter);
+}

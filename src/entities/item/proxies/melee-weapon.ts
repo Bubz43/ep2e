@@ -82,6 +82,14 @@ export class MeleeWeapon
     ]).join(' ');
   }
 
+  get singleUseSpent() {
+    return this.isSingleUse && this.epData.state.used;
+  }
+
+  setSingleUseSpent(spent: boolean) {
+    this.updater.path('data', 'state', 'used').commit(spent);
+  }
+
   @LazyGetter()
   get attacks() {
     return {

@@ -502,6 +502,7 @@ type MeleeWeaponData = {
   exoticSkill: string;
   hasSecondaryAttack: boolean;
   acceptsPayload: boolean;
+  state: { used: boolean };
 };
 
 type ThrownWeaponData = {
@@ -523,7 +524,7 @@ type RangedWeaponDataBase = {
    * @uniqueItems
    */
   accessories: RangedWeaponAccessory[];
-  state: { braced: boolean; interface: boolean };
+  state: { braced: boolean; interface: boolean; used: boolean };
 };
 
 type SeekerAmmo = {

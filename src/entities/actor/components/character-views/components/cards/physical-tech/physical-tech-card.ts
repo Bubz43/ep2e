@@ -1,5 +1,8 @@
 import { createMessage } from '@src/chat/create-message';
-import { renderLabeledCheckbox } from '@src/components/field/fields';
+import {
+  renderLabeledCheckbox,
+  renderLabeledSwitch,
+} from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import { Substance } from '@src/entities/item/proxies/substance';
@@ -81,6 +84,7 @@ export class PhysicalTechCard extends ItemCardBase {
           tech: {
             id: this.item.id,
             name: this.item.fullName,
+            singleUse: this.item.isSingleUse,
           },
           effects: this.item.activatedEffects,
           resistCheck: this.item.epData.resistEffectsCheck,
@@ -93,7 +97,7 @@ export class PhysicalTechCard extends ItemCardBase {
 
   renderHeaderButtons() {
     const { item } = this;
-    const { editable } = item;
+    const { editable, singleUseSpent: used, isSingleUse } = item;
 
     return html`
       ${item.hasToggleActivation
@@ -112,6 +116,16 @@ export class PhysicalTechCard extends ItemCardBase {
           `
         : item.hasUseActivation
         ? html`
+            ${isSingleUse
+              ? renderAutoForm({
+                  props: { used },
+                  disabled: !editable,
+                  update: ({ used }) => {
+                    item.setSingleUseSpent(!!used);
+                  },
+                  fields: ({ used }) => renderLabeledSwitch(used),
+                })
+              : ''}
             <mwc-icon-button
               icon="touch_app"
               @click=${this.useItem}
@@ -120,7 +134,7 @@ export class PhysicalTechCard extends ItemCardBase {
               })}
               @mouseover=${tooltip.fromData}
               @focus=${tooltip.fromData}
-              ?disabled=${!editable}
+              ?disabled=${!editable || used}
             ></mwc-icon-button>
           `
         : ''}

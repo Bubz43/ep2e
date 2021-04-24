@@ -1,3 +1,5 @@
+import { renderLabeledSwitch } from '@src/components/field/fields';
+import { renderAutoForm } from '@src/components/form/forms';
 import { SprayPayload } from '@src/data-enums';
 import { ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
@@ -122,6 +124,16 @@ export class ItemCard extends ItemCardBase {
             ?disabled=${!editable}
           ></mwc-icon-button>
         `
+      : ''}
+    ${'setSingleUseSpent' in item && item.isSingleUse
+      ? renderAutoForm({
+          disabled: !editable,
+          props: { used: item.singleUseSpent },
+          update: ({ used }) => {
+            item.setSingleUseSpent(!!used);
+          },
+          fields: ({ used }) => renderLabeledSwitch(used),
+        })
       : ''}
     ${item.type === ItemType.MeleeWeapon && item.equipped
       ? html` <mwc-icon-button

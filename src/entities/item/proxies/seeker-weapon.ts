@@ -4,6 +4,7 @@ import {
   RangedWeaponTrait,
 } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
+import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
@@ -44,6 +45,12 @@ export class SeekerWeapon extends mix(Base).with(
   );
   constructor(init: ItemProxyInit<ItemType.SeekerWeapon>) {
     super(init);
+  }
+
+  get fullType() {
+    return this.isSingleUse
+      ? `${localize('singleUse')} - ${super.type}`
+      : super.type;
   }
 
   fire() {
@@ -109,6 +116,10 @@ export class SeekerWeapon extends mix(Base).with(
     return capacityChanged && extended
       ? Math.ceil(missileCapacity * 1.5)
       : missileCapacity;
+  }
+
+  setSingleUseSpent(spent: boolean) {
+    this.updater.path('data', 'state', 'used').commit(spent);
   }
 
   @LazyGetter()

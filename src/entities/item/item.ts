@@ -69,7 +69,7 @@ export class ItemEP extends Item {
       isEditable: () =>
         !!this.owner &&
         (this.actor ? this.actor.editable : true) &&
-        !this.compendium?.locked,
+        !this.compendium,
       setData: (changedData) =>
         this.actor
           ? this.actor.itemOperations.update({ ...changedData, _id: this.id })

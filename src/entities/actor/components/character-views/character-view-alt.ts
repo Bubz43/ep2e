@@ -658,8 +658,6 @@ export class CharacterViewAlt extends CharacterViewBase {
                   movementRates,
                   ({ type }) => localize(type).length,
                 ).map(({ type, base, full, skill, original }) => {
-                  // const changed =
-                  //   base !== original.base || full !== original.full;
                   return html`
                     <span class="movement-rate"
                       ><span

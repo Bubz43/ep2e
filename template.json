@@ -772,7 +772,8 @@
       "improvised": false,
       "touchOnly": false,
       "wareType": "",
-      "exoticSkill": ""
+      "exoticSkill": "",
+      "state": { "used": false }
     },
     "sprayWeapon": {
       "accessories": ["safetySystem", "smartlink"],
@@ -796,7 +797,8 @@
       },
       "state": {
         "braced": false,
-        "interface": false
+        "interface": false,
+        "used": false
       },
       "templates": ["Common", "Cost", "GearTraits", "Copyable", "GearState"],
       "wareType": ""
@@ -832,7 +834,8 @@
       },
       "state": {
         "braced": false,
-        "interface": false
+        "interface": false,
+        "used": false
       },
       "fixed": false,
       "long": false,
@@ -862,7 +865,8 @@
       "range": 25,
       "state": {
         "braced": false,
-        "interface": false
+        "interface": false,
+        "used": false
       },
       "templates": ["Common", "Cost", "GearTraits", "Copyable", "GearState"],
       "wareType": ""
@@ -910,7 +914,8 @@
       "range": 37,
       "state": {
         "braced": false,
-        "interface": false
+        "interface": false,
+        "used": false
       },
       "templates": ["Common", "Cost", "GearTraits", "Copyable", "GearState"],
       "wareType": ""
@@ -925,7 +930,8 @@
       "state": {
         "braced": false,
         "interface": false,
-        "homing": false
+        "homing": false,
+        "used": false
       },
       "templates": ["Common", "Cost", "GearTraits", "Copyable", "GearState"],
       "wareType": "",

@@ -92,6 +92,10 @@ export class PhysicalTech
     return this.updater.path('flags', EP.Name, 'onboardALI').commit;
   }
 
+  setSingleUseSpent(spent: boolean) {
+    this.updater.path('data', 'state', 'activated').commit(spent);
+  }
+
   get fullName() {
     return this.isActiveFabber
       ? `${this.name} [${this.fabricatedItem?.name}]`
@@ -132,7 +136,7 @@ export class PhysicalTech
     return this.activation === Activation.Toggle;
   }
 
-  get used() {
+  get singleUseSpent() {
     return this.isSingleUse && this.epData.state.activated;
   }
 

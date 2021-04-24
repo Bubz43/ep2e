@@ -36,10 +36,6 @@ export class CompendiumList extends LitElement {
 
   private openedEntities = new Map<string, Entity>();
 
-  adoptedCallback() {
-    console.log('adopted', CompendiumList.styles);
-  }
-
   disconnectedCallback() {
     this.openedEntities.clear();
     super.disconnectedCallback();
@@ -111,10 +107,20 @@ export class CompendiumList extends LitElement {
   private openEntrySheet(ev: Event) {
     const { entryId } = (ev.currentTarget as HTMLElement).dataset;
     if (!entryId) return;
+    const opened = this.openedEntities.get(entryId);
+    if (opened) {
+      console.log(
+        'opened',
+        opened.name,
+        this.content.find((entry) => entry._id === entryId)?.name,
+      );
+    }
     const entry =
       this.openedEntities.get(entryId) ||
       this.content.find((entry) => entry._id === entryId);
+
     if (entry) {
+      entry.prepareData();
       this.openedEntities.set(entryId, entry);
       (entry.sheet as EntitySheet | null)?.render(true);
     }

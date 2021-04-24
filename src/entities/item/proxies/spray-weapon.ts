@@ -11,6 +11,7 @@ import {
   SprayPayload,
 } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
+import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
 import { HealthType } from '@src/health/health';
 import { nonNegative } from '@src/utility/helpers';
@@ -56,6 +57,12 @@ export class SprayWeapon
     super(init);
   }
 
+  get fullType() {
+    return this.isSingleUse
+      ? `${localize('singleUse')} - ${super.type}`
+      : super.type;
+  }
+
   get canFire() {
     return !!this.availableShots;
   }
@@ -94,6 +101,10 @@ export class SprayWeapon
           value: Math.ceil((this.payload?.quantity || 0) / this.dosesPerShot),
         }
       : { ...common, value: Math.min(value, max) };
+  }
+
+  setSingleUseSpent(spent: boolean) {
+    this.updater.path('data', 'state', 'used').commit(spent);
   }
 
   shouldApplyCoating(firedShots: number) {

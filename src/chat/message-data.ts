@@ -262,9 +262,12 @@ export type TechUse = {
   effects: StringID<Effect>[];
   resistCheck: AptitudeType | '';
   duration: number;
+  appliedTo?: string[];
+  actionTaken?: 'spent' | 'deleted' | null;
   tech: {
     id: string;
     name: string;
+    singleUse: boolean;
   };
 };
 
