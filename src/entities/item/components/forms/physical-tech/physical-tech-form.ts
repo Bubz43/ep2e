@@ -217,6 +217,7 @@ export class PhysicalTechForm extends ItemFormBase {
             activationAction,
             firewallRating,
             onboardALI,
+            singleUse,
           }) => [
             renderSelectField(wareType, enumValues(PhysicalWare), {
               ...emptyTextDash,
@@ -234,6 +235,9 @@ export class PhysicalTechForm extends ItemFormBase {
                   activationAction,
                   difference(enumValues(ActionType), [ActionType.Task]),
                 )
+              : '',
+            activation.value === Activation.Use
+              ? renderLabeledCheckbox(singleUse)
               : '',
             html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
             renderSelectField(deviceType, enumValues(DeviceType), {

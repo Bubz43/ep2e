@@ -55,6 +55,7 @@ export class MessageContent extends LitElement {
       psiTest,
       sleightSustainEnd,
       sharedInfluence,
+      techUse,
     } = this.data;
     if (!this.message.isContentVisible) return '';
     return html`
@@ -186,6 +187,9 @@ export class MessageContent extends LitElement {
         ? html`<message-share-influence
             .sharedInfluence=${sharedInfluence}
           ></message-share-influence>`
+        : ''}
+      ${techUse
+        ? html`<message-tech-use .techUse=${techUse}></message-tech-use>`
         : ''}
     `;
   }

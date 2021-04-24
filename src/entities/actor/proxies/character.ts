@@ -478,6 +478,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     const onboardALIs = new Map<string, PhysicalTech>();
     const softwareSkills: Software[] = [];
     let masterDevice: PhysicalTech | null = null;
+    // const singleUseItems: (PhysicalTech | RangedWeapon | MeleeWeapon)[] = [];
     const { masterDeviceId, unslavedDevices } = this.networkSettings;
 
     // TODO Weapons && active use

@@ -1,3 +1,4 @@
+import { createMessage } from '@src/chat/create-message';
 import { renderLabeledCheckbox } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
@@ -9,6 +10,7 @@ import { openMenu } from '@src/open-menu';
 import { localImage } from '@src/utility/images';
 import { customElement, html, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
+import { requestCharacter } from '../../../character-request-event';
 import { ItemCardBase } from '../item-card-base';
 import styles from './physical-tech-card.scss';
 
@@ -62,6 +64,33 @@ export class PhysicalTechCard extends ItemCardBase {
     });
   }
 
+  private useItem() {
+    const { token } = requestCharacter(this);
+    createMessage({
+      data: {
+        header: {
+          heading: this.item.name,
+          img: this.item.nonDefaultImg,
+          description: this.item.description,
+          subheadings: [
+            localize('use'),
+            `${localize(this.item.activationAction)} ${localize('action')}`,
+          ],
+        },
+        techUse: {
+          tech: {
+            id: this.item.id,
+            name: this.item.fullName,
+          },
+          effects: this.item.activatedEffects,
+          resistCheck: this.item.epData.resistEffectsCheck,
+          duration: this.item.epData.usedEffectsDuration,
+        },
+      },
+      entity: token || this.character,
+    });
+  }
+
   renderHeaderButtons() {
     const { item } = this;
     const { editable } = item;
@@ -73,6 +102,19 @@ export class PhysicalTechCard extends ItemCardBase {
               class="toggle ${classMap({ activated: item.activated })}"
               icon="power_settings_new"
               @click=${this.toggleActivation}
+              data-tooltip=${format('ActionToActivate', {
+                action: localize(item.activationAction),
+              })}
+              @mouseover=${tooltip.fromData}
+              @focus=${tooltip.fromData}
+              ?disabled=${!editable}
+            ></mwc-icon-button>
+          `
+        : item.hasUseActivation
+        ? html`
+            <mwc-icon-button
+              icon="touch_app"
+              @click=${this.useItem}
               data-tooltip=${format('ActionToActivate', {
                 action: localize(item.activationAction),
               })}

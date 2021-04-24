@@ -77,6 +77,10 @@ export const Gear = (cls: HasEpData<Record<GearTrait, boolean>>) => {
     get gearTraits() {
       return enumValues(GearTrait).filter((trait) => this.epData[trait]);
     }
+
+    get isSingleUse() {
+      return this.epData.singleUse;
+    }
   };
 };
 

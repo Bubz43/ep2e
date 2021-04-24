@@ -45,6 +45,7 @@ import { MessageSpecialTest } from './chat/components/special-test/message-speci
 import { MessageStressTest } from './chat/components/stress-test/message-stress-test';
 import { MessageSubstanceUse } from './chat/components/substance/message-substance-use';
 import { MessageSuccessTest } from './chat/components/success-test/message-success-test';
+import { MessageTechUse } from './chat/components/tech-use/message-tech-use';
 import { MessageThrownAttack } from './chat/components/thrown-attack/message-thrown-attack';
 import { CombatView } from './combat/components/combat-view/combat-view';
 import { CustomRollApp } from './combat/components/custom-roll-app/custom-roll-app';
@@ -371,6 +372,7 @@ MessageInfluenceRoll;
 MessagePsiTest;
 MessageSleightSustainEnd;
 MessageShareInfluence;
+MessageTechUse;
 
 // SuccessTest
 AptitudeCheckControls;

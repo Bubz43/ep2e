@@ -4175,6 +4175,9 @@
                     }
                   ]
                 },
+                "singleUse": {
+                  "type": "boolean"
+                },
                 "state": {
                   "additionalProperties": false,
                   "properties": {
@@ -4258,6 +4261,7 @@
                 "onboardALI",
                 "passiveEffects",
                 "resistEffectsCheck",
+                "singleUse",
                 "state",
                 "templates",
                 "usedEffectsDuration",

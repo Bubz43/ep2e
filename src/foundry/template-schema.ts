@@ -652,7 +652,7 @@ type PhysicalTechData = {
   activationAction: Exclude<ActionType, ActionType.Task>;
   usedEffectsDuration: number;
   resistEffectsCheck: AptitudeType | '';
-
+  singleUse: boolean;
   fabPrintDuration: number;
   onboardALI: boolean;
   state: {

@@ -34,7 +34,7 @@ import { MeshHealth } from '@src/health/full-mesh-health';
 import { notEmpty } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
-import { createPipe, forEach, merge } from 'remeda';
+import { compact, createPipe, forEach, merge } from 'remeda';
 import type { CopyableItem, ItemProxy } from '../item';
 import { Copyable, Equippable, Gear, Purchasable } from '../item-mixins';
 import { renderItemForm } from '../item-views';
@@ -99,11 +99,13 @@ export class PhysicalTech
   }
 
   get fullType() {
-    const { wareType, category } = this;
+    const { wareType, category, isSingleUse } = this;
     const localType = localize(wareType || this.type);
-    return localType === category || !category
-      ? localType
-      : `${localType} (${category})`;
+    const type =
+      localType === category || !category
+        ? localType
+        : `${localType} (${category})`;
+    return compact([isSingleUse && localize('singleUse'), type]).join(' - ');
   }
 
   get category() {
@@ -128,6 +130,10 @@ export class PhysicalTech
 
   get hasToggleActivation() {
     return this.activation === Activation.Toggle;
+  }
+
+  get used() {
+    return this.isSingleUse && this.epData.state.activated;
   }
 
   get effects() {

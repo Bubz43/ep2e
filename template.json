@@ -714,6 +714,7 @@
       "onboardALI": false,
       "firewallRating": 30,
       "fabPrintDuration": 0,
+      "singleUse": false,
       "firewallHealth": {
         "baseDurability": 30,
         "rebootEndTime": -1,
