@@ -107,11 +107,12 @@ export class MessageTechUse extends MessageElement {
                       ${tech.name} ${localize(actionTaken)}
                     </p>
                   `
-                : ''}
-              <mwc-button @click=${this.setUsed}
-                >${localize('set')} ${localize('used')}</mwc-button
-              >
-              <delete-button @delete=${this.deleteUsedTech}></delete-button>
+                : html` <mwc-button @click=${this.setUsed}
+                      >${localize('set')} ${localize('used')}</mwc-button
+                    >
+                    <delete-button
+                      @delete=${this.deleteUsedTech}
+                    ></delete-button>`}
             </div>
           `}
     `;
