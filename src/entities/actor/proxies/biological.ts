@@ -6,19 +6,18 @@ import { ActorType, ItemType } from '@src/entities/entity-types';
 import type { EquippableItem, ItemProxy } from '@src/entities/item/item';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import type { Trait } from '@src/entities/item/proxies/trait';
-import { EffectType } from '@src/features/effects';
+import type { ConditionType } from '@src/features/conditions';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
 import { BiologicalHealth } from '@src/health/biological-health';
 import { HealthType } from '@src/health/health';
 import type { ActorHealth } from '@src/health/health-mixin';
+import type { RecoveryConditions } from '@src/health/recovery';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { compact } from 'remeda';
-import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 import { PhysicalSleeve, SleeveInfo } from '../sleeve-mixins';
-import type { RecoveryConditions } from '@src/health/recovery';
-import type { ConditionType } from '@src/features/conditions';
+import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 
 class BiologicalBase extends ActorProxyBase<ActorType.Biological> {
   get subtype() {
@@ -96,7 +95,7 @@ export class Biological extends mix(BiologicalBase).with(
       data: this.epData.physicalHealth,
       statMods: this.activeEffects.getHealthStatMods(HealthType.Physical),
       updater: this.updater.path('data', 'physicalHealth').nestedStore(),
-      source: localize('frame'),
+      source: localize('morph'),
       isSwarm: this.isSwarm,
       recoveryEffects: this.activeEffects.healthRecovery,
       recoveryConditions: this.epData.recoveryConditions,

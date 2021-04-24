@@ -3,7 +3,7 @@ import {
   rollInitiative,
   Surprise,
   TrackedCombatEntity,
-  updateCombatState,
+  updateCombatState
 } from '@src/combat/combat-tracker';
 import { Placement } from '@src/components/popover/popover-options';
 import { enumValues, RechargeType } from '@src/data-enums';
@@ -15,7 +15,7 @@ import { formatEffect } from '@src/features/effects';
 import {
   addFeature,
   idProp,
-  removeFeature,
+  removeFeature
 } from '@src/features/feature-helpers';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
 import { MotivationStance } from '@src/features/motivations';
@@ -24,7 +24,7 @@ import { createTemporaryFeature } from '@src/features/temporary';
 import {
   CommonInterval,
   EPTimeInterval,
-  prettyMilliseconds,
+  prettyMilliseconds
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
@@ -40,7 +40,7 @@ import {
   internalProperty,
   property,
   PropertyValues,
-  TemplateResult,
+  TemplateResult
 } from 'lit-element';
 import { nothing } from 'lit-html';
 import { cache } from 'lit-html/directives/cache';
@@ -54,7 +54,7 @@ import {
   noop,
   prop,
   range,
-  sortBy,
+  sortBy
 } from 'remeda';
 import type { Ego } from '../../ego';
 import type { Character } from '../../proxies/character';
@@ -687,7 +687,7 @@ export class CharacterViewAlt extends CharacterViewBase {
               @click=${this.setDrawerRenderer}
               class="mental-health-view"
               .health=${ego.mentalHealth}
-              ><span slot="source">${localize('mental')}</span></health-item
+              ><span slot="source">${localize('ego')}</span></health-item
             >`
           : ''}
         ${physicalHealth
