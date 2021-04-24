@@ -591,6 +591,14 @@ character-view-item-group[group='sleights'] {
       color: var(--color-text-lighter);
     }
   }
+  .speed {
+    &.increased {
+      color: var(--color-secondary);
+    }
+    &.decreased {
+      color: lightv(var(--color-negative), 1.65);
+    }
+  }
 }
 
 footer {
