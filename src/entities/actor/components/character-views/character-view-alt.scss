@@ -132,7 +132,7 @@ h3 {
     --health-item-padding: 0.5rem;
     > * {
       flex-grow: 1;
-      background: alphav(var(--color-bg-alt), 0.95);
+      background: alphav(var(--color-grey), 0.1);
       margin: 0 0.125rem;
     }
   }
@@ -450,7 +450,7 @@ character-view-psi {
   mwc-tab-bar {
     --mdc-theme-primary: var(--color-grey);
     padding: 0 0.25rem;
-    width: max-content;
+    width: 300px;
     min-width: 100%;
     background: linear-gradient(to top, var(--color-bg-alt), transparent);
     box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.664);
