@@ -64,7 +64,7 @@
         },
         "woundRepair": {
           "amount": 1,
-          "interval": 86400000
+          "interval": 604800000
         },
         "log": [],
         "wounds": 0
@@ -85,11 +85,11 @@
         "ownHealTickStartTime": 0,
         "damageRepair": {
           "amount": "1d10",
-          "interval": 86400000
+          "interval": 60000
         },
         "woundRepair": {
           "amount": 1,
-          "interval": 86400000
+          "interval": 60000
         },
         "log": [],
         "rebootEndTime": -1,
@@ -155,11 +155,11 @@
         "ownHealTickStartTime": 0,
         "damageRepair": {
           "amount": "1d10",
-          "interval": 86400000
+          "interval": 60000
         },
         "woundRepair": {
           "amount": 1,
-          "interval": 86400000
+          "interval": 60000
         },
         "log": [],
         "wounds": 0,
@@ -736,11 +736,11 @@
         "ownHealTickStartTime": 0,
         "damageRepair": {
           "amount": "1d10",
-          "interval": 86400000
+          "interval": 60000
         },
         "woundRepair": {
           "amount": 1,
-          "interval": 86400000
+          "interval": 60000
         },
         "log": [],
         "rebootEndTime": -1,

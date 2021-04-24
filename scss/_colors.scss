@@ -1,7 +1,7 @@
 // credit: https://codyhouse.co/blog/post/how-to-combine-sass-color-functions-and-css-variables;
 
 @mixin defineColorHSL($color, $hue, $saturation, $lightness) {
-  #{$color}: unquote("hsl(#{$hue}, #{$saturation}, #{$lightness})");
+  #{$color}: unquote('hsl(#{$hue}, #{$saturation}, #{$lightness})');
   #{$color}-h: #{$hue};
   #{$color}-s: #{$saturation};
   #{$color}-l: #{$lightness};
@@ -23,9 +23,9 @@ body {
   @include defineColorHSL(--color-negative, 349, 64%, 28%);
   @include defineColorHSL(--color-text, 0, 0%, 94%);
   @include defineColorHSL(--color-text-lighter, 0, 0%, 65%);
-  @include defineColorHSL(--color-text-disabled, 0, 0%, 28%);
+  @include defineColorHSL(--color-text-disabled, 0, 0%, 34%);
   @include defineColorHSL(--color-foundry, 24, 100%, 50%);
 
   color: rgb(18, 18, 18);
-  color: rgb(24, 26, 27)
+  color: rgb(24, 26, 27);
 }

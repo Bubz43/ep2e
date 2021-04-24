@@ -134,6 +134,15 @@ export class HealthItem<T extends Health = Health> extends mix(LitElement).with(
                       </div>
                     `
                   : ''}
+                <div
+                  class="wound-threshold"
+                  title=${wound.woundThreshold.label}
+                >
+                  <span class="threshold-label"
+                    >${localize('SHORT', wound.woundThreshold.prop)}</span
+                  >
+                  <span class="wound-value">${wound.woundThreshold.value}</span>
+                </div>
               </section>
             `
           : ''}
