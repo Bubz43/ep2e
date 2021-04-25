@@ -11,7 +11,5 @@ This is still work in progress, with numerous things unfinished, and a lot of ge
 - Fragile gear trait
 - Social Attacks
 - Jamming
-- Psi
-- Sleights
 - "Abilities"
 - Combat State
