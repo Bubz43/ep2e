@@ -1084,3 +1084,17 @@ sl-tooltip {
     margin-top: -0.175rem;
   }
 }
+
+// Module Styles
+
+.quick-insert {
+  > * {
+    background: var(--color-bg) !important;
+    a > span:first-of-type {
+      color: var(--color-text) !important;
+    }
+    .search-selected {
+      background: alphav(var(--color-text), 0.1);
+    }
+  }
+}

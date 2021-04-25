@@ -125,16 +125,6 @@ export class ItemCard extends ItemCardBase {
           ></mwc-icon-button>
         `
       : ''}
-    ${'setSingleUseSpent' in item && item.isSingleUse
-      ? renderAutoForm({
-          disabled: !editable,
-          props: { used: item.singleUseSpent },
-          update: ({ used }) => {
-            item.setSingleUseSpent(!!used);
-          },
-          fields: ({ used }) => renderLabeledSwitch(used),
-        })
-      : ''}
     ${item.type === ItemType.MeleeWeapon && item.equipped
       ? html` <mwc-icon-button
           class="toggle ${classMap({ activated: !!item.coating })}"

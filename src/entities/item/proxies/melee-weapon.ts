@@ -32,6 +32,12 @@ export class MeleeWeapon
     super(init);
   }
 
+  get fullName() {
+    return this.singleUseSpent
+      ? `[${localize('spent')}] ${this.name}`
+      : this.name;
+  }
+
   get exoticSkillName() {
     return this.epData.exoticSkill;
   }

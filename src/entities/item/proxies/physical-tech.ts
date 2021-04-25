@@ -97,9 +97,10 @@ export class PhysicalTech
   }
 
   get fullName() {
-    return this.isActiveFabber
+    const name = this.isActiveFabber
       ? `${this.name} [${this.fabricatedItem?.name}]`
       : this.name;
+    return this.singleUseSpent ? `[${localize('spent')}] ${name}` : name;
   }
 
   get fullType() {

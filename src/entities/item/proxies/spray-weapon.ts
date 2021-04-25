@@ -57,6 +57,12 @@ export class SprayWeapon
     super(init);
   }
 
+  get fullName() {
+    return this.singleUseSpent
+      ? `[${localize('spent')}] ${this.name}`
+      : this.name;
+  }
+
   get fullType() {
     return this.isSingleUse
       ? `${localize('singleUse')} - ${super.fullType}`

@@ -64,7 +64,9 @@ export class Firearm
   }
 
   get fullName() {
-    return `${this.name} ${this.shapeChanging ? `(${this.shapeName})` : ''}`;
+    return `${this.singleUseSpent ? `[${localize('spent')}]` : ''} ${
+      this.name
+    } ${this.shapeChanging ? `(${this.shapeName})` : ''}`;
   }
 
   get fullType() {

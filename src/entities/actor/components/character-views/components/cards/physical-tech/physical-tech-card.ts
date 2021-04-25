@@ -116,16 +116,6 @@ export class PhysicalTechCard extends ItemCardBase {
           `
         : item.hasUseActivation
         ? html`
-            ${isSingleUse
-              ? renderAutoForm({
-                  props: { used },
-                  disabled: !editable,
-                  update: ({ used }) => {
-                    item.setSingleUseSpent(!!used);
-                  },
-                  fields: ({ used }) => renderLabeledSwitch(used),
-                })
-              : ''}
             <mwc-icon-button
               icon="touch_app"
               @click=${this.useItem}

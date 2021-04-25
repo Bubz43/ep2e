@@ -50,6 +50,12 @@ export class BeamWeapon
     super(init);
   }
 
+  get fullName() {
+    return this.singleUseSpent
+      ? `[${localize('spent')}] ${this.name}`
+      : this.name;
+  }
+
   get canFire() {
     return !!this.availableShots;
   }
