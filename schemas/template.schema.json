@@ -2640,11 +2640,15 @@
                     },
                     "interface": {
                       "type": "boolean"
+                    },
+                    "used": {
+                      "type": "boolean"
                     }
                   },
                   "required": [
                     "braced",
-                    "interface"
+                    "interface",
+                    "used"
                   ],
                   "type": "object"
                 },
@@ -2863,11 +2867,15 @@
                     },
                     "interface": {
                       "type": "boolean"
+                    },
+                    "used": {
+                      "type": "boolean"
                     }
                   },
                   "required": [
                     "braced",
-                    "interface"
+                    "interface",
+                    "used"
                   ],
                   "type": "object"
                 },
@@ -3048,6 +3056,18 @@
                 "secondaryAttack": {
                   "$ref": "#/definitions/MeleeWeaponAttackData"
                 },
+                "state": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "used": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "used"
+                  ],
+                  "type": "object"
+                },
                 "templates": {
                   "items": [
                     {
@@ -3099,6 +3119,7 @@
                 "primaryAttack",
                 "reachBonus",
                 "secondaryAttack",
+                "state",
                 "templates",
                 "touchOnly",
                 "wareType"
@@ -4175,6 +4196,9 @@
                     }
                   ]
                 },
+                "singleUse": {
+                  "type": "boolean"
+                },
                 "state": {
                   "additionalProperties": false,
                   "properties": {
@@ -4258,6 +4282,7 @@
                 "onboardALI",
                 "passiveEffects",
                 "resistEffectsCheck",
+                "singleUse",
                 "state",
                 "templates",
                 "usedEffectsDuration",
@@ -4414,11 +4439,15 @@
                     },
                     "interface": {
                       "type": "boolean"
+                    },
+                    "used": {
+                      "type": "boolean"
                     }
                   },
                   "required": [
                     "braced",
-                    "interface"
+                    "interface",
+                    "used"
                   ],
                   "type": "object"
                 },
@@ -4555,12 +4584,16 @@
                     },
                     "interface": {
                       "type": "boolean"
+                    },
+                    "used": {
+                      "type": "boolean"
                     }
                   },
                   "required": [
                     "braced",
                     "homing",
-                    "interface"
+                    "interface",
+                    "used"
                   ],
                   "type": "object"
                 },
@@ -6761,11 +6794,15 @@
                     },
                     "interface": {
                       "type": "boolean"
+                    },
+                    "used": {
+                      "type": "boolean"
                     }
                   },
                   "required": [
                     "braced",
-                    "interface"
+                    "interface",
+                    "used"
                   ],
                   "type": "object"
                 },

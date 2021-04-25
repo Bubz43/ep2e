@@ -57,7 +57,6 @@ import {
   refreshAvailable,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
-import { deepMerge } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { HealthEditor } from '@src/health/components/health-editor/health-editor';
 import type { ActorHealth } from '@src/health/health-mixin';
@@ -281,32 +280,39 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   }
 
   @LazyGetter()
-  get movementRates(): (MovementRate & { skill: string })[] {
+  get movementRates(): (MovementRate & {
+    skill: string;
+    original: { base: number; full: number };
+  })[] {
     if (!this.sleeve || this.sleeve.type === ActorType.Infomorph) return [];
     const { movementRates } = this.sleeve;
     const { movementEffects } = this._appliedEffects;
     const movements = [...movementRates, ...movementEffects.granted];
     const { encumbered, overburdened } = this.movementModifiers;
     if (encumbered) {
-      return movements.map((movement) => ({ ...movement, base: 0, full: 0 }));
+      return movements.map((movement) => ({
+        ...movement,
+        base: 0,
+        full: 0,
+        original: { base: movement.base, full: movement.full },
+      }));
     }
 
-    if (overburdened || notEmpty(movementEffects.modify)) {
-      const change = (initial: number, mod: number) =>
-        Math.ceil(nonNegative(initial + mod) / (overburdened ? 2 : 1));
-      return movements.map((movement) => {
-        const mods = movementEffects.modify.get(movement.type);
-        return mods
-          ? {
-              type: movement.type,
-              base: change(movement.base, mods.baseModification),
-              full: change(movement.full, mods.fullModification),
-              skill: movement.skill,
-            }
-          : movement;
-      });
-    }
-    return movements;
+    // if (overburdened || notEmpty(movementEffects.modify)) {
+    const change = (initial: number, mod: number) =>
+      Math.ceil(nonNegative(initial + mod) / (overburdened ? 2 : 1));
+    return movements.map((movement) => {
+      const mods = movementEffects.modify.get(movement.type);
+      return {
+        type: movement.type,
+        base: change(movement.base, mods?.baseModification || 0),
+        full: change(movement.full, mods?.fullModification || 0),
+        skill: movement.skill,
+        original: { base: movement.base, full: movement.full },
+      };
+    });
+    // }
+    // return movements;
   }
 
   async addToSpentPools(...pools: { pool: PoolType; points: number }[]) {
@@ -478,6 +484,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     const onboardALIs = new Map<string, PhysicalTech>();
     const softwareSkills: Software[] = [];
     let masterDevice: PhysicalTech | null = null;
+    // const singleUseItems: (PhysicalTech | RangedWeapon | MeleeWeapon)[] = [];
     const { masterDeviceId, unslavedDevices } = this.networkSettings;
 
     // TODO Weapons && active use

@@ -2915,6 +2915,9 @@
             "motivations": {
               "type": "string"
             },
+            "move": {
+              "type": "string"
+            },
             "movement": {
               "type": "string"
             },
@@ -4053,6 +4056,9 @@
               "type": "string"
             },
             "spend": {
+              "type": "string"
+            },
+            "spent": {
               "type": "string"
             },
             "spentPools": {
@@ -5675,6 +5681,7 @@
             "mote",
             "motivation",
             "motivations",
+            "move",
             "movement",
             "movementRate",
             "movementRates",
@@ -6055,6 +6062,7 @@
             "specialized",
             "specificTarget",
             "spend",
+            "spent",
             "spentPools",
             "sprayWeapon",
             "stance",

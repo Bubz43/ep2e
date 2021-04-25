@@ -116,7 +116,7 @@ export class ActorEP extends Actor {
 
   get editable() {
     // (!this.isToken || this.token?.scene?.id === activeCanvas()?.scene.id)
-    return this.owner && (!this.compendium || !this.compendium.locked);
+    return this.owner && !this.compendium;
   }
 
   get isToken() {

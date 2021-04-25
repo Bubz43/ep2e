@@ -642,21 +642,39 @@ export class CharacterViewAlt extends CharacterViewBase {
         <div class="movement">
           ${(['encumbered', 'overburdened'] as const).map((mod) => {
             const val = movementModifiers[mod];
-            return val ? html`<span class="mod">${localize(mod)}</span>` : '';
+            return val
+              ? html`<span
+                  class="mod"
+                  title=${mod === 'encumbered'
+                    ? `${localize('cannot')} ${localize('move')}`
+                    : `${localize('halved')} ${localize('movementRates')}`}
+                  >${localize(mod)}</span
+                >`
+              : '';
           })}
           ${notEmpty(movementRates)
             ? html`
                 ${sortBy(
                   movementRates,
                   ({ type }) => localize(type).length,
-                ).map(
-                  ({ type, base, full, skill }) => html`
-                    <span
-                      class="movement-rate"
-                      title=${`${localize('use')} ${skill}`}
-                      >${localize(type)}
+                ).map(({ type, base, full, skill, original }) => {
+                  return html`
+                    <span class="movement-rate"
+                      ><span
+                        data-tooltip=${`${localize('use')} ${skill}`}
+                        @mouseover=${tooltip.fromData}
+                        >${localize(type)}</span
+                      >
                       <span class="rate"
                         ><button
+                          class="speed ${classMap({
+                            increased: base > original.base,
+                            decreased: base < original.base,
+                          })}"
+                          data-tooltip="${localize(
+                            'original',
+                          )}: ${original.base}"
+                          @mouseover=${tooltip.fromData}
                           ?disabled=${!canPlace || !base}
                           @click=${() =>
                             this.placeMovementPreviewTemplate(base)}
@@ -665,7 +683,15 @@ export class CharacterViewAlt extends CharacterViewBase {
                         </button>
                         /
                         <button
+                          class="speed ${classMap({
+                            increased: full > original.full,
+                            decreased: full < original.full,
+                          })}"
+                          data-tooltip="${localize(
+                            'original',
+                          )}: ${original.full}"
                           ?disabled=${!canPlace || !full}
+                          @mouseover=${tooltip.fromData}
                           @click=${() =>
                             this.placeMovementPreviewTemplate(full)}
                         >
@@ -673,8 +699,8 @@ export class CharacterViewAlt extends CharacterViewBase {
                         </button></span
                       ></span
                     >
-                  `,
-                )}
+                  `;
+                })}
               `
             : ''}
         </div>
@@ -687,7 +713,7 @@ export class CharacterViewAlt extends CharacterViewBase {
               @click=${this.setDrawerRenderer}
               class="mental-health-view"
               .health=${ego.mentalHealth}
-              ><span slot="source">${localize('mental')}</span></health-item
+              ><span slot="source">${localize('ego')}</span></health-item
             >`
           : ''}
         ${physicalHealth

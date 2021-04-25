@@ -77,6 +77,10 @@ export const Gear = (cls: HasEpData<Record<GearTrait, boolean>>) => {
     get gearTraits() {
       return enumValues(GearTrait).filter((trait) => this.epData[trait]);
     }
+
+    get isSingleUse() {
+      return this.epData.singleUse;
+    }
   };
 };
 
@@ -118,7 +122,7 @@ export const RangedWeapon = (
   cls: HasEpData<
     {
       accessories: RangedWeaponAccessory[];
-      state: { braced: boolean; interface: boolean };
+      state: { braced: boolean; interface: boolean; used: boolean };
     },
     {
       readonly weaponTraits: RangedWeaponTrait[];
@@ -127,6 +131,9 @@ export const RangedWeapon = (
   >,
 ) => {
   return class extends cls {
+    get singleUseSpent() {
+      return this.epData.state.used;
+    }
     get accessories() {
       return this.epData.accessories;
     }

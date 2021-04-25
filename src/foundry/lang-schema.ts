@@ -1487,7 +1487,9 @@ type LangEntries =
   | 'scaleToTargetEffectsOnSuperior'
   | 'whileSustaining'
   | 'share'
-  | 'foreign';
+  | 'foreign'
+  | 'move'
+  | 'spent';
 type FullNames =
   | 'cog'
   | 'int'

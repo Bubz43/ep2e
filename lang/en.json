@@ -846,7 +846,7 @@
     "hard": "Hard",
     "high": "High",
     "low": "Low",
-    "singleUse": "Single Use",
+    "singleUse": "Single-Use",
     "twoHanded": "Two-Handed",
     "values": "Values",
     "veryHigh": "Very High",
@@ -1461,6 +1461,8 @@
     "whileSustaining": "While Sustaining",
     "share": "Share",
     "foreign": "Foreign",
+    "move": "Move",
+    "spent": "Spent",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

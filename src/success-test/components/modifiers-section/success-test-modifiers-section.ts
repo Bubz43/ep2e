@@ -3,16 +3,12 @@ import {
   renderTextField,
 } from '@src/components/field/fields';
 import { renderSubmitForm } from '@src/components/form/forms';
-import {
-  Source,
-  SourcedEffect,
-  SuccessTestEffect,
-} from '@src/features/effects';
+import { Source } from '@src/features/effects';
 import { idProp } from '@src/features/feature-helpers';
 import { localize } from '@src/foundry/localization';
 import {
   createSuccessTestModifier,
-  SimpleSuccessTestModifier,
+  SuccessTestModifiers,
 } from '@src/success-test/success-test';
 import { withSign } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
@@ -35,12 +31,7 @@ export class SuccessTestModifiersSection extends LitElement {
 
   @property({ type: Number }) total = 0;
 
-  @property({ attribute: false }) modifierStore!: {
-    effects: Map<SourcedEffect<SuccessTestEffect>, boolean>;
-    toggleEffect: (effect: SourcedEffect<SuccessTestEffect>) => void;
-    simple: Map<number, SimpleSuccessTestModifier>;
-    toggleSimple: (modifier: SimpleSuccessTestModifier) => void;
-  };
+  @property({ attribute: false }) modifierStore!: SuccessTestModifiers;
 
   render() {
     return html`
@@ -48,6 +39,13 @@ export class SuccessTestModifiersSection extends LitElement {
         itemCount=${withSign(this.total)}
         heading=${localize('modifiers')}
       >
+        <mwc-icon-button
+          slot="action"
+          icon="autorenew"
+          class="automate ${classMap({ active: this.modifierStore.automate })}"
+          title="${localize('automatic')} ${localize('modifiers')}"
+          @click=${this.modifierStore.toggleAutomate}
+        ></mwc-icon-button>
         <sl-popover
           focusSelector="input[type='number']"
           slot="action"
@@ -81,7 +79,10 @@ export class SuccessTestModifiersSection extends LitElement {
       </sl-header>
       <sl-animated-list>
         ${repeat(
-          sortBy([...this.modifierStore.effects], ([e]) => !e.requirement),
+          sortBy(
+            this.modifierStore.automate ? [...this.modifierStore.effects] : [],
+            ([e]) => !e.requirement,
+          ),
           first(),
           ([effect, active]) => {
             const useWhen =
@@ -124,7 +125,11 @@ export class SuccessTestModifiersSection extends LitElement {
           },
         )}
         ${repeat(
-          this.modifierStore.simple.values(),
+          this.modifierStore.automate
+            ? this.modifierStore.simple.values()
+            : [...this.modifierStore.simple.values()].filter(
+                (m) => m.temporary,
+              ),
           idProp,
           (modifier) => html`
             <wl-list-item

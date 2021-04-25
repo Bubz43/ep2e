@@ -2,6 +2,7 @@ import type { AreaEffect } from '@src/combat/area-effect';
 import type { BasicAreaEffectData } from '@src/combat/attack-formatting';
 import type { AttackType } from '@src/combat/attacks';
 import type {
+  AptitudeType,
   AttackTrait,
   CalledShot,
   PoolType,
@@ -10,11 +11,14 @@ import type {
 } from '@src/data-enums';
 import type { ItemType } from '@src/entities/entity-types';
 import type { RangedWeapon } from '@src/entities/item/item';
+import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import type { SubstanceUseMethod } from '@src/entities/item/proxies/substance';
 import type { ItemEntity } from '@src/entities/models';
 import type { ActiveTaskAction } from '@src/features/actions';
 import type { ArmorType } from '@src/features/active-armor';
 import type { AptitudeCheckInfo } from '@src/features/aptitude-check-result-info';
+import type { Effect } from '@src/features/effects';
+import type { StringID } from '@src/features/feature-helpers';
 import type { FiringModeGroup } from '@src/features/firing-modes';
 import type { PostTestPoolAction, PreTestPoolAction } from '@src/features/pool';
 import type {
@@ -254,6 +258,19 @@ export type SharedPsiInfluence = {
   duration: number;
 };
 
+export type TechUse = {
+  effects: StringID<Effect>[];
+  resistCheck: AptitudeType | '';
+  duration: number;
+  appliedTo?: string[];
+  actionTaken?: 'spent' | 'deleted' | null;
+  tech: {
+    id: string;
+    name: string;
+    singleUse: boolean;
+  };
+};
+
 export type MessageData = Partial<{
   header: MessageHeaderData;
   targets: MessageTargets;
@@ -278,4 +295,5 @@ export type MessageData = Partial<{
   psiTest: PsiTestData;
   sleightSustainEnd: SleightSustainEnd;
   sharedInfluence: SharedPsiInfluence;
+  techUse: TechUse;
 }>;

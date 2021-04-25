@@ -32,6 +32,12 @@ export class MeleeWeapon
     super(init);
   }
 
+  get fullName() {
+    return this.singleUseSpent
+      ? `[${localize('spent')}] ${this.name}`
+      : this.name;
+  }
+
   get exoticSkillName() {
     return this.epData.exoticSkill;
   }
@@ -73,12 +79,21 @@ export class MeleeWeapon
   }
 
   get fullType() {
-    const { wareType, isImprovised } = this;
+    const { wareType, isImprovised, isSingleUse } = this;
     return compact([
+      isSingleUse && `${localize('singleUse')} -`,
       isImprovised && localize('improvised'),
       wareType && localize(wareType),
       localize(this.type),
     ]).join(' ');
+  }
+
+  get singleUseSpent() {
+    return this.isSingleUse && this.epData.state.used;
+  }
+
+  setSingleUseSpent(spent: boolean) {
+    this.updater.path('data', 'state', 'used').commit(spent);
   }
 
   @LazyGetter()

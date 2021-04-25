@@ -103,6 +103,8 @@ export type SuccessTestModifiers = {
   toggleEffect: (effect: SourcedEffect<SuccessTestEffect>) => void;
   simple: Map<number, SimpleSuccessTestModifier>;
   toggleSimple: (modifier: SimpleSuccessTestModifier) => void;
+  automate: boolean;
+  toggleAutomate: () => void;
 };
 
 let lastId = 1;

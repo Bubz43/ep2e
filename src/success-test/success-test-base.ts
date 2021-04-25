@@ -6,7 +6,11 @@ import {
   createAction,
   updateAction,
 } from '@src/features/actions';
-import { Source } from '@src/features/effects';
+import {
+  Source,
+  SourcedEffect,
+  SuccessTestEffect,
+} from '@src/features/effects';
 import { PreTestPoolAction } from '@src/features/pool';
 import { localize } from '@src/foundry/localization';
 import type { WithUpdate } from '@src/utility/updating';
@@ -79,9 +83,12 @@ export abstract class SuccessTestBase {
     ),
     simple: new Map(),
     toggleSimple: this.recipe(({ modifiers: { simple } }, modifier) => {
-      console.log('toggle simple', simple.has(modifier.id));
       if (simple.has(modifier.id)) simple.delete(modifier.id);
       else simple.set(modifier.id, modifier);
+    }),
+    automate: true,
+    toggleAutomate: this.recipe(({ modifiers }) => {
+      modifiers.automate = !modifiers.automate;
     }),
   };
 
@@ -97,24 +104,41 @@ export abstract class SuccessTestBase {
     return this.pools.active?.[1] === PreTestPoolAction.IgnoreMods;
   }
 
+  get activeModifiersFromEffects(): SourcedEffect<SuccessTestEffect>[] {
+    return this.modifiers.automate
+      ? [...this.modifiers.effects].flatMap(([effect, active]) =>
+          active ? effect : [],
+        )
+      : [];
+  }
+
+  get activeSimpleModifiers(): SimpleSuccessTestModifier[] {
+    const { automate } = this.modifiers;
+    return [...this.modifiers.simple.values()].flatMap((modifier) =>
+      automate ? modifier : modifier.temporary ? modifier : [],
+    );
+  }
+
   get modifiersAsParts() {
-    const { effects, simple } = this.modifiers;
     return [
-      ...[...effects].flatMap(([effect, active]) =>
-        active ? { name: effect[Source], value: effect.modifier } : [],
-      ),
-      ...[...simple.values()].map(pick(['name', 'value'])),
+      ...this.activeModifiersFromEffects.map((effect) => ({
+        name: effect[Source],
+        value: effect.modifier,
+      })),
+      ...this.activeSimpleModifiers.map(pick(['name', 'value'])),
     ];
   }
 
   get modifierTotal() {
-    return [...this.modifiers.effects].reduce(
-      (accum, [effect, active]) => accum + (active ? effect.modifier : 0),
-      [...this.modifiers.simple.values()].reduce(
-        (accum, { value }) => accum + value,
-        0,
-      ),
+    const fromEffects = this.activeModifiersFromEffects.reduce(
+      (accum, { modifier }) => accum + modifier,
+      0,
     );
+    const fromSimple = this.activeSimpleModifiers.reduce(
+      (accum, { value }) => accum + value,
+      0,
+    );
+    return fromEffects + fromSimple;
   }
 
   constructor({ action }: SuccessTestInit = {}) {

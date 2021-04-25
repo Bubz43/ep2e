@@ -69,7 +69,15 @@ export class Railgun
   }
 
   get fullName() {
-    return `${this.name} ${this.shapeChanging ? `(${this.shapeName})` : ''}`;
+    return `${this.singleUseSpent ? `[${localize('spent')}]` : ''} ${
+      this.name
+    } ${this.shapeChanging ? `(${this.shapeName})` : ''}`;
+  }
+
+  get fullType() {
+    return this.isSingleUse
+      ? `${localize('singleUse')} - ${super.fullType}`
+      : super.fullType;
   }
 
   get canFire() {
@@ -118,6 +126,10 @@ export class Railgun
 
   get availableShots() {
     return Math.min(this.epData.ammo.value, this.totalCharge);
+  }
+
+  setSingleUseSpent(spent: boolean) {
+    this.updater.path('data', 'state', 'used').commit(spent);
   }
 
   @LazyGetter()
@@ -256,13 +268,18 @@ export class Railgun
       if (shapeData.flags.ep2e?.transformation) {
         shapeData.flags.ep2e.transformation = null;
       }
-      shapeData.data.state.equipped = this.equipped;
+      shapeData.data.state = {
+        ...this.epData.state,
+        ...shapeData.data.state,
+        equipped: this.equipped,
+      };
       this.updater.path('').store(shapeData);
 
       const myData = {
         ...this.getDataCopy(false),
         name: this.shapeName,
       };
+      myData.data.state = shapeData.data.state;
       myData.data = {
         ...myData.data,
         shapeChanging: true,

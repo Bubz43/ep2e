@@ -132,8 +132,9 @@ h3 {
     --health-item-padding: 0.5rem;
     > * {
       flex-grow: 1;
-      background: alphav(var(--color-bg-alt), 0.95);
+      background: alphav(var(--color-grey), 0.08);
       margin: 0 0.125rem;
+      box-shadow: 0 -1px 2px hsla(0, 0%, 0%, 0.75);
     }
   }
 
@@ -450,7 +451,7 @@ character-view-psi {
   mwc-tab-bar {
     --mdc-theme-primary: var(--color-grey);
     padding: 0 0.25rem;
-    width: max-content;
+    width: 300px;
     min-width: 100%;
     background: linear-gradient(to top, var(--color-bg-alt), transparent);
     box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.664);
@@ -588,6 +589,14 @@ character-view-item-group[group='sleights'] {
     border: 1px solid alphav(var(--color-grey), 0.25);
     .rate {
       color: var(--color-text-lighter);
+    }
+  }
+  .speed {
+    &.increased {
+      color: var(--color-secondary);
+    }
+    &.decreased {
+      color: lightv(var(--color-negative), 1.65);
     }
   }
 }

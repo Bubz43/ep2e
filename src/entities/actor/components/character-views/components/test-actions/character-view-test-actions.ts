@@ -284,9 +284,11 @@ export class CharacterViewTestActions extends LitElement {
             >
               <span slot="before">${localize('source')}:</span>
               <span>
-                ${activeEgo ? onboardALIs.get(activeEgo)?.name : ''}
-                ${currentEgo.name}</span
-              >
+                ${compact([
+                  activeEgo && onboardALIs.get(activeEgo)?.name,
+                  currentEgo.name,
+                ]).join(' - ')}
+              </span>
 
               <mwc-icon slot="after" ?disabled=${this.ego.disabled}
                 >${currentEgo !== this.ego

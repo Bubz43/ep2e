@@ -26,7 +26,7 @@
   display: grid;
   grid-template-columns: min-content;
   grid-template-areas:
-    '.. info ..'
+    '.. info info'
     'bars bars bars';
   position: relative;
   padding: var(--health-item-padding, 0.25rem 0.5rem);
@@ -76,7 +76,9 @@
 
 .health-type {
   grid-area: type;
-  @include truncate(100%);
+  @include truncate(100px);
+  min-width: 100%;
+  padding-right: 1rem;
   flex: 1;
   z-index: 1;
   text-transform: uppercase;
@@ -165,6 +167,9 @@
   .threshold-label {
     font-size: 15px;
     font-weight: light;
+  }
+  .wound-threshold {
+    white-space: nowrap;
   }
 }
 

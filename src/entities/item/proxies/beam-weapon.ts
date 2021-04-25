@@ -50,6 +50,12 @@ export class BeamWeapon
     super(init);
   }
 
+  get fullName() {
+    return this.singleUseSpent
+      ? `[${localize('spent')}] ${this.name}`
+      : this.name;
+  }
+
   get canFire() {
     return !!this.availableShots;
   }
@@ -95,11 +101,16 @@ export class BeamWeapon
   }
 
   get fullType() {
-    return pipe(
+    const type = pipe(
       [this.wareType, this.type] as const,
       compact,
       map(localize),
     ).join(' ');
+    return this.isSingleUse ? `${localize('singleUse')} - ${type}` : type;
+  }
+
+  setSingleUseSpent(spent: boolean) {
+    this.updater.path('data', 'state', 'used').commit(spent);
   }
 
   get timeTillFullyCharged() {
