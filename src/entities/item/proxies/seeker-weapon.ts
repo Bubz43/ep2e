@@ -49,8 +49,8 @@ export class SeekerWeapon extends mix(Base).with(
 
   get fullType() {
     return this.isSingleUse
-      ? `${localize('singleUse')} - ${super.type}`
-      : super.type;
+      ? `${localize('singleUse')} - ${super.fullType}`
+      : super.fullType;
   }
 
   fire() {

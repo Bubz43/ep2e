@@ -59,8 +59,8 @@ export class SprayWeapon
 
   get fullType() {
     return this.isSingleUse
-      ? `${localize('singleUse')} - ${super.type}`
-      : super.type;
+      ? `${localize('singleUse')} - ${super.fullType}`
+      : super.fullType;
   }
 
   get canFire() {
