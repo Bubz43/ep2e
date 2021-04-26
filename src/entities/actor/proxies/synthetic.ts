@@ -45,6 +45,7 @@ export class Synthetic extends mix(SyntheticBase).with(
   private _localEffects?: AppliedEffects;
   private _outsideEffects?: ReadonlyAppliedEffects;
   readonly sleeved;
+  readonly exoskeleton;
 
   static get painFilterEffects() {
     return [
@@ -64,15 +65,18 @@ export class Synthetic extends mix(SyntheticBase).with(
   constructor({
     activeEffects,
     sleeved,
+    exoskeleton,
     ...init
   }: ActorProxyInit<ActorType.Synthetic> & {
     activeEffects?: ReadonlyAppliedEffects;
     sleeved?: boolean;
+    exoskeleton?: boolean;
   }) {
     super(init);
     if (activeEffects) this._outsideEffects = activeEffects;
 
     this.sleeved = sleeved;
+    this.exoskeleton = exoskeleton;
   }
 
   updateConditions(conditions: ConditionType[]) {
@@ -108,8 +112,10 @@ export class Synthetic extends mix(SyntheticBase).with(
   get inherentArmorEffect() {
     const { source, ...armors } = this.epData.inherentArmor;
     return {
-      source: source || localize('frame'),
-      effects: [createEffect.armor({ ...armors, layerable: false })],
+      source: this.exoskeleton ? this.name : source || localize('frame'),
+      effects: [
+        createEffect.armor({ ...armors, layerable: !!this.exoskeleton }),
+      ],
     };
   }
 

@@ -34,6 +34,7 @@ import { taskState } from '@src/features/actions';
 import { ActiveArmor } from '@src/features/active-armor';
 import { ConditionType, getConditionEffects } from '@src/features/conditions';
 import {
+  createEffect,
   EffectType,
   totalModifiers,
   UniqueEffectType,
@@ -73,6 +74,7 @@ import {
   uniq,
 } from 'remeda';
 import { traverseActiveElements } from 'weightless';
+import type { ItemOperations } from '../actor';
 import { openSleeveForm } from '../actor-views';
 import { Ego, FullEgoData } from '../ego';
 import { formattedSleeveInfo, isSleeveItem, Sleeve } from '../sleeves';
@@ -98,6 +100,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   readonly activatedSleights: Sleight[] = [];
   readonly egoTraits: Trait[] = [];
   readonly morphTraits: Trait[] = [];
+  readonly vehicleTraits: Trait[] = [];
   readonly equipped: EquippableItem[] = [];
   readonly consumables: ConsumableItem[] = [];
   readonly awaitingOnsetSubstances: Substance[] = [];
@@ -111,14 +114,15 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
     const sleeveItems = new Map<string, ItemProxy>();
     const egoItems = new Map<string, ItemProxy>();
+    const vehicleItems = new Map<string, ItemProxy>();
 
     const { vehicle } = this.epFlags ?? {};
-    this.vehicle = vehicle && this.setupVehicle(vehicle);
+    this.vehicle = vehicle && this.setupVehicle(vehicle, vehicleItems);
 
     this.sleeve = this.setupSleeve(sleeveItems);
     this.ego = this.setupEgo(egoItems);
 
-    this.setupItems(sleeveItems, egoItems);
+    this.setupItems({ sleeveItems, egoItems, vehicleItems });
 
     for (const temp of this.epData.temporary) {
       if (temp.type === TemporaryFeatureType.Effects) {
@@ -139,7 +143,16 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       }
     }
 
-    if (this.sleeve && this.sleeve?.type !== ActorType.Infomorph) {
+    if (this.vehicle) {
+      this._appliedEffects.add(this.vehicle.inherentArmorEffect);
+      this._appliedEffects.add(getEffectsFromSize(this.vehicle.size));
+      const { unarmedDV } = this.vehicle;
+      unarmedDV &&
+        this._appliedEffects.add({
+          source: this.vehicle.name,
+          effects: [createEffect.melee({ dvModifier: unarmedDV })],
+        });
+    } else if (this.sleeve && this.sleeve?.type !== ActorType.Infomorph) {
       this._appliedEffects.add(getEffectsFromSize(this.sleeve.size));
     }
 
@@ -782,6 +795,19 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     return { accept: true } as const;
   }
 
+  openVehicleForm() {
+    const { vehicle } = this;
+    if (!vehicle) return;
+    this.addLinkedWindow(
+      vehicle.updater,
+      ({ proxy }) =>
+        proxy.type === ActorType.Character &&
+        proxy.vehicle?.type === vehicle.type &&
+        proxy.vehicle,
+      openSleeveForm,
+    );
+  }
+
   openSleeveForm() {
     const { sleeve } = this;
     if (!sleeve) return;
@@ -861,19 +887,40 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       : null;
   }
 
-  private setupVehicle(data: ActorEntity<ActorType.Synthetic>) {
+  private setupVehicle(
+    data: ActorEntity<ActorType.Synthetic>,
+    items: Map<string, ItemProxy>,
+  ) {
     const updater = this.updater
       .path('flags', EP.Name, 'vehicle')
       .nestedStore();
-    const items = new Map<string, ItemProxy>();
+    const add: ItemOperations['add'] = async (...datas) => {
+      const newIds = await this.itemOperations.add(...datas);
+      await updater
+        .path('flags', EP.Name, 'exoskeletonItemIds')
+        .commit((ids) => [...(ids || []), ...newIds]);
+      return newIds;
+    };
+    const remove: ItemOperations['remove'] = async (...removedIds) => {
+      const removed = await this.itemOperations.remove(...removedIds);
+      await updater
+        .path('flags', EP.Name, 'exoskeletonItemIds')
+        .commit((ids) => difference(ids || [], removed));
+      return removed;
+    };
     return new Synthetic({
       items,
       data,
       activeEffects: this.appliedEffects,
-      itemOperations: this.itemOperations,
+      itemOperations: {
+        add,
+        remove,
+        update: this.itemOperations.update,
+      },
       sleeved: true,
       actor: this.actor,
-      openForm: this.openSleeveForm.bind(this),
+      openForm: this.openVehicleForm.bind(this),
+      exoskeleton: true,
       updater,
     });
   }
@@ -898,11 +945,19 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     return !this.psi || this.psi?.isFunctioning;
   }
 
-  private setupItems(
-    sleeveItems: Map<string, ItemProxy>,
-    egoItems: Map<string, ItemProxy>,
-  ) {
+  private setupItems({
+    sleeveItems,
+    egoItems,
+    vehicleItems,
+  }: {
+    sleeveItems: Map<string, ItemProxy>;
+    egoItems: Map<string, ItemProxy>;
+    vehicleItems: Map<string, ItemProxy>;
+  }) {
     const sleights: Sleight[] = [];
+    const vehicleItemIds = new Set(
+      this.vehicle?.epFlags?.exoskeletonItemIds || [],
+    );
     for (const item of this.items.values()) {
       if (item.type === ItemType.Substance && item.appliedState) {
         if (item.appliedState === 'active') {
@@ -928,14 +983,25 @@ export class Character extends ActorProxyBase<ActorType.Character> {
           if ('currentEffects' in item) {
             this._appliedEffects.add(item.currentEffects);
           }
-          if (isSleeveItem(item)) sleeveItems.set(item.id, item);
+          if (isSleeveItem(item)) {
+            (vehicleItemIds.has(item._id) ? vehicleItems : sleeveItems).set(
+              item.id,
+              item,
+            );
+          }
         }
       } else if ('stashed' in item) {
         this[item.stashed ? 'stashed' : 'consumables'].push(item);
       } else if (item.type === ItemType.Trait) {
-        const collection = item.isMorphTrait ? sleeveItems : egoItems;
-        collection.set(item.id, item);
-        this[item.isMorphTrait ? 'morphTraits' : 'egoTraits'].push(item);
+        if (vehicleItemIds.has(item.id)) {
+          vehicleItems.set(item.id, item);
+          this.vehicleTraits.push(item);
+        } else {
+          const collection = item.isMorphTrait ? sleeveItems : egoItems;
+          collection.set(item.id, item);
+          this[item.isMorphTrait ? 'morphTraits' : 'egoTraits'].push(item);
+        }
+
         this._appliedEffects.add(item.currentEffects);
       } else if (item.type === ItemType.Sleight) {
         sleights.push(item);
