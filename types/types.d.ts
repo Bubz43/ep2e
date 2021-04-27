@@ -1,1 +1,1 @@
-import 'typed-query-selector/strict';
+// import 'typed-query-selector/strict';

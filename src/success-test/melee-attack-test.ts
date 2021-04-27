@@ -193,17 +193,15 @@ export class MeleeAttackTest extends SkillTest {
   ) {
     if (actor) {
       const { proxy } = actor;
-      const targetSleeve =
-        proxy.type === ActorType.Character ? proxy.sleeve : proxy;
-      const { sleeve } = this.character;
+      const targetSleeveSize =
+        proxy.type === ActorType.Character ? proxy.morphSize : "size" in proxy && proxy.size;
+      const {  morphSize } = this.character;
       if (
-        targetSleeve &&
-        targetSleeve?.type !== ActorType.Infomorph &&
-        sleeve &&
-        sleeve?.type !== ActorType.Infomorph
+        targetSleeveSize &&
+        morphSize
       ) {
         return (
-          sizeReachAdvantage(sleeve.size, targetSleeve.size) +
+          sizeReachAdvantage(morphSize, targetSleeveSize) +
           this.character.morphReach -
           (proxy.type === ActorType.Character ? proxy.morphReach : 0)
         );

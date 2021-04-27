@@ -379,7 +379,9 @@ for (const app of [ActorDirectory, ItemDirectory]) {
           game[app === ActorDirectory ? 'actors' : 'items'].get(entityId);
         if (!entity) return;
 
-        const nameElement = listItem.querySelector('h4.entity-name')!;
+        const nameElement = listItem.querySelector<HTMLHeadingElement>(
+          'h4.entity-name',
+        )!;
 
         if (isItem(entity)) {
           nameElement.querySelector('a')!.textContent = entity.proxy.fullName;

@@ -1,4 +1,5 @@
 import {
+  AddEffects,
   AppliedEffects,
   ReadonlyAppliedEffects,
 } from '@src/entities/applied-effects';
@@ -109,7 +110,7 @@ export class Synthetic extends mix(SyntheticBase).with(
     return !this.isSwarm;
   }
 
-  get inherentArmorEffect() {
+  get inherentArmorEffect(): AddEffects {
     const { source, ...armors } = this.epData.inherentArmor;
     return {
       source: this.exoskeleton ? this.name : source || localize('frame'),

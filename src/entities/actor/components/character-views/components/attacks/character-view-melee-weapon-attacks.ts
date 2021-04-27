@@ -63,19 +63,15 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
     });
 
     const header = this.weapon.messageHeader;
-
+    const size = character?.morphSize;
     createMessage({
       data: {
         header: {
           ...header,
           subheadings: compact([
             header.subheadings,
-            character?.sleeve &&
-            'size' in character.sleeve &&
-            character.sleeve.size !== Size.Medium
-              ? `${localize(character.sleeve.size)} ${localize(
-                  'size',
-                )} ${localize('user')}`
+            size && size !== Size.Medium
+              ? `${localize(size)} ${localize('size')} ${localize('user')}`
               : '',
           ]).flat(),
         },

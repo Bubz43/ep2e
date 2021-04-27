@@ -13,11 +13,13 @@ import { concat, map, pipe } from 'remeda';
 import type { ActorEP } from './actor/actor';
 import { ActorType, ItemType, sleeveTypes } from './entity-types';
 import {
+  ActorEntity,
   createActorEntity,
   createItemEntity,
   ItemDatas,
   ItemEntity,
 } from './models';
+import type { UpdateStore } from './update-store';
 
 // ! Make sure not to access proxies in migrations, instead use main entity
 
@@ -63,6 +65,9 @@ export const migrateWorld = async () => {
 
 const migrateActor = (actor: ActorEP) => {
   if (actor.data.type === ActorType.Character) {
+    const updater = actor.updater as UpdateStore<
+      ActorEntity<ActorType.Character>
+    >;
     const epFlags = actor.data.flags[EP.Name] || {};
     for (const sleeveType of sleeveTypes) {
       const sleeveData = epFlags[sleeveType];
@@ -71,17 +76,17 @@ const migrateActor = (actor: ActorEP) => {
           name: sleeveData.name,
           type: sleeveData.type,
         });
-        actor.updater
+        updater
           .path('flags', EP.Name, sleeveData.type)
           .store(mergeObject(updatedData, sleeveData, { inplace: false }));
-      } else actor.updater.path('flags', EP.Name, sleeveType).store(null);
+      } else updater.path('flags', EP.Name, sleeveType).store(null);
     }
     if (epFlags.psi) {
       pipe(
         epFlags.psi,
         baseItemMigration,
         migratePsiFlags,
-        actor.updater.path('flags', EP.Name, epFlags.psi.type).store,
+        updater.path('flags', EP.Name, epFlags.psi.type).store,
       );
     }
   }

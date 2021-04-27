@@ -75,7 +75,7 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
   }
 
   private rollUnarmedDamage() {
-    const { sleeve } = this.character;
+    const { sleeve, morphSize } = this.character;
     const damage =
       !sleeve || sleeve.type === ActorType.Infomorph ? '0' : sleeve.unarmedDV;
     console.log(damage);
@@ -91,7 +91,7 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
           augmentUnarmed: true,
           unarmedDV: damage,
           damageModifiers: this.character?.appliedEffects.meleeDamageBonuses,
-          morphSize: sleeve && 'size' in sleeve ? sleeve.size : null,
+          morphSize: morphSize,
           settings: {},
           attack: undefined,
         }),

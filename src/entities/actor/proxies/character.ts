@@ -36,6 +36,7 @@ import { ConditionType, getConditionEffects } from '@src/features/conditions';
 import {
   createEffect,
   EffectType,
+  PoolEffect,
   totalModifiers,
   UniqueEffectType,
 } from '@src/features/effects';
@@ -144,9 +145,22 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     }
 
     if (this.vehicle) {
-      this._appliedEffects.add(this.vehicle.inherentArmorEffect);
+      const vehicleEffects = this.vehicle.inherentArmorEffect;
       this._appliedEffects.add(getEffectsFromSize(this.vehicle.size));
-      const { unarmedDV } = this.vehicle;
+
+      const { unarmedDV, pools } = this.vehicle;
+      const poolEffects: PoolEffect[] = [];
+      for (const pool of enumValues(PoolType)) {
+        if (pool !== PoolType.Threat) {
+          const value = pools[pool];
+          if (value)
+            vehicleEffects.effects.push(
+              createEffect.pool({ pool, modifier: value }),
+            );
+        }
+      }
+      this._appliedEffects.add(vehicleEffects);
+
       unarmedDV &&
         this._appliedEffects.add({
           source: this.vehicle.name,
@@ -179,6 +193,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     const { sleeve } = this;
     return (
       (!sleeve || sleeve.type === ActorType.Infomorph ? 0 : sleeve.reach) +
+      (this.vehicle?.reach || 0) +
       this.appliedEffects
         .getGroup(EffectType.Melee)
         .reduce((accum, { reachBonus }) => accum + (reachBonus || 0), 0)
@@ -186,7 +201,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   }
 
   get morphSize() {
-    const { sleeve } = this;
+    const { sleeve, vehicle } = this;
+    if (vehicle) return vehicle.size;
     if (!sleeve || sleeve.type === ActorType.Infomorph) return null;
     return sleeve.size;
   }
@@ -346,6 +362,9 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       if (sleeve.type !== ActorType.Infomorph)
         healths.push(sleeve.physicalHealth);
       if (sleeve.activeMeshHealth) healths.push(sleeve.activeMeshHealth);
+    }
+    if (this.vehicle) {
+      healths.push(this.vehicle.physicalHealth);
     }
     return healths;
   }
@@ -808,7 +827,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     );
   }
 
-  openSleeveForm() {
+  openSleeveApp() {
     const { sleeve } = this;
     if (!sleeve) return;
     this.addLinkedWindow(
@@ -911,7 +930,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     return new Synthetic({
       items,
       data,
-      activeEffects: this.appliedEffects,
+      activeEffects: this._appliedEffects,
       itemOperations: {
         add,
         remove,
@@ -937,7 +956,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       sleeved: true,
       actor: this.actor,
       updater: this.updater.path('flags', EP.Name, data.type).nestedStore(),
-      openForm: this.openSleeveForm.bind(this),
+      openForm: this.openSleeveApp.bind(this),
     };
   }
 

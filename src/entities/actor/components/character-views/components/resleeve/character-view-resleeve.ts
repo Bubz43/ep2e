@@ -65,7 +65,7 @@ export class CharacterViewResleeve extends LitElement {
 
   @property({ attribute: false }) character!: Character;
 
-  @internalProperty() private selectedSleeve: Sleeve | null = null;
+  @property({ attribute: false }) selectedSleeve?: Sleeve | null = null;
 
   @internalProperty() private showStressForm = false;
 

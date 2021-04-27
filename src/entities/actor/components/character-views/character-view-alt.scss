@@ -114,6 +114,7 @@ h3 {
 }
 
 .header {
+  display: flow-root;
   grid-area: header;
   background: linear-gradient(
     to bottom,
@@ -205,6 +206,20 @@ h3 {
     width: max-content;
     border-bottom: 0;
   }
+}
+
+.vehicle {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0.25rem;
+  margin: 0.25rem;
+  width: 300px;
+  min-width: calc(100% - 0.5rem);
+  border: 1px solid var(--color-border);
+  border-right: none;
+  border-left: none;
 }
 
 .psi {
