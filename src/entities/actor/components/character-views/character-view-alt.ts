@@ -765,6 +765,27 @@ export class CharacterViewAlt extends CharacterViewBase {
     </header>`;
   }
 
+  private openVehicleMenu(ev: MouseEvent) {
+    openMenu({
+      header: {
+        heading: this.character.vehicle?.name || localize('exoskeleton'),
+      },
+      content: [
+        {
+          label: localize('delete'),
+          callback: async () => {
+            await this.character.itemOperations.remove(
+              ...(this.character.vehicle?.epFlags?.exoskeletonItemIds || []),
+            );
+            this.character.updater
+              .path('flags', EP.Name, 'vehicle')
+              .commit(null);
+          },
+        },
+      ],
+    });
+  }
+
   private renderVehicle(vehicle: NonNullable<Character['vehicle']>) {
     const canPlace = userCan('TEMPLATE_CREATE');
 
@@ -789,6 +810,11 @@ export class CharacterViewAlt extends CharacterViewBase {
             </div>
           `
         : ''}
+      <mwc-icon-button
+        icon="more_vert"
+        ?disabled=${!this.character.editable}
+        @click=${this.openVehicleMenu}
+      ></mwc-icon-button>
     </div>`;
   }
 
