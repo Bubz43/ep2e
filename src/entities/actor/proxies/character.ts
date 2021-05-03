@@ -316,21 +316,12 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     if (!this.sleeve || this.sleeve.type === ActorType.Infomorph) return [];
     const { movementRates } = this.sleeve;
     const { movementEffects } = this._appliedEffects;
-    const movements = [...movementRates, ...movementEffects.granted];
     const { encumbered, overburdened } = this.movementModifiers;
-    if (encumbered) {
-      return movements.map((movement) => ({
-        ...movement,
-        base: 0,
-        full: 0,
-        original: { base: movement.base, full: movement.full },
-      }));
-    }
-
-    // if (overburdened || notEmpty(movementEffects.modify)) {
     const change = (initial: number, mod: number) =>
-      Math.ceil(nonNegative(initial + mod) / (overburdened ? 2 : 1));
-    return movements.map((movement) => {
+      encumbered
+        ? 0
+        : Math.ceil(nonNegative(initial + mod) / (overburdened ? 2 : 1));
+    const finalMovements = movementRates.map((movement) => {
       const mods = movementEffects.modify.get(movement.type);
       return {
         type: movement.type,
@@ -340,8 +331,13 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         original: { base: movement.base, full: movement.full },
       };
     });
-    // }
-    // return movements;
+    return [
+      ...finalMovements,
+      ...movementEffects.granted.map((m) => ({
+        ...m,
+        original: { base: m.base, full: m.full },
+      })),
+    ];
   }
 
   async addToSpentPools(...pools: { pool: PoolType; points: number }[]) {
