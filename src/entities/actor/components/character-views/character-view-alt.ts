@@ -1051,11 +1051,7 @@ export class CharacterViewAlt extends CharacterViewBase {
     return html` <item-trash .proxy=${this.character}></item-trash> `;
   };
 
-  private static traits = [
-    ItemGroup.EgoTraits,
-    ItemGroup.MorphTraits,
-    ItemGroup.VehicleTraits,
-  ];
+  private static traits = [ItemGroup.EgoTraits, ItemGroup.MorphTraits];
 
   private static sleights = [
     ItemGroup.PassiveSleights,
@@ -1087,7 +1083,9 @@ export class CharacterViewAlt extends CharacterViewBase {
 
       case 'traits':
         return html`${repeat(
-          CharacterViewAlt.traits,
+          this.character.vehicleTraits.length
+            ? [...CharacterViewAlt.traits, ItemGroup.VehicleTraits]
+            : CharacterViewAlt.traits,
           identity,
           this.renderItemGroup,
         )}`;
