@@ -1051,7 +1051,11 @@ export class CharacterViewAlt extends CharacterViewBase {
     return html` <item-trash .proxy=${this.character}></item-trash> `;
   };
 
-  private static traits = [ItemGroup.EgoTraits, ItemGroup.MorphTraits];
+  private static traits = [
+    ItemGroup.EgoTraits,
+    ItemGroup.MorphTraits,
+    ItemGroup.VehicleTraits,
+  ];
 
   private static sleights = [
     ItemGroup.PassiveSleights,

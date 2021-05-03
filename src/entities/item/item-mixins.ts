@@ -45,6 +45,7 @@ export const Equippable = (
   >,
 ) => {
   return class extends cls {
+    vehicleOwner?: string | null;
     get equipped() {
       return this.epData.state.equipped;
     }

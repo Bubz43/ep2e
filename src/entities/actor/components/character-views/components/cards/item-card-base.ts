@@ -107,6 +107,9 @@ export abstract class ItemCardBase extends LazyRipple(LitElement) {
                 >
               `
             : ''}
+          ${'vehicleOwner' in item && item.vehicleOwner
+            ? html` <span class="vehicle-owner">[${item.vehicleOwner}]</span> `
+            : ''}
           <span class="name">${item.fullName}</span>
           <span class="type">${item.fullType}</span>
         </span>

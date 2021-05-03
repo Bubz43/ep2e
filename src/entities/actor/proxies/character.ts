@@ -999,10 +999,9 @@ export class Character extends ActorProxyBase<ActorType.Character> {
             this._appliedEffects.add(item.currentEffects);
           }
           if (isSleeveItem(item)) {
-            (vehicleItemIds.has(item._id) ? vehicleItems : sleeveItems).set(
-              item.id,
-              item,
-            );
+            const isVehicleItem = vehicleItemIds.has(item._id);
+            (isVehicleItem ? vehicleItems : sleeveItems).set(item.id, item);
+            item.vehicleOwner = isVehicleItem ? this.vehicle?.name : undefined;
           }
         }
       } else if ('stashed' in item) {
