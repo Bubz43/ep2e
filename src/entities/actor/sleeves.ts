@@ -74,9 +74,15 @@ export const ownedSleeves = () => {
   );
 };
 
-export const formattedSleeveInfo = (sleeve: Sleeve) => {
+export const formattedSleeveInfo = (
+  sleeve: Sleeve,
+  exoskeleton?: Synthetic | null,
+) => {
   return compact([
-    'size' in sleeve && localize(sleeve.size),
+    'size' in sleeve &&
+      `${localize(sleeve.size)}${
+        exoskeleton ? ` ${localize('as')} ${localize(exoskeleton.size)}` : ''
+      }`,
     sleeve.subtype ? localize(sleeve.subtype as any) : localize(sleeve.type),
     'isSwarm' in sleeve && sleeve.isSwarm && localize('swarm'),
     'sex' in sleeve && sleeve.sex,
