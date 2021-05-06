@@ -1491,7 +1491,8 @@ type LangEntries =
   | 'move'
   | 'spent'
   | 'vehicleTraits'
-  | 'healths';
+  | 'healths'
+  | 'vehicleGear';
 type FullNames =
   | 'cog'
   | 'int'

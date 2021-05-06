@@ -179,27 +179,25 @@ export const openPsiFormWindow = (psi: Psi) => {
 
 export const itemMenuOptions = (item: ItemProxy): MWCMenuOption[] => {
   return compact([
-    item.editable &&
-      'setSingleUseSpent' in item &&
+    'setSingleUseSpent' in item &&
       item.isSingleUse && {
         label: item.singleUseSpent
           ? `${localize('restore')} ${localize('use')}`
           : `${localize('set')} ${localize('spent')}`,
         callback: () => item.setSingleUseSpent(!item.singleUseSpent),
+        disabled: !item.editable,
       },
-    item.editable &&
-      'toggleStashed' in item &&
+    'toggleStashed' in item &&
       (item.type !== ItemType.Substance || !item.appliedState) && {
         label: localize(item.stashed ? 'carry' : 'stash'),
         callback: item.toggleStashed.bind(item),
         disabled: !item.editable,
       },
-    item.editable &&
-      'toggleEquipped' in item && {
-        label: localize(item.equipped ? 'unequip' : 'equip'),
-        callback: item.toggleEquipped.bind(item),
-        disabled: !item.editable,
-      },
+    'toggleEquipped' in item && {
+      label: localize(item.equipped ? 'unequip' : 'equip'),
+      callback: item.toggleEquipped.bind(item),
+      disabled: !item.editable || !!item.vehicleOwner,
+    },
     {
       label: localize('message'),
       icon: html`<mwc-icon>message</mwc-icon>`,

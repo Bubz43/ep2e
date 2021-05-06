@@ -103,6 +103,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   readonly morphTraits: Trait[] = [];
   readonly vehicleTraits: Trait[] = [];
   readonly equipped: EquippableItem[] = [];
+  readonly vehicleGear: EquippableItem[] = [];
   readonly consumables: ConsumableItem[] = [];
   readonly awaitingOnsetSubstances: Substance[] = [];
   readonly activeSubstances: Substance[] = [];
@@ -217,6 +218,12 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     return !!(this.passiveSleights.length || this.activatedSleights.length);
   }
 
+  get allEquipped() {
+    return this.vehicleGear.length
+      ? [...this.equipped, ...this.vehicleGear]
+      : this.equipped;
+  }
+
   @LazyGetter()
   get weapons() {
     const melee: MeleeWeapon[] = [];
@@ -248,7 +255,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       }
     }
 
-    for (const equipped of this.equipped) {
+    for (const equipped of this.allEquipped) {
       switch (equipped.type) {
         case ItemType.MeleeWeapon:
           melee.push(equipped);
@@ -515,7 +522,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     const { masterDeviceId, unslavedDevices } = this.networkSettings;
 
     // TODO Weapons && active use
-    for (const item of this.equipped) {
+    for (const item of this.allEquipped) {
       if (item.type === ItemType.PhysicalService) {
         services.push(item);
         if (!item.isIndefiniteService) {
@@ -992,17 +999,21 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         continue;
       }
       if ('equipped' in item) {
-        this[item.equipped ? 'equipped' : 'stashed'].push(item);
         if (item.equipped) {
+          const sleeveItem = isSleeveItem(item);
+          const isVehicleItem = sleeveItem && vehicleItemIds.has(item._id);
+          if (isVehicleItem) {
+            this.vehicleGear.push(item);
+            vehicleItems.set(item.id, item);
+            item.vehicleOwner = this.vehicle?.name;
+          } else this.equipped.push(item);
+
+          if (sleeveItem) sleeveItems.set(item.id, item);
+
           if ('currentEffects' in item) {
             this._appliedEffects.add(item.currentEffects);
           }
-          if (isSleeveItem(item)) {
-            const isVehicleItem = vehicleItemIds.has(item._id);
-            (isVehicleItem ? vehicleItems : sleeveItems).set(item.id, item);
-            item.vehicleOwner = isVehicleItem ? this.vehicle?.name : undefined;
-          }
-        }
+        } else this.stashed.push(item);
       } else if ('stashed' in item) {
         this[item.stashed ? 'stashed' : 'consumables'].push(item);
       } else if (item.type === ItemType.Trait) {

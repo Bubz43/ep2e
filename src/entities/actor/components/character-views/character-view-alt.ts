@@ -1096,6 +1096,13 @@ export class CharacterViewAlt extends CharacterViewBase {
     ItemGroup.Stashed,
   ];
 
+  private static gearWithVehicle = [
+    ItemGroup.Consumables,
+    ItemGroup.Equipped,
+    ItemGroup.VehicleGear,
+    ItemGroup.Stashed,
+  ];
+
   private renderTabbedContent() {
     switch (this.currentTab) {
       case 'combat':
@@ -1108,7 +1115,9 @@ export class CharacterViewAlt extends CharacterViewBase {
 
       case 'gear':
         return html`${repeat(
-          CharacterViewAlt.gear,
+          this.character.vehicle
+            ? CharacterViewAlt.gearWithVehicle
+            : CharacterViewAlt.gear,
           identity,
           this.renderItemGroup,
         )}`;
