@@ -150,6 +150,7 @@ export type MeleeWeaponSettings = {
   calledShot?: CalledShot | null;
   oneHanded?: boolean;
   damageIrrespectiveOfSize?: boolean;
+  alwaysArmorPiercing?: boolean;
 };
 
 export const formulasFromMeleeSettings = ({

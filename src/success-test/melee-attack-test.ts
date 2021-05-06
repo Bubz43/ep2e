@@ -102,6 +102,8 @@ export class MeleeAttackTest extends SkillTest {
       touchOnly: meleeWeapon?.isTouchOnly,
       attackTarget: [...game.user.targets][0], // TODO get closest to token
       damageIrrespectiveOfSize: meleeWeapon?.damageIrrespectiveOfSize,
+      alwaysArmorPiercing: this.character.appliedEffects
+        .meleeAlwaysArmorPiercing,
       update: this.recipe((draft, changed) => {
         draft.melee = merge(draft.melee, changed);
         if (changed.weapon) {
@@ -194,12 +196,11 @@ export class MeleeAttackTest extends SkillTest {
     if (actor) {
       const { proxy } = actor;
       const targetSleeveSize =
-        proxy.type === ActorType.Character ? proxy.morphSize : "size" in proxy && proxy.size;
-      const {  morphSize } = this.character;
-      if (
-        targetSleeveSize &&
-        morphSize
-      ) {
+        proxy.type === ActorType.Character
+          ? proxy.morphSize
+          : 'size' in proxy && proxy.size;
+      const { morphSize } = this.character;
+      if (targetSleeveSize && morphSize) {
         return (
           sizeReachAdvantage(morphSize, targetSleeveSize) +
           this.character.morphReach -

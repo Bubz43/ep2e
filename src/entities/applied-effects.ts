@@ -165,6 +165,11 @@ export class AppliedEffects {
   }
 
   @LazyGetter()
+  get meleeAlwaysArmorPiercing() {
+    return this.getGroup(EffectType.Melee).some((e) => e.armorPiercing);
+  }
+
+  @LazyGetter()
   get durationEffects() {
     return groupBy(
       this.getGroup(EffectType.Duration),

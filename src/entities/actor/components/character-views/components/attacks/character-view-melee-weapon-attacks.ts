@@ -59,6 +59,7 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
           ? character.sleeve.size
           : null,
       source: `${name} ${hasSecondaryAttack ? `[${attack.label}]` : ''}`,
+      alwaysArmorPiercing: character?.appliedEffects.meleeAlwaysArmorPiercing,
       settings: { attackType, damageIrrespectiveOfSize },
     });
 
