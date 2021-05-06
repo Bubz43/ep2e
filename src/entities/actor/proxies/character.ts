@@ -371,6 +371,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       // TODO Vehicle
       // TODO Item Healths
       ...(this.sleeve?.healths ?? []),
+      this.vehicle?.physicalHealth,
     ]);
   }
 

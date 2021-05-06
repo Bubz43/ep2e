@@ -81,7 +81,11 @@ export const formattedSleeveInfo = (
   return compact([
     'size' in sleeve &&
       `${localize(sleeve.size)}${
-        exoskeleton ? ` ${localize('as')} ${localize(exoskeleton.size)}` : ''
+        exoskeleton
+          ? ` ${localize('as').toLocaleLowerCase()} ${localize(
+              exoskeleton.size,
+            )}`
+          : ''
       }`,
     sleeve.subtype ? localize(sleeve.subtype as any) : localize(sleeve.type),
     'isSwarm' in sleeve && sleeve.isSwarm && localize('swarm'),

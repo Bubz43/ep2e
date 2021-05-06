@@ -134,6 +134,9 @@ h3 {
     margin-top: 0.25rem;
 
     --health-item-padding: 0.5rem;
+    &.even {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
     > * {
       flex-grow: 1;
       background: alphav(var(--color-grey), 0.08);
@@ -223,6 +226,7 @@ h3 {
   border: 1px solid var(--color-border);
   border-right: none;
   border-left: none;
+  --mdc-icon-button-size: 1.75rem;
 }
 
 .psi {

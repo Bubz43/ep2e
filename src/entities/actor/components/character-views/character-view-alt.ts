@@ -522,10 +522,7 @@ export class CharacterViewAlt extends CharacterViewBase {
       vehicle,
     } = this.character;
     const { filteredMotivations, settings } = ego;
-    const physicalHealth =
-      sleeve && 'physicalHealth' in sleeve && sleeve.physicalHealth;
-    const meshHealth =
-      sleeve && 'activeMeshHealth' in sleeve && sleeve.activeMeshHealth;
+
     const canPlace = userCan('TEMPLATE_CREATE');
 
     return html`<header class="header" @drop=${this.handleEntityDrop}>
@@ -596,9 +593,6 @@ export class CharacterViewAlt extends CharacterViewBase {
             ? html`
                 <ul class="pools">
                   ${[...pools.values()].map(
-                    // pools.size <= 1
-                    //   ? this.renderPool
-                    //   :
                     (pool) => html` <li
                       class="pool"
                       tabindex=${disabled ? '-1' : 0}
@@ -612,7 +606,6 @@ export class CharacterViewAlt extends CharacterViewBase {
                     >
                       <img height="22px" src=${pool.icon} />
                       <span></span>
-                      <!-- <span> ${localize(pool.type)} </span> -->
                       <value-status
                         value=${pool.available}
                         max=${pool.max}
@@ -718,51 +711,56 @@ export class CharacterViewAlt extends CharacterViewBase {
             : ''}
         </div>
       </div>
-      <div class="main-healths">
-        ${settings.trackMentalHealth
-          ? html` <health-item
-              clickable
-              data-renderer=${CharacterDrawerRenderer.MentalHealth}
-              @click=${this.setDrawerRenderer}
-              class="mental-health-view"
-              .health=${ego.mentalHealth}
-              ><span slot="source">${localize('ego')}</span></health-item
-            >`
-          : ''}
-        ${physicalHealth
-          ? html`
-              <health-item
-                clickable
-                data-renderer=${CharacterDrawerRenderer.SleevePhysicalHealth}
-                @click=${this.setDrawerRenderer}
-                .health=${physicalHealth}
-              >
-              </health-item>
-            `
-          : ''}
-        ${meshHealth && sleeve
-          ? html` <health-item
-              clickable
-              data-renderer=${CharacterDrawerRenderer.SleeveMeshHealth}
-              @click=${this.setDrawerRenderer}
-              .health=${meshHealth}
-            >
-              ${sleeve.type !== ActorType.Infomorph && sleeve.nonDefaultBrain
-                ? html`
-                    <span slot="source">${sleeve.nonDefaultBrain.name}</span>
-                  `
-                : ''}
-            </health-item>`
-          : ''}
-        ${vehicle
-          ? html`
-              <health-item .health=${vehicle.physicalHealth}
-                ><span slot="source">${vehicle.name}</span>
-              </health-item>
-            `
-          : ''}
-      </div>
+      ${this.renderHealths()}
     </header>`;
+  }
+
+  private renderHealths() {
+    const { ego, sleeve, vehicle } = this.character;
+    const { settings } = ego;
+    const physicalHealth =
+      sleeve && 'physicalHealth' in sleeve && sleeve.physicalHealth;
+    const meshHealth =
+      sleeve && 'activeMeshHealth' in sleeve && sleeve.activeMeshHealth;
+    const healths = compact([
+      settings.trackMentalHealth &&
+        html` <health-item
+          clickable
+          data-renderer=${CharacterDrawerRenderer.MentalHealth}
+          @click=${this.setDrawerRenderer}
+          class="mental-health-view"
+          .health=${ego.mentalHealth}
+        ></health-item>`,
+      physicalHealth &&
+        html`
+          <health-item
+            clickable
+            data-renderer=${CharacterDrawerRenderer.SleevePhysicalHealth}
+            @click=${this.setDrawerRenderer}
+            .health=${physicalHealth}
+          >
+          </health-item>
+        `,
+      meshHealth &&
+        sleeve &&
+        html` <health-item
+          clickable
+          data-renderer=${CharacterDrawerRenderer.SleeveMeshHealth}
+          @click=${this.setDrawerRenderer}
+          .health=${meshHealth}
+        >
+          ${sleeve.type !== ActorType.Infomorph && sleeve.nonDefaultBrain
+            ? html` <span slot="source">${sleeve.nonDefaultBrain.name}</span> `
+            : ''}
+        </health-item>`,
+      vehicle &&
+        html` <health-item .health=${vehicle.physicalHealth}> </health-item> `,
+    ]);
+    return html`<div
+      class="main-healths ${classMap({ even: !(healths.length % 2) })}"
+    >
+      ${healths}
+    </div>`;
   }
 
   private openVehicleMenu(ev: MouseEvent) {
