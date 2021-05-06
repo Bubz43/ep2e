@@ -6,7 +6,12 @@ import {
   updateCombatState,
 } from '@src/combat/combat-tracker';
 import { Placement } from '@src/components/popover/popover-options';
-import { enumValues, RechargeType, ShellType } from '@src/data-enums';
+import {
+  enumValues,
+  RechargeType,
+  ShellType,
+  VehicleType,
+} from '@src/data-enums';
 import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisition';
 import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
@@ -205,6 +210,11 @@ export class CharacterViewAlt extends CharacterViewBase {
     this.character.ego.rollStress();
   }
 
+  private static exoskeletons = [
+    VehicleType.Exoskeleton,
+    VehicleType.Hardsuit,
+  ] as string[];
+
   private handleEntityDrop = handleDrop(async ({ data, ev }) => {
     if (data?.type !== DropType.Actor || this.character.disabled) return;
     const proxy = await actorDroptoActorProxy(data);
@@ -221,7 +231,8 @@ export class CharacterViewAlt extends CharacterViewBase {
       };
       if (
         proxy.type === ActorType.Synthetic &&
-        proxy.epData.shellType === ShellType.Vehicle
+        proxy.epData.shellType === ShellType.Vehicle &&
+        CharacterViewAlt.exoskeletons.includes(proxy.epData.subtype)
       ) {
         openMenu({
           header: { heading: proxy.name },
