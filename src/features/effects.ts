@@ -372,7 +372,6 @@ const format = (effect: Effect): (string | number)[] => {
           ? effect.damageAmount
           : effect.woundAmount;
       return [
-        localize('heal'),
         `${localize(effect.stat)}:`,
         formatAutoHealing({ amount, interval: effect.interval }),
         effect.technologicallyAided ? `[${localize('tech')}]` : '',
