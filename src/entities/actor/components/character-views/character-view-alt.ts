@@ -13,7 +13,7 @@ import {
   VehicleType,
 } from '@src/data-enums';
 import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisition';
-import { ActorType } from '@src/entities/entity-types';
+import { ActorType, ItemType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import { conditionIcons, ConditionType } from '@src/features/conditions';
 import { formatEffect } from '@src/features/effects';
@@ -232,7 +232,9 @@ export class CharacterViewAlt extends CharacterViewBase {
       if (
         proxy.type === ActorType.Synthetic &&
         proxy.epData.shellType === ShellType.Vehicle &&
-        CharacterViewAlt.exoskeletons.includes(proxy.epData.subtype)
+        CharacterViewAlt.exoskeletons.includes(proxy.epData.subtype) &&
+        this.character.sleeve &&
+        this.character.sleeve.type !== ActorType.Infomorph
       ) {
         openMenu({
           header: { heading: proxy.name },
