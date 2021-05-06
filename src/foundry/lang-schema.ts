@@ -1495,7 +1495,8 @@ type LangEntries =
   | 'vehicleGear'
   | 'exoBonusMeleeDV'
   | 'exoMeleeArmorPiercing'
-  | 'meleeDamageArmorPiercing';
+  | 'meleeDamageArmorPiercing'
+  | 'removeExoskeletonToResleeve';
 type FullNames =
   | 'cog'
   | 'int'

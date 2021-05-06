@@ -68,3 +68,9 @@ li[divider] {
   --mdc-theme-primary: var(--color-negative);
   margin: 0.25rem 0;
 }
+
+.exoskeleton-message {
+  margin: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}

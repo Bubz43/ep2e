@@ -375,9 +375,14 @@ export class CharacterViewResleeve extends LitElement {
               : '',
           ],
         })}
+        ${this.character.vehicle ? html`
+        
+        <p class="exoskeleton-message">${localize('removeExoskeletonToResleeve')}</p>
+        ` : ""}
         <submit-button
           @click=${this.resleeve}
           ?complete=${!!this.selectedSleeve}
+          ?disabled=${!!this.character.vehicle}
           label=${localize(this.character.sleeve ? 'resleeve' : 'sleeve')}
         ></submit-button>
       </div>
