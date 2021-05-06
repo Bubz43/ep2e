@@ -129,6 +129,7 @@ slot[name='tabs'] {
   display: grid;
   grid-template-rows: min-content auto;
   grid-template-columns: 100%;
+  --health-item-padding: 0.5rem;
   &.no-scroll {
     overflow: visible;
     height: 100%;
