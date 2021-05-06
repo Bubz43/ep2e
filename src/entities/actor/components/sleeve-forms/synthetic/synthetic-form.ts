@@ -88,6 +88,7 @@ export class SyntheticForm extends SleeveFormBase {
       availableBrains,
       nonDefaultBrain,
       activeFirewallHealth,
+      exoskeleton,
     } = this.sleeve;
     const { movementEffects } = itemGroups.effects;
     const { originalValue, commit } = updater.path('data');
@@ -147,11 +148,15 @@ export class SyntheticForm extends SleeveFormBase {
               html`
                 <entity-form-sidebar-divider></entity-form-sidebar-divider>
               `,
-              renderSelectField(shellType, enumValues(ShellType)),
+              renderSelectField(shellType, enumValues(ShellType), {
+                disabled: exoskeleton,
+              }),
 
               notEmpty(subtypes)
                 ? html`
-                    ${renderSelectField(subtype, subtypes)}
+                    ${renderSelectField(subtype, subtypes, {
+                      disabled: exoskeleton,
+                    })}
                     <entity-form-sidebar-divider></entity-form-sidebar-divider>
                   `
                 : '',
