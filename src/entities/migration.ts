@@ -81,6 +81,16 @@ const migrateActor = (actor: ActorEP) => {
           .store(mergeObject(updatedData, sleeveData, { inplace: false }));
       } else updater.path('flags', EP.Name, sleeveType).store(null);
     }
+    if (epFlags.vehicle) {
+      const { vehicle } = epFlags;
+      const updatedData = createActorEntity({
+        name: vehicle.name,
+        type: vehicle.type,
+      });
+      updater
+        .path('flags', EP.Name, 'vehicle')
+        .store(mergeObject(updatedData, vehicle, { inplace: false }));
+    }
     if (epFlags.psi) {
       pipe(
         epFlags.psi,
