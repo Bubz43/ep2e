@@ -359,9 +359,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         healths.push(sleeve.physicalHealth);
       if (sleeve.activeMeshHealth) healths.push(sleeve.activeMeshHealth);
     }
-    if (this.vehicle) {
-      healths.push(this.vehicle.physicalHealth);
-    }
+
     return healths;
   }
 
@@ -927,7 +925,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     return new Synthetic({
       items,
       data,
-      activeEffects: this._appliedEffects,
+      // activeEffects: this._appliedEffects,
       itemOperations: {
         add,
         remove,

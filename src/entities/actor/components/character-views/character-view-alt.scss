@@ -217,7 +217,6 @@ h3 {
 .vehicle {
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-between;
   align-items: center;
   padding: 0.25rem 0.25rem;
   margin: 0 0.25rem 0.25rem;
@@ -227,6 +226,9 @@ h3 {
   border-right: none;
   border-left: none;
   --mdc-icon-button-size: 1.75rem;
+  .movement {
+    margin-left: auto;
+  }
 }
 
 .psi {

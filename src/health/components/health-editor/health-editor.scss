@@ -51,3 +51,9 @@ p {
     grid-column: span 2;
   }
 }
+
+sl-popover-section {
+  &::part(content) {
+    padding: 0.125rem 0;
+  }
+}

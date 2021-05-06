@@ -298,6 +298,16 @@ export abstract class CharacterViewBase extends LitElement {
     `;
   }
 
+  renderVehicleHealth() {
+    const { vehicle } = this.character;
+    if (!vehicle) return html``;
+    return html`<character-view-physical-health
+      .health=${vehicle.physicalHealth}
+      .sleeve=${vehicle}
+      .character=${this.character}
+    ></character-view-physical-health>`;
+  }
+
   renderConditions() {
     return html`<character-view-conditions
       .character=${this.character}

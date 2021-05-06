@@ -754,7 +754,15 @@ export class CharacterViewAlt extends CharacterViewBase {
             : ''}
         </health-item>`,
       vehicle &&
-        html` <health-item .health=${vehicle.physicalHealth}> </health-item> `,
+        html`
+          <health-item
+            clickable
+            data-renderer=${CharacterDrawerRenderer.VehicleHealth}
+            @click=${this.setDrawerRenderer}
+            .health=${vehicle.physicalHealth}
+          >
+          </health-item>
+        `,
     ]);
     return html`<div
       class="main-healths ${classMap({ even: !(healths.length % 2) })}"
