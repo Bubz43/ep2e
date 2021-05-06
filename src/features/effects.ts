@@ -96,6 +96,7 @@ export type MeleeEffect = {
   type: EffectType.Melee;
   dvModifier: string;
   reachBonus?: number;
+  armorPiercing?: boolean;
 };
 
 export type RangedEffect = {
@@ -247,6 +248,7 @@ const melee = createFeature<MeleeEffect>(() => ({
   type: EffectType.Melee,
   dvModifier: '',
   reachBonus: 0,
+  armorPiercing: false,
 }));
 
 const ranged = createFeature<RangedEffect>(() => ({
@@ -424,7 +426,13 @@ const format = (effect: Effect): (string | number)[] => {
       const reach =
         effect.reachBonus &&
         `${withSign(effect.reachBonus)} ${localize('reach')}`;
-      return [compact([dv, reach]).join(' - ')];
+      return [
+        compact([
+          dv,
+          reach,
+          effect.armorPiercing && localize('meleeDamageArmorPiercing'),
+        ]).join(' - '),
+      ];
     }
 
     case EffectType.Ranged:

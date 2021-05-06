@@ -1787,6 +1787,12 @@
             "exists": {
               "type": "string"
             },
+            "exoBonusMeleeDV": {
+              "type": "string"
+            },
+            "exoMeleeArmorPiercing": {
+              "type": "string"
+            },
             "exoskeleton": {
               "type": "string"
             },
@@ -2184,6 +2190,9 @@
               "type": "string"
             },
             "healthRecovery": {
+              "type": "string"
+            },
+            "healths": {
               "type": "string"
             },
             "hearingBased": {
@@ -4718,6 +4727,12 @@
             "vehicle": {
               "type": "string"
             },
+            "vehicleGear": {
+              "type": "string"
+            },
+            "vehicleTraits": {
+              "type": "string"
+            },
             "venusian": {
               "type": "string"
             },
@@ -5305,6 +5320,8 @@
             "escapeArtist",
             "exhuman",
             "exists",
+            "exoBonusMeleeDV",
+            "exoMeleeArmorPiercing",
             "exoskeleton",
             "exotic",
             "exoticMorphology",
@@ -5438,6 +5455,7 @@
             "healingTimeframes",
             "health",
             "healthRecovery",
+            "healths",
             "hearingBased",
             "heavy",
             "heavyPistol",
@@ -6282,6 +6300,8 @@
             "values",
             "variable",
             "vehicle",
+            "vehicleGear",
+            "vehicleTraits",
             "venusian",
             "versus",
             "veryFast",

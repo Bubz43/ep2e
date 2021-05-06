@@ -1492,7 +1492,10 @@ type LangEntries =
   | 'spent'
   | 'vehicleTraits'
   | 'healths'
-  | 'vehicleGear';
+  | 'vehicleGear'
+  | 'exoBonusMeleeDV'
+  | 'exoMeleeArmorPiercing'
+  | 'meleeDamageArmorPiercing';
 type FullNames =
   | 'cog'
   | 'int'

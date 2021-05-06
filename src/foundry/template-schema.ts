@@ -249,6 +249,8 @@ type SyntheticShellData = {
   subtype: '' | VehicleType | BotType;
   passengers: number;
   unarmedDV: string;
+  exoBonusMeleeDV: string;
+  exoMeleeArmorPiercing: boolean;
   isSwarm: boolean;
   painFilter: boolean;
   recoveryConditions: RecoveryConditions;

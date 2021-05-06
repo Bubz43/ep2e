@@ -132,6 +132,8 @@ export class SyntheticForm extends SleeveFormBase {
             passengers,
             shellType,
             firewallRating,
+            exoBonusMeleeDV,
+            exoMeleeArmorPiercing,
           }) => {
             const subtypes = this.getShellTypeGroup(shellType.value);
 
@@ -161,7 +163,16 @@ export class SyntheticForm extends SleeveFormBase {
                   `
                 : '',
               shellType.value === ShellType.Vehicle
-                ? renderNumberField(passengers, { min: 1 })
+                ? [
+                    renderNumberField(passengers, { min: 1 }),
+                    subtype.value === VehicleType.Hardsuit ||
+                    subtype.value === VehicleType.Exoskeleton
+                      ? [
+                          renderFormulaField(exoBonusMeleeDV),
+                          renderLabeledCheckbox(exoMeleeArmorPiercing),
+                        ]
+                      : '',
+                  ]
                 : renderLabeledCheckbox(isSwarm, {
                     tooltipText: localize('DESCRIPTIONS', 'AppliesSwarmRules'),
                   }),

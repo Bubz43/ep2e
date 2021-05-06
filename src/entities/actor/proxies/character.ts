@@ -149,8 +149,8 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       const vehicleEffects = this.vehicle.inherentArmorEffect;
       this._appliedEffects.add(getEffectsFromSize(this.vehicle.size));
 
-      const { unarmedDV, pools } = this.vehicle;
-      const poolEffects: PoolEffect[] = [];
+      const { pools, epData } = this.vehicle;
+      const { exoMeleeArmorPiercing, exoBonusMeleeDV } = epData;
       for (const pool of enumValues(PoolType)) {
         if (pool !== PoolType.Threat) {
           const value = pools[pool];
@@ -162,10 +162,15 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       }
       this._appliedEffects.add(vehicleEffects);
 
-      unarmedDV &&
+      (exoBonusMeleeDV || exoMeleeArmorPiercing) &&
         this._appliedEffects.add({
           source: this.vehicle.name,
-          effects: [createEffect.melee({ dvModifier: unarmedDV })],
+          effects: compact([
+            createEffect.melee({
+              dvModifier: exoBonusMeleeDV,
+              armorPiercing: exoMeleeArmorPiercing,
+            }),
+          ]),
         });
     } else if (this.sleeve && this.sleeve?.type !== ActorType.Infomorph) {
       this._appliedEffects.add(getEffectsFromSize(this.sleeve.size));
