@@ -2741,6 +2741,9 @@
             "meleeAttack": {
               "type": "string"
             },
+            "meleeDamageArmorPiercing": {
+              "type": "string"
+            },
             "meleeDamageRolls": {
               "type": "string"
             },
@@ -3615,6 +3618,9 @@
               "type": "string"
             },
             "remove": {
+              "type": "string"
+            },
+            "removeExoskeletonToResleeve": {
               "type": "string"
             },
             "removed": {
@@ -5638,6 +5644,7 @@
             "mediumPistol",
             "melee",
             "meleeAttack",
+            "meleeDamageArmorPiercing",
             "meleeDamageRolls",
             "meleeWeapon",
             "memoryRelated",
@@ -5930,6 +5937,7 @@
             "remainingDelay",
             "remainingDuration",
             "remove",
+            "removeExoskeletonToResleeve",
             "removed",
             "removing",
             "removingArmor",

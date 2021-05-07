@@ -631,8 +631,6 @@ export class CharacterViewAlt extends CharacterViewBase {
         </div>
       </div>
 
-      ${vehicle ? this.renderVehicle(vehicle) : ''}
-
       <div class="extras">
         ${notEmpty(filteredMotivations)
           ? html`
@@ -724,7 +722,7 @@ export class CharacterViewAlt extends CharacterViewBase {
             : ''}
         </div>
       </div>
-      ${this.renderHealths()}
+      ${this.renderHealths()} ${vehicle ? this.renderVehicle(vehicle) : ''}
     </header>`;
   }
 
