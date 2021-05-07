@@ -1268,6 +1268,9 @@
             "complete": {
               "type": "string"
             },
+            "completeTransformation": {
+              "type": "string"
+            },
             "completed": {
               "type": "string"
             },
@@ -5159,6 +5162,7 @@
             "compact",
             "complementary",
             "complete",
+            "completeTransformation",
             "completed",
             "complex",
             "complexAim",

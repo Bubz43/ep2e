@@ -1498,7 +1498,8 @@ type LangEntries =
   | 'meleeDamageArmorPiercing'
   | 'removeExoskeletonToResleeve'
   | 'dropSleeve/Exoskeleton'
-  | 'requireActorCreationPrivileges';
+  | 'requireActorCreationPrivileges'
+  | 'completeTransformation';
 type FullNames =
   | 'cog'
   | 'int'

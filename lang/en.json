@@ -1472,6 +1472,7 @@
     "vehicleGear": "Vehicle Gear",
     "vehicleTraits": "Vehicle Traits",
     "requireActorCreationPrivileges": "Requires actor creation privileges",
+    "completeTransformation": "Complete Transformation",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
