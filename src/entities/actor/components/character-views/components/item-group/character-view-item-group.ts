@@ -235,8 +235,13 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
 
     if ('equipped' in proxy) {
       const copy = proxy.getDataCopy(true);
-      copy.data.state.equipped = group === ItemGroup.Equipped;
-      this.character.itemOperations.add(copy);
+      if (this.group === ItemGroup.VehicleGear) {
+        copy.data.state.equipped = true;
+        this.character.vehicle?.itemOperations.add(copy);
+      } else {
+        copy.data.state.equipped = group === ItemGroup.Equipped;
+        this.character.itemOperations.add(copy);
+      }
     } else if ('stashed' in proxy) {
       const copy = proxy.getDataCopy(true);
       copy.data.state.stashed = group === ItemGroup.Stashed;
@@ -244,7 +249,15 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
     } else {
       if (proxy.type === ItemType.Sleight || proxy.type === ItemType.Psi) {
         this.character.ego.addNewItemProxy(proxy);
-      } else this.character.itemOperations.add(proxy.getDataCopy(true));
+      } else {
+        if (this.group === ItemGroup.VehicleTraits) {
+          if (proxy.isMorphTrait) {
+            this.character.vehicle?.itemOperations.add(proxy.getDataCopy(true));
+          }
+          return;
+        }
+        this.character.itemOperations.add(proxy.getDataCopy(true));
+      }
     }
   });
 
