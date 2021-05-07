@@ -490,7 +490,7 @@ export class CharacterViewResleeve extends LitElement {
       (i) => i.type !== ItemType.Trait,
     );
     return html`<mwc-list-item @click=${this.toggleHideWare}>
-      ${length} ${localize('ware')} ${localize('items')}, ${items.size - length}
+      ${length} ${localize('ware')}, ${items.size - length}
       ${localize('traits')}</mwc-list-item
     >`;
   }
