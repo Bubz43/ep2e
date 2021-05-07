@@ -1640,6 +1640,9 @@
             "drop": {
               "type": "string"
             },
+            "dropSleeve/Exoskeleton": {
+              "type": "string"
+            },
             "dropSleight/Trait": {
               "type": "string"
             },
@@ -5277,6 +5280,7 @@
             "downgrade",
             "downtime",
             "drop",
+            "dropSleeve/Exoskeleton",
             "dropSleight/Trait",
             "drug",
             "drugOrToxin",

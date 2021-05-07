@@ -13,7 +13,7 @@ import {
   VehicleType,
 } from '@src/data-enums';
 import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisition';
-import { ActorType, ItemType } from '@src/entities/entity-types';
+import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import { conditionIcons, ConditionType } from '@src/features/conditions';
 import { formatEffect } from '@src/features/effects';
@@ -66,6 +66,7 @@ import {
   range,
   sortBy,
 } from 'remeda';
+import { NotificationType, notify } from '../../../../foundry/foundry-apps';
 import type { Ego } from '../../ego';
 import type { Character } from '../../proxies/character';
 import { formattedSleeveInfo } from '../../sleeves';
@@ -266,7 +267,7 @@ export class CharacterViewAlt extends CharacterViewBase {
           ],
         });
       } else resleeve();
-    }
+    } else notify(NotificationType.Info, localize('dropSleeve/Exoskeleton'));
   });
 
   render() {
@@ -538,7 +539,11 @@ export class CharacterViewAlt extends CharacterViewBase {
 
     const canPlace = userCan('TEMPLATE_CREATE');
 
-    return html`<header class="header" @drop=${this.handleEntityDrop}>
+    return html`<sl-dropzone
+      ?disabled=${disabled}
+      class="header"
+      @drop=${this.handleEntityDrop}
+    >
       <div class="main-entities">
         <div class="avatar">
           <img src=${img} width="84px" />
@@ -723,7 +728,7 @@ export class CharacterViewAlt extends CharacterViewBase {
         </div>
       </div>
       ${this.renderHealths()} ${vehicle ? this.renderVehicle(vehicle) : ''}
-    </header>`;
+    </sl-dropzone>`;
   }
 
   private renderHealths() {
