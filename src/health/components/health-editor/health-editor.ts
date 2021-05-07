@@ -264,6 +264,7 @@ export class HealthEditor extends LitElement {
         ? html`
             <sl-popover
               placement=${Placement.Left}
+              offset="-5"
               .renderOnDemand=${() => html`
                 <sl-popover-section
                   heading="${localize(this.healthType)} ${localize('healths')}"
