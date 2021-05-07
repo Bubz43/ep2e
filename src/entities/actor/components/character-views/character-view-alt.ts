@@ -217,7 +217,10 @@ export class CharacterViewAlt extends CharacterViewBase {
   ] as string[];
 
   private handleEntityDrop = handleDrop(async ({ data, ev }) => {
-    if (data?.type !== DropType.Actor || this.character.disabled) return;
+    if (data?.type !== DropType.Actor || this.character.disabled) {
+      notify(NotificationType.Info, localize('dropSleeve/Exoskeleton'));
+      return;
+    }
     const proxy = await actorDroptoActorProxy(data);
     if (proxy && proxy.type !== ActorType.Character) {
       const resleeve = async () => {

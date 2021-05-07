@@ -48,16 +48,21 @@ li[divider] {
 
 .current-sleeve,
 .selected-sleeve {
-  max-width: 400px;
+  max-width: 300px;
   min-width: 100%;
+}
+
+[divider] + mwc-check-list-item {
+  margin-top: 0.25rem;
 }
 
 .tests {
   display: flex;
   flex-flow: row wrap;
+  padding: 0 0.5rem 0 0.25rem;
   > * {
     flex-grow: 1;
-    margin: 0.25rem 0.5rem;
+    margin: 0.25rem;
   }
 }
 
@@ -73,4 +78,6 @@ li[divider] {
   margin: 0.25rem;
   text-transform: uppercase;
   letter-spacing: 1px;
+  text-align: center;
+  flex: 1;
 }
