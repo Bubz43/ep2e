@@ -133,7 +133,10 @@ export class SoftwareSkillTestControls extends LitElement {
           <span>${token?.data.name ?? character.name} </span>
           ${character.sleeve
             ? html`<span slot="secondary"
-                >${formattedSleeveInfo(character.sleeve).join(' - ')}</span
+                >${formattedSleeveInfo(
+                  character.sleeve,
+                  character.vehicle,
+                ).join(' - ')}</span
               >`
             : ''}
         </mwc-list-item>

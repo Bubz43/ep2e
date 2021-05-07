@@ -95,7 +95,7 @@ export class Biological extends mix(BiologicalBase).with(
       data: this.epData.physicalHealth,
       statMods: this.activeEffects.getHealthStatMods(HealthType.Physical),
       updater: this.updater.path('data', 'physicalHealth').nestedStore(),
-      source: localize('morph'),
+      source: this.name,
       isSwarm: this.isSwarm,
       recoveryEffects: this.activeEffects.healthRecovery,
       recoveryConditions: this.epData.recoveryConditions,

@@ -129,6 +129,7 @@ slot[name='tabs'] {
   display: grid;
   grid-template-rows: min-content auto;
   grid-template-columns: 100%;
+  --health-item-padding: 0.5rem;
   &.no-scroll {
     overflow: visible;
     height: 100%;
@@ -152,9 +153,6 @@ slot[name='tabs'] {
   background: linear-gradient(to bottom, var(--color-bg), var(--color-bg-alt));
   border-right: 1px solid var(--color-border);
   min-width: calc(220px - 0.6rem);
-  &.no-scroll {
-    border-bottom: 1px solid var(--color-border);
-  }
 }
 
 slot[name='description'],

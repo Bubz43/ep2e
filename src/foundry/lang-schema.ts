@@ -1489,7 +1489,18 @@ type LangEntries =
   | 'share'
   | 'foreign'
   | 'move'
-  | 'spent';
+  | 'spent'
+  | 'vehicleTraits'
+  | 'healths'
+  | 'vehicleGear'
+  | 'exoBonusMeleeDV'
+  | 'exoMeleeArmorPiercing'
+  | 'meleeDamageArmorPiercing'
+  | 'removeExoskeletonToResleeve'
+  | 'dropSleeve/Exoskeleton'
+  | 'requireActorCreationPrivileges'
+  | 'completeTransformation'
+  | 'onlyWareAllowed';
 type FullNames =
   | 'cog'
   | 'int'

@@ -1,5 +1,5 @@
 {
-  "version": 0.6941,
+  "version": 0.7,
   "name": "ep2e",
   "title": "Eclipse Phase 2e",
   "description": "Eclipse Phase 2e Game System.",
@@ -76,6 +76,13 @@
       "system": "ep2e",
       "label": "Vehicles",
       "path": "./packs/vehicles.db",
+      "entity": "Actor"
+    },
+    {
+      "name": "exoskeletons-hardsuits",
+      "system": "ep2e",
+      "label": "Exoskeletons/Hardsuits",
+      "path": "./packs/exoskeletons-hardsuits.db",
       "entity": "Actor"
     },
     {

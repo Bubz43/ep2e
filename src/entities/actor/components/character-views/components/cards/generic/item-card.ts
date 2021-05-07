@@ -1,5 +1,3 @@
-import { renderLabeledSwitch } from '@src/components/field/fields';
-import { renderAutoForm } from '@src/components/form/forms';
 import { SprayPayload } from '@src/data-enums';
 import { ItemType } from '@src/entities/entity-types';
 import type { ItemProxy } from '@src/entities/item/item';
@@ -87,6 +85,20 @@ export class ItemCard extends ItemCardBase {
         position: ev,
         content: transformTimer
           ? [
+              {
+                label: localize('completeTransformation'),
+                icon: html`<mwc-icon>fast_forward</mwc-icon>`,
+                callback: () => {
+                  const shapeId = item.epFlags?.transformation?.shapeId;
+                  if (!shapeId || !item.shapes.has(shapeId)) {
+                    notify(
+                      NotificationType.Error,
+                      `${localize('shape')} ${localize('missing')}`,
+                    );
+                    item.cancelTransformation();
+                  } else item.swapShape(shapeId);
+                },
+              },
               {
                 label: localize('cancel'),
                 callback: () => item.cancelTransformation(),

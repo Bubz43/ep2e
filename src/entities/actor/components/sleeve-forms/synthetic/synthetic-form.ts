@@ -88,6 +88,7 @@ export class SyntheticForm extends SleeveFormBase {
       availableBrains,
       nonDefaultBrain,
       activeFirewallHealth,
+      exoskeleton,
     } = this.sleeve;
     const { movementEffects } = itemGroups.effects;
     const { originalValue, commit } = updater.path('data');
@@ -131,6 +132,8 @@ export class SyntheticForm extends SleeveFormBase {
             passengers,
             shellType,
             firewallRating,
+            exoBonusMeleeDV,
+            exoMeleeArmorPiercing,
           }) => {
             const subtypes = this.getShellTypeGroup(shellType.value);
 
@@ -147,20 +150,42 @@ export class SyntheticForm extends SleeveFormBase {
               html`
                 <entity-form-sidebar-divider></entity-form-sidebar-divider>
               `,
-              renderSelectField(shellType, enumValues(ShellType)),
+              renderSelectField(shellType, enumValues(ShellType), {
+                disabled: exoskeleton,
+              }),
 
               notEmpty(subtypes)
-                ? html`
-                    ${renderSelectField(subtype, subtypes)}
-                    <entity-form-sidebar-divider></entity-form-sidebar-divider>
-                  `
+                ? renderSelectField(subtype, subtypes, {
+                    disabled: exoskeleton,
+                  })
                 : '',
+              renderSelectField(size, enumValues(Size)),
               shellType.value === ShellType.Vehicle
-                ? renderNumberField(passengers, { min: 1 })
+                ? [
+                    renderNumberField(passengers, { min: 1 }),
+                    subtype.value === VehicleType.Hardsuit ||
+                    subtype.value === VehicleType.Exoskeleton
+                      ? [
+                          html`<entity-form-sidebar-divider
+                            label=${localize('melee')}
+                          ></entity-form-sidebar-divider>`,
+                          renderFormulaField({
+                            ...exoBonusMeleeDV,
+                            label: `${localize('bonus')} ${localize(
+                              'SHORT',
+                              'damageValue',
+                            )}`,
+                          }),
+                          renderLabeledCheckbox({
+                            ...exoMeleeArmorPiercing,
+                            label: `${localize('armorPiercing')}`,
+                          }),
+                        ]
+                      : '',
+                  ]
                 : renderLabeledCheckbox(isSwarm, {
                     tooltipText: localize('DESCRIPTIONS', 'AppliesSwarmRules'),
                   }),
-              renderSelectField(size, enumValues(Size)),
               html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
               isSwarm.value
                 ? ''

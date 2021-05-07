@@ -50,7 +50,6 @@ export class CharacterViewTestActions extends LitElement {
   @internalProperty()
   private skillControls = {
     filter: '',
-    singleColumn: false,
   };
 
   @queryAll('.skill-item')

@@ -34,6 +34,8 @@ export class PhysicalService extends mix(Base).with(Purchasable, Service) {
     super(init);
   }
 
+  vehicleOwner?: string | null;
+
   get serviceType() {
     return this.epData.serviceType;
   }

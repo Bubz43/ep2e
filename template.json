@@ -110,6 +110,8 @@
       "prehensileLimbs": 2,
       "shellType": "synthmorph",
       "subtype": "",
+      "exoBonusMeleeDV": "+1d10",
+      "exoMeleeArmorPiercing": false,
       "unarmedDV": "2d6",
       "isSwarm": false,
       "painFilter": false,

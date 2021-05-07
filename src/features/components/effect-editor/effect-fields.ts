@@ -110,8 +110,9 @@ const misc: WithAllProps<MiscEffect> = ({ unique, description }) => [
   renderTextareaField(description, { required: true }),
 ];
 
-const melee: WithAllProps<MeleeEffect> = ({ dvModifier }) =>
-  renderFormulaField(dvModifier, { required: true });
+const melee: WithAllProps<MeleeEffect> = ({ dvModifier }) => [
+  renderFormulaField(dvModifier, { required: true }),
+];
 
 const ranged: WithAllProps<RangedEffect> = ({
   negativeRangeModifiersMultiplier,

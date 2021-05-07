@@ -107,6 +107,7 @@ export abstract class ItemCardBase extends LazyRipple(LitElement) {
                 >
               `
             : ''}
+      
           <span class="name">${item.fullName}</span>
           <span class="type">${item.fullType}</span>
         </span>

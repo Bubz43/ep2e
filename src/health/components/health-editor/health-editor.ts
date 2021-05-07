@@ -264,18 +264,23 @@ export class HealthEditor extends LitElement {
         ? html`
             <sl-popover
               placement=${Placement.Left}
+              offset="-5"
               .renderOnDemand=${() => html`
-                <ul class="healths">
-                  ${filteredHealths.map(
-                    (health) => html`
-                      <health-item
-                        .health=${health}
-                        clickable
-                        @click=${() => (this.selectedHealth = health)}
-                      ></health-item>
-                    `,
-                  )}
-                </ul>
+                <sl-popover-section
+                  heading="${localize(this.healthType)} ${localize('healths')}"
+                >
+                  <ul class="healths">
+                    ${filteredHealths.map(
+                      (health) => html`
+                        <health-item
+                          .health=${health}
+                          clickable
+                          @click=${() => (this.selectedHealth = health)}
+                        ></health-item>
+                      `,
+                    )}
+                  </ul>
+                </sl-popover-section>
               `}
             >
               <health-item

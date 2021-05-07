@@ -59,23 +59,20 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
           ? character.sleeve.size
           : null,
       source: `${name} ${hasSecondaryAttack ? `[${attack.label}]` : ''}`,
+      alwaysArmorPiercing: character?.meleeDamageArmorPiercing,
       settings: { attackType, damageIrrespectiveOfSize },
     });
 
     const header = this.weapon.messageHeader;
-
+    const size = character?.morphSize;
     createMessage({
       data: {
         header: {
           ...header,
           subheadings: compact([
             header.subheadings,
-            character?.sleeve &&
-            'size' in character.sleeve &&
-            character.sleeve.size !== Size.Medium
-              ? `${localize(character.sleeve.size)} ${localize(
-                  'size',
-                )} ${localize('user')}`
+            size && size !== Size.Medium
+              ? `${localize(size)} ${localize('size')} ${localize('user')}`
               : '',
           ]).flat(),
         },

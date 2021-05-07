@@ -81,3 +81,9 @@ export const getEffectsFromSize = (size: Size) => {
   }
   return group;
 };
+
+export const effectsFromSize = {
+  sizeTargettedEffect,
+  strengthSizeEffect,
+  meleeDamageEffect,
+};

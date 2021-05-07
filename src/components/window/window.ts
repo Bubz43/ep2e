@@ -235,7 +235,7 @@ export class SlWindow extends LitElement {
         {
           width: [px(offsetWidth), px(this.offsetWidth)],
         },
-        { duration: 150 },
+        { duration: 200 },
       );
       if (!this.minimized) {
         contentContainer.style.overflowX = 'hidden';

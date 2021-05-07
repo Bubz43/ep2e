@@ -65,9 +65,11 @@ export class CharacterViewResleeve extends LitElement {
 
   @property({ attribute: false }) character!: Character;
 
-  @internalProperty() private selectedSleeve: Sleeve | null = null;
+  @property({ attribute: false }) selectedSleeve?: Sleeve | null = null;
 
   @internalProperty() private showStressForm = false;
+
+  @internalProperty() private hideWare = true;
 
   @internalProperty() private stressTestData: StressTestData & {
     stressType: StressType;
@@ -354,32 +356,42 @@ export class CharacterViewResleeve extends LitElement {
         </sl-header>
         ${this.selectedSleeve ? this.renderSelected(this.selectedSleeve) : ''}
       </section>
+
       <div class="controls">
-        ${renderAutoForm({
-          props: this.resleeveOptions,
-          classes: 'option-form',
-          update: (changed, original) =>
-            (this.resleeveOptions = { ...original, ...changed }),
-          fields: ({ keepCurrent }) => [
-            this.character.sleeve
-              ? renderLabeledCheckbox(
-                  {
-                    ...keepCurrent,
-                    label: `${localize('keep')} ${localize('current')}`,
-                  },
-                  {
-                    disabled: !userCan('ACTOR_CREATE'),
-                    tooltipText: 'Requires actor creator privileges',
-                  },
-                )
-              : '',
-          ],
-        })}
-        <submit-button
-          @click=${this.resleeve}
-          ?complete=${!!this.selectedSleeve}
-          label=${localize(this.character.sleeve ? 'resleeve' : 'sleeve')}
-        ></submit-button>
+        ${this.character.vehicle
+          ? html`
+              <p class="exoskeleton-message">
+                ${localize('removeExoskeletonToResleeve')}
+              </p>
+            `
+          : html` ${renderAutoForm({
+                props: this.resleeveOptions,
+                classes: 'option-form',
+                update: (changed, original) =>
+                  (this.resleeveOptions = { ...original, ...changed }),
+                fields: ({ keepCurrent }) => [
+                  this.character.sleeve
+                    ? renderLabeledCheckbox(
+                        {
+                          ...keepCurrent,
+                          label: `${localize('keep')} ${localize('current')}`,
+                        },
+                        {
+                          disabled: !userCan('ACTOR_CREATE'),
+                          tooltipText: localize(
+                            'requireActorCreationPrivileges',
+                          ),
+                        },
+                      )
+                    : '',
+                ],
+              })}
+
+              <submit-button
+                @click=${this.resleeve}
+                ?complete=${!!this.selectedSleeve}
+                label=${localize(this.character.sleeve ? 'resleeve' : 'sleeve')}
+              ></submit-button>`}
       </div>
     `;
   }
@@ -414,6 +426,10 @@ export class CharacterViewResleeve extends LitElement {
     `;
   }
 
+  private toggleHideWare() {
+    this.hideWare = !this.hideWare;
+  }
+
   private renderCurrent(sleeve: Sleeve) {
     return html`
       <sl-header heading="${localize('current')} ${localize('sleeve')}">
@@ -427,7 +443,13 @@ export class CharacterViewResleeve extends LitElement {
           @mouseover=${tooltip.fromData}
           >info</mwc-icon
         >
+        <mwc-icon-button
+          slot="action"
+          icon=${this.hideWare ? 'keyboard_arrow_left' : 'keyboard_arrow_down'}
+          @click=${this.toggleHideWare}
+        ></mwc-icon-button>
       </sl-header>
+
       <mwc-list class="current-sleeve" multi>
         <mwc-list-item graphic="medium" twoline @click=${sleeve.openForm}>
           <img slot="graphic" src=${sleeve.img} />
@@ -436,28 +458,43 @@ export class CharacterViewResleeve extends LitElement {
         </mwc-list-item>
         <li divider></li>
 
-        ${repeat(
-          sortBy([...sleeve.items.values()], (i) => i.type === ItemType.Trait),
-          idProp,
-          (item) => {
-            if (item.type === ItemType.Trait) return this.renderItem(item);
-            const selected = this.keptItems.has(item.id);
-            return html`
-              <mwc-check-list-item
-                class="item"
-                ?selected=${selected}
-                @click=${() => this.toggleKeptItem(item.id)}
-              >
-                <span
-                  >${item.fullName}
-                  <span class="item-type">${item.fullType}</span></span
-                >
-              </mwc-check-list-item>
-            `;
-          },
-        )}
+        ${!this.hideWare
+          ? html`${repeat(
+              sortBy(
+                [...sleeve.items.values()],
+                (i) => i.type === ItemType.Trait,
+              ),
+              idProp,
+              (item) => {
+                if (item.type === ItemType.Trait) return this.renderItem(item);
+                const selected = this.keptItems.has(item.id);
+                return html`
+                  <mwc-check-list-item
+                    class="item"
+                    ?selected=${selected}
+                    @click=${() => this.toggleKeptItem(item.id)}
+                  >
+                    <span
+                      >${item.fullName}
+                      <span class="item-type">${item.fullType}</span></span
+                    >
+                  </mwc-check-list-item>
+                `;
+              },
+            )}`
+          : this.renderCurrentSleeveItemSummary(sleeve)}
       </mwc-list>
     `;
+  }
+
+  private renderCurrentSleeveItemSummary({ items }: Sleeve) {
+    const { length } = [...items.values()].filter(
+      (i) => i.type !== ItemType.Trait,
+    );
+    return html`<mwc-list-item @click=${this.toggleHideWare}>
+      ${length} ${localize('ware')}, ${items.size - length}
+      ${localize('traits')}</mwc-list-item
+    >`;
   }
 
   private renderSelected(sleeve: Sleeve) {

@@ -33,7 +33,9 @@ export enum ItemGroup {
   ActiveSleights = 'activatedSleights',
   EgoTraits = 'egoTraits',
   MorphTraits = 'morphTraits',
+  VehicleTraits = 'vehicleTraits',
   Equipped = 'equipped',
+  VehicleGear = 'vehicleGear',
   Stashed = 'stashed',
 }
 
@@ -295,6 +297,16 @@ export abstract class CharacterViewBase extends LitElement {
         .health=${sleeve?.activeMeshHealth}
       ></character-view-mesh-health>
     `;
+  }
+
+  renderVehicleHealth() {
+    const { vehicle } = this.character;
+    if (!vehicle) return html``;
+    return html`<character-view-physical-health
+      .health=${vehicle.physicalHealth}
+      .sleeve=${vehicle}
+      .character=${this.character}
+    ></character-view-physical-health>`;
   }
 
   renderConditions() {

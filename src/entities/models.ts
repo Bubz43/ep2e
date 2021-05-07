@@ -60,6 +60,10 @@ type ActorFlags<T extends ActorType> = T extends ActorType.Character
       compactSheet: boolean;
       foreignPsiInfluences: StringID<PsiInfluenceData>[];
     } & { [key in SleeveType]: ActorEntity<key> | null }
+  : T extends ActorType.Synthetic
+  ? {
+      exoskeletonItemIds: string[] | null;
+    }
   : never;
 
 export type ActorEntity<T extends ActorType = ActorType> = CommonEntityData & {

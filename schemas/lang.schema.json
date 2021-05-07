@@ -1268,6 +1268,9 @@
             "complete": {
               "type": "string"
             },
+            "completeTransformation": {
+              "type": "string"
+            },
             "completed": {
               "type": "string"
             },
@@ -1640,6 +1643,9 @@
             "drop": {
               "type": "string"
             },
+            "dropSleeve/Exoskeleton": {
+              "type": "string"
+            },
             "dropSleight/Trait": {
               "type": "string"
             },
@@ -1785,6 +1791,12 @@
               "type": "string"
             },
             "exists": {
+              "type": "string"
+            },
+            "exoBonusMeleeDV": {
+              "type": "string"
+            },
+            "exoMeleeArmorPiercing": {
               "type": "string"
             },
             "exoskeleton": {
@@ -2184,6 +2196,9 @@
               "type": "string"
             },
             "healthRecovery": {
+              "type": "string"
+            },
+            "healths": {
               "type": "string"
             },
             "hearingBased": {
@@ -2732,6 +2747,9 @@
             "meleeAttack": {
               "type": "string"
             },
+            "meleeDamageArmorPiercing": {
+              "type": "string"
+            },
             "meleeDamageRolls": {
               "type": "string"
             },
@@ -3111,6 +3129,9 @@
               "type": "string"
             },
             "online": {
+              "type": "string"
+            },
+            "onlyWareAllowed": {
               "type": "string"
             },
             "onset": {
@@ -3608,6 +3629,9 @@
             "remove": {
               "type": "string"
             },
+            "removeExoskeletonToResleeve": {
+              "type": "string"
+            },
             "removed": {
               "type": "string"
             },
@@ -3639,6 +3663,9 @@
               "type": "string"
             },
             "require": {
+              "type": "string"
+            },
+            "requireActorCreationPrivileges": {
               "type": "string"
             },
             "requireBioSubstrate": {
@@ -4718,6 +4745,12 @@
             "vehicle": {
               "type": "string"
             },
+            "vehicleGear": {
+              "type": "string"
+            },
+            "vehicleTraits": {
+              "type": "string"
+            },
             "venusian": {
               "type": "string"
             },
@@ -5132,6 +5165,7 @@
             "compact",
             "complementary",
             "complete",
+            "completeTransformation",
             "completed",
             "complex",
             "complexAim",
@@ -5256,6 +5290,7 @@
             "downgrade",
             "downtime",
             "drop",
+            "dropSleeve/Exoskeleton",
             "dropSleight/Trait",
             "drug",
             "drugOrToxin",
@@ -5305,6 +5340,8 @@
             "escapeArtist",
             "exhuman",
             "exists",
+            "exoBonusMeleeDV",
+            "exoMeleeArmorPiercing",
             "exoskeleton",
             "exotic",
             "exoticMorphology",
@@ -5438,6 +5475,7 @@
             "healingTimeframes",
             "health",
             "healthRecovery",
+            "healths",
             "hearingBased",
             "heavy",
             "heavyPistol",
@@ -5620,6 +5658,7 @@
             "mediumPistol",
             "melee",
             "meleeAttack",
+            "meleeDamageArmorPiercing",
             "meleeDamageRolls",
             "meleeWeapon",
             "memoryRelated",
@@ -5747,6 +5786,7 @@
             "oneHanded",
             "ongoing",
             "online",
+            "onlyWareAllowed",
             "onset",
             "openSource",
             "operatingSystem",
@@ -5912,6 +5952,7 @@
             "remainingDelay",
             "remainingDuration",
             "remove",
+            "removeExoskeletonToResleeve",
             "removed",
             "removing",
             "removingArmor",
@@ -5923,6 +5964,7 @@
             "reputation",
             "reputations",
             "require",
+            "requireActorCreationPrivileges",
             "requireBioSubstrate",
             "required",
             "requirement",
@@ -6282,6 +6324,8 @@
             "values",
             "variable",
             "vehicle",
+            "vehicleGear",
+            "vehicleTraits",
             "venusian",
             "versus",
             "veryFast",

@@ -1,4 +1,5 @@
 import {
+  AddEffects,
   AppliedEffects,
   ReadonlyAppliedEffects,
 } from '@src/entities/applied-effects';
@@ -7,27 +8,24 @@ import type { EquippableItem, ItemProxy } from '@src/entities/item/item';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import type { Software } from '@src/entities/item/proxies/software';
 import type { Trait } from '@src/entities/item/proxies/trait';
-import { createEffect, EffectType } from '@src/features/effects';
-import { notify, NotificationType } from '@src/foundry/foundry-apps';
-import { format, localize } from '@src/foundry/localization';
-import { HealthStat, HealthType } from '@src/health/health';
-import { MeshHealth } from '@src/health/full-mesh-health';
-import { SyntheticHealth } from '@src/health/synthetic-health';
-import { LazyGetter } from 'lazy-get-decorator';
-import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
-import { AppMeshHealth } from '@src/health/app-mesh-health';
-import mix from 'mix-with/lib';
-import { PhysicalSleeve, SleeveInfo } from '../sleeve-mixins';
-import type { ActorHealth } from '@src/health/health-mixin';
-import { compact, identity, mapToObj } from 'remeda';
-import { SkillType } from '@src/features/skills';
-import { createTag, TagType } from '@src/features/tags';
-import { addFeature, removeFeature } from '@src/features/feature-helpers';
-import { ArmorType } from '@src/features/active-armor';
-import { enumValues } from '@src/data-enums';
-import type { RecoveryConditions } from '@src/health/recovery';
 import type { ConditionType } from '@src/features/conditions';
+import { createEffect } from '@src/features/effects';
+import { SkillType } from '@src/features/skills';
+import { createTag } from '@src/features/tags';
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
+import { format, localize } from '@src/foundry/localization';
+import { AppMeshHealth } from '@src/health/app-mesh-health';
+import { MeshHealth } from '@src/health/full-mesh-health';
+import { HealthStat, HealthType } from '@src/health/health';
+import type { ActorHealth } from '@src/health/health-mixin';
+import type { RecoveryConditions } from '@src/health/recovery';
+import { SyntheticHealth } from '@src/health/synthetic-health';
 import { toggle } from '@src/utility/helpers';
+import { LazyGetter } from 'lazy-get-decorator';
+import mix from 'mix-with/lib';
+import { compact } from 'remeda';
+import { PhysicalSleeve, SleeveInfo } from '../sleeve-mixins';
+import { ActorProxyBase, ActorProxyInit } from './actor-proxy-base';
 
 class SyntheticBase extends ActorProxyBase<ActorType.Synthetic> {
   get subtype() {
@@ -45,6 +43,7 @@ export class Synthetic extends mix(SyntheticBase).with(
   private _localEffects?: AppliedEffects;
   private _outsideEffects?: ReadonlyAppliedEffects;
   readonly sleeved;
+  readonly exoskeleton;
 
   static get painFilterEffects() {
     return [
@@ -64,15 +63,18 @@ export class Synthetic extends mix(SyntheticBase).with(
   constructor({
     activeEffects,
     sleeved,
+    exoskeleton,
     ...init
   }: ActorProxyInit<ActorType.Synthetic> & {
     activeEffects?: ReadonlyAppliedEffects;
     sleeved?: boolean;
+    exoskeleton?: boolean;
   }) {
     super(init);
     if (activeEffects) this._outsideEffects = activeEffects;
 
     this.sleeved = sleeved;
+    this.exoskeleton = exoskeleton;
   }
 
   updateConditions(conditions: ConditionType[]) {
@@ -105,11 +107,13 @@ export class Synthetic extends mix(SyntheticBase).with(
     return !this.isSwarm;
   }
 
-  get inherentArmorEffect() {
+  get inherentArmorEffect(): AddEffects {
     const { source, ...armors } = this.epData.inherentArmor;
     return {
-      source: source || localize('frame'),
-      effects: [createEffect.armor({ ...armors, layerable: false })],
+      source: this.exoskeleton ? this.name : source || localize('frame'),
+      effects: [
+        createEffect.armor({ ...armors, layerable: !!this.exoskeleton }),
+      ],
     };
   }
 
@@ -138,7 +142,9 @@ export class Synthetic extends mix(SyntheticBase).with(
       data: this.epData.physicalHealth,
       statMods: this.activeEffects.getHealthStatMods(HealthType.Physical),
       updater: this.updater.path('data', 'physicalHealth').nestedStore(),
-      source: this.epData.inherentArmor.source || localize('frame'),
+      source: `${this.name}: ${
+        this.epData.inherentArmor.source || localize('frame')
+      }`,
       isSwarm: this.isSwarm,
       recoveryEffects: this.activeEffects.healthRecovery,
       recoveryConditions: this.epData.recoveryConditions,

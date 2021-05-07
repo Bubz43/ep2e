@@ -142,6 +142,7 @@ export class MessageMeleeAttack extends MessageElement {
       unarmedDV,
       damageModifiers,
       morphSize,
+      alwaysArmorPiercing,
     } = this.meleeAttack;
 
     const attack = attacks && (attacks[attackType] || attacks.primary);
@@ -154,6 +155,7 @@ export class MessageMeleeAttack extends MessageElement {
       damageModifiers,
       settings: this.meleeAttack,
       morphSize,
+      alwaysArmorPiercing,
       source: `${name || localize('unarmed')} ${
         hasSecondaryAttack ? `[${attack?.label}]` : ''
       }`,

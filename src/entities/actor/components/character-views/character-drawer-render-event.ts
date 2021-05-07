@@ -9,6 +9,7 @@ export enum CharacterDrawerRenderer {
   MentalHealth = 'MentalHealth',
   SleeveMeshHealth = 'SleeveMeshHealth',
   SleevePhysicalHealth = 'SleevePhysicalHealth',
+  VehicleHealth = 'VehicleHealth',
   Conditions = 'Conditions',
   Substances = 'Substances',
 }

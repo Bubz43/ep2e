@@ -24,6 +24,7 @@ interface MeleeDamageInit {
   damageModifiers: LabeledFormula[] | undefined;
   settings: MeleeWeaponSettings;
   morphSize: Size | null | undefined;
+  alwaysArmorPiercing: boolean | undefined;
   source: string;
 }
 
@@ -36,6 +37,7 @@ export const meleeDamage = ({
   settings,
   morphSize,
   source,
+  alwaysArmorPiercing,
 }: MeleeDamageInit): DamageMessageData => {
   const { result: testResult } = successTestInfo;
   const superiorDamage =
@@ -71,17 +73,20 @@ export const meleeDamage = ({
     rollLabeledFormulas,
   );
 
+  const attackInfo = pick(
+    attack ?? {
+      armorPiercing: false,
+      armorUsed: [ArmorType.Kinetic],
+      damageType: HealthType.Physical,
+      notes: '',
+      reduceAVbyDV: false,
+    },
+    ['armorPiercing', 'armorUsed', 'damageType', 'notes', 'reduceAVbyDV'],
+  );
+
   return {
-    ...pick(
-      attack ?? {
-        armorPiercing: false,
-        armorUsed: [ArmorType.Kinetic],
-        damageType: HealthType.Physical,
-        notes: '',
-        reduceAVbyDV: false,
-      },
-      ['armorPiercing', 'armorUsed', 'damageType', 'notes', 'reduceAVbyDV'],
-    ),
+    ...attackInfo,
+    armorPiercing: alwaysArmorPiercing ?? attackInfo.armorPiercing,
     source,
     multiplier:
       morphSize === Size.Small && !settings.damageIrrespectiveOfSize

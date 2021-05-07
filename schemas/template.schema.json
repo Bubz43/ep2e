@@ -1744,6 +1744,12 @@
                 "brain": {
                   "type": "string"
                 },
+                "exoBonusMeleeDV": {
+                  "type": "string"
+                },
+                "exoMeleeArmorPiercing": {
+                  "type": "boolean"
+                },
                 "firewallHealth": {
                   "$ref": "#/definitions/AppMeshHealthData"
                 },
@@ -1852,6 +1858,8 @@
               },
               "required": [
                 "brain",
+                "exoBonusMeleeDV",
+                "exoMeleeArmorPiercing",
                 "firewallHealth",
                 "firewallRating",
                 "inherentArmor",

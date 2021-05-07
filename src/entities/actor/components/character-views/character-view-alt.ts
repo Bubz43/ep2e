@@ -6,7 +6,12 @@ import {
   updateCombatState,
 } from '@src/combat/combat-tracker';
 import { Placement } from '@src/components/popover/popover-options';
-import { enumValues, RechargeType } from '@src/data-enums';
+import {
+  enumValues,
+  RechargeType,
+  ShellType,
+  VehicleType,
+} from '@src/data-enums';
 import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisition';
 import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
@@ -26,6 +31,11 @@ import {
   EPTimeInterval,
   prettyMilliseconds,
 } from '@src/features/time';
+import {
+  actorDroptoActorProxy,
+  DropType,
+  handleDrop,
+} from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
 import { rollFormula } from '@src/foundry/rolls';
@@ -56,6 +66,7 @@ import {
   range,
   sortBy,
 } from 'remeda';
+import { NotificationType, notify } from '../../../../foundry/foundry-apps';
 import type { Ego } from '../../ego';
 import type { Character } from '../../proxies/character';
 import { formattedSleeveInfo } from '../../sleeves';
@@ -199,6 +210,68 @@ export class CharacterViewAlt extends CharacterViewBase {
   private rollStress() {
     this.character.ego.rollStress();
   }
+
+  private static exoskeletons = [
+    VehicleType.Exoskeleton,
+    VehicleType.Hardsuit,
+  ] as string[];
+
+  private handleEntityDrop = handleDrop(async ({ data, ev }) => {
+    if (data?.type !== DropType.Actor || this.character.disabled) {
+      notify(NotificationType.Info, localize('dropSleeve/Exoskeleton'));
+      return;
+    }
+    const proxy = await actorDroptoActorProxy(data);
+    if (proxy && proxy.type !== ActorType.Character) {
+      const resleeve = async () => {
+        if (this.drawerContentRenderer !== this.renderResleeve) {
+          this.toggleDrawerRenderer(CharacterDrawerRenderer.Resleeve);
+        }
+        await this.updateComplete;
+        const resleeveView = this.renderRoot.querySelector(
+          'character-view-resleeve',
+        );
+        if (resleeveView) resleeveView.selectedSleeve = proxy;
+      };
+      if (
+        proxy.type === ActorType.Synthetic &&
+        proxy.epData.shellType === ShellType.Vehicle &&
+        CharacterViewAlt.exoskeletons.includes(proxy.epData.subtype) &&
+        this.character.sleeve &&
+        this.character.sleeve.type !== ActorType.Infomorph
+      ) {
+        openMenu({
+          header: { heading: proxy.name },
+          position: ev,
+          content: [
+            {
+              label: localize('resleeve'),
+              callback: resleeve,
+            },
+            {
+              label: `${localize('equip')} ${localize('as')} ${localize(
+                'exoskeleton',
+              )}`,
+              callback: async () => {
+                const addedItemIds = await this.character.itemOperations.add(
+                  ...[...proxy.items.values()].map((i) => i.getDataCopy()),
+                );
+                const vehicleData = proxy.dataCopy();
+                vehicleData.flags.ep2e = {
+                  ...(vehicleData.flags.ep2e || {}),
+                  exoskeletonItemIds: addedItemIds,
+                };
+                this.character.updater
+                  .path('flags', EP.Name, 'vehicle')
+                  .commit(vehicleData);
+              },
+              disabled: !!this.character.vehicle,
+            },
+          ],
+        });
+      } else resleeve();
+    } else notify(NotificationType.Info, localize('dropSleeve/Exoskeleton'));
+  });
 
   render() {
     const { character, currentTabs } = this;
@@ -463,15 +536,17 @@ export class CharacterViewAlt extends CharacterViewBase {
       img,
       movementRates,
       movementModifiers,
+      vehicle,
     } = this.character;
     const { filteredMotivations, settings } = ego;
-    const physicalHealth =
-      sleeve && 'physicalHealth' in sleeve && sleeve.physicalHealth;
-    const meshHealth =
-      sleeve && 'activeMeshHealth' in sleeve && sleeve.activeMeshHealth;
+
     const canPlace = userCan('TEMPLATE_CREATE');
 
-    return html`<div class="header">
+    return html`<sl-dropzone
+      ?disabled=${disabled}
+      class="header"
+      @drop=${this.handleEntityDrop}
+    >
       <div class="main-entities">
         <div class="avatar">
           <img src=${img} width="84px" />
@@ -539,9 +614,6 @@ export class CharacterViewAlt extends CharacterViewBase {
             ? html`
                 <ul class="pools">
                   ${[...pools.values()].map(
-                    // pools.size <= 1
-                    //   ? this.renderPool
-                    //   :
                     (pool) => html` <li
                       class="pool"
                       tabindex=${disabled ? '-1' : 0}
@@ -555,7 +627,6 @@ export class CharacterViewAlt extends CharacterViewBase {
                     >
                       <img height="22px" src=${pool.icon} />
                       <span></span>
-                      <!-- <span> ${localize(pool.type)} </span> -->
                       <value-status
                         value=${pool.available}
                         max=${pool.max}
@@ -582,7 +653,9 @@ export class CharacterViewAlt extends CharacterViewBase {
           : ''}
         ${sleeve?.type === ActorType.Synthetic && sleeve.hasPainFilter
           ? html`
-              <mwc-formfield label=${localize('painFilter')} class="pain-filter"
+              <mwc-formfield
+                label="${sleeve.name} ${localize('painFilter')}"
+                class="pain-filter"
                 ><mwc-switch
                   ?disabled=${disabled}
                   ?checked=${sleeve.painFilterActive}
@@ -653,96 +726,170 @@ export class CharacterViewAlt extends CharacterViewBase {
               : '';
           })}
           ${notEmpty(movementRates)
-            ? html`
-                ${sortBy(
-                  movementRates,
-                  ({ type }) => localize(type).length,
-                ).map(({ type, base, full, skill, original }) => {
-                  return html`
-                    <span class="movement-rate"
-                      ><span
-                        data-tooltip=${`${localize('use')} ${skill}`}
-                        @mouseover=${tooltip.fromData}
-                        >${localize(type)}</span
-                      >
-                      <span class="rate"
-                        ><button
-                          class="speed ${classMap({
-                            increased: base > original.base,
-                            decreased: base < original.base,
-                          })}"
-                          data-tooltip="${localize(
-                            'original',
-                          )}: ${original.base}"
-                          @mouseover=${tooltip.fromData}
-                          ?disabled=${!canPlace || !base}
-                          @click=${() =>
-                            this.placeMovementPreviewTemplate(base)}
-                        >
-                          ${base}
-                        </button>
-                        /
-                        <button
-                          class="speed ${classMap({
-                            increased: full > original.full,
-                            decreased: full < original.full,
-                          })}"
-                          data-tooltip="${localize(
-                            'original',
-                          )}: ${original.full}"
-                          ?disabled=${!canPlace || !full}
-                          @mouseover=${tooltip.fromData}
-                          @click=${() =>
-                            this.placeMovementPreviewTemplate(full)}
-                        >
-                          ${full}
-                        </button></span
-                      ></span
-                    >
-                  `;
-                })}
-              `
+            ? html` ${this.renderMovements(movementRates, canPlace)} `
             : ''}
         </div>
       </div>
-      <div class="main-healths">
-        ${settings.trackMentalHealth
-          ? html` <health-item
-              clickable
-              data-renderer=${CharacterDrawerRenderer.MentalHealth}
-              @click=${this.setDrawerRenderer}
-              class="mental-health-view"
-              .health=${ego.mentalHealth}
-              ><span slot="source">${localize('ego')}</span></health-item
-            >`
-          : ''}
-        ${physicalHealth
-          ? html`
-              <health-item
-                clickable
-                data-renderer=${CharacterDrawerRenderer.SleevePhysicalHealth}
-                @click=${this.setDrawerRenderer}
-                .health=${physicalHealth}
-              >
-              </health-item>
-            `
-          : ''}
-        ${meshHealth && sleeve
-          ? html` <health-item
-              clickable
-              data-renderer=${CharacterDrawerRenderer.SleeveMeshHealth}
-              @click=${this.setDrawerRenderer}
-              .health=${meshHealth}
-            >
-              ${sleeve.type !== ActorType.Infomorph && sleeve.nonDefaultBrain
-                ? html`
-                    <span slot="source">${sleeve.nonDefaultBrain.name}</span>
-                  `
-                : ''}
-            </health-item>`
-          : ''}
-      </div>
+      ${this.renderHealths()} ${vehicle ? this.renderVehicle(vehicle) : ''}
+    </sl-dropzone>`;
+  }
+
+  private renderHealths() {
+    const { ego, sleeve, vehicle } = this.character;
+    const { settings } = ego;
+    const physicalHealth =
+      sleeve && 'physicalHealth' in sleeve && sleeve.physicalHealth;
+    const meshHealth =
+      sleeve && 'activeMeshHealth' in sleeve && sleeve.activeMeshHealth;
+    const healths = compact([
+      settings.trackMentalHealth &&
+        html` <health-item
+          clickable
+          data-renderer=${CharacterDrawerRenderer.MentalHealth}
+          @click=${this.setDrawerRenderer}
+          class="mental-health-view"
+          .health=${ego.mentalHealth}
+        ></health-item>`,
+      physicalHealth &&
+        html`
+          <health-item
+            clickable
+            data-renderer=${CharacterDrawerRenderer.SleevePhysicalHealth}
+            @click=${this.setDrawerRenderer}
+            .health=${physicalHealth}
+          >
+          </health-item>
+        `,
+      meshHealth &&
+        sleeve &&
+        html` <health-item
+          clickable
+          data-renderer=${CharacterDrawerRenderer.SleeveMeshHealth}
+          @click=${this.setDrawerRenderer}
+          .health=${meshHealth}
+        >
+          ${sleeve.type !== ActorType.Infomorph && sleeve.nonDefaultBrain
+            ? html` <span slot="source">${sleeve.nonDefaultBrain.name}</span> `
+            : ''}
+        </health-item>`,
+      vehicle &&
+        html`
+          <health-item
+            clickable
+            data-renderer=${CharacterDrawerRenderer.VehicleHealth}
+            @click=${this.setDrawerRenderer}
+            .health=${vehicle.physicalHealth}
+          >
+          </health-item>
+        `,
+    ]);
+    return html`<div
+      class="main-healths ${classMap({ even: !(healths.length % 2) })}"
+    >
+      ${healths}
     </div>`;
+  }
+
+  private openVehicleMenu(ev: MouseEvent) {
+    const vehicleName = this.character.vehicle?.name || localize('exoskeleton');
+    openMenu({
+      header: {
+        heading: vehicleName,
+      },
+      content: [
+        {
+          label: `${localize('unequip')} & ${localize('keep')}`,
+          sublabel: localize('requireActorCreationPrivileges'),
+          callback: async () => {
+            await this.character.vehicle?.createActor(
+              `${this.character.name}'s ${vehicleName}`,
+            );
+            this.character.removeVehicle();
+          },
+          disabled: !userCan('ACTOR_CREATE'),
+        },
+        {
+          label: localize('delete'),
+          callback: () => this.character.removeVehicle(),
+        },
+      ],
+    });
+  }
+
+  private renderVehicle(vehicle: NonNullable<Character['vehicle']>) {
+    const canPlace = userCan('TEMPLATE_CREATE');
+
+    return html` <div class="vehicle">
+      <span>
+        <span class="info">[${localize('exoskeleton')}]</span>
+        <button class="entity-name" @click=${vehicle.openForm}>
+          ${vehicle.name}
+        </button>
+        <span class="info"> ${formattedSleeveInfo(vehicle).join(' • ')}</span>
+      </span>
+      ${notEmpty(vehicle.movementRates)
+        ? html`
+            <div class="movement">
+              ${this.renderMovements(
+                vehicle.movementRates.map((rate) => ({
+                  ...rate,
+                  original: rate,
+                })),
+                canPlace,
+              )}
+            </div>
+          `
+        : ''}
+      <mwc-icon-button
+        icon="more_vert"
+        ?disabled=${!this.character.editable}
+        @click=${this.openVehicleMenu}
+      ></mwc-icon-button>
+    </div>`;
+  }
+
+  private renderMovements(
+    movementRates: Character['movementRates'],
+    canPlace: boolean,
+  ) {
+    return sortBy(movementRates, ({ type }) => localize(type).length).map(
+      ({ type, base, full, skill, original }) => html`
+        <span class="movement-rate"
+          ><span
+            data-tooltip=${`${localize('use')} ${skill}`}
+            @mouseover=${tooltip.fromData}
+            >${localize(type)}</span
+          >
+          <span class="rate"
+            ><button
+              class="speed ${classMap({
+                increased: base > original.base,
+                decreased: base < original.base,
+              })}"
+              data-tooltip="${localize('original')}: ${original.base}"
+              @mouseover=${tooltip.fromData}
+              ?disabled=${!canPlace || !base}
+              @click=${() => this.placeMovementPreviewTemplate(base)}
+            >
+              ${base}
+            </button>
+            /
+            <button
+              class="speed ${classMap({
+                increased: full > original.full,
+                decreased: full < original.full,
+              })}"
+              data-tooltip="${localize('original')}: ${original.full}"
+              ?disabled=${!canPlace || !full}
+              @mouseover=${tooltip.fromData}
+              @click=${() => this.placeMovementPreviewTemplate(full)}
+            >
+              ${full}
+            </button></span
+          ></span
+        >
+      `,
+    );
   }
 
   activateTab(ev: DragEvent & { currentTarget: HTMLElement }) {
@@ -973,6 +1120,13 @@ export class CharacterViewAlt extends CharacterViewBase {
     ItemGroup.Stashed,
   ];
 
+  private static gearWithVehicle = [
+    ItemGroup.Consumables,
+    ItemGroup.Equipped,
+    ItemGroup.VehicleGear,
+    ItemGroup.Stashed,
+  ];
+
   private renderTabbedContent() {
     switch (this.currentTab) {
       case 'combat':
@@ -985,14 +1139,18 @@ export class CharacterViewAlt extends CharacterViewBase {
 
       case 'gear':
         return html`${repeat(
-          CharacterViewAlt.gear,
+          this.character.vehicle
+            ? CharacterViewAlt.gearWithVehicle
+            : CharacterViewAlt.gear,
           identity,
           this.renderItemGroup,
         )}`;
 
       case 'traits':
         return html`${repeat(
-          CharacterViewAlt.traits,
+          this.character.vehicleTraits.length
+            ? [...CharacterViewAlt.traits, ItemGroup.VehicleTraits]
+            : CharacterViewAlt.traits,
           identity,
           this.renderItemGroup,
         )}`;

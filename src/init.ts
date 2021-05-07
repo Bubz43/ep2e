@@ -12,8 +12,10 @@ import { openWindow } from './components/window/window-controls';
 import { enumValues } from './data-enums';
 import { ActorEP } from './entities/actor/actor';
 import { ActorEPSheet } from './entities/actor/actor-sheet';
+import { formattedSleeveInfo, isSleeve } from './entities/actor/sleeves';
 import { ChatMessageEP } from './entities/chat-message';
 import { CompendiumSearch } from './entities/components/compendium-search/compendium-search';
+import { ActorType } from './entities/entity-types';
 import { findActor, findToken } from './entities/find-entities';
 import { ItemEP } from './entities/item/item';
 import { ItemEPSheet } from './entities/item/item-sheet';
@@ -379,13 +381,21 @@ for (const app of [ActorDirectory, ItemDirectory]) {
           game[app === ActorDirectory ? 'actors' : 'items'].get(entityId);
         if (!entity) return;
 
-        const nameElement = listItem.querySelector('h4.entity-name')!;
+        const nameElement = listItem.querySelector<HTMLHeadingElement>(
+          'h4.entity-name',
+        )!;
 
         if (isItem(entity)) {
           nameElement.querySelector('a')!.textContent = entity.proxy.fullName;
           nameElement.dataset['type'] = entity.proxy.fullType;
         } else {
-          nameElement.dataset['type'] = localize(entity.type);
+          if (entity.type !== ActorType.Character && isSleeve(entity.proxy)) {
+            nameElement.dataset['type'] = formattedSleeveInfo(entity.proxy)
+              .concat(localize(entity.type))
+              .join(' - ');
+          } else {
+            nameElement.dataset['type'] = localize(entity.type);
+          }
         }
         listItem.title = `${entity.name}
         ${nameElement.dataset['type']}`;

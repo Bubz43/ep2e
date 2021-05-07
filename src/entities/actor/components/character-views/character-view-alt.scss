@@ -72,6 +72,9 @@ h3 {
       }
     }
   }
+  .vehicle {
+    margin-top: 0.25rem;
+  }
 
   .main-entities {
     display: grid;
@@ -114,6 +117,7 @@ h3 {
 }
 
 .header {
+  display: flow-root;
   grid-area: header;
   background: linear-gradient(
     to bottom,
@@ -130,6 +134,9 @@ h3 {
     margin-top: 0.25rem;
 
     --health-item-padding: 0.5rem;
+    &.even {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
     > * {
       flex-grow: 1;
       background: alphav(var(--color-grey), 0.08);
@@ -204,6 +211,20 @@ h3 {
     min-width: unset;
     width: max-content;
     border-bottom: 0;
+  }
+}
+
+.vehicle {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  padding: 0.25rem 0.25rem;
+  margin: 0 0.25rem 0;
+  width: 300px;
+  min-width: calc(100% - 0.5rem);
+  --mdc-icon-button-size: 1.75rem;
+  .movement {
+    margin-left: auto;
   }
 }
 
@@ -516,7 +537,7 @@ character-view-item-group[group='sleights'] {
   display: none;
   grid-template-areas: 'content';
   grid-template-rows: 1fr;
-  width: 400px;
+  width: 425px;
   min-width: 100%;
   z-index: 1;
   > * {

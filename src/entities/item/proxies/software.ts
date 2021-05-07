@@ -32,6 +32,8 @@ export class Software
     super(init);
   }
 
+  vehicleOwner?: string | null;
+
   get fullType() {
     const { softwareType, category } = this;
     const localType = localize(softwareType);
