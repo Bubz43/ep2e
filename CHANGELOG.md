@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.71] - 2021-05-07
+
+- Show motivation goals on click
+
 ## [0.7] - 2021-05-07
 
 - Add ability to equip an exoskeleton in addition to a morph
