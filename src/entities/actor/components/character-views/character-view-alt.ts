@@ -21,6 +21,7 @@ import {
   addFeature,
   idProp,
   removeFeature,
+  updateFeature,
 } from '@src/features/feature-helpers';
 import { toMilliseconds } from '@src/features/modify-milliseconds';
 import { MotivationStance } from '@src/features/motivations';
@@ -898,22 +899,55 @@ export class CharacterViewAlt extends CharacterViewBase {
 
   private renderMotivation = (motivation: Ego['motivations'][number]) => {
     // TODO heal stress
-    // TODO Show goals
+    const filteredGoals = motivation.goals.filter((g) => g.goal);
     return html`
       <li class="motivation">
-        <!-- <button> -->
         <mwc-icon class=${motivation.stance}
           >${motivation.stance === MotivationStance.Support
             ? 'add'
             : 'remove'}</mwc-icon
         >
         ${motivation.cause}
-        <!-- </button> -->
-        ${motivation.goals.length
+        ${filteredGoals.length
           ? html`
-              <notification-coin
-                value=${motivation.goals.length}
-              ></notification-coin>
+              <mwc-icon-button
+                class="goals-button"
+                @click=${(ev: MouseEvent) => {
+                  openMenu({
+                    position: ev,
+                    header: {
+                      heading: `${motivation.cause} ${localize('goals')}`,
+                    },
+                    content: html` ${filteredGoals.map(
+                      (goal) => html`
+                        <mwc-check-list-item
+                          ?disabled=${this.character.disabled}
+                          ?selected=${goal.completed}
+                          left
+                          @click=${() => {
+                            this.character.ego.updater
+                              .path('data', 'motivations')
+                              .commit((motivations) =>
+                                updateFeature(motivations, {
+                                  id: motivation.id,
+                                  goals: updateFeature(motivation.goals, {
+                                    id: goal.id,
+                                    completed: !goal.completed,
+                                  }),
+                                }),
+                              );
+                          }}
+                          >${goal.goal}</mwc-check-list-item
+                        >
+                      `,
+                    )}`,
+                  });
+                }}
+              >
+                <notification-coin
+                  value=${filteredGoals.length}
+                ></notification-coin>
+              </mwc-icon-button>
             `
           : ''}
       </li>
