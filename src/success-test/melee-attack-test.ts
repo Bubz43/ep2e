@@ -323,6 +323,7 @@ export class MeleeAttackTest extends SkillTest {
             'oneHanded',
             'calledShot',
             'damageIrrespectiveOfSize',
+            'alwaysArmorPiercing',
           ]),
           morphSize: this.character.morphSize,
           damageModifiers: damageModifierEffects,

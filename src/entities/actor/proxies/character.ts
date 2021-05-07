@@ -148,7 +148,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       const vehicleEffects = this.vehicle.inherentArmorEffect;
       // TODO only apply some size effects
       const { pools, epData, size, name } = this.vehicle;
-      const { exoBonusMeleeDV } = epData;
+      const { exoMeleeArmorPiercing, exoBonusMeleeDV } = epData;
       for (const pool of enumValues(PoolType)) {
         if (pool !== PoolType.Threat) {
           const value = pools[pool];
@@ -160,14 +160,15 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       }
       this._appliedEffects.add(vehicleEffects);
 
-      exoBonusMeleeDV &&
+      (exoBonusMeleeDV || exoMeleeArmorPiercing) &&
         this._appliedEffects.add({
           source: this.vehicle.name,
-          effects: [
+          effects: compact([
             createEffect.melee({
               dvModifier: exoBonusMeleeDV,
+              armorPiercing: exoMeleeArmorPiercing,
             }),
-          ],
+          ]),
         });
 
       if (size !== Size.Medium) {
