@@ -28,6 +28,11 @@ import { nothing } from 'lit-html';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
 import { reject } from 'remeda';
+import {
+  NotificationType,
+  notify,
+} from '../../../../../../foundry/foundry-apps';
+import { EP } from '../../../../../../foundry/system';
 import { ItemGroup } from '../../character-view-base';
 import { ItemCardBase } from '../cards/item-card-base';
 import styles from './character-view-item-group.scss';
@@ -229,6 +234,13 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
         proxy.stashed
       ) {
         proxy.toggleStashed();
+      } else if (group === ItemGroup.VehicleGear) {
+        if ('wareType' in proxy && proxy.isWare && !proxy.vehicleOwner) {
+          if (!proxy.equipped) await proxy.toggleEquipped();
+          this.character.vehicle?.updater
+            .path('flags', EP.Name, 'exoskeletonItemIds')
+            .commit((ids) => [...(ids || []), proxy.id]);
+        }
       }
       return;
     }
@@ -236,8 +248,10 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
     if ('equipped' in proxy) {
       const copy = proxy.getDataCopy(true);
       if (this.group === ItemGroup.VehicleGear) {
-        copy.data.state.equipped = true;
-        this.character.vehicle?.itemOperations.add(copy);
+        if ('wareType' in proxy && proxy.isWare) {
+          copy.data.state.equipped = true;
+          this.character.vehicle?.itemOperations.add(copy);
+        } else notify(NotificationType.Info, localize('onlyWareAllowed'));
       } else {
         copy.data.state.equipped = group === ItemGroup.Equipped;
         this.character.itemOperations.add(copy);

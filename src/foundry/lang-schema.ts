@@ -1499,7 +1499,8 @@ type LangEntries =
   | 'removeExoskeletonToResleeve'
   | 'dropSleeve/Exoskeleton'
   | 'requireActorCreationPrivileges'
-  | 'completeTransformation';
+  | 'completeTransformation'
+  | 'onlyWareAllowed';
 type FullNames =
   | 'cog'
   | 'int'
