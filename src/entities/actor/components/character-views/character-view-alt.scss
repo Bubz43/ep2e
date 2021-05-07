@@ -297,7 +297,6 @@ h3 {
   align-items: center;
   padding-right: 0.5rem;
   position: relative;
-  @include textButton();
   mwc-icon {
     color: var(--color-negative);
     &.support {
@@ -307,9 +306,13 @@ h3 {
   }
   notification-coin {
     position: static;
-    margin-left: 0.5ch;
+    margin-left: 0.25ch;
     --coin-bg: #{alphav(var(--color-grey), 0.2)};
   }
+}
+
+.goals-button {
+  --mdc-icon-button-size: 1.25rem;
 }
 
 .pools {
