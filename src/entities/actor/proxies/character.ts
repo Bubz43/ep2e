@@ -36,7 +36,6 @@ import { ConditionType, getConditionEffects } from '@src/features/conditions';
 import {
   createEffect,
   EffectType,
-  PoolEffect,
   totalModifiers,
   UniqueEffectType,
 } from '@src/features/effects';
@@ -45,7 +44,7 @@ import type { MovementRate } from '@src/features/movement';
 import { Pool, Pools } from '@src/features/pool';
 import { influenceInfo, PsiInfluenceType } from '@src/features/psi-influence';
 import { Recharge } from '@src/features/recharge';
-import { getEffectsFromSize } from '@src/features/size';
+import { effectsFromSize, getEffectsFromSize, Size } from '@src/features/size';
 import {
   TemporaryFeatureEnd,
   TemporaryFeatureType,
@@ -145,11 +144,10 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       }
     }
 
-    if (this.vehicle) {
+    if (this.vehicle && this.sleeve) {
       const vehicleEffects = this.vehicle.inherentArmorEffect;
-      this._appliedEffects.add(getEffectsFromSize(this.vehicle.size));
-
-      const { pools, epData } = this.vehicle;
+      // TODO only apply some size effects
+      const { pools, epData, size, name } = this.vehicle;
       const { exoMeleeArmorPiercing, exoBonusMeleeDV } = epData;
       for (const pool of enumValues(PoolType)) {
         if (pool !== PoolType.Threat) {
@@ -172,6 +170,27 @@ export class Character extends ActorProxyBase<ActorType.Character> {
             }),
           ]),
         });
+
+      if (size !== Size.Medium) {
+        this._appliedEffects.add({
+          source: `${localize(size)} ${localize('size')} (${name})`,
+          effects: compact([
+            effectsFromSize.sizeTargettedEffect(size),
+            effectsFromSize.strengthSizeEffect(size),
+          ]),
+        });
+      }
+
+      if (this.sleeve.type !== ActorType.Infomorph) {
+        const { size, name } = this.sleeve;
+        const sleeveMeleeDamageEffect = effectsFromSize.meleeDamageEffect(size);
+        if (sleeveMeleeDamageEffect) {
+          this._appliedEffects.add({
+            source: `${localize(size)} ${localize('size')} (${name})`,
+            effects: [sleeveMeleeDamageEffect],
+          });
+        }
+      }
     } else if (this.sleeve && this.sleeve?.type !== ActorType.Infomorph) {
       this._appliedEffects.add(getEffectsFromSize(this.sleeve.size));
     }
