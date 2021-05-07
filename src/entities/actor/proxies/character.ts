@@ -310,6 +310,13 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     };
   }
 
+  async removeVehicle() {
+    await this.itemOperations.remove(
+      ...(this.vehicle?.epFlags?.exoskeletonItemIds || []),
+    );
+    return this.updater.path('flags', EP.Name, 'vehicle').commit(null);
+  }
+
   addConditions(conditions: ConditionType[]) {
     return this.sleeve?.updateConditions(
       uniq([...this.conditions, ...conditions]),

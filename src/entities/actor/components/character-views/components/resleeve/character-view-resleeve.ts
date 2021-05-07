@@ -378,7 +378,9 @@ export class CharacterViewResleeve extends LitElement {
                         },
                         {
                           disabled: !userCan('ACTOR_CREATE'),
-                          tooltipText: 'Requires actor creator privileges',
+                          tooltipText: localize(
+                            'requireActorCreationPrivileges',
+                          ),
                         },
                       )
                     : '',

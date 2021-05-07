@@ -1471,6 +1471,7 @@
     "removeExoskeletonToResleeve": "Remove exoskeleton to resleeve",
     "vehicleGear": "Vehicle Gear",
     "vehicleTraits": "Vehicle Traits",
+    "requireActorCreationPrivileges": "Requires actor creation privileges",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

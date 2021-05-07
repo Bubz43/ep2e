@@ -791,21 +791,26 @@ export class CharacterViewAlt extends CharacterViewBase {
   }
 
   private openVehicleMenu(ev: MouseEvent) {
+    const vehicleName = this.character.vehicle?.name || localize('exoskeleton');
     openMenu({
       header: {
-        heading: this.character.vehicle?.name || localize('exoskeleton'),
+        heading: vehicleName,
       },
       content: [
         {
-          label: localize('delete'),
+          label: `${localize('unequip')} & ${localize('keep')}`,
+          sublabel: localize('requireActorCreationPrivileges'),
           callback: async () => {
-            await this.character.itemOperations.remove(
-              ...(this.character.vehicle?.epFlags?.exoskeletonItemIds || []),
+            await this.character.vehicle?.createActor(
+              `${this.character.name}'s ${vehicleName}`,
             );
-            this.character.updater
-              .path('flags', EP.Name, 'vehicle')
-              .commit(null);
+            this.character.removeVehicle();
           },
+          disabled: !userCan('ACTOR_CREATE'),
+        },
+        {
+          label: localize('delete'),
+          callback: () => this.character.removeVehicle(),
         },
       ],
     });

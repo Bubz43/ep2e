@@ -3659,6 +3659,9 @@
             "require": {
               "type": "string"
             },
+            "requireActorCreationPrivileges": {
+              "type": "string"
+            },
             "requireBioSubstrate": {
               "type": "string"
             },
@@ -5953,6 +5956,7 @@
             "reputation",
             "reputations",
             "require",
+            "requireActorCreationPrivileges",
             "requireBioSubstrate",
             "required",
             "requirement",
