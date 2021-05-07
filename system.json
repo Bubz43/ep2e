@@ -79,6 +79,13 @@
       "entity": "Actor"
     },
     {
+      "name": "exoskeletons-hardsuits",
+      "system": "ep2e",
+      "label": "Exoskeletons/Hardsuits",
+      "path": "./packs/exoskeletons-hardsuits.db",
+      "entity": "Actor"
+    },
+    {
       "name": "robot-vehicle-shells",
       "system": "ep2e",
       "label": "Robot/Vehicle Shells",
