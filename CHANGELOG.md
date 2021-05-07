@@ -1,0 +1,8 @@
+# Changelog
+
+## [0.7] - 2021-05-07
+
+- Add ability to equip an exoskeleton in addition to a morph
+- Add Exoskeletons/Hardsuits compendium pack
+- Make the character header a dropzone for sleeves/exoskeletons
+- Add option to fast forward through shape changing weapon transformation
