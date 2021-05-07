@@ -1,11 +1,5 @@
-import { dragSource, Drop } from '@src/foundry/drag-and-drop';
-import {
-  customElement,
-  LitElement,
-  property,
-  html,
-  internalProperty,
-} from 'lit-element';
+import { dragSource } from '@src/foundry/drag-and-drop';
+import { customElement, html, LitElement, property } from 'lit-element';
 import mix from 'mix-with/lib';
 import { LazyRipple } from '../mixins/lazy-ripple';
 import styles from './dropzone.scss';
@@ -35,14 +29,14 @@ export class DropZone extends mix(LitElement).with(LazyRipple) {
   private internalDrag = false;
 
   connectedCallback() {
-    window.addEventListener('dragstart', this.setReady);
-    window.addEventListener('dragend', this.removeReady);
+    window.addEventListener('dragstart', this.setReady, { capture: true });
+    window.addEventListener('dragend', this.removeReady, { capture: true });
     super.connectedCallback();
   }
 
   disconnectCallback() {
-    window.removeEventListener('dragstart', this.setReady);
-    window.removeEventListener('dragend', this.removeReady);
+    window.removeEventListener('dragstart', this.setReady, { capture: true });
+    window.removeEventListener('dragend', this.removeReady, { capture: true });
     super.disconnectedCallback();
   }
 
@@ -61,8 +55,9 @@ export class DropZone extends mix(LitElement).with(LazyRipple) {
   }
 
   private readonly setReady = () => {
-    if (!this.disabled && !this.internalDrag && dragSource().element)
+    if (!this.disabled && !this.internalDrag) {
       this.setAttribute('ready', '');
+    }
   };
 
   private readonly removeReady = () => this.removeAttribute('ready');
