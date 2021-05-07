@@ -102,8 +102,7 @@ export class MeleeAttackTest extends SkillTest {
       touchOnly: meleeWeapon?.isTouchOnly,
       attackTarget: [...game.user.targets][0], // TODO get closest to token
       damageIrrespectiveOfSize: meleeWeapon?.damageIrrespectiveOfSize,
-      alwaysArmorPiercing: this.character.appliedEffects
-        .meleeAlwaysArmorPiercing,
+      alwaysArmorPiercing: this.character.meleeDamageArmorPiercing,
       update: this.recipe((draft, changed) => {
         draft.melee = merge(draft.melee, changed);
         if (changed.weapon) {

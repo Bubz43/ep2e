@@ -94,8 +94,7 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
           morphSize: morphSize,
           settings: {},
           attack: undefined,
-          alwaysArmorPiercing: this.character?.appliedEffects
-            .meleeAlwaysArmorPiercing,
+          alwaysArmorPiercing: this.character?.meleeDamageArmorPiercing,
         }),
       },
       entity: this.token ?? this.character,

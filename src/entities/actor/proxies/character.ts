@@ -148,7 +148,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       const vehicleEffects = this.vehicle.inherentArmorEffect;
       // TODO only apply some size effects
       const { pools, epData, size, name } = this.vehicle;
-      const { exoMeleeArmorPiercing, exoBonusMeleeDV } = epData;
+      const { exoBonusMeleeDV } = epData;
       for (const pool of enumValues(PoolType)) {
         if (pool !== PoolType.Threat) {
           const value = pools[pool];
@@ -160,15 +160,14 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       }
       this._appliedEffects.add(vehicleEffects);
 
-      (exoBonusMeleeDV || exoMeleeArmorPiercing) &&
+      exoBonusMeleeDV &&
         this._appliedEffects.add({
           source: this.vehicle.name,
-          effects: compact([
+          effects: [
             createEffect.melee({
               dvModifier: exoBonusMeleeDV,
-              armorPiercing: exoMeleeArmorPiercing,
             }),
-          ]),
+          ],
         });
 
       if (size !== Size.Medium) {
@@ -432,6 +431,10 @@ export class Character extends ActorProxyBase<ActorType.Character> {
 
   get conditions() {
     return this.sleeve?.conditions ?? [];
+  }
+
+  get meleeDamageArmorPiercing() {
+    return !!this.vehicle?.epData.exoMeleeArmorPiercing;
   }
 
   @LazyGetter()

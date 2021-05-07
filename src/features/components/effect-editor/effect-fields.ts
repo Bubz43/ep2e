@@ -110,12 +110,8 @@ const misc: WithAllProps<MiscEffect> = ({ unique, description }) => [
   renderTextareaField(description, { required: true }),
 ];
 
-const melee: WithAllProps<MeleeEffect> = ({ dvModifier, armorPiercing }) => [
+const melee: WithAllProps<MeleeEffect> = ({ dvModifier }) => [
   renderFormulaField(dvModifier, { required: true }),
-  renderLabeledCheckbox({
-    ...armorPiercing,
-    label: localize('meleeDamageArmorPiercing'),
-  }),
 ];
 
 const ranged: WithAllProps<RangedEffect> = ({

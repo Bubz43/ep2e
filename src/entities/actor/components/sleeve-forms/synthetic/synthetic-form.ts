@@ -155,28 +155,37 @@ export class SyntheticForm extends SleeveFormBase {
               }),
 
               notEmpty(subtypes)
-                ? html`
-                    ${renderSelectField(subtype, subtypes, {
-                      disabled: exoskeleton,
-                    })}
-                    <entity-form-sidebar-divider></entity-form-sidebar-divider>
-                  `
+                ? renderSelectField(subtype, subtypes, {
+                    disabled: exoskeleton,
+                  })
                 : '',
+              renderSelectField(size, enumValues(Size)),
               shellType.value === ShellType.Vehicle
                 ? [
                     renderNumberField(passengers, { min: 1 }),
                     subtype.value === VehicleType.Hardsuit ||
                     subtype.value === VehicleType.Exoskeleton
                       ? [
-                          renderFormulaField(exoBonusMeleeDV),
-                          renderLabeledCheckbox(exoMeleeArmorPiercing),
+                          html`<entity-form-sidebar-divider
+                            label=${localize('melee')}
+                          ></entity-form-sidebar-divider>`,
+                          renderFormulaField({
+                            ...exoBonusMeleeDV,
+                            label: `${localize('bonus')} ${localize(
+                              'SHORT',
+                              'damageValue',
+                            )}`,
+                          }),
+                          renderLabeledCheckbox({
+                            ...exoMeleeArmorPiercing,
+                            label: `${localize('armorPiercing')}`,
+                          }),
                         ]
                       : '',
                   ]
                 : renderLabeledCheckbox(isSwarm, {
                     tooltipText: localize('DESCRIPTIONS', 'AppliesSwarmRules'),
                   }),
-              renderSelectField(size, enumValues(Size)),
               html`<entity-form-sidebar-divider></entity-form-sidebar-divider>`,
               isSwarm.value
                 ? ''
