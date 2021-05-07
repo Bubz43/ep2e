@@ -1473,6 +1473,7 @@
     "vehicleTraits": "Vehicle Traits",
     "requireActorCreationPrivileges": "Requires actor creation privileges",
     "completeTransformation": "Complete Transformation",
+    "onlyWareAllowed": "Only ware allowed",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

@@ -3131,6 +3131,9 @@
             "online": {
               "type": "string"
             },
+            "onlyWareAllowed": {
+              "type": "string"
+            },
             "onset": {
               "type": "string"
             },
@@ -5783,6 +5786,7 @@
             "oneHanded",
             "ongoing",
             "online",
+            "onlyWareAllowed",
             "onset",
             "openSource",
             "operatingSystem",
