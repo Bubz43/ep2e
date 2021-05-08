@@ -19,9 +19,7 @@
 
   grid-template-rows: repeat(2, min-content) 1fr auto;
 
-  // grid-auto-rows: min-content;
-
-  // padding-left: 1rem;
+  color: var(--color-text);
 
   position: fixed;
   left: 0;

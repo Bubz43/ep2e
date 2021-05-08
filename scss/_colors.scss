@@ -25,7 +25,4 @@ body {
   @include defineColorHSL(--color-text-lighter, 0, 0%, 65%);
   @include defineColorHSL(--color-text-disabled, 0, 0%, 34%);
   @include defineColorHSL(--color-foundry, 24, 100%, 50%);
-
-  color: rgb(18, 18, 18);
-  color: rgb(24, 26, 27);
 }
