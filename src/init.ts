@@ -156,36 +156,28 @@ Hooks.once('ready', async () => {
     overlay.append(tooltip);
     document.body.classList.add('ready');
     Hooks.call('ep-ready', true);
+    const frag = new DocumentFragment();
+    render(
+      html`
+        <mwc-icon-button
+          data-tooltip=${`${localize('custom')} ${localize('roll')}`}
+          @mouseover=${tooltip.fromData}
+          style="flex: 0; margin-right: 0.5rem; --mdc-icon-button-size: 1.5rem"
+          @click=${(ev: Event & { currentTarget: HTMLElement }) =>
+            openWindow({
+              key: CustomRollApp,
+              content: html`<custom-roll-app></custom-roll-app>`,
+              name: `${localize('custom')} ${localize('roll')}`,
+              adjacentEl: ev.currentTarget,
+            })}
+        >
+          <img class="noborder" src="icons/svg/combat.svg" />
+        </mwc-icon-button>
+      `,
+      frag,
+    );
+    document.getElementById('chat-controls')?.prepend(frag);
   }, 150);
-
-  applicationHook({
-    app: ChatLog,
-    hook: 'on',
-    event: 'render',
-    callback: (_, [element]) => {
-      const frag = new DocumentFragment();
-      render(
-        html`
-          <mwc-icon-button
-            data-tooltip=${`${localize('custom')} ${localize('roll')}`}
-            @mouseover=${tooltip.fromData}
-            style="flex: 0; margin-right: 0.5rem; --mdc-icon-button-size: 1.5rem"
-            @click=${(ev: Event & { currentTarget: HTMLElement }) =>
-              openWindow({
-                key: CustomRollApp,
-                content: html`<custom-roll-app></custom-roll-app>`,
-                name: `${localize('custom')} ${localize('roll')}`,
-                adjacentEl: ev.currentTarget,
-              })}
-          >
-            <img class="noborder" src="icons/svg/combat.svg" />
-          </mwc-icon-button>
-        `,
-        frag,
-      );
-      element?.querySelector('div#chat-controls')?.prepend(frag);
-    },
-  });
 
   const compendiumSearchButton = () => {
     const frag = new DocumentFragment();

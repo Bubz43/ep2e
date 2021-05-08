@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.722] - 2021-05-07
+
+- Fix custom attack button not rendering
+
 ## [0.721] - 2021-05-07
 
 - Make sure chat footer is at bottom
