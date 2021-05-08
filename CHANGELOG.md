@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.72] - 2021-05-07
+
+- Fix permission and filepicker not being styled
+- Add limited view for characters
+
 ## [0.715] - 2021-05-07
 
 - Specifically target foundry apps for styling, leaving modules alone
