@@ -364,6 +364,17 @@ export const overridePrototypes = () => {
     },
   });
 
+  const { defaultOptions: compendiumdefaults } = Compendium;
+  Object.defineProperty(Compendium, 'defaultOptions', {
+    enumerable: true,
+    get() {
+      return {
+        ...(compendiumdefaults as { classes: [] }),
+        classes: ['compendium-list'],
+      };
+    },
+  });
+
   const { _replaceHTML } = CombatTracker.prototype;
   CombatTracker.prototype._replaceHTML = function (
     ...args: Parameters<typeof _replaceHTML>
