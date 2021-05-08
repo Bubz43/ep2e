@@ -906,6 +906,14 @@ sl-tooltip {
       padding: 0.25rem 0.125rem 0.25rem 0;
       order: 1;
     }
+    .directory-footer {
+      order: 4;
+      pointer-events: initial;
+      > * {
+        padding: 0 0.25rem;
+        margin: 0.125rem;
+      }
+    }
   }
   #chat-form,
   #chat-controls {
@@ -917,7 +925,7 @@ sl-tooltip {
   #chat-form {
     order: 2;
     box-shadow: 0 0 4px black;
-    margin: 0.25rem;
+    margin: 0 0.25rem 0.25rem;
   }
   #chat-message {
     background: alphav(var(--color-bg), 0.85);

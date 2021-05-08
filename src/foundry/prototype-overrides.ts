@@ -285,28 +285,6 @@ export const overridePrototypes = () => {
     }
   };
 
-  const { _render } = ChatLog.prototype;
-  ChatLog.prototype._render = async function (...args) {
-    if (document.body.classList.contains('ready')) {
-      _render.call(this, ...args);
-    }
-  };
-
-  // Object.defineProperties(Token.prototype, {
-  //   w: {
-  //     enumerable: true,
-  //     get(this: Token) {
-  //       return this.data.width * (readyCanvas()?.grid?.w ?? 100);
-  //     },
-  //   },
-  //   h: {
-  //     enumerable: true,
-  //     get(this: Token) {
-  //       return this.data.height * (readyCanvas()?.grid?.h ?? 100);
-  //     },
-  //   },
-  // });
-
   // TODO: Delay this to check for migration first
   // const barCache = new WeakMap<PIXI.Graphics, number>();
   // const bars = ["bar1", "bar2"] as const;

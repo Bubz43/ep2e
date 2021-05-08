@@ -150,38 +150,13 @@ Hooks.once('ready', async () => {
     overlay = new EPOverlay();
     SlWindow.container = overlay;
     document.body.append(overlay);
-    // document.getElementById('hotbar')?.remove();
 
     tooltip = document.createElement('sl-tooltip');
     tooltip.slot = 'tooltip';
     overlay.append(tooltip);
     document.body.classList.add('ready');
-    ui.chat.render(true);
-    // overlay.stealElements()
+    Hooks.call('ep-ready', true);
   }, 150);
-
-  // mutateEntityHook({
-  //   entity: Combat,
-  //   hook: 'on',
-  //   event: MutateEvent.Update,
-  //   callback: onCombatUpdate,
-  // });
-
-  // addEPSocketHandler('combatant', combatantSocketHandler);
-
-  // applicationHook({
-  //   app: CombatTracker,
-  //   hook: 'on',
-  //   event: 'render',
-  //   callback: onCombatTrackerRender,
-  // });
-
-  // applicationHook({
-  //   app: PlayerList,
-  //   hook: 'on',
-  //   event: 'render',
-  //   callback: () => requestAnimationFrame(() => ui.combat.render()),
-  // });
 
   applicationHook({
     app: ChatLog,

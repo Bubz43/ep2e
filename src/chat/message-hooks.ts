@@ -40,8 +40,26 @@ addEPSocketHandler('messageData', (data) => {
   }
 });
 
-export const onChatMessageRender = (message: ChatMessageEP, [el]: JQuery) => {
+let ready = false;
+
+const messageQueue = new Map<JQuery, ChatMessageEP>();
+
+Hooks.once('ep-ready', () => {
+  ready = true;
+  for (const [j, message] of messageQueue) {
+    onChatMessageRender(message, j);
+  }
+
+  messageQueue.clear();
+});
+
+export const onChatMessageRender = (message: ChatMessageEP, j: JQuery) => {
+  const [el] = j;
   if (!el) return;
+  if (!ready) {
+    messageQueue.set(j, message);
+    return;
+  }
   const content = el.querySelector<HTMLElement>('.message-content')!;
   const { speaker, whisper, blind, flags } = message.data;
   const epData = flags[EP.Name];

@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.721] - 2021-05-07
+
+- Make sure chat footer is at bottom
+- Improve logic for initial render of chat messages
+
 ## [0.72] - 2021-05-07
 
 - Fix permission and filepicker not being styled
