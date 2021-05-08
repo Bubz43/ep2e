@@ -275,51 +275,81 @@ export class CharacterViewAlt extends CharacterViewBase {
   });
 
   render() {
-    const { character, currentTabs } = this;
-    const { psi, foreignPsiInfluences } = character;
+    if (this.character.isLimited) return this.renderLimited();
     return html`
-      ${this.renderHeader()}
-      <div class="content">
-        <div class="psi">
-          ${psi
-            ? html`<character-view-psi
-                .character=${this.character}
-                .psi=${psi}
-              ></character-view-psi>`
-            : ''}
-          ${this.renderForeignInfluences()}
-        </div>
-
-        ${this.compact
-          ? ''
-          : html`<character-view-test-actions
-              class="actions"
-              .character=${this.character}
-              .ego=${this.character.ego}
-            ></character-view-test-actions>`}
-
-        <div class="tabbed-section">
-          <mwc-tab-bar
-            @MDCTabBar:activated=${this.setTab}
-            activeIndex=${currentTabs.findIndex((t) => t === this.currentTab)}
-          >
-            ${currentTabs.map(
-              (tab: CharacterTab) =>
-                html`
-                  <mwc-tab
-                    @dragenter=${tab === 'combat' || tab === 'details'
-                      ? noop
-                      : this.activateTab}
-                    label=${localize(tab)}
-                  ></mwc-tab>
-                `,
-            )}
-          </mwc-tab-bar>
-          <div class="tab-content">${cache(this.renderTabbedContent())}</div>
-        </div>
-      </div>
-      ${this.renderDrawer()} ${this.renderFooter()}
+      ${this.renderHeader()} ${this.renderContent()} ${this.renderDrawer()}
+      ${this.renderFooter()}
     `;
+  }
+
+  private renderLimited() {
+    const { sleeve, vehicle, img } = this.character;
+    return html`
+      <div class="limited">
+        <header>
+          <div class="avatar">
+            <img src=${img} width="84px" />
+          </div>
+          <h1>${this.character.name}</h1>
+          <span class="info">${localize('public')} ${localize('profile')}</span>
+        </header>
+
+        ${sleeve
+          ? html`
+              <div>
+                ${sleeve.name}
+                <span class="info"
+                  >${formattedSleeveInfo(sleeve, vehicle).join(' - ')}</span
+                >
+              </div>
+            `
+          : ''}
+      </div>
+    `;
+  }
+
+  private renderContent() {
+    const { character, currentTabs } = this;
+    const { psi } = character;
+    return html` <div class="content">
+      <div class="psi">
+        ${psi
+          ? html`<character-view-psi
+              .character=${this.character}
+              .psi=${psi}
+            ></character-view-psi>`
+          : ''}
+        ${this.renderForeignInfluences()}
+      </div>
+
+      ${this.compact
+        ? ''
+        : html`<character-view-test-actions
+            class="actions"
+            .character=${this.character}
+            .ego=${this.character.ego}
+          ></character-view-test-actions>`}
+
+      <div class="tabbed-section">
+        <mwc-tab-bar
+          @MDCTabBar:activated=${this.setTab}
+          activeIndex=${currentTabs.findIndex((t) => t === this.currentTab)}
+        >
+          ${currentTabs.map(
+            (tab: CharacterTab) =>
+              html`
+                <mwc-tab
+                  @dragenter=${tab === 'combat' || tab === 'details'
+                    ? noop
+                    : this.activateTab}
+                  label=${localize(tab)}
+                ></mwc-tab>
+              `,
+          )}
+        </mwc-tab-bar>
+        <div class="tab-content">${cache(this.renderTabbedContent())}</div>
+      </div>
+    </div>`;
   }
 
   private openForeignInfluenceMenu(

@@ -248,6 +248,10 @@ export class Character extends ActorProxyBase<ActorType.Character> {
       : this.equipped;
   }
 
+  get isLimited() {
+    return this.actor.hasPerm(game.user, 'LIMITED', true);
+  }
+
   @LazyGetter()
   get weapons() {
     const melee: MeleeWeapon[] = [];

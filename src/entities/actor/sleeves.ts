@@ -81,7 +81,7 @@ export const formattedSleeveInfo = (
   return compact([
     'size' in sleeve &&
       `${localize(sleeve.size)}${
-        exoskeleton
+        exoskeleton && exoskeleton.size !== sleeve.size
           ? ` ${localize('as').toLocaleLowerCase()} ${localize(
               exoskeleton.size,
             )}`
