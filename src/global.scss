@@ -78,6 +78,10 @@ body {
 .app.sidebar-popout,
 .app .sidebar-tab,
 .journal-sheet,
+.filepicker,
+#permissions-config,
+#permission,
+#av-config,
 #chat,
 #controls {
   @include styled-scrollbars;
