@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.715] - 2021-05-07
+
+- Specifically target foundry apps for styling, leaving modules alone
+
 ## [0.71] - 2021-05-07
 
 - Show motivation goals on click
