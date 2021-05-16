@@ -411,7 +411,9 @@ export class CombatView extends LitElement {
                 slot="base"
                 role="button"
               >
-                <span>${logEntry.text}</span>
+                <span class="entry-text" title=${logEntry.text}
+                  >${logEntry.text}</span
+                >
                 <time-since
                   slot="after"
                   timestamp=${logEntry.timestamp}

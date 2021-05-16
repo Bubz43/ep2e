@@ -82,7 +82,8 @@ wl-list-item {
     }
   }
   .name {
-    width: max-content;
+    @include truncate(100px);
+    min-width: 100%;
   }
 }
 

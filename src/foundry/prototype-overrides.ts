@@ -334,11 +334,11 @@ export const overridePrototypes = () => {
   //   }
   // };
 
-  const { defaultOptions } = JournalSheet;
+  const { defaultOptions: journalSheetOptions } = JournalSheet;
   Object.defineProperty(JournalSheet, 'defaultOptions', {
     enumerable: true,
     get() {
-      return { ...(defaultOptions as {}), width: 620 };
+      return { ...(journalSheetOptions as {}), width: 620 };
     },
   });
 
@@ -361,6 +361,7 @@ export const overridePrototypes = () => {
       _replaceHTML.apply(this, args);
     }
   };
+
   CombatTracker.prototype._renderInner = async function () {
     const existing = this.element?.[0]?.querySelector('combat-view');
     if (existing) {

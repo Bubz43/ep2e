@@ -610,6 +610,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
           class="name"
           ?disabled=${!editable || !actor}
           @click=${this.openActorSheet}
+          title=${participant.name}
         >
           ${this.surprise && participant.surprised
             ? html`<span class="surprise-label"

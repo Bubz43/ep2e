@@ -4,11 +4,13 @@ import type { RawEditorSettings } from 'tinymce';
 import type { PartialDeep } from 'type-fest';
 import { onChatMessageRender } from './chat/message-hooks';
 import { combatSocketHandler } from './combat/combat-tracker';
+import { CombatView } from './combat/components/combat-view/combat-view';
 import { CustomRollApp } from './combat/components/custom-roll-app/custom-roll-app';
 import { EPOverlay } from './components/ep-overlay/ep-overlay';
 import type { ToolTip } from './components/tooltip/tooltip';
 import { SlWindow } from './components/window/window';
 import { openWindow } from './components/window/window-controls';
+import { ResizeOption } from './components/window/window-options';
 import { enumValues } from './data-enums';
 import { ActorEP } from './entities/actor/actor';
 import { ActorEPSheet } from './entities/actor/actor-sheet';
@@ -200,6 +202,22 @@ Hooks.once('ready', async () => {
     );
     return frag;
   };
+
+  const trackerAnchor = document.querySelector(
+    "#sidebar-tabs > a.item[data-tab='combat']",
+  );
+
+  trackerAnchor?.addEventListener('contextmenu', (ev) => {
+    ev.stopPropagation();
+    openWindow(
+      {
+        key: CombatView,
+        content: html`<combat-view></combat-view>`,
+        name: localize('combat'),
+      },
+      { resizable: ResizeOption.Both },
+    );
+  });
 
   document
     .querySelector('#compendium .directory-footer')
