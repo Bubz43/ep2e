@@ -25,7 +25,7 @@ import { Biological } from './proxies/biological';
 import { Character } from './proxies/character';
 import { Infomorph } from './proxies/infomorph';
 import { Synthetic } from './proxies/synthetic';
-import { formattedSleeveInfo } from './sleeves';
+import { formattedSleeveInfo, Sleeve } from './sleeves';
 
 type ItemUpdate = SetRequired<DeepPartial<ItemEntity>, '_id'>;
 
@@ -37,7 +37,7 @@ export type ItemOperations = {
   remove: (...itemIds: string[]) => Promise<string[]>;
 };
 
-export type ActorProxy = ReturnType<ActorEP['createProxy']>;
+export type ActorProxy = Character | Sleeve;
 
 export type MaybeToken = Token | null | undefined;
 
@@ -96,23 +96,6 @@ export class ActorEP extends Actor {
     return this.#updater;
   }
 
-  get path() {
-    if (!this.#path) {
-      if (this.isToken && this.token) {
-        if (!this.token.scene) this.#path = [];
-        else {
-          this.#path = [this.token.scene, this.token];
-        }
-      } else if (game.actors.has(this.id)) {
-        this.#path = compact([
-          { name: localize('actors') },
-          this.folder && { name: this.folder.name },
-          this,
-        ]);
-      } else this.#path = [];
-    }
-    return this.#path;
-  }
 
   get editable() {
     // (!this.isToken || this.token?.scene?.id === activeCanvas()?.scene.id)
@@ -245,7 +228,7 @@ export class ActorEP extends Actor {
 
   private openForm = () => this.sheet.render(true);
 
-  private createProxy() {
+  private createProxy(): ActorProxy {
     const { data } = this;
 
     switch (data.type) {
@@ -279,7 +262,6 @@ export class ActorEP extends Actor {
       itemOperations: this.itemOperations,
       actor: this,
       openForm: this.openForm,
-      path: this.path,
     } as const;
   }
 
