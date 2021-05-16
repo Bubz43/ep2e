@@ -50,6 +50,7 @@ import {
 } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { clone, difference, mapToObj, pick } from 'remeda';
+import { RenderDialogEvent } from '../../../../../open-dialog';
 import type { FullEgoData } from '../../../../actor/ego';
 import { DefaultEgos } from '../../../../models';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
@@ -180,15 +181,41 @@ export class PhysicalTechForm extends ItemFormBase {
   }
 
   private handleDropOnOnboardALI = handleDrop(async ({ data }) => {
-    console.log(data);
-    if (this.disabled || data?.type !== DropType.Actor) return;
-    const proxy = await actorDroptoActorProxy(data);
+    if (this.disabled) return;
+    const proxy =
+      data?.type === DropType.Actor ? await actorDroptoActorProxy(data) : null;
     if (proxy?.type === ActorType.Character) {
-      const egoData = pick(clone(proxy.ego.data), ['data', 'img', 'name']);
-      const items = [...proxy.ego.items.values()].flatMap((i) =>
-        i.type === ItemType.Trait ? i.getDataCopy(false) : [],
+      this.dispatchEvent(
+        new RenderDialogEvent(html`
+          <mwc-dialog>
+            <p>${localize('thisWillOverwriteEgo')}</p>
+            <mwc-button slot="secondaryAction" dialogAction="cancel"
+              >${localize('cancel')}</mwc-button
+            >
+            <mwc-button
+              slot="primaryAction"
+              dialogAction="confirm"
+              unelevated
+              @click=${() => {
+                const egoData = pick(clone(proxy.ego.data), [
+                  'data',
+                  'img',
+                  'name',
+                ]);
+                const items = [...proxy.ego.items.values()].flatMap((i) =>
+                  i.type === ItemType.Trait ? i.getDataCopy(false) : [],
+                );
+                this.item.onboardALI.updater
+                  .path('')
+                  .commit({ ...egoData, items });
+              }}
+              >${localize('confirm')}</mwc-button
+            >
+          </mwc-dialog>
+        `),
       );
-      this.item.onboardALI.updater.path('').commit({ ...egoData, items });
+    } else {
+      notify(NotificationType.Info, `${localize('onlyCharactersAllowed')}`);
     }
   });
 
