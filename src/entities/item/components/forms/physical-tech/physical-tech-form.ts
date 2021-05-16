@@ -23,7 +23,7 @@ import {
   PhysicalWare,
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
-import { ItemType } from '@src/entities/entity-types';
+import { ActorType, ItemType } from '@src/entities/entity-types';
 import { renderItemForm } from '@src/entities/item/item-views';
 import type { PhysicalTech } from '@src/entities/item/proxies/physical-tech';
 import { ActionType } from '@src/features/actions';
@@ -32,6 +32,7 @@ import { EffectType } from '@src/features/effects';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import { CommonInterval } from '@src/features/time';
 import {
+  actorDroptoActorProxy,
   DropType,
   handleDrop,
   itemDropToItemProxy,
@@ -48,7 +49,9 @@ import {
   PropertyValues,
 } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
-import { difference, mapToObj } from 'remeda';
+import { clone, difference, mapToObj, pick } from 'remeda';
+import type { FullEgoData } from '../../../../actor/ego';
+import { DefaultEgos } from '../../../../models';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './physical-tech-form.scss';
@@ -176,6 +179,19 @@ export class PhysicalTechForm extends ItemFormBase {
     this.effectsOps[`${this.effectGroup}Effects` as const].add({}, ev.effect);
   }
 
+  private handleDropOnOnboardALI = handleDrop(async ({ data }) => {
+    console.log(data);
+    if (this.disabled || data?.type !== DropType.Actor) return;
+    const proxy = await actorDroptoActorProxy(data);
+    if (proxy?.type === ActorType.Character) {
+      const egoData = pick(clone(proxy.ego.data), ['data', 'img', 'name']);
+      const items = [...proxy.ego.items.values()].flatMap((i) =>
+        i.type === ItemType.Trait ? i.getDataCopy(false) : [],
+      );
+      this.item.onboardALI.updater.path('').commit({ ...egoData, items });
+    }
+  });
+
   render() {
     const {
       updater,
@@ -190,6 +206,7 @@ export class PhysicalTechForm extends ItemFormBase {
       onboardALI,
       hasOnboardALI,
     } = this.item;
+    console.log(onboardALI.data);
     const { disabled } = this;
     return html`
       <entity-form-layout>
@@ -266,8 +283,13 @@ export class PhysicalTechForm extends ItemFormBase {
           ${deviceType ? this.renderMeshHealthSection() : ''}
           ${hasOnboardALI
             ? html`
-                <section>
-                  <sl-header heading=${localize('onboardALI')}>
+                <sl-dropzone
+                  ?disabled=${disabled}
+                  @drop=${this.handleDropOnOnboardALI}
+                >
+                  <sl-header
+                    heading="${localize('onboardALI')} ${onboardALI.name}"
+                  >
                     <mwc-icon-button
                       slot="action"
                       icon="launch"
@@ -299,7 +321,7 @@ export class PhysicalTechForm extends ItemFormBase {
                       )}
                     </ul></sl-group
                   >
-                </section>
+                </sl-dropzone>
               `
             : ''}
           ${this.item.fabricatorType
