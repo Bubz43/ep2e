@@ -1474,6 +1474,8 @@
     "requireActorCreationPrivileges": "Requires actor creation privileges",
     "completeTransformation": "Complete Transformation",
     "onlyWareAllowed": "Only ware allowed",
+    "onlyCharactersAllowed": "Only characters allowed",
+    "thisWillOverwriteEgo": "This will completely overwrite ego.",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

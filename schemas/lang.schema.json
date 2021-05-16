@@ -3131,6 +3131,9 @@
             "online": {
               "type": "string"
             },
+            "onlyCharactersAllowed": {
+              "type": "string"
+            },
             "onlyWareAllowed": {
               "type": "string"
             },
@@ -4392,6 +4395,9 @@
               "type": "string"
             },
             "theUnknown": {
+              "type": "string"
+            },
+            "thisWillOverwriteEgo": {
               "type": "string"
             },
             "threat": {
@@ -5786,6 +5792,7 @@
             "oneHanded",
             "ongoing",
             "online",
+            "onlyCharactersAllowed",
             "onlyWareAllowed",
             "onset",
             "openSource",
@@ -6207,6 +6214,7 @@
             "testResult",
             "tests",
             "theUnknown",
+            "thisWillOverwriteEgo",
             "threat",
             "threatDetails",
             "threatLevel",
