@@ -1,13 +1,13 @@
-import { px, resizeObsAvailable } from '@src/utility/dom';
+import { resizeObsAvailable } from '@src/utility/dom';
 import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   eventOptions,
   html,
-  internalProperty,
   LitElement,
   property,
   query,
+  state,
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { first } from 'remeda';
@@ -35,9 +35,9 @@ export class EntityFormLayout extends LitElement {
 
   @property({ type: Boolean, reflect: true }) noSidebar = false;
 
-  @internalProperty() private hideScroll = false;
+  @state() private hideScroll = false;
 
-  @internalProperty() private drawerOpen = false;
+  @state() private drawerOpen = false;
 
   @query('.drawer', true) drawer!: HTMLElement;
 

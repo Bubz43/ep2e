@@ -46,9 +46,9 @@ import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
-  internalProperty,
   property,
   PropertyValues,
+  state,
 } from 'lit-element';
 import { createPipe, map, objOf } from 'remeda';
 import {
@@ -69,7 +69,7 @@ export class MeleeWeaponForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: MeleeWeapon;
 
-  @internalProperty() private skillOption = WeaponSkillOption.None;
+  @state() private skillOption = WeaponSkillOption.None;
 
   private coatingSheet?: SlWindow | null;
 

@@ -2,11 +2,7 @@ import type { MessageAreaEffectData } from '@src/chat/message-data';
 import { getCenteredDistance } from '@src/combat/area-effect';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { AreaEffectType } from '@src/data-enums';
-import {
-  createLiveTimeState,
-  getElapsedTime,
-  prettyMilliseconds,
-} from '@src/features/time';
+import { createLiveTimeState, prettyMilliseconds } from '@src/features/time';
 import {
   createTemporaryMeasuredTemplate,
   deletePlacedTemplate,
@@ -35,7 +31,7 @@ export class MessageAreaEffect extends mix(MessageElement).with(UseWorldTime) {
 
   @property({ type: Object }) areaEffect!: MessageAreaEffectData;
 
-  // @internalProperty() private targets = new Set<Token>();
+  // @state() private targets = new Set<Token>();
 
   // update(changedProps: PropertyValues) {
   //   if (this.areaEffect.templateIDs) {

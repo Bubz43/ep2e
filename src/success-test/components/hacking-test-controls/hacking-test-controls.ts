@@ -7,13 +7,7 @@ import { overlay } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import { HackingTest, HackingTestInit } from '@src/success-test/hacking-test';
 import { notEmpty } from '@src/utility/helpers';
-import {
-  customElement,
-  html,
-  internalProperty,
-  LitElement,
-  query,
-} from 'lit-element';
+import { customElement, html, LitElement, query, state } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { identity, Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';
@@ -54,7 +48,7 @@ export class HackingTestControls extends LitElement {
 
   private subs = new Set<Subscription | Subscription['unsubscribe']>();
 
-  @internalProperty() private test?: HackingTest;
+  @state() private test?: HackingTest;
 
   connectedCallback() {
     Hooks.on('targetToken', this.setTarget);

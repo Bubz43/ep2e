@@ -22,11 +22,11 @@ import {
   customElement,
   eventOptions,
   html,
-  internalProperty,
   LitElement,
   property,
   PropertyValues,
   query,
+  state,
 } from 'lit-element';
 import { createPipe, flatMapToObj } from 'remeda';
 import { ActorEP } from '../../actor';
@@ -59,11 +59,11 @@ export class ActorCreator extends LitElement {
 
   @query('.main-form sl-form') private actorForm!: Form;
 
-  @internalProperty() private actorKind = ActorKind.Character;
+  @state() private actorKind = ActorKind.Character;
 
-  @internalProperty() private characterTemplate = CharacterTemplate.PC;
+  @state() private characterTemplate = CharacterTemplate.PC;
 
-  @internalProperty() private selectedSleeve: Sleeve | null = null;
+  @state() private selectedSleeve: Sleeve | null = null;
 
   private defaultSleeveData = createDigimorph();
 

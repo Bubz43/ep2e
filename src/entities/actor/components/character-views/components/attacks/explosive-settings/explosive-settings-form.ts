@@ -49,10 +49,10 @@ import {
 import {
   customElement,
   html,
-  internalProperty,
   LitElement,
   property,
   PropertyValues,
+  state,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { difference, identity } from 'remeda';
@@ -104,10 +104,9 @@ export class ExplosiveSettingsForm extends LitElement {
 
   @property({ type: Object }) initialSettings?: Partial<ExplosiveSettings>;
 
-  @internalProperty() private settings: ExplosiveSettings = this
-    .defaultSettings;
+  @state() private settings: ExplosiveSettings = this.defaultSettings;
 
-  @internalProperty() private targets = new Set<Token>();
+  @state() private targets = new Set<Token>();
 
   disconnectedCallback() {
     this.targets.clear();

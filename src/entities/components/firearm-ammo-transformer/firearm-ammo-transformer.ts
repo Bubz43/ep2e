@@ -2,13 +2,7 @@ import type { Firearm } from '@src/entities/item/proxies/firearm';
 import type { FirearmAmmo } from '@src/entities/item/proxies/firearm-ammo';
 import { localize } from '@src/foundry/localization';
 import type { PropertyValues } from 'lit-element';
-import {
-  customElement,
-  html,
-  internalProperty,
-  LitElement,
-  property,
-} from 'lit-element';
+import { customElement, html, LitElement, property, state } from 'lit-element';
 import { equals } from 'remeda';
 import styles from './firearm-ammo-transformer.scss';
 
@@ -26,9 +20,9 @@ export class FirearmAmmoTransformer extends LitElement {
 
   @property({ type: Boolean, reflect: true }) overflowAmmo = false;
 
-  @internalProperty() private modeStates: number[] = [];
+  @state() private modeStates: number[] = [];
 
-  @internalProperty() private dragIndex: number | null = null;
+  @state() private dragIndex: number | null = null;
 
   private dragState: number[] = [];
 

@@ -17,11 +17,11 @@ import { notEmpty, safeMerge } from '@src/utility/helpers';
 import {
   customElement,
   html,
-  internalProperty,
   LitElement,
   property,
   PropertyValues,
   queryAll,
+  state,
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { ifDefined } from 'lit-html/directives/if-defined';
@@ -43,11 +43,11 @@ export class CharacterViewTestActions extends LitElement {
 
   @property({ attribute: false }) ego!: Ego;
 
-  @internalProperty() private activeFakeId?: string;
+  @state() private activeFakeId?: string;
 
-  @internalProperty() private activeEgo?: string;
+  @state() private activeEgo?: string;
 
-  @internalProperty()
+  @state()
   private skillControls = {
     filter: '',
   };
@@ -262,11 +262,8 @@ export class CharacterViewTestActions extends LitElement {
     const { groupedSkills, name, aptitudes } = currentEgo;
     const { active, know } = groupedSkills;
     const { sources, fakeID } = this.repSources;
-    const {
-      softwareSkills,
-      fakeIDs,
-      onboardALIs,
-    } = this.character.equippedGroups;
+    const { softwareSkills, fakeIDs, onboardALIs } =
+      this.character.equippedGroups;
     // TODO: Toggle to show all reps instead of just tracked
     // TODO: Add collapse toggle
     // TODO: Info that device ALI doesn't use different skills for anything besides here

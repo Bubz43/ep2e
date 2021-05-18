@@ -1,6 +1,6 @@
 import type { FocusTrap } from '@a11y/focus-trap';
-import { LitElement, query, internalProperty } from 'lit-element';
-import { TemplateResult, html, nothing } from 'lit-html';
+import { LitElement, query, state } from 'lit-element';
+import { html, nothing, TemplateResult } from 'lit-html';
 import type { Class } from 'type-fest';
 import { traverseActiveElements } from 'weightless';
 
@@ -12,9 +12,8 @@ export const FormDrawer = (Base: Class<LitElement>) => {
 
     private _autoFocus = true;
 
-    @internalProperty() protected drawerContentRenderer:
-      | (() => TemplateResult)
-      | null = null;
+    @state() protected drawerContentRenderer: (() => TemplateResult) | null =
+      null;
 
     connectedCallback() {
       this.addEventListener('drawer-close', this.closeDrawer);

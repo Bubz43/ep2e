@@ -1,17 +1,16 @@
 import { formatArmorUsed } from '@src/combat/attack-formatting';
 import {
-  renderNumberField,
-  renderLabeledCheckbox,
-  renderSelectField,
-  renderTextField,
-  renderRadioFields,
   renderFormulaField,
-  renderTimeField,
+  renderLabeledCheckbox,
+  renderNumberField,
+  renderRadioFields,
+  renderSelectField,
   renderTextareaField,
+  renderTextField,
+  renderTimeField,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import { Placement } from '@src/components/popover/popover-options';
-import type { SlWindow } from '@src/components/window/window';
 import {
   closeWindow,
   openWindow,
@@ -21,14 +20,13 @@ import {
   SlWindowEventName,
 } from '@src/components/window/window-options';
 import {
-  enumValues,
-  SubstanceType,
-  SubstanceClassification,
-  DrugCategory,
-  DrugAddiction,
-  SubstanceApplicationMethod,
   AptitudeType,
-  WeaponAttackType,
+  DrugAddiction,
+  DrugCategory,
+  enumValues,
+  SubstanceApplicationMethod,
+  SubstanceClassification,
+  SubstanceType,
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { ItemType } from '@src/entities/entity-types';
@@ -40,7 +38,6 @@ import { ArmorType } from '@src/features/active-armor';
 import { pairList } from '@src/features/check-list';
 import type { EffectCreatedEvent } from '@src/features/components/effect-creator/effect-created-event';
 import { ConditionType } from '@src/features/conditions';
-import { formatEffect } from '@src/features/effects';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import { CommonInterval, prettyMilliseconds } from '@src/features/time';
 import {
@@ -55,15 +52,14 @@ import { notEmpty, withSign } from '@src/utility/helpers';
 import {
   customElement,
   html,
-  internalProperty,
   property,
   PropertyValues,
+  state,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import {
   createPipe,
   flatMap,
-  groupBy,
   identity,
   map,
   mapToObj,
@@ -95,7 +91,7 @@ export class SubstanceForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: Substance;
 
-  @internalProperty() private effectGroup: Group = 'base';
+  @state() private effectGroup: Group = 'base';
 
   private baseSheetKeys = new Map<string, {}>();
 
@@ -461,9 +457,8 @@ export class SubstanceForm extends ItemFormBase {
 
   private renderCommonEffectInfo(group: Group) {
     const { duration, wearOffStress, notes, items } = this.item[group];
-    const { damageFormula, damageType, perTurn, ...armor } = this.item.epData[
-      group
-    ].damage;
+    const { damageFormula, damageType, perTurn, ...armor } =
+      this.item.epData[group].damage;
 
     const itemGroups = [...items.values()].reduce(
       (accum, item) => {

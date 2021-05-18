@@ -3,7 +3,7 @@ import { LazyRipple } from '@src/components/mixins/lazy-ripple';
 import type { Skill } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import type { FieldPropsRenderer } from '@src/utility/field-values';
-import { LitElement, property, html, internalProperty } from 'lit-element';
+import { html, LitElement, property, state } from 'lit-element';
 import mix from 'mix-with/lib';
 import { compact } from 'remeda';
 import styles from './ego-form-skill.scss';
@@ -25,7 +25,7 @@ export abstract class EgoFormSkillBase extends mix(LitElement).with(
 
   @property({ type: Boolean }) editTotal = false;
 
-  @internalProperty() editMain = false;
+  @state() editMain = false;
 
   firstUpdated() {
     this.setAttribute('role', 'listitem');

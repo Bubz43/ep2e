@@ -10,7 +10,7 @@ import { ArmorType } from '@src/features/active-armor';
 import { localize } from '@src/foundry/localization';
 import type { CustomAttackData } from '@src/global';
 import { HealthType } from '@src/health/health';
-import { customElement, html, internalProperty, LitElement } from 'lit-element';
+import { customElement, html, LitElement, state } from 'lit-element';
 import { mapToObj } from 'remeda';
 import styles from './custom-roll-app.scss';
 
@@ -33,7 +33,7 @@ export class CustomRollApp extends LitElement {
     return [styles];
   }
 
-  @internalProperty() private attackData = createInitialState();
+  @state() private attackData = createInitialState();
 
   private rollAttack() {
     if (!this.isComplete) return;

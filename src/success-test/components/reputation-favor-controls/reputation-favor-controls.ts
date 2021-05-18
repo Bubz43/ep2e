@@ -21,10 +21,10 @@ import { notEmpty, withSign } from '@src/utility/helpers';
 import {
   customElement,
   html,
-  internalProperty,
   LitElement,
   PropertyValues,
   query,
+  state,
 } from 'lit-element';
 import { compact } from 'remeda';
 import type { Subscription } from 'rxjs';
@@ -64,21 +64,19 @@ export class ReputationFavorControls extends LitElement {
     win.setState(init);
   }
 
-  @internalProperty() private entities!: {
+  @state() private entities!: {
     actor: ActorEP;
     token?: MaybeToken;
   };
 
-  @internalProperty() private getState!: (
-    actor: ActorEP,
-  ) => ReputationFavorInit | null;
+  @state() private getState!: (actor: ActorEP) => ReputationFavorInit | null;
 
   @query('sl-window')
   private win?: SlWindow;
 
   private subs = new Set<Subscription | Subscription['unsubscribe']>();
 
-  @internalProperty() private test?: ReputationFavor;
+  @state() private test?: ReputationFavor;
 
   update(
     changedProps: PropertyValues<

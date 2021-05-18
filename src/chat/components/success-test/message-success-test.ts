@@ -25,8 +25,8 @@ import {
   customElement,
   eventOptions,
   html,
-  internalProperty,
   property,
+  state,
 } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
@@ -58,13 +58,13 @@ export class MessageSuccessTest extends MessageElement {
 
   @property({ attribute: false }) successTest!: SuccessTestMessageData;
 
-  @internalProperty() private superiorEffects?: SuperiorResultEffect[];
+  @state() private superiorEffects?: SuperiorResultEffect[];
 
-  @internalProperty() private setRoll?: number | null;
+  @state() private setRoll?: number | null;
 
-  @internalProperty() private editing = false;
+  @state() private editing = false;
 
-  @internalProperty() private preview: {
+  @state() private preview: {
     roll: number;
     result: SuccessTestResult;
   } | null = null;
@@ -262,13 +262,8 @@ export class MessageSuccessTest extends MessageElement {
   }
 
   render() {
-    const {
-      defaulting,
-      linkedPool,
-      states,
-      task,
-      superiorResultEffects,
-    } = this.successTest;
+    const { defaulting, linkedPool, states, task, superiorResultEffects } =
+      this.successTest;
     const { actor, editable } = this.message;
     const isCharacter = actor?.type === ActorType.Character;
     const { roll, target = this.partTotal, result } = this.currentState ?? {};

@@ -11,10 +11,10 @@ import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
-  internalProperty,
   LitElement,
   property,
   query,
+  state,
 } from 'lit-element';
 import { render, TemplateResult } from 'lit-html';
 import { cache } from 'lit-html/directives/cache';
@@ -56,7 +56,7 @@ export class EPOverlay extends LitElement {
 
   @property({ type: Boolean, reflect: true }) faded = false;
 
-  @internalProperty() protected tokens: Token[] = [];
+  @state() protected tokens: Token[] = [];
 
   @query("slot[name='app-controls']")
   private foundryViewControlBar!: HTMLSlotElement;
@@ -70,7 +70,7 @@ export class EPOverlay extends LitElement {
   @query('event-list', true)
   eventList!: EventList;
 
-  @internalProperty() private dialogTemplate: TemplateResult | null = null;
+  @state() private dialogTemplate: TemplateResult | null = null;
 
   firstUpdated() {
     document.body.addEventListener(RenderDialogEvent.is, async (ev) => {
@@ -187,11 +187,8 @@ export class EPOverlay extends LitElement {
       ?.addEventListener('pointerdown', (ev: PointerEvent) => {
         if (ev.currentTarget !== ev.target) return;
         const el = ev.currentTarget as HTMLElement;
-        const {
-          scrollTop,
-          scrollHeight,
-          offsetHeight,
-        } = document.getElementById('chat-log')!;
+        const { scrollTop, scrollHeight, offsetHeight } =
+          document.getElementById('chat-log')!;
         const atBottom = scrollTop + offsetHeight === scrollHeight;
         const undo = toggleTouchAction(el);
         resizeElement({

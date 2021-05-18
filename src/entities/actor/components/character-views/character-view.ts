@@ -10,7 +10,7 @@ import { ActorType } from '@src/entities/entity-types';
 import { localize } from '@src/foundry/localization';
 import { RenderDialogEvent } from '@src/open-dialog';
 import { notEmpty } from '@src/utility/helpers';
-import { customElement, html, internalProperty } from 'lit-element';
+import { customElement, html, state } from 'lit-element';
 import { nothing, TemplateResult } from 'lit-html';
 import { cache } from 'lit-html/directives/cache';
 import { classMap } from 'lit-html/directives/class-map';
@@ -37,9 +37,9 @@ export class CharacterView extends CharacterViewBase {
 
   static styles = [styles];
 
-  @internalProperty() private dialogTemplate: TemplateResult | null = null;
+  @state() private dialogTemplate: TemplateResult | null = null;
 
-  @internalProperty() private currentTab: CharacterTab = 'actions';
+  @state() private currentTab: CharacterTab = 'actions';
 
   firstUpdated() {
     this.addEventListener(RenderDialogEvent.is, async (ev) => {

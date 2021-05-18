@@ -16,13 +16,7 @@ import {
   MeleeAttackTestInit,
 } from '@src/success-test/melee-attack-test';
 import { notEmpty } from '@src/utility/helpers';
-import {
-  customElement,
-  html,
-  internalProperty,
-  LitElement,
-  query,
-} from 'lit-element';
+import { customElement, html, LitElement, query, state } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { identity } from 'remeda';
 import type { Subscription } from 'rxjs';
@@ -64,7 +58,7 @@ export class MeleeAttackControls extends LitElement {
 
   private subs = new Set<Subscription | Subscription['unsubscribe']>();
 
-  @internalProperty() private test?: MeleeAttackTest;
+  @state() private test?: MeleeAttackTest;
 
   connectedCallback() {
     Hooks.on('targetToken', this.setTarget);
@@ -236,7 +230,10 @@ export class MeleeAttackControls extends LitElement {
               <span>${token?.data.name ?? character.name} </span>
               ${character.sleeve
                 ? html`<span slot="secondary"
-                    >${formattedSleeveInfo(character.sleeve, character.vehicle).join(' - ')}</span
+                    >${formattedSleeveInfo(
+                      character.sleeve,
+                      character.vehicle,
+                    ).join(' - ')}</span
                   >`
                 : ''}
             </mwc-list-item>

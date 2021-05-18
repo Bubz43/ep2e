@@ -1,13 +1,7 @@
 import type { MessageHeaderData } from '@src/chat/message-data';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
-import {
-  customElement,
-  html,
-  internalProperty,
-  LitElement,
-  property,
-} from 'lit-element';
+import { customElement, html, LitElement, property, state } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { noop } from 'remeda';
 import styles from './message-header.scss';
@@ -24,7 +18,7 @@ export class MessageHeader extends LitElement {
 
   @property({ type: Boolean, reflect: true }) nested = false;
 
-  @internalProperty() private descriptionOpen = false;
+  @state() private descriptionOpen = false;
 
   private toggleDescription(ev: Event) {
     this.descriptionOpen = !this.descriptionOpen;

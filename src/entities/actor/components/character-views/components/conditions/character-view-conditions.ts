@@ -8,22 +8,10 @@ import {
   getConditionEffects,
 } from '@src/features/conditions';
 import { formatEffect } from '@src/features/effects';
-import { addFeature } from '@src/features/feature-helpers';
-import {
-  createTemporaryFeature,
-  TemporaryCondition,
-  TemporaryFeatureType,
-} from '@src/features/temporary';
-import { LiveTimeState, prettyMilliseconds } from '@src/features/time';
+import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { notEmpty } from '@src/utility/helpers';
-import {
-  customElement,
-  LitElement,
-  property,
-  html,
-  internalProperty,
-} from 'lit-element';
+import { customElement, html, LitElement, property, state } from 'lit-element';
 import { compact } from 'remeda';
 import styles from './character-view-conditions.scss';
 
@@ -37,7 +25,7 @@ export class CharacterViewConditions extends UseWorldTime(LitElement) {
 
   @property({ attribute: false }) character!: Character;
 
-  @internalProperty() private viewEffects = false;
+  @state() private viewEffects = false;
 
   private toggleViewEffects() {
     this.viewEffects = !this.viewEffects;

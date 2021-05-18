@@ -10,10 +10,10 @@ import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
-  internalProperty,
   LitElement,
   property,
   PropertyValues,
+  state,
 } from 'lit-element';
 import styles from './message-heal.scss';
 
@@ -27,11 +27,11 @@ export class MessageHeal extends LitElement {
 
   @property({ type: Object }) heal!: MessageHealData;
 
-  @internalProperty() private viewFormulas = false;
+  @state() private viewFormulas = false;
 
-  @internalProperty() usedRollParts?: ReadonlySet<number>;
+  @state() usedRollParts?: ReadonlySet<number>;
 
-  @internalProperty() private multiplier: RollMultiplier = 1;
+  @state() private multiplier: RollMultiplier = 1;
 
   update(changedProps: PropertyValues<this>) {
     if (changedProps.has('heal')) {

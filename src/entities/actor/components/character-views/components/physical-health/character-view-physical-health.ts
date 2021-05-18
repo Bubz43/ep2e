@@ -1,4 +1,4 @@
-import { createMessage, MessageVisibility } from '@src/chat/create-message';
+import { createMessage } from '@src/chat/create-message';
 import {
   emptyTextDash,
   renderFormulaField,
@@ -29,9 +29,8 @@ import {
   DamageOverTime,
 } from '@src/health/health-changes';
 import {
-  HealOverTimeTarget,
   formatAutoHealing,
-  HealingSlot,
+  HealOverTimeTarget,
   Recovery,
   RecoveryConditions,
   recoveryMultiplier,
@@ -39,13 +38,7 @@ import {
 import type { SyntheticHealth } from '@src/health/synthetic-health';
 import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
-import {
-  customElement,
-  LitElement,
-  property,
-  html,
-  internalProperty,
-} from 'lit-element';
+import { customElement, html, LitElement, property, state } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { compact, pick } from 'remeda';
 import styles from './character-view-physical-health.scss';
@@ -64,7 +57,7 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
 
   @property({ attribute: false }) health!: BiologicalHealth | SyntheticHealth;
 
-  @internalProperty() private dotForm = false;
+  @state() private dotForm = false;
 
   private toggleDotForm() {
     this.dotForm = !this.dotForm;

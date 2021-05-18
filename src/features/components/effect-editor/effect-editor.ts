@@ -10,11 +10,11 @@ import { notEmpty } from '@src/utility/helpers';
 import type { PropertyValues } from 'lit-element';
 import {
   customElement,
+  html,
   LitElement,
   property,
-  html,
-  internalProperty,
   query,
+  state,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { identity, uniqBy } from 'remeda';
@@ -36,7 +36,7 @@ export class EffectEditor extends LitElement {
 
   @property({ type: Object }) effect!: Effect | StringID<Effect>;
 
-  @internalProperty() private internalEffect!: Required<Effect>;
+  @state() private internalEffect!: Required<Effect>;
 
   @query('sl-form')
   form!: Form;

@@ -17,7 +17,7 @@ import { addUpdateRemoveFeature, idProp } from '@src/features/feature-helpers';
 import { createRep, maxFavors, RepNetwork } from '@src/features/reputations';
 import { CommonInterval } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
-import { customElement, html, internalProperty, property } from 'lit-element';
+import { customElement, html, property, state } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { range } from 'remeda';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
@@ -39,7 +39,7 @@ export class PhysicalServiceForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: PhysicalService;
 
-  @internalProperty() private repCreatorMode = RepCreatorMode.Common;
+  @state() private repCreatorMode = RepCreatorMode.Common;
 
   private readonly repOps = addUpdateRemoveFeature(
     () => this.item.updater.path('data', 'reputations').commit,

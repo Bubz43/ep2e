@@ -14,10 +14,10 @@ import { openMenu } from '@src/open-menu';
 import {
   customElement,
   html,
-  internalProperty,
   LitElement,
   property,
   PropertyValues,
+  state,
 } from 'lit-element';
 import styles from './time-state-item.scss';
 
@@ -43,11 +43,11 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
 
   @property({ type: String }) readyLabel?: string;
 
-  @internalProperty() private editing = false;
+  @state() private editing = false;
 
-  @internalProperty() private prog = 0;
+  @state() private prog = 0;
 
-  @internalProperty() private updatedState = false;
+  @state() private updatedState = false;
 
   update(changedProps: PropertyValues<this>) {
     if (this.editing && changedProps.get('timeState') !== undefined) {
@@ -94,13 +94,8 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
   }
 
   render() {
-    const {
-      label,
-      remaining,
-      completed,
-      isIndefinite,
-      img,
-    } = this.activeTimeState;
+    const { label, remaining, completed, isIndefinite, img } =
+      this.activeTimeState;
     return html`
       ${img ? html` <img height="20px" src=${img} /> ` : ''}
       <span class="name">

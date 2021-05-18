@@ -48,9 +48,9 @@ import { localImage } from '@src/utility/images';
 import {
   customElement,
   html,
-  internalProperty,
   property,
   PropertyValues,
+  state,
   TemplateResult,
 } from 'lit-element';
 import { nothing } from 'lit-html';
@@ -104,7 +104,7 @@ export class CharacterViewAlt extends CharacterViewBase {
 
   @property({ type: Boolean, reflect: true }) compact = false;
 
-  @internalProperty() private currentTab: CharacterTab = 'combat';
+  @state() private currentTab: CharacterTab = 'combat';
 
   update(changedProps: PropertyValues<this>) {
     if (

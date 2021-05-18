@@ -7,13 +7,7 @@ import { localize } from '@src/foundry/localization';
 import { importFromCompendium } from '@src/foundry/misc-helpers';
 import { openMenu } from '@src/open-menu';
 import { clickIfEnter, searchRegExp } from '@src/utility/helpers';
-import {
-  customElement,
-  html,
-  internalProperty,
-  LitElement,
-  property,
-} from 'lit-element';
+import { customElement, html, LitElement, property, state } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
 import styles from './compendium-list.scss';
@@ -32,7 +26,7 @@ export class CompendiumList extends LitElement {
     img?: string;
   })[];
 
-  @internalProperty() private search = '';
+  @state() private search = '';
 
   private openedEntities = new Map<string, Entity>();
 
@@ -66,8 +60,9 @@ export class CompendiumList extends LitElement {
           disabled:
             !game.user.isGM &&
             !game.user.can(
-              `${(this.compendium
-                .entity as string).toLocaleUpperCase()}_CREATE`,
+              `${(
+                this.compendium.entity as string
+              ).toLocaleUpperCase()}_CREATE`,
             ),
           callback: () => importFromCompendium(this.compendium, entryId),
         },

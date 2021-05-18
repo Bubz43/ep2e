@@ -18,10 +18,10 @@ import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
-  internalProperty,
   LitElement,
   PropertyValues,
   query,
+  state,
 } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import type { Subscription } from 'rxjs';
@@ -66,21 +66,19 @@ export class AptitudeCheckControls extends LitElement {
     win.setState(init);
   }
 
-  @internalProperty() private entities!: {
+  @state() private entities!: {
     actor: ActorEP;
     token?: MaybeToken;
   };
 
-  @internalProperty() private getState!: (
-    actor: ActorEP,
-  ) => AptitudeCheckInit | null;
+  @state() private getState!: (actor: ActorEP) => AptitudeCheckInit | null;
 
   @query('sl-window')
   private win?: SlWindow;
 
   private subs = new Set<Subscription | Subscription['unsubscribe']>();
 
-  @internalProperty() private test?: AptitudeCheck;
+  @state() private test?: AptitudeCheck;
 
   update(
     changedProps: PropertyValues<

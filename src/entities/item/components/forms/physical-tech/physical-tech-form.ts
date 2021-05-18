@@ -44,15 +44,13 @@ import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
-  internalProperty,
   property,
   PropertyValues,
+  state,
 } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { clone, difference, mapToObj, pick } from 'remeda';
 import { RenderDialogEvent } from '../../../../../open-dialog';
-import type { FullEgoData } from '../../../../actor/ego';
-import { DefaultEgos } from '../../../../models';
 import { complexityForm, renderComplexityFields } from '../common-gear-fields';
 import { ItemFormBase } from '../item-form-base';
 import styles from './physical-tech-form.scss';
@@ -69,7 +67,7 @@ export class PhysicalTechForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: PhysicalTech;
 
-  @internalProperty() private effectGroup: 'passive' | 'activated' = 'passive';
+  @state() private effectGroup: 'passive' | 'activated' = 'passive';
 
   private glandSheet?: SlWindow | null;
 
