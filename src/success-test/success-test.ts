@@ -182,8 +182,8 @@ const isCriticalRoll = (roll: number) => {
 
 export const successTestTargetClamp = clamp({ min: 0, max: 99 });
 
-export const successTestEffectMap = <T extends SuccessTestEffect>(
-  effects: T[],
+export const successTestEffectMap = (
+  effects: SourcedEffect<SuccessTestEffect>[],
 ) => {
   return new Map(effects.map((effect) => [effect, !effect.requirement]));
 };
