@@ -89,12 +89,8 @@ export const overridePrototypes = () => {
     });
   };
 
-  const {
-    drawEffects,
-    toggleEffect,
-    _onUpdateBarAttributes,
-    _onUpdate,
-  } = Token.prototype;
+  const { drawEffects, toggleEffect, _onUpdateBarAttributes, _onUpdate } =
+    Token.prototype;
 
   Token.prototype._onUpdate = function (
     data: Partial<TokenData>,

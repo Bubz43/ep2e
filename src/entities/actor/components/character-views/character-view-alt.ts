@@ -36,6 +36,7 @@ import {
   actorDroptoActorProxy,
   DropType,
   handleDrop,
+  setDragDrop,
 } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
@@ -63,6 +64,7 @@ import {
   difference,
   identity,
   noop,
+  omit,
   prop,
   range,
   sortBy,
@@ -217,7 +219,10 @@ export class CharacterViewAlt extends CharacterViewBase {
     VehicleType.Hardsuit,
   ] as string[];
 
+  private draggingSleeve = false;
+
   private handleEntityDrop = handleDrop(async ({ data, ev }) => {
+    if (this.draggingSleeve) return;
     if (data?.type !== DropType.Actor || this.character.disabled) {
       notify(NotificationType.Info, localize('dropSleeve/Exoskeleton'));
       return;
@@ -273,6 +278,24 @@ export class CharacterViewAlt extends CharacterViewBase {
       } else resleeve();
     } else notify(NotificationType.Info, localize('dropSleeve/Exoskeleton'));
   });
+
+  private setSleeveDragData(ev: DragEvent) {
+    const { sleeve } = this.character;
+    if (!sleeve) return;
+    this.draggingSleeve = true;
+    setDragDrop(ev, {
+      type: DropType.Actor,
+      data: {
+        ...sleeve.dataCopy(),
+        name: `${this.character.name}'s ${sleeve.name}`,
+        items: [...sleeve.items.values()].map((i) => i.getDataCopy()),
+      },
+    });
+  }
+
+  private setDraggingEnd() {
+    this.draggingSleeve = false;
+  }
 
   render() {
     if (this.character.isLimited) return this.renderLimited();
@@ -598,12 +621,13 @@ export class CharacterViewAlt extends CharacterViewBase {
             ${this.compact ? this.renderInitiativeButton() : ''}
           </div>
 
-          <div class="sleeve-entity">
-            <button
-              class="entity-name"
-              @click=${sleeve?.openForm}
-              draggable="true"
-            >
+          <div
+            class="sleeve-entity"
+            draggable="true"
+            @dragstart=${this.setSleeveDragData}
+            @dragend=${this.setDraggingEnd}
+          >
+            <button class="entity-name" @click=${sleeve?.openForm}>
               ${sleeve?.name || `${localize('add')} ${localize('sleeve')}`}
             </button>
             ${sleeve
