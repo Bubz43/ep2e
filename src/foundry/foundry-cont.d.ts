@@ -105,9 +105,9 @@ export type TokenData = {
 };
 
 type Config = typeof CONFIG;
-type EntityName = keyof PickByValue<
-  Config,
-  { entityClass: Class<{ entity: unknown }> }
+type EntityName = Exclude<
+  keyof PickByValue<Config, { entityClass: Class<{ entity: unknown }> }>,
+  'canvasTextStyle'
 >;
 export type EntityType = Config[EntityName]['entityClass'];
 
@@ -182,6 +182,7 @@ type GameCollections = {
 };
 
 declare global {
+  const PIXI: PIXI;
   const tinymce: TinyMCE;
 
   interface Compendium {
