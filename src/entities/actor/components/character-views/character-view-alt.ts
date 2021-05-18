@@ -599,7 +599,11 @@ export class CharacterViewAlt extends CharacterViewBase {
           </div>
 
           <div class="sleeve-entity">
-            <button class="entity-name" @click=${sleeve?.openForm}>
+            <button
+              class="entity-name"
+              @click=${sleeve?.openForm}
+              draggable="true"
+            >
               ${sleeve?.name || `${localize('add')} ${localize('sleeve')}`}
             </button>
             ${sleeve
