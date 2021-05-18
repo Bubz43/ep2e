@@ -29,6 +29,7 @@ import { live } from 'lit-html/directives/live';
 import { compact, equals, first, range, reject } from 'remeda';
 import { AptitudeCheck } from '../../../../../../success-test/aptitude-check';
 import { SkillTest } from '../../../../../../success-test/skill-test';
+import { SoftwareSkillTest } from '../../../../../../success-test/software-skill-test';
 import { requestCharacter } from '../../character-request-event';
 import styles from './character-view-test-actions.scss';
 
@@ -183,6 +184,19 @@ export class CharacterViewTestActions extends LitElement {
         };
       },
     });
+  }
+
+  private startQuickSoftwareSkillTest(
+    skill: Software['skills'][number],
+    software: Software,
+  ) {
+    const test = new SoftwareSkillTest({
+      character: this.character,
+      token: requestCharacter(this).token,
+      software,
+      skill,
+    });
+    test.settings.setReady();
   }
 
   private startFavorTest(reputation: RepWithIdentifier, favor: Favor) {
@@ -394,6 +408,11 @@ export class CharacterViewTestActions extends LitElement {
                               ?disabled=${this.disabled}
                               @click=${() =>
                                 this.startSoftwareSkillTest(skill, software)}
+                              @contextmenu=${() =>
+                                this.startQuickSoftwareSkillTest(
+                                  skill,
+                                  software,
+                                )}
                             >
                               <span class="skill-name"
                                 >${name}
