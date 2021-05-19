@@ -9,6 +9,7 @@
 - Allow ego on character sheet to be draggable
 - Use custom window for combat tracker popout
 - Hybernoid -> Hibernoid in Biomorph compendium
+- -Right click on Aptitude/Skill/Software Skill tests to skip the sheet and roll instantly using default target number
 
 ## [0.722] - 2021-05-07
 
