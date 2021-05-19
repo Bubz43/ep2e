@@ -1,13 +1,14 @@
 # Changelog
 
-## Unreleased
+## [0.73] - 2021-05-19
 
 - Update dependencies
-- Allow dropping a character onto onboard ali section in tech to fill its data
+- Update readme
+- Allow dropping a character onto physical tech onboard ali section to autofill its data
 - Allow sleeve on character sheet to be draggable
 - Allow ego on character sheet to be draggable
 - Use custom window for combat tracker popout
-- Hybernoid -> Hibernoid in Biomorph pack
+- Hybernoid -> Hibernoid in Biomorph compendium
 
 ## [0.722] - 2021-05-07
 
