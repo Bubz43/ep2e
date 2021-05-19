@@ -219,10 +219,10 @@ export class CharacterViewAlt extends CharacterViewBase {
     VehicleType.Hardsuit,
   ] as string[];
 
-  private draggingSleeve = false;
+  private draggingSelf = false;
 
   private handleEntityDrop = handleDrop(async ({ data, ev }) => {
-    if (this.draggingSleeve) return;
+    if (this.draggingSelf) return;
     if (data?.type !== DropType.Actor || this.character.disabled) {
       notify(NotificationType.Info, localize('dropSleeve/Exoskeleton'));
       return;
@@ -279,22 +279,44 @@ export class CharacterViewAlt extends CharacterViewBase {
     } else notify(NotificationType.Info, localize('dropSleeve/Exoskeleton'));
   });
 
+  private setSelfDrag(ev: DragEvent) {
+    this.draggingSelf = true;
+    const { isToken, id, compendium } = this.character.actor;
+    setDragDrop(
+      ev,
+      isToken
+        ? {
+            type: DropType.Actor,
+            data: {
+              ...this.character.dataCopy(),
+              _id: '',
+            },
+          }
+        : {
+            type: DropType.Actor,
+            id,
+            pack: compendium?.collection,
+          },
+    );
+  }
+
   private setSleeveDragData(ev: DragEvent) {
     const { sleeve } = this.character;
     if (!sleeve) return;
-    this.draggingSleeve = true;
+    this.draggingSelf = true;
     setDragDrop(ev, {
       type: DropType.Actor,
       data: {
         ...sleeve.dataCopy(),
         name: `${this.character.name}'s ${sleeve.name}`,
         items: [...sleeve.items.values()].map((i) => i.getDataCopy()),
+        _id: '',
       },
     });
   }
 
   private setDraggingEnd() {
-    this.draggingSleeve = false;
+    this.draggingSelf = false;
   }
 
   render() {
@@ -607,7 +629,12 @@ export class CharacterViewAlt extends CharacterViewBase {
         </div>
 
         <div class="entities">
-          <div class="ego-entity">
+          <div
+            class="ego-entity"
+            draggable="true"
+            @dragstart=${this.setSelfDrag}
+            @dragend=${this.setDraggingEnd}
+          >
             <button class="entity-name">
               <span @click=${ego.openForm}>${ego.name}</span>
             </button>

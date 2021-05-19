@@ -315,7 +315,7 @@ export const setDragDrop = (ev: DragEvent, drop: Drop) => {
 };
 
 export const itemDropToItemProxy = async (drop: ItemDrop) => {
-  if ('pack' in drop) {
+  if ('pack' in drop && drop.pack) {
     const pack = game.packs.get(drop.pack);
     const item = await pack?.getEntity(drop.id);
     if (item instanceof ItemEP) return item.proxy;
@@ -338,7 +338,7 @@ export const itemDropToItemProxy = async (drop: ItemDrop) => {
 
 export const actorDroptoActorProxy = async (drop: ActorDrop) => {
   if ('data' in drop) return new ActorEP(drop.data).proxy;
-  if ('pack' in drop) {
+  if ('pack' in drop && drop.pack) {
     const pack = game.packs.get(drop.pack);
     const actor = await pack?.getEntity(drop.id);
     if (actor instanceof ActorEP) return actor.proxy;

@@ -178,10 +178,11 @@ export class PhysicalTechForm extends ItemFormBase {
     this.effectsOps[`${this.effectGroup}Effects` as const].add({}, ev.effect);
   }
 
-  private handleDropOnOnboardALI = handleDrop(async ({ data }) => {
+  private handleDropOnOnboardALI = handleDrop(async ({ data, drop }) => {
     if (this.disabled) return;
     const proxy =
       data?.type === DropType.Actor ? await actorDroptoActorProxy(data) : null;
+    console.log(proxy, data);
     if (proxy?.type === ActorType.Character) {
       this.dispatchEvent(
         new RenderDialogEvent(html`
