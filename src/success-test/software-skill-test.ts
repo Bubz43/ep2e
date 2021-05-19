@@ -16,6 +16,7 @@ export interface SoftwareSkillTestInit {
   character: Character;
   skill: Software['skills'][number];
   token?: MaybeToken;
+  // quick?: boolean
 }
 
 export class SoftwareSkillTest extends SuccessTestBase {

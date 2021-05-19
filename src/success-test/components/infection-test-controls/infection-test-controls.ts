@@ -10,10 +10,10 @@ import {
 import {
   customElement,
   html,
-  internalProperty,
   LitElement,
   PropertyValues,
   query,
+  state,
 } from 'lit-element';
 import type { Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';
@@ -52,21 +52,19 @@ export class InfectionTestControls extends LitElement {
     win.setState(init);
   }
 
-  @internalProperty() private entities!: {
+  @state() private entities!: {
     actor: ActorEP;
     token?: MaybeToken;
   };
 
-  @internalProperty() private getState!: (
-    actor: ActorEP,
-  ) => InfectionTestInit | null;
+  @state() private getState!: (actor: ActorEP) => InfectionTestInit | null;
 
   @query('sl-window')
   private win?: SlWindow;
 
   private subs = new Set<Subscription | Subscription['unsubscribe']>();
 
-  @internalProperty() private test?: InfectionTest;
+  @state() private test?: InfectionTest;
 
   update(
     changedProps: PropertyValues<

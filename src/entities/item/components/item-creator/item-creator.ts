@@ -13,13 +13,13 @@ import { localize } from '@src/foundry/localization';
 import { notEmpty, safeMerge } from '@src/utility/helpers';
 import {
   customElement,
+  eventOptions,
+  html,
   LitElement,
   property,
-  html,
-  internalProperty,
-  query,
   PropertyValues,
-  eventOptions,
+  query,
+  state,
 } from 'lit-element';
 import { flatMapToObj, sortBy } from 'remeda';
 import styles from './item-creator.scss';
@@ -53,7 +53,7 @@ export class ItemCreator extends LitElement {
     closeOnCreate: true,
   };
 
-  @internalProperty() private itemData: {
+  @state() private itemData: {
     name: string;
     type: ItemType;
     folder: string;

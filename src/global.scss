@@ -54,6 +54,11 @@ body {
   font-size: 14px;
 }
 
+ep-overlay {
+  @include styled-scrollbars;
+  @include widgetless-number-inputs;
+}
+
 .scene-sheet,
 .token-sheet,
 .light-sheet,

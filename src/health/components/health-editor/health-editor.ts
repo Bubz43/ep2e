@@ -29,10 +29,10 @@ import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
-  internalProperty,
   LitElement,
   property,
   PropertyValues,
+  state,
 } from 'lit-element';
 import { clamp, compact, identity, mapToObj } from 'remeda';
 import styles from './health-editor.scss';
@@ -84,13 +84,13 @@ export class HealthEditor extends LitElement {
   })
   health?: ActorHealth | null;
 
-  @internalProperty() protected healthType = HealthType.Physical;
+  @state() protected healthType = HealthType.Physical;
 
-  @internalProperty() private mode: 'heal' | 'damage' = 'heal';
+  @state() private mode: 'heal' | 'damage' = 'heal';
 
-  @internalProperty() private selectedHealth: ActorHealth | null = null;
+  @state() private selectedHealth: ActorHealth | null = null;
 
-  @internalProperty() private closeOnSubmit = true;
+  @state() private closeOnSubmit = true;
 
   private actorUnsub: (() => void) | null = null;
 

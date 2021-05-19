@@ -1,18 +1,11 @@
 import { isEventMulti } from '@material/mwc-list';
 import type { SelectedEvent } from '@material/mwc-list/mwc-list-foundation';
 import type { ActorProxy } from '@src/entities/actor/actor';
-import { ItemEP, ItemProxy } from '@src/entities/item/item';
+import { ItemEP } from '@src/entities/item/item';
 import type { ItemEntity } from '@src/entities/models';
 import { localize } from '@src/foundry/localization';
-import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
-import {
-  customElement,
-  LitElement,
-  property,
-  html,
-  internalProperty,
-} from 'lit-element';
+import { customElement, html, LitElement, property, state } from 'lit-element';
 import styles from './item-trash.scss';
 
 @customElement('item-trash')
@@ -25,7 +18,7 @@ export class ItemTrash extends LitElement {
 
   @property({ attribute: false }) proxy!: ActorProxy;
 
-  @internalProperty() private indexesToRestore?: number[] = [];
+  @state() private indexesToRestore?: number[] = [];
 
   private saveRestoreIndex(ev: SelectedEvent) {
     if (isEventMulti(ev)) {

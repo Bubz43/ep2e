@@ -2,7 +2,7 @@ import { enumValues } from '@src/data-enums';
 import { ActorEP } from '@src/entities/actor/actor';
 import type { ActorIdentifiers } from '@src/entities/find-entities';
 import { ItemEP } from '@src/entities/item/item';
-import type { ItemEntity } from '@src/entities/models';
+import type { ActorEntity, ItemEntity } from '@src/entities/models';
 import { Effect, EffectType } from '@src/features/effects';
 import type { StringID } from '@src/features/feature-helpers';
 import {
@@ -50,16 +50,18 @@ type UnknownValues<T> = {
   [key in keyof T]?: unknown;
 };
 
-const dropChecker = <T extends DropType, D = Drops[T]>(
-  type: T,
-  finalCheck: (obj: UnknownValues<D> & { type: T }) => boolean,
-) => (droppedData: unknown): droppedData is D => {
-  return !!(
-    isJsonObject(droppedData) &&
-    droppedData['type'] === type &&
-    finalCheck(droppedData as JsonObject & { type: T })
-  );
-};
+const dropChecker =
+  <T extends DropType, D = Drops[T]>(
+    type: T,
+    finalCheck: (obj: UnknownValues<D> & { type: T }) => boolean,
+  ) =>
+  (droppedData: unknown): droppedData is D => {
+    return !!(
+      isJsonObject(droppedData) &&
+      droppedData['type'] === type &&
+      finalCheck(droppedData as JsonObject & { type: T })
+    );
+  };
 
 export const dragSource = () => source as Readonly<typeof source>;
 
@@ -142,7 +144,9 @@ export type SimpleDrop<T extends DropType> = KnownDrop<{
   pack?: string;
 }>;
 
-export type ActorDrop = SimpleDrop<DropType.Actor>;
+export type ActorDrop =
+  | KnownDrop<{ type: DropType.Actor; data: ActorEntity }>
+  | SimpleDrop<DropType.Actor>;
 export type PlayListDrop = SimpleDrop<DropType.Playlist>;
 export type RollTableDrop = SimpleDrop<DropType.RollTable>;
 export type JournalEntryDrop = SimpleDrop<DropType.JournalEntry>;
@@ -259,7 +263,13 @@ const simpleDropCheck = ({ pack, id }: { pack?: unknown; id?: unknown }) => {
   );
 };
 
-const isActorDrop = dropChecker(DropType.Actor, simpleDropCheck);
+const isActorDrop = dropChecker(DropType.Actor, (actorDrop) => {
+  return (
+    ('data' in actorDrop && isJsonObject(actorDrop.data)) ||
+    ('id' in actorDrop && typeof actorDrop.id === 'string')
+  );
+});
+
 const isSceneDrop = dropChecker(DropType.Scene, simpleDropCheck);
 const isPlaylistDrop = dropChecker(DropType.Playlist, simpleDropCheck);
 const isRollTableDrop = dropChecker(DropType.RollTable, simpleDropCheck);
@@ -305,7 +315,7 @@ export const setDragDrop = (ev: DragEvent, drop: Drop) => {
 };
 
 export const itemDropToItemProxy = async (drop: ItemDrop) => {
-  if ('pack' in drop) {
+  if ('pack' in drop && drop.pack) {
     const pack = game.packs.get(drop.pack);
     const item = await pack?.getEntity(drop.id);
     if (item instanceof ItemEP) return item.proxy;
@@ -327,7 +337,8 @@ export const itemDropToItemProxy = async (drop: ItemDrop) => {
 };
 
 export const actorDroptoActorProxy = async (drop: ActorDrop) => {
-  if ('pack' in drop) {
+  if ('data' in drop) return new ActorEP(drop.data).proxy;
+  if ('pack' in drop && drop.pack) {
     const pack = game.packs.get(drop.pack);
     const actor = await pack?.getEntity(drop.id);
     if (actor instanceof ActorEP) return actor.proxy;

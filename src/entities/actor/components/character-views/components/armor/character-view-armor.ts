@@ -5,17 +5,10 @@ import {
 import { renderSubmitForm } from '@src/components/form/forms';
 import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
-import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
-import { EffectType, formatEffect, Source } from '@src/features/effects';
+import { formatEffect, Source } from '@src/features/effects';
 import { localize } from '@src/foundry/localization';
-import {
-  customElement,
-  LitElement,
-  property,
-  html,
-  internalProperty,
-} from 'lit-element';
+import { customElement, html, LitElement, property, state } from 'lit-element';
 import { mapToObj } from 'remeda';
 import styles from './character-view-armor.scss';
 
@@ -29,7 +22,7 @@ export class CharacterViewArmor extends LitElement {
 
   @property({ attribute: false }) character!: Character;
 
-  @internalProperty() private reductionCreator = false;
+  @state() private reductionCreator = false;
 
   private toggleReductionCreator() {
     this.reductionCreator = !this.reductionCreator;

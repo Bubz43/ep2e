@@ -5,13 +5,7 @@ import { createEffect, EffectType } from '@src/features/effects';
 import { createTag } from '@src/features/tags';
 import { localize } from '@src/foundry/localization';
 import { LazyGetter } from 'lazy-get-decorator';
-import {
-  customElement,
-  LitElement,
-  property,
-  html,
-  internalProperty,
-} from 'lit-element';
+import { customElement, html, LitElement, property, state } from 'lit-element';
 import { difference } from 'remeda';
 import type { EffectUpdatedEvent } from '../effect-editor/effect-updated-event';
 import { EffectCreatedEvent } from './effect-created-event';
@@ -35,7 +29,7 @@ export class EffectCreator extends LitElement {
 
   @property({ type: Array }) effectTypes = EffectCreator.defaultEffectTypes;
 
-  @internalProperty() effectType!: EffectType;
+  @state() effectType!: EffectType;
 
   connectedCallback() {
     this.effectType = this.effectTypes[0] || EffectType.Initiative;

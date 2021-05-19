@@ -1,11 +1,6 @@
 import type { Ripple } from '@material/mwc-ripple';
 import { RippleHandlers } from '@material/mwc-ripple/ripple-handlers';
-import {
-  eventOptions,
-  internalProperty,
-  LitElement,
-  queryAsync,
-} from 'lit-element';
+import { eventOptions, LitElement, queryAsync, state } from 'lit-element';
 import { html } from 'lit-html';
 import type { Class } from 'type-fest';
 
@@ -13,7 +8,7 @@ export const LazyRipple = (Base: Class<LitElement>) => {
   class LazyLoadRipple extends Base {
     @queryAsync('mwc-ripple') ripple!: Promise<Ripple | null>;
 
-    @internalProperty() protected shouldRenderRipple = false;
+    @state() protected shouldRenderRipple = false;
 
     protected rippleHandlers = new RippleHandlers(() => {
       this.shouldRenderRipple = true;

@@ -24,9 +24,9 @@ import { nonNegative, notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
-  internalProperty,
   LitElement,
   PropertyValues,
+  state,
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
@@ -48,9 +48,9 @@ export class CombatView extends LitElement {
 
   private unsub: (() => void) | null = null;
 
-  @internalProperty() private combatState: CombatData | null = null;
+  @state() private combatState: CombatData | null = null;
 
-  @internalProperty() private playerTurnControls = false;
+  @state() private playerTurnControls = false;
 
   private participants: CombatParticipant[] = [];
 
@@ -358,8 +358,11 @@ export class CombatView extends LitElement {
     const { round = 0 } = this.combatState ?? {};
     const { isGM } = game.user;
     const { combatRound, activeTurn = -1, activeParticipant } = this;
-    const { participants = [], someTookInitiative, surprise = false } =
-      combatRound ?? {};
+    const {
+      participants = [],
+      someTookInitiative,
+      surprise = false,
+    } = combatRound ?? {};
     const noPrevTurn = activeTurn < 0 || (round <= 1 && activeTurn <= 0);
     const phase = activeParticipant?.tookInitiative
       ? RoundPhase.TookInitiative
@@ -411,7 +414,9 @@ export class CombatView extends LitElement {
                 slot="base"
                 role="button"
               >
-                <span>${logEntry.text}</span>
+                <span class="entry-text" title=${logEntry.text}
+                  >${logEntry.text}</span
+                >
                 <time-since
                   slot="after"
                   timestamp=${logEntry.timestamp}

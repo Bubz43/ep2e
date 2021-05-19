@@ -44,9 +44,9 @@ import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
-  internalProperty,
   property,
   PropertyValues,
+  state,
 } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
@@ -67,7 +67,7 @@ export class SoftwareForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: Software;
 
-  @internalProperty() private effectGroup: 'passive' | 'activated' = 'passive';
+  @state() private effectGroup: 'passive' | 'activated' = 'passive';
 
   private readonly effectsOps = mapToObj(opsGroups, (group) => [
     group === 'effects' ? 'passive' : 'activated',

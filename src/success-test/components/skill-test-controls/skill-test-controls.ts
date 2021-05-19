@@ -5,13 +5,7 @@ import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
 import { SkillTest, SkillTestInit } from '@src/success-test/skill-test';
 import { notEmpty } from '@src/utility/helpers';
-import {
-  customElement,
-  html,
-  internalProperty,
-  LitElement,
-  query,
-} from 'lit-element';
+import { customElement, html, LitElement, query, state } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import type { Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';
@@ -53,7 +47,7 @@ export class SkillTestControls extends LitElement {
 
   private subs = new Set<Subscription | Subscription['unsubscribe']>();
 
-  @internalProperty() private test?: SkillTest;
+  @state() private test?: SkillTest;
 
   disconnectedCallback() {
     this.unsub();

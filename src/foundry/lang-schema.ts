@@ -1500,7 +1500,9 @@ type LangEntries =
   | 'dropSleeve/Exoskeleton'
   | 'requireActorCreationPrivileges'
   | 'completeTransformation'
-  | 'onlyWareAllowed';
+  | 'onlyWareAllowed'
+  | 'onlyCharactersAllowed'
+  | 'thisWillOverwriteEgo';
 type FullNames =
   | 'cog'
   | 'int'

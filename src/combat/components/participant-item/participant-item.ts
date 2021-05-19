@@ -34,10 +34,10 @@ import produce from 'immer';
 import {
   customElement,
   html,
-  internalProperty,
   LitElement,
   property,
   PropertyValues,
+  state,
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import mix from 'mix-with/lib';
@@ -74,13 +74,13 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
 
   @property({ type: Boolean }) interruptExtra = false;
 
-  @internalProperty() private token?: MaybeToken;
+  @state() private token?: MaybeToken;
 
-  @internalProperty() private actor?: ActorEP | null;
+  @state() private actor?: ActorEP | null;
 
-  @internalProperty() private timeState?: LiveTimeState | null;
+  @state() private timeState?: LiveTimeState | null;
 
-  @internalProperty() private highlighted = false;
+  @state() private highlighted = false;
 
   private tokenSubscription?: Subscription | null;
 
@@ -610,6 +610,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
           class="name"
           ?disabled=${!editable || !actor}
           @click=${this.openActorSheet}
+          title=${participant.name}
         >
           ${this.surprise && participant.surprised
             ? html`<span class="surprise-label"

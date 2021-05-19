@@ -15,7 +15,6 @@ import type {
   EnvironmentOverrides,
 } from '@src/features/environment';
 import type { UserHotbarEntry } from '@src/features/hotbar-entry';
-import type * as PIXI from 'pixi.js';
 import type { Socket } from 'socket.io';
 import type { TinyMCE } from 'tinymce';
 import type { Class, ConditionalPick, Mutable, ValueOf } from 'type-fest';
@@ -28,6 +27,7 @@ import type {
 import type { MeasuredTemplateData } from './canvas';
 import type { EP, SystemSchema } from './system';
 import type { EntityTemplates } from './template-schema';
+import type PIXI from 'pixi.js';
 // * Comment out canvas, game, ui from foundry.d.ts
 // * Add in context param to Entity.prototype._onUpdate
 // * Add generic type to collection
@@ -105,9 +105,9 @@ export type TokenData = {
 };
 
 type Config = typeof CONFIG;
-type EntityName = keyof PickByValue<
-  Config,
-  { entityClass: Class<{ entity: unknown }> }
+type EntityName = Exclude<
+  keyof PickByValue<Config, { entityClass: Class<{ entity: unknown }> }>,
+  'canvasTextStyle'
 >;
 export type EntityType = Config[EntityName]['entityClass'];
 
@@ -128,7 +128,7 @@ type LayerInfo<T extends PlaceableObject> = {
 type PlaceableLayer<
   L extends PlaceablesLayer,
   T extends PlaceableObject,
-  F = LayerInfo<T>
+  F = LayerInfo<T>,
 > = Omit<L, keyof F> & F;
 
 export type CanvasLayers = {
@@ -182,6 +182,7 @@ type GameCollections = {
 };
 
 declare global {
+  const PIXI: PIXI;
   const tinymce: TinyMCE;
 
   interface Compendium {
@@ -356,7 +357,9 @@ declare global {
     sheet: Application | null;
   }
 
-  interface MeasuredTemplate {
+  interface TemplateLayer extends PIXI.DisplayObject {}
+
+  interface MeasuredTemplate extends PIXI.DisplayObject {
     readonly layer: TemplateLayer;
     data: MeasuredTemplateData;
   }

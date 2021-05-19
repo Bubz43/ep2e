@@ -21,13 +21,7 @@ import { CommonInterval, currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { rollFormula } from '@src/foundry/rolls';
 import { notEmpty } from '@src/utility/helpers';
-import {
-  customElement,
-  html,
-  internalProperty,
-  LitElement,
-  property,
-} from 'lit-element';
+import { customElement, html, LitElement, property, state } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import mix from 'mix-with/lib';
 import styles from './character-view-recharge.scss';
@@ -42,7 +36,7 @@ export class CharacterViewRecharge extends mix(LitElement).with(UseWorldTime) {
 
   @property({ attribute: false }) character!: Character;
 
-  @internalProperty() rechargeType = RechargeType.Short;
+  @state() rechargeType = RechargeType.Short;
 
   render() {
     const { disabled, pools, updater, activeRecharge } = this.character;

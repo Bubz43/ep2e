@@ -96,7 +96,7 @@ export class PhysicalTech
     this.updater.path('data', 'state', 'activated').commit(spent);
   }
 
-  get fullName() {
+  get fullName(): string {
     const name = this.isActiveFabber
       ? `${this.name} [${this.fabricatedItem?.name}]`
       : this.name;
@@ -286,7 +286,7 @@ export class PhysicalTech
     return this.epData.fabricator;
   }
 
-  get disableFabTypeChange() {
+  get disableFabTypeChange(): boolean {
     switch (this.fabricatorType) {
       case FabType.Gland:
         return !!this.glandedSubstance;
@@ -364,7 +364,7 @@ export class PhysicalTech
   }
 
   @LazyGetter()
-  get itemBlueprint() {
+  get itemBlueprint(): Extract<ItemProxy, { cost: unknown }> | null {
     const data = this.epFlags?.blueprint?.[0];
     const init = <T extends ItemType>(data: ItemEntity<T>) => ({
       data,
@@ -409,7 +409,7 @@ export class PhysicalTech
       : null;
   }
 
-  get printDuration() {
+  get printDuration(): number {
     const { fabPrintDuration } = this.epData;
     return this.fabricatorType === FabType.Gland
       ? fabPrintDuration || toMilliseconds({ hours: 4 })

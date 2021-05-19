@@ -21,13 +21,7 @@ import { ConditionType } from '@src/features/conditions';
 import { CommonInterval } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { notEmpty, safeMerge } from '@src/utility/helpers';
-import {
-  customElement,
-  html,
-  internalProperty,
-  LitElement,
-  property,
-} from 'lit-element';
+import { customElement, html, LitElement, property, state } from 'lit-element';
 import { concat, difference, objOf, omit, pipe } from 'remeda';
 import styles from './aptitude-check-info-editor.scss';
 import { AptitudeCheckInfoUpdateEvent } from './aptitude-check-info-update-event';
@@ -56,11 +50,11 @@ export class AptitudeCheckInfoEditor extends LitElement {
   })
   aptitudeCheckInfo!: AptitudeCheckInfo;
 
-  @internalProperty() private resultType = CheckResultState.CheckFailure;
+  @state() private resultType = CheckResultState.CheckFailure;
 
-  @internalProperty() private resultInfo = checkResultInfoWithDefaults({});
+  @state() private resultInfo = checkResultInfoWithDefaults({});
 
-  @internalProperty() private durationEdit = DurationEdit.Static;
+  @state() private durationEdit = DurationEdit.Static;
 
   private emitUpdate = (changed: Partial<AptitudeCheckInfo>) => {
     this.dispatchEvent(new AptitudeCheckInfoUpdateEvent(changed));

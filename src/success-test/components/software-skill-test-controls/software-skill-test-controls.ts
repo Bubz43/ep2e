@@ -8,13 +8,7 @@ import {
   SoftwareSkillTestInit,
 } from '@src/success-test/software-skill-test';
 import { notEmpty, withSign } from '@src/utility/helpers';
-import {
-  customElement,
-  html,
-  internalProperty,
-  LitElement,
-  query,
-} from 'lit-element';
+import { customElement, html, LitElement, query, state } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import type { Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';
@@ -55,7 +49,7 @@ export class SoftwareSkillTestControls extends LitElement {
 
   private subs = new Set<Subscription | Subscription['unsubscribe']>();
 
-  @internalProperty() private test?: SoftwareSkillTest;
+  @state() private test?: SoftwareSkillTest;
 
   disconnectedCallback() {
     this.unsub();
@@ -111,15 +105,8 @@ export class SoftwareSkillTestControls extends LitElement {
   }
 
   private renderTest(test: NonNullable<SoftwareSkillTestControls['test']>) {
-    const {
-      character,
-      token,
-      action,
-      pools,
-      target,
-      skillState,
-      software,
-    } = test;
+    const { character, token, action, pools, target, skillState, software } =
+      test;
 
     const { skill, applySpecialization } = skillState;
     return html`

@@ -10,7 +10,7 @@ import { advanceWorldTime } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
 import { addEPSocketHandler } from '@src/foundry/socket';
-import { customElement, html, internalProperty, LitElement } from 'lit-element';
+import { customElement, html, LitElement, state } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import mix from 'mix-with/lib';
 import styles from './world-time-controls.scss';
@@ -25,9 +25,9 @@ export class WorldTimeControls extends mix(LitElement).with(UseWorldTime) {
 
   static styles = [styles];
 
-  @internalProperty() private timeChange = 0;
+  @state() private timeChange = 0;
 
-  @internalProperty() private changes: [number, string][] = [];
+  @state() private changes: [number, string][] = [];
 
   firstUpdated() {
     addEPSocketHandler('worldTimeChange', (change) => {

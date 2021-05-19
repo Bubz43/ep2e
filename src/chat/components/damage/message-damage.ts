@@ -20,9 +20,9 @@ import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
-  internalProperty,
   LitElement,
   property,
+  state,
   PropertyValues,
 } from 'lit-element';
 import { omit } from 'remeda';
@@ -38,11 +38,11 @@ export class MessageDamage extends LitElement {
 
   @property({ type: Object }) damage!: DamageMessageData;
 
-  @internalProperty() private viewFormulas = false;
+  @state() private viewFormulas = false;
 
-  @internalProperty() private usedRollParts?: ReadonlySet<number>;
+  @state() private usedRollParts?: ReadonlySet<number>;
 
-  @internalProperty() private multiplier: RollMultiplier = 1;
+  @state() private multiplier: RollMultiplier = 1;
 
   update(changedProps: PropertyValues<this>) {
     if (changedProps.has('damage')) {

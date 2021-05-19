@@ -17,16 +17,20 @@ import { notEmpty, safeMerge } from '@src/utility/helpers';
 import {
   customElement,
   html,
-  internalProperty,
   LitElement,
   property,
   PropertyValues,
   queryAll,
+  state,
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { live } from 'lit-html/directives/live';
 import { compact, equals, first, range, reject } from 'remeda';
+import { AptitudeCheck } from '../../../../../../success-test/aptitude-check';
+import { SkillTest } from '../../../../../../success-test/skill-test';
+import { SoftwareSkillTest } from '../../../../../../success-test/software-skill-test';
+import { requestCharacter } from '../../character-request-event';
 import styles from './character-view-test-actions.scss';
 
 @customElement('character-view-test-actions')
@@ -43,11 +47,11 @@ export class CharacterViewTestActions extends LitElement {
 
   @property({ attribute: false }) ego!: Ego;
 
-  @internalProperty() private activeFakeId?: string;
+  @state() private activeFakeId?: string;
 
-  @internalProperty() private activeEgo?: string;
+  @state() private activeEgo?: string;
 
-  @internalProperty()
+  @state()
   private skillControls = {
     filter: '',
   };
@@ -104,6 +108,22 @@ export class CharacterViewTestActions extends LitElement {
     });
   }
 
+  private startQuickAptitudeTest(aptitude: AptitudeType) {
+    const { currentEgo, activeEgo } = this;
+
+    const test = new AptitudeCheck({
+      ego: currentEgo,
+      character: this.character,
+      token: requestCharacter(this).token,
+      aptitude,
+      quick: true,
+      techSource: activeEgo
+        ? this.character.equippedGroups.onboardALIs.get(activeEgo)
+        : null,
+    });
+    test.settings.setReady();
+  }
+
   private startSkillTest(skill: Skill) {
     const onboardAliId = this.activeEgo;
     SkillTestControls.openWindow({
@@ -123,6 +143,22 @@ export class CharacterViewTestActions extends LitElement {
         };
       },
     });
+  }
+
+  private startQuickSkillTest(skill: Skill) {
+    const { currentEgo, activeEgo } = this;
+
+    const test = new SkillTest({
+      ego: currentEgo,
+      character: this.character,
+      token: requestCharacter(this).token,
+      skill,
+      quick: true,
+      techSource: activeEgo
+        ? this.character.equippedGroups.onboardALIs.get(activeEgo)
+        : null,
+    });
+    test.settings.setReady();
   }
 
   private startSoftwareSkillTest(
@@ -148,6 +184,19 @@ export class CharacterViewTestActions extends LitElement {
         };
       },
     });
+  }
+
+  private startQuickSoftwareSkillTest(
+    skill: Software['skills'][number],
+    software: Software,
+  ) {
+    const test = new SoftwareSkillTest({
+      character: this.character,
+      token: requestCharacter(this).token,
+      software,
+      skill,
+    });
+    test.settings.setReady();
   }
 
   private startFavorTest(reputation: RepWithIdentifier, favor: Favor) {
@@ -262,11 +311,8 @@ export class CharacterViewTestActions extends LitElement {
     const { groupedSkills, name, aptitudes } = currentEgo;
     const { active, know } = groupedSkills;
     const { sources, fakeID } = this.repSources;
-    const {
-      softwareSkills,
-      fakeIDs,
-      onboardALIs,
-    } = this.character.equippedGroups;
+    const { softwareSkills, fakeIDs, onboardALIs } =
+      this.character.equippedGroups;
     // TODO: Toggle to show all reps instead of just tracked
     // TODO: Add collapse toggle
     // TODO: Info that device ALI doesn't use different skills for anything besides here
@@ -362,6 +408,11 @@ export class CharacterViewTestActions extends LitElement {
                               ?disabled=${this.disabled}
                               @click=${() =>
                                 this.startSoftwareSkillTest(skill, software)}
+                              @contextmenu=${() =>
+                                this.startQuickSoftwareSkillTest(
+                                  skill,
+                                  software,
+                                )}
                             >
                               <span class="skill-name"
                                 >${name}
@@ -434,6 +485,7 @@ export class CharacterViewTestActions extends LitElement {
       ?disabled=${this.character.disabled}
       class="aptitude-item"
       @click=${() => this.startAptitudeTest(type)}
+      @contextmenu=${() => this.startQuickAptitudeTest(type)}
     >
       <span class="aptitude-name" slot="before"> ${localize(type)}</span>
       <span class="aptitude-points">${points}</span>
@@ -451,6 +503,7 @@ export class CharacterViewTestActions extends LitElement {
       ?disabled=${this.disabled}
       .tabIndex=${live(filtered ? -1 : 0)}
       @click=${() => this.startSkillTest(skill)}
+      @contextmenu=${() => this.startQuickSkillTest(skill)}
       title=${ifDefined(
         skill.source ? `${localize('source')}: ${skill.source}` : undefined,
       )}

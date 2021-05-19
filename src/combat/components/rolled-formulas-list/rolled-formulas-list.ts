@@ -1,13 +1,7 @@
 import type { MultiSelectedEvent } from '@material/mwc-list/mwc-list-foundation';
 import type { RollData, RolledFormula } from '@src/foundry/rolls';
 import { tooltip } from '@src/init';
-import {
-  customElement,
-  LitElement,
-  property,
-  html,
-  internalProperty,
-} from 'lit-element';
+import { customElement, html, LitElement, property } from 'lit-element';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import styles from './rolled-formulas-list.scss';
 import { UsedRollPartsEvent } from './used-roll-parts-event';

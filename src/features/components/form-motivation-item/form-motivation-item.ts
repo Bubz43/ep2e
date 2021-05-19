@@ -14,13 +14,7 @@ import { localize } from '@src/foundry/localization';
 import { tooltip } from '@src/init';
 import { debounce } from '@src/utility/decorators';
 import { notEmpty } from '@src/utility/helpers';
-import {
-  customElement,
-  html,
-  internalProperty,
-  LitElement,
-  property,
-} from 'lit-element';
+import { customElement, html, LitElement, property, state } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
 import styles from './form-motivation-item.scss';
@@ -41,7 +35,7 @@ export class FormMotivationItem extends LitElement {
 
   @property({ type: Boolean }) disabled = false;
 
-  @internalProperty() expandGoals = false;
+  @state() expandGoals = false;
 
   private readonly goalOps = addUpdateRemoveFeature<
     Motivation['goals'][number]

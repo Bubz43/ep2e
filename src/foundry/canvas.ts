@@ -8,8 +8,10 @@ import type { ValuesType } from 'utility-types';
 import { stopEvent } from 'weightless';
 import type { SceneEP } from '../entities/scene';
 import type { CanvasLayers } from './foundry-cont';
+import type PIXI from 'pixi.js';
 
-export type MeasuredTemplateType = keyof typeof CONFIG['MeasuredTemplate']['types'];
+export type MeasuredTemplateType =
+  keyof typeof CONFIG['MeasuredTemplate']['types'];
 
 export type MeasuredTemplateData = {
   t: MeasuredTemplateType;
@@ -104,13 +106,11 @@ export const placeMeasuredTemplate = (
     async function createTemplate(ev?: PIXI.InteractionEvent) {
       ev?.stopPropagation();
       cleanup();
-      const savedTemplateData: MeasuredTemplateData | null = await scene.createEmbeddedEntity(
-        MeasuredTemplate.embeddedName,
-        {
+      const savedTemplateData: MeasuredTemplateData | null =
+        await scene.createEmbeddedEntity(MeasuredTemplate.embeddedName, {
           ...template.data,
           ...grid.getSnappedPosition(template.x, template.y, 2),
-        },
-      );
+        });
       resolve(
         savedTemplateData?._id
           ? {

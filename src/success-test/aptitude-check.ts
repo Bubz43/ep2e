@@ -46,6 +46,7 @@ export type AptitudeCheckInit = {
   modifiers?: SimpleSuccessTestModifier[];
   techSource?: PhysicalTech | null;
   halve?: boolean;
+  quick?: boolean;
 };
 
 export class AptitudeCheck extends SuccessTestBase {
@@ -75,6 +76,7 @@ export class AptitudeCheck extends SuccessTestBase {
     modifiers,
     techSource,
     halve,
+    quick,
   }: AptitudeCheckInit) {
     super({
       action:
@@ -115,10 +117,12 @@ export class AptitudeCheck extends SuccessTestBase {
     this.special = special;
 
     this.pools.available = this.getPools(this.aptitude.type);
-    this.modifiers.effects = this.getModifierEffects(
-      this.aptitude.type,
-      this.action,
-    );
+    if (!quick) {
+      this.modifiers.effects = this.getModifierEffects(
+        this.aptitude.type,
+        this.action,
+      );
+    }
 
     for (const modifier of modifiers || []) {
       this.modifiers.simple.set(modifier.id, modifier);
@@ -266,7 +270,7 @@ export class AptitudeCheck extends SuccessTestBase {
     );
   }
 
-  private getModifierEffects(aptitude: AptitudeType, action: Action) {
+  private getModifierEffects(aptitude: AptitudeType, action: Action): ReturnType<typeof successTestEffectMap> {
     if (this.techSource) return new Map();
     return successTestEffectMap(
       this.character?.appliedEffects.getMatchingSuccessTestEffects(

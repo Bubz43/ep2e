@@ -10,10 +10,10 @@ import { localize } from '@src/foundry/localization';
 import {
   customElement,
   html,
-  internalProperty,
   LitElement,
   property,
   PropertyValues,
+  state,
 } from 'lit-element';
 import mix from 'mix-with/lib';
 import styles from './character-view-recharge-completion.scss';
@@ -40,7 +40,7 @@ export class CharacterViewRechargeCompletion extends mix(LitElement).with(
 
   @property({ attribute: false }) character!: Character;
 
-  @internalProperty() private overrideDuration = false;
+  @state() private overrideDuration = false;
 
   private state!: CompletionState;
 
@@ -150,12 +150,8 @@ export class CharacterViewRechargeCompletion extends mix(LitElement).with(
 
   render() {
     const { state, activeRecharge, overrideDuration, regained } = this;
-    const {
-      disabled,
-      timeTillRechargeComplete,
-      psi,
-      temporaryFeatures,
-    } = this.character;
+    const { disabled, timeTillRechargeComplete, psi, temporaryFeatures } =
+      this.character;
 
     if (timeTillRechargeComplete && !overrideDuration) {
       return html`
@@ -227,10 +223,12 @@ export class CharacterViewRechargeCompletion extends mix(LitElement).with(
               </div>
 
               <div class="control-buttons" slot="after">
-                ${([
-                  ['remove', newPoints === oldPoints],
-                  ['add', newPoints === max || unspent === 0],
-                ] as const).map(
+                ${(
+                  [
+                    ['remove', newPoints === oldPoints],
+                    ['add', newPoints === max || unspent === 0],
+                  ] as const
+                ).map(
                   ([icon, disable]) => html`
                     <button
                       @click=${() =>

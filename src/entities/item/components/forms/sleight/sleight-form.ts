@@ -33,9 +33,9 @@ import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
-  internalProperty,
   property,
   PropertyValues,
+  state,
 } from 'lit-element';
 import { map, mapToObj } from 'remeda';
 import { ItemFormBase } from '../item-form-base';
@@ -55,7 +55,7 @@ export class SleightForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: Sleight;
 
-  @internalProperty() private effectGroup: EffectGroup = 'self';
+  @state() private effectGroup: EffectGroup = 'self';
 
   update(changedProps: PropertyValues<this>) {
     if (this.item.isChi) this.effectGroup = 'self';

@@ -42,9 +42,9 @@ import { tooltip } from '@src/init';
 import {
   customElement,
   html,
-  internalProperty,
   property,
   PropertyValues,
+  state,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { map, mapToObj, pipe, range, take } from 'remeda';
@@ -63,7 +63,7 @@ export class FirearmAmmoForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: FirearmAmmo;
 
-  @internalProperty() private editingModeId!: string;
+  @state() private editingModeId!: string;
 
   private payloadSheet?: SlWindow | null;
 
@@ -161,14 +161,8 @@ export class FirearmAmmoForm extends ItemFormBase {
   }
 
   render() {
-    const {
-      updater,
-      type,
-      canCarryPayload,
-      payload,
-      loaded,
-      modes,
-    } = this.item;
+    const { updater, type, canCarryPayload, payload, loaded, modes } =
+      this.item;
     const { disabled } = this;
     return html`
       <entity-form-layout noSidebar>

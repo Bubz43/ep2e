@@ -16,7 +16,7 @@ import { RenderDialogEvent } from '@src/open-dialog';
 import { openMenu } from '@src/open-menu';
 import { debounce } from '@src/utility/decorators';
 import { notEmpty } from '@src/utility/helpers';
-import { internalProperty, LitElement, property, query } from 'lit-element';
+import { LitElement, property, query, state } from 'lit-element';
 import { html, TemplateResult } from 'lit-html';
 import { traverseActiveElements } from 'weightless';
 import type { MaybeToken } from '../../actor';
@@ -52,9 +52,8 @@ export abstract class CharacterViewBase extends LitElement {
   })
   token?: MaybeToken;
 
-  @internalProperty() protected drawerContentRenderer:
-    | (() => TemplateResult)
-    | null = null;
+  @state() protected drawerContentRenderer: (() => TemplateResult) | null =
+    null;
 
   @query('.drawer', true)
   private drawer!: HTMLElement;

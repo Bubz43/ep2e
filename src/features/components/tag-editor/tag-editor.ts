@@ -4,13 +4,7 @@ import { enumValues } from '@src/data-enums';
 import { createTag, Tag, TagType } from '@src/features/tags';
 import { localize } from '@src/foundry/localization';
 import { LazyGetter } from 'lazy-get-decorator';
-import {
-  customElement,
-  LitElement,
-  property,
-  html,
-  internalProperty,
-} from 'lit-element';
+import { customElement, html, LitElement, state } from 'lit-element';
 import { difference, sort } from 'remeda';
 import styles from './tag-editor.scss';
 import { tagFields } from './tag-fields';
@@ -27,7 +21,7 @@ export class TagEditor extends LitElement {
 
   static styles = [styles];
 
-  @internalProperty() private tagType = TagType.Action;
+  @state() private tagType = TagType.Action;
 
   @LazyGetter()
   static get settableTagTypes() {

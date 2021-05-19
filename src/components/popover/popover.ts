@@ -4,11 +4,11 @@ import { assignStyles, px, resizeObsAvailable } from '@src/utility/dom';
 import {
   customElement,
   html,
-  internalProperty,
   LitElement,
   property,
   PropertyValues,
   query,
+  state,
 } from 'lit-element';
 import { render } from 'lit-html';
 import { classMap } from 'lit-html/directives/class-map';
@@ -83,7 +83,7 @@ export class Popover extends mix(LitElement).with(ListenerSubscription) {
 
   @property({ type: Boolean }) padded = false;
 
-  @internalProperty() private arrowPlacement: Placement = Placement.Left;
+  @state() private arrowPlacement: Placement = Placement.Left;
 
   @property({
     type: Array,

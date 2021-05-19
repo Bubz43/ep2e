@@ -36,10 +36,10 @@ import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
-  internalProperty,
   LitElement,
   property,
   PropertyValues,
+  state,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import {
@@ -67,11 +67,11 @@ export class CharacterViewResleeve extends LitElement {
 
   @property({ attribute: false }) selectedSleeve?: Sleeve | null = null;
 
-  @internalProperty() private showStressForm = false;
+  @state() private showStressForm = false;
 
-  @internalProperty() private hideWare = true;
+  @state() private hideWare = true;
 
-  @internalProperty() private stressTestData: StressTestData & {
+  @state() private stressTestData: StressTestData & {
     stressType: StressType;
   } = {
     stressType: StressType.Alienation,

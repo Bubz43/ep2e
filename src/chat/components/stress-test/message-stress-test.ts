@@ -1,19 +1,13 @@
 import type { StressTestMessageData } from '@src/chat/message-data';
 import type { UsedRollPartsEvent } from '@src/combat/components/rolled-formulas-list/used-roll-parts-event';
-import { createStressDamage, StressDamage } from '@src/health/health-changes';
 import { pickOrDefaultActor } from '@src/entities/find-entities';
 import { localize } from '@src/foundry/localization';
 import { cleanFormula } from '@src/foundry/rolls';
 import { HealthEditor } from '@src/health/components/health-editor/health-editor';
 import { formatDamageType, HealthType } from '@src/health/health';
+import { createStressDamage, StressDamage } from '@src/health/health-changes';
 import { notEmpty } from '@src/utility/helpers';
-import {
-  customElement,
-  html,
-  internalProperty,
-  LitElement,
-  property,
-} from 'lit-element';
+import { customElement, html, LitElement, property, state } from 'lit-element';
 import styles from './message-stress-test.scss';
 
 @customElement('message-stress-test')
@@ -26,9 +20,9 @@ export class MessageStressTest extends LitElement {
 
   @property({ type: Object }) stress!: StressTestMessageData;
 
-  @internalProperty() private viewFormulas = false;
+  @state() private viewFormulas = false;
 
-  @internalProperty() private usedRollParts?: ReadonlySet<number>;
+  @state() private usedRollParts?: ReadonlySet<number>;
 
   toggleFormulas() {
     this.viewFormulas = !this.viewFormulas;

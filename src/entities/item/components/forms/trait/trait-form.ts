@@ -23,9 +23,9 @@ import { openMenu } from '@src/open-menu';
 import {
   customElement,
   html,
-  internalProperty,
   property,
   PropertyValues,
+  state,
 } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { repeat } from 'lit-html/directives/repeat';
@@ -45,11 +45,11 @@ export class TraitForm extends ItemFormBase {
 
   @property({ attribute: false }) item!: Trait;
 
-  @internalProperty() private levelCount = 1;
+  @state() private levelCount = 1;
 
-  @internalProperty() private levels = range(1, 5);
+  @state() private levels = range(1, 5);
 
-  @internalProperty() private addEffectLevel = 0;
+  @state() private addEffectLevel = 0;
 
   private readonly levelOps = addUpdateRemoveFeature(
     () => this.item.updater.path('data', 'levels').commit,

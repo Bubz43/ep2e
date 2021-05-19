@@ -2,5 +2,6 @@
 build
 web_modules
 node_modules
-types/foundry.d.ts
+foundry.d.ts
 latest.zip
+foundry-8.d.ts

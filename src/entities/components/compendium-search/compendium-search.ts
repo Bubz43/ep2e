@@ -10,7 +10,7 @@ import type { ItemEP } from '@src/entities/item/item';
 import { setDragDrop } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import { searchRegExp } from '@src/utility/helpers';
-import { customElement, html, internalProperty, LitElement } from 'lit-element';
+import { customElement, html, LitElement, state } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import styles from './compendium-search.scss';
 
@@ -24,16 +24,16 @@ export class CompendiumSearch extends LitElement {
     return [styles];
   }
 
-  @internalProperty() private results: Entity[] = [];
+  @state() private results: Entity[] = [];
 
-  @internalProperty() private filter = '';
+  @state() private filter = '';
 
-  @internalProperty() private sources = {
+  @state() private sources = {
     world: true,
     system: true,
   };
 
-  @internalProperty() private loading = false;
+  @state() private loading = false;
 
   private entity: 'Actor' | 'Item' = 'Item';
 

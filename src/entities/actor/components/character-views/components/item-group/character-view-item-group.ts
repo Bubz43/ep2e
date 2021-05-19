@@ -19,10 +19,10 @@ import { clickIfEnter, notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
-  internalProperty,
   LitElement,
   property,
   PropertyValues,
+  state,
 } from 'lit-element';
 import { nothing } from 'lit-html';
 import { classMap } from 'lit-html/directives/class-map';
@@ -68,11 +68,11 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
 
   @property({ type: Boolean }) noCollapse = false;
 
-  @internalProperty() private dragTargetItem: ItemProxy | null = null;
+  @state() private dragTargetItem: ItemProxy | null = null;
 
-  @internalProperty() private sortAfter = false;
+  @state() private sortAfter = false;
 
-  @internalProperty() private allowSort = false;
+  @state() private allowSort = false;
 
   private draggedItem: ItemProxy | null = null;
 

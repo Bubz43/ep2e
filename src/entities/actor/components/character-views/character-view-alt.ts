@@ -36,6 +36,7 @@ import {
   actorDroptoActorProxy,
   DropType,
   handleDrop,
+  setDragDrop,
 } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
@@ -48,9 +49,9 @@ import { localImage } from '@src/utility/images';
 import {
   customElement,
   html,
-  internalProperty,
   property,
   PropertyValues,
+  state,
   TemplateResult,
 } from 'lit-element';
 import { nothing } from 'lit-html';
@@ -63,6 +64,7 @@ import {
   difference,
   identity,
   noop,
+  omit,
   prop,
   range,
   sortBy,
@@ -104,7 +106,7 @@ export class CharacterViewAlt extends CharacterViewBase {
 
   @property({ type: Boolean, reflect: true }) compact = false;
 
-  @internalProperty() private currentTab: CharacterTab = 'combat';
+  @state() private currentTab: CharacterTab = 'combat';
 
   update(changedProps: PropertyValues<this>) {
     if (
@@ -217,7 +219,10 @@ export class CharacterViewAlt extends CharacterViewBase {
     VehicleType.Hardsuit,
   ] as string[];
 
+  private draggingSelf = false;
+
   private handleEntityDrop = handleDrop(async ({ data, ev }) => {
+    if (this.draggingSelf) return;
     if (data?.type !== DropType.Actor || this.character.disabled) {
       notify(NotificationType.Info, localize('dropSleeve/Exoskeleton'));
       return;
@@ -273,6 +278,46 @@ export class CharacterViewAlt extends CharacterViewBase {
       } else resleeve();
     } else notify(NotificationType.Info, localize('dropSleeve/Exoskeleton'));
   });
+
+  private setSelfDrag(ev: DragEvent) {
+    this.draggingSelf = true;
+    const { isToken, id, compendium } = this.character.actor;
+    setDragDrop(
+      ev,
+      isToken
+        ? {
+            type: DropType.Actor,
+            data: {
+              ...this.character.dataCopy(),
+              _id: '',
+            },
+          }
+        : {
+            type: DropType.Actor,
+            id,
+            pack: compendium?.collection,
+          },
+    );
+  }
+
+  private setSleeveDragData(ev: DragEvent) {
+    const { sleeve } = this.character;
+    if (!sleeve) return;
+    this.draggingSelf = true;
+    setDragDrop(ev, {
+      type: DropType.Actor,
+      data: {
+        ...sleeve.dataCopy(),
+        name: `${this.character.name}'s ${sleeve.name}`,
+        items: [...sleeve.items.values()].map((i) => i.getDataCopy()),
+        _id: '',
+      },
+    });
+  }
+
+  private setDraggingEnd() {
+    this.draggingSelf = false;
+  }
 
   render() {
     if (this.character.isLimited) return this.renderLimited();
@@ -584,7 +629,12 @@ export class CharacterViewAlt extends CharacterViewBase {
         </div>
 
         <div class="entities">
-          <div class="ego-entity">
+          <div
+            class="ego-entity"
+            draggable="true"
+            @dragstart=${this.setSelfDrag}
+            @dragend=${this.setDraggingEnd}
+          >
             <button class="entity-name">
               <span @click=${ego.openForm}>${ego.name}</span>
             </button>
@@ -598,7 +648,12 @@ export class CharacterViewAlt extends CharacterViewBase {
             ${this.compact ? this.renderInitiativeButton() : ''}
           </div>
 
-          <div class="sleeve-entity">
+          <div
+            class="sleeve-entity"
+            draggable="true"
+            @dragstart=${this.setSleeveDragData}
+            @dragend=${this.setDraggingEnd}
+          >
             <button class="entity-name" @click=${sleeve?.openForm}>
               ${sleeve?.name || `${localize('add')} ${localize('sleeve')}`}
             </button>

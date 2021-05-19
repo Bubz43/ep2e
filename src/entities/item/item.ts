@@ -27,7 +27,24 @@ import { Substance } from './proxies/substance';
 import { ThrownWeapon } from './proxies/thrown-weapon';
 import { Trait } from './proxies/trait';
 
-export type ItemProxy = ReturnType<ItemEP['createProxy']>;
+export type ItemProxy =
+  | Trait
+  | Substance
+  | Psi
+  | Sleight
+  | Armor
+  | Explosive
+  | Software
+  | MeleeWeapon
+  | PhysicalTech
+  | PhysicalService
+  | Firearm
+  | FirearmAmmo
+  | Railgun
+  | SeekerWeapon
+  | SprayWeapon
+  | ThrownWeapon
+  | BeamWeapon;
 
 export type ConsumableItem = Extract<ItemProxy, { quantity: number }>;
 export type EquippableItem = Extract<ItemProxy, { equipped: boolean }>;
@@ -52,14 +69,6 @@ export class ItemEP extends Item {
 
   get subscriptions() {
     return this._subscribers;
-  }
-
-  @LazyGetter()
-  get path(): EntityPath {
-    if (this.actor)
-      return [...this.actor.path, { name: localize('items') }, this];
-    if (game.items.has(this.id)) return [{ name: localize('items') }, this];
-    return [];
   }
 
   @LazyGetter()
@@ -186,10 +195,9 @@ export class ItemEP extends Item {
   private proxyInit<T extends ItemDatas>(data: T) {
     return {
       data,
-      updater: (this.updater as unknown) as UpdateStore<T>,
+      updater: this.updater as unknown as UpdateStore<T>,
       embedded: this.actor?.name,
       actor: this.actor,
-      path: this.path,
       ...this.operations,
       // actorIdentifiers: this.actor?.identifiers,
     } as const;

@@ -9,10 +9,10 @@ import { notEmpty, searchRegExp } from '@src/utility/helpers';
 import {
   customElement,
   html,
-  internalProperty,
   LitElement,
   property,
   query,
+  state,
 } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { sortBy } from 'remeda';
@@ -29,7 +29,7 @@ export class CharacterViewSearch extends LitElement {
 
   @property({ attribute: false }) character!: Character;
 
-  @internalProperty() private search = '';
+  @state() private search = '';
 
   @query('input') private searchInput!: HTMLInputElement;
 

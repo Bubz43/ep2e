@@ -36,6 +36,7 @@ export type SkillTestInit = {
   opposing?: { testName: string; messageId?: string };
   halve?: boolean;
   modifiers?: SimpleSuccessTestModifier[];
+  quick?: boolean;
 };
 
 export type SkillState = {
@@ -87,6 +88,7 @@ export class SkillTest extends SuccessTestBase {
     techSource,
     halve,
     modifiers,
+    quick,
   }: SkillTestInit) {
     super({
       action:
@@ -159,10 +161,12 @@ export class SkillTest extends SuccessTestBase {
     };
 
     this.pools.available = this.getPools(this.skillState.skill);
-    this.modifiers.effects = this.getModifierEffects(
-      this.skillState.skill,
-      this.action,
-    );
+    if (!quick) {
+      this.modifiers.effects = this.getModifierEffects(
+        this.skillState.skill,
+        this.action,
+      );
+    }
   }
 
   protected getModifierEffects(skill: Skill, action: Action) {

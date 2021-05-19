@@ -3,13 +3,7 @@ import { ActiveArmor, ArmorType } from '@src/features/active-armor';
 import { localize } from '@src/foundry/localization';
 import { rollLimit } from '@src/foundry/rolls';
 import { notEmpty, withSign } from '@src/utility/helpers';
-import {
-  html,
-  internalProperty,
-  LitElement,
-  property,
-  PropertyValues,
-} from 'lit-element';
+import { html, LitElement, property, PropertyValues, state } from 'lit-element';
 import { pick, set } from 'remeda';
 import {
   createHealthModification,
@@ -23,7 +17,7 @@ import styles from './health-edit-base.scss';
 
 export abstract class HealthEditBase<
   H extends ActorHealth,
-  D extends Damage
+  D extends Damage,
 > extends LitElement {
   protected abstract createEditable(): D;
 
@@ -37,9 +31,9 @@ export abstract class HealthEditBase<
 
   @property({ attribute: false }) armor?: ActiveArmor | null;
 
-  @internalProperty() protected editableDamage!: D;
+  @state() protected editableDamage!: D;
 
-  @internalProperty() protected overrides?: Partial<{
+  @state() protected overrides?: Partial<{
     takeMinimum: boolean;
     damage: number;
     wounds: number;
