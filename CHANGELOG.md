@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.73] - 2021-05-19
+## Unreleased
 
 - Update dependencies
 - Allow dropping a character onto onboard ali section in tech to fill its data
