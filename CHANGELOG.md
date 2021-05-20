@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.731] - 2021-05-20
+
+- Fix opening combat tracker popout with right click opening browser context menu
+
 ## [0.73] - 2021-05-19
 
 - Update dependencies
