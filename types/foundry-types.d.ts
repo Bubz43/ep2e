@@ -270,7 +270,6 @@ declare module 'common/constants' {
     export const FADE: number;
     export const ROOF: number;
     export const RADIAL: number;
-    export const VISION: number;
   }
   /**
    * Describe the various thresholds of token control upon which to show certain pieces of information
@@ -573,7 +572,7 @@ declare module 'common/utils/helpers' {
    */
   export function getRoute(
     path: string,
-    { prefix }?: { prefix: string | null },
+    { prefix }?: { prefix?: string | null },
   ): string;
   /**
    * Learn the named type of a token - extending the functionality of typeof to recognize some core Object types
@@ -1738,12 +1737,16 @@ declare module 'common/abstract/document' {
     /**
      * Perform preliminary operations before a Document of this type is created.
      * Pre-creation operations only occur for the client which requested the operation.
-     * @param {DocumentData} data         The initial data used to create the document
+     * @param {object} data               The initial data object provided to the document creation request
      * @param {object} options            Additional options which modify the creation request
      * @param {documents.BaseUser} user   The User requesting the document creation
      * @protected
      */
-    protected _preCreate(data: any, options: object, user: any): Promise<void>;
+    protected _preCreate(
+      data: object,
+      options: object,
+      user: any,
+    ): Promise<void>;
     /**
      * Perform preliminary operations before a Document of this type is updated.
      * Pre-update operations only occur for the client which requested the operation.
@@ -1768,29 +1771,29 @@ declare module 'common/abstract/document' {
     /**
      * Perform follow-up operations after a Document of this type is created.
      * Post-creation operations occur for all clients after the creation is broadcast.
-     * @param {DocumentData} data         The data from which the document was created
+     * @param {object} data               The initial data object provided to the document creation request
      * @param {object} options            Additional options which modify the creation request
-     * @param {documents.BaseUser} user   The User requesting the document creation
+     * @param {string} userId             The id of the User requesting the document update
      * @protected
      */
-    protected _onCreate(data: any, options: object, user: any): void;
+    protected _onCreate(data: object, options: object, userId: string): void;
     /**
      * Perform follow-up operations after a Document of this type is updated.
      * Post-update operations occur for all clients after the update is broadcast.
      * @param {object} changed            The differential data that was changed relative to the documents prior values
      * @param {object} options            Additional options which modify the update request
-     * @param {documents.BaseUser} user   The User requesting the document update
+     * @param {string} userId             The id of the User requesting the document update
      * @protected
      */
-    protected _onUpdate(changed: object, options: object, user: any): void;
+    protected _onUpdate(changed: object, options: object, userId: string): void;
     /**
      * Perform follow-up operations after a Document of this type is deleted.
      * Post-deletion operations occur for all clients after the deletion is broadcast.
      * @param {object} options            Additional options which modify the deletion request
-     * @param {documents.BaseUser} user   The User requesting the document deletion
+     * @param {string} userId             The id of the User requesting the document update
      * @protected
      */
-    protected _onDelete(options: object, user: any): void;
+    protected _onDelete(options: object, userId: string): void;
     /**
      * Transform the Document instance into a plain object.
      * The created object is an independent copy of the original data.
@@ -1806,238 +1809,6 @@ declare module 'common/abstract/document' {
      */
     toJSON(): object;
   }
-}
-declare module 'common/abstract/backend' {
-  export default DatabaseBackend;
-  /**
-   * An interface which is required by both client and server-side to provide implementations for document operations.
-   * @abstract
-   * @interface
-   * @memberof abstract
-   */
-  class DatabaseBackend {
-    /**
-     * Retrieve Documents based on provided query parameters
-     * @param {Function} documentClass        The Document definition
-     * @param {object} request                The requested operation
-     * @param {User} user                     The requesting User
-     * @returns {Document[]}                  The created Document instances
-     */
-    get(documentClass: Function, request: object, user: any): Document[];
-    /**
-     * Validate the arguments passed to the get operation
-     * @param {object} request                The requested operation
-     * @param {object} [request.query={}]     A document search query to execute
-     * @param {object} [request.options={}]   Operation options
-     * @param {string} [request.pack]         A Compendium pack identifier
-     * @private
-     */
-    private _getArgs;
-    /**
-     * Get primary Document instances
-     * @protected
-     */
-    protected _getDocuments(
-      documentClass: any,
-      query: any,
-      options: any,
-      user: any,
-    ): Promise<void>;
-    /**
-     * Get embedded Document instances
-     * @protected
-     */
-    protected _getEmbeddedDocuments(
-      documentClass: any,
-      parent: any,
-      query: any,
-      options: any,
-      user: any,
-    ): Promise<void>;
-    /**
-     * Get the parent Document (if any) associated with a request
-     * @param {object} request                The requested operation
-     * @return {Promise<Document|null>}       The parent Document, or null
-     * @private
-     */
-    private _getParent;
-    /**
-     * Perform document creation operations
-     * @param {Function} documentClass        The Document definition
-     * @param {object} request                The requested operation
-     * @param {User} user                     The requesting User
-     * @returns {Document[]}                  The created Document instances
-     */
-    create(documentClass: Function, request: object, user: any): Document[];
-    /**
-     * Validate the arguments passed to the create operation
-     * @param {object} request                The requested operation
-     * @param {object[]} request.data         An array of document data
-     * @param {object} [request.options={}]   Operation options
-     * @param {string} [request.pack]         A Compendium pack identifier
-     * @private
-     */
-    private _createArgs;
-    /**
-     * Create primary Document instances
-     * @returns {Promise<Document[]>}
-     * @protected
-     */
-    protected _createDocuments(
-      documentClass: any,
-      request: any,
-      user: any,
-    ): Promise<Document[]>;
-    /**
-     * Create embedded Document instances
-     * @returns {Promise<Document[]>}
-     * @protected
-     */
-    protected _createEmbeddedDocuments(
-      documentClass: any,
-      parent: any,
-      request: any,
-      user: any,
-    ): Promise<Document[]>;
-    /**
-     * Perform document update operations
-     * @param {Function} documentClass        The Document definition
-     * @param {object} request                The requested operation
-     * @param {User} user                     The requesting User
-     * @returns {Document[]}                  The updated Document instances
-     */
-    update(documentClass: Function, request: object, user: any): Document[];
-    /**
-     * Validate the arguments passed to the update operation
-     * @param {object} request                The requested operation
-     * @param {object[]} request.updates      An array of document data
-     * @param {object} [request.options={}]   Operation options
-     * @param {string} [request.pack]         A Compendium pack identifier
-     * @private
-     */
-    private _updateArgs;
-    /**
-     * Update primary Document instances
-     * @returns {Promise<Document[]>}
-     * @protected
-     */
-    protected _updateDocuments(
-      documentClass: any,
-      request: any,
-      user: any,
-    ): Promise<Document[]>;
-    /**
-     * Update embedded Document instances
-     * @returns {Promise<Document[]>}
-     * @protected
-     */
-    protected _updateEmbeddedDocuments(
-      documentClass: any,
-      parent: any,
-      request: any,
-      user: any,
-    ): Promise<Document[]>;
-    /**
-     * Perform document deletion operations
-     * @param {Function} documentClass        The Document definition
-     * @param {object} request                The requested operation
-     * @param {User} user                     The requesting User
-     * @returns {Document[]}                  The deleted Document instances
-     */
-    delete(documentClass: Function, request: object, user: any): Document[];
-    /**
-     * Validate the arguments passed to the delete operation
-     * @param {object} request                The requested operation
-     * @param {string[]} request.ids          An array of document ids
-     * @param {object} [request.options={}]   Operation options
-     * @param {string} [request.pack]         A Compendium pack identifier
-     * @private
-     */
-    private _deleteArgs;
-    /**
-     * Delete primary Document instances
-     * @returns {Promise<Document[]>}
-     * @protected
-     */
-    protected _deleteDocuments(
-      documentClass: any,
-      request: any,
-      user: any,
-    ): Promise<Document[]>;
-    /**
-     * Delete embedded Document instances
-     * @returns {Promise<Document[]>}
-     * @protected
-     */
-    protected _deleteEmbeddedDocuments(
-      documentClass: any,
-      parent: any,
-      request: any,
-      user: any,
-    ): Promise<Document[]>;
-    /**
-     * Describe the scopes which are suitable as the namespace for a flag key
-     * @returns {string[]}
-     * @protected
-     */
-    protected getFlagScopes(): string[];
-    /**
-     * Describe the scopes which are suitable as the namespace for a flag key
-     * @returns {string[]}
-     * @protected
-     */
-    protected getCompendiumScopes(): string[];
-    /**
-         * Provide the Logger implementation that should be used for database operations
-        //  * @return {Logger|Console}
-         * @protected 
-         */
-    protected _getLogger(): any | Console;
-    /**
-     * Log a database operation for an embedded document, capturing the action taken and relevant IDs
-     * @param {string} action                       The action performed
-     * @param {string} type                         The document type
-     * @param {abstract.Document[]} documents       The documents modified
-     * @param {string} [level=info]                 The logging level
-     * @param {abstract.Document} [parent]          A parent document
-     * @param {string} [pack]                       A compendium pack within which the operation occurred
-     * @protected
-     */
-    protected _logOperation(
-      action: string,
-      type: string,
-      documents: any[],
-      {
-        parent,
-        pack,
-        level,
-      }?: { parent: unknown; pack: string; level: string },
-    ): void;
-    /**
-     * Construct a standardized error message given the context of an attempted operation
-     * @returns {string}
-     * @protected
-     */
-    protected _logError(
-      user: any,
-      action: any,
-      subject: any,
-      {
-        parent,
-        pack,
-      }?: {
-        parent: any;
-        pack: any;
-      },
-    ): string;
-    /**
-     * Determine a string suffix for a log message based on the parent and/or compendium context.
-     * @returns {string}
-     * @private
-     */
-    private _logContext;
-  }
-  import Document from 'common/abstract/document';
 }
 declare module 'common/utils/collection' {
   export default Collection;
@@ -2137,12 +1908,16 @@ declare module 'common/abstract/embedded-collection' {
   /**
    * An extension of the Collection.
    * Used for the specific task of containing embedded Document instances within a parent Document.
+   * @param {DocumentData} documentData The parent DocumentData instance to which this collection belongs
    * @param {object[]} sourceArray      The source data array for the collection in the parent Document data
+   * @param {Function} documentClass    The Document class implementation contained by the collection
    */
   class EmbeddedCollection<T> extends Collection<T> {
-    constructor(sourceArray: any, documentClass: any);
-    _source: any;
-    documentClass: any;
+    /**
+     * Initialize the EmbeddedCollection object by constructing its contained Document instances
+     * @private
+     */
+    private _initialize;
     /**
      * Convert the EmbeddedCollection to an array of simple objects.
      * @param {boolean} [source=true]     Draw data for contained Documents from the underlying data source?
@@ -2249,7 +2024,7 @@ declare module 'common/abstract/data' {
      * @param {string} json       Serialized document data in string format
      * @returns {DocumentData}    A constructed data instance
      */
-    static frojsON(json: string): DocumentData;
+    static fromJSON(json: string): DocumentData;
     constructor(data?: {}, document?: any);
     /**
      * The primary identifier for the Document to which this data object applies.
@@ -2346,7 +2121,7 @@ declare module 'common/abstract/data' {
       name: string,
       field: DocumentField,
       value: any,
-      { children }?: { children: boolean },
+      { children }?: { children?: boolean },
     ): any;
     /**
      * Jointly validate the overall document after each field has been individually validated.
@@ -2394,19 +2169,251 @@ declare module 'common/abstract/data' {
   }
   import EmbeddedCollection from 'common/abstract/embedded-collection';
 }
+declare module 'common/abstract/backend' {
+  export default DatabaseBackend;
+  /**
+   * An interface which is required by both client and server-side to provide implementations for document operations.
+   * @abstract
+   * @interface
+   * @memberof abstract
+   */
+  class DatabaseBackend {
+    /**
+     * Retrieve Documents based on provided query parameters
+     * @param {Function} documentClass        The Document definition
+     * @param {object} request                The requested operation
+     * @param {BaseUser} user                 The requesting User
+     * @returns {Document[]}                  The created Document instances
+     */
+    get(documentClass: Function, request: object, user: any): Document[];
+    /**
+     * Validate the arguments passed to the get operation
+     * @param {object} request                The requested operation
+     * @param {object} [request.query={}]     A document search query to execute
+     * @param {object} [request.options={}]   Operation options
+     * @param {string} [request.pack]         A Compendium pack identifier
+     * @private
+     */
+    private _getArgs;
+    /**
+     * Get primary Document instances
+     * @protected
+     */
+    protected _getDocuments(
+      documentClass: any,
+      query: any,
+      options: any,
+      user: any,
+    ): Promise<void>;
+    /**
+     * Get embedded Document instances
+     * @protected
+     */
+    protected _getEmbeddedDocuments(
+      documentClass: any,
+      parent: any,
+      query: any,
+      options: any,
+      user: any,
+    ): Promise<void>;
+    /**
+     * Get the parent Document (if any) associated with a request
+     * @param {object} request                The requested operation
+     * @return {Promise<Document|null>}       The parent Document, or null
+     * @private
+     */
+    private _getParent;
+    /**
+     * Perform document creation operations
+     * @param {Function} documentClass        The Document definition
+     * @param {object} request                The requested operation
+     * @param {BaseUser} user                 The requesting User
+     * @returns {Document[]}                  The created Document instances
+     */
+    create(documentClass: Function, request: object, user: any): Document[];
+    /**
+     * Validate the arguments passed to the create operation
+     * @param {object} request                The requested operation
+     * @param {object[]} request.data         An array of document data
+     * @param {object} [request.options={}]   Operation options
+     * @param {string} [request.pack]         A Compendium pack identifier
+     * @private
+     */
+    private _createArgs;
+    /**
+     * Create primary Document instances
+     * @returns {Promise<Document[]>}
+     * @protected
+     */
+    protected _createDocuments(
+      documentClass: any,
+      request: any,
+      user: any,
+    ): Promise<Document[]>;
+    /**
+     * Create embedded Document instances
+     * @returns {Promise<Document[]>}
+     * @protected
+     */
+    protected _createEmbeddedDocuments(
+      documentClass: any,
+      parent: any,
+      request: any,
+      user: any,
+    ): Promise<Document[]>;
+    /**
+     * Perform document update operations
+     * @param {Function} documentClass        The Document definition
+     * @param {object} request                The requested operation
+     * @param {BaseUser} user                 The requesting User
+     * @returns {Document[]}                  The updated Document instances
+     */
+    update(documentClass: Function, request: object, user: any): Document[];
+    /**
+     * Validate the arguments passed to the update operation
+     * @param {object} request                The requested operation
+     * @param {object[]} request.updates      An array of document data
+     * @param {object} [request.options={}]   Operation options
+     * @param {string} [request.pack]         A Compendium pack identifier
+     * @private
+     */
+    private _updateArgs;
+    /**
+     * Update primary Document instances
+     * @returns {Promise<Document[]>}
+     * @protected
+     */
+    protected _updateDocuments(
+      documentClass: any,
+      request: any,
+      user: any,
+    ): Promise<Document[]>;
+    /**
+     * Update embedded Document instances
+     * @returns {Promise<Document[]>}
+     * @protected
+     */
+    protected _updateEmbeddedDocuments(
+      documentClass: any,
+      parent: any,
+      request: any,
+      user: any,
+    ): Promise<Document[]>;
+    /**
+     * Perform document deletion operations
+     * @param {Function} documentClass        The Document definition
+     * @param {object} request                The requested operation
+     * @param {BaseUser} user                 The requesting User
+     * @returns {Document[]}                  The deleted Document instances
+     */
+    delete(documentClass: Function, request: object, user: any): Document[];
+    /**
+     * Validate the arguments passed to the delete operation
+     * @param {object} request                The requested operation
+     * @param {string[]} request.ids          An array of document ids
+     * @param {object} [request.options={}]   Operation options
+     * @param {string} [request.pack]         A Compendium pack identifier
+     * @private
+     */
+    private _deleteArgs;
+    /**
+     * Delete primary Document instances
+     * @returns {Promise<Document[]>}
+     * @protected
+     */
+    protected _deleteDocuments(
+      documentClass: any,
+      request: any,
+      user: any,
+    ): Promise<Document[]>;
+    /**
+     * Delete embedded Document instances
+     * @returns {Promise<Document[]>}
+     * @protected
+     */
+    protected _deleteEmbeddedDocuments(
+      documentClass: any,
+      parent: any,
+      request: any,
+      user: any,
+    ): Promise<Document[]>;
+    /**
+     * Describe the scopes which are suitable as the namespace for a flag key
+     * @returns {string[]}
+     * @protected
+     */
+    protected getFlagScopes(): string[];
+    /**
+     * Describe the scopes which are suitable as the namespace for a flag key
+     * @returns {string[]}
+     * @protected
+     */
+    protected getCompendiumScopes(): string[];
+    /**
+     * Provide the Logger implementation that should be used for database operations
+     * @return {Logger|Console}
+     * @protected
+     */
+    protected _getLogger(): any | Console;
+    /**
+     * Log a database operation for an embedded document, capturing the action taken and relevant IDs
+     * @param {string} action                       The action performed
+     * @param {string} type                         The document type
+     * @param {abstract.Document[]} documents       The documents modified
+     * @param {string} [level=info]                 The logging level
+     * @param {abstract.Document} [parent]          A parent document
+     * @param {string} [pack]                       A compendium pack within which the operation occurred
+     * @protected
+     */
+    protected _logOperation(
+      action: string,
+      type: string,
+      documents: any[],
+      {
+        parent,
+        pack,
+        level,
+      }?: { parent?: unknown; pack?: string; level?: string },
+    ): void;
+    /**
+     * Construct a standardized error message given the context of an attempted operation
+     * @returns {string}
+     * @protected
+     */
+    protected _logError(
+      user: any,
+      action: any,
+      subject: any,
+      {
+        parent,
+        pack,
+      }?: {
+        parent: any;
+        pack: any;
+      },
+    ): string;
+    /**
+     * Determine a string suffix for a log message based on the parent and/or compendium context.
+     * @returns {string}
+     * @private
+     */
+    private _logContext;
+  }
+  import Document from 'common/abstract/document';
+}
 declare module 'common/abstract/module' {
-  export { default as DatabaseBackend } from 'common/abstract/backend';
   export { default as DocumentData } from 'common/abstract/data';
   export { default as Document } from 'common/abstract/document';
+  export { default as DatabaseBackend } from 'common/abstract/backend';
 }
 declare module 'common/data/validators' {
   /**
    * Test whether a string is a valid 16 character UID
-   * @param {string|null} id
+   * @param {string} id
    * @return {boolean}
    */
-  export function isValidId(id: string | null): boolean;
-  /**r
+  export function isValidId(id: string): boolean;
+  /**
    * Test whether a file path has an extension in a list of provided extensions
    * @param {string} path
    * @param {string[]} extensions
@@ -4102,7 +4109,6 @@ declare module 'common/data/data' {
     static defineSchema(): {
       mode: any;
       alpha: any;
-      radius: any;
     };
     constructor(data?: {}, document?: any);
   }
@@ -4830,7 +4836,7 @@ declare module 'common/documents' {
      * @param {boolean} [exact]       Require the role match to be exact
      * @return {boolean}              Does the user have at this role level (or greater)?
      */
-    hasRole(role: string | number, { exact }?: { exact: boolean }): boolean;
+    hasRole(role: string | number, { exact }?: { exact?: boolean }): boolean;
   }
   /**
    * The Wall embedded document model.
@@ -4859,12 +4865,92 @@ declare module 'common/documents' {
   import { Document } from 'common/abstract/module';
   import * as data from 'common/data/data';
 }
+/**
+ * A single point, expressed as an object {x, y}
+ */
+type Point = any;
+/**
+ * A single point, expressed as an array [x,y]
+ */
+type PointArray = number[];
+/**
+ * A Ray intersection point
+ */
+type RayIntersection = {
+  x: number;
+  y: number;
+  t0: number;
+  t1: number;
+};
+/**
+ * A standard rectangle interface.
+ */
+type Rectangle = any;
+type RequestData = any;
+type SocketRequest = {
+  /**
+   * The server-side action being requested
+   */
+  action?: string;
+  /**
+   * The type of object being modified
+   */
+  type?: string;
+  /**
+   * Data applied to the operation
+   */
+  data?: RequestData;
+  /**
+   * A Compendium pack name
+   */
+  pack?: string;
+  /**
+   * The type of parent document
+   */
+  parentType?: string;
+  /**
+   * The ID of a parent document
+   */
+  parentId?: string;
+  /**
+   * Additional options applied to the request
+   */
+  options?: object;
+};
+type SocketResponse = {
+  /**
+   * The initial request
+   */
+  request: SocketRequest;
+  /**
+   * An error, if one occurred
+   */
+  error?: Error;
+  /**
+   * The status of the request
+   */
+  status?: string;
+  /**
+   * The ID of the requesting User
+   */
+  userId?: string;
+  /**
+   * Data returned as a result of the request
+   */
+  data?: RequestData;
+};
 declare module 'common/data/module' {
-  export * from 'common/data/data';
-  export * as fields from 'common/data/fields';
   export * as validators from 'common/data/validators';
+  export * as fields from 'common/data/fields';
+  export * from 'common/data/data';
 }
 declare module 'common/packages' {
+  /**
+   * Checks a package against its availability code to see if it requires a compability warning, and if so, updates the pkg
+   * @param pkg           The package
+   * @private
+   */
+  export function tagPackageAvailability(pkg: any): void;
   /**
    * The data schema used to define World manifest files.
    * Extends the basic PackageData schema with some additional world-specific fields.
@@ -4991,6 +5077,7 @@ declare module 'common/packages' {
       download: any;
       protected: any;
     } & {
+      coreTranslation: any;
       minimumSystemVersion: any;
     };
     constructor(data?: {}, document?: any);
@@ -5061,6 +5148,7 @@ declare module 'common/packages' {
       name: any;
       path: any;
       system: any;
+      module: any;
     };
     /**
      * Validate that a language code is supported as a canonical locale
@@ -5069,6 +5157,7 @@ declare module 'common/packages' {
      */
     static validateLocale(lang: string): boolean;
     constructor(data?: {}, document?: any);
+    name: any;
   }
   /**
    * The data schema used to define a Package manifest.
@@ -5205,89 +5294,15 @@ declare module 'common/utils/semaphore' {
   }
 }
 declare module 'common/utils/module' {
-  export { default as Collection } from 'common/utils/collection';
   export * from 'common/utils/helpers';
+  export { default as Collection } from 'common/utils/collection';
   export { default as Semaphore } from 'common/utils/semaphore';
 }
 declare module 'common/module' {
-  export * as abstract from 'common/abstract/module';
   export * as CONST from 'common/constants';
+  export * as abstract from 'common/abstract/module';
   export * as data from 'common/data/module';
   export * as documents from 'common/documents';
   export * as packages from 'common/packages';
   export * as utils from 'common/utils/module';
 }
-/**
- * A single point, expressed as an object {x, y}
- */
-type Point = any;
-/**
- * A single point, expressed as an array [x,y]
- */
-type PointArray = number[];
-/**
- * A Ray intersection point
- */
-type RayIntersection = {
-  x: number;
-  y: number;
-  t0: number;
-  t1: number;
-};
-/**
- * A standard rectangle interface.
- */
-type Rectangle = any;
-type RequestData = any;
-type SocketRequest = {
-  /**
-   * The server-side action being requested
-   */
-  action?: string;
-  /**
-   * The type of object being modified
-   */
-  type?: string;
-  /**
-   * Data applied to the operation
-   */
-  data?: RequestData;
-  /**
-   * A Compendium pack name
-   */
-  pack?: string;
-  /**
-   * The type of parent document
-   */
-  parentType?: string;
-  /**
-   * The ID of a parent document
-   */
-  parentId?: string;
-  /**
-   * Additional options applied to the request
-   */
-  options?: object;
-};
-type SocketResponse = {
-  /**
-   * The initial request
-   */
-  request: SocketRequest;
-  /**
-   * An error, if one occurred
-   */
-  error?: Error;
-  /**
-   * The status of the request
-   */
-  status?: string;
-  /**
-   * The ID of the requesting User
-   */
-  userId?: string;
-  /**
-   * Data returned as a result of the request
-   */
-  data?: RequestData;
-};
