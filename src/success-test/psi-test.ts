@@ -23,6 +23,7 @@ import { notEmpty } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
 import { clamp, compact, merge, take } from 'remeda';
 import type { SetRequired } from 'type-fest';
+import type { Character } from '../entities/actor/proxies/character';
 import { psiRangeThresholds } from './range-modifiers';
 import { SkillTest, SkillTestInit } from './skill-test';
 import {
@@ -72,12 +73,12 @@ export class PsiTest extends SkillTest {
     const maxTargets = freePush === PsiPush.ExtraTarget ? 2 : 1;
     const attackTargets = new Set(take([...game.user.targets], maxTargets));
     const { token } = this;
-    const targettingSelf = !!token && attackTargets.has(token);
+    const targettingSelf = !!token && attackTargets.has(token.object);
     const targetDistance =
       token && notEmpty(attackTargets)
         ? Math.max(
             ...[...attackTargets].map((target) =>
-              distanceBetweenTokens(token, target),
+              distanceBetweenTokens(token.object, target),
             ),
           )
         : 10;
@@ -135,7 +136,7 @@ export class PsiTest extends SkillTest {
         if (changed.attackTargets && notEmpty(use.attackTargets) && token) {
           use.targetDistance = Math.max(
             ...[...use.attackTargets].map((target) =>
-              distanceBetweenTokens(token, target as Token),
+              distanceBetweenTokens(token.object, target as Token),
             ),
           );
         }
@@ -263,7 +264,7 @@ export class PsiTest extends SkillTest {
   ) {
     if (target.actor?.proxy.type !== ActorType.Character) return null;
     return successTestEffectMap(
-      target.actor.proxy.appliedEffects
+      (target.actor.proxy as Character).appliedEffects
         .getMatchingSuccessTestEffects(matchesSkill(skill)(action), true)
         .map((effect) => ({
           ...effect,

@@ -30,9 +30,8 @@ export const migrateWorld = async () => {
     concat(
       [...game.scenes.values()].flatMap((scene) => {
         const { tokens } = scene.data;
-        return tokens.flatMap((tokenData) => {
-          const token = new Token(tokenData);
-          return token.actor?.isToken ? migrateActor(token.actor) : [];
+        return [...tokens.values()].flatMap((tokenDoc) => {
+          return tokenDoc.actor?.isToken ? migrateActor(tokenDoc.actor) : [];
         });
       }),
     ),
@@ -64,11 +63,12 @@ export const migrateWorld = async () => {
 };
 
 const migrateActor = (actor: ActorEP) => {
-  if (actor.data.type === ActorType.Character) {
+  const data = actor.toJSON();
+  if (data.type === ActorType.Character) {
     const updater = actor.updater as UpdateStore<
       ActorEntity<ActorType.Character>
     >;
-    const epFlags = actor.data.flags[EP.Name] || {};
+    const epFlags = data.flags[EP.Name] || {};
     for (const sleeveType of sleeveTypes) {
       const sleeveData = epFlags[sleeveType];
       if (sleeveData?.type) {
@@ -158,19 +158,19 @@ const migrateExplosiveFlags = (data: ItemEntity<ItemType.Explosive>) => {
   });
 };
 
-const migrateMeleeFlags = (data: ItemEntity<ItemType.MeleeWeapon>) => {
-  const { coating, payload } = data.flags[EP.Name] || {};
-  if (coating || payload) {
-    return produce(data, ({ flags }) => {
-      if (!flags.ep2e) return;
-      flags.ep2e.coating =
-        coating &&
-        pipe(coating[0], baseItemMigration, migrateSubstanceFlags, toTuple);
+// const migrateMeleeFlags = (data: ItemEntity<ItemType.MeleeWeapon>) => {
+//   const { coating, payload } = data.flags[EP.Name] || {};
+//   if (coating || payload) {
+//     return produce(data, ({ flags }) => {
+//       if (!flags.ep2e) return;
+//       flags.ep2e.coating =
+//         coating &&
+//         pipe(coating[0], baseItemMigration, migrateSubstanceFlags, toTuple);
 
-      flags.ep2e.payload =
-        payload &&
-        pipe(payload[0], baseItemMigration, migrateExplosiveFlags, toTuple);
-    });
-  }
-  return null;
-};
+//       flags.ep2e.payload =
+//         payload &&
+//         pipe(payload[0], baseItemMigration, migrateExplosiveFlags, toTuple);
+//     });
+//   }
+//   return null;
+// };

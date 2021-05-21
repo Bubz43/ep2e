@@ -54,16 +54,16 @@ window.addEventListener('drop', setLastPosition, { capture: true });
 
 Hooks.once('init', () => {
   gameSettings = registerEPSettings();
-  CONFIG.Actor.entityClass = ActorEP;
+  CONFIG.Actor.documentClass = ActorEP;
   Actors.unregisterSheet('core', ActorSheet);
   Actors.registerSheet(EP.Name, ActorEPSheet, { makeDefault: true });
 
-  CONFIG.Scene.entityClass = SceneEP;
-  CONFIG.ChatMessage.entityClass = ChatMessageEP;
+  CONFIG.Scene.documentClass = SceneEP;
+  CONFIG.ChatMessage.documentClass = ChatMessageEP;
   CONFIG.ChatMessage.batchSize = 20;
 
-  CONFIG.User.entityClass = UserEP;
-  CONFIG.Item.entityClass = ItemEP;
+  CONFIG.User.documentClass = UserEP;
+  CONFIG.Item.documentClass = ItemEP;
 
   Items.unregisterSheet('core', ItemSheet);
   Items.registerSheet(EP.Name, ItemEPSheet, { makeDefault: true });
@@ -142,7 +142,7 @@ Hooks.once('ready', async () => {
     ({ type, itemIds, ...source }, id, local) => {
       if (local || type !== 'update') return;
 
-      for (const item of findActor(source)?.items || []) {
+      for (const item of findActor(source)?.items.values() || []) {
         if (itemIds.includes(item.id)) item.invalidate();
       }
     },
@@ -272,21 +272,15 @@ Hooks.once('ready', async () => {
     entity: Token,
     hook: 'on',
     event: MutateEvent.Update,
-    callback: (scene, tokenData, change) => {
+    callback: (tokenDoc, change) => {
       const changes = change as PartialDeep<TokenData>;
       if ('actorLink' in changes && changes.actorLink === false) {
-        const actor = game.actors.get(tokenData.actorId);
+        const actorId = tokenDoc.data.actorId;
+        const actor = game.actors.get(actorId);
         if (actor?.sheet.isRendered) {
           console.log('rendered');
           actor.sheet.close();
-          const token = findToken({
-            tokenId: tokenData._id,
-            actorId: tokenData.actorId,
-            sceneId: scene._id,
-          });
-          if (token) {
-            token.actor?.sheet.render(true, { token });
-          }
+          tokenDoc.actor?.sheet.render(true, { token: tokenDoc });
         }
       }
     },
@@ -296,13 +290,10 @@ Hooks.once('ready', async () => {
     entity: Token,
     hook: 'on',
     event: MutateEvent.Delete,
-    callback: (scene, tokenData) => {
-      if (tokenData.actorLink) {
-        const actor = game.actors.get(tokenData.actorId);
-        if (
-          actor?.sheet.isRendered &&
-          actor.sheet._token?.id === tokenData._id
-        ) {
+    callback: (tokenDoc) => {
+      if (tokenDoc.data.actorLink) {
+        const actor = game.actors.get(tokenDoc.data.actorId);
+        if (actor?.sheet.isRendered && actor.sheet._token?.id === tokenDoc.id) {
           actor.sheet.render(true);
         }
       }
@@ -350,8 +341,9 @@ window.addEventListener(
 );
 
 const isItem = (entity: ItemEP | ActorEP): entity is ItemEP => {
-  return (entity as ActorEP)._prepareOwnedItems === undefined;
+  return (entity as ActorEP).itemOperations === undefined;
 };
+
 
 for (const app of [ActorDirectory, ItemDirectory]) {
   applicationHook({

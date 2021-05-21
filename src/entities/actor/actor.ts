@@ -39,7 +39,7 @@ export type ItemOperations = {
 
 export type ActorProxy = Character | Sleeve;
 
-export type MaybeToken = Token | null | undefined;
+export type MaybeToken = TokenDocument | null | undefined;
 
 export type ActorSub = (data: ActorEP | null) => void;
 

@@ -38,6 +38,7 @@ import { arrayOf, notEmpty } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
 import { clamp, compact, intersection, last, merge, take } from 'remeda';
 import type { SetRequired } from 'type-fest';
+import type { Character } from '../entities/actor/proxies/character';
 import { getRangeModifier, getWeaponRange } from './range-modifiers';
 import { SkillTest, SkillTestInit } from './skill-test';
 import {
@@ -145,7 +146,7 @@ export class RangedAttackTest extends SkillTest {
         token && notEmpty(attackTargets)
           ? Math.max(
               ...[...attackTargets].map((target) =>
-                distanceBetweenTokens(token, target),
+                distanceBetweenTokens(token.object, target),
               ),
             )
           : 10,
@@ -255,7 +256,7 @@ export class RangedAttackTest extends SkillTest {
         ) {
           draft.firing.targetDistance = Math.max(
             ...[...draft.firing.attackTargets].map((target) =>
-              distanceBetweenTokens(token, target as Token),
+              distanceBetweenTokens(token.object, target as Token),
             ),
           );
         }
@@ -387,7 +388,7 @@ export class RangedAttackTest extends SkillTest {
   ) {
     if (target.actor?.proxy.type !== ActorType.Character) return null;
     return successTestEffectMap(
-      target.actor.proxy.appliedEffects
+      (target.actor.proxy as Character).appliedEffects
         .getMatchingSuccessTestEffects(matchesSkill(skill)(action), true)
         .map((effect) => ({
           ...effect,

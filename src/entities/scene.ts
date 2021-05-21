@@ -5,7 +5,7 @@ import { UpdateStore } from './update-store';
 
 export class SceneEP extends Scene {
   get sheet() {
-    return super.sheet as EntitySheet | null;
+    return super.sheet as EntitySheet;
   }
   get epFlags() {
     return this.data.flags[EP.Name];

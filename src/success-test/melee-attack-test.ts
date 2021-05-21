@@ -25,6 +25,7 @@ import type { WithUpdate } from '@src/utility/updating';
 import type { WritableDraft } from 'immer/dist/types/types-external';
 import { compact, concat, last, merge, pick, pipe, set } from 'remeda';
 import type { SetRequired } from 'type-fest';
+import type { Character } from '../entities/actor/proxies/character';
 import { SkillTest, SkillTestInit } from './skill-test';
 import {
   createSuccessTestModifier,
@@ -186,7 +187,8 @@ export class MeleeAttackTest extends SkillTest {
       this.modifiers.simple.set(this.reachModifier.id, this.reachModifier);
     }
 
-    this.damageModifierEffects = this.character.appliedEffects.meleeDamageBonuses;
+    this.damageModifierEffects =
+      this.character.appliedEffects.meleeDamageBonuses;
   }
 
   private computeReachAdvantage(
@@ -247,7 +249,7 @@ export class MeleeAttackTest extends SkillTest {
   ) {
     if (target.actor?.proxy.type !== ActorType.Character) return null;
     return successTestEffectMap(
-      target.actor.proxy.appliedEffects
+      (target.actor.proxy as Character).appliedEffects
         .getMatchingSuccessTestEffects(matchesSkill(skill)(action), true)
         .map((effect) => ({
           ...effect,
@@ -266,13 +268,8 @@ export class MeleeAttackTest extends SkillTest {
       damageModifierEffects,
     } = this;
 
-    const {
-      weapon,
-      primaryAttack,
-      charging,
-      attackTarget,
-      ...meleeSettings
-    } = melee;
+    const { weapon, primaryAttack, charging, attackTarget, ...meleeSettings } =
+      melee;
 
     await createMessage({
       data: {
