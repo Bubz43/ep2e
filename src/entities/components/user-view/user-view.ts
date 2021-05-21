@@ -29,7 +29,7 @@ export class UserView extends LitElement {
   }
 
   private openPlayerConfig() {
-    new PlayerConfig(this.user, {}).render(true);
+    new UserConfig(this.user, {}).render(true);
   }
 
   private popoutImage() {

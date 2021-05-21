@@ -1,10 +1,10 @@
 import { localize } from '@src/foundry/localization';
-import { packEntityIs, packIsVisible } from '@src/foundry/misc-helpers';
+import { packIsVisible } from '@src/foundry/misc-helpers';
 import { notEmpty } from '@src/utility/helpers';
 import { compact, filter, flatMap, pipe } from 'remeda';
 import { ItemType, sleeveTypes } from '../entity-types';
 import type { ItemProxy } from '../item/item';
-import { ActorEP } from './actor';
+import type { ActorEP } from './actor';
 import type { Biological } from './proxies/biological';
 import type { Character } from './proxies/character';
 import type { Infomorph } from './proxies/infomorph';
@@ -56,9 +56,9 @@ export const getSleeves = flatMap<ActorEP, Sleeve>(({ proxy }) =>
 
 export const sleevePacks = async () => {
   const packs: { name: string; sleeves: Sleeve[] }[] = [];
-  for (const pack of game.packs) {
-    if (packEntityIs(pack, ActorEP) && packIsVisible(pack)) {
-      const actors = await pack.getContent();
+  for (const pack of game.packs.values()) {
+    if (pack.collection.documentName === 'Actor' && packIsVisible(pack)) {
+      const actors = await pack.collection.getDocuments();
       const sleeves = getSleeves(actors);
       if (notEmpty(sleeves)) packs.push({ name: pack.metadata.label, sleeves });
     }
@@ -69,7 +69,7 @@ export const sleevePacks = async () => {
 export const ownedSleeves = () => {
   return pipe(
     [...game.actors.values()],
-    filter((a) => a.owner),
+    filter((a) => a.isOwner),
     getSleeves,
   );
 };

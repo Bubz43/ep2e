@@ -12,6 +12,7 @@ import { localize } from '@src/foundry/localization';
 import { searchRegExp } from '@src/utility/helpers';
 import { customElement, html, LitElement, state } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
+import type { FoundryDoc } from '../../../foundry/foundry-cont';
 import styles from './compendium-search.scss';
 
 @customElement('compendium-search')
@@ -24,7 +25,7 @@ export class CompendiumSearch extends LitElement {
     return [styles];
   }
 
-  @state() private results: Entity[] = [];
+  @state() private results: (ActorEP | ItemEP)[] = [];
 
   @state() private filter = '';
 
@@ -54,20 +55,23 @@ export class CompendiumSearch extends LitElement {
     this.results = [];
     this.entityRenderer = this.entity;
 
-    const entries: Entity[] = [];
+    const entries: FoundryDoc[] = [];
     const { isGM } = game.user;
     const { world, system } = this.sources;
 
-    for (const pack of game.packs) {
+    for (const pack of game.packs.values()) {
       if (pack.private && !isGM) continue;
       const { entity, package: source } = pack.metadata;
       if (entity === this.entity && (source === 'world' ? world : system)) {
-        const entities = await pack.getContent();
+        const entities = await pack.collection.getDocuments();
         entries.push(...entities);
       }
     }
 
-    this.results = entries.sort((a, b) => a.name.localeCompare(b.name));
+    this.results = entries.sort((a, b) => a.name.localeCompare(b.name)) as (
+      | ActorEP
+      | ItemEP
+    )[];
     this.loading = false;
   }
 
@@ -179,7 +183,7 @@ export class CompendiumSearch extends LitElement {
     return html`
       <wl-list-item
         draggable="true"
-        data-collection=${ifDefined(item.compendium?.collection)}
+        data-collection=${ifDefined(item.compendium?.collection.collection)}
         data-id=${item.id}
         clickable
         @click=${() => item.sheet.render(true)}
@@ -196,7 +200,7 @@ export class CompendiumSearch extends LitElement {
     return html`
       <wl-list-item
         draggable="true"
-        data-collection=${ifDefined(actor.compendium?.collection)}
+        data-collection=${ifDefined(actor.compendium?.collection.collection)}
         data-id=${actor.id}
         clickable
         @click=${() => actor.sheet.render(true)}

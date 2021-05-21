@@ -4,7 +4,6 @@ import {
   TrackedCombatEntity,
   updateCombatState,
 } from '@src/combat/combat-tracker';
-import type { Combatant } from '@src/combat/combatant';
 import {
   closeWindow,
   openWindow,

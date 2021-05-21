@@ -8,7 +8,6 @@ import type { ValuesType } from 'utility-types';
 import { stopEvent } from 'weightless';
 import type { SceneEP } from '../entities/scene';
 import type { CanvasLayers } from './foundry-cont';
-import type PIXI from 'pixi.js';
 
 export type MeasuredTemplateType =
   keyof typeof CONFIG['MeasuredTemplate']['types'];
@@ -61,7 +60,7 @@ export const placeMeasuredTemplate = (
     overlay.faded = true;
 
     const moveTemplate = throttleFn(
-      (ev: PIXI.InteractionEvent) => {
+      (ev: typeof PIXI['InteractionEvent']) => {
         const center = ev.data.getLocalPosition(template.layer);
         const { x, y } = grid.getSnappedPosition(center.x, center.y, 2);
         template.data.x = x;
@@ -103,18 +102,22 @@ export const placeMeasuredTemplate = (
         : ev.key === 'Enter' && createTemplate();
     }
 
-    async function createTemplate(ev?: PIXI.InteractionEvent) {
+    async function createTemplate(ev?: import('pixi.js').InteractionEvent) {
       ev?.stopPropagation();
       cleanup();
-      const savedTemplateData: MeasuredTemplateData | null =
-        await scene.createEmbeddedEntity(MeasuredTemplate.embeddedName, {
-          ...template.data,
-          ...grid.getSnappedPosition(template.x, template.y, 2),
-        });
+      const [savedTemplateData] = await scene.createEmbeddedDocuments(
+        MeasuredTemplate.embeddedName,
+        [
+          {
+            ...template.data,
+            ...grid.getSnappedPosition(template.x, template.y, 2),
+          },
+        ],
+      );
       resolve(
-        savedTemplateData?._id
+        savedTemplateData?.id
           ? {
-              templateId: savedTemplateData._id,
+              templateId: savedTemplateData.id,
               sceneId: scene.data._id,
             }
           : null,
@@ -139,7 +142,7 @@ export const deletePlacedTemplate = (
   const { sceneId, templateId } = ids;
   return game.scenes
     .get(sceneId)
-    ?.deleteEmbeddedEntity(MeasuredTemplate.embeddedName, templateId);
+    ?.deleteEmbeddedDocuments(MeasuredTemplate.embeddedName, [templateId]);
 };
 
 export const editPlacedTemplate = (
@@ -158,10 +161,12 @@ export const updatePlacedTemplate = (
 ) => {
   return game.scenes
     .get(ids.sceneId)
-    ?.updateEmbeddedEntity(MeasuredTemplate.embeddedName, {
-      ...changed,
-      _id: ids.templateId,
-    });
+    ?.updateEmbeddedDocuments(MeasuredTemplate.embeddedName, [
+      {
+        ...changed,
+        _id: ids.templateId,
+      },
+    ]);
 };
 
 export const getNormalizedTokenSize = ({ data }: Token) =>
@@ -207,11 +212,12 @@ export const getVisibleTokensWithinHighlightedTemplate = (
 
 type CanvasProps = {
   scene: SceneEP;
-  stage: PIXI.Application['stage'];
-  dimensions: ReturnType<typeof Canvas['getDimensions']>;
+  stage: import('pixi.js').Application['stage'];
+  // dimensions: ReturnType<typeof Canvas['getDimensions']>;
+  dimensions: { size: number; distance: number };
   hud: HeadsUpDisplay;
   activeLayer: ValuesType<CanvasLayers>;
-  app: PIXI.Application;
+  app: import('pixi.js').Application;
   pan: (location: Partial<Record<'x' | 'y' | 'scale', number>>) => void;
 };
 

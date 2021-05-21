@@ -18,7 +18,7 @@ const findMatch = (ev: Event) => {
 
 const entityLinkHandler = (anchor: JQuery, eventType: string) => {
   if (eventType === 'click')
-    anchor.one('click', TextEditor._onClickEntityLink).trigger('click');
+    anchor.one('click', TextEditor._onClickContentLink).trigger('click');
   else if (eventType === 'mousedown') {
     anchor
       .one('dragstart', TextEditor._onDragEntityLink)

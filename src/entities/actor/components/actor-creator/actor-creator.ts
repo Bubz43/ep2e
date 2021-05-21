@@ -29,7 +29,7 @@ import {
   state,
 } from 'lit-element';
 import { createPipe, flatMapToObj } from 'remeda';
-import { ActorEP } from '../../actor';
+import { createActor } from '../../actor';
 import { createDigimorph } from '../../default-actors';
 import { ownedSleeves, Sleeve } from '../../sleeves';
 import styles from './actor-creator.scss';
@@ -156,7 +156,7 @@ export class ActorCreator extends LitElement {
     folder?: string;
   }) {
     const { renderSheet, actorLink } = this.options;
-    return ActorEP.create(
+    return createActor(
       {
         ...data,
         name: data.name || `${localize('new')} ${localize(data.type)}`,

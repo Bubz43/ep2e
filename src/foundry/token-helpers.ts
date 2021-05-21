@@ -1,5 +1,6 @@
 import { conditionIcons } from '@src/features/conditions';
 import { concat, first, pipe, uniq } from 'remeda';
+import type { ActorEP } from '../entities/actor/actor';
 import { readyCanvas } from './canvas';
 
 export const panToToken = (token: Token) => {
@@ -36,7 +37,9 @@ export const activeTokenStatusEffects = ({ data, actor }: Token) =>
   pipe(
     data.effects ?? [],
     concat(
-      (actor?.conditions ?? []).map((condition) => conditionIcons[condition]),
+      ((actor as ActorEP | undefined)?.conditions ?? []).map(
+        (condition) => conditionIcons[condition],
+      ),
     ),
     uniq(),
   );

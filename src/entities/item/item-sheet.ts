@@ -9,7 +9,7 @@ import type {
   EntitySheet,
   EntitySheetOptions,
 } from '@src/foundry/foundry-cont';
-import { importFromCompendium, userCan } from '@src/foundry/misc-helpers';
+import { userCan } from '@src/foundry/misc-helpers';
 import { debounce } from '@src/utility/decorators';
 import { html } from 'lit-html';
 import { compact } from 'remeda';
@@ -87,7 +87,13 @@ export class ItemEPSheet implements EntitySheet {
     return compact([
       compendium &&
         SlWindow.headerButton({
-          onClick: () => importFromCompendium(compendium, id),
+          onClick: async () => {
+            await this.close();
+            return this.item.collection.importFromCompendium(
+              this.item.compendium,
+              this.item.id,
+            );
+          },
           content: html`<i class="fas fa-download"></i>`,
           disabled: !userCan('ITEM_CREATE'),
         }),

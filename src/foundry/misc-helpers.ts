@@ -5,6 +5,7 @@ import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { ActorEP } from '../entities/actor/actor';
 import { UpdateStore } from '@src/entities/update-store';
 import type { DeepPartial } from 'utility-types';
+import type { FoundryDoc } from './foundry-cont';
 
 export const isGamemaster = () => {
   return (
@@ -35,35 +36,15 @@ const primaryGmIsConnected = () => {
 };
 
 export const canViewActor = (actor: ActorEP) => {
-  return actor.hasPerm(game.user, CONST.ENTITY_PERMISSIONS.OBSERVER);
+  return actor.testUserPermission(game.user, CONST.ENTITY_PERMISSIONS.OBSERVER);
 };
 
-export const userCan = (permission: keyof typeof USER_PERMISSIONS) => {
-  return game.user.can(permission);
+export const userCan = (permission: keyof typeof CONST.USER_PERMISSIONS) => {
+  return game.user.can(permission as string);
 };
-
-export const packEntityIs = <T extends Class<Entity>, E = InstanceType<T>>(
-  pack: Compendium,
-  cls: T,
-): pack is Omit<Compendium, 'getContent' | 'cls'> & {
-  getContent(): Promise<E[]>;
-  cls: T;
-} => pack.cls === cls;
 
 export const packIsVisible = (pack: Compendium) =>
   game.user.isGM || !pack.private;
-
-export const importFromCompendium = (
-  compendium: Compendium,
-  entryId: string,
-) => {
-  compendium.cls.collection.importFromCollection(
-    compendium.collection,
-    entryId,
-    {},
-    { renderSheet: true },
-  );
-};
 
 export const performIntegerSort = <T extends { id: string }>({
   src,
@@ -77,7 +58,7 @@ export const performIntegerSort = <T extends { id: string }>({
   sortBefore: boolean;
 }) => {
   const sorted = SortingHelpers.performIntegerSort(src, {
-    target: (target as unknown) as null,
+    target: target as unknown as null,
     siblings: siblings as never[],
     sortBefore,
     sortKey: 'sort',
@@ -120,22 +101,22 @@ export const updateManyActors = async (actors: ActorEP[]): Promise<unknown> => {
     if (actor.updater.isEmpty) continue;
     if (actor.isToken) {
       const tokenActor = actor as TokenActor;
-      const { scene } = tokenActor.token;
+      const { scene } = tokenActor.token!;
       scene && tokens.set(scene, (tokens.get(scene) || []).concat(tokenActor));
     } else gameActors.push(actor);
   }
 
   return Promise.all(
     map([...tokens], ([scene, tokenActors]) =>
-      scene.updateEmbeddedEntity(
+      scene.updateEmbeddedDocuments(
         'Token',
         pipe(
           tokenActors,
-          filter((tokenActor) => tokenActor.token.scene === scene),
+          filter((tokenActor) => tokenActor.token!.scene === scene),
           map(
             (tokenActor) =>
               new UpdateStore({
-                getData: () => tokenActor.token.data,
+                getData: () => tokenActor.token!.data,
                 isEditable: () => true,
                 setData: (update) => tokenActor.update(update),
               })
@@ -150,7 +131,7 @@ export const updateManyActors = async (actors: ActorEP[]): Promise<unknown> => {
         gameActors,
         map(prop('updater')),
         UpdateStore.prepUpdateMany,
-        (updates) => ActorEP.update(updates),
+        (updates) => ActorEP.updateDocuments(updates),
       ),
     ),
   );

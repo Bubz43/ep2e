@@ -294,15 +294,6 @@ export class ActorEP extends Actor {
     return actorSheets.get(this) || new ActorEPSheet(this);
   }
 
-  static async create<
-    D extends SetRequired<DeepPartial<ActorEntity>, 'type' | 'name'>,
-  >(
-    data: D | D[],
-    options: { temporary?: boolean; renderSheet?: boolean } = {},
-  ) {
-    return super.create(data, options);
-  }
-
   matchRegexp(regex: RegExp) {
     return this.proxy.type === ActorType.Character
       ? this.proxy.matchRegexp(regex)
@@ -310,4 +301,10 @@ export class ActorEP extends Actor {
           regex.test(info),
         );
   }
+}
+
+export async function createActor<
+  D extends SetRequired<DeepPartial<ActorEntity>, 'type' | 'name'>,
+>(data: D, options: { temporary?: boolean; renderSheet?: boolean } = {}) {
+  return Actor.create(data, options) as Promise<ActorEP>;
 }

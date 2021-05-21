@@ -484,7 +484,8 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       activeToken?.isVisible &&
       !activeToken._controlled
     ) {
-      this.hoveredToken = activeToken;
+      this.hoveredToken =
+        activeToken instanceof Token ? activeToken : activeToken.object;
       activeToken?._onHoverIn(ev, {});
     }
   }

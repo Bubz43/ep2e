@@ -69,13 +69,13 @@ export class CustomRollApp extends LitElement {
 
   private async saveToMacro() {
     if (!this.isComplete) return;
-    const macro: Macro = await Macro.create({
+    const macro = (await Macro.create({
       name: this.attackData.source,
       type: 'script',
       command: `window.ep2e.rollCustomAttack(${JSON.stringify(
         this.toAttackInit(),
       )})`,
-    });
+    })) as Macro;
     macro.sheet?.render(true);
   }
 
