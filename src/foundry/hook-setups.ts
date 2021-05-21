@@ -17,7 +17,9 @@ export enum MutateEvent {
 }
 
 export const applicationHook = <
-  T extends Class<Omit<Application, 'render' | 'close' | 'setPosition'>>
+  T extends Class<
+    Omit<Application, 'render' | 'close' | 'setPosition' | '_renderInner'>
+  >,
 >({
   app,
   hook,
@@ -40,10 +42,13 @@ export const mutateEntityHook = <T extends EntityType, E = InstanceType<T>>({
   hook: HookType;
   event: MutateEvent | 'hover';
   callback: (ent: E, more: unknown) => void;
-}) => Hooks[hook](event + entity.entity, cb);
+}) => Hooks[hook](event + entity.documentName, cb);
 
 export const mutatePlaceableHook = <
-  T extends Pick<PlaceableObject, 'uuid' | 'clone' | 'refresh' | '_canHUD'>
+  T extends Pick<
+    PlaceableObject,
+    'uuid' | 'clone' | 'refresh' | '_canHUD' | 'document'
+  >,
 >({
   entity,
   hook,
@@ -54,8 +59,7 @@ export const mutatePlaceableHook = <
   hook: HookType;
   event: MutateEvent;
   callback: (
-    scene: SceneEP,
-    entData: T extends { data: unknown } ? T['data'] : unknown,
+    entData: T extends { document: unknown } ? T['document'] : unknown,
     change: unknown,
   ) => void;
 }) => Hooks[hook](event + entity.name, cb);

@@ -10,10 +10,13 @@ import type { Split } from 'type-fest/utilities';
 import { createTempToken, findToken } from './find-entities';
 import { SceneEP } from './scene';
 
-const tokenSubjects = new Map<`${string}-${string}`, BehaviorSubject<Token>>();
+const tokenSubjects = new Map<
+  `${string}-${string}`,
+  BehaviorSubject<TokenDocument>
+>();
 
-const toKey = (ids: { tokenId: string; sceneId: string }) => {
-  return `${ids.tokenId}-${ids.sceneId}` as const;
+const toKey = (ids: { tokenId: string; sceneId: string | undefined }) => {
+  return `${ids.tokenId}-${ids.sceneId ?? ''}` as const;
 };
 
 const fromKey = <T extends string>(str: T) => {
@@ -22,19 +25,22 @@ const fromKey = <T extends string>(str: T) => {
 
 Hooks.on('canvasReady', () => {
   const scene = readyCanvas()?.scene;
-  scene?.data.tokens.forEach((tokenData) => sceneUpdate(scene, tokenData));
+  scene?.data.tokens.forEach((tokenDoc) => sceneUpdate(tokenDoc));
 });
 
-const sceneUpdate = (scene: SceneEP, tokenData: Readonly<TokenData>) => {
+const sceneUpdate = (tokenDoc: TokenDocument) => {
+  const { scene } = tokenDoc;
   const subject = tokenSubjects.get(
-    toKey({ tokenId: tokenData._id, sceneId: scene.id }),
+    toKey({ tokenId: tokenDoc.id, sceneId: scene?.id }),
   );
-  if (subject) {
+  if (subject && scene) {
     const canvas = readyCanvas();
     const existing =
-      canvas?.scene === scene ? canvas?.tokens.get(tokenData._id) : null;
-    subject.next(existing ?? createTempToken(tokenData, scene));
-  }
+      canvas?.scene === scene
+        ? canvas?.tokens.get(tokenDoc.id)?.document
+        : null;
+    subject.next(existing ?? createTempToken(tokenDoc.data, scene));
+  } // TODO maybe end if not subject
 };
 mutatePlaceableHook({
   entity: Token,
@@ -47,8 +53,8 @@ mutatePlaceableHook({
   entity: Token,
   hook: 'on',
   event: MutateEvent.Delete,
-  callback: (scene, tokenData) => {
-    const key = toKey({ tokenId: tokenData._id, sceneId: scene.id });
+  callback: (tokenDoc) => {
+    const key = toKey({ tokenId: tokenDoc.id, sceneId: tokenDoc.scene?.id });
     const subject = tokenSubjects.get(key);
     if (subject) {
       subject.complete();
@@ -58,7 +64,7 @@ mutatePlaceableHook({
 });
 
 mutateEntityHook({
-  entity: SceneEP,
+  entity: Scene,
   hook: 'on',
   event: MutateEvent.Delete,
   callback: (scene) => {
@@ -74,7 +80,7 @@ mutateEntityHook({
 
 export const subscribeToToken = (
   ids: { tokenId: string; sceneId: string },
-  observer: PartialObserver<Token>,
+  observer: PartialObserver<TokenDocument>,
 ) => {
   const key = toKey(ids);
   let subject = tokenSubjects.get(key);

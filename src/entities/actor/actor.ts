@@ -89,13 +89,12 @@ export class ActorEP extends Actor {
   get updater() {
     if (!this.#updater)
       this.#updater = new UpdateStore({
-        getData: () => this.data,
+        getData: () => this.toJSON(),
         isEditable: () => this.editable,
         setData: (changedData) => this.update(changedData, {}),
       });
     return this.#updater;
   }
-
 
   get editable() {
     // (!this.isToken || this.token?.scene?.id === activeCanvas()?.scene.id)
@@ -134,18 +133,16 @@ export class ActorEP extends Actor {
     if (!this.#itemOperations) {
       this.#itemOperations = {
         add: async (...itemDatas) => {
-          await this.createOwnedItem(itemDatas);
-          const addedIDs = pipe(
-            this.data.items.slice(-itemDatas.length),
-            map(({ _id }) => _id),
-            compact,
+          const itemIDs = new Set(this.data.items.keys());
+          await this.createEmbeddedDocuments('Item', itemDatas);
+          const addedIDs = [...this.data.items.keys()].filter(
+            (id) => !itemIDs.has(id),
           );
           this.emitItemSocket({
             type: 'add',
             itemIds: addedIDs,
           });
           this.invalidated = true;
-
           return addedIDs;
         },
         update: async (...itemDatas) => {
@@ -198,14 +195,6 @@ export class ActorEP extends Actor {
     return !this.isToken && this.data.token.actorLink === false;
   }
 
-  get id() {
-    return this.data._id;
-  }
-
-  get type() {
-    return this.data.type;
-  }
-
   get tokenOrLocalInfo() {
     const token = this.isToken ? this.token : this.getActiveTokens(true)[0];
     return {
@@ -229,7 +218,7 @@ export class ActorEP extends Actor {
   private openForm = () => this.sheet.render(true);
 
   private createProxy(): ActorProxy {
-    const { data } = this;
+    const data = this.toJSON();
 
     switch (data.type) {
       case ActorType.Character:
@@ -251,13 +240,10 @@ export class ActorEP extends Actor {
   ): ActorProxyInit<T> {
     return {
       data,
-      updater: (this.updater as unknown) as UpdateStore<typeof data>,
+      updater: this.updater as unknown as UpdateStore<typeof data>,
       // TODO do this in this._prepareOwnedItems to avoid this additional iteration
       items: new Map(
-        (this.items || new Collection<ItemEP>()).map(({ proxy }) => [
-          proxy.id,
-          proxy,
-        ]),
+        [...(this.items?.values() || [])].map(({ proxy }) => [proxy.id, proxy]),
       ),
       itemOperations: this.itemOperations,
       actor: this,
@@ -293,13 +279,14 @@ export class ActorEP extends Actor {
   }
 
   get conditions() {
-    if (this.data.type === ActorType.Character) {
-      const epFlag = this.data.flags[EP.Name] || {};
+    const data = this.toJSON();
+    if (data.type === ActorType.Character) {
+      const epFlag = data.flags[EP.Name] || {};
       for (const sleeveType of sleeveTypes) {
         const sleeveData = epFlag[sleeveType];
         if (sleeveData) return sleeveData.data.conditions;
       }
-    } else return this.data.data.conditions;
+    } else return data.data.conditions;
     return [];
   }
 
@@ -307,51 +294,8 @@ export class ActorEP extends Actor {
     return actorSheets.get(this) || new ActorEPSheet(this);
   }
 
-  static createTokenActor(baseActor: ActorEP, token: Token) {
-    const actor = super.createTokenActor(baseActor, token);
-    if (!token.scene?.isView) {
-      delete this.collection.tokens[token.id];
-    }
-    return actor;
-  }
-
-  getOwnedItem(id: string | null) {
-    return super.getOwnedItem(id) as ItemEP | null;
-  }
-
-  async createOwnedItem<T extends ItemType>(
-    itemData: SetRequired<DeepPartial<ItemEntity<T>>, 'type' | 'name'>,
-    options?: unknown,
-  ): Promise<ItemEntity<T> | null>;
-
-  async createOwnedItem<
-    T extends SetRequired<DeepPartial<ItemEntity>, 'type' | 'name'>
-  >(itemDatas: T[], options?: unknown): Promise<ItemEntity[] | null>;
-
-  async createOwnedItem<
-    D extends SetRequired<DeepPartial<ItemEntity>, 'name' | 'type'>
-  >(itemData: D | D[], options = {}) {
-    return super.createOwnedItem(itemData, options);
-  }
-
-  // TODO: These types are pretty wonky, look into better solution
-  static async create<T extends ActorType>(
-    data: Omit<
-      SetRequired<Partial<ActorEntity<T>>, 'type' | 'name'>,
-      'data' | 'token'
-    > & { data?: Partial<ActorModels[T]>; token?: Partial<TokenData> },
-    options?: { temporary?: boolean; renderSheet?: boolean },
-  ): Promise<ActorEP>;
-
   static async create<
-    D extends SetRequired<DeepPartial<ActorEntity>, 'type' | 'name'>[]
-  >(
-    data: D,
-    options?: { temporary?: boolean; renderSheet?: boolean },
-  ): Promise<ActorEP[]>;
-
-  static async create<
-    D extends SetRequired<DeepPartial<ActorEntity>, 'type' | 'name'>
+    D extends SetRequired<DeepPartial<ActorEntity>, 'type' | 'name'>,
   >(
     data: D | D[],
     options: { temporary?: boolean; renderSheet?: boolean } = {},

@@ -134,7 +134,8 @@ export class ItemEP extends Item {
   }
 
   private createProxy() {
-    const { data, actor } = this;
+    const { actor } = this;
+    const data = this.toJSON();
     switch (data.type) {
       case ItemType.Trait:
         return new Trait({

@@ -1,3 +1,4 @@
+import type { MessageData } from '@src/chat/message-data';
 import type { Combatant } from '@src/combat/combatant';
 import type { ActorEP } from '@src/entities/actor/actor';
 import type { ChatMessageEP } from '@src/entities/chat-message';

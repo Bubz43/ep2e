@@ -35,6 +35,31 @@ export class ChatMessageEP extends ChatMessage {
     return this.data.flags[EP.Name];
   }
 
+  // toJSON() {
+  //   return super.toJSON() as {
+  //     flags: {
+  //       [EP.Name]?: MessageData;
+  //       core?: { canPopout?: boolean };
+  //     };
+  //     flavor?: string | null;
+  //     blind: boolean;
+  //     whisper: string[];
+  //     speaker: Partial<{
+  //       actor: string | null;
+  //       alias: string | null;
+  //       scene: string | null;
+  //       token: string | null;
+  //     }>;
+  //     content: string;
+  //     roll?: string | null; // RollData;
+  //     user: string;
+  //     type: number;
+  //     timestamp: number;
+  //     _id: string;
+  //     sound: string | null;
+  //   };
+  // }
+
   _onUpdate(...args: any[]) {
     //@ts-ignore
     super._onUpdate(...args);
@@ -99,9 +124,7 @@ export class ChatMessageEP extends ChatMessage {
         core: { canPopout: true },
       },
     };
-    return ChatMessage.create(chatMessageData, {}) as Promise<
-      ChatMessageEP['data']
-    >;
+    return ChatMessage.create(chatMessageData, {}) as Promise<ChatMessageEP>;
   }
 
   setRollDrag(ev: DragEvent) {
