@@ -249,7 +249,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   }
 
   get isLimited() {
-    return this.actor.hasPerm(game.user, 'LIMITED', true);
+    return this.actor.testUserPermission(game.user, 'LIMITED', { exact: true });
   }
 
   @LazyGetter()
@@ -904,7 +904,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   private setupEgo(egoItems: Map<string, ItemProxy>) {
     return new Ego({
       data: this.data,
-      updater: (this.updater as unknown) as UpdateStore<FullEgoData>,
+      updater: this.updater as unknown as UpdateStore<FullEgoData>,
       items: egoItems,
       activeEffects: this._appliedEffects,
       actor: this.actor,

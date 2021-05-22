@@ -260,6 +260,7 @@ declare global {
     id: string;
     uuid: string;
     update(tokenData: DeepPartial<TokenData>, options: unknown): unknown;
+    actor?: ActorEP;
   }
 
   interface Combat {
