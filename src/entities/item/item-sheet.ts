@@ -92,7 +92,9 @@ export class ItemEPSheet implements EntitySheet {
             this.item.collection?.importFromCompendium(
               compendium,
               this.item.id,
-              {},
+              this.item.proxy.nonDefaultImg
+                ? {}
+                : { img: foundry.data.ItemData.DEFAULT_ICON },
               { renderSheet: true },
             );
           },

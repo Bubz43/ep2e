@@ -22,6 +22,7 @@ import { findActor, findToken } from './entities/find-entities';
 import { ItemEP } from './entities/item/item';
 import { ItemEPSheet } from './entities/item/item-sheet';
 import { migrateWorld } from './entities/migration';
+import type { ItemEntity } from './entities/models';
 import { SceneEP } from './entities/scene';
 import { UserEP } from './entities/user';
 import { conditionIcons, ConditionType } from './features/conditions';
@@ -256,6 +257,22 @@ Hooks.once('ready', async () => {
       else actor.getActiveTokens(true, false).forEach((t) => t.drawBars());
     },
   });
+
+  // mutateEntityHook({
+  //   entity: ItemEP,
+  //   hook: 'on',
+  //   event: MutateEvent.PreCreate,
+  //   callback: (item, data) => {
+  //     if (data && typeof data === 'object' && 'img' in data) {
+  //       const { img } = data as { img?: string };
+  //       console.log(img);
+  //       if (img === 'icons/svg/item-bag.svg' || img === CONST.DEFAULT_TOKEN) {
+  //         (data as { img?: string }).img = foundry.data.ItemData.DEFAULT_ICON;
+  //         console.log(data);
+  //       }
+  //     }
+  //   },
+  // });
 
   // document.getElementById("board")?.addEventListener("drop", () => {
   //   const { element } = dragSource();

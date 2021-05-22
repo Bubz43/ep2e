@@ -1,6 +1,6 @@
 import { renderTextInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
-import type { ItemEP } from '@src/entities/item/item';
+import { ItemEP } from '@src/entities/item/item';
 import { setDragDrop } from '@src/foundry/drag-and-drop';
 import type { FoundryDoc } from '@src/foundry/foundry-cont';
 import { localize } from '@src/foundry/localization';
@@ -70,7 +70,9 @@ export class CompendiumList extends LitElement {
             collection?.importFromCompendium(
               this.compendium.collection,
               entryId,
-              {},
+              document instanceof ItemEP && !document.proxy.nonDefaultImg
+                ? { img: foundry.data.ItemData.DEFAULT_ICON }
+                : {},
               { renderSheet: true },
             );
           },
@@ -170,7 +172,11 @@ export class CompendiumList extends LitElement {
           const hidden = !regex.test(finalName);
           // const hidden = "matchRegexp" in entry ? !entry.matchRegexp(regex) :  !entry.matchRegexp(regex);
           if (hidden) return '';
-          const img = typeof entry.img === 'string' ? entry.img : undefined;
+          const img = isItem
+            ? (entry as ItemEP).proxy.nonDefaultImg
+            : typeof entry.img === 'string'
+            ? entry.img
+            : undefined;
           return html`
             <mwc-list-item
               draggable=${canDrag ? 'true' : 'false'}

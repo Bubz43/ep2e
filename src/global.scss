@@ -737,7 +737,8 @@ sl-tooltip {
     &.item {
       img {
         &[src='icons/svg/mystery-man.svg'],
-        &[data-src='icons/svg/mystery-man.svg'] {
+        &[data-src='icons/svg/mystery-man.svg'],
+        &[src='systems/ep2e/build/dist/icons/nested-eclipses.svg'] {
           opacity: 0.1;
         }
       }
