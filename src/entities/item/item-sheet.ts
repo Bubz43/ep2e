@@ -89,9 +89,11 @@ export class ItemEPSheet implements EntitySheet {
         SlWindow.headerButton({
           onClick: async () => {
             await this.close();
-            return this.item.collection.importFromCompendium(
-              this.item.compendium,
+            this.item.collection?.importFromCompendium(
+              compendium,
               this.item.id,
+              {},
+              { renderSheet: true },
             );
           },
           content: html`<i class="fas fa-download"></i>`,

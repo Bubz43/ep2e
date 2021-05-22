@@ -52,11 +52,7 @@ export class EPOverlay extends LitElement {
 
   @property({ type: Boolean, reflect: true }) ready = false;
 
-  @property({ attribute: false }) mainCharacter: MainCharacter | null = null;
-
   @property({ type: Boolean, reflect: true }) faded = false;
-
-  @state() protected tokens: Token[] = [];
 
   @query("slot[name='app-controls']")
   private foundryViewControlBar!: HTMLSlotElement;
@@ -119,43 +115,43 @@ export class EPOverlay extends LitElement {
 
     // window.addEventListener("resize", () => this.confirmPositions());
     // requestAnimationFrame(() => this.confirmPositions());
-    relevantHooks.forEach((hook) => Hooks.on(hook, this.setupControlled));
+    // relevantHooks.forEach((hook) => Hooks.on(hook, this.setupControlled));
   }
 
-  private setupControlled = debounceFn(() => {
-    const controlled = (readyCanvas()?.tokens.controlled || []).sort((a, b) => {
-      const { x: aX, y: aY } = a._validPosition;
-      const { x: bX, y: bY } = b._validPosition;
+  // private setupControlled = debounceFn(() => {
+  //   const controlled = (readyCanvas()?.tokens.controlled || []).sort((a, b) => {
+  //     const { x: aX, y: aY } = a._validPosition;
+  //     const { x: bX, y: bY } = b._validPosition;
 
-      return aY === bY ? aY - bY : aX - bX;
-    });
-    const tokens: Token[] = [];
-    let mainCharacter: MainCharacter | null = null;
-    for (const token of controlled) {
-      const { actor } = token;
-      if (!mainCharacter && actor?.proxy?.type === ActorType.Character) {
-        mainCharacter = {
-          character: actor.proxy,
-          token,
-        };
-      } else {
-        tokens.push(token);
-      }
-    }
-    if (!mainCharacter) {
-      const { character } = game.user;
-      if (character?.proxy.type === ActorType.Character) {
-        mainCharacter = {
-          character: character.proxy,
-          token: first(character.getActiveTokens(true)),
-        };
-      }
-    }
+  //     return aY === bY ? aY - bY : aX - bX;
+  //   });
+  //   const tokens: Token[] = [];
+  //   let mainCharacter: MainCharacter | null = null;
+  //   for (const token of controlled) {
+  //     const { actor } = token;
+  //     if (!mainCharacter && actor?.proxy?.type === ActorType.Character) {
+  //       mainCharacter = {
+  //         character: actor.proxy,
+  //         token,
+  //       };
+  //     } else {
+  //       tokens.push(token);
+  //     }
+  //   }
+  //   if (!mainCharacter) {
+  //     const { character } = game.user;
+  //     if (character?.proxy.type === ActorType.Character) {
+  //       mainCharacter = {
+  //         character: character.proxy,
+  //         token: first(character.getActiveTokens(true)),
+  //       };
+  //     }
+  //   }
 
-    this.tokens = tokens;
-    this.mainCharacter = mainCharacter;
-    this.requestUpdate();
-  }, 1);
+  //   this.tokens = tokens;
+  //   this.mainCharacter = mainCharacter;
+  //   this.requestUpdate();
+  // }, 1);
 
   stealElements() {
     const ids = [
@@ -303,18 +299,7 @@ export class EPOverlay extends LitElement {
   }
 
   render() {
-    const { mainCharacter } = this;
     return html`
-      ${cache(
-        mainCharacter
-          ? html`
-              <!-- <controlled-character
-                .character=${mainCharacter.character}
-                .token=${mainCharacter.token}
-              ></controlled-character> -->
-            `
-          : '',
-      )}
       <div class="singles">
         <world-time-controls></world-time-controls>
       </div>

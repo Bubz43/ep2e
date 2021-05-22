@@ -249,8 +249,8 @@ Hooks.once('ready', async () => {
     hook: 'on',
     event: MutateEvent.Update,
     callback: (actor) => {
-      if (actor.isToken) actor.token?.drawBars();
-      else actor.getActiveTokens(true).forEach((t) => t.drawBars());
+      if (actor.isToken) actor.token?.object.drawBars();
+      else actor.getActiveTokens(true, false).forEach((t) => t.drawBars());
     },
   });
 
@@ -343,7 +343,6 @@ window.addEventListener(
 const isItem = (entity: ItemEP | ActorEP): entity is ItemEP => {
   return (entity as ActorEP).itemOperations === undefined;
 };
-
 
 for (const app of [ActorDirectory, ItemDirectory]) {
   applicationHook({

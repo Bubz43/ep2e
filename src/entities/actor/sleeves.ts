@@ -57,10 +57,10 @@ export const getSleeves = flatMap<ActorEP, Sleeve>(({ proxy }) =>
 export const sleevePacks = async () => {
   const packs: { name: string; sleeves: Sleeve[] }[] = [];
   for (const pack of game.packs.values()) {
-    if (pack.collection.documentName === 'Actor' && packIsVisible(pack)) {
-      const actors = await pack.collection.getDocuments();
+    if (pack.documentName === 'Actor' && packIsVisible(pack)) {
+      const actors = await pack.getDocuments();
       const sleeves = getSleeves(actors);
-      if (notEmpty(sleeves)) packs.push({ name: pack.metadata.label, sleeves });
+      if (notEmpty(sleeves)) packs.push({ name: pack.name, sleeves });
     }
   }
   return packs;

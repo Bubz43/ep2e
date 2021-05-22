@@ -43,7 +43,7 @@ export const userCan = (permission: keyof typeof CONST.USER_PERMISSIONS) => {
   return game.user.can(permission as string);
 };
 
-export const packIsVisible = (pack: Compendium) =>
+export const packIsVisible = (pack: CompendiumCollection) =>
   game.user.isGM || !pack.private;
 
 export const performIntegerSort = <T extends { id: string }>({

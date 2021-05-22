@@ -300,6 +300,17 @@ declare global {
     }>;
   }
 
+  interface CompendiumCollection {
+    metadata: {
+      name: string;
+      label: string;
+      path: string;
+      private: boolean;
+      entity: EntityName;
+      system: string;
+    };
+  }
+
   // interface Document {
   //   // readonly compendium?: Compendium | null;
   //   matchRegexp(regex: RegExp): boolean;
@@ -317,7 +328,7 @@ declare global {
     data: ActorData;
     readonly items: FoundryCollection<ItemEP>;
     readonly effects: FoundryCollection<ActiveEffect>;
-    readonly token?: Token;
+    readonly token?: TokenDocument;
     toJSON(): ActorDatas;
     sheet: EntitySheet;
     collection?: GameCollections['actors'];
@@ -551,10 +562,7 @@ declare global {
     socket: Socket;
     keyboard: KeyboardManager;
     time: GameTime;
-    collections: Map<
-      keyof GameCollections,
-      GameCollections[keyof GameCollections]
-    >;
+    collections: Map<EntityName, GameCollections[keyof GameCollections]>;
     readonly combat: Combat | null;
   };
 

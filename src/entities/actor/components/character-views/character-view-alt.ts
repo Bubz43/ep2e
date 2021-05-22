@@ -295,7 +295,7 @@ export class CharacterViewAlt extends CharacterViewBase {
         : {
             type: DropType.Actor,
             id,
-            pack: compendium?.collection.collection,
+            pack: compendium?.collection,
           },
     );
   }

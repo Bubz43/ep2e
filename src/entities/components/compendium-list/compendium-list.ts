@@ -101,7 +101,7 @@ export class CompendiumList extends LitElement {
     const { collection } = this.compendium;
     const { entryId } = (ev.currentTarget as HTMLElement).dataset;
     setDragDrop(ev, {
-      type: collection.documentName,
+      type: collection.documentName as any, // TODO Better typings on all possible drops
       pack: collection.collection,
       id: entryId as string,
     });

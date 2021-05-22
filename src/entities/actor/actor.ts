@@ -78,10 +78,11 @@ export class ActorEP extends Actor {
   }
 
   get identifiers(): ActorIdentifiers {
+    const token = this.isToken ? this.token : null;
     return {
       actorId: this.id,
-      tokenId: this.isToken && this.token?.id,
-      sceneId: this.isToken && this.token?.scene?.id,
+      tokenId: token?.id,
+      sceneId: token?.scene?.id,
       uuid: this.uuid,
     };
   }
@@ -191,6 +192,10 @@ export class ActorEP extends Actor {
     return this.#subscribers;
   }
 
+  get token() {
+    return super.token as TokenDocument | null;
+  }
+
   get isTokenTemplate() {
     return !this.isToken && this.data.token.actorLink === false;
   }
@@ -241,7 +246,6 @@ export class ActorEP extends Actor {
     return {
       data,
       updater: this.updater as unknown as UpdateStore<typeof data>,
-      // TODO do this in this._prepareOwnedItems to avoid this additional iteration
       items: new Map(
         [...(this.items?.values() || [])].map(({ proxy }) => [proxy.id, proxy]),
       ),
@@ -252,7 +256,7 @@ export class ActorEP extends Actor {
   }
 
   getActiveTokens(linked?: boolean, document?: boolean) {
-    return super.getActiveTokens(linked, document) as Token[];
+    return super.getActiveTokens(linked, document) as (Token | TokenDocument)[];
   }
 
   prepareData() {
