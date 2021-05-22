@@ -136,9 +136,11 @@ export class ActorEPSheet implements EntitySheet {
         SlWindow.headerButton({
           onClick: async () => {
             await this.close();
-            return this.actor.collection.importFromCompendium(
-              this.actor.compendium,
+            this.actor.collection?.importFromCompendium(
+              compendium,
               this.actor.id,
+              {},
+              { renderSheet: true },
             );
           },
           content: html`<i class="fas fa-download"></i>`,
@@ -215,7 +217,6 @@ export class ActorEPSheet implements EntitySheet {
     const token = (this._token ?? this.actor.token)?.object;
     if (token?.scene?.isView && token?.isVisible) {
       const hud = document.getElementById('hud');
-      console.log(hud);
       if (hud) {
         const { w, h, x, y, data } = token;
         const { scale } = data;
@@ -245,7 +246,6 @@ export class ActorEPSheet implements EntitySheet {
   }
 
   render(force: boolean, { token }: { token?: TokenDocument | null } = {}) {
-    console.log(force, token);
     if (!force && !this.isRendered) return this;
 
     if (force) {

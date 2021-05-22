@@ -251,8 +251,8 @@ export class ActorEP extends Actor {
     } as const;
   }
 
-  getActiveTokens(linked?: boolean) {
-    return super.getActiveTokens(linked) as Token[];
+  getActiveTokens(linked?: boolean, document?: boolean) {
+    return super.getActiveTokens(linked, document) as Token[];
   }
 
   prepareData() {

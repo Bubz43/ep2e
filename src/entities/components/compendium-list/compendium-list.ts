@@ -52,6 +52,7 @@ export class CompendiumList extends LitElement {
     if (!entryId) return;
     const entry = this.findEntity(entryId);
     if (!entry) return;
+    console.log(this.compendium, this.compendium.collection);
     openMenu({
       content: [
         {
@@ -65,9 +66,10 @@ export class CompendiumList extends LitElement {
               ).toLocaleUpperCase()}_CREATE`,
             ),
           callback: () => {
-            //@ts-ignore
-            // TODO
-            this.compendium.collection.importFromCompendium(
+            const collection = game.collections.get(
+              this.compendium.collection.documentName,
+            );
+            collection?.importFromCompendium(
               this.compendium.collection,
               entryId,
               {},

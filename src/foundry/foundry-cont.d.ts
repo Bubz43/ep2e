@@ -169,6 +169,12 @@ type Col<T> = Omit<FoundryCollection<T>, 'get'> & {
   [Symbol.iterator](): IterableIterator<T>;
   get(id: string, options?: { strict: Boolean }): T | null;
   render(force: boolean): unknown;
+  importFromCompendium(
+    collection: CompendiumCollection,
+    id: string,
+    dataChanges?: {},
+    options?: { renderSheet: boolean },
+  );
   // readonly _source: DeepReadonly<T['data'][]>;
 };
 
@@ -314,12 +320,14 @@ declare global {
     readonly token?: Token;
     toJSON(): ActorDatas;
     sheet: EntitySheet;
+    collection?: GameCollections['actors'];
   }
 
   interface Item {
     data: ItemData;
     sheet: EntitySheet;
     toJSON(): ItemDatas;
+    collection?: GameCollections['items'];
   }
 
   interface String {
@@ -536,13 +544,17 @@ declare global {
 
   const game: GameCollections & {
     user: UserEP;
-    packs: import('common/utils/module').Collection<Compendium>;
+    packs: FoundryCollection<CompendiumCollection>;
     settings: ClientSettings;
     system: System;
     i18n: Localization;
     socket: Socket;
     keyboard: KeyboardManager;
     time: GameTime;
+    collections: Map<
+      keyof GameCollections,
+      GameCollections[keyof GameCollections]
+    >;
     readonly combat: Combat | null;
   };
 
