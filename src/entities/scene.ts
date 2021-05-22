@@ -16,7 +16,7 @@ export class SceneEP extends Scene {
     return new UpdateStore({
       getData: () => this.data,
       setData: (update) => this.update(update),
-      isEditable: () => this.owner,
+      isEditable: () => this.isOwner,
     });
   }
 

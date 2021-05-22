@@ -182,7 +182,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
   get editable() {
     return (
       game.user.isGM ||
-      (this.actor?.owner ?? this.participant.userId === game.user.id)
+      (this.actor?.isOwner ?? this.participant.userId === game.user.id)
     );
   }
 

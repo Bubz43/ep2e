@@ -76,7 +76,7 @@ export class ItemEP extends Item {
     return new UpdateStore({
       getData: () => this.data,
       isEditable: () =>
-        !!this.owner &&
+        !!this.isOwner &&
         (this.actor ? this.actor.editable : true) &&
         !this.compendium,
       setData: (changedData) =>

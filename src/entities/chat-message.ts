@@ -91,7 +91,7 @@ export class ChatMessageEP extends ChatMessage {
 
   get editable() {
     const { actor } = this;
-    return game.user.isGM || (this.isAuthor && (!actor || actor.owner));
+    return game.user.isGM || (this.isAuthor && (!actor || actor.isOwner));
   }
 
   get actor() {
