@@ -165,12 +165,12 @@ type CombatRoundInfo = {
 
 type FoundryCollection<T> = import('common/utils/module').Collection<T>;
 
-type Col<T> = Omit<FoundryCollection<T>, 'get'> & {
+type Col<T> = FoundryCollection<T> & {
   [Symbol.iterator](): IterableIterator<T>;
-  get(id: string, options?: { strict: Boolean }): T | null;
+  // get(id: string, options?: { strict: Boolean }): T | null;
   render(force: boolean): unknown;
   importFromCompendium(
-    collection: CompendiumCollection,
+    collection: CompendiumCollection, // TODO this could possibly by typed with generic
     id: string,
     dataChanges?: {},
     options?: { renderSheet: boolean },
@@ -195,13 +195,6 @@ type GameCollections = {
   macros: Col<Macro>;
 };
 
-// declare module 'common/abstracts/document' {
-//   interface Document {
-//     matchRegexp(regex: RegExp): boolean;
-//   }
-//   export default Document;
-// }
-
 declare global {
   const PIXI: import('pixi.js');
 
@@ -216,13 +209,6 @@ declare global {
   const CONST: typeof import('common/constants');
 
   const tinymce: TinyMCE;
-
-  // interface Collection<T> {
-  //   find(condition: (entry: T) => boolean): T | null;
-  //   filter(condition: (entry: T) => boolean): T[];
-  //   map<M>(transform: (entry: T) => M): M[];
-  //   reduce<I>(evaluator: (accum: I, entry: T) => I, initial: I): I;
-  // }
 
   interface GridLayer {
     getSnappedPosition(
@@ -285,19 +271,7 @@ declare global {
   }
 
   interface Compendium {
-    readonly private: boolean;
-    readonly locked: boolean;
     collection: CompendiumCollection;
-    readonly metadata: Readonly<{
-      label: string;
-      name: string;
-      // entity: EntityName;
-      entity: string;
-      package: string;
-      absPath: string;
-      path: string;
-      system: string;
-    }>;
   }
 
   interface CompendiumCollection {
@@ -310,11 +284,6 @@ declare global {
       system: string;
     };
   }
-
-  // interface Document {
-  //   // readonly compendium?: Compendium | null;
-  //   matchRegexp(regex: RegExp): boolean;
-  // }
 
   interface ActorData {
     items: FoundryCollection<ItemEP>;

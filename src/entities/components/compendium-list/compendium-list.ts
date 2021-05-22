@@ -30,6 +30,10 @@ export class CompendiumList extends LitElement {
 
   private openedEntities = new Map<string, FoundryDoc>();
 
+  get collection() {
+    return this.compendium.collection;
+  }
+
   disconnectedCallback() {
     this.openedEntities.clear();
     super.disconnectedCallback();
@@ -37,7 +41,7 @@ export class CompendiumList extends LitElement {
 
   firstUpdated() {
     this.addEventListener('drop', (ev) => {
-      if (!this.compendium.locked && this.compendium._canDragDrop('')) {
+      if (!this.collection.locked && this.compendium._canDragDrop('')) {
         this.compendium._onDrop(ev);
       }
     });
@@ -50,21 +54,15 @@ export class CompendiumList extends LitElement {
   private entryMenu(ev: MouseEvent) {
     const { entryId } = (ev.currentTarget as HTMLElement).dataset;
     if (!entryId) return;
-    const entry = this.findEntity(entryId);
-    if (!entry) return;
-    console.log(this.compendium, this.compendium.collection);
+    const document = this.findEntity(entryId);
+    if (!document) return;
     openMenu({
       content: [
         {
           label: game.i18n.localize('COMPENDIUM.ImportEntry'),
           icon: html`<i class="fas fa-download"></i>`,
-          disabled:
-            !game.user.isGM &&
-            !game.user.can(
-              `${(
-                this.compendium.collection.documentName as string
-              ).toLocaleUpperCase()}_CREATE`,
-            ),
+          disabled: () =>
+            !this.collection.documentClass.canUserCreate(game.user),
           callback: () => {
             const collection = game.collections.get(
               this.compendium.collection.documentName,
@@ -80,20 +78,25 @@ export class CompendiumList extends LitElement {
         {
           label: game.i18n.localize('COMPENDIUM.DeleteEntry'),
           icon: html`<i class="fas fa-trash"></i>`,
-          disabled: this.compendium.locked || !game.user.isGM,
-          callback: () => {
+          disabled: this.compendium.collection.locked || !game.user.isGM,
+          callback: async () =>
             Dialog.confirm({
               title: `${game.i18n.localize('COMPENDIUM.DeleteEntry')} ${
-                entry.name
+                document.name
               }`,
-              content: game.i18n.localize('COMPENDIUM.DeleteConfirm'),
-              yes: () => this.compendium.collection.delete(entryId),
-            } as any);
-          },
+              content: `<h4>${game.i18n.localize(
+                'AreYouSure',
+              )}</h4><p>${game.i18n.localize(
+                'COMPENDIUM.DeleteEntryWarning',
+              )}</p>`,
+              yes: () => document.delete(),
+              no: undefined,
+              render: undefined,
+            }),
         },
       ],
       position: ev,
-      header: { heading: entry.name },
+      header: { heading: document.name },
     });
   }
 
@@ -140,9 +143,9 @@ export class CompendiumList extends LitElement {
           html`<label
             ><mwc-icon>search</mwc-icon>${renderTextInput(search, {
               search: true,
-              placeholder: `${
-                this.compendium.collection.documentName
-              } ${localize('search')}`,
+              placeholder: `${this.collection.documentName} ${localize(
+                'search',
+              )}`,
             })}</label
           >`,
       })}
@@ -153,7 +156,7 @@ export class CompendiumList extends LitElement {
   private renderItems() {
     const { content } = this;
 
-    const isItem = this.compendium.collection.documentName === 'Item';
+    const isItem = this.collection.documentName === 'Item';
     const regex = searchRegExp(this.search);
     const canDrag = this.compendium._canDragStart('');
 
