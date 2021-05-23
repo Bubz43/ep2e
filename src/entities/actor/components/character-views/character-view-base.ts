@@ -12,6 +12,7 @@ import {
 } from '@src/foundry/canvas';
 import { DropType, handleDrop, isKnownDrop } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
+import { getTokenPlaceable } from '@src/foundry/token-helpers';
 import { RenderDialogEvent } from '@src/open-dialog';
 import { openMenu } from '@src/open-menu';
 import { debounce } from '@src/utility/decorators';
@@ -123,7 +124,8 @@ export abstract class CharacterViewBase extends LitElement {
   }
 
   protected async placeMovementPreviewTemplate(range: number) {
-    const token = this.token || this.character.actor.getActiveTokens(true)[0];
+    const token = getTokenPlaceable(this.token, this.character.actor);
+
     const center =
       token && token?.scene === readyCanvas()?.scene
         ? token.center

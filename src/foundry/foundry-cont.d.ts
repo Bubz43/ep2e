@@ -18,7 +18,6 @@ import type {
 import type { UserHotbarEntry } from '@src/features/hotbar-entry';
 import type { PrototypeTokenData } from 'common/data/data';
 import type { ActorData, SceneData } from 'common/data/module';
-// import type * as PIXI from 'pixi.js';
 import type { Socket } from 'socket.io';
 import type { TinyMCE } from 'tinymce';
 import type { Class, ConditionalPick, Mutable, ValueOf } from 'type-fest';
@@ -196,7 +195,7 @@ type GameCollections = {
 };
 
 declare global {
-  const PIXI: import('pixi.js');
+  const PIXI: PIXI;
 
   const foundry: {
     documents: typeof import('common/documents');
@@ -232,8 +231,8 @@ declare global {
     y: number;
     actor?: ActorEP | null;
     _validPosition: { x: number; y: number };
-    bars: Record<'bar1' | 'bar2', PIXI.Graphics>;
-    effects: PIXI.Container;
+    bars: Record<'bar1' | 'bar2', import('pixi.js').Graphics>;
+    effects: import('pixi.js').Container;
     update(tokenData: DeepPartial<TokenData>, options: unknown): Promise<Token>;
     _controlled: boolean;
   }
@@ -244,7 +243,7 @@ declare global {
 
   interface PrototypeTokenData extends TokenData {}
 
-  interface TokenDocument {
+  interface TokenDocument extends TokenData {
     scene?: SceneEP;
     data: Readonly<TokenData>;
     name: string;
@@ -408,7 +407,7 @@ declare global {
   }
 
   interface PlaceablesLayer {
-    preview: PIXI.Container | null;
+    preview: import('pixi.js').Container | null;
   }
 
   interface User {

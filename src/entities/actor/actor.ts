@@ -52,8 +52,6 @@ export class ActorEP extends Actor {
   // #identifiers?: ActorIdentifiers;
   #itemOperations?: ItemOperations;
 
-  #path?: EntityPath;
-
   private declare invalidated: boolean;
   private declare hasPrepared: boolean;
   private readonly subs = new Set<ActorSub>();
@@ -194,10 +192,6 @@ export class ActorEP extends Actor {
 
   get token() {
     return super.token as TokenDocument | null;
-  }
-
-  get isTokenTemplate() {
-    return !this.isToken && this.data.token.actorLink === false;
   }
 
   get tokenOrLocalInfo() {

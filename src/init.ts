@@ -252,9 +252,13 @@ Hooks.once('ready', async () => {
     entity: ActorEP,
     hook: 'on',
     event: MutateEvent.Update,
-    callback: (actor) => {
-      if (actor.isToken) actor.token?.object.drawBars();
-      else actor.getActiveTokens(true, false).forEach((t) => t.drawBars());
+    callback: (actor, ...args) => {
+      console.log(args);
+      if (actor.isToken) actor.token?.object.drawEffects();
+      else
+        actor
+          .getActiveTokens(true, false)
+          .forEach((t) => (t as Token).drawEffects());
     },
   });
 

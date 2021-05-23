@@ -56,7 +56,11 @@ export const placeMeasuredTemplate = (
     const controlled =
       originalLayer === tokens ? originalLayer.controlled : null;
 
-    (await template.draw()).layer.activate().preview?.addChild(template);
+    (await template.draw()).layer
+      .activate()
+      .preview?.addChild(
+        template as unknown as import('pixi.js').DisplayObject,
+      );
     overlay.faded = true;
 
     const moveTemplate = throttleFn(
@@ -228,7 +232,7 @@ export const controlledToken = () => {
   return (
     controlled.find((t) => t.actor?.type === ActorType.Character) ??
     controlled[0] ??
-    game.user.character?.getActiveTokens(true)[0]
+    (game.user.character?.getActiveTokens(true, false)[0] as Token | undefined)
   );
 };
 

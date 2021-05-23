@@ -1,6 +1,6 @@
 import { conditionIcons } from '@src/features/conditions';
 import { concat, first, pipe, uniq } from 'remeda';
-import type { ActorEP } from '../entities/actor/actor';
+import type { ActorEP, MaybeToken } from '../entities/actor/actor';
 import { readyCanvas } from './canvas';
 
 export const panToToken = (token: Token) => {
@@ -51,3 +51,13 @@ export const distanceBetweenTokens = (tokenA: Token, tokenB: Token) =>
       Math.abs(tokenA.data.elevation - tokenB.data.elevation),
     ) * 10,
   ) / 10;
+
+export const getTokenPlaceable = (
+  tokenDoc: MaybeToken,
+  actor?: ActorEP | null,
+) => {
+  return (
+    tokenDoc?.object ??
+    (actor?.getActiveTokens(true, false)[0] as undefined | Token)
+  );
+};
