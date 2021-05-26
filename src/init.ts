@@ -252,8 +252,7 @@ Hooks.once('ready', async () => {
     entity: ActorEP,
     hook: 'on',
     event: MutateEvent.Update,
-    callback: (actor, ...args) => {
-      console.log(args);
+    callback: (actor) => {
       if (actor.isToken) actor.token?.object.drawEffects();
       else
         actor

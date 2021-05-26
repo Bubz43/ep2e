@@ -223,7 +223,7 @@ export class ActorCreator extends LitElement {
             .store({
               infosec: { points: 20, specialization },
               interface: { points: 50, specialization },
-              perceive: { points: 20, specialization },
+              perceive: { points: 10, specialization },
               program: { points: 20, specialization },
               research: { points: 20, specialization },
             })
@@ -232,6 +232,15 @@ export class ActorCreator extends LitElement {
               addFeature(
                 createFieldSkillData({
                   field: localize('electronics'),
+                  points: 20,
+                }),
+              ),
+            )
+            .path('data', 'fieldSkills', FieldSkillType.Medicine)
+            .store(
+              addFeature(
+                createFieldSkillData({
+                  field: localize('psychosurgery'),
                   points: 20,
                 }),
               ),
