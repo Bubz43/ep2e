@@ -102,8 +102,6 @@ export class CharacterViewAlt extends CharacterViewBase {
     return [styles];
   }
 
-  @property({ attribute: false }) character!: Character;
-
   @property({ type: Boolean, reflect: true }) compact = false;
 
   @state() private currentTab: CharacterTab = 'combat';

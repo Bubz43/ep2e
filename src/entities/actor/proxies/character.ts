@@ -788,7 +788,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     return this.updater.commit();
   }
 
-  get pools() {
+  get pools(): Pools {
     return this.poolHolder.poolMap;
   }
 
@@ -823,7 +823,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         ).addEffects(this._appliedEffects.getGroup(EffectType.Pool));
   }
 
-  get poolHolder() {
+  get poolHolder(): Character {
     if (this.actor.isToken && this.ego.useThreat) {
       const original = game.actors.get(this.actor.id);
       if (
