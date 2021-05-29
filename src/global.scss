@@ -89,7 +89,11 @@ ep-overlay {
 #av-config,
 #chat,
 #controls,
-.app[id^='permission'] {
+#world-config,
+.user-config,
+.app[id^='permission'],
+.app[id^='playlist-config'],
+.app[id^='track-config'] {
   @include styled-scrollbars;
   @include widgetless-number-inputs;
 
