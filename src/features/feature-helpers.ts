@@ -14,7 +14,7 @@ export type StringID<T extends {}> = T & { id: string };
 
 export const idProp = <T extends { id: string | number }>(item: T) => item.id;
 
-export const stringID = (length = 10) =>
+export const stringID = (length = 16) =>
   range(0, length)
     .map(() => Math.random().toString(36)[2])
     .join('');
@@ -58,12 +58,14 @@ type CreateFn<T extends Feature, R extends keyof T = never> = (
   seed: SetRequired<Partial<T>, R>,
 ) => SetOptional<Required<T>, R>;
 
-export const createFeature = <T extends Feature, R extends keyof T = never>(
-  fn: CreateFn<T, R>,
-  transformer: (feature: Required<T>) => Required<T> = identity,
-) => (seed: SetRequired<Partial<T>, R>) => {
-  return transformer((safeMerge(fn(seed), seed) as unknown) as Required<T>);
-};
+export const createFeature =
+  <T extends Feature, R extends keyof T = never>(
+    fn: CreateFn<T, R>,
+    transformer: (feature: Required<T>) => Required<T> = identity,
+  ) =>
+  (seed: SetRequired<Partial<T>, R>) => {
+    return transformer(safeMerge(fn(seed), seed) as unknown as Required<T>);
+  };
 
 const existingIds = (list: ReadonlyArray<FeatureWithID>) =>
   list.map(({ id }) => id);
@@ -120,7 +122,7 @@ const _updateFeature = <T extends FeatureWithID>(
   const mutable = [...list];
   const index = mutable.findIndex(matchID(update.id));
   index !== -1 &&
-    mutable.splice(index, 1, (safeMerge(list[index]!, update) as unknown) as T);
+    mutable.splice(index, 1, safeMerge(list[index]!, update) as unknown as T);
   return mutable;
 };
 
