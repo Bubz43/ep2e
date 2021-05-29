@@ -162,7 +162,7 @@ export class ActorEP extends Actor {
           this.emitItemSocket({ type: 'remove', itemIds });
           pipe(
             itemIds,
-            flatMap((id) => this.getOwnedItem(id) || []),
+            flatMap((id) => this.items.get(id) || []),
             forEach((item) => {
               if (
                 !(
@@ -177,7 +177,7 @@ export class ActorEP extends Actor {
             }),
           );
 
-          await this.deleteOwnedItem(itemIds);
+          await this.deleteEmbeddedDocuments('Item', itemIds);
           this.invalidated = true;
           return itemIds;
         },
