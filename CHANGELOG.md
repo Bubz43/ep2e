@@ -3,7 +3,7 @@
 ## [0.8] -- Unreleased
 
 - Update to foundry 0.8.x compatibility
-- Fix errorsin default created muse. Perceive from 40 -> 30 and added Medicine: Psychosurgery at 30
+- Fix errors in default created muse. Perceive from 40 -> 30 and added Medicine: Psychosurgery at 30
 
 ## [0.731] - 2021-05-20
 
