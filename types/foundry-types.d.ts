@@ -353,7 +353,185 @@ declare module 'common/constants' {
    * Define the recognized User capabilities which individual Users or role levels may be permitted to perform
    * @type {Object<UserCapability>}
    */
-  export const USER_PERMISSIONS: any;
+  export namespace USER_PERMISSIONS {
+    namespace ACTOR_CREATE {
+      export const label: string;
+      export const hint: string;
+      export const disableGM: boolean;
+      import defaultRole = USER_ROLES.ASSISTANT;
+      export { defaultRole };
+    }
+    namespace BROADCAST_AUDIO {
+      const label_1: string;
+      export { label_1 as label };
+      const hint_1: string;
+      export { hint_1 as hint };
+      const disableGM_1: boolean;
+      export { disableGM_1 as disableGM };
+      import defaultRole_1 = USER_ROLES.TRUSTED;
+      export { defaultRole_1 as defaultRole };
+    }
+    namespace BROADCAST_VIDEO {
+      const label_2: string;
+      export { label_2 as label };
+      const hint_2: string;
+      export { hint_2 as hint };
+      const disableGM_2: boolean;
+      export { disableGM_2 as disableGM };
+      import defaultRole_2 = USER_ROLES.TRUSTED;
+      export { defaultRole_2 as defaultRole };
+    }
+    namespace DRAWING_CREATE {
+      const label_3: string;
+      export { label_3 as label };
+      const hint_3: string;
+      export { hint_3 as hint };
+      const disableGM_3: boolean;
+      export { disableGM_3 as disableGM };
+      import defaultRole_3 = USER_ROLES.TRUSTED;
+      export { defaultRole_3 as defaultRole };
+    }
+    namespace ITEM_CREATE {
+      const label_4: string;
+      export { label_4 as label };
+      const hint_4: string;
+      export { hint_4 as hint };
+      const disableGM_4: boolean;
+      export { disableGM_4 as disableGM };
+      import defaultRole_4 = USER_ROLES.ASSISTANT;
+      export { defaultRole_4 as defaultRole };
+    }
+    namespace FILES_BROWSE {
+      const label_5: string;
+      export { label_5 as label };
+      const hint_5: string;
+      export { hint_5 as hint };
+      const disableGM_5: boolean;
+      export { disableGM_5 as disableGM };
+      import defaultRole_5 = USER_ROLES.TRUSTED;
+      export { defaultRole_5 as defaultRole };
+    }
+    namespace FILES_UPLOAD {
+      const label_6: string;
+      export { label_6 as label };
+      const hint_6: string;
+      export { hint_6 as hint };
+      const disableGM_6: boolean;
+      export { disableGM_6 as disableGM };
+      import defaultRole_6 = USER_ROLES.ASSISTANT;
+      export { defaultRole_6 as defaultRole };
+    }
+    namespace JOURNAL_CREATE {
+      const label_7: string;
+      export { label_7 as label };
+      const hint_7: string;
+      export { hint_7 as hint };
+      const disableGM_7: boolean;
+      export { disableGM_7 as disableGM };
+      import defaultRole_7 = USER_ROLES.TRUSTED;
+      export { defaultRole_7 as defaultRole };
+    }
+    namespace MACRO_SCRIPT {
+      const label_8: string;
+      export { label_8 as label };
+      const hint_8: string;
+      export { hint_8 as hint };
+      const disableGM_8: boolean;
+      export { disableGM_8 as disableGM };
+      import defaultRole_8 = USER_ROLES.PLAYER;
+      export { defaultRole_8 as defaultRole };
+    }
+    namespace MESSAGE_WHISPER {
+      const label_9: string;
+      export { label_9 as label };
+      const hint_9: string;
+      export { hint_9 as hint };
+      const disableGM_9: boolean;
+      export { disableGM_9 as disableGM };
+      import defaultRole_9 = USER_ROLES.PLAYER;
+      export { defaultRole_9 as defaultRole };
+    }
+    namespace NOTE_CREATE {
+      const label_10: string;
+      export { label_10 as label };
+      const hint_10: string;
+      export { hint_10 as hint };
+      const disableGM_10: boolean;
+      export { disableGM_10 as disableGM };
+      import defaultRole_10 = USER_ROLES.TRUSTED;
+      export { defaultRole_10 as defaultRole };
+    }
+    namespace SETTINGS_MODIFY {
+      const label_11: string;
+      export { label_11 as label };
+      const hint_11: string;
+      export { hint_11 as hint };
+      const disableGM_11: boolean;
+      export { disableGM_11 as disableGM };
+      import defaultRole_11 = USER_ROLES.ASSISTANT;
+      export { defaultRole_11 as defaultRole };
+    }
+    namespace SHOW_CURSOR {
+      const label_12: string;
+      export { label_12 as label };
+      const hint_12: string;
+      export { hint_12 as hint };
+      const disableGM_12: boolean;
+      export { disableGM_12 as disableGM };
+      import defaultRole_12 = USER_ROLES.PLAYER;
+      export { defaultRole_12 as defaultRole };
+    }
+    namespace SHOW_RULER {
+      const label_13: string;
+      export { label_13 as label };
+      const hint_13: string;
+      export { hint_13 as hint };
+      const disableGM_13: boolean;
+      export { disableGM_13 as disableGM };
+      import defaultRole_13 = USER_ROLES.PLAYER;
+      export { defaultRole_13 as defaultRole };
+    }
+    namespace TEMPLATE_CREATE {
+      const label_14: string;
+      export { label_14 as label };
+      const hint_14: string;
+      export { hint_14 as hint };
+      const disableGM_14: boolean;
+      export { disableGM_14 as disableGM };
+      import defaultRole_14 = USER_ROLES.PLAYER;
+      export { defaultRole_14 as defaultRole };
+    }
+    namespace TOKEN_CREATE {
+      const label_15: string;
+      export { label_15 as label };
+      const hint_15: string;
+      export { hint_15 as hint };
+      const disableGM_15: boolean;
+      export { disableGM_15 as disableGM };
+      import defaultRole_15 = USER_ROLES.ASSISTANT;
+      export { defaultRole_15 as defaultRole };
+    }
+    namespace TOKEN_CONFIGURE {
+      const label_16: string;
+      export { label_16 as label };
+      const hint_16: string;
+      export { hint_16 as hint };
+      const disableGM_16: boolean;
+      export { disableGM_16 as disableGM };
+      import defaultRole_16 = USER_ROLES.TRUSTED;
+      export { defaultRole_16 as defaultRole };
+    }
+    namespace WALL_DOORS {
+      const label_17: string;
+      export { label_17 as label };
+      const hint_17: string;
+      export { hint_17 as hint };
+      const disableGM_17: boolean;
+      export { disableGM_17 as disableGM };
+      import defaultRole_17 = USER_ROLES.PLAYER;
+      export { defaultRole_17 as defaultRole };
+    }
+  }
   /**
    * The allowed directions of effect that a Wall can have
    * BOTH: The wall collides from both directions
@@ -738,6 +916,9 @@ declare module 'common/abstract/document' {
    * @memberof abstract
    */
   class Document {
+    readonly parent: Document | null;
+    readonly pack?: string | null;
+    readonly data: { _id: string };
     /**
      * Every document must define an object which represents its data schema.
      * This must be a subclass of the DocumentData interface.
@@ -1810,6 +1991,238 @@ declare module 'common/abstract/document' {
     toJSON(): object;
   }
 }
+declare module 'common/abstract/backend' {
+  export default DatabaseBackend;
+  /**
+   * An interface which is required by both client and server-side to provide implementations for document operations.
+   * @abstract
+   * @interface
+   * @memberof abstract
+   */
+  class DatabaseBackend {
+    /**
+     * Retrieve Documents based on provided query parameters
+     * @param {Function} documentClass        The Document definition
+     * @param {object} request                The requested operation
+     * @param {BaseUser} user                 The requesting User
+     * @returns {Document[]}                  The created Document instances
+     */
+    get(documentClass: Function, request: object, user: any): Document[];
+    /**
+     * Validate the arguments passed to the get operation
+     * @param {object} request                The requested operation
+     * @param {object} [request.query={}]     A document search query to execute
+     * @param {object} [request.options={}]   Operation options
+     * @param {string} [request.pack]         A Compendium pack identifier
+     * @private
+     */
+    private _getArgs;
+    /**
+     * Get primary Document instances
+     * @protected
+     */
+    protected _getDocuments(
+      documentClass: any,
+      query: any,
+      options: any,
+      user: any,
+    ): Promise<void>;
+    /**
+     * Get embedded Document instances
+     * @protected
+     */
+    protected _getEmbeddedDocuments(
+      documentClass: any,
+      parent: any,
+      query: any,
+      options: any,
+      user: any,
+    ): Promise<void>;
+    /**
+     * Get the parent Document (if any) associated with a request
+     * @param {object} request                The requested operation
+     * @return {Promise<Document|null>}       The parent Document, or null
+     * @private
+     */
+    private _getParent;
+    /**
+     * Perform document creation operations
+     * @param {Function} documentClass        The Document definition
+     * @param {object} request                The requested operation
+     * @param {BaseUser} user                 The requesting User
+     * @returns {Document[]}                  The created Document instances
+     */
+    create(documentClass: Function, request: object, user: any): Document[];
+    /**
+     * Validate the arguments passed to the create operation
+     * @param {object} request                The requested operation
+     * @param {object[]} request.data         An array of document data
+     * @param {object} [request.options={}]   Operation options
+     * @param {string} [request.pack]         A Compendium pack identifier
+     * @private
+     */
+    private _createArgs;
+    /**
+     * Create primary Document instances
+     * @returns {Promise<Document[]>}
+     * @protected
+     */
+    protected _createDocuments(
+      documentClass: any,
+      request: any,
+      user: any,
+    ): Promise<Document[]>;
+    /**
+     * Create embedded Document instances
+     * @returns {Promise<Document[]>}
+     * @protected
+     */
+    protected _createEmbeddedDocuments(
+      documentClass: any,
+      parent: any,
+      request: any,
+      user: any,
+    ): Promise<Document[]>;
+    /**
+     * Perform document update operations
+     * @param {Function} documentClass        The Document definition
+     * @param {object} request                The requested operation
+     * @param {BaseUser} user                 The requesting User
+     * @returns {Document[]}                  The updated Document instances
+     */
+    update(documentClass: Function, request: object, user: any): Document[];
+    /**
+     * Validate the arguments passed to the update operation
+     * @param {object} request                The requested operation
+     * @param {object[]} request.updates      An array of document data
+     * @param {object} [request.options={}]   Operation options
+     * @param {string} [request.pack]         A Compendium pack identifier
+     * @private
+     */
+    private _updateArgs;
+    /**
+     * Update primary Document instances
+     * @returns {Promise<Document[]>}
+     * @protected
+     */
+    protected _updateDocuments(
+      documentClass: any,
+      request: any,
+      user: any,
+    ): Promise<Document[]>;
+    /**
+     * Update embedded Document instances
+     * @returns {Promise<Document[]>}
+     * @protected
+     */
+    protected _updateEmbeddedDocuments(
+      documentClass: any,
+      parent: any,
+      request: any,
+      user: any,
+    ): Promise<Document[]>;
+    /**
+     * Perform document deletion operations
+     * @param {Function} documentClass        The Document definition
+     * @param {object} request                The requested operation
+     * @param {BaseUser} user                 The requesting User
+     * @returns {Document[]}                  The deleted Document instances
+     */
+    delete(documentClass: Function, request: object, user: any): Document[];
+    /**
+     * Validate the arguments passed to the delete operation
+     * @param {object} request                The requested operation
+     * @param {string[]} request.ids          An array of document ids
+     * @param {object} [request.options={}]   Operation options
+     * @param {string} [request.pack]         A Compendium pack identifier
+     * @private
+     */
+    private _deleteArgs;
+    /**
+     * Delete primary Document instances
+     * @returns {Promise<Document[]>}
+     * @protected
+     */
+    protected _deleteDocuments(
+      documentClass: any,
+      request: any,
+      user: any,
+    ): Promise<Document[]>;
+    /**
+     * Delete embedded Document instances
+     * @returns {Promise<Document[]>}
+     * @protected
+     */
+    protected _deleteEmbeddedDocuments(
+      documentClass: any,
+      parent: any,
+      request: any,
+      user: any,
+    ): Promise<Document[]>;
+    /**
+     * Describe the scopes which are suitable as the namespace for a flag key
+     * @returns {string[]}
+     * @protected
+     */
+    protected getFlagScopes(): string[];
+    /**
+     * Describe the scopes which are suitable as the namespace for a flag key
+     * @returns {string[]}
+     * @protected
+     */
+    protected getCompendiumScopes(): string[];
+    /**
+     * Provide the Logger implementation that should be used for database operations
+     * @return {Logger|Console}
+     * @protected
+     */
+    protected _getLogger(): any | Console;
+    /**
+     * Log a database operation for an embedded document, capturing the action taken and relevant IDs
+     * @param {string} action                       The action performed
+     * @param {string} type                         The document type
+     * @param {abstract.Document[]} documents       The documents modified
+     * @param {string} [level=info]                 The logging level
+     * @param {abstract.Document} [parent]          A parent document
+     * @param {string} [pack]                       A compendium pack within which the operation occurred
+     * @protected
+     */
+    protected _logOperation(
+      action: string,
+      type: string,
+      documents: any[],
+      {
+        parent,
+        pack,
+        level,
+      }?: { parent: unknown; pack: string; level: string },
+    ): void;
+    /**
+     * Construct a standardized error message given the context of an attempted operation
+     * @returns {string}
+     * @protected
+     */
+    protected _logError(
+      user: any,
+      action: any,
+      subject: any,
+      {
+        parent,
+        pack,
+      }?: {
+        parent: any;
+        pack: any;
+      },
+    ): string;
+    /**
+     * Determine a string suffix for a log message based on the parent and/or compendium context.
+     * @returns {string}
+     * @private
+     */
+    private _logContext;
+  }
+  import Document from 'common/abstract/document';
+}
 declare module 'common/utils/collection' {
   export default Collection;
   /**
@@ -1912,7 +2325,7 @@ declare module 'common/abstract/embedded-collection' {
    * @param {object[]} sourceArray      The source data array for the collection in the parent Document data
    * @param {Function} documentClass    The Document class implementation contained by the collection
    */
-  class EmbeddedCollection<T> extends Collection<T> {
+  class EmbeddedCollection<T = {}> extends Collection<T> {
     /**
      * Initialize the EmbeddedCollection object by constructing its contained Document instances
      * @private
@@ -2169,242 +2582,10 @@ declare module 'common/abstract/data' {
   }
   import EmbeddedCollection from 'common/abstract/embedded-collection';
 }
-declare module 'common/abstract/backend' {
-  export default DatabaseBackend;
-  /**
-   * An interface which is required by both client and server-side to provide implementations for document operations.
-   * @abstract
-   * @interface
-   * @memberof abstract
-   */
-  class DatabaseBackend {
-    /**
-     * Retrieve Documents based on provided query parameters
-     * @param {Function} documentClass        The Document definition
-     * @param {object} request                The requested operation
-     * @param {BaseUser} user                 The requesting User
-     * @returns {Document[]}                  The created Document instances
-     */
-    get(documentClass: Function, request: object, user: any): Document[];
-    /**
-     * Validate the arguments passed to the get operation
-     * @param {object} request                The requested operation
-     * @param {object} [request.query={}]     A document search query to execute
-     * @param {object} [request.options={}]   Operation options
-     * @param {string} [request.pack]         A Compendium pack identifier
-     * @private
-     */
-    private _getArgs;
-    /**
-     * Get primary Document instances
-     * @protected
-     */
-    protected _getDocuments(
-      documentClass: any,
-      query: any,
-      options: any,
-      user: any,
-    ): Promise<void>;
-    /**
-     * Get embedded Document instances
-     * @protected
-     */
-    protected _getEmbeddedDocuments(
-      documentClass: any,
-      parent: any,
-      query: any,
-      options: any,
-      user: any,
-    ): Promise<void>;
-    /**
-     * Get the parent Document (if any) associated with a request
-     * @param {object} request                The requested operation
-     * @return {Promise<Document|null>}       The parent Document, or null
-     * @private
-     */
-    private _getParent;
-    /**
-     * Perform document creation operations
-     * @param {Function} documentClass        The Document definition
-     * @param {object} request                The requested operation
-     * @param {BaseUser} user                 The requesting User
-     * @returns {Document[]}                  The created Document instances
-     */
-    create(documentClass: Function, request: object, user: any): Document[];
-    /**
-     * Validate the arguments passed to the create operation
-     * @param {object} request                The requested operation
-     * @param {object[]} request.data         An array of document data
-     * @param {object} [request.options={}]   Operation options
-     * @param {string} [request.pack]         A Compendium pack identifier
-     * @private
-     */
-    private _createArgs;
-    /**
-     * Create primary Document instances
-     * @returns {Promise<Document[]>}
-     * @protected
-     */
-    protected _createDocuments(
-      documentClass: any,
-      request: any,
-      user: any,
-    ): Promise<Document[]>;
-    /**
-     * Create embedded Document instances
-     * @returns {Promise<Document[]>}
-     * @protected
-     */
-    protected _createEmbeddedDocuments(
-      documentClass: any,
-      parent: any,
-      request: any,
-      user: any,
-    ): Promise<Document[]>;
-    /**
-     * Perform document update operations
-     * @param {Function} documentClass        The Document definition
-     * @param {object} request                The requested operation
-     * @param {BaseUser} user                 The requesting User
-     * @returns {Document[]}                  The updated Document instances
-     */
-    update(documentClass: Function, request: object, user: any): Document[];
-    /**
-     * Validate the arguments passed to the update operation
-     * @param {object} request                The requested operation
-     * @param {object[]} request.updates      An array of document data
-     * @param {object} [request.options={}]   Operation options
-     * @param {string} [request.pack]         A Compendium pack identifier
-     * @private
-     */
-    private _updateArgs;
-    /**
-     * Update primary Document instances
-     * @returns {Promise<Document[]>}
-     * @protected
-     */
-    protected _updateDocuments(
-      documentClass: any,
-      request: any,
-      user: any,
-    ): Promise<Document[]>;
-    /**
-     * Update embedded Document instances
-     * @returns {Promise<Document[]>}
-     * @protected
-     */
-    protected _updateEmbeddedDocuments(
-      documentClass: any,
-      parent: any,
-      request: any,
-      user: any,
-    ): Promise<Document[]>;
-    /**
-     * Perform document deletion operations
-     * @param {Function} documentClass        The Document definition
-     * @param {object} request                The requested operation
-     * @param {BaseUser} user                 The requesting User
-     * @returns {Document[]}                  The deleted Document instances
-     */
-    delete(documentClass: Function, request: object, user: any): Document[];
-    /**
-     * Validate the arguments passed to the delete operation
-     * @param {object} request                The requested operation
-     * @param {string[]} request.ids          An array of document ids
-     * @param {object} [request.options={}]   Operation options
-     * @param {string} [request.pack]         A Compendium pack identifier
-     * @private
-     */
-    private _deleteArgs;
-    /**
-     * Delete primary Document instances
-     * @returns {Promise<Document[]>}
-     * @protected
-     */
-    protected _deleteDocuments(
-      documentClass: any,
-      request: any,
-      user: any,
-    ): Promise<Document[]>;
-    /**
-     * Delete embedded Document instances
-     * @returns {Promise<Document[]>}
-     * @protected
-     */
-    protected _deleteEmbeddedDocuments(
-      documentClass: any,
-      parent: any,
-      request: any,
-      user: any,
-    ): Promise<Document[]>;
-    /**
-     * Describe the scopes which are suitable as the namespace for a flag key
-     * @returns {string[]}
-     * @protected
-     */
-    protected getFlagScopes(): string[];
-    /**
-     * Describe the scopes which are suitable as the namespace for a flag key
-     * @returns {string[]}
-     * @protected
-     */
-    protected getCompendiumScopes(): string[];
-    /**
-     * Provide the Logger implementation that should be used for database operations
-     * @return {Logger|Console}
-     * @protected
-     */
-    protected _getLogger(): any | Console;
-    /**
-     * Log a database operation for an embedded document, capturing the action taken and relevant IDs
-     * @param {string} action                       The action performed
-     * @param {string} type                         The document type
-     * @param {abstract.Document[]} documents       The documents modified
-     * @param {string} [level=info]                 The logging level
-     * @param {abstract.Document} [parent]          A parent document
-     * @param {string} [pack]                       A compendium pack within which the operation occurred
-     * @protected
-     */
-    protected _logOperation(
-      action: string,
-      type: string,
-      documents: any[],
-      {
-        parent,
-        pack,
-        level,
-      }?: { parent?: unknown; pack?: string; level?: string },
-    ): void;
-    /**
-     * Construct a standardized error message given the context of an attempted operation
-     * @returns {string}
-     * @protected
-     */
-    protected _logError(
-      user: any,
-      action: any,
-      subject: any,
-      {
-        parent,
-        pack,
-      }?: {
-        parent: any;
-        pack: any;
-      },
-    ): string;
-    /**
-     * Determine a string suffix for a log message based on the parent and/or compendium context.
-     * @returns {string}
-     * @private
-     */
-    private _logContext;
-  }
-  import Document from 'common/abstract/document';
-}
 declare module 'common/abstract/module' {
+  export { default as DatabaseBackend } from 'common/abstract/backend';
   export { default as DocumentData } from 'common/abstract/data';
   export { default as Document } from 'common/abstract/document';
-  export { default as DatabaseBackend } from 'common/abstract/backend';
 }
 declare module 'common/data/validators' {
   /**
@@ -4865,84 +5046,10 @@ declare module 'common/documents' {
   import { Document } from 'common/abstract/module';
   import * as data from 'common/data/data';
 }
-/**
- * A single point, expressed as an object {x, y}
- */
-type Point = any;
-/**
- * A single point, expressed as an array [x,y]
- */
-type PointArray = number[];
-/**
- * A Ray intersection point
- */
-type RayIntersection = {
-  x: number;
-  y: number;
-  t0: number;
-  t1: number;
-};
-/**
- * A standard rectangle interface.
- */
-type Rectangle = any;
-type RequestData = any;
-type SocketRequest = {
-  /**
-   * The server-side action being requested
-   */
-  action?: string;
-  /**
-   * The type of object being modified
-   */
-  type?: string;
-  /**
-   * Data applied to the operation
-   */
-  data?: RequestData;
-  /**
-   * A Compendium pack name
-   */
-  pack?: string;
-  /**
-   * The type of parent document
-   */
-  parentType?: string;
-  /**
-   * The ID of a parent document
-   */
-  parentId?: string;
-  /**
-   * Additional options applied to the request
-   */
-  options?: object;
-};
-type SocketResponse = {
-  /**
-   * The initial request
-   */
-  request: SocketRequest;
-  /**
-   * An error, if one occurred
-   */
-  error?: Error;
-  /**
-   * The status of the request
-   */
-  status?: string;
-  /**
-   * The ID of the requesting User
-   */
-  userId?: string;
-  /**
-   * Data returned as a result of the request
-   */
-  data?: RequestData;
-};
 declare module 'common/data/module' {
-  export * as validators from 'common/data/validators';
-  export * as fields from 'common/data/fields';
   export * from 'common/data/data';
+  export * as fields from 'common/data/fields';
+  export * as validators from 'common/data/validators';
 }
 declare module 'common/packages' {
   /**
@@ -5294,15 +5401,89 @@ declare module 'common/utils/semaphore' {
   }
 }
 declare module 'common/utils/module' {
-  export * from 'common/utils/helpers';
   export { default as Collection } from 'common/utils/collection';
+  export * from 'common/utils/helpers';
   export { default as Semaphore } from 'common/utils/semaphore';
 }
 declare module 'common/module' {
-  export * as CONST from 'common/constants';
   export * as abstract from 'common/abstract/module';
+  export * as CONST from 'common/constants';
   export * as data from 'common/data/module';
   export * as documents from 'common/documents';
   export * as packages from 'common/packages';
   export * as utils from 'common/utils/module';
 }
+/**
+ * A single point, expressed as an object {x, y}
+ */
+type Point = any;
+/**
+ * A single point, expressed as an array [x,y]
+ */
+type PointArray = number[];
+/**
+ * A Ray intersection point
+ */
+type RayIntersection = {
+  x: number;
+  y: number;
+  t0: number;
+  t1: number;
+};
+/**
+ * A standard rectangle interface.
+ */
+type Rectangle = any;
+type RequestData = any;
+type SocketRequest = {
+  /**
+   * The server-side action being requested
+   */
+  action?: string;
+  /**
+   * The type of object being modified
+   */
+  type?: string;
+  /**
+   * Data applied to the operation
+   */
+  data?: RequestData;
+  /**
+   * A Compendium pack name
+   */
+  pack?: string;
+  /**
+   * The type of parent document
+   */
+  parentType?: string;
+  /**
+   * The ID of a parent document
+   */
+  parentId?: string;
+  /**
+   * Additional options applied to the request
+   */
+  options?: object;
+};
+type SocketResponse = {
+  /**
+   * The initial request
+   */
+  request: SocketRequest;
+  /**
+   * An error, if one occurred
+   */
+  error?: Error;
+  /**
+   * The status of the request
+   */
+  status?: string;
+  /**
+   * The ID of the requesting User
+   */
+  userId?: string;
+  /**
+   * Data returned as a result of the request
+   */
+  data?: RequestData;
+};
