@@ -296,7 +296,6 @@ declare global {
     data: ActorData;
     readonly items: FoundryCollection<ItemEP>;
     readonly effects: FoundryCollection<ActiveEffect>;
-    readonly token?: TokenDocument;
     toJSON(): ActorDatas;
     sheet: EntitySheet;
     collection?: GameCollections['actors'];
@@ -496,6 +495,10 @@ declare global {
   interface ActorDirectory {
     readonly entities: ActorEP[];
     readonly folders: Folder[];
+  }
+
+  interface ActorData {
+    _id: string;
   }
 
   export function duplicate<T extends Record<string, unknown>>(

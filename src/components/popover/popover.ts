@@ -173,7 +173,7 @@ export class Popover extends mix(LitElement).with(ListenerSubscription) {
     }
   }
 
-  private get base() {
+  private get base(): Element {
     return this.baseSlot.assignedElements()[0] || this;
   }
 

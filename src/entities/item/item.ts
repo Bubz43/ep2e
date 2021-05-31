@@ -63,8 +63,8 @@ export class ItemEP extends Item {
     this.invalidated = true;
   }
 
-  get actor(): ActorEP | null {
-    return super.actor;
+  get actor() {
+    return super.actor as ActorEP | null;
   }
 
   get subscriptions() {

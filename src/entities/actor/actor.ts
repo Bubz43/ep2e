@@ -190,9 +190,9 @@ export class ActorEP extends Actor {
     return this.#subscribers;
   }
 
-  get token() {
-    return super.token as TokenDocument | null;
-  }
+  // get token() {
+  //   return super.token as TokenDocument | null;
+  // }
 
   get tokenOrLocalInfo() {
     const token = this.isToken ? this.token : this.getActiveTokens(true)[0];
@@ -250,7 +250,7 @@ export class ActorEP extends Actor {
   }
 
   getActiveTokens(linked?: boolean, document?: boolean) {
-    return super.getActiveTokens(linked, document) as (Token | TokenDocument)[];
+    return super.getActiveTokens(linked, document);
   }
 
   prepareData() {
@@ -304,5 +304,5 @@ export class ActorEP extends Actor {
 export async function createActor<
   D extends SetRequired<DeepPartial<ActorEntity>, 'type' | 'name'>,
 >(data: D, options: { temporary?: boolean; renderSheet?: boolean } = {}) {
-  return Actor.create(data, options) as Promise<ActorEP>;
+  return Actor.create(data, options) as unknown as Promise<ActorEP>;
 }
