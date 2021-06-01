@@ -739,6 +739,7 @@ footer {
 .gear-parts {
   max-height: 300px;
   overflow: auto;
+  background: lightv(var(--color-bg-alt), 1.25);
 }
 
 .details {

@@ -14,7 +14,7 @@ import {
   VehicleType,
 } from '@src/data-enums';
 import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisition';
-import { ActorType } from '@src/entities/entity-types';
+import { ActorType, ItemType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
 import { complexityGP } from '@src/features/complexity';
 import { conditionIcons, ConditionType } from '@src/features/conditions';
@@ -1305,21 +1305,42 @@ export class CharacterViewAlt extends CharacterViewBase {
   }
 
   private static gpTotals(
-    items: { fullName: string; cost: { complexity: Complexity } }[],
+    items: {
+      fullName: string;
+      multiplier?: number;
+      cost: { complexity: Complexity };
+    }[],
   ) {
-    return items.reduce(
+    const totals = items.reduce(
       (accum, item) => {
         const gp = complexityGP[item.cost.complexity];
         const gpNumber = parseInt(String(gp));
-        accum.total += gpNumber;
-        accum.parts.push({
-          name: item.fullName,
-          value: `${gp} ${gp === '5+' ? `${localize('as')} 5` : ''}`,
-        });
+        const value = `${gp} ${
+          gp === '5+' ? `${localize('as').toLocaleLowerCase()} ${gpNumber}` : ''
+        }`;
+        if (item.multiplier !== undefined && item.multiplier !== 1) {
+          const total = gpNumber * item.multiplier;
+          accum.total += total;
+          accum.parts.push({
+            name: item.fullName,
+            value: `${item.multiplier} x ${
+              gp === '5+' ? `(${value})` : value
+            } = ${total}`,
+          });
+        } else {
+          accum.total += gpNumber;
+          accum.parts.push({
+            name: item.fullName,
+            value,
+          });
+        }
+
         return accum;
       },
       { total: 0, parts: [] as { name: string; value: string }[] },
     );
+    totals.total = Math.round(totals.total * 1000) / 1000;
+    return totals;
   }
 
   private static renderGearPointParts(
@@ -1348,12 +1369,34 @@ export class CharacterViewAlt extends CharacterViewBase {
         },
       ]);
     const equippedGP = CharacterViewAlt.gpTotals(this.character.equipped);
-    const consumableGP = CharacterViewAlt.gpTotals(this.character.consumables);
+    const consumableGP = CharacterViewAlt.gpTotals(
+      this.character.consumables.map((c) => {
+        const { fullName, cost, quantity } = c;
+        switch (c.type) {
+          case ItemType.Substance:
+          case ItemType.ThrownWeapon: {
+            const { quantityPerCost } = c.epData;
+            const multiplier = quantity / quantityPerCost;
+            return { fullName, cost, multiplier };
+          }
+          case ItemType.Explosive: {
+            const { unitsPerComplexity } = c.epData;
+            const multiplier = quantity / unitsPerComplexity;
+            return { fullName, cost, multiplier };
+          }
+          case ItemType.FirearmAmmo: {
+            const { roundsPerComplexity } = c.epData;
+            const multiplier = quantity / roundsPerComplexity;
+            return { fullName, cost, multiplier };
+          }
+        }
+      }),
+    );
     const stashedGP = CharacterViewAlt.gpTotals(this.character.stashed);
     return html`
       <div class="gear-points">
         <sl-popover
-          placement=${Placement.Right}
+          placement=${Placement.Left}
           openEvent=${OpenEvent.Hover}
           .renderOnDemand=${() =>
             CharacterViewAlt.renderGearPointParts(consumableGP.parts)}
@@ -1368,7 +1411,7 @@ export class CharacterViewAlt extends CharacterViewBase {
           ></sl-popover
         >
         <sl-popover
-          placement=${Placement.Right}
+          placement=${Placement.Left}
           openEvent=${OpenEvent.Hover}
           .renderOnDemand=${() =>
             CharacterViewAlt.renderGearPointParts(equippedGP.parts)}
@@ -1383,7 +1426,7 @@ export class CharacterViewAlt extends CharacterViewBase {
           ></sl-popover
         >
         <sl-popover
-          placement=${Placement.Right}
+          placement=${Placement.Left}
           openEvent=${OpenEvent.Hover}
           .renderOnDemand=${() =>
             CharacterViewAlt.renderGearPointParts(stashedGP.parts)}
