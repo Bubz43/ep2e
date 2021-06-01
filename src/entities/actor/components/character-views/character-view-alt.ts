@@ -15,6 +15,7 @@ import {
 } from '@src/data-enums';
 import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisition';
 import { ActorType, ItemType } from '@src/entities/entity-types';
+import type { ConsumableItem } from '@src/entities/item/item';
 import { ArmorType } from '@src/features/active-armor';
 import { complexityGP } from '@src/features/complexity';
 import { conditionIcons, ConditionType } from '@src/features/conditions';
@@ -1356,6 +1357,26 @@ export class CharacterViewAlt extends CharacterViewBase {
     </ul>`;
   }
 
+  private static consumableGPMultiplier(consumable: ConsumableItem) {
+    const { quantity } = consumable;
+
+    switch (consumable.type) {
+      case ItemType.Substance:
+      case ItemType.ThrownWeapon: {
+        const { quantityPerCost } = consumable.epData;
+        return quantity / quantityPerCost;
+      }
+      case ItemType.Explosive: {
+        const { unitsPerComplexity } = consumable.epData;
+        return quantity / unitsPerComplexity;
+      }
+      case ItemType.FirearmAmmo: {
+        const { roundsPerComplexity } = consumable.epData;
+        return quantity / roundsPerComplexity;
+      }
+    }
+  }
+
   private renderDetails() {
     const { ego, sleeve, psi } = this.character;
     // TODO sleeve details, sex, limbs, reach, acquisition
@@ -1370,29 +1391,23 @@ export class CharacterViewAlt extends CharacterViewBase {
       ]);
     const equippedGP = CharacterViewAlt.gpTotals(this.character.equipped);
     const consumableGP = CharacterViewAlt.gpTotals(
-      this.character.consumables.map((c) => {
-        const { fullName, cost, quantity } = c;
-        switch (c.type) {
-          case ItemType.Substance:
-          case ItemType.ThrownWeapon: {
-            const { quantityPerCost } = c.epData;
-            const multiplier = quantity / quantityPerCost;
-            return { fullName, cost, multiplier };
-          }
-          case ItemType.Explosive: {
-            const { unitsPerComplexity } = c.epData;
-            const multiplier = quantity / unitsPerComplexity;
-            return { fullName, cost, multiplier };
-          }
-          case ItemType.FirearmAmmo: {
-            const { roundsPerComplexity } = c.epData;
-            const multiplier = quantity / roundsPerComplexity;
-            return { fullName, cost, multiplier };
-          }
-        }
-      }),
+      this.character.consumables.map((c) => ({
+        fullName: c.fullName,
+        cost: c.cost,
+        multiplier: CharacterViewAlt.consumableGPMultiplier(c),
+      })),
     );
-    const stashedGP = CharacterViewAlt.gpTotals(this.character.stashed);
+    const stashedGP = CharacterViewAlt.gpTotals(
+      this.character.stashed.map((s) =>
+        'quantity' in s
+          ? {
+              fullName: s.fullName,
+              cost: s.cost,
+              multiplier: CharacterViewAlt.consumableGPMultiplier(s),
+            }
+          : s,
+      ),
+    );
     return html`
       <div class="gear-points">
         <sl-popover
