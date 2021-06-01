@@ -25,20 +25,20 @@ import { closeWindow } from '../window/window-controls';
 import { SlWindowEventName } from '../window/window-options';
 import styles from './ep-overlay.scss';
 
-const relevantHooks = [
-  'updateScene',
-  'deleteScene',
-  'updateToken',
-  'updateUser',
-  'targetToken',
-  'canvasReady',
-  'controlToken',
-  'createToken',
-  'updateActor',
-  'updateOwnedItem',
-  'deleteOwnedItem',
-  'createOwnedItem',
-] as const;
+// const relevantHooks = [
+//   'updateScene',
+//   'deleteScene',
+//   'updateToken',
+//   'updateUser',
+//   'targetToken',
+//   'canvasReady',
+//   'controlToken',
+//   'createToken',
+//   'updateActor',
+//   'updateOwnedItem',
+//   'deleteOwnedItem',
+//   'createOwnedItem',
+// ] as const;
 
 type MainCharacter = { character: Character; token?: Token };
 

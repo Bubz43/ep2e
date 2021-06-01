@@ -145,7 +145,7 @@ export class ActorEP extends Actor {
           return addedIDs;
         },
         update: async (...itemDatas) => {
-          await this.updateOwnedItem(itemDatas);
+          await this.updateEmbeddedDocuments('Item', itemDatas);
 
           const itemIds: string[] = [];
           for (const { _id } of itemDatas) {

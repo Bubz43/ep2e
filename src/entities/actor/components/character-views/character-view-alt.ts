@@ -5,8 +5,9 @@ import {
   TrackedCombatEntity,
   updateCombatState,
 } from '@src/combat/combat-tracker';
-import { Placement } from '@src/components/popover/popover-options';
+import { OpenEvent, Placement } from '@src/components/popover/popover-options';
 import {
+  Complexity,
   enumValues,
   RechargeType,
   ShellType,
@@ -15,6 +16,7 @@ import {
 import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisition';
 import { ActorType } from '@src/entities/entity-types';
 import { ArmorType } from '@src/features/active-armor';
+import { complexityGP } from '@src/features/complexity';
 import { conditionIcons, ConditionType } from '@src/features/conditions';
 import { formatEffect } from '@src/features/effects';
 import {
@@ -1302,6 +1304,37 @@ export class CharacterViewAlt extends CharacterViewBase {
     return html``;
   }
 
+  private static gpTotals(
+    items: { fullName: string; cost: { complexity: Complexity } }[],
+  ) {
+    return items.reduce(
+      (accum, item) => {
+        const gp = complexityGP[item.cost.complexity];
+        const gpNumber = parseInt(String(gp));
+        accum.total += gpNumber;
+        accum.parts.push({
+          name: item.fullName,
+          value: `${gp} ${gp === '5+' ? `${localize('as')} 5` : ''}`,
+        });
+        return accum;
+      },
+      { total: 0, parts: [] as { name: string; value: string }[] },
+    );
+  }
+
+  private static renderGearPointParts(
+    parts: { name: string; value: string }[],
+  ) {
+    return html`<ul class="gear-parts">
+      ${parts.map(
+        ({ name, value }) => html`<wl-list-item>
+          <span>${name}</span>
+          <span slot="after">${value}</span>
+        </wl-list-item>`,
+      )}
+    </ul>`;
+  }
+
   private renderDetails() {
     const { ego, sleeve, psi } = this.character;
     // TODO sleeve details, sex, limbs, reach, acquisition
@@ -1314,7 +1347,57 @@ export class CharacterViewAlt extends CharacterViewBase {
           value: sleeve.prehensileLimbs,
         },
       ]);
+    const equippedGP = CharacterViewAlt.gpTotals(this.character.equipped);
+    const consumableGP = CharacterViewAlt.gpTotals(this.character.consumables);
+    const stashedGP = CharacterViewAlt.gpTotals(this.character.stashed);
     return html`
+      <div class="gear-points">
+        <sl-popover
+          placement=${Placement.Right}
+          openEvent=${OpenEvent.Hover}
+          .renderOnDemand=${() =>
+            CharacterViewAlt.renderGearPointParts(consumableGP.parts)}
+        >
+          <sl-group
+            slot="base"
+            label="${localize('carried')} ${localize('consumable')} ${localize(
+              'SHORT',
+              'gearPoints',
+            )}"
+            >${consumableGP.total}</sl-group
+          ></sl-popover
+        >
+        <sl-popover
+          placement=${Placement.Right}
+          openEvent=${OpenEvent.Hover}
+          .renderOnDemand=${() =>
+            CharacterViewAlt.renderGearPointParts(equippedGP.parts)}
+        >
+          <sl-group
+            slot="base"
+            label="${localize('equipped')} ${localize('gear')} ${localize(
+              'SHORT',
+              'gearPoints',
+            )}"
+            >${equippedGP.total}</sl-group
+          ></sl-popover
+        >
+        <sl-popover
+          placement=${Placement.Right}
+          openEvent=${OpenEvent.Hover}
+          .renderOnDemand=${() =>
+            CharacterViewAlt.renderGearPointParts(stashedGP.parts)}
+        >
+          <sl-group
+            slot="base"
+            label="${localize('stashed')} ${localize('gear')} ${localize(
+              'SHORT',
+              'gearPoints',
+            )}"
+            >${stashedGP.total}</sl-group
+          ></sl-popover
+        >
+      </div>
       <sl-details open summary="${localize('ego')} - ${ego.name}">
         ${notEmpty(ego.details)
           ? html`

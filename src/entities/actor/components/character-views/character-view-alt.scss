@@ -730,6 +730,17 @@ footer {
   }
 }
 
+.gear-points {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.25rem 1rem;
+}
+
+.gear-parts {
+  max-height: 300px;
+  overflow: auto;
+}
+
 .details {
   display: grid;
   column-gap: 0.5rem;
