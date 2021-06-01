@@ -77,7 +77,6 @@ import { ToolTip } from './components/tooltip/tooltip';
 import { ValueStatus } from './components/value-status/value-status';
 import { SlWindow } from './components/window/window';
 import { ActorCreator } from './entities/actor/components/actor-creator/actor-creator';
-import { CharacterView } from './entities/actor/components/character-views/character-view';
 import { CharacterViewAlt } from './entities/actor/components/character-views/character-view-alt';
 import { CharacterViewActiveSubstance } from './entities/actor/components/character-views/components/active-substance/character-view-active-substance';
 import { CharacterViewArmor } from './entities/actor/components/character-views/components/armor/character-view-armor';
@@ -111,7 +110,6 @@ import { CharacterViewRecharge } from './entities/actor/components/character-vie
 import { CharacterViewRechargeCompletion } from './entities/actor/components/character-views/components/recharge/character-view-recharge-completion';
 import { CharacterViewResleeve } from './entities/actor/components/character-views/components/resleeve/character-view-resleeve';
 import { CharacterViewSearch } from './entities/actor/components/character-views/components/search/character-view-search';
-import { CharacterViewSleeve } from './entities/actor/components/character-views/components/sleeve/character-view-sleeve';
 import { CharacterViewSubstances } from './entities/actor/components/character-views/components/substances/character-view-substances';
 import { CharacterViewTestActions } from './entities/actor/components/character-views/components/test-actions/character-view-test-actions';
 import { CharacterViewTime } from './entities/actor/components/character-views/components/time/character-view-time';
@@ -235,11 +233,9 @@ ActorCreator;
 ItemTrash;
 
 // Character
-CharacterView;
 CharacterViewAlt;
 CharacterViewHeader;
 CharacterViewEgo;
-CharacterViewSleeve;
 CharacterViewResleeve;
 CharacterViewSearch;
 CharacterViewRecharge;

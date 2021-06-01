@@ -109,7 +109,7 @@ export class ParticipantSelector extends mix(LitElement).with(
     return html`
       <mwc-list multi>
         ${[...game.actors.values()].map((actor) => {
-          if (!actor.owner) return '';
+          if (!actor.isOwner) return '';
           return html`
             <mwc-check-list-item
               graphic="medium"
@@ -132,7 +132,7 @@ export class ParticipantSelector extends mix(LitElement).with(
     return html`
       <mwc-list multi>
         ${readyCanvas()?.tokens?.placeables.map((token) => {
-          if (!token.owner) return '';
+          if (!token.isOwner) return '';
           return html`
             <mwc-check-list-item
               graphic="medium"

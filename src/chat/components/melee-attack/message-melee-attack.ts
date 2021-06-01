@@ -122,7 +122,7 @@ export class MessageMeleeAttack extends MessageElement {
             explosive: payload.getDataCopy(),
           },
         });
-        const item = message.actor?.items?.get(id);
+        const item = id ? message.actor?.items?.get(id) : null;
         if (item?.proxy.type === ItemType.MeleeWeapon) {
           await item.proxy.removePayload();
         }
@@ -190,13 +190,15 @@ export class MessageMeleeAttack extends MessageElement {
 
     const attack = attacks && (attacks[attackType] || attacks.primary);
 
-    const options = ([
-      'touchOnly',
-      'aggressive',
-      'charging',
-      'extraWeapons',
-      'oneHanded',
-    ] as const).flatMap((key) => (this.meleeAttack[key] ? localize(key) : []));
+    const options = (
+      [
+        'touchOnly',
+        'aggressive',
+        'charging',
+        'extraWeapons',
+        'oneHanded',
+      ] as const
+    ).flatMap((key) => (this.meleeAttack[key] ? localize(key) : []));
 
     if (calledShot) {
       options.push(`${localize('calledShot')}: ${localize(calledShot)}`);

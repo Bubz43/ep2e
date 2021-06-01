@@ -3,6 +3,7 @@ import type { ActorEP } from '@src/entities/actor/actor';
 import type { EntityPath } from '@src/entities/path';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
+import { localImage } from '@src/utility/images';
 import { noop } from 'remeda';
 import type { Mutable } from 'type-fest';
 import type { ItemType } from '../../entity-types';
@@ -90,9 +91,15 @@ export abstract class ItemProxyBase<T extends ItemType> {
     return this.data.img;
   }
 
+  static defaultIcon = localImage('icons/nested-eclipses.svg');
+
   get nonDefaultImg() {
     const { img } = this;
-    return img === CONST.DEFAULT_TOKEN ? undefined : img;
+    return img === CONST.DEFAULT_TOKEN ||
+      img === ItemProxyBase.defaultIcon ||
+      img === 'icons/svg/item-bag.svg'
+      ? undefined
+      : img;
   }
 
   get description() {

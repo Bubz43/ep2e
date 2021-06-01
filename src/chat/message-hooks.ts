@@ -111,7 +111,7 @@ export const onChatMessageRender = (message: ChatMessageEP, j: JQuery) => {
     // TODO add from before header
     const { innerHTML } = content;
     const showContent =
-      !message.roll && innerHTML.trim() !== messageContentPlaceholder;
+      !message.isRoll && innerHTML.trim() !== messageContentPlaceholder;
     render(
       html`
         <message-content .message=${message} .data=${epData}>

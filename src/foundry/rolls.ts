@@ -43,12 +43,14 @@ export const rollLimit = (formula: string, limit: 'max' | 'min') => {
   const rolled = preRolled[limit];
   const existing = rolled.get(formula);
   if (typeof existing === 'number') return existing;
-  const val = new Roll(formula || '0').evaluate({
+  const roll = new Roll(formula || '0').evaluate({
     maximize: limit === 'max',
     minimize: limit === 'min',
-  }).total;
-  rolled.set(formula, val);
-  return val;
+    async: false,
+  });
+  const total = (roll as Roll).total as number;
+  rolled.set(formula, total);
+  return total;
 };
 
 export const averageRoll = (formula: string) => {
@@ -63,7 +65,7 @@ export const rollFormula = (
 ) => {
   let roll: Roll | null = null;
   try {
-    roll = new Roll(formula, data).roll();
+    roll = new Roll(formula, data).roll() as Roll;
   } catch (err) {
     // console.log(err);
   }

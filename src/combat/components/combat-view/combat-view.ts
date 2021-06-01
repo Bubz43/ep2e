@@ -278,7 +278,10 @@ export class CombatView extends LitElement {
     const { players } = game.users;
     const participants = this.participants.filter((participant) => {
       const { actor } = getParticipantEntities(participant);
-      return !actor || !players.some((user) => actor.hasPerm(user, 'OWNER'));
+      return (
+        !actor ||
+        !players.some((user) => actor.testUserPermission(user, 'OWNER'))
+      );
     });
     const payload: { id: string; initiative: number }[] = [];
     for (const participant of participants) {

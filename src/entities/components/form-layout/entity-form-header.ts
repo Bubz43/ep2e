@@ -1,5 +1,7 @@
 import { renderTextInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
+import { enumValues } from '@src/data-enums';
+import { ActorType } from '@src/entities/entity-types';
 import type { EntityPath } from '@src/entities/path';
 import type { UpdateActions } from '@src/entities/update-store';
 import { closeImagePicker, openImagePicker } from '@src/foundry/foundry-apps';
@@ -11,7 +13,10 @@ import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, LitElement, property } from 'lit-element';
 import styles from './entity-form-header.scss';
 
-type CommonInfo = { name: string; img: string };
+const isItem = (type: string) =>
+  !(enumValues(ActorType) as string[]).includes(type);
+
+type CommonInfo = { name: string; img: string; type: string };
 
 /**
  * @slot tag
@@ -38,8 +43,6 @@ export class EntityFormHeader extends LitElement {
   @property({ type: Boolean }) noDefaultImg = false;
 
   @property({ type: Boolean }) disabled = false;
-
-  @property({ attribute: false }) entityPath?: EntityPath;
 
   async connectedCallback() {
     super.connectedCallback();
@@ -77,11 +80,31 @@ export class EntityFormHeader extends LitElement {
     return renderTextInput(name);
   };
 
+  private openResetMenu(ev: MouseEvent) {
+    openMenu({
+      content: [
+        {
+          label: `${localize(this.noDefaultImg ? 'clear' : 'reset')} ${localize(
+            'image',
+          )}`,
+          icon: html`<mwc-icon>clear</mwc-icon>`,
+          callback: () =>
+            this.updateImage(
+              isItem(this.updateActions.originalValue().type)
+                ? foundry.data.ItemData.DEFAULT_ICON
+                : CONST.DEFAULT_TOKEN,
+            ),
+        },
+      ],
+      position: ev,
+    });
+  }
+
   render() {
-    const { name, img } = this.updateActions.originalValue();
+    const { name, img, type } = this.updateActions.originalValue();
 
     return html`
-      ${this.renderIcon({ name, img })}
+      ${this.renderIcon({ name, img, type })}
       ${renderAutoForm({
         disabled: this.disabled,
         props: { name },
@@ -97,40 +120,14 @@ export class EntityFormHeader extends LitElement {
         ${this.type} ${this.disabled ? html`<mwc-icon>lock</mwc-icon>` : ''}
       </div>
       <slot name="settings"></slot>
-      ${notEmpty(this.entityPath)
-        ? html`
-            <div class="path">
-              ${this.entityPath.map(
-                (part, index, list) => html`
-                  <span>${part.name}</span>
-                  ${index < list.length - 1
-                    ? html`<mwc-icon>chevron_right</mwc-icon>`
-                    : ''}
-                `,
-              )}
-            </div>
-          `
-        : ''}
     `;
   }
 
-  private openResetMenu(ev: MouseEvent) {
-    openMenu({
-      content: [
-        {
-          label: `${localize(this.noDefaultImg ? 'clear' : 'reset')} ${localize(
-            'image',
-          )}`,
-          icon: html`<mwc-icon>clear</mwc-icon>`,
-          callback: () => this.updateImage(CONST.DEFAULT_TOKEN),
-        },
-      ],
-      position: ev,
-    });
-  }
-
-  private renderIcon({ name, img }: CommonInfo) {
-    const hideImg = this.noDefaultImg && img === CONST.DEFAULT_TOKEN;
+  private renderIcon({ name, img, type }: CommonInfo) {
+    const hideImg =
+      this.noDefaultImg &&
+      (img === CONST.DEFAULT_TOKEN ||
+        (isItem(type) && img === foundry.data.ItemData.DEFAULT_ICON));
     if (hideImg && this.disabled) return '';
     return hideImg
       ? html`<mwc-icon-button

@@ -59,7 +59,8 @@ class Base extends ItemProxyBase<ItemType.PhysicalTech> {
 }
 export class PhysicalTech
   extends mix(Base).with(Purchasable, Gear, Equippable, Copyable)
-  implements ObtainableEffects {
+  implements ObtainableEffects
+{
   private static aliItemWindows = new WeakMap<Function, Map<string, {}>>();
 
   private static aliItemInstances = new WeakMap<
@@ -401,7 +402,10 @@ export class PhysicalTech
     }
   }
 
-  get fabricatedItem() {
+  get fabricatedItem():
+    | Extract<ItemProxy, { cost: unknown }>
+    | undefined
+    | null {
     return this.fabricatorType === FabType.Gland
       ? this.glandedSubstance
       : this.fabricatorType

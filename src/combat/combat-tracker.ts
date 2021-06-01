@@ -1,5 +1,6 @@
 import { createMessage, MessageVisibility } from '@src/chat/create-message';
 import { PoolType } from '@src/data-enums';
+import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { ActorType } from '@src/entities/entity-types';
 import { findActor, findToken } from '@src/entities/find-entities';
 import {
@@ -156,7 +157,9 @@ export const rollParticipantInitiative = async (
   })),
 });
 
-export const getParticipantEntities = (data: CombatParticipantData) => {
+export const getParticipantEntities = (
+  data: CombatParticipantData,
+): { token: MaybeToken; actor: ActorEP | null | undefined } => {
   const token =
     data.entityIdentifiers?.type === TrackedCombatEntity.Token
       ? findToken(data.entityIdentifiers)

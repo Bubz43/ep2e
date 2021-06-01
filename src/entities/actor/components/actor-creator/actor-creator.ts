@@ -29,7 +29,7 @@ import {
   state,
 } from 'lit-element';
 import { createPipe, flatMapToObj } from 'remeda';
-import { ActorEP } from '../../actor';
+import { createActor } from '../../actor';
 import { createDigimorph } from '../../default-actors';
 import { ownedSleeves, Sleeve } from '../../sleeves';
 import styles from './actor-creator.scss';
@@ -156,7 +156,7 @@ export class ActorCreator extends LitElement {
     folder?: string;
   }) {
     const { renderSheet, actorLink } = this.options;
-    return ActorEP.create(
+    return createActor(
       {
         ...data,
         name: data.name || `${localize('new')} ${localize(data.type)}`,
@@ -223,7 +223,7 @@ export class ActorCreator extends LitElement {
             .store({
               infosec: { points: 20, specialization },
               interface: { points: 50, specialization },
-              perceive: { points: 20, specialization },
+              perceive: { points: 10, specialization },
               program: { points: 20, specialization },
               research: { points: 20, specialization },
             })
@@ -232,6 +232,15 @@ export class ActorCreator extends LitElement {
               addFeature(
                 createFieldSkillData({
                   field: localize('electronics'),
+                  points: 20,
+                }),
+              ),
+            )
+            .path('data', 'fieldSkills', FieldSkillType.Medicine)
+            .store(
+              addFeature(
+                createFieldSkillData({
+                  field: localize('psychosurgery'),
                   points: 20,
                 }),
               ),

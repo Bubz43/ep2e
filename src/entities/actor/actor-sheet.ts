@@ -10,7 +10,7 @@ import {
 import { readyCanvas } from '@src/foundry/canvas';
 import type { EntitySheet } from '@src/foundry/foundry-cont';
 import { localize } from '@src/foundry/localization';
-import { importFromCompendium, userCan } from '@src/foundry/misc-helpers';
+import { userCan } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import { openMenu } from '@src/open-menu';
 import { debounce } from '@src/utility/decorators';
@@ -27,7 +27,7 @@ import { renderCharacterView, renderSleeveForm } from './actor-views';
 export const actorSheets = new WeakMap<ActorEP, ActorEPSheet>();
 
 export class ActorEPSheet implements EntitySheet {
-  _token?: Token | null;
+  _token?: TokenDocument | null; // TODO this is actually TokenDoc
   declare token: unknown | null;
   private actorUnsub?: (() => void) | null;
 
@@ -124,7 +124,7 @@ export class ActorEPSheet implements EntitySheet {
         onClick: this.configureToken,
         disabled:
           this.disableTokenConfig ||
-          !(this.actor.owner && userCan('TOKEN_CONFIGURE')),
+          !(this.actor.isOwner && userCan('TOKEN_CONFIGURE')),
         content: html`
           <i class="fas fa-user-circle"></i> ${this._token
             ? 'Token'
@@ -134,7 +134,15 @@ export class ActorEPSheet implements EntitySheet {
 
       compendium &&
         SlWindow.headerButton({
-          onClick: () => importFromCompendium(compendium, id),
+          onClick: async () => {
+            await this.close();
+            this.actor.collection?.importFromCompendium(
+              compendium,
+              this.actor.id,
+              {},
+              { renderSheet: true },
+            );
+          },
           content: html`<i class="fas fa-download"></i>`,
           disabled: !userCan('ACTOR_CREATE'),
         }),
@@ -166,19 +174,13 @@ export class ActorEPSheet implements EntitySheet {
     });
   };
 
-  private get actorToken() {
-    return this._token || this.actor.token;
-  }
-
   private configureToken = (ev: Event) => {
     if (ev.currentTarget instanceof HTMLElement) {
       const { top, left } = ev.currentTarget.getBoundingClientRect();
-      console.log(this.actorToken);
-      new TokenConfig(this.actorToken || new Token(this.actor.data.token), {
+      new TokenConfig(this._token ?? this.actor, {
         left,
         top: top + 10,
-        configureDefault: !this.actorToken,
-      }).render(true);
+      }).render(true, {});
     }
   };
 
@@ -212,7 +214,7 @@ export class ActorEPSheet implements EntitySheet {
 
   getAdjacentEl() {
     const { actor } = this;
-    const token = this._token || this.actor.token;
+    const token = (this._token ?? this.actor.token)?.object;
     if (token?.scene?.isView && token?.isVisible) {
       const hud = document.getElementById('hud');
       if (hud) {
@@ -243,7 +245,7 @@ export class ActorEPSheet implements EntitySheet {
       .find((el) => !!el.offsetParent);
   }
 
-  render(force: boolean, { token }: { token?: Token | null } = {}) {
+  render(force: boolean, { token }: { token?: TokenDocument | null } = {}) {
     if (!force && !this.isRendered) return this;
 
     if (force) {

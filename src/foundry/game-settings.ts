@@ -33,7 +33,7 @@ const registerSystemSetting = <T extends NonFunction>(
       window.dispatchEvent(
         new CustomEvent(eventKey, { detail: updatedSetting }),
       );
-      onChange?.(updatedSetting);
+      onChange?.(updatedSetting as T);
     },
   });
 
@@ -99,8 +99,7 @@ export const registerEPSettings = once(() => {
     {
       name: `${EP.LocalizationNamespace}.glitchOnMeshWounds`,
       scope: 'world',
-      hint:
-        'Apply optional cumulative 10% change to suffer glitch per mesh wound.',
+      hint: 'Apply optional cumulative 10% change to suffer glitch per mesh wound.',
       config: true,
       default: false,
       type: Boolean,

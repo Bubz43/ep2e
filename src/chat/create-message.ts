@@ -34,7 +34,7 @@ export type MessageInit = Partial<{
   roll: Roll;
   flavor: string;
   alias: string;
-  entity: Token | ActorEP | ActorProxy | null;
+  entity: Token | ActorEP | ActorProxy | null | TokenDocument;
 }>;
 
 export const messageContentPlaceholder = '_';
@@ -42,7 +42,12 @@ export const messageContentPlaceholder = '_';
 const splitEntity = (entity: MessageInit['entity']) => {
   return {
     actor: entity instanceof ActorEP ? entity : entity?.actor,
-    token: entity instanceof Token ? entity : null,
+    token:
+      entity instanceof Token
+        ? entity
+        : entity instanceof TokenDocument
+        ? entity.object
+        : null,
   };
 };
 
@@ -78,8 +83,9 @@ export const createMessage = async ({
     whisper:
       visibility === MessageVisibility.Self
         ? [game.user.id]
-        : visibility !== MessageVisibility.Public &&
-          ChatMessage.getWhisperRecipients('GM'),
+        : visibility !== MessageVisibility.Public
+        ? ChatMessage.getWhisperRecipients('GM').map((i) => i.id)
+        : undefined,
   };
   if ('dice3d' in game) {
     const successTestRoll =
@@ -117,5 +123,5 @@ export const createMessage = async ({
     }
   }
 
-  return ChatMessage.create(chatMessageData, {});
+  return ChatMessage.create(chatMessageData, {}) as Promise<ChatMessageEP>;
 };

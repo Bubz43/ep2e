@@ -88,7 +88,12 @@ ep-overlay {
 #permission,
 #av-config,
 #chat,
-#controls {
+#controls,
+#world-config,
+.user-config,
+.app[id^='permission'],
+.app[id^='playlist-config'],
+.app[id^='track-config'] {
   @include styled-scrollbars;
   @include widgetless-number-inputs;
 
@@ -737,7 +742,8 @@ sl-tooltip {
     &.item {
       img {
         &[src='icons/svg/mystery-man.svg'],
-        &[data-src='icons/svg/mystery-man.svg'] {
+        &[data-src='icons/svg/mystery-man.svg'],
+        &[src='systems/ep2e/build/dist/icons/nested-eclipses.svg'] {
           opacity: 0.1;
         }
       }

@@ -30,6 +30,7 @@ import { arrayOf } from '@src/utility/helpers';
 import type { WithUpdate } from '@src/utility/updating';
 import { compact, concat, last, merge, pipe } from 'remeda';
 import type { SetRequired } from 'type-fest';
+import type { Character } from '../entities/actor/proxies/character';
 import { applyGravityToWeaponRange, getRangeModifier } from './range-modifiers';
 import { SkillTest, SkillTestInit } from './skill-test';
 import {
@@ -99,7 +100,7 @@ export class ThrownAttackTest extends SkillTest {
       ),
       targetDistance:
         attackTarget && this.token
-          ? Math.ceil(distanceBetweenTokens(this.token, attackTarget))
+          ? Math.ceil(distanceBetweenTokens(this.token.object, attackTarget))
           : 10,
       primaryAttack,
       weapon,
@@ -146,7 +147,7 @@ export class ThrownAttackTest extends SkillTest {
             draft.throwing.attackTarget && this.token
               ? Math.ceil(
                   distanceBetweenTokens(
-                    this.token,
+                    this.token.object,
                     draft.throwing.attackTarget as Token,
                   ),
                 )
@@ -240,7 +241,7 @@ export class ThrownAttackTest extends SkillTest {
   ) {
     if (target.actor?.proxy.type !== ActorType.Character) return null;
     return successTestEffectMap(
-      target.actor.proxy.appliedEffects
+      (target.actor.proxy as Character).appliedEffects
         .getMatchingSuccessTestEffects(matchesSkill(skill)(action), true)
         .map((effect) => ({
           ...effect,

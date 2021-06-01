@@ -11,8 +11,7 @@
   color: var(--color-text);
   grid-template-areas:
     'avatar form form form'
-    'avatar tags type settings'
-    'path path path path';
+    'avatar tags type settings';
   // gap: 0 0.5rem;
   grid-template-columns: min-content 1fr auto auto;
   align-items: center;
@@ -36,14 +35,6 @@ slot[name='settings'] {
   display: block;
   --mdc-icon-button-size: 1.75rem;
   --mdc-icon-size: 1.5rem;
-}
-
-.path {
-  grid-area: path;
-  margin-top: -0.2rem;
-  color: var(--color-text-lighter);
-  display: flex;
-  align-items: center;
 }
 
 .type {

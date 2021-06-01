@@ -5,16 +5,19 @@ import {
   TrackedCombatEntity,
   updateCombatState,
 } from '@src/combat/combat-tracker';
-import { Placement } from '@src/components/popover/popover-options';
+import { OpenEvent, Placement } from '@src/components/popover/popover-options';
 import {
+  Complexity,
   enumValues,
   RechargeType,
   ShellType,
   VehicleType,
 } from '@src/data-enums';
 import { morphAcquisitionDetails } from '@src/entities/components/sleeve-acquisition';
-import { ActorType } from '@src/entities/entity-types';
+import { ActorType, ItemType } from '@src/entities/entity-types';
+import type { ConsumableItem } from '@src/entities/item/item';
 import { ArmorType } from '@src/features/active-armor';
+import { complexityGP } from '@src/features/complexity';
 import { conditionIcons, ConditionType } from '@src/features/conditions';
 import { formatEffect } from '@src/features/effects';
 import {
@@ -101,8 +104,6 @@ export class CharacterViewAlt extends CharacterViewBase {
   static get styles() {
     return [styles];
   }
-
-  @property({ attribute: false }) character!: Character;
 
   @property({ type: Boolean, reflect: true }) compact = false;
 
@@ -1304,6 +1305,78 @@ export class CharacterViewAlt extends CharacterViewBase {
     return html``;
   }
 
+  private static gpTotals(
+    items: {
+      fullName: string;
+      multiplier?: number;
+      cost: { complexity: Complexity };
+    }[],
+  ) {
+    const totals = items.reduce(
+      (accum, item) => {
+        const gp = complexityGP[item.cost.complexity];
+        const gpNumber = parseInt(String(gp));
+        const value = `${gp} ${
+          gp === '5+' ? `${localize('as').toLocaleLowerCase()} ${gpNumber}` : ''
+        }`;
+        if (item.multiplier !== undefined && item.multiplier !== 1) {
+          const total = gpNumber * item.multiplier;
+          accum.total += total;
+          accum.parts.push({
+            name: item.fullName,
+            value: `${item.multiplier} x ${
+              gp === '5+' ? `(${value})` : value
+            } = ${total}`,
+          });
+        } else {
+          accum.total += gpNumber;
+          accum.parts.push({
+            name: item.fullName,
+            value,
+          });
+        }
+
+        return accum;
+      },
+      { total: 0, parts: [] as { name: string; value: string }[] },
+    );
+    totals.total = Math.round(totals.total * 1000) / 1000;
+    return totals;
+  }
+
+  private static renderGearPointParts(
+    parts: { name: string; value: string }[],
+  ) {
+    return html`<ul class="gear-parts">
+      ${parts.map(
+        ({ name, value }) => html`<wl-list-item>
+          <span>${name}</span>
+          <span slot="after">${value}</span>
+        </wl-list-item>`,
+      )}
+    </ul>`;
+  }
+
+  private static consumableGPMultiplier(consumable: ConsumableItem) {
+    const { quantity } = consumable;
+
+    switch (consumable.type) {
+      case ItemType.Substance:
+      case ItemType.ThrownWeapon: {
+        const { quantityPerCost } = consumable.epData;
+        return quantity / quantityPerCost;
+      }
+      case ItemType.Explosive: {
+        const { unitsPerComplexity } = consumable.epData;
+        return quantity / unitsPerComplexity;
+      }
+      case ItemType.FirearmAmmo: {
+        const { roundsPerComplexity } = consumable.epData;
+        return quantity / roundsPerComplexity;
+      }
+    }
+  }
+
   private renderDetails() {
     const { ego, sleeve, psi } = this.character;
     // TODO sleeve details, sex, limbs, reach, acquisition
@@ -1316,7 +1389,73 @@ export class CharacterViewAlt extends CharacterViewBase {
           value: sleeve.prehensileLimbs,
         },
       ]);
+    const equippedGP = CharacterViewAlt.gpTotals(this.character.equipped);
+    const consumableGP = CharacterViewAlt.gpTotals(
+      this.character.consumables.map((c) => ({
+        fullName: c.fullName,
+        cost: c.cost,
+        multiplier: CharacterViewAlt.consumableGPMultiplier(c),
+      })),
+    );
+    const stashedGP = CharacterViewAlt.gpTotals(
+      this.character.stashed.map((s) =>
+        'quantity' in s
+          ? {
+              fullName: s.fullName,
+              cost: s.cost,
+              multiplier: CharacterViewAlt.consumableGPMultiplier(s),
+            }
+          : s,
+      ),
+    );
     return html`
+      <div class="gear-points">
+        <sl-popover
+          placement=${Placement.Left}
+          openEvent=${OpenEvent.Hover}
+          .renderOnDemand=${() =>
+            CharacterViewAlt.renderGearPointParts(consumableGP.parts)}
+        >
+          <sl-group
+            slot="base"
+            label="${localize('carried')} ${localize('consumable')} ${localize(
+              'SHORT',
+              'gearPoints',
+            )}"
+            >${consumableGP.total}</sl-group
+          ></sl-popover
+        >
+        <sl-popover
+          placement=${Placement.Left}
+          openEvent=${OpenEvent.Hover}
+          .renderOnDemand=${() =>
+            CharacterViewAlt.renderGearPointParts(equippedGP.parts)}
+        >
+          <sl-group
+            slot="base"
+            label="${localize('equipped')} ${localize('gear')} ${localize(
+              'SHORT',
+              'gearPoints',
+            )}"
+            >${equippedGP.total}</sl-group
+          ></sl-popover
+        >
+        <sl-popover
+          placement=${Placement.Left}
+          openEvent=${OpenEvent.Hover}
+          .renderOnDemand=${() =>
+            CharacterViewAlt.renderGearPointParts(stashedGP.parts)}
+        >
+          <sl-group
+            slot="base"
+            label="${localize('stashed')} ${localize('gear')} ${localize(
+              'SHORT',
+              'gearPoints',
+            )}"
+            >${stashedGP.total}</sl-group
+          ></sl-popover
+        >
+      </div>
       <sl-details open summary="${localize('ego')} - ${ego.name}">
         ${notEmpty(ego.details)
           ? html`

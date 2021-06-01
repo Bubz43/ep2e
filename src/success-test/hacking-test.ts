@@ -93,7 +93,7 @@ export class HackingTest extends SkillTest {
   ) {
     if (target.actor?.proxy.type !== ActorType.Character) return null;
     return successTestEffectMap(
-      target.actor.proxy.appliedEffects
+      (target.actor.proxy as Character).appliedEffects
         .getMatchingSuccessTestEffects(matchesSkill(skill)(action), true)
         .map((effect) => ({
           ...effect,

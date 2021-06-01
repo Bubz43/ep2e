@@ -18,7 +18,7 @@ export type ActorIdentifiers = {
 };
 
 export const createTempToken = (tokenData: TokenData, scene: SceneEP) => {
-  return new Token(tokenData, scene);
+  return new TokenDocument(tokenData, { parent: scene });
 };
 
 export const findActor = (ids: ActorIdentifiers) => {
@@ -27,7 +27,7 @@ export const findActor = (ids: ActorIdentifiers) => {
       return game.actors.tokens[ids.tokenId];
     }
     const token = findToken(ids);
-    return token && (token.actor || Actor.fromToken(token));
+    return token?.actor as ActorEP | null;
   }
   return ids.actorId ? game.actors.get(ids.actorId) : null;
 };
@@ -39,10 +39,10 @@ export const findToken = ({ actorId, tokenId, sceneId }: ActorIdentifiers) => {
       scene?.id === sceneId &&
       (actorId ? data.actorId === actorId : true),
   );
-  if (token) return token;
+  if (token) return token.document;
   const scene = sceneId && game.scenes.get(sceneId);
-  if (scene) {
-    const tokenData = scene.data.tokens.find((t) => t._id === tokenId);
+  if (scene && tokenId) {
+    const tokenData = scene.data.tokens.get(tokenId)?.data;
     if (tokenData) return createTempToken(tokenData, scene);
   }
   return;

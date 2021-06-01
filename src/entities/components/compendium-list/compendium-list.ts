@@ -1,15 +1,15 @@
 import { renderTextInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
-import type { ItemEP } from '@src/entities/item/item';
+import { ItemEP } from '@src/entities/item/item';
 import { setDragDrop } from '@src/foundry/drag-and-drop';
-import type { EntitySheet } from '@src/foundry/foundry-cont';
+import type { FoundryDoc } from '@src/foundry/foundry-cont';
 import { localize } from '@src/foundry/localization';
-import { importFromCompendium } from '@src/foundry/misc-helpers';
 import { openMenu } from '@src/open-menu';
 import { clickIfEnter, searchRegExp } from '@src/utility/helpers';
 import { customElement, html, LitElement, property, state } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
+import { idProp } from '../../../features/feature-helpers';
 import styles from './compendium-list.scss';
 
 @customElement('compendium-list')
@@ -22,13 +22,17 @@ export class CompendiumList extends LitElement {
 
   @property({ attribute: false }) compendium!: Compendium;
 
-  @property({ attribute: false, type: Array }) content!: (Entity & {
+  @property({ attribute: false, type: Array }) content!: (FoundryDoc & {
     img?: string;
   })[];
 
   @state() private search = '';
 
-  private openedEntities = new Map<string, Entity>();
+  private openedEntities = new Map<string, FoundryDoc>();
+
+  get collection() {
+    return this.compendium.collection;
+  }
 
   disconnectedCallback() {
     this.openedEntities.clear();
@@ -37,88 +41,98 @@ export class CompendiumList extends LitElement {
 
   firstUpdated() {
     this.addEventListener('drop', (ev) => {
-      if (!this.compendium.locked && this.compendium._canDragDrop('')) {
+      if (!this.collection.locked && this.compendium._canDragDrop('')) {
         this.compendium._onDrop(ev);
       }
     });
   }
 
   private findEntity(id: string) {
-    return this.content.find((entity) => entity._id === id);
+    return this.content.find((entity) => entity.id === id);
   }
 
   private entryMenu(ev: MouseEvent) {
     const { entryId } = (ev.currentTarget as HTMLElement).dataset;
     if (!entryId) return;
-    const entry = this.findEntity(entryId);
-    if (!entry) return;
+    const document = this.findEntity(entryId);
+    if (!document) return;
     openMenu({
       content: [
         {
           label: game.i18n.localize('COMPENDIUM.ImportEntry'),
           icon: html`<i class="fas fa-download"></i>`,
-          disabled:
-            !game.user.isGM &&
-            !game.user.can(
-              `${(
-                this.compendium.entity as string
-              ).toLocaleUpperCase()}_CREATE`,
-            ),
-          callback: () => importFromCompendium(this.compendium, entryId),
+          disabled: () =>
+            !this.collection.documentClass.canUserCreate(game.user),
+          callback: () => {
+            const collection = game.collections.get(
+              this.compendium.collection.documentName,
+            );
+            collection?.importFromCompendium(
+              this.compendium.collection,
+              entryId,
+              document instanceof ItemEP && !document.proxy.nonDefaultImg
+                ? { img: foundry.data.ItemData.DEFAULT_ICON }
+                : {},
+              { renderSheet: true },
+            );
+          },
         },
         {
           label: game.i18n.localize('COMPENDIUM.DeleteEntry'),
           icon: html`<i class="fas fa-trash"></i>`,
-          disabled: this.compendium.locked || !game.user.isGM,
-          callback: () => {
-            Dialog.confirm(
-              {
-                title: `${game.i18n.localize('COMPENDIUM.DeleteEntry')} ${
-                  entry.name
-                }`,
-                content: game.i18n.localize('COMPENDIUM.DeleteConfirm'),
-                yes: () => this.compendium.deleteEntity(entryId),
-              } as any,
-              {},
-            );
-          },
+          disabled: this.compendium.collection.locked || !game.user.isGM,
+          callback: async () =>
+            Dialog.confirm({
+              title: `${game.i18n.localize('COMPENDIUM.DeleteEntry')} ${
+                document.name
+              }`,
+              content: `<h4>${game.i18n.localize(
+                'AreYouSure',
+              )}</h4><p>${game.i18n.localize(
+                'COMPENDIUM.DeleteEntryWarning',
+              )}</p>`,
+              yes: () => document.delete(),
+              no: undefined,
+              render: undefined,
+            }),
         },
       ],
       position: ev,
-      header: { heading: entry.name },
+      header: { heading: document.name },
     });
   }
 
   private setDragData(ev: DragEvent) {
-    const { entity, collection } = this.compendium;
+    const { collection } = this.compendium;
     const { entryId } = (ev.currentTarget as HTMLElement).dataset;
     setDragDrop(ev, {
-      type: entity as any,
-      pack: collection as string,
+      type: collection.documentName as any, // TODO Better typings on all possible drops
+      pack: collection.collection,
       id: entryId as string,
     });
   }
 
-  private openEntrySheet(ev: Event) {
+  private async openEntrySheet(ev: Event) {
     const { entryId } = (ev.currentTarget as HTMLElement).dataset;
     if (!entryId) return;
-    const opened = this.openedEntities.get(entryId);
-    if (opened) {
-      console.log(
-        'opened',
-        opened.name,
-        this.content.find((entry) => entry._id === entryId)?.name,
-      );
-    }
-    const entry =
-      this.openedEntities.get(entryId) ||
-      this.content.find((entry) => entry._id === entryId);
+    (await this.compendium.collection.getDocument(entryId)).sheet.render(true);
+    // const opened = this.openedEntities.get(entryId);
+    // if (opened) {
+    //   console.log(
+    //     'opened',
+    //     opened.name,
+    //     this.content.find((entry) => entry.id === entryId)?.name,
+    //   );
+    // }
+    // const entry =
+    //   this.openedEntities.get(entryId) ||
+    //   this.content.find((entry) => entry.id === entryId);
 
-    if (entry) {
-      entry.prepareData();
-      this.openedEntities.set(entryId, entry);
-      (entry.sheet as EntitySheet | null)?.render(true);
-    }
+    // if (entry) {
+    //   entry.prepareData();
+    //   this.openedEntities.set(entryId, entry);
+    //   (entry.sheet as EntitySheet | null)?.render(true);
+    // }
   }
 
   render() {
@@ -131,7 +145,9 @@ export class CompendiumList extends LitElement {
           html`<label
             ><mwc-icon>search</mwc-icon>${renderTextInput(search, {
               search: true,
-              placeholder: `${this.compendium.entity} ${localize('search')}`,
+              placeholder: `${this.collection.documentName} ${localize(
+                'search',
+              )}`,
             })}</label
           >`,
       })}
@@ -142,52 +158,53 @@ export class CompendiumList extends LitElement {
   private renderItems() {
     const { content } = this;
 
-    const isItem = this.compendium.entity === 'Item';
+    const isItem = this.collection.documentName === 'Item';
     const regex = searchRegExp(this.search);
     const canDrag = this.compendium._canDragStart('');
 
     return html`
       <mwc-list>
-        ${repeat(
-          content,
-          ({ _id }) => _id,
-          (entry) => {
-            const type = isItem ? (entry as ItemEP).proxy.fullType : '';
-            const finalName = isItem
-              ? (entry as ItemEP).proxy.fullName
-              : entry.name;
-            const hidden = !entry.matchRegexp(regex);
-            if (hidden) return '';
-            const img = typeof entry.img === 'string' ? entry.img : undefined;
-            return html`
-              <mwc-list-item
-                draggable=${canDrag ? 'true' : 'false'}
-                graphic=${ifDefined(img ? 'avatar' : undefined)}
-                ?twoline=${!!type}
-                data-entry-id=${entry._id}
-                @click=${this.openEntrySheet}
-                @contextmenu=${this.entryMenu}
-                @dragstart=${this.setDragData}
-                @keydown=${clickIfEnter}
-              >
-                ${img
-                  ? html`
-                      <img
-                        src=${img}
-                        class=${img === CONST.DEFAULT_TOKEN ? 'default' : ''}
-                        loading="lazy"
-                        width="40px"
-                        slot="graphic"
-                      />
-                    `
-                  : ''}
+        ${repeat(content, idProp, (entry) => {
+          const type = isItem ? (entry as ItemEP).proxy.fullType : '';
+          const finalName = isItem
+            ? (entry as ItemEP).proxy.fullName
+            : entry.name;
+          const hidden = !regex.test(finalName);
+          // const hidden = "matchRegexp" in entry ? !entry.matchRegexp(regex) :  !entry.matchRegexp(regex);
+          if (hidden) return '';
+          const img = isItem
+            ? (entry as ItemEP).proxy.nonDefaultImg
+            : typeof entry.img === 'string'
+            ? entry.img
+            : undefined;
+          return html`
+            <mwc-list-item
+              draggable=${canDrag ? 'true' : 'false'}
+              graphic=${ifDefined(img ? 'avatar' : undefined)}
+              ?twoline=${!!type}
+              data-entry-id=${entry.id}
+              @click=${this.openEntrySheet}
+              @contextmenu=${this.entryMenu}
+              @dragstart=${this.setDragData}
+              @keydown=${clickIfEnter}
+            >
+              ${img
+                ? html`
+                    <img
+                      src=${img}
+                      class=${img === CONST.DEFAULT_TOKEN ? 'default' : ''}
+                      loading="lazy"
+                      width="40px"
+                      slot="graphic"
+                    />
+                  `
+                : ''}
 
-                <span title=${finalName}>${finalName}</span>
-                ${type ? html`<span slot="secondary">${type}</span>` : ''}
-              </mwc-list-item>
-            `;
-          },
-        )}
+              <span title=${finalName}>${finalName}</span>
+              ${type ? html`<span slot="secondary">${type}</span>` : ''}
+            </mwc-list-item>
+          `;
+        })}
       </mwc-list>
     `;
   }

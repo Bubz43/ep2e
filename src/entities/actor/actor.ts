@@ -39,7 +39,7 @@ export type ItemOperations = {
 
 export type ActorProxy = Character | Sleeve;
 
-export type MaybeToken = Token | null | undefined;
+export type MaybeToken = TokenDocument | null | undefined;
 
 export type ActorSub = (data: ActorEP | null) => void;
 
@@ -51,8 +51,6 @@ export class ActorEP extends Actor {
   #updater?: UpdateStore<ActorDatas>;
   // #identifiers?: ActorIdentifiers;
   #itemOperations?: ItemOperations;
-
-  #path?: EntityPath;
 
   private declare invalidated: boolean;
   private declare hasPrepared: boolean;
@@ -78,10 +76,11 @@ export class ActorEP extends Actor {
   }
 
   get identifiers(): ActorIdentifiers {
+    const token = this.isToken ? this.token : null;
     return {
       actorId: this.id,
-      tokenId: this.isToken && this.token?.id,
-      sceneId: this.isToken && this.token?.scene?.id,
+      tokenId: token?.id,
+      sceneId: token?.scene?.id,
       uuid: this.uuid,
     };
   }
@@ -89,17 +88,16 @@ export class ActorEP extends Actor {
   get updater() {
     if (!this.#updater)
       this.#updater = new UpdateStore({
-        getData: () => this.data,
+        getData: () => this.toJSON(),
         isEditable: () => this.editable,
         setData: (changedData) => this.update(changedData, {}),
       });
     return this.#updater;
   }
 
-
   get editable() {
     // (!this.isToken || this.token?.scene?.id === activeCanvas()?.scene.id)
-    return this.owner && !this.compendium;
+    return this.isOwner && !this.compendium;
   }
 
   get isToken() {
@@ -134,22 +132,20 @@ export class ActorEP extends Actor {
     if (!this.#itemOperations) {
       this.#itemOperations = {
         add: async (...itemDatas) => {
-          await this.createOwnedItem(itemDatas);
-          const addedIDs = pipe(
-            this.data.items.slice(-itemDatas.length),
-            map(({ _id }) => _id),
-            compact,
+          const itemIDs = new Set(this.data.items.keys());
+          await this.createEmbeddedDocuments('Item', itemDatas);
+          const addedIDs = [...this.data.items.keys()].filter(
+            (id) => !itemIDs.has(id),
           );
           this.emitItemSocket({
             type: 'add',
             itemIds: addedIDs,
           });
           this.invalidated = true;
-
           return addedIDs;
         },
         update: async (...itemDatas) => {
-          await this.updateOwnedItem(itemDatas);
+          await this.updateEmbeddedDocuments('Item', itemDatas);
 
           const itemIds: string[] = [];
           for (const { _id } of itemDatas) {
@@ -166,7 +162,7 @@ export class ActorEP extends Actor {
           this.emitItemSocket({ type: 'remove', itemIds });
           pipe(
             itemIds,
-            flatMap((id) => this.getOwnedItem(id) || []),
+            flatMap((id) => this.items.get(id) || []),
             forEach((item) => {
               if (
                 !(
@@ -181,7 +177,7 @@ export class ActorEP extends Actor {
             }),
           );
 
-          await this.deleteOwnedItem(itemIds);
+          await this.deleteEmbeddedDocuments('Item', itemIds);
           this.invalidated = true;
           return itemIds;
         },
@@ -194,17 +190,9 @@ export class ActorEP extends Actor {
     return this.#subscribers;
   }
 
-  get isTokenTemplate() {
-    return !this.isToken && this.data.token.actorLink === false;
-  }
-
-  get id() {
-    return this.data._id;
-  }
-
-  get type() {
-    return this.data.type;
-  }
+  // get token() {
+  //   return super.token as TokenDocument | null;
+  // }
 
   get tokenOrLocalInfo() {
     const token = this.isToken ? this.token : this.getActiveTokens(true)[0];
@@ -229,7 +217,7 @@ export class ActorEP extends Actor {
   private openForm = () => this.sheet.render(true);
 
   private createProxy(): ActorProxy {
-    const { data } = this;
+    const data = this.toJSON();
 
     switch (data.type) {
       case ActorType.Character:
@@ -251,13 +239,9 @@ export class ActorEP extends Actor {
   ): ActorProxyInit<T> {
     return {
       data,
-      updater: (this.updater as unknown) as UpdateStore<typeof data>,
-      // TODO do this in this._prepareOwnedItems to avoid this additional iteration
+      updater: this.updater as unknown as UpdateStore<typeof data>,
       items: new Map(
-        (this.items || new Collection<ItemEP>()).map(({ proxy }) => [
-          proxy.id,
-          proxy,
-        ]),
+        [...(this.items?.values() || [])].map(({ proxy }) => [proxy.id, proxy]),
       ),
       itemOperations: this.itemOperations,
       actor: this,
@@ -265,8 +249,8 @@ export class ActorEP extends Actor {
     } as const;
   }
 
-  getActiveTokens(linked?: boolean) {
-    return super.getActiveTokens(linked) as Token[];
+  getActiveTokens(linked?: boolean, document?: boolean) {
+    return super.getActiveTokens(linked, document);
   }
 
   prepareData() {
@@ -293,70 +277,19 @@ export class ActorEP extends Actor {
   }
 
   get conditions() {
-    if (this.data.type === ActorType.Character) {
-      const epFlag = this.data.flags[EP.Name] || {};
+    const data = this.toJSON();
+    if (data.type === ActorType.Character) {
+      const epFlag = data.flags[EP.Name] || {};
       for (const sleeveType of sleeveTypes) {
         const sleeveData = epFlag[sleeveType];
         if (sleeveData) return sleeveData.data.conditions;
       }
-    } else return this.data.data.conditions;
+    } else return data.data.conditions;
     return [];
   }
 
   get sheet() {
     return actorSheets.get(this) || new ActorEPSheet(this);
-  }
-
-  static createTokenActor(baseActor: ActorEP, token: Token) {
-    const actor = super.createTokenActor(baseActor, token);
-    if (!token.scene?.isView) {
-      delete this.collection.tokens[token.id];
-    }
-    return actor;
-  }
-
-  getOwnedItem(id: string | null) {
-    return super.getOwnedItem(id) as ItemEP | null;
-  }
-
-  async createOwnedItem<T extends ItemType>(
-    itemData: SetRequired<DeepPartial<ItemEntity<T>>, 'type' | 'name'>,
-    options?: unknown,
-  ): Promise<ItemEntity<T> | null>;
-
-  async createOwnedItem<
-    T extends SetRequired<DeepPartial<ItemEntity>, 'type' | 'name'>
-  >(itemDatas: T[], options?: unknown): Promise<ItemEntity[] | null>;
-
-  async createOwnedItem<
-    D extends SetRequired<DeepPartial<ItemEntity>, 'name' | 'type'>
-  >(itemData: D | D[], options = {}) {
-    return super.createOwnedItem(itemData, options);
-  }
-
-  // TODO: These types are pretty wonky, look into better solution
-  static async create<T extends ActorType>(
-    data: Omit<
-      SetRequired<Partial<ActorEntity<T>>, 'type' | 'name'>,
-      'data' | 'token'
-    > & { data?: Partial<ActorModels[T]>; token?: Partial<TokenData> },
-    options?: { temporary?: boolean; renderSheet?: boolean },
-  ): Promise<ActorEP>;
-
-  static async create<
-    D extends SetRequired<DeepPartial<ActorEntity>, 'type' | 'name'>[]
-  >(
-    data: D,
-    options?: { temporary?: boolean; renderSheet?: boolean },
-  ): Promise<ActorEP[]>;
-
-  static async create<
-    D extends SetRequired<DeepPartial<ActorEntity>, 'type' | 'name'>
-  >(
-    data: D | D[],
-    options: { temporary?: boolean; renderSheet?: boolean } = {},
-  ) {
-    return super.create(data, options);
   }
 
   matchRegexp(regex: RegExp) {
@@ -366,4 +299,10 @@ export class ActorEP extends Actor {
           regex.test(info),
         );
   }
+}
+
+export async function createActor<
+  D extends SetRequired<DeepPartial<ActorEntity>, 'type' | 'name'>,
+>(data: D, options: { temporary?: boolean; renderSheet?: boolean } = {}) {
+  return Actor.create(data, options) as unknown as Promise<ActorEP>;
 }

@@ -9,9 +9,11 @@ import { ActorType } from '@src/entities/entity-types';
 import type { ItemEP } from '@src/entities/item/item';
 import { setDragDrop } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
+import { EP } from '@src/foundry/system';
 import { searchRegExp } from '@src/utility/helpers';
 import { customElement, html, LitElement, state } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
+import type { FoundryDoc } from '../../../foundry/foundry-cont';
 import styles from './compendium-search.scss';
 
 @customElement('compendium-search')
@@ -24,13 +26,14 @@ export class CompendiumSearch extends LitElement {
     return [styles];
   }
 
-  @state() private results: Entity[] = [];
+  @state() private results: (ActorEP | ItemEP)[] = [];
 
   @state() private filter = '';
 
   @state() private sources = {
     world: true,
     system: true,
+    modules: true,
   };
 
   @state() private loading = false;
@@ -54,20 +57,26 @@ export class CompendiumSearch extends LitElement {
     this.results = [];
     this.entityRenderer = this.entity;
 
-    const entries: Entity[] = [];
+    const entries: FoundryDoc[] = [];
     const { isGM } = game.user;
-    const { world, system } = this.sources;
+    const { world, system, modules } = this.sources;
 
-    for (const pack of game.packs) {
+    for (const pack of game.packs.values()) {
       if (pack.private && !isGM) continue;
-      const { entity, package: source } = pack.metadata;
-      if (entity === this.entity && (source === 'world' ? world : system)) {
-        const entities = await pack.getContent();
+      const { entity, system: source } = pack.metadata;
+      if (
+        entity === this.entity &&
+        (source === 'world' ? world : source === EP.Name ? system : modules)
+      ) {
+        const entities = await pack.getDocuments();
         entries.push(...entities);
       }
     }
 
-    this.results = entries.sort((a, b) => a.name.localeCompare(b.name));
+    this.results = entries.sort((a, b) => a.name.localeCompare(b.name)) as (
+      | ActorEP
+      | ItemEP
+    )[];
     this.loading = false;
   }
 
@@ -104,9 +113,10 @@ export class CompendiumSearch extends LitElement {
           update: (changed) => {
             this.sources = { ...this.sources, ...changed };
           },
-          fields: ({ world, system }) => [
+          fields: ({ world, system, modules }) => [
             renderLabeledCheckbox(world),
             renderLabeledCheckbox(system),
+            renderLabeledCheckbox(modules),
           ],
         })}
         ${renderAutoForm({

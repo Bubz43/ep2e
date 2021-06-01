@@ -127,20 +127,23 @@ export class Percentile extends DiceTerm {
 
   roll() {
     const roll = super.roll();
-    roll.result -= 1;
+    (roll.result as unknown as number) -= 1;
     this.results[this.results.length - 1]!.result = roll.result;
     return roll;
   }
 
   get total() {
     if (!notEmpty(this.results)) this.roll();
-    return this.results.reduce((accum, { result }) => accum + result, 0);
+    return this.results.reduce(
+      (accum, { result }) => accum + (result as unknown as number),
+      0,
+    );
   }
 
   static get total() {
     const total = range(0, 2)
       .map(() => {
-        const p = new Percentile();
+        const p = new Percentile({});
         p.roll();
         return p.total;
       })
@@ -182,8 +185,8 @@ const isCriticalRoll = (roll: number) => {
 
 export const successTestTargetClamp = clamp({ min: 0, max: 99 });
 
-export const successTestEffectMap = (
-  effects: SourcedEffect<SuccessTestEffect>[],
+export const successTestEffectMap = <T extends SuccessTestEffect>(
+  effects: T[],
 ) => {
   return new Map(effects.map((effect) => [effect, !effect.requirement]));
 };

@@ -63,8 +63,8 @@ export class ItemEP extends Item {
     this.invalidated = true;
   }
 
-  get actor(): ActorEP | null {
-    return super.actor;
+  get actor() {
+    return super.actor as ActorEP | null;
   }
 
   get subscriptions() {
@@ -76,7 +76,7 @@ export class ItemEP extends Item {
     return new UpdateStore({
       getData: () => this.data,
       isEditable: () =>
-        !!this.owner &&
+        !!this.isOwner &&
         (this.actor ? this.actor.editable : true) &&
         !this.compendium,
       setData: (changedData) =>
@@ -134,7 +134,8 @@ export class ItemEP extends Item {
   }
 
   private createProxy() {
-    const { data, actor } = this;
+    const { actor } = this;
+    const data = this.toJSON();
     switch (data.type) {
       case ItemType.Trait:
         return new Trait({

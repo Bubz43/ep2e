@@ -4,7 +4,6 @@ import {
   TrackedCombatEntity,
   updateCombatState,
 } from '@src/combat/combat-tracker';
-import type { Combatant } from '@src/combat/combatant';
 import {
   closeWindow,
   openWindow,
@@ -34,9 +33,9 @@ import { convertMenuOptions, gmIsConnected } from './misc-helpers';
 import { activeTokenStatusEffects } from './token-helpers';
 
 export const overridePrototypes = () => {
-  Entity.prototype.matchRegexp = function (regex: RegExp) {
-    return regex.test(this.name);
-  };
+  // Entity.prototype.matchRegexp = function (regex: RegExp) {
+  //   return regex.test(this.name);
+  // };
 
   // const { _injectHTML } = Application.prototype;
   // Application.prototype._injectHTML = function (
@@ -59,9 +58,9 @@ export const overridePrototypes = () => {
   //   }
   // };
 
-  const { getData } = PlayerConfig.prototype;
-  PlayerConfig.prototype.getData = function () {
-    const original = getData.call(this) as {
+  const { getData } = UserConfig.prototype;
+  UserConfig.prototype.getData = function () {
+    const original = getData.call(this, {}) as {
       user: User;
       actors: ActorEP[];
       options: unknown;
@@ -74,11 +73,6 @@ export const overridePrototypes = () => {
     };
   };
 
-  Combat.prototype._getInitiativeFormula = ({ actor }: Combatant) =>
-    actor?.proxy.type === ActorType.Character
-      ? `1d6 + ${actor.proxy.initiative}`
-      : '0';
-
   const { _onPreventDragstart } = Game.prototype;
   Game.prototype._onPreventDragstart = function (ev: DragEvent) {
     return pipe(ev.composedPath(), first(), (target) => {
@@ -89,8 +83,7 @@ export const overridePrototypes = () => {
     });
   };
 
-  const { drawEffects, toggleEffect, _onUpdateBarAttributes, _onUpdate } =
-    Token.prototype;
+  const { drawEffects, toggleEffect, _onUpdate } = Token.prototype;
 
   Token.prototype._onUpdate = function (
     data: Partial<TokenData>,
@@ -129,15 +122,8 @@ export const overridePrototypes = () => {
       );
     }
 
-    // Draw overlay effect
     if (this.data.overlayEffect) {
-      const texture = await loadTexture(this.data.overlayEffect);
-      const icon = new PIXI.Sprite(texture as any);
-      const size = Math.min(this.w * 0.6, this.h * 0.6);
-      icon.width = icon.height = size;
-      icon.position.set((this.w - size) / 2, (this.h - size) / 2);
-      icon.alpha = 0.8;
-      this.effects.addChild(icon);
+      this._drawOverlay({ src: this.data.overlayEffect, tint: null });
     }
   };
 
@@ -156,7 +142,7 @@ export const overridePrototypes = () => {
       if (!condition || !this.actor) {
         const effects = new Set(this.data.effects);
         effects.has(texture) ? effects.delete(texture) : effects.add(texture);
-        await this.update({ effects: [...effects] }, { diff: false });
+        await this.document.update({ effects: [...effects] }, { diff: false });
       } else {
         const newConditions = new Set(this.actor.conditions);
         const active = !newConditions.delete(condition);
@@ -170,22 +156,25 @@ export const overridePrototypes = () => {
     return this;
   };
 
-  const conditionRegex = new RegExp('conditions', 'i');
-  const hasConditions = (path: string) => conditionRegex.test(path);
-  Token.prototype._onUpdateBarAttributes = function (updateData) {
-    _onUpdateBarAttributes.call(this, updateData);
-    if (Object.keys(flattenObject(updateData)).some(hasConditions)) {
-      this.drawEffects();
-      if (game.combat?.getCombatantByToken(this.data._id)) {
-        game.combats.render(true);
-      }
-    }
-  };
+  // const conditionRegex = new RegExp('conditions', 'i');
+  // const hasConditions = (path: string) => conditionRegex.test(path);
+  // Token.prototype._onUpdateBarAttributes = function (updateData) {
+  //   _onUpdateBarAttributes.call(this, updateData);
+  //   if (Object.keys(flattenObject(updateData)).some(hasConditions)) {
+  //     this.drawEffects();
+  //     if (game.combat?.getCombatantByToken(this.data._id)) {
+  //       game.combats.render(true);
+  //     }
+  //   }
+  // };
 
   const { getData: getTokenData } = TokenHUD.prototype;
 
   TokenHUD.prototype.getData = function (options: unknown) {
-    const data = getTokenData.call(this, options);
+    const data = getTokenData.call(this, options) as {
+      canToggleCombat: boolean;
+      combatClass: 'active' | '';
+    };
     data.canToggleCombat = gmIsConnected();
     data.combatClass =
       this.object && tokenIsInCombat(this.object) ? 'active' : '';
@@ -349,6 +338,25 @@ export const overridePrototypes = () => {
     },
   });
 
+  Compendium.prototype._replaceHTML = noop;
+  Compendium.prototype._renderInner = async function () {
+    const existing = this.element?.[0]?.querySelector('compendium-list');
+    const content = await this.collection.getDocuments();
+    if (existing) {
+      existing.content = content;
+      return $(existing);
+    }
+    const frag = new DocumentFragment();
+    render(
+      html`<compendium-list
+        .content=${content}
+        .compendium=${this}
+      ></compendium-list>`,
+      frag,
+    );
+    return $(frag);
+  };
+
   const { _replaceHTML } = CombatTracker.prototype;
   CombatTracker.prototype._replaceHTML = function (
     ...args: Parameters<typeof _replaceHTML>
@@ -366,25 +374,6 @@ export const overridePrototypes = () => {
     const frag = new DocumentFragment();
     render(
       html`<combat-view class="sidebar-tab" data-tab="combat"></combat-view>`,
-      frag,
-    );
-    return $(frag);
-  };
-
-  Compendium.prototype._replaceHTML = noop;
-  Compendium.prototype._renderInner = async function () {
-    const existing = this.element?.[0]?.querySelector('compendium-list');
-    const content = await this.getContent();
-    if (existing) {
-      existing.content = content;
-      return $(existing);
-    }
-    const frag = new DocumentFragment();
-    render(
-      html`<compendium-list
-        .content=${content}
-        .compendium=${this}
-      ></compendium-list>`,
       frag,
     );
     return $(frag);
@@ -587,6 +576,7 @@ export const overridePrototypes = () => {
     this: ActorDirectory | ItemDirectory,
     _: Event,
     query: string,
+    rgx: RegExp,
     html: HTMLElement,
   ) {
     const isSearch = !!query;
@@ -649,7 +639,7 @@ export const overridePrototypes = () => {
 
   const closeCreator = () => closeWindow(ItemCreator);
 
-  ItemDirectory.prototype._onCreateEntity = async function (ev: Event) {
+  ItemDirectory.prototype._onCreateDocument = async function (ev: Event) {
     stopEvent(ev);
 
     if (ev.currentTarget instanceof HTMLElement) {
@@ -667,7 +657,7 @@ export const overridePrototypes = () => {
     }
   };
 
-  ActorDirectory.prototype._onCreateEntity = async function (ev: Event) {
+  ActorDirectory.prototype._onCreateDocument = async function (ev: Event) {
     stopEvent(ev);
 
     if (ev.currentTarget instanceof HTMLElement) {

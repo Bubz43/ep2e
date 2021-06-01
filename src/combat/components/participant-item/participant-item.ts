@@ -27,6 +27,7 @@ import {
 import { readyCanvas } from '@src/foundry/canvas';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
+import { getTokenPlaceable } from '@src/foundry/token-helpers';
 import { RenderDialogEvent } from '@src/open-dialog';
 import { MenuOption, MWCMenuOption, openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
@@ -162,7 +163,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
   };
 
   private highligtToggle = (token: Token, highlight: boolean) => {
-    if (token.uuid === this.token?.uuid) {
+    if (token.document.uuid === this.token?.uuid) {
       this.highlighted = highlight;
     }
   };
@@ -182,7 +183,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
   get editable() {
     return (
       game.user.isGM ||
-      (this.actor?.owner ?? this.participant.userId === game.user.id)
+      (this.actor?.isOwner ?? this.participant.userId === game.user.id)
     );
   }
 
@@ -462,7 +463,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
   }
 
   private get activeToken() {
-    return this.token ?? this.actor?.getActiveTokens(true)[0];
+    return getTokenPlaceable(this.token, this.actor);
   }
 
   private iconClick() {

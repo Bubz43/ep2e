@@ -270,7 +270,7 @@ export class AptitudeCheck extends SuccessTestBase {
     );
   }
 
-  private getModifierEffects(aptitude: AptitudeType, action: Action): ReturnType<typeof successTestEffectMap> {
+  private getModifierEffects(aptitude: AptitudeType, action: Action) {
     if (this.techSource) return new Map();
     return successTestEffectMap(
       this.character?.appliedEffects.getMatchingSuccessTestEffects(

@@ -1,3 +1,4 @@
+import type { MessageData } from '@src/chat/message-data';
 import type { Combatant } from '@src/combat/combatant';
 import type { ActorEP } from '@src/entities/actor/actor';
 import type { ChatMessageEP } from '@src/entities/chat-message';
@@ -15,6 +16,8 @@ import type {
   EnvironmentOverrides,
 } from '@src/features/environment';
 import type { UserHotbarEntry } from '@src/features/hotbar-entry';
+import type { PrototypeTokenData } from 'common/data/data';
+import type { ActorData, SceneData } from 'common/data/module';
 import type { Socket } from 'socket.io';
 import type { TinyMCE } from 'tinymce';
 import type { Class, ConditionalPick, Mutable, ValueOf } from 'type-fest';
@@ -27,7 +30,6 @@ import type {
 import type { MeasuredTemplateData } from './canvas';
 import type { EP, SystemSchema } from './system';
 import type { EntityTemplates } from './template-schema';
-import type PIXI from 'pixi.js';
 // * Comment out canvas, game, ui from foundry.d.ts
 // * Add in context param to Entity.prototype._onUpdate
 // * Add generic type to collection
@@ -104,12 +106,14 @@ export type TokenData = {
   bar2: { attribute: string };
 };
 
+export type FoundryDoc = import('common/abstract/module').Document;
+
 type Config = typeof CONFIG;
 type EntityName = Exclude<
-  keyof PickByValue<Config, { entityClass: Class<{ entity: unknown }> }>,
-  'canvasTextStyle'
+  keyof PickByValue<Config, { documentClass: Class<{ documentName: string }> }>,
+  'canvasTextStyle' | 'FogExploration'
 >;
-export type EntityType = Config[EntityName]['entityClass'];
+export type EntityType = Config[EntityName]['documentClass'];
 
 interface PlaceableObject {
   data: Record<string, unknown> & { _id?: string };
@@ -132,8 +136,9 @@ type PlaceableLayer<
 > = Omit<L, keyof F> & F;
 
 export type CanvasLayers = {
-  background: BackgroundLayer;
-  tiles: PlaceableLayer<TilesLayer, Tile>;
+  background: PlaceableLayer<BackgroundLayer, Tile>;
+  foreground: PlaceableLayer<BackgroundLayer, Tile>;
+
   drawings: PlaceableLayer<DrawingsLayer, Drawing>;
   grid: GridLayer;
   templates: PlaceableLayer<TemplateLayer, MeasuredTemplate>;
@@ -157,11 +162,19 @@ type CombatRoundInfo = {
   turn: number | null;
 };
 
-type Col<T extends Entity> = Omit<Collection<T>, 'get'> & {
+type FoundryCollection<T> = import('common/utils/module').Collection<T>;
+
+type Col<T> = FoundryCollection<T> & {
   [Symbol.iterator](): IterableIterator<T>;
-  get(id: string, options?: { strict: Boolean }): T | null;
+  // get(id: string, options?: { strict: Boolean }): T | null;
   render(force: boolean): unknown;
-  readonly _source: DeepReadonly<T['data'][]>;
+  importFromCompendium(
+    collection: CompendiumCollection, // TODO this could possibly by typed with generic
+    id: string,
+    dataChanges?: {},
+    options?: { renderSheet: boolean },
+  );
+  // readonly _source: DeepReadonly<T['data'][]>;
 };
 
 type GameCollections = {
@@ -183,18 +196,18 @@ type GameCollections = {
 
 declare global {
   const PIXI: PIXI;
+
+  const foundry: {
+    documents: typeof import('common/documents');
+    utils: typeof import('common/utils/module');
+    abstract: typeof import('common/abstract/module');
+    data: typeof import('common/data/module');
+    packages: typeof import('common/packages');
+  };
+
+  const CONST: typeof import('common/constants');
+
   const tinymce: TinyMCE;
-
-  interface Compendium {
-    readonly locked: boolean;
-  }
-
-  interface Collection<T> {
-    find(condition: (entry: T) => boolean): T | null;
-    filter(condition: (entry: T) => boolean): T[];
-    map<M>(transform: (entry: T) => M): M[];
-    reduce<I>(evaluator: (accum: I, entry: T) => I, initial: I): I;
-  }
 
   interface GridLayer {
     getSnappedPosition(
@@ -212,15 +225,33 @@ declare global {
 
   interface Token {
     data: Readonly<TokenData>;
+    document: TokenDocument;
     scene?: SceneEP;
     x: number;
     y: number;
     actor?: ActorEP | null;
     _validPosition: { x: number; y: number };
-    bars: Record<'bar1' | 'bar2', PIXI.Graphics>;
-    effects: PIXI.Container;
+    bars: Record<'bar1' | 'bar2', import('pixi.js').Graphics>;
+    effects: import('pixi.js').Container;
     update(tokenData: DeepPartial<TokenData>, options: unknown): Promise<Token>;
     _controlled: boolean;
+  }
+
+  interface PlaceableObject {
+    document: unknown;
+  }
+
+  interface PrototypeTokenData extends TokenData {}
+
+  interface TokenDocument extends TokenData {
+    scene?: SceneEP;
+    data: Readonly<TokenData>;
+    name: string;
+    object: Token;
+    id: string;
+    uuid: string;
+    update(tokenData: DeepPartial<TokenData>, options: unknown): unknown;
+    actor?: ActorEP;
   }
 
   interface Combat {
@@ -239,33 +270,42 @@ declare global {
   }
 
   interface Compendium {
-    readonly private: boolean;
-    readonly metadata: Readonly<{
-      label: string;
-      name: string;
-      // entity: EntityName;
-      entity: string;
-      package: string;
-      absPath: string;
-      path: string;
-      system: string;
-    }>;
+    collection: CompendiumCollection;
   }
 
-  interface Entity {
-    readonly compendium: Compendium | null;
-    matchRegexp(regex: RegExp): boolean;
+  interface CompendiumCollection {
+    metadata: {
+      name: string;
+      label: string;
+      path: string;
+      private: boolean;
+      entity: EntityName;
+      system: string;
+    };
+  }
+
+  interface ActorData {
+    items: FoundryCollection<ItemEP>;
+    effects: FoundryCollection<ActiveEffect>;
+    token: PrototypeTokenData | TokenDocument;
+    img: string;
+    folder: string | null;
   }
 
   interface Actor {
-    data: ActorDatas;
-    readonly items?: Collection<ItemEP>;
-    readonly effects: Collection<ActiveEffect>;
-    readonly token?: Token;
+    data: ActorData;
+    readonly items: FoundryCollection<ItemEP>;
+    readonly effects: FoundryCollection<ActiveEffect>;
+    toJSON(): ActorDatas;
+    sheet: EntitySheet;
+    collection?: GameCollections['actors'];
   }
 
   interface Item {
-    data: ItemDatas;
+    data: ItemData;
+    sheet: EntitySheet;
+    toJSON(): ItemDatas;
+    collection?: GameCollections['items'];
   }
 
   interface String {
@@ -277,6 +317,7 @@ declare global {
   }
 
   interface Scene {
+    sheet: EntitySheet;
     _viewPosition: { x: number; y: number; scale: number };
     data: {
       flags: {
@@ -285,7 +326,7 @@ declare global {
           environmentOverrides: Readonly<EnvironmentOverrides> | null;
         };
       };
-      tokens: TokenData[];
+      tokens: FoundryCollection<TokenDocument>;
       active: boolean;
       backgroundColor: string;
       grid: number;
@@ -357,15 +398,15 @@ declare global {
     sheet: Application | null;
   }
 
-  interface TemplateLayer extends PIXI.DisplayObject {}
-
-  interface MeasuredTemplate extends PIXI.DisplayObject {
+  interface MeasuredTemplate {
     readonly layer: TemplateLayer;
     data: MeasuredTemplateData;
+    x: number;
+    y: number;
   }
 
   interface PlaceablesLayer {
-    preview: PIXI.Container | null;
+    preview: import('pixi.js').Container | null;
   }
 
   interface User {
@@ -456,6 +497,10 @@ declare global {
     readonly folders: Folder[];
   }
 
+  interface ActorData {
+    _id: string;
+  }
+
   export function duplicate<T extends Record<string, unknown>>(
     data: T,
   ): Mutable<T>;
@@ -481,13 +526,14 @@ declare global {
 
   const game: GameCollections & {
     user: UserEP;
-    packs: Collection<Compendium>;
+    packs: FoundryCollection<CompendiumCollection>;
     settings: ClientSettings;
     system: System;
     i18n: Localization;
     socket: Socket;
     keyboard: KeyboardManager;
     time: GameTime;
+    collections: Map<EntityName, GameCollections[keyof GameCollections]>;
     readonly combat: Combat | null;
   };
 
