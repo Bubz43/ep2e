@@ -1,8 +1,8 @@
 # Changelog
 
-## [0.8] -- Unreleased
+## [0.81] -- 2021-06-01
 
-- Update to foundry 0.8.x compatibility
+- Update to provide compatibility with Foundry 0.8. **This release, and all future releases will be incompatible with Foundry versions lower than 0.8.6.**
 - Fix errors in default created muse. Perceive from 40 -> 30 and added Medicine: Psychosurgery at 30
 - Update Toughness/Frailty Traits to also apply to derived stats
 - Add GP totals to character details
