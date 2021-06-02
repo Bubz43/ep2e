@@ -59,6 +59,12 @@ ep-overlay {
   @include widgetless-number-inputs;
 }
 
+.header-actions.action-buttons {
+  button {
+    white-space: nowrap;
+  }
+}
+
 .scene-sheet,
 .token-sheet,
 .light-sheet,
@@ -79,7 +85,7 @@ ep-overlay {
 .macro-sheet,
 .roll-table-config,
 #playlist-config,
-.compendium-list,
+.ep-compendium-list,
 .app.sidebar-popout,
 .app .sidebar-tab,
 .journal-sheet,

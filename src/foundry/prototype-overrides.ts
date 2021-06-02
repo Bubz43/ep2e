@@ -333,7 +333,7 @@ export const overridePrototypes = () => {
     get() {
       return {
         ...(compendiumdefaults as { classes: [] }),
-        classes: ['compendium-list'],
+        classes: ['ep-compendium-list'],
       };
     },
   });
