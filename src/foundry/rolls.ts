@@ -65,7 +65,7 @@ export const rollFormula = (
 ) => {
   let roll: Roll | null = null;
   try {
-    roll = new Roll(formula, data).roll() as Roll;
+    roll = new Roll(formula, data).evaluate({ async: false }) as Roll;
   } catch (err) {
     // console.log(err);
   }

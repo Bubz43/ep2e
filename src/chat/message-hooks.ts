@@ -60,6 +60,7 @@ export const onChatMessageRender = (message: ChatMessageEP, j: JQuery) => {
     messageQueue.set(j, message);
     return;
   }
+
   const content = el.querySelector<HTMLElement>('.message-content')!;
   const { speaker, whisper, blind, flags } = message.data;
   const epData = flags[EP.Name];
@@ -72,7 +73,9 @@ export const onChatMessageRender = (message: ChatMessageEP, j: JQuery) => {
     : speakerToId.actorId
     ? findActor(speakerToId)?.img
     : message.user?.avatar;
+
   const fragment = new DocumentFragment();
+
   render(
     html`
       <div class="image-wrapper">
@@ -112,6 +115,7 @@ export const onChatMessageRender = (message: ChatMessageEP, j: JQuery) => {
     const { innerHTML } = content;
     const showContent =
       !message.isRoll && innerHTML.trim() !== messageContentPlaceholder;
+
     render(
       html`
         <message-content .message=${message} .data=${epData}>
