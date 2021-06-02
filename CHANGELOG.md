@@ -4,6 +4,7 @@
 
 - Fix initiative rolls not showing proper chat message
 - Add min width so combat tracker window doesn't change size when combat start
+- Remove extra puppet sock from Arachnoid compendium entry
 
 ## [0.81] -- 2021-06-01
 
