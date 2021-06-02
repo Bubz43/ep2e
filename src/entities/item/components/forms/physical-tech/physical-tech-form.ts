@@ -182,7 +182,6 @@ export class PhysicalTechForm extends ItemFormBase {
     if (this.disabled) return;
     const proxy =
       data?.type === DropType.Actor ? await actorDroptoActorProxy(data) : null;
-    console.log(proxy, data);
     if (proxy?.type === ActorType.Character) {
       this.dispatchEvent(
         new RenderDialogEvent(html`
@@ -232,7 +231,6 @@ export class PhysicalTechForm extends ItemFormBase {
       onboardALI,
       hasOnboardALI,
     } = this.item;
-    console.log(onboardALI.data);
     const { disabled } = this;
     return html`
       <entity-form-layout>

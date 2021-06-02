@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.811] -- 2021-06-02
+
+- Fix initiative rolls not showing proper chat message
+- Add min width so combat tracker window doesn't change size when combat start
+
 ## [0.81] -- 2021-06-01
 
 - Update to provide compatibility with Foundry 0.8. **This release, and all future releases will be incompatible with Foundry versions lower than 0.8.6.**
