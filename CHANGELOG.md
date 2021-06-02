@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.812] -- 2021-06-02
+
+- Fix styling conflicts with Compendium Folders module
+
 ## [0.811] -- 2021-06-02
 
 - Fix initiative rolls not showing proper chat message
