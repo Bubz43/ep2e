@@ -333,10 +333,29 @@ export const overridePrototypes = () => {
     get() {
       return {
         ...(compendiumdefaults as { classes: [] }),
-        classes: ['ep-compendium-list'],
+        classes: (compendiumdefaults as { classes: string[] }).classes.concat(
+          'ep-compendium-list',
+        ),
       };
     },
   });
+
+  Compendium.prototype._onSearchFilter = function (
+    event: unknown,
+    query: string,
+    rgx: RegExp,
+    html: HTMLElement,
+  ) {
+    for (let li of html.children) {
+      const header = li.querySelector('.entry-name')!;
+      const name = header.textContent;
+      const type = header.getAttribute('data-type');
+      const match =
+        rgx.test(SearchFilter.cleanQuery(name)) ||
+        (type && rgx.test(SearchFilter.cleanQuery(type)));
+      (li as HTMLLinkElement).style.display = match ? 'flex' : 'none';
+    }
+  };
 
   // Compendium.prototype._replaceHTML = noop;
   // Compendium.prototype._renderInner = async function () {

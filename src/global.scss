@@ -770,6 +770,11 @@ sl-tooltip {
   }
 }
 
+.directory .directory-header .header-search input {
+  background: var(--color-bg-alt);
+  color: var(--color-text);
+}
+
 .directory-header {
   padding: 0.25rem 0.5rem;
   border-bottom: 1px solid var(--color-border);
