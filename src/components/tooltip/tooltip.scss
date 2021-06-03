@@ -21,6 +21,7 @@
   transition: opacity 200ms;
   transition-delay: 100ms;
   pointer-events: none !important;
+  color: var(--color-text);
 
   ::slotted(p) {
     padding: 0 0.5rem;

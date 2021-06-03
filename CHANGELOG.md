@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.813] -- 2021-06-03
+
+- Update styling of chat inside of popped out chatlog
+- Add Cyberware variants for Access Jacks, Cortical Stack and Cyberbrain to Standard Augmentations compendium
+- Add Meshware variant for Mnemonics to Standard Augmentations compendium
+- Add compendium title to compendium search entries
+- Drop custom compendium list in favor of default to reduce conflicts with modules
+
 ## [0.812] -- 2021-06-02
 
 - Fix styling conflicts with Compendium Folders module

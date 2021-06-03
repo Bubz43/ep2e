@@ -158,8 +158,9 @@ Hooks.once('ready', async () => {
     document.body.append(overlay);
 
     tooltip = document.createElement('sl-tooltip');
-    tooltip.slot = 'tooltip';
-    overlay.append(tooltip);
+    document.body.append(tooltip);
+    // tooltip.slot = 'tooltip';
+    // overlay.append(tooltip);
     document.body.classList.add('ready');
     Hooks.call('ep-ready', true);
     const frag = new DocumentFragment();
@@ -234,6 +235,19 @@ Hooks.once('ready', async () => {
     event: 'render',
     callback: (dir, [el]) => {
       el?.querySelector('.directory-footer')?.append(compendiumSearchButton());
+    },
+  });
+
+  applicationHook({
+    app: ChatLog,
+    hook: 'on',
+    event: 'render',
+    callback: (log) => {
+      if (log.popOut) {
+        requestAnimationFrame(() => {
+          log.setPosition();
+        });
+      }
     },
   });
 
@@ -366,6 +380,51 @@ window.addEventListener(
 const isItem = (entity: ItemEP | ActorEP): entity is ItemEP => {
   return (entity as ActorEP).itemOperations === undefined;
 };
+
+applicationHook({
+  app: Compendium,
+  hook: 'on',
+  event: 'render',
+  callback: async (compendium, [el]) => {
+    if (compendium.collection.documentName === 'Item') {
+      await compendium.collection.getDocuments();
+      for (const listItem of (el?.querySelectorAll('li.directory-item') ??
+        []) as HTMLLIElement[]) {
+        if (listItem.offsetParent) {
+          const doc: ItemEP = await compendium.collection.getDocument(
+            listItem.getAttribute('data-document-id'),
+          );
+
+          compendium.collection.getDocuments;
+
+          listItem
+            .querySelector('.entry-name')
+            ?.setAttribute('data-type', doc.proxy.fullType);
+        }
+      }
+    } else if (compendium.collection.documentName === 'Actor') {
+      await compendium.collection.getDocuments();
+      for (const listItem of (el?.querySelectorAll('li.directory-item') ??
+        []) as HTMLLIElement[]) {
+        if (listItem.offsetParent) {
+          const doc: ActorEP = await compendium.collection.getDocument(
+            listItem.getAttribute('data-document-id'),
+          );
+
+          const type = localize(doc.type);
+          listItem
+            .querySelector('.entry-name')
+            ?.setAttribute(
+              'data-type',
+              isSleeve(doc.proxy)
+                ? formattedSleeveInfo(doc.proxy).concat(type).join(' - ')
+                : type,
+            );
+        }
+      }
+    }
+  },
+});
 
 for (const app of [ActorDirectory, ItemDirectory]) {
   applicationHook({
