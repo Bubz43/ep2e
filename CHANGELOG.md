@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.813] -- 2021-06-03
+
+- Update styling of chat log and messages inside popped out chatlog
+
 ## [0.812] -- 2021-06-02
 
 - Fix styling conflicts with Compendium Folders module

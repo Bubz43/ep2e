@@ -205,9 +205,7 @@ export class ActorEP extends Actor {
 
   get proxy() {
     if (!this.#proxy || this.invalidated) {
-      console.time('Create actor proxy');
       const agent = this.createProxy();
-      console.timeEnd('Create actor proxy');
       this.#proxy = agent;
     }
     this.invalidated = false;

@@ -715,51 +715,58 @@ sl-tooltip {
   }
 }
 
-#actors,
-#items {
-  .entity {
-    line-height: 16px;
-    padding: 0.25rem 0.5rem;
-    border: none;
-    > img {
-      grid-area: img;
+#actors .entity,
+#items .entity,
+.compendium .directory-item {
+  line-height: 16px;
+  padding: 0.25rem 0.5rem;
+  border: none;
+  > img {
+    grid-area: img;
+  }
+  > h4 {
+    display: grid;
+    grid-area: name;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+    align-self: center;
+    a,
+    &::after {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    > h4 {
-      display: grid;
-      grid-area: name;
-      margin: 0;
-      padding: 0;
-      pointer-events: none;
-      align-self: center;
-      a,
-      &::after {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      &::after {
-        content: attr(data-type);
-        font-size: 12px;
-        opacity: 0.8;
-      }
+    &::after {
+      content: attr(data-type);
+      font-size: 12px;
+      opacity: 0.8;
     }
-    &:hover {
-      box-shadow: 0 0 4px var(--color-grey);
-    }
-    &:focus {
-      background-color: var(--color-bg-alt);
-      outline: none;
-    }
+  }
+  &:hover {
+    box-shadow: 0 0 4px var(--color-grey);
+  }
+  &:focus {
+    background-color: var(--color-bg-alt);
+    outline: none;
+  }
 
-    &.item {
-      img {
-        &[src='icons/svg/mystery-man.svg'],
-        &[data-src='icons/svg/mystery-man.svg'],
-        &[src='systems/ep2e/build/dist/icons/nested-eclipses.svg'] {
-          opacity: 0.1;
-        }
+  &.item {
+    img {
+      &[src='icons/svg/mystery-man.svg'],
+      &[data-src='icons/svg/mystery-man.svg'],
+      &[src='systems/ep2e/build/dist/icons/nested-eclipses.svg'] {
+        opacity: 0.1;
       }
     }
+  }
+}
+
+.compendium .directory-list .directory-item {
+  border-bottom-color: var(--color-border);
+  .entry-name {
+    line-height: 1.25rem;
+    pointer-events: initial;
   }
 }
 

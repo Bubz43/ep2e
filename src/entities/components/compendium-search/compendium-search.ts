@@ -194,7 +194,12 @@ export class CompendiumSearch extends LitElement {
         clickable
         @click=${() => item.sheet.render(true)}
       >
-        <span>${item.proxy.fullName}</span>
+        <span
+          >${item.proxy.fullName}
+          <span class="compendium-title"
+            >[${item.compendium?.title}]</span
+          ></span
+        >
         <span class="type">${item.proxy.fullType}</span></wl-list-item
       >
     `;
@@ -212,7 +217,12 @@ export class CompendiumSearch extends LitElement {
         @click=${() => actor.sheet.render(true)}
       >
         <img slot="before" src=${proxy.img} loading="lazy" width="20px" />
-        <span>${proxy.name}</span>
+        <span
+          >${proxy.name}
+          <span class="compendium-title"
+            >[${actor.compendium?.title}]</span
+          ></span
+        >
         <span class="type">
           ${localize(proxy.type)}
           ${sleeve ? `/ ${formattedSleeveInfo(sleeve).join(' - ')}` : ''}

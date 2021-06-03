@@ -338,24 +338,24 @@ export const overridePrototypes = () => {
     },
   });
 
-  Compendium.prototype._replaceHTML = noop;
-  Compendium.prototype._renderInner = async function () {
-    const existing = this.element?.[0]?.querySelector('compendium-list');
-    const content = await this.collection.getDocuments();
-    if (existing) {
-      existing.content = content;
-      return $(existing);
-    }
-    const frag = new DocumentFragment();
-    render(
-      html`<compendium-list
-        .content=${content}
-        .compendium=${this}
-      ></compendium-list>`,
-      frag,
-    );
-    return $(frag);
-  };
+  // Compendium.prototype._replaceHTML = noop;
+  // Compendium.prototype._renderInner = async function () {
+  //   const existing = this.element?.[0]?.querySelector('compendium-list');
+  //   const content = await this.collection.getDocuments();
+  //   if (existing) {
+  //     existing.content = content;
+  //     return $(existing);
+  //   }
+  //   const frag = new DocumentFragment();
+  //   render(
+  //     html`<compendium-list
+  //       .content=${content}
+  //       .compendium=${this}
+  //     ></compendium-list>`,
+  //     frag,
+  //   );
+  //   return $(frag);
+  // };
 
   const { _replaceHTML } = CombatTracker.prototype;
   CombatTracker.prototype._replaceHTML = function (

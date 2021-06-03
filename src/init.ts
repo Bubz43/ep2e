@@ -381,6 +381,51 @@ const isItem = (entity: ItemEP | ActorEP): entity is ItemEP => {
   return (entity as ActorEP).itemOperations === undefined;
 };
 
+applicationHook({
+  app: Compendium,
+  hook: 'on',
+  event: 'render',
+  callback: async (compendium, [el]) => {
+    if (compendium.collection.documentName === 'Item') {
+      await compendium.collection.getDocuments();
+      for (const listItem of (el?.querySelectorAll('li.directory-item') ??
+        []) as HTMLLIElement[]) {
+        if (listItem.offsetParent) {
+          const doc: ItemEP = await compendium.collection.getDocument(
+            listItem.getAttribute('data-document-id'),
+          );
+
+          compendium.collection.getDocuments;
+
+          listItem
+            .querySelector('.entry-name')
+            ?.setAttribute('data-type', doc.proxy.fullType);
+        }
+      }
+    } else if (compendium.collection.documentName === 'Actor') {
+      await compendium.collection.getDocuments();
+      for (const listItem of (el?.querySelectorAll('li.directory-item') ??
+        []) as HTMLLIElement[]) {
+        if (listItem.offsetParent) {
+          const doc: ActorEP = await compendium.collection.getDocument(
+            listItem.getAttribute('data-document-id'),
+          );
+
+          const type = localize(doc.type);
+          listItem
+            .querySelector('.entry-name')
+            ?.setAttribute(
+              'data-type',
+              isSleeve(doc.proxy)
+                ? formattedSleeveInfo(doc.proxy).concat(type).join(' - ')
+                : type,
+            );
+        }
+      }
+    }
+  },
+});
+
 for (const app of [ActorDirectory, ItemDirectory]) {
   applicationHook({
     app,
