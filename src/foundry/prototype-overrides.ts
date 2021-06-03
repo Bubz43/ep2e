@@ -33,31 +33,6 @@ import { convertMenuOptions, gmIsConnected } from './misc-helpers';
 import { activeTokenStatusEffects } from './token-helpers';
 
 export const overridePrototypes = () => {
-  // Entity.prototype.matchRegexp = function (regex: RegExp) {
-  //   return regex.test(this.name);
-  // };
-
-  // const { _injectHTML } = Application.prototype;
-  // Application.prototype._injectHTML = function (
-  //   html: JQuery,
-  //   options: unknown,
-  // ) {
-  //   if (this instanceof MainMenu) {
-  //     _injectHTML.call(this, html, options);
-  //     return;
-  //   }
-  //   const [el] = html;
-
-  //   if (el) {
-  //     el.slot = 'foundry-apps';
-
-  //     document.querySelector('ep-overlay')?.append(el);
-  //     console.log(el);
-  //     this._element = html;
-  //     html.hide().fadeIn(200);
-  //   }
-  // };
-
   const { getData } = UserConfig.prototype;
   UserConfig.prototype.getData = function () {
     const original = getData.call(this, {}) as {
@@ -129,7 +104,7 @@ export const overridePrototypes = () => {
 
   Token.prototype.toggleEffect = async function (
     effect: string | typeof CONFIG['statusEffects'][number] | null,
-    options: { overlay?: boolean; active?: boolean } = {},
+    options: { overlay?: boolean | undefined; active?: boolean } = {},
   ) {
     const texture =
       typeof effect === 'string'
@@ -155,18 +130,6 @@ export const overridePrototypes = () => {
     if (this.hasActiveHUD) readyCanvas()?.tokens.hud.refreshStatusIcons();
     return this;
   };
-
-  // const conditionRegex = new RegExp('conditions', 'i');
-  // const hasConditions = (path: string) => conditionRegex.test(path);
-  // Token.prototype._onUpdateBarAttributes = function (updateData) {
-  //   _onUpdateBarAttributes.call(this, updateData);
-  //   if (Object.keys(flattenObject(updateData)).some(hasConditions)) {
-  //     this.drawEffects();
-  //     if (game.combat?.getCombatantByToken(this.data._id)) {
-  //       game.combats.render(true);
-  //     }
-  //   }
-  // };
 
   const { getData: getTokenData } = TokenHUD.prototype;
 
@@ -227,7 +190,7 @@ export const overridePrototypes = () => {
   TokenLayer.prototype.toggleCombat = async function (
     addToCombat = true,
     combat = null,
-    { token = null }: { token?: Token | null } = {},
+    { token = null }: { token?: Token | null | undefined } = {},
   ) {
     const tokens = new Set(
       (readyCanvas()?.tokens.controlled ?? [])
@@ -246,7 +209,7 @@ export const overridePrototypes = () => {
           if (!scene) return [];
           return {
             name: token.name,
-            hidden: token.data.hidden,
+            hidden: !!token.data.hidden,
             entityIdentifiers: {
               type: TrackedCombatEntity.Token,
               tokenId: token.id,
@@ -357,25 +320,6 @@ export const overridePrototypes = () => {
     }
   };
 
-  // Compendium.prototype._replaceHTML = noop;
-  // Compendium.prototype._renderInner = async function () {
-  //   const existing = this.element?.[0]?.querySelector('compendium-list');
-  //   const content = await this.collection.getDocuments();
-  //   if (existing) {
-  //     existing.content = content;
-  //     return $(existing);
-  //   }
-  //   const frag = new DocumentFragment();
-  //   render(
-  //     html`<compendium-list
-  //       .content=${content}
-  //       .compendium=${this}
-  //     ></compendium-list>`,
-  //     frag,
-  //   );
-  //   return $(frag);
-  // };
-
   const { _replaceHTML } = CombatTracker.prototype;
   CombatTracker.prototype._replaceHTML = function (
     ...args: Parameters<typeof _replaceHTML>
@@ -414,7 +358,7 @@ export const overridePrototypes = () => {
       openMenu({
         content: convertedOptions,
         position: ev,
-        header: heading ? { heading } : undefined,
+        header: heading ? { heading } : null,
       });
     });
   };
@@ -440,7 +384,7 @@ export const overridePrototypes = () => {
         openMenu({
           content: convertedOptions,
           position: ev,
-          header: heading ? { heading } : undefined,
+          header: heading ? { heading } : null,
         });
       } else if (entityLi.matches('.folder .folder-header')) {
         const folderOptions = this._getFolderContextOptions();
@@ -456,7 +400,7 @@ export const overridePrototypes = () => {
         openMenu({
           content: convertedOptions,
           position: ev,
-          header: heading ? { heading } : undefined,
+          header: heading ? { heading } : null,
         });
       }
     });
@@ -477,7 +421,7 @@ export const overridePrototypes = () => {
       openMenu({
         content: convertedOptions,
         position: ev,
-        header: heading ? { heading } : undefined,
+        header: heading ? { heading } : null,
       });
     };
 
@@ -509,7 +453,7 @@ export const overridePrototypes = () => {
       openMenu({
         content: convertedOptions,
         position: ev,
-        header: heading ? { heading } : undefined,
+        header: heading ? { heading } : null,
       });
     });
   };
