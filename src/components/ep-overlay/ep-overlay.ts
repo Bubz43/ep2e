@@ -339,26 +339,6 @@ export class EPOverlay extends LitElement {
       <slot name="sidebar"></slot>
     </div>
 
-    <!-- <div
-      class="chat-wrapper"
-      @mouseenter=${this.toggleChatPointers}
-      @mouseleave=${this.toggleChatPointers}
-    >
-      <slot name="chat"></slot>
-    </div> -->
-
-    <!-- <ul class="foundry-app-controls">
-      <slot name="app-controls"></slot>
-      <wl-list-item
-        clickable
-        class="menu-toggle"
-        @click=${() => ui.menu.toggle()}
-      >
-        <img src="icons/fvtt.png" height="30px" />
-      </wl-list-item>
-    </ul> -->
-
-    <!-- <user-view></user-view> -->
     <event-list></event-list>
     <slot name="dialog"></slot>
     <slot name="tooltip"></slot>

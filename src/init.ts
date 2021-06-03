@@ -158,8 +158,9 @@ Hooks.once('ready', async () => {
     document.body.append(overlay);
 
     tooltip = document.createElement('sl-tooltip');
-    tooltip.slot = 'tooltip';
-    overlay.append(tooltip);
+    document.body.append(tooltip);
+    // tooltip.slot = 'tooltip';
+    // overlay.append(tooltip);
     document.body.classList.add('ready');
     Hooks.call('ep-ready', true);
     const frag = new DocumentFragment();
@@ -234,6 +235,19 @@ Hooks.once('ready', async () => {
     event: 'render',
     callback: (dir, [el]) => {
       el?.querySelector('.directory-footer')?.append(compendiumSearchButton());
+    },
+  });
+
+  applicationHook({
+    app: ChatLog,
+    hook: 'on',
+    event: 'render',
+    callback: (log) => {
+      if (log.popOut) {
+        requestAnimationFrame(() => {
+          log.setPosition();
+        });
+      }
     },
   });
 

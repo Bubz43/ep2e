@@ -285,6 +285,12 @@ ep-overlay {
   }
 }
 
+#chat-popout {
+  #chat-log {
+    pointer-events: initial;
+  }
+}
+
 #chat-log {
   display: flex;
   flex-flow: column nowrap;
@@ -812,6 +818,37 @@ sl-tooltip {
   }
 }
 
+.sidebar-tab {
+  > header {
+    grid-area: header;
+  }
+  > footer {
+    grid-area: footer;
+  }
+  > .directory-list {
+    grid-area: list;
+    display: flex;
+    flex-flow: column nowrap;
+    padding: 0.25rem 0;
+    .entity {
+      background-color: alphav(var(--color-bg), 0.3);
+      img {
+        pointer-events: none;
+      }
+      &:hover {
+        cursor: pointer;
+        background-color: alphav(var(--color-bg), 0.8);
+        a {
+          text-shadow: none;
+        }
+      }
+      &:active {
+        background-color: var(--color-bg);
+      }
+    }
+  }
+}
+
 #sidebar {
   position: static;
   border: none;
@@ -909,6 +946,10 @@ sl-tooltip {
       border-top: 1px solid var(--color-border);
     }
   }
+}
+
+#sidebar,
+.sidebar-popout {
   #chat {
     background: transparent;
     pointer-events: none;
@@ -932,6 +973,7 @@ sl-tooltip {
       }
     }
   }
+
   #chat-form,
   #chat-controls {
     pointer-events: initial;
@@ -973,32 +1015,35 @@ sl-tooltip {
   }
 }
 
-.sidebar-tab {
-  > header {
-    grid-area: header;
+.sidebar-popout {
+  .window-content {
+    background: transparent !important;
   }
-  > footer {
-    grid-area: footer;
+  #chat-log {
+    order: 1;
+    align-items: unset;
+    padding: 0 0.25rem !important;
+    margin-bottom: 0.25rem;
   }
-  > .directory-list {
-    grid-area: list;
-    display: flex;
-    flex-flow: column nowrap;
-    padding: 0.25rem 0;
-    .entity {
-      background-color: alphav(var(--color-bg), 0.3);
-      img {
+  #chat-form {
+    box-shadow: none;
+  }
+  .message {
+    width: 100% !important;
+    .message-header {
+      grid-template-columns: auto 1fr auto;
+
+      .image-wrapper {
+        grid-area: img;
+        align-self: start;
+        filter: none;
         pointer-events: none;
       }
-      &:hover {
-        cursor: pointer;
-        background-color: alphav(var(--color-bg), 0.8);
-        a {
-          text-shadow: none;
-        }
-      }
-      &:active {
-        background-color: var(--color-bg);
+
+      img {
+        all: initial;
+        width: 22px;
+        display: block;
       }
     }
   }
@@ -1006,7 +1051,7 @@ sl-tooltip {
 
 .message {
   display: block;
-  background: alphav(var(--color-bg), 0.9);
+  background: alphav(var(--color-bg), 0.8);
   width: calc(100% - 1rem);
   color: var(--color-text);
   border: 2px solid var(--color-border) !important;
@@ -1068,6 +1113,11 @@ sl-tooltip {
       position: absolute;
       transform: translate(-70%, -0.1rem);
       z-index: 10;
+    }
+
+    .message-timestamp,
+    .message-delete {
+      font-size: 12px;
     }
   }
 

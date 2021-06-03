@@ -53,6 +53,11 @@ Hooks.once('ep-ready', () => {
   messageQueue.clear();
 });
 
+const scrollBottom = () => {
+  ui.chat.scrollBottom();
+  (ui.chat._popout as ChatLog | undefined)?.scrollBottom();
+};
+
 export const onChatMessageRender = (message: ChatMessageEP, j: JQuery) => {
   const [el] = j;
   if (!el) return;
@@ -136,13 +141,16 @@ export const onChatMessageRender = (message: ChatMessageEP, j: JQuery) => {
       { once: true },
     );
     el.classList.add('updated');
+
+    requestAnimationFrame(scrollBottom);
   } else if (createdChatMessages.has(message)) {
     el.addEventListener('animationend', () => el.classList.remove('new'), {
       once: true,
     });
     el.classList.add('new');
-    requestAnimationFrame(() => createdChatMessages.delete(message));
+    requestAnimationFrame(() => {
+      createdChatMessages.delete(message);
+      scrollBottom();
+    });
   }
-
-  requestAnimationFrame(() => ui.chat.scrollBottom());
 };
