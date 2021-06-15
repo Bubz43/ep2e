@@ -97,8 +97,9 @@ Hooks.once('ready', async () => {
     gameSettings.systemMigrationVersion.update(game.system.data.version);
   }
 
-  document.getElementById('board')?.addEventListener('auxclick', (ev) => {
+  document.getElementById('board')?.addEventListener('mousedown', (ev) => {
     if (ev.button === 1) {
+      ev.preventDefault();
       const control = ui.controls.control as {
         name: string;
         title: string;
