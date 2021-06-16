@@ -16,7 +16,7 @@ module.exports = function sassPlugin(
     name: 'snowpack-tagged-scss',
     resolve: {
       input: ['.scss', '.sass'],
-      output: ['.css.js', '.css'],
+      output: ['.js', '.css'],
     },
     async load({ filePath, isDev }) {
       const index = filePath.indexOf('src');
@@ -32,7 +32,7 @@ module.exports = function sassPlugin(
       }
 
       return {
-        '.css.js': `import {css} from '${afterSrc.join(
+        '.js': `import {css} from '${afterSrc.join(
           '/',
         )}/_snowpack/pkg/lit-element.js';
   

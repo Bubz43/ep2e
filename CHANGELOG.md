@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.814] - 2021-06-16
+
+- Fix middle mouse click on canvas not opening canvas menu
+- Update dependencies
+
 ## [0.813] -- 2021-06-03
 
 - Update styling of chat inside of popped out chatlog

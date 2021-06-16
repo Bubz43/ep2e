@@ -1,5 +1,5 @@
 {
-  "include": ["src", "types", "foundry-8.d.ts"],
+  "include": ["src", "types", "foundry.d.ts"],
   "compilerOptions": {
     "module": "esnext",
     "target": "esnext",
