@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.814] - 2021-06-17
+## [0.815] - 2021-06-17
 
 - Add pools to Remade biomorph compendium entry
 - Add option to roll incomplete health recovery without resetting timer
