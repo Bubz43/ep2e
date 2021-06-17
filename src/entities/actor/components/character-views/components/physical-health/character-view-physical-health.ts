@@ -99,26 +99,32 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
     heal: Recovery,
     instances: number,
   ) {
+    const wholeInstances = Math.floor(instances);
     await createMessage({
       data: {
         header: {
           heading: heal.source,
           subheadings: localize('healthRecovery'),
         },
-        heals: Array.from({ length: Math.floor(instances) || 1 }).map(() => ({
+        heal: {
           source: heal.source,
           healthType: HealthType.Physical,
           ...(target === HealOverTimeTarget.Damage
             ? {
-                damageFormulas: rollLabeledFormulas([
-                  {
-                    label: localize('heal'),
+                damageFormulas: rollLabeledFormulas(
+                  Array.from({ length: wholeInstances }).map((_, index) => ({
+                    label:
+                      instances >= 2
+                        ? `${localize('heal')} ${index + 1}`
+                        : localize('heal'),
                     formula: heal.amount,
-                  },
-                ]),
+                  })),
+                ),
               }
-            : { wounds: rollFormula(heal.amount)?.total || 0 }),
-        })),
+            : {
+                wounds: (rollFormula(heal.amount)?.total || 0) * wholeInstances,
+              }),
+        },
       },
       entity: this.character,
     });
@@ -139,7 +145,6 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
     const { health } = this;
     const { regenState, recoveries } = health;
     const { recoveryConditions } = this.sleeve;
-    // TODO Account for passing intervals
     // TODO Conditions
     return html`
       <character-view-drawer-heading
@@ -185,21 +190,35 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
                           heal.timeState.duration -
                           1,
                       );
-                      timeToTick !== false &&
-                        console.log(
-                          heal.source,
-                          'instances',
-                          instances,
-                          'indefinite',
-                          heal.timeState.isIndefinite,
-                        );
 
                       return html`
                         <wl-list-item
                           class="heal ${ready ? 'ready' : ''}"
                           ?disabled=${this.character.disabled}
                           clickable
-                          @click=${() => this.rollHeal(target, heal, instances)}
+                          @click=${(ev: MouseEvent) => {
+                            if (!timeToTick)
+                              this.rollHeal(target, heal, instances);
+                            else {
+                              openMenu({
+                                position: ev,
+                                content: [
+                                  {
+                                    label: `${localize('use')} & ${localize(
+                                      'reset',
+                                    )} ${localize('time')}`,
+                                    callback: () =>
+                                      this.rollHeal(target, heal, 1),
+                                  },
+                                  {
+                                    label: localize('use'),
+                                    callback: () =>
+                                      this.rollHeal(target, heal, instances),
+                                  },
+                                ],
+                              });
+                            }
+                          }}
                         >
                           <span slot="before">${heal.source}</span>
                           <span

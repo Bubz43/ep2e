@@ -13,6 +13,7 @@ import {
   HealOverTimeTarget,
   Recovery,
 } from '@src/health/recovery';
+import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import styles from './character-view-mesh-health.scss';
@@ -33,8 +34,12 @@ export class CharacterViewMeshHealth extends UseWorldTime(LitElement) {
     this.character.openHealthEditor(this.health);
   }
 
-  private async rollHeal(target: HealOverTimeTarget, heal: Recovery) {
-    // TODO Account for multiple instances
+  private async rollHeal(
+    target: HealOverTimeTarget,
+    heal: Recovery,
+    instances: number,
+  ) {
+    const wholeInstances = Math.floor(instances);
     await createMessage({
       data: {
         header: { heading: `${heal.source} ${localize('healthRecovery')}` },
@@ -43,20 +48,25 @@ export class CharacterViewMeshHealth extends UseWorldTime(LitElement) {
           healthType: HealthType.Mesh,
           ...(target === HealOverTimeTarget.Damage
             ? {
-                damageFormulas: rollLabeledFormulas([
-                  {
-                    label: localize('heal'),
+                damageFormulas: rollLabeledFormulas(
+                  Array.from({ length: wholeInstances }).map((_, index) => ({
+                    label:
+                      instances >= 2
+                        ? `${localize('heal')} ${index + 1}`
+                        : localize('heal'),
                     formula: heal.amount,
-                  },
-                ]),
+                  })),
+                ),
               }
-            : { wounds: rollFormula(heal.amount)?.total || 0 }),
+            : {
+                wounds: (rollFormula(heal.amount)?.total || 0) * wholeInstances,
+              }),
         },
       },
       // visibility: MessageVisibility.WhisperGM,
       entity: this.character.actor,
     });
-    await this.health.logHeal(heal.slot);
+    await this.health.logHeal(heal.slot, heal.interval * (instances % 1));
   }
 
   private async rollReboot() {
@@ -127,30 +137,64 @@ export class CharacterViewMeshHealth extends UseWorldTime(LitElement) {
                 <figure>
                   <figcaption>${localize(target)}</figcaption>
                   <ul>
-                    ${enumValues(HealingSlot).map((slot) => {
-                      const heal = heals.get(slot);
-                      return heal
-                        ? html`
-                            <wl-list-item
-                              ?disabled=${this.character.disabled}
-                              clickable
-                              @click=${() => this.rollHeal(target, heal)}
-                            >
-                              <span slot="before">${heal.source}</span>
-                              <span>${formatAutoHealing(heal)} </span>
-                              ${regenState === target
-                                ? html`
-                                    <span slot="after">
-                                      ${localize('tick')} ${localize('in')}
-                                      ${prettyMilliseconds(
-                                        heal.timeState.remaining,
-                                      )}
-                                    </span>
-                                  `
-                                : ''}
-                            </wl-list-item>
-                          `
-                        : '';
+                    ${[...heals.values()].map((heal) => {
+                      const timeToTick =
+                        regenState === target && heal.timeState.remaining;
+                      const ready = timeToTick === 0;
+                      const instances = Math.abs(
+                        (heal.timeState.duration - heal.timeState.elapsed) /
+                          heal.timeState.duration -
+                          1,
+                      );
+
+                      return html`
+                        <wl-list-item
+                          class="heal ${ready ? 'ready' : ''}"
+                          ?disabled=${this.character.disabled}
+                          clickable
+                          @click=${(ev: MouseEvent) => {
+                            if (!timeToTick)
+                              this.rollHeal(target, heal, instances);
+                            else {
+                              openMenu({
+                                position: ev,
+                                content: [
+                                  {
+                                    label: `${localize('use')} & ${localize(
+                                      'reset',
+                                    )} ${localize('time')}`,
+                                    callback: () =>
+                                      this.rollHeal(target, heal, 1),
+                                  },
+                                  {
+                                    label: localize('use'),
+                                    callback: () =>
+                                      this.rollHeal(target, heal, instances),
+                                  },
+                                ],
+                              });
+                            }
+                          }}
+                        >
+                          <span slot="before">${heal.source}</span>
+                          <span>${formatAutoHealing(heal)} </span>
+                          ${timeToTick !== false
+                            ? html`
+                                <span slot="after">
+                                  ${timeToTick === 0
+                                    ? localize('ready')
+                                    : ` ${localize('tick')} ${localize('in')}
+                                  ${prettyMilliseconds(timeToTick)}`}
+                                </span>
+                                ${instances >= 2
+                                  ? html`<span slot="after"
+                                      >x${Math.floor(instances)}</span
+                                    >`
+                                  : ''}
+                              `
+                            : ''}
+                        </wl-list-item>
+                      `;
                     })}
                   </ul>
                 </figure>

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.814] - 2021-06-17
+
+- Add pools to Remade biomorph compendium entry
+- Add option to roll incomplete health recovery without resetting timer
+- Allow health recoveries to accumlate multiple instances
+- Properly lower healing time on leftover partial health recovery instances
+
 ## [0.814] - 2021-06-16
 
 - Fix middle mouse click on canvas not opening canvas menu
