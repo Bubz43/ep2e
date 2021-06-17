@@ -37,6 +37,7 @@ export class MessageContent extends LitElement {
       stress,
       healthChange,
       heal,
+      heals,
       damage,
       substanceUse,
       explosiveUse,
@@ -155,6 +156,11 @@ export class MessageContent extends LitElement {
           `
         : ''}
       ${heal ? html` <message-heal .heal=${heal}></message-heal> ` : ''}
+      ${heals
+        ? html`${heals.map(
+            (heal) => html`<message-heal .heal=${heal}></message-heal>`,
+          )}`
+        : ''}
       ${damage ? html`<message-damage .damage=${damage}></message-damage>` : ''}
       ${stress
         ? html` <message-stress-test .stress=${stress}></message-stress-test> `

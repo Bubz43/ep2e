@@ -168,10 +168,10 @@ export class BiologicalHealth extends HealthMixin(BiologicalHealthBase) {
       .commit((data) => applyHealthModification(data, modification));
   }
 
-  logHeal(slot: HealingSlot) {
+  logHeal(slot: HealingSlot, remainder: number) {
     return this.init.updater
       .path(`${slot}HealTickStartTime` as const)
-      .commit(currentWorldTimeMS());
+      .commit(currentWorldTimeMS() - remainder);
   }
 
   addDamageOverTime(dot: DamageOverTime) {
