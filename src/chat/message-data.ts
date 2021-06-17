@@ -284,7 +284,6 @@ export type MessageData = Partial<{
   thrownAttack: ThrownWeaponMessageData;
   rangedAttack: RangedAttackMessageData;
   heal: MessageHealData;
-  heals: MessageHealData[];
   substanceUse: SubstanceUseData;
   fromMessageId: string;
   successTest: SuccessTestMessageData;
