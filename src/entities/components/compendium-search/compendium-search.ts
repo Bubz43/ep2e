@@ -104,7 +104,13 @@ export class CompendiumSearch extends LitElement {
 
   render() {
     const regex = searchRegExp(this.filter);
-    const filtered = this.results.filter((r) => r.matchRegexp(regex));
+    const filtered = this.results.filter((r) => {
+      const matches = r.matchRegexp(regex);
+      if (!matches && this.entity === 'Item') {
+        return regex.test(`${r.name} ${(r as ItemEP).proxy.fullType}`);
+      }
+      return matches;
+    });
     return html`
       <section class="sources">
         <sl-header heading=${localize('sources')}></sl-header>
