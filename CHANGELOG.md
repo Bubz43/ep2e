@@ -3,6 +3,8 @@
 ## [Unreleased] - 2021-06-
 
 - Improve compendium search
+- Move sleeve ware out of equipped and into own section
+- Show GP of sleeve ware separately from equipped gear
 
 ## [0.815] - 2021-06-17
 
