@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased] - 2021-06-
+## [0.816] - 2021-06-20
 
 - Improve compendium search
 - Move sleeve ware out of equipped and into own section
