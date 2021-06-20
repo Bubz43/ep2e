@@ -1047,8 +1047,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
             this.vehicleGear.push(item);
             vehicleItems.set(item.id, item);
             item.vehicleOwner = this.vehicle?.name;
-          }
-          if (sleeveItem) {
+          } else if (sleeveItem) {
             this.sleeveWare.push(item);
             sleeveItems.set(item.id, item);
           } else this.equipped.push(item);

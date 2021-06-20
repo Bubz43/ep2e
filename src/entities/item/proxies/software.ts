@@ -19,6 +19,7 @@ import { Purchasable, Service } from '../item-mixins';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
 const serviceTypes = [SoftwareType.AppAsService, SoftwareType.MeshService];
+const ware = [SoftwareType.AppAsWare, SoftwareType.Meshware];
 
 class Base extends ItemProxyBase<ItemType.Software> {
   get updateState() {
@@ -27,7 +28,8 @@ class Base extends ItemProxyBase<ItemType.Software> {
 }
 export class Software
   extends mix(Base).with(Purchasable, Service)
-  implements ObtainableEffects, Attacker<SoftwareAttackData, SoftwareAttack> {
+  implements ObtainableEffects, Attacker<SoftwareAttackData, SoftwareAttack>
+{
   constructor(init: ItemProxyInit<ItemType.Software>) {
     super(init);
   }
@@ -44,6 +46,10 @@ export class Software
 
   get category() {
     return this.epData.category;
+  }
+
+  get isWare() {
+    return ware.includes(this.softwareType);
   }
 
   get softwareType() {

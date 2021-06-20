@@ -1,3 +1,4 @@
+import { SoftwareType } from '@src/data-enums';
 import { localize } from '@src/foundry/localization';
 import { packIsVisible } from '@src/foundry/misc-helpers';
 import { notEmpty } from '@src/utility/helpers';
@@ -39,7 +40,7 @@ export const isSleeveItem = (proxy: ItemProxy) => {
       return false;
 
     case ItemType.Software:
-      return proxy.equipped;
+      return proxy.isWare && proxy.equipped;
 
     default:
       return !!proxy.wareType && proxy.equipped;

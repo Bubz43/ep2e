@@ -126,9 +126,16 @@ export class Infomorph extends mix(InfomorphBase).with(SleeveInfo) {
       }
 
       case ItemType.Software: {
-        const copy = proxy.getDataCopy(true);
-        copy.data.state.equipped = true;
-        this.itemOperations.add(copy);
+        if (proxy.isWare) {
+          const copy = proxy.getDataCopy(true);
+          copy.data.state.equipped = true;
+          this.itemOperations.add(copy);
+        } else
+          notify(
+            NotificationType.Error,
+            `${localize('software')} - ${localize('onlyWareAllowed')}`,
+          );
+
         break;
       }
 
