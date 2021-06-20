@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.818] - 2021-06-20
+
+- Only group App as Ware or Meshware instead of all Software with sleeves
+
 ## [0.817] - 2021-06-20
 
 - Update compatible core version to avoid warning message
