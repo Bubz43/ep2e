@@ -284,7 +284,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
           'morphTraits',
         )}`;
       case ItemGroup.VehicleGear:
-        return `${this.character.vehicle?.name ?? ''} ${localize('gear')}`;
+        return `${this.character.vehicle?.name ?? ''} ${localize('ware')}`;
       case ItemGroup.VehicleTraits:
         return `${this.character.vehicle?.name ?? ''} ${localize('traits')}`;
 

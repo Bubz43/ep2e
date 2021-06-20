@@ -1392,6 +1392,7 @@ export class CharacterViewAlt extends CharacterViewBase {
         },
       ]);
     const equippedGP = CharacterViewAlt.gpTotals(this.character.equipped);
+    const wareGP = CharacterViewAlt.gpTotals(this.character.sleeveWare);
     const consumableGP = CharacterViewAlt.gpTotals(
       this.character.consumables.map((c) => ({
         fullName: c.fullName,
@@ -1440,6 +1441,20 @@ export class CharacterViewAlt extends CharacterViewBase {
               'gearPoints',
             )}"
             >${equippedGP.total}</sl-group
+          ></sl-popover
+        >
+        <sl-popover
+          placement=${Placement.Left}
+          openEvent=${OpenEvent.Hover}
+          .renderOnDemand=${() =>
+            CharacterViewAlt.renderGearPointParts(wareGP.parts)}
+        >
+          <sl-group
+            slot="base"
+            label="${this.character.sleeve?.name} ${localize(
+              'ware',
+            )} ${localize('SHORT', 'gearPoints')}"
+            >${wareGP.total}</sl-group
           ></sl-popover
         >
         <sl-popover
@@ -1508,12 +1523,18 @@ export class CharacterViewAlt extends CharacterViewBase {
     >${label} <span class="value">${value}</span></span
   >`;
 
+  static defaultCollapsed = new Set([
+    ItemGroup.Stashed,
+    ItemGroup.SleeveWare,
+    ItemGroup.VehicleGear,
+  ]);
+
   private renderItemGroup = (group: ItemGroup) => {
     return html`
       <character-view-item-group
         .character=${this.character}
         group=${group}
-        ?collapsed=${group === ItemGroup.Stashed}
+        ?collapsed=${CharacterViewAlt.defaultCollapsed.has(group)}
       ></character-view-item-group>
     `;
   };
