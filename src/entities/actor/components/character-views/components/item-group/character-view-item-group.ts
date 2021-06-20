@@ -295,6 +295,8 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
         return `${localize('psi')}-${localize(`gamma`)}${
           this.character.psi?.level === 3 ? `/${localize('epsilon')}` : ``
         }`;
+      case ItemGroup.SleeveWare:
+        return `${this.character.sleeve?.name ?? ''} ${localize('ware')}`;
       default:
         return localize(this.group);
     }

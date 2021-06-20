@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased] - 2021-06-
+
+- Improve compendium search
+
 ## [0.815] - 2021-06-17
 
 - Add pools to Remade biomorph compendium entry

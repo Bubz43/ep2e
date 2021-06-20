@@ -102,6 +102,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   readonly morphTraits: Trait[] = [];
   readonly vehicleTraits: Trait[] = [];
   readonly equipped: EquippableItem[] = [];
+  readonly sleeveWare: EquippableItem[] = [];
   readonly vehicleGear: EquippableItem[] = [];
   readonly consumables: ConsumableItem[] = [];
   readonly awaitingOnsetSubstances: Substance[] = [];
@@ -243,9 +244,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   }
 
   get allEquipped() {
-    return this.vehicleGear.length
-      ? [...this.equipped, ...this.vehicleGear]
-      : this.equipped;
+    return [...this.equipped, ...this.sleeveWare, ...this.vehicleGear];
   }
 
   get isLimited() {
@@ -1048,9 +1047,11 @@ export class Character extends ActorProxyBase<ActorType.Character> {
             this.vehicleGear.push(item);
             vehicleItems.set(item.id, item);
             item.vehicleOwner = this.vehicle?.name;
+          }
+          if (sleeveItem) {
+            this.sleeveWare.push(item);
+            sleeveItems.set(item.id, item);
           } else this.equipped.push(item);
-
-          if (sleeveItem) sleeveItems.set(item.id, item);
 
           if ('currentEffects' in item) {
             this._appliedEffects.add(item.currentEffects);

@@ -36,6 +36,7 @@ export enum ItemGroup {
   MorphTraits = 'morphTraits',
   VehicleTraits = 'vehicleTraits',
   Equipped = 'equipped',
+  SleeveWare = 'sleeveWare',
   VehicleGear = 'vehicleGear',
   Stashed = 'stashed',
 }

@@ -1502,7 +1502,8 @@ type LangEntries =
   | 'completeTransformation'
   | 'onlyWareAllowed'
   | 'onlyCharactersAllowed'
-  | 'thisWillOverwriteEgo';
+  | 'thisWillOverwriteEgo'
+  | 'sleeveWare';
 type FullNames =
   | 'cog'
   | 'int'

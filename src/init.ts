@@ -195,6 +195,7 @@ Hooks.once('ready', async () => {
           style="width: 100%"
           label=${localize('search')}
           icon="search"
+          outlined
           @click=${() => {
             openWindow({
               key: CompendiumSearch,

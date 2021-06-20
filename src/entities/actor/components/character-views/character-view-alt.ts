@@ -1237,12 +1237,14 @@ export class CharacterViewAlt extends CharacterViewBase {
   private static gear = [
     ItemGroup.Consumables,
     ItemGroup.Equipped,
+    ItemGroup.SleeveWare,
     ItemGroup.Stashed,
   ];
 
   private static gearWithVehicle = [
     ItemGroup.Consumables,
     ItemGroup.Equipped,
+    ItemGroup.SleeveWare,
     ItemGroup.VehicleGear,
     ItemGroup.Stashed,
   ];
