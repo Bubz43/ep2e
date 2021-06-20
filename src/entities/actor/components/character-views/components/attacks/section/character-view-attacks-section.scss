@@ -12,7 +12,8 @@
 .group-toggles {
   display: flex;
   flex-flow: row wrap;
-  --mdc-shape-small: 0.5rem;
+  --mdc-shape-small: 1rem;
+  --mdc-button-outline-width: 2px;
   --mdc-theme-primary: #{alphav(var(--color-negative), 0.8)};
   --mdc-theme-primary: var(--color-grey);
   --mdc-theme-on-primary: var(--color-bg);

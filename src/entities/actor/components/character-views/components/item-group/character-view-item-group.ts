@@ -277,6 +277,8 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
 
   private get heading() {
     switch (this.group) {
+      case ItemGroup.Equipped:
+        return `${localize('equipped')} ${localize('gear')}`;
       case ItemGroup.EgoTraits:
         return `${this.character.name} ${localize('egoTraits')}`;
       case ItemGroup.MorphTraits:
