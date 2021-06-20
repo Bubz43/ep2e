@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.817] - 2021-06-20
+
+- Update compatible core version to avoid warning message
+
 ## [0.816] - 2021-06-20
 
 - Improve compendium search
