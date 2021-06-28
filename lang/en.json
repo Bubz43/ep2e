@@ -1543,7 +1543,7 @@
       "woundThreshold": "WT",
       "traumasIgnored": "TI",
       "woundsIgnored": "WI",
-      "noCost": "Free",
+      "noCost": "No Cost",
       "major": "Maj",
       "minor": "Min",
       "moderate": "Mod",

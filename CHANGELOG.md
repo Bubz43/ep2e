@@ -2,10 +2,11 @@
 
 ## [0.819] - 2021-06-28
 
-- Fix icons for combat editable participants not being clickable
-- Don't show menu button on hover for non editable participants
+- Fix icons for owned combat participants not being clickable
+- Don't show menu button on hover for non-owned combat participants
 - Show button to open threat source sheet for unlinked tokens using threat
 - Add a custom option to pools
+- Add no cost option to
 
 ## [0.818] - 2021-06-20
 
