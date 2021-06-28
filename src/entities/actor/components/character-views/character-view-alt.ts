@@ -1091,7 +1091,11 @@ export class CharacterViewAlt extends CharacterViewBase {
 
       ${this.character.poolHolder === this.character
         ? this.renderRecharges()
-        : ''}
+        : html`<mwc-button
+            dense
+            @click=${() => this.character.poolHolder.actor.sheet.render(true)}
+            >${localize('threat')} ${localize('source')}</mwc-button
+          >`}
 
       <mwc-button
         class="effects-toggle"
