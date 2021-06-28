@@ -1503,7 +1503,8 @@ type LangEntries =
   | 'onlyWareAllowed'
   | 'onlyCharactersAllowed'
   | 'thisWillOverwriteEgo'
-  | 'sleeveWare';
+  | 'sleeveWare'
+  | 'noCost';
 type FullNames =
   | 'cog'
   | 'int'
@@ -1527,6 +1528,7 @@ export type Abbreviation =
   | 'traumaThreshold'
   | 'traumasIgnored'
   | 'insanityRating'
+  | 'noCost'
   | 'minor'
   | 'moderate'
   | 'major'

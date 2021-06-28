@@ -1326,7 +1326,7 @@ export class CharacterViewAlt extends CharacterViewBase {
           gp === '5+' ? `${localize('as').toLocaleLowerCase()} ${gpNumber}` : ''
         }`;
         if (item.multiplier !== undefined && item.multiplier !== 1) {
-          const total = gpNumber * item.multiplier;
+          const total = Math.round(gpNumber * item.multiplier * 1000) / 1000;
           accum.total += total;
           accum.parts.push({
             name: item.fullName,

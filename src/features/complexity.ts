@@ -5,6 +5,7 @@ import { CommonInterval } from './time';
 import { toMilliseconds } from './modify-milliseconds';
 
 export const complexityGP = {
+  [Complexity.NoCost]: 0,
   [Complexity.Minor]: 1,
   [Complexity.Moderate]: 2,
   [Complexity.Major]: 3,
@@ -26,6 +27,7 @@ export const formatComplexity = ({
 };
 
 export const acquisitionTime: Record<Complexity, number> = {
+  [Complexity.NoCost]: 0,
   [Complexity.Minor]: toMilliseconds({ hours: 2 }),
   [Complexity.Moderate]: toMilliseconds({ hours: 8 }),
   [Complexity.Major]: CommonInterval.Day,

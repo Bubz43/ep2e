@@ -394,6 +394,9 @@
                 "nanoware": {
                   "type": "string"
                 },
+                "noCost": {
+                  "type": "string"
+                },
                 "oral": {
                   "type": "string"
                 },
@@ -446,6 +449,7 @@
                 "traumaThreshold",
                 "traumasIgnored",
                 "insanityRating",
+                "noCost",
                 "minor",
                 "moderate",
                 "major",
@@ -3038,6 +3042,9 @@
             "noClose": {
               "type": "string"
             },
+            "noCost": {
+              "type": "string"
+            },
             "noDamage": {
               "type": "string"
             },
@@ -3990,6 +3997,9 @@
               "type": "string"
             },
             "sleeve": {
+              "type": "string"
+            },
+            "sleeveWare": {
               "type": "string"
             },
             "sleeved": {
@@ -5761,6 +5771,7 @@
             "niche",
             "no",
             "noClose",
+            "noCost",
             "noDamage",
             "noFlipFlop",
             "noInitiativeModificationsAvailable",
@@ -6079,6 +6090,7 @@
             "slacker",
             "slaved",
             "sleeve",
+            "sleeveWare",
             "sleeved",
             "sleeves",
             "sleight",

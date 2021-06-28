@@ -1476,6 +1476,7 @@
     "onlyWareAllowed": "Only ware allowed",
     "onlyCharactersAllowed": "Only characters allowed",
     "thisWillOverwriteEgo": "This will completely overwrite ego.",
+    "noCost": "No Cost",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
@@ -1542,6 +1543,7 @@
       "woundThreshold": "WT",
       "traumasIgnored": "TI",
       "woundsIgnored": "WI",
+      "noCost": "Free",
       "major": "Maj",
       "minor": "Min",
       "moderate": "Mod",

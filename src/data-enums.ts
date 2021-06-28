@@ -114,6 +114,7 @@ export enum Brain {
 }
 
 export enum Complexity {
+  NoCost = 'noCost',
   Minor = 'minor',
   Moderate = 'moderate',
   Major = 'major',
