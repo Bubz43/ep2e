@@ -1,8 +1,14 @@
 import { createMessage } from '@src/chat/create-message';
+import {
+  renderNumberField,
+  renderTextField,
+} from '@src/components/field/fields';
+import { renderAutoForm } from '@src/components/form/forms';
 import { AptitudeType, enumValues, PoolType } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { localize } from '@src/foundry/localization';
 import { HealthStat, HealthType } from '@src/health/health';
+import { RenderDialogEvent } from '@src/open-dialog';
 import type { MenuOption, MWCMenuOption } from '@src/open-menu';
 import { withSign } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
@@ -77,10 +83,12 @@ const messageOnly = ({
   character,
   pool,
   label,
+  points = 1,
 }: {
   character: Character;
   pool: ReadonlyPool;
   label: string;
+  points?: number;
 }) => ({
   label,
   disabled: !pool.available,
@@ -90,7 +98,7 @@ const messageOnly = ({
       pool,
       character,
     });
-    character.addToSpentPools({ pool: pool.type, points: 1 });
+    character.addToSpentPools({ pool: pool.type, points });
   },
 });
 
@@ -253,6 +261,57 @@ export const poolActionOptions = (character: Character, poolType: PoolType) => {
     default:
       break;
   }
+
+  options.push('divider', {
+    label: localize('custom'),
+    disabled: !available,
+    callback: (ev) => {
+      const props = { points: 1, label: localize('custom') };
+
+      ev.currentTarget?.dispatchEvent(
+        new RenderDialogEvent(html`
+          <mwc-dialog
+            heading="${localize('custom')} ${localize(pool!.type)} ${localize(
+              'use',
+            )}"
+          >
+            ${renderAutoForm({
+              noDebounce: true,
+              storeOnInput: true,
+              props,
+              update: (changes) => {
+                Object.assign(props, changes);
+              },
+              fields: ({ points, label }) => [
+                renderNumberField(points, { min: 1, max: available }),
+                renderTextField(label),
+              ],
+            })}
+            <mwc-button
+              outlined
+              slot="secondaryAction"
+              dialogAction="cancel"
+              label=${localize('cancel')}
+            ></mwc-button>
+            <mwc-button
+              raised
+              slot="primaryAction"
+              dialogAction="confirm"
+              label=${localize('confirm')}
+              @click=${() => {
+                pool &&
+                  messageOnly({
+                    character,
+                    pool,
+                    ...props,
+                  }).callback();
+              }}
+            ></mwc-button>
+          </mwc-dialog>
+        `),
+      );
+    },
+  });
 
   return options;
 };

@@ -4,6 +4,7 @@
 
 - Fix icons for combat editable participants not being clickable
 - Don't show menu button on hover for non editable participants
+- Show button to open threat source sheet for unlinked tokens using threat
 
 ## [0.818] - 2021-06-20
 

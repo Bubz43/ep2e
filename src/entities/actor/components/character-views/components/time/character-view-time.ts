@@ -57,13 +57,12 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
   private openTaskCreator() {
     this.dispatchEvent(
       new RenderDialogEvent(
-        html`<mwc-dialog hideActions heading="${localize('new')} ${localize(
-          'task',
-        )}" open
+        html`<mwc-dialog
+          hideActions
+          heading="${localize('new')} ${localize('task')}"
+          open
           >${this.renderTaskCreator()}
-         </mwc-button>
-          </mwc-dialog
-        >`,
+        </mwc-dialog>`,
       ),
     );
   }
@@ -154,11 +153,8 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
   }
 
   private renderAppliedSubstances() {
-    const {
-      awaitingOnsetSubstances,
-      activeSubstances,
-      disabled,
-    } = this.character;
+    const { awaitingOnsetSubstances, activeSubstances, disabled } =
+      this.character;
     return html`
       ${notEmpty(activeSubstances)
         ? html`

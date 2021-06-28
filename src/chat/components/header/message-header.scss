@@ -42,7 +42,8 @@ header {
   .details {
     display: block;
     font-size: 0.75rem;
-    text-transform: capitalize;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     text-align: center;
   }
 }
