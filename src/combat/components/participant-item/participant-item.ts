@@ -93,7 +93,6 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
   }
 
   disconnectedCallback() {
-    // TODO highlight self on hoverToken
     this.unsubFromAll();
     super.disconnectedCallback();
     Hooks.off('canvasReady', this.setup);
@@ -468,10 +467,10 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
 
   private iconClick() {
     const { activeToken } = this;
-    if (activeToken?.scene?.isView) {
+    if (activeToken?.scene?.active) {
       activeToken.control({ releaseOthers: true });
       readyCanvas()?.animatePan({ x: activeToken.x, y: activeToken.y } as any);
-    } else if (activeToken) {
+    } else {
       notify(NotificationType.Info, 'Token not on viewed scene');
     }
   }
@@ -589,9 +588,8 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       >
         <mwc-icon-button
           slot="before"
-          ?disabled=${!editable ||
-          (!token && !actor) ||
-          !!(token && !token.scene?.isView)}
+          class="token-button"
+          ?disabled=${!editable || !actor}
           @click=${this.iconClick}
           ><img
             class="icon"
@@ -699,7 +697,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
                 /></mwc-icon-button>
               `}
           <mwc-icon-button
-            class="menu"
+            class="menu ${editable ? '' : 'inactive'}"
             icon="more_vert"
             @click=${this.openMenu}
           ></mwc-icon-button>
