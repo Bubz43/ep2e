@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.819] - 2021-06-28
+
+- Fix icons for combat editable participants not being clickable
+- Don't show menu button on hover for non editable participants
+
 ## [0.818] - 2021-06-20
 
 - Only group App as Ware or Meshware instead of all Software with sleeves

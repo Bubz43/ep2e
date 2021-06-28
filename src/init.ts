@@ -160,8 +160,6 @@ Hooks.once('ready', async () => {
 
     tooltip = document.createElement('sl-tooltip');
     document.body.append(tooltip);
-    // tooltip.slot = 'tooltip';
-    // overlay.append(tooltip);
     document.body.classList.add('ready');
     Hooks.call('ep-ready', true);
     const frag = new DocumentFragment();
