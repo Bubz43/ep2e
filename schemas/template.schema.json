@@ -533,6 +533,12 @@
           "type": "string"
         },
         "variableInterval": {
+          "enum": [
+            "days",
+            "hours",
+            "minutes",
+            "turns"
+          ],
           "type": "string"
         }
       },
@@ -582,6 +588,7 @@
     },
     "Complexity": {
       "enum": [
+        "trivial",
         "minor",
         "moderate",
         "major",
@@ -2368,6 +2375,9 @@
                       {
                         "additionalProperties": false,
                         "properties": {
+                          "armorPiercing": {
+                            "type": "boolean"
+                          },
                           "dvModifier": {
                             "type": "string"
                           },
@@ -3545,6 +3555,9 @@
                       {
                         "additionalProperties": false,
                         "properties": {
+                          "armorPiercing": {
+                            "type": "boolean"
+                          },
                           "dvModifier": {
                             "type": "string"
                           },
@@ -4052,6 +4065,9 @@
                       {
                         "additionalProperties": false,
                         "properties": {
+                          "armorPiercing": {
+                            "type": "boolean"
+                          },
                           "dvModifier": {
                             "type": "string"
                           },
@@ -4544,6 +4560,10 @@
                   "type": "object"
                 },
                 "firingMode": {
+                  "enum": [
+                    "semiAuto",
+                    "singleShot"
+                  ],
                   "type": "string"
                 },
                 "fixed": {
@@ -4987,6 +5007,9 @@
                       {
                         "additionalProperties": false,
                         "properties": {
+                          "armorPiercing": {
+                            "type": "boolean"
+                          },
                           "dvModifier": {
                             "type": "string"
                           },
@@ -5443,6 +5466,9 @@
                       {
                         "additionalProperties": false,
                         "properties": {
+                          "armorPiercing": {
+                            "type": "boolean"
+                          },
                           "dvModifier": {
                             "type": "string"
                           },
@@ -6027,6 +6053,9 @@
                       {
                         "additionalProperties": false,
                         "properties": {
+                          "armorPiercing": {
+                            "type": "boolean"
+                          },
                           "dvModifier": {
                             "type": "string"
                           },
@@ -6495,6 +6524,9 @@
                       {
                         "additionalProperties": false,
                         "properties": {
+                          "armorPiercing": {
+                            "type": "boolean"
+                          },
                           "dvModifier": {
                             "type": "string"
                           },
@@ -7218,6 +7250,9 @@
                           {
                             "additionalProperties": false,
                             "properties": {
+                              "armorPiercing": {
+                                "type": "boolean"
+                              },
                               "dvModifier": {
                                 "type": "string"
                               },
@@ -7726,6 +7761,9 @@
                           {
                             "additionalProperties": false,
                             "properties": {
+                              "armorPiercing": {
+                                "type": "boolean"
+                              },
                               "dvModifier": {
                                 "type": "string"
                               },
@@ -8425,6 +8463,9 @@
                             {
                               "additionalProperties": false,
                               "properties": {
+                                "armorPiercing": {
+                                  "type": "boolean"
+                                },
                                 "dvModifier": {
                                   "type": "string"
                                 },
@@ -9994,6 +10035,9 @@
         {
           "additionalProperties": false,
           "properties": {
+            "armorPiercing": {
+              "type": "boolean"
+            },
             "dvModifier": {
               "type": "string"
             },

@@ -2,11 +2,11 @@
 
 ## [0.819] - 2021-06-28
 
-- Fix icons for owned combat participants not being clickable
+- Make sure icons for owned combat participants are clickable to focus token if available
 - Don't show menu button on hover for non-owned combat participants
 - Show button to open threat source sheet for unlinked tokens using threat
 - Add a custom option to pools
-- Add no cost option to
+- Add a Trivial/0 GP option to complexity
 
 ## [0.818] - 2021-06-20
 
