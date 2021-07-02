@@ -188,7 +188,6 @@ class MentalHealthBase implements CommonHealth {
 
   applyModification(modification: HealthModification) {
     const { updater } = this.init;
-    const { damage, wounds } = this.data;
     if (
       modification.mode === HealthModificationMode.Inflict &&
       modification.wounds &&

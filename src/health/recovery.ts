@@ -159,6 +159,9 @@ export const setupRecoveries = ({
     ...effects.timeframeMultipliers,
   ];
 
+  let startTime = hot[`${slot}HealTickStartTime` as const];
+  if (startTime === -1) startTime = currentWorldTimeMS();
+
   for (const stat of enumValues(HealOverTimeTarget)) {
     const group = groups[stat];
     const { amount, ...data } = hot[stat];
@@ -175,7 +178,7 @@ export const setupRecoveries = ({
             duration: data.interval,
             multipliers,
           }),
-          startTime: hot[key],
+          startTime,
           label: source,
           id: `${stat}-${slot}`,
           updateStartTime: (newStartTime) =>
@@ -216,7 +219,7 @@ export const setupRecoveries = ({
           duration: effect.interval,
           multipliers,
         }),
-        startTime: hot[key],
+        startTime,
         label: effect[Source],
         id: `${stat}-${slot}`,
         updateStartTime: (newStartTime) =>
