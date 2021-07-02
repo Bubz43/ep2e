@@ -60,7 +60,7 @@ export const complementarySkillBonus = ({ total }: Skill) => {
 };
 
 type Info = Readonly<{
-  category: ActiveSkillCategory;
+  category: ActiveSkillCategory | KnowSkillCategory;
   linkedAptitude: AptitudeType;
   aptMultiplier?: 0 | 1 | 2;
 }>;
@@ -290,14 +290,21 @@ export const fieldSkillName = ({ fieldSkill, field }: FieldSkillIdentifier) => {
 };
 
 export const setupFullSkill = (
-  skillData: SkillData & { skill: SkillType },
+  skillData: SkillData & {
+    skill: SkillType;
+    aptMultiplier?: 0 | 1 | 2;
+    category?: ActiveSkillCategory | KnowSkillCategory;
+    linkedAptitude?: AptitudeType;
+  },
   aptitudes: Aptitudes,
 ): FullSkill => {
   const data = { ...skillData, ...skillInfo[skillData.skill] };
   return {
     ...data,
-    aptMultiplier: data.aptMultiplier ?? 1,
+    linkedAptitude: skillData.linkedAptitude ?? data.linkedAptitude,
+    aptMultiplier: skillData.aptMultiplier ?? data.aptMultiplier ?? 1,
     aptitudePoints: aptitudes[data.linkedAptitude],
+    category: skillData.category ?? data.category,
     name: localize(skillData.skill),
     get aptBonus(): number {
       return this.aptitudePoints * this.aptMultiplier;
@@ -314,12 +321,15 @@ export const setupFullSkill = (
 };
 
 export const setupFullFieldSkill = (
-  fieldData: FieldSkillData & { fieldSkill: FieldSkillType },
+  fieldData: FieldSkillData & {
+    fieldSkill: FieldSkillType;
+    aptMultiplier?: 0 | 1 | 2;
+  },
   aptitudes: Aptitudes,
 ): FullFieldSkill => {
   return {
     ...fieldData,
-    aptMultiplier: 1,
+    aptMultiplier: fieldData.aptMultiplier ?? 1,
     aptitudePoints: aptitudes[fieldData.linkedAptitude],
     name: fieldSkillName({
       fieldSkill: fieldData.fieldSkill,

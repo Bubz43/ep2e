@@ -249,15 +249,20 @@ export class Ego {
     }
 
     for (const effect of this.activeEffects?.getGroup(EffectType.Skill) || []) {
+      const useTotal = !!effect.total && !effect.points;
       if (isFieldSkillEffect(effect.skillType)) {
         const skill: Skill = setupFullFieldSkill(
           {
-            points: effect.total,
+            points: effect.points ?? effect.total,
             specialization: effect.specialization,
             fieldSkill: effect.skillType,
             field: effect.field,
             linkedAptitude: effect.linkedAptitude,
+            aptMultiplier: useTotal
+              ? 0
+              : (effect.aptitudeMultiplier as 0 | 1 | 2),
             category:
+              effect.category ||
               fieldSkillInfo[effect.skillType].categories[0] ||
               (effect.skillType === FieldSkillType.Know
                 ? KnowSkillCategory.Academics
@@ -266,9 +271,6 @@ export class Ego {
           this.aptitudes,
         );
 
-        skill.aptMultiplier = effect.total
-          ? 0
-          : (effect.aptitudeMultiplier as 0 | 1 | 2);
         skill.source = effect[Source];
         if (skill.total > (skills.get(skill.name)?.total || 0)) {
           addSkill(skill);
@@ -276,16 +278,19 @@ export class Ego {
       } else {
         const skill: Skill = setupFullSkill(
           {
-            points: effect.total,
+            points: effect.points ?? effect.total,
             specialization: effect.specialization,
             skill: effect.skillType,
+            linkedAptitude: effect.linkedAptitude,
+            aptMultiplier: useTotal
+              ? 0
+              : (effect.aptitudeMultiplier as 0 | 1 | 2),
+
+            category: effect.category,
           },
           this.aptitudes,
         );
-        skill.aptMultiplier = effect.total
-          ? 0
-          : (effect.aptitudeMultiplier as 0 | 1 | 2);
-        skill.linkedAptitude = effect.linkedAptitude;
+
         skill.source = effect[Source];
         if (skill.total > (skills.get(skill.name)?.total || 0)) {
           addSkill(skill);

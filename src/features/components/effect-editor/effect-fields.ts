@@ -42,8 +42,12 @@ import {
 } from '@src/features/effects';
 import { Movement } from '@src/features/movement';
 import {
+  ActiveSkillCategory,
   CommonPilotField,
+  fieldSkillInfo,
   FieldSkillType,
+  KnowSkillCategory,
+  skillInfo,
   SkillType,
 } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
@@ -196,6 +200,8 @@ const skill: WithAllProps<SkillEffect> = ({
   linkedAptitude: aptitude,
   aptitudeMultiplier,
   total,
+  points,
+  category,
 }) => [
   renderSelectField(skillType, [
     ...enumValues(SkillType),
@@ -203,13 +209,30 @@ const skill: WithAllProps<SkillEffect> = ({
   ]),
   isFieldSkillEffect(skillType.value) ? renderTextField(field) : '',
   renderTextField(specialization),
-  renderNumberField(total, { min: 0, max: 99 }),
-  total.value === 0
-    ? [
-        renderNumberField(aptitudeMultiplier, { min: 0, max: 3 }),
-        renderSelectField(aptitude, enumValues(AptitudeType)),
-      ]
+  renderSelectField(
+    {
+      ...category,
+      value:
+        category.value ||
+        (isFieldSkillEffect(skillType.value)
+          ? fieldSkillInfo[skillType.value].categories[0] ||
+            (skillType.value === FieldSkillType.Know
+              ? KnowSkillCategory.Academics
+              : ActiveSkillCategory.Misc)
+          : skillInfo[skillType.value].category),
+    },
+    [...enumValues(ActiveSkillCategory), ...enumValues(KnowSkillCategory)],
+  ),
+  renderNumberField(points, { min: 0, max: 99 }),
+  total.value && !points.value
+    ? renderNumberField(total, {
+        helpText: `${localize('set')} ${localize('points')}`,
+        helpPersistent: true,
+        max: total.value,
+      })
     : '',
+  renderSelectField(aptitude, enumValues(AptitudeType)),
+  renderNumberField(aptitudeMultiplier, { min: 0, max: 2 }),
 ];
 
 const movement: WithAllProps<MovementEffect> = ({

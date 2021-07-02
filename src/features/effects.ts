@@ -16,10 +16,12 @@ import { createFeature } from './feature-helpers';
 import { Movement, MovementRate } from './movement';
 import type { RepBase } from './reputations';
 import {
+  ActiveSkillCategory,
   CommonPilotField,
   fieldSkillName,
   FieldSkillType,
   isFieldSkill,
+  KnowSkillCategory,
   Skill,
   SkillType,
 } from './skills';
@@ -149,9 +151,15 @@ export type SkillEffect = {
   field: string;
   specialization: string;
   type: EffectType.Skill;
+  /**
+   * @deprecated - Have to continue to check for it to know if aptitude multiplier should be 0
+   * Total is now points
+   */
   total: number;
   aptitudeMultiplier: number;
   linkedAptitude: AptitudeType;
+  category?: ActiveSkillCategory | KnowSkillCategory;
+  points?: number;
 };
 
 export enum MovementEffectMode {
@@ -208,6 +216,8 @@ const skill = createFeature<SkillEffect>(() => ({
   aptitudeMultiplier: 1,
   total: 0,
   linkedAptitude: AptitudeType.Willpower,
+  category: ActiveSkillCategory.Mental,
+  points: 0,
 }));
 
 const duration = createFeature<DurationEffect>(() => ({
@@ -449,13 +459,13 @@ const format = (effect: Effect): (string | number)[] => {
             field: effect.field || '--',
           })
         : localize(effect.skillType);
+      const value = effect.total || effect.points || 0;
       return [
         baseName + (effect.specialization ? ` (${effect.specialization})` : ''),
-        effect.total
-          ? effect.total
-          : `@ ${localize(effect.linkedAptitude)} x${
-              effect.aptitudeMultiplier
-            }`,
+        value,
+        ` ${value ? '+' : '@'} ${localize(effect.linkedAptitude)} x${
+          effect.aptitudeMultiplier
+        }`,
       ];
     }
 
@@ -554,17 +564,15 @@ const anyEffectTagPasses = (...checks: ((tag: Tag) => boolean)[]) => {
 
 export const matchAllEffects = (action: Action) => () => true;
 
-export const matchesAptitude = (
-  aptitude: AptitudeType,
-  special?: SpecialTest,
-) => (action: Action) => {
-  return anyEffectTagPasses(
-    matchesAction(action),
-    (tag) => tag.type === TagType.AptitudeChecks && tag.aptitude === aptitude,
-    (tag) =>
-      !!(special && tag.type === TagType.Special) && tag.test === special,
-  );
-};
+export const matchesAptitude =
+  (aptitude: AptitudeType, special?: SpecialTest) => (action: Action) => {
+    return anyEffectTagPasses(
+      matchesAction(action),
+      (tag) => tag.type === TagType.AptitudeChecks && tag.aptitude === aptitude,
+      (tag) =>
+        !!(special && tag.type === TagType.Special) && tag.test === special,
+    );
+  };
 
 export const matchesRep = (rep: RepBase) => (action: Action) => {
   return anyEffectTagPasses(
