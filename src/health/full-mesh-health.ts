@@ -113,9 +113,9 @@ export class MeshHealth extends HealthMixin(MeshHealthBase) {
   private resetRegenStartTimes() {
     this.init.updater
       .path('aidedHealTickStartTime')
-      .store(currentWorldTimeMS())
+      .store(-1)
       .path('ownHealTickStartTime')
-      .store(currentWorldTimeMS());
+      .store(-1);
   }
 
   applyModification(modification: HealthModification) {
