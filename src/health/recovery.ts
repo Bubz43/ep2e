@@ -151,16 +151,16 @@ export const setupRecoveries = ({
     recoveryMultiplier(conditions),
     ...effects.timeframeMultipliers,
   ];
-  const key = `${slot}HealTickStartTime` as const;
-
-  let startTime = hot[key];
-  if (startTime === -1) startTime = currentWorldTimeMS();
 
   for (const stat of enumValues(HealOverTimeTarget)) {
     const group = groups[stat];
     const { amount, ...data } = hot[stat];
     if (amount && data.interval > 0) {
       const source = `${localize('own')} ${localize('healing')}`;
+      const key = `${slot}HealTickStartTime` as const;
+
+      let startTime = hot[key];
+      if (startTime === -1) startTime = currentWorldTimeMS();
       group.set(slot, {
         ...data,
         amount: String(amount),
@@ -201,6 +201,10 @@ export const setupRecoveries = ({
       if (unused) unused.push(current);
       else groups.unused.set(stat, [current]);
     }
+    const key = `${slot}HealTickStartTime` as const;
+
+    let startTime = hot[key];
+    if (startTime === -1) startTime = currentWorldTimeMS();
     group.set(slot, {
       amount,
       interval,
