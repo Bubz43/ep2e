@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.82] - 2021-07-02
+
+- Allow full control over skill effects
+- Allow editing fake id reps after creation
+- Remove [Fake ID] from name of active rep source
+- Add health type option to Health Recovery effects, allowing for mental health heals from items
+
 ## [0.819] - 2021-06-28
 
 - Make sure icons for owned combat participants are clickable to focus token if available
