@@ -1,9 +1,14 @@
 import { createMessage, MessageVisibility } from '@src/chat/create-message';
-import { PoolType } from '@src/data-enums';
+import { AptitudeType, PoolType } from '@src/data-enums';
 import { ActorType } from '@src/entities/entity-types';
 import type { Sleight } from '@src/entities/item/proxies/sleight';
 import { formatEffect } from '@src/features/effects';
-import { SkillType } from '@src/features/skills';
+import {
+  ActiveSkillCategory,
+  FieldSkillType,
+  setupFullFieldSkill,
+  SkillType,
+} from '@src/features/skills';
 import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
@@ -175,7 +180,23 @@ export class SleightCard extends ItemCardBase {
             character: actor.proxy,
             sleight: this.item,
             ego: actor.proxy.ego,
-            skill: actor.proxy.ego.getCommonSkill(SkillType.Psi),
+            skill: this.item.exoticSkillName
+              ? actor.proxy.ego.findFieldSkill({
+                  fieldSkill: FieldSkillType.Exotic,
+                  field: this.item.exoticSkillName,
+                }) ||
+                setupFullFieldSkill(
+                  {
+                    fieldSkill: FieldSkillType.Exotic,
+                    field: this.item.exoticSkillName,
+                    points: 0,
+                    linkedAptitude: AptitudeType.Intuition,
+                    specialization: '',
+                    category: ActiveSkillCategory.Mental,
+                  },
+                  actor.proxy.ego.aptitudes,
+                )
+              : actor.proxy.ego.getCommonSkill(SkillType.Psi),
             token,
           };
         }

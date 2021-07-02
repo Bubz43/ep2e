@@ -10,6 +10,7 @@ import {
   renderRadioFields,
   renderSelectField,
   renderTextareaField,
+  renderTextField,
   renderTimeField,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
@@ -19,6 +20,7 @@ import {
   enumValues,
   SleightDuration,
   SleightType,
+  WeaponSkillOption,
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import type { Sleight } from '@src/entities/item/proxies/sleight';
@@ -26,8 +28,10 @@ import { ActionType } from '@src/features/actions';
 import type { EffectCreatedEvent } from '@src/features/components/effect-creator/effect-created-event';
 import { EffectType } from '@src/features/effects';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
+import { FieldSkillType, SkillType } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { capitalize } from '@src/foundry/misc-helpers';
+import { EP } from '@src/foundry/system';
 import { formatDamageType, HealthType } from '@src/health/health';
 import { notEmpty } from '@src/utility/helpers';
 import {
@@ -56,6 +60,15 @@ export class SleightForm extends ItemFormBase {
   @property({ attribute: false }) item!: Sleight;
 
   @state() private effectGroup: EffectGroup = 'self';
+
+  @state() private skillOption = WeaponSkillOption.None;
+
+  connectedCallback() {
+    this.skillOption = this.item.exoticSkillName
+      ? WeaponSkillOption.Exotic
+      : WeaponSkillOption.None;
+    super.connectedCallback();
+  }
 
   update(changedProps: PropertyValues<this>) {
     if (this.item.isChi) this.effectGroup = 'self';
@@ -136,7 +149,51 @@ export class SleightForm extends ItemFormBase {
                 ],
           ],
         })}
+        ${isChi
+          ? ''
+          : html`
+              <entity-form-sidebar-divider
+                slot="sidebar"
+              ></entity-form-sidebar-divider>
+              ${renderAutoForm({
+                slot: 'sidebar',
+                props: {
+                  skill: this.skillOption,
+                },
+                update: ({ skill }) => {
+                  this.skillOption = skill || WeaponSkillOption.None;
+                  if (this.skillOption === WeaponSkillOption.None) {
+                    this.item.updater
+                      .path('flags', EP.Name, 'exoticSkill')
+                      .commit('');
+                  } else if (!this.item.exoticSkillName) {
+                    this.item.updater
+                      .path('flags', EP.Name, 'exoticSkill')
+                      .commit(this.item.name);
+                  }
+                },
+                fields: ({ skill }) =>
+                  renderSelectField(skill, enumValues(WeaponSkillOption), {
+                    altLabel: (value) =>
+                      value === WeaponSkillOption.Exotic
+                        ? localize(FieldSkillType.Exotic)
+                        : localize(SkillType.Psi),
+                  }),
+              })}
+              ${this.skillOption === WeaponSkillOption.Exotic
+                ? renderAutoForm({
+                    slot: 'sidebar',
 
+                    props: { field: this.item.exoticSkillName || '' },
+                    update: ({ field }) =>
+                      this.item.updater
+                        .path('flags', EP.Name, 'exoticSkill')
+                        .commit(field),
+                    fields: ({ field }) =>
+                      renderTextField(field, { required: true }),
+                  })
+                : ''}
+            `}
         <div slot="details">
           <section>
             <sl-header heading=${localize('effects')}>

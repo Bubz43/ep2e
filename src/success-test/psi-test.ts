@@ -282,7 +282,7 @@ export class PsiTest extends SkillTest {
           heading: sleight.name,
           // TODO: Maybe add specializations to subheadings
           subheadings: compact([
-            localize('psiTest'),
+            this.name,
             [
               `${action.type} ${
                 action.timeMod && action.type !== ActionType.Task

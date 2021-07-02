@@ -101,13 +101,8 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
   }
 
   get attack(): SleightAttack {
-    const {
-      useMentalArmor,
-      attackTraits,
-      damageType,
-      damageFormula,
-      notes,
-    } = this.epData.attack;
+    const { useMentalArmor, attackTraits, damageType, damageFormula, notes } =
+      this.epData.attack;
     return {
       armorPiercing: false,
       armorUsed: useMentalArmor ? [ArmorType.Mental] : [],
@@ -215,6 +210,10 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
         ? allEffects.map((effect) => multiplyEffectModifier(effect, 2))
         : allEffects,
     };
+  }
+
+  get exoticSkillName() {
+    return this.epFlags?.exoticSkill;
   }
 
   getDataCopy(reset?: boolean) {

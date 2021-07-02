@@ -29,7 +29,7 @@ type TemplateHolder<T extends EPEntity> = {
 
 type TemplateData<
   E extends EPEntity,
-  T extends TemplateHolder<E>
+  T extends TemplateHolder<E>,
 > = T['templates'][number];
 
 type TemplateParts<E extends EPEntity, T extends TemplateHolder<E>> = {
@@ -38,7 +38,7 @@ type TemplateParts<E extends EPEntity, T extends TemplateHolder<E>> = {
 
 type WithTemplates<
   E extends EPEntity,
-  T extends TemplateHolder<E>
+  T extends TemplateHolder<E>,
 > = UnionToIntersection<TemplateParts<E, T>[TemplateData<E, T>]> &
   Omit<T, 'templates'>;
 
@@ -305,6 +305,7 @@ type ItemFlags<T extends ItemType> = T extends ItemType.Psi
   ? { missiles: ItemEntity<ItemType.Explosive> | null }
   : T extends ItemType.Sleight
   ? {
+      exoticSkill: string;
       applyTrait: [ItemEntity<ItemType.Trait>] | null;
       modifyTrait: {
         traitId: string;
