@@ -24,11 +24,7 @@ import {
 import { SkillType } from '@src/features/skills';
 import { createTag } from '@src/features/tags';
 import { localize } from '@src/foundry/localization';
-import type {
-  HealthStat,
-  HealthStatMods,
-  HealthType,
-} from '@src/health/health';
+import { HealthStat, HealthStatMods, HealthType } from '@src/health/health';
 import { LazyGetter } from 'lazy-get-decorator';
 import { allPass, concat, filter, groupBy, pipe } from 'remeda';
 
@@ -138,9 +134,11 @@ export class AppliedEffects {
     >;
   }
 
-  get healthRecovery() {
+  get physicalHealthRecovery() {
     return {
-      recovery: this.getGroup(EffectType.HealthRecovery),
+      recovery: this.getGroup(EffectType.HealthRecovery).filter(
+        (e) => !e.healing || e.healing === HealthType.Physical,
+      ),
       timeframeMultipliers: extractDurationEffectMultipliers(
         this.durationEffects.healingTimeframes || [],
       ),

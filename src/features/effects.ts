@@ -18,11 +18,13 @@ import type { RepBase } from './reputations';
 import {
   ActiveSkillCategory,
   CommonPilotField,
+  fieldSkillInfo,
   fieldSkillName,
   FieldSkillType,
   isFieldSkill,
   KnowSkillCategory,
   Skill,
+  skillInfo,
   SkillType,
 } from './skills';
 import { formatEffectTags, SpecialTest, Tag, TagType } from './tags';
@@ -108,6 +110,7 @@ export type RangedEffect = {
 
 export type HealthRecoveryEffect = {
   interval: number;
+  healing?: HealthType;
   damageAmount: string;
   woundAmount: number;
   stat: HealOverTimeTarget;
@@ -208,7 +211,7 @@ export const isFieldSkillEffect = (
 ): skillType is FieldSkillType =>
   enumValues(FieldSkillType).some((type) => type === skillType);
 
-const skill = createFeature<SkillEffect>(() => ({
+const skill = createFeature<SkillEffect>((data) => ({
   type: EffectType.Skill,
   field: '',
   specialization: '',
@@ -216,7 +219,16 @@ const skill = createFeature<SkillEffect>(() => ({
   aptitudeMultiplier: 1,
   total: 0,
   linkedAptitude: AptitudeType.Willpower,
-  category: ActiveSkillCategory.Mental,
+  category:
+    data.category ||
+    (data.skillType
+      ? isFieldSkillEffect(data.skillType)
+        ? fieldSkillInfo[data.skillType].categories[0] ||
+          (data.skillType === FieldSkillType.Know
+            ? KnowSkillCategory.Academics
+            : ActiveSkillCategory.Misc)
+        : skillInfo[data.skillType].category
+      : ActiveSkillCategory.Mental),
   points: 0,
 }));
 
@@ -292,6 +304,7 @@ const armor = createFeature<ArmorEffect>(() => ({
 }));
 
 const healthRecovery = createFeature<HealthRecoveryEffect>(() => ({
+  healing: HealthType.Physical,
   type: EffectType.HealthRecovery,
   damageAmount: '1d10',
   woundAmount: 1,
@@ -383,8 +396,15 @@ const format = (effect: Effect): (string | number)[] => {
         effect.stat === HealOverTimeTarget.Damage
           ? effect.damageAmount
           : effect.woundAmount;
+      const isPhysical =
+        !effect.healing || effect.healing === HealthType.Physical;
       return [
-        `${localize(effect.stat)}:`,
+        isPhysical ? '' : localize(effect.healing!),
+        effect.healing === HealthType.Mental
+          ? `${localize(
+              effect.stat === HealOverTimeTarget.Damage ? 'trauma' : 'wound',
+            )} ${localize('heal')}:`
+          : `${localize(effect.stat)}:`,
         formatAutoHealing({ amount, interval: effect.interval }),
         effect.technologicallyAided ? `[${localize('tech')}]` : '',
       ];

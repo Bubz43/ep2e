@@ -97,7 +97,7 @@ export class Biological extends mix(BiologicalBase).with(
       updater: this.updater.path('data', 'physicalHealth').nestedStore(),
       source: this.name,
       isSwarm: this.isSwarm,
-      recoveryEffects: this.activeEffects.healthRecovery,
+      recoveryEffects: this.activeEffects.physicalHealthRecovery,
       recoveryConditions: this.epData.recoveryConditions,
     });
   }

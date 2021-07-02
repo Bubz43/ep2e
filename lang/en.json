@@ -1476,6 +1476,8 @@
     "onlyWareAllowed": "Only ware allowed",
     "onlyCharactersAllowed": "Only characters allowed",
     "thisWillOverwriteEgo": "This will completely overwrite ego.",
+    "damageAmount": "Damage Amount",
+    "sleeveWare": "Sleeve Ware",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

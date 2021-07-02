@@ -146,7 +146,7 @@ export class Synthetic extends mix(SyntheticBase).with(
         this.epData.inherentArmor.source || localize('frame')
       }`,
       isSwarm: this.isSwarm,
-      recoveryEffects: this.activeEffects.healthRecovery,
+      recoveryEffects: this.activeEffects.physicalHealthRecovery,
       recoveryConditions: this.epData.recoveryConditions,
     });
   }

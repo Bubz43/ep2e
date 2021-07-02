@@ -148,7 +148,9 @@ const healthRecovery: WithAllProps<HealthRecoveryEffect> = ({
   interval,
   stat,
   technologicallyAided,
+  healing,
 }) => [
+  renderSelectField(healing, [HealthType.Physical, HealthType.Mental]),
   renderRadioFields(stat, enumValues(HealOverTimeTarget)),
   stat.value === HealOverTimeTarget.Damage
     ? renderFormulaField(damageAmount)
@@ -172,7 +174,12 @@ const duration: WithAllProps<DurationEffect> = ({
   cummulative,
 }) => {
   return [
-    renderSelectField(subtype, enumValues(DurationEffectTarget)),
+    renderSelectField(subtype, enumValues(DurationEffectTarget), {
+      altLabel: (value) =>
+        value === DurationEffectTarget.HealingTimeframes
+          ? `${localize('physical')} ${localize(value)}`
+          : localize(value),
+    }),
     subtype.value === DurationEffectTarget.TaskActionTimeframe
       ? renderSelectField(taskType, enumValues(ActionSubtype), {
           emptyText: localize('all'),
@@ -209,20 +216,10 @@ const skill: WithAllProps<SkillEffect> = ({
   ]),
   isFieldSkillEffect(skillType.value) ? renderTextField(field) : '',
   renderTextField(specialization),
-  renderSelectField(
-    {
-      ...category,
-      value:
-        category.value ||
-        (isFieldSkillEffect(skillType.value)
-          ? fieldSkillInfo[skillType.value].categories[0] ||
-            (skillType.value === FieldSkillType.Know
-              ? KnowSkillCategory.Academics
-              : ActiveSkillCategory.Misc)
-          : skillInfo[skillType.value].category),
-    },
-    [...enumValues(ActiveSkillCategory), ...enumValues(KnowSkillCategory)],
-  ),
+  renderSelectField(category, [
+    ...enumValues(ActiveSkillCategory),
+    ...enumValues(KnowSkillCategory),
+  ]),
   renderNumberField(points, { min: 0, max: 99 }),
   total.value && !points.value
     ? renderNumberField(total, {

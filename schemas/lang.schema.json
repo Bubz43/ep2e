@@ -394,9 +394,6 @@
                 "nanoware": {
                   "type": "string"
                 },
-                "noCost": {
-                  "type": "string"
-                },
                 "oral": {
                   "type": "string"
                 },
@@ -424,6 +421,9 @@
                 "traumasIgnored": {
                   "type": "string"
                 },
+                "trivial": {
+                  "type": "string"
+                },
                 "versus": {
                   "type": "string"
                 },
@@ -449,7 +449,7 @@
                 "traumaThreshold",
                 "traumasIgnored",
                 "insanityRating",
-                "noCost",
+                "trivial",
                 "minor",
                 "moderate",
                 "major",
@@ -1432,6 +1432,9 @@
               "type": "string"
             },
             "damageAgainstStructures": {
+              "type": "string"
+            },
+            "damageAmount": {
               "type": "string"
             },
             "damageApplier": {
@@ -3040,9 +3043,6 @@
               "type": "string"
             },
             "noClose": {
-              "type": "string"
-            },
-            "noCost": {
               "type": "string"
             },
             "noDamage": {
@@ -5235,6 +5235,7 @@
             "daily",
             "damage",
             "damageAgainstStructures",
+            "damageAmount",
             "damageApplier",
             "damageFormula",
             "damageIrrespectiveOfSize",
@@ -5771,7 +5772,6 @@
             "niche",
             "no",
             "noClose",
-            "noCost",
             "noDamage",
             "noFlipFlop",
             "noInitiativeModificationsAvailable",
