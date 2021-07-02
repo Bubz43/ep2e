@@ -248,7 +248,7 @@ export class CharacterViewTestActions extends LitElement {
       },
       ...fakeIDs.map((fake) => ({
         reps: fake.repsWithIdentifiers,
-        label: `[${localize('fakeId')}] ${fake.name}`,
+        label: fake.name,
         active:
           fakeID === fake ||
           (!trackReputations && !fakeIDreps && fake === fakeIDs[0]),
