@@ -24,6 +24,7 @@ import {
   HealsOverTime,
   RecoveryConditions,
   setupRecoveries,
+  useCurrentWorldTimeFlag,
 } from './recovery';
 
 export type MeshHealthData = BasicHealthData &
@@ -113,9 +114,9 @@ export class MeshHealth extends HealthMixin(MeshHealthBase) {
   private resetRegenStartTimes() {
     this.init.updater
       .path('aidedHealTickStartTime')
-      .store(-1)
+      .store(useCurrentWorldTimeFlag)
       .path('ownHealTickStartTime')
-      .store(-1);
+      .store(useCurrentWorldTimeFlag);
   }
 
   applyModification(modification: HealthModification) {
