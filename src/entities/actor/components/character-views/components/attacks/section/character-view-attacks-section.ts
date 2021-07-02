@@ -78,7 +78,6 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
     const { sleeve, morphSize } = this.character;
     const damage =
       !sleeve || sleeve.type === ActorType.Infomorph ? '0' : sleeve.unarmedDV;
-    console.log(damage);
     createMessage({
       data: {
         header: { heading: localize('unarmed') },

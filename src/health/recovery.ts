@@ -1,23 +1,16 @@
 import { enumValues } from '@src/data-enums';
 import type { AppliedEffects } from '@src/entities/applied-effects';
-import {
-  applyDurationMultipliers,
-  HealthRecoveryEffect,
-  Source,
-  SourcedEffect,
-} from '@src/features/effects';
+import { applyDurationMultipliers, Source } from '@src/features/effects';
 import { createFeature } from '@src/features/feature-helpers';
 import {
-  prettyMilliseconds,
-  currentWorldTimeMS,
-  Timestamp,
-  getElapsedTime,
-  LiveTimeState,
   createLiveTimeState,
+  currentWorldTimeMS,
+  LiveTimeState,
+  prettyMilliseconds,
+  Timestamp,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { averageRoll } from '@src/foundry/rolls';
-import { nonNegative } from '@src/utility/helpers';
 import { compact } from 'remeda';
 
 export enum NaturalMentalHeal {
@@ -158,8 +151,9 @@ export const setupRecoveries = ({
     recoveryMultiplier(conditions),
     ...effects.timeframeMultipliers,
   ];
+  const key = `${slot}HealTickStartTime` as const;
 
-  let startTime = hot[`${slot}HealTickStartTime` as const];
+  let startTime = hot[key];
   if (startTime === -1) startTime = currentWorldTimeMS();
 
   for (const stat of enumValues(HealOverTimeTarget)) {
@@ -167,7 +161,6 @@ export const setupRecoveries = ({
     const { amount, ...data } = hot[stat];
     if (amount && data.interval > 0) {
       const source = `${localize('own')} ${localize('healing')}`;
-      const key = `${slot}HealTickStartTime` as const;
       group.set(slot, {
         ...data,
         amount: String(amount),
@@ -208,7 +201,6 @@ export const setupRecoveries = ({
       if (unused) unused.push(current);
       else groups.unused.set(stat, [current]);
     }
-    const key = `${slot}HealTickStartTime` as const;
     group.set(slot, {
       amount,
       interval,

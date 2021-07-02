@@ -122,6 +122,34 @@ export class CharacterViewMentalHealth extends UseWorldTime(LitElement) {
         .health=${this.character.ego.mentalHealth}
       ></health-state-form>
 
+      <figure>
+        <figcaption>${localize('hardening')}</figcaption>
+        <ul class="hardening">
+          ${hardeningTypes.map((type) => {
+            const val = this.health.hardening[type];
+            return html`
+              <li>
+                ${localize(type)}
+                <div>
+                  ${range(0, 5).map((place) => {
+                    const checked = place < val;
+                    return html`<mwc-icon-button
+                      @click=${() =>
+                        this.health.updateHardening(
+                          type,
+                          checked ? place : place + 1,
+                        )}
+                      ?disabled=${this.character.disabled}
+                      icon=${checked ? 'check_box' : 'check_box_outline_blank'}
+                    ></mwc-icon-button>`;
+                  })}
+                </div>
+              </li>
+            `;
+          })}
+        </ul>
+      </figure>
+
       <section>
         <sl-header heading=${localize('recovery')}> </sl-header>
         ${enumValues(HealOverTimeTarget).map((target) => {
@@ -200,34 +228,6 @@ export class CharacterViewMentalHealth extends UseWorldTime(LitElement) {
             : '';
         })}
       </section>
-
-      <figure>
-        <figcaption>${localize('hardening')}</figcaption>
-        <ul class="hardening">
-          ${hardeningTypes.map((type) => {
-            const val = this.health.hardening[type];
-            return html`
-              <li>
-                ${localize(type)}
-                <div>
-                  ${range(0, 5).map((place) => {
-                    const checked = place < val;
-                    return html`<mwc-icon-button
-                      @click=${() =>
-                        this.health.updateHardening(
-                          type,
-                          checked ? place : place + 1,
-                        )}
-                      ?disabled=${this.character.disabled}
-                      icon=${checked ? 'check_box' : 'check_box_outline_blank'}
-                    ></mwc-icon-button>`;
-                  })}
-                </div>
-              </li>
-            `;
-          })}
-        </ul>
-      </figure>
 
       <sl-group label=${localize('timeSinceStressAccrued')}
         >${prettyMilliseconds(this.health.timeSinceLastStress)}</sl-group

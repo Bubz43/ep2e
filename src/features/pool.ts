@@ -127,7 +127,6 @@ export class Pool {
 
 export class Pools extends Map<PoolType, Pool> {
   get totalSpent() {
-    console.log([...this.values()].map((p) => p.spent));
     return [...this.values()].reduce((accum, pool) => accum + pool.spent, 0);
   }
 

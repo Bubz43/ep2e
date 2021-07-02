@@ -83,14 +83,12 @@ export class CharacterViewRechargeCompletion extends mix(LitElement).with(
     let unspent = regained;
     let missing = totalSpent;
 
-    console.log('base', missing);
 
     for (const { max, available, type } of [...pools.values()]) {
       if (autoFill) {
         const diff = max - available;
         unspent -= diff;
         missing -= diff;
-        console.log(diff, missing);
       }
       local.set(type, {
         oldPoints: available,

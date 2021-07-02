@@ -76,7 +76,6 @@ export class ItemCard extends ItemCardBase {
         item.cancelTransformation();
       } else item.swapShape(shapeId);
     } else {
-      console.log(transformTimer?.progress);
       openMenu({
         header: {
           heading:

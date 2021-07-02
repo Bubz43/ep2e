@@ -75,7 +75,7 @@ class SyntheticHealthBase implements CommonHealth {
   get recoveries() {
     return setupRecoveries({
       hot: this.init.data,
-      biological: true,
+      biological: false,
       effects: this.init.recoveryEffects,
       conditions: this.init.recoveryConditions,
       updateStartTime: this.init.updater.path('').commit,

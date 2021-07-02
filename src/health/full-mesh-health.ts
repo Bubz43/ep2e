@@ -70,7 +70,7 @@ class MeshHealthBase implements CommonHealth {
   get recoveries() {
     return setupRecoveries({
       hot: this.init.data,
-      biological: true,
+      biological: false,
       effects: { recovery: [], timeframeMultipliers: [] },
       conditions: RecoveryConditions.Normal,
       updateStartTime: this.init.updater.path('').commit,

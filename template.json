@@ -407,7 +407,7 @@
           "amount": "",
           "interval": 0
         },
-        "ownHealTickStartTime": 0,
+        "ownHealTickStartTime": -1,
         "woundRepair": {
           "interval": 0,
           "amount": 0

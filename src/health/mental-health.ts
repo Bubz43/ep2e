@@ -1,7 +1,11 @@
 import type { AppliedEffects } from '@src/entities/applied-effects';
 import type { HealthRecoveryEffect } from '@src/features/effects';
 import { addFeature, StringID } from '@src/features/feature-helpers';
-import { currentWorldTimeMS, getElapsedTime } from '@src/features/time';
+import {
+  currentWorldTimeMS,
+  getElapsedTime,
+  prettyMilliseconds,
+} from '@src/features/time';
 import { mapProps } from '@src/utility/field-values';
 import { localImage } from '@src/utility/images';
 import { LazyGetter } from 'lazy-get-decorator';
@@ -115,7 +119,7 @@ class MentalHealthBase implements CommonHealth {
   get recoveries() {
     return setupRecoveries({
       hot: this.init.data,
-      biological: true,
+      biological: false,
       effects: this.init.recoveryEffects || {
         recovery: this.init.recoveryEffects || [],
         timeframeMultipliers: [],
@@ -155,8 +159,15 @@ class MentalHealthBase implements CommonHealth {
       .commit(clamp(newVal, { min: 0, max: 5 }));
   }
 
+  get lastGainedStressTime() {
+    const { lastGainedStressTime } = this.data;
+    return lastGainedStressTime === -1
+      ? currentWorldTimeMS()
+      : lastGainedStressTime;
+  }
+
   get timeSinceLastStress() {
-    return getElapsedTime(this.data.lastGainedStressTime);
+    return getElapsedTime(this.lastGainedStressTime);
   }
 
   get timeSinceHealAttempt() {
@@ -200,7 +211,7 @@ class MentalHealthBase implements CommonHealth {
       (modification.mode === HealthModificationMode.Edit &&
         modification.damage > this.main.damage.value)
     ) {
-      updater.path('lastGainedStressTime').commit(currentWorldTimeMS());
+      updater.path('lastGainedStressTime').commit(-1);
     }
     return updater
       .path('')
@@ -216,9 +227,9 @@ export class MentalHealth extends HealthMixin(MentalHealthBase) {
   private resetRegenStartTimes() {
     this.init.updater
       .path('aidedHealTickStartTime')
-      .store(currentWorldTimeMS())
+      .store(-1)
       .path('ownHealTickStartTime')
-      .store(currentWorldTimeMS());
+      .store(-1);
   }
 
   applyModification(modification: HealthModification) {

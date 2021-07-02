@@ -252,10 +252,7 @@ export class MessageSpecialTest extends MessageElement {
         fallDown,
       } = effect;
       const isStatic = !!staticDuration || !variableDuration;
-      console.log(
-        rollFormula(variableDuration || '1d6')?.total || 1,
-        variableInterval,
-      );
+  
       let duration = CommonInterval.Turn;
       if (isStatic) duration += staticDuration || CommonInterval.Turn;
       else {

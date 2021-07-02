@@ -31,3 +31,9 @@ figcaption {
     color: var(--color-text-lighter);
   }
 }
+
+.heal {
+  &.ready {
+    box-shadow: 0 0 4px var(--color-secondary);
+  }
+}

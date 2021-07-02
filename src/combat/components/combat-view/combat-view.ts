@@ -341,7 +341,6 @@ export class CombatView extends LitElement {
       startingTurn: (this.activeTurn ?? 0) + 1,
       skipSurprised: !!this.combatRound?.surprise,
     });
-    console.log(nextTurn);
     updateCombatState({
       type: CombatActionType.DelayParticipant,
       payload: { participantId: ev.detail.id, advanceRound: nextTurn === -1 },

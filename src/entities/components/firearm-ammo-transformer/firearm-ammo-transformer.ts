@@ -118,10 +118,6 @@ export class FirearmAmmoTransformer extends LitElement {
                       @mousedown=${() => this.setStateAndDrag(ammoIndex, index)}
                       @mouseenter=${() => {
                         if (this.dragIndex !== null) {
-                          console.log(
-                            this.dragState[ammoIndex],
-                            this.dragIndex,
-                          );
                           this.setState(ammoIndex, this.dragIndex);
                         }
                       }}

@@ -105,7 +105,6 @@ export class ThrownAttackControls extends LitElement {
   }
 
   async setState(init: Init) {
-    console.log(init.adjacentElement);
     this.unsub();
     this.subs.add(() =>
       ThrownAttackControls.openWindows.delete(init.entities.actor),

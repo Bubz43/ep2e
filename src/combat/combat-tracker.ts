@@ -561,6 +561,5 @@ export const updateCombatState = (action: CombatUpdateAction) => {
 export const combatSocketHandler = ({
   action,
 }: SystemSocketData['mutateCombat']) => {
-  console.log('gm', action);
   isGamemaster() && updateCombat(action);
 };
