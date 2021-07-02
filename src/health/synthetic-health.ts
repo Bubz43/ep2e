@@ -30,6 +30,7 @@ import {
   HealsOverTime,
   RecoveryConditions,
   setupRecoveries,
+  useCurrentWorldTimeFlag,
 } from './recovery';
 
 export type SyntheticHealthData = BasicHealthData &
@@ -117,9 +118,9 @@ export class SyntheticHealth extends HealthMixin(SyntheticHealthBase) {
   private resetRegenStartTimes() {
     this.init.updater
       .path('aidedHealTickStartTime')
-      .store(-1)
+      .store(useCurrentWorldTimeFlag)
       .path('ownHealTickStartTime')
-      .store(-1);
+      .store(useCurrentWorldTimeFlag);
   }
 
   applyModification(modification: HealthModification) {

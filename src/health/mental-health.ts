@@ -31,6 +31,7 @@ import {
   NaturalMentalHealAttempt,
   RecoveryConditions,
   setupRecoveries,
+  useCurrentWorldTimeFlag,
 } from './recovery';
 
 export enum StressType {
@@ -211,7 +212,7 @@ class MentalHealthBase implements CommonHealth {
       (modification.mode === HealthModificationMode.Edit &&
         modification.damage > this.main.damage.value)
     ) {
-      updater.path('lastGainedStressTime').commit(-1);
+      updater.path('lastGainedStressTime').commit(useCurrentWorldTimeFlag);
     }
     return updater
       .path('')
@@ -227,9 +228,9 @@ export class MentalHealth extends HealthMixin(MentalHealthBase) {
   private resetRegenStartTimes() {
     this.init.updater
       .path('aidedHealTickStartTime')
-      .store(-1)
+      .store(useCurrentWorldTimeFlag)
       .path('ownHealTickStartTime')
-      .store(-1);
+      .store(useCurrentWorldTimeFlag);
   }
 
   applyModification(modification: HealthModification) {
@@ -277,7 +278,7 @@ export class MentalHealth extends HealthMixin(MentalHealthBase) {
       (modification.mode === HealthModificationMode.Edit &&
         modification.damage > this.main.damage.value)
     ) {
-      updater.path('lastGainedStressTime').commit(currentWorldTimeMS());
+      updater.path('lastGainedStressTime').commit(useCurrentWorldTimeFlag);
     }
     return updater
       .path('')

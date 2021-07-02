@@ -13,6 +13,8 @@ import { localize } from '@src/foundry/localization';
 import { averageRoll } from '@src/foundry/rolls';
 import { compact } from 'remeda';
 
+export const useCurrentWorldTimeFlag = -1 as const;
+
 export enum NaturalMentalHeal {
   Stress = 'stress',
   Trauma = 'trauma',
