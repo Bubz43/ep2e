@@ -119,16 +119,46 @@ export class PhysicalServiceForm extends ItemFormBase {
           ${repeat(reputations, idProp, (rep) => {
             return html`
               <li class="rep">
-                <span class="rep-name"
-                  >${rep.network}
-                  <span class="network-abbreviation"
-                    >(${rep.acronym})</span
-                  ></span
-                >
-                <delete-button
-                  ?disabled=${disabled}
-                  @delete=${this.repOps.removeCallback(rep.id)}
-                ></delete-button>
+                <div class="rep-main">
+                  <span class="rep-name"
+                    >${rep.network}
+                    <span class="network-abbreviation"
+                      >(${rep.acronym})</span
+                    ></span
+                  >
+                  <sl-popover
+                    .renderOnDemand=${() =>
+                      html`<sl-popover-section>
+                        ${renderSubmitForm({
+                          props: rep,
+                          update: this.repOps.update,
+                          fields: ({ acronym, network }) => [
+                            renderTextField(network, {
+                              required: true,
+                              placeholder: localize('FULL', RepNetwork.Civic),
+                            }),
+                            renderTextField(acronym, {
+                              required: true,
+                              placeholder: localize(RepNetwork.Civic),
+                              maxLength: 6,
+                            }),
+                          ],
+                        })}
+                      </sl-popover-section>`}
+                  >
+                    <mwc-icon-button
+                      icon="edit"
+                      slot="base"
+                      ?disabled=${disabled}
+                    ></mwc-icon-button>
+                  </sl-popover>
+
+                  <delete-button
+                    ?disabled=${disabled}
+                    @delete=${this.repOps.removeCallback(rep.id)}
+                  ></delete-button>
+                </div>
+
                 <div class="favors">
                   ${[...maxFavors].map(([favor, max]) => {
                     const usedAmount = rep[favor];
@@ -164,6 +194,7 @@ export class PhysicalServiceForm extends ItemFormBase {
                   })}
                 </div>
                 ${renderAutoForm({
+                  classes: 'score-form',
                   props: rep,
                   update: this.repOps.update,
                   disabled,

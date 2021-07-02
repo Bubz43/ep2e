@@ -23,12 +23,12 @@
 
 .rep {
   display: grid;
-  grid-template-columns: min-content 1fr 110px;
+  grid-template-columns: 1fr 110px;
   gap: 0.25rem 0.5rem;
   align-items: center;
   grid-template-areas:
-    'delete name score'
-    'favors favors score';
+    'main score'
+    'favors score';
 
   padding: 0.5rem 0.5rem 0.5rem 1rem;
   border: 1px solid var(--color-border);
@@ -40,31 +40,17 @@
     color: var(--color-text-lighter);
   }
 
-  delete-button {
-    grid-area: delete;
-  }
-
-  sl-form {
+  .score-form {
     grid-area: score;
-    sl-field {
-      grid-area: score;
-      padding: 0;
-      margin-bottom: -0.5rem;
-    }
   }
 
   .favors {
     grid-area: favors;
   }
 
-  .rep-name {
-    @include truncate(100%);
-    grid-area: name;
-  }
   .favors {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: max-content;
+    display: flex;
+    justify-content: space-between;
     column-gap: 2ch;
     --mdc-icon-button-size: 1.5rem;
     --mdc-icon-size: 20px;
@@ -75,5 +61,18 @@
     .favor-label {
       color: var(--color-text-lighter);
     }
+  }
+}
+
+.rep-main {
+  grid-area: main;
+  --mdc-icon-button-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1ch;
+  .rep-name {
+    @include truncate(100%);
+    flex-grow: 1;
+    width: 0px;
   }
 }
