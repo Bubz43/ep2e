@@ -112,13 +112,15 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
           ...(target === HealOverTimeTarget.Damage
             ? {
                 damageFormulas: rollLabeledFormulas(
-                  Array.from({ length: wholeInstances }).map((_, index) => ({
-                    label:
-                      instances >= 2
-                        ? `${localize('heal')} ${index + 1}`
-                        : localize('heal'),
-                    formula: heal.amount,
-                  })),
+                  Array.from({ length: wholeInstances || 1 }).map(
+                    (_, index) => ({
+                      label:
+                        instances >= 2
+                          ? `${localize('heal')} ${index + 1}`
+                          : localize('heal'),
+                      formula: heal.amount,
+                    }),
+                  ),
                 ),
               }
             : {

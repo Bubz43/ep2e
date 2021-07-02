@@ -220,6 +220,7 @@ export class Ego {
       willpower: this.aptitudes.wil,
       updater: this.updater.path('data', 'mentalHealth').nestedStore(),
       source: this.name,
+      recoveryEffects: this.activeEffects?.mentalHealthRecovery,
     });
   }
 

@@ -110,7 +110,7 @@ export type RangedEffect = {
 
 export type HealthRecoveryEffect = {
   interval: number;
-  healing?: HealthType;
+  healthType?: HealthType;
   damageAmount: string;
   woundAmount: number;
   stat: HealOverTimeTarget;
@@ -304,7 +304,7 @@ const armor = createFeature<ArmorEffect>(() => ({
 }));
 
 const healthRecovery = createFeature<HealthRecoveryEffect>(() => ({
-  healing: HealthType.Physical,
+  healthType: HealthType.Physical,
   type: EffectType.HealthRecovery,
   damageAmount: '1d10',
   woundAmount: 1,
@@ -397,12 +397,12 @@ const format = (effect: Effect): (string | number)[] => {
           ? effect.damageAmount
           : effect.woundAmount;
       const isPhysical =
-        !effect.healing || effect.healing === HealthType.Physical;
+        !effect.healthType || effect.healthType === HealthType.Physical;
       return [
-        isPhysical ? '' : localize(effect.healing!),
-        effect.healing === HealthType.Mental
+        isPhysical ? '' : localize(effect.healthType!),
+        effect.healthType === HealthType.Mental
           ? `${localize(
-              effect.stat === HealOverTimeTarget.Damage ? 'trauma' : 'wound',
+              effect.stat === HealOverTimeTarget.Damage ? 'stress' : 'trauma',
             )} ${localize('heal')}:`
           : `${localize(effect.stat)}:`,
         formatAutoHealing({ amount, interval: effect.interval }),

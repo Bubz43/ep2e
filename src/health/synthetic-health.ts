@@ -44,7 +44,7 @@ export type SyntheticHealthData = BasicHealthData &
 type Init = HealthInit<SyntheticHealthData> & {
   isSwarm: boolean;
   statMods: HealthStatMods | undefined;
-  recoveryEffects: AppliedEffects['healthRecovery'];
+  recoveryEffects: AppliedEffects['physicalHealthRecovery'];
   recoveryConditions: RecoveryConditions;
 };
 
@@ -158,10 +158,10 @@ export class SyntheticHealth extends HealthMixin(SyntheticHealthBase) {
       .commit((data) => applyHealthModification(data, modification));
   }
 
-  logHeal(slot: HealingSlot) {
+  logHeal(slot: HealingSlot, remainder: number) {
     return this.init.updater
       .path(`${slot}HealTickStartTime` as const)
-      .commit(currentWorldTimeMS());
+      .commit(currentWorldTimeMS() - remainder);
   }
 
   addDamageOverTime(dot: DamageOverTime) {

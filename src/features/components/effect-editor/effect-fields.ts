@@ -44,10 +44,8 @@ import { Movement } from '@src/features/movement';
 import {
   ActiveSkillCategory,
   CommonPilotField,
-  fieldSkillInfo,
   FieldSkillType,
   KnowSkillCategory,
-  skillInfo,
   SkillType,
 } from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
@@ -148,24 +146,47 @@ const healthRecovery: WithAllProps<HealthRecoveryEffect> = ({
   interval,
   stat,
   technologicallyAided,
-  healing,
-}) => [
-  renderSelectField(healing, [HealthType.Physical, HealthType.Mental]),
-  renderRadioFields(stat, enumValues(HealOverTimeTarget)),
-  stat.value === HealOverTimeTarget.Damage
-    ? renderFormulaField(damageAmount)
-    : renderNumberField(woundAmount, { min: 1 }),
+  healthType,
+}) => {
+  const isMental = healthType.value === HealthType.Mental;
+  return [
+    renderSelectField(healthType, [HealthType.Physical, HealthType.Mental]),
+    renderRadioFields(stat, enumValues(HealOverTimeTarget), {
+      altLabel: isMental
+        ? (value) =>
+            value === HealOverTimeTarget.Damage
+              ? `${localize('stress')} ${localize('heal')}`
+              : `${localize('trauma')} ${localize('heal')}`
+        : undefined,
+    }),
+    stat.value === HealOverTimeTarget.Damage
+      ? renderFormulaField({
+          ...damageAmount,
+          label: isMental
+            ? `${localize('stress')} ${localize('amount')}`
+            : damageAmount.label,
+        })
+      : renderNumberField(
+          {
+            ...woundAmount,
+            label: isMental
+              ? `${localize('trauma')} ${localize('amount')}`
+              : woundAmount.label,
+          },
+          { min: 1 },
+        ),
 
-  renderTimeField(interval),
-  renderLabeledCheckbox(technologicallyAided),
-  html`
-    <p class="effect-info">
-      ${technologicallyAided.value
-        ? `Augments natural Biomorph healing. `
-        : `Replaces natural biomorph healing.`}
-    </p>
-  `,
-];
+    renderTimeField(interval),
+    renderLabeledCheckbox(technologicallyAided),
+    html`
+      <p class="effect-info">
+        ${technologicallyAided.value
+          ? `Augments natural healing. `
+          : `Replaces natural healing.`}
+      </p>
+    `,
+  ];
+};
 
 const duration: WithAllProps<DurationEffect> = ({
   subtype,

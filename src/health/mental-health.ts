@@ -1,7 +1,10 @@
+import type { AppliedEffects } from '@src/entities/applied-effects';
+import type { HealthRecoveryEffect } from '@src/features/effects';
 import { addFeature, StringID } from '@src/features/feature-helpers';
 import { currentWorldTimeMS, getElapsedTime } from '@src/features/time';
 import { mapProps } from '@src/utility/field-values';
 import { localImage } from '@src/utility/images';
+import { LazyGetter } from 'lazy-get-decorator';
 import { clamp, last, pick } from 'remeda';
 import {
   applyHealthModification,
@@ -17,7 +20,14 @@ import {
   initializeHealthData,
 } from './health';
 import { HealthMixin } from './health-mixin';
-import type { NaturalMentalHealAttempt } from './recovery';
+import {
+  HealingSlot,
+  HealOverTimeTarget,
+  HealsOverTime,
+  NaturalMentalHealAttempt,
+  RecoveryConditions,
+  setupRecoveries,
+} from './recovery';
 
 export enum StressType {
   Alienation = 'alienation',
@@ -26,25 +36,26 @@ export enum StressType {
   Violence = 'violence',
 }
 
-export type MentalHealthData = BasicHealthData & {
-  /**
-   * @minimum 0
-   * @maximum 5
-   */
-  alienation: number;
-  /**
-   * @minimum 0
-   * @maximum 5
-   */
-  helplessness: number;
-  /**
-   * @minimum 0
-   * @maximum 5
-   */
-  violence: number;
-  lastGainedStressTime: number;
-  naturalHealAttempts: StringID<NaturalMentalHealAttempt>[];
-};
+export type MentalHealthData = BasicHealthData &
+  HealsOverTime & {
+    /**
+     * @minimum 0
+     * @maximum 5
+     */
+    alienation: number;
+    /**
+     * @minimum 0
+     * @maximum 5
+     */
+    helplessness: number;
+    /**
+     * @minimum 0
+     * @maximum 5
+     */
+    violence: number;
+    lastGainedStressTime: number;
+    naturalHealAttempts: StringID<NaturalMentalHealAttempt>[];
+  };
 
 export const hardeningTypes = [
   StressType.Alienation,
@@ -55,6 +66,7 @@ export const hardeningTypes = [
 type Init = HealthInit<MentalHealthData> & {
   statMods: HealthStatMods | undefined;
   willpower: number;
+  recoveryEffects?: AppliedEffects['physicalHealthRecovery'];
 };
 
 class MentalHealthBase implements CommonHealth {
@@ -97,6 +109,20 @@ class MentalHealthBase implements CommonHealth {
       woundModifier: mapped.traumaModifier,
       woundsIgnored: mapped.traumasIgnored,
     };
+  }
+
+  @LazyGetter()
+  get recoveries() {
+    return setupRecoveries({
+      hot: this.init.data,
+      biological: true,
+      effects: this.init.recoveryEffects || {
+        recovery: this.init.recoveryEffects || [],
+        timeframeMultipliers: [],
+      },
+      conditions: RecoveryConditions.Normal,
+      updateStartTime: this.init.updater.path('').commit,
+    });
   }
 
   get data() {
@@ -144,7 +170,13 @@ class MentalHealthBase implements CommonHealth {
       .commit(addFeature(attempt));
   }
 
-  private canHarden(
+  logHeal(slot: HealingSlot, remainder: number) {
+    return this.init.updater
+      .path(`${slot}HealTickStartTime` as const)
+      .commit(currentWorldTimeMS() - remainder);
+  }
+
+  protected canHarden(
     stressType: HealthModification['stressType'],
   ): stressType is typeof hardeningTypes[number] {
     return !!(
@@ -156,6 +188,7 @@ class MentalHealthBase implements CommonHealth {
 
   applyModification(modification: HealthModification) {
     const { updater } = this.init;
+    const { damage, wounds } = this.data;
     if (
       modification.mode === HealthModificationMode.Inflict &&
       modification.wounds &&
@@ -180,4 +213,64 @@ class MentalHealthBase implements CommonHealth {
   }
 }
 
-export class MentalHealth extends HealthMixin(MentalHealthBase) {}
+export class MentalHealth extends HealthMixin(MentalHealthBase) {
+  private resetRegenStartTimes() {
+    this.init.updater
+      .path('aidedHealTickStartTime')
+      .store(currentWorldTimeMS())
+      .path('ownHealTickStartTime')
+      .store(currentWorldTimeMS());
+  }
+
+  applyModification(modification: HealthModification) {
+    const { updater } = this.init;
+    const { damage, wounds } = this.data;
+    switch (modification.mode) {
+      case HealthModificationMode.Edit: {
+        if (!damage && modification.damage) this.resetRegenStartTimes();
+        else if (damage && !modification.damage) this.resetRegenStartTimes();
+        else if (this.regenState !== HealOverTimeTarget.Damage) {
+          if (!wounds && modification.wounds) this.resetRegenStartTimes();
+          else if (wounds && !damage && modification.damage)
+            this.resetRegenStartTimes();
+        }
+
+        break;
+      }
+      case HealthModificationMode.Inflict: {
+        if (!damage && modification.damage) this.resetRegenStartTimes();
+        else if (this.regenState !== HealOverTimeTarget.Damage) {
+          if (!wounds && modification.wounds) this.resetRegenStartTimes();
+          else if (wounds && !damage && modification.damage)
+            this.resetRegenStartTimes();
+        }
+
+        break;
+      }
+
+      case HealthModificationMode.Heal: {
+        if (damage && modification.damage >= damage)
+          this.resetRegenStartTimes();
+        break;
+      }
+    }
+
+    if (
+      modification.mode === HealthModificationMode.Inflict &&
+      modification.wounds &&
+      this.canHarden(modification.stressType)
+    ) {
+      updater.path(modification.stressType).store((val) => val + 1);
+    }
+    if (
+      modification.mode === HealthModificationMode.Inflict ||
+      (modification.mode === HealthModificationMode.Edit &&
+        modification.damage > this.main.damage.value)
+    ) {
+      updater.path('lastGainedStressTime').commit(currentWorldTimeMS());
+    }
+    return updater
+      .path('')
+      .commit((data) => applyHealthModification(data, modification));
+  }
+}

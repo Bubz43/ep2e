@@ -401,7 +401,17 @@
         "naturalHealAttempts": [],
         "violence": 0,
         "wounds": 0,
-        "lastGainedStressTime": 0
+        "lastGainedStressTime": 0,
+        "aidedHealTickStartTime": 0,
+        "damageRepair": {
+          "amount": "",
+          "interval": 0
+        },
+        "ownHealTickStartTime": 0,
+        "woundRepair": {
+          "interval": 0,
+          "amount": 0
+        }
       }
     }
   },

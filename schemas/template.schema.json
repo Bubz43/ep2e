@@ -2341,6 +2341,9 @@
                           "damageAmount": {
                             "type": "string"
                           },
+                          "healing": {
+                            "$ref": "#/definitions/HealthType"
+                          },
                           "id": {
                             "type": "string"
                           },
@@ -2426,6 +2429,16 @@
                           "aptitudeMultiplier": {
                             "type": "number"
                           },
+                          "category": {
+                            "anyOf": [
+                              {
+                                "$ref": "#/definitions/ActiveSkillCategory"
+                              },
+                              {
+                                "$ref": "#/definitions/KnowSkillCategory"
+                              }
+                            ]
+                          },
                           "field": {
                             "type": "string"
                           },
@@ -2434,6 +2447,9 @@
                           },
                           "linkedAptitude": {
                             "$ref": "#/definitions/AptitudeType"
+                          },
+                          "points": {
+                            "type": "number"
                           },
                           "skillType": {
                             "anyOf": [
@@ -3521,6 +3537,9 @@
                           "damageAmount": {
                             "type": "string"
                           },
+                          "healing": {
+                            "$ref": "#/definitions/HealthType"
+                          },
                           "id": {
                             "type": "string"
                           },
@@ -3606,6 +3625,16 @@
                           "aptitudeMultiplier": {
                             "type": "number"
                           },
+                          "category": {
+                            "anyOf": [
+                              {
+                                "$ref": "#/definitions/ActiveSkillCategory"
+                              },
+                              {
+                                "$ref": "#/definitions/KnowSkillCategory"
+                              }
+                            ]
+                          },
                           "field": {
                             "type": "string"
                           },
@@ -3614,6 +3643,9 @@
                           },
                           "linkedAptitude": {
                             "$ref": "#/definitions/AptitudeType"
+                          },
+                          "points": {
+                            "type": "number"
                           },
                           "skillType": {
                             "anyOf": [
@@ -4031,6 +4063,9 @@
                           "damageAmount": {
                             "type": "string"
                           },
+                          "healing": {
+                            "$ref": "#/definitions/HealthType"
+                          },
                           "id": {
                             "type": "string"
                           },
@@ -4116,6 +4151,16 @@
                           "aptitudeMultiplier": {
                             "type": "number"
                           },
+                          "category": {
+                            "anyOf": [
+                              {
+                                "$ref": "#/definitions/ActiveSkillCategory"
+                              },
+                              {
+                                "$ref": "#/definitions/KnowSkillCategory"
+                              }
+                            ]
+                          },
                           "field": {
                             "type": "string"
                           },
@@ -4124,6 +4169,9 @@
                           },
                           "linkedAptitude": {
                             "$ref": "#/definitions/AptitudeType"
+                          },
+                          "points": {
+                            "type": "number"
                           },
                           "skillType": {
                             "anyOf": [
@@ -4973,6 +5021,9 @@
                           "damageAmount": {
                             "type": "string"
                           },
+                          "healing": {
+                            "$ref": "#/definitions/HealthType"
+                          },
                           "id": {
                             "type": "string"
                           },
@@ -5058,6 +5109,16 @@
                           "aptitudeMultiplier": {
                             "type": "number"
                           },
+                          "category": {
+                            "anyOf": [
+                              {
+                                "$ref": "#/definitions/ActiveSkillCategory"
+                              },
+                              {
+                                "$ref": "#/definitions/KnowSkillCategory"
+                              }
+                            ]
+                          },
                           "field": {
                             "type": "string"
                           },
@@ -5066,6 +5127,9 @@
                           },
                           "linkedAptitude": {
                             "$ref": "#/definitions/AptitudeType"
+                          },
+                          "points": {
+                            "type": "number"
                           },
                           "skillType": {
                             "anyOf": [
@@ -5432,6 +5496,9 @@
                           "damageAmount": {
                             "type": "string"
                           },
+                          "healing": {
+                            "$ref": "#/definitions/HealthType"
+                          },
                           "id": {
                             "type": "string"
                           },
@@ -5517,6 +5584,16 @@
                           "aptitudeMultiplier": {
                             "type": "number"
                           },
+                          "category": {
+                            "anyOf": [
+                              {
+                                "$ref": "#/definitions/ActiveSkillCategory"
+                              },
+                              {
+                                "$ref": "#/definitions/KnowSkillCategory"
+                              }
+                            ]
+                          },
                           "field": {
                             "type": "string"
                           },
@@ -5525,6 +5602,9 @@
                           },
                           "linkedAptitude": {
                             "$ref": "#/definitions/AptitudeType"
+                          },
+                          "points": {
+                            "type": "number"
                           },
                           "skillType": {
                             "anyOf": [
@@ -6019,6 +6099,9 @@
                           "damageAmount": {
                             "type": "string"
                           },
+                          "healing": {
+                            "$ref": "#/definitions/HealthType"
+                          },
                           "id": {
                             "type": "string"
                           },
@@ -6104,6 +6187,16 @@
                           "aptitudeMultiplier": {
                             "type": "number"
                           },
+                          "category": {
+                            "anyOf": [
+                              {
+                                "$ref": "#/definitions/ActiveSkillCategory"
+                              },
+                              {
+                                "$ref": "#/definitions/KnowSkillCategory"
+                              }
+                            ]
+                          },
                           "field": {
                             "type": "string"
                           },
@@ -6112,6 +6205,9 @@
                           },
                           "linkedAptitude": {
                             "$ref": "#/definitions/AptitudeType"
+                          },
+                          "points": {
+                            "type": "number"
                           },
                           "skillType": {
                             "anyOf": [
@@ -6490,6 +6586,9 @@
                           "damageAmount": {
                             "type": "string"
                           },
+                          "healing": {
+                            "$ref": "#/definitions/HealthType"
+                          },
                           "id": {
                             "type": "string"
                           },
@@ -6575,6 +6674,16 @@
                           "aptitudeMultiplier": {
                             "type": "number"
                           },
+                          "category": {
+                            "anyOf": [
+                              {
+                                "$ref": "#/definitions/ActiveSkillCategory"
+                              },
+                              {
+                                "$ref": "#/definitions/KnowSkillCategory"
+                              }
+                            ]
+                          },
                           "field": {
                             "type": "string"
                           },
@@ -6583,6 +6692,9 @@
                           },
                           "linkedAptitude": {
                             "$ref": "#/definitions/AptitudeType"
+                          },
+                          "points": {
+                            "type": "number"
                           },
                           "skillType": {
                             "anyOf": [
@@ -7216,6 +7328,9 @@
                               "damageAmount": {
                                 "type": "string"
                               },
+                              "healing": {
+                                "$ref": "#/definitions/HealthType"
+                              },
                               "id": {
                                 "type": "string"
                               },
@@ -7301,6 +7416,16 @@
                               "aptitudeMultiplier": {
                                 "type": "number"
                               },
+                              "category": {
+                                "anyOf": [
+                                  {
+                                    "$ref": "#/definitions/ActiveSkillCategory"
+                                  },
+                                  {
+                                    "$ref": "#/definitions/KnowSkillCategory"
+                                  }
+                                ]
+                              },
                               "field": {
                                 "type": "string"
                               },
@@ -7309,6 +7434,9 @@
                               },
                               "linkedAptitude": {
                                 "$ref": "#/definitions/AptitudeType"
+                              },
+                              "points": {
+                                "type": "number"
                               },
                               "skillType": {
                                 "anyOf": [
@@ -7727,6 +7855,9 @@
                               "damageAmount": {
                                 "type": "string"
                               },
+                              "healing": {
+                                "$ref": "#/definitions/HealthType"
+                              },
                               "id": {
                                 "type": "string"
                               },
@@ -7812,6 +7943,16 @@
                               "aptitudeMultiplier": {
                                 "type": "number"
                               },
+                              "category": {
+                                "anyOf": [
+                                  {
+                                    "$ref": "#/definitions/ActiveSkillCategory"
+                                  },
+                                  {
+                                    "$ref": "#/definitions/KnowSkillCategory"
+                                  }
+                                ]
+                              },
                               "field": {
                                 "type": "string"
                               },
@@ -7820,6 +7961,9 @@
                               },
                               "linkedAptitude": {
                                 "$ref": "#/definitions/AptitudeType"
+                              },
+                              "points": {
+                                "type": "number"
                               },
                               "skillType": {
                                 "anyOf": [
@@ -8429,6 +8573,9 @@
                                 "damageAmount": {
                                   "type": "string"
                                 },
+                                "healing": {
+                                  "$ref": "#/definitions/HealthType"
+                                },
                                 "id": {
                                   "type": "string"
                                 },
@@ -8514,6 +8661,16 @@
                                 "aptitudeMultiplier": {
                                   "type": "number"
                                 },
+                                "category": {
+                                  "anyOf": [
+                                    {
+                                      "$ref": "#/definitions/ActiveSkillCategory"
+                                    },
+                                    {
+                                      "$ref": "#/definitions/KnowSkillCategory"
+                                    }
+                                  ]
+                                },
                                 "field": {
                                   "type": "string"
                                 },
@@ -8522,6 +8679,9 @@
                                 },
                                 "linkedAptitude": {
                                   "$ref": "#/definitions/AptitudeType"
+                                },
+                                "points": {
+                                  "type": "number"
                                 },
                                 "skillType": {
                                   "anyOf": [
@@ -9023,6 +9183,9 @@
     "MentalHealthData": {
       "additionalProperties": false,
       "properties": {
+        "aidedHealTickStartTime": {
+          "type": "number"
+        },
         "alienation": {
           "maximum": 5,
           "minimum": 0,
@@ -9031,6 +9194,9 @@
         "damage": {
           "minimum": 0,
           "type": "number"
+        },
+        "damageRepair": {
+          "$ref": "#/definitions/HealthTick"
         },
         "helplessness": {
           "maximum": 5,
@@ -9052,10 +9218,29 @@
           },
           "type": "array"
         },
+        "ownHealTickStartTime": {
+          "type": "number"
+        },
         "violence": {
           "maximum": 5,
           "minimum": 0,
           "type": "number"
+        },
+        "woundRepair": {
+          "additionalProperties": false,
+          "properties": {
+            "amount": {
+              "type": "number"
+            },
+            "interval": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "amount",
+            "interval"
+          ],
+          "type": "object"
         },
         "wounds": {
           "minimum": 0,
@@ -9063,13 +9248,17 @@
         }
       },
       "required": [
+        "aidedHealTickStartTime",
         "alienation",
         "damage",
+        "damageRepair",
         "helplessness",
         "lastGainedStressTime",
         "log",
         "naturalHealAttempts",
+        "ownHealTickStartTime",
         "violence",
+        "woundRepair",
         "wounds"
       ],
       "type": "object"
@@ -10001,6 +10190,9 @@
             "damageAmount": {
               "type": "string"
             },
+            "healing": {
+              "$ref": "#/definitions/HealthType"
+            },
             "id": {
               "type": "string"
             },
@@ -10086,6 +10278,16 @@
             "aptitudeMultiplier": {
               "type": "number"
             },
+            "category": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/ActiveSkillCategory"
+                },
+                {
+                  "$ref": "#/definitions/KnowSkillCategory"
+                }
+              ]
+            },
             "field": {
               "type": "string"
             },
@@ -10094,6 +10296,9 @@
             },
             "linkedAptitude": {
               "$ref": "#/definitions/AptitudeType"
+            },
+            "points": {
+              "type": "number"
             },
             "skillType": {
               "anyOf": [

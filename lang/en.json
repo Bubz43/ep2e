@@ -1478,6 +1478,7 @@
     "thisWillOverwriteEgo": "This will completely overwrite ego.",
     "damageAmount": "Damage Amount",
     "sleeveWare": "Sleeve Ware",
+    "healthType": "Health Type",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",

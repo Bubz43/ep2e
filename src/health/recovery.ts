@@ -138,7 +138,7 @@ export const setupRecoveries = ({
 }: {
   hot: HealsOverTime;
   biological: boolean;
-  effects: AppliedEffects['healthRecovery'];
+  effects: AppliedEffects['physicalHealthRecovery'];
   conditions: RecoveryConditions;
   updateStartTime: (
     update: Pick<

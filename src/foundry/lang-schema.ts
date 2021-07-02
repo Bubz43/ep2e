@@ -1504,7 +1504,8 @@ type LangEntries =
   | 'onlyCharactersAllowed'
   | 'thisWillOverwriteEgo'
   | 'sleeveWare'
-  | 'damageAmount';
+  | 'damageAmount'
+  | 'healthType';
 type FullNames =
   | 'cog'
   | 'int'

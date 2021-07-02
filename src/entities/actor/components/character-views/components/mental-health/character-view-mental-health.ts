@@ -1,3 +1,4 @@
+import { createMessage } from '@src/chat/create-message';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
@@ -9,9 +10,17 @@ import {
 } from '@src/features/time';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
+import { rollLabeledFormulas, rollFormula } from '@src/foundry/rolls';
+import { HealthType } from '@src/health/health';
 import { hardeningTypes, MentalHealth } from '@src/health/mental-health';
-import { NaturalMentalHeal } from '@src/health/recovery';
+import {
+  formatAutoHealing,
+  HealOverTimeTarget,
+  NaturalMentalHeal,
+  Recovery,
+} from '@src/health/recovery';
 import { openMenu } from '@src/open-menu';
+import { notEmpty } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { range } from 'remeda';
@@ -57,8 +66,49 @@ export class CharacterViewMentalHealth extends UseWorldTime(LitElement) {
     });
   }
 
+  private async rollHeal(
+    target: HealOverTimeTarget,
+    heal: Recovery,
+    instances: number,
+  ) {
+    const wholeInstances = Math.floor(instances);
+    await createMessage({
+      data: {
+        header: {
+          heading: heal.source,
+          subheadings: localize('healthRecovery'),
+        },
+        heal: {
+          source: heal.source,
+          healthType: HealthType.Mental,
+          ...(target === HealOverTimeTarget.Damage
+            ? {
+                damageFormulas: rollLabeledFormulas(
+                  Array.from({ length: wholeInstances || 1 }).map(
+                    (_, index) => ({
+                      label:
+                        instances >= 2
+                          ? `${localize('heal')} ${index + 1}`
+                          : localize('heal'),
+                      formula: heal.amount,
+                    }),
+                  ),
+                ),
+              }
+            : {
+                wounds: (rollFormula(heal.amount)?.total || 0) * wholeInstances,
+              }),
+        },
+      },
+      entity: this.character,
+    });
+    await this.health.logHeal(heal.slot, heal.interval * (instances % 1));
+  }
+
   render() {
     const { timeSinceHealAttempt } = this.health;
+    const { regenState, recoveries } = this.health;
+
     // TODO show natural heals and attempt them
     return html`
       <character-view-drawer-heading
@@ -71,6 +121,86 @@ export class CharacterViewMentalHealth extends UseWorldTime(LitElement) {
       <health-state-form
         .health=${this.character.ego.mentalHealth}
       ></health-state-form>
+
+      <section>
+        <sl-header heading=${localize('recovery')}> </sl-header>
+        ${enumValues(HealOverTimeTarget).map((target) => {
+          const heals = recoveries[target];
+          return notEmpty(heals)
+            ? html`
+                <figure>
+                  <figcaption>
+                    ${target === HealOverTimeTarget.Damage
+                      ? `${localize('stress')} ${localize('heal')}`
+                      : `${localize('trauma')} ${localize('heal')}`}
+                  </figcaption>
+                  <ul>
+                    ${[...heals.values()].map((heal) => {
+                      const timeToTick =
+                        regenState === target && heal.timeState.remaining;
+                      const ready = timeToTick === 0;
+                      const instances = Math.abs(
+                        (heal.timeState.duration - heal.timeState.elapsed) /
+                          heal.timeState.duration -
+                          1,
+                      );
+
+                      return html`
+                        <wl-list-item
+                          class="heal ${ready ? 'ready' : ''}"
+                          ?disabled=${this.character.disabled}
+                          clickable
+                          @click=${(ev: MouseEvent) => {
+                            if (!timeToTick)
+                              this.rollHeal(target, heal, instances);
+                            else {
+                              openMenu({
+                                position: ev,
+                                content: [
+                                  {
+                                    label: `${localize('use')} & ${localize(
+                                      'reset',
+                                    )} ${localize('time')}`,
+                                    callback: () =>
+                                      this.rollHeal(target, heal, 1),
+                                  },
+                                  {
+                                    label: localize('use'),
+                                    callback: () =>
+                                      this.rollHeal(target, heal, instances),
+                                  },
+                                ],
+                              });
+                            }
+                          }}
+                        >
+                          <span slot="before">${heal.source}</span>
+                          <span>${formatAutoHealing(heal)} </span>
+                          ${timeToTick !== false
+                            ? html`
+                                <span slot="after">
+                                  ${timeToTick === 0
+                                    ? localize('ready')
+                                    : ` ${localize('tick')} ${localize('in')}
+                                  ${prettyMilliseconds(timeToTick)}`}
+                                </span>
+                                ${instances >= 2
+                                  ? html`<span slot="after"
+                                      >x${Math.floor(instances)}</span
+                                    >`
+                                  : ''}
+                              `
+                            : ''}
+                        </wl-list-item>
+                      `;
+                    })}
+                  </ul>
+                </figure>
+              `
+            : '';
+        })}
+      </section>
+
       <figure>
         <figcaption>${localize('hardening')}</figcaption>
         <ul class="hardening">

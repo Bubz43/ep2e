@@ -134,10 +134,19 @@ export class AppliedEffects {
     >;
   }
 
+  get mentalHealthRecovery() {
+    return {
+      recovery: this.getGroup(EffectType.HealthRecovery).filter(
+        (e) => e.healthType === HealthType.Mental,
+      ),
+      timeframeMultipliers: [] as number[],
+    };
+  }
+
   get physicalHealthRecovery() {
     return {
       recovery: this.getGroup(EffectType.HealthRecovery).filter(
-        (e) => !e.healing || e.healing === HealthType.Physical,
+        (e) => !e.healthType || e.healthType === HealthType.Physical,
       ),
       timeframeMultipliers: extractDurationEffectMultipliers(
         this.durationEffects.healingTimeframes || [],
