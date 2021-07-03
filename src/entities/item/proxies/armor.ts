@@ -1,6 +1,7 @@
 import type { ObtainableEffects } from '@src/entities/applied-effects';
 import type { ItemType } from '@src/entities/entity-types';
 import { createEffect } from '@src/features/effects';
+import { toggle } from '@src/utility/helpers';
 import { LazyGetter } from 'lazy-get-decorator';
 import mix from 'mix-with/lib';
 import { Copyable, Equippable, Purchasable } from '../item-mixins';
@@ -13,7 +14,8 @@ class Base extends ItemProxyBase<ItemType.Armor> {
 }
 export class Armor
   extends mix(Base).with(Equippable, Purchasable, Copyable)
-  implements ObtainableEffects {
+  implements ObtainableEffects
+{
   constructor(init: ItemProxyInit<ItemType.Armor>) {
     super(init);
   }
@@ -38,6 +40,10 @@ export class Armor
       this.equipped &&
       this.epData.state.activated
     );
+  }
+
+  toggleActiveState() {
+    return this.updater.path('data', 'state', 'activated').commit(toggle);
   }
 
   get armorValues() {

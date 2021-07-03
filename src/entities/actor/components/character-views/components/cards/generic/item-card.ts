@@ -186,6 +186,14 @@ export class ItemCard extends ItemCardBase {
           </span>
         `
       : ''}
+    ${item.type === ItemType.Armor && item.equipped && item.hasActiveState
+      ? html`<mwc-icon-button
+          class="toggle ${classMap({ activated: !!item.activated })}"
+          icon="power_settings_new"
+          @click=${() => item.toggleActiveState()}
+          ?disabled=${!editable}
+        />`
+      : ''}
     ${'toggleEquipped' in item && !item.equipped
       ? html`
           <mwc-icon-button

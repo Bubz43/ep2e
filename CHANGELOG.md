@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.822] - 2021-07-03
+
+- Add button to activate armor with active state
+
 ## [0.821] - 2021-07-02
 
 - Allow setting any armor used to sleight attack
