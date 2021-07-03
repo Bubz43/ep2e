@@ -3,6 +3,7 @@ import {
   formatLabeledFormulas,
 } from '@src/combat/attack-formatting';
 import {
+  emptyTextDash,
   renderFormulaField,
   renderLabeledCheckbox,
   renderNumberField,
@@ -25,6 +26,7 @@ import {
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import type { Sleight } from '@src/entities/item/proxies/sleight';
 import { ActionType } from '@src/features/actions';
+import { ArmorType } from '@src/features/active-armor';
 import type { EffectCreatedEvent } from '@src/features/components/effect-creator/effect-created-event';
 import { EffectType } from '@src/features/effects';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
@@ -342,6 +344,7 @@ export class SleightForm extends ItemFormBase {
       trait,
       attackTraits.includes(trait),
     ]);
+    const armorUsedProps = { armorUsed: this.item.armorUsed || '' } as const;
     return html`
       <h3>${localize('attack')}</h3>
       ${renderUpdaterForm(updater, {
@@ -349,12 +352,28 @@ export class SleightForm extends ItemFormBase {
         fields: ({ damageFormula, useMentalArmor, damageType }) => [
           renderFormulaField(damageFormula),
           renderSelectField(damageType, enumValues(HealthType)),
-          renderLabeledCheckbox(useMentalArmor, {
-            disabled: !damageFormula.value,
-            indeterminate: !damageFormula.value,
-          }),
+          // renderLabeledCheckbox(useMentalArmor, {
+          //   disabled: !damageFormula.value,
+          //   indeterminate: !damageFormula.value,
+          // }),
         ],
       })}
+      ${this.item.epData.attack.damageFormula
+        ? renderAutoForm({
+            props: armorUsedProps,
+            update: ({ armorUsed }) => {
+              this.item.updater
+                .path('flags', EP.Name, 'attackArmorUsed')
+                .store(armorUsed)
+                .path('data', 'attack', 'useMentalArmor')
+                .commit(false);
+            },
+            fields: ({ armorUsed }) =>
+              renderSelectField(armorUsed, enumValues(ArmorType), {
+                ...emptyTextDash,
+              }),
+          })
+        : ''}
       <p class="label">${localize('attackTraits')}</p>
       ${renderAutoForm({
         props: attackTraitsObj,

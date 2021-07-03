@@ -1,4 +1,5 @@
 import { EgoType } from '@src/data-enums';
+import type { ArmorType } from '@src/features/active-armor';
 import type { DurationEffect, MiscEffect } from '@src/features/effects';
 import {
   StringID,
@@ -305,6 +306,7 @@ type ItemFlags<T extends ItemType> = T extends ItemType.Psi
   ? { missiles: ItemEntity<ItemType.Explosive> | null }
   : T extends ItemType.Sleight
   ? {
+      attackArmorUsed: ArmorType | '';
       exoticSkill: string;
       applyTrait: [ItemEntity<ItemType.Trait>] | null;
       modifyTrait: {

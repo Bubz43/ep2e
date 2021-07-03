@@ -299,7 +299,7 @@ type BiologicalData = {
 type IT<
   /* Only 1 */
   T extends ItemType,
-  D extends TopLevel & { templates: (keyof ItemTemplates)[] }
+  D extends TopLevel & { templates: (keyof ItemTemplates)[] },
 > = {
   [key in T]: {
     templates: D['templates'];
@@ -309,7 +309,7 @@ type IT<
 type AT<
   /* Only 1 */
   T extends ActorType,
-  D extends TopLevel & { templates: (keyof ActorTemplates)[] }
+  D extends TopLevel & { templates: (keyof ActorTemplates)[] },
 > = {
   [key in T]: {
     templates: D['templates'];

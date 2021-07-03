@@ -10,6 +10,7 @@ import { createTag } from '@src/features/tags';
 import { createLiveTimeState, currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { LazyGetter } from 'lazy-get-decorator';
+import { compact } from 'remeda';
 import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
 export class Sleight extends ItemProxyBase<ItemType.Sleight> {
@@ -100,12 +101,19 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
     return !!this.epData.heal.formula;
   }
 
+  get armorUsed() {
+    return (
+      this.epFlags?.attackArmorUsed ||
+      (this.epData.attack.useMentalArmor ? ArmorType.Mental : null)
+    );
+  }
+
   get attack(): SleightAttack {
-    const { useMentalArmor, attackTraits, damageType, damageFormula, notes } =
+    const { attackTraits, damageType, damageFormula, notes } =
       this.epData.attack;
     return {
       armorPiercing: false,
-      armorUsed: useMentalArmor ? [ArmorType.Mental] : [],
+      armorUsed: compact([this.armorUsed]),
       attackTraits: attackTraits,
       damageType: damageType,
       reduceAVbyDV: false,

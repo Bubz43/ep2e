@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.821] - 2021-07-02
+
+- Allow setting any armor used to sleight attack
+
 ## [0.82] - 2021-07-02
 
 - Allow full control over skill effects
