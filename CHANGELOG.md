@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.823] - 2021-07-03
+
+- Fix meshware version of Endocrine controls providing +2 insight instead of +2 moxie
+
 ## [0.822] - 2021-07-03
 
 - Add button to activate armor with active state
@@ -15,7 +19,6 @@
 - Remove [Fake ID] from name of active rep source
 - Add health type option to Health Recovery effects, allowing for mental health heals from items
 - Allow setting custom exotic skill to sleights
-
 
 ## [0.819] - 2021-06-28
 
