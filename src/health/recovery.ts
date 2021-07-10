@@ -10,8 +10,8 @@ import {
   Timestamp,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
-import { averageRoll } from '@src/foundry/rolls';
-import { compact } from 'remeda';
+import { averageRoll, rollLimit } from '@src/foundry/rolls';
+import { clamp, compact } from 'remeda';
 
 export const useCurrentWorldTimeFlag = -1 as const;
 
@@ -230,3 +230,22 @@ export const setupRecoveries = ({
 };
 
 export type HealthRecoveries = ReturnType<typeof setupRecoveries>;
+
+export const getMaxRecoveryInstances = ({
+  health,
+  target,
+  amount,
+  instances,
+}: {
+  health: { damage: number; wounds: number };
+  target: HealOverTimeTarget;
+  amount: string;
+  instances: number;
+}) => {
+  const maxHeal =
+    target === HealOverTimeTarget.Damage ? health.damage : health.wounds;
+  const maxRequired = Math.trunc(maxHeal / rollLimit(amount, 'min'));
+  return clamp(Math.floor(instances), {
+    max: maxRequired || 1,
+  });
+};

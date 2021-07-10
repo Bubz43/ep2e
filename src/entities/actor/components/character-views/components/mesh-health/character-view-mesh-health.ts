@@ -13,6 +13,7 @@ import type { MeshHealth } from '@src/health/full-mesh-health';
 import { HealthType } from '@src/health/health';
 import {
   formatAutoHealing,
+  getMaxRecoveryInstances,
   HealingSlot,
   HealOverTimeTarget,
   Recovery,
@@ -44,13 +45,11 @@ export class CharacterViewMeshHealth extends UseWorldTime(LitElement) {
     heal: Recovery,
     instances: number,
   ) {
-    const maxHeal =
-      target === HealOverTimeTarget.Damage
-        ? this.health.data.damage
-        : this.health.data.wounds;
-    const maxRequired = maxHeal / rollLimit(heal.amount, 'min');
-    const wholeInstances = clamp(Math.floor(instances), {
-      max: maxRequired || 1,
+    const wholeInstances = getMaxRecoveryInstances({
+      target,
+      instances,
+      health: this.health.data,
+      amount: heal.amount,
     });
 
     await createMessage({

@@ -10,11 +10,16 @@ import {
 } from '@src/features/time';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';
-import { rollLabeledFormulas, rollFormula } from '@src/foundry/rolls';
+import {
+  rollLabeledFormulas,
+  rollFormula,
+  rollLimit,
+} from '@src/foundry/rolls';
 import { HealthType } from '@src/health/health';
 import { hardeningTypes, MentalHealth } from '@src/health/mental-health';
 import {
   formatAutoHealing,
+  getMaxRecoveryInstances,
   HealOverTimeTarget,
   NaturalMentalHeal,
   Recovery,
@@ -23,7 +28,7 @@ import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
-import { range } from 'remeda';
+import { clamp, range } from 'remeda';
 import styles from './character-view-mental-health.scss';
 
 @customElement('character-view-mental-health')
@@ -71,7 +76,13 @@ export class CharacterViewMentalHealth extends UseWorldTime(LitElement) {
     heal: Recovery,
     instances: number,
   ) {
-    const wholeInstances = Math.floor(instances);
+    const wholeInstances = getMaxRecoveryInstances({
+      target,
+      instances,
+      health: this.health.data,
+      amount: heal.amount,
+    });
+
     await createMessage({
       data: {
         header: {

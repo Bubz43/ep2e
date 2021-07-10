@@ -21,7 +21,11 @@ import {
   prettyMilliseconds,
 } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
-import { rollFormula, rollLabeledFormulas } from '@src/foundry/rolls';
+import {
+  rollFormula,
+  rollLabeledFormulas,
+  rollLimit,
+} from '@src/foundry/rolls';
 import type { BiologicalHealth } from '@src/health/biological-health';
 import { HealthType } from '@src/health/health';
 import {
@@ -34,13 +38,14 @@ import {
   Recovery,
   RecoveryConditions,
   recoveryMultiplier,
+  getMaxRecoveryInstances,
 } from '@src/health/recovery';
 import type { SyntheticHealth } from '@src/health/synthetic-health';
 import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, html, LitElement, property, state } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
-import { compact, pick } from 'remeda';
+import { clamp, compact, pick } from 'remeda';
 import styles from './character-view-physical-health.scss';
 
 @customElement('character-view-physical-health')
@@ -99,7 +104,13 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
     heal: Recovery,
     instances: number,
   ) {
-    const wholeInstances = Math.floor(instances);
+    const wholeInstances = getMaxRecoveryInstances({
+      target,
+      instances,
+      health: this.health.data,
+      amount: heal.amount,
+    });
+
     await createMessage({
       data: {
         header: {
