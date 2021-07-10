@@ -64,8 +64,11 @@ export class CharacterViewSearch extends LitElement {
       ${renderAutoForm({
         classes: 'controls',
         storeOnInput: true,
+        noDebounce: true,
         props: { search },
-        update: ({ search = '' }) => (this.search = search),
+        update: ({ search }) => {
+          if (search !== undefined) this.search = search;
+        },
         fields: ({ search }) => html`
           <label>
             <mwc-icon>search</mwc-icon>
