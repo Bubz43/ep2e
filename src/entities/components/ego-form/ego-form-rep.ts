@@ -65,8 +65,13 @@ export class EgoFormRep extends LitElement {
                     const used = usedAmount >= favorNumber;
                     return html`
                       <mwc-icon-button
-                        @click=${() =>
-                          this.repOps.commit({
+                        @click=${() => {
+                          const isActive =
+                            repRefreshTimerActive(repData) &&
+                            repData.refreshStartTime !== 0;
+                          const setRefresh =
+                            favor === Favor.Major ? false : !isActive;
+                          return this.repOps.commit({
                             [favor]: used
                               ? favorNumber === 1
                                 ? 0
@@ -74,12 +79,11 @@ export class EgoFormRep extends LitElement {
                                 ? 1
                                 : 2
                               : favorNumber,
-                            refreshStartTime:
-                              !repRefreshTimerActive(repData) &&
-                              favor !== Favor.Major
-                                ? currentWorldTimeMS()
-                                : undefined,
-                          })}
+                            refreshStartTime: setRefresh
+                              ? currentWorldTimeMS()
+                              : undefined,
+                          });
+                        }}
                         ?disabled=${this.disabled}
                         icon=${used ? 'check_box' : 'check_box_outline_blank'}
                       ></mwc-icon-button>
