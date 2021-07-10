@@ -449,11 +449,7 @@ export class CharacterViewTestActions extends LitElement {
                     class="source"
                   >
                     <span slot="before">${localize('profile')}:</span>
-                    <span
-                      >${fakeID
-                        ? `[${localize('fakeId')}] ${fakeID.name}`
-                        : this.ego.name}</span
-                    >
+                    <span>${fakeID ? fakeID.name : this.ego.name}</span>
                     <mwc-icon slot="after"
                       >${fakeID ? 'person_outline' : 'person'}</mwc-icon
                     >
