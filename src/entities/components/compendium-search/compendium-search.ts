@@ -166,7 +166,9 @@ export class CompendiumSearch extends LitElement {
           storeOnInput: true,
           noDebounce: true,
           props: { filter: this.filter },
-          update: ({ filter = '' }) => (this.filter = filter),
+          update: ({ filter }) => {
+            if (filter !== undefined) this.filter = filter;
+          },
           fields: ({ filter }) =>
             html`<label @keydown=${this.loadOnEnter}
               ><mwc-icon>search</mwc-icon>${renderTextInput(filter, {

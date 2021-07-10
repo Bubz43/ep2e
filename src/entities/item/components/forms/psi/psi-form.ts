@@ -418,10 +418,12 @@ export class PsiForm extends ItemFormBase {
         })}
         ${renderAutoForm({
           props: influence,
-          update: ({ description = '' }) => {
-            this.item.influenceCommiter((influences) =>
-              updateFeature(influences, { id: influence.id, description }),
-            );
+          update: ({ description }) => {
+            if (description !== undefined) {
+              this.item.influenceCommiter((influences) =>
+                updateFeature(influences, { id: influence.id, description }),
+              );
+            }
           },
           fields: ({ description }) =>
             renderTextareaField(description, { rows: 20, resizable: true }),

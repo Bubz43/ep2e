@@ -79,7 +79,9 @@ export class WorldTimeControls extends mix(LitElement).with(UseWorldTime) {
             ${renderAutoForm({
               noDebounce: true,
               props: { change: this.timeChange },
-              update: ({ change = 0 }) => (this.timeChange = change),
+              update: ({ change }) => {
+                if (change !== undefined) this.timeChange = change;
+              },
               fields: ({ change }) =>
                 renderTimeField(
                   { ...change, label: '' },

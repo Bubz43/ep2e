@@ -605,8 +605,8 @@ export class MessageSuccessTest extends MessageElement {
         }`,
         props: { roll: this.setRoll ?? this.currentState?.roll ?? 50 },
         storeOnInput: true,
-        update: ({ roll = 50 }) => {
-          this.setRoll = roll;
+        update: ({ roll }) => {
+          if (roll !== undefined) this.setRoll = roll;
         },
         fields: ({ roll }) => renderNumberInput(roll, { min: 0, max: 99 }),
       })}

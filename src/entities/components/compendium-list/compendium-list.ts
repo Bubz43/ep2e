@@ -140,7 +140,9 @@ export class CompendiumList extends LitElement {
       ${renderAutoForm({
         storeOnInput: true,
         props: { search: this.search },
-        update: ({ search = '' }) => (this.search = search),
+        update: ({ search }) => {
+          if (search !== undefined) this.search = search;
+        },
         fields: ({ search }) =>
           html`<label
             ><mwc-icon>search</mwc-icon>${renderTextInput(search, {

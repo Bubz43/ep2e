@@ -321,7 +321,9 @@ export class TraitForm extends ItemFormBase {
         ? html`
             ${renderAutoForm({
               props: { level: this.addEffectLevel + 1 },
-              update: ({ level = 0 }) => (this.addEffectLevel = level - 1),
+              update: ({ level }) => {
+                if (level !== undefined) this.addEffectLevel = level - 1;
+              },
               classes: 'add-effect-level-selector',
               fields: ({ level }) =>
                 renderNumberField(level, {

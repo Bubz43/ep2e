@@ -49,7 +49,9 @@ export class PhysicalTechCard extends ItemCardBase {
       content: [
         renderAutoForm({
           props: { hidden: isHidden },
-          update: ({ hidden = false }) => (isHidden = hidden),
+          update: ({ hidden }) => {
+            if (hidden !== undefined) isHidden = hidden;
+          },
           fields: ({ hidden }) => renderLabeledCheckbox(hidden),
         }),
         'divider',
