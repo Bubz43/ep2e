@@ -14,8 +14,14 @@ import { enumValues, PhysicalServiceType } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import type { PhysicalService } from '@src/entities/item/proxies/physical-service';
 import { addUpdateRemoveFeature, idProp } from '@src/features/feature-helpers';
-import { createRep, maxFavors, RepNetwork } from '@src/features/reputations';
-import { CommonInterval } from '@src/features/time';
+import {
+  createRep,
+  Favor,
+  maxFavors,
+  RepNetwork,
+  repRefreshTimerActive,
+} from '@src/features/reputations';
+import { CommonInterval, currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { customElement, html, property, state } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
@@ -169,8 +175,13 @@ export class PhysicalServiceForm extends ItemFormBase {
                           const used = usedAmount >= favorNumber;
                           return html`
                             <mwc-icon-button
-                              @click=${() =>
-                                this.repOps.update(
+                              @click=${() => {
+                                const isActive =
+                                  repRefreshTimerActive(rep) &&
+                                  rep.refreshStartTime !== 0;
+                                const setRefresh =
+                                  favor === Favor.Major ? false : !isActive;
+                                return this.repOps.update(
                                   {
                                     [favor]: used
                                       ? favorNumber === 1
@@ -179,9 +190,13 @@ export class PhysicalServiceForm extends ItemFormBase {
                                         ? 1
                                         : 2
                                       : favorNumber,
+                                    refreshStartTime: setRefresh
+                                      ? currentWorldTimeMS()
+                                      : undefined,
                                   },
                                   { id: rep.id },
-                                )}
+                                );
+                              }}
                               ?disabled=${this.disabled}
                               icon=${used
                                 ? 'check_box'
