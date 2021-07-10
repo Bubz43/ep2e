@@ -3,7 +3,7 @@
 ## [0.824] - 2021-07-10
 
 - Fix health recoveries not storing data permanently in some situations
-- Fix
+- Fix rep refreshes not setting correct start time when setting favor
 
 ## [0.823] - 2021-07-03
 
