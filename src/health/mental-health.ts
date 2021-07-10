@@ -225,12 +225,13 @@ class MentalHealthBase implements CommonHealth {
 }
 
 export class MentalHealth extends HealthMixin(MentalHealthBase) {
-  private resetRegenStartTimes() {
+  private resetRegenStartTimes(useCurrent: boolean) {
+    const value = useCurrent ? currentWorldTimeMS() : useCurrentWorldTimeFlag;
     this.init.updater
       .path('aidedHealTickStartTime')
-      .store(useCurrentWorldTimeFlag)
+      .store(value)
       .path('ownHealTickStartTime')
-      .store(useCurrentWorldTimeFlag);
+      .store(value);
   }
 
   applyModification(modification: HealthModification) {
@@ -238,22 +239,23 @@ export class MentalHealth extends HealthMixin(MentalHealthBase) {
     const { damage, wounds } = this.data;
     switch (modification.mode) {
       case HealthModificationMode.Edit: {
-        if (!damage && modification.damage) this.resetRegenStartTimes();
-        else if (damage && !modification.damage) this.resetRegenStartTimes();
+        if (!damage && modification.damage) this.resetRegenStartTimes(true);
+        else if (damage && !modification.damage)
+          this.resetRegenStartTimes(false);
         else if (this.regenState !== HealOverTimeTarget.Damage) {
-          if (!wounds && modification.wounds) this.resetRegenStartTimes();
+          if (!wounds && modification.wounds) this.resetRegenStartTimes(true);
           else if (wounds && !damage && modification.damage)
-            this.resetRegenStartTimes();
+            this.resetRegenStartTimes(false);
         }
 
         break;
       }
       case HealthModificationMode.Inflict: {
-        if (!damage && modification.damage) this.resetRegenStartTimes();
+        if (!damage && modification.damage) this.resetRegenStartTimes(true);
         else if (this.regenState !== HealOverTimeTarget.Damage) {
-          if (!wounds && modification.wounds) this.resetRegenStartTimes();
+          if (!wounds && modification.wounds) this.resetRegenStartTimes(true);
           else if (wounds && !damage && modification.damage)
-            this.resetRegenStartTimes();
+            this.resetRegenStartTimes(false);
         }
 
         break;
@@ -261,7 +263,7 @@ export class MentalHealth extends HealthMixin(MentalHealthBase) {
 
       case HealthModificationMode.Heal: {
         if (damage && modification.damage >= damage)
-          this.resetRegenStartTimes();
+          this.resetRegenStartTimes(false);
         break;
       }
     }

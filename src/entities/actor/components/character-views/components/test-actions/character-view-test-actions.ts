@@ -512,7 +512,6 @@ export class CharacterViewTestActions extends LitElement {
   };
 
   private renderRep = (rep: RepWithIdentifier) => {
-    console.log(rep);
     return html`
       <li class="rep-item">
         <button

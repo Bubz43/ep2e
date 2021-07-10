@@ -111,12 +111,13 @@ class MeshHealthBase implements CommonHealth {
 }
 
 export class MeshHealth extends HealthMixin(MeshHealthBase) {
-  private resetRegenStartTimes() {
+  private resetRegenStartTimes(useCurrent: boolean) {
+    const value = useCurrent ? currentWorldTimeMS() : useCurrentWorldTimeFlag;
     this.init.updater
       .path('aidedHealTickStartTime')
-      .store(useCurrentWorldTimeFlag)
+      .store(value)
       .path('ownHealTickStartTime')
-      .store(useCurrentWorldTimeFlag);
+      .store(value);
   }
 
   applyModification(modification: HealthModification) {
@@ -125,12 +126,13 @@ export class MeshHealth extends HealthMixin(MeshHealthBase) {
     const { value: dur } = this.main.durability;
     switch (modification.mode) {
       case HealthModificationMode.Edit: {
-        if (!damage && modification.damage) this.resetRegenStartTimes();
-        else if (damage && !modification.damage) this.resetRegenStartTimes();
+        if (!damage && modification.damage) this.resetRegenStartTimes(true);
+        else if (damage && !modification.damage)
+          this.resetRegenStartTimes(false);
         else if (this.regenState !== HealOverTimeTarget.Damage) {
-          if (!wounds && modification.wounds) this.resetRegenStartTimes();
+          if (!wounds && modification.wounds) this.resetRegenStartTimes(true);
           else if (wounds && !damage && modification.damage)
-            this.resetRegenStartTimes();
+            this.resetRegenStartTimes(false);
         }
 
         if (damage < dur && modification.damage >= dur) {
@@ -144,11 +146,11 @@ export class MeshHealth extends HealthMixin(MeshHealthBase) {
       }
 
       case HealthModificationMode.Inflict: {
-        if (!damage && modification.damage) this.resetRegenStartTimes();
+        if (!damage && modification.damage) this.resetRegenStartTimes(true);
         else if (this.regenState !== HealOverTimeTarget.Damage) {
-          if (!wounds && modification.wounds) this.resetRegenStartTimes();
+          if (!wounds && modification.wounds) this.resetRegenStartTimes(true);
           else if (wounds && !damage && modification.damage)
-            this.resetRegenStartTimes();
+            this.resetRegenStartTimes(false);
         }
 
         if (damage < dur && modification.damage + damage >= dur) {
@@ -163,7 +165,7 @@ export class MeshHealth extends HealthMixin(MeshHealthBase) {
 
       case HealthModificationMode.Heal: {
         if (damage && modification.damage >= damage)
-          this.resetRegenStartTimes();
+          this.resetRegenStartTimes(false);
         break;
       }
     }

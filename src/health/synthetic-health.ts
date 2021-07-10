@@ -115,34 +115,36 @@ class SyntheticHealthBase implements CommonHealth {
 }
 
 export class SyntheticHealth extends HealthMixin(SyntheticHealthBase) {
-  private resetRegenStartTimes() {
+  private resetRegenStartTimes(useCurrent: boolean) {
+    const value = useCurrent ? currentWorldTimeMS() : useCurrentWorldTimeFlag;
     this.init.updater
       .path('aidedHealTickStartTime')
-      .store(useCurrentWorldTimeFlag)
+      .store(value)
       .path('ownHealTickStartTime')
-      .store(useCurrentWorldTimeFlag);
+      .store(value);
   }
 
   applyModification(modification: HealthModification) {
     const { damage, wounds } = this.common;
     switch (modification.mode) {
       case HealthModificationMode.Edit: {
-        if (!damage && modification.damage) this.resetRegenStartTimes();
-        else if (damage && !modification.damage) this.resetRegenStartTimes();
+        if (!damage && modification.damage) this.resetRegenStartTimes(true);
+        else if (damage && !modification.damage)
+          this.resetRegenStartTimes(false);
         else if (this.regenState !== HealOverTimeTarget.Damage) {
-          if (!wounds && modification.wounds) this.resetRegenStartTimes();
+          if (!wounds && modification.wounds) this.resetRegenStartTimes(true);
           else if (wounds && !damage && modification.damage)
-            this.resetRegenStartTimes();
+            this.resetRegenStartTimes(false);
         }
 
         break;
       }
       case HealthModificationMode.Inflict: {
-        if (!damage && modification.damage) this.resetRegenStartTimes();
+        if (!damage && modification.damage) this.resetRegenStartTimes(true);
         else if (this.regenState !== HealOverTimeTarget.Damage) {
-          if (!wounds && modification.wounds) this.resetRegenStartTimes();
+          if (!wounds && modification.wounds) this.resetRegenStartTimes(true);
           else if (wounds && !damage && modification.damage)
-            this.resetRegenStartTimes();
+            this.resetRegenStartTimes(false);
         }
 
         break;
@@ -150,7 +152,7 @@ export class SyntheticHealth extends HealthMixin(SyntheticHealthBase) {
 
       case HealthModificationMode.Heal: {
         if (damage && modification.damage >= damage)
-          this.resetRegenStartTimes();
+          this.resetRegenStartTimes(false);
         break;
       }
     }
