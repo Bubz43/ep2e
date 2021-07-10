@@ -99,9 +99,9 @@ export class PhysicalService extends mix(Base).with(Purchasable, Service) {
     return this.reputations.flatMap((rep) =>
       repRefreshTimerActive(rep)
         ? createLiveTimeState({
-            label: `${this.name} - ${localize('fakeId')} | ${
-              rep.acronym
-            } ${localize('favor')} ${localize('refresh')}`,
+            label: `${this.name} | ${rep.acronym} ${localize(
+              'favor',
+            )} ${localize('refresh')}`,
             duration: CommonInterval.Week,
             id: `${this.id}-${rep.id}`,
             startTime: rep.refreshStartTime,
