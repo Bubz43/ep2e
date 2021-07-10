@@ -159,7 +159,9 @@ export class CharacterViewTimeItem extends UseWorldTime(LitElement) {
     return renderAutoForm({
       props: { progress: this.prog },
       storeOnInput: true,
-      update: ({ progress = 0 }) => (this.prog = progress),
+      update: ({ progress }) => {
+        if (progress !== undefined) this.prog = progress;
+      },
       fields: ({ progress }) =>
         renderSlider(progress, {
           min: 0,
