@@ -20,7 +20,7 @@ export class TimeSince extends LitElement {
   }
 
   disconnectedCallback() {
-    clearInterval(this.intervalId);
+    this.intervalId ?? clearInterval(this.intervalId);
     super.disconnectedCallback();
   }
 

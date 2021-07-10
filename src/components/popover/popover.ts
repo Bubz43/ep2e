@@ -126,7 +126,7 @@ export class Popover extends mix(LitElement).with(ListenerSubscription) {
 
   private resizeObs?: ResizeObserver;
 
-  private delayTimeout?: number;
+  private delayTimeout?: ReturnType<typeof setTimeout>;
 
   private positioningBase?: Record<
     'top' | 'left' | 'width' | 'height',
@@ -161,7 +161,7 @@ export class Popover extends mix(LitElement).with(ListenerSubscription) {
   }
 
   private selfClose = () => {
-    clearTimeout(this.delayTimeout);
+    this.delayTimeout ?? clearTimeout(this.delayTimeout);
     this.open = false;
   };
 
@@ -381,7 +381,8 @@ export class Popover extends mix(LitElement).with(ListenerSubscription) {
             addListener(this, 'pointerleave', () => this.hoverLeave()),
             ...[this.floater, this.base].map((el) =>
               addListener(el, ['pointerenter', 'pointerleave'], (e) => {
-                if (e.type === 'pointerleave') clearTimeout(this.delayTimeout);
+                if (e.type === 'pointerleave')
+                  this.delayTimeout ?? clearTimeout(this.delayTimeout);
                 this.pointerExit = e.type === 'pointerenter';
               }),
             ),

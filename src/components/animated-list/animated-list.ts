@@ -42,7 +42,7 @@ export class AnimatedList extends LitElement {
 
   private isReady = false;
 
-  private initTimeout?: number;
+  private initTimeout?: ReturnType<typeof setTimeout>;
 
   async connectedCallback() {
     super.connectedCallback();
@@ -62,7 +62,7 @@ export class AnimatedList extends LitElement {
   }
 
   disconnectedCallback() {
-    clearTimeout(this.initTimeout);
+    this.initTimeout ?? clearTimeout(this.initTimeout);
     this.isReady = false;
     this.savedPositions.clear();
     this.resizeObs?.disconnect();

@@ -53,13 +53,13 @@ export function debounceFn<T extends (...args: any) => any>(
   wait: number,
   callFirst?: boolean,
 ) {
-  let timeout: undefined | number;
+  let timeout: undefined | ReturnType<typeof setTimeout>;
   return function <F>(this: F, ...args: Parameters<T>) {
     const apply = () => fn.apply(this, args);
     if (!wait) return apply();
 
     const callNow = callFirst && !timeout;
-    clearTimeout(timeout);
+    timeout ?? clearTimeout(timeout);
 
     timeout = setTimeout(() => {
       timeout = undefined;

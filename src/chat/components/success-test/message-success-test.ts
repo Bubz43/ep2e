@@ -175,7 +175,7 @@ export class MessageSuccessTest extends MessageElement {
   }
 
   private clearPreviewTimeout() {
-    clearTimeout(this.previewTimeout);
+    this.previewTimeout ?? clearTimeout(this.previewTimeout);
   }
 
   private showLog() {
