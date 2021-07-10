@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.824] - 2021-07-10
+
+- Fix health recoveries not storing data permanently in some situations
+- Fix
+
 ## [0.823] - 2021-07-03
 
 - Fix meshware version of Endocrine controls providing +2 insight instead of +2 moxie
