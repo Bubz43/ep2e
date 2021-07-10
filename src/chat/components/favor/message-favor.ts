@@ -48,7 +48,8 @@ export class MessageFavor extends MessageElement {
             const isActive =
               repRefreshTimerActive(rep) && rep.refreshStartTime !== 0;
             const setRefresh =
-              !markedAsUsed || type === Favor.Major ? false : !isActive;
+              markedAsUsed || type === Favor.Major ? false : !isActive;
+
             return partial(
               rep[type],
               setRefresh ? currentWorldTimeMS() : rep.refreshStartTime,
@@ -65,7 +66,7 @@ export class MessageFavor extends MessageElement {
               const isActive =
                 repRefreshTimerActive(rep) && rep.refreshStartTime !== 0;
               const setRefresh =
-                !markedAsUsed || type === Favor.Major ? false : !isActive;
+                markedAsUsed || type === Favor.Major ? false : !isActive;
               return updateFeature(reps, {
                 ...partial(
                   rep[type],
