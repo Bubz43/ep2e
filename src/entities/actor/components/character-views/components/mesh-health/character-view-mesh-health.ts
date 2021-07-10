@@ -4,7 +4,11 @@ import { enumValues } from '@src/data-enums';
 import type { Character } from '@src/entities/actor/proxies/character';
 import { prettyMilliseconds } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
-import { rollLabeledFormulas, rollFormula } from '@src/foundry/rolls';
+import {
+  rollLabeledFormulas,
+  rollFormula,
+  rollLimit,
+} from '@src/foundry/rolls';
 import type { MeshHealth } from '@src/health/full-mesh-health';
 import { HealthType } from '@src/health/health';
 import {
@@ -16,6 +20,7 @@ import {
 import { openMenu } from '@src/open-menu';
 import { notEmpty } from '@src/utility/helpers';
 import { customElement, LitElement, property, html } from 'lit-element';
+import { clamp } from 'remeda';
 import styles from './character-view-mesh-health.scss';
 
 @customElement('character-view-mesh-health')
@@ -39,7 +44,15 @@ export class CharacterViewMeshHealth extends UseWorldTime(LitElement) {
     heal: Recovery,
     instances: number,
   ) {
-    const wholeInstances = Math.floor(instances);
+    const maxHeal =
+      target === HealOverTimeTarget.Damage
+        ? this.health.data.damage
+        : this.health.data.wounds;
+    const maxRequired = maxHeal / rollLimit(heal.amount, 'min');
+    const wholeInstances = clamp(Math.floor(instances), {
+      max: maxRequired || 1,
+    });
+
     await createMessage({
       data: {
         header: { heading: `${heal.source} ${localize('healthRecovery')}` },
