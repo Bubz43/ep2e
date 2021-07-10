@@ -1,7 +1,12 @@
 import type { FavorMessageData } from '@src/chat/message-data';
 import { ActorType } from '@src/entities/entity-types';
 import { updateFeature } from '@src/features/feature-helpers';
-import { Favor, maxFavors } from '@src/features/reputations';
+import {
+  Favor,
+  maxFavors,
+  repRefreshTimerActive,
+} from '@src/features/reputations';
+import { currentWorldTimeMS } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import {
   isSuccessfullTestResult,
@@ -31,13 +36,24 @@ export class MessageFavor extends MessageElement {
       const { repIdentifier, type, markedAsUsed } = this.favor;
       if (type === Favor.Trivial) return;
       const change = markedAsUsed ? -1 : 1;
-      const partial = (current: number) => ({
+      const partial = (current: number, refreshStartTime: number) => ({
         [type]: clamp(current + change, { max: maxFavors.get(type), min: 0 }),
+        refreshStartTime,
       });
+
       if (repIdentifier.type === 'ego') {
         await actor.proxy.ego.updater
           .path('data', 'reps', repIdentifier.networkId)
-          .commit((rep) => partial(rep[type]));
+          .commit((rep) => {
+            const isActive =
+              repRefreshTimerActive(rep) && rep.refreshStartTime !== 0;
+            const setRefresh =
+              !markedAsUsed || type === Favor.Major ? false : !isActive;
+            return partial(
+              rep[type],
+              setRefresh ? currentWorldTimeMS() : rep.refreshStartTime,
+            );
+          });
       } else {
         const { fakeEgoId, repId } = repIdentifier;
         actor.proxy.equippedGroups.fakeIDs
@@ -45,9 +61,20 @@ export class MessageFavor extends MessageElement {
           ?.updater.path('data', 'reputations')
           .commit((reps) => {
             const rep = reps.find((rep) => rep.id === repId);
-            return rep
-              ? updateFeature(reps, { ...partial(rep[type]), id: repId })
-              : reps;
+            if (rep) {
+              const isActive =
+                repRefreshTimerActive(rep) && rep.refreshStartTime !== 0;
+              const setRefresh =
+                !markedAsUsed || type === Favor.Major ? false : !isActive;
+              return updateFeature(reps, {
+                ...partial(
+                  rep[type],
+                  setRefresh ? currentWorldTimeMS() : rep.refreshStartTime,
+                ),
+                id: repId,
+              });
+            }
+            return reps;
           });
       }
       this.getUpdater('favor').commit({ markedAsUsed: !markedAsUsed });
