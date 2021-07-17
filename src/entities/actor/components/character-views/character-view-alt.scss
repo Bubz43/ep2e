@@ -33,6 +33,10 @@ h3 {
   background: alphav(var(--color-bg), 0.6);
 }
 
+:host([disabletransparency]) {
+  background: var(--color-bg);
+}
+
 .limited {
   grid-area: 1 / 1 / -1 / -1;
   padding: 1rem 1.5rem;

@@ -45,7 +45,7 @@ import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
 import { rollFormula } from '@src/foundry/rolls';
 import { EP } from '@src/foundry/system';
-import { tooltip } from '@src/init';
+import { gameSettings, tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import { clickIfEnter, notEmpty } from '@src/utility/helpers';
 import { localImage } from '@src/utility/images';
@@ -107,7 +107,11 @@ export class CharacterViewAlt extends CharacterViewBase {
 
   @property({ type: Boolean, reflect: true }) compact = false;
 
+  @property({ type: Boolean, reflect: true }) disableTransparency = false;
+
   @state() private currentTab: CharacterTab = 'combat';
+
+  private transparencyUnsub: (() => void) | null = null;
 
   update(changedProps: PropertyValues<this>) {
     if (
@@ -118,6 +122,19 @@ export class CharacterViewAlt extends CharacterViewBase {
       this.currentTab = 'gear';
     }
     super.update(changedProps);
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.transparencyUnsub = gameSettings.disableSheetTransparency.subscribe(
+      (value) => (this.disableTransparency = value),
+    );
+  }
+
+  disconnectedCallback() {
+    this.transparencyUnsub?.();
+    this.transparencyUnsub = null;
+    super.disconnectedCallback();
   }
 
   private get currentTabs() {

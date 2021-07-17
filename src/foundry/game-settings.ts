@@ -106,6 +106,18 @@ export const registerEPSettings = once(() => {
     },
   );
 
+  const disableSheetTransparency = registerSystemSetting<boolean>(
+    'disableSheetTransparency',
+    {
+      name: 'Disable Sheet Transparency',
+      scope: 'client',
+      hint: 'Makes the background on character sheets fully opaque.',
+      config: true,
+      default: false,
+      type: Boolean,
+    },
+  );
+
   const combatState = registerSystemSetting<CombatData>('combatState', {
     scope: 'world',
     config: false,
@@ -124,5 +136,6 @@ export const registerEPSettings = once(() => {
     credits,
     glitchOnMeshWounds,
     combatState,
+    disableSheetTransparency,
   } as const;
 });
