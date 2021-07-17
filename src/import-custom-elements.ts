@@ -20,7 +20,6 @@ import '@material/mwc-switch';
 import '@material/mwc-tab-bar';
 import { LitVirtualizer } from 'lit-virtualizer';
 import 'web-animations-js';
-// import '@tinymce/tinymce-webcomponent'; // TODO Test this out further
 // Weightless Components
 import 'weightless/label';
 import 'weightless/list-item';
@@ -189,13 +188,6 @@ import { SuccessTestSkillSection } from './success-test/components/skill-section
 import { SkillTestControls } from './success-test/components/skill-test-controls/skill-test-controls';
 import { SoftwareSkillTestControls } from './success-test/components/software-skill-test-controls/software-skill-test-controls';
 import { ThrownAttackControls } from './success-test/components/thrown-attack-controls/thrown-attack-controls';
-import { BaseElement } from '@material/mwc-base/base-element';
-import { LitElement } from 'lit-element';
-
-//@ts-ignore
-BaseElement.prototype._getUpdateComplete =
-  //@ts-ignore Have to do this or mwc-list-base gets stuck in recursive loop
-  LitElement.prototype.getUpdateComplete;
 
 // Generic Components
 Field;
