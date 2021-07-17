@@ -44,9 +44,9 @@ const splitEntity = (entity: MessageInit['entity']) => {
     actor: entity instanceof ActorEP ? entity : entity?.actor,
     token:
       entity instanceof Token
-        ? entity
+        ? entity.document
         : entity instanceof TokenDocument
-        ? entity.object
+        ? entity
         : null,
   };
 };
