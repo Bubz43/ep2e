@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.825] - 2021-07-17
+
+- Add client side system setting to remove transparency from character sheets
+
 ## [0.824] - 2021-07-10
 
 - Fix health recoveries not storing data permanently in some situations
