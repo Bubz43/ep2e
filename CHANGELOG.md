@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.826] - 2021-07-30
+
+- Fix armor-piercing not being applied to melee attacks
+
 ## [0.825] - 2021-07-17
 
 - Add client side system setting to remove transparency from character sheets

@@ -86,7 +86,7 @@ export const meleeDamage = ({
 
   return {
     ...attackInfo,
-    armorPiercing: alwaysArmorPiercing ?? attackInfo.armorPiercing,
+    armorPiercing: alwaysArmorPiercing || attackInfo.armorPiercing,
     source,
     multiplier:
       morphSize === Size.Small && !settings.damageIrrespectiveOfSize
