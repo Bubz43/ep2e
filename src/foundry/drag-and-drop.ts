@@ -14,6 +14,7 @@ import {
   PsiInfluenceData,
   PsiInfluenceType,
 } from '@src/features/psi-influence';
+import { SuccessTestInitInfo, successTestInitInfoSchema } from '@src/global';
 import { isJsonObject } from '@src/utility/helpers';
 import { createPipe } from 'remeda';
 import type { JsonObject } from 'type-fest';
@@ -118,6 +119,7 @@ export enum DropType {
   RollTable = 'RollTable',
   Playlist = 'Playlist',
   Folder = 'Folder',
+  SuccessTestInfo = 'SuccessTestInfo',
 }
 
 type MacroDrop = KnownDrop<{ id: string; type: DropType.Macro }>;
@@ -182,6 +184,11 @@ type FolderDrop = KnownDrop<{
   entity: EntityName;
 }>;
 
+type SuccessTestDrop = KnownDrop<{
+  type: DropType.SuccessTestInfo;
+  successTest: SuccessTestInitInfo;
+}>;
+
 type Drops = {
   [DropType.Macro]: MacroDrop;
   [DropType.HotbarEntryData]: HotbarEntryDataDrop;
@@ -196,6 +203,7 @@ type Drops = {
   [DropType.Scene]: SceneDrop;
   [DropType.RollTable]: RollTableDrop;
   [DropType.Folder]: FolderDrop;
+  [DropType.SuccessTestInfo]: SuccessTestDrop;
 };
 
 const isMacro = dropChecker(DropType.Macro, ({ id }) => typeof id === 'string');
@@ -279,6 +287,15 @@ const isFolderDrop = dropChecker(
   ({ id, entity }) => !!(id && typeof entity === 'string'),
 );
 
+const isSuccessTestInfo = dropChecker(DropType.SuccessTestInfo, (data) => {
+  try {
+    successTestInitInfoSchema.parse(data);
+    return true;
+  } catch (error) {
+    return false;
+  }
+});
+
 const droppedChecks: Record<DropType, (dropped: unknown) => boolean> = {
   [DropType.Macro]: isMacro,
   [DropType.HotbarEntryData]: isHotbarEntryData,
@@ -293,6 +310,7 @@ const droppedChecks: Record<DropType, (dropped: unknown) => boolean> = {
   [DropType.RollTable]: isRollTableDrop,
   [DropType.JournalEntry]: isJournalEntryDrop,
   [DropType.Folder]: isFolderDrop,
+  [DropType.SuccessTestInfo]: isSuccessTestInfo,
 };
 
 export const isKnownDrop = (droppedData: unknown): droppedData is Drop => {
