@@ -107,6 +107,8 @@ export type SuccessTestInitInfo = RequireExactlyOne<{
 }>;
 
 const startSuccessTest = (successTest: SuccessTestInitInfo) => {
+  const relativeEl =
+    lastClickedEl || document.getElementById('action-bar') || undefined;
   try {
     const test = successTestInitInfoSchema.parse(
       successTest,
@@ -115,7 +117,7 @@ const startSuccessTest = (successTest: SuccessTestInitInfo) => {
       pickOrDefaultCharacter((character) => {
         AptitudeCheckControls.openWindow({
           entities: { actor: character.actor },
-          relativeEl: lastClickedEl || undefined,
+          relativeEl: relativeEl,
           getState: (actor) => {
             if (actor.proxy.type !== ActorType.Character) return null;
 
@@ -132,7 +134,7 @@ const startSuccessTest = (successTest: SuccessTestInitInfo) => {
       pickOrDefaultCharacter((character) => {
         SkillTestControls.openWindow({
           entities: { actor: character.actor },
-          relativeEl: lastClickedEl || undefined,
+          relativeEl: relativeEl,
           getState: (actor) => {
             if (actor.proxy.type !== ActorType.Character) return null;
             return {
@@ -160,7 +162,7 @@ const startSuccessTest = (successTest: SuccessTestInitInfo) => {
         }
         SkillTestControls.openWindow({
           entities: { actor: character.actor },
-          relativeEl: lastClickedEl || undefined,
+          relativeEl: relativeEl,
 
           getState: (actor) => {
             if (actor.proxy.type !== ActorType.Character) return null;
