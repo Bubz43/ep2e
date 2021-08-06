@@ -190,10 +190,10 @@ Hooks.once('ready', async () => {
     render(
       html`
         <mwc-button
-          style="width: 100%"
+          style="width: calc(100% - 0.5rem); margin: 0.25rem; line-height: 1;"
           label=${localize('search')}
           icon="search"
-          outlined
+          raised
           @click=${() => {
             openWindow({
               key: CompendiumSearch,
