@@ -107,8 +107,9 @@ export type SuccessTestInitInfo = RequireExactlyOne<{
 }>;
 
 const startSuccessTest = (successTest: SuccessTestInitInfo) => {
-  const relativeEl =
-    lastClickedEl || document.getElementById('action-bar') || undefined;
+  let last = lastClickedEl;
+  if (last instanceof HTMLCanvasElement) last = null;
+  const relativeEl = last || document.getElementById('action-bar') || undefined;
   try {
     const test = successTestInitInfoSchema.parse(
       successTest,
