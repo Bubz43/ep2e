@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.827] - 2021-08-06
+
+- Allow dragging aptitudes/skills onto the hotbar. This creates a command which will attempt to start the test on the selected character's primary ego.
+
 ## [0.826] - 2021-07-30
 
 - Fix armor-piercing not being applied to melee attacks
