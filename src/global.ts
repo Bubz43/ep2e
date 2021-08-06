@@ -2,11 +2,13 @@ import * as v from '@badrap/valita';
 import type { RequireExactlyOne } from 'type-fest';
 import { createMessage, rollModeToVisibility } from './chat/create-message';
 import type { DamageMessageData } from './chat/message-data';
+import { lastClickedEl } from './components/window/window-controls';
 import { AptitudeType } from './data-enums';
 import { ActorType } from './entities/entity-types';
 import { pickOrDefaultCharacter } from './entities/find-entities';
 import { ArmorType } from './features/active-armor';
 import { FieldSkillType, SkillType } from './features/skills';
+import { DropType, isKnownDrop } from './foundry/drag-and-drop';
 import { NotificationType, notify } from './foundry/foundry-apps';
 import { localize } from './foundry/localization';
 import {
@@ -78,12 +80,17 @@ export const successTestInitInfoSchema = v
   .object({
     aptitude: vEnum(AptitudeType).optional(),
     skillType: vEnum(SkillType).optional(),
-    fieldSkill: v.object({
-      type: vEnum(FieldSkillType),
-      field: v
-        .string()
-        .assert((string) => string.trim().length > 0, 'Field cannot be empty'),
-    }),
+    fieldSkill: v
+      .object({
+        type: vEnum(FieldSkillType),
+        field: v
+          .string()
+          .assert(
+            (string) => string.trim().length > 0,
+            'Field cannot be empty',
+          ),
+      })
+      .optional(),
   })
   .assert(
     (test) => !!(test.aptitude || test.fieldSkill || test.skillType),
@@ -104,57 +111,60 @@ const startSuccessTest = (successTest: SuccessTestInitInfo) => {
     const test = successTestInitInfoSchema.parse(
       successTest,
     ) as SuccessTestInitInfo;
-    if (successTest.aptitude) {
+    if (test.aptitude) {
       pickOrDefaultCharacter((character) => {
         AptitudeCheckControls.openWindow({
           entities: { actor: character.actor },
+          relativeEl: lastClickedEl || undefined,
           getState: (actor) => {
             if (actor.proxy.type !== ActorType.Character) return null;
 
             return {
               ego: actor.proxy.ego,
               character: actor.proxy,
-              aptitude: AptitudeType.Willpower,
+              aptitude: test.aptitude,
               // TODO halve:,
             };
           },
         });
       });
-    } else if (successTest.skillType) {
+    } else if (test.skillType) {
       pickOrDefaultCharacter((character) => {
         SkillTestControls.openWindow({
           entities: { actor: character.actor },
-          relativeEl: this,
+          relativeEl: lastClickedEl || undefined,
           getState: (actor) => {
             if (actor.proxy.type !== ActorType.Character) return null;
             return {
               ego: actor.proxy.ego,
               character: actor.proxy,
-              skill: actor.proxy.ego.getCommonSkill(successTest.skillType),
+              skill: actor.proxy.ego.getCommonSkill(test.skillType),
             };
           },
         });
       });
-    } else if (successTest.fieldSkill) {
+    } else if (test.fieldSkill) {
       pickOrDefaultCharacter((character) => {
+        const skill = character.ego.findFieldSkill({
+          fieldSkill: test.fieldSkill.type,
+          field: test.fieldSkill.field,
+        });
+        if (!skill) {
+          notify(
+            NotificationType.Error,
+            `${character.name} does not have ${localize(
+              test.fieldSkill.type,
+            )}: ${test.fieldSkill.field}`,
+          );
+          return;
+        }
         SkillTestControls.openWindow({
           entities: { actor: character.actor },
-          relativeEl: this,
+          relativeEl: lastClickedEl || undefined,
+
           getState: (actor) => {
             if (actor.proxy.type !== ActorType.Character) return null;
-            const skill = actor.proxy.ego.findFieldSkill({
-              fieldSkill: successTest.fieldSkill.type,
-              field: successTest.fieldSkill.field,
-            });
-            if (!skill) {
-              notify(
-                NotificationType.Error,
-                `Ego does not have ${localize(successTest.fieldSkill.type)}: ${
-                  successTest.fieldSkill.field
-                }`,
-              );
-              return null;
-            }
+
             return {
               ego: actor.proxy.ego,
               character: actor.proxy,
@@ -170,6 +180,35 @@ const startSuccessTest = (successTest: SuccessTestInitInfo) => {
     return;
   }
 };
+
+Hooks.on('hotbarDrop', async (hotbar: Hotbar, data: unknown, slot: number) => {
+  if (isKnownDrop(data) && data.type === DropType.SuccessTestInfo) {
+    const { successTest } = data;
+    const command = `window.ep2e.startSuccessTest(${JSON.stringify(
+      successTest,
+    )})`;
+    const name = successTest.aptitude
+      ? `${localize(successTest.aptitude)} ${localize('aptitudeCheck')}`
+      : successTest.skillType
+      ? `${localize(successTest.skillType)} ${localize('skillTest')}`
+      : `${localize(successTest.fieldSkill.type)}: ${
+          successTest.fieldSkill.field
+        } ${localize('skillTest')}`;
+    let macro = [...game.macros.values()].find(
+      (m) => m.name === name && m.data.command === command,
+    );
+    if (!macro) {
+      macro = (await Macro.create({
+        name,
+        type: 'script',
+        command,
+      })) as Macro;
+    }
+    game.user.assignHotbarMacro(macro, slot);
+    return false;
+  }
+  return;
+});
 
 window.ep2e = {
   rollCustomAttack,

@@ -289,7 +289,7 @@ const isFolderDrop = dropChecker(
 
 const isSuccessTestInfo = dropChecker(DropType.SuccessTestInfo, (data) => {
   try {
-    successTestInitInfoSchema.parse(data);
+    successTestInitInfoSchema.parse(data.successTest);
     return true;
   } catch (error) {
     return false;

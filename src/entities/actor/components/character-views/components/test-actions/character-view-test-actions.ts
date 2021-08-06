@@ -6,7 +6,8 @@ import type { Character } from '@src/entities/actor/proxies/character';
 import { ActorType } from '@src/entities/entity-types';
 import type { Software } from '@src/entities/item/proxies/software';
 import { Favor, maxFavors, RepWithIdentifier } from '@src/features/reputations';
-import { Skill, skillFilterCheck } from '@src/features/skills';
+import { isFieldSkill, Skill, skillFilterCheck } from '@src/features/skills';
+import { DropType, setDragDrop } from '@src/foundry/drag-and-drop';
 import { localize } from '@src/foundry/localization';
 import { openMenu } from '@src/open-menu';
 import { AptitudeCheckControls } from '@src/success-test/components/aptitude-check-controls/aptitude-check-controls';
@@ -85,7 +86,9 @@ export class CharacterViewTestActions extends LitElement {
     return this.character.disabled;
   }
 
-  private startAptitudeTest(aptitude: AptitudeType) {
+  private startAptitudeTest(ev: Event & { currentTarget: HTMLElement }) {
+    const aptitude = ev.currentTarget.dataset['aptitude'] as AptitudeType;
+
     const onboardAliId = this.activeEgo;
 
     AptitudeCheckControls.openWindow({
@@ -474,14 +477,25 @@ export class CharacterViewTestActions extends LitElement {
     `;
   }
 
+  private setAptitudeDragInfo(ev: DragEvent & { currentTarget: HTMLElement }) {
+    const aptitude = ev.currentTarget.dataset['aptitude'] as AptitudeType;
+    setDragDrop(ev, {
+      type: DropType.SuccessTestInfo,
+      successTest: { aptitude },
+    });
+  }
+
   private renderAptitude = (type: AptitudeType) => {
     const points = this.currentEgo.aptitudes[type];
     return html` <wl-list-item
       clickable
       ?disabled=${this.character.disabled}
       class="aptitude-item"
-      @click=${() => this.startAptitudeTest(type)}
+      @click=${this.startAptitudeTest}
       @contextmenu=${() => this.startQuickAptitudeTest(type)}
+      draggable="true"
+      @dragstart=${this.setAptitudeDragInfo}
+      data-aptitude=${type}
     >
       <span class="aptitude-name" slot="before"> ${localize(type)}</span>
       <span class="aptitude-points">${points}</span>
@@ -503,6 +517,15 @@ export class CharacterViewTestActions extends LitElement {
       title=${ifDefined(
         skill.source ? `${localize('source')}: ${skill.source}` : undefined,
       )}
+      draggable="true"
+      @dragstart=${(ev: DragEvent) => {
+        setDragDrop(ev, {
+          type: DropType.SuccessTestInfo,
+          successTest: isFieldSkill(skill)
+            ? { fieldSkill: { type: skill.fieldSkill, field: skill.field } }
+            : { skillType: skill.skill },
+        });
+      }}
     >
       <span class="skill-name"
         >${skill.source ? '*' : ''}${skill.fullName}</span

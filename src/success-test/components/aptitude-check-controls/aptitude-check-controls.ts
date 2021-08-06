@@ -5,6 +5,7 @@ import {
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
+import { lastClickedEl } from '@src/components/window/window-controls';
 import { AptitudeType, enumValues } from '@src/data-enums';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
@@ -31,6 +32,7 @@ import styles from './aptitude-check-controls.scss';
 type Init = {
   entities: AptitudeCheckControls['entities'];
   getState: AptitudeCheckControls['getState'];
+  relativeEl?: HTMLElement;
 };
 
 @customElement('aptitude-check-controls')
@@ -56,9 +58,12 @@ export class AptitudeCheckControls extends LitElement {
       overlay.append(win);
       AptitudeCheckControls.openWindows.set(init.entities.actor, win);
     }
-
-    const source = traverseActiveElements();
-    if (source instanceof HTMLElement) {
+    const source = init.relativeEl || traverseActiveElements();
+    if (
+      source instanceof HTMLElement &&
+      source.isConnected &&
+      source.parentElement
+    ) {
       await win.win?.updateComplete;
       win!.win?.positionAdjacentToElement(source);
     }
