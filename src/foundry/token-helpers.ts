@@ -46,7 +46,6 @@ export const activeTokenStatusEffects = ({ data, actor }: Token) =>
   );
 
 export const distanceBetweenTokens = (tokenA: Token, tokenB: Token) => {
-  // Get the distance between the token centers, accounting for elevation
   let distance = Math.hypot(
     readyCanvas()!.grid.measureDistance(tokenA.center, tokenB.center),
     Math.abs(tokenA.data.elevation - tokenB.data.elevation),
@@ -54,13 +53,15 @@ export const distanceBetweenTokens = (tokenA: Token, tokenB: Token) => {
 
   const gridScale = readyCanvas()?.scene.data.gridDistance || 1;
 
-  // For each square token, subtract the distance of the edge from center, accounting for grid scale
-  // This can make distance negative if one token is inside the other
-  for (const { data } of [tokenA, tokenB]) {
-    if (data.width === data.height) {
-      distance -= (data.height / 2) * gridScale;
-    }
+  if (tokenB.data.width === tokenB.data.height) {
+    distance -= (tokenB.data.width / 2) * gridScale;
   }
+
+  // for (const { data } of [tokenA, tokenB]) {
+  //   if (data.width === data.height) {
+  //     distance -= (data.height / 2) * gridScale;
+  //   }
+  // }
 
   return nonNegative(Math.round(distance * 10) / 10);
 };
