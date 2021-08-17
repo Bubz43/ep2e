@@ -14,7 +14,12 @@ import {
 } from '@src/features/actions';
 import { matchesSkill } from '@src/features/effects';
 import { Pool } from '@src/features/pool';
-import { complementarySkillBonus, Skill } from '@src/features/skills';
+import {
+  complementarySkillBonus,
+  isFieldSkill,
+  Skill,
+  SkillType,
+} from '@src/features/skills';
 import { localize } from '@src/foundry/localization';
 import { arrayOf } from '@src/utility/helpers';
 import { compact, last } from 'remeda';
@@ -53,6 +58,16 @@ export type SkillState = {
 };
 
 export const skillLinkedAptitudeMultipliers = [0, 1, 2] as const;
+const automaticSkills = new Set([SkillType.Perceive, SkillType.Fray]);
+
+const defaultSkillAction = (skill: Skill) => {
+  const subtype = defaultCheckActionSubtype(skill.linkedAptitude);
+  let type = ActionType.Complex;
+  if (!isFieldSkill(skill) && automaticSkills.has(skill.skill)) {
+    type = ActionType.Automatic;
+  }
+  return { subtype, type };
+};
 
 export class SkillTest extends SuccessTestBase {
   readonly ego;
@@ -91,12 +106,7 @@ export class SkillTest extends SuccessTestBase {
     quick,
   }: SkillTestInit) {
     super({
-      action:
-        action ??
-        createAction({
-          type: ActionType.Automatic, // TODO better default
-          subtype: defaultCheckActionSubtype(skill.linkedAptitude),
-        }),
+      action: action ?? createAction(defaultSkillAction(skill)),
     });
     this.ego = ego;
     this.character = character;
