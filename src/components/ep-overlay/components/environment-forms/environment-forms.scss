@@ -8,6 +8,8 @@
 :host {
   display: block;
   min-width: max-content;
+  padding: 0.25rem;
+  background: var(--color-bg);
 }
 
 .forms-header {

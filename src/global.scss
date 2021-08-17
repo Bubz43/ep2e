@@ -1322,6 +1322,7 @@ sl-tooltip {
       grid-template-columns: repeat(auto-fill, 2.25rem);
       place-items: center;
       width: 7.65rem;
+      height: unset;
       background: linear-gradient(
         45deg,
         alphav(var(--color-bg), 0.8),
@@ -1329,6 +1330,7 @@ sl-tooltip {
       );
       border: 1px solid var(--color-border);
       z-index: -1;
+
       // box-shadow: 0 0 1px black, 0 0 1px var(--color-border) inset;
       // box-shadow: 0 0 0 1px alphav(var(--color-grey), 0.4) inset;
       &::before {
