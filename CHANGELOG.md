@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.828] - 2021-08-17
+
+- Support foundry 0.8.9 - specifically fixing style issue with canvas controls
+- Default all skills tests, except for Perceive and Fray, to complex actions
+
 ## [0.827] - 2021-08-06
 
 - Allow dragging aptitudes/skills onto the hotbar. This creates a macro with a command which will attempt to start the test on the selected character's primary ego.
