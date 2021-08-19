@@ -1,4 +1,11 @@
-import { customElement, LitElement, property, html, query } from 'lit-element';
+import {
+  customElement,
+  LitElement,
+  property,
+  html,
+  query,
+  eventOptions,
+} from 'lit-element';
 import styles from './field.scss';
 import { classMap } from 'lit-html/directives/class-map';
 import { nothing } from 'lit-html';
@@ -90,6 +97,7 @@ export class Field extends LitElement {
     this.requestUpdate();
   }
 
+  @eventOptions({ passive: false })
   @debounce(50)
   private updateFromInput() {
     this.dirty = true;
@@ -141,10 +149,12 @@ export class Field extends LitElement {
 
       return html`
         <div class="number-buttons">
-          ${([
-            ['remove', !minEnabled],
-            ['add', !maxEnabled],
-          ] as [string, boolean][]).map(
+          ${(
+            [
+              ['remove', !minEnabled],
+              ['add', !maxEnabled],
+            ] as [string, boolean][]
+          ).map(
             ([action, disable]) => html`
               <button
                 tabindex="-1"

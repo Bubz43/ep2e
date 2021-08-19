@@ -1,4 +1,5 @@
 import { conditionIcons } from '@src/features/conditions';
+import { nonNegative } from '@src/utility/helpers';
 import { concat, first, pipe, uniq } from 'remeda';
 import type { ActorEP, MaybeToken } from '../entities/actor/actor';
 import { readyCanvas } from './canvas';
@@ -44,13 +45,20 @@ export const activeTokenStatusEffects = ({ data, actor }: Token) =>
     uniq(),
   );
 
-export const distanceBetweenTokens = (tokenA: Token, tokenB: Token) =>
-  Math.round(
-    Math.hypot(
-      readyCanvas()!.grid.measureDistance(tokenA.center, tokenB.center),
-      Math.abs(tokenA.data.elevation - tokenB.data.elevation),
-    ) * 10,
-  ) / 10;
+export const distanceBetweenTokens = (tokenA: Token, tokenB: Token) => {
+  let distance = Math.hypot(
+    readyCanvas()!.grid.measureDistance(tokenA.center, tokenB.center),
+    Math.abs(tokenA.data.elevation - tokenB.data.elevation),
+  );
+
+  const gridScale = readyCanvas()?.scene.data.gridDistance || 1;
+
+  if (tokenB.data.width === tokenB.data.height) {
+    distance -= (tokenB.data.width / 2) * gridScale;
+  }
+
+  return nonNegative(Math.round(distance * 10) / 10);
+};
 
 export const getTokenPlaceable = (
   tokenDoc: MaybeToken,

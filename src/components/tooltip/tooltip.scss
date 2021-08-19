@@ -12,17 +12,16 @@
   box-shadow: 0 1px 5px black;
   z-index: 100000;
   position: absolute;
-  padding: 0.25rem 0.75rem;
-  border-radius: 3px;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
   pointer-events: none;
-  max-width: 60ch;
+  max-width: 45ch;
   font-size: 15px;
   opacity: 0;
   transition: opacity 200ms;
   transition-delay: 100ms;
   pointer-events: none !important;
   color: var(--color-text);
-
   ::slotted(p) {
     padding: 0 0.5rem;
     margin: 0.25rem 0;

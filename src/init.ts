@@ -2,11 +2,16 @@ import { html, render } from 'lit-html';
 import { compact, first } from 'remeda';
 import type { RawEditorSettings } from 'tinymce';
 import type { PartialDeep } from 'type-fest';
+import { createMessage, rollModeToVisibility } from './chat/create-message';
 import { onChatMessageRender } from './chat/message-hooks';
 import { combatSocketHandler } from './combat/combat-tracker';
 import { CombatView } from './combat/components/combat-view/combat-view';
 import { CustomRollApp } from './combat/components/custom-roll-app/custom-roll-app';
 import { EPOverlay } from './components/ep-overlay/ep-overlay';
+import { renderNumberField } from './components/field/fields';
+import { renderAutoForm, renderSubmitForm } from './components/form/forms';
+import type { Popover } from './components/popover/popover';
+import { Placement } from './components/popover/popover-options';
 import type { ToolTip } from './components/tooltip/tooltip';
 import { SlWindow } from './components/window/window';
 import { openWindow } from './components/window/window-controls';
@@ -39,6 +44,7 @@ import { localize } from './foundry/localization';
 import { addEPSocketHandler, setupSystemSocket } from './foundry/socket';
 import { EP } from './foundry/system';
 import { openMenu } from './open-menu';
+import { rollSuccessTest } from './success-test/success-test';
 import { notEmpty } from './utility/helpers';
 import { localImage } from './utility/images';
 
@@ -179,6 +185,52 @@ Hooks.once('ready', async () => {
         >
           <img class="noborder" src="icons/svg/combat.svg" />
         </mwc-icon-button>
+        <sl-popover
+          placement=${Placement.Left}
+          style="flex: 0; margin-right: 0.5rem;"
+          focusSelector="input"
+          .renderOnDemand=${(popover: Popover) => {
+            return html`<sl-popover-section>
+              ${renderSubmitForm({
+                noDebounce: true,
+                submitButtonText: 'Roll Success Test',
+                submitEmpty: true,
+                props: { target: 50 },
+                update: (changed) => {
+                  const { target = 50 } = changed;
+                  createMessage({
+                    data: {
+                      successTest: {
+                        disableSuperiorEffects: true,
+                        parts: [{ name: 'Target', value: target }],
+                        states: [
+                          {
+                            ...rollSuccessTest({ target }),
+                            action: 'initial',
+                          },
+                        ],
+                      },
+                    },
+                    visibility: rollModeToVisibility(
+                      game.settings.get('core', 'rollMode'),
+                    ),
+                  });
+                  popover.open = false;
+                },
+                fields: ({ target }) =>
+                  renderNumberField(target, { min: 0, max: 99 }),
+              })}
+            </sl-popover-section>`;
+          }}
+        >
+          <mwc-icon-button
+            slot="base"
+            data-tooltip="Quick Success Test"
+            @mouseover=${tooltip.fromData}
+            style="--mdc-icon-button-size: 1.5rem;"
+            >%</mwc-icon-button
+          >
+        </sl-popover>
       `,
       frag,
     );

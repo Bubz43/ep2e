@@ -24,7 +24,7 @@ import { CommonInterval } from '@src/features/time';
 import { readyCanvas } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
 import { joinLabeledFormulas } from '@src/foundry/rolls';
-import { overlay } from '@src/init';
+import { overlay, tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import {
   ThrownAttackTest,
@@ -360,7 +360,14 @@ export class ThrownAttackControls extends LitElement {
             props: { targetDistance, range },
             update: throwing.update,
             fields: ({ targetDistance, range }) => [
-              renderNumberField(targetDistance, { min: 0 }),
+              html`<div style="display: flex; align-items: center">
+                ${renderNumberField(targetDistance, { min: 0, step: 0.1 })}
+                <mwc-icon
+                  data-tooltip="Target distance is measured in a straight line from center to center of tokens and takes into account differences in elevation. When targeting square tokens greater than 1x1 grid units, the target distance is lowered by their width/2. Token image scale is always ignored. If multiple tokens are targeted, the farthest away will be used."
+                  @mouseover=${tooltip.fromData}
+                  >info</mwc-icon
+                >
+              </div>`,
               renderNumberField(
                 { ...range, label: `${localize('throwingRange')}` },
                 {

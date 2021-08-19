@@ -10,7 +10,7 @@ import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
 import { readyCanvas } from '@src/foundry/canvas';
 import { localize } from '@src/foundry/localization';
-import { overlay } from '@src/init';
+import { overlay, tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import { PsiTest, PsiTestInit } from '@src/success-test/psi-test';
 import { notEmpty } from '@src/utility/helpers';
@@ -437,11 +437,18 @@ export class PsiTestControls extends LitElement {
                     touchingTarget.value,
                 },
               ),
-              renderNumberField(targetDistance, {
-                min: 0,
-                step: 0.1,
-                disabled: touchingTarget.value,
-              }),
+              html`<div style="display: flex; align-items: center">
+                ${renderNumberField(targetDistance, {
+                  min: 0,
+                  step: 0.1,
+                  disabled: touchingTarget.value,
+                })}
+                <mwc-icon
+                  data-tooltip="Target distance is measured in a straight line from center to center of tokens and takes into account differences in elevation. When targeting square tokens greater than 1x1 grid units, the target distance is lowered by their width/2. Token image scale is always ignored. If multiple tokens are targeted, the farthest away will be used."
+                  @mouseover=${tooltip.fromData}
+                  >info</mwc-icon
+                >
+              </div>`,
             ],
           })}
         </li>
