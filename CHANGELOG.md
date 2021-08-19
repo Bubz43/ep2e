@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.829] - 2021-08-19
+
+- Add quick success test button
+- Account for size when computing distance between tokens and add a tooltip explaining how target distance is computed
+
 ## [0.828] - 2021-08-17
 
 - Support foundry 0.8.9 - specifically fixing style issue with canvas controls
