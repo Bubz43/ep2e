@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.83] - 2021-08-19
+
+- Module Compatability - Override some styles of [Combat Focus](https://foundryvtt.com/packages/foundry-combat-focus)
+
 ## [0.829] - 2021-08-19
 
 - Add quick success test button

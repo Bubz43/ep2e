@@ -1451,3 +1451,26 @@ sl-tooltip {
     margin-top: -0.175rem;
   }
 }
+
+// Combat Focus style overrides
+#chat {
+  &.small-chat {
+    position: initial;
+    &::before {
+      width: 100%;
+      border: 1px solid var(--color-border);
+      border-left: none;
+      border-right: none;
+      padding: 1px 2px;
+      margin: 0.25rem 0;
+      pointer-events: all;
+      height: unset;
+      position: relative;
+      top: -4px;
+      background: alphav(var(--color-bg), 0.25);
+    }
+    &::after {
+      display: none;
+    }
+  }
+}
