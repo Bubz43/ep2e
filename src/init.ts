@@ -202,7 +202,7 @@ Hooks.once('ready', async () => {
                     data: {
                       successTest: {
                         disableSuperiorEffects: true,
-                        parts: [{ name: 'Target', value: target }],
+                        parts: [{ name: 'Base', value: target }],
                         states: [
                           {
                             ...rollSuccessTest({ target }),
@@ -227,6 +227,9 @@ Hooks.once('ready', async () => {
             slot="base"
             data-tooltip="Quick Success Test"
             @mouseover=${tooltip.fromData}
+            @contextmenu=${() => {
+              new Roll('1d100 - 1').toMessage();
+            }}
             style="--mdc-icon-button-size: 1.5rem;"
             >%</mwc-icon-button
           >
