@@ -14,7 +14,7 @@ import type { Action, ActionSubtype } from './actions';
 import { ArmorType } from './active-armor';
 import { createFeature } from './feature-helpers';
 import { Movement, MovementRate } from './movement';
-import type { RepBase } from './reputations';
+import type { RepBase, RepWithIdentifier } from './reputations';
 import {
   ActiveSkillCategory,
   CommonPilotField,
@@ -594,10 +594,12 @@ export const matchesAptitude =
     );
   };
 
-export const matchesRep = (rep: RepBase) => (action: Action) => {
+export const matchesRep = (rep: RepWithIdentifier) => (action: Action) => {
+  const network =
+    rep.identifier.type === 'ego' ? rep.identifier.networkId : null;
   return anyEffectTagPasses(
     matchesAction(action),
-    (tag) => tag.type === TagType.Rep && rep.acronym === tag.network,
+    (tag) => tag.type === TagType.Rep && network === tag.network,
   );
 };
 
