@@ -2,7 +2,7 @@
 
 ## [0.831] - 2021-08-20
 
-- Fix effects targetting specific ego rep tests not applying
+- Fix effects targeting specific ego rep tests not applying
 
 ## [0.83] - 2021-08-19
 
