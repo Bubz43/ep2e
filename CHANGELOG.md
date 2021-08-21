@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.831] - 2021-08-20
+
+- Fix effects targetting specific ego rep tests not applying
+
 ## [0.83] - 2021-08-19
 
 - Module Compatability - Override some styles of [Combat Focus](https://foundryvtt.com/packages/foundry-combat-focus)
