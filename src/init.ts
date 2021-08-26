@@ -231,13 +231,19 @@ Hooks.once('ready', async () => {
               new Roll('1d100 - 1').toMessage();
             }}
             style="--mdc-icon-button-size: 1.5rem;"
-            >%</mwc-icon-button
           >
+            <span style="font-weight: bold; font-size: 1rem">%</span>
+          </mwc-icon-button>
         </sl-popover>
       `,
       frag,
     );
-    document.getElementById('chat-controls')?.prepend(frag);
+    const chatControls = document.getElementById('chat-controls');
+    if (!chatControls) {
+      Hooks.once('renderChatLog', (log: unknown, [el]: JQuery) => {
+        el?.querySelector('#chat-controls')?.prepend(frag);
+      });
+    } else chatControls.prepend(frag);
   }, 150);
 
   const compendiumSearchButton = () => {
