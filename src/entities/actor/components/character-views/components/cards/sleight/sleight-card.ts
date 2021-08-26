@@ -10,6 +10,7 @@ import {
   SkillType,
 } from '@src/features/skills';
 import { prettyMilliseconds } from '@src/features/time';
+import type { FoundryDoc } from '@src/foundry/foundry-cont';
 import { localize } from '@src/foundry/localization';
 import { rollLabeledFormulas } from '@src/foundry/rolls';
 import { HealthType } from '@src/health/health';
@@ -207,6 +208,23 @@ export class SleightCard extends ItemCardBase {
 
   private async stopSustaining() {
     const { sustainingOn } = this.item.status;
+    const entities: FoundryDoc[] = (
+      await Promise.all(sustainingOn.map((s) => fromUuid(s.uuid)))
+    ).filter(Boolean);
+    const owners = new Set<string>([game.user.id]);
+
+    for (const user of game.users.values()) {
+      if (
+        user.isGM ||
+        entities.some((entity) => {
+          const level = entity.getUserLevel(user);
+          return level ? level >= CONST.ENTITY_PERMISSIONS.OWNER : false;
+        })
+      ) {
+        owners.add(user.id);
+      }
+    }
+
     await createMessage({
       data: {
         header: {
@@ -219,6 +237,7 @@ export class SleightCard extends ItemCardBase {
         },
       },
       entity: requestCharacter(this).token || this.character,
+      whisper: [...owners],
     });
     this.item.setSustainOn([], false);
   }

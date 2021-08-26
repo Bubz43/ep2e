@@ -35,6 +35,7 @@ export type MessageInit = Partial<{
   flavor: string;
   alias: string;
   entity: Token | ActorEP | ActorProxy | null | TokenDocument;
+  whisper: string[];
 }>;
 
 export const messageContentPlaceholder = '_';
@@ -59,6 +60,7 @@ export const createMessage = async ({
   flavor,
   alias,
   entity,
+  whisper,
 }: RequireAtLeastOne<
   MessageInit,
   'content' | 'data' | 'roll'
@@ -81,11 +83,12 @@ export const createMessage = async ({
     type: roll ? CONST.CHAT_MESSAGE_TYPES.ROLL : undefined,
     blind: visibility === MessageVisibility.Blind,
     whisper:
-      visibility === MessageVisibility.Self
+      whisper ||
+      (visibility === MessageVisibility.Self
         ? [game.user.id]
         : visibility !== MessageVisibility.Public
         ? ChatMessage.getWhisperRecipients('GM').map((i) => i.id)
-        : undefined,
+        : undefined),
   };
   if ('dice3d' in game) {
     const successTestRoll =
