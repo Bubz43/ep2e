@@ -94,13 +94,5 @@ export const pickOrDefaultActor = (
       `${localize('no')} ${localize('controlled')} ${localize(
         onlyCharacters ? 'characters' : 'actors',
       )}`,
-    ); // TODO localize
+    );
 };
-
-// export const getMainCharacter = (notifyIfNone: boolean) => {
-//   const main = overlay.mainCharacter;
-//   if (!main && notifyIfNone) {
-//     notify(NotificationType.Error, "No character selected.");
-//   }
-//   return main;
-// };
