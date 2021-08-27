@@ -62,10 +62,10 @@ export class Form extends LitElement {
 
   get elements(): FieldElement[] {
     return Array.from(
-      this.querySelectorAll<FieldElement>(
+      this.querySelectorAll(
         'input, select, textarea, mwc-checkbox, mwc-switch, mwc-radio, mwc-slider, time-field, mwc-textfield, mwc-textarea, mwc-select',
       ),
-    );
+    ) as FieldElement[];
   }
 
   toggleElementDisabled() {

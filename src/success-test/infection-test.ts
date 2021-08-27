@@ -92,6 +92,7 @@ export class InfectionTest extends SuccessTestBase {
         },
       },
       entity: this.token || this.character,
+      visibility: settings.visibility,
     });
     if (this.sleightModifier) {
       this.psi.updateInfectionRating(

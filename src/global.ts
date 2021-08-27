@@ -1,4 +1,5 @@
 import * as v from '@badrap/valita';
+import { ValitaError } from '@badrap/valita';
 import type { RequireExactlyOne } from 'type-fest';
 import { createMessage, rollModeToVisibility } from './chat/create-message';
 import type { DamageMessageData } from './chat/message-data';
@@ -70,7 +71,9 @@ const rollCustomAttack = (data: unknown) => {
       visibility: rollModeToVisibility(game.settings.get('core', 'rollMode')),
     });
   } catch (error) {
-    notify(NotificationType.Error, `Invalid custom attack: ${error.message}`);
+    if (error instanceof ValitaError) {
+      notify(NotificationType.Error, `Invalid custom attack: ${error.message}`);
+    }
     console.log(error);
     return;
   }
@@ -178,7 +181,9 @@ const startSuccessTest = (successTest: SuccessTestInitInfo) => {
       });
     }
   } catch (error) {
-    notify(NotificationType.Error, `Invalid success test: ${error.message}`);
+    if (error instanceof ValitaError) {
+      notify(NotificationType.Error, `Invalid success test: ${error.message}`);
+    }
     console.log(error);
     return;
   }

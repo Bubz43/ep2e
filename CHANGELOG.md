@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.832] - 2021-08-26
+
+- Respect message visibility settings for infection tests
+- Whisper sustained sleight end message to GMs and owners of affected characters
+
 ## [0.831] - 2021-08-20
 
 - Fix effects targeting specific ego rep tests not applying
