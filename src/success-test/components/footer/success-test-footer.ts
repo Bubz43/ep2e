@@ -71,7 +71,11 @@ export class SuccessTestFooter extends LitElement {
           Auto Roll
         </button>
       </div>
-      <mwc-button @click=${settings.setReady} raised id="start"
+      <mwc-button
+        @click=${settings.setReady}
+        raised
+        id="start"
+        style="width: max-content"
         >${localize('start')} ${localize('test')}</mwc-button
       >
     `;
