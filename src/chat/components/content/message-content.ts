@@ -57,7 +57,6 @@ export class MessageContent extends LitElement {
       sharedInfluence,
       techUse,
     } = this.data;
-    console.log(header);
     if (!this.message.isContentVisible)
       return header
         ? html` <message-header hidden .data=${header}></message-header> `

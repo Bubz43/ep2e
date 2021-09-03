@@ -10,7 +10,7 @@ export type LangEntry = Exclude<
 
 export function localize<
   K1 extends NestedLangEnty,
-  K2 extends keyof Lang[EP.LocalizationNamespace][K1]
+  K2 extends keyof Lang[EP.LocalizationNamespace][K1],
 >(k1: K1, k2: K2): string;
 export function localize<K1 extends LangEntry>(k1: K1): string;
 export function localize(...keys: string[]) {
@@ -20,7 +20,6 @@ export function localize(...keys: string[]) {
     localized = (game?.i18n.localize(fullPath) as string) || fullPath;
     if (localized === fullPath || !localized) {
       localized = keys.join('.');
-      console.log(`${localized} - was not localized.`);
     }
     localizedCache.set(fullPath, localized);
   }
