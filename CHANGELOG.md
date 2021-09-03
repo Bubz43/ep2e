@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.834] - 2021-09-3
+
+- Fix Striking Looks in trait compendium (and premade Chi) incorrectly providing a +20 instead of +10 bonus at level 2
+
 ## [0.833] - 2021-09-2
 
 - Fix blind roll on success test showing message to player
