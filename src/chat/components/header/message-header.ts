@@ -18,6 +18,8 @@ export class MessageHeader extends LitElement {
 
   @property({ type: Boolean, reflect: true }) nested = false;
 
+  @property({ type: Boolean }) hidden = false;
+
   @state() private descriptionOpen = false;
 
   private toggleDescription(ev: Event) {
@@ -25,9 +27,9 @@ export class MessageHeader extends LitElement {
   }
 
   render() {
-    const { img, heading, subheadings, description, hidden } = this.data;
+    const { img, heading, subheadings, description } = this.data;
+    const hidden = this.hidden || this.data.hidden;
     const visibleHeading = hidden ? '???' : heading;
-    // TODO show special hidden image which can reveal normal on hover for gm
     return html`
       <header>
         <div class="headings">

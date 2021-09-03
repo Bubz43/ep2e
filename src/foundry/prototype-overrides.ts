@@ -462,7 +462,6 @@ export const overridePrototypes = () => {
     jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
       const item = findMatchingElement(ev, '.message');
       if (!item) return;
-      // TODO Alter/Replace Chat popout
       const entryOptions = this._getEntryContextOptions();
       Hooks.call(
         `get${this.constructor.name}EntryContext`,

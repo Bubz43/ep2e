@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.833] - 2021-09-2
+
+- Fix blind roll on success test showing message to player
+
 ## [0.832] - 2021-08-26
 
 - Respect message visibility settings for infection tests

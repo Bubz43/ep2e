@@ -81,6 +81,16 @@ export class ChatMessageEP extends ChatMessage {
     return this.#updater;
   }
 
+  get isContentVisible() {
+    if (this.epFlags?.successTest) {
+      const whisper = this.data.whisper || [];
+      const isBlind = whisper.length && this.data.blind;
+      if (whisper.length)
+        return whisper.includes(game.user.id) || (this.isAuthor && !isBlind);
+    }
+    return super.isContentVisible;
+  }
+
   get isWhisper() {
     return notEmpty(this.data.whisper);
   }
