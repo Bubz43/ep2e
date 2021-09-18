@@ -270,6 +270,7 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
           }
           return;
         }
+        // TODO handle trait drops directly on target entity
         this.character.itemOperations.add(proxy.getDataCopy(true));
       }
     }
