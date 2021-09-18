@@ -184,13 +184,13 @@ export class TraitForm extends ItemFormBase {
                       : ''}
                     ${embedded && hasMultipleLevels && !isPsiInfluence
                       ? html`
-                          <mwc-icon-button
+                          <mwc-button
                             class="level-selector"
                             slot="action"
-                            icon="list"
+                            label="Select Level"
                             ?disabled=${disabled}
                             @click=${this.openLevelSelector}
-                          ></mwc-icon-button>
+                          ></mwc-button>
                         `
                       : ''}
                     <mwc-icon-button

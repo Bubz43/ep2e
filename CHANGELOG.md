@@ -4,6 +4,7 @@
 
 - Fix Body Dysmorphia typo
 - Clicking on the character sheet icon with the Tokenizer module active will open it
+- Clearer level select button on trait sheet
 
 ## [0.834] - 2021-09-3
 

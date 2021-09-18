@@ -39,10 +39,6 @@ sl-group {
   margin-bottom: 0.5rem;
 }
 
-.level-selector {
-  color: var(--color-primary-alt);
-}
-
 [slot='drawer-content'] {
   display: flex;
   flex-flow: column;
