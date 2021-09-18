@@ -4,7 +4,7 @@ Heavily automated [Eclipse Phase 2e](https://www.eclipsephase.com) system.
 
 ## WIP
 
-The system is a work in progress. It is largely stable, but there rough edges and unfinished features. It is foundry 0.8.x compatible. Discoverability of features is sometimes a bit lacking, and a [discord](https://discord.gg/zs4jMnFqjx) server is available if you have any questions or want to talk with other users of the system.
+The system is a work in progress. It is largely stable, but there are rough edges and unfinished features. It is foundry 0.8.x compatible. Discoverability of features is sometimes a bit lacking, and a [discord](https://discord.gg/zs4jMnFqjx) server is available if you have any questions or want to talk with other users of the system.
 
 ### Notable missing features
 
