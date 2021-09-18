@@ -642,7 +642,14 @@ export class CharacterViewAlt extends CharacterViewBase {
       @drop=${this.handleEntityDrop}
     >
       <div class="main-entities">
-        <div class="avatar">
+        <div
+          class="avatar"
+          @click=${() => {
+            if (!disabled && 'Tokenizer' in window) {
+              (window as any)['Tokenizer'].tokenizeActor(this.character.actor);
+            }
+          }}
+        >
           <img src=${img} width="84px" />
         </div>
 

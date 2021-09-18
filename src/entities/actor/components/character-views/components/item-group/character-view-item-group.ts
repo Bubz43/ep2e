@@ -266,12 +266,15 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
       } else {
         if (this.group === ItemGroup.VehicleTraits) {
           if (proxy.isMorphTrait) {
-            this.character.vehicle?.itemOperations.add(proxy.getDataCopy(true));
+            this.character.vehicle?.addNewItemProxy(proxy);
           }
           return;
         }
-        // TODO handle trait drops directly on target entity
-        this.character.itemOperations.add(proxy.getDataCopy(true));
+        if (!proxy.isMorphTrait) {
+          this.character.ego.addNewItemProxy(proxy);
+        } else {
+          this.character.sleeve?.addNewItemProxy(proxy);
+        }
       }
     }
   });

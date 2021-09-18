@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.835] - 2021-09-18
+
+- Fix Body Dysmorphia typo
+- Clicking on the character sheet icon with the Tokenizer module active will open it
+
 ## [0.834] - 2021-09-3
 
 - Fix Striking Looks in trait compendium (and premade Chi) incorrectly providing a +20 instead of +10 bonus at level 2
