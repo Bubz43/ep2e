@@ -130,6 +130,12 @@ export const registerEPSettings = once(() => {
     },
   });
 
+  const yearStart = registerSystemSetting<number>('yearStart', {
+    scope: 'world',
+    config: false,
+    default: 10,
+  });
+
   return {
     systemMigrationVersion,
     environment,
@@ -137,5 +143,6 @@ export const registerEPSettings = once(() => {
     glitchOnMeshWounds,
     combatState,
     disableSheetTransparency,
+    yearStart,
   } as const;
 });

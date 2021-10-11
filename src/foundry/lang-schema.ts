@@ -1505,7 +1505,9 @@ type LangEntries =
   | 'thisWillOverwriteEgo'
   | 'sleeveWare'
   | 'damageAmount'
-  | 'healthType';
+  | 'healthType'
+  | 'yearStart'
+  | 'afterFall';
 type FullNames =
   | 'cog'
   | 'int'

@@ -100,6 +100,7 @@
   overflow: hidden;
   min-width: 100%;
   height: 1rem;
+  text-align: left;
   &.above {
     @include floatLabel;
   }

@@ -1,5 +1,8 @@
-import { renderTimeField } from '@src/components/field/fields';
-import { renderAutoForm } from '@src/components/form/forms';
+import {
+  renderNumberField,
+  renderTimeField,
+} from '@src/components/field/fields';
+import { renderAutoForm, renderSubmitForm } from '@src/components/form/forms';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
 import {
   defaultStandardCalendar,
@@ -10,6 +13,7 @@ import { advanceWorldTime } from '@src/features/time';
 import { localize } from '@src/foundry/localization';
 import { userCan } from '@src/foundry/misc-helpers';
 import { addEPSocketHandler } from '@src/foundry/socket';
+import { gameSettings } from '@src/init';
 import { customElement, html, LitElement, state } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import mix from 'mix-with/lib';
@@ -29,10 +33,13 @@ export class WorldTimeControls extends mix(LitElement).with(UseWorldTime) {
 
   @state() private changes: [number, string][] = [];
 
+  @state() private yearStart = 10;
+
   firstUpdated() {
     addEPSocketHandler('worldTimeChange', (change) => {
       this.changes = [...this.changes.slice(-3), change];
     });
+    gameSettings.yearStart.subscribe((value) => (this.yearStart = value));
   }
 
   private modifyTime(forwards: boolean) {
@@ -50,9 +57,12 @@ export class WorldTimeControls extends mix(LitElement).with(UseWorldTime) {
 
   render() {
     const disabled = this.timeChange === 0;
-    const currentDate = getCurrentDateTime(defaultStandardCalendar());
-    // console.log(prettyMilliseconds(currentWorldTimeMS()));
+    const currentDate = getCurrentDateTime({
+      ...defaultStandardCalendar(),
+      worldStartYear: this.yearStart,
+    });
     const { hours, minutes, seconds } = parseMilliseconds(currentDate.time);
+    const canModify = game.user.isGM && userCan('SETTINGS_MODIFY');
     return html`
       <div class="date-time">
         <span class="time"
@@ -63,12 +73,35 @@ export class WorldTimeControls extends mix(LitElement).with(UseWorldTime) {
             >${formatTime(seconds)}</span
           ></span
         >
-        <span class="date">
-          ${currentDate.month} ${currentDate.day}, ${currentDate.era}
-          ${currentDate.year}
-        </span>
+        <sl-popover
+          .renderOnDemand=${() => html`
+            <sl-popover-section
+              heading=${localize('yearStart')}
+              style="pointer-events: all"
+            >
+              ${renderSubmitForm({
+                props: { yearStart: this.yearStart },
+                update: ({ yearStart }) => {
+                  if (yearStart) {
+                    gameSettings.yearStart.update(yearStart);
+                  }
+                },
+                fields: ({ yearStart }) =>
+                  renderNumberField(
+                    { ...yearStart, label: localize('afterFall') },
+                    { min: 1 },
+                  ),
+              })}
+            </sl-popover-section>
+          `}
+        >
+          <button class="date" ?disabled=${!canModify} slot="base">
+            ${currentDate.month} ${currentDate.day}, ${currentDate.era}
+            ${currentDate.year}
+          </button>
+        </sl-popover>
       </div>
-      ${game.user.isGM && userCan('SETTINGS_MODIFY')
+      ${canModify
         ? html`<div class="controls">
             <mwc-icon-button
               ?disabled=${disabled}

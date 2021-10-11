@@ -87,7 +87,8 @@
 .date-time {
   display: grid;
   grid-template-columns: 14ch 1fr;
-  padding: 0.25rem 1rem;
+  align-items: center;
+  padding: 0 1rem;
   text-align: center;
   background: linear-gradient(
     to bottom,
@@ -106,4 +107,17 @@
   margin-right: 0.5ch;
   pointer-events: initial;
   font-family: var(--font-mono);
+}
+
+.date {
+  all: unset;
+  pointer-events: all;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  &:disabled {
+    pointer-events: none;
+  }
+  &:hover {
+    background-color: var(--color-bg-alt);
+  }
 }

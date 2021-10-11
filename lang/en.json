@@ -1479,6 +1479,8 @@
     "damageAmount": "Damage Amount",
     "sleeveWare": "Sleeve Ware",
     "healthType": "Health Type",
+    "yearStart": "Year Start",
+    "afterFall": "After Fall",
     "DESCRIPTIONS": {
       "invalidRollFormula": "Invalid roll formula",
       "medicineHeal": "...",
