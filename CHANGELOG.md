@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.836] - 2021-10-11
+
+- Add year start setting input when clicking on game date as GM
+- Fix being able to rewind before 0
+
 ## [0.835] - 2021-09-18
 
 - Fix Body Dysmorphia typo
