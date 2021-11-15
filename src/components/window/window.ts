@@ -21,8 +21,10 @@ import {
   LitElement,
   property,
   query,
+  state,
   TemplateResult,
 } from 'lit-element';
+import { render } from 'lit-html';
 import { NanoPopPosition, reposition } from 'nanopop';
 import { anyPass, clamp, mapToObj } from 'remeda';
 import { ResizeOption, SlWindowEventName } from './window-options';
@@ -130,6 +132,8 @@ export class SlWindow extends LitElement {
 
   @property({ type: String }) relativePosition: NanoPopPosition = 'left';
 
+  @state() private minimizedElementId: string | null = null;
+
   @query('header') private header!: HTMLElement;
 
   @query('.content') private contentContainer!: HTMLElement;
@@ -142,7 +146,17 @@ export class SlWindow extends LitElement {
 
   private closing = false;
 
+  private showTaskbarMinimize = false;
+
   async connectedCallback() {
+    if ((game as any).modules.get('foundry-taskbar')?.active) {
+      if (
+        game.settings.get('foundry-taskbar', 'enableplayers') ||
+        game.user.isGM
+      ) {
+        this.showTaskbarMinimize = true;
+      }
+    }
     super.connectedCallback();
     this.gainFocus();
     await this.updateComplete;
@@ -163,6 +177,8 @@ export class SlWindow extends LitElement {
     this.resizeObs?.disconnect();
     window.removeEventListener('resize', this);
     super.disconnectedCallback();
+    if (this.minimizedElementId)
+      document.getElementById(this.minimizedElementId)?.remove();
   }
 
   firstUpdated() {
@@ -349,10 +365,9 @@ export class SlWindow extends LitElement {
       const { contentContainer, header, footerSlot } = this;
       const { offsetHeight, offsetWidth } = SlWindow.container;
 
-      const {
-        minWidth,
-        minHeight,
-      } = (contentContainer.firstElementChild as HTMLSlotElement)
+      const { minWidth, minHeight } = (
+        contentContainer.firstElementChild as HTMLSlotElement
+      )
         .assignedElements({ flatten: true })
         .reduce(
           (accum, el) => {
@@ -526,31 +541,34 @@ export class SlWindow extends LitElement {
     });
   }
 
-  render() {
-    /*
-    const heading = html`<div class="heading">
-      ${this.img ? html`<img height="24px" src=${this.img} />` : ''}
-      <span>${this.name}</span>
-    </div>`;
-   ${this.minimized
-          ? heading
-          : html` <slot
-              name="header"
-              @slotchange=${this.toggleHeaderVisibility}
-              @pointerdown=${this.gainFocus}
-            >
-              ${heading}
-            </slot>`}
-
-               <!-- <wl-list-item
-            class="minimize-button"
-            role="button"
-            clickable
-            @click=${this.toggleMinimize}
+  private minimizeToTaskbar() {
+    const frag = new DocumentFragment();
+    const id = foundry.utils.randomID();
+    this.minimizedElementId = id;
+    render(
+      html`
+        <div class="app minimized window-app" id=${id}>
+          <header
+            class="window-header"
+            @click=${(ev: Event) => {
+              ev.stopImmediatePropagation();
+              this.minimizedElementId = null;
+              document.getElementById(id)?.remove();
+              this.removeAttribute('on-taskbar');
+            }}
           >
-            <mwc-icon>${this.minimized ? 'open_in_full' : 'remove'}</mwc-icon>
-          </wl-list-item> -->
-    */
+            <h4>${this.name}</h4>
+          </header>
+        </div>
+      `,
+      frag,
+    );
+
+    document.querySelector('.taskbar-items')?.append(frag);
+    this.setAttribute('on-taskbar', 'true');
+  }
+
+  render() {
     return html`
       <header
         id="header"
@@ -566,6 +584,17 @@ export class SlWindow extends LitElement {
 
         <div class="controls">
           <slot name="header-button"> </slot>
+
+          ${this.showTaskbarMinimize
+            ? html` <wl-list-item
+                class="taskbar-minimize-button"
+                role="button"
+                clickable
+                @click=${this.minimizeToTaskbar}
+              >
+                <mwc-icon>minimize</mwc-icon>
+              </wl-list-item>`
+            : ''}
 
           <wl-list-item
             class="close-button"

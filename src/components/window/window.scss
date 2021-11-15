@@ -32,6 +32,12 @@
   }
 }
 
+:host([on-taskbar]) {
+  transition: opacity 200ms ease-in-out;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 :host([focused]) {
   box-shadow: 0 0 10px black;
 
