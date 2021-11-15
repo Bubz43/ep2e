@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.837] - 2021-11-15
+
+- Fix Fault Tolerance compendium entry counting as armor layer
+- Add Actor/Item sheet compatibility for Taskbar module
+
 ## [0.836] - 2021-10-11
 
 - Add year start setting input when clicking on game date as GM
