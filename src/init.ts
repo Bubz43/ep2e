@@ -165,10 +165,33 @@ Hooks.once('ready', async () => {
     document.body.append(overlay);
 
     tooltip = document.createElement('sl-tooltip');
-    document.body.append(tooltip);
+    tooltip.slot = 'tooltip';
+    overlay.append(tooltip);
+    // document.body.append(tooltip);
     document.body.classList.add('ready');
     Hooks.call('ep-ready', true);
     const frag = new DocumentFragment();
+    const sceneView = document.createElement('scene-view');
+    document
+      .getElementById('ui-left')
+      ?.insertBefore(sceneView, document.getElementById('controls'));
+
+    document
+      .getElementById('ui-top')
+      ?.insertBefore(
+        document.createElement('world-time-controls'),
+        document.getElementById('loading'),
+      );
+
+    function toggleChatPointers({ type }: MouseEvent) {
+      document.getElementById('chat-log')!.style.pointerEvents =
+        type === 'mouseenter' ? 'initial' : '';
+    }
+
+    const rightUI = document.getElementById('ui-right');
+    rightUI?.addEventListener('mouseenter', toggleChatPointers);
+    rightUI?.addEventListener('mouseleave', toggleChatPointers);
+
     render(
       html`
         <mwc-icon-button

@@ -59,7 +59,13 @@ export class ToolTip extends LitElement {
     this.visible = true;
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        reposition(el, this, { position, margin: 4 });
+        reposition(el, this, {
+          position,
+          margin: 4,
+          container: document
+            .querySelector('ep-overlay')
+            ?.getBoundingClientRect(),
+        });
       });
     });
     this.listenerUnsub = addListener(el, leaveEvents, () => this.detach(true));

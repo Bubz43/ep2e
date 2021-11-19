@@ -108,7 +108,7 @@ export class EPOverlay extends LitElement {
 
     setTimeout(() => {
       // this.setFoundryPopouts();
-      this.stealElements();
+      // this.stealElements();
       ui.chat.scrollBottom();
       this.ready = true;
     }, 400);
@@ -293,34 +293,29 @@ export class EPOverlay extends LitElement {
     }
   }
 
-  private toggleChatPointers({ type }: MouseEvent) {
-    document.getElementById('chat-log')!.style.pointerEvents =
-      type === 'mouseenter' ? 'initial' : '';
-  }
-
   render() {
     return html`
-      <div class="singles">
+      <!-- <div class="singles">
         <world-time-controls></world-time-controls>
-      </div>
+      </div> -->
       ${this.staticElements} ${this.dialogTemplate || ''}
     `;
   }
 
   private staticElements = html`
     <!-- <scene-view><slot name="navigation"></slot></scene-view> -->
-    <slot
+    <!-- <slot
       name="foundry-apps"
       @slotchange=${this.switchWindowZ}
       @pointerdown=${this.switchWindowZ}
-    ></slot>
+    ></slot> -->
     <slot
       id="windows"
       @slotchange=${this.switchWindowZ}
       @pointerdown=${this.switchWindowZ}
     ></slot>
-    <scene-view></scene-view>
-    <div class="nav-wrapper">
+    <!-- <scene-view></scene-view> -->
+    <!-- <div class="nav-wrapper">
       <mwc-icon-button-toggle
         onIcon="expand_more"
         offIcon="expand_less"
@@ -330,14 +325,13 @@ export class EPOverlay extends LitElement {
     </div>
     <div class="controls-wrapper">
       <slot name="controls"></slot>
-    </div>
-    <div
+    </div> -->
+    <!-- <div
       class="sidebar-wrapper"
-      @mouseenter=${this.toggleChatPointers}
-      @mouseleave=${this.toggleChatPointers}
+  
     >
       <slot name="sidebar"></slot>
-    </div>
+    </div> -->
 
     <event-list></event-list>
     <slot name="dialog"></slot>
