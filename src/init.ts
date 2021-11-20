@@ -171,17 +171,19 @@ Hooks.once('ready', async () => {
     document.body.classList.add('ready');
     Hooks.call('ep-ready', true);
     const frag = new DocumentFragment();
-    const sceneView = document.createElement('scene-view');
-    document
-      .getElementById('ui-left')
-      ?.insertBefore(sceneView, document.getElementById('controls'));
+    // const sceneView = document.createElement('scene-view');
+    // document
+    //   .getElementById('ui-left')
+    //   ?.insertBefore(sceneView, document.getElementById('controls'));
+
+    const extraInfo = document.createElement('div');
+    extraInfo.className = 'ep-extra-info';
+    extraInfo.append(document.createElement('world-time-controls'));
+    extraInfo.append(document.createElement('scene-view'));
 
     document
       .getElementById('ui-top')
-      ?.insertBefore(
-        document.createElement('world-time-controls'),
-        document.getElementById('loading'),
-      );
+      ?.insertBefore(extraInfo, document.getElementById('loading'));
 
     function toggleChatPointers({ type }: MouseEvent) {
       document.getElementById('chat-log')!.style.pointerEvents =

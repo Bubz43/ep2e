@@ -93,7 +93,9 @@ export class SceneView extends LitElement {
 
       <sl-group label=${localize('gravity')}>${gravity}</sl-group>
 
-      ${vacuum ? html`<span>${localize('inVacuum')}</span>` : ''}
+      ${vacuum
+        ? html`<span>${localize('inVacuum')}</span>`
+        : html`<span></span>`}
     `;
   }
 }
