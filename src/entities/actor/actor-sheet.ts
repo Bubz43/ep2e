@@ -238,7 +238,7 @@ export class ActorEPSheet implements EntitySheet {
     }
     return Array.from(
       document.querySelectorAll<HTMLElement>(
-        `[data-entity-id="${actor.id}"], [data-entry-id="${actor.id}"]`,
+        `[data-document-id="${actor.id}"], [data-entry-id="${actor.id}"]`,
       ),
     )
       .reverse()

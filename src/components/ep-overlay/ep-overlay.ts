@@ -283,15 +283,15 @@ export class EPOverlay extends LitElement {
     sTabs.remove();
   }
 
-  private switchWindowZ({ currentTarget }: Event) {
-    if (!(currentTarget instanceof HTMLSlotElement)) return;
-    if (!currentTarget.classList.contains('top')) {
-      const otherSlot =
-        currentTarget.id === 'windows' ? this.foundryApps : this.windowsSlot;
-      currentTarget.classList.add('top');
-      otherSlot.classList.remove('top');
-    }
-  }
+  // private switchWindowZ({ currentTarget }: Event) {
+  //   if (!(currentTarget instanceof HTMLSlotElement)) return;
+  //   if (!currentTarget.classList.contains('top')) {
+  //     const otherSlot =
+  //       currentTarget.id === 'windows' ? this.foundryApps : this.windowsSlot;
+  //     currentTarget.classList.add('top');
+  //     otherSlot.classList.remove('top');
+  //   }
+  // }
 
   render() {
     return html`
@@ -306,14 +306,9 @@ export class EPOverlay extends LitElement {
     <!-- <scene-view><slot name="navigation"></slot></scene-view> -->
     <!-- <slot
       name="foundry-apps"
-      @slotchange=${this.switchWindowZ}
-      @pointerdown=${this.switchWindowZ}
+    
     ></slot> -->
-    <slot
-      id="windows"
-      @slotchange=${this.switchWindowZ}
-      @pointerdown=${this.switchWindowZ}
-    ></slot>
+    <slot id="windows"></slot>
     <!-- <scene-view></scene-view> -->
     <!-- <div class="nav-wrapper">
       <mwc-icon-button-toggle

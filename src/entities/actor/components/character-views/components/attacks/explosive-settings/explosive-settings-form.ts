@@ -218,14 +218,12 @@ export class ExplosiveSettingsForm extends LitElement {
     const token = controlledToken();
     const center = token?.center ??
       readyCanvas()?.scene._viewPosition ?? { x: 0, y: 0 };
-
-    const ids = await placeMeasuredTemplate(
-      createTemporaryMeasuredTemplate({
-        ...center,
-        ...this.templateData,
-      }),
-      !!token,
-    );
+    const template = createTemporaryMeasuredTemplate({
+      ...center,
+      ...this.templateData,
+    });
+    if (!template) return;
+    const ids = await placeMeasuredTemplate(template, !!token);
     if (ids) {
       this.updateSettings({ templateIDs: ids });
       this.getTargets();

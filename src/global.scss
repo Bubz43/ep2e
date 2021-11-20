@@ -111,6 +111,7 @@ ep-overlay {
 #controls,
 #world-config,
 .user-config,
+.app[id^='template-config'],
 .app[id^='permission'],
 .app[id^='playlist-config'],
 .app[id^='track-config'] {
@@ -501,13 +502,13 @@ code.formula {
   > .directory-list {
     max-height: unset;
   }
-  .compendium-entity:last-child {
-    li.compendium-pack {
-      &:last-child {
-        padding-bottom: 0;
-      }
-    }
-  }
+  // .compendium-entity:last-child {
+  //   li.compendium-pack {
+  //     &:last-child {
+  //       padding-bottom: 0;
+  //     }
+  //   }
+  // }
   li.compendium-pack {
     border-bottom-color: alphav(var(--color-border), 0.75);
     cursor: pointer;
@@ -737,12 +738,12 @@ sl-tooltip {
   }
 }
 
-#actors .entity,
-#items .entity,
+#actors .document,
+#items .document,
 .compendium .directory-item {
-  line-height: 16px;
-  padding: 0.25rem 0.5rem;
-  border: none;
+  line-height: 16px !important;
+  padding: 0.25rem 0.5rem !important;
+  border: none !important;
   > img {
     grid-area: img;
   }
@@ -766,7 +767,7 @@ sl-tooltip {
     }
   }
   &:hover {
-    box-shadow: 0 0 4px var(--color-grey);
+    box-shadow: 0 0 4px var(--color-grey) !important;
   }
   &:focus {
     background-color: var(--color-bg-alt);
@@ -786,7 +787,7 @@ sl-tooltip {
 
 .compendium .directory-list .directory-item {
   border-bottom-color: var(--color-border);
-  .entry-name {
+  .document-name {
     line-height: 1.25rem;
     pointer-events: initial;
   }
@@ -866,7 +867,7 @@ sl-tooltip {
     display: flex;
     flex-flow: column nowrap;
     padding: 0.25rem 0;
-    .entity {
+    .document {
       background-color: alphav(var(--color-bg), 0.3);
       img {
         pointer-events: none;

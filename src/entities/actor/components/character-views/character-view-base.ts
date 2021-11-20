@@ -132,14 +132,14 @@ export abstract class CharacterViewBase extends LitElement {
         ? token.center
         : { x: 0, y: 0 };
 
-    placeMeasuredTemplate(
-      createTemporaryMeasuredTemplate({
-        ...center,
-        t: 'circle',
-        distance: range,
-      }),
-      !!token,
-    );
+    const template = createTemporaryMeasuredTemplate({
+      ...center,
+      t: 'circle',
+      distance: range,
+    });
+    if (template) {
+      placeMeasuredTemplate(template, !!token);
+    }
   }
 
   protected openPoolMenu(ev: MouseEvent & { currentTarget: HTMLElement }) {

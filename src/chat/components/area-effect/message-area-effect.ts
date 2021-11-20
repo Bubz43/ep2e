@@ -110,13 +110,13 @@ export class MessageAreaEffect extends mix(MessageElement).with(UseWorldTime) {
 
   private async setTemplate(ev: MouseEvent) {
     const center = readyCanvas()?.scene._viewPosition ?? { x: 0, y: 0 };
+    const template = createTemporaryMeasuredTemplate({
+      ...center,
+      ...this.templateData,
+    });
+    if (!template) return;
 
-    const templateIDs = await placeMeasuredTemplate(
-      createTemporaryMeasuredTemplate({
-        ...center,
-        ...this.templateData,
-      }),
-    );
+    const templateIDs = await placeMeasuredTemplate(template);
     if (templateIDs) this.getUpdater('areaEffect').commit({ templateIDs });
   }
 

@@ -434,8 +434,8 @@ window.addEventListener(
     lastClicked = origTarget instanceof HTMLElement ? origTarget : null;
     return (
       target instanceof HTMLLIElement &&
-      target.matches(`.entity.actor, .entity.item`) &&
-      target.querySelector<HTMLElement>('.entity-name')?.click()
+      target.matches(`.document.actor, .document.item`) &&
+      target.querySelector<HTMLElement>('.document-name')?.click()
     );
   },
   { capture: true },
@@ -447,7 +447,7 @@ for (const app of [Dialog, PermissionControl, FolderConfig, FilePicker]) {
     hook: 'on',
     event: 'render',
     callback: (dialog) => {
-      const closestItem = lastClicked?.closest<HTMLElement>('.entity');
+      const closestItem = lastClicked?.closest<HTMLElement>('.document');
       const relative = closestItem || lastClicked;
       if (relative?.isConnected) positionApp(dialog, relative);
     },
@@ -459,7 +459,7 @@ window.addEventListener(
   ({ key, target }) =>
     key === 'Enter' &&
     target instanceof HTMLLIElement &&
-    target.matches('.entity.actor, .entity.item') &&
+    target.matches('.document.actor, .document.item') &&
     target.click(),
 );
 
@@ -484,7 +484,7 @@ applicationHook({
           compendium.collection.getDocuments;
 
           listItem
-            .querySelector('.entry-name')
+            .querySelector('.document-name')
             ?.setAttribute('data-type', doc.proxy.fullType);
         }
       }
@@ -499,7 +499,7 @@ applicationHook({
 
           const type = localize(doc.type);
           listItem
-            .querySelector('.entry-name')
+            .querySelector('.document-name')
             ?.setAttribute(
               'data-type',
               isSleeve(doc.proxy)
@@ -518,30 +518,30 @@ for (const app of [ActorDirectory, ItemDirectory]) {
     hook: 'on',
     event: 'render',
     callback: (_, [list]) =>
-      list?.querySelectorAll<HTMLLIElement>('.entity').forEach((listItem) => {
-        const { entityId } = listItem.dataset;
+      list?.querySelectorAll<HTMLLIElement>('.document').forEach((listItem) => {
+        const { documentId } = listItem.dataset;
         listItem.tabIndex = 0;
-        const entity =
-          entityId &&
-          game[app === ActorDirectory ? 'actors' : 'items'].get(entityId);
-        if (!entity) return;
+        const doc =
+          documentId &&
+          game[app === ActorDirectory ? 'actors' : 'items'].get(documentId);
+        if (!doc) return;
 
         const nameElement =
-          listItem.querySelector<HTMLHeadingElement>('h4.entity-name')!;
+          listItem.querySelector<HTMLHeadingElement>('h4.document-name')!;
 
-        if (isItem(entity)) {
-          nameElement.querySelector('a')!.textContent = entity.proxy.fullName;
-          nameElement.dataset['type'] = entity.proxy.fullType;
+        if (isItem(doc)) {
+          nameElement.querySelector('a')!.textContent = doc.proxy.fullName;
+          nameElement.dataset['type'] = doc.proxy.fullType;
         } else {
-          if (entity.type !== ActorType.Character && isSleeve(entity.proxy)) {
-            nameElement.dataset['type'] = formattedSleeveInfo(entity.proxy)
-              .concat(localize(entity.type))
+          if (doc.type !== ActorType.Character && isSleeve(doc.proxy)) {
+            nameElement.dataset['type'] = formattedSleeveInfo(doc.proxy)
+              .concat(localize(doc.type))
               .join(' - ');
           } else {
-            nameElement.dataset['type'] = localize(entity.type);
+            nameElement.dataset['type'] = localize(doc.type);
           }
         }
-        listItem.title = `${entity.name}
+        listItem.title = `${doc.name}
         ${nameElement.dataset['type']}`;
       }),
   });

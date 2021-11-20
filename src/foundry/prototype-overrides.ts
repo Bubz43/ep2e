@@ -72,10 +72,13 @@ export const overridePrototypes = () => {
     this.actor?.render(false, {});
   };
 
+  console.log(drawEffects);
+
   Token.prototype.drawEffects = async function () {
     if (!this.actor) return drawEffects.call(this);
 
-    this.effects.removeChildren().forEach((c) => c.destroy());
+    //@ts-ignore
+    this.hud.effects.removeChildren().forEach((c) => c.destroy());
 
     const effects = activeTokenStatusEffects(this);
 
@@ -310,7 +313,7 @@ export const overridePrototypes = () => {
     html: HTMLElement,
   ) {
     for (let li of html.children) {
-      const header = li.querySelector('.entry-name')!;
+      const header = li.querySelector('.document-name')!;
       const name = header.textContent;
       const type = header.getAttribute('data-type');
       const match =
@@ -367,12 +370,12 @@ export const overridePrototypes = () => {
     jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
       const entityLi = findMatchingElement(
         ev,
-        '.entity, .folder .folder-header',
+        '.document, .folder .folder-header',
       );
       if (!entityLi) return;
       const jqueryLi = $(entityLi);
 
-      if (entityLi.matches('.entity')) {
+      if (entityLi.matches('.document')) {
         const entryOptions = this._getEntryContextOptions();
         Hooks.call(
           `get${this.constructor.name}EntryContext`,
@@ -380,7 +383,7 @@ export const overridePrototypes = () => {
           entryOptions,
         );
         const convertedOptions = convertMenuOptions(entryOptions, jqueryLi);
-        const heading = entityLi.querySelector('.entity-name')?.textContent;
+        const heading = entityLi.querySelector('.document-name')?.textContent;
         openMenu({
           content: convertedOptions,
           position: ev,
@@ -577,7 +580,7 @@ export const overridePrototypes = () => {
       const { entityId, folderId } = el.dataset;
 
       // Entities
-      if (el.classList.contains('entity') && entityId) {
+      if (el.classList.contains('document') && entityId) {
         el.style.display = !isSearch || entityIds.has(entityId) ? '' : 'none';
       }
 

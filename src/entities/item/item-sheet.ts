@@ -125,7 +125,7 @@ export class ItemEPSheet implements EntitySheet {
       (this.item.actor && getWindow(this.item.actor)) ??
       Array.from(
         document.querySelectorAll<HTMLElement>(
-          `[data-entity-id="${this.item.data._id}"]`,
+          `[data-document-id="${this.item.data._id}"]`,
         ),
       )
         .reverse()

@@ -41,7 +41,23 @@ export const createTemporaryMeasuredTemplate = ({
 }: SetOptional<
   Omit<MeasuredTemplateData, '_id'>,
   'user' | 'fillColor' | 'direction' | 'x' | 'y'
->) => new MeasuredTemplate({ ...data, user, fillColor, direction, x, y });
+>) => {
+  const canvas = readyCanvas();
+  if (!canvas?.scene) return null;
+
+  const doc = new MeasuredTemplateDocument(
+    {
+      ...data,
+      user,
+      fillColor,
+      direction,
+      x,
+      y,
+    },
+    { parent: canvas.scene },
+  );
+  return new MeasuredTemplate(doc);
+};
 
 export const placeMeasuredTemplate = (
   template: MeasuredTemplate,
@@ -56,11 +72,8 @@ export const placeMeasuredTemplate = (
     const controlled =
       originalLayer === tokens ? originalLayer.controlled : null;
 
-    (await template.draw()).layer
-      .activate()
-      .preview?.addChild(
-        template as unknown as import('pixi.js').DisplayObject,
-      );
+    (await template.draw())?.layer.preview // .activate()
+      ?.addChild(template as unknown as import('pixi.js').DisplayObject);
     overlay.faded = true;
 
     const moveTemplate = throttleFn(
@@ -86,6 +99,8 @@ export const placeMeasuredTemplate = (
       view.removeEventListener('contextmenu', cleanup);
       view.removeEventListener('wheel', rotateTemplate);
       window.removeEventListener('keydown', cancelOrSave, { capture: true });
+      //@ts-ignore
+      console.log(template, template.layer);
       template.layer.preview?.removeChildren();
       originalLayer.activate();
       overlay.faded = false;

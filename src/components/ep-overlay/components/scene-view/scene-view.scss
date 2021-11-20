@@ -6,15 +6,15 @@
 }
 
 :host {
-  display: flex;
+  display: grid;
   gap: 0.5rem;
-  justify-content: space-between;
-  align-items: center;
+  grid-template-columns: auto 1fr 1fr;
+  place-items: center;
   --mdc-icon-button-size: 2rem;
   // margin: 0.25rem 0.75rem 0 1.25rem;
   padding: 0 0.375rem 0.25rem;
   border-radius: 0.5rem;
-  box-shadow: 0 0 4px var(--color-bg);
+  // box-shadow: 0 0 4px var(--color-bg);
   background-color: alphav(var(--color-bg-alt), 0.75);
   color: var(--color-text);
   > * {
