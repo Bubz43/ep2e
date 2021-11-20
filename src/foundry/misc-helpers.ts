@@ -36,7 +36,10 @@ const primaryGmIsConnected = () => {
 };
 
 export const canViewActor = (actor: ActorEP) => {
-  return actor.testUserPermission(game.user, CONST.ENTITY_PERMISSIONS.OBSERVER);
+  return actor.testUserPermission(
+    game.user as any,
+    CONST.DOCUMENT_PERMISSION_LEVELS.OBSERVER,
+  );
 };
 
 export const userCan = (permission: keyof typeof CONST.USER_PERMISSIONS) => {

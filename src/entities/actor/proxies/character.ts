@@ -250,7 +250,9 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   get isLimited() {
     return (
       !game.user.isGM &&
-      this.actor.testUserPermission(game.user, 'LIMITED', { exact: true })
+      this.actor.testUserPermission(game.user as any, 'LIMITED', {
+        exact: true,
+      })
     );
   }
 

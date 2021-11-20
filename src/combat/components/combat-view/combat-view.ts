@@ -280,7 +280,7 @@ export class CombatView extends LitElement {
       const { actor } = getParticipantEntities(participant);
       return (
         !actor ||
-        !players.some((user) => actor.testUserPermission(user, 'OWNER'))
+        !players.some((user) => actor.testUserPermission(user as any, 'OWNER'))
       );
     });
     const payload: { id: string; initiative: number }[] = [];

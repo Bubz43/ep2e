@@ -41,7 +41,10 @@ export type CommonEntityData = {
   img: string;
   _id: string;
   // flags: JsonObject;
-  permission: Record<'default' | string, ValueOf<CONST['ENTITY_PERMISSIONS']>>;
+  permission: Record<
+    'default' | string,
+    ValueOf<CONST['DOCUMENT_PERMISSION_LEVELS']>
+  >;
   folder?: string;
   sort?: number;
 };
@@ -162,7 +165,7 @@ type CombatRoundInfo = {
   turn: number | null;
 };
 
-type FoundryCollection<T> = import('common/utils/module').Collection<T>;
+type FoundryCollection<T> = Map<string, T>;
 
 type Col<T> = FoundryCollection<T> & {
   [Symbol.iterator](): IterableIterator<T>;

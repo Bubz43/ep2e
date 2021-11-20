@@ -87,7 +87,7 @@ export const createMessage = async ({
       (visibility === MessageVisibility.Self
         ? [game.user.id]
         : visibility !== MessageVisibility.Public
-        ? ChatMessage.getWhisperRecipients('GM').map((i) => i.id)
+        ? ChatMessage.getWhisperRecipients('GM').map((i: User) => i.id)
         : undefined),
   };
   if ('dice3d' in game) {

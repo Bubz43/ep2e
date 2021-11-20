@@ -217,8 +217,10 @@ export class SleightCard extends ItemCardBase {
       if (
         user.isGM ||
         entities.some((entity) => {
-          const level = entity.getUserLevel(user);
-          return level ? level >= CONST.ENTITY_PERMISSIONS.OWNER : false;
+          const level = entity.getUserLevel(user as any);
+          return level
+            ? level >= CONST.DOCUMENT_PERMISSION_LEVELS.OWNER
+            : false;
         })
       ) {
         owners.add(user.id);
