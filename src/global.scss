@@ -1264,20 +1264,7 @@ sl-tooltip {
 }
 
 #controls {
-  // position: relative;
-  // display: grid;
-  // grid-template-columns: 1fr 1fr;
-  // // gap: 0.125rem;
-  // flex-flow: column;
-  // padding: 0;
-  // margin: 0;
-  // pointer-events: none;
-  // align-items: flex-start;
-  // z-index: 20;
-  // border-radius: 0;
-
-  // display: grid;
-  // grid-template-columns: 2.5rem 2.5rem;
+  padding-top: 1rem;
   gap: 0.5rem;
 
   li {
@@ -1294,6 +1281,9 @@ sl-tooltip {
       alphav(var(--color-bg), 0.8),
       alphav(var(--color-bg-alt), 0.75)
     );
+    &.disabled * {
+      pointer-events: none !important;
+    }
   }
 
   ol.sub-controls {
