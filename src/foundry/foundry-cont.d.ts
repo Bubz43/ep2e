@@ -235,9 +235,11 @@ declare global {
     actor?: ActorEP | null;
     _validPosition: { x: number; y: number };
     bars: Record<'bar1' | 'bar2', import('pixi.js').Graphics>;
-    effects: import('pixi.js').Container;
     update(tokenData: DeepPartial<TokenData>, options: unknown): Promise<Token>;
     _controlled: boolean;
+    hud: {
+      effects: import('pixi.js').Container;
+    };
   }
 
   interface PlaceableObject {

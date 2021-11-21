@@ -72,12 +72,9 @@ export const overridePrototypes = () => {
     this.actor?.render(false, {});
   };
 
-  console.log(drawEffects);
-
   Token.prototype.drawEffects = async function () {
     if (!this.actor) return drawEffects.call(this);
 
-    //@ts-ignore
     this.hud.effects.removeChildren().forEach((c) => c.destroy());
 
     const effects = activeTokenStatusEffects(this);
@@ -88,7 +85,7 @@ export const overridePrototypes = () => {
           (canvas as ReturnType<typeof readyCanvas>)!.dimensions.size / 2 / 5,
         ) * 2;
 
-      const background = this.effects
+      const background = this.hud.effects
         .addChild(new PIXI.Graphics())
         .beginFill(0x000000, 0.4)
         .lineStyle(1.0, 0x000000);
