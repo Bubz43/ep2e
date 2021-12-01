@@ -629,7 +629,6 @@ code.formula {
 
 .ep-extra-info {
   display: grid;
-  gap: 0.25rem;
 }
 
 #navigation {
@@ -1275,6 +1274,7 @@ sl-tooltip {
     display: grid;
     padding-left: 0;
     width: 3rem;
+    grid-auto-rows: 2.75rem;
     border-radius: 0px 0.25rem 0.25rem 0px;
     background: linear-gradient(
       to right,
@@ -1288,6 +1288,9 @@ sl-tooltip {
 
   ol.sub-controls {
     border-radius: 0px;
+    gap: 0.25rem;
+    grid-auto-rows: 2.5rem;
+
     .control-tool {
       margin-right: 0px;
     }
@@ -1295,12 +1298,12 @@ sl-tooltip {
 
   ol.control-tools {
     height: max-content;
-    gap: 0.25rem;
-    grid-auto-rows: 2.5rem;
   }
 
   ol .scene-control,
   ol .control-tool {
+    display: grid;
+    place-items: center;
     width: unset;
     padding: 0.5rem 0;
     font-size: 1.45rem;
@@ -1332,9 +1335,10 @@ sl-tooltip {
 
   ol .scene-control {
     &.active {
-      color: alphav(var(--color-text), 0.95);
+      color: var(--color-text);
       border-left: 2px solid currentColor !important;
-      box-shadow: 0 0 4px black;
+      box-shadow: 0 0 1px 0px black;
+      // background: var(--color-bg);
       background: linear-gradient(
         to right,
         alphav(var(--color-bg), 0.85),

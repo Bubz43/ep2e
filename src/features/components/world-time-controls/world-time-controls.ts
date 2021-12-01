@@ -4,6 +4,7 @@ import {
 } from '@src/components/field/fields';
 import { renderAutoForm, renderSubmitForm } from '@src/components/form/forms';
 import { UseWorldTime } from '@src/components/mixins/world-time-mixin';
+import { Placement } from '@src/components/popover/popover-options';
 import {
   defaultStandardCalendar,
   getCurrentDateTime,
@@ -74,6 +75,7 @@ export class WorldTimeControls extends mix(LitElement).with(UseWorldTime) {
           ></span
         >
         <sl-popover
+          placement=${Placement.Left}
           .renderOnDemand=${() => html`
             <sl-popover-section
               heading=${localize('yearStart')}

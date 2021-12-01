@@ -178,8 +178,8 @@ Hooks.once('ready', async () => {
 
     const extraInfo = document.createElement('div');
     extraInfo.className = 'ep-extra-info';
-    extraInfo.append(document.createElement('world-time-controls'));
     extraInfo.append(document.createElement('scene-view'));
+    extraInfo.append(document.createElement('world-time-controls'));
 
     document
       .getElementById('ui-top')
