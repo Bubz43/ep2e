@@ -447,7 +447,8 @@ export class RangedAttackTest extends SkillTest {
     if (
       (weapon.type === ItemType.Railgun || weapon.type === ItemType.Firearm) &&
       this.rangeRating === RangeRating.BeyondRange &&
-      !getCurrentEnvironment().vacuum
+      !getCurrentEnvironment().vacuum &&
+      !('isSteady' in weapon && weapon.isSteady)
     ) {
       return {
         label: localize(this.rangeRating),

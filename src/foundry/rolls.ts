@@ -78,6 +78,9 @@ export const cleanFormula = (formula: string) => {
   let cleaned = cleanedFormulas.get(formula);
   if (!cleaned) {
     cleaned = new Roll(formula).formula;
+    if (cleaned) {
+      cleaned = cleaned.replaceAll(/\+\s*\+/g, '+').replaceAll(/\+\s*\-/g, '-');
+    }
     cleanedFormulas.set(formula, cleaned || formula);
   }
   return cleaned as string;
