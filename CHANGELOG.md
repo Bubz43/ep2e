@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.902] - 2021-12-27
+
+- Fix extra outlines sometimes showing up on inputs
+- Fix dice formulas not being visually cleaned up (e.g. 1d6 + + 1d10)
+- Fix -1d10 DV from beyond range being applied to firearms with steady ammo
+
 ## [0.901] - 2021-12-13
 
 - Update for compatability with Foundry v9, will not work on prior versions
