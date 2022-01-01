@@ -1022,7 +1022,7 @@ sl-tooltip {
   #chat-form {
     order: 2;
     box-shadow: 0 0 4px black;
-    margin: 0 0.25rem 0.25rem;
+    margin: 0 0.25rem;
   }
   #chat-message {
     background: alphav(var(--color-bg), 0.85);
@@ -1036,8 +1036,16 @@ sl-tooltip {
   }
   #chat-controls {
     align-items: center;
-    padding: 0 0 0.125rem;
+    padding: 0.25rem 0.5rem;
     order: 3;
+    background: linear-gradient(
+      to left,
+      alphav(var(--color-bg), 0.85),
+      alphav(var(--color-bg-alt), 0.85)
+    );
+    border-radius: 0.125rem;
+    box-shadow: 0 0 2px black;
+    margin: 0.25rem;
     i {
       line-height: unset;
       font-size: 1rem;
