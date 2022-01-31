@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.902] -
+
+- Update Chameleon Cloak/Skin to having a toggle activation and putting requirements on their effects. This avoids accidental stacking of effects when combined with smart clothing.
+
 ## [0.902] - 2021-12-27
 
 - Fix extra outlines sometimes showing up on inputs
