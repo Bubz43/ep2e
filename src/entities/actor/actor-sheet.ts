@@ -39,7 +39,7 @@ export class ActorEPSheet implements EntitySheet {
 
   private canvasReadyCallback = () => {
     const disableTokenConfig = !!(
-      this._token && this._token.scene !== readyCanvas()?.scene
+      this._token && this._token.parent !== readyCanvas()?.scene
     );
     if (disableTokenConfig !== this.disableTokenConfig) {
       this.disableTokenConfig = disableTokenConfig;
@@ -49,9 +49,9 @@ export class ActorEPSheet implements EntitySheet {
 
   constructor(private actor: ActorEP) {
     actorSheets.set(actor, this);
-    if (actor.isToken && actor.token?.scene) {
+    if (actor.isToken && actor.token?.parent) {
       this.tokenSubscription = subscribeToToken(
-        { tokenId: actor.token.id, sceneId: actor.token.scene.id },
+        { tokenId: actor.token.id, sceneId: actor.token.parent.id },
         {
           next: (token) => {
             this._token = token;

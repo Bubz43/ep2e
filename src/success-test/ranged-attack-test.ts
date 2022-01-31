@@ -137,16 +137,17 @@ export class RangedAttackTest extends SkillTest {
 
     const attackTargets = new Set(take([...game.user.targets], maxTargets));
     const { token } = this;
+    const tokenObj = token?.object;
     this.firing = {
       attackTargets: attackTargets,
       range: getWeaponRange(weapon),
       seekerMode: 'accushot',
       quickAim: false,
       targetDistance:
-        token && notEmpty(attackTargets)
+        tokenObj && notEmpty(attackTargets)
           ? Math.max(
               ...[...attackTargets].map((target) =>
-                distanceBetweenTokens(token.object, target),
+                distanceBetweenTokens(tokenObj, target),
               ),
             )
           : 10,
@@ -252,11 +253,12 @@ export class RangedAttackTest extends SkillTest {
         if (
           changed.attackTargets &&
           notEmpty(draft.firing.attackTargets) &&
-          token
+          token?.object
         ) {
+          const tokenObj = token.object;
           draft.firing.targetDistance = Math.max(
             ...[...draft.firing.attackTargets].map((target) =>
-              distanceBetweenTokens(token.object, target as Token),
+              distanceBetweenTokens(tokenObj, target as Token),
             ),
           );
         }

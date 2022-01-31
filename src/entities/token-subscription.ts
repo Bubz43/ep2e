@@ -29,10 +29,10 @@ Hooks.on('canvasReady', () => {
 });
 
 const sceneUpdate = (tokenDoc: TokenDocument) => {
-  const { scene } = tokenDoc;
-  const subject = tokenSubjects.get(
-    toKey({ tokenId: tokenDoc.id, sceneId: scene?.id }),
-  );
+  const { parent: scene } = tokenDoc;
+  const key = toKey({ tokenId: tokenDoc.id, sceneId: scene?.id });
+  const subject = tokenSubjects.get(key);
+
   if (subject && scene) {
     const canvas = readyCanvas();
     const existing =
@@ -54,7 +54,7 @@ mutatePlaceableHook({
   hook: 'on',
   event: MutateEvent.Delete,
   callback: (tokenDoc) => {
-    const key = toKey({ tokenId: tokenDoc.id, sceneId: tokenDoc.scene?.id });
+    const key = toKey({ tokenId: tokenDoc.id, sceneId: tokenDoc.parent?.id });
     const subject = tokenSubjects.get(key);
     if (subject) {
       subject.complete();

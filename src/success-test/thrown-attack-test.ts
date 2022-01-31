@@ -99,7 +99,7 @@ export class ThrownAttackTest extends SkillTest {
         gravity,
       ),
       targetDistance:
-        attackTarget && this.token
+        attackTarget && this.token?.object
           ? Math.ceil(distanceBetweenTokens(this.token.object, attackTarget))
           : 10,
       primaryAttack,
@@ -144,7 +144,7 @@ export class ThrownAttackTest extends SkillTest {
 
         if (changed.attackTarget !== undefined) {
           draft.throwing.targetDistance =
-            draft.throwing.attackTarget && this.token
+            draft.throwing.attackTarget && this.token?.object
               ? Math.ceil(
                   distanceBetweenTokens(
                     this.token.object,

@@ -121,7 +121,7 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
     const speaker = ChatMessage.getSpeaker({
       token,
       actor: this.character.actor,
-      scene: token?.scene,
+      scene: token?.parent,
       alias: undefined,
     });
     const extendDuration = false;
@@ -243,9 +243,8 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                     ${Object.values(this.psi.fullInfluences).map(
                       (influence) => {
                         const { name } = influenceInfo(influence);
-                        const active = this.psi.activePsiInfluences.has(
-                          influence,
-                        );
+                        const active =
+                          this.psi.activePsiInfluences.has(influence);
                         return html`<mwc-list-item
                           ?activated=${active}
                           ?disabled=${active}
@@ -314,10 +313,11 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                       renderSelectField(influence, Object.keys(influences), {
                         altLabel: (id) => influenceInfo(influences[id]!).name,
                         required: true,
-                        disableOptions: Object.entries(
-                          influences,
-                        ).flatMap(([id, influence]) =>
-                          influence.type === PsiInfluenceType.Damage ? id : [],
+                        disableOptions: Object.entries(influences).flatMap(
+                          ([id, influence]) =>
+                            influence.type === PsiInfluenceType.Damage
+                              ? id
+                              : [],
                         ),
                       }),
                       renderTimeField(duration, { min: CommonInterval.Turn }),
@@ -545,11 +545,8 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                 }
                 if (influence.type === PsiInfluenceType.Unique) {
                   const { name, description } = influenceInfo(influence);
-                  const {
-                    durationFormula,
-                    interval,
-                    items,
-                  } = influence.effects;
+                  const { durationFormula, interval, items } =
+                    influence.effects;
                   const hasEffects = items.length;
                   return html` <span
                     class="unique ${hasEffects ? 'has-effects' : ''}"

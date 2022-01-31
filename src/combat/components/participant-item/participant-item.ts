@@ -122,7 +122,6 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
         next: (token) => {
           this.token = token;
           this.requestUpdate();
-          console.log('actor sub');
           this.actorUnsub?.();
           this.actorUnsub = token.actor?.subscribe(this.actorSub);
         },

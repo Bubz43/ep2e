@@ -159,7 +159,6 @@ export class CharacterViewAlt extends CharacterViewBase {
   private addToCombat(initiative?: number, surprised?: Surprise) {
     const name = this.token?.name ?? this.character.name;
     const hidden = this.token?.data.hidden;
-    console.log(this.token?.scene);
     updateCombatState({
       type: CombatActionType.AddParticipants,
       payload: [
@@ -168,11 +167,11 @@ export class CharacterViewAlt extends CharacterViewBase {
           hidden,
           initiative,
           surprised,
-          entityIdentifiers: this.token?.scene
+          entityIdentifiers: this.token?.parent
             ? {
                 type: TrackedCombatEntity.Token,
                 tokenId: this.token.id,
-                sceneId: this.token.scene.id,
+                sceneId: this.token.parent.id,
               }
             : {
                 type: TrackedCombatEntity.Actor,

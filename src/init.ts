@@ -353,8 +353,10 @@ Hooks.once('ready', async () => {
     hook: 'on',
     event: MutateEvent.Update,
     callback: (actor) => {
-      if (actor.isToken) actor.token?.object.drawEffects();
-      else
+      if (actor.isToken) {
+        console.log(actor.token);
+        actor.token?.object?.drawEffects();
+      } else
         actor
           .getActiveTokens(true, false)
           .forEach((t) => (t as Token).drawEffects());

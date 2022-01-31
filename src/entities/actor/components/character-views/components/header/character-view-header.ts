@@ -95,11 +95,11 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
           hidden,
           initiative,
           surprised,
-          entityIdentifiers: this.token?.scene
+          entityIdentifiers: this.token?.parent
             ? {
                 type: TrackedCombatEntity.Token,
                 tokenId: this.token.id,
-                sceneId: this.token.scene.id,
+                sceneId: this.token.parent.id,
               }
             : {
                 type: TrackedCombatEntity.Actor,

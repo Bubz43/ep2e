@@ -252,7 +252,7 @@ declare global {
     parent?: SceneEP;
     data: Readonly<TokenData>;
     name: string;
-    object: Token;
+    object: Token | null;
     id: string;
     uuid: string;
     update(tokenData: DeepPartial<TokenData>, options: unknown): unknown;

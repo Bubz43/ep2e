@@ -104,7 +104,7 @@ export const updateManyActors = async (actors: ActorEP[]): Promise<unknown> => {
     if (actor.updater.isEmpty) continue;
     if (actor.isToken) {
       const tokenActor = actor as TokenActor;
-      const { scene } = tokenActor.token!;
+      const { parent: scene } = tokenActor.token!;
       scene && tokens.set(scene, (tokens.get(scene) || []).concat(tokenActor));
     } else gameActors.push(actor);
   }
@@ -115,7 +115,7 @@ export const updateManyActors = async (actors: ActorEP[]): Promise<unknown> => {
         'Token',
         pipe(
           tokenActors,
-          filter((tokenActor) => tokenActor.token!.scene === scene),
+          filter((tokenActor) => tokenActor.token!.parent === scene),
           map(
             (tokenActor) =>
               new UpdateStore({

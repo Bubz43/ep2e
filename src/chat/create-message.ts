@@ -76,7 +76,7 @@ export const createMessage = async ({
         ? { alias }
         : ChatMessage.getSpeaker({
             alias: alias || entity?.name,
-            scene: token?.scene,
+            scene: token?.parent,
             actor,
             token,
           }),

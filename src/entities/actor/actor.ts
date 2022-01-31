@@ -56,12 +56,16 @@ export class ActorEP extends Actor {
   private declare hasPrepared: boolean;
   private readonly subs = new Set<ActorSub>();
 
+  get token() {
+    return super.token as MaybeToken;
+  }
+
   subscribe(sub: ActorSub) {
-    if (this.token?.scene && this.isToken) {
+    if (this.token?.parent && this.isToken) {
       const tokenSub = subscribeToToken(
         {
           tokenId: this.token.id,
-          sceneId: this.token.scene.id,
+          sceneId: this.token.parent.id,
         },
         {
           next: (token) => sub(token.actor || null),
@@ -80,7 +84,7 @@ export class ActorEP extends Actor {
     return {
       actorId: this.id,
       tokenId: token?.id,
-      sceneId: token?.scene?.id,
+      sceneId: token?.parent?.id,
       uuid: this.uuid,
     };
   }
@@ -112,12 +116,12 @@ export class ActorEP extends Actor {
     change: Pick<SystemSocketData['itemChange'], 'itemIds' | 'type'>,
   ) {
     const { isToken, token } = this;
-    if (isToken && token?.scene?.id) {
+    if (isToken && token?.parent?.id) {
       emitEPSocket(
         {
           itemChange: {
             tokenId: token.id,
-            sceneId: token.scene.id,
+            sceneId: token.parent.id,
             ...change,
           },
         },

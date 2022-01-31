@@ -73,12 +73,13 @@ export class PsiTest extends SkillTest {
     const maxTargets = freePush === PsiPush.ExtraTarget ? 2 : 1;
     const attackTargets = new Set(take([...game.user.targets], maxTargets));
     const { token } = this;
-    const targettingSelf = !!token && attackTargets.has(token.object);
+    const tokenObj = token?.object;
+    const targettingSelf = tokenObj && attackTargets.has(tokenObj);
     const targetDistance =
-      token && notEmpty(attackTargets)
+      tokenObj && notEmpty(attackTargets)
         ? Math.max(
             ...[...attackTargets].map((target) =>
-              distanceBetweenTokens(token.object, target),
+              distanceBetweenTokens(tokenObj, target),
             ),
           )
         : 10;
@@ -88,7 +89,7 @@ export class PsiTest extends SkillTest {
       push: '',
       maxTargets,
       attackTargets,
-      targetingSelf: targettingSelf,
+      targetingSelf: !!targettingSelf,
       targetDistance,
       touchingTarget: false,
       range: PsiRange.Close,
@@ -133,10 +134,15 @@ export class PsiTest extends SkillTest {
           }
         }
 
-        if (changed.attackTargets && notEmpty(use.attackTargets) && token) {
+        if (
+          changed.attackTargets &&
+          notEmpty(use.attackTargets) &&
+          token?.object
+        ) {
+          const obj = token.object;
           use.targetDistance = Math.max(
             ...[...use.attackTargets].map((target) =>
-              distanceBetweenTokens(token.object, target as Token),
+              distanceBetweenTokens(obj, target as Token),
             ),
           );
         }
