@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.904] - 2022-01-31
+
+- Brighten health bar damage taken
+
 ## [0.903] - 2022-01-31
 
 - Fix various bugs related to token updates and referencing base actor instead of token.

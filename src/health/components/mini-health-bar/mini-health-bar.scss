@@ -16,7 +16,7 @@
 .health-icon {
   height: 1rem;
   z-index: 1;
-  filter: drop-shadow(0 0 2px black) opacity(0.9);
+  filter: drop-shadow(0 0 2px black) opacity(0.8);
   position: absolute;
   left: 0.25rem;
 }
@@ -34,7 +34,7 @@
   position: relative;
   &::before {
     content: '';
-    background: alphav(var(--color-negative), 0.8);
+    background: lightv(var(--color-negative), 1.5);
     top: 0;
     bottom: 0;
     left: 0;
