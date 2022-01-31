@@ -249,7 +249,7 @@ declare global {
   interface PrototypeTokenData extends TokenData {}
 
   interface TokenDocument extends TokenData {
-    scene?: SceneEP;
+    parent?: SceneEP;
     data: Readonly<TokenData>;
     name: string;
     object: Token;

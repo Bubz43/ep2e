@@ -171,6 +171,7 @@ import { HealthRegenSettingsForm } from './health/components/health-regen-settin
 import { HealthStateForm } from './health/components/health-state-form/health-state-form';
 import { MentalHealthStressEditor } from './health/components/mental-health-stress-editor/mental-health-stress-editor';
 import { MeshHealthDamageEditor } from './health/components/mesh-health-damage-editor/mesh-health-damage-editor';
+import { MiniHealth } from './health/components/mini-health-bar/mini-health-bar';
 import { PhysicalHealthDamageEditor } from './health/components/physical-health-damage-editor/physical-health-damage-editor';
 import { SuccessTestActionForm } from './success-test/components/action-form/success-test-action-form';
 import { AptitudeCheckControls } from './success-test/components/aptitude-check-controls/aptitude-check-controls';
@@ -333,6 +334,7 @@ MentalHealthStressEditor;
 PhysicalHealthDamageEditor;
 MeshHealthDamageEditor;
 HealthEditor;
+MiniHealth;
 
 // Overlay
 EPOverlay;

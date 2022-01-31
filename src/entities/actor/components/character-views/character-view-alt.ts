@@ -159,6 +159,7 @@ export class CharacterViewAlt extends CharacterViewBase {
   private addToCombat(initiative?: number, surprised?: Surprise) {
     const name = this.token?.name ?? this.character.name;
     const hidden = this.token?.data.hidden;
+    console.log(this.token?.scene);
     updateCombatState({
       type: CombatActionType.AddParticipants,
       payload: [

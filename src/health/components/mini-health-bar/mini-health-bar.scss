@@ -1,0 +1,48 @@
+@use "scss/functions" as *;
+@use "scss/mixins" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: flex;
+  align-items: center;
+  position: relative;
+  background: alphav(var(--color-bg-alt), 0.5);
+  margin: 0.25rem 0;
+}
+
+.health-icon {
+  height: 1rem;
+  z-index: 1;
+  filter: drop-shadow(0 0 2px black) opacity(0.9);
+  position: absolute;
+  left: 0.25rem;
+}
+
+.bars {
+  display: flex;
+  width: 100%;
+  background: alphav(var(--color-border), 0.8);
+}
+
+.bar {
+  flex: 1;
+  border: 1px solid lightv(var(--color-bg), 0.8);
+  height: 0.5rem;
+  position: relative;
+  &::before {
+    content: '';
+    background: alphav(var(--color-negative), 0.8);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    transition: transform 300ms ease-out, opacity 300ms ease-in-out;
+    transform-origin: left;
+    transform: scaleX(var(--percent));
+    opacity: 0.8;
+  }
+}

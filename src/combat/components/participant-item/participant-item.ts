@@ -122,10 +122,9 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
         next: (token) => {
           this.token = token;
           this.requestUpdate();
-          if (token.actor !== this.actor) {
-            this.actorUnsub?.();
-            this.actorUnsub = token.actor?.subscribe(this.actorSub);
-          }
+          console.log('actor sub');
+          this.actorUnsub?.();
+          this.actorUnsub = token.actor?.subscribe(this.actorSub);
         },
         complete: () => {
           this.token = null;
@@ -663,6 +662,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
               `
             : ''}
         </span>
+        ${this.renderHealthBar()}
 
         <div class="actions" slot="after">
           ${participant.initiative != null
@@ -704,6 +704,22 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
         </div>
       </wl-list-item>
     `;
+  }
+
+  private renderHealthBar() {
+    const { character, actor } = this;
+    const sleeve = character?.sleeve;
+
+    const sleeveHealth =
+      sleeve &&
+      ('physicalHealth' in sleeve
+        ? sleeve.physicalHealth
+        : sleeve.activeMeshHealth);
+
+    return html`${sleeveHealth &&
+    actor?.testUserPermission(game.user as any, 'OBSERVER')
+      ? html`<mini-health-bar .health=${sleeveHealth}></mini-health-bar>`
+      : ''}`;
   }
 }
 

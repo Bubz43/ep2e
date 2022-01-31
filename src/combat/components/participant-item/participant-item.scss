@@ -83,6 +83,7 @@ wl-list-item {
   }
   .name {
     @include truncate(100px);
+    padding-top: 0.125rem;
     min-width: 100%;
   }
 }
