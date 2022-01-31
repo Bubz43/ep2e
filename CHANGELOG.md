@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.903] - 2022-01-31
+
+- Fix various bugs related to token updates and referencing base actor instead of token.
+- Add primary sleeve health bar to combat tracker for GMs and observer+ permissions.
+
 ## [0.902] - 2021-12-27
 
 - Fix extra outlines sometimes showing up on inputs
