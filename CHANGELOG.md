@@ -1,8 +1,8 @@
 # Changelog
 
-## [0.905] - 2022-06-02
+## [0.906] - 2022-06-02
 
-- Upgrade some dependencies
+- Update some dependencies
 
 ## [0.905] - 2022-06-02
 
