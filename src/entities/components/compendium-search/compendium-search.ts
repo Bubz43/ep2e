@@ -38,9 +38,9 @@ export class CompendiumSearch extends LitElement {
 
   @state() private loading = false;
 
-  private entity: 'Actor' | 'Item' = 'Item';
+  private documentName: 'Actor' | 'Item' = 'Item';
 
-  private entityRenderer = 'Item';
+  private documentRenderer = 'Item';
 
   connectedCallback() {
     this.loading = false;
@@ -55,7 +55,7 @@ export class CompendiumSearch extends LitElement {
   private async loadEntities() {
     this.loading = true;
     this.results = [];
-    this.entityRenderer = this.entity;
+    this.documentRenderer = this.documentName;
 
     const entries: FoundryDoc[] = [];
     const { isGM } = game.user;
@@ -63,9 +63,9 @@ export class CompendiumSearch extends LitElement {
 
     for (const pack of game.packs.values()) {
       if (pack.private && !isGM) continue;
-      const { entity, system: source } = pack.metadata;
+      const { documentName, system: source } = pack.metadata;
       if (
-        entity === this.entity &&
+        documentName === this.documentName &&
         (source === 'world' ? world : source === EP.Name ? system : modules)
       ) {
         const entities = await pack.getDocuments();
@@ -84,7 +84,7 @@ export class CompendiumSearch extends LitElement {
     if (ev.target instanceof HTMLElement) {
       const { id, collection } = ev.target.dataset;
       setDragDrop(ev, {
-        type: this.entityRenderer as any,
+        type: this.documentRenderer as any,
         pack: collection as string,
         id: id as string,
       });
@@ -106,7 +106,7 @@ export class CompendiumSearch extends LitElement {
     const regex = searchRegExp(this.filter);
     const filtered = this.results.filter((r) => {
       const matches = r.matchRegexp(regex);
-      if (!matches && this.entity === 'Item') {
+      if (!matches && this.documentName === 'Item') {
         return regex.test(`${r.name} ${(r as ItemEP).proxy.fullType}`);
       }
       return matches;
@@ -126,9 +126,9 @@ export class CompendiumSearch extends LitElement {
           ],
         })}
         ${renderAutoForm({
-          props: { entity: this.entity },
+          props: { entity: this.documentName },
           update: ({ entity }) => {
-            if (entity) this.entity = entity;
+            if (entity) this.documentName = entity;
           },
           fields: ({ entity }) => html`
             <span class="entity-label">${entity.label}</span>
@@ -185,7 +185,7 @@ export class CompendiumSearch extends LitElement {
               @dragstart=${this.setDragData}
               class="list"
               .items=${filtered}
-              .renderItem=${this.entityRenderer === 'Item'
+              .renderItem=${this.documentRenderer === 'Item'
                 ? this.renderItem
                 : this.renderActor}
             ></lit-virtualizer>`}

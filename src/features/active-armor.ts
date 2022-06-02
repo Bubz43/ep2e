@@ -28,7 +28,8 @@ export type ReadonlyArmor = Omit<
 
 export class ActiveArmor
   extends Map<ArmorKey, number>
-  implements ObtainableEffects {
+  implements ObtainableEffects
+{
   private positiveArmorSources = new Set<ArmorType>();
   private _layerPenalty?: AddEffects;
   private _overburdened?: AddEffects;
@@ -81,25 +82,25 @@ export class ActiveArmor
         ],
       };
       this.currentEffects.push(this._layerPenalty);
-    }
 
-    if (!ignoreOverburdened && som && highestPhysicalArmor > som) {
-      this._overburdened = {
-        source: localize('overburdened'),
-        effects: [
-          createEffect.successTest({
-            modifier: -20,
-            tags: [
-              {
-                type: TagType.Action,
-                subtype: ActionSubtype.Physical,
-                action: '',
-              },
-            ],
-          }),
-        ],
-      };
-      this.currentEffects.push(this._overburdened);
+      if (!ignoreOverburdened && som && highestPhysicalArmor > som) {
+        this._overburdened = {
+          source: localize('overburdened'),
+          effects: [
+            createEffect.successTest({
+              modifier: -20,
+              tags: [
+                {
+                  type: TagType.Action,
+                  subtype: ActionSubtype.Physical,
+                  action: '',
+                },
+              ],
+            }),
+          ],
+        };
+        this.currentEffects.push(this._overburdened);
+      }
     }
   }
 

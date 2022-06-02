@@ -284,7 +284,7 @@ declare global {
       label: string;
       path: string;
       private: boolean;
-      entity: EntityName;
+      documentName: EntityName;
       system: string;
     };
   }

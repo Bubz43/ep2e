@@ -7,6 +7,7 @@
     "format:scss": "prettier --write \"src/**/*.scss\"",
     "lint": "prettier --check \"src/**/*.ts\"",
     "clean": "rimraf node_modules",
+    "typecheck": "tsc --noEmit",
     "gen:template-schema": "ts-json-schema-generator --tsconfig tsconfig.json --path ./src/foundry/template-schema.ts --no-type-check -t EntityTemplates --strict-tuples -o ./schemas/template.schema.json",
     "gen:system-schema": "ts-json-schema-generator --tsconfig tsconfig.json --path ./src/foundry/system.ts --no-type-check -t SystemSchema --strict-tuples -o ./schemas/system.schema.json",
     "gen:lang-schema": "ts-json-schema-generator --tsconfig tsconfig.json --path ./src/foundry/lang-schema.ts --no-type-check -t Lang --strict-tuples -o ./schemas/lang.schema.json"
