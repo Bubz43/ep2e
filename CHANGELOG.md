@@ -2,6 +2,10 @@
 
 ## [0.905] - 2022-06-02
 
+- Upgrade some dependencies
+
+## [0.905] - 2022-06-02
+
 - Only apply overburdened if character has multiple armor layers
 
 ## [0.904] - 2022-01-31
