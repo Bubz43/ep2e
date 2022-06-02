@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.906] - 2022-06-02
+
+- Update some dependencies
+
 ## [0.905] - 2022-06-02
 
 - Only apply overburdened if character has multiple armor layers
