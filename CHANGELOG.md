@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.907] - 2022-06-02
+## [0.907] - 2022-06-04
 
 - Apply custom styling solution for Monk's Enhanced Journal module
 
