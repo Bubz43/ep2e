@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -11,14 +11,14 @@
 
 mwc-button {
   width: 100%;
-  --mdc-theme-primary: var(--color-primary-alt);
+  --mdc-theme-primary: var(--ep-color-primary-alt);
 }
 
 .critical-effects {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--ep-color-border);
   p {
     margin: 0;
     width: 100%;
@@ -30,6 +30,6 @@ mwc-button {
 }
 
 .immune {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
   margin: 0.5rem;
 }

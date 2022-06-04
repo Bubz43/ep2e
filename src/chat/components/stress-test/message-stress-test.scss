@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -15,13 +15,13 @@
 }
 
 mwc-button[unelevated] {
-  --mdc-theme-primary: var(--color-negative);
+  --mdc-theme-primary: var(--ep-color-negative);
 
   margin-bottom: 0.25rem;
 }
 
 .damage-info {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
   padding-left: 0.5ch;
 }
 

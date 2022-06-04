@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -7,7 +7,7 @@
 
 :host {
   display: block;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--ep-color-border);
   overflow-y: scroll;
   overflow-x: hidden;
   height: 200px;
@@ -22,7 +22,7 @@
 }
 
 sl-header {
-  border-color: var(--color-border);
+  border-color: var(--ep-color-border);
   background: rgba(black, 0.25);
 }
 sl-animated-list {
@@ -37,12 +37,12 @@ wl-list-item {
   }
 
   mwc-icon {
-    color: var(--color-border);
+    color: var(--ep-color-border);
   }
 
   &:hover {
     mwc-icon {
-      color: lightv(var(--color-negative), 2);
+      color: lightv(var(--ep-color-negative), 2);
     }
   }
 }
@@ -55,7 +55,7 @@ wl-list-item {
 }
 
 .requirement {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
   font-size: 13px;
   white-space: normal; // TODO not sure if good
 }
@@ -76,7 +76,7 @@ img[slot='before'] {
 }
 
 span[slot='before'] {
-  color: var(--color-secondary);
+  color: var(--ep-color-secondary);
   border: 1px solid currentColor;
   height: 2rem;
   margin-right: 1rem;
@@ -87,7 +87,7 @@ span[slot='before'] {
   }
 
   &.negative {
-    color: var(--color-negative);
+    color: var(--ep-color-negative);
   }
 
   &.active {
@@ -103,15 +103,15 @@ span[slot='after'] {
 }
 
 .modifier {
-  color: var(--color-text-disabled);
+  color: var(--ep-color-text-disabled);
   &.active {
-    color: var(--color-text);
+    color: var(--ep-color-text);
   }
 }
 
 .automate {
   // transform: rotate(45deg);
   &.active {
-    color: var(--color-secondary);
+    color: var(--ep-color-secondary);
   }
 }

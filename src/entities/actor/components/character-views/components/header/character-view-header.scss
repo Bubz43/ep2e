@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include styled-scrollbars;
 
@@ -27,17 +27,17 @@
     display: flex;
     align-items: center;
     .stress-roll {
-      --mdc-theme-primary: #{lightv(var(--color-negative), 1.2)};
+      --mdc-theme-primary: #{lightv(var(--ep-color-negative), 1.2)};
     }
   }
   .initiative {
     margin-right: 0.5rem;
-    --mdc-theme-primary: var(--color-grey);
+    --mdc-theme-primary: var(--ep-color-grey);
   }
 
   .path {
     grid-area: path;
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
     display: flex;
     align-items: center;
     font-size: small;
@@ -64,7 +64,7 @@
   place-self: center;
   &[open] {
     button {
-      outline: solid var(--color-secondary);
+      outline: solid var(--ep-color-secondary);
     }
   }
   button {
@@ -76,10 +76,10 @@
       pointer-events: none;
     }
     &:focus {
-      outline: solid var(--color-secondary);
+      outline: solid var(--ep-color-secondary);
     }
     &:hover {
-      filter: drop-shadow(1px 2px 4px var(--color-secondary));
+      filter: drop-shadow(1px 2px 4px var(--ep-color-secondary));
     }
 
     img {
@@ -92,10 +92,10 @@
 
 .images {
   li[divider] {
-    border-color: var(--color-border);
+    border-color: var(--ep-color-border);
   }
   mwc-icon {
-    color: var(--color-text);
+    color: var(--ep-color-text);
   }
 }
 
@@ -144,13 +144,13 @@ h2 {
 }
 
 .effects-toggle {
-  --mdc-theme-primary: #{lightv(var(--color-grey), 1.2)};
+  --mdc-theme-primary: #{lightv(var(--ep-color-grey), 1.2)};
 }
 
 mwc-icon-button {
   --mdc-icon-button-size: 28px;
   --mdc-icon-size: 22px;
-  color: lightv(var(--color-grey), 1.2);
+  color: lightv(var(--ep-color-grey), 1.2);
 }
 
 .recharges {
@@ -159,7 +159,7 @@ mwc-icon-button {
   display: inline-flex;
   align-items: center;
   padding-right: 1ch;
-  color: lightv(var(--color-grey), 1.2);
+  color: lightv(var(--ep-color-grey), 1.2);
   height: 28px;
   cursor: pointer;
   border-radius: 4px;
@@ -168,10 +168,10 @@ mwc-icon-button {
     pointer-events: none;
   }
   &:hover {
-    background: alphav(var(--color-text), 0.05);
+    background: alphav(var(--ep-color-text), 0.05);
   }
   &:focus {
-    background: alphav(var(--color-text), 0.09);
+    background: alphav(var(--ep-color-text), 0.09);
   }
 
   > * {
@@ -188,13 +188,13 @@ mwc-icon-button {
     margin-right: 0.5ch;
   }
   > mwc-icon {
-    color: var(--color-grey);
+    color: var(--ep-color-grey);
   }
 
   &.active {
-    color: var(--color-secondary);
+    color: var(--ep-color-secondary);
     mwc-icon {
-      color: var(--color-secondary);
+      color: var(--ep-color-secondary);
     }
     &.ready {
       @include animate-css(bounce, 2s, infinite);
@@ -207,6 +207,6 @@ mwc-icon-button {
   transition: box-shadow 1s ease-in-out;
   border-radius: 100%;
   &:not([disabled]) {
-    box-shadow: 0 0 0.5rem var(--color-secondary);
+    box-shadow: 0 0 0.5rem var(--ep-color-secondary);
   }
 }

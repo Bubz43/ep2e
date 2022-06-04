@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -19,14 +19,14 @@ sl-group[slot='action'] {
 
 mwc-icon-button[slot='action'] {
   &.active {
-    color: var(--color-secondary);
+    color: var(--ep-color-secondary);
   }
 }
 
 .armor-source {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
   span {
-    color: var(--color-text);
+    color: var(--ep-color-text);
   }
 }
 

@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -52,7 +52,7 @@
   grid-column: span 2;
   grid-template-columns: 1fr 1fr;
   gap: 0.25rem;
-  --mdc-theme-primary: var(--color-negative);
+  --mdc-theme-primary: var(--ep-color-negative);
 }
 
 submit-button {
@@ -70,12 +70,12 @@ submit-button {
 .min-toggle {
   padding: 0.2rem 0.4rem;
   text-align: center;
-  border: 1px groove var(--color-grey);
+  border: 1px groove var(--ep-color-grey);
   white-space: nowrap;
   font-size: 15px;
   &.active {
-    background: alphav(var(--color-grey), 0.2);
-    border: 1px outset var(--color-grey);
+    background: alphav(var(--ep-color-grey), 0.2);
+    border: 1px outset var(--ep-color-grey);
   }
 }
 

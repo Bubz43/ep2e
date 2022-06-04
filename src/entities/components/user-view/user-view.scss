@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -10,7 +10,7 @@
   min-height: 2rem;
   align-items: center;
   width: max-content;
-  background: alphav(var(--color-bg), 0.5);
+  background: alphav(var(--ep-color-bg), 0.5);
   padding: 0.25rem 0.3rem;
   border-radius: 0 0.75rem;
 }
@@ -22,7 +22,7 @@ button {
   &:hover {
     cursor: pointer;
     img {
-      filter: drop-shadow(1px 2px 3px var(--color-primary));
+      filter: drop-shadow(1px 2px 3px var(--ep-color-primary));
     }
   }
 }

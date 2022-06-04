@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -28,7 +28,7 @@ sl-dropzone {
   grid-auto-rows: min-content;
   position: relative;
   padding: 0.25rem 0;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--ep-color-border);
   &[hidden] {
     display: none;
   }
@@ -58,7 +58,7 @@ sl-header {
   display: inline-block;
   --mdc-icon-size: 1.75rem;
   transition: transform 100ms ease-in-out;
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
 
   &.collapsed {
     transform: rotateZ(90deg);
@@ -68,13 +68,13 @@ sl-header {
 .sort-toggle {
   --mdc-icon-size: 1.5rem;
   --mdc-icon-button-size: 1.75rem;
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
   opacity: 0;
   animation-delay: 150ms;
   &:not(.no-animation) {
     @include animate-css(fadeIn, 300ms);
   }
   &.active {
-    color: var(--color-secondary);
+    color: var(--ep-color-secondary);
   }
 }

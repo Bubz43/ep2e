@@ -46,9 +46,9 @@ export abstract class ItemCardBase extends LazyRipple(LitElement) {
         {
           backgroundColor: [
             `transparent`,
-            'var(--color-primary)',
-            'var(--color-primary)',
-            'var(--color-primary)',
+            'var(--ep-color-primary)',
+            'var(--ep-color-primary)',
+            'var(--ep-color-primary)',
             'transparent',
           ],
         },
@@ -107,7 +107,7 @@ export abstract class ItemCardBase extends LazyRipple(LitElement) {
                 >
               `
             : ''}
-      
+
           <span class="name">${item.fullName}</span>
           <span class="type">${item.fullType}</span>
         </span>

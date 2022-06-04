@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -25,17 +25,17 @@ delete-button {
 }
 
 li[divider] {
-  border-color: var(--color-border);
+  border-color: var(--ep-color-border);
 }
 
 mwc-list-item {
   height: 46px;
   [slot='graphic'] {
-    color: var(--color-text);
+    color: var(--ep-color-text);
   }
   &[disabled] {
     [slot='graphic'] {
-      color: var(--color-text-disabled);
+      color: var(--ep-color-text-disabled);
     }
   }
 }
@@ -48,10 +48,10 @@ mwc-check-list-item {
   transition: box-shadow 1s ease-in-out;
   border-radius: 100%;
   &:not([disabled]) {
-    box-shadow: 0 0 0.5rem var(--color-secondary);
+    box-shadow: 0 0 0.5rem var(--ep-color-secondary);
   }
 }
 
 .type {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
 }

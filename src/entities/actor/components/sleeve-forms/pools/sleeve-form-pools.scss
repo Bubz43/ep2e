@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include resetUnorderedList;
 
@@ -28,19 +28,19 @@
 
   [data-bonus] {
     margin-left: -0.25ch;
-    color: alphav(var(--color-text), 0.9);
+    color: alphav(var(--ep-color-text), 0.9);
     align-self: start;
     &::before {
       content: attr(data-bonus);
     }
     &::first-letter {
-      color: var(--color-secondary);
+      color: var(--ep-color-secondary);
     }
   }
 
   [data-bonus^='-'] {
     &::first-letter {
-      color: var(--color-negative);
+      color: var(--ep-color-negative);
     }
   }
 }

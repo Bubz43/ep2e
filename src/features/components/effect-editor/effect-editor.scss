@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include styled-scrollbars;
 
@@ -22,8 +22,8 @@
   justify-content: space-around;
   align-items: center;
   padding: 0 0.5rem;
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
+  background: var(--ep-color-bg);
+  border: 1px solid var(--ep-color-border);
   margin: 0 0 0.5rem 0;
   border-radius: 3px;
   min-height: 40px;
@@ -33,13 +33,13 @@
   margin: 0.25rem;
   border-radius: 20px;
   padding: 0 1rem;
-  color: var(--color-text);
+  color: var(--ep-color-text);
   --mdc-icon-button-size: 32px;
   --mdc-icon-size: 22px;
   height: 26px;
   font-weight: normal;
 
-  background: lightv(var(--color-bg-alt), 1.1);
+  background: lightv(var(--ep-color-bg-alt), 1.1);
 
   &:hover {
     mwc-icon-button {
@@ -53,7 +53,7 @@
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-    background: lightv(var(--color-bg-alt), 1.1);
+    background: lightv(var(--ep-color-bg-alt), 1.1);
     opacity: 0;
     transition: opacity 100ms ease-in-out;
   }
@@ -78,19 +78,19 @@ submit-button {
     margin: 0;
     padding: 0 0 0 0.25rem;
     text-transform: uppercase;
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
     letter-spacing: 0.5px;
   }
 
   mwc-button {
-    --mdc-theme-primary: var(--color-primary-alt);
+    --mdc-theme-primary: var(--ep-color-primary-alt);
   }
 }
 
 .duration-slider-field {
   display: grid;
   span {
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
     margin-bottom: -1rem;
     &::first-letter {
       text-transform: uppercase;
@@ -101,7 +101,7 @@ submit-button {
 
 p {
   margin: 0;
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
 }
 
 .fields-form {

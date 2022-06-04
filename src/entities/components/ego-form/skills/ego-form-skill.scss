@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include widgetless-number-inputs;
 
@@ -26,7 +26,7 @@
   @include truncate(286px);
 }
 .info {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
   @include truncate(286px);
 }
 .points-form {
@@ -43,7 +43,7 @@
     cursor: initial;
     &:first-of-type {
       grid-area: points;
-      border-right: 1px solid var(--color-border);
+      border-right: 1px solid var(--ep-color-border);
     }
     &:nth-of-type(2n) {
       grid-area: total;
@@ -91,7 +91,7 @@
 }
 
 .edits {
-  --mdc-theme-primary: var(--color-primary-alt);
+  --mdc-theme-primary: var(--ep-color-primary-alt);
   display: flex;
   flex-flow: column;
   justify-content: center;
@@ -116,15 +116,15 @@
     width: 50px;
     flex: 1;
     background: transparent;
-    color: var(--color-text);
+    color: var(--ep-color-text);
     font-family: var(--font-1);
     font-size: 1rem;
-    border: 1px inset var(--color-grey);
+    border: 1px inset var(--ep-color-grey);
     border-radius: 3px;
-    background: var(--color-bg);
+    background: var(--ep-color-bg);
     &:focus {
       outline: none;
-      border-color: var(--color-secondary);
+      border-color: var(--ep-color-secondary);
       z-index: 1;
     }
     &:nth-of-type(2n) {

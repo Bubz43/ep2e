@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -7,8 +7,8 @@
 
 :host {
   display: block;
-  background: lightv(var(--color-bg-alt), 1.2);
-  border: 2px solid var(--color-grey);
+  background: lightv(var(--ep-color-bg-alt), 1.2);
+  border: 2px solid var(--ep-color-grey);
   box-shadow: 0 1px 5px black;
   z-index: 100000;
   position: absolute;
@@ -21,7 +21,7 @@
   transition: opacity 200ms;
   transition-delay: 100ms;
   pointer-events: none !important;
-  color: var(--color-text);
+  color: var(--ep-color-text);
   ::slotted(p) {
     padding: 0 0.5rem;
     margin: 0.25rem 0;

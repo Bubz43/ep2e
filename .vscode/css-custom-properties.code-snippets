@@ -19,62 +19,62 @@
   "color-primary": {
     "scope": "scss,typescript",
     "prefix": "vp",
-    "body": ["var(--color-primary)"]
+    "body": ["var(--ep-color-primary)"]
   },
   "color-primary-alt": {
     "scope": "scss,typescript",
     "prefix": "vpa",
-    "body": ["var(--color-primary-alt)"]
+    "body": ["var(--ep-color-primary-alt)"]
   },
   "color-secondary": {
     "scope": "scss,typescript",
     "prefix": "vs",
-    "body": ["var(--color-secondary)"]
+    "body": ["var(--ep-color-secondary)"]
   },
   "color-background": {
     "scope": "scss,typescript",
     "prefix": "vb",
-    "body": ["var(--color-bg)"]
+    "body": ["var(--ep-color-bg)"]
   },
   "color-background-alt": {
     "scope": "scss,typescript",
     "prefix": "vba",
-    "body": ["var(--color-bg-alt)"]
+    "body": ["var(--ep-color-bg-alt)"]
   },
   "color-disabled": {
     "scope": "scss,typescript",
     "prefix": "vd",
-    "body": ["var(--color-disabled)"]
+    "body": ["var(--ep-color-disabled)"]
   },
   "color-negative": {
     "scope": "scss,typescript",
     "prefix": "vn",
-    "body": ["var(--color-negative)"]
+    "body": ["var(--ep-color-negative)"]
   },
   "color-text": {
     "scope": "scss,typescript",
     "prefix": "vt",
-    "body": ["var(--color-text)"]
+    "body": ["var(--ep-color-text)"]
   },
   "color-text-lighter": {
     "scope": "scss,typescript",
     "prefix": "vtl",
-    "body": ["var(--color-text-lighter)"]
+    "body": ["var(--ep-color-text-lighter)"]
   },
   "color-text-disabled": {
     "scope": "scss,typescript",
     "prefix": "vtd",
-    "body": ["var(--color-text-disabled)"]
+    "body": ["var(--ep-color-text-disabled)"]
   },
   "color-grey": {
     "scope": "scss,typescript",
     "prefix": "vg",
-    "body": ["var(--color-grey)"]
+    "body": ["var(--ep-color-grey)"]
   },
   "color-border": {
     "scope": "scss,typescript",
     "prefix": "vbc",
-    "body": ["var(--color-border)"]
+    "body": ["var(--ep-color-border)"]
   },
   "font-1": {
     "scope": "scss,typescript",

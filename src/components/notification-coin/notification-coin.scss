@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -14,7 +14,7 @@
   font-size: 11px;
   height: 2.5ch !important;
   width: 2.5ch !important;
-  color: var(--color-text);
+  color: var(--ep-color-text);
   font-family: 'Fira Code';
 }
 
@@ -67,10 +67,10 @@
 }
 
 .value {
-  background: var(--coin-bg, alphav(var(--color-primary), 0.8));
+  background: var(--coin-bg, alphav(var(--ep-color-primary), 0.8));
 }
 
 .attention {
-  background: alphav(var(--color-negative), 0.8);
+  background: alphav(var(--ep-color-negative), 0.8);
   transform: rotateY(180deg);
 }

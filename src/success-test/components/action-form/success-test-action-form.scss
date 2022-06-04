@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -44,7 +44,7 @@
   }
 
   .rush {
-    color: var(--color-negative);
+    color: var(--ep-color-negative);
     position: absolute;
     text-transform: uppercase;
 
@@ -55,7 +55,7 @@
     pointer-events: none;
   }
   .take-time {
-    color: var(--color-secondary);
+    color: var(--ep-color-secondary);
     position: absolute;
     top: 0.5rem;
     text-transform: uppercase;

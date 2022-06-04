@@ -1,10 +1,10 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
   & + * {
-    border-top: 2px groove alphav(var(--color-border), 0.5);
+    border-top: 2px groove alphav(var(--ep-color-border), 0.5);
     // grid-column: 2;
   }
 }
@@ -19,7 +19,7 @@
 }
 
 message-header {
-  border-bottom-color: var(--color-border);
+  border-bottom-color: var(--ep-color-border);
   // grid-column: span 3;
 }
 

@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -12,7 +12,7 @@
 mwc-list-item {
   height: 2rem;
   &.active {
-    background: alphav(var(--color-primary), 0.5);
+    background: alphav(var(--ep-color-primary), 0.5);
   }
 }
 
@@ -27,7 +27,7 @@ p {
 }
 
 mwc-button {
-  --mdc-theme-primary: var(--color-primary-alt);
+  --mdc-theme-primary: var(--ep-color-primary-alt);
 }
 
 .roll {
@@ -39,5 +39,5 @@ mwc-button {
 .already-active-label {
   margin: 0.25rem 1rem 0;
   text-transform: uppercase;
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
 }

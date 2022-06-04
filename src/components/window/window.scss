@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include styled-scrollbars;
 
@@ -44,7 +44,7 @@
   #header {
     &:not(.alt) {
       background: rgba(148, 49, 176, 0.2);
-      background: alphav(var(--color-grey), 0.25);
+      background: alphav(var(--ep-color-grey), 0.25);
     }
     &.alt {
       .controls {
@@ -63,7 +63,7 @@
     position: static;
   }
   #header {
-    background: alphav(var(--color-grey), 0.2);
+    background: alphav(var(--ep-color-grey), 0.2);
     overflow: visible;
     .heading {
       max-width: 200px;
@@ -108,7 +108,7 @@ slot[name='footer'] {
   grid-template-columns: 1fr auto auto;
   position: relative;
   cursor: move;
-  background: alphav(var(--color-grey), 0.2);
+  background: alphav(var(--ep-color-grey), 0.2);
 
   transition: background 100ms ease-in-out;
   min-width: 200px;
@@ -124,15 +124,15 @@ slot[name='footer'] {
   ::slotted([slot='header']) {
     background: linear-gradient(
       to bottom,
-      var(--color-bg-alt),
-      var(--color-bg)
+      var(--ep-color-bg-alt),
+      var(--ep-color-bg)
     );
   }
 
   &.alt {
     background: linear-gradient(
       to bottom,
-      alphav(var(--color-bg), 0.9),
+      alphav(var(--ep-color-bg), 0.9),
       transparent
     );
     cursor: initial;
@@ -141,7 +141,7 @@ slot[name='footer'] {
     }
     .controls {
       margin-left: none;
-      background: alphav(var(--color-bg), 0.2);
+      background: alphav(var(--ep-color-bg), 0.2);
       z-index: 2;
     }
   }
@@ -184,7 +184,7 @@ slot[name='footer'] {
   height: 31px;
 
   transition: background 75ms ease-in-out;
-  --list-item-bg-hover: #{alphav(var(--color-bg), 0.5)};
+  --list-item-bg-hover: #{alphav(var(--ep-color-bg), 0.5)};
   --list-item-transition: all 75ms ease-in-out;
 }
 
@@ -205,7 +205,7 @@ slot[name='footer'] {
   transform-origin: top;
   box-sizing: content-box !important;
   // z-index: 2;
-  border: 1px solid alphav(var(--color-grey), 0.25);
+  border: 1px solid alphav(var(--ep-color-grey), 0.25);
   border-top: none;
 
   ::slotted(*) {
@@ -228,7 +228,7 @@ slot[name='footer'] {
     content: '';
     display: block;
     height: 1px;
-    background: var(--color-text);
+    background: var(--ep-color-text);
     opacity: 0.5;
   }
 

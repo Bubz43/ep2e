@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -40,17 +40,17 @@ img {
 
 .ready,
 .completed {
-  color: var(--color-secondary);
+  color: var(--ep-color-secondary);
   font-weight: bold;
 }
 
 .expired {
   font-weight: bold;
-  color: var(--color-negative);
+  color: var(--ep-color-negative);
 }
 
 .remaining {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
   text-transform: lowercase;
 }
 

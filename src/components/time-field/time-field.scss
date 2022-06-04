@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include widgetless-number-inputs;
 
@@ -54,14 +54,14 @@
   padding: 0;
   outline: none;
   font-size: 1.7rem;
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
   line-height: 1rem;
   background: transparent;
   position: absolute;
   right: 0.75rem;
   transform: translateY(0.2rem);
   &.infinite {
-    color: var(--color-secondary);
+    color: var(--ep-color-secondary);
     & + sl-form {
       .pretty-value {
         opacity: 1;
@@ -74,7 +74,7 @@
   &:not([disabled]) {
     cursor: pointer;
     &:focus {
-      color: var(--color-primary-alt);
+      color: var(--ep-color-primary-alt);
       text-shadow: var(--text-highlight);
     }
   }
@@ -134,7 +134,7 @@ sl-form {
 }
 
 input {
-  background: alphav(var(--color-text), 0.1);
+  background: alphav(var(--ep-color-text), 0.1);
   border: none;
   padding: 0;
   font-size: 1rem;
@@ -142,7 +142,7 @@ input {
   min-width: 80%;
   text-align: center;
   font-family: var(--font-alt);
-  color: var(--color-text);
+  color: var(--ep-color-text);
   transition: background 200ms ease-in-out opacity 200ms ease-in-out;
   line-height: 1em;
   border-radius: 3px;
@@ -150,17 +150,17 @@ input {
   &:focus {
     box-shadow: none;
     outline: none;
-    box-shadow: 0 0 0 1px var(--color-secondary) inset;
+    box-shadow: 0 0 0 1px var(--ep-color-secondary) inset;
   }
   &:invalid {
-    outline-color: var(--color-negative);
+    outline-color: var(--ep-color-negative);
   }
   &[disabled] {
     opacity: 0.5;
   }
   // &[value="0"] {
   //   opacity: 0.8;
-  //   color: var(--color-text);
+  //   color: var(--ep-color-text);
   // }
 }
 
@@ -172,7 +172,7 @@ footer {
   width: calc(100% + 6px);
   left: -3px;
   &::before {
-    background: lightv(var(--color-bg), 2);
+    background: lightv(var(--ep-color-bg), 2);
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.85);
   }
 
@@ -191,7 +191,7 @@ footer {
   &::after {
     opacity: 0;
     transition: var(--transition);
-    background: var(--color-secondary);
+    background: var(--ep-color-secondary);
     transform-origin: center;
     transform: scaleX(0.25);
   }
@@ -199,7 +199,7 @@ footer {
   &.invalid {
     &::before,
     &::after {
-      background: var(--color-negative) !important;
+      background: var(--ep-color-negative) !important;
     }
   }
 }

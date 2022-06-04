@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -29,11 +29,11 @@ header {
     }
   }
   .info {
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
     @include truncate(100%);
   }
   mwc-icon-button {
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
     --mdc-icon-button-size: 2rem;
     float: right;
   }
@@ -52,9 +52,9 @@ header {
     position: relative;
     margin-left: -0.5rem;
     mwc-icon {
-      color: var(--color-negative);
+      color: var(--ep-color-negative);
       &.support {
-        color: var(--color-secondary);
+        color: var(--ep-color-secondary);
         filter: hue-rotate(-30deg);
       }
     }
@@ -87,7 +87,7 @@ header {
     border: none;
 
     &:focus {
-      color: var(--color-secondary);
+      color: var(--ep-color-secondary);
     }
   }
 }
@@ -158,7 +158,7 @@ header {
     }
   }
   button[disabled] {
-    color: var(--color-text);
+    color: var(--ep-color-text);
   }
 
   &.selection {
@@ -173,7 +173,7 @@ header {
       left: 2px;
       width: 100%;
       height: 2px;
-      box-shadow: 0 0 2px 1px var(--color-secondary);
+      box-shadow: 0 0 2px 1px var(--ep-color-secondary);
       border-radius: 6px;
       @include animate-css(pulse, 1.5s, infinite);
     }
@@ -182,15 +182,15 @@ header {
 
 .badge {
   font-size: smaller;
-  background: alphav(var(--color-primary), 0.75);
+  background: alphav(var(--ep-color-primary), 0.75);
   border-radius: 0.5rem;
   transform: translateY(4px);
 
   padding: 0 0.5rem;
-  color: var(--color-text);
+  color: var(--ep-color-text);
   line-height: 1rem;
   &.expired {
-    background: alphav(var(--color-negative), 0.75);
+    background: alphav(var(--ep-color-negative), 0.75);
   }
 }
 

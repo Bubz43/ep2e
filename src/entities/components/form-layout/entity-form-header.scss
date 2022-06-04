@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -8,7 +8,7 @@
 :host {
   display: grid;
   padding: 0.75rem 1.6rem 0.5rem;
-  color: var(--color-text);
+  color: var(--ep-color-text);
   grid-template-areas:
     'avatar form form form'
     'avatar tags type settings';
@@ -19,8 +19,8 @@
   row-gap: 0.2rem;
 
   ::slotted([slot='tag']) {
-    border: 1px solid var(--color-grey);
-    background: alphav(var(--color-grey), 0.5);
+    border: 1px solid var(--ep-color-grey);
+    background: alphav(var(--ep-color-grey), 0.5);
     padding: 0.15rem 0.25rem;
     letter-spacing: 0.5px;
     border-radius: 2px;
@@ -44,7 +44,7 @@ slot[name='settings'] {
   font-size: 1.3rem;
   text-transform: uppercase;
   letter-spacing: 2px;
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
   min-width: 100px;
   padding-right: 0.5rem;
   text-align: right;
@@ -64,7 +64,7 @@ slot[name='settings'] {
   list-style: none;
   font-size: 13px;
   align-self: end;
-  color: alphav(var(--color-text), 0.9);
+  color: alphav(var(--ep-color-text), 0.9);
   text-transform: uppercase;
 }
 
@@ -85,8 +85,8 @@ sl-form {
   input {
     background: transparent;
     border: none;
-    color: var(--color-text);
-    border-bottom: 2px dashed var(--color-border);
+    color: var(--ep-color-text);
+    border-bottom: 2px dashed var(--ep-color-border);
     outline: none;
     transition: border-bottom 250ms;
     align-self: start;
@@ -96,7 +96,7 @@ sl-form {
     }
 
     &:focus {
-      border-color: var(--color-secondary);
+      border-color: var(--ep-color-secondary);
       border-bottom-style: solid;
     }
     &[disabled] {
@@ -118,19 +118,19 @@ sl-form {
 
   &:hover {
     .avatar {
-      filter: drop-shadow(2px 2px 3px var(--color-secondary));
+      filter: drop-shadow(2px 2px 3px var(--ep-color-secondary));
     }
   }
   &[disabled] {
     cursor: initial;
     pointer-events: none;
     .avatar {
-      filter: drop-shadow(2px 2px 3px var(--color-disabled));
+      filter: drop-shadow(2px 2px 3px var(--ep-color-disabled));
     }
   }
 
   &:focus {
-    outline: 2px solid var(--color-secondary);
+    outline: 2px solid var(--ep-color-secondary);
   }
 }
 
@@ -140,5 +140,5 @@ sl-form {
 }
 
 .name-part {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
 }

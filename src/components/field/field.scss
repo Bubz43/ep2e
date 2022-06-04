@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include styled-scrollbars;
 
@@ -125,7 +125,7 @@
 
   ::slotted(*) {
     // all: unset;
-    color: var(--color-text);
+    color: var(--ep-color-text);
     display: block;
     background: transparent !important;
     border: 0 !important;
@@ -179,12 +179,12 @@
   }
 
   ::slotted(select:focus) {
-    color: var(--color-text);
+    color: var(--ep-color-text);
   }
 
   ::slotted(select:-moz-focusring) {
     color: transparent !important;
-    text-shadow: 0 0 0 var(--color-bg);
+    text-shadow: 0 0 0 var(--ep-color-bg);
   }
 
   ::slotted([type='number']) {
@@ -258,7 +258,7 @@ slot[name='after'] {
     }
 
     &:hover {
-      background: var(--color-primary);
+      background: var(--ep-color-primary);
     }
 
     &:active {
@@ -277,7 +277,7 @@ footer {
   left: -3px;
   pointer-events: none;
   &::before {
-    background: lightv(var(--color-bg), 2);
+    background: lightv(var(--ep-color-bg), 2);
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.85);
   }
 
@@ -296,7 +296,7 @@ footer {
   &::after {
     opacity: 0;
     transition: var(--transition);
-    background: var(--color-secondary);
+    background: var(--ep-color-secondary);
     transform-origin: center;
     transform: scaleX(0.25);
   }
@@ -304,7 +304,7 @@ footer {
   &.invalid {
     &::before,
     &::after {
-      background: var(--color-negative) !important;
+      background: var(--ep-color-negative) !important;
     }
   }
 }

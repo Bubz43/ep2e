@@ -50,7 +50,7 @@ export const substanceActivationDialog = (
             <mwc-list-item noninteractive>
               ${localize('modifiers')}</mwc-list-item
             >
-            <li divider style="border-color: var(--color-border);"></li>
+            <li divider style="border-color: var(--ep-color-border);"></li>
             ${modifiers.map(
               (effect) => html`
                 <mwc-check-list-item twoline>

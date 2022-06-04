@@ -1,7 +1,7 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
-@use "scss/css-properties";
-@use "scss/colors";
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
+@use 'scss/css-properties';
+@use 'scss/colors';
 
 @for $i from 1 through 9 {
   @font-face {
@@ -68,7 +68,7 @@ ep-overlay {
 #ui-left,
 #ui-middle,
 #ui-bottom {
-  color: var(--color-text);
+  color: var(--ep-color-text);
 }
 
 #ui-top {
@@ -119,10 +119,10 @@ ep-overlay {
   @include widgetless-number-inputs;
 
   label {
-    color: var(--color-text);
+    color: var(--ep-color-text);
   }
 
-  color: var(--color-text);
+  color: var(--ep-color-text);
 
   // &.scene-sheet {
   //   max-width: 600px;
@@ -134,7 +134,7 @@ ep-overlay {
   //   }
   // }
   .compendium {
-    color: var(--color-text);
+    color: var(--ep-color-text);
   }
 
   &.minimized {
@@ -150,36 +150,36 @@ ep-overlay {
   }
 
   .window-content {
-    background: var(--color-bg);
+    background: var(--ep-color-bg);
     margin: 0 1px 1px;
 
     .form-header {
-      color: var(--color-text);
+      color: var(--ep-color-text);
     }
 
     form:not(#token-hud) {
-      color: var(--color-text);
-      background: var(--color-bg);
+      color: var(--ep-color-text);
+      background: var(--ep-color-bg);
     }
 
     span.units,
     .hint {
-      color: var(--color-text-lighter);
+      color: var(--ep-color-text-lighter);
     }
 
     .notes {
       font-size: 13px;
-      color: var(--color-text-lighter);
+      color: var(--ep-color-text-lighter);
     }
 
     textarea[name='command'] {
-      color: var(--color-text);
+      color: var(--ep-color-text);
     }
   }
 
   &.dialog {
     .dialog-content {
-      color: var(--color-text);
+      color: var(--ep-color-text);
     }
   }
 
@@ -188,66 +188,66 @@ ep-overlay {
   input[type='search'],
   select,
   textarea {
-    color: var(--color-text);
-    background: alphav(var(--color-text), 0.05);
+    color: var(--ep-color-text);
+    background: alphav(var(--ep-color-text), 0.05);
     border: none;
     padding: 2px 6px;
     font-size: 14px;
 
     &:focus {
       box-shadow: none;
-      outline: 1px solid var(--color-secondary);
+      outline: 1px solid var(--ep-color-secondary);
     }
 
     &[readonly] {
       opacity: 0.8;
     }
     &:not([disabled]):hover {
-      box-shadow: 0 0 1px var(--color-secondary);
+      box-shadow: 0 0 1px var(--ep-color-secondary);
     }
     &[disabled] {
-      background: var(--color-disabled);
-      color: var(--color-text-disabled);
+      background: var(--ep-color-disabled);
+      color: var(--ep-color-text-disabled);
     }
   }
 
   input[name='search'] {
     &::placeholder {
-      color: var(--color-text-lighter);
+      color: var(--ep-color-text-lighter);
     }
   }
 
   optgroup,
   option {
     background: rgb(30, 30, 30);
-    color: var(--color-text);
+    color: var(--ep-color-text);
   }
   .package {
     .package-title,
     .package-description {
-      color: var(--color-text) !important;
+      color: var(--ep-color-text) !important;
     }
     .package-metadata {
-      color: var(--color-primary) !important;
+      color: var(--ep-color-primary) !important;
     }
   }
 
   form button,
   .dialog .dialog-buttons button,
   button {
-    background: var(--color-primary);
-    color: var(--color-text);
+    background: var(--ep-color-primary);
+    color: var(--ep-color-text);
     border: none;
     box-shadow: none !important;
     cursor: pointer;
     // font-family: var(--font-1);
 
     &:hover {
-      background: lightv(var(--color-primary), 1.1);
+      background: lightv(var(--ep-color-primary), 1.1);
     }
 
     &:active {
-      background: lightv(var(--color-primary), 1.2);
+      background: lightv(var(--ep-color-primary), 1.2);
     }
 
     &[disabled] {
@@ -256,27 +256,27 @@ ep-overlay {
     }
     &.default {
       background: transparent;
-      border: 1px solid var(--color-primary);
-      color: lightv(var(--color-primary), 1.1);
+      border: 1px solid var(--ep-color-primary);
+      color: lightv(var(--ep-color-primary), 1.1);
       &:hover {
-        background: alphav(var(--color-primary), 0.1);
+        background: alphav(var(--ep-color-primary), 0.1);
       }
       &:active {
-        background: alphav(var(--color-primary), 0.2);
+        background: alphav(var(--ep-color-primary), 0.2);
       }
     }
   }
 
   .entity-link {
     background: transparent !important;
-    color: var(--color-primary-alt) !important;
+    color: var(--ep-color-primary-alt) !important;
     border: none !important;
     padding: 0 !important;
     i {
       color: currentColor !important;
     }
     &.broken {
-      color: var(--color-text-lighter) !important;
+      color: var(--ep-color-text-lighter) !important;
       cursor: initial;
     }
     &:not(.broken):hover {
@@ -284,7 +284,7 @@ ep-overlay {
     }
   }
   table {
-    border-color: var(--color-border);
+    border-color: var(--ep-color-border);
   }
 }
 
@@ -329,7 +329,7 @@ ep-overlay {
   .table-draw {
     .table-description {
       border-top: none;
-      color: var(--color-text);
+      color: var(--ep-color-text);
       opacity: 0.8;
       font-weight: lighter;
       font-size: 13px;
@@ -360,9 +360,9 @@ ep-overlay {
   &:hover {
     .dice-formula,
     .dice-total {
-      border-color: var(--color-secondary);
+      border-color: var(--ep-color-secondary);
       &::after {
-        border-color: var(--color-secondary);
+        border-color: var(--ep-color-secondary);
       }
     }
   }
@@ -377,28 +377,28 @@ ep-overlay {
   }
 
   .dice-formula {
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--ep-color-border);
   }
 
   .dice-total {
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--ep-color-border);
     padding-top: 0.25rem;
   }
 
   .dice-tooltip {
     padding: 0.75rem 1rem;
-    background: var(--color-bg);
+    background: var(--ep-color-bg);
     margin-top: -0.5rem;
     border-radius: 3px;
   }
 
   .part-flavor {
-    color: var(--color-grey) !important;
+    color: var(--ep-color-grey) !important;
   }
 }
 
 .inline-roll {
-  color: var(--color-bg);
+  color: var(--ep-color-bg);
 }
 
 #context-menu {
@@ -413,7 +413,7 @@ ep-overlay {
 .drag-image {
   position: absolute;
   left: -1000px;
-  background: var(--color-grey);
+  background: var(--ep-color-grey);
   box-shadow: 0 0 4px black;
   padding: 0.25rem 0.5rem;
   border-radius: 7px;
@@ -425,7 +425,7 @@ ep-overlay {
 // }
 
 li[divider] {
-  border-color: alphav(var(--color-border), 0.5);
+  border-color: alphav(var(--ep-color-border), 0.5);
   margin: 0.25rem 0;
 }
 
@@ -434,27 +434,27 @@ li[divider] {
 }
 
 mwc-menu {
-  --mdc-theme-surface: #{lightv(var(--color-bg), 1.45)};
+  --mdc-theme-surface: #{lightv(var(--ep-color-bg), 1.45)};
   --mdc-menu-item-height: 2rem;
   --mdc-menu-min-width: 200px;
   --mdc-list-vertical-padding: 0.25rem;
   li[divider] {
-    border-color: var(--color-border);
+    border-color: var(--ep-color-border);
     margin: 0.25rem 0;
     & + [divider] {
       display: none;
     }
   }
-  --mdc-theme-text-primary-on-background: var(--color-text);
+  --mdc-theme-text-primary-on-background: var(--ep-color-text);
   --mdc-list-item-graphic-margin: 1rem;
   --mdc-list-item-graphic-size: 20px;
   --mdc-icon-size: 20px;
-  --mdc-theme-primary: var(--color-primary-alt);
+  --mdc-theme-primary: var(--ep-color-primary-alt);
   mwc-list-item[noninteractive]:not([graphic]):not([twoline]) {
     height: var(--mdc-menu-item-height);
   }
   mwc-list-item[disabled] {
-    color: var(--color-text-disabled);
+    color: var(--ep-color-text-disabled);
   }
   [slot='graphic'] {
     border-radius: 4px;
@@ -481,8 +481,8 @@ mwc-snackbar {
 }
 
 code.formula {
-  background: var(--color-bg);
-  color: var(--color-text);
+  background: var(--ep-color-bg);
+  color: var(--ep-color-text);
   font-family: var(--font-mono);
   padding: 0 1ch;
 }
@@ -510,7 +510,7 @@ code.formula {
   //   }
   // }
   li.compendium-pack {
-    border-bottom-color: alphav(var(--color-border), 0.75);
+    border-bottom-color: alphav(var(--ep-color-border), 0.75);
     cursor: pointer;
     margin: 0 1px;
     padding: 0.5rem;
@@ -532,7 +532,7 @@ code.formula {
       }
     }
     .compendium-footer {
-      color: var(--color-text-lighter);
+      color: var(--ep-color-text-lighter);
       margin-left: 1.65rem;
     }
   }
@@ -544,20 +544,20 @@ code.formula {
 
 #permissions-config {
   .hint {
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
     margin-top: 0;
   }
 }
 
 #controls-reference {
   .window-content {
-    color: var(--color-text);
+    color: var(--ep-color-text);
   }
   .gm .key {
-    color: var(--color-bg);
+    color: var(--ep-color-bg);
   }
   h3 {
-    border-color: alphav(var(--color-primary), 0.4);
+    border-color: alphav(var(--ep-color-primary), 0.4);
   }
 }
 
@@ -565,14 +565,14 @@ code.formula {
   .filepicker-header {
     button,
     .display-modes > .display-mode {
-      background: var(--color-bg);
+      background: var(--ep-color-bg);
       &:hover,
       &:focus {
-        background: var(--color-primary) !important;
+        background: var(--ep-color-primary) !important;
       }
       &.active {
-        background: alphav(var(--color-primary), 0.5);
-        border: 1px solid var(--color-primary);
+        background: alphav(var(--ep-color-primary), 0.5);
+        border: 1px solid var(--ep-color-primary);
       }
       > * {
         text-shadow: 0 0 0px black;
@@ -581,11 +581,11 @@ code.formula {
   }
 
   .private div.form-group.current-dir > button.privacy {
-    background: alphav(var(--color-primary), 0.5);
+    background: alphav(var(--ep-color-primary), 0.5);
   }
 
   .directory {
-    border-color: var(--color-border);
+    border-color: var(--ep-color-border);
     border-top-right-radius: 7px;
     border-bottom-left-radius: 7px;
 
@@ -593,16 +593,16 @@ code.formula {
       border: none;
 
       &:hover {
-        background: alphav(var(--color-text), 0.1);
+        background: alphav(var(--ep-color-text), 0.1);
         text-shadow: 0 0 0px black;
       }
       &.picked {
-        background: alphav(var(--color-text), 0.15);
+        background: alphav(var(--ep-color-text), 0.15);
       }
 
       &:focus {
         outline: none;
-        box-shadow: 0 0 3px var(--color-secondary) inset;
+        box-shadow: 0 0 3px var(--ep-color-secondary) inset;
       }
     }
   }
@@ -617,7 +617,7 @@ code.formula {
 }
 
 .surprise-label {
-  background: var(--color-primary);
+  background: var(--ep-color-primary);
 }
 
 // #controls,
@@ -637,8 +637,8 @@ code.formula {
 
 #navigation {
   #nav-toggle {
-    background-color: alphav(var(--color-bg-alt), 0.75);
-    // box-shadow: 0 2px 4px var(--color-bg);
+    background-color: alphav(var(--ep-color-bg-alt), 0.75);
+    // box-shadow: 0 2px 4px var(--ep-color-bg);
     border-radius: 0px 0px 4px 4px;
     border: none;
     height: 1.5rem;
@@ -656,13 +656,13 @@ code.formula {
       filter: contrast(0.95) drop-shadow(2px 3px 4px rgba(0, 0, 0, 0.6));
       background: linear-gradient(
         to right,
-        alphav(var(--color-bg), 0.8),
-        alphav(var(--color-bg-alt), 0.8)
+        alphav(var(--ep-color-bg), 0.8),
+        alphav(var(--ep-color-bg-alt), 0.8)
       );
-      border: 1px solid var(--color-border);
+      border: 1px solid var(--ep-color-border);
       &.gm {
-        background: lightv(var(--color-primary), 0.3) !important;
-        border: 1px solid lightv(var(--color-primary), 0.5);
+        background: lightv(var(--ep-color-primary), 0.3) !important;
+        border: 1px solid lightv(var(--ep-color-primary), 0.5);
       }
       a {
         text-shadow: none !important;
@@ -683,11 +683,11 @@ code.formula {
         cursor: initial;
         background: linear-gradient(
           to right,
-          var(--color-bg),
-          var(--color-bg-alt)
+          var(--ep-color-bg),
+          var(--ep-color-bg-alt)
         );
-        border: 1px outset var(--color-primary-alt);
-        box-shadow: 0 0 4px var(--color-primary-alt), 0 1px 3px black;
+        border: 1px outset var(--ep-color-primary-alt);
+        box-shadow: 0 0 4px var(--ep-color-primary-alt), 0 1px 3px black;
         filter: contrast(0.95) drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.8));
       }
     }
@@ -766,10 +766,10 @@ sl-tooltip {
     }
   }
   &:hover {
-    box-shadow: 0 0 4px var(--color-grey) !important;
+    box-shadow: 0 0 4px var(--ep-color-grey) !important;
   }
   &:focus {
-    background-color: var(--color-bg-alt);
+    background-color: var(--ep-color-bg-alt);
     outline: none;
   }
 
@@ -785,7 +785,7 @@ sl-tooltip {
 }
 
 .compendium .directory-list .directory-item {
-  border-bottom-color: var(--color-border);
+  border-bottom-color: var(--ep-color-border);
   .document-name {
     line-height: 1.25rem;
     pointer-events: initial;
@@ -793,17 +793,17 @@ sl-tooltip {
 }
 
 .directory .directory-header .header-search input {
-  background: var(--color-bg-alt);
-  color: var(--color-text);
+  background: var(--ep-color-bg-alt);
+  color: var(--ep-color-text);
 }
 
 .directory-header {
   padding: 0.25rem 0.5rem;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--ep-color-border);
   input[name='search'] {
     color: black;
     &:focus {
-      outline: solid var(--color-secondary);
+      outline: solid var(--ep-color-secondary);
     }
   }
 }
@@ -819,8 +819,8 @@ sl-tooltip {
   border-top-right-radius: 0.25rem;
   background: linear-gradient(
     to left,
-    alphav(var(--color-bg), 0.85),
-    alphav(var(--color-bg-alt), 0.85)
+    alphav(var(--ep-color-bg), 0.85),
+    alphav(var(--ep-color-bg-alt), 0.85)
   );
 
   padding: 0;
@@ -831,12 +831,12 @@ sl-tooltip {
     gap: 0.25rem;
 
     cursor: pointer;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--ep-color-border);
     margin: 0;
     padding: 0.5rem;
     padding-left: 0.25rem;
     &:hover {
-      background: alphav(var(--color-text), 0.05);
+      background: alphav(var(--ep-color-text), 0.05);
     }
   }
   #player-list {
@@ -845,12 +845,12 @@ sl-tooltip {
     li {
       padding: 0.2rem 0.5rem;
       &:hover {
-        background: alphav(var(--color-text), 0.05);
+        background: alphav(var(--ep-color-text), 0.05);
       }
     }
   }
   .inactive + .player-name {
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
   }
 }
 
@@ -867,19 +867,19 @@ sl-tooltip {
     flex-flow: column nowrap;
     padding: 0.25rem 0;
     .document {
-      background-color: alphav(var(--color-bg), 0.3);
+      background-color: alphav(var(--ep-color-bg), 0.3);
       img {
         pointer-events: none;
       }
       &:hover {
         cursor: pointer;
-        background-color: alphav(var(--color-bg), 0.8);
+        background-color: alphav(var(--ep-color-bg), 0.8);
         a {
           text-shadow: none;
         }
       }
       &:active {
-        background-color: var(--color-bg);
+        background-color: var(--ep-color-bg);
       }
     }
   }
@@ -908,7 +908,7 @@ sl-tooltip {
     pointer-events: initial;
   }
   #sidebar-tabs {
-    background: alphav(var(--color-bg), 0.5);
+    background: alphav(var(--ep-color-bg), 0.5);
     margin-bottom: 0;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
@@ -922,34 +922,34 @@ sl-tooltip {
       border: none;
       padding: 0.125rem;
       border-bottom: 2px solid transparent;
-      color: alphav(var(--color-text), 0.9);
+      color: alphav(var(--ep-color-text), 0.9);
       transition: border-bottom-color 200ms ease-in-out, color 150ms ease-in-out,
         text-shadow 150ms ease-in-out;
       &:hover {
-        text-shadow: 0 0 4px var(--color-primary-alt);
-        color: alphav(var(--color-text), 0.95);
+        text-shadow: 0 0 4px var(--ep-color-primary-alt);
+        color: alphav(var(--ep-color-text), 0.95);
       }
       &.active {
         box-shadow: none;
-        border-bottom: 2px solid var(--color-secondary);
-        text-shadow: 0 0 4px var(--color-secondary);
-        color: var(--color-text);
+        border-bottom: 2px solid var(--ep-color-secondary);
+        text-shadow: 0 0 4px var(--ep-color-secondary);
+        color: var(--ep-color-text);
       }
     }
     .collapse {
       align-self: center;
-      border-left: 1px solid var(--color-border);
+      border-left: 1px solid var(--ep-color-border);
       width: 1.5rem;
       justify-self: end;
       padding: 0;
-      background: alphav(var(--color-border), 0.4);
+      background: alphav(var(--ep-color-border), 0.4);
       height: 100%;
       display: inline-grid;
       place-items: center;
       &:hover {
         text-shadow: none;
 
-        background: var(--color-border);
+        background: var(--ep-color-border);
       }
     }
   }
@@ -963,25 +963,25 @@ sl-tooltip {
         &.active {
           border-bottom: none;
 
-          border-right: 2px solid var(--color-secondary);
+          border-right: 2px solid var(--ep-color-secondary);
           border-radius: 0px;
         }
       }
       .collapse {
         margin-left: 0;
         border-left: none;
-        border-top: 1px solid var(--color-border);
+        border-top: 1px solid var(--ep-color-border);
         padding: 0.25rem;
         width: 100%;
       }
     }
   }
   .sidebar-tab {
-    background: alphav(var(--color-bg), 0.8);
+    background: alphav(var(--ep-color-bg), 0.8);
     &:not(#chat) {
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
-      border-top: 1px solid var(--color-border);
+      border-top: 1px solid var(--ep-color-border);
     }
   }
 }
@@ -1016,7 +1016,7 @@ sl-tooltip {
   #chat-controls {
     pointer-events: initial;
     ::selection {
-      background: var(--color-secondary);
+      background: var(--ep-color-secondary);
     }
   }
   #chat-form {
@@ -1025,13 +1025,13 @@ sl-tooltip {
     margin: 0 0.25rem 0.25rem;
   }
   #chat-message {
-    background: alphav(var(--color-bg), 0.85);
-    color: var(--color-text);
+    background: alphav(var(--ep-color-bg), 0.85);
+    color: var(--ep-color-text);
     font-size: 1rem;
     border-radius: 0;
     box-shadow: none;
     &:focus {
-      background: var(--color-bg);
+      background: var(--ep-color-bg);
     }
   }
   #chat-controls {
@@ -1044,7 +1044,7 @@ sl-tooltip {
     }
     .roll-type-select {
       height: unset;
-      background: alphav(var(--color-bg-alt), 0.85);
+      background: alphav(var(--ep-color-bg-alt), 0.85);
       border-radius: 0;
       padding: 0.125rem 0.5rem;
       -webkit-appearance: initial;
@@ -1089,14 +1089,14 @@ sl-tooltip {
 
 .message {
   display: block;
-  background: alphav(var(--color-bg), 0.8);
+  background: alphav(var(--ep-color-bg), 0.8);
   width: calc(100% - 1rem);
-  color: var(--color-text);
-  border: 2px solid var(--color-border) !important;
+  color: var(--ep-color-text);
+  border: 2px solid var(--ep-color-border) !important;
   padding: 0;
   margin: 0 0 0.25rem 0 !important;
   border-radius: 0.5rem 0px 0px 0.25rem !important;
-  box-shadow: 0 0 4px var(--color-bg);
+  box-shadow: 0 0 4px var(--ep-color-bg);
   &:last-child {
     margin-bottom: 0 !important;
   }
@@ -1129,14 +1129,14 @@ sl-tooltip {
       'img flavor flavor';
     grid-template-rows: repeat(3, min-content);
     grid-template-columns: 0.5rem 1fr auto;
-    color: var(--color-text);
+    color: var(--ep-color-text);
     padding: 0.2rem 0.3rem;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--ep-color-border);
     column-gap: 0.5rem;
     align-items: center;
     position: relative;
     z-index: 1;
-    background: alphav(var(--color-grey), 0.15);
+    background: alphav(var(--ep-color-grey), 0.15);
     border-top-left-radius: 0.5rem;
     .image-wrapper {
       grid-area: img;
@@ -1163,8 +1163,8 @@ sl-tooltip {
     font-size: 1rem;
     background: linear-gradient(
       to bottom,
-      alphav(var(--color-bg-alt), 0.8),
-      alphav(var(--color-bg), 0.8)
+      alphav(var(--ep-color-bg-alt), 0.8),
+      alphav(var(--ep-color-bg), 0.8)
     );
     &.non-ep {
       padding: 0.25rem 0.5rem;
@@ -1172,7 +1172,7 @@ sl-tooltip {
   }
 
   .message-metadata {
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
     padding-right: 0.25rem;
     grid-area: meta;
   }
@@ -1184,7 +1184,7 @@ sl-tooltip {
 
     &::after {
       content: attr(data-author);
-      color: var(--color-text-lighter);
+      color: var(--ep-color-text-lighter);
       margin-left: 0.5ch;
       font-size: small;
     }
@@ -1198,22 +1198,22 @@ sl-tooltip {
 
   .whisper-to {
     grid-area: whisper;
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
   }
 
   .flavor-text {
     grid-area: flavor;
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
   }
 
   &.whisper {
-    background: var(--color-bg);
+    background: var(--ep-color-bg);
     .message-header {
-      background: var(--color-bg);
+      background: var(--ep-color-bg);
       background: linear-gradient(
         to bottom right,
-        var(--color-bg) 20%,
-        lightv(var(--color-primary-alt), 0.7)
+        var(--ep-color-bg) 20%,
+        lightv(var(--ep-color-primary-alt), 0.7)
       );
     }
   }
@@ -1278,8 +1278,8 @@ sl-tooltip {
     border-radius: 0px 0.25rem 0.25rem 0px;
     background: linear-gradient(
       to right,
-      alphav(var(--color-bg), 0.8),
-      alphav(var(--color-bg-alt), 0.75)
+      alphav(var(--ep-color-bg), 0.8),
+      alphav(var(--ep-color-bg-alt), 0.75)
     );
     &.disabled * {
       pointer-events: none !important;
@@ -1317,32 +1317,32 @@ sl-tooltip {
     break-inside: avoid;
     page-break-inside: avoid;
     box-sizing: border-box;
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
     &.active,
     &:hover {
       border: none;
       box-shadow: none;
     }
     i {
-      text-shadow: 1px 1px 2px var(--color-bg);
+      text-shadow: 1px 1px 2px var(--ep-color-bg);
     }
     position: relative;
     box-shadow: 0 0 1px black;
     &:hover {
-      color: var(--color-text);
+      color: var(--ep-color-text);
     }
   }
 
   ol .scene-control {
     &.active {
-      color: var(--color-text);
+      color: var(--ep-color-text);
       border-left: 2px solid currentColor !important;
       box-shadow: 0 0 1px 0px black;
-      // background: var(--color-bg);
+      // background: var(--ep-color-bg);
       background: linear-gradient(
         to right,
-        alphav(var(--color-bg), 0.85),
-        alphav(var(--color-bg-alt), 0.8)
+        alphav(var(--ep-color-bg), 0.85),
+        alphav(var(--ep-color-bg-alt), 0.8)
       );
 
       z-index: 1;
@@ -1353,20 +1353,20 @@ sl-tooltip {
     display: grid;
     height: 2.5rem;
     width: 2.5rem;
-    border: 1px solid var(--color-border) !important;
+    border: 1px solid var(--ep-color-border) !important;
     border-radius: 0.5rem !important;
-    box-shadow: 0 0 2px var(--color-bg);
+    box-shadow: 0 0 2px var(--ep-color-bg);
     background: radial-gradient(
-      alphav(var(--color-bg), 0.8),
-      alphav(var(--color-bg-alt), 0.75)
+      alphav(var(--ep-color-bg), 0.8),
+      alphav(var(--ep-color-bg-alt), 0.75)
     );
     &.active {
-      color: alphav(var(--color-text), 0.95);
-      box-shadow: 0 0 4px var(--color-bg);
+      color: alphav(var(--ep-color-text), 0.95);
+      box-shadow: 0 0 4px var(--ep-color-bg);
       background: linear-gradient(
         to right,
-        var(--color-bg),
-        var(--color-bg-alt)
+        var(--ep-color-bg),
+        var(--ep-color-bg-alt)
       );
 
       z-index: 1;
@@ -1375,13 +1375,13 @@ sl-tooltip {
     &.toggle {
       box-shadow: none;
       background: radial-gradient(
-        alphav(var(--color-bg), 0.8),
-        alphav(var(--color-bg-alt), 0.75)
+        alphav(var(--ep-color-bg), 0.8),
+        alphav(var(--ep-color-bg-alt), 0.75)
       );
-      color: var(--color-grey);
+      color: var(--ep-color-grey);
 
       &.active {
-        color: var(--color-primary-alt);
+        color: var(--ep-color-primary-alt);
         i {
           transform: scale(1.15);
         }
@@ -1390,12 +1390,12 @@ sl-tooltip {
 
     &[data-tool='clear'] {
       i {
-        text-shadow: 1px 0 5px var(--color-negative);
+        text-shadow: 1px 0 5px var(--ep-color-negative);
       }
       &:hover {
         i {
-          color: lightv(var(--color-negative), 1.5);
-          text-shadow: 1px 2px 7px var(--color-negative);
+          color: lightv(var(--ep-color-negative), 1.5);
+          text-shadow: 1px 2px 7px var(--ep-color-negative);
         }
       }
     }
@@ -1413,12 +1413,12 @@ sl-tooltip {
     border-radius: 0.25rem;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
-    border-color: var(--color-border);
+    border-color: var(--ep-color-border);
     box-shadow: none;
     background: linear-gradient(
       to left,
-      alphav(var(--color-bg), 0.85),
-      alphav(var(--color-bg-alt), 0.85)
+      alphav(var(--ep-color-bg), 0.85),
+      alphav(var(--ep-color-bg-alt), 0.85)
     );
   }
   #macro-list {
@@ -1426,12 +1426,12 @@ sl-tooltip {
     border-color: transparent;
     background: linear-gradient(
       to left,
-      alphav(var(--color-bg), 0.7),
-      alphav(var(--color-bg-alt), 0.7)
+      alphav(var(--ep-color-bg), 0.7),
+      alphav(var(--ep-color-bg-alt), 0.7)
     );
     .macro {
       border-radius: 0;
-      border-color: var(--color-border);
+      border-color: var(--ep-color-border);
 
       border-bottom: none;
       box-shadow: none;
@@ -1439,19 +1439,19 @@ sl-tooltip {
 
       &:hover {
         .macro-key {
-          background: var(--color-primary);
+          background: var(--ep-color-primary);
         }
       }
       .macro-key {
         top: -1px;
         right: 0.125rem;
-        background: var(--color-border);
+        background: var(--ep-color-border);
         padding: 0;
         line-height: 1.25rem;
         font-family: var(--font-mono);
         width: 1.6ch;
         text-align: center;
-        border-top: 1px solid var(--color-border);
+        border-top: 1px solid var(--ep-color-border);
         box-shadow: -1px 1px 2px rgba(black, 0.2);
       }
     }
@@ -1467,7 +1467,7 @@ sl-tooltip {
     position: initial;
     &::before {
       width: 100%;
-      border: 1px solid var(--color-border);
+      border: 1px solid var(--ep-color-border);
       border-left: none;
       border-right: none;
       padding: 1px 2px;
@@ -1476,7 +1476,7 @@ sl-tooltip {
       height: unset;
       position: relative;
       top: -4px;
-      background: alphav(var(--color-bg), 0.25);
+      background: alphav(var(--ep-color-bg), 0.25);
     }
     &::after {
       display: none;

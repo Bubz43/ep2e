@@ -60,7 +60,7 @@ export class CharacterViewBeamAttacks extends mix(LitElement).with(
         .recharge {
           display: inline-flex;
           align-items: center;
-          color: var(--color-text-lighter);
+          color: var(--ep-color-text-lighter);
           margin-left: 0.5ch;
         }
       `,

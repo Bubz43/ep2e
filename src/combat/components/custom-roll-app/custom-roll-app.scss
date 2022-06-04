@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -9,7 +9,7 @@
   display: flex;
   flex-flow: column;
   padding: 0.5rem 1rem;
-  background: var(--color-bg);
+  background: var(--ep-color-bg);
 }
 
 .actions {

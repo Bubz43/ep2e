@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -15,7 +15,7 @@
   ::slotted([slot='after']) {
     align-self: start;
     margin-left: 1ch;
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
   }
   > div {
     display: contents;
@@ -33,20 +33,20 @@ wl-list-item {
 }
 
 .info {
-  --list-item-bg: #{alphav(var(--color-grey), 0.15)};
-  --list-item-bg-hover: #{alphav(var(--color-grey), 0.25)};
-  border-color: alphav(var(--color-grey), 0.35);
+  --list-item-bg: #{alphav(var(--ep-color-grey), 0.15)};
+  --list-item-bg-hover: #{alphav(var(--ep-color-grey), 0.25)};
+  border-color: alphav(var(--ep-color-grey), 0.35);
 }
 
 .usable {
   padding: 0.125rem 0.5rem;
-  --list-item-bg: #{alphav(var(--color-secondary), 0.15)};
-  --list-item-bg-hover: #{alphav(var(--color-secondary), 0.25)};
-  border-color: alphav(var(--color-secondary), 0.3);
+  --list-item-bg: #{alphav(var(--ep-color-secondary), 0.15)};
+  --list-item-bg-hover: #{alphav(var(--ep-color-secondary), 0.25)};
+  border-color: alphav(var(--ep-color-secondary), 0.3);
 }
 
 .attack {
-  --list-item-bg: #{alphav(var(--color-negative), 0.25)};
-  --list-item-bg-hover: #{alphav(var(--color-negative), 0.35)};
-  border-color: alphav(var(--color-negative), 0.5);
+  --list-item-bg: #{alphav(var(--ep-color-negative), 0.25)};
+  --list-item-bg-hover: #{alphav(var(--ep-color-negative), 0.35)};
+  border-color: alphav(var(--ep-color-negative), 0.5);
 }

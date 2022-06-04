@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -23,7 +23,7 @@
     transform: rotate(90deg);
   }
   .toggle {
-    background: alphav(var(--color-border), 0.5);
+    background: alphav(var(--ep-color-border), 0.5);
   }
 }
 

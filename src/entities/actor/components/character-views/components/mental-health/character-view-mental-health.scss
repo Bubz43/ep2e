@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include resetUnorderedList();
 
@@ -28,12 +28,12 @@ figcaption {
     padding: 0 1rem;
     --mdc-icon-button-size: 1.75rem;
     --mdc-icon-size: 1.25rem;
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
   }
 }
 
 .heal {
   &.ready {
-    box-shadow: 0 0 4px var(--color-secondary);
+    box-shadow: 0 0 4px var(--ep-color-secondary);
   }
 }

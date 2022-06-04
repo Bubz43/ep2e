@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include itemAddon();
 
@@ -31,7 +31,7 @@
     margin-left: 0.5ch;
   }
   .capacity {
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
     margin-left: 0.5ch;
     min-width: 3.5ch;
   }
@@ -39,5 +39,5 @@
 
 hr {
   width: 100%;
-  border-color: var(--color-border);
+  border-color: var(--ep-color-border);
 }

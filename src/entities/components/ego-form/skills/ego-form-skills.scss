@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -23,11 +23,11 @@ sl-form {
   input {
     background: transparent;
     font-family: var(--font-1);
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--ep-color-border);
     flex: 1;
     padding: 0.25rem;
     font-size: 1rem;
-    color: var(--color-text);
+    color: var(--ep-color-text);
     width: calc(100% - 1rem);
     border-radius: 3px;
     &::placeholder {
@@ -35,8 +35,8 @@ sl-form {
     }
     &:focus {
       outline: none;
-      border-color: var(--color-grey);
-      background: var(--color-bg);
+      border-color: var(--ep-color-grey);
+      background: var(--ep-color-bg);
     }
   }
 }
@@ -44,7 +44,11 @@ sl-form {
 header {
   position: sticky;
   top: 0;
-  background: linear-gradient(135deg, var(--color-bg), var(--color-bg-alt));
+  background: linear-gradient(
+    135deg,
+    var(--ep-color-bg),
+    var(--ep-color-bg-alt)
+  );
   padding: 0.5rem 1.5rem;
   z-index: 1;
   display: grid;
@@ -57,7 +61,7 @@ header {
 
 .add-field-button {
   grid-area: add;
-  --mdc-theme-primary: var(--color-secondary);
+  --mdc-theme-primary: var(--ep-color-secondary);
 }
 
 .totals {
@@ -79,11 +83,11 @@ header {
 
   .skill-count,
   .points-label {
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
   }
 
   .points {
-    color: var(--color-text);
+    color: var(--ep-color-text);
     display: inline-block;
     min-width: 4ch;
   }
@@ -107,9 +111,9 @@ header {
       left: 100%;
       --mdc-icon-size: 20px;
       transition: color 200ms;
-      color: var(--color-text-lighter);
+      color: var(--ep-color-text-lighter);
       &.active {
-        color: var(--color-secondary);
+        color: var(--ep-color-secondary);
       }
     }
   }

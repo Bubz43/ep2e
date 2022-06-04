@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include styled-scrollbars;
 
@@ -25,7 +25,7 @@ header {
   padding: 0.25rem 0;
   display: grid;
   grid-template-columns: 1fr 1fr max-content 1fr 1fr;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--ep-color-border);
   place-items: center;
   column-gap: 0.5rem;
   h2 {
@@ -44,24 +44,24 @@ footer {
   padding: 0.25rem;
   position: sticky;
   bottom: 0;
-  background: var(--color-bg);
-  border-top: 1px solid var(--color-border);
+  background: var(--ep-color-bg);
+  border-top: 1px solid var(--ep-color-border);
   justify-content: center;
-  --mdc-theme-primary: var(--color-grey);
+  --mdc-theme-primary: var(--ep-color-grey);
 }
 
 .label {
   list-style: none;
   padding: 0.25rem 0.5rem 0;
   text-transform: uppercase;
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
   letter-spacing: 1px;
 }
 
 .took-initiative {
   & + :not(.took-initiative) {
     margin-top: 0.25rem;
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--ep-color-border);
     padding-top: 0.25rem;
   }
 }
@@ -72,7 +72,7 @@ footer {
       content: attr(data-extra-label);
       padding: 0.25rem 0.5rem 0;
       text-transform: uppercase;
-      color: var(--color-text-lighter);
+      color: var(--ep-color-text-lighter);
       letter-spacing: 1px;
       display: block;
     }
@@ -109,5 +109,5 @@ footer {
 }
 
 time-since {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
 }

@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -14,13 +14,13 @@ p {
   margin: 0;
   text-align: center;
   .falloff {
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
   }
 }
 
 .shaped {
   font-size: small;
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
 }
 
 .template {
@@ -33,7 +33,7 @@ p {
     height: 1.25rem;
   }
   float: right;
-  color: var(--color-grey);
+  color: var(--ep-color-grey);
 }
 
 .targets {
@@ -58,6 +58,6 @@ p {
   text-align: center;
 
   .time {
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
   }
 }

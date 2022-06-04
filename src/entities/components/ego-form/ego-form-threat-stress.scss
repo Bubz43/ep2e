@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -16,7 +16,7 @@
 
 .min-form {
   display: flex;
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
   span {
     padding: 0 0.5rem;
     display: flex;

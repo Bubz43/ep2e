@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -11,19 +11,19 @@
   padding: 0.5rem;
   background: linear-gradient(
     to bottom,
-    alphav(var(--color-bg), 0.7),
-    alphav(var(--color-bg-alt), 0.7)
+    alphav(var(--ep-color-bg), 0.7),
+    alphav(var(--ep-color-bg-alt), 0.7)
   );
   min-width: 350px;
   width: 100%;
 
   > *:not(h2):not(submit-button) {
-    border-left: 3px solid var(--color-border);
+    border-left: 3px solid var(--ep-color-border);
     &:hover {
-      border-left-color: alphav(var(--color-grey), 0.5);
+      border-left-color: alphav(var(--ep-color-grey), 0.5);
     }
     &:focus-within {
-      border-left-color: var(--color-grey);
+      border-left-color: var(--ep-color-grey);
     }
     & + * {
       margin-top: 0.5rem;
@@ -41,7 +41,7 @@ h2 {
   padding: 0.25rem 0.5rem;
   p {
     margin: 0;
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
     font-size: small;
   }
   sl-form {
@@ -63,7 +63,7 @@ h2 {
   align-items: center;
   font-size: large;
   padding: 0 1rem;
-  --mdc-theme-primary: var(--color-grey);
+  --mdc-theme-primary: var(--ep-color-grey);
 
   > div {
     flex: 1;

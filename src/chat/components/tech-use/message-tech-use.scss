@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -15,15 +15,15 @@ sl-group {
 }
 
 .resist {
-  --mdc-theme-primary: var(--color-primary-alt);
+  --mdc-theme-primary: var(--ep-color-primary-alt);
 }
 
 .apply {
-  --mdc-theme-primary: var(--color-grey);
+  --mdc-theme-primary: var(--ep-color-grey);
 }
 
 .item-action {
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--ep-color-border);
   padding-top: 0.125rem;
   margin-top: 0.125rem;
   display: flex;
@@ -38,9 +38,9 @@ sl-group {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    background: alphav(var(--color-bg), 0.25);
+    background: alphav(var(--ep-color-bg), 0.25);
     display: none;
-    color: lightv(var(--color-negative), 1.5);
+    color: lightv(var(--ep-color-negative), 1.5);
     border-radius: 100%;
   }
   &[clickable]:hover {
@@ -53,5 +53,5 @@ sl-group {
 
 .action-taken {
   margin: 0.125rem;
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
 }

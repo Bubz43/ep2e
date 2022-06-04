@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include resetUnorderedList();
 
@@ -16,7 +16,7 @@
 .dot-creator {
   margin: 0.5rem;
   padding: 0.5rem;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--ep-color-border);
   grid-template-columns: 1fr;
   :nth-child(3n),
   submit-button {
@@ -26,7 +26,7 @@
 
 .dot-toggle {
   &.active {
-    color: var(--color-secondary);
+    color: var(--ep-color-secondary);
   }
 }
 
@@ -43,16 +43,16 @@ figure {
   margin: 0.5rem 1rem;
   figcaption {
     font-size: large;
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
   }
 }
 
 .conditions-button {
-  --mdc-theme-primary: var(--color-grey);
+  --mdc-theme-primary: var(--ep-color-grey);
 }
 
 .heal {
   &.ready {
-    box-shadow: 0 0 4px var(--color-secondary);
+    box-shadow: 0 0 4px var(--ep-color-secondary);
   }
 }

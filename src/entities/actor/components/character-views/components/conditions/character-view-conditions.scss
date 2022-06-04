@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include resetUnorderedList();
 
@@ -13,21 +13,21 @@
 }
 
 .condition-effects {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
   margin: 0 1rem 1rem;
 }
 mwc-check-list-item {
   height: 3rem;
 }
 li[divider] {
-  border-color: var(--color-border);
+  border-color: var(--ep-color-border);
   &:last-of-type {
     display: none;
   }
 }
 
 .effects-toggle {
-  --mdc-theme-primary: var(--color-grey);
+  --mdc-theme-primary: var(--ep-color-grey);
   --mdc-shape-small: 0px;
 }
 
@@ -39,7 +39,7 @@ figure {
     img {
       margin-right: 0.5ch;
     }
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
   }
 }
 

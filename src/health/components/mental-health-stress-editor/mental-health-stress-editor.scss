@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include resetUnorderedList();
 
@@ -9,6 +9,6 @@
     justify-content: space-between;
     padding: 0 1rem;
     --mdc-icon-size: 1.25rem;
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
   }
 }

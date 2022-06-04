@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -9,7 +9,7 @@
   display: flex;
   align-items: center;
   position: relative;
-  background: alphav(var(--color-bg-alt), 0.5);
+  background: alphav(var(--ep-color-bg-alt), 0.5);
   margin: 0.25rem 0;
 }
 
@@ -24,17 +24,17 @@
 .bars {
   display: flex;
   width: 100%;
-  background: alphav(var(--color-border), 0.8);
+  background: alphav(var(--ep-color-border), 0.8);
 }
 
 .bar {
   flex: 1;
-  border: 1px solid lightv(var(--color-bg), 0.8);
+  border: 1px solid lightv(var(--ep-color-bg), 0.8);
   height: 0.5rem;
   position: relative;
   &::before {
     content: '';
-    background: lightv(var(--color-negative), 1.5);
+    background: lightv(var(--ep-color-negative), 1.5);
     top: 0;
     bottom: 0;
     left: 0;

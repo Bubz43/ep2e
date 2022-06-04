@@ -210,7 +210,7 @@ export class MessageSuccessTest extends MessageElement {
                       `,
                     )}
                   </div>
-                  <hr style="border-color: var(--color-border)" />
+                  <hr style="border-color: var(--ep-color-border)" />
                   ${typeof state.action === 'string'
                     ? localize(state.action)
                     : html`<sl-group label=${localize(state.action[0])}

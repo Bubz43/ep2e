@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -37,7 +37,7 @@ ol {
 @keyframes fadeOut {
   75% {
     opacity: 1;
-    background: alphav(var(--color-bg), 0.7);
+    background: alphav(var(--ep-color-bg), 0.7);
   }
   100% {
     opacity: 0.5;
@@ -49,7 +49,7 @@ li {
   animation: fadeOut 2s;
   pointer-events: initial;
   font-size: 14px;
-  background: alphav(var(--color-bg), 0.7);
+  background: alphav(var(--ep-color-bg), 0.7);
   margin-left: auto;
   &:not(.scroll-target) {
     padding: 0.25rem 0.5rem;
@@ -62,6 +62,6 @@ li {
   }
   &:hover {
     opacity: 1 !important;
-    background: alphav(var(--color-bg), 0.7);
+    background: alphav(var(--ep-color-bg), 0.7);
   }
 }

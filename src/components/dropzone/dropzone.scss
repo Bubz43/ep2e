@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -13,12 +13,12 @@
 
 :host([ready]),
 :host([outlined]) {
-  outline: 2px dashed var(--color-grey);
+  outline: 2px dashed var(--ep-color-grey);
   outline-offset: -2px;
 }
 
 :host([outlined]) {
-  outline-color: var(--color-secondary);
+  outline-color: var(--ep-color-secondary);
   > * {
     pointer-events: none !important;
   }
@@ -29,7 +29,7 @@
     right: 0;
     bottom: 0;
 
-    background: alphav(var(--color-negative), 0.5);
+    background: alphav(var(--ep-color-negative), 0.5);
     display: grid;
     grid-template-areas: 'line';
     place-items: center;

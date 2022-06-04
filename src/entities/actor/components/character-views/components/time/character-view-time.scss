@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -17,7 +17,7 @@ sl-header {
 
 sl-animated-list {
   padding: 0.1rem 0;
-  --mdc-linear-progress-buffer-color: var(--color-border);
+  --mdc-linear-progress-buffer-color: var(--ep-color-border);
   max-width: 450px;
   position: relative;
 }
@@ -25,7 +25,7 @@ sl-animated-list {
 .accumulated {
   margin-left: 1rem;
   padding: 0.25rem;
-  border-left: 1px solid var(--color-grey);
+  border-left: 1px solid var(--ep-color-grey);
   display: flex;
 }
 
@@ -41,12 +41,12 @@ sl-animated-list {
       'adv adv';
 
     .ready {
-      color: var(--color-secondary);
+      color: var(--ep-color-secondary);
       font-weight: bold;
     }
 
     .remaining {
-      color: var(--color-text-lighter);
+      color: var(--ep-color-text-lighter);
       text-transform: lowercase;
     }
 
@@ -87,7 +87,7 @@ time-state-item {
 .heal-recoveries {
   margin: 0.5rem;
   figcaption {
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
   }
 }
 

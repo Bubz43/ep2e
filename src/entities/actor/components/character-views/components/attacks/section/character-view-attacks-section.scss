@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -14,9 +14,9 @@
   flex-flow: row wrap;
   --mdc-shape-small: 1rem;
   --mdc-button-outline-width: 2px;
-  --mdc-theme-primary: #{alphav(var(--color-negative), 0.8)};
-  --mdc-theme-primary: var(--color-grey);
-  --mdc-theme-on-primary: var(--color-bg);
+  --mdc-theme-primary: #{alphav(var(--ep-color-negative), 0.8)};
+  --mdc-theme-primary: var(--ep-color-grey);
+  --mdc-theme-on-primary: var(--ep-color-bg);
   padding: 0.125rem 0.5rem;
   > * {
     margin-bottom: 0.125rem;
@@ -43,14 +43,14 @@
     page-break-inside: avoid;
 
     &:not([expanded]) {
-      background: alphav(var(--color-grey), 0.06);
-      border-top: 2px solid var(--color-border);
+      background: alphav(var(--ep-color-grey), 0.06);
+      border-top: 2px solid var(--ep-color-border);
       padding: 0.25rem 0;
     }
     &[expanded] {
       margin: 0.5rem 0.375rem;
-      background: lightv(var(--color-bg-alt), 1.1);
-      border: 2px solid alphav(var(--color-grey), 0.5);
+      background: lightv(var(--ep-color-bg-alt), 1.1);
+      border: 2px solid alphav(var(--ep-color-grey), 0.5);
       border-radius: 0.25rem;
     }
   }

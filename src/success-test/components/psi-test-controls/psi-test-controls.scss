@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include styled-scrollbars();
 @include resetUnorderedList();
@@ -35,8 +35,8 @@
   }
   background: linear-gradient(
     to bottom,
-    alphav(var(--color-bg), 0.8),
-    alphav(var(--color-bg-alt), 0.8)
+    alphav(var(--ep-color-bg), 0.8),
+    alphav(var(--ep-color-bg-alt), 0.8)
   );
 }
 
@@ -52,14 +52,14 @@
   width: 350px;
   > * {
     display: flex;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--ep-color-border);
     > *:not(success-test-section-label) {
       align-self: center;
       flex: 1;
     }
   }
   success-test-section-label {
-    border-right: 1px solid var(--color-border);
+    border-right: 1px solid var(--ep-color-border);
     background: rgba(black, 0.25);
   }
 }
@@ -67,7 +67,7 @@
 .use-info {
   grid-area: use;
   margin-top: 0.25rem;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--ep-color-border);
   padding: 0.125rem 0;
   min-width: 20ch;
   @include textButton();
@@ -78,9 +78,9 @@
     margin-right: 0.7rem;
   }
   button {
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
     &.active {
-      color: var(--color-secondary);
+      color: var(--ep-color-secondary);
     }
   }
   mwc-check-list-item,
@@ -89,7 +89,7 @@
   }
 
   [divider] {
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--ep-color-border);
     margin: 0.125rem 0;
   }
 
@@ -108,7 +108,7 @@
 }
 
 .free-push-label {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
 }
 
 .targetting {
@@ -117,7 +117,7 @@
     --mdc-icon-size: 1.2rem;
     &:hover {
       mwc-icon {
-        color: var(--color-secondary);
+        color: var(--ep-color-secondary);
       }
     }
   }

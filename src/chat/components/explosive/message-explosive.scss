@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -31,7 +31,7 @@
   .attack-mode {
     grid-area: mode;
     & + .trigger-option {
-      color: var(--color-text-lighter);
+      color: var(--ep-color-text-lighter);
       font-size: small;
     }
   }
@@ -54,7 +54,7 @@
 
 .trigger-info,
 .trigger-countdown {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
   font-size: small;
   &::first-letter {
     text-transform: capitalize;
@@ -62,7 +62,7 @@
 }
 
 .detonate {
-  --mdc-theme-primary: var(--color-negative);
+  --mdc-theme-primary: var(--ep-color-negative);
   width: 100%;
   margin-top: 0.25rem;
 }
@@ -77,7 +77,7 @@ time-state-item {
 
 .state {
   text-transform: uppercase;
-  color: var(--color-text-disabled);
+  color: var(--ep-color-text-disabled);
   letter-spacing: 1px;
   text-align: center;
 }

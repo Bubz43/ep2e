@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include resetUnorderedList();
 
@@ -25,7 +25,7 @@ figure {
   margin: 0.5rem 1rem;
   figcaption {
     font-size: large;
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
   }
 }
 

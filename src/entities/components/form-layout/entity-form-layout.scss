@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include styled-scrollbars;
 
@@ -22,7 +22,11 @@
     'sidebar tabs'
     'sidebar content';
 
-  background: linear-gradient(45deg, var(--color-bg-alt), var(--color-bg));
+  background: linear-gradient(
+    45deg,
+    var(--ep-color-bg-alt),
+    var(--ep-color-bg)
+  );
 
   font-family: var(--font-1);
 
@@ -32,15 +36,15 @@
   }
 
   ::slotted([slot='description']) {
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--ep-color-border);
 
     padding: 0.25rem 0.5rem 0.5rem;
   }
 
   ::slotted([slot='tabs']) {
     box-shadow: 0 3px 4px 1px rgba(black, 0.5);
-    background: lightv(var(--color-bg), 1.4);
-    --mdc-theme-primary: var(--color-grey);
+    background: lightv(var(--ep-color-bg), 1.4);
+    --mdc-theme-primary: var(--ep-color-grey);
     width: min-content;
     margin: 0 auto 0.5rem;
   }
@@ -88,7 +92,11 @@
     width: min-content;
     justify-self: end;
     padding: 0 1rem 1rem;
-    background: linear-gradient(45deg, var(--color-bg), var(--color-bg-alt));
+    background: linear-gradient(
+      45deg,
+      var(--ep-color-bg),
+      var(--ep-color-bg-alt)
+    );
     transition: transform 350ms ease-out;
     transform: translateX(100%);
     margin-left: auto;
@@ -150,8 +158,12 @@ slot[name='tabs'] {
   flex-flow: column;
   grid-area: sidebar;
   padding: 1rem;
-  background: linear-gradient(to bottom, var(--color-bg), var(--color-bg-alt));
-  border-right: 1px solid var(--color-border);
+  background: linear-gradient(
+    to bottom,
+    var(--ep-color-bg),
+    var(--ep-color-bg-alt)
+  );
+  border-right: 1px solid var(--ep-color-border);
   min-width: calc(220px - 0.6rem);
 }
 

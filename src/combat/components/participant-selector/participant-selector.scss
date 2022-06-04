@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -12,7 +12,7 @@
 }
 
 mwc-tab-bar {
-  --mdc-theme-primary: var(--color-grey);
+  --mdc-theme-primary: var(--ep-color-grey);
 }
 
 mwc-list {
@@ -32,11 +32,11 @@ submit-button {
     background: transparent;
     border: none;
     cursor: pointer;
-    color: var(--color-text);
+    color: var(--ep-color-text);
     min-width: 40px;
     pointer-events: initial;
     &:hover {
-      box-shadow: 0 0 2px var(--color-secondary);
+      box-shadow: 0 0 2px var(--ep-color-secondary);
     }
     > * {
       pointer-events: none;

@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -11,7 +11,7 @@
 }
 
 .traits {
-  --mdc-theme-primary: var(--color-negative);
+  --mdc-theme-primary: var(--ep-color-negative);
   display: flex;
   flex-flow: row wrap;
   > * {
@@ -26,5 +26,5 @@
 
 p {
   margin: 0 0.25rem;
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
 }

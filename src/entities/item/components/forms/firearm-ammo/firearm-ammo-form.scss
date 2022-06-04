@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 @include itemAddon();
 
 * {
@@ -22,7 +22,7 @@
 .modes-wrapper {
   display: flex;
   align-items: center;
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
   mwc-slider {
     margin-left: 1.5ch;
   }

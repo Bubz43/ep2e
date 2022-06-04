@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -12,7 +12,7 @@
 }
 
 .change-source {
-  color: var(--color-grey);
+  color: var(--ep-color-grey);
 }
 
 delete-button {

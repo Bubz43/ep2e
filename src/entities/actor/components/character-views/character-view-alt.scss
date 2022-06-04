@@ -1,13 +1,13 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include styled-scrollbars;
 @include resetUnorderedList;
 
 ::-webkit-scrollbar-track {
   box-shadow: 0 0 0;
-  border-left: 1px solid var(--color-border);
-  border-right: 1px solid var(--color-border);
+  border-left: 1px solid var(--ep-color-border);
+  border-right: 1px solid var(--ep-color-border);
 }
 
 * {
@@ -30,11 +30,11 @@ h3 {
 
   overflow-x: auto;
   min-width: max-content;
-  background: alphav(var(--color-bg), 0.6);
+  background: alphav(var(--ep-color-bg), 0.6);
 }
 
 :host([disabletransparency]) {
-  background: var(--color-bg);
+  background: var(--ep-color-bg);
 }
 
 .limited {
@@ -149,7 +149,7 @@ h3 {
   grid-area: header;
   background: linear-gradient(
     to bottom,
-    alphav(var(--color-primary), 0.1),
+    alphav(var(--ep-color-primary), 0.1),
     rgba(0, 0, 0, 0)
   );
   padding: 0 0.25rem;
@@ -167,7 +167,7 @@ h3 {
     }
     > * {
       flex-grow: 1;
-      background: alphav(var(--color-grey), 0.08);
+      background: alphav(var(--ep-color-grey), 0.08);
       margin: 0 0.125rem;
       box-shadow: 0 -1px 2px hsla(0, 0%, 0%, 0.75);
     }
@@ -191,11 +191,11 @@ h3 {
   }
 
   .initiative {
-    --mdc-theme-primary: var(--color-grey);
+    --mdc-theme-primary: var(--ep-color-grey);
     float: right;
   }
   .stress-roll {
-    --mdc-theme-primary: #{lightv(var(--color-negative), 1.2)};
+    --mdc-theme-primary: #{lightv(var(--ep-color-negative), 1.2)};
   }
 
   .extras {
@@ -259,8 +259,12 @@ h3 {
 
 .psi {
   grid-area: psi;
-  border-right: 1px solid var(--color-border);
-  background: linear-gradient(45deg, black, alphav(var(--color-primary), 0.1));
+  border-right: 1px solid var(--ep-color-border);
+  background: linear-gradient(
+    45deg,
+    black,
+    alphav(var(--ep-color-primary), 0.1)
+  );
   > * {
     max-width: 200px;
     min-width: 100%;
@@ -302,14 +306,14 @@ h3 {
   position: relative;
   > * {
     padding: 0 0.5rem;
-    background: alphav(var(--color-grey), 0.1);
+    background: alphav(var(--ep-color-grey), 0.1);
     margin-left: 0.25rem;
     border-radius: 3px;
     list-style: none;
-    border: 1px solid alphav(var(--color-grey), 0.15);
+    border: 1px solid alphav(var(--ep-color-grey), 0.15);
   }
   .value {
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
   }
 }
 
@@ -327,16 +331,16 @@ h3 {
   padding-right: 0.5rem;
   position: relative;
   mwc-icon {
-    color: var(--color-negative);
+    color: var(--ep-color-negative);
     &.support {
-      color: var(--color-secondary);
+      color: var(--ep-color-secondary);
       filter: hue-rotate(-30deg);
     }
   }
   notification-coin {
     position: static;
     margin-left: 0.25ch;
-    --coin-bg: #{alphav(var(--color-grey), 0.2)};
+    --coin-bg: #{alphav(var(--ep-color-grey), 0.2)};
   }
 }
 
@@ -366,12 +370,12 @@ h3 {
   &:not([disabled]) {
     cursor: pointer;
     &:hover {
-      background: alphav(var(--color-text), 0.05);
+      background: alphav(var(--ep-color-text), 0.05);
     }
   }
   &:focus {
     outline: none;
-    background: alphav(var(--color-text), 0.09);
+    background: alphav(var(--ep-color-text), 0.09);
   }
   img {
     place-self: center;
@@ -386,18 +390,18 @@ h3 {
   cursor: pointer;
   width: 300px;
   min-width: 100%;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--ep-color-border);
   grid-area: armor;
 
   &:hover {
-    background: alphav(var(--color-text), 0.06);
+    background: alphav(var(--ep-color-text), 0.06);
   }
   &:focus {
-    background: alphav(var(--color-text), 0.08);
+    background: alphav(var(--ep-color-text), 0.08);
     outline: none;
   }
   &:active {
-    background: alphav(var(--color-text), 0.1);
+    background: alphav(var(--ep-color-text), 0.1);
   }
 
   .values {
@@ -420,15 +424,15 @@ h3 {
       // margin: 0.15rem 0 0;
       padding: 0 0.5rem 0 0.25rem;
       border-radius: 3px;
-      background: alphav(var(--color-grey), 0.4);
-      border: 1px solid alphav(var(--color-grey), 0.45);
+      background: alphav(var(--ep-color-grey), 0.4);
+      border: 1px solid alphav(var(--ep-color-grey), 0.45);
       text-shadow: 0 0 3px black;
 
       img {
         opacity: 0.7;
       }
       .value {
-        color: var(--color-text-lighter);
+        color: var(--ep-color-text-lighter);
       }
 
       .label {
@@ -438,12 +442,12 @@ h3 {
 
       &.reduced {
         .value {
-          color: lightv(var(--color-negative), 1.75);
+          color: lightv(var(--ep-color-negative), 1.75);
         }
       }
       &.info {
-        background: alphav(var(--color-grey), 0.25);
-        border: 1px solid alphav(var(--color-border), 0.75);
+        background: alphav(var(--ep-color-grey), 0.25);
+        border: 1px solid alphav(var(--ep-color-border), 0.75);
         padding: 0 0.5rem;
         &.concealable {
           justify-content: center;
@@ -471,16 +475,16 @@ h3 {
 }
 
 character-view-psi {
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--ep-color-border);
 }
 
 .info {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
 }
 
 .actions,
 .tabbed-section {
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--ep-color-border);
 }
 
 .actions {
@@ -502,11 +506,11 @@ character-view-psi {
   height: 400px;
   min-height: 100%;
   mwc-tab-bar {
-    --mdc-theme-primary: var(--color-grey);
+    --mdc-theme-primary: var(--ep-color-grey);
     padding: 0 0.25rem;
     width: 300px;
     min-width: 100%;
-    background: linear-gradient(to top, var(--color-bg-alt), transparent);
+    background: linear-gradient(to top, var(--ep-color-bg-alt), transparent);
     box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.664);
     z-index: 1;
     --mdc-tab-horizontal-padding: 0.5rem;
@@ -516,7 +520,7 @@ character-view-psi {
 .tab-content {
   overflow-y: scroll;
   overflow-x: hidden;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--ep-color-border);
   height: 300px;
   min-height: 100%;
   width: 500px;
@@ -531,7 +535,7 @@ character-view-item-group[group='sleights'] {
 .conditions {
   display: flex;
   align-items: center;
-  --mdc-theme-primary: var(--color-text);
+  --mdc-theme-primary: var(--ep-color-text);
   padding: 0.25rem;
   .conditions-list {
     display: grid;
@@ -546,7 +550,7 @@ character-view-item-group[group='sleights'] {
   notification-coin {
     right: -2px;
     top: -75%;
-    --coin-bg: var(--color-border);
+    --coin-bg: var(--ep-color-border);
   }
   img {
     opacity: 0.25;
@@ -575,7 +579,11 @@ character-view-item-group[group='sleights'] {
   > * {
     grid-area: content;
   }
-  background: linear-gradient(45deg, var(--color-bg), var(--color-bg-alt));
+  background: linear-gradient(
+    45deg,
+    var(--ep-color-bg),
+    var(--ep-color-bg-alt)
+  );
   height: 300px;
   min-height: 100%;
   overflow-x: hidden;
@@ -598,22 +606,22 @@ character-view-item-group[group='sleights'] {
   .close-drawer {
     padding: 0.25rem;
     width: min-content;
-    background: alphav(var(--color-border), 0.9);
+    background: alphav(var(--ep-color-border), 0.9);
     position: sticky;
     top: 0.25rem;
     right: 0.25rem;
     box-shadow: 0 0 4px black;
     margin: 0 0 0 auto;
     z-index: 10;
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
     align-self: baseline;
     --mdc-icon-size: 1rem;
     &:hover,
     &:focus-within {
-      color: var(--color-text);
+      color: var(--ep-color-text);
     }
     &:focus-within {
-      box-shadow: -1px 1px 2px var(--color-grey);
+      box-shadow: -1px 1px 2px var(--ep-color-grey);
     }
   }
 }
@@ -633,23 +641,23 @@ character-view-item-group[group='sleights'] {
     margin: 0.125rem 0;
   }
   .mod {
-    background: alphav(var(--color-negative), 0.2);
-    border: 1px solid alphav(var(--color-negative), 0.25);
+    background: alphav(var(--ep-color-negative), 0.2);
+    border: 1px solid alphav(var(--ep-color-negative), 0.25);
   }
 
   .movement-rate {
-    background: alphav(var(--color-grey), 0.2);
-    border: 1px solid alphav(var(--color-grey), 0.25);
+    background: alphav(var(--ep-color-grey), 0.2);
+    border: 1px solid alphav(var(--ep-color-grey), 0.25);
     .rate {
-      color: var(--color-text-lighter);
+      color: var(--ep-color-text-lighter);
     }
   }
   .speed {
     &.increased {
-      color: var(--color-secondary);
+      color: var(--ep-color-secondary);
     }
     &.decreased {
-      color: lightv(var(--color-negative), 1.65);
+      color: lightv(var(--ep-color-negative), 1.65);
     }
   }
 }
@@ -660,14 +668,14 @@ footer {
   flex-flow: row wrap;
   align-items: center;
   justify-content: space-between;
-  background: alphav(var(--color-primary), 0.1);
-  border-top: 1px solid var(--color-grey);
+  background: alphav(var(--ep-color-primary), 0.1);
+  border-top: 1px solid var(--ep-color-grey);
   padding: 0.125rem 0.5rem;
   width: 500px;
   min-width: 100%;
   z-index: 1;
   .effects-toggle {
-    --mdc-theme-primary: var(--color-text);
+    --mdc-theme-primary: var(--ep-color-text);
   }
 
   mwc-icon-button {
@@ -690,10 +698,10 @@ footer {
       pointer-events: none;
     }
     &:hover {
-      background: alphav(var(--color-text), 0.05);
+      background: alphav(var(--ep-color-text), 0.05);
     }
     &:focus {
-      background: alphav(var(--color-text), 0.09);
+      background: alphav(var(--ep-color-text), 0.09);
     }
 
     > * {
@@ -710,13 +718,13 @@ footer {
       margin-right: 0.5ch;
     }
     > mwc-icon {
-      color: var(--color-grey);
+      color: var(--ep-color-grey);
     }
 
     &.active {
-      color: var(--color-secondary);
+      color: var(--ep-color-secondary);
       mwc-icon {
-        color: var(--color-secondary);
+        color: var(--ep-color-secondary);
       }
       &.ready {
         @include animate-css(bounce, 2s, infinite);
@@ -729,7 +737,7 @@ footer {
     transition: box-shadow 1s ease-in-out;
     border-radius: 100%;
     &:not([disabled]) {
-      box-shadow: 0 0 0.5rem var(--color-secondary);
+      box-shadow: 0 0 0.5rem var(--ep-color-secondary);
     }
   }
 }
@@ -743,14 +751,14 @@ footer {
 .gear-parts {
   max-height: 300px;
   overflow: auto;
-  background: lightv(var(--color-bg-alt), 1.25);
+  background: lightv(var(--ep-color-bg-alt), 1.25);
 }
 
 .details {
   display: grid;
   column-gap: 0.5rem;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  border-bottom: 2px groove var(--color-border);
+  border-bottom: 2px groove var(--ep-color-border);
   padding: 0 0.25rem 0.25rem;
 }
 
@@ -758,7 +766,7 @@ footer {
   display: inline-block;
   padding: 0.15rem;
   .value {
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
   }
 }
 
@@ -796,9 +804,9 @@ enriched-html {
     position: relative;
     margin-left: -0.5rem;
     mwc-icon {
-      color: var(--color-negative);
+      color: var(--ep-color-negative);
       &.support {
-        color: var(--color-secondary);
+        color: var(--ep-color-secondary);
         filter: hue-rotate(-30deg);
       }
     }
@@ -806,15 +814,15 @@ enriched-html {
 
   .badge {
     font-size: smaller;
-    background: alphav(var(--color-primary), 0.75);
+    background: alphav(var(--ep-color-primary), 0.75);
     border-radius: 0.5rem;
     transform: translateY(4px);
 
     padding: 0 0.5rem;
-    color: var(--color-text);
+    color: var(--ep-color-text);
     line-height: 1rem;
     &.expired {
-      background: alphav(var(--color-negative), 0.75);
+      background: alphav(var(--ep-color-negative), 0.75);
     }
   }
 

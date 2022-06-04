@@ -480,7 +480,7 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                         tooltip.attach({
                           el: ev.currentTarget,
                           content: html` <p
-                              style="color: var(--color-primary-alt)"
+                              style="color: var(--ep-color-primary-alt)"
                             >
                               ${prettyMilliseconds(timeState.remaining, {
                                 compact: false,
@@ -522,7 +522,7 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                         tooltip.attach({
                           el: ev.currentTarget,
                           content: html` <p
-                              style="color: var(--color-primary-alt)"
+                              style="color: var(--ep-color-primary-alt)"
                             >
                               ${prettyMilliseconds(timeState.remaining, {
                                 compact: false,

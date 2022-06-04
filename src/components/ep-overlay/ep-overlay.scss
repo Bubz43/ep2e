@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include styled-scrollbars();
 
@@ -19,7 +19,7 @@
 
   grid-template-rows: repeat(2, min-content) 1fr auto;
 
-  color: var(--color-text);
+  color: var(--ep-color-text);
 
   position: fixed;
   left: 0;
@@ -139,7 +139,7 @@ slot#windows {
 //   --list-item-padding: 2px;
 //   --list-item-border-radius: 0px;
 //   --list-item-bg: transparent;
-//   --list-item-bg-hover: var(--color-primary);
+//   --list-item-bg-hover: var(--ep-color-primary);
 //   ::slotted(*) {
 //     height: 33px;
 //     width: 28px;
@@ -148,13 +148,13 @@ slot#windows {
 //     text-shadow: 1px 2px 3px black;
 //   }
 //   ::slotted(.active) {
-//     color: satv(var(--color-secondary), 1.4);
+//     color: satv(var(--ep-color-secondary), 1.4);
 //     font-size: 18px;
 //   }
 // }
 
 // .menu-toggle {
-//   --list-item-bg-hover: var(--color-foundry);
+//   --list-item-bg-hover: var(--ep-color-foundry);
 //   align-self: center;
 //   margin-left: 1rem;
 // }

@@ -73,7 +73,10 @@ export class DropZone extends mix(LitElement).with(LazyRipple) {
       const { position } = this.style;
       this.style.position = 'relative';
       if (ev.defaultPrevented) {
-        this.style.setProperty('--mdc-ripple-color', 'var(--color-negative)');
+        this.style.setProperty(
+          '--mdc-ripple-color',
+          'var(--ep-color-negative)',
+        );
       }
       this.rippleHandlers.startPress(ev);
       requestAnimationFrame(() => {

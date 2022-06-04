@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -9,7 +9,7 @@
   display: block;
   min-width: max-content;
   padding: 0.25rem;
-  background: var(--color-bg);
+  background: var(--ep-color-bg);
 }
 
 .forms-header {
@@ -36,11 +36,11 @@ button {
   background: transparent;
   border: none;
   cursor: pointer;
-  color: var(--color-text);
+  color: var(--ep-color-text);
   min-width: 40px;
   pointer-events: initial;
   &:hover {
-    box-shadow: 0 0 2px var(--color-secondary);
+    box-shadow: 0 0 2px var(--ep-color-secondary);
   }
   > * {
     pointer-events: none;

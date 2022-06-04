@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -35,7 +35,7 @@ div {
 
 wl-list-item {
   padding: 2px;
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
   transition: all 100ms ease-in-out;
   // transition: transform
 }
@@ -48,8 +48,8 @@ mwc-icon-button {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: var(--color-negative);
+  color: var(--ep-color-negative);
   border-radius: 100%;
-  background: var(--color-bg);
-  box-shadow: 0 0 4px var(--color-negative);
+  background: var(--ep-color-bg);
+  box-shadow: 0 0 4px var(--ep-color-negative);
 }

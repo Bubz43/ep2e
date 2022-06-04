@@ -36,8 +36,8 @@ export class ItemCard extends ItemCardBase {
           position: absolute;
           top: -0.35rem;
           left: -0.4rem;
-          --mdc-circular-progress-track-color: var(--color-border);
-          --mdc-theme-primary: var(--color-secondary);
+          --mdc-circular-progress-track-color: var(--ep-color-border);
+          --mdc-theme-primary: var(--ep-color-secondary);
         }
       `,
     ];

@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -15,12 +15,12 @@ ul {
 }
 
 li {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
   span {
-    color: var(--color-text);
+    color: var(--ep-color-text);
   }
 }
 
 .summary-value {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
 }

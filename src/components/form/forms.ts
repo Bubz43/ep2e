@@ -20,7 +20,7 @@ const styles = () => html` <style>
 
   select option,
   select optgroup {
-    background: var(--color-bg-alt);
+    background: var(--ep-color-bg-alt);
   }
 </style>`;
 
@@ -83,7 +83,7 @@ export const renderUpdaterForm = <T extends Record<string, unknown>>(
 ) => {
   return renderAutoForm({
     props: actions.originalValue(),
-    update: (actions.commit as unknown) as FormInstance<T>['update'],
+    update: actions.commit as unknown as FormInstance<T>['update'],
     ...settings,
   });
 };

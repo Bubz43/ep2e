@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include resetUnorderedList;
 
@@ -20,6 +20,6 @@ div {
   display: flex;
   flex-flow: row wrap;
   & + div {
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--ep-color-border);
   }
 }

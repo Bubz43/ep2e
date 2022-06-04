@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -18,11 +18,11 @@ p {
 }
 
 .duration {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
 }
 
 mwc-button {
-  --mdc-theme-primary: var(--color-primary-alt);
+  --mdc-theme-primary: var(--ep-color-primary-alt);
 }
 
 .levels {

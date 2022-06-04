@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -31,20 +31,20 @@ ol {
   gap: 0.5rem;
   position: sticky;
   top: 0;
-  background: alphav(var(--color-bg), 0.7);
+  background: alphav(var(--ep-color-bg), 0.7);
   z-index: 1;
   > wl-list-item {
     @include truncate(100%);
     text-align: center;
     padding: 0.25rem;
     &:first-of-type {
-      color: var(--color-grey);
+      color: var(--ep-color-grey);
     }
     &:nth-of-type(2) {
-      color: var(--color-primary);
+      color: var(--ep-color-primary);
     }
     &:nth-of-type(3) {
-      color: var(--color-secondary);
+      color: var(--ep-color-secondary);
     }
   }
 }
@@ -59,7 +59,7 @@ ol {
       &::before,
       &::after {
         content: '';
-        background: var(--color-border);
+        background: var(--ep-color-border);
         height: 1px;
         flex: 1;
         align-self: center;
@@ -69,7 +69,7 @@ ol {
 
     .empty-ammo {
       height: 0.5rem;
-      border: 1px solid var(--color-text-disabled);
+      border: 1px solid var(--ep-color-text-disabled);
     }
 
     .ammo-form {
@@ -85,13 +85,13 @@ ol {
         position: relative;
 
         &:first-of-type {
-          color: var(--color-grey);
+          color: var(--ep-color-grey);
         }
         &:nth-of-type(2) {
-          color: var(--color-primary);
+          color: var(--ep-color-primary);
         }
         &:nth-of-type(3) {
-          color: var(--color-secondary);
+          color: var(--ep-color-secondary);
         }
         &.active {
           &::before {
@@ -116,8 +116,8 @@ ol {
   position: sticky;
   bottom: -0.5rem;
   mwc-button {
-    --mdc-theme-primary: var(--color-grey);
-    background: var(--color-bg);
+    --mdc-theme-primary: var(--ep-color-grey);
+    background: var(--ep-color-bg);
   }
   submit-button {
     flex: 1;

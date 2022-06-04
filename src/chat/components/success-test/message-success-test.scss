@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include resetUnorderedList();
 
@@ -25,7 +25,7 @@
   }
   .available-effects {
     @include truncate(100%);
-    color: var(--color-primary-alt);
+    color: var(--ep-color-primary-alt);
   }
   .superior-list {
     --list-item-padding: 0 1rem;
@@ -68,7 +68,7 @@ sl-group {
   align-self: center;
   justify-self: end;
   padding-right: 0.25rem;
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
 }
 
 .pool-actions {
@@ -138,7 +138,7 @@ mwc-icon-button {
     &:focus-within,
     &.filled {
       input {
-        color: var(--color-text) !important;
+        color: var(--ep-color-text) !important;
       }
       & ~ * {
         visibility: visible;
@@ -167,7 +167,7 @@ mwc-icon-button {
 
   .divider {
     margin: 0.25rem;
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--ep-color-border);
   }
 }
 

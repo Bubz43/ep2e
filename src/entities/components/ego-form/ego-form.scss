@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -14,7 +14,7 @@
   left: -1rem;
   position: relative;
   width: calc(100% + 2rem);
-  --mdc-theme-primary: var(--color-grey);
+  --mdc-theme-primary: var(--ep-color-grey);
   --mdc-shape-small: 0px;
 }
 
@@ -74,7 +74,7 @@ ego-form-skills {
 }
 
 .stress-roll {
-  --mdc-theme-primary: #{lightv(var(--color-negative), 1.75)};
+  --mdc-theme-primary: #{lightv(var(--ep-color-negative), 1.75)};
 }
 
 .threat-details-form {
@@ -88,24 +88,24 @@ ego-form-skills {
   margin: 0.5rem 0 0;
   align-items: center;
   font-size: large;
-  border-left: 2px solid var(--color-border);
+  border-left: 2px solid var(--ep-color-border);
   --mdc-icon-button-size: 2rem;
   mwc-icon-button {
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
     --mdc-icon-size: 1.25rem;
   }
   &:hover {
-    background: alphav(var(--color-text), 0.03);
+    background: alphav(var(--ep-color-text), 0.03);
   }
   .psi-info {
     flex: 1;
   }
   .psi-level {
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
   }
   .psi-label {
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
   }
 }

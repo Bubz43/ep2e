@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -58,7 +58,7 @@
 }
 
 small {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
 }
 
 .pool {
@@ -73,17 +73,17 @@ small {
   position: relative;
   height: 62px;
   &.insight {
-    --filter-color: var(--color-secondary);
+    --filter-color: var(--ep-color-secondary);
   }
   &.moxie {
-    --filter-color: var(--color-primary);
+    --filter-color: var(--ep-color-primary);
   }
   &.vigor,
   &.threat {
-    --filter-color: var(--color-negative);
+    --filter-color: var(--ep-color-negative);
   }
   &.flex {
-    --filter-color: var(--color-text-lighter);
+    --filter-color: var(--ep-color-text-lighter);
   }
 
   &:hover,

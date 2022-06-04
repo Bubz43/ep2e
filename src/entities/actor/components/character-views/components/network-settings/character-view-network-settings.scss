@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -18,11 +18,11 @@ sl-form {
   display: flex;
   justify-content: space-between;
   padding: 0.25rem 1rem;
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
 }
 
 li[divider] {
-  border-color: var(--color-border);
+  border-color: var(--ep-color-border);
 }
 
 mwc-check-list-item {

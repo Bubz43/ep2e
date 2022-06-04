@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include resetUnorderedList();
 
@@ -36,7 +36,7 @@ header {
     }
   }
   .info {
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
     font-size: small;
   }
 }
@@ -48,14 +48,14 @@ header {
   float: right;
   > * {
     padding: 0 0.5rem;
-    background: alphav(var(--color-grey), 0.1);
+    background: alphav(var(--ep-color-grey), 0.1);
     margin-left: 0.25rem;
     border-radius: 3px;
     list-style: none;
-    border: 1px solid alphav(var(--color-grey), 0.15);
+    border: 1px solid alphav(var(--ep-color-grey), 0.15);
   }
   .value {
-    color: var(--color-text-lighter);
+    color: var(--ep-color-text-lighter);
   }
 }
 
@@ -76,15 +76,15 @@ header {
   position: relative;
   @include textButton();
   mwc-icon {
-    color: var(--color-negative);
+    color: var(--ep-color-negative);
     &.support {
-      color: var(--color-secondary);
+      color: var(--ep-color-secondary);
       filter: hue-rotate(-30deg);
     }
   }
   notification-coin {
     position: static;
     margin-left: 0.5ch;
-    --coin-bg: #{alphav(var(--color-grey), 0.2)};
+    --coin-bg: #{alphav(var(--ep-color-grey), 0.2)};
   }
 }

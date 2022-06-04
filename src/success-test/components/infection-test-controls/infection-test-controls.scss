@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include styled-scrollbars();
 
@@ -35,7 +35,7 @@
   }
   background: linear-gradient(
     to bottom,
-    alphav(var(--color-bg), 0.8),
-    alphav(var(--color-bg-alt), 0.8)
+    alphav(var(--ep-color-bg), 0.8),
+    alphav(var(--ep-color-bg-alt), 0.8)
   );
 }

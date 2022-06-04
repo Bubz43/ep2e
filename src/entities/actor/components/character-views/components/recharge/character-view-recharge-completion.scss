@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -62,7 +62,7 @@ wl-list-item {
 }
 
 .new-values {
-  color: var(--color-primary-alt);
+  color: var(--ep-color-primary-alt);
   margin-left: 1rem;
 }
 
@@ -107,7 +107,7 @@ wl-list-item {
 
 .complete-recharge {
   &.missing {
-    --mdc-theme-primary: var(--color-text-lighter);
+    --mdc-theme-primary: var(--ep-color-text-lighter);
   }
 }
 
@@ -128,7 +128,7 @@ button {
     color: grey;
   }
   &:hover {
-    background: var(--color-primary);
+    background: var(--ep-color-primary);
   }
   &:active {
     transform: scale(1.1);

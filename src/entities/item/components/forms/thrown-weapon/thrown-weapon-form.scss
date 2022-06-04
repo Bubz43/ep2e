@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include itemAddon();
 
@@ -48,6 +48,6 @@
 .radio-wrapper {
   display: flex;
   align-items: center;
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
   font-size: 1.1rem;
 }

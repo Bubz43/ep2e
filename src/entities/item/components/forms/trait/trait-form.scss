@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -54,7 +54,7 @@ sl-group {
 
 trait-form-level {
   &.active {
-    border-color: var(--color-primary);
+    border-color: var(--ep-color-primary);
     border-width: 2px;
   }
 }

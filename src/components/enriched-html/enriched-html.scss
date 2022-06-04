@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -13,7 +13,7 @@
   min-width: 100%;
   line-height: 1.5em;
 
-  color: lightv(var(--color-text), 1.1);
+  color: lightv(var(--ep-color-text), 1.1);
   font-family: var(--font-1);
   margin: 0.5rem 0;
   font-size: 15px;
@@ -25,7 +25,7 @@
 a.inline-roll,
 a.entity-link {
   background: transparent !important;
-  color: var(--color-primary-alt) !important;
+  color: var(--ep-color-primary-alt) !important;
   border: none !important;
   &:not(.broken):hover {
     text-shadow: 0 0 1px currentColor;
@@ -36,10 +36,10 @@ a.entity-link {
 }
 
 hr {
-  border-color: var(--color-grey);
+  border-color: var(--ep-color-grey);
 }
 
 h1,
 h2 {
-  border-color: var(--color-border);
+  border-color: var(--ep-color-border);
 }

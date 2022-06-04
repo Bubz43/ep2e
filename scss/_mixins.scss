@@ -1,4 +1,4 @@
-@use "./functions";
+@use './functions';
 
 @mixin styled-scrollbars {
   ::-webkit-scrollbar {
@@ -18,7 +18,7 @@
     background: #782e22;
     border: 1px solid #ff6400;
     background: #b0c4de99;
-    border: 1px solid alphav(var(--color-grey), 0.5);
+    border: 1px solid alphav(var(--ep-color-grey), 0.5);
   }
 
   * {
@@ -42,17 +42,17 @@
   }
   input {
     background: transparent;
-    color: var(--color-text);
+    color: var(--ep-color-text);
     font-family: var(--font-1);
     font-size: 1rem;
-    border: 1px inset var(--color-border);
+    border: 1px inset var(--ep-color-border);
     padding-left: 0.25rem;
     &:focus {
-      border-color: var(--color-secondary);
+      border-color: var(--ep-color-secondary);
       outline: none;
     }
     &[disabled] {
-      color: var(--color-text-disabled);
+      color: var(--ep-color-text-disabled);
     }
   }
 }
@@ -73,12 +73,12 @@
     }
     .addon-type {
       grid-area: type;
-      color: var(--color-text-lighter);
+      color: var(--ep-color-text-lighter);
       @include truncate(100%);
     }
     mwc-icon-button {
       --mdc-icon-button-size: 1.5rem;
-      color: var(--color-text-lighter);
+      color: var(--ep-color-text-lighter);
       --mdc-icon-size: 1.25rem;
       grid-area: sheet;
     }
@@ -100,7 +100,7 @@
   [data-comma] {
     &::after {
       content: ',';
-      color: var(--color-text-lighter);
+      color: var(--ep-color-text-lighter);
     }
   }
 }
@@ -108,7 +108,7 @@
 @mixin listItemLabel() {
   li.label {
     // text-transform: uppercase;
-    // color: var(--color-text-lighter);
+    // color: var(--ep-color-text-lighter);
     // letter-spacing: 0.5px;
     white-space: nowrap;
     text-transform: uppercase;
@@ -127,13 +127,13 @@
     display: inline-flex;
     &:hover {
       cursor: pointer;
-      color: functions.satv(var(--color-secondary), 1.2);
+      color: functions.satv(var(--ep-color-secondary), 1.2);
     }
     &:focus {
       text-shadow: var(--text-highlight);
     }
     &[disabled] {
-      color: var(--color-text-disabled);
+      color: var(--ep-color-text-disabled);
       pointer-events: none;
     }
   }
@@ -173,7 +173,7 @@
   margin: $vertMargin auto;
   opacity: 0.6;
   border-radius: 100%;
-  border-bottom: 2px solid var(--color-primary);
+  border-bottom: 2px solid var(--ep-color-primary);
 }
 
 @mixin elevation {

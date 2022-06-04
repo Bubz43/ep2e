@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -18,7 +18,7 @@
     padding: 0.5rem 0.75rem 0;
 
     .label {
-      color: var(--color-text-lighter);
+      color: var(--ep-color-text-lighter);
       text-transform: uppercase;
       letter-spacing: 1px;
       font-size: small;
@@ -26,7 +26,7 @@
   }
 
   mwc-button {
-    --mdc-theme-primary: var(--color-secondary);
+    --mdc-theme-primary: var(--ep-color-secondary);
     img {
       filter: drop-shadow(2px 4px 6px black);
     }

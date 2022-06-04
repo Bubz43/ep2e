@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -15,7 +15,7 @@
 }
 
 li[divider] {
-  border-color: var(--color-border);
+  border-color: var(--ep-color-border);
 }
 
 .item {
@@ -23,19 +23,19 @@ li[divider] {
 }
 
 .item-type {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
 }
 
 .controls {
   position: sticky;
   bottom: -1px;
   height: calc(100% + 1px);
-  background: var(--color-bg);
+  background: var(--ep-color-bg);
   margin-top: auto;
   padding: 0.5rem 1rem;
   display: flex;
   align-items: center;
-  border-top: 2px solid var(--color-border);
+  border-top: 2px solid var(--ep-color-border);
 
   submit-button {
     margin-left: auto;
@@ -70,7 +70,7 @@ li[divider] {
   display: grid;
 }
 .start-stress-test {
-  --mdc-theme-primary: var(--color-negative);
+  --mdc-theme-primary: var(--ep-color-negative);
   margin: 0.25rem 0;
 }
 

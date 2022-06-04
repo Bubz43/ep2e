@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -10,6 +10,6 @@
 }
 
 p {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
   margin: 0.5rem 1rem;
 }

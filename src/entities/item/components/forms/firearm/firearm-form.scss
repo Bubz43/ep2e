@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -11,7 +11,7 @@
 
 hr {
   width: 100%;
-  border-color: var(--color-border);
+  border-color: var(--ep-color-border);
 }
 
 @include itemAddon();
@@ -48,7 +48,7 @@ p.label {
 .shape-name-form {
   @include inputReset();
   mwc-formfield {
-    --mdc-theme-text-primary-on-background: var(--color-text-lighter);
+    --mdc-theme-text-primary-on-background: var(--ep-color-text-lighter);
   }
 }
 
@@ -60,7 +60,7 @@ p.label {
 }
 
 .shape {
-  --list-item-bg: #{alphav(var(--color-grey), 0.25)};
+  --list-item-bg: #{alphav(var(--ep-color-grey), 0.25)};
   --list-item-padding: 0.25rem 0.5rem;
   border-radius: 7px;
   margin-right: 0.25rem;

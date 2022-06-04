@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -21,10 +21,10 @@
 
 mwc-icon-button-toggle {
   grid-area: icon;
-  color: var(--color-negative);
+  color: var(--ep-color-negative);
   --mdc-theme-text-disabled-on-light: currentColor;
   &[on] {
-    color: var(--color-secondary);
+    color: var(--ep-color-secondary);
     filter: hue-rotate(-30deg);
   }
 }
@@ -35,7 +35,7 @@ mwc-icon-button-toggle {
 
 .goals-toggle {
   grid-area: goals-toggle;
-  --mdc-theme-primary: var(--color-grey);
+  --mdc-theme-primary: var(--ep-color-grey);
   min-width: 115px;
 }
 
@@ -46,15 +46,15 @@ mwc-icon-button-toggle {
 input {
   background: transparent;
   font-family: var(--font-1);
-  border: 1px inset var(--color-border);
+  border: 1px inset var(--ep-color-border);
   font-size: 1rem;
-  color: var(--color-text);
+  color: var(--ep-color-text);
   &:focus {
-    border-color: var(--color-secondary);
+    border-color: var(--ep-color-secondary);
     outline: none;
   }
   &[disabled] {
-    color: var(--color-text-disabled);
+    color: var(--ep-color-text-disabled);
   }
 }
 

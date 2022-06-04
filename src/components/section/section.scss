@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -47,6 +47,6 @@ h2 {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
   border-left: 1px inset;
-  border-color: alphav(var(--color-grey), 0.25);
+  border-color: alphav(var(--ep-color-grey), 0.25);
   background: rgba(black, 0.09);
 }

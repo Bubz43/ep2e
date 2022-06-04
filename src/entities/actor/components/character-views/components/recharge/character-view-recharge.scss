@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -48,7 +48,7 @@ recharge-completion {
 }
 
 .total-spent {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
 }
 
 .infection-easing {

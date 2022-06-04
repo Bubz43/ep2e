@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -12,15 +12,15 @@
 mwc-button {
   width: calc(100% - 1rem);
   margin: 0.25rem 0.5rem;
-  --mdc-theme-primary: var(--color-primary-alt);
+  --mdc-theme-primary: var(--ep-color-primary-alt);
 
   &.damage,
   &.attack {
-    --mdc-theme-primary: #{lightv(var(--color-negative), 1.25)};
+    --mdc-theme-primary: #{lightv(var(--ep-color-negative), 1.25)};
   }
 
   &.heal {
-    --mdc-theme-primary: var(--color-secondary);
+    --mdc-theme-primary: var(--ep-color-secondary);
   }
 }
 
@@ -29,7 +29,7 @@ mwc-button {
   wl-list-item {
     display: inline-flex;
     padding: 0.25rem;
-    color: var(--color-primary-alt);
+    color: var(--ep-color-primary-alt);
   }
 }
 
@@ -43,9 +43,9 @@ mwc-button {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    background: alphav(var(--color-bg), 0.25);
+    background: alphav(var(--ep-color-bg), 0.25);
     display: none;
-    color: lightv(var(--color-negative), 1.5);
+    color: lightv(var(--ep-color-negative), 1.5);
     border-radius: 100%;
   }
   &[clickable]:hover {
@@ -58,6 +58,6 @@ mwc-button {
 
 .user-actions {
   margin-top: 0.25rem;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--ep-color-border);
   padding-top: 0.25rem;
 }

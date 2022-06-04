@@ -479,7 +479,7 @@ export class CharacterViewAlt extends CharacterViewBase {
                       tooltip.attach({
                         el: ev.currentTarget,
                         content: html` <p
-                            style="color: var(--color-primary-alt)"
+                            style="color: var(--ep-color-primary-alt)"
                           >
                             ${prettyMilliseconds(timeState.remaining, {
                               compact: false,
@@ -521,7 +521,7 @@ export class CharacterViewAlt extends CharacterViewBase {
                       tooltip.attach({
                         el: ev.currentTarget,
                         content: html` <p
-                            style="color: var(--color-primary-alt)"
+                            style="color: var(--ep-color-primary-alt)"
                           >
                             ${prettyMilliseconds(timeState.remaining, {
                               compact: false,

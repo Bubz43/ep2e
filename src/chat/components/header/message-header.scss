@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -12,7 +12,7 @@
 
 :host([nested]) {
   header {
-    background: alphav(var(--color-bg), 0.25);
+    background: alphav(var(--ep-color-bg), 0.25);
   }
   .headings {
     padding: 0.15rem 0;
@@ -22,7 +22,7 @@
 header {
   display: flex;
   position: relative;
-  background: alphav(var(--color-bg-alt), 0.5);
+  background: alphav(var(--ep-color-bg-alt), 0.5);
 }
 
 .headings {
@@ -77,15 +77,15 @@ img {
 }
 
 h4 {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
 }
 
 .description {
   margin: 0;
   font-size: 14px;
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
   white-space: nowrap;
-  border-top: 2px groove alphav(var(--color-border), 0.5);
+  border-top: 2px groove alphav(var(--ep-color-border), 0.5);
   padding: 0.5rem 1rem;
 
   height: 2.5em;

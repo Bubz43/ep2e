@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -15,7 +15,7 @@ sl-form {
 }
 
 label {
-  color: alphav(var(--color-text), 0.8);
+  color: alphav(var(--ep-color-text), 0.8);
   letter-spacing: 1px;
   display: flex;
   width: 50%;
@@ -27,8 +27,8 @@ input {
   background: transparent;
   font-family: var(--font-primary);
   border: none;
-  border-bottom: 1px solid var(--color-grey);
-  color: var(--color-text);
+  border-bottom: 1px solid var(--ep-color-grey);
+  color: var(--ep-color-text);
   margin: 0 0.5rem;
   transform: translateY(-2px);
   font-size: 14px;
@@ -36,11 +36,11 @@ input {
   z-index: -1;
   &:focus {
     outline: none;
-    border-bottom-color: var(--color-secondary);
+    border-bottom-color: var(--ep-color-secondary);
   }
 
   &[disabled] {
-    color: var(--color-grey);
+    color: var(--ep-color-grey);
     transform: translateY(-1px);
     border-bottom: none;
   }

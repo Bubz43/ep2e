@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -10,7 +10,7 @@
 }
 
 message-header {
-  border-bottom: 1px solid alphav(var(--color-border), 0.5);
+  border-bottom: 1px solid alphav(var(--ep-color-border), 0.5);
 }
 
 .substance-info {
@@ -26,9 +26,9 @@ message-header {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    background: alphav(var(--color-bg), 0.25);
+    background: alphav(var(--ep-color-bg), 0.25);
     display: none;
-    color: lightv(var(--color-negative), 1.5);
+    color: lightv(var(--ep-color-negative), 1.5);
     border-radius: 100%;
   }
   &[clickable]:hover {

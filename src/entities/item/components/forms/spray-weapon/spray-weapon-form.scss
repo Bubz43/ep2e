@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include itemAddon();
 
@@ -13,7 +13,7 @@
 
 hr {
   width: 100%;
-  border-color: var(--color-border);
+  border-color: var(--ep-color-border);
 }
 
 .doses-form,

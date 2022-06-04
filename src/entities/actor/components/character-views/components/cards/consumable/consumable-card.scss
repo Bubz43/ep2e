@@ -1,9 +1,9 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 .quantity-form,
 character-view-explosive-attacks {
-  border-bottom: 2px groove var(--color-border);
+  border-bottom: 2px groove var(--ep-color-border);
 }
 
 .quantity {
@@ -17,13 +17,13 @@ character-view-explosive-attacks {
     font-family: var(--font-1);
     width: 4ch;
     text-align: center;
-    color: var(--color-text);
-    border-bottom: 1px solid var(--color-border);
+    color: var(--ep-color-text);
+    border-bottom: 1px solid var(--ep-color-border);
     &:focus {
-      border-color: var(--color-secondary);
+      border-color: var(--ep-color-secondary);
     }
     &[disabled] {
-      color: var(--color-text-disabled);
+      color: var(--ep-color-text-disabled);
       pointer-events: none;
       border: none;
     }

@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include resetUnorderedList();
 @include dataComma();
@@ -29,6 +29,6 @@ li {
   sup {
     vertical-align: text-top;
     margin-left: 0.25ch;
-    color: satv(var(--color-grey), 1.2);
+    color: satv(var(--ep-color-grey), 1.2);
   }
 }

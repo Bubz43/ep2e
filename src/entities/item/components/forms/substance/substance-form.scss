@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -34,7 +34,7 @@
     list-style: none;
     display: inline-block;
     padding: 0.15rem 0.5rem;
-    background: var(--color-border);
+    background: var(--ep-color-border);
     border-radius: 7px;
   }
 }
@@ -68,7 +68,7 @@ form-items-list {
       padding: 0.25rem 0.5rem;
       margin-bottom: 0.25rem;
       > span:first-of-type {
-        color: var(--color-text-lighter);
+        color: var(--ep-color-text-lighter);
       }
     }
   }
@@ -76,6 +76,6 @@ form-items-list {
 
 .divider {
   width: 100%;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--ep-color-border);
   margin: 0 0 0 0.5rem;
 }

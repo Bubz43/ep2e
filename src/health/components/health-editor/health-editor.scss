@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include resetUnorderedList();
 
@@ -11,11 +11,11 @@
   display: grid;
   width: 400px;
   --health-item-padding: 0.5rem 1rem;
-  background: alphav(var(--color-bg), 0.75);
+  background: alphav(var(--ep-color-bg), 0.75);
 }
 .mode-form {
   padding: 0.25rem 0.5rem;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--ep-color-border);
   margin-bottom: 0.5rem;
   grid-auto-flow: column;
 }
@@ -33,11 +33,11 @@ sl-popover {
 }
 
 mwc-tab-bar {
-  --mdc-theme-primary: var(--color-grey);
+  --mdc-theme-primary: var(--ep-color-grey);
 }
 
 mwc-list-item {
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--ep-color-border);
 }
 
 p {

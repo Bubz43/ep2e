@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -11,11 +11,11 @@
 
 .push-button,
 .use-button {
-  --mdc-theme-primary: var(--color-primary-alt);
+  --mdc-theme-primary: var(--ep-color-primary-alt);
 }
 
 .end-button {
-  --mdc-theme-primary: var(--color-secondary);
+  --mdc-theme-primary: var(--ep-color-secondary);
 }
 
 .effects {

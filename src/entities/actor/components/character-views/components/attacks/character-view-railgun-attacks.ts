@@ -55,7 +55,7 @@ export class CharacterViewRailgunAttacks extends LitElement {
         .recharge {
           display: inline-flex;
           align-items: center;
-          color: var(--color-text-lighter);
+          color: var(--ep-color-text-lighter);
           margin-left: 0.5ch;
         }
       `,

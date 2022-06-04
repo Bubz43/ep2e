@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -20,11 +20,11 @@
   display: grid;
   gap: 0.25rem;
   padding: 0.25rem 0.5rem;
-  border-top: 2px groove alphav(var(--color-border), 0.5);
+  border-top: 2px groove alphav(var(--ep-color-border), 0.5);
 }
 
 .options {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
   text-align: center;
   margin: 0;
   padding: 0.25rem 0.5rem;
@@ -35,7 +35,7 @@
 .payload {
   width: calc(100% - 1rem);
   margin: 0.25rem 0.5rem;
-  --mdc-theme-primary: var(--color-negative);
+  --mdc-theme-primary: var(--ep-color-negative);
 }
 
 .defense {
@@ -43,7 +43,7 @@
   wl-list-item {
     display: inline-flex;
     padding: 0.25rem;
-    color: var(--color-primary-alt);
+    color: var(--ep-color-primary-alt);
   }
 }
 
@@ -54,5 +54,5 @@
 }
 
 message-header {
-  border-top: 2px groove var(--color-border);
+  border-top: 2px groove var(--ep-color-border);
 }

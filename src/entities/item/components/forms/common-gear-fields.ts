@@ -139,7 +139,7 @@ export const accessoriesListStyles = css`
     list-style: none;
     display: inline-block;
     padding: 0.15rem 0.5rem;
-    background: var(--color-border);
+    background: var(--ep-color-border);
     border-radius: 7px;
     margin: 0.5rem 0.5rem 0 0;
   }
@@ -177,7 +177,7 @@ export const renderKineticAttackEdit = (
     })}
     <p class="label">${localize('firingModes')}</p>
     ${renderFiringModeCheckboxes(
-      (updater as unknown) as UpdateActions<{ firingModes: FiringMode[] }>,
+      updater as unknown as UpdateActions<{ firingModes: FiringMode[] }>,
     )}
     ${renderUpdaterForm(updater, {
       fields: ({ notes }) => renderTextareaField(notes),

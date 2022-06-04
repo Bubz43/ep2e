@@ -1,8 +1,8 @@
 :host {
   display: inline-flex;
-  --mdc-theme-primary: var(--color-border);
+  --mdc-theme-primary: var(--ep-color-border);
 }
 
 :host([complete]) {
-  --mdc-theme-primary: var(--color-primary);
+  --mdc-theme-primary: var(--ep-color-primary);
 }

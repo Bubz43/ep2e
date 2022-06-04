@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 * {
   box-sizing: border-box;
@@ -17,11 +17,11 @@
 
 .type,
 [slot='graphic'] {
-  color: var(--color-text-lighter);
+  color: var(--ep-color-text-lighter);
 }
 
 [slot='meta'] {
-  color: var(--color-negative);
+  color: var(--ep-color-negative);
 }
 
 mwc-list {

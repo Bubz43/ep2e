@@ -181,7 +181,7 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
               <mwc-list-item noninteractive
                 >${localize('remove')} ${localize('conditions')}</mwc-list-item
               >
-              <li divider style="--border-color: var(--color-border);"></li>
+              <li divider style="--border-color: var(--ep-color-border);"></li>
               ${conditions.map(
                 (condition) => html`
                   <mwc-check-list-item selected
@@ -252,11 +252,8 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
   render() {
     const { disabled } = this.character;
     const { substance } = this;
-    const {
-      timeState,
-      multiTimeStates,
-      finishedEffects,
-    } = substance.appliedInfo;
+    const { timeState, multiTimeStates, finishedEffects } =
+      substance.appliedInfo;
 
     return html`
       ${notEmpty(multiTimeStates)
@@ -333,12 +330,8 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
     const { disabled } = this.character;
     const { substance } = this;
     const { base: alwaysApplied, severity, hasSeverity } = substance;
-    const {
-      timeState,
-      modifyingEffects,
-      applySeverity,
-      dots,
-    } = substance.appliedInfo;
+    const { timeState, modifyingEffects, applySeverity, dots } =
+      substance.appliedInfo;
     const mods = compact([
       modifyingEffects?.duration,
       modifyingEffects?.misc,
