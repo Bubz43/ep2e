@@ -63,7 +63,9 @@ export class CompendiumSearch extends LitElement {
 
     for (const pack of game.packs.values()) {
       if (pack.private && !isGM) continue;
-      const { documentName, system: source } = pack.metadata;
+      const { system: source } = pack.metadata;
+      const { documentName } = pack;
+
       if (
         documentName === this.documentName &&
         (source === 'world' ? world : source === EP.Name ? system : modules)

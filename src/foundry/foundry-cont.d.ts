@@ -279,12 +279,12 @@ declare global {
   }
 
   interface CompendiumCollection {
+    documentName: EntityName;
     metadata: {
       name: string;
       label: string;
       path: string;
       private: boolean;
-      documentName: EntityName;
       system: string;
     };
   }
