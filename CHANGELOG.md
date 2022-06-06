@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.908] - 2022-06-06
+
+- Fix compendium browser not loading entries
+
 ## [0.907] - 2022-06-04
 
 - Apply custom styling solution for Monk's Enhanced Journal module
