@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.909] - 2022-06-08
+
+- Fix typo in Exoskeleton/Hardsuit compendium (Batttlesuit -> Battlesuit)
+
 ## [0.908] - 2022-06-06
 
 - Fix compendium browser not loading entries
