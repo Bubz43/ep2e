@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.910] - 2022-06-09
+
+- Keep sidebar actor/item info synced
+- Minor style fixes
+
 ## [0.909] - 2022-06-08
 
 - Fix typo in Exoskeleton/Hardsuit compendium (Batttlesuit -> Battlesuit)
