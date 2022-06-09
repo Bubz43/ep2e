@@ -3,6 +3,7 @@
 ## [0.909] - 2022-06-08
 
 - Fix typo in Exoskeleton/Hardsuit compendium (Batttlesuit -> Battlesuit)
+- Fix typo in Resources description (Minorcomplexity -> Minor complexity)
 
 ## [0.908] - 2022-06-06
 
