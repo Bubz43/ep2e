@@ -1,5 +1,5 @@
-@use "scss/functions" as *;
-@use "scss/mixins" as *;
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
 
 @include itemAddon();
 
@@ -37,7 +37,6 @@ p.label {
 .quantity-form {
   grid-template-columns: 1fr 1fr;
   > * {
-    width: min-content;
     & + * {
       justify-self: end;
     }

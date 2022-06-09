@@ -354,12 +354,21 @@ Hooks.once('ready', async () => {
     event: MutateEvent.Update,
     callback: (actor) => {
       if (actor.isToken) {
-        console.log(actor.token);
         actor.token?.object?.drawEffects();
-      } else
+      } else {
         actor
           .getActiveTokens(true, false)
           .forEach((t) => (t as Token).drawEffects());
+      }
+
+      if (!actor.token && !actor.compendium) {
+        const sidebarListItem = document.querySelector(
+          `.sidebar-tab.directory .directory-item.actor[data-document-id="${actor.id}"]`,
+        );
+        if (sidebarListItem instanceof HTMLElement) {
+          applyFullActorItemInfo(actor, sidebarListItem);
+        }
+      }
     },
   });
 
@@ -528,23 +537,50 @@ for (const app of [ActorDirectory, ItemDirectory]) {
           game[app === ActorDirectory ? 'actors' : 'items'].get(documentId);
         if (!doc) return;
 
-        const nameElement =
-          listItem.querySelector<HTMLHeadingElement>('h4.document-name')!;
-
         if (isItem(doc)) {
-          nameElement.querySelector('a')!.textContent = doc.proxy.fullName;
-          nameElement.dataset['type'] = doc.proxy.fullType;
+          applyFullItemInfo(doc, listItem);
         } else {
-          if (doc.type !== ActorType.Character && isSleeve(doc.proxy)) {
-            nameElement.dataset['type'] = formattedSleeveInfo(doc.proxy)
-              .concat(localize(doc.type))
-              .join(' - ');
-          } else {
-            nameElement.dataset['type'] = localize(doc.type);
-          }
+          applyFullActorItemInfo(doc, listItem);
         }
-        listItem.title = `${doc.name}
-        ${nameElement.dataset['type']}`;
       }),
   });
 }
+
+function applyFullActorItemInfo(actor: ActorEP, listItem: HTMLElement) {
+  const nameElement =
+    listItem.querySelector<HTMLHeadingElement>('h4.document-name')!;
+  if (actor.type !== ActorType.Character && isSleeve(actor.proxy)) {
+    nameElement.dataset['type'] = formattedSleeveInfo(actor.proxy)
+      .concat(localize(actor.type))
+      .join(' - ');
+  } else {
+    nameElement.dataset['type'] = localize(actor.type);
+  }
+  listItem.title = `${actor.name}
+        ${nameElement.dataset['type']}`;
+}
+
+function applyFullItemInfo(item: ItemEP, listItem: HTMLElement) {
+  const nameElement =
+    listItem.querySelector<HTMLHeadingElement>('h4.document-name')!;
+  nameElement.querySelector('a')!.textContent = item.proxy.fullName;
+  nameElement.dataset['type'] = item.proxy.fullType;
+  listItem.title = `${item.name}
+        ${nameElement.dataset['type']}`;
+}
+
+mutateEntityHook({
+  entity: ItemEP,
+  hook: 'on',
+  event: MutateEvent.Update,
+  callback: (item) => {
+    if (!item.actor && !item.compendium) {
+      const sidebarListItem = document.querySelector(
+        `.sidebar-tab.directory .directory-item.item[data-document-id="${item.id}"]`,
+      );
+      if (sidebarListItem instanceof HTMLElement) {
+        applyFullItemInfo(item, sidebarListItem);
+      }
+    }
+  },
+});

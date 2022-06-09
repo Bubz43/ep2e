@@ -745,6 +745,7 @@ sl-tooltip {
   border: none !important;
   > img {
     grid-area: img;
+    margin-right: 0.25rem;
   }
   > h4 {
     display: grid;
