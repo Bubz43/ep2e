@@ -4,5 +4,7 @@ export const foundryIcon = (name: string) => `icons/svg/${name}.svg`;
 
 export function getDefaultItemIcon() {
   // TODO Fix this
-  return foundry.data.ItemData.DEFAULT_ICON;
+  //@ts-expect-error
+  return foundry.documents.BaseItem.DEFAULT_ICON;
+  //   return foundry.data.ItemData.DEFAULT_ICON;
 }

@@ -118,14 +118,6 @@ export class ItemEP extends Item {
     return duplicate(this.data) as Mutable<ItemDatas>;
   }
 
-  get id() {
-    return this.data._id;
-  }
-
-  get type() {
-    return this.data.type;
-  }
-
   get proxy() {
     if (!this._proxy || this.invalidated) this._proxy = this.createProxy();
 

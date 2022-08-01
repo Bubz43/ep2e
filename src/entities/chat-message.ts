@@ -24,7 +24,8 @@ export class ChatMessageEP extends ChatMessage {
       token: string | null;
     }>;
     content: string;
-    roll?: string | null; // RollData;
+    rolls: string[]; // RollData;
+    // roll?: string | null; // RollData;
     user: string;
     type: number;
     timestamp: number;

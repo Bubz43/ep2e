@@ -23,12 +23,4 @@ export class UserEP extends User {
   // get color() {
   //   return this.data.color;
   // }
-
-  get avatar() {
-    return super.avatar as string;
-  }
-
-  get name() {
-    return this.data.name;
-  }
 }
