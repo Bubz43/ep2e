@@ -11,6 +11,7 @@ import type {
 } from '@src/foundry/foundry-cont';
 import { userCan } from '@src/foundry/misc-helpers';
 import { debounce } from '@src/utility/decorators';
+import { getDefaultItemIcon } from '@src/utility/images';
 import { html } from 'lit-html';
 import { compact } from 'remeda';
 import type { DeepPartial } from 'utility-types';
@@ -94,7 +95,7 @@ export class ItemEPSheet implements EntitySheet {
               this.item.id,
               this.item.proxy.nonDefaultImg
                 ? {}
-                : { img: foundry.data.ItemData.DEFAULT_ICON },
+                : { img: getDefaultItemIcon() },
               { renderSheet: true },
             );
           },

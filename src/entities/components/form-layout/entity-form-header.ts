@@ -10,6 +10,7 @@ import { tooltip } from '@src/init';
 import { openMenu } from '@src/open-menu';
 import type { FieldPropsRenderer } from '@src/utility/field-values';
 import { notEmpty } from '@src/utility/helpers';
+import { getDefaultItemIcon } from '@src/utility/images';
 import { customElement, html, LitElement, property } from 'lit-element';
 import styles from './entity-form-header.scss';
 
@@ -91,7 +92,7 @@ export class EntityFormHeader extends LitElement {
           callback: () =>
             this.updateImage(
               isItem(this.updateActions.originalValue().type)
-                ? foundry.data.ItemData.DEFAULT_ICON
+                ? getDefaultItemIcon()
                 : CONST.DEFAULT_TOKEN,
             ),
         },
@@ -127,7 +128,7 @@ export class EntityFormHeader extends LitElement {
     const hideImg =
       this.noDefaultImg &&
       (img === CONST.DEFAULT_TOKEN ||
-        (isItem(type) && img === foundry.data.ItemData.DEFAULT_ICON));
+        (isItem(type) && img === getDefaultItemIcon()));
     if (hideImg && this.disabled) return '';
     return hideImg
       ? html`<mwc-icon-button

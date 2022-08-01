@@ -63,7 +63,7 @@ window.addEventListener('drop', setLastPosition, { capture: true });
 Hooks.once('init', () => {
   gameSettings = registerEPSettings();
 
-  foundry.data.ItemData.DEFAULT_ICON = localImage('icons/nested-eclipses.svg');
+  // foundry.data.ItemData.DEFAULT_ICON = localImage('icons/nested-eclipses.svg');
   CONFIG.Actor.documentClass = ActorEP;
   Actors.unregisterSheet('core', ActorSheet);
   Actors.registerSheet(EP.Name, ActorEPSheet, { makeDefault: true });

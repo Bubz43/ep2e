@@ -6,6 +6,7 @@ import type { FoundryDoc } from '@src/foundry/foundry-cont';
 import { localize } from '@src/foundry/localization';
 import { openMenu } from '@src/open-menu';
 import { clickIfEnter, searchRegExp } from '@src/utility/helpers';
+import { getDefaultItemIcon } from '@src/utility/images';
 import { customElement, html, LitElement, property, state } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { repeat } from 'lit-html/directives/repeat';
@@ -71,7 +72,7 @@ export class CompendiumList extends LitElement {
               this.compendium.collection,
               entryId,
               document instanceof ItemEP && !document.proxy.nonDefaultImg
-                ? { img: foundry.data.ItemData.DEFAULT_ICON }
+                ? { img: getDefaultItemIcon() }
                 : {},
               { renderSheet: true },
             );
