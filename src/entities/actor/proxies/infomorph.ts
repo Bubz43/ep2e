@@ -22,7 +22,7 @@ class InfomorphBase extends ActorProxyBase<ActorType.Infomorph> {
     return localize(this.type);
   }
   get damagedArmorUpdater() {
-    return this.updater.path('data', 'damagedArmor');
+    return this.updater.path('system', 'damagedArmor');
   }
 }
 
@@ -45,7 +45,7 @@ export class Infomorph extends mix(InfomorphBase).with(SleeveInfo) {
   }
 
   updateConditions(conditions: ConditionType[]) {
-    return this.updater.path('data', 'conditions').commit(conditions);
+    return this.updater.path('system', 'conditions').commit(conditions);
   }
 
   get healths(): ActorHealth[] {
@@ -65,7 +65,7 @@ export class Infomorph extends mix(InfomorphBase).with(SleeveInfo) {
     return new MeshHealth({
       data: this.epData.meshHealth,
       statMods: this.activeEffects?.getHealthStatMods(HealthType.Mesh),
-      updater: this.updater.path('data', 'meshHealth').nestedStore(),
+      updater: this.updater.path('system', 'meshHealth').nestedStore(),
       source: localize('mindState'),
       homeDevices: 1, // TODO
       deathRating: true,
@@ -128,7 +128,7 @@ export class Infomorph extends mix(InfomorphBase).with(SleeveInfo) {
       case ItemType.Software: {
         if (proxy.isWare) {
           const copy = proxy.getDataCopy(true);
-          copy.data.state.equipped = true;
+          copy.system.state.equipped = true;
           this.itemOperations.add(copy);
         } else
           notify(

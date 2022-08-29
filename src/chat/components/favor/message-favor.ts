@@ -43,7 +43,7 @@ export class MessageFavor extends MessageElement {
 
       if (repIdentifier.type === 'ego') {
         await actor.proxy.ego.updater
-          .path('data', 'reps', repIdentifier.networkId)
+          .path('system', 'reps', repIdentifier.networkId)
           .commit((rep) => {
             const isActive =
               repRefreshTimerActive(rep) && rep.refreshStartTime !== 0;
@@ -59,7 +59,7 @@ export class MessageFavor extends MessageElement {
         const { fakeEgoId, repId } = repIdentifier;
         actor.proxy.equippedGroups.fakeIDs
           .find((fake) => fake.id === fakeEgoId)
-          ?.updater.path('data', 'reputations')
+          ?.updater.path('system', 'reputations')
           .commit((reps) => {
             const rep = reps.find((rep) => rep.id === repId);
             if (rep) {

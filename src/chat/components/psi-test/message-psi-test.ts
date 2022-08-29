@@ -215,7 +215,7 @@ export class MessagePsiTest extends MessageElement {
       character.epData.temporary.map((temp) => temp.id),
     );
 
-    await character.updater.path('data', 'temporary').commit((temps) => [
+    await character.updater.path('system', 'temporary').commit((temps) => [
       ...temps,
       {
         ...createTemporaryFeature.effects({

@@ -47,12 +47,13 @@ class Base extends ItemProxyBase<ItemType.Firearm> {
     ]);
   }
   get updateState() {
-    return this.updater.path('data', 'state');
+    return this.updater.path('system', 'state');
   }
 }
 export class Firearm
   extends mix(Base).with(Purchasable, Gear, Equippable, RangedWeapon, Copyable)
-  implements Attacker<KineticWeaponAttackData, KineticWeaponAttack> {
+  implements Attacker<KineticWeaponAttackData, KineticWeaponAttack>
+{
   readonly nestedShape;
 
   constructor({
@@ -84,18 +85,18 @@ export class Firearm
   }
 
   setSingleUseSpent(spent: boolean) {
-    this.updater.path('data', 'state', 'used').commit(spent);
+    this.updater.path('system', 'state', 'used').commit(spent);
   }
 
   updateAmmoCount(newValue: number) {
     const { max } = this.ammoState;
     const { value } = this.ammoData;
     this.updater
-      .path('data', 'ammo', 'value')
+      .path('system', 'ammo', 'value')
       .store(clamp(newValue, { min: 0, max: max + 1 }));
     return this.specialAmmo?.hasMultipleModes
       ? this.updater
-          .path('data', 'ammo', 'modeSettings')
+          .path('system', 'ammo', 'modeSettings')
           .commit(
             newValue < value
               ? (modes) => modes.slice(-newValue)
@@ -224,11 +225,11 @@ export class Firearm
     const gained = this.gainedFromAmmo(ammo);
     if (ammo.hasMultipleModes) {
       this.updater
-        .path('data', 'ammo', 'modeSettings')
+        .path('system', 'ammo', 'modeSettings')
         .store(Array(gained).fill(0));
     }
     this.updater
-      .path('data', 'ammo')
+      .path('system', 'ammo')
       .store({ selectedModeIndex: 0, value: gained });
     return this.updateAmmo([ammo.getDataCopy(true)]);
   }
@@ -316,8 +317,8 @@ export class Firearm
         name,
         _id: id,
       };
-      shapeData.data = {
-        ...shapeData.data,
+      shapeData.system = {
+        ...shapeData.system,
         shapeChanging: true,
         wareType: this.wareType,
         description: this.description,
@@ -330,9 +331,9 @@ export class Firearm
           transformation: null,
         },
       };
-      shapeData.data.state = {
+      shapeData.system.state = {
         ...this.epData.state,
-        ...shapeData.data.state,
+        ...shapeData.system.state,
         equipped: this.equipped,
       };
 
@@ -342,10 +343,10 @@ export class Firearm
         ...this.getDataCopy(false),
         name: this.shapeName,
       };
-      myData.data.state = shapeData.data.state;
+      myData.system.state = shapeData.system.state;
 
-      myData.data = {
-        ...myData.data,
+      myData.system = {
+        ...myData.system,
         shapeChanging: true,
         shapeName: this.shapeName,
       };
@@ -365,8 +366,8 @@ export class Firearm
 
   addShape(weaponData: ReturnType<Firearm['getDataCopy']>) {
     const { shapes, ...flags } = weaponData.flags.ep2e || {};
-    weaponData.data = {
-      ...weaponData.data,
+    weaponData.system = {
+      ...weaponData.system,
       shapeChanging: true,
       shapeName: weaponData.name,
       wareType: this.wareType,

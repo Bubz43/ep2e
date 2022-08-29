@@ -10,7 +10,8 @@ import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
 export class Trait
   extends ItemProxyBase<ItemType.Trait>
-  implements ObtainableEffects {
+  implements ObtainableEffects
+{
   readonly lockSource;
   readonly temporary;
   readonly isPsiInfluence;
@@ -51,7 +52,7 @@ export class Trait
         label: `${localize('level')} ${index + 1}`,
         callback: () => {
           const copy = this.getDataCopy();
-          copy.data.state.level = index;
+          copy.system.state.level = index;
           addTrait(copy);
         },
       })),
@@ -72,11 +73,11 @@ export class Trait
   }
 
   toggleTriggered() {
-    return this.updater.path('data', 'state', 'triggered').commit(toggle);
+    return this.updater.path('system', 'state', 'triggered').commit(toggle);
   }
 
   updateLevel(levelIndex: number) {
-    return this.updater.path('data', 'state', 'level').commit(levelIndex);
+    return this.updater.path('system', 'state', 'level').commit(levelIndex);
   }
 
   get fullType() {
@@ -158,14 +159,8 @@ export class Trait
   }
 
   get fullName() {
-    const {
-      levelIndex,
-      subtype,
-      triggered,
-      embedded,
-      levels,
-      isPsiInfluence,
-    } = this;
+    const { levelIndex, subtype, triggered, embedded, levels, isPsiInfluence } =
+      this;
     const parts = compact([
       subtype,
       levels.length > 1 &&

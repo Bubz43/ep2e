@@ -57,7 +57,7 @@ export type FullEgoData = {
   // _id: string;
   name: string;
   img: string;
-  data: EgoData & CommonDetails;
+  system: EgoData & CommonDetails;
   items: ItemDatas[];
 };
 
@@ -164,7 +164,7 @@ export class Ego {
   get epData(): EgoData & CommonDetails {
     const { data } = this;
     if ('system' in data) return (data as unknown as { system: any }).system;
-    return this.data.data;
+    return this.data.system;
   }
 
   get aptitudes() {
@@ -220,7 +220,7 @@ export class Ego {
       data: this.epData.mentalHealth,
       statMods: this.activeEffects?.getHealthStatMods(HealthType.Mental),
       willpower: this.aptitudes.wil,
-      updater: this.updater.path('data', 'mentalHealth').nestedStore(),
+      updater: this.updater.path('system', 'mentalHealth').nestedStore(),
       source: this.name,
       recoveryEffects: this.activeEffects?.mentalHealthRecovery,
     });
@@ -557,7 +557,7 @@ export class Ego {
             id: rep.network,
             startTime: rep.refreshStartTime,
             updateStartTime: this.updater.path(
-              'data',
+              'system',
               'reps',
               (rep.identifier as { networkId: RepNetwork }).networkId,
               'refreshStartTime',
@@ -577,7 +577,7 @@ export class Ego {
     if (this.repRefreshTimers.some(refreshAvailable)) {
       for (const network of enumValues(RepNetwork)) {
         this.updater
-          .path('data', 'reps', network)
+          .path('system', 'reps', network)
           .store((rep) =>
             getElapsedTime(rep.refreshStartTime) >= CommonInterval.Week
               ? { ...rep, refreshStartTime: 0, minor: 0, moderate: 0 }

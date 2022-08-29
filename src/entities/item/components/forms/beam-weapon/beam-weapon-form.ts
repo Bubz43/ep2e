@@ -74,7 +74,7 @@ export class BeamWeaponForm extends mix(Base).with(UseWorldTime) {
         >
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.path('data'), {
+        ${renderUpdaterForm(updater.path('system'), {
           disabled,
           slot: 'sidebar',
           fields: ({ wareType, range, hasSecondaryAttack, ...traits }) => [
@@ -103,7 +103,7 @@ export class BeamWeaponForm extends mix(Base).with(UseWorldTime) {
         })}
 
         <div slot="details">
-          ${renderUpdaterForm(updater.path('data'), {
+          ${renderUpdaterForm(updater.path('system'), {
             disabled,
             classes: complexityForm.cssClass,
             fields: renderComplexityFields,
@@ -153,7 +153,7 @@ export class BeamWeaponForm extends mix(Base).with(UseWorldTime) {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.path('data', 'description')}
+          .updateActions=${updater.path('system', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -227,7 +227,7 @@ export class BeamWeaponForm extends mix(Base).with(UseWorldTime) {
   }
 
   private renderAttackEdit(type: WeaponAttackType) {
-    const updater = this.item.updater.path('data', type);
+    const updater = this.item.updater.path('system', type);
     const { hasSecondaryAttack } = this.item;
     const [pairedTraits, changeTraits] = pairList(
       updater.originalValue().attackTraits,
@@ -287,7 +287,7 @@ export class BeamWeaponForm extends mix(Base).with(UseWorldTime) {
     return renderRangedAccessoriesEdit(
       this.item.accessories,
       BeamWeapon.possibleAccessories,
-      this.item.updater.path('data', 'accessories').commit,
+      this.item.updater.path('system', 'accessories').commit,
     );
   }
 }

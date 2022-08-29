@@ -69,7 +69,7 @@ type ActorFlags<T extends ActorType> = T extends ActorType.Character
 
 export type ActorEntity<T extends ActorType = ActorType> = CommonEntityData & {
   type: T;
-  data: ActorModels[T];
+  system: ActorModels[T];
   token: SetOptional<TokenData, 'elevation' | '_id' | 'x' | 'y'>;
   flags: { [EP.Name]?: Partial<ActorFlags<T>> };
   items: ItemDatas[];
@@ -85,10 +85,10 @@ export const createActorEntity = <T extends ActorType>({
   type,
   data,
   ...seed
-}: Partial<Omit<ActorEntity<T>, 'data'>> & {
+}: Partial<Omit<ActorEntity<T>, 'system'>> & {
   type: T;
   name: string;
-  data?: Partial<ActorEntity<T>['data']>;
+  data?: Partial<ActorEntity<T>['system']>;
 }): ActorEntity<T> => {
   const modelData = mergeObject(game.system.model.Actor[type], data || {}, {
     inplace: false,
@@ -100,7 +100,7 @@ export const createActorEntity = <T extends ActorType>({
     img: CONST.DEFAULT_TOKEN,
     permission: { default: CONST.DOCUMENT_PERMISSION_LEVELS.OWNER },
     _id,
-    data: modelData,
+    system: modelData,
     flags: {},
     items: [],
     effects: [],
@@ -160,7 +160,7 @@ export const createEgoData = (): FullEgoData => {
     name: 'Ego',
     img: CONST.DEFAULT_TOKEN,
     items: [],
-    data: {
+    system: {
       ...duplicate(data),
       description: '',
       reference: '',
@@ -172,7 +172,7 @@ export abstract class DefaultEgos {
   @LazyGetter()
   static get ali() {
     const ego = createEgoData();
-    ego.data.settings = {
+    ego.system.settings = {
       trackMentalHealth: true,
       canDefault: false,
       trackPoints: false,
@@ -190,7 +190,7 @@ export abstract class DefaultEgos {
     });
     ego.name = localize('deviceALI');
 
-    ego.data.egoType = localize(EgoType.ALI);
+    ego.system.egoType = localize(EgoType.ALI);
     return ego;
   }
 }
@@ -198,12 +198,12 @@ export abstract class DefaultEgos {
 export const createItemEntity = <T extends ItemType>({
   name,
   type,
-  data,
+  system: data,
   ...seed
-}: Partial<Omit<ItemEntity<T>, 'data'>> & {
+}: Partial<Omit<ItemEntity<T>, 'system'>> & {
   type: T;
   name: string;
-  data?: Partial<ItemEntity<T>['data']>;
+  system?: Partial<ItemEntity<T>['system']>;
 }): ItemEntity<T> => {
   const modelData = mergeObject(game.system.model.Item[type], data || {}, {
     inplace: false,
@@ -212,7 +212,7 @@ export const createItemEntity = <T extends ItemType>({
     name,
     type,
     _id: stringID(16),
-    data: modelData,
+    system: modelData,
     img: CONST.DEFAULT_TOKEN,
     permission: { default: CONST.DOCUMENT_PERMISSION_LEVELS.OWNER },
     flags: {},
@@ -331,7 +331,7 @@ export type ItemModels = {
 
 export type ItemEntity<T extends ItemType = ItemType> = CommonEntityData & {
   type: T;
-  data: ItemModels[T];
+  system: ItemModels[T];
   flags: { [EP.Name]?: Partial<ItemFlags<T>> };
 };
 

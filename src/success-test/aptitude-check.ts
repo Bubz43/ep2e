@@ -383,7 +383,7 @@ export class AptitudeCheck extends SuccessTestBase {
           }),
         );
         this.character?.updater
-          .path('data', 'temporary')
+          .path('system', 'temporary')
           .commit(addFeature(pain));
       }
     });

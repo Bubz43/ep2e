@@ -26,7 +26,7 @@ import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
 class Base extends ItemProxyBase<ItemType.PhysicalService> {
   get updateState() {
-    return this.updater.path('data', 'state');
+    return this.updater.path('system', 'state');
   }
 }
 export class PhysicalService extends mix(Base).with(Purchasable, Service) {
@@ -68,7 +68,7 @@ export class PhysicalService extends mix(Base).with(Purchasable, Service) {
 
   toggleEquipped() {
     return this.updater
-      .path('data', 'state')
+      .path('system', 'state')
       .commit(({ equipped, serviceStartTime }) => ({
         equipped: !equipped,
         serviceStartTime: equipped ? serviceStartTime : currentWorldTimeMS(),
@@ -78,7 +78,7 @@ export class PhysicalService extends mix(Base).with(Purchasable, Service) {
   useRep({ id, ...use }: RepUse & { id: string }) {
     const rep = this.findRep(id);
     if (!rep) return;
-    return this.updater.path('data', 'reputations').commit((reps) =>
+    return this.updater.path('system', 'reputations').commit((reps) =>
       updateFeature(reps, {
         id,
         ...repModification({ rep, ...use }),
@@ -106,7 +106,7 @@ export class PhysicalService extends mix(Base).with(Purchasable, Service) {
             id: `${this.id}-${rep.id}`,
             startTime: rep.refreshStartTime,
             updateStartTime: (refreshStartTime) => {
-              this.updater.path('data', 'reputations').commit((reps) =>
+              this.updater.path('system', 'reputations').commit((reps) =>
                 updateFeature(reps, {
                   refreshStartTime: refreshStartTime,
                   id: rep.id,
@@ -121,7 +121,7 @@ export class PhysicalService extends mix(Base).with(Purchasable, Service) {
   storeRepRefresh() {
     if (this.refreshTimers.some(refreshAvailable)) {
       this.updater
-        .path('data', 'reputations')
+        .path('system', 'reputations')
         .store(
           map((rep) =>
             getElapsedTime(rep.refreshStartTime) >= CommonInterval.Week
@@ -136,11 +136,11 @@ export class PhysicalService extends mix(Base).with(Purchasable, Service) {
   getDataCopy(reset = false) {
     const copy = super.getDataCopy(reset);
     if (reset) {
-      copy.data.state = {
+      copy.system.state = {
         equipped: false,
         serviceStartTime: currentWorldTimeMS(),
       };
-      copy.data.reputations.forEach(
+      copy.system.reputations.forEach(
         set('refreshStartTime', currentWorldTimeMS()),
       );
     }

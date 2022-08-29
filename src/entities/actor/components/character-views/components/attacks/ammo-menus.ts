@@ -62,7 +62,7 @@ export const openFirearmAmmoMenu = (
         } else {
           await character?.itemOperations.add(
             produce(specialAmmo.getDataCopy(), (draft) => {
-              draft.data.quantity = ammoCount;
+              draft.system.quantity = ammoCount;
             }),
           );
         }
@@ -87,7 +87,7 @@ export const openFirearmAmmoMenu = (
           const max = ammoCapacity - 1;
           const change = clamp(ammo.quantity, { max });
           const newAmmo = produce(ammo.getDataCopy(), (draft) => {
-            draft.data.quantity = change;
+            draft.system.quantity = change;
           });
           await ammo.setQuantity((current) => current - change);
           weapon.setSpecialAmmo(
@@ -180,7 +180,7 @@ export const openSeekerAmmoMenu = (
 
           const change = clamp(missile.quantity, { max });
           const newAmmo = produce(missile.getDataCopy(), (draft) => {
-            draft.data.quantity = change;
+            draft.system.quantity = change;
           });
           await missile.setQuantity((current) => current - change);
           weapon.setMissiles(newAmmo);
@@ -232,7 +232,7 @@ export const openMeleePayloadMenu = (
             await character?.itemOperations.add(
               produce(
                 payload.getDataCopy(),
-                ({ data }) => void (data.quantity = 1),
+                ({ system: data }) => void (data.quantity = 1),
               ),
             );
           await weapon.removePayload();
@@ -301,7 +301,7 @@ export const openCoatingMenu = (
             await character?.itemOperations.add(
               produce(
                 coating.getDataCopy(),
-                ({ data }) => void (data.quantity = amount),
+                ({ system: data }) => void (data.quantity = amount),
               ),
             );
           await weapon.removeCoating();
@@ -320,7 +320,7 @@ export const openCoatingMenu = (
           ) {
             await character.itemOperations.add(
               produce(weapon.getDataCopy(), (draft) => {
-                draft.data.quantity = weapon.quantity - c.quantity;
+                draft.system.quantity = weapon.quantity - c.quantity;
               }),
             );
             await weapon.updater.batchCommits(() => {
@@ -384,7 +384,7 @@ export const openFirearmAmmoPayloadMenu = (
           await character?.itemOperations.add(
             produce(
               payload.getDataCopy(),
-              ({ data }) => void (data.quantity = ammoQuantity),
+              ({ system: data }) => void (data.quantity = ammoQuantity),
             ),
           );
         await ammo.removePayload();
@@ -401,7 +401,7 @@ export const openFirearmAmmoPayloadMenu = (
           if (ammo.quantity > amount) {
             await character.itemOperations.add(
               produce(ammo.getDataCopy(), (draft) => {
-                draft.data.quantity = ammo.quantity - amount;
+                draft.system.quantity = ammo.quantity - amount;
               }),
             );
             await ammo.updater.batchCommits(() => {
@@ -483,7 +483,7 @@ export const openSprayWeaponPayloadMenu = (
           await character?.itemOperations.add(
             produce(
               payload.getDataCopy(),
-              ({ data }) => void (data.quantity = amount),
+              ({ system: data }) => void (data.quantity = amount),
             ),
           );
         await weapon.removePayload();
@@ -498,7 +498,7 @@ export const openSprayWeaponPayloadMenu = (
         callback: async () => {
           const amount = Math.min(s.quantity, max);
           const payload = produce(s.getDataCopy(), (draft) => {
-            draft.data.quantity = amount;
+            draft.system.quantity = amount;
           });
           await weapon.setPayload(payload);
           s.setQuantity((current) => current - amount);
@@ -555,7 +555,7 @@ export const openExplosiveSubstanceMenu = (
           await character?.itemOperations.add(
             produce(
               substance.getDataCopy(),
-              ({ data }) => void (data.quantity = amount),
+              ({ system: data }) => void (data.quantity = amount),
             ),
           );
         await weapon.removeSubstance();
@@ -572,7 +572,7 @@ export const openExplosiveSubstanceMenu = (
           if (weapon.quantity > amount) {
             await character.itemOperations.add(
               produce(weapon.getDataCopy(), (draft) => {
-                draft.data.quantity = weapon.quantity - amount;
+                draft.system.quantity = weapon.quantity - amount;
               }),
             );
             await weapon.updater.batchCommits(() => {

@@ -575,7 +575,7 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                                 ? CommonInterval.Turn * total
                                 : toMilliseconds({ [interval]: total });
                             this.character.updater
-                              .path('data', 'temporary')
+                              .path('system', 'temporary')
                               .commit((temps) =>
                                 addFeature(
                                   temps,

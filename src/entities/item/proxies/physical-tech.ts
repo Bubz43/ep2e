@@ -54,7 +54,7 @@ import { Trait } from './trait';
 
 class Base extends ItemProxyBase<ItemType.PhysicalTech> {
   get updateState() {
-    return this.updater.path('data', 'state');
+    return this.updater.path('system', 'state');
   }
 }
 export class PhysicalTech
@@ -94,7 +94,7 @@ export class PhysicalTech
   }
 
   setSingleUseSpent(spent: boolean) {
-    this.updater.path('data', 'state', 'activated').commit(spent);
+    this.updater.path('system', 'state', 'activated').commit(spent);
   }
 
   get fullName(): string {
@@ -326,7 +326,7 @@ export class PhysicalTech
     return new MeshHealth({
       data: this.epData.meshHealth,
       statMods: undefined,
-      updater: this.updater.path('data', 'meshHealth').nestedStore(),
+      updater: this.updater.path('system', 'meshHealth').nestedStore(),
       source: localize('mindState'),
       homeDevices: 1,
       deathRating: true,
@@ -337,7 +337,7 @@ export class PhysicalTech
   get firewallHealth() {
     return new AppMeshHealth({
       data: this.epData.firewallHealth,
-      updater: this.updater.path('data', 'firewallHealth').nestedStore(),
+      updater: this.updater.path('system', 'firewallHealth').nestedStore(),
       source: `${localize('firewall')} (${this.epData.firewallRating})`,
     });
   }
@@ -434,7 +434,7 @@ export class PhysicalTech
       id: `${this.type}-${this.id}`,
       label: this.fullName,
       startTime: this.state.fabStartTime,
-      updateStartTime: this.updater.path('data', 'state', 'fabStartTime')
+      updateStartTime: this.updater.path('system', 'state', 'fabStartTime')
         .commit,
     });
   }
@@ -451,7 +451,7 @@ export class PhysicalTech
   getDataCopy(reset = false) {
     const copy = super.getDataCopy(reset);
     if (reset) {
-      copy.data.state = {
+      copy.system.state = {
         fabStartTime: currentWorldTimeMS(),
         equipped: false,
         disabled: false,

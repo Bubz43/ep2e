@@ -110,25 +110,25 @@ export async function foundry9to10Migration() {
   const sceneUpdates = getCollectionUpdates(scenes._source);
   if (actorUpdates.length) {
     console.log('updating actors', actorUpdates.length);
-    ActorEP.updateDocuments;
+    ActorEP.updateDocuments(actorUpdates);
   }
   if (itemUpdates.length) {
     console.log('updating items', itemUpdates.length);
-    ItemEP.updateDocuments;
+    ItemEP.updateDocuments(itemUpdates);
   }
   if (messageUpdates.length) {
     console.log('updating messages', messageUpdates.length);
-    ChatMessageEP.updateDocuments;
+    ChatMessageEP.updateDocuments(messageUpdates);
   }
   if (sceneUpdates.length) {
     console.log('updating scenes', sceneUpdates.length);
-    SceneEP.updateDocuments;
+    SceneEP.updateDocuments(sceneUpdates);
   }
-  const packsWithDocuments: CompendiumCollection[] = [];
-  for (const [_, pack] of game.packs.entries()) {
-    if (documentNamesWithData.has(pack.documentName))
-      packsWithDocuments.push(pack);
-  }
+  // const packsWithDocuments: CompendiumCollection[] = [];
+  // for (const [_, pack] of game.packs.entries()) {
+  //   if (documentNamesWithData.has(pack.documentName))
+  //     packsWithDocuments.push(pack);
+  // }
   // for (const pack of packsWithDocuments) {
   //   await pack.updateAll((value: {}) => {
   //     const { obj, hasChanged } = dataToSystem(value);

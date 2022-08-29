@@ -573,7 +573,7 @@ export class CharacterViewAlt extends CharacterViewBase {
                               ? CommonInterval.Turn * total
                               : toMilliseconds({ [interval]: total });
                           this.character.updater
-                            .path('data', 'temporary')
+                            .path('system', 'temporary')
                             .commit((temps) =>
                               addFeature(
                                 temps,
@@ -1036,7 +1036,7 @@ export class CharacterViewAlt extends CharacterViewBase {
                           left
                           @click=${() => {
                             this.character.ego.updater
-                              .path('data', 'motivations')
+                              .path('system', 'motivations')
                               .commit((motivations) =>
                                 updateFeature(motivations, {
                                   id: motivation.id,

@@ -43,7 +43,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
   @property({ attribute: false }) character!: Character;
 
   private readonly temporaryFeatureOps = addUpdateRemoveFeature(
-    () => this.character.updater.path('data', 'temporary').commit,
+    () => this.character.updater.path('system', 'temporary').commit,
   );
 
   private readonly expandedTasks = new Set<string>();
@@ -68,7 +68,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
   }
 
   private readonly taskOps = addUpdateRemoveFeature(
-    () => this.character.updater.path('data', 'tasks').commit,
+    () => this.character.updater.path('system', 'tasks').commit,
   );
 
   private async refreshAllReady() {
@@ -283,7 +283,8 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
           update: createPipe(
             pathOr(['accumulatedTime'], 0),
             getElapsedTime,
-            this.character.updater.path('data', 'accumulatedTimeStart').commit,
+            this.character.updater.path('system', 'accumulatedTimeStart')
+              .commit,
           ),
           fields: ({ accumulatedTime }) =>
             renderTimeField(
@@ -300,7 +301,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
                 icon="sync_problem"
                 @click=${() =>
                   this.character.updater
-                    .path('data', 'accumulatedTimeStart')
+                    .path('system', 'accumulatedTimeStart')
                     .commit(currentWorldTimeMS)}
                 ?disabled=${disabled}
               ></mwc-icon-button>
@@ -352,7 +353,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
             update: ({ advance = 0, multiplier = 1 }) => {
               const { accumulatedTime } = this.character;
               this.character.updater
-                .path('data', 'accumulatedTimeStart')
+                .path('system', 'accumulatedTimeStart')
                 .store(getElapsedTime(accumulatedTime - advance));
               this.taskOps.update(
                 { timeTaken: task.timeTaken + advance * multiplier },
@@ -402,7 +403,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
             );
             if (this.character.tasks.length === 0) {
               this.character.updater
-                .path('data', 'accumulatedTimeStart')
+                .path('system', 'accumulatedTimeStart')
                 .commit(currentWorldTimeMS());
             }
           });

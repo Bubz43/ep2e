@@ -32,7 +32,7 @@ class SyntheticBase extends ActorProxyBase<ActorType.Synthetic> {
     return this.epData.subtype;
   }
   get damagedArmorUpdater() {
-    return this.updater.path('data', 'damagedArmor');
+    return this.updater.path('system', 'damagedArmor');
   }
 }
 
@@ -78,7 +78,7 @@ export class Synthetic extends mix(SyntheticBase).with(
   }
 
   updateConditions(conditions: ConditionType[]) {
-    return this.updater.path('data', 'conditions').commit(conditions);
+    return this.updater.path('system', 'conditions').commit(conditions);
   }
 
   get healths(): ActorHealth[] {
@@ -118,11 +118,11 @@ export class Synthetic extends mix(SyntheticBase).with(
   }
 
   updateRecoveryConditions(conditions: RecoveryConditions) {
-    return this.updater.path('data', 'recoveryConditions').commit(conditions);
+    return this.updater.path('system', 'recoveryConditions').commit(conditions);
   }
 
   togglePainFilter() {
-    return this.updater.path('data', 'painFilter').commit(toggle);
+    return this.updater.path('system', 'painFilter').commit(toggle);
   }
 
   @LazyGetter()
@@ -141,7 +141,7 @@ export class Synthetic extends mix(SyntheticBase).with(
     return new SyntheticHealth({
       data: this.epData.physicalHealth,
       statMods: this.activeEffects.getHealthStatMods(HealthType.Physical),
-      updater: this.updater.path('data', 'physicalHealth').nestedStore(),
+      updater: this.updater.path('system', 'physicalHealth').nestedStore(),
       source: `${this.name}: ${
         this.epData.inherentArmor.source || localize('frame')
       }`,
@@ -156,7 +156,7 @@ export class Synthetic extends mix(SyntheticBase).with(
     return new MeshHealth({
       data: this.epData.meshHealth,
       statMods: this.activeEffects?.getHealthStatMods(HealthType.Mesh),
-      updater: this.updater.path('data', 'meshHealth').nestedStore(),
+      updater: this.updater.path('system', 'meshHealth').nestedStore(),
       source: localize('mindState'),
       homeDevices: 1, // TODO,
       deathRating: true,
@@ -167,7 +167,7 @@ export class Synthetic extends mix(SyntheticBase).with(
   get firewallHealth() {
     return new AppMeshHealth({
       data: this.epData.firewallHealth,
-      updater: this.updater.path('data', 'firewallHealth').nestedStore(),
+      updater: this.updater.path('system', 'firewallHealth').nestedStore(),
       source: `${localize('firewall')} (${this.epData.firewallRating})`,
     });
   }
@@ -212,7 +212,7 @@ export class Synthetic extends mix(SyntheticBase).with(
     } else if ('wareType' in proxy) {
       if (proxy.isWare) {
         const copy = proxy.getDataCopy(true);
-        copy.data.state.equipped = true;
+        copy.system.state.equipped = true;
         this.itemOperations.add(copy);
       } else {
         notify(
@@ -223,7 +223,7 @@ export class Synthetic extends mix(SyntheticBase).with(
     } else if (proxy.type === ItemType.Software) {
       if (proxy.isWare) {
         const copy = proxy.getDataCopy(true);
-        copy.data.state.equipped = true;
+        copy.system.state.equipped = true;
         this.itemOperations.add(copy);
       } else
         notify(

@@ -48,7 +48,7 @@ export class PhysicalServiceForm extends ItemFormBase {
   @state() private repCreatorMode = RepCreatorMode.Common;
 
   private readonly repOps = addUpdateRemoveFeature(
-    () => this.item.updater.path('data', 'reputations').commit,
+    () => this.item.updater.path('system', 'reputations').commit,
   );
 
   render() {
@@ -69,7 +69,7 @@ export class PhysicalServiceForm extends ItemFormBase {
           <section>
             <sl-header heading=${localize('details')}></sl-header>
             <div class="detail-forms">
-              ${renderUpdaterForm(updater.path('data'), {
+              ${renderUpdaterForm(updater.path('system'), {
                 disabled,
                 classes: 'primary-fields-form',
                 fields: ({ serviceType, serviceDuration: duration }) => [
@@ -83,7 +83,7 @@ export class PhysicalServiceForm extends ItemFormBase {
                   }),
                 ],
               })}
-              ${renderUpdaterForm(updater.path('data'), {
+              ${renderUpdaterForm(updater.path('system'), {
                 disabled,
                 classes: complexityForm.cssClass,
                 fields: renderComplexityFields,
@@ -97,7 +97,7 @@ export class PhysicalServiceForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.path('data', 'description')}
+          .updateActions=${updater.path('system', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>

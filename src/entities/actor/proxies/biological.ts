@@ -24,7 +24,7 @@ class BiologicalBase extends ActorProxyBase<ActorType.Biological> {
     return this.epData.subtype;
   }
   get damagedArmorUpdater() {
-    return this.updater.path('data', 'damagedArmor');
+    return this.updater.path('system', 'damagedArmor');
   }
 }
 
@@ -50,7 +50,7 @@ export class Biological extends mix(BiologicalBase).with(
   }
 
   updateConditions(conditions: ConditionType[]) {
-    return this.updater.path('data', 'conditions').commit(conditions);
+    return this.updater.path('system', 'conditions').commit(conditions);
   }
 
   get healths(): ActorHealth[] {
@@ -71,7 +71,7 @@ export class Biological extends mix(BiologicalBase).with(
   }
 
   updateRecoveryConditions(conditions: RecoveryConditions) {
-    return this.updater.path('data', 'recoveryConditions').commit(conditions);
+    return this.updater.path('system', 'recoveryConditions').commit(conditions);
   }
 
   @LazyGetter()
@@ -94,7 +94,7 @@ export class Biological extends mix(BiologicalBase).with(
     return new BiologicalHealth({
       data: this.epData.physicalHealth,
       statMods: this.activeEffects.getHealthStatMods(HealthType.Physical),
-      updater: this.updater.path('data', 'physicalHealth').nestedStore(),
+      updater: this.updater.path('system', 'physicalHealth').nestedStore(),
       source: this.name,
       isSwarm: this.isSwarm,
       recoveryEffects: this.activeEffects.physicalHealthRecovery,
@@ -130,7 +130,7 @@ export class Biological extends mix(BiologicalBase).with(
     } else if ('wareType' in proxy) {
       if (proxy.isWare) {
         const copy = proxy.getDataCopy(true);
-        copy.data.state.equipped = true;
+        copy.system.state.equipped = true;
         this.itemOperations.add(copy);
       } else {
         notify(

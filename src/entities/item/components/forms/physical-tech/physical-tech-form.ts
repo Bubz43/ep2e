@@ -79,7 +79,9 @@ export class PhysicalTechForm extends ItemFormBase {
 
   private readonly effectsOps = mapToObj(opsGroups, (group) => [
     group,
-    addUpdateRemoveFeature(() => this.item.updater.path('data', group).commit),
+    addUpdateRemoveFeature(
+      () => this.item.updater.path('system', group).commit,
+    ),
   ]);
 
   disconnectedCallback() {
@@ -196,7 +198,7 @@ export class PhysicalTechForm extends ItemFormBase {
               unelevated
               @click=${() => {
                 const egoData = pick(clone(proxy.ego.data), [
-                  'data',
+                  'system',
                   'img',
                   'name',
                 ]);
@@ -246,7 +248,7 @@ export class PhysicalTechForm extends ItemFormBase {
             : ''}
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.path('data'), {
+        ${renderUpdaterForm(updater.path('system'), {
           disabled,
           slot: 'sidebar',
           fields: ({
@@ -299,7 +301,7 @@ export class PhysicalTechForm extends ItemFormBase {
         })}
 
         <div slot="details">
-          ${renderUpdaterForm(updater.path('data'), {
+          ${renderUpdaterForm(updater.path('system'), {
             disabled,
             classes: complexityForm.cssClass,
             fields: renderComplexityFields,
@@ -377,7 +379,7 @@ export class PhysicalTechForm extends ItemFormBase {
               ></mwc-icon-button
             ></sl-header>
             ${hasUseActivation
-              ? renderUpdaterForm(updater.path('data'), {
+              ? renderUpdaterForm(updater.path('system'), {
                   disabled,
                   classes: 'activation-form',
                   fields: ({ usedEffectsDuration, resistEffectsCheck }) => [
@@ -413,7 +415,7 @@ export class PhysicalTechForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.path('data', 'description')}
+          .updateActions=${updater.path('system', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -429,7 +431,7 @@ export class PhysicalTechForm extends ItemFormBase {
             heading="${localize('gland')} ${localize('substance')}"
           ></sl-header>
 
-          ${renderUpdaterForm(updater.path('data'), {
+          ${renderUpdaterForm(updater.path('system'), {
             disabled: this.disabled,
             classes: 'fab-duration-form',
             fields: ({ fabPrintDuration }) =>
@@ -475,7 +477,7 @@ export class PhysicalTechForm extends ItemFormBase {
         >
         </sl-header>
         ${itemBlueprint
-          ? renderUpdaterForm(updater.path('data'), {
+          ? renderUpdaterForm(updater.path('system'), {
               disabled: this.disabled,
               classes: 'fab-duration-form',
               fields: ({ fabPrintDuration }) =>
@@ -562,14 +564,14 @@ export class PhysicalTechForm extends ItemFormBase {
     const { meshHealth, updater } = this.item;
     return html`
       <h3>${localize('meshHealth')}</h3>
-      ${renderUpdaterForm(updater.path('data', 'meshHealth'), {
+      ${renderUpdaterForm(updater.path('system', 'meshHealth'), {
         fields: ({ baseDurability }) =>
           renderNumberField(baseDurability, { min: 1 }),
       })}
       <health-state-form .health=${meshHealth}></health-state-form>
       <health-regen-settings-form
         .health=${meshHealth}
-        .regenUpdater=${updater.path('data', 'meshHealth').nestedStore()}
+        .regenUpdater=${updater.path('system', 'meshHealth').nestedStore()}
       ></health-regen-settings-form>
     `;
   }
@@ -578,7 +580,7 @@ export class PhysicalTechForm extends ItemFormBase {
     const { firewallHealth, updater } = this.item;
     return html`
       <h3>${localize('firewallHealth')}</h3>
-      ${renderUpdaterForm(updater.path('data', 'firewallHealth'), {
+      ${renderUpdaterForm(updater.path('system', 'firewallHealth'), {
         fields: ({ baseDurability }) =>
           renderNumberField(baseDurability, { min: 1 }),
       })}

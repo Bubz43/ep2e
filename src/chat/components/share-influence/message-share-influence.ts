@@ -37,7 +37,7 @@ export class MessageShareInfluence extends LitElement {
           typeof level === 'number' &&
           draft.type === PsiInfluenceType.Trait
         ) {
-          draft.trait.data.state.level = level;
+          draft.trait.system.state.level = level;
         }
         draft.active = {
           duration,
@@ -62,7 +62,7 @@ export class MessageShareInfluence extends LitElement {
       <div class="levels">
         ${influence.type === PsiInfluenceType.Trait
           ? html`
-              ${influence.trait.data.levels.map(
+              ${influence.trait.system.levels.map(
                 (_, index) =>
                   html`<mwc-button
                     @click=${() => this.applyTraitInfluence(index)}

@@ -77,15 +77,16 @@ export type SubstanceUseMethod = Substance['applicationMethods'][number];
 
 class Base extends ItemProxyBase<ItemType.Substance> {
   get updateState() {
-    return this.updater.path('data', 'state');
+    return this.updater.path('system', 'state');
   }
   get updateQuantity() {
-    return this.updater.path('data');
+    return this.updater.path('system');
   }
 }
 export class Substance
   extends mix(Base).with(Purchasable, Copyable, Stackable)
-  implements Attacker<SubstanceAttackData, SubstanceAttack> {
+  implements Attacker<SubstanceAttackData, SubstanceAttack>
+{
   static onsetTime(application: SubstanceUseMethod) {
     switch (application) {
       case SubstanceApplicationMethod.Inhalation:
@@ -125,10 +126,8 @@ export class Substance
     if (this.appliedState) {
       const { itemWindowKeys } = this;
       if (notEmpty(itemWindowKeys)) {
-        const {
-          baseAppliedItems: baseAppliedItems,
-          severityAppliedItems,
-        } = this;
+        const { baseAppliedItems: baseAppliedItems, severityAppliedItems } =
+          this;
         for (const stringID of itemWindowKeys.keys()) {
           const [namespace, id] = stringID.split('___');
           const group =
@@ -537,7 +536,7 @@ export class Substance
         },
       },
     };
-    copy.data.quantity = 1;
+    copy.system.quantity = 1;
     return copy;
   }
 

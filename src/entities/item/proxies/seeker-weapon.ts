@@ -24,7 +24,7 @@ class Base extends ItemProxyBase<ItemType.SeekerWeapon> {
     return enumValues(RangedWeaponTrait).filter((trait) => this.epData[trait]);
   }
   get updateState() {
-    return this.updater.path('data', 'state');
+    return this.updater.path('system', 'state');
   }
 }
 
@@ -125,7 +125,7 @@ export class SeekerWeapon extends mix(Base).with(
   }
 
   setSingleUseSpent(spent: boolean) {
-    this.updater.path('data', 'state', 'used').commit(spent);
+    this.updater.path('system', 'state', 'used').commit(spent);
   }
 
   @LazyGetter()

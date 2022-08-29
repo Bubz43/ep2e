@@ -71,11 +71,13 @@ export class SoftwareForm extends ItemFormBase {
 
   private readonly effectsOps = mapToObj(opsGroups, (group) => [
     group === 'effects' ? 'passive' : 'activated',
-    addUpdateRemoveFeature(() => this.item.updater.path('data', group).commit),
+    addUpdateRemoveFeature(
+      () => this.item.updater.path('system', group).commit,
+    ),
   ]);
 
   private readonly skillOps = addUpdateRemoveFeature(
-    () => this.item.updater.path('data', 'skills').commit,
+    () => this.item.updater.path('system', 'skills').commit,
   );
 
   update(changedProps: PropertyValues<this>) {
@@ -108,7 +110,7 @@ export class SoftwareForm extends ItemFormBase {
         >
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.path('data'), {
+        ${renderUpdaterForm(updater.path('system'), {
           disabled,
           slot: 'sidebar',
           fields: ({ softwareType, category, activation, meshAttacks }) => [
@@ -131,7 +133,7 @@ export class SoftwareForm extends ItemFormBase {
         })}
 
         <div slot="details">
-          ${renderUpdaterForm(updater.path('data'), {
+          ${renderUpdaterForm(updater.path('system'), {
             disabled,
             classes: complexityForm.cssClass,
             fields: renderComplexityFields,
@@ -250,7 +252,7 @@ export class SoftwareForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.path('data', 'description')}
+          .updateActions=${updater.path('system', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -303,7 +305,7 @@ export class SoftwareForm extends ItemFormBase {
     const { meshHealth, updater } = this.item;
     return html`
       <h3>${localize('meshHealth')}</h3>
-      ${renderUpdaterForm(updater.path('data', 'meshHealth'), {
+      ${renderUpdaterForm(updater.path('system', 'meshHealth'), {
         fields: ({ baseDurability }) =>
           renderNumberField(baseDurability, { min: 1 }),
       })}
@@ -413,7 +415,7 @@ export class SoftwareForm extends ItemFormBase {
   }
 
   private renderAttackEdit(type: WeaponAttackType) {
-    const updater = this.item.updater.path('data', type);
+    const updater = this.item.updater.path('system', type);
     const hasSecondaryAttack = !!this.item.attacks.secondary;
 
     const [pairedTraits, change] = pairList(
@@ -464,7 +466,7 @@ export class SoftwareForm extends ItemFormBase {
   }
 
   private renderAttackCheckEdit(type: WeaponAttackType) {
-    const updater = this.item.updater.path('data', type, 'aptitudeCheckInfo');
+    const updater = this.item.updater.path('system', type, 'aptitudeCheckInfo');
     const hasSecondaryAttack = !!this.item.attacks.secondary;
 
     return html`

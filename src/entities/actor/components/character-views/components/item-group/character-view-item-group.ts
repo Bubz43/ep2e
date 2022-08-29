@@ -249,16 +249,16 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
       const copy = proxy.getDataCopy(true);
       if (this.group === ItemGroup.VehicleGear) {
         if ('wareType' in proxy && proxy.isWare) {
-          copy.data.state.equipped = true;
+          copy.system.state.equipped = true;
           this.character.vehicle?.itemOperations.add(copy);
         } else notify(NotificationType.Info, localize('onlyWareAllowed'));
       } else {
-        copy.data.state.equipped = group === ItemGroup.Equipped;
+        copy.system.state.equipped = group === ItemGroup.Equipped;
         this.character.itemOperations.add(copy);
       }
     } else if ('stashed' in proxy) {
       const copy = proxy.getDataCopy(true);
-      copy.data.state.stashed = group === ItemGroup.Stashed;
+      copy.system.state.stashed = group === ItemGroup.Stashed;
       this.character.itemOperations.add(copy);
     } else {
       if (proxy.type === ItemType.Sleight || proxy.type === ItemType.Psi) {

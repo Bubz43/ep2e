@@ -58,7 +58,7 @@ export abstract class ActorProxyBase<T extends ActorType> {
     const { data } = this;
     if ('system' in data) return (data as { system: ActorModels[T] }).system;
 
-    return this.data.data;
+    return this.data.system;
   }
 
   get epFlags() {

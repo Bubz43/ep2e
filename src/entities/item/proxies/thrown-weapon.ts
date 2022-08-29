@@ -17,15 +17,16 @@ import { Substance } from './substance';
 
 class Base extends ItemProxyBase<ItemType.ThrownWeapon> {
   get updateState() {
-    return this.updater.path('data', 'state');
+    return this.updater.path('system', 'state');
   }
   get updateQuantity() {
-    return this.updater.path('data');
+    return this.updater.path('system');
   }
 }
 export class ThrownWeapon
   extends mix(Base).with(Purchasable, Stackable, Copyable, Gear)
-  implements Attacker<ThrownWeaponAttackData, ThrownWeaponAttack> {
+  implements Attacker<ThrownWeaponAttackData, ThrownWeaponAttack>
+{
   constructor(init: ItemProxyInit<ItemType.ThrownWeapon>) {
     super(init);
   }
@@ -91,7 +92,7 @@ export class ThrownWeapon
   setCoating(substance: Substance | ReturnType<Substance['getDataCopy']>) {
     const substanceData =
       substance instanceof Substance ? substance.getDataCopy() : substance;
-    substanceData.data = { ...substanceData.data, quantity: 1 };
+    substanceData.system = { ...substanceData.system, quantity: 1 };
     this.updater.path('flags', EP.Name, 'coating').commit([substanceData]);
   }
 

@@ -19,7 +19,7 @@ export class CharacterViewNetworkSettings extends LitElement {
 
   private toggleUnslaved(id: string) {
     this.character.updater
-      .path('data', 'network', 'unslavedDevices')
+      .path('system', 'network', 'unslavedDevices')
       .commit((ids) => {
         const unslaved = new Set(ids);
         if (unslaved.has(id)) unslaved.delete(id);
@@ -41,7 +41,7 @@ export class CharacterViewNetworkSettings extends LitElement {
         ${localize('settings')}</character-view-drawer-heading
       >
 
-      ${renderUpdaterForm(updater.path('data', 'network'), {
+      ${renderUpdaterForm(updater.path('system', 'network'), {
         disabled,
         fields: ({ masterDeviceId }) =>
           renderSelectField(

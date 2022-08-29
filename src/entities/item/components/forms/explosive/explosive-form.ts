@@ -120,16 +120,10 @@ export class ExplosiveForm extends ItemFormBase {
   }
 
   render() {
-    const {
-      updater,
-      type,
-      loaded,
-      attacks,
-      canContainSubstance,
-      substance,
-    } = this.item;
+    const { updater, type, loaded, attacks, canContainSubstance, substance } =
+      this.item;
     const { disabled } = this;
-    const { commit, originalValue } = updater.path('data');
+    const { commit, originalValue } = updater.path('system');
 
     return html`
       <entity-form-layout>
@@ -206,12 +200,12 @@ export class ExplosiveForm extends ItemFormBase {
           <section>
             <sl-header heading=${localize('details')}></sl-header>
             <div class="detail-forms">
-              ${renderUpdaterForm(updater.path('data'), {
+              ${renderUpdaterForm(updater.path('system'), {
                 classes: complexityForm.cssClass,
                 disabled,
                 fields: renderComplexityFields,
               })}
-              ${renderUpdaterForm(updater.path('data'), {
+              ${renderUpdaterForm(updater.path('system'), {
                 disabled,
                 classes: 'quantity-form',
                 fields: ({ quantity, unitsPerComplexity }) => [
@@ -235,7 +229,7 @@ export class ExplosiveForm extends ItemFormBase {
                     heading=${localize('substance')}
                     ?hideBorder=${!substance}
                   >
-                    ${renderUpdaterForm(updater.path('data'), {
+                    ${renderUpdaterForm(updater.path('system'), {
                       disabled,
                       classes: 'doses-form',
                       slot: 'action',
@@ -272,7 +266,7 @@ export class ExplosiveForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.path('data', 'description')}
+          .updateActions=${updater.path('system', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -341,7 +335,7 @@ export class ExplosiveForm extends ItemFormBase {
   }
 
   private renderAttackEdit(type: WeaponAttackType) {
-    const updater = this.item.updater.path('data', type);
+    const updater = this.item.updater.path('system', type);
     const { disabled } = this;
     const modeLabel = localize(
       type === WeaponAttackType.Primary ? 'primaryMode' : 'secondaryMode',

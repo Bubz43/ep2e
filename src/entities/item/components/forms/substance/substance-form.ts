@@ -98,11 +98,11 @@ export class SubstanceForm extends ItemFormBase {
   private severitySheetKeys = new Map<string, {}>();
 
   private effectOps = addUpdateRemoveFeature(
-    () => this.item.updater.path('data', 'base', 'effects').commit,
+    () => this.item.updater.path('system', 'base', 'effects').commit,
   );
 
   private severityEffectOps = addUpdateRemoveFeature(
-    () => this.item.updater.path('data', 'severity', 'effects').commit,
+    () => this.item.updater.path('system', 'severity', 'effects').commit,
   );
 
   update(changedProps: PropertyValues<this>) {
@@ -208,7 +208,7 @@ export class SubstanceForm extends ItemFormBase {
         >
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.path('data'), {
+        ${renderUpdaterForm(updater.path('system'), {
           disabled,
           slot: 'sidebar',
           fields: ({
@@ -267,12 +267,12 @@ export class SubstanceForm extends ItemFormBase {
           <section>
             <sl-header heading=${localize('details')}></sl-header>
             <div class="detail-forms">
-              ${renderUpdaterForm(updater.path('data'), {
+              ${renderUpdaterForm(updater.path('system'), {
                 classes: complexityForm.cssClass,
                 disabled,
                 fields: renderComplexityFields,
               })}
-              ${renderUpdaterForm(updater.path('data'), {
+              ${renderUpdaterForm(updater.path('system'), {
                 disabled,
                 classes: 'quantity-form',
                 fields: ({ quantity, quantityPerCost }) => [
@@ -291,7 +291,7 @@ export class SubstanceForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.path('data', 'description')}
+          .updateActions=${updater.path('system', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -354,7 +354,7 @@ export class SubstanceForm extends ItemFormBase {
               const active = methods[method] ?? applicationObj[method];
               return active ? method : [];
             }),
-            this.item.updater.path('data', 'application').commit,
+            this.item.updater.path('system', 'application').commit,
           ),
         fields: (methods) =>
           enumValues(SubstanceApplicationMethod).map((method) =>
@@ -548,7 +548,7 @@ export class SubstanceForm extends ItemFormBase {
   }
 
   private renderbaseEdit() {
-    const updater = this.item.updater.path('data', 'base');
+    const updater = this.item.updater.path('system', 'base');
     return html`
       <h3>${localize('base')}</h3>
       ${renderUpdaterForm(updater, {
@@ -570,7 +570,7 @@ export class SubstanceForm extends ItemFormBase {
 
   private renderSeverityEdit() {
     const { conditions } = this.item.severity;
-    const updater = this.item.updater.path('data', 'severity');
+    const updater = this.item.updater.path('system', 'severity');
     return html`
       <h3>${localize('severity')}</h3>
       ${renderUpdaterForm(updater, {
@@ -609,7 +609,7 @@ export class SubstanceForm extends ItemFormBase {
   }
 
   private renderConditionsListForm() {
-    const updater = this.item.updater.path('data', 'severity');
+    const updater = this.item.updater.path('system', 'severity');
     const [pairedConditions, change] = pairList(
       updater.originalValue().conditions,
       enumValues(ConditionType),
@@ -624,7 +624,7 @@ export class SubstanceForm extends ItemFormBase {
   }
 
   private renderEffectDamage(group: Group) {
-    const updater = this.item.updater.path('data', group, 'damage');
+    const updater = this.item.updater.path('system', group, 'damage');
     const { damage } = this.item[group];
     return html`
       ${renderUpdaterForm(updater, {
@@ -659,7 +659,7 @@ export class SubstanceForm extends ItemFormBase {
   }
 
   private renderArmorUsedForm(group: Group) {
-    const updater = this.item.updater.path('data', group, 'damage');
+    const updater = this.item.updater.path('system', group, 'damage');
     const [pairedArmor, change] = pairList(
       updater.originalValue().armorUsed,
       enumValues(ArmorType),

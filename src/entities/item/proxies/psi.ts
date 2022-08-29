@@ -118,7 +118,7 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
 
   recedeInfection() {
     this.updater.batchCommits(() => {
-      this.updater.path('data', 'state', 'receded').store(true);
+      this.updater.path('system', 'state', 'receded').store(true);
       if (this.activePsiInfluences.size) {
         this.influenceCommiter((influences) =>
           influences.map((influence) => ({ ...influence, active: null })),
@@ -241,31 +241,31 @@ export class Psi extends ItemProxyBase<ItemType.Psi> {
     state: 'checkoutTime' | 'interference',
     active: boolean,
   ) {
-    return this.updater.path('data', 'state', state).commit(active);
+    return this.updater.path('system', 'state', state).commit(active);
   }
 
   updateFreePush(push: Psi['freePush']) {
-    return this.updater.path('data', 'state', 'freePush').commit(push);
+    return this.updater.path('system', 'state', 'freePush').commit(push);
   }
 
   updateLevel(newLevel: 1 | 2 | 3) {
     this.updater
-      .path('data', 'level')
+      .path('system', 'level')
       .store(newLevel)
-      .path('data', 'state', 'infectionRating')
+      .path('system', 'state', 'infectionRating')
       .commit(clamp({ min: newLevel * 10, max: 99 }));
   }
 
   updateInfectionRating(newRating: number) {
     return this.updater
-      .path('data', 'state', 'infectionRating')
+      .path('system', 'state', 'infectionRating')
       .commit(clamp(newRating, this.infectionClamp));
   }
 
   getDataCopy(reset = false) {
     const copy = super.getDataCopy(reset);
     if (reset) {
-      copy.data.state.infectionRating = this.baseInfectionRating;
+      copy.system.state.infectionRating = this.baseInfectionRating;
     }
     return copy;
   }

@@ -28,10 +28,12 @@ export const openSleeveForm = (sleeve: Sleeve) => {
 };
 
 export const renderSleeveForm = (proxy: Sleeve) => {
-  const updater = ((proxy.updater as unknown) as UpdateStore<{
-    data: { reference: string };
-  }>)
-    .path('data')
+  const updater = (
+    proxy.updater as unknown as UpdateStore<{
+      system: { reference: string };
+    }>
+  )
+    .path('system')
     .nestedStore();
   switch (proxy.type) {
     case ActorType.Infomorph:

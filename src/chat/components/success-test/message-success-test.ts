@@ -236,7 +236,7 @@ export class MessageSuccessTest extends MessageElement {
     let taskId = '';
     const failed = !isSuccessfullTestResult(result);
 
-    await actor.proxy.updater.path('data', 'tasks').commit((tasks) => {
+    await actor.proxy.updater.path('system', 'tasks').commit((tasks) => {
       const withTask = addFeature(
         tasks,
         createActiveTask({

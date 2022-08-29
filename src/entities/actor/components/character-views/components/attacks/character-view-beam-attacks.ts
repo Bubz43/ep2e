@@ -117,7 +117,7 @@ export class CharacterViewBeamAttacks extends mix(LitElement).with(
   }
 
   private toggleBraced() {
-    this.weapon.updater.path('data', 'state', 'braced').commit(toggle);
+    this.weapon.updater.path('system', 'state', 'braced').commit(toggle);
   }
 
   render() {

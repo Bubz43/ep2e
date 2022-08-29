@@ -31,12 +31,13 @@ class Base extends ItemProxyBase<ItemType.BeamWeapon> {
     return enumValues(RangedWeaponTrait).filter((trait) => this.epData[trait]);
   }
   get updateState() {
-    return this.updater.path('data', 'state');
+    return this.updater.path('system', 'state');
   }
 }
 export class BeamWeapon
   extends mix(Base).with(Gear, Purchasable, Equippable, RangedWeapon, Copyable)
-  implements Attacker<BeamWeaponAttackData, BeamWeaponAttack> {
+  implements Attacker<BeamWeaponAttackData, BeamWeaponAttack>
+{
   static readonly possibleAccessories = difference(
     enumValues(RangedWeaponAccessory),
     [
@@ -74,7 +75,7 @@ export class BeamWeapon
     const max = changed.max ?? this.battery.max;
     const charge = changed.charge ?? this.battery.charge;
     const diff = max - charge;
-    return this.updater.path('data', 'battery').commit({
+    return this.updater.path('system', 'battery').commit({
       ...changed,
       recharge: (diff / max) * CommonInterval.Hour * 4 + currentWorldTimeMS(),
     });
@@ -110,7 +111,7 @@ export class BeamWeapon
   }
 
   setSingleUseSpent(spent: boolean) {
-    this.updater.path('data', 'state', 'used').commit(spent);
+    this.updater.path('system', 'state', 'used').commit(spent);
   }
 
   get timeTillFullyCharged() {

@@ -42,12 +42,13 @@ class Base extends ItemProxyBase<ItemType.Railgun> {
     ]);
   }
   get updateState() {
-    return this.updater.path('data', 'state');
+    return this.updater.path('system', 'state');
   }
 }
 export class Railgun
   extends mix(Base).with(Purchasable, Gear, Equippable, RangedWeapon, Copyable)
-  implements Attacker<KineticWeaponAttackData, KineticWeaponAttack> {
+  implements Attacker<KineticWeaponAttackData, KineticWeaponAttack>
+{
   static readonly possibleAccessories = difference(
     enumValues(RangedWeaponAccessory),
     [
@@ -96,7 +97,7 @@ export class Railgun
     const max = changed.max ?? this.battery.max;
     const charge = changed.charge ?? this.battery.charge;
     const diff = max - charge;
-    return this.updater.path('data', 'battery').commit({
+    return this.updater.path('system', 'battery').commit({
       ...changed,
       recharge: (diff / max) * CommonInterval.Hour * 4 + currentWorldTimeMS(),
     });
@@ -113,13 +114,13 @@ export class Railgun
 
   reload() {
     return this.updater
-      .path('data', 'ammo', 'value')
+      .path('system', 'ammo', 'value')
       .commit((current) => this.ammoState.max + (current ? 1 : 0));
   }
 
   fire(shots: number) {
     this.updater
-      .path('data', 'ammo', 'value')
+      .path('system', 'ammo', 'value')
       .store((current) => nonNegative(current - shots));
     return this.updateCharge({ charge: this.totalCharge - shots });
   }
@@ -129,7 +130,7 @@ export class Railgun
   }
 
   setSingleUseSpent(spent: boolean) {
-    this.updater.path('data', 'state', 'used').commit(spent);
+    this.updater.path('system', 'state', 'used').commit(spent);
   }
 
   @LazyGetter()
@@ -258,8 +259,8 @@ export class Railgun
         _id: id,
       };
 
-      shapeData.data = {
-        ...shapeData.data,
+      shapeData.system = {
+        ...shapeData.system,
         shapeChanging: true,
         wareType: this.wareType,
         description: this.description,
@@ -268,9 +269,9 @@ export class Railgun
       if (shapeData.flags.ep2e?.transformation) {
         shapeData.flags.ep2e.transformation = null;
       }
-      shapeData.data.state = {
+      shapeData.system.state = {
         ...this.epData.state,
-        ...shapeData.data.state,
+        ...shapeData.system.state,
         equipped: this.equipped,
       };
       this.updater.path('').store(shapeData);
@@ -279,9 +280,9 @@ export class Railgun
         ...this.getDataCopy(false),
         name: this.shapeName,
       };
-      myData.data.state = shapeData.data.state;
-      myData.data = {
-        ...myData.data,
+      myData.system.state = shapeData.system.state;
+      myData.system = {
+        ...myData.system,
         shapeChanging: true,
         shapeName: this.shapeName,
       };
@@ -301,8 +302,8 @@ export class Railgun
 
   addShape(weaponData: ReturnType<Railgun['getDataCopy']>) {
     const { shapes, ...flags } = weaponData.flags.ep2e || {};
-    weaponData.data = {
-      ...weaponData.data,
+    weaponData.system = {
+      ...weaponData.system,
       shapeChanging: true,
       shapeName: weaponData.name,
       wareType: this.wareType,

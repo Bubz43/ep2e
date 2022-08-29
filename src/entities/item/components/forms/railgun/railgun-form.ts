@@ -104,7 +104,7 @@ export class RailgunForm extends mix(Base).with(UseWorldTime) {
         >
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.path('data'), {
+        ${renderUpdaterForm(updater.path('system'), {
           disabled,
           slot: 'sidebar',
           fields: this.renderSidebarFields,
@@ -124,7 +124,7 @@ export class RailgunForm extends mix(Base).with(UseWorldTime) {
                       classes: 'shape-name-form',
                       update: ({ shapeName }) => {
                         this.item.updater
-                          .path('data', 'shapeName')
+                          .path('system', 'shapeName')
                           .commit(shapeName || this.item.shapeName);
                         this.requestUpdate();
                       },
@@ -162,7 +162,7 @@ export class RailgunForm extends mix(Base).with(UseWorldTime) {
                 </sl-dropzone>
               `
             : ''}
-          ${renderUpdaterForm(updater.path('data'), {
+          ${renderUpdaterForm(updater.path('system'), {
             disabled,
             classes: complexityForm.cssClass,
             fields: renderComplexityFields,
@@ -171,7 +171,7 @@ export class RailgunForm extends mix(Base).with(UseWorldTime) {
 
           <section>
             <sl-header heading=${localize('ammo')}></sl-header>
-            ${renderUpdaterForm(updater.path('data', 'ammo'), {
+            ${renderUpdaterForm(updater.path('system', 'ammo'), {
               disabled,
               classes: 'ammo-form',
               fields: ({ value, max, ammoClass }) => [
@@ -236,7 +236,7 @@ export class RailgunForm extends mix(Base).with(UseWorldTime) {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.path('data', 'description')}
+          .updateActions=${updater.path('system', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -286,7 +286,7 @@ export class RailgunForm extends mix(Base).with(UseWorldTime) {
 
   private renderAttackEdit() {
     return renderKineticAttackEdit(
-      this.item.updater.path('data', 'primaryAttack'),
+      this.item.updater.path('system', 'primaryAttack'),
     );
   }
 
@@ -294,7 +294,7 @@ export class RailgunForm extends mix(Base).with(UseWorldTime) {
     return renderRangedAccessoriesEdit(
       this.item.accessories,
       Railgun.possibleAccessories,
-      this.item.updater.path('data', 'accessories').commit,
+      this.item.updater.path('system', 'accessories').commit,
     );
   }
 }

@@ -23,7 +23,7 @@ const ware = [SoftwareType.AppAsWare, SoftwareType.Meshware];
 
 class Base extends ItemProxyBase<ItemType.Software> {
   get updateState() {
-    return this.updater.path('data', 'state');
+    return this.updater.path('system', 'state');
   }
 }
 export class Software
@@ -98,7 +98,7 @@ export class Software
 
   toggleEquipped() {
     return this.updater
-      .path('data', 'state')
+      .path('system', 'state')
       .commit(({ equipped, serviceStartTime }) => ({
         equipped: !equipped,
         serviceStartTime: equipped ? serviceStartTime : currentWorldTimeMS(),
@@ -106,7 +106,7 @@ export class Software
   }
 
   toggleActivation() {
-    return this.updater.path('data', 'state', 'activated').commit(toggle);
+    return this.updater.path('system', 'state', 'activated').commit(toggle);
   }
 
   @LazyGetter()
@@ -123,7 +123,7 @@ export class Software
   get meshHealth() {
     return new AppMeshHealth({
       data: this.epData.meshHealth,
-      updater: this.updater.path('data', 'meshHealth').nestedStore(),
+      updater: this.updater.path('system', 'meshHealth').nestedStore(),
       source: localize('process'),
     });
   }
@@ -166,7 +166,7 @@ export class Software
   getDataCopy(reset = false) {
     const copy = super.getDataCopy(reset);
     if (reset) {
-      copy.data.state = {
+      copy.system.state = {
         activated: false,
         equipped: false,
         paused: false,

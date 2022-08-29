@@ -60,7 +60,7 @@ export abstract class ItemProxyBase<T extends ItemType> {
   }
 
   get dataActions() {
-    return this.updater.path('data').commit;
+    return this.updater.path('system').commit;
   }
 
   get textInfo(): string[] {
@@ -113,7 +113,7 @@ export abstract class ItemProxyBase<T extends ItemType> {
   get epData(): ItemModels[T] {
     const { data } = this;
     if ('system' in data) return (data as { system: ItemModels[T] }).system;
-    return this.data.data;
+    return this.data.system;
   }
 
   getDataCopy(resetState = true) {

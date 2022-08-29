@@ -66,7 +66,7 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
       if (sameExplosive) await sameExplosive.setQuantity((val) => val + 1);
       else {
         const copy = explosive.getDataCopy();
-        copy.data.quantity = 1;
+        copy.system.quantity = 1;
         await character.itemOperations.add(copy);
       }
 

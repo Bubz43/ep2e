@@ -70,7 +70,7 @@ export class FirearmAmmoForm extends ItemFormBase {
   private readonly payloadSheetKey = {};
 
   private readonly modeOps = addUpdateRemoveFeature(
-    () => this.item.updater.path('data', 'modes').commit,
+    () => this.item.updater.path('system', 'modes').commit,
   );
 
   update(changedProps: PropertyValues<this>) {
@@ -156,7 +156,7 @@ export class FirearmAmmoForm extends ItemFormBase {
                     }),
               modes,
             ),
-      updater.path('data', 'modes').commit,
+      updater.path('system', 'modes').commit,
     );
   }
 
@@ -201,7 +201,7 @@ export class FirearmAmmoForm extends ItemFormBase {
               })}
             </sl-header>
             <div class="detail-forms">
-              ${renderUpdaterForm(updater.path('data'), {
+              ${renderUpdaterForm(updater.path('system'), {
                 disabled,
                 classes: 'settings-form',
                 fields: ({ ammoClass, carryPayload }) => [
@@ -211,12 +211,12 @@ export class FirearmAmmoForm extends ItemFormBase {
                   renderLabeledCheckbox(carryPayload),
                 ],
               })}
-              ${renderUpdaterForm(updater.path('data'), {
+              ${renderUpdaterForm(updater.path('system'), {
                 classes: complexityForm.cssClass,
                 disabled,
                 fields: renderComplexityFields,
               })}
-              ${renderUpdaterForm(updater.path('data'), {
+              ${renderUpdaterForm(updater.path('system'), {
                 disabled,
                 classes: 'quantity-form',
                 fields: ({ quantity, roundsPerComplexity }) => [
@@ -274,7 +274,7 @@ export class FirearmAmmoForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.path('data', 'description')}
+          .updateActions=${updater.path('system', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>

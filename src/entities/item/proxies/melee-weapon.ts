@@ -21,13 +21,14 @@ import { Substance } from './substance';
 
 class MeleeWeaponBase extends ItemProxyBase<ItemType.MeleeWeapon> {
   get updateState() {
-    return this.updater.path('data', 'state');
+    return this.updater.path('system', 'state');
   }
 }
 
 export class MeleeWeapon
   extends mix(MeleeWeaponBase).with(Gear, Purchasable, Equippable, Copyable)
-  implements Attacker<MeleeWeaponAttackData, MeleeWeaponAttack> {
+  implements Attacker<MeleeWeaponAttackData, MeleeWeaponAttack>
+{
   constructor(init: ItemProxyInit<ItemType.MeleeWeapon>) {
     super(init);
   }
@@ -93,7 +94,7 @@ export class MeleeWeapon
   }
 
   setSingleUseSpent(spent: boolean) {
-    this.updater.path('data', 'state', 'used').commit(spent);
+    this.updater.path('system', 'state', 'used').commit(spent);
   }
 
   @LazyGetter()
@@ -177,7 +178,7 @@ export class MeleeWeapon
   setCoating(substance: Substance | ReturnType<Substance['getDataCopy']>) {
     const substanceData =
       substance instanceof Substance ? substance.getDataCopy() : substance;
-    substanceData.data = { ...substanceData.data, quantity: 1 };
+    substanceData.system = { ...substanceData.system, quantity: 1 };
     return this.updateCoating([substanceData]);
   }
 

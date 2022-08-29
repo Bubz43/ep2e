@@ -43,7 +43,7 @@ export class MessageTechUse extends MessageElement {
   private applyEffects() {
     const { effects, duration, tech, appliedTo } = this.techUse;
     pickOrDefaultCharacter(async (character) => {
-      await character.updater.path('data', 'temporary').commit(
+      await character.updater.path('system', 'temporary').commit(
         addFeature(
           createTemporaryFeature.effects({
             duration,

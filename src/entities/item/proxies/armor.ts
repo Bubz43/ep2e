@@ -9,7 +9,7 @@ import { ItemProxyBase, ItemProxyInit } from './item-proxy-base';
 
 class Base extends ItemProxyBase<ItemType.Armor> {
   get updateState() {
-    return this.updater.path('data', 'state');
+    return this.updater.path('system', 'state');
   }
 }
 export class Armor
@@ -43,7 +43,7 @@ export class Armor
   }
 
   toggleActiveState() {
-    return this.updater.path('data', 'state', 'activated').commit(toggle);
+    return this.updater.path('system', 'state', 'activated').commit(toggle);
   }
 
   get armorValues() {

@@ -38,12 +38,13 @@ class Base extends ItemProxyBase<ItemType.SprayWeapon> {
     ]);
   }
   get updateState() {
-    return this.updater.path('data', 'state');
+    return this.updater.path('system', 'state');
   }
 }
 export class SprayWeapon
   extends mix(Base).with(Gear, Purchasable, Equippable, RangedWeapon, Copyable)
-  implements Attacker<SprayWeaponAttackData, SprayWeaponAttack> {
+  implements Attacker<SprayWeaponAttackData, SprayWeaponAttack>
+{
   static readonly possibleAccessories = difference(
     enumValues(RangedWeaponAccessory),
     [
@@ -110,7 +111,7 @@ export class SprayWeapon
   }
 
   setSingleUseSpent(spent: boolean) {
-    this.updater.path('data', 'state', 'used').commit(spent);
+    this.updater.path('system', 'state', 'used').commit(spent);
   }
 
   shouldApplyCoating(firedShots: number) {
@@ -119,14 +120,14 @@ export class SprayWeapon
 
   reloadStandardAmmo() {
     return this.updater
-      .path('data', 'ammo', 'value')
+      .path('system', 'ammo', 'value')
       .commit(this.ammoState.max);
   }
 
   updateAmmoValue(newValue: number) {
     return this.payloadUse === SprayPayload.FirePayload
-      ? this.payload?.updater.path('data', 'quantity').commit(newValue)
-      : this.updater.path('data', 'ammo', 'value').commit(newValue);
+      ? this.payload?.updater.path('system', 'quantity').commit(newValue)
+      : this.updater.path('system', 'ammo', 'value').commit(newValue);
   }
 
   spendAmmo(amount: number) {
@@ -138,7 +139,7 @@ export class SprayWeapon
         this.shouldApplyCoating(amount))
     ) {
       payload.updater
-        .path('data', 'quantity')
+        .path('system', 'quantity')
         .store((quantity) =>
           nonNegative(
             quantity -
@@ -150,7 +151,7 @@ export class SprayWeapon
         );
     }
     return this.updater
-      .path('data', 'ammo', 'value')
+      .path('system', 'ammo', 'value')
       .commit(nonNegative(this.ammoState.value - amount));
   }
 

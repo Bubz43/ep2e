@@ -390,7 +390,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     const { updater } = this.poolHolder;
     for (const { pool, points } of pools) {
       this.poolHolder.updater
-        .path('data', 'spentPools', pool)
+        .path('system', 'spentPools', pool)
         .store((spent) => nonNegative(spent + points));
     }
     await updater.commit();
@@ -683,7 +683,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
             duration: CommonInterval.Day,
             startTime: refreshStartTime,
             updateStartTime: this.updater.path(
-              'data',
+              'system',
               rechargeType,
               'refreshStartTime',
             ).commit,
@@ -722,7 +722,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         id: `temporary-${temp.id}`,
         updateStartTime: (startTime) =>
           this.updater
-            .path('data', 'temporary')
+            .path('system', 'temporary')
             .commit((temps) =>
               updateFeature(temps, { id: temp.id, startTime }),
             ),
@@ -751,13 +751,13 @@ export class Character extends ActorProxyBase<ActorType.Character> {
   ) {
     for (const poolType of enumValues(PoolType)) {
       this.updater
-        .path('data', 'spentPools', poolType)
+        .path('system', 'spentPools', poolType)
         .store(newSpentPools.get(poolType) || 0);
     }
 
     this.updater.batchCommits(() => {
       if (this.psi?.receded) {
-        this.psi.updater.path('data', 'state', 'receded').store(false);
+        this.psi.updater.path('system', 'state', 'receded').store(false);
       }
       if (this.psi && !this.psi.hasActiveInfluences) {
         this.psi.updateInfectionRating(
@@ -767,13 +767,13 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         );
       }
       this.updater
-        .path('data', recharge)
+        .path('system', recharge)
         .store(({ taken, refreshStartTime }) => ({
           taken: taken + 1,
           refreshStartTime:
             taken === 0 ? currentWorldTimeMS() : refreshStartTime,
         }))
-        .path('data', 'temporary')
+        .path('system', 'temporary')
         .commit(reject((temp) => temp.endOn === TemporaryFeatureEnd.Recharge));
     });
   }
@@ -782,7 +782,7 @@ export class Character extends ActorProxyBase<ActorType.Character> {
     if (this.rechargeRefreshTimers.some(refreshAvailable)) {
       for (const rechargeType of enumValues(RechargeType)) {
         this.updater
-          .path('data', rechargeType)
+          .path('system', rechargeType)
           .store({ taken: 0, refreshStartTime: 0 });
       }
     }

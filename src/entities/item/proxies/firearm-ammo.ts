@@ -12,10 +12,10 @@ import { Substance } from './substance';
 
 class Base extends ItemProxyBase<ItemType.FirearmAmmo> {
   get updateState() {
-    return this.updater.path('data', 'state');
+    return this.updater.path('system', 'state');
   }
   get updateQuantity() {
-    return this.updater.path('data');
+    return this.updater.path('system');
   }
 }
 

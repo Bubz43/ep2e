@@ -104,7 +104,7 @@ export class CharacterViewFirearmAttacks extends LitElement {
   }
 
   private toggleBraced() {
-    this.weapon.updater.path('data', 'state', 'braced').commit(toggle);
+    this.weapon.updater.path('system', 'state', 'braced').commit(toggle);
   }
 
   private openAmmoTransformer() {
@@ -198,7 +198,7 @@ export class CharacterViewFirearmAttacks extends LitElement {
           props: { mode: String(specialAmmoModeIndex) },
           update: ({ mode }) =>
             this.weapon.updater
-              .path('data', 'ammo', 'selectedModeIndex')
+              .path('system', 'ammo', 'selectedModeIndex')
               .commit(Number(mode) || 0),
           fields: ({ mode }) =>
             renderSelectField({ ...mode, label: '' }, Object.keys(ammoModes), {

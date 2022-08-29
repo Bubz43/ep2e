@@ -107,12 +107,8 @@ export class ReputationFavor extends SuccessTestBase {
               timeframe: favorValues(change.type).timeframe,
             });
           }
-          const {
-            type,
-            reputation,
-            keepingQuiet,
-            burnBonus,
-          } = draft.favorState;
+          const { type, reputation, keepingQuiet, burnBonus } =
+            draft.favorState;
           draft.favorState.burnForAdditionalFavor =
             type !== Favor.Trivial &&
             reputation[type] >= (maxFavors.get(type) ?? 1);
@@ -176,13 +172,8 @@ export class ReputationFavor extends SuccessTestBase {
       totalBurnedRepScore,
     } = this;
 
-    const {
-      type,
-      reputation,
-      fakeID,
-      keepingQuiet,
-      burnForAdditionalFavor,
-    } = favorState;
+    const { type, reputation, fakeID, keepingQuiet, burnForAdditionalFavor } =
+      favorState;
 
     const name = `${reputation.network} ${localize(type)} ${localize('favor')}`;
 
@@ -274,13 +265,13 @@ export class ReputationFavor extends SuccessTestBase {
         const newScore = reputation.score - totalBurnedRepScore;
         if (reputation.identifier.type === 'ego') {
           this.ego.updater
-            .path('data', 'reps', reputation.identifier.networkId)
+            .path('system', 'reps', reputation.identifier.networkId)
             .commit({ score: newScore });
         } else {
           const { fakeEgoId, repId } = reputation.identifier;
           this.character?.equippedGroups.fakeIDs
             .find((f) => f.id === fakeEgoId)
-            ?.updater.path('data', 'reputations')
+            ?.updater.path('system', 'reputations')
             .commit((reps) =>
               updateFeature(reps, { id: repId, score: newScore }),
             );

@@ -86,7 +86,7 @@ export class CharacterViewSprayAttacks extends LitElement {
   }
 
   private toggleBraced() {
-    this.weapon.updater.path('data', 'state', 'braced').commit(toggle);
+    this.weapon.updater.path('system', 'state', 'braced').commit(toggle);
   }
 
   private openAmmoMenu(ev: MouseEvent) {

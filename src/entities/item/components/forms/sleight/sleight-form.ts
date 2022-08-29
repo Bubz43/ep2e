@@ -84,8 +84,10 @@ export class SleightForm extends ItemFormBase {
     group,
     addUpdateRemoveFeature(
       () =>
-        this.item.updater.path('data', `effectsTo${capitalize(group)}` as const)
-          .commit,
+        this.item.updater.path(
+          'system',
+          `effectsTo${capitalize(group)}` as const,
+        ).commit,
     ),
   ]);
 
@@ -120,7 +122,7 @@ export class SleightForm extends ItemFormBase {
         >
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.path('data'), {
+        ${renderUpdaterForm(updater.path('system'), {
           disabled,
           slot: 'sidebar',
           fields: ({
@@ -228,7 +230,7 @@ export class SleightForm extends ItemFormBase {
                     : ''}
                   ?disabled=${disabled}
                 ></item-form-effects-list>`}
-            ${renderUpdaterForm(updater.path('data', 'mentalArmor'), {
+            ${renderUpdaterForm(updater.path('system', 'mentalArmor'), {
               classes: 'mental-armor-form',
               fields: ({ apply, divisor, formula }) => [
                 renderLabeledCheckbox({
@@ -252,7 +254,7 @@ export class SleightForm extends ItemFormBase {
             })}
             ${isChi || (!effectsToTarget.length && !mentalArmor.apply)
               ? ''
-              : renderUpdaterForm(updater.path('data'), {
+              : renderUpdaterForm(updater.path('system'), {
                   fields: ({ scaleEffectsOnSuperior }) => [
                     renderLabeledCheckbox({
                       ...scaleEffectsOnSuperior,
@@ -267,7 +269,7 @@ export class SleightForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.path('data', 'description')}
+          .updateActions=${updater.path('system', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -337,7 +339,7 @@ export class SleightForm extends ItemFormBase {
   }
 
   private renderAttackEdit() {
-    const updater = this.item.updater.path('data', 'attack');
+    const updater = this.item.updater.path('system', 'attack');
     const { disabled } = this;
     const { attackTraits } = updater.originalValue();
     const attackTraitsObj = mapToObj(enumValues(AttackTrait), (trait) => [
@@ -365,7 +367,7 @@ export class SleightForm extends ItemFormBase {
               this.item.updater
                 .path('flags', EP.Name, 'attackArmorUsed')
                 .store(armorUsed)
-                .path('data', 'attack', 'useMentalArmor')
+                .path('system', 'attack', 'useMentalArmor')
                 .commit(false);
             },
             fields: ({ armorUsed }) =>
@@ -415,7 +417,7 @@ export class SleightForm extends ItemFormBase {
   }
 
   private renderHealEdit() {
-    const updater = this.item.updater.path('data', 'heal');
+    const updater = this.item.updater.path('system', 'heal');
     const { disabled } = this;
 
     return html`

@@ -83,7 +83,7 @@ export class EgoForm extends mix(LitElement).with(
   @property({ attribute: false }) ego!: Ego;
 
   private readonly motivationOps = addUpdateRemoveFeature(
-    () => this.ego.updater.path('data', 'motivations').commit,
+    () => this.ego.updater.path('system', 'motivations').commit,
   );
 
   private updateMotivation({ changed, id }: UpdatedMotivationEvent) {
@@ -127,7 +127,7 @@ export class EgoForm extends mix(LitElement).with(
               <editor-wrapper
                 slot="description"
                 ?disabled=${disabled}
-                .updateActions=${updater.path('data', 'description')}
+                .updateActions=${updater.path('system', 'description')}
               ></editor-wrapper>
             `
           : ''}
@@ -156,14 +156,8 @@ export class EgoForm extends mix(LitElement).with(
   }
 
   private renderDetails() {
-    const {
-      settings,
-      disabled,
-      updater,
-      motivations,
-      itemGroups,
-      psi,
-    } = this.ego;
+    const { settings, disabled, updater, motivations, itemGroups, psi } =
+      this.ego;
     const useCredits = gameSettings.credits.current;
     const { traits, sleights } = itemGroups;
 
@@ -246,7 +240,7 @@ export class EgoForm extends mix(LitElement).with(
                     : ''}
                 </sl-header>
                 <div class="threat-details">
-                  ${renderUpdaterForm(updater.path('data', 'threatDetails'), {
+                  ${renderUpdaterForm(updater.path('system', 'threatDetails'), {
                     classes: 'threat-details-form',
                     disabled,
                     fields: ({ niche, numbers, level }) => [
@@ -261,7 +255,7 @@ export class EgoForm extends mix(LitElement).with(
                   <ego-form-threat-stress
                     ?disabled=${disabled}
                     .updateOps=${updater.path(
-                      'data',
+                      'system',
                       'threatDetails',
                       'stress',
                     )}
@@ -281,7 +275,7 @@ export class EgoForm extends mix(LitElement).with(
                 </sl-header>
                 ${disabled
                   ? ''
-                  : renderUpdaterForm(updater.path('data', 'points'), {
+                  : renderUpdaterForm(updater.path('system', 'points'), {
                       disabled,
                       classes: 'points-form',
                       fields: (points) =>
@@ -354,21 +348,24 @@ export class EgoForm extends mix(LitElement).with(
           ? html`
               <section>
                 <sl-header heading=${localize('character')}></sl-header>
-                ${renderUpdaterForm(updater.path('data', 'characterDetails'), {
-                  disabled,
-                  classes: 'character-details-form',
-                  fields: (details) =>
-                    enumValues(CharacterDetail).map((detail) =>
-                      CharacterDetail.Languages === detail
-                        ? renderTextareaField(details[detail], {
-                            helpText: localize('commaSeperated'),
-                            rows: 6,
-                          })
-                        : renderTextField(details[detail], {
-                            listId: detail,
-                          }),
-                    ),
-                })}
+                ${renderUpdaterForm(
+                  updater.path('system', 'characterDetails'),
+                  {
+                    disabled,
+                    classes: 'character-details-form',
+                    fields: (details) =>
+                      enumValues(CharacterDetail).map((detail) =>
+                        CharacterDetail.Languages === detail
+                          ? renderTextareaField(details[detail], {
+                              helpText: localize('commaSeperated'),
+                              rows: 6,
+                            })
+                          : renderTextField(details[detail], {
+                              listId: detail,
+                            }),
+                      ),
+                  },
+                )}
                 ${this.detailDatalists}
               </section>
             `
@@ -377,12 +374,14 @@ export class EgoForm extends mix(LitElement).with(
     `;
   }
 
-  private detailDatalists = ([
-    [EgoBackground, CharacterDetail.Background],
-    [EgoCareer, CharacterDetail.Career],
-    [EgoInterest, CharacterDetail.Interest],
-    [EgoFaction, CharacterDetail.Faction],
-  ] as const).map(
+  private detailDatalists = (
+    [
+      [EgoBackground, CharacterDetail.Background],
+      [EgoCareer, CharacterDetail.Career],
+      [EgoInterest, CharacterDetail.Interest],
+      [EgoFaction, CharacterDetail.Faction],
+    ] as const
+  ).map(
     ([list, id]) => html`
       <datalist id=${id}>
         ${enumValues(list).map(
@@ -405,7 +404,7 @@ export class EgoForm extends mix(LitElement).with(
     const { updater, disabled, useThreat } = this.ego;
 
     return html`
-      ${renderUpdaterForm(updater.path('data'), {
+      ${renderUpdaterForm(updater.path('system'), {
         slot: 'sidebar',
         disabled,
         fields: ({ egoType, forkType, flex, threat }) => [
@@ -446,7 +445,7 @@ export class EgoForm extends mix(LitElement).with(
         label="aptitudes"
       ></entity-form-sidebar-divider>
 
-      ${renderUpdaterForm(updater.path('data', 'aptitudes'), {
+      ${renderUpdaterForm(updater.path('system', 'aptitudes'), {
         slot: 'sidebar',
         classes: 'aptitudes',
         fields: renderAptitudeFields,
@@ -466,7 +465,7 @@ export class EgoForm extends mix(LitElement).with(
   private renderSettingsForm() {
     return html`
       <h3>${localize('settings')}</h3>
-      ${renderUpdaterForm(this.ego.updater.path('data', 'settings'), {
+      ${renderUpdaterForm(this.ego.updater.path('system', 'settings'), {
         disabled: this.ego.disabled,
         classes: 'settings-form',
         fields: (props) =>
@@ -499,7 +498,7 @@ export class EgoForm extends mix(LitElement).with(
       <health-state-form .health=${this.ego.mentalHealth}></health-state-form>
 
       <p class="hardening-label">${localize('hardening')}</p>
-      ${renderUpdaterForm(this.ego.updater.path('data', 'mentalHealth'), {
+      ${renderUpdaterForm(this.ego.updater.path('system', 'mentalHealth'), {
         fields: (hardenings) =>
           hardeningTypes.map((type) =>
             renderNumberField(hardenings[type], { min: 0, max: 5 }),
@@ -525,7 +524,7 @@ export class EgoForm extends mix(LitElement).with(
 
   private renderRep = (network: RepNetwork) => html`
     <ego-form-rep
-      .repOps=${this.ego.updater.path('data', 'reps', network)}
+      .repOps=${this.ego.updater.path('system', 'reps', network)}
       network=${network}
       ?disabled=${this.ego.disabled}
     ></ego-form-rep>

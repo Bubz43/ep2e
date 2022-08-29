@@ -37,16 +37,17 @@ import { Substance } from './substance';
 
 class Base extends ItemProxyBase<ItemType.Explosive> {
   get updateState() {
-    return this.updater.path('data', 'state');
+    return this.updater.path('system', 'state');
   }
   get updateQuantity() {
-    return this.updater.path('data');
+    return this.updater.path('system');
   }
 }
 
 export class Explosive
   extends mix(Base).with(Purchasable, Copyable, Stackable)
-  implements Attacker<ExplosiveAttackData, ExplosiveAttack> {
+  implements Attacker<ExplosiveAttackData, ExplosiveAttack>
+{
   readonly loaded;
   constructor({
     loaded,

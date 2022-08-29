@@ -43,7 +43,7 @@ export class ArmorForm extends ItemFormBase {
   @property({ attribute: false }) item!: Armor;
 
   private readonly effectsOps = addUpdateRemoveFeature(
-    () => this.item.updater.path('data', 'effects').commit,
+    () => this.item.updater.path('system', 'effects').commit,
   );
 
   private addCreatedEffect(ev: EffectCreatedEvent) {
@@ -68,7 +68,7 @@ export class ArmorForm extends ItemFormBase {
         >
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.path('data'), {
+        ${renderUpdaterForm(updater.path('system'), {
           disabled,
           slot: 'sidebar',
           fields: ({
@@ -102,13 +102,13 @@ export class ArmorForm extends ItemFormBase {
           slot: 'sidebar',
           update: createPipe(
             changeTraits,
-            updater.path('data', 'attackTraits').commit,
+            updater.path('system', 'attackTraits').commit,
           ),
           fields: (traits) => map(Object.values(traits), renderLabeledCheckbox),
         })}
 
         <div slot="details">
-          ${renderUpdaterForm(updater.path('data'), {
+          ${renderUpdaterForm(updater.path('system'), {
             disabled,
             classes: complexityForm.cssClass,
             fields: renderComplexityFields,
@@ -119,7 +119,7 @@ export class ArmorForm extends ItemFormBase {
               <sl-header
                 heading="${localize('armor')} ${localize('values')}"
               ></sl-header>
-              ${renderUpdaterForm(updater.path('data', 'armorValues'), {
+              ${renderUpdaterForm(updater.path('system', 'armorValues'), {
                 disabled,
                 classes: `armor-values-form ${hasActiveState ? '' : 'solo'}`,
                 fields: renderArmorValuesFields,
@@ -132,7 +132,7 @@ export class ArmorForm extends ItemFormBase {
                     <sl-header
                       heading="${localize('when')} ${localize('activated')}"
                     ></sl-header>
-                    ${renderUpdaterForm(updater.path('data', 'activeArmor'), {
+                    ${renderUpdaterForm(updater.path('system', 'activeArmor'), {
                       disabled,
                       classes: 'armor-values-form',
                       fields: renderArmorValuesFields,
@@ -168,7 +168,7 @@ export class ArmorForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.path('data', 'description')}
+          .updateActions=${updater.path('system', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>

@@ -242,7 +242,7 @@ export class PsiForm extends ItemFormBase {
         <sl-animated-list slot="details">
           <section>
             <sl-header heading="${localize('psi')} ${localize('trait')}">
-              ${renderUpdaterForm(updater.path('data'), {
+              ${renderUpdaterForm(updater.path('system'), {
                 disabled,
                 slot: 'action',
                 fields: ({ requireBioSubstrate }) =>
@@ -251,7 +251,7 @@ export class PsiForm extends ItemFormBase {
             </sl-header>
             <div class="detail-forms">
               ${this.strainOptions}
-              ${renderUpdaterForm(updater.path('data'), {
+              ${renderUpdaterForm(updater.path('system'), {
                 disabled,
                 fields: ({ strain }) =>
                   renderTextField(strain, { listId: 'strains' }),
@@ -266,7 +266,7 @@ export class PsiForm extends ItemFormBase {
                 fields: ({ name }) =>
                   renderTextField({ ...name, label: localize('substrain') }),
               })}
-              ${renderUpdaterForm(updater.path('data'), {
+              ${renderUpdaterForm(updater.path('system'), {
                 disabled,
                 fields: ({ level }) =>
                   renderNumberField(level, {
@@ -359,7 +359,7 @@ export class PsiForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.path('data', 'description')}
+          .updateActions=${updater.path('system', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>

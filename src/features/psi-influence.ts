@@ -194,9 +194,9 @@ export const influenceInfo = (influence: PsiInfluence | PsiInfluenceData) => {
           }
         : {
             name: `${trait.name} ${
-              trait.data.subtype ? `(${trait.data.subtype})` : ''
+              trait.system.subtype ? `(${trait.system.subtype})` : ''
             }`,
-            description: trait.data.description,
+            description: trait.system.description,
           };
     }
 

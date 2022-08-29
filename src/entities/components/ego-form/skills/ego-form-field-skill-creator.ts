@@ -122,7 +122,7 @@ export class EgoFormFieldSkillCreator extends LitElement {
     if (invalidFieldMessage) return;
 
     await ego.updater
-      .path('data', 'fieldSkills', fieldSkill)
+      .path('system', 'fieldSkills', fieldSkill)
       .commit(addFeature(this.fieldSkillData));
 
     this.newFieldSkillData();

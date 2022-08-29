@@ -5,6 +5,6 @@ export const renderEgoForm = (ego: Ego) => html`
   <ego-form .ego=${ego}></ego-form>
   <entity-form-footer
     slot="footer"
-    .updater=${ego.updater.path('data').nestedStore()}
+    .updater=${ego.updater.path('system').nestedStore()}
   ></entity-form-footer>
 `;

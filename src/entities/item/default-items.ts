@@ -68,7 +68,7 @@ const exoticMorphology = (level: 1 | 2 | 3) => {
   return createItemEntity({
     type: ItemType.Trait,
     name: localize('exoticMorphology'),
-    data: {
+    system: {
       traitType: TraitType.Negative,
       source: TraitSource.Morph,
       restrictions: `May not be applied to morphs that don't come with it.`,
@@ -126,7 +126,7 @@ const enhancedBehavior = (subtype: string, level: number) => {
   return createItemEntity({
     type: ItemType.Trait,
     name: localize('enhancedBehavior'),
-    data: {
+    system: {
       traitType: TraitType.Negative,
       source: TraitSource.Ego,
       reference: defaultReference(78),
@@ -184,7 +184,7 @@ const realWorldNaivete = () => {
   return createItemEntity({
     name: localize('realWorldNaivete'),
     type: ItemType.Trait,
-    data: {
+    system: {
       traitType: TraitType.Negative,
       source: TraitSource.Ego,
       reference: defaultReference(80),
@@ -220,7 +220,7 @@ const digitalSpeed = () => {
   return createItemEntity({
     type: ItemType.Trait,
     name: localize('digitalSpeed'),
-    data: {
+    system: {
       traitType: TraitType.Positive,
       source: TraitSource.Morph,
       description: `<p>This trait is only available to infomorphs. Unfettered by the physical,
@@ -251,7 +251,7 @@ const mnemonicsWare = () => {
   return createItemEntity({
     type: ItemType.Software,
     name: localize('mnemonics'),
-    data: {
+    system: {
       complexity: Complexity.Minor,
       restricted: false,
       softwareType: SoftwareType.Meshware,

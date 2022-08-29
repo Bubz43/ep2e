@@ -284,9 +284,9 @@ export class ActorEP extends Actor {
       const epFlag = data.flags[EP.Name] || {};
       for (const sleeveType of sleeveTypes) {
         const sleeveData = epFlag[sleeveType];
-        if (sleeveData) return sleeveData.data.conditions;
+        if (sleeveData) return sleeveData.system.conditions;
       }
-    } else return data.data.conditions;
+    } else return data.system.conditions;
     return [];
   }
 

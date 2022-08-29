@@ -130,7 +130,7 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
     sustaining: boolean,
   ) {
     return this.updater
-      .path('data', 'status')
+      .path('system', 'status')
       .commit({ sustainingOn, sustaining });
   }
 
@@ -153,7 +153,7 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
   }
 
   psiPush(willpower: number) {
-    return this.updater.path('data', 'status').commit({
+    return this.updater.path('system', 'status').commit({
       pushDuration: toMilliseconds({ minutes: Math.round(willpower / 5) }),
       pushStartTime: currentWorldTimeMS(),
       pushed: true,
@@ -161,7 +161,7 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
   }
 
   endPush() {
-    return this.updater.path('data', 'status', 'pushed').commit(false);
+    return this.updater.path('system', 'status', 'pushed').commit(false);
   }
 
   @LazyGetter()
@@ -171,7 +171,7 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
       id: this.id,
       duration: this.status.pushDuration,
       startTime: this.status.pushStartTime,
-      updateStartTime: this.updater.path('data', 'status', 'pushStartTime')
+      updateStartTime: this.updater.path('system', 'status', 'pushStartTime')
         .commit,
     });
   }
@@ -226,7 +226,7 @@ export class Sleight extends ItemProxyBase<ItemType.Sleight> {
 
   getDataCopy(reset?: boolean) {
     const copy = super.getDataCopy(reset);
-    copy.data.status = {
+    copy.system.status = {
       sustaining: false,
       sustainingOn: [],
       pushDuration: 0,

@@ -235,7 +235,7 @@ export class CharacterViewResleeve extends LitElement {
       ...[...items.values()].map((item) => {
         if ('equipped' in item) {
           const data = item.getDataCopy(false);
-          data.data.state.equipped = true;
+          data.system.state.equipped = true;
           return data;
         }
 
@@ -258,7 +258,7 @@ export class CharacterViewResleeve extends LitElement {
         ),
         (brain) =>
           brain
-            ? (data.data.brain = brain.id)
+            ? (data.system.brain = brain.id)
             : notify(
                 NotificationType.Error,
                 `Unable to find ${nonDefaultBrain.name}`,

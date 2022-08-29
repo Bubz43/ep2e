@@ -80,7 +80,7 @@ export class MessageSleightSustainEnd extends MessageElement {
           this.sleightSustainEnd.removedFromIds.includes(sustain.uuid)}
           @click=${async () => {
             await character.updater
-              .path('data', 'temporary')
+              .path('system', 'temporary')
               .commit(removeFeature(sustain.temporaryFeatureId));
             this.getUpdater('sleightSustainEnd').commit({
               removedFromIds: [

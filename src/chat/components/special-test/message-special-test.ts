@@ -83,7 +83,7 @@ export class MessageSpecialTest extends MessageElement {
           ]),
         );
         character.updater
-          .path('data', 'temporary')
+          .path('system', 'temporary')
           .commit((temps) =>
             tempConditions.reduce(
               (accum, tempC) => addFeature(accum, tempC),
@@ -111,7 +111,7 @@ export class MessageSpecialTest extends MessageElement {
       character.updater.batchCommits(() => {
         character.addConditions([ConditionType.Blinded]);
         character.updater
-          .path('data', 'temporary')
+          .path('system', 'temporary')
           .commit(addFeature(blindness));
       });
     }
@@ -163,7 +163,7 @@ export class MessageSpecialTest extends MessageElement {
       character.updater.batchCommits(() => {
         character.addConditions(tempConditions.map(prop('condition')));
         character.updater
-          .path('data', 'temporary')
+          .path('system', 'temporary')
           .commit((temps) =>
             tempConditions.reduce(
               (accum, tempC) => addFeature(accum, tempC),
@@ -216,7 +216,7 @@ export class MessageSpecialTest extends MessageElement {
         }),
       );
       character.updater
-        .path('data', 'temporary')
+        .path('system', 'temporary')
         .commit(addFeature(poorIntegration));
     }
   }
@@ -252,7 +252,7 @@ export class MessageSpecialTest extends MessageElement {
         fallDown,
       } = effect;
       const isStatic = !!staticDuration || !variableDuration;
-  
+
       let duration = CommonInterval.Turn;
       if (isStatic) duration += staticDuration || CommonInterval.Turn;
       else {
@@ -328,7 +328,7 @@ export class MessageSpecialTest extends MessageElement {
       notEmpty(conditionsToAdd) && proxy.addConditions([...conditionsToAdd]);
       notEmpty(temporary) &&
         proxy.updater
-          .path('data', 'temporary')
+          .path('system', 'temporary')
           .commit((temps) =>
             temporary.reduce((accum, temp) => addFeature(accum, temp), temps),
           );

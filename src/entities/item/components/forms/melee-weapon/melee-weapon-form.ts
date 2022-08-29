@@ -239,7 +239,7 @@ export class MeleeWeaponForm extends ItemFormBase {
           ></mwc-icon-button>
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.path('data'), {
+        ${renderUpdaterForm(updater.path('system'), {
           disabled,
           slot: 'sidebar',
           fields: ({
@@ -278,7 +278,7 @@ export class MeleeWeaponForm extends ItemFormBase {
           <section>
             <sl-header heading=${localize('details')}></sl-header>
             <div class="detail-forms">
-              ${renderUpdaterForm(updater.path('data'), {
+              ${renderUpdaterForm(updater.path('system'), {
                 disabled,
                 classes: complexityForm.cssClass,
                 fields: renderComplexityFields,
@@ -293,11 +293,11 @@ export class MeleeWeaponForm extends ItemFormBase {
                 update: ({ skillOption, exotic }) => {
                   if (exotic !== undefined) {
                     this.item.updater
-                      .path('data', 'exoticSkill')
+                      .path('system', 'exoticSkill')
                       .commit(exotic);
                   } else if (skillOption === WeaponSkillOption.None) {
                     this.skillOption = skillOption;
-                    this.item.updater.path('data', 'exoticSkill').commit('');
+                    this.item.updater.path('system', 'exoticSkill').commit('');
                   } else if (skillOption) {
                     this.skillOption = skillOption;
                     if (
@@ -305,7 +305,7 @@ export class MeleeWeaponForm extends ItemFormBase {
                       !this.item.exoticSkillName
                     ) {
                       this.item.updater
-                        .path('data', 'exoticSkill')
+                        .path('system', 'exoticSkill')
                         .commit(this.item.name);
                     }
                   }
@@ -413,7 +413,7 @@ export class MeleeWeaponForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.path('data', 'description')}
+          .updateActions=${updater.path('system', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -500,7 +500,7 @@ export class MeleeWeaponForm extends ItemFormBase {
   }
 
   private renderAttackEdit(type: WeaponAttackType) {
-    const updater = this.item.updater.path('data', type);
+    const updater = this.item.updater.path('system', type);
     const { hasSecondaryAttack } = this.item;
     const { disabled } = this;
     const [pairedTraits, change] = pairList(

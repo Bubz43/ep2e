@@ -118,7 +118,7 @@ const ignore = ({
     disabled: !pool.available,
     icon: html`<mwc-icon>healing</mwc-icon>`,
     callback: () => {
-      character.updater.path('data', 'temporary').store(
+      character.updater.path('system', 'temporary').store(
         addFeature(
           tempEffect(
             pool.type,
@@ -171,7 +171,7 @@ const moxie: PoolOptionGetter = ({ character, pool }) => {
               disabled: points > pool.available,
               callback: () => {
                 character.updater
-                  .path('data', 'reps', network, type)
+                  .path('system', 'reps', network, type)
                   .store(used - 1);
                 character.addToSpentPools({ pool: pool.type, points });
               },
@@ -214,7 +214,7 @@ export const poolActionOptions = (character: Character, poolType: PoolType) => {
         )} ${localize('modifier')}`,
         disabled: point > available,
         callback: async () => {
-          character.updater.path('data', 'temporary').store(
+          character.updater.path('system', 'temporary').store(
             addFeature(
               createLinkedAptitude({
                 pool: poolType,

@@ -195,9 +195,9 @@ export class ActorCreator extends LitElement {
         const itemsToAdd = [...sleeveData.items];
         if (this.characterData.template === CharacterTemplate.Muse) {
           if (!selectedSleeve && sleeveData.type === ActorType.Infomorph) {
-            sleeveData.data.acquisition.resource = '';
-            sleeveData.data.meshHealth.baseDurability = 20;
-            sleeveData.data.description = `<p>Default infomorph for ALIs.</p>`;
+            sleeveData.system.acquisition.resource = '';
+            sleeveData.system.meshHealth.baseDurability = 20;
+            sleeveData.system.description = `<p>Default infomorph for ALIs.</p>`;
             sleeveData.name = `${localize('ali')} ${localize('morph')}`;
           }
           itemsToAdd.push(
@@ -210,7 +210,7 @@ export class ActorCreator extends LitElement {
         if (this.characterData.template === CharacterTemplate.Muse) {
           const specialization = '';
           updater
-            .path('data', 'settings')
+            .path('system', 'settings')
             .store({
               canDefault: false,
               trackPoints: false,
@@ -219,7 +219,7 @@ export class ActorCreator extends LitElement {
               threatDetails: false,
               useThreat: false,
             })
-            .path('data', 'skills')
+            .path('system', 'skills')
             .store({
               infosec: { points: 20, specialization },
               interface: { points: 50, specialization },
@@ -227,7 +227,7 @@ export class ActorCreator extends LitElement {
               program: { points: 20, specialization },
               research: { points: 20, specialization },
             })
-            .path('data', 'fieldSkills', FieldSkillType.Hardware)
+            .path('system', 'fieldSkills', FieldSkillType.Hardware)
             .store(
               addFeature(
                 createFieldSkillData({
@@ -236,7 +236,7 @@ export class ActorCreator extends LitElement {
                 }),
               ),
             )
-            .path('data', 'fieldSkills', FieldSkillType.Medicine)
+            .path('system', 'fieldSkills', FieldSkillType.Medicine)
             .store(
               addFeature(
                 createFieldSkillData({
@@ -245,7 +245,7 @@ export class ActorCreator extends LitElement {
                 }),
               ),
             )
-            .path('data', 'fieldSkills', FieldSkillType.Know)
+            .path('system', 'fieldSkills', FieldSkillType.Know)
             .store(
               createPipe(
                 addFeature(
@@ -275,7 +275,7 @@ export class ActorCreator extends LitElement {
               ),
             );
         } else if (this.characterData.template === CharacterTemplate.Threat) {
-          updater.path('data', 'settings').store({
+          updater.path('system', 'settings').store({
             trackPoints: false,
             characterDetails: false,
             threatDetails: true,

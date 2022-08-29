@@ -145,7 +145,7 @@ export class SeekerWeaponForm extends ItemFormBase {
         >
         </entity-form-header>
 
-        ${renderUpdaterForm(updater.path('data'), {
+        ${renderUpdaterForm(updater.path('system'), {
           disabled,
           slot: 'sidebar',
           fields: ({ wareType, firingMode, hasAlternativeAmmo, ...traits }) => [
@@ -177,7 +177,7 @@ export class SeekerWeaponForm extends ItemFormBase {
         })}
 
         <div slot="details">
-          ${renderUpdaterForm(updater.path('data'), {
+          ${renderUpdaterForm(updater.path('system'), {
             disabled,
             classes: complexityForm.cssClass,
             fields: renderComplexityFields,
@@ -192,7 +192,7 @@ export class SeekerWeaponForm extends ItemFormBase {
             ${missiles && !alternativeMissile
               ? this.renderMissiles(missiles)
               : ''}
-            ${renderUpdaterForm(updater.path('data', 'primaryAmmo'), {
+            ${renderUpdaterForm(updater.path('system', 'primaryAmmo'), {
               disabled,
               classes: 'missile-info-form',
               fields: ({ missileSize, missileCapacity, range }) => [
@@ -229,28 +229,33 @@ export class SeekerWeaponForm extends ItemFormBase {
                   ${missiles && alternativeMissile
                     ? this.renderMissiles(missiles)
                     : ''}
-                  ${renderUpdaterForm(updater.path('data', 'alternativeAmmo'), {
-                    disabled,
-                    classes: 'missile-info-form',
-                    fields: ({ missileSize, missileCapacity, range }) => [
-                      renderSelectField(
-                        missileSize,
-                        enumValues(ExplosiveSize),
-                        {
-                          disableOptions: [primaryAmmo.missileSize],
-                          disabled: alternativeMissile,
-                        },
-                      ),
-                      renderNumberField(
-                        {
-                          ...missileCapacity,
-                          label: `${localize('base')} ${localize('capacity')}`,
-                        },
-                        { min: 1 },
-                      ),
-                      renderNumberField(range, { min: 1 }),
-                    ],
-                  })}
+                  ${renderUpdaterForm(
+                    updater.path('system', 'alternativeAmmo'),
+                    {
+                      disabled,
+                      classes: 'missile-info-form',
+                      fields: ({ missileSize, missileCapacity, range }) => [
+                        renderSelectField(
+                          missileSize,
+                          enumValues(ExplosiveSize),
+                          {
+                            disableOptions: [primaryAmmo.missileSize],
+                            disabled: alternativeMissile,
+                          },
+                        ),
+                        renderNumberField(
+                          {
+                            ...missileCapacity,
+                            label: `${localize('base')} ${localize(
+                              'capacity',
+                            )}`,
+                          },
+                          { min: 1 },
+                        ),
+                        renderNumberField(range, { min: 1 }),
+                      ],
+                    },
+                  )}
                 </sl-dropzone>
               `
             : ''}
@@ -278,7 +283,7 @@ export class SeekerWeaponForm extends ItemFormBase {
         <editor-wrapper
           slot="description"
           ?disabled=${disabled}
-          .updateActions=${updater.path('data', 'description')}
+          .updateActions=${updater.path('system', 'description')}
         ></editor-wrapper>
         ${this.renderDrawerContent()}
       </entity-form-layout>
@@ -305,7 +310,7 @@ export class SeekerWeaponForm extends ItemFormBase {
 
   private renderMissilesQuantityForm(missiles: Explosive) {
     const { currentCapacity } = this.item;
-    return renderUpdaterForm(missiles.updater.path('data'), {
+    return renderUpdaterForm(missiles.updater.path('system'), {
       disabled: this.disabled,
       classes: 'missiles-quantity-form',
       slot: 'action',
@@ -328,7 +333,7 @@ export class SeekerWeaponForm extends ItemFormBase {
     return renderRangedAccessoriesEdit(
       this.item.accessories,
       SeekerWeapon.possibleAccessories,
-      this.item.updater.path('data', 'accessories').commit,
+      this.item.updater.path('system', 'accessories').commit,
     );
   }
 }
