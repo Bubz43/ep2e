@@ -74,7 +74,7 @@ export class ItemEP extends Item {
   @LazyGetter()
   get updater() {
     return new UpdateStore({
-      getData: () => this.system,
+      getData: () => this.toJSON(),
       isEditable: () =>
         !!this.isOwner &&
         (this.actor ? this.actor.editable : true) &&

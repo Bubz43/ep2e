@@ -177,7 +177,7 @@ export class UpdateStore<T extends UpdateStoreData> {
   path<
     K1 extends keyof NonNullable<T>,
     K2 extends keyof NonNullable<NonNullable<T>[K1]>,
-    K3 extends keyof NonNullable<NonNullable<NonNullable<T>[K1]>[K2]>
+    K3 extends keyof NonNullable<NonNullable<NonNullable<T>[K1]>[K2]>,
   >(
     k1: K1,
     k2: K2,
@@ -193,7 +193,7 @@ export class UpdateStore<T extends UpdateStoreData> {
     K3 extends keyof NonNullable<NonNullable<NonNullable<T>[K1]>[K2]>,
     K4 extends keyof NonNullable<
       NonNullable<NonNullable<NonNullable<T>[K1]>[K2]>[K3]
-    >
+    >,
   >(
     k1: K1,
     k2: K2,
@@ -213,7 +213,7 @@ export class UpdateStore<T extends UpdateStoreData> {
     >,
     K5 extends keyof NonNullable<
       NonNullable<NonNullable<NonNullable<T>[K1]>[K2]>[K3]
-    >[K4]
+    >[K4],
   >(
     k1: K1,
     k2: K2,
@@ -239,7 +239,7 @@ export class UpdateStore<T extends UpdateStoreData> {
     >[K4],
     K6 extends keyof NonNullable<
       NonNullable<NonNullable<NonNullable<NonNullable<T>[K1]>[K2]>[K3]>[K4]
-    >[K5]
+    >[K5],
   >(
     k1: K1,
     k2: K2,
@@ -305,9 +305,13 @@ export class UpdateStore<T extends UpdateStoreData> {
     append: (store: UpdateStore<any>) => UpdateStore<any>;
     originalValue: () => any;
   }) {
-    if (!isJsonObject(originalValue())) {
-      throw new Error('Can only get a nested store for object properties.');
+    const original = originalValue();
+    if (!isJsonObject(original)) {
+      throw new Error(
+        `Can only get a nested store for object properties. Got ${typeof original}`,
+      );
     }
+
     const existing = this.nestedStores.get(path);
     if (existing) return existing.store;
 
