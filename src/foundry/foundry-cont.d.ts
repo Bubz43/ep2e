@@ -238,9 +238,13 @@ declare global {
     bars: Record<'bar1' | 'bar2', import('pixi.js').Graphics>;
     update(tokenData: DeepPartial<TokenData>, options: unknown): Promise<Token>;
     _controlled: boolean;
-    hud: {
-      effects: import('pixi.js').Container;
-    };
+    effects: import('pixi.js').Container & { bg: unknown; overlay: unknown };
+    _refreshEffects: VoidFunction;
+    _drawEffect(src: string, tint: null): Promise<any>;
+    _drawOverlay(src: string, tint: null): Promise<any>;
+    // hud: {
+    //   effects: import('pixi.js').Container;
+    // };
   }
 
   interface PlaceableObject {

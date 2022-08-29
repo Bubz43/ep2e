@@ -72,35 +72,40 @@ export const overridePrototypes = () => {
     this.actor?.render(false, {});
   };
 
-  // Token.prototype.drawEffects = async function () {
-  //   if (!this.actor) return drawEffects.call(this);
+  Token.prototype.drawEffects = async function () {
+    if (!this.actor) return drawEffects.call(this);
+    this.effects.removeChildren().forEach((c) => c.destroy());
+    this.effects.bg = this.effects.addChild(new PIXI.Graphics());
+    this.effects.overlay = null;
 
-  //   this.hud.effects.removeChildren().forEach((c) => c.destroy());
+    const effects = activeTokenStatusEffects(this);
+    // Categorize new effects
 
-  //   const effects = activeTokenStatusEffects(this);
+    let overlay = {
+      src: this.document.overlayEffect,
+      tint: null,
+    };
 
-  //   if (notEmpty(effects)) {
-  //     const width =
-  //       Math.round(
-  //         (canvas as ReturnType<typeof readyCanvas>)!.dimensions.size / 2 / 5,
-  //       ) * 2;
+    console.log('overlay source', overlay.src);
 
-  //     const background = this.hud.effects
-  //       .addChild(new PIXI.Graphics())
-  //       .beginFill(0x000000, 0.4)
-  //       .lineStyle(1.0, 0x000000);
+    // Draw status effects
+    if (effects.length) {
+      const promises = [];
 
-  //     await Promise.all(
-  //       effects.map((source, index) =>
-  //         this._drawEffect(source, index, background, width, null),
-  //       ),
-  //     );
-  //   }
+      // Draw actor effects first
+      for (let iconPath of effects) {
+        // const tint = Color.from(f.tint ?? null);
 
-  //   if (this.data.overlayEffect) {
-  //     this._drawOverlay({ src: this.data.overlayEffect, tint: null });
-  //   }
-  // };
+        promises.push(this._drawEffect(iconPath, null));
+      }
+      await Promise.all(promises);
+      // Draw overlay effect
+      if (overlay.src) {
+        this.effects.overlay = await this._drawOverlay(overlay.src, null);
+      }
+      this._refreshEffects();
+    }
+  };
 
   Token.prototype.toggleEffect = async function (
     effect: string | typeof CONFIG['statusEffects'][number] | null,
