@@ -9,7 +9,7 @@ import {
 } from '@src/foundry/misc-helpers';
 import { EP } from '@src/foundry/system';
 import produce from 'immer';
-import { concat, map, pipe } from 'remeda';
+import { concat, difference, isArray, map, pipe } from 'remeda';
 import type { ActorEP } from './actor/actor';
 import { ActorType, ItemType, sleeveTypes } from './entity-types';
 import {
@@ -157,20 +157,3 @@ const migrateExplosiveFlags = (data: ItemEntity<ItemType.Explosive>) => {
     );
   });
 };
-
-// const migrateMeleeFlags = (data: ItemEntity<ItemType.MeleeWeapon>) => {
-//   const { coating, payload } = data.flags[EP.Name] || {};
-//   if (coating || payload) {
-//     return produce(data, ({ flags }) => {
-//       if (!flags.ep2e) return;
-//       flags.ep2e.coating =
-//         coating &&
-//         pipe(coating[0], baseItemMigration, migrateSubstanceFlags, toTuple);
-
-//       flags.ep2e.payload =
-//         payload &&
-//         pipe(payload[0], baseItemMigration, migrateExplosiveFlags, toTuple);
-//     });
-//   }
-//   return null;
-// };

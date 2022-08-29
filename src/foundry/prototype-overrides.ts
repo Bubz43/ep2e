@@ -72,35 +72,35 @@ export const overridePrototypes = () => {
     this.actor?.render(false, {});
   };
 
-  Token.prototype.drawEffects = async function () {
-    if (!this.actor) return drawEffects.call(this);
+  // Token.prototype.drawEffects = async function () {
+  //   if (!this.actor) return drawEffects.call(this);
 
-    this.hud.effects.removeChildren().forEach((c) => c.destroy());
+  //   this.hud.effects.removeChildren().forEach((c) => c.destroy());
 
-    const effects = activeTokenStatusEffects(this);
+  //   const effects = activeTokenStatusEffects(this);
 
-    if (notEmpty(effects)) {
-      const width =
-        Math.round(
-          (canvas as ReturnType<typeof readyCanvas>)!.dimensions.size / 2 / 5,
-        ) * 2;
+  //   if (notEmpty(effects)) {
+  //     const width =
+  //       Math.round(
+  //         (canvas as ReturnType<typeof readyCanvas>)!.dimensions.size / 2 / 5,
+  //       ) * 2;
 
-      const background = this.hud.effects
-        .addChild(new PIXI.Graphics())
-        .beginFill(0x000000, 0.4)
-        .lineStyle(1.0, 0x000000);
+  //     const background = this.hud.effects
+  //       .addChild(new PIXI.Graphics())
+  //       .beginFill(0x000000, 0.4)
+  //       .lineStyle(1.0, 0x000000);
 
-      await Promise.all(
-        effects.map((source, index) =>
-          this._drawEffect(source, index, background, width, null),
-        ),
-      );
-    }
+  //     await Promise.all(
+  //       effects.map((source, index) =>
+  //         this._drawEffect(source, index, background, width, null),
+  //       ),
+  //     );
+  //   }
 
-    if (this.data.overlayEffect) {
-      this._drawOverlay({ src: this.data.overlayEffect, tint: null });
-    }
-  };
+  //   if (this.data.overlayEffect) {
+  //     this._drawOverlay({ src: this.data.overlayEffect, tint: null });
+  //   }
+  // };
 
   Token.prototype.toggleEffect = async function (
     effect: string | typeof CONFIG['statusEffects'][number] | null,

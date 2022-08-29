@@ -27,6 +27,7 @@ import { findActor, findToken } from './entities/find-entities';
 import { ItemEP } from './entities/item/item';
 import { ItemEPSheet } from './entities/item/item-sheet';
 import { migrateWorld } from './entities/migration';
+import { foundry9to10Migration } from './entities/v9to10migration';
 import type { ItemEntity } from './entities/models';
 import { SceneEP } from './entities/scene';
 import { UserEP } from './entities/user';
@@ -101,6 +102,8 @@ Hooks.once('ready', async () => {
   setupSystemSocket();
 
   const { current } = gameSettings.systemMigrationVersion;
+  await foundry9to10Migration();
+
   if (current < game.system.version && game.user.isGM) {
     await migrateWorld();
     gameSettings.systemMigrationVersion.update(game.system.version);

@@ -168,6 +168,7 @@ type CombatRoundInfo = {
 type FoundryCollection<T> = Map<string, T>;
 
 type Col<T> = FoundryCollection<T> & {
+  _source: T extends { toJSON(): infer U } ? U[] : never;
   [Symbol.iterator](): IterableIterator<T>;
   // get(id: string, options?: { strict: Boolean }): T | null;
   render(force: boolean): unknown;
