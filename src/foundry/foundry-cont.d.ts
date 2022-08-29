@@ -298,7 +298,11 @@ declare global {
   }
 
   interface Actor {
+    /**
+     * @deprecated Use `system` instead.
+     */
     data: ActorData;
+    system: ActorData;
     readonly items: FoundryCollection<ItemEP>;
     readonly effects: FoundryCollection<ActiveEffect>;
     toJSON(): ActorDatas;
@@ -307,7 +311,11 @@ declare global {
   }
 
   interface Item {
+    /**
+     * @deprecated Use `system` instead.
+     */
     data: ItemData;
+    system: ItemData;
     sheet: EntitySheet;
     toJSON(): ItemDatas;
     collection?: GameCollections['items'];

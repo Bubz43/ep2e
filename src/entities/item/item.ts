@@ -74,7 +74,7 @@ export class ItemEP extends Item {
   @LazyGetter()
   get updater() {
     return new UpdateStore({
-      getData: () => this.data,
+      getData: () => this.system,
       isEditable: () =>
         !!this.isOwner &&
         (this.actor ? this.actor.editable : true) &&
@@ -115,7 +115,7 @@ export class ItemEP extends Item {
   }
 
   dataCopy() {
-    return duplicate(this.data) as Mutable<ItemDatas>;
+    return duplicate(this.system) as Mutable<ItemDatas>;
   }
 
   get proxy() {

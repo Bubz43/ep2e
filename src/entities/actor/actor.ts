@@ -45,7 +45,7 @@ export type ActorSub = (data: ActorEP | null) => void;
 
 export class ActorEP extends Actor {
   readonly #subscribers = new EntitySubscription<this>();
-  itemTrash: ItemEP['data'][] = [];
+  itemTrash: ItemEP['system'][] = [];
 
   #proxy?: ActorProxy;
   #updater?: UpdateStore<ActorDatas>;
@@ -136,9 +136,9 @@ export class ActorEP extends Actor {
     if (!this.#itemOperations) {
       this.#itemOperations = {
         add: async (...itemDatas) => {
-          const itemIDs = new Set(this.data.items.keys());
+          const itemIDs = new Set(this.system.items.keys());
           await this.createEmbeddedDocuments('Item', itemDatas);
-          const addedIDs = [...this.data.items.keys()].filter(
+          const addedIDs = [...this.system.items.keys()].filter(
             (id) => !itemIDs.has(id),
           );
           this.emitItemSocket({
