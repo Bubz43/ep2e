@@ -25,7 +25,7 @@ const fromKey = <T extends string>(str: T) => {
 
 Hooks.on('canvasReady', () => {
   const scene = readyCanvas()?.scene;
-  scene?.data.tokens.forEach((tokenDoc) => sceneUpdate(tokenDoc));
+  scene?.toJSON().tokens.forEach((tokenDoc) => sceneUpdate(tokenDoc));
 });
 
 const sceneUpdate = (tokenDoc: TokenDocument) => {

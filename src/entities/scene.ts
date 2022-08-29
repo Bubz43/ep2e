@@ -8,13 +8,13 @@ export class SceneEP extends Scene {
     return super.sheet as EntitySheet;
   }
   get epFlags() {
-    return this.data.flags[EP.Name];
+    return this.flags[EP.Name];
   }
 
   @LazyGetter()
   get updater() {
     return new UpdateStore({
-      getData: () => this.data,
+      getData: () => this.toJSON(),
       setData: (update) => this.update(update),
       isEditable: () => this.isOwner,
     });
@@ -25,7 +25,7 @@ export class SceneEP extends Scene {
   }
 
   get fullSceneName() {
-    const { navName, name: sceneName } = this.data;
+    const { navName, name: sceneName } = this;
     return navName
       ? `${navName} ${game.user.isGM ? `(${sceneName})` : ''}`
       : sceneName;

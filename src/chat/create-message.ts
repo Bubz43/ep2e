@@ -66,7 +66,7 @@ export const createMessage = async ({
   'content' | 'data' | 'roll'
 >): Promise<ChatMessageEP> => {
   const { actor, token } = splitEntity(entity);
-  const chatMessageData: Partial<ChatMessageEP['data']> = {
+  const chatMessageData: Partial<ChatMessageData> = {
     content: roll?.total ?? content,
     flavor,
     rolls: roll ? [JSON.stringify(roll)] : [],

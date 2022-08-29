@@ -7,7 +7,7 @@ import type { EntityPath } from '@src/entities/path';
 import { EP } from '@src/foundry/system';
 import type { ActorType } from '../../entity-types';
 import type { ItemProxy } from '../../item/item';
-import type { ActorEntity } from '../../models';
+import type { ActorEntity, ActorModels } from '../../models';
 import type { UpdateStore } from '../../update-store';
 import { ActorEP, ItemOperations } from '../actor';
 
@@ -55,6 +55,9 @@ export abstract class ActorProxyBase<T extends ActorType> {
   }
 
   get epData() {
+    const { data } = this;
+    if ('system' in data) return (data as { system: ActorModels[T] }).system;
+
     return this.data.data;
   }
 

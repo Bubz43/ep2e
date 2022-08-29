@@ -15,14 +15,14 @@ export const isGamemaster = () => {
       pipe(
         [...game.users.values()],
         filter((user) => user.active && user.isGM),
-        sortBy((user) => user.data._id),
+        sortBy((user) => user.id),
         (gms) => first(gms) === game.user,
       ))
   );
 };
 
 const isPrimaryGM = (user = game.user) => {
-  return user.data.role === CONST.USER_ROLES.GAMEMASTER;
+  return user.role === CONST.USER_ROLES.GAMEMASTER;
 };
 
 export const gmIsConnected = () => {

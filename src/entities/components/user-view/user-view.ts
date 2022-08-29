@@ -47,7 +47,7 @@ export class UserView extends LitElement {
 
   render() {
     const { avatar, name, isGM, character } = this.user;
-    const { color } = this.user.data;
+    const { color } = this.user;
     const showAvatar = avatar !== CONST.DEFAULT_TOKEN;
     return html`
       ${showAvatar

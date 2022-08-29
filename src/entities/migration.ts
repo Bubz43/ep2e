@@ -29,7 +29,7 @@ export const migrateWorld = async () => {
     map(migrateActor),
     concat(
       [...game.scenes.values()].flatMap((scene) => {
-        const { tokens } = scene.data;
+        const { tokens } = scene.toJSON();
         return [...tokens.values()].flatMap((tokenDoc) => {
           return tokenDoc.actor?.isToken ? migrateActor(tokenDoc.actor) : [];
         });

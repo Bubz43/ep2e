@@ -16,7 +16,7 @@ export type SystemSocketData = {
     | ({ actorId: string } & ItemChange)
     | ({ tokenId: string; sceneId: string } & ItemChange);
   actorChanged: ActorIdentifiers;
-  messageData: DeepPartial<ChatMessageEP['data']> & { _id: string };
+  messageData: DeepPartial<ChatMessageData> & { _id: string };
   worldTimeChange: [date: number, change: string];
   mutateCombat: { action: CombatUpdateAction };
 };

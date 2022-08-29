@@ -105,8 +105,7 @@ export class ActorEPSheet implements EntitySheet {
 
   private get windowHeaderButtons() {
     const { compendium, id, proxy } = this.actor;
-    const linked =
-      this._token?.data.actorLink ?? this.actor.data.token.actorLink;
+    const linked = this._token?.data.actorLink ?? this.actor.token?.actorLink;
 
     return compact([
       SlWindow.headerButton({

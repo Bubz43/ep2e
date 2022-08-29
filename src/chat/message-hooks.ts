@@ -67,7 +67,7 @@ export const onChatMessageRender = (message: ChatMessageEP, j: JQuery) => {
   }
 
   const content = el.querySelector<HTMLElement>('.message-content')!;
-  const { speaker, whisper, blind, flags } = message.data;
+  const { speaker, whisper, blind, flags } = message;
   const epData = flags[EP.Name];
 
   // TODO mapKeys but with typescript string const
@@ -110,10 +110,7 @@ export const onChatMessageRender = (message: ChatMessageEP, j: JQuery) => {
     );
   }
 
-  el.style.setProperty(
-    '--author-color',
-    message.user?.data.color || 'currentColor',
-  );
+  el.style.setProperty('--author-color', message.user?.color || 'currentColor');
 
   if (epData) {
     // TODO add from before header

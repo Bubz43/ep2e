@@ -329,27 +329,33 @@ declare global {
     token: TokenHUD;
   }
 
-  interface Scene {
+  type SceneData = {
+    flags: {
+      [EP.Name]?: {
+        environment: Readonly<Environment> | null;
+        environmentOverrides: Readonly<EnvironmentOverrides> | null;
+      };
+    };
+    tokens: FoundryCollection<TokenDocument>;
+    active: boolean;
+    backgroundColor: string;
+    grid: number;
+    gridDistance: number;
+    gridUnits: string;
+    name: string;
+    navName: string;
+    thumb?: string;
+    _id: string;
+  };
+
+  interface Scene extends SceneData {
     sheet: EntitySheet;
     _viewPosition: { x: number; y: number; scale: number };
-    data: {
-      flags: {
-        [EP.Name]?: {
-          environment: Readonly<Environment> | null;
-          environmentOverrides: Readonly<EnvironmentOverrides> | null;
-        };
-      };
-      tokens: FoundryCollection<TokenDocument>;
-      active: boolean;
-      backgroundColor: string;
-      grid: number;
-      gridDistance: number;
-      gridUnits: string;
-      name: string;
-      navName: string;
-      thumb?: string;
-      _id: string;
-    };
+    /**
+     * @deprecated
+     */
+    data: SceneData;
+    toJSON(): SceneData;
   }
   interface Ray {
     A: { x: number; y: number };
@@ -422,7 +428,24 @@ declare global {
     preview: import('pixi.js').Container | null;
   }
 
-  interface User {
+  type UserData = Readonly<
+    CommonEntityData & {
+      color: string;
+      active: boolean;
+      name: string;
+      role: ValueOf<CONST['USER_ROLES']>;
+      character?: string;
+      avatar?: string;
+      password: string;
+      flags: {
+        [EP.Name]?: Partial<{
+          hotbar: UserHotbarEntry[];
+        }>;
+      };
+    }
+  >;
+
+  interface User extends UserData {
     active: boolean;
     targets: Set<Token>;
     isTrusted: boolean;
@@ -431,23 +454,12 @@ declare global {
     can(permission: string): boolean;
     readonly isGM: boolean;
     readonly color: string;
-    data: Readonly<
-      CommonEntityData & {
-        color: string;
-        active: boolean;
-        name: string;
-        role: ValueOf<CONST['USER_ROLES']>;
-        character?: string;
-        avatar?: string;
-        password: string;
-        flags: {
-          [EP.Name]?: Partial<{
-            hotbar: UserHotbarEntry[];
-          }>;
-        };
-      }
-    >;
+    /**
+     * @deprecated
+     */
+    data: UserData;
     update: (data: Record<string, unknown>) => Promise<unknown>;
+    toJSON(): UserData;
   }
 
   interface Die {
@@ -468,10 +480,35 @@ declare global {
     data: { content: string };
   }
 
-  interface ChatMessage {
+  type ChatMessageData = {
+    flags: {
+      [EP.Name]?: MessageData;
+      core?: { canPopout?: boolean };
+    };
+    flavor?: string | null;
+    blind: boolean;
+    whisper: string[];
+    speaker: Partial<{
+      actor: string | null;
+      alias: string | null;
+      scene: string | null;
+      token: string | null;
+    }>;
+    content: string;
+    rolls: string[]; // RollData;
+    // roll?: string | null; // RollData;
+    user: string;
+    type: number;
+    timestamp: number;
+    _id: string;
+    sound: string | null;
+  };
+
+  interface ChatMessage extends ChatMessageData {
     apps: Record<string | number, Application>;
     user: UserEP | undefined;
     _roll?: Roll | null;
+    toJSON(): ChatMessageData;
   }
 
   interface ChatLog {
@@ -530,12 +567,15 @@ declare global {
     }>,
   ): O & C;
 
-  type System = {
+  interface System extends SystemSchema {
     id: EP.Name;
     template: EntityTemplates;
     model: { Actor: ActorModels; Item: ItemModels };
+    /**
+     * @deprecated
+     */
     data: SystemSchema;
-  };
+  }
 
   const game: GameCollections & {
     user: UserEP;

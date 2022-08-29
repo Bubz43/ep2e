@@ -137,7 +137,7 @@ export const placeMeasuredTemplate = (
         savedTemplateData?.id
           ? {
               templateId: savedTemplateData.id,
-              sceneId: scene.data._id,
+              sceneId: scene.id,
             }
           : null,
       );

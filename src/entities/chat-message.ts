@@ -8,7 +8,7 @@ import { findActor, findToken } from './find-entities';
 import { UpdateStore } from './update-store';
 
 export class ChatMessageEP extends ChatMessage {
-  #updater?: UpdateStore<this['data']>;
+  #updater?: UpdateStore<ChatMessageData>;
   declare data: {
     flags: {
       [EP.Name]?: MessageData;
@@ -33,7 +33,7 @@ export class ChatMessageEP extends ChatMessage {
     sound: string | null;
   };
   get epFlags() {
-    return this.data.flags[EP.Name];
+    return this.flags[EP.Name];
   }
 
   // toJSON() {
@@ -70,10 +70,10 @@ export class ChatMessageEP extends ChatMessage {
   get updater() {
     if (!this.#updater) {
       this.#updater = new UpdateStore({
-        getData: () => this.data,
+        getData: () => this.toJSON(),
         setData: (update) => {
           if (!this.editable)
-            emitEPSocket({ messageData: { ...update, _id: this.data._id } });
+            emitEPSocket({ messageData: { ...update, _id: this.id } });
           else this.update(update);
         },
         isEditable: gmIsConnected,
@@ -84,8 +84,8 @@ export class ChatMessageEP extends ChatMessage {
 
   get isContentVisible() {
     if (this.epFlags?.successTest) {
-      const whisper = this.data.whisper || [];
-      const isBlind = whisper.length && this.data.blind;
+      const whisper = this.whisper || [];
+      const isBlind = whisper.length && this.blind;
       if (whisper.length)
         return whisper.includes(game.user.id) || (this.isAuthor && !isBlind);
     }
@@ -93,11 +93,11 @@ export class ChatMessageEP extends ChatMessage {
   }
 
   get isWhisper() {
-    return notEmpty(this.data.whisper);
+    return notEmpty(this.whisper);
   }
 
   get isBlind() {
-    return this.data.blind;
+    return this.blind;
   }
 
   get editable() {
@@ -106,7 +106,7 @@ export class ChatMessageEP extends ChatMessage {
   }
 
   get actor() {
-    const { actor, token, scene } = this.data.speaker;
+    const { actor, token, scene } = this.speaker;
     return actor
       ? findActor({
           actorId: actor,
@@ -117,14 +117,14 @@ export class ChatMessageEP extends ChatMessage {
   }
 
   get token() {
-    const { token, scene } = this.data.speaker;
+    const { token, scene } = this.speaker;
     return findToken({ tokenId: token, sceneId: scene });
   }
 
   createSimilar(data: MessageData) {
-    const { _id, user, timestamp, flags, ...common } = this.data;
+    const { id, user, timestamp, flags, ...common } = this;
     const { header } = this.epFlags ?? {};
-    const chatMessageData: Partial<ChatMessageEP['data']> = {
+    const chatMessageData: Partial<ChatMessageData> = {
       ...common,
       flags: {
         [EP.Name]: {
@@ -140,10 +140,10 @@ export class ChatMessageEP extends ChatMessage {
 
   setRollDrag(ev: DragEvent) {
     const { _roll } = this;
-    const { flavor, _id } = this.data;
+    const { flavor, id } = this;
     setDragDrop(ev, {
       type: DropType.Roll,
-      messageId: _id,
+      messageId: id,
       roll: _roll?.total || 0,
       formula: _roll?.formula || '',
       flavor: flavor || '',

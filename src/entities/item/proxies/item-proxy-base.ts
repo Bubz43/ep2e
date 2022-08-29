@@ -7,7 +7,7 @@ import { localImage } from '@src/utility/images';
 import { noop } from 'remeda';
 import type { Mutable } from 'type-fest';
 import type { ItemType } from '../../entity-types';
-import type { ItemEntity, NonEditableProps } from '../../models';
+import type { ItemEntity, ItemModels, NonEditableProps } from '../../models';
 import { UpdateStore } from '../../update-store';
 
 export type ItemProxyInit<T extends ItemType> = {
@@ -110,7 +110,9 @@ export abstract class ItemProxyBase<T extends ItemType> {
     return this.updater.editable;
   }
 
-  get epData() {
+  get epData(): ItemModels[T] {
+    const { data } = this;
+    if ('system' in data) return (data as { system: ItemModels[T] }).system;
     return this.data.data;
   }
 

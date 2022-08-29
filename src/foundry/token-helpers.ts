@@ -51,7 +51,7 @@ export const distanceBetweenTokens = (tokenA: Token, tokenB: Token) => {
     Math.abs(tokenA.data.elevation - tokenB.data.elevation),
   );
 
-  const gridScale = readyCanvas()?.scene.data.gridDistance || 1;
+  const gridScale = readyCanvas()?.scene.gridDistance || 1;
 
   if (tokenB.data.width === tokenB.data.height) {
     distance -= (tokenB.data.width / 2) * gridScale;

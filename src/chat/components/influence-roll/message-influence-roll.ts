@@ -97,7 +97,7 @@ export class MessageInfluenceRoll extends MessageElement {
           );
           roll?.toMessage({
             flavor: localize('hours'),
-            speaker: this.message.data.speaker,
+            speaker: this.message.speaker,
           });
 
           break;
@@ -113,7 +113,7 @@ export class MessageInfluenceRoll extends MessageElement {
           );
           roll?.toMessage({
             flavor: localize('minutes'),
-            speaker: this.message.data.speaker,
+            speaker: this.message.speaker,
           });
 
           break;

@@ -101,9 +101,9 @@ Hooks.once('ready', async () => {
   setupSystemSocket();
 
   const { current } = gameSettings.systemMigrationVersion;
-  if (current < game.system.data.version && game.user.isGM) {
+  if (current < game.system.version && game.user.isGM) {
     await migrateWorld();
-    gameSettings.systemMigrationVersion.update(game.system.data.version);
+    gameSettings.systemMigrationVersion.update(game.system.version);
   }
 
   document.getElementById('board')?.addEventListener('mousedown', (ev) => {

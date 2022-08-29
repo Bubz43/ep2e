@@ -1,14 +1,13 @@
-import type { UserHotbarEntry } from '@src/features/hotbar-entry';
 import { EP } from '@src/foundry/system';
 import { UpdateStore } from './update-store';
 
 export class UserEP extends User {
-  #updater?: UpdateStore<this['data']>;
+  #updater?: UpdateStore<UserData>;
 
   get updater() {
     if (!this.#updater) {
       this.#updater = new UpdateStore({
-        getData: () => this.data,
+        getData: () => this.toJSON(),
         isEditable: () => !!this.isOwner || this === game.user,
         setData: (update) => this.update(update),
       });
@@ -17,7 +16,7 @@ export class UserEP extends User {
   }
 
   get epFlags() {
-    return this.data.flags[EP.Name] || {};
+    return this.flags[EP.Name] || {};
   }
 
   // get color() {
