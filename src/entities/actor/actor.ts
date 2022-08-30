@@ -201,7 +201,7 @@ export class ActorEP extends Actor {
   get tokenOrLocalInfo() {
     const token = this.isToken ? this.token : this.getActiveTokens(true)[0];
     return {
-      img: token?.data.img || this.img,
+      img: token?.img || this.img,
       name: token?.name || this.name,
       uuid: this.isToken ? this.token!.uuid : this.uuid,
     };

@@ -87,6 +87,8 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
 
   private actorUnsub?: (() => void) | null;
 
+  private hasSetup = false;
+
   connectedCallback() {
     Hooks.on('canvasReady', this.setup);
     super.connectedCallback();
@@ -113,7 +115,10 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
   }
 
   private setup = () => {
-    this.unsubFromAll();
+    if (this.hasSetup) {
+      this.unsubFromAll();
+    }
+    this.hasSetup = true;
     Hooks.on('hoverToken', this.highligtToggle);
     this.timeState = null;
     const { entityIdentifiers } = this.participant;

@@ -257,7 +257,6 @@ declare global {
     /**
      * @deprecated
      */
-    data: Readonly<TokenData>;
     name: string;
     object: Token | null;
     id: string;
