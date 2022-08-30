@@ -45,7 +45,8 @@ type SystemObject = {
   [key: string]: unknown;
 };
 function isDataObject(value: unknown): value is DataObject {
-  return isObject(value) && hasDataObjectKeys(keys(value));
+  const is = isObject(value) && hasDataObjectKeys(keys({ ...(value as {}) }));
+  return is;
 }
 function toSystemObject(dataObj: DataObject): SystemObject {
   const { data, ...rest } = dataObj;
@@ -55,9 +56,7 @@ function toSystemObject(dataObj: DataObject): SystemObject {
     system: data,
   };
 }
-type DocumentObject = {
-  [key: string]: unknown;
-};
+
 function dataToSystem(originalObj: {}) {
   const newObj: { [key: string]: unknown } = {};
 
@@ -67,6 +66,9 @@ function dataToSystem(originalObj: {}) {
         if (isDataObject(value)) {
           const asSystem = toSystemObject(v);
           return dataToSystem(asSystem).obj;
+        }
+        if (isObject(value)) {
+          return dataToSystem(v).obj;
         }
         return v;
       });
@@ -147,15 +149,20 @@ export async function foundry9to10Migration() {
     }
   }
   if (packsWithDocuments.length) {
-    notify(
-      NotificationType.Info,
-      `Migrating ${packsWithDocuments.length} compendiums...`,
-    );
     for (const pack of packsWithDocuments) {
-      await pack.updateAll((value: {}) => {
-        const { obj, hasChanged } = dataToSystem(value);
-        return hasChanged ? getDiffedUpdates(value, obj) : {};
+      const { locked } = pack;
+      if (locked) {
+        await pack.configure({ locked: false });
+      }
+      await pack.updateAll((value: { toJSON(): {} }) => {
+        const val = { ...value.toJSON() };
+        const doc = isDataObject(val) ? toSystemObject(val) : val;
+        const { obj, hasChanged } = dataToSystem(doc);
+        return hasChanged ? getDiffedUpdates(doc, obj) : {};
       });
+      if (locked) {
+        await pack.configure({ locked });
+      }
       migratedCompendiums.add(pack.metadata.id);
     }
     await gameSettings.v10Compendiums.update([...migratedCompendiums]);

@@ -162,8 +162,6 @@ export class Ego {
   }
 
   get epData(): EgoData & CommonDetails {
-    const { data } = this;
-    if ('system' in data) return (data as unknown as { system: any }).system;
     return this.data.system;
   }
 

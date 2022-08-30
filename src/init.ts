@@ -99,14 +99,16 @@ Hooks.once('init', () => {
 Hooks.on('renderChatMessage', onChatMessageRender);
 
 Hooks.once('ready', async () => {
-  await foundry9to10Migration();
   setupSystemSocket();
 
-  const { current } = gameSettings.systemMigrationVersion;
+  if (game.user.isGM) {
+    await foundry9to10Migration();
+    const { current } = gameSettings.systemMigrationVersion;
 
-  if (current < game.system.version && game.user.isGM) {
-    await migrateWorld();
-    gameSettings.systemMigrationVersion.update(game.system.version);
+    if (foundry.utils.isNewerVersion(game.system.version, current)) {
+      await migrateWorld();
+      gameSettings.systemMigrationVersion.update(game.system.version);
+    }
   }
 
   document.getElementById('board')?.addEventListener('mousedown', (ev) => {

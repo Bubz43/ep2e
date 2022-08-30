@@ -111,8 +111,6 @@ export abstract class ItemProxyBase<T extends ItemType> {
   }
 
   get epData(): ItemModels[T] {
-    const { data } = this;
-    if ('system' in data) return (data as { system: ItemModels[T] }).system;
     return this.data.system;
   }
 
