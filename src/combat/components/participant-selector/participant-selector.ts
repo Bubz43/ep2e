@@ -64,7 +64,7 @@ export class ParticipantSelector extends mix(LitElement).with(
           entity instanceof Token
             ? {
                 name: entity.name,
-                hidden: entity.data.hidden,
+                hidden: entity.document.hidden,
                 initiative:
                   entity.actor?.type !== ActorType.Character ? 0 : null,
                 entityIdentifiers: entity.scene && {
@@ -140,8 +140,8 @@ export class ParticipantSelector extends mix(LitElement).with(
               @click=${() => this.toggleToAdd(token)}
               ?selected=${live(this.toAdd.has(token))}
             >
-              <img slot="graphic" src=${token.data.img} />
-              <span>${token.data.name}</span>
+              <img slot="graphic" src=${token.document.img} />
+              <span>${token.document.name}</span>
               ${token.actor
                 ? html`
                     <span slot="secondary">${localize(token.actor.type)}</span>

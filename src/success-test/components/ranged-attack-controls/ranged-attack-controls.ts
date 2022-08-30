@@ -291,8 +291,8 @@ export class RangedAttackControls extends LitElement {
               graphic="medium"
               ?twoline=${!!character.sleeve}
             >
-              <img slot="graphic" src=${token?.data.img ?? character.img} />
-              <span>${token?.data.name ?? character.name} </span>
+              <img slot="graphic" src=${token?.img ?? character.img} />
+              <span>${token?.name ?? character.name} </span>
               ${character.sleeve
                 ? html`<span slot="secondary"
                     >${formattedSleeveInfo(
@@ -368,7 +368,7 @@ export class RangedAttackControls extends LitElement {
                       else newTargets.add(token);
                       firing.update({ attackTargets: newTargets });
                     }}
-                    ><img src=${token.data.img}
+                    ><img src=${token.document.img}
                   /></mwc-icon-button>
                 `;
               })}

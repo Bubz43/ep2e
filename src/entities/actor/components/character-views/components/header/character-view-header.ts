@@ -68,7 +68,7 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
   }
 
   private get img() {
-    return this.token?.data.img || this.character.img;
+    return this.token?.img || this.character.img;
   }
 
   private setImg = (img: string) => {
@@ -86,7 +86,7 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
 
   private addToCombat(initiative?: number, surprised?: Surprise) {
     const name = this.token?.name ?? this.character.name;
-    const hidden = this.token?.data.hidden;
+    const hidden = this.token?.hidden;
     updateCombatState({
       type: CombatActionType.AddParticipants,
       payload: [
@@ -114,7 +114,7 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
     const bonus = this.character?.initiative;
     const baseLabel = bonus ? `1d6 + ${bonus}` : '1d6';
     const name = this.token?.name ?? this.character.name;
-    const hidden = this.token?.data.hidden;
+    const hidden = this.token?.hidden;
     const roll = async (surprise?: Surprise) => {
       const result = await rollInitiative(
         { token: this.token, actor: this.character.actor },

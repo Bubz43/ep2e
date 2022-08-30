@@ -119,7 +119,7 @@ export const updateManyActors = async (actors: ActorEP[]): Promise<unknown> => {
           map(
             (tokenActor) =>
               new UpdateStore({
-                getData: () => tokenActor.token!.data,
+                getData: () => tokenActor.token!.toJSON(),
                 isEditable: () => true,
                 setData: (update) => tokenActor.update(update),
               })

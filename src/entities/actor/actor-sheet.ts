@@ -55,7 +55,7 @@ export class ActorEPSheet implements EntitySheet {
         {
           next: (token) => {
             this._token = token;
-            if (token.data.actorLink) {
+            if (token.actorLink) {
               this.close();
               token.actor?.sheet.render(true, { token });
             } else if (token.actor) {
@@ -105,7 +105,7 @@ export class ActorEPSheet implements EntitySheet {
 
   private get windowHeaderButtons() {
     const { compendium, id, proxy } = this.actor;
-    const linked = this._token?.data.actorLink ?? this.actor.token?.actorLink;
+    const linked = this._token?.actorLink ?? this.actor.token?.actorLink;
 
     return compact([
       SlWindow.headerButton({
@@ -197,7 +197,7 @@ export class ActorEPSheet implements EntitySheet {
                 tokenName ? `- ${localize('token')}: ${tokenName}` : ''
               }`
             : actorName,
-        img: this._token?.data.img || this.actor.img,
+        img: this._token?.img || this.actor.img,
         forceFocus: force,
         adjacentEl: !this.isRendered && this.getAdjacentEl(),
       },
@@ -217,7 +217,7 @@ export class ActorEPSheet implements EntitySheet {
     if (token?.scene?.isView && token?.isVisible) {
       const hud = document.getElementById('hud');
       if (hud) {
-        const { w, h, x, y, data } = token;
+        const { w, h, x, y, document: data } = token;
         const { scale } = data;
         const div = document.createElement('div');
         hud.append(

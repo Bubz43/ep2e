@@ -415,7 +415,7 @@ Hooks.once('ready', async () => {
     callback: (tokenDoc, change) => {
       const changes = change as PartialDeep<TokenData>;
       if ('actorLink' in changes && changes.actorLink === false) {
-        const actorId = tokenDoc.data.actorId;
+        const actorId = tokenDoc.actorId;
         const actor = game.actors.get(actorId);
         if (actor?.sheet.isRendered) {
           console.log('rendered');
@@ -431,8 +431,8 @@ Hooks.once('ready', async () => {
     hook: 'on',
     event: MutateEvent.Delete,
     callback: (tokenDoc) => {
-      if (tokenDoc.data.actorLink) {
-        const actor = game.actors.get(tokenDoc.data.actorId);
+      if (tokenDoc.actorLink) {
+        const actor = game.actors.get(tokenDoc.actorId);
         if (actor?.sheet.isRendered && actor.sheet._token?.id === tokenDoc.id) {
           actor.sheet.render(true);
         }

@@ -34,7 +34,7 @@ export const activateTargetingTool = () => {
   });
 };
 
-export const activeTokenStatusEffects = ({ data, actor }: Token) =>
+export const activeTokenStatusEffects = ({ document: data, actor }: Token) =>
   pipe(
     data.effects ?? [],
     concat(
@@ -48,13 +48,13 @@ export const activeTokenStatusEffects = ({ data, actor }: Token) =>
 export const distanceBetweenTokens = (tokenA: Token, tokenB: Token) => {
   let distance = Math.hypot(
     readyCanvas()!.grid.measureDistance(tokenA.center, tokenB.center),
-    Math.abs(tokenA.data.elevation - tokenB.data.elevation),
+    Math.abs(tokenA.document.elevation - tokenB.document.elevation),
   );
 
   const gridScale = readyCanvas()?.scene.gridDistance || 1;
 
-  if (tokenB.data.width === tokenB.data.height) {
-    distance -= (tokenB.data.width / 2) * gridScale;
+  if (tokenB.document.width === tokenB.document.height) {
+    distance -= (tokenB.document.width / 2) * gridScale;
   }
 
   return nonNegative(Math.round(distance * 10) / 10);

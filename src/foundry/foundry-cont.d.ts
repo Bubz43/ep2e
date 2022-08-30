@@ -228,7 +228,6 @@ declare global {
   }
 
   interface Token {
-    data: Readonly<TokenData>;
     document: TokenDocument;
     scene?: SceneEP;
     x: number;
@@ -255,6 +254,9 @@ declare global {
 
   interface TokenDocument extends TokenData {
     parent?: SceneEP;
+    /**
+     * @deprecated
+     */
     data: Readonly<TokenData>;
     name: string;
     object: Token | null;
@@ -262,6 +264,7 @@ declare global {
     uuid: string;
     update(tokenData: DeepPartial<TokenData>, options: unknown): unknown;
     actor?: ActorEP;
+    toJSON(): TokenData;
   }
 
   interface Combat {

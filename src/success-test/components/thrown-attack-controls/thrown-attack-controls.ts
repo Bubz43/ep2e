@@ -239,8 +239,8 @@ export class ThrownAttackControls extends LitElement {
               graphic="medium"
               ?twoline=${!!character.sleeve}
             >
-              <img slot="graphic" src=${token?.data.img ?? character.img} />
-              <span>${token?.data.name ?? character.name} </span>
+              <img slot="graphic" src=${token?.img ?? character.img} />
+              <span>${token?.name ?? character.name} </span>
               ${character.sleeve
                 ? html`<span slot="secondary"
                     >${formattedSleeveInfo(
@@ -301,7 +301,7 @@ export class ThrownAttackControls extends LitElement {
                   <mwc-icon-button
                     class=${token === attackTarget ? 'active' : ''}
                     @click=${() => throwing.update({ attackTarget: token })}
-                    ><img src=${token.data.img}
+                    ><img src=${token.document.img}
                   /></mwc-icon-button>
                 `,
               )}

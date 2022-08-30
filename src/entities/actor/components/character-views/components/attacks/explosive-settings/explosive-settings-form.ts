@@ -456,7 +456,8 @@ export class ExplosiveSettingsForm extends LitElement {
           ${repeat(
             this.targets,
             identity,
-            (target) => html` <img src=${target.data.img} height="32px" /> `,
+            (target) =>
+              html` <img src=${target.document.img} height="32px" /> `,
           )}
         </sl-animated-list>
       </div>`;

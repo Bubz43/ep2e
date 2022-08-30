@@ -86,8 +86,6 @@ export const overridePrototypes = () => {
       tint: null,
     };
 
-    console.log('overlay source', overlay.src);
-
     // Draw status effects
     if (effects.length) {
       const promises = [];
@@ -120,7 +118,7 @@ export const overridePrototypes = () => {
     else {
       const condition = iconToCondition.get(texture);
       if (!condition || !this.actor) {
-        const effects = new Set(this.data.effects);
+        const effects = new Set(this.document.effects);
         effects.has(texture) ? effects.delete(texture) : effects.add(texture);
         await this.document.update({ effects: [...effects] }, { diff: false });
       } else {
@@ -174,7 +172,8 @@ export const overridePrototypes = () => {
     return mapToObj(CONFIG.statusEffects, ({ icon: src, id, label }) => {
       const status = statuses.get(id);
       const isActive = !!status?.id || effects.includes(src);
-      const isOverlay = !!status?.overlay || token.data.overlayEffect === src;
+      const isOverlay =
+        !!status?.overlay || token.document.overlayEffect === src;
       return [
         src,
         {
@@ -214,7 +213,7 @@ export const overridePrototypes = () => {
           if (!scene) return [];
           return {
             name: token.name,
-            hidden: !!token.data.hidden,
+            hidden: !!token.document.hidden,
             entityIdentifiers: {
               type: TrackedCombatEntity.Token,
               tokenId: token.id,

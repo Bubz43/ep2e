@@ -39,7 +39,7 @@ const sceneUpdate = (tokenDoc: TokenDocument) => {
       canvas?.scene === scene
         ? canvas?.tokens.get(tokenDoc.id)?.document
         : null;
-    subject.next(existing ?? createTempToken(tokenDoc.data, scene));
+    subject.next(existing ?? createTempToken(tokenDoc.toJSON(), scene));
   } // TODO maybe end if not subject
 };
 mutatePlaceableHook({

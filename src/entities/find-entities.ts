@@ -34,7 +34,7 @@ export const findActor = (ids: ActorIdentifiers) => {
 
 export const findToken = ({ actorId, tokenId, sceneId }: ActorIdentifiers) => {
   const token = readyCanvas()?.tokens.placeables.find(
-    ({ id, scene, data }) =>
+    ({ id, scene, document: data }) =>
       id === tokenId &&
       scene?.id === sceneId &&
       (actorId ? data.actorId === actorId : true),
@@ -42,7 +42,7 @@ export const findToken = ({ actorId, tokenId, sceneId }: ActorIdentifiers) => {
   if (token) return token.document;
   const scene = sceneId && game.scenes.get(sceneId);
   if (scene && tokenId) {
-    const tokenData = scene.toJSON().tokens.get(tokenId)?.data;
+    const tokenData = scene.toJSON().tokens.get(tokenId)?.toJSON();
     if (tokenData) return createTempToken(tokenData, scene);
   }
   return;

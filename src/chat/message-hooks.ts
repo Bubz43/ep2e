@@ -74,7 +74,7 @@ export const onChatMessageRender = (message: ChatMessageEP, j: JQuery) => {
   const speakerToId = mapKeys(speaker, (k) => k + 'Id') as ActorIdentifiers;
 
   const img = speakerToId.tokenId
-    ? findToken(speakerToId)?.data.img
+    ? findToken(speakerToId)?.img
     : speakerToId.actorId
     ? findActor(speakerToId)?.img
     : message.user?.avatar;

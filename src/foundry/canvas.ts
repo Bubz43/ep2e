@@ -188,7 +188,7 @@ export const updatePlacedTemplate = (
     ]);
 };
 
-export const getNormalizedTokenSize = ({ data }: Token) =>
+export const getNormalizedTokenSize = ({ document: data }: Token) =>
   Math.min(data.height, data.width) * data.scale;
 
 export const getTemplateGridHighlightLayer = (templateId: string) => {

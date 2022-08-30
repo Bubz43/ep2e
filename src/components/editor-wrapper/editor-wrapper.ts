@@ -71,7 +71,7 @@ export class EditorWrapper extends LitElement {
       target_list: [{ title: 'New page', value: '_blank' }],
       toolbar:
         'styleselect bullist numlist image table hr link removeformat code',
-      autoresize_on_init: false,
+      // autoresize_on_init: false,
       autoresize_overflow_padding: 10,
       min_height: 200,
       max_height: 400,
