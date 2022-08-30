@@ -115,7 +115,7 @@ export class ItemEP extends Item {
   }
 
   dataCopy() {
-    return duplicate(this.system) as Mutable<ItemDatas>;
+    return duplicate(this.toJSON()) as Mutable<ItemDatas>;
   }
 
   get proxy() {

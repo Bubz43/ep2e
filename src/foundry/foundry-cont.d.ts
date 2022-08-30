@@ -288,11 +288,13 @@ declare global {
   interface CompendiumCollection {
     documentName: EntityName;
     metadata: {
+      id: string;
       name: string;
       label: string;
       path: string;
       private: boolean;
       system: string;
+      packageType: string;
     };
   }
 
@@ -309,7 +311,7 @@ declare global {
      * @deprecated Use `system` instead.
      */
     data: ActorData;
-    system: ActorData;
+    system: ActorDatas['system'];
     readonly items: FoundryCollection<ItemEP>;
     readonly effects: FoundryCollection<ActiveEffect>;
     toJSON(): ActorDatas;
@@ -318,11 +320,7 @@ declare global {
   }
 
   interface Item {
-    /**
-     * @deprecated Use `system` instead.
-     */
-    data: ItemData;
-    system: ItemData;
+    system: ItemDatas['system'];
     sheet: EntitySheet;
     toJSON(): ItemDatas;
     collection?: GameCollections['items'];

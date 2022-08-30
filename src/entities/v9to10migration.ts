@@ -1,3 +1,5 @@
+import { NotificationType, notify } from '@src/foundry/foundry-apps';
+import { gameSettings } from '@src/init';
 import {
   createPipe,
   equals,
@@ -108,31 +110,61 @@ export async function foundry9to10Migration() {
   const itemUpdates = getCollectionUpdates(items._source);
   const messageUpdates = getCollectionUpdates(messages._source);
   const sceneUpdates = getCollectionUpdates(scenes._source);
+
   if (actorUpdates.length) {
-    console.log('updating actors', actorUpdates.length);
-    ActorEP.updateDocuments(actorUpdates);
-  }
-  if (itemUpdates.length) {
-    console.log('updating items', itemUpdates.length);
-    ItemEP.updateDocuments(itemUpdates);
-  }
-  if (messageUpdates.length) {
-    console.log('updating messages', messageUpdates.length);
-    ChatMessageEP.updateDocuments(messageUpdates);
+    notify(NotificationType.Info, `Migrating ${actorUpdates.length} actors...`);
+    await ActorEP.updateDocuments(actorUpdates);
   }
   if (sceneUpdates.length) {
-    console.log('updating scenes', sceneUpdates.length);
-    SceneEP.updateDocuments(sceneUpdates);
+    notify(NotificationType.Info, `Migrating ${sceneUpdates.length} scenes...`);
+    await SceneEP.updateDocuments(sceneUpdates);
   }
-  // const packsWithDocuments: CompendiumCollection[] = [];
-  // for (const [_, pack] of game.packs.entries()) {
-  //   if (documentNamesWithData.has(pack.documentName))
-  //     packsWithDocuments.push(pack);
-  // }
-  // for (const pack of packsWithDocuments) {
-  //   await pack.updateAll((value: {}) => {
-  //     const { obj, hasChanged } = dataToSystem(value);
-  //     return hasChanged ? getDiffedUpdates(value, obj) : {};
-  //   });
-  // }
+  if (messageUpdates.length) {
+    notify(
+      NotificationType.Info,
+      `Migrating ${messageUpdates.length} messages...`,
+    );
+    await ChatMessageEP.updateDocuments(messageUpdates);
+  }
+
+  if (itemUpdates.length) {
+    notify(NotificationType.Info, `Migrating ${itemUpdates.length} items...`);
+    await ItemEP.updateDocuments(itemUpdates);
+  }
+
+  const migratedCompendiums = new Set(
+    gameSettings.v10Compendiums.current.filter((id) => game.packs.has(id)),
+  );
+
+  const packsWithDocuments: CompendiumCollection[] = [];
+  for (const [id, pack] of game.packs.entries()) {
+    if (
+      documentNamesWithData.has(pack.documentName) &&
+      pack.metadata.packageType !== 'system' &&
+      !migratedCompendiums.has(id)
+    ) {
+      packsWithDocuments.push(pack);
+    }
+  }
+  if (packsWithDocuments.length) {
+    notify(
+      NotificationType.Info,
+      `Migrating ${packsWithDocuments.length} compendiums...`,
+    );
+    for (const pack of packsWithDocuments) {
+      await pack.updateAll((value: {}) => {
+        const { obj, hasChanged } = dataToSystem(value);
+        return hasChanged ? getDiffedUpdates(value, obj) : {};
+      });
+      migratedCompendiums.add(pack.metadata.id);
+    }
+    await gameSettings.v10Compendiums.update([...migratedCompendiums]);
+  } else if (
+    !gameSettings.v10Compendiums.current.every((id) =>
+      migratedCompendiums.has(id),
+    )
+  ) {
+    // Ensures future compendiums will always be migrated
+    await gameSettings.v10Compendiums.update([...migratedCompendiums]);
+  }
 }

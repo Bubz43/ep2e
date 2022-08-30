@@ -557,7 +557,7 @@ export const overridePrototypes = () => {
       for (const entity of this.entities) {
         if (entity.matchRegexp(rgx)) {
           entityIds.add(entity.id);
-          if (entity.data.folder) folderIds.add(entity.data.folder);
+          if (entity.folder) folderIds.add(entity.folder.id);
         }
       }
 

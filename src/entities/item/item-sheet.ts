@@ -77,7 +77,7 @@ export class ItemEPSheet implements EntitySheet {
     updateData,
     _id,
   }: {
-    updateData: DeepPartial<ItemEP['data']>;
+    updateData: DeepPartial<ItemEP['system']>;
     _id: string;
   }) {
     return this.item.update({ ...updateData, _id }, {});
@@ -126,7 +126,7 @@ export class ItemEPSheet implements EntitySheet {
       (this.item.actor && getWindow(this.item.actor)) ??
       Array.from(
         document.querySelectorAll<HTMLElement>(
-          `[data-document-id="${this.item.data._id}"]`,
+          `[data-document-id="${this.item.id}"]`,
         ),
       )
         .reverse()

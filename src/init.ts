@@ -99,10 +99,10 @@ Hooks.once('init', () => {
 Hooks.on('renderChatMessage', onChatMessageRender);
 
 Hooks.once('ready', async () => {
+  await foundry9to10Migration();
   setupSystemSocket();
 
   const { current } = gameSettings.systemMigrationVersion;
-  await foundry9to10Migration();
 
   if (current < game.system.version && game.user.isGM) {
     await migrateWorld();
@@ -497,8 +497,6 @@ applicationHook({
           const doc: ItemEP = await compendium.collection.getDocument(
             listItem.getAttribute('data-document-id'),
           );
-
-          compendium.collection.getDocuments;
 
           listItem
             .querySelector('.document-name')

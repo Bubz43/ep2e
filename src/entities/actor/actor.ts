@@ -13,6 +13,7 @@ import type {
   ActorDatas,
   ActorEntity,
   ActorModels,
+  ItemDatas,
   ItemEntity,
 } from '../models';
 import type { EntityPath } from '../path';
@@ -45,7 +46,7 @@ export type ActorSub = (data: ActorEP | null) => void;
 
 export class ActorEP extends Actor {
   readonly #subscribers = new EntitySubscription<this>();
-  itemTrash: ItemEP['system'][] = [];
+  itemTrash: ItemDatas[] = [];
 
   #proxy?: ActorProxy;
   #updater?: UpdateStore<ActorDatas>;
@@ -136,9 +137,9 @@ export class ActorEP extends Actor {
     if (!this.#itemOperations) {
       this.#itemOperations = {
         add: async (...itemDatas) => {
-          const itemIDs = new Set(this.system.items.keys());
+          const itemIDs = new Set(this.items.keys());
           await this.createEmbeddedDocuments('Item', itemDatas);
-          const addedIDs = [...this.system.items.keys()].filter(
+          const addedIDs = [...this.items.keys()].filter(
             (id) => !itemIDs.has(id),
           );
           this.emitItemSocket({
@@ -174,7 +175,7 @@ export class ActorEP extends Actor {
                   item.proxy.appliedState
                 )
               ) {
-                this.itemTrash.push(item.dataCopy() as ItemEP['data']);
+                this.itemTrash.push(item.dataCopy() as ItemDatas);
               }
 
               item?._onDelete({}, game.user.id);

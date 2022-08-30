@@ -136,6 +136,12 @@ export const registerEPSettings = once(() => {
     default: 10,
   });
 
+  const v10Compendiums = registerSystemSetting<string[]>('v10Compendiums', {
+    scope: 'world',
+    config: false,
+    default: [],
+  });
+
   return {
     systemMigrationVersion,
     environment,
@@ -144,5 +150,6 @@ export const registerEPSettings = once(() => {
     combatState,
     disableSheetTransparency,
     yearStart,
+    v10Compendiums,
   } as const;
 });
