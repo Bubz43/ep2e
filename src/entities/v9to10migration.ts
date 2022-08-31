@@ -74,7 +74,10 @@ function dataToSystem(originalObj: {}) {
       });
       newObj[key] = changed;
     } else if (isObject(value)) {
-      const obj = isDataObject(value) ? toSystemObject(value) : value;
+      const obj =
+        isDataObject(value) || (key === 'onboardALI' && isObject(value['data']))
+          ? toSystemObject(value)
+          : value;
       newObj[key] = dataToSystem(obj).obj;
     } else {
       newObj[key] = value;
