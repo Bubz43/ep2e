@@ -80,8 +80,8 @@ export const placeMeasuredTemplate = (
       (ev: typeof PIXI['InteractionEvent']) => {
         const center = ev.data.getLocalPosition(template.layer);
         const { x, y } = grid.getSnappedPosition(center.x, center.y, 2);
-        template.data.x = x;
-        template.data.y = y;
+        template.document.x = x;
+        template.document.y = y;
         template.refresh();
       },
       20,
@@ -99,8 +99,6 @@ export const placeMeasuredTemplate = (
       view.removeEventListener('contextmenu', cleanup);
       view.removeEventListener('wheel', rotateTemplate);
       window.removeEventListener('keydown', cancelOrSave, { capture: true });
-      //@ts-ignore
-      console.log(template, template.layer);
       template.layer.preview?.removeChildren();
       originalLayer.activate();
       overlay.faded = false;
@@ -128,8 +126,12 @@ export const placeMeasuredTemplate = (
         MeasuredTemplate.embeddedName,
         [
           {
-            ...template.data,
-            ...grid.getSnappedPosition(template.x, template.y, 2),
+            ...template.document.toJSON(),
+            ...grid.getSnappedPosition(
+              template.document.x,
+              template.document.y,
+              2,
+            ),
           },
         ],
       );
@@ -148,7 +150,7 @@ export const placeMeasuredTemplate = (
       ev.stopPropagation();
       const delta = grid.type > CONST.GRID_TYPES.SQUARE ? 30 : 15;
       const snap = ev.shiftKey ? delta : 5;
-      template.data.direction += snap * Math.sign(ev.deltaY);
+      template.document.direction += snap * Math.sign(ev.deltaY);
       template.refresh();
     }
   });

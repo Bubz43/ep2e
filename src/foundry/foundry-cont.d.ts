@@ -424,9 +424,9 @@ declare global {
 
   interface MeasuredTemplate {
     readonly layer: TemplateLayer;
-    data: MeasuredTemplateData;
-    x: number;
-    y: number;
+    document: MeasuredTemplateData & {
+      toJSON(): MeasuredTemplateData;
+    };
   }
 
   interface PlaceablesLayer {
