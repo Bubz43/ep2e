@@ -235,8 +235,8 @@ ep-overlay {
   form button,
   .dialog .dialog-buttons button,
   button {
-    background: var(--ep-color-primary);
-    color: var(--ep-color-text);
+    background: var(--ep-color-primary) !important;
+    color: var(--ep-color-text) !important;
     border: none;
     box-shadow: none !important;
     cursor: pointer;
@@ -285,6 +285,19 @@ ep-overlay {
   }
   table {
     border-color: var(--ep-color-border);
+  }
+}
+
+.pm-dropdown {
+  ul {
+    background: var(--ep-color-bg) !important;
+    color: var(--ep-color-text) !important;
+    i {
+      color: var(--ep-color-text) !important;
+    }
+    li:hover {
+      background: var(--ep-color-primary) !important;
+    }
   }
 }
 
