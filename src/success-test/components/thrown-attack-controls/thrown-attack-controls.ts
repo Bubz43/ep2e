@@ -301,7 +301,7 @@ export class ThrownAttackControls extends LitElement {
                   <mwc-icon-button
                     class=${token === attackTarget ? 'active' : ''}
                     @click=${() => throwing.update({ attackTarget: token })}
-                    ><img src=${token.document.img}
+                    ><img src=${token.document.img || CONST.DEFAULT_TOKEN}
                   /></mwc-icon-button>
                 `,
               )}

@@ -241,7 +241,7 @@ export class HackingTestControls extends LitElement {
                   <mwc-icon-button
                     class=${token === attackTarget ? 'active' : ''}
                     @click=${() => hack.update({ attackTarget: token })}
-                    ><img src=${token.document.img}
+                    ><img src=${token.document.img || CONST.DEFAULT_TOKEN}
                   /></mwc-icon-button>
                 `,
               )}

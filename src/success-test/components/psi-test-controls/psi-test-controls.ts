@@ -308,7 +308,7 @@ export class PsiTestControls extends LitElement {
                       else newTargets.add(token);
                       use.update({ attackTargets: newTargets });
                     }}
-                    ><img src=${token.document.img}
+                    ><img src=${token.document.img || CONST.DEFAULT_TOKEN}
                   /></mwc-icon-button>
                 `;
               })}

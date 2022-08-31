@@ -368,7 +368,7 @@ export class RangedAttackControls extends LitElement {
                       else newTargets.add(token);
                       firing.update({ attackTargets: newTargets });
                     }}
-                    ><img src=${token.document.img}
+                    ><img src=${token.document.img || CONST.DEFAULT_TOKEN}
                   /></mwc-icon-button>
                 `;
               })}

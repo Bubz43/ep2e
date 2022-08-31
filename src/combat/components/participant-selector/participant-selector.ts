@@ -140,7 +140,10 @@ export class ParticipantSelector extends mix(LitElement).with(
               @click=${() => this.toggleToAdd(token)}
               ?selected=${live(this.toAdd.has(token))}
             >
-              <img slot="graphic" src=${token.document.img} />
+              <img
+                slot="graphic"
+                src=${token.document.img || CONST.DEFAULT_TOKEN}
+              />
               <span>${token.document.name}</span>
               ${token.actor
                 ? html`

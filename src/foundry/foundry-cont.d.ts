@@ -254,9 +254,6 @@ declare global {
 
   interface TokenDocument extends TokenData {
     parent?: SceneEP;
-    /**
-     * @deprecated
-     */
     name: string;
     object: Token | null;
     id: string;
