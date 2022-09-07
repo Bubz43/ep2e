@@ -115,6 +115,12 @@ export async function foundry9to10Migration() {
   const itemUpdates = getCollectionUpdates(items._source);
   const messageUpdates = getCollectionUpdates(messages._source);
   const sceneUpdates = getCollectionUpdates(scenes._source);
+  let hasMigrated = [
+    actorUpdates,
+    itemUpdates,
+    messageUpdates,
+    sceneUpdates,
+  ].some((u) => u.length > 0);
 
   if (actorUpdates.length) {
     notify(NotificationType.Info, `Migrating ${actorUpdates.length} actors...`);
@@ -161,6 +167,7 @@ export async function foundry9to10Migration() {
         const val = { ...value.toJSON() };
         const doc = isDataObject(val) ? toSystemObject(val) : val;
         const { obj, hasChanged } = dataToSystem(doc);
+        hasMigrated ||= hasChanged;
         return hasChanged ? getDiffedUpdates(doc, obj) : {};
       });
       if (locked) {
@@ -176,5 +183,9 @@ export async function foundry9to10Migration() {
   ) {
     // Ensures future compendiums will always be migrated
     await gameSettings.v10Compendiums.update([...migratedCompendiums]);
+  }
+
+  if (hasMigrated) {
+    location.reload();
   }
 }
