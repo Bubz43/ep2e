@@ -1231,6 +1231,10 @@ sl-tooltip {
       );
     }
   }
+
+  &.emote {
+    background: var(--ep-color-bg);
+  }
 }
 
 .chat-popout {
