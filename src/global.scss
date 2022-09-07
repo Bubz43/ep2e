@@ -41,11 +41,15 @@
 body {
   background-color: #000000;
   font-size: 1rem;
-  opacity: 0;
-  transition: opacity 600ms ease-out 750ms;
+ 
   background-image: none;
+  > *:not(#notifications) {
+    opacity: 0;
+  }
   &.ready {
-    opacity: 1;
+    > *:not(#notifications) {
+      opacity: 1;
+    }
   }
 }
 

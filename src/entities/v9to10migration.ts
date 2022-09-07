@@ -186,6 +186,7 @@ export async function foundry9to10Migration() {
   }
 
   if (hasMigrated) {
+    notify(NotificationType.Info, `Migration complete, reloading...`);
     location.reload();
   }
 }
