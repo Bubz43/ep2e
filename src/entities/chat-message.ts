@@ -100,6 +100,10 @@ export class ChatMessageEP extends ChatMessage {
     return this.blind;
   }
 
+  get isAuthor() {
+    return !!this.user?.isSelf
+  }
+
   get editable() {
     const { actor } = this;
     return game.user.isGM || (this.isAuthor && (!actor || actor.isOwner));
