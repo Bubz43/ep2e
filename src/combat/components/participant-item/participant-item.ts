@@ -597,7 +597,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
           ><img
             class="icon"
             src=${participant.img ||
-            token?.img ||
+            token?.texture.src ||
             actor?.img ||
             CONST.DEFAULT_TOKEN}
           />

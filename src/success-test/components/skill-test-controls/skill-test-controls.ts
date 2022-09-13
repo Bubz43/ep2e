@@ -124,7 +124,10 @@ export class SkillTestControls extends LitElement {
                 graphic="medium"
                 ?twoline=${!!character.sleeve}
               >
-                <img slot="graphic" src=${token?.img ?? character.img} />
+                <img
+                  slot="graphic"
+                  src=${token?.texture.src ?? character.img}
+                />
                 <span>${token?.name ?? character.name} </span>
                 ${character.sleeve
                   ? html`<span slot="secondary"

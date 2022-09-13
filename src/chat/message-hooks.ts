@@ -73,8 +73,10 @@ export const onChatMessageRender = (message: ChatMessageEP, j: JQuery) => {
   // TODO mapKeys but with typescript string const
   const speakerToId = mapKeys(speaker, (k) => k + 'Id') as ActorIdentifiers;
 
+  console.log('speakerToId', speakerToId);
+
   const img = speakerToId.tokenId
-    ? findToken(speakerToId)?.img
+    ? findToken(speakerToId)?.texture.src
     : speakerToId.actorId
     ? findActor(speakerToId)?.img
     : message.user?.avatar;

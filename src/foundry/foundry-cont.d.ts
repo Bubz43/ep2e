@@ -76,8 +76,10 @@ export type TokenData = {
   effects?: string[];
   overlayEffect?: string;
   displayName: ValueOf<CONST['TOKEN_DISPLAY_MODES']>;
-  img: string;
-  tint: null | unknown;
+  texture: {
+    src: string;
+    tint: null | unknown;
+  };
   hidden?: boolean;
   width: number;
   height: number;

@@ -203,7 +203,7 @@ export class ActorEPSheet implements EntitySheet {
                 tokenName ? `- ${localize('token')}: ${tokenName}` : ''
               }`
             : actorName,
-        img: this._token?.img || this.actor.img,
+        img: this._token?.texture.src || this.actor.img,
         forceFocus: force,
         adjacentEl: !this.isRendered && this.getAdjacentEl(),
       },

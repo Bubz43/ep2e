@@ -233,7 +233,7 @@ export class PsiTestControls extends LitElement {
         graphic="medium"
         ?twoline=${!!character.sleeve}
       >
-        <img slot="graphic" src=${entities.token?.img ?? character.img} />
+        <img slot="graphic" src=${entities.token?.texture.src ?? character.img} />
         <span>${entities.token?.name ?? character.name} </span>
         ${character.sleeve
           ? html`<span slot="secondary"
@@ -308,7 +308,8 @@ export class PsiTestControls extends LitElement {
                       else newTargets.add(token);
                       use.update({ attackTargets: newTargets });
                     }}
-                    ><img src=${token.document.img || CONST.DEFAULT_TOKEN}
+                    ><img
+                      src=${token.document.texture.src || CONST.DEFAULT_TOKEN}
                   /></mwc-icon-button>
                 `;
               })}

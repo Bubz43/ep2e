@@ -142,7 +142,7 @@ export class ParticipantSelector extends mix(LitElement).with(
             >
               <img
                 slot="graphic"
-                src=${token.document.img || CONST.DEFAULT_TOKEN}
+                src=${token.document.texture.src || CONST.DEFAULT_TOKEN}
               />
               <span>${token.document.name}</span>
               ${token.actor

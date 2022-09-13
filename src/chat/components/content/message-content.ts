@@ -74,7 +74,7 @@ export class MessageContent extends LitElement {
                   ? html`<img
                       height="24px"
                       loading="lazy"
-                      src=${token.img || CONST.DEFAULT_TOKEN}
+                      src=${token.texture.src || CONST.DEFAULT_TOKEN}
                       title=${token.name}
                     />`
                   : '';

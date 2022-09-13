@@ -420,7 +420,6 @@ Hooks.once('ready', async () => {
         const actorId = tokenDoc.actorId;
         const actor = game.actors.get(actorId);
         if (actor?.sheet.isRendered) {
-          console.log('rendered');
           actor.sheet.close();
           tokenDoc.actor?.sheet.render(true, { token: tokenDoc });
         }

@@ -68,11 +68,11 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
   }
 
   private get img() {
-    return this.token?.img || this.character.img;
+    return this.token?.texture.src || this.character.img;
   }
 
   private setImg = (img: string) => {
-    if (this.token) this.token.update({ img }, {});
+    if (this.token) this.token.update({ texture: { src: img } }, {});
     else this.character.updater.path('img').commit(img);
   };
 

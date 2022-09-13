@@ -108,8 +108,10 @@ export const createActorEntity = <T extends ActorType>({
       flags: {},
       name,
       displayName: CONST.TOKEN_DISPLAY_MODES.NONE,
-      img: CONST.DEFAULT_TOKEN,
-      tint: null,
+      texture: {
+        src: CONST.DEFAULT_TOKEN,
+        tint: null,
+      },
       width: 1,
       height: 1,
       scale: 1,
