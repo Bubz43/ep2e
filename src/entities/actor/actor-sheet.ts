@@ -105,7 +105,10 @@ export class ActorEPSheet implements EntitySheet {
 
   private get windowHeaderButtons() {
     const { compendium, id, proxy } = this.actor;
-    const linked = this._token?.actorLink ?? this.actor.token?.actorLink;
+    const linked =
+      this._token?.actorLink ??
+      this.actor.token?.actorLink ??
+      this.actor.prototypeToken.actorLink;
 
     return compact([
       SlWindow.headerButton({
@@ -176,10 +179,13 @@ export class ActorEPSheet implements EntitySheet {
   private configureToken = (ev: Event) => {
     if (ev.currentTarget instanceof HTMLElement) {
       const { top, left } = ev.currentTarget.getBoundingClientRect();
-      new TokenConfig(this._token ?? this.actor, {
-        left,
-        top: top + 10,
-      }).render(true, {});
+      const renderOptions = { top, left };
+      if (this._token) this._token.sheet.render(true, renderOptions);
+      else
+        new CONFIG.Token.prototypeSheetClass(
+          this.actor.prototypeToken,
+          renderOptions,
+        ).render(true, renderOptions);
     }
   };
 
@@ -276,7 +282,7 @@ export class ActorEPSheet implements EntitySheet {
     updateData,
     _id,
   }: {
-    updateData: DeepPartial<ActorEP['data']>;
+    updateData: DeepPartial<ActorEP['system']>;
     _id: string;
   }) {
     return this.actor.update({ ...updateData, _id });

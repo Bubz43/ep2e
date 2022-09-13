@@ -261,6 +261,7 @@ declare global {
     update(tokenData: DeepPartial<TokenData>, options: unknown): unknown;
     actor?: ActorEP;
     toJSON(): TokenData;
+    sheet: TokenConfig;
   }
 
   interface Combat {
@@ -304,16 +305,13 @@ declare global {
   }
 
   interface Actor {
-    /**
-     * @deprecated Use `system` instead.
-     */
-    data: ActorData;
     system: ActorDatas['system'];
     readonly items: FoundryCollection<ItemEP>;
     readonly effects: FoundryCollection<ActiveEffect>;
     toJSON(): ActorDatas;
     sheet: EntitySheet;
     collection?: GameCollections['actors'];
+    prototypeToken: TokenDocument;
   }
 
   interface Item {
