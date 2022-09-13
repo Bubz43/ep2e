@@ -70,7 +70,7 @@ type ActorFlags<T extends ActorType> = T extends ActorType.Character
 export type ActorEntity<T extends ActorType = ActorType> = CommonEntityData & {
   type: T;
   system: ActorModels[T];
-  token: SetOptional<TokenData, 'elevation' | '_id' | 'x' | 'y'>;
+  prototypeToken: SetOptional<TokenData, 'elevation' | '_id' | 'x' | 'y'>;
   flags: { [EP.Name]?: Partial<ActorFlags<T>> };
   items: ItemDatas[];
   effects: unknown[];
@@ -104,7 +104,7 @@ export const createActorEntity = <T extends ActorType>({
     flags: {},
     items: [],
     effects: [],
-    token: {
+    prototypeToken: {
       flags: {},
       name,
       displayName: CONST.TOKEN_DISPLAY_MODES.NONE,
