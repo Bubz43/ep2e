@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.0] - 2022-09-13
+
+- Update for Foundry v10 compatibility
+
 ## [0.910] - 2022-06-09
 
 - Keep sidebar actor/item info synced
