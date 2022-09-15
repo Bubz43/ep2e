@@ -25,6 +25,7 @@ export class CompendiumList extends LitElement {
 
   @property({ attribute: false, type: Array }) content!: (FoundryDoc & {
     img?: string;
+    uuid: string;
   })[];
 
   @state() private search = '';
@@ -105,11 +106,12 @@ export class CompendiumList extends LitElement {
 
   private setDragData(ev: DragEvent) {
     const { collection } = this.compendium;
-    const { entryId } = (ev.currentTarget as HTMLElement).dataset;
+    const { entryId, entryUuid } = (ev.currentTarget as HTMLElement).dataset;
+    console.log('list uuid', entryUuid);
+
     setDragDrop(ev, {
       type: collection.documentName as any, // TODO Better typings on all possible drops
-      pack: collection.collection,
-      id: entryId as string,
+      uuid: entryUuid!,
     });
   }
 
@@ -186,6 +188,7 @@ export class CompendiumList extends LitElement {
               graphic=${ifDefined(img ? 'avatar' : undefined)}
               ?twoline=${!!type}
               data-entry-id=${entry.id}
+              data-entry-uuid=${entry.uuid}
               @click=${this.openEntrySheet}
               @contextmenu=${this.entryMenu}
               @dragstart=${this.setDragData}

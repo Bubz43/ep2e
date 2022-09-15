@@ -8,11 +8,17 @@ export abstract class SleeveFormBase extends FormDrawer(LitElement) {
   declare abstract sleeve: ActorProxy;
 
   protected itemDragStart = (ev: DragEvent, item: ItemProxy) => {
-    const { actor } = this.sleeve;
-    setDragDrop(ev, {
-      ...actor.identifiers,
-      type: DropType.Item,
-      data: item.data,
-    });
+    setDragDrop(
+      ev,
+      item.uuid
+        ? {
+            type: DropType.Item,
+            uuid: item.uuid,
+          }
+        : {
+            type: DropType.Item,
+            data: item.data,
+          },
+    );
   };
 }

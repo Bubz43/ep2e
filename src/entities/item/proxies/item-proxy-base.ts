@@ -19,6 +19,7 @@ export type ItemProxyInit<T extends ItemType> = {
   alwaysDeletable?: boolean;
   actor?: ActorEP | null;
   path?: EntityPath;
+  uuid?: string;
 };
 
 export abstract class ItemProxyBase<T extends ItemType> {
@@ -31,6 +32,7 @@ export abstract class ItemProxyBase<T extends ItemType> {
   embedded;
   usable = true;
   readonly path;
+  readonly uuid;
 
   constructor({
     data,
@@ -41,6 +43,7 @@ export abstract class ItemProxyBase<T extends ItemType> {
     alwaysDeletable = false,
     actor,
     path,
+    uuid,
   }: ItemProxyInit<T>) {
     this.data = data;
     this.updater =
@@ -56,6 +59,7 @@ export abstract class ItemProxyBase<T extends ItemType> {
     this.alwaysDeletable = alwaysDeletable;
     this.actor = actor;
     this.path = path;
+    this.uuid = uuid;
     // this.actorIdentifiers = actorIdentifiers;
   }
 

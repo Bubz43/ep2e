@@ -12,7 +12,6 @@ import {
 import { enumValues } from '@src/data-enums';
 import type { Biological } from '@src/entities/actor/proxies/biological';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
-import type { ItemProxy } from '@src/entities/item/item';
 import { renderMovementRateFields } from '@src/features/components/movement-rate-fields';
 import { addUpdateRemoveFeature } from '@src/features/feature-helpers';
 import { defaultMovement } from '@src/features/movement';
@@ -21,7 +20,6 @@ import {
   DropType,
   handleDrop,
   itemDropToItemProxy,
-  setDragDrop,
 } from '@src/foundry/drag-and-drop';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { localize } from '@src/foundry/localization';

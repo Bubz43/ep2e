@@ -157,11 +157,20 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
       );
     }
 
-    setDragDrop(ev, {
-      type: DropType.Item,
-      ...this.character.actor.identifiers,
-      data: ev.currentTarget.item.data,
-    });
+    const { item } = ev.currentTarget;
+
+    setDragDrop(
+      ev,
+      item.uuid
+        ? {
+            type: DropType.Item,
+            uuid: item.uuid,
+          }
+        : {
+            type: DropType.Item,
+            data: item.data,
+          },
+    );
   };
 
   @throttle(20, true)

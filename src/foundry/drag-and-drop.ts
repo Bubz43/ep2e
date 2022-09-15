@@ -111,8 +111,8 @@ export enum DropType {
   FullHotbarEntry = 'FullHotbarEntry',
   Roll = 'Roll',
   Item = 'Item',
-  Effect = 'Effect',
-  PsiInfluence = 'PsiInfluence',
+  Effect = 'EP-Effect',
+  PsiInfluence = 'EP-PsiInfluence',
   Actor = 'Actor',
   Scene = 'Scene',
   JournalEntry = 'JournalEntry',
@@ -142,34 +142,24 @@ type RollDrop = KnownDrop<{
 
 export type SimpleDrop<T extends DropType> = KnownDrop<{
   type: T;
-  id: string;
-  pack?: string;
+  uuid: string;
 }>;
 
 export type ActorDrop =
   | KnownDrop<{ type: DropType.Actor; data: ActorEntity }>
   | SimpleDrop<DropType.Actor>;
+
 export type PlayListDrop = SimpleDrop<DropType.Playlist>;
 export type RollTableDrop = SimpleDrop<DropType.RollTable>;
 export type JournalEntryDrop = SimpleDrop<DropType.JournalEntry>;
 export type SceneDrop = SimpleDrop<DropType.Scene>;
 
 export type ItemDrop =
-  | KnownDrop<
-      {
-        type: DropType.Item;
-        data: ItemEntity;
-      } & ActorIdentifiers
-    >
   | KnownDrop<{
       type: DropType.Item;
-      pack: string;
-      id: string;
+      data: ItemEntity;
     }>
-  | KnownDrop<{
-      type: DropType.Item;
-      id: string;
-    }>;
+  | SimpleDrop<DropType.Item>;
 
 type EffectDrop = KnownDrop<{ type: DropType.Effect; effect: Effect }>;
 
@@ -243,8 +233,7 @@ const isRollDrop = dropChecker(
 
 const isItemDrop = dropChecker(DropType.Item, (itemDrop) => {
   return (
-    ('actorId' in itemDrop && isJsonObject(itemDrop.data)) ||
-    ('id' in itemDrop && typeof itemDrop.id === 'string')
+    'uuid' in itemDrop || ('data' in itemDrop && isJsonObject(itemDrop.data))
   );
 });
 
@@ -263,18 +252,13 @@ const isInfluenceDrop = dropChecker(DropType.PsiInfluence, ({ influence }) => {
   );
 });
 
-const simpleDropCheck = ({ pack, id }: { pack?: unknown; id?: unknown }) => {
-  return !!(
-    typeof id === 'string' &&
-    id.length &&
-    (!pack || (typeof pack === 'string' && pack.length))
-  );
+const simpleDropCheck = ({ uuid }: { uuid?: unknown }) => {
+  return !!(typeof uuid === 'string' && uuid.length > 0);
 };
 
 const isActorDrop = dropChecker(DropType.Actor, (actorDrop) => {
   return (
-    ('data' in actorDrop && isJsonObject(actorDrop.data)) ||
-    ('id' in actorDrop && typeof actorDrop.id === 'string')
+    'uuid' in actorDrop || ('data' in actorDrop && isJsonObject(actorDrop.data))
   );
 });
 
@@ -333,37 +317,52 @@ export const setDragDrop = (ev: DragEvent, drop: Drop) => {
 };
 
 export const itemDropToItemProxy = async (drop: ItemDrop) => {
-  if ('pack' in drop && drop.pack) {
-    const pack = game.packs.get(drop.pack);
-    const item = await pack?.getDocument(drop.id);
-    if (item instanceof ItemEP) return item.proxy;
-  } else if ('id' in drop) {
-    return game.items.get(drop.id)?.proxy;
-  } else {
-    const actor = drop.tokenId
-      ? game.actors.tokens[drop.tokenId] ||
-        (drop.actorId ? game.actors.get(drop.actorId) : null)
-      : drop.actorId
-      ? game.actors.get(drop.actorId)
-      : null;
-    return (
-      actor?.items?.get(drop.data?._id)?.proxy ||
-      new ItemEP(drop.data, {}).proxy
-    );
+  if ('data' in drop) {
+    return new ItemEP(drop.data, {}).proxy;
   }
-  return null;
+  const item: ItemEP | null = await (Item.implementation as any).fromDropData(
+    drop,
+  );
+  return item ? item.proxy : null;
+  // if ('pack' in drop && drop.pack) {
+  //   const pack = game.packs.get(drop.pack);
+  //   const item = await pack?.getDocument(drop.id);
+  //   if (item instanceof ItemEP) return item.proxy;
+  // } else if ('id' in drop) {
+  //   return game.items.get(drop.id)?.proxy;
+  // } else {
+  //   const actor = drop.tokenId
+  //     ? game.actors.tokens[drop.tokenId] ||
+  //       (drop.actorId ? game.actors.get(drop.actorId) : null)
+  //     : drop.actorId
+  //     ? game.actors.get(drop.actorId)
+  //     : null;
+  //   return (
+  //     actor?.items?.get(drop.data?._id)?.proxy ||
+  //     new ItemEP(drop.data, {}).proxy
+  //   );
+  // }
+  // return null;
 };
 
 export const actorDroptoActorProxy = async (drop: ActorDrop) => {
-  if ('data' in drop) return new ActorEP(drop.data, {}).proxy;
-  if ('pack' in drop && drop.pack) {
-    const pack = game.packs.get(drop.pack);
-    const actor = await pack?.getDocument(drop.id);
-    if (actor instanceof ActorEP) return actor.proxy;
-  } else if ('id' in drop) {
-    return game.actors.get(drop.id)?.proxy;
+  if ('data' in drop) {
+    return new ActorEP(drop.data, {}).proxy;
   }
-  return null;
+  const actor: ActorEP | null = await (
+    Actor.implementation as any
+  ).fromDropData(drop);
+  return actor ? actor.proxy : null;
+
+  // if ('data' in drop) return new ActorEP(drop.data, {}).proxy;
+  // if ('pack' in drop && drop.pack) {
+  //   const pack = game.packs.get(drop.pack);
+  //   const actor = await pack?.getDocument(drop.id);
+  //   if (actor instanceof ActorEP) return actor.proxy;
+  // } else if ('id' in drop) {
+  //   return game.actors.get(drop.id)?.proxy;
+  // }
+  // return null;
 };
 
 export const effectDrag = (effect: Effect) => (ev: DragEvent) =>

@@ -50,6 +50,10 @@ export abstract class ActorProxyBase<T extends ActorType> {
     this.path = path;
   }
 
+  get uuid() {
+    return this.actor.uuid;
+  }
+
   get itemTrash() {
     return this.actor.itemTrash;
   }

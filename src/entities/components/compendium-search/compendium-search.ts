@@ -84,11 +84,11 @@ export class CompendiumSearch extends LitElement {
 
   private setDragData(ev: DragEvent) {
     if (ev.target instanceof HTMLElement) {
-      const { id, collection } = ev.target.dataset;
+      const { id, collection, uuid } = ev.target.dataset;
+      console.log('search uuid', uuid);
       setDragDrop(ev, {
         type: this.documentRenderer as any,
-        pack: collection as string,
-        id: id as string,
+        uuid: uuid!,
       });
     }
   }
@@ -201,6 +201,7 @@ export class CompendiumSearch extends LitElement {
         draggable="true"
         data-collection=${ifDefined(item.compendium?.collection)}
         data-id=${item.id}
+        data-uuid=${item.uuid}
         clickable
         @click=${() => item.sheet.render(true)}
       >
@@ -223,6 +224,7 @@ export class CompendiumSearch extends LitElement {
         draggable="true"
         data-collection=${ifDefined(actor.compendium?.collection)}
         data-id=${actor.id}
+        data-uuid=${actor.uuid}
         clickable
         @click=${() => actor.sheet.render(true)}
       >

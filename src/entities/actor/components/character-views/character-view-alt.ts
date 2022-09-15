@@ -312,8 +312,7 @@ export class CharacterViewAlt extends CharacterViewBase {
           }
         : {
             type: DropType.Actor,
-            id,
-            pack: compendium?.collection,
+            uuid: this.character.uuid,
           },
     );
   }

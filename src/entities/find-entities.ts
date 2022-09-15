@@ -42,7 +42,9 @@ export const findToken = ({ actorId, tokenId, sceneId }: ActorIdentifiers) => {
   if (token) return token.document;
   const scene = sceneId && game.scenes.get(sceneId);
   if (scene && tokenId) {
-    const tokenData = scene.toJSON().tokens.get(tokenId)?.toJSON();
+    const tokenData = scene.tokens.get(tokenId)?.toJSON() as
+      | TokenData
+      | undefined;
     if (tokenData) return createTempToken(tokenData, scene);
   }
   return;

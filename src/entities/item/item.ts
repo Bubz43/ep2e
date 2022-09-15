@@ -191,6 +191,7 @@ export class ItemEP extends Item {
       updater: this.updater as unknown as UpdateStore<T>,
       embedded: this.actor?.name,
       actor: this.actor,
+      uuid: this.uuid,
       ...this.operations,
       // actorIdentifiers: this.actor?.identifiers,
     } as const;
