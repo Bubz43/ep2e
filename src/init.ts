@@ -61,6 +61,7 @@ window.addEventListener('mouseup', setLastPosition, { capture: true });
 window.addEventListener('click', setLastPosition, { capture: true });
 window.addEventListener('drop', setLastPosition, { capture: true });
 
+
 Hooks.once('init', () => {
   gameSettings = registerEPSettings();
 

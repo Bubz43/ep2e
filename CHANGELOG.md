@@ -1,6 +1,11 @@
 # Changelog
 
-## [1.0.1] --2022-09-15
+## [1.0.2] - 2022-12-03
+
+- Fix style conflict with foundry Configure Game Settings app
+- Apply consistant styling on inputs
+
+## [1.0.1] - 2022-09-15
 
 - Fix broken drag and drop
 
