@@ -255,7 +255,7 @@ export const renderLabeledCheckbox = (
     label=${props.label}
     ?alignEnd=${alignEnd}
     style="height: 40px; padding-right: 0.5rem; white-space: nowrap;"
-    data-tooltip=${ifDefined(tooltipText)}
+    data-ep-tooltip=${ifDefined(tooltipText)}
     @mouseover=${tooltipText ? tooltip.fromData : noop}
   >
     ${renderCheckbox(props, options)}

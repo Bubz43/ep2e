@@ -301,7 +301,7 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
       ?disabled=${this.character.disabled}
       data-renderer=${CharacterDrawerRenderer.Recharge}
       @click=${this.requestDrawerRender}
-      data-tooltip=${localize('recharge')}
+      data-ep-tooltip=${localize('recharge')}
       @mouseover=${tooltip.fromData}
       @focus=${tooltip.fromData}
     >
@@ -344,7 +344,7 @@ export class CharacterViewHeader extends mix(LitElement).with(UseWorldTime) {
   }) {
     return html` <mwc-icon-button
       ?disabled=${this.character.disabled}
-      data-tooltip=${tooltipText}
+      data-ep-tooltip=${tooltipText}
       icon=${ifDefined(icon)}
       @mouseenter=${tooltip.fromData}
       @focus=${tooltip.fromData}

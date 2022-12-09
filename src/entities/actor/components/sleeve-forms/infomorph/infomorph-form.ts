@@ -74,7 +74,7 @@ export class InfomorphForm extends SleeveFormBase {
             <sl-header heading=${localize('meshHealth')}>
               <mwc-icon-button
                 slot="action"
-                data-tooltip=${localize('changes')}
+                data-ep-tooltip=${localize('changes')}
                 @mouseover=${tooltip.fromData}
                 @focus=${tooltip.fromData}
                 icon="change_history"
@@ -98,7 +98,7 @@ export class InfomorphForm extends SleeveFormBase {
             >
               <mwc-icon
                 slot="info"
-                data-tooltip=${localize('DESCRIPTIONS', 'OnlyInfomorphItems')}
+                data-ep-tooltip=${localize('DESCRIPTIONS', 'OnlyInfomorphItems')}
                 @mouseover=${tooltip.fromData}
                 >info</mwc-icon
               >

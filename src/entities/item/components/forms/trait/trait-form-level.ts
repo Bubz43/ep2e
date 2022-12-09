@@ -84,7 +84,7 @@ export class TraitFormLevel extends LitElement {
                 icon="import_export"
                 ?disabled=${this.disabled}
                 @click=${this.requestEffectImport}
-                data-tooltip="${localize('copy')} ${localize(
+                data-ep-tooltip="${localize('copy')} ${localize(
                   'level',
                 )} 1 ${localize('effects')} @ x${this.index + 1}"
                 @mouseover=${tooltip.fromData}
@@ -97,7 +97,7 @@ export class TraitFormLevel extends LitElement {
           icon="add"
           slot="action"
           @click=${this.requestAddEffectForm}
-          data-tooltip="${localize('add')} ${localize('effect')}"
+          data-ep-tooltip="${localize('add')} ${localize('effect')}"
           @mouseover=${tooltip.fromData}
           @focus=${tooltip.fromData}
         ></mwc-icon-button>

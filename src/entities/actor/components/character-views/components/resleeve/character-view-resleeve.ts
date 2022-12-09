@@ -435,7 +435,7 @@ export class CharacterViewResleeve extends LitElement {
       <sl-header heading="${localize('current')} ${localize('sleeve')}">
         <mwc-icon
           slot="info"
-          data-tooltip="${localize('check')} ${localize(
+          data-ep-tooltip="${localize('check')} ${localize(
             'ware',
           ).toLocaleLowerCase()} ${localize('to')} ${localize(
             'keep',

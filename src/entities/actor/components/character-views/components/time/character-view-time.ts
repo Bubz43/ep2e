@@ -197,7 +197,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
                       <mwc-icon-button
                         slot="action"
                         icon="play_arrow"
-                        data-tooltip=${localize('start')}
+                        data-ep-tooltip=${localize('start')}
                         @mouseover=${tooltip.fromData}
                         @click=${() =>
                           this.openSubstanceActivationDialog(substance.id)}
@@ -258,7 +258,7 @@ export class CharacterViewTime extends mix(LitElement).with(UseWorldTime) {
             ?disabled=${this.character.disabled}
             slot="action"
             icon="add_task"
-            data-tooltip="${localize('add')} ${localize('task')}"
+            data-ep-tooltip="${localize('add')} ${localize('task')}"
             @mouseover=${tooltip.fromData}
             @focus=${tooltip.fromData}
           ></mwc-icon-button>

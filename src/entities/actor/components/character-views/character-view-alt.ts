@@ -549,7 +549,7 @@ export class CharacterViewAlt extends CharacterViewBase {
                   class="unique ${hasEffects ? 'has-effects' : ''}"
                   ><colored-tag
                     data-id=${influence.id}
-                    data-tooltip=${description}
+                    data-ep-tooltip=${description}
                     @mouseover=${tooltip.fromData}
                     @click=${this.openForeignInfluenceMenu}
                     clickable
@@ -561,7 +561,7 @@ export class CharacterViewAlt extends CharacterViewBase {
                         type="usable"
                         clickable
                         ?disabled=${this.character.disabled}
-                        data-tooltip=${items.map(formatEffect).join('. ')}
+                        data-ep-tooltip=${items.map(formatEffect).join('. ')}
                         @mouseover=${tooltip.fromData}
                         @click=${() => {
                           const roll = rollFormula(durationFormula);
@@ -595,7 +595,7 @@ export class CharacterViewAlt extends CharacterViewBase {
               return html`
                 <colored-tag
                   data-id=${influence.id}
-                  data-tooltip=${description}
+                  data-ep-tooltip=${description}
                   @mouseover=${tooltip.fromData}
                   @click=${this.openForeignInfluenceMenu}
                   clickable
@@ -729,7 +729,7 @@ export class CharacterViewAlt extends CharacterViewBase {
                       tabindex=${disabled ? '-1' : 0}
                       role="button"
                       data-pool=${pool.type}
-                      data-tooltip=${localize(pool.type)}
+                      data-ep-tooltip=${localize(pool.type)}
                       @mouseover=${tooltip.fromData}
                       @focus=${tooltip.fromData}
                       @click=${this.openPoolMenu}
@@ -966,7 +966,7 @@ export class CharacterViewAlt extends CharacterViewBase {
       ({ type, base, full, skill, original }) => html`
         <span class="movement-rate"
           ><span
-            data-tooltip=${`${localize('use')} ${skill}`}
+            data-ep-tooltip=${`${localize('use')} ${skill}`}
             @mouseover=${tooltip.fromData}
             >${localize(type)}</span
           >
@@ -976,7 +976,7 @@ export class CharacterViewAlt extends CharacterViewBase {
                 increased: base > original.base,
                 decreased: base < original.base,
               })}"
-              data-tooltip="${localize('original')}: ${original.base}"
+              data-ep-tooltip="${localize('original')}: ${original.base}"
               @mouseover=${tooltip.fromData}
               ?disabled=${!canPlace || !base}
               @click=${() => this.placeMovementPreviewTemplate(base)}
@@ -989,7 +989,7 @@ export class CharacterViewAlt extends CharacterViewBase {
                 increased: full > original.full,
                 decreased: full < original.full,
               })}"
-              data-tooltip="${localize('original')}: ${original.full}"
+              data-ep-tooltip="${localize('original')}: ${original.full}"
               ?disabled=${!canPlace || !full}
               @mouseover=${tooltip.fromData}
               @click=${() => this.placeMovementPreviewTemplate(full)}
@@ -1147,7 +1147,7 @@ export class CharacterViewAlt extends CharacterViewBase {
                 ?disabled=${disabled}
                 data-condition=${condition}
                 @click=${this.toggleCondition}
-                data-tooltip=${localize(condition)}
+                data-ep-tooltip=${localize(condition)}
                 @mouseover=${tooltip.fromData}
                 @focus=${tooltip.fromData}
               >
@@ -1196,7 +1196,7 @@ export class CharacterViewAlt extends CharacterViewBase {
       class="recharges"
       ?disabled=${this.character.disabled}
       data-renderer=${CharacterDrawerRenderer.Recharge}
-      data-tooltip=${localize('recharge')}
+      data-ep-tooltip=${localize('recharge')}
       @click=${this.setDrawerRenderer}
       @mouseover=${tooltip.fromData}
       @focus=${tooltip.fromData}
@@ -1240,7 +1240,7 @@ export class CharacterViewAlt extends CharacterViewBase {
   }) {
     return html` <mwc-icon-button
       ?disabled=${this.character.disabled}
-      data-tooltip=${tooltipText}
+      data-ep-tooltip=${tooltipText}
       icon=${ifDefined(icon)}
       @click=${this.setDrawerRenderer}
       @mouseenter=${tooltip.fromData}

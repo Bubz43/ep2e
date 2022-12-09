@@ -214,7 +214,7 @@ export class SyntheticForm extends SleeveFormBase {
             <sl-header heading=${localize('physicalHealth')}>
               <mwc-icon-button
                 slot="action"
-                data-tooltip=${localize('changes')}
+                data-ep-tooltip=${localize('changes')}
                 @mouseover=${tooltip.fromData}
                 @focus=${tooltip.fromData}
                 icon="change_history"
@@ -252,7 +252,7 @@ export class SyntheticForm extends SleeveFormBase {
             <sl-header heading=${localize('meshHealth')}>
               <mwc-icon-button
                 slot="action"
-                data-tooltip=${localize('changes')}
+                data-ep-tooltip=${localize('changes')}
                 @mouseover=${tooltip.fromData}
                 @focus=${tooltip.fromData}
                 icon="change_history"
@@ -308,7 +308,7 @@ export class SyntheticForm extends SleeveFormBase {
             >
               <mwc-icon
                 slot="info"
-                data-tooltip=${localize(
+                data-ep-tooltip=${localize(
                   'DESCRIPTIONS',
                   'OnlyPhysicalMorphItems',
                 )}

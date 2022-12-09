@@ -82,7 +82,7 @@ export class FormMotivationItem extends LitElement {
         ?on=${motivation.stance === MotivationStance.Support}
         onIcon="add"
         offIcon="remove"
-        data-tooltip=${localize(motivation.stance)}
+        data-ep-tooltip=${localize(motivation.stance)}
         @mouseenter=${tooltip.fromData}
         ?disabled=${disabled}
       ></mwc-icon-button-toggle>
@@ -115,7 +115,7 @@ export class FormMotivationItem extends LitElement {
       <mwc-icon-button
         icon="add"
         class="new-goal-button"
-        data-tooltip="${localize('add')} ${localize('goal')}"
+        data-ep-tooltip="${localize('add')} ${localize('goal')}"
         @mouseenter=${tooltip.fromData}
         @focus=${tooltip.fromData}
         ?disabled=${disabled}

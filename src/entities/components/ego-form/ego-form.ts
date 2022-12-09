@@ -174,7 +174,7 @@ export class EgoForm extends mix(LitElement).with(
             ${this.ego.allowSleights
               ? html` <mwc-icon
                   slot="info"
-                  data-tooltip=${localize('DESCRIPTIONS', 'OnlyEgoItems')}
+                  data-ep-tooltip=${localize('DESCRIPTIONS', 'OnlyEgoItems')}
                   @mouseover=${tooltip.fromData}
                   >info</mwc-icon
                 >`
@@ -308,7 +308,7 @@ export class EgoForm extends mix(LitElement).with(
               slot="action"
               ?disabled=${disabled}
               @click=${this.addMotivation}
-              data-tooltip="${localize('add')} ${localize('motivation')}"
+              data-ep-tooltip="${localize('add')} ${localize('motivation')}"
               @mouseover=${tooltip.fromData}
               @focus=${tooltip.fromData}
             ></mwc-icon-button>
@@ -325,7 +325,7 @@ export class EgoForm extends mix(LitElement).with(
                 <sl-header heading=${localize('mentalHealth')}
                   ><mwc-icon-button
                     slot="action"
-                    data-tooltip=${localize('changes')}
+                    data-ep-tooltip=${localize('changes')}
                     @mouseover=${tooltip.fromData}
                     @focus=${tooltip.fromData}
                     icon="change_history"

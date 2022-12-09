@@ -429,7 +429,7 @@ export class MessageSuccessTest extends MessageElement {
             map(
               (effect) => html`
                 <wl-list-item
-                  data-tooltip=${localize(
+                  data-ep-tooltip=${localize(
                     'DESCRIPTIONS',
                     `SuperiorResult${capitalize(effect)}` as const,
                   )}

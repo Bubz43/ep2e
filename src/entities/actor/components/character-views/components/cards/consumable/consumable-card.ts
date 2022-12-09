@@ -148,7 +148,7 @@ export class ConsumableCard extends ItemCardBase {
                 <mwc-icon-button
                   @click=${this.addictionTest}
                   ?disabled=${!editable}
-                  data-tooltip="${localize('addiction')} ${localize('test')}"
+                  data-ep-tooltip="${localize('addiction')} ${localize('test')}"
                   @mouseover=${tooltip.fromData}
                 >
                   <img src=${localImage('icons/actions/chained-heart.svg')} />
@@ -158,7 +158,7 @@ export class ConsumableCard extends ItemCardBase {
           <mwc-icon-button
             @click=${this.openSubstanceuseMenu}
             ?disabled=${!editable || item.quantity === 0}
-            data-tooltip=${localize('use')}
+            data-ep-tooltip=${localize('use')}
             @mouseover=${tooltip.fromData}
             ><img src=${localImage('icons/actions/pill-drop.svg')} />
           </mwc-icon-button>

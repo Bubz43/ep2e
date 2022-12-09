@@ -552,7 +552,7 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                     class="unique ${hasEffects ? 'has-effects' : ''}"
                     ><colored-tag
                       data-roll=${influence.roll}
-                      data-tooltip=${description}
+                      data-ep-tooltip=${description}
                       @mouseover=${tooltip.fromData}
                       @click=${this.openActiveInfluenceMenu}
                       clickable
@@ -564,7 +564,7 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                           type="usable"
                           clickable
                           ?disabled=${this.character.disabled}
-                          data-tooltip=${items.map(formatEffect).join('. ')}
+                          data-ep-tooltip=${items.map(formatEffect).join('. ')}
                           @mouseover=${tooltip.fromData}
                           @click=${() => {
                             const roll = rollFormula(durationFormula);
@@ -598,7 +598,7 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                 return html`
                   <colored-tag
                     data-roll=${influence.roll}
-                    data-tooltip=${description}
+                    data-ep-tooltip=${description}
                     @mouseover=${tooltip.fromData}
                     @click=${this.openActiveInfluenceMenu}
                     clickable

@@ -127,7 +127,7 @@ export class ItemCard extends ItemCardBase {
             class="toggle ${classMap({ activated: item.activated })}"
             icon="settings_power"
             @click=${() => item.toggleActivation()}
-            data-tooltip=${format('ActionToActivate', {
+            data-ep-tooltip=${format('ActionToActivate', {
               action: localize(item.activation),
             })}
             @mouseover=${tooltip.fromData}
@@ -161,7 +161,7 @@ export class ItemCard extends ItemCardBase {
                 activated: !!item.transformTimer?.completed,
               })}"
               icon="transform"
-              data-tooltip=${item.transformTimer
+              data-ep-tooltip=${item.transformTimer
                 ? `${item.transformTimer.label}. ${prettyMilliseconds(
                     item.transformTimer.remaining,
                     {

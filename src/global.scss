@@ -1121,14 +1121,24 @@ sl-tooltip {
       }
     }
 
+    >* {
+      pointer-events: initial;
+    }
+
     #chat-log {
       height: calc(100% - 136px);
       padding: 0.25rem 0.125rem 0.25rem 0;
-      order: 1;
+      pointer-events: none;
+
+      >* {
+        pointer-events: initial;
+      }
+
+      // order: 1;
     }
 
     .directory-footer {
-      order: 4;
+      // order: 4;
       pointer-events: initial;
 
       >* {
@@ -1148,8 +1158,7 @@ sl-tooltip {
   }
 
   #chat-form {
-    order: 2;
-    box-shadow: 0 0 4px black;
+    // order: 2;
     margin: 0 0.25rem 0.25rem;
   }
 
@@ -1157,8 +1166,9 @@ sl-tooltip {
     background: alphav(var(--ep-color-bg), 0.85);
     color: var(--ep-color-text);
     font-size: 1rem;
-    border-radius: 0;
-    box-shadow: none;
+    border-radius: 0.125rem;
+    box-shadow: 0 -1px 1px black;
+    border: 1px solid var(--ep-color-border);
 
     &:focus {
       background: var(--ep-color-bg);
@@ -1167,8 +1177,10 @@ sl-tooltip {
 
   #chat-controls {
     align-items: center;
-    padding: 0 0 0.125rem;
-    order: 3;
+    padding: 0.25rem 0.5rem;
+    background: alphav(var(--ep-color-bg), 0.85);
+    border-radius: 1rem 1rem 0 0;
+    // order: 3;
 
     i {
       line-height: unset;
@@ -1192,7 +1204,7 @@ sl-tooltip {
   }
 
   #chat-log {
-    order: 1;
+    // order: 1;
     align-items: unset;
     padding: 0 0.25rem !important;
     margin-bottom: 0.25rem;

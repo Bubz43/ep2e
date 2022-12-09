@@ -179,7 +179,6 @@ Hooks.once('ready', async () => {
     // document.body.append(tooltip);
     document.body.classList.add('ready');
     Hooks.call('ep-ready', true);
-    const frag = new DocumentFragment();
     // const sceneView = document.createElement('scene-view');
     // document
     //   .getElementById('ui-left')
@@ -203,10 +202,12 @@ Hooks.once('ready', async () => {
     rightUI?.addEventListener('mouseenter', toggleChatPointers);
     rightUI?.addEventListener('mouseleave', toggleChatPointers);
 
+    const frag = new DocumentFragment();
+
     render(
       html`
         <mwc-icon-button
-          data-tooltip=${`${localize('custom')} ${localize('roll')}`}
+          data-ep-tooltip=${`${localize('custom')} ${localize('roll')}`}
           @mouseover=${tooltip.fromData}
           style="flex: 0; margin-right: 0.5rem; --mdc-icon-button-size: 1.5rem"
           @click=${(ev: Event & { currentTarget: HTMLElement }) =>
@@ -259,7 +260,7 @@ Hooks.once('ready', async () => {
         >
           <mwc-icon-button
             slot="base"
-            data-tooltip="Quick Success Test"
+            data-ep-tooltip="Quick Success Test"
             @mouseover=${tooltip.fromData}
             @contextmenu=${() => {
               new Roll('1d100 - 1').toMessage();

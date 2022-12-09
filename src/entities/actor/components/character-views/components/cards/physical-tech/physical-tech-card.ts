@@ -108,7 +108,7 @@ export class PhysicalTechCard extends ItemCardBase {
               class="toggle ${classMap({ activated: item.activated })}"
               icon="power_settings_new"
               @click=${this.toggleActivation}
-              data-tooltip=${format('ActionToActivate', {
+              data-ep-tooltip=${format('ActionToActivate', {
                 action: localize(item.activationAction),
               })}
               @mouseover=${tooltip.fromData}
@@ -121,7 +121,7 @@ export class PhysicalTechCard extends ItemCardBase {
             <mwc-icon-button
               icon="touch_app"
               @click=${this.useItem}
-              data-tooltip=${format('ActionToActivate', {
+              data-ep-tooltip=${format('ActionToActivate', {
                 action: localize(item.activationAction),
               })}
               @mouseover=${tooltip.fromData}
@@ -167,7 +167,7 @@ export class PhysicalTechCard extends ItemCardBase {
                             slot="action"
                             @click=${this.useGlandedSubstance}
                             ?disabled=${!item.editable}
-                            data-tooltip=${localize('use')}
+                            data-ep-tooltip=${localize('use')}
                             @mouseover=${tooltip.fromData}
                             ><img
                               src=${localImage('icons/actions/pill-drop.svg')}

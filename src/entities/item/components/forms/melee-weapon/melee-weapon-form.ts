@@ -211,7 +211,7 @@ export class MeleeWeaponForm extends ItemFormBase {
             ? html`<li
                 slot="tag"
                 @mouseover=${tooltip.fromData}
-                data-tooltip=${localize(
+                data-ep-tooltip=${localize(
                   'DESCRIPTIONS',
                   'IgnoreSizeMeleeDamageModifiers',
                 )}
@@ -223,7 +223,7 @@ export class MeleeWeaponForm extends ItemFormBase {
             ? html`<li
                 slot="tag"
                 @mouseover=${tooltip.fromData}
-                data-tooltip=${localize(
+                data-ep-tooltip=${localize(
                   'DESCRIPTIONS',
                   'PermanentMeleeCoatings',
                 )}
@@ -346,7 +346,7 @@ export class MeleeWeaponForm extends ItemFormBase {
             <sl-header heading=${localize('coating')} ?hideBorder=${!coating}
               ><mwc-icon
                 slot="info"
-                data-tooltip="${localize('drop')} ${localize(
+                data-ep-tooltip="${localize('drop')} ${localize(
                   'non-electronic',
                 )} ${localize('substance')}"
                 @mouseenter=${tooltip.fromData}
@@ -382,7 +382,7 @@ export class MeleeWeaponForm extends ItemFormBase {
                     ?hideBorder=${!payload}
                     ><mwc-icon
                       slot="info"
-                      data-tooltip="${localize('drop')} ${localize(
+                      data-ep-tooltip="${localize('drop')} ${localize(
                         'any',
                       )} ${localize('explosive')}"
                       @mouseenter=${tooltip.fromData}

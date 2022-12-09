@@ -250,7 +250,7 @@ export class SprayWeaponForm extends ItemFormBase {
                     ?hideBorder=${!payload}
                     ><mwc-icon
                       slot="info"
-                      data-tooltip="${localize('drop')} ${localize(
+                      data-ep-tooltip="${localize('drop')} ${localize(
                         'non-electronic',
                       )} ${localize('substance')}"
                       @mouseenter=${tooltip.fromData}

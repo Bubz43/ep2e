@@ -165,7 +165,7 @@ export class CharacterViewSubstances extends LitElement {
                               <mwc-icon-button
                                 slot="action"
                                 icon="play_arrow"
-                                data-tooltip=${localize('start')}
+                                data-ep-tooltip=${localize('start')}
                                 @mouseover=${tooltip.fromData}
                                 @click=${() => {
                                   this.openSubstanceActivationDialog(

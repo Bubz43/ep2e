@@ -297,7 +297,7 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
                   >
                     <mwc-icon-button
                       slot="action"
-                      data-tooltip="${localize('end')} ${localize('effects')}"
+                      data-ep-tooltip="${localize('end')} ${localize('effects')}"
                       @mouseover=${tooltip.fromData}
                       class="remove ${classMap({
                         ready: nestedTimeState.completed,
@@ -393,7 +393,7 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
 
                 ${localize('severe')} ${localize('effects')}
                 <button
-                  data-tooltip="${localize('apply')} ${localize('effects')}"
+                  data-ep-tooltip="${localize('apply')} ${localize('effects')}"
                   @mouseover=${tooltip.fromData}
                   ?disabled=${disabled}
                   @click=${this.startSeverity}
@@ -401,7 +401,7 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
                   <mwc-icon>done</mwc-icon>
                 </button>
                 <button
-                  data-tooltip="${localize('resist')} ${localize('effects')}"
+                  data-ep-tooltip="${localize('resist')} ${localize('effects')}"
                   @mouseover=${tooltip.fromData}
                   ?disabled=${disabled}
                   @click=${this.cancelSeverity}

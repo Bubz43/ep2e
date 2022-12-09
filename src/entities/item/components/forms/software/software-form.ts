@@ -143,7 +143,7 @@ export class SoftwareForm extends ItemFormBase {
             <sl-header heading=${localize('meshHealth')}>
               <mwc-icon-button
                 slot="action"
-                data-tooltip=${localize('changes')}
+                data-ep-tooltip=${localize('changes')}
                 @mouseover=${tooltip.fromData}
                 @focus=${tooltip.fromData}
                 icon="change_history"

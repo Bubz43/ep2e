@@ -36,10 +36,11 @@ export class ToolTip extends LitElement {
   }
 
   fromData = ({ currentTarget: el }: Event) => {
-    if (el instanceof HTMLElement && el.dataset['tooltip']) {
-      this.attach({
+    if (el instanceof HTMLElement) {
+      const content = el.getAttribute("data-ep-tooltip");
+      content && this.attach({
         el,
-        content: el.dataset['tooltip'],
+        content,
         position: 'bottom-middle',
       });
     }

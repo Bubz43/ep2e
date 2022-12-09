@@ -449,7 +449,7 @@ export class RangedAttackControls extends LitElement {
               html`<div style="display: flex; align-items: center">
                 ${renderNumberField(targetDistance, { min: 0, step: 0.1 })}
                 <mwc-icon
-                  data-tooltip="Target distance is measured in a straight line from center to center of tokens and takes into account differences in elevation. When targeting square tokens greater than 1x1 grid units, the target distance is lowered by their width/2. Token image scale is always ignored. If multiple tokens are targeted, the farthest away will be used."
+                  data-ep-tooltip="Target distance is measured in a straight line from center to center of tokens and takes into account differences in elevation. When targeting square tokens greater than 1x1 grid units, the target distance is lowered by their width/2. Token image scale is always ignored. If multiple tokens are targeted, the farthest away will be used."
                   @mouseover=${tooltip.fromData}
                   >info</mwc-icon
                 >

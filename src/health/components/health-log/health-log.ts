@@ -42,7 +42,7 @@ export class HealthLog extends LitElement {
       ${notEmpty(log)
         ? html`
             <delete-button
-              data-tooltip="${localize('delete')} ${localize('history')}"
+              data-ep-tooltip="${localize('delete')} ${localize('history')}"
               @mouseover=${tooltip.fromData}
               @focus=${tooltip.fromData}
               @delete=${() => this.health.resetLog()}

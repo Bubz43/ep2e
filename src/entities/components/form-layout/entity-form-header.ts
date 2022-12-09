@@ -134,7 +134,7 @@ export class EntityFormHeader extends LitElement {
       ? html`<mwc-icon-button
           icon="insert_photo"
           class="add-photo"
-          data-tooltip="${localize('add')} ${localize('icon')}"
+          data-ep-tooltip="${localize('add')} ${localize('icon')}"
           @mouseover=${tooltip.fromData}
           @focus=${tooltip.fromData}
           @click=${this.editImg}

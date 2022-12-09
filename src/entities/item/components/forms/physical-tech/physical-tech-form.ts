@@ -365,7 +365,7 @@ export class PhysicalTechForm extends ItemFormBase {
                 ? html`
                     <mwc-icon
                       slot="info"
-                      data-tooltip=${localize('PassiveEffectsWhenActivated')}
+                      data-ep-tooltip=${localize('PassiveEffectsWhenActivated')}
                       @mouseover=${tooltip.fromData}
                       >info</mwc-icon
                     >
@@ -515,7 +515,7 @@ export class PhysicalTechForm extends ItemFormBase {
         <sl-header heading=${localize('meshHealth')}>
           <mwc-icon-button
             slot="action"
-            data-tooltip=${localize('changes')}
+            data-ep-tooltip=${localize('changes')}
             @mouseover=${tooltip.fromData}
             @focus=${tooltip.fromData}
             icon="change_history"

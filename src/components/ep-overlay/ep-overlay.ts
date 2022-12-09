@@ -235,7 +235,7 @@ export class EPOverlay extends LitElement {
         <wl-list-item
           slot="app-controls"
           clickable
-          data-tooltip=${title}
+          data-ep-tooltip=${title}
           @mouseenter=${tooltip.fromData}
           @focus=${tooltip.fromData}
           data-view=${tabName}

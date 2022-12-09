@@ -72,7 +72,7 @@ import styles from './substance-form.scss';
 
 const renderEffectInfo = () => html` <mwc-icon
   slot="info"
-  data-tooltip="${localize('traits')} & ${localize('sleights')}"
+  data-ep-tooltip="${localize('traits')} & ${localize('sleights')}"
   @mouseenter=${tooltip.fromData}
   >info</mwc-icon
 >`;
@@ -322,7 +322,7 @@ export class SubstanceForm extends ItemFormBase {
             (method) =>
               html`<li
                 class="method"
-                data-tooltip="${localize('onset')} ${localize(
+                data-ep-tooltip="${localize('onset')} ${localize(
                   'time',
                 )}: ${prettyMilliseconds(Substance.onsetTime(method), {
                   compact: false,
@@ -431,7 +431,7 @@ export class SubstanceForm extends ItemFormBase {
       slot="action"
       icon="add"
       ?disabled=${this.disabled}
-      data-tooltip="${localize('add')} ${localize('effect')}"
+      data-ep-tooltip="${localize('add')} ${localize('effect')}"
       @mouseenter=${tooltip.fromData}
       @focus=${tooltip.fromData}
       @click=${() => {

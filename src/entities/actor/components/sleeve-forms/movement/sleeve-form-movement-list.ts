@@ -117,7 +117,7 @@ export class SleeveFormMovementList extends LitElement {
     return html`
       <li
         class="movement-rate"
-        data-tooltip="${localize('source')}: ${movement[Source]}"
+        data-ep-tooltip="${localize('source')}: ${movement[Source]}"
         @mouseover=${tooltip.fromData}
       >
         ${localize(movement.type)}
