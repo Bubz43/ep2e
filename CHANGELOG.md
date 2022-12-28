@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.4] - 2022-12-28
+
+- Correct system manifest
+
 ## [1.0.3] - 2022-12-09
 
 - Change chat styling to avoid conflicts with modules

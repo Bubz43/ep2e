@@ -5,8 +5,18 @@
     "SystemSchema": {
       "additionalProperties": false,
       "properties": {
-        "author": {
-          "type": "string"
+        "authors": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ]
+          }
         },
         "compatibleCoreVersion": {
           "type": "string"
@@ -69,7 +79,7 @@
               "type": "string"
             },
             "properties": {
-              "entity": {
+              "type": {
                 "enum": [
                   "Actor",
                   "Item",
@@ -89,7 +99,7 @@
               }
             },
             "required": [
-              "entity",
+              "type",
               "label",
               "name",
               "path"
