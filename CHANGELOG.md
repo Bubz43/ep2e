@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.5] - 2023-01-02
+
+- Fix styling of armor input fields on shell frames
+
 ## [1.0.4] - 2022-12-28
 
 - Correct system manifest
