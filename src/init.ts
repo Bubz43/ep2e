@@ -48,6 +48,7 @@ import { openMenu } from './open-menu';
 import { rollSuccessTest } from './success-test/success-test';
 import { notEmpty } from './utility/helpers';
 import { localImage } from './utility/images';
+import { readyCanvas } from './foundry/canvas';
 
 export let gameSettings: ReturnType<typeof registerEPSettings>;
 export let overlay: EPOverlay;
@@ -137,18 +138,23 @@ Hooks.once('ready', async () => {
             label: game.i18n.localize(tool.title),
             icon: html`<i class=${tool.icon}></i>`,
             activated: ui.controls.activeTool === tool.name || !!tool.active,
-            callback: () => {
-              if (tool.toggle) {
+            callback: () => {          
+              if ( tool.toggle ) {
                 tool.active = !tool.active;
-                if (tool.onClick instanceof Function) tool.onClick(tool.active);
-              } else if (tool.button) {
-                if (tool.onClick instanceof Function) tool.onClick();
-              } else {
-                control.activeTool = tool.name;
-                if (tool.onClick instanceof Function) tool.onClick();
+                if ( tool.onClick instanceof Function ) tool.onClick(tool.active);
+                ui.controls.render();
               }
-
-              ui.controls.render();
+          
+              // Handle Buttons
+              else if ( tool.button ) {
+                if ( tool.onClick instanceof Function ) tool.onClick();
+                ui.controls.render();
+              }
+          
+              // Handle Tools
+              else {
+                ui.controls.initialize({ tool: tool.name } as any)
+              }
             },
           })),
           position: ev,

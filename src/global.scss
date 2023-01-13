@@ -1440,6 +1440,8 @@ nav#controls {
         alphav(var(--ep-color-bg), 0.8),
         alphav(var(--ep-color-bg-alt), 0.75));
 
+    contain: content;
+
     &.disabled * {
       pointer-events: none !important;
     }
@@ -1496,6 +1498,8 @@ nav#controls {
   }
 
   ol .scene-control {
+    width: 2.75rem;
+
     &.active {
       color: var(--ep-color-text);
       border-left: 2px solid currentColor !important;

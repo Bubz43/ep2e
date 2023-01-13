@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.6] - 2023-01-12
+
+- "Fix" style of inputs after datalist selection
+- Restore functionality of middle click scene controls menu
+
 ## [1.0.5] - 2023-01-02
 
 - Fix styling of armor input fields on shell frames

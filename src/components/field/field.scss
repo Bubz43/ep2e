@@ -31,7 +31,7 @@
 :host(:focus-within),
 :host(:hover) {
   .number-buttons {
-    > * {
+    >* {
       opacity: 1;
     }
   }
@@ -56,6 +56,7 @@
     }
   }
 }
+
 :host(:focus-within) {
   .label {
     @include floatLabel;
@@ -101,6 +102,7 @@
   min-width: 100%;
   height: 1rem;
   text-align: left;
+
   &.above {
     @include floatLabel;
   }
@@ -138,6 +140,10 @@
     padding-bottom: 2px !important;
     font-family: var(--font-1);
     flex: 1;
+  }
+
+  ::slotted(input:-internal-autofill-selected) {
+    color-scheme: dark;
   }
 
   ::slotted(textarea) {
@@ -221,12 +227,14 @@ slot[name='after'] {
   padding: 4px 8px;
   padding-left: 1rem;
 }
+
 .select-icon {
   opacity: 0.65;
   pointer-events: none;
   position: absolute;
   right: 0;
 }
+
 .number-buttons {
   grid-area: after;
   display: grid;
@@ -237,7 +245,7 @@ slot[name='after'] {
   gap: 0.25rem;
   transform: translateY(9px);
 
-  > button {
+  >button {
     --mdc-icon-size: 18px;
     line-height: 0;
     padding: 0;
@@ -276,6 +284,7 @@ footer {
   width: calc(100% + 6px);
   left: -3px;
   pointer-events: none;
+
   &::before {
     background: lightv(var(--ep-color-bg), 2);
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.85);
@@ -302,6 +311,7 @@ footer {
   }
 
   &.invalid {
+
     &::before,
     &::after {
       background: var(--ep-color-negative) !important;

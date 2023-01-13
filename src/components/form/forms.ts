@@ -18,6 +18,12 @@ const styles = () => html` <style>
     margin: 0;
   }
 
+  input:-webkit-autofill,
+  input:-webkit-autofill:focus {
+    transition: background-color 600000s 0s, color 600000s 0s;    
+  }
+  
+
   select option,
   select optgroup {
     background: var(--ep-color-bg-alt);
