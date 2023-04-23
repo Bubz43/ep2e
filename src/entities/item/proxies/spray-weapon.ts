@@ -213,4 +213,8 @@ export class SprayWeapon
   private get updatePayload() {
     return this.updater.path('flags', EP.Name, 'payload').commit;
   }
+
+  get exoticSkillName() {
+    return this.epFlags?.exoticSkill;
+  }
 }

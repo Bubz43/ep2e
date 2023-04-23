@@ -142,7 +142,24 @@ export const startRangedAttack = ({
         weapon,
         primaryAttack: attackType !== 'secondary',
         firingModeGroup,
-        skill: ego.getCommonSkill(SkillType.Guns),
+        skill:
+          weapon.type === ItemType.SprayWeapon && weapon?.exoticSkillName
+            ? ego.findFieldSkill({
+                fieldSkill: FieldSkillType.Exotic,
+                field: weapon.exoticSkillName,
+              }) ||
+              setupFullFieldSkill(
+                {
+                  field: weapon.exoticSkillName,
+                  fieldSkill: FieldSkillType.Exotic,
+                  points: 0,
+                  linkedAptitude: AptitudeType.Somatics,
+                  specialization: '',
+                  category: ActiveSkillCategory.Combat,
+                },
+                ego.aptitudes,
+              )
+            : ego.getCommonSkill(SkillType.Guns),
       };
     },
   });

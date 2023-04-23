@@ -31,6 +31,7 @@ import { entityFormCommonStyles } from '@src/entities/components/form-layout/ent
 import { ItemType } from '@src/entities/entity-types';
 import { renderItemForm } from '@src/entities/item/item-views';
 import type { MeleeWeapon } from '@src/entities/item/proxies/melee-weapon';
+import { ArmorType } from '@src/features/active-armor';
 import { pairList } from '@src/features/check-list';
 import { SkillType } from '@src/features/skills';
 import {
@@ -198,6 +199,9 @@ export class MeleeWeaponForm extends ItemFormBase {
       damageIrrespectiveOfSize,
     } = this.item;
     const { disabled } = this;
+
+    const armorUsedProps = { armorUsed: this.item.armorUsed } as const;
+
     return html`
       <entity-form-layout>
         <entity-form-header
@@ -329,6 +333,19 @@ export class MeleeWeaponForm extends ItemFormBase {
                     disabled: this.skillOption !== WeaponSkillOption.Exotic,
                   })}
                 `,
+              })}
+              ${renderAutoForm({
+                props: armorUsedProps,
+                update: ({ armorUsed }) => {
+                  this.item.updater
+                    .path('flags', EP.Name, 'attackArmorUsed')
+                    .commit(armorUsed);
+                },
+                fields: ({ armorUsed }) =>
+                  renderSelectField(armorUsed, [
+                    ArmorType.Kinetic,
+                    ArmorType.Energy,
+                  ]),
               })}
             </div>
           </section>

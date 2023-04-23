@@ -9,8 +9,10 @@ import {
   renderLabeledCheckbox,
   renderNumberField,
   renderNumberInput,
+  renderRadioFields,
   renderSelectField,
   renderTextareaField,
+  renderTextInput,
 } from '@src/components/field/fields';
 import { renderAutoForm, renderUpdaterForm } from '@src/components/form/forms';
 import type { SlWindow } from '@src/components/window/window';
@@ -24,6 +26,7 @@ import {
   enumValues,
   PhysicalWare,
   SprayPayload,
+  WeaponSkillOption,
 } from '@src/data-enums';
 import { entityFormCommonStyles } from '@src/entities/components/form-layout/entity-form-common-styles';
 import { ItemType } from '@src/entities/entity-types';
@@ -32,6 +35,7 @@ import { SprayWeapon } from '@src/entities/item/proxies/spray-weapon';
 import type { Substance } from '@src/entities/item/proxies/substance';
 import { ArmorType } from '@src/features/active-armor';
 import { pairList } from '@src/features/check-list';
+import { SkillType } from '@src/features/skills';
 import {
   DropType,
   handleDrop,
@@ -39,9 +43,16 @@ import {
 } from '@src/foundry/drag-and-drop';
 import { NotificationType, notify } from '@src/foundry/foundry-apps';
 import { format, localize } from '@src/foundry/localization';
+import { EP } from '@src/foundry/system';
 import { tooltip } from '@src/init';
 import { notEmpty } from '@src/utility/helpers';
-import { customElement, html, property, PropertyValues } from 'lit-element';
+import {
+  customElement,
+  html,
+  property,
+  PropertyValues,
+  state,
+} from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat';
 import { createPipe, identity, map, objOf } from 'remeda';
 import {
@@ -73,6 +84,15 @@ export class SprayWeaponForm extends ItemFormBase {
   private readonly payloadSheetKey = {};
 
   @property({ attribute: false }) item!: SprayWeapon;
+
+  @state() private skillOption = WeaponSkillOption.None;
+
+  connectedCallback() {
+    this.skillOption = this.item.exoticSkillName
+      ? WeaponSkillOption.Exotic
+      : WeaponSkillOption.None;
+    super.connectedCallback();
+  }
 
   update(changedProps: PropertyValues<this>) {
     if (this.payloadSheet) this.openPayloadSheet();
@@ -141,6 +161,7 @@ export class SprayWeaponForm extends ItemFormBase {
       payload,
       firePayload,
       ammoState,
+      exoticSkillName,
     } = this.item;
     const { disabled } = this;
     // TODO Some indication that payload has been expended
@@ -186,11 +207,61 @@ export class SprayWeaponForm extends ItemFormBase {
         })}
 
         <div slot="details">
-          ${renderUpdaterForm(updater.path('system'), {
-            disabled,
-            classes: complexityForm.cssClass,
-            fields: renderComplexityFields,
-          })}
+          <div class="detail-forms">
+            ${renderUpdaterForm(updater.path('system'), {
+              disabled,
+              classes: complexityForm.cssClass,
+              fields: renderComplexityFields,
+            })}
+            ${renderAutoForm({
+              classes: 'skill-form',
+              disabled,
+              props: {
+                skillOption: this.skillOption,
+                exotic: exoticSkillName || '',
+              },
+              update: ({ skillOption, exotic }) => {
+                const exoticSkillSetter = this.item.updater.path(
+                  'flags',
+                  EP.Name,
+                  'exoticSkill',
+                ).commit;
+                if (exotic !== undefined) {
+                  exoticSkillSetter(exotic);
+                } else if (skillOption === WeaponSkillOption.None) {
+                  this.skillOption = skillOption;
+                  exoticSkillSetter('');
+                } else if (skillOption) {
+                  this.skillOption = skillOption;
+                  if (
+                    skillOption === WeaponSkillOption.Exotic &&
+                    !this.item.exoticSkillName
+                  ) {
+                    exoticSkillSetter(this.item.name);
+                  }
+                }
+              },
+              fields: ({ skillOption, exotic }) => html`
+                <span class="radio-wrapper"
+                  >${localize('skill')}
+                  ${renderRadioFields(
+                    skillOption,
+                    enumValues(WeaponSkillOption),
+                    {
+                      altLabel: (option) =>
+                        option === WeaponSkillOption.None
+                          ? localize(SkillType.Guns)
+                          : localize(option),
+                    },
+                  )}
+                </span>
+                ${renderTextInput(exotic, {
+                  placeholder: `e.g. ${this.item.name}`,
+                  disabled: this.skillOption !== WeaponSkillOption.Exotic,
+                })}
+              `,
+            })}
+          </div>
           ${this.renderAttack()}
 
           <sl-dropzone ?disabled=${!firePayload} @drop=${this.addDrop}>

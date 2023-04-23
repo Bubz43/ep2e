@@ -40,3 +40,28 @@ p.label {
   padding: 0.25rem;
   font-size: large;
 }
+
+.detail-forms {
+  padding: 0.5rem 0 0;
+}
+
+.skill-form {
+  display: flex;
+  align-items: center;
+  margin-left: 0.65rem;
+  @include inputReset();
+  input {
+    flex: 1;
+    margin-left: 1ch;
+    position: relative;
+    top: -2px;
+    padding: 0 0.25rem;
+  }
+}
+
+.radio-wrapper {
+  display: flex;
+  align-items: center;
+  color: var(--ep-color-text-lighter);
+  font-size: 1.1rem;
+}

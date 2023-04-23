@@ -113,12 +113,16 @@ export class MeleeWeapon
     };
   }
 
+  get armorUsed() {
+    return this.epFlags?.attackArmorUsed || ArmorType.Kinetic;
+  }
+
   setupAttack(
     { damageFormula, label, ...data }: MeleeWeaponAttackData,
     defaultLabel: string,
   ): MeleeWeaponAttack {
     return {
-      armorUsed: [ArmorType.Kinetic],
+      armorUsed: [this.armorUsed],
       reduceAVbyDV: false,
       ...data,
       label: this.hasSecondaryAttack ? label || defaultLabel : '',

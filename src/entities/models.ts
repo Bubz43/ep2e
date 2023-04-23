@@ -280,6 +280,7 @@ type ItemFlags<T extends ItemType> = T extends ItemType.Psi
       payload: null | [ItemEntity<ItemType.Explosive>];
       damageIrrespectiveOfSize: boolean;
       permanentCoating: boolean;
+      attackArmorUsed: ArmorType | '';
     }
   : T extends ItemType.PhysicalTech
   ? {
@@ -301,7 +302,7 @@ type ItemFlags<T extends ItemType> = T extends ItemType.Psi
   : T extends ItemType.FirearmAmmo
   ? { payload: [ItemEntity<ItemType.Substance>] | null }
   : T extends ItemType.SprayWeapon
-  ? { payload: ItemEntity<ItemType.Substance> | null }
+  ? { payload: ItemEntity<ItemType.Substance> | null; exoticSkill: string }
   : T extends ItemType.ThrownWeapon
   ? { coating: [ItemEntity<ItemType.Substance>] | null }
   : T extends ItemType.SeekerWeapon
