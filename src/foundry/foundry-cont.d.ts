@@ -287,6 +287,7 @@ declare global {
 
   interface CompendiumCollection {
     documentName: EntityName;
+    visible: boolean;
     metadata: {
       id: string;
       name: string;

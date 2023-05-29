@@ -294,35 +294,35 @@ export const overridePrototypes = () => {
     },
   });
 
-  const { defaultOptions: compendiumdefaults } = Compendium;
-  Object.defineProperty(Compendium, 'defaultOptions', {
-    enumerable: true,
-    get() {
-      return {
-        ...(compendiumdefaults as { classes: [] }),
-        classes: (compendiumdefaults as { classes: string[] }).classes.concat(
-          'ep-compendium-list',
-        ),
-      };
-    },
-  });
+  // const { defaultOptions: compendiumdefaults } = Compendium;
+  // Object.defineProperty(Compendium, 'defaultOptions', {
+  //   enumerable: true,
+  //   get() {
+  //     return {
+  //       ...(compendiumdefaults as { classes: [] }),
+  //       classes: (compendiumdefaults as { classes: string[] }).classes.concat(
+  //         'ep-compendium-list',
+  //       ),
+  //     };
+  //   },
+  // });
 
-  Compendium.prototype._onSearchFilter = function (
-    event: unknown,
-    query: string,
-    rgx: RegExp,
-    html: HTMLElement,
-  ) {
-    for (let li of html.children) {
-      const header = li.querySelector('.document-name')!;
-      const name = header.textContent;
-      const type = header.getAttribute('data-type');
-      const match =
-        rgx.test(SearchFilter.cleanQuery(name)) ||
-        (type && rgx.test(SearchFilter.cleanQuery(type)));
-      (li as HTMLLinkElement).style.display = match ? 'flex' : 'none';
-    }
-  };
+  // Compendium.prototype._onSearchFilter = function (
+  //   event: unknown,
+  //   query: string,
+  //   rgx: RegExp,
+  //   html: HTMLElement,
+  // ) {
+  //   for (let li of html.children) {
+  //     const header = li.querySelector('.document-name')!;
+  //     const name = header.textContent;
+  //     const type = header.getAttribute('data-type');
+  //     const match =
+  //       rgx.test(SearchFilter.cleanQuery(name)) ||
+  //       (type && rgx.test(SearchFilter.cleanQuery(type)));
+  //     (li as HTMLLinkElement).style.display = match ? 'flex' : 'none';
+  //   }
+  // };
 
   const { _replaceHTML } = CombatTracker.prototype;
   CombatTracker.prototype._replaceHTML = function (
@@ -367,48 +367,48 @@ export const overridePrototypes = () => {
     });
   };
 
-  SidebarDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
-    jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
-      const entityLi = findMatchingElement(
-        ev,
-        '.document, .folder .folder-header',
-      );
-      if (!entityLi) return;
-      const jqueryLi = $(entityLi);
+  // SidebarDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
+  //   jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
+  //     const entityLi = findMatchingElement(
+  //       ev,
+  //       '.document, .folder .folder-header',
+  //     );
+  //     if (!entityLi) return;
+  //     const jqueryLi = $(entityLi);
 
-      if (entityLi.matches('.document')) {
-        const entryOptions = this._getEntryContextOptions();
-        Hooks.call(
-          `get${this.constructor.name}EntryContext`,
-          jqueryEl,
-          entryOptions,
-        );
-        const convertedOptions = convertMenuOptions(entryOptions, jqueryLi);
-        const heading = entityLi.querySelector('.document-name')?.textContent;
-        openMenu({
-          content: convertedOptions,
-          position: ev,
-          header: heading ? { heading } : null,
-        });
-      } else if (entityLi.matches('.folder .folder-header')) {
-        const folderOptions = this._getFolderContextOptions();
-        Hooks.call(
-          `get${this.constructor.name}FolderContext`,
-          jqueryEl,
-          folderOptions,
-        );
+  //     if (entityLi.matches('.document')) {
+  //       const entryOptions = this._getEntryContextOptions();
+  //       Hooks.call(
+  //         `get${this.constructor.name}EntryContext`,
+  //         jqueryEl,
+  //         entryOptions,
+  //       );
+  //       const convertedOptions = convertMenuOptions(entryOptions, jqueryLi);
+  //       const heading = entityLi.querySelector('.document-name')?.textContent;
+  //       openMenu({
+  //         content: convertedOptions,
+  //         position: ev,
+  //         header: heading ? { heading } : null,
+  //       });
+  //     } else if (entityLi.matches('.folder .folder-header')) {
+  //       const folderOptions = this._getFolderContextOptions();
+  //       Hooks.call(
+  //         `get${this.constructor.name}FolderContext`,
+  //         jqueryEl,
+  //         folderOptions,
+  //       );
 
-        const convertedOptions = convertMenuOptions(folderOptions, jqueryLi);
+  //       const convertedOptions = convertMenuOptions(folderOptions, jqueryLi);
 
-        const heading = entityLi.textContent?.trim();
-        openMenu({
-          content: convertedOptions,
-          position: ev,
-          header: heading ? { heading } : null,
-        });
-      }
-    });
-  };
+  //       const heading = entityLi.textContent?.trim();
+  //       openMenu({
+  //         content: convertedOptions,
+  //         position: ev,
+  //         header: heading ? { heading } : null,
+  //       });
+  //     }
+  //   });
+  // };
 
   PlayerList.prototype.activateListeners = function (jqueryEl: JQuery) {
     jqueryEl.find('h3').click(this._onToggleOfflinePlayers.bind(this));
@@ -441,26 +441,26 @@ export const overridePrototypes = () => {
     jqueryEl[0]?.addEventListener('contextmenu', navMenuListener);
   };
 
-  CompendiumDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
-    jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
-      const item = findMatchingElement(ev, '.compendium-pack');
-      if (!item) return;
-      const entryOptions = this._getEntryContextOptions();
-      Hooks.call(
-        `get${this.constructor.name}EntryContext`,
-        this.element,
-        entryOptions,
-      );
-      const targetEl = $(item);
-      const convertedOptions = convertMenuOptions(entryOptions, targetEl);
-      const heading = item.querySelector('h4')?.textContent;
-      openMenu({
-        content: convertedOptions,
-        position: ev,
-        header: heading ? { heading } : null,
-      });
-    });
-  };
+  // CompendiumDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
+  //   jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
+  //     const item = findMatchingElement(ev, '.compendium-pack');
+  //     if (!item) return;
+  //     const entryOptions = this._getEntryContextOptions();
+  //     Hooks.call(
+  //       `get${this.constructor.name}EntryContext`,
+  //       this.element,
+  //       entryOptions,
+  //     );
+  //     const targetEl = $(item);
+  //     const convertedOptions = convertMenuOptions(entryOptions, targetEl);
+  //     const heading = item.querySelector('h4')?.textContent;
+  //     openMenu({
+  //       content: convertedOptions,
+  //       position: ev,
+  //       header: heading ? { heading } : null,
+  //     });
+  //   });
+  // };
 
   ChatLog.prototype._contextMenu = function (jqueryEl: JQuery) {
     jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
@@ -538,66 +538,66 @@ export const overridePrototypes = () => {
     }
   };
 
-  function directorySearch(
-    this: ActorDirectory | ItemDirectory,
-    _: Event,
-    query: string,
-    rgx: RegExp,
-    html: HTMLElement,
-  ) {
-    const isSearch = !!query;
-    const entityIds = new Set<string>();
-    const folderIds = new Set<string>();
+  // function directorySearch(
+  //   this: ActorDirectory | ItemDirectory,
+  //   _: Event,
+  //   query: string,
+  //   rgx: RegExp,
+  //   html: HTMLElement,
+  // ) {
+  //   const isSearch = !!query;
+  //   const entityIds = new Set<string>();
+  //   const folderIds = new Set<string>();
 
-    // Match entities and folders
-    if (isSearch) {
-      const rgx = searchRegExp(query);
+  //   // Match entities and folders
+  //   if (isSearch) {
+  //     const rgx = searchRegExp(query);
 
-      // Match entity names
-      for (const entity of this.entities) {
-        if (entity.matchRegexp(rgx)) {
-          entityIds.add(entity.id);
-          if (entity.folder) folderIds.add(entity.folder.id);
-        }
-      }
+  //     // Match entity names
+  //     for (const entity of this.entities) {
+  //       if (entity.matchRegexp(rgx)) {
+  //         entityIds.add(entity.id);
+  //         if (entity.folder) folderIds.add(entity.folder.id);
+  //       }
+  //     }
 
-      // Match folder tree
-      const includeFolders = (folderIDs: Set<string>) => {
-        const parentIds = new Set(
-          this.folders.flatMap(({ data, _id }) =>
-            folderIDs.has(_id) && data.parent ? data.parent : [],
-          ),
-        );
-        if (parentIds.size) {
-          parentIds.forEach((p) => folderIds.add(p));
-          includeFolders(parentIds);
-        }
-      };
-      includeFolders(folderIds);
-    }
+  //     // Match folder tree
+  //     const includeFolders = (folderIDs: Set<string>) => {
+  //       const parentIds = new Set(
+  //         this.folders.flatMap(({ data, _id }) =>
+  //           folderIDs.has(_id) && data.parent ? data.parent : [],
+  //         ),
+  //       );
+  //       if (parentIds.size) {
+  //         parentIds.forEach((p) => folderIds.add(p));
+  //         includeFolders(parentIds);
+  //       }
+  //     };
+  //     includeFolders(folderIds);
+  //   }
 
-    // Toggle each directory item
-    for (const el of html.querySelectorAll<HTMLElement>('.directory-item')) {
-      const { entityId, folderId } = el.dataset;
+  //   // Toggle each directory item
+  //   for (const el of html.querySelectorAll<HTMLElement>('.directory-item')) {
+  //     const { entityId, folderId } = el.dataset;
 
-      // Entities
-      if (el.classList.contains('document') && entityId) {
-        el.style.display = !isSearch || entityIds.has(entityId) ? '' : 'none';
-      }
+  //     // Entities
+  //     if (el.classList.contains('document') && entityId) {
+  //       el.style.display = !isSearch || entityIds.has(entityId) ? '' : 'none';
+  //     }
 
-      // Folders
-      if (el.classList.contains('folder') && folderId) {
-        const match = isSearch && folderIds.has(folderId);
-        el.style.display = !isSearch || match ? '' : 'none';
-        if (isSearch && match) el.classList.remove('collapsed');
-        else
-          el.classList.toggle('collapsed', !game.folders._expanded[folderId]);
-      }
-    }
-  }
+  //     // Folders
+  //     if (el.classList.contains('folder') && folderId) {
+  //       const match = isSearch && folderIds.has(folderId);
+  //       el.style.display = !isSearch || match ? '' : 'none';
+  //       if (isSearch && match) el.classList.remove('collapsed');
+  //       else
+  //         el.classList.toggle('collapsed', !game.folders._expanded[folderId]);
+  //     }
+  //   }
+  // }
 
-  ItemDirectory.prototype._onSearchFilter = directorySearch;
-  ActorDirectory.prototype._onSearchFilter = directorySearch;
+  // ItemDirectory.prototype._onSearchFilter = directorySearch;
+  // ActorDirectory.prototype._onSearchFilter = directorySearch;
 
   const itemCreate = ({ itemInit }: ItemDataEvent) => {
     ItemEP.create(itemInit.data, itemInit.options);
