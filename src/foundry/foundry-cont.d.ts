@@ -543,11 +543,13 @@ declare global {
   interface ItemDirectory {
     readonly entities: ItemEP[];
     readonly folders: Folder[];
+    _onCreateEntry(ev: Event): Promise<unknown>;
   }
 
   interface ActorDirectory {
     readonly entities: ActorEP[];
     readonly folders: Folder[];
+    _onCreateEntry(ev: Event): Promise<unknown>;
   }
 
   interface ActorData {

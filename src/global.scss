@@ -809,6 +809,42 @@ sl-tooltip {
   }
 }
 
+#actors .document,
+#items .document,
+.compendium .directory-item.actor,
+.compendium .directory-item.item {
+  line-height: 16px !important;
+  padding: 0.25rem 0.5rem !important;
+  border: none !important;
+
+  >img {
+    grid-area: img;
+    margin-right: 0.5rem;
+  }
+
+  >h4 {
+    display: grid;
+    grid-area: name;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+    align-self: center;
+
+    a,
+    &::after {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &::after {
+      content: attr(data-type);
+      font-size: 12px;
+      color: var(--ep-color-text-alt);
+    }
+  }
+}
+
 
 // #actors .document,
 // #items .document,

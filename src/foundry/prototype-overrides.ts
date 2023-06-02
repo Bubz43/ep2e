@@ -65,6 +65,7 @@ export const overridePrototypes = () => {
     options: unknown,
     userId: string,
   ) {
+    console.log('token update', data, options, userId);
     _onUpdate.call(this, data, options, userId);
     if ((data.overlayEffect || data.effects) && this.hasActiveHUD) {
       readyCanvas()?.tokens.hud.refreshStatusIcons();
@@ -605,7 +606,7 @@ export const overridePrototypes = () => {
 
   const closeCreator = () => closeWindow(ItemCreator);
 
-  ItemDirectory.prototype._onCreateDocument = async function (ev: Event) {
+  ItemDirectory.prototype._onCreateEntry = async function (ev: Event) {
     stopEvent(ev);
 
     if (ev.currentTarget instanceof HTMLElement) {
@@ -623,7 +624,7 @@ export const overridePrototypes = () => {
     }
   };
 
-  ActorDirectory.prototype._onCreateDocument = async function (ev: Event) {
+  ActorDirectory.prototype._onCreateEntry = async function (ev: Event) {
     stopEvent(ev);
 
     if (ev.currentTarget instanceof HTMLElement) {
