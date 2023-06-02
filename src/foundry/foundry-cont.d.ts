@@ -74,7 +74,7 @@ export type TokenData = {
   flags: Record<string, unknown>;
   name: string;
   effects?: string[];
-  overlayEffect?: string;
+  overlayEffect?: string | null;
   displayName: ValueOf<CONST['TOKEN_DISPLAY_MODES']>;
   texture: {
     src: string;
@@ -99,7 +99,8 @@ export type TokenData = {
   lightAlpha: number;
   actorId: string;
   actorLink: boolean;
-  actorData: DeepPartial<ActorDatas>;
+  // actorData: DeepPartial<ActorDatas>;
+  delta: DeepPartial<ActorDatas>;
   disposition: ValueOf<CONST['TOKEN_DISPOSITIONS']>;
   displayBars: ValueOf<CONST['TOKEN_DISPLAY_MODES']>;
   randomImg: boolean;

@@ -65,7 +65,6 @@ export const overridePrototypes = () => {
     options: unknown,
     userId: string,
   ) {
-    console.log('token update', data, options, userId);
     _onUpdate.call(this, data, options, userId);
     if ((data.overlayEffect || data.effects) && this.hasActiveHUD) {
       readyCanvas()?.tokens.hud.refreshStatusIcons();
@@ -114,9 +113,10 @@ export const overridePrototypes = () => {
       typeof effect === 'string'
         ? effect
         : effect?.icon ?? CONFIG.controlIcons.defeated;
-    if (options.overlay)
-      await this._toggleOverlayEffect(texture, { active: options.active });
-    else {
+    if (options.overlay) {
+      const active = options.active ?? this.document.overlayEffect !== texture;
+      await this.document.update({ overlayEffect: active ? texture : '' }, {});
+    } else {
       const condition = iconToCondition.get(texture);
       if (!condition || !this.actor) {
         const effects = new Set(this.document.effects);
