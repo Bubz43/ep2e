@@ -341,7 +341,10 @@ export const overridePrototypes = () => {
     }
     const frag = new DocumentFragment();
     render(
-      html`<combat-view class="sidebar-tab" data-tab="combat"></combat-view>`,
+      html`<combat-view
+        class="sidebar-tab tab"
+        data-tab="combat"
+      ></combat-view>`,
       frag,
     );
     return $(frag);

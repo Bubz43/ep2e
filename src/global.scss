@@ -1031,6 +1031,9 @@ sl-tooltip {
   combat-view {
     overflow: visible;
 
+    &.active {
+      display: flex;
+    }
     &:not(.active) {
       display: none;
     }
