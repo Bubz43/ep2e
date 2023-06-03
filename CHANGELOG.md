@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.0] - 2023-06-03
+
+- Make compatible with foundry v11
+
 ## [1.0.7] - 2023-04-23
 
 - Add armor used option to Melee Weapons
