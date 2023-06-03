@@ -73,7 +73,6 @@ export class ActorEPSheet implements EntitySheet {
       );
     }
     this.actorUnsub = actor.subscribe((act) => {
-      console.log('bloop', act);
       if (!act) this.close();
       else this.render(false);
     });

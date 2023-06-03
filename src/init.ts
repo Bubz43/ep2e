@@ -547,7 +547,6 @@ for (const app of [ActorDirectory, ItemDirectory]) {
         const doc =
           documentId &&
           game[app === ActorDirectory ? 'actors' : 'items'].get(documentId);
-        console.log('doc', doc);
         if (!doc) return;
 
         if (isItem(doc)) {
