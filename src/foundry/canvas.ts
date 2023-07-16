@@ -99,7 +99,9 @@ export const placeMeasuredTemplate = (
       view.removeEventListener('contextmenu', cleanup);
       view.removeEventListener('wheel', rotateTemplate);
       window.removeEventListener('keydown', cancelOrSave, { capture: true });
+      console.log('template', template, 'layer', template.layer);
       template.layer.preview?.removeChildren();
+      template.destroy({});
       originalLayer.activate();
       overlay.faded = false;
       if (controlled && originalLayer === tokens) {
