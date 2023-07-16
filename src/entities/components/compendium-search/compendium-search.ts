@@ -58,7 +58,6 @@ export class CompendiumSearch extends LitElement {
     this.documentRenderer = this.documentName;
 
     const entries: FoundryDoc[] = [];
-    const { isGM } = game.user;
     const { world, system, modules } = this.sources;
 
     for (const pack of game.packs.values()) {
@@ -86,8 +85,7 @@ export class CompendiumSearch extends LitElement {
 
   private setDragData(ev: DragEvent) {
     if (ev.target instanceof HTMLElement) {
-      const { id, collection, uuid } = ev.target.dataset;
-      console.log('search uuid', uuid);
+      const { uuid } = ev.target.dataset;
       setDragDrop(ev, {
         type: this.documentRenderer as any,
         uuid: uuid!,
