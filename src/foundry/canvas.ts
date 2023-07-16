@@ -90,7 +90,7 @@ export const placeMeasuredTemplate = (
 
     stage.on('mousemove', moveTemplate).on('mousedown', createTemplate);
     view.addEventListener('contextmenu', cleanup);
-    view.addEventListener('wheel', rotateTemplate);
+    view.addEventListener('wheel', rotateTemplate, { passive: false });
     window.addEventListener('keydown', cancelOrSave, { capture: true });
     pan && canvas.pan(template.center);
 
