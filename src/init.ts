@@ -62,7 +62,6 @@ window.addEventListener('mouseup', setLastPosition, { capture: true });
 window.addEventListener('click', setLastPosition, { capture: true });
 window.addEventListener('drop', setLastPosition, { capture: true });
 
-
 Hooks.once('init', () => {
   gameSettings = registerEPSettings();
 
@@ -138,22 +137,22 @@ Hooks.once('ready', async () => {
             label: game.i18n.localize(tool.title),
             icon: html`<i class=${tool.icon}></i>`,
             activated: ui.controls.activeTool === tool.name || !!tool.active,
-            callback: () => {          
-              if ( tool.toggle ) {
+            callback: () => {
+              if (tool.toggle) {
                 tool.active = !tool.active;
-                if ( tool.onClick instanceof Function ) tool.onClick(tool.active);
+                if (tool.onClick instanceof Function) tool.onClick(tool.active);
                 ui.controls.render();
               }
-          
+
               // Handle Buttons
-              else if ( tool.button ) {
-                if ( tool.onClick instanceof Function ) tool.onClick();
+              else if (tool.button) {
+                if (tool.onClick instanceof Function) tool.onClick();
                 ui.controls.render();
               }
-          
+
               // Handle Tools
               else {
-                ui.controls.initialize({ tool: tool.name } as any)
+                ui.controls.initialize({ tool: tool.name } as any);
               }
             },
           })),
@@ -500,7 +499,7 @@ applicationHook({
   callback: async (compendium, [el]) => {
     if (compendium.collection.documentName === 'Item') {
       await compendium.collection.getDocuments();
-      for (const listItem of (el?.querySelectorAll('li.directory-item') ??
+      for (const listItem of (el?.querySelectorAll('li.directory-item.item') ??
         []) as HTMLLIElement[]) {
         if (listItem.offsetParent) {
           const doc: ItemEP = await compendium.collection.getDocument(
@@ -514,7 +513,7 @@ applicationHook({
       }
     } else if (compendium.collection.documentName === 'Actor') {
       await compendium.collection.getDocuments();
-      for (const listItem of (el?.querySelectorAll('li.directory-item') ??
+      for (const listItem of (el?.querySelectorAll('li.directory-item.actor') ??
         []) as HTMLLIElement[]) {
         if (listItem.offsetParent) {
           const doc: ActorEP = await compendium.collection.getDocument(

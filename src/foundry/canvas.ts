@@ -90,7 +90,7 @@ export const placeMeasuredTemplate = (
 
     stage.on('mousemove', moveTemplate).on('mousedown', createTemplate);
     view.addEventListener('contextmenu', cleanup);
-    view.addEventListener('wheel', rotateTemplate);
+    view.addEventListener('wheel', rotateTemplate, { passive: false });
     window.addEventListener('keydown', cancelOrSave, { capture: true });
     pan && canvas.pan(template.center);
 
@@ -99,7 +99,9 @@ export const placeMeasuredTemplate = (
       view.removeEventListener('contextmenu', cleanup);
       view.removeEventListener('wheel', rotateTemplate);
       window.removeEventListener('keydown', cancelOrSave, { capture: true });
+      console.log('template', template, 'layer', template.layer);
       template.layer.preview?.removeChildren();
+      template.destroy({});
       originalLayer.activate();
       overlay.faded = false;
       if (controlled && originalLayer === tokens) {

@@ -71,12 +71,11 @@ export class ActorEPSheet implements EntitySheet {
           complete: () => this.close(),
         },
       );
-    } else {
-      this.actorUnsub = actor.subscribe((act) => {
-        if (!act) this.close();
-        else this.render(false);
-      });
     }
+    this.actorUnsub = actor.subscribe((act) => {
+      if (!act) this.close();
+      else this.render(false);
+    });
     Hooks.on('canvasReady', this.canvasReadyCallback);
   }
 

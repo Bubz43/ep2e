@@ -74,7 +74,7 @@ export type TokenData = {
   flags: Record<string, unknown>;
   name: string;
   effects?: string[];
-  overlayEffect?: string;
+  overlayEffect?: string | null;
   displayName: ValueOf<CONST['TOKEN_DISPLAY_MODES']>;
   texture: {
     src: string;
@@ -99,7 +99,8 @@ export type TokenData = {
   lightAlpha: number;
   actorId: string;
   actorLink: boolean;
-  actorData: DeepPartial<ActorDatas>;
+  // actorData: DeepPartial<ActorDatas>;
+  delta: DeepPartial<ActorDatas>;
   disposition: ValueOf<CONST['TOKEN_DISPOSITIONS']>;
   displayBars: ValueOf<CONST['TOKEN_DISPLAY_MODES']>;
   randomImg: boolean;
@@ -287,6 +288,7 @@ declare global {
 
   interface CompendiumCollection {
     documentName: EntityName;
+    visible: boolean;
     metadata: {
       id: string;
       name: string;
@@ -542,11 +544,13 @@ declare global {
   interface ItemDirectory {
     readonly entities: ItemEP[];
     readonly folders: Folder[];
+    _onCreateEntry(ev: Event): Promise<unknown>;
   }
 
   interface ActorDirectory {
     readonly entities: ActorEP[];
     readonly folders: Folder[];
+    _onCreateEntry(ev: Event): Promise<unknown>;
   }
 
   interface ActorData {

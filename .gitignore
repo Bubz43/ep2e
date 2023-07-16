@@ -5,3 +5,12 @@ node_modules
 foundry.d.ts
 latest.zip
 foundry-8.d.ts
+
+packs/**/*.log
+packs/**/*.old
+packs/**/*.ldb
+packs/**/LOCK
+packs/**/MANIFEST
+packs/**/CURRENT
+packs/**/LOG
+packs/**/MANIFEST-*

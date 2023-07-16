@@ -3,7 +3,7 @@ import { localize } from '@src/foundry/localization';
 import { canViewActor } from '@src/foundry/misc-helpers';
 import { emitEPSocket, SystemSocketData } from '@src/foundry/socket';
 import { EP } from '@src/foundry/system';
-import { compact, flatMap, forEach, map, pipe } from 'remeda';
+import { compact, flatMap, forEach, map, mapKeys, pipe } from 'remeda';
 import type { SetRequired } from 'type-fest';
 import type { DeepPartial } from 'utility-types';
 import { ActorType, ItemType, sleeveTypes } from '../entity-types';
@@ -73,7 +73,12 @@ export class ActorEP extends Actor {
           complete: () => sub(null),
         },
       );
-      return () => tokenSub?.unsubscribe();
+      this.subs.add(sub);
+      sub(this);
+      return () => {
+        tokenSub?.unsubscribe();
+        this.subs.delete(sub);
+      };
     }
     this.subs.add(sub);
     sub(this);

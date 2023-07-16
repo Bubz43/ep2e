@@ -116,16 +116,16 @@ export const updateManyActors = async (actors: ActorEP[]): Promise<unknown> => {
         pipe(
           tokenActors,
           filter((tokenActor) => tokenActor.token!.parent === scene),
-          map(
-            (tokenActor) =>
-              new UpdateStore({
-                getData: () => tokenActor.token!.toJSON(),
-                isEditable: () => true,
-                setData: (update) => tokenActor.update(update),
-              })
-                .path('actorData')
-                .append(tokenActor.updater as any), // Deep partial on actorData messes this up
-          ),
+          map((tokenActor) => {
+            console.log('token actor', tokenActor);
+            return new UpdateStore({
+              getData: () => tokenActor.token!.toJSON(),
+              isEditable: () => true,
+              setData: (update) => tokenActor.update(update),
+            })
+              .path('delta')
+              .append(tokenActor.updater as any);
+          }),
           UpdateStore.prepUpdateMany,
         ),
       ),
