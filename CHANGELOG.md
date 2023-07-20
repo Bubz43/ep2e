@@ -1,6 +1,11 @@
 # Changelog
 
-## [1.1.0] - 2023-06-03
+## [1.1.1] - 2023-07-20
+
+- Fix clipped chat popover
+- Fix scenes list context menu hover
+
+## [1.1.0] - 2023-07-16
 
 - Make compatible with foundry v11
 
