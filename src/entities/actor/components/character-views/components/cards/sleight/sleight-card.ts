@@ -176,7 +176,7 @@ export class SleightCard extends ItemCardBase {
       entities: { actor: this.character.actor, token },
       relativeEl: this,
       getState: (actor) => {
-        if (actor.proxy.type === ActorType.Character && actor.proxy.psi) {
+        if (actor.proxy.type === ActorType.Character) {
           return {
             character: actor.proxy,
             sleight: this.item,

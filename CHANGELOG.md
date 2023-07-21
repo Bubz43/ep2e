@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.1.2] - 2023-07-21
+
+- Allow sleight use without sub-strain
+- Fix text clipping on firefox select
+
 ## [1.1.1] - 2023-07-20
 
 - Fix clipped chat popover
