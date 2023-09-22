@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.3] - 2023-09-22
+
+- Fix placement of chat jump to bottom button
+
 ## [1.1.2] - 2023-07-21
 
 - Allow sleight use without sub-strain

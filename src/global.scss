@@ -60,6 +60,23 @@ body {
   font-size: 14px;
 }
 
+.system-ep2e .jump-to-bottom {
+  width: 100%;
+  border-radius:0.5rem;
+  backdrop-filter:blur(2px);
+  bottom: 140px;
+  z-index: 20000;
+  a {
+    display: flex;
+    justify-content:center;
+    gap:0.5rem;
+    align-items:center;
+    i {
+      margin-bottom:-0.25rem;
+    }
+  }
+}
+
 ep-overlay {
   @include styled-scrollbars;
   @include widgetless-number-inputs;
