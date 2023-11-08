@@ -2,11 +2,13 @@
 
 Heavily automated [Eclipse Phase 2e](https://www.eclipsephase.com) system.
 
-## WIP
+## Maintenance mode 
 
-The system is a work in progress. It is largely stable, but there are rough edges and unfinished features. It is foundry 11 compatible. Discoverability of features is sometimes a bit lacking, and a [discord](https://discord.gg/zs4jMnFqjx) server is available if you have any questions or want to talk with other users of the system.
+The is largely stable, but there are rough edges and unfinished features. It is foundry 11 compatible. Discoverability of features is sometimes a bit lacking, and a [discord](https://discord.gg/zs4jMnFqjx) server is available if you have any questions or want to talk with other users of the system. It is currently in maintenance mode (critical bugs/foundry compat only) until the rewrite is complete.
 
-### Notable missing features
+### Notable missing features and issues
+
+- Transations are not setup properly. For languages other than English you would be best served waiting for the rewrite. 
 
 - Proper support for hives
 - Modular morphs, e.g. flexbots
