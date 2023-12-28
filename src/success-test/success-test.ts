@@ -116,7 +116,7 @@ export const createSuccessTestModifier = ({
   Omit<SimpleSuccessTestModifier, 'id'>
 > = {}): SimpleSuccessTestModifier => ({
   name,
-  value,
+  value: clamp(Math.trunc(value), { min: -99, max: 99 }),
   ...rest,
   id: ++lastId,
 });

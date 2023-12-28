@@ -268,7 +268,7 @@ export class ThrownAttackTest extends SkillTest {
       calledShot,
     } = throwing;
 
-    await createMessage({
+    const message = await createMessage({
       data: {
         header: {
           heading: `${weapon.name} ${localize('thrownAttack')}`,
@@ -337,5 +337,7 @@ export class ThrownAttackTest extends SkillTest {
       });
     }
     await weapon.consumeUnit();
+
+    return message.id;
   }
 }

@@ -34,7 +34,7 @@ import {
   SimpleSuccessTestModifier,
   successTestEffectMap,
 } from './success-test';
-import { SuccessTestBase } from './success-test-base';
+import { SuccessTestBase, SuccessTestBaseInit } from './success-test-base';
 
 export type AptitudeCheckInit = {
   ego: Ego;
@@ -47,6 +47,7 @@ export type AptitudeCheckInit = {
   techSource?: PhysicalTech | null;
   halve?: boolean;
   quick?: boolean;
+  onComplete?: SuccessTestBaseInit['onComplete'];
 };
 
 export class AptitudeCheck extends SuccessTestBase {
@@ -77,6 +78,7 @@ export class AptitudeCheck extends SuccessTestBase {
     techSource,
     halve,
     quick,
+    onComplete,
   }: AptitudeCheckInit) {
     super({
       action:
@@ -85,6 +87,7 @@ export class AptitudeCheck extends SuccessTestBase {
           type: ActionType.Automatic,
           subtype: defaultCheckActionSubtype(aptitude),
         }),
+      onComplete,
     });
     this.ego = ego;
     this.character = character;
@@ -336,7 +339,7 @@ export class AptitudeCheck extends SuccessTestBase {
         }));
     }
 
-    await createMessage({
+    const message = await createMessage({
       data: {
         header: {
           heading: name,
@@ -361,7 +364,7 @@ export class AptitudeCheck extends SuccessTestBase {
       visibility: settings.visibility,
     });
 
-    this.character?.updater.batchCommits(() => {
+    await this.character?.updater.batchCommits(() => {
       if (pools.active) {
         this.character?.addToSpentPools({
           pool: pools.active[0].type,
@@ -387,5 +390,7 @@ export class AptitudeCheck extends SuccessTestBase {
           .commit(addFeature(pain));
       }
     });
+
+    return message.id;
   }
 }
