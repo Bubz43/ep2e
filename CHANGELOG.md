@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.4] - 2023-12-28
+
+- Expand macro api to allow modifiers, and returning the created message id
+
 ## [1.1.3] - 2023-09-22
 
 - Fix placement of chat jump to bottom button
