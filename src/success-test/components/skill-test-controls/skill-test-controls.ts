@@ -5,7 +5,14 @@ import { localize } from '@src/foundry/localization';
 import { overlay } from '@src/init';
 import { SkillTest, SkillTestInit } from '@src/success-test/skill-test';
 import { notEmpty } from '@src/utility/helpers';
-import { customElement, html, LitElement, query, state } from 'lit-element';
+import {
+  customElement,
+  html,
+  LitElement,
+  property,
+  query,
+  state,
+} from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import type { Subscription } from 'rxjs';
 import { traverseActiveElements } from 'weightless';
@@ -18,6 +25,7 @@ type Init = {
   };
   getState: (actor: ActorEP) => SkillTestInit | null;
   relativeEl?: HTMLElement;
+  onCancel?: VoidFunction;
 };
 
 @customElement('skill-test-controls')
@@ -49,8 +57,15 @@ export class SkillTestControls extends LitElement {
 
   @state() private test?: SkillTest;
 
+  private wasCompleted = false;
+
+  @property({ attribute: false }) onCancel?: VoidFunction;
+
   disconnectedCallback() {
     this.unsub();
+    if (!this.wasCompleted) {
+      this.onCancel?.();
+    }
     super.disconnectedCallback();
   }
 
@@ -75,7 +90,10 @@ export class SkillTestControls extends LitElement {
           this.subs.add(
             new SkillTest(info).subscribe({
               next: (test) => (this.test = test),
-              complete: () => this.win?.close(),
+              complete: () => {
+                this.wasCompleted = true;
+                return this.win?.close();
+              },
             }),
           );
         }

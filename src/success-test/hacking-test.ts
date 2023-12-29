@@ -107,7 +107,7 @@ export class HackingTest extends SkillTest {
 
     const { software, primaryAttack, attackTarget } = hack;
 
-    await createMessage({
+    const message = await createMessage({
       data: {
         header: {
           heading: `${software.name} ${localize('hacking')} ${localize(
@@ -157,10 +157,11 @@ export class HackingTest extends SkillTest {
     });
 
     if (pools.active) {
-      this.character?.addToSpentPools({
+      await this.character?.addToSpentPools({
         pool: pools.active[0].type,
         points: 1,
       });
     }
+    return message.id;
   }
 }

@@ -271,7 +271,7 @@ export class MeleeAttackTest extends SkillTest {
     const { weapon, primaryAttack, charging, attackTarget, ...meleeSettings } =
       melee;
 
-    await createMessage({
+    const message = await createMessage({
       data: {
         header: {
           heading: `${weapon?.name || localize('unarmed')} ${localize(
@@ -332,10 +332,12 @@ export class MeleeAttackTest extends SkillTest {
     });
 
     if (pools.active) {
-      this.character?.addToSpentPools({
+      await this.character?.addToSpentPools({
         pool: pools.active[0].type,
         points: 1,
       });
     }
+
+    return message.id;
   }
 }

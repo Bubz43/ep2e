@@ -222,7 +222,7 @@ export class ReputationFavor extends SuccessTestBase {
         }));
     }
 
-    await createMessage({
+    const message = await createMessage({
       data: {
         header: {
           heading: name,
@@ -254,7 +254,7 @@ export class ReputationFavor extends SuccessTestBase {
       visibility: settings.visibility,
     });
 
-    this.character.updater.batchCommits(() => {
+    await this.character.updater.batchCommits(() => {
       if (pools.active) {
         this.character?.addToSpentPools({
           pool: pools.active[0].type,
@@ -278,5 +278,7 @@ export class ReputationFavor extends SuccessTestBase {
         }
       }
     });
+
+    return message.id;
   }
 }

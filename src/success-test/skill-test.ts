@@ -29,7 +29,7 @@ import {
   SimpleSuccessTestModifier,
   successTestEffectMap,
 } from './success-test';
-import { SuccessTestBase } from './success-test-base';
+import { SuccessTestBase, SuccessTestBaseInit } from './success-test-base';
 
 export type SkillTestInit = {
   ego: Ego;
@@ -42,6 +42,7 @@ export type SkillTestInit = {
   halve?: boolean;
   modifiers?: SimpleSuccessTestModifier[];
   quick?: boolean;
+  onComplete?: SuccessTestBaseInit['onComplete'];
 };
 
 export type SkillState = {
@@ -104,9 +105,11 @@ export class SkillTest extends SuccessTestBase {
     halve,
     modifiers,
     quick,
+    onComplete,
   }: SkillTestInit) {
     super({
       action: action ?? createAction(defaultSkillAction(skill)),
+      onComplete,
     });
     this.ego = ego;
     this.character = character;
@@ -287,7 +290,7 @@ export class SkillTest extends SuccessTestBase {
   protected async createMessage() {
     const { settings, pools, action, name, opposing, techSource } = this;
 
-    await createMessage({
+    const message = await createMessage({
       data: {
         header: {
           heading: opposing
@@ -316,10 +319,12 @@ export class SkillTest extends SuccessTestBase {
     });
 
     if (pools.active) {
-      this.character?.addToSpentPools({
+      await this.character?.addToSpentPools({
         pool: pools.active[0].type,
         points: 1,
       });
     }
+
+    return message.id;
   }
 }

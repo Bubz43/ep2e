@@ -282,7 +282,7 @@ export class PsiTest extends SkillTest {
   protected async createMessage() {
     const { settings, pools, action, name, techSource } = this;
     const { sleight, push, sideEffectNegation, attackTargets } = this.use;
-    await createMessage({
+    const message = await createMessage({
       data: {
         header: {
           heading: sleight.name,
@@ -338,7 +338,7 @@ export class PsiTest extends SkillTest {
       visibility: settings.visibility,
     });
 
-    this.character.updater.batchCommits(async () => {
+    await this.character.updater.batchCommits(async () => {
       if (this.psi?.hasVariableInfection) {
         await this.psi.updateInfectionRating(
           this.psi.infectionRating + sleight.infectionMod * (push ? 2 : 1),
@@ -367,5 +367,7 @@ export class PsiTest extends SkillTest {
         });
       }
     });
+
+    return message.id;
   }
 }

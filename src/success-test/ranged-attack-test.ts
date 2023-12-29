@@ -497,7 +497,7 @@ export class RangedAttackTest extends SkillTest {
       firingModeGroup,
     } = firing;
 
-    await createMessage({
+    const message = await createMessage({
       data: {
         header: {
           heading: `${weapon.fullName} ${localize('rangedAttack')}`,
@@ -572,5 +572,7 @@ export class RangedAttackTest extends SkillTest {
       });
     }
     await weapon.fire(getFiringModeGroupShots(firingModeGroup));
+
+    return message.id;
   }
 }

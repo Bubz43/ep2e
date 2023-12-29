@@ -114,10 +114,10 @@ export class SoftwareSkillTest extends SuccessTestBase {
     return data;
   }
 
-  protected createMessage() {
+  protected async createMessage() {
     const { software, character, settings, action } = this;
 
-    createMessage({
+    const message = await createMessage({
       data: {
         header: {
           heading: this.name,
@@ -140,5 +140,7 @@ export class SoftwareSkillTest extends SuccessTestBase {
       entity: character,
       visibility: settings.visibility,
     });
+
+    return message.id;
   }
 }

@@ -62,7 +62,7 @@ export class InfectionTest extends SuccessTestBase {
 
   async createMessage() {
     const { clampedTarget, settings, interference } = this;
-    await createMessage({
+    const message = await createMessage({
       data: {
         header: {
           heading: `${localize('infectionTest')}`,
@@ -95,11 +95,12 @@ export class InfectionTest extends SuccessTestBase {
       visibility: settings.visibility,
     });
     if (this.sleightModifier) {
-      this.psi.updateInfectionRating(
+      await this.psi.updateInfectionRating(
         this.psi.infectionRating + this.sleightModifier.value,
       );
     } else if (interference) {
-      this.psi.setCriticalSuccessState('interference', false);
+      await this.psi.setCriticalSuccessState('interference', false);
     }
+    return message.id;
   }
 }

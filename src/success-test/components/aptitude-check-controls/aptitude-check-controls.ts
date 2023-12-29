@@ -20,6 +20,7 @@ import {
   customElement,
   html,
   LitElement,
+  property,
   PropertyValues,
   query,
   state,
@@ -33,6 +34,7 @@ type Init = {
   entities: AptitudeCheckControls['entities'];
   getState: AptitudeCheckControls['getState'];
   relativeEl?: HTMLElement;
+  onCancel?: VoidFunction;
 };
 
 @customElement('aptitude-check-controls')
@@ -85,6 +87,8 @@ export class AptitudeCheckControls extends LitElement {
 
   @state() private test?: AptitudeCheck;
 
+  private wasCompleted = false;
+
   update(
     changedProps: PropertyValues<
       this & { entities: { actor: ActorEP; token?: MaybeToken } }
@@ -102,7 +106,10 @@ export class AptitudeCheckControls extends LitElement {
                 ...info,
               }).subscribe({
                 next: (test) => (this.test = test),
-                complete: () => this.win?.close(),
+                complete: () => {
+                  this.wasCompleted = true;
+                  this.win?.close();
+                },
               }),
             );
           }
@@ -113,9 +120,14 @@ export class AptitudeCheckControls extends LitElement {
     super.update(changedProps);
   }
 
+  @property({ attribute: false }) onCancel?: VoidFunction;
+
   disconnectedCallback() {
     this.unsub();
     AptitudeCheckControls.openWindows.delete(this.entities.actor);
+    if (!this.wasCompleted) {
+      this.onCancel?.();
+    }
     super.disconnectedCallback();
   }
 
@@ -130,6 +142,7 @@ export class AptitudeCheckControls extends LitElement {
   setState(init: Init) {
     this.entities = init.entities;
     this.getState = init.getState;
+    this.onCancel = init.onCancel;
   }
 
   render() {

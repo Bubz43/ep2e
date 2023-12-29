@@ -27,13 +27,14 @@ import {
   successTestTargetClamp,
 } from './success-test';
 
-export type SuccessTestInit = {
+export type SuccessTestBaseInit = {
   action?: Action;
+  onComplete?: (messageId: string | null) => void;
 };
 
 export abstract class SuccessTestBase {
   abstract get basePoints(): number;
-  protected abstract createMessage(): void | Promise<void>;
+  protected abstract createMessage(): Promise<string | null>;
   readonly [immerable] = true;
 
   readonly fullMoveModifier = createSuccessTestModifier({
@@ -52,7 +53,9 @@ export abstract class SuccessTestBase {
 
     if (nextState.settings.ready) {
       this.state.complete();
-      nextState.createMessage();
+      nextState.createMessage().then((messageId) => {
+        this.onComplete?.(messageId);
+      });
     } else this.state.next(nextState);
   }
 
@@ -141,7 +144,9 @@ export abstract class SuccessTestBase {
     return fromEffects + fromSimple;
   }
 
-  constructor({ action }: SuccessTestInit = {}) {
+  readonly onComplete: SuccessTestBaseInit['onComplete'];
+
+  constructor({ action, onComplete }: SuccessTestBaseInit = {}) {
     this.action = {
       ...(action ?? createAction({ type: ActionType.Automatic })),
       fullMove: false,
@@ -150,6 +155,7 @@ export abstract class SuccessTestBase {
         (draft, changed) => void this.updateAction(draft, changed),
       ),
     };
+    this.onComplete = onComplete;
   }
 
   protected updateAction(draft: Draft<this>, changed: Partial<Action>) {
