@@ -265,6 +265,7 @@ declare global {
     actor?: ActorEP;
     toJSON(): TokenData;
     sheet: TokenConfig;
+    baseActor?: ActorEP
   }
 
   interface Combat {
