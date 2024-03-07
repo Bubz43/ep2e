@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.5] - 2024-03-07
+
+- Fix token sheets occasionally opening when prototype token settings are changed
+
 ## [1.1.4] - 2023-12-28
 
 - Expand macro api to allow modifiers, and returning the created message id

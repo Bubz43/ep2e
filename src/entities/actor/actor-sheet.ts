@@ -65,7 +65,7 @@ export class ActorEPSheet implements EntitySheet {
                 actorSheets.set(token.actor, this);
               }
               this.actor = token.actor;
-              this.render(actorChange, { token });
+              this.render(false);
             } else this.close();
           },
           complete: () => this.close(),
@@ -251,6 +251,7 @@ export class ActorEPSheet implements EntitySheet {
 
   render(force: boolean, { token }: { token?: TokenDocument | null } = {}) {
     if (!force && !this.isRendered) return this;
+
 
     if (force) {
       this._token = token;
