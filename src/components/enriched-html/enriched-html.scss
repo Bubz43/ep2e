@@ -23,7 +23,9 @@
 }
 
 a.inline-roll,
-a.entity-link {
+a.content-link {
+  display: inline-flex;
+  align-items: center;
   background: transparent !important;
   color: var(--ep-color-primary-alt) !important;
   border: none !important;
@@ -32,7 +34,9 @@ a.entity-link {
   }
   i {
     pointer-events: none;
+    color: currentColor;
   }
+  
 }
 
 hr {

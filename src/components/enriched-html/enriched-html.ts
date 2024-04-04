@@ -8,7 +8,7 @@ const findMatch = (ev: Event) => {
     if (!(eventTarget instanceof HTMLAnchorElement)) return;
     ev.stopPropagation();
 
-    if (eventTarget.matches('.entity-link') && ev.type !== 'mouseover') {
+    if (eventTarget.matches('.content-link') && ev.type !== 'mouseover') {
       return entityLinkHandler($(eventTarget), ev.type);
     } else if (eventTarget.matches('.inline-roll') && ev.type !== 'mousedown') {
       return inlineRollHandler($(eventTarget), ev.type);
@@ -21,9 +21,9 @@ const entityLinkHandler = (anchor: JQuery, eventType: string) => {
     anchor.one('click', TextEditor._onClickContentLink).trigger('click');
   else if (eventType === 'mousedown') {
     anchor
-      .one('dragstart', TextEditor._onDragEntityLink)
+      .one('dragstart', TextEditor._onDragContentLink)
       .one('mouseup', () =>
-        anchor.off('dragstart', TextEditor._onDragEntityLink),
+        anchor.off('dragstart', TextEditor._onDragContentLink),
       );
   }
 };
