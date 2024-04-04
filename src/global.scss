@@ -319,7 +319,8 @@ ep-overlay {
     }
   }
 
-  .entity-link {
+  .inline-roll,
+  .content-link {
     background: transparent !important;
     color: var(--ep-color-primary-alt) !important;
     border: none !important;
@@ -1352,6 +1353,7 @@ section.chat-sidebar {
 
     &.non-ep {
       padding: 0.25rem 0.5rem;
+
     }
   }
 

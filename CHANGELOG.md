@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.6] - 2024-04-04
+
+- Fix styling for content links and inline rolls
+
 ## [1.1.5] - 2024-03-07
 
 - Fix token sheets occasionally opening when prototype token settings are changed
