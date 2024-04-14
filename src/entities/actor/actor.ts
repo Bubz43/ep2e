@@ -168,12 +168,18 @@ export class ActorEP extends Actor {
           this.prepareData();
           return itemIds;
         },
-        remove: async (...itemIds) => {
+        remove: async (...initialItemIds) => {
+          const itemIds: string[] = [];
+          const items: ItemEP[] = [];
+          for (const id of initialItemIds) {
+            const item = this.items.get(id);
+            if (item !== undefined) {
+              items.push(item);
+              itemIds.push(id);
+            }
+          }
           this.emitItemSocket({ type: 'remove', itemIds });
-          pipe(
-            itemIds,
-            flatMap((id) => this.items.get(id) || []),
-            forEach((item) => {
+          items.forEach((item) => {
               if (
                 !(
                   item.proxy.type === ItemType.Substance &&
@@ -184,8 +190,7 @@ export class ActorEP extends Actor {
               }
 
               item?._onDelete({}, game.user.id);
-            }),
-          );
+          })
 
           await this.deleteEmbeddedDocuments('Item', itemIds);
           this.invalidated = true;
