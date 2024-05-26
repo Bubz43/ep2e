@@ -103,9 +103,12 @@ export class HackingTest extends SkillTest {
   }
 
   protected async createMessage() {
-    const { settings, pools, action, hack, testMessageData, attack } = this;
+    const { settings, pools, action, hack, attack } = this;
 
     const { software, primaryAttack, attackTarget } = hack;
+
+    const testMessageData = await this.getTestMessageData();
+
 
     const message = await createMessage({
       data: {

@@ -77,7 +77,7 @@ export const onChatMessageRender = (message: ChatMessageEP, j: JQuery) => {
     ? findToken(speakerToId)?.texture.src
     : speakerToId.actorId
     ? findActor(speakerToId)?.img
-    : message.user?.avatar;
+    : message.author?.avatar;
 
   const fragment = new DocumentFragment();
 
@@ -92,10 +92,10 @@ export const onChatMessageRender = (message: ChatMessageEP, j: JQuery) => {
   el.querySelector('.message-header')?.append(fragment);
 
   // TODO This is wonky if message is whisper
-  if (message.user && message.user.name !== message.alias) {
+  if (message.author && message.author.name !== message.alias) {
     el.querySelector('.message-sender')?.setAttribute(
       'data-author',
-      message.user.name,
+      message.author.name,
     );
   }
 
@@ -110,7 +110,7 @@ export const onChatMessageRender = (message: ChatMessageEP, j: JQuery) => {
     );
   }
 
-  el.style.setProperty('--author-color', message.user?.color || 'currentColor');
+  el.style.setProperty('--author-color', message.author?.color || 'currentColor');
 
   if (epData) {
     // TODO add from before header

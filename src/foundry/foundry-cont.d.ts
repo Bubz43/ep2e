@@ -502,7 +502,7 @@ declare global {
     content: string;
     rolls: string[]; // RollData;
     // roll?: string | null; // RollData;
-    user: string;
+    author: string;
     type: number;
     timestamp: number;
     _id: string;
@@ -511,7 +511,7 @@ declare global {
 
   interface ChatMessage extends ChatMessageData {
     apps: Record<string | number, Application>;
-    user: UserEP | undefined;
+    author: UserEP | undefined;
     _roll?: Roll | null;
     toJSON(): ChatMessageData;
   }

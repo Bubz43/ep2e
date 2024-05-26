@@ -48,7 +48,7 @@ import { openMenu } from './open-menu';
 import { rollSuccessTest } from './success-test/success-test';
 import { notEmpty } from './utility/helpers';
 import { localImage } from './utility/images';
-import { readyCanvas } from './foundry/canvas';
+
 
 export let gameSettings: ReturnType<typeof registerEPSettings>;
 export let overlay: EPOverlay;
@@ -236,7 +236,7 @@ Hooks.once('ready', async () => {
                 submitButtonText: 'Roll Success Test',
                 submitEmpty: true,
                 props: { target: 50 },
-                update: (changed) => {
+                update: async (changed) => {
                   const { target = 50 } = changed;
                   createMessage({
                     data: {
@@ -245,7 +245,7 @@ Hooks.once('ready', async () => {
                         parts: [{ name: 'Base', value: target }],
                         states: [
                           {
-                            ...rollSuccessTest({ target }),
+                            ...(await rollSuccessTest({ target })),
                             action: 'initial',
                           },
                         ],
@@ -363,29 +363,29 @@ Hooks.once('ready', async () => {
   //   },
   // });
 
-  mutateEntityHook({
-    entity: ActorEP,
-    hook: 'on',
-    event: MutateEvent.Update,
-    callback: (actor) => {
-      if (actor.isToken) {
-        actor.token?.object?.drawEffects();
-      } else {
-        actor
-          .getActiveTokens(true, false)
-          .forEach((t) => (t as Token).drawEffects());
-      }
+  // mutateEntityHook({
+  //   entity: ActorEP,
+  //   hook: 'on',
+  //   event: MutateEvent.Update,
+  //   callback: (actor) => {
+  //     if (actor.isToken) {
+  //       actor.token?.object?.drawEffects();
+  //     } else {
+  //       actor
+  //         .getActiveTokens(true, false)
+  //         .forEach((t) => (t as Token).drawEffects());
+  //     }
 
-      if (!actor.token && !actor.compendium) {
-        const sidebarListItem = document.querySelector(
-          `.sidebar-tab.directory .directory-item.actor[data-document-id="${actor.id}"]`,
-        );
-        if (sidebarListItem instanceof HTMLElement) {
-          applyFullActorItemInfo(actor, sidebarListItem);
-        }
-      }
-    },
-  });
+  //     if (!actor.token && !actor.compendium) {
+  //       const sidebarListItem = document.querySelector(
+  //         `.sidebar-tab.directory .directory-item.actor[data-document-id="${actor.id}"]`,
+  //       );
+  //       if (sidebarListItem instanceof HTMLElement) {
+  //         applyFullActorItemInfo(actor, sidebarListItem);
+  //       }
+  //     }
+  //   },
+  // });
 
   // mutateEntityHook({
   //   entity: ItemEP,
@@ -466,18 +466,18 @@ window.addEventListener(
   { capture: true },
 );
 
-for (const app of [Dialog, PermissionControl, FolderConfig, FilePicker]) {
-  applicationHook({
-    app,
-    hook: 'on',
-    event: 'render',
-    callback: (dialog) => {
-      const closestItem = lastClicked?.closest<HTMLElement>('.document');
-      const relative = closestItem || lastClicked;
-      if (relative?.isConnected) positionApp(dialog, relative);
-    },
-  });
-}
+// for (const app of [Dialog, PermissionControl, FolderConfig, FilePicker]) {
+//   applicationHook({
+//     app,
+//     hook: 'on',
+//     event: 'render',
+//     callback: (dialog) => {
+//       const closestItem = lastClicked?.closest<HTMLElement>('.document');
+//       const relative = closestItem || lastClicked;
+//       if (relative?.isConnected) positionApp(dialog, relative);
+//     },
+//   });
+// }
 
 window.addEventListener(
   'keydown',

@@ -256,7 +256,6 @@ export class ThrownAttackTest extends SkillTest {
       pools,
       action,
       throwing,
-      testMessageData,
       rangeDamageModifier,
     } = this;
 
@@ -267,6 +266,8 @@ export class ThrownAttackTest extends SkillTest {
       explosiveSettings,
       calledShot,
     } = throwing;
+
+    const testMessageData = await this.getTestMessageData();
 
     const message = await createMessage({
       data: {

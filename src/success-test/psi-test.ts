@@ -282,6 +282,8 @@ export class PsiTest extends SkillTest {
   protected async createMessage() {
     const { settings, pools, action, name, techSource } = this;
     const { sleight, push, sideEffectNegation, attackTargets } = this.use;
+    const testMessageData = await this.getTestMessageData();
+
     const message = await createMessage({
       data: {
         header: {
@@ -302,7 +304,7 @@ export class PsiTest extends SkillTest {
           description: sleight.description,
         },
         successTest: {
-          ...this.testMessageData,
+          ...testMessageData,
           defaultSuperiorEffect: sleight.hasAttack
             ? SuperiorResultEffect.Damage
             : undefined,

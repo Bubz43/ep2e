@@ -53,6 +53,13 @@ export class EnrichedHTML extends LitElement {
 
   @property({ type: String }) content = '';
 
+  enrichedContent: string = "";
+
+  async performUpdate() {
+   this.enrichedContent = await TextEditor.enrichHTML(this.content);
+   return super.performUpdate()
+  }
+
   connectedCallback() {
     this.addEventListener('click', findMatch, { capture: true });
     this.addEventListener('mousedown', findMatch);
@@ -77,7 +84,7 @@ export class EnrichedHTML extends LitElement {
       />
       <link rel="stylesheet" href="css/mce.css" media="all" />
       ${unsafeHTML(
-        TextEditor.enrichHTML(this.content, { async: false } as any),
+        this.enrichedContent
       )}
     `;
   }
