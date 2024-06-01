@@ -42,7 +42,8 @@ export abstract class HealthEditBase<
   minDV: number = 0;
 
   async performUpdate() {
-   this.minDV = await rollLimit(this.editableDamage.formula, 'min');
+  const { editableDamage } = this;
+   this.minDV = editableDamage?.formula ? await rollLimit(this.editableDamage.formula, 'min') : 0;
    return super.performUpdate()
   }
 

@@ -98,7 +98,7 @@ export const createActorEntity = <T extends ActorType>({
     name,
     type,
     img: CONST.DEFAULT_TOKEN,
-    permission: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER },
+    ownership: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER },
     _id,
     system: modelData,
     flags: {},
@@ -217,7 +217,7 @@ export const createItemEntity = <T extends ItemType>({
     _id: stringID(16),
     system: modelData,
     img: CONST.DEFAULT_TOKEN,
-    permission: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER },
+    ownership: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER },
     flags: {},
     ...seed,
   };

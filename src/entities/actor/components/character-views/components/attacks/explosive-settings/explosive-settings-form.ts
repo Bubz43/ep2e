@@ -111,7 +111,11 @@ export class ExplosiveSettingsForm extends LitElement {
   private averageDamage = 0;
 
   async performUpdate() {
-    this.averageDamage = await this.computeAverageDamage();
+    try {
+      this.averageDamage = await this.computeAverageDamage();
+    } catch (error) {
+      
+    }
     return super.performUpdate()
   }
 

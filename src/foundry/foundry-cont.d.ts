@@ -41,9 +41,9 @@ export type CommonEntityData = {
   img: string;
   _id: string;
   // flags: JsonObject;
-  permission: Record<
+  ownership: Record<
     'default' | string,
-    ValueOf<CONST['DOCUMENT_PERMISSION_LEVELS']>
+    ValueOf<CONST['DOCUMENT_OWNERSHIP_LEVELS']>
   >;
   folder?: string;
   sort?: number;

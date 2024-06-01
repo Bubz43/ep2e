@@ -421,6 +421,7 @@ declare module "common/constants" {
    */
   export type DOCUMENT_OWNERSHIP_LEVELS = number;
   export namespace DOCUMENT_OWNERSHIP_LEVELS {
+    const INHERIT: number;
     const NONE: number;
     const LIMITED: number;
     const OBSERVER: number;

@@ -466,18 +466,18 @@ window.addEventListener(
   { capture: true },
 );
 
-// for (const app of [Dialog, PermissionControl, FolderConfig, FilePicker]) {
-//   applicationHook({
-//     app,
-//     hook: 'on',
-//     event: 'render',
-//     callback: (dialog) => {
-//       const closestItem = lastClicked?.closest<HTMLElement>('.document');
-//       const relative = closestItem || lastClicked;
-//       if (relative?.isConnected) positionApp(dialog, relative);
-//     },
-//   });
-// }
+for (const app of [Dialog, FolderConfig, FilePicker]) {
+  applicationHook({
+    app,
+    hook: 'on',
+    event: 'render',
+    callback: (dialog) => {
+      const closestItem = lastClicked?.closest<HTMLElement>('.document');
+      const relative = closestItem || lastClicked;
+      if (relative?.isConnected) positionApp(dialog, relative);
+    },
+  });
+}
 
 window.addEventListener(
   'keydown',
