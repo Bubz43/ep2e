@@ -244,6 +244,7 @@ declare global {
     _refreshEffects: VoidFunction;
     _drawEffect(src: string, tint: null): Promise<any>;
     _drawOverlay(src: string, tint: null): Promise<any>;
+    _drawEffects(): Promise<any>
     // hud: {
     //   effects: import('pixi.js').Container;
     // };

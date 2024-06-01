@@ -323,29 +323,30 @@ export class ActorEP extends Actor {
     effect: string | typeof CONFIG['statusEffects'][number] | null,
     options: { overlay?: boolean | undefined; active?: boolean } = {},
   ) {
+    if (options.overlay) {
+      return super.toggleStatusEffect(effect, options);
+    }
+
     const texture =
       typeof effect === 'string'
         ? effect
         : effect?.icon ?? CONFIG.controlIcons.defeated;
-    if (options.overlay) {
+
+    const condition = enumValues(ConditionType).includes(
+      texture as ConditionType,
+    )
+      ? (texture as ConditionType)
+      : iconToCondition.get(texture);
+    if (!condition) {
       return super.toggleStatusEffect(effect, options);
-    } else {
-      const condition = enumValues(ConditionType).includes(
-        texture as ConditionType,
-      )
-        ? (texture as ConditionType)
-        : iconToCondition.get(texture);
-      if (!condition) {
-        return super.toggleStatusEffect(effect, options);
-      } else {
-        const newConditions = new Set(this.conditions);
-        const active = !newConditions.delete(condition);
-        await this.proxy.updateConditions(
-          active ? [...newConditions, condition] : [...newConditions],
-        );
-        return;
-      }
     }
+
+    const newConditions = new Set(this.conditions);
+    const active = !newConditions.delete(condition);
+    await this.proxy.updateConditions(
+      active ? [...newConditions, condition] : [...newConditions],
+    );
+    return;
   }
 }
 

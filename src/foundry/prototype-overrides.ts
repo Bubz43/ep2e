@@ -8,6 +8,7 @@ import {
   closeWindow,
   openWindow,
 } from '@src/components/window/window-controls';
+import { enumValues } from '@src/data-enums';
 import type { ActorEP } from '@src/entities/actor/actor';
 import { ActorCreator } from '@src/entities/actor/components/actor-creator/actor-creator';
 import { ActorType } from '@src/entities/entity-types';
@@ -16,7 +17,7 @@ import type { ItemDataEvent } from '@src/entities/item/components/item-creator/i
 import { ItemEP } from '@src/entities/item/item';
 import type { SceneEP } from '@src/entities/scene';
 import type { UserEP } from '@src/entities/user';
-import { iconToCondition } from '@src/features/conditions';
+import { ConditionType, iconToCondition } from '@src/features/conditions';
 import { openMenu } from '@src/open-menu';
 import { findMatchingElement } from '@src/utility/dom';
 import { notEmpty, searchRegExp } from '@src/utility/helpers';
@@ -58,7 +59,7 @@ export const overridePrototypes = () => {
     });
   };
 
-  const { drawEffects, toggleEffect, _onUpdate } = Token.prototype;
+  const { _onUpdate } = Token.prototype;
 
   Token.prototype._onUpdate = function (
     data: Partial<TokenData>,
@@ -72,70 +73,40 @@ export const overridePrototypes = () => {
     this.actor?.render(false, {});
   };
 
-  Token.prototype.drawEffects = async function () {
-    if (!this.actor) return drawEffects.call(this);
+  Token.prototype._drawEffects = async function () {
+    this.effects.renderable = false;
+
+    // Clear Effects Container
     this.effects.removeChildren().forEach((c) => c.destroy());
     this.effects.bg = this.effects.addChild(new PIXI.Graphics());
     this.effects.overlay = null;
 
-    const effects = activeTokenStatusEffects(this);
-    // Categorize new effects
+    // Categorize effects
+    const activeEffects = this.actor?.temporaryEffects || [];
+    let hasOverlay = false;
 
-    let overlay = {
-      src: this.document.overlayEffect,
-      tint: null,
-    };
-
-    // Draw status effects
-    if (effects.length) {
-      const promises = [];
-
-      // Draw actor effects first
-      for (let iconPath of effects) {
-        // const tint = Color.from(f.tint ?? null);
-
-        promises.push(this._drawEffect(iconPath, null));
-      }
-      await Promise.all(promises);
-      // Draw overlay effect
-      if (overlay.src) {
-        this.effects.overlay = await this._drawOverlay(overlay.src, null);
-      }
-      this._refreshEffects();
+    // Draw effects
+    const promises = [];
+    for (const effect of activeEffects) {
+      if (!effect.img) continue;
+      if (effect.getFlag('core', 'overlay') && !hasOverlay) {
+        promises.push(this._drawOverlay(effect.img, effect.tint));
+        hasOverlay = true;
+      } else promises.push(this._drawEffect(effect.img, effect.tint));
     }
+
+    const effects = activeTokenStatusEffects(this);
+    for (const iconPath of effects) {
+      promises.push(this._drawEffect(iconPath, null));
+    }
+    await Promise.allSettled(promises);
+
+    this.effects.renderable = true;
+    //@ts-ignore
+    this.renderFlags.set({ refreshEffects: true });
   };
 
-  // Token.prototype.toggleEffect = async function (
-  //   effect: string | typeof CONFIG['statusEffects'][number] | null,
-  //   options: { overlay?: boolean | undefined; active?: boolean } = {},
-  // ) {
-  //   const texture =
-  //     typeof effect === 'string'
-  //       ? effect
-  //       : effect?.icon ?? CONFIG.controlIcons.defeated;
-  //   if (options.overlay) {
-  //     const active = options.active ?? this.document.overlayEffect !== texture;
-  //     await this.document.update({ overlayEffect: active ? texture : '' }, {});
-  //   } else {
-  //     const condition = iconToCondition.get(texture);
-  //     if (!condition || !this.actor) {
-  //       const effects = new Set(this.document.effects);
-  //       effects.has(texture) ? effects.delete(texture) : effects.add(texture);
-  //       await this.document.update({ effects: [...effects] }, { diff: false });
-  //     } else {
-  //       const newConditions = new Set(this.actor.conditions);
-  //       const active = !newConditions.delete(condition);
-  //       await this.actor.proxy.updateConditions(
-  //         active ? [...newConditions, condition] : [...newConditions],
-  //       );
-  //     }
-  //   }
-
-  //   if (this.hasActiveHUD) readyCanvas()?.tokens.hud.refreshStatusIcons();
-  //   return this;
-  // };
-
-  const { getData: getTokenData } = TokenHUD.prototype;
+  const { getData: getTokenData, _getStatusEffectChoices } = TokenHUD.prototype;
 
   TokenHUD.prototype.getData = function (options: unknown) {
     const data = getTokenData.call(this, options) as {
@@ -159,37 +130,36 @@ export const overridePrototypes = () => {
   };
 
   TokenHUD.prototype._getStatusEffectChoices = function () {
-    const token = this.object!;
-    const effects = activeTokenStatusEffects(token);
-    const statuses = new Map(
-      [...(token.actor?.effects.values() ?? [])].flatMap((effect) => {
-        const id = effect.getFlag('core', 'statusId');
-        return typeof id === 'string' && id.length
-          ? [[id, { id, overlay: !!effect.getFlag('core', 'overlay') }]]
-          : [];
-      }),
-    );
+    const choices = _getStatusEffectChoices.call(this) as Record<
+      string,
+      {
+        cssClass: string;
+        id: string;
+        isActive: boolean;
+        isOverlay: boolean;
+        src: string;
+        title: string;
+        _id: string | undefined;
+      }
+    >;
 
-    return mapToObj(CONFIG.statusEffects, ({ icon: src, id, label }) => {
-      const status = statuses.get(id);
-      const isActive = !!status?.id || effects.includes(src);
-      const isOverlay =
-        !!status?.overlay || token.document.overlayEffect === src;
-      return [
-        src,
-        {
-          id,
-          src,
-          title: game.i18n.localize(label) as string,
-          isActive,
-          isOverlay,
-          cssClass: compact([
-            isActive && 'active',
-            isOverlay && 'overlay',
-          ]).join(' '),
-        },
-      ];
-    });
+    const token = this.object!;
+
+    if (token.actor) {
+      const actor = token.actor as ActorEP;
+      for (const conditionType of enumValues(ConditionType)) {
+        const isActive = actor.conditions.includes(conditionType);
+        if (conditionType in choices && choices[conditionType]) {
+          const choice = choices[conditionType]!;
+          choice.isActive = isActive;
+          if (isActive) {
+            choice.cssClass += ' active';
+          }
+        }
+      }
+    }
+
+    return choices;
   };
 
   TokenLayer.prototype.toggleCombat = async function (
