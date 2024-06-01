@@ -67,9 +67,6 @@ export const overridePrototypes = () => {
     userId: string,
   ) {
     _onUpdate.call(this, data, options, userId);
-    if ((data.overlayEffect || data.effects) && this.hasActiveHUD) {
-      readyCanvas()?.tokens.hud.refreshStatusIcons();
-    }
     this.actor?.render(false, {});
   };
 
