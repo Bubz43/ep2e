@@ -81,7 +81,7 @@ export class ThrownWeapon
             setData: (changed) => {
               this.updater
                 .path('flags', EP.Name, 'coating')
-                .commit([mergeObject(substance, changed, { inplace: false })]);
+                .commit([foundry.utils.mergeObject(substance, changed, { inplace: false })]);
             },
           }),
           deleteSelf: () => this.removeCoating(),

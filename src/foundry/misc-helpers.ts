@@ -140,7 +140,7 @@ export const updateManyActors = async (actors: ActorEP[]): Promise<unknown> => {
   );
 };
 function _deepMerge<T>(original: T, changes: Partial<DeepPartial<T>>): T {
-  return mergeObject(original, changes, { inplace: false });
+  return foundry.utils.mergeObject(original, changes, { inplace: false });
 }
 export function deepMerge<T>(
   original: T,

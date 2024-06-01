@@ -78,7 +78,7 @@ const migrateActor = (actor: ActorEP) => {
         });
         updater
           .path('flags', EP.Name, sleeveData.type)
-          .store(mergeObject(updatedData, sleeveData, { inplace: false }));
+          .store(foundry.utils.mergeObject(updatedData, sleeveData, { inplace: false }));
       } else updater.path('flags', EP.Name, sleeveType).store(null);
     }
     if (epFlags.vehicle) {
@@ -89,7 +89,7 @@ const migrateActor = (actor: ActorEP) => {
       });
       updater
         .path('flags', EP.Name, 'vehicle')
-        .store(mergeObject(updatedData, vehicle, { inplace: false }));
+        .store(foundry.utils.mergeObject(updatedData, vehicle, { inplace: false }));
     }
     if (epFlags.psi) {
       pipe(
