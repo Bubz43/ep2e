@@ -119,14 +119,69 @@ export const overridePrototypes = () => {
     return data;
   };
 
-  TokenHUD.prototype._onToggleCombat = async function (
-    ev: Event & { currentTarget: HTMLElement },
-  ) {
-    ev.preventDefault();
-    if (!this.object?.scene) return;
-    const active = tokenIsInCombat(this.object);
-    this.object.layer.toggleCombat(!active, null, { token: this.object });
-    ev.currentTarget.classList.toggle('active', !active);
+  const { _onClickControl } = TokenHUD.prototype;
+
+  Object.defineProperty(TokenDocument.prototype, 'inCombat', {
+    get(this: TokenDocument): boolean {
+      return this.object ? tokenIsInCombat(this.object) : false;
+    },
+  });
+
+  TokenHUD.prototype._onClickControl = function (event: Event) {
+    const button = event.currentTarget;
+    if (
+      button instanceof HTMLElement &&
+      button.dataset['action'] === 'combat'
+    ) {
+      event.preventDefault();
+      if (!this.object?.scene) {
+        return;
+      }
+      const token = this.object;
+      const addToCombat = !tokenIsInCombat(token);
+      button.classList.toggle('active', addToCombat);
+      const tokens = new Set(
+        (readyCanvas()?.tokens.controlled ?? [])
+          .concat(token ?? [])
+          .filter((token) => {
+            const inCombat = tokenIsInCombat(token);
+            return inCombat !== addToCombat;
+          }),
+      );
+
+      if (addToCombat) {
+        updateCombatState({
+          type: CombatActionType.AddParticipants,
+          payload: [...tokens].flatMap((token) => {
+            const { scene } = token;
+            if (!scene) return [];
+            return {
+              name: token.name,
+              hidden: !!token.document.hidden,
+              entityIdentifiers: {
+                type: TrackedCombatEntity.Token,
+                tokenId: token.id,
+                sceneId: scene.id,
+              },
+            };
+          }),
+        });
+      } else {
+        updateCombatState({
+          type: CombatActionType.RemoveParticipantsByToken,
+          payload: [...tokens].flatMap((token) => {
+            const { scene } = token;
+            if (!scene) return [];
+            return {
+              tokenId: token.id,
+              sceneId: scene.id,
+            };
+          }),
+        });
+      }
+    } else {
+      _onClickControl.call(this, event);
+    }
   };
 
   TokenHUD.prototype._getStatusEffectChoices = function () {
@@ -162,100 +217,6 @@ export const overridePrototypes = () => {
     return choices;
   };
 
-  TokenLayer.prototype.toggleCombat = async function (
-    addToCombat = true,
-    combat = null,
-    { token = null }: { token?: Token | null | undefined } = {},
-  ) {
-    const tokens = new Set(
-      (readyCanvas()?.tokens.controlled ?? [])
-        .concat(token ?? [])
-        .filter((token) => {
-          const inCombat = tokenIsInCombat(token);
-          return inCombat !== addToCombat;
-        }),
-    );
-
-    if (addToCombat) {
-      updateCombatState({
-        type: CombatActionType.AddParticipants,
-        payload: [...tokens].flatMap((token) => {
-          const { scene } = token;
-          if (!scene) return [];
-          return {
-            name: token.name,
-            hidden: !!token.document.hidden,
-            entityIdentifiers: {
-              type: TrackedCombatEntity.Token,
-              tokenId: token.id,
-              sceneId: scene.id,
-            },
-          };
-        }),
-      });
-    } else {
-      updateCombatState({
-        type: CombatActionType.RemoveParticipantsByToken,
-        payload: [...tokens].flatMap((token) => {
-          const { scene } = token;
-          if (!scene) return [];
-          return {
-            tokenId: token.id,
-            sceneId: scene.id,
-          };
-        }),
-      });
-    }
-  };
-
-  // TODO: Delay this to check for migration first
-  // const barCache = new WeakMap<PIXI.Graphics, number>();
-  // const bars = ["bar1", "bar2"] as const;
-  // Token.prototype.drawBars = function () {
-  //   const { actor } = this;
-  //   const canvas = activeCanvas();
-  //   if (
-  //     !actor ||
-  //     !this.bars ||
-  //     !canvas ||
-  //     this.data.displayBars === TOKEN_DISPLAY_MODES.NONE
-  //   ) {
-  //     return;
-  //   }
-
-  //   for (const barName of bars) {
-  //     const health =
-  //       barName === "bar1"
-  //         ? actor.agent.primaryHealth
-  //         : actor.agent.type === ActorType.Character &&
-  //           actor.agent.ego.mentalHealth;
-  //     const bar = this.bars[barName];
-  //     bar.visible = !!health;
-
-  //     if (!health) {
-  //       barCache.delete(bar);
-  //       continue;
-  //     }
-
-  //     const { durability: percent } = damagePercents(health.main);
-  //     if (barCache.get(bar) === percent) continue;
-  //     const height =
-  //       Math.max(canvas.dimensions.size / 12, 8) *
-  //       (this.data.height >= 2 ? 1.6 : 1);
-  //     const color =
-  //       barName === "bar2" ? [percent, 0, percent * 0.35] : [percent, 0, 0];
-  //     bar
-  //       .clear()
-  //       .beginFill(0x000000, 0.5)
-  //       .lineStyle(2, 0x000000, 0.9)
-  //       .drawRoundedRect(0, 0, this.w, height, 3)
-  //       .beginFill(PIXI.utils.rgb2hex(color), 0.8)
-  //       .lineStyle(1, 0x000000, 0.8)
-  //       .drawRoundedRect(1, 1, percent * (this.w - 2), height - 2, 2);
-  //     barCache.set(bar, percent);
-  //     bar.position.set(0, barName === "bar1" ? this.h - height : 0);
-  //   }
-  // };
 
   const { defaultOptions: journalSheetOptions } = JournalSheet;
   Object.defineProperty(JournalSheet, 'defaultOptions', {

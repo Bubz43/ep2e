@@ -35,15 +35,9 @@ export const activateTargetingTool = () => {
 };
 
 export const activeTokenStatusEffects = ({ document: data, actor }: Token) =>
-  pipe(
-    data.effects ?? [],
-    concat(
-      ((actor as ActorEP | undefined)?.conditions ?? []).map(
-        (condition) => conditionIcons[condition],
-      ),
-    ),
-    uniq(),
-  );
+  ((actor as ActorEP | undefined)?.conditions ?? []).map(
+    (condition) => conditionIcons[condition],
+  )
 
 export const distanceBetweenTokens = (tokenA: Token, tokenB: Token) => {
   let distance = Math.hypot(
