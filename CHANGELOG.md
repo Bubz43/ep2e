@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.0] - 2024-06-01
+
+- Add support for Foundry v12
+
 ## [1.1.7] - 2024-04-14
 
 - Only attempt to delete embedded items that exist - fixes error when attempting to remove exoskeleton after deleting one of its items
