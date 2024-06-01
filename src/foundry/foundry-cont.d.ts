@@ -265,7 +265,7 @@ declare global {
     actor?: ActorEP;
     toJSON(): TokenData;
     sheet: TokenConfig;
-    baseActor?: ActorEP
+    baseActor?: ActorEP;
   }
 
   interface Combat {
@@ -317,6 +317,10 @@ declare global {
     sheet: EntitySheet;
     collection?: GameCollections['actors'];
     prototypeToken: TokenDocument;
+    toggleStatusEffect(
+      effect: string | typeof CONFIG['statusEffects'][number] | null,
+      options: { overlay?: boolean | undefined; active?: boolean },
+    ): Promise<unknown>;
   }
 
   interface Item {

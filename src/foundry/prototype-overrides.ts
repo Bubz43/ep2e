@@ -105,35 +105,35 @@ export const overridePrototypes = () => {
     }
   };
 
-  Token.prototype.toggleEffect = async function (
-    effect: string | typeof CONFIG['statusEffects'][number] | null,
-    options: { overlay?: boolean | undefined; active?: boolean } = {},
-  ) {
-    const texture =
-      typeof effect === 'string'
-        ? effect
-        : effect?.icon ?? CONFIG.controlIcons.defeated;
-    if (options.overlay) {
-      const active = options.active ?? this.document.overlayEffect !== texture;
-      await this.document.update({ overlayEffect: active ? texture : '' }, {});
-    } else {
-      const condition = iconToCondition.get(texture);
-      if (!condition || !this.actor) {
-        const effects = new Set(this.document.effects);
-        effects.has(texture) ? effects.delete(texture) : effects.add(texture);
-        await this.document.update({ effects: [...effects] }, { diff: false });
-      } else {
-        const newConditions = new Set(this.actor.conditions);
-        const active = !newConditions.delete(condition);
-        await this.actor.proxy.updateConditions(
-          active ? [...newConditions, condition] : [...newConditions],
-        );
-      }
-    }
+  // Token.prototype.toggleEffect = async function (
+  //   effect: string | typeof CONFIG['statusEffects'][number] | null,
+  //   options: { overlay?: boolean | undefined; active?: boolean } = {},
+  // ) {
+  //   const texture =
+  //     typeof effect === 'string'
+  //       ? effect
+  //       : effect?.icon ?? CONFIG.controlIcons.defeated;
+  //   if (options.overlay) {
+  //     const active = options.active ?? this.document.overlayEffect !== texture;
+  //     await this.document.update({ overlayEffect: active ? texture : '' }, {});
+  //   } else {
+  //     const condition = iconToCondition.get(texture);
+  //     if (!condition || !this.actor) {
+  //       const effects = new Set(this.document.effects);
+  //       effects.has(texture) ? effects.delete(texture) : effects.add(texture);
+  //       await this.document.update({ effects: [...effects] }, { diff: false });
+  //     } else {
+  //       const newConditions = new Set(this.actor.conditions);
+  //       const active = !newConditions.delete(condition);
+  //       await this.actor.proxy.updateConditions(
+  //         active ? [...newConditions, condition] : [...newConditions],
+  //       );
+  //     }
+  //   }
 
-    if (this.hasActiveHUD) readyCanvas()?.tokens.hud.refreshStatusIcons();
-    return this;
-  };
+  //   if (this.hasActiveHUD) readyCanvas()?.tokens.hud.refreshStatusIcons();
+  //   return this;
+  // };
 
   const { getData: getTokenData } = TokenHUD.prototype;
 

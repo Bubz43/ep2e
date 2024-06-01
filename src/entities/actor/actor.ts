@@ -1,3 +1,9 @@
+import { enumValues } from '@src/data-enums';
+import {
+  conditionIcons,
+  ConditionType,
+  iconToCondition,
+} from '@src/features/conditions';
 import type { TokenData } from '@src/foundry/foundry-cont';
 import { localize } from '@src/foundry/localization';
 import { canViewActor } from '@src/foundry/misc-helpers';
@@ -180,17 +186,17 @@ export class ActorEP extends Actor {
           }
           this.emitItemSocket({ type: 'remove', itemIds });
           items.forEach((item) => {
-              if (
-                !(
-                  item.proxy.type === ItemType.Substance &&
-                  item.proxy.appliedState
-                )
-              ) {
-                this.itemTrash.push(item.dataCopy() as ItemDatas);
-              }
+            if (
+              !(
+                item.proxy.type === ItemType.Substance &&
+                item.proxy.appliedState
+              )
+            ) {
+              this.itemTrash.push(item.dataCopy() as ItemDatas);
+            }
 
-              item?._onDelete({}, game.user.id);
-          })
+            item?._onDelete({}, game.user.id);
+          });
 
           await this.deleteEmbeddedDocuments('Item', itemIds);
           this.invalidated = true;
@@ -311,6 +317,35 @@ export class ActorEP extends Actor {
       : [this.proxy.name, ...formattedSleeveInfo(this.proxy)].some((info) =>
           regex.test(info),
         );
+  }
+
+  override async toggleStatusEffect(
+    effect: string | typeof CONFIG['statusEffects'][number] | null,
+    options: { overlay?: boolean | undefined; active?: boolean } = {},
+  ) {
+    const texture =
+      typeof effect === 'string'
+        ? effect
+        : effect?.icon ?? CONFIG.controlIcons.defeated;
+    if (options.overlay) {
+      return super.toggleStatusEffect(effect, options);
+    } else {
+      const condition = enumValues(ConditionType).includes(
+        texture as ConditionType,
+      )
+        ? (texture as ConditionType)
+        : iconToCondition.get(texture);
+      if (!condition) {
+        return super.toggleStatusEffect(effect, options);
+      } else {
+        const newConditions = new Set(this.conditions);
+        const active = !newConditions.delete(condition);
+        await this.proxy.updateConditions(
+          active ? [...newConditions, condition] : [...newConditions],
+        );
+        return;
+      }
+    }
   }
 }
 
