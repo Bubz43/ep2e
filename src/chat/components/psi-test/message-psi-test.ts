@@ -127,12 +127,12 @@ export class MessagePsiTest extends MessageElement {
     this.rollSelfDamage('push');
   }
 
-  private rollSelfDamage(source: 'criticalFailure' | 'push') {
+  private async rollSelfDamage(source: 'criticalFailure' | 'push') {
     this.message.createSimilar({
       damage: {
         source: localize(source),
         damageType: HealthType.Physical,
-        rolledFormulas: rollLabeledFormulas([
+        rolledFormulas: await rollLabeledFormulas([
           { label: localize(source), formula: '1d6' },
         ]),
       },
@@ -181,7 +181,7 @@ export class MessagePsiTest extends MessageElement {
     );
 
     if (mentalArmor.apply) {
-      const roll = rollFormula(
+      const roll = await rollFormula(
         joinLabeledFormulas(
           compact([
             { label: localize('base'), formula: mentalArmor.formula },
@@ -257,7 +257,7 @@ export class MessagePsiTest extends MessageElement {
     this.getUpdater('psiTest').commit({ appliedTo: newList });
   }
 
-  private createDamageMessage() {
+  private async createDamageMessage() {
     const { message, successTestInfo, sleight } = this;
     if (!successTestInfo) return;
 
@@ -270,7 +270,7 @@ export class MessagePsiTest extends MessageElement {
       ) || [];
 
     const multiplier = testResult === SuccessTestResult.CriticalSuccess ? 2 : 1;
-    const rolled = pipe(
+    const rolled = await pipe(
       [
         testResult === SuccessTestResult.SuperiorSuccess &&
           superiorDamage.length >= 1 && {
@@ -302,7 +302,7 @@ export class MessagePsiTest extends MessageElement {
     });
   }
 
-  createHealMessage() {
+  async createHealMessage() {
     const { message, successTestInfo, sleight } = this;
     if (!successTestInfo) return;
 
@@ -315,7 +315,7 @@ export class MessagePsiTest extends MessageElement {
       ) || [];
 
     const multiplier = testResult === SuccessTestResult.CriticalSuccess ? 2 : 1;
-    const rolled = pipe(
+    const rolled = await pipe(
       [
         testResult === SuccessTestResult.SuperiorSuccess &&
           superiorDamage.length >= 1 && {

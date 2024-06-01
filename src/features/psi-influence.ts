@@ -208,13 +208,13 @@ export const influenceInfo = (influence: PsiInfluence | PsiInfluenceData) => {
   }
 };
 
-export const influenceTimeframe = (influence: TemporaryInfluence) => {
+export const influenceTimeframe = async (influence: TemporaryInfluence) => {
   switch (influence.type) {
     case PsiInfluenceType.Motivation:
-      return toMilliseconds({ hours: rollFormula('1d6')?.total || 0 });
+      return toMilliseconds({ hours: (await rollFormula('1d6'))?.total || 0 });
 
     case PsiInfluenceType.Trait:
-      return toMilliseconds({ minutes: rollFormula('1d6')?.total || 0 });
+      return toMilliseconds({ minutes: (await rollFormula('1d6'))?.total || 0 });
 
     case PsiInfluenceType.Unique: {
       return influence.duration;

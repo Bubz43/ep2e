@@ -34,8 +34,8 @@ export class MessageInfluenceRoll extends MessageElement {
     }) as InfluenceRoll;
   }
 
-  private reroll() {
-    const roll = rollFormula(this.influenceRoll.rollData.formula);
+  private async reroll() {
+    const roll = await rollFormula(this.influenceRoll.rollData.formula);
     if (roll) {
       this.getUpdater('influenceRoll').commit({ rollData: roll.toJSON() });
     }
@@ -72,7 +72,7 @@ export class MessageInfluenceRoll extends MessageElement {
 
       switch (influence.type) {
         case PsiInfluenceType.Damage: {
-          const rolledFormulas = rollLabeledFormulas([
+          const rolledFormulas = await rollLabeledFormulas([
             { label: localize('influence'), formula: influence.formula },
           ]);
           this.message.createSimilar({
@@ -88,7 +88,7 @@ export class MessageInfluenceRoll extends MessageElement {
         }
 
         case PsiInfluenceType.Motivation: {
-          const roll = rollFormula(`1d6`);
+          const roll = await rollFormula(`1d6`);
 
           await psi.activateInfluence(
             influenceRoll,
@@ -104,7 +104,7 @@ export class MessageInfluenceRoll extends MessageElement {
         }
 
         case PsiInfluenceType.Trait: {
-          const roll = rollFormula(`1d6`);
+          const roll = await rollFormula(`1d6`);
 
           await psi.activateInfluence(
             influenceRoll,

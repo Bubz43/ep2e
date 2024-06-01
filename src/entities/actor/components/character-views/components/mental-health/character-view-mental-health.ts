@@ -76,7 +76,7 @@ export class CharacterViewMentalHealth extends UseWorldTime(LitElement) {
     heal: Recovery,
     instances: number,
   ) {
-    const wholeInstances = getMaxRecoveryInstances({
+    const wholeInstances = await getMaxRecoveryInstances({
       target,
       instances,
       health: this.health.data,
@@ -94,7 +94,7 @@ export class CharacterViewMentalHealth extends UseWorldTime(LitElement) {
           healthType: HealthType.Mental,
           ...(target === HealOverTimeTarget.Damage
             ? {
-                damageFormulas: rollLabeledFormulas(
+                damageFormulas: await rollLabeledFormulas(
                   Array.from({ length: wholeInstances || 1 }).map(
                     (_, index) => ({
                       label:
@@ -107,7 +107,7 @@ export class CharacterViewMentalHealth extends UseWorldTime(LitElement) {
                 ),
               }
             : {
-                wounds: (rollFormula(heal.amount)?.total || 0) * wholeInstances,
+                wounds: ((await rollFormula(heal.amount))?.total || 0) * wholeInstances,
               }),
         },
       },

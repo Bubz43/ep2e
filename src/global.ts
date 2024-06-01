@@ -51,7 +51,7 @@ const attack = v.object({
   ),
 });
 
-const rollCustomAttack = (data: unknown) => {
+const rollCustomAttack = async (data: unknown) => {
   try {
     const {
       source,
@@ -61,7 +61,7 @@ const rollCustomAttack = (data: unknown) => {
       reduceAVbyDV,
       formulas,
     } = attack.parse(data, { mode: 'strip' });
-    const rolledFormulas = rollLabeledFormulas(formulas);
+    const rolledFormulas = await rollLabeledFormulas(formulas);
     createMessage({
       data: {
         header: { heading: source },

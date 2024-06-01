@@ -113,8 +113,8 @@ export const formatAutoHealing = (
   ]).join(' ');
 };
 
-export const tickRate = ({ amount, interval }: BasicTickInfo) =>
-  averageRoll(amount) / interval;
+export const tickRate = async ({ amount, interval }: BasicTickInfo) =>
+ (await averageRoll(amount)) / interval;
 
 export const healingSlotToProp = (slot: HealingSlot) =>
   slot === HealingSlot.Aided ? 'lastAidedTick' : 'lastUnaidedTick';
@@ -232,7 +232,7 @@ export const setupRecoveries = ({
 
 export type HealthRecoveries = ReturnType<typeof setupRecoveries>;
 
-export const getMaxRecoveryInstances = ({
+export const getMaxRecoveryInstances = async ({
   health,
   target,
   amount,
@@ -246,7 +246,7 @@ export const getMaxRecoveryInstances = ({
   const maxHeal =
     target === HealOverTimeTarget.Damage ? health.damage : health.wounds;
   const maxRequired = nonNegative(
-    Math.trunc(maxHeal / rollLimit(amount, 'min')),
+    Math.trunc(maxHeal / (await rollLimit(amount, 'min'))),
   );
   return clamp(Math.floor(instances), {
     max: maxRequired || 1,

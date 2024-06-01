@@ -44,7 +44,7 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
         data: {
           header: { ...messageHeader, hidden: appliedAndHidden },
           damage: {
-            rolledFormulas: rollLabeledFormulas([
+            rolledFormulas: await rollLabeledFormulas([
               {
                 label: localize('wearOffStress'),
                 formula: data.wearOffStress,
@@ -87,7 +87,7 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
           },
           damage: {
             ...attack,
-            rolledFormulas: rollLabeledFormulas(rollFormulas),
+            rolledFormulas: await rollLabeledFormulas(rollFormulas),
             source: `${substance.appliedName} ${label}`,
             damageType,
             multiplier: notEmpty(modifyingEffects?.misc) ? 0.5 : 1,
@@ -216,7 +216,7 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
     } else cleanup();
   }
 
-  private rollDamageOverTime(index: number) {
+  private async  rollDamageOverTime(index: number) {
     const dot = this.substance.appliedInfo.dots[index];
     if (dot) {
       createMessage({
@@ -234,7 +234,7 @@ export class CharacterViewActiveSubstance extends UseWorldTime(LitElement) {
               'multiplier',
               'damageType',
             ]),
-            rolledFormulas: rollLabeledFormulas([
+            rolledFormulas: await rollLabeledFormulas([
               {
                 label: localize('damage'),
                 formula: dot.formula,

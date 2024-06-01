@@ -123,7 +123,7 @@ export const rollInitiative = async (
 ) => {
   const roll =
     actor?.proxy.type === ActorType.Character
-      ? rollFormula(
+      ? await rollFormula(
           `1d6 + ${actor.proxy.initiative} ${options.surprised ? `-3` : ''}`,
         )
       : null;

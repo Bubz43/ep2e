@@ -108,6 +108,13 @@ export class ExplosiveSettingsForm extends LitElement {
 
   @state() private targets = new Set<Token>();
 
+  private averageDamage = 0;
+
+  async performUpdate() {
+    this.averageDamage = await this.computeAverageDamage();
+    return super.performUpdate()
+  }
+
   disconnectedCallback() {
     this.targets.clear();
     super.disconnectedCallback();
@@ -175,11 +182,12 @@ export class ExplosiveSettingsForm extends LitElement {
     };
   }
 
-  private get averageDamage() {
-    return this.attack.rollFormulas.reduce(
-      (accum, { formula }) => accum + averageRoll(formula),
-      0,
-    );
+  private async computeAverageDamage() {
+    let average = 0;
+    for (const {formula} of this.attack.rollFormulas) {
+      average += await averageRoll(formula)
+    }
+    return average
   }
 
   private get templateData(): SetOptional<

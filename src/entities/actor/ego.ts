@@ -107,7 +107,7 @@ export class Ego {
     this.openForm = openForm;
   }
 
-  rollStress() {
+ async  rollStress() {
     const { stressTestValue, actor } = this;
     createMessage({
       entity: actor,
@@ -116,7 +116,7 @@ export class Ego {
           heading: localize('encounteringThreat'),
         },
         stress: {
-          rolledFormulas: rollLabeledFormulas([
+          rolledFormulas: await rollLabeledFormulas([
             {
               label: localize('stressValue'),
               formula: stressTestValue.sv,

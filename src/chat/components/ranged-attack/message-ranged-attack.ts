@@ -137,7 +137,7 @@ export class MessageRangedAttack extends MessageElement {
     });
   }
 
-  private createDamageMessage() {
+  private async createDamageMessage() {
     const { message, successTestInfo } = this;
     if (!successTestInfo) return;
 
@@ -188,7 +188,7 @@ export class MessageRangedAttack extends MessageElement {
           ]),
           source: name,
           multiplier: testResult === SuccessTestResult.CriticalSuccess ? 2 : 1,
-          rolledFormulas: pipe(
+          rolledFormulas: await pipe(
             [
               testResult === SuccessTestResult.SuperiorSuccess &&
                 superiorDamage.length >= 1 && {

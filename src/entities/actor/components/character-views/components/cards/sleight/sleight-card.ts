@@ -90,7 +90,7 @@ export class SleightCard extends ItemCardBase {
           damage: {
             source,
             damageType: HealthType.Physical,
-            rolledFormulas: rollLabeledFormulas([
+            rolledFormulas: await rollLabeledFormulas([
               {
                 label: ` ${localize('push')} ${localize('damage')}`,
                 formula: '1d6',

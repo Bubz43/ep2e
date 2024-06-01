@@ -256,7 +256,7 @@ export class MessageSpecialTest extends MessageElement {
       let duration = CommonInterval.Turn;
       if (isStatic) duration += staticDuration || CommonInterval.Turn;
       else {
-        const roll = rollFormula(variableDuration || '1d6');
+        const roll = await rollFormula(variableDuration || '1d6');
         if (roll) await roll.toMessage();
         const total = roll?.total || 1;
         if (variableInterval === 'turns')
@@ -315,7 +315,7 @@ export class MessageSpecialTest extends MessageElement {
         await this.message.createSimilar({
           damage: {
             source: this.specialTest.source,
-            rolledFormulas: rollLabeledFormulas([
+            rolledFormulas: await rollLabeledFormulas([
               { label: localize('stress'), formula: stress },
             ]),
             damageType: HealthType.Mental,
@@ -537,11 +537,11 @@ export class MessageSpecialTest extends MessageElement {
         return html`
           <wl-list-item
             clickable
-            @click=${() => {
+            @click=${async () => {
               this.message.createSimilar({
                 header: { heading: source },
                 stress: {
-                  rolledFormulas: rollLabeledFormulas([
+                  rolledFormulas: await rollLabeledFormulas([
                     {
                       label: localize('stressValue'),
                       formula: sv,

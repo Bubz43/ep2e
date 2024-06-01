@@ -165,11 +165,11 @@ export class Form extends LitElement {
     return store;
   }
 
-  private validate(ev: Event) {
+  private async validate(ev: Event) {
     ev.stopPropagation();
     const inputEvent = ev.type === 'input';
     if (inputEvent && !this.storeOnInput) return;
-    const { key, value, required } = validateFormField(
+    const { key, value, required } = await validateFormField(
       ev.target as FieldElement,
     );
     if (key)

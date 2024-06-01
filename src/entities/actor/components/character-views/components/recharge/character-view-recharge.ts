@@ -136,7 +136,7 @@ export class CharacterViewRecharge extends mix(LitElement).with(UseWorldTime) {
       props: recharge.startInfo,
       update: async (changed, original) => {
         const { timeframe, formula } = { ...original, ...changed };
-        const regainedPoints = rollFormula(formula)?.total || 0;
+        const regainedPoints = (await rollFormula(formula))?.total || 0;
         await this.character.updater.path('system', 'temporary').commit(
           addFeature(
             createTemporaryFeature.activeRecharge({

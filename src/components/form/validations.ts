@@ -23,10 +23,10 @@ const validateNumberInput = (input: HTMLInputElement) => {
   return value;
 };
 
-const validateFormulaInput = (input: HTMLInputElement) => {
+const validateFormulaInput = async (input: HTMLInputElement) => {
   const { value } = input;
   if (value) {
-    const { total } = rollFormula(value) ?? {};
+    const { total } = await rollFormula(value) ?? {};
 
     if (isInvalidNumber(total)) {
       // notify(
@@ -44,7 +44,7 @@ const validateFormulaInput = (input: HTMLInputElement) => {
   return input.value;
 };
 
-export const validateFormField = (field: FieldElement) => {
+export const validateFormField = async (field: FieldElement) => {
   const { localName, id } = field;
   const [name, type] = ['name', 'type'].map((attr) => field.getAttribute(attr));
   let value: FieldValue = '';
@@ -61,7 +61,7 @@ export const validateFormField = (field: FieldElement) => {
   ) {
     value = validateNumberInput(field as HTMLInputElement);
   } else if (field.hasAttribute('data-validate-formula')) {
-    value = validateFormulaInput(field as HTMLInputElement);
+    value = await validateFormulaInput(field as HTMLInputElement);
   } else if ('value' in field) {
     value = String(field.value);
     field.value = value;

@@ -85,7 +85,7 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
             'reduceAVbyDV',
             'source',
           ]),
-          rolledFormulas: rollLabeledFormulas([
+          rolledFormulas: await rollLabeledFormulas([
             {
               label: localize('damage'),
               formula: dot.formula,
@@ -104,7 +104,7 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
     heal: Recovery,
     instances: number,
   ) {
-    const wholeInstances = getMaxRecoveryInstances({
+    const wholeInstances = await getMaxRecoveryInstances({
       target,
       instances,
       health: this.health.data,
@@ -122,7 +122,7 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
           healthType: HealthType.Physical,
           ...(target === HealOverTimeTarget.Damage
             ? {
-                damageFormulas: rollLabeledFormulas(
+                damageFormulas: await  rollLabeledFormulas(
                   Array.from({ length: wholeInstances || 1 }).map(
                     (_, index) => ({
                       label:
@@ -135,7 +135,7 @@ export class CharacterViewPhysicalHealth extends UseWorldTime(LitElement) {
                 ),
               }
             : {
-                wounds: (rollFormula(heal.amount)?.total || 0) * wholeInstances,
+                wounds: ((await rollFormula(heal.amount))?.total || 0) * wholeInstances,
               }),
         },
       },
