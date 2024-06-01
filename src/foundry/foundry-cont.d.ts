@@ -576,8 +576,8 @@ declare global {
 
   interface System extends SystemSchema {
     id: EP.Name;
-    template: EntityTemplates;
-    model: { Actor: ActorModels; Item: ItemModels };
+    // template: EntityTemplates;
+    template: { Actor: ActorModels; Item: ItemModels };
     /**
      * @deprecated
      */

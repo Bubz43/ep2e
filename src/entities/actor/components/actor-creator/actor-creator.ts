@@ -123,8 +123,8 @@ export class ActorCreator extends LitElement {
   }
 
   private get folders() {
-    return flatMapToObj([...game.folders], ({ displayed, data }) =>
-      data.type === 'Actor' && displayed ? [[data._id, data.name]] : [],
+    return flatMapToObj([...game.folders], ({ displayed, type, id, name }) =>
+      type === 'Actor' && displayed ? [[id, name]] : [],
     );
   }
 

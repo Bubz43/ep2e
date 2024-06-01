@@ -419,8 +419,8 @@ declare module "common/constants" {
    * Define the allowed permission levels for a non-user Document.
    * Each level is assigned a value in ascending order. Higher levels grant more permissions.
    */
-  export type DOCUMENT_PERMISSION_LEVELS = number;
-  export namespace DOCUMENT_PERMISSION_LEVELS {
+  export type DOCUMENT_OWNERSHIP_LEVELS = number;
+  export namespace DOCUMENT_OWNERSHIP_LEVELS {
     const NONE: number;
     const LIMITED: number;
     const OBSERVER: number;
