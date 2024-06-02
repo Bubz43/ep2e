@@ -95,7 +95,7 @@ export abstract class ActorProxyBase<T extends ActorType> {
   }
 
   dataCopy() {
-    return duplicate(this.data);
+    return foundry.utils.duplicate(this.data);
   }
 
   createActor(name?: string) {

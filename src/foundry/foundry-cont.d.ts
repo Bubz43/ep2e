@@ -563,9 +563,7 @@ declare global {
     _id: string;
   }
 
-  export function duplicate<T extends Record<string, unknown>>(
-    data: T,
-  ): Mutable<T>;
+
   export function timeSince(timestamp: Date | number): string;
 
 

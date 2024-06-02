@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.2.2] - 2024-06-02
+
+- Fix explosives not rolling their damage
+- Fix not being able to edit own chat messages if GM is not connected
+
 ## [1.2.1] - 2024-06-01
 
 - Add ability to drag and drop a morph onto the character creation sheet

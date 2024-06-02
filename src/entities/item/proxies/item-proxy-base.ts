@@ -120,7 +120,7 @@ export abstract class ItemProxyBase<T extends ItemType> {
 
   getDataCopy(resetState = true) {
     const { data } = this;
-    return duplicate(data) as Mutable<typeof data>;
+    return foundry.utils.duplicate(data) as Mutable<typeof data>;
   }
 
   get id() {

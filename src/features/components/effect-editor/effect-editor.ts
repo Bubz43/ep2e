@@ -47,7 +47,7 @@ export class EffectEditor extends LitElement {
   update(changedProps: PropertyValues<this>) {
     if (changedProps.has('effect')) {
       this.internalEffect = createEffect[this.effect.type](
-        duplicate(this.effect) as any,
+        foundry.utils.duplicate(this.effect) as any,
       );
     }
     super.update(changedProps);

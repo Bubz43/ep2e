@@ -164,7 +164,7 @@ export const createEgoData = (): FullEgoData => {
     img: CONST.DEFAULT_TOKEN,
     items: [],
     system: {
-      ...duplicate(data),
+      ...foundry.utils.duplicate(data),
       description: '',
       reference: '',
     },

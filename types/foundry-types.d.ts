@@ -85,7 +85,9 @@ declare module "common/utils/helpers" {
    * For a subset of cases the deepClone function will offer better performance.
    * @param {Object} original   Some sort of data
    */
-  export function duplicate(original: any): any;
+  export function duplicate<T extends Record<string, unknown>>(
+    data: T,
+  ): T
   /**
    * Test whether some class is a subclass of a parent.
    * @param {Function} cls        The class to test

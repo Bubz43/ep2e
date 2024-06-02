@@ -115,7 +115,7 @@ export class ItemEP extends Item {
   }
 
   dataCopy() {
-    return duplicate(this.toJSON()) as Mutable<ItemDatas>;
+    return foundry.utils.duplicate(this.toJSON()) as Mutable<ItemDatas>;
   }
 
   get proxy() {
