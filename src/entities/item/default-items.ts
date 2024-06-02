@@ -53,7 +53,7 @@ export const createDefaultSleeve = () => {
         restricted: false,
       },
       meshHealth: {
-        ...game.system.model.Actor.infomorph.meshHealth,
+        ...game.system.template.Actor.infomorph.meshHealth,
         baseDurability: 25,
       },
     },

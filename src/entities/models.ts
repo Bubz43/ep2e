@@ -90,7 +90,7 @@ export const createActorEntity = <T extends ActorType>({
   name: string;
   data?: Partial<ActorEntity<T>['system']>;
 }): ActorEntity<T> => {
-  const modelData = mergeObject(game.system.model.Actor[type], data || {}, {
+  const modelData = foundry.utils.mergeObject(game.system.template.Actor[type], data || {}, {
     inplace: false,
   });
   const _id = stringID(16);
@@ -98,7 +98,7 @@ export const createActorEntity = <T extends ActorType>({
     name,
     type,
     img: CONST.DEFAULT_TOKEN,
-    permission: { default: CONST.DOCUMENT_PERMISSION_LEVELS.OWNER },
+    ownership: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER },
     _id,
     system: modelData,
     flags: {},
@@ -143,7 +143,7 @@ export const createActorEntity = <T extends ActorType>({
 };
 
 export const createEgoData = (): FullEgoData => {
-  const data = pick(game.system.model.Actor.character, [
+  const data = pick(game.system.template.Actor.character, [
     'egoType',
     'forkType',
     'flex',
@@ -208,7 +208,7 @@ export const createItemEntity = <T extends ItemType>({
   name: string;
   system?: Partial<ItemEntity<T>['system']>;
 }): ItemEntity<T> => {
-  const modelData = mergeObject(game.system.model.Item[type], data || {}, {
+  const modelData = foundry.utils.mergeObject(game.system.template.Item[type], data || {}, {
     inplace: false,
   });
   return {
@@ -217,7 +217,7 @@ export const createItemEntity = <T extends ItemType>({
     _id: stringID(16),
     system: modelData,
     img: CONST.DEFAULT_TOKEN,
-    permission: { default: CONST.DOCUMENT_PERMISSION_LEVELS.OWNER },
+    ownership: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER },
     flags: {},
     ...seed,
   };

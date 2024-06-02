@@ -484,7 +484,6 @@ export class RangedAttackTest extends SkillTest {
       action,
       firing,
       attack,
-      testMessageData,
       damageModifiers,
     } = this;
 
@@ -496,6 +495,8 @@ export class RangedAttackTest extends SkillTest {
       calledShot,
       firingModeGroup,
     } = firing;
+
+    const testMessageData = await this.getTestMessageData();
 
     const message = await createMessage({
       data: {

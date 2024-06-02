@@ -45,7 +45,7 @@ export class CharacterViewMeshHealth extends UseWorldTime(LitElement) {
     heal: Recovery,
     instances: number,
   ) {
-    const wholeInstances = getMaxRecoveryInstances({
+    const wholeInstances = await getMaxRecoveryInstances({
       target,
       instances,
       health: this.health.data,
@@ -60,7 +60,7 @@ export class CharacterViewMeshHealth extends UseWorldTime(LitElement) {
           healthType: HealthType.Mesh,
           ...(target === HealOverTimeTarget.Damage
             ? {
-                damageFormulas: rollLabeledFormulas(
+                damageFormulas: await rollLabeledFormulas(
                   Array.from({ length: wholeInstances }).map((_, index) => ({
                     label:
                       instances >= 2
@@ -71,7 +71,7 @@ export class CharacterViewMeshHealth extends UseWorldTime(LitElement) {
                 ),
               }
             : {
-                wounds: (rollFormula(heal.amount)?.total || 0) * wholeInstances,
+                wounds: ((await rollFormula(heal.amount))?.total || 0) * wholeInstances,
               }),
         },
       },
@@ -82,7 +82,7 @@ export class CharacterViewMeshHealth extends UseWorldTime(LitElement) {
   }
 
   private async rollReboot() {
-    const roll = rollFormula('1d6');
+    const roll = await rollFormula('1d6');
     if (roll) {
       await createMessage({
         roll,

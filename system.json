@@ -1,5 +1,5 @@
 {
-  "version": "1.1.7",
+  "version": "1.2.1",
   "id": "ep2e",
   "title": "Eclipse Phase 2e",
   "description": "Eclipse Phase 2e Game System.",
@@ -15,9 +15,9 @@
     "./build/dist/global.scss.css"
   ],
   "compatibility": {
-    "minimum": "11",
-    "verified": "11",
-    "maximum": "11"
+    "minimum": "12",
+    "verified": "12",
+    "maximum": "12"
   },
   "gridDistance": 1,
   "gridUnits": "m",

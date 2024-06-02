@@ -45,7 +45,7 @@ export class CharacterViewMeleeWeaponAttacks extends LitElement {
         : null;
     const attack = attacks[attackType] || attacks.primary;
 
-    const damage = meleeDamage({
+    const damage = await meleeDamage({
       attack,
       successTestInfo: {
         result: SuccessTestResult.Success,

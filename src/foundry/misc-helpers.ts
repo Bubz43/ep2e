@@ -38,7 +38,7 @@ const primaryGmIsConnected = () => {
 export const canViewActor = (actor: ActorEP) => {
   return actor.testUserPermission(
     game.user as any,
-    CONST.DOCUMENT_PERMISSION_LEVELS.OBSERVER,
+    CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER,
   );
 };
 
@@ -140,7 +140,7 @@ export const updateManyActors = async (actors: ActorEP[]): Promise<unknown> => {
   );
 };
 function _deepMerge<T>(original: T, changes: Partial<DeepPartial<T>>): T {
-  return mergeObject(original, changes, { inplace: false });
+  return foundry.utils.mergeObject(original, changes, { inplace: false });
 }
 export function deepMerge<T>(
   original: T,

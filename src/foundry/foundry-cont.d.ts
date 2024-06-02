@@ -41,9 +41,9 @@ export type CommonEntityData = {
   img: string;
   _id: string;
   // flags: JsonObject;
-  permission: Record<
+  ownership: Record<
     'default' | string,
-    ValueOf<CONST['DOCUMENT_PERMISSION_LEVELS']>
+    ValueOf<CONST['DOCUMENT_OWNERSHIP_LEVELS']>
   >;
   folder?: string;
   sort?: number;
@@ -244,6 +244,7 @@ declare global {
     _refreshEffects: VoidFunction;
     _drawEffect(src: string, tint: null): Promise<any>;
     _drawOverlay(src: string, tint: null): Promise<any>;
+    _drawEffects(): Promise<any>
     // hud: {
     //   effects: import('pixi.js').Container;
     // };
@@ -265,7 +266,7 @@ declare global {
     actor?: ActorEP;
     toJSON(): TokenData;
     sheet: TokenConfig;
-    baseActor?: ActorEP
+    baseActor?: ActorEP;
   }
 
   interface Combat {
@@ -317,6 +318,10 @@ declare global {
     sheet: EntitySheet;
     collection?: GameCollections['actors'];
     prototypeToken: TokenDocument;
+    toggleStatusEffect(
+      effect: string | typeof CONFIG['statusEffects'][number] | null,
+      options: { overlay?: boolean | undefined; active?: boolean },
+    ): Promise<unknown>;
   }
 
   interface Item {
@@ -502,7 +507,7 @@ declare global {
     content: string;
     rolls: string[]; // RollData;
     // roll?: string | null; // RollData;
-    user: string;
+    author: string;
     type: number;
     timestamp: number;
     _id: string;
@@ -511,7 +516,7 @@ declare global {
 
   interface ChatMessage extends ChatMessageData {
     apps: Record<string | number, Application>;
-    user: UserEP | undefined;
+    author: UserEP | undefined;
     _roll?: Roll | null;
     toJSON(): ChatMessageData;
   }
@@ -576,8 +581,8 @@ declare global {
 
   interface System extends SystemSchema {
     id: EP.Name;
-    template: EntityTemplates;
-    model: { Actor: ActorModels; Item: ItemModels };
+    // template: EntityTemplates;
+    template: { Actor: ActorModels; Item: ItemModels };
     /**
      * @deprecated
      */

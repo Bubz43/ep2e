@@ -47,11 +47,11 @@ export class MessageInfectionTest extends MessageElement {
     return actor?.proxy.type === ActorType.Character ? actor.proxy.psi : null;
   }
 
-  private rollInfluences() {
+  private async rollInfluences() {
     const { result } = this.successTestInfo ?? {};
     const increases = grantedSuperiorResultEffects(result);
 
-    const roll = rollFormula(`1d6 ${increases ? `+${increases}` : ''}`);
+    const roll = await rollFormula(`1d6 ${increases ? `+${increases}` : ''}`);
     const { psi } = this;
     if (!roll || !psi) return;
     this.message.createSimilar({

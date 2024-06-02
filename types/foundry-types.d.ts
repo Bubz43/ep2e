@@ -235,26 +235,17 @@ declare module "common/utils/helpers" {
    * @example <caption>Deleting an existing object key</caption>
    * mergeObject({k1: "v1", k2: "v2"}, {"-=k1": null});   // {k2: "v2"}
    */
-  export function mergeObject(
-    original: object,
-    other?: object,
-    {
-      insertKeys,
-      insertValues,
-      overwrite,
-      recursive,
-      inplace,
-      enforceTypes,
-    }?: {
-      insertKeys?: boolean;
-      insertValues?: boolean;
-      overwrite?: boolean;
-      recursive?: boolean;
-      inplace?: boolean;
-      enforceTypes?: boolean;
-    },
-    _d?: number
-  ): object;
+  export function mergeObject<O, C>(
+    orig: O,
+    change: C,
+    options?: Partial<{
+      insertKeys: boolean;
+      insertValues: boolean;
+      overwrite: boolean;
+      inplace: boolean;
+      enforceTypes: boolean;
+    }>,
+  ): O & C;
   /**
    * Generate a random string ID of a given requested length.
    * @param {number} length    The length of the random ID to generate
@@ -419,8 +410,9 @@ declare module "common/constants" {
    * Define the allowed permission levels for a non-user Document.
    * Each level is assigned a value in ascending order. Higher levels grant more permissions.
    */
-  export type DOCUMENT_PERMISSION_LEVELS = number;
-  export namespace DOCUMENT_PERMISSION_LEVELS {
+  export type DOCUMENT_OWNERSHIP_LEVELS = number;
+  export namespace DOCUMENT_OWNERSHIP_LEVELS {
+    const INHERIT: number;
     const NONE: number;
     const LIMITED: number;
     const OBSERVER: number;

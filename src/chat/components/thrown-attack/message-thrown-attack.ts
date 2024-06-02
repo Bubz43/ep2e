@@ -95,7 +95,7 @@ export class MessageThrownAttack extends MessageElement {
     this.getUpdater('thrownAttack').commit({ appliedCoating: true });
   }
 
-  private createDamageMessage() {
+  private async createDamageMessage() {
     const { message, successTestInfo } = this;
     if (!successTestInfo) return;
 
@@ -111,7 +111,7 @@ export class MessageThrownAttack extends MessageElement {
       ) || [];
 
     const multiplier = testResult === SuccessTestResult.CriticalSuccess ? 2 : 1;
-    const rolled = pipe(
+    const rolled = await pipe(
       [
         testResult === SuccessTestResult.SuperiorSuccess &&
           superiorDamage.length >= 1 && {

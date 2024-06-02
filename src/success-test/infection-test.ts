@@ -84,7 +84,7 @@ export class InfectionTest extends SuccessTestBase {
             {
               target: clampedTarget,
               ...(settings.autoRoll
-                ? rollSuccessTest({ target: clampedTarget })
+                ? await rollSuccessTest({ target: clampedTarget })
                 : {}),
               action: 'initial',
             },

@@ -233,7 +233,7 @@ export class Explosive
     );
   }
 
-  detonationMessageData(settings: ExplosiveSettings): MessageData {
+ async detonationMessageData(settings: ExplosiveSettings): Promise<MessageData> {
     const {
       attackType = 'primary',
       centeredReduction,
@@ -263,7 +263,7 @@ export class Explosive
           armorPiercing,
           armorUsed,
           reduceAVbyDV,
-          rolledFormulas: rollLabeledFormulas(rollFormulas),
+          rolledFormulas: await rollLabeledFormulas(rollFormulas),
           source: this.name,
           notes,
         }

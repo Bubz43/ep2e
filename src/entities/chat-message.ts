@@ -101,7 +101,7 @@ export class ChatMessageEP extends ChatMessage {
   }
 
   get isAuthor() {
-    return !!this.user?.isSelf
+    return !!this.author?.isSelf
   }
 
   get editable() {
@@ -126,7 +126,7 @@ export class ChatMessageEP extends ChatMessage {
   }
 
   createSimilar(data: MessageData) {
-    const { id, user, timestamp, flags, ...common } = this;
+    const { id, author: user, timestamp, flags, ...common } = this;
     const { header } = this.epFlags ?? {};
     const chatMessageData: Partial<ChatMessageData> = {
       ...common,

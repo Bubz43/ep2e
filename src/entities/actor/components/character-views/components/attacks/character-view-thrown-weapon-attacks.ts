@@ -42,7 +42,7 @@ export class CharacterViewThrownWeaponAttacks extends LitElement {
         'reduceAVbyDV',
       ]),
       source: name,
-      rolledFormulas: pipe(
+      rolledFormulas: await pipe(
         [...attack.rollFormulas],
         compact,
         rollLabeledFormulas,

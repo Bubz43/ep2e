@@ -264,12 +264,14 @@ export class MeleeAttackTest extends SkillTest {
       pools,
       action,
       melee,
-      testMessageData,
       damageModifierEffects,
     } = this;
 
     const { weapon, primaryAttack, charging, attackTarget, ...meleeSettings } =
       melee;
+
+    const testMessageData = await this.getTestMessageData();
+
 
     const message = await createMessage({
       data: {

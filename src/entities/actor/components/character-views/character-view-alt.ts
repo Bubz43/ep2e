@@ -563,8 +563,8 @@ export class CharacterViewAlt extends CharacterViewBase {
                         ?disabled=${this.character.disabled}
                         data-ep-tooltip=${items.map(formatEffect).join('. ')}
                         @mouseover=${tooltip.fromData}
-                        @click=${() => {
-                          const roll = rollFormula(durationFormula);
+                        @click=${async () => {
+                          const roll = await rollFormula(durationFormula);
                           roll?.toMessage({ flavor: localize(interval) });
                           const total = roll?.total || 1;
                           const duration =

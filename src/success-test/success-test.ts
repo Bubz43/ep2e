@@ -121,34 +121,54 @@ export const createSuccessTestModifier = ({
   id: ++lastId,
 });
 
+type Awaited<T> = T extends PromiseLike<infer U> ? Awaited<U> : T;
+
 export class Percentile extends DiceTerm {
   faces = 10;
-  declare results: ReturnType<DiceTerm['roll']>[];
+  declare results: Awaited<ReturnType<DiceTerm['roll']>>[];
 
-  roll() {
-    const roll = super.roll();
+  async roll() {
+    const roll = await super.roll();
     (roll.result as unknown as number) -= 1;
     this.results[this.results.length - 1]!.result = roll.result;
     return roll;
   }
 
-  get total() {
-    if (!notEmpty(this.results)) this.roll();
+  // get total() {
+  //   if (!notEmpty(this.results)) this.roll();
+  //   return this.results.reduce(
+  //     (accum, { result }) => accum + (result as unknown as number),
+  //     0,
+  //   );
+  // }
+
+  // static get total() {
+  //   const total = range(0, 2)
+  //     .map(() => {
+  //       const p = new Percentile({});
+  //       p.roll();
+  //       return p.total;
+  //     })
+  //     .join('');
+  //   return Number(total);
+  // }
+
+  async getTotal() {
+    if (!notEmpty(this.results))  await this.roll();
     return this.results.reduce(
       (accum, { result }) => accum + (result as unknown as number),
       0,
     );
   }
 
-  static get total() {
-    const total = range(0, 2)
-      .map(() => {
-        const p = new Percentile({});
-        p.roll();
-        return p.total;
-      })
-      .join('');
-    return Number(total);
+  static async  getTotal() {
+    const totals: number[] = [];
+    for (const _ of range(0, 2)) {
+      const p = new Percentile({});
+      totals.push(await p.getTotal());
+    }
+    return Number(totals.join(''));
+   
   }
 
   static DENOMINATION = 'p';
@@ -221,14 +241,14 @@ export const getSuccessTestResult = ({
   }
 };
 
-export const rollSuccessTest = ({
+export const rollSuccessTest = async  ({
   target,
   defaulting = false,
 }: {
   target: number;
   defaulting?: boolean;
 }) => {
-  const { total: roll } = Percentile;
+  const roll = await Percentile.getTotal();
   const clampedTarget = successTestTargetClamp(target);
   return {
     roll,

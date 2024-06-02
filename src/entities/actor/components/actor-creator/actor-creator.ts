@@ -14,6 +14,12 @@ import { createDefaultItem } from '@src/entities/item/default-items';
 import type { SleeveType } from '@src/entities/models';
 import { addFeature } from '@src/features/feature-helpers';
 import { createFieldSkillData, FieldSkillType } from '@src/features/skills';
+import {
+  actorDroptoActorProxy,
+  DropType,
+  handleDrop,
+} from '@src/foundry/drag-and-drop';
+import { notify, NotificationType } from '@src/foundry/foundry-apps';
 import { mutateEntityHook, MutateEvent } from '@src/foundry/hook-setups';
 import { localize } from '@src/foundry/localization';
 import { EP } from '@src/foundry/system';
@@ -123,8 +129,8 @@ export class ActorCreator extends LitElement {
   }
 
   private get folders() {
-    return flatMapToObj([...game.folders], ({ displayed, data }) =>
-      data.type === 'Actor' && displayed ? [[data._id, data.name]] : [],
+    return flatMapToObj([...game.folders], ({ displayed, type, id, name }) =>
+      type === 'Actor' && displayed ? [[id, name]] : [],
     );
   }
 
@@ -370,6 +376,19 @@ export class ActorCreator extends LitElement {
     };
   }
 
+  private handleSelectedSleeveDrop = handleDrop(async ({ data, ev }) => {
+    if (data?.type !== DropType.Actor) {
+      return;
+    }
+    const proxy =
+      data?.type === DropType.Actor ? await actorDroptoActorProxy(data) : null;
+    if (!proxy || proxy.type === ActorType.Character) {
+      notify(NotificationType.Info, 'Only morph drops accepted');
+      return;
+    }
+    this.selectedSleeve = proxy;
+  });
+
   private characterForm() {
     const { folders } = this;
 
@@ -396,49 +415,51 @@ export class ActorCreator extends LitElement {
           ],
         })}
 
-        <sl-popover
-          placement=${Placement.Left}
-          .renderOnDemand=${() => {
-            const available = ownedSleeves();
-            return html`
-              <mwc-list>
-                ${notEmpty(available)
-                  ? ownedSleeves().map(
-                      (sleeve) => html`
-                        <mwc-list-item
-                          twoline
-                          @keydown=${clickIfEnter}
-                          graphic="medium"
-                          @click=${() => (this.selectedSleeve = sleeve)}
-                        >
-                          ${this.renderSleeveItemContent(sleeve)}
+        <sl-dropzone @drop=${this.handleSelectedSleeveDrop}>
+          <sl-popover
+            placement=${Placement.Left}
+            .renderOnDemand=${() => {
+              const available = ownedSleeves();
+              return html`
+                <mwc-list>
+                  ${notEmpty(available)
+                    ? ownedSleeves().map(
+                        (sleeve) => html`
+                          <mwc-list-item
+                            twoline
+                            @keydown=${clickIfEnter}
+                            graphic="medium"
+                            @click=${() => (this.selectedSleeve = sleeve)}
+                          >
+                            ${this.renderSleeveItemContent(sleeve)}
+                          </mwc-list-item>
+                        `,
+                      )
+                    : html`
+                        <mwc-list-item>
+                          <span
+                            >${localize('no')} ${localize('sleeves')}
+                            ${localize('available')}</span
+                          >
                         </mwc-list-item>
-                      `,
-                    )
-                  : html`
-                      <mwc-list-item>
-                        <span
-                          >${localize('no')} ${localize('sleeves')}
-                          ${localize('available')}</span
-                        >
-                      </mwc-list-item>
-                    `}
-              </mwc-list>
-            `;
-          }}
-        >
-          <mwc-list-item
-            slot="base"
-            graphic="medium"
-            twoline
-            tabindex="0"
-            @keydown=${clickIfEnter}
+                      `}
+                </mwc-list>
+              `;
+            }}
           >
-            ${this.renderSleeveItemContent(
-              this.selectedSleeve || this.defaultSleeveData,
-            )}
-          </mwc-list-item>
-        </sl-popover>
+            <mwc-list-item
+              slot="base"
+              graphic="medium"
+              twoline
+              tabindex="0"
+              @keydown=${clickIfEnter}
+            >
+              ${this.renderSleeveItemContent(
+                this.selectedSleeve || this.defaultSleeveData,
+              )}
+            </mwc-list-item>
+          </sl-popover>
+        </sl-dropzone>
       `,
     };
   }

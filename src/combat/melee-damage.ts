@@ -28,7 +28,7 @@ interface MeleeDamageInit {
   source: string;
 }
 
-export const meleeDamage = ({
+export const meleeDamage = async ({
   attack,
   successTestInfo,
   augmentUnarmed,
@@ -38,7 +38,7 @@ export const meleeDamage = ({
   morphSize,
   source,
   alwaysArmorPiercing,
-}: MeleeDamageInit): DamageMessageData => {
+}: MeleeDamageInit): Promise<DamageMessageData> => {
   const { result: testResult } = successTestInfo;
   const superiorDamage =
     successTestInfo.superiorEffects?.filter(
@@ -46,7 +46,7 @@ export const meleeDamage = ({
     ) || [];
 
   const multiplier = testResult === SuccessTestResult.CriticalSuccess ? 2 : 1;
-  const rolled = pipe(
+  const rolled = await pipe(
     [
       testResult === SuccessTestResult.SuperiorSuccess &&
         superiorDamage.length >= 1 && {

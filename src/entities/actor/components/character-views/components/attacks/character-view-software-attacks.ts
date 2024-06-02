@@ -45,7 +45,7 @@ export class CharacterViewSoftwareAttacks extends LitElement {
             'reduceAVbyDV',
           ]),
           source: `${name} ${hasSecondaryAttack ? `[${attack.label}]` : ''}`,
-          rolledFormulas: pipe(
+          rolledFormulas: await pipe(
             attack.rollFormulas,
             compact,
             rollLabeledFormulas,

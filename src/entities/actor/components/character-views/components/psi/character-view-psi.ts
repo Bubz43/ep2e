@@ -127,7 +127,7 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
     const extendDuration = false;
     switch (influence.type) {
       case PsiInfluenceType.Damage: {
-        const rolledFormulas = rollLabeledFormulas([
+        const rolledFormulas = await rollLabeledFormulas([
           { label: localize('influence'), formula: influence.formula },
         ]);
         createMessage({
@@ -146,7 +146,7 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
       }
 
       case PsiInfluenceType.Motivation: {
-        const roll = rollFormula(`1d6`);
+        const roll = await rollFormula(`1d6`);
 
         await psi.activateInfluence(
           influenceRoll,
@@ -162,7 +162,7 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
       }
 
       case PsiInfluenceType.Trait: {
-        const roll = rollFormula(`1d6`);
+        const roll = await rollFormula(`1d6`);
 
         await psi.activateInfluence(
           influenceRoll,
@@ -199,10 +199,10 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
         },
         {
           label: `${localize('roll')} ${localize('influences')}`,
-          callback: () => {
+          callback:async () => {
             const { token } = requestCharacter(this);
 
-            const roll = rollFormula('1d6');
+            const roll = await rollFormula('1d6');
             if (roll) {
               createMessage({
                 entity: token || this.character,
@@ -566,8 +566,8 @@ export class CharacterViewPsi extends mix(LitElement).with(UseWorldTime) {
                           ?disabled=${this.character.disabled}
                           data-ep-tooltip=${items.map(formatEffect).join('. ')}
                           @mouseover=${tooltip.fromData}
-                          @click=${() => {
-                            const roll = rollFormula(durationFormula);
+                          @click=${async () => {
+                            const roll = await rollFormula(durationFormula);
                             roll?.toMessage({ flavor: localize(interval) });
                             const total = roll?.total || 1;
                             const duration =

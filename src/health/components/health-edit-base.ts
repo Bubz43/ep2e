@@ -39,6 +39,14 @@ export abstract class HealthEditBase<
     wounds: number;
   }>;
 
+  minDV: number = 0;
+
+  async performUpdate() {
+  const { editableDamage } = this;
+   this.minDV = editableDamage?.formula ? await rollLimit(this.editableDamage.formula, 'min') : 0;
+   return super.performUpdate()
+  }
+
   update(changedProps: PropertyValues<this>) {
     if (changedProps.has('damage')) {
       this.editableDamage = this.createEditable();
@@ -124,19 +132,8 @@ export abstract class HealthEditBase<
     });
     let damage = armorUsed?.appliedDamage ?? this.damageValue;
 
-    const minDV = rollLimit(this.editableDamage.formula, 'min');
-    // const max = nonNegative(
-    //   (roll?.terms || []).reduce<number>((accum, term, index, list) => {
-    //     if (term instanceof DiceTerm) accum += term.number;
-    //     else if (
-    //       typeof term === 'number' &&
-    //       (list[index - 1] === '+' || index === 0)
-    //     )
-    //       accum += term;
-    //     return accum;
-    //   }, 0),
-    // );
-
+    const {minDV} = this
+ 
     if (this.overrides?.takeMinimum) damage = Math.min(minDV, damage);
 
     const wounds = this.health.computeWounds(damage);

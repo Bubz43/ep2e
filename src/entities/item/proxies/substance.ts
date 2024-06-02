@@ -580,7 +580,7 @@ export class Substance
           header: { ...this.messageHeader, hidden },
           damage: {
             ...attack,
-            rolledFormulas: rollLabeledFormulas(rollFormulas),
+            rolledFormulas: await rollLabeledFormulas(rollFormulas),
             source: `${this.appliedName} ${label}`,
             damageType,
             multiplier: modifiers.some(

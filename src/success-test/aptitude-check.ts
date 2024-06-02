@@ -310,7 +310,7 @@ export class AptitudeCheck extends SuccessTestBase {
         {
           target: clampedTarget,
           ...(settings.autoRoll
-            ? rollSuccessTest({ target: clampedTarget })
+            ? await rollSuccessTest({ target: clampedTarget })
             : {}),
           action: pools.active
             ? [pools.active[0].type, pools.active[1]]

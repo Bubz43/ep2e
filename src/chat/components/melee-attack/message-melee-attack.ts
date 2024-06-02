@@ -131,7 +131,7 @@ export class MessageMeleeAttack extends MessageElement {
     });
   }
 
-  private createDamageMessage() {
+  private async createDamageMessage() {
     const { message, successTestInfo } = this;
     if (!successTestInfo) return;
 
@@ -147,7 +147,7 @@ export class MessageMeleeAttack extends MessageElement {
 
     const attack = attacks && (attacks[attackType] || attacks.primary);
 
-    const damage = meleeDamage({
+    const damage = await meleeDamage({
       attack,
       successTestInfo,
       augmentUnarmed,

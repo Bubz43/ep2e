@@ -135,8 +135,8 @@ export class ItemCreator extends LitElement {
   }
 
   private get folders() {
-    return flatMapToObj([...game.folders], ({ displayed, data }) =>
-      data.type === 'Item' && displayed ? [[data._id, data.name]] : [],
+    return flatMapToObj([...game.folders], ({ displayed, type, id, name }) =>
+      type === 'Item' && displayed ? [[id, name]] : [],
     );
   }
 
