@@ -567,17 +567,7 @@ declare global {
     data: T,
   ): Mutable<T>;
   export function timeSince(timestamp: Date | number): string;
-  export function mergeObject<O, C>(
-    orig: O,
-    change: C,
-    options?: Partial<{
-      insertKeys: boolean;
-      insertValues: boolean;
-      overwrite: boolean;
-      inplace: boolean;
-      enforceTypes: boolean;
-    }>,
-  ): O & C;
+
 
   interface System extends SystemSchema {
     id: EP.Name;

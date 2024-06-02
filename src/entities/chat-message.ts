@@ -76,7 +76,7 @@ export class ChatMessageEP extends ChatMessage {
             emitEPSocket({ messageData: { ...update, _id: this.id } });
           else this.update(update);
         },
-        isEditable: gmIsConnected,
+        isEditable: () => this.editable,
       });
     }
     return this.#updater;

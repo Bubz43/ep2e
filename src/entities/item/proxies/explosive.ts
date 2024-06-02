@@ -269,6 +269,7 @@ export class Explosive
         }
       : undefined;
 
+
     const attackTraitInfo: AttackTraitData | undefined = notEmpty(attackTraits)
       ? {
           traits: attackTraits,

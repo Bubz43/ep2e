@@ -45,7 +45,7 @@ export class MessageExplosive extends mix(MessageElement).with(UseWorldTime) {
   private async detonate() {
     const { explosive } = this;
     const { _id } = await this.message.createSimilar({
-      ...explosive.detonationMessageData(this.explosiveUse),
+      ...await explosive.detonationMessageData(this.explosiveUse),
       header: this.explosiveUse.showHeader
         ? explosive.messageHeader
         : undefined,
