@@ -46,8 +46,15 @@ export class ActiveArmor
     super();
     const armorTypes = enumValues(ArmorType);
     for (const source of sources) {
-      if (!source.layerable) this.incrementLayers();
-      if (this.concealable) this.concealable = source.concealable;
+      if (source[ArmorType.Energy] || source[ArmorType.Kinetic]) {
+        if (!source.layerable) {
+          this.incrementLayers();
+        }
+        if (this.concealable) {
+          this.concealable = source.concealable;
+        }
+      }
+
       for (const armor of armorTypes) {
         const value = source[armor];
         if (value > 0) this.positiveArmorSources.add(armor);
