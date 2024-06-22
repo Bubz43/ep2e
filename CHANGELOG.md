@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.3] - 2024-06-22
+
+- Only armor that provides energy/kinetic is considered for layering/concealable
+
 ## [1.2.2] - 2024-06-02
 
 - Fix explosives not rolling their damage
