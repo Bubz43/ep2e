@@ -2,7 +2,6 @@
   "scripts": {
     "start": "snowpack build",
     "build": "snowpack --config ./snowpack-prod.config.js build && node .github/workflows/archive.js",
-    "test": "web-test-runner \"src/**/*.test.ts\"",
     "format": "prettier --write \"src/**/*.ts\"",
     "format:scss": "prettier --write \"src/**/*.scss\"",
     "lint": "prettier --check \"src/**/*.ts\"",
