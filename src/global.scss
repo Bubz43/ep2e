@@ -55,7 +55,7 @@ body {
   }
 }
 
-.app *:not(i):not(mwc-icon) {
+.app *:not(i):not(mwc-icon):not([class*=" fa"]) {
   font-family: var(--font-2);
   font-size: 14px;
 }
