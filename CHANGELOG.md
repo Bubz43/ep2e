@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.5] - 2024-07-22
+
+- Fix section headers disappearing during drag on opaque windows
+
 ## [1.2.4] - 2024-07-11
 
 - Fix some foundry icons not rendering correctly
