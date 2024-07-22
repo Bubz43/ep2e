@@ -335,7 +335,6 @@ export class CharacterViewItemGroup extends LazyRipple(LitElement) {
           @mouseleave="${this.handleRippleMouseLeave}"
           @keydown=${clickIfEnter}
           tabindex=${noCollapse ? -1 : 0}
-          part="header"
         >
           ${this.renderInfo()}
           <span slot="action">${this.renderRipple(noCollapse)}</span>
