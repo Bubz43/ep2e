@@ -15,6 +15,8 @@
   border-bottom: 1px solid var(--ep-color-grey);
   --mdc-icon-size: 22px;
   --mdc-icon-button-size: 32px;
+  isolation: isolate;
+  contain: layout;
 
   ::slotted([slot='info']) {
     color: var(--ep-color-grey);
