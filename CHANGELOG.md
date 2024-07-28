@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.6] - 2024-07-27
+
+- Fix add modifier popover being clipped
+
 ## [1.2.5] - 2024-07-22
 
 - Fix section headers disappearing during drag on opaque windows
