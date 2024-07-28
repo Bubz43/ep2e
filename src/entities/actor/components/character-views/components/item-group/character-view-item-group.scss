@@ -36,6 +36,7 @@ sl-dropzone {
 
 sl-header {
   padding: 0 0.75rem;
+  position: relative;
   &::part(heading) {
     // font-weight: normal;
     font-size: large;
