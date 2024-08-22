@@ -1767,8 +1767,8 @@ h2 {
   pointer-events: auto;
   position: absolute;
   top: 3.25rem;
-  left:0.25rem;
-  background: var(--ep-color-bg);
+  left:0.5rem;
+  background: alphav(var(--ep-color-bg), 0.5);
   border-radius: 0.25rem;
   z-index: 1000;
   padding: 0.25rem;

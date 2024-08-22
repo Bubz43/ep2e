@@ -29,8 +29,7 @@ export class GMPanel extends LitElement {
       }
     }
     const { skillType } = this;
-    return html`
-      ${renderAutoForm({
+    return html` ${renderAutoForm({
         props: { skillType },
         noDebounce: true,
         update: (changes) => {
@@ -51,10 +50,10 @@ export class GMPanel extends LitElement {
 
       <table>
         <thead>
-            <tr>
-                <th>PC</th>
-                <th>Test Target</th>
-            </tr>
+          <tr>
+            <th>PC</th>
+            <th>Test Target</th>
+          </tr>
         </thead>
         ${repeat(
           playerCharacters,
@@ -68,7 +67,6 @@ export class GMPanel extends LitElement {
             </tr>`;
           },
         )}
-        
       </table>`;
   }
 }
