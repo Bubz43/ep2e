@@ -48,6 +48,7 @@ import { openMenu } from './open-menu';
 import { rollSuccessTest } from './success-test/success-test';
 import { notEmpty } from './utility/helpers';
 import { localImage } from './utility/images';
+import { GMPanel } from './gm-panel/gm-panel';
 
 
 export let gameSettings: ReturnType<typeof registerEPSettings>;
@@ -206,6 +207,26 @@ Hooks.once('ready', async () => {
     const rightUI = document.getElementById('ui-right');
     rightUI?.addEventListener('mouseenter', toggleChatPointers);
     rightUI?.addEventListener('mouseleave', toggleChatPointers);
+
+    if (game.user.isGM) {
+      const leftUI = document.getElementById("ui-left");
+      const gmFrag = new DocumentFragment();
+      render(html` <mwc-icon-button
+      id="ep-gm-panel"
+        data-ep-tooltip=${`GM Panel`}
+        @mouseover=${tooltip.fromData}
+        @click=${(ev: Event & { currentTarget: HTMLElement }) =>
+          openWindow({
+            key: GMPanel,
+            content: html`<gm-panel></gm-panel>`,
+            name: `GM Panel`,
+            adjacentEl: ev.currentTarget,
+          }, { resizable: ResizeOption.Both })}
+      >
+        <img class="noborder" src="icons/svg/dice-target.svg" />
+      </mwc-icon-button>`, gmFrag)
+      leftUI?.append(gmFrag);
+    }
 
     const frag = new DocumentFragment();
 

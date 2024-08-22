@@ -1,0 +1,32 @@
+@use 'scss/functions' as *;
+@use 'scss/mixins' as *;
+
+@include styled-scrollbars;
+
+* {
+  box-sizing: border-box;
+}
+
+:host {
+  display: flex;
+  flex-flow: column;
+  gap: 0.5rem;
+  // width: 350px;
+  height: 400px;
+  min-height: 400px;
+  min-width: 300px;
+  --mdc-icon-button-size: 2rem;
+  padding: 1rem;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+tr {
+    text-align: center;
+}
+
+thead {
+    background-color: var(--ep-color-bg-alt);
+}

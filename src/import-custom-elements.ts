@@ -164,6 +164,7 @@ import { PoolItem } from './features/components/pool-item/pool-item';
 import { TagEditor } from './features/components/tag-editor/tag-editor';
 import { CharacterViewTimeItem } from './features/components/time-state-item/time-state-item';
 import { WorldTimeControls } from './features/components/world-time-controls/world-time-controls';
+import { GMPanel } from './gm-panel/gm-panel';
 import { HealthEditor } from './health/components/health-editor/health-editor';
 import { HealthItem } from './health/components/health-item/health-item';
 import { HealthLog } from './health/components/health-log/health-log';
@@ -388,3 +389,6 @@ SoftwareSkillTestControls;
 RangedAttackControls;
 PsiTestControls;
 InfectionTestControls;
+
+// GM
+GMPanel;

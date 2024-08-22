@@ -44,35 +44,35 @@ body {
 
   background-image: none;
 
-  >*:not(#notifications) {
+  > *:not(#notifications) {
     opacity: 0;
   }
 
   &.ready {
-    >*:not(#notifications) {
+    > *:not(#notifications) {
       opacity: 1;
     }
   }
 }
 
-.app *:not(i):not(mwc-icon):not([class*=" fa"]) {
+.app *:not(i):not(mwc-icon):not([class*=' fa']) {
   font-family: var(--font-2);
   font-size: 14px;
 }
 
 .system-ep2e .jump-to-bottom {
   width: 100%;
-  border-radius:0.5rem;
-  backdrop-filter:blur(2px);
+  border-radius: 0.5rem;
+  backdrop-filter: blur(2px);
   bottom: 140px;
   z-index: 20000;
   a {
     display: flex;
-    justify-content:center;
-    gap:0.5rem;
-    align-items:center;
+    justify-content: center;
+    gap: 0.5rem;
+    align-items: center;
     i {
-      margin-bottom:-0.25rem;
+      margin-bottom: -0.25rem;
     }
   }
 }
@@ -143,6 +143,17 @@ ep-overlay {
 
   label {
     color: var(--ep-color-text);
+  }
+
+  .form-group {
+    label {
+      color: var(--ep-color-text);
+    }
+    &:hover {
+      label {
+        color: var(--ep-color-primary-alt);
+      }
+    }
   }
 
   color: var(--ep-color-text);
@@ -216,7 +227,6 @@ ep-overlay {
     }
   }
 
-
   input[type='text'],
   input[type='number'],
   input[type='search'],
@@ -264,7 +274,6 @@ ep-overlay {
   }
 
   .package {
-
     .package-title,
     .package-description {
       color: var(--ep-color-text) !important;
@@ -413,7 +422,7 @@ ep-overlay {
     }
   }
 
-  >*:first-child {
+  > *:first-child {
     margin-top: auto !important;
   }
 }
@@ -435,7 +444,6 @@ ep-overlay {
   cursor: pointer;
 
   &:hover {
-
     .dice-formula,
     .dice-total {
       border-color: var(--ep-color-secondary);
@@ -522,7 +530,7 @@ mwc-menu {
     border-color: var(--ep-color-border);
     margin: 0.25rem 0;
 
-    &+[divider] {
+    & + [divider] {
       display: none;
     }
   }
@@ -658,9 +666,8 @@ code.formula {
 
 .filepicker {
   .filepicker-header {
-
     button,
-    .display-modes>.display-mode {
+    .display-modes > .display-mode {
       background: var(--ep-color-bg);
 
       &:hover,
@@ -673,13 +680,13 @@ code.formula {
         border: 1px solid var(--ep-color-primary);
       }
 
-      >* {
+      > * {
         text-shadow: 0 0 0px black;
       }
     }
   }
 
-  .private div.form-group.current-dir>button.privacy {
+  .private div.form-group.current-dir > button.privacy {
     background: alphav(var(--ep-color-primary), 0.5);
   }
 
@@ -688,7 +695,7 @@ code.formula {
     border-top-right-radius: 7px;
     border-bottom-left-radius: 7px;
 
-    >li {
+    > li {
       border: none;
 
       &:hover {
@@ -794,8 +801,6 @@ code.formula {
 //   }
 // }
 
-
-
 sl-tooltip {
   .dice-tooltip {
     padding: 0.25rem;
@@ -820,12 +825,12 @@ sl-tooltip {
   padding: 0.25rem 0.5rem !important;
   border: none !important;
 
-  >img {
+  > img {
     grid-area: img;
     margin-right: 0.5rem;
   }
 
-  >h4 {
+  > h4 {
     display: grid;
     grid-area: name;
     margin: 0;
@@ -847,7 +852,6 @@ sl-tooltip {
     }
   }
 }
-
 
 // #actors .document,
 // #items .document,
@@ -982,15 +986,15 @@ sl-tooltip {
 // }
 
 .sidebar-tab {
-  >header {
+  > header {
     grid-area: header;
   }
 
-  >footer {
+  > footer {
     grid-area: footer;
   }
 
-  >.directory-list {
+  > .directory-list {
     grid-area: list;
     display: flex;
     flex-flow: column nowrap;
@@ -1046,7 +1050,7 @@ section.chat-sidebar {
     }
   }
 
-  >* {
+  > * {
     pointer-events: initial;
   }
 
@@ -1060,7 +1064,7 @@ section.chat-sidebar {
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
 
-    >.item {
+    > .item {
       border-radius: 0;
       border: none;
       padding: 0.125rem;
@@ -1107,7 +1111,7 @@ section.chat-sidebar {
     #sidebar-tabs {
       display: flex;
 
-      >.item {
+      > .item {
         border-bottom: none;
 
         &.active {
@@ -1152,7 +1156,7 @@ section.chat-sidebar {
       }
     }
 
-    >* {
+    > * {
       pointer-events: initial;
     }
 
@@ -1161,7 +1165,7 @@ section.chat-sidebar {
       padding: 0.25rem 0.125rem 0.25rem 0;
       pointer-events: none;
 
-      >* {
+      > * {
         pointer-events: initial;
       }
 
@@ -1172,7 +1176,7 @@ section.chat-sidebar {
       // order: 4;
       pointer-events: initial;
 
-      >* {
+      > * {
         padding: 0 0.25rem;
         margin: 0.125rem;
       }
@@ -1346,13 +1350,14 @@ section.chat-sidebar {
 
   .message-content {
     font-size: 1rem;
-    background: linear-gradient(to bottom,
-        alphav(var(--ep-color-bg-alt), 0.8),
-        alphav(var(--ep-color-bg), 0.8));
+    background: linear-gradient(
+      to bottom,
+      alphav(var(--ep-color-bg-alt), 0.8),
+      alphav(var(--ep-color-bg), 0.8)
+    );
 
     &.non-ep {
       padding: 0.25rem 0.5rem;
-
     }
   }
 
@@ -1396,9 +1401,11 @@ section.chat-sidebar {
 
     .message-header {
       background: var(--ep-color-bg);
-      background: linear-gradient(to bottom right,
-          var(--ep-color-bg) 20%,
-          lightv(var(--ep-color-primary-alt), 0.7));
+      background: linear-gradient(
+        to bottom right,
+        var(--ep-color-bg) 20%,
+        lightv(var(--ep-color-primary-alt), 0.7)
+      );
     }
   }
 
@@ -1469,9 +1476,11 @@ nav#controls {
     grid-auto-rows: 2.75rem;
     border-radius: 0px 0.25rem 0.25rem 0px;
     margin-right: 0px;
-    background: linear-gradient(to right,
-        alphav(var(--ep-color-bg), 0.8),
-        alphav(var(--ep-color-bg-alt), 0.75));
+    background: linear-gradient(
+      to right,
+      alphav(var(--ep-color-bg), 0.8),
+      alphav(var(--ep-color-bg-alt), 0.75)
+    );
 
     contain: content;
 
@@ -1538,9 +1547,11 @@ nav#controls {
       border-left: 2px solid currentColor !important;
       box-shadow: 0 0 1px 0px black;
       // background: var(--ep-color-bg);
-      background: linear-gradient(to right,
-          alphav(var(--ep-color-bg), 0.85),
-          alphav(var(--ep-color-bg-alt), 0.8));
+      background: linear-gradient(
+        to right,
+        alphav(var(--ep-color-bg), 0.85),
+        alphav(var(--ep-color-bg-alt), 0.8)
+      );
 
       z-index: 1;
     }
@@ -1553,23 +1564,29 @@ nav#controls {
     border: 1px solid var(--ep-color-border) !important;
     border-radius: 0.5rem !important;
     box-shadow: 0 0 2px var(--ep-color-bg);
-    background: radial-gradient(alphav(var(--ep-color-bg), 0.8),
-        alphav(var(--ep-color-bg-alt), 0.75));
+    background: radial-gradient(
+      alphav(var(--ep-color-bg), 0.8),
+      alphav(var(--ep-color-bg-alt), 0.75)
+    );
 
     &.active {
       color: alphav(var(--ep-color-text), 0.95);
       box-shadow: 0 0 4px var(--ep-color-bg);
-      background: linear-gradient(to right,
-          var(--ep-color-bg),
-          var(--ep-color-bg-alt));
+      background: linear-gradient(
+        to right,
+        var(--ep-color-bg),
+        var(--ep-color-bg-alt)
+      );
 
       z-index: 1;
     }
 
     &.toggle {
       box-shadow: none;
-      background: radial-gradient(alphav(var(--ep-color-bg), 0.8),
-          alphav(var(--ep-color-bg-alt), 0.75));
+      background: radial-gradient(
+        alphav(var(--ep-color-bg), 0.8),
+        alphav(var(--ep-color-bg-alt), 0.75)
+      );
       color: var(--ep-color-grey);
 
       &.active {
@@ -1743,4 +1760,17 @@ nav#controls {
 
 h2 {
   --color-underline-header: var(--ep-color-grey);
+}
+
+#ep-gm-panel {
+  --mdc-icon-button-size: 1.5rem;
+  pointer-events: auto;
+  position: absolute;
+  top: 3.25rem;
+  left:0.25rem;
+  background: var(--ep-color-bg);
+  border-radius: 0.25rem;
+  z-index: 1000;
+  padding: 0.25rem;
+  box-shadow: 0 0 4px black;
 }
