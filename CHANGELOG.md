@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.7] - 2024-08-22
+
+- Add a barebones GM panel that lets you see base test targets of PC's skills
+- Fix some foundry labels having poor contrast
+- Don't overwrite styles for user-config sheet
+
 ## [1.2.6] - 2024-07-27
 
 - Fix add modifier popover being clipped
