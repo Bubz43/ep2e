@@ -536,7 +536,7 @@ declare global {
 
   interface Folder {
     ancestors?: Folder[];
-    children?: Folder[]
+    children?: {folder: Folder}[]
     displayed: boolean;
     data: {
       color: string;

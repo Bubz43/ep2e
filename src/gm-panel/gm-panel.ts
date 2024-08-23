@@ -79,9 +79,10 @@ export class GMPanel extends LitElement {
           }
         }
 
+
         if (folder.children?.length) {
           for (const child of folder.children) {
-            for (const character of getAllCharacters(child)) {
+            for (const character of getAllCharacters(child.folder)) {
               characters.add(character);
             }
           }
@@ -100,7 +101,7 @@ export class GMPanel extends LitElement {
       }
     }
 
-    this.foldersWithCharacters = Array.from(foldersWithCharacters.keys()).map(
+    this.foldersWithCharacters = Array.from(foldersWithCharacters.keys()).sort((a, b) => a.depth - b.depth).map(
       (folder) => folder.id,
     );
 
@@ -199,7 +200,7 @@ export class GMPanel extends LitElement {
           renderSelectField(
             {
               ...selectedFolderId,
-              label: 'Limit to Folder',
+              label: 'Limit to Folder & Subfolders',
             },
             foldersWithCharacters,
             {
