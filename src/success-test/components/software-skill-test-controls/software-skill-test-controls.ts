@@ -1,8 +1,7 @@
-import type { SlWindow } from '@src/components/window/window';
+import { SlWindow } from '@src/components/window/window';
 import type { ActorEP } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
 import { localize } from '@src/foundry/localization';
-import { overlay } from '@src/init';
 import {
   SoftwareSkillTest,
   SoftwareSkillTestInit,
@@ -83,7 +82,7 @@ export class SoftwareSkillTestControls extends LitElement {
         }
       }),
     );
-    if (!this.isConnected) overlay.append(this);
+    if (!this.isConnected) SlWindow.container.append(this);
     SoftwareSkillTestControls.openWindows.set(init.entities.actor, this);
     const source = init.relativeEl || traverseActiveElements();
     if (source instanceof HTMLElement && source.isConnected) {

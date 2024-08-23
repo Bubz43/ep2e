@@ -4,13 +4,11 @@ import {
   renderTextField,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
-import type { SlWindow } from '@src/components/window/window';
-import { lastClickedEl } from '@src/components/window/window-controls';
+import { SlWindow } from '@src/components/window/window';
 import { AptitudeType, enumValues } from '@src/data-enums';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
 import { localize } from '@src/foundry/localization';
-import { overlay } from '@src/init';
 import {
   AptitudeCheck,
   AptitudeCheckInit,
@@ -57,7 +55,7 @@ export class AptitudeCheckControls extends LitElement {
 
     if (!win) {
       win = new AptitudeCheckControls();
-      overlay.append(win);
+      SlWindow.container.append(win);
       AptitudeCheckControls.openWindows.set(init.entities.actor, win);
     }
     const source = init.relativeEl || traverseActiveElements();

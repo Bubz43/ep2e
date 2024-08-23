@@ -1,4 +1,3 @@
-import { overlay } from '@src/init';
 import { debounceFn } from '@src/utility/decorators';
 import { TemplateResult, render } from 'lit-html';
 import type { NanoPopPosition } from 'nanopop';
@@ -22,7 +21,7 @@ export class WindowController<T> {
     this.renderTemplate = initialProps.renderTemplate;
     this.update(initialProps);
     this.win.addEventListener(SlWindowEventName.Closed, () => this.cleanup());
-    overlay.append(this.win);
+    SlWindow.container.append(this.win);
   }
 
   update(props: Partial<Omit<WindowProps<T>, 'renderTemplate'>>) {

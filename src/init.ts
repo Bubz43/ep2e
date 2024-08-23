@@ -176,6 +176,7 @@ Hooks.once('ready', async () => {
 
   setTimeout(() => {
     overlay = new EPOverlay();
+    // SlWindow.container = overlay;
     SlWindow.container = document.body;
     document.body.append(overlay);
 

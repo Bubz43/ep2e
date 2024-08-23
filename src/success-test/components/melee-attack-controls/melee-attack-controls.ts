@@ -1,6 +1,6 @@
 import { renderNumberInput } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
-import type { SlWindow } from '@src/components/window/window';
+import { SlWindow } from '@src/components/window/window';
 import { CalledShot, enumValues } from '@src/data-enums';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
@@ -108,7 +108,7 @@ export class MeleeAttackControls extends LitElement {
         }
       }),
     );
-    if (!this.isConnected) overlay.append(this);
+    if (!this.isConnected) SlWindow.container.append(this);
     MeleeAttackControls.openWindows.set(init.entities.actor, this);
     const source = traverseActiveElements();
     if (source instanceof HTMLElement && source.isConnected) {

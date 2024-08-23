@@ -1,8 +1,7 @@
-import type { SlWindow } from '@src/components/window/window';
+import { SlWindow } from '@src/components/window/window';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
 import { localize } from '@src/foundry/localization';
-import { overlay } from '@src/init';
 import {
   InfectionTest,
   InfectionTestInit,
@@ -45,7 +44,7 @@ export class InfectionTestControls extends LitElement {
 
     if (!win) {
       win = new InfectionTestControls();
-      overlay.append(win);
+      SlWindow.container.append(win);
       InfectionTestControls.openWindows.set(init.entities.actor, win);
     }
 

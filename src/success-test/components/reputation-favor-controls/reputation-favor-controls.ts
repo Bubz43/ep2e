@@ -1,6 +1,6 @@
 import { renderNumberField } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
-import type { SlWindow } from '@src/components/window/window';
+import { SlWindow } from '@src/components/window/window';
 import { enumValues } from '@src/data-enums';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
@@ -57,7 +57,7 @@ export class ReputationFavorControls extends LitElement {
 
     if (!win) {
       win = new ReputationFavorControls();
-      overlay.append(win);
+      SlWindow.container.append(win);
       ReputationFavorControls.openWindows.set(init.entities.actor, win);
     }
 

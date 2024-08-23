@@ -4,7 +4,7 @@ import {
   renderSelectField,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
-import type { SlWindow } from '@src/components/window/window';
+import { SlWindow } from '@src/components/window/window';
 import { enumValues, PoolType, PsiPush } from '@src/data-enums';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
@@ -51,7 +51,7 @@ export class PsiTestControls extends LitElement {
 
     if (!win) {
       win = new PsiTestControls();
-      overlay.append(win);
+      SlWindow.container.append(win);
       PsiTestControls.openWindows.set(init.entities.actor, win);
     }
 
