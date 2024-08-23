@@ -176,9 +176,13 @@ Hooks.once('ready', async () => {
 
   setTimeout(() => {
     overlay = new EPOverlay();
-    // SlWindow.container = overlay;
-    SlWindow.container = document.body;
     document.body.append(overlay);
+    // SlWindow.container = overlay;
+    const windowContainer = document.createElement('div');
+    windowContainer.className = 'ep-window-container';
+    SlWindow.container = windowContainer
+    document.body.append(windowContainer);
+   
 
     tooltip = document.createElement('sl-tooltip');
     // tooltip.slot = 'tooltip';

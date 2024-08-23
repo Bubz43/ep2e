@@ -395,7 +395,7 @@ export class SlWindow extends LitElement {
 
       const { bottom, right, top, left } = this.getBoundingClientRect();
       const { contentContainer, header, footerSlot } = this;
-      const { offsetHeight, offsetWidth } = SlWindow.container;
+      const { offsetHeight, offsetWidth } = document.body;
 
       const { minWidth, minHeight } = (
         contentContainer.firstElementChild as HTMLSlotElement
