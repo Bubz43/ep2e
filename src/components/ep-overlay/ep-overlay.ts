@@ -1,28 +1,16 @@
-import { CombatView } from '@src/combat/components/combat-view/combat-view';
 import type { Character } from '@src/entities/actor/proxies/character';
-import { ActorType } from '@src/entities/entity-types';
-import { readyCanvas } from '@src/foundry/canvas';
-import { positionApp } from '@src/foundry/foundry-apps';
-import { tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
-import { debounceFn } from '@src/utility/decorators';
-import { resizeElement, toggleTouchAction } from '@src/utility/dom';
-import { notEmpty } from '@src/utility/helpers';
 import {
   customElement,
   html,
   LitElement,
   property,
   query,
-  state,
+  state
 } from 'lit-element';
-import { render, TemplateResult } from 'lit-html';
-import { cache } from 'lit-html/directives/cache';
-import { first } from 'remeda';
+import type { TemplateResult } from 'lit-html';
 import { traverseActiveElements } from 'weightless';
 import type { EventList } from '../event-list/event-list';
-import { closeWindow } from '../window/window-controls';
-import { SlWindowEventName } from '../window/window-options';
 import styles from './ep-overlay.scss';
 
 // const relevantHooks = [
@@ -54,14 +42,14 @@ export class EPOverlay extends LitElement {
 
   @property({ type: Boolean, reflect: true }) faded = false;
 
-  @query("slot[name='app-controls']")
-  private foundryViewControlBar!: HTMLSlotElement;
+  // @query("slot[name='app-controls']")
+  // private foundryViewControlBar!: HTMLSlotElement;
 
-  @query('slot[name="foundry-apps"]')
-  private foundryApps!: HTMLSlotElement;
+  // @query('slot[name="foundry-apps"]')
+  // private foundryApps!: HTMLSlotElement;
 
-  @query('slot#windows')
-  private windowsSlot!: HTMLSlotElement;
+  // @query('slot#windows')
+  // private windowsSlot!: HTMLSlotElement;
 
   @query('event-list', true)
   eventList!: EventList;
@@ -153,135 +141,135 @@ export class EPOverlay extends LitElement {
   //   this.requestUpdate();
   // }, 1);
 
-  stealElements() {
-    const ids = [
-      // 'chat',
-      'sidebar',
-      'navigation',
-      'controls',
-    ];
-    for (const id of ids) {
-      const el = document.getElementById(id);
-      if (el) {
-        const wrapper = document.createElement('div');
-        wrapper.style.display = 'contents';
-        wrapper.slot = id;
-        wrapper.append(el);
-        this.append(wrapper);
-      }
-    }
-    this.setupChat();
-  }
+  // stealElements() {
+  //   const ids = [
+  //     // 'chat',
+  //     'sidebar',
+  //     'navigation',
+  //     'controls',
+  //   ];
+  //   for (const id of ids) {
+  //     const el = document.getElementById(id);
+  //     if (el) {
+  //       const wrapper = document.createElement('div');
+  //       wrapper.style.display = 'contents';
+  //       wrapper.slot = id;
+  //       wrapper.append(el);
+  //       this.append(wrapper);
+  //     }
+  //   }
+  //   this.setupChat();
+  // }
 
-  private setupChat() {
-    const chatTextArea = document.getElementById('chat-message');
-    chatTextArea?.setAttribute('placeholder', 'Enter a message');
-    chatTextArea?.addEventListener('keydown', () => {});
-    // chatTextArea?.before(new CommandHelper());
-    document
-      .getElementById('chat-form')
-      ?.addEventListener('pointerdown', (ev: PointerEvent) => {
-        if (ev.currentTarget !== ev.target) return;
-        const el = ev.currentTarget as HTMLElement;
-        const { scrollTop, scrollHeight, offsetHeight } =
-          document.getElementById('chat-log')!;
-        const atBottom = scrollTop + offsetHeight === scrollHeight;
-        const undo = toggleTouchAction(el);
-        resizeElement({
-          element: el,
-          ev,
-          width: false,
-          height: true,
-          reverse: true,
-          onEnd: () => {
-            undo();
-            if (atBottom) ui.chat.scrollBottom();
-          },
-        });
-      });
-  }
+  // private setupChat() {
+  //   const chatTextArea = document.getElementById('chat-message');
+  //   chatTextArea?.setAttribute('placeholder', 'Enter a message');
+  //   chatTextArea?.addEventListener('keydown', () => {});
+  //   // chatTextArea?.before(new CommandHelper());
+  //   document
+  //     .getElementById('chat-form')
+  //     ?.addEventListener('pointerdown', (ev: PointerEvent) => {
+  //       if (ev.currentTarget !== ev.target) return;
+  //       const el = ev.currentTarget as HTMLElement;
+  //       const { scrollTop, scrollHeight, offsetHeight } =
+  //         document.getElementById('chat-log')!;
+  //       const atBottom = scrollTop + offsetHeight === scrollHeight;
+  //       const undo = toggleTouchAction(el);
+  //       resizeElement({
+  //         element: el,
+  //         ev,
+  //         width: false,
+  //         height: true,
+  //         reverse: true,
+  //         onEnd: () => {
+  //           undo();
+  //           if (atBottom) ui.chat.scrollBottom();
+  //         },
+  //       });
+  //     });
+  // }
 
-  private get foundryViewControls() {
-    return this.foundryViewControlBar.assignedElements() as HTMLElement[];
-  }
+  // private get foundryViewControls() {
+  //   return this.foundryViewControlBar.assignedElements() as HTMLElement[];
+  // }
 
-  private toggleActiveFoundryApps = () => {
-    for (const el of this.foundryViewControls) {
-      const { view } = el.dataset;
-      if (view === 'combat') continue;
-      const app = ui[view as keyof typeof ui];
-      el.classList.toggle(
-        'active',
-        !!(app instanceof SidebarTab && app._popout),
-      );
-    }
-  };
+  // private toggleActiveFoundryApps = () => {
+  //   for (const el of this.foundryViewControls) {
+  //     const { view } = el.dataset;
+  //     if (view === 'combat') continue;
+  //     const app = ui[view as keyof typeof ui];
+  //     el.classList.toggle(
+  //       'active',
+  //       !!(app instanceof SidebarTab && app._popout),
+  //     );
+  //   }
+  // };
 
-  private setFoundryPopouts() {
-    this.foundryViewControls.forEach((el) => el.remove());
-    const sTabs = document.getElementById('sidebar-tabs');
-    if (!sTabs) return;
-    const sidebarTabs = Array.from(
-      sTabs.querySelectorAll<HTMLElement>('a.item'),
-    ).map((tabLink) => {
-      const { title, dataset } = tabLink;
-      const icon = tabLink.querySelector('i.fas');
-      const tabName = dataset['tab'] as keyof typeof ui;
-      if (tabName === 'chat') return '';
-      const tabApp = ui[tabName];
-      if (!(tabApp instanceof SidebarTab)) return '';
+  // private setFoundryPopouts() {
+  //   this.foundryViewControls.forEach((el) => el.remove());
+  //   const sTabs = document.getElementById('sidebar-tabs');
+  //   if (!sTabs) return;
+  //   const sidebarTabs = Array.from(
+  //     sTabs.querySelectorAll<HTMLElement>('a.item'),
+  //   ).map((tabLink) => {
+  //     const { title, dataset } = tabLink;
+  //     const icon = tabLink.querySelector('i.fas');
+  //     const tabName = dataset['tab'] as keyof typeof ui;
+  //     if (tabName === 'chat') return '';
+  //     const tabApp = ui[tabName];
+  //     if (!(tabApp instanceof SidebarTab)) return '';
 
-      return html`
-        <wl-list-item
-          slot="app-controls"
-          clickable
-          data-ep-tooltip=${title}
-          @mouseenter=${tooltip.fromData}
-          @focus=${tooltip.fromData}
-          data-view=${tabName}
-          @click=${(ev: Event & { currentTarget: HTMLElement }) => {
-            const { currentTarget } = ev;
-            if (tabName === 'combat') {
-              const { win, wasConnected } = CombatView.openWindow();
-              if (!wasConnected) {
-                win.addEventListener(
-                  SlWindowEventName.Closed,
-                  () => currentTarget.classList.remove('active'),
-                  { once: true },
-                );
-              }
-              currentTarget.classList.add('active');
-              return;
-            }
-            const { _popout } = tabApp;
-            if (_popout && notEmpty(_popout.element)) {
-              const [element] = _popout.element;
-              if (element?.classList.contains('minimized')) _popout.maximize();
-              _popout.bringToTop();
-            } else {
-              tabApp.renderPopout();
-              requestAnimationFrame(async () => {
-                const { _popout } = tabApp;
-                if (currentTarget instanceof HTMLElement && _popout?.element) {
-                  positionApp(_popout, currentTarget);
-                }
-              });
-            }
-          }}
-          @contextmenu=${() => {
-            if (tabName === 'combat') {
-              closeWindow(CombatView);
-            } else tabApp._popout?.close({});
-          }}
-          >${icon}</wl-list-item
-        >
-      `;
-    });
-    const fragment = new DocumentFragment();
-    render(sidebarTabs, fragment);
-    this.append(fragment);
-    sTabs.remove();
-  }
+  //     return html`
+  //       <wl-list-item
+  //         slot="app-controls"
+  //         clickable
+  //         data-ep-tooltip=${title}
+  //         @mouseenter=${tooltip.fromData}
+  //         @focus=${tooltip.fromData}
+  //         data-view=${tabName}
+  //         @click=${(ev: Event & { currentTarget: HTMLElement }) => {
+  //           const { currentTarget } = ev;
+  //           if (tabName === 'combat') {
+  //             const { win, wasConnected } = CombatView.openWindow();
+  //             if (!wasConnected) {
+  //               win.addEventListener(
+  //                 SlWindowEventName.Closed,
+  //                 () => currentTarget.classList.remove('active'),
+  //                 { once: true },
+  //               );
+  //             }
+  //             currentTarget.classList.add('active');
+  //             return;
+  //           }
+  //           const { _popout } = tabApp;
+  //           if (_popout && notEmpty(_popout.element)) {
+  //             const [element] = _popout.element;
+  //             if (element?.classList.contains('minimized')) _popout.maximize();
+  //             _popout.bringToTop();
+  //           } else {
+  //             tabApp.renderPopout();
+  //             requestAnimationFrame(async () => {
+  //               const { _popout } = tabApp;
+  //               if (currentTarget instanceof HTMLElement && _popout?.element) {
+  //                 positionApp(_popout, currentTarget);
+  //               }
+  //             });
+  //           }
+  //         }}
+  //         @contextmenu=${() => {
+  //           if (tabName === 'combat') {
+  //             closeWindow(CombatView);
+  //           } else tabApp._popout?.close({});
+  //         }}
+  //         >${icon}</wl-list-item
+  //       >
+  //     `;
+  //   });
+  //   const fragment = new DocumentFragment();
+  //   render(sidebarTabs, fragment);
+  //   this.append(fragment);
+  //   sTabs.remove();
+  // }
 
   // private switchWindowZ({ currentTarget }: Event) {
   //   if (!(currentTarget instanceof HTMLSlotElement)) return;

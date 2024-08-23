@@ -535,6 +535,8 @@ declare global {
   }
 
   interface Folder {
+    ancestors?: Folder[];
+    children?: {folder: Folder}[]
     displayed: boolean;
     data: {
       color: string;
@@ -593,7 +595,7 @@ declare global {
   type UIClasses = typeof CONFIG.ui;
   type UI = {
     [key in keyof UIClasses]: InstanceType<UIClasses[key]>;
-  } & { windows: Record<string, Application> };
+  } & { windows: Record<string, Application>, activeWindow: unknown };
   const ui: UI;
 
   const canvas: unknown;

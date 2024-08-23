@@ -1,8 +1,7 @@
-import type { SlWindow } from '@src/components/window/window';
+import { SlWindow } from '@src/components/window/window';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
 import { localize } from '@src/foundry/localization';
-import { overlay } from '@src/init';
 import { SkillTest, SkillTestInit } from '@src/success-test/skill-test';
 import { notEmpty } from '@src/utility/helpers';
 import {
@@ -99,7 +98,7 @@ export class SkillTestControls extends LitElement {
         }
       }),
     );
-    if (!this.isConnected) overlay.append(this);
+    if (!this.isConnected) SlWindow.container.append(this);
     SkillTestControls.openWindows.set(init.entities.actor, this);
     const source = init.relativeEl || traverseActiveElements();
     if (source instanceof HTMLElement && source.isConnected) {

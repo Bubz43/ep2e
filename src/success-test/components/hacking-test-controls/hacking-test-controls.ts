@@ -1,4 +1,4 @@
-import type { SlWindow } from '@src/components/window/window';
+import { SlWindow } from '@src/components/window/window';
 import type { ActorEP, MaybeToken } from '@src/entities/actor/actor';
 import { formattedSleeveInfo } from '@src/entities/actor/sleeves';
 import { readyCanvas } from '@src/foundry/canvas';
@@ -98,7 +98,7 @@ export class HackingTestControls extends LitElement {
         }
       }),
     );
-    if (!this.isConnected) overlay.append(this);
+    if (!this.isConnected) SlWindow.container.append(this);
     HackingTestControls.openWindows.set(init.entities.actor, this);
     const source = traverseActiveElements();
     if (source instanceof HTMLElement && source.isConnected) {

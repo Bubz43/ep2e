@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.8] - 2024-08-23
+
+- Fix layering interactions between ep windows and foundry ones
+- Add folder select to gm-panel
+- Add aptitude checks to gm-panel
+
 ## [1.2.7] - 2024-08-22
 
 - Add a barebones GM panel that lets you see base test targets of PC's skills

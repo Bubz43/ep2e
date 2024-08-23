@@ -5,7 +5,7 @@ import {
   renderTimeField,
 } from '@src/components/field/fields';
 import { renderAutoForm } from '@src/components/form/forms';
-import type { SlWindow } from '@src/components/window/window';
+import { SlWindow } from '@src/components/window/window';
 import {
   AreaEffectType,
   CalledShot,
@@ -123,7 +123,7 @@ export class ThrownAttackControls extends LitElement {
         }
       }),
     );
-    if (!this.isConnected) overlay.append(this);
+    if (!this.isConnected) SlWindow.container.append(this);
     ThrownAttackControls.openWindows.set(init.entities.actor, this);
     const source = init.adjacentElement || traverseActiveElements();
     if (source instanceof HTMLElement && source.isConnected) {
