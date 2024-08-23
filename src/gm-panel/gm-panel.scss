@@ -30,3 +30,9 @@ tr {
 thead {
   background-color: var(--ep-color-bg-alt);
 }
+
+.target-col {
+  width: 1%;
+  padding: 0 1rem;
+  white-space: nowrap;
+}
