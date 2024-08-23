@@ -26,7 +26,7 @@ import {
 } from 'lit-element';
 import { render } from 'lit-html';
 import { NanoPopPosition, reposition } from 'nanopop';
-import { anyPass, clamp, mapToObj } from 'remeda';
+import { anyPass, clamp, keys, mapToObj } from 'remeda';
 import { ResizeOption, SlWindowEventName } from './window-options';
 import styles from './window.scss';
 
@@ -64,7 +64,22 @@ export class SlWindow extends LitElement {
 
   static container = document.body;
 
-  private static _zIndex = 99;
+  private static get minZIndex() {
+    return Number(
+      getComputedStyle(document.body).getPropertyValue('--z-index-window'),
+    );
+  }
+
+  static readonly maxZIndex = 99999;
+
+  private static get zIndex() {
+    return _maxZ;
+  }
+
+  private static set zIndex(value: number) {
+    _maxZ = value;
+    ui.activeWindow = undefined;
+  }
 
   private static grantFocus(win: SlWindow) {
     if (!win.focused) {
@@ -84,8 +99,25 @@ export class SlWindow extends LitElement {
   }
 
   static updateZIndex(win: SlWindow) {
-    if (Number(win.style.zIndex) < this._zIndex) {
-      win.style.zIndex = `${++this._zIndex}`;
+    const { zIndex } = this;
+    if (Number(win.style.zIndex) < zIndex) {
+      if (
+        ui.activeWindow === undefined &&
+        zIndex >= this.maxZIndex &&
+        keys(ui.windows).length === 0
+      ) {
+        const allWindows = Array.from(
+          document.querySelectorAll('sl-window'),
+        ).sort((a, b) => Number(a.style.zIndex) - Number(b.style.zIndex));
+        let start = this.minZIndex;
+        for (const w of allWindows) {
+          w.style.zIndex = `${start++}`;
+        }
+        win.style.zIndex = `${start}`;
+        this.zIndex = start;
+      } else {
+        win.style.zIndex = `${++this.zIndex}`;
+      }
     }
   }
 

@@ -593,7 +593,7 @@ declare global {
   type UIClasses = typeof CONFIG.ui;
   type UI = {
     [key in keyof UIClasses]: InstanceType<UIClasses[key]>;
-  } & { windows: Record<string, Application> };
+  } & { windows: Record<string, Application>, activeWindow: unknown };
   const ui: UI;
 
   const canvas: unknown;

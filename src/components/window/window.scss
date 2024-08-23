@@ -22,6 +22,7 @@
   -webkit-backdrop-filter: blur(5px) contrast(85%);
   backdrop-filter: blur(5px) contrast(85%);
   transition: opacity 25ms ease-in-out;
+  color: var(--ep-color-text);
 
   ::slotted([slot='footer']) {
     display: flex;

@@ -1,11 +1,8 @@
 import { CombatView } from '@src/combat/components/combat-view/combat-view';
 import type { Character } from '@src/entities/actor/proxies/character';
-import { ActorType } from '@src/entities/entity-types';
-import { readyCanvas } from '@src/foundry/canvas';
 import { positionApp } from '@src/foundry/foundry-apps';
 import { tooltip } from '@src/init';
 import { RenderDialogEvent } from '@src/open-dialog';
-import { debounceFn } from '@src/utility/decorators';
 import { resizeElement, toggleTouchAction } from '@src/utility/dom';
 import { notEmpty } from '@src/utility/helpers';
 import {
@@ -14,11 +11,9 @@ import {
   LitElement,
   property,
   query,
-  state,
+  state
 } from 'lit-element';
 import { render, TemplateResult } from 'lit-html';
-import { cache } from 'lit-html/directives/cache';
-import { first } from 'remeda';
 import { traverseActiveElements } from 'weightless';
 import type { EventList } from '../event-list/event-list';
 import { closeWindow } from '../window/window-controls';
@@ -57,11 +52,11 @@ export class EPOverlay extends LitElement {
   @query("slot[name='app-controls']")
   private foundryViewControlBar!: HTMLSlotElement;
 
-  @query('slot[name="foundry-apps"]')
-  private foundryApps!: HTMLSlotElement;
+  // @query('slot[name="foundry-apps"]')
+  // private foundryApps!: HTMLSlotElement;
 
-  @query('slot#windows')
-  private windowsSlot!: HTMLSlotElement;
+  // @query('slot#windows')
+  // private windowsSlot!: HTMLSlotElement;
 
   @query('event-list', true)
   eventList!: EventList;
@@ -308,7 +303,7 @@ export class EPOverlay extends LitElement {
       name="foundry-apps"
     
     ></slot> -->
-    <slot id="windows"></slot>
+    <!-- <slot id="windows"></slot> -->
     <!-- <scene-view></scene-view> -->
     <!-- <div class="nav-wrapper">
       <mwc-icon-button-toggle

@@ -176,13 +176,12 @@ Hooks.once('ready', async () => {
 
   setTimeout(() => {
     overlay = new EPOverlay();
-    SlWindow.container = overlay;
+    SlWindow.container = document.body;
     document.body.append(overlay);
 
     tooltip = document.createElement('sl-tooltip');
-    tooltip.slot = 'tooltip';
+    // tooltip.slot = 'tooltip';
     overlay.append(tooltip);
-    // document.body.append(tooltip);
     document.body.classList.add('ready');
     Hooks.call('ep-ready', true);
     // const sceneView = document.createElement('scene-view');

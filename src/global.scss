@@ -82,6 +82,11 @@ ep-overlay {
   @include widgetless-number-inputs;
 }
 
+sl-window {
+  @include styled-scrollbars;
+  @include widgetless-number-inputs;
+}
+
 .header-actions.action-buttons {
   button {
     white-space: nowrap;
