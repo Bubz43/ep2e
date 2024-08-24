@@ -326,6 +326,10 @@ type LangEntries =
   | 'walker'
   | 'wheeled'
   | 'winged'
+  | "brachiate" 
+  | 'glider'
+  | "plasmaSail"
+  | "magneticGenerator"
   | 'painFilter'
   | 'biomorph'
   | 'synthmorph'

@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.9] - 2024-08-24
+
+- Add Brachiate, Glider, Plasma Sail, and Magnetic Generator movement types from Character Options
+
 ## [1.2.8] - 2024-08-23
 
 - Fix layering interactions between ep windows and foundry ones

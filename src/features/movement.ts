@@ -19,6 +19,10 @@ export enum Movement {
   Walker = 'walker',
   Wheeled = 'wheeled',
   Winged = 'winged',
+  Brachiate = "brachiate",
+  Glider = 'glider',
+  PlasmaSail = "plasmaSail",
+  MagneticGenerator = "magneticGenerator",
 }
 
 export enum MovementRange {

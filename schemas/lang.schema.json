@@ -636,6 +636,9 @@
             "aerospace": {
               "type": "string"
             },
+            "afterFall": {
+              "type": "string"
+            },
             "age": {
               "type": "string"
             },
@@ -1078,6 +1081,9 @@
               "type": "string"
             },
             "braced": {
+              "type": "string"
+            },
+            "brachiate": {
               "type": "string"
             },
             "brain": {
@@ -2097,6 +2103,9 @@
             "glands": {
               "type": "string"
             },
+            "glider": {
+              "type": "string"
+            },
             "glitch": {
               "type": "string"
             },
@@ -2203,6 +2212,9 @@
               "type": "string"
             },
             "healthRecovery": {
+              "type": "string"
+            },
+            "healthType": {
               "type": "string"
             },
             "healths": {
@@ -2713,6 +2725,9 @@
               "type": "string"
             },
             "made": {
+              "type": "string"
+            },
+            "magneticGenerator": {
               "type": "string"
             },
             "major": {
@@ -3331,6 +3346,9 @@
               "type": "string"
             },
             "plasmaCutter": {
+              "type": "string"
+            },
+            "plasmaSail": {
               "type": "string"
             },
             "playerCharacter": {
@@ -4905,6 +4923,9 @@
             "xenomorph": {
               "type": "string"
             },
+            "yearStart": {
+              "type": "string"
+            },
             "yellow": {
               "type": "string"
             },
@@ -4969,6 +4990,7 @@
             "advancePersonalTime",
             "advanced",
             "aerospace",
+            "afterFall",
             "age",
             "aggressive",
             "agi",
@@ -5117,6 +5139,7 @@
             "both",
             "bow",
             "braced",
+            "brachiate",
             "brain",
             "breakFree",
             "breakTool",
@@ -5456,6 +5479,7 @@
             "generic",
             "gland",
             "glands",
+            "glider",
             "glitch",
             "glitchOnMeshWounds",
             "goal",
@@ -5492,6 +5516,7 @@
             "healingTimeframes",
             "health",
             "healthRecovery",
+            "healthType",
             "healths",
             "hearingBased",
             "heavy",
@@ -5662,6 +5687,7 @@
             "machinePistol",
             "macro",
             "made",
+            "magneticGenerator",
             "major",
             "manuallyToggled",
             "masterDevice",
@@ -5868,6 +5894,7 @@
             "placeEgo",
             "plant",
             "plasmaCutter",
+            "plasmaSail",
             "playerCharacter",
             "players",
             "pod",
@@ -6392,6 +6419,7 @@
             "xRep",
             "xenofauna",
             "xenomorph",
+            "yearStart",
             "yellow",
             "z-a"
           ],

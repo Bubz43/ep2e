@@ -1,6 +1,10 @@
 {
   "Eclipse Phase 2e": "Eclipse Phase 2e",
   "EP2E": {
+    "brachiate": "Brachiate",
+    "glider": "Glider",
+    "plasmaSail": "Plasma Sail",
+    "magneticGenerator": "Magnetic Generator",
     "trait": "Trait",
     "morph": "Morph",
     "ego": "Ego",
