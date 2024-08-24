@@ -327,6 +327,7 @@ type LangEntries =
   | 'wheeled'
   | 'winged'
   | "brachiate" 
+  | "ooze"
   | 'glider'
   | "plasmaSail"
   | "magneticGenerator"

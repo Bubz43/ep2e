@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.2.10] - 2024-08-24
+
+- Add Ooze movement type
+- Set Pilot: Space movement skill for Plasma Sail and Magnetic Generator
+
 ## [1.2.9] - 2024-08-24
 
 - Add Brachiate, Glider, Plasma Sail, and Magnetic Generator movement types from Character Options

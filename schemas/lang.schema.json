@@ -3162,6 +3162,9 @@
             "onset": {
               "type": "string"
             },
+            "ooze": {
+              "type": "string"
+            },
             "openSource": {
               "type": "string"
             },
@@ -5832,6 +5835,7 @@
             "onlyCharactersAllowed",
             "onlyWareAllowed",
             "onset",
+            "ooze",
             "openSource",
             "operatingSystem",
             "opponent's",

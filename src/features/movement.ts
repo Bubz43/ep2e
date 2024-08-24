@@ -9,6 +9,7 @@ export enum Movement {
   Hover = 'hover',
   Ionic = 'ionic',
   Microlight = 'microlight',
+  Ooze = 'ooze',
   Roller = 'roller',
   Rotor = 'rotor',
   Snake = 'snake',
@@ -61,6 +62,8 @@ export const pilotMovementTypes: ReadonlyMap<
   [Movement.ThrustVector, CommonPilotField.Air],
   [Movement.Tracked, CommonPilotField.Ground],
   [Movement.Wheeled, CommonPilotField.Ground],
+  [Movement.PlasmaSail, CommonPilotField.Space],
+  [Movement.MagneticGenerator, CommonPilotField.Space],
 ]);
 
 export type MovementRate = {
