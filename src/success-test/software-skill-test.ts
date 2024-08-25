@@ -58,7 +58,7 @@ export class SoftwareSkillTest extends SuccessTestBase {
     return `${this.skillState.skill.name} ${localize('test')}`;
   }
 
-  protected get testMessageData(): SuccessTestMessageData {
+  protected async getTestMessageData(): Promise<SuccessTestMessageData> {
     const {
       ignoreModifiers,
       clampedTarget,
@@ -85,7 +85,7 @@ export class SoftwareSkillTest extends SuccessTestBase {
         {
           target: clampedTarget,
           ...(settings.autoRoll
-            ? rollSuccessTest({ target: clampedTarget })
+            ? await rollSuccessTest({ target: clampedTarget })
             : {}),
           action: pools.active
             ? [pools.active[0].type, pools.active[1]]
@@ -135,7 +135,7 @@ export class SoftwareSkillTest extends SuccessTestBase {
             ].join(' '),
           ]),
         },
-        successTest: this.testMessageData,
+        successTest: await this.getTestMessageData(),
       },
       entity: character,
       visibility: settings.visibility,

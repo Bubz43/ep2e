@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.11] - 2024-08-25
+
+- Fix Software Skill success test not rolling
+
 ## [1.2.10] - 2024-08-24
 
 - Add Ooze movement type
