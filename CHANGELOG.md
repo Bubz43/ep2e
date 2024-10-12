@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.2.12] - 2024-10-12
+
+- Apply aggressive penalty when using aggressive melee attack
+- Add Full Defense select to character combat tab
+
 ## [1.2.11] - 2024-08-25
 
 - Fix Software Skill success test not rolling

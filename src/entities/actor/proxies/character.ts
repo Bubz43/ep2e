@@ -3,7 +3,7 @@ import {
   openOrRenderWindow,
 } from '@src/components/window/window-controls';
 import { ResizeOption } from '@src/components/window/window-options';
-import { enumValues, PoolType, RechargeType } from '@src/data-enums';
+import { AptitudeType, enumValues, FullDefenseType, PoolType, RechargeType } from '@src/data-enums';
 import {
   AppliedEffects,
   ReadonlyAppliedEffects,
@@ -45,6 +45,8 @@ import { Pool, Pools } from '@src/features/pool';
 import { influenceInfo, PsiInfluenceType } from '@src/features/psi-influence';
 import { Recharge } from '@src/features/recharge';
 import { effectsFromSize, getEffectsFromSize, Size } from '@src/features/size';
+import { SkillType } from '@src/features/skills';
+import { TagType } from '@src/features/tags';
 import {
   TemporaryFeatureEnd,
   TemporaryFeatureType,
@@ -141,6 +143,48 @@ export class Character extends ActorProxyBase<ActorType.Character> {
         this._appliedEffects.add({
           source: localize('painFilter'),
           effects: Synthetic.painFilterEffects,
+        });
+      }
+    }
+
+    if (this.sleeve && this.sleeve?.type !== ActorType.Infomorph) {
+      const { combatState } = this.epData;
+      if (combatState.aggressive) {
+        this._appliedEffects.add({
+          source: 'Aggressive Penalty',
+          effects: [
+            createEffect.successTest({
+              modifier: -10,
+              tags: [{ type: TagType.Skill, skillType: SkillType.Fray }],
+            }),
+          ],
+        });
+      }
+      if (combatState.fullDefense === FullDefenseType.Physical) {
+        this._appliedEffects.add({
+          source: 'Physical Full Defense',
+          effects: [
+            createEffect.successTest({
+              modifier: 30,
+              tags: [{ type: TagType.Skill, skillType: SkillType.Fray }],
+            }),
+            createEffect.successTest({
+              modifier: 30,
+              requirement: "Dodging",
+              tags: [{ type: TagType.Skill, skillType: SkillType.Athletics }],
+            }),
+          ],
+        });
+      } else if (combatState.fullDefense === FullDefenseType.Mental) {
+        this._appliedEffects.add({
+          source: 'Mental Full Defense',
+          effects: [
+            createEffect.successTest({
+              modifier: 30,
+              requirement: "Resist sleights",
+              tags: [{ type: TagType.AptitudeChecks, aptitude: AptitudeType.Willpower }],
+            }),
+          ],
         });
       }
     }
