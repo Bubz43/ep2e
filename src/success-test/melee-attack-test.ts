@@ -340,6 +340,10 @@ export class MeleeAttackTest extends SkillTest {
       });
     }
 
+    if (meleeSettings.aggressive) {
+      await this.character?.updater.path("system", "combatState", "aggressive").commit(true)
+    }
+
     return message.id;
   }
 }

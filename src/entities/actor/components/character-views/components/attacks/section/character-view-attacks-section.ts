@@ -25,6 +25,13 @@ import { repeat } from 'lit-html/directives/repeat';
 import { identity } from 'remeda';
 import { renderItemAttacks } from '../render-item-attacks';
 import styles from './character-view-attacks-section.scss';
+import { renderUpdaterForm } from '@src/components/form/forms';
+import {
+  renderCheckbox,
+  renderLabeledCheckbox,
+  renderSelectField,
+} from '@src/components/field/fields';
+import { enumValues, FullDefenseType } from '@src/data-enums';
 
 const groups = ['melee', 'software', 'thrown', 'ranged'] as const;
 
@@ -206,6 +213,27 @@ export class CharacterViewAttacksSection extends LazyRipple(LitElement) {
             )}</span
           ></colored-tag
         >
+
+        ${renderUpdaterForm(
+          this.character.updater.path('system', 'combatState'),
+          {
+            disabled: this.character.disabled,
+            classes: 'combat-state-form',
+            fields: ({ aggressive, fullDefense }) => [
+            
+              renderSelectField(fullDefense, enumValues(FullDefenseType), {
+                emptyText: "-",
+                altLabel: (option) => option === FullDefenseType.Mental ? "Mental (Complex Action)" : "Physical (Complex Action)",
+              }),
+              renderLabeledCheckbox({
+                ...aggressive,
+                label: 'Aggressive Penalty',
+              }, {
+                "tooltipText": "-10 to Fray until next action"
+              }),
+            ],
+          },
+        )}
       </div>
     `;
   }

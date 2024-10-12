@@ -29,6 +29,15 @@
   grid-template-columns: 1fr 1fr;
   gap: 0.25rem;
   padding: 0.125rem 0.5rem 0.5rem;
+  max-width: 40rem;
+}
+
+.combat-state-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-column: span 2;
+  padding-top: 0.125rem;
+  align-items: center;
 }
 
 .attacks {
