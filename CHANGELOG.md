@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.2.13] - 2024-11-01
+
+- Add user setting to force all EP windows to be resizable in both directions.
+- Fix Dice So Nice! module interaction so users doing a blind success test won't see the dice being rolled.
+
 ## [1.2.12] - 2024-10-12
 
 - Apply aggressive penalty when using aggressive melee attack
