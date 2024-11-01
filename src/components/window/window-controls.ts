@@ -1,3 +1,4 @@
+import { gameSettings } from '@src/init';
 import { debounceFn } from '@src/utility/decorators';
 import { TemplateResult, render } from 'lit-html';
 import type { NanoPopPosition } from 'nanopop';
@@ -114,6 +115,7 @@ export const openWindow = (
   win.name = name;
   win.img = img;
   win.resizable = resizable;
+  win.resizable = gameSettings.alwaysResizableWindows.current ? ResizeOption.Both : resizable;
   if (position) win.relativePosition = position;
   render(content, win);
 
