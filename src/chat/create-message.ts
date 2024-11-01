@@ -90,6 +90,8 @@ export const createMessage = async ({
         ? ChatMessage.getWhisperRecipients('GM').map((i: User) => i.id)
         : undefined),
   };
+  const { user } = game
+
   if ('dice3d' in game) {
     const successTestRoll =
       chatMessageData.flags?.ep2e?.successTest?.states[0]?.roll;
@@ -122,7 +124,9 @@ export const createMessage = async ({
             ],
           },
         ],
-      });
+      }, 
+      user, false, chatMessageData.whisper, chatMessageData.blind
+     );
     }
   }
 
