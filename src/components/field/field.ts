@@ -192,9 +192,10 @@ export class Field extends LitElement {
     ) {
       const button = ev.currentTarget as HTMLElement;
       const { action } = button.dataset;
+      const n = ev.shiftKey ? 10 : 1;
 
-      if (action === 'remove') input.stepDown();
-      else input.stepUp();
+      if (action === 'remove') input.stepDown(n);
+      else input.stepUp(n);
 
       input.dispatchEvent(
         new Event('change', { bubbles: true, composed: true }),
