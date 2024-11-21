@@ -182,7 +182,7 @@ export class Field extends LitElement {
       : nothing;
   }
 
-  private stepInput(ev: Event) {
+  private stepInput(ev: MouseEvent) {
     ev.preventDefault();
     const { input } = this;
     if (

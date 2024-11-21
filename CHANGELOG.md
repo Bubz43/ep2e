@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.14] - 2024-11-20
+
+- Allow using shift to step number fields by 10
+
 ## [1.2.13] - 2024-11-01
 
 - Add user setting to force all EP windows to be resizable in both directions.
