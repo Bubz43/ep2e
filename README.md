@@ -4,7 +4,7 @@ Heavily automated [Eclipse Phase 2e](https://www.eclipsephase.com) system.
 
 ## Maintenance mode 
 
-The is largely stable, but there are rough edges and unfinished features. It is foundry 11 compatible. Discoverability of features is sometimes a bit lacking, and a [discord](https://discord.gg/zs4jMnFqjx) server is available if you have any questions or want to talk with other users of the system. It is currently in maintenance mode (critical bugs/foundry compat only) until the rewrite is complete.
+The is largely stable, but there are rough edges and unfinished features. It is foundry 12 compatible. Discoverability of features is sometimes a bit lacking, and a [discord](https://discord.gg/zs4jMnFqjx) server is available if you have any questions or want to talk with other users of the system. It is currently in maintenance mode (critical bugs/foundry compat only) until the rewrite is complete.
 
 ### Notable missing features and issues
 
