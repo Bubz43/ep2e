@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.15] - 2025-01-02
+
+- Fix Psychosurgery app complexity (minor -> moderate)
+
 ## [1.2.14] - 2024-11-20
 
 - Allow using shift to step number fields by 10
