@@ -22,9 +22,9 @@
   "gridDistance": 1,
   "gridUnits": "m",
   "socket": true,
-  "manifest": "https://github.com/Bubz43/ep2e/releases/latest/download/system.json",
-  "download": "https://github.com/Bubz43/ep2e/releases/latest/download/latest.zip",
-  "url": "https://github.com/Bubz43/ep2e",
+  "manifest": "https://github.com/XenoMath/ep2e/releases/1.1.7/download/system.json",
+  "download": "https://github.com/XenoMath/ep2e/releases/1.1.7/download/latest.zip",
+  "url": "https://github.com/XenoMath/ep2e",
   "languages": [
     {
       "lang": "en",
