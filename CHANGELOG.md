@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.16] - 2025-02-23
+
+- Fix lists in rich text not having proper styling
+- Fix Mnemonics, Spasm and Smart Clothing having wrong icon in compendiums
+- Allow dropping physical gear onto Synthetic Shell window ware section, installing it as hardware
+- Allow dropping apps onto morph window ware sections and installing them as meshware
+- Allow dropping meshware onto biomorph window ware sections
+- Add difficulty modifier select to success tests
+
 ## [1.2.15] - 2025-01-02
 
 - Fix Psychosurgery app complexity (minor -> moderate)
