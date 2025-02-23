@@ -25,6 +25,7 @@ sl-header {
   border-color: var(--ep-color-border);
   background: rgba(black, 0.25);
 }
+
 sl-animated-list {
   font-size: 15px;
   padding: 0.25rem 0;
@@ -32,6 +33,7 @@ sl-animated-list {
 
 wl-list-item {
   padding: 0.1rem 1rem;
+
   &.tall {
     padding: 0.25rem 1rem;
   }
@@ -96,6 +98,7 @@ span[slot='before'] {
     @include animate-css(pulse, 2s, infinite);
   }
 }
+
 span[slot='after'] {
   font-size: large;
   font-family: var(--font-mono);
@@ -104,14 +107,20 @@ span[slot='after'] {
 
 .modifier {
   color: var(--ep-color-text-disabled);
+
   &.active {
     color: var(--ep-color-text);
   }
 }
 
 .automate {
+
   // transform: rotate(45deg);
   &.active {
     color: var(--ep-color-secondary);
   }
+}
+
+.difficulty-form {
+  margin: 0.25rem 0.5rem 0;
 }

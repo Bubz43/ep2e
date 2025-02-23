@@ -19,6 +19,9 @@ import { equals, merge, pick } from 'remeda';
 import { BehaviorSubject } from 'rxjs';
 import {
   createSuccessTestModifier,
+  Difficulty,
+  difficultyByModifier,
+  difficultyModifiers,
   PreTestPool,
   SimpleSuccessTestModifier,
   SuccessTestModifiers,
@@ -26,6 +29,19 @@ import {
   SuccessTestSettings,
   successTestTargetClamp,
 } from './success-test';
+
+
+
+export const difficultyLabel = {
+  [Difficulty.VeryEasy]: 'Very Easy',
+  [Difficulty.Easy]: 'Easy',
+  [Difficulty.SlightlyEasy]: 'Slightly Easy',
+  [Difficulty.Average]: 'Average',
+  [Difficulty.SlightlyHard]: 'Slightly Hard',
+  [Difficulty.Hard]: 'Hard',
+  [Difficulty.VeryHard]: 'Very Hard'
+}
+
 
 export type SuccessTestBaseInit = {
   action?: Action;
@@ -41,6 +57,7 @@ export abstract class SuccessTestBase {
     name: localize('fullMove'),
     value: -20,
   });
+
 
   private readonly state = new BehaviorSubject(this);
   readonly subscribe = this.state.subscribe.bind(this.state);
@@ -93,6 +110,20 @@ export abstract class SuccessTestBase {
     toggleAutomate: this.recipe(({ modifiers }) => {
       modifiers.automate = !modifiers.automate;
     }),
+    difficulty: createSuccessTestModifier({
+      name: "Difficulty",
+      value: 0
+    }),
+    setDifficulty: this.recipe(({ modifiers }, difficulty) => {
+      modifiers.difficulty.value = difficultyModifiers[difficulty];
+      modifiers.difficulty.name = `${difficultyLabel[difficulty]} Difficulty`
+      if (modifiers.difficulty.value === 0) {
+        modifiers.simple.delete(modifiers.difficulty.id);
+      } else {
+        modifiers.simple.set(modifiers.difficulty.id, modifiers.difficulty);
+      }
+
+    })
   };
 
   get target() {
@@ -110,8 +141,8 @@ export abstract class SuccessTestBase {
   get activeModifiersFromEffects(): SourcedEffect<SuccessTestEffect>[] {
     return this.modifiers.automate
       ? [...this.modifiers.effects].flatMap(([effect, active]) =>
-          active ? effect : [],
-        )
+        active ? effect : [],
+      )
       : [];
   }
 
@@ -189,7 +220,7 @@ export abstract class SuccessTestBase {
 
     pools.active =
       pair?.[0].type === pools.active?.[0].type &&
-      equals(pair?.[1], pools.active?.[1])
+        equals(pair?.[1], pools.active?.[1])
         ? null
         : pair;
     if (pools.active?.[1] === PreTestPoolAction.Bonus) {

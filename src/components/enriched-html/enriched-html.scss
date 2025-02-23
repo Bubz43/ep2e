@@ -8,6 +8,7 @@
 }
 
 :host {
+
   display: block;
   max-width: 240px;
   min-width: 100%;
@@ -16,11 +17,24 @@
   color: lightv(var(--ep-color-text), 1.1);
   font-family: var(--font-1);
   margin: 0.5rem 0;
-  font-size: 15px;
-  > p:first-of-type {
+  font-size: 14px;
+
+
+  >p:first-of-type {
     margin: 0 !important;
   }
 }
+
+ul,
+ol {
+  list-style-position: inside;
+  padding: 0;
+}
+
+li {
+  margin: 0 0 0 0.5rem;
+}
+
 
 a.inline-roll,
 a.content-link {
@@ -29,14 +43,16 @@ a.content-link {
   background: transparent !important;
   color: var(--ep-color-primary-alt) !important;
   border: none !important;
+
   &:not(.broken):hover {
     text-shadow: 0 0 1px currentColor;
   }
+
   i {
     pointer-events: none;
     color: currentColor;
   }
-  
+
 }
 
 hr {

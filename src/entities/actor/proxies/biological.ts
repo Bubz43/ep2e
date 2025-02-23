@@ -1,3 +1,4 @@
+import { SoftwareType } from '@src/data-enums';
 import {
   AppliedEffects,
   ReadonlyAppliedEffects,
@@ -136,6 +137,22 @@ export class Biological extends mix(BiologicalBase).with(
         notify(
           NotificationType.Error,
           localize('DESCRIPTIONS', 'OnlyWareItems'),
+        );
+      }
+    } else if (proxy.type === ItemType.Software) {
+      if (proxy.isWare) {
+        const copy = proxy.getDataCopy(true);
+        copy.system.state.equipped = true;
+        this.itemOperations.add(copy);
+      } else if (proxy.softwareType === SoftwareType.App) {
+        const copy = proxy.getDataCopy(true);
+        copy.system.state.equipped = true;
+        copy.system.softwareType = SoftwareType.AppAsWare;
+        this.itemOperations.add(copy);
+      } else {
+        notify(
+          NotificationType.Error,
+          `${localize('software')} - ${localize('onlyWareAllowed')}`,
         );
       }
     } else {
