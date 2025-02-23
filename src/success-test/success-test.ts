@@ -10,6 +10,7 @@ import {
   createPipe,
   groupBy,
   identity,
+  mapToObj,
   pipe,
   range,
   reverse,
@@ -37,6 +38,37 @@ enum ResultTier {
   CriticalSuccess,
 }
 
+export enum Difficulty {
+  VeryEasy = "veryEasy",
+  Easy = "easy",
+  SlightlyEasy = "slightlyEasy",
+  Average = "average",
+  SlightlyHard = "slightlyHard",
+  Hard = "hard",
+  VeryHard = "veryHard",
+}
+
+
+export const difficultyModifiers = {
+  [Difficulty.VeryEasy]: 30,
+  [Difficulty.Easy]: 20,
+  [Difficulty.SlightlyEasy]: 10,
+  [Difficulty.Average]: 0,
+  [Difficulty.SlightlyHard]: -10,
+  [Difficulty.Hard]: -20,
+  [Difficulty.VeryHard]: -30,
+} as const
+
+export const difficultyByModifier: Record<number, Difficulty> = {
+  30: Difficulty.VeryEasy,
+  20: Difficulty.Easy,
+  10: Difficulty.SlightlyEasy,
+  0: Difficulty.Average,
+  [-10]: Difficulty.SlightlyHard,
+  [-20]: Difficulty.Hard,
+  [-30]: Difficulty.VeryHard,
+}
+
 const getRank = (result: SuccessTestResult) => ResultTier[capitalize(result)];
 
 export const isSuccessfullTestResult = createPipe(
@@ -52,16 +84,16 @@ export const grantedSuperiorResultEffects = (
   return !result
     ? 0
     : [
-        SuccessTestResult.SuperiorFailureX2,
-        SuccessTestResult.SuperiorSuccessX2,
-      ].includes(result)
-    ? 2
-    : [
+      SuccessTestResult.SuperiorFailureX2,
+      SuccessTestResult.SuperiorSuccessX2,
+    ].includes(result)
+      ? 2
+      : [
         SuccessTestResult.SuperiorSuccess,
         SuccessTestResult.SuperiorFailure,
       ].includes(result)
-    ? 1
-    : 0;
+        ? 1
+        : 0;
 };
 
 export const superiorEffectCounts = (effects: SuperiorResultEffect[] = []) => {
@@ -105,6 +137,8 @@ export type SuccessTestModifiers = {
   toggleSimple: (modifier: SimpleSuccessTestModifier) => void;
   automate: boolean;
   toggleAutomate: () => void;
+  difficulty: SimpleSuccessTestModifier;
+  setDifficulty: (difficulty: Difficulty) => void;
 };
 
 let lastId = 1;
@@ -154,21 +188,21 @@ export class Percentile extends DiceTerm {
   // }
 
   async getTotal() {
-    if (!notEmpty(this.results))  await this.roll();
+    if (!notEmpty(this.results)) await this.roll();
     return this.results.reduce(
       (accum, { result }) => accum + (result as unknown as number),
       0,
     );
   }
 
-  static async  getTotal() {
+  static async getTotal() {
     const totals: number[] = [];
     for (const _ of range(0, 2)) {
       const p = new Percentile({});
       totals.push(await p.getTotal());
     }
     return Number(totals.join(''));
-   
+
   }
 
   static DENOMINATION = 'p';
@@ -241,7 +275,7 @@ export const getSuccessTestResult = ({
   }
 };
 
-export const rollSuccessTest = async  ({
+export const rollSuccessTest = async ({
   target,
   defaulting = false,
 }: {
