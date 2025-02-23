@@ -1,4 +1,4 @@
-import { PhysicalWare } from '@src/data-enums';
+import { PhysicalWare, SoftwareType } from '@src/data-enums';
 import {
   AddEffects,
   AppliedEffects,
@@ -220,11 +220,18 @@ export class Synthetic extends mix(SyntheticBase).with(
         const copy = proxy.getDataCopy(true);
         copy.system.state.equipped = true;
         this.itemOperations.add(copy);
-      } else
+      } else if (proxy.softwareType === SoftwareType.App) {
+        const copy = proxy.getDataCopy(true);
+        copy.system.state.equipped = true;
+        copy.system.softwareType = SoftwareType.AppAsWare;
+        this.itemOperations.add(copy);
+      } else {
         notify(
           NotificationType.Error,
           `${localize('software')} - ${localize('onlyWareAllowed')}`,
         );
+      }
+       
     } else {
       notify(
         NotificationType.Error,

@@ -1,3 +1,4 @@
+import { SoftwareType } from '@src/data-enums';
 import {
   AppliedEffects,
   ReadonlyAppliedEffects,
@@ -130,11 +131,18 @@ export class Infomorph extends mix(InfomorphBase).with(SleeveInfo) {
           const copy = proxy.getDataCopy(true);
           copy.system.state.equipped = true;
           this.itemOperations.add(copy);
-        } else
+        } else if (proxy.softwareType === SoftwareType.App) {
+          const copy = proxy.getDataCopy(true);
+          copy.system.state.equipped = true;
+          copy.system.softwareType = SoftwareType.AppAsWare;
+          this.itemOperations.add(copy);
+        }  else {
           notify(
             NotificationType.Error,
             `${localize('software')} - ${localize('onlyWareAllowed')}`,
           );
+        }
+         
 
         break;
       }
