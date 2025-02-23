@@ -1,3 +1,4 @@
+import { PhysicalWare } from '@src/data-enums';
 import {
   AddEffects,
   AppliedEffects,
@@ -210,16 +211,10 @@ export class Synthetic extends mix(SyntheticBase).with(
         );
       }
     } else if ('wareType' in proxy) {
-      if (proxy.isWare) {
-        const copy = proxy.getDataCopy(true);
-        copy.system.state.equipped = true;
-        this.itemOperations.add(copy);
-      } else {
-        notify(
-          NotificationType.Error,
-          localize('DESCRIPTIONS', 'OnlyWareItems'),
-        );
-      }
+      const copy = proxy.getDataCopy(true);
+      copy.system.state.equipped = true;
+      copy.system.wareType ||= PhysicalWare.Hard;
+      this.itemOperations.add(copy);
     } else if (proxy.type === ItemType.Software) {
       if (proxy.isWare) {
         const copy = proxy.getDataCopy(true);
