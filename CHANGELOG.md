@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.2.17] - 2025-23-28
+
+- Fix Actor Link checkbox in Actor Creator not setting the value on the created actor
+- Add a full movement modify effect to prehensile feet ware within physical augmentations compendium
+
 ## [1.2.16] - 2025-02-23
 
 - Fix lists in rich text not having proper styling

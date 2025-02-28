@@ -90,10 +90,10 @@ export class ActorCreator extends LitElement {
     type: SleeveType;
     folder: string;
   } = {
-    name: '',
-    type: ActorType.Biological,
-    folder: '',
-  };
+      name: '',
+      type: ActorType.Biological,
+      folder: '',
+    };
 
   async connectedCallback() {
     super.connectedCallback();
@@ -166,7 +166,7 @@ export class ActorCreator extends LitElement {
       {
         ...data,
         name: data.name || `${localize('new')} ${localize(data.type)}`,
-        token: { actorLink },
+        prototypeToken: { actorLink },
       },
       { renderSheet },
     );
@@ -312,7 +312,7 @@ export class ActorCreator extends LitElement {
     return html`
       <mwc-tab-bar>
         ${enumValues(ActorKind).map(
-          (kind) => html`
+      (kind) => html`
             <mwc-tab
               minWidth
               isFadingIndicator
@@ -320,35 +320,35 @@ export class ActorCreator extends LitElement {
               @click=${() => (this.actorKind = kind)}
             ></mwc-tab>
           `,
-        )}
+    )}
       </mwc-tab-bar>
 
       <div class="main-form" @keydown=${this.clickSubmit}>${form}</div>
 
       ${renderAutoForm({
-        classes: 'options-form',
-        props: this.options,
-        update: this.updateOptions,
-        fields: ({ renderSheet, closeOnCreate, actorLink }) => [
-          renderLabeledCheckbox(renderSheet),
-          renderLabeledCheckbox({
-            ...closeOnCreate,
-            label: `${localize('close')} ${localize('on')} ${localize(
-              'create',
-            )}`,
-          }),
-          renderLabeledCheckbox(actorLink),
-        ],
-      })}
+      classes: 'options-form',
+      props: this.options,
+      update: this.updateOptions,
+      fields: ({ renderSheet, closeOnCreate, actorLink }) => [
+        renderLabeledCheckbox(renderSheet),
+        renderLabeledCheckbox({
+          ...closeOnCreate,
+          label: `${localize('close')} ${localize('on')} ${localize(
+            'create',
+          )}`,
+        }),
+        renderLabeledCheckbox(actorLink),
+      ],
+    })}
 
       <submit-button
         class="create-button"
         label="${localize('create')} ${localize(actorKind)}"
         ?complete=${ready}
         @submit-attempt=${() => {
-          this.actorForm.IsValid({ report: true });
-          if (ready) this.create();
-        }}
+        this.actorForm.IsValid({ report: true });
+        if (ready) this.create();
+      }}
       ></submit-button>
     `;
   }
@@ -367,9 +367,9 @@ export class ActorCreator extends LitElement {
           renderTextField(name, { required: true }),
           notEmpty(folders)
             ? renderSelectField(folder, Object.keys(folders), {
-                emptyText: '-',
-                altLabel: (id) => folders[id] || id,
-              })
+              emptyText: '-',
+              altLabel: (id) => folders[id] || id,
+            })
             : '',
         ],
       }),
@@ -396,35 +396,35 @@ export class ActorCreator extends LitElement {
       ready: !!this.characterData.name,
       form: html`
         ${renderAutoForm({
-          storeOnInput: true,
-          noDebounce: true,
-          props: this.characterData,
-          update: this.updateCharacterData,
-          fields: ({ name, template, folder }) => [
-            renderSelectField(template, enumValues(CharacterTemplate)),
-            renderTextField(
-              { ...name, label: `${localize('ego')} ${localize('name')}` },
-              { required: true },
-            ),
-            notEmpty(folders)
-              ? renderSelectField(folder, Object.keys(folders), {
-                  emptyText: '-',
-                  altLabel: (id) => folders[id] || id,
-                })
-              : '',
-          ],
-        })}
+        storeOnInput: true,
+        noDebounce: true,
+        props: this.characterData,
+        update: this.updateCharacterData,
+        fields: ({ name, template, folder }) => [
+          renderSelectField(template, enumValues(CharacterTemplate)),
+          renderTextField(
+            { ...name, label: `${localize('ego')} ${localize('name')}` },
+            { required: true },
+          ),
+          notEmpty(folders)
+            ? renderSelectField(folder, Object.keys(folders), {
+              emptyText: '-',
+              altLabel: (id) => folders[id] || id,
+            })
+            : '',
+        ],
+      })}
 
         <sl-dropzone @drop=${this.handleSelectedSleeveDrop}>
           <sl-popover
             placement=${Placement.Left}
             .renderOnDemand=${() => {
-              const available = ownedSleeves();
-              return html`
+          const available = ownedSleeves();
+          return html`
                 <mwc-list>
                   ${notEmpty(available)
-                    ? ownedSleeves().map(
-                        (sleeve) => html`
+              ? ownedSleeves().map(
+                (sleeve) => html`
                           <mwc-list-item
                             twoline
                             @keydown=${clickIfEnter}
@@ -434,8 +434,8 @@ export class ActorCreator extends LitElement {
                             ${this.renderSleeveItemContent(sleeve)}
                           </mwc-list-item>
                         `,
-                      )
-                    : html`
+              )
+              : html`
                         <mwc-list-item>
                           <span
                             >${localize('no')} ${localize('sleeves')}
@@ -445,7 +445,7 @@ export class ActorCreator extends LitElement {
                       `}
                 </mwc-list>
               `;
-            }}
+        }}
           >
             <mwc-list-item
               slot="base"
@@ -455,8 +455,8 @@ export class ActorCreator extends LitElement {
               @keydown=${clickIfEnter}
             >
               ${this.renderSleeveItemContent(
-                this.selectedSleeve || this.defaultSleeveData,
-              )}
+          this.selectedSleeve || this.defaultSleeveData,
+        )}
             </mwc-list-item>
           </sl-popover>
         </sl-dropzone>
