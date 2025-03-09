@@ -1,6 +1,10 @@
 # Changelog
 
-## [1.2.17] - 2025-23-28
+## [1.2.18] - 2025-03-09
+
+- Mark Thermogenic protection ware as layerable (including in High-Dive Suit and Envirosuit entries)
+
+## [1.2.17] - 2025-02-28
 
 - Fix Actor Link checkbox in Actor Creator not setting the value on the created actor
 - Add a full movement modify effect to prehensile feet ware within physical augmentations compendium
