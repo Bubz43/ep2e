@@ -10,7 +10,7 @@ import {
   PropertyValues,
   query,
 } from 'lit-element';
-import type { Editor, RawEditorSettings } from 'tinymce';
+import type { Editor, RawEditorOptions } from 'tinymce';
 import type { EnrichedHTML } from '../enriched-html/enriched-html';
 import styles from './editor-wrapper.scss';
 
@@ -61,7 +61,7 @@ export class EditorWrapper extends LitElement {
     return this.updateActions.originalValue();
   }
 
-  private get editorOptions(): RawEditorSettings {
+  private get editorOptions(): RawEditorOptions {
     const { contentArea } = this;
 
     return {

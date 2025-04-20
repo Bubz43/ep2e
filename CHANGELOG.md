@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.19] - 2025-04-20
+
+- Improve icon scaling in Combat Tracker
+
 ## [1.2.18] - 2025-03-09
 
 - Mark Thermogenic protection ware as layerable (including in High-Dive Suit and Envirosuit entries)

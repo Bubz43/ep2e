@@ -1,6 +1,6 @@
 import { html, render } from 'lit-html';
 import { compact, first } from 'remeda';
-import type { RawEditorSettings } from 'tinymce';
+import type { RawEditorOptions } from 'tinymce';
 import type { PartialDeep } from 'type-fest';
 import { createMessage, rollModeToVisibility } from './chat/create-message';
 import { onChatMessageRender } from './chat/message-hooks';
@@ -84,7 +84,7 @@ Hooks.once('init', () => {
   Items.unregisterSheet('core', ItemSheet);
   Items.registerSheet(EP.Name, ItemEPSheet, { makeDefault: true });
   CONFIG.TinyMCE.content_css.push(`${EP.Path}/darkMCE.css`);
-  (CONFIG.TinyMCE as RawEditorSettings).skin = 'oxide-dark';
+  (CONFIG.TinyMCE as RawEditorOptions).skin = 'oxide-dark';
   CONFIG.Combat.initiative.decimals = 2;
   CONFIG.statusEffects = compact([
     CONFIG.statusEffects[0],
@@ -182,7 +182,7 @@ Hooks.once('ready', async () => {
     windowContainer.className = 'ep-window-container';
     SlWindow.container = windowContainer
     document.body.append(windowContainer);
-   
+
 
     tooltip = document.createElement('sl-tooltip');
     // tooltip.slot = 'tooltip';
@@ -241,12 +241,12 @@ Hooks.once('ready', async () => {
           @mouseover=${tooltip.fromData}
           style="flex: 0; margin-right: 0.5rem; --mdc-icon-button-size: 1.5rem"
           @click=${(ev: Event & { currentTarget: HTMLElement }) =>
-            openWindow({
-              key: CustomRollApp,
-              content: html`<custom-roll-app></custom-roll-app>`,
-              name: `${localize('custom')} ${localize('roll')}`,
-              adjacentEl: ev.currentTarget,
-            })}
+          openWindow({
+            key: CustomRollApp,
+            content: html`<custom-roll-app></custom-roll-app>`,
+            name: `${localize('custom')} ${localize('roll')}`,
+            adjacentEl: ev.currentTarget,
+          })}
         >
           <img class="noborder" src="icons/svg/combat.svg" />
         </mwc-icon-button>
@@ -255,46 +255,46 @@ Hooks.once('ready', async () => {
           style="flex: 0; margin-right: 0.5rem;"
           focusSelector="input"
           .renderOnDemand=${(popover: Popover) => {
-            return html`<sl-popover-section>
+          return html`<sl-popover-section>
               ${renderSubmitForm({
-                noDebounce: true,
-                submitButtonText: 'Roll Success Test',
-                submitEmpty: true,
-                props: { target: 50 },
-                update: async (changed) => {
-                  const { target = 50 } = changed;
-                  createMessage({
-                    data: {
-                      successTest: {
-                        disableSuperiorEffects: true,
-                        parts: [{ name: 'Base', value: target }],
-                        states: [
-                          {
-                            ...(await rollSuccessTest({ target })),
-                            action: 'initial',
-                          },
-                        ],
+            noDebounce: true,
+            submitButtonText: 'Roll Success Test',
+            submitEmpty: true,
+            props: { target: 50 },
+            update: async (changed) => {
+              const { target = 50 } = changed;
+              createMessage({
+                data: {
+                  successTest: {
+                    disableSuperiorEffects: true,
+                    parts: [{ name: 'Base', value: target }],
+                    states: [
+                      {
+                        ...(await rollSuccessTest({ target })),
+                        action: 'initial',
                       },
-                    },
-                    visibility: rollModeToVisibility(
-                      game.settings.get('core', 'rollMode'),
-                    ),
-                  });
-                  popover.open = false;
+                    ],
+                  },
                 },
-                fields: ({ target }) =>
-                  renderNumberField(target, { min: 0, max: 99 }),
-              })}
+                visibility: rollModeToVisibility(
+                  game.settings.get('core', 'rollMode'),
+                ),
+              });
+              popover.open = false;
+            },
+            fields: ({ target }) =>
+              renderNumberField(target, { min: 0, max: 99 }),
+          })}
             </sl-popover-section>`;
-          }}
+        }}
         >
           <mwc-icon-button
             slot="base"
             data-ep-tooltip="Quick Success Test"
             @mouseover=${tooltip.fromData}
             @contextmenu=${() => {
-              new Roll('1d100 - 1').toMessage();
-            }}
+          new Roll('1d100 - 1').toMessage();
+        }}
             style="--mdc-icon-button-size: 1.5rem;"
           >
             <span style="font-weight: bold; font-size: 1rem">%</span>
@@ -321,12 +321,12 @@ Hooks.once('ready', async () => {
           icon="search"
           raised
           @click=${() => {
-            openWindow({
-              key: CompendiumSearch,
-              name: localize('search'),
-              content: html` <compendium-search></compendium-search> `,
-            });
-          }}
+          openWindow({
+            key: CompendiumSearch,
+            name: localize('search'),
+            content: html` <compendium-search></compendium-search> `,
+          });
+        }}
         ></mwc-button>
       `,
       frag,
