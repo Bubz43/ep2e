@@ -329,9 +329,8 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
           (!extraActions || extraActions.length === 1)
         ) {
           extraActionOptions.push({
-            label: `${localize('extraAction')} - ${localize(pool.type)} (${
-              pool.available
-            }/${pool.max})`,
+            label: `${localize('extraAction')} - ${localize(pool.type)} (${pool.available
+              }/${pool.max})`,
             icon: html`<img src=${pool.icon} />`,
             disabled:
               !pool.available || (this.surprise && poolType === PoolType.Vigor),
@@ -356,9 +355,8 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
     if (extraActions) {
       extraActionOptions.push(
         ...extraActions.map((poolType, index) => ({
-          label: `[${localize('undo')}] ${localize('extraAction')} ${
-            index + 1
-          } - ${localize(poolType)}`,
+          label: `[${localize('undo')}] ${localize('extraAction')} ${index + 1
+            } - ${localize(poolType)}`,
           icon: html`<img src=${poolIcon(poolType)} />`,
           callback: async () => {
             await character?.addToSpentPools({
@@ -509,21 +507,21 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
         <mwc-dialog
           hideActions
           @participant-changed=${(
-            ev: CustomEvent<Partial<CombatParticipant>> & {
-              currentTarget: Dialog;
-            },
-          ) => {
-            ev.currentTarget.close();
-            updateCombatState({
-              type: CombatActionType.UpdateParticipants,
-              payload: [
-                {
-                  ...ev.detail,
-                  id: this.participant.id,
-                },
-              ],
-            });
-          }}
+        ev: CustomEvent<Partial<CombatParticipant>> & {
+          currentTarget: Dialog;
+        },
+        ) => {
+          ev.currentTarget.close();
+          updateCombatState({
+            type: CombatActionType.UpdateParticipants,
+            payload: [
+              {
+                ...ev.detail,
+                id: this.participant.id,
+              },
+            ],
+          });
+        }}
           ><participant-editor
             .participant=${this.participant}
           ></participant-editor
@@ -578,14 +576,21 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
       highlighted,
     } = this;
 
+    const icon = participant.img ||
+      token?.texture.src ||
+      actor?.img ||
+      CONST.DEFAULT_TOKEN;
+
+    const coverIcon = token === undefined;
+
     return html`
       <wl-list-item
         @contextmenu=${this.openMenu}
         class=${classMap({
-          defeated: !!participant.defeated,
-          hidden: !!participant.hidden,
-          highlighted,
-        })}
+      defeated: !!participant.defeated,
+      hidden: !!participant.hidden,
+      highlighted,
+    })}
         @mouseenter=${this.hoverToken}
         @mouseleave=${this.unhoverToken}
       >
@@ -595,18 +600,18 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
           ?disabled=${!editable || !actor}
           @click=${this.iconClick}
           ><img
-            class="icon"
-            src=${participant.img ||
-            token?.texture.src ||
-            actor?.img ||
-            CONST.DEFAULT_TOKEN}
+            class=${classMap({
+      icon: true,
+      cover: coverIcon,
+    })}
+            src=${icon}
           />
           ${editable && character
-            ? html`<notification-coin
+        ? html`<notification-coin
                 value=${character.activeDurations}
                 ?actionRequired=${character.requiresAttention}
               ></notification-coin>`
-            : ''}
+        : ''}
         </mwc-icon-button>
         <button
           class="name"
@@ -615,24 +620,24 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
           title=${participant.name}
         >
           ${this.surprise && participant.surprised
-            ? html`<span class="surprise-label"
+        ? html`<span class="surprise-label"
                 >[${localize(participant.surprised)}]</span
               >`
-            : ''}
+        : ''}
           ${participant.name}
         </button>
         <span class="status">
           ${notEmpty(usedPools)
-            ? html`<span class="used-pool"
+        ? html`<span class="used-pool"
                 >[${map(usedPools, localize).join(', ')}]</span
               >`
-            : this.interruptExtra
-            ? html`<span class="extra-interrupt"
+        : this.interruptExtra
+          ? html`<span class="extra-interrupt"
                 >[${localize('interrupt')}]</span
               >`
-            : ''}
+          : ''}
           ${game.user.isGM
-            ? html`
+        ? html`
                 <mwc-icon-button
                   class="mini-button ${participant.hidden ? 'active' : ''}"
                   @click=${this.toggleHidden}
@@ -640,62 +645,62 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
                 ></mwc-icon-button>
                 <mwc-icon-button
                   class="mini-button defeat ${participant.defeated
-                    ? 'active'
-                    : ''}"
+            ? 'active'
+            : ''}"
                   @click=${this.toggleDefeated}
                 >
                   <img src="icons/svg/skull.svg" />
                 </mwc-icon-button>
               `
-            : ''}
+        : ''}
           ${actor?.conditions.map(
-            (condition) => html`
+          (condition) => html`
               <img
                 src=${conditionIcons[condition]}
                 title=${localize(condition)}
                 height="14px"
               />
             `,
-          )}
+        )}
           ${timeState
-            ? html`
+        ? html`
                 <span class="time">
                   ${prettyMilliseconds(timeState.remaining)}
                   ${localize('remaining')}
                 </span>
               `
-            : ''}
+        : ''}
         </span>
         ${this.renderHealthBar()}
 
         <div class="actions" slot="after">
           ${participant.initiative != null
-            ? html`
+        ? html`
                 <button
                   ?disabled=${!editable ||
-                  (participant.delaying ? !canInterrupt : !canDelay)}
+          (participant.delaying ? !canInterrupt : !canDelay)}
                   @click=${this.toggleDelay}
                   class=${canDelay ? 'can-delay' : ''}
                 >
                   <span class="container">
                     ${participant.delaying
-                      ? html`<mwc-icon title=${localize('interrupt')}
+            ? html`<mwc-icon title=${localize('interrupt')}
                           >play_arrow</mwc-icon
                         >`
-                      : html`<span class="initiative"
+            : html`<span class="initiative"
                             >${participant.initiative}</span
                           >
                           ${canDelay
-                            ? html`<mwc-icon class="pause">pause</mwc-icon>`
-                            : ''} `}
+                ? html`<mwc-icon class="pause">pause</mwc-icon>`
+                : ''} `}
                   </span>
                 </button>
               `
-            : html`
+        : html`
                 <mwc-icon-button
                   @click=${this.round <= 1
-                    ? this.openInitiativeMenu
-                    : this.rollInitiative}
+            ? this.openInitiativeMenu
+            : this.rollInitiative}
                   ?disabled=${!editable}
                   ><img src="icons/svg/d20.svg"
                 /></mwc-icon-button>
@@ -721,7 +726,7 @@ export class ParticipantItem extends mix(LitElement).with(UseWorldTime) {
         : sleeve.activeMeshHealth);
 
     return html`${sleeveHealth &&
-    actor?.testUserPermission(game.user as any, 'OBSERVER')
+      actor?.testUserPermission(game.user as any, 'OBSERVER')
       ? html`<mini-health-bar .health=${sleeveHealth}></mini-health-bar>`
       : ''}`;
   }

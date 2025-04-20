@@ -28,6 +28,7 @@ wl-list-item {
     --mdc-icon-button-size: 44px;
     margin-right: 0.25rem;
   }
+
   @include textButton();
 
   .surprise-label {
@@ -56,6 +57,7 @@ wl-list-item {
   .icon {
     transition: opacity 100ms ease-in-out;
   }
+
   &.defeated {
     opacity: 0.85;
 
@@ -81,6 +83,7 @@ wl-list-item {
       color: var(--ep-color-text-lighter);
     }
   }
+
   .name {
     @include truncate(100px);
     padding-top: 0.125rem;
@@ -92,6 +95,7 @@ wl-list-item {
   opacity: 0;
   transition: opacity 50ms;
   --mdc-icon-button-size: 1.5rem;
+
   &.inactive {
     visibility: hidden;
   }
@@ -101,7 +105,8 @@ wl-list-item {
   display: inline-grid;
   grid-template-areas: 'content';
   place-items: center;
-  > * {
+
+  >* {
     grid-area: content;
     transition: transform opacity 100ms ease-in-out;
     display: inline-block;
@@ -112,10 +117,12 @@ wl-list-item {
   .pause {
     opacity: 0;
   }
+
   &:hover {
     .initiative {
       opacity: 0;
     }
+
     .pause {
       opacity: 1;
     }
@@ -126,7 +133,8 @@ wl-list-item {
   display: flex;
   flex-flow: row wrap;
   font-size: 14px;
-  > * {
+
+  >* {
     margin: 0.1rem 0.5ch 0.1rem 0;
     @include animate-css(fadeIn, 250ms);
   }
@@ -136,9 +144,11 @@ wl-list-item {
   --mdc-icon-button-size: 1rem;
   --mdc-icon-size: 1rem;
   height: 1rem;
+
   &:not(.active) {
     filter: invert(0.5);
   }
+
   &:hover {
     filter: invert(0.3) drop-shadow(2px 4px 6px var(--ep-color-secondary));
   }
@@ -159,4 +169,14 @@ notification-coin {
 .used-pool,
 .extra-interrupt {
   transform: translateY(-0.15rem);
+}
+
+img.icon {
+  object-fit: contain;
+  object-position: 50% 50%;
+
+  &.cover {
+    object-fit: cover;
+    object-position: 50% 0;
+  }
 }
