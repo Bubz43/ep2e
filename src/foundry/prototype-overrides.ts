@@ -342,28 +342,30 @@ export const overridePrototypes = () => {
   //   });
   // };
 
-  PlayerList.prototype.activateListeners = function (jqueryEl: JQuery) {
-    jqueryEl.find('h3').click(this._onToggleOfflinePlayers.bind(this));
+  if (false) {
+    PlayerList.prototype.activateListeners = function (jqueryEl: JQuery) {
+      jqueryEl.find('h3').click(this._onToggleOfflinePlayers.bind(this));
 
-    const listener = (ev: MouseEvent) => {
-      const item = findMatchingElement(ev, '.player');
-      if (!item) return;
-      const targetEl = $(item);
+      const listener = (ev: MouseEvent) => {
+        const item = findMatchingElement(ev, '.player');
+        if (!item) return;
+        const targetEl = $(item);
 
-      const contextOptions = this._getUserContextOptions();
-      Hooks.call(`getUserContextOptions`, this.element, contextOptions);
-      const convertedOptions = convertMenuOptions(contextOptions, targetEl);
-      const heading = item.textContent?.trim();
-      openMenu({
-        content: convertedOptions,
-        position: ev,
-        header: heading ? { heading } : null,
-      });
+        const contextOptions = this._getUserContextOptions();
+        Hooks.call(`getUserContextOptions`, this.element, contextOptions);
+        const convertedOptions = convertMenuOptions(contextOptions, targetEl);
+        const heading = item.textContent?.trim();
+        openMenu({
+          content: convertedOptions,
+          position: ev,
+          header: heading ? { heading } : null,
+        });
+      };
+
+      jqueryEl[0]?.addEventListener('contextmenu', listener);
+      jqueryEl[0]?.addEventListener('click', listener);
     };
-
-    jqueryEl[0]?.addEventListener('contextmenu', listener);
-    jqueryEl[0]?.addEventListener('click', listener);
-  };
+  }
 
   SceneNavigation.prototype.activateListeners = function (jqueryEl: JQuery) {
     const scenes = jqueryEl.find('.scene');
@@ -444,11 +446,11 @@ export const overridePrototypes = () => {
     };
   };
 
-  const { close } = ChatPopout.prototype;
-  ChatPopout.prototype.close = async function () {
-    delete this.message.apps[this.appId];
-    close.call(this, []);
-  };
+  // const { close } = ChatPopout.prototype;
+  // ChatPopout.prototype.close = async function () {
+  //   delete this.message.apps[this.appId];
+  //   close.call(this, []);
+  // };
 
   tinymce.FocusManager.isEditorUIElement = function (elm: Element) {
     const className = elm.className?.toString() ?? '';

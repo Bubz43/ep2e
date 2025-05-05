@@ -113,55 +113,57 @@ Hooks.once('ready', async () => {
     }
   }
 
-  document.getElementById('board')?.addEventListener('mousedown', (ev) => {
-    if (ev.button === 1) {
-      ev.preventDefault();
-      const control = ui.controls.control as {
-        name: string;
-        title: string;
-        layer: string;
-        activeTool: string;
-        tools: {
+  if (false) {
+    document.getElementById('board')?.addEventListener('mousedown', (ev) => {
+      if (ev.button === 1) {
+        ev.preventDefault();
+        const control = ui.controls.control as {
           name: string;
-          icon: string;
           title: string;
-          toggle?: boolean;
-          button?: boolean;
-          active?: boolean;
-          onClick?: (args?: unknown) => void;
-        }[];
-      } | null;
-      if (control && notEmpty(control.tools)) {
-        openMenu({
-          header: { heading: game.i18n.localize(control.title) },
-          content: control.tools.map((tool) => ({
-            label: game.i18n.localize(tool.title),
-            icon: html`<i class=${tool.icon}></i>`,
-            activated: ui.controls.activeTool === tool.name || !!tool.active,
-            callback: () => {
-              if (tool.toggle) {
-                tool.active = !tool.active;
-                if (tool.onClick instanceof Function) tool.onClick(tool.active);
-                ui.controls.render();
-              }
+          layer: string;
+          activeTool: string;
+          tools: {
+            name: string;
+            icon: string;
+            title: string;
+            toggle?: boolean;
+            button?: boolean;
+            active?: boolean;
+            onClick?: (args?: unknown) => void;
+          }[];
+        } | null;
+        if (control && notEmpty(control.tools)) {
+          openMenu({
+            header: { heading: game.i18n.localize(control.title) },
+            content: control.tools.map((tool) => ({
+              label: game.i18n.localize(tool.title),
+              icon: html`<i class=${tool.icon}></i>`,
+              activated: ui.controls.activeTool === tool.name || !!tool.active,
+              callback: () => {
+                if (tool.toggle) {
+                  tool.active = !tool.active;
+                  if (tool.onClick instanceof Function) tool.onClick(tool.active);
+                  ui.controls.render();
+                }
 
-              // Handle Buttons
-              else if (tool.button) {
-                if (tool.onClick instanceof Function) tool.onClick();
-                ui.controls.render();
-              }
+                // Handle Buttons
+                else if (tool.button) {
+                  if (tool.onClick instanceof Function) tool.onClick();
+                  ui.controls.render();
+                }
 
-              // Handle Tools
-              else {
-                ui.controls.initialize({ tool: tool.name } as any);
-              }
-            },
-          })),
-          position: ev,
-        });
+                // Handle Tools
+                else {
+                  ui.controls.initialize({ tool: tool.name } as any);
+                }
+              },
+            })),
+            position: ev,
+          });
+        }
       }
-    }
-  });
+    });
+  }
 
   addEPSocketHandler(
     'itemChange',
@@ -203,17 +205,22 @@ Hooks.once('ready', async () => {
       .getElementById('ui-top')
       ?.insertBefore(extraInfo, document.getElementById('loading'));
 
-    function toggleChatPointers({ type }: MouseEvent) {
-      document.getElementById('chat-log')!.style.pointerEvents =
-        type === 'mouseenter' ? 'initial' : '';
+
+    if (false) {
+
+      function toggleChatPointers({ type }: MouseEvent) {
+        document.getElementById('chat-log')!.style.pointerEvents =
+          type === 'mouseenter' ? 'initial' : '';
+      }
+
+      const rightUI = document.getElementById('ui-right');
+      rightUI?.addEventListener('mouseenter', toggleChatPointers);
+      rightUI?.addEventListener('mouseleave', toggleChatPointers);
     }
 
-    const rightUI = document.getElementById('ui-right');
-    rightUI?.addEventListener('mouseenter', toggleChatPointers);
-    rightUI?.addEventListener('mouseleave', toggleChatPointers);
 
     if (game.user.isGM) {
-      const leftUI = document.getElementById("ui-left");
+      const leftUI = document.getElementById("players");
       const gmFrag = new DocumentFragment();
       render(html` <mwc-icon-button
       id="ep-gm-panel"
@@ -229,24 +236,25 @@ Hooks.once('ready', async () => {
       >
         <img class="noborder" src="icons/svg/dice-target.svg" />
       </mwc-icon-button>`, gmFrag)
-      leftUI?.append(gmFrag);
+      leftUI?.prepend(gmFrag);
     }
 
-    const frag = new DocumentFragment();
+    if (false) {
+      const frag = new DocumentFragment();
 
-    render(
-      html`
+      render(
+        html`
         <mwc-icon-button
           data-ep-tooltip=${`${localize('custom')} ${localize('roll')}`}
           @mouseover=${tooltip.fromData}
           style="flex: 0; margin-right: 0.5rem; --mdc-icon-button-size: 1.5rem"
           @click=${(ev: Event & { currentTarget: HTMLElement }) =>
-          openWindow({
-            key: CustomRollApp,
-            content: html`<custom-roll-app></custom-roll-app>`,
-            name: `${localize('custom')} ${localize('roll')}`,
-            adjacentEl: ev.currentTarget,
-          })}
+            openWindow({
+              key: CustomRollApp,
+              content: html`<custom-roll-app></custom-roll-app>`,
+              name: `${localize('custom')} ${localize('roll')}`,
+              adjacentEl: ev.currentTarget,
+            })}
         >
           <img class="noborder" src="icons/svg/combat.svg" />
         </mwc-icon-button>
@@ -255,60 +263,61 @@ Hooks.once('ready', async () => {
           style="flex: 0; margin-right: 0.5rem;"
           focusSelector="input"
           .renderOnDemand=${(popover: Popover) => {
-          return html`<sl-popover-section>
+            return html`<sl-popover-section>
               ${renderSubmitForm({
-            noDebounce: true,
-            submitButtonText: 'Roll Success Test',
-            submitEmpty: true,
-            props: { target: 50 },
-            update: async (changed) => {
-              const { target = 50 } = changed;
-              createMessage({
-                data: {
-                  successTest: {
-                    disableSuperiorEffects: true,
-                    parts: [{ name: 'Base', value: target }],
-                    states: [
-                      {
-                        ...(await rollSuccessTest({ target })),
-                        action: 'initial',
-                      },
-                    ],
+              noDebounce: true,
+              submitButtonText: 'Roll Success Test',
+              submitEmpty: true,
+              props: { target: 50 },
+              update: async (changed) => {
+                const { target = 50 } = changed;
+                createMessage({
+                  data: {
+                    successTest: {
+                      disableSuperiorEffects: true,
+                      parts: [{ name: 'Base', value: target }],
+                      states: [
+                        {
+                          ...(await rollSuccessTest({ target })),
+                          action: 'initial',
+                        },
+                      ],
+                    },
                   },
-                },
-                visibility: rollModeToVisibility(
-                  game.settings.get('core', 'rollMode'),
-                ),
-              });
-              popover.open = false;
-            },
-            fields: ({ target }) =>
-              renderNumberField(target, { min: 0, max: 99 }),
-          })}
+                  visibility: rollModeToVisibility(
+                    game.settings.get('core', 'rollMode'),
+                  ),
+                });
+                popover.open = false;
+              },
+              fields: ({ target }) =>
+                renderNumberField(target, { min: 0, max: 99 }),
+            })}
             </sl-popover-section>`;
-        }}
+          }}
         >
           <mwc-icon-button
             slot="base"
             data-ep-tooltip="Quick Success Test"
             @mouseover=${tooltip.fromData}
             @contextmenu=${() => {
-          new Roll('1d100 - 1').toMessage();
-        }}
+            new Roll('1d100 - 1').toMessage();
+          }}
             style="--mdc-icon-button-size: 1.5rem;"
           >
             <span style="font-weight: bold; font-size: 1rem">%</span>
           </mwc-icon-button>
         </sl-popover>
       `,
-      frag,
-    );
-    const chatControls = document.getElementById('chat-controls');
-    if (!chatControls) {
-      Hooks.once('renderChatLog', (log: unknown, [el]: JQuery) => {
-        el?.querySelector('#chat-controls')?.prepend(frag);
-      });
-    } else chatControls.prepend(frag);
+        frag,
+      );
+      const chatControls = document.getElementById('chat-controls');
+      if (!chatControls) {
+        Hooks.once('renderChatLog', (log: unknown, [el]: JQuery) => {
+          el?.querySelector('#chat-controls')?.prepend(frag);
+        });
+      } else chatControls?.prepend(frag);
+    }
   }, 150);
 
   const compendiumSearchButton = () => {
@@ -433,14 +442,16 @@ Hooks.once('ready', async () => {
   //   if (element instanceof HotbarCell) element.requestDeletion();
   // });
 
-  applicationHook({
-    app: ChatPopout,
-    hook: 'on',
-    event: 'render',
-    callback: (popout) => {
-      requestAnimationFrame(() => popout.setPosition());
-    },
-  });
+  if (false) {
+    applicationHook({
+      app: ChatPopout,
+      hook: 'on',
+      event: 'render',
+      callback: (popout) => {
+        requestAnimationFrame(() => popout.setPosition());
+      },
+    });
+  }
 
   mutatePlaceableHook({
     entity: Token,
@@ -560,27 +571,29 @@ applicationHook({
   },
 });
 
-for (const app of [ActorDirectory, ItemDirectory]) {
-  applicationHook({
-    app,
-    hook: 'on',
-    event: 'render',
-    callback: (_, [list]) =>
-      list?.querySelectorAll<HTMLLIElement>('.document').forEach((listItem) => {
-        const { documentId } = listItem.dataset;
-        listItem.tabIndex = 0;
-        const doc =
-          documentId &&
-          game[app === ActorDirectory ? 'actors' : 'items'].get(documentId);
-        if (!doc) return;
+if (false) {
+  for (const app of [ActorDirectory, ItemDirectory]) {
+    applicationHook({
+      app,
+      hook: 'on',
+      event: 'render',
+      callback: (_, [list]) =>
+        list?.querySelectorAll<HTMLLIElement>('.document').forEach((listItem) => {
+          const { documentId } = listItem.dataset;
+          listItem.tabIndex = 0;
+          const doc =
+            documentId &&
+            game[app === ActorDirectory ? 'actors' : 'items'].get(documentId);
+          if (!doc) return;
 
-        if (isItem(doc)) {
-          applyFullItemInfo(doc, listItem);
-        } else {
-          applyFullActorItemInfo(doc, listItem);
-        }
-      }),
-  });
+          if (isItem(doc)) {
+            applyFullItemInfo(doc, listItem);
+          } else {
+            applyFullActorItemInfo(doc, listItem);
+          }
+        }),
+    });
+  }
 }
 
 function applyFullActorItemInfo(actor: ActorEP, listItem: HTMLElement) {
