@@ -123,10 +123,12 @@ mwc-snackbar {
   display: grid;
   color: var(--ep-color-text);
 
-  * {
-    &:not(mwc-icon):not(i) {
-      font-family: var(--font-1);
-    }
+
+}
+
+.ep-window-container {
+  &:not(mwc-icon):not(i) {
+    font-family: var(--font-1);
   }
 }
 
@@ -184,7 +186,7 @@ sl-tooltip {
   color: var(--ep-color-text);
   border: 2px solid var(--ep-color-border) !important;
   padding: 0;
-  margin: 0 0 0.25rem 0 !important;
+  margin: 0 0 0.25rem 0.85rem !important;
   border-radius: 0.5rem 0px 0px 0.25rem !important;
   box-shadow: 0 0 4px var(--ep-color-bg);
 
@@ -250,7 +252,7 @@ sl-tooltip {
       all: unset;
       width: 2rem;
       position: absolute;
-      transform: translate(-70%, -0.1rem);
+      transform: translate(-65%, -0.1rem);
       z-index: 10;
     }
 
