@@ -182,6 +182,9 @@ Hooks.once('ready', async () => {
     // SlWindow.container = overlay;
     const windowContainer = document.createElement('div');
     windowContainer.className = 'ep-window-container';
+    windowContainer.addEventListener("dragstart", ev => {
+      ev.stopPropagation()
+    })
     SlWindow.container = windowContainer
     document.body.append(windowContainer);
 
@@ -368,7 +371,7 @@ Hooks.once('ready', async () => {
     app: CompendiumDirectory,
     hook: 'on',
     event: 'render',
-    callback: (dir, [el]) => {
+    callback: (dir, el) => {
       el?.querySelector('.directory-footer')?.append(compendiumSearchButton());
     },
   });
@@ -442,16 +445,16 @@ Hooks.once('ready', async () => {
   //   if (element instanceof HotbarCell) element.requestDeletion();
   // });
 
-  if (false) {
-    applicationHook({
-      app: ChatPopout,
-      hook: 'on',
-      event: 'render',
-      callback: (popout) => {
-        requestAnimationFrame(() => popout.setPosition());
-      },
-    });
-  }
+  // if (false) {
+  //   applicationHook({
+  //     app: ChatPopout,
+  //     hook: 'on',
+  //     event: 'render',
+  //     callback: (popout) => {
+  //       requestAnimationFrame(() => popout.setPosition());
+  //     },
+  //   });
+  // }
 
   mutatePlaceableHook({
     entity: Token,
@@ -532,11 +535,11 @@ applicationHook({
   app: Compendium,
   hook: 'on',
   event: 'render',
-  callback: async (compendium, [el]) => {
+  callback: async (compendium, el) => {
     if (compendium.collection.documentName === 'Item') {
       await compendium.collection.getDocuments();
       for (const listItem of (el?.querySelectorAll('li.directory-item.item') ??
-        []) as HTMLLIElement[]) {
+        []) as Iterable<HTMLLIElement>) {
         if (listItem.offsetParent) {
           const doc: ItemEP = await compendium.collection.getDocument(
             listItem.getAttribute('data-document-id'),
@@ -550,7 +553,7 @@ applicationHook({
     } else if (compendium.collection.documentName === 'Actor') {
       await compendium.collection.getDocuments();
       for (const listItem of (el?.querySelectorAll('li.directory-item.actor') ??
-        []) as HTMLLIElement[]) {
+        []) as Iterable<HTMLLIElement>) {
         if (listItem.offsetParent) {
           const doc: ActorEP = await compendium.collection.getDocument(
             listItem.getAttribute('data-document-id'),
@@ -571,34 +574,37 @@ applicationHook({
   },
 });
 
-if (false) {
+if (true) {
   for (const app of [ActorDirectory, ItemDirectory]) {
     applicationHook({
       app,
       hook: 'on',
       event: 'render',
-      callback: (_, [list]) =>
-        list?.querySelectorAll<HTMLLIElement>('.document').forEach((listItem) => {
-          const { documentId } = listItem.dataset;
-          listItem.tabIndex = 0;
-          const doc =
-            documentId &&
-            game[app === ActorDirectory ? 'actors' : 'items'].get(documentId);
-          if (!doc) return;
+      callback: (_, list) => {
+        return list?.querySelectorAll<HTMLLIElement>('.document').forEach((listItem) => {
+          const { entryId } = listItem.dataset;
+          const doc = entryId &&
+            game[app === ActorDirectory ? 'actors' : 'items'].get(entryId);
+          if (!doc)
+            return;
 
           if (isItem(doc)) {
             applyFullItemInfo(doc, listItem);
           } else {
             applyFullActorItemInfo(doc, listItem);
           }
-        }),
+        });
+      },
     });
   }
 }
 
 function applyFullActorItemInfo(actor: ActorEP, listItem: HTMLElement) {
   const nameElement =
-    listItem.querySelector<HTMLHeadingElement>('h4.document-name')!;
+    listItem.querySelector<HTMLHeadingElement>('.entry-name');
+  if (!nameElement) {
+    return;
+  }
   if (actor.type !== ActorType.Character && isSleeve(actor.proxy)) {
     nameElement.dataset['type'] = formattedSleeveInfo(actor.proxy)
       .concat(localize(actor.type))
@@ -612,8 +618,11 @@ function applyFullActorItemInfo(actor: ActorEP, listItem: HTMLElement) {
 
 function applyFullItemInfo(item: ItemEP, listItem: HTMLElement) {
   const nameElement =
-    listItem.querySelector<HTMLHeadingElement>('h4.document-name')!;
-  nameElement.querySelector('a')!.textContent = item.proxy.fullName;
+    listItem.querySelector<HTMLHeadingElement>('.entry-name');
+  if (!nameElement) {
+    return;
+  }
+  nameElement.textContent = item.proxy.fullName;
   nameElement.dataset['type'] = item.proxy.fullType;
   listItem.title = `${item.name}
         ${nameElement.dataset['type']}`;

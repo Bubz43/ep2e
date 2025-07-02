@@ -234,7 +234,7 @@ export class Popover extends mix(LitElement).with(ListenerSubscription) {
   }
 
   private async show() {
-    this.floater.togglePopover(true)
+    this.floater.togglePopover?.(true)
     await this.appendTemplateContent();
     await this.positionFloater();
     this.addListenerSubs(
@@ -309,7 +309,7 @@ export class Popover extends mix(LitElement).with(ListenerSubscription) {
       { duration: noAnimation ? 0 : 100, easing: 'ease-in-out' },
     );
     closingAnimation.onfinish = () => {
-      floater.togglePopover(false);
+      floater.togglePopover?.(false);
       floater.style.display = '';
       if (this.tempContainer) {
         this.tempContainer.remove();
@@ -599,7 +599,7 @@ declare global {
   }
 
   interface HTMLElement {
-    togglePopover: (open: boolean) => void;
+    togglePopover?: (open: boolean) => void;
   }
 }
 

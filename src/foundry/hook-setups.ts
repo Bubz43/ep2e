@@ -20,17 +20,17 @@ export const applicationHook = <
   T extends Class<
     Omit<Application, 'render' | 'close' | 'setPosition' | '_renderInner'>
   >,
->({
-  app,
-  hook,
-  event,
-  callback,
-}: {
-  app: T;
-  hook: HookType;
-  event: 'render' | 'close';
-  callback: (app: InstanceType<T>, wrappedHTML: JQuery, data: unknown) => void;
-}) => Hooks[hook](event + app.prototype.constructor.name, callback);
+  >({
+    app,
+    hook,
+    event,
+    callback,
+  }: {
+    app: T;
+    hook: HookType;
+    event: 'render' | 'close';
+    callback: (app: InstanceType<T>, html: HTMLElement, data: unknown) => void;
+  }) => Hooks[hook](event + app.prototype.constructor.name, callback);
 
 export const mutateEntityHook = <T extends EntityType, E = InstanceType<T>>({
   entity,
@@ -49,17 +49,17 @@ export const mutatePlaceableHook = <
     PlaceableObject,
     'uuid' | 'clone' | 'refresh' | '_canHUD' | 'document'
   >,
->({
-  entity,
-  hook,
-  event,
-  callback: cb,
-}: {
-  entity: Class<T>;
-  hook: HookType;
-  event: MutateEvent;
-  callback: (
-    entData: T extends { document: unknown } ? T['document'] : unknown,
-    change: unknown,
-  ) => void;
-}) => Hooks[hook](event + entity.name, cb);
+  >({
+    entity,
+    hook,
+    event,
+    callback: cb,
+  }: {
+    entity: Class<T>;
+    hook: HookType;
+    event: MutateEvent;
+    callback: (
+      entData: T extends { document: unknown } ? T['document'] : unknown,
+      change: unknown,
+    ) => void;
+  }) => Hooks[hook](event + entity.name, cb);

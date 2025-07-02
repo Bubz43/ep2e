@@ -95,12 +95,6 @@ mwc-menu {
 }
 
 
-mwc-snackbar {
-  z-index: 99999;
-  position: absolute;
-  bottom: 50px;
-}
-
 
 
 
@@ -133,7 +127,10 @@ mwc-snackbar {
 }
 
 
-
+sl-window {
+  @include styled-scrollbars;
+  @include widgetless-number-inputs;
+}
 
 sl-tooltip {
   color: var(--ep-color-text);
@@ -408,4 +405,30 @@ sl-tooltip {
   padding: 0.25rem;
   box-shadow: 0 0 4px black;
   width: max-content;
+}
+
+.actors-sidebar .document,
+.items-sidebar .document,
+.compendium-directory .directory-item.actor,
+.compendium-directory .directory-item.item {
+  >a {
+
+    &::after {
+      content: attr(data-type);
+      font-size: 12px;
+      // float: right;
+      margin-inline: 1ch;
+      opacity: 0.8
+    }
+  }
+}
+
+.drag-image {
+  position: absolute;
+  left: -1000px;
+  background: var(--ep-color-grey);
+  box-shadow: 0 0 4px black;
+  padding: 0.25rem 0.5rem;
+  border-radius: 7px;
+  @include truncate(250px);
 }

@@ -215,6 +215,7 @@ export const overridePrototypes = () => {
   };
 
 
+
   const { defaultOptions: journalSheetOptions } = JournalSheet;
   Object.defineProperty(JournalSheet, 'defaultOptions', {
     enumerable: true,
@@ -342,38 +343,38 @@ export const overridePrototypes = () => {
   //   });
   // };
 
-  if (false) {
-    PlayerList.prototype.activateListeners = function (jqueryEl: JQuery) {
-      jqueryEl.find('h3').click(this._onToggleOfflinePlayers.bind(this));
+  // if (false) {
+  //   PlayerList.prototype.activateListeners = function (jqueryEl: JQuery) {
+  //     jqueryEl.find('h3').click(this._onToggleOfflinePlayers.bind(this));
 
-      const listener = (ev: MouseEvent) => {
-        const item = findMatchingElement(ev, '.player');
-        if (!item) return;
-        const targetEl = $(item);
+  //     const listener = (ev: MouseEvent) => {
+  //       const item = findMatchingElement(ev, '.player');
+  //       if (!item) return;
+  //       const targetEl = $(item);
 
-        const contextOptions = this._getUserContextOptions();
-        Hooks.call(`getUserContextOptions`, this.element, contextOptions);
-        const convertedOptions = convertMenuOptions(contextOptions, targetEl);
-        const heading = item.textContent?.trim();
-        openMenu({
-          content: convertedOptions,
-          position: ev,
-          header: heading ? { heading } : null,
-        });
-      };
+  //       const contextOptions = this._getUserContextOptions();
+  //       Hooks.call(`getUserContextOptions`, this.element, contextOptions);
+  //       const convertedOptions = convertMenuOptions(contextOptions, targetEl);
+  //       const heading = item.textContent?.trim();
+  //       openMenu({
+  //         content: convertedOptions,
+  //         position: ev,
+  //         header: heading ? { heading } : null,
+  //       });
+  //     };
 
-      jqueryEl[0]?.addEventListener('contextmenu', listener);
-      jqueryEl[0]?.addEventListener('click', listener);
-    };
-  }
+  //     jqueryEl[0]?.addEventListener('contextmenu', listener);
+  //     jqueryEl[0]?.addEventListener('click', listener);
+  //   };
+  // }
 
-  SceneNavigation.prototype.activateListeners = function (jqueryEl: JQuery) {
-    const scenes = jqueryEl.find('.scene');
-    scenes.on('click', this._onClickScene.bind(this));
-    jqueryEl.find('#nav-toggle').on('click', this._onToggleNav.bind(this));
+  // SceneNavigation.prototype.activateListeners = function (jqueryEl: JQuery) {
+  //   const scenes = jqueryEl.find('.scene');
+  //   scenes.on('click', this._onClickScene.bind(this));
+  //   jqueryEl.find('#nav-toggle').on('click', this._onToggleNav.bind(this));
 
-    jqueryEl[0]?.addEventListener('contextmenu', navMenuListener);
-  };
+  //   jqueryEl[0]?.addEventListener('contextmenu', navMenuListener);
+  // };
 
   // CompendiumDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
   //   jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
@@ -396,21 +397,21 @@ export const overridePrototypes = () => {
   //   });
   // };
 
-  ChatLog.prototype._contextMenu = function (jqueryEl: JQuery) {
-    jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
-      const item = findMatchingElement(ev, '.message');
-      if (!item) return;
-      const entryOptions = this._getEntryContextOptions();
-      Hooks.call(
-        `get${this.constructor.name}EntryContext`,
-        this.element,
-        entryOptions,
-      );
-      const targetEl = $(item);
-      const convertedOptions = convertMenuOptions(entryOptions, targetEl);
-      openMenu({ content: convertedOptions, position: ev });
-    });
-  };
+  // ChatLog.prototype._contextMenu = function (jqueryEl: JQuery) {
+  //   jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
+  //     const item = findMatchingElement(ev, '.message');
+  //     if (!item) return;
+  //     const entryOptions = this._getEntryContextOptions();
+  //     Hooks.call(
+  //       `get${this.constructor.name}EntryContext`,
+  //       this.element,
+  //       entryOptions,
+  //     );
+  //     const targetEl = $(item);
+  //     const convertedOptions = convertMenuOptions(entryOptions, targetEl);
+  //     openMenu({ content: convertedOptions, position: ev });
+  //   });
+  // };
 
   ChatMessage._getSpeakerFromUser = function ({
     scene,
@@ -467,6 +468,7 @@ export const overridePrototypes = () => {
     } catch (error) {
       console.log(error);
     }
+
     if (isKnownDrop(data)) {
       onlySetDragSource(ev, data);
     }
