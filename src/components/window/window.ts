@@ -73,11 +73,11 @@ export class SlWindow extends LitElement {
   static readonly maxZIndex = 99999;
 
   private static get zIndex() {
-    return _maxZ;
+    return foundry.applications.api.ApplicationV2._maxZ;
   }
 
   private static set zIndex(value: number) {
-    _maxZ = value;
+    foundry.applications.api.ApplicationV2._maxZ = value;
     ui.activeWindow = undefined;
   }
 
@@ -583,11 +583,11 @@ export class SlWindow extends LitElement {
           <header
             class="window-header"
             @click=${(ev: Event) => {
-              ev.stopImmediatePropagation();
-              this.minimizedElementId = null;
-              document.getElementById(id)?.remove();
-              this.removeAttribute('on-taskbar');
-            }}
+          ev.stopImmediatePropagation();
+          this.minimizedElementId = null;
+          document.getElementById(id)?.remove();
+          this.removeAttribute('on-taskbar');
+        }}
           >
             <h4>${this.name}</h4>
           </header>
@@ -618,7 +618,7 @@ export class SlWindow extends LitElement {
           <slot name="header-button"> </slot>
 
           ${this.showTaskbarMinimize
-            ? html` <wl-list-item
+        ? html` <wl-list-item
                 class="taskbar-minimize-button"
                 role="button"
                 clickable
@@ -626,7 +626,7 @@ export class SlWindow extends LitElement {
               >
                 <mwc-icon>minimize</mwc-icon>
               </wl-list-item>`
-            : ''}
+        : ''}
 
           <wl-list-item
             class="close-button"
@@ -645,10 +645,10 @@ export class SlWindow extends LitElement {
       <slot name="footer"></slot>
       ${this.resizable !== ResizeOption.None
         ? resizeList.map((option) => {
-            const hidden = ![ResizeOption.Both, option].includes(
-              this.resizable,
-            );
-            return html`
+          const hidden = ![ResizeOption.Both, option].includes(
+            this.resizable,
+          );
+          return html`
               <div
                 class="resize-handle ${option}-resize"
                 data-resize=${option}
@@ -656,8 +656,8 @@ export class SlWindow extends LitElement {
                 ?hidden=${hidden}
               ></div>
               ${option === ResizeOption.Both
-                ? ''
-                : html`
+              ? ''
+              : html`
                     <div
                       class="resize-handle ${option}-resize alt"
                       data-resize=${option}
@@ -666,7 +666,7 @@ export class SlWindow extends LitElement {
                     ></div>
                   `}
             `;
-          })
+        })
         : ''}
     `;
   }

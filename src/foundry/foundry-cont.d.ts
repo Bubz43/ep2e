@@ -139,7 +139,7 @@ type PlaceableLayer<
   L extends PlaceablesLayer,
   T extends PlaceableObject,
   F = LayerInfo<T>,
-> = Omit<L, keyof F> & F;
+  > = Omit<L, keyof F> & F;
 
 export type CanvasLayers = {
   background: PlaceableLayer<BackgroundLayer, Tile>;
@@ -210,6 +210,13 @@ declare global {
     abstract: typeof import('common/abstract/module');
     data: typeof import('common/data/module');
     packages: typeof import('common/packages');
+    applications: {
+      api: {
+        ApplicationV2: {
+          _maxZ: number;
+        }
+      }
+    }
   };
 
   const CONST: typeof import('common/constants');
@@ -254,7 +261,7 @@ declare global {
     document: unknown;
   }
 
-  interface PrototypeTokenData extends TokenData {}
+  interface PrototypeTokenData extends TokenData { }
 
   interface TokenDocument extends TokenData {
     parent?: SceneEP;
@@ -536,7 +543,7 @@ declare global {
 
   interface Folder {
     ancestors?: Folder[];
-    children?: {folder: Folder}[]
+    children?: { folder: Folder }[]
     displayed: boolean;
     data: {
       color: string;
