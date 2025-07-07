@@ -194,32 +194,89 @@ Hooks.once('ready', async () => {
     overlay.append(tooltip);
     document.body.classList.add('ready');
     Hooks.call('ep-ready', true);
-    // const sceneView = document.createElement('scene-view');
-    // document
-    //   .getElementById('ui-left')
-    //   ?.insertBefore(sceneView, document.getElementById('controls'));
+
 
     const extraInfo = document.createElement('div');
     extraInfo.className = 'ep-extra-info';
     extraInfo.append(document.createElement('scene-view'));
     extraInfo.append(document.createElement('world-time-controls'));
 
+    const extraChatControlsFrag = new DocumentFragment();
+
+    render(
+      html`
+        <div class="ep-extra-chat-controls">
+          <mwc-icon-button
+          data-ep-tooltip=${`${localize('custom')} ${localize('roll')}`}
+          @mouseover=${tooltip.fromData}
+          @click=${(ev: Event & { currentTarget: HTMLElement }) =>
+          openWindow({
+            key: CustomRollApp,
+            content: html`<custom-roll-app></custom-roll-app>`,
+            name: `${localize('custom')} ${localize('roll')}`,
+            adjacentEl: ev.currentTarget,
+          })}
+        >
+          <img class="noborder" src="icons/svg/combat.svg" />
+        </mwc-icon-button>
+        <sl-popover
+          placement=${Placement.Left}
+          focusSelector="input"
+          .renderOnDemand=${(popover: Popover) => {
+          return html`<sl-popover-section>
+              ${renderSubmitForm({
+            noDebounce: true,
+            submitButtonText: 'Roll Success Test',
+            submitEmpty: true,
+            props: { target: 50 },
+            update: async (changed) => {
+              const { target = 50 } = changed;
+              createMessage({
+                data: {
+                  successTest: {
+                    disableSuperiorEffects: true,
+                    parts: [{ name: 'Base', value: target }],
+                    states: [
+                      {
+                        ...(await rollSuccessTest({ target })),
+                        action: 'initial',
+                      },
+                    ],
+                  },
+                },
+                visibility: rollModeToVisibility(
+                  game.settings.get('core', 'rollMode'),
+                ),
+              });
+              popover.open = false;
+            },
+            fields: ({ target }) =>
+              renderNumberField(target, { min: 0, max: 99 }),
+          })}
+            </sl-popover-section>`;
+        }}
+        >
+          <mwc-icon-button
+            slot="base"
+            data-ep-tooltip="Quick Success Test"
+            @mouseover=${tooltip.fromData}
+            @contextmenu=${() => {
+          new Roll('1d100 - 1').toMessage();
+        }}
+          >
+            <span style="font-size:var(--mdc-icon-size);font-weight:bold;">%</span>
+          </mwc-icon-button>
+        </sl-popover>
+      </div>
+      `,
+      extraChatControlsFrag,
+    );
+
+    extraInfo.append(extraChatControlsFrag);
+
     document
       .getElementById('ui-top')
       ?.insertBefore(extraInfo, document.getElementById('loading'));
-
-
-    if (false) {
-
-      function toggleChatPointers({ type }: MouseEvent) {
-        document.getElementById('chat-log')!.style.pointerEvents =
-          type === 'mouseenter' ? 'initial' : '';
-      }
-
-      const rightUI = document.getElementById('ui-right');
-      rightUI?.addEventListener('mouseenter', toggleChatPointers);
-      rightUI?.addEventListener('mouseleave', toggleChatPointers);
-    }
 
 
     if (game.user.isGM) {

@@ -115,9 +115,43 @@ mwc-menu {
 
 .ep-extra-info {
   display: grid;
-  color: var(--ep-color-text);
+  grid-template-columns: 1fr auto 1fr;
+  grid-template-rows: auto auto;
+
+  * {
+    color: var(--ep-color-text);
+  }
+
+  scene-view {
+    grid-column-start: 2;
+    grid-row-start: 1;
+  }
+
+  world-time-controls {
+    grid-column-start: 2;
+    grid-row-start: 2;
+  }
+
+  .ep-extra-chat-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    grid-column-start: 3;
+    grid-row: 1 / -1;
+    --mdc-icon-size: 1.25rem;
+    --mdc-icon-button-size: 2rem;
+
+    mwc-icon-button,
+    sl-popover {
+      pointer-events: auto;
+      background: alphav(var(--ep-color-bg), 0.75);
+      border-radius: 100%;
+    }
 
 
+
+  }
 }
 
 .ep-window-container {
