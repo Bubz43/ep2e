@@ -117,6 +117,7 @@ mwc-menu {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   grid-template-rows: auto auto;
+  column-gap: 0.5rem;
 
   * {
     color: var(--ep-color-text);
@@ -132,22 +133,32 @@ mwc-menu {
     grid-row-start: 2;
   }
 
+  mwc-icon-button {
+    --mdc-icon-size: 1.25rem;
+    --mdc-icon-button-size: 2rem;
+    pointer-events: auto;
+    background: alphav(var(--ep-color-bg), 0.5);
+    box-shadow: 0 0 4px black;
+    border-radius: 100%;
+  }
+
+  #ep-gm-panel {
+    grid-row: 1 / -1;
+    grid-column-start: 1;
+    margin: 0.5rem auto auto;
+  }
+
   .ep-extra-chat-controls {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    padding: 0.5rem;
+    padding: 0.5rem 0;
     grid-column-start: 3;
     grid-row: 1 / -1;
     --mdc-icon-size: 1.25rem;
     --mdc-icon-button-size: 2rem;
 
-    mwc-icon-button,
-    sl-popover {
-      pointer-events: auto;
-      background: alphav(var(--ep-color-bg), 0.75);
-      border-radius: 100%;
-    }
+
 
 
 
@@ -438,19 +449,7 @@ sl-tooltip {
   }
 }
 
-#ep-gm-panel {
-  --mdc-icon-button-size: 1.5rem;
-  pointer-events: auto;
-  // position: absolute;
-  // top: 3.25rem;
-  // left: 0.5rem;
-  background: alphav(var(--ep-color-bg), 0.5);
-  border-radius: 0.25rem;
-  z-index: 1000;
-  padding: 0.25rem;
-  box-shadow: 0 0 4px black;
-  width: max-content;
-}
+
 
 .actors-sidebar .document,
 .items-sidebar .document,

@@ -280,7 +280,6 @@ Hooks.once('ready', async () => {
 
 
     if (game.user.isGM) {
-      const leftUI = document.getElementById("players");
       const gmFrag = new DocumentFragment();
       render(html` <mwc-icon-button
       id="ep-gm-panel"
@@ -294,90 +293,11 @@ Hooks.once('ready', async () => {
             adjacentEl: ev.currentTarget,
           }, { resizable: ResizeOption.Both })}
       >
-        <img class="noborder" src="icons/svg/dice-target.svg" />
+        <img  class="noborder" src="icons/svg/dice-target.svg" />
       </mwc-icon-button>`, gmFrag)
-      leftUI?.prepend(gmFrag);
+      extraInfo?.prepend(gmFrag);
     }
 
-    if (false) {
-      const frag = new DocumentFragment();
-
-      render(
-        html`
-        <mwc-icon-button
-          data-ep-tooltip=${`${localize('custom')} ${localize('roll')}`}
-          @mouseover=${tooltip.fromData}
-          style="flex: 0; margin-right: 0.5rem; --mdc-icon-button-size: 1.5rem"
-          @click=${(ev: Event & { currentTarget: HTMLElement }) =>
-            openWindow({
-              key: CustomRollApp,
-              content: html`<custom-roll-app></custom-roll-app>`,
-              name: `${localize('custom')} ${localize('roll')}`,
-              adjacentEl: ev.currentTarget,
-            })}
-        >
-          <img class="noborder" src="icons/svg/combat.svg" />
-        </mwc-icon-button>
-        <sl-popover
-          placement=${Placement.Left}
-          style="flex: 0; margin-right: 0.5rem;"
-          focusSelector="input"
-          .renderOnDemand=${(popover: Popover) => {
-            return html`<sl-popover-section>
-              ${renderSubmitForm({
-              noDebounce: true,
-              submitButtonText: 'Roll Success Test',
-              submitEmpty: true,
-              props: { target: 50 },
-              update: async (changed) => {
-                const { target = 50 } = changed;
-                createMessage({
-                  data: {
-                    successTest: {
-                      disableSuperiorEffects: true,
-                      parts: [{ name: 'Base', value: target }],
-                      states: [
-                        {
-                          ...(await rollSuccessTest({ target })),
-                          action: 'initial',
-                        },
-                      ],
-                    },
-                  },
-                  visibility: rollModeToVisibility(
-                    game.settings.get('core', 'rollMode'),
-                  ),
-                });
-                popover.open = false;
-              },
-              fields: ({ target }) =>
-                renderNumberField(target, { min: 0, max: 99 }),
-            })}
-            </sl-popover-section>`;
-          }}
-        >
-          <mwc-icon-button
-            slot="base"
-            data-ep-tooltip="Quick Success Test"
-            @mouseover=${tooltip.fromData}
-            @contextmenu=${() => {
-            new Roll('1d100 - 1').toMessage();
-          }}
-            style="--mdc-icon-button-size: 1.5rem;"
-          >
-            <span style="font-weight: bold; font-size: 1rem">%</span>
-          </mwc-icon-button>
-        </sl-popover>
-      `,
-        frag,
-      );
-      const chatControls = document.getElementById('chat-controls');
-      if (!chatControls) {
-        Hooks.once('renderChatLog', (log: unknown, [el]: JQuery) => {
-          el?.querySelector('#chat-controls')?.prepend(frag);
-        });
-      } else chatControls?.prepend(frag);
-    }
   }, 150);
 
   const compendiumSearchButton = () => {
