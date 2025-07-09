@@ -105,20 +105,21 @@ export const overridePrototypes = () => {
 
   const { TokenHUD } = foundry.applications.hud;
 
-  const { getData: getTokenData, _getStatusEffectChoices } = TokenHUD.prototype;
+  // @ts-expect-error
+  const { getData: getTokenData, _getStatusEffectChoices, _prepareContext } = TokenHUD.prototype;
 
-  TokenHUD.prototype.getData = function (options: unknown) {
-    const data = getTokenData.call(this, options) as {
+  // @ts-expect-error
+  TokenHUD.prototype._prepareContext = async function (options: unknown) {
+    const context = (await _prepareContext.call(this, options)) as {
       canToggleCombat: boolean;
       combatClass: 'active' | '';
-    };
-    data.canToggleCombat = gmIsConnected();
-    data.combatClass =
+    }
+    context.canToggleCombat = gmIsConnected();
+    context.combatClass =
       this.object && tokenIsInCombat(this.object) ? 'active' : '';
-    return data;
-  };
 
-  const { _onClickControl } = TokenHUD.prototype;
+    return context;
+  };
 
   Object.defineProperty(TokenDocument.prototype, 'inCombat', {
     get(this: TokenDocument): boolean {
@@ -126,60 +127,55 @@ export const overridePrototypes = () => {
     },
   });
 
-  TokenHUD.prototype._onClickControl = function (event: Event) {
-    const button = event.currentTarget;
-    if (
-      button instanceof HTMLElement &&
-      button.dataset['action'] === 'combat'
-    ) {
-      event.preventDefault();
-      if (!this.object?.scene) {
-        return;
-      }
-      const token = this.object;
-      const addToCombat = !tokenIsInCombat(token);
-      button.classList.toggle('active', addToCombat);
-      const tokens = new Set(
-        (readyCanvas()?.tokens.controlled ?? [])
-          .concat(token ?? [])
-          .filter((token) => {
-            const inCombat = tokenIsInCombat(token);
-            return inCombat !== addToCombat;
-          }),
-      );
 
-      if (addToCombat) {
-        updateCombatState({
-          type: CombatActionType.AddParticipants,
-          payload: [...tokens].flatMap((token) => {
-            const { scene } = token;
-            if (!scene) return [];
-            return {
-              name: token.name,
-              hidden: !!token.document.hidden,
-              entityIdentifiers: {
-                type: TrackedCombatEntity.Token,
-                tokenId: token.id,
-                sceneId: scene.id,
-              },
-            };
-          }),
-        });
-      } else {
-        updateCombatState({
-          type: CombatActionType.RemoveParticipantsByToken,
-          payload: [...tokens].flatMap((token) => {
-            const { scene } = token;
-            if (!scene) return [];
-            return {
+  // @ts-expect-error
+  TokenHUD.DEFAULT_OPTIONS.actions.combat = function (event: Event) {
+    const button = (event.currentTarget as HTMLElement).querySelector("button[data-action='combat']");
+    event.preventDefault();
+    if (!this.object?.scene || !(button instanceof HTMLElement)) {
+      return;
+    }
+    const token = this.object;
+    const addToCombat = !tokenIsInCombat(token);
+    button.classList.toggle('active', addToCombat);
+    const tokens = new Set(
+      (readyCanvas()?.tokens.controlled ?? [])
+        .concat(token ?? [])
+        .filter((token) => {
+          const inCombat = tokenIsInCombat(token);
+          return inCombat !== addToCombat;
+        }),
+    );
+
+    if (addToCombat) {
+      updateCombatState({
+        type: CombatActionType.AddParticipants,
+        payload: [...tokens].flatMap((token) => {
+          const { scene } = token;
+          if (!scene) return [];
+          return {
+            name: token.name,
+            hidden: !!token.document.hidden,
+            entityIdentifiers: {
+              type: TrackedCombatEntity.Token,
               tokenId: token.id,
               sceneId: scene.id,
-            };
-          }),
-        });
-      }
+            },
+          };
+        }),
+      });
     } else {
-      _onClickControl.call(this, event);
+      updateCombatState({
+        type: CombatActionType.RemoveParticipantsByToken,
+        payload: [...tokens].flatMap((token) => {
+          const { scene } = token;
+          if (!scene) return [];
+          return {
+            tokenId: token.id,
+            sceneId: scene.id,
+          };
+        }),
+      });
     }
   };
 

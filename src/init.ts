@@ -4,7 +4,7 @@ import type { RawEditorOptions } from 'tinymce';
 import type { PartialDeep } from 'type-fest';
 import { createMessage, rollModeToVisibility } from './chat/create-message';
 import { onChatMessageRender } from './chat/message-hooks';
-import { combatSocketHandler } from './combat/combat-tracker';
+import { combatSocketHandler, tokenIsInCombat } from './combat/combat-tracker';
 import { CombatView } from './combat/components/combat-view/combat-view';
 import { CustomRollApp } from './combat/components/custom-roll-app/custom-roll-app';
 import { EPOverlay } from './components/ep-overlay/ep-overlay';
@@ -49,6 +49,7 @@ import { rollSuccessTest } from './success-test/success-test';
 import { notEmpty } from './utility/helpers';
 import { localImage } from './utility/images';
 import { GMPanel } from './gm-panel/gm-panel';
+import { readyCanvas } from './foundry/canvas';
 
 
 export let gameSettings: ReturnType<typeof registerEPSettings>;
@@ -63,8 +64,20 @@ window.addEventListener('mouseup', setLastPosition, { capture: true });
 window.addEventListener('click', setLastPosition, { capture: true });
 window.addEventListener('drop', setLastPosition, { capture: true });
 
+
+
 Hooks.once('init', () => {
   gameSettings = registerEPSettings();
+
+  gameSettings.combatState.subscribe(() => {
+    const toggleCombatButton = document.querySelector("#token-hud button[data-action='combat']:not(:focus-within)");
+    if (toggleCombatButton instanceof HTMLElement) {
+      const token = (readyCanvas()?.tokens.hud.object) as Token | undefined;
+      const isInCombat = token ? tokenIsInCombat(token) : false;
+      toggleCombatButton.classList.toggle('active', isInCombat);
+    }
+  })
+
 
   //@ts-expect-error
   foundry.documents.BaseItem.DEFAULT_ICON = localImage(
