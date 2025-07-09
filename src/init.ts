@@ -1,5 +1,5 @@
 import { html, render } from 'lit-html';
-import { compact, first } from 'remeda';
+import { compact, first, values } from 'remeda';
 import type { RawEditorOptions } from 'tinymce';
 import type { PartialDeep } from 'type-fest';
 import { createMessage, rollModeToVisibility } from './chat/create-message';
@@ -126,57 +126,63 @@ Hooks.once('ready', async () => {
     }
   }
 
-  if (false) {
-    document.getElementById('board')?.addEventListener('mousedown', (ev) => {
-      if (ev.button === 1) {
-        ev.preventDefault();
-        const control = ui.controls.control as {
+  document.getElementById('board')?.addEventListener('mousedown', (ev) => {
+    if (ev.button === 1) {
+      ev.preventDefault();
+      const control = ui.controls.control as {
+        name: string;
+        title: string;
+        layer: string;
+        activeTool: string;
+        tools: {
           name: string;
+          icon: string;
           title: string;
-          layer: string;
-          activeTool: string;
-          tools: {
-            name: string;
-            icon: string;
-            title: string;
-            toggle?: boolean;
-            button?: boolean;
-            active?: boolean;
-            onClick?: (args?: unknown) => void;
-          }[];
-        } | null;
-        if (control && notEmpty(control.tools)) {
-          openMenu({
-            header: { heading: game.i18n.localize(control.title) },
-            content: control.tools.map((tool) => ({
-              label: game.i18n.localize(tool.title),
-              icon: html`<i class=${tool.icon}></i>`,
-              activated: ui.controls.activeTool === tool.name || !!tool.active,
-              callback: () => {
-                if (tool.toggle) {
-                  tool.active = !tool.active;
-                  if (tool.onClick instanceof Function) tool.onClick(tool.active);
-                  ui.controls.render();
-                }
+          toggle?: boolean;
+          button?: boolean;
+          active?: boolean;
+          onClick?: (args?: unknown) => void;
+          onChange?: (args?: unknown) => void;
+        }[];
+      } | null;
+      const tools = control ? values(control.tools) : [];
+      if (control && notEmpty(tools)) {
+        openMenu({
+          header: { heading: game.i18n.localize(control.title) },
+          content: tools.map((tool) => ({
+            label: game.i18n.localize(tool.title),
+            icon: html`<i class=${tool.icon}></i>`,
+            activated: ui.controls.activeTool === tool.name || !!tool.active,
+            callback: () => {
+              if (tool.toggle) {
+                tool.active = !tool.active;
+                if (tool.onClick instanceof Function) tool.onClick(tool.active);
+              }
 
-                // Handle Buttons
-                else if (tool.button) {
-                  if (tool.onClick instanceof Function) tool.onClick();
-                  ui.controls.render();
+              // Handle Buttons
+              else if (tool.button) {
+                if (tool.onClick instanceof Function) tool.onClick();
+                else if (tool['onChange'] instanceof Function) {
+                  tool.onChange()
                 }
+              }
 
-                // Handle Tools
-                else {
-                  ui.controls.initialize({ tool: tool.name } as any);
-                }
-              },
-            })),
-            position: ev,
-          });
-        }
+              // Handle Tools
+              else {
+                ui.controls.initialize({ tool: tool.name } as any);
+              }
+
+              queueMicrotask(() => {
+                ui.controls.render();
+
+              })
+            },
+          })),
+          position: ev,
+        });
       }
-    });
-  }
+    }
+  });
 
   addEPSocketHandler(
     'itemChange',
@@ -378,63 +384,6 @@ Hooks.once('ready', async () => {
       }
     },
   });
-
-  // applicationHook({
-  //   app: HeadsUpDisplay,
-  //   hook: "on",
-  //   event: "render",
-  //   callback: (_, [el]) => {
-  //     const tokenQuickView = new TokenQuickView();
-  //     el.append(tokenQuickView);
-  //     activeCanvas()?.tokens.placeables.forEach((t) => t.drawBars());
-  //   },
-  // });
-
-  // mutateEntityHook({
-  //   entity: ActorEP,
-  //   hook: 'on',
-  //   event: MutateEvent.Update,
-  //   callback: (actor) => {
-  //     if (actor.isToken) {
-  //       actor.token?.object?.drawEffects();
-  //     } else {
-  //       actor
-  //         .getActiveTokens(true, false)
-  //         .forEach((t) => (t as Token).drawEffects());
-  //     }
-
-  //     if (!actor.token && !actor.compendium) {
-  //       const sidebarListItem = document.querySelector(
-  //         `.sidebar-tab.directory .directory-item.actor[data-document-id="${actor.id}"]`,
-  //       );
-  //       if (sidebarListItem instanceof HTMLElement) {
-  //         applyFullActorItemInfo(actor, sidebarListItem);
-  //       }
-  //     }
-  //   },
-  // });
-
-  // mutateEntityHook({
-  //   entity: ItemEP,
-  //   hook: 'on',
-  //   event: MutateEvent.PreCreate,
-  //   callback: (item, data) => {
-  //     if (data && typeof data === 'object' && 'img' in data) {
-  //       const { img } = data as { img?: string };
-  //       console.log(img);
-  //       if (img === 'icons/svg/item-bag.svg' || img === CONST.DEFAULT_TOKEN) {
-  //         (data as { img?: string }).img = foundry.data.ItemData.DEFAULT_ICON;
-  //         console.log(data);
-  //       }
-  //     }
-  //   },
-  // });
-
-  // document.getElementById("board")?.addEventListener("drop", () => {
-  //   const { element } = dragSource();
-  //   if (element instanceof HotbarCell) element.requestDeletion();
-  // });
-
 
 
   mutatePlaceableHook({
