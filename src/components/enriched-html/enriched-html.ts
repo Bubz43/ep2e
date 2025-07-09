@@ -14,7 +14,7 @@ const findMatch = (ev: Event) => {
         ev.preventDefault();
         fromUuid(dataLinkElement.dataset["uuid"])
           .then((doc) => doc?._onClickDocumentLink(ev));
-      } else if (eventTarget.closest("a.inline-roll")) {
+      } else if (eventTarget.matches("a.inline-roll")) {
 
         if (eventTarget.classList.contains('inline-result')) {
           showRollTooltip(eventTarget)
@@ -97,7 +97,7 @@ export class EnrichedHTML extends LitElement {
   enrichedContent: string = "";
 
   async performUpdate() {
-    this.enrichedContent = await TextEditor.enrichHTML(this.content);
+    this.enrichedContent = await foundry.applications.ux.TextEditor.implementation.enrichHTML(this.content);
     return super.performUpdate()
   }
 

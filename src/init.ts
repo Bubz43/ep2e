@@ -523,11 +523,12 @@ applicationHook({
         []) as Iterable<HTMLLIElement>) {
         if (listItem.offsetParent) {
           const doc: ItemEP = await compendium.collection.getDocument(
-            listItem.getAttribute('data-document-id'),
+            listItem.getAttribute('data-entry-id'),
           );
 
+
           listItem
-            .querySelector('.document-name')
+            .querySelector('.entry-name')
             ?.setAttribute('data-type', doc.proxy.fullType);
         }
       }
@@ -537,12 +538,12 @@ applicationHook({
         []) as Iterable<HTMLLIElement>) {
         if (listItem.offsetParent) {
           const doc: ActorEP = await compendium.collection.getDocument(
-            listItem.getAttribute('data-document-id'),
+            listItem.getAttribute('data-entry-id'),
           );
 
           const type = localize(doc.type);
           listItem
-            .querySelector('.document-name')
+            .querySelector('.entry-name')
             ?.setAttribute(
               'data-type',
               isSleeve(doc.proxy)

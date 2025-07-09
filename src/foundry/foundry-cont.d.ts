@@ -228,9 +228,7 @@ declare global {
       }
       ux: {
         TextEditor: {
-          implementation: {
-            _onClickInlineRoll(event: Event): void
-          }
+          implementation: typeof TextEditor
         }
       }
     }
