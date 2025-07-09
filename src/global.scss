@@ -131,7 +131,7 @@ mwc-menu {
   display: grid;
   grid-template-columns: 2rem auto 2rem;
   grid-template-rows: auto auto;
-  column-gap: 0.5rem;
+  column-gap: 0.25rem;
 
   * {
     color: var(--ep-color-text);
@@ -159,14 +159,14 @@ mwc-menu {
   #ep-gm-panel {
     grid-row: 1 / -1;
     grid-column-start: 1;
-    margin: 0.5rem auto auto;
+    margin: 0.25rem auto auto;
   }
 
   .ep-extra-chat-controls {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    padding: 0.5rem 0;
+    gap: 0.25rem;
+    padding: 0.25rem 0;
     grid-column-start: 3;
     grid-row: 1 / -1;
     --mdc-icon-size: 1.25rem;
