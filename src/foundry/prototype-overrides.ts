@@ -103,6 +103,8 @@ export const overridePrototypes = () => {
     this.renderFlags.set({ refreshEffects: true });
   };
 
+  const { TokenHUD } = foundry.applications.hud;
+
   const { getData: getTokenData, _getStatusEffectChoices } = TokenHUD.prototype;
 
   TokenHUD.prototype.getData = function (options: unknown) {
@@ -254,141 +256,63 @@ export const overridePrototypes = () => {
   //   }
   // };
 
+  // const { _replaceHTML } = CombatTracker.prototype;
+  // CombatTracker.prototype._replaceHTML = function (
+  //   ...args: Parameters<typeof _replaceHTML>
+  // ) {
+  //   if (!this.popOut) {
+  //     _replaceHTML.apply(this, args);
+  //   }
+  // };
+
   const { _replaceHTML } = CombatTracker.prototype;
+  //@ts-expect-error
+  CombatTracker.prototype._renderHTML = () => { };
   CombatTracker.prototype._replaceHTML = function (
     ...args: Parameters<typeof _replaceHTML>
   ) {
-    if (!this.popOut) {
-      _replaceHTML.apply(this, args);
-    }
-  };
-
-  CombatTracker.prototype._renderInner = async function () {
-    const existing = this.element?.[0]?.querySelector('combat-view');
-    if (existing) {
-      return $(existing);
-    }
-    const frag = new DocumentFragment();
-    render(
-      html`<combat-view
-        class="sidebar-tab tab"
-        data-tab="combat"
+    const element = args[1] as HTMLElement;
+    // @ts-expect-error
+    const options = args[2] as { isFirstRender: boolean }
+    if (options.isFirstRender) {
+      render(
+        html`<combat-view
       ></combat-view>`,
-      frag,
-    );
-    return $(frag);
-  };
-
-  CombatTracker.prototype._contextMenu = function (jqueryEl: JQuery) {
-    jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
-      const item = findMatchingElement(ev, '.directory-item');
-      if (!item) return;
-      const targetEl = $(item);
-      const entryOptions = this._getEntryContextOptions();
-      Hooks.call(
-        `get${this.constructor.name}EntryContext`,
-        this.element,
-        entryOptions,
+        element,
       );
-      const convertedOptions = convertMenuOptions(entryOptions, targetEl);
-      const heading = item.textContent?.trim();
-      openMenu({
-        content: convertedOptions,
-        position: ev,
-        header: heading ? { heading } : null,
-      });
-    });
+    }
+    // _replaceHTML.apply(this, args);
   };
 
-  // SidebarDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
-  //   jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
-  //     const entityLi = findMatchingElement(
-  //       ev,
-  //       '.document, .folder .folder-header',
-  //     );
-  //     if (!entityLi) return;
-  //     const jqueryLi = $(entityLi);
-
-  //     if (entityLi.matches('.document')) {
-  //       const entryOptions = this._getEntryContextOptions();
-  //       Hooks.call(
-  //         `get${this.constructor.name}EntryContext`,
-  //         jqueryEl,
-  //         entryOptions,
-  //       );
-  //       const convertedOptions = convertMenuOptions(entryOptions, jqueryLi);
-  //       const heading = entityLi.querySelector('.document-name')?.textContent;
-  //       openMenu({
-  //         content: convertedOptions,
-  //         position: ev,
-  //         header: heading ? { heading } : null,
-  //       });
-  //     } else if (entityLi.matches('.folder .folder-header')) {
-  //       const folderOptions = this._getFolderContextOptions();
-  //       Hooks.call(
-  //         `get${this.constructor.name}FolderContext`,
-  //         jqueryEl,
-  //         folderOptions,
-  //       );
-
-  //       const convertedOptions = convertMenuOptions(folderOptions, jqueryLi);
-
-  //       const heading = entityLi.textContent?.trim();
-  //       openMenu({
-  //         content: convertedOptions,
-  //         position: ev,
-  //         header: heading ? { heading } : null,
-  //       });
-  //     }
-  //   });
+  // CombatTracker.prototype._renderInner = async function () {
+  //   const existing = this.element?.[0]?.querySelector('combat-view');
+  //   if (existing) {
+  //     return $(existing);
+  //   }
+  //   const frag = new DocumentFragment();
+  //   render(
+  //     html`<combat-view
+  //       class="sidebar-tab tab"
+  //       data-tab="combat"
+  //     ></combat-view>`,
+  //     frag,
+  //   );
+  //   return $(frag);
   // };
 
-  // if (false) {
-  //   PlayerList.prototype.activateListeners = function (jqueryEl: JQuery) {
-  //     jqueryEl.find('h3').click(this._onToggleOfflinePlayers.bind(this));
-
-  //     const listener = (ev: MouseEvent) => {
-  //       const item = findMatchingElement(ev, '.player');
-  //       if (!item) return;
-  //       const targetEl = $(item);
-
-  //       const contextOptions = this._getUserContextOptions();
-  //       Hooks.call(`getUserContextOptions`, this.element, contextOptions);
-  //       const convertedOptions = convertMenuOptions(contextOptions, targetEl);
-  //       const heading = item.textContent?.trim();
-  //       openMenu({
-  //         content: convertedOptions,
-  //         position: ev,
-  //         header: heading ? { heading } : null,
-  //       });
-  //     };
-
-  //     jqueryEl[0]?.addEventListener('contextmenu', listener);
-  //     jqueryEl[0]?.addEventListener('click', listener);
-  //   };
-  // }
-
-  // SceneNavigation.prototype.activateListeners = function (jqueryEl: JQuery) {
-  //   const scenes = jqueryEl.find('.scene');
-  //   scenes.on('click', this._onClickScene.bind(this));
-  //   jqueryEl.find('#nav-toggle').on('click', this._onToggleNav.bind(this));
-
-  //   jqueryEl[0]?.addEventListener('contextmenu', navMenuListener);
-  // };
-
-  // CompendiumDirectory.prototype._contextMenu = function (jqueryEl: JQuery) {
+  // CombatTracker.prototype._contextMenu = function (jqueryEl: JQuery) {
   //   jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
-  //     const item = findMatchingElement(ev, '.compendium-pack');
+  //     const item = findMatchingElement(ev, '.directory-item');
   //     if (!item) return;
+  //     const targetEl = $(item);
   //     const entryOptions = this._getEntryContextOptions();
   //     Hooks.call(
   //       `get${this.constructor.name}EntryContext`,
   //       this.element,
   //       entryOptions,
   //     );
-  //     const targetEl = $(item);
   //     const convertedOptions = convertMenuOptions(entryOptions, targetEl);
-  //     const heading = item.querySelector('h4')?.textContent;
+  //     const heading = item.textContent?.trim();
   //     openMenu({
   //       content: convertedOptions,
   //       position: ev,
@@ -397,21 +321,7 @@ export const overridePrototypes = () => {
   //   });
   // };
 
-  // ChatLog.prototype._contextMenu = function (jqueryEl: JQuery) {
-  //   jqueryEl[0]?.addEventListener('contextmenu', (ev) => {
-  //     const item = findMatchingElement(ev, '.message');
-  //     if (!item) return;
-  //     const entryOptions = this._getEntryContextOptions();
-  //     Hooks.call(
-  //       `get${this.constructor.name}EntryContext`,
-  //       this.element,
-  //       entryOptions,
-  //     );
-  //     const targetEl = $(item);
-  //     const convertedOptions = convertMenuOptions(entryOptions, targetEl);
-  //     openMenu({ content: convertedOptions, position: ev });
-  //   });
-  // };
+
 
   ChatMessage._getSpeakerFromUser = function ({
     scene,

@@ -210,7 +210,14 @@ declare global {
     abstract: typeof import('common/abstract/module');
     data: typeof import('common/data/module');
     packages: typeof import('common/packages');
+    canvas: {
+      Canvas: typeof Canvas
+    },
+
     applications: {
+      hud: {
+        TokenHUD: typeof TokenHUD
+      }
       api: {
         ApplicationV2: {
           _maxZ: number;

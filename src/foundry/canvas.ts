@@ -139,9 +139,9 @@ export const placeMeasuredTemplate = (
       resolve(
         savedTemplateData?.id
           ? {
-              templateId: savedTemplateData.id,
-              sceneId: scene.id,
-            }
+            templateId: savedTemplateData.id,
+            sceneId: scene.id,
+          }
           : null,
       );
     }
@@ -254,7 +254,9 @@ export const controlledToken = () => {
   );
 };
 
-export const readyCanvas = () =>
-  canvas instanceof Canvas && canvas.ready
+export const readyCanvas = () => {
+  const { Canvas } = foundry.canvas;
+  return canvas instanceof Canvas && canvas.ready
     ? (canvas as Omit<Canvas, keyof CanvasProps> & CanvasLayers & CanvasProps)
     : null;
+};

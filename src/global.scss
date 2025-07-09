@@ -39,7 +39,8 @@
 }
 
 
-ep-overlay {
+ep-overlay,
+combat-view {
   @include styled-scrollbars;
   @include widgetless-number-inputs;
 }
@@ -52,7 +53,18 @@ ep-overlay[faded]~.ep-window-container {
   visibility: hidden !important;
 }
 
+combat-view {
+  background: var(--ep-color-bg-alt);
+  color: var(--ep-color-text);
+  --mdc-theme-text-icon-on-background: var(--ep-color-text);
 
+}
+
+#combat {
+  combat-view {
+    flex: 1;
+  }
+}
 
 
 
@@ -61,6 +73,8 @@ mwc-menu {
   --mdc-menu-item-height: 2rem;
   --mdc-menu-min-width: 200px;
   --mdc-list-vertical-padding: 0.25rem;
+  --mdc-theme-text-icon-on-background: var(--ep-color-text);
+
 
   li[divider] {
     border-color: var(--ep-color-border);
@@ -115,7 +129,7 @@ mwc-menu {
 
 .ep-extra-info {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: 2rem auto 2rem;
   grid-template-rows: auto auto;
   column-gap: 0.5rem;
 

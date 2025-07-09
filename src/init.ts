@@ -422,16 +422,7 @@ Hooks.once('ready', async () => {
   //   if (element instanceof HotbarCell) element.requestDeletion();
   // });
 
-  // if (false) {
-  //   applicationHook({
-  //     app: ChatPopout,
-  //     hook: 'on',
-  //     event: 'render',
-  //     callback: (popout) => {
-  //       requestAnimationFrame(() => popout.setPosition());
-  //     },
-  //   });
-  // }
+
 
   mutatePlaceableHook({
     entity: Token,
