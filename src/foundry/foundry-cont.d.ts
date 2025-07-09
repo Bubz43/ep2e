@@ -206,13 +206,16 @@ declare global {
 
   const foundry: {
     documents: typeof import('common/documents');
-    utils: typeof import('common/utils/module');
+    utils: typeof import('common/utils/module') & {
+      fromUuidSync: (...args: Parameters<typeof fromUuid>) => { toDragData(): unknown } | undefined | null;
+    };
     abstract: typeof import('common/abstract/module');
     data: typeof import('common/data/module');
     packages: typeof import('common/packages');
     canvas: {
       Canvas: typeof Canvas
     },
+
 
     applications: {
       hud: {
@@ -221,6 +224,13 @@ declare global {
       api: {
         ApplicationV2: {
           _maxZ: number;
+        }
+      }
+      ux: {
+        TextEditor: {
+          implementation: {
+            _onClickInlineRoll(event: Event): void
+          }
         }
       }
     }
@@ -314,6 +324,15 @@ declare global {
       system: string;
       packageType: string;
     };
+    index: {
+      size: number;
+      find(cb: (value: { _id: string; name: unknown }) => boolean | undefined): {
+        _id: string;
+      };
+    };
+    getUuid(id: string): string | null;
+
+
   }
 
   interface ActorData {
