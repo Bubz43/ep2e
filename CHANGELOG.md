@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.3.0] - 2025-07-10
+- Update for Foundry v13 compatibility
+- Move all added ui buttons to top-center of the screen
+
 ## [1.2.19] - 2025-04-20
 
 - Improve icon scaling in Combat Tracker
